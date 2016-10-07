@@ -318,7 +318,7 @@ Ext.define('Shopware.apps.Order.view.list.List', {
             {
                 header: me.snippets.columns.customer,
                 dataIndex: 'customerId',
-                flex:2,
+                flex: 3,
                 renderer: me.customerColumn,
                 getSortParam: function() {
                     return 'customerName';
@@ -662,10 +662,13 @@ Ext.define('Shopware.apps.Order.view.list.List', {
 
         if (billing instanceof Ext.data.Store && billing.first() instanceof Ext.data.Model) {
             billing = billing.first();
+
+            name = Ext.String.trim(
+                billing.get('lastName') + ',' + billing.get('firstName')
+            );
+
             if (billing.get('company').length > 0) {
-                name = billing.get('company');
-            } else {
-                name = Ext.String.trim(billing.get('firstName') + ' ' + billing.get('lastName'));
+                name += ' (' + billing.get('company') + ')';
             }
         }
 
@@ -691,7 +694,6 @@ Ext.define('Shopware.apps.Order.view.list.List', {
         } else {
             return name;
         }
-
     }
 
 });

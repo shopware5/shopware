@@ -98,9 +98,9 @@ class OrderTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame(
             [
-                ['property' => 'billing.company', 'direction' => 'DESC'],
                 ['property' => 'billing.lastName', 'direction' => 'DESC'],
-                ['property' => 'billing.firstName', 'direction' => 'DESC']
+                ['property' => 'billing.firstName', 'direction' => 'DESC'],
+                ['property' => 'billing.company', 'direction' => 'DESC']
             ],
             $this->method->invokeArgs($this->controller, [$sorts])
         );
