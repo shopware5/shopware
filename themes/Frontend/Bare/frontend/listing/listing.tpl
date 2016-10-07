@@ -8,37 +8,20 @@
             <div class="content--emotions">
 
                 {foreach $emotions as $emotion}
-
-                    {if $hasEscapedFragment}
-                        {if 0|in_array:$emotion.devicesArray}
-                            {if $emotion.showListing == 1}
-                                {$showListing = true}
-                            {/if}
-
-                            {if $emotion.fullscreen == 1}
-                                {$fullscreen = true}
-                            {/if}
-
-                            <div class="emotion--fragment">
-                                {action module=widgets controller=emotion action=index emotionId=$emotion.id controllerName=$Controller}
-                            </div>
-                        {/if}
-                    {else}
-                        {if $emotion.showListing == 1}
-                            {$showListing = true}
-                        {/if}
-
-                        {if $emotion.fullscreen == 1}
-                            {$fullscreen = true}
-                        {/if}
-
-                        <div class="emotion--wrapper"
-                             data-controllerUrl="{url module=widgets controller=emotion action=index emotionId=$emotion.id controllerName=$Controller}"
-                             data-availableDevices="{$emotion.devices}"
-                             data-showListing="{if $emotion.showListing == 1}true{else}false{/if}">
-                        </div>
+                    {if $emotion.showListing == 1}
+                        {$showListing = true}
                     {/if}
-                {/foreach}
+
+                    {if $emotion.fullscreen == 1}
+                        {$fullscreen = true}
+                    {/if}
+
+                    <div class="emotion--wrapper"
+                         data-controllerUrl="{url module=widgets controller=emotion action=index emotionId=$emotion.id controllerName=$Controller}"
+                         data-availableDevices="{$emotion.devices}"
+                         data-showListing="{if $emotion.showListing == 1}true{else}false{/if}">
+                    </div>
+            {/foreach}
 
                 {if !$showListing}
                     {block name="frontend_listing_list_promotion_link_show_listing"}

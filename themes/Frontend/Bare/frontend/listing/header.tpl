@@ -77,10 +77,3 @@
 {* RSS and Atom feeds *}
 {block name="frontend_index_header_feeds"}
 {/block}
-
-{* Google optimized crawling *}
-{block name='frontend_index_header_meta_tags' append}
-    {if $hasEmotion && !$hasEscapedFragment}
-        <meta name="fragment" content="!">
-    {/if}
-{/block}
