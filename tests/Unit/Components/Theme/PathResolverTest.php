@@ -77,12 +77,7 @@ class PathResolverTest extends TestCase
      */
     private function createTemplateMock($templateId)
     {
-        $templateStub = $this->createMock(Template::class);
-
-        $templateStub->method('getId')
-                     ->willReturn($templateId);
-
-        return $templateStub;
+        return $this->createConfiguredMock(Template::class, ['getId' => $templateId]);
     }
 
     /**
@@ -92,17 +87,10 @@ class PathResolverTest extends TestCase
      */
     private function createShopMock($shopId, $templateStub)
     {
-        $stub = $this->createMock(Shop::class);
-
-        $stub->method('getMain')
-            ->willReturn(null);
-
-        $stub->method('getId')
-             ->willReturn($shopId);
-
-        $stub->method('getTemplate')
-             ->willReturn($templateStub);
-
-        return $stub;
+        return $this->createConfiguredMock(Shop::class, [
+            'getMain'     => null,
+            'getid'       => $shopId,
+            'getTemplate' => $templateStub,
+        ]);
     }
 }
