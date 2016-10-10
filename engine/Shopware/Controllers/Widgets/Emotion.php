@@ -169,7 +169,12 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
 
         $limit = (int) $this->Request()->getParam("limit", 5);
         $sort = $this->Request()->getParam('sort', 'newcomer');
-        $pages = $this->Request()->getParam("pages");
+        $pages = (int) $this->Request()->getParam("pages", 1);
+
+        if ($pages <= 0) {
+            $pages = 1;
+        }
+
         $offset = (int) $this->Request()->getParam("start", $limit * ($pages-1));
         $max = $this->Request()->getParam("max");
 
