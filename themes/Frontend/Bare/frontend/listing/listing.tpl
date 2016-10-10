@@ -13,20 +13,24 @@
 
                     <div class="emotion--wrapper"
                          data-controllerUrl="{url module=widgets controller=emotion action=index emotionId=$emotion.id controllerName=$Controller}"
-                         data-availableDevices="{$emotion.devices}"
-                         data-showListing="{if $showListing == 1}true{else}false{/if}">
+                         data-availableDevices="{$emotion.devices}">
                     </div>
                 {/foreach}
 
-                {if !$showListing}
-                    {block name="frontend_listing_list_promotion_link_show_listing"}
-                        <div class="emotion--show-listing{if $fullscreen} is--align-center{/if}">
-                            <a href="{url controller='cat' sPage=1 sCategory=$sCategoryContent.id}" title="{$sCategoryContent.name|escape}" class="link--show-listing{if $fullscreen} btn is--primary{/if}">
-                                {s name="ListingActionsOffersLink"}Weitere Artikel in dieser Kategorie &raquo;{/s}
-                            </a>
-                        </div>
-                    {/block}
-                {/if}
+                {block name="frontend_listing_list_promotion_link_show_listing"}
+
+                    {$showListingCls = "emotion--show-listing"}
+
+                    {foreach $showListingDevices as $device}
+                        {$showListingCls = "{$showListingCls} hidden--{$emotionViewports[$device]}"}
+                    {/foreach}
+
+                    <div class="{$showListingCls}{if $fullscreen} is--align-center{/if}">
+                        <a href="{url controller='cat' sPage=1 sCategory=$sCategoryContent.id}" title="{$sCategoryContent.name|escape}" class="link--show-listing{if $fullscreen} btn is--primary{/if}">
+                            {s name="ListingActionsOffersLink"}Weitere Artikel in dieser Kategorie &raquo;{/s}
+                        </a>
+                    </div>
+                {/block}
             </div>
         {/block}
     {/if}
@@ -37,10 +41,9 @@
     {if $showListing}
 
         {$listingCssClass = "listing--wrapper"}
-        {$deviceClasses = [0 => 'xl', 1 => 'l', 2 => 'm', 3 => 's', 4 => 'xs']}
 
         {foreach $showListingDevices as $device}
-            {$listingCssClass = "{$listingCssClass} listing--{$deviceClasses[$device]}"}
+            {$listingCssClass = "{$listingCssClass} visible--{$emotionViewports[$device]}"}
         {/foreach}
 
         <div class="{$listingCssClass}">

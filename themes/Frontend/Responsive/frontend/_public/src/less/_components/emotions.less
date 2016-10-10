@@ -130,8 +130,8 @@ Shopware 5 provides 11 integrated elements inside the shopping worlds that can b
 .content--emotions {
     display: block;
 
-    & + .listing--wrapper {
-        .unitize-margin(20, 0, 0, 0);
+    .emotion--container:last-child {
+        .unitize(margin-bottom, 20);
     }
 }
 

@@ -36,6 +36,8 @@
 		{* Define all necessary template variables for the listing *}
 		{block name="frontend_listing_index_layout_variables"}
 
+            {$emotionViewports = [0 => 'xl', 1 => 'l', 2 => 'm', 3 => 's', 4 => 'xs']}
+
             {* Count of available product pages *}
 			{$pages = 1}
 
