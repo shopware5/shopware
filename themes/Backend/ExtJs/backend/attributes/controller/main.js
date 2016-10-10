@@ -128,36 +128,61 @@ Ext.define('Shopware.apps.Attributes.controller.Main', {
         }
     },
 
+    checkColumnName: function(record) {
+        var me = this;
+        var window = me.getWindow();
+
+        window.setLoading(true);
+
+        newColumnName = record.get('columnName');
+        me.getListing().getStore().remove(record);
+        exists = me.getListing().getStore().findRecord('columnName', newColumnName);
+
+        if (exists === null) {
+            return true;
+        }
+
+        Shopware.Notification.createGrowlMessage('{s name="error_namecheck_title"}The name already exists{/s}',
+            '{s name="error_namecheck_message"}The Name already exists. Use an other name.{/s}');
+        me.getListing().getStore().reload();
+        window.setLoading(false);
+        return false;
+    },
+
     saveColumn: function(record, callback) {
         var me = this;
         var window = me.getWindow();
         callback = callback ? callback : Ext.emptyFn;
 
-        window.setLoading('{s name="save_config_message"}{/s}');
+        check = me.checkColumnName(record);
 
-        var generateRequired = me.requireGenerate(record);
-        me.disableForm();
+        if (check === true) {
+            window.setLoading('{s name="save_config_message"}{/s}');
 
-        record.save({
-            callback: function(data, operation) {
-                var message = Ext.String.format(
-                    '{s name="save_success"}{/s}',
-                    record.get('tableName'),
-                    record.get('columnName')
-                );
-                me.displayResponseMessage(operation.response, message);
+            var generateRequired = me.requireGenerate(record);
+            me.disableForm();
 
-                window.setLoading(false);
-                if (!generateRequired) {
-                    callback();
-                    return;
+            record.save({
+                callback: function (data, operation) {
+                    var message = Ext.String.format(
+                        '{s name="save_success"}{/s}',
+                        record.get('tableName'),
+                        record.get('columnName')
+                    );
+                    me.displayResponseMessage(operation.response, message);
+
+                    window.setLoading(false);
+                    if (!generateRequired) {
+                        callback();
+                        return;
+                    }
+
+                    me.generateModel(record.get('tableName'), function () {
+                        callback();
+                    });
                 }
-
-                me.generateModel(record.get('tableName'), function() {
-                    callback();
-                });
-            }
-        });
+            });
+        }
     },
 
     generateModel: function(table, callback) {
