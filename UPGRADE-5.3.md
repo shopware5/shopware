@@ -46,3 +46,6 @@ This changelog references changes done in Shopware 5.3 patch versions.
     * Removed `\Shopware\Models\Order\Repository::getBackendOrdersQueryBuilder`
     * Removed `\Shopware\Models\Order\Repository::getBackendOrdersQuery`
     * Removed `\Shopware\Models\Order\Repository::getBackendAdditionalOrderDataQuery`
+* Refactored category listing with shopping worlds
+    * Variable `showListing` is now dynamically set, if the listing needs to be displayed
+    * Products and their data will only be loaded if `showListing` is true

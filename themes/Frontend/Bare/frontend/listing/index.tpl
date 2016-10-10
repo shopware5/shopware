@@ -37,7 +37,11 @@
 		{block name="frontend_listing_index_layout_variables"}
 
             {* Count of available product pages *}
-            {$pages = ceil($sNumberArticles / $criteria->getLimit())}
+			{$pages = 1}
+
+			{if $criteria}
+				{$pages = ceil($sNumberArticles / $criteria->getLimit())}
+			{/if}
 
             {* Controller url for the found products counter *}
             {$countCtrlUrl = "{url module="widgets" controller="listing" action="listingCount" params=$ajaxCountUrlParams fullPath}"}

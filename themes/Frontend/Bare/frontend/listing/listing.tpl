@@ -1,17 +1,12 @@
 {* Emotion worlds *}
 {block name="frontend_listing_list_promotion"}
     {if $hasEmotion}
-        {$showListing = false}
         {$fullscreen = false}
 
         {block name="frontend_listing_emotions"}
             <div class="content--emotions">
 
                 {foreach $emotions as $emotion}
-                    {if $emotion.showListing == 1}
-                        {$showListing = true}
-                    {/if}
-
                     {if $emotion.fullscreen == 1}
                         {$fullscreen = true}
                     {/if}
@@ -19,9 +14,9 @@
                     <div class="emotion--wrapper"
                          data-controllerUrl="{url module=widgets controller=emotion action=index emotionId=$emotion.id controllerName=$Controller}"
                          data-availableDevices="{$emotion.devices}"
-                         data-showListing="{if $emotion.showListing == 1}true{else}false{/if}">
+                         data-showListing="{if $showListing == 1}true{else}false{/if}">
                     </div>
-            {/foreach}
+                {/foreach}
 
                 {if !$showListing}
                     {block name="frontend_listing_list_promotion_link_show_listing"}
@@ -39,44 +34,55 @@
 
 {* Listing wrapper *}
 {block name="frontend_listing_listing_wrapper"}
-    <div class="listing--wrapper{if !$showListing} is--hidden{/if}">
+    {if $showListing}
 
-        {* Sorting and changing layout *}
-        {block name="frontend_listing_top_actions"}
-            {include file='frontend/listing/listing_actions.tpl'}
-        {/block}
+        {$listingCssClass = "listing--wrapper"}
+        {$deviceClasses = [0 => 'xl', 1 => 'l', 2 => 'm', 3 => 's', 4 => 'xs']}
 
-        {block name="frontend_listing_listing_container"}
-            <div class="listing--container">
+        {foreach $showListingDevices as $device}
+            {$listingCssClass = "{$listingCssClass} listing--{$deviceClasses[$device]}"}
+        {/foreach}
 
-                {block name="frontend_listing_listing_content"}
-                    <div class="listing" 
-                        data-ajax-wishlist="true"
-                        data-compare-ajax="true"
-                        {if $theme.infiniteScrolling}
-                        data-infinite-scrolling="true"
-                        data-loadPreviousSnippet="{s name="ListingActionsLoadPrevious"}{/s}"
-                        data-loadMoreSnippet="{s name="ListingActionsLoadMore"}{/s}"
-                        data-categoryId="{$sCategoryContent.id}"
-                        data-pages="{$pages}"
-                        data-threshold="{$theme.infiniteThreshold}"{/if}>
+        <div class="{$listingCssClass}">
 
-                        {* Actual listing *}
-                        {block name="frontend_listing_list_inline"}
-                            {foreach $sArticles as $sArticle}
-                                {include file="frontend/listing/box_article.tpl"}
-                            {/foreach}
-                        {/block}
-                    </div>
-                {/block}
-            </div>
-        {/block}
+            {* Sorting and changing layout *}
+            {block name="frontend_listing_top_actions"}
+                {include file='frontend/listing/listing_actions.tpl'}
+            {/block}
 
-        {* Paging *}
-        {block name="frontend_listing_bottom_paging"}
-            <div class="listing--bottom-paging">
-                {include file="frontend/listing/actions/action-pagination.tpl"}
-            </div>
-        {/block}
-    </div>
+            {block name="frontend_listing_listing_container"}
+                <div class="listing--container">
+
+                    {block name="frontend_listing_listing_content"}
+                        <div class="listing"
+                             data-ajax-wishlist="true"
+                             data-compare-ajax="true"
+                             {if $theme.infiniteScrolling}
+                                data-infinite-scrolling="true"
+                                data-loadPreviousSnippet="{s name="ListingActionsLoadPrevious"}{/s}"
+                                data-loadMoreSnippet="{s name="ListingActionsLoadMore"}{/s}"
+                                data-categoryId="{$sCategoryContent.id}"
+                                data-pages="{$pages}"
+                                data-threshold="{$theme.infiniteThreshold}"
+                            {/if}>
+
+                            {* Actual listing *}
+                            {block name="frontend_listing_list_inline"}
+                                {foreach $sArticles as $sArticle}
+                                    {include file="frontend/listing/box_article.tpl"}
+                                {/foreach}
+                            {/block}
+                        </div>
+                    {/block}
+                </div>
+            {/block}
+
+            {* Paging *}
+            {block name="frontend_listing_bottom_paging"}
+                <div class="listing--bottom-paging">
+                    {include file="frontend/listing/actions/action-pagination.tpl"}
+                </div>
+            {/block}
+        </div>
+    {/if}
 {/block}

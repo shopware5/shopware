@@ -56,7 +56,7 @@
 							{/block}
 
 							{block name="frontend_listing_actions_filter_form_perpage"}
-								{if $criteria->getLimit()}
+								{if $criteria && $criteria->getLimit()}
 									<input type="hidden" name="{$shortParameters['sPerPage']}" value="{$criteria->getLimit()|escape}" />
 								{/if}
 							{/block}
