@@ -435,6 +435,10 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
      */
     private function assignAssociation($orders, $associations, $arrayKey)
     {
+        foreach ($orders as &$order) {
+            $order[$arrayKey] = [];
+        }
+
         foreach ($associations as $association) {
             $id = $association['orderId'];
             $orders[$id][$arrayKey][] = $association;
