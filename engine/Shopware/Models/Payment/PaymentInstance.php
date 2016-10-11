@@ -52,6 +52,12 @@ class PaymentInstance extends ModelEntity
     private $id;
 
     /**
+     * @var integer
+     * @ORM\Column(name="order_id", type="integer")
+     */
+    protected $orderId;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Payment\Payment", inversedBy="paymentInstances")
      * @ORM\JoinColumn(name="payment_mean_id", referencedColumnName="id")
      */

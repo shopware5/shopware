@@ -492,7 +492,6 @@ class Repository extends ModelRepository
 
         $query->select([
             'orders',
-            'customer',
             'shipping',
             'shippingCountry',
             'shippingState',
