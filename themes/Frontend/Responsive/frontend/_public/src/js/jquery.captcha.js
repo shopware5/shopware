@@ -39,6 +39,7 @@
 
             if (typeof me.hasError !== 'undefined') {
                 window.setTimeout($.proxy(me.sendRequest, me), 1000);
+                return;
             }
 
             me.$form = $el.closest('form');
