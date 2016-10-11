@@ -179,7 +179,7 @@ class FacetFilter implements FacetFilterInterface
             $condition = $criteria->getBaseCondition('price');
 
             $facet->setMin($condition->getMinPrice());
-            if ($condition->getMaxPrice() !== 0) {
+            if ($condition->getMaxPrice() != 0) {
                 $facet->setMax($condition->getMaxPrice());
             }
         }
