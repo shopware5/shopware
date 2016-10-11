@@ -67,6 +67,7 @@
                <param name="db.host" value="${user.db.host}"/>
                <param name="db.port" value="${user.db.port}"/>
                <param name="db.name" value="${user.db.name}"/>
+               <param name="db.user" value="${user.db.user}"/>
                <param name="db.password" value="${user.db.password}"/>
                <param name="db.port" value="${user.db.port}"/>
                <param name="app.host" value="${user.app.host}"/>
