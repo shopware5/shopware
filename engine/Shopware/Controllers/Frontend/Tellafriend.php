@@ -86,7 +86,7 @@ class Shopware_Controllers_Frontend_Tellafriend extends Enlight_Controller_Actio
                 $captchaValidator = $this->container->get('shopware.captcha.validator');
 
                 if (!$captchaValidator->validate($this->Request())) {
-                    $sErrorFlag['sCaptcha'] = true;
+                    $variables["sError"] = true;
                 }
             }
 
