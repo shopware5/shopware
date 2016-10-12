@@ -24,6 +24,8 @@ This changelog references changes done in Shopware 5.2 patch versions.
 
 ## 5.2.9
 
+[View all changes from v5.2.8...v5.2.9](https://github.com/shopware/shopware/compare/v5.2.8...v5.2.9)
+
 * `filtergroupID` column will be set to `null` in the `s_articles` table when deleting a property set 
 
 ## 5.2.8
