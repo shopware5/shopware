@@ -212,8 +212,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
             return $this->forward('cart');
         }
 
-        $order = new ArrayObject($this->View()->getAssign(), ArrayObject::ARRAY_AS_PROPS);
-        $this->session['sOrderVariables'] = $order;
+        $this->session['sOrderVariables'] = new ArrayObject($this->View()->getAssign(), ArrayObject::ARRAY_AS_PROPS);
 
         $agbChecked = $this->Request()->getParam('sAGB');
         if (!empty($agbChecked)) {
@@ -262,9 +261,6 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
 
         $this->View()->assign('invalidBillingAddress', !$this->isValidAddress($activeBillingAddressId));
         $this->View()->assign('invalidShippingAddress', !$this->isValidAddress($activeShippingAddressId));
-
-        $signature = $this->persistBasket($this->View()->getAssign(), $this->session->get('sUserId'));
-        $this->View()->assign('__basket_signature', $signature);
     }
 
     /**
@@ -471,23 +467,19 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
             $this->admin->sUpdateNewsletter(true, $this->admin->sGetUserMailById(), true);
         }
 
-        $signature = $this->Request()->getParam('__basket_signature');
-        $this->View()->assign('__basket_signature', $signature);
-
         if (!empty($this->View()->sPayment['embediframe'])) {
             $embedded = $this->View()->sPayment['embediframe'];
             $embedded = preg_replace('#^[./]+#', '', $embedded);
             $embedded .= '?sCoreId='.Shopware()->Session()->get('sessionId');
             $embedded .= '&sAGB=1';
-            $embedded .= '&__basket_signature=' . $signature;
+            $embedded .= '&__basket_signature=' . $this->persistBasket();
             $this->View()->sEmbedded = $embedded;
         } else {
             $action = explode('/', $this->View()->sPayment['action']);
             $this->redirect(array(
                 'controller' => $action[0],
                 'action' => empty($action[1]) ? 'index' : $action[1],
-                'forceSecure' => true,
-                '__basket_signature' => $signature
+                'forceSecure' => true
             ));
         }
     }
@@ -1827,21 +1819,18 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
     }
 
     /**
-     * @param array $viewData
-     * @param int $customerId
      * @return string
      */
-    private function persistBasket($viewData, $customerId)
+    private function persistBasket()
     {
-        $basket = Basket::createFromSBasket($viewData['sBasket']);
-
-        /** @var BasketSignatureGeneratorInterface $signatureCreator */
-        $signatureCreator = $this->get('basket_signature_generator');
-        $signature = $signatureCreator->generateSignature($basket, $customerId);
+        /** @var BasketSignatureGeneratorInterface $generator */
+        $generator = $this->get('basket_signature_generator');
+        $basket = $this->session->offsetGet('sOrderVariables')->getArrayCopy();
+        $signature = $generator->generateSignature($basket, $this->session->get('sUserId'));
 
         /** @var BasketPersister $persister */
         $persister = $this->get('basket_persister');
-        $persister->persist($signature, $viewData);
+        $persister->persist($signature, $basket);
 
         return $signature;
     }

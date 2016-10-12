@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -49,18 +48,23 @@ class BasketPersister
      *
      * @param string $signature
      * @param array $basket
+     * @throws \Exception
      */
     public function persist($signature, $basket)
     {
-        $createdAt = new \DateTime();
+        $this->connection->transactional(
+            function () use ($signature, $basket) {
+                $createdAt = new \DateTime();
 
-        $this->delete($signature);
+                $this->delete($signature);
 
-        $this->connection->insert(self::DBAL_TABLE, [
-            'signature' => $signature,
-            'basket' => json_encode($basket),
-            'created_at' => $createdAt->format('Y-m-d')
-        ]);
+                $this->connection->insert(self::DBAL_TABLE, [
+                    'signature' => $signature,
+                    'basket' => json_encode($basket),
+                    'created_at' => $createdAt->format('Y-m-d')
+                ]);
+            }
+        );
     }
 
     /**

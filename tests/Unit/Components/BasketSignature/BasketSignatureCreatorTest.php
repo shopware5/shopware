@@ -25,8 +25,6 @@
 namespace Shopware\tests\Unit\Components\BasketSignature;
 
 use PHPUnit\Framework\TestCase;
-use Shopware\Components\BasketSignature\Basket;
-use Shopware\Components\BasketSignature\BasketItem;
 use Shopware\Components\BasketSignature\BasketSignatureGenerator;
 
 class BasketSignatureGeneratorTest extends TestCase
@@ -34,7 +32,14 @@ class BasketSignatureGeneratorTest extends TestCase
     public function testSignatureCanBeCreatedForEmptyBasket()
     {
         $signatureCreator = new BasketSignatureGenerator();
-        $signature = $signatureCreator->generateSignature(new Basket(0.0, 0.0, []), null);
+        $signature = $signatureCreator->generateSignature(
+            [
+                'sAmount' => 0,
+                'sAmountTax' => 0,
+                'content' => []
+            ],
+            null
+        );
 
         $this->assertNotEmpty($signature);
     }
@@ -45,19 +50,23 @@ class BasketSignatureGeneratorTest extends TestCase
 
         $this->assertNotSame(
             $signatureCreator->generateSignature(
-                new Basket(
-                    0.0,
-                    0.0,
-                    [new BasketItem(null, null, 19.0, null)]
-                ),
+                [
+                    'sAmount' => 0,
+                    'sAmountTax' => 0,
+                    'content' => [
+                        $this->createItemRow(null, null, null, 19)
+                    ]
+                ],
                 null
             ),
             $signatureCreator->generateSignature(
-                new Basket(
-                    0.0,
-                    0.0,
-                    [new BasketItem(null, null, 20.0, null)]
-                ),
+                [
+                    'sAmount' => 0,
+                    'sAmountTax' => 0,
+                    'content' => [
+                        $this->createItemRow(null, null, null, 22)
+                    ]
+                ],
                 null
             )
         );
@@ -69,19 +78,23 @@ class BasketSignatureGeneratorTest extends TestCase
 
         $this->assertNotSame(
             $signatureCreator->generateSignature(
-                new Basket(
-                    0.0,
-                    0.0,
-                    [new BasketItem(null, 1, null, null)]
-                ),
+                [
+                    'sAmount' => 0,
+                    'sAmountTax' => 0,
+                    'content' => [
+                        $this->createItemRow(null, 1, null, null)
+                    ]
+                ],
                 null
             ),
             $signatureCreator->generateSignature(
-                new Basket(
-                    0.0,
-                    0.0,
-                    [new BasketItem(null, 2, null, null)]
-                ),
+                [
+                    'sAmount' => 0,
+                    'sAmountTax' => 0,
+                    'content' => [
+                        $this->createItemRow(null, 2, null, null)
+                    ]
+                ],
                 null
             )
         );
@@ -93,21 +106,26 @@ class BasketSignatureGeneratorTest extends TestCase
 
         $this->assertNotSame(
             $signatureCreator->generateSignature(
-                new Basket(
-                    0.0,
-                    0.0,
-                    [new BasketItem(null, null, null, 19.99)]
-                ),
+                [
+                    'sAmount' => 0,
+                    'sAmountTax' => 0,
+                    'content' => [
+                        $this->createItemRow(100, null, null, null)
+                    ]
+                ],
                 null
             ),
             $signatureCreator->generateSignature(
-                new Basket(
-                    0.0,
-                    0.0,
-                    [new BasketItem(null, null, null, 20.00)]
-                ),
+                [
+                    'sAmount' => 0,
+                    'sAmountTax' => 0,
+                    'content' => [
+                        $this->createItemRow(200, null, null, null)
+                    ]
+                ],
                 null
             )
+
         );
     }
 
@@ -117,19 +135,23 @@ class BasketSignatureGeneratorTest extends TestCase
 
         $this->assertNotSame(
             $signatureCreator->generateSignature(
-                new Basket(
-                    0.0,
-                    0.0,
-                    [new BasketItem('a', null, null, null)]
-                ),
+                [
+                    'sAmount' => 0,
+                    'sAmountTax' => 0,
+                    'content' => [
+                        $this->createItemRow(null, null, 'A', null)
+                    ]
+                ],
                 null
             ),
             $signatureCreator->generateSignature(
-                new Basket(
-                    0.0,
-                    0.0,
-                    [new BasketItem('b', null, null, null)]
-                ),
+                [
+                    'sAmount' => 0,
+                    'sAmountTax' => 0,
+                    'content' => [
+                        $this->createItemRow(null, null, 'B', null)
+                    ]
+                ],
                 null
             )
         );
@@ -141,19 +163,19 @@ class BasketSignatureGeneratorTest extends TestCase
 
         $this->assertNotSame(
             $signatureCreator->generateSignature(
-                new Basket(
-                    10.0,
-                    0.0,
-                    [new BasketItem('a', null, null, null)]
-                ),
+                [
+                    'sAmount' => 100,
+                    'sAmountTax' => 0,
+                    'content' => []
+                ],
                 null
             ),
             $signatureCreator->generateSignature(
-                new Basket(
-                    11.0,
-                    0.0,
-                    [new BasketItem('a', null, null, null)]
-                ),
+                [
+                    'sAmount' => 200,
+                    'sAmountTax' => 0,
+                    'content' => []
+                ],
                 null
             )
         );
@@ -165,19 +187,19 @@ class BasketSignatureGeneratorTest extends TestCase
 
         $this->assertNotSame(
             $signatureCreator->generateSignature(
-                new Basket(
-                    10.0,
-                    19.0,
-                    [new BasketItem('a', null, null, null)]
-                ),
+                [
+                    'sAmount' => 0,
+                    'sAmountTax' => 100,
+                    'content' => []
+                ],
                 null
             ),
             $signatureCreator->generateSignature(
-                new Basket(
-                    10.0,
-                    20.0,
-                    [new BasketItem('a', null, null, null)]
-                ),
+                [
+                    'sAmount' => 0,
+                    'sAmountTax' => 200,
+                    'content' => []
+                ],
                 null
             )
         );
@@ -189,30 +211,30 @@ class BasketSignatureGeneratorTest extends TestCase
 
         $this->assertNotSame(
             $signatureCreator->generateSignature(
-                new Basket(
-                    10.0,
-                    0.0,
-                    [
-                        new BasketItem('a', null, null, null),
-                        new BasketItem('a', null, null, null),
-                        new BasketItem('a', null, null, null)
+                [
+                    'sAmount' => 0,
+                    'sAmountTax' => 0,
+                    'content' => [
+                        $this->createItemRow(10, null, null, null),
+                        $this->createItemRow(10, null, null, null),
+                        $this->createItemRow(10, null, null, null),
+                        $this->createItemRow(10, null, null, null)
                     ]
-                ),
+                ],
                 null
             ),
             $signatureCreator->generateSignature(
-                new Basket(
-                    10.0,
-                    0.0,
-                    [
-                        new BasketItem('a', null, null, null),
-                        new BasketItem('a', null, null, null),
-                        new BasketItem('a', null, null, null),
-                        new BasketItem('a', null, null, null)
+                [
+                    'sAmount' => 0,
+                    'sAmountTax' => 0,
+                    'content' => [
+                        $this->createItemRow(10, null, null, null),
+                        $this->createItemRow(10, null, null, null)
                     ]
-                ),
+                ],
                 null
             )
+
         );
     }
 
@@ -220,32 +242,63 @@ class BasketSignatureGeneratorTest extends TestCase
     {
         $signatureCreator = new BasketSignatureGenerator();
 
+        $generator = $this->createPartialMock(BasketSignatureGenerator::class, []);
+        $class = new \ReflectionClass($generator);
+        $method = $class->getMethod('sortItems');
+        $method->setAccessible(true);
+
         $this->assertSame(
             $signatureCreator->generateSignature(
-                new Basket(
-                    10.0,
-                    0.0,
-                    [
-                        new BasketItem('a', null, null, 1),
-                        new BasketItem('a', null, null, 2),
-                        new BasketItem('a', null, null, 3)
+                [
+                    'sAmount' => 0,
+                    'sAmountTax' => 0,
+                    'content' => [
+                        $this->createItemRow(10, 1, 'B', 19.00),
+                        $this->createItemRow(20, 1, 'A', 19.00)
                     ]
-                ),
+                ],
                 null
             ),
             $signatureCreator->generateSignature(
-                new Basket(
-                    10.0,
-                    0.0,
-                    [
-                        new BasketItem('a', null, null, 3),
-                        new BasketItem('a', null, null, 1),
-                        new BasketItem('a', null, null, 2)
+                [
+                    'sAmount' => 0,
+                    'sAmountTax' => 0,
+                    'content' => [
+                        $this->createItemRow(20, 1, 'A', 19.00),
+                        $this->createItemRow(10, 1, 'B', 19.00)
                     ]
-                ),
+                ],
                 null
             )
         );
+    }
+
+    public function testSortRandomItems()
+    {
+        $generator = $this->createPartialMock(BasketSignatureGenerator::class, []);
+        $class = new \ReflectionClass($generator);
+        $method = $class->getMethod('sortItems');
+        $method->setAccessible(true);
+
+        $items = [];
+        // generate 100 random items
+        foreach (range(0, 10) as $counter) {
+            $items[] = $this->createItemRow(
+                random_int(0, 10),
+                random_int(0, 10),
+                random_int(0, 10),
+                random_int(0, 10)
+            );
+        }
+
+        // sort items once for reference
+        $expected = $method->invokeArgs($generator, [$items]);
+
+        // shuffle the items and compare output to reference
+        foreach (range(0, 10) as $counter) {
+            shuffle($items);
+            $this->assertEquals($expected, $method->invokeArgs($generator, [$items]));
+        }
     }
 
     public function testSignatureConsidersCustomerId()
@@ -254,13 +307,42 @@ class BasketSignatureGeneratorTest extends TestCase
 
         $this->assertNotSame(
             $signatureCreator->generateSignature(
-                new Basket(0.0, 0.0, []),
+                [
+                    'sAmount' => 0,
+                    'sAmountTax' => 0,
+                    'content' => []
+                ],
                 1
             ),
             $signatureCreator->generateSignature(
-                new Basket(0.0, 0.0, []),
+                [
+                    'sAmount' => 0,
+                    'sAmountTax' => 0,
+                    'content' => []
+                ],
                 2
             )
         );
+    }
+
+    /**
+     * @param float $price
+     * @param int $quantity
+     * @param string $number
+     * @param float $taxRate
+     * @return array
+     */
+    private function createItemRow(
+        $price,
+        $quantity,
+        $number,
+        $taxRate
+    ) {
+        return [
+            'ordernumber' => $number,
+            'price' => $price,
+            'tax_rate' => $taxRate,
+            'quantity' => $quantity
+        ];
     }
 }

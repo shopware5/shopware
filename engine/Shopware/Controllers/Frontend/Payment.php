@@ -22,7 +22,6 @@
  * our trademarks remain entirely with us.
  */
 
-use Shopware\Components\BasketSignature\Basket;
 use Shopware\Components\BasketSignature\BasketPersister;
 use Shopware\Components\BasketSignature\BasketSignatureGeneratorInterface;
 
@@ -126,6 +125,30 @@ abstract class Shopware_Controllers_Frontend_Payment extends Enlight_Controller_
     }
 
     /**
+     * @return string
+     */
+    protected function persistBasket()
+    {
+        /** @var Enlight_Components_Session_Namespace $session */
+        $session = $this->get('session');
+        $basket = $session->offsetGet('sOrderVariables')->getArrayCopy();
+        $customerId = $session->offsetGet('sUserId');
+
+        /** @var BasketSignatureGeneratorInterface $signatureGenerator */
+        $signatureGenerator = $this->get('basket_signature_generator');
+        $signature = $signatureGenerator->generateSignature(
+            $basket['sBasket'],
+            $customerId
+        );
+
+        /** @var BasketPersister $persister */
+        $persister = $this->get('basket_persister');
+        $persister->persist($signature, $basket);
+
+        return $signature;
+    }
+
+    /**
      * Loads the persisted basket identified by the given signature.
      * Persisted basket will be removed from storage after loading.
      * Converted ArrayObject for shopware session is already created and stored in session for following checkout processes.
@@ -164,7 +187,7 @@ abstract class Shopware_Controllers_Frontend_Payment extends Enlight_Controller_
         $data = $basket->getArrayCopy();
 
         $newSignature = $generator->generateSignature(
-            Basket::createFromSBasket($data['sBasket']),
+            $data['sBasket'],
             $this->get('session')->get('sUserId')
         );
 
@@ -174,44 +197,35 @@ abstract class Shopware_Controllers_Frontend_Payment extends Enlight_Controller_
     }
 
     /**
-     * @param int $paymentId
-     * @param string $signature
+     * @param string $paymentName
      * @param string $orderNumber
      * @param string $transactionNumber
      */
-    protected function sendSignatureIsInvalidNotificationMail($paymentId, $signature, $orderNumber, $transactionNumber)
+    protected function sendSignatureIsInvalidNotificationMail($paymentName, $orderNumber, $transactionNumber)
     {
-        /** @var Enlight_Components_Snippet_Namespace $snippets */
-        $snippets = $this->get('snippets')->getNamespace('frontend/payment/error_mail');
+        $content = <<<'EOD'
+An invalid basket signature occurred during a customers checkout. Please verify the order.
+Following information may help you to identify the problem:<br>
+Payment method: %s. <br>
+Order number: %s.<br>
+Payment transaction number: %s.
+EOD;
 
-        $subject = $snippets->get('InvalidBasketSignatureSubject');
+        $content = sprintf($content, $paymentName, $orderNumber, $transactionNumber);
 
-        /** @var \Doctrine\DBAL\Connection $dbalConnection */
-        $dbalConnection = $this->get('dbal_connection');
-        $query = $dbalConnection->createQueryBuilder();
+        try {
+            /** @var Enlight_Components_Mail $mail */
+            $mail = $this->get('mail');
+            $mail->addTo($this->get('config')->get('mail'));
+            $mail->setSubject('An invalid basket signature occured');
+            $mail->setBodyHtml($content);
+            $mail->send();
+        } catch (Exception $e) {
+        }
 
-        $query->select('payment.name, payment.description')
-            ->from('s_core_paymentmeans', 'payment')
-            ->where('payment.id = :paymentId')
-            ->setParameter('paymentId', $paymentId);
-
-        $payment = $query->execute()->fetch();
-
-        $content = [];
-        $content[] = $snippets->get('InvalidBasketSignatureContent');
-        $content[] = sprintf($snippets->get('InvalidBasketSignaturePaymentMethod'), $payment['name'], $paymentId, $payment['description']);
-        $content[] = $snippets->get('InvalidBasketSignature') . $signature;
-        $content[] = $snippets->get('InvalidBasketSignatureOrderNumber'). $orderNumber;
-        $content[] = $snippets->get('InvalidBasketSignatureTransactionNumber'). $transactionNumber;
-
-        $content = implode("<br>", $content);
-
-        /** @var Enlight_Components_Mail $mail */
-        $mail = $this->get('mail');
-        $mail->addTo($this->get('config')->get('mail'));
-        $mail->setSubject($subject);
-        $mail->setBodyHtml($content);
-        $mail->send();
+        /** @var \Shopware\Components\Logger $logger */
+        $logger = $this->get('corelogger');
+        $logger->log('error', $content);
     }
 
     /**

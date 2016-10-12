@@ -24,16 +24,44 @@
 
 namespace Shopware\Components\BasketSignature;
 
-interface BasketSignatureGeneratorInterface
+use Doctrine\DBAL\Connection;
+use Enlight\Event\SubscriberInterface;
+
+class CleanupSignatureSubscriber implements SubscriberInterface
 {
     /**
-     * Generates a signature for the provided basket.
-     * Signature can be used to verify if basket content changed between
-     * payment process and checkout finish.
-     *
-     * @param array $basket
-     * @param int $customerId
-     * @return string
+     * @var Connection
      */
-    public function generateSignature(array $basket, $customerId);
+    private $connection;
+
+    /**
+     * @param Connection $connection
+     */
+    public function __construct(Connection $connection)
+    {
+        $this->connection = $connection;
+    }
+
+    /**
+     * @return array
+     */
+    public static function getSubscribedEvents()
+    {
+        return [
+            'Shopware_CronJob_CleanupSignatures' => 'cleanup'
+        ];
+    }
+
+    public function cleanup()
+    {
+        $date = (new \DateTime())
+            ->sub(new \DateInterval('P10D'))
+            ->format('Y-m-d');
+
+        $this->connection->executeUpdate(
+            "DELETE FROM " . BasketPersister::DBAL_TABLE . " WHERE created_at < :createdAt",
+            [':createdAt' => $date]
+        );
+        return true;
+    }
 }

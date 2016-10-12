@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -30,12 +29,61 @@ class BasketSignatureGenerator implements BasketSignatureGeneratorInterface
     /**
      * @inheritdoc
      */
-    public function generateSignature(Basket $basket, $customerId)
+    public function generateSignature(array $basket, $customerId)
     {
-        usort($basket->items, function (BasketItem $a, BasketItem $b) {
-            return $a->price >= $b->price;
-        });
+        $items = array_map(
+            function (array $item) {
+                return [
+                    'ordernumber' => $item['ordernumber'],
+                    'quantity' => (float) $item['quantity'],
+                    'tax_rate' => (float) $item['tax_rate'],
+                    'price' => (float) $item['price']
+                ];
+            },
+            $basket['content']
+        );
 
-        return hash('sha256', json_encode($basket) . $customerId);
+        $items = $this->sortItems($items);
+
+        $data = [
+            'amount' => (float) $basket['sAmount'],
+            'taxAmount' => (float) $basket['sAmountTax'],
+            'items' => $items
+        ];
+
+        return hash('sha256', json_encode($data) . $customerId);
+    }
+
+    /**
+     * @param array $items
+     * @return array
+     */
+    private function sortItems(array $items)
+    {
+        usort(
+            $items,
+            function (array $a, array $b) {
+                if ($a['price'] < $b['price']) {
+                    return 1;
+                } elseif ($a['price'] > $b['price']) {
+                    return -1;
+                }
+
+                if ($a['quantity'] < $b['quantity']) {
+                    return 1;
+                } elseif ($a['quantity'] > $b['quantity']) {
+                    return -1;
+                }
+
+                if ($a['tax_rate'] < $b['tax_rate']) {
+                    return 1;
+                } elseif ($a['tax_rate'] > $b['tax_rate']) {
+                    return -1;
+                }
+
+                return strcmp($a['ordernumber'], $b['ordernumber']);
+            }
+        );
+        return array_values($items);
     }
 }
