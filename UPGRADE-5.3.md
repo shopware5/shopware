@@ -46,3 +46,13 @@ This changelog references changes done in Shopware 5.3 patch versions.
     * Removed `\Shopware\Models\Order\Repository::getBackendOrdersQueryBuilder`
     * Removed `\Shopware\Models\Order\Repository::getBackendOrdersQuery`
     * Removed `\Shopware\Models\Order\Repository::getBackendAdditionalOrderDataQuery`
+* Refactored category listing with shopping worlds
+    * Variable `showListing` is now dynamically set, if the listing needs to be displayed
+    * Products and their data will only be loaded if `showListing` is true
+* Refactored emotion fallback content handling in `jquery.emotion.js`
+    * Removed method `showFallbackContent` 
+    * Removed method `hideFallbackContent` 
+    * Removed jQuery event `plugin/swEmotionLoader/onShowFallbackContent`
+    * Removed jQuery event `plugin/swEmotionLoader/onHideFallbackContent`
+* Implemented new helper CSS classes for showing and hiding content on different viewports 
+    * Added `_mixins/visibility-helper.less`
