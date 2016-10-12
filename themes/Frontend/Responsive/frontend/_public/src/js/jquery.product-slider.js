@@ -302,6 +302,9 @@
             me.bufferedCall = false;
             me.initialized = false;
 
+            me.scrollingReachedEndOfItems = false;
+            me.totalUniqueItems = 0;
+
             me.isLoading = false;
             me.isAnimating = false;
 
@@ -381,6 +384,9 @@
             if (me.opts.arrowControls && me.isActive()) me.createArrows();
             if (me.opts.autoScroll && me.isActive()) me.autoScroll();
             if (me.opts.autoSlide && me.isActive()) me.autoSlide();
+            if (!me.totalUniqueItems && me.opts.mode !== 'ajax' && me.isActive()) {
+                me.initInfiniteScrolling();
+            }
 
             me.initialized = true;
 
@@ -610,7 +616,11 @@
 
                     me.isLoading = false;
                     me.$container.append(response);
-                    me.trackItems();
+
+                    if (me.itemsCount === me.trackItems()) {
+                        me.initInfiniteScrolling();
+                    }
+
                     me.setSizes();
                     me.trackArrows();
 
@@ -767,11 +777,53 @@
                 itemsLeftToLoad = me.opts.ajaxMaxShow - me.itemsCount,
                 loadMoreCount = me.itemsCount - me.itemsPerPage * 2;
 
-            if (scrolledItems >= loadMoreCount && itemsLeftToLoad > 0) {
+            if (!me.totalUniqueItems && itemsLeftToLoad === 0) {
+                me.initInfiniteScrolling();
+            }
+            if (!me.totalUniqueItems && scrolledItems >= loadMoreCount && itemsLeftToLoad > 0) {
                 me.loadItems(me.itemsCount, Math.min(me.itemsPerPage, itemsLeftToLoad));
             }
 
             $.publish('plugin/swProductSlider/onScroll', [ me, event ]);
+        },
+
+        /**
+         * Copies the first Items to the end for scrolling inifinitely
+         *
+         * @public
+         * @method initInfiniteScrolling
+         */
+        initInfiniteScrolling: function () {
+            var me = this, i;
+
+            if (!me.opts.autoSlide && !me.opts.autoScroll) {
+                return;
+            }
+
+            me.totalUniqueItems  = me.itemsCount;
+            me.$items = me.$container.find(me.opts.itemSelector);
+
+            for (i = 0; i < me.itemsPerPage + me.opts.itemsPerSlide; i++) {
+                me.$container.append($(me.$items[i]).clone());
+            }
+            me.trackItems();
+
+            $.publish('plugin/swProductSlider/onInitInfiniteScrolling', [ me, me.currentPosition ]);
+        },
+
+        /**
+         * Sets the current position to the relative Beginning
+         *
+         * @public
+         * @method rearangeItems
+         */
+        resetToBeginning: function () {
+            var me = this;
+
+            me.scrollingReachedEndOfItems = false;
+            me.setPosition((Math.floor(me.currentPosition / me.itemSize) - (me.totalUniqueItems)) * me.itemSize);
+
+            $.publish('plugin/swProductSlider/onResetToBeginning', [ me, me.currentPosition ]);
         },
 
         /**
@@ -784,8 +836,16 @@
         slideNext: function () {
             var me = this;
 
+            if (me.opts.autoSlide && me.scrollingReachedEndOfItems) {
+                me.resetToBeginning();
+            }
+
             me.currentPosition = Math.floor((me.currentPosition + me.itemSize * me.opts.itemsPerSlide) / me.itemSize) * me.itemSize;
             me.slide(me.currentPosition);
+
+            if (me.opts.autoSlide && me.totalUniqueItems && (me.currentPosition / me.itemSize) >= me.totalUniqueItems) {
+                me.scrollingReachedEndOfItems = true;
+            }
 
             $.publish('plugin/swProductSlider/onSlideNext', [ me, me.currentPosition ]);
         },
@@ -799,6 +859,10 @@
          */
         slidePrev: function () {
             var me = this;
+
+            if (me.scrollingReachedEndOfItems) {
+                me.scrollingReachedEndOfItems = false;
+            }
 
             me.currentPosition = Math.ceil((me.currentPosition - me.itemSize * me.opts.itemsPerSlide) / me.itemSize) * me.itemSize;
             me.slide(me.currentPosition);
@@ -935,6 +999,10 @@
             me.autoScrollAnimation = StateManager.requestAnimationFrame($.proxy(me.autoScroll, me, direction, speed));
 
             me.setPosition((direction === 'prev') ? position - speed : position + speed);
+
+            if (me.totalUniqueItems && (me.currentPosition / me.itemSize) >= me.totalUniqueItems) {
+                me.setPosition(0);
+            }
 
             $.publish('plugin/swProductSlider/onAutoScroll', [ me, me.autoScrollAnimation, scrollDirection, scrollSpeed ]);
         },
