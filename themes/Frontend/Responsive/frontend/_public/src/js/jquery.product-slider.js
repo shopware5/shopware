@@ -795,7 +795,8 @@
         },
 
         /**
-         * Copies the first Items to the end for scrolling infinitely
+         * Initializes the slider for infinite sliding.
+         * The slider will jump to the start position when it reached the end.
          *
          * @public
          * @method initInfiniteSlide
@@ -811,6 +812,15 @@
             $.publish('plugin/swProductSlider/onInitInfiniteSlide', [ me ]);
         },
 
+        /**
+         * Clones items in the given index range and appends them to the list.
+         * Used for infinite sliding.
+         *
+         * @public
+         * @method cloneItems
+         * @param start
+         * @param end
+         */
         cloneItems: function (start, end) {
             var me = this,
                 $copyItems = me.$items.slice(start, end);
@@ -821,7 +831,7 @@
         },
 
         /**
-         * Sets the current position to the relative Beginning
+         * Sets the current position to the relative start position.
          *
          * @public
          * @method resetToStart
