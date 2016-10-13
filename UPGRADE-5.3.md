@@ -264,6 +264,7 @@ did not work anymore because the smarty rendering is off. The string {$offerPosi
     * `SORTING_PRODUCT_NAME_DESC`
     * `SORTING_SEARCH_RANKING`
 * Removed smarty modifier `rewrite`
+* Removed scrollbar styling on filter-panels (Selector `.filter-panel--content`)
 
 ### Deprecations
 
