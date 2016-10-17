@@ -185,8 +185,7 @@ class Shopware_Components_StringCompiler
             if (!is_string($replacement)) {
                 continue;
             }
-
-            $value = str_replace('{' . $key . '}', $replacement, $value);
+            $value = str_replace('{' . $key . '}', '{$' . $key . '}', $value);
         }
 
         return $value;
