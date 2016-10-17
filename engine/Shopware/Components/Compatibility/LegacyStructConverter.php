@@ -556,7 +556,7 @@ class LegacyStructConverter
 
         // check if manufacturer is not null
         // prevent Call to am member function getName() on null if manufactuer was not set via API
-        if($manufacturer != null) {
+        if ($manufacturer != null) {
             $data["sLinks"][] = array(
                 'supplierSearch' => true,
                 'description' => $manufacturer->getName(),
