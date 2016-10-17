@@ -265,7 +265,7 @@ class Homepage extends Page implements HelperSelectorInterface
     {
         $properties = array_keys(current($slides));
 
-        $sliderSlides = array_slice($slider->getSlides($properties), 0, count($slides));
+        $sliderSlides = $slider->getSlides($properties);
 
         $result = Helper::compareArrays($sliderSlides, $slides);
 
@@ -275,8 +275,8 @@ class Homepage extends Page implements HelperSelectorInterface
 
         $message = [
             sprintf('The slides have a different %s!', $result['key']),
-            'Given: ' . print_r($result['value'], true),
-            'Expected: ' . print_r($result['value2'], true)
+            'Given: ' . $result['value'],
+            'Expected: ' . $result['value2']
         ];
 
         Helper::throwException($message);
