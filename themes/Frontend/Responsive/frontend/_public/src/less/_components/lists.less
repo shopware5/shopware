@@ -56,13 +56,13 @@ In addition there are 8 list style types Shopware 5 provides that you can choose
     }
 
     // Other list icons
-    &.is--disc li { .icon-element('\e656'); }
-    &.is--checked li { .icon-element('\e60c'); }
-    &.is--arrow-right li { .icon-element('\e60f', 10); }
-    &.is--star li { .icon-element('\e600', 10); }
-    &.is--cross li { .icon-element('\e60d'); }
-    &.is--tag li { .icon-element('\e640'); }
-    &.is--plus li { .icon-element('\e689'); }
+    &.is--disc li { .icon-element(@sw-icon-cd); }
+    &.is--checked li { .icon-element(@sw-icon-check); }
+    &.is--arrow-right li { .icon-element(@sw-icon-arrow-right, 10); }
+    &.is--star li { .icon-element(@sw-icon-star, 10); }
+    &.is--cross li { .icon-element(@sw-icon-cross); }
+    &.is--tag li { .icon-element(@sw-icon-tag); }
+    &.is--plus li { .icon-element(@sw-icon-plus); }
 }
 
 .list--unstyled { list-style: none }
