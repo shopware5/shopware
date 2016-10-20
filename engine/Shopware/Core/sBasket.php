@@ -1073,6 +1073,8 @@ class sBasket
      */
     public function sGetBasket()
     {
+        $this->removeCustomerGroupBlockedArticles();
+
         // Refresh basket prices
         $basketData = $this->db->fetchAll(
             'SELECT id, modus, quantity
@@ -1435,14 +1437,6 @@ class sBasket
 
         if (empty($queryNewPrice["price"]) && empty($queryNewPrice["config"])) {
             // If no price is set for default customer group, delete article from basket
-            $this->sDeleteArticle($id);
-            return false;
-        }
-
-        /**
-         * Remove article from basket, if article is blocked for this customergroup
-         */
-        if ($this->isProductBlockedByCustomerGroup($queryAdditionalInfo['articleID'])) {
             $this->sDeleteArticle($id);
             return false;
         }
@@ -2787,11 +2781,26 @@ class sBasket
         return $newQuantity;
     }
 
+    /**
+     * @param $articleId
+     * @return string
+     */
     private function isProductBlockedByCustomerGroup($articleId)
     {
         return $this->db->fetchOne('SELECT 1 FROM s_articles_avoid_customergroups WHERE customergroupId = ? AND articleID = ?', [
             $this->contextService->getShopContext()->getCurrentCustomerGroup()->getId(),
             $articleId
+        ]);
+    }
+
+    /**
+     * Remove customgroup blocked articles from basket
+     */
+    private function removeCustomerGroupBlockedArticles()
+    {
+        $this->db->query('DELETE FROM s_order_basket WHERE modus = 0 AND sessionId = ? AND (SELECT 1 FROM s_articles_avoid_customergroups WHERE customergroupId = ? and articleID = s_order_basket.articleId) = 1', [
+            $this->session->offsetGet('sessionId'),
+            $this->contextService->getShopContext()->getCurrentCustomerGroup()->getId()
         ]);
     }
 }
