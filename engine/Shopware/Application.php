@@ -31,7 +31,7 @@ use Shopware\Components\DependencyInjection\Container;
  * @package   Shopware
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Shopware extends Enlight_Application
+class Shopware
 {
     const VERSION      = '___VERSION___';
     const VERSION_TEXT = '___VERSION_TEXT___';
@@ -63,46 +63,6 @@ class Shopware extends Enlight_Application
         $this->container = $container;
         $this->appPath   = __DIR__ . DIRECTORY_SEPARATOR;
         $this->docPath   = dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR;
-
-        parent::__construct();
-    }
-
-    /**
-     * Returns the name of the application
-     *
-     * @deprecated since 5.2, to be removed in 5.3
-     * @return string
-     */
-    public function App()
-    {
-        trigger_error('Shopware()->App() is deprecated since version 5.2 and will be removed in 5.3.', E_USER_DEPRECATED);
-
-        return $this->container->getParameter('kernel.name');
-    }
-
-    /**
-     * Returns the application environment method
-     *
-     * @deprecated since 5.2, to be removed in 5.3
-     * @return string
-     */
-    public function Environment()
-    {
-        trigger_error('Shopware()->Environment() is deprecated since version 5.2 and will be removed in 5.3. Use the kernel.environment parameter instead.', E_USER_DEPRECATED);
-
-        return $this->container->getParameter('kernel.environment');
-    }
-
-    /**
-     * @deprecated since 5.2, to be removed in 5.3. Use Shopware()->DocPath() instead.
-     * @param string $path
-     * @return string
-     */
-    public function OldPath($path = null)
-    {
-        trigger_error('Shopware()->OldPath() is deprecated since version 5.2 and will be removed in 5.3. Use Shopware()->DocPath() instead.', E_USER_DEPRECATED);
-
-        return $this->DocPath($path);
     }
 
     /**
@@ -154,8 +114,6 @@ class Shopware extends Enlight_Application
     }
 
     /**
-     * Returns the instance of the loader, which is initialed in the class constructor
-     *
      * @return Enlight_Loader
      */
     public function Loader()
@@ -164,8 +122,6 @@ class Shopware extends Enlight_Application
     }
 
     /**
-     * Returns the instance of the hook manager, which is initialed in the class constructor
-     *
      * @return Enlight_Hook_HookManager
      */
     public function Hooks()
@@ -181,7 +137,7 @@ class Shopware extends Enlight_Application
      */
     public function System()
     {
-        return $this->container->get('System');
+        return $this->container->get('system');
     }
 
     /**
@@ -191,27 +147,23 @@ class Shopware extends Enlight_Application
      */
     public function Front()
     {
-        return $this->container->get('Front');
+        return $this->container->get('front');
     }
 
     /**
-     * Returns template instance
-     *
      * @return Enlight_Template_Manager
      */
     public function Template()
     {
-        return $this->container->get('Template');
+        return $this->container->get('template');
     }
 
     /**
-     * Returns config instance
-     *
      * @return Shopware_Components_Config
      */
     public function Config()
     {
-        return $this->container->get('Config');
+        return $this->container->get('config');
     }
 
     /**
@@ -221,7 +173,7 @@ class Shopware extends Enlight_Application
      */
     public function Modules()
     {
-        return $this->container->get('Modules');
+        return $this->container->get('modules');
     }
 
     /**
@@ -229,7 +181,7 @@ class Shopware extends Enlight_Application
      */
     public function Shop()
     {
-        return $this->container->get('Shop');
+        return $this->container->get('shop');
     }
 
     /**
@@ -239,52 +191,50 @@ class Shopware extends Enlight_Application
      */
     public function Db()
     {
-        return $this->container->get('Db');
+        return $this->container->get('db');
     }
 
     /**
-     * Returns doctrine instance
-     *
      * @return Shopware\Components\Model\ModelManager
      */
     public function Models()
     {
-        return $this->container->get('Models');
+        return $this->container->get('models');
     }
 
     /**
-     * Returns session instance
-     *
      * @return Enlight_Components_Session_Namespace
      */
     public function Session()
     {
-        return $this->container->get('Session');
+        return $this->container->get('session');
     }
 
     /**
-     * Returns session instance
-     *
+     * @return Enlight_Components_Session_Namespace
+     */
+    public function BackendSession()
+    {
+        return $this->container->get('backendsession');
+    }
+
+    /**
      * @return Shopware_Components_Acl
      */
     public function Acl()
     {
-        return $this->container->get('Acl');
+        return $this->container->get('acl');
     }
 
     /**
-     * Returns session instance
-     *
      * @return Shopware_Components_TemplateMail
      */
     public function TemplateMail()
     {
-        return $this->container->get('TemplateMail');
+        return $this->container->get('templatemail');
     }
 
     /**
-     * Returns the instance of the plugin manager, which is initialed in the class constructor
-     *
      * @return Enlight_Plugin_PluginManager
      */
     public function Plugins()
@@ -293,8 +243,6 @@ class Shopware extends Enlight_Application
     }
 
     /**
-     * Returns the instance of the snippet manager
-     *
      * @return Shopware_Components_Snippet_Manager
      */
     public function Snippets()
@@ -303,53 +251,19 @@ class Shopware extends Enlight_Application
     }
 
     /**
-     * Returns the instance of the password manager
-     *
      * @return \Shopware\Components\Password\Manager
      */
     public function PasswordEncoder()
     {
-        return $this->container->get('PasswordEncoder');
+        return $this->container->get('passwordencoder');
     }
 
     /**
-     * Returns the instance of the event manager, which is initialed in the class constructor
-     *
      * @return Enlight_Event_EventManager
      */
     public function Events()
     {
         return $this->container->get('events');
-    }
-
-    /**
-     * Setter function of the _events property.
-     * Allows to override the default Shopware Event Manager with an
-     * plugin specified event manager.
-     * The passed manager has to be an instance of the Enlight_Event_EventManager,
-     * otherwise the function throws an exception.
-     *
-     * @deprecated since 5.2, to be removed in 5.3
-     * @param Enlight_Event_EventManager $manager
-     */
-    public function setEventManager(Enlight_Event_EventManager $manager)
-    {
-        trigger_error('Shopware()->setEventManager() is deprecated since version 5.2 and will be removed in 5.3. Use the Container instead.', E_USER_DEPRECATED);
-
-        $this->container->set('events', $manager);
-    }
-
-
-    /**
-     * Returns the instance of the application bootstrap
-     * @deprecated since 5.2, to be removed in 5.3
-     * @return Shopware_Bootstrap
-     */
-    public function Bootstrap()
-    {
-        trigger_error('Shopware()->Bootstrap() is deprecated since version 5.2 and will be removed in 5.3. Use the Container instead.', E_USER_DEPRECATED);
-
-        return $this->container->get('bootstrap');
     }
 
     /**
@@ -363,7 +277,10 @@ class Shopware extends Enlight_Application
      */
     public function __call($name, $value = null)
     {
-        trigger_error('Shopware()->__call(' . $name . ') is deprecated since version 4.2 and will be removed in 5.3. Use the Container instead.', E_USER_DEPRECATED);
+        $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 1)[0];
+        $caller = $trace['file'].':'.$trace['line'];
+
+        trigger_error('Shopware()->'. $name . '() is deprecated since version 4.2 and will be removed in 6.0. Use the Container instead. Called by '. $caller, E_USER_DEPRECATED);
 
         if (!$this->container->has($name)) {
             throw new Enlight_Exception(
@@ -390,7 +307,7 @@ function Shopware($newInstance = null)
         $instance    = $newInstance;
         return $oldInstance;
     } elseif (!isset($instance)) {
-        throw new RuntimeException("Shopware Kernel not booted");
+        throw new RuntimeException('Shopware Kernel not booted');
     }
 
     return $instance;

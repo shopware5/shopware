@@ -225,7 +225,7 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
         $targetLocale = Shopware()->Container()->get('Auth')->getIdentity()->locale;
 
         /** @var Zend_Locale $baseLocale */
-        $baseLocale = Shopware()->Locale();
+        $baseLocale = Shopware()->Container()->get('locale');
 
         $locales = Shopware()->Plugins()->Backend()->Auth()->getLocales();
 

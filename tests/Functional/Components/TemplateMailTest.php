@@ -44,11 +44,16 @@ class Shopware_Tests_Components_TemplateMailTest extends Enlight_Components_Test
 
         $stringCompiler = new Shopware_Components_StringCompiler(Shopware()->Template());
 
-        $manager = $this->createMock(\Shopware\Components\Model\ModelManager::class);
+        $repository = $this->createMock(\Doctrine\ORM\EntityRepository::class);
+        $repository->expects($this->any())
+            ->method('findOneBy')
+            ->willReturn(null);
 
+        $manager = $this->createMock(\Shopware\Components\Model\ModelManager::class);
         $manager->expects($this->any())
                 ->method('getRepository')
-                ->will($this->returnSelf());
+                ->willReturn($repository);
+
 
         $this->mail = new Shopware_Components_TemplateMail();
         $this->mail->setShop(Shopware()->Shop());
