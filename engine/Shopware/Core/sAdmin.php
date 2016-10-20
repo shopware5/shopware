@@ -3424,22 +3424,9 @@ SQL;
         $shipping['attributes'] = $this->attributeLoader->load('s_user_addresses_attributes', $shipping['id']) ?: [];
         $userData["shippingaddress"] = $shipping;
 
-        // If shipping address is not available, billing address is coeval the shipping address
-        $countryShipping = $this->config->get('sCOUNTRYSHIPPING');
         if (!isset($userData["shippingaddress"]["firstname"])) {
             $userData["shippingaddress"] = $userData["billingaddress"];
             $userData["shippingaddress"]["eqalBilling"] = true;
-        } else {
-            if (($userData["shippingaddress"]["countryID"] != $userData["billingaddress"]["countryID"])
-                && empty($countryShipping)
-            ) {
-                $this->db->update(
-                    's_user_shippingaddress',
-                    array('countryID' => $userData["billingaddress"]["countryID"]),
-                    array('id = ?' => $userData["shippingaddress"]["id"])
-                );
-                $userData["shippingaddress"]["countryID"] = $userData["billingaddress"]["countryID"];
-            }
         }
 
         if (empty($userData["shippingaddress"]["countryID"])) {
