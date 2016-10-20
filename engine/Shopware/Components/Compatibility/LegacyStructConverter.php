@@ -334,11 +334,7 @@ class LegacyStructConverter
             return array();
         }
 
-        if ($this->config->get('calculateCheapestPriceWithMinPurchase')) {
-            $cheapestPrice = $product->getCheapestPrice();
-        } else {
-            $cheapestPrice = $product->getCheapestUnitPrice();
-        }
+        $cheapestPrice = $product->getListingPrice();
 
         $promotion = $this->getListProductData($product);
         $promotion = array_merge($promotion, $this->convertProductPriceStruct($cheapestPrice));
@@ -348,7 +344,7 @@ class LegacyStructConverter
             $promotion['pricegroupID'] = $product->getPriceGroup()->getId();
         }
 
-        if (count($product->getPrices()) > 1 || $product->hasDifferentPrices()) {
+        if ($product->displayFromPrice()) {
             $promotion['priceStartingFrom'] = $promotion['price'];
         }
 
@@ -941,10 +937,7 @@ class LegacyStructConverter
         $data = [];
 
         $variantPrice = $product->getVariantPrice();
-        $cheapestPrice = $product->getCheapestUnitPrice();
-        if ($this->config->get('calculateCheapestPriceWithMinPurchase')) {
-            $cheapestPrice = $product->getCheapestPrice();
-        }
+        $cheapestPrice = $product->getListingPrice();
 
         if (count($product->getPrices()) > 1 || $product->hasDifferentPrices()) {
             $data['priceStartingFrom'] = $this->sFormatPrice($cheapestPrice->getCalculatedPrice());

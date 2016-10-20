@@ -344,6 +344,12 @@ class ListProduct extends BaseProduct implements \JsonSerializable
      */
     protected $categories = [];
 
+
+    /**
+     * @var Price
+     */
+    protected $listingPrice;
+
     /**
      * Adds a new product state.
      *
@@ -1147,5 +1153,29 @@ class ListProduct extends BaseProduct implements \JsonSerializable
     public function setCategories(array $categories)
     {
         $this->categories = $categories;
+    }
+
+    /**
+     * @param Price $price
+     */
+    public function setListingPrice(Price $price)
+    {
+        $this->listingPrice = $price;
+    }
+
+    /**
+     * @return Price
+     */
+    public function getListingPrice()
+    {
+        return $this->listingPrice;
+    }
+
+    /**
+     * @return bool
+     */
+    public function displayFromPrice()
+    {
+        return (count($this->getPrices()) > 1 || $this->hasDifferentPrices());
     }
 }

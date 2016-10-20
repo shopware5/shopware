@@ -173,6 +173,12 @@ class ListProductService implements Service\ListProductServiceInterface
 
             $this->priceCalculationService->calculateProduct($product, $context);
 
+            if ($this->config->get('calculateCheapestPriceWithMinPurchase')) {
+                $product->setListingPrice($product->getCheapestPrice());
+            } else {
+                $product->setListingPrice($product->getCheapestUnitPrice());
+            }
+
             if ($this->isProductValid($product, $context)) {
                 $result[$number] = $product;
             }
