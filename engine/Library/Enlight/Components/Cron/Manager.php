@@ -213,7 +213,7 @@ class Enlight_Components_Cron_Manager
      */
     public function addJob(Enlight_Components_Cron_Job $job)
     {
-        $this->adapter->addJob($job);
+        $this->adapter->updateJob($job);
         return $this;
     }
 

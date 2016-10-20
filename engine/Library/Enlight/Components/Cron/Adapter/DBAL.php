@@ -67,6 +67,7 @@ class Enlight_Components_Cron_Adapter_DBAL implements Enlight_Components_Cron_Ad
         $data['start']            = ($job->getStart()) ? $job->getStart()->toString('YYYY-MM-dd HH:mm:ss') : null;
         $data['end']              = ($job->getEnd()) ? $job->getEnd()->toString('YYYY-MM-dd HH:mm:ss') : null;
         $data['disable_on_error'] = ($job->getDisableOnError()) ? '1' : '0';
+        $data["name"]             = $job->getName();
 
         if (is_null($job->getId())) {
             $this->connection->insert($this->tableName, $data);
