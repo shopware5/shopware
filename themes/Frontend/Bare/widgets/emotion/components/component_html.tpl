@@ -10,7 +10,7 @@
         {/block}
 
         {block name="widget_emotion_component_html_content"}
-            <div class="html--content{if !$Data.needsNoStyling && $Data.cms_title} panel--body is--wide{/if}">
+            <div class="html--content{if !$Data.needsNoStyling} panel--body is--wide{/if}">
                 {$Data.text}
             </div>
         {/block}
