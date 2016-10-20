@@ -56,3 +56,4 @@ This changelog references changes done in Shopware 5.3 patch versions.
     * Removed jQuery event `plugin/swEmotionLoader/onHideFallbackContent`
 * Implemented new helper CSS classes for showing and hiding content on different viewports 
     * Added `_mixins/visibility-helper.less`
+* Webcron requires now one of these Fields `Allowed key` or `Allowed IP` or `Secured by account`

@@ -24,7 +24,7 @@
 
 class Shopware_Plugins_Core_Cron_Bootstrap extends Shopware_Components_Plugin_Bootstrap
 {
-    protected $results = array();
+    protected $results = [];
 
     public function install()
     {
@@ -41,49 +41,55 @@ class Shopware_Plugins_Core_Cron_Bootstrap extends Shopware_Components_Plugin_Bo
     private function createForm()
     {
         $form = $this->Form();
-        $parent = $this->Forms()->findOneBy(array('name' => 'Other'));
-        $form->setParent($parent);
+        $form->setParent($this->Forms()->findOneBy(['name' => 'Other']));
         $form->setName('CronSecurity');
         $form->setLabel('Cron-Sicherheit');
 
-        $form->setElement('text', 'cronSecureAllowedKey', array(
+        $form->setElement('text', 'cronSecureAllowedKey', [
             'label'    => 'Gültiger Schlüssel',
             'description' => 'Hinterlegen Sie hier einen Key zum Ausführen der Cronjobs.',
             'required' => false,
             'value'    => ''
-        ));
-        $form->setElement('text', 'cronSecureAllowedIp', array(
+        ]);
+
+        $form->setElement('text', 'cronSecureAllowedIp', [
             'label' => 'Zulässige IP(s)',
             'description' => 'Nur angegebene IP-Adressen können die Cron Anfragen auslösen. Mehrere IP-Adressen müssen durch ein \';\' getrennt werden.',
             'required' => false,
             'value' => ''
-        ));
-        $form->setElement('boolean', 'cronSecureByAccount', array(
+        ]);
+
+        $form->setElement('boolean', 'cronSecureByAccount', [
             'label' => 'Durch Benutzerkonto absichern',
             'description' => 'Es werden nur Anfragen von authentifizierten Backend Benutzern akzeptiert',
             'value' => false,
-        ));
+        ]);
+
+        $form->setElement('text', 'isNewInstallation', [
+            'value' => 1,
+            'hidden' => true
+        ]);
 
         $this->addFormTranslations(
-            array(
-                'en_GB' => array(
-                    'plugin_form' => array(
+            [
+                'en_GB' => [
+                    'plugin_form' => [
                         'label' => 'Cron security'
-                    ),
-                    'cronSecureAllowedKey' => array(
+                    ],
+                    'cronSecureAllowedKey' => [
                         'label'    => 'Allowed key',
                         'description' => 'If provided, cron requests will be executed if the inserted value is provided as \'key\' in the request'
-                    ),
-                    'cronSecureAllowedIp' => array(
+                    ],
+                    'cronSecureAllowedIp' => [
                         'label' => 'Allowed IP(s)',
                         'description' => 'If provided, cron requests will be executed if triggered from the given IP address(es). Use \';\' to separate multiple addresses.'
-                    ),
-                    'cronSecureByAccount' => array(
+                    ],
+                    'cronSecureByAccount' => [
                         'label' => 'Secure using account',
                         'description' => 'If set, requests received from authenticated backend users will be accepted'
-                    )
-                )
-            )
+                    ]
+                ]
+            ]
         );
     }
 
@@ -107,13 +113,13 @@ class Shopware_Plugins_Core_Cron_Bootstrap extends Shopware_Components_Plugin_Bo
 
         // At least one of the security policies is enabled.
         // If at least one of them validates, cron tasks will be executed
-        $cronSecureAllowedKey = Shopware()->Config()->get('cronSecureAllowedKey');
-        $cronSecureAllowedIp = Shopware()->Config()->get('cronSecureAllowedIp');
-        $cronSecureByAccount = Shopware()->Config()->get('cronSecureByAccount');
+        $cronSecureAllowedKey = $this->Config()->get('cronSecureAllowedKey');
+        $cronSecureAllowedIp = $this->Config()->get('cronSecureAllowedIp');
+        $cronSecureByAccount = $this->Config()->get('cronSecureByAccount');
 
-        // No security policy specified, accept all requests
+        // No security policy specified, accept all requests if is a old shopware installation or block
         if (empty($cronSecureAllowedKey) && empty($cronSecureAllowedIp) && !$cronSecureByAccount) {
-            return true;
+            return !(boolean) $this->Config()->get('isNewInstallation', 0);
         }
 
         // Validate key
