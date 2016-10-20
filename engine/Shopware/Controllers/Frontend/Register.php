@@ -290,7 +290,7 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
         $countryStateName = "country_state_" . $data['register']['billing']['country'];
         $data['register']['billing']['state'] = $data['register']['billing'][$countryStateName];
 
-        $countryStateName = "country_state_" . $data['register']['shipping']['country'];
+        $countryStateName = "country_shipping_state_" . $data['register']['shipping']['country'];
         $data['register']['shipping']['state'] = $data['register']['shipping'][$countryStateName];
         $data['register']['billing'] += $data['register']['personal'];
         $data['register']['shipping']['phone'] = $data['register']['personal']['phone'];
