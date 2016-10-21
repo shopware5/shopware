@@ -62,13 +62,14 @@ class Enlight_Components_Cron_Adapter_DBAL implements Enlight_Components_Cron_Ad
         $data['action']           = $job->getAction();
         $data[$this->connection->quoteIdentifier('interval')] = $job->getInterval();
         $data['data']             = serialize($job->getData());
-        $data['active']           = ($job->getActive()) ? '1' : '0';
-        $data['next']             = ($job->getNext()) ? $job->getNext()->toString('YYYY-MM-dd HH:mm:ss') : null;
-        $data['start']            = ($job->getStart()) ? $job->getStart()->toString('YYYY-MM-dd HH:mm:ss') : null;
-        $data['end']              = ($job->getEnd()) ? $job->getEnd()->toString('YYYY-MM-dd HH:mm:ss') : null;
-        $data['disable_on_error'] = ($job->getDisableOnError()) ? '1' : '0';
+        $data['active']           = $job->getActive() ? '1' : '0';
+        $data['next']             = $job->getNext() ? $job->getNext()->toString('YYYY-MM-dd HH:mm:ss') : null;
+        $data['start']            = $job->getStart() ? $job->getStart()->toString('YYYY-MM-dd HH:mm:ss') : null;
+        $data['end']              = $job->getEnd() ? $job->getEnd()->toString('YYYY-MM-dd HH:mm:ss') : null;
+        $data['disable_on_error'] = $job->getDisableOnError() ? '1' : '0';
+        $data['name']             = $job->getName();
 
-        if (is_null($job->getId())) {
+        if (null === $job->getId()) {
             $this->connection->insert($this->tableName, $data);
         } else {
             $this->connection->update(
