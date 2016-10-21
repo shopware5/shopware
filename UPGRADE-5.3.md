@@ -30,6 +30,7 @@ This changelog references changes done in Shopware 5.3 patch versions.
 
 ### Removals
 
+* Removed configuration option `sCOUNTRYSHIPPING`
 * Removed `{$sShopname}` from forms, use `{sShopname}` instead
 * Removed import / export module
 * Removed article vote module files
