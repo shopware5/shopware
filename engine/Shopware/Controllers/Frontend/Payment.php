@@ -22,6 +22,9 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Components\BasketSignature\BasketPersister;
+use Shopware\Components\BasketSignature\BasketSignatureGeneratorInterface;
+
 /**
  * Shopware Payment Controller
  *
@@ -119,6 +122,110 @@ abstract class Shopware_Controllers_Frontend_Payment extends Enlight_Controller_
         }
 
         return $orderNumber;
+    }
+
+    /**
+     * @return string
+     */
+    protected function persistBasket()
+    {
+        /** @var Enlight_Components_Session_Namespace $session */
+        $session = $this->get('session');
+        $basket = $session->offsetGet('sOrderVariables')->getArrayCopy();
+        $customerId = $session->offsetGet('sUserId');
+
+        /** @var BasketSignatureGeneratorInterface $signatureGenerator */
+        $signatureGenerator = $this->get('basket_signature_generator');
+        $signature = $signatureGenerator->generateSignature(
+            $basket['sBasket'],
+            $customerId
+        );
+
+        /** @var BasketPersister $persister */
+        $persister = $this->get('basket_persister');
+        $persister->persist($signature, $basket);
+
+        return $signature;
+    }
+
+    /**
+     * Loads the persisted basket identified by the given signature.
+     * Persisted basket will be removed from storage after loading.
+     * Converted ArrayObject for shopware session is already created and stored in session for following checkout processes.
+     *
+     * @param string $signature
+     * @return ArrayObject
+     */
+    protected function loadBasketFromSignature($signature)
+    {
+        /** @var BasketPersister $persister */
+        $persister = $this->get('basket_persister');
+        $data = $persister->load($signature);
+
+        if (!$data) {
+            throw new RuntimeException(sprintf('Basket for signature %s not found', $signature));
+        }
+
+        $persister->delete($signature);
+
+        $basket = new ArrayObject($data, ArrayObject::ARRAY_AS_PROPS);
+        $this->get('session')->offsetSet('sOrderVariables', $basket);
+
+        return $basket;
+    }
+
+    /**
+     * @param string $signature
+     * @param ArrayObject $basket
+     * @throws RuntimeException if signature does not match with provided basket
+     */
+    protected function verifyBasketSignature($signature, ArrayObject $basket)
+    {
+        /** @var BasketSignatureGeneratorInterface $generator */
+        $generator = $this->get('basket_signature_generator');
+
+        $data = $basket->getArrayCopy();
+
+        $newSignature = $generator->generateSignature(
+            $data['sBasket'],
+            $this->get('session')->get('sUserId')
+        );
+
+        if ($newSignature !== $signature) {
+            throw new RuntimeException('The given signature is not equal to the generated signature of the saved basket');
+        }
+    }
+
+    /**
+     * @param string $paymentName
+     * @param string $orderNumber
+     * @param string $transactionNumber
+     */
+    protected function sendSignatureIsInvalidNotificationMail($paymentName, $orderNumber, $transactionNumber)
+    {
+        $content = <<<'EOD'
+An invalid basket signature occurred during a customers checkout. Please verify the order.
+Following information may help you to identify the problem:<br>
+Payment method: %s. <br>
+Order number: %s.<br>
+Payment transaction number: %s.
+EOD;
+
+        $content = sprintf($content, $paymentName, $orderNumber, $transactionNumber);
+
+        try {
+            /** @var Enlight_Components_Mail $mail */
+            $mail = $this->get('mail');
+            $mail->addTo($this->get('config')->get('mail'));
+            $mail->setSubject('An invalid basket signature occured');
+            $mail->setBodyHtml($content);
+            $mail->send();
+        } catch (Exception $e) {
+        }
+
+        /** @var \Shopware\Components\Logger $logger */
+        $logger = $this->get('corelogger');
+        $logger->log('error', $content);
     }
 
     /**

@@ -480,6 +480,19 @@
             <argument type="service" id="db_connection"/>
         </service>
 
+
+        <service id="basket_persister" class="Shopware\Components\BasketSignature\BasketPersister">
+            <argument type="service" id="dbal_connection" />
+        </service>
+
+        <service id="basket_signature_generator" class="Shopware\Components\BasketSignature\BasketSignatureGenerator" />
+
+        <service id="basket_cleanup_cron_job_subscriber" class="Shopware\Components\BasketSignature\CleanupSignatureSubscriber" >
+            <argument type="service" id="dbal_connection" />
+            <tag name="shopware.event_subscriber" />
+        </service>
+
+
         <service id="shopware.components.last_articles_subscriber" class="Shopware\Components\LastArticlesSubscriber">
             <argument type="service" id="service_container" />
             <tag name="shopware.event_subscriber" />
