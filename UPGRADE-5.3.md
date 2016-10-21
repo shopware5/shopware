@@ -6,6 +6,7 @@ This changelog references changes done in Shopware 5.3 patch versions.
 
 [View all changes from v5.2.9...v5.3.0](https://github.com/shopware/shopware/compare/v5.2.9...v5.3.0)
 
+### Additions
 
 * Added config element `displayOnlySubShopVotes` to display only shop assigned article votes
 * Added parameter `displayProgressOnSingleDelete` to `Shopware.grid.Panel` to hide progress window on single delete action
@@ -18,7 +19,8 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Added method `Shopware\Models\Order\Repository::getDetails()`
 * Added method `Shopware\Models\Order\Repository::getPayments()`
 * Added responsive helper css/less classes in `_mixins/visibility-helper.less`
-    
+
+### Changes
 
 * Changed theme path for new plugins from `/resources` into `/Resources`
 * Changed sorting of `Shopware.listing.FilterPanel` fields
@@ -26,6 +28,7 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Changed `LastArticle` plugin config elements `show`, `controller` and `time` to be prefixed with `lastarticles_`
 * Changed product listings in shopping worlds to only be loaded if `showListing` is true
 
+### Removals
 
 * Removed `{$sShopname}` from forms, use `{sShopname}` instead
 * Removed import / export module
@@ -55,6 +58,7 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Removed jQuery plugin event `plugin/swEmotionLoader/onShowFallbackContent` in `jquery.emotion.js`
 * Removed jQuery plugin event `plugin/swEmotionLoader/onHideFallbackContent`in `jquery.emotion.js`
 
+### Deprecations
 
 * Deprecated `Shopware_Components_Convert_Csv` without replacement, to be removed with 5.4
 * Deprecated `Shopware_Components_Convert_Xml` without replacement, to be removed with 5.4
@@ -84,7 +88,7 @@ Ext.define('Shopware.apps.Vote.view.list.extensions.Filter', {
 
 ### Captcha
 
-Captchas are now configurable via backend and can be added using a dependency injection container tag.
+Captchas are now configurable via backend and can be added using the `captcha` dependency injection container tag.
 
 ```xml
 <service id="shopware.captcha.recaptcha" class="SwagReCaptcha\ReCaptcha">
