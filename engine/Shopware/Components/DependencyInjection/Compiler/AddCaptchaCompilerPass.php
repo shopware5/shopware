@@ -36,7 +36,6 @@ use Symfony\Component\DependencyInjection\Reference;
  */
 class AddCaptchaCompilerPass implements CompilerPassInterface
 {
-
     use TagReplaceTrait;
 
     /**

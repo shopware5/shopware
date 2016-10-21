@@ -1,6 +1,7 @@
 <?php
 
 namespace Shopware\Tests\Functional\Components;
+
 use Shopware\Components\Captcha\DefaultCaptcha;
 
 /**
