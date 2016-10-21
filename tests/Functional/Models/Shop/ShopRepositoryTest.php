@@ -144,7 +144,6 @@ class Shopware_Tests_Models_ShopRepositoryTest extends Enlight_Components_Test_C
         $this->callGetActiveShopByRequest($this->mainShop['secure_base_path']. '/en/uk', 'testShop2', false);
         $this->callGetActiveShopByRequest($this->mainShop['secure_base_path']. '/en/uk/things', 'testShop2', true);
         $this->callGetActiveShopByRequest($this->mainShop['secure_base_path']. '/en/uk/things', 'testShop2', false);
-
     }
 
     /**
