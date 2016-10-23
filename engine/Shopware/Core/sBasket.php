@@ -2787,9 +2787,9 @@ class sBasket
      */
     private function isProductBlockedByCustomerGroup($articleId)
     {
-        return $this->db->fetchOne('SELECT 1 FROM s_articles_avoid_customergroups WHERE customergroupId = ? AND articleID = ?', [
-            $this->contextService->getShopContext()->getCurrentCustomerGroup()->getId(),
-            $articleId
+        return $this->db->fetchOne('SELECT 1 FROM s_articles_avoid_customergroups WHERE customergroupId = :customerGroupId AND articleID = :articleId', [
+            'customerGroupId' => $this->contextService->getShopContext()->getCurrentCustomerGroup()->getId(),
+            'articleId' => $articleId
         ]);
     }
 
@@ -2798,9 +2798,9 @@ class sBasket
      */
     private function removeCustomerGroupBlockedArticles()
     {
-        $this->db->query('DELETE FROM s_order_basket WHERE modus = 0 AND sessionId = ? AND (SELECT 1 FROM s_articles_avoid_customergroups WHERE customergroupId = ? and articleID = s_order_basket.articleId) = 1', [
-            $this->session->offsetGet('sessionId'),
-            $this->contextService->getShopContext()->getCurrentCustomerGroup()->getId()
+        $this->db->query('DELETE FROM s_order_basket WHERE modus = 0 AND sessionId = :sessionId AND (SELECT 1 FROM s_articles_avoid_customergroups WHERE customergroupId = :customerGroupId and articleID = s_order_basket.articleId) = 1', [
+            'sessionId' => $this->session->offsetGet('sessionId'),
+            'customerGroupId' => $this->contextService->getShopContext()->getCurrentCustomerGroup()->getId()
         ]);
     }
 }
