@@ -23,6 +23,10 @@ This changelog references changes done in Shopware 5.2 patch versions.
 * Replaced the default filter on `dispatches.active` added in `Shopware_Controllers_Backend_Base::getDispatchesAction()` by a default filter on `active` added in `Shopware.apps.Base.store.Dispatch`
 * Refactored jQuery product slider plugin for sliding infinitely
 * Added `initOnEvent` option to cross selling tabs on detail page for the combination of tabs with product sliders
+* Added `Shopware\Components\Emotion\ComponentInstaller` class to install emotion components in plugins.
+* Added `\Shopware\Components\Emotion\EmotionComponentViewSubscriber` to register emotion widget templates 
+* Added `plugin_dir` and `plugin_name` container parameter for each plugin. Parameters are prefixed by `\Shopware\Components\Plugin::getContainerPrefix`
+
 
 ## 5.2.9
 
