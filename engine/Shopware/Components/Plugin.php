@@ -209,4 +209,14 @@ abstract class Plugin implements ContainerAwareInterface, SubscriberInterface
 
         return $this->path;
     }
+    
+     /**
+     * Gets the Plugin config.
+     *
+     * @return array The Plugin config
+     */
+    final public function getConfig()
+    {
+        return $this->container->get('shopware.plugin.config_reader')->getByPluginName($this->getName());
+    }
 }
