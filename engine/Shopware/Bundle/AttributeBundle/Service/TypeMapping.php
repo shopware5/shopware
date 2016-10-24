@@ -50,10 +50,10 @@ class TypeMapping
      */
     private $types = [
         self::TYPE_STRING   => [
-            'sql' => 'VARCHAR(500)',
+            'sql' => 'TEXT',
             'dbal' => 'string',
-            'allowDefaultValue' => true,
-            'quoteDefaultValue' => true,
+            'allowDefaultValue' => false,
+            'quoteDefaultValue' => false,
             'elastic' => ['type' => 'string']
         ],
         self::TYPE_TEXT     => [
@@ -113,10 +113,10 @@ class TypeMapping
             'elastic' => ['type' => 'string']
         ],
         self::TYPE_SINGLE_SELECTION => [
-            'sql' => 'VARCHAR(500)',
+            'sql' => 'TEXT',
             'dbal' => 'text',
-            'allowDefaultValue' => true,
-            'quoteDefaultValue' => true,
+            'allowDefaultValue' => false,
+            'quoteDefaultValue' => false,
             'elastic' => ['type' => 'string']
         ],
         self::TYPE_MULTI_SELECTION => [
