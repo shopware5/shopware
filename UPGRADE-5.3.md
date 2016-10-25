@@ -27,6 +27,10 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Changed database column `s_articles_vote`.`answer_date` to allow `NULL` values
 * Changed `LastArticle` plugin config elements `show`, `controller` and `time` to be prefixed with `lastarticles_`
 * Changed product listings in shopping worlds to only be loaded if `showListing` is true
+* Changed sql query in `sAdmin` queries which uses a sub query for address compatibility, following functions affected:
+    * `sAdmin::sGetDispatchBasket`
+    * `sAdmin::sGetPremiumDispatches`
+    * `sAdmin::sGetPremiumDispatchSurcharge`
 
 ### Removals
 

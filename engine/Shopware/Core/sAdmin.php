@@ -2588,16 +2588,18 @@ SQL;
             ON t.id = a.taxID
 
             LEFT JOIN s_user u
-            ON u.id = ?
+            ON u.id = :userId
             AND u.active = 1
 
-            LEFT JOIN s_user_billingaddress ub
-            ON ub.userID = u.id
-
-            LEFT JOIN s_user_shippingaddress us
-            ON us.userID = u.id
-
-            WHERE b.sessionID = ?
+            LEFT JOIN s_user_addresses as ub
+                ON ub.user_id = u.id
+                AND ub.id = :billingAddressId
+              
+            LEFT JOIN s_user_addresses as us
+                ON us.user_id = u.id
+                AND us.id = :shippingAddressId
+                
+            WHERE b.sessionID = :sessionId
 
             GROUP BY b.sessionID
         ";
@@ -2606,10 +2608,12 @@ SQL;
         $sessionId = $this->session->offsetGet('sessionId');
         $basket = $this->db->fetchRow(
             $sql,
-            array(
-                $userId,
-                empty($sessionId) ? session_id() : $sessionId
-            )
+            [
+                'userId' => $userId,
+                'sessionId' => empty($sessionId) ? session_id() : $sessionId,
+                'billingAddressId' => $this->getBillingAddressId(),
+                'shippingAddressId' => $this->getShippingAddressId()
+            ]
         );
         if ($basket === false) {
             return false;
@@ -2769,11 +2773,13 @@ SQL;
             ON u.id=b.userID
             AND u.active=1
 
-            LEFT JOIN s_user_billingaddress ub
-            ON ub.userID=u.id
-
-            LEFT JOIN s_user_shippingaddress us
-            ON us.userID=u.id
+            LEFT JOIN s_user_addresses as ub
+                ON ub.user_id = u.id
+                AND ub.id = :billingAddressId
+              
+            LEFT JOIN s_user_addresses as us
+                ON us.user_id = u.id
+                AND us.id = :shippingAddressId
 
             WHERE d.active=1
             AND (
@@ -2807,7 +2813,14 @@ SQL;
             ORDER BY d.position, d.name
         ";
 
-        $dispatches = $this->db->fetchAssoc($sql);
+        $dispatches = $this->db->fetchAssoc(
+            $sql,
+            [
+                'billingAddressId' => $this->getBillingAddressId(),
+                'shippingAddressId' => $this->getShippingAddressId()
+            ]
+        );
+
         if (empty($dispatches)) {
             $sql = "
                 SELECT
@@ -2920,11 +2933,13 @@ SQL;
             ON u.id=b.userID
             AND u.active=1
 
-            LEFT JOIN s_user_billingaddress ub
-            ON ub.userID=u.id
-
-            LEFT JOIN s_user_shippingaddress us
-            ON us.userID=u.id
+            LEFT JOIN s_user_addresses as ub
+                ON ub.user_id = u.id
+                AND ub.id = :billingAddressId
+              
+            LEFT JOIN s_user_addresses as us
+                ON us.user_id = u.id
+                AND us.id = :shippingAddressId
 
             WHERE d.active=1
             AND (
@@ -2957,9 +2972,16 @@ SQL;
             $sql_where
             GROUP BY d.id
         ";
+
         return $this->calculateDispatchSurcharge(
             $basket,
-            $this->db->fetchAll($sql)
+            $this->db->fetchAll(
+                $sql,
+                [
+                    'billingAddressId' => $this->getBillingAddressId(),
+                    'shippingAddressId' => $this->getShippingAddressId()
+                ]
+            )
         );
     }
 
@@ -3829,5 +3851,47 @@ SQL;
     {
         $date = new DateTime();
         return $date->format($format);
+    }
+
+    /**
+     * @return int
+     */
+    private function getBillingAddressId()
+    {
+        if ($this->session->offsetGet('checkoutBillingAddressId')) {
+            return (int) $this->session->offsetGet('checkoutBillingAddressId');
+        }
+        if (!$this->session->offsetGet('sUserId')) {
+            return 0;
+        }
+        $dbal = Shopware()->Container()->get('dbal_connection');
+
+        return (int) $dbal->fetchColumn('
+            SELECT default_billing_address_id 
+            FROM s_user WHERE id = :id
+            ',
+            ['id' => $this->session->offsetGet('sUserId')]
+        );
+    }
+
+    /**
+     * @return int
+     */
+    private function getShippingAddressId()
+    {
+        if ($this->session->offsetGet('checkoutShippingAddressId')) {
+            return (int) $this->session->offsetGet('checkoutShippingAddressId');
+        }
+        if (!$this->session->offsetGet('sUserId')) {
+            return 0;
+        }
+        $dbal = Shopware()->Container()->get('dbal_connection');
+
+        return (int) $dbal->fetchColumn('
+            SELECT default_shipping_address_id 
+            FROM s_user WHERE id = :id
+            ',
+            ['id' => $this->session->offsetGet('sUserId')]
+        );
     }
 }
