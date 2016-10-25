@@ -53,34 +53,11 @@ class Zend_Log_Writer_Mail extends Zend_Log_Writer_Abstract
     protected $_eventsToMail = array();
 
     /**
-     * Array of formatted lines for use in an HTML email body; these events
-     * are formatted with an optional formatter if the caller is using
-     * Zend_Layout.
-     *
-     * @var array
-     */
-    protected $_layoutEventsToMail = array();
-
-    /**
      * Zend_Mail instance to use
      *
      * @var Zend_Mail
      */
     protected $_mail;
-
-    /**
-     * Zend_Layout instance to use; optional.
-     *
-     * @var Zend_Layout
-     */
-    protected $_layout;
-
-    /**
-     * Optional formatter for use when rendering with Zend_Layout.
-     *
-     * @var Zend_Log_Formatter_Interface
-     */
-    protected $_layoutFormatter;
 
     /**
      * Array keeping track of the number of entries per priority level.
@@ -115,20 +92,13 @@ class Zend_Log_Writer_Mail extends Zend_Log_Writer_Abstract
     /**
      * Class constructor.
      *
-     * Constructs the mail writer; requires a Zend_Mail instance, and takes an
-     * optional Zend_Layout instance.  If Zend_Layout is being used,
-     * $this->_layout->events will be set for use in the layout template.
+     * Constructs the mail writer; requires a Zend_Mail instance.
      *
      * @param  Zend_Mail $mail Mail instance
-     * @param  Zend_Layout $layout Layout instance; optional
-     * @return void
      */
-    public function __construct(Zend_Mail $mail, Zend_Layout $layout = null)
+    public function __construct(Zend_Mail $mail, $unused = null)
     {
         $this->_mail = $mail;
-        if (null !== $layout) {
-            $this->setLayout($layout);
-        }
         $this->_formatter = new Zend_Log_Formatter_Simple();
     }
 
@@ -144,40 +114,11 @@ class Zend_Log_Writer_Mail extends Zend_Log_Writer_Abstract
         $mail = self::_constructMailFromConfig($config);
         $writer = new self($mail);
 
-        if (isset($config['layout']) || isset($config['layoutOptions'])) {
-            $writer->setLayout($config);
-        }
-        if (isset($config['layoutFormatter'])) {
-            $layoutFormatter = new $config['layoutFormatter'];
-            $writer->setLayoutFormatter($layoutFormatter);
-        }
         if (isset($config['subjectPrependText'])) {
             $writer->setSubjectPrependText($config['subjectPrependText']);
         }
 
         return $writer;
-    }
-
-    /**
-     * Set the layout
-     *
-     * @param Zend_Layout|array $layout
-     * @return Zend_Log_Writer_Mail
-     * @throws Zend_Log_Exception
-     */
-    public function setLayout($layout)
-    {
-        if (is_array($layout)) {
-            $layout = $this->_constructLayoutFromConfig($layout);
-        }
-
-        if (!$layout instanceof Zend_Layout) {
-            require_once 'Zend/Log/Exception.php';
-            throw new Zend_Log_Exception('Mail must be an instance of Zend_Layout or an array');
-        }
-        $this->_layout = $layout;
-
-        return $this;
     }
 
     /**
@@ -230,33 +171,9 @@ class Zend_Log_Writer_Mail extends Zend_Log_Writer_Abstract
     }
 
     /**
-     * Construct a Zend_Layout instance based on a configuration array
-     *
-     * @param array $config
-     * @return Zend_Layout
-     * @throws Zend_Log_Exception
-     */
-    protected function _constructLayoutFromConfig(array $config)
-    {
-        $config = array_merge(array(
-            'layout' => 'Zend_Layout',
-            'layoutOptions' => null
-        ), $config);
-
-        $layoutClass = $config['layout'];
-        $layout = new $layoutClass($config['layoutOptions']);
-        if (!$layout instanceof Zend_Layout) {
-            throw new Zend_Log_Exception($layout . 'must extend Zend_Layout');
-        }
-
-        return $layout;
-    }
-
-    /**
      * Places event line into array of lines to be used as message body.
      *
-     * Handles the formatting of both plaintext entries, as well as those
-     * rendered with Zend_Layout.
+     * Handles the formatting of plaintext entries.
      *
      * @param  array $event Event data
      * @return void
@@ -274,52 +191,6 @@ class Zend_Log_Writer_Mail extends Zend_Log_Writer_Abstract
 
         // All plaintext events are to use the standard formatter.
         $this->_eventsToMail[] = $formattedEvent;
-
-        // If we have a Zend_Layout instance, use a specific formatter for the
-        // layout if one exists.  Otherwise, just use the event with its
-        // default format.
-        if ($this->_layout) {
-            if ($this->_layoutFormatter) {
-                $this->_layoutEventsToMail[] =
-                    $this->_layoutFormatter->format($event);
-            } else {
-                $this->_layoutEventsToMail[] = $formattedEvent;
-            }
-        }
-    }
-
-    /**
-     * Gets instance of Zend_Log_Formatter_Instance used for formatting a
-     * message using Zend_Layout, if applicable.
-     *
-     * @return Zend_Log_Formatter_Interface|null The formatter, or null.
-     */
-    public function getLayoutFormatter()
-    {
-        return $this->_layoutFormatter;
-    }
-
-    /**
-     * Sets a specific formatter for use with Zend_Layout events.
-     *
-     * Allows use of a second formatter on lines that will be rendered with
-     * Zend_Layout.  In the event that Zend_Layout is not being used, this
-     * formatter cannot be set, so an exception will be thrown.
-     *
-     * @param  Zend_Log_Formatter_Interface $formatter
-     * @return Zend_Log_Writer_Mail
-     * @throws Zend_Log_Exception
-     */
-    public function setLayoutFormatter(Zend_Log_Formatter_Interface $formatter)
-    {
-        if (!$this->_layout) {
-            throw new Zend_Log_Exception(
-                'cannot set formatter for layout; ' .
-                    'a Zend_Layout instance is not in use');
-        }
-
-        $this->_layoutFormatter = $formatter;
-        return $this;
     }
 
     /**
@@ -372,29 +243,6 @@ class Zend_Log_Writer_Mail extends Zend_Log_Writer_Abstract
 
         // Always provide events to mail as plaintext.
         $this->_mail->setBodyText(implode('', $this->_eventsToMail));
-
-        // If a Zend_Layout instance is being used, set its "events"
-        // value to the lines formatted for use with the layout.
-        if ($this->_layout) {
-            // Set the required "messages" value for the layout.  Here we
-            // are assuming that the layout is for use with HTML.
-            $this->_layout->events =
-                implode('', $this->_layoutEventsToMail);
-
-            // If an exception occurs during rendering, convert it to a notice
-            // so we can avoid an exception thrown without a stack frame.
-            try {
-                $this->_mail->setBodyHtml($this->_layout->render());
-            } catch (Exception $e) {
-                trigger_error(
-                    "exception occurred when rendering layout; " .
-                        "unable to set html body for message; " .
-                        "message = {$e->getMessage()}; " .
-                        "code = {$e->getCode()}; " .
-                        "exception class = " . get_class($e),
-                    E_USER_NOTICE);
-            }
-        }
 
         // Finally, send the mail.  If an exception occurs, convert it into a
         // warning-level message so we can avoid an exception thrown without a
