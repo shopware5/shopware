@@ -31,6 +31,7 @@ This changelog references changes done in Shopware 5.3 patch versions.
     * `sAdmin::sGetDispatchBasket`
     * `sAdmin::sGetPremiumDispatches`
     * `sAdmin::sGetPremiumDispatchSurcharge`
+* Changed attribute type `string` mapping to mysql `TEXT` type. String and single selection data type supports no longer a sql default value.
 
 ### Removals
 
