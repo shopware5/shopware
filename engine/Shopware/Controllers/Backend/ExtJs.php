@@ -182,17 +182,7 @@ class Shopware_Controllers_Backend_ExtJs extends Enlight_Controller_Action
         $moduleName = 'backend';
         $controllerName = $this->Request()->getParam('baseController');
 
-        $inflector = new Zend_Filter_Inflector(':module/:controller/:file:suffix');
-        $inflector->setRules(array(
-            ':module' => array('Word_CamelCaseToUnderscore', 'StringToLower'),
-            ':controller' => array('Word_CamelCaseToUnderscore', 'StringToLower'),
-            ':file' => array('Word_CamelCaseToUnderscore', 'StringToLower'),
-            'suffix' => '.js'
-        ));
-        $inflector->setThrowTargetExceptionsOn(false);
-
         $fileNames = (array) $request->getParam('file');
-
         if (empty($fileNames)) {
             $fileNames = $request->getParam('f', array());
             $fileNames = explode('|', $fileNames);
@@ -226,17 +216,13 @@ class Shopware_Controllers_Backend_ExtJs extends Enlight_Controller_Action
                 continue;
             }
 
-            $templateBase = $inflector->filter(array(
-                'module'     => $moduleName,
-                'controller' => $controllerName,
-                'file'       => $fileName
-            ));
+            $templateBase = $this->inflectPath($moduleName, $controllerName, $fileName);
 
-            $templateExtend = $inflector->filter(array(
-                'module'     => $moduleName,
-                'controller' => $this->Request()->getControllerName(),
-                'file'       => $fileName
-            ));
+            $templateExtend = $this->inflectPath(
+                $moduleName,
+                $this->Request()->getControllerName(),
+                $fileName
+            );
 
             if ($this->View()->templateExists($templateBase)) {
                 $template .= '{include file="' . $templateBase. '"}' . "\n";
@@ -254,6 +240,35 @@ class Shopware_Controllers_Backend_ExtJs extends Enlight_Controller_Action
         $this->View()->setTemplate();
         $template = $this->View()->fetch($template);
         $template = str_replace($toFind, $toReplace, $template);
+
         echo $template;
+    }
+
+    /**
+     * @param string $module
+     * @param string $controller
+     * @param string $file
+     * @return string
+     */
+    private function inflectPath($module, $controller, $file)
+    {
+        return sprintf(
+            '%s/%s/%s.js',
+            mb_strtolower($this->camelCaseToUnderScore($module)),
+            mb_strtolower($this->camelCaseToUnderScore($controller)),
+            mb_strtolower($this->camelCaseToUnderScore($file))
+        );
+    }
+
+    /**
+     * @param string $input
+     * @return string
+     */
+    private function camelCaseToUnderScore($input)
+    {
+        $pattern = ['#(?<=(?:\p{Lu}))(\p{Lu}\p{Ll})#','#(?<=(?:\p{Ll}|\p{Nd}))(\p{Lu})#'];
+        $replacement = ['_\1', '_\1'];
+
+        return preg_replace($pattern, $replacement, $input);
     }
 }

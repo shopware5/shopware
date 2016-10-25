@@ -36,24 +36,10 @@
 class Enlight_Controller_Plugins_ScriptRenderer_Bootstrap extends Enlight_Plugin_Bootstrap_Default
 {
     /**
-     * @var string Used for the Zend_Filter_Inflector
-     */
-    protected $target = ':module/:controller/:file:suffix';
-
-    /**
      * @var string Used when no file parameter is given.
      */
     protected $defaultFile = null;
 
-    /**
-     * @var array Filter rules for the Zend_Filter_Inflector
-     */
-    protected $filterRules = array(
-        ':module'     => array('Word_CamelCaseToUnderscore', 'StringToLower'),
-        ':controller' => array('Word_CamelCaseToUnderscore', 'StringToLower'),
-        ':file'       => array('Word_CamelCaseToUnderscore', 'StringToLower'),
-        'suffix'      => '.js'
-    );
 
     /**
      * @var array Will be set in the response instance on pre dispatch.
@@ -158,12 +144,7 @@ class Enlight_Controller_Plugins_ScriptRenderer_Bootstrap extends Enlight_Plugin
         $moduleName = $dispatcher->formatModuleName($request->getModuleName());
         $controllerName = $dispatcher->formatControllerName($request->getControllerName());
 
-        $inflector = new Zend_Filter_Inflector($this->target);
-        $inflector->setRules($this->filterRules);
-        $inflector->setThrowTargetExceptionsOn(false);
-
         $fileNames = (array) $request->getParam('file', $this->defaultFile);
-
         if (empty($fileNames)) {
             $fileNames = $request->getParam('f');
             $fileNames = explode('|', $fileNames);
@@ -189,11 +170,7 @@ class Enlight_Controller_Plugins_ScriptRenderer_Bootstrap extends Enlight_Plugin
                 continue;
             }
 
-            $fileName = $inflector->filter(array(
-                'module'     => $moduleName,
-                'controller' => $controllerName,
-                'file'       => $fileName
-            ));
+            $fileName = $this->inflectPath($moduleName, $controllerName, $fileName);
 
             $templateNames[]  = $fileName;
         }
@@ -223,5 +200,33 @@ class Enlight_Controller_Plugins_ScriptRenderer_Bootstrap extends Enlight_Plugin
         $this->viewRenderer = $viewRenderer;
 
         return $this;
+    }
+
+    /**
+     * @param string $module
+     * @param string $controller
+     * @param string $file
+     * @return string
+     */
+    private function inflectPath($module, $controller, $file)
+    {
+        return sprintf(
+            '%s/%s/%s.js',
+            mb_strtolower($this->camelCaseToUnderScore($module)),
+            mb_strtolower($this->camelCaseToUnderScore($controller)),
+            mb_strtolower($this->camelCaseToUnderScore($file))
+        );
+    }
+
+    /**
+     * @param string $input
+     * @return string
+     */
+    private function camelCaseToUnderScore($input)
+    {
+        $pattern = ['#(?<=(?:\p{Lu}))(\p{Lu}\p{Ll})#','#(?<=(?:\p{Ll}|\p{Nd}))(\p{Lu})#'];
+        $replacement = ['_\1', '_\1'];
+
+        return preg_replace($pattern, $replacement, $input);
     }
 }
