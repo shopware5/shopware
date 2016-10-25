@@ -782,7 +782,7 @@ class Zend_Currency
     /**
      * Returns the set service class
      *
-     * @return Zend_Service
+     * @return Zend_Currency_CurrencyInterface
      */
     public function getService()
     {
