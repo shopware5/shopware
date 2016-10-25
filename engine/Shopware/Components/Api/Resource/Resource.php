@@ -113,11 +113,8 @@ abstract class Resource
      */
     protected function getResource($name)
     {
-        $name = ucfirst($name);
-        $class = __NAMESPACE__ . '\\' . $name;
-
         /** @var $resource \Shopware\Components\Api\Resource\Resource */
-        $resource = new $class();
+        $resource = $this->getContainer()->get('shopware.api.' . strtolower($name));
         $resource->setManager($this->getManager());
 
         if ($this->getAcl()) {
