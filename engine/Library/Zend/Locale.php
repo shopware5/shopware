@@ -863,13 +863,6 @@ class Zend_Locale
     public static function findLocale($locale = null)
     {
         if ($locale === null) {
-            require_once 'Zend/Registry.php';
-            if (Zend_Registry::isRegistered('Zend_Locale')) {
-                $locale = Zend_Registry::get('Zend_Locale');
-            }
-        }
-
-        if ($locale === null) {
             $locale = new Zend_Locale();
         }
 

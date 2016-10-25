@@ -77,12 +77,7 @@ class Zend_Validate_PostCode extends Zend_Validate_Abstract
             $options = $options->toArray();
         }
 
-        if (empty($options)) {
-            require_once 'Zend/Registry.php';
-            if (Zend_Registry::isRegistered('Zend_Locale')) {
-                $this->setLocale(Zend_Registry::get('Zend_Locale'));
-            }
-        } elseif (is_array($options)) {
+        if (is_array($options)) {
             // Received
             if (array_key_exists('locale', $options)) {
                 $this->setLocale($options['locale']);
