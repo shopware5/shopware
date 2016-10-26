@@ -1274,11 +1274,7 @@ class Zend_Locale_Format
      */
     protected static function _setEncoding($encoding)
     {
-        if (PHP_VERSION_ID < 50600) {
-            iconv_set_encoding('internal_encoding', $encoding);
-        } else {
-            ini_set('default_charset', $encoding);
-        }
+        ini_set('default_charset', $encoding);
     }
 
     /**
@@ -1289,10 +1285,6 @@ class Zend_Locale_Format
      */
     protected static function _getEncoding()
     {
-        $oenc = PHP_VERSION_ID < 50600
-            ? iconv_get_encoding('internal_encoding')
-            : ini_get('default_charset');
-
-        return $oenc;
+        return ini_get('default_charset');
     }
 }

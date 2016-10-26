@@ -158,33 +158,6 @@ class Zend_Validate_File_MimeType extends Zend_Validate_Abstract
      */
     public function getMagicFile()
     {
-        if (version_compare(PHP_VERSION, '5.3.0', '<')
-            && null === $this->_magicfile) {
-            if (!empty($_ENV['MAGIC'])) {
-                $this->setMagicFile($_ENV['MAGIC']);
-            } elseif (
-                !(@ini_get("safe_mode") == 'On' || @ini_get("safe_mode") === 1)
-                && $this->shouldTryCommonMagicFiles() // @see ZF-11784
-            ) {
-                require_once 'Zend/Validate/Exception.php';
-                foreach ($this->_magicFiles as $file) {
-                    // supressing errors which are thrown due to openbase_dir restrictions
-                    try {
-                        $this->setMagicFile($file);
-                        if ($this->_magicfile !== null) {
-                            break;
-                        }
-                    } catch (Zend_Validate_Exception $e) {
-                        // Intentionally, catch and fall through
-                    }
-                }
-            }
-
-            if ($this->_magicfile === null) {
-                $this->_magicfile = false;
-            }
-        }
-
         return $this->_magicfile;
     }
 

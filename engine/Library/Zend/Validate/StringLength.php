@@ -199,24 +199,14 @@ class Zend_Validate_StringLength extends Zend_Validate_Abstract
     public function setEncoding($encoding = null)
     {
         if ($encoding !== null) {
-            $orig = PHP_VERSION_ID < 50600
-                ? iconv_get_encoding('internal_encoding')
-                : ini_get('default_charset');
-            if (PHP_VERSION_ID < 50600) {
-                $result = iconv_set_encoding('internal_encoding', $encoding);
-            } else {
-                $result = ini_set('default_charset', $encoding);
-            }
+            $orig = ini_get('default_charset');
+            $result = ini_set('default_charset', $encoding);
             if (!$result) {
                 require_once 'Zend/Validate/Exception.php';
                 throw new Zend_Validate_Exception('Given encoding not supported on this OS!');
             }
 
-            if (PHP_VERSION_ID < 50600) {
-                iconv_set_encoding('internal_encoding', $orig);
-            } else {
-                ini_set('default_charset', $orig);
-            }
+            ini_set('default_charset', $orig);
         }
 
         $this->_encoding = $encoding;

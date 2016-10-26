@@ -50,11 +50,6 @@ class Enlight_Exception extends Exception
     const PROPERTY_NOT_FOUND = 1200;
 
     /**
-     * @var Exception|null The previous thrown exception.
-     */
-    protected $previous;
-
-    /**
      * The class constructor sets the given previous exception into the internal property.
      * If the given code is one of the internal constants, it will generate a back trace and iterate
      * the returned values to set the line and file property.
@@ -65,11 +60,7 @@ class Enlight_Exception extends Exception
      */
     public function __construct($message = '', $code = 0, Exception $previous = null)
     {
-        if ($previous !== null) {
-            $this->previous = $previous;
-        }
-
-        parent::__construct($message, $code);
+        parent::__construct($message, $code, $previous);
 
         if (in_array($code, array(self::CLASS_NOT_FOUND, self::METHOD_NOT_FOUND, self::PROPERTY_NOT_FOUND))) {
             $trace = debug_backtrace(false);
@@ -83,19 +74,5 @@ class Enlight_Exception extends Exception
                 break;
             }
         }
-    }
-
-    /**
-     * Returns the exception class as string.
-     * @return string
-     */
-    public function __toString()
-    {
-        if (version_compare(PHP_VERSION, '5.3.0', '<')) {
-            if ($this->previous !== null) {
-                return $this->previous->__toString() . "\n\nNext " . parent::__toString();
-            }
-        }
-        return parent::__toString();
     }
 }
