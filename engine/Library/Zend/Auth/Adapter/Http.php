@@ -46,14 +46,14 @@ class Zend_Auth_Adapter_Http implements Zend_Auth_Adapter_Interface
     /**
      * Reference to the HTTP Request object
      *
-     * @var Zend_Controller_Request_Http
+     * @var Enlight_Controller_Request_Request
      */
     protected $_request;
 
     /**
      * Reference to the HTTP Response object
      *
-     * @var Zend_Controller_Response_Http
+     * @var Enlight_Controller_Response_Response
      */
     protected $_response;
 
@@ -312,10 +312,10 @@ class Zend_Auth_Adapter_Http implements Zend_Auth_Adapter_Interface
     /**
      * Setter for the Request object
      *
-     * @param  Zend_Controller_Request_Http $request
+     * @param  Enlight_Controller_Request_Request $request
      * @return Zend_Auth_Adapter_Http Provides a fluent interface
      */
-    public function setRequest(Zend_Controller_Request_Http $request)
+    public function setRequest(Enlight_Controller_Request_Request $request)
     {
         $this->_request = $request;
 
@@ -325,7 +325,7 @@ class Zend_Auth_Adapter_Http implements Zend_Auth_Adapter_Interface
     /**
      * Getter for the Request object
      *
-     * @return Zend_Controller_Request_Http
+     * @return Enlight_Controller_Request_Request
      */
     public function getRequest()
     {
@@ -335,10 +335,10 @@ class Zend_Auth_Adapter_Http implements Zend_Auth_Adapter_Interface
     /**
      * Setter for the Response object
      *
-     * @param  Zend_Controller_Response_Http $response
+     * @param  Enlight_Controller_Response_Response $response
      * @return Zend_Auth_Adapter_Http Provides a fluent interface
      */
-    public function setResponse(Zend_Controller_Response_Http $response)
+    public function setResponse(Enlight_Controller_Response_Response $response)
     {
         $this->_response = $response;
 
@@ -348,7 +348,7 @@ class Zend_Auth_Adapter_Http implements Zend_Auth_Adapter_Interface
     /**
      * Getter for the Response object
      *
-     * @return Zend_Controller_Response_Http
+     * @return Enlight_Controller_Response_Response
      */
     public function getResponse()
     {

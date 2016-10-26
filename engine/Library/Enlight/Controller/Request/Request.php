@@ -7,32 +7,16 @@
  * This source file is subject to the new BSD license that is bundled
  * with this package in the file LICENSE.txt.
  * It is also available through the world-wide-web at this URL:
- * http://enlight.de/license
+ * http://opensource.org/licenses/bsd-license.php
  * If you did not receive a copy of the license and are unable to
  * obtain it through the world-wide-web, please send an email
  * to license@shopware.de so we can send you a copy immediately.
  *
- * @category   Enlight
- * @package    Enlight_Controller
+ * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
- * @license    http://enlight.de/license     New BSD License
- * @version    $Id$
- * @author     Heiner Lohaus
- * @author     $Author$
+ * @license    http://opensource.org/licenses/bsd-license.php New BSD License
  */
 
-/**
- * Controller interface for the enlight request class.
- *
- * The Enlight_Controller_Request_Request is an interface for a request instance, which is used in the
- * different controller components. The Enlight router components uses the Enlight_Controller_Request_Request
- * to route the request to the corresponding controller action.
- *
- * @category   Enlight
- * @package    Enlight_Controller
- * @copyright  Copyright (c) 2015, shopware AG (http://www.shopware.de)
- * @license    http://enlight.de/license     New BSD License
- */
 interface Enlight_Controller_Request_Request
 {
     /**
@@ -46,7 +30,7 @@ interface Enlight_Controller_Request_Request
      * Set the module name to use
      *
      * @param string $value
-     * @return Zend_Controller_Request_Abstract
+     * @return Enlight_Controller_Request_Request
      */
     public function setModuleName($value);
 
@@ -61,7 +45,7 @@ interface Enlight_Controller_Request_Request
      * Set the controller name to use
      *
      * @param string $value
-     * @return Zend_Controller_Request_Abstract
+     * @return Enlight_Controller_Request_Request
      */
     public function setControllerName($value);
 
@@ -76,7 +60,7 @@ interface Enlight_Controller_Request_Request
      * Set the action name
      *
      * @param string $value
-     * @return Zend_Controller_Request_Abstract
+     * @return Enlight_Controller_Request_Request
      */
     public function setActionName($value);
 
@@ -91,7 +75,7 @@ interface Enlight_Controller_Request_Request
      * Set the module key
      *
      * @param string $key
-     * @return Zend_Controller_Request_Abstract
+     * @return Enlight_Controller_Request_Request
      */
     public function setModuleKey($key);
 
@@ -106,7 +90,7 @@ interface Enlight_Controller_Request_Request
      * Set the controller key
      *
      * @param string $key
-     * @return Zend_Controller_Request_Abstract
+     * @return Enlight_Controller_Request_Request
      */
     public function setControllerKey($key);
 
@@ -121,7 +105,7 @@ interface Enlight_Controller_Request_Request
      * Set the action key
      *
      * @param string $key
-     * @return Zend_Controller_Request_Abstract
+     * @return Enlight_Controller_Request_Request
      */
     public function setActionKey($key);
 
@@ -144,7 +128,7 @@ interface Enlight_Controller_Request_Request
     /**
      * Unset all user parameters
      *
-     * @return Zend_Controller_Request_Abstract
+     * @return Enlight_Controller_Request_Request
      */
     public function clearParams();
 
@@ -152,7 +136,7 @@ interface Enlight_Controller_Request_Request
      * Set flag indicating whether or not request has been dispatched
      *
      * @param boolean $flag
-     * @return Zend_Controller_Request_Abstract
+     * @return Enlight_Controller_Request_Request
      */
     public function setDispatched($flag = true);
 
@@ -190,8 +174,7 @@ interface Enlight_Controller_Request_Request
      *
      * @param string $key
      * @param mixed $value
-     * @return void
-     * @throws Zend_Controller_Request_Exception
+     * @throws \Exception
      */
     public function __set($key, $value);
 
@@ -200,7 +183,6 @@ interface Enlight_Controller_Request_Request
      *
      * @param string $key
      * @param mixed $value
-     * @return void
      */
     public function set($key, $value);
 
@@ -225,7 +207,6 @@ interface Enlight_Controller_Request_Request
      *
      * If no $key is passed, returns the entire $_GET array.
      *
-     * @todo How to retrieve from nested arrays
      * @param string $key
      * @param mixed $default Default value to use if key not found
      * @return mixed Returns null if key does not exist
@@ -237,7 +218,6 @@ interface Enlight_Controller_Request_Request
      *
      * If no $key is passed, returns the entire $_POST array.
      *
-     * @todo How to retrieve from nested arrays
      * @param string $key
      * @param mixed $default Default value to use if key not found
      * @return mixed Returns null if key does not exist
@@ -249,7 +229,6 @@ interface Enlight_Controller_Request_Request
      *
      * If no $key is passed, returns the entire $_COOKIE array.
      *
-     * @todo How to retrieve from nested arrays
      * @param string $key
      * @param mixed $default Default value to use if key not found
      * @return mixed Returns null if key does not exist
@@ -304,7 +283,7 @@ interface Enlight_Controller_Request_Request
      * ORIG_SCRIPT_NAME in its determination.
      *
      * @param mixed $baseUrl
-     * @return Zend_Controller_Request_Http
+     * @return Enlight_Controller_Request_Request
      */
     public function setBaseUrl($baseUrl = null);
 
@@ -312,6 +291,7 @@ interface Enlight_Controller_Request_Request
      * Everything in REQUEST_URI before PATH_INFO
      * <form action="<?=$baseUrl?>/news/submit" method="POST"/>
      *
+     * @param bool $raw
      * @return string
      */
     public function getBaseUrl($raw = false);
@@ -320,7 +300,7 @@ interface Enlight_Controller_Request_Request
      * Set the base path for the URL
      *
      * @param string|null $basePath
-     * @return Zend_Controller_Request_Http
+     * @return Enlight_Controller_Request_Request
      */
     public function setBasePath($basePath = null);
 
@@ -336,7 +316,7 @@ interface Enlight_Controller_Request_Request
      * Set the PATH_INFO string
      *
      * @param string|null $pathInfo
-     * @return Zend_Controller_Request_Http
+     * @return Enlight_Controller_Request_Request
      */
     public function setPathInfo($pathInfo = null);
 
@@ -354,10 +334,10 @@ interface Enlight_Controller_Request_Request
      *
      * Can be empty array, or contain one or more of '_GET' or '_POST'.
      *
-     * @param  array $paramSoures
-     * @return Zend_Controller_Request_Http
+     * @param  array $paramSources
+     * @return Enlight_Controller_Request_Request
      */
-    public function setParamSources(array $paramSources = array());
+    public function setParamSources(array $paramSources = []);
 
     /**
      * Get list of allowed parameter sources
@@ -369,12 +349,11 @@ interface Enlight_Controller_Request_Request
     /**
      * Set a userland parameter
      *
-     * Uses $key to set a userland parameter. If $key is an alias, the actual
-     * key will be retrieved and used to set the parameter.
+     * Uses $key to set a userland parameter.
      *
      * @param mixed $key
      * @param mixed $value
-     * @return Zend_Controller_Request_Http
+     * @return Enlight_Controller_Request_Request
      */
     public function setParam($key, $value);
 
@@ -384,8 +363,6 @@ interface Enlight_Controller_Request_Request
      * Retrieves a parameter from the instance. Priority is in the order of
      * userland parameters (see {@link setParam()}), $_GET, $_POST. If a
      * parameter matching the $key is not found, null is returned.
-     *
-     * If the $key is an alias, the actual key aliased will be used.
      *
      * @param mixed $key
      * @param mixed $default Default value to use if key not found
@@ -411,7 +388,7 @@ interface Enlight_Controller_Request_Request
      * using the keys specified in the array.
      *
      * @param array $params
-     * @return Zend_Controller_Request_Http
+     * @return Enlight_Controller_Request_Request
      */
     public function setParams(array $params);
 
@@ -463,35 +440,6 @@ interface Enlight_Controller_Request_Request
      * @param string $name The attribute name.
      */
     public function unsetAttribute($name);
-
-    /**
-     * Set a key alias
-     *
-     * Set an alias used for key lookups. $name specifies the alias, $target
-     * specifies the actual key to use.
-     *
-     * @param string $name
-     * @param string $target
-     * @return Zend_Controller_Request_Http
-     */
-    public function setAlias($name, $target);
-
-    /**
-     * Retrieve an alias
-     *
-     * Retrieve the actual key represented by the alias $name.
-     *
-     * @param string $name
-     * @return string|null Returns null when no alias exists
-     */
-    public function getAlias($name);
-
-    /**
-     * Retrieve the list of all aliases
-     *
-     * @return array
-     */
-    public function getAliases();
 
     /**
      * Return the method by which the request was made
@@ -603,7 +551,7 @@ interface Enlight_Controller_Request_Request
      *
      * @param  string|array $spec
      * @param  null|mixed $value
-     * @return Zend_Controller_Request_Http
+     * @return Enlight_Controller_Request_Request
      */
     public function setQuery($spec, $value = null);
 
@@ -612,7 +560,7 @@ interface Enlight_Controller_Request_Request
      *
      * @param  string|array $spec
      * @param  null|mixed $value
-     * @return Zend_Controller_Request_Http
+     * @return Enlight_Controller_Request_Request
      */
     public function setPost($spec, $value = null);
 
@@ -647,7 +595,7 @@ interface Enlight_Controller_Request_Request
      * $_SERVER['HTTP_X_REWRITE_URL'], or $_SERVER['ORIG_PATH_INFO'] + $_SERVER['QUERY_STRING'].
      *
      * @param string $requestUri
-     * @return Zend_Controller_Request_Http
+     * @return Enlight_Controller_Request_Request
      */
     public function setRequestUri($requestUri = null);
 
@@ -658,7 +606,7 @@ interface Enlight_Controller_Request_Request
      *
      * @param string $header HTTP header name
      * @return string|false HTTP header value, or false if not found
-     * @throws Zend_Controller_Request_Exception
+     * @throws \Exception
      */
     public function getHeader($header);
 

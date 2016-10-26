@@ -332,10 +332,10 @@ class RegisterTest extends \Enlight_Components_Test_Controller_TestCase
     }
 
     /**
-     * @param \Zend_Controller_Response_Abstract $response
+     * @param \Enlight_Controller_Response_Response $response
      * @return null|string
      */
-    private function getHeaderLocation(\Zend_Controller_Response_Abstract $response)
+    private function getHeaderLocation(\Enlight_Controller_Response_Response $response)
     {
         $headers = $response->getHeaders();
         foreach ($headers as $header) {
