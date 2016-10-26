@@ -27,7 +27,7 @@ class Router
         $queryAliasMapper = $container->get('query_alias_mapper');
 
         $matchers = [
-            new Matchers\RewriteMatcher($container->get('dbal_connection'), $queryAliasMapper),
+            $container->get('shopware.routing.rewrite_matcher'),
             new Matchers\EventMatcher($eventManager),
             new Matchers\DefaultMatcher($container->get('dispatcher'))
         ];
