@@ -32,8 +32,11 @@ class Shopware_Controllers_Api_Rest extends Enlight_Controller_Action
     {
         $this->Front()->Plugins()->ViewRenderer()->setNoRender();
 
-        $serverUrlHelper = new Zend_View_Helper_ServerUrl();
-        $this->apiBaseUrl = $serverUrlHelper->serverUrl() . $this->Request()->getBaseUrl() . '/api/';
+        $this->apiBaseUrl = $this->Request()->getScheme()
+           . '://'
+           . $this->Request()->getHttpHost()
+           . $this->Request()->getBaseUrl()
+           . '/api/';
     }
 
     public function postDispatch()
