@@ -25,6 +25,7 @@
 use Shopware\Bundle\AccountBundle\Service\AddressServiceInterface;
 use Shopware\Bundle\StoreFrontBundle;
 use Shopware\Components\NumberRangeIncrementerInterface;
+use Shopware\Components\Session\SessionInterface;
 use Shopware\Components\Validator\EmailValidatorInterface;
 use Shopware\Models\Customer\Address;
 use Shopware\Models\Customer\Customer;
@@ -64,7 +65,7 @@ class sAdmin
      * Shopware session object.
      * Injected over the class constructor
      *
-     * @var Enlight_Components_Session_Namespace
+     * @var SessionInterface
      */
     private $session;
 
@@ -154,7 +155,7 @@ class sAdmin
         Enlight_Components_Db_Adapter_Pdo_Mysql          $db                    = null,
         Enlight_Event_EventManager                       $eventManager          = null,
         Shopware_Components_Config                       $config                = null,
-        Enlight_Components_Session_Namespace             $session               = null,
+        SessionInterface                                 $session               = null,
         Enlight_Controller_Front                         $front                 = null,
         \Shopware\Components\Password\Manager            $passwordEncoder       = null,
         Shopware_Components_Snippet_Manager              $snippetManager        = null,
@@ -604,7 +605,7 @@ class sAdmin
      */
     public function sUpdatePayment($paymentId = null)
     {
-        $userId = $this->session->offsetGet('sUserId');
+        $userId = $this->session->get('sUserId');
         if (empty($userId)) {
             return false;
         }
@@ -691,9 +692,9 @@ class sAdmin
         if (!empty($sErrorFlag)) {
             $sErrorMessages[] = $this->snippetManager->getNamespace('frontend/account/internalMessages')
                 ->get('LoginFailure', 'Wrong email or password');
-            $this->session->offsetUnset('sUserMail');
-            $this->session->offsetUnset('sUserPassword');
-            $this->session->offsetUnset('sUserId');
+            $this->session->remove('sUserMail');
+            $this->session->remove('sUserPassword');
+            $this->session->remove('sUserId');
         }
 
         if (count($sErrorMessages)) {
@@ -778,16 +779,12 @@ class sAdmin
      */
     private function regenerateSessionId()
     {
-        $oldSessionId = session_id();
-        session_regenerate_id(true);
-        $newSessionId = session_id();
+        $oldSessionId = $this->session->getId();
+        $this->session->migrate(true);
+        $newSessionId = $this->session->getId();
 
-        // close and restart session to make sure the db session handler writes updates.
-        session_write_close();
-        session_start();
 
         $this->sSYSTEM->sSESSION_ID = $newSessionId;
-        $this->session->offsetSet('sessionId', $newSessionId);
         Shopware()->Container()->reset('SessionId');
         Shopware()->Container()->set('SessionId', $newSessionId);
 
@@ -829,17 +826,17 @@ class sAdmin
             return false;
         }
 
-        $userId = $this->session->offsetGet('sUserId');
-        $userMail = $this->session->offsetGet('sUserMail');
-        $userPassword = $this->session->offsetGet('sUserPassword');
+        $userId = $this->session->get('sUserId');
+        $userMail = $this->session->get('sUserMail');
+        $userPassword = $this->session->get('sUserPassword');
 
         if (empty($userMail)
             || empty($userPassword)
             || empty($userId)
         ) {
-            $this->session->offsetUnset('sUserMail');
-            $this->session->offsetUnset('sUserPassword');
-            $this->session->offsetUnset('sUserId');
+            $this->session->remove('sUserMail');
+            $this->session->remove('sUserPassword');
+            $this->session->remove('sUserId');
 
             return false;
         }
@@ -884,12 +881,12 @@ class sAdmin
             }
             $this->sSYSTEM->sUSERGROUP = $getUser["customergroup"];
 
-            $this->session->offsetSet('sUserGroup', $this->sSYSTEM->sUSERGROUP);
-            $this->session->offsetSet('sUserGroupData', $this->sSYSTEM->sUSERGROUPDATA);
+            $this->session->set('sUserGroup', $this->sSYSTEM->sUSERGROUP);
+            $this->session->set('sUserGroupData', $this->sSYSTEM->sUSERGROUPDATA);
 
             $this->db->query(
                 "UPDATE s_user SET lastlogin = NOW(), sessionID = ? WHERE id = ?",
-                array($this->session->offsetGet('sessionId'), $getUser["id"])
+                array($this->session->getId(), $getUser["id"])
             );
             $this->eventManager->notify(
                 'Shopware_Modules_Admin_CheckUser_Successful',
@@ -898,9 +895,9 @@ class sAdmin
 
             return true;
         } else {
-            $this->session->offsetUnset('sUserMail');
-            $this->session->offsetUnset('sUserPassword');
-            $this->session->offsetUnset('sUserId');
+            $this->session->remove('sUserMail');
+            $this->session->remove('sUserPassword');
+            $this->session->remove('sUserId');
             $this->eventManager->notify(
                 'Shopware_Modules_Admin_CheckUser_Failure',
                 array('subject' => $this, 'session' => $this->session, 'user' => $getUser)
@@ -1141,7 +1138,7 @@ class sAdmin
         );
 
         $namespace = $this->snippetManager->getNamespace('frontend/salutation');
-        $register = $this->session->offsetGet('sRegister');
+        $register = $this->session->get('sRegister');
         foreach ($register["billing"] as $key => $value) {
             if ($key == "salutation") {
                 $value = $namespace->get($value);
@@ -1179,7 +1176,7 @@ class sAdmin
      */
     public function sGetDownloads($destinationPage = 1, $perPage = 10)
     {
-        $userId = $this->session->offsetGet('sUserId');
+        $userId = $this->session->get('sUserId');
         $getOrders = $this->db->fetchAll(
             "SELECT
                 id, ordernumber, invoice_amount, invoice_amount_net,
@@ -1306,7 +1303,7 @@ class sAdmin
         $getOrders = $this->db->fetchAll(
             $sql,
             array(
-                $this->session->offsetGet('sUserId'),
+                $this->session->get('sUserId'),
                 $mainShop->getId()
             )
         );
@@ -1329,7 +1326,7 @@ class sAdmin
             $getOrders,
             array(
                 'subject' => $this,
-                'id' => $this->session->offsetGet('sUserId'),
+                'id' => $this->session->get('sUserId'),
                 'subshopID' => $this->contextService->getShopContext()->getShop()->getId()
             )
         );
@@ -1399,7 +1396,7 @@ class sAdmin
     {
         return $this->db->fetchOne(
             "SELECT email FROM s_user WHERE id = ?",
-            array($this->session->offsetGet('sUserId'))
+            array($this->session->get('sUserId'))
         ) ? : null;
     }
 
@@ -1445,9 +1442,9 @@ class sAdmin
         ) {
             return false;
         }
-        $register = $this->session->offsetGet('sRegister');
+        $register = $this->session->get('sRegister');
         if (empty($register)) {
-            $this->session->offsetSet('sRegister', array());
+            $this->session->set('sRegister', array());
         }
 
         $userData = array();
@@ -1460,10 +1457,10 @@ class sAdmin
           WHERE c.id = ?';
 
         // If user is logged in
-        $userId = $this->session->offsetGet('sUserId');
-        if (!empty($userId)) {
-            $userData = $this->getUserBillingData($userId, $userData);
-
+        $userId = $this->session->get('sUserId');
+        if (!empty($userId)
+            && ($userData = $this->getUserBillingData($userId, $userData))
+        ) {
             $userData = $this->getUserCountryData($userData, $userId);
 
             $newsletter = $this->db->fetchRow(
@@ -1483,12 +1480,12 @@ class sAdmin
             );
         } else {
             // No user logged in
-            $register = $this->session->offsetGet('sRegister');
-            if ($this->session->offsetGet('sCountry')
-                && $this->session->offsetGet('sCountry') != $register["billing"]["country"]
+            $register = $this->session->get('sRegister');
+            if ($this->session->get('sCountry')
+                && $this->session->get('sCountry') != $register["billing"]["country"]
             ) {
-                $register['billing']['country'] = intval($this->session->offsetGet('sCountry'));
-                $this->session->offsetSet('sRegister', $register);
+                $register['billing']['country'] = intval($this->session->get('sCountry'));
+                $this->session->set('sRegister', $register);
             }
 
             $userData["additional"]["country"] = $this->db->fetchRow(
@@ -1497,14 +1494,14 @@ class sAdmin
             );
             $userData["additional"]["country"] = $userData["additional"]["country"] ? : array();
             $userData["additional"]["countryShipping"] = $userData["additional"]["country"];
-            $state = $this->session->offsetGet('sState');
+            $state = $this->session->get('sState');
             $userData["additional"]["stateShipping"]["id"] = !empty($state) ? $state : 0;
         }
 
         $userData = $this->eventManager->filter(
             'Shopware_Modules_Admin_GetUserData_FilterResult',
             $userData,
-            array('subject' => $this, 'id' => $this->session->offsetGet('sUserId'))
+            array('subject' => $this, 'id' => $this->session->get('sUserId'))
         );
 
         return $userData;
@@ -1519,23 +1516,23 @@ class sAdmin
     private function overwriteBillingAddress(array $userData)
     {
         // temporarily overwrite billing address
-        if (!$this->session->offsetGet('checkoutBillingAddressId') || Shopware()->Front()->Request()->getControllerName() !== 'checkout') {
+        if (!$this->session->get('checkoutBillingAddressId') || Shopware()->Front()->Request()->getControllerName() !== 'checkout') {
             return $userData;
         }
 
         $addressRepository = Shopware()->Models()->getRepository(Address::class);
-        $addressId = $this->session->offsetGet('checkoutBillingAddressId');
+        $addressId = $this->session->get('checkoutBillingAddressId');
 
         try {
             $legacyAddress = $this->convertToLegacyAddressArray(
-                $addressRepository->getOneByUser($addressId, $this->session->offsetGet('sUserId'))
+                $addressRepository->getOneByUser($addressId, $this->session->get('sUserId'))
             );
 
             $userData['billingaddress'] = array_merge($userData['billingaddress'], $legacyAddress);
             $userData = $this->completeUserCountryData($userData);
         } catch (\Exception $ex) {
             // no need to overwrite default billing address
-            $this->session->offsetUnset('checkoutBillingAddressId');
+            $this->session->remove('checkoutBillingAddressId');
         }
 
         return $userData;
@@ -1549,23 +1546,23 @@ class sAdmin
     private function overwriteShippingAddress(array $userData)
     {
         // temporarily overwrite shipping address
-        if (!$this->session->offsetGet('checkoutShippingAddressId') || Shopware()->Front()->Request()->getControllerName() !== 'checkout') {
+        if (!$this->session->get('checkoutShippingAddressId') || Shopware()->Front()->Request()->getControllerName() !== 'checkout') {
             return $userData;
         }
 
         $addressRepository = Shopware()->Models()->getRepository(Address::class);
-        $addressId = $this->session->offsetGet('checkoutShippingAddressId');
+        $addressId = $this->session->get('checkoutShippingAddressId');
 
         try {
             $legacyAddress = $this->convertToLegacyAddressArray(
-                $addressRepository->getOneByUser($addressId, $this->session->offsetGet('sUserId'))
+                $addressRepository->getOneByUser($addressId, $this->session->get('sUserId'))
             );
 
             $userData['shippingaddress'] = array_merge($userData['shippingaddress'], $legacyAddress);
             $userData = $this->completeUserCountryData($userData, true);
         } catch (\Exception $ex) {
             // no need to overwrite default shipping address
-            $this->session->offsetUnset('checkoutShippingAddressId');
+            $this->session->remove('checkoutShippingAddressId');
         }
 
         return $userData;
@@ -1643,9 +1640,9 @@ SQL;
 
         // session
         if ($isShippingAddress) {
-            $this->session->offsetSet('sCountry', $userData['additional'][$countryKey]['id']);
-            $this->session->offsetSet('sState', $userData['additional'][$stateKey]['id']);
-            $this->session->offsetSet('sArea', $userData['additional'][$countryKey]['areaID']);
+            $this->session->set('sCountry', $userData['additional'][$countryKey]['id']);
+            $this->session->set('sState', $userData['additional'][$stateKey]['id']);
+            $this->session->set('sArea', $userData['additional'][$countryKey]['areaID']);
         }
 
         return $userData;
@@ -1676,8 +1673,8 @@ SQL;
         // Get Basket
         if (empty($basket)) {
             $basket = array(
-                'content' => $this->session->offsetGet('sBasketQuantity'),
-                'AmountNumeric' => $this->session->offsetGet('sBasketAmount')
+                'content' => $this->session->get('sBasketQuantity'),
+                'AmountNumeric' => $this->session->get('sBasketAmount')
             );
         }
 
@@ -2002,7 +1999,7 @@ SQL;
 
                 $checkArticle = $this->db->fetchOne(
                     $sql,
-                    array($this->session->offsetGet('sessionId'), $value[1])
+                    array($this->session->getId(), $value[1])
                 );
                 return (bool) $checkArticle;
             } else {
@@ -2043,7 +2040,7 @@ SQL;
                 $checkArticle = $this->db->fetchOne(
                     $sql,
                     array(
-                        $this->session->offsetGet('sessionId'),
+                        $this->session->getId(),
                         $value[1]
                     )
                 );
@@ -2122,7 +2119,7 @@ SQL;
     public function sRiskLASTORDERLESS($user, $order, $value)
     {
         // A order from previous x days must exists
-        if ($this->session->offsetGet('sUserId')) {
+        if ($this->session->get('sUserId')) {
             $value = (int) $value;
             $checkOrder = $this->db->fetchRow(
                 "SELECT id
@@ -2130,7 +2127,7 @@ SQL;
                 WHERE userID = ?
                 AND TO_DAYS(ordertime) <= (TO_DAYS(now())-$value) LIMIT 1",
                 array(
-                    $this->session->offsetGet('sUserId')
+                    $this->session->get('sUserId')
                 )
             );
 
@@ -2157,7 +2154,7 @@ SQL;
             AND s_articles_categories_ro.categoryID = ?
             AND s_order_basket.sessionID = ?
             AND s_order_basket.modus = 0
-        ", array($value, $this->session->offsetGet('sessionId')));
+        ", array($value, $this->session->getId()));
 
         return (!empty($checkArticle));
     }
@@ -2172,11 +2169,11 @@ SQL;
      */
     public function sRiskLASTORDERSLESS($user, $order, $value)
     {
-        if ($this->session->offsetGet('sUserId')) {
+        if ($this->session->get('sUserId')) {
             $checkOrder = $this->db->fetchAll(
                 "SELECT id FROM s_order
                   WHERE status != -1 AND status != 4 AND userID = ?",
-                array($this->session->offsetGet('sUserId'))
+                array($this->session->get('sUserId'))
             );
             return (count($checkOrder) <= $value);
         } else {
@@ -2617,13 +2614,13 @@ SQL;
             GROUP BY b.sessionID
         ";
 
-        $userId = $this->session->offsetGet('sUserId');
-        $sessionId = $this->session->offsetGet('sessionId');
+        $userId = $this->session->get('sUserId');
+        $sessionId = $this->session->getId();
         $basket = $this->db->fetchRow(
             $sql,
             [
                 'userId' => $userId,
-                'sessionId' => empty($sessionId) ? session_id() : $sessionId,
+                'sessionId' => $sessionId,
                 'billingAddressId' => $this->getBillingAddressId(),
                 'shippingAddressId' => $this->getShippingAddressId()
             ]
@@ -2635,7 +2632,7 @@ SQL;
         $basket["max_tax"] = $this->moduleManager->Basket()->getMaxTax();
 
         $postPaymentId = $this->front->Request()->getPost('sPayment');
-        $sessionPaymentId = $this->session->offsetGet('sPaymentID');
+        $sessionPaymentId = $this->session->get('sPaymentID');
 
         if (!empty($paymentID)) {
             $paymentID = (int) $paymentID;
@@ -2777,7 +2774,7 @@ SQL;
                 JOIN s_premium_dispatch_categories dc
                 ON dc.categoryID=ac.categoryID
                 WHERE b.modus=0
-                AND b.sessionID='{$this->session->offsetGet('sessionId')}'
+                AND b.sessionID='{$this->session->getId()}'
                 GROUP BY dc.dispatchID
             ) as dk
             ON dk.dispatchID=d.id
@@ -2834,7 +2831,7 @@ SQL;
             ORDER BY d.position, d.name
         ";
 
-        $userId = $this->session->offsetGet('sUserId');
+        $userId = $this->session->get('sUserId');
         $dispatches = $this->db->fetchAssoc(
             $sql,
             [
@@ -2947,7 +2944,7 @@ SQL;
                 JOIN s_premium_dispatch_categories dc
                 ON dc.categoryID=ac.categoryID
                 WHERE b.modus=0
-                AND b.sessionID='{$this->session->offsetGet('sessionId')}'
+                AND b.sessionID='{$this->session->getId()}'
                 GROUP BY dc.dispatchID
             ) as dk
             ON dk.dispatchID=d.id
@@ -3004,7 +3001,7 @@ SQL;
             GROUP BY d.id
         ";
 
-        $userId = $this->session->offsetGet('sUserId');
+        $userId = $this->session->get('sUserId');
 
         return $this->calculateDispatchSurcharge(
             $basket,
@@ -3045,7 +3042,7 @@ SQL;
         $percent_ordernumber = $this->config->get('sPAYMENTSURCHARGENUMBER', "PAYMENTSURCHARGE");
 
         $this->db->delete('s_order_basket', array(
-            'sessionID = ?' => $this->session->offsetGet('sessionId'),
+            'sessionID = ?' => $this->session->getId(),
             'modus IN (?)' => array(3, 4),
             'ordernumber IN (?)' => array(
                 $surcharge_ordernumber,
@@ -3074,7 +3071,7 @@ SQL;
                 WHERE sessionID = ?
                 GROUP BY sessionID
             ',
-            array($this->session->offsetGet('sessionId'))
+            array($this->session->getId())
         );
 
         $this->handleBasketDiscount(
@@ -3089,7 +3086,7 @@ SQL;
             $discount_tax
         );
 
-        $dispatch = $this->sGetPremiumDispatch((int) $this->session->offsetGet('sDispatch'));
+        $dispatch = $this->sGetPremiumDispatch((int) $this->session->get('sDispatch'));
 
         $payment = $this->handlePaymentMeanSurcharge(
             $country,
@@ -3207,7 +3204,7 @@ SQL;
                 'lastlogin' => new Zend_Date(),
                 'failedlogins' => 0,
                 'lockeduntil' => null,
-                'sessionID' => $this->session->offsetGet('sessionId')
+                'sessionID' => $this->session->getId()
             ),
             array(
                 'id = ?' => $getUser["id"]
@@ -3246,9 +3243,9 @@ SQL;
             );
         }
 
-        $this->session->offsetSet('sUserMail', $email);
-        $this->session->offsetSet('sUserPassword', $hash);
-        $this->session->offsetSet('sUserId', $getUser["id"]);
+        $this->session->set('sUserMail', $email);
+        $this->session->set('sUserPassword', $hash);
+        $this->session->set('sUserId', $getUser["id"]);
 
         $this->sCheckUser();
     }
@@ -3311,9 +3308,9 @@ SQL;
             array('subject' => $this, 'email' => $email, 'password' => $password, 'error' => $sErrorMessages)
         );
 
-        $this->session->offsetUnset('sUserMail');
-        $this->session->offsetUnset('sUserPassword');
-        $this->session->offsetUnset('sUserId');
+        $this->session->remove('sUserMail');
+        $this->session->remove('sUserPassword');
+        $this->session->remove('sUserId');
 
         return $sErrorMessages;
     }
@@ -3402,7 +3399,7 @@ SQL;
                     AND orderdetailsID = ?
                     AND s_order_esd.serialID = s_articles_esd_serials.id',
                     array(
-                        $this->session->offsetGet('sUserId'),
+                        $this->session->get('sUserId'),
                         $orderValue["id"],
                         $orderDetailsValue["id"]
                     )
@@ -3512,7 +3509,7 @@ SQL;
         $userData["additional"]["countryShipping"] = $this->sGetCountryTranslation(
             $userData["additional"]["countryShipping"]
         );
-        $this->session->offsetSet('sCountry', $userData["additional"]["countryShipping"]["id"]);
+        $this->session->set('sCountry', $userData["additional"]["countryShipping"]["id"]);
 
         // State selection
         $userData["additional"]["stateShipping"] = $this->db->fetchRow(
@@ -3522,9 +3519,9 @@ SQL;
         $userData["additional"]["stateShipping"] = $userData["additional"]["stateShipping"] ? : array();
         $userData["additional"]["stateShipping"] = $this->sGetCountryStateTranslation($userData["additional"]["stateShipping"]);
         // Add stateId to session
-        $this->session->offsetSet('sState', $userData["additional"]["stateShipping"]["id"]);
+        $this->session->set('sState', $userData["additional"]["stateShipping"]["id"]);
         // Add areaId to session
-        $this->session->offsetSet('sArea', $userData["additional"]["countryShipping"]["areaID"]);
+        $this->session->set('sArea', $userData["additional"]["countryShipping"]["areaID"]);
 
         return $userData;
     }
@@ -3541,6 +3538,9 @@ SQL;
     {
         $entityManager = Shopware()->Container()->get('models');
         $customer = $entityManager->find(Customer::class, $userId);
+        if (!$customer) {
+            return false;
+        }
         $billing = $this->convertToLegacyAddressArray($customer->getDefaultBillingAddress());
         $billing['attributes'] = $this->attributeLoader->load('s_user_addresses_attributes', $billing['id']) ?: [];
         $userData["billingaddress"] = $billing;
@@ -3699,7 +3699,7 @@ SQL;
             $this->db->insert(
                 's_order_basket',
                 array(
-                    'sessionID' => $this->session->offsetGet('sessionId'),
+                    'sessionID' => $this->session->getId(),
                     'articlename' => '- ' . $percent . ' % ' . $discount_basket_name,
                     'articleID' => 0,
                     'ordernumber' => $discount_basket_ordernumber,
@@ -3745,7 +3745,7 @@ SQL;
             $this->db->insert(
                 's_order_basket',
                 array(
-                    'sessionID' => $this->session->offsetGet('sessionId'),
+                    'sessionID' => $this->session->getId(),
                     'articlename' => $discount_name,
                     'articleID' => 0,
                     'ordernumber' => $discount_ordernumber,
@@ -3800,7 +3800,7 @@ SQL;
             $this->db->insert(
                 's_order_basket',
                 array(
-                    'sessionID' => $this->session->offsetGet('sessionId'),
+                    'sessionID' => $this->session->getId(),
                     'articlename' => $surcharge_name,
                     'articleID' => 0,
                     'ordernumber' => $surcharge_ordernumber,
@@ -3821,7 +3821,7 @@ SQL;
                 'SELECT SUM(quantity*price) as amount
                 FROM s_order_basket
                 WHERE sessionID = ? GROUP BY sessionID',
-                array($this->session->offsetGet('sessionId'))
+                array($this->session->getId())
             );
 
             $percent = round($amount / 100 * $payment['debit_percent'], 2);
@@ -3846,7 +3846,7 @@ SQL;
             $this->db->insert(
                 's_order_basket',
                 array(
-                    'sessionID' => $this->session->offsetGet('sessionId'),
+                    'sessionID' => $this->session->getId(),
                     'articlename' => $percent_name,
                     'articleID' => 0,
                     'ordernumber' => $percent_ordernumber,
@@ -3872,7 +3872,7 @@ SQL;
      */
     private function riskCheckClearedLevel($cleared)
     {
-        if (!$this->session->offsetGet('sUserId')) {
+        if (!$this->session->get('sUserId')) {
             return false;
         }
 
@@ -3881,7 +3881,7 @@ SQL;
             WHERE cleared = ? AND userID = ?",
             array(
                 $cleared,
-                $this->session->offsetGet('sUserId')
+                $this->session->get('sUserId')
             )
         );
 
@@ -3905,10 +3905,10 @@ SQL;
      */
     private function getBillingAddressId()
     {
-        if ($this->session->offsetGet('checkoutBillingAddressId')) {
-            return (int) $this->session->offsetGet('checkoutBillingAddressId');
+        if ($this->session->get('checkoutBillingAddressId')) {
+            return (int) $this->session->get('checkoutBillingAddressId');
         }
-        if (!$this->session->offsetGet('sUserId')) {
+        if (!$this->session->get('sUserId')) {
             return 0;
         }
         $dbal = Shopware()->Container()->get('dbal_connection');
@@ -3917,7 +3917,7 @@ SQL;
             SELECT default_billing_address_id 
             FROM s_user WHERE id = :id
             ',
-            ['id' => $this->session->offsetGet('sUserId')]
+            ['id' => $this->session->get('sUserId')]
         );
     }
 
@@ -3926,10 +3926,10 @@ SQL;
      */
     private function getShippingAddressId()
     {
-        if ($this->session->offsetGet('checkoutShippingAddressId')) {
-            return (int) $this->session->offsetGet('checkoutShippingAddressId');
+        if ($this->session->get('checkoutShippingAddressId')) {
+            return (int) $this->session->get('checkoutShippingAddressId');
         }
-        if (!$this->session->offsetGet('sUserId')) {
+        if (!$this->session->get('sUserId')) {
             return 0;
         }
         $dbal = Shopware()->Container()->get('dbal_connection');
@@ -3938,7 +3938,7 @@ SQL;
             SELECT default_shipping_address_id 
             FROM s_user WHERE id = :id
             ',
-            ['id' => $this->session->offsetGet('sUserId')]
+            ['id' => $this->session->get('sUserId')]
         );
     }
 }

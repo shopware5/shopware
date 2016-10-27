@@ -71,8 +71,11 @@ abstract class Enlight_Components_Test_Controller_TestCase extends Enlight_Compo
     {
         parent::setUp();
 
-        Shopware()->Container()->reset('Session');
-        Shopware()->Container()->reset('Auth');
+        /** @var \Shopware\Components\Session\SessionInterface $container */
+        $session = Shopware()->Container()->get('session');
+
+        $session->invalidate();
+        $session->setId(uniqid('', true));
 
         $this->reset();
     }
@@ -112,6 +115,8 @@ abstract class Enlight_Components_Test_Controller_TestCase extends Enlight_Compo
     {
         $app = Shopware();
 
+        $container = $app->Container();
+
         $this->resetRequest();
         $this->resetResponse();
 
@@ -125,11 +130,7 @@ abstract class Enlight_Components_Test_Controller_TestCase extends Enlight_Compo
         $this->_front = null;
 
         $app->Plugins()->reset();
-        //$app->Hooks()->resetHooks();
         $app->Events()->reset();
-        //$app->Db()->getProfiler()->clear();
-
-        $container = Shopware()->Container();
 
         $container->get('models')->clear();
 
@@ -137,15 +138,8 @@ abstract class Enlight_Components_Test_Controller_TestCase extends Enlight_Compo
                 ->reset('Plugins')
                 ->reset('Front')
                 ->reset('Router')
-//            ->reset('Template')
-//            ->reset('Snippets')
                 ->reset('System')
                 ->reset('Modules')
-//                ->reset('Models')
-//            ->reset('Config')
-//            ->reset('Shop');
-//            ->reset('Session')
-//            ->reset('Auth');
         ;
 
         $container->load('Front');

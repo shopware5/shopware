@@ -62,12 +62,15 @@ class AccountTest extends \Enlight_Components_Test_Controller_TestCase
         $this->Request()->setParams($params);
         $this->dispatch('/account/download');
 
-        $header = $this->Response()->getHeaders();
-        $this->assertEquals("Content-Disposition", $header[1]["name"]);
-        $this->assertEquals('attachment; filename="shopware_packshot_community_edition_72dpi_rgb.png"', $header[1]["value"]);
-        $this->assertEquals('Content-Length', $header[2]["name"]);
-        $this->assertGreaterThan(630, intval($header[2]["value"]));
-        $this->assertEquals(strlen($this->Response()->getBody()), intval($header[2]["value"]));
+        $headers = [];
+        foreach ($this->Response()->getHeaders() as $header) {
+            $headers[$header['name']] = $header['value'];
+        }
+        $this->assertArrayHasKey('Content-Disposition', $headers);
+        $this->assertEquals('attachment; filename="shopware_packshot_community_edition_72dpi_rgb.png"', $headers['Content-Disposition']);
+        $this->assertArrayHasKey('Content-Length', $headers);
+        $this->assertGreaterThan(630, intval($headers['Content-Length']));
+        $this->assertEquals(strlen($this->Response()->getBody()), $headers['Content-Length']);
 
         if ($deleteFolderOnTearDown) {
             $files = glob($deleteFolderOnTearDown . '/*'); // get all file names

@@ -61,13 +61,14 @@ class sBasketTest extends PHPUnit_Framework_TestCase
         $this->db = Shopware()->Db();
         $this->module = Shopware()->Modules()->Basket();
         $this->session = Shopware()->Session();
-        $this->session->offsetSet('sessionId', null);
         $this->module->sSYSTEM->_POST = array();
         $this->module->sSYSTEM->_GET = array();
         $this->config = Shopware()->Config();
         $this->module->sSYSTEM->sCONFIG = &$this->config;
         $this->module->sSYSTEM->sCurrency = Shopware()->Db()->fetchRow('SELECT * FROM s_core_currencies WHERE currency LIKE "EUR"');
         $this->module->sSYSTEM->sSESSION_ID = null;
+        $this->session->clear();
+        $this->session->setId('');
     }
 
     /**

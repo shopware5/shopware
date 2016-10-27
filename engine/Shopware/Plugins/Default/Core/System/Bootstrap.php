@@ -73,7 +73,9 @@ class Shopware_Plugins_Core_System_Bootstrap extends Shopware_Components_Plugin_
         /** @var $plugin Shopware_Plugins_Frontend_Statistics_Bootstrap */
         $plugin = Shopware()->Plugins()->Frontend()->Statistics();
         if ($plugin->checkIsBot($args->getRequest()->getHeader('USER_AGENT'))) {
-            Enlight_Components_Session::destroy(true, false);
+            /** @var \Shopware\Components\Session\SessionInterface $session */
+            $session = $container->get('session');
+            $session->invalidate();
         }
     }
 

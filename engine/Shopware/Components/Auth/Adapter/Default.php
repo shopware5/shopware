@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+use \Shopware\Components\Session\SessionInterface;
 
 /**
  * Shopware default auth adapter
@@ -74,17 +75,36 @@ class Shopware_Components_Auth_Adapter_Default extends Enlight_Components_Auth_A
     protected $expiry = 21600;
 
     /**
-     * Set some properties only available at runtime
+     * @var SessionInterface
      */
-    public function __construct()
+    protected $session;
+
+    /**
+     * Set some properties only available at runtime
+     * @param SessionInterface $session
+     */
+    public function __construct(SessionInterface $session)
     {
+        $this->session = $session;
+
         parent::__construct();
         // Add conditions to user queries
         foreach ($this->conditions as $condition) {
             $this->addCondition($condition);
         }
+    }
 
-        $this->setSessionId(Enlight_Components_Session::getId());
+    /**
+     * Refresh the authentication.
+     *
+     * Checks the expiry date and the identity.
+     *
+     * @return Zend_Auth_Result
+     */
+    public function refresh()
+    {
+        $this->setSessionId($this->session->getId());
+        return parent::refresh();
     }
 
     /**
@@ -115,13 +135,9 @@ class Shopware_Components_Auth_Adapter_Default extends Enlight_Components_Auth_A
                 );
             }
 
-            Enlight_Components_Session::regenerateId();
+            $this->session->migrate(true);
 
-            // close and restart session to make sure the db session handler writes updates.
-            session_write_close();
-            session_start();
-
-            $this->setSessionId(Enlight_Components_Session::getId());
+            $this->setSessionId($this->session->getId());
 
             $this->updateExpiry();
             $this->updateSessionId();

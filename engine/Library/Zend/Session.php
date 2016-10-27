@@ -379,6 +379,8 @@ class Zend_Session extends Zend_Session_Abstract
     /**
      * sessionExists() - whether or not a session exists for the current request
      *
+     * @todo Add this method to the request
+     * @see https://symfony.com/doc/current/session/avoid_session_start.html
      * @return bool
      */
     public static function sessionExists()

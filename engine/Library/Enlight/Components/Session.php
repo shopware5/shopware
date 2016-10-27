@@ -29,6 +29,7 @@
  * @package    Enlight_Session
  * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
  * @license    http://enlight.de/license     New BSD License
+ * @deprecated Use \Shopware\Components\Session\SessionInterface instead
  */
 class Enlight_Components_Session extends Zend_Session
 {
