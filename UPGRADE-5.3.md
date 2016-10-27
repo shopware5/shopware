@@ -63,6 +63,66 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Removed jQuery plugin method `hideFallbackContent` in `jquery.emotion.js`
 * Removed jQuery plugin event `plugin/swEmotionLoader/onShowFallbackContent` in `jquery.emotion.js`
 * Removed jQuery plugin event `plugin/swEmotionLoader/onHideFallbackContent`in `jquery.emotion.js`
+* Removed alias support from `Enlight_Controller_Request_Request` (`getAlias`, `getAliases`, `setAlias`)
+* Removed unused Zend Framework Components
+    * Changes to `Zend_Json`
+        * Removed `Zend_Json_Decoder`
+        * Removed `Zend_Json_Encoder`
+        * Removed `Zend_Json_Expr`
+        * Option `enableJsonExprFinder`
+        * Removed property `Zend_Json::$useBuiltinEncoderDecoder`
+        * Removed property `Zend_Json::$maxRecursionDepthAllowed`
+        * Removed method `Zend_Json::fromXml()`
+    * Changes to `Zend_Loader`
+         * Removed `Zend_Loader_Autoloader`
+         * Removed `Zend_Loader_ClassMapAutoloader`
+         * Removed `Zend_Loader_StandardAutoloader`
+         * Removed `Zend_Loader_Autoloader_Resource`
+         * Removed method `Zend_Loader::autoload()`
+         * Removed method `Zend_Loader::registerAutoload()`
+    * Changes to `Zend_DB` 
+        * Removed unused adapters like Db2, Mysqli, Oracle, Ibm, MsSql, Oci, PgSQL, Sqlsrv
+    * `Zend_Controller`
+    * `Zend_Navigation`
+    * `Zend_View`
+    * `Zend_Form`
+    * `Zend_Paginator`
+    * `Zend_Crypt`
+    * `Zend_Oauth`
+    * `Zend_Dom`
+    * `Zend_Server`
+    * `Zend_Rest`
+    * `Zend_Stdlib`
+    * `Zend_Text`
+    * `Zend_Debug`
+    * `Zend_Registry`
+    * `Zend_XmlRpc`
+    * `Zend_Soap`
+    * `Zend_Service`
+    * `Zend_Filter_Compress`
+    * `Zend_Filter_Decompress`
+    * `Zend_Filter_Encrypt`
+    * `Zend_Filter_Decrypt`
+    * `Zend_Layout`
+        * Also removed `Zend_Log_Writer_Mail::setLayout()` config options `layout` and `layoutFormatter` `setLayoutFormatter()` `getLayoutFormatter()`
+    * `Zend_Infocard`
+         * Also removed `Zend_Auth_Adapter_InfoCard`
+    * `Zend_OpenId`
+         * Also removed `Zend_Auth_Adapter_OpenId`
+    * `Zend_TimeSync`
+        * Also removed TimeSync support from `Zend_Date`
+    * `Zend_ProgressBar` 
+        * Also removed ProgressBar support from `Zend_File_Transfer_Adapter_Http`
+    * `Zend_Ldap` 
+        * Also removed `Zend_Auth_Adapter_Ldap` 
+        * Also removed `Zend_Validate_Ldap_Dn`
+    * `Zend_Wildfire`
+        * Also removed `Zend_Db_Profiler_Firebug`
+        * Also removed `Zend_Log_Formatter_Firebug`
+        * Also removed `Zend_Log_Writer_Firebug`
+    * `Zend_File`
+        * Also removed `Zend_Filter_File_*`
+        * Also removed `Zend_Validate_File_*`
 
 ### Deprecations
 
