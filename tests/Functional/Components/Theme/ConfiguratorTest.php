@@ -52,8 +52,9 @@ class ConfiguratorTest extends Base
 
         $tab->addElement($fieldSet);
 
+        $configurator = Shopware()->Container()->get('theme_configurator');
         $names = $this->invokeMethod(
-            Shopware()->Container()->get('theme_configurator'),
+            $configurator,
             'getContainerNames',
             array($container)
         );
@@ -146,8 +147,9 @@ class ConfiguratorTest extends Base
         $container->addTab($tab);
         $tab->addElement(new \Shopware\Components\Form\Field\Text('Text'));
 
+        $configurator = Shopware()->Container()->get('theme_configurator');
         $this->invokeMethod(
-            Shopware()->Container()->get('theme_configurator'),
+            $configurator,
             'validateConfig',
             array($container)
         );
@@ -167,8 +169,9 @@ class ConfiguratorTest extends Base
         $container->addTab($tab);
         $tab->addElement(new \Shopware\Components\Form\Field\Text(null));
 
+        $configurator = Shopware()->Container()->get('theme_configurator');
         $this->invokeMethod(
-            Shopware()->Container()->get('theme_configurator'),
+            $configurator,
             'validateConfig',
             array($container)
         );
