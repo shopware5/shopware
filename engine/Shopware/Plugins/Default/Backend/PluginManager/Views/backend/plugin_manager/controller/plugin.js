@@ -457,7 +457,9 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
             '{url controller=PluginInstaller action=update}',
             { technicalName: plugin.get('technicalName') },
             function(response) {
-                me.handleCrudResponse(response, plugin);
+                me.handleCrudResponse(response, plugin, function() {
+                    me.reloadMenu();
+                }, me);
                 callback(response);
             },
             null,
@@ -693,7 +695,9 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
             '{url controller=PluginInstaller action=uninstallPlugin}',
             { technicalName: plugin.get('technicalName') },
             function(response) {
-                me.handleCrudResponse(response, plugin);
+                me.handleCrudResponse(response, plugin, function() {
+                    me.reloadMenu();
+                }, me);
                 callback(response);
             },
             null,
@@ -725,7 +729,9 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
             '{url controller=PluginInstaller action=secureUninstallPlugin}',
             { technicalName: plugin.get('technicalName') },
             function(response) {
-                me.handleCrudResponse(response, plugin);
+                me.handleCrudResponse(response, plugin, function() {
+                    me.reloadMenu();
+                }, me);
                 callback(response);
             },
             null,
@@ -759,7 +765,9 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
             '{url controller=PluginInstaller action=activatePlugin}',
             { technicalName: plugin.get('technicalName') },
             function(response) {
-                me.handleCrudResponse(response, plugin);
+                me.handleCrudResponse(response, plugin, function() {
+                    me.reloadMenu();
+                }, me);
                 callback(response);
             }
         );
@@ -774,14 +782,19 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
             '{url controller=PluginInstaller action=deactivatePlugin}',
             { technicalName: plugin.get('technicalName') },
             function(response) {
-                me.handleCrudResponse(response, plugin);
+                me.handleCrudResponse(response, plugin, function() {
+                    me.reloadMenu();
+                }, me);
                 callback(response);
             }
         );
     },
 
-    handleCrudResponse: function(response, plugin) {
+    handleCrudResponse: function(response, plugin, callback, scope) {
         response = response.result;
+
+        callback = callback || Ext.emptyFn;
+        scope = scope || this;
 
         if (!response) {
             return;
@@ -797,7 +810,9 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
 
         var caches = this.getResponseCacheClearTask(response);
         if (caches !== null) {
-            this.clearCache(caches, plugin);
+            this.clearCache(caches, plugin, callback, scope);
+        } else {
+            Ext.callback(callback, scope)
         }
     },
 
@@ -822,7 +837,7 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
         return null;
     },
 
-    clearCache: function(caches, plugin) {
+    clearCache: function(caches, plugin, callback, scope) {
         var me = this;
 
         var message = Ext.String.format(
@@ -852,12 +867,21 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
                         if (caches.indexOf('theme') >= 0 || caches.indexOf('frontend') >= 0) {
                             Shopware.app.Application.fireEvent('shopware-theme-cache-warm-up-request');
                         }
-
+                        if (Ext.isFunction(callback)) {
+                            Ext.callback(callback, scope);
+                        }
                         me.hideLoadingMask();
                     }
                 });
+            },
+            function() {
+                Ext.callback(callback, scope);
             }
         );
+    },
+
+    reloadMenu: function() {
+        Shopware.app.Application.fireEvent('reload-main-menu');
     }
 });
 //{/block}
