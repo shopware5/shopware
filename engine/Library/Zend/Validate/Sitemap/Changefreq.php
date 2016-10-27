@@ -23,7 +23,6 @@
 /**
  * @see Zend_Validate_Abstract
  */
-require_once 'Zend/Validate/Abstract.php';
 
 /**
  * Validates whether a given value is valid as a sitemap <changefreq> value

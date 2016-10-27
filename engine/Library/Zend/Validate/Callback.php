@@ -22,7 +22,6 @@
 /**
  * @see Zend_Validate_Abstract
  */
-require_once 'Zend/Validate/Abstract.php';
 
 /**
  * @category   Zend
@@ -88,7 +87,6 @@ class Zend_Validate_Callback extends Zend_Validate_Abstract
         }
 
         if (null === ($initializedCallack = $this->getCallback())) {
-            require_once 'Zend/Validate/Exception.php';
             throw new Zend_Validate_Exception('No callback registered');
         }
     }
@@ -112,7 +110,6 @@ class Zend_Validate_Callback extends Zend_Validate_Abstract
     public function setCallback($callback)
     {
         if (!is_callable($callback)) {
-            require_once 'Zend/Validate/Exception.php';
             throw new Zend_Validate_Exception('Invalid callback given');
         }
         $this->_callback = $callback;

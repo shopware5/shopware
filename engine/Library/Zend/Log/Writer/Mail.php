@@ -21,13 +21,10 @@
  */
 
 /** Zend_Log_Writer_Abstract */
-require_once 'Zend/Log/Writer/Abstract.php';
 
 /** Zend_Log_Exception */
-require_once 'Zend/Log/Exception.php';
 
 /** Zend_Log_Formatter_Simple*/
-require_once 'Zend/Log/Formatter/Simple.php';
 
 /**
  * Class used for writing log messages to email via Zend_Mail.

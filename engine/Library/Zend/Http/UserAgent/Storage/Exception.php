@@ -23,7 +23,6 @@
 /**
  * @see Zend_Http_UserAgent_Exception
  */
-require_once 'Zend/Http/UserAgent/Exception.php';
 
 
 /**

@@ -23,12 +23,10 @@
 /**
  * Zend_Mail_Part
  */
-require_once 'Zend/Mail/Part.php';
 
 /**
  * Zend_Mail_Message_Interface
  */
-require_once 'Zend/Mail/Message/Interface.php';
 
 /**
  * @category   Zend
@@ -63,7 +61,6 @@ class Zend_Mail_Message extends Zend_Mail_Part implements Zend_Mail_Message_Inte
                     /**
                      * @see Zend_Mail_Exception
                      */
-                    require_once 'Zend/Mail/Exception.php';
                     throw new Zend_Mail_Exception('could not open file');
                 }
             } else {

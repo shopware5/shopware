@@ -21,10 +21,8 @@
  */
 
 /** @see Zend_Log_Formatter_Interface */
-require_once 'Zend/Log/Formatter/Interface.php';
 
 /** @see Zend_Log_FactoryInterface */
-require_once 'Zend/Log/FactoryInterface.php';
 
 /**
  * @category   Zend

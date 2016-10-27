@@ -22,12 +22,10 @@
 /**
  * @see Zend_Config_Writer
  */
-require_once 'Zend/Config/Writer/FileAbstract.php';
 
 /**
  * @see Zend_Config_Xml
  */
-require_once 'Zend/Config/Xml.php';
 
 /**
  * @category   Zend
@@ -101,7 +99,6 @@ class Zend_Config_Writer_Xml extends Zend_Config_Writer_FileAbstract
                     $branchType = 'string';
                 }
             } else if ($branchType !== (is_numeric($key) ? 'numeric' : 'string')) {
-                require_once 'Zend/Config/Exception.php';
                 throw new Zend_Config_Exception('Mixing of string and numeric keys is not allowed');
             }
 

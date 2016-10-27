@@ -21,7 +21,6 @@
  */
 
 /** Zend_Log_Writer_Abstract */
-require_once 'Zend/Log/Writer/Abstract.php';
 
 /**
  * @category   Zend

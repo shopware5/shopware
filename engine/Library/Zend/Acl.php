@@ -23,31 +23,26 @@
 /**
  * @see Zend_Acl_Resource_Interface
  */
-require_once 'Zend/Acl/Resource/Interface.php';
 
 
 /**
  * @see Zend_Acl_Role_Registry
  */
-require_once 'Zend/Acl/Role/Registry.php';
 
 
 /**
  * @see Zend_Acl_Assert_Interface
  */
-require_once 'Zend/Acl/Assert/Interface.php';
 
 
 /**
  * @see Zend_Acl_Role
  */
-require_once 'Zend/Acl/Role.php';
 
 
 /**
  * @see Zend_Acl_Resource
  */
-require_once 'Zend/Acl/Resource.php';
 
 
 /**
@@ -152,7 +147,6 @@ class Zend_Acl
         }
 
         if (!$role instanceof Zend_Acl_Role_Interface) {
-            require_once 'Zend/Acl/Exception.php';
             throw new Zend_Acl_Exception('addRole() expects $role to be of type Zend_Acl_Role_Interface');
         }
 
@@ -287,14 +281,12 @@ class Zend_Acl
         }
 
         if (!$resource instanceof Zend_Acl_Resource_Interface) {
-            require_once 'Zend/Acl/Exception.php';
             throw new Zend_Acl_Exception('addResource() expects $resource to be of type Zend_Acl_Resource_Interface');
         }
 
         $resourceId = $resource->getResourceId();
 
         if ($this->has($resourceId)) {
-            require_once 'Zend/Acl/Exception.php';
             throw new Zend_Acl_Exception("Resource id '$resourceId' already exists in the ACL");
         }
 
@@ -309,7 +301,6 @@ class Zend_Acl
                 }
                 $resourceParent = $this->get($resourceParentId);
             } catch (Zend_Acl_Exception $e) {
-                require_once 'Zend/Acl/Exception.php';
                 throw new Zend_Acl_Exception("Parent Resource id '$resourceParentId' does not exist", 0, $e);
             }
             $this->_resources[$resourceParentId]['children'][$resourceId] = $resource;
@@ -361,7 +352,6 @@ class Zend_Acl
         }
 
         if (!$this->has($resource)) {
-            require_once 'Zend/Acl/Exception.php';
             throw new Zend_Acl_Exception("Resource '$resourceId' not found");
         }
 
@@ -408,7 +398,6 @@ class Zend_Acl
             $resourceId     = $this->get($resource)->getResourceId();
             $inheritId = $this->get($inherit)->getResourceId();
         } catch (Zend_Acl_Exception $e) {
-            require_once 'Zend/Acl/Exception.php';
             throw new Zend_Acl_Exception($e->getMessage(), $e->getCode(), $e);
         }
 
@@ -447,7 +436,6 @@ class Zend_Acl
         try {
             $resourceId = $this->get($resource)->getResourceId();
         } catch (Zend_Acl_Exception $e) {
-            require_once 'Zend/Acl/Exception.php';
             throw new Zend_Acl_Exception($e->getMessage(), $e->getCode(), $e);
         }
 
@@ -609,7 +597,6 @@ class Zend_Acl
         // ensure that the rule type is valid; normalize input to uppercase
         $type = strtoupper($type);
         if (self::TYPE_ALLOW !== $type && self::TYPE_DENY !== $type) {
-            require_once 'Zend/Acl/Exception.php';
             throw new Zend_Acl_Exception("Unsupported rule type; must be either '" . self::TYPE_ALLOW . "' or '"
                                        . self::TYPE_DENY . "'");
         }
@@ -788,7 +775,6 @@ class Zend_Acl
                 break;
 
             default:
-                require_once 'Zend/Acl/Exception.php';
                 throw new Zend_Acl_Exception("Unsupported operation; must be either '" . self::OP_ADD . "' or '"
                                            . self::OP_REMOVE . "'");
         }
@@ -966,7 +952,6 @@ class Zend_Acl
             /**
              * @see Zend_Acl_Exception
              */
-            require_once 'Zend/Acl/Exception.php';
             throw new Zend_Acl_Exception('$dfs parameter may not be null');
         }
 
@@ -1009,7 +994,6 @@ class Zend_Acl
             /**
              * @see Zend_Acl_Exception
              */
-            require_once 'Zend/Acl/Exception.php';
             throw new Zend_Acl_Exception('$privilege parameter may not be null');
         }
 
@@ -1055,7 +1039,6 @@ class Zend_Acl
             /**
              * @see Zend_Acl_Exception
              */
-            require_once 'Zend/Acl/Exception.php';
             throw new Zend_Acl_Exception('$privilege parameter may not be null');
         }
 
@@ -1063,7 +1046,6 @@ class Zend_Acl
             /**
              * @see Zend_Acl_Exception
              */
-            require_once 'Zend/Acl/Exception.php';
             throw new Zend_Acl_Exception('$dfs parameter may not be null');
         }
 

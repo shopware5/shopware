@@ -22,7 +22,6 @@
 /**
  * @see Zend_Browser_Exception
  */
-require_once 'Zend/Http/UserAgent/Exception.php';
 
 /**
  * @category   Zend

@@ -22,7 +22,6 @@
 /**
  * @see Zend_Validate_Abstract
  */
-require_once 'Zend/Validate/Abstract.php';
 
 /**
  * @category   Zend
@@ -227,7 +226,6 @@ class Zend_Validate_CreditCard extends Zend_Validate_Abstract
     public function setService($service)
     {
         if (!is_callable($service)) {
-            require_once 'Zend/Validate/Exception.php';
             throw new Zend_Validate_Exception('Invalid callback given');
         }
 
@@ -299,7 +297,6 @@ class Zend_Validate_CreditCard extends Zend_Validate_Abstract
 
         if (!empty($this->_service)) {
             try {
-                require_once 'Zend/Validate/Callback.php';
                 $callback = new Zend_Validate_Callback($this->_service);
                 $callback->setOptions($this->_type);
                 if (!$callback->isValid($value)) {
