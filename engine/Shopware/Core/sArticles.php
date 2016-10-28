@@ -775,16 +775,9 @@ class sArticles
     {
         $context = $this->contextService->getShopContext();
 
-        $criteria = $this->storeFrontCriteriaFactory->createProductNavigationCriteria(
-            $request,
-            $context,
-            $categoryId
-        );
+        $criteria = $this->createProductNavigationCriteria($categoryId, $context, $request);
 
-        $searchResult = $this->productNumberSearch->search(
-            $criteria,
-            $context
-        );
+        $searchResult = $this->productNumberSearch->search($criteria, $context);
 
         $navigation = $this->buildNavigation(
             $searchResult,
@@ -796,6 +789,47 @@ class sArticles
         $navigation["currentListing"]["link"] = $this->buildCategoryLink($categoryId, $request);
 
         return $navigation;
+    }
+
+    /**
+     * @param int $categoryId
+     * @param StoreFrontBundle\Struct\ShopContextInterface $context
+     * @param Enlight_Controller_Request_RequestHttp $request
+     * @return SearchBundle\Criteria
+     */
+    private function createProductNavigationCriteria(
+        $categoryId,
+        StoreFrontBundle\Struct\ShopContextInterface $context,
+        Enlight_Controller_Request_RequestHttp $request
+    ) {
+        $streamId = $this->getStreamIdOfCategory($categoryId);
+        if ($streamId === null) {
+            return $this->storeFrontCriteriaFactory->createProductNavigationCriteria(
+                $request,
+                $context,
+                $categoryId
+            );
+        }
+
+        /** @var \Shopware\Components\ProductStream\CriteriaFactoryInterface $factory */
+        $factory = Shopware()->Container()->get('shopware_product_stream.criteria_factory');
+        $criteria = $factory->createCriteria($request, $context);
+        $criteria->limit(null);
+
+        /** @var \Shopware\Components\ProductStream\RepositoryInterface $streamRepository */
+        $streamRepository = Shopware()->Container()->get('shopware_product_stream.repository');
+        $streamRepository->prepareCriteria($criteria, $streamId);
+
+        return $criteria;
+    }
+
+    /**
+     * @param int $categoryId
+     * @return int|null
+     */
+    private function getStreamIdOfCategory($categoryId)
+    {
+        return $this->db->fetchOne("SELECT stream_id FROM s_categories WHERE id = ?", [$categoryId]);
     }
 
     /**

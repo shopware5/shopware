@@ -2,6 +2,38 @@
 
 This changelog references changes done in Shopware 5.2 patch versions.
 
+## 5.2.10
+
+[View all changes from v5.2.9...v5.2.10](https://github.com/shopware/shopware/compare/v5.2.9...v5.2.10)
+
+* Added optional `filter` option to `Shopware.apps.Base.view.element.Select`
+* Set `remoteFilter` to `true` in several *base* stores:
+    * `Shopware.apps.Base.store.Country`
+    * `Shopware.apps.Base.store.CountryArea`
+    * `Shopware.apps.Base.store.CountryState`
+    * `Shopware.apps.Base.store.Currency`
+    * `Shopware.apps.Base.store.CustomerGroup`
+    * `Shopware.apps.Base.store.Dispatch`
+    * `Shopware.apps.Base.store.Locale`
+    * `Shopware.apps.Base.store.OrderStatus`
+    * `Shopware.apps.Base.store.Payment`
+    * `Shopware.apps.Base.store.PaymentStatus`
+    * `Shopware.apps.Base.store.PositionStatus`
+    * `Shopware.apps.Base.store.Tax`
+* Replaced the default filter on `dispatches.active` added in `Shopware_Controllers_Backend_Base::getDispatchesAction()` by a default filter on `active` added in `Shopware.apps.Base.store.Dispatch`
+* Refactored jQuery product slider plugin for sliding infinitely
+* Added `initOnEvent` option to cross selling tabs on detail page for the combination of tabs with product sliders
+* Added `Shopware\Components\Emotion\ComponentInstaller` class to install emotion components in plugins.
+* Added `\Shopware\Components\Emotion\EmotionComponentViewSubscriber` to register emotion widget templates 
+* Added `plugin_dir` and `plugin_name` container parameter for each plugin. Parameters are prefixed by `\Shopware\Components\Plugin::getContainerPrefix`
+
+
+## 5.2.9
+
+[View all changes from v5.2.8...v5.2.9](https://github.com/shopware/shopware/compare/v5.2.8...v5.2.9)
+
+* `filtergroupID` column will be set to `null` in the `s_articles` table when deleting a property set 
+
 ## 5.2.8
 
 [View all changes from v5.2.7...v5.2.8](https://github.com/shopware/shopware/compare/v5.2.7...v5.2.8)

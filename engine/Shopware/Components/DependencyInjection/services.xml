@@ -475,6 +475,9 @@
             <argument type="service" id="db_connection"/>
         </service>
 
+        <service id="shopware.emotion_component_installer" class="Shopware\Components\Emotion\ComponentInstaller">
+            <argument type="service" id="models" />
+        </service>
 
         <service id="basket_persister" class="Shopware\Components\BasketSignature\BasketPersister">
             <argument type="service" id="dbal_connection" />

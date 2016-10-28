@@ -148,6 +148,8 @@ abstract class Plugin implements ContainerAwareInterface, SubscriberInterface
      */
     public function build(ContainerBuilder $container)
     {
+        $container->setParameter($this->getContainerPrefix() . '.plugin_dir', $this->getPath());
+        $container->setParameter($this->getContainerPrefix() . '.plugin_name', $this->getName());
         $this->loadFiles($container);
     }
 
@@ -195,6 +197,14 @@ abstract class Plugin implements ContainerAwareInterface, SubscriberInterface
         return $this->name = false === $pos ? $name : substr($name, $pos + 1);
     }
 
+    /**
+     * @return string
+     */
+    public function getContainerPrefix()
+    {
+        return $this->camelCaseToUnderscore($this->getName());
+    }
+
      /**
      * Gets the Plugin directory path.
      *
@@ -208,5 +218,14 @@ abstract class Plugin implements ContainerAwareInterface, SubscriberInterface
         }
 
         return $this->path;
+    }
+
+    /**
+     * @param string $string
+     * @return string
+     */
+    private function camelCaseToUnderscore($string)
+    {
+        return ltrim(strtolower(preg_replace('/[A-Z]/', '_$0', $string)), '_');
     }
 }

@@ -65,11 +65,10 @@ class QueryAliasMapperTest extends TestCase
             'omg' => 'baz',
         ];
 
-        $mock = $this->createMock(\Shopware_Components_Config::class);
-
-        $mock->expects($this->any())
-             ->method('get')
-             ->willReturn('foo=bar,omg=baz');
+        $mock = $this->createConfiguredMock(
+            \Shopware_Components_Config::class,
+            ['get' => 'foo=bar,omg=baz']
+        );
 
         $mapper = QueryAliasMapper::createFromConfig($mock);
 

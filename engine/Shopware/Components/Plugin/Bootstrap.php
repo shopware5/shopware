@@ -816,29 +816,10 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
      */
     public function createEmotionComponent(array $options)
     {
-        $config = array_merge([
-            'convertFunction' => null,
-            'description' => '',
-            'cls' => '',
-            'xtype' => 'emotion-components-base'
-        ], $options);
+        /** @var \Shopware\Components\Emotion\ComponentInstaller $installer */
+        $installer = $this->get('shopware.emotion_component_installer');
 
-        $component = Shopware()->Models()->getRepository(Component::class)->findOneBy([
-            'name' => $options['name'],
-            'pluginId' => $this->getId()
-        ]);
-
-        if (!$component) {
-            $component = new Component();
-        }
-
-        $component->fromArray($config);
-
-        $component->setPluginId($this->getId());
-        $component->setPlugin($this->Plugin());
-
-        //saves the component automatically if the plugin is saved
-        $this->Plugin()->getEmotionComponents()->add($component);
+        $component = $installer->createOrUpdate($this->getName(), $options['name'], $options);
 
         //register post dispatch of backend and widgets emotion controller to load the template extensions of the plugin
         $this->subscribeEvent('Enlight_Controller_Action_PostDispatchSecure_Widgets_Emotion', 'extendsEmotionTemplates');

@@ -284,7 +284,14 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
     private function getFreeVoucherCode($voucherId)
     {
         $builder = Shopware()->Models()->createQueryBuilder();
-        $builder->select(array('voucherCodes.id', 'voucherCodes.code'))
+        $builder->select(array(
+            'voucherCodes.id',
+            'voucherCodes.code',
+            'voucher.validTo',
+            'voucher.value',
+            'voucher.percental',
+            'voucher.validFrom'
+        ))
                 ->from('Shopware\Models\Voucher\Voucher', 'voucher')
                 ->leftJoin('voucher.codes', 'voucherCodes')
                 ->where('voucher.modus = ?1')
@@ -362,8 +369,18 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
                 ]);
                 return;
             }
+            if ($code[0]['validTo'] !== null) {
+                $code[0]['validTo'] = $code[0]['validTo']->format('Y-m-d');
+            }
+            if ($code[0]['validFrom'] !== null) {
+                $code[0]['validFrom'] = $code[0]['validFrom']->format('Y-m-d');
+            }
             $context = array(
-                'sVouchercode' => $code[0]['code']
+                'sVouchercode' => $code[0]['code'],
+                'sVouchervalue' => $code[0]['value'],
+                'sVouchervalidto' => $code[0]['validTo'],
+                'sVouchervalidfrom' => $code[0]['validFrom'],
+                'sVoucherpercental' => $code[0]['percental']
             );
         }
 

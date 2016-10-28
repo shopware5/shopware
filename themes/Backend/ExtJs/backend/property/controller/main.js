@@ -660,7 +660,6 @@ Ext.define('Shopware.apps.Property.controller.Main', {
     onEditGroup: function(editor, event) {
         var me     = this,
             record = event.record,
-            groupStore = me.subApplication.groupStore,
             optionGrid  = me.getOptionGrid(),
             groupGrid = me.getGroupGrid();
 
@@ -674,7 +673,7 @@ Ext.define('Shopware.apps.Property.controller.Main', {
                 groupGrid.addBtn.enable();
                 groupGrid.setLoading(false);
 
-                groupStore.getProxy().extraParams.optionId = record.get('id');
+                optionGrid.getStore().getProxy().setExtraParam('optionId', record.get('id'));
                 groupGrid.getSelectionModel().select(record);
                 optionGrid.enable();
             },

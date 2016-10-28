@@ -107,16 +107,22 @@ class sExport
      */
     private $config;
 
+    /** @var StoreFrontBundle\Service\ConfiguratorServiceInterface  */
+    private $configuratorService;
+
     /**
      * @param ContextServiceInterface $contextService
      * @param AdditionalTextServiceInterface $additionalTextService
      * @param Enlight_Components_Db_Adapter_Pdo_Mysql $db
+     * @param Shopware_Components_Config $config
+     * @param StoreFrontBundle\Service\ConfiguratorServiceInterface $configuratorService
      */
     public function __construct(
         ContextServiceInterface $contextService = null,
         AdditionalTextServiceInterface $additionalTextService = null,
         Enlight_Components_Db_Adapter_Pdo_Mysql $db = null,
-        Shopware_Components_Config $config = null
+        Shopware_Components_Config $config = null,
+        StoreFrontBundle\Service\ConfiguratorServiceInterface $configuratorService = null
     ) {
         $container = Shopware()->Container();
 
@@ -124,6 +130,7 @@ class sExport
         $this->additionalTextService = $container->get('shopware_storefront.additional_text_service');
         $this->db = $db ?: $container->get('db');
         $this->config = $config ?: $container->get('config');
+        $this->configuratorService = $configuratorService ?: $container->get('shopware_storefront.configurator_service');
     }
 
     /**
@@ -1169,6 +1176,15 @@ class sExport
                 $product = $this->additionalTextService->buildAdditionalText($product, $context);
 
                 $row['additionaltext'] = $product->getAdditional();
+                $row['configurator_options'] = [];
+
+                $configurationGroups = $this->configuratorService->getProductConfiguration($product, $context);
+
+                /** @var StoreFrontBundle\Struct\Configurator\Group $configuratorOption */
+                foreach ($configurationGroups as $configurationGroup) {
+                    $option = current($configurationGroup->getOptions());
+                    $row['configurator_options'][$configurationGroup->getName()] = $option->getName();
+                }
             }
             $rows[] = $row;
 

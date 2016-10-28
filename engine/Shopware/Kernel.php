@@ -305,24 +305,33 @@ class Kernel implements HttpKernelInterface
 
         $pluginRoot = $this->getRootDir().'/custom/plugins';
         foreach (new \DirectoryIterator($pluginRoot) as $pluginDir) {
-            if ($pluginDir->getBasename()[0] === '.' || $pluginDir->isFile()) {
+            if ($pluginDir->isFile() || $pluginDir->getBasename()[0] === '.') {
                 continue;
             }
 
             $pluginName = $pluginDir->getBasename();
-            if (!is_file($pluginDir->getPathname() . '/'. $pluginName . '.php')) {
+            $pluginFile = $pluginDir->getPathname() . '/'. $pluginName . '.php';
+            if (!is_file($pluginFile)) {
                 continue;
             }
 
             $namespace = $pluginName;
             $className = '\\' . $namespace . '\\' .  $pluginName;
-
             $classLoader->addPrefix($namespace, $pluginDir->getPathname());
 
-            $isActive = in_array($pluginName, $activePlugins);
+            if (!class_exists($className)) {
+                throw new \RuntimeException(sprintf('Unable to load class %s for plugin %s in file %s', $className, $pluginName, $pluginFile));
+            }
+
+            $isActive = in_array($pluginName, $activePlugins, true);
 
             /** @var Plugin $plugin */
             $plugin = new $className($isActive);
+
+            if (!$plugin instanceof Plugin) {
+                throw new \RuntimeException(sprintf('Class %s must extend %s in file %s', get_class($plugin), Plugin::class, $pluginFile));
+            }
+
             $this->plugins[$plugin->getName()] = $plugin;
         }
 

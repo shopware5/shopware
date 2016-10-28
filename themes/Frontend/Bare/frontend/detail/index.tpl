@@ -357,7 +357,7 @@
                             {* Accessory articles *}
                             {block name="frontend_detail_index_tabs_related"}
                                 {if $sArticle.sRelatedArticles && !$sArticle.crossbundlelook}
-                                    <div class="tab--container">
+                                    <div class="tab--container" data-tab-id="related">
                                         {block name="frontend_detail_index_tabs_related_inner"}
                                             <div class="tab--header">
                                                 <a href="#" class="tab--title" title="{s namespace="frontend/detail/tabs" name='DetailTabsAccessories'}{/s}">
@@ -376,7 +376,7 @@
                             {* Similar products slider *}
                             {if $sArticle.sSimilarArticles}
                                 {block name="frontend_detail_index_tabs_similar"}
-                                    <div class="tab--container">
+                                    <div class="tab--container" data-tab-id="similar">
                                         {block name="frontend_detail_index_tabs_similar_inner"}
                                             <div class="tab--header">
                                                 <a href="#" class="tab--title" title="{s name="DetailRecommendationSimilarLabel"}{/s}">{s name="DetailRecommendationSimilarLabel"}{/s}</a>
@@ -390,7 +390,7 @@
                             {* "Customers bought also" slider *}
                             {if $showAlsoBought}
                                 {block name="frontend_detail_index_tabs_also_bought"}
-                                    <div class="tab--container">
+                                    <div class="tab--container" data-tab-id="alsobought">
                                         {block name="frontend_detail_index_tabs_also_bought_inner"}
                                             <div class="tab--header">
                                                 <a href="#" class="tab--title" title="{s name='DetailRecommendationAlsoBoughtLabel'}{/s}">{s name='DetailRecommendationAlsoBoughtLabel'}{/s}</a>
@@ -404,7 +404,7 @@
                             {* "Customers similar viewed" slider *}
                             {if $showAlsoViewed}
                                 {block name="frontend_detail_index_tabs_also_viewed"}
-                                    <div class="tab--container">
+                                    <div class="tab--container" data-tab-id="alsoviewed">
                                         {block name="frontend_detail_index_tabs_also_viewed_inner"}
                                             <div class="tab--header">
                                                 <a href="#" class="tab--title" title="{s name='DetailRecommendationAlsoViewedLabel'}{/s}">{s name='DetailRecommendationAlsoViewedLabel'}{/s}</a>

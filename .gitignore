@@ -27,6 +27,11 @@ Thumbs.db
 /engine/Shopware/Plugins/Local/
 /custom/plugins/
 
+# User installed themes
+/themes/Frontend
+!/themes/Frontend/Bare
+!/themes/Frontend/Responsive
+
 # Userconfigurations
 /config.php
 /config_*.php
