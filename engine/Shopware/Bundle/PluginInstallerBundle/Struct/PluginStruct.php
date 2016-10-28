@@ -227,6 +227,21 @@ class PluginStruct implements \JsonSerializable
     private $localUpdateAvailable = false;
 
     /**
+     * @var string
+     */
+    private $link;
+
+    /**
+     * @var bool
+     */
+    private $redirectToStore = false;
+
+    /**
+     * @var float
+     */
+    private $lowestPrice;
+
+    /**
      * @param string $technicalName
      */
     public function __construct($technicalName)
@@ -848,5 +863,53 @@ class PluginStruct implements \JsonSerializable
     public function setLocalDescription($localDescription)
     {
         $this->localDescription = $localDescription;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLink()
+    {
+        return $this->link;
+    }
+
+    /**
+     * @param string $link
+     */
+    public function setLink($link)
+    {
+        $this->link = $link;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isRedirectToStore()
+    {
+        return $this->redirectToStore;
+    }
+
+    /**
+     * @param boolean $redirectToStore
+     */
+    public function setRedirectToStore($redirectToStore)
+    {
+        $this->redirectToStore = $redirectToStore;
+    }
+
+    /**
+     * @return float
+     */
+    public function getLowestPrice()
+    {
+        return $this->lowestPrice;
+    }
+
+    /**
+     * @param float $lowestPrice
+     */
+    public function setLowestPrice($lowestPrice)
+    {
+        $this->lowestPrice = $lowestPrice;
     }
 }
