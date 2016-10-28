@@ -324,6 +324,10 @@ class Kernel implements HttpKernelInterface
 
             $isActive = in_array($pluginName, $activePlugins, true);
 
+            if (!class_exists($className)) {
+                throw new \Exception("Class {$className} for plugin {$pluginName} not found.");
+            }
+
             /** @var Plugin $plugin */
             $plugin = new $className($isActive);
 
