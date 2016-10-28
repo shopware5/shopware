@@ -178,7 +178,7 @@ class Enlight_Controller_Request_RequestTestCase extends Enlight_Controller_Requ
     public function setMethod($type)
     {
         $type = strtoupper(trim((string) $type));
-        if (!in_array($type, $this->_validMethodTypes)) {
+        if (!in_array($type, $this->_validMethodTypes, true)) {
             throw new \Exception('Invalid request method specified');
         }
         $this->_method = $type;
@@ -289,51 +289,8 @@ class Enlight_Controller_Request_RequestTestCase extends Enlight_Controller_Requ
         return $name;
     }
 
-
     /**
-     * Set GET values method
-     *
-     * @param  string|array $spec
-     * @param  null|mixed   $value
-     * @return Enlight_Controller_Request_Request
-     */
-    public function setQuery($spec, $value = null)
-    {
-        if (!is_array($spec) && $value === null) {
-            unset($_GET[$spec]);
-            return $this;
-        } elseif (is_array($spec) && empty($spec)) {
-            $_GET = [];
-            return $this;
-        }
-        return parent::setQuery($spec, $value);
-    }
-
-    /**
-     * Set POST values method
-     *
-     * @param  string|array $spec
-     * @param  null|mixed   $value
-     * @return Enlight_Controller_Request_Request
-     */
-    public function setPost($spec, $value = null)
-    {
-        if (!is_array($spec) && $value === null) {
-            unset($_POST[$spec]);
-            return $this;
-        } elseif (is_array($spec) && empty($spec)) {
-            $_POST = [];
-            return $this;
-        }
-
-        return parent::setPost($spec, $value);
-    }
-
-    /**
-     * Set SERVER remote address
-     *
-     * @param string $address
-     * @return Enlight_Controller_Request_Request
+     * {@inheritdoc}
      */
     public function setRemoteAddress($address)
     {
@@ -384,11 +341,7 @@ class Enlight_Controller_Request_RequestTestCase extends Enlight_Controller_Requ
     }
 
     /**
-     * Gets a server param
-     *
-     * @param string $key
-     * @param string $default
-     * @return Enlight_Controller_Request_RequestTestCase
+     * {@inheritdoc}
      */
     public function getServer($key = null, $default = null)
     {
@@ -402,7 +355,13 @@ class Enlight_Controller_Request_RequestTestCase extends Enlight_Controller_Requ
             return $default;
         }
     }
-
+    /**
+     * {@inheritdoc}
+     */
+    public function getDeviceType()
+    {
+        return $this->deviceType;
+    }
     /**
      * Sets the current device type
      * @param string $deviceType
@@ -410,7 +369,6 @@ class Enlight_Controller_Request_RequestTestCase extends Enlight_Controller_Requ
     public function setDeviceType($deviceType)
     {
         $deviceType = strtolower($deviceType);
-
-        $this->deviceType = in_array($deviceType, $this->validDeviceTypes) ? $deviceType : 'desktop';
+        $this->deviceType = in_array($deviceType, $this->validDeviceTypes, true) ? $deviceType : 'desktop';
     }
 }

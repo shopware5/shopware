@@ -74,23 +74,24 @@ class Shopware_Tests_Plugins_Frontend_StatisticsTest extends Enlight_Components_
      */
     public function testRefreshCurrentUsers()
     {
+        /** @var \Enlight_Controller_Request_RequestTestCase $request */
         $request = $this->Request()
             ->setModuleName('frontend')
             ->setDispatched(true)
-            ->setClientIp('127.0.0.1', false)
-            ->setRequestUri('/');
+            ->setRemoteAddress('192.168.33.10')
+            ->setRequestUri('/foobar');
 
-        $request->setDeviceType('desktop');
+        /** @var \Enlight_Controller_Request_RequestTestCase $request */
+        $request->setDeviceType('mobile');
 
         $this->Plugin()->refreshCurrentUsers($request);
 
-        $sql = 'SELECT `id` FROM `s_statistics_currentusers` WHERE `remoteaddr`=? AND `page`=?';
-        $insertId = Shopware()->Db()->fetchOne($sql, array(
-            $request->getClientIp(false),
-            $request->getRequestUri()
-        ));
+        $sql = 'SELECT * FROM `s_statistics_currentusers` ORDER BY `id` DESC LIMIT 1';
+        $result = Shopware()->Container()->get('dbal_connection')->fetchAssoc($sql);
 
-        $this->assertNotEmpty($insertId);
+        $this->assertSame('192.168.33.10', $result['remoteaddr']);
+        $this->assertSame('/foobar', $result['page']);
+        $this->assertSame('mobile', $result['deviceType']);
     }
 
     /**

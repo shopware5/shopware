@@ -28,7 +28,7 @@ class Enlight_Controller_Request_RequestHttp implements Enlight_Controller_Reque
     /**
      * @var string[]
      */
-    private $validDeviceTypes = [
+    protected $validDeviceTypes = [
         'desktop',
         'tablet',
         'mobile',
