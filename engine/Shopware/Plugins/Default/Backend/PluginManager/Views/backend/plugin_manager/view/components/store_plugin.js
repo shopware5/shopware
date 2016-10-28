@@ -154,7 +154,6 @@ Ext.define('Shopware.apps.PluginManager.view.components.StorePlugin', {
         });
     },
 
-
     createRating: function() {
         var me = this;
 
@@ -180,7 +179,7 @@ Ext.define('Shopware.apps.PluginManager.view.components.StorePlugin', {
         if (me.record.get('id')) {
             items.push({
                 cls: 'installed badge',
-                html: template + 'v '+ me.record.get('version') +'</div>'
+                html: template + 'v ' + me.record.get('version') + '</div>'
             });
         }
 
@@ -203,7 +202,7 @@ Ext.define('Shopware.apps.PluginManager.view.components.StorePlugin', {
     createButton: function() {
         var me = this, cls, text;
 
-        switch(true) {
+        switch (true) {
             case me.record.allowDummyUpdate():
 
                 return Ext.create('PluginManager.container.Container', {
@@ -262,7 +261,6 @@ Ext.define('Shopware.apps.PluginManager.view.components.StorePlugin', {
                     }
                 });
 
-
             case me.record.get('useContactForm'):
                 return Ext.create('PluginManager.container.Container', {
                     cls: 'button contact-form',
@@ -275,19 +273,20 @@ Ext.define('Shopware.apps.PluginManager.view.components.StorePlugin', {
 
             default:
                 if (me.record['getPricesStore']) {
-                    var prices = me.record['getPricesStore'];
-                    var buyPrice = me.getPriceByType(prices, 'buy');
-                    var rentPrice = me.getPriceByType(prices, 'rent');
+                    var prices = me.record['getPricesStore'],
+                        buyPrice = me.getPriceByType(prices, 'buy'),
+                        rentPrice = me.getPriceByType(prices, 'rent'),
+                        redirectToStore = me.record.get('redirectToStore');
 
-                    if (rentPrice) {
-                        text = '{s name="from_price"}From{/s} ' + Ext.util.Format.currency(rentPrice.get('price'), ' €', 2, true);
-                        cls  = 'rent';
+                    if (rentPrice || redirectToStore) {
+                        text = me.getBoxText(redirectToStore, rentPrice);
+                        cls = 'rent';
                     } else if (buyPrice) {
                         text = Ext.util.Format.currency(buyPrice.get('price'), ' €', 2, true);
                         cls = 'buy';
                     } else {
                         text = '{s name="free_price"}Free{/s}';
-                        cls  = 'free';
+                        cls = 'free';
                     }
                 }
                 break;
@@ -302,6 +301,21 @@ Ext.define('Shopware.apps.PluginManager.view.components.StorePlugin', {
         });
     },
 
+    /**
+     * @param { boolean } redirectToStore
+     * @param { Shopware.apps.PluginManager.model.Price } price
+     * @returns { string }
+     */
+    getBoxText: function(redirectToStore, price) {
+        var me = this;
+
+        if (!redirectToStore) {
+            return '{s name="from_price"}From{/s} ' + Ext.util.Format.currency(price.get('price'), ' €', 2, true);
+        }
+
+        return '{s name="more/info/button/text"}More information{/s}'
+    },
+
     getPriceByType: function(prices, type) {
         var me = this, price = null;
 
@@ -312,6 +326,5 @@ Ext.define('Shopware.apps.PluginManager.view.components.StorePlugin', {
         });
         return price;
     }
-
 });
 //{/block}

@@ -228,6 +228,9 @@ class StructHydrator
             $localPlugin->setAvailableVersion($storePlugin->getVersion());
         }
 
+        $localPlugin->setLink($storePlugin->getLink());
+        $localPlugin->setRedirectToStore($storePlugin->isRedirectToStore());
+        $localPlugin->setLowestPrice($storePlugin->getLowestPrice());
         $localPlugin->setContactForm($storePlugin->getContactForm());
         $localPlugin->setRating($storePlugin->getRating());
         $localPlugin->setUseContactForm($storePlugin->useContactForm());
@@ -262,6 +265,9 @@ class StructHydrator
         $storePlugin->setCapabilityInstall($localPlugin->hasCapabilityInstall());
         $storePlugin->setCapabilitySecureUninstall($localPlugin->hasCapabilitySecureUninstall());
         $storePlugin->setLocalDescription($localPlugin->getLocalDescription());
+        $storePlugin->setLink($localPlugin->getLink());
+        $storePlugin->setRedirectToStore($localPlugin->isRedirectToStore());
+        $storePlugin->setLowestPrice($localPlugin->getLowestPrice());
 
         $storePlugin->setCapabilityUpdate($localPlugin->hasCapabilityUpdate());
 
@@ -381,9 +387,14 @@ class StructHydrator
         $plugin->setCode($data['code']);
         $plugin->setDescription($data['description']);
         $plugin->setVersion($data['version']);
+        $plugin->setLink($data['link']);
+        $plugin->setRedirectToStore((bool) $data['redirectToStore']);
+        $plugin->setLowestPrice((float) $data['lowestPriceValue']);
+
         if (isset($data['contactForm'])) {
             $plugin->setContactForm($data['contactForm']);
         }
+
         $plugin->setChangelog($data['changelog']);
         $plugin->setInstallationManual($data['installationManual']);
         $plugin->setExampleUrl($data['examplePageUrl']);
@@ -439,6 +450,9 @@ class StructHydrator
         $plugin->setCapabilityInstall((bool) $data['capability_install']);
         $plugin->setCapabilitySecureUninstall((bool) $data['capability_secure_uninstall']);
         $plugin->setLocalUpdateAvailable(($data['update_version'] !== null));
+        $plugin->setLink($data['link']);
+        $plugin->setRedirectToStore((bool) $data['redirectToStore']);
+        $plugin->setLowestPrice((float) $data['lowestPriceValue']);
 
         $plugin->setSource($data['source']);
         $plugin->setFormId($data['form_id']);

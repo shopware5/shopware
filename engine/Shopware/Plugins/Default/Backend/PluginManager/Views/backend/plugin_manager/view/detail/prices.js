@@ -38,8 +38,7 @@ Ext.define('Shopware.apps.PluginManager.view.detail.Prices', {
         events: 'Shopware.apps.PluginManager.view.PluginHelper'
     },
 
-    tabIndex: {
-    },
+    tabIndex: { },
 
     initComponent: function() {
         var me = this,
@@ -48,7 +47,28 @@ Ext.define('Shopware.apps.PluginManager.view.detail.Prices', {
             buyPrice = me.getPriceByType(me.prices, 'buy'),
             rentPrice = me.getPriceByType(me.prices, 'rent'),
             testPrice = me.getPriceByType(me.prices, 'test'),
-            freePrice = me.getPriceByType(me.prices, 'free');
+            freePrice = me.getPriceByType(me.prices, 'free'),
+            redirectToStore = me.plugin.get('redirectToStore'),
+            lowestPrice = me.plugin.get('lowestPrice'),
+            price;
+
+        if (redirectToStore) {
+            price = me.getLowestPrice({
+                lowestPrice: lowestPrice,
+                buyPrice: buyPrice,
+                freePrice: freePrice
+            });
+
+            items.push(me.createCommunityTab(price));
+            me.tabIndex['bye'] = index;
+            index++;
+
+            // In this case we only want to add the "test tab" if it exists.
+            // For this reason set the other prices to "null"
+            buyPrice = null;
+            rentPrice = null;
+            freePrice = null;
+        }
 
         if (buyPrice) {
             items.push(me.createBuyTab(buyPrice));
@@ -81,9 +101,85 @@ Ext.define('Shopware.apps.PluginManager.view.detail.Prices', {
         me.callParent(arguments);
     },
 
+    /**
+     * @param { Shopware.apps.PluginManager.model.Price } price
+     * @returns { Ext.container.Container }
+     */
+    createCommunityTab: function(price) {
+        var me = this,
+            items = [];
+
+        items.push({
+            xtype: 'plugin-manager-container-container',
+            cls: 'button buy',
+            html: '<div class="text">{s name="show/in/community/store"}Show in store{/s}</div>',
+            handler: Ext.bind(me.onShowInCommunityStore, me)
+        });
+
+        items.push({
+            xtype: 'component',
+            cls: 'price',
+            html: '{s name="from/price/prefix"}from{/s} ' + me.formatPrice(price.get('price')) + ' *'
+        });
+
+        if (price.get('subscription')) {
+            items.push({
+                xtype: 'component',
+                cls: 'subscription',
+                html: '<div class="icon">U</div>' +
+                '<div class="text">{s name="subscription_info"}Incl. updates for 12 Months (subscription){/s}</div>'
+            });
+        }
+
+        return Ext.create('Ext.container.Container', {
+            title: '{s name="community/store/tab/header"}Community store{/s}',
+            cls: 'tab buy-tab',
+            height: 110,
+            items: items
+        });
+    },
+
+    /**
+     * This is the event handler for the buy button. If the buy button is
+     * clicked open a new window with the given URL to the Store.
+     */
+    onShowInCommunityStore: function() {
+        var me = this;
+
+        window.open(me.plugin.get('link'));
+    },
+
+    /**
+     * @param { object } prices
+     */
+    getLowestPrice: function(prices) {
+        var me = this;
+
+        if (prices.lowestPrice) {
+            return Ext.create('Shopware.apps.PluginManager.model.Price', {
+                price: prices.lowestPrice,
+                subscription: prices.buyPrice && prices.buyPrice.get('subscription') ? prices.buyPrice.get('subscription') : false,
+                type: 'buy'
+            });
+        }
+
+        if (prices.freePrice) {
+            return prices.freePrice;
+        }
+
+        if(prices.buyPrice) {
+            return prices;
+        }
+
+        return Ext.create('Shopware.apps.PluginManager.model.Price', {
+            price: 0,
+            subscription: false,
+            type: 'free'
+        });
+    },
+
     createContactTab: function() {
         var me = this, items = [];
-
 
         items.push({
             xtype: 'plugin-manager-container-container',
@@ -128,7 +224,6 @@ Ext.define('Shopware.apps.PluginManager.view.detail.Prices', {
             items: items
         });
     },
-
 
     createBuyTab: function(price) {
         var me = this, items = [];
