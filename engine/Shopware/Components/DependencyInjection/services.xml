@@ -16,11 +16,6 @@
         <service id="PasswordEncoder" synthetic="true" />
         <service id="db_connection"   synthetic="true" />
 
-        <service id="bootstrap" class="Shopware_Bootstrap">
-            <argument type="service" id="service_container"/>
-            <deprecated>The "%service_id%" service is deprecated since 5.2 and will be removed in 5.3.</deprecated>
-        </service>
-
         <service id="locale_factory" class="Shopware\Components\DependencyInjection\Bridge\Locale" />
         <service id="shopware.locale" alias="locale" />
         <service id="locale" class="Zend_Locale">

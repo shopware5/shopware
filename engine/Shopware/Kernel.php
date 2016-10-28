@@ -350,11 +350,11 @@ class Kernel implements HttpKernelInterface
 
         // Set up mpdf cache dirs
         if (!defined('_MPDF_TEMP_PATH')) {
-            define("_MPDF_TEMP_PATH", $this->getCacheDir() .'/mpdf/tmp/');
+            define('_MPDF_TEMP_PATH', $this->getCacheDir() .'/mpdf/tmp/');
         }
 
         if (!defined('_MPDF_TTFONTDATAPATH')) {
-            define("_MPDF_TTFONTDATAPATH", $this->getCacheDir() .'/mpdf/ttfontdata/');
+            define('_MPDF_TTFONTDATAPATH', $this->getCacheDir() .'/mpdf/ttfontdata/');
         }
     }
 
@@ -686,17 +686,6 @@ class Kernel implements HttpKernelInterface
             'kernel.charset'         => 'UTF-8',
             'kernel.container_class' => $this->getContainerClass(),
         );
-    }
-
-    /**
-     * @deprecated since 5.2, to be removed in 5.3
-     * @return \Shopware
-     */
-    public function getShopware()
-    {
-        trigger_error('Shopware\Kernel::getShopware() is deprecated since version 5.2 and will be removed in 5.3.', E_USER_DEPRECATED);
-
-        return $this->shopware;
     }
 
     /**
