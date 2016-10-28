@@ -40,7 +40,7 @@ function smarty_function_controllerAction($params, Enlight_Template_Default $tem
     $front = Shopware()->Front();
     $request = $front->Request();
 
-    if (empty($request) || !$request instanceof Zend_Controller_Request_Abstract) {
+    if (empty($request) || !$request instanceof Enlight_Controller_Request_Request) {
         $e = new Exception(
             'Controller view helper requires a valid request object in the front controller instance'
         );

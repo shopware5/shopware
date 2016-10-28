@@ -24,7 +24,6 @@
 /**
  * @see Zend_Mail_Protocol_Smtp
  */
-require_once 'Zend/Mail/Protocol/Smtp.php';
 
 
 /**

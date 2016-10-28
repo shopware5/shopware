@@ -7,30 +7,20 @@
  * This source file is subject to the new BSD license that is bundled
  * with this package in the file LICENSE.txt.
  * It is also available through the world-wide-web at this URL:
- * http://enlight.de/license
+ * http://opensource.org/licenses/bsd-license.php
  * If you did not receive a copy of the license and are unable to
  * obtain it through the world-wide-web, please send an email
  * to license@shopware.de so we can send you a copy immediately.
  *
- * @category   Enlight
- * @package    Enlight_Controller
+ * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
- * @license    http://enlight.de/license     New BSD License
- * @version    $Id$
- * @author     Heiner Lohaus
- * @author     $Author$
+ * @license    http://opensource.org/licenses/bsd-license.php New BSD License
  */
 
 /**
- * Controller for Enlight request test cases.
+ * This class is highly based on Zend_Controller_Request_HttpTestCasep
  *
- * The Enlight_Controller_Request_RequestTestCase extends the zend controller request
- * with some helper functions.
- *
- * @category   Enlight
- * @package    Enlight_Controller
- * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
- * @license    http://enlight.de/license     New BSD License
+ * @link https://github.com/zendframework/zf1/blob/release-1.12.20/library/Zend/Controller/Request/HttpTestCase.php
  */
 class Enlight_Controller_Request_RequestTestCase extends Enlight_Controller_Request_RequestHttp
 {
@@ -38,7 +28,7 @@ class Enlight_Controller_Request_RequestTestCase extends Enlight_Controller_Requ
      * Request headers
      * @var array
      */
-    protected $_headers = array();
+    protected $_headers = [];
 
     /**
      * Request method
@@ -47,23 +37,30 @@ class Enlight_Controller_Request_RequestTestCase extends Enlight_Controller_Requ
     protected $_method = 'GET';
 
     /**
-     * Raw POST body
-     * @var string|null
-     */
-    protected $_rawBody;
-
-    /**
      * Valid request method types
      * @var array
      */
-    protected $_validMethodTypes = array(
+    protected $_validMethodTypes = [
         'DELETE',
         'GET',
         'HEAD',
         'OPTIONS',
         'POST',
         'PUT',
-    );
+    ];
+
+    /**
+     * Server params
+     * @var array
+     */
+    protected $_serverParams = [];
+
+    /**
+     * See: getDeviceType()
+     *
+     * @var string
+     */
+    private $deviceType = 'desktop';
 
     /**
      * Clear the global state
@@ -85,7 +82,7 @@ class Enlight_Controller_Request_RequestTestCase extends Enlight_Controller_Requ
      */
     public function clearQuery()
     {
-        $_GET = array();
+        $_GET = [];
         return $this;
     }
 
@@ -96,7 +93,7 @@ class Enlight_Controller_Request_RequestTestCase extends Enlight_Controller_Requ
      */
     public function clearPost()
     {
-        $_POST = array();
+        $_POST = [];
         return $this;
     }
 
@@ -150,7 +147,7 @@ class Enlight_Controller_Request_RequestTestCase extends Enlight_Controller_Requ
      * Set multiple cookies at once
      *
      * @param array $cookies
-     * @return void
+     * @return self
      */
     public function setCookies(array $cookies)
     {
@@ -167,7 +164,7 @@ class Enlight_Controller_Request_RequestTestCase extends Enlight_Controller_Requ
      */
     public function clearCookies()
     {
-        $_COOKIE = array();
+        $_COOKIE = [];
         return $this;
     }
 
@@ -176,13 +173,13 @@ class Enlight_Controller_Request_RequestTestCase extends Enlight_Controller_Requ
      *
      * @param  string $type
      * @return Enlight_Controller_Request_RequestTestCase
+     * @throws Exception
      */
     public function setMethod($type)
     {
         $type = strtoupper(trim((string) $type));
         if (!in_array($type, $this->_validMethodTypes)) {
-            require_once 'Zend/Controller/Exception.php';
-            throw new Zend_Controller_Exception('Invalid request method specified');
+            throw new \Exception('Invalid request method specified');
         }
         $this->_method = $type;
         return $this;
@@ -265,7 +262,7 @@ class Enlight_Controller_Request_RequestTestCase extends Enlight_Controller_Requ
      */
     public function clearHeaders()
     {
-        $this->_headers = array();
+        $this->_headers = [];
         return $this;
     }
 
@@ -292,34 +289,13 @@ class Enlight_Controller_Request_RequestTestCase extends Enlight_Controller_Requ
         return $name;
     }
 
-    /**
-     * Server params
-     * @var array
-     */
-    protected $_serverParams = array();
-
-    /**
-     * @var string[]
-     */
-    private $validDeviceTypes = [
-        'desktop',
-        'tablet',
-        'mobile',
-    ];
-
-    /**
-     * See: getDeviceType()
-     *
-     * @var string
-     */
-    private $deviceType = 'desktop';
 
     /**
      * Set GET values method
      *
      * @param  string|array $spec
      * @param  null|mixed   $value
-     * @return Zend_Controller_Request_Http
+     * @return Enlight_Controller_Request_Request
      */
     public function setQuery($spec, $value = null)
     {
@@ -327,7 +303,7 @@ class Enlight_Controller_Request_RequestTestCase extends Enlight_Controller_Requ
             unset($_GET[$spec]);
             return $this;
         } elseif (is_array($spec) && empty($spec)) {
-            $_GET = array();
+            $_GET = [];
             return $this;
         }
         return parent::setQuery($spec, $value);
@@ -338,7 +314,7 @@ class Enlight_Controller_Request_RequestTestCase extends Enlight_Controller_Requ
      *
      * @param  string|array $spec
      * @param  null|mixed   $value
-     * @return Zend_Controller_Request_Http
+     * @return Enlight_Controller_Request_Request
      */
     public function setPost($spec, $value = null)
     {
@@ -346,7 +322,7 @@ class Enlight_Controller_Request_RequestTestCase extends Enlight_Controller_Requ
             unset($_POST[$spec]);
             return $this;
         } elseif (is_array($spec) && empty($spec)) {
-            $_POST = array();
+            $_POST = [];
             return $this;
         }
 
@@ -427,48 +403,6 @@ class Enlight_Controller_Request_RequestTestCase extends Enlight_Controller_Requ
         }
     }
 
-
-
-    /**
-     * Sets the request URI scheme
-     *
-     * @param $value
-     * @return Enlight_Controller_Request_Request
-     */
-    public function setSecure($value = true)
-    {
-        $_SERVER['HTTPS'] = $value ? 'on' : null;
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getModuleName()
-    {
-        if (parent::getModuleName() === null) {
-            return null;
-        }
-
-        return strtolower(trim(parent::getModuleName()));
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getClientIp($checkProxy = false)
-    {
-        return parent::getClientIp($checkProxy);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getDeviceType()
-    {
-        return $this->deviceType;
-    }
-
     /**
      * Sets the current device type
      * @param string $deviceType
@@ -477,6 +411,6 @@ class Enlight_Controller_Request_RequestTestCase extends Enlight_Controller_Requ
     {
         $deviceType = strtolower($deviceType);
 
-        $this->deviceType = (in_array($deviceType, $this->validDeviceTypes)) ? $deviceType : 'desktop';
+        $this->deviceType = in_array($deviceType, $this->validDeviceTypes) ? $deviceType : 'desktop';
     }
 }

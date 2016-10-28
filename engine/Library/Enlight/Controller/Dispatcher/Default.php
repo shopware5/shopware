@@ -78,7 +78,7 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
     protected $defaultModule = 'frontend';
 
     /**
-     * @var Zend_Controller_Front Contains the instance of the front controller.
+     * @var Enlight_Controller_Front Contains the instance of the front controller.
      */
     protected $frontController;
 
@@ -335,6 +335,7 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
         if (!$request->getControllerName()) {
             $request->setControllerName($this->defaultController);
         }
+
         if (!$request->getModuleName()) {
             $request->setModuleName($this->defaultModule);
         }
@@ -445,6 +446,7 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
             return true;
         }
         $path = $this->getControllerPath($request);
+
         return Enlight_Loader::isReadable($path);
     }
 

@@ -23,7 +23,6 @@
 /**
  * @see Zend_Cache_Backend_Interface
  */
-require_once 'Zend/Cache/Backend/Interface.php';
 
 /**
  * @package    Zend_Cache
