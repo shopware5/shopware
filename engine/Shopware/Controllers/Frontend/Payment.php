@@ -56,7 +56,7 @@ abstract class Shopware_Controllers_Frontend_Payment extends Enlight_Controller_
      */
     public function getCurrencyShortName()
     {
-        return Shopware()->Currency()->getShortName();
+        return Shopware()->Container()->get('currency')->getShortName();
     }
 
     /**

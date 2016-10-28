@@ -44,7 +44,7 @@ class Shopware_Controllers_Backend_Cron extends Enlight_Controller_Action implem
         }
 
         /** @var $cronManager Enlight_Components_Cron_Manager */
-        $cronManager = Shopware()->Cron();
+        $cronManager = Shopware()->Container()->get('cron');
 
         set_time_limit(0);
         while (($job = $cronManager->getNextJob()) !== null) {
