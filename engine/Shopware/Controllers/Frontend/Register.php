@@ -409,7 +409,7 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
     private function createCustomerForm(array $data)
     {
         $customer = new Customer();
-        $form = $this->createForm(PersonalFormType::class, $customer);
+        $form = $this->createForm(get_class($this->container->get('shopware_account.form.personalform')), $customer);
         $form->submit($data);
         return $form;
     }
@@ -421,7 +421,7 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
     private function createBillingForm(array $data)
     {
         $address = new Address();
-        $form = $this->createForm(AddressFormType::class, $address);
+        $form = $this->createForm(get_class($this->container->get('shopware_account.form.addressform')), $address);
         $form->submit($data);
         return $form;
     }
@@ -433,7 +433,7 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
     private function createShippingForm(array $data)
     {
         $address = new Address();
-        $form = $this->createForm(AddressFormType::class, $address);
+        $form = $this->createForm(get_class($this->container->get('shopware_account.form.addressform')), $address);
         $form->submit($data);
         return $form;
     }

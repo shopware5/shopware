@@ -139,7 +139,10 @@ class Shopware_Controllers_Backend_Address extends Shopware_Controllers_Backend_
         $data['state'] = $data['state_id'];
 
         /** @var \Symfony\Component\Form\FormInterface $form */
-        $form = $this->get('shopware.form.factory')->create(AddressFormType::class, $model);
+        $form = $this->get('shopware.form.factory')->create(
+            get_class($this->container->get('shopware_account.form.addressform')),
+            $model
+        );
         $form->submit($data);
 
         if (!$form->isValid()) {
