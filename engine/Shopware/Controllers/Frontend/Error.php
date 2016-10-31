@@ -191,8 +191,8 @@ class Shopware_Controllers_Frontend_Error extends Enlight_Controller_Action impl
      */
     private function enableBackendTheme()
     {
-        $directory = Shopware()->Container()->get('theme_path_resolver')->getExtJsThemeDirectory();
-        Shopware()->Container()->get('template')->setTemplateDir([
+        $directory = $this->get('theme_path_resolver')->getExtJsThemeDirectory();
+        $this->get('template')->setTemplateDir([
             'backend' => $directory,
             'include_dir' => '.'
         ]);

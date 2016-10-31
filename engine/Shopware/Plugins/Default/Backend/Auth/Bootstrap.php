@@ -297,7 +297,7 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
         /** @var $engine Enlight_Template_Manager */
         $engine = $container->get('Template');
         $engine->unregisterPlugin(
-            Smarty::PLUGIN_FUNCTION,
+            Enlight_Template_Manager::PLUGIN_FUNCTION,
             'acl_is_allowed'
         );
         $engine->registerPlugin(
@@ -425,8 +425,8 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
      */
     protected function getCurrentLocale()
     {
+        $auth = Shopware()->Container()->get('Auth');
         if (Enlight_Components_Session::sessionExists()) {
-            $auth = Shopware()->Container()->get('Auth');
             if ($auth->hasIdentity()) {
                 $user = $auth->getIdentity();
                 if (isset($user->locale)) {

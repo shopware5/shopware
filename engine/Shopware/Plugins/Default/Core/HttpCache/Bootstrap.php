@@ -543,12 +543,12 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
         }
 
         // Don't cache when using admin session
-        if (Shopware()->Session()->Admin) {
+        if (Shopware()->Container()->get('session')->get('Admin')) {
             return false;
         }
 
         // Don't cache filled basket or wishlist
-        if ($controllerName == 'widgets/checkout' && (!empty(Shopware()->Session()->sBasketQuantity) || !empty(Shopware()->Session()->sNotesQuantity))) {
+        if ($controllerName == 'widgets/checkout' && (!empty(Shopware()->Container()->get('session')->sBasketQuantity) || !empty(Shopware()->Container()->get('session')->sNotesQuantity))) {
             $this->response->setHeader('Cache-Control', 'private, no-cache');
             return false;
         }
@@ -580,7 +580,7 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
         }
 
         if ($controllerName == 'frontend/checkout' || $controllerName == 'frontend/note') {
-            if (empty(Shopware()->Session()->sBasketQuantity) && empty(Shopware()->Session()->sNotesQuantity)) {
+            if (empty(Shopware()->Container()->get('session')->sBasketQuantity) && empty(Shopware()->Container()->get('session')->sNotesQuantity)) {
                 // remove checkout-cookie
                 $this->setNoCacheTag('checkout', true);
             }
@@ -591,12 +591,12 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
             $this->setNoCacheTag('compare', true);
         }
 
-        if (!empty(Shopware()->Session()->sNotesQuantity)) {
+        if (!empty(Shopware()->Container()->get('session')->sNotesQuantity)) {
             // set checkout-cookie
             $this->setNoCacheTag('checkout');
         }
 
-        if ($this->request->getModuleName() == 'frontend' && !empty(Shopware()->Session()->Admin)) {
+        if ($this->request->getModuleName() == 'frontend' && Shopware()->Container()->get('session')->get('Admin')) {
             // set admin-cookie if admin session is present
             $this->setNoCacheTag('admin');
         }
@@ -1127,10 +1127,10 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
      */
     private function addContextCookie(Request $request, Response $response)
     {
-        /** @var $session Enlight_Components_Session_Namespace */
+        /** @var $session Shopware\Components\Session\SessionInterface */
         $session = $this->get('session');
 
-        if ($session->offsetGet('sCountry')) {
+        if ($session->get('sCountry')) {
             /** @var ProductContextInterface $productContext */
             $productContext = $this->get('shopware_storefront.context_service')->getShopContext();
             $userContext = sha1(

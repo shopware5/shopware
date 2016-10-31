@@ -282,7 +282,7 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
         /** @var Shopware\Models\Dispatch\Dispatch[] $result */
         $result  = $builder->getResult();
 
-        $modelManager = Shopware()->Container()->get('models');
+        $modelManager = $this->get('models');
 
         /** @var Shopware\Models\Dispatch\Dispatch $dispatch */
         foreach ($result as $dispatch) {

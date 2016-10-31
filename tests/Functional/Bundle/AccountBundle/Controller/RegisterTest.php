@@ -184,7 +184,7 @@ class RegisterTest extends \Enlight_Components_Test_Controller_TestCase
 
     public function testDefaultPayment()
     {
-        Shopware()->Session()->offsetSet('sPaymentID', 6);
+        Shopware()->Container()->get('session')->set('sPaymentID', 6);
 
         $this->Request()->setMethod('POST');
         $this->Request()->setPost([
@@ -224,7 +224,7 @@ class RegisterTest extends \Enlight_Components_Test_Controller_TestCase
         );
 
         $session = Shopware()->Container()->get('session');
-        $this->assertNotEmpty($session->offsetGet('sUserId'));
+        $this->assertNotEmpty($session->get('sUserId'));
 
         $customer = Shopware()->Container()->get('dbal_connection')->fetchAssoc(
             "SELECT * FROM s_user WHERE email = :mail LIMIT 1",

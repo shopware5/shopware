@@ -171,7 +171,7 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
 
         try {
             /** @var $compiler \Shopware\Components\Theme\Compiler */
-            $compiler = $this->container->get('theme_compiler');
+            $compiler = $this->get('theme_compiler');
             $compiler->compileJavascript('new', $shop->getTemplate(), $shop);
             $compiler->compileLess('new', $shop->getTemplate(), $shop);
         } catch (Exception $e) {
@@ -189,8 +189,8 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
         /**@var $repository \Shopware\Models\Shop\Repository*/
         $repository = $this->get('models')->getRepository('Shopware\Models\Shop\Shop');
         $shops = $repository->getShopsWithThemes()->getResult();
-        $compiler = $this->container->get('theme_compiler');
-        $pathResolver = $this->container->get('theme_path_resolver');
+        $compiler = $this->get('theme_compiler');
+        $pathResolver = $this->get('theme_path_resolver');
 
         $time = time();
 

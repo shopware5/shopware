@@ -344,7 +344,7 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
         }
 
         // Start session in frontend controllers
-        $session = Shopware()->Session();
+        $session = Shopware()->Container()->get('session');
 
         if ($cookieKey !== null) {
             $session->$cookieKey = $cookieValue;

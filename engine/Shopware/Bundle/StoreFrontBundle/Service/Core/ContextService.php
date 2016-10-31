@@ -35,7 +35,7 @@ use Shopware\Bundle\StoreFrontBundle\Gateway\CustomerGroupGatewayInterface;
 use Shopware\Bundle\StoreFrontBundle\Gateway\PriceGroupDiscountGatewayInterface;
 use Shopware\Bundle\StoreFrontBundle\Gateway\ShopGatewayInterface;
 use Shopware\Bundle\StoreFrontBundle\Gateway\TaxGatewayInterface;
-use Enlight_Components_Session_Namespace as Session;
+use Shopware\Components\Session\SessionInterface as Session;
 use Shopware\Models;
 
 /**
@@ -264,8 +264,8 @@ class ContextService implements ContextServiceInterface
     {
         /** @var $session Session */
         $session = $this->container->get('session');
-        if ($session->offsetExists('sUserGroup') && $session->offsetGet('sUserGroup')) {
-            return $session->offsetGet('sUserGroup');
+        if ($session->has('sUserGroup') && $session->get('sUserGroup')) {
+            return $session->get('sUserGroup');
         }
 
         /**@var $shop Models\Shop\Shop */
@@ -280,8 +280,8 @@ class ContextService implements ContextServiceInterface
     {
         /** @var $session Session */
         $session = $this->container->get('session');
-        if ($session->offsetGet('sArea')) {
-            return $session->offsetGet('sArea');
+        if ($session->get('sArea')) {
+            return $session->get('sArea');
         }
         return null;
     }
@@ -293,8 +293,8 @@ class ContextService implements ContextServiceInterface
     {
         /** @var $session Session */
         $session = $this->container->get('session');
-        if ($session->offsetGet('sCountry')) {
-            return $session->offsetGet('sCountry');
+        if ($session->get('sCountry')) {
+            return $session->get('sCountry');
         }
         return null;
     }
@@ -306,8 +306,8 @@ class ContextService implements ContextServiceInterface
     {
         /** @var $session Session */
         $session = $this->container->get('session');
-        if ($session->offsetGet('sState')) {
-            return $session->offsetGet('sState');
+        if ($session->get('sState')) {
+            return $session->get('sState');
         }
         return null;
     }

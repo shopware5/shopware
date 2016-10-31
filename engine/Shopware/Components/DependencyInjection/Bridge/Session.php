@@ -60,9 +60,7 @@ class Session
         $eventManager = $container->get('events');
         $eventManager->addListener(
             'Enlight_Bootstrap_AfterRegisterResource_Shop',
-            function () use ($container) {
-                $this->onAfterRegisterShop($container);
-            },
+            array($this, 'onAfterRegisterShop'),
             -100
         );
 
@@ -90,10 +88,12 @@ class Session
 
 
     /**
-     * @param Container $container
+     * @param \Enlight_Event_EventArgs $args
      */
-    private function onAfterRegisterShop(Container $container)
+    public function onAfterRegisterShop(\Enlight_Event_EventArgs $args)
     {
+        /** @var $container Container */
+        $container = $args->get('subject');
         if ($container->initialized('session')) {
             /** @var SessionInterface $session */
             $session = $container->get('session');
@@ -111,6 +111,8 @@ class Session
     }
 
     /**
+     * @see NativeSessionStorage::setOptions
+     * @see NativeSessionStorage::setSaveHandler
      * @param $container
      * @param NativeSessionStorage $storage
      * @param $sessionOptions
@@ -195,7 +197,7 @@ class Session
 
     /**
      * @param $container
-     * @return \SessionHandlerInterface
+     * @return PdoSessionHandler
      */
     private function getDbSaveHandler(Container $container)
     {

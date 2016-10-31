@@ -61,7 +61,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
         $filter = $this->Request()->getParam('filter');
         $repository = $this->getRepository('form');
 
-        $user = Shopware()->Container()->get('Auth')->getIdentity();
+        $user = $this->get('Auth')->getIdentity();
         /** @var $locale \Shopware\Models\Shop\Locale */
         $locale = $user->locale;
 
@@ -113,7 +113,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
     {
         $repository = $this->getRepository('form');
 
-        $user = Shopware()->Container()->get('Auth')->getIdentity();
+        $user = $this->get('Auth')->getIdentity();
         /** @var $locale \Shopware\Models\Shop\Locale */
         $locale = $user->locale;
         $language = $locale->toString();
@@ -587,9 +587,9 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                     $data['widget'] = $mappingRepository->find($data['widgetId']);
                     unset($data['widgetId']);
                 }
-                if (Shopware()->Container()->get('Auth')->hasIdentity()) {
+                if ($this->get('Auth')->hasIdentity()) {
                     $mappingRepository = $this->getRepository('auth');
-                    $authId = Shopware()->Container()->get('Auth')->getIdentity()->id;
+                    $authId = $this->get('Auth')->getIdentity()->id;
                     $data['auth'] = $mappingRepository->find($authId);
                 }
                 break;
@@ -1085,7 +1085,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
      */
     private function getShopLocaleMapping()
     {
-        $connection = Shopware()->Container()->get('dbal_connection');
+        $connection = $this->get('dbal_connection');
         $query = $connection->createQueryBuilder();
         $query->select(['id, IFNULL(main_id, id)']);
         $query->from('s_core_shops');
@@ -1098,7 +1098,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
      */
     private function createSalutationSnippets($elementData)
     {
-        $connection = Shopware()->Container()->get('dbal_connection');
+        $connection = $this->get('dbal_connection');
 
         $shops = $this->getShopLocaleMapping();
 

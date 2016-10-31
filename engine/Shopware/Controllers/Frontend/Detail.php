@@ -46,7 +46,7 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
      */
     public function errorAction()
     {
-        $config = $this->container->get('config');
+        $config = $this->get('config');
         if (!$config->get('RelatedArticlesOnArticleNotFound')) {
             throw new Enlight_Controller_Exception('Article not found', 404);
         }
@@ -79,7 +79,7 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
         $this->View()->assign('sFormData', isset($this->View()->sFormData) ? $this->View()->sFormData : array(), true);
         $this->View()->assign('userLoggedIn', Shopware()->Modules()->Admin()->sCheckUser());
 
-        if (!empty(Shopware()->Session()->sUserId) && empty($this->Request()->sVoteName)
+        if (!empty($this->get('session')->get('sUserId')) && empty($this->Request()->sVoteName)
           && $this->Request()->getParam('__cache') !== null) {
             $userData = Shopware()->Modules()->Admin()->sGetUserData();
             $this->View()->sFormData = array(
@@ -243,7 +243,7 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
                 $sErrorFlag['sCaptcha'] = true;
             }
         }
-        $validator = $this->container->get('validator.email');
+        $validator = $this->get('validator.email');
         if (!empty(Shopware()->Config()->sOPTINVOTE)
             && (empty(Shopware()->System()->_POST['sVoteMail'])
                 || !$validator->isValid(Shopware()->System()->_POST['sVoteMail']))
@@ -253,7 +253,7 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
 
         if (empty($sErrorFlag)) {
             if (!empty(Shopware()->Config()->sOPTINVOTE)
-                && !$voteConfirmed && empty(Shopware()->Session()->sUserId)
+                && !$voteConfirmed && empty($this->get('session')->get('sUserId'))
             ) {
                 $hash = \Shopware\Components\Random::getAlphanumericString(32);
                 $sql = '

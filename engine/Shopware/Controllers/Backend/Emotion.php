@@ -167,7 +167,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
         $repository = $this->getRepository();
 
         $query = $repository->getEmotionDetailQuery($id);
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $mediaService = $this->get('shopware_media.media_service');
 
         $emotion = $query->getArrayResult();
         $emotion = $emotion[0];
@@ -459,9 +459,9 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
             $elements = $this->createElements($emotion, $data['elements']);
         }
 
-        if (Shopware()->Container()->get('Auth')->getIdentity()->id) {
+        if ($this->get('Auth')->getIdentity()->id) {
             /**@var $user \Shopware\Models\User\User */
-            $user = Shopware()->Models()->find('Shopware\Models\User\User', Shopware()->Container()->get('Auth')->getIdentity()->id);
+            $user = Shopware()->Models()->find('Shopware\Models\User\User', $this->get('Auth')->getIdentity()->id);
             $emotion->setUser($user);
         }
 
@@ -582,7 +582,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
         $valueType = strtolower($field->getValueType());
         $xType = $field->getXType();
 
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $mediaService = $this->get('shopware_media.media_service');
         $mediaFields = $this->getMediaXTypes();
 
         if ($valueType === 'json') {
@@ -725,7 +725,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
         if (!empty($new->getId())) {
             $this->copyEmotionTranslations($emotion->getId(), $new->getId());
             $this->copyElementTranslations($emotion, $new);
-            $persister = Shopware()->Container()->get('shopware_attribute.data_persister');
+            $persister = $this->get('shopware_attribute.data_persister');
             $persister->cloneAttribute('s_emotion_attributes', $emotion->getId(), $new->getId());
         }
 
@@ -748,7 +748,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
         $translation = new Shopware_Components_Translation();
 
         /** @var \Doctrine\DBAL\Query\QueryBuilder $query */
-        $query = Shopware()->Container()->get('dbal_connection')->createQueryBuilder();
+        $query = $this->get('dbal_connection')->createQueryBuilder();
 
         $languageIds = $query->select('id')
             ->from('s_core_shops', 'shops')
@@ -781,7 +781,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
         $translation = new Shopware_Components_Translation();
 
         /** @var \Doctrine\DBAL\Query\QueryBuilder $query */
-        $query = Shopware()->Container()->get('dbal_connection')->createQueryBuilder();
+        $query = $this->get('dbal_connection')->createQueryBuilder();
 
         $languageIds = $query->select('id')
             ->from('s_core_shops', 'shops')
@@ -1217,7 +1217,7 @@ EOD;
     private function generateEmotionSeoUrls(Emotion $emotion)
     {
         /** @var Shopware_Components_SeoIndex $seoIndexer */
-        $seoIndexer = Shopware()->Container()->get('SeoIndex');
+        $seoIndexer = $this->get('SeoIndex');
         $module = Shopware()->Modules()->RewriteTable();
         $shops = $emotion->getShops();
         $emotionData = [
@@ -1249,7 +1249,7 @@ EOD;
      */
     private function getSeoUrlFromRouter($emotionId, $shopId)
     {
-        $repository = Shopware()->Container()->get('models')->getRepository(Shop::class);
+        $repository = $this->get('models')->getRepository(Shop::class);
         /** @var Shop $shop */
         $shop = $repository->getActiveById($shopId);
         if (empty($shop)) {

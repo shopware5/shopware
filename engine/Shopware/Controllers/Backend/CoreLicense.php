@@ -68,7 +68,7 @@ class Shopware_Controllers_Backend_CoreLicense extends Shopware_Controllers_Back
         }
 
         try {
-            $licenseInstaller = new LicenseInstaller($this->container->get('dbal_connection'));
+            $licenseInstaller = new LicenseInstaller($this->get('dbal_connection'));
             $licenseInstaller->installLicense($licenseData);
         } catch (Exception $e) {
             $this->View()->assign([
@@ -169,7 +169,7 @@ class Shopware_Controllers_Backend_CoreLicense extends Shopware_Controllers_Back
     private function getInstalledLicense()
     {
         $sql = 'SELECT license FROM s_core_licenses WHERE active=1 AND module = "SwagCommercial"';
-        return $this->container->get('dbal_connection')->query($sql)->fetchColumn();
+        return $this->get('dbal_connection')->query($sql)->fetchColumn();
     }
 
     /**
@@ -183,12 +183,12 @@ class Shopware_Controllers_Backend_CoreLicense extends Shopware_Controllers_Back
      */
     private function unpackLicense($licenseString)
     {
-        $repository = $this->container->get('models')->getRepository('Shopware\Models\Shop\Shop');
+        $repository = $this->get('models')->getRepository('Shopware\Models\Shop\Shop');
         $host = $repository->getActiveDefault()->getHost();
         $request = new LicenseUnpackRequest($licenseString, $host);
 
         /** @var LicenseInformation $licenseData */
-        $licenseData = $this->container->get('shopware_core.local_license_unpack_service')->evaluateLicense($request);
+        $licenseData = $this->get('shopware_core.local_license_unpack_service')->evaluateLicense($request);
 
         return $licenseData;
     }
@@ -202,7 +202,7 @@ class Shopware_Controllers_Backend_CoreLicense extends Shopware_Controllers_Back
     {
         try {
             $sql = "DELETE FROM s_core_licenses WHERE module = 'SwagCommercial'";
-            $this->container->get('dbal_connection')->query($sql);
+            $this->get('dbal_connection')->query($sql);
         } catch (\PDOException $e) {
             throw new \RuntimeException("Could not remove license from database", 0, $e);
         }

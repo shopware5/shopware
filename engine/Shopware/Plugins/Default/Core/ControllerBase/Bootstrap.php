@@ -80,7 +80,7 @@ class Shopware_Plugins_Core_ControllerBase_Bootstrap extends Shopware_Components
         $view->sCategoryCurrent = $this->getCategoryCurrent($view->sCategoryStart);
         $view->sCategories = $this->getCategories($view->sCategoryCurrent);
         $view->sMainCategories = $view->sCategories;
-        $view->sOutputNet = Shopware()->Session()->sOutputNet;
+        $view->sOutputNet = Shopware()->Container()->get('session')->sOutputNet;
 
         $activePage = isset($view->sCustomPage['id']) ? $view->sCustomPage['id'] : null;
         $view->sMenu = $this->getMenu($shop->getId(), $activePage);

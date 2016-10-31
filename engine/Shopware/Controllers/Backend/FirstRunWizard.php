@@ -61,11 +61,11 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
             ];
         }, $themeConfigKeys);
 
-        $theme = $this->container->get('models')
+        $theme = $this->get('models')
             ->getRepository('Shopware\Models\Shop\Template')
             ->findOneBy(array('template' => 'Responsive'));
 
-        $this->container->get('theme_service')->saveConfig(
+        $this->get('theme_service')->saveConfig(
             $theme,
             $themeConfigValues
         );
@@ -113,10 +113,10 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
      */
     public function loadConfigurationAction()
     {
-        $defaultShop = $this->container->get('models')
+        $defaultShop = $this->get('models')
             ->getRepository('Shopware\Models\Shop\Shop')
             ->getDefault();
-        $theme = $this->container->get('models')
+        $theme = $this->get('models')
             ->getRepository('Shopware\Models\Shop\Template')
             ->findOneBy(array('template' => 'Responsive'));
 
@@ -127,7 +127,7 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
             'desktopLogo'
         ];
 
-        $themeConfigData = $this->container->get('theme_service')->getConfig(
+        $themeConfigData = $this->get('theme_service')->getConfig(
             $theme,
             $defaultShop,
             $themeConfigKeys
@@ -156,7 +156,7 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
             'metaIsFamilyFriendly'
         ];
 
-        $builder = $this->container->get('models')->createQueryBuilder();
+        $builder = $this->get('models')->createQueryBuilder();
         $builder->select(array(
             'elements',
             'values'
@@ -198,7 +198,7 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
     public function pingServerAction()
     {
         /** @var AccountManagerService $accountManagerService */
-        $accountManagerService = $this->container->get('shopware_plugininstaller.account_manager_service');
+        $accountManagerService = $this->get('shopware_plugininstaller.account_manager_service');
 
         try {
             $isConnected = $accountManagerService->pingServer();
@@ -222,7 +222,7 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
     public function getAlternativeLocalesAction()
     {
         /** @var $locale \Shopware\Models\Shop\Locale */
-        $targetLocale = Shopware()->Container()->get('Auth')->getIdentity()->locale;
+        $targetLocale = $this->get('Auth')->getIdentity()->locale;
 
         /** @var Zend_Locale $baseLocale */
         $baseLocale = Shopware()->Locale();
@@ -272,7 +272,7 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
         $email = $this->Request()->getParam('email');
 
         /** @var AccountManagerService $accountManagerService */
-        $accountManagerService = $this->container->get('shopware_plugininstaller.account_manager_service');
+        $accountManagerService = $this->get('shopware_plugininstaller.account_manager_service');
 
         try {
             $locale = $this->getCurrentLocale();
@@ -327,7 +327,7 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
      */
     public function registerDomainAction()
     {
-        $shop = $this->container->get('models')
+        $shop = $this->get('models')
             ->getRepository('Shopware\Models\Shop\Shop')
             ->getDefault();
 
@@ -357,7 +357,7 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
         }
 
         /** @var AccountManagerService $accountManagerService */
-        $accountManagerService = $this->container->get('shopware_plugininstaller.account_manager_service');
+        $accountManagerService = $this->get('shopware_plugininstaller.account_manager_service');
 
         try {
             $domainHashData = $accountManagerService->getDomainHash($domain, $token);
@@ -380,8 +380,8 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
         }
 
         /** @var \Symfony\Component\Filesystem\Filesystem $fileSystem */
-        $fileSystem = $this->container->get('file_system');
-        $rootDir = $this->container->getParameter('kernel.root_dir');
+        $fileSystem = $this->get('file_system');
+        $rootDir = Shopware()->Container()->getParameter('kernel.root_dir');
         $filePath = $rootDir . DIRECTORY_SEPARATOR . $filename;
 
         try {
@@ -442,7 +442,7 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
 
         if (empty($locales)) {
             /** @var AccountManagerService $accountManagerService */
-            $accountManagerService = $this->container->get('shopware_plugininstaller.account_manager_service');
+            $accountManagerService = $this->get('shopware_plugininstaller.account_manager_service');
 
             try {
                 /** @var LocaleStruct[] $serverLocales */
@@ -460,7 +460,7 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
             }
         }
 
-        $user = Shopware()->Container()->get('Auth')->getIdentity();
+        $user = $this->get('Auth')->getIdentity();
         /** @var $locale \Shopware\Models\Shop\Locale */
         $locale = $user->locale;
         $localeCode = $locale->getLocale();
@@ -478,7 +478,7 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
     private function getDomains(AccessTokenStruct $token)
     {
         /** @var AccountManagerService $accountManagerService */
-        $accountManagerService = $this->container->get('shopware_plugininstaller.account_manager_service');
+        $accountManagerService = $this->get('shopware_plugininstaller.account_manager_service');
 
         try {
             $shopsData = $accountManagerService->getShops($token);
@@ -509,7 +509,7 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
     private function getToken($shopwareId, $password)
     {
         /** @var AccessTokenStruct $token */
-        $token = Shopware()->BackendSession()->accessToken;
+        $token = $this->get('session')->accessToken;
 
         if (empty($token) || $token->getExpire()->getTimestamp() <= strtotime("+30 seconds")) {
             if (empty($shopwareId) || empty($password)) {
@@ -517,11 +517,11 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
             }
 
             /** @var AccountManagerService $accountManagerService */
-            $accountManagerService = $this->container->get('shopware_plugininstaller.account_manager_service');
+            $accountManagerService = $this->get('shopware_plugininstaller.account_manager_service');
 
             $token = $accountManagerService->getToken($shopwareId, $password);
 
-            Shopware()->BackendSession()->accessToken = $token;
+            $this->get('session')->accessToken = $token;
         }
 
         return $token;

@@ -130,7 +130,7 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action imple
         $sbpLogin = 0;
         if ($firstRunWizardEnabled) {
             /** @var \Shopware\Bundle\PluginInstallerBundle\Struct\AccessTokenStruct $tokenData */
-            $tokenData = Shopware()->BackendSession()->accessToken;
+            $tokenData = $this->get('session')->accessToken;
 
             $sbpLogin = (int) (!empty($tokenData) && $tokenData->getExpire() >= new DateTime("+30 seconds"));
         }
@@ -156,7 +156,7 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action imple
     {
         // Only admins can see the wizard
         if ($identity->role->getAdmin()) {
-            return $this->container->get('config')->get('firstRunWizardEnabled', false);
+            return $this->get('config')->get('firstRunWizardEnabled', false);
         } else {
             return false;
         }
@@ -185,7 +185,7 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action imple
             return;
         }
 
-        $locale = $this->container->get('models')
+        $locale = $this->get('models')
             ->getRepository('Shopware\Models\Shop\Locale')
             ->find($localeId);
 
@@ -285,8 +285,8 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action imple
         if (!$identity->role->getAdmin() || Shopware::VERSION_TEXT === '___VERSION_TEXT___') {
             return false;
         }
-        $installationSurvey = $this->container->get('config')->get('installationSurvey', false);
-        $installationDate = \DateTime::createFromFormat('Y-m-d H:i', $this->container->get('config')->get('installationDate'));
+        $installationSurvey = $this->get('config')->get('installationSurvey', false);
+        $installationDate = \DateTime::createFromFormat('Y-m-d H:i', $this->get('config')->get('installationDate'));
         if (!$installationSurvey || !$installationDate) {
             return false;
         }

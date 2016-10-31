@@ -30,7 +30,7 @@ class Shopware_Controllers_Backend_Feedback extends Shopware_Controllers_Backend
 {
     public function disableInstallationSurveyAction()
     {
-        $conn = $this->container->get('dbal_connection');
+        $conn = $this->get('dbal_connection');
         $elementId = $conn->fetchColumn('SELECT id FROM s_core_config_elements WHERE name LIKE "installationSurvey"');
         $valueId = $conn->fetchColumn('SELECT id FROM s_core_config_values WHERE element_id = :elementId', ['elementId' => $elementId]);
         $data = [

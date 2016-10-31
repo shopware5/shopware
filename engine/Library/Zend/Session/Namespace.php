@@ -40,6 +40,7 @@ require_once 'Zend/Session/Abstract.php';
  * @package    Zend_Session
  * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ * @deprecated Use \Shopware\Components\Session\SessionInterface instead
  */
 class Zend_Session_Namespace extends Zend_Session_Abstract implements IteratorAggregate
 {

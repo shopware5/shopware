@@ -327,7 +327,7 @@ class sMarketing
 
         $checkForEsdOnly = $this->db->fetchAll(
             $sql,
-            array($this->sSYSTEM->sSESSION_ID)
+            array(Shopware()->Container()->get('session')->getId())
         );
 
         foreach ($checkForEsdOnly as $esdCheck) {

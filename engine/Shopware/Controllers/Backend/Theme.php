@@ -119,12 +119,12 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
         $shop = $this->getManager()->getRepository('Shopware\Models\Shop\Shop')->getActiveById($shopId);
         $shop->registerResources();
 
-        Shopware()->Session()->template = $theme->getTemplate();
-        Shopware()->Session()->Admin = true;
+        $this->get('session')->set('template', $theme->getTemplate());
+        $this->get('session')->set('Admin', true);
 
         if (!$this->Request()->isXmlHttpRequest()) {
             $this->get('events')->notify('Shopware_Theme_Preview_Starts', array(
-                'session' => Shopware()->Session(),
+                'session' => $this->get('session'),
                 'shop'    => $shop,
                 'theme'   => $theme
             ));
@@ -162,7 +162,7 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
 
         $shop->registerResources();
 
-        Shopware()->Session()->template = null;
+        $this->get('session')->template = null;
     }
 
     /**
@@ -201,7 +201,7 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
             }
         }
 
-        $this->container->get('theme_generator')->generateTheme(
+        $this->get('theme_generator')->generateTheme(
             $this->Request()->getParams(),
             $parent
         );
@@ -216,7 +216,7 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
      */
     public function listAction()
     {
-        $this->container->get('theme_installer')->synchronize();
+        $this->get('theme_installer')->synchronize();
 
         parent::listAction();
     }
@@ -277,7 +277,7 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
                 $name
             ));
         }
-        $targetDirectory = $this->container->get('theme_path_resolver')->getFrontendThemeDirectory();
+        $targetDirectory = $this->get('theme_path_resolver')->getFrontendThemeDirectory();
 
         if (!is_writable($targetDirectory)) {
             return $this->View()->assign(array(
@@ -330,7 +330,7 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
 
         $data['hasConfigSet'] = $this->hasTemplateConfigSet($template);
 
-        $data['configLayout'] = $this->container->get('theme_service')->getLayout(
+        $data['configLayout'] = $this->get('theme_service')->getLayout(
             $template,
             $shop
         );
@@ -389,11 +389,11 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
             /**@var $instance Template */
             $instance = $this->getRepository()->find($theme['id']);
 
-            $theme['screen'] = $this->container->get('theme_util')->getPreviewImage(
+            $theme['screen'] = $this->get('theme_util')->getPreviewImage(
                 $instance
             );
 
-            $theme['path'] = $this->container->get('theme_path_resolver')->getDirectory(
+            $theme['path'] = $this->get('theme_path_resolver')->getDirectory(
                 $instance
             );
 
@@ -440,7 +440,7 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
     {
         $this->View()->assign(array(
             'success' => true,
-            'data' => $this->container->get('theme_service')->getSystemConfiguration()
+            'data' => $this->get('theme_service')->getSystemConfiguration()
         ));
     }
 
@@ -451,7 +451,7 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
     {
         $this->View()->assign(array(
             'success' => true,
-            'data' => $this->container->get('theme_service')->saveSystemConfiguration(
+            'data' => $this->get('theme_service')->saveSystemConfiguration(
                 $this->Request()->getParams()
             )
         ));

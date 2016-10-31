@@ -99,7 +99,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
     private function activeHttpCache($httpCache)
     {
         /**@var $service InstallerService*/
-        $service = Shopware()->Container()->get('shopware.plugin_manager');
+        $service = $this->get('shopware.plugin_manager');
 
         if (!$httpCache->getInstalled()) {
             $service->installPlugin($httpCache);
@@ -120,7 +120,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
         }
 
         /**@var $service InstallerService*/
-        $service = Shopware()->Container()->get('shopware.plugin_manager');
+        $service = $this->get('shopware.plugin_manager');
         $service->deactivatePlugin($httpCache);
     }
 
@@ -153,7 +153,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
      */
     public function getConfigAction()
     {
-        Shopware()->Container()->get('cache')->remove('Shopware_Config');
+        $this->get('cache')->remove('Shopware_Config');
         $this->View()->assign(array(
             'success' => true,
             'data' => $this->prepareConfigData()
@@ -184,7 +184,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
      */
     public function getActiveShopsAction()
     {
-        $shops = $this->container->get('models')->getRepository(
+        $shops = $this->get('models')->getRepository(
             'Shopware\Models\Shop\Shop'
         )->getActiveShops(AbstractQuery::HYDRATE_ARRAY);
         $this->View()->assign(array(
@@ -206,7 +206,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
         $data = $this->prepareDataForSaving($data);
         $this->saveConfigData($data);
 
-        Shopware()->Container()->get('cache')->remove('Shopware_Config');
+        $this->get('cache')->remove('Shopware_Config');
 
         // Reload config, so that the actual config from the
         // db is returned
@@ -344,7 +344,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
      */
     public function prepareHttpCacheConfigForSaving($data)
     {
-        $modelManager = $this->container->get('models');
+        $modelManager = $this->get('models');
         $repo = $modelManager->getRepository(
             'Shopware\Models\Plugin\Plugin'
         );
@@ -394,7 +394,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
      */
     public function saveConfig($name, $value)
     {
-        $modelManager = $this->container->get('models');
+        $modelManager = $this->get('models');
         $shopRepository    = $modelManager->getRepository(Shop::class);
         $elementRepository = $modelManager->getRepository(Element::class);
         $formRepository    = $modelManager->getRepository(Form::class);
@@ -458,8 +458,8 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
         // The colon separates formName and elementName
         list($scope, $config) = explode(':', $configName, 2);
 
-        $elementRepository = $this->container->get('models')->getRepository('Shopware\Models\Config\Element');
-        $formRepository = $this->container->get('models')->getRepository('Shopware\Models\Config\Form');
+        $elementRepository = $this->get('models')->getRepository('Shopware\Models\Config\Element');
+        $formRepository = $this->get('models')->getRepository('Shopware\Models\Config\Form');
 
         $form = $formRepository->findOneBy(array('name' => $scope));
 
@@ -594,7 +594,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
             }
         }
 
-        $repo = $this->container->get('models')->getRepository(
+        $repo = $this->get('models')->getRepository(
             'Shopware\Models\Plugin\Plugin'
         );
 
@@ -625,7 +625,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
         $offset = $this->Request()->getParam('offset', 0);
         $limit  = $this->Request()->getParam('limit', null);
 
-        $component = Shopware()->Container()->get('CategoryDenormalization');
+        $component = $this->get('CategoryDenormalization');
 
         if ($offset == 0) {
             $component->rebuildCategoryPath();
@@ -642,7 +642,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
 
     public function prepareTreeAction()
     {
-        $component = Shopware()->Container()->get('CategoryDenormalization');
+        $component = $this->get('CategoryDenormalization');
 
         $component->removeOrphanedAssignments();
 

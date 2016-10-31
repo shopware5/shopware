@@ -48,7 +48,7 @@ class Shopware_Controllers_Frontend_SitemapMobileXml extends Enlight_Controller_
 
     private function assertMobileSitemapEnabled()
     {
-        if (!$this->container->get('config')->get('mobileSitemap')) {
+        if (!$this->get('config')->get('mobileSitemap')) {
             throw new Enlight_Controller_Exception(
                 'Page not found', 404
             );

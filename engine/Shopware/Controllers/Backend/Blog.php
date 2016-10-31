@@ -282,7 +282,7 @@ class Shopware_Controllers_Backend_Blog extends Shopware_Controllers_Backend_Ext
     {
         /** @var $filter array */
         $filter = $this->Request()->getParam('filter', array());
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $mediaService = $this->get('shopware_media.media_service');
 
         $dataQuery = $this->getRepository()->getBackendDetailQuery($filter);
         $data = $dataQuery->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);

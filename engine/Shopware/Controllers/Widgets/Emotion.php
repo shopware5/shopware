@@ -379,7 +379,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
 
                 $struct = $medias[$id];
 
-                $mediaData = Shopware()->Container()->get('legacy_struct_converter')->convertMediaStruct($struct);
+                $mediaData = $this->get('legacy_struct_converter')->convertMediaStruct($struct);
                 $entry['media'] = $mediaData;
             }
         }
@@ -439,7 +439,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         $categoryName = $builder->getQuery()->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
 
         $data["categoryName"] = $categoryName["name"];
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $mediaService = $this->get('shopware_media.media_service');
 
         // Second get category image per random, if configured
         if ($data["image_type"] != "selected_image") {
@@ -456,10 +456,10 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
             }
         } else {
             $mediaId = Shopware()->Db()->fetchOne('SELECT id FROM s_media WHERE path = ?', [$data['image']]);
-            $context = Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext();
-            $media = Shopware()->Container()->get('shopware_storefront.media_service')->get($mediaId, $context);
+            $context = $this->get('shopware_storefront.context_service')->getShopContext();
+            $media = $this->get('shopware_storefront.media_service')->get($mediaId, $context);
             if ($media instanceof \Shopware\Bundle\StoreFrontBundle\Struct\Media) {
-                $data['media'] = Shopware()->Container()->get('legacy_struct_converter')->convertMediaStruct($media);
+                $data['media'] = $this->get('legacy_struct_converter')->convertMediaStruct($media);
             } else {
                 $data['media'] = [];
             }
@@ -537,7 +537,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
             }
         }
 
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $mediaService = $this->get('shopware_media.media_service');
         $mediaId = Shopware()->Db()->fetchOne("SELECT id FROM s_media WHERE path = ?", [$data['file']]);
         if ($mediaId) {
             $context = $this->get('shopware_storefront.context_service')->getShopContext();
@@ -578,7 +578,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         if ($data["manufacturer_type"] == "manufacturers_by_cat") {
             $data["values"] = Shopware()->Modules()->Articles()->sGetAffectedSuppliers($data["manufacturer_category"], 12);
         } else {
-            $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+            $mediaService = $this->get('shopware_media.media_service');
             $selectedManufacturers = $data["selected_manufacturers"];
             $manufacturers = array();
 
@@ -616,7 +616,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
                     $query['sCategory'] = $category;
                 }
 
-                $value["link"] = Shopware()->Container()->get('router')->assemble($query);
+                $value["link"] = $this->get('router')->assemble($query);
             }
         }
 
@@ -638,7 +638,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         $mediaIds = array_column($data['values'], 'mediaId');
         $context = $this->get('shopware_storefront.context_service')->getShopContext();
         $media = $this->get('shopware_storefront.media_service')->getList($mediaIds, $context);
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $mediaService = $this->get('shopware_media.media_service');
 
         foreach ($data["values"] as &$value) {
             if (!empty($value['link'])) {
@@ -712,7 +712,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
                     'streamId' => $data['article_slider_stream'],
                 );
 
-                $data["ajaxFeed"] = Shopware()->Container()->get('router')->assemble($query);
+                $data["ajaxFeed"] = $this->get('router')->assemble($query);
 
                 break;
             case "selected_article":
@@ -744,7 +744,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
                     'action' => 'emotionArticleSlider',
                     'sort' => $data["article_slider_type"]
                 );
-                $data["ajaxFeed"] = Shopware()->Container()->get('router')->assemble($query);
+                $data["ajaxFeed"] = $this->get('router')->assemble($query);
                 break;
             default:
                 // Prevent the slider form endless loading
@@ -769,8 +769,8 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
      */
     private function getProductSliderData($category, $offset = 0, $limit, $sort = null)
     {
-        $context = Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext();
-        $factory = Shopware()->Container()->get('shopware_search.store_front_criteria_factory');
+        $context = $this->get('shopware_storefront.context_service')->getShopContext();
+        $factory = $this->get('shopware_search.store_front_criteria_factory');
         $criteria = $factory->createBaseCriteria([$category], $context);
 
         $criteria->offset($offset)
@@ -792,8 +792,8 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         }
 
         /** @var $result ProductSearchResult */
-        $result = Shopware()->Container()->get('shopware_search.product_search')->search($criteria, $context);
-        $data = Shopware()->Container()->get('legacy_struct_converter')->convertListProductStructList($result->getProducts());
+        $result = $this->get('shopware_search.product_search')->search($criteria, $context);
+        $data = $this->get('legacy_struct_converter')->convertListProductStructList($result->getProducts());
 
         $count = $result->getTotalCount();
         if ($limit != 0) {
@@ -861,8 +861,8 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
 
     private function getProductStream($productStreamId, $offset = 0, $limit = 100)
     {
-        $context = Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext();
-        $factory = Shopware()->Container()->get('shopware_search.store_front_criteria_factory');
+        $context = $this->get('shopware_storefront.context_service')->getShopContext();
+        $factory = $this->get('shopware_search.store_front_criteria_factory');
 
         $category = $context->getShop()->getCategory()->getId();
         $criteria = $factory->createBaseCriteria([$category], $context);
@@ -874,8 +874,8 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         $streamRepository->prepareCriteria($criteria, $productStreamId);
 
         /** @var $result ProductSearchResult */
-        $result = Shopware()->Container()->get('shopware_search.product_search')->search($criteria, $context);
-        $data = Shopware()->Container()->get('legacy_struct_converter')->convertListProductStructList($result->getProducts());
+        $result = $this->get('shopware_search.product_search')->search($criteria, $context);
+        $data = $this->get('legacy_struct_converter')->convertListProductStructList($result->getProducts());
 
         $count = $result->getTotalCount();
 

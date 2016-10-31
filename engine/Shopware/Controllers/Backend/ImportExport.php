@@ -1559,7 +1559,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
             //generate thumbnails
             if ($media->getType() ==  \Shopware\Models\Media\Media::TYPE_IMAGE) {
                 /**@var $manager \Shopware\Components\Thumbnail\Manager */
-                $manager = Shopware()->Container()->get('thumbnail_manager');
+                $manager = $this->get('thumbnail_manager');
                 $manager->createMediaThumbnail($media, array(), true);
             }
 
@@ -1810,7 +1810,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
 
         $errors = array();
 
-        $emailValidator = $this->container->get('validator.email');
+        $emailValidator = $this->get('validator.email');
         foreach ($results as $newsletterData) {
             if (empty($newsletterData['email'])) {
                 $errors[] = "Empty email field";

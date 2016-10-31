@@ -139,7 +139,7 @@ class Shopware_Tests_Plugins_Frontend_StatisticsTest extends Enlight_Components_
 
         $this->Plugin()->refreshPartner($request, $response);
 
-        $this->assertEquals('test123', Shopware()->Session()->sPartner);
+        $this->assertEquals('test123', Shopware()->Container()->get('session')->get('sPartner'));
         $this->assertEquals('test123', $response->getCookie('partner'));
     }
 
@@ -155,6 +155,6 @@ class Shopware_Tests_Plugins_Frontend_StatisticsTest extends Enlight_Components_
 
         $this->Plugin()->refreshPartner($request, $response);
 
-        $this->assertEquals('sCampaign1', Shopware()->Session()->sPartner);
+        $this->assertEquals('sCampaign1', Shopware()->Container()->get('session')->get('sPartner'));
     }
 }

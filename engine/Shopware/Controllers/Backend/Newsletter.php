@@ -82,7 +82,7 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
     {
         if ($this->Request()->getParam('id')) {
             $mailingID = (int) $this->Request()->getParam('id');
-            if (!Shopware()->Container()->get('Auth')->hasIdentity()) {
+            if (!$this->get('Auth')->hasIdentity()) {
                 $hash = $this->createHash($mailingID);
                 if ($hash!==$this->Request()->getParam('hash')) {
                     return;
@@ -144,7 +144,7 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
     {
         $mailingID = (int) $this->Request()->getParam('id');
 
-        if (!empty($mailingID) && !Shopware()->Container()->get('Auth')->hasIdentity()) {
+        if (!empty($mailingID) && !$this->get('Auth')->hasIdentity()) {
             return;
         }
 
@@ -214,7 +214,7 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
         $fromName = $template->fetch('string:' . $mailing['sendername'], $template);
 
         /** @var \Enlight_Components_Mail $mail */
-        $mail = clone Shopware()->Container()->get('mail');
+        $mail = clone $this->get('mail');
         $mail->setFrom($from, $fromName);
 
         $counter = 0;
@@ -251,7 +251,7 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
             $mail->setSubject($subject);
             $mail->clearRecipients();
             $mail->addTo($user['email']);
-            $validator = $this->container->get('validator.email');
+            $validator = $this->get('validator.email');
             if (!$validator->isValid($user['email'])) {
                 echo "Skipped invalid email\n";
                 // SW-4526
@@ -403,13 +403,13 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
 
         $shop->registerResources();
 
-        Shopware()->Session()->sUserGroup = $mailing['customergroup'];
+        $this->get('session')->set('sUserGroup', $mailing['customergroup']);
         $sql = 'SELECT * FROM s_core_customergroups WHERE groupkey=?';
-        Shopware()->Session()->sUserGroupData =  Shopware()->Db()->fetchRow($sql, array($mailing['customergroup']));
+        $this->get('session')->set('sUserGroupData', Shopware()->Db()->fetchRow($sql, array($mailing['customergroup'])));
 
-        Shopware()->Container()->get('router')->setGlobalParam('module', 'frontend');
+        $this->get('router')->setGlobalParam('module', 'frontend');
         Shopware()->Config()->DontAttachSession = true;
-        Shopware()->Container()->get('shopware_storefront.context_service')->initializeShopContext();
+        $this->get('shopware_storefront.context_service')->initializeShopContext();
 
         return $mailing;
     }

@@ -294,7 +294,7 @@ class Shopware_Controllers_Backend_ProductFeed extends Shopware_Controllers_Back
         $productFeed->setLastChange(new DateTime());
 
         // Clear feed cache
-        $cacheDir = $this->container->getParameter('kernel.cache_dir');
+        $cacheDir = Shopware()->Container()->getParameter('kernel.cache_dir');
         $cacheDir .= '/productexport/';
         if (!is_dir($cacheDir)) {
             if (false === @mkdir($cacheDir, 0777, true)) {

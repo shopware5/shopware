@@ -117,7 +117,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
         $fields = array();
         $labels = array();
 
-        $shopId = $this->container->get('shopware_storefront.context_service')->getShopContext()->getShop()->getId();
+        $shopId = $this->get('shopware_storefront.context_service')->getShopContext()->getShop()->getId();
 
         /* @var $query \Doctrine\ORM\Query */
         $query = Shopware()->Models()->getRepository('Shopware\Models\Form\Form')->getFormQuery($formId, $shopId);
@@ -496,7 +496,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
         $errors = array();
 
         /** @var \Shopware\Components\Validator\EmailValidatorInterface $emailValidator */
-        $emailValidator = $this->container->get('validator.email');
+        $emailValidator = $this->get('validator.email');
 
         foreach ($elements as $element) {
             $valide = true;

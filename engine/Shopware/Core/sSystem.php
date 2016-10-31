@@ -40,14 +40,6 @@ class sSystem
     public $sCONFIG;
 
     /**
-     * Current session id
-     *
-     * @var string
-     * @deprecated Use Shopware()->Session()->get('sessionId')
-     */
-    public $sSESSION_ID;
-
-    /**
      * Pointer to Smarty
      *
      * @var Enlight_Template_Manager
@@ -76,14 +68,6 @@ class sSystem
      * @var array
      */
     public $sUSERGROUPDATA;
-
-    /**
-     * Session data
-     *
-     * @var Enlight_Components_Session_Namespace Session
-     * @deprecated Use Shopware()->Session()
-     */
-    public $_SESSION;
 
     /**
      * @var \Shopware\Components\LegacyRequestWrapper\PostWrapper Wrapper for _POST
@@ -136,14 +120,6 @@ class sSystem
      * @deprecated Use Shopware()->Mail()
      */
     public $sMailer;
-
-    /**
-     * True if user is identified as bot
-     *
-     * @var bool
-     * @deprecated Use Shopware()->Session()->Bot
-     */
-    public $sBotSession;
 
     /**
      * Reference to $this, for compability reasons.

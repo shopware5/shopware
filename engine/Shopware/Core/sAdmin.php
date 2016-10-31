@@ -169,7 +169,7 @@ class sAdmin
         $this->db = $db ? : Shopware()->Db();
         $this->eventManager = $eventManager ? : Shopware()->Events();
         $this->config = $config ? : Shopware()->Config();
-        $this->session = $session ? : Shopware()->Session();
+        $this->session = $session ? : Shopware()->Container()->get('session');
         $this->front = $front ? : Shopware()->Front();
         $this->passwordEncoder = $passwordEncoder ? : Shopware()->PasswordEncoder();
         $this->snippetManager = $snippetManager ? : Shopware()->Snippets();
@@ -641,7 +641,7 @@ class sAdmin
     {
         $this->moduleManager->Basket()->clearBasket();
 
-        Shopware()->Session()->unsetAll();
+        Shopware()->Container()->get('session')->clear();
         $this->regenerateSessionId();
         Shopware()->Container()->get('shopware.csrftoken_validator')->invalidateToken($this->front->Response());
     }
@@ -783,9 +783,6 @@ class sAdmin
         $this->session->migrate(true);
         $newSessionId = $this->session->getId();
 
-
-        $this->sSYSTEM->sSESSION_ID = $newSessionId;
-        Shopware()->Container()->reset('SessionId');
         Shopware()->Container()->set('SessionId', $newSessionId);
 
         $this->eventManager->notify(

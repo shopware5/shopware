@@ -193,7 +193,7 @@ class sOrder
      * for each session access in this class.
      * Injected over the class constructor
      *
-     * @var Enlight_Components_Session_Namespace
+     * @var Shopware\Components\Session\SessionInterface
      */
     private $session;
 
@@ -237,12 +237,12 @@ class sOrder
     }
 
     /**
-     * @return Enlight_Components_Session_Namespace
+     * @return Shopware\Components\Session\SessionInterface
      */
     private function getSession()
     {
         if ($this->session == null) {
-            $this->session = Shopware()->Session();
+            $this->session = Shopware()->Container()->get('session');
         }
         return $this->session;
     }
@@ -358,7 +358,7 @@ class sOrder
      */
     public function sDeleteTemporaryOrder()
     {
-        $sessionId = $this->getSession()->offsetGet('sessionId');
+        $sessionId = $this->getSession()->getId();
 
         if (empty($sessionId)) {
             return;
@@ -366,7 +366,7 @@ class sOrder
 
         $deleteWholeOrder = $this->db->fetchAll("
         SELECT * FROM s_order WHERE temporaryID = ? LIMIT 2
-        ", array($this->getSession()->offsetGet('sessionId')));
+        ", array($this->getSession()->getId()));
 
         foreach ($deleteWholeOrder as $orderDelete) {
             $this->db->executeUpdate("
@@ -451,7 +451,7 @@ class sOrder
             'net' => $net,
             'taxfree' => $taxfree,
             'partnerID' => (string) $this->getSession()->offsetGet("sPartner"),
-            'temporaryID' => $this->getSession()->offsetGet('sessionId'),
+            'temporaryID' => $this->getSession()->getId(),
             'referer' => (string) $this->getSession()->offsetGet('sReferer'),
             'language' => $shop->getId(),
             'dispatchID' => $dispatchId,
@@ -816,7 +816,7 @@ class sOrder
         // Completed - Garbage basket / temporary - order
         $this->sDeleteTemporaryOrder();
 
-        $this->db->executeUpdate("DELETE FROM s_order_basket WHERE sessionID=?", array($this->getSession()->offsetGet('sessionId')));
+        $this->db->executeUpdate("DELETE FROM s_order_basket WHERE sessionID=?", array($this->getSession()->getId()));
 
         $confirmMailDeliveryFailed = false;
         try {

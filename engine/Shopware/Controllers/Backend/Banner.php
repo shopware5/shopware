@@ -190,7 +190,7 @@ class Shopware_Controllers_Backend_Banner extends Shopware_Controllers_Backend_E
     {
         $cnt   = 0;
         $nodes = null;
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $mediaService = $this->get('shopware_media.media_service');
 
         foreach ($banners as $banner) {
             // we have to split the datetime to date and time

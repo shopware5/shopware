@@ -45,8 +45,8 @@ class Shopware_Plugins_Frontend_Statistics_Bootstrap extends Shopware_Components
         ));
 
         $form->setElement('textarea', 'botBlackList', array(
-                'label' => 'Bot-Liste',
-                'value' => 'antibot;appie;architext;bjaaland;digout4u;echo;fast-webcrawler;ferret;googlebot;
+            'label' => 'Bot-Liste',
+            'value' => 'antibot;appie;architext;bjaaland;digout4u;echo;fast-webcrawler;ferret;googlebot;
 gulliver;harvest;htdig;ia_archiver;jeeves;jennybot;linkwalker;lycos;mercator;moget;muscatferret;
 myweb;netcraft;nomad;petersnews;scooter;slurp;unlost_web_crawler;voila;voyager;webbase;weblayers;
 wget;wisenutbot;acme.spider;ahoythehomepagefinder;alkaline;arachnophilia;aretha;ariadne;arks;
@@ -76,8 +76,8 @@ wz101;xget;awbot;bobby;boris;bumblebee;cscrawler;daviesbot;ezresult;gigabot;gnod
 justview;linkbot;linkchecker;nederland.zoek;perman;pompos;pooodle;redalert;shoutcast;slysearch;
 ultraseek;webcompass;yandex;robot;yahoo;bot;psbot;crawl;RSS;larbin;ichiro;Slurp;msnbot;bot;Googlebot;
 ShopWiki;Bot;WebAlta;;abachobot;architext;ask jeeves;frooglebot;googlebot;lycos;spider;HTTPClient',
-                'scope' => \Shopware\Models\Config\Element::SCOPE_SHOP
-            ));
+            'scope' => \Shopware\Models\Config\Element::SCOPE_SHOP
+        ));
 
         return true;
     }
@@ -136,11 +136,11 @@ ShopWiki;Bot;WebAlta;;abachobot;architext;ask jeeves;frooglebot;googlebot;lycos;
     public function refreshBasket($request)
     {
         $currentController = $request->getParam('requestController', $request->getControllerName());
-        $sessionId = (string) Enlight_Components_Session::getId();
+        /** @var \Shopware\Components\Session\SessionInterface $session */
+        $session = $this->get('session')->getId();
 
-        if (!empty($currentController) && !empty($sessionId)) {
-            $userId = (int) Shopware()->Session()->sUserId;
-            $userAgent = (string) $request->getServer("HTTP_USER_AGENT");
+        if (!empty($currentController) && $session->getId()) {
+            $userAgent = (string)$request->getServer("HTTP_USER_AGENT");
             $sql = "
                 UPDATE s_order_basket
                 SET lastviewport = ?,
@@ -150,7 +150,7 @@ ShopWiki;Bot;WebAlta;;abachobot;architext;ask jeeves;frooglebot;googlebot;lycos;
             ";
             Shopware()->Db()->query($sql, array(
                 $currentController, $userAgent,
-                $userId, $sessionId
+                $session->get('sUserId'), $session->getId()
             ));
         }
     }
@@ -162,7 +162,7 @@ ShopWiki;Bot;WebAlta;;abachobot;architext;ask jeeves;frooglebot;googlebot;lycos;
     public function shouldRefreshLog($request)
     {
         if ($request->getClientIp(false) === null
-            || !empty(Shopware()->Session()->Bot)
+            || $this->get('session')->get('Bot')
         ) {
             return false;
         }
@@ -200,7 +200,7 @@ ShopWiki;Bot;WebAlta;;abachobot;architext;ask jeeves;frooglebot;googlebot;lycos;
         Shopware()->Db()->query($sql, array(
             $request->getClientIp(false),
             $request->getParam('requestPage', $request->getRequestUri()),
-            empty(Shopware()->Session()->sUserId) ? 0 : (int) Shopware()->Session()->sUserId,
+            empty($this->get('session')->get('sUserId')) ? 0 : (int)$this->get('session')->get('sUserId'),
             $request->getDeviceType()
         ));
     }
@@ -275,12 +275,13 @@ ShopWiki;Bot;WebAlta;;abachobot;architext;ask jeeves;frooglebot;googlebot;lycos;
         if (empty($referer)
             || strpos($referer, 'http') !== 0
             || strpos($referer, $request->getHttpHost()) !== false
-            || !empty(Shopware()->Session()->Admin)
+            || $this->get('session')->get('Admin')
         ) {
             return;
         }
 
-        Shopware()->Session()->sReferer = $referer;
+        $this->get('session')->set('sReferer', $referer);
+
 
         if ($partner !== null) {
             $referer .= '$' . $partner;
@@ -331,9 +332,9 @@ ShopWiki;Bot;WebAlta;;abachobot;architext;ask jeeves;frooglebot;googlebot;lycos;
         $partner = $request->getParam('partner', $request->getParam('sPartner'));
         if ($partner !== null) {
             if (strpos($partner, 'sCampaign') === 0) {
-                $campaignID = (int) str_replace('sCampaign', '', $partner);
+                $campaignID = (int)str_replace('sCampaign', '', $partner);
                 if (!empty($campaignID)) {
-                    Shopware()->Session()->sPartner = 'sCampaign' . $campaignID;
+                    $this->get('session')->set('sPartner', 'sCampaign' . $campaignID);
                     $sql = '
                         UPDATE s_campaigns_mailings
                         SET clicked = clicked + 1
@@ -352,15 +353,15 @@ ShopWiki;Bot;WebAlta;;abachobot;architext;ask jeeves;frooglebot;googlebot;lycos;
                     }
                     $response->setCookie('partner', $row['idcode'], $valid, '/');
                 }
-                Shopware()->Session()->sPartner = $partner;
+                $this->get('session')->set('sPartner', $partner);
             }
         } elseif ($request->getCookie('partner') !== null) {
             $sql = 'SELECT idcode FROM s_emarketing_partner WHERE active=1 AND idcode=?';
             $partner = Shopware()->Db()->fetchOne($sql, array($request->getCookie('partner')));
             if (empty($partner)) {
-                unset(Shopware()->Session()->sPartner);
+                $this->get('session')->remove('sPartner');
             } else {
-                Shopware()->Session()->sPartner = $partner;
+                $this->get('session')->set('sPartner', $partner);
             }
         }
     }

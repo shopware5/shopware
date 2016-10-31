@@ -99,7 +99,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
 
         $paymentClass = $this->admin->sInitiatePaymentClass($getPaymentDetails);
         if ($paymentClass instanceof \ShopwarePlugin\PaymentMethods\Components\BasePaymentMethod) {
-            $data = $paymentClass->getCurrentPaymentDataAsArray(Shopware()->Session()->sUserId);
+            $data = $paymentClass->getCurrentPaymentDataAsArray($this->get('session')->get('sUserId'));
             if (!empty($data)) {
                 $this->View()->sFormData += $data;
             }
@@ -163,10 +163,10 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
     {
         // show partner statistic menu
         $partnerModel = Shopware()->Models()->getRepository('Shopware\Models\Partner\Partner')
-                                            ->findOneBy(array('customerId' => Shopware()->Session()->sUserId));
+                                            ->findOneBy(array('customerId' => $this->get('session')->get('sUserId')));
         if (!empty($partnerModel)) {
             $this->View()->partnerId = $partnerModel->getId();
-            Shopware()->Session()->partnerId = $partnerModel->getId();
+            $this->get('session')->partnerId = $partnerModel->getId();
         }
     }
 
@@ -177,7 +177,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
      */
     public function partnerStatisticAction()
     {
-        $partnerId = Shopware()->Session()->partnerId;
+        $partnerId = $this->get('session')->partnerId;
 
         if (empty($partnerId)) {
             return $this->forward('index');
@@ -293,13 +293,13 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
                 $previousPayment = $this->admin->sGetPaymentMeanById($previousPayment);
                 if ($previousPayment['paymentTable']) {
                     $deleteSQL = 'DELETE FROM '.$previousPayment['paymentTable'].' WHERE userID=?';
-                    Shopware()->Db()->query($deleteSQL, array(Shopware()->Session()->sUserId));
+                    Shopware()->Db()->query($deleteSQL, array($this->get('session')->get('sUserId')));
                 }
 
                 $this->admin->sUpdatePayment();
 
                 if ($checkData['sPaymentObject'] instanceof \ShopwarePlugin\PaymentMethods\Components\BasePaymentMethod) {
-                    $checkData['sPaymentObject']->savePaymentData(Shopware()->Session()->sUserId, $this->Request());
+                    $checkData['sPaymentObject']->savePaymentData($this->get('session')->get('sUserId'), $this->Request());
                 }
             }
         }
@@ -330,7 +330,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
                 $successMessage = 'optinnewsletter';
             }
             $this->View()->sSuccessAction = $successMessage;
-            $this->container->get('session')->offsetSet('sNewsletter', $status);
+            $this->get('session')->set('sNewsletter', $status);
         }
         $this->forward('index');
     }
@@ -355,7 +355,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
             AND	oe.userID=?
             AND oe.orderdetailsID=?
         ';
-        $download = Shopware()->Db()->fetchRow($sql, array(Shopware()->Session()->sUserId, $esdID));
+        $download = Shopware()->Db()->fetchRow($sql, array($this->get('session')->get('sUserId'), $esdID));
 
         if (empty($download)) {
             $sql = '
@@ -367,7 +367,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
                 AND o.userID=?
                 AND od.id=?
             ';
-            $download = Shopware()->Db()->fetchRow($sql, array(Shopware()->Session()->sUserId, $esdID));
+            $download = Shopware()->Db()->fetchRow($sql, array($this->get('session')->get('sUserId'), $esdID));
         }
 
         if (empty($download['file'])) {
@@ -633,7 +633,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
 
         if ($form->isValid()) {
             $this->customerService->update($customer);
-            $this->get('session')->offsetSet('sUserMail', $customer->getEmail());
+            $this->get('session')->set('sUserMail', $customer->getEmail());
 
             $this->redirect(['controller' => 'account', 'action' => 'profile', 'success' => true, 'section' => 'email']);
             return;
@@ -656,7 +656,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
 
         if ($form->isValid()) {
             $this->customerService->update($customer);
-            $this->get('session')->offsetSet('sUserPassword', $customer->getPassword());
+            $this->get('session')->set('sUserPassword', $customer->getPassword());
 
             $this->redirect(['controller' => 'account', 'action' => 'profile', 'success' => true, 'section' => 'password']);
             return;
@@ -672,7 +672,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
      */
     private function getCustomerByResetHash($hash)
     {
-        $resetPasswordNamespace = $this->container->get('snippets')->getNamespace('frontend/account/reset_password');
+        $resetPasswordNamespace = $this->get('snippets')->getNamespace('frontend/account/reset_password');
 
         $this->deleteExpiredOptInItems();
 
