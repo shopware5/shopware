@@ -12,7 +12,7 @@
             {/if}
 
 			<div class="blog--detail-images block">
-				<a href="{$sArticle.preview.thumbnails[2].retinaSource}"
+				<a href="{$sArticle.preview.source}"
                    data-lightbox="true"
 				   title="{$alt}"
 				   class="link--blog-image">
@@ -38,7 +38,7 @@
 						{/if}
 
 						{if !$sArticleMedia.preview}
-							<a href="{$sArticleMedia.thumbnails[2].source}"
+							<a href="{$sArticleMedia.source}"
 							   data-lightbox="true"
                                class="blog--thumbnail panel has--border is--rounded block"
 							   title="{s name="BlogThumbnailText" namespace="frontend/blog/detail"}{/s}: {$alt}">
