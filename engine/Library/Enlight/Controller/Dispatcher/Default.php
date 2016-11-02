@@ -112,7 +112,7 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
         }
 
         $module = $this->formatModuleName($module);
-        $path = realpath($path) . '/';
+        $path = Enlight_Loader::realpath($path) . '/';
 
         $this->controllerDirectory[$module] = $path;
 

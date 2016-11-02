@@ -150,6 +150,50 @@ class Enlight_Loader
     }
 
     /**
+     * Realpath implementation that is 100% compatible but symlink aware
+     *
+     * @param $path
+     *
+     * @return string
+     */
+    public static function realpath($path)
+    {
+        // No symlink
+        if (realpath($path) == $path) {
+            return $path;
+        }
+
+        // Make path absolute
+        if ($path[0] != DIRECTORY_SEPARATOR) {
+            $path = getcwd().DIRECTORY_SEPARATOR.$path;
+        }
+
+        // Remove . and ..
+        // See http://php.net/manual/en/function.realpath.php#84012
+        $path = str_replace(array('/', '\\'), DIRECTORY_SEPARATOR, $path);
+        $parts = array_filter(explode(DIRECTORY_SEPARATOR, $path), 'strlen');
+        $absolutes = array();
+        foreach ($parts as $part) {
+            if ('.' == $part) {
+                continue;
+            }
+            if ('..' == $part) {
+                array_pop($absolutes);
+            } else {
+                $absolutes[] = $part;
+            }
+        }
+        $newPath = DIRECTORY_SEPARATOR.implode(DIRECTORY_SEPARATOR, $absolutes);
+
+        // Check if path/file exists
+        if (!file_exists($newPath)) {
+            return false;
+        }
+
+        return $newPath;
+    }
+
+    /**
      * Explodes the given path by the PATH_SEPARATOR constant
      *
      * @param   string $path
