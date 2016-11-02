@@ -83,4 +83,40 @@ class EnlightLoaderTest extends TestCase
 
         $this->assertFalse($found);
     }
+
+    /**
+     * Test realpath abstraction
+     *
+     * @dataProvider dataProviderRealpath
+     */
+    public function testRealpath($path, $expected)
+    {
+        $result = \Enlight_Loader::realpath($path);
+        $this->assertEquals($expected, $result);
+    }
+
+    /**
+     * Provide test cases
+     *
+     * @return array
+     */
+    public function dataProviderRealpath()
+    {
+        return array(
+            // Absolute paths
+            array('/', '/'),
+            array(getcwd().'/', getcwd()),
+            array(getcwd().'/test/..', getcwd()),
+
+            // Relative paths
+            array('', getcwd()),
+            array('./', getcwd()),
+            array('../', realpath(getcwd().'/../')),
+
+            // Nonexisting paths
+            array('/nonexisting', false),
+            array('../nonexisting', false),
+            array('nonexisting', false),
+        );
+    }
 }
