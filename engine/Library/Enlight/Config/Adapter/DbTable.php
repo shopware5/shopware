@@ -245,10 +245,7 @@ class Enlight_Config_Adapter_DbTable extends Enlight_Config_Adapter
         }
 
         $name = $this->_namePrefix . $config->getName() . $this->_nameSuffix;
-        $section = $config->getSection();
-        if (is_string($section)) {
-            $section = explode($config->getSectionSeparator(), $config->getSection());
-        }
+        $section = explode($config->getSectionSeparator(), $config->getSection());
 
         $dbTable = $this->getTable($this->_namespaceColumn === null ? $name : null);
         $db = $dbTable->getAdapter();
