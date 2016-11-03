@@ -84,10 +84,10 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
      */
     public function postDispatch()
     {
-        $this->session->sBasketCurrency = Shopware()->Shop()->getCurrency()->getId();
-        $this->session->sBasketQuantity = $this->basket->sCountBasket();
+        $this->session->set('sBasketCurrency', Shopware()->Shop()->getCurrency()->getId());
+        $this->session->set('sBasketQuantity', $this->basket->sCountBasket());
         $amount = $this->basket->sGetAmount();
-        $this->session->sBasketAmount = empty($amount) ? 0 : array_shift($amount);
+        $this->session->set('sBasketAmount', empty($amount) ? 0 : array_shift($amount));
     }
 
     /**
@@ -1516,8 +1516,8 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         $amount = $this->basket->sGetAmount();
         $quantity = $this->basket->sCountBasket();
 
-        $this->View()->sBasketQuantity = $quantity;
-        $this->View()->sBasketAmount = empty($amount) ? 0 : array_shift($amount);
+        $this->session->set('sBasketQuantity', $quantity);
+        $this->session->set('sBasketAmount', empty($amount) ? 0 : array_shift($amount));
 
         $this->Front()->Plugins()->ViewRenderer()->setNoRender();
 
@@ -1593,7 +1593,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
     private function basketHasMixedArticles($basket)
     {
         $config = Shopware()->Config();
-        $attrName = $config->serviceAttrField;
+        $attrName = $config->get('serviceAttrField');
 
         if (!isset($basket['content'])) {
             return false;

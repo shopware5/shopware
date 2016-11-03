@@ -40,18 +40,6 @@ class Enlight_Components_Session_Namespace extends BaseSession implements Sessio
     /**
      * {@inheritdoc}
      */
-    public function start()
-    {
-        // required for theme preview
-        if (!parent::getId() && !empty($_REQUEST[$this->getName()])) {
-            $this->setId($_REQUEST[$this->getName()]);
-        }
-        return parent::start();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function offsetExists($key)
     {
         return $this->has($key);

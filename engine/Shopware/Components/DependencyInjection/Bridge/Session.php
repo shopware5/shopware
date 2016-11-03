@@ -54,14 +54,16 @@ class Session
             new AttributeBag('Shopware')
         );
 
-        $container->set('SessionID', $session->getId());
-
         /** @var \Enlight_Event_EventManager $eventManager */
         $eventManager = $container->get('events');
         $eventManager->addListener(
             'Enlight_Bootstrap_AfterRegisterResource_Shop',
             array($this, 'onAfterRegisterShop'),
             -100
+        );
+        $eventManager->addListener(
+            'Enlight_Bootstrap_InitResource_SessionID',
+            array($this, 'onInitSessionId')
         );
 
         return $session;
@@ -86,6 +88,24 @@ class Session
         return $storage;
     }
 
+
+    /**
+     * @param \Enlight_Event_EventArgs $args
+     * @return string
+     */
+    public function onInitSessionId(\Enlight_Event_EventArgs $args)
+    {
+        /** @var $container Container */
+        $container = $args->get('subject');
+        /** @var SessionInterface $session */
+        $session = $container->get('session');
+
+        if (!$session->isStarted()) {
+            $session->start();
+        }
+
+        return $session->getId();
+    }
 
     /**
      * @param \Enlight_Event_EventArgs $args
@@ -148,6 +168,9 @@ class Session
             $mainShop = $shop->getMain() ?: $shop;
             if ($mainShop->getAlwaysSecure()) {
                 $options['cookie_secure'] = true;
+            }
+            if (!isset($options['cookie_path'])) {
+                $options['cookie_path'] = rtrim($shop->getBasePath(), '/') . '/';
             }
         } else {
             $options = $this->getBackendOptions($container);

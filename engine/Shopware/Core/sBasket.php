@@ -592,14 +592,12 @@ class sBasket
      */
     public function getMaxTax()
     {
-        $sessionId = $this->session->getId();
-
         return $this->db->fetchOne(
             'SELECT MAX(tax_rate) as max_tax
                 FROM s_order_basket b
                 WHERE b.sessionID = ? AND b.modus = 0
                 GROUP BY b.sessionID',
-            array(empty($sessionId) ? session_id() : $sessionId)
+            array($this->session->getId())
         );
     }
 

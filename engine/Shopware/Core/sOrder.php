@@ -450,9 +450,9 @@ class sOrder
             'customercomment' => $this->sComment,
             'net' => $net,
             'taxfree' => $taxfree,
-            'partnerID' => (string) $this->getSession()->offsetGet("sPartner"),
+            'partnerID' => (string) $this->getSession()->get("sPartner"),
             'temporaryID' => $this->getSession()->getId(),
-            'referer' => (string) $this->getSession()->offsetGet('sReferer'),
+            'referer' => (string) $this->getSession()->get('sReferer'),
             'language' => $shop->getId(),
             'dispatchID' => $dispatchId,
             'currency' => $this->sSYSTEM->sCurrency["currency"],
@@ -620,7 +620,7 @@ class sOrder
             'taxfree'              => $taxfree,
             'partnerID'            => (string) $partner,
             'temporaryID'          => (string) $this->uniqueID,
-            'referer'              => (string) $this->getSession()->offsetGet('sReferer'),
+            'referer'              => (string) $this->getSession()->get('sReferer'),
             'language'             => $shop->getId(),
             'dispatchID'           => $dispatchId,
             'currency'             => $this->sSYSTEM->sCurrency["currency"],
@@ -830,11 +830,11 @@ class sOrder
         // Check if voucher is affected
         $this->sTellFriend();
 
-        if ($this->getSession()->offsetExists('sOrderVariables')) {
-            $variables = $this->getSession()->offsetGet('sOrderVariables');
+        if ($this->getSession()->has('sOrderVariables')) {
+            $variables = $this->getSession()->get('sOrderVariables');
             $variables['sOrderNumber'] = $orderNumber;
             $variables['confirmMailDeliveryFailed'] = $confirmMailDeliveryFailed;
-            $this->getSession()->offsetSet('sOrderVariables', $variables);
+            $this->getSession()->set('sOrderVariables', $variables);
         }
 
         return $orderNumber;
@@ -920,9 +920,9 @@ class sOrder
      */
     private function getPartnerCode($userAffiliate)
     {
-        $isPartner = $this->getSession()->offsetGet("sPartner");
+        $isPartner = $this->getSession()->get("sPartner");
         if (!empty($isPartner)) {
-            return $this->getSession()->offsetGet("sPartner");
+            return $this->getSession()->get("sPartner");
         }
 
         if (empty($userAffiliate)) {
