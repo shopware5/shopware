@@ -26,7 +26,6 @@ namespace Shopware\Commands;
 
 use Shopware\Components\Install\Database;
 use Shopware\Components\Migrations\Manager;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -59,19 +58,28 @@ class DatabaseSetupCommand extends ShopwareCommand
             'steps',
             null,
             InputOption::VALUE_REQUIRED,
-            sprintf("Valid steps: %s.", implode(', ', $this->validSteps))
+            sprintf('Valid steps: %s.', implode(', ', $this->validSteps))
+        );
+
+        $this->addOption(
+            'shop-url',
+            null,
+            InputOption::VALUE_OPTIONAL,
+            'Shop-URL e.G. https://example.com:8080/myshop'
         );
 
         $this->addOption(
             'host',
             null,
-            InputOption::VALUE_OPTIONAL
+            InputOption::VALUE_OPTIONAL,
+            'Shop Hostname (deprecated, use shop-url option instead)'
         );
 
         $this->addOption(
             'path',
             null,
-            InputOption::VALUE_OPTIONAL
+            InputOption::VALUE_OPTIONAL,
+            'Shop Basepath (deprecated, use shop-url option instead)'
         );
     }
 
@@ -94,10 +102,11 @@ class DatabaseSetupCommand extends ShopwareCommand
         $database = new Database($connection);
 
         $steps = $input->getOption('steps');
-        $steps = explode(',', $steps);
+        /** @var string[] $steps */
+        $steps = array_filter(explode(',', $steps));
 
         foreach ($steps as $step) {
-            if (!in_array($step, $this->validSteps)) {
+            if (!in_array($step, $this->validSteps, true)) {
                 $io->error(
                     sprintf("Unknown install step (%s). Valid steps: %s\n", $step, implode(', ', $this->validSteps))
                 );
@@ -105,56 +114,43 @@ class DatabaseSetupCommand extends ShopwareCommand
             }
         }
 
-        if (in_array('setupShop', $steps)) {
-            $host = $input->getOption('host');
-            $path = $input->getOption('path');
-
-            $path = !empty($path) ? $path : '';
-            $host = !empty($host) ? $host : '';
-
-            if ($path === '/') {
-                $path = '';
-            }
-
-            if (!empty($path)) {
-                $path = trim($path, '/');
-                $path = '/'.$path;
-            }
-        }
-
         while ($step = array_shift($steps)) {
             switch ($step) {
-                case "drop":
-                    $io->comment("Drop database");
+                case 'drop':
+                    $io->comment('Drop database');
                     $database->dropDatabase($dbConfig['dbname']);
                     break;
 
-                case "create":
-                    $io->comment("Create database");
+                case 'create':
+                    $io->comment('Create database');
                     $database->createDatabase($dbConfig['dbname']);
                     break;
 
-                case "clear":
-                    $io->comment("Clear database");
+                case 'clear':
+                    $io->comment('Clear database');
                     $database->emptyDatabase($dbConfig['dbname']);
                     break;
 
-                case "import":
-                    $io->comment("Import database");
+                case 'import':
+                    $io->comment('Import database');
                     $database->importFile($dbConfig['dbname'], $rootDir . '/_sql/install/latest.sql');
 
                     $migrationManger = new Manager($connection, $rootDir . '/_sql/migrations');
                     $migrationManger->run();
                     break;
 
-                case "importDemodata":
-                    $io->comment("Import demodata");
+                case 'importDemodata':
+                    $io->comment('Import demodata');
                     $database->importFile($dbConfig['dbname'], $rootDir . '/_sql/demo/latest.sql');
                     break;
 
-                case "setupShop":
-                    $io->comment("Setup shop");
-                    $database->setupShop($host, $path, $dbConfig['dbname']);
+                case 'setupShop':
+                    $io->comment('Setup shop');
+                    $url = $this->parseUrl($input);
+                    if (!empty($url)) {
+                        $database->setupShop($url, $dbConfig['dbname']);
+                    }
+
                     break;
 
                 default:
@@ -163,7 +159,7 @@ class DatabaseSetupCommand extends ShopwareCommand
             }
         }
 
-        $io->success("Database was successfully created.");
+        $io->success('Database was successfully created.');
     }
 
     /**
@@ -176,9 +172,9 @@ class DatabaseSetupCommand extends ShopwareCommand
             $dbConfig['host'] = 'localhost';
         }
 
-        $connectionSettings = array(
+        $connectionSettings = [
             'host=' . $dbConfig['host'],
-        );
+        ];
 
         if (!empty($dbConfig['socket'])) {
             $connectionSettings[] = 'unix_socket=' . $dbConfig['socket'];
@@ -222,5 +218,44 @@ class DatabaseSetupCommand extends ShopwareCommand
         }
 
         return $conn;
+    }
+
+    /**
+     * @param InputInterface $input
+     * @return string
+     */
+    private function parseUrl(InputInterface $input)
+    {
+        $url = trim($input->getOption('shop-url'));
+
+        if (!empty($url)) {
+            if (parse_url($url) === false) {
+                throw new \InvalidArgumentException(
+                    sprintf('Invalid Shop URL (%s).', $url)
+                );
+            }
+
+            return $url;
+        }
+
+        $host = trim($input->getOption('host'));
+        if (empty($host)) {
+            return '';
+        }
+
+        $path = $input->getOption('path');
+        $path = !empty($path) ? $path : '';
+        if ($path === '/') {
+            $path = '';
+        }
+
+        if (!empty($path)) {
+            $path = trim($path, '/');
+            $path = '/' . $path;
+        }
+
+        $url = 'http://' . $host . $path;
+
+        return $url;
     }
 }

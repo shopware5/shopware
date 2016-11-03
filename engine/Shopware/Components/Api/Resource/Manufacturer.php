@@ -26,6 +26,7 @@ namespace Shopware\Components\Api\Resource;
 
 use Shopware\Components\Api\Exception as ApiException;
 use Shopware\Models\Article\Supplier as ManufacturerModel;
+use Shopware\Models\Media\Album;
 use Shopware\Models\Media\Media as MediaModel;
 
 /**
@@ -232,10 +233,9 @@ class Manufacturer extends Resource
         $media = null;
 
         if (isset($data['image']['link'])) {
-            /**@var $media MediaModel */
-            $media = $this->getResource('media')->internalCreateMediaByFileLink(
-                $data['image']['link']
-            );
+            /** @var Media $resource */
+            $resource = $this->getResource('media');
+            $media = $resource->internalCreateMediaByFileLink($data['image']['link'], Album::ALBUM_SUPPLIER);
         } elseif (!empty($data['image']['mediaId'])) {
             $media = $this->getManager()->find(
                 'Shopware\Models\Media\Media',

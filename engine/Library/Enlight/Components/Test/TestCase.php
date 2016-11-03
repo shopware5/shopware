@@ -40,48 +40,6 @@ abstract class Enlight_Components_Test_TestCase extends PHPUnit_Framework_TestCa
     protected $databaseTester;
 
     /**
-     * Returns a mock object for the specified class.
-     *
-     * @param  string $originalClassName
-     * @param  array $methods
-     * @param  array $arguments
-     * @param  string $mockClassName
-     * @param  boolean $callOriginalConstructor
-     * @param  boolean $callOriginalClone
-     * @param  boolean $callAutoload
-     * @param bool $cloneArguments
-     * @param bool $callOriginalMethods
-     * @return PHPUnit_Framework_MockObject_MockObject
-     * @throws Enlight_Exception
-     * @since  Method available since Release 3.0.0
-     */
-    public function getMock(
-        $originalClassName,
-        $methods = array(),
-        array $arguments = array(),
-        $mockClassName = '',
-        $callOriginalConstructor = true,
-        $callOriginalClone = true,
-        $callAutoload = true,
-        $cloneArguments = false,
-        $callOriginalMethods = false
-    ) {
-        $originalClassName = Enlight_Class::getClassName($originalClassName);
-
-        return parent::getMock(
-            $originalClassName,
-            $methods,
-            $arguments,
-            $mockClassName,
-            $callOriginalConstructor,
-            $callOriginalClone,
-            $callAutoload,
-            $cloneArguments,
-            $callOriginalMethods
-        );
-    }
-
-    /**
      * Gets the IDatabaseTester for this testCase. If the IDatabaseTester is
      * not set yet, this method calls newDatabaseTester() to obtain a new
      * instance.

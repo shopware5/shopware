@@ -1333,8 +1333,11 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         $this->front->Request()->setPost('sPayment', (int)$payment['id']);
         $this->admin->sUpdatePayment();
 
-        $this->flagPaymentBlocked();
-        
+        //if customer logged in and payment switched to fallback, display cart notice. Otherwise anonymous customers will see the message too
+        if (Shopware()->Session()->sUserId) {
+            $this->flagPaymentBlocked();
+        }
+
         return $payment;
     }
 

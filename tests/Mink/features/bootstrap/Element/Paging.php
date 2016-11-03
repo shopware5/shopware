@@ -25,8 +25,8 @@ class Paging extends Element implements \Shopware\Tests\Mink\HelperSelectorInter
     public function getCssSelectors()
     {
         return [
-            'previous' => 'a.pagination--link.paging--prev',
-            'next' => 'a.pagination--link.paging--next'
+            'previous' => 'a.paging--link.paging--prev',
+            'next' => 'a.paging--link.paging--next'
         ];
     }
 
@@ -48,11 +48,7 @@ class Paging extends Element implements \Shopware\Tests\Mink\HelperSelectorInter
         $elements = Helper::findElements($this, $locator);
 
         for ($i = 0; $i < $steps; $i++) {
-            $result = Helper::countElements($this, $direction, 1);
-
-            if ($result !== true) {
-                $result = Helper::countElements($this, $direction, 2);
-            }
+            $result = Helper::countElements($this, $direction, 4);
 
             if ($result !== true) {
                 Helper::throwException(

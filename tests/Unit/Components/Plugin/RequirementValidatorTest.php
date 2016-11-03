@@ -184,27 +184,18 @@ class RequirementValidatorTest extends TestCase
 
     private function getValidator(array $plugins)
     {
-        $em = $this->createMock(ModelManager::class);
-
         $repo = $this->createMock(ModelRepository::class);
         $defaults = ['active' => false, 'installed' => null];
 
         foreach ($plugins as $pluginInfo) {
             $pluginInfo = array_merge($defaults, $pluginInfo);
 
-            $plugin = $this->createMock(Plugin::class);
-
-            $plugin->method('getVersion')
-                ->willReturn($pluginInfo['version']);
-
-            $plugin->method('getName')
-                ->willReturn($pluginInfo['name']);
-
-            $plugin->method('getActive')
-                ->willReturn($pluginInfo['active']);
-
-            $plugin->method('getInstalled')
-                ->willReturn($pluginInfo['installed']);
+            $plugin = $this->createConfiguredMock(Plugin::class, [
+                'getVersion' => $pluginInfo['version'],
+                'getName' => $pluginInfo['name'],
+                'getActive' => $pluginInfo['active'],
+                'getInstalled' => $pluginInfo['installed'],
+            ]);
 
             $this->plugins[$pluginInfo['name']] = $plugin;
         }
@@ -214,8 +205,7 @@ class RequirementValidatorTest extends TestCase
                 ->will($this->returnCallback([$this, 'findPluginByName']));
         }
 
-        $em->method('getRepository')
-           ->willReturn($repo);
+        $em = $this->createConfiguredMock(ModelManager::class, ['getRepository' => $repo]);
 
         return new RequirementValidator($em, new XmlPluginInfoReader());
     }
@@ -230,6 +220,7 @@ class RequirementValidatorTest extends TestCase
         if (isset($this->plugins[$name])) {
             return $this->plugins[$name];
         }
+
         return null;
     }
 }

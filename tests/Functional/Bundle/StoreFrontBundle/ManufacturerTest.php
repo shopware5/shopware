@@ -23,7 +23,7 @@ class ManufacturerTest extends TestCase
 
         $manufacturer = $this->helper->createManufacturer(array(
             'name' => 'testManufacturerList-2',
-            'image' => 'Manufacturer-Cover-2',
+            'image' => 'Manufacturer-Cover-2.jpg',
             'link' => 'www.google.de?manufacturer=2',
             'metaTitle' => 'Meta title',
             'description' => 'Lorem ipsum manufacturer',
@@ -34,7 +34,7 @@ class ManufacturerTest extends TestCase
 
         $manufacturer = $this->helper->createManufacturer(array(
             'name' => 'testManufacturerList-2',
-            'image' => 'Manufacturer-Cover-2',
+            'image' => 'Manufacturer-Cover-2.jpg',
             'link' => 'www.google.de?manufacturer=2',
             'metaTitle' => 'Meta title',
             'description' => 'Lorem ipsum manufacturer',

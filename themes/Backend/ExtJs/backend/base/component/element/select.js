@@ -49,6 +49,7 @@ Ext.define('Shopware.apps.Base.view.element.Select', {
             me.store = new Ext.data.Store({
                 url:'{url controller=index}/' + me.controller + '/' + me.action,
                 autoLoad:true,
+                remoteFilter: true,
                 reader:new Ext.data.JsonReader({
                     root:me.root || 'data',
                     totalProperty:me.count || 'total',
@@ -66,6 +67,12 @@ Ext.define('Shopware.apps.Base.view.element.Select', {
             me.valueField = me.displayField;
         } else if (typeof(me.store) === 'string' && me.store.substring(0, 5) !== 'base.') {
             me.store = me.getStoreById(me.store);
+        }
+
+        if (me.store instanceof Ext.data.Store && me.filter) {
+            // Apply the filter on the store
+            me.store.clearFilter(true);
+            me.store.filter(me.filter);
         }
 
         me.callParent(arguments);

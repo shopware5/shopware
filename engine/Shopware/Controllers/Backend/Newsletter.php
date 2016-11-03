@@ -409,6 +409,7 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
 
         Shopware()->Container()->get('router')->setGlobalParam('module', 'frontend');
         Shopware()->Config()->DontAttachSession = true;
+        Shopware()->Container()->get('shopware_storefront.context_service')->initializeShopContext();
 
         return $mailing;
     }
@@ -520,8 +521,8 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
         $sql = "
             SELECT ev.*, 'VOUCHER123' as code
             FROM s_emarketing_vouchers ev
-            WHERE  ev.modus = 1 AND (ev.valid_to >= NOW() OR ev.valid_to IS NULL)
-            AND (ev.valid_from <= NOW() OR ev.valid_from IS NULL)
+            WHERE  ev.modus = 1 AND (ev.valid_to >= CURDATE() OR ev.valid_to IS NULL)
+            AND (ev.valid_from <= CURDATE() OR ev.valid_from IS NULL)
             AND ev.id=?
         ";
         $voucher = Shopware()->Db()->fetchRow($sql, array($voucherID));

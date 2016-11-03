@@ -107,16 +107,22 @@ class sExport
      */
     private $config;
 
+    /** @var StoreFrontBundle\Service\ConfiguratorServiceInterface  */
+    private $configuratorService;
+
     /**
      * @param ContextServiceInterface $contextService
      * @param AdditionalTextServiceInterface $additionalTextService
      * @param Enlight_Components_Db_Adapter_Pdo_Mysql $db
+     * @param Shopware_Components_Config $config
+     * @param StoreFrontBundle\Service\ConfiguratorServiceInterface $configuratorService
      */
     public function __construct(
         ContextServiceInterface $contextService = null,
         AdditionalTextServiceInterface $additionalTextService = null,
         Enlight_Components_Db_Adapter_Pdo_Mysql $db = null,
-        Shopware_Components_Config $config = null
+        Shopware_Components_Config $config = null,
+        StoreFrontBundle\Service\ConfiguratorServiceInterface $configuratorService = null
     ) {
         $container = Shopware()->Container();
 
@@ -124,6 +130,7 @@ class sExport
         $this->additionalTextService = $container->get('shopware_storefront.additional_text_service');
         $this->db = $db ?: $container->get('db');
         $this->config = $config ?: $container->get('config');
+        $this->configuratorService = $configuratorService ?: $container->get('shopware_storefront.configurator_service');
     }
 
     /**
@@ -904,6 +911,7 @@ class sExport
                 a.filtergroupID,
                 a.supplierID,
                 d.unitID,
+                d.purchaseprice,
                 IF(a.changetime!='0000-00-00 00:00:00',a.changetime,'') as `changed`,
                 IF(a.datum!='0000-00-00',a.datum,'') as `added`,
                 IF(d.releasedate!='0000-00-00',d.releasedate,'') as `releasedate`,
@@ -951,7 +959,9 @@ class sExport
                 a.configurator_set_id as configurator,
 
                 ROUND(CAST(IFNULL($grouppricefield, $pricefield)*(100-IF(pd.discount,pd.discount,0)-{$this->sCustomergroup["discount"]})/100*{$this->sCurrency["factor"]} AS DECIMAL(10,3)),2) as netprice,
+                IFNULL($grouppricefield, $pricefield)*(100-IF(pd.discount,pd.discount,0)-{$this->sCustomergroup["discount"]})/100*{$this->sCurrency["factor"]} as netprice_numeric,
                 ROUND(CAST(IFNULL($grouppricefield, $pricefield)*(100+t.tax)/100*(100-IF(pd.discount,pd.discount,0)-{$this->sCustomergroup["discount"]})/100*{$this->sCurrency["factor"]} AS DECIMAL(10,3)),2) as price,
+                IFNULL($grouppricefield, $pricefield)*(100+t.tax)/100*(100-IF(pd.discount,pd.discount,0)-{$this->sCustomergroup["discount"]})/100*{$this->sCurrency["factor"]} as price_numeric,
                 pd.discount,
                 ROUND(CAST($pseudoprice*{$this->sCurrency["factor"]} AS DECIMAL(10,3)),2) as netpseudoprice,
                 ROUND(CAST($pseudoprice*(100+t.tax)*{$this->sCurrency["factor"]}/100 AS DECIMAL(10,3)),2) as pseudoprice,
@@ -1166,6 +1176,15 @@ class sExport
                 $product = $this->additionalTextService->buildAdditionalText($product, $context);
 
                 $row['additionaltext'] = $product->getAdditional();
+                $row['configurator_options'] = [];
+
+                $configurationGroups = $this->configuratorService->getProductConfiguration($product, $context);
+
+                /** @var StoreFrontBundle\Struct\Configurator\Group $configuratorOption */
+                foreach ($configurationGroups as $configurationGroup) {
+                    $option = current($configurationGroup->getOptions());
+                    $row['configurator_options'][$configurationGroup->getName()] = $option->getName();
+                }
             }
             $rows[] = $row;
 

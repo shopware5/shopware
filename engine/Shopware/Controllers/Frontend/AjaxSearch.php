@@ -23,7 +23,8 @@
  */
 
 use Shopware\Bundle\SearchBundle\ProductSearchResult;
-use Shopware\Bundle\StoreFrontBundle\Struct\ProductContextInterface;
+use Shopware\Bundle\SearchBundle\SearchTermPreProcessorInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 /**
  * Search controller for suggest search
@@ -31,19 +32,8 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ProductContextInterface;
 class Shopware_Controllers_Frontend_AjaxSearch extends Enlight_Controller_Action
 {
     /**
-     * Array with search results
-     * @var array
-     */
-    protected $_results = array();
-
-    /**
-     * Count of search results
-     * @var int
-     */
-    protected $_countResults = 0;
-
-    /**
-     * Index action - get searchterm from request (sSearch) and start search
+     * Index action - get search term from request (sSearch) and start search
+     *
      * @return void
      */
     public function indexAction()
@@ -53,26 +43,31 @@ class Shopware_Controllers_Frontend_AjaxSearch extends Enlight_Controller_Action
         $this->View()->loadTemplate('frontend/search/ajax.tpl');
 
         $term = $this->Request()->getParam('sSearch');
-        $term = trim(stripslashes(html_entity_decode($term)));
+        /** @var SearchTermPreProcessorInterface $processor */
+        $processor = $this->get('shopware_search.search_term_pre_processor');
+        $term = $processor->process($term);
 
-        if (!$term || strlen($term) < Shopware()->Config()->MinSearchLenght) {
-            return false;
+        if (!$term || strlen($term) < Shopware()->Config()->get('MinSearchLenght')) {
+            return;
         }
 
-        /**@var $context ProductContextInterface*/
-        $context  = $this->get('shopware_storefront.context_service')->getShopContext();
+        /**@var ShopContextInterface $context */
+        $context = $this->get('shopware_storefront.context_service')->getShopContext();
 
         $criteria = $this->get('shopware_search.store_front_criteria_factory')
             ->createAjaxSearchCriteria($this->Request(), $context);
 
-        /**@var $result ProductSearchResult*/
+        /**@var ProductSearchResult $result */
         $result = $this->get('shopware_search.product_search')->search($criteria, $context);
 
         if ($result->getTotalCount() > 0) {
             $articles = $this->convertProducts($result);
-            $this->View()->searchResult = $result;
-            $this->View()->sSearchRequest = array("sSearch" => $term);
-            $this->View()->sSearchResults = array("sResults" => $articles, "sArticlesCount" => $result->getTotalCount());
+            $this->View()->assign('searchResult', $result);
+            $this->View()->assign('sSearchRequest', ['sSearch' => $term]);
+            $this->View()->assign('sSearchResults', [
+                'sResults' => $articles,
+                'sArticlesCount' => $result->getTotalCount()
+            ]);
         }
     }
 
@@ -82,17 +77,16 @@ class Shopware_Controllers_Frontend_AjaxSearch extends Enlight_Controller_Action
      */
     private function convertProducts(ProductSearchResult $result)
     {
-        $articles = array();
+        $articles = [];
         foreach ($result->getProducts() as $product) {
-            $article = $this->get('legacy_struct_converter')->convertListProductStruct(
-                $product
-            );
+            $article = $this->get('legacy_struct_converter')->convertListProductStruct($product);
 
-            $article['link'] = $this->Front()->Router()->assemble(array(
+            $article['link'] = $this->Front()->Router()->assemble([
                 'controller' => 'detail',
                 'sArticle' => $product->getId(),
+                'number' => $product->getNumber(),
                 'title' => $product->getName()
-            ));
+            ]);
             $article['name'] = $product->getName();
             $articles[] = $article;
         }

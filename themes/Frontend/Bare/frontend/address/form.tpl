@@ -30,7 +30,7 @@
                     {else}
                         {block name="frontend_address_form_fieldset_customer_type_input"}
                             {* Always register as a private customer*}
-                            <input type="hidden" name="{$inputPrefix}[additional][customer_type]" value="private" />
+                            <input type="hidden" name="{$inputPrefix}[additional][customer_type]" value="{if $formData.company}business{else}private{/if}" />
                         {/block}
                     {/if}
                 </div>

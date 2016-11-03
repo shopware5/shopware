@@ -52,7 +52,7 @@
              * @property typeFieldSelector
              * @type {String}
              */
-            typeFieldSelector: '.register--customertype select,.address--customertype select',
+            typeFieldSelector: '.register--customertype select,.address--customertype select,.address--customertype input',
 
             /**
              * Type name for a company selection.

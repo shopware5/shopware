@@ -130,7 +130,7 @@
                 $container = $(el);
                 $tab = $(me.$tabs.get(i));
 
-                if ($container.find(opts.contentSelector).html().length) {
+                if ($container.find(opts.contentSelector).html().trim().length) {
                     $container.addClass(opts.hasContentClass);
                     $tab.addClass(opts.hasContentClass);
                     

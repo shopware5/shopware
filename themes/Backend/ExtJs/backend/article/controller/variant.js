@@ -164,6 +164,7 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
                 generateOrderNumbers: me.onGenerateOrderNumbers,
                 applyData: me.onDisplayMappingWindow,
                 editVariantPrice: me.onEditVariantPrice,
+                editVariantPseudoPrice: me.onEditVariantPseudoPrice,
                 createVariants: me.onCreateVariants,
                 saveSettings: me.onSaveSettings
             },
@@ -1513,6 +1514,40 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
 
         record.getPrice().removeAll();
         record.getPrice().add(newPrice);
+        record.save();
+    },
+
+    /**
+     * Event listener function which fired when the user edits a variant pseudoprice over the listing row editor.
+     */
+    onEditVariantPseudoPrice: function(record, pseudoPrice) {
+        var me = this;
+
+        if (!record) {
+            return false;
+        }
+
+        if (!record.getPrice()) {
+            record.getPriceStore = Ext.create('Ext.data.Store', { model: 'Shopware.apps.Article.model.Price' });
+        }
+
+        var newPrice = Ext.create('Shopware.apps.Article.model.Price', {
+            percent: 0,
+            customerGroupKey: me.subApplication.firstCustomerGroup.get('key')
+        });
+
+        if (record.getPrice().getCount() > 0) {
+            newPrice = record.getPrice().first();
+        }
+        newPrice.set('pseudoPrice', pseudoPrice);
+        newPrice.set('to', 'beliebig');
+        newPrice.set('from', 1);
+        newPrice.set('cloned', false);
+        newPrice.commit();
+
+        record.getPrice().removeAll();
+        record.getPrice().add(newPrice);
+        record.set('pseudoPrice', pseudoPrice);
         record.save();
     },
 

@@ -156,33 +156,40 @@ Ext.define('Shopware.apps.Order.view.batch.List', {
 
     /**
      * Column renderer function for the mail column.
-     * @param value
-     * @param metaData
-     * @param record
+     *
+     * @param { boolean } value
+     * @param { Object } metaData
+     * @param { Ext.data.Model } record
+     * @return string
      */
     mailColumn: function(value, metaData, record) {
         var me = this,
+            checked = 'sprite-ui-check-box-uncheck',
             mail = record.getMail().first();
 
-        return (mail instanceof Ext.data.Model);
+        if (mail instanceof Ext.data.Model) {
+            checked = 'sprite-ui-check-box';
+        }
+        return '<span style="display:block; margin: 0 auto; height:16px; width:16px;" class="' + checked + '"></span>';
     },
 
     /**
      * Column renderer function for the sent column
-     * @param value
-     * @param metaData
-     * @param record
-     * @return boolean
+     *
+     * @param { boolean } value
+     * @param { Object } metaData
+     * @param { Ext.data.Model } record
+     * @return string
      */
     sentColumn: function(value, metaData, record) {
         var me = this,
+            checked = 'sprite-ui-check-box-uncheck',
             mail = record.getMail().first();
 
         if (mail) {
-            return mail.get('sent');
-        } else {
-            return false;
+            checked = 'sprite-ui-check-box';
         }
+        return '<span style="display:block; margin: 0 auto; height:16px; width:16px;" class="' + checked + '"></span>';
     },
 
     /**

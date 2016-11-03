@@ -39,6 +39,7 @@ Ext.define('Shopware.apps.Base.store.Tax', {
     storeId: 'base.Tax',
     model : 'Shopware.apps.Base.model.Tax',
     pageSize: 1000,
+    remoteFilter: true,
 
     proxy:{
         type:'ajax',

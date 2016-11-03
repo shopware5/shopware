@@ -357,18 +357,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
      */
     protected function getList($filter, $sort, $offset, $limit)
     {
-        if (empty($sort)) {
-            $sort = array(array('property' => 'orders.orderTime', 'direction' => 'DESC'));
-        } else {
-            switch ($sort[0]['property']) {
-                case 'customerEmail':
-                    $sort[0]['property'] = 'customer.email';
-                    break;
-                default:
-                    $sort[0]['property'] = 'orders.' . $sort[0]['property'];
-                    break;
-            }
-        }
+        $sort = $this->resolveSortParameter($sort);
 
         $query = $this->getRepository()->getBackendOrdersQuery($filter, $sort, $offset, $limit);
 
@@ -416,6 +405,47 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
             'data' => $orders,
             'total' => $total
         );
+    }
+
+    /**
+     * @param array[] $sorts
+     * @return array[]
+     */
+    private function resolveSortParameter($sorts)
+    {
+        if (empty($sorts)) {
+            return [
+                ['property' => 'orders.orderTime', 'direction' => 'DESC']
+            ];
+        }
+
+        $resolved = [];
+        foreach ($sorts as $sort) {
+            $direction = $sort['direction']?: 'ASC';
+            switch (true) {
+                //custom sort field for customer email
+                case $sort['property'] == 'customerEmail':
+                    $resolved[] = ['property' => 'customer.email', 'direction' => $direction];
+                    break;
+
+                //custom sort field for customer name
+                case $sort['property'] == 'customerName':
+                    $resolved[] = ['property' => 'billing.lastName', 'direction' => $direction];
+                    $resolved[] = ['property' => 'billing.firstName', 'direction' => $direction];
+                    $resolved[] = ['property' => 'billing.company', 'direction' => $direction];
+                    break;
+
+                //contains no sql prefix? add orders as default prefix
+                case strpos($sort['property'], '.') === false:
+                    $resolved[] = ['property' => 'orders.' . $sort['property'], 'direction' => $direction];
+                    break;
+
+                //already prefixed with an alias?
+                default:
+                    $resolved[] = $sort;
+            }
+        }
+        return $resolved;
     }
 
     /**
@@ -710,6 +740,8 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         //check if the passed position data is a new position or an existing position.
         if (empty($id)) {
             $position = new Detail();
+            $attribute = new Shopware\Models\Attribute\OrderDetail();
+            $position->setAttribute($attribute);
             Shopware()->Models()->persist($position);
         } else {
             $detailRepository = Shopware()->Models()->getRepository('Shopware\Models\Order\Detail');
@@ -1065,7 +1097,13 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         $mail = clone Shopware()->Container()->get('mail');
         $mail->clearRecipients();
         $mail->setSubject($this->Request()->getParam('subject', ''));
-        $mail->setBodyText($this->Request()->getParam('content', ''));
+
+        if ($this->Request()->getParam('isHtml')) {
+            $mail->setBodyHtml($this->Request()->getParam('contentHtml', ''));
+        } else {
+            $mail->setBodyText($this->Request()->getParam('content', ''));
+        }
+
         $mail->setFrom($this->Request()->getParam('fromMail', ''), $this->Request()->getParam('fromName', ''));
         $mail->addTo($this->Request()->getParam('to', ''));
 
@@ -1434,11 +1472,13 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
                 'data' => array(
                     'error' => false,
                     'content' => $mail->getPlainBodyText(),
+                    'contentHtml' => $mail->getPlainBody(),
                     'subject' => $mail->getPlainSubject(),
                     'to' => implode(', ', $mail->getTo()),
                     'fromMail' => $mail->getFrom(),
                     'fromName' => $mail->getFromName(),
                     'sent' => false,
+                    'isHtml' => !empty($mail->getPlainBody()),
                     'orderId' => $orderId
                 )
             );

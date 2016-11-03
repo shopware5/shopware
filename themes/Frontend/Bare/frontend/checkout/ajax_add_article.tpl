@@ -36,10 +36,10 @@
 
                         <span class="image--media">
                             {if isset($image.thumbnails)}
-                                <img srcset="{$image.thumbnails[0].sourceSet}" alt="{$alt}" title="{$alt|truncate:25:""}" />
+                                <img srcset="{$image.thumbnails[0].sourceSet}" alt="{$alt}" title="{$alt|truncate:160}" />
                             {else}
                                 {block name='frontend_detail_image_fallback'}
-                                    <img src="{link file='frontend/_public/src/img/no-picture.jpg'}" alt="{$alt}" title="{$alt|truncate:25:""}" />
+                                    <img src="{link file='frontend/_public/src/img/no-picture.jpg'}" alt="{$alt}" title="{$alt|truncate:160}" />
                                 {/block}
                             {/if}
                         </span>

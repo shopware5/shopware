@@ -271,7 +271,6 @@
 // Search drop down
 .#{$prefix}search-dropdown {
 	top: 54px !important;
-    left: 724px !important;
 	width: 330px;
 	border-bottom: 1px solid #a3adb4;
     -webkit-box-shadow: 0 1px 1px 0 rgba(0, 55, 110, 0.4) !important;
@@ -376,13 +375,6 @@
 			border-bottom: 0 none;
 		}
 	}
-}
-
-// Safari Search Drop Down
-.#{$prefix}safari {
-    .#{$prefix}search-dropdown {
-        left: 746px !important;
-    }
 }
 
 // IE 9 Top Menu
