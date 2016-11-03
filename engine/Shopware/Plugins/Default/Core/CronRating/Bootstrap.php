@@ -98,8 +98,9 @@ class Shopware_Plugins_Core_CronRating_Bootstrap extends Shopware_Components_Plu
             $message[] = "Mail sent to '{$customers[$orderId]['email']}'.";
         }
 
-        if( count($message)<=20 )
+        if( count($message)>0 && count($message)<=20 ) {
             return date("Y-m-d H:i:s").": ".implode(" \n",$message);
+        }
         return date("Y-m-d H:i:s").": ".count($message) . ' rating mails have been sent.';
     }
 
