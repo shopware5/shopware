@@ -180,7 +180,7 @@ class Shopware_Components_TemplateMail
 
         $this->getStringCompiler()->setContext(array_merge($defaultContext, $context));
 
-        $mail = clone Shopware()->Container()->get('mail');
+        $mail = Shopware()->Container()->get('mail');
 
         return $this->loadValues($mail, $mailModel, $overrideConfig);
     }
@@ -239,8 +239,11 @@ class Shopware_Components_TemplateMail
             if (!$mediaService->has($attachment->getPath())) {
                 Shopware()->Container()->get('corelogger')->error('Could not load file: ' . $attachment->getPath());
             } else {
-                $fileAttachment = $mail->createAttachment($mediaService->read($attachment->getPath()));
-                $fileAttachment->filename = $attachment->getFileName();
+                $mailAttachment = new Swift_Attachment(
+                    $mediaService->read($attachment->getPath()),
+                    $attachment->getFileName()
+                );
+                $mail->attach($mailAttachment);
             }
         }
 

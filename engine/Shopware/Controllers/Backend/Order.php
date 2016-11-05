@@ -1094,8 +1094,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
             return;
         }
 
-        $mail = clone Shopware()->Container()->get('mail');
-        $mail->clearRecipients();
+        $mail = Shopware()->Container()->get('mail');
         $mail->setSubject($this->Request()->getParam('subject', ''));
 
         if ($this->Request()->getParam('isHtml')) {
@@ -1474,8 +1473,8 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
                     'content' => $mail->getPlainBodyText(),
                     'contentHtml' => $mail->getPlainBody(),
                     'subject' => $mail->getPlainSubject(),
-                    'to' => implode(', ', $mail->getTo()),
-                    'fromMail' => $mail->getFrom(),
+                    'to' => implode(', ', array_keys($mail->getTo())),
+                    'fromMail' => $mail->getFromAddress(),
                     'fromName' => $mail->getFromName(),
                     'sent' => false,
                     'isHtml' => !empty($mail->getPlainBody()),

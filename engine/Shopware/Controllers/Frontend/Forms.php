@@ -293,8 +293,6 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
         $mailBody = $this->replaceVariables($content["email_template"]);
         $mailSubject = $this->replaceVariables($content["email_subject"]);
 
-        $mail->setFrom(Shopware()->Config()->Mail);
-        $mail->clearRecipients();
         $mail->addTo($content['email']);
         $mail->setBodyText($mailBody);
         $mail->setSubject($mailSubject);

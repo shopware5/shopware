@@ -188,9 +188,9 @@ class Shopware_Tests_Components_TemplateMailTest extends Enlight_Components_Test
 
         $this->assertEquals($templateMock->getSubject(),     $result->getSubject());
         $this->assertEquals($templateMock->getFromName(),    $result->getFromName());
-        $this->assertEquals($templateMock->getFromMail(),    $result->getFrom());
-        $this->assertEquals($templateMock->getContent(),     $result->getBodyText(true));
-        $this->assertEquals($templateMock->getContentHtml(), $result->getBodyHtml(true));
+        $this->assertEquals($templateMock->getFromMail(),    $result->getFromAddress());
+        $this->assertEquals($templateMock->getContent(),     $result->getBodyText());
+        $this->assertEquals($templateMock->getContentHtml(), $result->getBodyHtml());
     }
 
     /**
@@ -214,9 +214,9 @@ class Shopware_Tests_Components_TemplateMailTest extends Enlight_Components_Test
 
         $this->assertEquals('Ihr Bestellung bei Shopware 3.5 Demo',      $result->getSubject());
         $this->assertEquals('Shopware 3.5 Demo',                         $result->getFromName());
-        $this->assertEquals('info@example.com',                          $result->getFrom());
-        $this->assertEquals('Testbestellung bei Shopware 3.5 Demo',      $result->getBodyText(true));
-        $this->assertEquals('Testbestellung HTML bei Shopware 3.5 Demo', $result->getBodyHtml(true));
+        $this->assertEquals('info@example.com',                          $result->getFromAddress());
+        $this->assertEquals('Testbestellung bei Shopware 3.5 Demo',      $result->getBodyText());
+        $this->assertEquals('Testbestellung HTML bei Shopware 3.5 Demo', $result->getBodyHtml());
     }
 
     /**
@@ -236,9 +236,9 @@ class Shopware_Tests_Components_TemplateMailTest extends Enlight_Components_Test
 
         $this->assertEquals('Ihr Bestellung bei Shopware 3.5 Demo',      $result->getSubject());
         $this->assertEquals('Shopware 3.5 Demo',                         $result->getFromName());
-        $this->assertEquals('info@example.com',                          $result->getFrom());
-        $this->assertEquals('Testbestellung bei Shopware 3.5 Demo',      $result->getBodyText(true));
-        $this->assertEquals('Testbestellung HTML bei Shopware 3.5 Demo', $result->getBodyHtml(true));
+        $this->assertEquals('info@example.com',                          $result->getFromAddress());
+        $this->assertEquals('Testbestellung bei Shopware 3.5 Demo',      $result->getBodyText());
+        $this->assertEquals('Testbestellung HTML bei Shopware 3.5 Demo', $result->getBodyHtml());
     }
 
     /**
