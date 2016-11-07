@@ -4,7 +4,7 @@
     <div class="product--box box--{$productBoxLayout}"
          data-page-index="{$pageIndex}"
          data-ordernumber="{$sArticle.ordernumber}"
-         {if !{config name=disableArticleNavigation}} data-category-id="{$sCategoryCurrent}"{/if}>
+            {if !{config name=disableArticleNavigation}} data-category-id="{$sCategoryCurrent}"{/if}>
 
         {block name="frontend_listing_box_article_content"}
             <div class="box--content is--rounded">
@@ -60,6 +60,18 @@
                                     {include file="frontend/listing/product-box/product-price.tpl"}
                                 {/block}
                             </div>
+                        {/block}
+
+                        {block name="frontend_listing_box_article_buy"}
+                            {if {config name="displayListingBuyButton"}}
+                                <div>
+                                    {if $sArticle.allowBuyInListing}
+                                        {include file="frontend/listing/product-box/buy_button.tpl"}
+                                    {else}
+                                        {include file="frontend/listing/product-box/to_product_button.tpl"}
+                                    {/if}
+                                </div>
+                            {/if}
                         {/block}
 
                         {* Product actions - Compare product, more information, buy now *}

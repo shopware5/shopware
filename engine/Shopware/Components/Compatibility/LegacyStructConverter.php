@@ -1121,7 +1121,8 @@ class LegacyStructConverter
             'keywords' => $product->getKeywords(),
             'sReleasedate' => $this->dateToString($product->getReleaseDate()),
             'template' => $product->getTemplate(),
-            'attributes' => $product->getAttributes()
+            'attributes' => $product->getAttributes(),
+            'allowBuyInListing' => $product->allowBuyInListing()
         );
 
         if ($product->hasAttribute('core')) {

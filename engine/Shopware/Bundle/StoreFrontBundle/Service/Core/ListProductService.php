@@ -166,17 +166,16 @@ class ListProductService implements Service\ListProductServiceInterface
                 $product->setCategories($categories[$number]);
             }
 
-            $product->addAttribute(
-                'marketing',
-                $this->marketingService->getProductAttribute($product)
-            );
+            $product->addAttribute('marketing', $this->marketingService->getProductAttribute($product));
 
             $this->priceCalculationService->calculateProduct($product, $context);
 
+            $product->setAllowBuyInListing(!$product->hasConfigurator() && !$product->hasDifferentPrices() && $product->isAvailable());
+            $product->setListingPrice($product->getCheapestUnitPrice());
+            $product->setDisplayFromPrice((count($product->getPrices()) > 1 || $product->hasDifferentPrices()));
+
             if ($this->config->get('calculateCheapestPriceWithMinPurchase')) {
                 $product->setListingPrice($product->getCheapestPrice());
-            } else {
-                $product->setListingPrice($product->getCheapestUnitPrice());
             }
 
             if ($this->isProductValid($product, $context)) {

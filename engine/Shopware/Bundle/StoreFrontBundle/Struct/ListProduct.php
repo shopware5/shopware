@@ -351,6 +351,16 @@ class ListProduct extends BaseProduct implements \JsonSerializable
     protected $listingPrice;
 
     /**
+     * @var boolean
+     */
+    protected $allowBuyInListing;
+
+    /**
+     * @var boolean
+     */
+    protected $displayFromPrice;
+
+    /**
      * Adds a new product state.
      *
      * @param $state
@@ -1176,6 +1186,30 @@ class ListProduct extends BaseProduct implements \JsonSerializable
      */
     public function displayFromPrice()
     {
-        return (count($this->getPrices()) > 1 || $this->hasDifferentPrices());
+        return $this->displayFromPrice;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function allowBuyInListing()
+    {
+        return $this->allowBuyInListing;
+    }
+
+    /**
+     * @param boolean $allowBuyInListing
+     */
+    public function setAllowBuyInListing($allowBuyInListing)
+    {
+        $this->allowBuyInListing = $allowBuyInListing;
+    }
+
+    /**
+     * @param boolean $displayFromPrice
+     */
+    public function setDisplayFromPrice($displayFromPrice)
+    {
+        $this->displayFromPrice = $displayFromPrice;
     }
 }
