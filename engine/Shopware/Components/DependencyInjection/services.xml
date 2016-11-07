@@ -55,21 +55,42 @@
             <argument type="service" id="service_container"/>
         </service>
 
-        <service id="mailtransport_factory" class="Shopware\Components\DependencyInjection\Bridge\MailTransport" />
-        <service id="shopware.mail_transport" alias="MailTransport" />
-        <service id="MailTransport" class="Zend_Mail_Transport_Abstract">
-            <factory service="mailtransport_factory" method="factory" />
-            <argument type="service" id="Loader"/>
+        <service id="mailtransport_factory" class="Shopware\Components\DependencyInjection\Bridge\MailTransport"/>
+        <service id="shopware.mail_transport" alias="MailTransport"/>
+        <service id="mailtransport" class="Swift_Transport">
+            <factory service="mailtransport_factory" method="factory"/>
             <argument type="service" id="config"/>
             <argument>%shopware.mail%</argument>
         </service>
 
-        <service id="mail_factory" class="Shopware\Components\DependencyInjection\Bridge\Mail" />
-        <service id="mail" class="Enlight_Components_Mail">
-            <factory service="mail_factory" method="factory" />
-            <argument type="service" id="service_container"/>
+        <service id="mail_factory" class="Shopware\Components\DependencyInjection\Bridge\Mail"/>
+        <service id="mail" class="Enlight_Components_Mail" shared="false">
+            <factory service="mail_factory" method="factory"/>
             <argument type="service" id="config"/>
             <argument>%shopware.mail%</argument>
+        </service>
+
+        <service id="mailer_config_listener" class="Shopware\Components\Mail\ConfigListener">
+            <argument>%shopware.mail%</argument>
+            <argument type="service" id="config"/>
+        </service>
+        <service id="mailer_redirecting_listener" class="Shopware\Components\Mail\RedirectingListener">
+            <argument type="service" id="config"/>
+        </service>
+        <service id="mailer_send_listener" class="Shopware\Components\Mail\SendListener">
+            <argument type="service" id="events"/>
+        </service>
+        <service id="mailer" class="Swift_Mailer">
+            <argument type="service" id="mailtransport"/>
+            <call method="registerPlugin">
+                <argument type="service" id="mailer_config_listener"/>
+            </call>
+            <call method="registerPlugin">
+                <argument type="service" id="mailer_redirecting_listener"/>
+            </call>
+            <call method="registerPlugin">
+                <argument type="service" id="mailer_send_listener"/>
+            </call>
         </service>
 
         <service id="templatemail_factory" class="Shopware\Components\DependencyInjection\Bridge\TemplateMail" />

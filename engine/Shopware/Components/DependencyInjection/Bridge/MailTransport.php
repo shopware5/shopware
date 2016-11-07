@@ -24,6 +24,14 @@
 
 namespace Shopware\Components\DependencyInjection\Bridge;
 
+use Shopware_Components_Config;
+use Swift_FileSpool;
+use Swift_MailTransport;
+use Swift_NullTransport;
+use Swift_SpoolTransport;
+use Swift_Transport;
+use Swift_SmtpTransport;
+
 /**
  * @category  Shopware
  * @package   Shopware\Components\DependencyInjection\Bridge
@@ -32,80 +40,93 @@ namespace Shopware\Components\DependencyInjection\Bridge;
 class MailTransport
 {
     /**
-     * @param \Enlight_Loader               $loader
-     * @param \Shopware_Components_Config   $config
-     * @param array                         $options
-     * @return \Enlight_Class|\Zend_Mail_Transport_Abstract
+     * @param Shopware_Components_Config $config
+     * @param array $options
+     * @return Swift_Transport
      */
-    public function factory(\Enlight_Loader $loader, \Shopware_Components_Config $config, array $options)
+    public function factory(Shopware_Components_Config $config, array $options)
     {
         if (!isset($options['type']) && !empty($config->MailerMailer) && $config->MailerMailer != 'mail') {
             $options['type'] = $config->MailerMailer;
         }
+
         if (empty($options['type'])) {
-            $options['type'] = 'sendmail';
+            $options['type'] = 'mail';
+        } elseif ($options['type'] == 'gmail') {
+            $options['type'] = 'smtp';
+            $options['ssl'] = 'ssl';
+            $options['auth'] = 'login';
+            $options['host'] = 'smtp.gmail.com';
+            $options['port'] = 465;
         }
 
         if ($options['type'] == 'smtp') {
-            if (!isset($options['username']) && !empty($config->MailerUsername)) {
-                if (!empty($config->MailerAuth)) {
-                    $options['auth'] = $config->MailerAuth;
-                } elseif (empty($options['auth'])) {
-                    $options['auth'] = 'login';
-                }
-                $options['username'] = $config->MailerUsername;
-                $options['password'] = $config->MailerPassword;
-            }
-            if (!isset($options['ssl']) && !empty($config->MailerSMTPSecure)) {
-                $options['ssl'] = $config->MailerSMTPSecure;
-            }
-            if (!isset($options['port']) && !empty($config->MailerPort)) {
-                $options['port'] = $config->MailerPort;
-            }
-            if (!isset($options['name']) && !empty($config->MailerHostname)) {
-                $options['name'] = $config->MailerHostname;
-            }
-            if (!isset($options['host']) && !empty($config->MailerHost)) {
-                $options['host'] = $config->MailerHost;
-            }
-        }
-
-        if (!$loader->loadClass($options['type'])) {
-            $transportName = ucfirst(strtolower($options['type']));
-            $transportName = 'Zend_Mail_Transport_' . $transportName;
-        } else {
-            $transportName = $options['type'];
-        }
-        unset($options['type'], $options['charset']);
-
-        if ($transportName == 'Zend_Mail_Transport_Smtp') {
-            $transport = \Enlight_Class::Instance($transportName, array($options['host'], $options));
-        } elseif (!empty($options)) {
-            $transport = \Enlight_Class::Instance($transportName, array($options));
-        } else {
-            $transport = \Enlight_Class::Instance($transportName);
-        }
-        /** @var $transport \Zend_Mail_Transport_Abstract */
-        \Enlight_Components_Mail::setDefaultTransport($transport);
-
-        if (!isset($options['from']) && !empty($config->Mail)) {
-            $options['from'] = array('email' => $config->Mail, 'name' => $config->Shopname);
-        }
-
-        if (!empty($options['from']['email'])) {
-            \Enlight_Components_Mail::setDefaultFrom(
-                $options['from']['email'],
-                !empty($options['from']['name']) ? $options['from']['name'] : null
+            $transport = new Swift_SmtpTransport();
+            $this->setSmtpOptions(
+                $transport,
+                $this->getSmtpOptions($options, $config)
             );
+            return $transport;
+        } elseif ($options['type'] == 'mail') {
+            return new Swift_MailTransport();
+        } elseif ($options['type'] == 'file') {
+            return new Swift_SpoolTransport(new Swift_FileSpool($options['path']));
+        } else {
+            return new Swift_NullTransport();
         }
+    }
 
-        if (!empty($options['replyTo']['email'])) {
-            \Enlight_Components_Mail::setDefaultReplyTo(
-                $options['replyTo']['email'],
-                !empty($options['replyTo']['name']) ? $options['replyTo']['name'] : null
-            );
+    private function getSmtpOptions(array $options, Shopware_Components_Config $config)
+    {
+        if (!isset($options['username']) && !empty($config->MailerUsername)) {
+            if (!empty($config->MailerAuth)) {
+                $options['auth'] = $config->MailerAuth;
+            } elseif (empty($options['auth'])) {
+                $options['auth'] = 'login';
+            }
+            if ($options['auth'] == 'crammd5') {
+                $options['auth'] = 'cram-md5';
+            }
+            $options['username'] = $config->MailerUsername;
+            $options['password'] = $config->MailerPassword;
         }
+        if (!isset($options['ssl']) && !empty($config->MailerSMTPSecure)) {
+            $options['ssl'] = $config->MailerSMTPSecure;
+        }
+        if (!isset($options['port']) && !empty($config->MailerPort)) {
+            $options['port'] = $config->MailerPort;
+        }
+        if (!isset($options['name']) && !empty($config->MailerHostname)) {
+            $options['name'] = $config->MailerHostname;
+        }
+        if (!isset($options['host']) && !empty($config->MailerHost)) {
+            $options['host'] = $config->MailerHost;
+        }
+        return $options;
+    }
 
-        return $transport;
+    private function setSmtpOptions(Swift_SmtpTransport $transport, $options)
+    {
+        if (isset($options['host'])) {
+            $transport->setHost($options['host']);
+        }
+        if (isset($options['port'])) {
+            $transport->setPort($options['port']);
+        }
+        if (!empty($options['ssl'])) {
+            $transport->setEncryption($options['ssl']);
+        }
+        if (isset($options['username'])) {
+            $transport->setUsername($options['username']);
+        }
+        if (isset($options['password'])) {
+            $transport->setPassword($options['password']);
+        }
+        if (isset($options['auth'])) {
+            $transport->setAuthMode($options['auth']);
+        }
+        if (isset($options['name'])) {
+            $transport->setLocalDomain($options['name']);
+        }
     }
 }

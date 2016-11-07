@@ -672,7 +672,8 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
     public function sendMailToMerchantAction()
     {
         $params = $this->Request()->getParams();
-        $mail = clone Shopware()->Container()->get('mail');
+        /** @var \Enlight_Components_Mail $mail */
+        $mail = $this->get('mail');
 
         $toMail = $params['toMail'];
         $fromName = $params['fromName'];
@@ -696,12 +697,9 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
         $compiler->setContext($defaultContext);
 
         // Send eMail to customer
-        $mail->IsHTML(false);
-        $mail->From = $compiler->compileString($fromMail);
-        $mail->FromName = $compiler->compileString($fromName);
-        $mail->Subject = $compiler->compileString($subject);
-        $mail->Body = $compiler->compileString($content);
-        $mail->clearRecipients();
+        $mail->setFrom($compiler->compileString($fromMail), $compiler->compileString($fromName));
+        $mail->setSubject($compiler->compileString($subject));
+        $mail->setBody($compiler->compileString($content));
         $mail->addTo($toMail);
 
         if (!$mail->send()) {

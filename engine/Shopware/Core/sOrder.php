@@ -1577,7 +1577,7 @@ class sOrder
             'content'  => $mail->getPlainBodyText(),
             'subject'  => $mail->getPlainSubject(),
             'email'    => trim($user['email']),
-            'frommail' => $mail->getFrom(),
+            'frommail' => $mail->getFromAddress(),
             'fromname' => $mail->getFromName()
         );
 
