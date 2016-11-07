@@ -127,6 +127,10 @@ class ListProductService implements Service\ListProductServiceInterface
      */
     public function getList(array $numbers, Struct\ProductContextInterface $context)
     {
+        // faster replacement for array_unique()
+        // see http://stackoverflow.com/questions/8321620/array-unique-vs-array-flip
+        $numbers = array_keys(array_flip($numbers));
+
         $products = $this->productGateway->getList($numbers, $context);
 
         $covers = $this->mediaService->getCovers($products, $context);

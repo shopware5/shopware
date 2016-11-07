@@ -19,7 +19,8 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Added method `Shopware\Models\Order\Repository::getDetails()`
 * Added method `Shopware\Models\Order\Repository::getPayments()`
 * Added responsive helper css/less classes in `_mixins/visibility-helper.less`
-* Added `displayListingBuyButton` config to display listing buy button
+* Added config element `displayListingBuyButton` to display listing buy button
+* Added service `shopware_search.batch_product_search` and `shopware_search.batch_product_number_search` for optimized product queries
 
 ### Changes
 
@@ -183,3 +184,28 @@ Captchas are now configurable via backend and can be added using the `captcha` d
 ```
 
 For more information, please refer to our [Captcha Documentation](https://developers.shopware.com/developers-guide/implementing-your-own-captcha/).
+
+### Batch Product Search
+
+The Batch Product Search service works with request and results. You can add multiple criteria's and/or product numbers to a request and resolve them in an optimized way. An optimizer groups multiple equal criteria's into one and performs the search.
+
+```php
+$criteria = new Critera();
+$criteria->addCondition(new CategoryCondition([3]));
+$criteria->limit(3);
+
+$anotherCriteria = new Critera();
+$anotherCriteria->addCondition(new CategoryCondition([3]));
+$anotherCriteria->limit(5);
+
+$request = new BatchProductNumberSearchRequest();
+$request->setProductNumbers('numbers-1', ['SW10004', 'SW10006']);
+$request->setCriteria('criteria-1', $criteria);
+$request->setCriteria('criteria-2', $anotherCriteria);
+
+$result = $this->container->get('shopware_search.batch_product_search')->search($request, $context);
+
+$result->get('numbers-1'); // ['SW10004' => ListProduct, 'SW10006' => ListProduct] 
+$result->get('criteria-1'); // ['SW10006' => ListProduct, 'SW10007' => ListProduct, 'SW10008' => ListProduct] 
+$result->get('criteria-2'); // ['SW10009' => ListProduct, 'SW10010' => ListProduct, 'SW10011' => ListProduct, 'SW10012' => ListProduct, 'SW10013' => ListProduct] 
+```

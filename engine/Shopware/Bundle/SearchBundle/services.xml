@@ -35,5 +35,15 @@
             <!--criteria request handlers-->
             <argument type="collection" />
         </service>
+
+        <service id="shopware_search.batch_product_number_search" class="Shopware\Bundle\SearchBundle\BatchProductNumberSearch">
+            <argument type="service" id="shopware_search.product_number_search" />
+            <argument type="service" id="shopware_storefront.base_product_factory" />
+        </service>
+
+        <service id="shopware_search.batch_product_search" class="Shopware\Bundle\SearchBundle\BatchProductSearch">
+            <argument type="service" id="shopware_search.batch_product_number_search" />
+            <argument type="service" id="shopware_storefront.list_product_service" />
+        </service>
     </services>
 </container>
