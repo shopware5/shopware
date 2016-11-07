@@ -58,7 +58,8 @@ class SearchIndexer implements SearchIndexerInterface
         \Shopware_Components_Config $config,
         Connection $connection,
         TermHelperInterface $termHelper
-    ) {
+    )
+    {
         $this->config = $config;
         $this->connection = $connection;
         $this->termHelper = $termHelper;
@@ -77,7 +78,7 @@ class SearchIndexer implements SearchIndexerInterface
         }
 
 
-        $interval = (int) $this->config->get('cacheSearch');
+        $interval = (int)$this->config->get('cacheSearch');
 
         if (empty($interval) || $interval < 360) {
             $interval = 86400;
@@ -112,7 +113,7 @@ class SearchIndexer implements SearchIndexerInterface
      */
     public function build()
     {
-        MemoryLimit::setMinimumMemoryLimit(1024*1024*512);
+        MemoryLimit::setMinimumMemoryLimit(1024 * 1024 * 512);
         @set_time_limit(0);
 
         $this->setNextUpdateTimestamp();
@@ -135,7 +136,7 @@ class SearchIndexer implements SearchIndexerInterface
                 $table['elementID'] = empty($table['foreign_key']) && $table['table'] != 's_articles' ? 'articleID' : 'id';
 
                 if ($table['table'] === 's_articles_attributes') {
-                    $table['elementID'] = '(SELECT id FROM s_articles article WHERE article.main_detail_id = s_articles_attributes.articledetailsID LIMIT 1)';
+                    $table['elementID'] = '(SELECT articleID FROM s_articles_details WHERE id = articledetailsID LIMIT 1)';
                 }
 
                 // Build sql query to fetch values from this table
