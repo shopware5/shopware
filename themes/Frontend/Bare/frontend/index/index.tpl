@@ -229,5 +229,13 @@
         {include file='widgets/index/statistic_include.tpl'}
     {/if}
 {/block}
+
+{* If required add the cookiePermission hint *}
+{block name='frontend_index_cookie_permission'}
+    {if {config name="show_cookie_note"}}
+        {include file="frontend/_includes/cookie_permission_note.tpl"}
+    {/if}
+{/block}
+
 </body>
 </html>

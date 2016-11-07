@@ -106,6 +106,7 @@ class Theme extends \Shopware\Components\Theme
         'src/js/jquery.panel-auto-resizer.js',
         'src/js/jquery.address-selection.js',
         'src/js/jquery.address-editor.js',
+        'src/js/jquery.cookie-permission.js',
         'src/js/jquery.shopware-responsive.js'
     ];
 

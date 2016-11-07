@@ -115,6 +115,7 @@
         .addPlugin('*[data-panel-auto-resizer="true"]', 'swPanelAutoResizer')
         .addPlugin('*[data-address-selection="true"]', 'swAddressSelection')
         .addPlugin('*[data-address-editor="true"]', 'swAddressEditor')
+        .addPlugin('*[data-cookie-permission="true"]', 'swCookiePermission')
     ;
 
     $(function($) {

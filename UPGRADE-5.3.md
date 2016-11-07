@@ -210,3 +210,9 @@ $result->get('numbers-1'); // ['SW10004' => ListProduct, 'SW10006' => ListProduc
 $result->get('criteria-1'); // ['SW10006' => ListProduct, 'SW10007' => ListProduct, 'SW10008' => ListProduct] 
 $result->get('criteria-2'); // ['SW10009' => ListProduct, 'SW10010' => ListProduct, 'SW10011' => ListProduct, 'SW10012' => ListProduct, 'SW10013' => ListProduct] 
 ```
+### CookiePermission
+
+Cookie permissions is now a part of shopware and you can configure it in the shop settings. 
+
+We implement a basic cookie permission hint. If you want to change the decision whether the item is displayed or not, overwrite the jQuery plugin in the jquery.cookie-permission.js
+  
