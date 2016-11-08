@@ -37,6 +37,7 @@ Thumbs.db
 /config_*.php
 
 # Caches/Proxies
+.php_cs
 .php_cs.cache
 /tests/Shopware/TempFiles/*
 !/tests/Shopware/TempFiles/.gitkeep
