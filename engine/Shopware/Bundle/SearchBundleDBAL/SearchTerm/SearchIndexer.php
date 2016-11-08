@@ -58,8 +58,7 @@ class SearchIndexer implements SearchIndexerInterface
         \Shopware_Components_Config $config,
         Connection $connection,
         TermHelperInterface $termHelper
-    )
-    {
+    ) {
         $this->config = $config;
         $this->connection = $connection;
         $this->termHelper = $termHelper;
