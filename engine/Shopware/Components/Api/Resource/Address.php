@@ -28,7 +28,7 @@ use Shopware\Bundle\AccountBundle\Service\AddressServiceInterface;
 use Shopware\Components\Api\Exception as ApiException;
 use Shopware\Models\Country\Country;
 use Shopware\Models\Country\State;
-use Shopware\Models\Customer\Customer;
+use Shopware\Models\Customer\Customer as CustomerModel;
 use Shopware\Models\Shop\Repository;
 use Shopware\Models\Shop\Shop as ShopModel;
 
@@ -123,7 +123,7 @@ class Address extends Resource
         $customerId = !empty($params['customer']) ? (int) $params['customer'] : 0;
         unset($params['customer']);
 
-        $customer = $this->getContainer()->get('models')->find(Customer::class, $customerId);
+        $customer = $this->getContainer()->get('models')->find(CustomerModel::class, $customerId);
         if (!$customer) {
             throw new ApiException\NotFoundException("Customer by id $customerId not found");
         }

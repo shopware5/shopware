@@ -106,9 +106,9 @@ class PreCommitChecks
         foreach ($files as $file) {
             $output = [];
             $return = null;
-            exec("./vendor/bin/php-cs-fixer fix -v --config-file=.php_cs --no-ansi --dry-run " . escapeshellarg($file). ' 2>&1', $output, $return);
+            exec("./vendor/bin/php-cs-fixer fix -v --no-ansi --dry-run " . escapeshellarg($file). ' 2>&1', $output, $return);
             if ($return != 0) {
-                $misses[$file] = "./vendor/bin/php-cs-fixer fix -v --config-file=.php_cs " . escapeshellarg($file);
+                $misses[$file] = "./vendor/bin/php-cs-fixer fix -v " . escapeshellarg($file);
                 $this->error = true;
                 $succeed = false;
             }

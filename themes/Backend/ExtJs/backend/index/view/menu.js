@@ -65,6 +65,24 @@ Ext.define('Shopware.apps.Index.view.Menu', {
         Shopware.app.Application.on('global-close-menu', function() {
             Ext.menu.Manager.hideAll();
         });
+
+        Shopware.app.Application.on('reload-main-menu', function() {
+            Ext.Ajax.request({
+                url: '{url action=menu}',
+                scope: me,
+                success: function(response) {
+                    me.removeAll();
+                    me.add(Ext.create('Shopware.Search'));
+                    me.onMenuLoaded(response);
+                    me.add({ xtype: 'tbfill' }, {
+                        xtype: 'container',
+                        cls  : 'x-main-logo-container',
+                        width: 23,
+                        height: 17
+                    });
+                }
+            });
+        });
     },
 
     onMenuLoaded: function(response) {
