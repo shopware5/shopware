@@ -61,6 +61,7 @@
             <argument type="service" id="dbal_connection" />
             <argument type="service" id="snippets" />
             <argument type="service" id="query_alias_mapper" />
+            <argument type="service" id="config" />
             <tag name="facet_handler_dbal"/>
         </service>
 
@@ -118,6 +119,7 @@
 
         <!-- Condition handler -->
         <service id="shopware_searchdbal.vote_average_condition_handler_dbal" class="Shopware\Bundle\SearchBundleDBAL\ConditionHandler\VoteAverageConditionHandler">
+            <argument type="service" id="config" />
             <tag name="condition_handler_dbal"/>
         </service>
 

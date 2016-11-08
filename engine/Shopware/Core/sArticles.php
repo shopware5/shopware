@@ -376,27 +376,45 @@ class sArticles
 
         $date = date("Y-m-d H:i:s");
 
-        $sql = '
-            INSERT INTO s_articles_vote (articleID, name, headline, comment, points, datum, active, email)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-        ';
+        $container = Shopware()->Container();
+        $shopId = null;
+        if ($container->initialized('Shop')) {
+            $shopId = $container->get('Shop')->getId();
+        }
 
-        $insertComment = $this->db->executeUpdate($sql, array(
-            $article,
-            $sVoteName,
-            $sVoteSummary,
-            $sVoteComment,
-            $sVoteStars,
-            $date,
-            $active,
-            $sVoteMail
-        ));
+        $connection = $container->get('dbal_connection');
+        $query = $connection->createQueryBuilder();
+        $query->insert('s_articles_vote');
+        $query->values([
+            'articleID' => ':articleID',
+            'name' => ':name',
+            'headline' => ':headline',
+            'comment' => ':comment',
+            'points' => ':points',
+            'datum' => ':datum',
+            'active' => ':active',
+            'email' => ':email',
+            'shop_id' => ':shopId'
+        ]);
 
-        if (empty($insertComment)) {
+        $query->setParameters([
+            ':articleID'  => $article,
+            ':name'  => $sVoteName,
+            ':headline'  => $sVoteSummary,
+            ':comment'  => $sVoteComment,
+            ':points'  => $sVoteStars,
+            ':datum'  => $date,
+            ':active'  => $active,
+            ':email'  => $sVoteMail,
+            ':shopId' => $shopId
+        ]);
+
+        $success = $query->execute();
+        if (empty($success)) {
             throw new Enlight_Exception("sSaveComment #00: Could not save comment");
         }
 
-        $insertId = $this->db->lastInsertId();
+        $insertId = $connection->lastInsertId();
         if (!isset($this->session['sArticleCommentInserts'])) {
             $this->session['sArticleCommentInserts'] = new ArrayObject();
         }

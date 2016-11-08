@@ -803,7 +803,6 @@ class sAdmin
         $sessions = array(
             's_order_basket'            => 'sessionID',
             's_user'                    => 'sessionID',
-            's_emarketing_lastarticles' => 'sessionID',
             's_order_comparisons'       => 'sessionID',
         );
 
@@ -2596,22 +2595,14 @@ SQL;
             ON u.id = :userId
             AND u.active = 1
 
-            LEFT JOIN (
-              SELECT *, user_id as userID, country_id as countryID, state_id as stateID
-              FROM s_user_addresses a
-              WHERE a.user_id = :userId
-              AND a.id = :billingAddressId
-            ) as ub
-              ON ub.userID = u.id
+            LEFT JOIN s_user_addresses as ub
+                ON ub.user_id = u.id
+                AND ub.id = :billingAddressId
               
-           LEFT JOIN (
-              SELECT *, user_id as userID, country_id as countryID, state_id as stateID
-              FROM s_user_addresses a
-              WHERE a.user_id = :userId
-              AND a.id = :shippingAddressId
-            ) as us
-              ON us.userID = u.id   
-
+            LEFT JOIN s_user_addresses as us
+                ON us.user_id = u.id
+                AND us.id = :shippingAddressId
+                
             WHERE b.sessionID = :sessionId
 
             GROUP BY b.sessionID
@@ -2786,21 +2777,13 @@ SQL;
             ON u.id=b.userID
             AND u.active=1
 
-            LEFT JOIN (
-              SELECT *, user_id as userID, country_id as countryID, state_id as stateID
-              FROM s_user_addresses a
-              WHERE a.user_id = :userId
-              AND a.id = :billingAddressId
-            ) as ub
-              ON ub.userID = u.id
+            LEFT JOIN s_user_addresses as ub
+                ON ub.user_id = u.id
+                AND ub.id = :billingAddressId
               
-           LEFT JOIN (
-              SELECT *, user_id as userID, country_id as countryID, state_id as stateID
-              FROM s_user_addresses a
-              WHERE a.user_id = :userId
-              AND a.id = :shippingAddressId
-            ) as us
-              ON us.userID = u.id
+            LEFT JOIN s_user_addresses as us
+                ON us.user_id = u.id
+                AND us.id = :shippingAddressId
 
             WHERE d.active=1
             AND (
@@ -2834,11 +2817,9 @@ SQL;
             ORDER BY d.position, d.name
         ";
 
-        $userId = $this->session->offsetGet('sUserId');
         $dispatches = $this->db->fetchAssoc(
             $sql,
             [
-                'userId' => empty($userId) ? 0 : $userId,
                 'billingAddressId' => $this->getBillingAddressId(),
                 'shippingAddressId' => $this->getShippingAddressId()
             ]
@@ -2956,21 +2937,13 @@ SQL;
             ON u.id=b.userID
             AND u.active=1
 
-            LEFT JOIN (
-              SELECT *, user_id as userID, country_id as countryID, state_id as stateID
-              FROM s_user_addresses a
-              WHERE a.user_id = :userId
-              AND a.id = :billingAddressId
-            ) as ub
-              ON ub.userID = u.id
+            LEFT JOIN s_user_addresses as ub
+                ON ub.user_id = u.id
+                AND ub.id = :billingAddressId
               
-           LEFT JOIN (
-              SELECT *, user_id as userID, country_id as countryID, state_id as stateID
-              FROM s_user_addresses a
-              WHERE a.user_id = :userId
-              AND a.id = :shippingAddressId
-            ) as us
-              ON us.userID = u.id
+            LEFT JOIN s_user_addresses as us
+                ON us.user_id = u.id
+                AND us.id = :shippingAddressId
 
             WHERE d.active=1
             AND (
@@ -3004,14 +2977,11 @@ SQL;
             GROUP BY d.id
         ";
 
-        $userId = $this->session->offsetGet('sUserId');
-
         return $this->calculateDispatchSurcharge(
             $basket,
             $this->db->fetchAll(
                 $sql,
                 [
-                    'userId' => empty($userId) ? 0 : $userId,
                     'billingAddressId' => $this->getBillingAddressId(),
                     'shippingAddressId' => $this->getShippingAddressId()
                 ]
@@ -3480,22 +3450,9 @@ SQL;
         $shipping['attributes'] = $this->attributeLoader->load('s_user_addresses_attributes', $shipping['id']) ?: [];
         $userData["shippingaddress"] = $shipping;
 
-        // If shipping address is not available, billing address is coeval the shipping address
-        $countryShipping = $this->config->get('sCOUNTRYSHIPPING');
         if (!isset($userData["shippingaddress"]["firstname"])) {
             $userData["shippingaddress"] = $userData["billingaddress"];
             $userData["shippingaddress"]["eqalBilling"] = true;
-        } else {
-            if (($userData["shippingaddress"]["countryID"] != $userData["billingaddress"]["countryID"])
-                && empty($countryShipping)
-            ) {
-                $this->db->update(
-                    's_user_shippingaddress',
-                    array('countryID' => $userData["billingaddress"]["countryID"]),
-                    array('id = ?' => $userData["shippingaddress"]["id"])
-                );
-                $userData["shippingaddress"]["countryID"] = $userData["billingaddress"]["countryID"];
-            }
         }
 
         if (empty($userData["shippingaddress"]["countryID"])) {

@@ -1061,7 +1061,7 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
                 }
 
                 $field = $fields[$condition['property']];
-                $value = $this->formatSearchValue($condition['value'], $field);
+                $value = $this->formatSearchValue($condition['value'], $field, $condition['expression']);
 
                 $conditions[] = array(
                     'property' => $field['alias'],
@@ -1100,9 +1100,10 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
      *
      * @param string $value
      * @param array $field
+     * @param null|string $expression
      * @return string
      */
-    protected function formatSearchValue($value, array $field)
+    protected function formatSearchValue($value, array $field, $expression = null)
     {
         switch ($field['type']) {
             case 'boolean':
@@ -1118,6 +1119,10 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
 
                 $date = new DateTime($value);
                 $value = $date->format('Y-m-d');
+                if (!$this->isSearchExpression($expression)) {
+                    return $value;
+                }
+
                 //search values for date time should added the % wildcards to search for time values.
                 if ($field['type'] === 'datetime') {
                     $value = '%' . $value . '%';
@@ -1129,10 +1134,22 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
             case 'string':
             case 'text':
             default:
+                if (!$this->isSearchExpression($expression)) {
+                    return $value;
+                }
                 $value = '%' . $value . '%';
         }
 
         return $value;
+    }
+
+    /**
+     * @param string|null $expression
+     * @return bool
+     */
+    private function isSearchExpression($expression)
+    {
+        return ($expression === 'LIKE' || $expression === null);
     }
 
     /**

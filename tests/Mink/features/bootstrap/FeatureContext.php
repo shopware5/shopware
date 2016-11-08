@@ -137,7 +137,7 @@ EOD;
      */
     public function deactivateCaptchas()
     {
-        $this->changeConfigValue('captchaColor', '');
+        $this->changeConfigValue('captchaMethod', 'nocaptcha');
     }
 
     /**

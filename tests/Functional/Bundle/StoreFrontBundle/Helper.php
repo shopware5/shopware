@@ -615,7 +615,7 @@ class Helper
         return $manufacturer;
     }
 
-    public function createVotes($articleId, $points = array())
+    public function createVotes($articleId, $points = array(), $shopId = null)
     {
         $data = array(
             'id' => null,
@@ -625,7 +625,8 @@ class Helper
             'comment' => 'Dieser Artikel zeichnet sich durch extreme Stabilität aus und fasst super viele Klamotten. Das Preisleistungsverhältnis ist exorbitant gut.',
             'points' => null,
             'datum' => '2012-08-29 14:02:24',
-            'active' => '1'
+            'active' => '1',
+            'shop_id' => $shopId
         );
 
         foreach ($points as $point) {

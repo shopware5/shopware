@@ -69,6 +69,9 @@ Ext.define('Shopware.apps.PluginManager.model.Plugin', {
         { name: 'capabilityActivate', type: 'boolean',  defaultValue: false },
         { name: 'useContactForm',     type: 'boolean',  defaultValue: false },
         { name: 'formId',             type: 'int', useNull: true, defaultValue: null },
+        { name: 'link',               type: 'string', useNull: true },
+        { name: 'redirectToStore',    type: 'boolean', useNull: true},
+        { name: 'lowestPrice',        type: 'float', useNull: true},
 
         { name: 'groupingState', type: 'int', convert: function(value, record) {
 

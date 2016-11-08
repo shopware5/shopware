@@ -56,9 +56,8 @@ class Shopware_Plugins_Frontend_CronRefresh_Bootstrap extends Shopware_Component
     public function onCronJobClearing(Shopware_Components_Cron_CronJob $job)
     {
         // Delete all entries from lastarticles older than 30 days
-        $sql = '
-            DELETE FROM s_emarketing_lastarticles WHERE `time` < date_add(current_date, INTERVAL -30 DAY)
-        ';
+        $lastArticleTime = $this->get('config')->get('lastarticles_time', 30);
+        $sql = "DELETE FROM s_emarketing_lastarticles WHERE `time` < date_add(current_date, INTERVAL -{$lastArticleTime} DAY)";
         $result = Shopware()->Db()->query($sql);
         $data['lastarticles']['rows'] = $result->rowCount();
 

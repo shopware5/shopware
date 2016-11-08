@@ -302,13 +302,14 @@ Ext.define('Shopware.apps.Order.controller.List', {
                     orderID: position.get('orderId')
                 },
                 callback: function(data, operation) {
+                    if (orderPositionGrid) {
+                        orderPositionGrid.setLoading(true);
+                    }
+
                     var records = operation.getRecords(),
                         record = records[0],
                         rawData = record.getProxy().getReader().rawData;
 
-                    if (orderPositionGrid) {
-                        orderPositionGrid.setLoading(true);
-                    }
                     if ( operation.success === true ) {
                         Shopware.Notification.createGrowlMessage(me.snippets.deletePosition.successTitle,me.snippets.deletePosition.successMessage, me.snippets.growlMessage);
 

@@ -66,6 +66,9 @@ Ext.define('Shopware.apps.PluginManager.controller.Main', {
                     Shopware.Notification.createGrowlMessage('', '{s name="sbp_not_available"}Shopware store not available, store features disabled.{/s}');
                 }
                 me.mainWindow = me.getView('list.Window').create();
+                if (me.subApplication.action == 'ImportExport') {
+                   return;
+                }
                 me.mainWindow.show();
             }
         });
@@ -77,6 +80,10 @@ Ext.define('Shopware.apps.PluginManager.controller.Main', {
             'plugin-manager-connect-introduction-page{ isVisible(true) }': {
                 'connect-introduction-remove': me.removeConnectIntroduction,
                 'connect-introduction-install': me.installConnectIntroduction
+            },
+            'plugin-manager-importexport-teaser-page{ isVisible(true) }': {
+                'install-import-export-plugin': me.installImportExportPlugin,
+                'install-migration-plugin': me.installMigrationPlugin
             }
         });
 
@@ -85,6 +92,7 @@ Ext.define('Shopware.apps.PluginManager.controller.Main', {
             'enable-premium-plugins-mode': me.enablePremiumPluginsMode,
             'enable-expired-plugins-mode': me.enableExpiredPluginsMode,
             'enable-connect-introduction-mode': me.enableConnectIntroductionMode,
+            'enable-importexport-teaser-mode': me.enableImportExportTeaserMode,
             scope: me
         });
 
@@ -115,6 +123,16 @@ Ext.define('Shopware.apps.PluginManager.controller.Main', {
         listingWindow.setWidth(1130);
         listingWindow.setHeight(695);
         listingWindow.setTitle('{s name="connect_introduction/title"}{/s}');
+        me.getNavigation().hide();
+    },
+
+    enableImportExportTeaserMode: function() {
+        var me = this,
+            listingWindow = me.getListingWindow();
+
+        listingWindow.setWidth(845);
+        listingWindow.setHeight(550);
+        listingWindow.setTitle('{s name="import_export_teaser/title"}{/s}');
         me.getNavigation().hide();
     },
 
@@ -176,6 +194,23 @@ Ext.define('Shopware.apps.PluginManager.controller.Main', {
 
             return;
         }
+        if (me.subApplication.action == 'ImportExport') {
+            Shopware.app.Application.fireEvent('display-importexport-teaser');
+            var plugin = Ext.create('Shopware.apps.PluginManager.model.Plugin', {
+                technicalName: 'SwagMigration'
+            });
+            plugin.reload({
+                callback: function(record) {
+                    if (Ext.isDefined(record)) {
+                        me.mainWindow.down('#migrationteaser').destroy();
+                        me.mainWindow.setHeight(340);
+                    }
+                    me.mainWindow.show();
+                }
+            });
+
+            return;
+        }
 
         Ext.Function.defer(function () {
             localListing.getStore().load({
@@ -212,16 +247,56 @@ Ext.define('Shopware.apps.PluginManager.controller.Main', {
                 iconPath: '{link file="themes/Backend/ExtJs/backend/_resources/resources/themes/images/shopware-ui/shopware_connect.png"}'
             });
 
+        me.doInstallPlugin(plugin, function(response) {
+            me.getListingWindow().close();
+            Shopware.app.Application.addSubApplication({
+                name: 'Shopware.apps.Connect',
+                action: 'Register'
+            });
+        });
+    },
+
+    installImportExportPlugin: function() {
+        var me = this,
+            plugin = Ext.create('Shopware.apps.PluginManager.model.Plugin', {
+                technicalName: 'SwagImportExport',
+                iconPath: '{link file="themes/Backend/ExtJs/backend/_resources/resources/themes/images/shopware-ui/importexport_plugin.png"}'
+            });
+
+        me.doInstallPlugin(plugin, function(response) {
+            me.getListingWindow().close();
+            Shopware.Notification.createStickyGrowlMessage({
+                title: '{s name="import_export_teaser/installation_successful"}{/s}',
+                text: '{s name="import_export_teaser/reload_backend_message"}{/s}'
+            });
+        });
+    },
+
+    installMigrationPlugin: function() {
+        var me = this,
+            plugin = Ext.create('Shopware.apps.PluginManager.model.Plugin', {
+                technicalName: 'SwagMigration',
+                iconPath: '{link file="themes/Backend/ExtJs/backend/_resources/resources/themes/images/shopware-ui/migration_plugin.png"}'
+            });
+
+        me.doInstallPlugin(plugin, function(response) {
+            me.getListingWindow().close();
+            Shopware.Notification.createStickyGrowlMessage({
+                title: '{s name="import_export_teaser/installation_successful"}{/s}',
+                text: '{s name="import_export_teaser/reload_backend_message"}{/s}'
+            });
+        });
+    },
+
+    doInstallPlugin: function(plugin, callback) {
+        var me = this;
+
         Shopware.app.Application.fireEvent('update-dummy-plugin', plugin, function(response) {
             if (response.success) {
                 Shopware.app.Application.fireEvent('install-plugin', plugin, function(response) {
                     if (response.success) {
                         Shopware.app.Application.fireEvent('activate-plugin', plugin, function(response) {
-                            me.getListingWindow().close();
-                            Shopware.app.Application.addSubApplication({
-                                name: 'Shopware.apps.Connect',
-                                action: 'Register'
-                            });
+                            Ext.callback(callback, me, [response]);
                         });
                     }
                 }, me);

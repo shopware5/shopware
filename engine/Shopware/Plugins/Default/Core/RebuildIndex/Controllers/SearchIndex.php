@@ -32,16 +32,6 @@ use Shopware\Bundle\SearchBundleDBAL\SearchTerm\SearchIndexerInterface;
 class Shopware_Controllers_Backend_SearchIndex extends Shopware_Controllers_Backend_ExtJs
 {
     /**
-     * Helper function to get the new seo index component with auto completion
-     *
-     * @return Shopware_Components_SeoIndex
-     */
-    public function SearchIndex()
-    {
-        return Shopware()->SearchIndex();
-    }
-
-    /**
      * This controller action is used to build the search index.
      */
     public function buildAction()

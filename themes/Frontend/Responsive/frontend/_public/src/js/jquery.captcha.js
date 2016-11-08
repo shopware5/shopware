@@ -29,23 +29,35 @@
          */
         init: function () {
             var me = this,
-                $el = me.$el,
-                url = $el.attr('data-src'),
-                $window = $(window);
+                $el = me.$el;
+            me.url = $el.attr('data-src');
+            me.hasError = $el.attr('data-has-error');
 
-            if (!url || !url.length) {
+            if (!me.url || !me.url.length) {
                 return;
             }
 
-            // fix bfcache from caching the captcha/whole rendered page
-            me._on($window, 'unload', function () {});
-            me._on($window, 'pageshow', function (event) {
-                if (event.originalEvent.persisted) {
-                    me.sendRequest(url);
-                }
-            });
+            if (typeof me.hasError !== 'undefined') {
+                window.setTimeout($.proxy(me.sendRequest, me), 1000);
+                return;
+            }
 
-            me.sendRequest(url);
+            me.$form = $el.closest('form');
+            me.$formInputs = me.$form.find(':input:not([name="__csrf_token"], select)');
+            me._on(me.$formInputs, 'focus', $.proxy(me.onInputFocus, me));
+        },
+
+        /**
+         * Triggers _sendRequest and deactivates the focus listeners from input elements
+         *
+         * @private
+         * @method onInputFocus
+         */
+        onInputFocus: function () {
+            var me = this;
+
+            me._off(me.$formInputs, 'focus');
+            me.sendRequest();
         },
 
         /**
@@ -53,18 +65,16 @@
          *
          * @public
          * @method _sendRequest
-         * @param {String} url
          */
-        sendRequest: function (url) {
+        sendRequest: function () {
             var me = this,
                 $el = me.$el;
 
             $.ajax({
-                url: url,
+                url: me.url,
                 cache: false,
                 success: function (response) {
                     $el.html(response);
-
                     $.publish('plugin/swCaptcha/onSendRequestSuccess', [ me ]);
                 }
             });

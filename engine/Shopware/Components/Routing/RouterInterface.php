@@ -32,7 +32,6 @@ namespace Shopware\Components\Routing;
  * @see \Symfony\Component\Routing\UrlMatcherInterface
  * @see \Symfony\Component\Routing\UrlGeneratorInterface
  * @see http://api.symfony.com/2.0/Symfony/Component/Routing/RouterInterface.html
- * @see \Zend_Controller_Router_Interface
  * @see \Enlight_Controller_Router
  * @see http://framework.zend.com/manual/1.12/de/zend.controller.router.html#zend.controller.router.subclassing
  *

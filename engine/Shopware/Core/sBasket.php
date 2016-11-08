@@ -1170,15 +1170,6 @@ class sBasket
             "AmountWithTaxNumeric" => $totalAmountWithTaxNumeric
         );
 
-        $lastArticle = $this->session->get('sLastArticle');
-        if (!empty($lastArticle)) {
-            $result["sLastActiveArticle"] = array(
-                "id" => $lastArticle,
-                "link" => $this->config->get('sBASEFILE')
-                    . "?sViewport=detail&sDetails=" . $lastArticle
-            );
-        }
-
         if (!empty($result["content"])) {
             foreach ($result["content"] as $key => $value) {
                 if (!empty($value['amountWithTax'])) {

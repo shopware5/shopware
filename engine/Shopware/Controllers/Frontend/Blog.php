@@ -403,12 +403,14 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
             }
 
             if (!empty(Shopware()->Config()->CaptchaColor)) {
-                $captcha = str_replace(' ', '', strtolower($this->Request()->sCaptcha));
-                $rand = $this->Request()->getPost('sRand');
-                if (empty($rand) || $captcha != substr(md5($rand), 0, 5)) {
+                /** @var \Shopware\Components\Captcha\CaptchaValidator $captchaValidator */
+                $captchaValidator = $this->container->get('shopware.captcha.validator');
+
+                if (!$captchaValidator->validate($this->Request())) {
                     $sErrorFlag['sCaptcha'] = true;
                 }
             }
+            
             $validator = $this->container->get('validator.email');
             if (!empty(Shopware()->Config()->sOPTINVOTE) && (empty($this->Request()->eMail) || !$validator->isValid($this->Request()->eMail))) {
                 $sErrorFlag['eMail'] = true;

@@ -37,7 +37,7 @@ function smarty_modifier_tax($value, $locale = null)
 
     $format['precision'] = 2;
     if (!$locale) {
-        $format['locale'] = Shopware()->Locale();
+        $format['locale'] = Shopware()->Container()->get('locale');
     } else {
         $format['locale'] = $locale;
     }

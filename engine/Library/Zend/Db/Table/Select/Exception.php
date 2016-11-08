@@ -23,7 +23,6 @@
 /**
  * Zend_Db_Exception
  */
-require_once 'Zend/Db/Select/Exception.php';
 
 /**
  * @category   Zend

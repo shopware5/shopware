@@ -599,7 +599,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
             if ($item->isLeaf() || !$batchModeEnabled) {
                 $needsRebuild = false;
             } else {
-                Shopware()->CategorySubscriber()->disableForNextFlush();
+                Shopware()->Container()->get('categorysubscriber')->disableForNextFlush();
                 $needsRebuild = true;
             }
 

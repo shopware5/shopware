@@ -24,7 +24,6 @@
 /**
  * @see Zend_Http_UserAgent_Storage_Interface
  */
-require_once 'Zend/Http/UserAgent/Storage.php';
 
 
 /**

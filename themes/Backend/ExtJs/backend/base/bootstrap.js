@@ -119,6 +119,7 @@
 {include file='backend/base/model/position_status.js'}
 {include file='backend/base/model/doc_type.js'}
 {include file='backend/base/model/password_encoder.js'}
+{include file='backend/base/model/captcha.js'}
 {include file='backend/base/model/product_box_layout.js'}
 {include file='backend/base/model/page_not_found_destination_options.js'}
 {include file='backend/base/model/attribute_config.js'}
@@ -148,6 +149,7 @@
 {include file='backend/base/store/form.js'}
 {include file='backend/base/store/position_status.js'}
 {include file='backend/base/store/password_encoder.js'}
+{include file='backend/base/store/captcha.js'}
 {include file='backend/base/store/product_box_layout.js'}
 {include file='backend/base/store/page_not_found_destination_options.js'}
 {include file='backend/base/store/attribute_config.js'}

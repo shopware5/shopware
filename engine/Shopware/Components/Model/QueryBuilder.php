@@ -198,6 +198,10 @@ class QueryBuilder extends BaseQueryBuilder
                 }
             }
 
+            if (is_null($where)) {
+                $expression = 'IS NULL';
+            }
+
             $exprParameterKey = ':' . $parameterKey;
             if (is_array($where)) {
                 $exprParameterKey = '('.$exprParameterKey.')' ;

@@ -556,6 +556,10 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
                     var documentStore = order['getReceiptStore'],
                         documents = order.get('documents');
 
+                    if (!documentStore) {
+                        return;
+                    }
+
                     documentStore.removeAll();
                     Ext.each(documents, function(modelData){
                         var model = Ext.create('Shopware.apps.Order.model.Receipt', modelData),

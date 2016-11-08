@@ -672,10 +672,9 @@ class Shop extends ModelEntity
     }
 
     /**
-     * @param null $bootstrap Deprecated since 5.2 will be removed in 5.3
      * @return DetachedShop
      */
-    public function registerResources($bootstrap = null)
+    public function registerResources()
     {
         /** @var Container $container */
         $container = Shopware()->Container();

@@ -967,6 +967,7 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
 
     public function getAvailableHashesAction()
     {
+        /** @var \Shopware\Components\Password\Encoder\PasswordEncoderInterface[] $hashes */
         $hashes = Shopware()->PasswordEncoder()->getCompatibleEncoders();
 
         $result = array();
@@ -992,6 +993,32 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
             'data' => $result,
             'total' => $totalResult,
         ));
+    }
+
+    public function getAvailableCaptchasAction()
+    {
+        /** @var \Shopware\Components\Captcha\CaptchaRepository $captchaManager */
+        $captchaRepository = $this->get('shopware.captcha.repository');
+        /** @var Enlight_Components_Snippet_Namespace $namespace */
+        $namespace = $namespace = Shopware()->Snippets()->getNamespace('backend/captcha/display_names');
+        /** @var \Shopware\Components\Captcha\CaptchaInterface[] $availableCaptchas */
+        $availableCaptchas = $captchaRepository->getList();
+        $result = [];
+
+        foreach ($availableCaptchas as $captcha) {
+            $result[] = [
+                'id' => $captcha->getName(),
+                'displayname' => $namespace->get($captcha->getName(), ucfirst(strtolower($captcha->getName())))
+            ];
+        }
+        
+        $totalResult = count($availableCaptchas);
+
+        $this->View()->assign([
+            'success' => true,
+            'data' => $result,
+            'total' => $totalResult,
+        ]);
     }
 
     /**

@@ -23,12 +23,10 @@
 /**
  * @see Zend_Validate_Abstract
  */
-require_once 'Zend/Validate/Abstract.php';
 
 /**
  * @see Zend_Uri
  */
-require_once 'Zend/Uri.php';
 
 /**
  * Validates whether a given value is valid as a sitemap <loc> value

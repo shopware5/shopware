@@ -82,9 +82,10 @@ class Shopware_Controllers_Frontend_Tellafriend extends Enlight_Controller_Actio
             }
 
             if (!empty(Shopware()->Config()->CaptchaColor)) {
-                $captcha = str_replace(' ', '', strtolower($this->Request()->sCaptcha));
-                $rand = $this->Request()->getPost('sRand');
-                if (empty($rand) || $captcha != substr(md5($rand), 0, 5)) {
+                /** @var \Shopware\Components\Captcha\CaptchaValidator $captchaValidator */
+                $captchaValidator = $this->container->get('shopware.captcha.validator');
+
+                if (!$captchaValidator->validate($this->Request())) {
                     $variables["sError"] = true;
                 }
             }

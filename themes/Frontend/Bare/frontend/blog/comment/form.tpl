@@ -20,7 +20,11 @@
             <div class="blog--comments-form-errors">
             {if $sAction == "rating"}
                 {if isset($sErrorFlag)}
-                    {include file="frontend/_includes/messages.tpl" type="error" content="{s name="BlogInfoFailureFields"}{/s}"}
+                    {if $sErrorFlag['sCaptcha']}
+                        {include file="frontend/_includes/messages.tpl" type="error" content="{s name="BlogInfoFailureCaptcha"}{/s}"}
+                    {else}
+                        {include file="frontend/_includes/messages.tpl" type="error" content="{s name="BlogInfoFailureFields"}{/s}"}
+                    {/if}
                 {else}
                     {if {config name=OptInVote} && !{$smarty.get.sConfirmation} && !{$userLoggedIn}}
                         {include file="frontend/_includes/messages.tpl" type="success" content="{s name="BlogInfoSuccessOptin"}{/s}"}
@@ -101,22 +105,7 @@
 
                 {* Captcha *}
                 {block name='frontend_blog_comments_input_captcha'}
-                    <div class="blog--comments-captcha">
-
-                        {block name='frontend_blog_comments_input_captcha_placeholder'}
-                            <div class="captcha--placeholder" data-src="{url module=widgets controller=Captcha action=refreshCaptcha}"></div>
-                        {/block}
-
-                        {block name='frontend_blog_comments_input_captcha_placeholder'}
-                            <strong class="captcha--notice">{s name="BlogLabelCaptcha"}{/s}</strong>
-                        {/block}
-
-                        {block name='frontend_blog_comments_input'}
-                            <div class="captcha--code">
-                                <input type="text" name="sCaptcha" class="input--field{if $sErrorFlag.sCaptcha} has--error{/if}" required="required" aria-required="true" />
-                            </div>
-                        {/block}
-                    </div>
+                    <div class="captcha--placeholder" data-src="{url module=widgets controller=Captcha action=index}"{if isset($sErrorFlag) && count($sErrorFlag) > 0} data-has-error="true"{/if}></div>
                 {/block}
 
                 {block name='frontend_blog_comments_input_notice'}

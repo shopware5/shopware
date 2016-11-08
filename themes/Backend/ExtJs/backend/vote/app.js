@@ -27,71 +27,33 @@
  * @author shopware AG
  */
 
-/**
- * Shopware Application Vote
- *
- * This is the main-file for the vote-module.
- * It contains all controllers, stores, views and models.
- */
 //{block name="backend/vote/app"}
 Ext.define('Shopware.apps.Vote', {
-	/**
-	* Extends from our special controller, which handles the
-	* sub-application behavior and the event bus
-	* @string
-	*/
-    extend : 'Enlight.app.SubApplication',
-	/**
-	* The name of the module. Used for internal purpose
-	* @string
-	*/
-	name: 'Shopware.apps.Vote',
+    extend: 'Enlight.app.SubApplication',
+
+    name:'Shopware.apps.Vote',
+
+    loadPath: '{url action=load}',
+    bulkLoad: true,
+
+    controllers: [ 'Main' ],
 
     views: [
-        'main.Window',
-        'vote.Window',
-        'vote.List',
-        'vote.Edit',
-        'vote.Detail',
-        'vote.Toolbar',
-        'vote.Infopanel'
+        'PointHelper',
+        'list.Window',
+        'list.Vote',
+        'list.extensions.Info',
+        'list.extensions.Filter',
+        'list.Progress',
+        'detail.Vote',
+        'detail.Window'
     ],
-    stores: ['Votes'],
-    models: ['Vote'],
 
+    models: ['Vote', 'AcceptResponse'],
+    stores: ['Vote'],
 
-	/**
-	* Sets the loading path for the sub-application.
-	*
-	* Note that you'll need a "loadAction" in your
-	* controller (server-side)
-	* @string
-	*/
-    loadPath : '{url controller="vote" action=load}',
-    bulkLoad: true,
-	/**
-	* Requires controllers for sub-application
-	* @array
-	*/
-    controllers : ['Main', 'Vote'],
-        /**
-     * Returns the main application window for this is expected
-     * by the Enlight.app.SubApplication class.
-     * The class sets a new event listener on the "destroy" event of
-     * the main application window to perform the destroying of the
-     * whole sub application when the user closes the main application window.
-     *
-     * This method will be called when all dependencies are solved and
-     * all member controllers, models, views and stores are initialized.
-     *
-     * @private
-     * @return [object] mainWindow - the main application window based on Enlight.app.Window
-     */
     launch: function() {
-        var me = this,
-            mainController = me.getController('Main');
-
-        return mainController.mainWindow;
+        return this.getController('Main').mainWindow;
     }
 });
 //{/block}

@@ -59,25 +59,11 @@
 			<textarea name="sVoteComment" placeholder="{s name="DetailCommentPlaceholderText"}{/s}" cols="3" rows="2" class="review--field{if $sErrorFlag.sVoteComment} has--error{/if}">{$sFormData.sVoteComment|escape}</textarea>
 		{/block}
 
+
+
 		{* Captcha *}
 		{block name='frontend_detail_comment_input_captcha'}
-			<div class="review--captcha">
-
-				{* Deferred loading of the captcha image *}
-				{block name='frontend_detail_comment_input_captcha_placeholder'}
-					<div class="captcha--placeholder" data-src="{url module=widgets controller=Captcha action=refreshCaptcha}"></div>
-				{/block}
-
-				{block name='frontend_detail_comment_input_captcha_label'}
-					<strong class="captcha--notice">{s name="DetailCommentLabelCaptcha"}{/s}</strong>
-				{/block}
-
-				{block name='frontend_detail_comment_input_captcha_code'}
-					<div class="captcha--code">
-						<input type="text" name="sCaptcha" class="review--field{if $sErrorFlag.sCaptcha} has--error{/if}" required="required" aria-required="true" />
-					</div>
-				{/block}
-			</div>
+			<div class="captcha--placeholder" data-src="{url module=widgets controller=Captcha action=index}"{if isset($sErrorFlag) && count($sErrorFlag) > 0} data-has-error="true"{/if}></div>
 		{/block}
 
 		{* Notice that all fields which contains a star symbole needs to be filled out *}

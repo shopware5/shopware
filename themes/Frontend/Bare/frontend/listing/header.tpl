@@ -44,7 +44,11 @@
 {* Canonical link *}
 {block name='frontend_index_header_canonical'}
     {* Count of available product pages *}
-    {$pages = ceil($sNumberArticles / $criteria->getLimit())}
+    {$pages = 1}
+
+    {if $criteria}
+        {$pages = ceil($sNumberArticles / $criteria->getLimit())}
+    {/if}
 
     {if {config name=seoIndexPaginationLinks} && $showListing && $pages > 1}
         {* Previous rel tag *}
@@ -76,11 +80,4 @@
 
 {* RSS and Atom feeds *}
 {block name="frontend_index_header_feeds"}
-{/block}
-
-{* Google optimized crawling *}
-{block name='frontend_index_header_meta_tags' append}
-    {if $hasEmotion && !$hasEscapedFragment}
-        <meta name="fragment" content="!">
-    {/if}
 {/block}

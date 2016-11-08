@@ -34,14 +34,6 @@
             availableDevices: null,
 
             /**
-             * Show or hide the listing on category pages.
-             *
-             * @property showListing
-             * @type {boolean}
-             */
-            showListing: false,
-
-            /**
              * Configuration object to map device types to IDs.
              *
              * @property deviceTypes
@@ -62,23 +54,6 @@
              * @type {string}
              */
             wrapperSelector: '.emotion--wrapper',
-
-            /**
-             * The DOM selector of the fallback content
-             * if no emotion world is available.
-             *
-             * @property fallbackContentSelector
-             * @type {string}
-             */
-            fallbackContentSelector: '.listing--wrapper',
-
-            /**
-             * The DOM selector of the show listing link.
-             *
-             * @property showListingSelector
-             * @type {string}
-             */
-            showListingSelector: '.emotion--show-listing',
 
             /**
              * The DOM selector for the loading overlay.
@@ -105,20 +80,9 @@
             }
 
             me.$emotion = false;
-
-            me.$siblings = me.$el.siblings(opts.wrapperSelector);
-
-            me.hasSiblings = (me.$siblings.length > 0);
             me.availableDevices = (opts.availableDevices + '').split(',');
 
-            me.$fallbackContent = $(opts.fallbackContentSelector);
-            me.$showListingLink = $(opts.showListingSelector);
-
             me.$overlay = $(me.opts.loadingOverlaySelector);
-
-            if (!opts.showListing) {
-                me.hideFallbackContent();
-            }
 
             me.loadEmotion();
             me.registerEvents();
@@ -162,42 +126,27 @@
                 state = deviceState || StateManager.getCurrentState();
 
             /**
-             * If the emotion world is not defined for the current device,
-             * hide the wrapper element and show the default content.
+             * Hide the emotion world if it is not defined for the current device.
              */
             if (devices.indexOf(types[state]) === -1) {
-                var hasSameDeviceSibling = false;
-
+                me.$overlay.remove();
                 me.hideEmotion();
-
-                me.$siblings.each(function(index, el) {
-                    var devices = $(el).attr('data-availabledevices');
-
-                    if (devices.indexOf(types[state]) !== -1) {
-                        hasSameDeviceSibling = true;
-                    }
-                });
-
-                if (!hasSameDeviceSibling) me.showFallbackContent();
                 return;
             }
 
             /**
-             * If the plugin is not configured correctly show the default content.
+             * Return if the plugin is not configured correctly.
              */
             if (!devices.length || !state.length || !url.length) {
+                me.$overlay.remove();
                 me.hideEmotion();
-                me.showFallbackContent();
                 return;
             }
 
             /**
              * If the emotion world was already loaded show it.
              */
-            if (me.$emotion.length) {
-
-                (me.opts.showListing) ? me.showFallbackContent() : me.hideFallbackContent();
-
+            if (me.$emotion && me.$emotion.length) {
                 me.$overlay.remove();
                 me.showEmotion();
                 return;
@@ -227,11 +176,8 @@
 
                     if (!response.length) {
                         me.hideEmotion();
-                        me.showFallbackContent();
                         return;
                     }
-
-                    (me.opts.showListing) ? me.showFallbackContent() : me.hideFallbackContent();
 
                     me.initEmotion(response);
 
@@ -255,7 +201,6 @@
             me.$emotion = me.$el.find('*[data-emotion="true"]');
 
             if (!me.$emotion.length) {
-                me.showFallbackContent();
                 return;
             }
 
@@ -284,36 +229,6 @@
             me.$el.css('display', 'none');
 
             $.publish('plugin/swEmotionLoader/onHideEmotion', [ me ]);
-        },
-
-        /**
-         * Shows the fallback content.
-         */
-        showFallbackContent: function() {
-            var me = this;
-
-            me.$fallbackContent.removeClass('is--hidden');
-            me.$showListingLink.addClass('is--hidden');
-
-            me.$overlay.remove();
-
-            StateManager.updatePlugin('*[data-infinite-scrolling="true"]', 'swInfiniteScrolling');
-
-            $.publish('plugin/swEmotionLoader/onShowFallbackContent', [ me ]);
-        },
-
-        /**
-         * Hides the fallback content.
-         */
-        hideFallbackContent: function() {
-            var me = this;
-
-            me.$fallbackContent.addClass('is--hidden');
-            me.$showListingLink.removeClass('is--hidden');
-
-            StateManager.updatePlugin('*[data-infinite-scrolling="true"]', 'swInfiniteScrolling');
-
-            $.publish('plugin/swEmotionLoader/onHideFallbackContent', [ me ]);
         },
 
         /**

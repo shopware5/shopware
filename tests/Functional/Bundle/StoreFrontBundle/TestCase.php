@@ -241,14 +241,15 @@ class TestCase extends \Enlight_Components_Test_TestCase
     }
 
     /**
+     * @param int $shopId
      * @return TestContext
      */
-    protected function getContext()
+    protected function getContext($shopId = 1)
     {
         $tax = $this->helper->createTax();
         $customerGroup = $this->helper->createCustomerGroup();
 
-        $shop = $this->helper->getShop();
+        $shop = $this->helper->getShop($shopId);
 
         return $this->helper->createContext(
             $customerGroup,

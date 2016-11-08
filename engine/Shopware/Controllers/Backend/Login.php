@@ -132,7 +132,7 @@ class Shopware_Controllers_Backend_Login extends Shopware_Controllers_Backend_Ex
      */
     public function getLocalesAction()
     {
-        $current = Shopware()->Locale();
+        $current = Shopware()->Container()->get('locale');
         $locales = $this->getPlugin()->getLocales();
         $locales = Shopware()->Db()->quote($locales);
         $sql = 'SELECT id, locale FROM s_core_locales WHERE id IN (' . $locales . ')';

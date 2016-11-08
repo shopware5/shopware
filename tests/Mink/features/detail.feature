@@ -18,7 +18,6 @@ Feature: Detail page
             | sVoteStars   | 1 sehr schlecht |
             | sVoteSummary | Neue Bewertung  |
             | sVoteComment | Hallo Welt      |
-            | sCaptcha     | 123456          |
         And  I click the link in my latest email
         And  the shop owner activates my latest evaluation
 
@@ -63,7 +62,6 @@ Feature: Detail page
             | sVoteStars   | 3               |
             | sVoteSummary | Neue Bewertung  |
             | sVoteComment | Hallo Welt      |
-            | sCaptcha     | 123456          |
         Then  I should not see "Bitte füllen Sie alle rot markierten Felder aus"
         But   I should see "Vielen Dank für die Abgabe Ihrer Bewertung! Sie erhalten in wenigen Minuten eine Bestätigungs-E-Mail. Bestätigen Sie den Link in dieser E-Mail um die Bewertung freizugeben."
         But   I should not see "Hallo Welt"
@@ -137,6 +135,7 @@ Feature: Detail page
     Scenario: The customer evaluation form has a captcha
         Given I am on the detail page for article 167
         Then  I should see "Sonnenbrille Speed Eyes"
+        When  I open the evaluation form
         And   I should see a captcha
 
     @basePrice

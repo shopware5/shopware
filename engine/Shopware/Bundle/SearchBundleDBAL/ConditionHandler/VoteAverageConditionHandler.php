@@ -38,6 +38,19 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 class VoteAverageConditionHandler implements ConditionHandlerInterface
 {
     /**
+     * @var \Shopware_Components_Config
+     */
+    private $config;
+
+    /**
+     * @param \Shopware_Components_Config $config
+     */
+    public function __construct(\Shopware_Components_Config $config)
+    {
+        $this->config = $config;
+    }
+
+    /**
      * Checks if the passed condition can be handled by this class.
      *
      * @param ConditionInterface $condition
@@ -56,9 +69,16 @@ class VoteAverageConditionHandler implements ConditionHandlerInterface
         QueryBuilder $query,
         ShopContextInterface $context
     ) {
+        $shopCondition = '';
+        if ($this->config->get('displayOnlySubShopVotes')) {
+            $shopCondition = ' AND (vote.shop_id = :voteAverageShopId OR vote.shop_id IS NULL)';
+            $query->setParameter(':voteAverageShopId', $context->getShop()->getId());
+        }
+
         $table = '
 SELECT SUM(vote.points) / COUNT(vote.id) AS average, vote.articleID AS product_id
 FROM s_articles_vote vote
+WHERE vote.active = 1 ' . $shopCondition . '
 GROUP BY vote.articleID';
 
         $query->innerJoin(

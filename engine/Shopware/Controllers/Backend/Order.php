@@ -22,6 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
+use Doctrine\DBAL\Connection;
 use Shopware\Components\CSRFWhitelistAware;
 use Shopware\Models\Order\Order as Order;
 use Shopware\Models\Order\Billing as Billing;
@@ -333,8 +334,8 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         //read store parameter to filter and paginate the data.
         $limit = $this->Request()->getParam('limit', 20);
         $offset = $this->Request()->getParam('start', 0);
-        $sort = $this->Request()->getParam('sort', null);
-        $filter = $this->Request()->getParam('filter', null);
+        $sort = $this->Request()->getParam('sort', []);
+        $filter = $this->Request()->getParam('filter', []);
         $orderId = $this->Request()->getParam('orderID');
 
         if (!is_null($orderId)) {
@@ -344,7 +345,9 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
             }
             array_push($filter, $orderIdFilter);
         }
+
         $list = $this->getList($filter, $sort, $offset, $limit);
+
         $this->View()->assign($list);
     }
 
@@ -359,44 +362,51 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
     {
         $sort = $this->resolveSortParameter($sort);
 
-        $query = $this->getRepository()->getBackendOrdersQuery($filter, $sort, $offset, $limit);
 
-        $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+        $searchResult = $this->getRepository()->search($offset, $limit, $filter, $sort);
 
-        $paginator = $this->getModelManager()->createPaginator($query);
+        $total = $searchResult['total'];
 
-        //returns the total count of the query
-        $total = $paginator->count();
+        $ids = array_column($searchResult['orders'], 'id');
 
-        //returns the customer data
-        $orders = $paginator->getIterator()->getArrayCopy();
+        $orders = $this->getRepository()->getList($ids);
+        $documents = $this->getRepository()->getDocuments($ids);
+        $details = $this->getRepository()->getDetails($ids);
+        $payments = $this->getRepository()->getPayments($ids);
 
-        $namespace = Shopware()->Container()->get('snippets')->getNamespace('frontend/salutation');
+        $orders = $this->assignAssociation($orders, $documents, 'documents');
+        $orders = $this->assignAssociation($orders, $details, 'details');
+        $orders = $this->assignAssociation($orders, $payments, 'paymentInstances');
+
+        $orders = array_values($orders);
+
+        /** @var Enlight_Components_Snippet_Namespace $namespace */
+        $namespace = $this->get('snippets')->getNamespace('frontend/salutation');
+
+        $numbers = [];
+        foreach ($orders as $order) {
+            $temp = array_column($order["details"], 'articleNumber');
+            $numbers = array_merge($numbers, (array) $temp);
+        }
+        $stocks = $this->getVariantsStock($numbers);
 
         foreach ($orders as $key => $order) {
-            $additionalOrderDataQuery = $this->getRepository()->getBackendAdditionalOrderDataQuery($order['number']);
-            $additionalOrderData = $additionalOrderDataQuery->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
-
-            $order = array_merge($order, $additionalOrderData);
             $order['locale']= $order['languageSubShop']['locale'];
 
             //Deprecated: use payment instance
             $order['debit'] = $order['customer']['debit'];
-
             $order['customerEmail'] = $order['customer']['email'];
-
             $order['billing']['salutationSnippet'] = $namespace->get($order['billing']['salutation']);
             $order['shipping']['salutationSnippet'] = $namespace->get($order['shipping']['salutation']);
 
-            //find the instock of the article
             foreach ($order["details"] as &$orderDetail) {
-                $articleRepository = Shopware()->Models()->getRepository('Shopware\Models\Article\Detail');
-                $article = $articleRepository->findOneBy(array('number' => $orderDetail["articleNumber"]));
-                if ($article instanceof \Shopware\Models\Article\Detail) {
-                    $orderDetail['inStock'] = $article->getInStock();
+                $number = $orderDetail["articleNumber"];
+                $orderDetail['inStock'] = 0;
+                if (!isset($stocks[$number])) {
+                    continue;
                 }
+                $orderDetail['inStock'] = $stocks[$number];
             }
-
             $orders[$key] = $order;
         }
 
@@ -449,36 +459,23 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
     }
 
     /**
-     * Returns the order ids for the list query.
-     * @param $id
-     * @param $filter
-     * @param $sort
-     * @param $limit
-     * @param $offset
-     * @return array
+     * @param array[] $orders
+     * @param array[] $associations
+     * @param string $arrayKey
+     * @return array[]
      */
-    private function getListIds($id, $filter, $sort, $limit, $offset)
+    private function assignAssociation($orders, $associations, $arrayKey)
     {
-        if ($id === null) {
-            //Doctrine has problems to limit queries with 1:n or n:m association, so first we
-            //create an query which selects only the founded order ids for the passed list parameters.
-            $idQuery = $this->getRepository()->getListIdsQuery($filter, $sort, $offset, $limit);
-            $totalResult = Shopware()->Models()->getQueryCount($idQuery);
-            $idResult = $idQuery->getArrayResult();
-
-            //iterate id query result an create a one dimension array of ids
-            $ids = array();
-            foreach ($idResult as $id) {
-                $ids[] = $id['id'];
-            }
-        } else {
-            $ids = array($id);
-            $totalResult = 1;
+        foreach ($orders as &$order) {
+            $order[$arrayKey] = [];
         }
-        return array(
-            'ids' => $ids,
-            'totalResult' => $totalResult
-        );
+
+        foreach ($associations as $association) {
+            $id = $association['orderId'];
+            $orders[$id][$arrayKey][] = $association;
+        }
+
+        return $orders;
     }
 
     /**
@@ -1485,5 +1482,19 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         } else {
             return array();
         }
+    }
+
+    /**
+     * @param string[] $numbers
+     * @return array
+     */
+    private function getVariantsStock(array $numbers)
+    {
+        $query = Shopware()->Container()->get('dbal_connection')->createQueryBuilder();
+        $query->select(['variant.ordernumber', 'variant.instock']);
+        $query->from('s_articles_details', 'variant');
+        $query->where('variant.ordernumber IN (:numbers)');
+        $query->setParameter(':numbers', $numbers, Connection::PARAM_STR_ARRAY);
+        return $query->execute()->fetchAll(PDO::FETCH_KEY_PAIR);
     }
 }
