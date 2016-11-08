@@ -26,6 +26,7 @@ namespace   Shopware\Models\Dispatch;
 
 use Doctrine\ORM\Query\Expr\Join;
 use Shopware\Components\Model\ModelRepository;
+use Shopware\Components\Model\QueryBuilder;
 use Shopware\Models\Customer;
 
 /**
@@ -62,15 +63,10 @@ class Repository extends ModelRepository
      */
     public function getDispatchesQueryBuilder($filter = null, $order = null)
     {
+        /** @var QueryBuilder $builder */
         $builder = $this->getEntityManager()->createQueryBuilder();
-        $builder->select(array(
-            'id' => 'dispatches.id',
-            'name' => 'dispatches.name',
-            'type' => 'dispatches.type',
-            'comment' => 'dispatches.comment',
-            'active' => 'dispatches.active',
-            'position' => 'dispatches.position'
-        ));
+        $builder->select('dispatches');
+        $builder->setAlias('dispatches');
         $builder->from('Shopware\Models\Dispatch\Dispatch', 'dispatches');
 
         if (!empty($filter)) {
@@ -79,6 +75,7 @@ class Repository extends ModelRepository
         if (!empty($order)) {
             $builder->addOrderBy($order);
         }
+
         return $builder;
     }
 

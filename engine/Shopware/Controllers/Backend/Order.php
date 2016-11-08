@@ -362,7 +362,6 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
     {
         $sort = $this->resolveSortParameter($sort);
 
-
         $searchResult = $this->getRepository()->search($offset, $limit, $filter, $sort);
 
         $total = $searchResult['total'];
@@ -378,8 +377,6 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         $orders = $this->assignAssociation($orders, $details, 'details');
         $orders = $this->assignAssociation($orders, $payments, 'paymentInstances');
 
-        $orders = array_values($orders);
-
         /** @var Enlight_Components_Snippet_Namespace $namespace */
         $namespace = $this->get('snippets')->getNamespace('frontend/salutation');
 
@@ -390,7 +387,13 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         }
         $stocks = $this->getVariantsStock($numbers);
 
-        foreach ($orders as $key => $order) {
+        $result = [];
+        foreach ($ids as $id) {
+            if (!array_key_exists($id, $orders)) {
+                continue;
+            }
+            $order = $orders[$id];
+
             $order['locale']= $order['languageSubShop']['locale'];
 
             //Deprecated: use payment instance
@@ -407,12 +410,12 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
                 }
                 $orderDetail['inStock'] = $stocks[$number];
             }
-            $orders[$key] = $order;
+            $result[] = $order;
         }
 
         return array(
             'success' => true,
-            'data' => $orders,
+            'data' => $result,
             'total' => $total
         );
     }
