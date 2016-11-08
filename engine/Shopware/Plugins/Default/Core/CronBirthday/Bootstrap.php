@@ -69,8 +69,8 @@ class Shopware_Plugins_Core_CronBirthday_Bootstrap extends Shopware_Components_P
                 customergroup,
                 language,
                 subshopID
-            FROM s_user u, s_user_billingaddress ub
-            LEFT JOIN s_user_billingaddress_attributes at
+            FROM s_user u, s_user_addresses ub
+            LEFT JOIN s_user_addresses_attributes at
             ON at.billingID = ub.id
             WHERE accountmode = 0
             AND active = 1

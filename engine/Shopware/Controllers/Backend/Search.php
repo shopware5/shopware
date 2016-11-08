@@ -316,17 +316,17 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
         $search = Shopware()->Db()->quote("%$search%");
 
         $sql = "
-            SELECT userID as id,
+            SELECT b.user_id as id,
             IF(b.company != '', b.company, CONCAT(u.firstname, ' ', u.lastname)) as name,
             CONCAT(street, ' ', zipcode, ' ', city) as description
-            FROM s_user_billingaddress b, s_user u
+            FROM s_user_addresses b, s_user u
             WHERE (
                 email LIKE $search
                 OR u.customernumber LIKE $search2
                 OR TRIM(CONCAT(b.company,' ', b.department)) LIKE $search
                 OR TRIM(CONCAT(b.firstname,' ',b.lastname)) LIKE $search
             )
-            AND u.id = b.userID
+            AND u.id = b.user_id
             GROUP BY u.id
             ORDER BY name ASC
         ";

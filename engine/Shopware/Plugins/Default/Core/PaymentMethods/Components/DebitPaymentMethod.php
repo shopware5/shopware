@@ -137,8 +137,8 @@ class DebitPaymentMethod extends GenericPaymentMethod
             ->getQuery()
             ->getSingleScalarResult();
 
-        $addressData = Shopware()->Models()->getRepository('Shopware\Models\Customer\Billing')->
-            getUserBillingQuery($userId)->getOneOrNullResult(AbstractQuery::HYDRATE_ARRAY);
+        $addressData = Shopware()->Models()->getRepository('Shopware\Models\Customer\Customer')
+            ->find($userId)->getDefaultBillingAddress();
 
         $debitData = $this->getCurrentPaymentDataAsArray($userId);
 
@@ -147,11 +147,11 @@ class DebitPaymentMethod extends GenericPaymentMethod
             'payment_mean_id' => $paymentId,
             'order_id' => $orderId,
             'user_id' => $userId,
-            'firstname' => $addressData['firstName'],
-            'lastname' => $addressData['lastName'],
-            'address' => $addressData['street'],
-            'zipcode' => $addressData['zipCode'],
-            'city' => $addressData['city'],
+            'firstname' => $addressData->getFirstname(),
+            'lastname' => $addressData->getLastname(),
+            'address' => $addressData->getStreet(),
+            'zipcode' => $addressData->getZipcode(),
+            'city' => $addressData->getCity(),
             'account_number' => $debitData['sDebitAccount'],
             'bank_code' => $debitData['sDebitBankcode'],
             'bank_name' => $debitData['sDebitBankName'],

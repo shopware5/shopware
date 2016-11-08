@@ -73,19 +73,19 @@ class GenericPaymentMethod extends BasePaymentMethod
             ->getQuery()
             ->getSingleScalarResult();
 
-        $addressData = Shopware()->Models()->getRepository('Shopware\Models\Customer\Billing')
-            ->getUserBillingQuery($userId)->getOneOrNullResult(AbstractQuery::HYDRATE_ARRAY);
+        $addressData = Shopware()->Models()->getRepository('Shopware\Models\Customer\Customer')
+            ->find($userId)->getDefaultBillingAddress();
 
         $date = new \DateTime();
         $data = array(
             'payment_mean_id' => $paymentId,
             'order_id' => $orderId,
             'user_id' => $userId,
-            'firstname' => $addressData['firstName'],
-            'lastname' => $addressData['lastName'],
-            'address' => $addressData['street'],
-            'zipcode' => $addressData['zipCode'],
-            'city' => $addressData['city'],
+            'firstname' => $addressData->getFirstname(),
+            'lastname' => $addressData->getLastname(),
+            'address' => $addressData->getStreet(),
+            'zipcode' => $addressData->getZipcode(),
+            'city' => $addressData->getCity(),
             'amount' => $orderAmount,
             'created_at' => $date->format('Y-m-d')
         );

@@ -28,7 +28,7 @@ use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @deprecated Since 5.2 removed in 5.3 use \Shopware\Models\Customer\Address
+ * @deprecated Since 5.2 removed in 5.4 use \Shopware\Models\Customer\Address
  * Shopware customer shipping model represents a single shipping address of a customer.
  *
  * The Shopware customer shipping model represents a row of the s_user_shippingaddress table.

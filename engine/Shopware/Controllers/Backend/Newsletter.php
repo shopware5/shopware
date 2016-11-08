@@ -656,8 +656,8 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
             LEFT JOIN s_user u
             ON u.email=cm.email
             AND u.accountmode=0
-            LEFT JOIN s_user_billingaddress ub
-            ON ub.userID=u.id
+            LEFT JOIN s_user_addresses ub
+            ON ub.user_id=u.id
             WHERE cm.email=?
         ';
         $user = Shopware()->Db()->fetchRow($sql, array($email));
@@ -673,8 +673,8 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
                 LEFT JOIN s_user u
                 ON u.email=cm.email
                 AND u.accountmode=0
-                LEFT JOIN s_user_billingaddress ub
-                ON ub.userID=u.id
+                LEFT JOIN s_user_addresses ub
+                ON ub.user_id=u.id
                 LIMIT 1
             ';
             $user = Shopware()->Db()->fetchRow($sql);

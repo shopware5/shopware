@@ -30,9 +30,7 @@ use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Country\Country;
 use Shopware\Models\Customer\Address;
-use Shopware\Models\Customer\Billing;
 use Shopware\Models\Customer\Customer;
-use Shopware\Models\Customer\Shipping;
 
 /**
  * Class AddressServiceTest
