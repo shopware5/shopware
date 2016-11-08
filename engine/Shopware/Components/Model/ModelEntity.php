@@ -185,10 +185,10 @@ abstract class ModelEntity
             $this->$getterFunction()->clear();
             return $this;
         }
-        // if \Doctrine\Common\Collections\ArrayCollection
-		if($data instanceof \Doctrine\Common\Collections\ArrayCollection){
-			$data = $data.toArray();
-		}
+        //if \Doctrine\Common\Collections\ArrayCollection
+        if($data instanceof \Doctrine\Common\Collections\ArrayCollection){
+            $data = $data->toArray();
+        }
         //if no array passed or if false passed, return
         if (!is_array($data)) {
             return $this;
