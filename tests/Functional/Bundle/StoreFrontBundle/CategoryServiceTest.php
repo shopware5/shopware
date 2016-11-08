@@ -28,7 +28,7 @@ class CategoryServiceTest extends TestCase
 
         $categories = array_values($categories);
         $this->assertEquals($second->getId(), $categories[0]->getId());
-        $this->assertEquals($third->getId(),  $categories[1]->getId());
+        $this->assertEquals($third->getId(), $categories[1]->getId());
         $this->assertEquals($fourth->getId(), $categories[2]->getId());
     }
 
