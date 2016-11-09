@@ -139,6 +139,7 @@ This changelog references changes done in Shopware 5.3 patch versions.
     - `Shopware()/Enlight()->CorePath()`
     - `Shopware()/Enlight()->ComponentsPath()`
     - `Shopware()/Enlight()->Path()`
+* Removed parameter `$checkProxy` from `Enlight_Controller_Request_Request::getClientIp()`
     
 ### Deprecations
 

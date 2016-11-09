@@ -313,16 +313,11 @@ class Enlight_Controller_Request_RequestTestCase extends Enlight_Controller_Requ
     /**
      * Sets HTTP client method
      * @param      $ip
-     * @param bool $setProxy
      * @return Enlight_Controller_Request_RequestTestCase
      */
-    public function setClientIp($ip, $setProxy = true)
+    public function setClientIp($ip)
     {
-        if ($setProxy) {
-            $this->setHeader('CLIENT_IP', $ip);
-        } else {
-            $this->setServer('REMOTE_ADDR', $ip);
-        }
+        $this->setServer('REMOTE_ADDR', $ip);
 
         return $this;
     }

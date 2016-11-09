@@ -1117,16 +1117,8 @@ class Enlight_Controller_Request_RequestHttp implements Enlight_Controller_Reque
     /**
      * {@inheritdoc}
      */
-    public function getClientIp($checkProxy = false)
+    public function getClientIp()
     {
-        if ($checkProxy && $this->getServer('HTTP_CLIENT_IP') != null) {
-            $ip = $this->getServer('HTTP_CLIENT_IP');
-        } elseif ($checkProxy && $this->getServer('HTTP_X_FORWARDED_FOR') != null) {
-            $ip = $this->getServer('HTTP_X_FORWARDED_FOR');
-        } else {
-            $ip = $this->getServer('REMOTE_ADDR');
-        }
-
-        return $ip;
+        return $this->getServer('REMOTE_ADDR');
     }
 }
