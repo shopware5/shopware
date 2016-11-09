@@ -337,7 +337,7 @@ class Repository extends ModelRepository
      */
     protected function sortListQuery($builder, $sortings)
     {
-        if (!empty($sortings)) {
+        if (empty($sortings)) {
             return $builder;
         }
 
@@ -601,8 +601,6 @@ class Repository extends ModelRepository
         if ($limit !== null) {
             $builder->setMaxResults($limit);
         }
-
-
         $query = $builder->getQuery();
         $query->setHydrationMode(AbstractQuery::HYDRATE_ARRAY);
         $paginator = $em->createPaginator($query);
