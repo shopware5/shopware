@@ -126,6 +126,7 @@ class Shopware_Controllers_Backend_Site extends Shopware_Controllers_Backend_Ext
             try {
                 //call the getSitesByNodeName helper function, which will return an array containing all children of that node
                 $sites = $this->getSitesByNodeName($node);
+
                 //hand that array to the view
                 $this->View()->assign(array('success' => true, 'nodes' => $sites));
             } catch (Exception $e) {
@@ -389,8 +390,6 @@ class Shopware_Controllers_Backend_Site extends Shopware_Controllers_Backend_Ext
         //this was a javascript array
         //change it back to the actual db format
         $params['grouping'] = str_replace(",", "|", $params['grouping']);
-
-        $params['shopIds'] = array_filter($params['shopIds']) ? '|' . implode('|', $params['shopIds']) . '|' : null;
 
         //check whether we create a new site or are updating one
         //also, check if we have the necessary rights
