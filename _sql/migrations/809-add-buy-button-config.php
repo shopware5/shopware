@@ -9,10 +9,6 @@ class Migrations_Migration809 extends AbstractMigration
      */
     public function up($modus)
     {
-        if ($modus === AbstractMigration::MODUS_UPDATE) {
-            return;
-        }
-
         $this->addSql("SET @formId = (select id from s_core_config_forms WHERE name = 'Frontend30' LIMIT 1);");
 
         $sql = <<<EOD
@@ -25,7 +21,6 @@ EOD;
 SET @elementID = (SELECT id FROM s_core_config_elements WHERE form_id=@formId AND `name`='displayListingBuyButton');
 INSERT IGNORE INTO s_core_config_element_translations (element_id, locale_id, label, description) VALUES (@elementID, 2, 'Display buy button in listing', '');
 EOD;
-        ;
 
         $this->addSql($sql);
     }

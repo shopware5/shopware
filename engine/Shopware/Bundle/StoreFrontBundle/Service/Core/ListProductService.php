@@ -170,7 +170,7 @@ class ListProductService implements Service\ListProductServiceInterface
 
             $this->priceCalculationService->calculateProduct($product, $context);
 
-            $product->setAllowBuyInListing(!$product->hasConfigurator() && !$product->hasDifferentPrices() && $product->isAvailable());
+            $product->setAllowBuyInListing($this->allowBuyInListing($product));
             $product->setListingPrice($product->getCheapestUnitPrice());
             $product->setDisplayFromPrice((count($product->getPrices()) > 1 || $product->hasDifferentPrices()));
 
@@ -185,7 +185,6 @@ class ListProductService implements Service\ListProductServiceInterface
 
         return $result;
     }
-
 
     /**
      * Checks if the provided product is allowed to display in the store front for
@@ -215,5 +214,17 @@ class ListProductService implements Service\ListProductServiceInterface
         }, $product->getCategories());
 
         return in_array($context->getShop()->getCategory()->getId(), $ids);
+    }
+
+    /**
+     * @param Struct\ListProduct $product
+     * @return bool
+     */
+    private function allowBuyInListing(Struct\ListProduct $product)
+    {
+        return !$product->hasConfigurator()
+            && !$product->hasDifferentPrices()
+            && $product->isAvailable()
+            && $product->getUnit()->getMinPurchase() <= 1;
     }
 }

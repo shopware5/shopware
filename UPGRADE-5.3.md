@@ -19,6 +19,7 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Added method `Shopware\Models\Order\Repository::getDetails()`
 * Added method `Shopware\Models\Order\Repository::getPayments()`
 * Added responsive helper css/less classes in `_mixins/visibility-helper.less`
+* Added `displayListingBuyButton` config to display listing buy button
 
 ### Changes
 
