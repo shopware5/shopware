@@ -26,7 +26,7 @@ This changelog references changes done in Shopware 5.2 patch versions.
 * Added `Shopware\Components\Emotion\ComponentInstaller` class to install emotion components in plugins.
 * Added `\Shopware\Components\Emotion\EmotionComponentViewSubscriber` to register emotion widget templates 
 * Added `plugin_dir` and `plugin_name` container parameter for each plugin. Parameters are prefixed by `\Shopware\Components\Plugin::getContainerPrefix`
-
+* Deprecated parameter `$checkProxy` from `Enlight_Controller_Request_Request::getClientIp()`
 
 ## 5.2.9
 
