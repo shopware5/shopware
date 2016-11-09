@@ -3,9 +3,10 @@
 {* Constants for the different basket item types *}
 {$IS_PRODUCT = 0}
 {$IS_PREMIUM_PRODUCT = 1}
-{$IS_VOUCHER = 2}
+{$IS_VOUCHER_STATIONARY = 2}
 {$IS_REBATE = 3}
 {$IS_SURCHARGE_DISCOUNT = 4}
+{$IS_VOUCHER_DYNAMIC = 5}
 
 {if $sBasketItem.additional_details.sConfigurator}
     {$detailLink={url controller=detail sArticle=$sBasketItem.articleID number=$sBasketItem.ordernumber}}
@@ -58,7 +59,7 @@
 
             {* Voucher *}
             {block name='frontend_checkout_ajax_cart_articleimage_badge_voucher'}
-                {if $basketItem.modus == $IS_VOUCHER}
+                {if $sBasketItem.modus == $IS_VOUCHER_STATIONARY || $sBasketItem.modus == $IS_VOUCHER_DYNAMIC}
                     <div class="basket--badge">
                         <i class="icon--coupon"></i>
                     </div>
