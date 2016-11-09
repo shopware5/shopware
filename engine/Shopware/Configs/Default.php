@@ -18,6 +18,7 @@ return array_replace_recursive([
     'cdn' => [
         'backend' => 'local',
         'strategy' => 'md5',
+        'liveMigration' => false,
         'adapters' => [
             'local' => [
                 'type' => 'local',
