@@ -86,7 +86,7 @@ class MediaService implements MediaServiceInterface
      */
     public function read($path)
     {
-        $this->migrateFile($path);
+        $this->migrateFileLive($path);
         $path = $this->strategy->encode($path);
 
         return $this->filesystem->read($path);
@@ -97,7 +97,7 @@ class MediaService implements MediaServiceInterface
      */
     public function readStream($path)
     {
-        $this->migrateFile($path);
+        $this->migrateFileLive($path);
         $path = $this->strategy->encode($path);
 
         return $this->filesystem->readStream($path);
@@ -116,7 +116,7 @@ class MediaService implements MediaServiceInterface
             return $this->mediaUrl . $path;
         }
 
-        $this->migrateFile($path);
+        $this->migrateFileLive($path);
         $path = $this->strategy->encode($path);
 
         return $this->mediaUrl . $path;
@@ -155,7 +155,7 @@ class MediaService implements MediaServiceInterface
      */
     public function has($path)
     {
-        $this->migrateFile($path);
+        $this->migrateFileLive($path);
         $path = $this->strategy->encode($path);
 
         return $this->filesystem->has($path);
@@ -176,7 +176,7 @@ class MediaService implements MediaServiceInterface
      */
     public function getSize($path)
     {
-        $this->migrateFile($path);
+        $this->migrateFileLive($path);
         $path = $this->strategy->encode($path);
 
         return $this->filesystem->getSize($path);
@@ -187,7 +187,7 @@ class MediaService implements MediaServiceInterface
      */
     public function rename($path, $newPath)
     {
-        $this->migrateFile($path);
+        $this->migrateFileLive($path);
         $path = $this->strategy->encode($path);
         $newPath = $this->strategy->encode($newPath);
 
@@ -266,6 +266,20 @@ class MediaService implements MediaServiceInterface
     public function createDir($dirname)
     {
         return $this->filesystem->createDir($dirname);
+    }
+
+    /**
+     * Used as internal check for the liveMigration config flag.
+     *
+     * @param string $path
+     */
+    private function migrateFileLive($path)
+    {
+        if (!$this->container->getParameter('shopware.cdn.liveMigration')) {
+            return;
+        }
+
+        $this->migrateFile($path);
     }
 
     /**

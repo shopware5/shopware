@@ -25,7 +25,6 @@
 namespace Shopware\Bundle\MediaBundle\Commands;
 
 use Shopware\Commands\ShopwareCommand;
-use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
