@@ -1,5 +1,6 @@
 {if $sEmotions|@count > 0}
     {foreach $sEmotions as $emotion}
+        {convertEmotion assign=emotion emotion=$emotion}
 
         {block name="widgets/emotion/index/container"}
 
@@ -36,7 +37,7 @@
                          data-baseWidth="{$baseWidth}"
                          {block name="widgets/emotion/index/attributes"}{/block}>
 
-                    {if $emotion.elements.0}
+                    {if $emotion.elements|@count > 0}
                         {foreach $emotion.elements as $element}
                             {block name="widgets/emotion/index/element"}
 

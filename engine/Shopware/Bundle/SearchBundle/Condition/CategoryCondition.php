@@ -46,6 +46,7 @@ class CategoryCondition implements ConditionInterface
     {
         Assertion::allIntegerish($categoryIds);
         $this->categoryIds = array_map('intval', $categoryIds);
+        sort($this->categoryIds, SORT_NUMERIC);
     }
 
     /**

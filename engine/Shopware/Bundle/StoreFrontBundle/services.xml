@@ -406,5 +406,20 @@
         <service id="shopware_storefront.category_depth_service" class="Shopware\Bundle\StoreFrontBundle\Service\Core\CategoryDepthService">
             <argument type="service" id="dbal_connection" />
         </service>
+
+        <service id="shopware_storefront.blog_service" class="Shopware\Bundle\StoreFrontBundle\Service\Core\BlogService">
+            <argument type="service" id="shopware_storefront.blog_gateway_dbal" />
+            <argument type="service" id="shopware_storefront.media_service" />
+        </service>
+
+        <service id="shopware_storefront.blog_gateway_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\BlogGateway">
+            <argument type="service" id="dbal_connection" />
+            <argument type="service" id="shopware_storefront.field_helper_dbal" />
+            <argument type="service" id="shopware_storefront.blog_hydrator_dbal" />
+        </service>
+
+        <service id="shopware_storefront.blog_hydrator_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\BlogHydrator">
+            <argument type="service" id="shopware_storefront.attribute_hydrator_dbal" />
+        </service>
     </services>
 </container>

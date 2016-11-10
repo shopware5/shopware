@@ -42,6 +42,10 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Added event `plugin/swListing/fetchListing` which allows to load listings, facet data or listing counts
 * Added config `listingMode` to switch listing reload behavior
 * Added event `action/fetchListing` which allows to load listings, facet data or listing counts
+* Added property `path` to `Shopware\Bundle\StoreFrontBundle\Struct\Media` which reflects the virtual path
+* Added service `Shopware\Bundle\StoreFrontBundle\Service\Core\BlogService` to fetch blog entries by id
+* Added filter event `Shopware_Core_HttpCache_CacheIdsFromController` in HttpCache to extend cache keys to be invalidated based on the controller 
+* Added smarty function `convertEmotion` to convert an emotion struct to the legacy array structure
 
 ### Changes
 
@@ -62,6 +66,7 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Renamed parameter `data-count-ctrl` on `#filter` form to `data-listing-url`
 * Changed removal version of method `Shopware\Components\Model\ModelManager::addAttribute` to 5.4
 * Changed removal version of method `Shopware\Components\Model\ModelManager::removeAttribute` to 5.4
+* Changed template `component_article_slider.tpl` to show provided products instead of always fetching them via ajax
 
 ### Removals
 
@@ -205,6 +210,16 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Removed `attributes.search.average` field from DBAL search
 * Removed model `Shopware\Models\Article\Element`
 * Removed database table `s_core_engine_elements`
+* Removed method `Shopware_Controllers_Widgets_Emotion::getEmotion()`
+* Removed method `Shopware_Controllers_Widgets_Emotion::handleElement()`, use `Shopware\Bundle\EmotionBundle\ComponentHandler\ComponentHandlerInterface` instead
+* Removed method `Shopware_Controllers_Widgets_Emotion::getRandomBlogEntry()`
+* Removed method `Shopware_Controllers_Widgets_Emotion::getBlogEntry()`, has been replaced by `Shopware\Bundle\EmotionBundle\ComponentHandler\BlogComponentHandler`
+* Removed method `Shopware_Controllers_Widgets_Emotion::getCategoryTeaser()`, has been replaced by `Shopware\Bundle\EmotionBundle\ComponentHandler\CategoryTeaserComponentHandler`
+* Removed method `Shopware_Controllers_Widgets_Emotion::getBannerMappingLinks()`, has been replaced by `Shopware\Bundle\EmotionBundle\ComponentHandler\BannerComponentHandler`
+* Removed method `Shopware_Controllers_Widgets_Emotion::getManufacturerSlider()`, has been replaced by `Shopware\Bundle\EmotionBundle\ComponentHandler\ManufacturerSliderComponentHandler`
+* Removed method `Shopware_Controllers_Widgets_Emotion::getBannerSlider()`, has been replaced by `Shopware\Bundle\EmotionBundle\ComponentHandler\BannerSliderComponentHandler`
+* Removed method `Shopware_Controllers_Widgets_Emotion::getArticleSlider()`, has been replaced by `Shopware\Bundle\EmotionBundle\ComponentHandler\ArticleSliderComponentHandler`
+* Removed method `Shopware_Controllers_Widgets_Emotion::getHtml5Video()`, has been replaced by `Shopware\Bundle\EmotionBundle\ComponentHandler\Html5VideoComponentHandler`
 
 ### Deprecations
 
@@ -212,6 +227,7 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Deprecated `Shopware_Components_Convert_Xml` without replacement, to be removed with 5.4
 * Deprecated `Shopware_Components_Convert_Excel` without replacement, to be removed with 5.4
 * Deprecated `\Shopware_Controllers_Widgets_Listing::ajaxListingAction`, use `\Shopware_Controllers_Widgets_Listing::listingCountAction` instead
+* Deprecated method `sArticles::sGetAffectedSuppliers()` without replacement, to be removed with 5.5
 
 ### Backend Components
 
@@ -364,4 +380,71 @@ public function handle(
 Cookie permissions is now a part of shopware and you can configure it in the shop settings. 
 
 We implement a basic cookie permission hint. If you want to change the decision whether the item is displayed or not, overwrite the jQuery plugin in the jquery.cookie-permission.js
-  
+
+### Shopping Worlds
+
+Shopping World have been technically refactored from the ground up to improve the overall performance when adding several elements to a shopping world.
+
+#### ComponentHandler
+
+The processing of elements has been changed from events to classes of component handler.
+
+**Before: Subscribe to an event and process element data in the callback method**
+
+```php
+public static function getSubscribedEvents()
+{
+    return ['Shopware_Controllers_Widgets_Emotion_AddElement' => 'handleSideviewElement'];
+}
+```
+
+**After: Create new class and tag it as `shopware_emotion.component_handler` in your `services.xml`**
+
+```php
+class SideviewComponentHandler implements ComponentHandlerInterface
+{
+    public function supports(Element $element)
+    {
+        return $element->getComponent()->getType() === 'emotion-component-sideview';
+    }
+
+    public function prepare(PrepareDataCollection $collection, Element $element, ShopContextInterface $context)
+    {
+        // do some prepare logic
+    }
+
+    public function handle(ResolvedDataCollection $collection, Element $element, ShopContextInterface $context)
+    {
+        // do some handle logic and fill data
+        $element->getData()->set('key', 'value');
+    }
+}
+```
+
+#### Requesting items in ComponentHandler
+
+To make use of the performance improvement, you have to split your logic into a prepare step and handle step. The prepare step collects product numbers or criteria objects which will be resolved across all elements at once. The handle step provides a collection with resolved products and can be filled into your element.
+
+```php
+public function prepare(PrepareDataCollection $collection, Element $element, ShopContextInterface $context)
+{
+    $productNumber = $element->getConfig()->get('selected_product_number');
+    $collection->getBatchRequest()->setProductNumbers('my-unique-request', [$productNumber]);
+}
+
+public function handle(ResolvedDataCollection $collection, Element $element, ShopContextInterface $context)
+{
+    $product = current($collection->getBatchResult()->get('my-unique-request));
+    $element->getData()->set('product', $product);
+}
+```
+
+Keep in mind to use a unique key for requesting and getting products. For best practise, use the element's id in your key (`$element->getId()`). 
+
+#### View changes
+
+In addition, the emotion template will now be populated with an `Shopware\Bundle\EmotionBundle\Struct\Emotion` object instead of an array. To recreate the old behaviour, you have to convert the emotion object to an array using a smarty function.
+
+```
+{convertEmotion assign=emotion emotion=$emotion}
+```

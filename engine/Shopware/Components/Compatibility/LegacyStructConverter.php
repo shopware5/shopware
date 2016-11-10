@@ -1020,6 +1020,37 @@ class LegacyStructConverter
     }
 
     /**
+     * @param StoreFrontBundle\Struct\Blog\Blog $blog
+     * @return array
+     */
+    public function convertBlogStruct(StoreFrontBundle\Struct\Blog\Blog $blog)
+    {
+        $data = [
+            'id' => $blog->getId(),
+            'title' => $blog->getTitle(),
+            'authorId' => $blog->getAuthorId(),
+            'active' => $blog->isActive(),
+            'shortDescription' => $blog->getShortDescription(),
+            'description' => $blog->getDescription(),
+            'displayDate' => $blog->getDisplayDate(),
+            'categoryId' => $blog->getCategoryId(),
+            'template' => $blog->getTemplate(),
+            'metaKeyWords' => $blog->getMetaKeywords(),
+            'metaKeywords' => $blog->getMetaKeywords(),
+            'metaDescription' => $blog->getMetaDescription(),
+            'metaTitle' => $blog->getMetaTitle(),
+            'views' => $blog->getViews(),
+            'mediaList' => array_map([$this, 'convertMediaStruct'], $blog->getMedias())
+        ];
+
+        $data['media'] = reset($data['mediaList']);
+
+        return $this->eventManager->filter('Legacy_Struct_Converter_Convert_Blog', $data, [
+            'blog' => $blog
+        ]);
+    }
+
+    /**
      * Formats article prices
      * @access public
      * @param float $price

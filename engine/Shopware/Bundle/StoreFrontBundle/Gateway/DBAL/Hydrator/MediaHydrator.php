@@ -103,6 +103,7 @@ class MediaHydrator extends Hydrator
         }
 
         if (isset($data['__media_path'])) {
+            $media->setPath($data['__media_path']);
             $media->setFile($this->mediaService->getUrl($data['__media_path']));
         }
 

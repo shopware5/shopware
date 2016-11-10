@@ -23,6 +23,8 @@
  */
 
 use Doctrine\Common\EventArgs;
+use Shopware\Bundle\EmotionBundle\ComponentHandler\ArticleComponentHandler;
+use Shopware\Bundle\EmotionBundle\ComponentHandler\ArticleSliderComponentHandler;
 use Shopware\Bundle\StoreFrontBundle\Struct\ProductContextInterface;
 use Shopware\Components\Model\ModelManager;
 use Enlight_Controller_Request_Request as Request;
@@ -785,20 +787,25 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
 
                 break;
             case 'widgets/emotion':
+                /** @var \Shopware\Bundle\EmotionBundle\Struct\Emotion $emotion */
                 foreach ($view->getAssign('sEmotions') as $emotion) {
-                    $cacheIds[] = 'e' . $emotion['id'];
-                    foreach ($emotion['elements'] as $element) {
-                        if ($element['component']['name'] == 'Artikel') {
-                            $articleIds[] = $element['data']['articleID'];
-                            $articleIds[] = $element['data']['articleDetailsID'];
-                        } elseif ($element['component']['name'] == 'Artikel-Slider') {
-                            foreach ($element['data']['values'] as $value) {
-                                $articleIds[] = $value['articleID'];
-                                $articleIds[] = $value['articleDetailsID'];
+                    $cacheIds[] = 'e' . $emotion->getId();
+                    foreach ($emotion->getElements() as $element) {
+                        if ($element->getComponent()->getType() === ArticleComponentHandler::COMPONENT_NAME) {
+                            /** @var \Shopware\Bundle\StoreFrontBundle\Struct\ListProduct $product */
+                            $product = $element->getData()->get('product');
+                            if (!$product) {
+                                continue;
                             }
-                        } elseif ($element['component']['name'] == 'Sideview-Element') {
-                            foreach ($element['data']['product_data'] as $value) {
-                                $articleIds[] = $value['articleID'];
+
+                            $articleIds[] = $product->getId();
+                            $articleIds[] = $product->getVariantId();
+                        } elseif ($element->getComponent()->getType() === ArticleSliderComponentHandler::COMPONENT_NAME) {
+                            /** @var \Shopware\Bundle\StoreFrontBundle\Struct\ListProduct[] $products */
+                            $products = $element->getData()->get('products');
+                            foreach ($products as $product) {
+                                $articleIds[] = $product->getId();
+                                $articleIds[] = $product->getVariantId();
                             }
                         }
                     }

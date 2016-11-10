@@ -63,20 +63,6 @@ class sArticlesTest extends Enlight_Components_Test_Controller_TestCase
     }
 
     /**
-     * @ticket SW-4709
-     */
-    public function testGetAffectedSuppliers()
-    {
-        $this->dispatch('/');
-        $suppliers = Shopware()->Modules()->Articles()->sGetAffectedSuppliers(
-            Shopware()->Config()->BlogCategory
-        );
-
-        $this->assertNotNull($suppliers);
-    }
-
-
-    /**
      * Checks if price group is taken into account correctly
      * @ticket SW-4887
      */

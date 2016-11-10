@@ -103,9 +103,7 @@ class BatchProductSearch
                 continue;
             }
 
-            foreach ($searchProduct->getAttributes() as $key => $attribute) {
-                $product->addAttribute($key, $attribute);
-            }
+            $product->addAttributes($searchProduct->getAttributes());
         }
 
         return $products;
