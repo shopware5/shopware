@@ -73,7 +73,7 @@
         "behat/mink-selenium2-driver": "~1.3",
         "sensiolabs/behat-page-object-extension": "~2.0.0-rc1",
         "symfony/dom-crawler": "~2.8",
-        "friendsofphp/php-cs-fixer": "^1.12"
+        "friendsofphp/php-cs-fixer": "^2.0-beta"
     },
     "include-path": [
         "engine/Library/"

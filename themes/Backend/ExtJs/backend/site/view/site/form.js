@@ -150,11 +150,11 @@ Ext.define('Shopware.apps.Site.view.site.Form', {
     },
 
     getLinkField: function() {
-        var me = this;
-		var data = [
-			['_parent'],
-			['_blank']
-		];
+        var me = this,
+            data = [
+                ['_parent'],
+                ['_blank']
+            ];
 
         return [
             {
@@ -286,21 +286,18 @@ Ext.define('Shopware.apps.Site.view.site.Form', {
     },
 
     getShopsSelector: function() {
-        var me = this;
-
-        return {
-            xtype: 'combobox',
+        var selectionFactory = Ext.create('Shopware.attribute.SelectionFactory');
+        return Ext.create('Shopware.form.field.ShopGrid', {
             name: 'shopIds',
             fieldLabel: '{s name=site/shop_selector/label}Limit to shop(s){/s}',
             helpText: '{s name=site/shop_selector/helper}If set, limits shop page visibility to the configured shops. If this shop page links to another page, that page might still be accessible.{/s}',
-            store: me.shopStore,
-            multiSelect: true,
-            displayField: 'name',
-            valueField: 'id',
-            queryMode:'local',
+            allowSorting: false,
+            height: 130,
             anchor:'100%',
-            editable: false
-        };
+            labelWidth: 155,
+            store: selectionFactory.createEntitySearchStore("Shopware\\Models\\Shop\\Shop"),
+            searchStore: selectionFactory.createEntitySearchStore("Shopware\\Models\\Shop\\Shop")
+        });
     }
 });
 //{/block}
