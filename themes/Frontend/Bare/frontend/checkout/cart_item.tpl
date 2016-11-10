@@ -1,9 +1,10 @@
 {* Constants for the different basket item types *}
 {$IS_PRODUCT = 0}
 {$IS_PREMIUM_PRODUCT = 1}
-{$IS_VOUCHER = 2}
+{$IS_VOUCHER_STATIONARY = 2}
 {$IS_REBATE = 3}
 {$IS_SURCHARGE_DISCOUNT = 4}
+{$IS_VOUCHER_DYNAMIC = 5}
 
 {if $sBasketItem.modus == $IS_PRODUCT}
 
@@ -17,7 +18,7 @@
     {block name='frontend_checkout_cart_item_premium_product'}
         {include file="frontend/checkout/items/premium-product.tpl" isLast=$isLast}
     {/block}
-{elseif $sBasketItem.modus == $IS_VOUCHER}
+{elseif $sBasketItem.modus == $IS_VOUCHER_STATIONARY || $sBasketItem.modus == $IS_VOUCHER_DYNAMIC}
 
     {* Voucher *}
     {block name='frontend_checkout_cart_item_voucher'}

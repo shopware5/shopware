@@ -288,21 +288,24 @@ class sBasket
     private function sGetVoucher()
     {
         $voucher = $this->db->fetchRow(
-            'SELECT id basketID, ordernumber, articleID as voucherID
+            'SELECT id basketID, ordernumber, articleID as voucherID, modus
                 FROM s_order_basket
-                WHERE modus = 2 AND sessionID = ?',
+                WHERE modus = 2 OR modus = 5 AND sessionID = ?',
             array($this->session->get('sessionId'))
         );
         if (!empty($voucher)) {
-            $voucher['code'] = $this->db->fetchOne(
-                'SELECT vouchercode FROM s_emarketing_vouchers WHERE ordercode = ?',
-                array($voucher['ordernumber'])
-            );
-            if (empty($voucher['code'])) {
+            if ($voucher['modus'] == 2) {
+                $voucher['code'] = $this->db->fetchOne(
+                    'SELECT vouchercode FROM s_emarketing_vouchers WHERE ordercode = ?',
+                    array($voucher['ordernumber'])
+                );
+            } elseif ($voucher['modus'] == 5) {
                 $voucher['code'] = $this->db->fetchOne(
                     'SELECT code FROM s_emarketing_voucher_codes WHERE id = ?',
                     array($voucher['voucherID'])
                 );
+            } else {
+                return false;
             }
         }
         return $voucher;
@@ -707,7 +710,7 @@ class sBasket
         $chkBasket = $this->db->fetchRow(
             'SELECT id
             FROM s_order_basket
-            WHERE sessionID = ? AND modus = 2',
+            WHERE sessionID = ? AND modus = 2 OR modus = 5',
             array($this->session->get('sessionId'))
         );
         if ($chkBasket) {
@@ -790,7 +793,7 @@ class sBasket
           sessionID, articlename, articleID, ordernumber, shippingfree,
           quantity, price, netprice,tax_rate, datum, modus, currencyFactor
         )
-        VALUES (?,?,?,?,?,1,?,?,?,?,2,?)
+        VALUES (?,?,?,?,?,1,?,?,?,?,".($voucherDetails['modus'] == 1 ? 5 : 2).",?)
         ";
         $params = array(
             $this->session->get('sessionId'),
