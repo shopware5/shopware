@@ -1,7 +1,7 @@
 <?php
 /**
  * Shopware 5
- * Copyright (c) shopware AG
+ * Copyright (c) shopware AG.
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -34,13 +34,13 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Product\VoteAverage;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\StoreFrontBundle\Struct
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ListProduct extends BaseProduct implements \JsonSerializable
 {
     /**
-     * State for a calculated product price
+     * State for a calculated product price.
      */
     const STATE_PRICE_CALCULATED = 'price_calculated';
 
@@ -92,7 +92,7 @@ class ListProduct extends BaseProduct implements \JsonSerializable
     /**
      * Defines if the product has no shipping costs.
      *
-     * @var boolean
+     * @var bool
      */
     protected $shippingFree;
 
@@ -100,13 +100,14 @@ class ListProduct extends BaseProduct implements \JsonSerializable
      * Defines that the product are no longer
      * available if the last item is sold.
      *
-     * @var boolean
+     * @var bool
      */
     protected $closeouts;
 
     /**
      * Contains a flag if the product has properties.
-     * @var boolean
+     *
+     * @var bool
      */
     protected $hasProperties = false;
 
@@ -137,7 +138,7 @@ class ListProduct extends BaseProduct implements \JsonSerializable
      * Defines if the customer can be set an email
      * notification for this product if it is sold out.
      *
-     * @var boolean
+     * @var bool
      */
     protected $allowsNotification;
 
@@ -150,6 +151,7 @@ class ListProduct extends BaseProduct implements \JsonSerializable
 
     /**
      * Minimal stock value for the product.
+     *
      * @var int
      */
     protected $minStock;
@@ -157,6 +159,7 @@ class ListProduct extends BaseProduct implements \JsonSerializable
     /**
      * Physical height of the product.
      * Used for area calculation.
+     *
      * @var float
      */
     protected $height;
@@ -164,6 +167,7 @@ class ListProduct extends BaseProduct implements \JsonSerializable
     /**
      * Physical width of the product.
      * Used for area calculation.
+     *
      * @var float
      */
     protected $width;
@@ -179,12 +183,14 @@ class ListProduct extends BaseProduct implements \JsonSerializable
     /**
      * Physical width of the product.
      * Used for area calculation.
+     *
      * @var float
      */
     protected $weight;
 
     /**
      * Ean code of the product.
+     *
      * @var string
      */
     protected $ean;
@@ -262,6 +268,7 @@ class ListProduct extends BaseProduct implements \JsonSerializable
 
     /**
      * Price of the current variant.
+     *
      * @var Price[]
      */
     protected $prices = [];
@@ -314,8 +321,9 @@ class ListProduct extends BaseProduct implements \JsonSerializable
     protected $voteAverage;
 
     /**
-     * Flag if the product has an available variant
-     * @var boolean
+     * Flag if the product has an available variant.
+     *
+     * @var bool
      */
     protected $hasAvailableVariant;
 
@@ -345,6 +353,21 @@ class ListProduct extends BaseProduct implements \JsonSerializable
     protected $categories = [];
 
     /**
+     * @var Price
+     */
+    protected $listingPrice;
+
+    /**
+     * @var bool
+     */
+    protected $allowBuyInListing;
+
+    /**
+     * @var bool
+     */
+    protected $displayFromPrice;
+
+    /**
      * Adds a new product state.
      *
      * @param $state
@@ -363,7 +386,7 @@ class ListProduct extends BaseProduct implements \JsonSerializable
     }
 
     /**
-     * Resets the struct states
+     * Resets the struct states.
      */
     public function resetStates()
     {
@@ -371,8 +394,10 @@ class ListProduct extends BaseProduct implements \JsonSerializable
     }
 
     /**
-     * Checks if the product has a specify state
+     * Checks if the product has a specify state.
+     *
      * @param $state
+     *
      * @return bool
      */
     public function hasState($state)
@@ -381,7 +406,7 @@ class ListProduct extends BaseProduct implements \JsonSerializable
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function hasProperties()
     {
@@ -389,7 +414,7 @@ class ListProduct extends BaseProduct implements \JsonSerializable
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isShippingFree()
     {
@@ -397,7 +422,7 @@ class ListProduct extends BaseProduct implements \JsonSerializable
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function allowsNotification()
     {
@@ -405,7 +430,7 @@ class ListProduct extends BaseProduct implements \JsonSerializable
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function highlight()
     {
@@ -413,7 +438,7 @@ class ListProduct extends BaseProduct implements \JsonSerializable
     }
 
     /**
-     * @param boolean $highlight
+     * @param bool $highlight
      */
     public function setHighlight($highlight)
     {
@@ -421,7 +446,7 @@ class ListProduct extends BaseProduct implements \JsonSerializable
     }
 
     /**
-     * @param boolean $allowsNotification
+     * @param bool $allowsNotification
      */
     public function setAllowsNotification($allowsNotification)
     {
@@ -429,7 +454,7 @@ class ListProduct extends BaseProduct implements \JsonSerializable
     }
 
     /**
-     * @param boolean $shippingFree
+     * @param bool $shippingFree
      */
     public function setShippingFree($shippingFree)
     {
@@ -573,7 +598,7 @@ class ListProduct extends BaseProduct implements \JsonSerializable
     }
 
     /**
-     * @param boolean $closeouts
+     * @param bool $closeouts
      */
     public function setCloseouts($closeouts)
     {
@@ -581,7 +606,7 @@ class ListProduct extends BaseProduct implements \JsonSerializable
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isCloseouts()
     {
@@ -793,7 +818,7 @@ class ListProduct extends BaseProduct implements \JsonSerializable
     }
 
     /**
-     * @param boolean $hasProperties
+     * @param bool $hasProperties
      */
     public function setHasProperties($hasProperties)
     {
@@ -913,7 +938,7 @@ class ListProduct extends BaseProduct implements \JsonSerializable
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function hasConfigurator()
     {
@@ -921,7 +946,7 @@ class ListProduct extends BaseProduct implements \JsonSerializable
     }
 
     /**
-     * @param boolean $hasConfigurator
+     * @param bool $hasConfigurator
      */
     public function setHasConfigurator($hasConfigurator)
     {
@@ -945,7 +970,7 @@ class ListProduct extends BaseProduct implements \JsonSerializable
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function hasEsd()
     {
@@ -953,7 +978,7 @@ class ListProduct extends BaseProduct implements \JsonSerializable
     }
 
     /**
-     * @param boolean $hasEsd
+     * @param bool $hasEsd
      */
     public function setHasEsd($hasEsd)
     {
@@ -977,7 +1002,7 @@ class ListProduct extends BaseProduct implements \JsonSerializable
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isPriceGroupActive()
     {
@@ -985,7 +1010,7 @@ class ListProduct extends BaseProduct implements \JsonSerializable
     }
 
     /**
-     * @param boolean $isPriceGroupActive
+     * @param bool $isPriceGroupActive
      */
     public function setIsPriceGroupActive($isPriceGroupActive)
     {
@@ -1009,7 +1034,7 @@ class ListProduct extends BaseProduct implements \JsonSerializable
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function jsonSerialize()
     {
@@ -1033,7 +1058,7 @@ class ListProduct extends BaseProduct implements \JsonSerializable
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function hasAvailableVariant()
     {
@@ -1041,7 +1066,7 @@ class ListProduct extends BaseProduct implements \JsonSerializable
     }
 
     /**
-     * @param boolean $hasAvailableVariant
+     * @param bool $hasAvailableVariant
      */
     public function setHasAvailableVariant($hasAvailableVariant)
     {
@@ -1101,11 +1126,11 @@ class ListProduct extends BaseProduct implements \JsonSerializable
      */
     public function hasDifferentPrices()
     {
-        return (
+        return
             $this->getCustomerPriceCount() > 1
             ||
             $this->getFallbackPriceCount() > 1
-        );
+        ;
     }
 
     /**
@@ -1126,7 +1151,7 @@ class ListProduct extends BaseProduct implements \JsonSerializable
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isMainVariant()
     {
@@ -1147,5 +1172,53 @@ class ListProduct extends BaseProduct implements \JsonSerializable
     public function setCategories(array $categories)
     {
         $this->categories = $categories;
+    }
+
+    /**
+     * @param Price $price
+     */
+    public function setListingPrice(Price $price)
+    {
+        $this->listingPrice = $price;
+    }
+
+    /**
+     * @return Price
+     */
+    public function getListingPrice()
+    {
+        return $this->listingPrice;
+    }
+
+    /**
+     * @return bool
+     */
+    public function displayFromPrice()
+    {
+        return $this->displayFromPrice;
+    }
+
+    /**
+     * @return bool
+     */
+    public function allowBuyInListing()
+    {
+        return $this->allowBuyInListing;
+    }
+
+    /**
+     * @param bool $allowBuyInListing
+     */
+    public function setAllowBuyInListing($allowBuyInListing)
+    {
+        $this->allowBuyInListing = $allowBuyInListing;
+    }
+
+    /**
+     * @param bool $displayFromPrice
+     */
+    public function setDisplayFromPrice($displayFromPrice)
+    {
+        $this->displayFromPrice = $displayFromPrice;
     }
 }
