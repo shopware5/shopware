@@ -703,7 +703,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
 
         // Test the voucher values with tax from user group
         $discount = $this->db->fetchRow(
-            'SELECT * FROM s_order_basket WHERE modus = 2 and sessionID = ?',
+            'SELECT * FROM s_order_basket WHERE modus = 2 or modus = 5 and sessionID = ?',
             array($this->module->sSYSTEM->sSESSION_ID)
         );
         $this->assertEquals($voucherData['value']*-1, $discount['price']);
@@ -815,7 +815,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
 
         // Test the voucher values. This voucher has no taxes
         $discount = $this->db->fetchRow(
-            'SELECT * FROM s_order_basket WHERE modus = 2 and sessionID = ?',
+            'SELECT * FROM s_order_basket WHERE modus = 2 or modus = 5 and sessionID = ?',
             array($this->module->sSYSTEM->sSESSION_ID)
         );
         $this->assertEquals($voucherData['value']*-1, $discount['price']);
@@ -913,7 +913,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
 
         // Test the voucher values with custom tax from voucher
         $discount = $this->db->fetchRow(
-            'SELECT * FROM s_order_basket WHERE modus = 2 and sessionID = ?',
+            'SELECT * FROM s_order_basket WHERE modus = 2 or modus = 5 and sessionID = ?',
             array($this->module->sSYSTEM->sSESSION_ID)
         );
         $this->assertEquals($voucherData['value']*-1, $discount['price']);
