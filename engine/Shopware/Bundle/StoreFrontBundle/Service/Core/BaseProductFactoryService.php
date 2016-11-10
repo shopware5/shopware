@@ -62,6 +62,10 @@ class BaseProductFactoryService implements BaseProductFactoryServiceInterface
      */
     public function createBaseProducts($numbers)
     {
+        if (!count($numbers)) {
+            return [];
+        }
+
         $query = $this->connection->createQueryBuilder();
         $query->select([
             'variant.id as variantId',

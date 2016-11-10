@@ -262,14 +262,14 @@ class TestCase extends \Enlight_Components_Test_TestCase
      * @param $number
      * @param ShopContext $context
      * @param Category $category
-     * @param null $additionally
+     * @param array $additionally
      * @return array
      */
     protected function getProduct(
         $number,
         ShopContext $context,
         Category $category = null,
-        $additionally = null
+        $additionally = []
     ) {
         $product = $this->helper->getSimpleProduct(
             $number,
@@ -283,6 +283,12 @@ class TestCase extends \Enlight_Components_Test_TestCase
                 array('id' => $category->getId())
             );
         }
+
+        if (!is_array($additionally)) {
+            $additionally = [];
+        }
+
+        $product = array_merge($product, $additionally);
 
         return $product;
     }
