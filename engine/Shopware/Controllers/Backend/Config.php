@@ -1087,7 +1087,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
     {
         $connection = Shopware()->Container()->get('dbal_connection');
         $query = $connection->createQueryBuilder();
-        $query->select(['id, IFNULL(main_id, id)']);
+        $query->select(['locale_id, IFNULL(main_id, id)']);
         $query->from('s_core_shops');
         return $query->execute()->fetchAll(PDO::FETCH_KEY_PAIR);
     }
