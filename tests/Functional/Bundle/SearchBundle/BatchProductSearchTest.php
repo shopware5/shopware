@@ -31,6 +31,8 @@ use Shopware\Bundle\SearchBundle\Condition\PriceCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\Sorting\ProductNameSorting;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
+use Shopware\Models\Category\Category;
 use Shopware\Tests\Functional\Bundle\StoreFrontBundle\TestCase;
 
 class BatchProductNumberSearchTest extends TestCase
@@ -50,6 +52,18 @@ class BatchProductNumberSearchTest extends TestCase
         $this->batchSearch = Shopware()->Container()->get('shopware_search.batch_product_number_search');
 
         parent::setUp();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function createProducts($products, ShopContext $context, Category $category)
+    {
+        $articles = parent::createProducts($products, $context, $category);
+
+        $this->helper->refreshSearchIndexes($context->getShop());
+
+        return $articles;
     }
 
     /**
