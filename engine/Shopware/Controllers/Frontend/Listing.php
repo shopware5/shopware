@@ -76,7 +76,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         );
 
         if ($manufacturer->getCoverFile()) {
-            $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+            $mediaService = $this->get('shopware_media.media_service');
             $manufacturer->setCoverFile($mediaService->getUrl($manufacturer->getCoverFile()));
         }
 
@@ -306,6 +306,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
 
         $content['metaTitle'] = $manufacturer->getMetaTitle();
         $content['title'] = $manufacturer->getName();
+        $content['productBoxLayout'] = $this->get('config')->get('manufacturerProductBoxLayout');
 
         return $content;
     }
