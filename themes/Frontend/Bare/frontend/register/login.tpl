@@ -29,8 +29,8 @@
 			<h2 class="panel--title is--underline">{s name="LoginHeaderExistingCustomer"}{/s}</h2>
 			<div class="panel--body is--wide">
 				{block name='frontend_register_login_form'}
-					{if $sValidation}
-						{$url = {url controller=account action=login sTarget=$sTarget sTargetAction=$sTargetAction sValidation=$sValidation} }
+					{if $register.personal.sValidation}
+						{$url = {url controller=account action=login sTarget=$sTarget sTargetAction=$sTargetAction sValidation=$register.personal.sValidation} }
 					{else}
 						{$url = {url controller=account action=login sTarget=$sTarget sTargetAction=$sTargetAction} }
 					{/if}
