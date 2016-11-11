@@ -9,7 +9,7 @@
     {/block}
 
     {block name="frontend_listing_product_box_button_detail_label"}
-        {$label = "{s name="ListingBoxLinkDetails" namespace="frontend/listing/box_article"}See details{/s}"}
+        {$label = "{s name="ListingButtonDetail" namespace="frontend/listing/box_article"}Details{/s}"}
     {/block}
 
     {block name="frontend_listing_product_box_button_detail_container"}

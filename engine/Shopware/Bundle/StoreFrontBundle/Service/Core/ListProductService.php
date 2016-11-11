@@ -174,9 +174,9 @@ class ListProductService implements Service\ListProductServiceInterface
 
             $this->priceCalculationService->calculateProduct($product, $context);
 
-            $product->setAllowBuyInListing($this->allowBuyInListing($product));
             $product->setListingPrice($product->getCheapestUnitPrice());
             $product->setDisplayFromPrice((count($product->getPrices()) > 1 || $product->hasDifferentPrices()));
+            $product->setAllowBuyInListing($this->allowBuyInListing($product));
 
             if ($this->config->get('calculateCheapestPriceWithMinPurchase')) {
                 $product->setListingPrice($product->getCheapestPrice());
@@ -227,8 +227,8 @@ class ListProductService implements Service\ListProductServiceInterface
     private function allowBuyInListing(Struct\ListProduct $product)
     {
         return !$product->hasConfigurator()
-            && !$product->hasDifferentPrices()
             && $product->isAvailable()
-            && $product->getUnit()->getMinPurchase() <= 1;
+            && $product->getUnit()->getMinPurchase() <= 1
+            && !$product->displayFromPrice();
     }
 }
