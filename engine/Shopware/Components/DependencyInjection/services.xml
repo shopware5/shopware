@@ -165,6 +165,9 @@
         <service id="events" class="Shopware\Components\ContainerAwareEventManager">
             <argument type="service" id="service_container"/>
         </service>
+        <service id="event_dispatcher" class="Shopware\Components\EventDispatcher">
+            <argument type="service" id="events"/>
+        </service>
 
         <service id="shopware.hook_manager" alias="Hooks" />
         <service id="Hooks" class="Enlight_Hook_HookManager">
