@@ -145,6 +145,10 @@ class ProductNumberSearch implements SearchBundle\ProductNumberSearchInterface
      */
     private function createFacets(SearchBundle\Criteria $criteria, ShopContextInterface $context)
     {
+        if (count($criteria->getFacets()) === 0) {
+            return [];
+        }
+
         $facets = [];
 
         $clone = clone $criteria;

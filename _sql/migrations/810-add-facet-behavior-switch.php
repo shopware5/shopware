@@ -2,7 +2,7 @@
 
 use Shopware\Components\Migrations\AbstractMigration;
 
-class Migrations_Migration809 extends AbstractMigration
+class Migrations_Migration810 extends AbstractMigration
 {
     /**
      * @inheritdoc
@@ -11,13 +11,13 @@ class Migrations_Migration809 extends AbstractMigration
     {
         $sql = <<<EOD
 INSERT IGNORE INTO `s_core_config_elements` (`id`, `form_id`, `name`, `value`, `label`, `description`, `type`, `required`, `position`, `scope`) VALUES
-(NULL, 0, 'generatePartialFacets',      'i:0;', '', '', '', 1, 0, 0);
+(NULL, 0, 'generatePartialFacets','i:0;', '', '', '', 1, 0, 0);
 EOD;
         $this->addSql($sql);
 
         $sql = <<<EOD
 INSERT IGNORE INTO `s_core_config_elements` (`id`, `form_id`, `name`, `value`, `label`, `description`, `type`, `required`, `position`, `scope`) VALUES
-(NULL, 0, 'categoryFilterDepth',      'i:2;', '', '', '', 1, 0, 0);
+(NULL, 0, 'categoryFilterDepth', 'i:2;', '', '', '', 1, 0, 0);
 EOD;
         $this->addSql($sql);
     }

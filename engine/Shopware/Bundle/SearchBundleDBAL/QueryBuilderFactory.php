@@ -139,12 +139,6 @@ class QueryBuilderFactory implements QueryBuilderFactoryInterface
                  AND product.active = 1'
             )
             ->innerJoin(
-                'product',
-                's_core_tax',
-                'tax',
-                'tax.id = product.taxID'
-            )
-            ->innerJoin(
                 'variant',
                 's_articles_attributes',
                 'productAttribute',

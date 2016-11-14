@@ -24,6 +24,22 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Added service `shopware_search.batch_product_search` and `shopware_search.batch_product_number_search` for optimized product queries
 * `jQuery.overlay` & `jQuery.loadingIndicators` are now supporting callbacks and jQuery promises
 * A loading indicator can now be applied to elements using the `$('selector').setLoading()` method
+* Added `data-facet-name` requirement for each filter element
+* Added `categoryFilterDepth` to configure new `CategoryFacet` behavior
+* Added `generatePartialFacets` config to switch facet behavior
+* Added new type for the filter panels `value-list-single`
+* Added new Smarty blocks for the unified filter panel:
+    * `frontend_listing_filter_facet_multi_selection`
+    * `frontend_listing_filter_facet_multi_selection_flyout`
+    * `frontend_listing_filter_facet_multi_selection_title`
+    * `frontend_listing_filter_facet_multi_selection_icon`
+    * `frontend_listing_filter_facet_multi_selection_content`
+    * `frontend_listing_filter_facet_multi_selection_list`
+    * `frontend_listing_filter_facet_multi_selection_option`
+    * `frontend_listing_filter_facet_multi_selection_option_container`
+    * `frontend_listing_filter_facet_multi_selection_input`
+    * `frontend_listing_filter_facet_multi_selection_label`
+* Added `\Shopware\Bundle\StoreFrontBundle\Service\Core\CategoryDepthService` service to select categories by their depth
 
 ### Changes
 
@@ -37,7 +53,10 @@ This changelog references changes done in Shopware 5.3 patch versions.
     * `sAdmin::sGetPremiumDispatches`
     * `sAdmin::sGetPremiumDispatchSurcharge`
 * Changed attribute type `string` mapping to mysql `TEXT` type. String and single selection data type supports no longer a sql default value.
-
+* Changed `roundPretty` value for currency range filter
+* Changed `CategoryFacet` behavior to generate each time a tree based on the system category with a configured category depth
+* Refactored the filter panels `facet-radio`, `facet-media-list` & `facet-value-list` and unified the panels
+* Base query build in `\Shopware\Bundle\SearchBundleDBAL\ProductNumberSearch` contains no more an join to s_core_tax
 ### Removals
 
 * Removed configuration option `sCOUNTRYSHIPPING`
@@ -145,7 +164,40 @@ This changelog references changes done in Shopware 5.3 patch versions.
     - `Shopware()/Enlight()->ComponentsPath()`
     - `Shopware()/Enlight()->Path()`
 * Removed parameter `$checkProxy` from `Enlight_Controller_Request_Request::getClientIp()`
-    
+* Removed `frontend_search_category_filter` block.
+* Removed `themes/Frontend/Bare/frontend/search/category-filter.tpl`
+* Removed `sCategory` parameter for search controller `listing/ajaxCount` requests.
+* Removed Smarty blocks due to the unified filter panel. The following blocks were removed:
+    * `frontend_listing_filter_facet_media_list_flyout`
+    * `frontend_listing_filter_facet_media_list_title`
+    * `frontend_listing_filter_facet_media_list_icon`
+    * `frontend_listing_filter_facet_media_list_content`
+    * `frontend_listing_filter_facet_media_list_list`
+    * `frontend_listing_filter_facet_media_list_option`
+    * `frontend_listing_filter_facet_media_list_option_container`
+    * `frontend_listing_filter_facet_media_list_input`
+    * `frontend_listing_filter_facet_media_list_label`
+    * `frontend_listing_filter_facet_radio_flyout`
+    * `frontend_listing_filter_facet_radio_title`
+    * `frontend_listing_filter_facet_radio_icon`
+    * `frontend_listing_filter_facet_radio_content`
+    * `frontend_listing_filter_facet_radio_list`
+    * `frontend_listing_filter_facet_radio_option`
+    * `frontend_listing_filter_facet_radio_option_container`
+    * `frontend_listing_filter_facet_radio_input`
+    * `frontend_listing_filter_facet_radio_label`
+    * `frontend_listing_filter_facet_value_list_flyout`
+    * `frontend_listing_filter_facet_value_list_title`
+    * `frontend_listing_filter_facet_value_list_icon`
+    * `frontend_listing_filter_facet_value_list_content`
+    * `frontend_listing_filter_facet_value_list_list`
+    * `frontend_listing_filter_facet_value_list_option`
+    * `frontend_listing_filter_facet_value_list_option_container`
+    * `frontend_listing_filter_facet_value_list_input`
+    * `frontend_listing_filter_facet_value_list_label`
+* Removed `attributes.search.cheapest_price` field from DBAL search
+* Removed `attributes.search.average` field from DBAL search
+
 ### Deprecations
 
 * Deprecated `Shopware_Components_Convert_Csv` without replacement, to be removed with 5.4
@@ -212,6 +264,92 @@ $result->get('numbers-1'); // ['SW10004' => ListProduct, 'SW10006' => ListProduc
 $result->get('criteria-1'); // ['SW10006' => ListProduct, 'SW10007' => ListProduct, 'SW10008' => ListProduct] 
 $result->get('criteria-2'); // ['SW10009' => ListProduct, 'SW10010' => ListProduct, 'SW10011' => ListProduct, 'SW10012' => ListProduct, 'SW10013' => ListProduct] 
 ```
+
+### Partial facets
+
+`\Shopware\Bundle\SearchBundleDBAL\FacetHandlerInterface` marked as deprecated and replaced by `\Shopware\Bundle\SearchBundleDBAL\PartialFacetHandlerInterface`.
+Each facet handler had to revert the provided criteria by their own to remove customer conditions. This behaviour is now handled in the `\Shopware\Bundle\SearchBundleDBAL\ProductNumberSearch::createFacets`
+
+Old implementation:
+```
+/**
+ * @param FacetInterface $facet
+ * @param Criteria $criteria
+ * @param ShopContextInterface $context
+ * @return BooleanFacetResult
+ */
+public function generateFacet(
+    FacetInterface $facet,
+    Criteria $criteria,
+    ShopContextInterface $context
+) {
+    $reverted = clone $criteria;
+    $reverted->resetConditions();
+    $reverted->resetSorting();
+
+    $query = $this->queryBuilderFactory->createQuery($reverted, $context);
+    //...
+}
+```
+
+New implementation:
+```
+public function generatePartialFacet(
+    FacetInterface $facet,
+    Criteria $reverted,
+    Criteria $criteria,
+    ShopContextInterface $context
+) {
+    $query = $this->queryBuilderFactory->createQuery($reverted, $context);
+    //...
+```
+
+All elastic search condition handlers has to extend the filter and post filter validiation:
+Before:
+```
+/**
+ * {@inheritdoc}
+ */
+public function handle(
+    CriteriaPartInterface $criteriaPart,
+    Criteria $criteria,
+    Search $search,
+    ShopContextInterface $context
+) {
+    /** @var CategoryCondition $criteriaPart */
+    $filter = new TermsQuery('categoryIds', $criteriaPart->getCategoryIds());
+
+    if ($criteria->hasBaseCondition($criteriaPart->getName())) {
+        $search->addFilter($filter);
+    } else {
+        $search->addPostFilter($filter);
+    }
+}
+```
+
+After:
+```
+/**
+ * {@inheritdoc}
+ */
+public function handle(
+    CriteriaPartInterface $criteriaPart,
+    Criteria $criteria,
+    Search $search,
+    ShopContextInterface $context
+) {
+    /** @var CategoryCondition $criteriaPart */
+    $filter = new TermsQuery('categoryIds', $criteriaPart->getCategoryIds());
+
+    if ($criteria->generatePartialFacets() || $criteria->hasBaseCondition($criteriaPart->getName())) {
+        $search->addFilter($filter);
+        return;
+    }
+
+    $search->addPostFilter($filter);
+}
+```
+
 ### CookiePermission
 
 Cookie permissions is now a part of shopware and you can configure it in the shop settings. 

@@ -49,7 +49,7 @@
                 if (checkedIds.length > 0) {
                     return false;
                 }
-                if (values && values.length <= 1) {
+                if (values && values.length <= 0) {
                     return true;
                 }
                 return data == null;
@@ -72,7 +72,7 @@
             },
 
             validateElementShouldBeDisabled: function($element, activeIds, ids, checkedIds, value) {
-                var val = $element.val() * 1;
+                var val = $element.val();
                 if (checkedIds.length > 0) {
                     return checkedIds.indexOf(val) === -1
                 }
@@ -224,7 +224,7 @@
             },
 
             validateElementShouldBeDisabled: function($element, activeIds, ids, checkedIds, value) {
-                var val = $element.val() * 1;
+                var val = $element.val();
 
                 if (value) {
                     $element.parents('.rating-star--outer-container').find('.rating-star--suffix-count').html('(' + value.label + ')');
@@ -450,8 +450,19 @@
             me._destroy();
         },
 
+        /**
+         * Trigger function which called if the filter panel updated and an ajax request reloads the filter data.
+         * Provided data array contains the whole response of the ajax request
+         * @param data
+         */
         updateFacet: function(data) { },
 
+        /**
+         * Updates the facet elements with the new provided data
+         * This function is used to enable or disable value lists, tree facets, radio lists, single value lists.
+         * To switch the behavior for single components, it is possible to overwrite small functions like
+         * @param data
+         */
         updateValueList: function(data) {
             var me = this;
             var $elements = me.convertToElementList(me.$inputs);
@@ -463,37 +474,65 @@
             );
 
             if (me.validateComponentShouldBeDisabled(data, values, checkedIds)) {
-                me.disableAll($elements);
+                me.disableAll($elements, values);
                 return;
             }
 
             $elements.each(function(index, $element) {
-                var value = me.findValue($element.val() * 1, values);
-
+                var value = me.findValue($element.val(), values);
                 var disable = me.validateElementShouldBeDisabled($element, activeIds, ids, checkedIds, value);
                 me.disable($element, disable);
                 me.setDisabledClass($element.parents('.filter-panel--input'), disable);
             });
 
-            me.setDisabledClass(me.$el, me.allDisabled($elements));
+            me.disableComponent(me.allDisabled($elements), values);
         },
 
+        /**
+         * Sets is--disabled class on the filter panel
+         * @param disable
+         * @param values
+         */
+        disableComponent: function(disable, values) {
+            this.setDisabledClass(this.$el, disable);
+        },
+
+        /**
+         * Validate function to check if the filter panel should be disabled
+         * @param data
+         * @param values
+         * @param checkedIds
+         * @returns {boolean}
+         */
         validateComponentShouldBeDisabled: function(data, values, checkedIds) {
             return data == null && checkedIds.length <= 0;
         },
 
-        disableAll: function($elements) {
+        /**
+         * Disables all provided elements and the filter panel
+         * @param $elements
+         */
+        disableAll: function($elements, values) {
             var me = this;
 
             $elements.each(function(index, $element) {
                 me.disable($element, true);
                 me.setDisabledClass($element.parents('.filter-panel--input'), true);
             });
-            me.setDisabledClass(me.$el, true);
+            me.disableComponent(true, values);
         },
 
+        /**
+         * Validate function to check if the provided element should be disabled or enabled
+         * @param $element
+         * @param activeIds
+         * @param ids
+         * @param checkedIds
+         * @param value
+         * @returns {boolean}
+         */
         validateElementShouldBeDisabled: function($element, activeIds, ids, checkedIds, value) {
-            var val = $element.val() * 1;
+            var val = $element.val();
 
             if (activeIds.indexOf(val) >= 0) {
                 return false;
@@ -505,6 +544,12 @@
             return true;
         },
 
+        /**
+         * Returns the facet data for the provided name
+         * @param facets
+         * @param name
+         * @returns {object|null}
+         */
         getFacet: function(facets, name) {
             for (var key in facets){
                 var facet = facets[key];
@@ -515,10 +560,20 @@
             return null;
         },
 
+        /**
+         * Validates if the provided element is already checked
+         * @param $element
+         * @returns {boolean}
+         */
         isChecked: function($element) {
             return $element.is(':checked');
         },
 
+        /**
+         * Returns all elements which have the checked state
+         * @param $elements
+         * @returns {Array}
+         */
         getCheckedElements: function($elements) {
             var $actives = [], me = this;
 
@@ -530,12 +585,23 @@
             return $actives;
         },
 
+        /**
+         * Returns an array with all values of the provided elements
+         * @param $elements
+         * @returns {*}
+         */
         getElementValues: function($elements) {
             return $elements.map(function($element) {
-                return $element.val() * 1;
+                return $element.val();
             });
         },
 
+        /**
+         * Finds the value item for the provided id
+         * @param val
+         * @param values
+         * @returns {*}
+         */
         findValue: function(val, values) {
             var value = null;
             $(values).each(function(index, item) {
@@ -546,11 +612,21 @@
             return value;
         },
 
+        /**
+         * Disables or enables the provided element
+         * @param $element
+         * @param disabled
+         */
         disable: function($element, disabled) {
             this.setDisabledClass($element, disabled);
             this.disableElement($element, disabled);
         },
 
+        /**
+         * Sets or removes the disabled property for the provided element
+         * @param $element
+         * @param disabled
+         */
         disableElement: function($element, disabled) {
             $element.removeAttr('disabled');
             if (disabled) {
@@ -558,6 +634,11 @@
             }
         },
 
+        /**
+         * Sets or removes the is--disabled class for the provided element
+         * @param $element
+         * @param disabled
+         */
         setDisabledClass: function($element, disabled) {
             $element.removeClass('is--disabled');
             if (disabled) {
@@ -565,6 +646,11 @@
             }
         },
 
+        /**
+         * Checks if all provided elements are disabled
+         * @param $elements
+         * @returns {boolean}
+         */
         allDisabled: function($elements) {
             var me = this, allDisabled = true;
             $elements.each(function(index, $element) {
@@ -575,10 +661,20 @@
             return allDisabled;
         },
 
+        /**
+         * Validates if the provided element is marked as disabled
+         * @param $element
+         * @returns {*}
+         */
         isDisabled: function($element) {
             return $element.hasClass('is--disabled');
         },
 
+        /**
+         * Returns an array of all value ids
+         * @param values
+         * @returns {Array}
+         */
         getValueIds: function(values) {
             var ids = [];
             $(values).each(function(index, value) {
@@ -587,6 +683,11 @@
             return ids;
         },
 
+        /**
+         * Returns all ids of the provided values which marked as active
+         * @param values
+         * @returns {Array}
+         */
         getActiveValueIds: function(values) {
             var ids = [];
             $(values).each(function(index, value) {
@@ -597,6 +698,11 @@
             return ids;
         },
 
+        /**
+         * Converts the provided html element list to jQuery objects
+         * @param elements
+         * @returns {*|HTMLElement}
+         */
         convertToElementList: function(elements) {
             var $elements = [];
             $(elements).each(function(index, element) {
@@ -605,63 +711,12 @@
             return $($elements);
         },
 
-        updateList: function(data, elements, considerActives) {
-            var me = this,
-                allDisabled = true,
-                $elements = $(elements),
-                activeItems = [],
-                ids = [],
-                items = me.getItems(data, $elements);
-
-            var hasActiveElement = me.hasActiveElement($elements);
-
-            if (data === null && !hasActiveElement) {
-                $elements.each(function(index, input) {
-                    var $input = $(input);
-                    me.setDisabledClass($input, true);
-                });
-                me.setDisabledClass(me.$el, true);
-                return;
-            }
-
-            $(items).each(function(index, item) {
-                if (item.active) {
-                    activeItems.push(item.id);
-                }
-                ids.push(item.id);
-            });
-
-            $elements.each(function(index, input) {
-                var $input = $(input);
-                var val = $input.val() * 1;
-                var disabled = (ids.indexOf(val) == -1);
-
-                if (considerActives === true) {
-                    disabled = disabled || (activeItems.length > 0 && activeItems.indexOf(val) == -1);
-                }
-
-                if (!disabled) {
-                    allDisabled = false;
-                }
-
-                me.setDisabledClass($input, disabled);
-                me.setDisabledClass($input.parents('.filter-panel--input'), disabled);
-            });
-
-            me.setDisabledClass(me.$el, allDisabled);
-        },
-
-        hasActiveElement: function($elements) {
-            var hasActive = false;
-
-            $elements.each(function(index, item) {
-                if (item.checked) {
-                    hasActive = true;
-                }
-            });
-            return hasActive;
-        },
-
+        /**
+         * Returns a list of values which contained in the provided elements array
+         * @param data
+         * @param $elements
+         * @returns {*}
+         */
         getValues: function(data, $elements) {
             var me = this;
 
@@ -685,6 +740,12 @@
             return values;
         },
 
+        /**
+         * Validates if the provided value exists in the provided elements array
+         * @param value
+         * @param $elements
+         * @returns {boolean}
+         */
         valueExists: function(value, $elements) {
             var exists = false;
 

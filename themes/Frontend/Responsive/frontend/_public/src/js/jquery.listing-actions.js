@@ -211,7 +211,7 @@
 
             var isFiltered = me.$filterForm.attr('data-is-filtered');
             if (isFiltered > 0 && me.loadFacets) {
-                me.getFilterResult();
+                me.getFilterResult(me.urlParams, true);
             }
         },
 
@@ -698,8 +698,11 @@
          */
         getFilterResult: function(urlParams, loadFacets) {
             var me = this,
-                loadFacets = loadFacets || me.loadFacets,
                 params = urlParams || me.urlParams;
+
+            if (typeof loadFacets === 'undefined') {
+                loadFacets = me.loadFacets;
+            }
 
             me.resetBuffer();
 
@@ -711,7 +714,7 @@
 
                     me.updateFilterButton(response.totalCount);
 
-                    if (response.hasOwnProperty('facets') && loadFacets == 1) {
+                    if (response.hasOwnProperty('facets') && loadFacets) {
                         $.publish('plugin/swListingActions/updateFacets', [ me, response.facets ]);
                     }
 
