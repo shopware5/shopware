@@ -249,7 +249,7 @@ SQL;
                 continue;
             }
 
-            Utils::deleteDir($directory->getRealPath(), true);
+            Utils::deleteDir($directory, true);
         }
     }
 }
