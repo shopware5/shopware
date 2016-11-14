@@ -1,8 +1,9 @@
 {namespace name="frontend/listing/listing_actions"}
 
 {block name="frontend_listing_filter_facet_value_tree"}
-    <div class="filter-panel filter--property facet--{$facet->getFacetName()|escape:'htmlall'}"
+    <div class="filter-panel filter--value-tree facet--{$facet->getFacetName()|escape:'htmlall'}"
          data-filter-type="value-tree"
+         data-facet-name="{$facet->getFacetName()}"
          data-field-name="{$facet->getFieldName()|escape:'htmlall'}">
 
         {block name="frontend_listing_filter_facet_value_tree_flyout"}
@@ -34,14 +35,14 @@
                                                     <div class="option--container value-tree--container">
 
                                                         {block name="frontend_listing_filter_facet_value_tree_input"}
-                                                            <span class="filter-panel--checkbox">
+                                                            <span class="filter-panel--input">
                                                                 <input type="checkbox"
                                                                        id="__{$facet->getFieldName()|escape:'htmlall'}__{$option->getId()|escape:'htmlall'}"
                                                                        name="__{$facet->getFieldName()|escape:'htmlall'}__{$option->getId()|escape:'htmlall'}"
                                                                        value="{$option->getId()|escape:'htmlall'}"
                                                                        {if $option->isActive()}checked="checked" {/if}/>
 
-                                                                <span class="checkbox--state">&nbsp;</span>
+                                                                <span class="input--state">&nbsp;</span>
                                                             </span>
                                                         {/block}
 

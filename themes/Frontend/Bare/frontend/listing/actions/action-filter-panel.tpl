@@ -25,6 +25,8 @@
 						<form id="filter"
 							  method="get"
 							  data-filter-form="true"
+							  data-is-filtered="{$criteria->getCustomerConditions()|count}"
+							  data-load-facets="{config name=generatePartialFacets}"
 							  data-count-ctrl="{$countCtrlUrl}">
 
 							{block name="frontend_listing_actions_filter_submit_button"}
