@@ -53,11 +53,10 @@ class PropertyConditionHandler implements HandlerInterface
     ) {
         /** @var PropertyCondition $criteriaPart */
         $filter = new TermsQuery('properties.id', $criteriaPart->getValueIds());
-
-        if ($criteria->hasBaseCondition($criteriaPart->getName())) {
+        if ($criteria->generatePartialFacets() || $criteria->hasBaseCondition($criteriaPart->getName())) {
             $search->addFilter($filter);
-        } else {
-            $search->addPostFilter($filter);
+            return;
         }
+        $search->addPostFilter($filter);
     }
 }

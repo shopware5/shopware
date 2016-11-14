@@ -26,7 +26,7 @@ namespace Shopware\Bundle\SearchBundleDBAL\FacetHandler;
 
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\FacetResult\BooleanFacetResult;
-use Shopware\Bundle\SearchBundleDBAL\FacetHandlerInterface;
+use Shopware\Bundle\SearchBundleDBAL\PartialFacetHandlerInterface;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactory;
 use Shopware\Bundle\SearchBundle\Facet;
 use Shopware\Bundle\SearchBundle\FacetInterface;
@@ -38,7 +38,7 @@ use Shopware\Components\QueryAliasMapper;
  * @package   Shopware\Bundle\SearchBundleDBAL\FacetHandler
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class ShippingFreeFacetHandler implements FacetHandlerInterface
+class ShippingFreeFacetHandler implements PartialFacetHandlerInterface
 {
     /**
      * @var QueryBuilderFactory
@@ -73,25 +73,13 @@ class ShippingFreeFacetHandler implements FacetHandlerInterface
         }
     }
 
-    /**
-     * Generates the facet data for the passed query, criteria and context object.
-     *
-     * @param FacetInterface|Facet\ShippingFreeFacet $facet
-     * @param Criteria $criteria
-     * @param ShopContextInterface $context
-     * @return BooleanFacetResult
-     */
-    public function generateFacet(
+    public function generatePartialFacet(
         FacetInterface $facet,
+        Criteria $reverted,
         Criteria $criteria,
         ShopContextInterface $context
     ) {
-        $queryCriteria = clone $criteria;
-        $queryCriteria->resetConditions();
-        $queryCriteria->resetSorting();
-
-        $query = $this->queryBuilderFactory->createQuery($queryCriteria, $context);
-
+        $query = $this->queryBuilderFactory->createQuery($reverted, $context);
         $query->resetQueryPart('orderBy');
         $query->resetQueryPart('groupBy');
 

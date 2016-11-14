@@ -37,17 +37,17 @@ class ValueListItem extends Extendable
     /**
      * @var int|string
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      */
-    private $label;
+    protected $label;
 
     /**
      * @var boolean
      */
-    private $active;
+    protected $active;
 
     /**
      * @param int|string $id

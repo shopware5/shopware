@@ -58,11 +58,10 @@ class CustomerGroupConditionHandler implements HandlerInterface
             new TermsQuery('blockedCustomerGroupIds', $criteriaPart->getCustomerGroupIds()),
             BoolQuery::MUST_NOT
         );
-
-        if ($criteria->hasBaseCondition($criteriaPart->getName())) {
+        if ($criteria->generatePartialFacets() || $criteria->hasBaseCondition($criteriaPart->getName())) {
             $search->addFilter($filter);
-        } else {
-            $search->addPostFilter($filter);
+            return;
         }
+        $search->addPostFilter($filter);
     }
 }

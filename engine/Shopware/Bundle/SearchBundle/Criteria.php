@@ -72,6 +72,11 @@ class Criteria implements \JsonSerializable
     private $sortings = [];
 
     /**
+     * @var bool
+     */
+    private $generatePartialFacets = false;
+
+    /**
      * @param integer $offset
      * @return $this
      */
@@ -414,5 +419,29 @@ class Criteria implements \JsonSerializable
     public function getBaseConditions()
     {
         return $this->baseConditions;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function generatePartialFacets()
+    {
+        return $this->generatePartialFacets;
+    }
+
+    /**
+     * @param boolean $generatePartialFacets
+     */
+    public function setGeneratePartialFacets($generatePartialFacets)
+    {
+        $this->generatePartialFacets = $generatePartialFacets;
+    }
+
+    /**
+     * @return ConditionInterface[]
+     */
+    public function getCustomerConditions()
+    {
+        return $this->conditions;
     }
 }

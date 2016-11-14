@@ -120,6 +120,14 @@ class StoreFrontCriteriaFactory implements StoreFrontCriteriaFactoryInterface
             'context'  => $context
         ]);
 
+        if (!$criteria->hasBaseCondition('category')) {
+            $criteria->addBaseCondition(
+                new CategoryCondition([
+                    $context->getShop()->getCategory()->getId()
+                ])
+            );
+        }
+
         return $criteria;
     }
 
@@ -251,10 +259,7 @@ class StoreFrontCriteriaFactory implements StoreFrontCriteriaFactoryInterface
             $request->setParam('sSort', StoreFrontCriteriaFactory::SORTING_SEARCH_RANKING);
         }
 
-        $criteria = $this->createCriteriaFromRequest(
-            $request,
-            $context
-        );
+        $criteria = $this->createCriteriaFromRequest($request, $context);
 
         if (!$criteria->hasCondition('category')) {
             $categoryId = $context->getShop()->getCategory()->getId();

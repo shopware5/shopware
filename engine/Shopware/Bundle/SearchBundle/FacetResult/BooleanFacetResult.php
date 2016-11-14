@@ -38,27 +38,27 @@ class BooleanFacetResult extends Extendable implements FacetResultInterface
     /**
      * @var string
      */
-    private $facetName;
+    protected $facetName;
 
     /**
      * @var string
      */
-    private $fieldName;
+    protected $fieldName;
 
     /**
      * @var bool
      */
-    private $active;
+    protected $active;
 
     /**
      * @var string
      */
-    private $label;
+    protected $label;
 
     /**
      * @var string|null
      */
-    private $template = null;
+    protected $template = null;
 
     /**
      * @param string $facetName

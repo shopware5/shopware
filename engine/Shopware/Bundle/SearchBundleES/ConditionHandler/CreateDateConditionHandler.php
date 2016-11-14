@@ -60,11 +60,10 @@ class CreateDateConditionHandler implements HandlerInterface
         $filter = new RangeQuery('formattedCreatedAt', [
             'gte' => $date->format('Y-m-d')
         ]);
-
-        if ($criteria->hasBaseCondition($criteriaPart->getName())) {
+        if ($criteria->generatePartialFacets() || $criteria->hasBaseCondition($criteriaPart->getName())) {
             $search->addFilter($filter);
-        } else {
-            $search->addPostFilter($filter);
+            return;
         }
+        $search->addPostFilter($filter);
     }
 }

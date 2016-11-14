@@ -38,52 +38,52 @@ class RangeFacetResult extends Extendable implements FacetResultInterface
     /**
      * @var string
      */
-    private $facetName;
+    protected $facetName;
 
     /**
      * @var bool
      */
-    private $active;
+    protected $active;
 
     /**
      * @var string
      */
-    private $label;
+    protected $label;
 
     /**
      * @var float
      */
-    private $min;
+    protected $min;
 
     /**
      * @var float
      */
-    private $max;
+    protected $max;
 
     /**
      * @var string
      */
-    private $minFieldName;
+    protected $minFieldName;
 
     /**
      * @var string
      */
-    private $maxFieldName;
+    protected $maxFieldName;
 
     /**
      * @var float
      */
-    private $activeMax;
+    protected $activeMax;
 
     /**
      * @var float
      */
-    private $activeMin;
+    protected $activeMin;
 
     /**
      * @var null|string
      */
-    private $template = null;
+    protected $template = null;
 
     /**
      * @param string $facetName

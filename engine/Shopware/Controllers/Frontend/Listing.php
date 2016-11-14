@@ -40,68 +40,6 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
 {
     /**
-     * Listing of all manufacturer products.
-     * Templates extends from the normal listing template.
-     */
-    public function manufacturerAction()
-    {
-        $manufacturerId = $this->Request()->getParam('sSupplier', null);
-
-        /**@var $context ProductContextInterface*/
-        $context = $this->get('shopware_storefront.context_service')->getShopContext();
-
-        if (!$this->Request()->getParam('sCategory')) {
-            $this->Request()->setParam('sCategory', $context->getShop()->getCategory()->getId());
-        }
-
-        /**@var $criteria Criteria*/
-        $criteria = $this->get('shopware_search.store_front_criteria_factory')
-            ->createListingCriteria($this->Request(), $context);
-
-        if ($criteria->hasCondition('manufacturer')) {
-            $condition = $criteria->getCondition('manufacturer');
-            $criteria->removeCondition('manufacturer');
-            $criteria->addBaseCondition($condition);
-        }
-
-        $categoryArticles = Shopware()->Modules()->Articles()->sGetArticlesByCategory(
-            $context->getShop()->getCategory()->getId(),
-            $criteria
-        );
-
-        /**@var $manufacturer Manufacturer*/
-        $manufacturer = $this->get('shopware_storefront.manufacturer_service')->get(
-            $manufacturerId,
-            $this->get('shopware_storefront.context_service')->getShopContext()
-        );
-
-        if ($manufacturer->getCoverFile()) {
-            $mediaService = Shopware()->Container()->get('shopware_media.media_service');
-            $manufacturer->setCoverFile($mediaService->getUrl($manufacturer->getCoverFile()));
-        }
-
-        $facets = array();
-        foreach ($categoryArticles['facets'] as $facet) {
-            if (!$facet instanceof FacetResultInterface || $facet->getFacetName() == 'manufacturer') {
-                continue;
-            }
-            $facets[] = $facet;
-        }
-
-        $categoryArticles['facets'] = $facets;
-
-        $this->View()->assign($categoryArticles);
-        $this->View()->assign('showListing', true);
-        $this->View()->assign('manufacturer', $manufacturer);
-        $this->View()->assign('ajaxCountUrlParams', [
-            'sSupplier' => $manufacturerId,
-            'sCategory' => $context->getShop()->getCategory()->getId()
-        ]);
-
-        $this->View()->assign('sCategoryContent', $this->getSeoDataOfManufacturer($manufacturer));
-    }
-
-    /**
      * Index action method
      */
     public function indexAction()
@@ -193,6 +131,68 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         $categoryArticles['facets'] = $facets;
 
         $this->View()->assign($categoryArticles);
+    }
+
+    /**
+     * Listing of all manufacturer products.
+     * Templates extends from the normal listing template.
+     */
+    public function manufacturerAction()
+    {
+        $manufacturerId = $this->Request()->getParam('sSupplier', null);
+
+        /**@var $context ProductContextInterface*/
+        $context = $this->get('shopware_storefront.context_service')->getShopContext();
+
+        if (!$this->Request()->getParam('sCategory')) {
+            $this->Request()->setParam('sCategory', $context->getShop()->getCategory()->getId());
+        }
+
+        /**@var $criteria Criteria*/
+        $criteria = $this->get('shopware_search.store_front_criteria_factory')
+            ->createListingCriteria($this->Request(), $context);
+
+        if ($criteria->hasCondition('manufacturer')) {
+            $condition = $criteria->getCondition('manufacturer');
+            $criteria->removeCondition('manufacturer');
+            $criteria->addBaseCondition($condition);
+        }
+
+        $categoryArticles = Shopware()->Modules()->Articles()->sGetArticlesByCategory(
+            $context->getShop()->getCategory()->getId(),
+            $criteria
+        );
+
+        /**@var $manufacturer Manufacturer*/
+        $manufacturer = $this->get('shopware_storefront.manufacturer_service')->get(
+            $manufacturerId,
+            $this->get('shopware_storefront.context_service')->getShopContext()
+        );
+
+        if ($manufacturer->getCoverFile()) {
+            $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+            $manufacturer->setCoverFile($mediaService->getUrl($manufacturer->getCoverFile()));
+        }
+
+        $facets = array();
+        foreach ($categoryArticles['facets'] as $facet) {
+            if (!$facet instanceof FacetResultInterface || $facet->getFacetName() == 'manufacturer') {
+                continue;
+            }
+            $facets[] = $facet;
+        }
+
+        $categoryArticles['facets'] = $facets;
+
+        $this->View()->assign($categoryArticles);
+        $this->View()->assign('showListing', true);
+        $this->View()->assign('manufacturer', $manufacturer);
+        $this->View()->assign('ajaxCountUrlParams', [
+            'sSupplier' => $manufacturerId,
+            'sCategory' => $context->getShop()->getCategory()->getId()
+        ]);
+
+        $this->View()->assign('sCategoryContent', $this->getSeoDataOfManufacturer($manufacturer));
     }
 
     /**

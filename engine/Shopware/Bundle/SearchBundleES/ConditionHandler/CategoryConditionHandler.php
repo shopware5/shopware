@@ -53,11 +53,10 @@ class CategoryConditionHandler implements HandlerInterface
     ) {
         /** @var CategoryCondition $criteriaPart */
         $filter = new TermsQuery('categoryIds', $criteriaPart->getCategoryIds());
-
-        if ($criteria->hasBaseCondition($criteriaPart->getName())) {
+        if ($criteria->generatePartialFacets() || $criteria->hasBaseCondition($criteriaPart->getName())) {
             $search->addFilter($filter);
-        } else {
-            $search->addPostFilter($filter);
+            return;
         }
+        $search->addPostFilter($filter);
     }
 }

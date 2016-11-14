@@ -54,12 +54,11 @@ class HasPseudoPriceConditionHandler implements HandlerInterface
         /** @var HasPseudoPriceCondition $criteriaPart */
         $field = $this->getPseudoPriceField($context);
         $filter = new RangeQuery($field, ['gt' => 0]);
-
-        if ($criteria->hasBaseCondition($criteriaPart->getName())) {
+        if ($criteria->generatePartialFacets() || $criteria->hasBaseCondition($criteriaPart->getName())) {
             $search->addFilter($filter);
-        } else {
-            $search->addPostFilter($filter);
+            return;
         }
+        $search->addPostFilter($filter);
     }
 
     /**

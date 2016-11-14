@@ -31,19 +31,21 @@ use Shopware\Bundle\SearchBundle\FacetResult\RadioFacetResult;
 use Shopware\Bundle\SearchBundle\FacetResult\RangeFacetResult;
 use Shopware\Bundle\SearchBundle\FacetResult\ValueListFacetResult;
 use Shopware\Bundle\SearchBundle\FacetResult\ValueListItem;
-use Shopware\Bundle\SearchBundleDBAL\FacetHandlerInterface;
+use Shopware\Bundle\SearchBundle\FacetResultInterface;
+use Shopware\Bundle\SearchBundleDBAL\PartialFacetHandlerInterface;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactory;
 use Shopware\Bundle\SearchBundle\Facet\ProductAttributeFacet;
 use Shopware\Bundle\SearchBundle\FacetInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 /**
  * @category  Shopware
  * @package   Shopware\Bundle\SearchBundleDBAL\FacetHandler
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class ProductAttributeFacetHandler implements FacetHandlerInterface
+class ProductAttributeFacetHandler implements PartialFacetHandlerInterface
 {
     /**
      * @var QueryBuilderFactory
@@ -51,20 +53,11 @@ class ProductAttributeFacetHandler implements FacetHandlerInterface
     private $queryBuilderFactory;
 
     /**
-     * @var \Enlight_Components_Snippet_Namespace
-     */
-    private $snippetNamespace;
-
-    /**
      * @param QueryBuilderFactory $queryBuilderFactory
-     * @param \Shopware_Components_Snippet_Manager $snippetManager
      */
-    public function __construct(
-        QueryBuilderFactory $queryBuilderFactory,
-        \Shopware_Components_Snippet_Manager $snippetManager
-    ) {
+    public function __construct(QueryBuilderFactory $queryBuilderFactory)
+    {
         $this->queryBuilderFactory = $queryBuilderFactory;
-        $this->snippetNamespace = $snippetManager->getNamespace('frontend/listing/facet_labels');
     }
 
     /**
@@ -76,24 +69,19 @@ class ProductAttributeFacetHandler implements FacetHandlerInterface
     }
 
     /**
-     * Generates the facet data for the passed query, criteria and context object.
-     *
      * @param FacetInterface|ProductAttributeFacet $facet
+     * @param Criteria $reverted
      * @param Criteria $criteria
-     * @param Struct\ShopContextInterface $context
-     * @return BooleanFacetResult|ValueListFacetResult
+     * @param ShopContextInterface $context
+     * @return FacetResultInterface|null
      */
-    public function generateFacet(
+    public function generatePartialFacet(
         FacetInterface $facet,
+        Criteria $reverted,
         Criteria $criteria,
-        Struct\ShopContextInterface $context
+        ShopContextInterface $context
     ) {
-        $queryCriteria = clone $criteria;
-        $queryCriteria->resetConditions();
-        $queryCriteria->resetSorting();
-
-        $query = $this->queryBuilderFactory->createQuery($queryCriteria, $context);
-
+        $query = $this->queryBuilderFactory->createQuery($reverted, $context);
         $query->resetQueryPart('orderBy');
         $query->resetQueryPart('groupBy');
 
@@ -123,7 +111,6 @@ class ProductAttributeFacetHandler implements FacetHandlerInterface
         if ($result !== null && $facet->getTemplate()) {
             $result->setTemplate($facet->getTemplate());
         }
-
         return $result;
     }
 

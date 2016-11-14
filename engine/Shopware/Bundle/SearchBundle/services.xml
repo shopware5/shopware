@@ -45,5 +45,10 @@
             <argument type="service" id="shopware_search.batch_product_number_search" />
             <argument type="service" id="shopware_storefront.list_product_service" />
         </service>
+
+        <service id="shopware_search.category_tree_facet_result_builder" class="Shopware\Bundle\SearchBundle\FacetResult\CategoryTreeFacetResultBuilder">
+            <argument type="service" id="snippets" />
+            <argument type="service" id="query_alias_mapper" />
+        </service>
     </services>
 </container>

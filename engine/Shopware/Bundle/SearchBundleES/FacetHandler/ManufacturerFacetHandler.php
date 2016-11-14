@@ -116,7 +116,9 @@ class ManufacturerFacetHandler implements HandlerInterface, ResultHydratorInterf
             return;
         }
 
-        $manufacturers = $this->getManufacturers($buckets, $context);
+        $ids = array_column($buckets, 'key');
+        $manufacturers = $this->manufacturerService->getList($ids, $context);
+
         $items = $this->createListItems($criteria, $manufacturers);
 
         $criteriaPart = $this->createFacet($criteria, $items);
@@ -124,21 +126,8 @@ class ManufacturerFacetHandler implements HandlerInterface, ResultHydratorInterf
     }
 
     /**
-     * @param $buckets
-     * @param ShopContextInterface $context
-     * @return \Shopware\Bundle\StoreFrontBundle\Struct\Product\Manufacturer[]
-     * @throws \Exception
-     */
-    private function getManufacturers($buckets, ShopContextInterface $context)
-    {
-        $ids = array_column($buckets, 'key');
-        $manufacturers = $this->manufacturerService->getList($ids, $context);
-        return $manufacturers;
-    }
-
-    /**
      * @param Criteria $criteria
-     * @param $manufacturers
+     * @param Manufacturer[] $manufacturers
      * @return array
      */
     private function createListItems(Criteria $criteria, $manufacturers)

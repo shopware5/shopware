@@ -38,22 +38,22 @@ class FacetResultGroup extends Extendable implements FacetResultInterface
     /**
      * @var FacetResultInterface[]
      */
-    private $facetResults;
+    protected $facetResults;
 
     /**
      * @var string
      */
-    private $facetName;
+    protected $facetName;
 
     /**
      * @var string
      */
-    private $label;
+    protected $label;
 
     /**
      * @var string|null
      */
-    private $template = null;
+    protected $template = null;
 
     /**
      * @param FacetResultInterface[] $facetResults
