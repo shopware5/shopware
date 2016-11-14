@@ -27,7 +27,7 @@ namespace Shopware\Bundle\SearchBundleDBAL\ConditionHandler;
 use Shopware\Bundle\SearchBundle\Condition\HasPseudoPriceCondition;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
 use Shopware\Bundle\SearchBundleDBAL\ConditionHandlerInterface;
-use Shopware\Bundle\SearchBundleDBAL\PriceHelperInterface;
+use Shopware\Bundle\SearchBundleDBAL\ListingPriceTable;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
@@ -39,25 +39,16 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 class HasPseudoPriceConditionHandler implements ConditionHandlerInterface
 {
     /**
-     * @var PriceHelperInterface
+     * @var ListingPriceTable
      */
-    private $priceHelper;
+    private $listingPriceTable;
 
     /**
-     * @var \Shopware_Components_Config
+     * @param ListingPriceTable $listingPriceTable
      */
-    private $config;
-
-    /**
-     * @param PriceHelperInterface $priceHelper
-     * @param \Shopware_Components_Config $config
-     */
-    public function __construct(
-        PriceHelperInterface $priceHelper,
-        \Shopware_Components_Config $config
-    ) {
-        $this->priceHelper = $priceHelper;
-        $this->config = $config;
+    public function __construct(ListingPriceTable $listingPriceTable)
+    {
+        $this->listingPriceTable = $listingPriceTable;
     }
 
     /**
@@ -76,7 +67,15 @@ class HasPseudoPriceConditionHandler implements ConditionHandlerInterface
         QueryBuilder $query,
         ShopContextInterface $context
     ) {
-        $this->priceHelper->joinPrices($query, $context);
-        $query->andWhere('IFNULL(customerPrice.pseudoprice, defaultPrice.pseudoprice) > 0');
+        if (!$query->hasState(PriceConditionHandler::LISTING_PRICE_JOINED)) {
+            $table = $this->listingPriceTable->get($context);
+            $query->innerJoin('product', '(' . $table->getSQL() . ')', 'listing_price', 'listing_price.articleID = product.id');
+            foreach ($table->getParameters() as $key => $value) {
+                $query->setParameter($key, $value);
+            }
+            $query->addState(PriceConditionHandler::LISTING_PRICE_JOINED);
+        }
+
+        $query->andWhere('listing_price.pseudoprice > 0');
     }
 }

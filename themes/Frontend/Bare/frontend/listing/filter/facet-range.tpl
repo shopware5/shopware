@@ -3,6 +3,7 @@
 {block name="frontend_listing_filter_facet_range"}
 	<div class="filter-panel filter--range facet--{$facet->getFacetName()|escape:'htmlall'}"
 		 data-filter-type="range"
+		 data-facet-name="{$facet->getFacetName()}"
 		 data-field-name="{$facet->getFacetName()|escape:'htmlall'}">
 
 		{block name="frontend_listing_filter_facet_range_flyout"}
