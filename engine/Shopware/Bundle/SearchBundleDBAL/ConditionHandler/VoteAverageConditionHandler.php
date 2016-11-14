@@ -91,7 +91,6 @@ GROUP BY vote.articleID';
 
         /** @var VoteAverageCondition $condition */
         $query->setParameter(':average', (float) $condition->getAverage());
-        $query->addSelect('voteAverage.average');
         $query->addState(VoteAverageCondition::STATE_INCLUDES_VOTE_TABLE);
     }
 }

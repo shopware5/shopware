@@ -3,6 +3,7 @@
 {block name="frontend_listing_filter_facet_rating"}
     <div class="filter-panel filter--rating facet--{$facet->getFacetName()|escape:'htmlall'}"
          data-filter-type="rating"
+         data-facet-name="{$facet->getFacetName()}"
          data-field-name="{$facet->getFieldName()|escape:'htmlall'}">
 
         {block name="frontend_listing_filter_facet_rating_flyout"}
@@ -23,28 +24,21 @@
 
                         {block name="frontend_listing_filter_facet_rating_stars"}
                             <div class="filter-panel--star-rating">
-
-                                {block name="frontend_listing_filter_facet_rating_reset_input"}
-                                    <input type="radio"
-                                           class="rating-star--input"
-                                           id="star--reset"
-                                           name="rating"
-                                           value=""
-                                           {if !$facet->isActive()}checked="checked" {/if}/>
-                                {/block}
-
                                 {foreach $facet->getValues() as $value}
-                                    {block name="frontend_listing_filter_facet_rating_label"}
-                                        <label class="rating-star--label star--{$value->getId()}" for="star--{$value->getId()}"></label>
-                                    {/block}
+                                    {block name="frontend_listing_filter_facet_rating_container"}
+                                        <label for="rating_{$value->getId()}" class="rating-star--outer-container{if $value->isActive()} is--active{/if}">
+                                            <input class="is--hidden" type="checkbox" name="rating" id="rating_{$value->getId()}" value="{$value->getId()}" {if $value->isActive()}checked="checked" {/if}/>
 
-                                    {block name="frontend_listing_filter_facet_rating_input"}
-                                        <input type="radio"
-                                               class="rating-star--input"
-                                               id="star--{$value->getId()}"
-                                               name="rating"
-                                               value="{$value->getId()}"
-                                               {if $value->isActive()}checked="checked" {/if}/>
+                                            {for $i = 1 to $value->getId()}
+                                                <i class="icon--star"></i>
+                                            {/for}
+
+                                            {for $i = $value->getId() + 1 to 5}
+                                                <i class="icon--star-empty"></i>
+                                            {/for}
+                                            <span class="rating-star--suffix">& mehr</span>
+                                            <span class="rating-star--suffix-count">({$value->getLabel()})</span>
+                                        </label>
                                     {/block}
                                 {/foreach}
                             </div>
