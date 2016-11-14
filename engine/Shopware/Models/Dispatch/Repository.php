@@ -72,7 +72,8 @@ class Repository extends ModelRepository
             'position' => 'dispatches.position'
         ));
         $builder->from('Shopware\Models\Dispatch\Dispatch', 'dispatches');
-
+        $builder->setAlias('dispatches');
+        
         if (!empty($filter)) {
             $builder->addFilter($filter);
         }
