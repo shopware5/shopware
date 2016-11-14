@@ -24,7 +24,6 @@
 
 namespace Shopware\Recovery\Update\Controller;
 
-use DirectoryIterator;
 use Shopware\Recovery\Update\CleanupFilesFinder;
 use Shopware\Recovery\Update\DummyPluginFinder;
 use Shopware\Recovery\Update\Utils;
@@ -111,7 +110,6 @@ class CleanupController
         );
 
         $this->cleanupMedia();
-        $this->deleteOutdatedCacheFolders();
 
         if (count($cleanupList) == 0) {
             $_SESSION['CLEANUP_DONE'] = true;
@@ -233,23 +231,5 @@ SQL;
                 ':newValue' => $value,
                 ':shopId' => $shopId
             ]);
-    }
-
-    /**
-     * Deletes outdated cache folders from earlier shopware versions.
-     */
-    private function deleteOutdatedCacheFolders()
-    {
-        $cacheDirectory = $this->shopwarePath.'/var/cache';
-
-        $inCacheDirectoryIterator = new DirectoryIterator($cacheDirectory);
-
-        foreach ($inCacheDirectoryIterator as $directory) {
-            if ($directory->isDot() || $directory->isFile()) {
-                continue;
-            }
-
-            Utils::deleteDir($directory->getRealPath(), true);
-        }
     }
 }
