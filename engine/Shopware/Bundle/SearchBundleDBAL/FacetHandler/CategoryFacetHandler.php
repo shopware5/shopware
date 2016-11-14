@@ -24,26 +24,24 @@
 
 namespace Shopware\Bundle\SearchBundleDBAL\FacetHandler;
 
-use Doctrine\DBAL\Connection;
 use Shopware\Bundle\SearchBundle\Condition\CategoryCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
-use Shopware\Bundle\SearchBundle\FacetResult\TreeFacetResult;
-use Shopware\Bundle\SearchBundle\FacetResult\TreeItem;
+use Shopware\Bundle\SearchBundle\Facet\CategoryFacet;
+use Shopware\Bundle\SearchBundle\FacetResult\CategoryTreeFacetResultBuilder;
+use Shopware\Bundle\SearchBundle\FacetResultInterface;
+use Shopware\Bundle\SearchBundleDBAL\PartialFacetHandlerInterface;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactory;
-use Shopware\Bundle\SearchBundle\Facet;
 use Shopware\Bundle\SearchBundle\FacetInterface;
-use Shopware\Bundle\SearchBundleDBAL\FacetHandlerInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\Category;
+use Shopware\Bundle\StoreFrontBundle\Service\Core\CategoryDepthService;
 use Shopware\Bundle\StoreFrontBundle\Service\CategoryServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
-use Shopware\Components\QueryAliasMapper;
 
 /**
  * @category  Shopware
  * @package   Shopware\Bundle\SearchBundleDBAL\FacetHandler
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class CategoryFacetHandler implements FacetHandlerInterface
+class CategoryFacetHandler implements PartialFacetHandlerInterface
 {
     /**
      * @var CategoryServiceInterface
@@ -56,61 +54,69 @@ class CategoryFacetHandler implements FacetHandlerInterface
     private $queryBuilderFactory;
 
     /**
-     * @var \Enlight_Components_Snippet_Namespace
+     *
+     * @var \Shopware_Components_Config
      */
-    private $snippetNamespace;
+    private $config;
 
     /**
-     * @var string
+     * @var CategoryDepthService
      */
-    private $fieldName;
+    private $categoryDepthService;
+
     /**
-     * @var Connection
+     * @var CategoryTreeFacetResultBuilder
      */
-    private $connection;
+    private $categoryTreeFacetResultBuilder;
 
     /**
      * @param CategoryServiceInterface $categoryService
      * @param QueryBuilderFactory $queryBuilderFactory
-     * @param \Shopware_Components_Snippet_Manager $snippetManager
-     * @param QueryAliasMapper $queryAliasMapper
-     * @param Connection $connection
+     * @param \Shopware_Components_Config $config
+     * @param CategoryDepthService $categoryDepthService
+     * @param CategoryTreeFacetResultBuilder $categoryTreeFacetResultBuilder
      */
     public function __construct(
         CategoryServiceInterface $categoryService,
         QueryBuilderFactory $queryBuilderFactory,
-        \Shopware_Components_Snippet_Manager $snippetManager,
-        QueryAliasMapper $queryAliasMapper,
-        Connection $connection
+        \Shopware_Components_Config $config,
+        CategoryDepthService $categoryDepthService,
+        CategoryTreeFacetResultBuilder $categoryTreeFacetResultBuilder
     ) {
         $this->categoryService = $categoryService;
         $this->queryBuilderFactory = $queryBuilderFactory;
-        $this->snippetNamespace = $snippetManager->getNamespace('frontend/listing/facet_labels');
-        $this->connection = $connection;
-
-        if (!$this->fieldName = $queryAliasMapper->getShortAlias('sCategory')) {
-            $this->fieldName = 'sCategory';
-        }
+        $this->config = $config;
+        $this->categoryDepthService = $categoryDepthService;
+        $this->categoryTreeFacetResultBuilder = $categoryTreeFacetResultBuilder;
     }
 
     /**
-     * Generates the facet for the \Shopware\Bundle\SearchBundle\Facet;\Category class.
-     * Displays how many products are assigned to the children categories.
-     *
-     * The handler use the category ids of the \Shopware\Bundle\SearchBundle\Condition\Category.
-     * If no \Shopware\Bundle\SearchBundle\Condition\Category is set, the handler uses as default the id 1.
-     *
-     * @param FacetInterface|Facet\CategoryFacet $facet
+     * @param FacetInterface|CategoryFacet $facet
+     * @param Criteria $reverted
      * @param Criteria $criteria
      * @param ShopContextInterface $context
-     * @return TreeFacetResult
+     * @return FacetResultInterface
      */
-    public function generateFacet(
+    public function generatePartialFacet(
         FacetInterface $facet,
+        Criteria $reverted,
         Criteria $criteria,
         ShopContextInterface $context
     ) {
-        $ids = $this->getCategoryIds($criteria, $context);
+        $ids = $this->fetchCategoriesOfProducts($reverted, $context);
+
+        if (empty($ids)) {
+            return null;
+        }
+
+        $ids = $this->filterSystemCategories($ids, $context);
+
+        $ids = $this->categoryDepthService->get(
+            $context->getShop()->getCategory(),
+            (int) $this->config->get('categoryFilterDepth', 2),
+            $ids
+        );
+
         $categories = $this->categoryService->getList($ids, $context);
 
         $active = [];
@@ -120,92 +126,10 @@ class CategoryFacetHandler implements FacetHandlerInterface
             $active = $condition->getCategoryIds();
         }
 
-        return $this->createTreeFacet($categories, $facet, $active);
-    }
-
-    /**
-     * @param Category[] $categories
-     * @param Facet\CategoryFacet $facet
-     * @param int[] $active
-     * @return TreeFacetResult
-     */
-    private function createTreeFacet($categories, $facet, $active)
-    {
-        $items = $this->getCategoriesOfParent($categories, null);
-        if (!$items) {
-            return null;
-        }
-
-        $values = [];
-        foreach ($items as $item) {
-            $values[] = $this->createTreeItem($categories, $item, $active);
-        }
-
-        return new TreeFacetResult(
-            $facet->getName(),
-            $this->fieldName,
-            empty($active),
-            $this->snippetNamespace->get($facet->getName(), 'Categories'),
-            $values,
-            [],
-            null
-        );
-    }
-
-    /**
-     * @param Category[] $categories
-     * @param $parentId
-     * @return array
-     */
-    private function getCategoriesOfParent($categories, $parentId)
-    {
-        $result = [];
-
-        foreach ($categories as $category) {
-            if (!$category->getPath() && $parentId !== null) {
-                continue;
-            }
-
-            if ($category->getPath() == $parentId) {
-                $result[] = $category;
-                continue;
-            }
-
-            $parents = $category->getPath();
-            $lastParent = $parents[count($parents) - 1];
-
-            if ($lastParent == $parentId) {
-                $result[] = $category;
-            }
-        }
-
-        return $result;
-    }
-
-    /**
-     * @param Category[] $categories
-     * @param Category $category
-     * @param int[] $active
-     * @return \Shopware\Bundle\SearchBundle\FacetResult\TreeItem
-     */
-    private function createTreeItem($categories, Category $category, $active)
-    {
-        $children = $this->getCategoriesOfParent(
+        return $this->categoryTreeFacetResultBuilder->buildFacetResult(
             $categories,
-            $category->getId()
-        );
-
-        $values = [];
-        foreach ($children as $child) {
-            $values[] = $this->createTreeItem($categories, $child, $active);
-        }
-
-        return new TreeItem(
-            $category->getId(),
-            $category->getName(),
-            in_array($category->getId(), $active),
-            $values,
-            $category->getAttributes()
+            $active,
+            $context->getShop()->getCategory()->getId()
         );
     }
 
@@ -214,75 +138,39 @@ class CategoryFacetHandler implements FacetHandlerInterface
      */
     public function supportsFacet(FacetInterface $facet)
     {
-        return ($facet instanceof Facet\CategoryFacet);
+        return ($facet instanceof CategoryFacet);
     }
 
     /**
-     * @param Criteria $criteria
+     * @param array $ids
      * @param ShopContextInterface $context
      * @return array
      */
-    private function getCategoryIds(Criteria $criteria, ShopContextInterface $context)
+    private function filterSystemCategories(array $ids, ShopContextInterface $context)
     {
-        $queryCriteria = clone $criteria;
-        $queryCriteria->resetConditions();
-        $queryCriteria->resetSorting();
-
-        $queryCriteria->removeBaseCondition('category');
-        $queryCriteria->removeCondition('category');
-
-        $query = $this->queryBuilderFactory->createQuery($queryCriteria, $context);
-
-        $query->resetQueryPart('orderBy');
-        $query->resetQueryPart('groupBy');
-
-        $query->select(['productCategory.categoryID']);
-
-        $query->innerJoin(
-            'product',
-            's_articles_categories_ro',
-            'productCategory',
-            'productCategory.articleID = product.id'
+        $system = array_merge(
+            [$context->getShop()->getCategory()->getId()],
+            explode('|', $context->getShop()->getCategory()->getPath())
         );
 
+        return array_filter($ids, function ($id) use ($system) {
+            return !in_array($id, $system);
+        });
+    }
+
+    /**
+     * @param Criteria $reverted
+     * @param ShopContextInterface $context
+     * @return int[]
+     */
+    private function fetchCategoriesOfProducts(Criteria $reverted, ShopContextInterface $context)
+    {
+        $query = $this->queryBuilderFactory->createQuery($reverted, $context);
+        $query->resetQueryPart('orderBy');
+        $query->resetQueryPart('groupBy');
+        $query->select(['productCategory.categoryID']);
+        $query->innerJoin('product', 's_articles_categories_ro', 'productCategory', 'productCategory.articleID = product.id');
         $query->groupBy('productCategory.categoryID');
-
-        if ($criteria->hasCondition('category')) {
-            /**@var $condition CategoryCondition */
-            $condition = $criteria->getCondition('category');
-            $parentIds = $condition->getCategoryIds();
-        } else {
-            $parentIds = [1];
-        }
-
-        /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
-        $statement = $query->execute();
-
-        /**@var $facet Facet\CategoryFacet */
-        $ids = $statement->fetchAll(\PDO::FETCH_COLUMN);
-
-        $query = $this->connection->createQueryBuilder();
-        $query->select(['category.id', 'category.path'])
-            ->from('s_categories', 'category')
-            ->where('category.parent IN (:parent) OR category.id IN (:parent)')
-            ->andWhere('category.id IN (:ids)')
-            ->andWhere('category.active = 1')
-            ->setParameter(':parent', $parentIds, Connection::PARAM_INT_ARRAY)
-            ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY)
-        ;
-
-        $paths = $query->execute()->fetchAll(\PDO::FETCH_KEY_PAIR);
-
-        $ids = array_keys($paths);
-        $plain = array_values($paths);
-
-        if (count($plain) > 0 && strpos($plain[0], '|') !== false) {
-            $rootPath = explode('|', $plain[0]);
-            $rootPath = array_filter(array_unique($rootPath));
-            $ids = array_merge($ids, $rootPath);
-            return $ids;
-        }
-
-        return $ids;
+        return $query->execute()->fetchAll(\PDO::FETCH_COLUMN);
     }
 }

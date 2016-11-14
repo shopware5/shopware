@@ -56,14 +56,7 @@ class CategoryFacetTest extends TestCase
 
         /** @var TreeItem $value */
         $value = $facet->getValues()[0];
-        $this->assertEquals('Deutsch', $value->getLabel());
-
-        $value = $value->getValues()[0];
         $this->assertEquals('firstLevel', $value->getLabel());
-        $this->assertTrue($value->isActive());
-
-        $value = $value->getValues()[0];
-        $this->assertEquals('secondLevel', $value->getLabel());
     }
 
     public function testMultipleCategories()
@@ -104,9 +97,6 @@ class CategoryFacetTest extends TestCase
         $this->assertCount(1, $facet->getValues());
 
         $value = $facet->getValues()[0];
-        $this->assertEquals('Deutsch', $value->getLabel());
-
-        $value = $value->getValues()[0];
         $this->assertEquals('firstLevel', $value->getLabel());
         $this->assertTrue($value->isActive());
 
@@ -135,6 +125,10 @@ class CategoryFacetTest extends TestCase
             'parent' => $baseCategory->getId()
         ));
 
+        /** @var \Shopware_Components_Config $config */
+        $config = Shopware()->Container()->get('config');
+        $config->offsetSet('categoryFilterDepth', 4);
+
         $result = $this->search(
             array(
                 'first' => $subCategory1,
@@ -159,9 +153,6 @@ class CategoryFacetTest extends TestCase
 
         /** @var TreeItem $value */
         $value = $facet->getValues()[0];
-        $this->assertEquals('Deutsch', $value->getLabel());
-
-        $value = $value->getValues()[0];
         $this->assertEquals('firstLevel', $value->getLabel());
 
         $value = $value->getValues()[0];
