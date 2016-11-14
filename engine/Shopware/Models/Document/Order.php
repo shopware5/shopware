@@ -556,11 +556,11 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
     {
         $this->_billing =  new ArrayObject(Shopware()->Db()->fetchRow("
         SELECT sob.*,sub.ustid,u.customernumber FROM s_order_billingaddress AS sob
-        LEFT JOIN s_user_addresses AS sub ON sub.user_id = ?
+        LEFT JOIN s_user_addresses AS sub ON sub.id = ?
         LEFT JOIN s_user u ON u.id = sub.user_id
         WHERE sob.userID = ? AND
         sob.orderID = ?
-        ", array($this->_userID, $this->_userID, $this->_id)), ArrayObject::ARRAY_AS_PROPS);
+        ", array($this->_user['default_billing_address_id'], $this->_userID, $this->_id)), ArrayObject::ARRAY_AS_PROPS);
 
         $this->_billing["country"] = new ArrayObject(Shopware()->Db()->fetchRow("
         SELECT * FROM s_core_countries

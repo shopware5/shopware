@@ -1394,13 +1394,15 @@ class sExport
 
             # Join on NULL in order to synchronize query result columns with query from sAdmin::sGetDispatchBasket
             LEFT JOIN s_user u
-            ON u.id = NULL
+            ON u.id=NULL
 
             LEFT JOIN s_user_addresses as ub
-            ON ub.user_id = u.id
+            ON ub.id=u.default_billing_address_id
+            AND ub.user_id=u.id
               
             LEFT JOIN s_user_addresses as us
-            ON us.user_id = u.id
+            ON us.id=u.default_shipping_address_id
+            AND us.user_id=u.id
 
             GROUP BY b.sessionID
         ";
@@ -1521,10 +1523,12 @@ class sExport
             AND u.active=1
 
             LEFT JOIN s_user_addresses ub
-            ON ub.user_id=u.id
+            ON u.default_billing_address_id=ub.id
+            AND u.id=ub.user_id
 
             LEFT JOIN s_user_addresses us
-            ON us.user_id=u.id
+            ON u.default_shipping_address_id=us.id
+            AND u.id=us.user_id
 
             WHERE d.active = 1
             AND (bind_weight_from IS NULL OR bind_weight_from <= b.weight)
@@ -1626,10 +1630,12 @@ class sExport
             AND u.active=1
 
             LEFT JOIN s_user_addresses ub
-            ON ub.user_id=u.id
+            ON u.default_billing_address_id=ub.id
+            AND u.id=ub.user_id
 
             LEFT JOIN s_user_addresses us
-            ON us.user_id=u.id
+            ON u.default_shipping_address_id=us.id
+            AND u.id=us.user_id
 
             WHERE d.active=1
             AND (bind_weight_from IS NULL OR bind_weight_from <= b.weight)

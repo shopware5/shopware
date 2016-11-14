@@ -320,7 +320,9 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
             IF(b.company != '', b.company, CONCAT(u.firstname, ' ', u.lastname)) as name,
             CONCAT(street, ' ', zipcode, ' ', city) as description
             FROM s_user_addresses b, s_user u
-            WHERE (
+            WHERE u.default_billing_address_id=b.id
+            AND
+            (
                 email LIKE $search
                 OR u.customernumber LIKE $search2
                 OR TRIM(CONCAT(b.company,' ', b.department)) LIKE $search

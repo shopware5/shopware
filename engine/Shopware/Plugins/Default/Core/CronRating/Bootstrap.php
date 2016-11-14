@@ -226,10 +226,11 @@ class Shopware_Plugins_Core_CronRating_Bootstrap extends Shopware_Components_Plu
                 s_order_billingaddress as b
             LEFT JOIN s_order_shippingaddress as s
                 ON s.orderID = b.orderID
-            LEFT JOIN s_user_addresses as ub
-                ON ub.user_id = b.userID
             LEFT JOIN s_user as u
                 ON b.userID = u.id
+            LEFT JOIN s_user_addresses as ub
+                ON u.default_billing_address_id = ub.id
+                AND u.id = ub.user_id
             LEFT JOIN s_core_countries as bc
                 ON bc.id = b.countryID
             LEFT JOIN s_core_countries as sc

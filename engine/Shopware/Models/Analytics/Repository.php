@@ -1375,7 +1375,7 @@ class Repository
         ));
         $builder->from('s_order', 'orders')
             ->innerJoin('orders', 's_user', 'users', 'orders.userID = users.id')
-            ->innerJoin('users', 's_user_addresses', 'billing', 'billing.user_id = users.id')
+            ->innerJoin('users', 's_user_addresses', 'billing', 'billing.id = users.default_billing_address_id and billing.user_id = users.id')
             ->andWhere('orders.status NOT IN (-1, 4)')
             ->orderBy('orderTime', 'ASC');
 
