@@ -804,8 +804,10 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
                     nextRecord.set('from', event.value + 1);
                 }
             } else {
-                icon.removeCls('x-hidden');
-                icon.addCls('sprite-minus-circle-frame');
+                if (event.rowIdx != 0 || event.value != null) {
+                    icon.removeCls('x-hidden');
+                    icon.addCls('sprite-minus-circle-frame');
+                }
             }
         } else if ( event.field === 'price') {
             if (price && firstPrice > price) {
