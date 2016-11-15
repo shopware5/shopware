@@ -1089,6 +1089,8 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
         $query = $connection->createQueryBuilder();
         $query->select(['locale_id, IFNULL(main_id, id)']);
         $query->from('s_core_shops');
+        $query->where('s_core_shops.default = 1');
+        $query->setMaxResults(1);
         return $query->execute()->fetchAll(PDO::FETCH_KEY_PAIR);
     }
 
