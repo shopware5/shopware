@@ -115,7 +115,8 @@ class Shopware_Plugins_Frontend_InputFilter_Bootstrap extends Shopware_Component
                     $process[$key][self::filterValue($k, $regex)] = $v;
                     $process[] = &$process[$key][self::filterValue($k, $regex)];
                 } else {
-                    $process[$key][self::filterValue($k, $regex)] = self::filterValue($v, $regex);
+                    $stripTags = !in_array($k, ['password', 'passwordConfirmation', 'currentPassword']);
+                    $process[$key][self::filterValue($k, $regex)] = self::filterValue($v, $regex, $stripTags);
                 }
             }
         }
@@ -131,10 +132,10 @@ class Shopware_Plugins_Frontend_InputFilter_Bootstrap extends Shopware_Component
      * @param string $regex
      * @return string
      */
-    public static function filterValue($value, $regex)
+    public static function filterValue($value, $regex, $stripTags = true)
     {
         if (!empty($value)) {
-            $value = strip_tags($value);
+            if ($stripTags) $value = strip_tags($value);
             if (preg_match($regex, $value)) {
                 $value = null;
             }
