@@ -135,7 +135,9 @@ class Shopware_Plugins_Frontend_InputFilter_Bootstrap extends Shopware_Component
     public static function filterValue($value, $regex, $stripTags = true)
     {
         if (!empty($value)) {
-            if ($stripTags) $value = strip_tags($value);
+            if ($stripTags) {
+                $value = strip_tags($value);
+            }
             if (preg_match($regex, $value)) {
                 $value = null;
             }
