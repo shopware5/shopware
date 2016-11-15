@@ -147,8 +147,7 @@
 
             // reset modal
             $.modal.close();
-            $.overlay.open({ closeOnClick: false });
-            $.loadingIndicator.open({ openOverlay: false });
+            $.loadingIndicator.open();
 
             $.publish('plugin/swAddressEditor/onBeforeOpen', [ me, requestData ]);
 

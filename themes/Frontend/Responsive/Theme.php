@@ -131,6 +131,8 @@ class Theme extends \Shopware\Components\Theme
         "highlight-info" => "#4AA3DF",
         "body-bg" => "darken(@gray-light, 5%)",
         "overlay-bg" => "#000000",
+        "overlay-dark-bg" => "@overlay-bg",
+        "overlay-light-bg" => "#FFFFFF",
         "overlay-opacity" => "0.7",
         "text-color" => "@brand-secondary",
         "text-color-dark" => "@brand-secondary-dark",
@@ -364,7 +366,7 @@ class Theme extends \Shopware\Components\Theme
 
         $tab->addElement($fieldSetHighlights);
 
-        $attributes = array_merge($this->fieldSetDefaults, ['height' => 200]);
+        $attributes = array_merge($this->fieldSetDefaults, ['height' => 220]);
         $fieldSetScaffolding = $this->createFieldSet(
             'scaffolding',
             '__responsive_tab_general_fieldset_scaffolding__',
@@ -420,6 +422,23 @@ class Theme extends \Shopware\Components\Theme
                 '#000000'
             )
         );
+
+        $fieldSetScaffolding->addElement(
+            $this->createColorPickerField(
+                'overlay-theme-dark-bg',
+                '@overlay-theme-dark-bg',
+                '@overlay-bg'
+            )
+        );
+
+        $fieldSetScaffolding->addElement(
+            $this->createColorPickerField(
+                'overlay-theme-light-bg',
+                '@overlay-theme-light-bg',
+                '#FFFFFF'
+            )
+        );
+
         $fieldSetScaffolding->addElement(
             $this->createColorPickerField(
                 'overlay-opacity',

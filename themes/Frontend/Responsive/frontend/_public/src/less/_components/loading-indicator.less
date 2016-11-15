@@ -11,12 +11,15 @@ The functionality is provided by the `jquery.loading-indicator.js` file.
 */
 
 .js--loading-indicator {
-    .unitize-padding(20, 20, 20, 20);
-    position: fixed;
+    position: absolute;
     display: none;
-    left: 50%;
-    top: 50%;
     z-index: @zindex-loading-indicator;
+    top: 50%;
+    left: 50%;
+
+    body > & {
+        position: fixed;
+    }
 
     &.indicator--relative {
         .unitize-width(30);
@@ -33,16 +36,19 @@ The functionality is provided by the `jquery.loading-indicator.js` file.
 
     &.indicator--absolute {
         .indicator--relative();
-        &.js--loading-indicator { .unitize-margin(-15, 0, 0, -15) };
         position: absolute;
         padding: 0;
         top: 50%;
+
+        &.js--loading-indicator {
+            .unitize-margin(-15, 0, 0, -15);
+        };
     }
 }
 
 .has--cssanimations {
     .js--loading-indicator {
-        .unitize-margin(-33, 0, 0, -33);
+        .unitize-margin(-13, 0, 0, -13);
 
         div[class^="icon--"] {
             .unitize-width(26);
@@ -67,7 +73,7 @@ The functionality is provided by the `jquery.loading-indicator.js` file.
 
 .has--no-cssanimations {
     .js--loading-indicator {
-        .unitize-margin(-28, 0, 0, -28);
+        .unitize-margin(-13, 0, 0, -13);
 
         div[class^="icon--"] {
             .unitize-width(16);
