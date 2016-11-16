@@ -388,7 +388,7 @@ class Shopware_Controllers_Backend_Site extends Shopware_Controllers_Backend_Ext
         $siteId = empty($params['helperId']) ? null : $params['helperId'];
 
         if (empty($params['shopIds'])) {
-            $params['shopIds'] = '';
+            $params['shopIds'] = null;
         }
         
         //this was a javascript array
