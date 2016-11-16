@@ -7,6 +7,11 @@ This changelog references changes done in Shopware 5.2 patch versions.
 * Added new rule for `/widgets/emotion` to robots.txt in `frontend/robots_txt/index.tpl`
 * Added new blocks in `themes/Frontend/Bare/frontend/account/index.tpl`
 * If shipping address equals billing address show notice instead of same address twice in account index
+* Added container tag `shopware_media.adapter` to register new media adapters
+* Added interface `Shopware\Bundle\MediaBundle\Adapters\AdapterFactoryInterface` to create new adapter factories
+* Removed method `Shopware\Bundle\MediaBundle\Subscriber\ServiceSubscriber::createLocalAdapter()`
+* Removed method `Shopware\Bundle\MediaBundle\Subscriber\ServiceSubscriber::createFtpAdapter()`
+* Deprecated collect event `Shopware_Collect_MediaAdapter_*`, use container tag `shopware_media.adapter` instead. The event will be removed in 5.4.
 
 ## 5.2.10
 
