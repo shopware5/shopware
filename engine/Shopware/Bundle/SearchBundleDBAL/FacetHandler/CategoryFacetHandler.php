@@ -119,16 +119,9 @@ class CategoryFacetHandler implements PartialFacetHandlerInterface
 
         $categories = $this->categoryService->getList($ids, $context);
 
-        $active = [];
-        if ($criteria->hasCondition('category')) {
-            /**@var $condition CategoryCondition*/
-            $condition = $criteria->getCondition('category');
-            $active = $condition->getCategoryIds();
-        }
-
         return $this->categoryTreeFacetResultBuilder->buildFacetResult(
             $categories,
-            $active,
+            $this->getFilteredIds($criteria),
             $context->getShop()->getCategory()->getId()
         );
     }
@@ -150,7 +143,7 @@ class CategoryFacetHandler implements PartialFacetHandlerInterface
     {
         $system = array_merge(
             [$context->getShop()->getCategory()->getId()],
-            explode('|', $context->getShop()->getCategory()->getPath())
+            $context->getShop()->getCategory()->getPath()
         );
 
         return array_filter($ids, function ($id) use ($system) {
@@ -172,5 +165,20 @@ class CategoryFacetHandler implements PartialFacetHandlerInterface
         $query->innerJoin('product', 's_articles_categories_ro', 'productCategory', 'productCategory.articleID = product.id');
         $query->groupBy('productCategory.categoryID');
         return $query->execute()->fetchAll(\PDO::FETCH_COLUMN);
+    }
+
+    /**
+     * @param Criteria $criteria
+     * @return \int[]
+     */
+    private function getFilteredIds(Criteria $criteria)
+    {
+        $active = [];
+        foreach ($criteria->getCustomerConditions() as $condition) {
+            if ($condition instanceof CategoryCondition) {
+                $active = array_merge($active, $condition->getCategoryIds());
+            }
+        }
+        return $active;
     }
 }

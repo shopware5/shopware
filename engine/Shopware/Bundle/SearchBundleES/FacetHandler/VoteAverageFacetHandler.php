@@ -163,6 +163,10 @@ class VoteAverageFacetHandler implements HandlerInterface, ResultHydratorInterfa
             });
 
             $count = array_sum(array_column($affected, 'doc_count'));
+            if ($count === 0) {
+                continue;
+            }
+
             $values[] = new ValueListItem($i, $count, $activeAverage == $i);
         }
 

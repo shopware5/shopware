@@ -51,7 +51,7 @@ class Category extends Extendable implements \JsonSerializable
     /**
      * @var array
      */
-    protected $path;
+    protected $path = [];
 
     /**
      * @var string

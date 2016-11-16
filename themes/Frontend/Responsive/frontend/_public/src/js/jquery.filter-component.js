@@ -18,7 +18,7 @@
             updateFacet: function(data) {
                 var me = this;
 
-                if (me.isChecked($(me.$inputs))) {
+                if (me.isChecked(me.$inputs)) {
                     return;
                 }
                 me.disable(me.$el, data === null);
@@ -74,10 +74,10 @@
             validateElementShouldBeDisabled: function($element, activeIds, ids, checkedIds, value) {
                 var val = $element.val();
                 if (checkedIds.length > 0) {
-                    return checkedIds.indexOf(val) === -1
+                    return checkedIds.indexOf(val) === -1;
                 }
                 if (activeIds.length > 0) {
-                    return activeIds.indexOf(val) === -1
+                    return activeIds.indexOf(val) === -1;
                 }
                 return ids.indexOf(val) === -1;
             }
@@ -112,6 +112,29 @@
                 this.updateValueList(data);
             },
 
+            getValueIds: function(values) {
+                var ids = [];
+                $(values).each(function(index, value) {
+                    ids.push(value.id + '');
+                });
+                return ids;
+            },
+
+            registerComponentEvents: function() {
+                var me = this;
+
+                me._on(me.$inputs, 'change', function(event) {
+                    var $el = $(event.currentTarget);
+                    if ($el.is(':checked')) {
+                        me.$inputs.not($el).attr('disabled', 'disabled').parent().addClass('is--disabled');
+                        me.$inputs.not($el).prop('checked', false);
+                    } else {
+                        me.$inputs.removeAttr('disabled').parent().removeClass('is--disabled');
+                    }
+                    me.onChange(event);
+                });
+            },
+
             getValues: function(data, $elements) {
                 return this.recursiveGetValues(data.values);
             },
@@ -127,6 +150,60 @@
                     }
                 });
                 return items;
+            }
+        },
+
+        'value-tree-single': {
+            updateFacet: function(data) {
+                this.updateValueList(data);
+            },
+
+            registerComponentEvents: function() {
+                var me = this;
+
+                me._on(me.$inputs, 'change', function(event) {
+                    var $el = $(event.currentTarget);
+
+                    if ($el.is(':checked')) {
+                        me.$inputs.not($el).attr('disabled', 'disabled').parent().addClass('is--disabled');
+                        me.$inputs.not($el).prop('checked', false);
+                    }
+                    me.onChange(event);
+                });
+            },
+
+            getValues: function(data, $elements) {
+                if (!data || !data.values) {
+                    return [];
+                }
+
+                return this.recursiveGetValues(data.values);
+            },
+
+            recursiveGetValues: function(values) {
+                var items = [];
+                var me = this;
+
+                $(values).each(function (index, value) {
+                    value.id = value.id + '';
+
+                    items.push(value);
+                    if (value.values.length > 0) {
+                        items = items.concat(me.recursiveGetValues(value.values));
+                    }
+                });
+                return items;
+            },
+
+            validateElementShouldBeDisabled: function($element, activeIds, ids, checkedIds, value) {
+                var val = $element.val();
+                if (activeIds.length > 0) {
+                    return activeIds.indexOf(val) === -1;
+                }
+                if (checkedIds.length > 0) {
+                    return checkedIds.indexOf(val) === -1;
+                }
+                return ids.indexOf(val) === -1;
             }
         },
 
@@ -151,24 +228,33 @@
 
             updateFacet: function(data) {
                 var me = this;
-                var isFiltered = (me.rangeSlider.minValue != me.rangeSlider.opts.startMin || me.rangeSlider.maxValue != me.rangeSlider.opts.startMax);
+                var initial = me.rangeSlider.opts;
+                var isFiltered = (
+                    me.rangeSlider.minValue != initial.rangeMin
+                    ||
+                    me.rangeSlider.maxValue != initial.rangeMax
+                );
+
+                if (!isFiltered && data) {
+                    isFiltered = data.activeMin !== data.min || data.activeMax !== data.max;
+                }
 
                 if (isFiltered) {
-                    me.disable(me.$el, false);
+                    me.disableComponent(false, []);
                     return;
                 }
 
                 if (data === null) {
-                    me.disable(me.$el, true);
+                    me.disableComponent(true, []);
                     return;
                 }
 
                 if (data.min == data.max) {
-                    me.disable(me.$el, true);
+                    me.disableComponent(true, []);
                     return;
                 }
 
-                me.disable(me.$el, false);
+                me.disableComponent(false, []);
 
                 me.rangeSlider.opts.rangeMax = data.max;
                 me.rangeSlider.opts.rangeMin = data.min;
@@ -467,6 +553,8 @@
             var me = this;
             var $elements = me.convertToElementList(me.$inputs);
             var values = me.getValues(data, $elements);
+            values = me.convertValueIds(values);
+
             var ids = me.getValueIds(values);
             var activeIds = me.getActiveValueIds(values);
             var checkedIds = me.getElementValues(
@@ -479,7 +567,8 @@
             }
 
             $elements.each(function(index, $element) {
-                var value = me.findValue($element.val(), values);
+                var val = $element.val() + '';
+                var value = me.findValue(val, values);
                 var disable = me.validateElementShouldBeDisabled($element, activeIds, ids, checkedIds, value);
                 me.disable($element, disable);
                 me.setDisabledClass($element.parents('.filter-panel--input'), disable);
@@ -489,11 +578,26 @@
         },
 
         /**
+         * Converts the id property of the provided values to an string
+         * @param values
+         * @returns {array}
+         */
+        convertValueIds: function(values) {
+            $(values).each(function(index, value) {
+                value.id = value.id + '';
+            });
+            return values;
+        },
+
+        /**
          * Sets is--disabled class on the filter panel
          * @param disable
          * @param values
          */
         disableComponent: function(disable, values) {
+            if (disable && this.$el.hasClass(this.opts.collapseCls)) {
+                this.close();
+            }
             this.setDisabledClass(this.$el, disable);
         },
 
@@ -532,7 +636,7 @@
          * @returns {boolean}
          */
         validateElementShouldBeDisabled: function($element, activeIds, ids, checkedIds, value) {
-            var val = $element.val();
+            var val = $element.val() + '';
 
             if (activeIds.indexOf(val) >= 0) {
                 return false;
@@ -592,7 +696,7 @@
          */
         getElementValues: function($elements) {
             return $elements.map(function($element) {
-                return $element.val();
+                return $element.val() + '';
             });
         },
 
@@ -750,7 +854,8 @@
             var exists = false;
 
             $elements.each(function(index, input) {
-                if ($(input).val() == value) {
+                var val = $(input).val() + '';
+                if (val == value) {
                     exists = true;
                     return false;
                 }

@@ -64,7 +64,7 @@
 							{/block}
 
 							{block name="frontend_listing_actions_filter_form_category"}
-								{if !$sCategoryContent && $sCategoryCurrent != $sCategoryStart}
+								{if !$sCategoryContent && $sCategoryCurrent != $sCategoryStart && {controllerName} != 'search'}
 									<input type="hidden" name="{$shortParameters['sCategory']}" value="{$sCategoryCurrent|escape}" />
 								{/if}
 							{/block}

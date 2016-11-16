@@ -2,6 +2,8 @@
 
 namespace Shopware\Tests\Functional\Bundle\SearchBundle\Facet;
 
+use Shopware\Bundle\SearchBundle\Condition\CategoryCondition;
+use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\Facet\CategoryFacet;
 use Shopware\Bundle\SearchBundle\FacetResult\TreeFacetResult;
 use Shopware\Bundle\SearchBundle\FacetResult\TreeItem;
@@ -161,5 +163,27 @@ class CategoryFacetTest extends TestCase
 
         $value = $value->getValues()[0];
         $this->assertEquals('thirdLevel-2', $value->getLabel());
+    }
+
+    /**
+     * @param Criteria $criteria
+     * @param Category $category
+     * @param $conditions
+     * @param ShopContext $context
+     */
+    protected function addCategoryBaseCondition(
+        Criteria $criteria,
+        Category $category,
+        $conditions,
+        ShopContext $context
+    ) {
+        if ($category) {
+            $criteria->addBaseCondition(
+                new CategoryCondition(array($category->getId()))
+            );
+            $criteria->addCondition(
+                new CategoryCondition(array($category->getId()))
+            );
+        }
     }
 }

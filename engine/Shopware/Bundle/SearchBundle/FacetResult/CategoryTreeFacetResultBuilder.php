@@ -81,7 +81,7 @@ class CategoryTreeFacetResultBuilder
         return new TreeFacetResult(
             'category',
             $fieldName,
-            empty($active),
+            !empty($activeIds),
             $label,
             $values
         );

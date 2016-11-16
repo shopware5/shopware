@@ -155,6 +155,10 @@ class PriceFacetHandler implements PartialFacetHandlerInterface
             $activeMax = $condition->getMaxPrice();
         }
 
+        if ($min == $max) {
+            return null;
+        }
+
         return new RangeFacetResult(
             $facet->getName(),
             $criteria->hasCondition($facet->getName()),

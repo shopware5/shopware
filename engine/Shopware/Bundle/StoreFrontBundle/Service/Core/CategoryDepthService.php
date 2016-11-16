@@ -50,8 +50,7 @@ class CategoryDepthService
      */
     public function get(Category $category, $depth, array $filterIds = [])
     {
-        $depth += count(array_filter(explode('|', $category->getPath())));
-
+        $depth += count(array_filter($category->getPath()));
         $query = $this->connection->createQueryBuilder();
         $query->select(['category.id', 'category.path'])
             ->from('s_categories', 'category')

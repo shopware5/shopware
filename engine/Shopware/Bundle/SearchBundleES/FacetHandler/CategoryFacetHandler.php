@@ -132,16 +132,9 @@ class CategoryFacetHandler implements HandlerInterface, ResultHydratorInterface
 
         $categories = $this->categoryService->getList($ids, $context);
 
-        $active = [];
-        if ($criteria->hasCondition('category')) {
-            /**@var $condition CategoryCondition*/
-            $condition = $criteria->getCondition('category');
-            $active = $condition->getCategoryIds();
-        }
-
         $facet = $this->categoryTreeFacetResultBuilder->buildFacetResult(
             $categories,
-            $active,
+            $this->getFilteredIds($criteria),
             $context->getShop()->getCategory()->getId()
         );
         $result->addFacet($facet);
@@ -156,11 +149,26 @@ class CategoryFacetHandler implements HandlerInterface, ResultHydratorInterface
     {
         $system = array_merge(
             [$context->getShop()->getCategory()->getId()],
-            explode('|', $context->getShop()->getCategory()->getPath())
+            $context->getShop()->getCategory()->getPath()
         );
 
         return array_filter($ids, function ($id) use ($system) {
             return !in_array($id, $system);
         });
+    }
+
+    /**
+     * @param Criteria $criteria
+     * @return \int[]
+     */
+    private function getFilteredIds(Criteria $criteria)
+    {
+        $active = [];
+        foreach ($criteria->getCustomerConditions() as $condition) {
+            if ($condition instanceof CategoryCondition) {
+                $active = array_merge($active, $condition->getCategoryIds());
+            }
+        }
+        return $active;
     }
 }

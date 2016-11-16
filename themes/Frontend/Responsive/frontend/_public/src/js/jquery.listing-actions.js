@@ -201,7 +201,6 @@
             filterCount = Object.keys(me.activeFilterElements).length;
 
             me.updateFilterTriggerButton(filterCount > 1 ? filterCount - 1 : filterCount);
-
             me.initStateHandling();
             me.registerEvents();
 
@@ -456,11 +455,11 @@
 
             $.each(me.$filterComponents, function(index, item) {
                 var $comp = $(item),
+                    types = ['value-list', 'value-list-single', 'value-tree', 'media', 'value-tree-single'],
                     type = $comp.attr('data-filter-type'),
                     fieldName = $comp.attr('data-field-name');
 
-                if ((type == 'value-list' || type == 'value-list-single' || type == 'value-tree' || type == 'media') &&
-                    me.propertyFieldNames.indexOf(fieldName) == -1) {
+                if (types.indexOf(type) >= 0 && me.propertyFieldNames.indexOf(fieldName) == -1) {
                     me.propertyFieldNames.push(fieldName);
                 }
             });
@@ -698,17 +697,22 @@
          */
         getFilterResult: function(urlParams, loadFacets) {
             var me = this,
-                params = urlParams || me.urlParams;
+                params = urlParams || me.urlParams,
+                url = me.resultCountURL + params;
 
             if (typeof loadFacets === 'undefined') {
                 loadFacets = me.loadFacets;
+            }
+
+            if (loadFacets) {
+                url += '&loadFacets=1';
             }
 
             me.resetBuffer();
 
             $.ajax({
                 type: 'get',
-                url: me.resultCountURL + params + '&loadFacets=' + loadFacets,
+                url: url,
                 success: function(response) {
                     me.$applyFilterBtn.removeClass(me.opts.loadingClass);
 
