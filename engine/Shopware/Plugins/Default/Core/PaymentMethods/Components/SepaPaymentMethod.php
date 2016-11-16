@@ -25,6 +25,8 @@
 namespace ShopwarePlugin\PaymentMethods\Components;
 
 use Doctrine\ORM\AbstractQuery;
+use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
+use Shopware\Models\Customer\AddressRepository;
 
 /**
  * Class SepaPaymentMethod
@@ -174,8 +176,8 @@ class SepaPaymentMethod extends GenericPaymentMethod
             ->getQuery()
             ->getOneOrNullResult(AbstractQuery::HYDRATE_ARRAY);
 
-        $addressData = Shopware()->Models()->getRepository('Shopware\Models\Customer\Billing')->
-            getUserBillingQuery($userId)->getOneOrNullResult(AbstractQuery::HYDRATE_ARRAY);
+        $addressData = Shopware()->Models()->getRepository('Shopware\Models\Customer\Customer')
+            ->find($userId)->getDefaultBillingAddress();
         $paymentData = $this->getCurrentPaymentDataAsArray($userId);
 
         $date = new \DateTime();
@@ -184,14 +186,14 @@ class SepaPaymentMethod extends GenericPaymentMethod
             'order_id' => $orderId,
             'user_id' => $userId,
 
-            'firstname' => $paymentData['sSepaUseBillingData']?$addressData['firstName']:null,
-            'lastname' => $paymentData['sSepaUseBillingData']?$addressData['lastName']:null,
-            'address' => $paymentData['sSepaUseBillingData']?$addressData['street']:null,
-            'zipcode' => $paymentData['sSepaUseBillingData']?$addressData['zipCode']:null,
-            'city' => $paymentData['sSepaUseBillingData']?$addressData['city']:null,
+            'firstname' => $paymentData['sSepaUseBillingData']?$addressData->getFirstname():null,
+            'lastname' => $paymentData['sSepaUseBillingData']?$addressData->getLastname():null,
+            'address' => $paymentData['sSepaUseBillingData']?$addressData->getStreet():null,
+            'zipcode' => $paymentData['sSepaUseBillingData']?$addressData->getZipcode():null,
+            'city' => $paymentData['sSepaUseBillingData']?$addressData->getCity():null,
 
             'bank_name' => $paymentData['sSepaBankName'],
-            'account_holder' => $paymentData['sSepaUseBillingData']?($addressData['firstName'] . ' ' . $addressData['lastName']):null,
+            'account_holder' => $paymentData['sSepaUseBillingData']?($addressData->getFirstname() . ' ' . $addressData->getLastname()):null,
             'bic' => $paymentData['sSepaBic'],
             'iban' => $paymentData['sSepaIban'],
 

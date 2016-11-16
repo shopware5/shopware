@@ -41,6 +41,7 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
     private $orderNumber;
     private $articleDetailId;
     private $orderIds;
+    private $addressId;
 
     /**
      * Standard set up for every test - just disable auth
@@ -95,6 +96,26 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
             'salutation'     => 'mr',
             'countryID'      => 2,
             'stateID'        => 3,
+        ));
+
+        Shopware()->Db()->insert('s_user_addresses', array(
+            'user_id'        => $this->userId,
+            'company'        => 'PHPUNIT',
+            'salutation'     => 'mr',
+            'firstname'      => '',
+            'lastname'       => '',
+            'zipcode'        => '',
+            'city'           => '',
+            'country_id'     => 2,
+            'state_id'       => 3,
+        ));
+        $this->addressId = Shopware()->Db()->lastInsertId();
+
+        Shopware()->Db()->update('s_user', array(
+            'default_billing_address_id' => $this->addressId,
+            'default_shipping_address_id' => $this->addressId,
+        ), array(
+            'id = ?' => $this->userId,
         ));
     }
 
@@ -331,6 +352,7 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
     {
         if ($this->userId) {
             Shopware()->Db()->delete('s_user', 'id = ' . $this->userId);
+            Shopware()->Db()->delete('s_user_addresses', 'user_id = ' . $this->userId);
             Shopware()->Db()->delete('s_user_billingaddress', 'userID = ' . $this->userId);
             Shopware()->Db()->delete('s_order', 'userID = ' . $this->userId);
             Shopware()->Db()->delete('s_order_billingaddress', 'userID = ' . $this->userId);

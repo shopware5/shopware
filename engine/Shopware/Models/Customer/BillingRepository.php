@@ -27,6 +27,7 @@ namespace   Shopware\Models\Customer;
 use Shopware\Components\Model\ModelRepository;
 
 /**
+ * @deprecated Since 5.2 removed in 5.4 use \Shopware\Models\Customer\Address
  * Repository for the billing model (Shopware\Models\Customer\Billing).
  *
  * The billing model repository is responsible to load all billing data.

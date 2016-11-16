@@ -389,7 +389,7 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
         $fetchLoggedInUsers = Shopware()->Container()->get('db')->fetchAll("
             SELECT s.userID,
             (SELECT SUM(quantity * price) AS amount FROM s_order_basket WHERE userID = s.userID GROUP BY sessionID ORDER BY id DESC LIMIT 1) AS amount,
-            (SELECT IF(ub.company,ub.company,CONCAT(ub.firstname,' ',ub.lastname)) FROM s_user_billingaddress AS ub WHERE ub.userID = s.userID) AS customer
+            (SELECT IF(ub.company,ub.company,CONCAT(ub.firstname,' ',ub.lastname)) FROM s_user_addresses AS ub INNER JOIN s_user AS u ON u.default_billing_address_id = ub.id WHERE u.id = s.userID) AS customer
             FROM s_statistics_currentusers s
             WHERE userID != 0
             GROUP BY remoteaddr
@@ -566,11 +566,12 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
             company AS company_name, s_user.customernumber, CONCAT(s_user.firstname,' ',s_user.lastname) AS customer
         FROM s_user
         LEFT JOIN s_core_customergroups
-            ON groupkey = validation,
-        s_user_billingaddress
+            ON groupkey = validation
+        LEFT JOIN s_user_addresses
+            ON s_user_addresses.id = s_user.default_billing_address_id
+            AND s_user.id = s_user_addresses.user_id
         WHERE
-            s_user.id = s_user_billingaddress.userID
-            AND validation != ''
+            validation != ''
             AND validation != '0'
         ORDER BY s_user.firstlogin DESC";
 
