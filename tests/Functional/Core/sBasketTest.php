@@ -1759,6 +1759,139 @@ class sBasketTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test tax calculation for normal products
+     * @covers sBasket::getBasketArticles
+     */
+    public function testsTaxCalculationForBasketWithModeProduct()
+    {
+        $modeProduct = 0;
+        $this->testsTaxCalculationWithModes($modeProduct);
+
+        /*
+         * Explicitly testing a branch of sGetBasketData which would always fail for other modes
+         */
+
+        // Test calculation with net flag
+        $this->setBasketToNet();
+        $basketData = $this->module->sGetBasketData();
+
+        $expectedGrossAmount = 80.00; // see testsTaxCalculationWithModes
+        $this->assertEquals($expectedGrossAmount, $basketData['AmountWithTaxNumeric'], 'net=1, Modus: ' . $modeProduct);
+    }
+
+    /**
+     * Test that tax calculation with premium products works as expected
+     * @covers sBasket::getBasketArticles
+     */
+    public function testsTaxCalculationForBasketWithModePremiumProduct()
+    {
+        $modePremiumProduct = 1;
+        $this->testsTaxCalculationWithModes($modePremiumProduct);
+    }
+
+    /**
+     * @covers sBasket::getBasketArticles
+     */
+    public function testsTaxCalculationForBasketWithModeRebate()
+    {
+        $modeRebate = 3;
+        $this->testsTaxCalculationWithModes($modeRebate);
+    }
+
+    /**
+     * @covers sBasket::getBasketArticles
+     */
+    public function testsTaxCalculationForBasketWithSurchargeDiscount()
+    {
+        $modeSurchargeDiscount = 4;
+        $this->testsTaxCalculationWithModes($modeSurchargeDiscount);
+    }
+
+    /**
+     * Helper to separate different tests for different Modes
+     * basket['AmountWithTaxNumeric'] won't be tested by default since it's value widely varies between different modes
+     * @param int $modus Mode of the Article
+     */
+    public function testsTaxCalculationWithModes($modus = 0) {
+        $this->module->sSYSTEM->sSESSION_ID = uniqid(rand());
+        $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
+        $this->insertDummyArticleWithNoPrice();
+
+        $this->db->insert(
+            's_order_basket',
+            array(
+                'price' => 0.80302110, // Using prices with "needless" precision to produce errors with rounding
+                'netPrice' => 0.6711378,
+                'quantity' => 100,
+                'tax_rate' => 19,
+                'modus' => $modus,
+                'sessionID' => $this->session->get('sessionId'),
+                'ordernumber' => 'SW10003',
+                'ordernumber' => 'SW10003',
+                'articleID' => 3
+            )
+        );
+
+        /*
+         * To avoid errors through multiplication with quantity's
+         * the price per article has to be rounded to two digits before it is multiplied with quantity.
+         * Math example: round(round(articlePrice, 2) / 1.19, 2) * quantity
+         *      => round(0.80 / 1.19, 2) * quantity
+         *      => round(0.6722689, 2) * quantity    // without rounding an error of 0.22€ would occur
+         *      => 0.67 * 100 = 67.00
+         */
+        $expectedGrossAmount = 80.00;
+        $expectedNetAmount = 67.00;
+
+        // Test calculation without net flag
+        $basketData = $this->module->sGetBasketData();
+
+        $this->assertEquals($expectedNetAmount, $basketData['AmountNetNumeric'], 'net=0, Modus: ' . $modus);
+        $this->assertEquals($expectedGrossAmount, $basketData['AmountNumeric'], 'net=0, Modus: ' . $modus);
+
+        // Test calculation with net flag
+        $this->setBasketToNet();
+        $basketData = $this->module->sGetBasketData();
+        $this->assertEquals($expectedNetAmount, $basketData['AmountNetNumeric'], 'net=1, Modus: ' . $modus);
+        $this->assertEquals($expectedGrossAmount, $basketData['AmountNumeric'], 'net=1, Modus: ' . $modus);
+    }
+
+    /**
+     * This helper adds an article with no price,
+     * if a basket has not at least one article with modus=0 the basket will always be empty in getBasketArticles
+     */
+    private function insertDummyArticleWithNoPrice()
+    {
+        $this->db->insert(
+            's_order_basket',
+            array(
+                'price' => 0.00,
+                'netPrice' => 0.00,
+                'quantity' => 1,
+                'tax_rate' => 0,
+                'modus' => 0,
+                'sessionID' => $this->session->get('sessionId'),
+                'ordernumber' => 'SW10003',
+                'articleID' => 3
+            )
+        );
+    }
+
+    /**
+     * Sets the basket to net (for getBasketArticles)
+     */
+    private function setBasketToNet()
+    {
+        // test calculation with net flag
+        $customerGroup = $this->db->fetchOne(
+            'SELECT * FROM s_core_customergroups
+            ORDER BY id ASC LIMIT 1'
+        );
+        $this->module->sSYSTEM->sUSERGROUPDATA["tax"] = null;
+        $this->module->sSYSTEM->sUSERGROUPDATA["id"] = $customerGroup['id'];
+    }
+
+    /**
      * @covers sBasket::sAddNote
      */
     public function testsAddNote()
