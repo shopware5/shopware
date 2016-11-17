@@ -5,6 +5,8 @@ This changelog references changes done in Shopware 5.2 patch versions.
 ## 5.2.11
 * Added new Smarty block `frontend_robots_txt_allows` to `frontend/robots_txt/index.tpl`
 * Added new rule for `/widgets/emotion` to robots.txt in `frontend/robots_txt/index.tpl`
+* Added new blocks in `themes/Frontend/Bare/frontend/account/index.tpl`
+* If shipping address equals billing address show notice instead of same address twice in account index
 
 ## 5.2.10
 

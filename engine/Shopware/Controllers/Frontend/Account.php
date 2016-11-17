@@ -61,9 +61,16 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
             && !$this->admin->sCheckUser()) {
             return $this->forward('index', 'register');
         }
-        $this->View()->sUserData = $this->admin->sGetUserData();
-        $this->View()->sUserLoggedIn = $this->admin->sCheckUser();
-        $this->View()->sAction = $this->Request()->getActionName();
+        $userData = $this->admin->sGetUserData();
+
+        $activeBillingAddressId = $userData['additional']['user']['default_billing_address_id'];
+        $activeShippingAddressId = $userData['additional']['user']['default_shipping_address_id'];
+
+        $this->View()->assign('activeBillingAddressId', $activeBillingAddressId);
+        $this->View()->assign('activeShippingAddressId', $activeShippingAddressId);
+        $this->View()->assign('sUserData', $userData);
+        $this->View()->assign('sUserLoggedIn', $this->admin->sCheckUser());
+        $this->View()->assign('sAction', $this->Request()->getActionName());
     }
 
     /**
