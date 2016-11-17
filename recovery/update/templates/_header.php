@@ -19,7 +19,7 @@
 
     <link rel="stylesheet" type="text/css" href="<?= $baseUrl ?>../common/assets/styles/reset.css" media="all"/>
     <link rel="stylesheet" type="text/css" href="<?= $baseUrl ?>../common/assets/styles/icons.css" media="all"/>
-    <link rel="stylesheet" type="text/css" href="<?= $baseUrl ?>../common/assets/styles/style.css" media="all"/>
+    <link rel="stylesheet" type="text/css" href="<?= $baseUrl ?>../common/assets/styles/style.css?<?php $version ?>" media="all"/>
 
     <script>
         var shopwareTranslations = {

@@ -41,7 +41,7 @@
                value="<?= $language["forward"]; ?>"/>
      </div>
 
-    <div class="error-message-container">
+    <div class="error-message-container alert alert-error">
         <p><?= $language['cache_clear_error'] ?></p>
     </div>
 </form>

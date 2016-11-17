@@ -52,5 +52,5 @@ return [
     'done_backend'          => 'Open shop backend',
     'done_template_changed' => '<b>Emotion Template has been deactivated!</b><br/>At least one of your shops is currently using an emotion based (document-) template, which is no longer supported in Shopware 5.2. Shops that were using the emotion template have been automatically configured to use the new responsive theme.',
     'deleted_files' => '&nbsp;deleted files',
-    'cache_clear_error' => 'An error has occurred. Please delete the cache after update manual.',
+    'cache_clear_error' => 'An error has occurred. Please delete the cache after update manually.',
 ];
