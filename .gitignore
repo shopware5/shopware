@@ -28,7 +28,7 @@ Thumbs.db
 /custom/plugins/
 
 # User installed themes
-/themes/Frontend
+/themes/Frontend/*
 !/themes/Frontend/Bare
 !/themes/Frontend/Responsive
 
