@@ -25,7 +25,7 @@
 						<form id="filter"
 							  method="get"
 							  data-filter-form="true"
-							  data-is-filtered="{$criteria->getCustomerConditions()|count}"
+							  data-is-filtered="{$criteria->getUserConditions()|count}"
 							  data-load-facets="{config name=generatePartialFacets}"
 							  data-count-ctrl="{$countCtrlUrl}">
 

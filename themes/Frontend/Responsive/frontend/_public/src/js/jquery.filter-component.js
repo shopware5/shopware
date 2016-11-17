@@ -181,8 +181,7 @@
             },
 
             recursiveGetValues: function(values) {
-                var items = [];
-                var me = this;
+                var me = this, items = [];
 
                 $(values).each(function (index, value) {
                     value.id = value.id + '';
@@ -222,14 +221,15 @@
                 me.$rangeSliderEl = me.$el.find(me.opts.rangeSliderSelector);
                 me.$rangeInputs = me.$rangeSliderEl.find('input');
                 me.rangeSlider = me.$rangeSliderEl.data('plugin_swRangeSlider');
-
                 me.registerComponentEvents();
             },
 
             updateFacet: function(data) {
-                var me = this;
-                var initial = me.rangeSlider.opts;
-                var isFiltered = (
+                var me = this, initial, isFiltered;
+
+                initial = me.rangeSlider.opts;
+
+                isFiltered = (
                     me.rangeSlider.minValue != initial.rangeMin
                     ||
                     me.rangeSlider.maxValue != initial.rangeMax
@@ -240,21 +240,21 @@
                 }
 
                 if (isFiltered) {
-                    me.disableComponent(false, []);
+                    me.disableComponent(false);
                     return;
                 }
 
                 if (data === null) {
-                    me.disableComponent(true, []);
+                    me.disableComponent(true);
                     return;
                 }
 
                 if (data.min == data.max) {
-                    me.disableComponent(true, []);
+                    me.disableComponent(true);
                     return;
                 }
 
-                me.disableComponent(false, []);
+                me.disableComponent(false);
 
                 me.rangeSlider.opts.rangeMax = data.max;
                 me.rangeSlider.opts.rangeMin = data.min;
@@ -291,10 +291,9 @@
                 var me = this;
 
                 me._on(me.$starInputs, 'change', function(event) {
-                    $(me.$starInputs).parents('.rating-star--outer-container').removeClass('is--active');
-
                     var $el = $(event.currentTarget);
-                    $(me.$starInputs).not($el).prop("checked", false);
+                    me.$starInputs.parents('.rating-star--outer-container').removeClass('is--active');
+                    me.$starInputs.not($el).prop("checked", false);
 
                     if ($el.is(":checked")) {
                         $el.parents('.rating-star--outer-container').addClass('is--active');
@@ -407,7 +406,7 @@
         subscribeEvents: function() {
             var me = this;
 
-            $.subscribe('plugin/swListingActions/updateFacets', function(event, plugin, facets) {
+            $.subscribe(me.getEventName('plugin/swListingActions/updateFacets'), function(event, plugin, facets) {
                 var facet = me.getFacet(facets, me.facetName);
                 me.updateFacet(facet);
             });
@@ -550,14 +549,15 @@
          * @param data
          */
         updateValueList: function(data) {
-            var me = this;
-            var $elements = me.convertToElementList(me.$inputs);
-            var values = me.getValues(data, $elements);
+            var me = this, $elements, values, ids, activeIds, checkedIds;
+
+            $elements = me.convertToElementList(me.$inputs);
+            values = me.getValues(data, $elements);
             values = me.convertValueIds(values);
 
-            var ids = me.getValueIds(values);
-            var activeIds = me.getActiveValueIds(values);
-            var checkedIds = me.getElementValues(
+            ids = me.getValueIds(values);
+            activeIds = me.getActiveValueIds(values);
+            checkedIds = me.getElementValues(
                 me.getCheckedElements($elements)
             );
 
@@ -574,7 +574,7 @@
                 me.setDisabledClass($element.parents('.filter-panel--input'), disable);
             });
 
-            me.disableComponent(me.allDisabled($elements), values);
+            me.disableComponent(me.allDisabled($elements));
         },
 
         /**
@@ -583,7 +583,7 @@
          * @returns {array}
          */
         convertValueIds: function(values) {
-            $(values).each(function(index, value) {
+            values.forEach(function(value, index) {
                 value.id = value.id + '';
             });
             return values;
@@ -592,9 +592,8 @@
         /**
          * Sets is--disabled class on the filter panel
          * @param disable
-         * @param values
          */
-        disableComponent: function(disable, values) {
+        disableComponent: function(disable) {
             if (disable && this.$el.hasClass(this.opts.collapseCls)) {
                 this.close();
             }
@@ -623,11 +622,12 @@
                 me.disable($element, true);
                 me.setDisabledClass($element.parents('.filter-panel--input'), true);
             });
-            me.disableComponent(true, values);
+            me.disableComponent(true);
         },
 
         /**
-         * Validate function to check if the provided element should be disabled or enabled
+         * Validate function to check if the provided element should be disabled or enabled.
+         * The provided elements contains for example a single value list item or tree item.
          * @param $element
          * @param activeIds
          * @param ids
@@ -655,13 +655,16 @@
          * @returns {object|null}
          */
         getFacet: function(facets, name) {
-            for (var key in facets){
-                var facet = facets[key];
+            var found = null;
+
+            facets.forEach(function(facet, index) {
                 if (facet.facetName == name) {
-                    return facet;
+                    found = facet;
+                    return false;
                 }
-            }
-            return null;
+            });
+
+            return found;
         },
 
         /**
@@ -679,14 +682,14 @@
          * @returns {Array}
          */
         getCheckedElements: function($elements) {
-            var $actives = [], me = this;
+            var actives = [], me = this;
 
             $elements.each(function(index, $element) {
                 if (me.isChecked($element)) {
-                    $actives.push($element);
+                    actives.push($element);
                 }
             });
-            return $actives;
+            return actives;
         },
 
         /**

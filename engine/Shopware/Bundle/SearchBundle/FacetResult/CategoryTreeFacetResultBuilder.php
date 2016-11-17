@@ -57,7 +57,7 @@ class CategoryTreeFacetResultBuilder
      * @param int $systemCategoryId
      * @return null|TreeFacetResult
      */
-    public function buildFacetResult(array $categories, $activeIds, $systemCategoryId)
+    public function buildFacetResult(array $categories, array $activeIds = [], $systemCategoryId)
     {
         $items = $this->getCategoriesOfParent($categories, $systemCategoryId);
 
@@ -89,10 +89,10 @@ class CategoryTreeFacetResultBuilder
 
     /**
      * @param Category[] $categories
-     * @param $parentId
+     * @param int|null $parentId
      * @return array
      */
-    private function getCategoriesOfParent($categories, $parentId)
+    private function getCategoriesOfParent(array $categories, $parentId)
     {
         $result = [];
 
@@ -120,22 +120,22 @@ class CategoryTreeFacetResultBuilder
     /**
      * @param Category[] $categories
      * @param Category $category
-     * @param int[] $active
+     * @param int[] $actives
      * @return \Shopware\Bundle\SearchBundle\FacetResult\TreeItem
      */
-    private function createTreeItem($categories, Category $category, $active)
+    private function createTreeItem(array $categories, Category $category, array $actives = [])
     {
         $children = $this->getCategoriesOfParent($categories, $category->getId());
 
         $values = [];
         foreach ($children as $child) {
-            $values[] = $this->createTreeItem($categories, $child, $active);
+            $values[] = $this->createTreeItem($categories, $child, $actives);
         }
 
         return new TreeItem(
             $category->getId(),
             $category->getName(),
-            in_array($category->getId(), $active),
+            in_array($category->getId(), $actives),
             $values,
             $category->getAttributes()
         );

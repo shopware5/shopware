@@ -45,6 +45,11 @@ The styling includes the collapsed and expanded styling and the panel component 
     }
 
     &.is--disabled {
+        .white-gradient();
+        opacity: 0.5;
+        border: 1px solid @border-color;
+        color: @text-color;
+
         &:hover {
             border: 1px solid @border-color;
             color: @text-color;
@@ -54,11 +59,6 @@ The styling includes the collapsed and expanded styling and the panel component 
                 color: @text-color;
             }
         }
-
-        opacity: 0.5;
-        border: 1px solid @border-color;
-        color: @text-color;
-        .white-gradient();
 
         .filter-panel--title {
             color: @text-color;
@@ -268,7 +268,6 @@ The styling includes the collapsed and expanded styling and the panel component 
             }
 
             &:disabled ~ .input--state {
-                background: @body-bg;
                 background: @body-bg;
             }
 

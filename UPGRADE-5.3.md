@@ -57,6 +57,7 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Changed `CategoryFacet` behavior to generate each time a tree based on the system category with a configured category depth
 * Refactored the filter panels `facet-radio`, `facet-media-list` & `facet-value-list` and unified the panels
 * Base query build in `\Shopware\Bundle\SearchBundleDBAL\ProductNumberSearch` contains no more an join to s_core_tax
+
 ### Removals
 
 * Removed configuration option `sCOUNTRYSHIPPING`

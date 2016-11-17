@@ -440,7 +440,7 @@ class Criteria implements \JsonSerializable
     /**
      * @return ConditionInterface[]
      */
-    public function getCustomerConditions()
+    public function getUserConditions()
     {
         return $this->conditions;
     }

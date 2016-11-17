@@ -25,9 +25,10 @@
 namespace Shopware\Bundle\StoreFrontBundle\Service\Core;
 
 use Doctrine\DBAL\Connection;
+use Shopware\Bundle\StoreFrontBundle\Service\CategoryDepthServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Category;
 
-class CategoryDepthService
+class CategoryDepthService implements CategoryDepthServiceInterface
 {
     /**
      * @var Connection
@@ -43,10 +44,7 @@ class CategoryDepthService
     }
 
     /**
-     * @param Category $category
-     * @param int $depth
-     * @param int[] $filterIds
-     * @return \int[]
+     * {@inheritdoc}
      */
     public function get(Category $category, $depth, array $filterIds = [])
     {

@@ -169,12 +169,12 @@ class CategoryFacetHandler implements PartialFacetHandlerInterface
 
     /**
      * @param Criteria $criteria
-     * @return \int[]
+     * @return int[]
      */
     private function getFilteredIds(Criteria $criteria)
     {
         $active = [];
-        foreach ($criteria->getCustomerConditions() as $condition) {
+        foreach ($criteria->getUserConditions() as $condition) {
             if ($condition instanceof CategoryCondition) {
                 $active = array_merge($active, $condition->getCategoryIds());
             }

@@ -121,6 +121,10 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
         }
     }
 
+    /**
+     * Loads the listing count for the provided listing parameters.
+     * Sets a json response with: `facets`, `totalCount` and `products`.
+     */
     public function listingCountAction()
     {
         if ($this->Request()->getParam('sSearch')) {
