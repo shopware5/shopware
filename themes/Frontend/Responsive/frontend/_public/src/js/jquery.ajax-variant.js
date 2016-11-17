@@ -93,7 +93,7 @@
          * Requests the HTML structure of the product detail page using AJAX and injects the returned
          * content into the page.
          *
-         * @param {String} values
+         * @param {Object} values
          * @param {Boolean} pushState
          */
         requestData: function(values, pushState) {
@@ -107,10 +107,10 @@
 
             $.publish('plugin/swAjaxVariant/onBeforeRequestData', [ me, values, stateObj.location ]);
 
-            values += '&template=ajax';
+            values.template = 'ajax';
 
             if(stateObj.params.hasOwnProperty('c')) {
-                values += '&c=' + stateObj.params.c;
+                values.c = stateObj.params.c;
             }
 
             $.ajax({
@@ -204,7 +204,15 @@
             var me = this,
                 $target = $(event.target),
                 $form = $target.parents('form'),
-                values = $form.serialize();
+                values = {};
+
+            $.each($form.serializeArray(), function(i, item) {
+                if (item.name === '__csrf_token') {
+                    return;
+                }
+
+                values[item.name] = item.value;
+            });
 
             event.preventDefault();
 
