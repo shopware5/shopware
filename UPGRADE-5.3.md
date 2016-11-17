@@ -22,6 +22,8 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Added config element `liveMigration` to enable or disable the media live migration
 * Added config element `displayListingBuyButton` to display listing buy button
 * Added service `shopware_search.batch_product_search` and `shopware_search.batch_product_number_search` for optimized product queries
+* `jQuery.overlay` & `jQuery.loadingIndicators` are now supporting callbacks and jQuery promises
+* A loading indicator can now be applied to elements using the `$('selector').setLoading()` method
 
 ### Changes
 

@@ -23,14 +23,21 @@ default color:`#000000` default opacity (alpha):`0.7`
     .tap-highlight-color();
     .transform(translateZ(0));
     .opacity(0.01);
-    background: rgba(red(@overlay-bg), green(@overlay-bg), blue(@overlay-bg), @overlay-opacity);
-    position: fixed;
+    position: absolute;
     width: 100%;
     height: 100%;
     left: 0;
     top: 0;
     z-index: @zindex-overlay;
     visibility: hidden;
+
+    &.theme--dark {
+        background: rgba(red(@overlay-theme-dark-bg), green(@overlay-theme-dark-bg), blue(@overlay-theme-dark-bg), @overlay-opacity);
+    }
+
+    &.theme--light {
+        background: rgba(red(@overlay-theme-light-bg), green(@overlay-theme-light-bg), blue(@overlay-theme-light-bg), @overlay-opacity);
+    }
 
     &.is--open {
         .transition-delay(0);
@@ -41,4 +48,8 @@ default color:`#000000` default opacity (alpha):`0.7`
     &.is--closable {
         cursor: pointer;
     }
+}
+
+body > .js--overlay {
+    position: fixed;
 }
