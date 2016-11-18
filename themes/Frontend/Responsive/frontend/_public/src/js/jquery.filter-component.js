@@ -310,14 +310,9 @@
 
             validateElementShouldBeDisabled: function($element, activeIds, ids, checkedIds, value) {
                 var val = $element.val();
-
                 if (value) {
-                    $element.parents('.rating-star--outer-container').find('.rating-star--suffix-count').html('(' + value.label + ')');
                     return false;
-                } else if (checkedIds.indexOf(val) === -1) {
-                    $element.parents('.rating-star--outer-container').find('.rating-star--suffix-count').html('(' + 0 + ')');
                 }
-
                 return checkedIds.indexOf(val) === -1;
             },
 

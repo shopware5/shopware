@@ -36,8 +36,7 @@
                                             {for $i = $value->getId() + 1 to 5}
                                                 <i class="icon--star-empty"></i>
                                             {/for}
-                                            <span class="rating-star--suffix">& mehr</span>
-                                            <span class="rating-star--suffix-count">({$value->getLabel()})</span>
+                                            <span class="rating-star--suffix">{s name="RatingStarSuffix"}& more{/s}</span>
                                         </label>
                                     {/block}
                                 {/foreach}
