@@ -26,8 +26,8 @@ namespace Shopware\Bundle\SearchBundleDBAL\ConditionHandler;
 
 use Shopware\Bundle\SearchBundle\Condition\PriceCondition;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
+use Shopware\Bundle\SearchBundleDBAL\ListingPriceTable;
 use Shopware\Bundle\SearchBundleDBAL\ConditionHandlerInterface;
-use Shopware\Bundle\SearchBundleDBAL\PriceHelperInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 
@@ -38,17 +38,19 @@ use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
  */
 class PriceConditionHandler implements ConditionHandlerInterface
 {
-    /**
-     * @var PriceHelperInterface
-     */
-    private $priceHelper;
+    const LISTING_PRICE_JOINED = 'listing_price';
 
     /**
-     * @param PriceHelperInterface $priceHelper
+     * @var ListingPriceTable
      */
-    public function __construct(PriceHelperInterface $priceHelper)
+    private $listingPriceTable;
+
+    /**
+     * @param ListingPriceTable $listingPriceTable
+     */
+    public function __construct(ListingPriceTable $listingPriceTable)
     {
-        $this->priceHelper = $priceHelper;
+        $this->listingPriceTable = $listingPriceTable;
     }
 
     /**
@@ -67,24 +69,26 @@ class PriceConditionHandler implements ConditionHandlerInterface
         QueryBuilder $query,
         ShopContextInterface $context
     ) {
-        $selection = $this->priceHelper->getSelection($context);
-        $selection = 'MIN('.$selection.')';
-
-        $this->priceHelper->joinPrices($query, $context);
+        if (!$query->hasState(self::LISTING_PRICE_JOINED)) {
+            $table = $this->listingPriceTable->get($context);
+            $query->innerJoin('product', '(' . $table->getSQL() . ')', 'listing_price', 'listing_price.articleID = product.id');
+            foreach ($table->getParameters() as $key => $value) {
+                $query->setParameter($key, $value);
+            }
+            $query->addState(self::LISTING_PRICE_JOINED);
+        }
 
         /** @var PriceCondition $condition */
         if ($condition->getMaxPrice() > 0 && $condition->getMinPrice() > 0) {
-            $query->andHaving($selection . ' BETWEEN :priceMin AND :priceMax');
+            $query->andWhere('listing_price.cheapest_price BETWEEN :priceMin AND :priceMax');
             $query->setParameter(':priceMin', $condition->getMinPrice());
             $query->setParameter(':priceMax', $condition->getMaxPrice());
         } elseif ($condition->getMaxPrice() > 0) {
-            $query->andHaving($selection . ' <= :priceMax');
+            $query->andWhere('listing_price.cheapest_price <= :priceMax');
             $query->setParameter(':priceMax', $condition->getMaxPrice());
         } elseif ($condition->getMinPrice() > 0) {
-            $query->andHaving($selection . ' >= :priceMin');
+            $query->andWhere('listing_price.cheapest_price >= :priceMin');
             $query->setParameter(':priceMin', $condition->getMinPrice());
         }
-
-        return;
     }
 }

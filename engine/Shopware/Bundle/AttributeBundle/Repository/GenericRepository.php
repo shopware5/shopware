@@ -99,8 +99,8 @@ class GenericRepository implements RepositoryInterface
     }
 
     /**
-     * @param \int[]|\string[] $identifiers
-     * @return \array[]
+     * @param int[]|string[] $identifiers
+     * @return array[]
      */
     public function getList($identifiers)
     {

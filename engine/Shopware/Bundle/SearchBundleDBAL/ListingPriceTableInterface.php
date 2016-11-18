@@ -22,49 +22,16 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\AttributeBundle\Repository\Searcher;
+namespace Shopware\Bundle\SearchBundleDBAL;
 
-/**
- * @category  Shopware
- * @package   Shopware\Bundle\AttributeBundle\Repository\Searcher
- * @copyright Copyright (c) shopware AG (http://www.shopware.com)
- */
-class SearcherResult
+use Doctrine\DBAL\Query\QueryBuilder;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+
+interface ListingPriceTableInterface
 {
     /**
-     * @var int[]|string[]
+     * @param ShopContextInterface $context
+     * @return QueryBuilder
      */
-    private $identifiers;
-
-    /**
-     * @var int
-     */
-    private $count;
-
-    /**
-     * SearchGatewayResult constructor.
-     * @param int[]|string[] $identifiers
-     * @param int $count
-     */
-    public function __construct($identifiers, $count)
-    {
-        $this->identifiers = $identifiers;
-        $this->count = $count;
-    }
-
-    /**
-     * @return int[]|string[]
-     */
-    public function getIdentifiers()
-    {
-        return $this->identifiers;
-    }
-
-    /**
-     * @return int
-     */
-    public function getCount()
-    {
-        return $this->count;
-    }
+    public function get(ShopContextInterface $context);
 }

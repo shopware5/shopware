@@ -421,25 +421,41 @@
         updateMinInput: function(value) {
             var me = this;
 
-            if (me.$minInputEl.length) {
+            if (!me.$minInputEl.length) {
+                return;
+            }
+
+            if (value <= me.opts.rangeMin) {
+                me.$minInputEl.prop('disabled', 'disabled')
+                    .trigger('change');
+
+            } else {
                 me.$minInputEl.val(value.toFixed(2))
                     .removeAttr('disabled')
                     .trigger('change');
-
-                $.publish('plugin/swRangeSlider/onUpdateMinInput', [ me, me.$minInputEl, value ]);
             }
+
+            $.publish('plugin/swRangeSlider/onUpdateMinInput', [ me, me.$minInputEl, value ]);
         },
 
         updateMaxInput: function(value) {
             var me = this;
 
-            if (me.$maxInputEl.length) {
+            if (!me.$maxInputEl.length) {
+                return;
+            }
+
+            if (value >= me.opts.rangeMax) {
+                me.$maxInputEl.prop('disabled', 'disabled')
+                    .trigger('change');
+
+            } else {
                 me.$maxInputEl.val(value.toFixed(2))
                     .removeAttr('disabled')
                     .trigger('change');
-
-                $.publish('plugin/swRangeSlider/onUpdateMaxInput', [ me, me.$maxInputEl, value ]);
             }
+
+            $.publish('plugin/swRangeSlider/onUpdateMaxInput', [ me, me.$maxInputEl, value ]);
         },
 
         updateMinLabel: function(value) {

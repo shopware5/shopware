@@ -27,12 +27,13 @@ namespace Shopware\Bundle\SearchBundleDBAL\FacetHandler;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\FacetResult\ValueListFacetResult;
 use Shopware\Bundle\SearchBundle\FacetResult\ValueListItem;
+use Shopware\Bundle\SearchBundle\FacetResultInterface;
+use Shopware\Bundle\SearchBundleDBAL\PartialFacetHandlerInterface;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactory;
 use Shopware\Bundle\SearchBundle\Facet;
 use Shopware\Bundle\SearchBundle\Condition;
 use Shopware\Bundle\SearchBundle\FacetInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
-use Shopware\Bundle\SearchBundleDBAL\FacetHandlerInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ManufacturerServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\Manufacturer;
 use Shopware\Components\QueryAliasMapper;
@@ -42,7 +43,7 @@ use Shopware\Components\QueryAliasMapper;
  * @package   Shopware\Bundle\SearchBundleDBAL\FacetHandler
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class ManufacturerFacetHandler implements FacetHandlerInterface
+class ManufacturerFacetHandler implements PartialFacetHandlerInterface
 {
     /**
      * @var ManufacturerServiceInterface
@@ -86,22 +87,19 @@ class ManufacturerFacetHandler implements FacetHandlerInterface
     }
 
     /**
-     * @param FacetInterface|Facet\PriceFacet $facet
+     * @param FacetInterface $facet
+     * @param Criteria $reverted
      * @param Criteria $criteria
      * @param ShopContextInterface $context
-     * @return ValueListFacetResult
+     * @return FacetResultInterface|null
      */
-    public function generateFacet(
+    public function generatePartialFacet(
         FacetInterface $facet,
+        Criteria $reverted,
         Criteria $criteria,
         ShopContextInterface $context
     ) {
-        $queryCriteria = clone $criteria;
-        $queryCriteria->resetConditions();
-        $queryCriteria->resetSorting();
-
-        $query = $this->queryBuilderFactory->createQuery($queryCriteria, $context);
-
+        $query = $this->queryBuilderFactory->createQuery($reverted, $context);
         $query->resetQueryPart('groupBy');
         $query->resetQueryPart('orderBy');
 

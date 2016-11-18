@@ -52,14 +52,13 @@ class VoteAverageConditionHandler implements HandlerInterface
         ShopContextInterface $context
     ) {
         /** @var VoteAverageCondition $criteriaPart */
-        $range = new RangeQuery('voteAverage.average', [
+        $filter = new RangeQuery('voteAverage.average', [
             'gte' => $criteriaPart->getAverage() * 2
         ]);
-
-        if ($criteria->hasBaseCondition($criteriaPart->getName())) {
-            $search->addFilter($range);
-        } else {
-            $search->addPostFilter($range);
+        if ($criteria->generatePartialFacets() || $criteria->hasBaseCondition($criteriaPart->getName())) {
+            $search->addFilter($filter);
+            return;
         }
+        $search->addPostFilter($filter);
     }
 }

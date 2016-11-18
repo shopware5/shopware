@@ -23,6 +23,7 @@
  */
 
 use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
+use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 
 /**
  * Shopware Listing Widgets
@@ -120,39 +121,29 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
         }
     }
 
+    /**
+     * Loads the listing count for the provided listing parameters.
+     * Sets a json response with: `facets`, `totalCount` and `products`.
+     */
     public function listingCountAction()
     {
-        $this->Front()->Plugins()->ViewRenderer()->setNoRender();
-
-        $context = $this->get('shopware_storefront.context_service')->getShopContext();
+        if ($this->Request()->getParam('sSearch')) {
+            $result = $this->fetchSearchListing();
+            $this->setSearchResultResponse($result);
+            return;
+        }
 
         $categoryId = $this->Request()->getParam('sCategory');
         $productStreamId = $this->findStreamIdByCategoryId($categoryId);
 
         if ($productStreamId) {
-            /** @var \Shopware\Components\ProductStream\CriteriaFactoryInterface $factory */
-            $factory = $this->get('shopware_product_stream.criteria_factory');
-            $criteria = $factory->createCriteria($this->Request(), $context);
-
-            /** @var \Shopware\Components\ProductStream\RepositoryInterface $streamRepository */
-            $streamRepository = $this->get('shopware_product_stream.repository');
-            $streamRepository->prepareCriteria($criteria, $productStreamId);
-
-            $criteria->resetSorting();
-        } else {
-            $criteria = $this->get('shopware_search.store_front_criteria_factory')
-                ->createAjaxCountCriteria($this->Request(), $context);
+            $result = $this->fetchStreamListing($productStreamId);
+            $this->setSearchResultResponse($result);
+            return;
         }
 
-        /**@var $result ProductNumberSearchResult*/
-        $result = $this->get('shopware_search.product_number_search')->search(
-            $criteria,
-            $context
-        );
-
-        $body = json_encode(array('totalCount' => $result->getTotalCount()));
-        $this->Response()->setBody($body);
-        $this->Response()->setHeader('Content-type', 'application/json', true);
+        $result = $this->fetchCategoryListing();
+        $this->setSearchResultResponse($result);
     }
 
     /**
@@ -266,8 +257,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
             ->andWhere('category.active = 1')
             ->setParameter(':parentId', $categoryId);
 
-        $childrenIds = $query->execute()->fetchAll(PDO::FETCH_COLUMN);
-        return $childrenIds;
+        return $query->execute()->fetchAll(PDO::FETCH_COLUMN);
     }
 
     /**
@@ -286,5 +276,117 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
         }
 
         return null;
+    }
+
+    /**
+     * @param ProductNumberSearchResult $result
+     */
+    private function setSearchResultResponse(ProductNumberSearchResult $result)
+    {
+        $body = json_encode([
+            'totalCount' => $result->getTotalCount(),
+            'facets' => $result->getFacets()
+        ]);
+
+        $this->Front()->Plugins()->ViewRenderer()->setNoRender();
+        $this->Response()->setBody($body);
+        $this->Response()->setHeader('Content-type', 'application/json', true);
+    }
+
+    /**
+     * @param int $productStreamId
+     * @return ProductNumberSearchResult
+     */
+    private function fetchStreamListing($productStreamId)
+    {
+        /** @var ContextServiceInterface $contextService */
+        $contextService = $this->get('shopware_storefront.context_service');
+        $context = $contextService->getShopContext();
+
+        /** @var \Shopware\Components\ProductStream\CriteriaFactoryInterface $factory */
+        $factory = $this->get('shopware_product_stream.criteria_factory');
+        $criteria = $factory->createCriteria($this->Request(), $context);
+
+        /** @var \Shopware\Components\ProductStream\RepositoryInterface $streamRepository */
+        $streamRepository = $this->get('shopware_product_stream.repository');
+        $streamRepository->prepareCriteria($criteria, $productStreamId);
+
+        /** @var \Shopware\Components\ProductStream\FacetFilter $facetFilter */
+        $facetFilter = $this->get('shopware_product_stream.facet_filter');
+        $facetFilter->add($criteria);
+
+        $criteria->setGeneratePartialFacets(
+            $this->container->get('config')->get('generatePartialFacets')
+        );
+
+        if (!$this->Request()->get('loadFacets')) {
+            $criteria->resetFacets();
+        }
+
+        /** @var \Shopware\Bundle\SearchBundle\ProductNumberSearchInterface $search */
+        $search = $this->get('shopware_search.product_number_search');
+        $result = $search->search($criteria, $context);
+
+        if (!$this->Request()->get('loadFacets')) {
+            return $result;
+        }
+
+        return new ProductNumberSearchResult(
+            $result->getProducts(),
+            $result->getTotalCount(),
+            $facetFilter->filter($criteria->getFacets(), $criteria)
+        );
+    }
+
+    /**
+     * @return ProductNumberSearchResult
+     */
+    private function fetchCategoryListing()
+    {
+        /** @var ContextServiceInterface $contextService */
+        $contextService = $this->get('shopware_storefront.context_service');
+        $context = $contextService->getShopContext();
+
+        /** @var \Shopware\Bundle\SearchBundle\StoreFrontCriteriaFactoryInterface $factory */
+        $factory = $this->get('shopware_search.store_front_criteria_factory');
+        $criteria = $factory->createListingCriteria($this->Request(), $context);
+
+        $criteria->setGeneratePartialFacets(
+            $this->container->get('config')->get('generatePartialFacets')
+        );
+
+        if (!$this->Request()->get('loadFacets')) {
+            $criteria->resetFacets();
+        }
+
+        /** @var \Shopware\Bundle\SearchBundle\ProductNumberSearchInterface $search */
+        $search = $this->get('shopware_search.product_number_search');
+        return $search->search($criteria, $context);
+    }
+
+    /**
+     * @return ProductNumberSearchResult
+     */
+    private function fetchSearchListing()
+    {
+        /** @var ContextServiceInterface $contextService */
+        $contextService = $this->get('shopware_storefront.context_service');
+        $context = $contextService->getShopContext();
+
+        /** @var \Shopware\Bundle\SearchBundle\StoreFrontCriteriaFactoryInterface $factory */
+        $factory = $this->get('shopware_search.store_front_criteria_factory');
+        $criteria = $factory->createSearchCriteria($this->Request(), $context);
+
+        $criteria->setGeneratePartialFacets(
+            $this->container->get('config')->get('generatePartialFacets')
+        );
+
+        if (!$this->Request()->get('loadFacets')) {
+            $criteria->resetFacets();
+        }
+
+        /** @var \Shopware\Bundle\SearchBundle\ProductNumberSearchInterface $search */
+        $search = $this->get('shopware_search.product_number_search');
+        return $search->search($criteria, $context);
     }
 }

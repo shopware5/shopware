@@ -153,24 +153,6 @@ class PriceSortingTest extends TestCase
             array($sorting),
             $context
         );
-
-        $products = $result->getProducts();
-
-        $product = $products['second'];
-        $this->assertTrue($product->hasAttribute('search'));
-        $this->assertEquals(99.00, $product->getAttribute('search')->get('cheapest_price'));
-
-        $product = $products['third'];
-        $this->assertTrue($product->hasAttribute('search'));
-        $this->assertEquals(108.00, $product->getAttribute('search')->get('cheapest_price'));
-
-        $product = $products['fourth'];
-        $this->assertTrue($product->hasAttribute('search'));
-        $this->assertEquals(117.00, $product->getAttribute('search')->get('cheapest_price'));
-
-        $product = $products['first'];
-        $this->assertTrue($product->hasAttribute('search'));
-        $this->assertEquals(126.00, $product->getAttribute('search')->get('cheapest_price'));
     }
 
     protected function search(

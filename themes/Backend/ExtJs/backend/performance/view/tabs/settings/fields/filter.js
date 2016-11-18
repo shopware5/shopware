@@ -82,52 +82,65 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Filter', {
                 title: '{s name=fieldset/listings}Listings{/s}',
                 items: [{
                     name: 'filters[showSupplierInCategories]',
-                    fieldLabel: '{s name=fieldset/filter/text/showManufacturerFacet}Hersteller Filter anzeigen{/s}',
-                    helpText:   '{s name=fieldset/filter/text/showManufacturerFacetHelp}Ermöglicht dem Kunden, die angezeigten Produkte nach Ihren Herstellern zu filtern{/s}',
+                    fieldLabel: '{s name=fieldset/filter/text/showManufacturerFacet}Show manufacturer filter{/s}',
+                    helpText:   '{s name=fieldset/filter/text/showManufacturerFacetHelp}Allow customers to filter product lists by manufacturer{/s}',
 
                     xtype: 'checkbox',
                     uncheckedValue: false,
                     inputValue: true
                 }, {
                     name: 'filters[showImmediateDeliveryFacet]',
-                    fieldLabel: '{s name=fieldset/filter/text/showImmediateDeliveryFacet}Sofort lieferbar Filter anzeigen{/s}',
-                    helpText:   '{s name=fieldset/filter/text/showImmediateDeliveryFacetHelp}Ermöglicht dem Kunden, nur Produkte anzuzeigen, die sofort lieferbar sind.{/s}',
+                    fieldLabel: '{s name=fieldset/filter/text/showImmediateDeliveryFacet}Show immediate delivery filter{/s}',
+                    helpText:   '{s name=fieldset/filter/text/showImmediateDeliveryFacetHelp}Allows customers to show only products that are in stock.{/s}',
 
                     xtype: 'checkbox',
                     uncheckedValue: false,
                     inputValue: true
                 }, {
                     name: 'filters[showShippingFreeFacet]',
-                    fieldLabel: '{s name=fieldset/filter/text/showShippingFreeFacet}Versandkostenfrei Filter anzeigen{/s}',
-                    helpText:   '{s name=fieldset/filter/text/showShippingFreeFacetHelp}Ermöglicht dem Kunden, nur Produkte anzuzeigen, welche als Versandkostenfrei markiert wurden{/s}',
+                    fieldLabel: '{s name=fieldset/filter/text/showShippingFreeFacet}Show free shipping filter{/s}',
+                    helpText:   '{s name=fieldset/filter/text/showShippingFreeFacetHelp}Allows customers to filter products by free shipping costs{/s}',
 
                     xtype: 'checkbox',
                     uncheckedValue: false,
                     inputValue: true
                 }, {
                     name: 'filters[showPriceFacet]',
-                    fieldLabel: '{s name=fieldset/filter/text/showPriceFacet}Preis Filter anzeigen{/s}',
-                    helpText:   '{s name=fieldset/filter/text/showPriceFacetHelp}Ermöglicht dem Kunden, die angezeigten Produkte nach Ihren Preisen zu filtern{/s}',
+                    fieldLabel: '{s name=fieldset/filter/text/showPriceFacet}Show price filter{/s}',
+                    helpText:   '{s name=fieldset/filter/text/showPriceFacetHelp}Allow customers to filter products by price{/s}',
 
                     xtype: 'checkbox',
                     uncheckedValue: false,
                     inputValue: true
                 }, {
                     name: 'filters[showVoteAverageFacet]',
-                    fieldLabel: '{s name=fieldset/filter/text/showVoteAverageFacet}Bewertungs Filter anzeigen{/s}',
-                    helpText:   '{s name=fieldset/filter/text/showVoteAverageFacetHelp}Ermöglicht dem Kunden, die angezeigten Produkte nach Ihren Durchschnitts-Bewertungen zu filtern{/s}',
+                    fieldLabel: '{s name=fieldset/filter/text/showVoteAverageFacet}Show rating filter{/s}',
+                    helpText:   '{s name=fieldset/filter/text/showVoteAverageFacetHelp}Allow customers to filter products by average user rating{/s}',
 
                     xtype: 'checkbox',
                     uncheckedValue: false,
                     inputValue: true
                 }, {
                     name: 'filters[displayFiltersInListings]',
-                    fieldLabel: '{s name=fieldset/filter/text/showPropertyFacet}Eigenschaften Filter anzeigen{/s}',
-                    helpText:   '{s name=fieldset/filter/text/showPropertyFacetHelp}Ermöglicht dem Kunden, die angezeigten Produkte nach Ihren Eigenschaften zu filtern{/s}',
+                    fieldLabel: '{s name=fieldset/filter/text/showPropertyFacet}Show property(ies) filter(s){/s}',
+                    helpText:   '{s name=fieldset/filter/text/showPropertyFacetHelp}Allow customers to filter products by its property(ies){/s}',
                     cls: 'property-facet',
                     xtype: 'checkbox',
                     uncheckedValue: false,
                     inputValue: true
+                }, {
+                    name: 'filters[generatePartialFacets]',
+                    fieldLabel: '{s name=fieldset/filter/text/generatePartialFacets}Display only combinable filters{/s}',
+                    helpText:   '{s name=fieldset/filter/text/generatePartialFacetsHelp}When the customer filters a listing, filters will be reloaded and will be deactivated if they would lead to no result with the activated filters.{/s}',
+                    xtype: 'checkbox',
+                    uncheckedValue: false,
+                    inputValue: true
+                }, {
+                    xtype: 'numberfield',
+                    minValue: 1,
+                    name: 'filters[categoryFilterDepth]',
+                    fieldLabel: '{s name=fieldset/filter/text/categoryFilterDepth}{/s}',
+                    helpText:   '{s name=fieldset/filter/text/categoryFilterDepthHelp}{/s}'
                 }]
             }
         ];

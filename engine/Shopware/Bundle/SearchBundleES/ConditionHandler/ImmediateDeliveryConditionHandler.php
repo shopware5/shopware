@@ -52,12 +52,10 @@ class ImmediateDeliveryConditionHandler implements HandlerInterface
         ShopContextInterface $context
     ) {
         $filter = new TermQuery('hasAvailableVariant', 1);
-
-        /** @var ImmediateDeliveryCondition $criteriaPart */
-        if ($criteria->hasBaseCondition($criteriaPart->getName())) {
+        if ($criteria->generatePartialFacets() || $criteria->hasBaseCondition($criteriaPart->getName())) {
             $search->addFilter($filter);
-        } else {
-            $search->addPostFilter($filter);
+            return;
         }
+        $search->addPostFilter($filter);
     }
 }

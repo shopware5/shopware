@@ -58,11 +58,10 @@ class OrdernumberConditionHandler implements HandlerInterface
     ) {
         /** @var OrdernumberCondition $criteriaPart */
         $filter = new TermsQuery('number', $criteriaPart->getOrdernumbers());
-
-        if ($criteria->hasBaseCondition($criteriaPart->getName())) {
+        if ($criteria->generatePartialFacets() || $criteria->hasBaseCondition($criteriaPart->getName())) {
             $search->addFilter($filter);
-        } else {
-            $search->addPostFilter($filter);
+            return;
         }
+        $search->addPostFilter($filter);
     }
 }

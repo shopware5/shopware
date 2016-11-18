@@ -50,14 +50,6 @@
 				</h1>
 			{/block}
 
-			{block name='frontend_search_category_filter'}
-                {foreach $facets as $facet}
-                    {if $facet|is_a: 'Shopware\Bundle\SearchBundle\FacetResult\TreeFacetResult' && $facet->getFacetName() === 'category'}
-                        {include file="frontend/search/category-filter.tpl" facet=$facet}
-                    {/if}
-                {/foreach}
-			{/block}
-
 			{block name="frontend_search_results"}
 				<div class="search--results">
 					{include file='frontend/listing/listing.tpl'}

@@ -251,17 +251,22 @@ class StoreFrontCriteriaFactory implements StoreFrontCriteriaFactoryInterface
             $request->setParam('sSort', StoreFrontCriteriaFactory::SORTING_SEARCH_RANKING);
         }
 
-        $criteria = $this->createCriteriaFromRequest(
-            $request,
-            $context
-        );
+        $criteria = $this->createCriteriaFromRequest($request, $context);
 
-        if (!$criteria->hasCondition('category')) {
-            $categoryId = $context->getShop()->getCategory()->getId();
+        $systemId = $context->getShop()->getCategory()->getId();
 
-            $criteria->addBaseCondition(
-                new CategoryCondition([$categoryId])
-            );
+        if (!$criteria->hasBaseCondition('category')) {
+            $criteria->addBaseCondition(new CategoryCondition([$systemId]));
+            return $criteria;
+        }
+
+        /** @var CategoryCondition $condition */
+        $condition = $criteria->getBaseCondition('category');
+
+        if (!in_array($systemId, $condition->getCategoryIds())) {
+            $criteria->removeBaseCondition('category');
+            $criteria->addCondition($condition);
+            $criteria->addBaseCondition(new CategoryCondition([$systemId]));
         }
 
         return $criteria;

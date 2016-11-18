@@ -53,11 +53,29 @@ class CategoryConditionHandler implements HandlerInterface
     ) {
         /** @var CategoryCondition $criteriaPart */
         $filter = new TermsQuery('categoryIds', $criteriaPart->getCategoryIds());
-
-        if ($criteria->hasBaseCondition($criteriaPart->getName())) {
+        if ($criteria->generatePartialFacets() || $this->isBaseCondition($criteriaPart, $criteria)) {
             $search->addFilter($filter);
-        } else {
-            $search->addPostFilter($filter);
+            return;
         }
+        $search->addPostFilter($filter);
+    }
+
+    /**
+     * Category condition can be assigned multiple times for search requests.
+     * Validates if the provided condition class is inside the base condition array of the provided criteria
+     * identified by the object reference.
+     *
+     * @param CriteriaPartInterface $condition
+     * @param Criteria $criteria
+     * @return bool
+     */
+    public function isBaseCondition(CriteriaPartInterface $condition, Criteria $criteria)
+    {
+        foreach ($criteria->getBaseConditions() as $baseCondition) {
+            if ($baseCondition === $condition) {
+                return true;
+            }
+        }
+        return false;
     }
 }

@@ -53,11 +53,10 @@ class ManufacturerConditionHandler implements HandlerInterface
     ) {
         /** @var ManufacturerCondition $criteriaPart */
         $filter = new TermsQuery('manufacturer.id', $criteriaPart->getManufacturerIds());
-
-        if ($criteria->hasBaseCondition($criteriaPart->getName())) {
+        if ($criteria->generatePartialFacets() || $criteria->hasBaseCondition($criteriaPart->getName())) {
             $search->addFilter($filter);
-        } else {
-            $search->addPostFilter($filter);
+            return;
         }
+        $search->addPostFilter($filter);
     }
 }

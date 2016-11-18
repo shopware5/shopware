@@ -262,6 +262,8 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
                 'showVoteAverageFacet',
                 'displayFiltersInListings',
                 'defaultListingSorting',
+                'generatePartialFacets',
+                'categoryFilterDepth'
             ]),
             'various' => $this->genericConfigLoader([
                 'disableShopwareStatistics',

@@ -22,49 +22,17 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\AttributeBundle\Repository\Searcher;
+namespace Shopware\Bundle\StoreFrontBundle\Service;
 
-/**
- * @category  Shopware
- * @package   Shopware\Bundle\AttributeBundle\Repository\Searcher
- * @copyright Copyright (c) shopware AG (http://www.shopware.com)
- */
-class SearcherResult
+use Shopware\Bundle\StoreFrontBundle\Struct\Category;
+
+interface CategoryDepthServiceInterface
 {
     /**
-     * @var int[]|string[]
+     * @param Category $category
+     * @param int $depth
+     * @param int[] $filterIds
+     * @return int[]
      */
-    private $identifiers;
-
-    /**
-     * @var int
-     */
-    private $count;
-
-    /**
-     * SearchGatewayResult constructor.
-     * @param int[]|string[] $identifiers
-     * @param int $count
-     */
-    public function __construct($identifiers, $count)
-    {
-        $this->identifiers = $identifiers;
-        $this->count = $count;
-    }
-
-    /**
-     * @return int[]|string[]
-     */
-    public function getIdentifiers()
-    {
-        return $this->identifiers;
-    }
-
-    /**
-     * @return int
-     */
-    public function getCount()
-    {
-        return $this->count;
-    }
+    public function get(Category $category, $depth, array $filterIds = []);
 }

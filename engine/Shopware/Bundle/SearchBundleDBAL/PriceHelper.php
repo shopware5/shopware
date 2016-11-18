@@ -24,7 +24,6 @@
 
 namespace Shopware\Bundle\SearchBundleDBAL;
 
-use Doctrine\DBAL\Connection;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
@@ -41,22 +40,15 @@ class PriceHelper implements PriceHelperInterface
     const STATE_INCLUDES_AVAILABLE_VARIANT = 'available_variant';
 
     /**
-     * @var Connection
-     */
-    private $connection;
-
-    /**
      * @var \Shopware_Components_Config
      */
     private $config;
 
     /**
-     * @param Connection $connection
      * @param \Shopware_Components_Config $config
      */
-    public function __construct(Connection $connection, \Shopware_Components_Config $config)
+    public function __construct(\Shopware_Components_Config $config)
     {
-        $this->connection = $connection;
         $this->config = $config;
     }
 
@@ -188,8 +180,8 @@ class PriceHelper implements PriceHelperInterface
              AND ' . $graduation
         );
 
-        $query->setParameter(':fallbackCustomerGroup', $context->getFallbackCustomerGroup()->getKey());
         $query->setParameter(':priceGroupCustomerGroup', $context->getCurrentCustomerGroup()->getId());
+        $query->setParameter(':fallbackCustomerGroup', $context->getFallbackCustomerGroup()->getKey());
         $query->addState(self::STATE_INCLUDES_DEFAULT_PRICE);
     }
 

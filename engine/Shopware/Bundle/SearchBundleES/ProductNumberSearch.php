@@ -160,14 +160,14 @@ class ProductNumberSearch implements ProductNumberSearchInterface
     }
 
     /**
-     * @param $data
-     * @return BaseProduct[]
+     * @param array[] $data
+     * @return \Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct[]
      */
     private function createProducts($data)
     {
         $products = [];
-        foreach ($data['hits']['hits'] as $data) {
-            $source = $data['_source'];
+        foreach ($data['hits']['hits'] as $row) {
+            $source = $row['_source'];
 
             $product = new BaseProduct(
                 (int)$source['id'],
@@ -178,8 +178,8 @@ class ProductNumberSearch implements ProductNumberSearchInterface
             $product->addAttribute(
                 'elastic_search',
                 new Attribute(array_merge(
-                    $data['_source'],
-                    ['score' => $data['_score']]
+                    $row['_source'],
+                    ['score' => $row['_score']]
                 ))
             );
 

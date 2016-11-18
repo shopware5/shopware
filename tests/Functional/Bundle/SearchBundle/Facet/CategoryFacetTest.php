@@ -2,6 +2,8 @@
 
 namespace Shopware\Tests\Functional\Bundle\SearchBundle\Facet;
 
+use Shopware\Bundle\SearchBundle\Condition\CategoryCondition;
+use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\Facet\CategoryFacet;
 use Shopware\Bundle\SearchBundle\FacetResult\TreeFacetResult;
 use Shopware\Bundle\SearchBundle\FacetResult\TreeItem;
@@ -56,14 +58,7 @@ class CategoryFacetTest extends TestCase
 
         /** @var TreeItem $value */
         $value = $facet->getValues()[0];
-        $this->assertEquals('Deutsch', $value->getLabel());
-
-        $value = $value->getValues()[0];
         $this->assertEquals('firstLevel', $value->getLabel());
-        $this->assertTrue($value->isActive());
-
-        $value = $value->getValues()[0];
-        $this->assertEquals('secondLevel', $value->getLabel());
     }
 
     public function testMultipleCategories()
@@ -104,9 +99,6 @@ class CategoryFacetTest extends TestCase
         $this->assertCount(1, $facet->getValues());
 
         $value = $facet->getValues()[0];
-        $this->assertEquals('Deutsch', $value->getLabel());
-
-        $value = $value->getValues()[0];
         $this->assertEquals('firstLevel', $value->getLabel());
         $this->assertTrue($value->isActive());
 
@@ -135,6 +127,10 @@ class CategoryFacetTest extends TestCase
             'parent' => $baseCategory->getId()
         ));
 
+        /** @var \Shopware_Components_Config $config */
+        $config = Shopware()->Container()->get('config');
+        $config->offsetSet('categoryFilterDepth', 4);
+
         $result = $this->search(
             array(
                 'first' => $subCategory1,
@@ -159,9 +155,6 @@ class CategoryFacetTest extends TestCase
 
         /** @var TreeItem $value */
         $value = $facet->getValues()[0];
-        $this->assertEquals('Deutsch', $value->getLabel());
-
-        $value = $value->getValues()[0];
         $this->assertEquals('firstLevel', $value->getLabel());
 
         $value = $value->getValues()[0];
@@ -170,5 +163,27 @@ class CategoryFacetTest extends TestCase
 
         $value = $value->getValues()[0];
         $this->assertEquals('thirdLevel-2', $value->getLabel());
+    }
+
+    /**
+     * @param Criteria $criteria
+     * @param Category $category
+     * @param $conditions
+     * @param ShopContext $context
+     */
+    protected function addCategoryBaseCondition(
+        Criteria $criteria,
+        Category $category,
+        $conditions,
+        ShopContext $context
+    ) {
+        if ($category) {
+            $criteria->addBaseCondition(
+                new CategoryCondition(array($category->getId()))
+            );
+            $criteria->addCondition(
+                new CategoryCondition(array($category->getId()))
+            );
+        }
     }
 }

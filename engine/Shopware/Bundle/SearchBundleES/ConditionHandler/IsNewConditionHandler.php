@@ -73,11 +73,10 @@ class IsNewConditionHandler implements HandlerInterface
         ];
 
         $filter = new RangeQuery('formattedCreatedAt', $range);
-
-        if ($criteria->hasBaseCondition($criteriaPart->getName())) {
+        if ($criteria->generatePartialFacets() || $criteria->hasBaseCondition($criteriaPart->getName())) {
             $search->addFilter($filter);
-        } else {
-            $search->addPostFilter($filter);
+            return;
         }
+        $search->addPostFilter($filter);
     }
 }

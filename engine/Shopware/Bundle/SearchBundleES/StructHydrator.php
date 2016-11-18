@@ -28,7 +28,6 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Attribute;
 use Shopware\Bundle\StoreFrontBundle\Struct\Property\Group as PropertyGroup;
 use Shopware\Bundle\StoreFrontBundle\Struct\Property\Option as PropertyOption;
 use Shopware\Bundle\StoreFrontBundle\Struct\Media;
-use Shopware\Bundle\StoreFrontBundle\Struct\Product;
 use Shopware\Bundle\StoreFrontBundle\Struct\Thumbnail;
 
 /**

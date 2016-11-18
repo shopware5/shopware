@@ -402,5 +402,9 @@
             <argument type="service" id="shopware_storefront.country_gateway" />
             <argument type="service" id="dbal_connection" />
         </service>
+
+        <service id="shopware_storefront.category_depth_service" class="Shopware\Bundle\StoreFrontBundle\Service\Core\CategoryDepthService">
+            <argument type="service" id="dbal_connection" />
+        </service>
     </services>
 </container>

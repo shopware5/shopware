@@ -22,49 +22,33 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\AttributeBundle\Repository\Searcher;
+namespace Shopware\Bundle\SearchBundleDBAL;
 
-/**
- * @category  Shopware
- * @package   Shopware\Bundle\AttributeBundle\Repository\Searcher
- * @copyright Copyright (c) shopware AG (http://www.shopware.com)
- */
-class SearcherResult
+use Shopware\Bundle\SearchBundle\Criteria;
+use Shopware\Bundle\SearchBundle\FacetInterface;
+use Shopware\Bundle\SearchBundle\FacetResultInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+
+interface PartialFacetHandlerInterface
 {
     /**
-     * @var int[]|string[]
+     * @param FacetInterface $facet
+     * @param Criteria $reverted
+     * @param Criteria $criteria
+     * @param ShopContextInterface $context
+     * @return FacetResultInterface
      */
-    private $identifiers;
+    public function generatePartialFacet(
+        FacetInterface $facet,
+        Criteria $reverted,
+        Criteria $criteria,
+        ShopContextInterface $context
+    );
 
     /**
-     * @var int
+     * Checks if the provided facet can be handled by this class.
+     * @param FacetInterface $facet
+     * @return bool
      */
-    private $count;
-
-    /**
-     * SearchGatewayResult constructor.
-     * @param int[]|string[] $identifiers
-     * @param int $count
-     */
-    public function __construct($identifiers, $count)
-    {
-        $this->identifiers = $identifiers;
-        $this->count = $count;
-    }
-
-    /**
-     * @return int[]|string[]
-     */
-    public function getIdentifiers()
-    {
-        return $this->identifiers;
-    }
-
-    /**
-     * @return int
-     */
-    public function getCount()
-    {
-        return $this->count;
-    }
+    public function supportsFacet(FacetInterface $facet);
 }

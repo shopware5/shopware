@@ -56,7 +56,7 @@ class GenericReader implements ReaderInterface
     }
 
     /**
-     * @param \int[]|\string[] $identifiers
+     * @param int[]|string[] $identifiers
      * @return array[]
      */
     public function getList($identifiers)

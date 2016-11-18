@@ -1,8 +1,14 @@
 {namespace name="frontend/listing/listing_actions"}
 
 {block name="frontend_listing_filter_facet_value_tree"}
-    <div class="filter-panel filter--property facet--{$facet->getFacetName()|escape:'htmlall'}"
-         data-filter-type="value-tree"
+    {$type = 'value-tree'}
+    {if {config name="generatePartialFacets"} }
+        {$type = 'value-tree-single'}
+    {/if}
+
+    <div class="filter-panel filter--value-tree facet--{$facet->getFacetName()|escape:'htmlall'}"
+         data-filter-type="{$type}"
+         data-facet-name="{$facet->getFacetName()}"
          data-field-name="{$facet->getFieldName()|escape:'htmlall'}">
 
         {block name="frontend_listing_filter_facet_value_tree_flyout"}
@@ -32,16 +38,18 @@
 
                                                 {block name="frontend_listing_filter_facet_value_tree_option_container"}
                                                     <div class="option--container value-tree--container">
+                                                        {$disabled = !$option->isActive() && $facet->isActive()}
 
                                                         {block name="frontend_listing_filter_facet_value_tree_input"}
-                                                            <span class="filter-panel--checkbox">
+                                                            <span class="filter-panel--input{if $disabled} is--disabled{/if}">
                                                                 <input type="checkbox"
+                                                                       data-parent-id="{$parent}"
                                                                        id="__{$facet->getFieldName()|escape:'htmlall'}__{$option->getId()|escape:'htmlall'}"
                                                                        name="__{$facet->getFieldName()|escape:'htmlall'}__{$option->getId()|escape:'htmlall'}"
                                                                        value="{$option->getId()|escape:'htmlall'}"
-                                                                       {if $option->isActive()}checked="checked" {/if}/>
+                                                                       {if $option->isActive()}checked="checked"{elseif $disabled}disabled="disabled"{/if}/>
 
-                                                                <span class="checkbox--state">&nbsp;</span>
+                                                                <span class="input--state">&nbsp;</span>
                                                             </span>
                                                         {/block}
 
@@ -55,7 +63,7 @@
                                                 {/block}
 
                                                 {if !empty($option->getValues())}
-                                                    {valueTree options=$option->getValues() level=$level+1}
+                                                    {valueTree options=$option->getValues() level=$level+1 parent=$option->getId()}
                                                 {/if}
                                             </li>
                                         {/block}
@@ -63,7 +71,7 @@
                                 </ul>
                             {/function}
 
-                            {valueTree options=$facet->getValues()}
+                            {valueTree options=$facet->getValues() parent=null}
                         {/block}
                     </div>
                 {/block}

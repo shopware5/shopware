@@ -37,22 +37,22 @@ class TreeItem extends Extendable
     /**
      * @var int|string
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      */
-    private $label;
+    protected $label;
 
     /**
      * @var bool
      */
-    private $active;
+    protected $active;
 
     /**
      * @var TreeItem[]
      */
-    private $values;
+    protected $values;
 
     /**
      * @param int|string $id

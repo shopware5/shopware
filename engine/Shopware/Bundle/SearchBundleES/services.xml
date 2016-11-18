@@ -147,9 +147,9 @@
 
         <service id="shopware_search_es.category_facet_handler" class="Shopware\Bundle\SearchBundleES\FacetHandler\CategoryFacetHandler">
             <argument type="service" id="shopware_storefront.category_service" />
-            <argument type="service" id="snippets" />
-            <argument type="service" id="query_alias_mapper" />
-            <argument type="service" id="dbal_connection" />
+            <argument type="service" id="shopware_storefront.category_depth_service" />
+            <argument type="service" id="config" />
+            <argument type="service" id="shopware_search.category_tree_facet_result_builder" />
             <tag name="shopware_search_es.search_handler" />
         </service>
 

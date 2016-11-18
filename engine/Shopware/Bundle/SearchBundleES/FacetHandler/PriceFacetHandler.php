@@ -113,6 +113,9 @@ class PriceFacetHandler implements HandlerInterface, ResultHydratorInterface
         if ($data['count'] <= 0) {
             return;
         }
+        if ($data['min'] == $data['max']) {
+            return;
+        }
 
         $criteriaPart = $this->createFacet(
             $criteria,

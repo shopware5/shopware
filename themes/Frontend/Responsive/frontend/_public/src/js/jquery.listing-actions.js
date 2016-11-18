@@ -173,6 +173,7 @@
 
             me.$filterForm = $(me.opts.filterFormSelector);
             me.$filterComponents = me.$el.find(me.opts.filterComponentSelector);
+
             me.$filterTrigger = me.$el.find(me.opts.filterTriggerSelector);
             me.$filterTriggerIcon = me.$filterTrigger.find(me.opts.filterTriggerIconSelector);
             me.$filterCont = me.$el.find(me.opts.filterContainerSelector);
@@ -182,6 +183,8 @@
             me.$applyFilterBtn = me.$el.find(me.opts.applyFilterBtnSelector);
 
             me.resultCountURL = me.$filterForm.attr('data-count-ctrl');
+            me.loadFacets = me.$filterForm.attr('data-load-facets');
+
             me.controllerURL = window.location.href.split('?')[0];
             me.resetLabel = me.$activeFilterCont.attr('data-reset-label');
             me.propertyFieldNames = [];
@@ -198,9 +201,17 @@
             filterCount = Object.keys(me.activeFilterElements).length;
 
             me.updateFilterTriggerButton(filterCount > 1 ? filterCount - 1 : filterCount);
-
             me.initStateHandling();
             me.registerEvents();
+
+            if (me.loadFacets) {
+                me.opts.bufferTime = 0;
+            }
+
+            var isFiltered = me.$filterForm.attr('data-is-filtered');
+            if (isFiltered > 0 && me.loadFacets) {
+                me.getFilterResult(me.urlParams, true);
+            }
         },
 
         /**
@@ -393,15 +404,17 @@
          */
         onComponentChange: function(event) {
             var me = this,
+                urlParams,
                 formData = me.$filterForm.serializeArray(),
-                categoryParams = me.setCategoryParamsFromData(formData),
-                urlParams = me.createUrlParams(categoryParams);
+                categoryParams = me.setCategoryParamsFromData(formData);
+
+            urlParams = me.createUrlParams(categoryParams);
 
             me.createActiveFiltersFromCategoryParams(categoryParams);
 
             me.$applyFilterBtn.addClass(me.opts.loadingClass);
 
-            me.buffer($.proxy(me.getFilterResult, me, urlParams), me.opts.bufferTime);
+            me.buffer($.proxy(me.getFilterResult, me, urlParams, me.loadFacets), me.opts.bufferTime);
 
             $.publish('plugin/swListingActions/onComponentChange', [ me, event ]);
         },
@@ -442,11 +455,11 @@
 
             $.each(me.$filterComponents, function(index, item) {
                 var $comp = $(item),
+                    types = ['value-list', 'value-list-single', 'value-tree', 'media', 'value-tree-single'],
                     type = $comp.attr('data-filter-type'),
                     fieldName = $comp.attr('data-field-name');
 
-                if ((type == 'value-list' || type == 'value-tree' || type == 'media') &&
-                    me.propertyFieldNames.indexOf(fieldName) == -1) {
+                if (types.indexOf(type) >= 0 && me.propertyFieldNames.indexOf(fieldName) == -1) {
                     me.propertyFieldNames.push(fieldName);
                 }
             });
@@ -682,19 +695,32 @@
          *
          * @param urlParams
          */
-        getFilterResult: function(urlParams) {
+        getFilterResult: function(urlParams, loadFacets) {
             var me = this,
-                params = urlParams || me.urlParams;
+                params = urlParams || me.urlParams,
+                url = me.resultCountURL + params;
+
+            if (typeof loadFacets === 'undefined') {
+                loadFacets = me.loadFacets;
+            }
+
+            if (loadFacets) {
+                url += '&loadFacets=1';
+            }
 
             me.resetBuffer();
 
             $.ajax({
                 type: 'get',
-                url: me.resultCountURL + params,
+                url: url,
                 success: function(response) {
                     me.$applyFilterBtn.removeClass(me.opts.loadingClass);
 
                     me.updateFilterButton(response.totalCount);
+
+                    if (response.hasOwnProperty('facets') && loadFacets) {
+                        $.publish('plugin/swListingActions/updateFacets', [ me, response.facets ]);
+                    }
 
                     $.publish('plugin/swListingActions/onGetFilterResultFinished', [ me, response, params ]);
                 }
@@ -852,16 +878,12 @@
                 $input,
                 rangeSlider;
 
-            if (param == 'rating') {
-                me.$el.find('#star--reset').prop('checked', true).trigger('change');
+            $input = me.$el.find('[name="'+me.escapeDoubleQuotes(param)+'"]');
+            if ($input.is('[data-range-input]')) {
+                rangeSlider = $input.parents('[data-range-slider="true"]').data('plugin_swRangeSlider');
+                rangeSlider.reset($input.attr('data-range-input'));
             } else {
-                $input = me.$el.find('[name="'+me.escapeDoubleQuotes(param)+'"]');
-                if ($input.is('[data-range-input]')) {
-                    rangeSlider = $input.parents('[data-range-slider="true"]').data('plugin_swRangeSlider');
-                    rangeSlider.reset($input.attr('data-range-input'));
-                } else {
-                    $input.removeAttr('checked').trigger('change');
-                }
+                $input.removeAttr('checked').trigger('change');
             }
 
             $.publish('plugin/swListingActions/onResetFilterProperty', [ me, param ]);
@@ -880,6 +902,7 @@
                 $label,
                 labelText = '',
                 valueString = value + '';
+
 
             if (param == 'rating' && value > 0) {
                 labelText = me.createStarLabel(value);
