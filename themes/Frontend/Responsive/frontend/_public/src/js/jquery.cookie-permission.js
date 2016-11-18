@@ -22,6 +22,14 @@
             acceptButtonSelector: '.cookie-permission--accept-button',
 
             /**
+             * Selector of the privacy statement link "More information" to select and prepare the href property.
+             *
+             * @property privacyLinkSelector
+             * @type {string}
+             */
+            privacyLinkSelector: '.cookie-permission--privacy-link',
+
+            /**
              * The current shopId for create the storageKey
              *
              * @property shopId
@@ -30,12 +38,12 @@
             shopId: 0,
 
             /**
-             * The basePath of the current shop to create the storageKey
+             * The shop host url for creating the data privacy statement link
              *
-             * @property basePath
+             * @property host
              * @type {string}
              */
-            basePath: ''
+            urlPrefix: ''
         },
 
         /**
@@ -59,6 +67,7 @@
             me.applyDataAttributes();
 
             me.createProperties();
+            me.preparePrivacyLink();
             me.registerEvents();
             me.displayCookiePermission(function(display) {
                 if (display) {
@@ -76,9 +85,36 @@
         createProperties: function() {
             var me = this;
 
+            me.$privacyLink = me.$el.find(me.opts.privacyLinkSelector);
             me.$acceptButton = me.$el.find(me.opts.acceptButtonSelector);
             me.storageKey = me.createStorageKey();
             me.storage = window.StorageManager.getLocalStorage();
+        },
+
+        /**
+         * Create and set if required a full qualified url as prefix for the privacy link href attribute.
+         *
+         * @public
+         * @method preparePrivacyLink
+         */
+        preparePrivacyLink: function() {
+            var me = this,
+                href = me.$privacyLink.attr('href'),
+                prefix = me.opts.urlPrefix;
+
+            if (href.match(/^(http:|https:)/)) {
+                return;
+            }
+
+            if (href.match(/^\//)) {
+                prefix = me.opts.urlPrefix.replace(/(\/)$/, '');
+            }
+
+            me.$privacyLink.attr('href', [
+                    prefix,
+                    href
+                ].join('')
+            );
         },
 
         /**
@@ -105,9 +141,9 @@
         },
 
         /**
-         * Creates the storageKey from the prefix, shopId and the basePath like the following example:
+         * Creates the storageKey from the prefix and the shopId like the following example:
          *
-         * hide-cookie-permission-1-en
+         * hide-cookie-permission-1
          *
          * @public
          * @method createStorageKey
@@ -120,9 +156,7 @@
             return [
                 me.cookieStorageKeyPrefix,
                 delimiter,
-                me.opts.shopId,
-                delimiter,
-                me.opts.basePath
+                me.opts.shopId
             ].join('');
         },
 
