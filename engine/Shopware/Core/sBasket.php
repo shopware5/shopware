@@ -2245,7 +2245,7 @@ class sBasket
                 || (!$this->sSYSTEM->sUSERGROUPDATA["tax"] && $this->sSYSTEM->sUSERGROUPDATA["id"])
             ) {
                 if (empty($getArticles[$key]["modus"])) {
-                    $priceWithTax = round($netprice, 2) / 100 * (100 + $tax);
+                    $priceWithTax = round(round($netprice, 2) / 100 * (100 + $tax), 2);
 
                     $getArticles[$key]["amountWithTax"] = $quantity * $priceWithTax;
                     // If basket comprised any discount, calculate brutto-value for the discount
@@ -2298,7 +2298,7 @@ class sBasket
                 if (!$this->sSYSTEM->sUSERGROUPDATA["tax"] && $this->sSYSTEM->sUSERGROUPDATA["id"]) {
                     $getArticles[$key]["amountnet"] = $quantity * round($netprice, 2);
                 } else {
-                    $getArticles[$key]["amountnet"] = $quantity * $netprice;
+                    $getArticles[$key]["amountnet"] = $quantity * round($netprice, 2);
                 }
             }
 
