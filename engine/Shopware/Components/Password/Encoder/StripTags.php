@@ -34,7 +34,7 @@ class StripTags implements PasswordEncoderInterface
      */
     public function encodePassword($password)
     {
-        throw new Exception('Shoud never be called.');
+        throw new RuntimeException('Should never be called.');
     }
 
     /**
