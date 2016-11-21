@@ -25,7 +25,15 @@ class StripTags implements PasswordEncoderInterface
      */
     public function isPasswordValid($password, $hash)
     {
-        return password_verify(strip_tags($password), $hash);
+        $passwordManager = new \Shopware\Components\Password\Manager(
+            Shopware()->Config()
+        );
+
+        $password = strip_tags($password);
+
+        return $passwordManager->isPasswordValid($password, $hash, 'bcrypt') ||
+            $passwordManager->isPasswordValid($password, $hash, 'sha256') ||
+            $passwordManager->isPasswordValid($password, $hash, 'md5');
     }
 
     /**
