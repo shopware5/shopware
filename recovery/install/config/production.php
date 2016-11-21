@@ -5,6 +5,8 @@ return [
     'check.check_url' => 'recovery/install/check.php',
     'check.token.path' => __DIR__ . '/../tmp/token',
 
+    'api.endpoint' => 'https://api.shopware.com',
+
     'slim' => [
         'log.level'   => \Slim\Log::DEBUG,
         'log.enabled' => true,
