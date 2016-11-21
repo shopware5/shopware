@@ -7,6 +7,7 @@ This changelog references changes done in Shopware 5.2 patch versions.
 * Added new rule for `/widgets/emotion` to robots.txt in `frontend/robots_txt/index.tpl`
 * Added new blocks in `themes/Frontend/Bare/frontend/account/index.tpl`
 * If shipping address equals billing address show notice instead of same address twice in account index
+* Added `$sAmountNumeric` and `$sAmountNetNumeric` to sOrder mail
 
 ## 5.2.10
 
