@@ -199,6 +199,10 @@ This changelog references changes done in Shopware 5.3 patch versions.
     * `frontend_listing_filter_facet_value_list_label`
 * Removed `attributes.search.cheapest_price` field from DBAL search
 * Removed `attributes.search.average` field from DBAL search
+* Removed model `Shopware\Models\Article\Element`
+* Removed method `Shopware\Components\Model\ModelManager::addAttribute`
+* Removed method `Shopware\Components\Model\ModelManager::removeAttribute`
+* Removed database table `s_core_engine_elements`
 
 ### Deprecations
 
