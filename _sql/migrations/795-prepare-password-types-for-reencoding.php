@@ -4,6 +4,6 @@ class Migrations_Migration795 extends Shopware\Components\Migrations\AbstractMig
 {
     public function up($modus)
     {
-        $this->addSql("UPDATE s_user SET encoder = 'StripTags';");
+        $this->addSql("UPDATE s_user SET encoder = 'StripTags' WHERE encoder IN ('bcrypt', 'sha256', 'md5');");
     }
 }
