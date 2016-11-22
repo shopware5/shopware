@@ -35,8 +35,8 @@ class Migrations_Migration814 extends AbstractMigration
         $sql = <<<'EOD'
             INSERT IGNORE `s_core_config_mails`
                 (`stateId`, `name`, `frommail`, `fromname`, `subject`, `content`, `contentHTML`, `ishtml`, `attachment`, `mailtype`, `context`, `dirty`)
-            VALUE
-                (NULL, 'sORDERDOCUMENTS', '{config name=mail}', '{config name=shopName}', 'Rechnung zur Bestellung {$orderNumber}', '{include file="string:{config name=emailheaderplain}"}
+            VALUE 
+                (NULL, 'sORDERDOCUMENTS', '{config name=mail}', '{config name=shopName}', 'Dokumente zur Bestellung {$orderNumber}', '{include file="string:{config name=emailheaderplain}"}
 
 Hallo {$sUser.salutation|salutation} {$sUser.firstname} {$sUser.lastname},
 
@@ -56,7 +56,7 @@ EOD;
             INSERT IGNORE `s_core_translations`
                 (`objecttype`, `objectdata`, `objectkey`, `objectlanguage`, `dirty`)
             VALUES
-                ('config_mails', 'a:4:{s:8:"fromMail";s:18:"{config name=mail}";s:8:"fromName";s:22:"{config name=shopName}";s:7:"subject";s:40:"Information to your order {$orderNumber}";s:7:"content";s:338:"{include file="string:{config name=emailheaderplain}"}
+                ('config_mails', 'a:4:{s:8:"fromMail";s:18:"{config name=mail}";s:8:"fromName";s:22:"{config name=shopName}";s:7:"subject";s:38:"Documents to your order {$orderNumber}";s:7:"content";s:338:"{include file="string:{config name=emailheaderplain}"}
 
 Hello {$ sUser.salutation | salutation} {$ sUser.firstname} {$ sUser.lastname},
 

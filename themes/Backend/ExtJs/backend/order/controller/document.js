@@ -141,7 +141,7 @@ Ext.define('Shopware.apps.Order.controller.Document', {
         var me = this,
             mail = Ext.create('Shopware.apps.Order.model.Mail', mail),
             documentTypeStore = Ext.create('Shopware.apps.Order.store.DocType');
-
+        
         documentTypeStore.load({
             callback: function() {
                 me.mainWindow = me.getView('mail.Window').create({

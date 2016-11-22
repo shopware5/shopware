@@ -98,27 +98,80 @@ Ext.define('Shopware.apps.Order.controller.Attachment', {
      * @param { Ext.grid.Panel } attachmentGrid
      * @param { boolean } addAsAttachment
      * @param { number } orderId
-     * @param { number } documentType
+     * @param { Ext.data.Model } document
      * @param { Ext.data.Store } listStore
      */
-    createDocument: function(attachmentGrid, addAsAttachment, orderId, documentType, listStore) {
+    createDocument: function(attachmentGrid, addAsAttachment, orderId, document, listStore) {
         var me = this,
             store = Ext.create('Shopware.apps.Order.store.Configuration'),
-            config = Ext.create('Shopware.apps.Order.model.Configuration');
+            config = Ext.create('Shopware.apps.Order.model.Configuration'),
+            data;
 
-        if (!documentType) {
+        if (!document) {
             return;
         }
 
-        attachmentGrid.setLoading(true);
+        data = {
+            store: store,
+            config: config,
+            attachmentGrid: attachmentGrid,
+            addAsAttachment: addAsAttachment,
+            orderId: orderId,
+            document: document,
+            listStore: listStore
+        };
 
-        config.set('orderId', orderId);
-        config.set('documentType', documentType);
-        store.add(config);
+        if (document.get('numbers') === 'doc_3') {
+            Ext.Msg.prompt(
+                '{s name=document/attachment/invoice/number}{/s}',
+                '{s name=document/attachment/invoice/number/text}{/s}',
+                function(clickedButtonName, inputText) {
+                    me.afterInsertNewInvoiceNumber(clickedButtonName, inputText, data);
+                }
+            );
 
-        store.sync({
-            callback: Ext.bind(me.callStoreReload, me, [attachmentGrid, addAsAttachment, listStore])
+            return;
+        }
+
+        me.saveDocument(data);
+    },
+
+    /**
+     * Sets parameter to the config and calls store.sync to save the new document
+     *
+     * @param { object } data
+     */
+    saveDocument: function(data) {
+        var me = this;
+
+        data.attachmentGrid.setLoading(true);
+
+        data.config.set('orderId', data.orderId);
+        data.config.set('documentType', data.document.get('id'));
+        data.store.add(data.config);
+
+        data.store.sync({
+            callback: Ext.bind(me.callStoreReload, me, [data.attachmentGrid, data.addAsAttachment, data.listStore])
         });
+    },
+
+    /**
+     * Checks the input and calls saveDocument
+     *
+     * @param { string } clickedButtonName
+     * @param { string } inputText
+     * @param { object } data
+     */
+    afterInsertNewInvoiceNumber: function(clickedButtonName, inputText, data) {
+        var me = this;
+
+        if (clickedButtonName !== 'ok' || !inputText) {
+            return;
+        }
+
+        data.config.set('invoiceNumber', inputText);
+
+        me.saveDocument(data);
     },
 
     /**
@@ -144,9 +197,9 @@ Ext.define('Shopware.apps.Order.controller.Attachment', {
      */
     applyNewDocument: function(attachmentGrid, addAsAttachment) {
         var orderRecord = attachmentGrid.getRecord(
-                attachmentGrid.listStore,
-                attachmentGrid.record.get('id')
-            );
+            attachmentGrid.listStore,
+            attachmentGrid.record.get('id')
+        );
 
         if (!orderRecord) {
             attachmentGrid.setLoading(false);
