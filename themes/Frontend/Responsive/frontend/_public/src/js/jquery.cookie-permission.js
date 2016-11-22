@@ -99,8 +99,14 @@
          */
         preparePrivacyLink: function() {
             var me = this,
-                href = me.$privacyLink.attr('href'),
-                prefix = me.opts.urlPrefix;
+                prefix = me.opts.urlPrefix,
+                href;
+
+            if (!me.$privacyLink) {
+                return;
+            }
+
+            href = me.$privacyLink.attr('href') || '';
 
             if (href.match(/^(http:|https:)/)) {
                 return;
