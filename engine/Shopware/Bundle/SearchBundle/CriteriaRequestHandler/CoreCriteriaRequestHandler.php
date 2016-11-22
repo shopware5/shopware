@@ -176,9 +176,12 @@ class CoreCriteriaRequestHandler implements CriteriaRequestHandlerInterface
             return;
         }
 
-        $manufacturers = explode(
-            '|',
-            $request->getParam('sSupplier')
+        /* Split filter parameter. Do not return empty elements from broken urls */
+        $manufacturers = preg_split(
+            '/\|/',
+            $request->getParam('sSupplier'),
+            -1,
+            PREG_SPLIT_NO_EMPTY
         );
 
         if (!empty($manufacturers)) {
