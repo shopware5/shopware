@@ -1,7 +1,7 @@
 <div class="page-wrap--cookie-permission is--hidden"
      data-cookie-permission="true"
-     data-basePath="{$Shop->getBaseUrl()}"
-     data-shopId="{$Shop->getId()}">
+     data-urlPrefix="{url controller=index action=index}"
+     {if $Shop}data-shopId="{$Shop->getId()}"{/if}>
 
     {block name="cookie_permission_container"}
         <div class="cookie-permission--container">
@@ -15,6 +15,7 @@
                         {$privacyLink = {config name="data_privacy_statement_link"}}
                         {if $privacyLink}
                             <a title="{s namespace="frontend/cookiepermission/index" name="cookiePermission/linkText"}{/s}"
+                               class="cookie-permission--privacy-link"
                                href="{$privacyLink}">
                                 {s namespace="frontend/cookiepermission/index" name="cookiePermission/linkText"}{/s}
                             </a>
