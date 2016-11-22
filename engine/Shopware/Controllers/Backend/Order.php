@@ -383,7 +383,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         $numbers = [];
         foreach ($orders as $order) {
             $temp = array_column($order["details"], 'articleNumber');
-            $numbers = array_merge($numbers, (array) $temp);
+            $numbers = array_merge($numbers, (array)$temp);
         }
         $stocks = $this->getVariantsStock($numbers);
 
@@ -394,7 +394,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
             }
             $order = $orders[$id];
 
-            $order['locale']= $order['languageSubShop']['locale'];
+            $order['locale'] = $order['languageSubShop']['locale'];
 
             //Deprecated: use payment instance
             $order['debit'] = $order['customer']['debit'];
@@ -434,7 +434,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
 
         $resolved = [];
         foreach ($sorts as $sort) {
-            $direction = $sort['direction']?: 'ASC';
+            $direction = $sort['direction'] ?: 'ASC';
             switch (true) {
                 //custom sort field for customer email
                 case $sort['property'] == 'customerEmail':
@@ -932,7 +932,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
             $data['paymentStatus'] = Shopware()->Models()->toArray($order->getPaymentStatus());
             $data['orderStatus'] = Shopware()->Models()->toArray($order->getOrderStatus());
 
-            $data['mail'] = $this->checkOrderStatus($order, $statusBefore, $clearedBefore, $autoSend);
+            $data['mail'] = $this->checkOrderStatus($order, $statusBefore, $clearedBefore, $autoSend, $documentType);
             //return the modified data array.
             $orders[$key] = $data;
         }
@@ -1047,9 +1047,10 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
      * @param \Shopware\Models\Order\Status $statusBefore
      * @param \Shopware\Models\Order\Status $clearedBefore
      * @param boolean $autoSend
+     * @param integer|string $documentType
      * @return array
      */
-    private function checkOrderStatus($order, $statusBefore, $clearedBefore, $autoSend)
+    private function checkOrderStatus($order, $statusBefore, $clearedBefore, $autoSend, $documentType)
     {
         if ($order->getOrderStatus()->getId() !== $statusBefore->getId() || $order->getPaymentStatus()->getId() !== $clearedBefore->getId()) {
             //status or cleared changed?
@@ -1061,6 +1062,13 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
 
             //mail object created and auto send activated, then send mail directly.
             if (is_object($mail['mail']) && $autoSend === "true") {
+                if ($this->request->getParam('addAttachments')) {
+                    if ($documentType) {
+                        $document = $this->getDocument($documentType, $order->getDocuments()->toArray());
+                    }
+
+                    $mail['mail'] = $this->addAttachments($mail['mail'], $order->getId(), [$document]);
+                }
                 $result = Shopware()->Modules()->Order()->sendStatusMail($mail['mail']);
 
                 //check if send mail was successfully.
@@ -1073,6 +1081,30 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
     }
 
     /**
+     * @param integer $typeId
+     * @param \Shopware\Models\Order\Document\Document[] $documents
+     * @return array
+     */
+    private function getDocument($typeId, array $documents)
+    {
+        foreach ($documents as $document) {
+            if ($document->getTypeId() == $typeId) {
+                return [
+                    'hash' => $document->getHash(),
+                    'type' => [
+                        [
+                            'id' => $document->getTypeId(),
+                            'name' => $document->getType()->getName()
+                        ]
+                    ]
+                ];
+            }
+        }
+
+        return [];
+    }
+
+    /**
      * The sendMailAction fired from the batch window in the order backend module when the user want to send the order
      * status mail manually.
      *
@@ -1081,6 +1113,8 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
     public function sendMailAction()
     {
         $data = $this->Request()->getParams();
+        $orderId = $this->request->getParam('orderId');
+        $attachments = $this->request->getParam('attachment');
 
         /** @var $namespace Enlight_Components_Snippet_Namespace */
         $namespace = Shopware()->Snippets()->getNamespace('backend/order');
@@ -1094,7 +1128,8 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
             return;
         }
 
-        $mail = clone Shopware()->Container()->get('mail');
+        $mail = clone $this->container->get('mail');
+        $mail = $this->addAttachments($mail, $orderId, $attachments);
         $mail->clearRecipients();
         $mail->setSubject($this->Request()->getParam('subject', ''));
 
@@ -1113,6 +1148,170 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
             'success' => true,
             'data' => $data
         ));
+    }
+
+    /**
+     * Deletes a document by the requested document id.
+     */
+    public function deleteDocumentAction()
+    {
+        $documentId = $this->request->getParam('documentId');
+        $documentPath = $this->container->getParameter('kernel.root_dir') . '/files/documents/';
+        $connection = $this->container->get('dbal_connection');
+        $queryBuilder = $connection->createQueryBuilder();
+
+        try {
+            $documentHash = $queryBuilder->select('hash')
+                ->from('s_order_documents')
+                ->where('id = :documentId')
+                ->setParameter('documentId', $documentId)
+                ->execute()
+                ->fetchColumn();
+
+            $queryBuilder = $connection->createQueryBuilder();
+            $queryBuilder->delete('s_order_documents')
+                ->where('id = :documentId')
+                ->setParameter('documentId', $documentId)
+                ->execute();
+
+            $file = $documentPath . $documentHash . '.pdf';
+            if (!is_file($file)) {
+                $this->View()->assign('success', true);
+                return;
+            }
+
+            unlink($file);
+        } catch (\Exception $exception) {
+            $this->View()->assign([
+                'success' => false,
+                'errorMessage' => $exception->getMessage()
+            ]);
+        }
+
+        $this->View()->assign('success', true);
+    }
+
+    /**
+     * Creates a mail by the requested orderId and assign it to the view.
+     */
+    public function createMailAction()
+    {
+        $orderId = $this->request->getParam('orderId');
+
+        /**@var $mail Enlight_Components_Mail */
+        $mail = Shopware()->Modules()->Order()->createStatusMail($orderId, 0, 'sORDERDOCUMENTS');
+
+        $this->view->assign([
+            'mail' => [
+                'error' => false,
+                'content' => $mail->getPlainBodyText(),
+                'contentHtml' => $mail->getPlainBody(),
+                'subject' => $mail->getPlainSubject(),
+                'to' => implode(', ', $mail->getTo()),
+                'fromMail' => $mail->getFrom(),
+                'fromName' => $mail->getFromName(),
+                'sent' => false,
+                'isHtml' => !empty($mail->getPlainBody()),
+                'orderId' => $orderId
+            ]
+        ]);
+    }
+
+    /**
+     * Adds the requested attachments to the given $mail object
+     *
+     * @param Enlight_Components_Mail $mail
+     * @param integer|string $orderId
+     * @param array $attachments
+     * @return Enlight_Components_Mail
+     */
+    private function addAttachments(Enlight_Components_Mail $mail, $orderId, array $attachments = [])
+    {
+        $rootDirectory = $this->container->getParameter('kernel.root_dir');
+        $documentDirectory = $rootDirectory . '/files/documents';
+
+        foreach ($attachments as $attachment) {
+            $filePath = $documentDirectory . '/' . $attachment['hash'] . '.pdf';
+            $fileName = $this->getFileName(
+                $orderId,
+                $attachment['type'][0]['id'],
+                '.pdf',
+                $attachment['type'][0]['name']
+            );
+
+            if (!is_file($filePath)) {
+                continue;
+            }
+
+            $mail->addAttachment($this->createAttachment($filePath, $fileName));
+        }
+
+        return $mail;
+    }
+
+    /**
+     * Creates a attachment by a file path.
+     *
+     * @param string $filePath
+     * @param string $fileName
+     * @return Zend_Mime_Part
+     */
+    private function createAttachment($filePath, $fileName)
+    {
+        $content = file_get_contents($filePath);
+        $zendAttachment = new Zend_Mime_Part($content);
+        $zendAttachment->type = 'application/pdf';
+        $zendAttachment->disposition = Zend_Mime::DISPOSITION_ATTACHMENT;
+        $zendAttachment->encoding = Zend_Mime::ENCODING_BASE64;
+        $zendAttachment->filename = $fileName;
+
+        return $zendAttachment;
+    }
+
+    /**
+     * Creates a translated filename with the given extension
+     * or returns the default name with the given file extension.
+     *
+     * @param integer $orderId
+     * @param string $typeKey
+     * @param string $fileExtension
+     * @param string $defaultName
+     * @return string
+     */
+    private function getFileName($orderId, $typeKey, $fileExtension, $defaultName)
+    {
+        $localeId = $this->getOrderLocaleId($orderId);
+
+        if (!$localeId) {
+            return $defaultName . $fileExtension;
+        }
+
+        $translationReader = new Shopware_Components_Translation();
+        $translations = $translationReader->read($localeId, 'documents', $typeKey);
+
+        if (!$translations[1]['name']) {
+            return $defaultName . $fileExtension;
+        }
+
+        return $translations[1]['name'] . $fileExtension;
+    }
+
+    /**
+     * Returns the locale id from the order
+     *
+     * @param integer|string $orderId
+     * @return bool|string
+     */
+    private function getOrderLocaleId($orderId)
+    {
+        $queryBuilder = $this->container->get('dbal_connection')->createQueryBuilder();
+
+        return $queryBuilder->select('language')
+            ->from('s_order')
+            ->where('id = :orderId')
+            ->setParameter('orderId', $orderId)
+            ->execute()
+            ->fetchColumn();
     }
 
     /**
@@ -1253,7 +1452,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
             ->execute()
             ->fetchAll();
 
-        $total = (int) $this->get('dbal_connection')->fetchColumn('SELECT FOUND_ROWS()');
+        $total = (int)$this->get('dbal_connection')->fetchColumn('SELECT FOUND_ROWS()');
 
         $this->View()->assign(['success' => true, 'data' => $data, 'total' => $total]);
     }

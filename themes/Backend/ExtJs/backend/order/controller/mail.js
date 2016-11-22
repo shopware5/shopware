@@ -37,18 +37,19 @@ Ext.define('Shopware.apps.Order.controller.Mail', {
 
     /**
      * Extend from the standard ExtJS 4 controller
-     * 
+     *
      * @type { String }
      */
-    extend:'Ext.app.Controller',
+    extend: 'Ext.app.Controller',
 
-   /**
-    * all references to get the elements by the applicable selector
-    *
-    * @type { Array }
-    */
-    refs:[
-        { ref:'mailWindow', selector:'order-mail-window' }
+    /**
+     * all references to get the elements by the applicable selector
+     *
+     * @type { Array }
+     */
+    refs: [
+        { ref: 'mailWindow', selector: 'order-mail-window' },
+        { ref: 'attachmentGrid', selector: 'order-mail-attachment' }
     ],
 
     /**
@@ -71,7 +72,7 @@ Ext.define('Shopware.apps.Order.controller.Mail', {
      * It is called before the Application's launch function is executed
      * so gives a hook point to run any code before your Viewport is created.
      */
-    init:function () {
+    init: function() {
         var me = this;
 
         me.control({
@@ -96,6 +97,10 @@ Ext.define('Shopware.apps.Order.controller.Mail', {
             mail = form.getRecord(),
             rawData,
             message;
+
+        mail.getReceipt().add(
+            me.getAttachmentGrid().getStore().getActiveDocuments()
+        );
 
         win.setLoading(true);
 

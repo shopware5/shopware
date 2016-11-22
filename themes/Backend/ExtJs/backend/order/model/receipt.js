@@ -62,7 +62,8 @@ Ext.define('Shopware.apps.Order.model.Receipt', {
         { name: 'amount', type:'float' },
         { name: 'documentId', type:'int' },
         { name: 'hash', type:'string' },
-        { name: 'typeName', type:'string' }
+        { name: 'typeName', type:'string' },
+        { name: 'active', type:'boolean', defaultValue: false }
     ],
     /**
      * @array

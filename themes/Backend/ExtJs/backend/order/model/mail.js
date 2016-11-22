@@ -39,29 +39,38 @@ Ext.define('Shopware.apps.Order.model.Mail', {
      * Extends the standard Ext Model
      * @string
      */
-    extend:'Ext.data.Model',
+    extend: 'Ext.data.Model',
 
     /**
      * The fields used for this model
      * @array
      */
-    fields:[
-		//{block name="backend/order/model/mail/fields"}{/block}
-        { name: 'orderId', type:'int' },
-        { name: 'content', type:'string' },
-        { name: 'contentHtml', type:'string' },
-        { name: 'subject', type:'string' },
-        { name: 'to', type:'string' },
-        { name: 'fromMail', type:'string' },
-        { name: 'fromName', type:'string' },
-        { name: 'sent', type:'boolean' },
-        { name: 'isHtml', type:'boolean' }
+    fields: [
+        //{block name="backend/order/model/mail/fields"}{/block}
+        { name: 'orderId', type: 'int' },
+        { name: 'content', type: 'string' },
+        { name: 'contentHtml', type: 'string' },
+        { name: 'subject', type: 'string' },
+        { name: 'to', type: 'string' },
+        { name: 'fromMail', type: 'string' },
+        { name: 'fromName', type: 'string' },
+        { name: 'sent', type: 'boolean' },
+        { name: 'isHtml', type: 'boolean' }
+    ],
+
+    associations: [
+        {
+            type: 'hasMany',
+            model: 'Shopware.apps.Order.model.Receipt',
+            name: 'getReceipt',
+            associationKey: 'attachment'
+        }
     ],
 
     /**
-    * Configure the data communication
-    * @object
-    */
+     * Configure the data communication
+     * @object
+     */
     proxy: {
         /**
          * Set proxy type to ajax

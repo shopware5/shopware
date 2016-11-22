@@ -43,15 +43,15 @@ Ext.define('Shopware.apps.Order.controller.List', {
      * Defines that this component is a extJs controller extension
      * @string
      */
-    extend:'Ext.app.Controller',
+    extend: 'Ext.app.Controller',
 
     /**
      * Contains all snippets for the component
      * @object
      */
     snippets: {
-        successTitle:'{s name=message/save/success_title}Successful{/s}',
-        failureTitle:'{s name=message/save/error_title}Error{/s}',
+        successTitle: '{s name=message/save/success_title}Successful{/s}',
+        failureTitle: '{s name=message/save/error_title}Error{/s}',
         changeStatus: {
             successMessage: '{s name=message/status/success}The status has been changed successfully{/s}',
             failureMessage: '{s name=message/status/failure}An error has occurred while changing the status.{/s}'
@@ -59,31 +59,31 @@ Ext.define('Shopware.apps.Order.controller.List', {
         deleteOrder: {
             title: '{s name=delete_order/title}Delete selected order{/s}',
             message: '{s name=delete_order/message}Are you sure you want to delete the selected order: {/s}',
-            successTitle:'{s name=delete_order/success_message}Successful{/s}',
-            successMessage:'{s name=delete_order/success_title}Order has been removed{/s}',
-            failureTitle:'{s name=delete_order/error_title}Failure{/s}',
-            failureMessage:'{s name=delete_order/error_message}An error has occurred while deleting:{/s}'
+            successTitle: '{s name=delete_order/success_message}Successful{/s}',
+            successMessage: '{s name=delete_order/success_title}Order has been removed{/s}',
+            failureTitle: '{s name=delete_order/error_title}Failure{/s}',
+            failureMessage: '{s name=delete_order/error_message}An error has occurred while deleting:{/s}'
         },
         deletePosition: {
             title: '{s name=delete_position/title}Delete selected order position{/s}',
             message: '{s name=delete_position/message}Are you sure you want to delete the selected order: {/s}',
-            successTitle:'{s name=delete_position/success_message}Successful{/s}',
-            successMessage:'{s name=delete_position/success_title}Order position has been removed{/s}',
-            failureTitle:'{s name=delete_position/error_title}Error{/s}',
-            failureMessage:'{s name=delete_position/error_message}An error has occurred while deleting:{/s}'
+            successTitle: '{s name=delete_position/success_message}Successful{/s}',
+            successMessage: '{s name=delete_position/success_title}Order position has been removed{/s}',
+            failureTitle: '{s name=delete_position/error_title}Error{/s}',
+            failureMessage: '{s name=delete_position/error_message}An error has occurred while deleting:{/s}'
         },
 
-		growlMessage: '{s name=growlMessage}Order{/s}'
+        growlMessage: '{s name=growlMessage}Order{/s}'
 
     },
 
     /**
-    * all references to get the elements by the applicable selector
-    */
-    refs:[
-       { ref:'orderListGrid', selector:'order-list-main-window order-list' },
-       { ref:'orderPositionGrid', selector:'order-list-main-window order-position-grid' },
-       { ref:'orderReceiptGrid', selector:'order-list-main-window order-list-navigation order-document-list' },
+     * all references to get the elements by the applicable selector
+     */
+    refs: [
+        { ref: 'orderListGrid', selector: 'order-list-main-window order-list' },
+        { ref: 'orderPositionGrid', selector: 'order-list-main-window order-position-grid' },
+        { ref: 'orderReceiptGrid', selector: 'order-list-main-window order-list-navigation order-document-list' },
     ],
 
     /**
@@ -93,7 +93,7 @@ Ext.define('Shopware.apps.Order.controller.List', {
      *
      * @return void
      */
-    init:function () {
+    init: function() {
         var me = this;
 
         me.control({
@@ -126,25 +126,25 @@ Ext.define('Shopware.apps.Order.controller.List', {
             grid = me.getOrderListGrid();
 
         record = store.getAt(event.rowIdx);
-        if(record == null) {
+        if (record == null) {
             return;
         }
 
         record.save({
-            callback:function (data, operation) {
+            callback: function(data, operation) {
                 var records = operation.getRecords(),
                     record = records[0],
                     proxyReader = record.getProxy().getReader(),
                     rawData = proxyReader.rawData;
 
-                if ( operation.success === true ) {
+                if (operation.success === true) {
                     Shopware.Notification.createGrowlMessage(me.snippets.successTitle, me.snippets.changeStatus.successMessage, me.snippets.growlMessage);
                     record.set('invoiceAmount', rawData.data.invoiceAmount);
 
                     //Check if a status mail is created and create a model with the returned data and open the mail window.
                     if (!Ext.isEmpty(rawData.data.mail) && !Ext.isEmpty(proxyReader.jsonData.data.mail.content)) {
                         var mail = Ext.create('Shopware.apps.Order.model.Mail', rawData.data.mail);
-                        me.showOrderMail(mail)
+                        me.showOrderMail(mail, record)
                     }
 
                 } else {
@@ -159,14 +159,22 @@ Ext.define('Shopware.apps.Order.controller.List', {
      * Creates the batch window with a special mode, so only the mail panel will be displayed.
      *
      * @param mail
+     * @param { Ext.data.Model } record
      */
-    showOrderMail: function(mail) {
-        var me = this;
+    showOrderMail: function(mail, record) {
+        var me = this,
+            documentTypeStore = Ext.create('Shopware.apps.Order.store.DocType');
 
-        //open the order listing window
-        me.mainWindow = me.getView('mail.Window').create({
-            mail: mail
-        }).show();
+        documentTypeStore.load({
+            callback: function() {
+                me.mainWindow = me.getView('mail.Window').create({
+                    listStore: me.getOrderListGrid().getStore(),
+                    mail: mail,
+                    record: record,
+                    documentTypeStore: documentTypeStore
+                }).show();
+            }
+        });
     },
 
     onShowBatch: function(grid) {
@@ -188,7 +196,7 @@ Ext.define('Shopware.apps.Order.controller.List', {
             record = null;
 
         if (Ext.isArray(selected)) {
-            record = selected[selected.length-1];
+            record = selected[selected.length - 1];
         } else {
             record = selected;
         }
@@ -205,22 +213,21 @@ Ext.define('Shopware.apps.Order.controller.List', {
 
     },
 
-
     /**
      * Event listener method which fired when the user clicks the delete button
      * in the order list to delete a single order.
      * @param record
      * @return void
      */
-    onDeleteOrder:function (record) {
+    onDeleteOrder: function(record) {
         var me = this,
             store = me.subApplication.getStore('Order'),
             message = me.snippets.deleteOrder.message + ' ' + record.get('number'),
             title = me.snippets.deleteOrder.title;
 
         // we do not just delete - we are polite and ask the user if he is sure.
-        Ext.MessageBox.confirm(title, message, function (response) {
-            if ( response !== 'yes' ) {
+        Ext.MessageBox.confirm(title, message, function(response) {
+            if (response !== 'yes') {
                 return;
             }
             record.destroy({
@@ -229,8 +236,8 @@ Ext.define('Shopware.apps.Order.controller.List', {
                         record = records[0],
                         rawData = record.getProxy().getReader().rawData;
 
-                    if ( operation.success === true ) {
-                        Shopware.Notification.createGrowlMessage(me.snippets.deleteOrder.successTitle,me.snippets.deleteOrder.successMessage, me.snippets.growlMessage);
+                    if (operation.success === true) {
+                        Shopware.Notification.createGrowlMessage(me.snippets.deleteOrder.successTitle, me.snippets.deleteOrder.successMessage, me.snippets.growlMessage);
                     } else {
                         Shopware.Notification.createGrowlMessage(me.snippets.deleteOrder.failureTitle, me.snippets.deleteOrder.failureMessage + ' ' + rawData.message, me.snippets.growlMessage);
                     }
@@ -272,7 +279,6 @@ Ext.define('Shopware.apps.Order.controller.List', {
         });
     },
 
-
     /**
      * Event listener method which is fired when the user clicks the
      * action column icon to delete a single order position.
@@ -290,8 +296,8 @@ Ext.define('Shopware.apps.Order.controller.List', {
             title = me.snippets.deletePosition.title;
 
         // we do not just delete - we are polite and ask the user if he is sure.
-        Ext.MessageBox.confirm(title, message, function (response) {
-            if ( response !== 'yes' ) {
+        Ext.MessageBox.confirm(title, message, function(response) {
+            if (response !== 'yes') {
                 return;
             }
             if (orderPositionGrid) {
@@ -310,8 +316,8 @@ Ext.define('Shopware.apps.Order.controller.List', {
                         record = records[0],
                         rawData = record.getProxy().getReader().rawData;
 
-                    if ( operation.success === true ) {
-                        Shopware.Notification.createGrowlMessage(me.snippets.deletePosition.successTitle,me.snippets.deletePosition.successMessage, me.snippets.growlMessage);
+                    if (operation.success === true) {
+                        Shopware.Notification.createGrowlMessage(me.snippets.deletePosition.successTitle, me.snippets.deletePosition.successMessage, me.snippets.growlMessage);
 
                         store.remove(position);
                         order.set('invoiceAmount', rawData.data.invoiceAmount);
