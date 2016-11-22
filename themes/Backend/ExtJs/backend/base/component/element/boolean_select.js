@@ -39,11 +39,23 @@ Ext.define('Shopware.apps.Base.view.element.BooleanSelect', {
     queryMode: 'local',
     forceSelection: true,
     editable: false,
+    reverse: false,
 
     store: [
         ["", 'Inherited'],
         [true, 'Yes'],
         [false, 'No']
-    ]
+    ],
+    initComponent: function(){
+        var me = this;
+        if(me.reverse) {
+            me.store[1][0] = false;
+            me.store[2][0] = true;
+        } else {
+            me.store[1][0] = true;
+            me.store[2][0] = false;
+        }
+        me.callParent(arguments);
+    }
 });
 //{/block}
