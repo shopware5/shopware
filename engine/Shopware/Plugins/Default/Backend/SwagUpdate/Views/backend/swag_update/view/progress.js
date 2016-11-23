@@ -153,17 +153,6 @@ Ext.define('Shopware.apps.SwagUpdate.view.Progress', {
             style: 'border-width: 1px !important;',
             cls:'left-align'
         });
-    },
-
-    /**
-     * Creates the button container for the close and cancel button
-     *
-     * @return Ext.container.Container
-     */
-    createButtons: function() {
-        return Ext.create('Ext.container.Container', {
-            layout: 'hbox'
-        });
     }
 });
 //{/block}
