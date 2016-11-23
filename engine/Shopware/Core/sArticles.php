@@ -2283,38 +2283,40 @@ class sArticles
             $context
         );
 
-        $articles = array();
+        $articles = [];
 
         /**@var $product StoreFrontBundle\Struct\ListProduct */
         foreach ($searchResult->getProducts() as $product) {
             $article = $this->legacyStructConverter->convertListProductStruct($product);
 
             if (!empty($categoryId) && $categoryId != $context->getShop()->getCategory()->getId()) {
-                $article["linkDetails"] .= "&sCategory=$categoryId";
+                $article['linkDetails'] .= "&sCategory=$categoryId";
             }
 
             if ($this->config->get('useShortDescriptionInListing') && strlen($article['description']) > 5) {
-                $article["description_long"] = $article['description'];
+                $article['description_long'] = $article['description'];
             }
             $article['description_long'] = $this->sOptimizeText($article['description_long']);
 
             $articles[$article['ordernumber']] = $article;
         }
 
-        $pageSizes = explode("|", $this->config->get('numberArticlesToShow'));
+        $pageSizes = explode('|', $this->config->get('numberArticlesToShow'));
+        $sPage = $request->getParam('sPage', 1);
 
-        return array(
+        return [
             'sArticles'       => $articles,
             'criteria'        => $criteria,
             'facets'          => $searchResult->getFacets(),
-            'sPage'           => $request->getParam('sPage', 1),
+            'sPage'           => $sPage,
+            'pageIndex'       => $sPage,
             'pageSizes'       => $pageSizes,
             'sPerPage'        => $criteria->getLimit(),
             'sNumberArticles' => $searchResult->getTotalCount(),
             'shortParameters' => $this->queryAliasMapper->getQueryAliases(),
             'sTemplate'       => $request->getParam('sTemplate'),
             'sSort'           => $request->getParam('sSort', $this->config->get('defaultListingSorting'))
-        );
+        ];
     }
 
     /**
