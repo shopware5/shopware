@@ -160,7 +160,7 @@ Ext.define('Shopware.apps.SwagUpdate.controller.Progress', {
      * @param win
      */
     onProcessFailure: function (win) {
-        win.fireEvent('closeWindow', win);
+        win.destroy();
     },
 
     /**

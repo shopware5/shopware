@@ -140,8 +140,7 @@ Ext.define('Shopware.apps.SwagUpdate.view.Progress', {
      */
     registerEvents: function() {
         this.addEvents(
-            'startProcess',
-            'closeWindow'
+            'startProcess'
         );
     },
 
