@@ -40,6 +40,7 @@ This changelog references changes done in Shopware 5.3 patch versions.
     * `frontend_listing_filter_facet_multi_selection_input`
     * `frontend_listing_filter_facet_multi_selection_label`
 * Added `\Shopware\Bundle\StoreFrontBundle\Service\Core\CategoryDepthService` service to select categories by their depth
+* Added `instantFilterResult` config to show a new, by the customer filtered, listing immediately via ajax
 
 ### Changes
 

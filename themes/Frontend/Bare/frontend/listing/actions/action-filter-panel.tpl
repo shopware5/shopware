@@ -3,65 +3,68 @@
 
 {block name='frontend_listing_actions_filter'}
 
-	{if $facets|count > 0}
-		<div class="action--filter-options off-canvas">
+    {if $facets|count > 0}
+        <div class="action--filter-options off-canvas">
 
-			{block name='frontend_listing_actions_filter_close_button'}
-				<a href="#" class="filter--close-btn">
-					{s name="ListingActionsCloseFilter"}{/s} <i class="icon--arrow-right"></i>
-				</a>
-			{/block}
+            {block name='frontend_listing_actions_filter_close_button'}
+                <a href="#" class="filter--close-btn">
+                    {s name="ListingActionsCloseFilter"}{/s} <i class="icon--arrow-right"></i>
+                </a>
+            {/block}
 
-			{block name='frontend_listing_actions_filter_container'}
-				<div class="filter--container">
+            {block name='frontend_listing_actions_filter_container'}
+                <div class="filter--container">
 
-					{block name="frontend_listing_actions_filter_active_filters"}
-						<div class="filter--active-container"
-							 data-reset-label="{s name='ListingFilterResetAll'}{/s}">
-						</div>
-					{/block}
+                    {block name="frontend_listing_actions_filter_active_filters"}
+                        <div class="filter--active-container"
+                             data-reset-label="{s name='ListingFilterResetAll'}{/s}">
+                        </div>
+                    {/block}
 
-					{block name='frontend_listing_actions_filter_form'}
-						<form id="filter"
-							  method="get"
-							  data-filter-form="true"
-							  data-is-filtered="{$criteria->getUserConditions()|count}"
-							  data-load-facets="{config name=generatePartialFacets}"
-							  data-count-ctrl="{$countCtrlUrl}">
+                    {block name='frontend_listing_actions_filter_form'}
+                        <form id="filter"
+                              method="get"
+                              data-filter-form="true"
+                              data-is-filtered="{$criteria->getUserConditions()|count}"
+                              data-load-facets="{if {config name=instantFilterResult}}true{else}false{/if}""
+                              data-count-ctrl="{$countCtrlUrl}"
+                              data-instant-filter-result="{if {config name=instantFilterResult}}true{else}false{/if}">
 
-							{block name="frontend_listing_actions_filter_submit_button"}
-								<div class="filter--actions">
-									<button type="submit"
-									        class="btn is--primary filter--btn-apply is--large is--icon-right"
-									        disabled="disabled">
-										<span class="filter--count"></span>
-										{s name="ListingFilterApplyButton"}{/s}
-										<i class="icon--cycle"></i>
-									</button>
-								</div>
-							{/block}
+                            {if !{config name=instantFilterResult}}
+                                {block name="frontend_listing_actions_filter_submit_button"}
+                                    <div class="filter--actions">
+                                        <button type="submit"
+                                                class="btn is--primary filter--btn-apply is--large is--icon-right"
+                                                disabled="disabled">
+                                            <span class="filter--count"></span>
+                                            {s name="ListingFilterApplyButton"}{/s}
+                                            <i class="icon--cycle"></i>
+                                        </button>
+                                    </div>
+                                {/block}
+                            {/if}
 
-							{block name="frontend_listing_actions_filter_form_page"}
-								<input type="hidden" name="{$shortParameters['sPage']}" value="1" />
-							{/block}
+                            {block name="frontend_listing_actions_filter_form_page"}
+                                <input type="hidden" name="{$shortParameters['sPage']}" value="1"/>
+                            {/block}
 
-							{block name="frontend_listing_actions_filter_form_search"}
-								{if $term}
-									<input type="hidden" name="{$shortParameters['sSearch']}" value="{$term|escape}" />
-								{/if}
-							{/block}
+                            {block name="frontend_listing_actions_filter_form_search"}
+                                {if $term}
+                                    <input type="hidden" name="{$shortParameters['sSearch']}" value="{$term|escape}"/>
+                                {/if}
+                            {/block}
 
-							{block name="frontend_listing_actions_filter_form_sort"}
-								{if $sSort}
-									<input type="hidden" name="{$shortParameters['sSort']}" value="{$sSort|escape}" />
-								{/if}
-							{/block}
+                            {block name="frontend_listing_actions_filter_form_sort"}
+                                {if $sSort}
+                                    <input type="hidden" name="{$shortParameters['sSort']}" value="{$sSort|escape}"/>
+                                {/if}
+                            {/block}
 
-							{block name="frontend_listing_actions_filter_form_perpage"}
-								{if $criteria && $criteria->getLimit()}
-									<input type="hidden" name="{$shortParameters['sPerPage']}" value="{$criteria->getLimit()|escape}" />
-								{/if}
-							{/block}
+                            {block name="frontend_listing_actions_filter_form_perpage"}
+                                {if $criteria && $criteria->getLimit()}
+                                    <input type="hidden" name="{$shortParameters['sPerPage']}" value="{$criteria->getLimit()|escape}"/>
+                                {/if}
+                            {/block}
 
 							{block name="frontend_listing_actions_filter_form_category"}
 								{if !$sCategoryContent && $sCategoryCurrent != $sCategoryStart && {controllerName} != 'search'}
@@ -72,10 +75,10 @@
                             {block name="frontend_listing_actions_filter_form_facets"}
                                 {include file="frontend/listing/actions/action-filter-facets.tpl" facets=$facets}
                             {/block}
-						</form>
-					{/block}
-				</div>
-			{/block}
-		</div>
-	{/if}
+                        </form>
+                    {/block}
+                </div>
+            {/block}
+        </div>
+    {/if}
 {/block}
