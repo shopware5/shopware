@@ -334,7 +334,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
         return new ProductNumberSearchResult(
             $result->getProducts(),
             $result->getTotalCount(),
-            $facetFilter->filter($criteria->getFacets(), $criteria)
+            $facetFilter->filter($result->getFacets(), $criteria)
         );
     }
 
