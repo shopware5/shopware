@@ -6,9 +6,25 @@
             <name>selectArray</name>
             <label>XML Store</label>
             <store>
-                <option value="1">Test 1</option>
-                <option value="2">Test 2</option>
-                <option value="3">Test 3</option>
+                <option>
+                    <value>1</value>
+                    <label lang="de">DE 1</label>
+                    <label lang="en">EN 1</label>
+                </option>
+                <option>
+                    <value>TWO</value>
+                    <label lang="de">DE 2</label>
+                    <label lang="en">EN 2</label>
+                </option>
+                <option>
+                    <value>3</value>
+                    <label>Test</label>
+                </option>
+                <option>
+                    <value>4</value>
+                    <label>Test default</label>
+                    <label lang="de">Test</label>
+                </option>
             </store>
         </element>
         <element type="select">

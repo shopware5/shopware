@@ -34,9 +34,33 @@ class XmlConfigDefinitionReaderTest extends TestCase
         $this->assertInternalType('array', $form);
 
         $expected = [
-            ['1', 'Test 1'],
-            ['2', 'Test 2'],
-            ['3', 'Test 3'],
+            [
+                '1',
+                [
+                    'de_DE' => 'DE 1',
+                    'en_GB' => 'EN 1',
+                ],
+            ],
+            [
+                'TWO',
+                [
+                    'de_DE' => 'DE 2',
+                    'en_GB' => 'EN 2',
+                ],
+            ],
+            [
+                '3',
+                [
+                    'en_GB' => 'Test',
+                ],
+            ],
+            [
+                '4',
+                [
+                    'en_GB' => 'Test default',
+                    'de_DE' => 'Test',
+                ],
+            ],
         ];
 
         $this->assertEquals($expected, $form['elements'][0]['store']);
