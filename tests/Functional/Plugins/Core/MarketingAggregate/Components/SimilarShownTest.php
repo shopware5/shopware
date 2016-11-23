@@ -33,6 +33,9 @@ use Shopware\Tests\Functional\Plugins\Core\MarketingAggregate\AbstractMarketing;
  */
 class SimilarShownTest extends AbstractMarketing
 {
+    /**
+     * @return array
+     */
     protected function getDemoData()
     {
         return require __DIR__ . '/fixtures/similarShown.php';
@@ -44,32 +47,40 @@ class SimilarShownTest extends AbstractMarketing
     protected function insertDemoData()
     {
         $this->Db()->query("DELETE FROM s_emarketing_lastarticles");
-        $statement = $this->Db()->prepare("
-            INSERT INTO s_emarketing_lastarticles (img, name, articleID, sessionID, time, userID, shopID)
-            VALUES(:img, :name, :articleID, :sessionID, :time, :userID, :shopID)"
+        $statement = $this->Db()->prepare(
+            "INSERT INTO s_emarketing_lastarticles (name, articleID, sessionID, time, userID, shopID)
+             VALUES(:name, :articleID, :sessionID, :time, :userID, :shopID);"
         );
         foreach ($this->getDemoData() as $data) {
             $statement->execute($data);
         }
     }
 
+    /**
+     * @param string $condition
+     * @return array
+     */
     protected function getAllSimilarShown($condition = '')
     {
         return $this->Db()->fetchAll('SELECT * FROM s_articles_similar_shown_ro ' . $condition);
     }
 
+    /**
+     * @param string $condition
+     */
     protected function resetSimilarShown($condition = '')
     {
         $this->Db()->query("DELETE FROM s_articles_similar_shown_ro " . $condition);
     }
 
+    /**
+     * @param string $date
+     * @param string $condition
+     */
     protected function setSimilarShownInvalid($date = '2010-01-01', $condition = '')
     {
-        $this->Db()->query(" UPDATE s_articles_similar_shown_ro SET init_date = :date " . $condition, array(
-            'date' => $date
-        ));
+        $this->Db()->query(" UPDATE s_articles_similar_shown_ro SET init_date = :date " . $condition, ['date' => $date]);
     }
-
 
     public function testResetSimilarShown()
     {
@@ -142,7 +153,7 @@ class SimilarShownTest extends AbstractMarketing
 
         $this->setSimilarShownInvalid('2010-01-01', 'LIMIT 20');
 
-        Shopware()->Events()->notify('Shopware_Plugins_LastArticles_ResetLastArticles', array());
+        Shopware()->Events()->notify('Shopware_Plugins_LastArticles_ResetLastArticles', []);
 
         $articles = $this->getAllSimilarShown();
 
@@ -169,7 +180,7 @@ class SimilarShownTest extends AbstractMarketing
         $this->assertNotEmpty($cron);
 
         //the cron plugin isn't installed, so we can't use a dispatch on /backend/cron
-        $this->Plugin()->refreshSimilarShown(new \Enlight_Event_EventArgs(array('subject' => $this)));
+        $this->Plugin()->refreshSimilarShown(new \Enlight_Event_EventArgs(['subject' => $this]));
 
         $articles = $this->getAllSimilarShown(" WHERE init_date > '2010-01-01' ");
         $this->assertCount(

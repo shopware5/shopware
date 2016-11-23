@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -22,9 +23,8 @@
  * our trademarks remain entirely with us.
  */
 
-/**
- * Shopware Application
- */
+use Shopware\Components\Model\ModelManager;
+use Shopware\Models\Shop\Shop;
 
 class Shopware_Controllers_Widgets_Index extends Enlight_Controller_Action
 {
@@ -46,12 +46,13 @@ class Shopware_Controllers_Widgets_Index extends Enlight_Controller_Action
         $request = $this->Request();
         $response = $this->Response();
 
-        /** @var $plugin Shopware_Plugins_Frontend_Statistics_Bootstrap */
-        $plugin = Shopware()->Plugins()->Frontend()->Statistics();
+        /** @var Shopware_Plugins_Frontend_Statistics_Bootstrap $plugin */
+        $plugin = $this->get('plugin_manager')->Frontend()->Statistics();
         $plugin->updateLog($request, $response);
 
         if (($articleId = $request->getParam('articleId')) !== null) {
-            $plugin = Shopware()->Plugins()->Frontend()->LastArticles();
+            /** @var \Shopware_Plugins_Frontend_LastArticles_Bootstrap $plugin */
+            $plugin = $this->get('plugin_manager')->Frontend()->LastArticles();
             $plugin->setLastArticleById($articleId);
         }
     }
@@ -61,9 +62,10 @@ class Shopware_Controllers_Widgets_Index extends Enlight_Controller_Action
      */
     public function menuAction()
     {
-        $this->View()->sGroup = $this->Request()->getParam('group');
-        $plugin = Shopware()->Plugins()->Core()->ControllerBase();
-        $this->View()->sMenu = $plugin->getMenu();
+        $this->View()->assign('sGroup', $this->Request()->getParam('group'));
+        /** @var Shopware_Plugins_Core_ControllerBase_Bootstrap $plugin */
+        $plugin = $this->get('plugin_manager')->Core()->ControllerBase();
+        $this->View()->assign('sMenu', $plugin->getMenu());
     }
 
     /**
@@ -71,22 +73,29 @@ class Shopware_Controllers_Widgets_Index extends Enlight_Controller_Action
      */
     public function shopMenuAction()
     {
-        $shop = Shopware()->Shop();
+        /** @var Shop $shop */
+        $shop = $this->get('shop');
         $main = $shop->getMain() !== null ? $shop->getMain() : $shop;
-        Shopware()->Models()->detach($main);
+        /** @var ModelManager $modelManager */
+        $modelManager = $this->get('models');
+        $modelManager->detach($main);
 
-        $this->View()->shop = $shop;
+        $this->View()->assign('shop', $shop);
+
         if (!$this->Request()->getParam('hideCurrency', false)) {
-            $this->View()->currencies = $shop->getCurrencies();
+            $this->View()->assign('currencies', $shop->getCurrencies());
         }
+
         $languages = $shop->getChildren()->toArray();
+        /** @var Shop $language */
         foreach ($languages as $languageKey => $language) {
-            Shopware()->Models()->detach($language);
+            $modelManager->detach($language);
             if (!$language->getActive()) {
                 unset($languages[$languageKey]);
             }
         }
+
         array_unshift($languages, $main);
-        $this->View()->languages = $languages;
+        $this->View()->assign('languages', $languages);
     }
 }
