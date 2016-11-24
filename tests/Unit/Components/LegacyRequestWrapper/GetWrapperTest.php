@@ -26,9 +26,6 @@ namespace Shopware\Tests\Unit\Components\LegacyRequestWrapper;
 
 use PHPUnit\Framework\TestCase;
 
-/**
- * @covers \Shopware\Components\LegacyRequestWrapper\GetWrapper
- */
 class GetWrapperTest extends TestCase
 {
     /**
@@ -52,9 +49,6 @@ class GetWrapperTest extends TestCase
         $this->request->clearAll();
     }
 
-    /**
-     * @covers \Shopware\Components\LegacyRequestWrapper\GetWrapper::offsetSet()
-     */
     public function testSet()
     {
         $this->system->_GET->offsetSet('foo', 'bar');
@@ -68,9 +62,6 @@ class GetWrapperTest extends TestCase
         $this->assertInternalType('array', $this->request->getQuery('foo'));
     }
 
-    /**
-     * @covers \Shopware\Components\LegacyRequestWrapper\GetWrapper::offsetSet()
-     */
     public function testGet()
     {
         $this->request->setQuery('foo', 'bar');
@@ -84,9 +75,6 @@ class GetWrapperTest extends TestCase
         $this->assertInternalType('array', $this->system->_GET->offsetGet('foo'));
     }
 
-    /**
-     * @covers \Shopware\Components\LegacyRequestWrapper\GetWrapper::offsetUnset()
-     */
     public function testUnset()
     {
         $this->system->_GET->offsetSet('foo', 'bar');
@@ -95,9 +83,6 @@ class GetWrapperTest extends TestCase
         $this->assertNull($this->request->getQuery('foo'));
     }
 
-    /**
-     * @covers \Shopware\Components\LegacyRequestWrapper\GetWrapper::setAll()
-     */
     public function testSetAll()
     {
         $this->system->_GET->offsetSet('foo', 'bar');
@@ -108,9 +93,6 @@ class GetWrapperTest extends TestCase
         $this->assertEquals('too', $this->request->getQuery('foo'));
     }
 
-    /**
-     * @covers \Shopware\Components\LegacyRequestWrapper\GetWrapper::toArray()
-     */
     public function testToArray()
     {
         $this->request->setQuery('foo', 'bar');

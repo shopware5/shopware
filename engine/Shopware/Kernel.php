@@ -204,16 +204,6 @@ class Kernel implements HttpKernelInterface
         // Create englight request from global state
         $enlightRequest = new EnlightRequest();
 
-        // Set commandline args as request uri
-        // This is used for legacy cronjob routing.
-        // e.g: /usr/bin/php shopware.php /backend/cron
-        if (PHP_SAPI === 'cli'
-            && is_array($argv = $request->server->get('argv'))
-            && isset($argv[1])
-        ) {
-            $enlightRequest->setRequestUri($argv[1]);
-        }
-
         // Let the symfony request handle the trusted proxies
         $enlightRequest->setRemoteAddress($request->getClientIp());
         $enlightRequest->setSecure($request->isSecure());

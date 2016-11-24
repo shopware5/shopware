@@ -112,7 +112,7 @@
         }
     },
     "scripts": {
-        "test": "phpunit -c tests/",
-        "test-unit": "phpunit -c tests/phpunit_unit.xml.dist"
+        "test": "phpunit -c tests/ --colors=always",
+        "test-unit": "phpunit -c tests/phpunit_unit.xml.dist --colors=always"
     }
 }

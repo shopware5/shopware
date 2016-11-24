@@ -237,7 +237,7 @@ class Basic implements GeneratorInterface
      * @param array $newSize
      * @param resource $newImage
      */
-    private function fixGdImageBlur($newSize,  $newImage)
+    private function fixGdImageBlur($newSize, $newImage)
     {
         $colorWhite = imagecolorallocate($newImage, 255, 255, 255);
         $processHeight = $newSize['height'] + 0;

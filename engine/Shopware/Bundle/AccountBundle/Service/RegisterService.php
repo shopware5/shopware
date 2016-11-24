@@ -196,10 +196,12 @@ class RegisterService implements RegisterServiceInterface
         $customer->setLanguageSubShop(
             $this->modelManager->find('Shopware\Models\Shop\Shop', $shop->getId())
         );
-
-        $customer->setGroup(
-            $this->modelManager->find('Shopware\Models\Customer\Group', $shop->getCustomerGroup()->getId())
-        );
+        
+        if (is_null($customer->getGroup())) {
+            $customer->setGroup(
+                $this->modelManager->find('Shopware\Models\Customer\Group', $shop->getCustomerGroup()->getId())
+            );
+        }
 
         if ($customer->getAffiliate()) {
             $customer->setAffiliate((int) $this->getPartnerId($customer));

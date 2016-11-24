@@ -140,7 +140,7 @@ class Repository extends ModelRepository
                         $builder->expr()->isNull('sites.shopIds')
                     )
                 )
-                ->setParameter('shopId',  '%|' . $shopId . '|%');
+                ->setParameter('shopId', '%|' . $shopId . '|%');
         }
 
         return $builder;
@@ -235,7 +235,7 @@ class Repository extends ModelRepository
                     $builder->expr()->isNull('site.shopIds')
                 )
             )
-            ->setParameter('shopId',  '%|' . $shopId . '|%');
+            ->setParameter('shopId', '%|' . $shopId . '|%');
 
         return $builder;
     }

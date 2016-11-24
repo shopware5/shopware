@@ -24,10 +24,9 @@
 
 namespace Shopware\Bundle\SearchBundleDBAL\DependencyInjection\Compiler;
 
+use Shopware\Components\DependencyInjection\Compiler\TagReplaceTrait;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
-use Symfony\Component\DependencyInjection\Definition;
-use Symfony\Component\DependencyInjection\Reference;
 
 /**
  * @category  Shopware
@@ -36,41 +35,15 @@ use Symfony\Component\DependencyInjection\Reference;
  */
 class DBALCompilerPass implements CompilerPassInterface
 {
+    use TagReplaceTrait;
+
     /**
      * @param ContainerBuilder $container
      */
     public function process(ContainerBuilder $container)
     {
-        if (!$container->hasDefinition('shopware_search.product_number_search')) {
-            return;
-        }
-
-        $definition = $container->getDefinition('shopware_search.product_number_search');
-        $this->replaceArgument($container, $definition, 'facet_handler_dbal', 3);
-
-        $definition = $container->getDefinition('shopware_searchdbal.dbal_query_builder_factory');
-        $this->replaceArgument($container, $definition, 'condition_handler_dbal', 2);
-        $this->replaceArgument($container, $definition, 'sorting_handler_dbal', 3);
-    }
-
-    /**
-     * @param ContainerBuilder $container
-     * @param Definition       $definition
-     * @param string           $tag
-     * @param int              $argumentIndex
-     */
-    public function replaceArgument(ContainerBuilder $container, Definition $definition, $tag, $argumentIndex)
-    {
-        $transports = $definition->getArgument($argumentIndex);
-
-        $taggedServices = $container->findTaggedServiceIds(
-            $tag
-        );
-
-        foreach ($taggedServices as $id => $attributes) {
-            $transports[] = new Reference($id);
-        }
-
-        $definition->replaceArgument($argumentIndex, $transports);
+        $this->replaceArgumentWithTaggedServices($container, 'shopware_search.product_number_search', 'facet_handler_dbal', 3);
+        $this->replaceArgumentWithTaggedServices($container, 'shopware_searchdbal.dbal_query_builder_factory', 'condition_handler_dbal', 2);
+        $this->replaceArgumentWithTaggedServices($container, 'shopware_searchdbal.dbal_query_builder_factory', 'sorting_handler_dbal', 3);
     }
 }

@@ -736,6 +736,31 @@ VALUES
 ('$userId','shopware AG','','mr','Max','Mustermann','Mustermannstraße 92','48624','Schöppingen','2',NULL,'','',NULL);
 EOD;
         $dbal->query($sql);
+    }
 
+    /**
+     * @BeforeScenario @paymentsurcharge
+     */
+    public function addCustomPaymentSurcharge()
+    {
+        /** @var Connection $dbal */
+        $dbal = $this->getService('dbal_connection');
+        $sql = <<<"EOD"
+            UPDATE s_core_paymentmeans SET debit_percent = 10 WHERE id = 5;
+EOD;
+        $dbal->query($sql);
+    }
+
+    /**
+     * @AfterScenario @paymentsurcharge
+     */
+    public function removeCustomPaymentSurcharge()
+    {
+        /** @var Connection $dbal */
+        $dbal = $this->getService('dbal_connection');
+        $sql = <<<"EOD"
+            UPDATE s_core_paymentmeans SET debit_percent = 0 WHERE id = 5;
+EOD;
+        $dbal->query($sql);
     }
 }

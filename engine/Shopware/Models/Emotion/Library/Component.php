@@ -701,7 +701,9 @@ class Component extends ModelEntity
             $this->maxFieldPositionValue = 0;
 
             $positions = array_map(
-                function ($field) {return $field->getPosition();},
+                function ($field) {
+                    return $field->getPosition();
+                },
                 $this->getFields()->toArray()
             );
             

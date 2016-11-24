@@ -62,7 +62,9 @@ class Filter
      */
     public function filterArrayToString($filterArray)
     {
-        return implode(' ', array_map(function ($filter) { return $filter['token']; }, $filterArray));
+        return implode(' ', array_map(function ($filter) {
+            return $filter['token'];
+        }, $filterArray));
     }
 
     /**
@@ -171,8 +173,8 @@ class Filter
         $totalCount = $paginator->count();
 
         $result = array_map(function ($item) {
-                return $item->getId();
-            },
+            return $item->getId();
+        },
             $paginator->getIterator()->getArrayCopy()
         );
 

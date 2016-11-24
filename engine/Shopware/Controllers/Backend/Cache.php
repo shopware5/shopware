@@ -169,10 +169,15 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
             $shop = $shop->getMain();
         }
 
-        /** @var $compiler \Shopware\Components\Theme\Compiler */
-        $compiler = $this->container->get('theme_compiler');
-        $compiler->compileJavascript('new', $shop->getTemplate(), $shop);
-        $compiler->compileLess('new', $shop->getTemplate(), $shop);
+        try {
+            /** @var $compiler \Shopware\Components\Theme\Compiler */
+            $compiler = $this->container->get('theme_compiler');
+            $compiler->compileJavascript('new', $shop->getTemplate(), $shop);
+            $compiler->compileLess('new', $shop->getTemplate(), $shop);
+        } catch (Exception $e) {
+            $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);
+            return;
+        }
 
         $this->View()->assign(array(
             'success' => true

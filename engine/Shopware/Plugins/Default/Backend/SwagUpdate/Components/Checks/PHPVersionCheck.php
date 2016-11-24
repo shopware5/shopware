@@ -67,7 +67,7 @@ class PHPVersionCheck implements CheckInterface
 
         $validVersion = (version_compare(PHP_VERSION, $minPHPVersion) >= 0);
 
-        $successMessage = $this->namespace->get('controller/check_phpversion_success',  "Min PHP Version: %s, your version %s");
+        $successMessage = $this->namespace->get('controller/check_phpversion_success', "Min PHP Version: %s, your version %s");
         $failMessage = $this->namespace->get('controller/check_phpversion_failure', "Min PHP Version: %s, your version %s");
 
         if ($validVersion) {
