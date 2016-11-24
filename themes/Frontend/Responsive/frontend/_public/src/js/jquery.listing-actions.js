@@ -83,7 +83,7 @@
 
             /**
              * The selector for the inner filter container which used to for the loading indicator
-             * if the offcanvas menu is active
+             * if the off canvas menu is active
              */
             filterInnerContainerSelector: '.filter--container',
 
@@ -237,7 +237,17 @@
                 theme: 'light',
                 animationSpeed: 100,
                 closeOnClick: false
-            }
+            },
+
+            /**
+             * selector for the filter close button, which is only visible in off canvas
+             */
+            filterCloseBtnSelector: '.filter--close-btn',
+
+            /**
+             * icon for the filter close button
+             */
+            closeFilterOffCanvasBtnIcon: '<i class="icon--arrow-right"></i>'
         },
 
         /**
@@ -263,6 +273,7 @@
             me.$sortInput = $(me.$filterForm.find(me.opts.sortInputSelector));
             me.$perPageInput = $(me.$filterForm.find(me.opts.perPageInputSelector));
             me.$listingWrapper = me.$el.parent(me.opts.listingWrapperSelector);
+            me.$closeFilterOffCanvasBtn = $(me.opts.filterCloseBtnSelector);
 
             me.listingUrl = me.$filterForm.attr('data-listing-url');
             me.loadFacets = $.parseJSON(me.$filterForm.attr('data-load-facets'));
@@ -276,6 +287,8 @@
             me.categoryParams = {};
             me.urlParams = '';
             me.bufferTimeout = 0;
+            me.closeFilterOffCanvasBtnText = me.$closeFilterOffCanvasBtn.html();
+            me.closeFilterOffCanvasBtnTextWithProducts = me.$closeFilterOffCanvasBtn.attr('data-show-products-text');
 
             me.getPropertyFieldNames();
             me.setCategoryParamsFromTopLocation();
@@ -869,6 +882,7 @@
 
         /**
          * Event listener which allows to send listing ajax request to load facets, total count and/or listings
+         *
          * @param {object} event
          * @param {string} params
          * @param {boolean} loadFacets
@@ -876,7 +890,9 @@
          * @param {function} callback
          */
         onSendListingRequest: function(event, params, loadFacets, loadProducts, callback) {
-            this.sendListingRequest(params, loadFacets, loadProducts, callback);
+            var me = this;
+
+            me.sendListingRequest(params, loadFacets, loadProducts, callback);
         },
 
         /**
@@ -912,8 +928,7 @@
          */
         getFilterResult: function(urlParams, loadFacets, loadProducts) {
             var me = this,
-                params = urlParams || me.urlParams,
-                url = me.listingUrl + params;
+                params = urlParams || me.urlParams;
 
             me.resetBuffer();
 
@@ -934,13 +949,15 @@
         },
 
         /**
-         * Enabels the loading animation in the listing
-         * @param callback
+         * Enables the loading animation in the listing
+         *
+         * @param {boolean} loadProducts
+         * @param {function} callback
          */
         enableLoading: function(loadProducts, callback) {
-            var me = this;
+            var me = this,
+                loadingIndicator = me.$loadingIndicatorElement;
 
-            var loadingIndicator = me.$loadingIndicatorElement;
             if (me.$filterCont.is('.off-canvas.is--open')) {
                 loadingIndicator = me.$offCanvasLoadingIndicator;
             }
@@ -961,10 +978,11 @@
         },
 
         /**
-         * Enables the bubtton reload animation
+         * Enables the button reload animation
          */
         enableButtonLoading: function() {
             var me = this;
+
             if (!me.showInstantFilterResult) {
                 me.$applyFilterBtn.addClass(me.opts.loadingClass);
             }
@@ -972,7 +990,8 @@
 
         /**
          * Disables the loading animation for the listing
-         * @param response
+         * @param {object} response
+         * @param {function} callback
          */
         disableLoading: function(response, callback) {
             var me = this;
@@ -1020,12 +1039,16 @@
          * @param {object} response
          */
         updateListing: function(response) {
-            var me = this, html, pages;
+            var me = this,
+                html,
+                pages;
 
             if (!response.hasOwnProperty('listing')) {
                 me.$listing.removeClass(me.opts.isLoadingCls);
                 return;
             }
+
+            me.updateFilterCloseButton(response.totalCount);
 
             html = response.listing.trim();
 
@@ -1045,17 +1068,40 @@
                 StateManager.addPlugin(me.opts.listingSelector, 'swInfiniteScrolling');
                 $.publish('plugin/swListingActions/updateInfiniteScrolling', [me, html, pages]);
             } else {
-                me.updatePagination();
+                me.updatePagination(response);
             }
+        },
+
+        /**
+         * updates the off canvas filter close button with the amount of products
+         *
+         * @param {int} totalCount
+         */
+        updateFilterCloseButton: function(totalCount) {
+            var me = this,
+                filterCount = Object.keys(me.activeFilterElements).length;
+
+            if (filterCount > 0) {
+                me.$closeFilterOffCanvasBtn.html(me.closeFilterOffCanvasBtnTextWithProducts.replace('%s', totalCount) + me.opts.closeFilterOffCanvasBtnIcon);
+
+                $.publish('plugin/swListingActions/updateFilterCloseBtnWithProductsCount', [me, totalCount]);
+            } else {
+                me.$closeFilterOffCanvasBtn.html(me.closeFilterOffCanvasBtnText);
+
+                $.publish('plugin/swListingActions/updateFilterCloseBtnDefault', [me]);
+            }
+
+            me.updateFilterTriggerButton(filterCount > 1 ? filterCount - 1 : filterCount);
         },
 
         /**
          * Updates the html for the listing pagination in case infinite scrolling is disabled
          *
-         * @param {string} newPaginationHtml
+         * @param {object} response
          */
         updatePagination: function(response) {
-            var me = this, html = response.pagination.trim();
+            var me = this,
+                html = response.pagination.trim();
 
             $(me.opts.paginationSelector).replaceWith(html);
             StateManager.updatePlugin(me.opts.paginationBarPerPageSelector, 'swSelectboxReplacement');
