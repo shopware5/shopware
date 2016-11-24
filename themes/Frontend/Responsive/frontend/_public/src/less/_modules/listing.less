@@ -66,6 +66,20 @@ It contains the viewport specific styles inside media queries.
     .tap-highlight-color();
 }
 
+.listing--wrapper.js--is-loading .js--loading-indicator {
+    .unitize(top, 150);
+}
+
+.listing {
+    .transition(opacity 0.5s ease-out);
+    opacity: 1;
+
+    &.is--loading {
+        opacity: 0;
+    }
+}
+
+
 .action--filter-btn {
     .unitize(margin-bottom, 10);
 

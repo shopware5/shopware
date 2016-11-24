@@ -135,7 +135,6 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
         if ($this->Request()->getParam('sSearch')) {
             $result = $this->fetchSearchListing();
             $this->setSearchResultResponse($result);
-
             return;
         }
 
@@ -145,7 +144,6 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
         if ($productStreamId) {
             $result = $this->fetchStreamListing($productStreamId);
             $this->setSearchResultResponse($result);
-
             return;
         }
 
@@ -294,9 +292,11 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
     {
         $body = [
             'totalCount' => $result->getTotalCount(),
-            'facets' => $result->getFacets()
         ];
 
+        if ($this->Request()->getParam('loadFacets')) {
+            $body['facets'] = $result->getFacets();
+        }
         if ($this->Request()->getParam('loadProducts')) {
             $body['listing'] = $this->fetchListing($result);
             $body['pagination'] = $this->fetchPagination($result);

@@ -82,6 +82,12 @@
             filterContainerSelector: '.action--filter-options',
 
             /**
+             * The selector for the inner filter container which used to for the loading indicator
+             * if the offcanvas menu is active
+             */
+            filterInnerContainerSelector: '.filter--container',
+
+            /**
              * The selector for additional listing action forms.
              */
             actionFormSelector: '*[data-action-form="true"]',
@@ -212,7 +218,26 @@
             /**
              * selector for the wrapper of the whole listing
              */
-            listingWrapperSelector: '.listing--wrapper'
+            listingWrapperSelector: '.listing--wrapper',
+
+            /**
+             * The selector for the element which get the loading indicator after customer activates a filter
+             */
+            loadingIndSelector: '.listing--wrapper',
+
+            /**
+             * Class for loading indicator, added and removed on the configurable `listingSelector` element
+             */
+            isLoadingCls: 'is--loading',
+
+            /**
+             * Configuration for the loading indicator
+             */
+            loadingIndConfig: {
+                theme: 'light',
+                animationSpeed: 100,
+                closeOnClick: false
+            }
         },
 
         /**
@@ -262,6 +287,9 @@
             me.updateFilterTriggerButton(filterCount > 1 ? filterCount - 1 : filterCount);
             me.initStateHandling();
             me.registerEvents();
+
+            me.$loadingIndicatorElement = $(me.opts.loadingIndSelector);
+            me.$offCanvasLoadingIndicator = $(me.opts.filterInnerContainerSelector);
 
             var isFiltered = me.$filterForm.attr('data-is-filtered');
             if (isFiltered > 0 && me.loadFacets) {
@@ -548,8 +576,7 @@
 
             me.createActiveFiltersFromCategoryParams(categoryParams);
 
-            me.$applyFilterBtn.addClass(me.opts.loadingClass);
-
+            me.enableButtonLoading();
             me.buffer($.proxy(me.getFilterResult, me, urlParams, me.loadFacets, me.showInstantFilterResult), me.opts.bufferTime);
 
             $.publish('plugin/swListingActions/onComponentChange', [ me, event ]);
@@ -775,6 +802,8 @@
                 formData = me.$filterForm.serializeArray();
                 categoryParams = me.setCategoryParamsFromData(formData);
                 paramsForFilterResult = me.createUrlParams(categoryParams);
+
+                me.enableButtonLoading();
                 me.buffer($.proxy(me.getFilterResult, me, paramsForFilterResult, false, me.showInstantFilterResult), me.opts.bufferTime);
             } else {
                 window.location.href = me.getListingUrl(params, false);
@@ -836,6 +865,25 @@
             $.publish('plugin/swListingActions/onResetBuffer', [ me, me.bufferTimeout ]);
         },
 
+
+        /**
+         * @param params
+         * @param loadProducts
+         * @param loadFacets
+         * @param callback
+         */
+        sendListingCountRequest: function(params, loadFacets, loadProducts, callback) {
+            var me = this;
+
+            me.resetBuffer();
+            $.ajax({
+                type: 'get',
+                url: me.buildListingUrl(params, loadFacets, loadProducts),
+                success: $.proxy(callback, me)
+            });
+            $.publish('plugin/swListingActions/onGetFilterResult', [ me, params ]);
+        },
+
         /**
          * Gets the counted result of found products
          * with the current applied category parameters.
@@ -850,89 +898,153 @@
                 params = urlParams || me.urlParams,
                 url = me.resultCountURL + params;
 
-            if (typeof loadFacets === 'undefined') {
-                loadFacets = me.loadFacets;
+            me.resetBuffer();
+
+            me.enableLoading(loadProducts, function() {
+
+                //send ajax request to load products and facets
+                me.sendListingCountRequest(params, loadFacets, loadProducts, function(response) {
+
+                    me.disableLoading(response, function() {
+
+                        me.updateListing(response);
+
+                        //publish finish event to update filter panels
+                        $.publish('plugin/swListingActions/onGetFilterResultFinished', [ me, response, params ]);
+                    });
+                });
+            });
+        },
+
+        /**
+         * Enabels the loading animation in the listing
+         * @param callback
+         */
+        enableLoading: function(loadProducts, callback) {
+            var me = this;
+
+            var loadingIndicator = me.$loadingIndicatorElement;
+            if (me.$filterCont.is('.off-canvas.is--open')) {
+                loadingIndicator = me.$offCanvasLoadingIndicator;
             }
 
-            if (typeof loadProducts === 'undefined') {
-                loadProducts = me.showInstantFilterResult;
+            if (loadProducts) {
+                me.$listing.addClass(me.opts.isLoadingCls);
+
+                loadingIndicator.setLoading(
+                    true,
+                    me.opts.loadingIndConfig
+                ).then(
+                    $.proxy(callback, me)
+                );
+            } else {
+                me.enableButtonLoading();
+                callback.call(me);
+            }
+        },
+
+        /**
+         * Enables the bubtton reload animation
+         */
+        enableButtonLoading: function() {
+            var me = this;
+            if (!me.showInstantFilterResult) {
+                me.$applyFilterBtn.addClass(me.opts.loadingClass);
+            }
+        },
+
+        /**
+         * Disables the loading animation for the listing
+         * @param response
+         */
+        disableLoading: function(response, callback) {
+            var me = this;
+
+            var loadingIndicator = me.$loadingIndicatorElement;
+            if (me.$filterCont.is('.off-canvas.is--open')) {
+                loadingIndicator = me.$offCanvasLoadingIndicator;
             }
 
-            if (loadFacets) {
-                url += '&loadFacets=1';
+            if (me.showInstantFilterResult) {
+                //disable loading indicator
+                loadingIndicator.setLoading(false).then(
+                    $.proxy(callback, this)
+                );
+            } else {
+                me.$applyFilterBtn.removeClass(me.opts.loadingClass);
+                me.updateFilterButton(response.totalCount);
             }
+        },
+
+        /**
+         *
+         * @param formParams
+         * @param loadProducts
+         * @param loadFacets
+         * @returns {string}
+         */
+        buildListingUrl: function(formParams, loadFacets, loadProducts) {
+            var me = this, url;
+
+            url = me.resultCountURL + formParams;
 
             if (loadProducts) {
                 url += '&loadProducts=1';
             }
-
-            me.resetBuffer();
-
-            $.ajax({
-                type: 'get',
-                url: url,
-                success: function(response) {
-                    var pages = Math.ceil(response.totalCount / me.$perPageInput.val());
-                    if (!loadProducts) {
-                        me.$applyFilterBtn.removeClass(me.opts.loadingClass);
-                        me.updateFilterButton(response.totalCount);
-                    }
-
-                    if (response.hasOwnProperty('facets') && loadFacets) {
-                        $.publish('plugin/swListingActions/updateFacets', [ me, response.facets ]);
-                    }
-
-                    if (response.hasOwnProperty('listing') && loadProducts) {
-                        me.updateListing(response.listing.trim(), pages);
-
-                        if (response.hasOwnProperty('pagination') && !me.isInfiniteScrolling) {
-                            me.updatePagination(response.pagination.trim());
-                        }
-                    }
-
-                    $.publish('plugin/swListingActions/onGetFilterResultFinished', [ me, response, params ]);
-                }
-            });
-
-            $.publish('plugin/swListingActions/onGetFilterResult', [ me, params ]);
+            if (loadFacets) {
+                url += '&loadFacets=1';
+            }
+            return url;
         },
 
         /**
          * updates the listing with new products
          *
-         * @param {string} newListingHtml
-         * @param {int} newPages
+         * @param {object} response
          */
-        updateListing: function(newListingHtml, newPages) {
-            var me = this;
+        updateListing: function(response) {
+            var me = this, html, pages;
 
-            me.$listing.html(newListingHtml);
+            if (!response.hasOwnProperty('listing')) {
+                me.$listing.removeClass(me.opts.isLoadingCls);
+                return;
+            }
+
+            html = response.listing.trim();
+
+            me.$listing.html(html);
+            me.$listing.removeClass(me.opts.isLoadingCls);
+
             window.history.pushState('data', '', window.location.href.split('?')[0] + me.urlParams);
 
-            $.publish('plugin/swListingActions/updateListing', [me, newListingHtml]);
+            $.publish('plugin/swListingActions/updateListing', [me, html]);
 
             if (me.isInfiniteScrolling) {
-                me.$listing.attr('data-pages', newPages);
+                pages = Math.ceil(response.totalCount / me.$perPageInput.val());
+
+                //update infinite scrolling plugin and data attributes for infinite scrolling
+                me.$listing.attr('data-pages', pages);
                 me.$listing.data('plugin_swInfiniteScrolling').destroy();
                 StateManager.addPlugin(me.opts.listingSelector, 'swInfiniteScrolling');
-
-                $.publish('plugin/swListingActions/updateInfiniteScrolling', [me, newListingHtml, newPages]);
+                $.publish('plugin/swListingActions/updateInfiniteScrolling', [me, html, pages]);
+            } else {
+                me.updatePagination();
             }
         },
 
         /**
-         * updates the pagination
+         * Updates the html for the listing pagination in case infinite scrolling is disabled
          *
          * @param {string} newPaginationHtml
          */
-        updatePagination: function(newPaginationHtml) {
-            var me = this;
+        updatePagination: function(response) {
+            var me = this, html = response.pagination.trim();
 
-            $(me.opts.paginationSelector).replaceWith(newPaginationHtml);
+            $(me.opts.paginationSelector).replaceWith(html);
             StateManager.updatePlugin(me.opts.paginationBarPerPageSelector, 'swSelectboxReplacement');
             StateManager.updatePlugin(me.opts.paginationBarPerPageSelector, 'swAutoSubmit');
 
-            $.publish('plugin/swListingActions/updatePagination', [me, newPaginationHtml]);
+            $.publish('plugin/swListingActions/updatePagination', [me, html]);
         },
 
         /**
