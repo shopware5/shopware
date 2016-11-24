@@ -1694,8 +1694,8 @@ class sAdminTest extends PHPUnit_Framework_TestCase
                 'value1' => '2'
             )
         );
-        $this->assertFalse($this->module->sManageRisks(2, $basket, $user));
-        Shopware()->Db()->delete('s_core_rulesets', 'id >= '.$firstTestRuleId);
+        $this->assertTrue($this->module->sManageRisks(2, $basket, $user));
+        Shopware()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
 
         $this->module->sSYSTEM->sSESSION_ID = uniqid(rand());
         $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
