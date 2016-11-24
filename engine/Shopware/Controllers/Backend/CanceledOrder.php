@@ -127,9 +127,9 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
         if ($result[0]['customer']['shipping'] === null) {
             $result[0]['customer']['shipping'] = $result[0]['customer']['billing'];
         }
-		
-		// copy customer number into billing address from customer
-		$result[0]['customer']['billing']['number'] = $result[0]['customer']['number'];
+
+        // copy customer number into billing address from customer
+        $result[0]['customer']['billing']['number'] = $result[0]['customer']['number'];
 
         // Create new entry in s_order_billingaddress
         $billingModel = new Shopware\Models\Order\Billing();
