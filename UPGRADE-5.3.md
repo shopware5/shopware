@@ -22,10 +22,10 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Added config element `liveMigration` to enable or disable the media live migration
 * Added config element `displayListingBuyButton` to display listing buy button
 * Added service `shopware_search.batch_product_search` and `shopware_search.batch_product_number_search` for optimized product queries
-* `jQuery.overlay` & `jQuery.loadingIndicators` are now supporting callbacks and jQuery promises
-* A loading indicator can now be applied to elements using the `$('selector').setLoading()` method
-* Added `data-facet-name` requirement for each filter element
-* Added `categoryFilterDepth` to configure new `CategoryFacet` behavior
+* Added support for callback methods and jQuery promises in `jQuery.overlay` and `jQuery.loadingIndicators`
+* Added jQuery method `setLoading()` to apply a loading indicator to an element `$('selector').setLoading()`
+* Added required attribute `data-facet-name` for filter elements
+* Added config element `categoryFilterDepth` to configure how many levels of the category facet will be displayed
 * Added new type for the filter panels `value-list-single`
 * Added new Smarty blocks for the unified filter panel:
     * `frontend_listing_filter_facet_multi_selection`
@@ -38,9 +38,9 @@ This changelog references changes done in Shopware 5.3 patch versions.
     * `frontend_listing_filter_facet_multi_selection_option_container`
     * `frontend_listing_filter_facet_multi_selection_input`
     * `frontend_listing_filter_facet_multi_selection_label`
-* Added `\Shopware\Bundle\StoreFrontBundle\Service\Core\CategoryDepthService` service to select categories by their depth
+* Added service `Shopware\Bundle\StoreFrontBundle\Service\Core\CategoryDepthService` to select categories by the given depth
 * Added event `plugin/swListing/fetchListing` which allows to load listings, facet data or listing counts
-* Added config `listingMode` to switch listing reload behavior
+* Added config element `listingMode` to switch listing reload behavior
 * Added event `action/fetchListing` which allows to load listings, facet data or listing counts
 * Added property `path` to `Shopware\Bundle\StoreFrontBundle\Struct\Media` which reflects the virtual path
 * Added service `Shopware\Bundle\StoreFrontBundle\Service\Core\BlogService` to fetch blog entries by id
@@ -61,8 +61,7 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Changed attribute type `string` mapping to mysql `TEXT` type. String and single selection data type supports no longer a sql default value.
 * Changed `roundPretty` value for currency range filter
 * Changed `CategoryFacet` behavior to generate each time a tree based on the system category with a configured category depth
-* Refactored the filter panels `facet-radio`, `facet-media-list` & `facet-value-list` and unified the panels
-* Base query build in `\Shopware\Bundle\SearchBundleDBAL\ProductNumberSearch` contains no more an join to s_core_tax
+* Changed facet templates `facet-radio`, `facet-media-list` and `facet-value-list` into one template
 * Renamed parameter `data-count-ctrl` on `#filter` form to `data-listing-url`
 * Changed removal version of method `Shopware\Components\Model\ModelManager::addAttribute` to 5.4
 * Changed removal version of method `Shopware\Components\Model\ModelManager::removeAttribute` to 5.4
@@ -71,7 +70,7 @@ This changelog references changes done in Shopware 5.3 patch versions.
 ### Removals
 
 * Removed configuration option `sCOUNTRYSHIPPING`
-* Removed `{$sShopname}` from forms, use `{sShopname}` instead
+* Removed variable `{$sShopname}` from forms, use `{sShopname}` instead
 * Removed import / export module
 * Removed article vote module files
     * `themes/Backend/ExtJs/backend/vote/view/vote/detail.js`
@@ -163,8 +162,8 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Removed function `Enlight()`
 * Removed class `Enlight_Bootstrap`
 * Removed class `Shopware_Bootstrap`
-* Removed service ID `bootstrap`
-* Remmoved the following methods from `Shopware` respectively `Enlight_Application`:
+* Removed service `bootstrap`
+* Removed the following methods from `Shopware` respectively `Enlight_Application`:
     - `Shopware()/Enlight()->DS()`
     - `Shopware()/Enlight()->setEventManager()`
     - `Shopware()/Enlight()->Bootstrap()`
@@ -175,9 +174,9 @@ This changelog references changes done in Shopware 5.3 patch versions.
     - `Shopware()/Enlight()->ComponentsPath()`
     - `Shopware()/Enlight()->Path()`
 * Removed parameter `$checkProxy` from `Enlight_Controller_Request_Request::getClientIp()`
-* Removed `frontend_search_category_filter` block.
-* Removed `themes/Frontend/Bare/frontend/search/category-filter.tpl`
-* Removed `sCategory` parameter for search controller `listing/ajaxCount` requests.
+* Removed smarty block `frontend_search_category_filter`
+* Removed template file `themes/Frontend/Bare/frontend/search/category-filter.tpl`
+* Removed parameter `sCategory` from search controller `listing/ajaxCount` requests
 * Removed Smarty blocks due to the unified filter panel. The following blocks were removed:
     * `frontend_listing_filter_facet_media_list_flyout`
     * `frontend_listing_filter_facet_media_list_title`
@@ -206,8 +205,9 @@ This changelog references changes done in Shopware 5.3 patch versions.
     * `frontend_listing_filter_facet_value_list_option_container`
     * `frontend_listing_filter_facet_value_list_input`
     * `frontend_listing_filter_facet_value_list_label`
-* Removed `attributes.search.cheapest_price` field from DBAL search
-* Removed `attributes.search.average` field from DBAL search
+* Removed field `attributes.search.cheapest_price` from DBAL search query
+* Removed field `attributes.search.average` from DBAL search query
+* Removed join to `s_core_tax` in `Shopware\Bundle\SearchBundleDBAL\ProductNumberSearch`
 * Removed model `Shopware\Models\Article\Element`
 * Removed database table `s_core_engine_elements`
 * Removed method `Shopware_Controllers_Widgets_Emotion::getEmotion()`
