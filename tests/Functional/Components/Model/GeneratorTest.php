@@ -34,7 +34,7 @@ use Shopware\Components\Model\Generator;
 class GeneratorTest extends \PHPUnit_Framework_TestCase
 {
     const TEST_TABLE_NAME = 's_articles_attributes';
-    const TEST_ATTRIBUTE_FIELD_PREFIX = 'test';
+    const TEST_ATTRIBUTE_FIELD_PREFIX = 'test_';
     const TEST_ATTRIBUTE_FIELD_NAME = 'not_null_default_value_field';
     const TEST_ATTRIBUTE_PROPERTY_NAME = 'testNotNullDefaultValueField';
 
@@ -44,6 +44,11 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
     public $em;
 
     /**
+     * @var \Shopware\Bundle\AttributeBundle\Service\CrudService
+     */
+    public $cs;
+
+    /**
      * @var \Shopware\Components\Model\Generator
      */
     public $generator;
@@ -51,7 +56,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         parent::setUp();
-
+        $this->cs = Shopware()->Container()->get('shopware_attribute.crud_service');
         $this->em = Shopware()->Models();
         $this->generator = new Generator(
             $this->em->getConnection()->getSchemaManager(),
@@ -64,29 +69,18 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
     {
         parent::tearDown();
 
-        $this->em->removeAttribute(
+        $this->cs->delete(
             self::TEST_TABLE_NAME,
-            self::TEST_ATTRIBUTE_FIELD_PREFIX,
-            self::TEST_ATTRIBUTE_FIELD_NAME
-        );
-    }
-
-    public function testDefaultInitializationString()
-    {
-        $default = 'test 123';
-        $this->addAndEvaluateInitialization(
-            'VARCHAR(255)',
-            $default,
-            '"'.$default.'"'
+            self::TEST_ATTRIBUTE_FIELD_PREFIX.self::TEST_ATTRIBUTE_FIELD_NAME
         );
     }
 
     public function testDefaultInitializationEmptyString()
     {
         $this->addAndEvaluateInitialization(
-            'VARCHAR(255)',
-            '',
-            '""'
+            'string',
+            'string',
+            'text'
         );
     }
 
@@ -94,8 +88,9 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
     {
         $default = 123;
         $this->addAndEvaluateInitialization(
-            'INT(11)',
-            $default,
+            'integer',
+            'integer',
+            'integer',
             $default
         );
     }
@@ -103,36 +98,20 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
     public function testDefaultInitializationBooleanTrue()
     {
         $this->addAndEvaluateInitialization(
-            'TINYINT(1)',
-            true,
-            'true'
+            'boolean',
+            'integer',
+            'integer',
+            1
         );
     }
 
     public function testDefaultInitializationBooleanFalse()
     {
         $this->addAndEvaluateInitialization(
-            'TINYINT(1)',
-            false,
-            'false'
-        );
-    }
-
-    public function testDefaultInitializationBooleanTrueAsInt()
-    {
-        $this->addAndEvaluateInitialization(
-            'TINYINT(1)',
-            1,
-            'true'
-        );
-    }
-
-    public function testDefaultInitializationBooleanFalseAsInt()
-    {
-        $this->addAndEvaluateInitialization(
-            'TINYINT(1)',
-            0,
-            'false'
+            'boolean',
+            'integer',
+            'integer',
+            0
         );
     }
 
@@ -140,8 +119,9 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
     {
         $default = 123.45;
         $this->addAndEvaluateInitialization(
-            'DECIMAL(10,2)',
-            $default,
+            'float',
+            'float',
+            'float',
             $default
         );
     }
@@ -150,9 +130,10 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
     {
         $default = '2016-01-02';
         $this->addAndEvaluateInitialization(
-            'DATE',
-            $default,
-            'new \DateTime("'.$default.'")'
+            'date',
+            'date',
+            'date',
+            $default
         );
     }
 
@@ -160,90 +141,105 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
     {
         $default = '2016-01-02 12:13:14';
         $this->addAndEvaluateInitialization(
-            'DATETIME',
-            $default,
-            'new \DateTime("'.$default.'")'
-        );
-    }
-
-    public function testDefaultInitializationNotNullConstraint()
-    {
-        $default = 'test 123 with not NULL constraint';
-        $this->addAndEvaluateInitialization(
-            'VARCHAR(255)',
-            $default,
-            '"'.$default.'"',
-            false
+            'datetime',
+            'datetime',
+            'datetime',
+            $default
         );
     }
 
     public function testDefaultInitializationTwoProperties()
     {
         // Add two attribute fields
-        $firstDefault = 'test 123';
-        $this->em->addAttribute(
+        $this->cs->update(
             self::TEST_TABLE_NAME,
-            self::TEST_ATTRIBUTE_FIELD_PREFIX,
-            self::TEST_ATTRIBUTE_FIELD_NAME,
-            'VARCHAR(255)',
-            false,
-            $firstDefault
+            self::TEST_ATTRIBUTE_FIELD_PREFIX.self::TEST_ATTRIBUTE_FIELD_NAME,
+            'string'
         );
-        $secondDefault = 123;
-        $this->em->addAttribute(
+
+        $this->cs->update(
             self::TEST_TABLE_NAME,
-            self::TEST_ATTRIBUTE_FIELD_PREFIX,
-            self::TEST_ATTRIBUTE_FIELD_NAME.'_two',
-            'INT(11)',
+            self::TEST_ATTRIBUTE_FIELD_PREFIX.self::TEST_ATTRIBUTE_FIELD_NAME.'_two',
+            'integer',
+            [],
+            null,
             false,
-            $secondDefault
+            123456
         );
 
         // Generate updated attribute source code
         $modelSourceCode = $this->generator->getSourceCodeForTable(self::TEST_TABLE_NAME);
 
-        $initialization = '
-    public function __construct()
+        $definitionInt ='/**
+     * @var integer $'.self::TEST_ATTRIBUTE_PROPERTY_NAME.'Two
+     *
+     * @ORM\Column(name="'.self::TEST_ATTRIBUTE_FIELD_PREFIX.self::TEST_ATTRIBUTE_FIELD_NAME.'_two", type="integer", nullable=true)
+     */
+     protected $'.self::TEST_ATTRIBUTE_PROPERTY_NAME.'Two;';
+
+
+        $definitionString ='/**
+     * @var string $'.self::TEST_ATTRIBUTE_PROPERTY_NAME.'
+     *
+     * @ORM\Column(name="'.self::TEST_ATTRIBUTE_FIELD_PREFIX.self::TEST_ATTRIBUTE_FIELD_NAME.'", type="text", nullable=true)
+     */
+     protected $'.self::TEST_ATTRIBUTE_PROPERTY_NAME.';';
+
+        $initialization ='public function __construct()
     {
-        $this->'.self::TEST_ATTRIBUTE_PROPERTY_NAME.' = "'.$firstDefault.'";
-        $this->'.self::TEST_ATTRIBUTE_PROPERTY_NAME.'Two = '.$secondDefault.';
+        $this->'.self::TEST_ATTRIBUTE_PROPERTY_NAME.'Two = 123456;
     }';
+
+        $this->assertTrue(strpos($modelSourceCode, $definitionInt) !== false);
+        $this->assertTrue(strpos($modelSourceCode, $definitionString) !== false);
         $this->assertTrue(strpos($modelSourceCode, $initialization) !== false);
 
         // Clean up second field
-        $this->em->removeAttribute(
+        $this->cs->delete(
             self::TEST_TABLE_NAME,
-            self::TEST_ATTRIBUTE_FIELD_PREFIX,
-            self::TEST_ATTRIBUTE_FIELD_NAME.'_two'
+            self::TEST_ATTRIBUTE_FIELD_PREFIX.self::TEST_ATTRIBUTE_FIELD_NAME.'_two'
         );
     }
 
     /**
      * @param string $type
-     * @param string|int|float|boolean $default
-     * @param string $initializedValue
-     * @param boolean $allowNull (optional)
+     * @param string $phpType
+     * @param string $ormType
+     * @param null|float|int $default
      */
-    private function addAndEvaluateInitialization($type, $default, $initializedValue, $allowNull = true)
+    private function addAndEvaluateInitialization($type, $phpType, $ormType, $default = null)
     {
         // Add attribute field
-        $this->em->addAttribute(
+        $this->cs->update(
             self::TEST_TABLE_NAME,
-            self::TEST_ATTRIBUTE_FIELD_PREFIX,
-            self::TEST_ATTRIBUTE_FIELD_NAME,
+            self::TEST_ATTRIBUTE_FIELD_PREFIX.self::TEST_ATTRIBUTE_FIELD_NAME,
             $type,
-            $allowNull,
+            [],
+            null,
+            false,
             $default
         );
 
         // Generate updated attribute source code
         $modelSourceCode = $this->generator->getSourceCodeForTable(self::TEST_TABLE_NAME);
 
-        $initialization = '
-    public function __construct()
-    {
-        $this->'.self::TEST_ATTRIBUTE_PROPERTY_NAME.' = '.$initializedValue.';
-    }';
-        $this->assertTrue(strpos($modelSourceCode, $initialization) !== false);
+        $definition = '/**
+     * @var '.$phpType.' $'.self::TEST_ATTRIBUTE_PROPERTY_NAME.'
+     *
+     * @ORM\Column(name="'.self::TEST_ATTRIBUTE_FIELD_PREFIX.self::TEST_ATTRIBUTE_FIELD_NAME.'", type="'.$ormType.'", nullable=true)
+     */
+     protected $'.self::TEST_ATTRIBUTE_PROPERTY_NAME.';';
+
+        $this->assertTrue(strpos($modelSourceCode, $definition) !== false);
+        if ($default ==! null) {
+            switch ($type) {
+                case 'date':
+                case 'datetime':
+                    $default = 'new \DateTime("'.$default.'")';
+                    break;
+            }
+            $initialization = '$this->'.self::TEST_ATTRIBUTE_PROPERTY_NAME.' = '.$default.';';
+            $this->assertTrue(strpos($modelSourceCode, $initialization) !== false);
+        }
     }
 }
