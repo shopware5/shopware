@@ -40,6 +40,9 @@
             /** @string - Icon class for the spinner */
             iconCls: 'icon--default',
 
+            /** @string - Class which added to the render element while indicator activated */
+            loadingCls: 'js--is-loading',
+
             /** @string - Delays the appearing of the loading indicator and overlay (in milliseconds), if defined.  */
             delay: 0,
 
@@ -80,7 +83,7 @@
             scope = scope || me;
 
             me.$loader = me._createLoader();
-            $(me.options.renderElement).append(me.$loader).css('position', 'relative');
+            $(me.options.renderElement).append(me.$loader).addClass(me.options.loadingCls);
 
             me._updateLoader();
 
@@ -148,7 +151,7 @@
 
                 if (opts.openOverlay !== false) {
                     me.overlay.close().then(function() {
-                        $(me.options.renderElement).removeAttr('style');
+                        $(me.options.renderElement).removeClass(me.options.loadingCls);
                     });
                 }
 

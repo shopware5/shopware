@@ -84,7 +84,10 @@
             'listingActionsWrapper': 'infinite--actions',
 
             /** @string ajaxUrl - this string will be used as url for the ajax-call to load the articles */
-            ajaxUrl: window.controller.ajax_listing || null
+            ajaxUrl: window.controller.ajax_listing || null,
+
+            /** @string delegateConSelector - selector for delegate container, used for reload buttons */
+            delegateConSelector: '.listing--wrapper'
         },
 
         /**
@@ -95,8 +98,9 @@
          * @method init
          */
         init: function() {
-            var me = this,
-                $body = $('body');
+            var me = this;
+
+            me.$delegateContainer = $(me.opts.delegateConSelector);
 
             // Overwrite plugin configuration with user configuration
             me.applyDataAttributes();
@@ -192,12 +196,10 @@
             me._on(window, me.opts.eventName, $.proxy(me.onScrolling, me));
 
             // on load more button event for manually fetching further pages
-            var loadMoreSelector = '.' + me.opts.loadMoreCls;
-            $body.delegate(loadMoreSelector, 'click', $.proxy(me.onLoadMore, me));
+            me.$delegateContainer.on(me.getEventName('click'), '.' + me.opts.loadMoreCls, $.proxy(me.onLoadMore, me));
 
             // on load previous button event for manually fetching previous pages
-            var loadPreviousSelector = '.' + me.opts.loadPreviousCls;
-            $body.delegate(loadPreviousSelector, 'click', $.proxy(me.onLoadPrevious, me));
+            me.$delegateContainer.on(me.getEventName('click'), '.' + me.opts.loadPreviousCls, $.proxy(me.onLoadPrevious, me));
 
             $.publish('plugin/swInfiniteScrolling/onRegisterEvents', [ me ]);
         },
@@ -556,6 +558,12 @@
             if (me.$buttonWrapperBottom) {
                 me.$buttonWrapperBottom.remove();
             }
+
+            // on load more button event for manually fetching further pages
+            me.$delegateContainer.off(me.getEventName('click'), '.' + me.opts.loadMoreCls);
+
+            // on load previous button event for manually fetching previous pages
+            me.$delegateContainer.off(me.getEventName('click'), '.' + me.opts.loadPreviousCls);
 
             me._destroy();
         }

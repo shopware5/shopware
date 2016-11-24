@@ -400,11 +400,26 @@
 
         subscribeEvents: function() {
             var me = this;
+            $.subscribe(
+                me.getEventName('plugin/swListingActions/onGetFilterResultFinished'),
+                $.proxy(me.onUpdateFacets, me)
+            );
+        },
 
-            $.subscribe(me.getEventName('plugin/swListingActions/updateFacets'), function(event, plugin, facets) {
-                var facet = me.getFacet(facets, me.facetName);
-                me.updateFacet(facet);
-            });
+        /**
+         * Event listener which triggered after the listing reloaded
+         * @param event
+         * @param plugin
+         * @param response
+         */
+        onUpdateFacets: function(event, plugin, response) {
+            var me = this;
+
+            if (!response.hasOwnProperty('facets')) {
+                return;
+            }
+            var facet = me.getFacet(response.facets, me.facetName);
+            me.updateFacet(facet);
         },
 
         /**
