@@ -106,6 +106,14 @@ class sCms
             return false;
         }
 
+        // load attributes
+        $staticPage['attribute'] = $this->db->fetchRow(
+            'SELECT * FROM s_cms_static_attributes WHERE cmsStaticID = ?',
+            [
+                $staticId
+            ]
+        );
+
         /**
          * Add support for sub pages
          */
