@@ -199,6 +199,14 @@ Ext.define('Shopware.apps.Order.view.batch.Form', {
                 },
                 {
                     xtype: 'checkbox',
+                    fieldLabel: '{s name=attachment/batch/add}Add files to email{/s}',
+                    checked: true,
+                    inputValue: true,
+                    uncheckedValue: false,
+                    name: 'addAttachments'
+                },
+                {
+                    xtype: 'checkbox',
                     fieldLabel: me.snippets.oneDocument,
                     checked: false,
                     inputValue: true,

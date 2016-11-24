@@ -167,7 +167,8 @@ Ext.define('Shopware.apps.Order.controller.Batch', {
             forceTaxCheck: 1,
             displayDate: new Date(),
             deliveryDate: new Date(),
-            autoSend: values.autoSendMail
+            autoSend: values.autoSendMail,
+            addAttachments: values.addAttachments
         };
 
         //generate documents? display progress bar window

@@ -40,14 +40,14 @@ Ext.define('Shopware.apps.Order.view.mail.Form', {
      *
      * @type { String }
      */
-    extend:'Ext.form.Panel',
+    extend: 'Ext.form.Panel',
 
     /**
      * List of short aliases for class names. Most useful for defining xtypes for widgets.
      *
      * @type { String }
      */
-    alias:'widget.order-mail-form',
+    alias: 'widget.order-mail-form',
 
     /**
      * An optional extra CSS class that will be added to this component's Element.
@@ -97,7 +97,7 @@ Ext.define('Shopware.apps.Order.view.mail.Form', {
      * This makes it easy to implement and, if needed, override the constructor logic of the Component at any step in the hierarchy.
      * The initComponent method must contain a call to callParent in order to ensure that the parent class' initComponent method is also called.
      */
-    initComponent:function () {
+    initComponent: function() {
         var me = this;
 
         me.registerEvents();
@@ -130,7 +130,7 @@ Ext.define('Shopware.apps.Order.view.mail.Form', {
      *
      * @returns { Ext.toolbar.Toolbar }
      */
-    getToolbar: function () {
+    getToolbar: function() {
         var me = this;
 
         return Ext.create('Ext.toolbar.Toolbar', {
@@ -141,8 +141,9 @@ Ext.define('Shopware.apps.Order.view.mail.Form', {
                     xtype: 'button',
                     cls: 'primary',
                     text: me.snippets.button,
-                    handler: function () {
+                    handler: function() {
                         me.fireEvent('sendMail', me);
+                        me.fireEvent('afterSendMail', me.attachmentGrid.getStore());
                     }
                 }
             ]
@@ -185,6 +186,17 @@ Ext.define('Shopware.apps.Order.view.mail.Form', {
                 flex: 1
             });
         }
+
+        me.attachmentGrid = Ext.create('Shopware.apps.Order.view.mail.Attachment', {
+            attached: me.attached,
+            record: me.record,
+            receiptStore: me.record.getReceipt(),
+            listStore: me.listStore,
+            documentTypeStore: me.documentTypeStore
+        });
+
+        // adds at last the attachment panel
+        fields.push(me.attachmentGrid);
 
         return fields;
     }
