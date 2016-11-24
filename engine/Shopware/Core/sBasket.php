@@ -2751,7 +2751,7 @@ class sBasket
         if ($article['configurator_set_id'] > 0) {
             $context = $this->contextService->getShopContext();
             $product = Shopware()->Container()->get('shopware_storefront.list_product_service')->get($article['ordernumber'], $context);
-            if(null === $product) {
+            if (null === $product) {
                 return false;
             }
             $product = $this->additionalTextService->buildAdditionalText($product, $context);
