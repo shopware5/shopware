@@ -968,7 +968,7 @@ class sBasket
             return false;
         }
 
-        if ($userId && !$paymentId) {
+        if ($userId) {
             $userData =  $this->db->fetchRow('SELECT paymentID FROM s_user WHERE id = ?', [$userId]);
             $paymentId = $userData["paymentID"];
         }

@@ -490,7 +490,9 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
             return;
         }
 
-        $shopsDomains = array_map(function ($shopData) { return $shopData->domain; }, $shopsData);
+        $shopsDomains = array_map(function ($shopData) {
+            return $shopData->domain;
+        }, $shopsData);
 
         return $shopsDomains;
     }

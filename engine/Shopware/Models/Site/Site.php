@@ -588,7 +588,9 @@ class Site extends ModelEntity
         $explodedShopIds = explode('|', trim($this->shopIds, '|'));
 
         // cast to ints
-        $explodedShopIds = array_map(function ($elem) {return (int) $elem;}, $explodedShopIds);
+        $explodedShopIds = array_map(function ($elem) {
+            return (int) $elem;
+        }, $explodedShopIds);
 
         return $explodedShopIds;
     }

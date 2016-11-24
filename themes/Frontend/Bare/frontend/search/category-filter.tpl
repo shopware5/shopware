@@ -5,12 +5,12 @@
     {if $level == 0}
         {$activeCategoryTree[] = [
             'label' => "{s name="SearchFilterMainCategories"}{/s}",
-            'link' => '#?c=reset'
+            'link' => '#?c=reset&p=1'
         ]}
     {else}
         {$activeCategoryTree[] = [
             'label' => "{$category->getLabel()}",
-            'link' => "#?c={$category->getId()}"
+            'link' => "#?c={$category->getId()}&p=1"
         ]}
     {/if}
 
@@ -30,7 +30,7 @@
 
                         {* Category filter reset link *}
                         {block name="frontend_search_category_filter_reset_link"}
-                            <a href="#?c=reset" title="{"{s name='SearchFilterLinkDefault'}{/s}"|escape}" class="cat-filter--reset" data-action-link="true">
+                            <a href="#?c=reset&p=1" title="{"{s name='SearchFilterLinkDefault'}{/s}"|escape}" class="cat-filter--reset" data-action-link="true">
                                 {block name="frontend_search_category_filter_reset_link_icon"}
 									<i class="icon--cross"></i>
                                 {/block}
@@ -92,7 +92,7 @@
                             <div class="cat-filter--sub-categories">
                                 {foreach $category->getValues() as $subCategory}
                                     {block name="frontend_search_category_filter_sub_category_link"}
-                                        <a href="#?c={$subCategory->getId()}" title="{$subCategory->getLabel()|escape}" class="cat-filter--sub-cat" data-action-link="true">
+                                        <a href="#?c={$subCategory->getId()}&p=1" title="{$subCategory->getLabel()|escape}" class="cat-filter--sub-cat" data-action-link="true">
                                             {block name="frontend_search_category_filter_sub_category_link_icon"}
                                                 <span class="checkbox">
                                                     <span class="checkbox--state"></span>

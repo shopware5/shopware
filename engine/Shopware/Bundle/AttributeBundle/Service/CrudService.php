@@ -153,7 +153,7 @@ class CrudService
 
         $tables = $this->tableMapping->getDependingTables($table);
         foreach ($tables as $table) {
-            $this->update($table, $columnName, $unifiedType, $data, $newColumnName);
+            $this->update($table, $columnName, $unifiedType, $data, $newColumnName, false, $defaultValue);
         }
     }
 

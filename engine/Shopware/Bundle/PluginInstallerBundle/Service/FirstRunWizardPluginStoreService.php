@@ -142,7 +142,7 @@ class FirstRunWizardPluginStoreService
 
     /**
      * Loads countries for integrated plugins from SBP
-     * 
+     *
      * @param LocaleStruct $locale Locale in which to translate the information
      * @return array List of countries
      */

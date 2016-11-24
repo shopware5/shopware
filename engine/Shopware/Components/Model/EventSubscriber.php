@@ -24,10 +24,9 @@
 
 namespace Shopware\Components\Model;
 
-use Doctrine\ORM\Event\LifecycleEventArgs,
-//    Doctrine\Common\Persistence\Event\LifecycleEventArgs,
-//    Doctrine\Common\Persistence\Event\PreUpdateEventArgs,
-    Doctrine\Common\EventSubscriber as BaseEventSubscriber;
+use Doctrine\Common\EventSubscriber as BaseEventSubscriber;
+use Doctrine\ORM\Event\LifecycleEventArgs;
+use Doctrine\ORM\Proxy\Proxy;
 
 /**
  * The Shopware EventSubscriber is an extension of the standard Doctrine EventSubscriber.
@@ -58,7 +57,6 @@ class EventSubscriber implements BaseEventSubscriber
     protected $eventManager;
 
     /**
-     * Class constructor. Requires the \Enlight_Event_EventManager as argument
      * @param $eventManager
      */
     public function __construct($eventManager)
@@ -67,119 +65,137 @@ class EventSubscriber implements BaseEventSubscriber
     }
 
     /**
-     * Specifies the list of events to listen
-     * @return array
+     * Specifies the list of events to listen.
+     *
+     * @return string[]
      */
     public function getSubscribedEvents()
     {
-        return array(
+        return [
             'prePersist',
             'preRemove',
             'preUpdate',
             'postPersist',
             'postUpdate',
-            'postRemove'
-        );
+            'postRemove',
+        ];
     }
 
     /**
      * Event listener function of the preUpdate live cycle event. Fired before an existing model saved.
      *
      * @param LifecycleEventArgs $eventArgs
+     *
      * @return \Enlight_Event_EventArgs|null
      */
     public function preUpdate(LifecycleEventArgs $eventArgs)
     {
         $entityName = $this->getEntityName($eventArgs->getEntity());
-        return $this->notifyEvent($entityName. '::preUpdate', $eventArgs);
+
+        return $this->notifyEvent($entityName . '::preUpdate', $eventArgs);
     }
 
     /**
      * Event listener function of the preRemove live cycle event. Fired before an model removed.
      *
      * @param LifecycleEventArgs $eventArgs
+     *
      * @return \Enlight_Event_EventArgs|null
      */
     public function preRemove(LifecycleEventArgs $eventArgs)
     {
         $entityName = $this->getEntityName($eventArgs->getEntity());
-        return $this->notifyEvent($entityName. '::preRemove', $eventArgs);
+
+        return $this->notifyEvent($entityName . '::preRemove', $eventArgs);
     }
 
     /**
      * Event listener function of the prePersist live cycle event. Fired before a new model saved.
      *
      * @param LifecycleEventArgs $eventArgs
+     *
      * @return \Enlight_Event_EventArgs|null
      */
     public function prePersist(LifecycleEventArgs $eventArgs)
     {
         $entityName = $this->getEntityName($eventArgs->getEntity());
-        return $this->notifyEvent($entityName. '::prePersist', $eventArgs);
+
+        return $this->notifyEvent($entityName . '::prePersist', $eventArgs);
     }
 
     /**
      * Event listener function of the postUpdateRemove live cycle event. Fired after an existing model saved.
      *
      * @param LifecycleEventArgs $eventArgs
+     *
      * @return \Enlight_Event_EventArgs|null
      */
     public function postUpdate(LifecycleEventArgs $eventArgs)
     {
         $entityName = $this->getEntityName($eventArgs->getEntity());
-        return $this->notifyEvent($entityName. '::postUpdate', $eventArgs);
+
+        return $this->notifyEvent($entityName . '::postUpdate', $eventArgs);
     }
 
     /**
      * Event listener function of the postRemove live cycle event. Fired after a model removed.
      *
      * @param LifecycleEventArgs $eventArgs
+     *
      * @return \Enlight_Event_EventArgs|null
      */
     public function postRemove(LifecycleEventArgs $eventArgs)
     {
         $entityName = $this->getEntityName($eventArgs->getEntity());
-        return $this->notifyEvent($entityName. '::postRemove', $eventArgs);
+
+        return $this->notifyEvent($entityName . '::postRemove', $eventArgs);
     }
 
     /**
      * Event listener function of the postPersist live cycle event. Fired after a new model saved.
      *
      * @param LifecycleEventArgs $eventArgs
+     *
      * @return \Enlight_Event_EventArgs|null
      */
     public function postPersist(LifecycleEventArgs $eventArgs)
     {
         $entityName = $this->getEntityName($eventArgs->getEntity());
-        return $this->notifyEvent($entityName. '::postPersist', $eventArgs);
+
+        return $this->notifyEvent($entityName . '::postPersist', $eventArgs);
     }
 
     /**
      * Returns the class name of the passed entity.
+     *
      * @param $entity \Shopware\Components\Model\ModelEntity
+     *
      * @return string
      */
     protected function getEntityName($entity)
     {
-        if ($entity instanceof \Doctrine\ORM\Proxy\Proxy) {
+        if ($entity instanceof Proxy) {
             $entityName = get_parent_class($entity);
         } else {
             $entityName = get_class($entity);
         }
+
         return $entityName;
     }
 
     /**
-     * Notify a lifecycleCallback event of doctrine over the enlight event manager
+     * Notify a lifecycleCallback event of doctrine over the enlight event manager.
+     *
      * @param $eventName string
      * @param $eventArgs LifecycleEventArgs
+     *
      * @return \Enlight_Event_EventArgs|null
      */
     protected function notifyEvent($eventName, $eventArgs)
     {
-        return $this->eventManager->notify($eventName, array(
+        return $this->eventManager->notify($eventName, [
             'entityManager' => $eventArgs->getEntityManager(),
-            'entity' => $eventArgs->getEntity()
-        ));
+            'entity' => $eventArgs->getEntity(),
+        ]);
     }
 }

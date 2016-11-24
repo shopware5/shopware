@@ -95,7 +95,6 @@ class PluginInstaller
         $this->requirementValidator->validate($pluginBootstrap->getPath().'/plugin.xml', \Shopware::VERSION);
 
         $this->em->transactional(function ($em) use ($pluginBootstrap, $plugin, $context) {
-
             $this->installResources($pluginBootstrap, $plugin);
 
             $this->em->flush($plugin);

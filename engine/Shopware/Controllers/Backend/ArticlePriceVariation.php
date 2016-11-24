@@ -199,7 +199,9 @@ class Shopware_Controllers_Backend_ArticlePriceVariation extends Shopware_Contro
      */
     private function implodePriceVariation($variation)
     {
-        $variation['options'] = array_map(function ($option) { return $option['id']; }, $variation['options']);
+        $variation['options'] = array_map(function ($option) {
+            return $option['id'];
+        }, $variation['options']);
         asort($variation['options']);
 
         if (!empty($variation['options'])) {

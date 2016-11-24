@@ -25,10 +25,13 @@
 namespace Shopware\Bundle\MediaBundle\Commands;
 
 use Doctrine\ORM\ORMException;
+use Doctrine\ORM\AbstractQuery;
 use Shopware\Commands\ShopwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Helper\ProgressBar;
+use Shopware\Models\Media\Media;
 
 /**
  * @category  Shopware
@@ -66,7 +69,7 @@ class MediaCleanupCommand extends ShopwareCommand
             }
 
             $verb = "Deleted";
-            $total = $this->handleCleanup();
+            $total = $this->handleCleanup($output);
         }
 
         $output->writeln("Cleanup: ".$verb." $total items.");
@@ -76,27 +79,44 @@ class MediaCleanupCommand extends ShopwareCommand
     /**
      * Handles cleaning process and returns the number of deleted media objects
      *
+     * @param OutputInterface $output
      * @return int
      */
-    private function handleCleanup()
+    private function handleCleanup(OutputInterface $output)
     {
         /** @var \Shopware\Components\Model\ModelManager $em */
         $em = $this->getContainer()->get('models');
+        /** @var \Shopware\Models\Media\Repository $repository */
+        $repository = $em->getRepository(Media::class);
 
-        $album = $em->find('Shopware\Models\Media\Album', -13);
-        $mediaList = $album->getMedia();
-        $total = count($mediaList);
+        $query = $repository->getAlbumMediaQuery(-13);
+        $query->setHydrationMode(AbstractQuery::HYDRATE_OBJECT);
+
+        $count = $em->getQueryCount($query);
+        $iterableResult = $query->iterate();
+
+        $progressBar = new ProgressBar($output, $count);
+        $progressBar->start();
 
         try {
-            foreach ($mediaList as $media) {
+            foreach ($iterableResult as $key => $row) {
+                $media = $row[0];
                 $em->remove($media);
+                if ($key % 100 == 0) {
+                    $em->flush();
+                    $em->clear();
+                }
+                $progressBar->advance();
             }
             $em->flush();
+            $em->clear();
         } catch (ORMException $e) {
-            $total = 0;
+            $count = 0;
         }
 
-        return $total;
+        $progressBar->finish();
+
+        return $count;
     }
 
     /**

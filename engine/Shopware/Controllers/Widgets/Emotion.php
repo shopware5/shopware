@@ -746,7 +746,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
                 );
                 $data["ajaxFeed"] = Shopware()->Container()->get('router')->assemble($query);
                 break;
-            default;
+            default:
                 // Prevent the slider form endless loading
                 $data['article_slider_type'] = 'selected_article';
                 return $data;

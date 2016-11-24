@@ -142,7 +142,12 @@ class sOrder
      * @var string
      * @deprecated since 5.2, remove in 5.3. Use orderAttributes instead
      */
-    public $o_attr_1, $o_attr_2,$o_attr_3,$o_attr_4,$o_attr_5,$o_attr_6;
+    public $o_attr_1;
+    public $o_attr_2;
+    public $o_attr_3;
+    public $o_attr_4;
+    public $o_attr_5;
+    public $o_attr_6;
 
     /**
      * Custom attributes

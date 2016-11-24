@@ -1723,7 +1723,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
 
     /**
      * Validates the given address id with current shop configuration
-     * 
+     *
      * @param $addressId
      * @return bool
      */

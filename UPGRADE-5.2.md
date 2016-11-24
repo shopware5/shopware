@@ -2,6 +2,14 @@
 
 This changelog references changes done in Shopware 5.2 patch versions.
 
+## 5.2.7
+
+[View all changes from v5.2.6...v5.2.7](https://github.com/shopware/shopware/compare/v5.2.6...v5.2.7)
+
+* Add support for third party post messages in the backend
+* getOne function of customer api resource contains now the country and state data for billing and shipping address
+* Changed `jquery.search::onKeyboardNavigation()` method to provide more extension possibilities.
+
 ## 5.2.6
 
 [View all changes from v5.2.5...v5.2.6](https://github.com/shopware/shopware/compare/v5.2.5...v5.2.6)
@@ -29,6 +37,7 @@ This changelog references changes done in Shopware 5.2 patch versions.
 * Updated `phpunit/phpunit` to version 5.5
 * Removed unused smarty block `frontend_checkout_cart_item_small_quantites_tax_price` in `themes/Frontend/Bare/frontend/checkout/confirm_item.tpl`
 * Added method `Enlight_Controller_Response_ResponseTestCase::sendCookies` so it's consistent with `Enlight_Controller_Response_ResponseHttp`
+* Added `\Shopware\Components\DependencyInjection\Compiler\TagReplaceTrait` class which centralized service constructor replacements with prioritized tagged services
 
 ## 5.2.5
 
