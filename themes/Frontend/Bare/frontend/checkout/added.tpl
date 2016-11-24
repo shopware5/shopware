@@ -1,5 +1,5 @@
 {block name='frontend_checkout_added_info_teaser'}
-	{if $sArticleName}
+    {if $sArticleName}
 
         <div class="alert is--success is--rounded">
             {* Icon column *}
@@ -12,5 +12,5 @@
                 {s name="CheckoutAddArticleInfoAdded"}{/s}
             </div>
         </div>
-	{/if}
+    {/if}
 {/block}

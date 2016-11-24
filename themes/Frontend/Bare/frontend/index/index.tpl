@@ -8,7 +8,7 @@
 {/block}
 
 {block name='frontend_index_header'}
-	{include file='frontend/index/header.tpl'}
+    {include file='frontend/index/header.tpl'}
 {/block}
 
 <body class="{block name="frontend_index_body_classes"}{strip}
@@ -190,14 +190,14 @@
                     'articleName': '{$sArticle.articleName|escape:"javascript"}',
                     'imageTitle': '{$sArticle.image.description|escape:"javascript"}',
                     'images': {ldelim}
-						{foreach $sArticle.image.thumbnails as $key => $image}
-							'{$key}': {ldelim}
+                        {foreach $sArticle.image.thumbnails as $key => $image}
+                            '{$key}': {ldelim}
                                 'source': '{$image.source}',
                                 'retinaSource': '{$image.retinaSource}',
                                 'sourceSet': '{$image.sourceSet}'
                             {rdelim},
-						{/foreach}
-					{rdelim}
+                        {/foreach}
+                    {rdelim}
                 {/if}{rdelim}
             {rdelim};
 
@@ -208,7 +208,7 @@
             {rdelim};
         {/block}
         //]]>
-	</script>
+    </script>
 
     {if $theme.additionalJsLibraries}
         {$theme.additionalJsLibraries}
