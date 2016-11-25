@@ -928,16 +928,21 @@
          */
         getFilterResult: function(urlParams, loadFacets, loadProducts) {
             var me = this,
-                params = urlParams || me.urlParams;
+                params = urlParams || me.urlParams,
+                loadingIndicator = me.$loadingIndicatorElement;
+
+            if (me.$filterCont.is('.off-canvas.is--open')) {
+                loadingIndicator = me.$offCanvasLoadingIndicator;
+            }
 
             me.resetBuffer();
 
-            me.enableLoading(loadProducts, function() {
+            me.enableLoading(loadingIndicator, loadProducts, function() {
 
                 //send ajax request to load products and facets
                 me.sendListingRequest(params, loadFacets, loadProducts, function(response) {
 
-                    me.disableLoading(response, function() {
+                    me.disableLoading(loadingIndicator,response, function() {
 
                         me.updateListing(response);
 
@@ -951,16 +956,12 @@
         /**
          * Enables the loading animation in the listing
          *
+         * @param {object} loadingIndicator
          * @param {boolean} loadProducts
          * @param {function} callback
          */
-        enableLoading: function(loadProducts, callback) {
-            var me = this,
-                loadingIndicator = me.$loadingIndicatorElement;
-
-            if (me.$filterCont.is('.off-canvas.is--open')) {
-                loadingIndicator = me.$offCanvasLoadingIndicator;
-            }
+        enableLoading: function(loadingIndicator, loadProducts, callback) {
+            var me = this;
 
             if (loadProducts) {
                 me.$listing.addClass(me.opts.isLoadingCls);
@@ -990,16 +991,12 @@
 
         /**
          * Disables the loading animation for the listing
+         * @param {object} loadingIndicator
          * @param {object} response
          * @param {function} callback
          */
-        disableLoading: function(response, callback) {
+        disableLoading: function(loadingIndicator, response, callback) {
             var me = this;
-
-            var loadingIndicator = me.$loadingIndicatorElement;
-            if (me.$filterCont.is('.off-canvas.is--open')) {
-                loadingIndicator = me.$offCanvasLoadingIndicator;
-            }
 
             if (me.showInstantFilterResult) {
                 //disable loading indicator
