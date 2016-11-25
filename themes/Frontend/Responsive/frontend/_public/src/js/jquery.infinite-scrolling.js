@@ -340,40 +340,10 @@
 
             $.publish('plugin/swInfiniteScrolling/onBeforeFetchNewPage', [ me ]);
 
-            // generate ajax fetch url by all params
-            var url = me.ajax.url + '?' + $.param(me.params);
-
-            $.get(url, function(data) {
-                var template = data.trim();
-
-                $.publish('plugin/swInfiniteScrolling/onFetchNewPageLoaded', [ me, template ]);
-
-                // Cancel is no data provided
-                if (!template) {
-                    me.isFinished = true;
-
-                    me.closeLoadingIndicator();
-                    return;
-                }
-
-                // append fetched data into listing
-                me.$el.append(template);
-
-                // trigger picturefill for regenerating thumbnail sizes
-                picturefill();
-
-                me.closeLoadingIndicator();
-
-                // enable loading for further pages
-                me.isLoading = false;
-
-                // check if last page reached
-                if (me.params.p >= me.maxPages) {
-                    me.isFinished = true;
-                }
-
-                $.publish('plugin/swInfiniteScrolling/onFetchNewPageFinished', [ me, template ]);
-            });
+            $.publish(
+                'action/fetchListing',
+                [me.params, false, true, $.proxy(me.appendListing, me)]
+            );
 
             $.publish('plugin/swInfiniteScrolling/onFetchNewPage', [ me ]);
         },
@@ -445,7 +415,7 @@
         onLoadPrevious: function(event) {
             event.preventDefault();
 
-            var me = this;
+            var me = this, callback;
 
             // Remove load previous button
             $('.' + me.opts.loadPreviousCls).remove();
@@ -468,31 +438,78 @@
 
             $.publish('plugin/swInfiniteScrolling/onBeforeFetchPreviousPage', [ me ]);
 
-            // generate ajax fetch url by all params
-            var url = me.ajax.url + '?' + $.param(tmpParams);
+            me.previousLoadPage = tmpParams.p;
 
-            $.get(url, function(data) {
-                var template = data.trim();
-
-                // append fetched data into listing
-                me.$el.prepend(template);
-
-                picturefill();
-
-                me.closeLoadingIndicator();
-
-                // enable loading for further pages
-                me.isLoading = false;
+            callback = function(response) {
+                me.prependListing(response);
 
                 // Set load previous button if we aren't already on page one
                 if (tmpParams.p > 1) {
                     me.showLoadPrevious();
                 }
+            };
 
-                $.publish('plugin/swInfiniteScrolling/onLoadPreviousFinished', [ me, event, data ]);
-            });
+            $.publish(
+                'action/fetchListing',
+                [tmpParams, false, true, callback]
+            );
 
             $.publish('plugin/swInfiniteScrolling/onLoadPrevious', [ me, event ]);
+        },
+
+        /**
+         * @param {object} response
+         */
+        appendListing: function(response) {
+            var me = this, template;
+
+            template = response.listing.trim();
+
+            $.publish('plugin/swInfiniteScrolling/onFetchNewPageLoaded', [ me, template ]);
+
+            // Cancel is no data provided
+            if (!template) {
+                me.isFinished = true;
+                me.closeLoadingIndicator();
+                return;
+            }
+
+            // append fetched data into listing
+            me.$el.append(template);
+
+            // trigger picturefill for regenerating thumbnail sizes
+            picturefill();
+
+            me.closeLoadingIndicator();
+
+            // enable loading for further pages
+            me.isLoading = false;
+
+            // check if last page reached
+            if (me.params.p >= me.maxPages) {
+                me.isFinished = true;
+            }
+
+            $.publish('plugin/swInfiniteScrolling/onFetchNewPageFinished', [ me, template ]);
+        },
+
+        /**
+         * @param {object} response
+         */
+        prependListing: function(response) {
+            var me = this;
+
+            // append fetched data into listing
+            me.$el.prepend(response.listing.trim());
+
+            picturefill();
+
+            me.closeLoadingIndicator();
+
+            // enable loading for further pages
+            me.isLoading = false;
+
+            $.publish('plugin/swInfiniteScrolling/onLoadPreviousFinished', [ me, event, response.listing ]);
         },
 
         /**

@@ -41,6 +41,7 @@ This changelog references changes done in Shopware 5.3 patch versions.
     * `frontend_listing_filter_facet_multi_selection_label`
 * Added `\Shopware\Bundle\StoreFrontBundle\Service\Core\CategoryDepthService` service to select categories by their depth
 * Added `instantFilterResult` config to show a new, by the customer filtered, listing immediately via ajax
+* Added event `action/fetchListing` which allows to load listings, facet data or listing counts
 
 ### Changes
 
@@ -58,6 +59,8 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Changed `CategoryFacet` behavior to generate each time a tree based on the system category with a configured category depth
 * Refactored the filter panels `facet-radio`, `facet-media-list` & `facet-value-list` and unified the panels
 * Base query build in `\Shopware\Bundle\SearchBundleDBAL\ProductNumberSearch` contains no more an join to s_core_tax
+* Renamed parameter `data-count-ctrl` on `#filter` form to `data-listing-url`
+ 
 
 ### Removals
 
@@ -205,6 +208,7 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Deprecated `Shopware_Components_Convert_Csv` without replacement, to be removed with 5.4
 * Deprecated `Shopware_Components_Convert_Xml` without replacement, to be removed with 5.4
 * Deprecated `Shopware_Components_Convert_Excel` without replacement, to be removed with 5.4
+* Deprecated `\Shopware_Controllers_Widgets_Listing::ajaxListingAction`, use `\Shopware_Controllers_Widgets_Listing::listingCountAction` instead
 
 ### Backend Components
 

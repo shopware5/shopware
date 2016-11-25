@@ -264,7 +264,7 @@
             me.$perPageInput = $(me.$filterForm.find(me.opts.perPageInputSelector));
             me.$listingWrapper = me.$el.parent(me.opts.listingWrapperSelector);
 
-            me.resultCountURL = me.$filterForm.attr('data-count-ctrl');
+            me.listingUrl = me.$filterForm.attr('data-listing-url');
             me.loadFacets = $.parseJSON(me.$filterForm.attr('data-load-facets'));
             me.showInstantFilterResult = $.parseJSON(me.$filterForm.attr('data-instant-filter-result'));
             me.isInfiniteScrolling = me.$listing.attr(me.opts.infiniteScrollingAttribute);
@@ -290,6 +290,8 @@
 
             me.$loadingIndicatorElement = $(me.opts.loadingIndSelector);
             me.$offCanvasLoadingIndicator = $(me.opts.filterInnerContainerSelector);
+
+            $.subscribe('action/fetchListing', $.proxy(me.onSendListingRequest, me));
 
             var isFiltered = me.$filterForm.attr('data-is-filtered');
             if (isFiltered > 0 && me.loadFacets) {
@@ -865,15 +867,30 @@
             $.publish('plugin/swListingActions/onResetBuffer', [ me, me.bufferTimeout ]);
         },
 
+        /**
+         * Event listener which allows to send listing ajax request to load facets, total count and/or listings
+         * @param {object} event
+         * @param {string} params
+         * @param {boolean} loadFacets
+         * @param {boolean} loadProducts
+         * @param {function} callback
+         */
+        onSendListingRequest: function(event, params, loadFacets, loadProducts, callback) {
+            this.sendListingRequest(params, loadFacets, loadProducts, callback);
+        },
 
         /**
-         * @param params
-         * @param loadProducts
-         * @param loadFacets
-         * @param callback
+         * @param {string|object} params
+         * @param {boolean} loadFacets
+         * @param {boolean} loadProducts
+         * @param {function} callback
          */
-        sendListingCountRequest: function(params, loadFacets, loadProducts, callback) {
+        sendListingRequest: function(params, loadFacets, loadProducts, callback) {
             var me = this;
+
+            if (typeof params == 'object') {
+                params = '?' + $.param(params);
+            }
 
             me.resetBuffer();
             $.ajax({
@@ -896,14 +913,14 @@
         getFilterResult: function(urlParams, loadFacets, loadProducts) {
             var me = this,
                 params = urlParams || me.urlParams,
-                url = me.resultCountURL + params;
+                url = me.listingUrl + params;
 
             me.resetBuffer();
 
             me.enableLoading(loadProducts, function() {
 
                 //send ajax request to load products and facets
-                me.sendListingCountRequest(params, loadFacets, loadProducts, function(response) {
+                me.sendListingRequest(params, loadFacets, loadProducts, function(response) {
 
                     me.disableLoading(response, function() {
 
@@ -986,7 +1003,7 @@
         buildListingUrl: function(formParams, loadFacets, loadProducts) {
             var me = this, url;
 
-            url = me.resultCountURL + formParams;
+            url = me.listingUrl + formParams;
 
             if (loadProducts) {
                 url += '&loadProducts=1';
