@@ -14,6 +14,39 @@ This changelog references changes done in Shopware 5.2 patch versions.
 * Removed method `Shopware\Bundle\MediaBundle\Subscriber\ServiceSubscriber::createFtpAdapter()`
 * Deprecated collect event `Shopware_Collect_MediaAdapter_*`, use container tag `shopware_media.adapter` instead. The event will be removed in 5.4.
 
+### Custom stores in plugin configuration
+
+It is now possible to define custom config stores directly inside your plugin's config.xml when using the new plugin system.
+
+A custom config store is defined like this:
+
+```
+<store>
+    <option>
+        <value>1</value>
+        <label lang="de">Deutscher Anzeigewert</label>
+        <label lang="en">English display value</label>
+    </option>
+    <option>
+        <value>two</value>
+        <label lang="de">Deutscher Anzeigewert</label>
+        <label>English display value (locale en via fallback)</label>
+    </option>
+    <option>
+        <value>3</value>
+        <label>Single display value (locale en via fallback)</label>
+    </option>
+</store>
+```
+
+There are two unique constraints:
+* Inside a store, a value tag's value must only occur once
+* Inside an option tag, a label tag's lang attribute value must only occur once
+
+Additionally, the order is fixed. The value tag must be defined before the label tag(s).
+
+There must be at least one option tag and inside each option tag where must be at least one value and one option tag. 
+
 ## 5.2.10
 
 [View all changes from v5.2.9...v5.2.10](https://github.com/shopware/shopware/compare/v5.2.9...v5.2.10)

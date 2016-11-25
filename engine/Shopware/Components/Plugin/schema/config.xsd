@@ -24,7 +24,12 @@
             <xsd:element name="label" type="translatableString" maxOccurs="unbounded"/>
             <xsd:element name="value" type="xsd:string" minOccurs="0"/>
             <xsd:element name="description" type="translatableString" minOccurs="0" maxOccurs="unbounded"/>
-            <xsd:element name="store" type="store" minOccurs="0"/>
+            <xsd:element name="store" type="store" minOccurs="0">
+                <xsd:unique name="uniqueStoreOptionValue">
+                    <xsd:selector xpath="option/value"/>
+                    <xsd:field xpath="."/>
+                </xsd:unique>
+            </xsd:element>
             <xsd:element name="options" type="options" minOccurs="0"/>
         </xsd:sequence>
         <xsd:attribute name="type" type="type" default="text"/>
@@ -57,18 +62,29 @@
         </xsd:restriction>
     </xsd:simpleType>
 
+    <xsd:complexType name="store" mixed="true">
+        <xsd:sequence>
+            <xsd:element type="storeOption" name="option" minOccurs="0" maxOccurs="unbounded">
+                <xsd:unique name="uniqueStoreOptionLabel">
+                    <xsd:selector xpath="label"/>
+                    <xsd:field xpath="@lang"/>
+                </xsd:unique>
+            </xsd:element>
+        </xsd:sequence>
+        <xsd:attribute type="storeType" name="storeType" use="optional"/>
+    </xsd:complexType>
+
     <xsd:simpleType name="storeType">
         <xsd:restriction base="xsd:string">
             <xsd:enumeration value="php"/>
         </xsd:restriction>
     </xsd:simpleType>
 
-    <xsd:complexType name="store">
-        <xsd:simpleContent>
-            <xsd:extension base="xsd:string">
-                <xsd:attribute name="type" type="storeType" default="php"/>
-            </xsd:extension>
-        </xsd:simpleContent>
+    <xsd:complexType name="storeOption">
+        <xsd:sequence>
+            <xsd:element name="value" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+            <xsd:element name="label" type="translatableString" minOccurs="1" maxOccurs="unbounded"/>
+        </xsd:sequence>
     </xsd:complexType>
 
     <xsd:simpleType name="scope">
