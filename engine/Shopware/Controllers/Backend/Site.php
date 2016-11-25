@@ -194,6 +194,7 @@ class Shopware_Controllers_Backend_Site extends Shopware_Controllers_Backend_Ext
             'pageTitle' => $site->getPageTitle(),
             'metaKeywords' => $site->getMetaKeywords(),
             'metaDescription' => $site->getMetaDescription(),
+            'metaRobots' => $site->getMetaRobots(),
             'html' => $site->getHtml(),
             'grouping' => $site->getGrouping(),
             'position' => $site->getPosition(),
@@ -390,7 +391,7 @@ class Shopware_Controllers_Backend_Site extends Shopware_Controllers_Backend_Ext
         if (empty($params['shopIds'])) {
             $params['shopIds'] = null;
         }
-        
+
         //this was a javascript array
         //change it back to the actual db format
         $params['grouping'] = str_replace(",", "|", $params['grouping']);
