@@ -152,6 +152,8 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
     }
 
     /**
+     * @deprecated since 5.3, remove in 5.5. Use \Shopware_Controllers_Widgets_Listing::listingCountAction instead
+     *
      * listing action for asynchronous fetching listing pages
      * by infinite scrolling plugin
      */

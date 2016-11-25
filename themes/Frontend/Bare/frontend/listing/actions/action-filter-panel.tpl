@@ -27,7 +27,7 @@
                               data-filter-form="true"
                               data-is-filtered="{$criteria->getUserConditions()|count}"
                               data-load-facets="{if {config name=generatePartialFacets}}true{else}false{/if}""
-                              data-count-ctrl="{$countCtrlUrl}"
+                              data-listing-url="{$countCtrlUrl}"
                               data-instant-filter-result="{if {config name=instantFilterResult}}true{else}false{/if}">
 
                             {if !{config name=instantFilterResult}}
