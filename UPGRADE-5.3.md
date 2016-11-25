@@ -26,7 +26,6 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * A loading indicator can now be applied to elements using the `$('selector').setLoading()` method
 * Added `data-facet-name` requirement for each filter element
 * Added `categoryFilterDepth` to configure new `CategoryFacet` behavior
-* Added `generatePartialFacets` config to switch facet behavior
 * Added new type for the filter panels `value-list-single`
 * Added new Smarty blocks for the unified filter panel:
     * `frontend_listing_filter_facet_multi_selection`
@@ -40,7 +39,8 @@ This changelog references changes done in Shopware 5.3 patch versions.
     * `frontend_listing_filter_facet_multi_selection_input`
     * `frontend_listing_filter_facet_multi_selection_label`
 * Added `\Shopware\Bundle\StoreFrontBundle\Service\Core\CategoryDepthService` service to select categories by their depth
-* Added `instantFilterResult` config to show a new, by the customer filtered, listing immediately via ajax
+* Added event `plugin/swListing/fetchListing` which allows to load listings, facet data or listing counts
+* Added config `listingMode` to switch listing reload behavior
 * Added event `action/fetchListing` which allows to load listings, facet data or listing counts
 
 ### Changes

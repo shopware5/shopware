@@ -151,6 +151,7 @@
 {include file='backend/base/store/password_encoder.js'}
 {include file='backend/base/store/captcha.js'}
 {include file='backend/base/store/product_box_layout.js'}
+{include file='backend/base/store/listing_filter_mode.js'}
 {include file='backend/base/store/page_not_found_destination_options.js'}
 {include file='backend/base/store/attribute_config.js'}
 {include file='backend/base/store/salutation.js'}
@@ -206,10 +207,9 @@
 {include file='backend/base/component/element/time.js'}
 {include file='backend/base/component/element/media_selection.js'}
 {include file='backend/base/component/element/product_box_layout_select.js'}
+{include file='backend/base/component/element/listing_filter_mode_select.js'}
 {include file='backend/base/component/element/media_text_selection.js'}
-
 {include file='backend/base/component/Shopware.ModuleManager.js'}
-
 
 
 // Shopware attribute components

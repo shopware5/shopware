@@ -1,7 +1,8 @@
 {* Listing actions *}
 {block name='frontend_listing_actions_top'}
+    {$listingMode = {config name=listingMode}}
     <div data-listing-actions="true"
-         {if {config name=instantFilterResult} || {config name=generatePartialFacets}}data-bufferTime="0"{/if}
+         {if $listingMode != 'full_page_reload'}data-bufferTime="0"{/if}
          class="listing--actions is--rounded{block name='frontend_listing_actions_class'}{/block}">
 
         {* Filter action button *}

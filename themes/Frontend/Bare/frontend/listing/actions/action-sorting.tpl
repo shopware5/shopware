@@ -13,11 +13,14 @@
 
     {* Sorting field *}
     {block name='frontend_listing_actions_sort_field'}
+        {$listingMode = {config name=listingMode}}
+
         <select name="{$shortParameters.sSort}"
                 class="sort--field action--field"
                 data-auto-submit="true"
                 data-class="sort--select"
-                {if {config name=instantFilterResult}}data-loadingindicator="false"{/if}>
+                {if $listingMode != 'full_page_reload'}data-loadingindicator="false"{/if}>
+
             {block name="frontend_listing_actions_sort_field_relevance"}
                 {if $Controller == 'search'}
                     <option value="7"{if $sSort eq 7} selected="selected"{/if}>{s name='ListingSortRelevance'}{/s}</option>

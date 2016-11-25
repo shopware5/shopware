@@ -22,15 +22,17 @@
                     {/block}
 
                     {block name='frontend_listing_actions_filter_form'}
+                        {$listingMode = {config name=listingMode}}
+
                         <form id="filter"
                               method="get"
                               data-filter-form="true"
                               data-is-filtered="{$criteria->getUserConditions()|count}"
-                              data-load-facets="{if {config name=generatePartialFacets}}true{else}false{/if}"
+                              data-load-facets="{if $listingMode == 'filter_ajax_reload'}true{else}false{/if}""
                               data-listing-url="{$countCtrlUrl}"
-                              data-instant-filter-result="{if {config name=instantFilterResult}}true{else}false{/if}">
+                              data-instant-filter-result="{if $listingMode != 'full_page_reload'}true{else}false{/if}">
 
-                            {if !{config name=instantFilterResult}}
+                            {if $listingMode === 'full_page_reload'}
                                 {block name="frontend_listing_actions_filter_submit_button"}
                                     <div class="filter--actions">
                                         <button type="submit"

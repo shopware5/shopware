@@ -46,7 +46,7 @@
 			{/if}
 
             {* Controller url for the found products counter *}
-            {$countCtrlUrl = "{url module="widgets" controller="listing" action="listing" params=$ajaxCountUrlParams fullPath}"}
+            {$countCtrlUrl = "{url module="widgets" controller="listing" action="listingCount" params=$ajaxCountUrlParams fullPath}"}
 
             {* Layout for the product boxes *}
             {$productBoxLayout = 'basic'}
