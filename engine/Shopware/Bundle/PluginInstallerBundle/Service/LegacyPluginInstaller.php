@@ -27,7 +27,7 @@ namespace Shopware\Bundle\PluginInstallerBundle\Service;
 use Shopware\Models\Plugin\Plugin;
 use Shopware\Components\Model\ModelManager;
 
-class LegacyPluginInstaller
+class LegacyPluginInstaller implements LegacyPluginInstallerInterface
 {
     /**
      * @var ModelManager

@@ -26,8 +26,8 @@ use Doctrine\DBAL\Connection;
 use Shopware\Bundle\PluginInstallerBundle\Context\UpdateLicencesRequest;
 use Shopware\Bundle\PluginInstallerBundle\Exception\AuthenticationException;
 use Shopware\Bundle\PluginInstallerBundle\Exception\StoreException;
-use Shopware\Bundle\PluginInstallerBundle\Service\AccountManagerService;
-use Shopware\Bundle\PluginInstallerBundle\Service\PluginLicenceService;
+use Shopware\Bundle\PluginInstallerBundle\Service\AccountManagerServiceInterface;
+use Shopware\Bundle\PluginInstallerBundle\Service\PluginLicenceServiceInterface;
 use Shopware\Bundle\PluginInstallerBundle\Struct\AccessTokenStruct;
 
 class Shopware_Controllers_Backend_UpdateWizard extends Shopware_Controllers_Backend_ExtJs
@@ -47,10 +47,10 @@ class Shopware_Controllers_Backend_UpdateWizard extends Shopware_Controllers_Bac
     {
         $pluginCheck = new \ShopwarePlugins\SwagUpdate\Components\PluginCheck($this->container);
 
-        /** @var PluginLicenceService $service */
+        /** @var PluginLicenceServiceInterface $service */
         $licenceService = $this->get('shopware_plugininstaller.plugin_licence_service');
 
-        /** @var AccountManagerService $accountService */
+        /** @var AccountManagerServiceInterface $accountService */
         $accountService = $this->get('shopware_plugininstaller.account_manager_service');
 
         $request = new UpdateLicencesRequest(

@@ -23,7 +23,9 @@
  */
 use Shopware\Bundle\AttributeBundle\Service\ConfigurationStruct;
 use Shopware\Bundle\AttributeBundle\Service\CrudService;
-use Shopware\Bundle\AttributeBundle\Service\DataLoader;
+use Shopware\Bundle\AttributeBundle\Service\CrudServiceInterface;
+use Shopware\Bundle\AttributeBundle\Service\DataLoaderInterface;
+use Shopware\Bundle\AttributeBundle\Service\DataPersisterInterface;
 
 /**
  * @category  Shopware
@@ -34,7 +36,7 @@ class Shopware_Controllers_Backend_AttributeData extends Shopware_Controllers_Ba
 {
     public function loadDataAction()
     {
-        /** @var DataLoader $dataLoader */
+        /** @var DataLoaderInterface $dataLoader */
         $dataLoader = $this->get('shopware_attribute.data_loader');
 
         try {
@@ -62,7 +64,7 @@ class Shopware_Controllers_Backend_AttributeData extends Shopware_Controllers_Ba
 
     public function saveDataAction()
     {
-        /** @var \Shopware\Bundle\AttributeBundle\Service\DataPersister $dataPersister */
+        /** @var DataPersisterInterface $dataPersister */
         $dataPersister = $this->get('shopware_attribute.data_persister');
 
         $data = [];
@@ -86,7 +88,7 @@ class Shopware_Controllers_Backend_AttributeData extends Shopware_Controllers_Ba
 
     public function listAction()
     {
-        /** @var CrudService $crudService */
+        /** @var CrudServiceInterface $crudService */
         $crudService = $this->get('shopware_attribute.crud_service');
         $columns = $crudService->getList(
             $this->Request()->getParam('table')

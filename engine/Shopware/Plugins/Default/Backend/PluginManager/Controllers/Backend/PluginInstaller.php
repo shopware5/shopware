@@ -22,8 +22,8 @@
  * our trademarks remain entirely with us.
  */
 
-use Shopware\Bundle\PluginInstallerBundle\Service\DownloadService;
-use Shopware\Bundle\PluginInstallerBundle\Service\InstallerService;
+use Shopware\Bundle\PluginInstallerBundle\Service\DownloadServiceInterface;
+use Shopware\Bundle\PluginInstallerBundle\Service\InstallerServiceInterface;
 use Shopware\Components\Model\ModelRepository;
 use Shopware\Models\Plugin\Plugin;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -32,7 +32,7 @@ use Symfony\Component\HttpFoundation\FileBag;
 class Shopware_Controllers_Backend_PluginInstaller extends Shopware_Controllers_Backend_ExtJs
 {
     /**
-     * @var InstallerService
+     * @var InstallerServiceInterface
      */
     private $pluginManager;
 
@@ -193,7 +193,7 @@ class Shopware_Controllers_Backend_PluginInstaller extends Shopware_Controllers_
 
     public function uploadAction()
     {
-        /** @var DownloadService $service */
+        /** @var DownloadServiceInterface $service */
         $pluginDownloadService = Shopware()->Container()->get('shopware_plugininstaller.plugin_download_service');
 
         try {

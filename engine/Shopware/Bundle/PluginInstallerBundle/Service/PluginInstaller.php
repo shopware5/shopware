@@ -42,7 +42,7 @@ use Shopware\Components\Plugin\XmlMenuReader;
 use Shopware\Components\Plugin\XmlConfigDefinitionReader;
 use Shopware\Components\Plugin\XmlPluginInfoReader;
 
-class PluginInstaller
+class PluginInstaller implements PluginInstallerInterface
 {
     /**
      * @var ModelManager

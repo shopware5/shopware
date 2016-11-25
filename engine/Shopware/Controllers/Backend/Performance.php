@@ -23,7 +23,7 @@
  */
 
 use Doctrine\ORM\AbstractQuery;
-use Shopware\Bundle\PluginInstallerBundle\Service\InstallerService;
+use Shopware\Bundle\PluginInstallerBundle\Service\InstallerServiceInterface;
 use Shopware\Models\Config\Element;
 use Shopware\Models\Config\Form;
 use Shopware\Models\Plugin\Plugin;
@@ -98,7 +98,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
      */
     private function activeHttpCache($httpCache)
     {
-        /**@var $service InstallerService*/
+        /**@var $service InstallerServiceInterface */
         $service = Shopware()->Container()->get('shopware.plugin_manager');
 
         if (!$httpCache->getInstalled()) {
@@ -119,7 +119,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
             return;
         }
 
-        /**@var $service InstallerService*/
+        /**@var $service InstallerServiceInterface */
         $service = Shopware()->Container()->get('shopware.plugin_manager');
         $service->deactivatePlugin($httpCache);
     }

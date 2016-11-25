@@ -26,9 +26,9 @@ namespace ShopwarePlugins\PluginManager\Components;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Driver\PDOStatement;
-use Shopware\Bundle\PluginInstallerBundle\Service\PluginStoreService;
+use Shopware\Bundle\PluginInstallerBundle\Service\PluginStoreServiceInterface;
 use Shopware\Bundle\PluginInstallerBundle\Struct\CategoryStruct;
-use Shopware\Bundle\PluginInstallerBundle\Struct\StructHydrator;
+use Shopware\Bundle\PluginInstallerBundle\Struct\StructHydratorInterface;
 
 /**
  * @package ShopwarePlugins\PluginManager\Components
@@ -40,7 +40,7 @@ class PluginCategoryService
     const CATEGORY_RECOMMENDATION = -3;
 
     /**
-     * @var PluginStoreService
+     * @var PluginStoreServiceInterface
      */
     private $pluginService;
 
@@ -50,19 +50,19 @@ class PluginCategoryService
     private $connection;
 
     /**
-     * @var StructHydrator
+     * @var StructHydratorInterface
      */
     private $hydrator;
 
     /**
-     * @param PluginStoreService $pluginService
-     * @param Connection $connection
-     * @param StructHydrator $hydrator
+     * @param PluginStoreServiceInterface $pluginService
+     * @param Connection                  $connection
+     * @param StructHydratorInterface     $hydrator
      */
     public function __construct(
-        PluginStoreService $pluginService,
+        PluginStoreServiceInterface $pluginService,
         Connection $connection,
-        StructHydrator $hydrator
+        StructHydratorInterface $hydrator
     ) {
         $this->pluginService = $pluginService;
         $this->connection = $connection;

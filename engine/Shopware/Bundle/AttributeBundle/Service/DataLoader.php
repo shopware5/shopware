@@ -31,7 +31,7 @@ use Doctrine\DBAL\Connection;
  * @package   Shopware\Bundle\AttributeBundle\Service
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
-class DataLoader
+class DataLoader implements DataLoaderInterface
 {
     /**
      * @var Connection
@@ -39,15 +39,15 @@ class DataLoader
     private $connection;
 
     /**
-     * @var TableMapping
+     * @var TableMappingInterface
      */
     private $mapping;
 
     /**
-     * @param Connection $connection
-     * @param TableMapping $mapping
+     * @param Connection            $connection
+     * @param TableMappingInterface $mapping
      */
-    public function __construct(Connection $connection, TableMapping $mapping)
+    public function __construct(Connection $connection, TableMappingInterface $mapping)
     {
         $this->connection = $connection;
         $this->mapping = $mapping;
@@ -69,7 +69,7 @@ class DataLoader
             throw new \Exception("No foreign key provided");
         }
 
-        /** @var TableMapping $mapping */
+        /** @var TableMappingInterface $mapping */
         $foreignKeyColumn = $this->mapping->getTableForeignKey($table);
 
         $query = $this->connection->createQueryBuilder();

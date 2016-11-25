@@ -32,7 +32,7 @@ use Shopware\Models\Attribute\Configuration;
  * @package   Shopware\Bundle\AttributeBundle\Service
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
-class CrudService
+class CrudService implements CrudServiceInterface
 {
     const EXT_JS_PREFIX = '__attribute_';
     const NULL_STRING = 'NULL';
@@ -43,32 +43,33 @@ class CrudService
     private $entityManager;
 
     /**
-     * @var SchemaOperator
+     * @var SchemaOperatorInterface
      */
     private $schemaOperator;
 
     /**
-     * @var TableMapping
+     * @var TableMappingInterface
      */
     private $tableMapping;
 
     /**
-     * @var TypeMapping
+     * @var TypeMappingInterface
      */
     private $typeMapping;
 
     /**
      * CrudService constructor.
-     * @param ModelManager $entityManager
-     * @param SchemaOperator $schemaOperator
-     * @param TableMapping $tableMapping
-     * @param TypeMapping $typeMapping
+     *
+     * @param ModelManager            $entityManager
+     * @param SchemaOperatorInterface $schemaOperator
+     * @param TableMappingInterface   $tableMapping
+     * @param TypeMappingInterface    $typeMapping
      */
     public function __construct(
         ModelManager $entityManager,
-        SchemaOperator $schemaOperator,
-        TableMapping $tableMapping,
-        TypeMapping $typeMapping
+        SchemaOperatorInterface $schemaOperator,
+        TableMappingInterface $tableMapping,
+        TypeMappingInterface $typeMapping
     ) {
         $this->entityManager = $entityManager;
         $this->schemaOperator = $schemaOperator;

@@ -30,13 +30,13 @@ use Shopware\Bundle\PluginInstallerBundle\Context\ListingRequest;
 use Shopware\Bundle\PluginInstallerBundle\Context\PluginsByTechnicalNameRequest;
 use Shopware\Bundle\PluginInstallerBundle\Struct\ListingResultStruct;
 use Shopware\Bundle\PluginInstallerBundle\Struct\PluginStruct;
-use Shopware\Bundle\PluginInstallerBundle\Struct\StructHydrator;
+use Shopware\Bundle\PluginInstallerBundle\Struct\StructHydratorInterface;
 
 /**
  * Class PluginLocalService
  * @package Shopware\Bundle\PluginInstallerBundle\Service
  */
-class PluginLocalService
+class PluginLocalService implements PluginLocalServiceInterface
 {
     /**
      * @var Connection
@@ -44,15 +44,15 @@ class PluginLocalService
     private $connection;
 
     /**
-     * @var StructHydrator
+     * @var StructHydratorInterface
      */
     private $hydrator;
 
     /**
-     * @param Connection $connection
-     * @param StructHydrator $hydrator
+     * @param Connection              $connection
+     * @param StructHydratorInterface $hydrator
      */
-    public function __construct(Connection $connection, StructHydrator $hydrator)
+    public function __construct(Connection $connection, StructHydratorInterface $hydrator)
     {
         $this->connection = $connection;
         $this->hydrator = $hydrator;

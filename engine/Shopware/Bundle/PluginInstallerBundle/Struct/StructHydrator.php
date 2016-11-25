@@ -28,7 +28,7 @@ namespace Shopware\Bundle\PluginInstallerBundle\Struct;
  * Class StructHydrator
  * @package Shopware\Bundle\PluginInstallerBundle\Struct
  */
-class StructHydrator
+class StructHydrator implements StructHydratorInterface
 {
     /**
      * @param $data

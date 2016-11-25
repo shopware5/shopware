@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\AccountBundle\Form\Account;
 
-use Shopware\Bundle\AttributeBundle\Service\CrudService;
+use Shopware\Bundle\AttributeBundle\Service\CrudServiceInterface;
 use Shopware\Components\Model\ModelManager;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -38,16 +38,17 @@ class AttributeFormType extends AbstractType
     private $entityManager;
 
     /**
-     * @var CrudService
+     * @var CrudServiceInterface
      */
     private $attributeService;
 
     /**
      * AttributeFormType constructor.
-     * @param ModelManager $entityManager
-     * @param CrudService $attributeService
+     *
+     * @param ModelManager         $entityManager
+     * @param CrudServiceInterface $attributeService
      */
-    public function __construct(ModelManager $entityManager, CrudService $attributeService)
+    public function __construct(ModelManager $entityManager, CrudServiceInterface $attributeService)
     {
         $this->entityManager = $entityManager;
         $this->attributeService = $attributeService;
