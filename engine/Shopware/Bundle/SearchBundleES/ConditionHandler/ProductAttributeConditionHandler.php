@@ -87,7 +87,8 @@ class ProductAttributeConditionHandler implements HandlerInterface
         switch ($criteriaPart->getOperator()) {
             case ProductAttributeCondition::OPERATOR_EQ:
                 if ($criteriaPart->getValue() === null) {
-                    $filter = new MissingQuery($field);
+                    $filter = new BoolQuery();
+                    $filter->add(new ExistsQuery($field), BoolQuery::MUST_NOT);
                 } else {
                     $filter = new TermQuery($field, $criteriaPart->getValue());
                 }

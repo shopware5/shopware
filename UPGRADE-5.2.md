@@ -7,6 +7,7 @@ This changelog references changes done in Shopware 5.2 patch versions.
 [View all changes from v5.2.12...v5.2.13](https://github.com/shopware/shopware/compare/v5.2.12...v5.2.13)
 
 * Changed duplicate smarty block from `frontend_checkout_confirm_information_addresses_equal_panel_shipping_select_address` to `frontend_checkout_confirm_information_addresses_equal_panel_shipping_add_address` in `frontend/checkout/confirm.tpl`
+* Added interface `\Shopware\Bundle\ESIndexingBundle\TextMappingInterface` which handles text field mappings for different elastic search versions
 
 ## 5.2.12
 
