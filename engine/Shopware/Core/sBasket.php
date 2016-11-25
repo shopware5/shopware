@@ -2508,7 +2508,7 @@ class sBasket
         ) ? : array();
 
         // Load prices from default group if article prices are not defined
-        if (!$queryNewPrice["price"]) {
+        if ($queryNewPrice["price"] === null) {
             // In the case no price is available for this customer group, use price of default customer group
             $sql = 'SELECT s_articles_prices.price AS price, taxID, s_core_tax.tax AS tax,
               s_articles_details.id AS articleDetailsID, s_articles_details.articleID,
