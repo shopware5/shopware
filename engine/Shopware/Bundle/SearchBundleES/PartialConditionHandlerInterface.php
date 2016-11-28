@@ -22,53 +22,51 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\SearchBundleES\ConditionHandler;
+namespace Shopware\Bundle\SearchBundleES;
 
-use ONGR\ElasticsearchDSL\Query\TermsQuery;
 use ONGR\ElasticsearchDSL\Search;
-use Shopware\Bundle\SearchBundle\Condition\PropertyCondition;
-use Shopware\Bundle\SearchBundle\CriteriaPartInterface;
 use Shopware\Bundle\SearchBundle\Criteria;
-use Shopware\Bundle\SearchBundleES\PartialConditionHandlerInterface;
+use Shopware\Bundle\SearchBundle\CriteriaPartInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
-class PropertyConditionHandler implements PartialConditionHandlerInterface
+interface PartialConditionHandlerInterface
 {
     /**
-     * {@inheritdoc}
+     * Validates if the criteria part can be handled by this handler
+     *
+     * @param CriteriaPartInterface $criteriaPart
+     * @return bool
      */
-    public function supports(CriteriaPartInterface $criteriaPart)
-    {
-        return ($criteriaPart instanceof PropertyCondition);
-    }
+    public function supports(CriteriaPartInterface $criteriaPart);
 
     /**
-     * {@inheritdoc}
+     * Handles the criteria part and adds the provided condition as post filter.
+     *
+     * @param CriteriaPartInterface $criteriaPart
+     * @param Criteria $criteria
+     * @param Search $search
+     * @param ShopContextInterface $context
+     * @return
      */
     public function handleFilter(
         CriteriaPartInterface $criteriaPart,
         Criteria $criteria,
         Search $search,
         ShopContextInterface $context
-    ) {
-        /** @var PropertyCondition $criteriaPart */
-        $search->addFilter(
-            new TermsQuery('properties.id', $criteriaPart->getValueIds())
-        );
-    }
+    );
 
     /**
-     * {@inheritdoc}
+     * Handles the criteria part and extends the provided search.
+     *
+     * @param CriteriaPartInterface $criteriaPart
+     * @param Criteria $criteria
+     * @param Search $search
+     * @param ShopContextInterface $context
      */
     public function handlePostFilter(
         CriteriaPartInterface $criteriaPart,
         Criteria $criteria,
         Search $search,
         ShopContextInterface $context
-    ) {
-        /** @var PropertyCondition $criteriaPart */
-        $search->addPostFilter(
-            new TermsQuery('properties.id', $criteriaPart->getValueIds())
-        );
-    }
+    );
 }

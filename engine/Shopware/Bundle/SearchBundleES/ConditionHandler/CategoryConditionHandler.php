@@ -28,11 +28,11 @@ use ONGR\ElasticsearchDSL\Query\TermsQuery;
 use ONGR\ElasticsearchDSL\Search;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\CriteriaPartInterface;
-use Shopware\Bundle\SearchBundleES\HandlerInterface;
 use Shopware\Bundle\SearchBundle\Condition\CategoryCondition;
+use Shopware\Bundle\SearchBundleES\PartialConditionHandlerInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
-class CategoryConditionHandler implements HandlerInterface
+class CategoryConditionHandler implements PartialConditionHandlerInterface
 {
     /**
      * {@inheritdoc}
@@ -45,37 +45,30 @@ class CategoryConditionHandler implements HandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function handle(
+    public function handleFilter(
         CriteriaPartInterface $criteriaPart,
         Criteria $criteria,
         Search $search,
         ShopContextInterface $context
     ) {
         /** @var CategoryCondition $criteriaPart */
-        $filter = new TermsQuery('categoryIds', $criteriaPart->getCategoryIds());
-        if ($criteria->generatePartialFacets() || $this->isBaseCondition($criteriaPart, $criteria)) {
-            $search->addFilter($filter);
-            return;
-        }
-        $search->addPostFilter($filter);
+        $search->addFilter(
+            new TermsQuery('categoryIds', $criteriaPart->getCategoryIds())
+        );
     }
 
     /**
-     * Category condition can be assigned multiple times for search requests.
-     * Validates if the provided condition class is inside the base condition array of the provided criteria
-     * identified by the object reference.
-     *
-     * @param CriteriaPartInterface $condition
-     * @param Criteria $criteria
-     * @return bool
+     * {@inheritdoc}
      */
-    public function isBaseCondition(CriteriaPartInterface $condition, Criteria $criteria)
-    {
-        foreach ($criteria->getBaseConditions() as $baseCondition) {
-            if ($baseCondition === $condition) {
-                return true;
-            }
-        }
-        return false;
+    public function handlePostFilter(
+        CriteriaPartInterface $criteriaPart,
+        Criteria $criteria,
+        Search $search,
+        ShopContextInterface $context
+    ) {
+        /** @var CategoryCondition $criteriaPart */
+        $search->addPostFilter(
+            new TermsQuery('categoryIds', $criteriaPart->getCategoryIds())
+        );
     }
 }

@@ -29,10 +29,10 @@ use ONGR\ElasticsearchDSL\Search;
 use Shopware\Bundle\SearchBundle\Condition\HasPseudoPriceCondition;
 use Shopware\Bundle\SearchBundle\CriteriaPartInterface;
 use Shopware\Bundle\SearchBundle\Criteria;
-use Shopware\Bundle\SearchBundleES\HandlerInterface;
+use Shopware\Bundle\SearchBundleES\PartialConditionHandlerInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
-class HasPseudoPriceConditionHandler implements HandlerInterface
+class HasPseudoPriceConditionHandler implements PartialConditionHandlerInterface
 {
     /**
      * {@inheritdoc}
@@ -45,20 +45,35 @@ class HasPseudoPriceConditionHandler implements HandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function handle(
+    public function handleFilter(
         CriteriaPartInterface $criteriaPart,
         Criteria $criteria,
         Search $search,
         ShopContextInterface $context
     ) {
-        /** @var HasPseudoPriceCondition $criteriaPart */
-        $field = $this->getPseudoPriceField($context);
-        $filter = new RangeQuery($field, ['gt' => 0]);
-        if ($criteria->generatePartialFacets() || $criteria->hasBaseCondition($criteriaPart->getName())) {
-            $search->addFilter($filter);
-            return;
-        }
-        $search->addPostFilter($filter);
+        $search->addFilter(
+            new RangeQuery(
+                $this->getPseudoPriceField($context),
+                ['gt' => 0]
+            )
+        );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function handlePostFilter(
+        CriteriaPartInterface $criteriaPart,
+        Criteria $criteria,
+        Search $search,
+        ShopContextInterface $context
+    ) {
+        $search->addPostFilter(
+            new RangeQuery(
+                $this->getPseudoPriceField($context),
+                ['gt' => 0]
+            )
+        );
     }
 
     /**

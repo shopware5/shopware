@@ -28,11 +28,11 @@ use ONGR\ElasticsearchDSL\Search;
 use Shopware\Bundle\SearchBundle\Condition\SearchTermCondition;
 use Shopware\Bundle\SearchBundle\CriteriaPartInterface;
 use Shopware\Bundle\SearchBundle\Criteria;
-use Shopware\Bundle\SearchBundleES\HandlerInterface;
+use Shopware\Bundle\SearchBundleES\PartialConditionHandlerInterface;
 use Shopware\Bundle\SearchBundleES\SearchTermQueryBuilderInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
-class SearchTermConditionHandler implements HandlerInterface
+class SearchTermConditionHandler implements PartialConditionHandlerInterface
 {
     /**
      * @var SearchTermQueryBuilderInterface
@@ -58,14 +58,27 @@ class SearchTermConditionHandler implements HandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function handle(
+    public function handleFilter(
         CriteriaPartInterface $criteriaPart,
         Criteria $criteria,
         Search $search,
         ShopContextInterface $context
     ) {
         /** @var SearchTermCondition $criteriaPart */
-        $query = $this->queryBuilder->buildQuery($context, $criteriaPart->getTerm());
-        $search->addQuery($query);
+        $search->addQuery(
+            $this->queryBuilder->buildQuery($context, $criteriaPart->getTerm())
+        );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function handlePostFilter(
+        CriteriaPartInterface $criteriaPart,
+        Criteria $criteria,
+        Search $search,
+        ShopContextInterface $context
+    ) {
+        $this->handleFilter($criteriaPart, $criteria, $search, $context);
     }
 }

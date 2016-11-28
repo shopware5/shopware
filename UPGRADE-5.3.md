@@ -313,11 +313,12 @@ public function generatePartialFacet(
     //...
 ```
 
-All elastic search condition handlers has to extend the filter and post filter validiation:
-Before:
+#### Elastic search
+In the elastic search implementation the current filter behavior is controlled by the condition handlers. By adding an query as `post filter`, facets are not affected by this filter.
+This behavior is checked over the `Criteria->hasBaseCondition` statement:
 ```
 /**
- * {@inheritdoc}
+ * @inheritdoc
  */
 public function handle(
     CriteriaPartInterface $criteriaPart,
@@ -325,37 +326,66 @@ public function handle(
     Search $search,
     ShopContextInterface $context
 ) {
-    /** @var CategoryCondition $criteriaPart */
-    $filter = new TermsQuery('categoryIds', $criteriaPart->getCategoryIds());
-
     if ($criteria->hasBaseCondition($criteriaPart->getName())) {
-        $search->addFilter($filter);
+        $search->addFilter(new TermQuery('active', 1));
     } else {
-        $search->addPostFilter($filter);
+        $search->addPostFilter(new TermQuery('active', 1));
     }
 }
-```
 
-After:
 ```
-/**
- * {@inheritdoc}
- */
-public function handle(
-    CriteriaPartInterface $criteriaPart,
-    Criteria $criteria,
-    Search $search,
-    ShopContextInterface $context
-) {
-    /** @var CategoryCondition $criteriaPart */
-    $filter = new TermsQuery('categoryIds', $criteriaPart->getCategoryIds());
+This behavior is now controlled in the `\Shopware\Bundle\SearchBundleES\ProductNumberSearch`. To support the new filter mode, each condition handler has to implement the `\Shopware\Bundle\SearchBundleES\PartialConditionHandlerInterface`.
+It is possible to implement this interface beside the original `\Shopware\Bundle\SearchBundleES\HandlerInterface`.
+```
+namespace Shopware\Bundle\SearchBundleES;
+if (!interface_exists('\Shopware\Bundle\SearchBundleES\PartialConditionHandlerInterface')) {
+    interface PartialConditionHandlerInterface { }
+}
 
-    if ($criteria->generatePartialFacets() || $criteria->hasBaseCondition($criteriaPart->getName())) {
-        $search->addFilter($filter);
-        return;
+namespace Shopware\SwagBonusSystem\Bundle\SearchBundleES;
+
+class BonusConditionHandler implements HandlerInterface, PartialConditionHandlerInterface
+{
+    const ES_FIELD = 'attributes.bonus_system.has_bonus';
+
+    public function supports(CriteriaPartInterface $criteriaPart)
+    {
+        return ($criteriaPart instanceof BonusCondition);
     }
 
-    $search->addPostFilter($filter);
+    public function handleFilter(
+        CriteriaPartInterface $criteriaPart,
+        Criteria $criteria,
+        Search $search,
+        ShopContextInterface $context
+    ) {
+        $search->addFilter(
+            new TermQuery(self::ES_FIELD, 1)
+        );
+    }
+
+
+    public function handlePostFilter(
+        CriteriaPartInterface $criteriaPart,
+        Criteria $criteria,
+        Search $search,
+        ShopContextInterface $context
+    ) {
+        $search->addPostFilter(new TermQuery(self::ES_FIELD, 1));
+    }
+
+    public function handle(
+        CriteriaPartInterface $criteriaPart,
+        Criteria $criteria,
+        Search $search,
+        ShopContextInterface $context
+    ) {
+        if ($criteria->hasBaseCondition($criteriaPart->getName())) {
+            $this->handleFilter($criteriaPart, $criteria, $search, $context);
+        } else {
+            $this->handlePostFilter($criteriaPart, $criteria, $search, $context);
+        }
+    }
 }
 ```
 
