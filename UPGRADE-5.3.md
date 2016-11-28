@@ -60,7 +60,8 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Refactored the filter panels `facet-radio`, `facet-media-list` & `facet-value-list` and unified the panels
 * Base query build in `\Shopware\Bundle\SearchBundleDBAL\ProductNumberSearch` contains no more an join to s_core_tax
 * Renamed parameter `data-count-ctrl` on `#filter` form to `data-listing-url`
- 
+* Changed removal version of method `Shopware\Components\Model\ModelManager::addAttribute` to 5.4
+* Changed removal version of method `Shopware\Components\Model\ModelManager::removeAttribute` to 5.4
 
 ### Removals
 
@@ -203,8 +204,6 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Removed `attributes.search.cheapest_price` field from DBAL search
 * Removed `attributes.search.average` field from DBAL search
 * Removed model `Shopware\Models\Article\Element`
-* Removed method `Shopware\Components\Model\ModelManager::addAttribute`
-* Removed method `Shopware\Components\Model\ModelManager::removeAttribute`
 * Removed database table `s_core_engine_elements`
 
 ### Deprecations
