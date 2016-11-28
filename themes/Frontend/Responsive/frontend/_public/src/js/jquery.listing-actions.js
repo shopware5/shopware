@@ -247,7 +247,12 @@
             /**
              * icon for the filter close button
              */
-            closeFilterOffCanvasBtnIcon: '<i class="icon--arrow-right"></i>'
+            closeFilterOffCanvasBtnIcon: '<i class="icon--arrow-right"></i>',
+
+            /**
+             * selector for the search page headline
+             */
+            searchHeadlineProductCountSelector: '.search--headline .headline--product-count'
         },
 
         /**
@@ -274,6 +279,7 @@
             me.$perPageInput = $(me.$filterForm.find(me.opts.perPageInputSelector));
             me.$listingWrapper = me.$el.parent(me.opts.listingWrapperSelector);
             me.$closeFilterOffCanvasBtn = $(me.opts.filterCloseBtnSelector);
+            me.searchHeadlineProductCount = $(me.opts.searchHeadlineProductCountSelector);
 
             me.listingUrl = me.$filterForm.attr('data-listing-url');
             me.loadFacets = $.parseJSON(me.$filterForm.attr('data-load-facets'));
@@ -1046,6 +1052,7 @@
             }
 
             me.updateFilterCloseButton(response.totalCount);
+            me.updateSearchHeadline(response.totalCount);
 
             html = response.listing.trim();
 
@@ -1089,6 +1096,19 @@
             }
 
             me.updateFilterTriggerButton(filterCount > 1 ? filterCount - 1 : filterCount);
+        },
+
+        /**
+         * updates the head line of the search page with the new total count
+         *
+         * @param {int} totalCount
+         */
+        updateSearchHeadline: function(totalCount) {
+            var me = this;
+
+            if (me.searchHeadlineProductCount.length > 0) {
+                me.searchHeadlineProductCount.html(totalCount);
+            }
         },
 
         /**

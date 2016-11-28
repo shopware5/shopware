@@ -364,4 +364,12 @@ class ShopwareContext extends SubContext
     {
         Helper::setCurrentLanguage($language);
     }
+
+    /**
+     * @When I scroll to the bottom of the page
+     */
+    public function iScrollToTheBottomOfThePage()
+    {
+        $this->getDriver()->executeScript('window.scrollTo(0, document.body.scrollHeight);');
+    }
 }

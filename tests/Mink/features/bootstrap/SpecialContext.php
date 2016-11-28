@@ -3,6 +3,7 @@
 namespace Shopware\Tests\Mink;
 
 use Behat\Gherkin\Node\PyStringNode;
+use Behat\Mink\Exception\ResponseTextException;
 use Behat\Mink\WebAssert;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
 use Shopware\Tests\Mink\Page\Homepage;
@@ -43,15 +44,56 @@ class SpecialContext extends SubContext
     }
 
     /**
-     * @Then /^I should see (?P<quantity>\d+) element of type "(?P<elementClass>[^"]*)"$/
-     * @Then /^I should see (?P<quantity>\d+) elements of type "(?P<elementClass>[^"]*)"$/
+     * @Then /^I should see (?P<quantity>\d+) element of type "(?P<elementClass>[^"]*)"( eventually)?$/
+     * @Then /^I should see (?P<quantity>\d+) elements of type "(?P<elementClass>[^"]*)"( eventually)?$/
      */
-    public function iShouldSeeElementsOfType($count, $elementClass)
+    public function iShouldSeeElementsOfType($count, $elementClass, $mode = null)
     {
         /** @var Homepage $page */
         $page = $this->getPage('Homepage');
-        $elements = $this->getMultipleElement($page, $elementClass);
-        Helper::assertElementCount($elements, $count);
+
+        if ($mode === null) {
+            $elements = $this->getMultipleElement($page, $elementClass);
+            Helper::assertElementCount($elements, $count);
+            return;
+        }
+
+        $this->spin(function (SpecialContext $context) use ($page, $count, $elementClass) {
+            try {
+                $elements = $context->getMultipleElement($page, $elementClass);
+                Helper::assertElementCount($elements, $count);
+                return true;
+            } catch (ResponseTextException $e) {
+                // NOOP
+            }
+            return false;
+        });
+    }
+
+    /**
+     * Based on Behat's own example
+     * @see http://docs.behat.org/en/v2.5/cookbook/using_spin_functions.html#adding-a-timeout
+     * @param $lambda
+     * @param int $wait
+     * @throws \Exception
+     */
+    public function spin($lambda, $wait = 60)
+    {
+        $time = time();
+        $stopTime = $time + $wait;
+        while (time() < $stopTime) {
+            try {
+                if ($lambda($this)) {
+                    return;
+                }
+            } catch (\Exception $e) {
+                // do nothing
+            }
+
+            usleep(250000);
+        }
+
+        throw new \Exception("Spin function timed out after {$wait} seconds");
     }
 
     /**
