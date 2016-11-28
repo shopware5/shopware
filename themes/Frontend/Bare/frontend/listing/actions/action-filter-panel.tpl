@@ -7,7 +7,7 @@
         <div class="action--filter-options off-canvas">
 
             {block name='frontend_listing_actions_filter_close_button'}
-                <a href="#" class="filter--close-btn">
+                <a href="#" class="filter--close-btn" data-show-products-text="{s name="ListingActionsCloseFilterShowProducts"}{/s}">
                     {s name="ListingActionsCloseFilter"}{/s} <i class="icon--arrow-right"></i>
                 </a>
             {/block}
@@ -26,7 +26,7 @@
                               method="get"
                               data-filter-form="true"
                               data-is-filtered="{$criteria->getUserConditions()|count}"
-                              data-load-facets="{if {config name=generatePartialFacets}}true{else}false{/if}""
+                              data-load-facets="{if {config name=generatePartialFacets}}true{else}false{/if}"
                               data-listing-url="{$countCtrlUrl}"
                               data-instant-filter-result="{if {config name=instantFilterResult}}true{else}false{/if}">
 
