@@ -211,6 +211,11 @@ class CacheManager
             $metaDataCache->deleteAll();
         }
 
+        // Clear the APCu cache because this may cause problems when attributes are removed
+        if (function_exists('apcu_clear_cache')) {
+            apcu_clear_cache();
+        }
+
         // Clear Shopware Proxies / Classmaps / Container
         $this->clearDirectory($this->container->getParameter('shopware.hook.proxyDir'));
 
