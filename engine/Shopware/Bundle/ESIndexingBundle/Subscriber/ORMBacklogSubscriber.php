@@ -153,26 +153,10 @@ class ORMBacklogSubscriber implements EventSubscriber
             $this->queue[] = $backlog;
         }
         $this->inserts = [];
-
-        $this->registerShutdownListener();
     }
 
-    private function registerShutdownListener()
-    {
-        if ($this->eventRegistered) {
-            return;
-        }
 
-        $this->eventRegistered = true;
-        $this->container->get('events')->addListener(
-            'Enlight_Controller_Front_DispatchLoopShutdown',
-            function () {
-                $this->processQueue();
-            }
-        );
-    }
-
-    private function processQueue()
+    public function processQueue()
     {
         if (empty($this->queue)) {
             return;
