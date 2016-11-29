@@ -121,6 +121,8 @@ class Application extends BaseApplication
             }
         }
 
+        $this->setDispatcher($container->get('event_dispatcher'));
+
         if (true === $input->hasParameterOption(array('--shell', '-s'))) {
             $shell = new Shell($this);
             $shell->setProcessIsolation($input->hasParameterOption(array('--process-isolation')));

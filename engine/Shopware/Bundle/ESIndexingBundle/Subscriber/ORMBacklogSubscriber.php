@@ -82,11 +82,6 @@ class ORMBacklogSubscriber implements EventSubscriber
     private $inserts = [];
 
     /**
-     * @var bool
-     */
-    private $eventRegistered = false;
-
-    /**
      * @var Container
      */
     private $container;
@@ -113,7 +108,7 @@ class ORMBacklogSubscriber implements EventSubscriber
     public function onFlush(OnFlushEventArgs $eventArgs)
     {
         /** @var $em ModelManager */
-        $em  = $eventArgs->getEntityManager();
+        $em = $eventArgs->getEntityManager();
         $uow = $em->getUnitOfWork();
 
         // Entity deletions
@@ -153,26 +148,9 @@ class ORMBacklogSubscriber implements EventSubscriber
             $this->queue[] = $backlog;
         }
         $this->inserts = [];
-
-        $this->registerShutdownListener();
     }
 
-    private function registerShutdownListener()
-    {
-        if ($this->eventRegistered) {
-            return;
-        }
-
-        $this->eventRegistered = true;
-        $this->container->get('events')->addListener(
-            'Enlight_Controller_Front_DispatchLoopShutdown',
-            function () {
-                $this->processQueue();
-            }
-        );
-    }
-
-    private function processQueue()
+    public function processQueue()
     {
         if (empty($this->queue)) {
             return;
