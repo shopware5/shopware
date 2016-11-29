@@ -263,6 +263,14 @@ class MediaService implements MediaServiceInterface
     /**
      * @inheritdoc
      */
+    public function listContents($directory = '', $recursive = false)
+    {
+        return $this->filesystem->listContents($directory, $recursive);
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function createDir($dirname)
     {
         return $this->filesystem->createDir($dirname);
