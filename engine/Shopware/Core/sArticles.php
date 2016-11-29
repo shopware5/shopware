@@ -510,6 +510,7 @@ class sArticles
 
     /**
      * Get all available suppliers from a specific category
+     * @deprecated since 5.3, will be removed with 5.5 without replacement
      * @param int $id - category id
      * @param int $limit
      * @return array

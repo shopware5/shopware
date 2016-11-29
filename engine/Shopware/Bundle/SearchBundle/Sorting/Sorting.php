@@ -43,7 +43,7 @@ abstract class Sorting implements SortingInterface
      */
     public function __construct($direction = SortingInterface::SORT_ASC)
     {
-        $this->direction = $direction;
+        $this->direction = strtoupper($direction);
     }
 
     /**

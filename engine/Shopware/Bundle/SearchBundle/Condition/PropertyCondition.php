@@ -48,6 +48,7 @@ class PropertyCondition implements ConditionInterface
     {
         Assertion::allIntegerish($valueIds);
         $this->valueIds = array_map('intval', $valueIds);
+        sort($this->valueIds, SORT_NUMERIC);
     }
 
     /**

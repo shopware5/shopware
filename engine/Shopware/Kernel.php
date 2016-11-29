@@ -26,6 +26,7 @@ namespace Shopware;
 
 use Shopware\Bundle\AttributeBundle\DependencyInjection\Compiler\SearchRepositoryCompilerPass;
 use Shopware\Bundle\ControllerBundle\DependencyInjection\Compiler\RegisterControllerCompilerPass;
+use Shopware\Bundle\EmotionBundle\DependencyInjection\Compiler\EmotionComponentHandlerCompilerPass;
 use Shopware\Bundle\ESIndexingBundle\DependencyInjection\CompilerPass\SettingsCompilerPass;
 use Shopware\Bundle\ESIndexingBundle\DependencyInjection\CompilerPass\SynchronizerCompilerPass;
 use Shopware\Bundle\ESIndexingBundle\DependencyInjection\CompilerPass\DataIndexerCompilerPass;
@@ -593,6 +594,7 @@ class Kernel implements HttpKernelInterface
         $loader->load('FormBundle/services.xml');
         $loader->load('AccountBundle/services.xml');
         $loader->load('AttributeBundle/services.xml');
+        $loader->load('EmotionBundle/services.xml');
 
         if ($this->isElasticSearchEnabled()) {
             $loader->load('SearchBundleES/services.xml');
@@ -619,6 +621,7 @@ class Kernel implements HttpKernelInterface
         $container->addCompilerPass(new SearchRepositoryCompilerPass());
         $container->addCompilerPass(new AddConsoleCommandPass());
         $container->addCompilerPass(new AddCaptchaCompilerPass());
+        $container->addCompilerPass(new EmotionComponentHandlerCompilerPass());
 
         if ($this->isElasticSearchEnabled()) {
             $container->addCompilerPass(new SearchHandlerCompilerPass());

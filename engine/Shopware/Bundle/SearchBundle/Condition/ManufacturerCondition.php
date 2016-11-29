@@ -46,6 +46,7 @@ class ManufacturerCondition implements ConditionInterface
     {
         Assertion::allIntegerish($manufacturerIds);
         $this->manufacturerIds = array_map('intval', $manufacturerIds);
+        sort($this->manufacturerIds, SORT_NUMERIC);
     }
 
     /**

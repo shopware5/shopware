@@ -796,6 +796,217 @@ class FieldHelper
     }
 
     /**
+     * Returns an array with all required emotion fields.
+     * Requires that the s_emotion table is included with table alias 'emotion'
+     *
+     * @return array
+     */
+    public function getEmotionFields()
+    {
+        $fields = [
+            'emotion.id AS __emotion_id',
+            'emotion.active AS __emotion_active',
+            'emotion.name AS __emotion_name',
+            'emotion.cols AS __emotion_cols',
+            'emotion.cell_spacing AS __emotion_cell_spacing',
+            'emotion.cell_height AS __emotion_cell_height',
+            'emotion.article_height AS __emotion_article_height',
+            'emotion.rows AS __emotion_rows',
+            'emotion.valid_from AS __emotion_valid_from',
+            'emotion.valid_to AS __emotion_valid_to',
+            'emotion.userID AS __emotion_user_id',
+            'emotion.show_listing AS __emotion_show_listing',
+            'emotion.is_landingpage AS __emotion_is_landingpage',
+            'emotion.seo_title AS __emotion_seo_title',
+            'emotion.seo_keywords AS __emotion_seo_keywords',
+            'emotion.seo_description AS __emotion_seo_description',
+            'emotion.create_date AS __emotion_create_date',
+            'emotion.modified AS __emotion_modified',
+            'emotion.template_id AS __emotion_template_id',
+            'emotion.device AS __emotion_device',
+            'emotion.fullscreen AS __emotion_fullscreen',
+            'emotion.mode AS __emotion_mode',
+            'emotion.position AS __emotion_position',
+            'emotion.parent_id AS __emotion_parent_id',
+        ];
+
+        $fields = array_merge(
+            $fields,
+            $this->getTableFields('s_emotion_attributes', 'emotionAttribute')
+        );
+
+        return $fields;
+    }
+
+    /**
+     * Returns an array with all required emotion fields.
+     * Requires that the s_emotion_templates table is included with table alias 'emotionTemplate'
+     *
+     * @return array
+     */
+    public function getEmotionTemplateFields()
+    {
+        $fields = [
+            'emotionTemplate.id AS __emotionTemplate_id',
+            'emotionTemplate.name AS __emotionTemplate_name',
+            'emotionTemplate.file AS __emotionTemplate_file',
+        ];
+
+        return $fields;
+    }
+
+    /**
+     * Returns an array with all required emotion element fields.
+     * Requires that the s_emotion_element table is included with table alias 'emotionElement'
+     *
+     * @return array
+     */
+    public function getEmotionElementFields()
+    {
+        $fields = [
+            'emotionElement.id AS __emotionElement_id',
+            'emotionElement.emotionID AS __emotionElement_emotion_id',
+            'emotionElement.componentID AS __emotionElement_component_id',
+            'emotionElement.start_row AS __emotionElement_start_row',
+            'emotionElement.start_col AS __emotionElement_start_col',
+            'emotionElement.end_row AS __emotionElement_end_row',
+            'emotionElement.end_col AS __emotionElement_end_col',
+            'emotionElement.css_class AS __emotionElement_css_class',
+        ];
+
+        return $fields;
+    }
+
+    /**
+     * Returns an array with all required emotion element value fields.
+     * Requires that the s_emotion_element_value table is included with table alias 'emotionElementValue'
+     *
+     * @return array
+     */
+    public function getEmotionElementValueFields()
+    {
+        $fields = [
+            'emotionElementValue.id AS __emotionElementValue_id',
+            'emotionElementValue.emotionID AS __emotionElementValue_emotion_id',
+            'emotionElementValue.elementID AS __emotionElementValue_element_id',
+            'emotionElementValue.componentID AS __emotionElementValue_component_id',
+            'emotionElementValue.fieldID AS __emotionElementValue_field_id',
+            'emotionElementValue.value AS __emotionElementValue_value'
+        ];
+
+        return $fields;
+    }
+
+    /**
+     * Returns an array with all required emotion component fields.
+     * Requires that the s_library_component table is included with table alias 'emotionLibraryComponent'
+     *
+     * @return array
+     */
+    public function getEmotionElementLibraryFields()
+    {
+        $fields = [
+            'emotionLibraryComponent.id AS __emotionLibraryComponent_id',
+            'emotionLibraryComponent.name AS __emotionLibraryComponent_name',
+            'emotionLibraryComponent.x_type AS __emotionLibraryComponent_x_type',
+            'emotionLibraryComponent.convert_function AS __emotionLibraryComponent_convert_function',
+            'emotionLibraryComponent.description AS __emotionLibraryComponent_description',
+            'emotionLibraryComponent.template AS __emotionLibraryComponent_template',
+            'emotionLibraryComponent.cls AS __emotionLibraryComponent_cls',
+            'emotionLibraryComponent.pluginID AS __emotionLibraryComponent_plugin_id',
+        ];
+
+        return $fields;
+    }
+
+    /**
+     * Returns an array with all required emotion component settings fields.
+     * Requires that the s_library_component_fields table is included with table alias 'emotionLibraryComponentField'
+     *
+     * @return array
+     */
+    public function getEmotionElementLibraryFieldFields()
+    {
+        $fields = [
+            'emotionLibraryComponentField.id AS __emotionLibraryComponentField_id',
+            'emotionLibraryComponentField.componentID AS __emotionLibraryComponentField_component_id',
+            'emotionLibraryComponentField.name AS __emotionLibraryComponentField_name',
+            'emotionLibraryComponentField.x_type AS __emotionLibraryComponentField_x_type',
+            'emotionLibraryComponentField.value_type AS __emotionLibraryComponentField_value_type',
+            'emotionLibraryComponentField.field_label AS __emotionLibraryComponentField_field_label',
+            'emotionLibraryComponentField.support_text AS __emotionLibraryComponentField_support_text',
+            'emotionLibraryComponentField.help_title AS __emotionLibraryComponentField_help_title',
+            'emotionLibraryComponentField.help_text AS __emotionLibraryComponentField_help_text',
+            'emotionLibraryComponentField.store AS __emotionLibraryComponentField_store',
+            'emotionLibraryComponentField.display_field AS __emotionLibraryComponentField_display_field',
+            'emotionLibraryComponentField.value_field AS __emotionLibraryComponentField_value_field',
+            'emotionLibraryComponentField.default_value AS __emotionLibraryComponentField_default_value',
+            'emotionLibraryComponentField.allow_blank AS __emotionLibraryComponentField_allow_blank',
+            'emotionLibraryComponentField.translatable AS __emotionLibraryComponentField_translatable',
+            'emotionLibraryComponentField.position AS __emotionLibraryComponentField_position',
+        ];
+
+        return $fields;
+    }
+
+    /**
+     * Returns an array with all required emotion element viewport fields.
+     * Requires that the s_emotion_element_viewport table is included with table alias 'emotionElementViewport'
+     *
+     * @return array
+     */
+    public function getEmotionElementViewportFields()
+    {
+        $fields = [
+            'emotionElementViewport.id AS __emotionElementViewport_id',
+            'emotionElementViewport.emotionID AS __emotionElementViewport_emotion_id',
+            'emotionElementViewport.elementID AS __emotionElementViewport_element_id',
+            'emotionElementViewport.alias AS __emotionElementViewport_alias',
+            'emotionElementViewport.start_row AS __emotionElementViewport_start_row',
+            'emotionElementViewport.start_col AS __emotionElementViewport_start_col',
+            'emotionElementViewport.end_row AS __emotionElementViewport_end_row',
+            'emotionElementViewport.end_col AS __emotionElementViewport_end_col',
+            'emotionElementViewport.visible AS __emotionElementViewport_visible',
+
+        ];
+
+        return $fields;
+    }
+
+    /**
+     * Returns an array with all required blog fields.
+     * Requires that the s_blog table is included with table alias 'blog'
+     *
+     * @return array
+     */
+    public function getBlogFields()
+    {
+        $fields = [
+            'blog.id AS __blog_id',
+            'blog.title AS __blog_title',
+            'blog.author_id AS __blog_author_id',
+            'blog.active AS __blog_active',
+            'blog.short_description AS __blog_short_description',
+            'blog.description AS __blog_description',
+            'blog.views AS __blog_views',
+            'blog.display_date AS __blog_display_date',
+            'blog.category_id AS __blog_category_id',
+            'blog.template AS __blog_template',
+            'blog.meta_keywords AS __blog_meta_keywords',
+            'blog.meta_description AS __blog_meta_description',
+            'blog.meta_title AS __blog_meta_title'
+        ];
+
+
+        $fields = array_merge(
+            $fields,
+            $this->getTableFields('s_blog_attributes', 'blogAttribute')
+        );
+
+        return $fields;
+    }
+
+    /**
      * Joins the translation table and selects the objectdata for the provided join conditions
      *
      * @param string $fromPart Table which uses as from part
@@ -1045,5 +1256,14 @@ class FieldHelper
     public function addProductStreamTranslation(QueryBuilder $query, ShopContextInterface $context)
     {
         $this->addTranslation('stream', 'productStream', $query, $context);
+    }
+
+    /**
+     * @param QueryBuilder $query
+     * @param ShopContextInterface $context
+     */
+    public function addEmotionElementTranslation(QueryBuilder $query, ShopContextInterface $context)
+    {
+        $this->addTranslation('emotionElementValue', 'emotionElement', $query, $context, 'emotionElementValue.elementID');
     }
 }

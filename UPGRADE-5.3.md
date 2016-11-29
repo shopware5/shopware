@@ -22,10 +22,10 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Added config element `liveMigration` to enable or disable the media live migration
 * Added config element `displayListingBuyButton` to display listing buy button
 * Added service `shopware_search.batch_product_search` and `shopware_search.batch_product_number_search` for optimized product queries
-* `jQuery.overlay` & `jQuery.loadingIndicators` are now supporting callbacks and jQuery promises
-* A loading indicator can now be applied to elements using the `$('selector').setLoading()` method
-* Added `data-facet-name` requirement for each filter element
-* Added `categoryFilterDepth` to configure new `CategoryFacet` behavior
+* Added support for callback methods and jQuery promises in `jQuery.overlay` and `jQuery.loadingIndicators`
+* Added jQuery method `setLoading()` to apply a loading indicator to an element `$('selector').setLoading()`
+* Added required attribute `data-facet-name` for filter elements
+* Added config element `categoryFilterDepth` to configure how many levels of the category facet will be displayed
 * Added new type for the filter panels `value-list-single`
 * Added new Smarty blocks for the unified filter panel:
     * `frontend_listing_filter_facet_multi_selection`
@@ -38,10 +38,14 @@ This changelog references changes done in Shopware 5.3 patch versions.
     * `frontend_listing_filter_facet_multi_selection_option_container`
     * `frontend_listing_filter_facet_multi_selection_input`
     * `frontend_listing_filter_facet_multi_selection_label`
-* Added `\Shopware\Bundle\StoreFrontBundle\Service\Core\CategoryDepthService` service to select categories by their depth
+* Added service `Shopware\Bundle\StoreFrontBundle\Service\Core\CategoryDepthService` to select categories by the given depth
 * Added event `plugin/swListing/fetchListing` which allows to load listings, facet data or listing counts
-* Added config `listingMode` to switch listing reload behavior
+* Added config element `listingMode` to switch listing reload behavior
 * Added event `action/fetchListing` which allows to load listings, facet data or listing counts
+* Added property `path` to `Shopware\Bundle\StoreFrontBundle\Struct\Media` which reflects the virtual path
+* Added service `Shopware\Bundle\StoreFrontBundle\Service\Core\BlogService` to fetch blog entries by id
+* Added filter event `Shopware_Core_HttpCache_CacheIdsFromController` in HttpCache to extend cache keys to be invalidated based on the controller 
+* Added smarty function `convertEmotion` to convert an emotion struct to the legacy array structure
 
 ### Changes
 
@@ -57,16 +61,16 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Changed attribute type `string` mapping to mysql `TEXT` type. String and single selection data type supports no longer a sql default value.
 * Changed `roundPretty` value for currency range filter
 * Changed `CategoryFacet` behavior to generate each time a tree based on the system category with a configured category depth
-* Refactored the filter panels `facet-radio`, `facet-media-list` & `facet-value-list` and unified the panels
-* Base query build in `\Shopware\Bundle\SearchBundleDBAL\ProductNumberSearch` contains no more an join to s_core_tax
+* Changed facet templates `facet-radio`, `facet-media-list` and `facet-value-list` into one template
 * Renamed parameter `data-count-ctrl` on `#filter` form to `data-listing-url`
 * Changed removal version of method `Shopware\Components\Model\ModelManager::addAttribute` to 5.4
 * Changed removal version of method `Shopware\Components\Model\ModelManager::removeAttribute` to 5.4
+* Changed template `component_article_slider.tpl` to show provided products instead of always fetching them via ajax
 
 ### Removals
 
 * Removed configuration option `sCOUNTRYSHIPPING`
-* Removed `{$sShopname}` from forms, use `{sShopname}` instead
+* Removed variable `{$sShopname}` from forms, use `{sShopname}` instead
 * Removed import / export module
 * Removed article vote module files
     * `themes/Backend/ExtJs/backend/vote/view/vote/detail.js`
@@ -158,8 +162,8 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Removed function `Enlight()`
 * Removed class `Enlight_Bootstrap`
 * Removed class `Shopware_Bootstrap`
-* Removed service ID `bootstrap`
-* Remmoved the following methods from `Shopware` respectively `Enlight_Application`:
+* Removed service `bootstrap`
+* Removed the following methods from `Shopware` respectively `Enlight_Application`:
     - `Shopware()/Enlight()->DS()`
     - `Shopware()/Enlight()->setEventManager()`
     - `Shopware()/Enlight()->Bootstrap()`
@@ -170,9 +174,9 @@ This changelog references changes done in Shopware 5.3 patch versions.
     - `Shopware()/Enlight()->ComponentsPath()`
     - `Shopware()/Enlight()->Path()`
 * Removed parameter `$checkProxy` from `Enlight_Controller_Request_Request::getClientIp()`
-* Removed `frontend_search_category_filter` block.
-* Removed `themes/Frontend/Bare/frontend/search/category-filter.tpl`
-* Removed `sCategory` parameter for search controller `listing/ajaxCount` requests.
+* Removed smarty block `frontend_search_category_filter`
+* Removed template file `themes/Frontend/Bare/frontend/search/category-filter.tpl`
+* Removed parameter `sCategory` from search controller `listing/ajaxCount` requests
 * Removed Smarty blocks due to the unified filter panel. The following blocks were removed:
     * `frontend_listing_filter_facet_media_list_flyout`
     * `frontend_listing_filter_facet_media_list_title`
@@ -201,10 +205,21 @@ This changelog references changes done in Shopware 5.3 patch versions.
     * `frontend_listing_filter_facet_value_list_option_container`
     * `frontend_listing_filter_facet_value_list_input`
     * `frontend_listing_filter_facet_value_list_label`
-* Removed `attributes.search.cheapest_price` field from DBAL search
-* Removed `attributes.search.average` field from DBAL search
+* Removed field `attributes.search.cheapest_price` from DBAL search query
+* Removed field `attributes.search.average` from DBAL search query
+* Removed join to `s_core_tax` in `Shopware\Bundle\SearchBundleDBAL\ProductNumberSearch`
 * Removed model `Shopware\Models\Article\Element`
 * Removed database table `s_core_engine_elements`
+* Removed method `Shopware_Controllers_Widgets_Emotion::getEmotion()`
+* Removed method `Shopware_Controllers_Widgets_Emotion::handleElement()`, use `Shopware\Bundle\EmotionBundle\ComponentHandler\ComponentHandlerInterface` instead
+* Removed method `Shopware_Controllers_Widgets_Emotion::getRandomBlogEntry()`
+* Removed method `Shopware_Controllers_Widgets_Emotion::getBlogEntry()`, has been replaced by `Shopware\Bundle\EmotionBundle\ComponentHandler\BlogComponentHandler`
+* Removed method `Shopware_Controllers_Widgets_Emotion::getCategoryTeaser()`, has been replaced by `Shopware\Bundle\EmotionBundle\ComponentHandler\CategoryTeaserComponentHandler`
+* Removed method `Shopware_Controllers_Widgets_Emotion::getBannerMappingLinks()`, has been replaced by `Shopware\Bundle\EmotionBundle\ComponentHandler\BannerComponentHandler`
+* Removed method `Shopware_Controllers_Widgets_Emotion::getManufacturerSlider()`, has been replaced by `Shopware\Bundle\EmotionBundle\ComponentHandler\ManufacturerSliderComponentHandler`
+* Removed method `Shopware_Controllers_Widgets_Emotion::getBannerSlider()`, has been replaced by `Shopware\Bundle\EmotionBundle\ComponentHandler\BannerSliderComponentHandler`
+* Removed method `Shopware_Controllers_Widgets_Emotion::getArticleSlider()`, has been replaced by `Shopware\Bundle\EmotionBundle\ComponentHandler\ArticleSliderComponentHandler`
+* Removed method `Shopware_Controllers_Widgets_Emotion::getHtml5Video()`, has been replaced by `Shopware\Bundle\EmotionBundle\ComponentHandler\Html5VideoComponentHandler`
 
 ### Deprecations
 
@@ -212,6 +227,7 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Deprecated `Shopware_Components_Convert_Xml` without replacement, to be removed with 5.4
 * Deprecated `Shopware_Components_Convert_Excel` without replacement, to be removed with 5.4
 * Deprecated `\Shopware_Controllers_Widgets_Listing::ajaxListingAction`, use `\Shopware_Controllers_Widgets_Listing::listingCountAction` instead
+* Deprecated method `sArticles::sGetAffectedSuppliers()` without replacement, to be removed with 5.5
 
 ### Backend Components
 
@@ -364,4 +380,71 @@ public function handle(
 Cookie permissions is now a part of shopware and you can configure it in the shop settings. 
 
 We implement a basic cookie permission hint. If you want to change the decision whether the item is displayed or not, overwrite the jQuery plugin in the jquery.cookie-permission.js
-  
+
+### Shopping Worlds
+
+Shopping World have been technically refactored from the ground up to improve the overall performance when adding several elements to a shopping world.
+
+#### ComponentHandler
+
+The processing of elements has been changed from events to classes of component handler.
+
+**Before: Subscribe to an event and process element data in the callback method**
+
+```php
+public static function getSubscribedEvents()
+{
+    return ['Shopware_Controllers_Widgets_Emotion_AddElement' => 'handleSideviewElement'];
+}
+```
+
+**After: Create new class and tag it as `shopware_emotion.component_handler` in your `services.xml`**
+
+```php
+class SideviewComponentHandler implements ComponentHandlerInterface
+{
+    public function supports(Element $element)
+    {
+        return $element->getComponent()->getType() === 'emotion-component-sideview';
+    }
+
+    public function prepare(PrepareDataCollection $collection, Element $element, ShopContextInterface $context)
+    {
+        // do some prepare logic
+    }
+
+    public function handle(ResolvedDataCollection $collection, Element $element, ShopContextInterface $context)
+    {
+        // do some handle logic and fill data
+        $element->getData()->set('key', 'value');
+    }
+}
+```
+
+#### Requesting items in ComponentHandler
+
+To make use of the performance improvement, you have to split your logic into a prepare step and handle step. The prepare step collects product numbers or criteria objects which will be resolved across all elements at once. The handle step provides a collection with resolved products and can be filled into your element.
+
+```php
+public function prepare(PrepareDataCollection $collection, Element $element, ShopContextInterface $context)
+{
+    $productNumber = $element->getConfig()->get('selected_product_number');
+    $collection->getBatchRequest()->setProductNumbers('my-unique-request', [$productNumber]);
+}
+
+public function handle(ResolvedDataCollection $collection, Element $element, ShopContextInterface $context)
+{
+    $product = current($collection->getBatchResult()->get('my-unique-request));
+    $element->getData()->set('product', $product);
+}
+```
+
+Keep in mind to use a unique key for requesting and getting products. For best practise, use the element's id in your key (`$element->getId()`). 
+
+#### View changes
+
+In addition, the emotion template will now be populated with an `Shopware\Bundle\EmotionBundle\Struct\Emotion` object instead of an array. To recreate the old behaviour, you have to convert the emotion object to an array using a smarty function.
+
+```
+{convertEmotion assign=emotion emotion=$emotion}
+```
