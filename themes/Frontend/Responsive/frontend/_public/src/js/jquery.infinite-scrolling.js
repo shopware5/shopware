@@ -106,7 +106,7 @@
             me.applyDataAttributes();
 
             // Check if plugin is enabled
-            if (!me.opts.enabled || !me.$el.is(':visible') || !me.opts.categoryId || me.opts.ajaxUrl === null) {
+            if (!me.opts.enabled || !me.$el.is(':visible') || me.opts.ajaxUrl === null) {
                 return;
             }
 
@@ -331,7 +331,7 @@
             me.fetchCount++;
 
             // use categoryId by settings if not defined by filters
-            if (!me.params.c) {
+            if (!me.params.c && me.opts.categoryId) {
                 me.params.c = me.opts.categoryId;
             }
 
@@ -424,7 +424,7 @@
             var tmpParams = me.upperParams;
 
             // use categoryId by settings if not defined by filters
-            if (!tmpParams.c) {
+            if (!tmpParams.c && me.opts.categoryId) {
                 tmpParams.c = me.opts.categoryId;
             }
 

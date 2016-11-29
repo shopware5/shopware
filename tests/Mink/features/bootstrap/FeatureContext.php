@@ -14,6 +14,7 @@ use Behat\Testwork\Hook\Scope\BeforeSuiteScope;
 use Behat\Testwork\Suite\Suite;
 use Behat\Testwork\Tester\Result\TestResult;
 use Doctrine\DBAL\Connection;
+use Shopware\Components\CacheManager;
 
 class FeatureContext extends SubContext implements SnippetAcceptingContext
 {
@@ -21,10 +22,8 @@ class FeatureContext extends SubContext implements SnippetAcceptingContext
      * @var array
      */
     protected $dirtyConfigElements;
-
     protected static $isPrepared = false;
     protected static $lastScenarioLine = 0;
-
     /**
      * @var Suite
      */
@@ -37,16 +36,17 @@ class FeatureContext extends SubContext implements SnippetAcceptingContext
     public function __construct()
     {
         if (!self::$suite->hasSetting('template')) {
-            throw new \RuntimeException("Template not set. Please start testsuite using the --profile argument.");
+            throw new \RuntimeException('Template not set. Please start testsuite using the --profile argument.');
         }
 
         $this->registerErrorHandler();
 
-        $this->dirtyConfigElements = array();
+        $this->dirtyConfigElements = [];
     }
 
     /**
      * @BeforeSuite
+     * @param BeforeSuiteScope $scope
      */
     public static function setup(BeforeSuiteScope $scope)
     {
@@ -55,6 +55,7 @@ class FeatureContext extends SubContext implements SnippetAcceptingContext
 
     /**
      * @BeforeScenario
+     * @param BeforeScenarioScope $scope
      */
     public function before(BeforeScenarioScope $scope)
     {
@@ -69,7 +70,6 @@ class FeatureContext extends SubContext implements SnippetAcceptingContext
         }
 
         self::$lastScenarioLine = $scope->getScenario()->getLine();
-        return;
     }
 
     private function prepare()
@@ -91,7 +91,7 @@ class FeatureContext extends SubContext implements SnippetAcceptingContext
         $templateId = $this->getService('db')->fetchOne($sql);
         if (!$templateId) {
             throw new \RuntimeException(
-                sprintf("Unable to find template by name %s", self::$suite->getSetting('template'))
+                sprintf('Unable to find template by name %s', self::$suite->getSetting('template'))
             );
         }
 
@@ -189,12 +189,11 @@ EOD;
 
         $currentDateAsString = date('YmdHis');
 
-        $path = sprintf("%s/behat-%s.%s", $logDir, $currentDateAsString, $type);
+        $path = sprintf('%s/behat-%s.%s', $logDir, $currentDateAsString, $type);
         if (!file_put_contents($path, $content)) {
             throw new \RuntimeException(sprintf('Failed while trying to write log in "%s".', $path));
         }
     }
-
 
     /**
      * @return int|null
@@ -207,6 +206,7 @@ EOD;
             return null;
         }
     }
+
     /**
      * @param Session $session
      *
@@ -224,6 +224,7 @@ EOD;
             return null;
         }
     }
+
     /**
      * @param Session $session
      *
@@ -237,6 +238,7 @@ EOD;
             return null;
         }
     }
+
     /**
      * @param Session $session
      *
@@ -279,7 +281,6 @@ EOD;
         $filepath = $filepath ? $filepath : (ini_get('upload_tmp_dir') ? ini_get('upload_tmp_dir') : sys_get_temp_dir());
         file_put_contents($filepath . '/' . $filename, $this->getSession()->getScreenshot());
     }
-
 
     /**
      * @param string $configName
@@ -333,9 +334,11 @@ EOD;
 
     /**
      * @BeforeScenario @configChange
+     * @param ScenarioScope $scope
      */
     public function clearCache(ScenarioScope $scope = null)
     {
+        /** @var CacheManager $cacheManager */
         $cacheManager = $this->getService('shopware.cache_manager');
         $cacheManager->clearConfigCache();
         $cacheManager->clearTemplateCache();
@@ -344,7 +347,7 @@ EOD;
     public function registerErrorHandler()
     {
         error_reporting(-1);
-        $errorNameMap = array(
+        $errorNameMap = [
             E_ERROR             => 'E_ERROR',
             E_WARNING           => 'E_WARNING',
             E_PARSE             => 'E_PARSE',
@@ -361,17 +364,62 @@ EOD;
             E_DEPRECATED        => 'E_DEPRECATED',
             E_USER_DEPRECATED   => 'E_USER_DEPRECATED',
             E_ALL               => 'E_ALL',
-        );
+        ];
 
         set_error_handler(function ($errno, $errstr, $errfile, $errline) use ($errorNameMap) {
             $filepath = $this->getService('kernel')->getRootdir() . '/build/logs/mink';
 
             // No effect in other environments.
             $filename = sprintf('errors_%s_%s.%s', date('c'), uniqid('', true), 'log');
-            $filepath = $filepath .'/'.$filename;
-            file_put_contents($filepath, $errorNameMap[$errno].': '.$errstr, FILE_APPEND);
+            $filepath = $filepath . '/' . $filename;
+            file_put_contents($filepath, $errorNameMap[$errno] . ': ' . $errstr, FILE_APPEND);
 
             return true;
         });
+    }
+
+    /**
+     * @BeforeScenario @noinfinitescrolling
+     */
+    public static function deactivateInfiniteScrolling()
+    {
+        /** @var Connection $dbal */
+        $dbal = Shopware()->Container()->get('dbal_connection');
+
+        $sql = "SET @elementId = (SELECT id FROM `s_core_templates_config_elements` WHERE `name` = 'infiniteScrolling');
+                INSERT INTO `s_core_templates_config_values` (`element_id`, `shop_id`, `value`)
+                VALUES (@elementId, '1', 'b:0;')
+                ON DUPLICATE KEY UPDATE `value` = 'b:0;';";
+
+        $dbal->query($sql);
+
+        self::clearTemplateCache();
+    }
+
+    /**
+     * @AfterScenario @noinfinitescrolling
+     */
+    public static function activateInfiniteScrolling()
+    {
+        /** @var Connection $dbal */
+        $dbal = Shopware()->Container()->get('dbal_connection');
+
+        $sql = "SET @elementId = (SELECT id FROM `s_core_templates_config_elements` WHERE `name` = 'infiniteScrolling');
+                INSERT INTO `s_core_templates_config_values` (`element_id`, `shop_id`, `value`)
+                VALUES (@elementId, '1', 'b:1;')
+                ON DUPLICATE KEY UPDATE `value` = 'b:1;';";
+
+        $dbal->query($sql);
+
+        self::clearTemplateCache();
+    }
+
+    private static function clearTemplateCache()
+    {
+        /** @var CacheManager $cacheManager */
+        $cacheManager = Shopware()->Container()->get('shopware.cache_manager');
+        $cacheManager->clearConfigCache();
+        $cacheManager->clearTemplateCache();
+        $cacheManager->clearThemeCache();
     }
 }

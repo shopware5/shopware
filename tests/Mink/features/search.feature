@@ -22,7 +22,7 @@ Feature: Search things
         Then I should see "Zu \"str\" wurden 13 Artikel gefunden!"
         But  I should see 12 elements of type "ArticleBox"
 
-    @javascript
+    @javascript @noinfinitescrolling
     Scenario: Search with special uri characters
         When I search for "20% alle"
         Then I should see "Zu \"20% alle\" wurden 14 Artikel gefunden!"
@@ -34,6 +34,14 @@ Feature: Search things
     Scenario: Search with no hits
         When I search for "foo"
         Then I should see the no results message for keyword "foo"
+
+    @javascript
+    Scenario: Infinite Scrolling is active in seach results
+        When I search for "art"
+        Then I should see "Zu \"art\" wurden 17 Artikel gefunden!"
+        And  I should see 12 elements of type "ArticleBox"
+        When I scroll to the bottom of the page
+        Then I should see 17 elements of type "ArticleBox" eventually
 
     @javascript
     Scenario Outline: Live-Search with hits
