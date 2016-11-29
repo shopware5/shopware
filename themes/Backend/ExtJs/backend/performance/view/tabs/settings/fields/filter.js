@@ -68,6 +68,14 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Filter', {
     getItems: function() {
         var me = this;
 
+        me.listingModeField = Ext.create('Shopware.apps.Base.view.element.ListingFilterModeSelect', {
+            name: 'filters[listingMode]',
+            fieldLabel: '{s name=fieldset/filter/text/listingMode}{/s}',
+            labelWidth: 210,
+            labelStyle: 'font-weight: 700;',
+            anchor: '100%'
+        });
+
         return [
             {
                 xtype: 'fieldset',
@@ -130,22 +138,9 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Filter', {
                         xtype: 'checkbox',
                         uncheckedValue: false,
                         inputValue: true
-                    }, {
-                        name: 'filters[instantFilterResult]',
-                        fieldLabel: '{s name=fieldset/filter/text/instantFilterResult}{/s}',
-                        helpText: '{s name=fieldset/filter/text/instantFilterResultHelp}{/s}',
-
-                        xtype: 'checkbox',
-                        uncheckedValue: false,
-                        inputValue: true
-                    }, {
-                        name: 'filters[generatePartialFacets]',
-                        fieldLabel: '{s name=fieldset/filter/text/generatePartialFacets}{/s}',
-                        helpText: '{s name=fieldset/filter/text/generatePartialFacetsHelp}{/s}',
-                        xtype: 'checkbox',
-                        uncheckedValue: false,
-                        inputValue: true
-                    }, {
+                    },
+                    me.listingModeField,
+                    {
                         xtype: 'numberfield',
                         minValue: 1,
                         name: 'filters[categoryFilterDepth]',

@@ -9,16 +9,17 @@ class Migrations_Migration811 extends AbstractMigration
      */
     public function up($modus)
     {
-        $sql = <<<EOD
-INSERT IGNORE INTO `s_core_config_elements` (`id`, `form_id`, `name`, `value`, `label`, `description`, `type`, `required`, `position`, `scope`) VALUES
-(NULL, 0, 'generatePartialFacets','i:0;', '', '', '', 1, 0, 0);
-EOD;
+        $sql = <<<'SQL'
+INSERT INTO s_core_config_elements (form_id, name, value, label, description, type, required, position, scope, options)
+VALUES (0, 'listingMode', 's:16:"full_page_reload";', '', '', 'listing-filter-mode-select', 1, 0, 0, NULL);
+SQL;
         $this->addSql($sql);
 
-        $sql = <<<EOD
+
+        $sql = <<<'SQL'
 INSERT IGNORE INTO `s_core_config_elements` (`id`, `form_id`, `name`, `value`, `label`, `description`, `type`, `required`, `position`, `scope`) VALUES
 (NULL, 0, 'categoryFilterDepth', 'i:2;', '', '', '', 1, 0, 0);
-EOD;
+SQL;
         $this->addSql($sql);
     }
 }

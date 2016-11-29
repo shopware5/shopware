@@ -324,9 +324,6 @@
 
             me.openLoadingIndicator();
 
-            // add parameter to see whether the next page or a previous page has been loaded
-            me.params.mode = 'next';
-
             // increase page index for further page loading
             me.params.p++;
 
@@ -432,9 +429,6 @@
             }
 
             tmpParams.p = tmpParams.p - 1;
-
-            // add parameter to see whether the next page or a previous page has been loaded
-            tmpParams.mode = 'previous';
 
             $.publish('plugin/swInfiniteScrolling/onBeforeFetchPreviousPage', [ me ]);
 

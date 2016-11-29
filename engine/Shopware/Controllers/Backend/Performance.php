@@ -266,8 +266,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
                 'showVoteAverageFacet',
                 'displayFiltersInListings',
                 'defaultListingSorting',
-                'instantFilterResult',
-                'generatePartialFacets',
+                'listingMode',
                 'categoryFilterDepth'
             ]),
             'various' => $this->genericConfigLoader([

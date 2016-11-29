@@ -332,7 +332,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
         $facetFilter->add($criteria);
 
         $criteria->setGeneratePartialFacets(
-            $this->container->get('config')->get('generatePartialFacets')
+            $this->container->get('config')->get('listingMode') === 'filter_ajax_reload'
         );
 
         if (!$this->Request()->get('loadFacets')) {
@@ -373,7 +373,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
         $criteria = $factory->createListingCriteria($this->Request(), $context);
 
         $criteria->setGeneratePartialFacets(
-            $this->container->get('config')->get('generatePartialFacets')
+            $this->container->get('config')->get('listingMode') === 'filter_ajax_reload'
         );
 
         if (!$this->Request()->get('loadFacets')) {
@@ -404,7 +404,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
         $criteria = $factory->createSearchCriteria($this->Request(), $context);
 
         $criteria->setGeneratePartialFacets(
-            $this->container->get('config')->get('generatePartialFacets')
+            $this->container->get('config')->get('listingMode') === 'filter_ajax_reload'
         );
 
         if (!$this->Request()->get('loadFacets')) {

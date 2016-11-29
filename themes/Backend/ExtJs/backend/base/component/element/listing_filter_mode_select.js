@@ -21,39 +21,21 @@
  * our trademarks remain entirely with us.
  *
  * @category   Shopware
- * @package    Performance
- * @subpackage Model
+ * @package    Base
+ * @subpackage Store
  * @version    $Id$
  * @author shopware AG
  */
 
-/**
- * Base config model which holds references to the config items
- */
-//{block name="backend/performance/model/filter"}
-Ext.define('Shopware.apps.Performance.model.Filter', {
+Ext.define('Shopware.apps.Base.view.element.ListingFilterModeSelect', {
+    extend: 'Shopware.apps.Base.view.element.ProductBoxLayoutSelect',
+    labelWidth: 180,
+    alias: 'widget.base-element-listing-filter-mode-select',
+    forceSelection: true,
+    editable: false,
+    allowBlank: false,
 
-    /**
-     * Extends the standard Ext Model
-     * @string
-     */
-    extend: 'Ext.data.Model',
-
-    /**
-     * Contains the model fields
-     * @array
-     */
-    fields: [
-        //{block name="backend/performance/model/filter/fields"}{/block}
-        { name: 'id', type: 'int' },
-        { name: 'showSupplierInCategories', type: 'bool' },
-        { name: 'displayFiltersInListings', type: 'bool' },
-        { name: 'showShippingFreeFacet', type: 'bool' },
-        { name: 'showPriceFacet', type: 'bool' },
-        { name: 'showVoteAverageFacet', type: 'bool' },
-        { name: 'showImmediateDeliveryFacet', type: 'bool' },
-        { name: 'listingMode', type: 'string' },
-        { name: 'categoryFilterDepth', type:'integer' }
-    ]
+    createStore: function() {
+        this.store = Ext.create('Shopware.apps.Base.store.ListingFilterMode', this.storeConfig);
+    }
 });
-//{/block}

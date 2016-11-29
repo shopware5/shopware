@@ -2,7 +2,8 @@
 
 {block name="frontend_listing_filter_facet_value_list"}
     {$type = 'value-list'}
-    {if {config name="generatePartialFacets"} }
+    {$listingMode = {config name="listingMode"}}
+    {if $listingMode == 'filter_ajax_reload'}
         {$type = 'value-list-single'}
     {/if}
 
