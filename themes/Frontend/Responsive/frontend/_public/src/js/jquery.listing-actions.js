@@ -1121,7 +1121,6 @@
                 html = response.pagination.trim();
 
             $(me.opts.paginationSelector).replaceWith(html);
-            StateManager.updatePlugin(me.opts.paginationBarPerPageSelector, 'swSelectboxReplacement');
             StateManager.updatePlugin(me.opts.paginationBarPerPageSelector, 'swAutoSubmit');
 
             $.publish('plugin/swListingActions/updatePagination', [me, html]);

@@ -39,7 +39,7 @@
                                 {block name='frontend_account_profile_profile_input_salutation'}
                                     {getSalutations variable="salutations"}
 
-                                    <div class="profile--salutation field--select">
+                                    <div class="profile--salutation field--select select-field">
                                         <select name="profile[salutation]"
                                                 required="required"
                                                 aria-required="true"
@@ -106,7 +106,7 @@
                                             {/block}
 
                                             {block name="frontend_account_profile_profile_input_birthday_day"}
-                                                <div class="profile--birthday field--select">
+                                                <div class="profile--birthday field--select select-field">
                                                     <select name="profile[birthday][day]"
                                                             {if {config name=requireBirthdayField}} required="required" aria-required="true"{/if}
                                                             class="{if {config name=requireBirthdayField}}is--required{/if}{if $errorFlags.birthday && {config name=requireBirthdayField}} has--error{/if}">
@@ -121,7 +121,7 @@
                                             {/block}
 
                                             {block name="frontend_account_profile_profile_input_birthday_month"}
-                                                <div class="profile--birthmonth field--select">
+                                                <div class="profile--birthmonth field--select select-field">
                                                     <select name="profile[birthday][month]"
                                                             {if {config name=requireBirthdayField}} required="required" aria-required="true"{/if}
                                                             class="{if {config name=requireBirthdayField}}is--required{/if}{if $errorFlags.birthday && {config name=requireBirthdayField}} has--error{/if}">
@@ -136,7 +136,7 @@
                                             {/block}
 
                                             {block name="frontend_account_profile_profile_input_birthday_year"}
-                                                <div class="profile--birthyear field--select">
+                                                <div class="profile--birthyear field--select select-field">
                                                     <select name="profile[birthday][year]"
                                                             {if {config name=requireBirthdayField}} required="required" aria-required="true"{/if}
                                                             class="{if {config name=requireBirthdayField}}is--required{/if}{if $errorFlags.birthday && {config name=requireBirthdayField}} has--error{/if}">

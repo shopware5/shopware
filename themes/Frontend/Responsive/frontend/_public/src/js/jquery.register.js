@@ -355,8 +355,7 @@
                 $select = $(event.currentTarget),
                 countryId = $select.val(),
                 addressType = $select.attr('data-address-type'),
-                $stateContainers,
-                plugin;
+                $stateContainers;
 
             $.publish('plugin/swRegister/onCountryChangedBefore', [ me, event, countryId, addressType ]);
 
@@ -375,12 +374,6 @@
                 $stateContainers.removeClass(me.opts.hiddenClass);
                 $select = $stateContainers.find('select');
                 $select.removeAttr('disabled');
-
-                if ((plugin = $select.data('plugin_swSelectboxReplacement'))) {
-                    plugin.$el.removeClass(me.opts.hiddenClass);
-                    plugin.$wrapEl.removeClass(me.opts.hiddenClass);
-                    plugin.setEnabled();
-                }
             }
 
             $.publish('plugin/swRegister/onCountryChanged', [ me, event, countryId, addressType ]);
@@ -397,7 +390,6 @@
          */
         resetStateSelections: function (addressType) {
             var me = this,
-                plugin,
                 $select,
                 $stateContainers,
                 $stateContainer;
@@ -410,12 +402,7 @@
             $.each($stateContainers, function(index, stateContainer) {
                 $stateContainer = $(stateContainer);
                 $select = $stateContainer.find('select');
-
-                if (plugin = $select.data('plugin_swSelectboxReplacement')) {
-                    plugin.setDisabled();
-                } else {
-                    $select.attr('disabled', 'disabled');
-                }
+                $select.attr('disabled', 'disabled');
 
                 $stateContainer.addClass(me.opts.hiddenClass);
             });
@@ -559,45 +546,31 @@
         },
 
         /**
-         * Adds the defined error class to the given field or calls the
-         * setError() method of the selectboxReplacement plugin if its
-         * registered on the element.
+         * Adds the defined error class to the given field.
          *
          * @public
          * @method setFieldAsError
          * @param {jQuery} $el
          */
         setFieldAsError: function ($el) {
-            var me = this,
-                plugin;
+            var me = this;
 
-            if ((plugin = $el.data('plugin_swSelectboxReplacement'))) {
-                plugin.setError();
-            } else {
-                $el.addClass(me.opts.errorClass);
-            }
+            $el.addClass(me.opts.errorClass);
 
             $.publish('plugin/swRegister/onSetFieldAsError', [ me, $el ]);
         },
 
         /**
-         * Removes the defined error class to the given field or calls the
-         * removeError() method of the selectboxReplacement plugin if its
-         * registered on the element.
+         * Removes the defined error class from the given field.
          *
          * @public
          * @method setFieldAsSuccess
          * @param {jQuery} $el
          */
         setFieldAsSuccess: function ($el) {
-            var me = this,
-                plugin;
+            var me = this;
 
-            if ((plugin = $el.data('plugin_swSelectboxReplacement'))) {
-                plugin.removeError();
-            } else {
-                $el.removeClass(me.opts.errorClass);
-            }
+            $el.removeClass(me.opts.errorClass);
 
             $.publish('plugin/swRegister/onSetFieldAsSuccess', [ me, $el ]);
         },

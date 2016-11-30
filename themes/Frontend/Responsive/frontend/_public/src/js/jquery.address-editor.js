@@ -199,7 +199,6 @@
         _registerPlugins: function() {
             window.StateManager
                 .addPlugin('div[data-register="true"]', 'swRegister')
-                .addPlugin('select:not([data-no-fancy-select="true"])', 'swSelectboxReplacement')
                 .addPlugin('*[data-preloader-button="true"]', 'swPreloaderButton');
 
             $.publish('plugin/swAddressEditor/onRegisterPlugins', [ this ]);

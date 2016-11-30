@@ -18,14 +18,16 @@
                 <div class="address--customertype">
                     {if {config name=showCompanySelectField}}
                         {block name="frontend_address_form_fieldset_customer_type_select"}
-                            <select name="{$inputPrefix}[additional][customer_type]"
-                                    required="required"
-                                    aria-required="true"
-                                    class="is--required{if $error_flags.customer_type} has--error{/if}">
-                                <option value="private"{if !$formData.additional.customer_type OR $formData.additional.customer_type eq "private"} selected="selected"{/if}>{s name='RegisterPersonalLabelPrivate' namespace='frontend/register/personal_fieldset'}{/s}</option>
-                                <option value="business"{if $formData.company || $formData.additional.customer_type eq "business"} selected="selected"{/if}>{s name='RegisterPersonalLabelBusiness' namespace='frontend/register/personal_fieldset'}{/s}</option>
-                                {block name="frontend_address_form_fieldset_customer_type_options"}{/block}
-                            </select>
+                            <div class="select-field">
+                                <select name="{$inputPrefix}[additional][customer_type]"
+                                        required="required"
+                                        aria-required="true"
+                                        class="is--required{if $error_flags.customer_type} has--error{/if}">
+                                    <option value="private"{if !$formData.additional.customer_type OR $formData.additional.customer_type eq "private"} selected="selected"{/if}>{s name='RegisterPersonalLabelPrivate' namespace='frontend/register/personal_fieldset'}{/s}</option>
+                                    <option value="business"{if $formData.company || $formData.additional.customer_type eq "business"} selected="selected"{/if}>{s name='RegisterPersonalLabelBusiness' namespace='frontend/register/personal_fieldset'}{/s}</option>
+                                    {block name="frontend_address_form_fieldset_customer_type_options"}{/block}
+                                </select>
+                            </div>
                         {/block}
                     {else}
                         {block name="frontend_address_form_fieldset_customer_type_input"}
@@ -84,7 +86,7 @@
             {block name="frontend_address_form_fieldset_address"}
                 {* Salutation *}
                 {block name='frontend_address_form_input_salutation'}
-                    <div class="address--salutation field--select">
+                    <div class="address--salutation field--select select-field">
 
                         {getSalutations variable="salutations"}
 
@@ -243,7 +245,7 @@
 
                 {* Country *}
                 {block name='frontend_address_form_input_country'}
-                    <div class="address--country field--select">
+                    <div class="address--country field--select select-field">
                         <select name="{$inputPrefix}[country]"
                                 data-address-type="address"
                                 id="country"
@@ -270,7 +272,7 @@
                                 {if $country.states}
                                     <div data-country-id="{$country.id}"
                                          data-address-type="address"
-                                         class="address--state-selection field--select{if $country.id != $formData.country.id} is--hidden{/if}">
+                                         class="address--state-selection field--select select-field{if $country.id != $formData.country.id} is--hidden{/if}">
                                         <select {if $country.id != $formData.country.id}disabled="disabled"{/if}
                                                 name="{$inputPrefix}[state]"{if $country.force_state_in_registration}
                                                 required="required"

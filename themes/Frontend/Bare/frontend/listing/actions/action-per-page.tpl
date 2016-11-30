@@ -20,18 +20,19 @@
         {block name='frontend_listing_actions_items_per_page_field'}
             {$listingMode = {config name=listingMode}}
 
-            <select id="{$shortParameters.sPerPage}"
-                    name="{$shortParameters.sPerPage}"
-                    class="per-page--field action--field"
-                    data-auto-submit="true"
-                    data-class="per-page--select"
-                    {if $listingMode != 'full_page_reload'}data-loadingindicator="false"{/if}>
+            <div class="per-page--select select-field">
+                <select id="{$shortParameters.sPerPage}"
+                        name="{$shortParameters.sPerPage}"
+                        class="per-page--field action--field"
+                        data-auto-submit="true"
+                        {if $listingMode != 'full_page_reload'}data-loadingindicator="false"{/if}>
 
-                {foreach $pageSizes as $perPage}
-                    <option value="{$perPage}" {if $perPage == $limit}selected="selected"{/if}>{$perPage}</option>
-                {/foreach}
-                {block name='frontend_listing_actions_per_page_values'}{/block}
-            </select>
+                    {foreach $pageSizes as $perPage}
+                        <option value="{$perPage}" {if $perPage == $limit}selected="selected"{/if}>{$perPage}</option>
+                    {/foreach}
+                    {block name='frontend_listing_actions_per_page_values'}{/block}
+                </select>
+            </div>
         {/block}
     </form>
 {/if}

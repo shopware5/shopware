@@ -72,7 +72,6 @@ class Theme extends \Shopware\Components\Theme
         'src/js/jquery.product-slider.js',
         'src/js/jquery.register.js',
         'src/js/jquery.modal.js',
-        'src/js/jquery.selectbox-replacement.js',
         'src/js/jquery.captcha.js',
         'src/js/jquery.drop-down-menu.js',
         'src/js/jquery.loading-indicator.js',

@@ -51,58 +51,50 @@ body > .sidebar-main {
     }
 
     .field--select,
-    .navigation--entry,
-    .js--fancy-select,
-    .js--fancy-select-text,
-    .js--fancy-select-trigger {
-        .unitize-height(30, 16);
+    .navigation--entry {
+        .unitize-height(30);
     }
 
-    // Normalize fancy select appearance
     .field--select {
         position: relative;
-        margin: 0;
-        padding: 0;
     }
 
-    .js--fancy-select {
-        .reset-border-radius();
-        background: none;
-        border: 0 none;
-        width: auto;
+    .select-field {
+        .unitize-height(30);
 
-        select { border: 0 none; }
-    }
+        select {
+            .reset-border-radius();
+            .unitize-padding(0, 18, 0, 0);
+            .unitize(line-height, 28);
+            .unitize(font-size, 16);
+            background: none;
+            border: 0 none;
+        }
 
-    .js--fancy-select-text {
-        .unitize-padding(0, 18, 0, 0);
-        .unitize(line-height, 30);
-        .unitize(font-size, 16);
-        border: 0 none;
-    }
-
-    .js--fancy-select-trigger {
-        .unitize(line-height, 32);
-        width: auto;
-        border: 0 none;
+        &:after {
+            .unitize-height(25);
+            .unitize(line-height, 28);
+            width: auto;
+            border: 0 none;
+        }
     }
 
     // Language switcher
     .top-bar--language {
-        .js--fancy-select-text {
-            .unitize-width(32, 16);
-            text-indent: -9999px;
-            text-align: left;
-            white-space: nowrap;
-            overflow: hidden;
+        .select-field {
+            .unitize-width(32);
+
+            select {
+                text-indent: -9999px;
+            }
         }
 
         .language--flag {
             .unitize(-6, 16, margin-top);
             position: absolute;
-            z-index: @zindex-sidebar-language-flag;
-            top: 50%;
-            left: 0;
+            z-index: @zindex-header-language-flag;
+            top: 50%; left: 0;
+            pointer-events: none;
         }
     }
 }
