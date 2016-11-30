@@ -31,9 +31,28 @@ Ext.define('Shopware.apps.Base.view.element.ListingFilterModeSelect', {
     extend: 'Shopware.apps.Base.view.element.ProductBoxLayoutSelect',
     labelWidth: 180,
     alias: 'widget.base-element-listing-filter-mode-select',
+    cls: 'listing-filter-mode-select',
+
     forceSelection: true,
     editable: false,
     allowBlank: false,
+    fieldLabel: '',
+    helpText: '',
+
+    listConfig: {
+        getInnerTpl: function () {
+            return '{literal}' +
+                '<div class="layout-select-item listing-filter-mode-select-item">' +
+                    '<img src="{image}" width="70" height="50" class="layout-picto" />' +
+                    '<div class="layout-info">' +
+                        '<h1>{label}</h1>' +
+                        '<div>{description}</div>' +
+                    '</div>' +
+                    '<div class="x-clear" />' +
+                '</div>' +
+            '{/literal}';
+        }
+    },
 
     createStore: function() {
         this.store = Ext.create('Shopware.apps.Base.store.ListingFilterMode', this.storeConfig);

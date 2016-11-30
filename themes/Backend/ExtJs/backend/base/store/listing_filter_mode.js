@@ -47,53 +47,44 @@ Ext.define('Shopware.apps.Base.store.ListingFilterMode', {
     pageSize: 1000,
 
     defaultModes: {
-        fullPageReload: true,
-        reloadProductsMode: true,
-        reloadFiltersMode: true
+        displayFullPageReload: true,
+        displayReloadProductsMode: true,
+        displayReloadFiltersMode: true
     },
 
-    snippets: {
-        fullPageReload: {
-            label: '{s name=listing_mode_reload_label}{/s}',
-            description: '{s name=listing_mode_reload_description}{/s}'
-        },
-        reloadProductsMode: {
-            label: '{s name=listing_mode_product_reload_label}{/s}',
-            description: '{s name=listing_mode_product_reload_description}{/s}'
-        },
-        reloadFiltersMode: {
-            label: '{s name=listing_mode_filter_reload_label}{/s}',
-            description: '{s name=listing_mode_filter_reload_description}{/s}'
-        }
+    fullPageReload: {
+        key: 'full_page_reload',
+        label: '{s name=listing_mode_reload_label}{/s}',
+        description: '{s name=listing_mode_reload_description}{/s}',
+        image: '{link file="backend/_resources/images/listing_mode/full_page_reload.jpg"}'
+    },
+
+    reloadProductsMode: {
+        key: 'product_ajax_reload',
+        label: '{s name=listing_mode_product_reload_label}{/s}',
+        description: '{s name=listing_mode_product_reload_description}{/s}',
+        image: '{link file="backend/_resources/images/listing_mode/product_ajax_reload.jpg"}'
+    },
+
+    reloadFiltersMode: {
+        key: 'filter_ajax_reload',
+        label: '{s name=listing_mode_filter_reload_label}{/s}',
+        description: '{s name=listing_mode_filter_reload_description}{/s}',
+        image: '{link file="backend/_resources/images/listing_mode/filter_ajax_reload.jpg"}'
     },
 
     constructor: function(config) {
         var me = this,
             data = [];
 
-        if (this.getConfigValue(config, 'fullPageReload')) {
-            data.push({
-                key: 'full_page_reload',
-                label: me.snippets.fullPageReload.label,
-                description: me.snippets.fullPageReload.description,
-                image: '{link file="backend/_resources/images/category/layout_box_parent.png"}'
-            });
+        if (this.getConfigValue(config, 'displayFullPageReload')) {
+            data.push(me.fullPageReload);
         }
-        if (this.getConfigValue(config, 'reloadProductsMode')) {
-            data.push({
-                key: 'product_ajax_reload',
-                label: me.snippets.reloadProductsMode.label,
-                description: me.snippets.reloadProductsMode.description,
-                image: '{link file="backend/_resources/images/category/layout_box_basic.png"}'
-            });
+        if (this.getConfigValue(config, 'displayReloadProductsMode')) {
+            data.push(me.reloadProductsMode);
         }
-        if (this.getConfigValue(config, 'reloadFiltersMode')) {
-            data.push({
-                key: 'filter_ajax_reload',
-                label: me.snippets.reloadFiltersMode.label,
-                description: me.snippets.reloadFiltersMode.description,
-                image: '{link file="backend/_resources/images/category/layout_box_minimal.png"}'
-            });
+        if (this.getConfigValue(config, 'displayReloadFiltersMode')) {
+            data.push(me.reloadFiltersMode);
         }
 
         this.data = data;
