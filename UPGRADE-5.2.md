@@ -3,9 +3,19 @@
 This changelog references changes done in Shopware 5.2 patch versions.
 
 ## 5.2.13
+
+[View all changes from v5.2.12...v5.2.13](https://github.com/shopware/shopware/compare/v5.2.12...v5.2.13)
+
 * Changed duplicate smarty block from `frontend_checkout_confirm_information_addresses_equal_panel_shipping_select_address` to `frontend_checkout_confirm_information_addresses_equal_panel_shipping_add_address` in `frontend/checkout/confirm.tpl`
 
+## 5.2.12
+
+[View all changes from v5.2.11...v5.2.12](https://github.com/shopware/shopware/compare/v5.2.11...v5.2.12)
+
 ## 5.2.11
+
+[View all changes from v5.2.10...v5.2.11](https://github.com/shopware/shopware/compare/v5.2.10...v5.2.11)
+
 * Added new Smarty block `frontend_robots_txt_allows` to `frontend/robots_txt/index.tpl`
 * Added new Smarty block `frontend_account_order_item_availability` to `frontend/account/order_item_details.tpl`
 * Added new rule for `/widgets/emotion` to robots.txt in `frontend/robots_txt/index.tpl`
