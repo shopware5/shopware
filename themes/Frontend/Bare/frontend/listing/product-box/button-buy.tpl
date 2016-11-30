@@ -12,8 +12,8 @@
               data-add-article="true"
               data-eventName="submit"
               {if $theme.offcanvasCart}
-                  data-showModal="false"
-                  data-addArticleUrl="{url controller=checkout action=ajaxAddArticleCart}"
+              data-showModal="false"
+              data-addArticleUrl="{url controller=checkout action=ajaxAddArticleCart}"
               {/if}>
 
             {block name="frontend_listing_product_box_button_buy_order_number"}
@@ -21,9 +21,9 @@
             {/block}
 
             {block name="frontend_listing_product_box_button_buy_button"}
-                <button class="buybox--button block btn is--primary is--icon-right is--center is--large" name="{s namespace="frontend/detail/buy" name="DetailBuyActionAdd"}{/s}">
+                <button class="buybox--button block btn is--primary is--icon-right is--center is--large">
                     {block name="frontend_listing_product_box_button_buy_button_text"}
-                        {s namespace="frontend/detail/buy" name="DetailBuyActionAdd"}{/s} <i class="icon--arrow-right"></i>
+                        {s namespace="frontend/listing/box_article" name="ListingBuyActionAdd"}{/s}<i class="icon--basket"></i> <i class="icon--arrow-right"></i>
                     {/block}
                 </button>
             {/block}
