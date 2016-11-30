@@ -283,6 +283,39 @@ class Homepage extends Page implements HelperSelectorInterface
     }
 
     /**
+     * Checks an emotion manufacturer slider element
+     * @param SliderElement $slider
+     * @param array $slides
+     */
+    public function checkManufacturerSlider(SliderElement $slider, array $slides)
+    {
+        $properties = array_keys(current($slides));
+
+        $sliderSlides = array_slice($slider->getSlides($properties), 0, count($slides));
+
+        usort($sliderSlides, function ($a, $b) {
+            return strcmp($a['name'], $b['name']);
+        });
+        usort($slides, function ($a, $b) {
+            return strcmp($a['name'], $b['name']);
+        });
+
+        $result = Helper::compareArrays($sliderSlides, $slides);
+
+        if ($result === true) {
+            return;
+        }
+
+        $message = [
+            sprintf('The slides have a different %s!', $result['key']),
+            'Given: ' . print_r($result['value'], true),
+            'Expected: ' . print_r($result['value2'], true)
+        ];
+
+        Helper::throwException($message);
+    }
+
+    /**
      * Checks an emotion category teaser element
      * @param CategoryTeaser $teaser
      * @param string $name

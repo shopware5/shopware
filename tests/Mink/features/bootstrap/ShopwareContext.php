@@ -338,7 +338,7 @@ class ShopwareContext extends SubContext
         /** @var \Shopware\Tests\Mink\Element\ManufacturerSlider $slider */
         $slider = $this->getMultipleElement($page, 'ManufacturerSlider', 1);
 
-        $page->checkSlider($slider, $manufacturers->getHash());
+        $page->checkManufacturerSlider($slider, $manufacturers->getHash());
     }
 
     /**
