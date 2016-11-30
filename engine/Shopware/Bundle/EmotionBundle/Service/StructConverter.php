@@ -37,6 +37,7 @@ use Shopware\Bundle\EmotionBundle\Struct\Library\Component;
 use Shopware\Bundle\MediaBundle\MediaServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\Manufacturer;
 use Shopware\Components\Compatibility\LegacyStructConverter;
+use Shopware\Components\DependencyInjection\Container;
 
 class StructConverter
 {
@@ -56,15 +57,22 @@ class StructConverter
     private $eventManager;
 
     /**
+     * @var Container
+     */
+    private $container;
+
+    /**
      * @param LegacyStructConverter $converter
      * @param MediaServiceInterface $mediaService
      * @param \Enlight_Event_EventManager $eventManager
+     * @param Container $container
      */
-    public function __construct(LegacyStructConverter $converter, MediaServiceInterface $mediaService, \Enlight_Event_EventManager $eventManager)
+    public function __construct(LegacyStructConverter $converter, MediaServiceInterface $mediaService, \Enlight_Event_EventManager $eventManager, Container $container)
     {
         $this->converter = $converter;
         $this->mediaService = $mediaService;
         $this->eventManager = $eventManager;
+        $this->container = $container;
     }
 
     /**
@@ -189,6 +197,9 @@ class StructConverter
                     if ($manufacturerArray['image']) {
                         $manufacturerArray['image'] = $this->mediaService->getUrl($manufacturerArray['image']);
                     }
+
+                    $manufacturerArray['link'] = $this->container->get('config')->get('baseFile') . '?controller=listing&action=manufacturer&sSupplier=' . $manufacturer->getId();
+                    $manufacturerArray['website'] = $manufacturer->getLink();
 
                     $elementArray['data']['values'][$manufacturer->getId()] = $manufacturerArray;
                 }
