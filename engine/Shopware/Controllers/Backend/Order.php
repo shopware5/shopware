@@ -874,7 +874,8 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         $autoSend = $this->Request()->getParam('autoSend', false);
         $orders = $this->Request()->getParam('orders', array(0 => $this->Request()->getParams()));
         $documentType = $this->Request()->getParam('docType', null);
-        $documentMode = $this->Request()->getParam('mode', 0);
+        $documentMode = $this->Request()->getParam('mode');
+        $addAttachments = $this->request->getParam('addAttachments') == "true" ? true : false;
 
         /** @var $namespace Enlight_Components_Snippet_Namespace */
         $namespace = Shopware()->Snippets()->getNamespace('backend/order');
@@ -926,13 +927,10 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
             // this would create a new Shop if we execute an flush();
             $this->createOrderDocuments($documentType, $documentMode, $order);
 
-
-            //convert to array data to return the data to the view
-
             $data['paymentStatus'] = Shopware()->Models()->toArray($order->getPaymentStatus());
             $data['orderStatus'] = Shopware()->Models()->toArray($order->getOrderStatus());
 
-            $data['mail'] = $this->checkOrderStatus($order, $statusBefore, $clearedBefore, $autoSend, $documentType);
+            $data['mail'] = $this->checkOrderStatus($order, $statusBefore, $clearedBefore, $autoSend, $documentType, $addAttachments);
             //return the modified data array.
             $orders[$key] = $data;
         }
@@ -1048,9 +1046,10 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
      * @param \Shopware\Models\Order\Status $clearedBefore
      * @param boolean $autoSend
      * @param integer|string $documentType
+     * @param boolean $addAttachments
      * @return array
      */
-    private function checkOrderStatus($order, $statusBefore, $clearedBefore, $autoSend, $documentType)
+    private function checkOrderStatus($order, $statusBefore, $clearedBefore, $autoSend, $documentType, $addAttachments)
     {
         if ($order->getOrderStatus()->getId() !== $statusBefore->getId() || $order->getPaymentStatus()->getId() !== $clearedBefore->getId()) {
             //status or cleared changed?
@@ -1062,11 +1061,8 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
 
             //mail object created and auto send activated, then send mail directly.
             if (is_object($mail['mail']) && $autoSend === "true") {
-                if ($this->request->getParam('addAttachments')) {
-                    if ($documentType) {
-                        $document = $this->getDocument($documentType, $order->getDocuments()->toArray());
-                    }
-
+                if ($addAttachments) {
+                    $document = $this->getDocument($documentType, $order);
                     $mail['mail'] = $this->addAttachments($mail['mail'], $order->getId(), [$document]);
                 }
                 $result = Shopware()->Modules()->Order()->sendStatusMail($mail['mail']);
@@ -1082,12 +1078,12 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
 
     /**
      * @param integer $typeId
-     * @param \Shopware\Models\Order\Document\Document[] $documents
+     * @param Order $order
      * @return array
      */
-    private function getDocument($typeId, array $documents)
+    private function getDocument($typeId, Order $order)
     {
-        foreach ($documents as $document) {
+        foreach ($order->getDocuments()->toArray() as $document) {
             if ($document->getTypeId() == $typeId) {
                 return [
                     'hash' => $document->getHash(),
@@ -1101,7 +1097,40 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
             }
         }
 
-        return [];
+        return $this->getDocumentFromDatabase($order->getId(), $typeId);
+    }
+
+    /**
+     * @param integer $orderId
+     * @param integer $typeId
+     * @return array
+     */
+    private function getDocumentFromDatabase($orderId, $typeId)
+    {
+        $queryBuilder = $this->container->get('dbal_connection')->createQueryBuilder();
+        $queryResult = $queryBuilder->select('doc.hash, template.id, template.name')
+            ->from('s_order_documents', 'doc')
+            ->join('doc', 's_core_documents', 'template', 'doc.type = template.id')
+            ->where('doc.orderID = :orderId')
+            ->andWhere('doc.type = :type')
+            ->setParameter('orderId', $orderId)
+            ->setParameter('type', $typeId)
+            ->execute()
+            ->fetch(PDO::FETCH_ASSOC);
+
+        if ($queryResult) {
+            return [
+                'hash' => $queryResult['hash'],
+                'type' => [
+                    [
+                        'id' => $queryResult['id'],
+                        'name' => $queryResult['name']
+                    ]
+                ]
+            ];
+        }
+
+        return[];
     }
 
     /**
@@ -1349,7 +1378,6 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
     private function createDocument($orderId, $documentType)
     {
         $renderer = "pdf"; // html / pdf
-
 
         $deliveryDate = $this->Request()->getParam('deliveryDate', null);
         if (!empty($deliveryDate)) {
