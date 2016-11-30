@@ -23,6 +23,12 @@
 
         <service id="shopware_elastic_search.field_mapping" class="Shopware\Bundle\ESIndexingBundle\FieldMapping">
             <argument type="service" id="shopware_elastic_search.shop_analyzer" />
+            <argument type="service" id="shopware_elastic_search.text_mapping" />
+        </service>
+
+        <service id="shopware_elastic_search.text_mapping" class="Shopware\Bundle\ESIndexingBundle\TextMappingInterface">
+            <factory class="Shopware\Bundle\ESIndexingBundle\DependencyInjection\Factory\TextMappingFactory" method="factory" />
+            <argument type="service" id="shopware_elastic_search.client" />
         </service>
 
         <service id="shopware_elastic_search.index_factory" class="Shopware\Bundle\ESIndexingBundle\IndexFactory" >
@@ -119,6 +125,8 @@
         <service id="shopware_elastic_search.product_mapping" class="Shopware\Bundle\ESIndexingBundle\Product\ProductMapping">
             <argument type="service" id="shopware_elastic_search.identifier_selector" />
             <argument type="service" id="shopware_elastic_search.field_mapping" />
+            <argument type="service" id="shopware_elastic_search.text_mapping" />
+            <argument type="service" id="shopware_attribute.crud_service" />
             <tag name="shopware_elastic_search.mapping" />
         </service>
 
