@@ -312,7 +312,7 @@
                                                                     </a>
                                                                 {/block}
 
-                                                                {block name='frontend_checkout_confirm_information_addresses_equal_panel_shipping_select_address'}
+                                                                {block name='frontend_checkout_confirm_information_addresses_equal_panel_shipping_add_address'}
                                                                     <a href="{url controller=address}"
                                                                        class="btn choose-different-address"
                                                                        data-address-selection="true"

@@ -2,6 +2,9 @@
 
 This changelog references changes done in Shopware 5.2 patch versions.
 
+## 5.2.13
+* Changed duplicate smarty block from `frontend_checkout_confirm_information_addresses_equal_panel_shipping_select_address` to `frontend_checkout_confirm_information_addresses_equal_panel_shipping_add_address` in `frontend/checkout/confirm.tpl`
+
 ## 5.2.11
 * Added new Smarty block `frontend_robots_txt_allows` to `frontend/robots_txt/index.tpl`
 * Added new Smarty block `frontend_account_order_item_availability` to `frontend/account/order_item_details.tpl`
