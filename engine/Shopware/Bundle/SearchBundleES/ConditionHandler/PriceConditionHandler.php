@@ -30,10 +30,10 @@ use Shopware\Bundle\ESIndexingBundle\FieldMappingInterface;
 use Shopware\Bundle\SearchBundle\Condition\PriceCondition;
 use Shopware\Bundle\SearchBundle\CriteriaPartInterface;
 use Shopware\Bundle\SearchBundle\Criteria;
-use Shopware\Bundle\SearchBundleES\HandlerInterface;
+use Shopware\Bundle\SearchBundleES\PartialConditionHandlerInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
-class PriceConditionHandler implements HandlerInterface
+class PriceConditionHandler implements PartialConditionHandlerInterface
 {
     /**
      * @var FieldMappingInterface
@@ -59,14 +59,38 @@ class PriceConditionHandler implements HandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function handle(
+    public function handleFilter(
         CriteriaPartInterface $criteriaPart,
         Criteria $criteria,
         Search $search,
         ShopContextInterface $context
     ) {
-        $field = $this->fieldMapping->getPriceField($context);
+        $search->addFilter(
+            $this->createQuery($criteriaPart, $context)
+        );
+    }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function handlePostFilter(
+        CriteriaPartInterface $criteriaPart,
+        Criteria $criteria,
+        Search $search,
+        ShopContextInterface $context
+    ) {
+        $search->addPostFilter(
+            $this->createQuery($criteriaPart, $context)
+        );
+    }
+
+    /**
+     * @param CriteriaPartInterface $criteriaPart
+     * @param ShopContextInterface $context
+     * @return RangeQuery
+     */
+    private function createQuery(CriteriaPartInterface $criteriaPart, ShopContextInterface $context)
+    {
         $range = [];
 
         /** @var PriceCondition $criteriaPart */
@@ -76,12 +100,6 @@ class PriceConditionHandler implements HandlerInterface
         if ($criteriaPart->getMaxPrice()) {
             $range['lte'] = $criteriaPart->getMaxPrice();
         }
-
-        $filter = new RangeQuery($field, $range);
-        if ($criteria->generatePartialFacets() || $criteria->hasBaseCondition($criteriaPart->getName())) {
-            $search->addFilter($filter);
-            return;
-        }
-        $search->addPostFilter($filter);
+        return new RangeQuery($this->fieldMapping->getPriceField($context), $range);
     }
 }

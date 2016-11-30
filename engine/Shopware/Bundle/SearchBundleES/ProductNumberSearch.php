@@ -28,6 +28,7 @@ use Elasticsearch\Client;
 use ONGR\ElasticsearchDSL\Search;
 use Shopware\Bundle\ESIndexingBundle\IndexFactoryInterface;
 use Shopware\Bundle\ESIndexingBundle\Product\ProductMapping;
+use Shopware\Bundle\SearchBundle\ConditionInterface;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\CriteriaPartInterface;
 use Shopware\Bundle\SearchBundle\ProductNumberSearchInterface;
@@ -114,7 +115,7 @@ class ProductNumberSearch implements ProductNumberSearchInterface
     {
         $search = new Search();
 
-        $this->addCriteriaParts($criteria, $context, $search, $criteria->getConditions());
+        $this->addConditions($criteria, $context, $search);
         $this->addCriteriaParts($criteria, $context, $search, $criteria->getSortings());
         $this->addCriteriaParts($criteria, $context, $search, $criteria->getFacets());
 
@@ -186,5 +187,62 @@ class ProductNumberSearch implements ProductNumberSearchInterface
             $products[$product->getNumber()] = $product;
         }
         return $products;
+    }
+
+    /**
+     * @param Criteria $criteria
+     * @param ShopContextInterface $context
+     * @param Search $search
+     * @throws \Exception
+     */
+    private function addConditions(
+        Criteria $criteria,
+        ShopContextInterface $context,
+        Search $search
+    ) {
+        foreach ($criteria->getBaseConditions() as $condition) {
+            $handler = $this->getHandler($condition);
+            if (!$handler) {
+                continue;
+            }
+
+            if ($handler instanceof PartialConditionHandlerInterface) {
+                $handler->handleFilter($condition, $criteria, $search, $context);
+            } else {
+                trigger_error(sprintf("Condition handler %s doesn't support new filter mode. Class has to implement \\Shopware\\Bundle\\SearchBundleES\\PartialConditionHandlerInterface.", get_class($handler)), E_USER_DEPRECATED);
+                $handler->handle($condition, $criteria, $search, $context);
+            }
+        }
+
+        foreach ($criteria->getUserConditions() as $criteriaPart) {
+            $handler = $this->getHandler($criteriaPart);
+
+            if (!$handler) {
+                continue;
+            }
+
+            //trigger error when new interface isn't implemented
+            if (!$handler instanceof PartialConditionHandlerInterface) {
+                trigger_error(sprintf("Condition handler %s doesn't support new filter mode. Class has to implement \\Shopware\\Bundle\\SearchBundleES\\PartialConditionHandlerInterface.", get_class($handler)), E_USER_DEPRECATED);
+            }
+
+            //filter mode active and handler doesn't supports the filter mode?
+            if ($criteria->generatePartialFacets() && !$handler instanceof PartialConditionHandlerInterface) {
+                throw new \Exception(sprintf("New filter mode activated, handler class %s doesn't support this mode", get_class($handler)));
+            }
+
+            //filter mode active and handler supports new filter mode?
+            if ($criteria->generatePartialFacets() && $handler instanceof PartialConditionHandlerInterface) {
+                $handler->handleFilter($criteriaPart, $criteria, $search, $context);
+                continue;
+            }
+
+            //old filter mode activated and implements new interface?
+            if ($handler instanceof PartialConditionHandlerInterface) {
+                $handler->handlePostFilter($criteriaPart, $criteria, $search, $context);
+            } else {
+                $handler->handle($criteriaPart, $criteria, $search, $context);
+            }
+        }
     }
 }

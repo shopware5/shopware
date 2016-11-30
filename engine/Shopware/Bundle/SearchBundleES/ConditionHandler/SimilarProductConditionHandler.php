@@ -33,10 +33,10 @@ use ONGR\ElasticsearchDSL\Search;
 use Shopware\Bundle\SearchBundle\Condition\SimilarProductCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\CriteriaPartInterface;
-use Shopware\Bundle\SearchBundleES\HandlerInterface;
+use Shopware\Bundle\SearchBundleES\PartialConditionHandlerInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
-class SimilarProductConditionHandler implements HandlerInterface
+class SimilarProductConditionHandler implements PartialConditionHandlerInterface
 {
     /**
      * @var Connection
@@ -63,7 +63,7 @@ class SimilarProductConditionHandler implements HandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function handle(
+    public function handleFilter(
         CriteriaPartInterface $criteriaPart,
         Criteria $criteria,
         Search $search,
@@ -90,13 +90,24 @@ class SimilarProductConditionHandler implements HandlerInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function handlePostFilter(
+        CriteriaPartInterface $criteriaPart,
+        Criteria $criteria,
+        Search $search,
+        ShopContextInterface $context
+    ) {
+        $this->handleFilter($criteriaPart, $criteria, $search, $context);
+    }
+
+    /**
      * @param int $productId
      * @return int[]
      */
     private function getProductCategories($productId)
     {
         $query = $this->connection->createQueryBuilder();
-
         return $query->select('categoryID')
             ->from('s_articles_categories', 'category')
             ->where('articleID = :productId')
