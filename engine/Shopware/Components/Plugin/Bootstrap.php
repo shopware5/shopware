@@ -379,28 +379,20 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
      */
     public function createPayment($options, $description = null, $action = null)
     {
+        /** @var \Shopware\Components\Plugin\PaymentInstaller $installer */
+        $installer = $this->get('shopware.plugin_payment_installer');
+
         if (is_string($options)) {
             $options = ['name' => $options];
         }
-        $payment = $this->Payments()->findOneBy(['name' => $options['name']]);
-        if ($payment === null) {
-            $payment = new Payment();
-            $payment->setName($options['name']);
-            Shopware()->Models()->persist($payment);
-        }
-        $payment->fromArray($options);
         if ($description !== null) {
-            $payment->setDescription($description);
+            $options['description'] = $description;
         }
         if ($action !== null) {
-            $payment->setAction($action);
+            $options['action'] = $action;
         }
-        $plugin = $this->Plugin();
-        $plugin->getPayments()->add($payment);
-        $payment->setPlugin($plugin);
-        Shopware()->Models()->flush($payment);
 
-        return $payment;
+        return $installer->createOrUpdate($this->getName(), $options);
     }
 
     /**
