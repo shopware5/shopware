@@ -68,7 +68,8 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
         duplicateSuccessMsg: '{s name=duplicate/success_msg}{/s}',
         removeColTitle: '{s name="settings/grid/removeColTitel"}{/s}',
         removeColMsg: '{s name="settings/grid/removeColMsg"}{/s}',
-        emotionNotFoundMsg: '{s name="save/error/emotion_not_found"}{/s}'
+        emotionNotFoundMsg: '{s name="save/error/emotion_not_found"}{/s}',
+        previewErrorMessage: '{s name="preview/error"}{/s}'
     },
 
     /**
@@ -523,20 +524,92 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
 
     onPreview: function(view, viewport, emotion) {
         var me = this,
-            layoutForm = me.getLayoutForm(),
+            settings = me.getSettingsForm(),
+            layout = me.getLayoutForm(),
             gridPanel = me.getDesignerGrid(),
-            previewPanel = me.getDesignerPreview();
+            previewPanel = me.getDesignerPreview(),
+            emotionData;
 
-        if (!me.onSaveEmotion(emotion, true)) {
+        settings.getForm().updateRecord(emotion);
+        layout.getForm().updateRecord(emotion);
+
+        if (!emotion.get('id')) {
             gridPanel.designer.activePreview = false;
             gridPanel.refresh();
-            return false;
+            return;
         }
 
-        layoutForm.setDisabled(true);
+        emotionData = me.convertPreviewData(emotion);
 
-        previewPanel.showPreview(viewport);
-        gridPanel.hide();
+        var previewSaveFailed = function() {
+            gridPanel.designer.activePreview = false;
+            gridPanel.refresh();
+            Shopware.Notification.createGrowlMessage(me.snippets.errorTitle, me.snippets.previewErrorMessage);
+        };
+
+        Ext.Ajax.request({
+            url: '{url module=backend controller=emotion action=savePreview}',
+            jsonData: emotionData,
+            success: function(response) {
+                var json = Ext.decode(response.responseText);
+
+                if (Ext.isEmpty(json) || json.success === false) {
+                    previewSaveFailed();
+                    return;
+                }
+
+                var previewSrc = '{url module=widgets controller=emotion action=preview}/?emotionId=' + json.data.id + '&secret=' + json.data.previewSecret;
+
+                layout.setDisabled(true);
+                gridPanel.hide();
+
+                previewPanel.showPreview(viewport, previewSrc)
+            },
+            failure: previewSaveFailed
+        });
+    },
+
+    /**
+     * Converts the emotion ExtJS record into an useful array structure
+     * including all associations and additional data which is used by the preview.
+     *
+     * @param emotionRecord
+     * @returns emotionData []
+     */
+    convertPreviewData: function(emotionRecord) {
+        var me = this,
+            layout = me.getLayoutForm(),
+            emotionData = emotionRecord.getData(),
+            elements = emotionRecord.getElements(),
+            template = layout.tplStore.findRecord('id', emotionData['templateId']);
+
+        if (template !== null) {
+            emotionData['template'] = template.getData();
+        } else {
+            emotionData['template'] = {
+                'file': 'index.tpl'
+            }
+        }
+
+        emotionData['elements'] = [];
+        elements.each(function(element) {
+            var elementData = element.getData(),
+                viewports = element.getViewports(),
+                component = element.getComponent().getAt(0);
+
+            elementData['viewports'] = [];
+            viewports.each(function(viewport) {
+                elementData['viewports'].push(viewport.getData());
+            });
+
+            if (Ext.isDefined(component)) {
+                elementData['component'] = component.getData();
+            }
+
+            emotionData['elements'].push(elementData);
+        });
+
+        return emotionData;
     },
 
     closePreview: function() {

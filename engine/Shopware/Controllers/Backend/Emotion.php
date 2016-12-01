@@ -307,6 +307,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
             $data['id'] = $emotion->getId();
 
             $this->generateEmotionSeoUrls($emotion);
+            $this->removePreview($emotion->getId());
 
             $this->View()->assign(array(
                 'data' => $data,
@@ -320,6 +321,82 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
                 'message' => $e->getMessage()
             ));
         }
+    }
+    /**
+     * Model event listener function which fired when the user configure an emotion over the backend
+     * module and clicks the save button.
+     */
+    public function savePreviewAction()
+    {
+        try {
+            $data = $this->Request()->getParams();
+
+            if (empty($data['id'])) {
+                throw new \Shopware\Components\Api\Exception\NotFoundException('The emotion must exists before previewing it.');
+            }
+
+            $data['previewId'] = $data['id'];
+            $data['previewSecret'] = \Shopware\Components\Random::getAlphanumericString(32);
+            $data['active'] = false;
+
+            /** @var Emotion $previewEmotion */
+            $previewEmotion = $this->findPreviewEmotion($data['id']);
+            if ($previewEmotion) {
+                $previewEmotion->getElements()->clear();
+                $this->getManager()->flush($previewEmotion);
+
+                $data['id'] = $previewEmotion->getId();
+            } else {
+                unset($data['id']);
+            }
+
+            $emotion = $this->saveEmotion($data);
+
+            if ($emotion === null) {
+                $this->View()->assign(array(
+                    'data' => $this->Request()->getParams(),
+                    'success' => false
+                ));
+
+                return;
+            }
+
+            $data['id'] = $emotion->getId();
+
+            $this->View()->assign(array(
+                'data' => $data,
+                'success' => true,
+            ));
+        } catch (\Doctrine\ORM\ORMException $e) {
+            $this->View()->assign(array(
+                'data' => $this->Request()->getParams(),
+                'success' => false,
+                'message' => $e->getMessage()
+            ));
+        } catch (\Shopware\Components\Api\Exception\NotFoundException $e) {
+            $this->View()->assign(array(
+                'data' => $this->Request()->getParams(),
+                'success' => false,
+                'message' => $e->getMessage()
+            ));
+        }
+    }
+
+    /**
+     * @param int $emotionId
+     * @return Emotion
+     */
+    private function findPreviewEmotion($emotionId)
+    {
+        $builder = $this->container->get('models')->createQueryBuilder();
+        $emotion = $builder->select('emotion')
+                ->from(Emotion::class, 'emotion')
+                ->where('emotion.previewId = :previewId')
+                ->setParameter('previewId', $emotionId)
+                ->getQuery()
+                ->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_OBJECT);
+
+        return $emotion;
     }
 
     /***
@@ -489,6 +566,8 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
         $emotion->setSeoTitle($data['seoTitle']);
         $emotion->setSeoKeywords($data['seoKeywords']);
         $emotion->setSeoDescription($data['seoDescription']);
+        $emotion->setPreviewId(array_key_exists('previewId', $data) ? $data['previewId'] : null);
+        $emotion->setPreviewSecret(array_key_exists('previewSecret', $data) ? $data['previewSecret'] : null);
 
         Shopware()->Models()->persist($emotion);
         Shopware()->Models()->flush();
@@ -663,6 +742,9 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
                 foreach ($entity->getElements() as $element) {
                     $translator->delete(null, 'emotionElement', $element->getId());
                 }
+
+                // delete created previews
+                $this->removePreview($entity->getId());
 
                 Shopware()->Models()->remove($entity);
             }
@@ -1269,5 +1351,20 @@ EOD;
             'emotionId' => $emotionId,
             'fullPath' => true
         ]);
+    }
+
+    /**
+     * @param int $emotionId
+     */
+    private function removePreview($emotionId)
+    {
+        /** @var Emotion $previewEmotion */
+        $previewEmotion = $this->findPreviewEmotion($emotionId);
+        if (!$previewEmotion) {
+            return;
+        }
+
+        $this->getManager()->remove($previewEmotion);
+        $this->getManager()->flush($previewEmotion);
     }
 }

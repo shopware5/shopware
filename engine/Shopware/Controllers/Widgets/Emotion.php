@@ -63,6 +63,10 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         /** @var Emotion $emotion */
         $emotion = reset($emotions);
 
+        if ($emotion->isPreview() && $emotion->getPreviewSecret() !== $this->Request()->getParam('secret')) {
+            return;
+        }
+
         if ($emotion->getTemplate()) {
             $this->View()->loadTemplate('widgets/emotion/' . $emotion->getTemplate()->getFile());
         }
@@ -87,6 +91,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
                 ->andWhere('(emotions.valid_to >= :now OR emotions.valid_to IS NULL)')
                 ->andWhere('emotions.is_landingpage = 0 ')
                 ->andWhere('emotions.active = 1 ')
+                ->andWhere('emotions.preview_id IS NULL')
                 ->setParameter('categoryId', $categoryId)
                 ->setParameter('now', new \DateTime());
 
@@ -215,6 +220,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         $emotion['devices'] = '0,1,2,3,4';
 
         $viewAssignments['emotion'] = $emotion;
+        $viewAssignments['previewSecret'] = $this->Request()->getParam('secret');
         $viewAssignments['hasEmotion'] = (!empty($emotion));
 
         $viewAssignments['showListing'] = (bool) max(array_column($emotion, 'showListing'));

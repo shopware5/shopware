@@ -828,6 +828,8 @@ class FieldHelper
             'emotion.mode AS __emotion_mode',
             'emotion.position AS __emotion_position',
             'emotion.parent_id AS __emotion_parent_id',
+            'emotion.preview_id AS __emotion_preview_id',
+            'emotion.preview_secret AS __emotion_preview_secret',
         ];
 
         $fields = array_merge(
