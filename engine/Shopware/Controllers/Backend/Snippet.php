@@ -269,6 +269,7 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
             $snippet->setDirty(true);
 
             if (!$this->isSnippetValid($snippet)) {
+                $result[$snippet->getId()] = $params;
                 continue;
             }
 

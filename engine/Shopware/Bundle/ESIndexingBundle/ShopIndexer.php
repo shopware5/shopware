@@ -188,7 +188,6 @@ class ShopIndexer implements ShopIndexerInterface
             $indexer->populate($index, $progress);
         }
         $this->client->indices()->refresh(['index' => $index->getName()]);
-        $this->client->indices()->optimize(['index' => $index->getName()]);
     }
 
     /**

@@ -2,6 +2,65 @@
 
 This changelog references changes done in Shopware 5.2 patch versions.
 
+## 5.2.13
+
+[View all changes from v5.2.12...v5.2.13](https://github.com/shopware/shopware/compare/v5.2.12...v5.2.13)
+
+* Changed duplicate smarty block from `frontend_checkout_confirm_information_addresses_equal_panel_shipping_select_address` to `frontend_checkout_confirm_information_addresses_equal_panel_shipping_add_address` in `frontend/checkout/confirm.tpl`
+* Added interface `\Shopware\Bundle\ESIndexingBundle\TextMappingInterface` which handles text field mappings for different elastic search versions
+
+## 5.2.12
+
+[View all changes from v5.2.11...v5.2.12](https://github.com/shopware/shopware/compare/v5.2.11...v5.2.12)
+
+## 5.2.11
+
+[View all changes from v5.2.10...v5.2.11](https://github.com/shopware/shopware/compare/v5.2.10...v5.2.11)
+
+* Added new Smarty block `frontend_robots_txt_allows` to `frontend/robots_txt/index.tpl`
+* Added new Smarty block `frontend_account_order_item_availability` to `frontend/account/order_item_details.tpl`
+* Added new rule for `/widgets/emotion` to robots.txt in `frontend/robots_txt/index.tpl`
+* Added new blocks in `themes/Frontend/Bare/frontend/account/index.tpl`
+* If shipping address equals billing address show notice instead of same address twice in account index
+* Added container tag `shopware_media.adapter` to register new media adapters
+* Added interface `Shopware\Bundle\MediaBundle\Adapters\AdapterFactoryInterface` to create new adapter factories
+* Removed method `Shopware\Bundle\MediaBundle\Subscriber\ServiceSubscriber::createLocalAdapter()`
+* Removed method `Shopware\Bundle\MediaBundle\Subscriber\ServiceSubscriber::createFtpAdapter()`
+* Deprecated collect event `Shopware_Collect_MediaAdapter_*`, use container tag `shopware_media.adapter` instead. The event will be removed in 5.4.
+
+### Custom stores in plugin configuration
+
+It is now possible to define custom config stores directly inside your plugin's config.xml when using the new plugin system.
+
+A custom config store is defined like this:
+
+```
+<store>
+    <option>
+        <value>1</value>
+        <label lang="de">Deutscher Anzeigewert</label>
+        <label lang="en">English display value</label>
+    </option>
+    <option>
+        <value>two</value>
+        <label lang="de">Deutscher Anzeigewert</label>
+        <label>English display value (locale en via fallback)</label>
+    </option>
+    <option>
+        <value>3</value>
+        <label>Single display value (locale en via fallback)</label>
+    </option>
+</store>
+```
+
+There are two unique constraints:
+* Inside a store, a value tag's value must only occur once
+* Inside an option tag, a label tag's lang attribute value must only occur once
+
+Additionally, the order is fixed. The value tag must be defined before the label tag(s).
+
+There must be at least one option tag and inside each option tag where must be at least one value and one option tag. 
+
 ## 5.2.10
 
 [View all changes from v5.2.9...v5.2.10](https://github.com/shopware/shopware/compare/v5.2.9...v5.2.10)
@@ -26,7 +85,7 @@ This changelog references changes done in Shopware 5.2 patch versions.
 * Added `Shopware\Components\Emotion\ComponentInstaller` class to install emotion components in plugins.
 * Added `\Shopware\Components\Emotion\EmotionComponentViewSubscriber` to register emotion widget templates 
 * Added `plugin_dir` and `plugin_name` container parameter for each plugin. Parameters are prefixed by `\Shopware\Components\Plugin::getContainerPrefix`
-
+* Deprecated parameter `$checkProxy` from `Enlight_Controller_Request_Request::getClientIp()`
 
 ## 5.2.9
 

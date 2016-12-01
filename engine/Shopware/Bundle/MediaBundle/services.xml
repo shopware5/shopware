@@ -27,6 +27,7 @@
         </service>
         <service id="shopware_media.media_service_factory" class="Shopware\Bundle\MediaBundle\MediaServiceFactory">
             <argument type="service" id="service_container" />
+            <argument type="collection" />
             <argument>%shopware.cdn%</argument>
         </service>
 
@@ -38,5 +39,12 @@
             <argument>%shopware.cdn.strategy%</argument>
         </service>
 
+        <!-- Media Adapters -->
+        <service id="shopware_media.adapter.local" class="Shopware\Bundle\MediaBundle\Adapters\LocalAdapterFactory">
+            <tag name="shopware_media.adapter" />
+        </service>
+        <service id="shopware_media.adapter.ftp" class="Shopware\Bundle\MediaBundle\Adapters\FtpAdapterFactory">
+            <tag name="shopware_media.adapter" />
+        </service>
     </services>
 </container>

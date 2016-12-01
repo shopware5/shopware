@@ -148,6 +148,13 @@ Ext.define('Shopware.form.field.Grid', {
 
     createSortingColumn: function() {
         var me = this;
+
+        if (!me.allowSorting) {
+            return {
+                hidden: true
+            };
+        }
+
         return {
             width: 24,
             hideable: false,

@@ -1425,10 +1425,12 @@ class sExport
         if (empty($basket)) {
             return false;
         }
+        $mainID = $this->shopData['main_id'];
+        $shopID = $this->shopData['id'];
         $basket['countryID'] = $countryID;
         $basket['paymentID'] = $paymentID;
         $basket['customergroupID'] = $this->sCustomergroup['id'];
-        $basket['multishopID'] = $this->sMultishop['id'];
+        $basket['multishopID'] = $mainID === null ? $shopID : $mainID;
         $basket['sessionID'] = null;
         return $basket;
     }
@@ -1665,7 +1667,7 @@ class sExport
                 } elseif ($dispatch['calculation']==2) {
                     $from = round($basket['count_article']);
                 } elseif ($dispatch['calculation']==3) {
-                    $from = round($basket['calculation_value_'.$dispatch['id']]);
+                    $from = round($basket['calculation_value_'.$dispatch['id']], 2);
                 } else {
                     continue;
                 }
@@ -1719,7 +1721,7 @@ class sExport
         } elseif ($dispatch['calculation']==2) {
             $from = round($basket['count_article']);
         } elseif ($dispatch['calculation']==3) {
-            $from = round($basket['calculation_value_'.$dispatch['id']]);
+            $from = round($basket['calculation_value_'.$dispatch['id']], 2);
         } else {
             return false;
         }

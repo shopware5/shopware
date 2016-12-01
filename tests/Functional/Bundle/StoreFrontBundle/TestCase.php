@@ -13,7 +13,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
 use Shopware\Models\Article\Article;
 use Shopware\Models\Category\Category;
 
-class TestCase extends \Enlight_Components_Test_TestCase
+abstract class TestCase extends \Enlight_Components_Test_TestCase
 {
     /**
      * @var Helper

@@ -62,6 +62,7 @@ class Shopware_Plugins_Core_CronRating_Bootstrap extends Shopware_Components_Plu
         $customers = $this->getCustomers($orderIds);
         $positions = $this->getPositions($orderIds);
 
+        $count = 0;
         foreach ($orders as $orderId => $order) {
             if (empty($customers[$orderId]['email']) || count($positions[$orderId]) === 0) {
                 continue;
@@ -94,9 +95,14 @@ class Shopware_Plugins_Core_CronRating_Bootstrap extends Shopware_Components_Plu
             $mail = Shopware()->TemplateMail()->createMail('sARTICLECOMMENT', $context);
             $mail->addTo($customers[$orderId]['email']);
             $mail->send();
+            $count++;
         }
 
-        return count($order) . ' rating mails was sent.';
+        if ($count <= 0) {
+            return 'No rating mails sent.';
+        }
+        
+        return $count . ' rating mail(s) sent.';
     }
 
     /**

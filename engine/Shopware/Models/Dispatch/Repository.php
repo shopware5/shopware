@@ -68,7 +68,8 @@ class Repository extends ModelRepository
         $builder->select('dispatches');
         $builder->setAlias('dispatches');
         $builder->from('Shopware\Models\Dispatch\Dispatch', 'dispatches');
-
+        $builder->setAlias('dispatches');
+        
         if (!empty($filter)) {
             $builder->addFilter($filter);
         }

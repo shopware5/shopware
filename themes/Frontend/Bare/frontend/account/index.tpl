@@ -190,47 +190,74 @@
 
 						{block name="frontend_account_index_primary_shipping_content"}
 							<div class="panel--body is--wide">
-								{if $sUserData.shippingaddress.company}
-									<p>
-										<span class="address--company">{$sUserData.shippingaddress.company}</span>{if $sUserData.shippingaddress.department} - <span class="address--department">{$sUserData.shippingaddress.department}</span>{/if}
-									</p>
+								{if $activeBillingAddressId == $activeShippingAddressId}
+									{block name="frontend_account_index_primary_shipping_content_equality_notice"}
+										<div class="shipping--equal-info">
+											{s name="AccountAddressEqualsBilling"}Equal to the billing address{/s}
+										</div>
+									{/block}
+								{else}
+									{block name="frontend_account_index_primary_shipping_content_address"}
+										{if $sUserData.shippingaddress.company}
+											<p>
+												<span class="address--company">{$sUserData.shippingaddress.company}</span>{if $sUserData.shippingaddress.department} - <span class="address--department">{$sUserData.shippingaddress.department}</span>{/if}
+											</p>
+										{/if}
+										<p>
+											<span class="address--salutation">{$sUserData.shippingaddress.salutation|salutation}</span>
+											{if {config name="displayprofiletitle"}}
+                                		        <span class="address--title">{$sUserData.shippingaddress.title}</span><br/>
+											{/if}
+                                		    <span class="address--firstname">{$sUserData.shippingaddress.firstname}</span> <span class="address--lastname">{$sUserData.shippingaddress.lastname}</span><br />
+											<span class="address--street">{$sUserData.shippingaddress.street}</span><br />
+											{if $sUserData.shippingaddress.additional_address_line1}<span class="address--additional-one">{$sUserData.shippingaddress.additional_address_line1}</span><br />{/if}
+											{if $sUserData.shippingaddress.additional_address_line2}<span class="address--additional-two">{$sUserData.shippingaddress.additional_address_line2}</span><br />{/if}
+											{if {config name=showZipBeforeCity}}
+                                		        <span class="address--zipcode">{$sUserData.shippingaddress.zipcode}</span> <span class="address--city">{$sUserData.shippingaddress.city}</span>
+                                		    {else}
+                                		        <span class="address--city">{$sUserData.shippingaddress.city}</span> <span class="address--zipcode">{$sUserData.shippingaddress.zipcode}</span>
+                                		    {/if}<br />
+											{if $sUserData.additional.stateShipping.statename}<span class="address--statename">{$sUserData.additional.stateShipping.statename}</span><br />{/if}
+                                		    <span class="address--countryname">{$sUserData.additional.countryShipping.countryname}</span>
+										</p>
+									{/block}
 								{/if}
-								<p>
-									<span class="address--salutation">{$sUserData.shippingaddress.salutation|salutation}</span>
-									{if {config name="displayprofiletitle"}}
-                                        <span class="address--title">{$sUserData.shippingaddress.title}</span><br/>
-									{/if}
-                                    <span class="address--firstname">{$sUserData.shippingaddress.firstname}</span> <span class="address--lastname">{$sUserData.shippingaddress.lastname}</span><br />
-									<span class="address--street">{$sUserData.shippingaddress.street}</span><br />
-									{if $sUserData.shippingaddress.additional_address_line1}<span class="address--additional-one">{$sUserData.shippingaddress.additional_address_line1}</span><br />{/if}
-									{if $sUserData.shippingaddress.additional_address_line2}<span class="address--additional-two">{$sUserData.shippingaddress.additional_address_line2}</span><br />{/if}
-									{if {config name=showZipBeforeCity}}
-                                        <span class="address--zipcode">{$sUserData.shippingaddress.zipcode}</span> <span class="address--city">{$sUserData.shippingaddress.city}</span>
-                                    {else}
-                                        <span class="address--city">{$sUserData.shippingaddress.city}</span> <span class="address--zipcode">{$sUserData.shippingaddress.zipcode}</span>
-                                    {/if}<br />
-									{if $sUserData.additional.stateShipping.statename}<span class="address--statename">{$sUserData.additional.stateShipping.statename}</span><br />{/if}
-                                    <span class="address--countryname">{$sUserData.additional.countryShipping.countryname}</span>
-								</p>
 							</div>
 						{/block}
 
 						{block name="frontend_account_index_primary_shipping_actions"}
-							<div class="panel--actions is--wide">
-								<a href="{url controller=address action=edit id=$sUserData.additional.user.default_shipping_address_id sTarget=account}"
-								   title="{s name='AccountLinkChangeBilling'}{/s}"
-								   class="btn">
-									{s name="AccountLinkChangeShipping"}{/s}
-								</a>
-								<br/>
-								<a href="{url controller=address}"
-								   data-address-selection="true"
-								   data-setDefaultShippingAddress="1"
-								   data-id="{$sUserData.additional.user.default_shipping_address_id}"
-								   title="{s name='AccountLinkChangeBilling'}{/s}">
-									{s name="AccountLinkSelectBilling"}{/s}
-								</a>
-							</div>
+							{if $activeBillingAddressId == $activeShippingAddressId}
+								{block name="frontend_account_index_primary_shipping_choose_seperate_address"}
+										<div class="panel--actions is--wide">
+											<a href="{url controller=address}"
+											   class="btn choose-different-address"
+											   data-address-selection="true"
+											   data-setDefaultShippingAddress="1"
+											   data-id="{$sUserData.additional.user.default_shipping_address_id}"
+											   title="{s name="ConfirmAddressChooseDifferentShippingAddress" namespace="frontend/checkout/confirm"}{/s}">
+												{s name="ConfirmAddressChooseDifferentShippingAddress" namespace="frontend/checkout/confirm"}{/s}
+											</a>
+										</div>
+								{/block}
+							{else}
+								{block name="frontend_account_index_primary_shipping_add_select_address"}
+									<div class="panel--actions is--wide">
+										<a href="{url controller=address action=edit id=$sUserData.additional.user.default_shipping_address_id sTarget=account}"
+										   title="{s name='AccountLinkChangeShipping'}{/s}"
+										   class="btn">
+											{s name="AccountLinkChangeShipping"}{/s}
+										</a>
+										<br/>
+										<a href="{url controller=address}"
+										   data-address-selection="true"
+										   data-setDefaultShippingAddress="1"
+										   data-id="{$sUserData.additional.user.default_shipping_address_id}"
+										   title="{s name='AccountLinkSelectShipping'}{/s}">
+											{s name="AccountLinkSelectShipping"}{/s}
+										</a>
+									</div>
+								{/block}
+							{/if}
 						{/block}
 					</div>
 				{/block}
