@@ -78,7 +78,14 @@
             me.$triggerEl =$('<div>', { 'class': me.opts.baseCls + '-trigger', 'html': me.opts.triggerText }).appendTo(wrapEl);
 
             me.selected = me.$el.find(':selected');
-            me.$textEl.html(me.selected.html());
+
+            // if no option is selected fall back to the first one
+            if(me.selected.length === 0){
+                me.selected = me.$el.find('option:first');
+            }
+
+            // prevent collapsing, when there are no options available
+            me.$textEl.html(me.selected.html() || '&nbsp;');
 
             $.publish('plugin/swSelectboxReplacement/onCreateTemplate', [ me, wrapEl ]);
 
