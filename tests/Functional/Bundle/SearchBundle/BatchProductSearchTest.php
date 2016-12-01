@@ -42,11 +42,6 @@ class BatchProductNumberSearchTest extends TestCase
      */
     private $batchSearch;
 
-    /**
-     * @var ContextServiceInterface
-     */
-    private $contextService;
-
     protected function setUp()
     {
         $this->batchSearch = Shopware()->Container()->get('shopware_search.batch_product_number_search');
@@ -73,7 +68,7 @@ class BatchProductNumberSearchTest extends TestCase
     private function assertProductNumbersExists(array $result, array $numbers)
     {
         array_walk($numbers, function ($number) use ($result) {
-            $this->assertArrayHasKey($number, $result);
+            $this->assertArrayHasKey($number, $result, sprintf('Expected "%s" to be in [%s]', $number, implode(', ', array_keys($result))));
             $this->assertSame($number, $result[$number]->getNumber());
         });
     }
