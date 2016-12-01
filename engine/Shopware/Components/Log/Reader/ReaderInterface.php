@@ -1,3 +1,4 @@
+<?php
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -19,31 +20,21 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Log
- * @subpackage Store
- * @version    $Id$
- * @author shopware AG
  */
 
-/**
- * Shopware - Users store
- *
- * This store contains all users.
- */
-//{block name="backend/log/store/users"}
-Ext.define('Shopware.apps.Log.store.Users', {
+namespace Shopware\Components\Log\Reader;
+
+interface ReaderInterface extends \SeekableIterator, \Countable, \OuterIterator
+{
+    /**
+     * Return the key and position of the current element
+     *
+     * @return integer
+     */
+    public function key();
 
     /**
-    * Extend for the standard ExtJS 4
-    * @string
-    */
-    extend: 'Shopware.apps.Base.store.User',
-    /**
-    * Amount of data loaded at once
-    * @integer
-    */
-    pageSize: 2000
-});
-//{/block}
+     * @return \SeekableIterator
+     */
+    public function getInnerIterator();
+}

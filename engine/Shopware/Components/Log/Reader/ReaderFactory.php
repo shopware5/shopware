@@ -1,3 +1,4 @@
+<?php
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -19,51 +20,30 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Log
- * @subpackage Store
- * @version    $Id$
- * @author shopware AG
  */
 
-/**
- * Shopware - Logs store
- *
- * This store contains all logs.
- */
-//{block name="backend/log/store/logs"}
-Ext.define('Shopware.apps.Log.store.Logs', {
+namespace Shopware\Components\Log\Reader;
 
+class ReaderFactory
+{
     /**
-    * Extend for the standard ExtJS 4
-    * @string
-    */
-    extend: 'Ext.data.Store',
-    /**
-    * Auto load the store after the component
-    * is initialized
-    * @boolean
-    */
-    autoLoad: true,
-    /**
-    * Amount of data loaded at once
-    * @integer
-    */
-    pageSize: 20,
-    remoteFilter: true,
-    remoteSort: true,
-    /**
-    * Define the used model for this store
-    * @string
-    */
-    model : 'Shopware.apps.Log.model.Log',
-
-    // Default sorting for the store
-    sortOnLoad: true,
-    sorters: {
-        property: 'date',
-        direction: 'DESC'
+     * @param $file
+     * @param int $offset
+     * @param null|int $limit
+     * @param bool $reverse
+     * @return ReaderInterface
+     */
+    public function createFileReader($file, $offset = null, $limit = null, $reverse = false)
+    {
+        $iterator = new FileParseIterator($file, 'r');
+        if ($reverse) {
+            $reader = new ReverseReader($iterator);
+        } else {
+            $reader = new Reader($iterator);
+        }
+        if (isset($offset) || isset($limit)) {
+            $reader = new LimitReader($reader, $offset, $limit);
+        }
+        return $reader;
     }
-});
-//{/block}
+}

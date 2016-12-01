@@ -21,49 +21,47 @@
  * our trademarks remain entirely with us.
  *
  * @category   Shopware
- * @package    Log
- * @subpackage Store
+ * @package    Systeminfo
+ * @subpackage Model
  * @version    $Id$
- * @author shopware AG
+ * @author     shopware AG
  */
 
-/**
- * Shopware - Logs store
- *
- * This store contains all logs.
- */
-//{block name="backend/log/store/logs"}
-Ext.define('Shopware.apps.Log.store.Logs', {
+//{block name="backend/log/model/log_file"}
+Ext.define('Shopware.apps.Log.model.LogFile', {
 
     /**
-    * Extend for the standard ExtJS 4
+    * Extends the standard ExtJS 4
     * @string
     */
-    extend: 'Ext.data.Store',
-    /**
-    * Auto load the store after the component
-    * is initialized
-    * @boolean
-    */
-    autoLoad: true,
-    /**
-    * Amount of data loaded at once
-    * @integer
-    */
-    pageSize: 20,
-    remoteFilter: true,
-    remoteSort: true,
-    /**
-    * Define the used model for this store
-    * @string
-    */
-    model : 'Shopware.apps.Log.model.Log',
+    extend: 'Ext.data.Model',
 
-    // Default sorting for the store
-    sortOnLoad: true,
-    sorters: {
-        property: 'date',
-        direction: 'DESC'
+    fields: [
+        //{block name="backend/log/model/log_file/fields"}{/block}
+        { name: 'name', type: 'string' },
+        { name: 'date', type: 'date' },
+        { name: 'channel', type: 'string' },
+        { name: 'environment', type: 'string' },
+        { name: 'default', type: 'boolean' }
+    ],
+
+    /**
+    * Configure the data communication
+    * @object
+    */
+    proxy: {
+        type: 'ajax',
+        api: {
+            read: '{url action="getLogFileList"}'
+        },
+        /**
+        * Configure the data reader
+        * @object
+        */
+        reader: {
+            type: 'json',
+            root: 'data'
+        }
     }
 });
 //{/block}

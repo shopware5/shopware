@@ -1,3 +1,4 @@
+<?php
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -19,51 +20,11 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Log
- * @subpackage Store
- * @version    $Id$
- * @author shopware AG
  */
 
-/**
- * Shopware - Logs store
- *
- * This store contains all logs.
- */
-//{block name="backend/log/store/logs"}
-Ext.define('Shopware.apps.Log.store.Logs', {
+namespace Shopware\Components\Log\Reader;
 
-    /**
-    * Extend for the standard ExtJS 4
-    * @string
-    */
-    extend: 'Ext.data.Store',
-    /**
-    * Auto load the store after the component
-    * is initialized
-    * @boolean
-    */
-    autoLoad: true,
-    /**
-    * Amount of data loaded at once
-    * @integer
-    */
-    pageSize: 20,
-    remoteFilter: true,
-    remoteSort: true,
-    /**
-    * Define the used model for this store
-    * @string
-    */
-    model : 'Shopware.apps.Log.model.Log',
-
-    // Default sorting for the store
-    sortOnLoad: true,
-    sorters: {
-        property: 'date',
-        direction: 'DESC'
-    }
-});
-//{/block}
+class Reader implements ReaderInterface
+{
+    use ReaderTrait;
+}
