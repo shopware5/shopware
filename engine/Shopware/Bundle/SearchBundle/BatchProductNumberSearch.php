@@ -93,6 +93,10 @@ class BatchProductNumberSearch
             return [];
         }
 
+        if (!array_key_exists($key, $this->pointer)) {
+            $this->pointer[$key] = 0;
+        }
+
         // use internal pointer to return different products to each request with the same criteria/context
         $items = array_slice($baseProducts, $this->pointer[$key], $numberOfProducts);
         $missingItems = $numberOfProducts - count($items);
@@ -121,8 +125,6 @@ class BatchProductNumberSearch
             /** @var ProductNumberSearchResult $searchResult */
             $searchResult = $this->productNumberSearch->search($criteriaMeta['criteria'], $context);
             $baseProducts = $searchResult->getProducts();
-
-            $this->pointer[$key] = 0;
 
             foreach ($criteriaMeta['requests'] as $request) {
                 $products[$request['key']] = $this->getBaseProductsRange($key, $baseProducts, $request['criteria']->getLimit());
