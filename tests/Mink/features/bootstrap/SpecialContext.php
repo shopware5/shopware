@@ -3,6 +3,8 @@
 namespace Shopware\Tests\Mink;
 
 use Behat\Gherkin\Node\PyStringNode;
+use Behat\Mink\Element\NodeElement;
+use Behat\Mink\Exception\DriverException;
 use Behat\Mink\Exception\ResponseTextException;
 use Behat\Mink\WebAssert;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
@@ -75,16 +77,31 @@ class SpecialContext extends SubContext
      * @see http://docs.behat.org/en/v2.5/cookbook/using_spin_functions.html#adding-a-timeout
      * @param $lambda
      * @param int $wait
+     * @return bool
      * @throws \Exception
      */
-    public function spin($lambda, $wait = 60)
+    protected function spin($lambda, $wait = 60)
+    {
+        if (!$this->spinWithNoException($lambda, $wait)) {
+            throw new \Exception("Spin function timed out after {$wait} seconds");
+        }
+    }
+
+    /**
+     * Based on Behat's own example
+     * @see http://docs.behat.org/en/v2.5/cookbook/using_spin_functions.html#adding-a-timeout
+     * @param $lambda
+     * @param int $wait
+     * @return bool
+     */
+    protected function spinWithNoException($lambda, $wait = 60)
     {
         $time = time();
         $stopTime = $time + $wait;
         while (time() < $stopTime) {
             try {
                 if ($lambda($this)) {
-                    return;
+                    return true;
                 }
             } catch (\Exception $e) {
                 // do nothing
@@ -93,7 +110,7 @@ class SpecialContext extends SubContext
             usleep(250000);
         }
 
-        throw new \Exception("Spin function timed out after {$wait} seconds");
+        return false;
     }
 
     /**
@@ -110,7 +127,6 @@ class SpecialContext extends SubContext
      */
     public function iFollowTheLinkOfTheElement($elementClass, $position = 1)
     {
-        $this->getSession()->wait(5000, "$('.emotion--element').length > 0");
         $this->iFollowTheLinkOfTheElementOnPosition(null, $elementClass, $position);
     }
 
@@ -134,11 +150,48 @@ class SpecialContext extends SubContext
         }
 
         if (empty($linkName)) {
-            $element->click();
+            $this->clickElementWhenClickable($element);
             return;
         }
 
-        Helper::clickNamedLink($element, $linkName);
+        $this->clickNamedLinkWhenClickable($element, $linkName);
+    }
+
+    /**
+     * Tries to click on a named link until the click is successfull or the timeout is reached
+     * @param HelperSelectorInterface $element
+     * @param $linkName
+     * @param int $timeout Defaults to 60 seconds
+     */
+    protected function clickNamedLinkWhenClickable(HelperSelectorInterface $element, $linkName, $timeout = 60)
+    {
+        $this->spin(function (SpecialContext $context) use ($element, $linkName) {
+            try {
+                Helper::clickNamedLink($element, $linkName);
+                return true;
+            } catch (DriverException $e) {
+                // NOOP
+            }
+            return false;
+        }, $timeout);
+    }
+
+    /**
+     * Tries to click on an element until the click is successfull or the timeout is reached
+     * @param NodeElement $element
+     * @param int $timeout Defaults to 60 seconds
+     */
+    protected function clickElementWhenClickable(NodeElement $element, $timeout = 60)
+    {
+        $this->spin(function (SpecialContext $context) use ($element) {
+            try {
+                $element->click();
+                return true;
+            } catch (DriverException $e) {
+                // NOOP
+            }
+            return false;
+        }, $timeout);
     }
 
     /**
