@@ -28,7 +28,6 @@ use ONGR\ElasticsearchDSL\BuilderInterface;
 use ONGR\ElasticsearchDSL\Query\BoolQuery;
 use ONGR\ElasticsearchDSL\Query\ExistsQuery;
 use ONGR\ElasticsearchDSL\Query\MatchQuery;
-use ONGR\ElasticsearchDSL\Query\MissingQuery;
 use ONGR\ElasticsearchDSL\Query\PrefixQuery;
 use ONGR\ElasticsearchDSL\Query\RangeQuery;
 use ONGR\ElasticsearchDSL\Query\TermQuery;
@@ -114,7 +113,9 @@ class ProductAttributeConditionHandler implements PartialConditionHandlerInterfa
         switch ($criteriaPart->getOperator()) {
             case ProductAttributeCondition::OPERATOR_EQ:
                 if ($criteriaPart->getValue() === null) {
-                    return new MissingQuery($field);
+                    $filter = new BoolQuery();
+                    $filter->add(new ExistsQuery($field), BoolQuery::MUST_NOT);
+                    return $filter;
                 }
                 return new TermQuery($field, $criteriaPart->getValue());
 
