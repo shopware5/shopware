@@ -389,7 +389,11 @@ Ext.define('Shopware.apps.Customer.controller.Detail', {
                 if (operation.success === true) {
                     if (typeof addressModel !== 'undefined') {
                         addressModel.set('user_id', record.get('id'));
-                        addressModel.save();
+                        addressModel.save({
+                            success:  function (result) {
+                                Shopware.app.Application.fireEvent('customer-address-save-successfully', me, result, win, addressModel, form);
+                            }
+                        });
                     }
 
                     number = model.get('number');
