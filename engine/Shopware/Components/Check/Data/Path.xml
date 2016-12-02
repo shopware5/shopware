@@ -8,6 +8,7 @@
     <file><name>files/documents/</name></file>
     <file><name>files/downloads/</name></file>
     <file><name>recovery/</name></file>
+    <file><name>custom/plugins</name></file>
     <file><name>engine/Shopware/Plugins/Community/</name></file>
     <file><name>engine/Shopware/Plugins/Community/Frontend</name></file>
     <file><name>engine/Shopware/Plugins/Community/Core</name></file>
