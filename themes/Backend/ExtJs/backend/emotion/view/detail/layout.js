@@ -112,13 +112,15 @@ Ext.define('Shopware.apps.Emotion.view.detail.Layout', {
         var me = this,
             layoutLabelWidth = 80;
 
+        me.tplStore = Ext.create('Shopware.apps.Emotion.store.Templates').load();
+
         me.tplComboBox = Ext.create('Ext.form.field.ComboBox', {
             fieldLabel: me.snippets.fields.templateLabel,
             name: 'templateId',
             valueField: 'id',
             displayField: 'name',
             queryMode: 'remote',
-            store: Ext.create('Shopware.apps.Emotion.store.Templates').load(),
+            store: me.tplStore,
             emptyText: me.snippets.fields.templateEmptyText,
             labelWidth: layoutLabelWidth
         });

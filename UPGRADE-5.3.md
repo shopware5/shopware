@@ -66,6 +66,7 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Changed removal version of method `Shopware\Components\Model\ModelManager::addAttribute` to 5.4
 * Changed removal version of method `Shopware\Components\Model\ModelManager::removeAttribute` to 5.4
 * Changed template `component_article_slider.tpl` to show provided products instead of always fetching them via ajax
+* Changed emotion preview to not save the current state before showing preview 
 
 ### Removals
 

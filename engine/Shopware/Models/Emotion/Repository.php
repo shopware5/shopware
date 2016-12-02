@@ -181,6 +181,9 @@ class Repository extends ModelRepository
             );
         }
 
+        // skip preview entries
+        $builder->andWhere('emotions.preview_id IS NULL');
+
         return $builder;
     }
 

@@ -285,7 +285,6 @@ div[id^=emotion-detail-window] {
         &.is--disabled {
             opacity: 0.4;
             cursor: default;
-            pointer-events: none;
         }
     }
 
@@ -327,6 +326,10 @@ div[id^=emotion-detail-window] {
             .disconnect-btn-icon {
                 background-color: #1695e3;
             }
+        }
+
+        &.is--disabled {
+            pointer-events: none;
         }
     }
 }

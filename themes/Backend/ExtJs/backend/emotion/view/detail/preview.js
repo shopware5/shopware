@@ -59,16 +59,10 @@ Ext.define('Shopware.apps.Emotion.view.detail.Preview', {
         var me = this;
 
         me.width = me.basicGridWidth;
-
-        me.emotionId = me.emotion.get('id');
-        me.emotionName = me.emotion.get('name');
-
-        me.previewSrc = '{url module=widgets controller=emotion action=preview}/?emotionId=' + me.emotionId;
-
         me.callParent(arguments);
     },
 
-    showPreview: function(viewport) {
+    showPreview: function(viewport, previewSrc) {
         var me = this,
             width = viewport.get('minWidth') || me.basicGridWidth,
             padding = me.viewportPadding[viewport.get('alias')] * 2;
@@ -77,7 +71,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Preview', {
 
         me.setWidth(me.basicGridWidth + padding);
 
-        me.previewElement = me.createPreviewElement(me.previewSrc, width + padding);
+        me.previewElement = me.createPreviewElement(previewSrc, width + padding);
 
         me.add(me.previewElement);
         me.show();

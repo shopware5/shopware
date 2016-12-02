@@ -151,6 +151,16 @@ class Emotion extends Extendable
     protected $parentId;
 
     /**
+     * @var bool
+     */
+    protected $isPreview = false;
+
+    /**
+     * @var string
+     */
+    protected $previewSecret;
+
+    /**
      * @var Element[]
      */
     protected $elements = [];
@@ -658,6 +668,38 @@ class Emotion extends Extendable
     public function setShopIds(array $shopIds)
     {
         $this->shopIds = $shopIds;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPreview()
+    {
+        return $this->isPreview;
+    }
+
+    /**
+     * @param bool $isPreview
+     */
+    public function setIsPreview($isPreview)
+    {
+        $this->isPreview = $isPreview;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPreviewSecret()
+    {
+        return $this->previewSecret;
+    }
+
+    /**
+     * @param string $previewSecret
+     */
+    public function setPreviewSecret($previewSecret)
+    {
+        $this->previewSecret = $previewSecret;
     }
 
     /**
