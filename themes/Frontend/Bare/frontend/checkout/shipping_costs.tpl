@@ -8,13 +8,15 @@
             {/block}
 
             {block name='frontend_checkout_shipping_costs_country_selection'}
-                <select id="basket_country_list" name="sCountry" data-auto-submit="true">
-                    {foreach $sCountryList as $country}
-                        <option value="{$country.id}"{if $country.id eq $sCountry.id} selected="selected"{/if}>
-                            {$country.countryname}
-                        </option>
-                    {/foreach}
-                </select>
+                <div class="select-field">
+                    <select id="basket_country_list" name="sCountry" data-auto-submit="true">
+                        {foreach $sCountryList as $country}
+                            <option value="{$country.id}"{if $country.id eq $sCountry.id} selected="selected"{/if}>
+                                {$country.countryname}
+                            </option>
+                        {/foreach}
+                    </select>
+                </div>
             {/block}
         </div>
 
@@ -29,15 +31,17 @@
                         {/block}
 
                         {block name='frontend_checkout_shipping_costs_state_selection'}
-                            <select name="sState" id="country_{$country.id}_states" data-auto-submit="true"{if $country.id != $sCountry.id} disabled="disabled"{/if}>
-                                <option value="" selected="selected">{s name='StateSelection'}{/s}</option>
+                            <div class="select-field">
+                                <select name="sState" id="country_{$country.id}_states" data-auto-submit="true"{if $country.id != $sCountry.id} disabled="disabled"{/if}>
+                                    <option value="" selected="selected">{s name='StateSelection'}{/s}</option>
 
-                                {foreach $country.states as $state}
-                                    <option value="{$state.id}"{if $state.id eq $sState.id || $state.id eq $sState} selected="selected"{/if}>
-                                        {$state.name}
-                                    </option>
-                                {/foreach}
-                            </select>
+                                    {foreach $country.states as $state}
+                                        <option value="{$state.id}"{if $state.id eq $sState.id || $state.id eq $sState} selected="selected"{/if}>
+                                            {$state.name}
+                                        </option>
+                                    {/foreach}
+                                </select>
+                            </div>
                         {/block}
                     </div>
                 {/if}
@@ -53,13 +57,15 @@
             {/block}
 
             {block name='frontend_checkout_shipping_costs_payment_selection'}
-                <select id="basket_payment_list" name="sPayment" data-auto-submit="true">
-                    {foreach $sPayments as $payment}
-                        <option value="{$payment.id}"{if $payment.id eq $sPayment.id} selected="selected"{/if}>
-                            {$payment.description}
-                        </option>
-                    {/foreach}
-                </select>
+                <div class="select-field">
+                    <select id="basket_payment_list" name="sPayment" data-auto-submit="true">
+                        {foreach $sPayments as $payment}
+                            <option value="{$payment.id}"{if $payment.id eq $sPayment.id} selected="selected"{/if}>
+                                {$payment.description}
+                            </option>
+                        {/foreach}
+                    </select>
+                </div>
             {/block}
         </div>
     {/block}
@@ -72,15 +78,17 @@
             {/block}
 
             {block name='frontend_checkout_shipping_costs_dispatch_selection'}
-                <select id="basket_dispatch_list" name="sDispatch" data-auto-submit="true">
-                {if $sDispatches}
-                    {foreach $sDispatches as $dispatch}
-                        <option value="{$dispatch.id}"{if $dispatch.id eq $sDispatch.id} selected="selected"{/if}>
-                            {$dispatch.name}
-                        </option>
-                    {/foreach}
-                {/if}
-                </select>
+                <div class="select-field">
+                    <select id="basket_dispatch_list" name="sDispatch" data-auto-submit="true">
+                    {if $sDispatches}
+                        {foreach $sDispatches as $dispatch}
+                            <option value="{$dispatch.id}"{if $dispatch.id eq $sDispatch.id} selected="selected"{/if}>
+                                {$dispatch.name}
+                            </option>
+                        {/foreach}
+                    {/if}
+                    </select>
+                </div>
             {/block}
         </div>
     {/block}

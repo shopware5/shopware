@@ -113,9 +113,9 @@ Defines the styles for the address pages and the modals.
         .unitize(font-size, 14);
     }
 
-    .js--fancy-select {
+    .select-field {
         .unitize(margin-bottom, 5);
-        width: 100%;
+        max-width: 100%;
     }
 
     .address--field {
@@ -220,13 +220,8 @@ Defines the styles for the address pages and the modals.
             width: 70%;
         }
 
-        .js--fancy-select {
-            width: 70%;
-        }
-
-        .address--customertype .js--fancy-select,
-        .address--salutation .js--fancy-select {
-            width: 40%;
+        .select-field {
+            .unitize(max-width, 290);
         }
 
         .address--form-actions {

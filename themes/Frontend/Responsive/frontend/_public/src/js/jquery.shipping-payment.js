@@ -53,7 +53,6 @@
                 success: function(res) {
                     me.$el.empty().html(res);
                     me.$el.find('input[type="submit"][form], button[form]').swFormPolyfill();
-                    me.$el.find('select:not([data-no-fancy-select="true"])').swSelectboxReplacement();
                     $.loadingIndicator.close();
                     window.picturefill();
 

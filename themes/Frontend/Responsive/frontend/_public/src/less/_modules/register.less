@@ -38,9 +38,9 @@ The user can see the registration steps, advantages and required information.
         .unitize(font-size, 14);
     }
 
-    .js--fancy-select {
+    .select-field {
         .unitize(margin-bottom, 10);
-        width: 100%;
+        max-width: 100%;
     }
 
     .register--field {
@@ -83,14 +83,14 @@ The user can see the registration steps, advantages and required information.
 
     .register--birthdate {
 
-        .js--fancy-select {
+        .select-field {
             .unitize(margin-bottom, 15);
-            width: 100%;
+            max-width: 100%;
             float: left;
         }
 
         .register--birthyear,
-        .register--birthyear .js--fancy-select {
+        .register--birthyear.select-field {
             .unitize(margin-right, 0);
         }
 
@@ -282,7 +282,7 @@ The user can see the registration steps, advantages and required information.
         float: right;
         display: block;
 
-        .js--fancy-select {
+        .select-field {
             .unitize(margin-bottom, 15);
 
             .register--birthday {
@@ -298,12 +298,12 @@ The user can see the registration steps, advantages and required information.
             .unitize(padding-bottom, 8);
         }
 
-        .js--fancy-select {
-            .unitize-width(290);
+        .select-field {
+            .unitize(max-width, 290);
         }
 
         .register--birthdate {
-            .js--fancy-select {
+            .select-field {
                 width: 32%;
                 margin-right: 2%;
             }

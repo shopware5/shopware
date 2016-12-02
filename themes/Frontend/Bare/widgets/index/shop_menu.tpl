@@ -11,17 +11,18 @@
                                     <div class="language--flag {$shop->getLocale()->toString()}">{$shop->getName()}</div>
                                 {/if}
                                 {block name="frontend_index_actions_active_shop_language_form_select"}
-                                    <select name="__shop" class="language--select" data-auto-submit="true">
-                                        {foreach $languages as $language}
-                                            <option value="{$language->getId()}" {if $language->getId() === $shop->getId()}selected="selected"{/if}>
-                                                {$language->getName()}
-                                            </option>
-                                        {/foreach}
-                                    </select>
+                                    <div class="select-field">
+                                        <select name="__shop" class="language--select" data-auto-submit="true">
+                                            {foreach $languages as $language}
+                                                <option value="{$language->getId()}" {if $language->getId() === $shop->getId()}selected="selected"{/if}>
+                                                    {$language->getName()}
+                                                </option>
+                                            {/foreach}
+                                        </select>
+                                    </div>
                                 {/block}
                                 <input type="hidden" name="__redirect" value="1">
                                 {block name="frontend_index_actions_active_shop_inline"}{/block}
-                                <span class="arrow"></span>
                             </div>
                         {/block}
                     </form>
@@ -38,16 +39,18 @@
             {block name='frontend_index_actions_currency_form'}
                 <form method="post" class="currency--form">
                     {block name="frontend_index_actions_currency_form_content"}
-                        <div class="field--select"> {block name="frontend_index_actions_currency_form_select"}
-                            <select name="__currency" class="currency--select" data-auto-submit="true">
-                                {foreach $currencies as $currency}
-                                    <option value="{$currency->getId()}"{if $currency->getId() === $shop->getCurrency()->getId()} selected="selected"{/if}>
-                                        {if $currency->getSymbol() != $currency->getCurrency()}{$currency->getSymbol()} {/if}{$currency->getCurrency()}
-                                    </option>
-                                {/foreach}
-                            </select>
+                        <div class="field--select">
+                            {block name="frontend_index_actions_currency_form_select"}
+                                <div class="select-field">
+                                    <select name="__currency" class="currency--select" data-auto-submit="true">
+                                        {foreach $currencies as $currency}
+                                            <option value="{$currency->getId()}"{if $currency->getId() === $shop->getCurrency()->getId()} selected="selected"{/if}>
+                                                {if $currency->getSymbol() != $currency->getCurrency()}{$currency->getSymbol()} {/if}{$currency->getCurrency()}
+                                            </option>
+                                        {/foreach}
+                                    </select>
+                                </div>
                             {/block}
-                            <span class="arrow"></span>
                         </div>
                     {/block}
                 </form>

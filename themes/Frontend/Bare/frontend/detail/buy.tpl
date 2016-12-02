@@ -67,11 +67,13 @@
                                     {/if}
 
                                     {block name='frontend_detail_buy_quantity_select'}
-                                        <select id="sQuantity" name="sQuantity" class="quantity--select">
-                                            {section name="i" start=$sArticle.minpurchase loop=$maxQuantity step=$sArticle.purchasesteps}
-                                                <option value="{$smarty.section.i.index}">{$smarty.section.i.index}{if $sArticle.packunit} {$sArticle.packunit}{/if}</option>
-                                            {/section}
-                                        </select>
+                                        <div class="select-field">
+                                            <select id="sQuantity" name="sQuantity" class="quantity--select">
+                                                {section name="i" start=$sArticle.minpurchase loop=$maxQuantity step=$sArticle.purchasesteps}
+                                                    <option value="{$smarty.section.i.index}">{$smarty.section.i.index}{if $sArticle.packunit} {$sArticle.packunit}{/if}</option>
+                                                {/section}
+                                            </select>
+                                        </div>
                                     {/block}
                                 </div>
                             {/block}

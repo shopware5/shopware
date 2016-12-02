@@ -77,7 +77,7 @@
 
                 {* Voting *}
                 {block name='frontend_blog_comments_input_voting'}
-                    <div class="blog--comments-voting">
+                    <div class="blog--comments-voting select-field">
                         <select required="required" aria-required="true" name="points" class="text{if $sErrorFlag.points} has--error{/if}">
                             <option value="">{s name="BlogLabelRating"}{/s}{s name="RequiredField" namespace="frontend/register/index"}{/s}</option>
                             <option value="10"{if $sFormData.points == 10} selected="selected"{/if}>{s name="rate10"}{/s}</option>

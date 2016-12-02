@@ -220,6 +220,9 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Removed method `Shopware_Controllers_Widgets_Emotion::getBannerSlider()`, has been replaced by `Shopware\Bundle\EmotionBundle\ComponentHandler\BannerSliderComponentHandler`
 * Removed method `Shopware_Controllers_Widgets_Emotion::getArticleSlider()`, has been replaced by `Shopware\Bundle\EmotionBundle\ComponentHandler\ArticleSliderComponentHandler`
 * Removed method `Shopware_Controllers_Widgets_Emotion::getHtml5Video()`, has been replaced by `Shopware\Bundle\EmotionBundle\ComponentHandler\Html5VideoComponentHandler`
+* Removed select field replacement via JavaScript
+    * Removed the jQuery plugin `src/js/jquery.selectbox-replacement.js` completely
+    * Removed LESS variable `@zindex-fancy-select`
 
 ### Deprecations
 
@@ -264,6 +267,19 @@ Captchas are now configurable via backend and can be added using the `captcha` d
 ```
 
 For more information, please refer to our [Captcha Documentation](https://developers.shopware.com/developers-guide/implementing-your-own-captcha/).
+
+### Select field replacement
+
+The replacement of the select field elements via JavaScript was removed completely. A styled select field can now be simply achieved by adding the following wrapper element.
+
+```
+<div class="select-field">
+    <select>
+        <option></option>
+        <option></option>
+    </select>
+</div>
+```
 
 ### Batch Product Search
 

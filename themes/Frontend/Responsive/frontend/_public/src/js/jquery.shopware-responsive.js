@@ -91,7 +91,6 @@
         .addPlugin('.emotion--wrapper', 'swEmotionLoader')
 
         .addPlugin('input[type="submit"][form], button[form]', 'swFormPolyfill')
-        .addPlugin('select:not([data-no-fancy-select="true"])', 'swSelectboxReplacement')
 
         // Deferred loading of the captcha
         .addPlugin('div.captcha--placeholder[data-src]', 'swCaptcha')
