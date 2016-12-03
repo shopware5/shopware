@@ -89,7 +89,7 @@ class SitemapXMLRepository
     private function readCategoryUrls($parentId)
     {
         $categoryRepository = $this->em->getRepository('Shopware\Models\Category\Category');
-        $categories = $categoryRepository->getActiveChildrenList($parentId);
+        $categories = $categoryRepository->getActiveChildrenList($parentId, $this->contextService->getShopContext()->getFallbackCustomerGroup()->getId());
 
         foreach ($categories as &$category) {
             $category['show'] = empty($category['external']);
