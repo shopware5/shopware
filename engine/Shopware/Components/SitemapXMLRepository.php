@@ -129,14 +129,19 @@ class SitemapXMLRepository
               s_articles_categories_ro ac
             INNER JOIN
               s_articles a ON ac.articleID = a.id AND a.active = 1
+            LEFT JOIN s_articles_avoid_customergroups ON(s_articles_avoid_customergroups.articleID = a.id AND s_articles_avoid_customergroups.customergroupID = :defaultCustomerGroup)
             WHERE
-              ac.categoryID IN (:categoryIds)
+              ac.categoryID IN (:categoryIds) AND
+              s_articles_avoid_customergroups.articleID IS NULL
             GROUP BY a.id
         ";
 
         $result = $this->connection->executeQuery(
             $sql,
-            [':categoryIds' => $categoryIds],
+            [
+                ':categoryIds'          => $categoryIds,
+                ':defaultCustomerGroup' => $this->contextService->getShopContext()->getFallbackCustomerGroup()->getId()
+            ],
             [':categoryIds' => Connection::PARAM_INT_ARRAY]
         );
 
