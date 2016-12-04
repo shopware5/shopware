@@ -667,12 +667,13 @@ class BasicEntityPersister implements EntityPersister
 
                 $this->quotedColumns[$sourceColumn]  = $quotedColumn;
                 $this->columnTypes[$sourceColumn]    = PersisterHelper::getTypeOfColumn($targetColumn, $targetClass, $this->em);
-                $result[$owningTable][$sourceColumn] = $newValId
-                    ? $newValId[$targetClass->getFieldForColumn($targetColumn)]
-                    : null;
 
                 // @shopware-hack: allow non primary keys as foreign-key target
                 $isDefault = (isset($newValId[$targetClass->fieldNames[$targetColumn]]));
+                // Fix SW-16364 PHP Notice: Undefined index: key
+                $result[$owningTable][$sourceColumn] = ($isDefault)
+                    ? $newValId[$targetClass->getFieldForColumn($targetColumn)]
+                    : null;
 
                 // Set data to result set, only if no exits.
                 $skipValue = false;
