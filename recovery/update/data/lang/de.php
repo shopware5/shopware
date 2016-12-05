@@ -51,6 +51,6 @@ return [
     'done_frontend'         => 'Zum Shop-Frontend',
     'done_backend'          => 'Zum Shop-Backend (Administration)',
     'done_template_changed' => '<b>Emotion Template wurde deaktiviert!</b><br/>Zum Zeitpunkt der Aktualisierung wurde festegestellt, dass Sie noch ein (Dokumenten-) Template auf Emotion-Basis verwendet haben. Dieses Template ist ab Shopware 5.2 nicht mehr kompatibel. Aus diesem Grund wurden nun Ihre Shops, die noch das alte Template verwendet haben, auf das neue Responsive Theme umgestellt.',
-    'deleted_files' => '&nbsp;enfernte Dateien',
+    'deleted_files' => '&nbsp;entfernte Dateien',
     'cache_clear_error' => 'Es ist ein Fehler aufgetreten. Bitte löschen Sie den Cache nach dem Update manuell.'
 ];
