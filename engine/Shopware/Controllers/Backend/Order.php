@@ -1261,12 +1261,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
 
         foreach ($attachments as $attachment) {
             $filePath = $documentDirectory . '/' . $attachment['hash'] . '.pdf';
-            $fileName = $this->getFileName(
-                $orderId,
-                $attachment['type'][0]['id'],
-                '.pdf',
-                $attachment['type'][0]['name']
-            );
+            $fileName = $this->getFileName($orderId, $attachment['type'][0]['id']);
 
             if (!is_file($filePath)) {
                 continue;
@@ -1298,31 +1293,23 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
     }
 
     /**
-     * Creates a translated filename with the given extension
-     * or returns the default name with the given file extension.
-     *
-     * @param integer $orderId
-     * @param string $typeKey
+     * @param integer|string $orderId
+     * @param integer|string $typeId
      * @param string $fileExtension
-     * @param string $defaultName
      * @return string
      */
-    private function getFileName($orderId, $typeKey, $fileExtension, $defaultName)
+    private function getFileName($orderId, $typeId, $fileExtension = '.pdf')
     {
         $localeId = $this->getOrderLocaleId($orderId);
 
-        if (!$localeId) {
-            return $defaultName . $fileExtension;
-        }
-
         $translationReader = new Shopware_Components_Translation();
-        $translations = $translationReader->read($localeId, 'documents', $typeKey);
-
-        if (!$translations[1]['name']) {
-            return $defaultName . $fileExtension;
+        $translations = $translationReader->read($localeId, 'documents', $typeId, true);
+        
+        if (empty($translations) || empty($translations['name'])) {
+            return $this->getDefaultName($typeId) . $fileExtension;
         }
 
-        return $translations[1]['name'] . $fileExtension;
+        return $translations['name'] . $fileExtension;
     }
 
     /**
@@ -1339,6 +1326,24 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
             ->from('s_order')
             ->where('id = :orderId')
             ->setParameter('orderId', $orderId)
+            ->execute()
+            ->fetchColumn();
+    }
+
+    /**
+     * Gets the default name from the document template
+     *
+     * @param integer|string $typeId
+     * @return bool|string
+     */
+    private function getDefaultName($typeId)
+    {
+        $queryBuilder = $this->container->get('dbal_connection')->createQueryBuilder();
+
+        return $queryBuilder->select('name')
+            ->from('s_core_documents')
+            ->where('`id` = :typeId')
+            ->setParameter('typeId', $typeId)
             ->execute()
             ->fetchColumn();
     }

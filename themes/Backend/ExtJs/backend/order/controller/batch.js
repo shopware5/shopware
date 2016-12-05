@@ -247,7 +247,7 @@ Ext.define('Shopware.apps.Order.controller.Batch', {
         var me = this,
             progressBar = me.getProgressBar(),
             snippets = me.snippets,
-            percentage = index + 1 / orders.length;
+            percentage = index / orders.length;
 
         if (index === orders.length) {
             me.finishProcess(orders, resultStore, percentage);
@@ -266,21 +266,24 @@ Ext.define('Shopware.apps.Order.controller.Batch', {
      * @param { Array } orders
      * @param { Ext.data.Store } resultStore
      * @param { number } percentage
+     * @param { boolean } canceled
      */
-    finishProcess: function(orders, resultStore, percentage) {
+    finishProcess: function(orders, resultStore, percentage, canceled) {
         var me = this,
             snippets = me.snippets,
             progressBar = me.getProgressBar(),
             batchStore = me.getBatchList().getStore();
 
         //display finish update progress bar and display finish message
-        progressBar.updateProgress(percentage, snippets.done.message, true);
+        progressBar.updateProgress(percentage, canceled ? '' : snippets.done.message, true);
 
         //reload the main order store to show the new generated documents on the detail page
         me.subApplication.getStore('Order').load();
 
-        //display shopware notification message that the batch process finished
-        Shopware.Notification.createGrowlMessage(snippets.done.title, snippets.done.message, snippets.growlMessage);
+        if (!canceled) {
+            //display shopware notification message that the batch process finished
+            Shopware.Notification.createGrowlMessage(snippets.done.title, snippets.done.message, snippets.growlMessage);
+        }
 
         //refresh the current batch status and enable the close window button.
         me.currentStatus = me.processStatus.done;
@@ -331,10 +334,29 @@ Ext.define('Shopware.apps.Order.controller.Batch', {
      * @param { number } index
      */
     process: function(document, store, orders, index, resultStore) {
+        var me = this;
+
+        if (!me.checkForCancellation(document, store, orders, index, resultStore)) {
+            me.saveDocument(document, orders, store, resultStore, index);
+        }
+    },
+
+    /**
+     * Checks if the document type is a cancellation also input a invoice number is required.
+     *
+     * @param { Ext.data.Model } document
+     * @param { Array } orders
+     * @param { Ext.data.Store } store
+     * @param { Ext.data.Store } resultStore
+     * @param { number } index
+     * @returns { boolean }
+     */
+    checkForCancellation: function(document, store, orders, index, resultStore) {
         var me = this,
             message;
 
-        if ((document.get('numbers') === 'doc_3' && (!me.hasDocument(orders[index], document)) || me.mode == 0)) {
+        if ((document.get('numbers') === 'doc_3' && !me.hasDocument(orders[index], document)) ||
+            (document.get('numbers') === 'doc_3' && me.mode == 0)) {
 
             message = Ext.String.format(
                 '{s name=document/attachment/invoice/number/hint}{/s} [0] [1] [2]',
@@ -359,10 +381,10 @@ Ext.define('Shopware.apps.Order.controller.Batch', {
                 );
             }, 200);
 
-            return;
+            return true;
         }
 
-        me.saveDocument(document, orders, store, resultStore, index);
+        return false;
     },
 
     /**
@@ -443,7 +465,7 @@ Ext.define('Shopware.apps.Order.controller.Batch', {
             progressBar.updateProgress(1, snippets.cancel.message, true);
 
             me.refreshProgressWindow(orders);
-
+            me.finishProcess(orders, resultStore, index / orders.length, true);
             //display shopware notification growl message to display that the batch process canceled successfully
             Shopware.Notification.createGrowlMessage(snippets.cancel.title, snippets.cancel.message, snippets.growlMessage);
         } else {

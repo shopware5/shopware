@@ -56,14 +56,14 @@ EOD;
             INSERT IGNORE `s_core_translations`
                 (`objecttype`, `objectdata`, `objectkey`, `objectlanguage`, `dirty`)
             VALUES
-                ('config_mails', 'a:4:{s:8:"fromMail";s:18:"{config name=mail}";s:8:"fromName";s:22:"{config name=shopName}";s:7:"subject";s:38:"Documents to your order {$orderNumber}";s:7:"content";s:338:"{include file="string:{config name=emailheaderplain}"}
+                ('config_mails', 'a:4:{s:8:"fromMail";s:18:"{config name=mail}";s:8:"fromName";s:22:"{config name=shopName}";s:7:"subject";s:38:"Documents to your order {$orderNumber}";s:7:"content";s:331:"{include file="string:{config name=emailheaderplain}"}
 
-Hello {$ sUser.salutation | salutation} {$ sUser.firstname} {$ sUser.lastname},
+Hello {$sUser.salutation|salutation} {$sUser.firstname} {$sUser.lastname},
 
-Thank you for your order at {config name = shopName}. In the attachement you will find documents about your order as PDF.
+Thank you for your order at {config name=shopName}. In the attachement you will find documents about your order as PDF.
 We wish you a nice day.
 
-{include file="string:{config name=emailfooterplain}"}";}', @documentId, '2', '1');
+{include file="string:{config name=emailfooterplain}"}";}', @documentId, '2', '0');
 EOD;
         $this->addSql($sql);
     }
