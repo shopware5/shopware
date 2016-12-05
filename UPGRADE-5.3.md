@@ -46,6 +46,8 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Added service `Shopware\Bundle\StoreFrontBundle\Service\Core\BlogService` to fetch blog entries by id
 * Added filter event `Shopware_Core_HttpCache_CacheIdsFromController` in HttpCache to extend cache keys to be invalidated based on the controller 
 * Added smarty function `convertEmotion` to convert an emotion struct to the legacy array structure
+* Added method `Shopware\Bundle\MediaBundle\MediaServiceInterface::listContents()`
+* Added method `Shopware\Bundle\MediaBundle\MediaService::listContents()`
 
 ### Changes
 
@@ -67,6 +69,7 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Changed removal version of method `Shopware\Components\Model\ModelManager::removeAttribute` to 5.4
 * Changed template `component_article_slider.tpl` to show provided products instead of always fetching them via ajax
 * Changed emotion preview to not save the current state before showing preview 
+* Changed command `sw:thumbnail:cleanup` to search the filesystem to remove orphaned thumbnails
 
 ### Removals
 

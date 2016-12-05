@@ -87,6 +87,16 @@ interface MediaServiceInterface
     public function listFiles($directory = '');
 
     /**
+     * List contents of a directory.
+     *
+     * @param string $directory The directory to list.
+     * @param bool   $recursive Whether to list recursively.
+     *
+     * @return array A list of file metadata.
+     */
+    public function listContents($directory = '', $recursive = false);
+
+    /**
      * Check whether a file exists.
      *
      * @param string $path
