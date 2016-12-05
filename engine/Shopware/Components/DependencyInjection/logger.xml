@@ -72,6 +72,6 @@
             <argument>debug</argument>
         </service>
 
-        <service id="shopware.log.reader.factory" class="Shopware\Components\Log\Reader\ReaderFactory"/>
+        <service id="shopware.log.fileparser" class="Shopware\Components\Log\Parser\LogfileParser"/>
     </services>
  </container>

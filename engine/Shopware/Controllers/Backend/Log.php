@@ -232,6 +232,7 @@ class Shopware_Controllers_Backend_Log extends Shopware_Controllers_Backend_ExtJ
         foreach ($files as $file) {
             return $file[0];
         }
+
         return false;
     }
 
@@ -251,12 +252,19 @@ class Shopware_Controllers_Backend_Log extends Shopware_Controllers_Backend_ExtJ
 
         $response = $this->Response();
         $response->setHeader('Cache-Control', 'public');
+        $response->setHeader('Content-Type', 'application/octet-stream');
         $response->setHeader('Content-Description', 'File Transfer');
         $response->setHeader('Content-Disposition', 'attachment; filename=' . $logFile);
         $response->setHeader('Content-Transfer-Encoding', 'binary');
         $response->setHeader('Content-Length', filesize($logFilePath));
+        $response->sendHeaders();
 
-        echo file_get_contents($logFilePath);
+        $this->Front()->Plugins()->ViewRenderer()->setNoRender();
+
+        $out = fopen('php://output', 'wb');
+        $file = fopen($logFilePath, 'rb');
+
+        stream_copy_to_stream($file, $out);
     }
 
     public function getLogFileListAction()
@@ -314,27 +322,34 @@ class Shopware_Controllers_Backend_Log extends Shopware_Controllers_Backend_ExtJ
             $reverse = true;
         }
 
-        /** @var ReaderInterface $reader */
-        $reader = $this->get('shopware.log.reader.factory')->createFileReader(
+        /** @var \Shopware\Components\Log\Parser\LogfileParser $reader */
+        $reader = $this->get('shopware.log.fileparser')->parseLogFile(
             $logDir . '/' . $logFile,
             $start,
             $limit,
             $reverse
         );
 
-        // Iterate before counting
-        $data = iterator_to_array($reader);
-
-        if ($reader->getInnerIterator() instanceof \Countable) {
-            $count = $reader->getInnerIterator()->count();
-        } else {
-            $count = $reader->count();
-        }
+        $count = $this->getNumberOfLines($logDir . '/' . $logFile);
 
         $this->View()->assign([
             'success' => true,
-            'data' => $data,
+            'data' => $reader,
             'count' => $count
         ]);
+    }
+
+    /**
+     * Return the number of lines for the given file.
+     * This is faster than iterating fgets.
+     * @param string $filePath
+     * @return int
+     */
+    private function getNumberOfLines($filePath)
+    {
+        $file = new \SplFileObject($filePath, 'r');
+        $file->seek(PHP_INT_MAX);
+
+        return $file->key();
     }
 }

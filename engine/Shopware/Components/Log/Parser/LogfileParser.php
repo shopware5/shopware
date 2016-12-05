@@ -22,23 +22,42 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Components\Log\Reader;
+namespace Shopware\Components\Log\Parser;
 
-class FileParseIterator extends \SplFileObject implements \SeekableIterator
+use Bcremer\LineReader\LineReader;
+
+class LogfileParser
 {
     /**
-     * {@inheritdoc}
+     * @param $file
+     * @param int $offset
+     * @param null|int $limit
+     * @param bool $reverse
+     * @return array
      */
-    public function current()
+    public function parseLogFile($file, $offset = null, $limit = null, $reverse = false)
     {
-        $current = parent::current();
-        if (!$current) {
-            return false;
+        if ($reverse) {
+            $lineGenerator = LineReader::readLinesBackwards($file);
+        } else {
+            $lineGenerator = LineReader::readLines($file);
         }
-        return $this->parse($current);
+
+        $reader = new \LimitIterator($lineGenerator, $offset, $limit);
+
+        $result = [];
+        foreach ($reader as $line) {
+            $result[] = $this->parseLine($line);
+        }
+
+        return $result;
     }
 
-    private function parse($log)
+    /**
+     * @param string $log
+     * @return string[]
+     */
+    private function parseLine($log)
     {
         $pattern = '/\[(?P<date>[^\[]*)\] (?P<channel>\w+).(?P<level>\w+): (?P<message>[^\[]+) (?P<context>[\[\{].*[\]\}]) (?P<extra>[\[\{].*[\]\}])/';
 
@@ -59,15 +78,5 @@ class FileParseIterator extends \SplFileObject implements \SeekableIterator
             'extra' => json_decode($data['extra'], true),
             'raw' => $log
         ];
-    }
-
-    /**
-     * Not not an empty line
-     *
-     * @return bool true if not an empty line, false otherwise.
-     */
-    public function valid()
-    {
-        return (bool)parent::current();
     }
 }
