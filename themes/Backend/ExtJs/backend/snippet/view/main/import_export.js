@@ -30,10 +30,7 @@
 Ext.define('Shopware.apps.Snippet.view.main.ImportExport', {
     extend: 'Enlight.app.Window',
     alias: 'widget.snippet-main-importExport',
-    layout: {
-        type: 'vbox',
-        align: 'stretch'
-    },
+    layout: 'fit',
 
     width: 500,
     height: 280,
@@ -62,7 +59,12 @@ Ext.define('Shopware.apps.Snippet.view.main.ImportExport', {
 
         me.title = me.snippets.title;
 
-        me.items = [ me.createExportForm(), me.createImportForm() ];
+        me.items = [
+            {
+                xtype: 'tabpanel',
+                items: [me.createExportForm(), me.createImportForm()]
+            }
+        ];
 
         me.callParent(arguments);
     },
@@ -94,6 +96,7 @@ Ext.define('Shopware.apps.Snippet.view.main.ImportExport', {
 
             buttons: [{
                 text: me.snippets.buttonStartImport,
+                cls: 'button primary',
                 handler: function () {
                     var form = this.up('form').getForm();
                     if (form.isValid()) {
@@ -151,6 +154,7 @@ Ext.define('Shopware.apps.Snippet.view.main.ImportExport', {
 
             buttons: [{
                 text: me.snippets.buttonExport,
+                cls: 'button primary',
                 handler: function () {
                     var form = this.up('form').getForm();
                     if (!form.isValid()) {
