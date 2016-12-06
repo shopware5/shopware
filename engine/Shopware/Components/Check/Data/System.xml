@@ -96,6 +96,10 @@
         <name>suhosin.get.max_value_length</name><group>config</group><required>2000</required>
         <notice>When the "suhosin" PHP extension is loaded and the "get.max_value_length" is less than 2000, the Ext JS files cannot be loaded via GET request in the Shopware backend. This means that the Shopware backend can be partially uncached.</notice>
     </requirement>
+	<requirement>
+		<name>parse_ini_file</name><group>config</group><required>1</required>
+		<notice>The php function "parse_ini_file" must be enabled to use plugins which provide custom snippets.</notice>
+	</requirement>
     <requirement>
         <name>zip</name><group>extension</group><required>1</required>
     </requirement>
