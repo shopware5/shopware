@@ -203,7 +203,15 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
                     me.sendAjaxRequest(
                         '{url controller=PluginManager action=extract}',
                         { technicalName: plugin.get('technicalName'), fileName: fileName },
-                        callback
+                        function(extractResponse) {
+                            me.sendAjaxRequest(
+                                '{url controller=PluginManager action=refreshPluginList}',
+                                { },
+                                function() {
+                                    callback(extractResponse);
+                                }
+                            );
+                        }
                     );
                 });
 
