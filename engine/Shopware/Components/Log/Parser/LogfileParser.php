@@ -54,6 +54,18 @@ class LogfileParser
     }
 
     /**
+     * @param string $filePath
+     * @return int
+     */
+    public function countLogFile($filePath)
+    {
+        $file = new \SplFileObject($filePath, 'r');
+        $file->seek(PHP_INT_MAX);
+
+        return $file->key();
+    }
+
+    /**
      * @param string $log
      * @return string[]
      */

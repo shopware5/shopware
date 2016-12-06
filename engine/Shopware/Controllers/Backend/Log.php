@@ -313,6 +313,7 @@ class Shopware_Controllers_Backend_Log extends Shopware_Controllers_Backend_ExtJ
             return;
         }
 
+        $file = $logDir . '/' . $logFile;
         $start = $this->Request()->getParam('start', 0);
         $limit = $this->Request()->getParam('limit', 100);
         $sort = $this->Request()->getParam('sort');
@@ -323,33 +324,20 @@ class Shopware_Controllers_Backend_Log extends Shopware_Controllers_Backend_ExtJ
         }
 
         /** @var \Shopware\Components\Log\Parser\LogfileParser $reader */
-        $reader = $this->get('shopware.log.fileparser')->parseLogFile(
-            $logDir . '/' . $logFile,
+        $reader = $this->get('shopware.log.fileparser');
+
+        $data = $reader->parseLogFile(
+            $file,
             $start,
             $limit,
             $reverse
         );
-
-        $count = $this->getNumberOfLines($logDir . '/' . $logFile);
+        $count = $reader->countLogFile($file);
 
         $this->View()->assign([
             'success' => true,
-            'data' => $reader,
+            'data' => $data,
             'count' => $count
         ]);
-    }
-
-    /**
-     * Return the number of lines for the given file.
-     * This is faster than iterating fgets.
-     * @param string $filePath
-     * @return int
-     */
-    private function getNumberOfLines($filePath)
-    {
-        $file = new \SplFileObject($filePath, 'r');
-        $file->seek(PHP_INT_MAX);
-
-        return $file->key();
     }
 }
