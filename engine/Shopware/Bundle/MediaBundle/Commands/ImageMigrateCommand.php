@@ -45,7 +45,9 @@ class ImageMigrateCommand extends ShopwareCommand
             ->setName('sw:media:migrate')
             ->setDescription('Migrate images to new structure')
             ->addOption('from', null, InputOption::VALUE_OPTIONAL)
-            ->addOption('to', null, InputOption::VALUE_OPTIONAL);
+            ->addOption('to', null, InputOption::VALUE_OPTIONAL)
+            ->addOption('skip-scan', null, InputOption::VALUE_NONE, 'Skips the initial filesystem scan and migrates the files immediately.')
+        ;
     }
 
     /**
@@ -55,12 +57,13 @@ class ImageMigrateCommand extends ShopwareCommand
     {
         $from = $input->getOption('from') ?: 'local';
         $to = $input->getOption('to') ?: 'local';
+        $skipScan = $input->getOption('skip-scan');
 
         $filesystemFactory = $this->getContainer()->get('shopware_media.media_service_factory');
         $fromFileSystem = $filesystemFactory->factory($from);
         $toFileSystem = $filesystemFactory->factory($to);
 
         $mediaMigration = $this->getContainer()->get('shopware_media.media_migration');
-        $mediaMigration->migrate($fromFileSystem, $toFileSystem, $output);
+        $mediaMigration->migrate($fromFileSystem, $toFileSystem, $output, $skipScan);
     }
 }

@@ -49,13 +49,18 @@ class MediaMigration
      * @param MediaServiceInterface $fromFilesystem
      * @param MediaServiceInterface $toFileSystem
      * @param OutputInterface $output
+     * @param bool $skipScan
      */
-    public function migrate(MediaServiceInterface $fromFilesystem, MediaServiceInterface $toFileSystem, OutputInterface $output)
+    public function migrate(MediaServiceInterface $fromFilesystem, MediaServiceInterface $toFileSystem, OutputInterface $output, $skipScan = false)
     {
         $output->writeln(' // Migrating all media files in your filesystem. This might take some time, depending on the number of media files you have.');
         $output->writeln('');
 
-        $filesToMigrate = $this->countFilesToMigrate('media', $fromFilesystem);
+        $filesToMigrate = 0;
+
+        if (!$skipScan) {
+            $filesToMigrate = $this->countFilesToMigrate('media', $fromFilesystem);
+        }
 
         $progressBar = new ProgressBar($output, $filesToMigrate);
         $progressBar->setFormat(' %current%/%max% [%bar%] %percent%% Elapsed: %elapsed%' . "\n" . ' Current file: %filename%');
@@ -148,7 +153,7 @@ class MediaMigration
     private function migrateFilesIn($directory, MediaServiceInterface $fromFilesystem, MediaServiceInterface $toFilesystem, ProgressBar $progressBar)
     {
         /** @var array $contents */
-        $contents = $fromFilesystem->listContents($directory);
+        $contents = $fromFilesystem->getAdapter()->listContents($directory);
 
         foreach ($contents as $item) {
             if ($item['type'] === 'dir') {
@@ -176,7 +181,7 @@ class MediaMigration
     private function countFilesToMigrate($directory, MediaServiceInterface $filesystem)
     {
         /** @var array $contents */
-        $contents = $filesystem->listContents($directory);
+        $contents = $filesystem->getAdapter()->listContents($directory);
         $cnt = 0;
 
         foreach ($contents as $item) {

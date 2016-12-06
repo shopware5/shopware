@@ -24,6 +24,8 @@
 
 namespace Shopware\Bundle\MediaBundle;
 
+use League\Flysystem\FilesystemInterface;
+
 /**
  * Interface MediaServiceInterface
  * @package Shopware\Bundle\MediaBundle
@@ -85,16 +87,6 @@ interface MediaServiceInterface
      * @return array A list of file paths.
      */
     public function listFiles($directory = '');
-
-    /**
-     * List contents of a directory.
-     *
-     * @param string $directory The directory to list.
-     * @param bool   $recursive Whether to list recursively.
-     *
-     * @return array A list of file metadata.
-     */
-    public function listContents($directory = '', $recursive = false);
 
     /**
      * Check whether a file exists.
@@ -180,4 +172,9 @@ interface MediaServiceInterface
      * @return bool
      */
     public function migrateFile($path);
+
+    /**
+     * @return FilesystemInterface
+     */
+    public function getAdapter();
 }
