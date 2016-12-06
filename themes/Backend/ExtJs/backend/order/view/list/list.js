@@ -664,7 +664,7 @@ Ext.define('Shopware.apps.Order.view.list.List', {
             billing = billing.first();
 
             name = Ext.String.trim(
-                billing.get('lastName') + ',' + billing.get('firstName')
+                billing.get('lastName') + ', ' + billing.get('firstName')
             );
 
             if (billing.get('company').length > 0) {
