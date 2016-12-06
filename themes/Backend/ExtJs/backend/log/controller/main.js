@@ -34,27 +34,32 @@
  * It only creates the main-window.
  */
 
-//{block name="backend/log/controller/log"}
+//{block name="backend/log/controller/main"}
 Ext.define('Shopware.apps.Log.controller.Main', {
     /**
-    * Extend from the standard ExtJS 4
-    * @string
-    */
+     * Extend from the standard ExtJS 4
+     * @string
+     */
     extend: 'Ext.app.Controller',
-
-    requires: [ 'Shopware.apps.Log.controller.Log' ],
 
     /**
      * Init-function to create the main-window and assign the paymentStore
      */
-    init: function() {
+    init: function () {
         var me = this;
-		me.subApplication.logStore = me.subApplication.getStore('Logs');
-		me.subApplication.logStore.load();
 
-        me.mainWindow = me.getView('main.Window').create({
+        me.subApplication.logStore = me.subApplication.getStore('Logs');
+
+        var stores = {
             logStore: me.subApplication.logStore
-        });
+        };
+
+        /*{if {acl_is_allowed privilege=system}}*/
+        stores.logFilesStore = me.subApplication.getStore('LogFiles');
+        stores.systemLogsStore = me.subApplication.getStore('SystemLogs');
+        /* {/if} */
+
+        me.mainWindow = me.getView('main.Window').create(stores);
 
         this.callParent(arguments);
     }

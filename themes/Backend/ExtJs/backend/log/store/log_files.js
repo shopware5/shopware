@@ -21,49 +21,33 @@
  * our trademarks remain entirely with us.
  *
  * @category   Shopware
- * @package    Log
+ * @package    Systeminfo
  * @subpackage Store
  * @version    $Id$
- * @author shopware AG
+ * @author     shopware AG
  */
 
-/**
- * Shopware - Logs store
- *
- * This store contains all logs.
- */
-//{block name="backend/log/store/logs"}
-Ext.define('Shopware.apps.Log.store.Logs', {
+//{block name="backend/log/store/log_files"}
+Ext.define('Shopware.apps.Log.store.LogFiles', {
 
     /**
-    * Extend for the standard ExtJS 4
-    * @string
-    */
+     * Extend for the standard ExtJS 4
+     * @string
+     */
     extend: 'Ext.data.Store',
     /**
-    * Auto load the store after the component
-    * is initialized
-    * @boolean
-    */
+     * Auto load the store after the component
+     * is initialized
+     * @boolean
+     */
     autoLoad: true,
-    /**
-    * Amount of data loaded at once
-    * @integer
-    */
-    pageSize: 20,
-    remoteFilter: true,
-    remoteSort: true,
-    /**
-    * Define the used model for this store
-    * @string
-    */
-    model : 'Shopware.apps.Log.model.Log',
 
-    // Default sorting for the store
-    sortOnLoad: true,
-    sorters: {
-        property: 'date',
-        direction: 'DESC'
-    }
+    /**
+     * Define the used model for this store
+     * @string
+     */
+    model : 'Shopware.apps.Log.model.LogFile',
+
+    pageSize: 10
 });
 //{/block}
