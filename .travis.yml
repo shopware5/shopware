@@ -21,6 +21,3 @@ notifications:
     email: false
     irc: "chat.freenode.net#shopware-dev"
 
-matrix:
-  allow_failures:
-    - php: 7.1
