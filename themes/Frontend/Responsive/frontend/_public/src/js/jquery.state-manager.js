@@ -400,6 +400,8 @@
             me._setDeviceCookie();
 
             $($.proxy(me.initQueuedPlugins, me, true));
+            
+            $.publish('StateManager/onInit', [ me ]);
 
             return me;
         },
