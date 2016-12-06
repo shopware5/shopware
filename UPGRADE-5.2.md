@@ -9,6 +9,16 @@ This changelog references changes done in Shopware 5.2 patch versions.
 * Changed duplicate smarty block from `frontend_checkout_confirm_information_addresses_equal_panel_shipping_select_address` to `frontend_checkout_confirm_information_addresses_equal_panel_shipping_add_address` in `frontend/checkout/confirm.tpl`
 * Added interface `\Shopware\Bundle\ESIndexingBundle\TextMappingInterface` which handles text field mappings for different elastic search versions
 
+### Autoloading of plugin resources
+
+Plugin resources inside of the `PluginName/Resources/frontend` directory are now loaded automatically on theme compilation when using the new plugin system.
+
+Example:
+
+- `custom/plugins/SwagResourceTest/Resources/frontend/css/**.css`
+- `custom/plugins/SwagResourceTest/Resources/frontend/js/**.js`
+- `custom/plugins/SwagResourceTest/Resources/frontend/less/all.less`
+
 ## 5.2.12
 
 [View all changes from v5.2.11...v5.2.12](https://github.com/shopware/shopware/compare/v5.2.11...v5.2.12)
