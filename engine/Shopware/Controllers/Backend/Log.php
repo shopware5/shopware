@@ -42,7 +42,7 @@ class Shopware_Controllers_Backend_Log extends Shopware_Controllers_Backend_ExtJ
         $this->addAclPermission("deleteLogs", "delete", "You're not allowed to delete the logs.");
         $this->addAclPermission("downloadLogFile", "system", "You're not allowed to see the system logs.");
         $this->addAclPermission("getLogFileList", "system", "You're not allowed to see the system logs.");
-        $this->addAclPermission("getLogList", "system", "You're not allowed to delete the system logs.");
+        $this->addAclPermission("getLogList", "system", "You're not allowed to see the system logs.");
     }
 
     /**
