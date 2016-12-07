@@ -81,6 +81,7 @@
             <argument type="service" id="js_compressor" />
             <argument type="service" id="events" />
             <argument type="service" id="theme_timestamp_persistor" />
+            <argument type="service" id="service_container" />
 
         </service>
 
