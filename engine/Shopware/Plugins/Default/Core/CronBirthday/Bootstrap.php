@@ -133,7 +133,7 @@ class Shopware_Plugins_Core_CronBirthday_Bootstrap extends Shopware_Components_P
             $shop = $repository->getActiveById($shopId);
             $shop->registerResources();
 
-            //language 	subshopID
+            //language subshopID
             $context = array(
                 'sUser' => $user,
                 'sVoucher' => $voucher,

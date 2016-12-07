@@ -359,7 +359,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
             SELECT file, articleID
             FROM s_articles_esd ae, s_order_esd oe
             WHERE ae.id=oe.esdID
-            AND	oe.userID=?
+            AND oe.userID=?
             AND oe.orderdetailsID=?
         ';
         $download = Shopware()->Db()->fetchRow($sql, array(Shopware()->Session()->sUserId, $esdID));
@@ -460,7 +460,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
         if (empty($email)) {
             return array('sErrorMessages' => array($snippets->get('ErrorForgotMail')));
         }
-        
+
         $userID = Shopware()->Modules()->Admin()->sGetUserByMail($email);
         if (empty($userID)) {
             return;

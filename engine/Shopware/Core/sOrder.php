@@ -1787,20 +1787,20 @@ SELECT
     `s`.`name` as `status_name`,
     `s`.`description` as `status_description`,
     `p`.`description` as `payment_description`,
-    `d`.`name` 		  as `dispatch_description`,
-    `cu`.`name` 	  as `currency_description`
+    `d`.`name` as `dispatch_description`,
+    `cu`.`name` as `currency_description`
 FROM
     `s_order` as `o`
 LEFT JOIN `s_core_states` as `s`
-    ON	(`o`.`status` = `s`.`id`)
+    ON  (`o`.`status` = `s`.`id`)
 LEFT JOIN `s_core_states` as `c`
-    ON	(`o`.`cleared` = `c`.`id`)
+    ON  (`o`.`cleared` = `c`.`id`)
 LEFT JOIN `s_core_paymentmeans` as `p`
-    ON	(`o`.`paymentID` = `p`.`id`)
+    ON  (`o`.`paymentID` = `p`.`id`)
 LEFT JOIN `s_premium_dispatch` as `d`
-    ON	(`o`.`dispatchID` = `d`.`id`)
+    ON  (`o`.`dispatchID` = `d`.`id`)
 LEFT JOIN `s_core_currencies` as `cu`
-    ON	(`o`.`currency` = `cu`.`currency`)
+    ON  (`o`.`currency` = `cu`.`currency`)
 WHERE
     `o`.`id` = :orderId
 EOT;

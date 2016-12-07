@@ -985,7 +985,7 @@ class sExport
 
             LEFT JOIN s_core_pricegroups_discounts pd
             ON a.pricegroupActive=1
-            AND	a.pricegroupID=groupID
+            AND a.pricegroupID=groupID
             AND customergroupID = 1
             AND discountstart=1
 
@@ -1309,10 +1309,10 @@ class sExport
         }
 
         if (!empty($sql_where)) {
-            $sql_from = " s_premium_dispatch_countries sc,	s_core_countries c";
+            $sql_from = ' s_premium_dispatch_countries sc, s_core_countries c';
             $sql_where = "AND $sql_where AND c.id=sc.countryID";
         } else {
-            $sql_from = "";
+            $sql_from = '';
         }
         $sql = "
             SELECT sd.id, name, sd.description, sd.shippingfree
@@ -1320,7 +1320,7 @@ class sExport
                 s_premium_dispatch sd,
                 $sql_from
             WHERE sd.active = 1
-            AND	sd.id = sc.dispatchID
+            AND sd.id = sc.dispatchID
             $sql_where
             ORDER BY $sql_order sd.position ASC LIMIT 1
         ";
