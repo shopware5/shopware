@@ -10,6 +10,7 @@ This changelog references changes done in Shopware 5.2 patch versions.
 * Added interface `\Shopware\Bundle\ESIndexingBundle\TextMappingInterface` which handles text field mappings for different elastic search versions
 * Added the missing requirement of the php function `parse_ini_file` to the system info and the installer
 * Added `Shopware\Components\Plugin\PaymentInstaller` class to install payment methods in plugins
+* Changed theme path for plugins of new plugin system from `/resources` to `/Resources`
 
 ## 5.2.12
 
