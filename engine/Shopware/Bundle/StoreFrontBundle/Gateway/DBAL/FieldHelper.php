@@ -1275,6 +1275,15 @@ class FieldHelper
      * @param QueryBuilder         $query
      * @param ShopContextInterface $context
      */
+    public function addCategoryMainDataTranslation(QueryBuilder $query, ShopContextInterface $context)
+    {
+        $this->addTranslation('category', 'category', $query, $context);
+    }
+
+    /**
+     * @param QueryBuilder         $query
+     * @param ShopContextInterface $context
+     */
     public function addEmotionElementTranslation(QueryBuilder $query, ShopContextInterface $context)
     {
         $this->addTranslation('emotionElementValue', 'emotionElement', $query, $context, 'emotionElementValue.elementID');

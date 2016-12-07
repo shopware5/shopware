@@ -29,7 +29,8 @@ This changelog references changes done in Shopware 5.5 patch versions.
     * `finish_item_premium_product.tpl`
     * `finish_item_product.tpl`
     * `finish_item_voucher.tpl`
-    
+* Added ability to translate categories
+
 ### Changes
 
 * Changed the execution model of `replace` hooks to prevent multiple calls of the hooked method, if more than one `replace` hook on the same method exists and all of them call `executeParent()` once

@@ -38,21 +38,26 @@
 Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
     /**
      * Parent Element Ext.container.Container
+     *
      * @string
      */
     extend:'Ext.form.Panel',
+
     /**
      * Register the alias for this class.
+     *
      * @string
      */
     alias:'widget.category-category-tabs-settings',
 
     cls: 'shopware-form',
+
     /**
      * Title of this tab
      * @string
      */
     title:'{s name=tabs/settings_title}Settings{/s}',
+
     /**
      * Specifies the border for this component. The border can be a single numeric
      * value to apply to all sides or it can be a CSS style specification for each
@@ -62,34 +67,42 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
      * @integer
      */
     border: 0,
+
     /**
      * Display the the contents of this tab immediately
+     *
      * @boolean
      */
     autoShow : true,
+
     /**
      * enable auto scroll
+     *
      * @boolean
      */
     autoScroll: true,
+
     /**
-     * used layout column
+     * Used layout column
      *
      * @string
      */
     layout: 'anchor',
+
     /**
      * Body padding
+     *
      * @integer
      */
     bodyPadding: 10,
 
     /**
      * Translations
+     *
      * @object
      */
     snippets : {
-        noticeText : '{s name=view/settings_notice}To move a category, please click on the requested category, keep the mouse botton pressed and drag it to the desired position.<br/><br/>Notice text - right click menu to delete and create a new category or alternative throught the lower field set.{/s}',
+        noticeText : '{s name=view/settings_notice}To move a category, simply click and drag it to the desired position.<br/><br/>Right clicking in the menu to the left enables you to add or delete subcategories.{/s}',
         emotionNotice : '{s name=view/settings_emotion_notice}An emotion is linked to this category{/s}',
 
         createSubCategoryTitle : '{s name=view/settings_create_category_title}Create sub category{/s}',
@@ -142,42 +155,56 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
 
         growlMessage: '{s name=window/main_title}Category{/s}'
     },
+
     /**
      * Single Form elements to access them from the controller
      */
     /**
      * Form part containing the form for creating a new subcategory
+     *
      * @object [Ext.form.FieldSet]
      */
     createCategory  : null,
+
     /**
      * Form part containing the form with the default category settings
      * @object [Ext.form.FieldSet]
      */
     defaultSettings : null,
+
     /**
      * From part containing the form with CMS related settings
+     *
      * @object [Ext.form.FieldSet]
      */
     cmsSettings     : null,
+
     /**
      * Form part containing the form with the metadata settings
+     *
      * @object [Ext.form.FieldSet]
      */
     metaInfo        : null,
+
     /**
      * Form part containing the form for the six customizable fields
+     *
      * @object [Ext.form.FieldSet]
      */
     attributes       : null,
 
     /**
-     * default field attributes
+     * Default field attributes
      */
     defaults: {
         anchor : '100%',
         labelWidth:155
     },
+
+    plugins: [{
+        ptype: 'translation',
+        translationType: 'category'
+    }],
 
     /**
      * Initialize the Shopware.apps.Category.view.category.tabs.Settings and defines the necessary
@@ -191,6 +218,7 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
         me.registerEvents();
         me.callParent(arguments);
     },
+
     /**
      * Creates all fields for the form
      *
@@ -216,6 +244,7 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
             me.attributes
         ];
     },
+
     /**
      * Defines additional events which will be
      * fired from the component
@@ -251,7 +280,6 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
         return blockMessage;
     },
 
-
     /**
      * Builds and returns the notice section of the form.
      *
@@ -266,6 +294,7 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
             cls: Ext.baseCSSPrefix + 'global-notice-text'
         }
     },
+
     /**
      * Builds and returns the create category section of the form.
      *
@@ -307,7 +336,7 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
     },
 
     /**
-     * Builds and creates the fieldset which contains the main settings for  a category.
+     * Builds and creates the fieldset which contains the main settings for a category.
      * Those settings are
      *  - an active flag. This flag indicates if the loaded category is active or nor.
      *  - description or name for the category (this text will be displayed in the menu)
@@ -332,12 +361,13 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
     },
 
     /**
-     * Returns the Items for the Default Form Fieldset
+     * Returns the items for the default form fieldset
+     *
      * @return { Array }
      */
     getDefaultSettingItems:function () {
         var me = this;
-        // create the template combo box and register it in the local namespace to
+        // Create the template combo box and register it in the local namespace to
         // gain access from the outside.
         me.templateComboBox = Ext.create('Ext.form.field.ComboBox', {
             fieldLabel:me.snippets.defaultSettingsTemplateLabel,
@@ -352,7 +382,7 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
             helpText: '{s name="template_selection_help"}{/s}'
         });
 
-        // add record for default value
+        // Add record for default value
         me.templateStore.on('load', function(store, records) {
             var record = store.model.create({
                 template: '',
@@ -405,6 +435,8 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
                 xtype:'textfield',
                 fieldLabel:me.snippets.defaultSettingsNameLabel,
                 dataIndex:'name',
+                translationName: 'description',
+                translatable: true,
                 name:'name'
             },
             me.templateComboBox,
@@ -465,6 +497,7 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
 
     /**
      * Returns the category settings checkboxes for the default fieldset
+     *
      * @return { Array }
      */
     getSettingsCheckboxes : function()
@@ -480,7 +513,7 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
     },
 
     /**
-     * Builds and retuns the CMS settings. A category can be set as blog article and the data can be defined here.
+     * Builds and returns the CMS settings. A category can be set as blog article and the data can be defined here.
      * A blog entry contains the
      * - blog flag
      * - a headline and
@@ -500,16 +533,21 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
                 {
                     xtype : 'textfield',
                     fieldLabel : me.snippets.cmsHeaderLabel,
-                    name : 'cmsHeadline'
+                    name : 'cmsHeadline',
+                    translatable: true,
+                    translationName: 'cmsheadline'
                 } , {
                     xtype : 'tinymce',
                     fieldLabel : me.snippets.cmsTextLabel,
                     height: 100,
-                    name : 'cmsText'
+                    name : 'cmsText',
+                    translatable: true,
+                    translationName: 'cmstext'
                 }
             ]
         });
     },
+
     /**
      * Builds and returns the meta data section.
      * Fields
@@ -529,22 +567,28 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
             items : [{
                 xtype : 'textfield',
                 fieldLabel  : me.snippets.metaTitle,
-                name : 'metaTitle'
+                name : 'metaTitle',
+                translatable: true,
+                translationName: 'metatitle'
             },{
                 xtype : 'textareafield',
                 fieldLabel  : me.snippets.metaDescription,
-                name : 'metaDescription'
+                name : 'metaDescription',
+                translatable: true,
+                translationName: 'metadescription'
             }, {
                 xtype : 'textfield',
                 fieldLabel : me.snippets.metaKeywords,
-                name : 'metaKeywords'
+                name : 'metaKeywords',
+                translatable: true,
+                translationName: 'metakeywords'
             }
             ]
         });
     },
 
     /**
-     * Builds and returns the 6 free attributs each category may have.
+     * Builds and returns the six free attributes each category may have.
      * Each of this six fields can store up to 255 chars.
      *
      * @return Ext.form.FieldSet
