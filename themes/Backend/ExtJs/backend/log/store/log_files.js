@@ -40,7 +40,7 @@ Ext.define('Shopware.apps.Log.store.LogFiles', {
      * is initialized
      * @boolean
      */
-    autoLoad: true,
+    autoLoad: false,
 
     /**
      * Define the used model for this store

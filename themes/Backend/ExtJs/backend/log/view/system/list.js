@@ -141,7 +141,7 @@ Ext.define('Shopware.apps.Log.view.system.List', {
             forceSelection: true,
             width: 400,
             fieldLabel: '{s name=toolbar/file}File{/s}',
-            store: 'LogFiles',
+            store: me.logFilesStore,
             valueField: 'name',
             displayField: 'name'
         });
@@ -154,6 +154,8 @@ Ext.define('Shopware.apps.Log.view.system.List', {
         }, this, {
             single: true
         });
+
+        combo.store.load();
 
         combo.on('change', function () {
             var value = combo.getValue();
