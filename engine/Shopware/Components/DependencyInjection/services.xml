@@ -483,5 +483,9 @@
         <service id="shopware.emotion_component_installer" class="Shopware\Components\Emotion\ComponentInstaller">
             <argument type="service" id="models" />
         </service>
+
+        <service id="shopware.plugin_payment_installer" class="Shopware\Components\Plugin\PaymentInstaller">
+            <argument type="service" id="models" />
+        </service>
     </services>
 </container>
