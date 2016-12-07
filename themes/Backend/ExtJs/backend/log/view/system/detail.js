@@ -36,7 +36,7 @@ Ext.define('Shopware.apps.Log.view.system.Detail', {
     layout: 'fit',
     record: null,
     title: '{s name=detail/title}Log{/s}',
-    width: 600,
+    width: '90%',
     height: 700,
 
     /**
