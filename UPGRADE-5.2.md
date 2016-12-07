@@ -8,6 +8,7 @@ This changelog references changes done in Shopware 5.2 patch versions.
 
 * Changed duplicate smarty block from `frontend_checkout_confirm_information_addresses_equal_panel_shipping_select_address` to `frontend_checkout_confirm_information_addresses_equal_panel_shipping_add_address` in `frontend/checkout/confirm.tpl`
 * Added interface `\Shopware\Bundle\ESIndexingBundle\TextMappingInterface` which handles text field mappings for different elastic search versions
+* Added the missing requirement of the php function `parse_ini_file` to the system info and the installer
 
 ## 5.2.12
 
