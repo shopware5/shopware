@@ -12,6 +12,16 @@ This changelog references changes done in Shopware 5.2 patch versions.
 * Added `Shopware\Components\Plugin\PaymentInstaller` class to install payment methods in plugins
 * Changed theme path for plugins of new plugin system from `/resources` to `/Resources`
 
+### Autoloading of plugin resources
+
+Plugin resources inside of the `PluginName/Resources/frontend` directory are now loaded automatically on theme compilation when using the new plugin system.
+
+Example:
+
+- `custom/plugins/SwagResourceTest/Resources/frontend/css/**.css`
+- `custom/plugins/SwagResourceTest/Resources/frontend/js/**.js`
+- `custom/plugins/SwagResourceTest/Resources/frontend/less/all.less`
+
 ## 5.2.12
 
 [View all changes from v5.2.11...v5.2.12](https://github.com/shopware/shopware/compare/v5.2.11...v5.2.12)
