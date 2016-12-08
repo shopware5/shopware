@@ -15,6 +15,8 @@ This changelog references changes done in Shopware 5.2 patch versions.
 * Changed frontendsession to a locking session handler
     * Added new configuration parameter `session.locking` which is `true` by default
     * The session handler can be overwritten by replacing the `session.save_handler`-Service. A instance of `\SessionHandlerInterface` has to be returned.
+* Changed return value of `sArticles::sGetArticleById()` to provide an additional text if none is given and display the cover image by default when using the selection configurator
+* Changed url parameter in last seen articles to deeplink to an article variant instead of the article
 
 ### Autoloading of plugin resources
 
