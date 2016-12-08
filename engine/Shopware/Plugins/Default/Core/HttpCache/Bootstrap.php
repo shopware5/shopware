@@ -1030,8 +1030,8 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
         }
 
         // if no explicit proxy was configured + no host is configured
-        $proxy = $this->getProxyUrl($this->request);
-        if ($proxy !== null) {
+        $proxyUrl = $this->getProxyUrl($this->request);
+        if ($proxyUrl !== null) {
             return $this->invalidateWithBANRequest($proxyUrl, $cacheId);
         }
 
