@@ -26,7 +26,6 @@ namespace Shopware\Commands;
 
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Helper\ProgressBar;
 
@@ -41,6 +40,7 @@ class WarmUpHttpCacheCommand extends ShopwareCommand
             ->setName('sw:warm:http:cache')
             ->setDescription('warm up http cache')
             ->addArgument('shopId', InputArgument::OPTIONAL, 'The Id of the shop')
+            ->addOption('clearcache', 'c', InputArgument::OPTIONAL, 'Clear complete httpcache before warmup', false)
             ->setHelp('The <info>%command.name%</info> warms up the http cache')
         ;
     }
@@ -56,6 +56,11 @@ class WarmUpHttpCacheCommand extends ShopwareCommand
             $shopIds[] = $shopId;
         } else {
             $shopIds = $this->container->get('db')->fetchCol('SELECT id FROM s_core_shops WHERE active = 1');
+        }
+
+        if ($input->getOption('clearcache')) {
+            $output->writeln('Clearing httpcache.');
+            $this->container->get('shopware.cache_manager')->clearHttpCache();
         }
 
         /** @var \Shopware\Components\HttpCache\CacheWarmer $cacheWarmer */
