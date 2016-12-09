@@ -217,7 +217,6 @@ Shopware provides 3 product box types:<br/>
     .buybox--form {
         .unitize-height(42);
         .unitize(margin-top, 7);
-        .unitize(max-width, 280);
 
         i.icon--basket {
             display: none;
@@ -227,7 +226,6 @@ Shopware provides 3 product box types:<br/>
     .product--detail-btn {
         .unitize-height(42);
         .unitize(margin-top, 7);
-        .unitize(max-width, 280);
     }
 
     .product--actions {
@@ -474,6 +472,16 @@ Creates a corner product badge on a product-box.
         color: @text-color;
         font-weight: normal;
         white-space: normal;
+    }
+}
+
+.box--list {
+    .buybox--form {
+        .unitize(max-width, 280);
+    }
+
+    .product--detail-btn {
+        .unitize(max-width, 280);
     }
 }
 
