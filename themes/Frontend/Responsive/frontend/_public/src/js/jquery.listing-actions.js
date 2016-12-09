@@ -252,7 +252,22 @@
             /**
              * selector for the search page headline
              */
-            searchHeadlineProductCountSelector: '.search--headline .headline--product-count'
+            searchHeadlineProductCountSelector: '.search--headline .headline--product-count',
+
+            /**
+             * selector for the filter facet container
+             */
+            filterFacetContainerSelector: '.filter--facet-container',
+
+            /**
+             * selector for the filter action button bottom
+             */
+            filterActionButtonBottomSelector: '.filter--actions.filter--actions-bottom',
+
+            /**
+             * selector for the parent of the loading indicator in if the filters in sidebar mode
+             */
+            sidebarLoadingIndicatorParentSelector: '.content-main--inner'
         },
 
         /**
@@ -265,26 +280,30 @@
             me.applyDataAttributes();
 
             me.$filterForm = $(me.opts.filterFormSelector);
-            me.$filterComponents = me.$el.find(me.opts.filterComponentSelector);
+            me.$filterComponents = me.$filterForm.find(me.opts.filterComponentSelector);
             me.$filterTrigger = me.$el.find(me.opts.filterTriggerSelector);
             me.$filterTriggerIcon = me.$filterTrigger.find(me.opts.filterTriggerIconSelector);
-            me.$filterCont = me.$el.find(me.opts.filterContainerSelector);
+            me.$filterCont = $(me.opts.filterContainerSelector);
             me.$actionForms = $(me.opts.actionFormSelector);
             me.$actionLinks = $(me.opts.actionLinkSelector);
-            me.$activeFilterCont = me.$el.find(me.opts.activeFilterContSelector);
-            me.$applyFilterBtn = me.$el.find(me.opts.applyFilterBtnSelector);
+            me.$activeFilterCont = me.$filterForm.find(me.opts.activeFilterContSelector);
+            me.$applyFilterBtn =  me.$filterForm.find(me.opts.applyFilterBtnSelector);
             me.$listing = $(me.opts.listingSelector);
             me.$pageInput = $(me.$filterForm.find(me.opts.pageInputSelector));
             me.$sortInput = $(me.$filterForm.find(me.opts.sortInputSelector));
             me.$perPageInput = $(me.$filterForm.find(me.opts.perPageInputSelector));
             me.$listingWrapper = me.$el.parent(me.opts.listingWrapperSelector);
             me.$closeFilterOffCanvasBtn = $(me.opts.filterCloseBtnSelector);
-            me.searchHeadlineProductCount = $(me.opts.searchHeadlineProductCountSelector);
+            me.$filterFacetContainer = me.$filterForm.find(me.opts.filterFacetContainerSelector);
+            me.$filterActionButtonBottom =  me.$filterForm.find(me.opts.filterActionButtonBottomSelector);
+            me.$sidebarModeLoadionIndicator = $(me.opts.sidebarLoadingIndicatorParentSelector);
 
+            me.searchHeadlineProductCount = $(me.opts.searchHeadlineProductCountSelector);
             me.listingUrl = me.$filterForm.attr('data-listing-url');
             me.loadFacets = $.parseJSON(me.$filterForm.attr('data-load-facets'));
             me.showInstantFilterResult = $.parseJSON(me.$filterForm.attr('data-instant-filter-result'));
             me.isInfiniteScrolling = me.$listing.attr(me.opts.infiniteScrollingAttribute);
+            me.isFilterpanelInSidebar = $.parseJSON(me.$filterForm.attr('data-is-in-sidebar'));
 
             me.controllerURL = window.location.href.split('?')[0];
             me.resetLabel = me.$activeFilterCont.attr('data-reset-label');
@@ -351,6 +370,8 @@
                 opts = me.opts;
 
             me.$filterForm.removeAttr('style');
+            me.$filterFacetContainer.removeAttr('style');
+            me.$filterActionButtonBottom.removeAttr('style');
 
             me.$activeFilterCont.removeAttr('style').removeClass(opts.disabledCls);
 
@@ -373,7 +394,7 @@
                 return;
             }
 
-            if (Object.keys(me.activeFilterElements).length) {
+            if (Object.keys(me.activeFilterElements).length && !me.isFilterpanelInSidebar) {
                 me.$activeFilterCont.addClass(me.opts.disabledCls);
             }
 
@@ -392,7 +413,7 @@
 
             me._on($body, 'click', $.proxy(me.onBodyClick, me));
 
-            me.$el.on(me.getEventName('click'), '.' + me.opts.activeFilterCls, $.proxy(me.onActiveFilterClick, me));
+            me.$activeFilterCont.on(me.getEventName('click'), '.' + me.opts.activeFilterCls, $.proxy(me.onActiveFilterClick, me));
             me.$listingWrapper.on(me.getEventName('submit'), me.opts.actionFormSelector, $.proxy(me.onActionSubmit, me));
             me.$listingWrapper.on(me.getEventName('click'), me.opts.actionLinkSelector, $.proxy(me.onActionLink, me));
 
@@ -626,7 +647,7 @@
                     me.applyCategoryParams();
                 }
 
-            } else if (isMobile || !me.$activeFilterCont.hasClass(me.opts.disabledCls)) {
+            } else if (isMobile || !me.$activeFilterCont.hasClass(me.opts.disabledCls) || me.isFilterpanelInSidebar) {
                 me.removeActiveFilter(param);
                 me.resetFilterProperty(param);
             }
@@ -939,6 +960,8 @@
 
             if (me.$filterCont.is('.off-canvas.is--open')) {
                 loadingIndicator = me.$offCanvasLoadingIndicator;
+            } else if (me.isFilterpanelInSidebar)  {
+                loadingIndicator = me.$sidebarModeLoadionIndicator;
             }
 
             me.resetBuffer();
@@ -948,7 +971,7 @@
                 //send ajax request to load products and facets
                 me.sendListingRequest(params, loadFacets, loadProducts, function(response) {
 
-                    me.disableLoading(loadingIndicator,response, function() {
+                    me.disableLoading(loadingIndicator, loadProducts, response, function() {
 
                         me.updateListing(response);
 
@@ -967,7 +990,8 @@
          * @param {function} callback
          */
         enableLoading: function(loadingIndicator, loadProducts, callback) {
-            var me = this;
+            var me = this,
+                callback = $.isFunction(callback) ? callback : $.noop;
 
             if (loadProducts) {
                 me.$listing.addClass(me.opts.isLoadingCls);
@@ -998,20 +1022,23 @@
         /**
          * Disables the loading animation for the listing
          * @param {object} loadingIndicator
+         * @param {boolean} loadProducts
          * @param {object} response
          * @param {function} callback
          */
-        disableLoading: function(loadingIndicator, response, callback) {
-            var me = this;
+        disableLoading: function(loadingIndicator, loadProducts, response, callback) {
+            var me = this,
+                callback = $.isFunction(callback) ? callback : $.noop;
 
-            if (me.showInstantFilterResult) {
+            if (loadProducts) {
                 //disable loading indicator
                 loadingIndicator.setLoading(false).then(
-                    $.proxy(callback, this)
+                    $.proxy(callback, me)
                 );
             } else {
                 me.$applyFilterBtn.removeClass(me.opts.loadingClass);
                 me.updateFilterButton(response.totalCount);
+                callback.call(me);
             }
         },
 
@@ -1194,7 +1221,10 @@
                 me.$filterCont.addClass(me.opts.instantFilterActiveCls);
             }
 
-            me.$activeFilterCont.toggleClass(me.opts.disabledCls, !me.$filterCont.hasClass(me.opts.collapsedCls));
+            me.$activeFilterCont.toggleClass(
+                me.opts.collapsedCls,
+                !(me.opts.isFilterpanelInSidebar || me.$filterCont.hasClass(me.opts.collapsedCls))
+            );
 
             $.publish('plugin/swListingActions/onCreateActiveFiltersFromCategoryParams', [ me, categoryParams ]);
         },
@@ -1280,7 +1310,7 @@
                 $input,
                 rangeSlider;
 
-            $input = me.$el.find('[name="' + me.escapeDoubleQuotes(param) + '"]');
+            $input = me.$filterForm.find('[name="' + me.escapeDoubleQuotes(param) + '"]');
             if ($input.is('[data-range-input]')) {
                 rangeSlider = $input.parents('[data-range-slider="true"]').data('plugin_swRangeSlider');
                 rangeSlider.reset($input.attr('data-range-input'));
@@ -1382,7 +1412,9 @@
                 me.$activeFilterCont.slideDown(me.opts.animationSpeed);
             }
 
-            me.$filterForm.slideDown(me.opts.animationSpeed);
+            me.$filterFacetContainer.slideDown(me.opts.animationSpeed);
+            me.$filterActionButtonBottom.slideDown(me.opts.animationSpeed);
+
             me.$activeFilterCont.removeClass(me.opts.disabledCls);
             me.$filterCont.addClass(me.opts.collapsedCls);
             me.$filterTrigger.addClass(me.opts.activeCls);
@@ -1400,7 +1432,9 @@
                 me.$activeFilterCont.slideUp(me.opts.animationSpeed);
             }
 
-            me.$filterForm.slideUp(me.opts.animationSpeed);
+            me.$filterFacetContainer.slideUp(me.opts.animationSpeed);
+            me.$filterActionButtonBottom.slideUp(me.opts.animationSpeed);
+
             me.$activeFilterCont.addClass(me.opts.disabledCls);
             me.$filterCont.removeClass(me.opts.collapsedCls);
             me.$filterTrigger.removeClass(me.opts.activeCls);

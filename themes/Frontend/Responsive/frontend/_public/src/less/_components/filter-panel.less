@@ -488,7 +488,7 @@ The styling includes the collapsed and expanded styling and the panel component 
 .filter--active {
     .unitize-padding(0, 10);
     .unitize-margin(0, 10, 10, 0);
-    .unitize(line-height, 22);
+    .unitize(line-height, 30);
     .unitize(font-size, 13);
     .border-radius();
     display: inline-block;
@@ -533,7 +533,6 @@ The styling includes the collapsed and expanded styling and the panel component 
 .filter--actions {
     .unitize-padding(10, 0);
     .unitize(margin-bottom, 10);
-    border-bottom: 1px solid @border-color;
     clear: both;
 }
 
@@ -556,6 +555,55 @@ The styling includes the collapsed and expanded styling and the panel component 
 
     .filter--count {
         font-weight: bold;
+    }
+}
+
+.filter--facet-container {
+    .clearfix();
+    .unitize-padding(10, 0, 0, 0);
+}
+
+.action--filter-options.is--active-filter {
+    .filter--active-container {
+        .unitize-padding(15, 0, 5, 0);
+        display: block;
+    }
+}
+
+.filter--active-container {
+    display: none;
+}
+
+.listing--wrapper {
+    width: 100%;
+
+    &.has--sidebar-filter {
+        .listing--paging {
+            clear: both;
+        }
+
+        .action--filter-btn {
+            display: block;
+        }
+
+        .action--sort {
+            .unitize(line-height, 32);
+            .unitize-margin(0, 10, 10, 0);
+            width: 100%;
+
+            .sort--label {
+                display: none;
+            }
+
+            .sort--select {
+                width: 100%;
+                vertical-align: top;
+            }
+        }
+    }
+
+    .filter--actions.filter--actions-top {
+        margin: 0;
     }
 }
 
@@ -588,7 +636,7 @@ The styling includes the collapsed and expanded styling and the panel component 
     }
 
     .filter--active-container {
-        .unitize-padding(15, 0, 5, 0);
+        padding: 0;
         margin-left: 1%;
         margin-right: 1%;
 
@@ -618,6 +666,29 @@ The styling includes the collapsed and expanded styling and the panel component 
     .filter--btn-apply {
         width: auto;
     }
+
+    .filter--facet-container,
+    .filter--actions-bottom {
+        display: none;
+    }
+
+    .filter--actions.filter--actions-top {
+        display: none;
+    }
+
+    .listing--wrapper.has--sidebar-filter {
+
+        .action--filter-btn {
+            display:none;
+        }
+
+        .action--sort {
+            .sort--select {
+                .unitize(max-width, 200);
+                vertical-align: top;
+            }
+        }
+    }
 }
 
 @media screen and(min-width: @tabletLandscapeViewportWidth) {
@@ -641,5 +712,11 @@ The styling includes the collapsed and expanded styling and the panel component 
             .unitize(line-height, 20);
             .unitize(font-size, 20);
         }
+    }
+
+    .listing--wrapper.has--sidebar-filter .action--sort .sort--label {
+        .unitize-margin(0, 10, 0, 0);
+        display: inline-block;
+        font-weight: bold;
     }
 }

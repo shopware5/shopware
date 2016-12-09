@@ -46,6 +46,10 @@
             {$listingCssClass = "{$listingCssClass} visible--{$emotionViewports[$device]}"}
         {/foreach}
 
+        {if $theme.sidebarFilter}
+            {$listingCssClass = "{$listingCssClass} has--sidebar-filter"}
+        {/if}
+
         <div class="{$listingCssClass}">
 
             {* Sorting and changing layout *}
