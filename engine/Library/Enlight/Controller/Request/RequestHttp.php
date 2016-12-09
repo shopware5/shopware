@@ -67,6 +67,14 @@ class Enlight_Controller_Request_RequestHttp extends Zend_Controller_Request_Htt
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function replacePost($data)
+    {
+        $_POST = $data;
+    }
+
+    /**
      * Set POST values method
      *
      * @param  string|array $spec

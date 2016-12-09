@@ -11,6 +11,7 @@ This changelog references changes done in Shopware 5.2 patch versions.
 * Added the missing requirement of the php function `parse_ini_file` to the system info and the installer
 * Added `Shopware\Components\Plugin\PaymentInstaller` class to install payment methods in plugins
 * Changed theme path for plugins of new plugin system from `/resources` to `/Resources`
+* Changed parsing of JSON `POST`ed to the REST API to not remove top-level `NULL` values
 
 ### Autoloading of plugin resources
 
