@@ -66,5 +66,13 @@ We wish you a nice day.
 {include file="string:{config name=emailfooterplain}"}";}', @documentId, '2', '0');
 EOD;
         $this->addSql($sql);
+
+        $sql = <<<'EOD'
+            INSERT IGNORE `s_core_translations`
+                (`objecttype`, `objectdata`, `objectkey`, `objectlanguage`, `dirty`)
+            VALUES
+                ('documents', 'a:4:{i:1;a:1:{s:4:"name";s:7:"Invoice";}i:2;a:1:{s:4:"name";s:18:"Notice of delivery";}i:3;a:1:{s:4:"name";s:6:"Credit";}i:4;a:1:{s:4:"name";s:12:"Cancellation";}}', '1', '2', '0');
+EOD;
+        $this->addSql($sql);
     }
 }
