@@ -45,6 +45,7 @@ require_once 'Zend/Session/SaveHandler/Interface.php';
  * @package    Zend_Session
  * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ * @deprecated  Use \Shopware\Components\Session\SessionInterface instead
  */
 class Zend_Session extends Zend_Session_Abstract
 {
@@ -379,6 +380,8 @@ class Zend_Session extends Zend_Session_Abstract
     /**
      * sessionExists() - whether or not a session exists for the current request
      *
+     * @todo Add this method to the request
+     * @see https://symfony.com/doc/current/session/avoid_session_start.html
      * @return bool
      */
     public static function sessionExists()

@@ -232,13 +232,13 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
         $childrenIds = $this->getCategoryChildrenIds($categoryId);
         $childrenIds[] = $categoryId;
 
-        $context = $this->container->get('shopware_storefront.context_service')->getShopContext();
-        $categories = $this->container->get('shopware_storefront.category_service')
+        $context = $this->get('shopware_storefront.context_service')->getShopContext();
+        $categories = $this->get('shopware_storefront.category_service')
             ->getList($childrenIds, $context);
 
         $converted = [];
         foreach ($categories as $category) {
-            $temp = $this->container->get('legacy_struct_converter')->convertCategoryStruct($category);
+            $temp = $this->get('legacy_struct_converter')->convertCategoryStruct($category);
             $childrenIds = $this->getCategoryChildrenIds($category->getId());
             $temp['childrenCount'] = count($childrenIds);
             $converted[$category->getId()] = $temp;
@@ -259,7 +259,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
      */
     private function getCategoryChildrenIds($categoryId)
     {
-        $query = $this->container->get('dbal_connection')->createQueryBuilder();
+        $query = $this->get('dbal_connection')->createQueryBuilder();
         $query->select('category.id')
             ->from('s_categories', 'category')
             ->where('category.parent = :parentId')

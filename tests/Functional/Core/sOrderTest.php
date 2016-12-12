@@ -50,7 +50,7 @@ class sOrderTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->module = Shopware()->Modules()->Order();
-        Shopware()->Session()->offsetSet('sessionId', self::$sessionId);
+        Shopware()->Container()->get('session')->setId(self::$sessionId);
     }
 
     public function testGetOrderNumber()
@@ -784,7 +784,7 @@ class sOrderTest extends PHPUnit_Framework_TestCase
         }
 
         $this->module->sSYSTEM->sUSERGROUPDATA = $customerGroup;
-        Shopware()->Session()->sUserGroupData = $customerGroup;
+        Shopware()->Container()->get('session')->sUserGroupData = $customerGroup;
 
         return array(
             'user' => $user,

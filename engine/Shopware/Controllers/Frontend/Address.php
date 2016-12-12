@@ -404,7 +404,7 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
                     $this->refreshSession($address);
                 }
 
-                $this->get('session')->offsetSet($key, $address->getId());
+                $this->get('session')->set($key, $address->getId());
             }
         }
 
@@ -426,9 +426,9 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
         $stateId = $address->getState() ? $address->getState()->getId() : null;
         $areaId = $address->getCountry()->getArea() ? $address->getCountry()->getArea()->getId() : null;
 
-        $this->get('session')->offsetSet('sCountry', $countryId);
-        $this->get('session')->offsetSet('sState', $stateId);
-        $this->get('session')->offsetSet('sArea', $areaId);
+        $this->get('session')->set('sCountry', $countryId);
+        $this->get('session')->set('sState', $stateId);
+        $this->get('session')->set('sArea', $areaId);
 
         $this->get('shopware_storefront.context_service')->initializeShopContext();
     }

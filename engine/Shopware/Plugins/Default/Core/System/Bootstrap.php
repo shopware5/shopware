@@ -73,7 +73,9 @@ class Shopware_Plugins_Core_System_Bootstrap extends Shopware_Components_Plugin_
         /** @var $plugin Shopware_Plugins_Frontend_Statistics_Bootstrap */
         $plugin = Shopware()->Plugins()->Frontend()->Statistics();
         if ($plugin->checkIsBot($args->getRequest()->getHeader('USER_AGENT'))) {
-            Enlight_Components_Session::destroy(true, false);
+            /** @var \Shopware\Components\Session\SessionInterface $session */
+            $session = $container->get('session');
+            $session->invalidate();
         }
     }
 
@@ -98,14 +100,11 @@ class Shopware_Plugins_Core_System_Bootstrap extends Shopware_Components_Plugin_
         $system->sMailer = Shopware()->Container()->get('mail');
 
         if (Shopware()->Container()->initialized('Session')) {
-            $system->_SESSION = Shopware()->Session();
-            $system->sSESSION_ID = Shopware()->Session()->get('sessionId');
-            if ($request !== null && Shopware()->Session()->Bot === null) {
+            if ($request !== null && $this->get('session')->get('Bot') === null) {
                 /** @var $plugin Shopware_Plugins_Frontend_Statistics_Bootstrap */
                 $plugin = Shopware()->Plugins()->Frontend()->Statistics();
-                Shopware()->Session()->Bot = $plugin->checkIsBot($request->getHeader('USER_AGENT'));
+                $this->get('session')->set('Bot', $plugin->checkIsBot($request->getHeader('USER_AGENT')));
             }
-            $system->sBotSession = Shopware()->Session()->Bot;
         }
 
         if (Shopware()->Container()->initialized('Shop')) {
@@ -118,9 +117,10 @@ class Shopware_Plugins_Core_System_Bootstrap extends Shopware_Components_Plugin_
         }
 
         if (Shopware()->Container()->initialized('Session')) {
-            if (!empty(Shopware()->Session()->sUserGroup)
-                    && Shopware()->Session()->sUserGroup != $system->sUSERGROUP) {
-                $system->sUSERGROUP = Shopware()->Session()->sUserGroup;
+            /** @var \Shopware\Components\Session\SessionInterface $session */
+            $session = Shopware()->Container()->get('session');
+            if ($session->has('sUserGroup') && $session->get('sUserGroup') != $system->sUSERGROUP) {
+                $system->sUSERGROUP = $session->get('sUserGroup');
                 $system->sUSERGROUPDATA = Shopware()->Db()->fetchRow("
                     SELECT * FROM s_core_customergroups
                     WHERE groupkey = ?
@@ -128,9 +128,9 @@ class Shopware_Plugins_Core_System_Bootstrap extends Shopware_Components_Plugin_
             }
             if (empty($system->sUSERGROUPDATA['tax']) && !empty($system->sUSERGROUPDATA['id'])) {
                 $config['sARTICLESOUTPUTNETTO'] = 1; //Old template
-                Shopware()->Session()->sOutputNet = true;
+                $session->set('sOutputNet', true);
             } else {
-                Shopware()->Session()->sOutputNet = false;
+                $session->set('sOutputNet', false);
             }
         }
 

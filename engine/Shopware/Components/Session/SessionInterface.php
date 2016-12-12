@@ -22,36 +22,15 @@
  * our trademarks remain entirely with us.
  */
 
+namespace Shopware\Components\Session;
+
+use Symfony\Component\HttpFoundation\Session\SessionInterface as BaseInterface;
+
 /**
- * Mobile sitemap controller
+ * Interface SessionInterface
  *
- * @category  Shopware
- * @package   Shopware\Controllers\Frontend
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
+ * @package Shopware\Components\Session
  */
-class Shopware_Controllers_Frontend_SitemapMobileXml extends Enlight_Controller_Action
+interface SessionInterface extends BaseInterface
 {
-    /**
-     * Index action method
-     */
-    public function indexAction()
-    {
-        $this->assertMobileSitemapEnabled();
-
-        $this->Response()->setHeader('Content-Type', 'text/xml; charset=utf-8');
-        set_time_limit(0);
-
-        /** @var \Shopware\Components\SitemapXMLRepository $sitemap */
-        $sitemap = $this->get('sitemapxml.repository');
-        $this->View()->sitemap = $sitemap->getSitemapContent();
-    }
-
-    private function assertMobileSitemapEnabled()
-    {
-        if (!$this->get('config')->get('mobileSitemap')) {
-            throw new Enlight_Controller_Exception(
-                'Page not found', 404
-            );
-        }
-    }
 }

@@ -40,7 +40,7 @@ class Shopware_Controllers_Backend_UpdateWizard extends Shopware_Controllers_Bac
                 VALUES (NULL, '0', 'updateWizardStarted', 'b:1;', '', '', 'checkbox', '0', '0', '1');";
         $connection->executeUpdate($sql);
 
-        Shopware()->Container()->get('shopware.cache_manager')->clearConfigCache();
+        $this->get('shopware.cache_manager')->clearConfigCache();
     }
 
     public function updateAction()
@@ -91,7 +91,7 @@ class Shopware_Controllers_Backend_UpdateWizard extends Shopware_Controllers_Bac
      */
     private function getLocale()
     {
-        return Shopware()->Container()->get('Auth')->getIdentity()->locale->getLocale();
+        return $this->get('Auth')->getIdentity()->locale->getLocale();
     }
 
 

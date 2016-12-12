@@ -140,9 +140,9 @@ class Shopware_Controllers_Frontend_Newsletter extends Enlight_Controller_Action
             // Unsubscribe user
             $this->View()->sStatus = Shopware()->Modules()->Admin()->sNewsletterSubscription(Shopware()->System()->_POST["newsletter"], true);
 
-            $session = $this->container->get('session');
-            if ($session->offsetExists('sNewsletter')) {
-                $session->offsetSet('sNewsletter', false);
+            $session = $this->get('session');
+            if ($session->has('sNewsletter')) {
+                $session->set('sNewsletter', false);
             }
 
             return;
@@ -185,7 +185,7 @@ class Shopware_Controllers_Frontend_Newsletter extends Enlight_Controller_Action
     {
         $customergroups = $this->getCustomerGroups();
         $customergroups = Shopware()->Db()->quote($customergroups);
-        $context = $this->container->get('shopware_storefront.context_service')->getShopContext();
+        $context = $this->get('shopware_storefront.context_service')->getShopContext();
 
         $page = (int) $this->Request()->getQuery('sPage', 1);
         $perPage = (int) Shopware()->Config()->get('contentPerPage', 12);
@@ -242,7 +242,7 @@ class Shopware_Controllers_Frontend_Newsletter extends Enlight_Controller_Action
     {
         $customergroups = $this->getCustomerGroups();
         $customergroups = Shopware()->Db()->quote($customergroups);
-        $context = $this->container->get('shopware_storefront.context_service')->getShopContext();
+        $context = $this->get('shopware_storefront.context_service')->getShopContext();
 
         $sql = "
             SELECT id, IF(datum='00-00-0000','',datum) as `date`, subject as description, sendermail, sendername

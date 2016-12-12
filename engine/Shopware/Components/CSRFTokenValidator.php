@@ -25,7 +25,7 @@
 namespace Shopware\Components;
 
 use Enlight\Event\SubscriberInterface;
-use Enlight_Components_Session_Namespace as Session;
+use Shopware\Components\Session\SessionInterface;
 use Enlight_Controller_ActionEventArgs as ActionEventArgs;
 use Shopware\Components\DependencyInjection\Container;
 
@@ -75,7 +75,6 @@ class CSRFTokenValidator implements SubscriberInterface
     {
         return [
             'Enlight_Controller_Action_PreDispatch_Backend' => 'checkBackendTokenValidation',
-
             'Enlight_Controller_Action_PreDispatch_Frontend' => 'checkFrontendTokenValidation',
             'Enlight_Controller_Action_PreDispatch_Widgets' => 'checkFrontendTokenValidation'
         ];
@@ -107,7 +106,7 @@ class CSRFTokenValidator implements SubscriberInterface
             return;
         }
 
-        $expected = $this->container->get('BackendSession')->offsetGet($this->tokenName);
+        $expected = $this->container->get('session')->get($this->tokenName);
         $token = $controller->Request()->getHeader($this->tokenName);
 
         if (empty($token)) {
@@ -120,10 +119,10 @@ class CSRFTokenValidator implements SubscriberInterface
     }
 
     /**
-     * @param \Enlight_Event_EventArgs $args
+     * @param \Enlight_Controller_ActionEventArgs $args
      * @throws CSRFTokenValidationException
      */
-    public function checkFrontendTokenValidation(\Enlight_Event_EventArgs $args)
+    public function checkFrontendTokenValidation(\Enlight_Controller_ActionEventArgs $args)
     {
         if (!$this->isEnabledFrontend) {
             return;
@@ -142,9 +141,9 @@ class CSRFTokenValidator implements SubscriberInterface
         /** @var \Enlight_Controller_Action $controller */
         $controller = $args->getSubject();
 
-        /** @var \Enlight_Components_Session_Namespace $session */
+        /** @var SessionInterface $session */
         $session = $this->container->get('session');
-        $token = $session->offsetGet('X-CSRF-Token');
+        $token = $session->get('X-CSRF-Token');
 
         if (!$token) {
             $token = $this->generateToken($controller->Response());
@@ -170,7 +169,7 @@ class CSRFTokenValidator implements SubscriberInterface
     private function generateToken(\Enlight_Controller_Response_ResponseHttp $response)
     {
         $token = Random::getAlphanumericString(30);
-        $this->container->get('session')->offsetSet('X-CSRF-Token', $token);
+        $this->container->get('session')->set('X-CSRF-Token', $token);
         $this->invalidateToken($response);
 
         return $token;

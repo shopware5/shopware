@@ -50,9 +50,17 @@
         </service>
 
         <service id="session_factory" class="Shopware\Components\DependencyInjection\Bridge\Session" />
-        <service id="session" class="Enlight_Components_Session_Namespace">
+        <service id="session.storage" class="Symfony\Component\HttpFoundation\Session\Storage\SessionStorageInterface">
+            <factory service="session_factory" method="factoryStorage" />
+            <argument type="service" id="service_container"/>
+        </service>
+        <service id="session" class="Shopware\Components\Session\SessionInterface">
             <factory service="session_factory" method="factory" />
             <argument type="service" id="service_container"/>
+        </service>
+        <service id="save_session_subscriber" class="Shopware\Components\Session\SaveSessionSubscriber">
+            <argument type="service" id="service_container" />
+            <tag name="shopware.event_subscriber" />
         </service>
 
         <service id="mailtransport_factory" class="Shopware\Components\DependencyInjection\Bridge\MailTransport" />

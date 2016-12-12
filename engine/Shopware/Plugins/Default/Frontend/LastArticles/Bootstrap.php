@@ -120,7 +120,6 @@ class Shopware_Plugins_Frontend_LastArticles_Bootstrap extends Shopware_Componen
         if (!$request->isDispatched()
             || $response->isException()
             || $request->getModuleName() != 'frontend'
-            //|| !empty(Shopware()->Session()->Bot)
             || !$view->hasTemplate()
         ) {
             return;
@@ -163,8 +162,8 @@ class Shopware_Plugins_Frontend_LastArticles_Bootstrap extends Shopware_Componen
     {
         $article = $this->getArticleData((int) $articleId);
 
-        Shopware()->Session()->sLastArticle = $articleId;
-        $sessionId = Shopware()->Session()->get('sessionId');
+        $this->get('session')->set('sLastArticle', $articleId);
+        $sessionId = $this->get('session')->getId();
 
         if (empty($sessionId) || empty($article['articleName']) || empty($articleId)) {
             return;
@@ -186,7 +185,7 @@ class Shopware_Plugins_Frontend_LastArticles_Bootstrap extends Shopware_Componen
             (string) $article['articleName'],
             $articleId,
             $sessionId,
-            (int) Shopware()->Session()->sUserId,
+            (int) Shopware()->Container()->get('session')->get('sUserId'),
             (int) Shopware()->Shop()->getId()
         ));
     }

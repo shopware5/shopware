@@ -193,7 +193,7 @@ class sOrder
      * for each session access in this class.
      * Injected over the class constructor
      *
-     * @var Enlight_Components_Session_Namespace
+     * @var Shopware\Components\Session\SessionInterface
      */
     private $session;
 
@@ -237,12 +237,12 @@ class sOrder
     }
 
     /**
-     * @return Enlight_Components_Session_Namespace
+     * @return Shopware\Components\Session\SessionInterface
      */
     private function getSession()
     {
         if ($this->session == null) {
-            $this->session = Shopware()->Session();
+            $this->session = Shopware()->Container()->get('session');
         }
         return $this->session;
     }
@@ -358,7 +358,7 @@ class sOrder
      */
     public function sDeleteTemporaryOrder()
     {
-        $sessionId = $this->getSession()->offsetGet('sessionId');
+        $sessionId = $this->getSession()->getId();
 
         if (empty($sessionId)) {
             return;
@@ -366,7 +366,7 @@ class sOrder
 
         $deleteWholeOrder = $this->db->fetchAll("
         SELECT * FROM s_order WHERE temporaryID = ? LIMIT 2
-        ", array($this->getSession()->offsetGet('sessionId')));
+        ", array($this->getSession()->getId()));
 
         foreach ($deleteWholeOrder as $orderDelete) {
             $this->db->executeUpdate("
@@ -450,9 +450,9 @@ class sOrder
             'customercomment' => $this->sComment,
             'net' => $net,
             'taxfree' => $taxfree,
-            'partnerID' => (string) $this->getSession()->offsetGet("sPartner"),
-            'temporaryID' => $this->getSession()->offsetGet('sessionId'),
-            'referer' => (string) $this->getSession()->offsetGet('sReferer'),
+            'partnerID' => (string) $this->getSession()->get("sPartner"),
+            'temporaryID' => $this->getSession()->getId(),
+            'referer' => (string) $this->getSession()->get('sReferer'),
             'language' => $shop->getId(),
             'dispatchID' => $dispatchId,
             'currency' => $this->sSYSTEM->sCurrency["currency"],
@@ -620,7 +620,7 @@ class sOrder
             'taxfree'              => $taxfree,
             'partnerID'            => (string) $partner,
             'temporaryID'          => (string) $this->uniqueID,
-            'referer'              => (string) $this->getSession()->offsetGet('sReferer'),
+            'referer'              => (string) $this->getSession()->get('sReferer'),
             'language'             => $shop->getId(),
             'dispatchID'           => $dispatchId,
             'currency'             => $this->sSYSTEM->sCurrency["currency"],
@@ -816,7 +816,7 @@ class sOrder
         // Completed - Garbage basket / temporary - order
         $this->sDeleteTemporaryOrder();
 
-        $this->db->executeUpdate("DELETE FROM s_order_basket WHERE sessionID=?", array($this->getSession()->offsetGet('sessionId')));
+        $this->db->executeUpdate("DELETE FROM s_order_basket WHERE sessionID=?", array($this->getSession()->getId()));
 
         $confirmMailDeliveryFailed = false;
         try {
@@ -830,11 +830,11 @@ class sOrder
         // Check if voucher is affected
         $this->sTellFriend();
 
-        if ($this->getSession()->offsetExists('sOrderVariables')) {
-            $variables = $this->getSession()->offsetGet('sOrderVariables');
+        if ($this->getSession()->has('sOrderVariables')) {
+            $variables = $this->getSession()->get('sOrderVariables');
             $variables['sOrderNumber'] = $orderNumber;
             $variables['confirmMailDeliveryFailed'] = $confirmMailDeliveryFailed;
-            $this->getSession()->offsetSet('sOrderVariables', $variables);
+            $this->getSession()->set('sOrderVariables', $variables);
         }
 
         return $orderNumber;
@@ -920,9 +920,9 @@ class sOrder
      */
     private function getPartnerCode($userAffiliate)
     {
-        $isPartner = $this->getSession()->offsetGet("sPartner");
+        $isPartner = $this->getSession()->get("sPartner");
         if (!empty($isPartner)) {
-            return $this->getSession()->offsetGet("sPartner");
+            return $this->getSession()->get("sPartner");
         }
 
         if (empty($userAffiliate)) {

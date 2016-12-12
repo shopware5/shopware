@@ -522,7 +522,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
 
         if (!$customer->getNumber() && Shopware()->Config()->get('shopwareManagedCustomerNumbers')) {
             /** @var NumberRangeIncrementerInterface $incrementer */
-            $incrementer = Shopware()->Container()->get('shopware.number_range_incrementer');
+            $incrementer = $this->get('shopware.number_range_incrementer');
             $customer->setNumber($incrementer->increment('user'));
         }
 
@@ -564,7 +564,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
             $data['birthday'] = $birthday->format('d.m.Y');
         }
 
-        $namespace = Shopware()->Container()->get('snippets')->getNamespace('frontend/salutation');
+        $namespace = $this->get('snippets')->getNamespace('frontend/salutation');
         $data['billing']['salutationSnippet'] = $namespace->get($data['billing']['salutation']);
         $data['shipping']['salutationSnippet'] = $namespace->get($data['shipping']['salutation']);
 
@@ -675,7 +675,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
         $customer = $query->getArrayResult();
 
         /** @var \Shopware\Components\Validator\EmailValidatorInterface $emailValidator */
-        $emailValidator = $this->container->get('validator.email');
+        $emailValidator = $this->get('validator.email');
 
         if (empty($customer) && $emailValidator->isValid($mail)) {
             $this->Response()->setBody(1);
@@ -707,7 +707,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
 
         $shop->registerResources();
 
-        Shopware()->Session()->Admin = true;
+        $this->get('session')->set('Admin', true);
         Shopware()->System()->_POST = array(
             'email' => $user['email'],
             'passwordMD5' => $user['password'],
@@ -718,7 +718,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
             'action' => 'performOrderRedirect',
             'shopId' => $shop->getId(),
             'hash' => $this->createPerformOrderRedirectHash($user['password']),
-            'sessionId' => Shopware()->Session()->get('sessionId'),
+            'sessionId' => $this->get('session')->getId(),
             'userId' => $user['id'],
             'fullPath' => true
         ));

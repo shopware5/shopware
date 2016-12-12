@@ -22,43 +22,52 @@
  * our trademarks remain entirely with us.
  */
 
-use Shopware\Components\CSRFWhitelistAware;
+namespace Shopware\Components\Session;
 
-class Shopware_Controllers_Backend_CSRFToken extends Shopware_Controllers_Backend_ExtJs implements CSRFWhitelistAware
+use Enlight\Event\SubscriberInterface;
+use Shopware\Components\DependencyInjection\Container;
+
+/**
+ * Class SessionSubscriberInterface
+ *
+ * @package Shopware\Components\Session
+ */
+class SaveSessionSubscriber implements SubscriberInterface
 {
     /**
-     * Loads auth and script renderer resource
+     * @var Container
      */
-    public function init()
+    private $container;
+
+    /**
+     * @param Container $container
+     */
+    public function __construct(Container $container)
     {
-        Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
-        $this->Front()->Plugins()->ViewRenderer()->setNoRender(true);
-        parent::init();
+        $this->container = $container;
     }
 
     /**
      * @inheritdoc
      */
-    public function getWhitelistedCSRFActions()
+    public static function getSubscribedEvents()
     {
         return [
-            'generate'
+            'Enlight_Controller_Front_DispatchLoopShutdown'  => 'onDispatchLoopShutdown',
         ];
     }
 
     /**
-     * Generates a token and fills the cookie and session
+     * @see \Symfony\Component\HttpKernel\EventListener\SaveSessionListener
      */
-    public function generateAction()
+    public function onDispatchLoopShutdown()
     {
-        /** @var Shopware\Components\Session\SessionInterface $session */
-        $session = $this->get('session');
-
-        if (!$token = $session->get('X-CSRF-Token')) {
-            $token = \Shopware\Components\Random::getAlphanumericString(30);
-            $session->set('X-CSRF-Token', $token);
+        if ($this->container->initialized('session')) {
+            /** @var SessionInterface $session */
+            $session = $this->container->get('session');
+            if ($session->isStarted()) {
+                $this->container->get('session')->save();
+            }
         }
-
-        $this->Response()->setHeader('X-CSRF-Token', $token);
     }
 }

@@ -1516,7 +1516,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             return $this->View()->assign(['success' => false, 'message' => 'No property value provided!']);
         }
 
-        $entityManager = Shopware()->Container()->get('models');
+        $entityManager = $this->get('models');
         $group = $entityManager->find('Shopware\Models\Property\Option', $groupId);
 
         if (!$group) {
@@ -1778,7 +1778,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      */
     public function getArticleImages($articleId)
     {
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $mediaService = $this->get('shopware_media.media_service');
         $builder = Shopware()->Models()->createQueryBuilder();
         $builder->select(array( 'images', 'imageMapping', 'mappingRule', 'ruleOption'))
                 ->from('Shopware\Models\Article\Image', 'images')
@@ -3130,7 +3130,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      */
     protected function prepareDownloadAssociatedData($data)
     {
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $mediaService = $this->get('shopware_media.media_service');
         foreach ($data['downloads'] as &$downloadData) {
             $downloadData['file'] = $mediaService->normalize($downloadData['file']);
         }
@@ -3270,7 +3270,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         $query->execute();
 
         $sql = "DELETE FROM s_articles_translations WHERE articleID = ?";
-        $this->container->get('dbal_connection')->executeQuery($sql, array($article->getId()));
+        $this->get('dbal_connection')->executeQuery($sql, array($article->getId()));
     }
 
     /**
@@ -4218,7 +4218,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
 
         $shop->registerResources();
 
-        Shopware()->Session()->Admin = true;
+        $this->get('session')->set('Admin', true);
 
         $url = $this->Front()->Router()->assemble(
             array(

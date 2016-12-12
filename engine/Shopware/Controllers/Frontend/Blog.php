@@ -150,9 +150,9 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
 
         // PerPage
         if (!empty($this->Request()->sPerPage)) {
-            Shopware()->Session()->sPerPage = (int) $this->Request()->sPerPage;
+            $this->get('session')->sPerPage = (int) $this->Request()->sPerPage;
         }
-        $sPerPage = Shopware()->Session()->sPerPage;
+        $sPerPage = $this->get('session')->sPerPage;
         if (empty($sPerPage)) {
             $sPerPage = (int) Shopware()->Config()->get('sARTICLESPERPAGE');
         }
@@ -288,8 +288,8 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
             $this->View()->loadTemplate('frontend/blog/' . $blogArticleData['template']);
         }
 
-        $this->View()->userLoggedIn = !empty(Shopware()->Session()->sUserId);
-        if (!empty(Shopware()->Session()->sUserId) && empty($this->Request()->name)
+        $this->View()->userLoggedIn = !empty($this->get('session')->get('sUserId'));
+        if (!empty($this->get('session')->get('sUserId')) && empty($this->Request()->name)
                 && $this->Request()->getParam('__cache') === null) {
             $userData = Shopware()->Modules()->Admin()->sGetUserData();
             $this->View()->sFormData = array(
@@ -301,7 +301,6 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
         $mediaIds = array_column($blogArticleData["media"], 'mediaId');
         $context = $this->get('shopware_storefront.context_service')->getShopContext();
         $mediaStructs = $this->get('shopware_storefront.media_service')->getList($mediaIds, $context);
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
 
         //adding thumbnails to the blog article
         foreach ($blogArticleData["media"] as &$media) {
@@ -326,8 +325,8 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
         $blogArticleData["sVoteAverage"] = $avgVoteQuery->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_SINGLE_SCALAR);
 
         //count the views of this blog item
-        $visitedBlogItems = Shopware()->Session()->visitedBlogItems;
-        if (!Shopware()->Session()->Bot && !in_array($blogArticleId, $visitedBlogItems)) {
+        $visitedBlogItems = $this->get('session')->visitedBlogItems;
+        if (!$this->get('session')->get('Bot') && !in_array($blogArticleId, $visitedBlogItems)) {
             //update the views count
             /* @var $blogModel Shopware\Models\Blog\Blog */
             $blogModel = $this->getRepository()->find($blogArticleId);
@@ -337,7 +336,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
 
                 //save it to the session
                 $visitedBlogItems[] = $blogArticleId;
-                Shopware()->Session()->visitedBlogItems = $visitedBlogItems;
+                $this->get('session')->visitedBlogItems = $visitedBlogItems;
             }
         }
 
@@ -409,13 +408,13 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
                     $sErrorFlag['sCaptcha'] = true;
                 }
             }
-            $validator = $this->container->get('validator.email');
+            $validator = $this->get('validator.email');
             if (!empty(Shopware()->Config()->sOPTINVOTE) && (empty($this->Request()->eMail) || !$validator->isValid($this->Request()->eMail))) {
                 $sErrorFlag['eMail'] = true;
             }
 
             if (empty($sErrorFlag)) {
-                if (!empty(Shopware()->Config()->sOPTINVOTE) && empty(Shopware()->Session()->sUserId)) {
+                if (!empty(Shopware()->Config()->sOPTINVOTE) && empty($this->get('session')->get('sUserId'))) {
                     $hash = md5(uniqid(rand()));
 
                     //save comment confirm for the optin

@@ -76,7 +76,7 @@ class Shopware_Controllers_Frontend_Tellafriend extends Enlight_Controller_Actio
                 $variables["sError"] = true;
             }
 
-            $validator = $this->container->get('validator.email');
+            $validator = $this->get('validator.email');
             if (!$validator->isValid($this->Request()->getPost("sRecipient"))) {
                 $variables["sError"] = true;
             }

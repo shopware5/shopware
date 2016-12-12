@@ -77,7 +77,7 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
         $resourceName = $this->Request()->getParam('resource');
 
         /** @var \Shopware\Components\MultiEdit\Resource\ResourceInterface $resource */
-        $resource = $this->container->get('multi_edit.' . $resourceName);
+        $resource = $this->get('multi_edit.' . $resourceName);
         $data = $resource->getColumnConfig();
 
         $this->View()->assign(array(
@@ -105,7 +105,7 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
         }
 
         /** @var \Shopware\Components\MultiEdit\Resource\ResourceInterface $resource */
-        $resource = $this->container->get('multi_edit.' . $resource);
+        $resource = $this->get('multi_edit.' . $resource);
         $data = $resource->save($params);
 
         $this->View()->assign(array(
@@ -128,7 +128,7 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
         $id = $this->Request()->getParam('id');
 
         /** @var \Shopware\Components\MultiEdit\Resource\ResourceInterface $resource */
-        $resource = $this->container->get('multi_edit.' . $resource);
+        $resource = $this->get('multi_edit.' . $resource);
         $success = $resource->deleteBackup($id);
 
         $this->View()->assign(array(
@@ -146,7 +146,7 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
         $offset = $this->Request()->getParam('offset');
 
         /** @var \Shopware\Components\MultiEdit\Resource\ResourceInterface $resource */
-        $resource = $this->container->get('multi_edit.' . $resource);
+        $resource = $this->get('multi_edit.' . $resource);
         $data = $resource->restoreBackup($id, $offset);
 
         $this->View()->assign(array(
@@ -166,7 +166,7 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
         $offset = ($this->Request()->getParam('page', 1) - 1) * $limit;
 
         /** @var \Shopware\Components\MultiEdit\Resource\ResourceInterface $resource */
-        $resource = $this->container->get('multi_edit.' . $resource);
+        $resource = $this->get('multi_edit.' . $resource);
         $result = $resource->listBackups($offset, $limit);
         $result['success'] = true;
 
@@ -203,7 +203,7 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
         $resource = $this->Request()->getParam('resource');
 
         /** @var \Shopware\Components\MultiEdit\Resource\ResourceInterface $resource */
-        $resource = $this->container->get('multi_edit.' . $resource);
+        $resource = $this->get('multi_edit.' . $resource);
         $columns = $resource->getBatchColumns();
 
         // Extract the operators and build array for the extjs store
@@ -232,7 +232,7 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
         $resource = $this->Request()->getParam('resource');
 
         /** @var \Shopware\Components\MultiEdit\Resource\ResourceInterface $resource */
-        $resource = $this->container->get('multi_edit.' . $resource);
+        $resource = $this->get('multi_edit.' . $resource);
         $columns = $resource->getBatchColumns();
 
         ksort($columns);
@@ -273,7 +273,7 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
         $queueId = $this->Request()->getParam('queueId', null);
 
         /** @var \Shopware\Components\MultiEdit\Resource\ResourceInterface $resource */
-        $resource = $this->container->get('multi_edit.' . $resource);
+        $resource = $this->get('multi_edit.' . $resource);
         $data = $resource->batchProcess($queueId);
 
         $this->View()->assign(
@@ -298,7 +298,7 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
         $resource = $this->Request()->getParam('resource');
 
         /** @var \Shopware\Components\MultiEdit\Resource\ResourceInterface $resource */
-        $resource = $this->container->get('multi_edit.' . $resource);
+        $resource = $this->get('multi_edit.' . $resource);
         $grammar = $resource->getGrammar();
 
         $this->View()->assign(
@@ -328,7 +328,7 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
         }
 
         /** @var \Shopware\Components\MultiEdit\Resource\ResourceInterface $resource */
-        $resource = $this->container->get('multi_edit.' . $resource);
+        $resource = $this->get('multi_edit.' . $resource);
         $data = $resource->getValuesFor(
             $attribute,
             $operator,
@@ -360,7 +360,7 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
         }
 
         /** @var \Shopware\Components\MultiEdit\Resource\ResourceInterface $resource */
-        $resource = $this->container->get('multi_edit.' . $resource);
+        $resource = $this->get('multi_edit.' . $resource);
         $result = $resource->filter($ast, $offset, $limit, $sort);
 
         if ($this->displayVariants($ast)) {
@@ -501,7 +501,7 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
         }
 
         /** @var \Shopware\Components\MultiEdit\Resource\ResourceInterface $resource */
-        $resource = $this->container->get('multi_edit.' . $resource);
+        $resource = $this->get('multi_edit.' . $resource);
         $return = $resource->createQueue($filterArray, $operations, $offset, $limit, $queueId);
 
         $this->View()->assign(

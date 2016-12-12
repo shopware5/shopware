@@ -548,7 +548,7 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
      */
     public function getVariantsAction()
     {
-        $builder = Shopware()->Container()->get('dbal_connection')->createQueryBuilder();
+        $builder = $this->get('dbal_connection')->createQueryBuilder();
 
         $fields = array(
                 'details.id',
@@ -660,7 +660,7 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
             return $data;
         }
 
-        $builder = Shopware()->Container()->get('dbal_connection')->createQueryBuilder();
+        $builder = $this->get('dbal_connection')->createQueryBuilder();
 
         $builder->select([
             'details.id',
@@ -1050,7 +1050,7 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
         $email = $this->Request()->getParam('value');
 
         /** @var \Shopware\Components\Validator\EmailValidatorInterface $emailValidator */
-        $emailValidator = $this->container->get('validator.email');
+        $emailValidator = $this->get('validator.email');
         if ($emailValidator->isValid($email)) {
             $this->Response()->setBody(1);
         } else {
@@ -1062,7 +1062,7 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
     {
         $value = $this->getAvailableSalutationKeys();
 
-        $namespace = Shopware()->Container()->get('snippets')->getNamespace('frontend/salutation');
+        $namespace = $this->get('snippets')->getNamespace('frontend/salutation');
         $salutations = [];
         foreach ($value as $key) {
             $salutations[] = ['key' => $key, 'label' => $namespace->get($key, $key)];
@@ -1076,7 +1076,7 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
      */
     private function getAvailableSalutationKeys()
     {
-        $builder = Shopware()->Container()->get('models')->createQueryBuilder();
+        $builder = $this->get('models')->createQueryBuilder();
         $builder->select(['element', 'values'])
             ->from('Shopware\Models\Config\Element', 'element')
             ->leftJoin('element.values', 'values')

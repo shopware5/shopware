@@ -153,7 +153,7 @@ class sArticles
     private $productNumberSearch;
 
     /**
-     * @var Enlight_Components_Session_Namespace
+     * @var Shopware\Components\Session\SessionInterface
      */
     private $session;
 

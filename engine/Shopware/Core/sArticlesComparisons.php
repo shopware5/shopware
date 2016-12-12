@@ -48,7 +48,7 @@ class sArticlesComparisons
     private $db;
 
     /**
-     * @var Enlight_Components_Session_Namespace
+     * @var Shopware\Components\Session\SessionInterface
      */
     private $session;
 
@@ -87,7 +87,7 @@ class sArticlesComparisons
         if ($articleId) {
             $this->db->executeUpdate(
                 "DELETE FROM s_order_comparisons WHERE sessionID=? AND articleID=?",
-                [$this->session->offsetGet('sessionId'), $articleId]
+                [$this->session->getId(), $articleId]
             );
         }
     }
@@ -101,7 +101,7 @@ class sArticlesComparisons
           DELETE FROM s_order_comparisons WHERE sessionID=?
         ";
 
-        $this->db->executeUpdate($sql, [$this->session->offsetGet('sessionId')]);
+        $this->db->executeUpdate($sql, [$this->session->getId()]);
     }
 
     /**
@@ -120,13 +120,13 @@ class sArticlesComparisons
         // Check if this article is already noted
         $checkForArticle = $this->db->fetchRow(
             "SELECT id FROM s_order_comparisons WHERE sessionID=? AND articleID=?",
-            [$this->session->offsetGet('sessionId'), $articleId]
+            [$this->session->getId(), $articleId]
         );
 
         // Check if max. numbers of articles for one comparison-session is reached
         $checkNumberArticles = $this->db->fetchRow(
             "SELECT COUNT(id) AS countArticles FROM s_order_comparisons WHERE sessionID=?",
-            [$this->session->offsetGet('sessionId')]
+            [$this->session->getId()]
         );
 
         if ($checkNumberArticles["countArticles"] >= $this->config->offsetGet("sMAXCOMPARISONS")) {
@@ -149,7 +149,7 @@ class sArticlesComparisons
             ";
 
             $queryNewPrice = $this->db->executeUpdate($sql, [
-                $this->session->offsetGet('sessionId'),
+                $this->session->getId(),
                 empty($this->session["sUserId"]) ? 0 : $this->session["sUserId"],
                 $articleName,
                 $articleId
@@ -169,14 +169,14 @@ class sArticlesComparisons
      */
     public function sGetComparisons()
     {
-        if (!$this->session->offsetGet('sessionId')) {
+        if (!$this->session->getId()) {
             return [];
         }
 
         // Get all comparisons for this user
         $checkForArticle = $this->db->fetchAll(
             "SELECT * FROM s_order_comparisons WHERE sessionID=?",
-            [$this->session->offsetGet('sessionId')]
+            [$this->session->getId()]
         );
 
         if (!count($checkForArticle)) {
@@ -202,7 +202,7 @@ class sArticlesComparisons
      */
     public function sGetComparisonList()
     {
-        if (!$this->session->offsetGet('sessionId')) {
+        if (!$this->session->getId()) {
             return [];
         }
 
@@ -211,7 +211,7 @@ class sArticlesComparisons
         // Get all comparisons for this user
         $checkForArticle = $this->db->fetchAll(
             "SELECT * FROM s_order_comparisons WHERE sessionID=?",
-            [$this->session->offsetGet('sessionId')]
+            [$this->session->getId()]
         );
 
         if (!count($checkForArticle)) {

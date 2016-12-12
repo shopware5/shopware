@@ -26,6 +26,7 @@ namespace Shopware\Bundle\AccountBundle\Constraint;
 
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Password\Manager;
+use Shopware\Components\Session\SessionInterface;
 use Shopware\Models\Customer\Customer;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
@@ -39,7 +40,7 @@ use Symfony\Component\Validator\ConstraintValidator;
 class CurrentPasswordValidator extends ConstraintValidator
 {
     /**
-     * @var \Enlight_Components_Session_Namespace
+     * @var SessionInterface
      */
     private $session;
 
@@ -60,13 +61,13 @@ class CurrentPasswordValidator extends ConstraintValidator
 
     /**
      * CurrentPasswordValidator constructor.
-     * @param \Enlight_Components_Session_Namespace $session
+     * @param SessionInterface $session
      * @param \Enlight_Components_Snippet_Manager $snippets
      * @param Manager $passwordManager
      * @param ModelManager $modelManager
      */
     public function __construct(
-        \Enlight_Components_Session_Namespace $session,
+        SessionInterface $session,
         \Enlight_Components_Snippet_Manager $snippets,
         Manager $passwordManager,
         ModelManager $modelManager
@@ -90,7 +91,7 @@ class CurrentPasswordValidator extends ConstraintValidator
             return;
         }
 
-        $sessionPassword = $this->session->offsetGet('sUserPassword');
+        $sessionPassword = $this->session->get('sUserPassword');
         $encoderName = $this->getEncoder();
 
         if ($this->passwordManager->isPasswordValid($value, $sessionPassword, $encoderName) === false) {
@@ -113,7 +114,7 @@ class CurrentPasswordValidator extends ConstraintValidator
     private function getEncoder()
     {
         /** @var Customer $user */
-        $user = $this->modelManager->find(Customer::class, $this->session->offsetGet('sUserId'));
+        $user = $this->modelManager->find(Customer::class, $this->session->get('sUserId'));
         return $user->getEncoderName() ?: $this->passwordManager->getDefaultPasswordEncoderName();
     }
 }

@@ -45,7 +45,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
     private $config;
 
     /**
-     * @var Enlight_Components_Session_Namespace The session data
+     * @var Shopware\Components\Session\SessionInterface The session data
      */
     private $session;
 
@@ -68,14 +68,14 @@ class sAdminTest extends PHPUnit_Framework_TestCase
 
         $this->module = Shopware()->Modules()->Admin();
         $this->config = Shopware()->Config();
-        $this->session = Shopware()->Session();
+        $this->session = Shopware()->Container()->get('session');
         $this->front = Shopware()->Front();
         $this->snippetManager = Shopware()->Snippets();
         $this->basketModule = Shopware()->Modules()->Basket();
         $this->systemModule = Shopware()->System();
         $this->systemModule->sCurrency = Shopware()->Db()->fetchRow('SELECT * FROM s_core_currencies WHERE currency LIKE "EUR"');
-        $this->systemModule->sSESSION_ID = null;
-        $this->session->offsetSet('sessionId', null);
+        $this->session->clear();
+        $this->session->setId('');
     }
 
     protected function tearDown()
@@ -255,7 +255,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($this->module->sUpdatePayment());
 
         $customer = $this->createDummyCustomer();
-        $this->session->offsetSet('sUserId', $customer->getId());
+        $this->session->set('sUserId', $customer->getId());
 
         // Test that operation succeeds even without payment id
         $this->assertTrue($this->module->sUpdatePayment());
@@ -455,16 +455,16 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         Shopware()->Db()->update('s_user', array('lastlogin' => '2000-01-01 00:00:00'), 'id = '.$customer->getId());
         $this->assertFalse($this->module->sCheckUser());
 
-        $this->assertEquals($customer->getGroup()->getKey(), $this->session->offsetGet('sUserGroup'));
-        $this->assertInternalType('array', $this->session->offsetGet('sUserGroupData'));
-        $this->assertArrayHasKey('groupkey', $this->session->offsetGet('sUserGroupData'));
-        $this->assertArrayHasKey('description', $this->session->offsetGet('sUserGroupData'));
-        $this->assertArrayHasKey('tax', $this->session->offsetGet('sUserGroupData'));
-        $this->assertArrayHasKey('taxinput', $this->session->offsetGet('sUserGroupData'));
-        $this->assertArrayHasKey('mode', $this->session->offsetGet('sUserGroupData'));
-        $this->assertArrayHasKey('discount', $this->session->offsetGet('sUserGroupData'));
-        $this->assertArrayHasKey('minimumorder', $this->session->offsetGet('sUserGroupData'));
-        $this->assertArrayHasKey('minimumordersurcharge', $this->session->offsetGet('sUserGroupData'));
+        $this->assertEquals($customer->getGroup()->getKey(), $this->session->get('sUserGroup'));
+        $this->assertInternalType('array', $this->session->get('sUserGroupData'));
+        $this->assertArrayHasKey('groupkey', $this->session->get('sUserGroupData'));
+        $this->assertArrayHasKey('description', $this->session->get('sUserGroupData'));
+        $this->assertArrayHasKey('tax', $this->session->get('sUserGroupData'));
+        $this->assertArrayHasKey('taxinput', $this->session->get('sUserGroupData'));
+        $this->assertArrayHasKey('mode', $this->session->get('sUserGroupData'));
+        $this->assertArrayHasKey('discount', $this->session->get('sUserGroupData'));
+        $this->assertArrayHasKey('minimumorder', $this->session->get('sUserGroupData'));
+        $this->assertArrayHasKey('minimumordersurcharge', $this->session->get('sUserGroupData'));
 
         $this->deleteDummyCustomer($customer);
     }
@@ -961,7 +961,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
     public function testsGetDownloads()
     {
         $customer = $this->createDummyCustomer();
-        $this->session->offsetSet('sUserId', $customer->getId());
+        $this->session->set('sUserId', $customer->getId());
 
         // New customers don't have available downloads
         $downloads = $this->module->sGetDownloads();
@@ -1148,7 +1148,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         $this->assertCount(0, $data['orderData']);
 
         // Mock a login
-        $this->session->offsetSet('sUserId', $customer->getId());
+        $this->session->set('sUserId', $customer->getId());
 
         // Calling the method should now return the expected data
         $result = $this->module->sGetOpenOrderData();
@@ -1203,7 +1203,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
 
         // Test sGetUserMailById with null and expected cases
         $this->assertNull($this->module->sGetUserMailById());
-        $this->session->offsetSet('sUserId', $customer->getId());
+        $this->session->set('sUserId', $customer->getId());
         $this->assertEquals($customer->getEmail(), $this->module->sGetUserMailById());
 
         // Test sGetUserByMail with null and expected cases
@@ -1236,7 +1236,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
             $this->module->sGetUserData()
         );
 
-        $this->session->offsetSet('sCountry', 20);
+        $this->session->set('sCountry', 20);
 
         $this->assertEquals(
             array('additional' =>
@@ -1290,8 +1290,8 @@ class sAdminTest extends PHPUnit_Framework_TestCase
     public function testsGetUserDataWithLogin()
     {
         $customer = $this->createDummyCustomer();
-        $this->session->offsetSet('sUserId', $customer->getId());
-        $this->session->offsetUnset('sState');
+        $this->session->set('sUserId', $customer->getId());
+        $this->session->remove('sState');
 
         $result = $this->module->sGetUserData();
 
@@ -1499,7 +1499,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
     public function testsManageRisks()
     {
         $customer = $this->createDummyCustomer();
-        $this->session->offsetSet('sUserId', $customer->getId());
+        $this->session->set('sUserId', $customer->getId());
 
         $basket = array(
             'content' => 1,
@@ -1697,8 +1697,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($this->module->sManageRisks(2, $basket, $user));
         Shopware()->Db()->delete('s_core_rulesets', 'id >= '.$firstTestRuleId);
 
-        $this->module->sSYSTEM->sSESSION_ID = uniqid(rand());
-        $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
+        $this->session->setId(uniqid(rand()));
         $this->basketModule->sAddArticle('SW10118.8');
 
         // sRiskATTRIS
@@ -2327,8 +2326,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         // No basket, return false
         $this->assertFalse($this->module->sGetDispatchBasket());
 
-        $this->module->sSYSTEM->sSESSION_ID = uniqid(rand());
-        $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
+        $this->session->setId(uniqid(rand()));
         $this->basketModule->sAddArticle('SW10118.8');
 
         // With the correct data, return properly formatted array
@@ -2367,8 +2365,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         // No basket, return empty array,
         $this->assertEquals(array(), $this->module->sGetPremiumDispatches());
 
-        $this->module->sSYSTEM->sSESSION_ID = uniqid(rand());
-        $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
+        $this->session->setId(uniqid(rand()));
         $this->basketModule->sAddArticle('SW10118.8');
 
         $result = $this->module->sGetPremiumDispatches();
@@ -2391,8 +2388,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         // No basket, return false,
         $this->assertFalse($this->module->sGetPremiumDispatchSurcharge(null));
 
-        $this->module->sSYSTEM->sSESSION_ID = uniqid(rand());
-        $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
+        $this->session->setId(uniqid(rand()));
         $this->basketModule->sAddArticle('SW10010');
         $fullBasket = $this->module->sGetDispatchBasket();
 
@@ -2416,8 +2412,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
             }
         }
 
-        $this->module->sSYSTEM->sSESSION_ID = uniqid(rand());
-        $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
+        $this->session->setId(uniqid(rand()));
         $this->basketModule->sAddArticle('SW10010');
 
         // With country data, no dispatch method
@@ -2427,7 +2422,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         );
 
         // With dispatch method
-        $this->session->offsetSet('sDispatch', 9);
+        $this->session->set('sDispatch', 9);
         $result = $this->module->sGetPremiumShippingcosts($germany);
         $this->assertArrayHasKey('brutto', $result);
         $this->assertArrayHasKey('netto', $result);

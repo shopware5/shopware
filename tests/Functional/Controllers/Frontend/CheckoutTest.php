@@ -83,6 +83,6 @@ class Shopware_Tests_Controllers_Frontend_CheckoutTest extends Enlight_Component
         $this->reset();
         $this->Request()->setHeader('User-Agent', $userAgent);
         $this->dispatch('/checkout/addArticle/sAdd/'.self::ARTICLE_NUMBER);
-        return Shopware()->Container()->get('SessionID');
+        return Shopware()->Container()->get('session')->getId();
     }
 }

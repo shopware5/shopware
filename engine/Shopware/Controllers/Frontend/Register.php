@@ -99,7 +99,7 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
         /** @var ShopContextInterface $context */
         $context = $this->get('shopware_storefront.context_service')->getShopContext();
 
-        /** @var Enlight_Components_Session_Namespace $session */
+        /** @var Shopware\Components\Session\SessionInterface $session */
         $session = $this->get('session');
 
         /** @var Enlight_Event_EventManager $eventManager */
@@ -149,10 +149,10 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
         /** @var Address $billing */
         $billing = $billingForm->getData();
 
-        $customer->setReferer((string) $session->offsetGet('sReferer'));
+        $customer->setReferer((string) $session->get('sReferer'));
         $customer->setValidation((string) $data['register']['personal']['sValidation']);
-        $customer->setAffiliate((int) $session->offsetGet('sPartner'));
-        $customer->setPaymentId((int) $session->offsetGet("sPaymentID"));
+        $customer->setAffiliate((int) $session->get('sPartner'));
+        $customer->setPaymentId((int) $session->get("sPaymentID"));
 
         $registerService->register(
             $context->getShop(),
@@ -220,7 +220,7 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
      */
     private function isUserLoggedIn()
     {
-        return !empty($this->get('session')->offsetGet('sUserId'));
+        return !empty($this->get('session')->get('sUserId'));
     }
 
     /**
@@ -247,7 +247,7 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
      */
     private function shouldRedirectToTarget()
     {
-        return $this->isUserLoggedIn() && empty($this->get('session')->offsetGet('sRegisterFinished'));
+        return $this->isUserLoggedIn() && empty($this->get('session')->get('sRegisterFinished'));
     }
 
     /**
@@ -348,8 +348,8 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
                 'sValidation' => $this->getCustomerGroupKey()
             ],
             'billing' => [
-                'country' => $session->offsetGet('sCountry'),
-                'state' => $session->offsetGet('sState')
+                'country' => $session->get('sCountry'),
+                'state' => $session->get('sState')
             ]
         ], $register);
 
@@ -362,15 +362,15 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
      */
     private function writeSession(array $data, Customer $customer)
     {
-        /** @var Enlight_Components_Session_Namespace $session */
+        /** @var Shopware\Components\Session\SessionInterface $session */
         $session = $this->get('session');
-        $session->offsetSet('sRegister', $data['register']);
-        $session->offsetSet('sOneTimeAccount', false);
-        $session->offsetSet('sRegisterFinished', true);
+        $session->set('sRegister', $data['register']);
+        $session->set('sOneTimeAccount', false);
+        $session->set('sRegisterFinished', true);
         if ($customer->getAccountMode() === Customer::ACCOUNT_MODE_FAST_LOGIN) {
-            $session->offsetSet('sOneTimeAccount', true);
+            $session->set('sOneTimeAccount', true);
         }
-        $session->offsetSet('sCountry', $customer->getDefaultBillingAddress()->getCountry()->getId());
+        $session->set('sCountry', $customer->getDefaultBillingAddress()->getCountry()->getId());
     }
 
 
@@ -458,7 +458,7 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
             Shopware()->Modules()->Admin()->sSaveRegisterSendConfirmation($customer->getEmail());
         } catch (\Exception $e) {
             $message = sprintf("Could not send user registration email to address %s", $customer->getEmail());
-            Shopware()->Container()->get('corelogger')->error($message, ['exception' => $e]);
+            $this->get('corelogger')->error($message, ['exception' => $e]);
         }
     }
 }

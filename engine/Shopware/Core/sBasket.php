@@ -24,6 +24,7 @@
 
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 use Shopware\Bundle\StoreFrontBundle;
+use Shopware\Components\Session\SessionInterface;
 
 /**
  * Shopware Class that handles cart operations
@@ -59,7 +60,7 @@ class sBasket
      * Shopware session object.
      * Injected over the class constructor
      *
-     * @var Enlight_Components_Session_Namespace
+     * @var SessionInterface
      */
     private $session;
 
@@ -113,7 +114,7 @@ class sBasket
         Enlight_Event_EventManager              $eventManager       = null,
         Shopware_Components_Snippet_Manager     $snippetManager     = null,
         Shopware_Components_Config              $config             = null,
-        Enlight_Components_Session_Namespace    $session            = null,
+        SessionInterface                        $session            = null,
         Enlight_Controller_Front                $front              = null,
         Shopware_Components_Modules             $moduleManager      = null,
         sSystem                                 $systemModule       = null,
@@ -125,7 +126,7 @@ class sBasket
         $this->eventManager = $eventManager ? : Shopware()->Events();
         $this->snippetManager = $snippetManager ? : Shopware()->Snippets();
         $this->config = $config ? : Shopware()->Config();
-        $this->session = $session ? : Shopware()->Session();
+        $this->session = $session ? : Shopware()->Container()->get('session');
         $this->front = $front ? : Shopware()->Front();
         $this->moduleManager = $moduleManager ? : Shopware()->Modules();
         $this->sSYSTEM = $systemModule ? : Shopware()->System();
@@ -153,7 +154,7 @@ class sBasket
             'SELECT SUM(quantity*(floor(price * 100 + .55)/100)) AS totalAmount
                 FROM s_order_basket
                 WHERE sessionID = ? GROUP BY sessionID',
-            array($this->session->get('sessionId'))
+            array($this->session->getId())
         );
 
         return ($result === false ? array() : $result);
@@ -172,7 +173,7 @@ class sBasket
                 FROM s_order_basket
                 WHERE sessionID = ? AND modus = 0
                 GROUP BY sessionID',
-            array($this->session->get('sessionId'))
+            array($this->session->getId())
         );
 
         return ($result === false ? array() : $result);
@@ -198,7 +199,7 @@ class sBasket
             WHERE b.sessionID = ?
               AND b.modus = 0
             GROUP BY b.ordernumber',
-            array($this->session->get('sessionId'))
+            array($this->session->getId())
         );
         $hideBasket = false;
         foreach ($result as $article) {
@@ -250,7 +251,7 @@ class sBasket
                 AND s_order_basket.articleID = s_articles.id
                 $sqlExtra
                 GROUP BY sessionID",
-            array($this->session->get('sessionId'))
+            array($this->session->getId())
         );
 
         return ($result === false ? array() : $result);
@@ -291,7 +292,7 @@ class sBasket
             'SELECT id basketID, ordernumber, articleID as voucherID
                 FROM s_order_basket
                 WHERE modus = 2 AND sessionID = ?',
-            array($this->session->get('sessionId'))
+            array($this->session->getId())
         );
         if (!empty($voucher)) {
             $voucher['code'] = $this->db->fetchOne(
@@ -326,7 +327,7 @@ class sBasket
 
         $this->db->query(
             'DELETE FROM s_order_basket WHERE sessionID = ? AND modus = 3',
-            array($this->session->get('sessionId'))
+            array($this->session->getId())
         );
 
         // No discounts
@@ -338,7 +339,7 @@ class sBasket
               FROM s_order_basket
               WHERE sessionID = ? AND modus != 4
               GROUP BY sessionID';
-        $params = array($this->session->get('sessionId'));
+        $params = array($this->session->getId());
 
         $sql = Shopware()->Events()->filter(
             'Shopware_Modules_Basket_InsertDiscount_FilterSql_BasketAmount',
@@ -400,7 +401,7 @@ class sBasket
                 ->get('discount_name');
 
         $params = [
-            'sessionID' => $this->session->get('sessionId'),
+            'sessionID' => $this->session->getId(),
             'articlename' => $discountName,
             'articleID' => 0,
             'ordernumber' => $name,
@@ -436,7 +437,7 @@ class sBasket
     {
         $discount = $this->db->fetchOne(
             'SELECT id FROM s_order_basket WHERE sessionID = ? AND modus = 3',
-            array($this->session->get('sessionId'))
+            array($this->session->getId())
         );
 
         return (bool) $discount;
@@ -474,7 +475,7 @@ class sBasket
                 WHERE basket.modus = 1
                 AND premium.id IS NULL
                 AND basket.sessionID = ?',
-                array($sBasketAmount, $this->session->get('sessionId'))
+                array($sBasketAmount, $this->session->getId())
             );
             if (empty($deletePremium)) {
                 return true;
@@ -496,7 +497,7 @@ class sBasket
         $this->db->delete(
             's_order_basket',
             array(
-                'sessionID = ?' => $this->session->get('sessionId'),
+                'sessionID = ?' => $this->session->getId(),
                 'modus = 1'
             )
         );
@@ -568,7 +569,7 @@ class sBasket
         return $this->db->insert(
             's_order_basket',
             array(
-                'sessionID' => $this->session->get('sessionId'),
+                'sessionID' => $this->session->getId(),
                 'articlename' => trim($premium["articleName"] . " " . $premium["additionaltext"]),
                 'articleID' => $premium['articleID'],
                 'ordernumber' => $number,
@@ -591,14 +592,12 @@ class sBasket
      */
     public function getMaxTax()
     {
-        $sessionId = $this->session->get('sessionId');
-
         return $this->db->fetchOne(
             'SELECT MAX(tax_rate) as max_tax
                 FROM s_order_basket b
                 WHERE b.sessionID = ? AND b.modus = 0
                 GROUP BY b.sessionID',
-            array(empty($sessionId) ? session_id() : $sessionId)
+            array($this->session->getId())
         );
     }
 
@@ -708,7 +707,7 @@ class sBasket
             'SELECT id
             FROM s_order_basket
             WHERE sessionID = ? AND modus = 2',
-            array($this->session->get('sessionId'))
+            array($this->session->getId())
         );
         if ($chkBasket) {
             $sErrorMessages[] = $this->snippetManager->getNamespace('frontend/basket/internalMessages')->get(
@@ -793,7 +792,7 @@ class sBasket
         VALUES (?,?,?,?,?,1,?,?,?,?,2,?)
         ";
         $params = array(
-            $this->session->get('sessionId'),
+            $this->session->getId(),
             $voucherName,
             $voucherDetails["id"],
             $voucherDetails["ordercode"],
@@ -834,7 +833,7 @@ class sBasket
                 WHERE sessionID = ?
                 AND modus = 0
                 ORDER BY modus ASC, datum DESC',
-            array($this->session->get('sessionId'))
+            array($this->session->getId())
         );
 
         return empty($articles) ? null : $articles;
@@ -874,7 +873,7 @@ class sBasket
         $this->db->delete(
             's_order_basket',
             array(
-                'sessionID = ?' => $this->session->get('sessionId'),
+                'sessionID = ?' => $this->session->getId(),
                 'ordernumber = ?' => $name
             )
         );
@@ -925,7 +924,7 @@ class sBasket
             ->get('surcharge_name');
 
         $params = array(
-            'sessionID'      => $this->session->get('sessionId'),
+            'sessionID'      => $this->session->getId(),
             'articlename'    => $surchargeName,
             'articleID'      => 0,
             'ordernumber'    => $name,
@@ -988,7 +987,7 @@ class sBasket
 
         $this->db->query(
             'DELETE FROM s_order_basket WHERE sessionID = ? AND ordernumber = ?',
-            [$this->session->get('sessionId'), $name]
+            [$this->session->getId(), $name]
         );
 
         if (!$this->sCountBasket()) {
@@ -1027,7 +1026,7 @@ class sBasket
         }
 
         $params = [
-            'sessionID'      => $this->session->get('sessionId'),
+            'sessionID'      => $this->session->getId(),
             'articlename'    => $surchargeName,
             'articleID'      => 0,
             'ordernumber'    => $name,
@@ -1062,7 +1061,7 @@ class sBasket
     {
         return $this->db->fetchOne(
             'SELECT COUNT(*) FROM s_order_basket WHERE modus = 0 AND sessionID = ?',
-            array($this->session->get('sessionId'))
+            array($this->session->getId())
         );
     }
 
@@ -1078,7 +1077,7 @@ class sBasket
             'SELECT id, modus, quantity
             FROM s_order_basket
             WHERE sessionID = ?',
-            array($this->session->get('sessionId'))
+            array($this->session->getId())
         );
         foreach ($basketData as $basketContent) {
             if (empty($basketContent["modus"])) {
@@ -1095,7 +1094,7 @@ class sBasket
             $this->db->delete(
                 's_order_basket',
                 array(
-                    'sessionID = ?' => $this->session->get('sessionId'),
+                    'sessionID = ?' => $this->session->getId(),
                     'modus = 3'
                 )
             );
@@ -1243,7 +1242,7 @@ class sBasket
             $queryNewPrice = $this->db->insert(
                 's_order_notes',
                 array(
-                    'sUniqueID'   => empty($uniqueId) ? $this->session->get('sessionId') : $uniqueId,
+                    'sUniqueID'   => empty($uniqueId) ? $this->session->getId() : $uniqueId,
                     'userID'      => $this->session->get('sUserId') ? : '0',
                     'articlename' => $articleName,
                     'articleID'   => $articleID,
@@ -1335,7 +1334,7 @@ class sBasket
             AND a.id = n.articleID AND a.active = 1
             ORDER BY n.datum DESC',
             array(
-                empty($uniqueId) ? $this->session->get('sessionId') : $uniqueId,
+                empty($uniqueId) ? $this->session->getId() : $uniqueId,
                 $this->session->get('sUserId', 0)
             )
         );
@@ -1364,7 +1363,7 @@ class sBasket
             WHERE (sUniqueID = ? OR (userID != 0 AND userID = ?))
             AND a.id = n.articleID AND a.active = 1
         ', array(
-            empty($uniqueId) ? $this->session->get('sessionId') : $uniqueId,
+            empty($uniqueId) ? $this->session->getId() : $uniqueId,
             $this->session->get('sUserId', 0)
         ));
         return $count;
@@ -1425,7 +1424,7 @@ class sBasket
             return false;
         }
 
-        if (!$this->session->get('sessionId') || !$id) {
+        if (!$this->session->getId() || !$id) {
             return false;
         }
 
@@ -1472,7 +1471,7 @@ class sBasket
                 $this->sSYSTEM->sCurrency["factor"],
                 $taxRate,
                 $id,
-                $this->session->get('sessionId')
+                $this->session->getId()
             )
         );
 
@@ -1495,7 +1494,7 @@ class sBasket
             WHERE sessionID = ?
             AND esdarticle = 1
             LIMIT 1;',
-            array($this->session->get('sessionId'))
+            array($this->session->getId())
         );
 
         return (bool) $getArticlesId;
@@ -1510,7 +1509,7 @@ class sBasket
      */
     public function sDeleteBasket()
     {
-        $sessionId = $this->session->get('sessionId');
+        $sessionId = $this->session->getId();
         if (empty($sessionId)) {
             return false;
         }
@@ -1538,7 +1537,7 @@ class sBasket
             $this->db->delete(
                 's_order_basket',
                 array(
-                    'sessionID = ?' => $this->session->get('sessionId'),
+                    'sessionID = ?' => $this->session->getId(),
                     'id = ?' => $id
                 )
             );
@@ -1556,7 +1555,7 @@ class sBasket
      */
     public function sAddArticle($id, $quantity = 1)
     {
-        $sessionId = $this->session->get('sessionId');
+        $sessionId = $this->session->getId();
         if ($this->session->get('Bot') || empty($sessionId)) {
             return false;
         }
@@ -1727,7 +1726,7 @@ class sBasket
     {
         $this->db->executeUpdate(
             'DELETE FROM s_order_basket WHERE sessionID= :sessionId',
-            ['sessionId' => $this->session->get('sessionId')]
+            ['sessionId' => $this->session->getId()]
         );
     }
 
@@ -1743,10 +1742,10 @@ class sBasket
         $this->moduleManager->Admin()->sGetPremiumShippingcosts();
 
         // Update basket data in session
-        $this->session->offsetSet('sBasketCurrency', Shopware()->Shop()->getCurrency()->getId());
-        $this->session->offsetSet('sBasketQuantity', $this->sCountBasket());
+        $this->session->set('sBasketCurrency', Shopware()->Shop()->getCurrency()->getId());
+        $this->session->set('sBasketQuantity', $this->sCountBasket());
         $amount = $this->sGetAmount();
-        $this->session->offsetSet('sBasketAmount', empty($amount) ? 0 : array_shift($amount));
+        $this->session->set('sBasketAmount', empty($amount) ? 0 : array_shift($amount));
     }
 
     /**
@@ -1934,7 +1933,7 @@ class sBasket
             $foundMatchingArticle = $this->db->fetchOne($this->db
                     ->select()
                     ->from('s_order_basket', 'id')
-                    ->where('sessionID = ?', $this->session->get('sessionId'))
+                    ->where('sessionID = ?', $this->session->getId())
                     ->where('modus = 0')
                     ->where('ordernumber IN (?)', $restrictedArticles)
             );
@@ -1968,7 +1967,7 @@ class sBasket
                 WHERE s_order_basket.articleID = s_articles.id
                 AND s_articles.supplierID = ?
                 AND s_order_basket.sessionID = ?',
-                array($allowedSupplierId, $this->session->get('sessionId'))
+                array($allowedSupplierId, $this->session->getId())
             );
 
             if (!$allowedBasketEntriesBySupplier) {
@@ -2402,7 +2401,7 @@ class sBasket
             array('subject' => $this)
         );
 
-        $getArticles = $this->db->fetchAll($sql, array($this->session->get('sessionId')));
+        $getArticles = $this->db->fetchAll($sql, array($this->session->getId()));
 
         return $getArticles;
     }
@@ -2428,7 +2427,7 @@ class sBasket
             AND s_order_basket.id = ?
             AND s_order_basket.sessionID = ?
             ",
-            array($id, $this->session->get('sessionId'))
+            array($id, $this->session->getId())
         ) ? : array();
 
         // Check if quantity matches minimum purchase
@@ -2503,7 +2502,7 @@ class sBasket
             $sql . ' ' . $quantitySQL,
             array(
                 $id,
-                $this->session->get('sessionId'),
+                $this->session->getId(),
                 $this->sSYSTEM->sUSERGROUP
             )
         ) ? : array();
@@ -2527,7 +2526,7 @@ class sBasket
                 $sql . ' ' . $quantitySQL,
                 array(
                     $id,
-                    $this->session->get('sessionId')
+                    $this->session->getId()
                 )
             ) ? : array();
         }
@@ -2728,7 +2727,7 @@ class sBasket
             array(
                 "id" => $id,
                 'subject'=> $this,
-                "partner" => $this->sSYSTEM->_SESSION["sPartner"]
+                "partner" => $this->session->get('sPartner')
             )
         );
 

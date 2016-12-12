@@ -61,7 +61,7 @@ class ShopwareEnvironmentProcessor
         }
 
         if (Shopware()->Container()->has('shop')) {
-            if ($session = Shopware()->Session()) {
+            if ($session = Shopware()->Container()->get('session')) {
                 $record['extra']['session'] = $session;
             }
             if ($shop = Shopware()->Shop()) {

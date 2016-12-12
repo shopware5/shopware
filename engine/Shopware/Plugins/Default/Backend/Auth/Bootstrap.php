@@ -297,7 +297,7 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
         /** @var $engine Enlight_Template_Manager */
         $engine = $container->get('Template');
         $engine->unregisterPlugin(
-            Smarty::PLUGIN_FUNCTION,
+            Enlight_Template_Manager::PLUGIN_FUNCTION,
             'acl_is_allowed'
         );
         $engine->registerPlugin(
@@ -375,16 +375,11 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
      *
      * @param Enlight_Event_EventArgs $args
      * @throws Exception
-     * @return null|\Zend_Auth
+     * @return \Shopware\Components\Session\SessionInterface
      */
     public function onInitResourceBackendSession(Enlight_Event_EventArgs $args)
     {
-        $options = $this->getSessionOptions();
-        $this->setSaveHandler($options);
-
-        Enlight_Components_Session::start($options);
-
-        return new Enlight_Components_Session_Namespace('ShopwareBackend');
+        return $this->get('session');
     }
 
     /**
@@ -396,11 +391,12 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
      */
     public function onInitResourceAuth(Enlight_Event_EventArgs $args)
     {
-        Shopware()->Container()->load('BackendSession');
+        /** @var \Shopware\Components\Session\SessionInterface $session */
+        $session = $this->get('BackendSession');
 
         $resource = Shopware_Components_Auth::getInstance();
-        $adapter = new Shopware_Components_Auth_Adapter_Default();
-        $storage = new Zend_Auth_Storage_Session('Shopware', 'Auth');
+        $adapter = new Shopware_Components_Auth_Adapter_Default($session);
+        $storage = new Shopware_Components_Auth_Storage_Session($session);
         $resource->setBaseAdapter($adapter);
         $resource->addAdapter($adapter);
         $resource->setStorage($storage);
@@ -429,12 +425,8 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
      */
     protected function getCurrentLocale()
     {
-        $options = $this->getSessionOptions();
-
-        Enlight_Components_Session::setOptions($options);
-
+        $auth = Shopware()->Container()->get('Auth');
         if (Enlight_Components_Session::sessionExists()) {
-            $auth = Shopware()->Container()->get('Auth');
             if ($auth->hasIdentity()) {
                 $user = $auth->getIdentity();
                 if (isset($user->locale)) {
@@ -447,46 +439,5 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
         $locale = Shopware()->Models()->getRepository('Shopware\Models\Shop\Locale')->find($default);
 
         return $locale;
-    }
-
-    /**
-     * Filters and transforms the session options array
-     * so it complies with the format expected by Enlight_Components_Session
-     *
-     * @return array
-     */
-    private function getSessionOptions()
-    {
-        $options = Shopware()->Container()->getParameter('shopware.backendsession');
-
-        if (!isset($options['cookie_path']) && $this->request !== null) {
-            $options['cookie_path'] = rtrim($this->request->getBaseUrl(), '/').'/backend/';
-        }
-        if (empty($options['gc_maxlifetime'])) {
-            $backendTimeout = $this->Config()->get('backendTimeout', 60 * 90);
-            $options['gc_maxlifetime'] = (int) $backendTimeout;
-        }
-
-        return $options;
-    }
-
-    /**
-     * @param array $options
-     */
-    private function setSaveHandler(array $options)
-    {
-        if (!isset($options['save_handler']) || $options['save_handler'] == 'db') {
-            $config_save_handler = array(
-                'name' => 's_core_sessions_backend',
-                'primary' => 'id',
-                'modifiedColumn' => 'modified',
-                'dataColumn' => 'data',
-                'lifetimeColumn' => 'expiry',
-                'lifetime' => $options['gc_maxlifetime'] ?: PHP_INT_MAX
-            );
-            Enlight_Components_Session::setSaveHandler(
-                new Enlight_Components_Session_SaveHandler_DbTable($config_save_handler)
-            );
-        }
     }
 }

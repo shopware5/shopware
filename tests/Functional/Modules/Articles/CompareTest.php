@@ -51,7 +51,7 @@ class Shopware_Tests_Modules_Articles_CompareTest extends Enlight_Components_Tes
         parent::setUp();
 
         $this->module = Shopware()->Modules()->Articles();
-        $this->module->sSYSTEM->sSESSION_ID = uniqid(rand());
+        Shopware()->Container()->get('session')->setId(uniqid(rand()));
         $this->module->sDeleteComparisons();
 
         $sql = 'SELECT `id` FROM `s_articles` WHERE `active` =1';

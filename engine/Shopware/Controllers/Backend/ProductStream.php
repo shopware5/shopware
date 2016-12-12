@@ -39,7 +39,7 @@ class Shopware_Controllers_Backend_ProductStream extends Shopware_Controllers_Ba
         $sourceStreamId = $this->Request()->getParam('sourceStreamId');
         $targetStreamId = $this->Request()->getParam('targetStreamId');
 
-        $persister = Shopware()->Container()->get('shopware_attribute.data_persister');
+        $persister = $this->get('shopware_attribute.data_persister');
         $persister->cloneAttribute(
             's_product_streams_attributes',
             $sourceStreamId,
@@ -91,7 +91,7 @@ class Shopware_Controllers_Backend_ProductStream extends Shopware_Controllers_Ba
             new CategoryCondition([$category])
         );
 
-        $result = Shopware()->Container()->get('shopware_search.product_search')
+        $result = $this->get('shopware_search.product_search')
             ->search($criteria, $context);
 
         $products = array_values($result->getProducts());
@@ -135,7 +135,7 @@ class Shopware_Controllers_Backend_ProductStream extends Shopware_Controllers_Ba
     private function createContext($shopId, $currencyId = null, $customerGroupKey = null)
     {
         /** @var Shopware\Models\Shop\Repository $repo */
-        $repo = Shopware()->Container()->get('models')->getRepository('Shopware\Models\Shop\Shop');
+        $repo = $this->get('models')->getRepository('Shopware\Models\Shop\Shop');
 
         $shop = $repo->getActiveById($shopId);
         $shopId = $shop->getId();
@@ -148,14 +148,14 @@ class Shopware_Controllers_Backend_ProductStream extends Shopware_Controllers_Ba
             $customerGroupKey = ContextService::FALLBACK_CUSTOMER_GROUP;
         }
 
-        return Shopware()->Container()->get('shopware_storefront.context_service')
+        return $this->get('shopware_storefront.context_service')
             ->createShopContext($shopId, $currencyId, $customerGroupKey);
     }
 
     public function loadSelectedProductsAction()
     {
         $streamId = $this->Request()->getParam('streamId');
-        $query = Shopware()->Container()->get('dbal_connection')->createQueryBuilder();
+        $query = $this->get('dbal_connection')->createQueryBuilder();
 
         $query->select(['product.id', 'variant.ordernumber as number', 'product.name'])
             ->from('s_articles', 'product')
@@ -182,7 +182,7 @@ class Shopware_Controllers_Backend_ProductStream extends Shopware_Controllers_Ba
         $streamId = $this->Request()->getParam('streamId');
         $articleId = $this->Request()->getParam('articleId');
 
-        Shopware()->Container()->get('dbal_connection')->executeUpdate(
+        $this->get('dbal_connection')->executeUpdate(
             "DELETE FROM s_product_streams_selection WHERE stream_id = :streamId AND article_id = :articleId",
             [':streamId' => $streamId, ':articleId' => $articleId]
         );
@@ -195,7 +195,7 @@ class Shopware_Controllers_Backend_ProductStream extends Shopware_Controllers_Ba
         $streamId = $this->Request()->getParam('streamId');
         $articleId = $this->Request()->getParam('articleId');
 
-        Shopware()->Container()->get('dbal_connection')->executeUpdate(
+        $this->get('dbal_connection')->executeUpdate(
             "INSERT IGNORE INTO s_product_streams_selection(stream_id, article_id) VALUES (:streamId, :articleId)",
             [':streamId' => $streamId, ':articleId' => $articleId]
         );
@@ -205,7 +205,7 @@ class Shopware_Controllers_Backend_ProductStream extends Shopware_Controllers_Ba
 
     public function getAttributesAction()
     {
-        $service = Shopware()->Container()->get('shopware_attribute.crud_service');
+        $service = $this->get('shopware_attribute.crud_service');
         $data = $service->getList('s_articles_attributes');
 
         $columns = [];
@@ -231,7 +231,7 @@ class Shopware_Controllers_Backend_ProductStream extends Shopware_Controllers_Ba
             return;
         }
 
-        Shopware()->Container()->get('dbal_connection')->executeUpdate(
+        $this->get('dbal_connection')->executeUpdate(
             "INSERT IGNORE INTO s_product_streams_selection (stream_id, article_id) SELECT :targetStreamId, article_id FROM s_product_streams_selection WHERE stream_id = :sourceStreamId",
             [':targetStreamId' => $targetStreamId, ':sourceStreamId' => $sourceStreamId]
         );

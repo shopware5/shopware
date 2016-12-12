@@ -144,7 +144,7 @@ class Shopware_Tests_Plugins_Core_PaymentMethods_SepaPaymentMethod extends Enlig
         $orderId = 57;
         $userId = 1;
         $paymentId = 6;
-        Shopware()->Session()->sUserId = $userId;
+        Shopware()->Container()->get('session')->set('sUserId', $userId);
 
         //for now, don't test email
         Shopware()->Config()->set('sepaSendEmail', false);
@@ -213,7 +213,7 @@ class Shopware_Tests_Plugins_Core_PaymentMethods_SepaPaymentMethod extends Enlig
         $orderId = 57;
         $userId = 1;
         $paymentId = 6;
-        Shopware()->Session()->sUserId = $userId;
+        Shopware()->Container()->get('session')->set('sUserId', $userId);
 
         //for now, don't test email
         Shopware()->Config()->set('sepaSendEmail', false);
