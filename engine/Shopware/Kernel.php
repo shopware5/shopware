@@ -32,6 +32,7 @@ use Shopware\Bundle\ESIndexingBundle\DependencyInjection\CompilerPass\DataIndexe
 use Shopware\Bundle\ESIndexingBundle\DependencyInjection\CompilerPass\MappingCompilerPass;
 use Shopware\Bundle\FormBundle\DependencyInjection\CompilerPass\FormPass;
 use Shopware\Bundle\MediaBundle\DependencyInjection\Compiler\MediaAdapterCompilerPass;
+use Shopware\Bundle\PluginInstallerBundle\Service\PluginInitializer;
 use Shopware\Bundle\SearchBundle\DependencyInjection\Compiler\CriteriaRequestHandlerCompilerPass;
 use Shopware\Bundle\SearchBundleDBAL\DependencyInjection\Compiler\DBALCompilerPass;
 use Shopware\Bundle\SearchBundleES\DependencyInjection\CompilerPass\SearchHandlerCompilerPass;
@@ -296,45 +297,12 @@ class Kernel implements HttpKernelInterface
 
     protected function initializePlugins()
     {
-        $this->plugins = [];
+        $initializer = new PluginInitializer(
+            $this->connection,
+            $this->getRootDir() . '/custom/plugins'
+        );
 
-        $classLoader = new Psr4ClassLoader();
-        $classLoader->register(true);
-
-        $stmt = $this->connection->query('SELECT name FROM s_core_plugins WHERE namespace LIKE "ShopwarePlugins" AND active = 1 AND installation_date IS NOT NULL;');
-        $activePlugins = $stmt->fetchAll(\PDO::FETCH_COLUMN);
-
-        $pluginRoot = $this->getRootDir().'/custom/plugins';
-        foreach (new \DirectoryIterator($pluginRoot) as $pluginDir) {
-            if ($pluginDir->isFile() || $pluginDir->getBasename()[0] === '.') {
-                continue;
-            }
-
-            $pluginName = $pluginDir->getBasename();
-            $pluginFile = $pluginDir->getPathname() . '/'. $pluginName . '.php';
-            if (!is_file($pluginFile)) {
-                continue;
-            }
-
-            $namespace = $pluginName;
-            $className = '\\' . $namespace . '\\' .  $pluginName;
-            $classLoader->addPrefix($namespace, $pluginDir->getPathname());
-
-            if (!class_exists($className)) {
-                throw new \RuntimeException(sprintf('Unable to load class %s for plugin %s in file %s', $className, $pluginName, $pluginFile));
-            }
-
-            $isActive = in_array($pluginName, $activePlugins, true);
-
-            /** @var Plugin $plugin */
-            $plugin = new $className($isActive);
-
-            if (!$plugin instanceof Plugin) {
-                throw new \RuntimeException(sprintf('Class %s must extend %s in file %s', get_class($plugin), Plugin::class, $pluginFile));
-            }
-
-            $this->plugins[$plugin->getName()] = $plugin;
-        }
+        $this->plugins = $initializer->initializePlugins();
 
         $this->pluginHash = $this->createPluginHash($this->plugins);
     }

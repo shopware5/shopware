@@ -65,19 +65,35 @@ class PluginInstaller
     private $requirementValidator;
 
     /**
+     * @var \PDO
+     */
+    private $pdo;
+
+    /**
+     * @var string
+     */
+    private $rootDirectory;
+
+    /**
      * @param ModelManager $em
      * @param DatabaseHandler $snippetHandler
      * @param RequirementValidator $requirementValidator
+     * @param \PDO $pdo
+     * @param $rootDirectory
      */
     public function __construct(
         ModelManager $em,
         DatabaseHandler $snippetHandler,
-        RequirementValidator $requirementValidator
+        RequirementValidator $requirementValidator,
+        \PDO $pdo,
+        $rootDirectory
     ) {
         $this->em = $em;
         $this->connection = $this->em->getConnection();
         $this->snippetHandler = $snippetHandler;
         $this->requirementValidator = $requirementValidator;
+        $this->pdo = $pdo;
+        $this->rootDirectory = $rootDirectory;
     }
 
     /**
@@ -250,9 +266,11 @@ class PluginInstaller
      */
     public function refreshPluginList(\DateTimeInterface $refreshDate)
     {
-        /** @var Kernel $kernel */
-        $kernel = Shopware()->Container()->get('kernel');
-        $plugins = $kernel->getPlugins();
+        $initializer = new PluginInitializer(
+            $this->pdo,
+            $this->rootDirectory . '/custom/plugins'
+        );
+        $plugins = $initializer->initializePlugins();
 
         foreach ($plugins as $plugin) {
             $pluginInfoPath = $plugin->getPath().'/plugin.xml';
