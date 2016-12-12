@@ -4,26 +4,27 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "7331fe51e3da94f73a48d9c6be6de4dc",
+    "content-hash": "e77b2f4d9be74c6a60a6eed0a4087a41",
     "packages": [
         {
             "name": "bcremer/line-reader",
-            "version": "0.1.0",
+            "version": "0.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bcremer/LineReader.git",
-                "reference": "2fd53b5821891e136414e782893b204faea6a7f5"
+                "reference": "b2bdbcf97df9a05b8ce317c3a5382610cd832419"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bcremer/LineReader/zipball/2fd53b5821891e136414e782893b204faea6a7f5",
-                "reference": "2fd53b5821891e136414e782893b204faea6a7f5",
+                "url": "https://api.github.com/repos/bcremer/LineReader/zipball/b2bdbcf97df9a05b8ce317c3a5382610cd832419",
+                "reference": "b2bdbcf97df9a05b8ce317c3a5382610cd832419",
                 "shasum": ""
             },
             "require": {
-                "php": "~5.6|~7.0"
+                "php": "~5.6|~7.0|~7.1"
             },
             "require-dev": {
+                "humbug/humbug": "dev-master@DEV",
                 "phpunit/phpunit": "^5.4"
             },
             "type": "library",
@@ -42,7 +43,8 @@
                     "email": "b.cremer@shopware.com"
                 }
             ],
-            "time": "2016-08-05T08:43:01+00:00"
+            "description": "Read large files line by line in a memory efficient (constant) way.",
+            "time": "2016-12-12T09:04:04+00:00"
         },
         {
             "name": "beberlei/assert",
