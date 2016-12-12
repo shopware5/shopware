@@ -181,29 +181,29 @@ class Repository
             "DATE(orders.ordertime) as orderTime",
 
             "SUM( IF(
-			    orders.status NOT IN (-1, 4),
-		   	    1, 0
-	   	    )) as orderCount",
+                orders.status NOT IN (-1, 4),
+                1, 0
+            )) as orderCount",
 
             "SUM( IF(
-   			    orders.status = -1,
-   			    1, 0
-		    )) as cancelledOrders"
+                orders.status = -1,
+                1, 0
+            )) as cancelledOrders"
         ));
 
         foreach ($shopIds as $shopId) {
             $builder->addSelect(
                 "SUM( IF(
-	   		        orders.language = ".$shopId." AND orders.status NOT IN (-1, 4),
-	   		        1, 0
-		        )) as orderCount" . $shopId
+                    orders.language = ".$shopId." AND orders.status NOT IN (-1, 4),
+                    1, 0
+                )) as orderCount" . $shopId
             );
 
             $builder->addSelect(
                 "SUM( IF(
                     orders.language = ".$shopId." AND orders.status = -1,
-	   		        1, 0
-	   	        )) cancelledOrders" . $shopId
+                    1, 0
+                )) cancelledOrders" . $shopId
             );
         }
 

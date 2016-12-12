@@ -24,7 +24,7 @@
 namespace Shopware\Components\Theme;
 
 use Shopware\Models\Plugin\Plugin;
-use Shopware\Models\Shop as Shop;
+use Shopware\Models\Shop;
 
 /**
  * The Theme\PathResolver class is a helper
@@ -279,7 +279,7 @@ class PathResolver
      */
     public function getCssFilePath(Shop\Shop $shop, $timestamp)
     {
-        return $this->getCacheDirectory() . "/" . $this->buildTimestampName($timestamp, $shop, 'css');
+        return $this->getCacheDirectory() . '/' . $this->buildTimestampName($timestamp, $shop, 'css');
     }
 
     /**
@@ -295,7 +295,7 @@ class PathResolver
      */
     public function getJsFilePath(Shop\Shop $shop, $timestamp)
     {
-        return $this->getCacheDirectory() . "/" . $this->buildTimestampName($timestamp, $shop, 'js');
+        return $this->getCacheDirectory() . '/' . $this->buildTimestampName($timestamp, $shop, 'js');
     }
 
     /**
@@ -311,9 +311,9 @@ class PathResolver
             $shop = $shop->getMain();
         }
 
-        $filname = $timestamp.'_'.md5($timestamp.$shop->getTemplate()->getId().$shop->getId().\Shopware::REVISION);
+        $filename = $timestamp . '_' . md5($timestamp . $shop->getTemplate()->getId() . $shop->getId() . \Shopware::REVISION);
 
-        return $filname.'.'.$suffix;
+        return $filename . '.' . $suffix;
     }
 
     /**

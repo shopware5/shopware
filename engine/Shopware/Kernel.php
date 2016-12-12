@@ -282,6 +282,7 @@ class Kernel implements HttpKernelInterface
             }
 
             $this->container->get('events')->addSubscriber($plugin);
+            $this->container->get('events')->addSubscriber(new Plugin\ResourceSubscriber($plugin->getPath()));
         }
 
         $this->booted = true;

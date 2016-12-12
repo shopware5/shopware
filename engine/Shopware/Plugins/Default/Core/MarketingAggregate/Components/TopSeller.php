@@ -77,7 +77,7 @@ class Shopware_Components_TopSeller extends Enlight_Class
 
         $sql = "
             INSERT IGNORE INTO s_articles_top_seller_ro (article_id, last_cleared, sales)
-            SELECT 	articles.id as article_id,
+            SELECT articles.id as article_id,
                     NOW() as last_cleared,
             " . $select . "
             FROM s_articles articles
@@ -108,7 +108,7 @@ class Shopware_Components_TopSeller extends Enlight_Class
         $orderTime = $this->getTopSellerOrderTime();
 
         $sql = "
-            SELECT 	articles.id as article_id,
+            SELECT articles.id as article_id,
                     NOW() as last_cleared,
                     " . $select . "
             FROM s_articles articles

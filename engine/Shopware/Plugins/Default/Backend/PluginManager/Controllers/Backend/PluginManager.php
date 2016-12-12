@@ -255,6 +255,16 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
         ]);
     }
 
+    public function refreshPluginListAction()
+    {
+        /** @var InstallerService $pluginManager */
+        $pluginManager = $this->get('shopware_plugininstaller.plugin_manager');
+        $pluginManager->refreshPluginList();
+        $this->View()->assign([
+            'success' => true
+        ]);
+    }
+
     public function localListingAction()
     {
         $this->registerShutdown();

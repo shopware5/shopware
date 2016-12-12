@@ -8,6 +8,20 @@ This changelog references changes done in Shopware 5.2 patch versions.
 
 * Changed duplicate smarty block from `frontend_checkout_confirm_information_addresses_equal_panel_shipping_select_address` to `frontend_checkout_confirm_information_addresses_equal_panel_shipping_add_address` in `frontend/checkout/confirm.tpl`
 * Added interface `\Shopware\Bundle\ESIndexingBundle\TextMappingInterface` which handles text field mappings for different elastic search versions
+* Added the missing requirement of the php function `parse_ini_file` to the system info and the installer
+* Added `Shopware\Components\Plugin\PaymentInstaller` class to install payment methods in plugins
+* Changed theme path for plugins of new plugin system from `/resources` to `/Resources`
+* Changed parsing of JSON `POST`ed to the REST API to not remove top-level `NULL` values
+
+### Autoloading of plugin resources
+
+Plugin resources inside of the `PluginName/Resources/frontend` directory are now loaded automatically on theme compilation when using the new plugin system.
+
+Example:
+
+- `custom/plugins/SwagResourceTest/Resources/frontend/css/**.css`
+- `custom/plugins/SwagResourceTest/Resources/frontend/js/**.js`
+- `custom/plugins/SwagResourceTest/Resources/frontend/less/all.less`
 
 ## 5.2.12
 

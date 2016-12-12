@@ -45,7 +45,7 @@ Ext.define('Shopware.apps.Log.store.Logs', {
     * is initialized
     * @boolean
     */
-    autoLoad: false,
+    autoLoad: true,
     /**
     * Amount of data loaded at once
     * @integer

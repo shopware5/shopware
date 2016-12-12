@@ -558,6 +558,14 @@ class Enlight_Controller_Request_RequestHttp implements Enlight_Controller_Reque
     /**
      * {@inheritdoc}
      */
+    public function replacePost($data)
+    {
+        $_POST = $data;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function setPost($spec, $value = null)
     {
         if (!is_array($spec) && $value === null) {

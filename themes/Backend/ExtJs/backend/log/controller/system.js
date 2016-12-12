@@ -19,31 +19,30 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Log
- * @subpackage Store
- * @version    $Id$
- * @author shopware AG
  */
 
-/**
- * Shopware - Users store
- *
- * This store contains all users.
- */
-//{block name="backend/log/store/users"}
-Ext.define('Shopware.apps.Log.store.Users', {
+//{block name="backend/log/controller/system"}
+Ext.define('Shopware.apps.Log.controller.System', {
+    extend: 'Ext.app.Controller',
 
     /**
-    * Extend for the standard ExtJS 4
-    * @string
-    */
-    extend: 'Shopware.apps.Base.store.User',
-    /**
-    * Amount of data loaded at once
-    * @integer
-    */
-    pageSize: 2000
+     * @return void
+     */
+    init: function() {
+        var me = this;
+
+        me.control({
+            'log-system-list': {
+                openLog: me.onOpenLog
+            }
+        });
+    },
+
+    onOpenLog: function(record) {
+        var me = this;
+        me.getView('system.Detail').create({
+            record: record
+        });
+    }
 });
 //{/block}

@@ -173,6 +173,12 @@ class Shopware_Plugins_Core_PostFilter_Bootstrap extends Shopware_Components_Plu
         }
 
         $link = $src[3];
+
+        $anchorPart = '';
+        if (strpos($link, '#') !== false) {
+            $anchorPart = substr($link, strpos($link, '#'));
+        }
+
         switch ($src[1]) {
             case 'input':
             case 'img':
@@ -201,6 +207,10 @@ class Shopware_Plugins_Core_PostFilter_Bootstrap extends Shopware_Components_Plu
             if (!preg_match('#^[a-z]+:|^\#|^/#', $link)) {
                 $link = $this->basePathUrl . $link;
             }
+        }
+
+        if ($anchorPart !== '' && strpos($link, $anchorPart) === false) {
+            $link .= $anchorPart;
         }
 
         //check canonical shopware configuration

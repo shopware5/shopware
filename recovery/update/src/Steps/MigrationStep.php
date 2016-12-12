@@ -71,7 +71,7 @@ class MigrationStep
             $reflection = new \ReflectionClass(get_class($migration));
             $classFile = $reflection->getFileName();
 
-            return new ErrorResult($e->getMessage(), $e,  [
+            return new ErrorResult($e->getMessage(), $e, [
                 'deltaFile'    => $classFile,
                 'deltaVersion' => $migration->getVersion(),
                 'deltaLabel'   => $migration->getLabel()

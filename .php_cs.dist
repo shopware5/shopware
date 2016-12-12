@@ -4,6 +4,7 @@ $finder = PhpCsFixer\Finder::create()
     ->in(__DIR__.'/engine/Library/Enlight')
     ->in(__DIR__.'/engine/Shopware')
     ->in(__DIR__.'/tests')
+    ->in(__DIR__.'/recovery')
 ;
 
 return PhpCsFixer\Config::create()

@@ -64,6 +64,7 @@ class Shopware_Tests_Controllers_Backend_LogTest extends Enlight_Components_Test
      */
     public function testCreateLog()
     {
+        $this->Request()->setClientIp('10.0.0.3', false);
         $this->Request()->setMethod('POST')->setPost(
             array(
                 'type'   => 'backend',
@@ -74,6 +75,7 @@ class Shopware_Tests_Controllers_Backend_LogTest extends Enlight_Components_Test
                 'value4' => ''
             )
         );
+
 
         $this->dispatch('backend/log/createLog');
         $this->assertTrue($this->View()->success);
