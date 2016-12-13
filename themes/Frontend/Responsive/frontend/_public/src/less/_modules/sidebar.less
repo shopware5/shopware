@@ -236,7 +236,70 @@ body > .sidebar-main {
     }
 }
 
+.listing--sidebar {
+    overflow: hidden;
+    width: 0;
+    height: 0;
+}
+
+.listing--sidebar .sidebar-filter {
+
+    .action--filter-options {
+        .border-radius();
+        border: 1px solid @border-color;
+    }
+
+    .filter--container {
+        .unitize-padding(10, 10);
+        margin: 0;
+
+        .filter-panel {
+            .unitize-margin(0, 0, 10, 0);
+            float: none;
+            width: auto;
+        }
+    }
+
+    .filter--actions {
+        width: auto;
+        padding: 0;
+        margin: 0;
+
+        &.filter--actions-top {
+            margin: 0;
+        }
+
+        .filter--btn-apply {
+            width: 100%;
+        }
+    }
+
+    #filter {
+        display: block;
+        padding: 0;
+    }
+}
+
 @media screen and (min-width: @tabletViewportWidth) {
+
+    .listing--sidebar {
+        .unitize-width(230);
+        height: auto;
+        display: block;
+        float: left;
+
+        & + .content--wrapper {
+            .unitize(margin-left, 260);
+        }
+
+        .is--no-sidebar & {
+            display: none;
+
+            & + .content--wrapper {
+                margin: 0;
+            }
+        }
+    }
 
     .offcanvas--overlay {
         display: none;
@@ -427,6 +490,50 @@ body > .sidebar-main {
             .navigation--link {
                 .unitize-padding(5, 10);
             }
+        }
+    }
+
+    .sidebar-filter {
+
+        .filter--active-container {
+            margin: 0;
+            padding: 0;
+        }
+
+        .is--instant-filter .filter--facet-container .filter-panel {
+            &:last-child {
+                margin-bottom: 0;
+            }
+        }
+
+        .filter--facet-container,
+        .filter--actions-bottom,
+        .filter--active-container{
+            display: block;
+        }
+
+        .filter--facet-container {
+            padding: 0;
+        }
+    }
+
+    .listing--sidebar .sidebar-filter {
+
+        //remove overlay of collapsed panel
+        .filter-panel.is--collapsed {
+            height: auto;
+
+            .filter-panel--flyout {
+                position: relative;
+            }
+        }
+    }
+
+    .listing--sidebar + .search--results {
+        .unitize(margin-left, 260);
+
+        & .listing--wrapper {
+            float: left;
         }
     }
 }

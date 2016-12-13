@@ -14,36 +14,20 @@
 
             {block name='frontend_listing_actions_filter_container'}
                 <div class="filter--container">
-
-                    {block name="frontend_listing_actions_filter_active_filters"}
-                        <div class="filter--active-container"
-                             data-reset-label="{s name='ListingFilterResetAll'}{/s}">
-                        </div>
-                    {/block}
-
                     {block name='frontend_listing_actions_filter_form'}
                         {$listingMode = {config name=listingMode}}
-
                         <form id="filter"
-                              method="get"
-                              data-filter-form="true"
-                              data-is-filtered="{$criteria->getUserConditions()|count}"
-                              data-load-facets="{if $listingMode == 'filter_ajax_reload'}true{else}false{/if}""
-                              data-listing-url="{$countCtrlUrl}"
-                              data-instant-filter-result="{if $listingMode != 'full_page_reload'}true{else}false{/if}">
+                            method="get"
+                            data-filter-form="true"
+                            data-is-in-sidebar="{if $theme.sidebarFilter}true{else}false{/if}"
+                            data-listing-url="{$countCtrlUrl}"
+                            data-is-filtered="{$criteria->getUserConditions()|count}"
+                            data-load-facets="{if $listingMode == 'filter_ajax_reload'}true{else}false{/if}"
+                            data-instant-filter-result="{if $listingMode != 'full_page_reload'}true{else}false{/if}"
+                            class="{if $listingMode != 'full_page_reload'} is--instant-filter{/if}">
 
                             {if $listingMode === 'full_page_reload'}
-                                {block name="frontend_listing_actions_filter_submit_button"}
-                                    <div class="filter--actions">
-                                        <button type="submit"
-                                                class="btn is--primary filter--btn-apply is--large is--icon-right"
-                                                disabled="disabled">
-                                            <span class="filter--count"></span>
-                                            {s name="ListingFilterApplyButton"}{/s}
-                                            <i class="icon--cycle"></i>
-                                        </button>
-                                    </div>
-                                {/block}
+                                {include file="frontend/listing/actions/filter-apply-button.tpl" clsSuffix='filter--actions-top'}
                             {/if}
 
                             {block name="frontend_listing_actions_filter_form_page"}
@@ -75,8 +59,20 @@
 							{/block}
 
                             {block name="frontend_listing_actions_filter_form_facets"}
-                                {include file="frontend/listing/actions/action-filter-facets.tpl" facets=$facets}
+                                <div class="filter--facet-container">
+                                    {include file="frontend/listing/actions/action-filter-facets.tpl" facets=$facets}
+                                </div>
                             {/block}
+
+                            {block name="frontend_listing_actions_filter_active_filters"}
+                                <div class="filter--active-container"
+                                     data-reset-label="{s name='ListingFilterResetAll'}{/s}">
+                                </div>
+                            {/block}
+
+                            {if $listingMode === 'full_page_reload'}
+                                {include file="frontend/listing/actions/filter-apply-button.tpl" clsSuffix='filter--actions-bottom'}
+                            {/if}
                         </form>
                     {/block}
                 </div>

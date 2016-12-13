@@ -1191,6 +1191,17 @@ class Theme extends \Shopware\Components\Theme
 
         $fieldSet->addElement(
             $this->createCheckboxField(
+                'sidebarFilter',
+                '__show_filter_in_sidebar__',
+                false,
+                $this->getLabelAttribute(
+                    'show_filter_in_sidebar_description'
+                )
+            )
+        );
+
+        $fieldSet->addElement(
+            $this->createCheckboxField(
                 'checkoutHeader',
                 '__checkout_header__',
                 true,

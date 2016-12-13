@@ -17,7 +17,9 @@
 
         {* Filter options *}
         {block name="frontend_listing_actions_filter_options"}
-            {include file="frontend/listing/actions/action-filter-panel.tpl"}
+            {if !$theme.sidebarFilter}
+                {include file="frontend/listing/actions/action-filter-panel.tpl"}
+            {/if}
         {/block}
 
         {* Listing pagination *}

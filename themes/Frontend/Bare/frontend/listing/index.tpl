@@ -5,7 +5,27 @@
 {/block}
 
 {block name='frontend_index_content_left'}
-    {include file='frontend/listing/sidebar.tpl'}
+
+	{block name='frontend_index_controller_url'}
+		{* Controller url for the found products counter *}
+		{$countCtrlUrl = "{url module="widgets" controller="listing" action="listingCount" params=$ajaxCountUrlParams fullPath}"}
+	{/block}
+
+	{if $theme.sidebarFilter}
+		{block name='frontend_index_listing_sidebar'}
+		<div class="listing--sidebar">
+			{include file='frontend/listing/sidebar.tpl'}
+
+			<div class="sidebar-filter">
+				<div class="sidebar-filter--content">
+					{include file="frontend/listing/actions/action-filter-panel.tpl"}
+				</div>
+			</div>
+		</div>
+		{/block}
+	{else}
+		{include file='frontend/listing/sidebar.tpl'}
+	{/if}
 {/block}
 
 {* Main content *}
@@ -44,9 +64,6 @@
 			{if $criteria}
 				{$pages = ceil($sNumberArticles / $criteria->getLimit())}
 			{/if}
-
-            {* Controller url for the found products counter *}
-            {$countCtrlUrl = "{url module="widgets" controller="listing" action="listingCount" params=$ajaxCountUrlParams fullPath}"}
 
             {* Layout for the product boxes *}
             {$productBoxLayout = 'basic'}

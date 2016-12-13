@@ -1,6 +1,7 @@
 <?php
 namespace  Shopware\Tests\Mink\Page;
 
+use Behat\Mink\Element\NodeElement;
 use Shopware\Tests\Mink\Element\ArticleBox;
 use Shopware\Tests\Mink\Element\FilterGroup;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
@@ -29,7 +30,7 @@ class Listing extends Page implements HelperSelectorInterface
             'viewList' => 'a.action--link.link--list-view',
             'active' => '.is--active',
             'filterActiveProperties' => '.filter--active:not([data-filter-param=reset])',
-            'filterShowResults' => 'div.filter--container > form > div.filter--actions > button[type=submit]',
+            'filterShowResults' => 'div.filter--container > form > div.filter--actions-bottom > button[type=submit]',
             'listingBox' => 'div.listing--container'
         ];
     }
