@@ -25,6 +25,7 @@
 namespace Shopware\Components\DependencyInjection\Bridge;
 
 use Shopware\Components\DependencyInjection\Container;
+use Shopware\Models\Shop\Shop;
 
 /**
  * Session Dependency Injection Bridge
@@ -56,14 +57,19 @@ class Session
         /** @var $shop \Shopware\Models\Shop\Shop */
         $shop = $container->get('Shop');
 
-        $name = 'session-' . $shop->getId();
-        $sessionOptions['name'] = $name;
+        if (! $shop instanceof Shop) {
+            $name = 'session-backend';
+        } else {
+            $name = 'session-' . $shop->getId();
 
-        $mainShop = $shop->getMain() ?: $shop;
-        if ($mainShop->getAlwaysSecure()) {
-            $sessionOptions['cookie_secure'] = true;
+            $mainShop = $shop->getMain() ?: $shop;
+            if ($mainShop->getAlwaysSecure()) {
+                $sessionOptions['cookie_secure'] = true;
+            }
         }
 
+        $sessionOptions['name'] = $name;
+        
         if (!isset($sessionOptions['save_handler']) || $sessionOptions['save_handler'] == 'db') {
             $config_save_handler = array(
                 'db'             => $container->get('Db'),
