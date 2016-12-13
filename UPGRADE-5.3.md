@@ -49,6 +49,7 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Added method `Shopware\Bundle\MediaBundle\MediaServiceInterface::listContents()`
 * Added method `Shopware\Bundle\MediaBundle\MediaService::listContents()`
 
+
 ### Changes
 
 * Changed theme path for new plugins from `/resources` into `/Resources`
