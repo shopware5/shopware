@@ -2,6 +2,6 @@
 
 {block name="frontend_index_navigation_categories_top_include" append}
     {block name="frontend_plugins_advanced_menu_outer"}
-        {include file="frontend/advanced_menu/index.tpl"}
+        {include file="frontend/plugins/advanced_menu/index.tpl"}
     {/block}
 {/block}
