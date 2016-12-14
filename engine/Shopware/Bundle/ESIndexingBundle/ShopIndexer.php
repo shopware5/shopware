@@ -80,6 +80,7 @@ class ShopIndexer implements ShopIndexerInterface
      * @param DataIndexerInterface[] $indexer
      * @param MappingInterface[] $mappings
      * @param SettingsInterface[] $settings
+     * @param array $configuration
      */
     public function __construct(
         Client $client,
