@@ -46,6 +46,7 @@ Ext.define('Shopware.form.field.Grid', {
     hideHeaders: true,
     baseBodyCls: Ext.baseCSSPrefix + 'form-item-body shopware-multi-selection-form-item-body',
     separator: '|',
+    allowBlank: true,
 
     /**
      * @required
@@ -246,15 +247,27 @@ Ext.define('Shopware.form.field.Grid', {
             pageSize: me.searchStore.pageSize,
             listeners: {
                 beforeselect: function (combo, records) {
-                    var added = false;
-                    Ext.each(records, function(record) {
-                        added = me.addItem(record);
-                        me.animateAdded(combo, added, record);
-                    });
-                    return false;
+                    return me.onBeforeSelect(combo, records);
+                },
+                select: function(combo, records) {
+                    return me.onSelect(combo, records);
                 }
             }
         };
+    },
+
+    onSelect: function(combo, records) {
+
+    },
+
+    onBeforeSelect: function(combo, records) {
+        var me = this, added = false;
+
+        Ext.each(records, function(record) {
+            added = me.addItem(record);
+            me.animateAdded(combo, added, record);
+        });
+        return false;
     },
 
     animateAdded: function(combo, added, record) {
@@ -323,6 +336,26 @@ Ext.define('Shopware.form.field.Grid', {
         var value = { };
         value[this.name] = this.getValue();
         return value;
+    },
+
+    isValid: function() {
+        var me = this;
+
+        me.searchField.combo.clearInvalid();
+
+        if (me.allowBlank) {
+            return true;
+        }
+
+        if (me.store.getCount() > 0) {
+            return true;
+        }
+
+        me.searchField.combo.markInvalid([
+            '{s name="not_empty"}{/s}'
+        ]);
+
+        return false;
     },
 
     labelRenderer: function(value, meta, record) {

@@ -97,7 +97,7 @@ Ext.define('Shopware.attribute.SelectionFactory', {
             model: extJsModel,
             proxy: {
                 type: 'ajax',
-                url: '{url controller="EntitySearch" action="search"}?model=' + attribute.get('entity'),
+                url: '{url controller="EntitySearch" action="search"}?model=' + entity,
                 reader: { type: 'json', root: 'data' }
             }
         });

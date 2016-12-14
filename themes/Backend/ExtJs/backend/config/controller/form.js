@@ -55,6 +55,21 @@ Ext.define('Shopware.apps.Config.controller.Form', {
         'form.Search',
         'form.CronJob',
 
+        'custom_search.Overview',
+        'custom_search.sorting.Listing',
+        'custom_search.sorting.Detail',
+        'custom_search.sorting.SortingSelection',
+
+        'custom_search.sorting.classes.PriceSorting',
+        'custom_search.sorting.classes.ProductNameSorting',
+        'custom_search.sorting.classes.PopularitySorting',
+        'custom_search.sorting.classes.ReleaseDateSorting',
+        'custom_search.sorting.classes.SearchRankingSorting',
+        'custom_search.sorting.classes.ProductAttributeSorting',
+
+        'custom_search.sorting.includes.CreateWindow',
+        'custom_search.sorting.includes.DirectionCombo',
+
         'shop.Detail',
         'shop.Currency',
         'shop.Page',

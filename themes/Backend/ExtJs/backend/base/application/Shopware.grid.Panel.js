@@ -1465,9 +1465,7 @@ Ext.define('Shopware.grid.Panel', {
 
         selModel = Ext.create('Ext.selection.CheckboxModel', {
             listeners: {
-                selectionchange: function (selModel, selection) {
-                    return me.fireEvent(me.eventAlias + '-selection-changed', me, selModel, selection);
-                }
+                selectionchange: Ext.bind(me.onSelectionChange, me)
             }
         });
 
@@ -1701,9 +1699,7 @@ Ext.define('Shopware.grid.Panel', {
         me.addButton = Ext.create('Ext.button.Button', {
             text: me.addButtonText,
             iconCls: 'sprite-plus-circle-frame',
-            handler: function () {
-                me.fireEvent(me.eventAlias + '-add-item', me, me.createNewRecord());
-            }
+            handler: Ext.bind(me.onAddItem, me)
         });
 
         me.fireEvent(me.eventAlias + '-add-button-created', me, me.addButton);
@@ -1860,6 +1856,20 @@ Ext.define('Shopware.grid.Panel', {
         if (result) return result;
 
         return value;
+    },
+
+    onAddItem: function() {
+        var me = this;
+        me.fireEvent(me.eventAlias + '-add-item', me, me.createNewRecord());
+    },
+
+    /**
+     * @param selModel
+     * @param selection
+     */
+    onSelectionChange: function(selModel, selection) {
+        var me = this;
+        return me.fireEvent(me.eventAlias + '-selection-changed', me, selModel, selection);
     }
 });
 

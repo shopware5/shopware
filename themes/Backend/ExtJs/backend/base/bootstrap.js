@@ -296,3 +296,6 @@
 {include file='backend/base/attribute/Shopware.attribute.Window.js'}
 {include file='backend/base/attribute/Shopware.attribute.Button.js'}
 {include file='backend/base/attribute/Shopware.grid.plugin.Attribute.js'}
+
+{include file='backend/base/model/custom_sorting.js'}
+{include file='backend/base/store/custom_sorting.js'}
