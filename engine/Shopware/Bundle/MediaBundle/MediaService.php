@@ -263,14 +263,6 @@ class MediaService implements MediaServiceInterface
     /**
      * @inheritdoc
      */
-    public function listContents($directory = '', $recursive = false)
-    {
-        return $this->filesystem->listContents($directory, $recursive);
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function createDir($dirname)
     {
         return $this->filesystem->createDir($dirname);
@@ -324,5 +316,13 @@ class MediaService implements MediaServiceInterface
     public function isEncoded($path)
     {
         return $this->strategy->isEncoded($path);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getAdapter()
+    {
+        return $this->filesystem;
     }
 }

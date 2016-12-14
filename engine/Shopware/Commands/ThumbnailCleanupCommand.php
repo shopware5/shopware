@@ -24,7 +24,7 @@
 
 namespace Shopware\Commands;
 
-use Shopware\Bundle\MediaBundle\MediaServiceInterface;
+use League\Flysystem\FilesystemInterface;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -77,11 +77,13 @@ class ThumbnailCleanupCommand extends ShopwareCommand
      */
     private function removeThumbnails(SymfonyStyle $io)
     {
-        $filesystem = $this->getContainer()->get('shopware_media.media_service');
+        $mediaService = $this->getContainer()->get('shopware_media.media_service');
+        $filesystem = $mediaService->getAdapter();
 
         $thumbnailFiles = $this->searchThumbnails($io, $filesystem);
 
         if (count($thumbnailFiles) === 0) {
+            $io->success('No orphaned thumbnails found.');
             return;
         }
 
@@ -102,10 +104,10 @@ class ThumbnailCleanupCommand extends ShopwareCommand
 
     /**
      * @param string $directory
-     * @param MediaServiceInterface $filesystem
+     * @param FilesystemInterface $filesystem
      * @param ProgressBar $progressBar
      */
-    private function processFilesIn($directory, MediaServiceInterface $filesystem, ProgressBar $progressBar)
+    private function processFilesIn($directory, FilesystemInterface $filesystem, ProgressBar $progressBar)
     {
         /** @var array $contents */
         $contents = $filesystem->listContents($directory);
@@ -120,8 +122,7 @@ class ThumbnailCleanupCommand extends ShopwareCommand
                     continue;
                 }
 
-                $file = $filesystem->normalize($item['path']);
-                $this->indexFile($file);
+                $this->indexFile($item['path']);
                 $progressBar->advance();
             }
         }
@@ -134,7 +135,6 @@ class ThumbnailCleanupCommand extends ShopwareCommand
     {
         $baseName = pathinfo($file, PATHINFO_FILENAME);
         $fileName = pathinfo($file, PATHINFO_BASENAME);
-        $path = str_replace($fileName, '', $file);
 
         // check if the filename matches thumbnail syntax like "*_200x200" or "*_200x200@2x"
         if (preg_match("/(_[0-9]+x[0-9]+(@2x)?)$/", $baseName)) {
@@ -146,7 +146,7 @@ class ThumbnailCleanupCommand extends ShopwareCommand
                 return;
             }
 
-            $this->thumbnailFiles[$strippedName][] = $path . 'thumbnail/' . $fileName;
+            $this->thumbnailFiles[$strippedName][] = $file;
             return;
         }
 
@@ -159,10 +159,10 @@ class ThumbnailCleanupCommand extends ShopwareCommand
 
     /**
      * @param SymfonyStyle $io
-     * @param MediaServiceInterface $filesystem
+     * @param FilesystemInterface $filesystem
      * @return array
      */
-    private function searchThumbnails(SymfonyStyle $io, MediaServiceInterface $filesystem)
+    private function searchThumbnails(SymfonyStyle $io, FilesystemInterface $filesystem)
     {
         // reset internal index
         $this->baseFiles = [];
@@ -170,9 +170,10 @@ class ThumbnailCleanupCommand extends ShopwareCommand
         $thumbnailFiles = [];
 
         $io->comment('Searching for all media files in your filesystem. This might take some time, depending on the number of media files you have.');
+        $io->newLine(2);
 
         $progressBar = $io->createProgressBar();
-        $progressBar->setFormat('verbose');
+        $progressBar->setFormat(" Scanned: %current% files\n Elapsed: %elapsed:6s%");
         $this->processFilesIn('media', $filesystem, $progressBar);
         $progressBar->finish();
 
@@ -187,11 +188,11 @@ class ThumbnailCleanupCommand extends ShopwareCommand
 
     /**
      * @param SymfonyStyle $io
-     * @param MediaServiceInterface $filesystem
+     * @param FilesystemInterface $filesystem
      * @param array $thumbnailFiles
      * @return int
      */
-    private function deleteThumbnails(SymfonyStyle $io, MediaServiceInterface $filesystem, array $thumbnailFiles)
+    private function deleteThumbnails(SymfonyStyle $io, FilesystemInterface $filesystem, array $thumbnailFiles)
     {
         $deleted = 0;
         $progressBar = $io->createProgressBar(count($thumbnailFiles));
