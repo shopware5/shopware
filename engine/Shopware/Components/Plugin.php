@@ -217,14 +217,8 @@ abstract class Plugin implements ContainerAwareInterface, SubscriberInterface
     final public function getPath()
     {
         if (null === $this->path) {
-            // Resolve path where the plugin is expected to be installed
-            $this->path = \Enlight_Loader::realpath(__DIR__.'/../../../custom/plugins/'.$this->getName());
-
-            // Path not found -> previous behaviour
-            if (false === $this->path) {
-                $reflected = new \ReflectionObject($this);
-                $this->path = dirname($reflected->getFileName());
-            }
+            $reflected = new \ReflectionObject($this);
+            $this->path = dirname($reflected->getFileName());
         }
 
         return $this->path;

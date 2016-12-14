@@ -102,21 +102,23 @@ class EnlightLoaderTest extends TestCase
      */
     public function dataProviderRealpath()
     {
-        return array(
-            // Absolute paths
-            array('/', '/'),
-            array(getcwd().'/', getcwd()),
-            array(getcwd().'/test/..', getcwd()),
+        return [
+            // Nonexisting paths
+            ['/nonexisting', false],
+            ['../nonexisting', false],
+            ['nonexisting', false],
+            [' ', false],
 
             // Relative paths
-            array('', getcwd()),
-            array('./', getcwd()),
-            array('../', realpath(getcwd().'/../')),
+            ['', getcwd()],
+            ['./', getcwd()],
+            ['../', realpath(getcwd().'/../')],
+            ['tests/Unit/Plugin/../../', getcwd().'/tests'],
 
-            // Nonexisting paths
-            array('/nonexisting', false),
-            array('../nonexisting', false),
-            array('nonexisting', false),
-        );
+            // Absolute paths
+            ['/', '/'],
+            [getcwd().'/', getcwd()],
+            [getcwd().'/test/..', getcwd()],
+        ];
     }
 }
