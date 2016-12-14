@@ -1,4 +1,7 @@
 <div class="actions">
+    {* Continue shopping *}
+    {block name="frontend_checkout_actions_link_last"}{/block}
+
     {if !$sMinimumSurcharge && ($sInquiry || $sDispatchNoOrder)}
     	{block name="frontend_checkout_actions_inquiry"}
 		<a href="{$sInquiryLink}" title="{"{s name='CheckoutActionsLinkOffer'}{/s}"|escape}" class="button-middle large">
@@ -6,7 +9,7 @@
 		</a>
 		{/block}
 	{/if}
-	
+
 	{* Checkout *}
 	{if !$sMinimumSurcharge && !$sDispatchNoOrder}
 		{block name="frontend_checkout_actions_confirm"}
@@ -15,6 +18,6 @@
         </a>
         {/block}
     {/if}
-		
+
 	<div class="clear">&nbsp;</div>
 </div>
