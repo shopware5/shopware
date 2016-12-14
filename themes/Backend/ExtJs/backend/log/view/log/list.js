@@ -72,7 +72,6 @@ Ext.define('Shopware.apps.Log.view.log.List', {
         var me = this;
 		me.registerEvents();
 		me.selModel = me.getGridSelModel();
-		me.store = me.logStore;
 		me.toolbar = me.getToolbar();
 		me.columns = me.getColumns();
 		me.dockedItems = [];

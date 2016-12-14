@@ -608,6 +608,13 @@ interface Enlight_Controller_Request_Request
     public function setQuery($spec, $value = null);
 
     /**
+     * Replace POST values
+     *
+     * @param array $data
+     */
+    public function replacePost($data);
+
+    /**
      * Set POST values method
      *
      * @param  string|array $spec

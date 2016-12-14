@@ -274,7 +274,7 @@ SQL;
             }
 
             $iterator = new RecursiveIteratorIterator(
-                new \RecursiveDirectoryIterator($directory->getPath(), FilesystemIterator::SKIP_DOTS),
+                new \RecursiveDirectoryIterator($directory->getRealPath(), FilesystemIterator::SKIP_DOTS),
                 RecursiveIteratorIterator::CHILD_FIRST
             );
 

@@ -2436,7 +2436,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      */
     protected function prepareVariantData($variant, $detailData, &$counter, $dependencies, $priceVariations, $allOptions, $originals, $article, $mergeType)
     {
-        $name = '';
         $optionsModels = array();
         $tax = $article->getTax();
         $optionIds = array();
@@ -2449,7 +2448,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             $optionIds[] = $optionId;
 
             $optionsModels[] = $allOptions[$optionId];
-            $name[] = $variant['o' . $id . 'Name'];
         }
 
         $abortVariant = false;
