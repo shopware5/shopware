@@ -40,7 +40,11 @@ if (is_file('files/update/update.json') || is_dir('update-assets')) {
     header('Content-type: text/html; charset=utf-8', true, 503);
     header('Status: 503 Service Temporarily Unavailable');
     header('Retry-After: 1200');
-    echo file_get_contents(__DIR__ . '/recovery/update/maintenance.html');
+    if (file_exists(__DIR__ . '/maintenance.html')) {
+        echo file_get_contents(__DIR__ . '/maintenance.html');
+    } else {
+        echo file_get_contents(__DIR__ . '/recovery/update/maintenance.html');
+    }
     return;
 }
 
