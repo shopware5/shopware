@@ -190,7 +190,7 @@ class PreCommitChecks
      */
     private function hasDuplicateMigrations()
     {
-        exec('find ./_sql/migrations -type f | cut -d\/ -f4 | cut -d\- -f1 | sort | uniq -d', $output);
+        exec('find ./_sql/migrations -maxdepth 1 -type f | cut -d\/ -f4 | cut -d\- -f1 | sort | uniq -d', $output);
         if (count($output)) {
             return current($output);
         }
