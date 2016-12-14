@@ -22,6 +22,10 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Components\DependencyInjection\Bridge\Db;
+use Shopware\Components\DependencyInjection\Container;
+use Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler;
+
 /**
  *
  * Shopware Auth Plugin
@@ -370,17 +374,17 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
     }
 
     /**
-     * Initiate shopware auth resource
-     * database adapter by default
-     *
      * @param Enlight_Event_EventArgs $args
+     * @return Enlight_Components_Session_Namespace
      * @throws Exception
-     * @return null|\Zend_Auth
      */
     public function onInitResourceBackendSession(Enlight_Event_EventArgs $args)
     {
         $options = $this->getSessionOptions();
-        $this->setSaveHandler($options);
+        $saveHandler = $this->createSaveHandler(Shopware()->Container());
+        if ($saveHandler) {
+            session_set_save_handler($saveHandler);
+        }
 
         Enlight_Components_Session::start($options);
 
@@ -392,7 +396,7 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
      * database adapter by default
      *
      * @param Enlight_Event_EventArgs $args
-     * @return null|\Zend_Auth
+     * @return \Zend_Auth
      */
     public function onInitResourceAuth(Enlight_Event_EventArgs $args)
     {
@@ -466,27 +470,35 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
             $backendTimeout = $this->Config()->get('backendTimeout', 60 * 90);
             $options['gc_maxlifetime'] = (int) $backendTimeout;
         }
+        unset($options['locking']);
 
         return $options;
     }
 
     /**
-     * @param array $options
+     * @param Container $container
+     * @return \SessionHandlerInterface|null
      */
-    private function setSaveHandler(array $options)
+    private function createSaveHandler(Container $container)
     {
-        if (!isset($options['save_handler']) || $options['save_handler'] == 'db') {
-            $config_save_handler = array(
-                'name' => 's_core_sessions_backend',
-                'primary' => 'id',
-                'modifiedColumn' => 'modified',
-                'dataColumn' => 'data',
-                'lifetimeColumn' => 'expiry',
-                'lifetime' => $options['gc_maxlifetime'] ?: PHP_INT_MAX
-            );
-            Enlight_Components_Session::setSaveHandler(
-                new Enlight_Components_Session_SaveHandler_DbTable($config_save_handler)
-            );
+        $sessionOptions = $container->getParameter('shopware.backendsession');
+        if (isset($sessionOptions['save_handler']) && $sessionOptions['save_handler'] !== 'db') {
+            return null;
         }
+
+        $dbOptions = $container->getParameter('shopware.db');
+        $conn = Db::createPDO($dbOptions);
+
+        return new PdoSessionHandler(
+            $conn,
+            [
+                'db_table'        => 's_core_sessions_backend',
+                'db_id_col'       => 'id',
+                'db_data_col'     => 'data',
+                'db_lifetime_col' => 'expiry',
+                'db_time_col'     => 'modified',
+                'lock_mode'       => $sessionOptions['locking'] ? PdoSessionHandler::LOCK_TRANSACTIONAL : PdoSessionHandler::LOCK_NONE,
+            ]
+        );
     }
 }

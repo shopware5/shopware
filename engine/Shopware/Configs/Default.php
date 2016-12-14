@@ -133,6 +133,7 @@ return array_replace_recursive([
         'gc_divisor' => 100,
         'save_handler' => 'db',
         'use_trans_sid' => 0,
+        'locking' => true,
     ],
     'phpsettings' => [
         'error_reporting' => E_ALL & ~E_USER_DEPRECATED,
@@ -172,5 +173,6 @@ return array_replace_recursive([
         'cookie_lifetime' => 0,
         'cookie_httponly' => 1,
         'use_trans_sid' => 0,
+        'locking' => false,
     ],
 ], $customConfig);

@@ -12,6 +12,9 @@ This changelog references changes done in Shopware 5.2 patch versions.
 * Added `Shopware\Components\Plugin\PaymentInstaller` class to install payment methods in plugins
 * Changed theme path for plugins of new plugin system from `/resources` to `/Resources`
 * Changed parsing of JSON `POST`ed to the REST API to not remove top-level `NULL` values
+* Changed frontendsession to a locking session handler
+    * Added new configuration parameter `session.locking` which is `true` by default
+    * The session handler can be overwritten by replacing the `session.save_handler`-Service. A instance of `\SessionHandlerInterface` has to be returned.
 
 ### Autoloading of plugin resources
 
