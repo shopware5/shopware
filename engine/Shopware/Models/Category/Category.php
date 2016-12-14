@@ -329,6 +329,18 @@ class Category extends ModelEntity
     protected $media;
 
     /**
+     * @var string
+     * @ORM\Column(name="sorting_ids", type="string", nullable=true)
+     */
+    protected $sortingIds;
+
+    /**
+     * @var boolean
+     * @ORM\Column(name="hide_sortings", type="boolean", nullable=false)
+     */
+    protected $hideSortings = false;
+
+    /**
      * Class constructor.
      */
     public function __construct()
@@ -993,5 +1005,37 @@ class Category extends ModelEntity
     public function getMediaId()
     {
         return $this->mediaId;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSortingIds()
+    {
+        return $this->sortingIds;
+    }
+
+    /**
+     * @param string $sortingIds
+     */
+    public function setSortingIds($sortingIds)
+    {
+        $this->sortingIds = $sortingIds;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function hideSortings()
+    {
+        return $this->hideSortings;
+    }
+
+    /**
+     * @param boolean $hideSortings
+     */
+    public function setHideSortings($hideSortings)
+    {
+        $this->hideSortings = $hideSortings;
     }
 }

@@ -68,6 +68,11 @@ Ext.define('Shopware.form.field.Grid', {
      */
     animateAddItem: true,
 
+    /**
+     * @boolean
+     */
+    ignoreDisabled: true,
+
     initComponent: function() {
         var me = this;
 
@@ -291,9 +296,11 @@ Ext.define('Shopware.form.field.Grid', {
     },
 
     getValue: function() {
-        var me = this;
-        var recordData = [];
-        var store = me.store;
+        var me = this, recordData = [], store = me.store;
+
+        if (me.isDisabled() && !me.ignoreDisabled) {
+            return null;
+        }
 
         store.each(function(item) {
             recordData.push(me.getItemData(item));
@@ -375,5 +382,21 @@ Ext.define('Shopware.form.field.Grid', {
             html: '<div>'+supportText+'</div>',
             cls: Ext.baseCSSPrefix +'form-support-text'
         });
+    },
+
+    enable: function() {
+        var me = this;
+
+        me.callParent(arguments);
+        me.grid.enable();
+        me.searchField.enable();
+    },
+
+    disable: function() {
+        var me = this;
+
+        me.callParent(arguments);
+        me.grid.disable();
+        me.searchField.disable();
     }
 });

@@ -9,6 +9,13 @@ class Migrations_Migration850 extends AbstractMigration
      */
     public function up($modus)
     {
+        $this->addSortingModule();
+
+        $this->addCategorySortings();
+    }
+
+    private function addSortingModule()
+    {
         $sql = <<<SQL
 CREATE TABLE IF NOT EXISTS `s_search_custom_sorting` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -37,6 +44,16 @@ SET @formId = (SELECT id FROM s_core_config_forms WHERE name = 'CustomSearch');
 
 INSERT INTO `s_core_config_form_translations` (`form_id`, `locale_id`, `label`, `description`)
 VALUES (@formId, '2', 'Sortings / Filter', NULL);
+SQL;
+        $this->addSql($sql);
+    }
+
+    private function addCategorySortings()
+    {
+        $sql = <<<SQL
+ALTER TABLE `s_categories`
+  ADD `hide_sortings` INT(1) NOT NULL DEFAULT '0',
+  ADD `sorting_ids` TEXT NULL;
 SQL;
         $this->addSql($sql);
     }

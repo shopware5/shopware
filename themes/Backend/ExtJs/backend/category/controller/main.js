@@ -56,6 +56,7 @@ Ext.define('Shopware.apps.Category.controller.Main', {
      * @array
      */
     refs: [
+        { ref: 'mainWindow', selector: 'category-main-window' },
         { ref: 'settingsForm', selector: 'category-category-tabs-settings' }
     ],
 
@@ -108,10 +109,28 @@ Ext.define('Shopware.apps.Category.controller.Main', {
         });
 
         me.control({
+            'category-tab-custom-listing': {
+                'saveCategory': me.saveCategory
+            },
             // Save button
             'category-main-window':{
                 'saveDetail' : me.onSaveSettings
             }
+        });
+    },
+
+    saveCategory: function(category, callback) {
+        var me = this,
+            form = me.getMainWindow().formPanel.getForm();
+
+        if (!form.isValid()) {
+            return;
+        }
+
+        form.updateRecord(category);
+
+        category.save({
+            callback: Ext.bind(callback)
         });
     },
 
@@ -125,31 +144,27 @@ Ext.define('Shopware.apps.Category.controller.Main', {
      */
     onSaveSettings: function (button, event) {
         var me = this,
-                form = me.getSettingsForm().getForm(),
-                categoryModel = form.getRecord(),
-                selectedNode = me.getController("Tree").getSelectedNode(),
-                parentNode = selectedNode.parentNode || selectedNode;
+            window = me.getMainWindow(),
+            form = window.formPanel.getForm(),
+            categoryModel = form.getRecord(),
+            selectedNode = me.getController("Tree").getSelectedNode(),
+            parentNode = selectedNode.parentNode || selectedNode;
 
-        form.updateRecord(categoryModel);
-        if (form.isValid()) {
-            categoryModel.save({
-                callback:function (self, operation) {
-                    if (operation.success) {
-                        me.getSettingsForm().attributeForm.saveAttribute(categoryModel.get('id'));
+        me.saveCategory(categoryModel, function(self, operation) {
+            if (operation.success) {
+                me.getSettingsForm().attributeForm.saveAttribute(categoryModel.get('id'));
 
-                        Shopware.Notification.createGrowlMessage('', me.snippets.onSaveChangesSuccess, me.snippets.growlMessage);
-                        me.subApplication.treeStore.load({ node: parentNode });
-                    } else {
-                        var rawData = self.proxy.reader.rawData;
-                        if (rawData.message) {
-                            Shopware.Notification.createGrowlMessage('',me.snippets.onSaveChangesError + '<br>' +  rawData.message, me.snippets.growlMessage);
-                        } else {
-                            Shopware.Notification.createGrowlMessage('', me.snippets.onSaveChangesError, me.snippets.growlMessage);
-                        }
-                    }
+                Shopware.Notification.createGrowlMessage('', me.snippets.onSaveChangesSuccess, me.snippets.growlMessage);
+                me.subApplication.treeStore.load({ node: parentNode });
+            } else {
+                var rawData = self.proxy.reader.rawData;
+                if (rawData.message) {
+                    Shopware.Notification.createGrowlMessage('',me.snippets.onSaveChangesError + '<br>' +  rawData.message, me.snippets.growlMessage);
+                } else {
+                    Shopware.Notification.createGrowlMessage('', me.snippets.onSaveChangesError, me.snippets.growlMessage);
                 }
-            });
-        }
+            }
+        });
     }
 });
 //{/block}

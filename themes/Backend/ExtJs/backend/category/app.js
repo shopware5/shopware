@@ -78,7 +78,8 @@ Ext.define('Shopware.apps.Category', {
         'category.Tree',
         'category.tabs.Settings',
         'category.tabs.ArticleMapping',
-        'category.tabs.restriction'
+        'category.tabs.restriction',
+        'category.tabs.CustomListing'
     ],
 
     /**

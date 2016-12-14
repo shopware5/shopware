@@ -28,6 +28,29 @@ class Shopware_Controllers_Backend_CustomSorting extends Shopware_Controllers_Ba
 {
     protected $model = CustomSorting::class;
 
+    public function copyCategorySettingsAction()
+    {
+        $categoryId = (int) $this->Request()->getParam('categoryId');
+
+        $connection = $this->container->get('dbal_connection');
+
+        $data = $connection->fetchAssoc(
+            'SELECT `hide_sortings`, `sorting_ids` FROM s_categories WHERE id = :id',
+            [':id' => $categoryId]
+        );
+
+        $connection->executeUpdate(
+            "UPDATE s_categories SET `hide_sortings` = :hideSortings, `sorting_ids` = :sortingIds WHERE path LIKE :path",
+            [
+                ':hideSortings' => (int) $data['hide_sortings'],
+                ':sortingIds' => (string) $data['sorting_ids'],
+                ':path' => '%|'. $categoryId .'|%'
+            ]
+        );
+
+        $this->View()->assign('success', true);
+    }
+
     public function changePositionAction()
     {
         $id = (int) $this->Request()->getParam('id');
