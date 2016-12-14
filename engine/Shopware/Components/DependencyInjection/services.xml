@@ -398,8 +398,10 @@
         <service id="validator.email" class="Shopware\Components\Validator\EmailValidator" />
 
         <service id="sitemapxml.repository" class="Shopware\Components\SitemapXMLRepository">
+            <argument type="service" id="shopware_search.product_number_search" />
+            <argument type="service" id="shopware_search.store_front_criteria_factory" />
             <argument type="service" id="models" />
-            <argument type="service" id="shopware_storefront.context_service" />
+            <argument type="service" id="shopware_storefront.context_service"/>
         </service>
 
         <service id="AttributeSubscriber" class="Shopware\Components\AttributeSubscriber">
