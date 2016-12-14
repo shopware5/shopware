@@ -406,6 +406,8 @@ Ext.define('Shopware.apps.Customer.controller.Detail', {
 
                     win.attributeForm.saveAttribute(record.get('id'));
 
+                    Shopware.app.Application.fireEvent('customer-save-successfully', me, record, win, form);
+
                     win.destroy();
                     listStore.load();
                 } else {
