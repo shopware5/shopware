@@ -39,7 +39,7 @@ class RefreshSearchIndexCommand extends ShopwareCommand
     {
         $this
             ->setName('sw:refresh:search:index')
-            ->setDescription('refreshes and regenerates the search index')
+            ->setDescription('Refreshes and regenerates the search index')
             ->setHelp('The <info>%command.name%</info> regenerates the search index')
             ->addOption(
                 'clear-table',
