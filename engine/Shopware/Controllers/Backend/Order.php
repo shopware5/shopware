@@ -263,7 +263,12 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
     }
 
     /**
-     * This class has its own OrderStatusQuery as we need to get rid of states with satus.id = -1
+     * This class has its own OrderStatusQuery as we need to get rid of states with status.id = -1
+     * @param array|null $filter
+     * @param array|null $order
+     * @param int|null $offset
+     * @param int|null $limit
+     * @return \Doctrine\ORM\Query
      */
     public function getOrderStatusQuery($filter = null, $order = null, $offset = null, $limit = null)
     {
@@ -277,6 +282,8 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         }
         if ($order !== null) {
             $builder->addOrderBy($order);
+        } else {
+            $builder->orderBy('status.position', 'ASC');
         }
 
         if ($offset !== null) {

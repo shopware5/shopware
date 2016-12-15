@@ -79,6 +79,8 @@ class Repository extends ModelRepository
         }
         if ($order !== null) {
             $builder->addOrderBy($order);
+        } else {
+            $builder->orderBy('status.position', 'ASC');
         }
 
         return $builder;
@@ -129,6 +131,8 @@ class Repository extends ModelRepository
         }
         if ($order !== null) {
             $builder->addOrderBy($order);
+        } else {
+            $builder->orderBy('status.position', 'ASC');
         }
 
         return $builder;
