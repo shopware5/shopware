@@ -236,15 +236,15 @@
          * @private
          */
         _getUrlParams: function() {
-            var url = window.decodeURIComponent(window.location.search.substring(1)),
-                urlParams = url.split('&'),
+            var search = window.location.search.substring(1),
+                urlParams = search.split('&'),
                 params = {};
 
             $.each(urlParams, function(i, param) {
                 param = param.split('=');
 
                 if(param[0].length && param[1].length && !params.hasOwnProperty(param[0])) {
-                    params[param[0]] = param[1];
+                    params[decodeURIComponent(param[0])] = decodeURIComponent(param[1]);
                 }
             });
 
