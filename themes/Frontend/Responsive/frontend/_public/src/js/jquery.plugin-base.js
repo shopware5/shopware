@@ -153,7 +153,9 @@
                 name = me.getName();
 
             $.each(me._events, function (i, obj) {
-                obj.el.off(obj.event);
+                if (typeof obj !== 'undefined') {
+                    obj.el.off(obj.event);
+                }
             });
 
             // remove all references of extern plugins
@@ -211,7 +213,7 @@
                     return typeof obj !== 'undefined' && pluginEvent === obj.event && $element[0] === obj.el[0];
                 });
 
-            $.each(filteredEvents, function (event) {
+            $.each(filteredEvents, function (index, event) {
                 $element.off.call($element, event.event);
             });
 
