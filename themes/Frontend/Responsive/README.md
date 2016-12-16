@@ -1,7 +1,7 @@
 # Shopware 5 Responsive Theme
 
 ## Description
-The Responsive Theme is the new default theme which is bundled with Shopware 5. It's based on Smarty 3, HTML5 and CSS3 using the LESS processor. The theme can be customized to your needs the Theme-Manager module in the Shopware 5 backend.
+The Responsive theme is the new default theme which is bundled with Shopware 5. It's based on Smarty 3, HTML5 and CSS3 using the LESS pre-processor. The theme can be customized to your needs with the Theme-Manager module in the Shopware 5 backend.
 
 Additionally third-party web components can be easily added using `npm`.
 
@@ -24,7 +24,7 @@ Using the theme is as easy as selecting it in the Theme-Manager module and you'r
 ### Installing third-party components
 Before installation new third-party components, please run `npm install` in the Responsive theme directory to download all defined dependencies.
 
-1.) To install new dependencies, witch to the Responsive theme directory in your Shopware installation e.g. `themes/Frontend/Responsive`
+1.) To install new dependencies, switch to the Responsive theme directory in your Shopware installation, e.g. `themes/Frontend/Responsive`
 
 2.) Install and save the dependency using `npm install --save <dependency>`
 
@@ -44,7 +44,7 @@ protected $javascript = array(
 ```
 
 ### Using LESS for your stylesheets
-The LESS compiler in Shopware 5 is very easy to use. When the storefront will be opened, we'll check if a LESS file named ```all.less``` is available in the directory ```frontend/_public/src/less/``` it will be automatically compiled to CSS.
+The LESS pre-processor in Shopware 5 is very easy to use. When the storefront will be opened, we'll check if a LESS file named ```all.less``` is available in the directory ```frontend/_public/src/less/``` it will be automatically translated to CSS.
 
 ### Using additional CSS files
 We provide the ability adding additional CSS files to your theme. Using it is as easy as adding your files to the ```$css``` array in your ```Theme.php```.
@@ -61,4 +61,4 @@ If you find any bugs in the theme, please use our public tracker at [https://iss
 
 
 ## License
-The theme is licensed under the MIT License. Please see the included License File for more information.
+The theme is licensed under the MIT license. Please see the included license file for more information.
