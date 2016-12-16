@@ -46,6 +46,9 @@
                         <div class="table--actions">
 
                             <div class="main--actions">
+                                {* Continue shopping *}
+                                {block name="frontend_checkout_actions_link_last"}{/block}
+
                                 {block name="frontend_checkout_actions_confirm"}
 
                                     {* Forward to the checkout *}
@@ -113,6 +116,9 @@
                         <div class="table--actions actions--bottom">
                             {block name="frontend_checkout_actions_confirm_bottom"}
                                 <div class="main--actions">
+
+                                    {* Continue shopping *}
+                                    {block name="frontend_checkout_actions_link_last_bottom"}{/block}
 
                                     {* Forward to the checkout *}
                                     {if !$sMinimumSurcharge && !($sDispatchNoOrder && !$sDispatches)}

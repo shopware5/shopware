@@ -90,7 +90,6 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Removed default plugin `LastArticle`, use `shopware.components.last_articles_subscriber` instead
 * Removed session key `sLastArticle`
 * Removed view variable `sLastActiveArticle` from basket
-* Removed block `frontend_checkout_actions_link_last`
 * Removed snippet `frontend/checkout/actions/CheckoutActionsLinkLast`
 * Removed meta tag `fragment`
 * Removed view variable `hasEscapedFragment`
