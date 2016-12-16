@@ -718,6 +718,81 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
     }
 
     /**
+     * Controller action to get a list of all defined presets.
+     */
+    public function getPresetsAction()
+    {
+        $identity = Shopware()->Container()->get('Auth')->getIdentity();
+        $locale = $identity->locale->getLocale();
+
+        if (empty($locale)) {
+            return;
+        }
+
+        $result = $this->getPresets($locale);
+
+        $this->View()->assign($result);
+    }
+
+    /**
+     * Returns all emotion presets, including translations for the given locale.
+     *
+     * @param $locale
+     * @return array
+     */
+    private function getPresets($locale)
+    {
+        try {
+            $query = $this->getPresetsQuery($locale);
+
+            $result = [
+                'success' => true,
+                'data' => []
+            ];
+
+            foreach ($query->getQuery()->getArrayResult() as $preset) {
+                $translation = $preset['translations'];
+                if (!is_array($translation) || !array_key_exists(0, $translation)) {
+                    $translation = [];
+                    $translation[0] = [
+                        'label' => $preset['name'],
+                        'description' => ''
+                    ];
+                }
+                $result['data'][] = [
+                    'id' => $preset['id'],
+                    'name' => $preset['name'],
+                    'premium' => $preset['premium'],
+                    'thumbnail' => $preset['thumbnail'],
+                    'presetData' => $preset['presetData'],
+                    'label' => $translation[0]['label'],
+                    'description' => $translation[0]['description']
+                ];
+            }
+        } catch (Exception $e) {
+            $result = ['success' => false, 'error' => $e->getMessage()];
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param $locale
+     * @return \Doctrine\ORM\QueryBuilder|\Shopware\Components\Model\QueryBuilder
+     */
+    private function getPresetsQuery($locale)
+    {
+        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder->select('presets', 'translations')
+            ->from('Shopware\Models\Emotion\Preset', 'presets')
+            ->leftJoin('presets.translations', 'translations')
+            ->where('translations.locale = :locale')
+            ->setParameter('locale', $locale);
+
+        return $builder;
+    }
+
+    /**
      * Deletes a single template which will be identified over
      * the passed id parameter. The return value is
      * every time an array.

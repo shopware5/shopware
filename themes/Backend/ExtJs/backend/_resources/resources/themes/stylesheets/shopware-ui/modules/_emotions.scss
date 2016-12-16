@@ -1205,3 +1205,31 @@ div[id^=emotion-detail-window] {
     }
   }
 }
+
+.theme-listing {
+    .thumbnail {
+
+        .thumbnail .thumb, .inner-preset-thumb {
+            width: 141px;
+            height: 106px;
+        }
+
+        .inner-preset-thumb {
+            border: 1px solid #c4c4c4;
+            padding: 3px;
+            text-align: center;
+        }
+
+        .inner-preset-thumb img {
+            max-width: 133px;
+            height: 98px;
+        }
+        .premium {
+            background: theme-image($theme, 'ribbon_blue.png') no-repeat;
+
+            span {
+                text-shadow: 0 1px 0 #0166ff;
+            }
+        }
+    }
+}

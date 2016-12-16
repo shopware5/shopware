@@ -48,9 +48,10 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
         { ref: 'designerPreview', selector: 'emotion-detail-window emotion-detail-preview' },
         { ref: 'listing', selector: 'emotion-main-window emotion-list-grid' },
         { ref: 'deleteButton', selector: 'emotion-main-window button[action=emotion-list-toolbar-delete]' },
-        { ref: 'attributeForm', selector: 'emotion-detail-window shopware-attribute-form' }
+        { ref: 'attributeForm', selector: 'emotion-detail-window shopware-attribute-form' },
+        { ref: 'listingView', selector: 'presets-list dataview' },
     ],
-
+    
     snippets: {
         successTitle: '{s name=save/success/title}{/s}',
         errorTitle: '{s name=save/error/title}{/s}',
@@ -105,7 +106,10 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
                 'updateGridByField': me.onUpdateGridByField
             },
             'emotion-main-window button[action=emotion-list-toolbar-add]': {
-                'click': me.onOpenDetail
+                'click': me.onOpenPreset
+            },
+            'emotion-presets-window, presets-list': {
+                'emotionpresetselect': me.onOpenDetail
             },
             'emotion-main-window emotion-list-grid': {
                 'editemotion': me.onEditEmotion,
@@ -307,7 +311,7 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
             layout = me.getLayoutForm(),
             win = me.getDetailWindow(),
             activeTab = win.sidebar.items.indexOf(win.sidebar.getActiveTab());
-
+        
         if (Ext.isObject(preview)) {
             preview = false;
         }
@@ -442,9 +446,65 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
 
         me.getMainWindow().setLoading(true);
 
-        record = Ext.create('Shopware.apps.Emotion.model.Emotion');
+        record = me.getSelectedPreset();
 
         me.openDetailWindow(record);
+    },
+
+    getSelectedPreset: function() {
+        var me = this,
+            selModel,
+            presetData;
+
+        if (!(me.getListingView())) {
+            return Ext.create('Shopware.apps.Emotion.model.Emotion');
+        }
+
+        selModel = me.getListingView().getSelectionModel();
+
+        if (selModel.getSelection().length > 0) {
+            presetData = selModel.getSelection()[0].get('presetData');
+            return me.decodeEmotionPresetData(presetData);
+        } else {
+            return Ext.create('Shopware.apps.Emotion.model.Emotion');
+        }
+    },
+
+    decodeEmotionPresetData: function(presetData){
+        var data,
+            store;
+
+        if(!presetData){
+            return Ext.create('Shopware.apps.Emotion.model.Emotion');
+        }
+
+        data = Ext.decode(presetData);
+
+        store = Ext.create('Ext.data.Store', {
+            autoLoad: true,
+            model: 'Shopware.apps.Emotion.model.Emotion',
+            data : data,
+            proxy: {
+                type: 'memory',
+                reader: {
+                    type: 'json'
+                }
+            }
+        });
+
+        return store.first();
+    },
+
+    onOpenPreset: function() {
+        var me = this;
+
+        me.openPresetsWindow();
+    },
+
+    openPresetsWindow: function(options) {
+        var me = this;
+
+        me.getView('presets.Window').create(options);
     },
 
     openDetailWindow: function(record, options) {
