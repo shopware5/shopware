@@ -1267,4 +1267,29 @@ class FieldHelper
     {
         $this->addTranslation('emotionElementValue', 'emotionElement', $query, $context, 'emotionElementValue.elementID');
     }
+
+    /**
+     * @return string[]
+     */
+    public function getCustomSortingFields()
+    {
+        return [
+            'customSorting.id as __customSorting_id',
+            'customSorting.label as __customSorting_label',
+            'customSorting.active as __customSorting_active',
+            'customSorting.display_in_categories as __customSorting_display_in_categories',
+            'customSorting.position as __customSorting_position',
+            'customSorting.sortings as __customSorting_sortings',
+            'customSorting.shops as __customSorting_shops'
+        ];
+    }
+
+    /**
+     * @param QueryBuilder $query
+     * @param ShopContextInterface $context
+     */
+    public function addCustomSortingTranslation(QueryBuilder $query, ShopContextInterface $context)
+    {
+        $this->addTranslation('customSorting', 'custom_sorting', $query, $context, 1);
+    }
 }

@@ -103,6 +103,7 @@ Ext.define('Shopware.apps.Config.view.custom_search.Overview', {
             bodyPadding: '20 5',
             plugins: [{
                 ptype: 'translation',
+                translationMerge: true,
                 translationType: 'custom_sorting'
             }],
             dockedItems: [{

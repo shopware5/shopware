@@ -421,5 +421,17 @@
         <service id="shopware_storefront.blog_hydrator_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\BlogHydrator">
             <argument type="service" id="shopware_storefront.attribute_hydrator_dbal" />
         </service>
+
+        <service id="shopware_storefront.custom_sorting_service" class="Shopware\Bundle\StoreFrontBundle\Service\Core\CustomSortingService">
+            <argument type="service" id="shopware_storefront.custom_sorting_gateway" />
+        </service>
+
+        <service id="shopware_storefront.custom_sorting_gateway" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\CustomSortingGateway">
+            <argument type="service" id="dbal_connection" />
+            <argument type="service" id="shopware_storefront.field_helper_dbal" />
+            <argument type="service" id="shopware_storefront.custom_listing_hydrator" />
+        </service>
+
+        <service id="shopware_storefront.custom_listing_hydrator" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\CustomListingHydrator" />
     </services>
 </container>
