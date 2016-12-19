@@ -270,6 +270,7 @@
 {include file='backend/base/attribute/field/Shopware.form.field.ProductStreamSingleSelection.js'}
 {include file='backend/base/attribute/field/Shopware.form.field.ShopGrid.js'}
 {include file='backend/base/attribute/field/Shopware.form.field.CustomSortingGrid.js'}
+{include file='backend/base/attribute/field/Shopware.form.field.AttributeSingleSelection.js'}
 
 
 {include file='backend/base/attribute/field_handler/Shopware.attribute.AbstractEntityFieldHandler.js'}

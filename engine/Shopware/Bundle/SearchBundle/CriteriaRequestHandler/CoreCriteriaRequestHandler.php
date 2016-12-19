@@ -44,12 +44,6 @@ use Shopware\Bundle\SearchBundle\Facet\PriceFacet;
 use Shopware\Bundle\SearchBundle\Facet\ShippingFreeFacet;
 use Shopware\Bundle\SearchBundle\Facet\VoteAverageFacet;
 use Shopware\Bundle\SearchBundle\SearchTermPreProcessorInterface;
-use Shopware\Bundle\SearchBundle\Sorting\PopularitySorting;
-use Shopware\Bundle\SearchBundle\Sorting\PriceSorting;
-use Shopware\Bundle\SearchBundle\Sorting\ProductNameSorting;
-use Shopware\Bundle\SearchBundle\Sorting\ReleaseDateSorting;
-use Shopware\Bundle\SearchBundle\Sorting\SearchRankingSorting;
-use Shopware\Bundle\SearchBundle\SortingInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 /**
@@ -58,14 +52,6 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
  */
 class CoreCriteriaRequestHandler implements CriteriaRequestHandlerInterface
 {
-    const SORTING_RELEASE_DATE = 1;
-    const SORTING_POPULARITY = 2;
-    const SORTING_CHEAPEST_PRICE = 3;
-    const SORTING_HIGHEST_PRICE = 4;
-    const SORTING_PRODUCT_NAME_ASC = 5;
-    const SORTING_PRODUCT_NAME_DESC = 6;
-    const SORTING_SEARCH_RANKING = 7;
-
     /**
      * @var \Shopware_Components_Config
      */
@@ -116,8 +102,6 @@ class CoreCriteriaRequestHandler implements CriteriaRequestHandlerInterface
         $this->addImmediateDeliveryCondition($request, $criteria);
         $this->addRatingCondition($request, $criteria);
         $this->addPriceCondition($request, $criteria);
-
-        $this->addSorting($request, $criteria);
 
         $this->addFacets($criteria);
     }
@@ -257,54 +241,6 @@ class CoreCriteriaRequestHandler implements CriteriaRequestHandlerInterface
         }
         $term = $this->searchTermPreProcessor->process($term);
         $criteria->addBaseCondition(new SearchTermCondition($term));
-    }
-
-    /**
-     * @param Request $request
-     * @param Criteria $criteria
-     */
-    private function addSorting(Request $request, Criteria $criteria)
-    {
-        $defaultSort = $this->config->get('defaultListingSorting');
-        $sort = $request->getParam('sSort', $defaultSort);
-
-        switch ($sort) {
-            case self::SORTING_RELEASE_DATE:
-                $criteria->addSorting(
-                    new ReleaseDateSorting(SortingInterface::SORT_DESC)
-                );
-                break;
-            case self::SORTING_POPULARITY:
-                $criteria->addSorting(
-                    new PopularitySorting(SortingInterface::SORT_DESC)
-                );
-                break;
-            case self::SORTING_CHEAPEST_PRICE:
-                $criteria->addSorting(
-                    new PriceSorting(SortingInterface::SORT_ASC)
-                );
-                break;
-            case self::SORTING_HIGHEST_PRICE:
-                $criteria->addSorting(
-                    new PriceSorting(SortingInterface::SORT_DESC)
-                );
-                break;
-            case self::SORTING_PRODUCT_NAME_ASC:
-                $criteria->addSorting(
-                    new ProductNameSorting(SortingInterface::SORT_ASC)
-                );
-                break;
-            case self::SORTING_PRODUCT_NAME_DESC:
-                $criteria->addSorting(
-                    new ProductNameSorting(SortingInterface::SORT_DESC)
-                );
-                break;
-            case self::SORTING_SEARCH_RANKING:
-                $criteria->addSorting(
-                    new SearchRankingSorting(SortingInterface::SORT_DESC)
-                );
-                break;
-        }
     }
 
     /**

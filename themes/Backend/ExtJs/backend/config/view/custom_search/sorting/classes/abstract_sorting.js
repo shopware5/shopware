@@ -35,9 +35,19 @@ Ext.define('Shopware.apps.Config.view.custom_search.sorting.classes.AbstractSort
      * @api called to create grid record for existing data set
      * @param { string } sortingClass
      * @param { object } parameters
-     * @returns { object }
+     * @return { boolean }
      */
-    load: function(sortingClass, parameters) {
+    supports: function(sortingClass, parameters) {
+        throw 'Unimplemented method.';
+    },
+
+    /**
+     * @api called to create grid record for existing data set
+     * @param { string } sortingClass
+     * @param { object } parameters
+     * @param { function } callback({ object }) Expects an object as parameter which added to store: label, class, parameters are required in the object
+     */
+    load: function(sortingClass, parameters, callback) {
         throw 'Unimplemented method.';
     },
 

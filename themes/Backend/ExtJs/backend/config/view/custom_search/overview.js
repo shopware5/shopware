@@ -67,6 +67,7 @@ Ext.define('Shopware.apps.Config.view.custom_search.Overview', {
                         active: true
                     })
                 );
+                me.sortingDetail.shopSelection.store.load();
             },
             onSelectionChange: function(selModel, selection) {
                 if (selection.length <= 0) {

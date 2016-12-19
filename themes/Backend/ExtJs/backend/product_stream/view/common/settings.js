@@ -36,43 +36,15 @@ Ext.define('Shopware.apps.ProductStream.view.common.Settings', {
     bodyPadding: 10,
     cls: 'shopware-form',
     layout: 'anchor',
+    mixins: {
+        factory: 'Shopware.attribute.SelectionFactory'
+    },
 
     initComponent: function() {
         var me = this;
 
         me.items = me.createItems();
         me.callParent(arguments);
-    },
-
-    setSorting: function(record) {
-        var me = this;
-        var sorting = record.get('sorting');
-        if (!sorting) {
-            return;
-        }
-
-        var sortingValue = me.findSorting(sorting);
-
-        me.sortingCombo.setValue(sortingValue);
-    },
-
-    findSorting: function(sorting) {
-        var me = this;
-
-        var key = Object.keys(sorting)[0];
-        var properties = sorting[key];
-        var direction = properties.direction;
-        var store = me.getSortings();
-        var match = null;
-
-        store.forEach(function(item) {
-            if (item.key === key && item.direction === direction) {
-                match = item.value;
-                return false;
-            }
-        });
-
-        return match;
     },
 
     createItems: function() {
@@ -86,34 +58,19 @@ Ext.define('Shopware.apps.ProductStream.view.common.Settings', {
     createSortingCombo: function() {
         var me = this;
 
-        me.sortingStore = Ext.create('Ext.data.Store', {
-            fields: ['key', 'value', 'direction'],
-            data: me.getSortings()
-        });
-
-        me.sortingCombo = Ext.create('Ext.form.field.ComboBox', {
-            name: 'sorting',
-            store: me.sortingStore,
+        me.sortingCombo = Ext.create('Shopware.form.field.SingleSelection', {
             fieldLabel: '{s name=sorting}Sorting{/s}',
-            valueField: 'value',
-            displayField: 'value',
-            queryMode: 'local',
-            anchor: '100%',
+            name: 'sortingId',
             allowBlank: false,
-            forceSelection: true
+            forceSelection: true,
+            anchor: '100%',
+            store: me.createEntitySearchStore(
+                "Shopware\\Models\\Search\\CustomSorting",
+                'Shopware.apps.Base.model.CustomSorting'
+            )
         });
 
         return me.sortingCombo;
-    },
-
-    getSortings: function() {
-        return [
-            { key: 'Shopware\\Bundle\\SearchBundle\\Sorting\\ReleaseDateSorting', value: '{s name=release_date}Release date{/s}', direction: 'desc' },
-            { key: 'Shopware\\Bundle\\SearchBundle\\Sorting\\PopularitySorting', value: '{s name=popularity}Popularity{/s}', direction: 'desc' },
-            { key: 'Shopware\\Bundle\\SearchBundle\\Sorting\\PriceSorting', value: '{s name=cheapest_price}Cheapest price{/s}', direction: 'asc' },
-            { key: 'Shopware\\Bundle\\SearchBundle\\Sorting\\PriceSorting', value: '{s name=highest_price}Highest price{/s}', direction: 'desc' },
-            { key: 'Shopware\\Bundle\\SearchBundle\\Sorting\\ProductNameSorting', value: '{s name=article_description}Article description{/s}', direction: 'asc' }
-        ];
     },
 
     createNameField: function() {

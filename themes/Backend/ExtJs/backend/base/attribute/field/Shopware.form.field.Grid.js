@@ -348,7 +348,9 @@ Ext.define('Shopware.form.field.Grid', {
     isValid: function() {
         var me = this;
 
-        me.searchField.combo.clearInvalid();
+        if (me.searchField) {
+            me.searchField.combo.clearInvalid();
+        }
 
         if (me.allowBlank) {
             return true;
@@ -358,9 +360,11 @@ Ext.define('Shopware.form.field.Grid', {
             return true;
         }
 
-        me.searchField.combo.markInvalid([
-            '{s name="not_empty"}{/s}'
-        ]);
+        if (me.searchField) {
+            me.searchField.combo.markInvalid([
+                '{s name="not_empty"}{/s}'
+            ]);
+        }
 
         return false;
     },
@@ -388,15 +392,24 @@ Ext.define('Shopware.form.field.Grid', {
         var me = this;
 
         me.callParent(arguments);
-        me.grid.enable();
-        me.searchField.enable();
+        if (me.grid) {
+            me.grid.enable();
+        }
+        if (me.searchField) {
+            me.searchField.enable();
+        }
     },
 
     disable: function() {
         var me = this;
 
         me.callParent(arguments);
-        me.grid.disable();
-        me.searchField.disable();
+
+        if (me.grid) {
+            me.grid.disable();
+        }
+        if (me.searchField) {
+            me.searchField.disable();
+        }
     }
 });

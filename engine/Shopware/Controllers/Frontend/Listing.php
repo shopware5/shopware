@@ -28,6 +28,7 @@ use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
 use Shopware\Bundle\SearchBundle\StoreFrontCriteriaFactoryInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\Manufacturer;
 use Shopware\Bundle\StoreFrontBundle\Struct\ProductContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\Search\CustomSorting;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Models\Emotion\Emotion;
 
@@ -83,6 +84,16 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
 
         $context = $this->get('shopware_storefront.context_service')->getShopContext();
 
+        /** @var \Shopware\Bundle\StoreFrontBundle\Service\CustomSortingServiceInterface $service */
+        $service = $this->get('shopware_storefront.custom_sorting_service');
+
+        $sortings = $service->getSortingsOfCategories([$categoryId], $context);
+
+        /** @var CustomSorting[] $sortings */
+        $sortings = array_shift($sortings);
+
+        $this->setDefaultSorting($sortings);
+
         if ($categoryContent['streamId']) {
             /** @var \Shopware\Components\ProductStream\CriteriaFactoryInterface $factory */
             $factory = $this->get('shopware_product_stream.criteria_factory');
@@ -132,6 +143,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         $categoryArticles['facets'] = $facets;
 
         $this->View()->assign($categoryArticles);
+        $this->View()->assign('sortings', $sortings);
     }
 
     /**
@@ -427,6 +439,25 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         $visibleDevices = array_merge($permanentVisibleDevices, $visibleDevices);
 
         return array_values($visibleDevices);
+    }
+
+    /**
+     * @param CustomSorting[] $sortings
+     */
+    private function setDefaultSorting($sortings)
+    {
+        if ($this->Request()->has('sSort')) {
+            return;
+        }
+
+        /** @var CustomSorting $default */
+        $default = array_shift($sortings);
+
+        if (!$default) {
+            return;
+        }
+
+        $this->Request()->setParam('sSort', $default->getId());
     }
 
     /**

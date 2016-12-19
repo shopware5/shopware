@@ -22,7 +22,10 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Bundle\AttributeBundle\Service\ConfigurationStruct;
 use Shopware\Models\Search\CustomSorting;
+use Enlight_Controller_Request_Request as Request;
+use Shopware\Bundle\AttributeBundle\Repository\SearchCriteria;
 
 class Shopware_Controllers_Backend_CustomSorting extends Shopware_Controllers_Backend_Application
 {
@@ -49,6 +52,68 @@ class Shopware_Controllers_Backend_CustomSorting extends Shopware_Controllers_Ba
         );
 
         $this->View()->assign('success', true);
+    }
+
+    public function listAttributesAction()
+    {
+        $service = Shopware()->Container()->get('shopware_attribute.crud_service');
+
+        if ($column = $this->Request()->getParam('columnName')) {
+            $attribute = $service->get('s_articles_attributes', $column);
+            $this->View()->assign(['success' => true, 'data' => $attribute]);
+            return;
+        }
+
+        $attributes = $service->getList('s_articles_attributes');
+        $total = count($attributes);
+
+        $term = $this->Request()->getParam('query', null);
+
+        $attributes = array_filter(
+            $attributes,
+            function (ConfigurationStruct $attribute) {
+                return !$attribute->isIdentifier();
+            }
+        );
+
+        if ($term) {
+            $attributes = array_filter(
+                $attributes,
+                function (ConfigurationStruct $attribute) use ($term) {
+                    return stripos($term, $attribute->getLabel()) > 0;
+                }
+            );
+        }
+
+        $offset = $this->Request()->getParam('start', 0);
+        $limit = $this->Request()->getParam('limit', 30);
+        if ($offset && $limit) {
+            $attributes = array_slice($attributes, $offset, $limit);
+        }
+
+        usort(
+            $attributes,
+            function (ConfigurationStruct $a, ConfigurationStruct $b) {
+                if (!$b->getId() && $a->getId()) {
+                    return -1;
+                }
+                if ($b->getId() && !$a->getId()) {
+                    return 1;
+                }
+                if (empty($b->getLabel()) && $a->getLabel()) {
+                    return -1;
+                }
+                if ($b->getLabel() && empty($a->getLabel())) {
+                    return 1;
+                }
+                return strnatcmp($a->getLabel(), $b->getLabel());
+            }
+        );
+
+        $this->View()->assign([
+            'data' => array_values($attributes),
+            'totalCount' => $total
+        ]);
     }
 
     public function changePositionAction()

@@ -35,6 +35,7 @@ Ext.define('Shopware.form.field.SingleSelection', {
     layout: 'anchor',
     defaults: { anchor: '100%' },
     baseBodyCls: Ext.baseCSSPrefix + 'form-item-body shopware-single-selection-form-item-body',
+    allowBlank: true,
 
     mixins: {
         formField: 'Ext.form.field.Base',
@@ -145,6 +146,7 @@ Ext.define('Shopware.form.field.SingleSelection', {
             valueField: 'id',
             queryMode: 'remote',
             store: me.store,
+            allowBlank: me.allowBlank,
             isFormField: false,
             pageSize: me.store.pageSize,
             labelWidth: 180,

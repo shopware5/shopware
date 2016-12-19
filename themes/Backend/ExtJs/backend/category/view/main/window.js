@@ -125,13 +125,20 @@ Ext.define('Shopware.apps.Category.view.main.Window', {
         me.addEvents('saveDetail');
 
         me.tabPanel = Ext.create('Ext.tab.Panel', {
-            items:me.getTabs()
+            items:me.getTabs(),
+            split: true,
+            flex: 1
         });
 
         me.formPanel = Ext.create('Ext.form.Panel', {
             items: [me.tabPanel],
             region: 'center',
+            border: false,
             name: 'mainForm',
+            layout: {
+                type: 'hbox',
+                align: 'stretch'
+            },
             dockedItems: me.getDockedItems()
         });
 

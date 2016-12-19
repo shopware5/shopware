@@ -148,7 +148,12 @@ SQL;
     private function getStreamById($productStreamId)
     {
         $row = $this->conn->fetchAssoc(
-            "SELECT * FROM s_product_streams WHERE id = :productStreamId LIMIT 1",
+            "SELECT streams.*, customSorting.sortings as customSortings
+             FROM s_product_streams streams
+             LEFT JOIN s_search_custom_sorting customSorting
+                 ON customSorting.id = streams.sorting_id
+             WHERE streams.id = :productStreamId
+             LIMIT 1",
             ['productStreamId' => $productStreamId]
         );
 
@@ -161,9 +166,14 @@ SQL;
      */
     private function assignSortings(array $productStream, Criteria $criteria)
     {
-        $serializedSortings = json_decode($productStream['sorting'], true);
+        $sorting = $productStream['sorting'];
+        if (!empty($productStream['customSortings'])) {
+            $sorting = $productStream['customSortings'];
+        }
 
-        /** @var SortingInterface $sortings */
+        $serializedSortings = json_decode($sorting, true);
+
+        /** @var SortingInterface[] $sortings */
         $sortings = $this->unserialize($serializedSortings);
         foreach ($sortings as $sorting) {
             $criteria->addSorting($sorting);

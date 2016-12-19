@@ -21,6 +21,11 @@
             <tag name="criteria_request_handler"/>
         </service>
 
+        <service id="shopware_search.sorting_criteria_request_handler" class="Shopware\Bundle\SearchBundle\CriteriaRequestHandler\SortingCriteriaRequestHandler">
+            <argument type="service" id="shopware_storefront.custom_sorting_service" />
+            <tag name="criteria_request_handler" />
+        </service>
+
         <service id="shopware_search.property_criteria_request_handler" class="Shopware\Bundle\SearchBundle\CriteriaRequestHandler\PropertyCriteriaRequestHandler">
             <argument type="service" id="config" />
             <argument type="service" id="dbal_connection" />

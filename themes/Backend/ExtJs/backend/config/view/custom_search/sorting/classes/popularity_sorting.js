@@ -32,11 +32,15 @@ Ext.define('Shopware.apps.Config.view.custom_search.sorting.classes.PopularitySo
         return '{s name="popularity_sorting"}{/s}';
     },
 
-    load: function(sortingClass, parameters) {
-        if (sortingClass != 'Shopware\\Bundle\\SearchBundle\\Sorting\\PopularitySorting') {
-            return null;
+    supports: function(sortingClass) {
+        return (sortingClass == 'Shopware\\Bundle\\SearchBundle\\Sorting\\PopularitySorting');
+    },
+
+    load: function(sortingClass, parameters, callback) {
+        if (!Ext.isFunction(callback)) {
+            throw 'Requires provided callback function';
         }
-        return this._createRecord(parameters);
+        callback(this._createRecord(parameters));
     },
 
     create: function(callback) {

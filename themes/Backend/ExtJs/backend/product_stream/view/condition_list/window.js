@@ -50,7 +50,6 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.Window', {
         var me = this;
 
         me.formPanel.loadRecord(record);
-        me.settingsPanel.setSorting(record);
         me.conditionPanel.removeAll();
         me.conditionPanel.loadConditions(record);
         me.attributeForm.loadAttribute(record.get('id'));

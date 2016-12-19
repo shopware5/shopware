@@ -32,11 +32,15 @@ Ext.define('Shopware.apps.Config.view.custom_search.sorting.classes.SearchRankin
         return '{s name="search_ranking_sorting"}{/s}';
     },
 
-    load: function(sortingClass, parameters) {
-        if (sortingClass != 'Shopware\\Bundle\\SearchBundle\\Sorting\\SearchRankingSorting') {
-            return null;
+    supports: function(sortingClass) {
+        return (sortingClass == 'Shopware\\Bundle\\SearchBundle\\Sorting\\SearchRankingSorting');
+    },
+
+    load: function(sortingClass, parameters, callback) {
+        if (!Ext.isFunction(callback)) {
+            throw 'Requires provided callback function';
         }
-        return this._createRecord();
+        callback(this._createRecord());
     },
 
     create: function(callback) {

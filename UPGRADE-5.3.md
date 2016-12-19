@@ -210,6 +210,16 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Removed method `Shopware_Controllers_Widgets_Emotion::getArticleSlider()`, has been replaced by `Shopware\Bundle\EmotionBundle\ComponentHandler\ArticleSliderComponentHandler`
 * Removed method `Shopware_Controllers_Widgets_Emotion::getHtml5Video()`, has been replaced by `Shopware\Bundle\EmotionBundle\ComponentHandler\Html5VideoComponentHandler`
 * Removed LESS variable `@zindex-fancy-select`
+* Removed select field replacement via JavaScript
+    * Removed the jQuery plugin `src/js/jquery.selectbox-replacement.js` completely
+    * Removed LESS variable `@zindex-fancy-select`
+* Removed smarty blocks:
+    frontend_listing_actions_sort_field_relevance
+    frontend_listing_actions_sort_field_release
+    frontend_listing_actions_sort_field_rating
+    frontend_listing_actions_sort_field_price_asc
+    frontend_listing_actions_sort_field_price_desc
+    frontend_listing_actions_sort_field_name
 
 ### Deprecations
 

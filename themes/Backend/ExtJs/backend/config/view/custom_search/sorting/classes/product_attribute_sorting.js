@@ -35,11 +35,15 @@ Ext.define('Shopware.apps.Config.view.custom_search.sorting.classes.ProductAttri
         return '{s name="product_attribute_sorting"}{/s}';
     },
 
-    load: function(sortingClass, parameters) {
-        if (sortingClass.indexOf('Shopware\\Bundle\\SearchBundle\\Sorting\\ProductAttributeSorting') < 0) {
-            return null;
+    supports: function(sortingClass) {
+        return (sortingClass.indexOf('Shopware\\Bundle\\SearchBundle\\Sorting\\ProductAttributeSorting') >= 0);
+    },
+
+    load: function(sortingClass, parameters, callback) {
+        if (!Ext.isFunction(callback)) {
+            throw 'Requires provided callback function';
         }
-        return this._createRecord(parameters);
+        this._createRecord(parameters, callback);
     },
 
     create: function(callback) {
@@ -52,13 +56,13 @@ Ext.define('Shopware.apps.Config.view.custom_search.sorting.classes.ProductAttri
         Ext.create('Shopware.apps.Config.view.custom_search.sorting.includes.CreateWindow', {
             title: me.getLabel(),
             height: 180,
-            width: 390,
+            width: 500,
             items: [
                 me._createAttributeSelection(),
                 { xtype: 'custom-search-direction-combo', labelWidth: 150 }
             ],
             callback: function(values) {
-                callback(me._createRecord(values));
+                me._createRecord(values, callback);
             }
         }).show();
     },
@@ -66,40 +70,55 @@ Ext.define('Shopware.apps.Config.view.custom_search.sorting.classes.ProductAttri
     _createAttributeSelection: function() {
         var me = this;
 
-        return {
-            xtype: 'combobox',
-            name: 'field',
+        var store = Ext.create('Ext.data.Store', {
+            model: 'Shopware.model.Dynamic',
+            proxy: {
+                type: 'ajax',
+                url: '{url controller="CustomSorting" action="listAttributes"}',
+                reader: Ext.create('Shopware.model.DynamicReader')
+            }
+        });
+        store.filters.add({ property: 'tableName', value: 's_articles_attributes' });
+
+        return Ext.create('Shopware.form.field.AttributeSingleSelection', {
             labelWidth: 150,
-            fieldLabel: '{s name="product_attribute_sorting_field"}{/s}',
-            pageSize: 20,
-            store: me.createEntitySearchStore("Shopware\\Models\\Attribute\\Configuration"),
-            valueField: 'columnName',
+            name: 'field',
             allowBlank: false,
-            tpl: Ext.create('Ext.XTemplate',
-                '<tpl for="."><div class="x-boundlist-item">{literal}{[this.getRecordLabel(values)]}{/literal}</div></tpl>',
-                {
-                    getRecordLabel: function(values) {
-                        return me._getLabelOfObject(values);
-                    }
-                }
-            ),
-            displayTpl: Ext.create('Ext.XTemplate',
-                '<tpl for=".">{literal}{[this.getRecordLabel(values)]}{/literal}</tpl>',
-                {
-                    getRecordLabel: function(values) {
-                        return me._getLabelOfObject(values);
-                    }
-                }
-            )
-        };
+            fieldLabel: '{s name="product_attribute_sorting_field"}{/s}',
+            store: store
+        });
     },
 
-    _createRecord: function(parameters) {
-        return {
-            'class': 'Shopware\\Bundle\\SearchBundle\\Sorting\\ProductAttributeSorting|' + parameters.field,
-            'label': '{s name="product_attribute_sorting_short"}{/s} - ' + parameters.field + ' [' + parameters.direction + ']',
-            'parameters': parameters
-        };
+    _createRecord: function(parameters, callback) {
+        Ext.Ajax.request({
+            url: '{url controller=CustomSorting action=listAttributes}',
+            params: {
+                columnName: parameters.field
+            },
+            success: function(operation, opts) {
+                var response = Ext.decode(operation.responseText);
+                response = response.data;
+
+                var label = '{s name="product_attribute_sorting_short"}{/s}:';
+
+                if (response.label) {
+                    label += ' <b>' + response.label + '</b>';
+                } else if (response.columnName) {
+                    label += ' <b>' + response.columnName + '</b>';
+                }
+
+                if (response.helpText) {
+                    label += ' <i>[' + response.helpText + ']</i>';
+                }
+
+                callback({
+                    'class': 'Shopware\\Bundle\\SearchBundle\\Sorting\\ProductAttributeSorting|' + parameters.field,
+                    'label': label,
+                    'parameters': parameters
+                });
+            }
+        });
+
     },
 
     _getLabelOfObject: function(values) {

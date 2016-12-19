@@ -32,11 +32,15 @@ Ext.define('Shopware.apps.Config.view.custom_search.sorting.classes.ReleaseDateS
         return '{s name="release_date_sorting"}{/s}';
     },
 
-    load: function(sortingClass, parameters) {
-        if (sortingClass != 'Shopware\\Bundle\\SearchBundle\\Sorting\\ReleaseDateSorting') {
-            return null;
+    supports: function(sortingClass) {
+        return (sortingClass == 'Shopware\\Bundle\\SearchBundle\\Sorting\\ReleaseDateSorting');
+    },
+
+    load: function(sortingClass, parameters, callback) {
+        if (!Ext.isFunction(callback)) {
+            throw 'Requires provided callback function';
         }
-        return this._createRecord(parameters);
+        callback(this._createRecord(parameters));
     },
 
     create: function(callback) {

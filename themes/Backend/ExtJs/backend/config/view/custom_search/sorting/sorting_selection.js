@@ -124,30 +124,50 @@ Ext.define('Shopware.apps.Config.view.custom_search.sorting.SortingSelection', {
         if (!value) {
             return;
         }
+
         try {
-            me.store.add(
-                me.buildSortings(Ext.JSON.decode(value))
-            );
+            var sorting = Ext.JSON.decode(value);
         } catch (e) {
             throw 'Sorting selection can not be decoded';
         }
+
+        me.loadSortings(sorting);
     },
 
-    buildSortings: function(sortings) {
-        var records = [],
-            me = this;
+    loadSortings: function(sortings, callback) {
+        var me = this,
+            parameters,
+            handler;
 
         for (var sortingClass in sortings) {
-            var parameters = sortings[sortingClass];
+            parameters = sortings[sortingClass];
+            handler = me.getHandler(sortingClass, parameters);
 
-            Ext.each(me.sortingHandlers, function(handler) {
-                var sorting = handler.load(sortingClass, parameters);
-                if (sorting) {
-                    records.push(sorting);
-                }
-            });
+            if (handler) {
+                handler.load(sortingClass, parameters, function(sorting) {
+                    me.store.add(sorting);
+                });
+            } else {
+                me.store.add({
+                    label: sortingClass,
+                    parameters: parameters
+                });
+            }
         }
-        return records;
+    },
+
+    getHandler: function(sortingClass, parameters) {
+        var me = this,
+            supportedHandler = null;
+
+        Ext.each(me.sortingHandlers, function(handler) {
+            if (handler.supports(sortingClass, parameters)) {
+                supportedHandler = handler;
+                return false;
+            }
+        });
+
+        return supportedHandler;
     },
 
     getValue: function() {

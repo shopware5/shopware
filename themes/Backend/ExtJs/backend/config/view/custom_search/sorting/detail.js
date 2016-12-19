@@ -67,7 +67,8 @@ Ext.define('Shopware.apps.Config.view.custom_search.sorting.Detail', {
     },
 
     createShopField: function() {
-        return Ext.create('Shopware.form.field.ShopGrid', {
+        var me = this;
+        me.shopSelection = Ext.create('Shopware.form.field.ShopGrid', {
             fieldLabel: '{s name="shops"}{/s}',
             helpText: '{s name="shops_help"}{/s}',
             name: 'shops',
@@ -77,6 +78,7 @@ Ext.define('Shopware.apps.Config.view.custom_search.sorting.Detail', {
             store: this.createEntitySearchStore("Shopware\\Models\\Shop\\Shop"),
             searchStore: this.createEntitySearchStore("Shopware\\Models\\Shop\\Shop")
         });
+        return me.shopSelection;
     }
 });
 

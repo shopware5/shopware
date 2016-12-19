@@ -20,31 +20,33 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  *
- * @category   Shopware
- * @package    ProductStream
- * @subpackage Model
- * @version    $Id$
- * @author shopware AG
+ * @category    Shopware
+ * @package     Base
+ * @subpackage  Attribute
+ * @version     $Id$
+ * @author      shopware AG
  */
-//{block name="backend/product_stream/model/stream"}
-Ext.define('Shopware.apps.ProductStream.model.Stream', {
-    extend: 'Shopware.data.Model',
 
-    configure: function() {
-        return {
-            controller: 'ProductStream'
-        };
+Ext.define('Shopware.form.field.AttributeSingleSelection', {
+    extend: 'Shopware.form.field.SingleSelection',
+    alias: 'widget.shopware-form-field-attribute-single-selection',
+
+    getComboConfig: function() {
+        var me = this;
+        var config = me.callParent(arguments);
+        config.valueField = 'columnName';
+        return config;
     },
 
-    fields: [
-        //{block name="backend/product_stream/model/stream/fields"}{/block}
-        { name : 'id', type: 'int', useNull: true },
-        { name : 'name', type: 'string', useNull: false },
-        { name : 'description', type: 'string', useNull: false },
-        { name : 'type', type: 'int', defaultValue: 1 },
-        { name : 'sorting' },
-        { name : 'sortingId', type: 'int', useNull: true },
-        { name : 'conditions', useNull: false }
-    ]
+    getLabelOfObject: function(values) {
+        var label = values.label;
+
+        if (!label) {
+            label = values.columnName;
+        }
+        if (values.helpText) {
+            label += ' [' + values.helpText + ']';
+        }
+        return label;
+    }
 });
-//{/block}
