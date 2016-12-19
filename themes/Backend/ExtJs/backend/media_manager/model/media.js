@@ -48,7 +48,8 @@ Ext.define('Shopware.apps.MediaManager.model.Media', {
         'height',
         'albumId',
         'newAlbumID',
-        'virtualPath'
+        'virtualPath',
+        'timestamp'
     ],
     proxy: {
         type: 'ajax',

@@ -323,7 +323,7 @@ Ext.define('Shopware.apps.Article.view.detail.Base', {
             listeners: {
                 change: function(checkbox, newValue) {
                     me.priceGroupComboBox.allowBlank = !newValue;
-                    me.priceGroupComboBox.validateValue(me.priceGroupComboBox.getValue());
+                    me.priceGroupComboBox.validateCount(me.priceGroupComboBox.getValue());
                 }
             }
         }, me.priceGroupComboBox, {

@@ -22,12 +22,14 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Components\Thumbnail\Manager;
 use Symfony\Component\HttpFoundation\File\UploadedFile as UploadedFile;
 use Doctrine\ORM\AbstractQuery;
 use Shopware\Models\Media\Album as Album;
 use Shopware\Models\Media\Settings as Settings;
 use Shopware\Models\Media\Media as Media;
 use Shopware\Components\CSRFWhitelistAware;
+use Symfony\Component\HttpFoundation\FileBag;
 
 /**
  * Shopware MediaManager Controller
@@ -270,6 +272,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
             if (!empty($thumbnails) && $mediaService->has($thumbnails['140x140'])) {
                 $media['thumbnail'] = $mediaService->getUrl($thumbnails['140x140']);
             }
+            $media['timestamp'] = time();
         }
 
         $this->View()->assign(array('success' => true, 'data' => $mediaList, 'total' => $totalResult));
@@ -548,7 +551,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
             $file['name'] = $fileInfo['filename'] . "." . $fileExtension;
             $_FILES['fileId']['name'] = $file['name'];
 
-            $fileBag = new \Symfony\Component\HttpFoundation\FileBag($_FILES);
+            $fileBag = new FileBag($_FILES);
 
             /** @var $file UploadedFile */
             $file = $fileBag->get('fileId');
@@ -1062,5 +1065,39 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
             'success' => count($input) > 0,
             'data' => $output
         ]);
+    }
+
+    /**
+     *
+     */
+    public function singleReplaceAction()
+    {
+        $file = $_FILES['file'];
+        $fileInfo = pathinfo($file['name']);
+        $fileExtension = strtolower($fileInfo['extension']);
+        $file['name'] = $fileInfo['filename'] . "." . $fileExtension;
+        $_FILES['file']['name'] = $file['name'];
+
+        if (in_array($fileExtension, self::$fileUploadBlacklist)) {
+            unlink($file);
+
+            $this->View()->assign(array('success' => false, 'message' => 'file type is in blacklist'));
+            return;
+        }
+
+        $fileBag = new FileBag($_FILES);
+        $file = $fileBag->get('file');
+        $mediaId = $this->request->get('mediaId');
+
+        $mediaReplaceService = $this->container->get('shopware_media.replace_service');
+
+        try {
+            $mediaReplaceService->replace($mediaId, $file);
+        } catch (\Exception $exception) {
+            $this->View()->assign(array('success' => false, 'message' => $exception->getMessage()));
+            return;
+        }
+
+        $this->View()->assign(array('success' => true));
     }
 }

@@ -17,6 +17,7 @@
             <argument type="service" id="dbal_connection" />
             <argument type="service" id="shopware_media.media_service" />
         </service>
+
         <service id="shopware_media.garbage_collector" class="Shopware\Bundle\MediaBundle\GarbageCollector">
             <factory service="shopware_media.garbage_collector_factory" method="factory" />
         </service>
@@ -25,6 +26,13 @@
             <factory service="shopware_media.media_service_factory" method="factory" />
             <argument>%shopware.cdn.backend%</argument>
         </service>
+
+        <service id="shopware_media.replace_service" class="Shopware\Bundle\MediaBundle\MediaReplaceService">
+            <argument type="service" id="shopware_media.media_service" />
+            <argument type="service" id="thumbnail_manager"/>
+            <argument type="service" id="models" />
+        </service>
+
         <service id="shopware_media.media_service_factory" class="Shopware\Bundle\MediaBundle\MediaServiceFactory">
             <argument type="service" id="service_container" />
             <argument type="collection" />
@@ -34,6 +42,7 @@
         <service id="shopware_media.strategy_factory" class="Shopware\Bundle\MediaBundle\Strategy\StrategyFactory">
             <argument>%shopware.cdn%</argument>
         </service>
+
         <service id="shopware_media.strategy" class="Shopware\Bundle\MediaBundle\Strategy\StrategyInterface">
             <factory service="shopware_media.strategy_factory" method="factory" />
             <argument>%shopware.cdn.strategy%</argument>
@@ -43,6 +52,7 @@
         <service id="shopware_media.adapter.local" class="Shopware\Bundle\MediaBundle\Adapters\LocalAdapterFactory">
             <tag name="shopware_media.adapter" />
         </service>
+
         <service id="shopware_media.adapter.ftp" class="Shopware\Bundle\MediaBundle\Adapters\FtpAdapterFactory">
             <tag name="shopware_media.adapter" />
         </service>

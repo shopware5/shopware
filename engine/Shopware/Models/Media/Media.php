@@ -1274,6 +1274,14 @@ class Media extends ModelEntity
      ****************************************************************/
 
     /**
+     * @return array
+     */
+    public function getTypeMapping()
+    {
+        return $this->typeMapping;
+    }
+    
+    /**
      * Returns the identifier "id"
      * @return integer
      */
@@ -2255,5 +2263,13 @@ class Media extends ModelEntity
         }
 
         return array_keys($sizes);
+    }
+
+    public function removeThumbnails()
+    {
+        $thumbnailSizes = $this->getAllThumbnailSizes();
+
+        $this->removeDefaultThumbnails($this->getFileName());
+        $this->removeAlbumThumbnails($thumbnailSizes, $this->getFileName());
     }
 }
