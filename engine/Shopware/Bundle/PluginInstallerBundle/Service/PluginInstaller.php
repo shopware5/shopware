@@ -207,16 +207,16 @@ class PluginInstaller
      */
     private function installResources(PluginBootstrap $bootstrap, Plugin $plugin)
     {
-        if (is_file($bootstrap->getPath().'/Resources/config.xml')) {
-            $this->installForm($plugin, $bootstrap->getPath().'/Resources/config.xml');
+        if (is_file($bootstrap->getConfigXmlPath())) {
+            $this->installForm($plugin, $bootstrap->getConfigXmlPath());
         }
 
-        if (is_file($bootstrap->getPath().'/Resources/menu.xml')) {
-            $this->installMenu($plugin, $bootstrap->getPath().'/Resources/menu.xml');
+        if (is_file($bootstrap->getMenuXmlPath())) {
+            $this->installMenu($plugin, $bootstrap->getMenuXmlPath());
         }
 
-        if (file_exists($bootstrap->getPath() . '/Resources/snippets')) {
-            $this->installSnippets($bootstrap->getPath() . '/Resources/snippets/');
+        if (file_exists($bootstrap->getSnippetDirectoryPath())) {
+            $this->installSnippets($bootstrap->getSnippetDirectoryPath());
         }
     }
 
