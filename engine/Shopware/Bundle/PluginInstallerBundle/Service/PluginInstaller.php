@@ -221,7 +221,7 @@ class PluginInstaller
     }
 
     /**
-     * @param string file
+     * @param string $file
      */
     private function installSnippets($file)
     {
