@@ -216,16 +216,16 @@ class PluginInstaller
         }
 
         if (file_exists($bootstrap->getPath() . '/Resources/snippets')) {
-            $this->installSnippets($bootstrap);
+            $this->installSnippets($bootstrap->getPath() . '/Resources/snippets/');
         }
     }
 
     /**
-     * @param PluginBootstrap $bootstrap
+     * @param string file
      */
-    private function installSnippets(PluginBootstrap $bootstrap)
+    private function installSnippets($file)
     {
-        $this->snippetHandler->loadToDatabase($bootstrap->getPath() . '/Resources/snippets/');
+        $this->snippetHandler->loadToDatabase($file);
     }
 
     /**
