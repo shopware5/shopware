@@ -415,7 +415,7 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
 
         if ($shop && $request->getCookie('shop') !== null && $request->getPost('__shop') == null) {
             $requestShop = $repository->getActiveByRequest($request);
-            if ($shop->getId() !== $requestShop->getId() && $shop->getBaseUrl() !== $requestShop->getBaseUrl()) {
+            if ($requestShop !== null && $shop->getId() !== $requestShop->getId() && $shop->getBaseUrl() !== $requestShop->getBaseUrl()) {
                 $shop = $requestShop;
             }
         }
