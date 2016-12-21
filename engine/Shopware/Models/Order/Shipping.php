@@ -218,6 +218,13 @@ class Shipping extends ModelEntity
     private $city = '';
 
     /**
+     * Contains the phone number of the shipping address
+     * @var string $phone
+     * @ORM\Column(name="phone", type="string", length=40)
+     */
+    private $phone = '';
+
+    /**
      * @ORM\OneToOne(targetEntity="\Shopware\Models\Country\State")
      * @ORM\JoinColumn(name="stateID", referencedColumnName="id")
      *
@@ -425,6 +432,28 @@ class Shipping extends ModelEntity
     public function getCity()
     {
         return $this->city;
+    }
+
+    /**
+     * Setter function for the phone column property.
+     *
+     * @param string $phone
+     * @return Shipping
+     */
+    public function setPhone($phone)
+    {
+        $this->phone = $phone;
+        return $this;
+    }
+
+    /**
+     * Getter function for the phone column property.
+     *
+     * @return string
+     */
+    public function getPhone()
+    {
+        return $this->phone;
     }
 
     /**
