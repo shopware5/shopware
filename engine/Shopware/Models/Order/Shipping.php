@@ -156,6 +156,13 @@ class Shipping extends ModelEntity
     private $city = '';
 
     /**
+     * Contains the phone number of the shipping address
+     * @var string $phone
+     * @ORM\Column(name="phone", type="string", length=40)
+     */
+    private $phone = '';
+
+    /**
      * Contains the additional address line data
      *
      * @var string $additionalAddressLine1
@@ -399,6 +406,27 @@ class Shipping extends ModelEntity
         return $this->city;
     }
 
+    /**
+     * Setter function for the phone column property.
+     *
+     * @param string $phone
+     * @return Shipping
+     */
+    public function setPhone($phone)
+    {
+        $this->phone = $phone;
+        return $this;
+    }
+
+    /**
+     * Getter function for the phone column property.
+     *
+     * @return string
+     */
+    public function getPhone()
+    {
+        return $this->phone;
+    }
 
     /**
      * Returns the instance of the Shopware\Models\Customer\Customer model which
