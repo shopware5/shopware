@@ -21,19 +21,17 @@
  * our trademarks remain entirely with us.
  */
 
-//{block name="backend/performance/store/listing_sorting"}
-Ext.define('Shopware.apps.Performance.store.ListingSorting', {
-    extend: 'Ext.data.Store',
+Ext.define('Shopware.apps.Config.view.element.CustomSortingSelection', {
+    alias: 'widget.config-element-custom-sorting-selection',
+    extend: 'Shopware.form.field.SingleSelection',
 
-    fields: [ 'id', 'name' ],
-
-    proxy: {
-        type: 'ajax',
-        url: '{url controller=Performance action=getListingSortings}',
-        reader: {
-            type: 'json',
-            root: 'data'
+    initComponent: function() {
+        var me = this;
+        var factory = Ext.create('Shopware.attribute.SelectionFactory');
+        me.store = factory.createEntitySearchStore("Shopware\\Models\\Search\\CustomSorting");
+        me.callParent(arguments);
+        if (me.value) {
+            me.setValue(me.value);
         }
     }
 });
-//{/block}

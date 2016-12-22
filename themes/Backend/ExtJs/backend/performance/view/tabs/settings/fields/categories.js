@@ -100,16 +100,6 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Categories', {
                 defaults: me.defaults,
                 title: '{s name=fieldset/listings}Listings{/s}',
                 items: [{
-                    fieldLabel: '{s name=fieldset/categories/text/sort}Default listing sorting{/s}',
-                    helpText: '',
-                    name: 'categories[defaultListingSorting]',
-                    xtype: 'combo',
-                    valueField: 'id',
-                    value: 1,
-                    editable: false,
-                    displayField: 'name',
-                    store: Ext.create('Shopware.apps.Performance.store.ListingSorting').load()
-                }, {
                     name: 'categories[articlesperpage]',
                     fieldLabel: '{s name=fieldset/categories/text/perPage}Articles per page{/s}',
                     helpText: '{s name=fieldset/categories/help/perPage}How many articles should be shown per page?{/s}',

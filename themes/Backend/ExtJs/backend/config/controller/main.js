@@ -52,7 +52,8 @@ Ext.define('Shopware.apps.Config.controller.Main', {
         'element.TextArea', 'element.Time', 'element.Number',
         'element.DateTime', 'element.Interval', 'element.SelectTree',
         'element.ProductBoxLayoutSelect',
-        'element.Color'
+        'element.Color',
+        'element.CustomSortingSelection'
     ],
 
     stores:[

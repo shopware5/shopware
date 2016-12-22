@@ -71,6 +71,7 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Changed template `component_article_slider.tpl` to show provided products instead of always fetching them via ajax
 * Changed emotion preview to not save the current state before showing preview 
 * Changed command `sw:thumbnail:cleanup` to search the filesystem to remove orphaned thumbnails
+* Moved `defaultListingSorting` configuration from performance module to base settings > `categories / listings`
 * Changed the jQuery plugin `src/js/jquery.selectbox-replacement.js` to be used only as a polyfill. Use the CSS-only version for select fields instead.
 
 ### Removals
@@ -214,12 +215,21 @@ This changelog references changes done in Shopware 5.3 patch versions.
     * Removed the jQuery plugin `src/js/jquery.selectbox-replacement.js` completely
     * Removed LESS variable `@zindex-fancy-select`
 * Removed smarty blocks:
-    frontend_listing_actions_sort_field_relevance
-    frontend_listing_actions_sort_field_release
-    frontend_listing_actions_sort_field_rating
-    frontend_listing_actions_sort_field_price_asc
-    frontend_listing_actions_sort_field_price_desc
-    frontend_listing_actions_sort_field_name
+    * `frontend_listing_actions_sort_field_relevance`
+    * `frontend_listing_actions_sort_field_release`
+    * `frontend_listing_actions_sort_field_rating`
+    * `frontend_listing_actions_sort_field_price_asc`
+    * `frontend_listing_actions_sort_field_price_desc`
+    * `frontend_listing_actions_sort_field_name`
+* Removed `\Shopware_Controllers_Backend_Performance::getListingSortingsAction`
+* Removed `\Shopware\Bundle\SearchBundle\CriteriaRequestHandler\CoreCriteriaRequestHandler` constants:
+    * `SORTING_RELEASE_DATE`
+    * `SORTING_POPULARITY`
+    * `SORTING_CHEAPEST_PRICE`
+    * `SORTING_HIGHEST_PRICE`
+    * `SORTING_PRODUCT_NAME_ASC`
+    * `SORTING_PRODUCT_NAME_DESC`
+    * `SORTING_SEARCH_RANKING`
 
 ### Deprecations
 

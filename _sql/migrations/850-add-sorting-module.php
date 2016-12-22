@@ -80,13 +80,13 @@ SQL;
     {
         $sql = <<<SQL
 INSERT INTO `s_search_custom_sorting` (`id`, `label`, `active`, `display_in_categories`, `position`, `sortings`, `shops`) VALUES
-(1, 'Erscheinungsdatum', 1, 1, 0, '{"Shopware\\\\\\\Bundle\\\\\\\SearchBundle\\\\\\\Sorting\\\\\\\ReleaseDateSorting":{"direction":"DESC"}}', ''),
-(2, 'Beliebtheit', 1, 1, -10, '{"Shopware\\\\\\\Bundle\\\\\\\SearchBundle\\\\\\\Sorting\\\\\\\PopularitySorting":{"direction":"DESC"}}', ''),
-(3, 'Niedrigster Preis', 1, 1, 0, '{"Shopware\\\\\\\Bundle\\\\\\\SearchBundle\\\\\\\Sorting\\\\\\\PriceSorting":{"direction":"ASC"}}', ''),
-(4, 'Höchster Preis', 1, 1, 0, '{"Shopware\\\\\\\Bundle\\\\\\\SearchBundle\\\\\\\Sorting\\\\\\\PriceSorting":{"direction":"DESC"}}', ''),
-(5, 'Artikelbezeichnung', 1, 1, 0, '{"Shopware\\\\\\\Bundle\\\\\\\SearchBundle\\\\\\\Sorting\\\\\\\ProductNameSorting":{"direction":"ASC"}}', ''),
-(6, 'Artikelbezeichnung', 0, 1, 0, '{"Shopware\\\\\\\Bundle\\\\\\\SearchBundle\\\\\\\Sorting\\\\\\\ProductNameSorting":{"direction":"DESC"}}', ''),
-(7, 'Relevanz', 1, 0, 0, '{"Shopware\\\\\\\Bundle\\\\\\\SearchBundle\\\\\\\Sorting\\\\\\\SearchRankingSorting":{}}', '');
+(1, 'Erscheinungsdatum', 1, 1, -10, '{"Shopware\\\\\\\Bundle\\\\\\\SearchBundle\\\\\\\Sorting\\\\\\\ReleaseDateSorting":{"direction":"DESC"}}', ''),
+(2, 'Beliebtheit', 1, 1, 1, '{"Shopware\\\\\\\Bundle\\\\\\\SearchBundle\\\\\\\Sorting\\\\\\\PopularitySorting":{"direction":"DESC"}}', ''),
+(3, 'Niedrigster Preis', 1, 1, 2, '{"Shopware\\\\\\\Bundle\\\\\\\SearchBundle\\\\\\\Sorting\\\\\\\PriceSorting":{"direction":"ASC"}}', ''),
+(4, 'Höchster Preis', 1, 1, 3, '{"Shopware\\\\\\\Bundle\\\\\\\SearchBundle\\\\\\\Sorting\\\\\\\PriceSorting":{"direction":"DESC"}}', ''),
+(5, 'Artikelbezeichnung', 1, 1, 4, '{"Shopware\\\\\\\Bundle\\\\\\\SearchBundle\\\\\\\Sorting\\\\\\\ProductNameSorting":{"direction":"ASC"}}', ''),
+(6, 'Artikelbezeichnung', 0, 1, 5, '{"Shopware\\\\\\\Bundle\\\\\\\SearchBundle\\\\\\\Sorting\\\\\\\ProductNameSorting":{"direction":"DESC"}}', ''),
+(7, 'Relevanz', 1, 0, 6, '{"Shopware\\\\\\\Bundle\\\\\\\SearchBundle\\\\\\\Sorting\\\\\\\SearchRankingSorting":{}}', '');
 SQL;
 
         $this->addSql($sql);
@@ -110,6 +110,22 @@ SQL;
                 );
             }
         }
+
+        $this->addSql("SET @formId = (SELECT id FROM s_core_config_forms WHERE name = 'Frontend30' LIMIT 1)");
+        $this->addSql("
+            UPDATE s_core_config_elements
+            SET form_id = @formId,
+                `type` = 'custom-sorting-selection',
+                 label = 'Kategorie Standard Sortierung'
+            WHERE name = 'defaultListingSorting'
+        ");
+
+        $this->addSql("SET @elementId = (SELECT id FROM s_core_config_elements WHERE name = 'defaultListingSorting' LIMIT 1)");
+
+        $this->addSql("
+INSERT IGNORE INTO `s_core_config_element_translations` (`id` ,`element_id` ,`locale_id` ,`label` ,`description`)
+VALUES (NULL,  @elementId,  '2',  'Default category sorting', NULL);
+");
     }
 
     /**

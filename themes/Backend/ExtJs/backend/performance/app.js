@@ -96,7 +96,7 @@ Ext.define('Shopware.apps.Performance', {
      * The other shops are global stores which used for combo boxes.
      * @array
      */
-    stores:[ 'Info', 'Shop', 'Config', 'ListingSorting' ],
+    stores:[ 'Info', 'Shop', 'Config' ],
 
     /**
      * All store's required models. The detail store handles the base, billing, shipping and debit model.

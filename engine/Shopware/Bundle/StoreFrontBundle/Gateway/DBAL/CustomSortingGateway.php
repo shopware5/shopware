@@ -49,18 +49,26 @@ class CustomSortingGateway implements CustomSortingGatewayInterface
     private $hydrator;
 
     /**
+     * @var \Shopware_Components_Config
+     */
+    private $config;
+
+    /**
      * @param Connection $connection
      * @param FieldHelper $fieldHelper
      * @param CustomListingHydrator $hydrator
+     * @param \Shopware_Components_Config $config
      */
     public function __construct(
         Connection $connection,
         FieldHelper $fieldHelper,
-        CustomListingHydrator $hydrator
+        CustomListingHydrator $hydrator,
+        \Shopware_Components_Config $config
     ) {
         $this->connection = $connection;
         $this->fieldHelper = $fieldHelper;
         $this->hydrator = $hydrator;
+        $this->config = $config;
     }
 
     /**
@@ -131,7 +139,10 @@ class CustomSortingGateway implements CustomSortingGatewayInterface
         $query->from('s_search_custom_sorting', 'customSorting');
         $query->andWhere('customSorting.display_in_categories = 1');
         $query->addOrderBy('customSorting.position', 'ASC');
-        return $query->execute()->fetchAll(\PDO::FETCH_COLUMN);
+        $ids = $query->execute()->fetchAll(\PDO::FETCH_COLUMN);
+
+        $default = $this->config->get('defaultListingSorting', 1);
+        return array_unique(array_merge([$default], $ids));
     }
 
     /**
