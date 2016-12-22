@@ -118,7 +118,6 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
         defaultSettingsTemplateNotAvailable: '{s name=view/settings_default_settings_template_not_available}Not available{/s}',
         defaultSettingsHideTopLabel : '{s name=view/settings_default_settings_no_top_navigation_label}Do NOT show in top navigation.{/s}',
         defaultSettingsNoDesignSwitchLabel : '{s name=view/settings_default_settings_no_design_switch_label}Do NOT switch design.{/s}',
-        defaultSettingsNoFilterLabel : '{s name=view/settings_default_settings_no_filter_label}Hide filters.{/s}',
 
         defaultSettingsProductLayoutLabel: '{s name=view/settings_default_settings_box_layout_label}Product layout{/s}',
         defaultSettingsProductLayoutHelp: '{s name=view/settings_default_settings_box_layout_help}Product layout allows you to control how your products are presented on the category page. Choose between three different layouts to fine-tune your product display. You can select a layout for each category or automatically adopt the settings from the parent category.{/s}',
@@ -452,11 +451,6 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
                 boxLabel:me.snippets.defaultSettingsHideTopLabel,
                 name:'hideTop',
                 dataIndex:'hideTop'
-            },
-            {
-                boxLabel:me.snippets.defaultSettingsNoFilterLabel,
-                name:'hideFilter',
-                dataIndex:'hideFilter'
             }
         ];
     },

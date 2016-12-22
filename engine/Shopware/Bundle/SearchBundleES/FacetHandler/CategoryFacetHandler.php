@@ -135,8 +135,10 @@ class CategoryFacetHandler implements HandlerInterface, ResultHydratorInterface
         $facet = $this->categoryTreeFacetResultBuilder->buildFacetResult(
             $categories,
             $this->getFilteredIds($criteria),
-            $context->getShop()->getCategory()->getId()
+            $context->getShop()->getCategory()->getId(),
+            $criteria->getFacet('category')
         );
+
         $result->addFacet($facet);
     }
 

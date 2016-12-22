@@ -167,8 +167,14 @@ class ManufacturerFacetHandler implements HandlerInterface, ResultHydratorInterf
             $fieldName = 'sSupplier';
         }
 
-        $label = $this->snippetManager->getNamespace('frontend/listing/facet_labels')
-            ->get('manufacturer', 'Manufacturer');
+        /** @var ManufacturerFacet $facet */
+        $facet = $criteria->getFacet('manufacturer');
+        if ($facet && !empty($facet->getLabel())) {
+            $label = $facet->getLabel();
+        } else {
+            $label = $this->snippetManager->getNamespace('frontend/listing/facet_labels')
+                ->get('manufacturer', 'Manufacturer');
+        }
 
         return new ValueListFacetResult(
             'manufacturer',

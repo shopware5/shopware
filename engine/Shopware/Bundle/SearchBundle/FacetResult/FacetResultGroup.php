@@ -53,7 +53,7 @@ class FacetResultGroup extends Extendable implements FacetResultInterface
     /**
      * @var string|null
      */
-    protected $template = null;
+    protected $template;
 
     /**
      * @param FacetResultInterface[] $facetResults

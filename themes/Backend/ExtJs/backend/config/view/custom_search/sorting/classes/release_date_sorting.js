@@ -21,12 +21,12 @@
  * our trademarks remain entirely with us.
  */
 
-//{namespace name=backend/custom_search/sorting}
+//{namespace name=backend/custom_search/translation}
 
 //{block name="backend/config/view/custom_search/sorting/classes/release_date_sorting"}
 
 Ext.define('Shopware.apps.Config.view.custom_search.sorting.classes.ReleaseDateSorting', {
-    extend: 'Shopware.apps.Config.view.custom_search.sorting.classes.AbstractSorting',
+    extend: 'Shopware.apps.Config.view.custom_search.sorting.classes.SortingInterface',
 
     getLabel: function() {
         return '{s name="release_date_sorting"}{/s}';

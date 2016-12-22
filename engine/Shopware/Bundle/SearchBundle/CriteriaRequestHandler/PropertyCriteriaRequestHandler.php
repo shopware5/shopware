@@ -29,7 +29,6 @@ use Enlight_Controller_Request_RequestHttp as Request;
 use Shopware\Bundle\SearchBundle\Condition\PropertyCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\CriteriaRequestHandlerInterface;
-use Shopware\Bundle\SearchBundle\Facet\PropertyFacet;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 /**
@@ -39,24 +38,15 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 class PropertyCriteriaRequestHandler implements CriteriaRequestHandlerInterface
 {
     /**
-     * @var \Shopware_Components_Config
-     */
-    private $config;
-
-    /**
      * @var Connection
      */
     private $connection;
 
     /**
-     * @param \Shopware_Components_Config $config
      * @param Connection $connection
      */
-    public function __construct(
-        \Shopware_Components_Config $config,
-        Connection $connection
-    ) {
-        $this->config = $config;
+    public function __construct(Connection $connection)
+    {
         $this->connection = $connection;
     }
 
@@ -68,10 +58,6 @@ class PropertyCriteriaRequestHandler implements CriteriaRequestHandlerInterface
     public function handleRequest(Request $request, Criteria $criteria, ShopContextInterface $context)
     {
         $this->addPropertyCondition($request, $criteria);
-
-        if ($this->config->get('displayFiltersInListings')) {
-            $criteria->addFacet(new PropertyFacet());
-        }
     }
 
     /**
@@ -97,7 +83,6 @@ class PropertyCriteriaRequestHandler implements CriteriaRequestHandlerInterface
             $criteria->addCondition($condition);
         }
     }
-
 
     /**
      * Helper function which groups the passed filter option ids

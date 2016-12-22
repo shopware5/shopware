@@ -63,7 +63,7 @@ class TreeFacetResult extends Extendable implements FacetResultInterface
     /**
      * @var string|null
      */
-    protected $template = null;
+    protected $template;
 
     /**
      * @param string $facetName

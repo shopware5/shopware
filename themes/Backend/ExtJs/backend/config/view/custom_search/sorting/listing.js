@@ -21,7 +21,7 @@
  * our trademarks remain entirely with us.
  */
 
-//{namespace name=backend/custom_search/sorting}
+//{namespace name=backend/custom_search/translation}
 
 //{block name="backend/config/view/custom_search/sorting/listing"}
 
@@ -35,9 +35,18 @@ Ext.define('Shopware.apps.Config.view.custom_search.sorting.Listing', {
             editColumn: false,
             pagingbar: false,
             columns: {
-                label: '{s name="sorting_label"}{/s}',
-                active: '{s name="active"}{/s}',
-                displayInCategories: '{s name="display_in_categories"}{/s}'
+                label: {
+                    header: '{s name="sorting_label"}{/s}',
+                    sortable: false
+                },
+                active: {
+                    header: '{s name="active"}{/s}',
+                    sortable: false
+                },
+                displayInCategories: {
+                    header: '{s name="display_in_categories"}{/s}',
+                    sortable: false
+                }
             }
         };
     },
@@ -109,6 +118,33 @@ Ext.define('Shopware.apps.Config.view.custom_search.sorting.Listing', {
                 me.getStore().load();
             }
         });
+    },
+
+    onAddItem: function() {
+        var me = this;
+        me.sortingForm.setDisabled(false);
+        me.sortingForm.loadRecord(
+            Ext.create('Shopware.apps.Base.model.CustomSorting', {
+                displayInCategories: true,
+                active: true
+            })
+        );
+    },
+
+    onSelectionChange: function(selModel, selection) {
+        var me = this;
+
+        if (selection.length <= 0) {
+            me.sortingForm.setDisabled(true);
+            return;
+        }
+        me.onLoadSorting(selection[0]);
+    },
+
+    onLoadSorting: function(record) {
+        var me = this;
+        me.sortingForm.setDisabled(false);
+        me.sortingForm.loadRecord(record);
     }
 });
 

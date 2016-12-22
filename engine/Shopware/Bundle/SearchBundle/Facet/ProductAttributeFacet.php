@@ -61,7 +61,7 @@ class ProductAttributeFacet implements FacetInterface
     /**
      * @var string|null
      */
-    private $template = null;
+    private $template;
 
     /**
      * @param string $field

@@ -73,7 +73,7 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
         ];
     }
 
-   /**
+    /**
     * Add the table alias to the passed filter and sort parameters.
     * @param array $properties
     * @param array $fields

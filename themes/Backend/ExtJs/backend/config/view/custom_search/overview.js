@@ -21,7 +21,7 @@
  * our trademarks remain entirely with us.
  */
 
-//{namespace name=backend/custom_search/sorting}
+//{namespace name=backend/custom_search/translation}
 
 //{block name="backend/config/view/custom_search/overview"}
 
@@ -32,7 +32,6 @@ Ext.define('Shopware.apps.Config.view.custom_search.Overview', {
 
     getItems: function() {
         var me = this;
-
         return [
             me.createTab()
         ];
@@ -44,61 +43,56 @@ Ext.define('Shopware.apps.Config.view.custom_search.Overview', {
         me.tabPanel = Ext.create('Ext.tab.Panel', {
             region: 'center',
             items: [
+                me.createFacetTab(),
                 me.createSortingTab()
             ]
         });
         return me.tabPanel;
     },
 
-    createSortingTab: function() {
+    createFacetTab: function() {
         var me = this;
 
-        me.sortingListing = Ext.create('Shopware.apps.Config.view.custom_search.sorting.Listing', {
-            store: Ext.create('Shopware.apps.Base.store.CustomSorting', {
-                pageSize: 200
-            }).load(),
-            flex: 2,
-            subApp: me.subApp,
-            onAddItem: function() {
-                me.formPanel.setDisabled(false);
-                me.formPanel.loadRecord(
-                    Ext.create('Shopware.apps.Base.model.CustomSorting', {
-                        displayInCategories: true,
-                        active: true
-                    })
-                );
-                me.sortingDetail.shopSelection.store.load();
-            },
-            onSelectionChange: function(selModel, selection) {
-                if (selection.length <= 0) {
-                    me.formPanel.setDisabled(true);
-                    return;
+        me.facetForm = Ext.create('Shopware.apps.Config.view.custom_search.facet.Detail', {
+            width: 500,
+            disabled: true,
+            listeners: {
+                'facet-saved': function() {
+                    me.facetListing.getStore().load();
                 }
-                me.onLoadSorting(selection[0]);
             }
         });
+
+        me.facetStore = Ext.create('Shopware.apps.Base.store.CustomFacet', {
+            pageSize: 200
+        }).load();
+
+        me.facetListing = Ext.create('Shopware.apps.Config.view.custom_search.facet.Listing', {
+            store: me.facetStore,
+            flex: 2,
+            subApp: me.subApp,
+            facetForm: me.facetForm
+        });
+
+        return Ext.create('Ext.container.Container', {
+            title: '{s name="facet_tab"}{/s}',
+            layout: {
+                type: 'hbox',
+                align: 'stretch'
+            },
+            items: [me.facetListing, me.facetForm]
+        });
+    },
+
+    createSortingTab: function() {
+        var me = this;
 
         me.sortingDetail = Ext.create('Shopware.apps.Config.view.custom_search.sorting.Detail', {
             record: Ext.create('Shopware.apps.Base.model.CustomSorting'),
             width: 550
         });
 
-        me.formPanel = me.createFormPanel();
-
-        return Ext.create('Ext.container.Container', {
-            title: '{s name="sorting_tab"}{/s}',
-            layout: {
-                type: 'hbox',
-                align: 'stretch'
-            },
-            items: [me.sortingListing, me.formPanel]
-        });
-    },
-
-    createFormPanel: function() {
-        var me = this;
-
-        return Ext.create('Ext.form.Panel', {
+        me.sortingForm = Ext.create('Ext.form.Panel', {
             items: [ me.sortingDetail ],
             disabled: true,
             bodyPadding: '20 5',
@@ -110,44 +104,48 @@ Ext.define('Shopware.apps.Config.view.custom_search.Overview', {
             dockedItems: [{
                 xtype: 'toolbar',
                 dock: 'bottom',
-                items: me.createToolbarItems()
+                items: ['->', {
+                    xtype: 'button',
+                    cls: 'primary',
+                    handler: Ext.bind(me.saveSorting, me),
+                    text: '{s name="apply_button"}{/s}'
+                }]
             }]
         });
-    },
 
-    createToolbarItems: function() {
-        var me = this;
-
-        me.saveButton = Ext.create('Ext.button.Button', {
-            cls: 'primary',
-            handler: Ext.bind(me.saveSorting, me),
-            text: '{s name="apply_button"}{/s}'
+        me.sortingListing = Ext.create('Shopware.apps.Config.view.custom_search.sorting.Listing', {
+            store: Ext.create('Shopware.apps.Base.store.CustomSorting', { pageSize: 200 }).load(),
+            flex: 2,
+            sortingForm: me.sortingForm,
+            sortingDetail: me.sortingDetail,
+            subApp: me.subApp
         });
-        return ['->', me.saveButton];
+
+        return Ext.create('Ext.container.Container', {
+            title: '{s name="sorting_tab"}{/s}',
+            layout: {
+                type: 'hbox',
+                align: 'stretch'
+            },
+            items: [me.sortingListing, me.sortingForm]
+        });
     },
 
     saveSorting: function() {
         var me = this,
-            record = me.formPanel.getRecord();
+            record = me.sortingForm.getRecord();
 
-        if (!me.formPanel.getForm().isValid()) {
+        if (!me.sortingForm.getForm().isValid()) {
             return;
         }
 
-        me.formPanel.getForm().updateRecord(record);
-        me.formPanel.setDisabled(true);
+        me.sortingForm.getForm().updateRecord(record);
+        me.sortingForm.setDisabled(true);
         record.save({
             callback: function() {
                 me.sortingListing.getStore().load();
             }
         });
-    },
-
-    onLoadSorting: function(record) {
-        var me = this;
-
-        me.formPanel.setDisabled(false);
-        me.formPanel.loadRecord(record);
     }
 });
 

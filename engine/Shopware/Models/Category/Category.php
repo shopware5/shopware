@@ -341,6 +341,12 @@ class Category extends ModelEntity
     protected $hideSortings = false;
 
     /**
+     * @var string
+     * @ORM\Column(name="facet_ids", type="string", nullable=true)
+     */
+    protected $facetIds;
+
+    /**
      * Class constructor.
      */
     public function __construct()
@@ -1037,5 +1043,21 @@ class Category extends ModelEntity
     public function setHideSortings($hideSortings)
     {
         $this->hideSortings = $hideSortings;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFacetIds()
+    {
+        return $this->facetIds;
+    }
+
+    /**
+     * @param string $facetIds
+     */
+    public function setFacetIds($facetIds)
+    {
+        $this->facetIds = $facetIds;
     }
 }

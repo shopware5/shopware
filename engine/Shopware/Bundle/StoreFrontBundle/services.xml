@@ -433,6 +433,16 @@
             <argument type="service" id="config" />
         </service>
 
+        <service id="shopware_storefront.custom_facet_service" class="Shopware\Bundle\StoreFrontBundle\Service\Core\CustomFacetService">
+            <argument type="service" id="shopware_storefront.custom_facet_gateway" />
+        </service>
+
+        <service id="shopware_storefront.custom_facet_gateway" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\CustomFacetGateway">
+            <argument type="service" id="dbal_connection" />
+            <argument type="service" id="shopware_storefront.field_helper_dbal" />
+            <argument type="service" id="shopware_storefront.custom_listing_hydrator" />
+        </service>
+
         <service id="shopware_storefront.custom_listing_hydrator" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\CustomListingHydrator" />
     </services>
 </container>

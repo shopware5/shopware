@@ -159,10 +159,17 @@ class PriceFacetHandler implements PartialFacetHandlerInterface
             return null;
         }
 
+        /** @var Facet\PriceFacet $facet */
+        if (!empty($facet->getLabel())) {
+            $label = $facet->getLabel();
+        } else {
+            $label = $this->snippetNamespace->get($facet->getName(), 'Price');
+        }
+
         return new RangeFacetResult(
             $facet->getName(),
             $criteria->hasCondition($facet->getName()),
-            $this->snippetNamespace->get($facet->getName(), 'Price'),
+            $label,
             (float) $min,
             (float) $max,
             (float) $activeMin,

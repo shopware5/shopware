@@ -21,7 +21,7 @@
  * our trademarks remain entirely with us.
  */
 
-Ext.define('Shopware.apps.Config.view.custom_search.sorting.classes.AbstractSorting', {
+Ext.define('Shopware.apps.Config.view.custom_search.sorting.classes.SortingInterface', {
 
     /**
      * @api Displayed in combo box selection

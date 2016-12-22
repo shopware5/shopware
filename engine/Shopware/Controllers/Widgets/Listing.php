@@ -25,6 +25,7 @@
 use Shopware\Bundle\SearchBundle\ProductSearchInterface;
 use Shopware\Bundle\SearchBundle\ProductSearchResult;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\Search\CustomFacet;
 use Shopware\Components\Compatibility\LegacyStructConverter;
 use Shopware\Components\Routing\RouterInterface;
 
@@ -142,7 +143,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
         $productStreamId = $this->findStreamIdByCategoryId($categoryId);
 
         if ($productStreamId) {
-            $result = $this->fetchStreamListing($productStreamId);
+            $result = $this->fetchStreamListing($categoryId, $productStreamId);
             $this->setSearchResultResponse($result);
             return;
         }
@@ -313,7 +314,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
      * @param int $productStreamId
      * @return ProductSearchResult
      */
-    private function fetchStreamListing($productStreamId)
+    private function fetchStreamListing($categoryId, $productStreamId)
     {
         /** @var ContextServiceInterface $contextService */
         $contextService = $this->get('shopware_storefront.context_service');
@@ -330,6 +331,16 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
         /** @var \Shopware\Components\ProductStream\FacetFilter $facetFilter */
         $facetFilter = $this->get('shopware_product_stream.facet_filter');
         $facetFilter->add($criteria);
+
+        /** @var \Shopware\Bundle\StoreFrontBundle\Service\CustomFacetServiceInterface $facetService */
+        $facetService = $this->get('shopware_storefront.custom_facet_service');
+        $facets = $facetService->getFacetsOfCategories([$categoryId], $context);
+
+        /** @var CustomFacet[] $facets */
+        $facets = array_shift($facets);
+        foreach ($facets as $facet) {
+            $criteria->addFacet($facet->getFacet());
+        }
 
         $criteria->setGeneratePartialFacets(
             $this->container->get('config')->get('listingMode') === 'filter_ajax_reload'

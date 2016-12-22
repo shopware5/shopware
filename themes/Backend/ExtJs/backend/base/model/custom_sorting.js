@@ -28,8 +28,7 @@ Ext.define('Shopware.apps.Base.model.CustomSorting', {
 
     configure: function() {
         return {
-            controller: 'CustomSorting',
-            detail: 'Shopware.apps.CustomSorting.view.detail.CustomSorting'
+            controller: 'CustomSorting'
         };
     },
 

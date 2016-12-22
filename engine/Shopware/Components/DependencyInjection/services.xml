@@ -439,6 +439,7 @@
 
         <service id="shopware_product_stream.facet_filter" class="Shopware\Components\ProductStream\FacetFilter" >
             <argument type="service" id="config" />
+            <argument type="service" id="shopware_storefront.custom_facet_service" />
         </service>
 
         <service id="shopware.upload_max_size_validator" class="Shopware\Components\UploadMaxSizeValidator">

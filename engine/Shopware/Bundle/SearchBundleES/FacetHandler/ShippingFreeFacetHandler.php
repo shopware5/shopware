@@ -121,12 +121,18 @@ class ShippingFreeFacetHandler implements HandlerInterface, ResultHydratorInterf
      */
     private function createFacet(Criteria $criteria)
     {
-        $label = $this->snippetManager
-            ->getNamespace('frontend/listing/facet_labels')
-            ->get('shipping_free', 'Shipping free');
-
         if (!$fieldName = $this->queryAliasMapper->getShortAlias('shippingFree')) {
             $fieldName = 'shippingFree';
+        }
+
+        /** @var ShippingFreeFacet $facet */
+        $facet = $criteria->getFacet('shipping_free');
+        if ($facet && !empty($facet->getLabel())) {
+            $label = $facet->getLabel();
+        } else {
+            $label = $this->snippetManager
+                ->getNamespace('frontend/listing/facet_labels')
+                ->get('shipping_free', 'Shipping free');
         }
 
         $criteriaPart = new BooleanFacetResult(

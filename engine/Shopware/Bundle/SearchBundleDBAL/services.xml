@@ -11,6 +11,7 @@
 
             <!--facet handler-->
             <argument type="collection" />
+            <argument type="service" id="service_container" />
         </service>
 
         <service id="shopware_searchdbal.search_price_helper_dbal" class="Shopware\Bundle\SearchBundleDBAL\PriceHelper">
@@ -228,6 +229,18 @@
             <tag name="sorting_handler_dbal"/>
         </service>
 
+
+        <service id="shopware_searchdbal.combined_condition_facet_handler_dbal" class="Shopware\Bundle\SearchBundleDBAL\FacetHandler\CombinedConditionFacetHandler">
+            <argument type="service" id="shopware_searchdbal.dbal_query_builder_factory" />
+            <tag name="facet_handler_dbal"/>
+        </service>
+
+        <service id="shopware_searchdbal.combined_condition_handler_dbal" class="Shopware\Bundle\SearchBundleDBAL\ConditionHandler\CombinedConditionHandler">
+            <argument type="service" id="service_container" />
+
+            <tag name="condition_handler_dbal"/>
+        </service>
+
         <service id="shopware_searchdbal.dbal_query_builder_factory" class="Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactory">
             <argument type="service" id="dbal_connection" />
             <argument type="service" id="events" />
@@ -237,6 +250,12 @@
 
             <!--sorting handlers-->
             <argument type="collection" />
+
+            <argument type="service" id="service_container" />
         </service>
+
+        <service id="shopware_searchdbal.condition_handlers" class="Doctrine\Common\Collections\ArrayCollection" synthetic="true" />
+        <service id="shopware_searchdbal.sorting_handlers" class="Doctrine\Common\Collections\ArrayCollection" synthetic="true" />
+        <service id="shopware_searchdbal.facet_handlers" class="Doctrine\Common\Collections\ArrayCollection" synthetic="true" />
     </services>
 </container>

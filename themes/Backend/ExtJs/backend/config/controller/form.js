@@ -56,17 +56,32 @@ Ext.define('Shopware.apps.Config.controller.Form', {
         'form.CronJob',
 
         'custom_search.Overview',
+        'custom_search.common.Listing',
+
+        'custom_search.facet.Listing',
+        'custom_search.facet.Detail',
+        'custom_search.facet.Facet',
+        'custom_search.facet.classes.FacetInterface',
+        'custom_search.facet.classes.CategoryFacet',
+        'custom_search.facet.classes.ImmediateDeliveryFacet',
+        'custom_search.facet.classes.ManufacturerFacet',
+        'custom_search.facet.classes.PriceFacet',
+        'custom_search.facet.classes.PropertyFacet',
+        'custom_search.facet.classes.ShippingFreeFacet',
+        'custom_search.facet.classes.VoteAverageFacet',
+        'custom_search.facet.classes.ProductAttributeFacet',
+        'custom_search.facet.classes.CombinedConditionFacet',
+
         'custom_search.sorting.Listing',
         'custom_search.sorting.Detail',
         'custom_search.sorting.SortingSelection',
-
+        'custom_search.sorting.classes.SortingInterface',
         'custom_search.sorting.classes.PriceSorting',
         'custom_search.sorting.classes.ProductNameSorting',
         'custom_search.sorting.classes.PopularitySorting',
         'custom_search.sorting.classes.ReleaseDateSorting',
         'custom_search.sorting.classes.SearchRankingSorting',
         'custom_search.sorting.classes.ProductAttributeSorting',
-
         'custom_search.sorting.includes.CreateWindow',
         'custom_search.sorting.includes.DirectionCombo',
 

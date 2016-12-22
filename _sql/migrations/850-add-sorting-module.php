@@ -41,7 +41,8 @@ CREATE TABLE IF NOT EXISTS `s_search_custom_sorting` (
   `display_in_categories` int(1) unsigned NOT NULL,
   `position` int(11) NOT NULL,
   `sortings` LONGTEXT NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `sorting` (`display_in_categories`,`position`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 SQL;
         $this->addSql($sql);
@@ -91,7 +92,7 @@ INSERT INTO `s_search_custom_sorting` (`id`, `label`, `active`, `display_in_cate
 (4, 'Höchster Preis', 1, 1, 3, '{"Shopware\\\\\\\Bundle\\\\\\\SearchBundle\\\\\\\Sorting\\\\\\\PriceSorting":{"direction":"DESC"}}'),
 (5, 'Artikelbezeichnung', 1, 1, 4, '{"Shopware\\\\\\\Bundle\\\\\\\SearchBundle\\\\\\\Sorting\\\\\\\ProductNameSorting":{"direction":"ASC"}}'),
 (6, 'Artikelbezeichnung', 0, 1, 5, '{"Shopware\\\\\\\Bundle\\\\\\\SearchBundle\\\\\\\Sorting\\\\\\\ProductNameSorting":{"direction":"DESC"}}'),
-(7, 'Relevanz', 1, 0, 6, '{"Shopware\\\\\\\Bundle\\\\\\\SearchBundle\\\\\\\Sorting\\\\\\\SearchRankingSorting":{}}');
+(7, 'Beste Ergebnisse', 1, 0, 6, '{"Shopware\\\\\\\Bundle\\\\\\\SearchBundle\\\\\\\Sorting\\\\\\\SearchRankingSorting":{}}');
 SQL;
 
         $this->addSql($sql);

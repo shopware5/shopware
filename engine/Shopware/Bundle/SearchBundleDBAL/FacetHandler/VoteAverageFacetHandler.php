@@ -129,10 +129,17 @@ class VoteAverageFacetHandler implements PartialFacetHandlerInterface
 
         $values = $this->buildItems($data, $activeAverage);
 
+        /** @var VoteAverageFacet $facet */
+        if (!empty($facet->getLabel())) {
+            $label = $facet->getLabel();
+        } else {
+            $label =  $this->snippetNamespace->get($facet->getName(), 'Shipping free');
+        }
+
         return new RadioFacetResult(
             $facet->getName(),
             $criteria->hasCondition($facet->getName()),
-            $this->snippetNamespace->get($facet->getName(), 'Ranking'),
+            $label,
             $values,
             $this->fieldName,
             [],

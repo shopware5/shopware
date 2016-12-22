@@ -27,7 +27,7 @@
  * @author      shopware AG
  */
 
-//{namespace name="backend/custom_search/sorting"}
+//{namespace name="backend/custom_search/translation"}
 
 Ext.define('Shopware.form.field.CustomSortingGrid', {
     extend: 'Shopware.form.field.Grid',

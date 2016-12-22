@@ -84,7 +84,8 @@ Ext.define('Shopware.apps.Category.model.Detail', {
         { name : 'hideTop', type: 'boolean' },
         { name : 'imagePath', type: 'string' , useNull:true, defaultValue: null},
         { name : 'hideSortings', type: 'boolean' },
-        { name : 'sortingIds', type: 'string' }
+        { name : 'sortingIds', type: 'string' },
+        { name : 'facetIds', type: 'string' }
     ],
 
     proxy : {

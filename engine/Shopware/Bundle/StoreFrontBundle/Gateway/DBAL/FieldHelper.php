@@ -1291,4 +1291,28 @@ class FieldHelper
     {
         $this->addTranslation('customSorting', 'custom_sorting', $query, $context, 1);
     }
+
+    /**
+     * @return string[]
+     */
+    public function getCustomFacetFields()
+    {
+        return [
+            'customFacet.id as __customFacet_id',
+            'customFacet.unique_key as __customFacet_unique_key',
+            'customFacet.active as __customFacet_active',
+            'customFacet.position as __customFacet_position',
+            'customFacet.name as __customFacet_name',
+            'customFacet.facet as __customFacet_facet'
+        ];
+    }
+
+    /**
+     * @param QueryBuilder $query
+     * @param ShopContextInterface $context
+     */
+    public function addCustomFacetTranslation($query, $context)
+    {
+        $this->addTranslation('customFacet', 'custom_facet', $query, $context, 1);
+    }
 }

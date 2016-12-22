@@ -15,7 +15,6 @@
 
         <service id="shopware_search.core_criteria_request_handler" class="Shopware\Bundle\SearchBundle\CriteriaRequestHandler\CoreCriteriaRequestHandler">
             <argument type="service" id="config" />
-            <argument type="service" id="dbal_connection" />
             <argument type="service" id="shopware_search.search_term_pre_processor" />
 
             <tag name="criteria_request_handler"/>
@@ -26,8 +25,13 @@
             <tag name="criteria_request_handler" />
         </service>
 
-        <service id="shopware_search.property_criteria_request_handler" class="Shopware\Bundle\SearchBundle\CriteriaRequestHandler\PropertyCriteriaRequestHandler">
+        <service id="shopware_search.custom_facet_criteria_request_handler" class="Shopware\Bundle\SearchBundle\CriteriaRequestHandler\FacetCriteriaRequestHandler">
             <argument type="service" id="config" />
+            <argument type="service" id="shopware_storefront.custom_facet_service" />
+            <tag name="criteria_request_handler" />
+        </service>
+
+        <service id="shopware_search.property_criteria_request_handler" class="Shopware\Bundle\SearchBundle\CriteriaRequestHandler\PropertyCriteriaRequestHandler">
             <argument type="service" id="dbal_connection" />
 
             <tag name="criteria_request_handler"/>

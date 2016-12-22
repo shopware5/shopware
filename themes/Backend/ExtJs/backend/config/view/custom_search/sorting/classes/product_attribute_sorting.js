@@ -21,12 +21,12 @@
  * our trademarks remain entirely with us.
  */
 
-//{namespace name=backend/custom_search/sorting}
+//{namespace name=backend/custom_search/translation}
 
 //{block name="backend/config/view/custom_search/sorting/classes/product_attribute_sorting"}
 
 Ext.define('Shopware.apps.Config.view.custom_search.sorting.classes.ProductAttributeSorting', {
-    extend: 'Shopware.apps.Config.view.custom_search.sorting.classes.AbstractSorting',
+    extend: 'Shopware.apps.Config.view.custom_search.sorting.classes.SortingInterface',
     mixins: {
         factory: 'Shopware.attribute.SelectionFactory'
     },
@@ -74,11 +74,11 @@ Ext.define('Shopware.apps.Config.view.custom_search.sorting.classes.ProductAttri
             model: 'Shopware.model.Dynamic',
             proxy: {
                 type: 'ajax',
-                url: '{url controller="CustomSorting" action="listAttributes"}',
+                url: '{url controller="AttributeData" action="list"}',
                 reader: Ext.create('Shopware.model.DynamicReader')
             }
         });
-        store.filters.add({ property: 'tableName', value: 's_articles_attributes' });
+        store.getProxy().extraParams.table = 's_articles_attributes';
 
         return Ext.create('Shopware.form.field.AttributeSingleSelection', {
             labelWidth: 150,
@@ -91,15 +91,16 @@ Ext.define('Shopware.apps.Config.view.custom_search.sorting.classes.ProductAttri
 
     _createRecord: function(parameters, callback) {
         Ext.Ajax.request({
-            url: '{url controller=CustomSorting action=listAttributes}',
+            url: '{url controller=Attributes action=getColumn}',
             params: {
+                table: 's_articles_attributes',
                 columnName: parameters.field
             },
             success: function(operation, opts) {
                 var response = Ext.decode(operation.responseText);
-                response = response.data;
-
                 var label = '{s name="product_attribute_sorting_short"}{/s}:';
+
+                response = response.data;
 
                 if (response.label) {
                     label += ' <b>' + response.label + '</b>';

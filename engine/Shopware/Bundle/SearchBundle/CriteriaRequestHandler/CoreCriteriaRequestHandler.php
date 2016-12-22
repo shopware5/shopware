@@ -24,7 +24,6 @@
 
 namespace Shopware\Bundle\SearchBundle\CriteriaRequestHandler;
 
-use Doctrine\DBAL\Connection;
 use Enlight_Controller_Request_RequestHttp as Request;
 use Shopware\Bundle\SearchBundle\Condition\CategoryCondition;
 use Shopware\Bundle\SearchBundle\Condition\CustomerGroupCondition;
@@ -37,12 +36,6 @@ use Shopware\Bundle\SearchBundle\Condition\ShippingFreeCondition;
 use Shopware\Bundle\SearchBundle\Condition\VoteAverageCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\CriteriaRequestHandlerInterface;
-use Shopware\Bundle\SearchBundle\Facet\CategoryFacet;
-use Shopware\Bundle\SearchBundle\Facet\ImmediateDeliveryFacet;
-use Shopware\Bundle\SearchBundle\Facet\ManufacturerFacet;
-use Shopware\Bundle\SearchBundle\Facet\PriceFacet;
-use Shopware\Bundle\SearchBundle\Facet\ShippingFreeFacet;
-use Shopware\Bundle\SearchBundle\Facet\VoteAverageFacet;
 use Shopware\Bundle\SearchBundle\SearchTermPreProcessorInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
@@ -58,27 +51,19 @@ class CoreCriteriaRequestHandler implements CriteriaRequestHandlerInterface
     private $config;
 
     /**
-     * @var Connection
-     */
-    private $connection;
-
-    /**
      * @var SearchTermPreProcessorInterface
      */
     private $searchTermPreProcessor;
 
     /**
      * @param \Shopware_Components_Config $config
-     * @param Connection $connection
      * @param SearchTermPreProcessorInterface $searchTermPreProcessor
      */
     public function __construct(
         \Shopware_Components_Config $config,
-        Connection $connection,
         SearchTermPreProcessorInterface $searchTermPreProcessor
     ) {
         $this->config = $config;
-        $this->connection = $connection;
         $this->searchTermPreProcessor = $searchTermPreProcessor;
     }
 
@@ -102,38 +87,7 @@ class CoreCriteriaRequestHandler implements CriteriaRequestHandlerInterface
         $this->addImmediateDeliveryCondition($request, $criteria);
         $this->addRatingCondition($request, $criteria);
         $this->addPriceCondition($request, $criteria);
-
-        $this->addFacets($criteria);
     }
-
-    /**
-     * @param Criteria $criteria
-     */
-    private function addFacets(Criteria $criteria)
-    {
-        if ($this->config->get('showImmediateDeliveryFacet')) {
-            $criteria->addFacet(new ImmediateDeliveryFacet());
-        }
-
-        if ($this->config->get('showShippingFreeFacet')) {
-            $criteria->addFacet(new ShippingFreeFacet());
-        }
-
-        if ($this->config->get('showPriceFacet')) {
-            $criteria->addFacet(new PriceFacet());
-        }
-
-        if ($this->config->get('showVoteAverageFacet')) {
-            $criteria->addFacet(new VoteAverageFacet());
-        }
-
-        if ($this->config->get('showSupplierInCategories')) {
-            $criteria->addFacet(new ManufacturerFacet());
-        }
-
-        $criteria->addFacet(new CategoryFacet());
-    }
-
 
     /**
      * @param Request $request

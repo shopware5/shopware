@@ -96,11 +96,18 @@ class ShippingFreeFacetHandler implements PartialFacetHandlerInterface
             return null;
         }
 
+        /** @var Facet\ShippingFreeFacet $facet */
+        if (!empty($facet->getLabel())) {
+            $label = $facet->getLabel();
+        } else {
+            $label =  $this->snippetNamespace->get($facet->getName(), 'Shipping free');
+        }
+
         return new BooleanFacetResult(
             $facet->getName(),
             $this->fieldName,
             $criteria->hasCondition($facet->getName()),
-            $this->snippetNamespace->get($facet->getName(), 'Shipping free')
+            $label
         );
     }
 

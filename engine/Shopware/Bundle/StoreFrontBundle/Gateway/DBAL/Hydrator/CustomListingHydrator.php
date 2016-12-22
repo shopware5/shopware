@@ -24,7 +24,10 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator;
 
+use Shopware\Bundle\SearchBundle\ConditionInterface;
+use Shopware\Bundle\SearchBundle\FacetInterface;
 use Shopware\Bundle\SearchBundle\SortingInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\Search\CustomFacet;
 use Shopware\Bundle\StoreFrontBundle\Struct\Search\CustomSorting;
 use Shopware\Components\ReflectionHelper;
 
@@ -67,7 +70,7 @@ class CustomListingHydrator extends Hydrator
 
     /**
      * @param array[] $serialized
-     * @return SortingInterface[]
+     * @return SortingInterface[]|FacetInterface[]
      */
     private function unserialize($serialized)
     {
@@ -83,5 +86,35 @@ class CustomListingHydrator extends Hydrator
         }
 
         return $sortings;
+    }
+
+    /**
+     * @param array $data
+     * @return CustomFacet
+     */
+    public function hydrateFacet(array $data)
+    {
+        $id = (int) $data['__customFacet_id'];
+        $translation = $this->getTranslation($data, '__customFacet', [], $id);
+        $data = array_merge($data, $translation);
+
+        $customFacet = new CustomFacet();
+
+        $customFacet->setId($id);
+        $customFacet->setUniqueKey($data['__customFacet_unique_key']);
+        $customFacet->setName($data['__customFacet_name']);
+        $customFacet->setPosition((int) $data['__customFacet_position']);
+
+        $translation = $this->extractFields('__customFacet_', $translation);
+        $facets = json_decode($data['__customFacet_facet'], true);
+
+        foreach ($facets as &$facet) {
+            $facet = array_merge($facet, $translation);
+        }
+
+        $facets = $this->unserialize($facets);
+        $customFacet->setFacet(array_shift($facets));
+
+        return $customFacet;
     }
 }

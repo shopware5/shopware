@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/custom_search/sorting}
+//{namespace name=backend/custom_search/translation}
 
 //{block name="backend/category/view/tabs/custom_listing"}
 
@@ -58,15 +58,41 @@ Ext.define('Shopware.apps.Category.view.category.tabs.CustomListing', {
         me.sortingFieldSet = Ext.create('Ext.form.FieldSet', {
             title: '{s name="category/sorting_title"}{/s}',
             anchor: '100%',
-            height: 390,
             items: [
                 me.createHideSortingItem(),
                 me.createActivateSortingItem(),
                 me.createSortingSelection(),
-                me.createCopySettingsButton()
+                me.createCopySettingsButton(me.copySortingSettings)
             ]
         });
-        return [me.sortingFieldSet];
+
+        me.facetFieldSet = Ext.create('Ext.form.FieldSet', {
+            title: '{s name="category/facet_title"}{/s}',
+            anchor: '100%',
+            items: [
+                me.createHideFacetItem(),
+                me.createActivateFacetItem(),
+                me.createFacetSelection(),
+                me.createCopySettingsButton(me.copyFacetSettings)
+            ]
+        });
+
+        return [me.sortingFieldSet, me.facetFieldSet];
+    },
+
+
+    createHideFacetItem: function() {
+        var me = this;
+
+        me.hideFilterItem = Ext.create('Ext.form.field.Checkbox', {
+            labelWidth: 155,
+            name: 'hideFilter',
+            inputValue: true,
+            uncheckedValue: false,
+            dataIndex: 'hideFilter',
+            fieldLabel: '{s namespace=backend/category/main name=view/settings_default_settings_no_filter_label}{/s}'
+        });
+        return me.hideFilterItem;
     },
 
     createActivateSortingItem: function() {
@@ -82,6 +108,21 @@ Ext.define('Shopware.apps.Category.view.category.tabs.CustomListing', {
             }
         });
         return me.activateSorting;
+    },
+
+    createActivateFacetItem: function() {
+        var me = this;
+
+        me.activateFacets = Ext.create('Ext.form.field.Checkbox', {
+            labelWidth: 155,
+            inputValue: true,
+            uncheckedValue: false,
+            fieldLabel: '{s name="category/activate_facets"}{/s}',
+            listeners: {
+                'change': Ext.bind(me.onActivateFacet, me)
+            }
+        });
+        return me.activateFacets;
     },
 
     createHideSortingItem: function() {
@@ -115,19 +156,37 @@ Ext.define('Shopware.apps.Category.view.category.tabs.CustomListing', {
         return me.sortingSelection;
     },
 
-    createCopySettingsButton: function() {
+    createFacetSelection: function() {
+        var me = this, store;
+
+        store = me.createEntitySearchStore("Shopware\\Models\\Search\\CustomFacet");
+        store.pageSize = 200;
+
+        me.facetSelection = Ext.create('Shopware.form.field.CustomFacetGrid', {
+            labelWidth: 155,
+            disabled: true,
+            ignoreDisabled: false,
+            store: store,
+            searchStore: me.createEntitySearchStore("Shopware\\Models\\Search\\CustomFacet"),
+            fieldLabel: '{s name="category/facet_selection"}{/s}',
+            name: 'facetIds'
+        });
+        return me.facetSelection;
+    },
+
+    createCopySettingsButton: function(copyFunction) {
         var me = this;
 
         me.copySettingsButton = Ext.create('Ext.button.Button', {
             cls: 'secondary small',
             margin: '5 0 0 160',
             text: '{s name="category/copy_settings_button"}{/s}',
-            handler: Ext.bind(me.copySettings, me)
+            handler: Ext.bind(copyFunction, me)
         });
         return me.copySettingsButton;
     },
 
-    copySettings: function() {
+    copySortingSettings: function() {
         var me = this;
 
         if (!me.category) {
@@ -137,6 +196,27 @@ Ext.define('Shopware.apps.Category.view.category.tabs.CustomListing', {
         me.fireEvent('saveCategory', me.category, function() {
             Ext.Ajax.request({
                 url: '{url controller=CustomSorting action=copyCategorySettings}',
+                method: 'POST',
+                params: {
+                    categoryId: me.category.get('id')
+                },
+                success: function(operation, opts) {
+                    Shopware.Notification.createGrowlMessage('', '{s name="category/copy_success"}{/s}');
+                }
+            });
+        });
+    },
+
+    copyFacetSettings: function() {
+        var me = this;
+
+        if (!me.category) {
+            return;
+        }
+
+        me.fireEvent('saveCategory', me.category, function() {
+            Ext.Ajax.request({
+                url: '{url controller=CustomFacet action=copyCategorySettings}',
                 method: 'POST',
                 params: {
                     categoryId: me.category.get('id')
@@ -162,8 +242,23 @@ Ext.define('Shopware.apps.Category.view.category.tabs.CustomListing', {
         return true;
     },
 
+    onActivateFacet: function(checkbox, active) {
+        var me = this;
+
+        if (active) {
+            me.facetSelection.enable();
+            return true;
+        }
+
+        me.category.set('facetIds', null);
+        me.facetSelection.disable();
+        me.facetSelection.store.load();
+        return true;
+    },
+
+
     loadCategory: function(category) {
-        var me = this, hasSortings;
+        var me = this, hasSortings, hasFacets;
 
         me.loadRecord(category);
         me.category = category;
@@ -174,11 +269,21 @@ Ext.define('Shopware.apps.Category.view.category.tabs.CustomListing', {
 
         if (hasSortings) {
             me.sortingSelection.enable();
-            return true;
+        } else {
+            me.sortingSelection.disable();
+            me.sortingSelection.store.load();
         }
 
-        me.sortingSelection.disable();
-        me.sortingSelection.store.load();
+        hasFacets = (category.get('facetIds').length > 0);
+        me.activateFacets.setValue(hasFacets);
+
+        if (hasFacets) {
+            me.facetSelection.enable();
+        } else {
+            me.facetSelection.disable();
+            me.facetSelection.store.load();
+        }
+
         return true;
     }
 });

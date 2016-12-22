@@ -34,7 +34,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
  * @package   Shopware\Bundle\SearchBundle
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class ProductNumberSearchResult extends Extendable implements \JsonSerializable
+class ProductNumberSearchResult extends Extendable
 {
     /**
      * @var BaseProduct[] Indexed by the product order number

@@ -28,7 +28,6 @@ use Elasticsearch\Client;
 use ONGR\ElasticsearchDSL\Search;
 use Shopware\Bundle\ESIndexingBundle\IndexFactoryInterface;
 use Shopware\Bundle\ESIndexingBundle\Product\ProductMapping;
-use Shopware\Bundle\SearchBundle\ConditionInterface;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\CriteriaPartInterface;
 use Shopware\Bundle\SearchBundle\ProductNumberSearchInterface;
@@ -48,7 +47,6 @@ class ProductNumberSearch implements ProductNumberSearchInterface
      * @var HandlerInterface[]
      */
     private $handlers;
-
 
     /**
      * @var IndexFactoryInterface

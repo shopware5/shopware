@@ -33,7 +33,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
  * @package   Shopware\Bundle\SearchBundle
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class ProductSearchResult extends ProductNumberSearchResult implements \JsonSerializable
+class ProductSearchResult extends ProductNumberSearchResult
 {
     /**
      * @var ListProduct[] Indexed by the product order number
