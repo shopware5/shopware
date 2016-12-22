@@ -2343,7 +2343,7 @@ class sArticles
             }
         }
 
-        $data = array_merge($data, $this->getLinksOfProduct($product, $categoryId, $selection));
+        $data = array_merge($data, $this->getLinksOfProduct($product, $categoryId, !empty($selection)));
 
         $data["articleName"] = $this->sOptimizeText($data["articleName"]);
         $data["description_long"] = htmlspecialchars_decode($data["description_long"]);
@@ -2371,20 +2371,20 @@ class sArticles
      *
      * @param StoreFrontBundle\Struct\ListProduct $product
      * @param null $categoryId
-     * @param array $selection
+     * @param bool $addNumber
      * @return array
      */
-    private function getLinksOfProduct(StoreFrontBundle\Struct\ListProduct $product, $categoryId = null, array $selection)
+    private function getLinksOfProduct(StoreFrontBundle\Struct\ListProduct $product, $categoryId = null, $addNumber = false)
     {
         $baseFile = $this->config->get('baseFile');
         $context = $this->contextService->getShopContext();
 
         $detail = $baseFile . "?sViewport=detail&sArticle=" . $product->getId();
-        if (!empty($selection)) {
-            $detail .= '&number=' . $product->getNumber();
-        }
         if ($categoryId) {
             $detail .= '&sCategory=' . $categoryId;
+        }
+        if ($addNumber) {
+            $detail .= '&number=' . $product->getNumber();
         }
         $rewrite = Shopware()->Modules()->Core()->sRewriteLink($detail, $product->getName());
 
