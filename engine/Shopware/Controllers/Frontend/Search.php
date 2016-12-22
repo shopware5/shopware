@@ -92,6 +92,8 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
         /** @var $mapper \Shopware\Components\QueryAliasMapper */
         $mapper = $this->get('query_alias_mapper');
 
+        $service = Shopware()->Container()->get('shopware_storefront.custom_sorting_service');
+
         $this->View()->assign([
             'term' => $term,
             'criteria' => $criteria,
@@ -104,6 +106,7 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
             'shortParameters' => $mapper->getQueryAliases(),
             'pageSizes' => array_values(explode("|", $pageCounts)),
             'ajaxCountUrlParams' => [],
+            'sortings' => $service->getShopSortings($context->getShop()->getId(), $context),
             'sSearchResults' => [
                 'sArticles' => $articles,
                 'sArticlesCount' => $result->getTotalCount()
