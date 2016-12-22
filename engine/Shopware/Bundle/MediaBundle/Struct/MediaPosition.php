@@ -37,6 +37,7 @@ class MediaPosition
     const PARSE_JSON = 2;
     const PARSE_SERIALIZE = 3;
     const PARSE_HTML = 4;
+    const PARSE_PIPES = 5;
 
     /**
      * @var string

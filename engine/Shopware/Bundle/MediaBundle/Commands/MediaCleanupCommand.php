@@ -30,8 +30,8 @@ use Shopware\Commands\ShopwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Helper\ProgressBar;
 use Shopware\Models\Media\Media;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
  * @category  Shopware
@@ -47,9 +47,9 @@ class MediaCleanupCommand extends ShopwareCommand
     {
         $this
             ->setName('sw:media:cleanup')
-            ->setHelp("The <info>%command.name%</info> collects unused media and deletes them.")
-            ->setDescription("Collect unused media move them to trash.")
-            ->addOption('delete', false, InputOption::VALUE_NONE, "Delete unused media.");
+            ->setHelp('The <info>%command.name%</info> collects unused media and moves them to the recycle bin album.')
+            ->setDescription('Collect unused media move them to trash.')
+            ->addOption('delete', false, InputOption::VALUE_NONE, 'Delete unused media.');
     }
 
     /**
@@ -57,35 +57,41 @@ class MediaCleanupCommand extends ShopwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $verb = "Moved";
+        $io = new SymfonyStyle($input, $output);
+
+        $io->section('Searching for unused media files.');
         $total = $this->handleMove();
+        $io->text(sprintf('%s unused item(s) found.', $total));
 
-        if ($input->getOption('delete')) {
-            if ($input->isInteractive()) {
-                $dialog = $this->getHelper('dialog');
-                if (!$dialog->askConfirmation($output, 'Are you sure you want to delete every file in the recycle bin? [y/N] ', false)) {
-                    return;
-                }
-            }
-
-            $verb = "Deleted";
-            $total = $this->handleCleanup($output);
+        if ($total === 0) {
+            return;
         }
 
-        $output->writeln("Cleanup: ".$verb." $total items.");
+        if ($input->getOption('delete')) {
+            if ($input->isInteractive() && !$io->confirm('Are you sure you want to delete every item in the recycle bin?')) {
+                return;
+            }
+
+            $deleted = $this->handleCleanup($io);
+            $io->success(sprintf('%d item(s) deleted.', $deleted));
+            return;
+        }
+
+        $io->success(sprintf('%d item(s) in recycle bin.', $total));
     }
 
 
     /**
      * Handles cleaning process and returns the number of deleted media objects
      *
-     * @param OutputInterface $output
+     * @param SymfonyStyle $io
      * @return int
      */
-    private function handleCleanup(OutputInterface $output)
+    private function handleCleanup(SymfonyStyle $io)
     {
         /** @var \Shopware\Components\Model\ModelManager $em */
         $em = $this->getContainer()->get('models');
+
         /** @var \Shopware\Models\Media\Repository $repository */
         $repository = $em->getRepository(Media::class);
 
@@ -95,14 +101,13 @@ class MediaCleanupCommand extends ShopwareCommand
         $count = $em->getQueryCount($query);
         $iterableResult = $query->iterate();
 
-        $progressBar = new ProgressBar($output, $count);
-        $progressBar->start();
+        $progressBar = $io->createProgressBar($count);
 
         try {
             foreach ($iterableResult as $key => $row) {
                 $media = $row[0];
                 $em->remove($media);
-                if ($key % 100 == 0) {
+                if ($key % 100 === 0) {
                     $em->flush();
                     $em->clear();
                 }
@@ -115,6 +120,7 @@ class MediaCleanupCommand extends ShopwareCommand
         }
 
         $progressBar->finish();
+        $io->newLine(2);
 
         return $count;
     }
@@ -127,8 +133,6 @@ class MediaCleanupCommand extends ShopwareCommand
         $gc = $this->getContainer()->get('shopware_media.garbage_collector');
         $gc->run();
 
-        $total = (int)$gc->getCount();
-
-        return $total;
+        return (int) $gc->getCount();
     }
 }
