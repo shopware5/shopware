@@ -1226,8 +1226,8 @@ class sArticles
             return [];
         }
 
-        $hideNoInstock = $this->config->get('hideNoInstock');
-        if ($hideNoInstock && !$product->isAvailable()) {
+        $hideNoInStock = $this->config->get('hideNoInStock');
+        if ($hideNoInStock && !$product->isAvailable()) {
             return [];
         }
 
