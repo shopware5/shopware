@@ -56,9 +56,6 @@ class MailTransport
                 $options['username'] = $config->MailerUsername;
                 $options['password'] = $config->MailerPassword;
             }
-            if (!isset($options['ssl']) && !empty($config->MailerSMTPSecure)) {
-                $options['ssl'] = $config->MailerSMTPSecure;
-            }
             if (!isset($options['port']) && !empty($config->MailerPort)) {
                 $options['port'] = $config->MailerPort;
             }
