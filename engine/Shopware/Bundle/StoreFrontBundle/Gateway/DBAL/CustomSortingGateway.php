@@ -90,22 +90,6 @@ class CustomSortingGateway implements CustomSortingGatewayInterface
     /**
      * {@inheritdoc}
      */
-    public function getShopSortings($shopId, ShopContextInterface $context)
-    {
-        $query = $this->createQuery($context);
-        $query->orderBy('customSorting.position', 'ASC');
-        $query->andWhere('customSorting.shops LIKE :shops');
-        $query->setParameter(':shops', '%|'. (int) $shopId .'|%');
-
-        $sortings = $this->hydrate(
-            $query->execute()->fetchAll(\PDO::FETCH_ASSOC)
-        );
-        return $sortings;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getSortingsOfCategories(array $categoryIds, ShopContextInterface $context)
     {
         $mapping = $this->getCategoryMapping(

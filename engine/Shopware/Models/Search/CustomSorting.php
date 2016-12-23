@@ -73,12 +73,6 @@ class CustomSorting extends ModelEntity
     protected $sortings;
 
     /**
-     * @var string
-     * @ORM\Column(nullable=true)
-     */
-    protected $shops;
-
-    /**
      * @return int
      */
     public function getId()
@@ -132,22 +126,6 @@ class CustomSorting extends ModelEntity
     public function setSortings($sortings)
     {
         $this->sortings = $sortings;
-    }
-
-    /**
-     * @return string
-     */
-    public function getShops()
-    {
-        return $this->shops;
-    }
-
-    /**
-     * @param string $shops
-     */
-    public function setShops($shops)
-    {
-        $this->shops = $shops;
     }
 
     /**

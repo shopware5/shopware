@@ -37,13 +37,6 @@ interface CustomSortingServiceInterface
     public function getList(array $ids, ShopContextInterface $context);
 
     /**
-     * @param int $shopId
-     * @param ShopContextInterface $context
-     * @return CustomSorting[] index by id, sorted by position
-     */
-    public function getShopSortings($shopId, ShopContextInterface $context);
-
-    /**
      * @param int[] $categoryIds
      * @param ShopContextInterface $context
      * @return array[] indexed by category id, sorted by category mapping or position

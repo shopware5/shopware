@@ -56,10 +56,6 @@ class CustomListingHydrator extends Hydrator
         $sorting->setLabel($data['__customSorting_label']);
         $sorting->setPosition((int) $data['__customSorting_position']);
 
-        $sorting->setShopIds(
-            array_values(array_filter(explode('|', $data['__customSorting_shops'])))
-        );
-
         $sorting->setSortings(
             $this->unserialize(
                 json_decode($data['__customSorting_sortings'], true)

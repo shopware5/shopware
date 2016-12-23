@@ -1,4 +1,3 @@
-<?php
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -22,24 +21,20 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\StoreFrontBundle\Gateway;
+Ext.define('Shopware.apps.Config.view.element.CustomSortingGrid', {
+    extend: 'Shopware.form.field.CustomSortingGrid',
+    alias: 'widget.config-element-custom-sorting-grid',
 
-use Shopware\Bundle\StoreFrontBundle\Struct\Search\CustomSorting;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+    initComponent: function() {
+        var me = this,
+            factory = Ext.create('Shopware.attribute.SelectionFactory');
 
-interface CustomSortingGatewayInterface
-{
-    /**
-     * @param int[] $ids
-     * @param ShopContextInterface $context
-     * @return CustomSorting[] indexed by id, sorted by provided id array
-     */
-    public function getList(array $ids, ShopContextInterface $context);
+        me.store = factory.createEntitySearchStore("Shopware\\Models\\Search\\CustomSorting");
+        me.searchStore = factory.createEntitySearchStore("Shopware\\Models\\Search\\CustomSorting");
+        me.callParent(arguments);
 
-    /**
-     * @param int[] $categoryIds
-     * @param ShopContextInterface $context
-     * @return array[] indexed by category id, sorted by category mapping or position
-     */
-    public function getSortingsOfCategories(array $categoryIds, ShopContextInterface $context);
-}
+        if (me.value) {
+            me.setValue(me.value);
+        }
+    }
+});

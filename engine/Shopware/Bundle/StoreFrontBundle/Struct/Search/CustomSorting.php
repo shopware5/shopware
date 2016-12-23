@@ -55,11 +55,6 @@ class CustomSorting extends Extendable
     protected $sortings;
 
     /**
-     * @var int[]
-     */
-    protected $shopIds;
-
-    /**
      * @return int
      */
     public function getId()
@@ -137,21 +132,5 @@ class CustomSorting extends Extendable
     public function setSortings(array $sortings)
     {
         $this->sortings = $sortings;
-    }
-
-    /**
-     * @return int[]
-     */
-    public function getShopIds()
-    {
-        return $this->shopIds;
-    }
-
-    /**
-     * @param int[] $shopIds
-     */
-    public function setShopIds(array $shopIds)
-    {
-        $this->shopIds = $shopIds;
     }
 }

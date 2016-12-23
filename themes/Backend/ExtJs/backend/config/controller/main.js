@@ -53,7 +53,8 @@ Ext.define('Shopware.apps.Config.controller.Main', {
         'element.DateTime', 'element.Interval', 'element.SelectTree',
         'element.ProductBoxLayoutSelect',
         'element.Color',
-        'element.CustomSortingSelection'
+        'element.CustomSortingSelection',
+        'element.CustomSortingGrid'
     ],
 
     stores:[

@@ -54,14 +54,6 @@ class CustomSortingService implements CustomSortingServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function getShopSortings($shopId, ShopContextInterface $context)
-    {
-        return $this->gateway->getShopSortings($shopId, $context);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getSortingsOfCategories(array $categoryIds, ShopContextInterface $context)
     {
         return $this->gateway->getSortingsOfCategories($categoryIds, $context);

@@ -125,7 +125,7 @@ Ext.define('Shopware.apps.Category.view.main.Window', {
         me.addEvents('saveDetail');
 
         me.tabPanel = Ext.create('Ext.tab.Panel', {
-            items:me.getTabs(),
+            items: me.getTabs(),
             split: true,
             flex: 1
         });

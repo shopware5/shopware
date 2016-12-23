@@ -1279,8 +1279,7 @@ class FieldHelper
             'customSorting.active as __customSorting_active',
             'customSorting.display_in_categories as __customSorting_display_in_categories',
             'customSorting.position as __customSorting_position',
-            'customSorting.sortings as __customSorting_sortings',
-            'customSorting.shops as __customSorting_shops'
+            'customSorting.sortings as __customSorting_sortings'
         ];
     }
 

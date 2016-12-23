@@ -38,7 +38,6 @@ Ext.define('Shopware.apps.Base.model.CustomSorting', {
         { name: 'label', type: 'string' },
         { name: 'active', type: 'boolean' },
         { name: 'displayInCategories', type: 'boolean' },
-        { name: 'shops', type: 'string' },
         { name: 'position', type: 'int' },
         { name: 'sortings', type: 'array' }
     ]

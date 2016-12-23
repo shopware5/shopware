@@ -222,7 +222,7 @@ This changelog references changes done in Shopware 5.3 patch versions.
     * `frontend_listing_actions_sort_field_price_desc`
     * `frontend_listing_actions_sort_field_name`
 * Removed `\Shopware_Controllers_Backend_Performance::getListingSortingsAction`
-* Removed `\Shopware\Bundle\SearchBundle\CriteriaRequestHandler\CoreCriteriaRequestHandler` constants:
+* Removed constants of `\Shopware\Bundle\SearchBundle\CriteriaRequestHandler\CoreCriteriaRequestHandler` and `Shopware\Bundle\SearchBundle\StoreFrontCriteriaFactory`:
     * `SORTING_RELEASE_DATE`
     * `SORTING_POPULARITY`
     * `SORTING_CHEAPEST_PRICE`

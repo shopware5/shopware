@@ -59,26 +59,10 @@ Ext.define('Shopware.apps.Config.view.custom_search.sorting.Detail', {
                         fieldLabel: '{s name="sortings"}{/s}',
                         helpText: '{s name="sortings_help"}{/s}',
                         height: 180
-                    },
-                    shops: this.createShopField
+                    }
                 }
             }]
         };
-    },
-
-    createShopField: function() {
-        var me = this;
-        me.shopSelection = Ext.create('Shopware.form.field.ShopGrid', {
-            fieldLabel: '{s name="shops"}{/s}',
-            helpText: '{s name="shops_help"}{/s}',
-            name: 'shops',
-            height: 180,
-            labelWidth: 130,
-            allowSorting: false,
-            store: this.createEntitySearchStore("Shopware\\Models\\Shop\\Shop"),
-            searchStore: this.createEntitySearchStore("Shopware\\Models\\Shop\\Shop")
-        });
-        return me.shopSelection;
     }
 });
 

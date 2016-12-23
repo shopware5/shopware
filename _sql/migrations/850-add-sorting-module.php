@@ -18,11 +18,17 @@ class Migrations_Migration850 extends AbstractMigration
 
         $this->addDefaultSortings();
 
+        $this->importSortingTranslations();
+
         $this->addCategorySortings();
 
         $this->addSortingsToProductStreams();
 
         $this->importProductStreamSortings();
+
+        $this->moveCategoryDefaultSorting();
+
+        $this->addSearchConfiguration();
     }
 
     private function addSortingModule()
@@ -35,7 +41,6 @@ CREATE TABLE IF NOT EXISTS `s_search_custom_sorting` (
   `display_in_categories` int(1) unsigned NOT NULL,
   `position` int(11) NOT NULL,
   `sortings` LONGTEXT NOT NULL,
-  `shops` LONGTEXT NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 SQL;
@@ -79,53 +84,17 @@ SQL;
     private function addDefaultSortings()
     {
         $sql = <<<SQL
-INSERT INTO `s_search_custom_sorting` (`id`, `label`, `active`, `display_in_categories`, `position`, `sortings`, `shops`) VALUES
-(1, 'Erscheinungsdatum', 1, 1, -10, '{"Shopware\\\\\\\Bundle\\\\\\\SearchBundle\\\\\\\Sorting\\\\\\\ReleaseDateSorting":{"direction":"DESC"}}', ''),
-(2, 'Beliebtheit', 1, 1, 1, '{"Shopware\\\\\\\Bundle\\\\\\\SearchBundle\\\\\\\Sorting\\\\\\\PopularitySorting":{"direction":"DESC"}}', ''),
-(3, 'Niedrigster Preis', 1, 1, 2, '{"Shopware\\\\\\\Bundle\\\\\\\SearchBundle\\\\\\\Sorting\\\\\\\PriceSorting":{"direction":"ASC"}}', ''),
-(4, 'Höchster Preis', 1, 1, 3, '{"Shopware\\\\\\\Bundle\\\\\\\SearchBundle\\\\\\\Sorting\\\\\\\PriceSorting":{"direction":"DESC"}}', ''),
-(5, 'Artikelbezeichnung', 1, 1, 4, '{"Shopware\\\\\\\Bundle\\\\\\\SearchBundle\\\\\\\Sorting\\\\\\\ProductNameSorting":{"direction":"ASC"}}', ''),
-(6, 'Artikelbezeichnung', 0, 1, 5, '{"Shopware\\\\\\\Bundle\\\\\\\SearchBundle\\\\\\\Sorting\\\\\\\ProductNameSorting":{"direction":"DESC"}}', ''),
-(7, 'Relevanz', 1, 0, 6, '{"Shopware\\\\\\\Bundle\\\\\\\SearchBundle\\\\\\\Sorting\\\\\\\SearchRankingSorting":{}}', '');
+INSERT INTO `s_search_custom_sorting` (`id`, `label`, `active`, `display_in_categories`, `position`, `sortings`) VALUES
+(1, 'Erscheinungsdatum', 1, 1, -10, '{"Shopware\\\\\\\Bundle\\\\\\\SearchBundle\\\\\\\Sorting\\\\\\\ReleaseDateSorting":{"direction":"DESC"}}'),
+(2, 'Beliebtheit', 1, 1, 1, '{"Shopware\\\\\\\Bundle\\\\\\\SearchBundle\\\\\\\Sorting\\\\\\\PopularitySorting":{"direction":"DESC"}}'),
+(3, 'Niedrigster Preis', 1, 1, 2, '{"Shopware\\\\\\\Bundle\\\\\\\SearchBundle\\\\\\\Sorting\\\\\\\PriceSorting":{"direction":"ASC"}}'),
+(4, 'Höchster Preis', 1, 1, 3, '{"Shopware\\\\\\\Bundle\\\\\\\SearchBundle\\\\\\\Sorting\\\\\\\PriceSorting":{"direction":"DESC"}}'),
+(5, 'Artikelbezeichnung', 1, 1, 4, '{"Shopware\\\\\\\Bundle\\\\\\\SearchBundle\\\\\\\Sorting\\\\\\\ProductNameSorting":{"direction":"ASC"}}'),
+(6, 'Artikelbezeichnung', 0, 1, 5, '{"Shopware\\\\\\\Bundle\\\\\\\SearchBundle\\\\\\\Sorting\\\\\\\ProductNameSorting":{"direction":"DESC"}}'),
+(7, 'Relevanz', 1, 0, 6, '{"Shopware\\\\\\\Bundle\\\\\\\SearchBundle\\\\\\\Sorting\\\\\\\SearchRankingSorting":{}}');
 SQL;
 
         $this->addSql($sql);
-
-        $shops = $this->connection->query("SELECT id, main_id, locale_id FROM s_core_shops")->fetchAll(PDO::FETCH_ASSOC);
-        $imploded = '|' . implode('|', array_column($shops, 'id')) . '|';
-
-        $sql = "UPDATE s_search_custom_sorting SET shops = '" . $imploded . "'";
-        $this->addSql($sql);
-
-        foreach ($shops as $shop) {
-            $translationShopId = $shop['main_id'] ?: $shop['id'];
-            $localeId = $shop['locale_id'];
-
-            $insert = $this->getExistingSortingTranslations($translationShopId, $localeId);
-
-            if (!empty($insert)) {
-                $this->addSql(
-                    "INSERT INTO s_core_translations (objecttype, objectdata, objectkey, objectlanguage)
-                     VALUES ('custom_sorting', '" . serialize($insert) . "', '1', ". $shop['id'] .")"
-                );
-            }
-        }
-
-        $this->addSql("SET @formId = (SELECT id FROM s_core_config_forms WHERE name = 'Frontend30' LIMIT 1)");
-        $this->addSql("
-            UPDATE s_core_config_elements
-            SET form_id = @formId,
-                `type` = 'custom-sorting-selection',
-                 label = 'Kategorie Standard Sortierung'
-            WHERE name = 'defaultListingSorting'
-        ");
-
-        $this->addSql("SET @elementId = (SELECT id FROM s_core_config_elements WHERE name = 'defaultListingSorting' LIMIT 1)");
-
-        $this->addSql("
-INSERT IGNORE INTO `s_core_config_element_translations` (`id` ,`element_id` ,`locale_id` ,`label` ,`description`)
-VALUES (NULL,  @elementId,  '2',  'Default category sorting', NULL);
-");
     }
 
     /**
@@ -185,8 +154,8 @@ VALUES (NULL,  @elementId,  '2',  'Default category sorting', NULL);
             $name = 'Stream import: ' . $sorting['name'] . ' [' . $sorting['id'] . ']';
 
             $this->addSql("
-INSERT INTO `s_search_custom_sorting` (`label`, `active`, `display_in_categories`, `position`, `sortings`, `shops`) VALUES
-('".$name."', 1, 0, 0, '". str_replace("\\", "\\\\", $sorting['sorting']) ."', '');
+INSERT INTO `s_search_custom_sorting` (`label`, `active`, `display_in_categories`, `position`, `sortings`) VALUES
+('".$name."', 1, 0, 0, '". str_replace("\\", "\\\\", $sorting['sorting']) ."');
             ");
 
             $this->addSql("UPDATE s_product_streams SET sorting_id = (SELECT id FROM s_search_custom_sorting WHERE name = '". $name ."' LIMIT 1) WHERE id  = " . (int) $sorting['id']);
@@ -223,5 +192,59 @@ INSERT INTO `s_search_custom_sorting` (`label`, `active`, `display_in_categories
                 return 7;
         }
         return null;
+    }
+
+    private function importSortingTranslations()
+    {
+        $shops = $this->connection->query("SELECT id, main_id, locale_id FROM s_core_shops")->fetchAll(PDO::FETCH_ASSOC);
+
+        foreach ($shops as $shop) {
+            $translationShopId = $shop['main_id'] ?: $shop['id'];
+            $localeId = $shop['locale_id'];
+
+            $insert = $this->getExistingSortingTranslations($translationShopId, $localeId);
+
+            if (!empty($insert)) {
+                $this->addSql(
+                    "INSERT INTO s_core_translations (objecttype, objectdata, objectkey, objectlanguage)
+                     VALUES ('custom_sorting', '" . serialize($insert) . "', '1', " . $shop['id'] . ")"
+                );
+            }
+        }
+    }
+
+    private function moveCategoryDefaultSorting()
+    {
+        $this->addSql("SET @formId = (SELECT id FROM s_core_config_forms WHERE name = 'Frontend30' LIMIT 1)");
+        $this->addSql("
+            UPDATE s_core_config_elements
+            SET form_id = @formId,
+                `type` = 'custom-sorting-selection',
+                 label = 'Kategorie Standard Sortierung'
+            WHERE name = 'defaultListingSorting'
+        ");
+
+        $this->addSql("SET @elementId = (SELECT id FROM s_core_config_elements WHERE name = 'defaultListingSorting' LIMIT 1)");
+
+        $this->addSql("
+INSERT IGNORE INTO `s_core_config_element_translations` (`id` ,`element_id` ,`locale_id` ,`label` ,`description`)
+VALUES (NULL,  @elementId,  '2',  'Default category sorting', NULL);
+");
+    }
+
+    private function addSearchConfiguration()
+    {
+        $this->addSql("SET @formId = (SELECT id FROM s_core_config_forms WHERE name = 'Search' LIMIT 1);");
+
+        $this->addSql("
+INSERT INTO `s_core_config_elements` (`form_id`, `name`, `value`, `label`, `description`, `type`, `required`, `position`, `scope`, `options`)
+VALUES (@formId, 'searchSortings', 's:15:\"|7|1|2|3|4|5|6|\";', 'Verfügbare Sortierungen', '', 'custom-sorting-grid', '1', '0', '1', NULL);
+        ");
+
+        $this->addSql("SET @elementId = (SELECT id FROM s_core_config_elements WHERE name = 'defaultSearchSorting' LIMIT 1)");
+        $this->addSql("
+INSERT IGNORE INTO `s_core_config_element_translations` (`id` ,`element_id` ,`locale_id` ,`label` ,`description`)
+VALUES (NULL,  @elementId,  '2',  'Available sortings', NULL);
+        ");
     }
 }
