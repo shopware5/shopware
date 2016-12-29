@@ -46,7 +46,8 @@ Ext.define('Shopware.apps.Partner.controller.Partner', {
      * all references to get the elements by the applicable selector
      */
     refs:[
-        { ref:'detailWindow', selector:'partner-partner-window' }
+        { ref:'detailWindow', selector:'partner-partner-window' },
+        { ref:'attributeForm', selector:'partner-partner-window shopware-attribute-form' }
     ],
 
     /**
@@ -218,6 +219,7 @@ Ext.define('Shopware.apps.Partner.controller.Partner', {
             formPanel = me.getDetailWindow().formPanel,
             form = formPanel.getForm(),
             listStore = me.subApplication.listStore,
+            attributeForm = me.getAttributeForm(),
             record = form.getRecord();
 
         //check if all required fields are valid
@@ -230,6 +232,7 @@ Ext.define('Shopware.apps.Partner.controller.Partner', {
         record.save({
             callback: function (self,operation) {
                 if (operation.success) {
+                    attributeForm.saveAttribute(record.get('id'));
                     listStore.load();
                     Shopware.Notification.createGrowlMessage('',me.snippets.onSaveChangesSuccess, me.snippets.growlMessage);
                     me.getDetailWindow().destroy();
