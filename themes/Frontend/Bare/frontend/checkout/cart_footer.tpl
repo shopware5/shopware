@@ -1,17 +1,17 @@
 {* Add product using the sku *}
 {block name='frontend_checkout_cart_footer_add_product'}
-	<form method="post" action="{url action='addArticle' sTargetAction=$sTargetAction}" class="table--add-product add-product--form block-group">
+    <form method="post" action="{url action='addArticle' sTargetAction=$sTargetAction}" class="table--add-product add-product--form block-group">
 
-		{block name='frontend_checkout_cart_footer_add_product_field'}
-			<input name="sAdd" class="add-product--field block" type="text" placeholder="{s name='CheckoutFooterAddProductPlaceholder' namespace='frontend/checkout/cart_footer_left'}{/s}" />
-		{/block}
+        {block name='frontend_checkout_cart_footer_add_product_field'}
+            <input name="sAdd" class="add-product--field block" type="text" placeholder="{s name='CheckoutFooterAddProductPlaceholder' namespace='frontend/checkout/cart_footer_left'}{/s}" />
+        {/block}
 
-		{block name='frontend_checkout_cart_footer_add_product_button'}
-			<button type="submit" class="add-product--button btn is--primary is--center block">
-				<i class="icon--arrow-right"></i>
-			</button>
-		{/block}
-	</form>
+        {block name='frontend_checkout_cart_footer_add_product_button'}
+            <button type="submit" class="add-product--button btn is--primary is--center block">
+                <i class="icon--arrow-right"></i>
+            </button>
+        {/block}
+    </form>
 {/block}
 
 {block name='frontend_checkout_cart_footer_element'}

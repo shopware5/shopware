@@ -37,7 +37,7 @@
         {$smarty.block.parent}
     {/if}
 
-	{include file="frontend/register/steps.tpl" sStepActive="paymentShipping"}
+    {include file="frontend/register/steps.tpl" sStepActive="paymentShipping"}
 {/block}
 
 {* Footer *}

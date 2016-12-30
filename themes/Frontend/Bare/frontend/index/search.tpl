@@ -4,18 +4,18 @@
         {block name="frontend_index_search_innerform"}{/block}
 
         {* Search icon *}
-		{block name='frontend_index_search_icon'}
+        {block name='frontend_index_search_icon'}
 
-		{/block}
+        {/block}
 
         {* Search field *}
-		{block name='frontend_index_search_field'}
-        	<input type="search" name="sSearch" class="main-search--field" autocomplete="off" autocapitalize="off" placeholder="{s name="IndexSearchFieldPlaceholder"}{/s}" maxlength="30"  />
-		{/block}
+        {block name='frontend_index_search_field'}
+            <input type="search" name="sSearch" class="main-search--field" autocomplete="off" autocapitalize="off" placeholder="{s name="IndexSearchFieldPlaceholder"}{/s}" maxlength="30"  />
+        {/block}
 
         {* Search input *}
-		{block name='frontend_index_search_field_submit'}
-        	<button type="submit" class="main-search--button">
+        {block name='frontend_index_search_field_submit'}
+            <button type="submit" class="main-search--button">
 
                 {* Search icon *}
                 {block name='frontend_index_search_field_submit_icon'}
@@ -27,7 +27,7 @@
                     <span class="main-search--text">{s name="IndexSearchFieldSubmit"}{/s}</span>
                 {/block}
             </button>
-		{/block}
+        {/block}
 
         {* Ajax loader *}
         {block name='frontend_index_search_ajax_loader'}

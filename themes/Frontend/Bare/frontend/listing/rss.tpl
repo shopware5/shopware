@@ -9,13 +9,13 @@
 <lastBuildDate>{time()|date:rss}</lastBuildDate>
 {foreach from=$sArticles item=sArticle key=key name="counter"}
 <item>
-	<title>{block name='frontend_listing_rss_article_name'}{$sArticle.articleName|escape}{/block}</title>
-	<guid>{block name='frontend_listing_rss_guid'}{$sArticle.linkDetails|rewrite:$sArticle.articleName|escape}{/block}</guid>
-	<link>{block name='frontend_listing_rss_link'}{$sArticle.linkDetails|rewrite:$sArticle.articleName|escape}{/block}</link>
-	<description>{block name='frontend_listing_rss_description'}{$sArticle.description_long|strip_tags|strip|truncate:280:"...":true|escape}{/block}</description>
-	<category>{block name='frontend_listing_rss_category'}{$sArticle.supplierName|escape}{/block}</category>
+    <title>{block name='frontend_listing_rss_article_name'}{$sArticle.articleName|escape}{/block}</title>
+    <guid>{block name='frontend_listing_rss_guid'}{$sArticle.linkDetails|rewrite:$sArticle.articleName|escape}{/block}</guid>
+    <link>{block name='frontend_listing_rss_link'}{$sArticle.linkDetails|rewrite:$sArticle.articleName|escape}{/block}</link>
+    <description>{block name='frontend_listing_rss_description'}{$sArticle.description_long|strip_tags|strip|truncate:280:"...":true|escape}{/block}</description>
+    <category>{block name='frontend_listing_rss_category'}{$sArticle.supplierName|escape}{/block}</category>
 {if $sArticle.changetime}
-	<pubDate>{block name='frontend_listing_rss_date'}{$sArticle.changetime|date:rss}{/block}</pubDate>
+    <pubDate>{block name='frontend_listing_rss_date'}{$sArticle.changetime|date:rss}{/block}</pubDate>
 {/if}
 </item>
 {/foreach}

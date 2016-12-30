@@ -26,56 +26,56 @@ In addition to the general `.unitize()` mixin, Shopware contains specific mixins
 `.unitize-variable(@value)`<br/>
 */
 
-	// @deprecated unitize mixin which should be called like ```.unitize(200, @remScaleFactor, height);```
+    // @deprecated unitize mixin which should be called like ```.unitize(200, @remScaleFactor, height);```
 .unitize(@value, @baseValue: @remScaleFactor, @property: font-size) when (isnumber(@value)) and(isnumber(@baseValue)) and (iskeyword(@property)) {
-	@pxValue: @value;
-	@remValue: (@value / @baseValue);
-	@{property}: ~"@{pxValue}px";
-	@{property}: ~"@{remValue}rem";
+    @pxValue: @value;
+    @remValue: (@value / @baseValue);
+    @{property}: ~"@{pxValue}px";
+    @{property}: ~"@{remValue}rem";
 }
-	// New default unitize mixin which should be called like ```.unitize(height, 200);```
+    // New default unitize mixin which should be called like ```.unitize(height, 200);```
 .unitize(@property, @value, @baseValue: @remScaleFactor) when (iskeyword(@property)) and (isnumber(@value)) and (isnumber(@baseValue)) {
-	@pxValue: @value;
-	@remValue: (@value / @baseValue);
-	@{property}: ~"@{pxValue}px";
-	@{property}: ~"@{remValue}rem";
+    @pxValue: @value;
+    @remValue: (@value / @baseValue);
+    @{property}: ~"@{pxValue}px";
+    @{property}: ~"@{remValue}rem";
 }
 
 .unitize-multiple(@topValue, @rightValue, @bottomValue: @topValue, @leftValue: @rightValue, @baseValue: @remScaleFactor, @property: padding) {
-	@pxTopValue: @topValue;
-	@emTopValue: (@topValue / @baseValue);
+    @pxTopValue: @topValue;
+    @emTopValue: (@topValue / @baseValue);
 
-	@pxRightValue: @rightValue;
-	@emRightValue: (@rightValue / @baseValue);
+    @pxRightValue: @rightValue;
+    @emRightValue: (@rightValue / @baseValue);
 
-	@pxBottomValue: @bottomValue;
-	@emBottomValue: (@bottomValue / @baseValue);
+    @pxBottomValue: @bottomValue;
+    @emBottomValue: (@bottomValue / @baseValue);
 
-	@pxLeftValue: @leftValue;
-	@emLeftValue: (@leftValue / @baseValue);
+    @pxLeftValue: @leftValue;
+    @emLeftValue: (@leftValue / @baseValue);
 
-	@{property}: ~"@{pxTopValue}px @{pxRightValue}px @{pxBottomValue}px @{pxLeftValue}px";
-	@{property}: ~"@{emTopValue}rem @{emRightValue}rem @{emBottomValue}rem @{emLeftValue}rem";
+    @{property}: ~"@{pxTopValue}px @{pxRightValue}px @{pxBottomValue}px @{pxLeftValue}px";
+    @{property}: ~"@{emTopValue}rem @{emRightValue}rem @{emBottomValue}rem @{emLeftValue}rem";
 }
 
 .unitize-height(@value, @baseValue: @remScaleFactor) {
-	.unitize(height, @value, @baseValue);
+    .unitize(height, @value, @baseValue);
 }
 
 .unitize-width(@value, @baseValue: @remScaleFactor) {
-	.unitize(width, @value, @baseValue);
+    .unitize(width, @value, @baseValue);
 }
 
 .unitize-max-height(@value, @baseValue: @remScaleFactor) {
-	.unitize(max-height, @value, @baseValue);
+    .unitize(max-height, @value, @baseValue);
 }
 
 .unitize-min-height(@value, @baseValue: @remScaleFactor) {
-	.unitize(min-height, @value, @baseValue);
+    .unitize(min-height, @value, @baseValue);
 }
 
 .unitize-max-width(@value, @baseValue: @remScaleFactor) {
-	.unitize(max-width, @value, @baseValue);
+    .unitize(max-width, @value, @baseValue);
 }
 
 .unitize-min-width(@value, @baseValue: @remScaleFactor) {
@@ -83,13 +83,13 @@ In addition to the general `.unitize()` mixin, Shopware contains specific mixins
 }
 
 .unitize-margin(@topValue, @rightValue, @bottomValue: @topValue, @leftValue: @rightValue, @baseValue: @remScaleFactor) {
-	.unitize-multiple(@topValue, @rightValue, @bottomValue, @leftValue, @baseValue, margin);
+    .unitize-multiple(@topValue, @rightValue, @bottomValue, @leftValue, @baseValue, margin);
 }
 
 .unitize-padding(@topValue, @rightValue, @bottomValue: @topValue, @leftValue: @rightValue, @baseValue: @remScaleFactor) {
-	.unitize-multiple(@topValue, @rightValue, @bottomValue, @leftValue, @baseValue, padding);
+    .unitize-multiple(@topValue, @rightValue, @bottomValue, @leftValue, @baseValue, padding);
 }
 
 .unitize-variable(@value, @baseValue: @remScaleFactor) {
-	@emValue: (@value / @baseValue);
+    @emValue: (@value / @baseValue);
 }
