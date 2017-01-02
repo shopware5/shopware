@@ -106,7 +106,7 @@ Selectfield
 Creates a styled combobox selection for the basic select element.
 
 ```
-<div class="select-field>
+<div class="select-field">
     <select>
         <option selected="selected" disabled="disabled" value="">Disabled Option</option>
         <option>Option 1</option>
@@ -115,7 +115,8 @@ Creates a styled combobox selection for the basic select element.
 </div>
 ```
 */
-.select-field {
+.select-field,
+.js--fancy-select {
     .unitize(max-width, 290);
     .unitize-height(42);
     width: 100%;

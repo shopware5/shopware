@@ -70,6 +70,7 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Changed template `component_article_slider.tpl` to show provided products instead of always fetching them via ajax
 * Changed emotion preview to not save the current state before showing preview 
 * Changed command `sw:thumbnail:cleanup` to search the filesystem to remove orphaned thumbnails
+* Changed the jQuery plugin `src/js/jquery.selectbox-replacement.js` to be used only as a polyfill. Use the CSS-only version for select fields instead.
 
 ### Removals
 
@@ -223,9 +224,7 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Removed method `Shopware_Controllers_Widgets_Emotion::getBannerSlider()`, has been replaced by `Shopware\Bundle\EmotionBundle\ComponentHandler\BannerSliderComponentHandler`
 * Removed method `Shopware_Controllers_Widgets_Emotion::getArticleSlider()`, has been replaced by `Shopware\Bundle\EmotionBundle\ComponentHandler\ArticleSliderComponentHandler`
 * Removed method `Shopware_Controllers_Widgets_Emotion::getHtml5Video()`, has been replaced by `Shopware\Bundle\EmotionBundle\ComponentHandler\Html5VideoComponentHandler`
-* Removed select field replacement via JavaScript
-    * Removed the jQuery plugin `src/js/jquery.selectbox-replacement.js` completely
-    * Removed LESS variable `@zindex-fancy-select`
+* Removed LESS variable `@zindex-fancy-select`
 
 ### Deprecations
 
@@ -273,7 +272,7 @@ For more information, please refer to our [Captcha Documentation](https://develo
 
 ### Select field replacement
 
-The replacement of the select field elements via JavaScript was removed completely. A styled select field can now be simply achieved by adding the following wrapper element.
+The replacement of the select field elements via JavaScript is deprecated and will be removed in a future release. You can create a styled select field with a simple CSS-only solution by adding a wrapper element.
 
 ```
 <div class="select-field">
