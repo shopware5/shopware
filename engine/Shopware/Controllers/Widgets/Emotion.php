@@ -22,6 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Bundle\EmotionBundle\Struct\Element;
 use Shopware\Bundle\EmotionBundle\Struct\Emotion;
 use Shopware\Bundle\SearchBundle\ProductSearchResult;
 use Shopware\Bundle\SearchBundle\Sorting\PopularitySorting;
@@ -66,6 +67,8 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         if ($emotion->isPreview() && $emotion->getPreviewSecret() !== $this->Request()->getParam('secret')) {
             return;
         }
+
+        $emotions = array_map([$this, 'getLegacyEmotion'], $emotions);
 
         if ($emotion->getTemplate()) {
             $this->View()->loadTemplate('widgets/emotion/' . $emotion->getTemplate()->getFile());
@@ -294,5 +297,24 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         $this->View()->assign('fixedImageSize', $this->Request()->getParam('fixedImageSize', true));
         $this->View()->assign('pages', $values["pages"] > $maxPages ? $maxPages : $values["pages"]);
         $this->View()->assign('sPerPage', $limit);
+    }
+
+    /**
+     * @param Emotion $emotion
+     * @return array
+     */
+    private function getLegacyEmotion(Emotion $emotion)
+    {
+        $emotionConverter = $this->container->get('shopware_emotion.emotion_struct_converter');
+        $legacyEmotion = $emotionConverter->convertEmotion($emotion);
+
+        /** @var Element $element */
+        foreach ($emotion->getElements() as $index => $element) {
+            $legacyEmotion['elements'][$index] = $emotionConverter->convertEmotionElement($element);
+        }
+
+        $legacyEmotion['elements'] = array_values($legacyEmotion['elements']);
+
+        return $legacyEmotion;
     }
 }

@@ -791,20 +791,22 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
             case 'widgets/emotion':
                 /** @var \Shopware\Bundle\EmotionBundle\Struct\Emotion $emotion */
                 foreach ($view->getAssign('sEmotions') as $emotion) {
-                    $cacheIds[] = 'e' . $emotion->getId();
-                    foreach ($emotion->getElements() as $element) {
-                        if ($element->getComponent()->getType() === ArticleComponentHandler::COMPONENT_NAME) {
+                    $cacheIds[] = 'e' . $emotion['id'];
+
+                    foreach ($emotion['elements'] as $element) {
+                        if ($element['component']['type'] === ArticleComponentHandler::COMPONENT_NAME) {
+
                             /** @var \Shopware\Bundle\StoreFrontBundle\Struct\ListProduct $product */
-                            $product = $element->getData()->get('product');
+                            $product = $element['data']['product'];
                             if (!$product) {
                                 continue;
                             }
-
                             $articleIds[] = $product->getId();
                             $articleIds[] = $product->getVariantId();
-                        } elseif ($element->getComponent()->getType() === ArticleSliderComponentHandler::COMPONENT_NAME) {
+                        } elseif ($element['component']['type'] === ArticleSliderComponentHandler::COMPONENT_NAME) {
+
                             /** @var \Shopware\Bundle\StoreFrontBundle\Struct\ListProduct[] $products */
-                            $products = $element->getData()->get('products');
+                            $products = $element['data']['products'];
                             foreach ($products as $product) {
                                 $articleIds[] = $product->getId();
                                 $articleIds[] = $product->getVariantId();
