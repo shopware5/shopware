@@ -121,4 +121,9 @@ interface ShopContextInterface
      * @return State|null
      */
     public function getState();
+
+    /**
+     * @return int[]
+     */
+    public function getActiveCustomerStreamIds();
 }

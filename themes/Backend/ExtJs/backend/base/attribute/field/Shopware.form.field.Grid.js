@@ -68,6 +68,8 @@ Ext.define('Shopware.form.field.Grid', {
      */
     animateAddItem: true,
 
+    useSeparator: true,
+
     /**
      * @boolean
      */
@@ -315,6 +317,9 @@ Ext.define('Shopware.form.field.Grid', {
             return null;
         }
 
+        if (!me.useSeparator) {
+            return recordData;
+        }
         return me.separator + recordData.join(me.separator) + me.separator;
     },
 
@@ -328,9 +333,12 @@ Ext.define('Shopware.form.field.Grid', {
         }
 
         try {
-            var ids = value.split(me.separator);
-            ids = ids.filter(function(value) {
-                return value.length > 0;
+            var ids = value;
+            if (me.useSeparator) {
+                ids = value.split(me.separator);
+            }
+            ids = ids.filter(function(id) {
+                return id.length > 0 || id > 0;
             });
         } catch (e) {
             return;

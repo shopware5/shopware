@@ -41,7 +41,7 @@ Ext.define('Shopware.form.field.EmotionGrid', {
         return [
             me.createSortingColumn(),
             activeColumn,
-            { dataIndex: 'name', flex: 1 },
+            { dataIndex: 'name', flex: 2 },
             { dataIndex: 'type', flex: 1 },
             { dataIndex: 'device', flex: 1, renderer: me.deviceRenderer },
             me.createActionColumn()

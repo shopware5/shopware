@@ -1,0 +1,101 @@
+<?php
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
+
+namespace Shopware\Bundle\EmotionBundle\Service;
+
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Components\Emotion\DeviceConfiguration;
+
+class StoreFrontEmotionDeviceConfiguration
+{
+    /**
+     * @var DeviceConfiguration
+     */
+    private $deviceConfiguration;
+
+    /**
+     * @param DeviceConfiguration $deviceConfiguration
+     */
+    public function __construct(DeviceConfiguration $deviceConfiguration)
+    {
+        $this->deviceConfiguration = $deviceConfiguration;
+    }
+
+    /**
+     * @param int $categoryId
+     * @param ShopContextInterface $context
+     * @return array
+     */
+    public function getCategoryConfiguration($categoryId, ShopContextInterface $context)
+    {
+        $configurations = $this->deviceConfiguration->get($categoryId);
+
+        if (empty($configurations)) {
+            return [];
+        }
+
+        //no active stream detected? display only emotions without customer stream configuration
+        if (empty($context->getActiveCustomerStreamIds())) {
+            return array_filter($configurations, function($config) {
+                 return $config['customer_stream_id'] === null;
+            });
+        }
+
+        //filter emotions which has customer stream configuration for active streams or which has no configuration
+        $configurations = array_filter(
+            $configurations,
+            function(array $config) use ($context) {
+                return (
+                    $config['customer_stream_id'] === null
+                    ||
+                    in_array($config['customer_stream_id'], $context->getActiveCustomerStreamIds())
+                );
+            }
+        );
+
+        //collect emotion replacements
+        $replacements = $this->getReplacements($configurations);
+
+        //remove all emotions which replaced by customer stream emotions
+        return array_filter(
+            $configurations,
+            function(array $config) use ($replacements) {
+                return !in_array($config['id'], $replacements);
+            }
+        );
+    }
+
+    /**
+     * @param array $configurations
+     * @return array
+     */
+    private function getReplacements(array $configurations)
+    {
+        $replacements = [];
+        foreach ($configurations as $config) {
+            $replacements = array_merge($replacements, explode('|', $config['replacement']));
+        }
+        return array_filter($replacements);
+    }
+}
