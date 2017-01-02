@@ -22,6 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Bundle\EmotionBundle\Service\StoreFrontEmotionDeviceConfiguration;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 /**
@@ -42,7 +43,9 @@ class Shopware_Controllers_Frontend_Index extends Enlight_Controller_Action
         $context = Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext();
         $categoryId = $context->getShop()->getCategory()->getId();
 
-        $emotions = $this->get('emotion_device_configuration')->get($categoryId);
+        /** @var StoreFrontEmotionDeviceConfiguration $service */
+        $service = $this->get('shopware_emotion.store_front_emotion_device_configuration');
+        $emotions = $service->getCategoryConfiguration($categoryId, $context);
 
         $categoryContent = Shopware()->Modules()->Categories()->sGetCategoryContent($categoryId);
 

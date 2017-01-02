@@ -138,6 +138,43 @@
             <argument type="service" id="models" />
         </service>
 
+        <service id="shopware_attribute.emotion_repository" class="Shopware\Bundle\AttributeBundle\Repository\GenericRepository">
+            <argument>Shopware\Models\Emotion\Emotion</argument>
+            <argument type="service" id="models" />
+            <argument type="service" id="shopware_attribute.emotion_reader" />
+            <argument type="service" id="shopware_attribute.emotion_searcher" />
+            <tag name="attribute_search_repository" />
+        </service>
+
+        <service id="shopware_attribute.emotion_searcher" class="Shopware\Bundle\AttributeBundle\Repository\Searcher\EmotionSearcher">
+            <argument>Shopware\Models\Emotion\Emotion</argument>
+            <argument type="service" id="models" />
+        </service>
+
+        <service id="shopware_attribute.emotion_reader" class="Shopware\Bundle\AttributeBundle\Repository\Reader\GenericReader">
+            <argument>Shopware\Models\Emotion\Emotion</argument>
+            <argument type="service" id="models" />
+        </service>
+
+        <service id="shopware_attribute.customer_group_repository" class="Shopware\Bundle\AttributeBundle\Repository\GenericRepository">
+            <argument>Shopware\Models\Customer\Group</argument>
+            <argument type="service" id="models" />
+            <argument type="service" id="shopware_attribute.customer_group_reader" />
+            <argument type="service" id="shopware_attribute.customer_group_searcher" />
+            <tag name="attribute_search_repository" />
+        </service>
+
+        <service id="shopware_attribute.customer_group_searcher" class="Shopware\Bundle\AttributeBundle\Repository\Searcher\CustomerGroupSearcher">
+            <argument>Shopware\Models\Customer\Group</argument>
+            <argument type="service" id="models" />
+        </service>
+
+        <service id="shopware_attribute.customer_group_reader" class="Shopware\Bundle\AttributeBundle\Repository\Reader\CustomerGroupReader">
+            <argument>Shopware\Models\Customer\Group</argument>
+            <argument type="service" id="models" />
+        </service>
+
+
         <service id="shopware_attribute.customer_repository" class="Shopware\Bundle\AttributeBundle\Repository\GenericRepository">
             <argument>Shopware\Models\Customer\Customer</argument>
             <argument type="service" id="models" />
