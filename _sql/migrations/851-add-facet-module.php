@@ -23,6 +23,8 @@ class Migrations_Migration851 extends AbstractMigration
         $this->importFacetTranslations();
 
         $this->createSearchFacets();
+
+        $this->addNewCategoryFilterParam();
     }
 
     private function addModule()
@@ -54,7 +56,7 @@ SQL;
     {
         $sql = <<<SQL
 INSERT IGNORE INTO `s_search_custom_facet` (`id`, `unique_key`, `active`, `display_in_categories`, `position`, `name`, `facet`, `deletable`) VALUES
-(1, 'CategoryFacet', 1, 0, 1, 'Kategorien', '{"Shopware\\\\\\\Bundle\\\\\\\SearchBundle\\\\\\\Facet\\\\\\\CategoryFacet":{"label":"Kategorien"}}', 0),
+(1, 'CategoryFacet', 1, 0, 1, 'Kategorien', '{"Shopware\\\\\\\Bundle\\\\\\\SearchBundle\\\\\\\Facet\\\\\\\CategoryFacet":{"label":"Kategorien", "depth": "2"}}', 0),
 (2, 'ImmediateDeliveryFacet', 1, 1, 2, 'Sofort lieferbar', '{"Shopware\\\\\\\Bundle\\\\\\\SearchBundle\\\\\\\Facet\\\\\\\ImmediateDeliveryFacet":{"label":"Sofort lieferbar"}}', 0),
 (3, 'ManufacturerFacet', 1, 1, 3, 'Hersteller', '{"Shopware\\\\\\\Bundle\\\\\\\SearchBundle\\\\\\\Facet\\\\\\\ManufacturerFacet":{"label":"Hersteller"}}', 0),
 (4, 'PriceFacet', 1, 1, 4, 'Preis', '{"Shopware\\\\\\\Bundle\\\\\\\SearchBundle\\\\\\\Facet\\\\\\\PriceFacet":{"label":"Preis"}}', 0),
@@ -140,5 +142,41 @@ SQL;
             INSERT IGNORE INTO s_core_config_element_translations (element_id, locale_id, label, description)
             VALUES (@elementId, 2, 'Available filter', NULL);
         ");
+    }
+
+    private function addNewCategoryFilterParam()
+    {
+        $statement = $this->connection->prepare("SELECT * FROM s_core_config_elements WHERE name = 'seoqueryalias'");
+        $statement->execute();
+        $config = $statement->fetch(PDO::FETCH_ASSOC);
+
+        if (empty($config)) {
+            return;
+        }
+
+        $value = unserialize($config['value']);
+        $value .= ',
+categoryFilter=cf';
+
+        $statement = $this->connection->prepare("UPDATE s_core_config_elements SET value = ? WHERE id = ?");
+        $statement->execute(array(serialize($value), $config['id']));
+
+        $statement = $this->connection->prepare("SELECT * FROM s_core_config_values WHERE element_id = ?");
+        $statement->execute(array($config['id']));
+        $values = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        foreach($values as $shopValue) {
+            if (empty($shopValue) || empty($shopValue['value'])) {
+                continue;
+            }
+
+            $value = unserialize($shopValue['value']);
+            $value .= ',
+categoryFilter=cf';
+
+            $statement = $this->connection->prepare("UPDATE s_core_config_values SET value = ? WHERE id = ?");
+            $statement->execute(array(serialize($value), $shopValue['id']));
+
+        }
     }
 }

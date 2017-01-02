@@ -28,7 +28,7 @@
 Ext.define('Shopware.apps.Config.view.custom_search.sorting.includes.CreateWindow', {
     extend: 'Enlight.app.Window',
     height: 150,
-    width: 300,
+    width: 380,
     layout: {
         type: 'vbox',
         align: 'stretch'

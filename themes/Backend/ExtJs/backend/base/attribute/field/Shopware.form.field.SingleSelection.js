@@ -162,12 +162,7 @@ Ext.define('Shopware.form.field.SingleSelection', {
         var me = this;
 
         if (value && !Ext.isObject(value)) {
-            me.store.load({
-                params: { ids: Ext.JSON.encode([value]) },
-                callback: function(records) {
-                    me.combo.setValue(records);
-                }
-            });
+            me.resolveValue(value);
             return;
         }
         if (!value) {
@@ -181,5 +176,16 @@ Ext.define('Shopware.form.field.SingleSelection', {
         var value = { };
         value[this.name] = this.getValue();
         return value;
+    },
+
+    resolveValue: function(value) {
+        var me = this;
+
+        me.store.load({
+            params: { ids: Ext.JSON.encode([value]) },
+            callback: function(records) {
+                me.combo.setValue(records);
+            }
+        });
     }
 });

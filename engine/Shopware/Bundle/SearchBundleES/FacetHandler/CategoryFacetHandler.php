@@ -123,10 +123,13 @@ class CategoryFacetHandler implements HandlerInterface, ResultHydratorInterface
             return;
         }
 
+        /** @var CategoryFacet $categoryFacet */
+        $categoryFacet = $criteria->getFacet('category');
+
         $ids = $this->filterSystemCategories($ids, $context);
         $ids = $this->categoryDepthService->get(
             $context->getShop()->getCategory(),
-            (int) $this->config->get('categoryFilterDepth', 2),
+            $categoryFacet->getDepth(),
             $ids
         );
 
@@ -136,7 +139,7 @@ class CategoryFacetHandler implements HandlerInterface, ResultHydratorInterface
             $categories,
             $this->getFilteredIds($criteria),
             $context->getShop()->getCategory()->getId(),
-            $criteria->getFacet('category')
+            $categoryFacet
         );
 
         $result->addFacet($facet);

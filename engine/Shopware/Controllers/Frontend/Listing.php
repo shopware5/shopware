@@ -286,15 +286,6 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
     }
 
     /**
-     * Helper function which checks the configuration for listing filters.
-     * @return boolean
-     */
-    protected function displayFiltersInListing()
-    {
-        return Shopware()->Config()->get('displayFiltersInListings', true);
-    }
-
-    /**
      * Returns listing breadcrumb
      *
      * @param int $categoryId
@@ -471,13 +462,13 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         $streamRepository = $this->get('shopware_product_stream.repository');
         $streamRepository->prepareCriteria($criteria, $streamId);
 
-        /** @var \Shopware\Components\ProductStream\FacetFilter $facetFilter */
-        $facetFilter = $this->get('shopware_product_stream.facet_filter');
-        $facetFilter->add($criteria);
-
         /** @var CustomFacetServiceInterface $facetService */
         $facetService = $this->get('shopware_storefront.custom_facet_service');
         $facets = $facetService->getFacetsOfCategories([$categoryId], $context);
+
+        /** @var \Shopware\Components\ProductStream\FacetFilter $facetFilter */
+        $facetFilter = $this->get('shopware_product_stream.facet_filter');
+        $facetFilter->add($criteria);
 
         /** @var CustomFacet[] $facets */
         $facets = array_shift($facets);

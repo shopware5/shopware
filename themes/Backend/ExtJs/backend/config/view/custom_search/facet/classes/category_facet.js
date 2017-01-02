@@ -38,6 +38,17 @@ Ext.define('Shopware.apps.Config.view.custom_search.facet.classes.CategoryFacet'
             labelWidth: 150,
             translatable: true,
             fieldLabel: '{s name="label"}{/s}'
+        }, {
+            xtype: 'numberfield',
+            allowBlank: false,
+            minValue: 1,
+            name: 'depth',
+            labelWidth: 150,
+            translatable: true,
+            fieldLabel: '{s name="category_depth"}{/s}',
+            helpTitle: '',
+            helpText: '{s name="category_depth_help"}{/s}'
+
         }];
     }
 });

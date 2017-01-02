@@ -328,13 +328,13 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
         $streamRepository = $this->get('shopware_product_stream.repository');
         $streamRepository->prepareCriteria($criteria, $productStreamId);
 
-        /** @var \Shopware\Components\ProductStream\FacetFilter $facetFilter */
-        $facetFilter = $this->get('shopware_product_stream.facet_filter');
-        $facetFilter->add($criteria);
-
         /** @var \Shopware\Bundle\StoreFrontBundle\Service\CustomFacetServiceInterface $facetService */
         $facetService = $this->get('shopware_storefront.custom_facet_service');
         $facets = $facetService->getFacetsOfCategories([$categoryId], $context);
+
+        /** @var \Shopware\Components\ProductStream\FacetFilter $facetFilter */
+        $facetFilter = $this->get('shopware_product_stream.facet_filter');
+        $facetFilter->add($criteria);
 
         /** @var CustomFacet[] $facets */
         $facets = array_shift($facets);

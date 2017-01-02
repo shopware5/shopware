@@ -78,7 +78,6 @@ class PriceSortingHandler implements SortingHandlerInterface
         }
 
         /** @var PriceSorting $sorting */
-        $query->addOrderBy('listing_price.cheapest_price', $sorting->getDirection())
-            ->addOrderBy('product.id', $sorting->getDirection());
+        $query->addOrderBy('listing_price.cheapest_price', $sorting->getDirection());
     }
 }

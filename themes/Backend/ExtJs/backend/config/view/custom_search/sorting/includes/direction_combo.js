@@ -33,6 +33,7 @@ Ext.define('Shopware.apps.Config.view.custom_search.sorting.includes.DirectionCo
     queryMode: 'local',
     fieldLabel: '{s name="direction_combo"}{/s}',
     allowBlank: false,
+
     name: 'direction',
     value: 'ASC',
 
@@ -42,12 +43,20 @@ Ext.define('Shopware.apps.Config.view.custom_search.sorting.includes.DirectionCo
         me.store = Ext.create('Ext.data.Store', {
             fields: ['key', 'label'],
             data: [
-                { key: 'ASC', label: '{s name="ascending"}{/s}' },
-                { key: 'DESC', label: '{s name="descending"}{/s}' }
+                { key: 'ASC', label: me.getAscendingLabel() },
+                { key: 'DESC', label: me.getDescendingLabel() }
             ]
         });
 
         me.callParent(arguments);
+    },
+
+    getAscendingLabel: function() {
+        return '{s name="ascending"}{/s}';
+    },
+
+    getDescendingLabel: function() {
+        return '{s name="descending"}{/s}';
     }
 });
 

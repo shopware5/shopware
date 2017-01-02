@@ -91,7 +91,6 @@ INSERT INTO `s_search_custom_sorting` (`id`, `label`, `active`, `display_in_cate
 (3, 'Niedrigster Preis', 1, 1, 2, '{"Shopware\\\\\\\Bundle\\\\\\\SearchBundle\\\\\\\Sorting\\\\\\\PriceSorting":{"direction":"ASC"}}'),
 (4, 'Höchster Preis', 1, 1, 3, '{"Shopware\\\\\\\Bundle\\\\\\\SearchBundle\\\\\\\Sorting\\\\\\\PriceSorting":{"direction":"DESC"}}'),
 (5, 'Artikelbezeichnung', 1, 1, 4, '{"Shopware\\\\\\\Bundle\\\\\\\SearchBundle\\\\\\\Sorting\\\\\\\ProductNameSorting":{"direction":"ASC"}}'),
-(6, 'Artikelbezeichnung', 0, 1, 5, '{"Shopware\\\\\\\Bundle\\\\\\\SearchBundle\\\\\\\Sorting\\\\\\\ProductNameSorting":{"direction":"DESC"}}'),
 (7, 'Beste Ergebnisse', 1, 0, 6, '{"Shopware\\\\\\\Bundle\\\\\\\SearchBundle\\\\\\\Sorting\\\\\\\SearchRankingSorting":{}}');
 SQL;
 
@@ -239,7 +238,7 @@ VALUES (NULL,  @elementId,  '2',  'Default category sorting', NULL);
 
         $this->addSql("
 INSERT INTO `s_core_config_elements` (`form_id`, `name`, `value`, `label`, `description`, `type`, `required`, `position`, `scope`, `options`)
-VALUES (@formId, 'searchSortings', 's:15:\"|7|1|2|3|4|5|6|\";', 'Verfügbare Sortierungen', '', 'custom-sorting-grid', '1', '0', '1', NULL);
+VALUES (@formId, 'searchSortings', 's:13:\"|7|1|2|3|4|5|\";', 'Verfügbare Sortierungen', '', 'custom-sorting-grid', '1', '0', '1', NULL);
         ");
 
         $this->addSql("SET @elementId = (SELECT id FROM s_core_config_elements WHERE name = 'defaultSearchSorting' LIMIT 1)");

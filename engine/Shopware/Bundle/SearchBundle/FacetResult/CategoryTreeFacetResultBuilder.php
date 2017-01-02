@@ -80,8 +80,8 @@ class CategoryTreeFacetResultBuilder
                 ->get('category', 'Categories');
         }
 
-        if (!$fieldName = $this->queryAliasMapper->getShortAlias('sCategory')) {
-            $fieldName = 'sCategory';
+        if (!$fieldName = $this->queryAliasMapper->getShortAlias('categoryFilter')) {
+            $fieldName = 'categoryFilter';
         }
 
         return new TreeFacetResult(

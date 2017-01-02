@@ -75,10 +75,12 @@ Ext.define('Shopware.apps.Config.view.custom_search.sorting.classes.ProductAttri
             proxy: {
                 type: 'ajax',
                 url: '{url controller="AttributeData" action="list"}',
-                reader: Ext.create('Shopware.model.DynamicReader')
+                reader: Ext.create('Shopware.model.DynamicReader'),
+                extraParams: {
+                    table: 's_articles_attributes'
+                }
             }
         });
-        store.getProxy().extraParams.table = 's_articles_attributes';
 
         return Ext.create('Shopware.form.field.AttributeSingleSelection', {
             labelWidth: 150,

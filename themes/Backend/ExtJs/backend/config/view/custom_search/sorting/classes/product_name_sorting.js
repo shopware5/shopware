@@ -53,7 +53,13 @@ Ext.define('Shopware.apps.Config.view.custom_search.sorting.classes.ProductNameS
         Ext.create('Shopware.apps.Config.view.custom_search.sorting.includes.CreateWindow', {
             title: me.getLabel(),
             items: [{
-                xtype: 'custom-search-direction-combo'
+                xtype: 'custom-search-direction-combo',
+                getAscendingLabel: function() {
+                    return '{s name="product_name_sorting_asc"}{/s}';
+                },
+                getDescendingLabel: function() {
+                    return '{s name="product_name_sorting_desc"}{/s}';
+                }
             }],
             callback: function(values) {
                 callback(me._createRecord(values));

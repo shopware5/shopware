@@ -36,6 +36,7 @@ Ext.define('Shopware.apps.Config.view.custom_search.facet.Listing', {
             editColumn: false,
             pagingbar: false,
             addButton: false,
+            displayProgressOnSingleDelete: false,
             columns: {
                 name: {
                     header: '{s name="name"}{/s}',

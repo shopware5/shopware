@@ -95,13 +95,19 @@ class CoreCriteriaRequestHandler implements CriteriaRequestHandlerInterface
      */
     private function addCategoryCondition(Request $request, Criteria $criteria)
     {
-        $category = $request->getParam('sCategory', null);
-        if (!$category) {
-            return;
+        if ($request->has('sCategory')) {
+            $criteria->addBaseCondition(
+                new CategoryCondition(
+                    [$request->getParam('sCategory', null)]
+                )
+            );
+        } else if ($request->has('categoryFilter')) {
+            $criteria->addCondition(
+                new CategoryCondition(
+                    [$request->getParam('categoryFilter', null)]
+                )
+            );
         }
-
-        $condition = new CategoryCondition([$category]);
-        $criteria->addBaseCondition($condition);
     }
 
     /**

@@ -39,11 +39,18 @@ class CategoryFacet implements FacetInterface
     private $label;
 
     /**
-     * @param string|null $label
+     * @var int
      */
-    public function __construct($label = null)
+    private $depth;
+
+    /**
+     * @param string|null $label
+     * @param int $depth
+     */
+    public function __construct($label = null, $depth = 2)
     {
         $this->label = $label;
+        $this->depth = $depth;
     }
 
     /**
@@ -60,5 +67,13 @@ class CategoryFacet implements FacetInterface
     public function getName()
     {
         return 'category';
+    }
+
+    /**
+     * @return int
+     */
+    public function getDepth()
+    {
+        return $this->depth;
     }
 }

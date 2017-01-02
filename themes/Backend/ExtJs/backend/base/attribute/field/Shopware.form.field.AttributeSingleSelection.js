@@ -48,5 +48,16 @@ Ext.define('Shopware.form.field.AttributeSingleSelection', {
             label += ' [' + values.helpText + ']';
         }
         return label;
+    },
+
+    resolveValue: function(value) {
+        var me = this;
+
+        me.store.load({
+            params: { columns: Ext.JSON.encode([value]) },
+            callback: function(records) {
+                me.combo.setValue(records);
+            }
+        });
     }
 });

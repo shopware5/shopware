@@ -92,10 +92,7 @@ class CustomSortingGateway implements CustomSortingGatewayInterface
      */
     public function getSortingsOfCategories(array $categoryIds, ShopContextInterface $context)
     {
-        $mapping = $this->getCategoryMapping(
-            $categoryIds,
-            $this->getAllCategorySortingIds()
-        );
+        $mapping = $this->getCategoryMapping($categoryIds);
 
         $sortings = $this->getList(
             array_merge(...array_values($mapping)),
@@ -116,7 +113,7 @@ class CustomSortingGateway implements CustomSortingGatewayInterface
      * Returns an array with all sorting ids which enabled for category listings
      * @return int[]
      */
-    private function getAllCategorySortingIds()
+    private function getAllCategorySortings()
     {
         $query = $this->connection->createQueryBuilder();
         $query->select('id');
@@ -178,10 +175,9 @@ class CustomSortingGateway implements CustomSortingGatewayInterface
 
     /**
      * @param int[] $categoryIds
-     * @param int[] $allSortingIds
      * @return string[] indexed by id
      */
-    private function getCategoryMapping(array $categoryIds, array $allSortingIds)
+    private function getCategoryMapping(array $categoryIds)
     {
         $query = $this->connection->createQueryBuilder();
         $query->select(['id', 'sorting_ids'])
@@ -190,6 +186,12 @@ class CustomSortingGateway implements CustomSortingGatewayInterface
             ->setParameter(':ids', $categoryIds, Connection::PARAM_INT_ARRAY);
 
         $mapping = $query->execute()->fetchAll(\PDO::FETCH_KEY_PAIR);
+
+        $allSortingIds = [];
+        $hasEmpty = count(array_filter($mapping)) !== count($mapping);
+        if ($hasEmpty) {
+            $allSortingIds = $this->getAllCategorySortings();
+        }
 
         return array_map(
             function ($ids) use ($allSortingIds) {

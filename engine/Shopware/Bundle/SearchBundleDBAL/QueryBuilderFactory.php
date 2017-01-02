@@ -197,6 +197,7 @@ class QueryBuilderFactory implements QueryBuilderFactoryInterface
             $handler = $this->getSortingHandler($sorting);
             $handler->generateSorting($sorting, $query, $context);
         }
+        $query->addOrderBy('product.id', 'ASC');
     }
 
     /**

@@ -34,6 +34,7 @@ Ext.define('Shopware.apps.Config.view.custom_search.sorting.Listing', {
             deleteButton: false,
             editColumn: false,
             pagingbar: false,
+            displayProgressOnSingleDelete: false,
             columns: {
                 label: {
                     header: '{s name="sorting_label"}{/s}',

@@ -54,7 +54,6 @@ class ProductNameSortingHandler implements SortingHandlerInterface
         ShopContextInterface $context
     ) {
         /** @var ProductNameSorting $sorting */
-        $query->addOrderBy('product.name', $sorting->getDirection())
-            ->addOrderBy('product.id', $sorting->getDirection());
+        $query->addOrderBy('product.name', $sorting->getDirection());
     }
 }

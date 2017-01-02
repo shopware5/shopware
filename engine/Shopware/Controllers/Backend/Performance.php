@@ -239,14 +239,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
                 'articlesperpage'
             ]),
             'filters' => $this->genericConfigLoader([
-                'showSupplierInCategories',
-                'showImmediateDeliveryFacet',
-                'showShippingFreeFacet',
-                'showPriceFacet',
-                'showVoteAverageFacet',
-                'displayFiltersInListings',
-                'listingMode',
-                'categoryFilterDepth'
+                'listingMode'
             ]),
             'various' => $this->genericConfigLoader([
                 'disableShopwareStatistics',

@@ -84,10 +84,7 @@ class CustomFacetGateway implements CustomFacetGatewayInterface
      */
     public function getFacetsOfCategories(array $categoryIds, ShopContextInterface $context)
     {
-        $mapping = $this->getCategoryMapping(
-            $categoryIds,
-            $this->getAllCategoryFacetIds()
-        );
+        $mapping = $this->getCategoryMapping($categoryIds);
 
         $facets = $this->getList(
             array_merge(...array_values($mapping)),
@@ -167,10 +164,9 @@ class CustomFacetGateway implements CustomFacetGatewayInterface
 
     /**
      * @param int[] $categoryIds
-     * @param int[] $allFacetIds
      * @return string[] indexed by id
      */
-    private function getCategoryMapping(array $categoryIds, array $allFacetIds)
+    private function getCategoryMapping(array $categoryIds)
     {
         $query = $this->connection->createQueryBuilder();
         $query->select(['id', 'facet_ids'])
@@ -179,6 +175,12 @@ class CustomFacetGateway implements CustomFacetGatewayInterface
             ->setParameter(':ids', $categoryIds, Connection::PARAM_INT_ARRAY);
 
         $mapping = $query->execute()->fetchAll(\PDO::FETCH_KEY_PAIR);
+        $allFacetIds = [];
+
+        $hasEmpty = count(array_filter($mapping)) !== count($mapping);
+        if ($hasEmpty) {
+            $allFacetIds = $this->getAllCategoryFacetIds();
+        }
 
         return array_map(
             function ($ids) use ($allFacetIds) {

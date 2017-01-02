@@ -25,7 +25,6 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Added support for callback methods and jQuery promises in `jQuery.overlay` and `jQuery.loadingIndicators`
 * Added jQuery method `setLoading()` to apply a loading indicator to an element `$('selector').setLoading()`
 * Added required attribute `data-facet-name` for filter elements
-* Added config element `categoryFilterDepth` to configure how many levels of the category facet will be displayed
 * Added new type for the filter panels `value-list-single`
 * Added new Smarty blocks for the unified filter panel:
     * `frontend_listing_filter_facet_multi_selection`

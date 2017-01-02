@@ -122,11 +122,9 @@ Ext.define('Shopware.apps.Config.view.custom_search.facet.classes.ProductAttribu
     },
 
     _createAttributeSelection: function() {
-        return Ext.create('Ext.form.field.ComboBox', {
+        return Ext.create('Shopware.form.field.AttributeSingleSelection', {
             labelWidth: 150,
             name: 'field',
-            displayField: 'columnName',
-
             allowBlank: false,
             fieldLabel: '{s name="product_attribute_sorting_field"}{/s}',
             store: this._createAttributeStore()

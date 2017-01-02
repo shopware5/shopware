@@ -60,6 +60,5 @@ class SearchRankingSortingHandler implements SortingHandlerInterface
 
         /** @var SearchRankingSorting $sorting */
         $query->addOrderBy('searchTable.ranking', $sorting->getDirection());
-        $query->addOrderBy('product.id', $sorting->getDirection());
     }
 }

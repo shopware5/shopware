@@ -65,7 +65,6 @@ class PopularitySortingHandler implements SortingHandlerInterface
         }
 
         /** @var PopularitySorting $sorting */
-        $query->addOrderBy('topSeller.sales', $sorting->getDirection())
-              ->addOrderBy('topSeller.article_id', $sorting->getDirection());
+        $query->addOrderBy('topSeller.sales', $sorting->getDirection());
     }
 }
