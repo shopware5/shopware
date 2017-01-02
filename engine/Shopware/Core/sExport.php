@@ -866,7 +866,7 @@ class sExport
         if (!empty($this->sSettings["own_filter"])&&trim($this->sSettings["own_filter"])) {
             $sql_add_where[] = "(".$this->sSettings["own_filter"].")";
         }
-        if ($this->config->offsetGet('hideNoInstock')) {
+        if ($this->config->offsetGet('hideNoInStock')) {
             $sql_add_where[] = "(
                 (a.laststock * v.instock >= a.laststock * v.minpurchase)
                 OR
