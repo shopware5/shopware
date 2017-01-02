@@ -5430,6 +5430,12 @@ INSERT INTO `s_core_documents_box` (`id`, `documentID`, `name`, `style`, `value`
 (114, 4, 'Content_Amount', 'margin-left:90mm;', ''),
 (115, 4, 'Content_Info', '', '<p>Die Ware bleibt bis zur vollst&auml;ndigen Bezahlung unser Eigentum</p>');
 
+TRUNCATE TABLE `s_core_engine_elements`;
+INSERT INTO `s_core_engine_elements` (`id`, `groupID`, `domname`, `default`, `type`, `store`, `label`, `required`, `position`, `name`, `layout`, `variantable`, `help`, `translatable`) VALUES
+(22, 7, 'attr[3]', '', 'textarea', NULL, 'Kommentar', 0, 3, 'attr3', '', 0, 'Optionaler Kommentar', 1),
+(33, 7, 'attr[1]', '', 'text', NULL, 'Freitext-1', 0, 1, 'attr1', 'w200', 1, 'Freitext zur Anzeige auf der Detailseite', 1),
+(34, 7, 'attr[2]', '', 'text', NULL, 'Freitext-2', 0, 2, 'attr2', 'w200', 1, 'Freitext zur Anzeige auf der Detailseite', 1);
+
 TRUNCATE TABLE `s_core_engine_groups`;
 INSERT INTO `s_core_engine_groups` (`id`, `name`, `label`, `layout`, `variantable`, `position`) VALUES
 (1, 'basic', 'Stammdaten', 'column', 1, 1),
