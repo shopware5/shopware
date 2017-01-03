@@ -32,7 +32,7 @@ interface MediaReplaceServiceInterface
     /**
      * replace the media by the given mediaId with the given file content
      *
-     * @param String|Integer $mediaId
+     * @param int $mediaId
      * @param UploadedFile $file
      * @throws \Exception
      */
