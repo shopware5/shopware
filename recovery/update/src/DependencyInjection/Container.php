@@ -71,7 +71,7 @@ class Container extends BaseContainer
         $container['path.builder'] = function () use ($me) {
             $baseDir   = SW_PATH;
             $updateDir = UPDATE_FILES_PATH;
-            $backupDir = SW_PATH . '/files/backup';
+            $backupDir = SW_PATH . '/files/backup/auto_update';
 
             return new PathBuilder($baseDir, $updateDir, $backupDir);
         };
