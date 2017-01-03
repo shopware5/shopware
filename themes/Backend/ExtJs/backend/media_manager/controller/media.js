@@ -394,6 +394,7 @@ Ext.define('Shopware.apps.MediaManager.controller.Media', {
 
         if(view.deleteBtn) {
             view.deleteBtn.setDisabled(!selection.length);
+            view.replaceButton.setDisabled(!selection.length);
         }
 
         if(!selection.length) {

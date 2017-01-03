@@ -96,7 +96,7 @@ Ext.define('Shopware.form.field.Media', {
 
     /**
      * Contains the instance of the preview image.
-     * The preview image is created in the { @link #createPreview } function.
+     * The preview image is created in the { @link #showPreview } function.
      * @type { Ext.Img }
      */
     preview: undefined,

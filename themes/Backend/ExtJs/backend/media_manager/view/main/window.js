@@ -45,7 +45,7 @@ Ext.define('Shopware.apps.MediaManager.view.main.Window', {
     autoShow: true,
     layout: 'border',
     height: '90%',
-    width: 1024,
+    width: 1124,
 
     /**
      * Initializes the component and builds up the main interface
