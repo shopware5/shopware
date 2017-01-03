@@ -69,7 +69,24 @@
                         {* Captcha *}
                         {block name='frontend_tellafriend_captcha'}
                             <div class="tellafriend--captcha">
-                                <div class="captcha--placeholder" data-src="{url module=widgets controller=Captcha action=index}"{if $sError} data-has-error="true"{/if}></div>
+                                {if {config name=captchaMethod} === 'legacy'}
+                                    {* Deferred loading of the captcha image *}
+                                    {block name='frontend_tellafriend_captcha_placeholder'}
+                                        <div class="captcha--placeholder" data-src="{url module=widgets controller=Captcha action=refreshCaptcha}"></div>
+                                    {/block}
+
+                                    {block name='frontend_tellafriend_captcha_label'}
+                                        <strong class="captcha--notice">{s name="TellAFriendLabelCaptchaInfo"}{/s}</strong>
+                                    {/block}
+
+                                    {block name='frontend_tellafriend_captcha_field_code'}
+                                        <div class="captcha--code">
+                                            <input type="text" name="sCaptcha" required="required" aria-required="true" class="tellafriend--field is--required{if $sErrorFlag.sCaptcha} has--error{/if}"/>
+                                        </div>
+                                    {/block}
+                                {else}
+                                    <div class="captcha--placeholder" data-src="{url module=widgets controller=Captcha action=index}"{if $sError} data-hasError="true"{/if}></div>
+                                {/if}
                             </div>
                         {/block}
 

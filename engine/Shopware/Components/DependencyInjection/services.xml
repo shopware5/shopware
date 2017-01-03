@@ -524,6 +524,12 @@
             <tag name="captcha" />
         </service>
 
+        <service id="shopware.captcha.legacy_captcha" class="Shopware\Components\Captcha\LegacyCaptcha">
+            <argument type="service" id="config" />
+            <argument type="service" id="template" />
+            <tag name="captcha" />
+        </service>
+
         <service id="shopware.captcha.repository" class="Shopware\Components\Captcha\CaptchaRepository">
             <argument type="collection" />
             <argument type="service" id="config" />

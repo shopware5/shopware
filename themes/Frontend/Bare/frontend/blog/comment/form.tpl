@@ -105,7 +105,26 @@
 
                 {* Captcha *}
                 {block name='frontend_blog_comments_input_captcha'}
-                    <div class="captcha--placeholder" data-src="{url module=widgets controller=Captcha action=index}"{if isset($sErrorFlag) && count($sErrorFlag) > 0} data-has-error="true"{/if}></div>
+                    {if {config name=captchaMethod} === 'legacy'}
+                        <div class="blog--comments-captcha">
+
+                            {block name='frontend_blog_comments_input_captcha_placeholder'}
+                                <div class="captcha--placeholder" data-autoLoad="true" data-src="{url module=widgets controller=Captcha action=refreshCaptcha}"></div>
+                            {/block}
+
+                            {block name='frontend_blog_comments_input_captcha_placeholder'}
+                                <strong class="captcha--notice">{s name="BlogLabelCaptcha"}{/s}</strong>
+                            {/block}
+
+                            {block name='frontend_blog_comments_input'}
+                                <div class="captcha--code">
+                                    <input type="text" name="sCaptcha" class="input--field{if $sErrorFlag.sCaptcha} has--error{/if}" required="required" aria-required="true" />
+                                </div>
+                            {/block}
+                        </div>
+                    {else}
+                        <div class="captcha--placeholder" data-src="{url module=widgets controller=Captcha action=index}"{if isset($sErrorFlag) && count($sErrorFlag) > 0} data-hasError="true"{/if}></div>
+                    {/if}
                 {/block}
 
                 {block name='frontend_blog_comments_input_notice'}

@@ -26,17 +26,10 @@ namespace Shopware\Components\Captcha;
 
 use Enlight_Controller_Request_Request;
 use Shopware\Components\Random;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class DefaultCaptcha implements CaptchaInterface
+class LegacyCaptcha implements CaptchaInterface
 {
-    const SESSION_KEY = __CLASS__.'_sRandom';
-    const CAPTCHA_METHOD = 'default';
-
-    /**
-     * @var ContainerInterface
-     */
-    private $container;
+    const CAPTCHA_METHOD = 'legacy';
 
     /**
      * @var \Shopware_Components_Config
@@ -49,17 +42,13 @@ class DefaultCaptcha implements CaptchaInterface
     private $templateManager;
 
     /**
-     * DefaultCaptcha constructor.
-     * @param ContainerInterface $container
      * @param \Shopware_Components_Config $config
      * @param \Enlight_Template_Manager $templateManager
      */
     public function __construct(
-        ContainerInterface $container,
         \Shopware_Components_Config $config,
         \Enlight_Template_Manager $templateManager
     ) {
-        $this->container = $container;
         $this->config = $config;
         $this->templateManager = $templateManager;
     }
@@ -69,19 +58,14 @@ class DefaultCaptcha implements CaptchaInterface
      */
     public function validate(Enlight_Controller_Request_Request $request)
     {
-        $captchaArray = $this->container->get('session')->get(self::SESSION_KEY, []);
-
-        if (count($captchaArray) === 0) {
-            return false;
+        if (!empty($this->config->get('CaptchaColor'))) {
+            $captchaString = $request->get('sCaptcha');
+            $captcha = str_replace(' ', '', strtolower($captchaString));
+            $rand = $request->get('sRand');
+            if (empty($rand) || $captcha != substr(md5($rand), 0, 5)) {
+                return false;
+            }
         }
-
-        if (!array_key_exists($request->get('sCaptcha'), $captchaArray)) {
-            return false;
-        }
-
-        unset($captchaArray[$request->get('sCaptcha')]);
-
-        $this->container->get('session')->offsetSet(self::SESSION_KEY, $captchaArray);
 
         return true;
     }
@@ -92,7 +76,6 @@ class DefaultCaptcha implements CaptchaInterface
     public function getTemplateData()
     {
         $string = $this->createCaptchaString();
-
         $imgResource = $this->getImageResource($string);
 
         ob_start();
@@ -101,19 +84,10 @@ class DefaultCaptcha implements CaptchaInterface
         imagedestroy($imgResource);
         $img = base64_encode($img);
 
-        /** @var string[] $sRandArray */
-        $sRandArray = $this->container->get('session')->get(self::SESSION_KEY, []);
-
-        $threshold = 51;
-        if (count($sRandArray) > $threshold) {
-            $sRandArray = array_slice($sRandArray, -$threshold);
-        }
-
-        $sRandArray[$string] = true;
-
-        $this->container->get('session')->offsetSet(self::SESSION_KEY, $sRandArray);
-
-        return ['img' => $img];
+        return [
+            'img' => $img,
+            'sRand' => $string,
+        ];
     }
 
     /**
@@ -140,6 +114,7 @@ class DefaultCaptcha implements CaptchaInterface
         } else {
             $im = imagecreatetruecolor(162, 87);
         }
+
         if (!empty($this->config->get('CaptchaColor'))) {
             $colors = explode(',', $this->config->get('CaptchaColor'));
         } else {
@@ -147,13 +122,14 @@ class DefaultCaptcha implements CaptchaInterface
         }
 
         $black = imagecolorallocate($im, $colors[0], $colors[1], $colors[2]);
+
         $string = implode(' ', str_split($string));
 
         if (!empty($font)) {
             for ($i = 0; $i <= strlen($string); $i++) {
-                $rand1 = mt_rand(35, 40);
-                $rand2 = mt_rand(15, 20);
-                $rand3 = mt_rand(60, 70);
+                $rand1 = rand(35, 40);
+                $rand2 = rand(15, 20);
+                $rand3 = rand(60, 70);
                 imagettftext($im, $rand1, $rand2, ($i + 1) * 15, $rand3, $black, $font, substr($string, $i, 1));
                 imagettftext($im, $rand1, $rand2, (($i + 1) * 15) + 2, $rand3 + 2, $black, $font, substr($string, $i, 1));
             }
@@ -171,14 +147,15 @@ class DefaultCaptcha implements CaptchaInterface
     }
 
     /**
-     * Helper function that checks if a given file exists in any template directory.
-     * If the file exists, the full file path will be returned, otherwise null.
+     * Helper function that checks if the file exists in any of the template directories
+     * If the file exists, the full file path will be returned
      *
      * @param string $fileName
      * @return null|string
      */
     private function getCaptchaFile($fileName)
     {
+        /** @var array $templateDirs */
         $templateDirs = $this->templateManager->getTemplateDir();
 
         foreach ($templateDirs as $templateDir) {
@@ -188,14 +165,6 @@ class DefaultCaptcha implements CaptchaInterface
         }
 
         return null;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getName()
-    {
-        return self::CAPTCHA_METHOD;
     }
 
     /**
@@ -216,5 +185,13 @@ class DefaultCaptcha implements CaptchaInterface
         $charlist = implode($alphabet) . implode($numericRange);
 
         return Random::getString(5, $charlist);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getName()
+    {
+        return self::CAPTCHA_METHOD;
     }
 }
