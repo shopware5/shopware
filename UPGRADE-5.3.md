@@ -212,8 +212,6 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Removed field `attributes.search.cheapest_price` from DBAL search query
 * Removed field `attributes.search.average` from DBAL search query
 * Removed join to `s_core_tax` in `Shopware\Bundle\SearchBundleDBAL\ProductNumberSearch`
-* Removed model `Shopware\Models\Article\Element`
-* Removed database table `s_core_engine_elements`
 * Removed method `Shopware_Controllers_Widgets_Emotion::getEmotion()`
 * Removed method `Shopware_Controllers_Widgets_Emotion::handleElement()`, use `Shopware\Bundle\EmotionBundle\ComponentHandler\ComponentHandlerInterface` instead
 * Removed method `Shopware_Controllers_Widgets_Emotion::getRandomBlogEntry()`
@@ -233,6 +231,7 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Deprecated `Shopware_Components_Convert_Excel` without replacement, to be removed with 5.4
 * Deprecated `\Shopware_Controllers_Widgets_Listing::ajaxListingAction`, use `\Shopware_Controllers_Widgets_Listing::listingCountAction` instead
 * Deprecated method `sArticles::sGetAffectedSuppliers()` without replacement, to be removed with 5.5
+* Deprecated `Shopware\Models\Article\Element`, to be removed with 6.0
 
 ### Backend Components
 
