@@ -24,6 +24,7 @@
 
 namespace Shopware\Bundle\SearchBundle\CriteriaRequestHandler;
 
+use Doctrine\DBAL\Connection;
 use Enlight_Controller_Request_RequestHttp as Request;
 use Shopware\Bundle\SearchBundle\Condition\CombinedCondition;
 use Shopware\Bundle\SearchBundle\Condition\ProductAttributeCondition;
@@ -48,15 +49,23 @@ class FacetCriteriaRequestHandler implements CriteriaRequestHandlerInterface
     private $facetService;
 
     /**
+     * @var Connection
+     */
+    private $connection;
+
+    /**
      * @param \Shopware_Components_Config $config
      * @param CustomFacetServiceInterface $facetService
+     * @param Connection $connection
      */
     public function __construct(
         \Shopware_Components_Config $config,
-        CustomFacetServiceInterface $facetService
+        CustomFacetServiceInterface $facetService,
+        Connection $connection
     ) {
         $this->config = $config;
         $this->facetService = $facetService;
+        $this->connection = $connection;
     }
 
     /**
@@ -76,7 +85,7 @@ class FacetCriteriaRequestHandler implements CriteriaRequestHandlerInterface
             $customFacets = $this->facetService->getFacetsOfCategories([$categoryId], $context);
             $customFacets = array_shift($customFacets);
         } else {
-            $customFacets = [];
+            $customFacets = $this->getGlobalCategoryFacets($context);
         }
 
         /** @var CustomFacet[] $customFacets */
@@ -218,5 +227,20 @@ class FacetCriteriaRequestHandler implements CriteriaRequestHandlerInterface
             ||
             $request->has('max' . $facet->getFormFieldName())
         );
+    }
+
+    /**
+     * @param ShopContextInterface $context
+     * @return CustomFacet[]
+     */
+    private function getGlobalCategoryFacets(ShopContextInterface $context)
+    {
+        $query = $this->connection->createQueryBuilder();
+        $query->select(['id']);
+        $query->from('s_search_custom_facet', 'facets');
+        $query->where('facets.display_in_categories = 1');
+        $query->orderBy('facets.position', 'ASC');
+        $ids = $query->execute()->fetchAll(\PDO::FETCH_COLUMN);
+        return $this->facetService->getList($ids, $context);
     }
 }

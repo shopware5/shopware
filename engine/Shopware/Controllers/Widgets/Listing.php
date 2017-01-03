@@ -440,10 +440,16 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
     {
         $categoryId = $this->Request()->getParam('sCategory', null);
 
-        $boxLayout = $categoryId ? Shopware()->Modules()->Categories()
-            ->getProductBoxLayout($categoryId) : $this->get('config')->get('searchProductBoxLayout');
+        if ($this->Request()->has('productBoxLayout')) {
+            $boxLayout = $this->Request()->get('productBoxLayout');
+        } else {
+            $boxLayout = $categoryId ? Shopware()->Modules()->Categories()
+                ->getProductBoxLayout($categoryId) : $this->get('config')->get('searchProductBoxLayout');
+        }
 
         $articles = $this->convertArticlesResult($result, $categoryId);
+
+        $this->View()->assign($this->Request()->getParams());
 
         $this->View()->assign([
             'sArticles' => $articles,
