@@ -312,10 +312,10 @@ td.head  {
 			{/block}
 			{block name="document_index_info_dispatch"}
 				{if $Order._dispatch.name}
-					<div style="font-size:11px;color:#333;">
+					<p>
 						{s name="DocumentIndexSelectedDispatch"}{/s}
 						{$Order._dispatch.name}
-					</div>
+					</p>
 				{/if}
 			{/block}
 				
