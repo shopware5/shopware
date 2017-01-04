@@ -72,7 +72,7 @@ abstract class Plugin implements ContainerAwareInterface, SubscriberInterface
      */
     final public function __construct($isActive)
     {
-        $this->isActive = (bool)$isActive;
+        $this->isActive = (bool) $isActive;
     }
 
     /**
@@ -94,6 +94,7 @@ abstract class Plugin implements ContainerAwareInterface, SubscriberInterface
 
     /**
      * This method can be overridden
+     *
      * @param InstallContext $context
      */
     public function install(InstallContext $context)
@@ -102,6 +103,7 @@ abstract class Plugin implements ContainerAwareInterface, SubscriberInterface
 
     /**
      * This method can be overridden
+     *
      * @param UpdateContext $context
      */
     public function update(UpdateContext $context)
@@ -111,6 +113,7 @@ abstract class Plugin implements ContainerAwareInterface, SubscriberInterface
 
     /**
      * This method can be overridden
+     *
      * @param ActivateContext $context
      */
     public function activate(ActivateContext $context)
@@ -120,6 +123,7 @@ abstract class Plugin implements ContainerAwareInterface, SubscriberInterface
 
     /**
      * This method can be overridden
+     *
      * @param DeactivateContext $context
      */
     public function deactivate(DeactivateContext $context)
@@ -129,6 +133,7 @@ abstract class Plugin implements ContainerAwareInterface, SubscriberInterface
 
     /**
      * This method can be overridden
+     *
      * @param UninstallContext $context
      */
     public function uninstall(UninstallContext $context)
@@ -148,8 +153,8 @@ abstract class Plugin implements ContainerAwareInterface, SubscriberInterface
      */
     public function build(ContainerBuilder $container)
     {
-        $container->setParameter($this->getContainerPrefix() . '.plugin_dir', $this->getPath());
-        $container->setParameter($this->getContainerPrefix() . '.plugin_name', $this->getName());
+        $container->setParameter($this->getContainerPrefix().'.plugin_dir', $this->getPath());
+        $container->setParameter($this->getContainerPrefix().'.plugin_name', $this->getName());
         $this->loadFiles($container);
     }
 
@@ -163,8 +168,7 @@ abstract class Plugin implements ContainerAwareInterface, SubscriberInterface
         }
 
         $loader = new XmlFileLoader(
-            $container,
-            new FileLocator()
+            $container, new FileLocator()
         );
 
         $loader->load($this->getPath().'/Resources/services.xml');
@@ -205,7 +209,7 @@ abstract class Plugin implements ContainerAwareInterface, SubscriberInterface
         return $this->camelCaseToUnderscore($this->getName());
     }
 
-     /**
+    /**
      * Gets the Plugin directory path.
      *
      * @return string The Plugin absolute path
@@ -222,6 +226,7 @@ abstract class Plugin implements ContainerAwareInterface, SubscriberInterface
 
     /**
      * @param string $string
+     *
      * @return string
      */
     private function camelCaseToUnderscore($string)
