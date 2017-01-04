@@ -90,6 +90,9 @@ class FacetCriteriaRequestHandler implements CriteriaRequestHandlerInterface
 
         /** @var CustomFacet[] $customFacets */
         foreach ($customFacets as $customFacet) {
+            if (!$customFacet->getFacet()) {
+                continue;
+            }
             $facet = $customFacet->getFacet();
             $criteria->addFacet($facet);
 

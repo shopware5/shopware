@@ -78,14 +78,17 @@ class CustomListingHydrator extends Hydrator
             return [];
         }
 
-        $sortings = [];
+        $classes = [];
         foreach ($serialized as $className => $arguments) {
             $className = explode('|', $className);
             $className = $className[0];
-            $sortings[] = $this->reflector->createInstanceFromNamedArguments($className, $arguments);
+            try {
+                $classes[] = $this->reflector->createInstanceFromNamedArguments($className, $arguments);
+            } catch (\Exception $e) {
+            }
         }
 
-        return $sortings;
+        return $classes;
     }
 
     /**
