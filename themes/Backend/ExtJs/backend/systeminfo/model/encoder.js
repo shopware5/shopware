@@ -42,8 +42,8 @@ Ext.define('Shopware.apps.Systeminfo.model.Encoder', {
     extend: 'Ext.data.Model',
 
     fields: [
-		//{block name="backend/systeminfo/model/encoder/fields"}{/block}
-		'name', 'required', 'version', 'result'],
+        //{block name="backend/systeminfo/model/encoder/fields"}{/block}
+        'name', 'required', 'version', 'result'],
     /**
     * Configure the data communication
     * @object

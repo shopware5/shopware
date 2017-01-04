@@ -43,7 +43,7 @@ Ext.define('Shopware.apps.Translation',
      * sub-application behavior and the event bus
      * @string
      */
-	extend: 'Enlight.app.SubApplication',
+    extend: 'Enlight.app.SubApplication',
 
     /**
      * Sets the loading path for the sub-application.
@@ -64,13 +64,13 @@ Ext.define('Shopware.apps.Translation',
      * The name of the module. Used for internal purpose
      * @string
      */
-	name: 'Shopware.apps.Translation',
+    name: 'Shopware.apps.Translation',
 
     /**
      * Required controllers for module (subapplication)
      * @array
      */
-	controllers: [ 'Main' ],
+    controllers: [ 'Main' ],
 
     /**
      * Returns the main application window for this is expected

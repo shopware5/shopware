@@ -35,17 +35,17 @@
  */
 //{block name="backend/vote/app"}
 Ext.define('Shopware.apps.Vote', {
-	/**
-	* Extends from our special controller, which handles the
-	* sub-application behavior and the event bus
-	* @string
-	*/
+    /**
+    * Extends from our special controller, which handles the
+    * sub-application behavior and the event bus
+    * @string
+    */
     extend : 'Enlight.app.SubApplication',
-	/**
-	* The name of the module. Used for internal purpose
-	* @string
-	*/
-	name: 'Shopware.apps.Vote',
+    /**
+    * The name of the module. Used for internal purpose
+    * @string
+    */
+    name: 'Shopware.apps.Vote',
 
     views: [
         'main.Window',
@@ -60,19 +60,19 @@ Ext.define('Shopware.apps.Vote', {
     models: ['Vote'],
 
 
-	/**
-	* Sets the loading path for the sub-application.
-	*
-	* Note that you'll need a "loadAction" in your
-	* controller (server-side)
-	* @string
-	*/
+    /**
+    * Sets the loading path for the sub-application.
+    *
+    * Note that you'll need a "loadAction" in your
+    * controller (server-side)
+    * @string
+    */
     loadPath : '{url controller="vote" action=load}',
     bulkLoad: true,
-	/**
-	* Requires controllers for sub-application
-	* @array
-	*/
+    /**
+    * Requires controllers for sub-application
+    * @array
+    */
     controllers : ['Main', 'Vote'],
         /**
      * Returns the main application window for this is expected

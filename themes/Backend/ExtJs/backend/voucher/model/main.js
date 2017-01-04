@@ -35,17 +35,17 @@
  */
 //{block name="backend/voucher/model/main"}
 Ext.define('Shopware.apps.Voucher.model.Main', {
-	/**
-	* Extends the standard ExtJS 4
-	* @string
-	*/
+    /**
+    * Extends the standard ExtJS 4
+    * @string
+    */
     extend : 'Ext.data.Model',
-	/**
-	* The fields used for this model
-	* @array
-	*/
+    /**
+    * The fields used for this model
+    * @array
+    */
     fields : [
-		//{block name="backend/voucher/model/main/fields"}{/block}
+        //{block name="backend/voucher/model/main/fields"}{/block}
         { name : 'id', type : 'int' },
         { name : 'description', type : 'string' },
         { name : 'voucherCode', type : 'string' },
@@ -57,15 +57,15 @@ Ext.define('Shopware.apps.Voucher.model.Main', {
         { name : 'percental', type : 'int' },
         { name : 'checkedIn', type : 'int' }
     ],
-	/**
-	* If the name of the field is 'id' extjs assumes autmagical that
-	* this field is an unique identifier.
-	*/
+    /**
+    * If the name of the field is 'id' extjs assumes autmagical that
+    * this field is an unique identifier.
+    */
     idProperty : 'id',
-	/**
-	* Configure the data communication
-	* @object
-	*/
+    /**
+    * Configure the data communication
+    * @object
+    */
     proxy : {
         type : 'ajax',
         api:{
@@ -80,9 +80,9 @@ Ext.define('Shopware.apps.Voucher.model.Main', {
             totalProperty: 'totalCount'
         }
     },
-	/**
-	* Rules to validate the input at the frontend side.
-	*/
+    /**
+    * Rules to validate the input at the frontend side.
+    */
     validations : [
         { field : 'description', type : 'length', min : 5 }
     ]

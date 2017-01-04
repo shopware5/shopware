@@ -38,7 +38,7 @@
 Ext.define('Shopware.apps.Translation.view.main.Services',
 /** @lends Ext.window.Window# */
 {
-	extend: 'Ext.window.Window',
+    extend: 'Ext.window.Window',
     title: '{s name=services_title}Translation services{/s}',
     alias: 'widget.translation-main-services-window',
     width: 400,

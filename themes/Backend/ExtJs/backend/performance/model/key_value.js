@@ -44,7 +44,7 @@ Ext.define('Shopware.apps.Performance.model.KeyValue', {
      * @array
      */
     fields:[
-		//{block name="backend/performance/model/key_value/fields"}{/block}
+        //{block name="backend/performance/model/key_value/fields"}{/block}
         { name:'id', type:'int' },
         { name:'key', type:'string' },
         { name:'value', type:'string' }

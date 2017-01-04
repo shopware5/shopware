@@ -73,7 +73,7 @@ Ext.define('Shopware.apps.Order.controller.List', {
             failureMessage:'{s name=delete_position/error_message}An error has occurred while deleting:{/s}'
         },
 
-		growlMessage: '{s name=growlMessage}Order{/s}'
+        growlMessage: '{s name=growlMessage}Order{/s}'
 
     },
 

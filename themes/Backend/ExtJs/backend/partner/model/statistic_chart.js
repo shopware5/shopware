@@ -34,29 +34,29 @@
  */
 //{block name="backend/partner/model/statisticChart"}
 Ext.define('Shopware.apps.Partner.model.StatisticChart', {
-	/**
-	* Extends the standard ExtJS 4
-	* @string
-	*/
+    /**
+    * Extends the standard ExtJS 4
+    * @string
+    */
     extend : 'Ext.data.Model',
-	/**
-	* The fields used for this model
-	* @array
-	*/
+    /**
+    * The fields used for this model
+    * @array
+    */
     fields : [
-		//{block name="backend/partner/model/statisticChart/fields"}{/block}
+        //{block name="backend/partner/model/statisticChart/fields"}{/block}
         { name:'netTurnOver', type:'float' },
         { name:'date', type:'date', dateFormat:'Y-m-d' }
     ],
-	/**
-	* If the name of the field is 'id' extjs assumes autmagical that
-	* this field is an unique identifier.
-	*/
+    /**
+    * If the name of the field is 'id' extjs assumes autmagical that
+    * this field is an unique identifier.
+    */
     idProperty : 'id',
-	/**
-	* Configure the data communication
-	* @object
-	*/
+    /**
+    * Configure the data communication
+    * @object
+    */
     proxy : {
         type : 'ajax',
         api:{

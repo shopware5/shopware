@@ -76,7 +76,7 @@ Ext.define('Shopware.apps.Supplier.controller.Main', {
         saveDialogSuccess :'{s name=dialog_save_success}Supplier has been saved successfully.{/s}',
         deleteDialogFailure :'{s name=dialog_multi_error}Some suppliers could not be removed.{/s}',
         deleteDialogTitle : '{s name=delete_dialog_title}Delete selected supplier{/s}',
-		growlMessage: '{s name=window_title}{/s}'
+        growlMessage: '{s name=window_title}{/s}'
     },
 
     /**
@@ -433,7 +433,7 @@ Ext.define('Shopware.apps.Supplier.controller.Main', {
             Shopware.Msg.createGrowlMessage(
                 me.messages.deleteDialogTitle,
                 me.messages.deleteDialogForbidden,
-				me.messages.growlMessage
+                me.messages.growlMessage
             );
         }
         /* {/if} */

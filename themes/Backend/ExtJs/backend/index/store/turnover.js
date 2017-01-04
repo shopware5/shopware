@@ -26,8 +26,8 @@
  */
 //{block name="backend/ubdex/store/turnover"}
 Ext.define('Shopware.apps.Index.store.Turnover', {
-	extend: 'Ext.data.Store',
-	model: 'Shopware.apps.Index.model.Turnover',
+    extend: 'Ext.data.Store',
+    model: 'Shopware.apps.Index.model.Turnover',
     remoteFilter: true,
     clearOnLoad: false,
 

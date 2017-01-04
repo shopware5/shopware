@@ -71,31 +71,31 @@ Ext.define('Shopware.apps.UserManager.view.user.Create', {
         me.addEvents('saveUser');
 
         me.dockedItems = [{
-	        xtype: 'toolbar',
-	        dock: 'bottom',
-	        ui: 'shopware-ui',
-	        cls: 'shopware-toolbar',
-	        items: ['->', {
-				text: '{s name="create_user/cancel"}Cancel{/s}',
-				cls: 'secondary',
-				scope: me,
-				handler: me.close
-	        }
+            xtype: 'toolbar',
+            dock: 'bottom',
+            ui: 'shopware-ui',
+            cls: 'shopware-toolbar',
+            items: ['->', {
+                text: '{s name="create_user/cancel"}Cancel{/s}',
+                cls: 'secondary',
+                scope: me,
+                handler: me.close
+            }
         /* {if {acl_is_allowed privilege=create}} */
-			,{
-				text: '{s name="create_user/save"}Save{/s}',
-				action: 'save',
-	            cls: 'primary',
-	            handler: function(btn) {
-	                me.fireEvent('saveUser', me.record, me.formPanel);
-	            }
-	        }
+            ,{
+                text: '{s name="create_user/save"}Save{/s}',
+                action: 'save',
+                cls: 'primary',
+                handler: function(btn) {
+                    me.fireEvent('saveUser', me.record, me.formPanel);
+                }
+            }
         /* {/if} */]
         }];
 
         // Add own vtypes to validate password fields
         Ext.apply(Ext.form.field.VTypes, {
-        	password: function(val, field) {
+            password: function(val, field) {
                 if (!field.up('window').edit && !val) return false;
                 var repeatField = field.up('window').down('[name=password2]');
                 var success = true;
@@ -104,8 +104,8 @@ Ext.define('Shopware.apps.UserManager.view.user.Create', {
                 if (val.length < 8) success = false;
                 repeatField.validate();
                 return success;
-        	},
-        	passwordText: '{s name="create_user/password_error"}Repeat password and use minimum 8 characters!{/s}',
+            },
+            passwordText: '{s name="create_user/password_error"}Repeat password and use minimum 8 characters!{/s}',
             passwordRepeat: function(val, field) {
                 if (!field.up('window').edit && !val) return false;
                 var originalField = field.up('window').down('[name=password]');

@@ -42,7 +42,7 @@ Ext.define('Shopware.apps.MediaManager', {
      * sub-application behavior and the event bus
      * @string
      */
-	extend: 'Enlight.app.SubApplication',
+    extend: 'Enlight.app.SubApplication',
 
     bulkLoad: true,
 
@@ -59,13 +59,13 @@ Ext.define('Shopware.apps.MediaManager', {
      * The name of the module. Used for internal purpose
      * @string
      */
-	name: 'Shopware.apps.MediaManager',
+    name: 'Shopware.apps.MediaManager',
 
     /**
      * Required controllers for module (subapplication)
      * @array
      */
-	controllers: [ 'Main', 'Album', 'Media', 'Thumbnail' ],
+    controllers: [ 'Main', 'Album', 'Media', 'Thumbnail' ],
 
     /**
      * Requires models for sub-application

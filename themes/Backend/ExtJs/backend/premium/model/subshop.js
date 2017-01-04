@@ -37,35 +37,35 @@ Ext.define('Shopware.apps.Premium.model.Subshop', {
      * @string
      */
     extend:'Ext.data.Model',
-	/**
-	* Configure the data communication
-	* @object
-	*/
-	proxy: {
-		type: 'ajax',
-		/**
-		* Configure the url mapping for the different
-		* @object
-		*/
-		api: {
-			//read out all articles
-			read: '{url controller="premium" action="getSubShops"}'
-		},
-		/**
-		* Configure the data reader
-		* @object
-		*/
-		reader: {
-			type: 'json',
-			root: 'data'
-		}
-	},
+    /**
+    * Configure the data communication
+    * @object
+    */
+    proxy: {
+        type: 'ajax',
+        /**
+        * Configure the url mapping for the different
+        * @object
+        */
+        api: {
+            //read out all articles
+            read: '{url controller="premium" action="getSubShops"}'
+        },
+        /**
+        * Configure the data reader
+        * @object
+        */
+        reader: {
+            type: 'json',
+            root: 'data'
+        }
+    },
     /**
      * The fields used for this model
      * @array
      */
     fields:[
-		//{block name="backend/premium/model/shop/fields"}{/block}
+        //{block name="backend/premium/model/shop/fields"}{/block}
         { name:'id', type:'int' },
         { name:'localeId', type:'int' },
         { name:'categoryId', type:'int' },

@@ -33,7 +33,7 @@ Ext.define('Shopware.apps.Category.model.ProductAssignment', {
      * @object
      */
     fields:[
-		//{block name="backend/category/model/product_assignment/fields"}{/block}
+        //{block name="backend/category/model/product_assignment/fields"}{/block}
         { name: 'articleId', type: 'integer' },
         { name: 'name', type: 'string' },
         { name: 'number', type: 'string' },

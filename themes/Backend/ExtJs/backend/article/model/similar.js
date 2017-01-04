@@ -46,7 +46,7 @@ Ext.define('Shopware.apps.Article.model.Similar', {
      * @array
      */
     fields: [
-		//{block name="backend/article/model/similar/fields"}{/block}
+        //{block name="backend/article/model/similar/fields"}{/block}
         { name: 'id', type: 'int' },
         { name: 'cross', type: 'boolean' },
         { name: 'name', type: 'string' },

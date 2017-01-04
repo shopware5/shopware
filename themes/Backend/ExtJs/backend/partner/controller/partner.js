@@ -69,7 +69,7 @@ Ext.define('Shopware.apps.Partner.controller.Partner', {
         deleteSingleItemSuccess : '{s name=tree/delete_success}Item has been deleted{/s}',
         deleteSingleItemFailure : '{s name=tree/delete_failure}Item could not be deleted{/s}',
         mappedToCustomer: '{s name=message/mappedToCustomer}Linked to:{/s}',
-		growlMessage: '{s name=window/main_title}Affiliate program{/s}'
+        growlMessage: '{s name=window/main_title}Affiliate program{/s}'
     },
 
     /**

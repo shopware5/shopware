@@ -53,12 +53,12 @@ Ext.define('Shopware.apps.Base.model.Dispatch', {
      */
     idProperty : 'id',
 
-	/**
+    /**
     * The fields used for this model
     * @array
     */
     fields: [
-		//{block name="backend/base/model/dispatch/fields"}{/block}
+        //{block name="backend/base/model/dispatch/fields"}{/block}
         { name : 'id', type : 'int' },
         { name : 'name', type : 'string' },
         { name : 'type', type : 'int' },

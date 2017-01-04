@@ -33,8 +33,8 @@
 //{block name="backend/first_run_wizard/model/integrated_plugins_countries"}
 
 Ext.define('Shopware.apps.FirstRunWizard.model.IntegratedPluginsCountries', {
-	extend: 'Ext.data.Model',
-	fields: [
+    extend: 'Ext.data.Model',
+    fields: [
         'iso',
         'text'
     ]

@@ -26,8 +26,8 @@
  */
 //{block name="backend/ubdex/store/merchant"}
 Ext.define('Shopware.apps.Index.store.Merchant', {
-	extend: 'Ext.data.Store',
-	model: 'Shopware.apps.Index.model.Merchant',
+    extend: 'Ext.data.Store',
+    model: 'Shopware.apps.Index.model.Merchant',
     remoteFilter: true,
     clearOnLoad: false,
 

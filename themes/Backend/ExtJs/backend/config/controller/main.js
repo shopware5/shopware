@@ -102,9 +102,9 @@ Ext.define('Shopware.apps.Config.controller.Main', {
             'config-main-form button[action=save]': {
                 click: me.onSaveForm
             },
-			'config-main-form button[action=reset]': {
-				click: me.onResetForm
-			},
+            'config-main-form button[action=reset]': {
+                click: me.onResetForm
+            },
             'config-navigation config-base-search': {
                 change: me.onSearchForm
             }
@@ -121,15 +121,15 @@ Ext.define('Shopware.apps.Config.controller.Main', {
         }
     },
 
-	onResetForm: function(btn){
-		var me = this,
-			formPanel = btn.up('form'),
-			basicForm = formPanel.getForm();
+    onResetForm: function(btn){
+        var me = this,
+            formPanel = btn.up('form'),
+            basicForm = formPanel.getForm();
 
-		Ext.each(basicForm.getFields().items, function(field) {
-			field.reset();
-		});
-	},
+        Ext.each(basicForm.getFields().items, function(field) {
+            field.reset();
+        });
+    },
 
     onLoadForm: function(store, records, success) {
         var me = this, form, controller;
@@ -145,11 +145,11 @@ Ext.define('Shopware.apps.Config.controller.Main', {
         }
 
         if(form.get('name') == 'Document') {
-			controller = 'Document';
-			me.getController('Form');
-		} else {
-			controller = 'Form';
-		}
+            controller = 'Document';
+            me.getController('Form');
+        } else {
+            controller = 'Form';
+        }
         me.getController(controller);
 
         me.initForm(form);

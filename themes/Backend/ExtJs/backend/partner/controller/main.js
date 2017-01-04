@@ -39,7 +39,7 @@ Ext.define('Shopware.apps.Partner.controller.Main', {
      * Extend from the standard ExtJS 4 controller
      * @string
      */
-	extend: 'Ext.app.Controller',
+    extend: 'Ext.app.Controller',
 
     /**
      * Required sub-controller for this controller
@@ -59,13 +59,13 @@ Ext.define('Shopware.apps.Partner.controller.Main', {
 
 
     /**
-	 * Creates the necessary event listener for this
-	 * specific controller and opens a new Ext.window.Window
-	 * to display the subapplication
+     * Creates the necessary event listener for this
+     * specific controller and opens a new Ext.window.Window
+     * to display the subapplication
      *
      * @return void
-	 */
-	init: function() {
+     */
+    init: function() {
         var me = this;
         /** me.subApplication.listStore stores the list data*/
         me.subApplication.listStore =  me.subApplication.getStore('List');

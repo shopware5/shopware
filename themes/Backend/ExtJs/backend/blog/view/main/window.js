@@ -36,7 +36,7 @@
  */
 //{block name="backend/blog/view/main/window"}
 Ext.define('Shopware.apps.Blog.view.main.Window', {
-	extend: 'Enlight.app.Window',
+    extend: 'Enlight.app.Window',
     title: '{s name=window/main_title}Blog-Overview{/s}',
     alias: 'widget.blog-main-window',
     border: false,

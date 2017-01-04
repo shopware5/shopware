@@ -1,13 +1,13 @@
 {block name='frontend_detail_data_block_prices_start'}
-	<div class="block-prices--container{if $hidden && !$sArticle.selected} is--hidden{/if} block-price--{$sArticle.ordernumber}">
+    <div class="block-prices--container{if $hidden && !$sArticle.selected} is--hidden{/if} block-price--{$sArticle.ordernumber}">
 
-		{* @deprecated *}
-		{block name='frontend_detail_data_block_prices_headline'}{/block}
+        {* @deprecated *}
+        {block name='frontend_detail_data_block_prices_headline'}{/block}
 
         {$hasReferencePrice = ($sArticle.referenceprice > 0)}
 
-		{block name="frontend_detail_data_block_prices_table"}
-			<table class="block-prices--table">
+        {block name="frontend_detail_data_block_prices_table"}
+            <table class="block-prices--table">
                 {block name="frontend_detail_data_block_prices_table_inner"}
                     {block name="frontend_detail_data_block_prices_table_head"}
                         <thead class="block-prices--head">
@@ -53,10 +53,10 @@
 
                                                         {if $blockPrice.from == 1}
                                                             {s namespace="frontend/detail/data" name="DetailDataInfoUntil"}{/s}
-															<span class="block-prices--quantity">{$blockPrice.to}</span>
+                                                            <span class="block-prices--quantity">{$blockPrice.to}</span>
                                                         {else}
                                                             {s namespace="frontend/detail/data" name="DetailDataInfoFrom"}{/s}
-															<span class="block-prices--quantity">{$blockPrice.from}</span>
+                                                            <span class="block-prices--quantity">{$blockPrice.from}</span>
                                                         {/if}
                                                     </td>
                                                 {/block}
@@ -82,7 +82,7 @@
                         </tbody>
                     {/block}
                 {/block}
-			</table>
-		{/block}
-	</div>
+            </table>
+        {/block}
+    </div>
 {/block}

@@ -43,7 +43,7 @@ Ext.define('Shopware.apps.Emotion.model.ArticleSlider', {
      * @array
      */
     fields: [
-		//{block name="backend/emotion/model/field/article_slider"}{/block}
+        //{block name="backend/emotion/model/field/article_slider"}{/block}
         'position', 'name', 'ordernumber', 'articleId'
     ]
 });

@@ -36,7 +36,7 @@
  */
 //{block name="backend/partner/view/partner/window"}
 Ext.define('Shopware.apps.Partner.view.partner.Window', {
-	extend: 'Enlight.app.Window',
+    extend: 'Enlight.app.Window',
     title: '{s name=window/detail_title}Partner configuration{/s}',
     alias: 'widget.partner-partner-window',
     border: false,

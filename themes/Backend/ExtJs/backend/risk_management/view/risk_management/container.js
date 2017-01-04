@@ -44,11 +44,11 @@ Ext.define('Shopware.apps.RiskManagement.view.risk_management.Container', {
     * @string
     */
     extend: 'Ext.container.Container',
-	layout: 'column',
-	defaults: {
-		columnWidth: 0.2
-	},
-	alias: 'widget.risk_management-main-container',
+    layout: 'column',
+    defaults: {
+        columnWidth: 0.2
+    },
+    alias: 'widget.risk_management-main-container',
 
     /**
     * Sets up the ui component
@@ -57,62 +57,62 @@ Ext.define('Shopware.apps.RiskManagement.view.risk_management.Container', {
     initComponent: function() {
         var me = this;
 
-		me.addEvents('onChangeRisk');
+        me.addEvents('onChangeRisk');
 
-		me.items = me.createItems();
+        me.items = me.createItems();
 
         me.callParent(arguments);
     },
 
-	/**
-	 * Creates the items for the container
-	 * @return Array
-	 */
-	createItems: function(){
-		var me = this,
-			newContainer,
-			window = me.up('window');
+    /**
+     * Creates the items for the container
+     * @return Array
+     */
+    createItems: function(){
+        var me = this,
+            newContainer,
+            window = me.up('window');
 
-		if(!me.hasOwnProperty('values')){
-			newContainer = true;
-		}
-		var comboBox1 = Ext.create('Ext.form.field.ComboBox', {
-			store: Ext.create('Shopware.apps.RiskManagement.store.Risks'),
-			displayField: 'description',
-			valueField: 'value',
-			editable: false,
-			value: (me.values && me.values.rule1) ? me.values.rule1 : '',
-			listeners: {
-				'change': function(comboBox, newValue){
-					me.fireEvent('onChangeRisk', this, newValue, 1)
-				}
-			}
-		}),
+        if(!me.hasOwnProperty('values')){
+            newContainer = true;
+        }
+        var comboBox1 = Ext.create('Ext.form.field.ComboBox', {
+            store: Ext.create('Shopware.apps.RiskManagement.store.Risks'),
+            displayField: 'description',
+            valueField: 'value',
+            editable: false,
+            value: (me.values && me.values.rule1) ? me.values.rule1 : '',
+            listeners: {
+                'change': function(comboBox, newValue){
+                    me.fireEvent('onChangeRisk', this, newValue, 1)
+                }
+            }
+        }),
 
-		comboBox2 = Ext.create('Ext.form.field.ComboBox', {
-			store: Ext.create('Shopware.apps.RiskManagement.store.Risks'),
-			displayField: 'description',
-			valueField: 'value',
-			editable: false,
-			value: (me.values && me.values.rule2) ? me.values.rule2 : '',
-			listeners: {
-				'change': function(comboBox, newValue){
-					me.fireEvent('onChangeRisk', this, newValue, 4)
-				}
-			}
-		});
-		if(me.values && ['ZONEIS', 'ZONEISNOT', 'BILLINGZONEIS', 'BILLINGZONEISNOT'].indexOf(me.values.rule1) >= 0){
-			var field1 = Ext.create('Ext.form.field.ComboBox', {
-				store: me.areasStore,
-				displayField: 'name',
-				valueField: 'name',
-				editable: false,
-				value: (me.values && me.values.value1) ? me.values.value1 : '',
-				columnWidth: 0.1,
-				style: {
-					marginLeft: '10px'
-				}
-			});
+        comboBox2 = Ext.create('Ext.form.field.ComboBox', {
+            store: Ext.create('Shopware.apps.RiskManagement.store.Risks'),
+            displayField: 'description',
+            valueField: 'value',
+            editable: false,
+            value: (me.values && me.values.rule2) ? me.values.rule2 : '',
+            listeners: {
+                'change': function(comboBox, newValue){
+                    me.fireEvent('onChangeRisk', this, newValue, 4)
+                }
+            }
+        });
+        if(me.values && ['ZONEIS', 'ZONEISNOT', 'BILLINGZONEIS', 'BILLINGZONEISNOT'].indexOf(me.values.rule1) >= 0){
+            var field1 = Ext.create('Ext.form.field.ComboBox', {
+                store: me.areasStore,
+                displayField: 'name',
+                valueField: 'name',
+                editable: false,
+                value: (me.values && me.values.value1) ? me.values.value1 : '',
+                columnWidth: 0.1,
+                style: {
+                    marginLeft: '10px'
+                }
+            });
         }else if(me.values && (me.values.rule1 == 'SUBSHOP' || me.values.rule1 == 'SUBSHOPNOT')){
             var field1 = Ext.create('Ext.form.field.ComboBox', {
                 store: me.subShopStore,
@@ -131,15 +131,15 @@ Ext.define('Shopware.apps.RiskManagement.view.risk_management.Container', {
             }else{
                 field1.setValue('');
             }
-		}else{
-			var field1 = Ext.create('Ext.form.field.Text', {
-				columnWidth: 0.1,
-				style: {
-					marginLeft: '10px'
-				},
-				value: (me.values && me.values.value1) ? me.values.value1 : ''
-			});
-		}
+        }else{
+            var field1 = Ext.create('Ext.form.field.Text', {
+                columnWidth: 0.1,
+                style: {
+                    marginLeft: '10px'
+                },
+                value: (me.values && me.values.value1) ? me.values.value1 : ''
+            });
+        }
         if(me.values && me.values.rule1 == 'INKASSO'){
             field1.setValue('1');
             field1.hide();
@@ -147,18 +147,18 @@ Ext.define('Shopware.apps.RiskManagement.view.risk_management.Container', {
             field1.show();
         }
 
-		if(me.values && ['ZONEIS', 'ZONEISNOT', 'BILLINGZONEIS', 'BILLINGZONEISNOT'].indexOf(me.values.rule2) >= 0){
-			var field2 = Ext.create('Ext.form.field.ComboBox', {
-				store: me.areasStore,
-				displayField: 'name',
-				valueField: 'name',
-				editable: false,
-				value: (me.values && me.values.value2) ? me.values.value2 : '',
-				columnWidth: 0.1,
-				style: {
-					marginLeft: '10px'
-				}
-			});
+        if(me.values && ['ZONEIS', 'ZONEISNOT', 'BILLINGZONEIS', 'BILLINGZONEISNOT'].indexOf(me.values.rule2) >= 0){
+            var field2 = Ext.create('Ext.form.field.ComboBox', {
+                store: me.areasStore,
+                displayField: 'name',
+                valueField: 'name',
+                editable: false,
+                value: (me.values && me.values.value2) ? me.values.value2 : '',
+                columnWidth: 0.1,
+                style: {
+                    marginLeft: '10px'
+                }
+            });
         }else if(me.values && (me.values.rule2 == 'SUBSHOP' || me.values.rule2 == 'SUBSHOPNOT')){
             var field2 = Ext.create('Ext.form.field.ComboBox', {
                 store: me.subShopStore,
@@ -177,15 +177,15 @@ Ext.define('Shopware.apps.RiskManagement.view.risk_management.Container', {
             }else{
                 field2.setValue('');
             }
-		}else{
-			var field2 = Ext.create('Ext.form.field.Text', {
-				columnWidth: 0.1,
-				style: {
-					marginLeft: '10px'
-				},
-				value: (me.values && me.values.value2) ? me.values.value2 : ''
-			});
-		}
+        }else{
+            var field2 = Ext.create('Ext.form.field.Text', {
+                columnWidth: 0.1,
+                style: {
+                    marginLeft: '10px'
+                },
+                value: (me.values && me.values.value2) ? me.values.value2 : ''
+            });
+        }
         if(me.values && me.values.rule2 == 'INKASSO'){
             field2.setValue('1');
             field2.hide();
@@ -193,53 +193,53 @@ Ext.define('Shopware.apps.RiskManagement.view.risk_management.Container', {
             field2.show();
         }
 
-		var	items = [
-			comboBox1,
-			field1,
-			{
-				xtype: 'container',
-				html: '<b>{s name=container_and}AND{/s}</b>',
-				columnWidth: 0.1,
-				style: {
-					height: '20px',
-					textAlign: 'center',
-					paddingTop: '2px',
-					paddingBottom: '2px'
-				}
-			},
-			comboBox2,
-			field2,
-			{
-				xtype: 'hidden',
-				value: (me.values && me.values.id) ? me.values.id : ''
-			}
-		];
-		if(!newContainer){
-			/*{if {acl_is_allowed privilege=delete}}*/
-			items.push({
-				xtype: 'button',
-				iconCls: 'sprite-minus-circle',
-				columnWidth: 0.09,
-				text: '{s name=container/deleteButton}Delete{/s}',
-				action: 'delete',
-				rowIndex: (me.values && me.values.id) ? me.values.id : ''
-			});
-			/*{/if}*/
-		}else{
-			/*{if {acl_is_allowed privilege=save}}*/
-			items.push({
-				xtype: 'button',
+        var items = [
+            comboBox1,
+            field1,
+            {
+                xtype: 'container',
+                html: '<b>{s name=container_and}AND{/s}</b>',
+                columnWidth: 0.1,
+                style: {
+                    height: '20px',
+                    textAlign: 'center',
+                    paddingTop: '2px',
+                    paddingBottom: '2px'
+                }
+            },
+            comboBox2,
+            field2,
+            {
+                xtype: 'hidden',
+                value: (me.values && me.values.id) ? me.values.id : ''
+            }
+        ];
+        if(!newContainer){
+            /*{if {acl_is_allowed privilege=delete}}*/
+            items.push({
+                xtype: 'button',
+                iconCls: 'sprite-minus-circle',
+                columnWidth: 0.09,
+                text: '{s name=container/deleteButton}Delete{/s}',
+                action: 'delete',
+                rowIndex: (me.values && me.values.id) ? me.values.id : ''
+            });
+            /*{/if}*/
+        }else{
+            /*{if {acl_is_allowed privilege=save}}*/
+            items.push({
+                xtype: 'button',
                 cls: 'primary',
-				columnWidth: 0.22,
-				text: '{s name=container/saveButton}Save{/s}',
-				action: 'saveRules'
-			});
-			/*{/if}*/
-			comboBox1.setValue("");
-			comboBox2.setValue("");
-		}
+                columnWidth: 0.22,
+                text: '{s name=container/saveButton}Save{/s}',
+                action: 'saveRules'
+            });
+            /*{/if}*/
+            comboBox1.setValue("");
+            comboBox2.setValue("");
+        }
 
-		return items;
-	}
+        return items;
+    }
 });
 //{/block}

@@ -1,5 +1,5 @@
 {block name="backend/index/menu/function"}
-	{function name=backend_menu level=0}
+    {function name=backend_menu level=0}
         [{foreach $menu as $category}
             {if ($category['onclick'] || $category['action'] || $category['children']) && {acl_is_allowed privilege=read resource=$category['controller']|lower}}
                 {
@@ -28,6 +28,6 @@
                 }{if !$category@last},{ xtype: 'tbspacer', width: 6 }, { xtype: 'tbseparator' }, { xtype: 'tbspacer', width: 6 }, {/if}
             {/if}
         {/foreach}]
-	{/function}
+    {/function}
 {/block}
 {call name=backend_menu menu=$menu}

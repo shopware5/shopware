@@ -35,7 +35,7 @@ Ext.define('Shopware.apps.Config.model.form.Document', {
     extend:'Ext.data.Model',
 
     fields: [
-		//{block name="backend/config/model/form/document/fields"}{/block}
+        //{block name="backend/config/model/form/document/fields"}{/block}
         { name: 'id', type: 'int' },
         { name: 'name',  type: 'string' },
         { name: 'template',  type: 'string' },
@@ -47,11 +47,11 @@ Ext.define('Shopware.apps.Config.model.form.Document', {
         { name: 'pageBreak',  type: 'int' }
     ],
 
-	associations: [{
-		type: 'hasMany',
-		model: 'Shopware.apps.Config.model.form.DocumentElement',
-		name: 'getElements',
-		associationKey: 'elements'
-	}]
+    associations: [{
+        type: 'hasMany',
+        model: 'Shopware.apps.Config.model.form.DocumentElement',
+        name: 'getElements',
+        associationKey: 'elements'
+    }]
 });
 //{/block}

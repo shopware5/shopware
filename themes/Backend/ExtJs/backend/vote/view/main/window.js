@@ -37,7 +37,7 @@
  */
 //{block name="backend/vote/view/main/window"}
 Ext.define('Shopware.apps.Vote.view.main.Window', {
-	extend: 'Enlight.app.Window',
+    extend: 'Enlight.app.Window',
     title: '{s name=window_title}Votes{/s}',
     cls: Ext.baseCSSPrefix + 'vote-window',
     alias: 'widget.vote-main-window',

@@ -34,23 +34,23 @@
  */
 //{block name="backend/user_manager/model/roles"}
 Ext.define('Shopware.apps.UserManager.model.Roles', {
-	extend: 'Ext.data.Model',
-	fields: [
-		//{block name="backend/user_manager/model/roles/fields"}{/block}
-		'id', 'parentId', 'name', 'description', 'source', { name: 'enabled', type: 'bool' }, { name: 'admin', type: 'bool' }],
-	proxy: {
-		type: 'ajax',
-		api: {
-			read: '{url controller="UserManager" action="getRoles"}',
-			create: '{url controller="UserManager" action="updateRole"}',
-			update: '{url controller="UserManager" action="updateRole"}',
-			destroy: '{url controller="UserManager" action="deleteRole"}'
-		},
-		reader: {
-			type: 'json',
-			root: 'data',
+    extend: 'Ext.data.Model',
+    fields: [
+        //{block name="backend/user_manager/model/roles/fields"}{/block}
+        'id', 'parentId', 'name', 'description', 'source', { name: 'enabled', type: 'bool' }, { name: 'admin', type: 'bool' }],
+    proxy: {
+        type: 'ajax',
+        api: {
+            read: '{url controller="UserManager" action="getRoles"}',
+            create: '{url controller="UserManager" action="updateRole"}',
+            update: '{url controller="UserManager" action="updateRole"}',
+            destroy: '{url controller="UserManager" action="deleteRole"}'
+        },
+        reader: {
+            type: 'json',
+            root: 'data',
             totalProperty:'total'
-		}
-	}
+        }
+    }
 });
 //{/block}

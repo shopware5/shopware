@@ -46,7 +46,7 @@ Ext.define('Shopware.apps.Config.model.form.Widget', {
 
     extend: 'Ext.data.Model',
     fields: [
-		//{block name="backend/config/model/form/widget/fields"}{/block}
+        //{block name="backend/config/model/form/widget/fields"}{/block}
         { name: 'id', type: 'int' },
         {
             name:'label',

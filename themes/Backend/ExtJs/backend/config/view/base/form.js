@@ -65,12 +65,12 @@ Ext.define('Shopware.apps.Config.view.base.Form', {
     },
 
     getItems: function() {
-		return [];
+        return [];
     },
 
     getActionColumn: function() {
         var me = this,
-			items = [];
+            items = [];
         if(me.deletable) {
         /*{if {acl_is_allowed privilege=delete}}*/
             items.push({

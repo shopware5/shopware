@@ -34,27 +34,27 @@
  */
 //{block name="backend/user_manager/model/user"}
 Ext.define('Shopware.apps.UserManager.model.User', {
-	extend: 'Ext.data.Model',
-	fields: [
-		//{block name="backend/user_manager/model/user/fields"}{/block}
-		'id', 'username', 'groupname', 'name', 'email', 'active', 'admin', 'failedlogins', { name: 'lastLogin', type: 'date'} ],
-	proxy: {
-		type: 'ajax',
-		api: {
-			read: '{url controller="UserManager" action="getUsers"}',
-			create: '{url controller="UserManager" action="createUser"}',
-			update: '{url controller="UserManager" action="updateUser"}',
-			destroy: '{url controller="UserManager" action="deleteUser"}'
-		},
-		reader: {
-			type: 'json',
-			root: 'data'
-		}
-	},
-	validations: [
-		{ field: 'username', type: 'length', min: 6 },
-		{ field: 'password', type: 'length', min: 6 },
-		{ field: 'name', type: 'length', min: 6 }
-	]
+    extend: 'Ext.data.Model',
+    fields: [
+        //{block name="backend/user_manager/model/user/fields"}{/block}
+        'id', 'username', 'groupname', 'name', 'email', 'active', 'admin', 'failedlogins', { name: 'lastLogin', type: 'date'} ],
+    proxy: {
+        type: 'ajax',
+        api: {
+            read: '{url controller="UserManager" action="getUsers"}',
+            create: '{url controller="UserManager" action="createUser"}',
+            update: '{url controller="UserManager" action="updateUser"}',
+            destroy: '{url controller="UserManager" action="deleteUser"}'
+        },
+        reader: {
+            type: 'json',
+            root: 'data'
+        }
+    },
+    validations: [
+        { field: 'username', type: 'length', min: 6 },
+        { field: 'password', type: 'length', min: 6 },
+        { field: 'name', type: 'length', min: 6 }
+    ]
 });
 //{/block}

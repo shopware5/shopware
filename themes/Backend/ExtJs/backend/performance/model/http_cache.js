@@ -44,7 +44,7 @@ Ext.define('Shopware.apps.Performance.model.HttpCache', {
      * @array
      */
     fields:[
-		//{block name="backend/performance/model/http_cache/fields"}{/block}
+        //{block name="backend/performance/model/http_cache/fields"}{/block}
         { name:'id', type:'int' },
         { name: 'enabled', type: 'bool'},
         { name: 'HttpCache:proxyPrune', type: 'bool'},

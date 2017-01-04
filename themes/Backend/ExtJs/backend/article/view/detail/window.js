@@ -720,9 +720,9 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
             items: [
                 { xtype: 'tbfill' },
                 me.cancelButton,
-				/*{if {acl_is_allowed privilege=save}}*/
+                /*{if {acl_is_allowed privilege=save}}*/
                 me.saveButton,
-				/*{/if}*/
+                /*{/if}*/
                 me.configuratorSaveButton,
                 me.esdBackButton,
                 me.esdSaveButton

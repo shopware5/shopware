@@ -44,7 +44,7 @@ Ext.define('Shopware.apps.NewsletterManager.model.Settings', {
      * @array
      */
     fields: [
-		//{block name="backend/newsletter_manager/model/settings/fields"}{/block}
+        //{block name="backend/newsletter_manager/model/settings/fields"}{/block}
         { name: 'id', type: 'int' },
         { name: 'subject', type: 'string' },
         { name: 'senderId', type: 'int', defaultValue: 1 },

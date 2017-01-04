@@ -29,11 +29,11 @@
 
 //{block name="backend/site/model/groups"}
 Ext.define('Shopware.apps.Site.model.Groups', {
-	extend: 'Ext.data.Model',
+    extend: 'Ext.data.Model',
     idProperty: 'templateVariable',
     root: 'groups',
     fields: [
-		//{block name="backend/site/model/groups/fields"}{/block}
+        //{block name="backend/site/model/groups/fields"}{/block}
         { name : 'id', type: 'int' },
         { name : 'templateVariable', type: 'string', mapping: 'key' },
         { name : 'groupName', type: 'string', mapping: 'name' }

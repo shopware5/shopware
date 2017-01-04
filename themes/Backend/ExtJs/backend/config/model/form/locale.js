@@ -34,7 +34,7 @@
 Ext.define('Shopware.apps.Config.model.form.Locale', {
     extend: 'Shopware.apps.Base.model.Locale',
     fields: [
-		//{block name="backend/config/model/form/locale/fields"}{/block}
+        //{block name="backend/config/model/form/locale/fields"}{/block}
         { name: 'deletable', type: 'boolean', convert: function(v, r) { return r.data.id > 2; } }
     ]
 });

@@ -47,7 +47,7 @@ Ext.define('Shopware.apps.ProductFeed.model.CategoryForComboTree', {
      * @array
      */
     fields : [
-		//{block name="backend/product_feed/model/category_for_combo_tree/fields"}{/block}
+        //{block name="backend/product_feed/model/category_for_combo_tree/fields"}{/block}
         { name : 'name',     type: 'string' },
         { name : 'id',       type: 'int' },
         { name : 'parentId', type: 'int' },

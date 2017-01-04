@@ -592,7 +592,7 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
                 } else {
                     message = Ext.String.format(me.snippets.failure.setLoad, name) + '<br>' + me.snippets.failure.noMoreInformation;
                 }
-				Shopware.Notification.createGrowlMessage(me.snippets.failure.title, message, me.snippets.growlMessage);
+                Shopware.Notification.createGrowlMessage(me.snippets.failure.title, message, me.snippets.growlMessage);
             }
         })
     },
@@ -1147,7 +1147,7 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
                 } else {
                     message = Ext.String.Format(me.snippets.failure.optionSave, name) + '<br>' + me.snippets.failure.noMoreInformation;
                 }
-				Shopware.Notification.createGrowlMessage(me.snippets.failure.title, message, me.snippets.growlMessage);
+                Shopware.Notification.createGrowlMessage(me.snippets.failure.title, message, me.snippets.growlMessage);
             }
         });
     },
@@ -1315,13 +1315,13 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
             articleButton = me.getSaveArticleButton(),
             configuratorButton = me.getSaveConfiguratorButton();
 
-		if(articleButton){
-			if (hideArticleButton) {
-				articleButton.hide();
-			} else {
-				articleButton.show();
-			}
-		}
+        if(articleButton){
+            if (hideArticleButton) {
+                articleButton.hide();
+            } else {
+                articleButton.show();
+            }
+        }
 
         if (hideConfiguratorButton) {
             configuratorButton.hide();
@@ -1651,7 +1651,7 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
                 } else {
                     message = me.snippets.failure.dependencySave + '<br>' + me.snippets.failure.noMoreInformation;
                 }
-				Shopware.Notification.createGrowlMessage(me.snippets.failure.title, message, me.snippets.growlMessage);
+                Shopware.Notification.createGrowlMessage(me.snippets.failure.title, message, me.snippets.growlMessage);
             }
         });
     },
@@ -1686,7 +1686,7 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
                         } else {
                             message = me.snippets.failure.dependencyRemove + '<br>' + me.snippets.failure.noMoreInformation;
                         }
-        				Shopware.Notification.createGrowlMessage(me.snippets.failure.title, message, me.snippets.growlMessage);
+                        Shopware.Notification.createGrowlMessage(me.snippets.failure.title, message, me.snippets.growlMessage);
                     }
                 });
             });
@@ -1776,7 +1776,7 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
                         } else {
                             message = me.snippets.failure.variantsRemove + '<br>' + me.snippets.failure.noMoreInformation;
                         }
-        				Shopware.Notification.createGrowlMessage(me.snippets.failure.title, message, me.snippets.growlMessage);
+                        Shopware.Notification.createGrowlMessage(me.snippets.failure.title, message, me.snippets.growlMessage);
                     }
                 });
             });

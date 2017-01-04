@@ -32,8 +32,8 @@
  */
 //{block name="backend/media_manager/store/album"}
 Ext.define('Shopware.apps.MediaManager.store.Album', {
-	extend: 'Ext.data.TreeStore',
-	model: 'Shopware.apps.MediaManager.model.Album',
+    extend: 'Ext.data.TreeStore',
+    model: 'Shopware.apps.MediaManager.model.Album',
     batch: true,
     remoteFilter: true,
     clearOnLoad: false

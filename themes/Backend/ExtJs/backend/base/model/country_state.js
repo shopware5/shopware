@@ -34,7 +34,7 @@
 Ext.define('Shopware.apps.Base.model.CountryState', {
     extend: 'Shopware.data.Model',
     fields: [
-		//{block name="backend/base/model/country_state/fields"}{/block}
+        //{block name="backend/base/model/country_state/fields"}{/block}
         { name: 'id', type: 'int' },
         { name: 'countryId', type: 'int' },
         { name: 'name', type: 'string' },
