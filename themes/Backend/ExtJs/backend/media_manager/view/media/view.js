@@ -37,7 +37,7 @@
  */
 //{block name="backend/media_manager/view/media/view"}
 Ext.define('Shopware.apps.MediaManager.view.media.View', {
-	extend: 'Ext.panel.Panel',
+    extend: 'Ext.panel.Panel',
     alias: 'widget.mediamanager-media-view',
     style: 'background: #fff',
     border: false,
@@ -51,35 +51,35 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
     selectedLayout: 'grid',
     width: 1120,
 
-	snippets: {
-		noMediaFound: '{s name=noMediaFound}No Media found{/s}',
-		uploadDataDragDrop: '{s name=uploadDataDragDrop}Upload your Data via <strong>Drag & Drop</strong> here{/s}',
-		noAdditionalInfo: '{s name=noAdditionalInfo}No additional informations found{/s}',
-		moreInfoTitle:'{s name=moreInfoTitle}More information{/s}',
-		mediaInfo: {
-			name: '{s name=mediaInfo/name}Name:{/s}',
-			uploadedon: '{s name=mediaInfo/uploadedOn}Uploaded on:{/s}',
-			type: '{s name=mediaInfo/type}Type:{/s}',
-			resolution: '{s name=mediaInfo/resolution}Resolution:{/s}',
-			adress: '{s name=mediaInfo/adress}Adress:{/s}',
+    snippets: {
+        noMediaFound: '{s name=noMediaFound}No Media found{/s}',
+        uploadDataDragDrop: '{s name=uploadDataDragDrop}Upload your Data via <strong>Drag & Drop</strong> here{/s}',
+        noAdditionalInfo: '{s name=noAdditionalInfo}No additional informations found{/s}',
+        moreInfoTitle:'{s name=moreInfoTitle}More information{/s}',
+        mediaInfo: {
+            name: '{s name=mediaInfo/name}Name:{/s}',
+            uploadedon: '{s name=mediaInfo/uploadedOn}Uploaded on:{/s}',
+            type: '{s name=mediaInfo/type}Type:{/s}',
+            resolution: '{s name=mediaInfo/resolution}Resolution:{/s}',
+            adress: '{s name=mediaInfo/adress}Adress:{/s}',
             mediaLink: '{s name=mediaInfo/mediaLink}Link to media{/s}'
-		},
-		formatTypes: {
-			video: '{s name=formatTypes/video}-video{/s}',
-			music: '{s name=formatTypes/music}-music{/s}',
-			archive: '{s name=formatTypes/archive}-archive{/s}',
-			pdf: '{s name=formatTypes/pdf}PDF-document{/s}',
-			graphic: '{s name=formatTypes/graphic}-graphic{/s}',
-			unknown: '{s name=formatTypes/unknown}unknown file{/s}'
-		},
-		fieldsText:{
-			searchField: '{s name=fieldsText/searchField}Search media...{/s}',
-			deleteButton: '{s name=fieldsText/deleteButton}delete marked file(s){/s}',
-			addButton: '{s name=fieldsText/addButton}add more files{/s}',
-			itemsPerSite: '{s name=fieldsText/itemsPerSite}items per site{/s}',
-			itemCount: '{s name=fieldsText/itemCount}items{/s}'
-		}
-	},
+        },
+        formatTypes: {
+            video: '{s name=formatTypes/video}-video{/s}',
+            music: '{s name=formatTypes/music}-music{/s}',
+            archive: '{s name=formatTypes/archive}-archive{/s}',
+            pdf: '{s name=formatTypes/pdf}PDF-document{/s}',
+            graphic: '{s name=formatTypes/graphic}-graphic{/s}',
+            unknown: '{s name=formatTypes/unknown}unknown file{/s}'
+        },
+        fieldsText:{
+            searchField: '{s name=fieldsText/searchField}Search media...{/s}',
+            deleteButton: '{s name=fieldsText/deleteButton}delete marked file(s){/s}',
+            addButton: '{s name=fieldsText/addButton}add more files{/s}',
+            itemsPerSite: '{s name=fieldsText/itemsPerSite}items per site{/s}',
+            itemCount: '{s name=fieldsText/itemCount}items{/s}'
+        }
+    },
 
     /**
      * Initializes the component and sets the neccessary
@@ -258,7 +258,7 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
      * @return [object] this.mediaDropZone - created Shopware.app.FileUpload
      */
     createDropZone: function() {
-		var me = this;
+        var me = this;
 
         me.mediaDropZone = Ext.create('Shopware.app.FileUpload', {
             requestURL: '{url controller="mediaManager" action="upload"}',
@@ -283,7 +283,7 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
      * @return [object] generated Ext.XTemplate
      */
     createInfoPanelTemplate: function() {
-		var me = this;
+        var me = this;
         return new Ext.XTemplate(
             '{literal}<tpl for=".">',
                 '<div class="media-info-pnl">',
@@ -349,7 +349,7 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
                  * @param [string] extension - File extension of the media
                  */
                 formatDataType: function(type, extension) {
-			        var result = '';
+                    var result = '';
 
                     extension = extension.toUpperCase();
                     switch(type) {
@@ -427,8 +427,8 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
      * @return [object] created Ext.toolbar.Toolbar
      */
     createActionToolbar: function() {
-		var me = this;
-		/* {if {acl_is_allowed privilege=create}} */
+        var me = this;
+        /* {if {acl_is_allowed privilege=create}} */
         if(Ext.isIE) {
             me.addBtn = Ext.create('Shopware.app.FileUpload', {
                 requestURL: '{url controller="mediaManager" action="upload"}',
@@ -464,7 +464,7 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
                 }
             });
         }
-		/* {/if} */
+        /* {/if} */
 
         /*{if {acl_is_allowed privilege=update}}*/
             me.replaceButton = Ext.create('Ext.button.Button', {
@@ -487,16 +487,16 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
         var toolbar = Ext.create('Ext.toolbar.Toolbar', {
             ui: 'shopware-ui',
             items: [
-		/* {if {acl_is_allowed privilege=create}} */
+        /* {if {acl_is_allowed privilege=create}} */
                 this.addBtn,
-		/* {/if} */
+        /* {/if} */
         /*{if {acl_is_allowed privilege=update}}*/
                 me.replaceButton
         /* {/if} */
             ]
         });
 
-		/* {if {acl_is_allowed privilege=delete}} */
+        /* {if {acl_is_allowed privilege=delete}} */
         if(this.createDeleteButton) {
             this.deleteBtn = Ext.create('Ext.button.Button', {
                 text: me.snippets.fieldsText.deleteButton,
@@ -509,7 +509,7 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
                 this.deleteBtn
             );
         }
-		/* {/if} */
+        /* {/if} */
 
         toolbar.add({
             showText: true,
@@ -530,11 +530,11 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
             }
         });
 
-		toolbar.add(
-			'->',
-			searchField,
-			{ xtype: 'tbspacer', width: 6 }
-		);
+        toolbar.add(
+            '->',
+            searchField,
+            { xtype: 'tbspacer', width: 6 }
+        );
 
         return toolbar;
     },

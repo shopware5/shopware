@@ -47,7 +47,7 @@ Ext.define('Shopware.apps.Customer.model.Chart', {
      * @array
      */
     fields:[
-		//{block name="backend/customer/model/chart/fields"}{/block}
+        //{block name="backend/customer/model/chart/fields"}{/block}
         { name:'amount', type:'float' },
         { name:'date', type:'date', dateFormat:'Y-m-d' }
     ],

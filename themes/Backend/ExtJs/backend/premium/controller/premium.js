@@ -138,7 +138,7 @@ Ext.define('Shopware.apps.Premium.controller.Premium', {
         var win = btn.up('window'),
                 grid = win.down('grid'),
                 selModel = grid.selModel,
-				store = grid.getStore(),
+                store = grid.getStore(),
                 selection = selModel.getSelection(),
                 me = this,
                 message = Ext.String.format('{s name=messagebox_multipleDelete/message}You have marked [0] articles. Are you sure you want to delete them?{/s}', selection.length);
@@ -152,19 +152,19 @@ Ext.define('Shopware.apps.Premium.controller.Premium', {
             }
 
             Ext.each(selection, function(item){
-				store.remove(item);
-			});
-			store.sync({
-				callback: function(batch, operation) {
-					var rawData = batch.proxy.getReader().rawData;
-					if (rawData.success) {
-						me.subApplication.premiumStore.load();
-						Shopware.Notification.createGrowlMessage('{s name=growlMessage_title/deleteMultipleSuccess}Articles deleted{/s}', "{s name=growlMessage_message/deleteMultipleSuccess}The articles were successfully deleted{/s}", '{s name=window_title}{/s}');
-					}else{
-						Shopware.Notification.createGrowlMessage('{s name=growlMessage_title/deleteMultipleError}An error occurred{/s}', rawData.errorMsg, '{s name=window_title}{/s}');
-					}
-				}
-			})
+                store.remove(item);
+            });
+            store.sync({
+                callback: function(batch, operation) {
+                    var rawData = batch.proxy.getReader().rawData;
+                    if (rawData.success) {
+                        me.subApplication.premiumStore.load();
+                        Shopware.Notification.createGrowlMessage('{s name=growlMessage_title/deleteMultipleSuccess}Articles deleted{/s}', "{s name=growlMessage_message/deleteMultipleSuccess}The articles were successfully deleted{/s}", '{s name=window_title}{/s}');
+                    }else{
+                        Shopware.Notification.createGrowlMessage('{s name=growlMessage_title/deleteMultipleError}An error occurred{/s}', rawData.errorMsg, '{s name=window_title}{/s}');
+                    }
+                }
+            })
         });
     },
 

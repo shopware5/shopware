@@ -41,22 +41,22 @@ Ext.define('Shopware.apps.UserManager.controller.Roles', {
      * Extend from the standard ExtJS 4 controller
      * @string
      */
-	extend: 'Enlight.app.Controller',
+    extend: 'Enlight.app.Controller',
 
     refs: [
         { ref: 'RolesGrid', selector: 'usermanager-roles-list' }
     ],
 
-	/**
-	 * Creates the necessary event listener for this
-	 * specific controller and opens a new Ext.window.Window
-	 * to display the subapplication
+    /**
+     * Creates the necessary event listener for this
+     * specific controller and opens a new Ext.window.Window
+     * to display the subapplication
      *
      * @return void
-	 */
-	init: function() {
+     */
+    init: function() {
 
-		var me = this;
+        var me = this;
         me.control({
             'button[action=addRole]': {
                 click: me.onAddRole
@@ -65,7 +65,7 @@ Ext.define('Shopware.apps.UserManager.controller.Roles', {
                 deleteRole: me.onDeleteRole
             }
         });
-	},
+    },
     /**
      * Delete a role from store
      * @param view

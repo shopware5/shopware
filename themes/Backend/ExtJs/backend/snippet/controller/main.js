@@ -86,7 +86,7 @@ Ext.define('Shopware.apps.Snippet.controller.Main', {
         createErrorTitle: '{s name=message/save_error_title}Failure{/s}',
         createErrorMessage: '{s name=message/save_error_message}During saving an error has occurred.{/s}',
 
-		growlMessage: '{s name=title}Snippet{/s}'
+        growlMessage: '{s name=title}Snippet{/s}'
     },
 
         /**

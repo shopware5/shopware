@@ -41,13 +41,13 @@ Ext.define('Shopware.apps.Translation.store.Language',
      * The parent class that this class extends
      * @string
      */
-	extend: 'Ext.data.TreeStore',
+    extend: 'Ext.data.TreeStore',
 
     /**
      * Name of the Model associated with this store
      * @string
      */
-	model: 'Shopware.apps.Translation.model.Language',
+    model: 'Shopware.apps.Translation.model.Language',
 
     /**
      * Remove previously existing child nodes before loading.

@@ -1,7 +1,7 @@
 <div class="blog--listing block">
-	{if $sCategoryContent.cmsheadline || $sCategoryContent.cmstext}
-		{include file="frontend/listing/text.tpl"}
-	{/if}
+    {if $sCategoryContent.cmsheadline || $sCategoryContent.cmstext}
+        {include file="frontend/listing/text.tpl"}
+    {/if}
 
     {* Blog Filter Button *}
     {block name='frontend_blog_listing_filter_button'}
@@ -20,15 +20,15 @@
 
     {if $sBlogArticles}
         {foreach from=$sBlogArticles item=sArticle key=key name="counter"}
-			{include file="frontend/blog/box.tpl" sArticle=$sArticle key=$key}
-		{/foreach}
+            {include file="frontend/blog/box.tpl" sArticle=$sArticle key=$key}
+        {/foreach}
 
-		{* Paging *}
-		{block name="frontend_listing_bottom_paging"}
+        {* Paging *}
+        {block name="frontend_listing_bottom_paging"}
             {if $sNumberPages > 1}
-			    {include file='frontend/blog/listing_actions.tpl'}
+                {include file='frontend/blog/listing_actions.tpl'}
             {/if}
-		{/block}
-	{/if}
+        {/block}
+    {/if}
 </div>
 

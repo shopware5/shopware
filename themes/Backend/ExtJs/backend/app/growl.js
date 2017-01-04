@@ -36,14 +36,14 @@
  */
 //{block name="backend/growl/growl"}
 Ext.define('Shopware.app.Growl', {
-	extend: 'Shopware.app.Controller',
-	singleton: true,
+    extend: 'Shopware.app.Controller',
+    singleton: true,
 
-	/** Time (in Milliseconds) to fade out the growl message */
-	timeout: 5000,
+    /** Time (in Milliseconds) to fade out the growl message */
+    timeout: 5000,
 
-	/** Message counter */
-	count: 0,
+    /** Message counter */
+    count: 0,
 
     /** Offset (in pixels) between the growl messages */
     offsetTop: 55,
@@ -54,16 +54,16 @@ Ext.define('Shopware.app.Growl', {
     /** Suffix for the data attribute */
     dataSuffix: 'growl-index',
 
-	/**
-	 * Opens a new growl message based on the passed parameters.
-	 *
-	 * @param title
-	 * @param text
-	 */
-	open: function(title, text, iconCls) {
-		var message, task, me = this, top;
+    /**
+     * Opens a new growl message based on the passed parameters.
+     *
+     * @param title
+     * @param text
+     */
+    open: function(title, text, iconCls) {
+        var message, task, me = this, top;
 
-		iconCls = iconCls || 'growl';
+        iconCls = iconCls || 'growl';
 
         me.naviHeight = me.naviHeight || Shopware.app.Application.navigationHeight;
 
@@ -73,12 +73,12 @@ Ext.define('Shopware.app.Growl', {
         message = me.createDomElement(title, text, iconCls, top);
         message = Ext.get(message);
 
-		// Create a new delayed task to fade out the growl message
-		task = new Ext.util.DelayedTask(function() {
-			me.close(message);
-		});
-		task.delay(this.timeout);
-	},
+        // Create a new delayed task to fade out the growl message
+        task = new Ext.util.DelayedTask(function() {
+            me.close(message);
+        });
+        task.delay(this.timeout);
+    },
 
     /**
      * Creates the neccessary DOM structure for the growl message
@@ -122,22 +122,22 @@ Ext.define('Shopware.app.Growl', {
         return message;
     },
 
-	/**
-	 * Close the passed growl message.
-	 *
-	 * Note that this method needs the DOM element to remove the message
-	 *
-	 * @param message
-	 */
-	close: function(message) {
+    /**
+     * Close the passed growl message.
+     *
+     * Note that this method needs the DOM element to remove the message
+     *
+     * @param message
+     */
+    close: function(message) {
         this.count--;
 
-		message.fadeOut({
-			duration: 350,
-			callback: function() {
-				message.destroy();
-			}
-		});
-	}
+        message.fadeOut({
+            duration: 350,
+            callback: function() {
+                message.destroy();
+            }
+        });
+    }
 });
 //{/block}

@@ -1,7 +1,7 @@
 <ul class="breadcrumb--list" role="menu" itemscope itemtype="http://schema.org/BreadcrumbList">
 
-	{* Prefix for the breadcrumb e.g. the configured shop name *}
-	{block name="frontend_index_breadcrumb_prefix"}{/block}
+    {* Prefix for the breadcrumb e.g. the configured shop name *}
+    {block name="frontend_index_breadcrumb_prefix"}{/block}
 
     {block name="frontend_index_breadcrumb_content"}
         {foreach $sBreadcrumb as $breadcrumb}

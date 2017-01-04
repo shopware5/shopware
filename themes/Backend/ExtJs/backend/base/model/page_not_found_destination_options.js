@@ -37,7 +37,7 @@ Ext.define('Shopware.apps.Base.model.PageNotFoundDestinationOptions', {
 
     alternateClassName: 'Shopware.model.PageNotFoundDestinationOptions',
     fields: [
-		//{block name="backend/base/model/page_not_found_destination_options/fields"}{/block}
+        //{block name="backend/base/model/page_not_found_destination_options/fields"}{/block}
         { name: 'id', type: 'int' },
         { name: 'name', type: 'string' }
     ]

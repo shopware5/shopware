@@ -45,151 +45,151 @@
 //{block name="backend/deprecated/view/window"}
 Ext.define('Shopware.apps.Deprecated.view.main.Window', {
 
-	// Default configuration options
-	extend: 'Enlight.app.Window',
-	alias: 'widgets.swagwindow',
-	maximizable: true,
-	bodyBorder: 0,
-	border: 0,
-	layout: 'fit',
+    // Default configuration options
+    extend: 'Enlight.app.Window',
+    alias: 'widgets.swagwindow',
+    maximizable: true,
+    bodyBorder: 0,
+    border: 0,
+    layout: 'fit',
 
-	// Custom configuration options
-	moduleName: null,
-	controllerName: null,
-	actionName: 'index',
-	requestConfig: {},
-	moduleConfig: {},
-	requestUrl: '{url action=include fullPath=false}',
+    // Custom configuration options
+    moduleName: null,
+    controllerName: null,
+    actionName: 'index',
+    requestConfig: {},
+    moduleConfig: {},
+    requestUrl: '{url action=include fullPath=false}',
 
 
-	/**
-	 * Initialize our special window component
-	 */
-	initComponent: function() {
+    /**
+     * Initialize our special window component
+     */
+    initComponent: function() {
         var me = this;
 
         me.items = [];
 
         me.callParent(me);
-		if(me.moduleName && !me.controllerName) {
-			me.loadConfiguration(me.moduleName);
-		}
+        if(me.moduleName && !me.controllerName) {
+            me.loadConfiguration(me.moduleName);
+        }
 
-		if(!me.moduleName && me.controllerName) {
-			me.loadControllerAction(me.controllerName);
-		}
+        if(!me.moduleName && me.controllerName) {
+            me.loadControllerAction(me.controllerName);
+        }
 
-	},
+    },
 
-	/**
-	 * Load the configuation of the deprecated module
-	 *
-	 * @param moduleName
-	 */
-	loadConfiguration: function(moduleName) {
-		var me = this,
-			request = null;
+    /**
+     * Load the configuation of the deprecated module
+     *
+     * @param moduleName
+     */
+    loadConfiguration: function(moduleName) {
+        var me = this,
+            request = null;
 
-		// Handling the passed options
-		me.requestConfig.includeDir = moduleName;
+        // Handling the passed options
+        me.requestConfig.includeDir = moduleName;
 
-		// Send AJAX request
-		request = Ext.Ajax.request({
-			url: me.requestUrl,
-			params: me.requestConfig,
-			timeout: 2000,
-			async: false,
-			success: function(response) {
-
-				// We are getting a object as a string
-				me.moduleConfig = Ext.decode(response.responseText);
-
-				// Initialize the deprecated module
-				me.initModule(moduleName);
-
-			},
-			failure: function(response) {
-				//me.growl.open('Fehler aufgetreten', 'Das angegebene Modul kann nicht geladen werden');
-			}
-		});
-	},
-
-	/**
-	 * Load a controller based module configuration from the
-	 * server side. In comparison to the loadConfiguration methids
-	 * needs this method the controller name of the module and
-	 * the requested url needs to built up dynamically
-	 *
-	 * @param controllerName
-	 */
-	loadControllerAction: function(controllerName) {
-		var me = this,
-			request = null,
-			params = {};
-
-		params.target_action = this.actionName;
-
-		request = Ext.Ajax.request({
-			url: '{url controller=index}/' + controllerName + '/skeleton',
-			params: params,
+        // Send AJAX request
+        request = Ext.Ajax.request({
+            url: me.requestUrl,
+            params: me.requestConfig,
+            timeout: 2000,
             async: false,
-			success: function(response) {
+            success: function(response) {
 
-				// We are getting a object as a string
-				me.moduleConfig = Ext.decode(response.responseText);
+                // We are getting a object as a string
+                me.moduleConfig = Ext.decode(response.responseText);
 
-				// Initialize the deprecated module
-				me.initModule(controllerName, me.moduleConfig.init.url);
+                // Initialize the deprecated module
+                me.initModule(moduleName);
 
-			},
-			failure: function(response) {
-				//me.growl.open('Fehler aufgetreten', 'Das angegebene Modul kann nicht geladen werden');
-			}
-		})
-	},
+            },
+            failure: function(response) {
+                //me.growl.open('Fehler aufgetreten', 'Das angegebene Modul kann nicht geladen werden');
+            }
+        });
+    },
 
-	/**
-	 * Initialize the deprecated module
-	 *
-	 * @param moduleName
-	 */
-	initModule: function(moduleName, actionUrl) {
-		var me = this,
-			config = me.moduleConfig.init,
-			url = null,
+    /**
+     * Load a controller based module configuration from the
+     * server side. In comparison to the loadConfiguration methids
+     * needs this method the controller name of the module and
+     * the requested url needs to built up dynamically
+     *
+     * @param controllerName
+     */
+    loadControllerAction: function(controllerName) {
+        var me = this,
+            request = null,
+            params = {};
+
+        params.target_action = this.actionName;
+
+        request = Ext.Ajax.request({
+            url: '{url controller=index}/' + controllerName + '/skeleton',
+            params: params,
+            async: false,
+            success: function(response) {
+
+                // We are getting a object as a string
+                me.moduleConfig = Ext.decode(response.responseText);
+
+                // Initialize the deprecated module
+                me.initModule(controllerName, me.moduleConfig.init.url);
+
+            },
+            failure: function(response) {
+                //me.growl.open('Fehler aufgetreten', 'Das angegebene Modul kann nicht geladen werden');
+            }
+        })
+    },
+
+    /**
+     * Initialize the deprecated module
+     *
+     * @param moduleName
+     */
+    initModule: function(moduleName, actionUrl) {
+        var me = this,
+            config = me.moduleConfig.init,
+            url = null,
             container;
 
         Ext.suspendLayouts();
-		me.tabs = (me.moduleConfig.tabs) ? me.moduleConfig.tabs : null;
-		me.btns = (me.moduleConfig.buttons) ? me.moduleConfig.buttons : null;
+        me.tabs = (me.moduleConfig.tabs) ? me.moduleConfig.tabs : null;
+        me.btns = (me.moduleConfig.buttons) ? me.moduleConfig.buttons : null;
 
-		// Set the basic window proportions
-		me.width = ~~config.width || 'auto';
-		me.height = ~~config.height || 'auto';
-		me.minWidth = ~~config.minwidth || 'auto';
-		me.minHeight = ~~config.minheight || 'auto';
+        // Set the basic window proportions
+        me.width = ~~config.width || 'auto';
+        me.height = ~~config.height || 'auto';
+        me.minWidth = ~~config.minwidth || 'auto';
+        me.minHeight = ~~config.minheight || 'auto';
 
-		if(!config.width) { me.width = ~~config.minwidth; }
-		if(!config.height) { me.height = ~~config.minheight; }
+        if(!config.width) { me.width = ~~config.minwidth; }
+        if(!config.height) { me.height = ~~config.minheight; }
 
-		me.title = config.title || '{s name="window/fallback_title"}Deprecated module{/s}';
+        me.title = config.title || '{s name="window/fallback_title"}Deprecated module{/s}';
 
 
-		// Check how to load the request module
-		switch(me.moduleConfig.init.loader) {
-			case 'iframe':
-			case 'iframe2':
-			case 'action':
+        // Check how to load the request module
+        switch(me.moduleConfig.init.loader) {
+            case 'iframe':
+            case 'iframe2':
+            case 'action':
                 // Build up the iframe url
                 url = (actionUrl ? actionUrl : me.requestUrl + '?includeDir=' + escape(moduleName) + '&include=' + escape(config.url));
                 break;
             case 'extern':
                 url = config.url;
-				break;
+                break;
             case 'none':
-			default:
-				break;
-		}
+            default:
+                break;
+        }
 
 
         if(!this.tabs) {
@@ -201,80 +201,80 @@ Ext.define('Shopware.apps.Deprecated.view.main.Window', {
         } else {
             me.handleTabs();
         }
-		//if(this.btns) { me.handleButtons(); }
+        //if(this.btns) { me.handleButtons(); }
         Ext.resumeLayouts(true);
-	},
+    },
 
-	/**
-	 * Creates the necessary tabs if the module configuration
-	 * needs them.
-	 * Note that the tabs are placed in a Ext.tab.Panel
-	 */
-	handleTabs: function() {
-		var me = this;
+    /**
+     * Creates the necessary tabs if the module configuration
+     * needs them.
+     * Note that the tabs are placed in a Ext.tab.Panel
+     */
+    handleTabs: function() {
+        var me = this;
 
-		me.tabPnl = Ext.create('Ext.tab.Panel', {
-			activeTab: 0,
-			bodyBorder: 0
-		});
+        me.tabPnl = Ext.create('Ext.tab.Panel', {
+            activeTab: 0,
+            bodyBorder: 0
+        });
         me.add(me.tabPnl);
 
-		var tabs = {};
+        var tabs = {};
 
-		Ext.each(this.tabs, function(tab, idx) {
+        Ext.each(this.tabs, function(tab, idx) {
 
-			// Refactor the content
-			var content = tab.content,
+            // Refactor the content
+            var content = tab.content,
                 newTab;
-			content = content.replace(/div/,"iframe");
-			content = content.replace(/\<\/div\>/,"");
+            content = content.replace(/div/,"iframe");
+            content = content.replace(/\<\/div\>/,"");
             content = content.replace(/http.*\/engine\/backend\/modules\//, me.requestUrl + '?include=');
 
-			newTab = Ext.create('Ext.container.Container', {
-				bodyBorder: 0,
-				border: 0,
-				title: tab.title,
-				cls: tab.id,
-				disabled: (~~(1 * tab.active)) ? false : true,
-				html: content
-			});
+            newTab = Ext.create('Ext.container.Container', {
+                bodyBorder: 0,
+                border: 0,
+                title: tab.title,
+                cls: tab.id,
+                disabled: (~~(1 * tab.active)) ? false : true,
+                html: content
+            });
             me.tabPnl.setActiveTab(0);
-			me.tabPnl.add(newTab);
-			tabs[tab.id] = newTab;
-		});
-	},
+            me.tabPnl.add(newTab);
+            tabs[tab.id] = newTab;
+        });
+    },
 
-	/**
-	 * Creates the necessary buttons if the module configuration.
-	 *
-	 * Note that the buttons are placed as dockedItems in a
-	 * Ext.toolbarToolbar
-	 */
-	handleButtons: function() {
-		var me = this,
-			toolbar = null;
+    /**
+     * Creates the necessary buttons if the module configuration.
+     *
+     * Note that the buttons are placed as dockedItems in a
+     * Ext.toolbarToolbar
+     */
+    handleButtons: function() {
+        var me = this,
+            toolbar = null;
 
-		// Create toolbar which holds the button(s)
-		toolbar = Ext.create('Ext.toolbar.Toolbar', {
-			dock: 'bottom'
-		});
+        // Create toolbar which holds the button(s)
+        toolbar = Ext.create('Ext.toolbar.Toolbar', {
+            dock: 'bottom'
+        });
 
-		Ext.each(this.btns, function(button, idx) {
+        Ext.each(this.btns, function(button, idx) {
 
-			// TODO - Bind event handler
-			var btn = Ext.create('Ext.button.Button', {
-				id: button.id || Ext.id(),
-				text: button.title,
-				scope: this,
-				handler: function(el) {
-					var active = me.tabPnl.getActiveTab();
-					var iframe = active.body.dom.children[0];
-					iframe.contentWindow.sWrapper(button.remotecall);
-				}
-			});
-			toolbar.add(btn);
-		});
+            // TODO - Bind event handler
+            var btn = Ext.create('Ext.button.Button', {
+                id: button.id || Ext.id(),
+                text: button.title,
+                scope: this,
+                handler: function(el) {
+                    var active = me.tabPnl.getActiveTab();
+                    var iframe = active.body.dom.children[0];
+                    iframe.contentWindow.sWrapper(button.remotecall);
+                }
+            });
+            toolbar.add(btn);
+        });
         me.addDocked(toolbar);
-	}
+    }
 });
 //{/block}

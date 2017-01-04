@@ -522,7 +522,7 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
                         name: 'Shopware.apps.Article',
                         action: 'detail',
                         params: {
-							needGenerate: operation.isConfigurator,
+                            needGenerate: operation.isConfigurator,
                             articleId: operation.articleId
                         }
                     });

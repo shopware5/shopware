@@ -40,7 +40,7 @@ Ext.define('Shopware.apps.Article.view.image.List', {
     /**
      * Defines that the article image listing is an extension of the Ext.panel.Panel
      */
-	extend: 'Ext.panel.Panel',
+    extend: 'Ext.panel.Panel',
 
     /**
      * Defines an alias for this component to get access over xtype
@@ -129,15 +129,15 @@ Ext.define('Shopware.apps.Article.view.image.List', {
      * Registers additional component events.
      */
     registerEvents: function() {
-    	this.addEvents(
-    		/**
-    		 * Event will be fired when the user select an article image in the listing.
-    		 *
-    		 * @event
-    		 * @param [Ext.selection.DataViewModel] The selection data view model of the Ext.view.View
+        this.addEvents(
+            /**
+             * Event will be fired when the user select an article image in the listing.
+             *
+             * @event
+             * @param [Ext.selection.DataViewModel] The selection data view model of the Ext.view.View
              * @param [Shopware.apps.Article.model.Media] The selected media
-    		 */
-    		'mediaSelect',
+             */
+            'mediaSelect',
 
             /**
              * Event will be fired when the user de select an article image in the listing.
@@ -184,7 +184,7 @@ Ext.define('Shopware.apps.Article.view.image.List', {
              */
             'download'
 
-    	);
+        );
     },
 
     /**

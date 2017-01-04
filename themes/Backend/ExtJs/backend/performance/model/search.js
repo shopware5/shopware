@@ -44,7 +44,7 @@ Ext.define('Shopware.apps.Performance.model.Search', {
      * @array
      */
     fields:[
-		//{block name="backend/performance/model/search/fields"}{/block}
+        //{block name="backend/performance/model/search/fields"}{/block}
         { name:'id', type:'int' },
         { name: 'searchRefreshStrategy', type: 'int'},
         { name: 'cachesearch', type: 'int'},

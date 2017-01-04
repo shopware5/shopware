@@ -29,11 +29,11 @@
     <script type="text/javascript" src="{link file='TinyMce/tiny_mce.js'}?{Shopware::REVISION}"></script>
     <script type="text/javascript" src="{link file='CodeMirror/lib/codemirror.js'}?{Shopware::REVISION}"></script>
 
-	{* We need to put the language in there, due to the caching of the bootstrap.js *}
-	<script type="text/javascript">
+    {* We need to put the language in there, due to the caching of the bootstrap.js *}
+    <script type="text/javascript">
         {* Ext.editorLang is no longer used and is deprecated *}
         Ext.editorLang = '{s name=script/ext/lang}{/s}';
-	    Ext.shopwareRevision = '{Shopware::REVISION}';
+        Ext.shopwareRevision = '{Shopware::REVISION}';
         Ext.userLanguage = '{s name=script/ext/lang}{/s}';
     </script>
 

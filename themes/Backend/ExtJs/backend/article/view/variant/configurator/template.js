@@ -158,15 +158,15 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.Template', {
     },
 
     /**
-	 * The initComponent template method is an important initialization step for a Component.
+     * The initComponent template method is an important initialization step for a Component.
      * It is intended to be implemented by each subclass of Ext.Component to provide any needed constructor logic.
      * The initComponent method of the class being created is called first,
      * with each initComponent method up the hierarchy to Ext.Component being called thereafter.
      * This makes it easy to implement and, if needed, override the constructor logic of the Component at any step in the hierarchy.
      * The initComponent method must contain a call to callParent in order to ensure that the parent class' initComponent method is also called.
-	 *
-	 * @return void
-	 */
+     *
+     * @return void
+     */
     initComponent:function () {
         var me = this, mainWindow;
         me.items = me.createItems();
@@ -264,15 +264,15 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.Template', {
      * Registers additional component events.
      */
     registerEvents: function() {
-    	this.addEvents(
-    		/**
-    		 * Event will be fired when the user clicks the save button.
-    		 *
-    		 * @event
-    		 * @param [object] The variant detail window
-    		 * @param [Ext.data.Model] The article variant record.
-    		 */
-    		'saveTemplate',
+        this.addEvents(
+            /**
+             * Event will be fired when the user clicks the save button.
+             *
+             * @event
+             * @param [object] The variant detail window
+             * @param [Ext.data.Model] The article variant record.
+             */
+            'saveTemplate',
             /**
              * Event will be fired when the user clicks the cancel button.
              *
@@ -280,7 +280,7 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.Template', {
              * @param [object] The variant detail window
              */
             'cancelEdit'
-    	);
+        );
     },
 
     /**

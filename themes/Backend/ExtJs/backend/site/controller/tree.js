@@ -127,9 +127,9 @@ Ext.define('Shopware.apps.Site.controller.Tree', {
             /*{/if}*/
             saveSiteButton = me.getSaveSiteButton(),
 
-			ddselector = form.down('ddselector'),
-			groupStore = ddselector.fromStore,
-			selectedStore = ddselector.toStore;
+            ddselector = form.down('ddselector'),
+            groupStore = ddselector.fromStore,
+            selectedStore = ddselector.toStore;
 
         me.getAttributeForm().setDisabled(true);
 
@@ -149,16 +149,16 @@ Ext.define('Shopware.apps.Site.controller.Tree', {
             form.saveButton.disable();
             /*{/if}*/
 
-			groupStore.load({
-				params: {
-					grouping: record.data.grouping
-				}
-			});
-			selectedStore.load({
-				params: {
-					grouping: record.data.grouping
-				}
-			});
+            groupStore.load({
+                params: {
+                    grouping: record.data.grouping
+                }
+            });
+            selectedStore.load({
+                params: {
+                    grouping: record.data.grouping
+                }
+            });
             //load record into the form
             //hotfix find a better solution for this after beta
             //record.data.description = record.data.description.split("(")[0];
@@ -255,51 +255,51 @@ Ext.define('Shopware.apps.Site.controller.Tree', {
             dialogWindow = btn.up('window'),
             groupName = dialogWindow.down('textfield[name=description]').getValue(),
             templateVar = dialogWindow.down('textfield[name=templateVar]').getValue();
-			//send ajax request containing groupName and templateVariable
-			Ext.Ajax.request({
-				url : '{url action=createGroup}',
-				scope: me,
-				params: {
-					groupName: groupName,
-					templateVar: templateVar
-				},
-				success: function(response){
-					//get the response object
-					var responseObject = Ext.decode(response.responseText);
+            //send ajax request containing groupName and templateVariable
+            Ext.Ajax.request({
+                url : '{url action=createGroup}',
+                scope: me,
+                params: {
+                    groupName: groupName,
+                    templateVar: templateVar
+                },
+                success: function(response){
+                    //get the response object
+                    var responseObject = Ext.decode(response.responseText);
 
-					if (responseObject.success) {
-						//destroy the window, reload the stores
-						dialogWindow.destroy();
-						me.getStore('Nodes').load();
-						me.getStore('Groups').load();
+                    if (responseObject.success) {
+                        //destroy the window, reload the stores
+                        dialogWindow.destroy();
+                        me.getStore('Nodes').load();
+                        me.getStore('Groups').load();
 //                            me.getGroupSelector().items.items[0].items.items[0].items.items[0].getStore().load();
 
-						//display a success message
-						Shopware.Notification.createGrowlMessage('','{s name=onCreateGroupSuccess}The group has been created successfully.{/s}', '{s name=mainWindowTitle}{/s}');
-					} else {
-						if (responseObject.message == 'nameExists') {
-							dialogWindow.destroy();
-							Shopware.Notification.createGrowlMessage('',Ext.String.format('{s name=onCreateGroupGroupNameExisting}The group \'[0]\' already exists.{/s}', groupName));
+                        //display a success message
+                        Shopware.Notification.createGrowlMessage('','{s name=onCreateGroupSuccess}The group has been created successfully.{/s}', '{s name=mainWindowTitle}{/s}');
+                    } else {
+                        if (responseObject.message == 'nameExists') {
+                            dialogWindow.destroy();
+                            Shopware.Notification.createGrowlMessage('',Ext.String.format('{s name=onCreateGroupGroupNameExisting}The group \'[0]\' already exists.{/s}', groupName));
                             return;
-						}
-						if (responseObject.message == 'variableExists') {
-							dialogWindow.destroy();
-							Shopware.Notification.createGrowlMessage('',Ext.String.format('{s name=onCreateGroupTemplateVariableExisting}The template variable \'[0]\' is already in use.{/s}', templateVar));
+                        }
+                        if (responseObject.message == 'variableExists') {
+                            dialogWindow.destroy();
+                            Shopware.Notification.createGrowlMessage('',Ext.String.format('{s name=onCreateGroupTemplateVariableExisting}The template variable \'[0]\' is already in use.{/s}', templateVar));
                             return;
-						}
+                        }
                         dialogWindow.destroy();
                         Shopware.Notification.createGrowlMessage('','{s name=onCreateGroupError}An error has occurred while trying to create the group: {/s}' + responseObject.message, '{s name=mainWindowTitle}{/s}');
-					}
-				},
-				failure: function(response) {
-					//get the response object
-					var responseObject = Ext.decode(response.responseText),
-						errorMsg = responseObject.message;
+                    }
+                },
+                failure: function(response) {
+                    //get the response object
+                    var responseObject = Ext.decode(response.responseText),
+                        errorMsg = responseObject.message;
 
-					//display an error message followed by the actual error
-					Shopware.Notification.createGrowlMessage('','{s name=onCreateGroupError}An error has occurred while trying to create the group: {/s}' + errorMsg, '{s name=mainWindowTitle}{/s}');
-				}
-			});
+                    //display an error message followed by the actual error
+                    Shopware.Notification.createGrowlMessage('','{s name=onCreateGroupError}An error has occurred while trying to create the group: {/s}' + errorMsg, '{s name=mainWindowTitle}{/s}');
+                }
+            });
     },
 
     /**

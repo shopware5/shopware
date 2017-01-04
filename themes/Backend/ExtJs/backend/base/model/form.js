@@ -33,7 +33,7 @@ Ext.define('Shopware.apps.Base.model.Form', {
     alternateClassName: 'Shopware.model.Form',
 
     fields: [
-		//{block name="backend/base/model/form/fields"}{/block}
+        //{block name="backend/base/model/form/fields"}{/block}
         { name: 'id', type: 'int', useNull: true },
         { name: 'label', type: 'string' },
         { name: 'name', type: 'string' },

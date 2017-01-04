@@ -211,14 +211,14 @@ Ext.define('Shopware.apps.Blog.view.blog.List', {
                 dock:'top',
                 ui:'shopware-ui',
                 items:[
-			/* {if {acl_is_allowed privilege=create}} */
+            /* {if {acl_is_allowed privilege=create}} */
                     {
                         iconCls:'sprite-plus-circle',
                         text:'{s name=list/button/add}Add blog article{/s}',
                         action:'add'
                     },
-			/* {/if} */
-			/* {if {acl_is_allowed privilege=delete}} */
+            /* {/if} */
+            /* {if {acl_is_allowed privilege=delete}} */
                     {
 
                         iconCls:'sprite-minus-circle-frame',
@@ -227,7 +227,7 @@ Ext.define('Shopware.apps.Blog.view.blog.List', {
                         action:'deleteBlogArticles'
 
                     },
-			/* {/if} */
+            /* {/if} */
                     '->',
                     {
                         xtype:'textfield',

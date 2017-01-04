@@ -107,7 +107,7 @@ Ext.define('Shopware.apps.Property.controller.Main', {
         successfulSavedSet: '{s name=message/set_successful_saved}The set has been successfully saved.{/s}',
 
         successfulTitle: '{s name=message/successful_title}Successful{/s}',
-		growlMessage: '{s name=title}{/s}'
+        growlMessage: '{s name=title}{/s}'
     },
 
     /**

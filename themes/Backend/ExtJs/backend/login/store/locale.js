@@ -31,7 +31,7 @@
  * todo@all: Documentation
  */
 Ext.define('Shopware.apps.Login.store.Locale', {
-	extend: 'Ext.data.Store',
-	autoLoad: true,
-	model : 'Shopware.apps.Login.model.Locale'
+    extend: 'Ext.data.Store',
+    autoLoad: true,
+    model : 'Shopware.apps.Login.model.Locale'
 });

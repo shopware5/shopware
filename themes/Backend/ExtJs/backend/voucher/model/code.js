@@ -35,17 +35,17 @@
  */
 //{block name="backend/voucher/model/code"}
 Ext.define('Shopware.apps.Voucher.model.Code', {
-	/**
-	* Extends the standard ExtJS 4
-	* @string
-	*/
+    /**
+    * Extends the standard ExtJS 4
+    * @string
+    */
     extend : 'Ext.data.Model',
-	/**
-	* The fields used for this model
-	* @array
-	*/
+    /**
+    * The fields used for this model
+    * @array
+    */
     fields : [
-	//{block name="backend/voucher/model/code/fields"}{/block}
+    //{block name="backend/voucher/model/code/fields"}{/block}
         { name : 'id', type : 'int' },
         { name : 'voucherID', type : 'int' },
         { name : 'number', type : 'string' },
@@ -55,15 +55,15 @@ Ext.define('Shopware.apps.Voucher.model.Code', {
         { name : 'customerId', type : 'int' },
         { name : 'cashed', type : 'boolean' }
     ],
-	/**
-	* If the name of the field is 'id' extjs assumes autmagical that
-	* this field is an unique identifier.
-	*/
+    /**
+    * If the name of the field is 'id' extjs assumes autmagical that
+    * this field is an unique identifier.
+    */
     idProperty : 'id',
-	/**
-	* Configure the data communication
-	* @object
-	*/
+    /**
+    * Configure the data communication
+    * @object
+    */
     proxy : {
         type : 'ajax',
         api:{

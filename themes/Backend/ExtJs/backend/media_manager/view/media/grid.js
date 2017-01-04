@@ -37,7 +37,7 @@
  */
 //{block name="backend/media_manager/view/media/grid"}
 Ext.define('Shopware.apps.MediaManager.view.media.Grid', {
-	extend: 'Ext.grid.Panel',
+    extend: 'Ext.grid.Panel',
     border: 0,
     bodyBorder: 0,
     alias: 'widget.mediamanager-media-grid',
@@ -52,7 +52,7 @@ Ext.define('Shopware.apps.MediaManager.view.media.Grid', {
      * Used snippets in this component
      * @object
      */
-	snippets: {
+    snippets: {
         column: {
             'preview': '{s name=grid/column/preview}Preview{/s}',
             'created': '{s name=grid/column/created}Upload date{/s}',
@@ -69,7 +69,7 @@ Ext.define('Shopware.apps.MediaManager.view.media.Grid', {
             'image': '{s name=grid/types/image}Image{/s}',
             'unknown': '{s name=grid/types/unknown}Unknown{/s}'
         }
-	},
+    },
 
     /**
      * Initializes the component and sets the neccessary

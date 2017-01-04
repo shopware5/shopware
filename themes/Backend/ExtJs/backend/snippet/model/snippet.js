@@ -39,7 +39,7 @@ Ext.define('Shopware.apps.Snippet.model.Snippet', {
      * @array
      */
     fields : [
-		//{block name="backend/snippet/model/snippet/fields"}{/block}
+        //{block name="backend/snippet/model/snippet/fields"}{/block}
         { name: 'namespace', type: 'string' },
         { name: 'value',     type: 'string' },
         { name: 'defaultValue', type: 'string' },

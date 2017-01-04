@@ -37,12 +37,12 @@ Ext.define('Shopware.apps.Config.view.customerGroup.Discount', {
 
     sortableColumns: false,
 
-	snippets:{
-		discount:{
-			basketValue: '{s name=discount/basket_value}Basket value{/s}',
-			basketDiscount: '{s name=discount/basket_discount}Basket discount{/s}'
-		}
-	},
+    snippets:{
+        discount:{
+            basketValue: '{s name=discount/basket_value}Basket value{/s}',
+            basketDiscount: '{s name=discount/basket_discount}Basket discount{/s}'
+        }
+    },
 
     getColumns: function() {
         var me = this;
@@ -68,7 +68,7 @@ Ext.define('Shopware.apps.Config.view.customerGroup.Discount', {
             editor: {
                 xtype: 'config-element-number',
                 minValue: 0,
-				maxValue: 100,
+                maxValue: 100,
                 decimalPrecision: 2
             }
         }, me.getActionColumn()];

@@ -36,7 +36,7 @@
  */
 //{block name="backend/product_feed/view/feed/window"}
 Ext.define('Shopware.apps.ProductFeed.view.feed.Window', {
-	extend: 'Enlight.app.Window',
+    extend: 'Enlight.app.Window',
     title: '{s name=window/detail_title}Feed - Configuration{/s}',
     alias: 'widget.product_feed-feed-window',
     border: false,

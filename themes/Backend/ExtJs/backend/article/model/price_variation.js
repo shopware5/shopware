@@ -44,7 +44,7 @@ Ext.define('Shopware.apps.Article.model.PriceVariation', {
      * @array
      */
     fields: [
-		//{block name="backend/article/model/price_variation/fields"}{/block}
+        //{block name="backend/article/model/price_variation/fields"}{/block}
         { name: 'id', type: 'integer', useNull: true },
         { name: 'option_names' },
         { name: 'isGross', type: 'integer' },

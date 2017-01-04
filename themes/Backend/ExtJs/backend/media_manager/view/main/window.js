@@ -37,7 +37,7 @@
  */
 //{block name="backend/media_manager/view/main/window"}
 Ext.define('Shopware.apps.MediaManager.view.main.Window', {
-	extend: 'Enlight.app.Window',
+    extend: 'Enlight.app.Window',
     title: '{s name=mainWindowTitle}Mediamanager{/s}',
     cls: Ext.baseCSSPrefix + 'media-manager-window',
     alias: 'widget.mediamanager-main-window',

@@ -50,7 +50,7 @@ Ext.define('Shopware.apps.Premium.store.Premiums', {
     */
     pageSize: 20,
     remoteFilter: true,
-	remoteSort: true,
+    remoteSort: true,
     /**
     * Define the used model for this store
     * @string

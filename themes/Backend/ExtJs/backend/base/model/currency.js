@@ -55,7 +55,7 @@ Ext.define('Shopware.apps.Base.model.Currency', {
      * @array
      */
     fields: [
-		//{block name="backend/base/model/currency/fields"}{/block}
+        //{block name="backend/base/model/currency/fields"}{/block}
         { name : 'id', type : 'int' },
         { name : 'name', type : 'string' },
         { name : 'currency', type : 'string' }

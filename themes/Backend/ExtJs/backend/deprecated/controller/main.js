@@ -31,18 +31,18 @@
  * todo@all: Documentation
  */
 Ext.define('Shopware.apps.Deprecated.controller.Main', {
-	extend: 'Ext.app.Controller',
-	views: [ 'main.Window' ],
+    extend: 'Ext.app.Controller',
+    views: [ 'main.Window' ],
 
-	/**
-	 * Creates the neccessary event listener for this
-	 * specific controller and opens a new Ext.window.Window
-	 * to display the subapplication.
+    /**
+     * Creates the neccessary event listener for this
+     * specific controller and opens a new Ext.window.Window
+     * to display the subapplication.
      *
      * @public
      * @
-	 */
-	init: function() {
+     */
+    init: function() {
         var me = this;
         me.mainWindow = this.getView('main.Window').create({
             moduleName: this.subApplication.moduleName,
@@ -51,5 +51,5 @@ Ext.define('Shopware.apps.Deprecated.controller.Main', {
             requestConfig: this.subApplication.requestConfig,
             moduleConfig: this.subApplication.moduleConfig
         }).show();
-	}
+    }
 });

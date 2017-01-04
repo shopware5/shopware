@@ -51,7 +51,7 @@ Ext.define('Shopware.apps.Base.model.Captcha', {
      * @array
      */
     fields:[
-		//{block name="backend/base/model/captcha/fields"}{/block}
+        //{block name="backend/base/model/captcha/fields"}{/block}
         { name: 'id', type: 'string' },
         { name: 'displayname', type: 'string' }
     ]

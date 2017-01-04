@@ -31,17 +31,17 @@
 //{namespace name=backend/index/controller/main}
 //{block name="backend/index/controller/main"}
 Ext.define('Shopware.apps.Index.controller.Main', {
-	extend: 'Ext.app.Controller',
+    extend: 'Ext.app.Controller',
 
-	/**
-	 * Creates the necessary event listener for this
-	 * specific controller and opens a new Ext.window.Window
-	 * to display the subapplication
+    /**
+     * Creates the necessary event listener for this
+     * specific controller and opens a new Ext.window.Window
+     * to display the subapplication
      *
      * @public
      * @return void
-	 */
-	init: function() {
+     */
+    init: function() {
         var me = this,
             firstRunWizardStep = Ext.util.Cookies.get('firstRunWizardStep'),
             firstRunWizardEnabled = me.subApplication.firstRunWizardEnabled,
@@ -100,7 +100,7 @@ Ext.define('Shopware.apps.Index.controller.Main', {
                 }
             }
         }
-	},
+    },
 
     initBackendDesktop: function() {
         var me = this,
@@ -116,7 +116,7 @@ Ext.define('Shopware.apps.Index.controller.Main', {
 
         me.addKeyboardEvents();
         me.checkLoginStatus();
-	},
+    },
 
     /**
      * This method provides experimental support
@@ -267,8 +267,8 @@ Ext.define('Shopware.apps.Index.controller.Main', {
 });
 
 Ext.define('Shopware.apps.Index.view.Main', {
-	extend: 'Ext.panel.Panel',
-	alias: 'widget.index-desktoppanel',
+    extend: 'Ext.panel.Panel',
+    alias: 'widget.index-desktoppanel',
     cls: 'main-backend-holder',
     height: '100%',
     width: '100%',
@@ -297,7 +297,7 @@ Ext.define('Shopware.apps.Index.view.Main', {
  */
 loadSkeleton = function(module, forceNewWindow, requestConfig) {
 
-	var options = { };
+    var options = { };
     options.name = 'Shopware.apps.Deprecated';
     options.moduleName = module;
     options.requestConfig = requestConfig || {};
@@ -335,7 +335,7 @@ openAction = function(controller, action) {
 openNewModule = function(subapp, options) {
     options = options || { };
     options.name = subapp;
-	Shopware.app.Application.addSubApplication(options);
+    Shopware.app.Application.addSubApplication(options);
 };
 
 createKeyNavOverlay = function() {

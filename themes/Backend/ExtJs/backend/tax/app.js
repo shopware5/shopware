@@ -35,7 +35,7 @@ Ext.define('Shopware.apps.Tax', {
      * sub-application behavior and the event bus
      * @string
      */
-	extend: 'Enlight.app.SubApplication',
+    extend: 'Enlight.app.SubApplication',
 
     /**
      * Sets the loading path for the sub-application.
@@ -56,13 +56,13 @@ Ext.define('Shopware.apps.Tax', {
      * The name of the module. Used for internal purpose
      * @string
      */
-	name: 'Shopware.apps.Tax',
+    name: 'Shopware.apps.Tax',
 
     /**
      * Required controllers for module (subapplication)
      * @array
      */
-	controllers: [ 'Main' ],
+    controllers: [ 'Main' ],
 
     stores: [ 'Groups', 'Rules' ,'Areas','Countries', 'States'],
 

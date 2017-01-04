@@ -51,7 +51,7 @@ Ext.define('Shopware.apps.Base.model.PasswordEncoder', {
      * @array
      */
     fields:[
-		//{block name="backend/base/model/hash_type/fields"}{/block}
+        //{block name="backend/base/model/hash_type/fields"}{/block}
         { name:'id', type:'string' }
     ]
 

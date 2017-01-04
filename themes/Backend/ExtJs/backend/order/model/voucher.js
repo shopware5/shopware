@@ -46,7 +46,7 @@ Ext.define('Shopware.apps.Order.model.Voucher', {
      * @array
      */
     fields:[
-		//{block name="backend/order/model/voucher/fields"}{/block}
+        //{block name="backend/order/model/voucher/fields"}{/block}
         { name: 'id', type:'int' },
         { name: 'description', type:'string' },
         { name: 'voucherCode', type:'string' },

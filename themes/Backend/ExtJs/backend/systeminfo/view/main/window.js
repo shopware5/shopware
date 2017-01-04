@@ -36,7 +36,7 @@
  */
 //{block name="backend/systeminfo/view/main/window"}
 Ext.define('Shopware.apps.Systeminfo.view.main.Window', {
-	extend: 'Enlight.app.Window',
+    extend: 'Enlight.app.Window',
     title: '{s name=window_title}System-Information{/s}',
     cls: Ext.baseCSSPrefix + 'systeminfo-window',
     alias: 'widget.systeminfo-main-window',
@@ -44,9 +44,9 @@ Ext.define('Shopware.apps.Systeminfo.view.main.Window', {
     layout: 'fit',
     stateful:true,
     stateId:'shopware-systeminfo-window',
-	height: '90%',
- 	width: 925,
-	overflow: 'hidden',
+    height: '90%',
+    width: 925,
+    overflow: 'hidden',
 
     /**
      * Initializes the component and builds up the main interface
@@ -71,7 +71,7 @@ Ext.define('Shopware.apps.Systeminfo.view.main.Window', {
             items: [
                 {
                     xtype: 'container',
-					overflowY: 'scroll',
+                    overflowY: 'scroll',
                     title: '{s name=window/tabpanel/config_tab/title}Server-Configs{/s}',
                     items: [{
                         xtype: 'systeminfo-main-encoder',
@@ -81,7 +81,7 @@ Ext.define('Shopware.apps.Systeminfo.view.main.Window', {
                     }]
                 },{
                     xtype: 'container',
-					overflowY: 'scroll',
+                    overflowY: 'scroll',
                     title: '{s name=window/tabpanel/path_tab/title}Shopware-Paths{/s}',
                     items:[{
                         xtype: 'systeminfo-main-pathlist'
@@ -95,15 +95,15 @@ Ext.define('Shopware.apps.Systeminfo.view.main.Window', {
                     }]
                 },{
                     xtype: 'container',
-					overflowY: 'scroll',
+                    overflowY: 'scroll',
                     title: '{s name=window/tabpanel/version_tab/title}Version-info{/s}',
                     items:[{
                         xtype: 'systeminfo-main-versionlist'
                     }]
                 },{
                     xtype: 'container',
-					layout: 'fit',
-					overflowY: 'hidden',
+                    layout: 'fit',
+                    overflowY: 'hidden',
                     title: '{s name=window/tabpanel/info_tab/title}PHP-Info{/s}',
                     items:[{
                         xtype: 'systeminfo-main-phpinfo'

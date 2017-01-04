@@ -44,7 +44,7 @@ Ext.define('Shopware.apps.Shipping.model.Holiday', {
      * @array
      */
     fields : [
-		//{block name="backend/shipping/model/holiday/fields"}{/block}
+        //{block name="backend/shipping/model/holiday/fields"}{/block}
         { name : 'id',  type: 'integer' },
         { name : 'name',type: 'string' }
     ],

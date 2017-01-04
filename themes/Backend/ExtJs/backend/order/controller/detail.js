@@ -89,7 +89,7 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
             message: '{s name=convertOrder/message}Do you want to convert this order to a regular order?{/s}',
             successTitle: '{s name=convertOrderSuccess/tile}Order converted{/s}'
         },
-		growlMessage: '{s name=growlMessage}Order{/s}'
+        growlMessage: '{s name=growlMessage}Order{/s}'
     },
 
     /**

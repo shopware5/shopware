@@ -2,76 +2,76 @@
 
 {* Breadcrumb *}
 {block name='frontend_index_start' prepend}
-	{if $sRequests.sSearchOrginal}
-		{$sBreadcrumb = [['name' => "{s name="SearchResultsFor"}{/s}"]]}
-	{else}
-		{$sBreadcrumb = [['name' => "{s name="SearchResultsEmpty"}{/s}"]]}
-	{/if}
+    {if $sRequests.sSearchOrginal}
+        {$sBreadcrumb = [['name' => "{s name="SearchResultsFor"}{/s}"]]}
+    {else}
+        {$sBreadcrumb = [['name' => "{s name="SearchResultsEmpty"}{/s}"]]}
+    {/if}
 {/block}
 
 {* Main content *}
 {block name='frontend_index_content'}
-	<div class="content search--content">
+    <div class="content search--content">
 
-		{block name='frontend_search_info_messages'}
-			{if !$sSearchResults.sArticles}
-				{if $sRequests.sSearchOrginal}
+        {block name='frontend_search_info_messages'}
+            {if !$sSearchResults.sArticles}
+                {if $sRequests.sSearchOrginal}
 
-					{* No results found *}
-					{block name='frontend_search_message_no_results'}
-						{include file="frontend/_includes/messages.tpl" type="warning" content="{s name='SearchFuzzyHeadlineNoResult'}{/s}"}
-					{/block}
-				{else}
+                    {* No results found *}
+                    {block name='frontend_search_message_no_results'}
+                        {include file="frontend/_includes/messages.tpl" type="warning" content="{s name='SearchFuzzyHeadlineNoResult'}{/s}"}
+                    {/block}
+                {else}
 
-					{* Given search term is too short *}
-					{block name='frontend_search_message_shortterm'}
-						{include file="frontend/_includes/messages.tpl" type="error" content="{s name='SearchFuzzyInfoShortTerm'}{/s}"}
-					{/block}
-				{/if}
-			{/if}
-		{/block}
+                    {* Given search term is too short *}
+                    {block name='frontend_search_message_shortterm'}
+                        {include file="frontend/_includes/messages.tpl" type="error" content="{s name='SearchFuzzyInfoShortTerm'}{/s}"}
+                    {/block}
+                {/if}
+            {/if}
+        {/block}
 
-		{if $sSearchResults.sArticles}
+        {if $sSearchResults.sArticles}
 
-			{* Listing varibles *}
-			{block name="frontend_search_variables"}
-				{$sArticles = $sSearchResults.sArticles}
-				{$sNumberArticles = $sSearchResults.sArticlesCount}
-				{$sTemplate = "listing"}
-				{$sBoxMode = "table"}
-				{$showListing = true}
-				{$pages = ceil($sNumberArticles / $criteria->getLimit())}
-				{$countCtrlUrl = "{url module="widgets" controller="listing" action="listingCount" params=$ajaxCountUrlParams fullPath}"}
-			{/block}
+            {* Listing varibles *}
+            {block name="frontend_search_variables"}
+                {$sArticles = $sSearchResults.sArticles}
+                {$sNumberArticles = $sSearchResults.sArticlesCount}
+                {$sTemplate = "listing"}
+                {$sBoxMode = "table"}
+                {$showListing = true}
+                {$pages = ceil($sNumberArticles / $criteria->getLimit())}
+                {$countCtrlUrl = "{url module="widgets" controller="listing" action="listingCount" params=$ajaxCountUrlParams fullPath}"}
+            {/block}
 
-			{block name='frontend_search_headline'}
-				<h1 class="search--headline">
-					{s name='SearchHeadline'}{/s}
-				</h1>
-			{/block}
+            {block name='frontend_search_headline'}
+                <h1 class="search--headline">
+                    {s name='SearchHeadline'}{/s}
+                </h1>
+            {/block}
 
-			{block name="frontend_search_sidebar"}
-				{if $theme.sidebarFilter}
-					<div class="listing--sidebar">
-						{include file='frontend/listing/sidebar.tpl'}
+            {block name="frontend_search_sidebar"}
+                {if $theme.sidebarFilter}
+                    <div class="listing--sidebar">
+                        {include file='frontend/listing/sidebar.tpl'}
 
-						<div class="sidebar-filter">
-							<div class="sidebar-filter--content">
-								{* include the filter panel *}
-								{block name="frontend_search_sidebar_filter"}
-									{include file="frontend/listing/actions/action-filter-panel.tpl"}
-								{/block}
-							</div>
-						</div>
-					</div>
-				{/if}
-			{/block}
+                        <div class="sidebar-filter">
+                            <div class="sidebar-filter--content">
+                                {* include the filter panel *}
+                                {block name="frontend_search_sidebar_filter"}
+                                    {include file="frontend/listing/actions/action-filter-panel.tpl"}
+                                {/block}
+                            </div>
+                        </div>
+                    </div>
+                {/if}
+            {/block}
 
             {block name="frontend_search_results"}
                 <div class="search--results">
                     {include file='frontend/listing/listing.tpl'}
                 </div>
             {/block}
-		{/if}
-	</div>
+        {/if}
+    </div>
 {/block}

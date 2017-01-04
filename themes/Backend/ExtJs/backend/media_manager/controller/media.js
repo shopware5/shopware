@@ -43,7 +43,7 @@ Ext.define('Shopware.apps.MediaManager.controller.Media', {
      * Extend from the standard ExtJS 4 controller
      * @string
      */
-	extend: 'Ext.app.Controller',
+    extend: 'Ext.app.Controller',
 
     snippets: {
         confirmMsgBox: {
@@ -61,20 +61,20 @@ Ext.define('Shopware.apps.MediaManager.controller.Media', {
      *
      * @object
      */
-	refs: [
+    refs: [
         { ref: 'mediaView', selector: 'mediamanager-media-view' },
         { ref: 'albumTree', selector: 'mediamanager-album-tree' },
         { ref: 'mediaGrid', selector: 'mediamanager-media-grid' }
-	],
+    ],
 
-	/**
-	 * Creates the necessary event listener for this
-	 * specific controller and opens a new Ext.window.Window
-	 * to display the subapplication
+    /**
+     * Creates the necessary event listener for this
+     * specific controller and opens a new Ext.window.Window
+     * to display the subapplication
      *
      * @return void
-	 */
-	init: function() {
+     */
+    init: function() {
         var me = this;
 
         me.control({
@@ -82,7 +82,7 @@ Ext.define('Shopware.apps.MediaManager.controller.Media', {
                 itemclick: me.onChangeMediaAlbum
 
         /* {if {acl_is_allowed privilege=upload}} */
-				,reload: me.onTreeLoad
+                ,reload: me.onTreeLoad
         /* {/if} */
             },
             'mediamanager-media-view': {
@@ -106,9 +106,9 @@ Ext.define('Shopware.apps.MediaManager.controller.Media', {
                 change: me.onMediaUpload
             },
         /* {/if} */
-			'mediamanager-selection-window textfield[action=mediamanager-selection-window-searchfield]': {
-				change: me.onSearchMedia
-			},
+            'mediamanager-selection-window textfield[action=mediamanager-selection-window-searchfield]': {
+                change: me.onSearchMedia
+            },
             'mediamanager-media-grid': {
                 'showDetail': me.onShowDetails,
                 'edit': me.onGridEditLabel
@@ -221,14 +221,14 @@ Ext.define('Shopware.apps.MediaManager.controller.Media', {
             mediaView = me.getMediaView(),
             store = mediaView.dataView.store,
             searchString = Ext.String.trim(value),
-			childNodes = me.getAlbumTree().getStore().tree.root.childNodes;
+            childNodes = me.getAlbumTree().getStore().tree.root.childNodes;
 
         //don't use store.clearFilter(), clearFilter() send an ajax request to reload the store.
         store.filters.clear();
-		//Only one album available, so the search will only work in this album
-		if(childNodes.length == 1 && !store.getProxy().extraParams.albumID){
-			store.getProxy().extraParams.albumID = childNodes[0].getId();
-		}
+        //Only one album available, so the search will only work in this album
+        if(childNodes.length == 1 && !store.getProxy().extraParams.albumID){
+            store.getProxy().extraParams.albumID = childNodes[0].getId();
+        }
         store.currentPage = 1;
         store.filter('name', searchString);
     },
@@ -273,7 +273,7 @@ Ext.define('Shopware.apps.MediaManager.controller.Media', {
             proxy.extraParams.validTypes = me.setValidTypes();
         }
         store.filters.clear();
-		store.currentPage = 1;
+        store.currentPage = 1;
         store.load();
 
         /**

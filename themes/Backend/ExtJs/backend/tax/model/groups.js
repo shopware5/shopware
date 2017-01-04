@@ -34,26 +34,26 @@
  */
 //{block name="backend/tax/model/groups"}
 Ext.define('Shopware.apps.Tax.model.Groups', {
-	extend: 'Ext.data.Model',
+    extend: 'Ext.data.Model',
     fields: [
-		//{block name="backend/tax/model/groups/fields"}{/block}
+        //{block name="backend/tax/model/groups/fields"}{/block}
           { name : 'id', type: 'string' },
           { name : 'text', type: 'string' },
           { name : 'databaseId', type: 'string' }
     ],
-	proxy: {
-		type: 'ajax',
-		api: {
-			read: '{url controller="Tax" action="getGroups"}',
-			create: '{url controller="Tax" action="updateGroup"}',
-			update: '{url controller="Tax" action="updateGroup"}',
-			destroy: '{url controller="Tax" action="deleteGroup"}'
-		},
-		reader: {
-			type: 'json',
-			root: 'data',
+    proxy: {
+        type: 'ajax',
+        api: {
+            read: '{url controller="Tax" action="getGroups"}',
+            create: '{url controller="Tax" action="updateGroup"}',
+            update: '{url controller="Tax" action="updateGroup"}',
+            destroy: '{url controller="Tax" action="deleteGroup"}'
+        },
+        reader: {
+            type: 'json',
+            root: 'data',
             totalProperty:'total'
-		}
-	}
+        }
+    }
 });
 //{/block}
