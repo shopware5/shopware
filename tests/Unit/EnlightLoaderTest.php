@@ -91,8 +91,13 @@ class EnlightLoaderTest extends TestCase
      */
     public function testRealpath($path, $expected)
     {
+        $oldCWD = getcwd();
+        chdir(__DIR__);
+
         $result = \Enlight_Loader::realpath($path);
         $this->assertEquals($expected, $result);
+
+        chdir($oldCWD);
     }
 
     /**
@@ -102,21 +107,23 @@ class EnlightLoaderTest extends TestCase
      */
     public function dataProviderRealpath()
     {
-        return array(
-            // Absolute paths
-            array('/', '/'),
-            array(getcwd().'/', getcwd()),
-            array(getcwd().'/test/..', getcwd()),
+        return [
+            // Nonexisting paths
+            ['/nonexisting', false],
+            ['../nonexisting', false],
+            ['nonexisting', false],
+            [' ', false],
 
             // Relative paths
-            array('', getcwd()),
-            array('./', getcwd()),
-            array('../', realpath(getcwd().'/../')),
+            ['', __DIR__],
+            ['./', __DIR__],
+            ['../', dirname(__DIR__)],
+            ['Bundle/MediaBundle/Strategy/../../', __DIR__.'/Bundle'],
 
-            // Nonexisting paths
-            array('/nonexisting', false),
-            array('../nonexisting', false),
-            array('nonexisting', false),
-        );
+            // Absolute paths
+            ['/', '/'],
+            [__DIR__.'/', __DIR__],
+            [__DIR__.'/tests/..', __DIR__],
+        ];
     }
 }
