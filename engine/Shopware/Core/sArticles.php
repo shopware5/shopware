@@ -705,6 +705,8 @@ class sArticles
 
         $criteria->addSorting(new PopularitySorting(SortingInterface::SORT_DESC));
 
+        $criteria->setFetchCount(false);
+
         $result = $this->searchService->search($criteria, $context);
         $articles = $this->legacyStructConverter->convertListProductStructList($result->getProducts());
 
@@ -1472,6 +1474,8 @@ class sArticles
             default:
                 $criteria->addSorting(new ReleaseDateSorting(SortingInterface::SORT_DESC));
         }
+
+        $criteria->setFetchCount(false);
 
         $result = $this->productNumberSearch->search($criteria, $context);
 
