@@ -111,7 +111,7 @@ class sRewriteTable
      * @var ContextServiceInterface
      */
     private $contextService;
-    
+
     /**
      * @var ShopPageServiceInterface
      */
@@ -659,7 +659,7 @@ class sRewriteTable
         $routerCampaignTemplate
     ) {
         $translation = $translator->readWithFallback($shopId, $fallbackShopId, 'emotion', $campaign['id']);
-        
+
         $campaign = array_merge($campaign, $translation);
 
         $this->data->assign('campaign', $campaign);
@@ -877,8 +877,8 @@ class sRewriteTable
                 continue;
             }
 
-            $objectData = unserialize($article['objectdata']);
-            $objectDataFallback = unserialize($article['objectdataFallback']);
+            $objectData = @unserialize($article['objectdata']);
+            $objectDataFallback = @unserialize($article['objectdataFallback']);
 
             if (empty($objectData)) {
                 $objectData = [];
