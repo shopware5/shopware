@@ -102,4 +102,12 @@ class ProductNumberSearchResult extends Extendable
     {
         return get_object_vars($this);
     }
+
+    /**
+     * @param FacetResultInterface[] $facets
+     */
+    public function setFacets(array $facets)
+    {
+        $this->facets = $facets;
+    }
 }
