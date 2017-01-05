@@ -95,17 +95,13 @@ class ProductNumberSearch implements SearchBundle\ProductNumberSearchInterface
 
         $products = $this->getProducts($query);
 
-        $total = $this->getTotalCount($query);
+        $total = 0;
+        if ($criteria->fetchCount()) {
+            $total = $this->getTotalCount($query);
+        }
 
         $facets = $this->createFacets($criteria, $context);
-
-        $result = new SearchBundle\ProductNumberSearchResult(
-            $products,
-            intval($total),
-            $facets
-        );
-
-        return $result;
+        return new SearchBundle\ProductNumberSearchResult($products, (int) $total, $facets);
     }
 
     /**

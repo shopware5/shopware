@@ -72,6 +72,11 @@ class Criteria implements \JsonSerializable
     private $sortings = [];
 
     /**
+     * @var bool
+     */
+    private $fetchCount = true;
+
+    /**
      * @param integer $offset
      * @return $this
      */
@@ -414,5 +419,23 @@ class Criteria implements \JsonSerializable
     public function getBaseConditions()
     {
         return $this->baseConditions;
+    }
+
+    /**
+     * @return bool
+     */
+    public function fetchCount()
+    {
+        return $this->fetchCount;
+    }
+
+    /**
+     * @param bool $fetchCount
+     * @return $this
+     */
+    public function setFetchCount($fetchCount)
+    {
+        $this->fetchCount = $fetchCount;
+        return $this;
     }
 }
