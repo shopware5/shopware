@@ -82,11 +82,6 @@ class ORMBacklogSubscriber implements EventSubscriber
     private $inserts = [];
 
     /**
-     * @var bool
-     */
-    private $eventRegistered = false;
-
-    /**
      * @var Container
      */
     private $container;
@@ -104,6 +99,13 @@ class ORMBacklogSubscriber implements EventSubscriber
      */
     public function getSubscribedEvents()
     {
+        if (!$this->container->getParameter('shopware.es.enabled')) {
+            return [];
+        }
+        if (!$this->container->getParameter('shopware.es.write_backlog')) {
+            return [];
+        }
+
         return array(Events::onFlush, Events::postFlush);
     }
 
@@ -154,7 +156,6 @@ class ORMBacklogSubscriber implements EventSubscriber
         }
         $this->inserts = [];
     }
-
 
     public function processQueue()
     {
