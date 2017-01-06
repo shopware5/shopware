@@ -45,7 +45,7 @@ Ext.define('Shopware.apps.Config.view.custom_search.sorting.SortingSelection', {
 
     sort: function(sortings) {
         return sortings.sort(function(a, b) {
-            return a.getLabel() > b.getLabel();
+            return a.getLabel().localeCompare(b.getLabel());
         });
     },
 

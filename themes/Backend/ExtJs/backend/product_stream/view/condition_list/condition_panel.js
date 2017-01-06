@@ -44,10 +44,18 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.ConditionPanel', {
 
         me.conditions = [];
         me.items = [];
-        me.conditionHandlers = me.createConditionHandlers();
+        me.conditionHandlers = me.sort(
+            me.createConditionHandlers()
+        );
         me.dockedItems = [me.createToolbar()];
 
         me.callParent(arguments);
+    },
+
+    sort: function(handlers) {
+        return handlers.sort(function(a, b) {
+            return a.getLabel().localeCompare(b.getLabel());
+        });
     },
 
     loadPreview: function(conditions) {
