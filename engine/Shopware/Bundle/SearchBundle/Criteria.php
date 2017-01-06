@@ -24,6 +24,8 @@
 
 namespace Shopware\Bundle\SearchBundle;
 
+use Assert\Assertion;
+
 /**
  * The criteria object is used for the search gateway.
  *
@@ -77,6 +79,7 @@ class Criteria implements \JsonSerializable
      */
     public function offset($offset)
     {
+        Assertion::min($offset, 0, 'The offset must be greater than equals 0');
         $this->offset = $offset;
 
         return $this;
@@ -88,6 +91,7 @@ class Criteria implements \JsonSerializable
      */
     public function limit($limit)
     {
+        Assertion::min($limit, 1, 'The limit must be greater than equals 1');
         $this->limit = $limit;
 
         return $this;
