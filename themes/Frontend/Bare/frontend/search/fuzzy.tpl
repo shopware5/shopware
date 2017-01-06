@@ -50,22 +50,11 @@
                 </h1>
             {/block}
 
-            {block name="frontend_search_sidebar"}
-                {if $theme.sidebarFilter}
-                    <div class="listing--sidebar">
-                        {include file='frontend/listing/sidebar.tpl'}
-
-                        <div class="sidebar-filter">
-                            <div class="sidebar-filter--content">
-                                {* include the filter panel *}
-                                {block name="frontend_search_sidebar_filter"}
-                                    {include file="frontend/listing/actions/action-filter-panel.tpl"}
-                                {/block}
-                            </div>
-                        </div>
-                    </div>
-                {/if}
-            {/block}
+			{block name="frontend_search_sidebar"}
+				{if $theme.sidebarFilter}
+					{include file='frontend/listing/sidebar.tpl'}
+				{/if}
+			{/block}
 
             {block name="frontend_search_results"}
                 <div class="search--results">
