@@ -110,10 +110,19 @@ class CustomSortingGateway implements CustomSortingGatewayInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getAllCategorySortings(ShopContextInterface $context)
+    {
+        return $this->getList($this->getAllCategorySortingIds(), $context);
+    }
+
+
+    /**
      * Returns an array with all sorting ids which enabled for category listings
      * @return int[]
      */
-    private function getAllCategorySortings()
+    private function getAllCategorySortingIds()
     {
         $query = $this->connection->createQueryBuilder();
         $query->select('id');
@@ -190,7 +199,7 @@ class CustomSortingGateway implements CustomSortingGatewayInterface
         $allSortingIds = [];
         $hasEmpty = count(array_filter($mapping)) !== count($mapping);
         if ($hasEmpty) {
-            $allSortingIds = $this->getAllCategorySortings();
+            $allSortingIds = $this->getAllCategorySortingIds();
         }
 
         return array_map(
