@@ -70,11 +70,11 @@ class CaptchaRepository
         $captchaMethod = strtolower($this->config->get('captchaMethod'));
 
         if ($this->isCaptchaDisabled()) {
-            $captchaMethod = 'nocaptcha';
+            $captchaMethod = NoCaptcha::CAPTCHA_METHOD;
         }
 
         if (empty($captchaMethod)) {
-            $captchaMethod = 'default';
+            $captchaMethod = DefaultCaptcha::CAPTCHA_METHOD;
         }
 
         return $this->getCaptcha($captchaMethod);

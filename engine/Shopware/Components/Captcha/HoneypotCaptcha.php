@@ -28,6 +28,7 @@ use Enlight_Controller_Request_Request;
 
 class HoneypotCaptcha implements CaptchaInterface
 {
+    const CAPTCHA_METHOD = 'honeypot';
 
     /**
      * {@inheritDoc}
@@ -50,6 +51,6 @@ class HoneypotCaptcha implements CaptchaInterface
      */
     public function getName()
     {
-        return 'honeypot';
+        return self::CAPTCHA_METHOD;
     }
 }

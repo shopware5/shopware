@@ -28,6 +28,7 @@ use Enlight_Controller_Request_Request;
 
 class NoCaptcha implements CaptchaInterface
 {
+    const CAPTCHA_METHOD = 'nocaptcha';
 
     /**
      * {@inheritDoc}
@@ -50,6 +51,6 @@ class NoCaptcha implements CaptchaInterface
      */
     public function getName()
     {
-        return 'nocaptcha';
+        return self::CAPTCHA_METHOD;
     }
 }
