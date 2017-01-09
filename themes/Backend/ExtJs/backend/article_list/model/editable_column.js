@@ -39,7 +39,7 @@ Ext.define('Shopware.apps.ArticleList.model.EditableColumn', {
      * @array
      */
     fields: [
-		//{block name="backend/article_list/model/editable_column/fields"}{/block}
+        //{block name="backend/article_list/model/editable_column/fields"}{/block}
         { name: 'id', type: 'int', useNull: true },
         { name: 'name', type: 'string' }
     ],

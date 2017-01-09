@@ -60,7 +60,7 @@ Ext.define('Shopware.apps.Emotion.model.Component', {
      * @array
      */
     fields: [
-		//{block name="backend/emotion/model/component/fields"}{/block}
+        //{block name="backend/emotion/model/component/fields"}{/block}
         { name: 'id', type: 'int' },
         { name: 'pluginId', type: 'int', useNull: true },
 

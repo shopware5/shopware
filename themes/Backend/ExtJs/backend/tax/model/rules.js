@@ -34,23 +34,23 @@
  */
 //{block name="backend/tax/model/rules"}
 Ext.define('Shopware.apps.Tax.model.Rules', {
-	extend: 'Ext.data.Model',
-	fields: [
-		//{block name="backend/tax/model/rules/fields"}{/block}
-		'id', 'areaId','countryId','stateId','groupId',{ name: 'tax',  type: 'number' },'name','active'],
-	proxy: {
-		type: 'ajax',
-		api: {
-			read: '{url controller="Tax" action="getRules"}',
-			create: '{url controller="Tax" action="updateRule"}',
-			update: '{url controller="Tax" action="updateRule"}',
-			destroy: '{url controller="Tax" action="deleteRule"}'
-		},
-		reader: {
-			type: 'json',
-			root: 'data',
+    extend: 'Ext.data.Model',
+    fields: [
+        //{block name="backend/tax/model/rules/fields"}{/block}
+        'id', 'areaId','countryId','stateId','groupId',{ name: 'tax',  type: 'number' },'name','active'],
+    proxy: {
+        type: 'ajax',
+        api: {
+            read: '{url controller="Tax" action="getRules"}',
+            create: '{url controller="Tax" action="updateRule"}',
+            update: '{url controller="Tax" action="updateRule"}',
+            destroy: '{url controller="Tax" action="deleteRule"}'
+        },
+        reader: {
+            type: 'json',
+            root: 'data',
             totalProperty:'total'
-		}
-	}
+        }
+    }
 });
 //{/block}

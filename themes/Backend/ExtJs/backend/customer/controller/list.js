@@ -69,7 +69,7 @@ Ext.define('Shopware.apps.Customer.controller.List', {
         deleteSuccessMessage:'{s name=message/delete_success_title}Customer(s) has been removed{/s}',
         deleteErrorTitle:'{s name=message/delete_error_title}Failure{/s}',
         deleteErrorMessage:'{s name=message/delete_error_message}During deleting an error has occurred:{/s}',
-		growlMessage:'{s name=message/growlMessage}Customer{/s}'
+        growlMessage:'{s name=message/growlMessage}Customer{/s}'
     },
 
     /**

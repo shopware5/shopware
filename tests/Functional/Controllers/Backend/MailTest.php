@@ -68,12 +68,12 @@ class Shopware_Tests_Controllers_Backend_MailTest extends Enlight_Components_Tes
 
         $result = $jsonBody['data'];
 
-        $this->assertEquals($this->testData['name'],        $result['name']);
-        $this->assertEquals($this->testData['fromMail'],    $result['fromMail']);
-        $this->assertEquals($this->testData['fromName'],    $result['fromName']);
-        $this->assertEquals($this->testData['subject'],     $result['subject']);
+        $this->assertEquals($this->testData['name'], $result['name']);
+        $this->assertEquals($this->testData['fromMail'], $result['fromMail']);
+        $this->assertEquals($this->testData['fromName'], $result['fromName']);
+        $this->assertEquals($this->testData['subject'], $result['subject']);
         $this->assertEquals($this->testData['contentHtml'], $result['contentHtml']);
-        $this->assertEquals($this->testData['isHtml'],      $result['isHtml']);
+        $this->assertEquals($this->testData['isHtml'], $result['isHtml']);
 
         $this->assertArrayHasKey('id', $result);
 
@@ -97,11 +97,11 @@ class Shopware_Tests_Controllers_Backend_MailTest extends Enlight_Components_Tes
 
         $result = $jsonBody['data'];
 
-        $this->assertEquals($this->testData['fromMail'],    $result['fromMail']);
-        $this->assertEquals($this->testData['fromName'],    $result['fromName']);
-        $this->assertEquals($this->testData['subject'],     $result['subject']);
+        $this->assertEquals($this->testData['fromMail'], $result['fromMail']);
+        $this->assertEquals($this->testData['fromName'], $result['fromName']);
+        $this->assertEquals($this->testData['subject'], $result['subject']);
         $this->assertEquals($this->testData['contentHtml'], $result['contentHtml']);
-        $this->assertEquals($this->testData['isHtml'],      $result['isHtml']);
+        $this->assertEquals($this->testData['isHtml'], $result['isHtml']);
 
         $this->assertArrayHasKey('id', $result);
 

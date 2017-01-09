@@ -38,7 +38,7 @@
 
 //{block name="backend/media_manager/view/main/selection"}
 Ext.define('Shopware.apps.MediaManager.view.main.Selection', {
-	extend: 'Enlight.app.Window',
+    extend: 'Enlight.app.Window',
     title: '{s name="selectionWindowTitle"}Mediaselection{/s}',
     cls: Ext.baseCSSPrefix + 'media-manager-window ' + Ext.baseCSSPrefix + 'media-manager-selection',
     alias: 'widget.mediamanager-selection-window',
@@ -59,11 +59,11 @@ Ext.define('Shopware.apps.MediaManager.view.main.Selection', {
      * Collection of used snippets.
      * @object
      */
-	snippets:{
-		album: '{s name="selection/album"}Album{/s}',
-		searchText: '{s name="selection/search_text"}Search...{/s}',
-		applySelection: '{s name="selection/apply_selection"}Apply Selection{/s}'
-	},
+    snippets:{
+        album: '{s name="selection/album"}Album{/s}',
+        searchText: '{s name="selection/search_text"}Search...{/s}',
+        applySelection: '{s name="selection/apply_selection"}Apply Selection{/s}'
+    },
 
     /**
      * Initializes the component and builds up the main interface

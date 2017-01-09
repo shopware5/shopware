@@ -53,27 +53,27 @@ Ext.define('Shopware.apps.MediaManager.view.album.Setting', {
      */
     settings: null,
 
-	snippets:{
-		settings:{
-			cancel: '{s name="settings/cancel"}Cancel{/s}',
-			save: '{s name="settings/save"}Save settings{/s}',
-			albumName: '{s name="settings/albumName"}Album name{/s}',
-			myAlbum: '{s name="settings/myAlbum"}My album{/s}',
-			thumbnails: '{s name="settings/thumbails"}Thumbnails{/s}',
-			createThumbnails: '{s name="settings/createThumbnails"}Create thumbnails for this album{/s}',
-			createThumb: '{s name="settings/createThumb"}Create thumbnail{/s}',
-			thumbSize: '{s name="settings/thumbSize"}Thumbnail size{/s}',
-			albumIcon: '{s name="settings/albumIcon"}Album icon{/s}',
-			chooseThumb: '{s name="settings/chooseThumb"}Thumbnail configuration{/s}',
-			duplicateThumb: '{s name="settings/duplicateThumb"}Duplicate thumbnail{/s}',
-			deleteThumb: '{s name="settings/deleteThumb"}Delete thumbnail{/s}',
+    snippets:{
+        settings:{
+            cancel: '{s name="settings/cancel"}Cancel{/s}',
+            save: '{s name="settings/save"}Save settings{/s}',
+            albumName: '{s name="settings/albumName"}Album name{/s}',
+            myAlbum: '{s name="settings/myAlbum"}My album{/s}',
+            thumbnails: '{s name="settings/thumbails"}Thumbnails{/s}',
+            createThumbnails: '{s name="settings/createThumbnails"}Create thumbnails for this album{/s}',
+            createThumb: '{s name="settings/createThumb"}Create thumbnail{/s}',
+            thumbSize: '{s name="settings/thumbSize"}Thumbnail size{/s}',
+            albumIcon: '{s name="settings/albumIcon"}Album icon{/s}',
+            chooseThumb: '{s name="settings/chooseThumb"}Thumbnail configuration{/s}',
+            duplicateThumb: '{s name="settings/duplicateThumb"}Duplicate thumbnail{/s}',
+            deleteThumb: '{s name="settings/deleteThumb"}Delete thumbnail{/s}',
             highDpiThumbs: '{s name="settings/highDpiThumbs"}High dpi thumbnails{/s}',
             highDpiThumbsHelper: '{s name="settings/highDpiThumbsHelper"}Also generate high dpi versions of thumbnails{/s}',
             thumbQuality: '{s name="settings/thumbQuality"}Thumbnail quality{/s}',
             thumbQualitySupport: '{s name="settings/thumbQualitySupport"}Value between 1 and 100. Higher means more quality but bigger files{/s}',
             highDpiQuality: '{s name="settings/highDpiQuality"}High dpi thumbnail quality{/s}'
-		}
-	},
+        }
+    },
     /**
      * Initializes the component and sets the toolbars
      * and the neccessary event listener
@@ -105,7 +105,7 @@ Ext.define('Shopware.apps.MediaManager.view.album.Setting', {
                     me.close();
                 }
             }, {
-				text: me.snippets.settings.save,
+                text: me.snippets.settings.save,
                 cls: 'primary',
                 action: 'mediamanager-album-setting-save'
             }]

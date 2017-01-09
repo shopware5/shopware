@@ -79,7 +79,7 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.Comments', {
             dock:'top',
             ui:'shopware-ui',
             items:[
-		/* {if {acl_is_allowed privilege=comments}} */
+        /* {if {acl_is_allowed privilege=comments}} */
                 {
                     iconCls:'sprite-plus-circle',
                     text:'{s name=detail/main/comments/button/add}Accept selected comments{/s}',
@@ -93,7 +93,7 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.Comments', {
                     disabled:true,
                     action:'deleteSelectedComments'
                 },
-		/* {/if} */
+        /* {/if} */
                 '->',
                 {
                     xtype:'textfield',

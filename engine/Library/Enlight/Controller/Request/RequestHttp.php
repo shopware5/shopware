@@ -31,9 +31,7 @@
  * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
  * @license    http://enlight.de/license     New BSD License
  */
-class Enlight_Controller_Request_RequestHttp
-    extends Zend_Controller_Request_Http
-    implements Enlight_Controller_Request_Request
+class Enlight_Controller_Request_RequestHttp extends Zend_Controller_Request_Http implements Enlight_Controller_Request_Request
 {
     /**
      * @var string[]
@@ -69,6 +67,14 @@ class Enlight_Controller_Request_RequestHttp
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function replacePost($data)
+    {
+        $_POST = $data;
+    }
+
+    /**
      * Set POST values method
      *
      * @param  string|array $spec
@@ -95,7 +101,7 @@ class Enlight_Controller_Request_RequestHttp
     {
         return $this->attributes;
     }
-    
+
     /**
      * {@inheritdoc}
      */
@@ -162,26 +168,6 @@ class Enlight_Controller_Request_RequestHttp
     }
 
     /**
-     * Sets the REQUEST_URI on which the instance operates.
-     *
-     * If no request URI is passed, it uses the value in $_SERVER['REQUEST_URI'],
-     * $_SERVER['HTTP_X_REWRITE_URL'], or $_SERVER['ORIG_PATH_INFO'] + $_SERVER['QUERY_STRING'].
-     *
-     * @param string $requestUri
-     * @return Zend_Controller_Request_Http
-     */
-    public function setRequestUri($requestUri = null)
-    {
-        parent::setRequestUri($requestUri);
-        if ($this->_requestUri === null
-                && !empty($_SERVER['argc'])
-                && $_SERVER['argc'] > 1) {
-            $this->setRequestUri($_SERVER['argv'][1]);
-        }
-        return $this;
-    }
-
-    /**
      * Return the value of the given HTTP header. Pass the header name as the
      * plain, HTTP-specified header name. Ex.: Ask for 'Accept' to get the
      * Accept header, 'Accept-Encoding' to get the Accept-Encoding header.
@@ -235,6 +221,10 @@ class Enlight_Controller_Request_RequestHttp
      */
     public function getClientIp($checkProxy = false)
     {
+        if ($checkProxy) {
+            trigger_error('The checkProxy parameter is deprecated and is not secure. Please configure the trusted proxies.', E_USER_DEPRECATED);
+        }
+
         return parent::getClientIp($checkProxy);
     }
 

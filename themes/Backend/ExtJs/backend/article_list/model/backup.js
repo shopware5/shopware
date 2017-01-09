@@ -39,7 +39,7 @@ Ext.define('Shopware.apps.ArticleList.model.Backup', {
      * @array
      */
     fields: [
-		//{block name="backend/article_list/model/backup/fields"}{/block}
+        //{block name="backend/article_list/model/backup/fields"}{/block}
         { name: 'id', type: 'int', useNull: true },
         { name: 'date', type: 'datetime', dateFormat: 'Y-m-d H:i:s' },
         { name: 'items', type: 'int' },

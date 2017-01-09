@@ -44,7 +44,7 @@ Ext.define('Shopware.apps.Shipping.model.Costsmatrix', {
      * @array
      */
     fields:[
-		//{block name="backend/shipping/model/costmatrix/fields"}{/block}
+        //{block name="backend/shipping/model/costmatrix/fields"}{/block}
         { name:'id', type:'integer' },
         { name:'from', type:'float' },
         { name:'value', type:'float' },

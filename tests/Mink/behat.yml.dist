@@ -13,7 +13,7 @@ default:
             goutte: ~
             selenium2:
                 wd_host: "http://selenium:4444/wd/hub"
-            browser_name: firefox
+            browser_name: chrome
 
     gherkin:
       filters:

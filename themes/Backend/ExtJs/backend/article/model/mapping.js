@@ -41,7 +41,7 @@ Ext.define('Shopware.apps.Article.model.Mapping', {
      * @array
      */
     fields: [
-		//{block name="backend/article/model/mapping/fields"}{/block}
+        //{block name="backend/article/model/mapping/fields"}{/block}
         { name: 'id', type: 'int' },
         { name: 'articleId', type: 'int' },
         { name: 'settings', type: 'boolean', defaultValue: true },

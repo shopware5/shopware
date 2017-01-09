@@ -53,12 +53,12 @@ Ext.define('Shopware.apps.Base.model.Supplier', {
      */
     idProperty : 'id',
 
-	/**
+    /**
     * The fields used for this model
     * @array
     */
     fields: [
-		//{block name="backend/base/model/supplier/fields"}{/block}
+        //{block name="backend/base/model/supplier/fields"}{/block}
         { name : 'id', type : 'int' },
         { name : 'name', type : 'string' },
         { name : 'image', type : 'string' },

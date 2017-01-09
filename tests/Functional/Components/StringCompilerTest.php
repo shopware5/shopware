@@ -61,9 +61,9 @@ EOD;
         $expectedResult = <<<'EOD'
 Hallo,
 
-ihre Zugangsdaten zu http://demo.shopware.de lauten wie folgt:
-Benutzer: info@example.de
-Passwort: 123muster
+ihre Zugangsdaten zu {$sShopURL} lauten wie folgt:
+Benutzer: {$sMail}
+Passwort: {$sPassword}
 EOD;
 
         $context = array(

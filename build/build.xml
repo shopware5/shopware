@@ -23,9 +23,7 @@
     <target name="test-unit" depends="unit-shopware"/>
 
     <target name="write-properties" description="Write build-variables to file">
-        <propertyfile
-                file="${build.dir}/build.properties"
-                comment="Project properties">
+        <propertyfile file="${build.dir}/build.properties" comment="Project properties">
             <entry  key="db.host"     value="${db.host}"/>
             <entry  key="db.name"     value="${db.name}"/>
             <entry  key="db.user"     value="${db.user}"/>
@@ -55,7 +53,6 @@
 
         <input message="Please enter db-password:"
                addproperty="user.db.password">
-            <handler type="secure"/>
         </input>
 
         <input message="Please enter app.host (Hostname e.g. example.com):"
@@ -66,7 +63,16 @@
                addproperty="user.app.path"
                defaultvalue="${app.path}" />
 
-        <antcall target="write-properties"/>
+           <antcall target="write-properties">
+               <param name="db.host" value="${user.db.host}"/>
+               <param name="db.port" value="${user.db.port}"/>
+               <param name="db.name" value="${user.db.name}"/>
+               <param name="db.user" value="${user.db.user}"/>
+               <param name="db.password" value="${user.db.password}"/>
+               <param name="db.port" value="${user.db.port}"/>
+               <param name="app.host" value="${user.app.host}"/>
+               <param name="app.path" value="${user.app.path}"/>
+           </antcall>
     </target>
 
     <target name="check-composer-binary">
@@ -218,6 +224,10 @@
     </target>
 
     <target name="unit-shopware-continuous" depends="build-unit">
+        <exec executable="${script.phpunit}" failonerror="true" dir="${test.dir.shopware}">
+            <arg value="--config=phpunit_unit.xml.dist"/>
+        </exec>
+
         <exec executable="${script.phpunit}" failonerror="true" dir="${test.dir.shopware}">
             <arg value="--log-junit=${log.dir}/junit.xml"/>
         </exec>

@@ -397,19 +397,17 @@ class sOrderTest extends PHPUnit_Framework_TestCase
 
         $this->module->sCreateTemporaryOrder();
 
-        $order = Shopware()->Models()->createQueryBuilder()
-            ->select(array('orders'))
-            ->from('Shopware\Models\Order\Order', 'orders')
-            ->where('orders.temporaryId = :orderId')
-            ->setParameter('orderId', self::$sessionId)
-            ->setFirstResult(0)
-            ->setMaxResults(1)
-            ->getQuery()
-            ->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+        $order = Shopware()->Models()->getRepository('Shopware\Models\Order\Order')->findOneBy(['temporaryId' => self::$sessionId]);
 
-        $this->assertEquals('1113', $order['invoiceAmount']);
-        $this->assertEquals('1113', $order['invoiceAmountNet']);
-        $this->assertEquals('0', $order['number']);
+        $this->assertNotNull($order);
+        $this->assertNotNull($order->getAttribute());
+        $this->assertEquals('1113', $order->getInvoiceAmount());
+        $this->assertEquals('1113', $order->getInvoiceAmountNet());
+        $this->assertEquals('0', $order->getNumber());
+
+        foreach ($order->getDetails() as $orderDetail) {
+            $this->assertNotNull($orderDetail->getAttribute());
+        }
     }
 
     /**

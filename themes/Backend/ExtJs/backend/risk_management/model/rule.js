@@ -39,46 +39,46 @@ Ext.define('Shopware.apps.RiskManagement.model.Rule', {
     * @string
     */
     extend: 'Ext.data.Model',
-	idProperty: 'id',
+    idProperty: 'id',
 
-	proxy: {
-		type: 'ajax',
-		/**
-		* Configure the url mapping for the different
-		* @object
-		*/
-		api: {
-			//create articles
+    proxy: {
+        type: 'ajax',
+        /**
+        * Configure the url mapping for the different
+        * @object
+        */
+        api: {
+            //create articles
             create: '{url controller="risk_management" action="createRule"}',
             //edit articles
             update: '{url controller="risk_management" action="editRule"}',
-	       	//function to delete articles
-          	destroy: '{url controller="risk_management" action="deleteRule"}'
-		},
+            //function to delete articles
+            destroy: '{url controller="risk_management" action="deleteRule"}'
+        },
 
-		/**
-		* Configure the data reader
-		* @object
-		*/
-		reader: {
-			type: 'json',
-			root: 'data',
-			totalProperty: 'total'
-		}
-	},
+        /**
+        * Configure the data reader
+        * @object
+        */
+        reader: {
+            type: 'json',
+            root: 'data',
+            totalProperty: 'total'
+        }
+    },
 
     /**
     * The fields used for this model
     * @array
     */
     fields: [
-		//{block name="backend/risk_management/model/rule/fields"}{/block}
-		{ name: 'id', type: 'int' },
-		{ name: 'paymentId', type: 'string' },
-		{ name: 'rule1', type: 'string' },
-		{ name: 'value1', type: 'string' },
-		{ name: 'rule2', type: 'string' },
-		{ name: 'value2', type: 'string' }
+        //{block name="backend/risk_management/model/rule/fields"}{/block}
+        { name: 'id', type: 'int' },
+        { name: 'paymentId', type: 'string' },
+        { name: 'rule1', type: 'string' },
+        { name: 'value1', type: 'string' },
+        { name: 'rule2', type: 'string' },
+        { name: 'value2', type: 'string' }
     ]
 });
 //{/block}

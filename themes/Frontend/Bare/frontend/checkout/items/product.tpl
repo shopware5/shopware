@@ -41,10 +41,10 @@
                                                         {$desc = $image.description|escape}
                                                     {/if}
 
-                                                    <img srcset="{$image.thumbnails[0].sourceSet}" alt="{$desc}" title="{$desc|truncate:25:""}" />
+                                                    <img srcset="{$image.thumbnails[0].sourceSet}" alt="{$desc}" title="{$desc|truncate:160}" />
                                                 </a>
                                             {else}
-                                                <img src="{link file='frontend/_public/src/img/no-picture.jpg'}" alt="{$desc}" title="{$desc|truncate:25:""}" />
+                                                <img src="{link file='frontend/_public/src/img/no-picture.jpg'}" alt="{$desc}" title="{$desc|truncate:160}" />
                                             {/if}
                                         {/block}
                                     </div>
@@ -161,8 +161,10 @@
     {* Remove product from basket *}
     {block name='frontend_checkout_cart_item_delete_article'}
         <div class="panel--td column--actions">
-            <form action="{url action='deleteArticle' sDelete=$sBasketItem.id sTargetAction=$sTargetAction}" method="post">
-                <button type="submit" class="btn is--small column--actions-link" title="{"{s name='CartItemLinkDelete '}{/s}"|escape}">
+            <form action="{url action='deleteArticle' sDelete=$sBasketItem.id sTargetAction=$sTargetAction}"
+                  method="post">
+                <button type="submit" class="btn is--small column--actions-link"
+                        title="{"{s name='CartItemLinkDelete'}{/s}"|escape}">
                     <i class="icon--cross"></i>
                 </button>
             </form>

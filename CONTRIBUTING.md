@@ -31,6 +31,15 @@ When coding and committing, please:
 All contributions should follow the [PSR-1](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-1-basic-coding-standard.md) and [PSR-2](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-2-coding-style-guide.md) coding
 standards.
 
+To check for CS issues:
+
+    composer cs-check
+
+You can also fix reported errors automatically:
+
+    composer cs-fix
+
+If you use `composer cs-fix` to fix issues, make certain you add and commit any files changed!
 
 # Start hacking
 

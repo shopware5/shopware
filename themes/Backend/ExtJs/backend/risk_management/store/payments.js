@@ -58,31 +58,31 @@ Ext.define('Shopware.apps.RiskManagement.store.Payments', {
     */
     model : 'Shopware.apps.RiskManagement.model.Payment',
 
-	/**
-	 * Configure the data communication
-	 * @object
-	 */
-	proxy:{
-		type:'ajax',
-		/**
-		 * Configure the url mapping for the different
-		 * @object
-		 */
-		api:{
-			//read out all articles
-			read:'{url controller="risk_management" action="getPayments"}'
-		},
-		/**
-		 * Configure the data reader
-		 * @object
-		 */
-		reader:{
-			type:'json',
-			root:'data',
-			//total values, used for paging
-			totalProperty:'total'
-		}
-	}
+    /**
+     * Configure the data communication
+     * @object
+     */
+    proxy:{
+        type:'ajax',
+        /**
+         * Configure the url mapping for the different
+         * @object
+         */
+        api:{
+            //read out all articles
+            read:'{url controller="risk_management" action="getPayments"}'
+        },
+        /**
+         * Configure the data reader
+         * @object
+         */
+        reader:{
+            type:'json',
+            root:'data',
+            //total values, used for paging
+            totalProperty:'total'
+        }
+    }
 
 });
 //{/block}

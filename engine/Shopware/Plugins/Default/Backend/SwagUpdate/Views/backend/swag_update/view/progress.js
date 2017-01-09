@@ -46,7 +46,7 @@ Ext.define('Shopware.apps.SwagUpdate.view.Progress', {
      * Define window height
      * @integer
      */
-    height: 120,
+    height: 80,
 
     /**
      * Display no footer button for the detail window
@@ -93,6 +93,7 @@ Ext.define('Shopware.apps.SwagUpdate.view.Progress', {
      * @boolean
      */
     maximizable: false,
+
     /**
      * Disables the minimize button in the window header
      * @boolean
@@ -106,9 +107,7 @@ Ext.define('Shopware.apps.SwagUpdate.view.Progress', {
      * @object
      */
     snippets: {
-        title:'{s name=progress/title}Prepare Update{/s}',
-        cancel:'{s name=progress/cancel}Cancel process{/s}',
-        close:'{s name=progress/close}Close window{/s}'
+        title:'{s name=progress/title}Prepare Update{/s}'
     },
 
     /**
@@ -129,8 +128,7 @@ Ext.define('Shopware.apps.SwagUpdate.view.Progress', {
         me.progressBar = me.createProgressBar();
 
         me.items = [
-            me.progressBar,
-            me.createButtons()
+            me.progressBar
         ];
         me.callParent(arguments);
 
@@ -142,9 +140,7 @@ Ext.define('Shopware.apps.SwagUpdate.view.Progress', {
      */
     registerEvents: function() {
         this.addEvents(
-            'cancelProcess',
-            'startProcess',
-            'closeWindow'
+            'startProcess'
         );
     },
 
@@ -154,69 +150,8 @@ Ext.define('Shopware.apps.SwagUpdate.view.Progress', {
     createProgressBar: function() {
         return Ext.create('Ext.ProgressBar', {
             animate: true,
-            margin: '0 0 15',
             style: 'border-width: 1px !important;',
             cls:'left-align'
-        });
-    },
-
-    /**
-     * Creates the cancel button which allows the user to cancel the document creation in the
-     * batch window. Event will be handled in the batch controller.
-     */
-    createCancelButton: function() {
-        var me = this;
-
-        return Ext.create('Ext.button.Button', {
-            text: me.snippets.cancel,
-            cls: 'primary',
-            action: 'cancel',
-            disabled: false,
-            hidden: true,
-            handler: function() {
-                me.fireEvent('cancelProcess', this);
-            }
-        });
-    },
-
-    /**
-     * Creates the close button which allows the user to close the window. The window closing is handled over this
-     * button to prevent that the user close the window while the batch process is already working.
-     * So the user have to wait until the process are finish or the user can clicks the cancel button.
-     * The button will enabled after the batch process are finish or the cancel event are fired and the batch process
-     * successfully canceled.
-     */
-    createCloseButton: function() {
-        var me = this;
-
-        return Ext.create('Ext.button.Button', {
-            text: me.snippets.close,
-            flex: 1,
-            action: 'closeWindow',
-            cls: 'secondary',
-            handler: function() {
-                me.fireEvent('closeWindow', me);
-            }
-        });
-    },
-
-    /**
-     * Creates the button container for the close and cancel button
-     *
-     * @return Ext.container.Container
-     */
-    createButtons: function() {
-        var me = this;
-
-        me.closeButton  = me.createCloseButton();
-        me.cancelButton = me.createCancelButton();
-
-        return Ext.create('Ext.container.Container', {
-            layout: 'hbox',
-            items: [
-                me.cancelButton,
-                me.closeButton
-            ]
         });
     }
 });

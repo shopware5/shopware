@@ -34,7 +34,7 @@
 Ext.define('Shopware.apps.Config.model.form.SearchTable', {
     extend: 'Ext.data.Model',
     fields: [
-		//{block name="backend/config/model/form/search_table/fields"}{/block}
+        //{block name="backend/config/model/form/search_table/fields"}{/block}
         { name: 'id', type: 'int' },
         { name: 'name', type: 'string' },
         { name: 'table', type: 'string' }

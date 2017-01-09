@@ -123,7 +123,8 @@ Ext.define('Shopware.apps.CanceledOrder.view.tabs.order.Orders', {
             },
             {
                 header: me.snippets.columns.contact,
-                dataIndex: 'comment',
+                dataIndex: 'orders.comment',
+                renderer: me.commentRenderer,
                 flex: 2
             },
             {
@@ -152,7 +153,20 @@ Ext.define('Shopware.apps.CanceledOrder.view.tabs.order.Orders', {
         ];
     },
 
-
+    /**
+     * Returns the transactionId from a record
+     *
+     * @param value
+     * @param metaDate
+     * @param record
+     * @return string
+     */
+    commentRenderer: function (value, metaDate, record) {
+        if (!record) {
+            return '-';
+        }
+        return record.get('comment');
+    },
 
     /**
      * Returns the transactionId from a record

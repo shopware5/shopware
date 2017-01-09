@@ -94,7 +94,7 @@ class Backup
      */
     public function setupBackupDir()
     {
-        $this->backupPath = Shopware()->DocPath() . 'files/backup';
+        $this->backupPath = Shopware()->DocPath() . 'files/backup/multi_edit';
 
         $this->backupPath = rtrim($this->backupPath, '/\\') . '/';
 

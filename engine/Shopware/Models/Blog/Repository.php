@@ -380,6 +380,7 @@ class Repository extends ModelRepository
                 ->leftJoin('blog.comments', 'comments', \Doctrine\ORM\Query\Expr\Join::WITH, 'comments.active = 1')
                 ->leftJoin('mappingMedia.media', 'media')
                 ->where("blog.id = :blogArticleId")
+                ->addOrderBy('comments.creationDate', 'ASC')
                 ->setParameter("blogArticleId", $blogArticleId);
 
         return $builder;

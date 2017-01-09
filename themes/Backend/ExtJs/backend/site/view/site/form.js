@@ -37,7 +37,7 @@
 
 //{block name="backend/site/view/site/form"}
 Ext.define('Shopware.apps.Site.view.site.Form', {
-	extend: 'Ext.form.Panel',
+    extend: 'Ext.form.Panel',
     alias: 'widget.site-form',
     layout: 'anchor',
     defaults: {
@@ -48,10 +48,10 @@ Ext.define('Shopware.apps.Site.view.site.Form', {
 
     initComponent: function() {
         var me = this;
-		me.dockedItems = [];
+        me.dockedItems = [];
         me.items = me.getItems();
-		me.toolBar = me.getToolBar();
-		me.dockedItems.push(me.toolBar);
+        me.toolBar = me.getToolBar();
+        me.dockedItems.push(me.toolBar);
 
         me.callParent(arguments);
 
@@ -59,29 +59,29 @@ Ext.define('Shopware.apps.Site.view.site.Form', {
         me.loadRecord(record);
     },
 
-	getToolBar: function(){
-		var me = this,
+    getToolBar: function(){
+        var me = this,
             items = [];
 
-		me.saveButton = Ext.create('Ext.button.Button',{
-			text: '{s name=formLinkFieldSaveButtonText}Save{/s}',
-			action: 'onSaveSite',
-			cls:'primary'
-		});
+        me.saveButton = Ext.create('Ext.button.Button',{
+            text: '{s name=formLinkFieldSaveButtonText}Save{/s}',
+            action: 'onSaveSite',
+            cls:'primary'
+        });
         /*{if not {acl_is_allowed privilege=createSite}}*/
         me.saveButton.disable();
         /*{/if}*/
-		items.push('->');
+        items.push('->');
 
         /*{if {acl_is_allowed privilege=createSite} || {acl_is_allowed privilege=updateSite}}*/
-		items.push(me.saveButton);
+        items.push(me.saveButton);
         /*{/if}*/
-		return Ext.create('Ext.toolbar.Toolbar',{
-			dock: 'bottom',
-			ui: 'shopware-ui',
-			items: items
-		});
-	},
+        return Ext.create('Ext.toolbar.Toolbar',{
+            dock: 'bottom',
+            ui: 'shopware-ui',
+            items: items
+        });
+    },
 
     getItems: function() {
         var me = this;
@@ -150,11 +150,11 @@ Ext.define('Shopware.apps.Site.view.site.Form', {
     },
 
     getLinkField: function() {
-        var me = this;
-		var data = [
-			['_parent'],
-			['_blank']
-		];
+        var me = this,
+            data = [
+                ['_parent'],
+                ['_blank']
+            ];
 
         return [
             {
@@ -166,15 +166,15 @@ Ext.define('Shopware.apps.Site.view.site.Form', {
             {
                 fieldLabel: '{s name=formLinkFieldTargetLabel}Link-Target{/s}',
                 xtype: 'combo',
-				mode:'local',
+                mode:'local',
                 name: 'target',
-				valueField:'target',
-    			displayField:'target',
+                valueField:'target',
+                displayField:'target',
                 anchor:'100%',
-				store: new Ext.data.SimpleStore({
-					fields:['target'],
-					data: data
-				})
+                store: new Ext.data.SimpleStore({
+                    fields:['target'],
+                    data: data
+                })
             },
             me.getShopsSelector()
         ]
@@ -184,12 +184,12 @@ Ext.define('Shopware.apps.Site.view.site.Form', {
         var me = this;
 
         return [
-			{
-			   fieldLabel: '{s name=formSettingsFieldPositionLabel}Position{/s}',
-			   xtype: 'textfield',
-			   name: 'position',
-			   anchor:'100%'
-			},
+            {
+               fieldLabel: '{s name=formSettingsFieldPositionLabel}Position{/s}',
+               xtype: 'textfield',
+               name: 'position',
+               anchor:'100%'
+            },
             {
                fieldLabel: '{s name=formSettingsFieldEmbedCodeLabel}Embed-Code{/s}',
                xtype: 'textfield',
@@ -272,35 +272,32 @@ Ext.define('Shopware.apps.Site.view.site.Form', {
                 add: "Add",
                 remove: "Remove"
             },
-			fromColumns :[{
-				text: 'name',
-				flex: 1,
-				dataIndex: 'groupName'
-			}],
-			toColumns :[{
-				text: 'name',
-				flex: 1,
-				dataIndex: 'groupName'
-			}]
+            fromColumns :[{
+                text: 'name',
+                flex: 1,
+                dataIndex: 'groupName'
+            }],
+            toColumns :[{
+                text: 'name',
+                flex: 1,
+                dataIndex: 'groupName'
+            }]
         }
     },
 
     getShopsSelector: function() {
-        var me = this;
-
-        return {
-            xtype: 'combobox',
+        var selectionFactory = Ext.create('Shopware.attribute.SelectionFactory');
+        return Ext.create('Shopware.form.field.ShopGrid', {
             name: 'shopIds',
             fieldLabel: '{s name=site/shop_selector/label}Limit to shop(s){/s}',
             helpText: '{s name=site/shop_selector/helper}If set, limits shop page visibility to the configured shops. If this shop page links to another page, that page might still be accessible.{/s}',
-            store: me.shopStore,
-            multiSelect: true,
-            displayField: 'name',
-            valueField: 'id',
-            queryMode:'local',
+            allowSorting: false,
+            height: 130,
             anchor:'100%',
-            editable: false
-        };
+            labelWidth: 155,
+            store: selectionFactory.createEntitySearchStore("Shopware\\Models\\Shop\\Shop"),
+            searchStore: selectionFactory.createEntitySearchStore("Shopware\\Models\\Shop\\Shop")
+        });
     }
 });
 //{/block}

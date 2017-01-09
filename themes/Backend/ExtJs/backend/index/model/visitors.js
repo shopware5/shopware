@@ -26,9 +26,9 @@
  */
 //{block name="backend/index/model/visitors"}
 Ext.define('Shopware.apps.Index.model.Visitors', {
-	extend: 'Ext.data.Model',
+    extend: 'Ext.data.Model',
     fields: [
-		//{block name="backend/index/model/visitors/fields"}{/block}
-		'date', { name: 'visitors', type: 'int'}, 'timestamp']
+        //{block name="backend/index/model/visitors/fields"}{/block}
+        'date', { name: 'visitors', type: 'int'}, 'timestamp']
 });
 //{/block}

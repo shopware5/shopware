@@ -40,7 +40,7 @@ Ext.define('Shopware.apps.ArticleList.model.Filter', {
      * @array
      */
     fields: [
-		//{block name="backend/article_list/model/filter/fields"}{/block}
+        //{block name="backend/article_list/model/filter/fields"}{/block}
         { name: 'id', type: 'int', useNull: true },
         { name: 'name', type: 'string' },
         { name: 'filterString', type: 'string' },

@@ -303,8 +303,8 @@ It contains the viewport specific styles inside media queries.
                 .unitize(margin-top, -8);
                 .unitize(font-size, 6);
                 .unitize(line-height, 16);
-                font-family: "shopware";
-                content: "\e612";
+                font-family: @sw-icon-fontname;
+                content: @sw-icon-arrow-down;
                 position: absolute;
                 text-align: center;
                 background: none;
@@ -314,7 +314,7 @@ It contains the viewport specific styles inside media queries.
 
             &:after {
                 .unitize(margin-top, -48);
-                content: "\e610";
+                content: @sw-icon-arrow-up;
             }
 
             &.is--active {

@@ -1587,8 +1587,8 @@ class Media extends ModelEntity
         //returns a change set for the model, which contains all changed properties with the old and new value.
         $changeSet = Shopware()->Models()->getUnitOfWork()->getEntityChangeSet($this);
 
-        $isNameChanged  = $changeSet['name'][0] !== $changeSet['name'][1];
-        $isAlbumChanged = $changeSet['albumId'][0] !== $changeSet['albumId'][1];
+        $isNameChanged  = isset($changeSet['name']) && $changeSet['name'][0] !== $changeSet['name'][1];
+        $isAlbumChanged = isset($changeSet['albumId']) && $changeSet['albumId'][0] !== $changeSet['albumId'][1];
 
         //name changed || album changed?
         if ($isNameChanged || $isAlbumChanged) {
@@ -1677,21 +1677,10 @@ class Media extends ModelEntity
             return;
         }
 
-        //iterate thumbnails and remove them
-        foreach ($this->thumbnails as $thumbnail) {
-            if ($mediaService->has($thumbnail)) {
-                $mediaService->delete($thumbnail);
-            }
-        }
+        $thumbnailSizes = $this->getAllThumbnailSizes();
 
         $this->removeDefaultThumbnails($this->getFileName());
-
-        //remove the configured album thumbnail files
-        $settings = $this->album->getSettings();
-        /**@var $settings Settings*/
-        if ($settings !== null) {
-            $this->removeAlbumThumbnails($settings->getThumbnailSize(), $this->getFileName());
-        }
+        $this->removeAlbumThumbnails($thumbnailSizes, $this->getFileName());
     }
 
     /****************************************************************
@@ -2242,5 +2231,29 @@ class Media extends ModelEntity
     public function setArticles($articles)
     {
         $this->articles = $articles;
+    }
+
+    /**
+     * Searches all album settings for thumbnail sizes
+     *
+     * @return array
+     */
+    private function getAllThumbnailSizes()
+    {
+        $joinedSizes = Shopware()->Container()->get('dbal_connection')
+            ->query('SELECT DISTINCT thumbnail_size FROM s_media_album_settings WHERE thumbnail_size != ""')
+            ->fetchAll(\PDO::FETCH_COLUMN);
+
+        $sizes = [];
+        foreach ($joinedSizes as $sizeItem) {
+            $explodedSizes = explode(";", $sizeItem);
+            if (empty($explodedSizes)) {
+                continue;
+            }
+
+            $sizes = array_merge($sizes, array_flip($explodedSizes));
+        }
+
+        return array_keys($sizes);
     }
 }

@@ -34,7 +34,7 @@
 Ext.define('Shopware.apps.Config.model.form.Tax', {
     extend: 'Ext.data.Model',
     fields: [
-		//{block name="backend/config/model/form/tax/fields"}{/block}
+        //{block name="backend/config/model/form/tax/fields"}{/block}
         { name: 'id', type: 'string' },
         { name: 'name', type: 'string' },
         { name: 'tax', type: 'float' }
@@ -51,7 +51,7 @@ Ext.define('Shopware.apps.Config.model.form.Tax', {
 Ext.define('Shopware.apps.Config.model.form.TaxRule', {
     extend: 'Ext.data.Model',
     fields: [
-		//{block name="backend/config/model/form/tax_rule/fields"}{/block}
+        //{block name="backend/config/model/form/tax_rule/fields"}{/block}
         { name: 'id', type: 'int' },
         { name: 'name', type: 'string' },
         { name: 'active', type: 'boolean', defaultValue: true },

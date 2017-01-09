@@ -146,6 +146,13 @@ class FileSystem
         // set group-bit to writable
         $newPermission[2] = '6';
 
+        if ($fileInfo->isExecutable()) {
+            // set owner-bit to writable/executable
+            $newPermission[1] = '7';
+            // set group-bit to writable/executable
+            $newPermission[2] = '7';
+        }
+
         $newPermission = octdec($newPermission);
         chmod($fileInfo->getPathname(), $newPermission);
         clearstatcache(false, $fileInfo->getPathname());

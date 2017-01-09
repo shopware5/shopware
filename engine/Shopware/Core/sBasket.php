@@ -629,7 +629,7 @@ class sBasket
               WHERE modus != 1
               AND LOWER(vouchercode) = ?
               AND (
-                (valid_to >= now() AND valid_from <= now())
+                (valid_to >= CURDATE() AND valid_from <= CURDATE())
                 OR valid_to IS NULL
               )',
             array($voucherCode)
@@ -667,8 +667,8 @@ class sBasket
                     minimumcharge, shippingfree, bindtosupplier, taxconfig, valid_from,
                     valid_to, ordercode, modus, percental, strict, subshopID
                     FROM s_emarketing_vouchers WHERE modus = 1 AND id = ? AND (
-                      (valid_to >= now()
-                          AND valid_from <= now()
+                      (valid_to >= CURDATE()
+                          AND valid_from <= CURDATE()
                       )
                       OR valid_to is NULL
                 ) LIMIT 1',
@@ -1017,7 +1017,7 @@ class sBasket
         }
 
         if (!$tax) {
-            $tax = 119;
+            $tax = 19;
         }
 
         if ((!$this->sSYSTEM->sUSERGROUPDATA["tax"] && $this->sSYSTEM->sUSERGROUPDATA["id"])) {
@@ -2751,6 +2751,9 @@ class sBasket
         if ($article['configurator_set_id'] > 0) {
             $context = $this->contextService->getShopContext();
             $product = Shopware()->Container()->get('shopware_storefront.list_product_service')->get($article['ordernumber'], $context);
+            if (null === $product) {
+                return false;
+            }
             $product = $this->additionalTextService->buildAdditionalText($product, $context);
             $article['additionaltext'] = $product->getAdditional();
         }

@@ -32,24 +32,24 @@
  */
 //{block name="backend/payment/app"}
 Ext.define('Shopware.apps.Payment', {
-	/**
-	* Extends from our special controller, which handles the
-	* sub-application behavior and the event bus
-	* @string
-	*/
+    /**
+    * Extends from our special controller, which handles the
+    * sub-application behavior and the event bus
+    * @string
+    */
     extend : 'Enlight.app.SubApplication',
-	/**
-	* The name of the module. Used for internal purpose
-	* @string
-	*/
-	name: 'Shopware.apps.Payment',
-	/**
-	* Sets the loading path for the sub-application.
-	*
-	* Note that you'll need a "loadAction" in your
-	* controller (server-side)
-	* @string
-	*/
+    /**
+    * The name of the module. Used for internal purpose
+    * @string
+    */
+    name: 'Shopware.apps.Payment',
+    /**
+    * Sets the loading path for the sub-application.
+    *
+    * Note that you'll need a "loadAction" in your
+    * controller (server-side)
+    * @string
+    */
     loadPath : '{url controller="payment" action=load}',
 
     /**
@@ -74,10 +74,10 @@ Ext.define('Shopware.apps.Payment', {
     */
     models: [ 'Country', 'Payment' ],
 
-	/**
-	* Requires controllers for sub-application
-	* @array
-	*/
+    /**
+    * Requires controllers for sub-application
+    * @array
+    */
     controllers : [ 'Payment', 'Main' ],
         /**
      * Returns the main application window for this is expected

@@ -2436,7 +2436,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      */
     protected function prepareVariantData($variant, $detailData, &$counter, $dependencies, $priceVariations, $allOptions, $originals, $article, $mergeType)
     {
-        $name = '';
         $optionsModels = array();
         $tax = $article->getTax();
         $optionIds = array();
@@ -2449,7 +2448,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             $optionIds[] = $optionId;
 
             $optionsModels[] = $allOptions[$optionId];
-            $name[] = $variant['o' . $id . 'Name'];
         }
 
         $abortVariant = false;
@@ -2961,11 +2959,11 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             if (empty($relatedData['id'])) {
                 continue;
             }
-            /**@var $relatedArticle \Shopware\Models\Article\Article */
+            /** @var $relatedArticle \Shopware\Models\Article\Article */
             $relatedArticle = $this->getRepository()->find($relatedData['id']);
 
             //if the user select the cross
-            if ($relatedData['cross']) {
+            if ($relatedData['cross'] && !$relatedArticle->getRelated()->contains($article)) {
                 $relatedArticle->getRelated()->add($article);
                 Shopware()->Models()->persist($relatedArticle);
             }
@@ -3013,11 +3011,11 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             if (empty($similarData['id'])) {
                 continue;
             }
-            /**@var $similarArticle \Shopware\Models\Article\Article */
+            /** @var $similarArticle \Shopware\Models\Article\Article */
             $similarArticle = $this->getRepository()->find($similarData['id']);
 
             //if the user select the cross
-            if ($similarData['cross']) {
+            if ($similarData['cross'] && !$similarArticle->getSimilar()->contains($article)) {
                 $similarArticle->getSimilar()->add($article);
                 Shopware()->Models()->persist($similarArticle);
             }

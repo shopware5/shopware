@@ -43,7 +43,7 @@ Ext.define('Shopware.apps.Emotion.model.BannerSlider', {
      * @array
      */
     fields: [
-		//{block name="backend/emotion/model/field/banner_slider"}{/block}
+        //{block name="backend/emotion/model/field/banner_slider"}{/block}
         'position', 'path', 'mediaId', 'link', 'altText', 'title'
     ]
 });

@@ -37,8 +37,8 @@
 
 //{block name="backend/site/view/site/tree"}
 Ext.define('Shopware.apps.Site.view.site.Tree', {
-	extend: 'Ext.tree.Panel',
-	alias : 'widget.site-tree',
+    extend: 'Ext.tree.Panel',
+    alias : 'widget.site-tree',
     rootVisible: false,
     animate: false,
 

@@ -38,7 +38,7 @@
 Ext.define('Shopware.apps.Translation.view.main.Window',
 /** @lends Enlight.app.Window# */
 {
-	extend: 'Enlight.app.Window',
+    extend: 'Enlight.app.Window',
     title: '{s name=window_title}Translation{/s}',
     cls: Ext.baseCSSPrefix + 'translation-manager-window',
     alias: 'widget.translation-main-window',

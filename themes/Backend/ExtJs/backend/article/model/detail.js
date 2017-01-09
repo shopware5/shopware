@@ -43,7 +43,7 @@ Ext.define('Shopware.apps.Article.model.Detail', {
      * @array
      */
     fields: [
-		//{block name="backend/article/model/detail/fields"}{/block}
+        //{block name="backend/article/model/detail/fields"}{/block}
         { name: 'id', type: 'int' },
         { name: 'articleId', type: 'int' },
         { name: 'number', type: 'string' },
@@ -82,6 +82,23 @@ Ext.define('Shopware.apps.Article.model.Detail', {
                 }
                 if (record && record.raw && record.raw.prices && record.raw.prices[0]) {
                     return Ext.Number.toFixed(record.raw.prices[0].price, 2);
+                }
+                return 0;
+            }
+        },
+        {
+            name: 'pseudoPrice',
+            type: 'float',
+            persist: false,
+            convert: function(value, record) {
+                if (value) {
+                    return value;
+                }
+                if (record && record.getPrice() && record.getPrice().count() > 0) {
+                    return Ext.Number.toFixed(record.getPrice().first().get('pseudoPrice'), 2);
+                }
+                if (record && record.raw && record.raw.prices && record.raw.prices[0]) {
+                    return Ext.Number.toFixed(record.raw.prices[0].pseudoPrice, 2);
                 }
                 return 0;
             }

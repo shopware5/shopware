@@ -1,5 +1,6 @@
 <?php
-class Migrations_Migration427 Extends Shopware\Components\Migrations\AbstractMigration
+
+class Migrations_Migration427 extends Shopware\Components\Migrations\AbstractMigration
 {
     public function up($modus)
     {
@@ -10,12 +11,12 @@ SQL;
 
         $sql = <<<SQL
             INSERT IGNORE INTO `s_core_config_elements` (`form_id`, `name`, `value`, `label`, `description`, `type`, `required`, `position`, `scope`) VALUES
-            (@formId, 'hideNoInstock', 'b:0;', 'Abverkaufsartikel ohne Lagerbestand nicht anzeigen', null, 'checkbox', 0, 0, 0);
+            (@formId, 'hideNoInStock', 'b:0;', 'Abverkaufsartikel ohne Lagerbestand nicht anzeigen', null, 'checkbox', 0, 0, 0);
 SQL;
         $this->addSql($sql);
 
         $sql = <<<SQL
-        SET @elementId = (SELECT id FROM `s_core_config_elements` WHERE `name` = 'hideNoInstock' LIMIT 1);
+        SET @elementId = (SELECT id FROM `s_core_config_elements` WHERE `name` = 'hideNoInStock' LIMIT 1);
 SQL;
         $this->addSql($sql);
 

@@ -44,7 +44,7 @@ Ext.define('Shopware.apps.Performance.model.Categories', {
      * @array
      */
     fields:[
-		//{block name="backend/performance/model/categories/fields"}{/block}
+        //{block name="backend/performance/model/categories/fields"}{/block}
         { name:'id', type:'int' },
         { name: 'articlesperpage', type: 'int'},
         { name: 'orderbydefault', type: 'string'},

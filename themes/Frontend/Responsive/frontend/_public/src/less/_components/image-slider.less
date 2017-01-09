@@ -42,7 +42,7 @@ It contains the viewport specific styles inside media queries.
         position: absolute;
         top: 50%;
         z-index: @zindex-image-slider-arrow;
-        font-family: 'shopware';
+        font-family: @sw-icon-fontname;
         text-align: center;
         color: @text-color;
         cursor: pointer;
@@ -54,7 +54,7 @@ It contains the viewport specific styles inside media queries.
 
             &:before,
             &::before {
-                content: "\e611";
+                content: @sw-icon-arrow-left;
             }
         }
 
@@ -63,7 +63,7 @@ It contains the viewport specific styles inside media queries.
             .border-radius-multi(3px, 0, 0, 3px);
 
             &:before {
-                content: "\e60f";
+                content: @sw-icon-arrow-right;
             }
         }
 
@@ -168,7 +168,7 @@ It contains the viewport specific styles inside media queries.
         display: none;
         position: absolute;
         z-index: @zindex-image-slider-arrow;
-        font-family: 'shopware';
+        font-family: @sw-icon-fontname;
         text-align: center;
         color: @text-color;
         border: 1px solid rgba(255, 255, 255, 0.85);
@@ -195,7 +195,7 @@ It contains the viewport specific styles inside media queries.
             top: 0;
 
             &::before {
-                content: "\e610";
+                content: @sw-icon-arrow-up;
             }
         }
 
@@ -204,7 +204,7 @@ It contains the viewport specific styles inside media queries.
             bottom: 0;
 
             &::before {
-                content: "\e612";
+                content: @sw-icon-arrow-down;
             }
         }
 
@@ -215,7 +215,7 @@ It contains the viewport specific styles inside media queries.
             left: 0;
 
             &::before {
-                content: "\e611";
+                content: @sw-icon-arrow-left;
             }
         }
 
@@ -226,7 +226,7 @@ It contains the viewport specific styles inside media queries.
             right: 0;
 
             &::before {
-                content: "\e60f";
+                content: @sw-icon-arrow-right;
             }
         }
 

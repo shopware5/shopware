@@ -34,7 +34,7 @@
 Ext.define('Shopware.apps.Config.model.main.Navigation', {
     extend: 'Ext.data.Model',
     fields: [
-		//{block name="backend/config/model/main/navigation/fields"}{/block}
+        //{block name="backend/config/model/main/navigation/fields"}{/block}
         { name: 'id', type: 'int' },
         { name: 'text', convert: function(v, record) { return record.data.label; } },
         { name: 'leaf', convert: function(v, record) { return record.data.childrenCount <= 0; } },

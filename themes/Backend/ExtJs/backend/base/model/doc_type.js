@@ -54,7 +54,7 @@ Ext.define('Shopware.apps.Base.model.DocType', {
      * @array
      */
     fields:[
-		//{block name="backend/order/model/type/fields"}{/block}
+        //{block name="backend/order/model/type/fields"}{/block}
         { name: 'id', type: 'int' },
         {
             name:'name',

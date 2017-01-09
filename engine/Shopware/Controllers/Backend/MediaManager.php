@@ -23,6 +23,7 @@
  */
 
 use Symfony\Component\HttpFoundation\File\UploadedFile as UploadedFile;
+use Doctrine\ORM\AbstractQuery;
 use Shopware\Models\Media\Album as Album;
 use Shopware\Models\Media\Settings as Settings;
 use Shopware\Models\Media\Media as Media;
@@ -640,7 +641,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
                 \Doctrine\ORM\AbstractQuery::HYDRATE_OBJECT
             );
             if (!$album) {
-                $this->View()->assign(array('success' => false, 'message' => 'Invalid album id passed'));
+                $this->View()->assign(['success' => false, 'message' => 'Invalid album id passed']);
                 return false;
             }
         } else {
@@ -655,9 +656,9 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
             $this->getManager()->flush($album);
             $this->getManager()->flush($album->getSettings());
 
-            $this->View()->assign(array('success' => true));
+            $this->View()->assign(['success' => true, 'data' => ['id' => $album->getId()]]);
         } catch (Exception $e) {
-            $this->View()->assign(array('success' => false, 'message' => $e->getMessage()));
+            $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);
         }
     }
 
@@ -1021,22 +1022,27 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
      */
     public function emptyTrashAction()
     {
-        $album = Shopware()->Models()->find('Shopware\Models\Media\Album', -13);
-        $mediaList = $album->getMedia();
+        /** @var \Shopware\Components\Model\ModelManager $em */
+        $em = $this->get('models');
+        /** @var \Shopware\Models\Media\Repository $repository */
+        $repository = $em->getRepository(Media::class);
 
-        //try to remove the media and the uploaded files.
-        try {
-            foreach ($mediaList as $media) {
-                Shopware()->Models()->remove($media);
+        $query = $repository->getAlbumMediaQuery(-13);
+        $query->setHydrationMode(AbstractQuery::HYDRATE_OBJECT);
+
+        $iterableResult = $query->iterate();
+        foreach ($iterableResult as $key => $row) {
+            $media = $row[0];
+            $em->remove($media);
+            if ($key % 100 == 0) {
+                $em->flush();
+                $em->clear();
             }
-            Shopware()->Models()->flush();
-
-            Shopware()->Db()->query("TRUNCATE TABLE `s_media_used`");
-
-            $this->View()->assign(array('success' => true));
-        } catch (\Doctrine\ORM\ORMException $e) {
-            $this->View()->assign(array('success' => false, 'message' => $e->getMessage()));
         }
+        $em->flush();
+        $em->clear();
+
+        $this->View()->assign(array('success' => true));
     }
 
     /**

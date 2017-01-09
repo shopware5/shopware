@@ -44,9 +44,9 @@ Ext.define('Shopware.apps.Article.controller.Media', {
      * @object
      */
     snippets: {
-    	upload: {
-	    	text: '{s name=media/upload/text}The image was uploaded successfully.{/s}'
-    	},
+        upload: {
+            text: '{s name=media/upload/text}The image was uploaded successfully.{/s}'
+        },
         success: {
             title: '{s name=media/success/title}Success{/s}',
             mapping: '{s name=media/success/mapping}The image mapping saved successfully{/s}'
@@ -370,31 +370,17 @@ Ext.define('Shopware.apps.Article.controller.Media', {
      *
      * @return boolean
      */
-    onRemoveImage: function() {
+    onRemoveImage: function () {
         var me = this,
             mediaList = me.getMediaList(),
-            store = mediaList.getStore(),
-            changeMain,
-            selected = null;
+            store = mediaList.getStore();
 
-        if (mediaList.getSelectionModel() &&  mediaList.getSelectionModel().selected && mediaList.getSelectionModel().selected.first()) {
-            selected = mediaList.getSelectionModel().selected.first();
-        }
+        store.remove(mediaList.getSelectionModel().getSelection());
 
-        if (!(selected instanceof Ext.data.Model)) {
-            return false;
-        }
-        changeMain = (selected.get('main')===1);
-
-        store.remove(selected);
-        mediaList.getSelectionModel().select(0);
-        if (!changeMain) {
-            return true;
-        }
-
-        var next = store.getAt(0);
-        if (next instanceof Ext.data.Model) {
-            next.set('main', 1);
+        var main = store.findExact('main', 1);
+        var first = store.getAt(0);
+        if (main < 0 && first instanceof Ext.data.Model) {
+            first.set('main', 1);
         }
     },
 

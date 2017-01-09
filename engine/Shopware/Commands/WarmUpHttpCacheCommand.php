@@ -39,7 +39,7 @@ class WarmUpHttpCacheCommand extends ShopwareCommand
     {
         $this
             ->setName('sw:warm:http:cache')
-            ->setDescription('warm up http cache')
+            ->setDescription('Warm up http cache')
             ->addArgument('shopId', InputArgument::OPTIONAL, 'The Id of the shop')
             ->setHelp('The <info>%command.name%</info> warms up the http cache')
         ;

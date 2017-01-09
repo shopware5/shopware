@@ -39,6 +39,7 @@ Ext.define('Shopware.apps.Partner.view.partner.Detail', {
     border: 0,
     title: '{s name=partner/configuration/title}Partner configuration{/s}',
     partnerId:0,
+    autoScroll: true,
 
     //Text for the ModusCombobox
     cookieLifeTimeGrading:[
@@ -91,7 +92,13 @@ Ext.define('Shopware.apps.Partner.view.partner.Detail', {
             items:me.createPartnerForm()
         });
 
-        me.items = [ me.generalFieldset, me.partnerFieldset ];
+        me.attributeForm = Ext.create('Shopware.attribute.Form', {
+            table: 's_emarketing_partner_attributes'
+        });
+
+        me.attributeForm.loadAttribute(me.record.get('id'));
+
+        me.items = [ me.generalFieldset, me.partnerFieldset, me.attributeForm ];
 
         me.callParent(arguments);
         if (me.record.get('customerId') > 0) {

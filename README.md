@@ -70,11 +70,11 @@ You can also start testing with lower permissions due to security reasons (644 f
 
 4.) Download the test images and extract them:
 
-Go to the checkout directory and download the test images:
+Go to the root directory of your shopware system and download the test images:
 
 	wget -O test_images.zip http://releases.s3.shopware.com/test_images.zip
 
-Unzip the files to the checkout directory:
+Unzip the files inside the root directory:
 
 	unzip test_images.zip
 

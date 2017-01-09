@@ -35,17 +35,17 @@ Ext.define('Shopware.apps.Feedback.controller.Main', {
      * Extend from the standard ExtJS 4 controller
      * @string
      */
-	extend: 'Ext.app.Controller',
+    extend: 'Ext.app.Controller',
 
-	/**
-	 * Creates the necessary event listener for this
-	 * specific controller and opens a new Ext.window.Window
-	 * to display the subapplication
+    /**
+     * Creates the necessary event listener for this
+     * specific controller and opens a new Ext.window.Window
+     * to display the subapplication
      *
      * @return void
-	 */
-	init: function() {
-		var me = this;
+     */
+    init: function() {
+        var me = this;
 
         me.control({
             'installation-survey-window': {
@@ -62,14 +62,14 @@ Ext.define('Shopware.apps.Feedback.controller.Main', {
             return;
         }
 
-		if (me.subApplication.params && me.subApplication.params.previewFeedback) {
+        if (me.subApplication.params && me.subApplication.params.previewFeedback) {
             me.mainWindow = me.getView('preview.Window').create();
             return;
         }
 
         me.mainWindow = me.getView('main.Window').create();
 
-	},
+    },
 
     onBeforeInstallationFeedbackClose: function(win) {
         var checked = win.down('#disableInstallationSurvey').getValue();

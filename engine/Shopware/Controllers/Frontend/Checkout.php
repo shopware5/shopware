@@ -634,6 +634,9 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
             $this->session['sState'] = (int) $this->Request()->getPost('sState');
         }
 
+        // We might change the shop context here so we need to initialize it again
+        $this->get('shopware_storefront.context_service')->initializeShopContext();
+
         // We need an indicator in the view to expand the shipping costs pre-calculation on page load
         $this->View()->assign('calculateShippingCosts', true);
 
@@ -676,6 +679,9 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         // Load current and all shipping methods
         $this->View()->sDispatch = $this->getSelectedDispatch();
         $this->View()->sDispatches = $this->getDispatches($this->View()->sFormData['payment']);
+
+        // We might change the shop context here so we need to initialize it again
+        $this->get('shopware_storefront.context_service')->initializeShopContext();
 
         $this->View()->sBasket = $this->getBasket();
 
@@ -1333,8 +1339,11 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         $this->front->Request()->setPost('sPayment', (int)$payment['id']);
         $this->admin->sUpdatePayment();
 
-        $this->flagPaymentBlocked();
-        
+        //if customer logged in and payment switched to fallback, display cart notice. Otherwise anonymous customers will see the message too
+        if (Shopware()->Session()->sUserId) {
+            $this->flagPaymentBlocked();
+        }
+
         return $payment;
     }
 

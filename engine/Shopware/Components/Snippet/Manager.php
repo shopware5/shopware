@@ -25,6 +25,9 @@
 
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Snippet\DbAdapter;
+use Shopware\Models\Plugin\Plugin;
+use Shopware\Models\Shop\Locale;
+use Shopware\Models\Shop\Shop;
 
 /**
  * @category  Shopware
@@ -61,7 +64,7 @@ class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Man
     /**
      * @var array
      */
-    protected $extends = array();
+    protected $extends = [];
 
     /**
      * @var array
@@ -81,18 +84,18 @@ class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Man
 
         if ($this->snippetConfig['readFromIni']) {
             $configDir = $this->getConfigDirs();
-            $this->fileAdapter = new Enlight_Config_Adapter_File(array(
+            $this->fileAdapter = new Enlight_Config_Adapter_File([
                 'configDir'   => $configDir,
                 'allowWrites' => $snippetConfig['writeToIni']
-            ));
+            ]);
         }
 
-        $this->adapter = new DbAdapter(array(
+        $this->adapter = new DbAdapter([
             'table'           => 's_core_snippets',
             'namespaceColumn' => 'namespace',
-            'sectionColumn'   => array('shopID', 'localeID'),
+            'sectionColumn'   => ['shopID', 'localeID'],
             'allowWrites'     => $snippetConfig['writeToDb']
-        ));
+        ]);
     }
 
     /**
@@ -119,33 +122,33 @@ class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Man
 
         if (!isset($this->namespaces[$key])) {
             if ($this->snippetConfig['readFromDb']) {
-                $this->namespaces[$key] = new $this->defaultNamespaceClass(array(
+                $this->namespaces[$key] = new $this->defaultNamespaceClass([
                     'adapter' => $this->adapter,
                     'name' => $namespace,
-                    'section' => array(
+                    'section' => [
                         $this->shop ? $this->shop->getId() : 1,
                         $this->locale ? $this->locale->getId() : $this->getDefaultLocale()->getId(),
-                    ),
+                    ],
                     'extends' => $this->extends,
-                ));
+                ]);
             }
 
             if ($this->snippetConfig['readFromIni'] && (!isset($this->namespaces[$key]) || count($this->namespaces[$key]) == 0) && isset($this->fileAdapter)) {
 
                 /** @var \Enlight_Components_Snippet_Namespace $fullNamespace */
-                $fullNamespace = new $this->defaultNamespaceClass(array(
+                $fullNamespace = new $this->defaultNamespaceClass([
                     'adapter' => $this->fileAdapter,
                     'name' => $namespace,
                     'section' => null
-                ));
+                ]);
 
                 $locale = $this->locale ? $this->locale->getLocale() : $this->getDefaultLocale()->getLocale();
                 if (
                     !array_key_exists($locale, $fullNamespace->toArray())
-                    && in_array($locale, array('en_GB', 'default'))
+                    && in_array($locale, ['en_GB', 'default'])
                     && count(array_keys($fullNamespace->toArray()))
                 ) {
-                    $locale = array_shift(array_diff(array('en_GB', 'default'), array($locale)));
+                    $locale = array_shift(array_diff(['en_GB', 'default'], [$locale]));
                 }
 
                 $fullNamespace->setSection($locale);
@@ -156,9 +159,9 @@ class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Man
         }
 
         if (!isset($this->namespaces[$key])) {
-            $this->namespaces[$key] = new $this->defaultNamespaceClass(array(
+            $this->namespaces[$key] = new $this->defaultNamespaceClass([
                 'name' => $namespace,
-            ));
+            ]);
         }
         return $this->namespaces[$key];
     }
@@ -166,37 +169,37 @@ class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Man
     /**
      * Set locale instance
      *
-     * @param   \Shopware\Models\Shop\Locale $locale
+     * @param   Locale $locale
      * @return  Shopware_Components_Snippet_Manager
      */
-    public function setLocale(\Shopware\Models\Shop\Locale $locale)
+    public function setLocale(Locale $locale)
     {
         $this->locale = $locale;
-        $this->namespaces = array();
+        $this->namespaces = [];
         return $this;
     }
 
     /**
      * Set shop instance
      *
-     * @param   \Shopware\Models\Shop\Shop $shop
+     * @param   Shop $shop
      * @return  Shopware_Components_Snippet_Manager
      */
-    public function setShop(\Shopware\Models\Shop\Shop $shop)
+    public function setShop(Shop $shop)
     {
         $this->shop = $shop;
         $this->locale = $shop->getLocale();
-        $this->namespaces = array();
+        $this->namespaces = [];
         $this->initExtends();
         return $this;
     }
 
     /**
-     * @return \Shopware\Models\Shop\Locale
+     * @return Locale
      */
     protected function getDefaultLocale()
     {
-        return $this->modelManager->getRepository('Shopware\Models\Shop\Shop')->getDefault()->getLocale();
+        return $this->modelManager->getRepository(Shop::class)->getDefault()->getLocale();
     }
 
     /**
@@ -205,7 +208,7 @@ class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Man
      */
     protected function initExtends()
     {
-        $extends = array();
+        $extends = [];
         $shop   = $this->shop;
         $locale = $this->locale;
 
@@ -216,18 +219,18 @@ class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Man
 
         // fallback to parent shop, current locale
         if ($main !== null && $main->getId() !== 1) {
-            $extends[] = array(
+            $extends[] = [
                 $main->getId(),
                 $locale->getId()
-            );
+            ];
         }
 
         // fallback to default shop, current locale
         if ($shop && $shop->getId() !== 1) {
-            $extends[] = array(
+            $extends[] = [
                 1,
                 $locale->getId()
-            );
+            ];
         }
 
 
@@ -237,19 +240,19 @@ class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Man
          * as it was already added previously ("fallback to parent shop, current locale")
          **/
         if ($main !== null && $locale->getId() != $main->getLocale()->getId()) {
-            $extends[] = array(
+            $extends[] = [
                 $main->getId(),
                 $main->getLocale()->getId(),
-            );
+            ];
         }
 
         // fallback to default shop, default language
         // this needs to be fixed, because its wrong for non-english installations
         if ($locale->getId() !== 1) {
-            $extends[] = array(
+            $extends[] = [
                 1,
                 1,
-            );
+            ];
         }
 
         $this->extends = $extends;
@@ -275,14 +278,17 @@ class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Man
      */
     protected function getConfigDirs()
     {
-        $configDir = array();
+        $configDir = [];
         if (file_exists(Shopware()->DocPath('snippets'))) {
             $configDir[] = Shopware()->DocPath('snippets');
         }
 
         /** @var \Shopware\Models\Plugin\Plugin[] $plugins */
-        $plugins = $this->modelManager->getRepository('Shopware\Models\Plugin\Plugin')->findByActive(true);
+        $plugins = $this->modelManager->getRepository(Plugin::class)->findBy(['active' => true]);
         foreach ($plugins as $plugin) {
+            if (!$plugin->isLegacyPlugin()) {
+                continue;
+            }
             $pluginPath = $this->pluginDirectories[$plugin->getSource()] . $plugin->getNamespace() . DIRECTORY_SEPARATOR . $plugin->getName();
 
             // Add plugin snippets
@@ -300,7 +306,7 @@ class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Man
                 /** @var $directory \DirectoryIterator */
                 foreach ($directories as $directory) {
                     //check valid directory
-                    if ($directory->isDot() || !$directory->isDir() || $directory->getFilename() == '_cache') {
+                    if ($directory->isDot() || !$directory->isDir() || $directory->getFilename() === '_cache') {
                         continue;
                     }
 

@@ -34,7 +34,7 @@
 Ext.define('Shopware.apps.Config.model.form.WidgetView', {
     extend: 'Ext.data.Model',
     fields: [
-		//{block name="backend/config/model/form/widget_view/fields"}{/block}
+        //{block name="backend/config/model/form/widget_view/fields"}{/block}
         { name: 'id', type: 'int' },
         { name: 'widgetId', type: 'int', convert: function(v, record) {
             return v || record.raw && record.raw.widget && record.raw.widget.id;

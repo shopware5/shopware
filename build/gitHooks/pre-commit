@@ -5,8 +5,6 @@
  *
  * This pre-commit hooks will check for PHP errors (lint), and make sure the
  * code is PSR-2 compliant.
- *
- * Dependecy: PHP-CS-Fixer (http://cs.sensiolabs.org/)
  */
 
 class PreCommitChecks
@@ -48,7 +46,7 @@ class PreCommitChecks
                 echo "ERROR: Your commit does not comply with Shopware's coding standards." . PHP_EOL;
             }
         } else {
-            echo "ERROR: PHP-CS-Fixer is NOT installed. Please install globally (http://cs.sensiolabs.org/)." . PHP_EOL;
+            echo "ERROR: ./vendor/bin/php-cs-fixer is NOT installed. Please install composer with dev dependencies" . PHP_EOL;
             $this->error = true;
         }
 
@@ -74,7 +72,7 @@ class PreCommitChecks
     {
         $output = [];
         $return = 0;
-        exec('command -v php-cs-fixer >/dev/null 2>&1', $output, $return);
+        exec('command -v ./vendor/bin/php-cs-fixer >/dev/null 2>&1', $output, $return);
 
         return !(bool) $return;
     }
@@ -108,9 +106,9 @@ class PreCommitChecks
         foreach ($files as $file) {
             $output = [];
             $return = null;
-            exec("php-cs-fixer fix -v --dry-run --level=psr2 " . escapeshellarg($file), $output, $return);
+            exec("./vendor/bin/php-cs-fixer fix -v --no-ansi --dry-run " . escapeshellarg($file). ' 2>&1', $output, $return);
             if ($return != 0) {
-                $misses[$file] = "php-cs-fixer fix -v --level=psr2 " . escapeshellarg($file);
+                $misses[$file] = "./vendor/bin/php-cs-fixer fix -v " . escapeshellarg($file);
                 $this->error = true;
                 $succeed = false;
             }
@@ -192,7 +190,7 @@ class PreCommitChecks
      */
     private function hasDuplicateMigrations()
     {
-        exec('find ./_sql/migrations -type f | cut -d\/ -f4 | cut -d\- -f1 | sort | uniq -d', $output);
+        exec('find ./_sql/migrations -maxdepth 1 -type f | cut -d\/ -f4 | cut -d\- -f1 | sort | uniq -d', $output);
         if (count($output)) {
             return current($output);
         }

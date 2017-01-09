@@ -17,8 +17,8 @@
     {if {config name=sepaSendEmail}}
         <p class="none">
             <input disabled name="sSepaUseBillingData" type="checkbox"{if $form_data.sSepaUseBillingData === true} checked="checked"{/if} class="checkbox"/>
-			<label>{s name='PaymentSepaLabelUseBillingData'}{/s}</label>
-		</p>
+            <label>{s name='PaymentSepaLabelUseBillingData'}{/s}</label>
+        </p>
     {/if}
 
     <a href="{url controller=account action=payment sTarget=$sTarget|default:"checkout" sTargetAction=$sTargetAction|default:"index"}" class="btn is--secondary is--small">

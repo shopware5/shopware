@@ -27,7 +27,7 @@
                                     <div align="center" style="overflow:hidden;">
                                         <a target="_blank" href="{url controller=detail sArticle=$sArticle.articleID}" title="{$sArticle.articleName|escape}">
                                             {if $sArticle.image.source}
-                                                <img style="max-height: 160px; max-width: 160px;" src="{$sArticle.image.thumbnails[0].source}" border="0" alt="{$sArticle.articleName|escape|truncate:155}">
+                                                <img style="max-height: 160px; max-width: 160px;" src="{$sArticle.image.thumbnails[0].source}" border="0" alt="{$sArticle.articleName|escape|truncate:160}">
                                             {else}
                                                 <img style="max-height: 160px; max-width: 160px;" src="{link file='frontend/_public/src/img/no-picture.jpg' fullPath}" alt="{s name="ListingBoxNoPicture" namespace="frontend/listing/box_article"}{/s}" border="0"/>
                                             {/if}

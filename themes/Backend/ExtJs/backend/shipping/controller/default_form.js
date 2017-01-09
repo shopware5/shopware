@@ -122,28 +122,28 @@ Ext.define('Shopware.apps.Shipping.controller.DefaultForm', {
             return;
         }
 
-		if(record.get('clone')){
-			record.set('id', '');
-		}
+        if(record.get('clone')){
+            record.set('id', '');
+        }
 
         // save the rest
         record.save({
              callback: function(answer, answerConfig) {
-				// save costs matrix
-				if (answerConfig.success ) {
-					var records = answerConfig.getRecords(),
-						record = records[0],
-						rawData = record.getProxy().getReader().rawData;
+                // save costs matrix
+                if (answerConfig.success ) {
+                    var records = answerConfig.getRecords(),
+                        record = records[0],
+                        rawData = record.getProxy().getReader().rawData;
                     // Prevent cloned records from creating new records on each save-action
                     if(record.get('clone')){
                         record.set('id', rawData.data.id);
                         record.set('clone', false);
                     }
                     attributeForm.saveAttribute(rawData.data.id);
-					me.onCostsMatrixSave(button, rawData.data.id);
-				}
-				me.getStore('Dispatch').load();
-				Shopware.Notification.createGrowlMessage('','{s name=growl_save_success}The settings have been saved successfully.{/s}', '{s name=title}{/s}');
+                    me.onCostsMatrixSave(button, rawData.data.id);
+                }
+                me.getStore('Dispatch').load();
+                Shopware.Notification.createGrowlMessage('','{s name=growl_save_success}The settings have been saved successfully.{/s}', '{s name=title}{/s}');
              }
         });
     },

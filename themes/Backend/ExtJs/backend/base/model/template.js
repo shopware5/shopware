@@ -50,12 +50,12 @@ Ext.define('Shopware.apps.Base.model.Template', {
      */
     idProperty : 'id',
 
-	/**
+    /**
     * The fields used for this model
     * @array
     */
     fields: [
-		//{block name="backend/base/model/template/fields"}{/block}
+        //{block name="backend/base/model/template/fields"}{/block}
         { name: 'id', type : 'int' },
         { name: 'name', type: 'string' },
         { name: 'template', type : 'string' }

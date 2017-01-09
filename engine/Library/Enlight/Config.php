@@ -107,7 +107,7 @@ class Enlight_Config extends Enlight_Config_BaseConfig implements ArrayAccess
             $this->_adapter = self::$_defaultAdapter;
         }
         if (isset($options['section'])) {
-            $this->_section = $options['section'];
+            $this->setSection($options['section']);
         }
         if (isset($options['extends'])) {
             $this->setExtends($options['extends']);

@@ -110,7 +110,7 @@ class <namespace>_<proxyClassName> extends <className> implements Enlight_Hook_P
             throw new \RuntimeException(sprintf("Unable to write in the %s directory (%s)\n", "Proxy", $proxyDir));
         }
 
-        $proxyDir = rtrim(realpath($proxyDir), '\\/') . DIRECTORY_SEPARATOR;
+        $proxyDir = rtrim(Enlight_Loader::realpath($proxyDir), '\\/') . DIRECTORY_SEPARATOR;
 
         $this->proxyDir = $proxyDir;
     }
@@ -275,12 +275,17 @@ class <namespace>_<proxyClassName> extends <className> implements Enlight_Hook_P
                     $proxy_params .= ', ';
                     $array_params .= ', ';
                 }
+
+                $array_param = '';
                 if ($rp->isPassedByReference()) {
                     $params .= '&';
+                    $proxy_params .= '$';
+                    $array_param .= '&';
                 }
                 $params .= '$' . $rp->getName();
                 $proxy_params .= '$' . $rp->getName();
-                $array_params .= '\'' . $rp->getName() . '\'=>$' . $rp->getName();
+                $array_param .= '$' . $rp->getName();
+                $array_params .= '\'' . $rp->getName() . '\'=>' . $array_param;
                 if ($rp->isOptional()) {
                     $params .= ' = ' . str_replace("\n", '', var_export($rp->getDefaultValue(), true));
                 }

@@ -34,7 +34,7 @@
 Ext.define('Shopware.apps.Config.model.form.CronJob', {
     extend: 'Ext.data.Model',
     fields: [
-		//{block name="backend/config/model/form/cron_job/fields"}{/block}
+        //{block name="backend/config/model/form/cron_job/fields"}{/block}
         { name: 'id', type: 'int' },
         { name: 'name', type: 'string' },
         { name: 'action', type: 'string' },
@@ -44,6 +44,7 @@ Ext.define('Shopware.apps.Config.model.form.CronJob', {
         { name: 'end', type: 'date', useNull: true },
         { name: 'interval', type: 'int' },
         { name: 'active', type: 'boolean' },
+        { name: 'disableOnError', type: 'boolean' },
         { name: 'informTemplate', type: 'string' },
         { name: 'informMail', type: 'string' },
         { name: 'pluginId', type: 'int', useNull: true, defaultValue: 0 },

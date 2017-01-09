@@ -31,9 +31,7 @@
  * @copyright   Copyright (c) 2011, shopware AG (http://www.shopware.de)
  * @license     http://enlight.de/license     New BSD License
  */
-class Enlight_Components_Session_Namespace
-    extends Zend_Session_Namespace
-    implements Countable, IteratorAggregate, ArrayAccess
+class Enlight_Components_Session_Namespace extends Zend_Session_Namespace implements Countable, IteratorAggregate, ArrayAccess
 {
     /**
      * Whether an offset exists
