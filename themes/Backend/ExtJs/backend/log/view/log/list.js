@@ -70,36 +70,35 @@ Ext.define('Shopware.apps.Log.view.log.List', {
     */
     initComponent: function() {
         var me = this;
-		me.registerEvents();
-		me.selModel = me.getGridSelModel();
-		me.store = me.logStore;
-		me.toolbar = me.getToolbar();
-		me.columns = me.getColumns();
-		me.dockedItems = [];
-		me.dockedItems.push(me.toolbar);
+        me.registerEvents();
+        me.selModel = me.getGridSelModel();
+        me.toolbar = me.getToolbar();
+        me.columns = me.getColumns();
+        me.dockedItems = [];
+        me.dockedItems.push(me.toolbar);
 
-		// Add paging toolbar to the bottom of the grid panel
-		me.dockedItems.push({
-			dock: 'bottom',
-			xtype: 'pagingtoolbar',
-			displayInfo: true,
-			store: me.store
-		});
-		me.callParent(arguments);
+        // Add paging toolbar to the bottom of the grid panel
+        me.dockedItems.push({
+            dock: 'bottom',
+            xtype: 'pagingtoolbar',
+            displayInfo: true,
+            store: me.store
+        });
+        me.callParent(arguments);
     },
 
-	/**
-	 * Creates the toolbar
-	 *
-	 * @return [object] Ext.toolbar.Toolbar
-	 */
-	getToolbar: function(){
+    /**
+     * Creates the toolbar
+     *
+     * @return [object] Ext.toolbar.Toolbar
+     */
+    getToolbar: function(){
         var me = this;
 
-		return Ext.create('Ext.toolbar.Toolbar', {
-			dock: 'top',
-			ui: 'shopware-ui',
-			items: [
+        return Ext.create('Ext.toolbar.Toolbar', {
+            dock: 'top',
+            ui: 'shopware-ui',
+            items: [
                 /*{if {acl_is_allowed privilege=delete}}*/
                 {
                     xtype: 'button',
@@ -124,57 +123,57 @@ Ext.define('Shopware.apps.Log.view.log.List', {
                     }
                 }
             ]
-		});
-	},
+        });
+    },
 
     /**
      * Creates the selectionModel of the grid with a listener to enable the delete-button
      */
     getGridSelModel: function(){
-		return Ext.create('Ext.selection.CheckboxModel',{
-			listeners: {
-				selectionchange: function(sm, selections) {
-					var owner = this.view.ownerCt,
-						btn = owner.down('button[action=deleteMultipleLogs]');
+        return Ext.create('Ext.selection.CheckboxModel',{
+            listeners: {
+                selectionchange: function(sm, selections) {
+                    var owner = this.view.ownerCt,
+                        btn = owner.down('button[action=deleteMultipleLogs]');
 
-					//If no log is marked
-					if(btn) {
-						btn.setDisabled(selections.length == 0);
-					}
-				}
-			}
-		});
+                    //If no log is marked
+                    if(btn) {
+                        btn.setDisabled(selections.length == 0);
+                    }
+                }
+            }
+        });
     },
 
     /**
      *  Creates the columns
-	 *
-	 *  @return array columns Contains all columns
+     *
+     *  @return array columns Contains all columns
      */
     getColumns: function(){
         var me = this;
 
         var columns = [{
-			header: '{s name=grid/column_date}Date{/s}',
-			dataIndex: 'date',
-			flex: 1,
-			xtype: 'datecolumn',
-			renderer: me.renderDate
-		},{
-			header: '{s name=grid/column_user}User{/s}',
-			dataIndex: 'user',
-			flex: 1
-		}, {
-			header: '{s name=grid/column_module}Module{/s}',
-			dataIndex: 'key',
-			flex: 1
-		}, {
-			header: '{s name=grid/column_text}Text{/s}',
-			dataIndex: 'text',
-			flex: 1
-		}, {
-			header: '{s name=grid/actioncolumn}Options{/s}',
-			xtype: 'actioncolumn',
+            header: '{s name=grid/column_date}Date{/s}',
+            dataIndex: 'date',
+            flex: 1,
+            xtype: 'datecolumn',
+            renderer: me.renderDate
+        },{
+            header: '{s name=grid/column_user}User{/s}',
+            dataIndex: 'user',
+            flex: 1
+        }, {
+            header: '{s name=grid/column_module}Module{/s}',
+            dataIndex: 'key',
+            flex: 1
+        }, {
+            header: '{s name=grid/column_text}Text{/s}',
+            dataIndex: 'text',
+            flex: 1
+        }, {
+            header: '{s name=grid/actioncolumn}Options{/s}',
+            xtype: 'actioncolumn',
             items: [
                 /*{if {acl_is_allowed privilege=delete}}*/
                 {
@@ -195,37 +194,37 @@ Ext.define('Shopware.apps.Log.view.log.List', {
                     }
                 }
             ]
-		}];
+        }];
 
         return columns;
     },
 
-	/**
-	 * Renders the date
-	 *
-	 * @param value
-	 * @return { String } value Contains the date
-	 */
-	renderDate: function(value){
-		return Ext.util.Format.date(value) + ' ' + Ext.util.Format.date(value, timeFormat);
-	},
+    /**
+     * Renders the date
+     *
+     * @param value
+     * @return { String } value Contains the date
+     */
+    renderDate: function(value){
+        return Ext.util.Format.date(value) + ' ' + Ext.util.Format.date(value, timeFormat);
+    },
 
-	/**
-	 * Defines additional events which will be
-	 * fired from the component
-	 *
-	 * @return void
-	 */
-	registerEvents:function () {
-		this.addEvents(
-			/**
-			 * Event will be fired when the user clicks the delete icon in the
-			 * action column
-			 *
-			 * @event deleteColumn
-			 * @param { Number } rowIndex - Row index of the selection
-			 */
-			'deleteColumn',
+    /**
+     * Defines additional events which will be
+     * fired from the component
+     *
+     * @return void
+     */
+    registerEvents:function () {
+        this.addEvents(
+            /**
+             * Event will be fired when the user clicks the delete icon in the
+             * action column
+             *
+             * @event deleteColumn
+             * @param { Number } rowIndex - Row index of the selection
+             */
+            'deleteColumn',
 
             /**
              * Event will be fired when the user clicks on the magnifier icon
@@ -235,7 +234,7 @@ Ext.define('Shopware.apps.Log.view.log.List', {
              * @param { Number } rowIndex - Row index of the selection
              */
             'openLog'
-		)
-	}
+        )
+    }
 });
 //{/block}

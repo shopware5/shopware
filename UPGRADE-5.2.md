@@ -2,13 +2,126 @@
 
 This changelog references changes done in Shopware 5.2 patch versions.
 
+## 5.2.13
+
+[View all changes from v5.2.12...v5.2.13](https://github.com/shopware/shopware/compare/v5.2.12...v5.2.13)
+
+* Changed duplicate smarty block from `frontend_checkout_confirm_information_addresses_equal_panel_shipping_select_address` to `frontend_checkout_confirm_information_addresses_equal_panel_shipping_add_address` in `frontend/checkout/confirm.tpl`
+* Added interface `\Shopware\Bundle\ESIndexingBundle\TextMappingInterface` which handles text field mappings for different elastic search versions
+* Added the missing requirement of the php function `parse_ini_file` to the system info and the installer
+* Added `Shopware\Components\Plugin\PaymentInstaller` class to install payment methods in plugins
+* Changed theme path for plugins of new plugin system from `/resources` to `/Resources`
+* Changed parsing of JSON `POST`ed to the REST API to not remove top-level `NULL` values
+* Changed frontendsession to a locking session handler
+    * Added new configuration parameter `session.locking` which is `true` by default
+    * The session handler can be overwritten by replacing the `session.save_handler`-Service. A instance of `\SessionHandlerInterface` has to be returned.
+* Changed return value of `sArticles::sGetArticleById()` to provide an additional text if none is given and display the cover image by default when using the selection configurator
+* Changed url parameter in last seen articles to deeplink to an article variant instead of the article
+* Added console command `sw:rebuild:seo:index` to rebuild the SEO index on demand
+
+### Autoloading of plugin resources
+
+Plugin resources inside of the `PluginName/Resources/frontend` directory are now loaded automatically on theme compilation when using the new plugin system.
+
+Example:
+
+- `custom/plugins/SwagResourceTest/Resources/frontend/css/**.css`
+- `custom/plugins/SwagResourceTest/Resources/frontend/js/**.js`
+- `custom/plugins/SwagResourceTest/Resources/frontend/less/all.less`
+
+## 5.2.12
+
+[View all changes from v5.2.11...v5.2.12](https://github.com/shopware/shopware/compare/v5.2.11...v5.2.12)
+
+## 5.2.11
+
+[View all changes from v5.2.10...v5.2.11](https://github.com/shopware/shopware/compare/v5.2.10...v5.2.11)
+
+* Added new Smarty block `frontend_robots_txt_allows` to `frontend/robots_txt/index.tpl`
+* Added new Smarty block `frontend_account_order_item_availability` to `frontend/account/order_item_details.tpl`
+* Added new rule for `/widgets/emotion` to robots.txt in `frontend/robots_txt/index.tpl`
+* Added new blocks in `themes/Frontend/Bare/frontend/account/index.tpl`
+* If shipping address equals billing address show notice instead of same address twice in account index
+* Added container tag `shopware_media.adapter` to register new media adapters
+* Added interface `Shopware\Bundle\MediaBundle\Adapters\AdapterFactoryInterface` to create new adapter factories
+* Removed method `Shopware\Bundle\MediaBundle\Subscriber\ServiceSubscriber::createLocalAdapter()`
+* Removed method `Shopware\Bundle\MediaBundle\Subscriber\ServiceSubscriber::createFtpAdapter()`
+* Deprecated collect event `Shopware_Collect_MediaAdapter_*`, use container tag `shopware_media.adapter` instead. The event will be removed in 5.4.
+
+### Custom stores in plugin configuration
+
+It is now possible to define custom config stores directly inside your plugin's config.xml when using the new plugin system.
+
+A custom config store is defined like this:
+
+```
+<store>
+    <option>
+        <value>1</value>
+        <label lang="de">Deutscher Anzeigewert</label>
+        <label lang="en">English display value</label>
+    </option>
+    <option>
+        <value>two</value>
+        <label lang="de">Deutscher Anzeigewert</label>
+        <label>English display value (locale en via fallback)</label>
+    </option>
+    <option>
+        <value>3</value>
+        <label>Single display value (locale en via fallback)</label>
+    </option>
+</store>
+```
+
+There are two unique constraints:
+* Inside a store, a value tag's value must only occur once
+* Inside an option tag, a label tag's lang attribute value must only occur once
+
+Additionally, the order is fixed. The value tag must be defined before the label tag(s).
+
+There must be at least one option tag and inside each option tag where must be at least one value and one option tag. 
+
+## 5.2.10
+
+[View all changes from v5.2.9...v5.2.10](https://github.com/shopware/shopware/compare/v5.2.9...v5.2.10)
+
+* Added optional `filter` option to `Shopware.apps.Base.view.element.Select`
+* Set `remoteFilter` to `true` in several *base* stores:
+    * `Shopware.apps.Base.store.Country`
+    * `Shopware.apps.Base.store.CountryArea`
+    * `Shopware.apps.Base.store.CountryState`
+    * `Shopware.apps.Base.store.Currency`
+    * `Shopware.apps.Base.store.CustomerGroup`
+    * `Shopware.apps.Base.store.Dispatch`
+    * `Shopware.apps.Base.store.Locale`
+    * `Shopware.apps.Base.store.OrderStatus`
+    * `Shopware.apps.Base.store.Payment`
+    * `Shopware.apps.Base.store.PaymentStatus`
+    * `Shopware.apps.Base.store.PositionStatus`
+    * `Shopware.apps.Base.store.Tax`
+* Replaced the default filter on `dispatches.active` added in `Shopware_Controllers_Backend_Base::getDispatchesAction()` by a default filter on `active` added in `Shopware.apps.Base.store.Dispatch`
+* Refactored jQuery product slider plugin for sliding infinitely
+* Added `initOnEvent` option to cross selling tabs on detail page for the combination of tabs with product sliders
+* Added `Shopware\Components\Emotion\ComponentInstaller` class to install emotion components in plugins.
+* Added `\Shopware\Components\Emotion\EmotionComponentViewSubscriber` to register emotion widget templates 
+* Added `plugin_dir` and `plugin_name` container parameter for each plugin. Parameters are prefixed by `\Shopware\Components\Plugin::getContainerPrefix`
+* Deprecated parameter `$checkProxy` from `Enlight_Controller_Request_Request::getClientIp()`
+
+## 5.2.9
+
+[View all changes from v5.2.8...v5.2.9](https://github.com/shopware/shopware/compare/v5.2.8...v5.2.9)
+
+* `filtergroupID` column will be set to `null` in the `s_articles` table when deleting a property set 
+
 ## 5.2.8
 
 [View all changes from v5.2.7...v5.2.8](https://github.com/shopware/shopware/compare/v5.2.7...v5.2.8)
 
 * Fixed a PHP 7 fatal error in the SVG rendering of mPDF
 * Added missing update of the order details' order number, when converting a cancelled order to a *normal* order in `Shopware_Controllers_Backend_CanceledOrder::convertOrderAction()`
-* Add ProductIndexerInterface to ESIndexingBundle
+* Added creation of `Shopware\Models\Attribute\OrderDetail` upon adding a new order position in the backend
+* Added missing creation of `Shopware\Models\Attribute\Order` and `Shopware\Models\Attribute\OrderDetail` instances in `sOrder::sCreateTemporaryOrder()`
+
 
 ## 5.2.7
 

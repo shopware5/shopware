@@ -57,13 +57,23 @@ class Shopware_Plugins_Core_System_Bootstrap extends Shopware_Components_Plugin_
      * Listener method of the Enlight_Controller_Front_DispatchLoopShutdown event.
      * If the request is from a Bot, discard the session
      *
-     * @param \Enlight_Event_EventArgs $args
+     * @param Enlight_Controller_EventArgs $args
      */
-    public function onDispatchLoopShutdown(\Enlight_Event_EventArgs $args)
+    public function onDispatchLoopShutdown(\Enlight_Controller_EventArgs $args)
     {
+        if (PHP_SAPI === 'cli') {
+            return;
+        }
+
         $container = Shopware()->Container();
-        if ($container->initialized('session') && $container->get('session')->Bot && PHP_SAPI !== 'cli') {
-            Enlight_Components_Session::destroy();
+        if (!$container->initialized('session')) {
+            return;
+        }
+
+        /** @var $plugin Shopware_Plugins_Frontend_Statistics_Bootstrap */
+        $plugin = Shopware()->Plugins()->Frontend()->Statistics();
+        if ($plugin->checkIsBot($args->getRequest()->getHeader('USER_AGENT'))) {
+            Enlight_Components_Session::destroy(true, false);
         }
     }
 

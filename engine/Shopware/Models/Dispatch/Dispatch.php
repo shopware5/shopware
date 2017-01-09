@@ -323,7 +323,7 @@ class Dispatch extends ModelEntity
     private $calculationSql;
 
     /**
-     * Contains all known Counties for whom this dispatch is available.
+     * Contains all known countries for whom this dispatch is available.
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *

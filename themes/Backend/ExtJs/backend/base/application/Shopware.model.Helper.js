@@ -104,7 +104,7 @@ Ext.define('Shopware.model.Helper', {
 
         conditions = conditions || [];
 
-        if (model.associations.lenght <= 0) {
+        if (model.associations.length <= 0) {
             return associations;
         }
         Ext.each(model.associations.items, function (association) {

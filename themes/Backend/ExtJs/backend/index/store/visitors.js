@@ -26,8 +26,8 @@
  */
 //{block name="backend/ubdex/store/visitors"}
 Ext.define('Shopware.apps.Index.store.Visitors', {
-	extend: 'Ext.data.Store',
-	model: 'Shopware.apps.Index.model.Batch',
+    extend: 'Ext.data.Store',
+    model: 'Shopware.apps.Index.model.Batch',
     remoteFilter: true,
     clearOnLoad: false,
 

@@ -41,7 +41,7 @@ class Smarty_Resource_Parent extends Smarty_Internal_Resource_File
         $hit = false;
 
         foreach ($source->smarty->getTemplateDir() as $_directory) {
-            $_filePath = realpath($_directory . $file);
+            $_filePath = Enlight_Loader::realpath($_directory . $file);
             if ($this->fileExists($source, $_filePath)) {
                 if ($hit) {
                     return $_filePath;

@@ -34,7 +34,8 @@
             configuratorFormSelector: '.configurator--form',
             orderNumberSelector: '.entry--sku .entry--content',
             historyIdentifier: 'sw-ajax-variants',
-            productDetailsDescriptionSelector: '.content--description'
+            productDetailsDescriptionSelector: '.content--description',
+            footerJavascriptInlineSelector: '#footer--js-inline'
         },
 
         /**
@@ -93,7 +94,7 @@
          * Requests the HTML structure of the product detail page using AJAX and injects the returned
          * content into the page.
          *
-         * @param {String} values
+         * @param {Object} values
          * @param {Boolean} pushState
          */
         requestData: function(values, pushState) {
@@ -107,10 +108,10 @@
 
             $.publish('plugin/swAjaxVariant/onBeforeRequestData', [ me, values, stateObj.location ]);
 
-            values += '&template=ajax';
+            values.template = 'ajax';
 
             if(stateObj.params.hasOwnProperty('c')) {
-                values += '&c=' + stateObj.params.c;
+                values.c = stateObj.params.c;
             }
 
             $.ajax({
@@ -118,7 +119,7 @@
                 data: values,
                 method: 'GET',
                 success: function(response) {
-                    var $response = $($.parseHTML(response)),
+                    var $response = $($.parseHTML(response, document, true)),
                         $productDetails,
                         $productDescription,
                         ordernumber;
@@ -133,6 +134,10 @@
 
                     // Get the ordernumber for the url
                     ordernumber = $.trim(me.$el.find(me.opts.orderNumberSelector).text());
+
+                    // Update global variables
+                    window.controller = window.snippets = window.themeConfig = window.lastSeenProductsConfig = window.csrfConfig = null;
+                    $(me.opts.footerJavascriptInlineSelector).replaceWith($response.filter(me.opts.footerJavascriptInlineSelector));
 
                     StateManager.addPlugin('select:not([data-no-fancy-select="true"])', 'swSelectboxReplacement')
                         .addPlugin('*[data-image-slider="true"]', 'swImageSlider', { touchControls: true })
@@ -204,7 +209,15 @@
             var me = this,
                 $target = $(event.target),
                 $form = $target.parents('form'),
-                values = $form.serialize();
+                values = {};
+
+            $.each($form.serializeArray(), function(i, item) {
+                if (item.name === '__csrf_token') {
+                    return;
+                }
+
+                values[item.name] = item.value;
+            });
 
             event.preventDefault();
 

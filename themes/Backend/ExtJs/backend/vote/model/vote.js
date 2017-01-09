@@ -45,8 +45,8 @@ Ext.define('Shopware.apps.Vote.model.Vote', {
     * @array
     */
     fields: [
-		//{block name="backend/vote/model/vote/fields"}{/block}
-		'id', 'active',
+        //{block name="backend/vote/model/vote/fields"}{/block}
+        'id', 'active',
         { name : 'datum', type : 'date' },
         'name', 'headline', 'points', 'articleName', 'comment', 'answer', 'answer_datum', 'email'],
     /**

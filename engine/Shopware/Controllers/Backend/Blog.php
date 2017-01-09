@@ -318,6 +318,9 @@ class Shopware_Controllers_Backend_Blog extends Shopware_Controllers_Backend_Ext
         //order data
         $order = (array) $this->Request()->getParam('sort', array());
 
+        if (empty($order)) {
+            $order = array(array('property' => 'creationDate', 'direction' => 'DESC'));
+        }
         /** @var $filter array */
         $filter = $this->Request()->getParam('filter', array());
         $blogId = intval($this->Request()->blogId);

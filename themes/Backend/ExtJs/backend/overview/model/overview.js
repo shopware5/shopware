@@ -45,7 +45,7 @@ Ext.define('Shopware.apps.Overview.model.Overview', {
      * @array
      */
     fields : [
-		//{block name="backend/overview/model/overview/fields"}{/block}
+        //{block name="backend/overview/model/overview/fields"}{/block}
         { name: 'visits',           type: 'int' },
         { name: 'averageUsers',     type: 'float' },
         { name: 'hits',             type: 'int' },

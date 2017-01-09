@@ -43,7 +43,7 @@ Ext.define('Shopware.apps.Translation.controller.Main',
      * Extend from the standard ExtJS 4 controller
      * @string
      */
-	extend: 'Ext.app.Controller',
+    extend: 'Ext.app.Controller',
 
     /**
      * Array of views to require from AppName.view namespace.
@@ -96,14 +96,14 @@ Ext.define('Shopware.apps.Translation.controller.Main',
      */
     urls: Ext.create('Ext.util.HashMap'),
 
-	/**
-	 * Creates the necessary event listener for this
-	 * specific controller and opens a new Ext.window.Window
-	 * to display the subapplication
+    /**
+     * Creates the necessary event listener for this
+     * specific controller and opens a new Ext.window.Window
+     * to display the subapplication
      *
      * @return void
-	 */
-	init: function() {
+     */
+    init: function() {
         var me = this;
 
         // Bind the neccessary event listeners

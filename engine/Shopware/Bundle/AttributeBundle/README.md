@@ -23,31 +23,31 @@ CRUD operations on attribute tables can be made with their corresponding actions
 **createAction**
 
 * Required parameters:
-	* `tableName` - Name of the attribute table
-	* `columnName` - Name of the attirbute
-	* `columnType` - Field type like `string`, `float`, ...
+    * `tableName` - Name of the attribute table
+    * `columnName` - Name of the attirbute
+    * `columnType` - Field type like `string`, `float`, ...
 * Optional parameters: see `\Shopware\Models\Attribute\Configuration`
 
 **updateAction**
 
 * Required parameters:
-	* `tableName` - Name of the attribute table
-	* `originalName` - The attribute name to be updated
-	* `columnType` - Field type like `string`, `float`, ...
+    * `tableName` - Name of the attribute table
+    * `originalName` - The attribute name to be updated
+    * `columnType` - Field type like `string`, `float`, ...
 * Optional parameters: see `\Shopware\Models\Attribute\Configuration`
 
 **deleteAction**
 
 * Required parameters:
-	* `tableName` - Name of the attribute table
-	* `originalName` - Attribute name to be deleted
+    * `tableName` - Name of the attribute table
+    * `originalName` - Attribute name to be deleted
 
 **generateModelsAction**
 
 Generate the attribute model for the given table. Should be called after changing an attribute schema.
 
 * Required parameters:
-	* `tableName` - Name of the attribute table
+    * `tableName` - Name of the attribute table
 
 #### Loading and saving data
 
@@ -68,15 +68,15 @@ $payload = [
 There is only one action where you can search for any entity in Shopware.
 
 * Required parameters:
-	* `model` - Class name of the model to search, e.g. `\Shopware\Models\Article\Supplier`
+    * `model` - Class name of the model to search, e.g. `\Shopware\Models\Article\Supplier`
 * Extra parameters:
-	* `ids` - If provided, only selects the given IDs and ignores all other parameters
+    * `ids` - If provided, only selects the given IDs and ignores all other parameters
 * Optional parameters:
-	* `limit` - Limits the result set
-	* `offset` - Sets an offset to the result set
-	* `term` - Term to search for in any column of entity
-	* `sortings` - Sort results using the Doctrine sorting syntax
-	* `conditions` - Filter results using the Doctrine filter syntax
+    * `limit` - Limits the result set
+    * `offset` - Sets an offset to the result set
+    * `term` - Term to search for in any column of entity
+    * `sortings` - Sort results using the Doctrine sorting syntax
+    * `conditions` - Filter results using the Doctrine filter syntax
 
 ## Services
 
@@ -91,23 +91,23 @@ This service allows you to manage attributes for nearly all attribute entities i
 Create a new attribute column.
 
 * Parameters:
-	* `$table` - Name of the attribute table
-	* `$column` - Name of the attribute column
-	* `$unifiedType` - Data type of the column, see \Shopware\Bundle\AttributeBundle\Service\TypeMapping::$types
-	* `$data` - Array with multiple options and configurations
-		* For all options available, see `\Shopware\Models\Attribute\Configuration`
+    * `$table` - Name of the attribute table
+    * `$column` - Name of the attribute column
+    * `$unifiedType` - Data type of the column, see \Shopware\Bundle\AttributeBundle\Service\TypeMapping::$types
+    * `$data` - Array with multiple options and configurations
+        * For all options available, see `\Shopware\Models\Attribute\Configuration`
 
 **update($table, $column, $data) : void**
 
 Update an existing attribute column.
 
 * Parameters:
-	* `$table` - Name of the attribute table
-	* `$originalColumnName` - Original name of the attribute column
-	* `$newColumnName` - New attribute name, may be the same in case you don't want to change the name
+    * `$table` - Name of the attribute table
+    * `$originalColumnName` - Original name of the attribute column
+    * `$newColumnName` - New attribute name, may be the same in case you don't want to change the name
     * `$unifiedType` - Data type of the column, see \Shopware\Bundle\AttributeBundle\Service\TypeMapping::$types
-	* `$data` - Array with multiple options and configurations
-		* For all options available, see `\Shopware\Models\Attribute\Configuration`
+    * `$data` - Array with multiple options and configurations
+        * For all options available, see `\Shopware\Models\Attribute\Configuration`
 
 
 **delete($table, $column) : void**
@@ -115,23 +115,23 @@ Update an existing attribute column.
 Delete an attribute column.
 
 * Parameters:
-	* `$table` - Name of the attribute table
-	* `$column` - Name of the attribute column
+    * `$table` - Name of the attribute table
+    * `$column` - Name of the attribute column
 
 **get($table, $column) : ConfigurationStruct**
 
 Get information about a single attribute column.
 
 * Parameters:
-	* `$table` - Name of the attribute table
-	* `$column` - Name of the attribute column
+    * `$table` - Name of the attribute table
+    * `$column` - Name of the attribute column
 
 **getList($table) : ConfigurationStruct[]**
 
 Get information about all attribute columns of the provided table.
 
 * Parameters:
-	* `$table` - Name of the attribute table
+    * `$table` - Name of the attribute table
 
 
 ### Perform database schema changes (SchemaOperator)
@@ -143,35 +143,35 @@ This Service is used by the `CrudService` to perform the schema changes with the
 Creates a new column in given attribute table.
 
 * Parameters:
-	* `tableName` - Name of the attribute table
-	* `column` - The attribute name to be updated
-	* `columnType` - MySQL column type like `int(11)`, `varchar(255)`, ...
+    * `tableName` - Name of the attribute table
+    * `column` - The attribute name to be updated
+    * `columnType` - MySQL column type like `int(11)`, `varchar(255)`, ...
 
 **changeColumn($table, $originalName, $newName, $type) : void**
 
 Change the given column to a new name and type.
 
 * Parameters:
-	* `tableName` - Name of the attribute table
-	* `originalName` - The attribute name to be updated
-	* `newName` - New attribute name, may be the same in case you don't want to change the name
-	* `type` - MySQL column type like `int(11)`, `varchar(255)`, ...
+    * `tableName` - Name of the attribute table
+    * `originalName` - The attribute name to be updated
+    * `newName` - New attribute name, may be the same in case you don't want to change the name
+    * `type` - MySQL column type like `int(11)`, `varchar(255)`, ...
 
 **dropColumn($table, $column) : void**
 
 Drops the given column.
 
 * Parameters:
-	* `tableName` - Name of the attribute table
-	* `column` - The attribute name to be dropped
+    * `tableName` - Name of the attribute table
+    * `column` - The attribute name to be dropped
 
 **resetColumn($table, $column) : void**
 
 Sets the value of all entries in the given column to `NULL`.
 
 * Parameters:
-	* `tableName` - Name of the attribute table
-	* `column` - The attribute name to be dropped
+    * `tableName` - Name of the attribute table
+    * `column` - The attribute name to be dropped
 
 
 ## Backend components
@@ -186,10 +186,10 @@ The grid plugin will add a new icon to your action column. The implementation is
 
 ```
 plugins: [
-	{
-		ptype: 'grid-attributes',
-		table: 's_order_documents_attributes'
-	}
+    {
+        ptype: 'grid-attributes',
+        table: 's_order_documents_attributes'
+    }
 ]
 ```
 
@@ -201,7 +201,7 @@ The button implementation is mostly used in situations where the grid plugin or 
 
 ```
 Ext.create('Shopware.attribute.Button', {
-	table: 's_media_attributes'
+    table: 's_media_attributes'
 });
 ```
 
@@ -213,8 +213,8 @@ The form implementation is the most used type of implementation. It will create 
 
 ```
 Ext.create('Shopware.attribute.Form', {
-	title: 'Blog attributes',
-	table: 's_blog_attributes',
+    title: 'Blog attributes',
+    table: 's_blog_attributes',
 });
 ```
 
@@ -228,10 +228,10 @@ A good approach could be to set the attribute form onto a variable available in 
 
 ```
 initComponent: function() {
-	this.attributeForm = this.createAttributeForm();
-	this.callParent(arguments);
+    this.attributeForm = this.createAttributeForm();
+    this.callParent(arguments);
 
-	this.attributeForm.loadAttribute(this.record.get('id'));
+    this.attributeForm.loadAttribute(this.record.get('id'));
 }
 ```
 
@@ -243,12 +243,12 @@ To save the user input, you just have to call the `saveAttribute` method with th
 
 ```
 onSave: function(record) {
-	var me = this;
+    var me = this;
 
-	record.save({
-		callback: function() {
-			me.attributeForm.saveAttribute(record.get('id'));
-		}
-	});
+    record.save({
+        callback: function() {
+            me.attributeForm.saveAttribute(record.get('id'));
+        }
+    });
 }
 ```

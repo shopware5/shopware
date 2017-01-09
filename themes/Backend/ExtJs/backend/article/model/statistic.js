@@ -43,7 +43,7 @@ Ext.define('Shopware.apps.Article.model.Statistic', {
      * @array
      */
     fields: [
-		//{block name="backend/article/model/statistic/fields"}{/block}
+        //{block name="backend/article/model/statistic/fields"}{/block}
         { name: 'name' },
         { name: 'groupdate' },
         { name: 'month',  type: 'integer'},

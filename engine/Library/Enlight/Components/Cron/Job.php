@@ -83,6 +83,11 @@ class Enlight_Components_Cron_Job
     protected $active = true;
 
     /**
+     * @var bool Indication whether cronjob should be disabled if an error occurs during execution.
+     */
+    protected $disableOnError;
+
+    /**
      * @var array
      */
     protected $options = array();
@@ -97,6 +102,7 @@ class Enlight_Components_Cron_Job
      * end - The time the last scheduled run ended. Expected data type: String in form of yyyy-mm-dd hh:mm:ss
      * active - Boolean value which indicates if a cronjob is enabled or not. If the cronjob is disabled the cronjob
      *          will not be executed. Expected data type: boolean
+     * disable_on_error - Indication whether cronjob should be disabled if an error occurs during execution. Expected data type: boolean
      * crontab - Name of the storage where all the cron jobs are stored: Expected data type: String
      * name - Name or the description of the cron job: Expected data type: String
      * action - Name of the action which is called during the execution phase. Expected data type: String
@@ -118,6 +124,7 @@ class Enlight_Components_Cron_Job
      * end - The time the last scheduled run ended. Expected data type: String in form of yyyy-mm-dd hh:mm:ss
      * active - Boolean value which indicates if a cronjob is enabled or not. If the cronjob is disabled the cronjob
      *          will not be executed. Expected data type: boolean
+     * disable_on_error - Indication whether cronjob should be disabled if an error occurs during execution Expected data type: boolean
      * crontab - Name of the storage where all the cron jobs are stored: Expected data type: String
      * name - Name or the description of the cron job: Expected data type: String
      * action - Name of the action which is called during the execution phase. Expected data type: String
@@ -148,6 +155,9 @@ class Enlight_Components_Cron_Job
                     break;
                 case 'active':
                     $this->setActive($value);
+                    break;
+                case 'disable_on_error':
+                    $this->setDisableOnError($value);
                     break;
                 case 'name':
                     $this->setName($value);
@@ -378,6 +388,28 @@ class Enlight_Components_Cron_Job
     public function setActive($active)
     {
         $this->active = (boolean) $active;
+        return $this;
+    }
+
+    /**
+     * Checks if the cronjob should be disabled when an error occurs during execution
+     *
+     * @return int
+     */
+    public function getDisableOnError()
+    {
+        return $this->disableOnError;
+    }
+
+    /**
+     * Sets the indication for disabling the cronjob when an error occurs during execution.
+     *
+     * @param bool $disableOnError
+     * @return Enlight_Components_Cron_Job
+     */
+    public function setDisableOnError($disableOnError)
+    {
+        $this->disableOnError = (boolean) $disableOnError;
         return $this;
     }
 

@@ -50,9 +50,14 @@
         </service>
 
         <service id="session_factory" class="Shopware\Components\DependencyInjection\Bridge\Session" />
-        <service id="session" class="Enlight_Components_Session_Namespace">
-            <factory service="session_factory" method="factory" />
+        <service id="session.save_handler" class="SessionHandlerInterface" public="false">
+            <factory service="session_factory" method="createSaveHandler" />
             <argument type="service" id="service_container"/>
+        </service>
+        <service id="session" class="Enlight_Components_Session_Namespace">
+            <factory service="session_factory" method="createSession" />
+            <argument type="service" id="service_container"/>
+            <argument type="service" id="session.save_handler"/>
         </service>
 
         <service id="mailtransport_factory" class="Shopware\Components\DependencyInjection\Bridge\MailTransport" />
@@ -393,8 +398,10 @@
         <service id="validator.email" class="Shopware\Components\Validator\EmailValidator" />
 
         <service id="sitemapxml.repository" class="Shopware\Components\SitemapXMLRepository">
+            <argument type="service" id="shopware_search.product_number_search" />
+            <argument type="service" id="shopware_search.store_front_criteria_factory" />
             <argument type="service" id="models" />
-            <argument type="service" id="shopware_storefront.context_service" />
+            <argument type="service" id="shopware_storefront.context_service"/>
         </service>
 
         <service id="AttributeSubscriber" class="Shopware\Components\AttributeSubscriber">
@@ -478,6 +485,14 @@
         <service id="shopware.requirements" class="Shopware\Components\Check\Requirements">
             <argument>%kernel.root_dir%/engine/Shopware/Components/Check/Data/System.xml</argument>
             <argument type="service" id="db_connection"/>
+        </service>
+
+        <service id="shopware.emotion_component_installer" class="Shopware\Components\Emotion\ComponentInstaller">
+            <argument type="service" id="models" />
+        </service>
+
+        <service id="shopware.plugin_payment_installer" class="Shopware\Components\Plugin\PaymentInstaller">
+            <argument type="service" id="models" />
         </service>
     </services>
 </container>

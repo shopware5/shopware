@@ -44,7 +44,7 @@ Ext.define('Shopware.apps.Performance.model.Config', {
      * @array
      */
     fields:[
-		//{block name="backend/performance/model/config/fields"}{/block}
+        //{block name="backend/performance/model/config/fields"}{/block}
         { name:'id', type:'int' }
     ],
 

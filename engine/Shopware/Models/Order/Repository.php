@@ -79,6 +79,8 @@ class Repository extends ModelRepository
         }
         if ($order !== null) {
             $builder->addOrderBy($order);
+        } else {
+            $builder->orderBy('status.position', 'ASC');
         }
 
         return $builder;
@@ -129,6 +131,8 @@ class Repository extends ModelRepository
         }
         if ($order !== null) {
             $builder->addOrderBy($order);
+        } else {
+            $builder->orderBy('status.position', 'ASC');
         }
 
         return $builder;
@@ -174,6 +178,8 @@ class Repository extends ModelRepository
             'billing',
             'billingCountry',
             'shippingCountry',
+            'billingState',
+            'shippingState',
             'shop',
             'dispatch',
             'paymentStatus',
@@ -201,6 +207,7 @@ class Repository extends ModelRepository
                 ->leftJoin('orders.paymentInstances', 'paymentInstances')
                 ->leftJoin('orders.billing', 'billing')
                 ->leftJoin('billing.country', 'billingCountry')
+                ->leftJoin('billing.state', 'billingState')
                 ->leftJoin('orders.shipping', 'shipping')
                 ->leftJoin('orders.shop', 'shop')
                 ->leftJoin('orders.dispatch', 'dispatch')
@@ -213,7 +220,8 @@ class Repository extends ModelRepository
                 ->leftJoin('orders.attribute', 'attribute')
                 ->leftJoin('orders.languageSubShop', 'subShop')
                 ->leftJoin('subShop.locale', 'locale')
-                ->leftJoin('shipping.country', 'shippingCountry');
+                ->leftJoin('shipping.country', 'shippingCountry')
+                ->leftJoin('shipping.state', 'shippingState');
 
         if (!empty($filters)) {
             $builder = $this->filterListQuery($builder, $filters);

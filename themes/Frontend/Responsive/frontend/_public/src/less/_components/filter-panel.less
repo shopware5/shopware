@@ -62,7 +62,7 @@ The styling includes the collapsed and expanded styling and the panel component 
 
         .filter-panel--icon:before {
             color: @brand-primary;
-            content: "\e610";
+            content: @sw-icon-arrow-up;
         }
     }
 }
@@ -103,13 +103,13 @@ The styling includes the collapsed and expanded styling and the panel component 
     .tap-highlight-color(rgba(0, 0, 0, 0));
     display: inline-block;
     position: absolute;
-    font-family: "shopware";
+    font-family: @sw-icon-fontname;
     text-align: center;
     cursor: pointer;
     pointer-events: none;
 
     &:before {
-        content: "\e612";
+        content: @sw-icon-arrow-down;
     }
 }
 
@@ -199,11 +199,11 @@ The styling includes the collapsed and expanded styling and the panel component 
                 .unitize(line-height, 12);
                 .unitize(font-size, 7);
                 display: block;
-                font-family: 'shopware';
+                font-family: @sw-icon-fontname;
                 font-weight: normal;
                 text-align: center;
                 color: #fff;
-                content: "\e60c";
+                content: @sw-icon-check;
             }
         }
 
@@ -330,11 +330,11 @@ The styling includes the collapsed and expanded styling and the panel component 
                 .border-radius(8px);
                 display: block;
                 position: absolute;
-                font-family: 'shopware';
+                font-family: @sw-icon-fontname;
                 font-weight: normal;
                 text-align: center;
                 color: #fff;
-                content: "\e60c";
+                content: @sw-icon-check;
             }
         }
 
@@ -403,7 +403,7 @@ The styling includes the collapsed and expanded styling and the panel component 
             color: @text-color;
 
             &:before {
-                content: "\e601";
+                content: @sw-icon-star-empty;
             }
         }
     }
@@ -415,12 +415,12 @@ The styling includes the collapsed and expanded styling and the panel component 
         .unitize(font-size, 30);
         position: absolute;
         top: 0; left: 0;
-        font-family: 'shopware';
+        font-family: @sw-icon-fontname;
         font-weight: normal;
         color: @rating-star-color;
 
         &:before {
-            content: "\e600";
+            content: @sw-icon-star;
         }
 
         &.star--1 { .unitize(left, 0); }
@@ -505,11 +505,11 @@ The styling includes the collapsed and expanded styling and the panel component 
         .unitize(font-size, 8);
         .unitize(-1, 16, top);
         position: relative;
-        font-family: 'shopware';
+        font-family: @sw-icon-fontname;
         color: @text-color;
 
         &:before {
-            content: "\e60d";
+            content: @sw-icon-cross;
         }
     }
 
@@ -604,7 +604,7 @@ The styling includes the collapsed and expanded styling and the panel component 
                     color: @text-color;
 
                     &:before {
-                        content: "\e60c";
+                        content: @sw-icon-check;
                     }
                 }
             }

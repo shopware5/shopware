@@ -50,33 +50,53 @@ class Database
      */
     public function importFile($dbName, $file)
     {
-        $this->connection->query(sprintf("use `%s`", $dbName));
+        $this->connection->query(sprintf('use `%s`', $dbName));
 
         if (false === ($contents = file_get_contents($file))) {
-            throw new \Exception(sprintf("Could not open file: %s", $file));
+            throw new \Exception(sprintf('Could not open file: %s', $file));
         }
 
         $rows = explode(";\n", trim($contents));
-
         foreach ($rows as $row) {
             $this->connection->exec(trim($row));
         }
     }
 
     /**
-     * @param string $host
-     * @param string $path
+     * @param string $url
      * @param string $dbName
      */
-    public function setupShop($host, $path, $dbName)
+    public function setupShop($url, $dbName)
     {
-        $this->connection->query(sprintf("use `%s`", $dbName));
+        $parts = parse_url($url);
+        if ($parts === false || !array_key_exists('host', $parts)) {
+            throw new \InvalidArgumentException(
+                sprintf('Invalid Shop URL (%s)', $url)
+            );
+        }
 
-        $stmt = $this->connection->prepare("UPDATE `s_core_shops` SET `host` = :host, `base_path` = :path WHERE `main_id` IS NULL");
-        $stmt->execute(array(
-            'host' => $host,
-            'path' => $path,
-        ));
+        $isSecure = $parts['scheme'] === 'https';
+        $host = $parts['host'];
+        $path = array_key_exists('path', $parts) ? $parts['path'] : '';
+        $host .= array_key_exists('port', $parts) ? ':'.$parts['port'] : '';
+
+        if ($path === '/') {
+            $path = '';
+        }
+
+        if (!empty($path)) {
+            $path = trim($path, '/');
+            $path = '/'.$path;
+        }
+
+        $this->connection->query(sprintf('use `%s`', $dbName));
+
+        $stmt = $this->connection->prepare('UPDATE `s_core_shops` SET `host` = :host, `base_path` = :path, `secure` = :isSecure, `always_secure` = :isSecure WHERE `main_id` IS NULL');
+        $stmt->execute([
+            'host'     => $host,
+            'path'     => $path,
+            'isSecure' => $isSecure
+        ]);
     }
 
     /**
@@ -84,7 +104,7 @@ class Database
      */
     public function emptyDatabase($dbName)
     {
-        $this->connection->query(sprintf("use `%s`", $dbName));
+        $this->connection->query(sprintf('use `%s`', $dbName));
 
         $sql = <<<SQL
 SET FOREIGN_KEY_CHECKS = 0;
@@ -114,7 +134,7 @@ SQL;
     {
         $this->connection->exec(
             sprintf(
-                "DROP DATABASE IF EXISTS `%s`",
+                'DROP DATABASE IF EXISTS `%s`',
                 $dbName
             )
         );
@@ -129,14 +149,14 @@ SQL;
     {
         $this->connection->exec(
             sprintf(
-                "CREATE DATABASE `%s`",
+                'CREATE DATABASE `%s`',
                 $dbName
             )
         );
 
         $this->connection->exec(
             sprintf(
-                "ALTER DATABASE `%s` DEFAULT CHARACTER SET = utf8 COLLATE = utf8_unicode_ci;",
+                'ALTER DATABASE `%s` DEFAULT CHARACTER SET = utf8 COLLATE = utf8_unicode_ci;',
                 $dbName
             )
         );

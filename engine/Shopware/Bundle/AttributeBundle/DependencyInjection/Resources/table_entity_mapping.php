@@ -108,6 +108,14 @@ return [
         'coreAttributes' => [],
         'dependingTables' => []
     ],
+    's_emarketing_partner_attributes' => [
+        'readOnly' => false,
+        'model' => 'Shopware\Models\Attribute\Partner',
+        'identifiers' => ['id', 'partnerid'],
+        'foreignKey' => 'partnerid',
+        'coreAttributes' => [],
+        'dependingTables' => []
+    ],
     's_blog_attributes' => [
         'readOnly' => false,
         'model' => 'Shopware\Models\Attribute\Blog',

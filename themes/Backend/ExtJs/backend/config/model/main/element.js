@@ -34,7 +34,7 @@
 Ext.define('Shopware.apps.Config.model.main.Element', {
     extend: 'Ext.data.Model',
     fields: [
-		//{block name="backend/config/model/main/element/fields"}{/block}
+        //{block name="backend/config/model/main/element/fields"}{/block}
         { name: 'id', type: 'int', useNull: true },
         { name: 'name', type: 'string' },
         { name: 'value' },

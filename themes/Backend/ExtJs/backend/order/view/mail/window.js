@@ -61,7 +61,7 @@ Ext.define('Shopware.apps.Order.view.mail.Window', {
      *
      * @type { Number }
      */
-    width: 600,
+    width: 700,
 
     /**
      * Define window height
@@ -102,7 +102,9 @@ Ext.define('Shopware.apps.Order.view.mail.Window', {
     initComponent: function () {
         var me = this;
 
-        me.form = Ext.create('Shopware.apps.Order.view.mail.Form');
+        me.form = Ext.create('Shopware.apps.Order.view.mail.Form', {
+            mail: me.mail
+        });
 
         me.items = me.form;
 

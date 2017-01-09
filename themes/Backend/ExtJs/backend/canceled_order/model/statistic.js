@@ -44,7 +44,7 @@ Ext.define('Shopware.apps.CanceledOrder.model.Statistic', {
      * @array
      */
     fields: [
-		//{block name="backend/canceled_order/model/statistic/fields"}{/block}
+        //{block name="backend/canceled_order/model/statistic/fields"}{/block}
         {
             name: 'paymentName',
             type: 'string',

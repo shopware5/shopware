@@ -71,7 +71,7 @@ Ext.define('Shopware.apps.Mail.controller.Attachment', {
         singleDeleteTitle: '{s name=message_delete_single_title}Delete selected attachment{/s}',
         singleDeletMessage: '{s name=message_delete_single_content}Are you sure that you want to delete the selected attachment?{/s}',
 
-		growlMessage: '{s name=growlMessage}Mail{/s}'
+        growlMessage: '{s name=growlMessage}Mail{/s}'
     },
 
     /**

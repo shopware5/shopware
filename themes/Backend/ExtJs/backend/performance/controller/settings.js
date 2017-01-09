@@ -38,9 +38,9 @@
 Ext.define('Shopware.apps.Performance.controller.Settings', {
     extend: 'Enlight.app.Controller',
 
-	/*
-	 * Selector for easy access to the settings panel
-	 */
+    /*
+     * Selector for easy access to the settings panel
+     */
     refs: [
         { ref: 'settings', selector: 'performance-tabs-settings-main' },
         { ref: 'cacheTime', selector: 'performance-tabs-settings-elements-cache-time' },
@@ -59,10 +59,10 @@ Ext.define('Shopware.apps.Performance.controller.Settings', {
         noticeMessage: '{s name=noticeMessage}There are still invalid data entered in the forms, please check all forms before saving{/s}'
     },
 
-	/*
-	 * A reference to the current fieldSet being shown
-	 */
-	currentItem: null,
+    /*
+     * A reference to the current fieldSet being shown
+     */
+    currentItem: null,
 
     /**
      * Init the controller, registert to some events
@@ -77,7 +77,7 @@ Ext.define('Shopware.apps.Performance.controller.Settings', {
                 }
             },
             'performance-tabs-settings-navigation': {
-            	'itemClicked': me.onNavigationItemClicked
+                'itemClicked': me.onNavigationItemClicked
             }
         });
 
@@ -93,11 +93,11 @@ Ext.define('Shopware.apps.Performance.controller.Settings', {
         me.getStore('Config').load(function (records) {
             var storeData = records[0];
 
-			me.injectConfig(storeData);
+            me.injectConfig(storeData);
 
-	        if (callback) {
-	        	callback();
-	        }
+            if (callback) {
+                callback();
+            }
         });
 
     },
@@ -107,7 +107,7 @@ Ext.define('Shopware.apps.Performance.controller.Settings', {
      * some stores
      */
     injectConfig: function(config) {
-    	var me = this;
+        var me = this;
         var store = config.getPerformanceCheck();
         var grid = me.getCheckGrid();
 
@@ -121,33 +121,33 @@ Ext.define('Shopware.apps.Performance.controller.Settings', {
         me.configData = Ext.clone(config);
     },
 
-	/*
-	 * Called after the user clicked on an item in the navigation tree
-	 */
-	onNavigationItemClicked: function(itemName) {
-		var me = this,
-			settings = me.getSettings(),
-			itemToShow;
+    /*
+     * Called after the user clicked on an item in the navigation tree
+     */
+    onNavigationItemClicked: function(itemName) {
+        var me = this,
+            settings = me.getSettings(),
+            itemToShow;
 
-		// First of all: Hide all items:
-		settings.panel.items.each(function(item) {
-			item.hide();
-			if (item.xtype == itemName) {
-				itemToShow = item;
-			}
-		});
+        // First of all: Hide all items:
+        settings.panel.items.each(function(item) {
+            item.hide();
+            if (item.xtype == itemName) {
+                itemToShow = item;
+            }
+        });
 
-		// If no fieldSet is defined for the clicked item, return
-		if (!itemToShow) {
-			me.currentItem = null;
-			return;
-		}
+        // If no fieldSet is defined for the clicked item, return
+        if (!itemToShow) {
+            me.currentItem = null;
+            return;
+        }
 
-		// Load the last saved configData into the form
+        // Load the last saved configData into the form
         me.injectConfig(me.configData);
-		itemToShow.show();
-		me.currentItem = itemName;
-	},
+        itemToShow.show();
+        me.currentItem = itemName;
+    },
 
 
 
@@ -176,7 +176,7 @@ Ext.define('Shopware.apps.Performance.controller.Settings', {
                     rawData = record.getProxy().getReader().rawData;
 
                 if ( operation.success === true ) {
-                	// Load the returned data
+                    // Load the returned data
                     me.loadConfigStore();
                     Shopware.Notification.createGrowlMessage(me.snippets.successTitle, me.snippets.successMessage, me.snippets.growlMessage);
                 } else {

@@ -169,15 +169,17 @@ class Shopware_Controllers_Backend_Property extends Shopware_Controllers_Backend
         }
 
         /* @var $group Group */
-        $group = Shopware()->Models()->getRepository('Shopware\Models\Property\Group')->find($id);
+        $group = $this->get('models')->getRepository(Group::class)->find($id);
         if (!$group) {
             $this->View()->assign(array('success' => false, 'message' => 'Group not found'));
             return;
         }
 
         try {
-            Shopware()->Models()->remove($group);
-            Shopware()->Models()->flush();
+            $this->get('models')->remove($group);
+            $this->get('models')->flush();
+
+            $this->removeSetRelationsFromArticles($id);
         } catch (Exception $e) {
             $this->View()->assign(array('success' => false, 'message' => $e->getMessage()));
             return;
@@ -536,5 +538,14 @@ class Shopware_Controllers_Backend_Property extends Shopware_Controllers_Backend
 
 
         $this->View()->assign(array('success' => true));
+    }
+
+    /**
+     * @param int $filterSetId
+     */
+    private function removeSetRelationsFromArticles($filterSetId)
+    {
+        $sql = 'UPDATE s_articles SET filtergroupID = null WHERE filtergroupID = ?';
+        $this->get('dbal_connection')->executeUpdate($sql, [$filterSetId]);
     }
 }

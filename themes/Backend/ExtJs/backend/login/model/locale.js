@@ -33,8 +33,8 @@
  * todo@all: Documentation
  */
 Ext.define('Shopware.apps.Login.model.Locale', {
-	extend: 'Ext.data.Model',
-	fields: [ 'name', 'value' ],
+    extend: 'Ext.data.Model',
+    fields: [ 'name', 'value' ],
     proxy: {
         type: 'ajax',
         url: '{url action=getLocales}',

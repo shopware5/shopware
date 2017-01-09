@@ -255,6 +255,16 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
         ]);
     }
 
+    public function refreshPluginListAction()
+    {
+        /** @var InstallerService $pluginManager */
+        $pluginManager = $this->get('shopware_plugininstaller.plugin_manager');
+        $pluginManager->refreshPluginList();
+        $this->View()->assign([
+            'success' => true
+        ]);
+    }
+
     public function localListingAction()
     {
         $this->registerShutdown();
@@ -725,6 +735,20 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
 
         $snippet .= '<br><br>Error code: ' . $exception->getSbpCode();
 
+        if (!($prev = $exception->getPrevious())) {
+            return $snippet;
+        }
+
+        /** @var \Shopware\Components\HttpClient\RequestException $prev */
+        if (!($prev instanceof \Shopware\Components\HttpClient\RequestException)) {
+            return $snippet;
+        }
+
+        $data = json_decode($prev->getBody(), true);
+        if (isset($data['reason'])) {
+            $snippet .= '<br>' . $data['reason'];
+        }
+
         return $snippet;
     }
 
@@ -817,9 +841,7 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
         }
 
         $message = $this->getExceptionMessage($e);
-        if (empty($message)) {
-            $message = $e->getMessage();
-        }
+
 
         $this->View()->assign([
             'success' => false,

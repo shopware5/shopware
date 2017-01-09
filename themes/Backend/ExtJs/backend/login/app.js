@@ -73,13 +73,13 @@ Ext.define('Shopware.apps.Login', {
      * Required stores for controller
      * @array
      */
-	stores: [ 'Locale' ],
+    stores: [ 'Locale' ],
 
     /**
      * Required models for controller
      * @array
      */
-	models: [ 'Locale' ],
+    models: [ 'Locale' ],
 
     /**
      * Required views for controller

@@ -243,8 +243,16 @@
          * @returns {boolean}
          */
         function hasCookiesSupport() {
-            return ('cookie' in document && (document.cookie.length > 0 ||
-            (document.cookie = 'test').indexOf.call(document.cookie, 'test') > -1));
+            // if cookies are already present assume cookie support
+            if ('cookie' in document && (document.cookie.length > 0)) {
+                return true;
+            }
+
+            document.cookie = "testcookie=1;";
+            var writeTest = (document.cookie.indexOf("testcookie") !== -1);
+            document.cookie = "testcookie=1"+';expires=Sat, 01-Jan-2000 00:00:00 GMT';
+
+            return writeTest;
         }
 
         /**

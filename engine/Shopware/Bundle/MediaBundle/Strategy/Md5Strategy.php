@@ -46,7 +46,7 @@ class Md5Strategy implements StrategyInterface
         $path = str_replace("//", "/", $path);
 
         // remove everything before /media/...
-        preg_match("/.*((media\/(?:archive|image|music|pdf|temp|unknown|video)(?:\/thumbnail)?).*\/(.*))/", $path, $matches);
+        preg_match("/.*((media\/(?:archive|image|music|pdf|temp|unknown|video)(?:\/thumbnail)?).*\/((.+)\.(.+)))/", $path, $matches);
 
         if (!empty($matches)) {
             return $matches[2] . "/" .$matches[3];
@@ -70,6 +70,10 @@ class Md5Strategy implements StrategyInterface
         $pathElements = explode("/", $path);
         $pathInfo = pathinfo($path);
         $md5hash = md5($path);
+
+        if (empty($pathInfo['extension'])) {
+            return "";
+        }
 
         $realPath = array_slice(str_split($md5hash, 2), 0, 3);
         $realPath = $pathElements[0] . "/" . $pathElements[1] . "/" . join("/", $realPath) . "/" . $pathInfo['basename'];
@@ -107,7 +111,7 @@ class Md5Strategy implements StrategyInterface
         if ($this->hasBlacklistParts($path)) {
             return false;
         }
-        return (bool)preg_match("/.*(media\/(?:archive|image|music|pdf|temp|unknown|video)(?:\/thumbnail)?\/(?:([0-9a-g]{2}\/[0-9a-g]{2}\/[0-9a-g]{2}\/)).*)/", $path);
+        return (bool)preg_match("/.*(media\/(?:archive|image|music|pdf|temp|unknown|video)(?:\/thumbnail)?\/(?:([0-9a-g]{2}\/[0-9a-g]{2}\/[0-9a-g]{2}\/))((.+)\.(.+)))/", $path);
     }
 
     /**

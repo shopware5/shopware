@@ -44,7 +44,7 @@ Ext.define('Shopware.apps.NewsletterManager.model.ContainerTypeText', {
      * @array
      */
     fields: [
-		//{block name="backend/newsletter_manager/model/container_type_text/fields"}{/block}
+        //{block name="backend/newsletter_manager/model/container_type_text/fields"}{/block}
         { name: 'id', type: 'int', useNull: true },
         { name: 'containerId', type: 'int' },
         { name: 'headline', type: 'string' },

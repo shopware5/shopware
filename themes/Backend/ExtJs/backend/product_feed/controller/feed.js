@@ -56,6 +56,7 @@ Ext.define('Shopware.apps.ProductFeed.controller.Feed', {
     refs:[
         { ref:'productFeedWindow', selector:'product_feed-feed-window' },
         { ref:'productFeedSaveButton', selector:'product_feed-feed-window button[action=save]' },
+        { ref:'productFeedUpdateButton', selector:'product_feed-feed-window button[action=update]' },
         { ref:'categoryTree', selector : 'product_feed-feed-tab-category treepanel' },
         { ref:'attributeForm', selector: 'product_feed-feed-window shopware-attribute-form' }
     ],
@@ -71,7 +72,7 @@ Ext.define('Shopware.apps.ProductFeed.controller.Feed', {
         confirmDeleteSingle: '{s name=message/confirm_delete_single}Are you sure you want to delete this article? ([0]){/s}',
         deleteSingleItemSuccess: '{s name=message/confirm_delete_single_success}The article has been deleted successfully.{/s}',
         deleteSingleItemError: '{s name=message/confirm_delete_single_error}An error has occurred while deleting the selected article: {/s}',
-		growlMessage: '{s name=window/main_title}{/s}'
+        growlMessage: '{s name=window/main_title}{/s}'
     },
 
     /**
@@ -102,6 +103,9 @@ Ext.define('Shopware.apps.ProductFeed.controller.Feed', {
             },
             'product_feed-feed-window button[action=save]':{
                 click:me.onSave
+            },
+            'product_feed-feed-window button[action=update]':{
+                click:me.onUpdate
             },
             'product_feed-feed-window':{
                 scope:me,
@@ -294,6 +298,19 @@ Ext.define('Shopware.apps.ProductFeed.controller.Feed', {
         store.filter('filter', searchString);
     },
 
+    /**
+     * Event listener method which will be fired when the user
+     * clicks the "update"-button in the edit-window.
+     *
+     * @event click
+     * @param [object] btn - pressed Ext.button.Button
+     * @param [object] event
+     * @param [object] obj
+     * @return void
+     */
+    onUpdate: function (btn, event, obj) {
+        this.onSave(btn, event, obj, true);
+    },
 
     /**
      * Event listener method which will be fired when the user
@@ -301,9 +318,12 @@ Ext.define('Shopware.apps.ProductFeed.controller.Feed', {
      *
      * @event click
      * @param [object] btn - pressed Ext.button.Button
+     * @param [object] event
+     * @param [object] obj
+     * @param [bool] keepOpened - flag indicating whether or not the window shall be kept open
      * @return void
      */
-    onSave: function (btn) {
+    onSave: function (btn, event, obj, keepOpened) {
         var me = this,
             formPanel = me.getProductFeedWindow().formPanel,
             form = formPanel.getForm(),
@@ -332,7 +352,9 @@ Ext.define('Shopware.apps.ProductFeed.controller.Feed', {
                     var data = response.data;
                     attributeForm.saveAttribute(data.id);
                     Shopware.Notification.createGrowlMessage('',me.snippets.onSaveChangesSuccess, me.snippets.growlMessage);
-                    me.getProductFeedWindow().destroy();
+                    if(!Ext.isDefined(keepOpened) || !keepOpened){
+                        me.getProductFeedWindow().destroy();
+                    }
                 } else {
                     Shopware.Notification.createGrowlMessage('',me.snippets.onSaveChangesError, me.snippets.growlMessage);
                 }
@@ -370,6 +392,7 @@ Ext.define('Shopware.apps.ProductFeed.controller.Feed', {
                             if(selectedTreeItemCounter == resultCount) {
                                 //tree completely expanded
                                 me.getProductFeedSaveButton().enable();
+                                me.getProductFeedUpdateButton().enable();
                             }
                         }
                     );

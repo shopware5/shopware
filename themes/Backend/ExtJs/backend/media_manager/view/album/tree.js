@@ -37,7 +37,7 @@
  */
 //{block name="backend/media_manager/view/album/tree"}
 Ext.define('Shopware.apps.MediaManager.view.album.Tree', {
-	extend: 'Ext.tree.Panel',
+    extend: 'Ext.tree.Panel',
     alias: 'widget.mediamanager-album-tree',
     region: 'west',
     width: 230,
@@ -57,24 +57,24 @@ Ext.define('Shopware.apps.MediaManager.view.album.Tree', {
         }
     },
 
-	snippets:{
-		tree:{
-			columns:{
-				album: '{s name="tree/columns/album"}Album{/s}',
-				files: '{s name="tree/columns/files"}Files{/s}',
-				action: '{s name="tree/columns/action"}Action{/s}',
-				editAlbumSettings: '{s name="tree/columns/editAlbumSettings"}Edit the album settings{/s}'
-			},
-			searchAlbum: '{s name="tree/searchAlbum"}Search album...{/s}',
-			addAlbum: '{s name="tree/addAlbum"}Add album{/s}',
-			deleteAlbum: '{s name="tree/deleteAlbum"}Delete album{/s}',
-			createSubAlbum: '{s name="tree/createSubAlbum"}Create subalbum{/s}',
-			settings: '{s name="tree/settings"}Settings{/s}',
-			newAlbum: '{s name="tree/newAlbum"}Create new Album{/s}',
-			refresh: '{s name="tree/refresh"}Refresh list{/s}',
-			emptyTrash: '{s name="tree/emptyTrash"}Empty trash{/s}'
-		}
-	},
+    snippets:{
+        tree:{
+            columns:{
+                album: '{s name="tree/columns/album"}Album{/s}',
+                files: '{s name="tree/columns/files"}Files{/s}',
+                action: '{s name="tree/columns/action"}Action{/s}',
+                editAlbumSettings: '{s name="tree/columns/editAlbumSettings"}Edit the album settings{/s}'
+            },
+            searchAlbum: '{s name="tree/searchAlbum"}Search album...{/s}',
+            addAlbum: '{s name="tree/addAlbum"}Add album{/s}',
+            deleteAlbum: '{s name="tree/deleteAlbum"}Delete album{/s}',
+            createSubAlbum: '{s name="tree/createSubAlbum"}Create subalbum{/s}',
+            settings: '{s name="tree/settings"}Settings{/s}',
+            newAlbum: '{s name="tree/newAlbum"}Create new Album{/s}',
+            refresh: '{s name="tree/refresh"}Refresh list{/s}',
+            emptyTrash: '{s name="tree/emptyTrash"}Empty trash{/s}'
+        }
+    },
 
     /**
      * Initializes the component and sets the toolbars
@@ -88,6 +88,7 @@ Ext.define('Shopware.apps.MediaManager.view.album.Tree', {
         // Set column model and selection model
         me.columns = me.createColumns();
         me.selModel = Ext.create('Ext.selection.RowModel', {
+            allowDeselect: true,
             listeners: {
                 scope: me,
                 select: me.onUnlockDeleteBtn
@@ -113,6 +114,7 @@ Ext.define('Shopware.apps.MediaManager.view.album.Tree', {
             'editSettings',
             'addAlbum',
             'reload',
+            'refresh',
             'emptyTrash'
         );
 
@@ -154,8 +156,8 @@ Ext.define('Shopware.apps.MediaManager.view.album.Tree', {
             dataIndex: 'mediaCount',
             tpl: Ext.create('Ext.XTemplate', '{literal}{mediaCount}{/literal}')
         },
-		/*{if {acl_is_allowed privilege=update}}*/
-		{
+        /*{if {acl_is_allowed privilege=update}}*/
+        {
             xtype: 'actioncolumn',
             width: 50,
             handler: function(view, rowIndex, colIndex, item, e) {
@@ -184,7 +186,7 @@ Ext.define('Shopware.apps.MediaManager.view.album.Tree', {
             }
         }
         /* {/if} */
-		];
+        ];
 
         return columns;
     },
@@ -196,7 +198,7 @@ Ext.define('Shopware.apps.MediaManager.view.album.Tree', {
      * @return [object] generated Ext.toolbar.Toolbar
      */
     createSearchToolbar: function() {
-		var me = this;
+        var me = this;
         this.searchField = Ext.create('Ext.form.field.Text', {
             emptyText: me.snippets.tree.searchAlbum,
             cls: 'searchfield',
@@ -223,8 +225,8 @@ Ext.define('Shopware.apps.MediaManager.view.album.Tree', {
      * @return [object] generated Ext.toolbar.Toolbar
      */
     createActionToolbar: function() {
-		var me = this;
-		/* {if {acl_is_allowed privilege=create}} */
+        var me = this;
+        /* {if {acl_is_allowed privilege=create}} */
         me.addBtn = Ext.create('Ext.button.Button', {
             text: me.snippets.tree.addAlbum,
             cls: 'small secondary',
@@ -232,7 +234,7 @@ Ext.define('Shopware.apps.MediaManager.view.album.Tree', {
         });
         /* {/if} */
 
-		/* {if {acl_is_allowed privilege=delete}} */
+        /* {if {acl_is_allowed privilege=delete}} */
         me.deleteBtn = Ext.create('Ext.button.Button', {
             text: me.snippets.tree.deleteAlbum,
             cls: 'small secondary',
@@ -243,14 +245,14 @@ Ext.define('Shopware.apps.MediaManager.view.album.Tree', {
 
         return Ext.create('Ext.toolbar.Toolbar', {
             items: [
-		/* {if {acl_is_allowed privilege=create}} */
-				'',
+        /* {if {acl_is_allowed privilege=create}} */
+                '',
                 me.addBtn,
         /* {/if} */
-		/* {if {acl_is_allowed privilege=delete}} */
-				'->',
+        /* {if {acl_is_allowed privilege=delete}} */
+                '->',
                 me.deleteBtn,
-				''
+                ''
         /* {/if} */
             ]
         });

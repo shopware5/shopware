@@ -58,7 +58,7 @@ Ext.define('Shopware.apps.Base.model.Category', {
      * @array
      */
     fields:[
-		//{block name="backend/base/model/category/fields"}{/block}
+        //{block name="backend/base/model/category/fields"}{/block}
         { name : 'id', type:'int' },
         { name : 'parent', type:'int' },
         { name : 'name', type:'string' },

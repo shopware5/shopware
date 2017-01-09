@@ -34,48 +34,48 @@
  */
 //{block name="backend/log/app"}
 Ext.define('Shopware.apps.Log', {
-	/**
-	* Extends from our special controller, which handles the
-	* sub-application behavior and the event bus
-	* @string
-	*/
-    extend : 'Enlight.app.SubApplication',
-	/**
-	* The name of the module. Used for internal purpose
-	* @string
-	*/
-	name: 'Shopware.apps.Log',
-	/**
-	* Sets the loading path for the sub-application.
-	*
-	* Note that you'll need a "loadAction" in your
-	* controller (server-side)
-	* @string
-	*/
-    loadPath : '{url controller="log" action=load}',
+    /**
+     * Extends from our special controller, which handles the
+     * sub-application behavior and the event bus
+     * @string
+     */
+    extend: 'Enlight.app.SubApplication',
+    /**
+     * The name of the module. Used for internal purpose
+     * @string
+     */
+    name: 'Shopware.apps.Log',
+    /**
+     * Sets the loading path for the sub-application.
+     *
+     * Note that you'll need a "loadAction" in your
+     * controller (server-side)
+     * @string
+     */
+    loadPath: '{url controller="log" action=load}',
     bulkLoad: true,
 
     /**
-    * Required views for controller
-    * @array
-    */
-    views: [ 'main.Window', 'log.List', 'log.Detail' ],
+     * Required views for controller
+     * @array
+     */
+    views: ['main.Window', 'log.List', 'log.Detail', 'system.List', 'system.Detail'],
     /**
-    * Required stores for controller
-    * @array
-    */
-    stores: [ 'Logs', 'Users' ],
+     * Required stores for controller
+     * @array
+     */
+    stores: ['Logs', 'LogFiles', 'SystemLogs'],
     /**
-    * Required models for controller
-    * @array
-    */
-    models: [ 'Log' ],
+     * Required models for controller
+     * @array
+     */
+    models: ['Log', 'SystemLog', 'LogFile'],
 
-	/**
-	* Requires controllers for sub-application
-	* @array
-	*/
-    controllers : [ 'Main', 'Log' ],
+    /**
+     * Requires controllers for sub-application
+     * @array
+     */
+    controllers: ['Main', 'Log', 'System'],
 
     /**
      * Returns the main application window for this is expected
@@ -90,7 +90,7 @@ Ext.define('Shopware.apps.Log', {
      * @private
      * @return [object] mainWindow - the main application window based on Enlight.app.Window
      */
-    launch:function () {
+    launch: function () {
         var me = this,
             mainController = me.getController('Main');
 

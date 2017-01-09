@@ -34,20 +34,20 @@
  */
 //{block name="backend/tax/model/areas"}
 Ext.define('Shopware.apps.Tax.model.Areas', {
-	extend: 'Ext.data.Model',
-	fields: [
-		//{block name="backend/tax/model/areas/fields"}{/block}
-		'id', 'name'],
-	proxy: {
-		type: 'ajax',
-		api: {
-			read: '{url controller="Tax" action="getAreas"}'
-		},
-		reader: {
-			type: 'json',
-			root: 'data',
+    extend: 'Ext.data.Model',
+    fields: [
+        //{block name="backend/tax/model/areas/fields"}{/block}
+        'id', 'name'],
+    proxy: {
+        type: 'ajax',
+        api: {
+            read: '{url controller="Tax" action="getAreas"}'
+        },
+        reader: {
+            type: 'json',
+            root: 'data',
             totalProperty:'total'
-		}
-	}
+        }
+    }
 });
 //{/block}

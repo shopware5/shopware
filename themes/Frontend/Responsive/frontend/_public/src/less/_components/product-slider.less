@@ -112,7 +112,7 @@ For initializing a product slider the outer `product-slider` wrapper has to have
     position: absolute;
     top: 50%;
     z-index: @zindex-product-slider;
-    font-family: 'shopware';
+    font-family: @sw-icon-fontname;
     text-align: center;
     color: @btn-default-text-color;
     border: 1px solid @btn-default-border-color;
@@ -124,7 +124,7 @@ For initializing a product slider the outer `product-slider` wrapper has to have
 
         &:before,
         &::before {
-            content: "\e611";
+            content: @sw-icon-arrow-left;
         }
     }
 
@@ -133,7 +133,7 @@ For initializing a product slider the outer `product-slider` wrapper has to have
         right: 0;
 
         &:before {
-            content: "\e60f";
+            content: @sw-icon-arrow-right;
         }
     }
 
@@ -158,7 +158,7 @@ For initializing a product slider the outer `product-slider` wrapper has to have
 
 			&:before,
 			&::before {
-				content: "\e610";
+				content: @sw-icon-arrow-up;
 			}
 		}
 
@@ -167,7 +167,7 @@ For initializing a product slider the outer `product-slider` wrapper has to have
             .border-radius-multi(3px, 3px, 0, 0);
 
 			&:before {
-				content: "\e612";
+				content: @sw-icon-arrow-down;
 			}
 		}
 	}

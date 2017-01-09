@@ -274,9 +274,9 @@ class Enlight_Components_Snippet_Resource extends Smarty_Internal_Resource_Exten
                 throw new Enlight_Exception("Missing name attribute in namespace block");
             }
         } else {
-            $path = realpath($source->filepath);
+            $path = Enlight_Loader::realpath($source->filepath);
             foreach ($source->smarty->getTemplateDir() as $template_dir) {
-                $template_dir = realpath($template_dir);
+                $template_dir = Enlight_Loader::realpath($template_dir);
                 if (strpos($path, $template_dir) === 0) {
                     $namespace = substr($path, strlen($template_dir));
                     $namespace = strtr($namespace, DIRECTORY_SEPARATOR, '/');

@@ -38,23 +38,23 @@ Ext.define('Shopware.apps.Tax.controller.Main', {
      * Extend from the standard ExtJS 4 controller
      * @string
      */
-	extend: 'Ext.app.Controller',
+    extend: 'Ext.app.Controller',
     refs:[
         { ref:'navigationTree', selector:'tax-tree' },
         { ref:'rulesGrid', selector:'tax-rules' },
         { ref:'deleteGroupButton', selector:'tax-tree button[action=onDeleteGroup]' }
     ],
 
-	/**
-	 * Creates the necessary event listener for this
-	 * specific controller and opens a new Ext.window.Window
-	 * to display the subapplication
+    /**
+     * Creates the necessary event listener for this
+     * specific controller and opens a new Ext.window.Window
+     * to display the subapplication
      *
      * @return void
-	 */
-	init: function() {
+     */
+    init: function() {
 
-		var me = this;
+        var me = this;
         me.control({
             'tax-tree': {
                 itemclick: me.onItemClick,
@@ -81,7 +81,7 @@ Ext.define('Shopware.apps.Tax.controller.Main', {
         });
 
         me.appContent = me.mainWindow.appContent;
-	},
+    },
     onCreateGroup: function(){
         var me = this;
         Ext.MessageBox.prompt('Name', 'Name for new group:', function(result,value){

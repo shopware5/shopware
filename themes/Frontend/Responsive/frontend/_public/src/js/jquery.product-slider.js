@@ -302,6 +302,11 @@
             me.bufferedCall = false;
             me.initialized = false;
 
+            me.scrollingReachedEndOfItems = false;
+            me.totalUniqueItems = 0;
+
+            me.itemsPerSlide = me.opts.itemsPerSlide;
+
             me.isLoading = false;
             me.isAnimating = false;
 
@@ -336,12 +341,39 @@
         update: function () {
             var me = this;
 
-            if (!me.initialized) {
+            if (!me.initialized || !me.$el.is(':visible')) {
                 return false;
             }
 
             me.trackItems();
             me.setSizes();
+
+            var copyCount = me.itemsCount - me.totalUniqueItems,
+                copySize = me.itemsPerPage + me.itemsPerSlide;
+
+            /**
+             * If the page size is bigger as the total amount of items
+             * the copied items have to be removed, because the slider is not active anymore.
+             */
+            if (me.totalUniqueItems && me.totalUniqueItems <= me.itemsPerPage) {
+                me.$items.slice(me.totalUniqueItems, me.itemsCount).remove();
+                me.trackItems();
+            }
+
+            /**
+             * If the page size gets bigger we have to copy more items for infinite sliding.
+             */
+            else if (me.totalUniqueItems && copySize > copyCount) {
+                me.cloneItems(copyCount, copySize);
+                me.trackItems();
+            }
+
+            /**
+             *  The slider changes from inactive to active and we have to init the infinite sliding.
+             */
+            else if (!me.totalUniqueItems && me.isActive() && me.opts.mode !== 'ajax') {
+                me.initInfiniteSlide();
+            }
 
             /**
              * Always set back to the first item on update
@@ -381,6 +413,10 @@
             if (me.opts.arrowControls && me.isActive()) me.createArrows();
             if (me.opts.autoScroll && me.isActive()) me.autoScroll();
             if (me.opts.autoSlide && me.isActive()) me.autoSlide();
+
+            if (me.opts.mode !== 'ajax' && me.isActive()) {
+                me.initInfiniteSlide();
+            }
 
             me.initialized = true;
 
@@ -471,6 +507,8 @@
             me.itemsPerPage = Math.floor(containerSize / itemSize);
 
             if (me.itemsPerPage < 1) me.itemsPerPage = 1;
+
+            me.itemsPerSlide = Math.min(me.opts.itemsPerSlide, me.itemsPerPage);
 
             me.itemSizePercent = 100 / me.itemsPerPage;
 
@@ -603,14 +641,13 @@
                 success: function (response) {
                     me.removeLoadingIndicator();
 
-                    if (!response) {
-                        // Prevent infinite loop
-                        return;
-                    }
-
                     me.isLoading = false;
                     me.$container.append(response);
-                    me.trackItems();
+
+                    if (me.itemsCount === me.trackItems()) {
+                        me.initInfiniteSlide();
+                    }
+
                     me.setSizes();
                     me.trackArrows();
 
@@ -767,11 +804,66 @@
                 itemsLeftToLoad = me.opts.ajaxMaxShow - me.itemsCount,
                 loadMoreCount = me.itemsCount - me.itemsPerPage * 2;
 
-            if (scrolledItems >= loadMoreCount && itemsLeftToLoad > 0) {
+            if (!me.totalUniqueItems && itemsLeftToLoad === 0) {
+                me.initInfiniteSlide();
+            }
+
+            if (!me.totalUniqueItems && scrolledItems >= loadMoreCount && itemsLeftToLoad > 0) {
                 me.loadItems(me.itemsCount, Math.min(me.itemsPerPage, itemsLeftToLoad));
             }
 
             $.publish('plugin/swProductSlider/onScroll', [ me, event ]);
+        },
+
+        /**
+         * Initializes the slider for infinite sliding.
+         * The slider will jump to the start position when it reached the end.
+         *
+         * @public
+         * @method initInfiniteSlide
+         */
+        initInfiniteSlide: function () {
+            var me = this;
+
+            me.cloneItems(0, me.itemsPerPage + me.itemsPerSlide);
+
+            me.totalUniqueItems = me.itemsCount;
+            me.trackItems();
+
+            $.publish('plugin/swProductSlider/onInitInfiniteSlide', [ me ]);
+        },
+
+        /**
+         * Clones items in the given index range and appends them to the list.
+         * Used for infinite sliding.
+         *
+         * @public
+         * @method cloneItems
+         * @param {Number} start
+         * @param {Number} end
+         */
+        cloneItems: function (start, end) {
+            var me = this,
+                $copyItems = me.$items.slice(start, end);
+
+            me.$container.append($copyItems.clone());
+
+            $.publish('plugin/swProductSlider/onCloneItems', [ me, start, end, $copyItems ]);
+        },
+
+        /**
+         * Sets the current position to the relative start position.
+         *
+         * @public
+         * @method resetToStart
+         */
+        resetToStart: function () {
+            var me = this;
+
+            me.scrollingReachedEndOfItems = false;
+            me.setPosition((Math.floor(me.currentPosition / me.itemSize) - me.totalUniqueItems) * me.itemSize);
+
+            $.publish('plugin/swProductSlider/onResetToStart', [ me, me.currentPosition ]);
         },
 
         /**
@@ -784,8 +876,16 @@
         slideNext: function () {
             var me = this;
 
-            me.currentPosition = Math.floor((me.currentPosition + me.itemSize * me.opts.itemsPerSlide) / me.itemSize) * me.itemSize;
+            if (me.scrollingReachedEndOfItems) {
+                me.resetToStart();
+            }
+
+            me.currentPosition = Math.floor((me.currentPosition + me.itemSize * me.itemsPerSlide) / me.itemSize) * me.itemSize;
             me.slide(me.currentPosition);
+
+            if (me.totalUniqueItems && (me.currentPosition / me.itemSize) >= me.totalUniqueItems) {
+                me.scrollingReachedEndOfItems = true;
+            }
 
             $.publish('plugin/swProductSlider/onSlideNext', [ me, me.currentPosition ]);
         },
@@ -800,7 +900,9 @@
         slidePrev: function () {
             var me = this;
 
-            me.currentPosition = Math.ceil((me.currentPosition - me.itemSize * me.opts.itemsPerSlide) / me.itemSize) * me.itemSize;
+            me.scrollingReachedEndOfItems = false;
+
+            me.currentPosition = Math.ceil((me.currentPosition - me.itemSize * me.itemsPerSlide) / me.itemSize) * me.itemSize;
             me.slide(me.currentPosition);
 
             $.publish('plugin/swProductSlider/onSlidePrev', [ me, me.currentPosition ]);
@@ -935,6 +1037,10 @@
             me.autoScrollAnimation = StateManager.requestAnimationFrame($.proxy(me.autoScroll, me, direction, speed));
 
             me.setPosition((direction === 'prev') ? position - speed : position + speed);
+
+            if (me.totalUniqueItems && (me.currentPosition / me.itemSize) >= me.totalUniqueItems) {
+                me.setPosition(0);
+            }
 
             $.publish('plugin/swProductSlider/onAutoScroll', [ me, me.autoScrollAnimation, scrollDirection, scrollSpeed ]);
         },

@@ -56,23 +56,23 @@
 
 {* Main content *}
 {block name="frontend_index_content"}
-	<div class="content checkout--content finish--content">
+    <div class="content checkout--content finish--content">
 
-		{* Finish teaser message *}
-		{block name='frontend_checkout_finish_teaser'}
-			<div class="finish--teaser panel has--border is--rounded">
+        {* Finish teaser message *}
+        {block name='frontend_checkout_finish_teaser'}
+            <div class="finish--teaser panel has--border is--rounded">
 
-				{block name='frontend_checkout_finish_teaser_title'}
-					<h2 class="panel--title teaser--title is--align-center">{s name="FinishHeaderThankYou"}{/s} {$sShopname|escapeHtml}!</h2>
-				{/block}
+                {block name='frontend_checkout_finish_teaser_title'}
+                    <h2 class="panel--title teaser--title is--align-center">{s name="FinishHeaderThankYou"}{/s} {$sShopname|escapeHtml}!</h2>
+                {/block}
 
-				{block name='frontend_checkout_finish_teaser_content'}
-					<div class="panel--body is--wide is--align-center">
+                {block name='frontend_checkout_finish_teaser_content'}
+                    <div class="panel--body is--wide is--align-center">
                         {if $confirmMailDeliveryFailed}
                             {include file="frontend/_includes/messages.tpl" type="error" content="{s name="FinishInfoConfirmationMailFailed"}{/s}"}
                         {/if}
 
-						<p class="teaser--text">
+                        <p class="teaser--text">
                             {if !$confirmMailDeliveryFailed}
                                 {s name="FinishInfoConfirmationMail"}{/s}
                                 <br />
@@ -81,21 +81,21 @@
                             {s name="FinishInfoPrintOrder"}{/s}
                         </p>
 
-						{block name='frontend_checkout_finish_teaser_actions'}
-							<p class="teaser--actions">
+                        {block name='frontend_checkout_finish_teaser_actions'}
+                            <p class="teaser--actions">
 
                                 {strip}
-								{* Back to the shop button *}
-								<a href="{url controller='index'}" class="btn is--secondary teaser--btn-back is--icon-left" title="{"{s name='FinishButtonBackToShop'}{/s}"|escape}">
-									<i class="icon--arrow-left"></i>&nbsp;{"{s name="FinishButtonBackToShop"}{/s}"|replace:' ':'&nbsp;'}
-								</a>
+                                {* Back to the shop button *}
+                                <a href="{url controller='index'}" class="btn is--secondary teaser--btn-back is--icon-left" title="{"{s name='FinishButtonBackToShop'}{/s}"|escape}">
+                                    <i class="icon--arrow-left"></i>&nbsp;{"{s name="FinishButtonBackToShop"}{/s}"|replace:' ':'&nbsp;'}
+                                </a>
 
-								{* Print button *}
-								<a href="#" class="btn is--primary teaser--btn-print" onclick="self.print()" title="{"{s name='FinishLinkPrint'}{/s}"|escape}">
-									{s name="FinishLinkPrint"}{/s}
-								</a>
+                                {* Print button *}
+                                <a href="#" class="btn is--primary teaser--btn-print" onclick="self.print()" title="{"{s name='FinishLinkPrint'}{/s}"|escape}">
+                                    {s name="FinishLinkPrint"}{/s}
+                                </a>
                                 {/strip}
-							</p>
+                            </p>
 
                             {* Print notice *}
                             {block name='frontend_checkout_finish_teaser_print_notice'}
@@ -103,233 +103,233 @@
                                     {s name="FinishPrintNotice"}{/s}
                                 </p>
                             {/block}
-						{/block}
-					</div>
-				{/block}
-			</div>
-		{/block}
+                        {/block}
+                    </div>
+                {/block}
+            </div>
+        {/block}
 
-		{block name='frontend_checkout_finish_information_wrapper'}
-			<div class="panel--group block-group information--panel-wrapper finish--info" data-panel-auto-resizer="true">
+        {block name='frontend_checkout_finish_information_wrapper'}
+            <div class="panel--group block-group information--panel-wrapper finish--info" data-panel-auto-resizer="true">
 
-				{block name='frontend_checkout_finish_information_addresses'}
+                {block name='frontend_checkout_finish_information_addresses'}
 
-					{if $sAddresses.equal}
+                    {if $sAddresses.equal}
 
-						{* Equal Billing & Shipping *}
-						{block name='frontend_checkout_finish_information_addresses_equal'}
-							<div class="information--panel-item information--panel-address">
+                        {* Equal Billing & Shipping *}
+                        {block name='frontend_checkout_finish_information_addresses_equal'}
+                            <div class="information--panel-item information--panel-address">
 
-								{block name='frontend_checkout_finish_information_addresses_equal_panel'}
-									<div class="panel has--border is--rounded block information--panel finish--billing">
+                                {block name='frontend_checkout_finish_information_addresses_equal_panel'}
+                                    <div class="panel has--border is--rounded block information--panel finish--billing">
 
-										{block name='frontend_checkout_finish_information_addresses_equal_panel_title'}
-											<div class="panel--title is--underline">
-												{s name='ConfirmAddressEqualTitle' namespace="frontend/checkout/confirm"}{/s}
-											</div>
-										{/block}
+                                        {block name='frontend_checkout_finish_information_addresses_equal_panel_title'}
+                                            <div class="panel--title is--underline">
+                                                {s name='ConfirmAddressEqualTitle' namespace="frontend/checkout/confirm"}{/s}
+                                            </div>
+                                        {/block}
 
-										{block name='frontend_checkout_finish_information_addresses_equal_panel_body'}
-											<div class="panel--body is--wide">
+                                        {block name='frontend_checkout_finish_information_addresses_equal_panel_body'}
+                                            <div class="panel--body is--wide">
 
-												{block name='frontend_checkout_finish_information_addresses_equal_panel_billing'}
-													<div class="billing--panel">
-														{if $sAddresses.billing.company}
-															<span class="address--company is--bold">{$sAddresses.billing.company}</span>{if $sAddresses.billing.department}<br /><span class="address--department is--bold">{$sAddresses.billing.department}</span>{/if}
-															<br />
-														{/if}
+                                                {block name='frontend_checkout_finish_information_addresses_equal_panel_billing'}
+                                                    <div class="billing--panel">
+                                                        {if $sAddresses.billing.company}
+                                                            <span class="address--company is--bold">{$sAddresses.billing.company}</span>{if $sAddresses.billing.department}<br /><span class="address--department is--bold">{$sAddresses.billing.department}</span>{/if}
+                                                            <br />
+                                                        {/if}
 
-														<span class="address--salutation">{$sAddresses.billing.salutation|salutation}</span>
-														{if {config name="displayprofiletitle"}}
-															<span class="address--title">{$sAddresses.billing.title}</span><br/>
-														{/if}
-														<span class="address--firstname">{$sAddresses.billing.firstname}</span> <span class="address--lastname">{$sAddresses.billing.lastname}</span><br />
-														<span class="address--street">{$sAddresses.billing.street}</span><br />
-														{if $sAddresses.billing.additional_address_line1}<span class="address--additional-one">{$sAddresses.billing.additional_address_line1}</span><br />{/if}
-														{if $sAddresses.billing.additional_address_line2}<span class="address--additional-two">{$sAddresses.billing.additional_address_line2}</span><br />{/if}
-														{if {config name=showZipBeforeCity}}
+                                                        <span class="address--salutation">{$sAddresses.billing.salutation|salutation}</span>
+                                                        {if {config name="displayprofiletitle"}}
+                                                            <span class="address--title">{$sAddresses.billing.title}</span><br/>
+                                                        {/if}
+                                                        <span class="address--firstname">{$sAddresses.billing.firstname}</span> <span class="address--lastname">{$sAddresses.billing.lastname}</span><br />
+                                                        <span class="address--street">{$sAddresses.billing.street}</span><br />
+                                                        {if $sAddresses.billing.additional_address_line1}<span class="address--additional-one">{$sAddresses.billing.additional_address_line1}</span><br />{/if}
+                                                        {if $sAddresses.billing.additional_address_line2}<span class="address--additional-two">{$sAddresses.billing.additional_address_line2}</span><br />{/if}
+                                                        {if {config name=showZipBeforeCity}}
                                                             <span class="address--zipcode">{$sAddresses.billing.zipcode}</span> <span class="address--city">{$sAddresses.billing.city}</span>
-														{else}
+                                                        {else}
                                                             <span class="address--city">{$sAddresses.billing.city}</span> <span class="address--zipcode">{$sAddresses.billing.zipcode}</span>
                                                         {/if}<br />
-														{if $sAddresses.billing.state.name}<span class="address--statename">{$sAddresses.billing.state.name}</span><br />{/if}
+                                                        {if $sAddresses.billing.state.name}<span class="address--statename">{$sAddresses.billing.state.name}</span><br />{/if}
                                                         <span class="address--countryname">{$sAddresses.billing.country.name}</span>
-													</div>
-												{/block}
-											</div>
-										{/block}
-									</div>
-								{/block}
-							</div>
-						{/block}
+                                                    </div>
+                                                {/block}
+                                            </div>
+                                        {/block}
+                                    </div>
+                                {/block}
+                            </div>
+                        {/block}
 
-					{else}
+                    {else}
 
-						{* Separate Billing & Shipping *}
-						{block name='frontend_checkout_finish_information_addresses_billing'}
-							<div class="information--panel-item information--panel-item-billing">
-								{* Billing address *}
-								{block name='frontend_checkout_finish_information_addresses_billing_panel'}
-									<div class="panel has--border block information--panel billing--panel finish--billing">
+                        {* Separate Billing & Shipping *}
+                        {block name='frontend_checkout_finish_information_addresses_billing'}
+                            <div class="information--panel-item information--panel-item-billing">
+                                {* Billing address *}
+                                {block name='frontend_checkout_finish_information_addresses_billing_panel'}
+                                    <div class="panel has--border block information--panel billing--panel finish--billing">
 
-										{* Headline *}
-										{block name='frontend_checkout_confirm_information_addresses_billing_panel_title'}
-											<div class="panel--title is--underline">
-												{s name="ConfirmHeaderBilling" namespace="frontend/checkout/confirm"}{/s}
-											</div>
-										{/block}
+                                        {* Headline *}
+                                        {block name='frontend_checkout_confirm_information_addresses_billing_panel_title'}
+                                            <div class="panel--title is--underline">
+                                                {s name="ConfirmHeaderBilling" namespace="frontend/checkout/confirm"}{/s}
+                                            </div>
+                                        {/block}
 
-										{* Content *}
-										{block name='frontend_checkout_finish_information_addresses_billing_panel_body'}
-											<div class="panel--body is--wide">
-												{if $sAddresses.billing.company}
+                                        {* Content *}
+                                        {block name='frontend_checkout_finish_information_addresses_billing_panel_body'}
+                                            <div class="panel--body is--wide">
+                                                {if $sAddresses.billing.company}
                                                     <span class="address--company is--bold">{$sAddresses.billing.company}</span>{if $sAddresses.billing.department}<br /><span class="address--department is--bold">{$sAddresses.billing.department}</span>{/if}
-													<br />
-												{/if}
+                                                    <br />
+                                                {/if}
 
                                                 <span class="address--salutation">{$sAddresses.billing.salutation|salutation}</span>
-												{if {config name="displayprofiletitle"}}
+                                                {if {config name="displayprofiletitle"}}
                                                     <span class="address--title">{$sAddresses.billing.title}</span><br/>
-												{/if}
+                                                {/if}
                                                 <span class="address--firstname">{$sAddresses.billing.firstname}</span> <span class="address--lastname">{$sAddresses.billing.lastname}</span><br />
-												<span class="address--street">{$sAddresses.billing.street}</span><br />
-												{if $sAddresses.billing.additional_address_line1}<span class="address--additional-one">{$sAddresses.billing.additional_address_line1}</span><br />{/if}
-												{if $sAddresses.billing.additional_address_line2}<span class="address--additional-two">{$sAddresses.billing.additional_address_line2}</span><br />{/if}
-												{if {config name=showZipBeforeCity}}
+                                                <span class="address--street">{$sAddresses.billing.street}</span><br />
+                                                {if $sAddresses.billing.additional_address_line1}<span class="address--additional-one">{$sAddresses.billing.additional_address_line1}</span><br />{/if}
+                                                {if $sAddresses.billing.additional_address_line2}<span class="address--additional-two">{$sAddresses.billing.additional_address_line2}</span><br />{/if}
+                                                {if {config name=showZipBeforeCity}}
                                                     <span class="address--zipcode">{$sAddresses.billing.zipcode}</span> <span class="address--city">{$sAddresses.billing.city}</span>
                                                 {else}
                                                     <span class="address--city">{$sAddresses.billing.city}</span> <span class="address--zipcode">{$sAddresses.billing.zipcode}</span>
                                                 {/if}<br />
-												{if $sAddresses.billing.state.name}<span class="address--statename">{$sAddresses.billing.state.name}</span><br />{/if}
+                                                {if $sAddresses.billing.state.name}<span class="address--statename">{$sAddresses.billing.state.name}</span><br />{/if}
                                                 <span class="address--countryname">{$sAddresses.billing.country.name}</span>
-											</div>
-										{/block}
-									</div>
-								{/block}
-							</div>
-						{/block}
+                                            </div>
+                                        {/block}
+                                    </div>
+                                {/block}
+                            </div>
+                        {/block}
 
-						{block name='frontend_checkout_finish_information_addresses_shipping'}
-							<div class="information--panel-item information--panel-item-shipping">
-								{block name='frontend_checkout_finish_information_addresses_shipping_panel'}
-									<div class="panel has--border block information--panel shipping--panel finish--shipping">
+                        {block name='frontend_checkout_finish_information_addresses_shipping'}
+                            <div class="information--panel-item information--panel-item-shipping">
+                                {block name='frontend_checkout_finish_information_addresses_shipping_panel'}
+                                    <div class="panel has--border block information--panel shipping--panel finish--shipping">
 
-										{* Headline *}
-										{block name='frontend_checkout_finish_information_addresses_shipping_panel_title'}
-											<div class="panel--title is--underline">
-												{s name="ConfirmHeaderShipping" namespace="frontend/checkout/confirm"}{/s}
-											</div>
-										{/block}
+                                        {* Headline *}
+                                        {block name='frontend_checkout_finish_information_addresses_shipping_panel_title'}
+                                            <div class="panel--title is--underline">
+                                                {s name="ConfirmHeaderShipping" namespace="frontend/checkout/confirm"}{/s}
+                                            </div>
+                                        {/block}
 
-										{* Content *}
-										{block name='frontend_checkout_finish_information_addresses_shipping_panel_body'}
-											<div class="panel--body is--wide">
-												{if $sAddresses.shipping.company}
+                                        {* Content *}
+                                        {block name='frontend_checkout_finish_information_addresses_shipping_panel_body'}
+                                            <div class="panel--body is--wide">
+                                                {if $sAddresses.shipping.company}
                                                     <span class="address--company is--bold">{$sAddresses.shipping.company}</span>{if $sAddresses.shipping.department}<br /><span class="address--department is--bold">{$sAddresses.shipping.department}</span>{/if}
-													<br />
-												{/if}
+                                                    <br />
+                                                {/if}
 
                                                 <span class="address--salutation">{$sAddresses.shipping.salutation|salutation}</span>
-												{if {config name="displayprofiletitle"}}
+                                                {if {config name="displayprofiletitle"}}
                                                     <span class="address--title">{$sAddresses.shipping.title}</span><br/>
-												{/if}
+                                                {/if}
                                                 <span class="address--firstname">{$sAddresses.shipping.firstname}</span> <span class="address--lastname">{$sAddresses.shipping.lastname}</span><br />
-												<span class="address--street">{$sAddresses.shipping.street}</span><br />
-												{if $sAddresses.shipping.additional_address_line1}<span class="address--additional-one">{$sAddresses.shipping.additional_address_line1}</span><br />{/if}
-												{if $sAddresses.shipping.additional_address_line2}<span class="address--additional-two">{$sAddresses.shipping.additional_address_line2}</span><br />{/if}
-												{if {config name=showZipBeforeCity}}
+                                                <span class="address--street">{$sAddresses.shipping.street}</span><br />
+                                                {if $sAddresses.shipping.additional_address_line1}<span class="address--additional-one">{$sAddresses.shipping.additional_address_line1}</span><br />{/if}
+                                                {if $sAddresses.shipping.additional_address_line2}<span class="address--additional-two">{$sAddresses.shipping.additional_address_line2}</span><br />{/if}
+                                                {if {config name=showZipBeforeCity}}
                                                     <span class="address--zipcode">{$sAddresses.shipping.zipcode}</span> <span class="address--city">{$sAddresses.shipping.city}</span>
                                                 {else}
                                                     <span class="address--city">{$sAddresses.shipping.city}</span> <span class="address--zipcode">{$sAddresses.shipping.zipcode}</span>
                                                 {/if}<br />
-												{if $sAddresses.shipping.state.name}<span class="address--statename">{$sAddresses.shipping.state.name}</span><br />{/if}
+                                                {if $sAddresses.shipping.state.name}<span class="address--statename">{$sAddresses.shipping.state.name}</span><br />{/if}
                                                 <span class="address--countryname">{$sAddresses.shipping.country.name}</span>
-											</div>
-										{/block}
-									</div>
-								{/block}
-							</div>
-						{/block}
-					{/if}
-				{/block}
+                                            </div>
+                                        {/block}
+                                    </div>
+                                {/block}
+                            </div>
+                        {/block}
+                    {/if}
+                {/block}
 
-				{* Payment method *}
-				{block name='frontend_checkout_finish_information_payment'}
-					<div class="information--panel-item">
-						{block name='frontend_checkout_finish_payment_method_panel'}
-							<div class="panel has--border block information--panel payment--panel finish--details">
+                {* Payment method *}
+                {block name='frontend_checkout_finish_information_payment'}
+                    <div class="information--panel-item">
+                        {block name='frontend_checkout_finish_payment_method_panel'}
+                            <div class="panel has--border block information--panel payment--panel finish--details">
 
-								{block name='frontend_checkout_finish_left_payment_method_headline'}
-									<div class="panel--title is--underline payment--title">
-										{s name="FinishHeaderInformation"}{/s}
-									</div>
-								{/block}
+                                {block name='frontend_checkout_finish_left_payment_method_headline'}
+                                    <div class="panel--title is--underline payment--title">
+                                        {s name="FinishHeaderInformation"}{/s}
+                                    </div>
+                                {/block}
 
-								{block name='frontend_checkout_finish_left_payment_content'}
-									<div class="panel--body is--wide payment--content">
+                                {block name='frontend_checkout_finish_left_payment_content'}
+                                    <div class="panel--body is--wide payment--content">
 
-										{* Invoice number *}
-										{block name='frontend_checkout_finish_invoice_number'}
-											{if $sOrderNumber}
-												<strong>{s name="FinishInfoId"}{/s}</strong> {$sOrderNumber}<br />
-											{/if}
-										{/block}
+                                        {* Invoice number *}
+                                        {block name='frontend_checkout_finish_invoice_number'}
+                                            {if $sOrderNumber}
+                                                <strong>{s name="FinishInfoId"}{/s}</strong> {$sOrderNumber}<br />
+                                            {/if}
+                                        {/block}
 
-										{* Transaction number *}
-										{block name='frontend_checkout_finish_transaction_number'}
-											{if $sTransactionumber}
-												<strong>{s name="FinishInfoTransaction"}{/s}</strong> {$sTransactionumber}<br />
-											{/if}
-										{/block}
+                                        {* Transaction number *}
+                                        {block name='frontend_checkout_finish_transaction_number'}
+                                            {if $sTransactionumber}
+                                                <strong>{s name="FinishInfoTransaction"}{/s}</strong> {$sTransactionumber}<br />
+                                            {/if}
+                                        {/block}
 
-										{* Payment method *}
-										{block name='frontend_checkout_finish_payment_method'}
-											{if $sPayment.description}
-												<strong>{s name="ConfirmHeaderPayment" namespace="frontend/checkout/confirm"}{/s}:</strong> {$sPayment.description}<br />
-											{/if}
-										{/block}
+                                        {* Payment method *}
+                                        {block name='frontend_checkout_finish_payment_method'}
+                                            {if $sPayment.description}
+                                                <strong>{s name="ConfirmHeaderPayment" namespace="frontend/checkout/confirm"}{/s}:</strong> {$sPayment.description}<br />
+                                            {/if}
+                                        {/block}
 
-										{* Dispatch method *}
-										{block name='frontend_checkout_finish_dispatch_method'}
-											{if $sDispatch.name}
-												<strong>{s name="CheckoutDispatchHeadline" namespace="frontend/checkout/confirm_dispatch"}{/s}:</strong> {$sDispatch.name}
-											{/if}
-										{/block}
+                                        {* Dispatch method *}
+                                        {block name='frontend_checkout_finish_dispatch_method'}
+                                            {if $sDispatch.name}
+                                                <strong>{s name="CheckoutDispatchHeadline" namespace="frontend/checkout/confirm_dispatch"}{/s}:</strong> {$sDispatch.name}
+                                            {/if}
+                                        {/block}
 
-									</div>
-								{/block}
+                                    </div>
+                                {/block}
 
-							</div>
-						{/block}
-					</div>
-				{/block}
-			</div>
-		{/block}
+                            </div>
+                        {/block}
+                    </div>
+                {/block}
+            </div>
+        {/block}
 
-		{block name='frontend_checkout_finish_items'}
-			<div class="finish--table product--table">
-				<div class="panel has--border">
-					<div class="panel--body is--rounded">
+        {block name='frontend_checkout_finish_items'}
+            <div class="finish--table product--table">
+                <div class="panel has--border">
+                    <div class="panel--body is--rounded">
 
-						{* Table header *}
-						{block name='frontend_checkout_finish_table_header'}
-							{include file="frontend/checkout/finish_header.tpl"}
-						{/block}
+                        {* Table header *}
+                        {block name='frontend_checkout_finish_table_header'}
+                            {include file="frontend/checkout/finish_header.tpl"}
+                        {/block}
 
-						{* Article items *}
-						{foreach $sBasket.content as $key => $sBasketItem}
-							{block name='frontend_checkout_finish_item'}
-								{include file='frontend/checkout/finish_item.tpl' isLast=$sBasketItem@last}
-							{/block}
-						{/foreach}
+                        {* Article items *}
+                        {foreach $sBasket.content as $key => $sBasketItem}
+                            {block name='frontend_checkout_finish_item'}
+                                {include file='frontend/checkout/finish_item.tpl' isLast=$sBasketItem@last}
+                            {/block}
+                        {/foreach}
 
-						{* Table footer *}
-						{block name='frontend_checkout_finish_table_footer'}
-							{include file="frontend/checkout/finish_footer.tpl"}
-						{/block}
-					</div>
-				</div>
-			</div>
-		{/block}
-	</div>
+                        {* Table footer *}
+                        {block name='frontend_checkout_finish_table_footer'}
+                            {include file="frontend/checkout/finish_footer.tpl"}
+                        {/block}
+                    </div>
+                </div>
+            </div>
+        {/block}
+    </div>
 {/block}

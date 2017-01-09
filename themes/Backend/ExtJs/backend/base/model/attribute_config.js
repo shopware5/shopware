@@ -38,6 +38,12 @@ Ext.define('Shopware.model.AttributeConfig', {
     },
 
     allowDelete: function() {
+        if (this.get('core')) {
+            return false;
+        }
+        if (this.get('identifier')) {
+            return false;
+        }
         return this.get('custom');
     },
 

@@ -462,6 +462,7 @@
                 $el.replaceWith(img);
             });
 
+            me._$thumbContainerClone.find('a.thumbnails--arrow').remove();
             me._$imageContainerClone.find('.arrow').remove();
 
             $template = $('<div>', {

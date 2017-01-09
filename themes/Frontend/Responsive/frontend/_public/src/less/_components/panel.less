@@ -312,7 +312,7 @@ Displays an arrow button that is used to navigate through the slider pages.
     position: absolute;
     top: 50%;
     z-index: @zindex-panel-arrow;
-    font-family: 'shopware';
+    font-family: @sw-icon-fontname;
     text-align: center;
     color: @text-color;
 
@@ -327,7 +327,7 @@ Displays an arrow button that is used to navigate through the slider pages.
 
         &:before,
         &::before {
-            content: "\e611";
+            content: @sw-icon-arrow-left;
         }
     }
 
@@ -335,7 +335,7 @@ Displays an arrow button that is used to navigate through the slider pages.
         .unitize(right, 10);
 
         &:before {
-            content: "\e60f";
+            content: @sw-icon-arrow-right;
         }
     }
 
@@ -551,12 +551,12 @@ Displays an arrow button that is used to navigate through the slider pages.
         top: 0;
         right: 0;
         border-left: 1px solid @border-color;
-        font-family: 'shopware';
+        font-family: @sw-icon-fontname;
         text-align: center;
 
         &:before,
         &::before {
-            content: "\e612";
+            content: @sw-icon-arrow-down;
         }
     }
 

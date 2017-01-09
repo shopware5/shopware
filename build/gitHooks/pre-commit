@@ -106,9 +106,9 @@ class PreCommitChecks
         foreach ($files as $file) {
             $output = [];
             $return = null;
-            exec("./vendor/bin/php-cs-fixer fix -v --config-file=.php_cs --no-ansi --dry-run " . escapeshellarg($file). ' 2>&1', $output, $return);
+            exec("./vendor/bin/php-cs-fixer fix -v --no-ansi --dry-run " . escapeshellarg($file). ' 2>&1', $output, $return);
             if ($return != 0) {
-                $misses[$file] = "./vendor/bin/php-cs-fixer fix -v --config-file=.php_cs " . escapeshellarg($file);
+                $misses[$file] = "./vendor/bin/php-cs-fixer fix -v " . escapeshellarg($file);
                 $this->error = true;
                 $succeed = false;
             }
@@ -190,7 +190,7 @@ class PreCommitChecks
      */
     private function hasDuplicateMigrations()
     {
-        exec('find ./_sql/migrations -type f | cut -d\/ -f4 | cut -d\- -f1 | sort | uniq -d', $output);
+        exec('find ./_sql/migrations -maxdepth 1 -type f | cut -d\/ -f4 | cut -d\- -f1 | sort | uniq -d', $output);
         if (count($output)) {
             return current($output);
         }

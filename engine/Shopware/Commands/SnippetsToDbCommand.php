@@ -77,12 +77,12 @@ class SnippetsToDbCommand extends ShopwareCommand
         $databaseLoader = $this->container->get('shopware.snippet_database_handler');
         $force = $input->getOption('force');
 
-        $sourceDir = $this->container->getParameter('kernel.root_dir') . DIRECTORY_SEPARATOR . $input->getOption('source') . DIRECTORY_SEPARATOR;
+        $sourceDir = $this->container->getParameter('kernel.root_dir') . '/' . $input->getOption('source') . '/';
 
         $databaseLoader->setOutput($output);
         $databaseLoader->loadToDatabase($sourceDir, $force);
 
-        //Import plugin snippets
+        // Import plugin snippets
         if ($input->getOption('include-plugins')) {
             $pluginRepository = $this->container->get('shopware.model_manager')->getRepository('Shopware\Models\Plugin\Plugin');
 
@@ -92,12 +92,14 @@ class SnippetsToDbCommand extends ShopwareCommand
             $pluginDirectories = $this->container->getParameter('shopware.plugin_directories');
 
             foreach ($plugins as $plugin) {
-                $pluginPath = $pluginDirectories[$plugin->getSource()] . $plugin->getNamespace() . DIRECTORY_SEPARATOR . $plugin->getName();
+                if (array_key_exists($plugin->getSource(), $pluginDirectories)) {
+                    $pluginPath = $pluginDirectories[$plugin->getSource()] . $plugin->getNamespace() . '/' . $plugin->getName();
 
-                $output->writeln('<info>Importing snippets for '.$plugin->getName().' plugin</info>');
-                $databaseLoader->loadToDatabase($pluginPath.'/Snippets/', $force);
-                $databaseLoader->loadToDatabase($pluginPath.'/snippets/', $force);
-                $databaseLoader->loadToDatabase($pluginPath.'/Resources/snippet/', $force);
+                    $output->writeln('<info>Importing snippets for ' . $plugin->getName() . ' plugin</info>');
+                    $databaseLoader->loadToDatabase($pluginPath . '/Snippets/', $force);
+                    $databaseLoader->loadToDatabase($pluginPath . '/snippets/', $force);
+                    $databaseLoader->loadToDatabase($pluginPath . '/Resources/snippet/', $force);
+                }
 
                 if ($plugin = $this->getPlugin($plugin->getName())) {
                     $databaseLoader->loadToDatabase($plugin->getPath() . '/Resources/snippets/', $force);

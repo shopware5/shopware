@@ -40,6 +40,7 @@ Ext.define('Shopware.apps.Attributes.model.Table', {
         s_articles_prices_attributes: '{s name="table/s_articles_prices_attributes"}{/s}',
         s_articles_supplier_attributes: '{s name="table/s_articles_supplier_attributes"}{/s}',
         s_emarketing_banners_attributes: '{s name="table/s_emarketing_banners_attributes"}{/s}',
+        s_emarketing_partner_attributes: '{s name="table/s_emarketing_partner_attributes"}{/s}',
         s_blog_attributes: '{s name="table/s_blog_attributes"}{/s}',
         s_categories_attributes: '{s name="table/s_categories_attributes"}{/s}',
         s_core_countries_attributes: '{s name="table/s_core_countries_attributes"}{/s}',

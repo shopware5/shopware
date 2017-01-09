@@ -226,6 +226,7 @@ Ext.define('Shopware.apps.SwagUpdate.view.Window', {
             text: '{s name="start_update"}Start update{/s}',
             disabled: true,
             handler: function() {
+                me.updateButton.disable();
                 me.fireEvent('startUpdate', me);
             }
         });

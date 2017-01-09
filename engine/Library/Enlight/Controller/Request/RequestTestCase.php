@@ -458,6 +458,10 @@ class Enlight_Controller_Request_RequestTestCase extends Enlight_Controller_Requ
      */
     public function getClientIp($checkProxy = false)
     {
+        if ($checkProxy) {
+            trigger_error('The checkProxy parameter is deprecated and is not secure. Please configure the trusted proxies.', E_USER_DEPRECATED);
+        }
+
         return parent::getClientIp($checkProxy);
     }
 

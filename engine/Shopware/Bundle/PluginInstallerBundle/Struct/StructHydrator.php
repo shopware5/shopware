@@ -504,10 +504,13 @@ class StructHydrator
 
         $producer->setId($data['id']);
         $producer->setName($data['name']);
-        $producer->setDescription($data['description']);
         $producer->setPrefix($data['prefix']);
         $producer->setWebsite($data['website']);
         $producer->setIconPath($data['iconPath']);
+
+        if (!empty($data['description'])) {
+            $producer->setDescription($data['description']);
+        }
 
         return $producer;
     }

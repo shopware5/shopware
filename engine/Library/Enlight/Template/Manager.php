@@ -247,7 +247,7 @@ class Enlight_Template_Manager extends Smarty
     public function unifyDirectories($inheritance)
     {
         $inheritance = $this->enforceEndingSlash($inheritance);
-        $inheritance = array_map('realpath', $inheritance);
+        $inheritance = array_map('Enlight_Loader::realpath', $inheritance);
         $inheritance = array_filter($inheritance);
         $inheritance = array_unique($inheritance);
         return $inheritance;

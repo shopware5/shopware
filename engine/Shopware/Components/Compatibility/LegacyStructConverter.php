@@ -683,7 +683,7 @@ class LegacyStructConverter
 
         $data = array(
             'id' => $media->getId(),
-            'position' => 1,
+            'position' => null,
             'source' => $media->getFile(),
             'description' => $media->getName(),
             'extension' => $media->getExtension(),
@@ -786,6 +786,8 @@ class LegacyStructConverter
                 /**@var $option StoreFrontBundle\Struct\Property\Option */
                 $values[$option->getId()] = $option->getName();
             }
+            
+            $propertyOptions = array_map([$this, 'convertPropertyOptionStruct'], $group->getOptions());
 
             $mediaValues = array();
             foreach ($group->getOptions() as $option) {
@@ -803,6 +805,8 @@ class LegacyStructConverter
                 'groupName' => $set->getName(),
                 'value'     => implode(', ', $values),
                 'values'    => $values,
+                'isFilterable' => $group->isFilterable(),
+                'options'   => $propertyOptions,
                 'media'     => $mediaValues,
                 'attributes' => $group->getAttributes(),
             ];
@@ -1163,7 +1167,7 @@ class LegacyStructConverter
             $data['sReleasedate'] = $product->getReleaseDate()->format('Y-m-d');
         }
 
-        return $this->eventManager->filter('Legacy_Struct_Converter_List_Product_data', $data, [
+        return $this->eventManager->filter('Legacy_Struct_Converter_List_Product_Data', $data, [
             'product' => $product,
         ]);
     }

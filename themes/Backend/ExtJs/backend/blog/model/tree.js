@@ -47,7 +47,7 @@ Ext.define('Shopware.apps.Blog.model.Tree', {
      * @object
      */
     fields:[
-		// {block name="backend/blog/model/tree/fields"}{/block}
+        // {block name="backend/blog/model/tree/fields"}{/block}
         { name : 'id', type: 'integer', useNull:true },
         { name : 'parentId', type: 'integer' },
         { name : 'name', type: 'string'},

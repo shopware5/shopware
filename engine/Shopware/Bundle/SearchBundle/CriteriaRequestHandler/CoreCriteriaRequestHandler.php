@@ -349,7 +349,7 @@ class CoreCriteriaRequestHandler implements CriteriaRequestHandlerInterface
      */
     private function addIsAvailableCondition(Criteria $criteria)
     {
-        if (!$this->config->get('hideNoInstock')) {
+        if (!$this->config->get('hideNoInStock')) {
             return;
         }
         $criteria->addBaseCondition(new IsAvailableCondition());

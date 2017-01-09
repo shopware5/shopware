@@ -641,7 +641,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
                 \Doctrine\ORM\AbstractQuery::HYDRATE_OBJECT
             );
             if (!$album) {
-                $this->View()->assign(array('success' => false, 'message' => 'Invalid album id passed'));
+                $this->View()->assign(['success' => false, 'message' => 'Invalid album id passed']);
                 return false;
             }
         } else {
@@ -656,9 +656,9 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
             $this->getManager()->flush($album);
             $this->getManager()->flush($album->getSettings());
 
-            $this->View()->assign(array('success' => true));
+            $this->View()->assign(['success' => true, 'data' => ['id' => $album->getId()]]);
         } catch (Exception $e) {
-            $this->View()->assign(array('success' => false, 'message' => $e->getMessage()));
+            $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);
         }
     }
 

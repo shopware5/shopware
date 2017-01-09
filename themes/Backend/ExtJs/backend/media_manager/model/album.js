@@ -32,34 +32,34 @@
  */
 //{block name="backend/media_manager/model/album"}
 Ext.define('Shopware.apps.MediaManager.model.Album', {
-	extend: 'Ext.data.Model',
-	fields: [
-		//{block name="backend/media_manager/model/album/fields"}{/block}
-		'id',
-		'text',
-		'position',
-		'mediaCount',
-		'parentId',
-		'createThumbnails',
-		'thumbnailSize',
-		'iconCls',
-		'albumID' ,
-		'thumbnailHighDpi',
-		'thumbnailQuality',
-		'thumbnailHighDpiQuality'
-	],
-	proxy: {
-		type: 'ajax',
+    extend: 'Ext.data.Model',
+    fields: [
+        //{block name="backend/media_manager/model/album/fields"}{/block}
+        'id',
+        'text',
+        'position',
+        'mediaCount',
+        'parentId',
+        'createThumbnails',
+        'thumbnailSize',
+        'iconCls',
+        'albumID' ,
+        'thumbnailHighDpi',
+        'thumbnailQuality',
+        'thumbnailHighDpiQuality'
+    ],
+    proxy: {
+        type: 'ajax',
         api: {
             read: '{url controller="MediaManager" action="getAlbums"}',
             create: '{url controller="MediaManager" action="saveAlbum"}',
             update: '{url controller="MediaManager" action="saveAlbum"}',
             destroy: '{url controller="MediaManager" action="removeAlbum" targetField=albums}'
         },
-		reader: {
-			type: 'json',
-			root: 'data'
-		}
-	}
+        reader: {
+            type: 'json',
+            root: 'data'
+        }
+    }
 });
 //{/block}

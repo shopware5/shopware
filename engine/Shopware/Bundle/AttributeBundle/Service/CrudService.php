@@ -87,7 +87,7 @@ class CrudService
         $column = $this->formatColumnName($column);
 
         if (!$this->tableMapping->isTableColumn($table, $column)) {
-            throw new \Exception(sprintf('Table %s has no column with name %s', $table, $column));
+            throw new \RuntimeException(sprintf('Table %s has no column with name %s', $table, $column));
         }
 
         $this->schemaOperator->dropColumn($table, $column);
@@ -108,9 +108,9 @@ class CrudService
             return;
         }
 
-        $tables = $this->tableMapping->getDependingTables($table);
-        foreach ($tables as $table) {
-            $this->delete($table, $column);
+        $dependingTables = $this->tableMapping->getDependingTables($table);
+        foreach ($dependingTables as $dependingTable) {
+            $this->delete($dependingTable, $column);
         }
     }
 
@@ -119,7 +119,7 @@ class CrudService
      * @param string $columnName
      * @param string $unifiedType
      * @param array $data
-     * @param null $newColumnName
+     * @param null|string $newColumnName
      * @param bool $updateDependingTables
      * @param null|string|int|float $defaultValue
      * @throws \Exception
@@ -134,26 +134,23 @@ class CrudService
         $defaultValue = null
     ) {
         $columnName = $this->formatColumnName($columnName);
-        $newColumnName = $this->formatColumnName($newColumnName);
+        $newColumnName = $newColumnName ? $this->formatColumnName($newColumnName) : $columnName;
 
         $config = $this->get($table, $columnName);
 
         if (!$config) {
             $this->createAttribute($table, $columnName, $unifiedType, $data, $defaultValue);
-            return;
+        } else {
+            $this->changeAttribute($table, $columnName, $newColumnName, $unifiedType, $data, $defaultValue);
         }
-
-        $newColumnName = $newColumnName?: $columnName;
-
-        $this->changeAttribute($table, $columnName, $newColumnName, $unifiedType, $data, $defaultValue);
 
         if (!$updateDependingTables) {
             return;
         }
 
-        $tables = $this->tableMapping->getDependingTables($table);
-        foreach ($tables as $table) {
-            $this->update($table, $columnName, $unifiedType, $data, $newColumnName, false, $defaultValue);
+        $dependingTables = $this->tableMapping->getDependingTables($table);
+        foreach ($dependingTables as $dependingTable) {
+            $this->update($dependingTable, $columnName, $unifiedType, $data, $newColumnName, false, $defaultValue);
         }
     }
 
@@ -332,8 +329,14 @@ class CrudService
      * @param array $data
      * @throws \Exception
      */
-    private function changeAttribute($table, $originalColumnName, $newColumnName, $unifiedType, array $data = [], $defaultValue = null)
-    {
+    private function changeAttribute(
+        $table,
+        $originalColumnName,
+        $newColumnName,
+        $unifiedType,
+        array $data = [],
+        $defaultValue = null
+    ) {
         $config = $this->get($table, $originalColumnName);
 
         $data = array_merge($data, [

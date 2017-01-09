@@ -33,7 +33,7 @@ Ext.define('Shopware.apps.Base.model.Value', {
     alternateClassName: 'Shopware.model.Value',
 
     fields: [
-		//{block name="backend/base/model/value/fields"}{/block}
+        //{block name="backend/base/model/value/fields"}{/block}
         { name: 'id', type: 'int', useNull: true },
         { name: 'shopId', type: 'int' },
         { name: 'value', defaultValue: null, useNull: true }

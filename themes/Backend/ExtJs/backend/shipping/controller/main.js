@@ -41,7 +41,7 @@ Ext.define('Shopware.apps.Shipping.controller.Main', {
      * Extend from the standard ExtJS 4 controller
      * @string
      */
-	extend: 'Enlight.app.Controller',
+    extend: 'Enlight.app.Controller',
 
     /**
      * Some references to get a better grip of the single elements
@@ -317,7 +317,7 @@ Ext.define('Shopware.apps.Shipping.controller.Main', {
             costsmatrix = Ext.create('Shopware.apps.Shipping.store.Costsmatrix'),
             record      = store.load().getAt(rowIndex);
 
-		record.data.clone = false;
+        record.data.clone = false;
 
         // load the right data set based on the dispatch ID
         costsmatrix.getProxy().extraParams = {
@@ -354,7 +354,7 @@ Ext.define('Shopware.apps.Shipping.controller.Main', {
             emptyCostsMatrix = me.getModel('Costsmatrix').create();
 
         record.data.clone = true;
-		costsmatrix.removeAll();
+        costsmatrix.removeAll();
 
         // also clone the actual shipping costs SW-2263
         costsmatrix.getProxy().extraParams = {

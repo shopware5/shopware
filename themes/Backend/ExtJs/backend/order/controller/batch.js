@@ -71,7 +71,7 @@ Ext.define('Shopware.apps.Order.controller.Batch', {
             title: '{s name=cancel_title}Cancelled{/s}'
         },
 
-		growlMessage: '{s name=growlMessage}Order{/s}'
+        growlMessage: '{s name=growlMessage}Order{/s}'
 
     },
 
@@ -186,8 +186,8 @@ Ext.define('Shopware.apps.Order.controller.Batch', {
                     operation = batch.operations[0];
                     resultSet = operation.resultSet ? operation.resultSet.records : operation.records;
 
-                    me.getBatchList().getStore().load();
-
+                    grid.getStore().removeAll();
+                    grid.getStore().add(resultSet);
                     grid.setLoading(false);
 
                     gridStore.load();
@@ -202,10 +202,10 @@ Ext.define('Shopware.apps.Order.controller.Batch', {
      * to the store and calls the store.sync() function. In the callback function of the store sync,
      * the function calls themselves.
      *
-     * @param store
+     * @param { Shopware.apps.Order.store.Batch } store
      * @param orders
      * @param index
-     * @param resultStore
+     * @param { Shopware.apps.Order.store.Batch } resultStore
      */
     queueProcess: function(store, orders, index, resultStore) {
         var me = this,
@@ -235,7 +235,10 @@ Ext.define('Shopware.apps.Order.controller.Batch', {
             me.refreshProgressWindow(orders);
 
             // Update the grid in order to set the new status or the mail
-            batchStore.load();
+            batchStore.removeAll();
+            resultStore.each(function (record) {
+                batchStore.add(record);
+            });
 
             // Merge documents if requested
             if(settingValues.createSingleDocument) {

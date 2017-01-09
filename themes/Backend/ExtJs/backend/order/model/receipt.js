@@ -53,7 +53,7 @@ Ext.define('Shopware.apps.Order.model.Receipt', {
      * @array
      */
     fields:[
-		//{block name="backend/order/model/receipt/fields"}{/block}
+        //{block name="backend/order/model/receipt/fields"}{/block}
         { name: 'id', type:'int' },
         { name: 'date', type:'date' },
         { name: 'typeId', type:'int' },

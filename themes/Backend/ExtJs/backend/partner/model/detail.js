@@ -34,17 +34,17 @@
  */
 //{block name="backend/partner/model/detail"}
 Ext.define('Shopware.apps.Partner.model.Detail', {
-	/**
-	* Extends the standard ExtJS 4
-	* @string
-	*/
+    /**
+    * Extends the standard ExtJS 4
+    * @string
+    */
     extend : 'Ext.data.Model',
-	/**
-	* The fields used for this model
-	* @array
-	*/
+    /**
+    * The fields used for this model
+    * @array
+    */
     fields : [
-		//{block name="backend/partner/model/detail/fields"}{/block}
+        //{block name="backend/partner/model/detail/fields"}{/block}
         { name : 'id', type : 'int' },
         { name : 'idCode', type : 'string' },
         { name : 'date', type : 'date' },
@@ -65,15 +65,15 @@ Ext.define('Shopware.apps.Partner.model.Detail', {
         { name : 'cookieLifeTime', type : 'int' },
         { name : 'active', type : 'int' }
     ],
-	/**
-	* If the name of the field is 'id' ExtJs assumes automatically that
-	* this field is an unique identifier.
-	*/
+    /**
+    * If the name of the field is 'id' ExtJs assumes automatically that
+    * this field is an unique identifier.
+    */
     idProperty : 'id',
-	/**
-	* Configure the data communication
-	* @object
-	*/
+    /**
+    * Configure the data communication
+    * @object
+    */
     proxy : {
         type : 'ajax',
         api:{

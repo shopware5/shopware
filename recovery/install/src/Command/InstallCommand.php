@@ -246,6 +246,8 @@ class InstallCommand extends Command
         /** @var $container Container */
         $container = $this->container = $this->getApplication()->getContainer();
 
+        $container->offsetGet('shopware.notify')->doTrackEvent('Installer started');
+
         if ($this->IOHelper->isInteractive()) {
             $this->printStartMessage();
         }
@@ -328,6 +330,9 @@ class InstallCommand extends Command
         /** @var \Shopware\Recovery\Common\SystemLocker $systemLocker */
         $systemLocker = $this->container->offsetGet('system.locker');
         $systemLocker();
+
+        $container->offsetGet('uniqueid.persister')->store();
+        $container->offsetGet('shopware.notify')->doTrackEvent('Installer finished');
 
         if ($this->IOHelper->isInteractive()) {
             $this->IOHelper->writeln("<info>Shop successfully installed.</info>");

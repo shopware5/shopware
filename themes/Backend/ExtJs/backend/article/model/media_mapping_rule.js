@@ -41,7 +41,7 @@ Ext.define('Shopware.apps.Article.model.MediaMappingRule', {
      * @array
      */
     fields: [
-		//{block name="backend/article/model/media_mapping_rule/fields"}{/block}
+        //{block name="backend/article/model/media_mapping_rule/fields"}{/block}
         { name: 'id', type: 'int', useNull: true },
         { name: 'mappingId', type: 'int', useNull: true },
         { name: 'optionId', type: 'int', useNull: true }

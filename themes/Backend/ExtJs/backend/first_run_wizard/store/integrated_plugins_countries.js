@@ -33,8 +33,8 @@
 //{block name="backend/first_run_wizard/store/integrated_plugins_countries"}
 
 Ext.define('Shopware.apps.FirstRunWizard.store.IntegratedPluginsCountries', {
-	extend: 'Ext.data.Store',
-	model : 'Shopware.apps.FirstRunWizard.model.IntegratedPluginsCountries',
+    extend: 'Ext.data.Store',
+    model : 'Shopware.apps.FirstRunWizard.model.IntegratedPluginsCountries',
     proxy: {
         type: 'ajax',
         url: '{url controller="FirstRunWizardPluginManager" action="getIntegratedPluginsCountries"}',
