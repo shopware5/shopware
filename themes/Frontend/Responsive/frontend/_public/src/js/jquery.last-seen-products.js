@@ -307,7 +307,7 @@
 
             // Remove query string from article url
             if (url.indexOf('/sCategory') !== -1) {
-                newProduct.linkDetailsRewritten = url.substring(0, url.indexOf('/sCategory'));
+                newProduct.linkDetailsRewritten = url.replace(/\/?sCategory\/[0-9]+/i, '');
             } else if (url.indexOf('?') !== -1) {
                 newProduct.linkDetailsRewritten = url.substring(0, url.indexOf('?')) + linkDetailsQuery;
             }
@@ -338,10 +338,21 @@
                 return {};
             }
 
+            // strip everything until query parameters
             url = url.substring(url.indexOf('?'));
+
+            // remove leading "?" symbol
+            url = url.substring(1);
+
             $.each(url.split('&'), function (key, param) {
                 param = param.split('=');
-                queryParams[param[0]] = param[1];
+
+                param[0] = decodeURIComponent(param[0]);
+                param[1] = decodeURIComponent(param[1]);
+
+                if (param[0].length && param[1].length && !queryParams.hasOwnProperty(param[0])) {
+                    queryParams[param[0]] = param[1];
+                }
             });
 
             return queryParams;
