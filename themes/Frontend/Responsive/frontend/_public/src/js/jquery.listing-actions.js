@@ -280,6 +280,10 @@
             me.applyDataAttributes();
 
             me.$filterForm = $(me.opts.filterFormSelector);
+            if (me.$filterForm.length <= 0) {
+                return;
+            }
+
             me.$filterComponents = me.$filterForm.find(me.opts.filterComponentSelector);
             me.$filterTrigger = me.$el.find(me.opts.filterTriggerSelector);
             me.$filterTriggerIcon = me.$filterTrigger.find(me.opts.filterTriggerIconSelector);
