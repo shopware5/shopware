@@ -27,6 +27,7 @@ namespace Shopware\Recovery\Update\Command;
 use Shopware\Components\Migrations\Manager as MigrationManager;
 use Shopware\Recovery\Common\DumpIterator;
 use Shopware\Recovery\Common\IOHelper;
+use Shopware\Recovery\Update\Cleanup;
 use Shopware\Recovery\Update\CleanupFilesFinder;
 use Shopware\Recovery\Update\DependencyInjection\Container;
 use Shopware\Recovery\Update\DummyPluginFinder;
@@ -221,7 +222,6 @@ class UpdateCommand extends Command
 
         $this->deleteDummyPlugins();
         $this->cleanupFiles();
-        $this->cleanupCache();
     }
 
     private function deleteDummyPlugins()
@@ -240,17 +240,10 @@ class UpdateCommand extends Command
         foreach ($cleanupFilesFinder->getCleanupFiles() as $path) {
             Utils::cleanPath($path);
         }
-    }
 
-    private function cleanupCache()
-    {
-        $cachePath = SW_PATH . '/var/cache';
-        foreach (new \DirectoryIterator($cachePath) as $cacheDirectory) {
-            if ($cacheDirectory->isDot() || !$cacheDirectory->isDir()) {
-                continue;
-            }
-            Utils::deleteDir($cacheDirectory->getPathname(), true);
-        }
+        /** @var Cleanup $cleanup */
+        $cleanup = $this->container->get('shopware.update.cleanup');
+        $cleanup->cleanup(false);
     }
 
     private function writeLockFile()
