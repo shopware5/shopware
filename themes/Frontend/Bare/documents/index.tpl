@@ -71,6 +71,7 @@ td.head  {
     {$Containers.Content_Info.style}
 }
 </style>
+</head>
 
 <body>
 {foreach from=$Pages item=postions name="pagingLoop" key=page}

@@ -18,14 +18,15 @@ Thumbs.db
 /vendor/*
 !/vendor/.htaccess
 
-# Internal Repositories
-/internal
-/engine/Shopware/Plugins/Commercial/
-
 # User installed plugins
-/engine/Shopware/Plugins/Community/
-/engine/Shopware/Plugins/Local/
-/custom/plugins/
+/engine/Shopware/Plugins/Community/Backend/*
+/engine/Shopware/Plugins/Community/Core/*
+/engine/Shopware/Plugins/Community/Frontend/*
+/engine/Shopware/Plugins/Local/Backend/*
+/engine/Shopware/Plugins/Local/Core/*
+/engine/Shopware/Plugins/Local/Frontend/*
+
+/custom/plugins/*
 
 # User installed themes
 /themes/Frontend/*
@@ -40,12 +41,10 @@ Thumbs.db
 .php_cs
 .php_cs.cache
 /tests/Shopware/TempFiles/*
-!/tests/Shopware/TempFiles/.gitkeep
 /var/cache/*
 !/var/cache/.htaccess
 !/var/cache/clear_cache.sh
 /web/cache/*
-!/web/cache/.gitkeep
 
 # Log files
 /var/log/*
@@ -53,18 +52,20 @@ Thumbs.db
 
 
 # User provided content
-/media/archive/
-/media/image/
-/media/music/
-/media/pdf/
-/media/temp/
-/media/unknown/
-/media/video/
+/media/archive/*
+/media/image/*
+!/media/image/thumbnail
+/media/image/thumbnail/*
+/media/music/*
+/media/pdf/*
+/media/temp/*
+!/media/temp/.htaccess
+/media/unknown/*
+/media/video/*
 
 /files/documents/*
 !/files/documents/.htaccess
 /files/downloads/*
-!/files/downloads/.gitkeep
 
 # Snippet exports
 /snippetsExport/

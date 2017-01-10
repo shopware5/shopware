@@ -34,7 +34,8 @@
             configuratorFormSelector: '.configurator--form',
             orderNumberSelector: '.entry--sku .entry--content',
             historyIdentifier: 'sw-ajax-variants',
-            productDetailsDescriptionSelector: '.content--description'
+            productDetailsDescriptionSelector: '.content--description',
+            footerJavascriptInlineSelector: '#footer--js-inline'
         },
 
         /**
@@ -118,7 +119,7 @@
                 data: values,
                 method: 'GET',
                 success: function(response) {
-                    var $response = $($.parseHTML(response)),
+                    var $response = $($.parseHTML(response, document, true)),
                         $productDetails,
                         $productDescription,
                         ordernumber;
@@ -133,6 +134,10 @@
 
                     // Get the ordernumber for the url
                     ordernumber = $.trim(me.$el.find(me.opts.orderNumberSelector).text());
+
+                    // Update global variables
+                    window.controller = window.snippets = window.themeConfig = window.lastSeenProductsConfig = window.csrfConfig = null;
+                    $(me.opts.footerJavascriptInlineSelector).replaceWith($response.filter(me.opts.footerJavascriptInlineSelector));
 
                     StateManager.addPlugin('*[data-image-slider="true"]', 'swImageSlider', { touchControls: true })
                         .addPlugin('.product--image-zoom', 'swImageZoom', 'xl')

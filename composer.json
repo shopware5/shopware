@@ -58,7 +58,7 @@
         "league/flysystem": "1.0.22",
         "paragonie/random_compat": "1.4.1",
         "cocur/slugify": "2.2",
-        "bcremer/line-reader": "^0.1.0"
+        "bcremer/line-reader": "^0.2.0"
     },
     "suggest": {
         "ext-apcu": "*",

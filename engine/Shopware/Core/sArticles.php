@@ -27,6 +27,7 @@ use Shopware\Bundle\SearchBundle\Sorting\PopularitySorting;
 use Shopware\Bundle\SearchBundle\Sorting\ReleaseDateSorting;
 use Shopware\Bundle\SearchBundle\SortingInterface;
 use Shopware\Bundle\StoreFrontBundle;
+use Shopware\Bundle\StoreFrontBundle\Service\Core\ConfiguratorService;
 use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product;
 use Shopware\Components\QueryAliasMapper;
@@ -1244,8 +1245,8 @@ class sArticles
             return [];
         }
 
-        $hideNoInstock = $this->config->get('hideNoInstock');
-        if ($hideNoInstock && !$product->isAvailable()) {
+        $hideNoInStock = $this->config->get('hideNoInStock');
+        if ($hideNoInStock && !$product->isAvailable()) {
             return [];
         }
 
@@ -2345,9 +2346,25 @@ class sArticles
 
             $convertedConfiguratorPrice = $this->legacyStructConverter->convertConfiguratorPrice($product, $configurator);
             $data = array_merge($data, $convertedConfiguratorPrice);
+
+            // generate additional text
+            if (!empty($selection)) {
+                $this->additionalTextService->buildAdditionalText($product, $this->contextService->getShopContext());
+                $data['additionaltext'] = $product->getAdditional();
+            }
+
+            if ($this->config->get('forceArticleMainImageInListing') && $configurator->getType() !== ConfiguratorService::CONFIGURATOR_TYPE_STANDARD && empty($selection)) {
+                $data['image'] = $this->legacyStructConverter->convertMediaStruct($product->getCover());
+                $data['images'] = [];
+                foreach ($product->getMedia() as $image) {
+                    if ($image->getId() !== $product->getCover()->getId()) {
+                        $data['images'][] = $this->legacyStructConverter->convertMediaStruct($image);
+                    }
+                }
+            }
         }
 
-        $data = array_merge($data, $this->getLinksOfProduct($product, $categoryId));
+        $data = array_merge($data, $this->getLinksOfProduct($product, $categoryId, !empty($selection)));
 
         $data["articleName"] = $this->sOptimizeText($data["articleName"]);
         $data["description_long"] = htmlspecialchars_decode($data["description_long"]);
@@ -2375,9 +2392,10 @@ class sArticles
      *
      * @param StoreFrontBundle\Struct\ListProduct $product
      * @param null $categoryId
+     * @param bool $addNumber
      * @return array
      */
-    private function getLinksOfProduct(StoreFrontBundle\Struct\ListProduct $product, $categoryId = null)
+    private function getLinksOfProduct(StoreFrontBundle\Struct\ListProduct $product, $categoryId = null, $addNumber = false)
     {
         $baseFile = $this->config->get('baseFile');
         $context = $this->contextService->getShopContext();
@@ -2385,6 +2403,9 @@ class sArticles
         $detail = $baseFile . "?sViewport=detail&sArticle=" . $product->getId();
         if ($categoryId) {
             $detail .= '&sCategory=' . $categoryId;
+        }
+        if ($addNumber) {
+            $detail .= '&number=' . $product->getNumber();
         }
         $rewrite = Shopware()->Modules()->Core()->sRewriteLink($detail, $product->getName());
 

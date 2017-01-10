@@ -159,7 +159,7 @@ $app->map('/cleanup', function () use ($container) {
 })->via('GET', 'POST')->name('cleanup');
 
 $app->map('/clearCache', function () use ($container) {
-    $container->get('controller.cleanup')->deleteOutdatedCacheFolders();
+    $container->get('controller.cleanup')->deleteOutdatedFolders();
 })->via('GET', 'POST')->name('clearCache');
 
 $app->map('/done', function () use ($app, $container) {

@@ -195,7 +195,7 @@ class PriceHelper implements PriceHelperInterface
         }
 
         $stockCondition = '';
-        if ($this->config->get('hideNoInstock')) {
+        if ($this->config->get('hideNoInStock')) {
             $stockCondition = 'AND (product.laststock * availableVariant.instock) >= (product.laststock * availableVariant.minpurchase)';
         }
 

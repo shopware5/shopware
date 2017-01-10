@@ -1017,7 +1017,7 @@ class sBasket
         }
 
         if (!$tax) {
-            $tax = 119;
+            $tax = 19;
         }
 
         if ((!$this->sSYSTEM->sUSERGROUPDATA["tax"] && $this->sSYSTEM->sUSERGROUPDATA["id"])) {

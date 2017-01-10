@@ -78,7 +78,8 @@ class MediaService implements MediaServiceInterface
             throw new \Exception(sprintf("Please provide a 'mediaUrl' in your %s adapter.", $config['type']));
         }
 
-        $this->mediaUrl = $config['mediaUrl'] ?: $this->createFallbackMediaUrl();
+        $mediaUrl = $config['mediaUrl'] ?: $this->createFallbackMediaUrl();
+        $this->mediaUrl = rtrim($mediaUrl, '/');
     }
 
     /**
@@ -113,13 +114,13 @@ class MediaService implements MediaServiceInterface
         }
 
         if ($this->strategy->isEncoded($path)) {
-            return $this->mediaUrl . $path;
+            return $this->mediaUrl . '/' . ltrim($path, '/');
         }
 
         $this->migrateFileLive($path);
         $path = $this->strategy->encode($path);
 
-        return $this->mediaUrl . $path;
+        return $this->mediaUrl . '/' . ltrim($path, '/');
     }
 
     /**

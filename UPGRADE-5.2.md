@@ -12,6 +12,12 @@ This changelog references changes done in Shopware 5.2 patch versions.
 * Added `Shopware\Components\Plugin\PaymentInstaller` class to install payment methods in plugins
 * Changed theme path for plugins of new plugin system from `/resources` to `/Resources`
 * Changed parsing of JSON `POST`ed to the REST API to not remove top-level `NULL` values
+* Changed frontendsession to a locking session handler
+    * Added new configuration parameter `session.locking` which is `true` by default
+    * The session handler can be overwritten by replacing the `session.save_handler`-Service. A instance of `\SessionHandlerInterface` has to be returned.
+* Changed return value of `sArticles::sGetArticleById()` to provide an additional text if none is given and display the cover image by default when using the selection configurator
+* Changed url parameter in last seen articles to deeplink to an article variant instead of the article
+* Added console command `sw:rebuild:seo:index` to rebuild the SEO index on demand
 
 ### Autoloading of plugin resources
 

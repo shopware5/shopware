@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\ESIndexingBundle\Subscriber;
 
 use Enlight\Event\SubscriberInterface;
+use Shopware\Components\DependencyInjection\Container;
 
 class ORMBacklogSaveSubscriber implements SubscriberInterface
 {
@@ -32,6 +33,11 @@ class ORMBacklogSaveSubscriber implements SubscriberInterface
      * @var ORMBacklogSubscriber
      */
     private $backlog;
+
+    /**
+     * @var Container
+     */
+    private $container;
 
     /**
      * {@inheritdoc}
@@ -46,14 +52,25 @@ class ORMBacklogSaveSubscriber implements SubscriberInterface
 
     /**
      * @param ORMBacklogSubscriber $backlog
+     * @param Container $container
      */
-    public function __construct(ORMBacklogSubscriber $backlog)
-    {
+    public function __construct(
+        ORMBacklogSubscriber $backlog,
+        Container $container
+    ) {
         $this->backlog = $backlog;
+        $this->container = $container;
     }
 
     public function onTerminate()
     {
+        if (!$this->container->getParameter('shopware.es.enabled')) {
+            return;
+        }
+        if (!$this->container->getParameter('shopware.es.write_backlog')) {
+            return;
+        }
+
         $this->backlog->processQueue();
     }
 }

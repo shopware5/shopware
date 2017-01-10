@@ -148,7 +148,7 @@
     {/block}
 
 {block name="frontend_index_header_javascript"}
-    <script type="text/javascript">
+    <script type="text/javascript" id="footer--js-inline">
         //<![CDATA[
         {block name="frontend_index_header_javascript_inline"}
             var timeNow = {time() nocache};
@@ -187,7 +187,7 @@
                     {/foreach}
                     'articleId': ~~('{$sArticle.articleID}'),
                     'linkDetailsRewritten': '{$sArticle.linkDetailsRewrited}',
-                    'articleName': '{$sArticle.articleName|escape:"javascript"}',
+                    'articleName': '{$sArticle.articleName|escape:"javascript"}{if $sArticle.additionaltext} {$sArticle.additionaltext|escape:"javascript"}{/if}',
                     'imageTitle': '{$sArticle.image.description|escape:"javascript"}',
                     'images': {ldelim}
                         {foreach $sArticle.image.thumbnails as $key => $image}

@@ -42,7 +42,7 @@ Ext.define('Shopware.apps.Partner.view.partner.Window', {
     border: false,
     autoShow: true,
     layout: 'fit',
-    height: 500,
+    height: 630,
     /**
      * Display no footer button for the detail window
      * @boolean

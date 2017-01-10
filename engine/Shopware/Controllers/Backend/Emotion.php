@@ -1264,7 +1264,7 @@ SELECT `objecttype`,
 `objectlanguage`,
 `dirty`
 FROM `s_core_translations`
-WHERE objectkey = :oldObjectKey
+WHERE objectkey = :oldObjectKey AND `objecttype` = 'emotionElement'
 EOD;
 
         /** @var Element $el */
