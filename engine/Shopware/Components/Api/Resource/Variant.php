@@ -467,7 +467,7 @@ class Variant extends Resource implements BatchInterface
             $connection = Shopware()->Container()->get('dbal_connection');
 
             // Number changed, hence make sure it does not already exist in another variant
-            $exists = $connection->fetchColumn('SELECT id FROM s_articles_details WHERE ordernumber = ? AND articleID != ?', [$data['number'],$article->getId()]);
+            $exists = $connection->fetchColumn('SELECT id FROM s_articles_details WHERE ordernumber = ? AND articleID != ?', [$data['number'], $article->getId()]);
             if ($exists) {
                 throw new ApiException\CustomValidationException(sprintf('A variant with the given order number "%s" already exists.', $data['number']));
             }
