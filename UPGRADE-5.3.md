@@ -162,21 +162,7 @@ This changelog references changes done in Shopware 5.3 patch versions.
         * Also removed `Zend_Filter_File_*`
         * Also removed `Zend_Validate_File_*`
 * Removed method `Shopware\Components\Model\ModelManager::__call()`
-* Removed class `Enlight_Application`
-* Removed function `Enlight()`
 * Removed class `Enlight_Bootstrap`
-* Removed class `Shopware_Bootstrap`
-* Removed service `bootstrap`
-* Removed the following methods from `Shopware` respectively `Enlight_Application`:
-    - `Shopware()/Enlight()->DS()`
-    - `Shopware()/Enlight()->setEventManager()`
-    - `Shopware()/Enlight()->Bootstrap()`
-    - `Shopware()/Enlight()->App()`
-    - `Shopware()/Enlight()->Environment()`
-    - `Shopware()/Enlight()->OldPath()`
-    - `Shopware()/Enlight()->CorePath()`
-    - `Shopware()/Enlight()->ComponentsPath()`
-    - `Shopware()/Enlight()->Path()`
 * Removed parameter `$checkProxy` from `Enlight_Controller_Request_Request::getClientIp()`
 * Removed smarty block `frontend_search_category_filter`
 * Removed template file `themes/Frontend/Bare/frontend/search/category-filter.tpl`

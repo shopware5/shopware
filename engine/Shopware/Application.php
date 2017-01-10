@@ -31,7 +31,7 @@ use Shopware\Components\DependencyInjection\Container;
  * @package   Shopware
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Shopware
+class Shopware extends Enlight_Application
 {
     const VERSION      = '___VERSION___';
     const VERSION_TEXT = '___VERSION_TEXT___';
@@ -63,6 +63,46 @@ class Shopware
         $this->container = $container;
         $this->appPath   = __DIR__ . DIRECTORY_SEPARATOR;
         $this->docPath   = dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR;
+
+        parent::__construct();
+    }
+
+    /**
+     * Returns the name of the application
+     *
+     * @deprecated since 5.2, to be removed in 6.0
+     * @return string
+     */
+    public function App()
+    {
+        trigger_error('Shopware()->App() is deprecated since version 5.2 and will be removed in 6.0.', E_USER_DEPRECATED);
+
+        return $this->container->getParameter('kernel.name');
+    }
+
+    /**
+     * Returns the application environment method
+     *
+     * @deprecated since 5.2, to be removed in 6.0
+     * @return string
+     */
+    public function Environment()
+    {
+        trigger_error('Shopware()->Environment() is deprecated since version 5.2 and will be removed in 6.0. Use the kernel.environment parameter instead.', E_USER_DEPRECATED);
+
+        return $this->container->getParameter('kernel.environment');
+    }
+
+    /**
+     * @deprecated since 5.2, to be removed in 6.0. Use Shopware()->DocPath() instead.
+     * @param string $path
+     * @return string
+     */
+    public function OldPath($path = null)
+    {
+        trigger_error('Shopware()->OldPath() is deprecated since version 5.2 and will be removed in 6.0. Use Shopware()->DocPath() instead.', E_USER_DEPRECATED);
+
+        return $this->DocPath($path);
     }
 
     /**
@@ -264,6 +304,35 @@ class Shopware
     public function Events()
     {
         return $this->container->get('events');
+    }
+
+    /**
+     * Setter function of the _events property.
+     * Allows to override the default Shopware Event Manager with an
+     * plugin specified event manager.
+     * The passed manager has to be an instance of the Enlight_Event_EventManager,
+     * otherwise the function throws an exception.
+     *
+     * @deprecated since 5.2, to be removed in 6.0
+     * @param Enlight_Event_EventManager $manager
+     */
+    public function setEventManager(Enlight_Event_EventManager $manager)
+    {
+        trigger_error('Shopware()->setEventManager() is deprecated since version 5.2 and will be removed in 6.0. Use the Container instead.', E_USER_DEPRECATED);
+
+        $this->container->set('events', $manager);
+    }
+
+    /**
+     * Returns the instance of the application bootstrap
+     * @deprecated since 5.2, to be removed in 6.0
+     * @return Shopware_Bootstrap
+     */
+    public function Bootstrap()
+    {
+        trigger_error('Shopware()->Bootstrap() is deprecated since version 5.2 and will be removed in 6.0. Use the Container instead.', E_USER_DEPRECATED);
+
+        return $this->container->get('bootstrap');
     }
 
     /**
