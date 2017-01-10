@@ -100,11 +100,19 @@ class QueryBuilderFactory implements QueryBuilderFactoryInterface
 
         $select = $query->getQueryPart('select');
 
-        $query->select([
-            'SQL_CALC_FOUND_ROWS product.id as __product_id',
-            'variant.id                     as __variant_id',
-            'variant.ordernumber            as __variant_ordernumber'
-        ]);
+        if ($criteria->fetchCount()) {
+            $query->select([
+                'SQL_CALC_FOUND_ROWS product.id as __product_id',
+                'variant.id                     as __variant_id',
+                'variant.ordernumber            as __variant_ordernumber'
+            ]);
+        } else {
+            $query->select([
+                'product.id as __product_id',
+                'variant.id                     as __variant_id',
+                'variant.ordernumber            as __variant_ordernumber'
+            ]);
+        }
 
         foreach ($select as $selection) {
             $query->addSelect($selection);

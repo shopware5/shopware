@@ -85,17 +85,16 @@ class FieldHelper
             return $columns;
         }
 
-        $schemaManager = $this->connection->getSchemaManager();
-        $tableColumns = $schemaManager->listTableColumns($table);
+        $tableColumns = $this->connection->fetchAll("SHOW COLUMNS FROM " . $table);
+        $tableColumns = array_column($tableColumns, 'Field');
 
         $columns = [];
         foreach ($tableColumns as $column) {
-            $columns[] = $alias . '.' . $column->getName() . ' as __' . $alias . '_' . $column->getName();
+            $columns[] = $alias . '.' . $column . ' as __' . $alias . '_' . $column;
         }
 
         $this->cache->save($key, $columns);
         $this->attributeFields[$key] = $columns;
-
         return $columns;
     }
 
