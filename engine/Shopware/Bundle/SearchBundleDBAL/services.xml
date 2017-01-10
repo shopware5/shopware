@@ -7,7 +7,6 @@
     <services>
         <service id="shopware_search.product_number_search" class="Shopware\Bundle\SearchBundleDBAL\ProductNumberSearch">
             <argument type="service" id="shopware_searchdbal.dbal_query_builder_factory"/>
-            <argument type="service" id="shopware_storefront.attribute_hydrator_dbal"/>
             <argument type="service" id="events" />
 
             <!--facet handler-->
