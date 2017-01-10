@@ -24,7 +24,7 @@
 
 use Shopware\Components\Migrations\AbstractMigration;
 
-class Migrations_Migration814 extends AbstractMigration
+class Migrations_Migration912 extends AbstractMigration
 {
     /**
      * @param string $modus

@@ -2,7 +2,7 @@
 
 use Shopware\Components\Migrations\AbstractMigration;
 
-class Migrations_Migration809 extends AbstractMigration
+class Migrations_Migration909 extends AbstractMigration
 {
     /**
      * @inheritdoc
