@@ -24,7 +24,6 @@
 
 namespace Shopware\Bundle\MediaBundle;
 
-use phpDocumentor\Reflection\Types\Integer;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Thumbnail\Manager;
 use Shopware\Models\Media\Media;
@@ -75,8 +74,12 @@ class MediaReplaceService implements MediaReplaceServiceInterface
         $media->setFileSize($file->getClientSize());
 
         if ($media->getType() == $media::TYPE_IMAGE) {
-            $media->setWidth(imagesx($fileContent));
-            $media->setHeight(imagesy($fileContent));
+            $imageSize = getimagesize($file->getRealPath());
+
+            if ($imageSize) {
+                $media->setWidth($imageSize[0]);
+                $media->setHeight($imageSize[1]);
+            }
 
             $media->removeThumbnails();
             $this->thumbnailManager->createMediaThumbnail($media, $media->getDefaultThumbnails(), true);

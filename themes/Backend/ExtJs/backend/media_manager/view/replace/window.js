@@ -31,7 +31,6 @@ Ext.define('Shopware.apps.MediaManager.view.replace.Window', {
     cancelUrl: '{url action=cancel controller=MediaManager}',
     replaceUrl: '{url action=replace controller=MediaManager}',
     updateUrl: '{url action=updateTemporaryMedia controller=MediaManager}',
-    closeAction: 'hide',
     height: 'auto',
     maximizable: false,
     minimizable: false,
@@ -41,6 +40,10 @@ Ext.define('Shopware.apps.MediaManager.view.replace.Window', {
     maxHeight: 500,
     baseHeight: 210,
     rowHeight: 136,
+
+    bodyStyle: {
+        background: '#F0F2F4'
+    },
 
     /**
      * Initializes the component and builds up the main interface

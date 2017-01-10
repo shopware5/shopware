@@ -31,6 +31,9 @@ Ext.define('Shopware.apps.MediaManager.view.replace.Grid', {
     autoScroll: true,
     maxHeight: 305,
     margin: '0 0 0 10',
+    bodyStyle: {
+        background: '#F0F2F4'
+    },
 
     /**
      * Initializes the component and builds up the main interface
