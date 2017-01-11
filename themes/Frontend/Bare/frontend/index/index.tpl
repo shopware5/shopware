@@ -169,7 +169,7 @@
             {rdelim};
 
             var snippets = snippets || {ldelim}
-                'noCookiesNotice': '{s name="IndexNoCookiesNotice"}{/s}'
+                'noCookiesNotice': '{"{s name='IndexNoCookiesNotice'}{/s}"|escape:"javascript"}'
             {rdelim};
 
             var themeConfig = themeConfig || {ldelim}
