@@ -75,7 +75,11 @@ class LegacyCaptcha implements CaptchaInterface
      */
     public function getTemplateData()
     {
-        $string = $this->createCaptchaString();
+        $rand = Random::getAlphanumericString(32);
+
+        $string = md5($rand);
+        $string = substr($string, 0, 5);
+
         $imgResource = $this->getImageResource($string);
 
         ob_start();
@@ -86,7 +90,7 @@ class LegacyCaptcha implements CaptchaInterface
 
         return [
             'img' => $img,
-            'sRand' => $string,
+            'sRand' => $rand,
         ];
     }
 
@@ -165,26 +169,6 @@ class LegacyCaptcha implements CaptchaInterface
         }
 
         return null;
-    }
-
-    /**
-     * @return string
-     */
-    private function createCaptchaString()
-    {
-        $alphabetRangeLow = range('a', 'z');
-        $alphabetRangeUpp = range('A', 'Z');
-
-        $exclude = ['C', 'c', 'I', 'l', 'O', 'o', 's', 'S', 'U', 'u', 'v', 'V', 'W', 'w', 'X', 'x', 'Z', 'z',];
-
-        $alphabet = array_merge($alphabetRangeLow, $alphabetRangeUpp);
-        $alphabet = array_diff($alphabet, $exclude);
-
-        $numericRange = range(1, 9);
-
-        $charlist = implode($alphabet) . implode($numericRange);
-
-        return Random::getString(5, $charlist);
     }
 
     /**
