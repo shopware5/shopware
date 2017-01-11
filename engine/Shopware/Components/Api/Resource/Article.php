@@ -1880,7 +1880,7 @@ class Article extends Resource implements BatchInterface
 
                 $conditions = [];
 
-                if($option['id']) {
+                if ($option['id']) {
                     $conditions['id'] = $option['id'];
                 }
 
