@@ -923,13 +923,20 @@
          * Event listener which allows to send listing ajax request to load facets, total count and/or listings
          *
          * @param {object} event
-         * @param {string} params
+         * @param {object} params
          * @param {boolean} loadFacets
          * @param {boolean} loadProducts
          * @param {function} callback
          */
         onSendListingRequest: function(event, params, loadFacets, loadProducts, callback) {
-            var me = this;
+            var me = this,
+                formData = me.$filterForm.serializeArray();
+
+            $.each(formData, function(index, item) {
+                if (!params.hasOwnProperty(item.name)) {
+                    params[item.name] = item.value;
+                }
+            });
 
             me.sendListingRequest(params, loadFacets, loadProducts, callback, true);
         },
@@ -944,40 +951,18 @@
         sendListingRequest: function(params, loadFacets, loadProducts, callback, appendDefaults) {
             var me = this;
 
-            params = me.buildUrlParams(params);
+            if (typeof params == 'object') {
+                params = '?' + $.param(params);
+            }
 
             me.resetBuffer();
+
             $.ajax({
                 type: 'get',
                 url: me.buildListingUrl(params, loadFacets, loadProducts),
                 success: $.proxy(callback, me)
             });
             $.publish('plugin/swListingActions/onGetFilterResult', [ me, params ]);
-        },
-
-        buildUrlParams: function(params) {
-            var me = this,
-                tmp,
-                formData = me.$filterForm.serializeArray();
-
-            if (typeof params == 'string') {
-                tmp = params.replace('?', '');
-                tmp = tmp.split('&');
-
-                params = {};
-                $.each(tmp, function(index, item) {
-                    var path = item.split('=');
-                    params[path[0]] = path[1];
-                });
-            }
-
-            $.each(formData, function(index, item) {
-                if (!params.hasOwnProperty(item.name)) {
-                    params[item.name] = item.value;
-                }
-            });
-
-            return '?' + $.param(params);
         },
 
         /**

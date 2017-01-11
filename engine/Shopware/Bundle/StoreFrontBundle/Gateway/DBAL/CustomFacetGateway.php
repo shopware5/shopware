@@ -95,10 +95,7 @@ class CustomFacetGateway implements CustomFacetGatewayInterface
 
         $categoryFacets = [];
         foreach ($mapping as $categoryId => $facetIds) {
-            $categoryFacets[$categoryId] = $this->getAndSortElementsByIds(
-                $facetIds,
-                $facets
-            );
+            $categoryFacets[$categoryId] = $this->getAndSortElementsByIds($facetIds, $facets);
         }
         return $categoryFacets;
     }

@@ -82,10 +82,7 @@ class CustomListingHydrator extends Hydrator
         foreach ($serialized as $className => $arguments) {
             $className = explode('|', $className);
             $className = $className[0];
-            try {
-                $classes[] = $this->reflector->createInstanceFromNamedArguments($className, $arguments);
-            } catch (\Exception $e) {
-            }
+            $classes[] = $this->reflector->createInstanceFromNamedArguments($className, $arguments);
         }
 
         return $classes;
