@@ -1881,10 +1881,10 @@ class Article extends Resource implements BatchInterface
                 $conditions = [];
 
                 if($option['id']) {
-                    $conditions[] = $option['id'];
+                    $conditions['id'] = $option['id'];
                 }
 
-                $conditions[] = $option['name'];
+                $conditions['name'] = $option['name'];
 
                 $available = $this->getCollectionElementByProperties($configuratorOptions, $conditions);
 
