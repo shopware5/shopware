@@ -18,7 +18,7 @@
 
         <service id="bootstrap" class="Shopware_Bootstrap">
             <argument type="service" id="service_container"/>
-            <deprecated>The "%service_id%" service is deprecated since 5.2 and will be removed in 5.3.</deprecated>
+            <deprecated>The "%service_id%" service is deprecated since 5.2 and will be removed in 6.0.</deprecated>
         </service>
 
         <service id="locale_factory" class="Shopware\Components\DependencyInjection\Bridge\Locale" />
