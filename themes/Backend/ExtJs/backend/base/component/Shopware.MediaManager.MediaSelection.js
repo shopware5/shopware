@@ -101,10 +101,19 @@ Ext.define('Shopware.MediaManager.MediaSelection',
 
     /**
      * Return type
+     *
+     * If you want to change the return value set the property "valueField" when creating this component.
+     *
      * @see Shopware.apps.MediaManager.model.Media for fields
      * @string
      */
     returnValue: 'path',
+
+    /**
+     * Property to set the "returnValue".
+     * If this property is set to "virtualPath" the property "returnValue" is set to "virtualPath"
+     */
+    valueField: null,
 
     /**
      * Initializes the component
@@ -115,6 +124,10 @@ Ext.define('Shopware.MediaManager.MediaSelection',
     onRender: function() {
         var me = this,
             inputEl, buttonWrap, mediaButton;
+
+        if (me.valueField) {
+            me.returnValue = me.valueField;
+        }
 
         me.callParent(arguments);
 
