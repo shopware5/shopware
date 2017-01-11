@@ -277,6 +277,7 @@ class FieldHelper
             'category.hidefilter as __category_hidefilter',
             'category.hidetop as __category_hidetop',
             'category.stream_id as __category_stream_id',
+            'category.hide_sortings as __category_hide_sortings',
         ];
 
         $fields = array_merge(

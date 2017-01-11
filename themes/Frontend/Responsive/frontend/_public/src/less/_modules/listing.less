@@ -60,7 +60,7 @@ It contains the viewport specific styles inside media queries.
     }
 }
 
-    // Listing actions
+// Listing actions
 .listing--actions {
     .clearfix();
     .tap-highlight-color();
@@ -68,6 +68,13 @@ It contains the viewport specific styles inside media queries.
 
 .listing--wrapper.js--is-loading .js--loading-indicator {
     .unitize(top, 150);
+}
+
+.listing--actions.is--hidden {
+    display: none;
+}
+.action--filter-options.is--hidden {
+    display: none;
 }
 
 .listing {

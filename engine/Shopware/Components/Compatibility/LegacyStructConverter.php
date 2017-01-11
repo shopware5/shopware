@@ -274,6 +274,7 @@ class LegacyStructConverter
             'sSelf'           => $detailUrl,
             'sSelfCanonical'  => $canonical,
             'canonicalParams' => $canonicalParams,
+            'hide_sortings'   => $category->hideSortings(),
             'rssFeed'         => $detailUrl . '&sRss=1',
             'atomFeed'        => $detailUrl . '&sAtom=1'
         ];

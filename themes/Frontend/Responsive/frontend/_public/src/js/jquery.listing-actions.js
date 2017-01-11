@@ -280,10 +280,6 @@
             me.applyDataAttributes();
 
             me.$filterForm = $(me.opts.filterFormSelector);
-            if (me.$filterForm.length <= 0) {
-                return;
-            }
-
             me.$filterComponents = me.$filterForm.find(me.opts.filterComponentSelector);
             me.$filterTrigger = me.$el.find(me.opts.filterTriggerSelector);
             me.$filterTriggerIcon = me.$filterTrigger.find(me.opts.filterTriggerIconSelector);
@@ -463,18 +459,31 @@
 
             if (me.showInstantFilterResult) {
                 // first array element is always page number
-                me.setPageInput(formData[0].value);
+                me.setPageInput(me.getFormValue(formData, 'p'));
+
                 // second array element is always whether sorting or products per pages
                 if (me.isSortAction($form)) {
-                    me.setSortInput(formData[1].value);
+                    me.setSortInput(me.getFormValue(formData, 'o'));
+
                 } else if (me.isPerPageAction($form)) {
-                    me.setPerPageInput(formData[1].value);
+                    me.setPerPageInput(me.getFormValue(formData, 'n'))
                 }
             }
 
             me.applyCategoryParams(categoryParams);
 
             $.publish('plugin/swListingActions/onActionSubmit', [ me, event ]);
+        },
+
+        getFormValue: function(data, key) {
+            var value = '';
+            $.each(data, function(index, item) {
+                if (item.name == key) {
+                    value = item.value;
+                    return;
+                }
+            });
+            return value
         },
 
         /**
@@ -922,7 +931,7 @@
         onSendListingRequest: function(event, params, loadFacets, loadProducts, callback) {
             var me = this;
 
-            me.sendListingRequest(params, loadFacets, loadProducts, callback);
+            me.sendListingRequest(params, loadFacets, loadProducts, callback, true);
         },
 
         /**
@@ -930,13 +939,12 @@
          * @param {boolean} loadFacets
          * @param {boolean} loadProducts
          * @param {function} callback
+         * @param {boolean} appendDefaults
          */
-        sendListingRequest: function(params, loadFacets, loadProducts, callback) {
+        sendListingRequest: function(params, loadFacets, loadProducts, callback, appendDefaults) {
             var me = this;
 
-            if (typeof params == 'object') {
-                params = '?' + $.param(params);
-            }
+            params = me.buildUrlParams(params);
 
             me.resetBuffer();
             $.ajax({
@@ -945,6 +953,31 @@
                 success: $.proxy(callback, me)
             });
             $.publish('plugin/swListingActions/onGetFilterResult', [ me, params ]);
+        },
+
+        buildUrlParams: function(params) {
+            var me = this,
+                tmp,
+                formData = me.$filterForm.serializeArray();
+
+            if (typeof params == 'string') {
+                tmp = params.replace('?', '');
+                tmp = tmp.split('&');
+
+                params = {};
+                $.each(tmp, function(index, item) {
+                    var path = item.split('=');
+                    params[path[0]] = path[1];
+                });
+            }
+
+            $.each(formData, function(index, item) {
+                if (!params.hasOwnProperty(item.name)) {
+                    params[item.name] = item.value;
+                }
+            });
+
+            return '?' + $.param(params);
         },
 
         /**

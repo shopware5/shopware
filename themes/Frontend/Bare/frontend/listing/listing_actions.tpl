@@ -1,9 +1,14 @@
 {* Listing actions *}
 {block name='frontend_listing_actions_top'}
     {$listingMode = {config name=listingMode}}
+
+    {block name="frontend_listing_actions_top_hide_detection"}
+        {$hide = ($listingMode != 'full_page_reload' && ($theme.sidebarFilter || $sCategoryContent.hideFilter) && $sCategoryContent.hide_sortings)}
+    {/block}
+
     <div data-listing-actions="true"
          {if $listingMode != 'full_page_reload'}data-bufferTime="0"{/if}
-         class="listing--actions is--rounded{block name='frontend_listing_actions_class'}{/block}">
+         class="listing--actions is--rounded{block name='frontend_listing_actions_class'}{/block}{if $hide} is--hidden{/if}">
 
         {* Filter action button *}
         {block name="frontend_listing_actions_filter"}
