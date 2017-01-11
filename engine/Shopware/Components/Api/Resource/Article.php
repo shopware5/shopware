@@ -1877,7 +1877,6 @@ class Article extends Resource implements BatchInterface
             $options = new ArrayCollection();
 
             foreach ($mappingData as $option) {
-
                 $conditions = [];
 
                 if ($option['id']) {
