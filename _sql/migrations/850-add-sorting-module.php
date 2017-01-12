@@ -51,7 +51,7 @@ SQL;
 SET @formId = (SELECT id FROM s_core_config_forms WHERE name = 'Frontend' LIMIT 1);
 
 INSERT INTO `s_core_config_forms` (`parent_id`, `name`, `label`, `description`, `position`, `plugin_id`) VALUES
-(@formId, 'CustomSearch', 'Sortierung / Filter', NULL, 0, NULL);
+(@formId, 'CustomSearch', 'Filter / Sortierung', NULL, 0, NULL);
 SQL;
 
         $this->addSql($sql);
@@ -60,7 +60,7 @@ SQL;
 SET @formId = (SELECT id FROM s_core_config_forms WHERE name = 'CustomSearch');
 
 INSERT INTO `s_core_config_form_translations` (`form_id`, `locale_id`, `label`, `description`)
-VALUES (@formId, '2', 'Sortings / Filter', NULL);
+VALUES (@formId, '2', 'Filter / Sortings', NULL);
 SQL;
         $this->addSql($sql);
     }

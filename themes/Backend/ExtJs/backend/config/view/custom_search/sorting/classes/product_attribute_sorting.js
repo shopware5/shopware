@@ -43,7 +43,13 @@ Ext.define('Shopware.apps.Config.view.custom_search.sorting.classes.ProductAttri
         if (!Ext.isFunction(callback)) {
             throw 'Requires provided callback function';
         }
-        this._createRecord(parameters, callback);
+        var record = {
+            'class': 'Shopware\\Bundle\\SearchBundle\\Sorting\\ProductAttributeSorting|' + parameters.field,
+            'label': parameters.backend_label,
+            'parameters': parameters
+        };
+
+        callback(record);
     },
 
     create: function(callback) {
@@ -92,11 +98,25 @@ Ext.define('Shopware.apps.Config.view.custom_search.sorting.classes.ProductAttri
     },
 
     _createRecord: function(parameters, callback) {
+        var me = this;
+
+        me._requestLabel(parameters.field, function(label) {
+            parameters.backend_label = label;
+
+            callback({
+                'class': 'Shopware\\Bundle\\SearchBundle\\Sorting\\ProductAttributeSorting|' + parameters.field,
+                'label': label,
+                'parameters': parameters
+            });
+        });
+    },
+
+    _requestLabel: function(field, callback) {
         Ext.Ajax.request({
             url: '{url controller=Attributes action=getColumn}',
             params: {
                 table: 's_articles_attributes',
-                columnName: parameters.field
+                columnName: field
             },
             success: function(operation, opts) {
                 var response = Ext.decode(operation.responseText);
@@ -114,14 +134,9 @@ Ext.define('Shopware.apps.Config.view.custom_search.sorting.classes.ProductAttri
                     label += ' <i>[' + response.helpText + ']</i>';
                 }
 
-                callback({
-                    'class': 'Shopware\\Bundle\\SearchBundle\\Sorting\\ProductAttributeSorting|' + parameters.field,
-                    'label': label,
-                    'parameters': parameters
-                });
+                callback(label);
             }
         });
-
     },
 
     _getLabelOfObject: function(values) {
