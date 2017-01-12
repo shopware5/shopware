@@ -332,7 +332,12 @@ class InstallCommand extends Command
         $systemLocker();
 
         $container->offsetGet('uniqueid.persister')->store();
-        $container->offsetGet('shopware.notify')->doTrackEvent('Installer finished');
+
+        $additionalInformation = [
+            'method' => 'console'
+        ];
+
+        $container->offsetGet('shopware.notify')->doTrackEvent('Installer finished', $additionalInformation);
 
         if ($this->IOHelper->isInteractive()) {
             $this->IOHelper->writeln("<info>Shop successfully installed.</info>");
