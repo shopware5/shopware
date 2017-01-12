@@ -220,7 +220,8 @@ INSERT INTO `s_search_custom_sorting` (`label`, `active`, `display_in_categories
             UPDATE s_core_config_elements
             SET form_id = @formId,
                 `type` = 'custom-sorting-selection',
-                 label = 'Kategorie Standard Sortierung'
+                 label = 'Kategorie Standard Sortierung',
+                 `scope` = 1
             WHERE name = 'defaultListingSorting'
         ");
 
