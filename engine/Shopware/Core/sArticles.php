@@ -2374,11 +2374,11 @@ class sArticles
      * Creates different links for the product like `add to basket`, `add to note`, `view detail page`, ...
      *
      * @param StoreFrontBundle\Struct\ListProduct $product
-     * @param null $categoryId
+     * @param int $categoryId
      * @param bool $addNumber
      * @return array
      */
-    private function getLinksOfProduct(StoreFrontBundle\Struct\ListProduct $product, $categoryId = null, $addNumber = false)
+    private function getLinksOfProduct(StoreFrontBundle\Struct\ListProduct $product, $categoryId, $addNumber)
     {
         $baseFile = $this->config->get('baseFile');
         $context = $this->contextService->getShopContext();
@@ -2387,10 +2387,13 @@ class sArticles
         if ($categoryId) {
             $detail .= '&sCategory=' . $categoryId;
         }
-        if ($addNumber) {
-            $detail .= '&number=' . $product->getNumber();
-        }
+
         $rewrite = Shopware()->Modules()->Core()->sRewriteLink($detail, $product->getName());
+
+        if ($addNumber) {
+            $rewrite .= strpos($rewrite, '?') !== false ? '&' : '?';
+            $rewrite .= 'number=' . $product->getNumber();
+        }
 
         $basket = $baseFile . "?sViewport=basket&sAdd=" . $product->getNumber();
         $note = $baseFile . "?sViewport=note&sAdd=" . $product->getNumber();
