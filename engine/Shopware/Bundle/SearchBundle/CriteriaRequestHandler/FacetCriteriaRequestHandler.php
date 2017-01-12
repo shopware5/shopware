@@ -219,16 +219,19 @@ class FacetCriteriaRequestHandler implements CriteriaRequestHandlerInterface
      */
     private function isAttributeInRequest(ProductAttributeFacet $facet, Request $request)
     {
-        if ($request->has($facet->getFormFieldName())) {
+        $params = $request->getParams();
+
+        if (array_key_exists($facet->getFormFieldName(), $params)) {
             return true;
         }
         if ($facet->getMode() !== ProductAttributeFacet::MODE_RANGE_RESULT) {
             return false;
         }
+
         return (
-            $request->has('min' . $facet->getFormFieldName())
+            array_key_exists('min' . $facet->getFormFieldName(), $params)
             ||
-            $request->has('max' . $facet->getFormFieldName())
+            array_key_exists('max' . $facet->getFormFieldName(), $params)
         );
     }
 
