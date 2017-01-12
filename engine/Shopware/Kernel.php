@@ -32,6 +32,7 @@ use Shopware\Bundle\ESIndexingBundle\DependencyInjection\CompilerPass\DataIndexe
 use Shopware\Bundle\ESIndexingBundle\DependencyInjection\CompilerPass\MappingCompilerPass;
 use Shopware\Bundle\FormBundle\DependencyInjection\CompilerPass\FormPass;
 use Shopware\Bundle\MediaBundle\DependencyInjection\Compiler\MediaAdapterCompilerPass;
+use Shopware\Bundle\MediaBundle\DependencyInjection\Compiler\MediaOptimizerCompilerPass;
 use Shopware\Bundle\PluginInstallerBundle\Service\PluginInitializer;
 use Shopware\Bundle\SearchBundle\DependencyInjection\Compiler\CriteriaRequestHandlerCompilerPass;
 use Shopware\Bundle\SearchBundleDBAL\DependencyInjection\Compiler\DBALCompilerPass;
@@ -588,6 +589,7 @@ class Kernel implements HttpKernelInterface
         $container->addCompilerPass(new SearchRepositoryCompilerPass());
         $container->addCompilerPass(new AddConsoleCommandPass());
         $container->addCompilerPass(new MediaAdapterCompilerPass());
+        $container->addCompilerPass(new MediaOptimizerCompilerPass());
 
         if ($this->isElasticSearchEnabled()) {
             $container->addCompilerPass(new SearchHandlerCompilerPass());

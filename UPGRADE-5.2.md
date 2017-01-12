@@ -12,6 +12,11 @@ This changelog references changes done in Shopware 5.2 patch versions.
 * Changed database field `s_core_sessions.expiry` to contain the timestamp when the session should expire, not the session lifetime.
 * Changed database field `s_core_sessions_backend.expiry` to contain the timestamp when the session should expire, not the session lifetime.
 * Added `$sAmountNumeric` and `$sAmountNetNumeric` to sOrder mail
+* Added command `sw:media:optimize` to optimize media files without quality loss.
+
+### Media Optimizer
+
+The service `shopware_media.optimizer_service` optimizes files using external tools. Further external tools can be implemented using the interface `Shopware\Bundle\MediaBundle\Optimizer\OptimizerInterface` and the dependency injection tag `shopware_media.optimizer`.
 
 ## 5.2.15
 
