@@ -91,6 +91,11 @@ class Criteria implements \JsonSerializable
      */
     public function limit($limit)
     {
+        if ($limit === null) {
+            $this->limit = null;
+            return $this;
+        }
+
         Assertion::min($limit, 1, 'The limit must be greater than equals 1');
         $this->limit = $limit;
 
