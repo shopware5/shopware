@@ -361,7 +361,9 @@ class sArticles
             $active = 1;
         }
 
-        $sBADWORDS = "#sex|porn|viagra|url\=|src\=|link\=#i";
+        $sBADWORDS = preg_replace(('/\;/', '|' $this->config['sBADWORDS']); //replace ';' to '|'   
+        $sBadWordsRegex = "#{$sBADWORDS}#i";  
+        
         if (preg_match($sBADWORDS, $sVoteComment)) {
             return false;
         }
