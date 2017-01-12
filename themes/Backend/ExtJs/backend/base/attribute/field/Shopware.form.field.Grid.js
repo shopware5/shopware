@@ -318,6 +318,7 @@ Ext.define('Shopware.form.field.Grid', {
 
         me.store.removeAll();
         if (!value) {
+            me.isValid();
             return;
         }
 
@@ -331,11 +332,15 @@ Ext.define('Shopware.form.field.Grid', {
         }
 
         if (!ids || ids.length <= 0) {
+            me.isValid();
             return;
         }
 
         me.store.load({
-            params: { ids: Ext.JSON.encode(ids) }
+            params: { ids: Ext.JSON.encode(ids) },
+            callback: function() {
+                me.isValid();
+            }
         });
     },
 
