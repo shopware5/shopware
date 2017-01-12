@@ -32,6 +32,10 @@ use Symfony\Component\Config\Util\XmlUtils;
  */
 class XmlCronjobReader
 {
+    /**
+     * @param string $file
+     * @return array
+     */
     public function read($file)
     {
         try {
