@@ -50,6 +50,7 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
         { ref: 'deleteButton', selector: 'emotion-main-window button[action=emotion-list-toolbar-delete]' },
         { ref: 'attributeForm', selector: 'emotion-detail-window shopware-attribute-form' },
         { ref: 'listingView', selector: 'presets-list dataview' },
+        { ref: 'presetWindow', selector: 'emotion-presets-window' }
     ],
     
     snippets: {
@@ -106,10 +107,16 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
                 'updateGridByField': me.onUpdateGridByField
             },
             'emotion-main-window button[action=emotion-list-toolbar-add]': {
+                'click': me.onOpenDetail
+            },
+            'emotion-main-window button[action=emotion-list-toolbar-add-preset]': {
                 'click': me.onOpenPreset
             },
             'emotion-presets-window, presets-list': {
                 'emotionpresetselect': me.onOpenDetail
+            },
+            'emotion-presets-window presets-list': {
+                'showpresetdetails': me.onShowPresetDetails
             },
             'emotion-main-window emotion-list-grid': {
                 'editemotion': me.onEditEmotion,
@@ -449,6 +456,13 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
         record = me.getSelectedPreset();
 
         me.openDetailWindow(record);
+    },
+
+    onShowPresetDetails: function(selectedPreset) {
+        var me = this,
+            win = me.getPresetWindow();
+
+        win.infoView.updateInfoView(selectedPreset);
     },
 
     getSelectedPreset: function() {

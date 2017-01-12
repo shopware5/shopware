@@ -36,6 +36,10 @@ Ext.define('Shopware.apps.Emotion.view.presets.List', {
     autoScroll: true,
     extend: 'Ext.panel.Panel',
 
+    config: {
+        selectedPreset: null
+    },
+
     initComponent: function () {
         var me = this;
 
@@ -43,7 +47,15 @@ Ext.define('Shopware.apps.Emotion.view.presets.List', {
             me.createInfoView()
         ];
 
-        this.addEvents('emotionpresetselect');
+        me.addEvents('emotionpresetselect');
+        me.addEvents('showpresetdetails');
+
+        me.store.on('load', function() {
+            me.infoView.getSelectionModel().select(0);
+            me.selectedPreset = me.infoView.getSelectionModel().getSelection()[0];
+
+            me.fireEvent('showpresetdetails', me.selectedPreset);
+        });
 
         me.callParent(arguments);
     },
@@ -55,9 +67,13 @@ Ext.define('Shopware.apps.Emotion.view.presets.List', {
             itemSelector: '.thumbnail',
             tpl: me.createTemplate(),
             store: me.store,
-            cls: 'theme-listing',
+            cls: 'emotion-listing',
             listeners: {
-                render: Ext.bind(me.onAddInfoViewEvents, me)
+                render: Ext.bind(me.onAddInfoViewEvents, me),
+                selectionchange: function(view, selected) {
+                    me.selectedPreset = selected[0];
+                    me.showDetails();
+                }
             }
         });
 
@@ -68,19 +84,51 @@ Ext.define('Shopware.apps.Emotion.view.presets.List', {
         var me = this;
 
         return new Ext.XTemplate(
-            '{literal}{[this.getPresets(values)]}{/literal}',
+            '{literal}{[this.getPresetRows(values)]}{/literal}',
             '<div class="x-clear"></div>',
             {
-                getPresets: function (values) {
-                    var me = this;
+                getPresetRows: function(values) {
+                    var me = this,
+                        sortedPresets,
+                        i, count, output = '';
 
                     if (values.length <= 0) {
                         return '';
                     }
 
+                    sortedPresets = {
+                        default: [],
+                        custom: []
+                    };
+
+                    for (i = 0, count = values.length; i < count; i++) {
+                        var preset = values[i];
+                        if (preset.custom) {
+                            sortedPresets['custom'].push(preset);
+                        } else {
+                            sortedPresets['default'].push(preset);
+                        }
+                    }
+
+                    Ext.Object.each(sortedPresets, function(key, value) {
+                        var name = '{s name=default_shopping_world_presets}{/s}';
+                        if (key === 'custom') {
+                            name = '{s name=custom_shopping_world_presets}{/s}'
+                        }
+
+                        if (value.length > 0) {
+                            output += me.getPresets(value, name);
+                        }
+                    }, me);
+
+                    return output;
+                },
+                getPresets: function (values, name) {
+                    var me = this;
+
                     return '<div class="preset--outer-container">' +
                                '<div class="x-grid-group-hd x-grid-group-hd-collapsible">' +
-                                   '<div class="x-grid-group-title">{s name=default_shopping_world_presets}{/s}</div>' +
+                                   '<div class="x-grid-group-title">' + name + '</div>' +
                                '</div>' +
                                '<div class="preset--container">' +
                                    me.getItem(values) +
@@ -96,7 +144,7 @@ Ext.define('Shopware.apps.Emotion.view.presets.List', {
 
                         if (preset.premium) {
                             itemTpl += '<div class="thumbnail premium">';
-                            itemTpl += '<div class="hint premium"><span>{s name=premium_hint}Premium{/s}</span></div>';
+                            itemTpl += '<div class="hint premium"><span>{s name=premium_hint}{/s}</span></div>';
                         } else {
                             itemTpl += '<div class="thumbnail">';
                         }
@@ -137,8 +185,15 @@ Ext.define('Shopware.apps.Emotion.view.presets.List', {
 
     selectPreset: function() {
         var me = this;
+
         me.fireEvent('emotionpresetselect');
         me.up('emotion-presets-window').close();
+    },
+
+    showDetails: function() {
+        var me = this;
+
+        me.fireEvent('showpresetdetails', me.selectedPreset);
     }
 });
 

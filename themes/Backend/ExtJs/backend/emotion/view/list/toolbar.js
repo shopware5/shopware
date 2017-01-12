@@ -67,6 +67,10 @@ Ext.define('Shopware.apps.Emotion.view.list.Toolbar', {
             iconCls: 'sprite-plus-circle',
             action: 'emotion-list-toolbar-add'
         }, {
+            text: '{s name=toolbar/add_emotion_from_preset}{/s}',
+            iconCls: 'sprite-pin marketing--shopping-worlds',
+            action: 'emotion-list-toolbar-add-preset'
+        }, {
             text: '{s name=toolbar/delete_selected_emotion}Delete selected shopping worlds{/s}',
             iconCls: 'sprite-minus-circle',
             action: 'emotion-list-toolbar-delete',

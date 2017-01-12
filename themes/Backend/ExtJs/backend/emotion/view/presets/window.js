@@ -43,17 +43,15 @@ Ext.define('Shopware.apps.Emotion.view.presets.Window', {
     stateId: 'emotion-presets-window',
 
     border: false,
-    resizable: false,
-    collapsible: false,
-    maximizable: true,
-    minimizable: true,
     autoShow: true,
     modal: true,
 
     showPreview: false,
 
     height: '80%',
-    width: '37%',
+    width: 1200,
+
+    layout: 'border',
 
     /**
      * Initializes the component and builds up the main interface
@@ -66,7 +64,8 @@ Ext.define('Shopware.apps.Emotion.view.presets.Window', {
         me.title = '{s name="window/title"}{/s}';
 
         me.items = [
-            me.createList()
+            me.createList(),
+            me.createDetailView()
         ];
 
         me.buttons = me.getButtons();
@@ -80,17 +79,28 @@ Ext.define('Shopware.apps.Emotion.view.presets.Window', {
         var me = this;
 
         me.listPanel = Ext.create('Shopware.apps.Emotion.view.presets.List',{
+            region: 'center',
+            flex: 3,
             store: Ext.create('Shopware.apps.Emotion.store.Presets', {
                 autoLoad: true
             })
         });
 
-        return me.overviewContainer = Ext.create('Ext.container.Container', {
-            title: '{s name="presetlist/container/title"}{/s}',
-            items: [
-                me.listPanel
-            ]
+        return me.listPanel;
+    },
+
+    createDetailView: function() {
+        var me = this;
+
+        me.infoView = Ext.create('Shopware.apps.Emotion.view.presets.Info', {
+            collapsible: false,
+            resizable: false,
+            title: 'Details',
+            region: 'east',
+            width: 400
         });
+
+        return me.infoView;
     },
 
     getButtons: function() {
