@@ -3,12 +3,24 @@
     {$listingMode = {config name=listingMode}}
 
     {block name="frontend_listing_actions_top_hide_detection"}
-        {$hide = ($listingMode != 'full_page_reload' && ($theme.sidebarFilter || $sCategoryContent.hideFilter) && $sCategoryContent.hide_sortings)}
+        {$class = 'listing--actions is--rounded'}
+
+        {if ($sCategoryContent.hide_sortings || $sortings|count == 0)}
+            {$class = "{$class} without-sortings"}
+        {/if}
+
+        {if ($theme.sidebarFilter || $sCategoryContent.hideFilter || $facets|count == 0)}
+            {$class = "{$class} without-facets"}
+        {/if}
+
+        {if $theme.infiniteScrolling}
+            {$class = "{$class} without-pagination"}
+        {/if}
     {/block}
 
     <div data-listing-actions="true"
          {if $listingMode != 'full_page_reload'}data-bufferTime="0"{/if}
-         class="listing--actions is--rounded{block name='frontend_listing_actions_class'}{/block}{if $hide} is--hidden{/if}">
+         class="{$class}{block name='frontend_listing_actions_class'}{/block}">
 
         {* Filter action button *}
         {block name="frontend_listing_actions_filter"}
