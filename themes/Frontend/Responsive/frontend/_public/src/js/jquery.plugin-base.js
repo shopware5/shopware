@@ -211,7 +211,7 @@
                     return typeof obj !== 'undefined' && pluginEvent === obj.event && $element[0] === obj.el[0];
                 });
 
-            $.each(filteredEvents, function (event) {
+            $.each(filteredEvents, function (i, event) {
                 $element.off.call($element, event.event);
             });
 
