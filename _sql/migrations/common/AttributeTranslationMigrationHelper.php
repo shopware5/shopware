@@ -81,9 +81,12 @@ EOL
             $ids = array_keys($values);
 
             $this->connection->exec('DELETE FROM s_core_translations WHERE id IN (' . implode(',', $ids) . ')');
-            $this->connection->exec(
-                'INSERT INTO s_core_translations (objecttype, objectdata, objectkey, objectlanguage) VALUES ' . implode(',', $values)
-            );
+			
+			foreach($values as $id => $value)
+			{
+				$query = $this->connection->prepare('INSERT INTO s_core_translations (objecttype, objectdata, objectkey, objectlanguage) VALUES(:objecttype, :objectdata, :objectkey, :objectlanguage)');
+				$query->execute([':objecttype' => $value['objecttype'], ':objectdata' => $value['objectdata'], ':objectkey' => $value['objectkey'], ':objectlanguage' => $value['objectlanguage']]);
+			}
 
             $lastId = array_pop($rows)['id'];
             $statement->execute([':lastId' => $lastId, ':maxId' => $maxId]);
@@ -180,7 +183,12 @@ EOL
 
             $updated = serialize($updated);
 
-            $values[$row['id']] = "('{$row['objecttype']}', '{$updated}', {$row['objectkey']}, {$row['objectlanguage']})";
+            $values[$row['id']] = [
+									'objecttype' => $row['objecttype'], 
+									'objectdata' => $updated, 
+									'objectkey' => $row['objectkey'],
+									'objectlanguage' => $row['objectlanguage']
+			];
         }
 
         return $values;
