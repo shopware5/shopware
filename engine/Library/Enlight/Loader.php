@@ -157,6 +157,11 @@ class Enlight_Loader
      */
     public static function realpath($path)
     {
+        // symlink are not supported on windows, fallback to inbuilt realpath
+        if (DIRECTORY_SEPARATOR !== '/') {
+            return realpath($path);
+        }
+
         // No symlink
         if (realpath($path) === $path) {
             return $path;
