@@ -28,11 +28,8 @@
  * @package   Shopware
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-
 //{namespace name=backend/emotion/presets/presets}
-
 //{block name="backend/emotion/presets/list"}
-
 Ext.define('Shopware.apps.Emotion.view.presets.List', {
     alias: 'widget.presets-list',
     region: 'center',
@@ -72,8 +69,8 @@ Ext.define('Shopware.apps.Emotion.view.presets.List', {
 
         return new Ext.XTemplate(
             '{literal}{[this.getPresets(values)]}{/literal}',
-            '<div class="x-clear"></div>', {
-
+            '<div class="x-clear"></div>',
+            {
                 getPresets: function (values) {
                     var me = this;
 
@@ -82,16 +79,15 @@ Ext.define('Shopware.apps.Emotion.view.presets.List', {
                     }
 
                     return '<div class="preset--outer-container">' +
-                            '<div class="x-grid-group-hd x-grid-group-hd-collapsible">' +
-                                '<div class="x-grid-group-title">{s name=default_shopping_world_presets}{/s}</div>' +
-                            '</div>' +
-                            '<div class="preset--container">' +
-                                me.getItem(values) +
-                                '<div class="x-clear"></div>' +
-                            '</div>' +
-                        '</div>';
+                               '<div class="x-grid-group-hd x-grid-group-hd-collapsible">' +
+                                   '<div class="x-grid-group-title">{s name=default_shopping_world_presets}{/s}</div>' +
+                               '</div>' +
+                               '<div class="preset--container">' +
+                                   me.getItem(values) +
+                                   '<div class="x-clear"></div>' +
+                               '</div>' +
+                           '</div>';
                 },
-
                 getItem: function (values) {
                     var items = [];
 

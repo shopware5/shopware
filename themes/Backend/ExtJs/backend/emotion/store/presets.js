@@ -37,11 +37,13 @@ Ext.define('Shopware.apps.Emotion.store.Presets', {
      * @string
      */
     extend:'Ext.data.Store',
+
     /**
      * Define the used model for this store
      * @string
      */
     model:'Shopware.apps.Emotion.model.Preset',
+
     /**
      * Configure the data communication
      * @object

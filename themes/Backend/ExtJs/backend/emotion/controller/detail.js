@@ -471,28 +471,25 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
     },
 
     decodeEmotionPresetData: function(presetData){
-        var data,
-            store;
+        var me = this,
+            data,
+            store = me.getStore('Detail'),
+            resultSet,
+            record;
 
-        if(!presetData){
+        if (!presetData){
             return Ext.create('Shopware.apps.Emotion.model.Emotion');
         }
 
-        data = Ext.decode(presetData);
+        data = Ext.JSON.decode(presetData);
 
-        store = Ext.create('Ext.data.Store', {
-            autoLoad: true,
-            model: 'Shopware.apps.Emotion.model.Emotion',
-            data : data,
-            proxy: {
-                type: 'memory',
-                reader: {
-                    type: 'json'
-                }
-            }
-        });
+        /** { Ext.data.ResultSet } resultSet */
+        resultSet = store.getProxy().getReader().readRecords([data]);
+        record = resultSet.records[0];
+        // very important for automatic id assignment after saving
+        record.phantom = true;
 
-        return store.first();
+        return record;
     },
 
     onOpenPreset: function() {

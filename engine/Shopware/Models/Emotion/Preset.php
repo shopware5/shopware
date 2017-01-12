@@ -69,19 +69,33 @@ class Preset extends ModelEntity
     private $premium;
 
     /**
+     * Indicates if the preset is a custom user created preset.
+     *
+     * @var boolean $custom
+     * @ORM\Column(name="custom", type="boolean", nullable=false)
+     */
+    private $custom;
+
+    /**
      * Contains the thumbnail path
      *
      * @var string $thumbnail
-     *
      * @ORM\Column(name="thumbnail", type="text", nullable=true)
      */
     private $thumbnail;
 
     /**
+     * Contains the preview image path
+     *
+     * @var string $preview
+     * @ORM\Column(name="preview", type="text", nullable=true)
+     */
+    private $preview;
+
+    /**
      * Contains the thumbnail path
      *
      * @var string $presetData
-     *
      * @ORM\Column(name="presetData", type="text", nullable=false)
      */
     private $presetData;
@@ -100,6 +114,7 @@ class Preset extends ModelEntity
     public function __construct()
     {
         $this->translations = new ArrayCollection();
+        $this->custom = true;
     }
 
     /**
@@ -108,7 +123,19 @@ class Preset extends ModelEntity
     public function __clone()
     {
         $this->id = null;
-        $this->translations = new ArrayCollection();
+
+        $translations = new ArrayCollection();
+
+        /** @var PresetTranslation $translation */
+        foreach ($this->translations as $translation) {
+            $newTranslation = clone $translation;
+            $newTranslation->setPreset($this);
+
+            $translations->add($newTranslation);
+        }
+        $this->translations = $translations;
+
+        $this->custom = true;
     }
 
     /**
@@ -152,6 +179,22 @@ class Preset extends ModelEntity
     }
 
     /**
+     * @return bool
+     */
+    public function getCustom()
+    {
+        return $this->custom;
+    }
+
+    /**
+     * @param boolean $custom
+     */
+    public function setCustom($custom)
+    {
+        $this->custom = $custom;
+    }
+
+    /**
      * @return string
      */
     public function getThumbnail()
@@ -165,6 +208,22 @@ class Preset extends ModelEntity
     public function setThumbnail($thumbnail)
     {
         $this->thumbnail = $thumbnail;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPreview()
+    {
+        return $this->preview;
+    }
+
+    /**
+     * @param string $preview
+     */
+    public function setPreview($preview)
+    {
+        $this->preview = $preview;
     }
 
     /**

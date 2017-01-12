@@ -27,6 +27,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Emotion\Emotion;
 use Shopware\Models\Emotion\Library\Field;
+use Shopware\Models\Emotion\Preset;
 use Shopware\Models\Shop\Shop;
 
 class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_ExtJs
@@ -763,7 +764,9 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
                     'id' => $preset['id'],
                     'name' => $preset['name'],
                     'premium' => $preset['premium'],
+                    'custom' => $preset['custom'],
                     'thumbnail' => $preset['thumbnail'],
+                    'preview' => $preset['preview'],
                     'presetData' => $preset['presetData'],
                     'label' => $translation[0]['label'],
                     'description' => $translation[0]['description']
@@ -784,7 +787,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
     {
         $builder = Shopware()->Models()->createQueryBuilder();
         $builder->select('presets', 'translations')
-            ->from('Shopware\Models\Emotion\Preset', 'presets')
+            ->from(Preset::class, 'presets')
             ->leftJoin('presets.translations', 'translations')
             ->where('translations.locale = :locale')
             ->setParameter('locale', $locale);
