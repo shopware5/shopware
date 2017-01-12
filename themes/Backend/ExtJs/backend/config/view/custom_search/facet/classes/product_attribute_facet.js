@@ -49,6 +49,7 @@ Ext.define('Shopware.apps.Config.view.custom_search.facet.classes.ProductAttribu
                 xtype: 'textfield',
                 labelWidth: 150,
                 allowBlank: false,
+                translatable: true,
                 fieldLabel: '{s name="label"}{/s}',
                 name: 'label'
             },
