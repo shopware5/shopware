@@ -325,7 +325,10 @@ class CoreCriteriaRequestHandler implements CriteriaRequestHandlerInterface
      */
     private function addOffset(Request $request, Criteria $criteria)
     {
-        $page = $request->getParam('sPage', 1);
+        $page = (int) $request->getParam('sPage', 1);
+        $page = ($page > 0) ? $page : 1;
+        $request->setParam('sPage', $page);
+
         $criteria->offset(
             ($page - 1) * $criteria->getLimit()
         );
@@ -337,10 +340,8 @@ class CoreCriteriaRequestHandler implements CriteriaRequestHandlerInterface
      */
     private function addLimit(Request $request, Criteria $criteria)
     {
-        $limit = $request->getParam(
-            'sPerPage',
-            (int)$this->config->get('articlesPerPage')
-        );
+        $limit = (int) $request->getParam('sPerPage', $this->config->get('articlesPerPage'));
+        $limit = $limit >= 1 ? $limit: 1;
         $criteria->limit($limit);
     }
 

@@ -2294,7 +2294,7 @@ class sArticles
             'sArticles'       => $articles,
             'criteria'        => $criteria,
             'facets'          => $searchResult->getFacets(),
-            'sPage'           => $request->getParam('sPage', 1),
+            'sPage'           => (int) $request->getParam('sPage', 1),
             'pageSizes'       => $pageSizes,
             'sPerPage'        => $criteria->getLimit(),
             'sNumberArticles' => $searchResult->getTotalCount(),
