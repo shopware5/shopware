@@ -131,13 +131,17 @@
         },
 
         /**
-         * Append X-CSRF-Token header to every request
+         * Append X-CSRF-Token header to every request, except CORS
          *
          * @param event
          * @param request
          * @private
          */
-        _ajaxBeforeSend: function(event, request) {
+        _ajaxBeforeSend: function(event, request, settings) {
+            if(settings.crossDomain){
+                return;
+            }
+
             request.setRequestHeader('X-CSRF-Token', this.getToken());
         },
 
