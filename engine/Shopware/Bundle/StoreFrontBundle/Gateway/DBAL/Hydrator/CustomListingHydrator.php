@@ -24,23 +24,23 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator;
 
-use Shopware\Bundle\SearchBundle\ConditionInterface;
-use Shopware\Bundle\SearchBundle\FacetInterface;
-use Shopware\Bundle\SearchBundle\SortingInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Search\CustomFacet;
 use Shopware\Bundle\StoreFrontBundle\Struct\Search\CustomSorting;
-use Shopware\Components\ReflectionHelper;
+use Shopware\Components\LogawareReflectionHelper;
 
 class CustomListingHydrator extends Hydrator
 {
     /**
-     * @var ReflectionHelper
+     * @var LogawareReflectionHelper
      */
     private $reflector;
 
-    public function __construct()
+    /**
+     * @param LogawareReflectionHelper $reflector
+     */
+    public function __construct(LogawareReflectionHelper $reflector)
     {
-        $this->reflector = new ReflectionHelper();
+        $this->reflector = $reflector;
     }
 
     /**
@@ -59,33 +59,14 @@ class CustomListingHydrator extends Hydrator
         $sorting->setLabel($data['__customSorting_label']);
         $sorting->setPosition((int) $data['__customSorting_position']);
 
-        $sorting->setSortings(
-            $this->unserialize(
-                json_decode($data['__customSorting_sortings'], true)
-            )
+        $sortings = $this->reflector->unserialize(
+            json_decode($data['__customSorting_sortings'], true),
+            sprintf('Serialization error in custom sorting %s', $sorting->getLabel())
         );
 
+        $sorting->setSortings($sortings);
+
         return $sorting;
-    }
-
-    /**
-     * @param array[] $serialized
-     * @return SortingInterface[]|FacetInterface[]
-     */
-    private function unserialize($serialized)
-    {
-        if (empty($serialized)) {
-            return [];
-        }
-
-        $classes = [];
-        foreach ($serialized as $className => $arguments) {
-            $className = explode('|', $className);
-            $className = $className[0];
-            $classes[] = $this->reflector->createInstanceFromNamedArguments($className, $arguments);
-        }
-
-        return $classes;
     }
 
     /**
@@ -112,7 +93,11 @@ class CustomListingHydrator extends Hydrator
             $facet = array_merge($facet, $translation);
         }
 
-        $facets = $this->unserialize($facets);
+        $facets = $this->reflector->unserialize(
+            $facets,
+            sprintf('Serialization error in custom facet %s', $customFacet->getName())
+        );
+
         $customFacet->setFacet(array_shift($facets));
 
         return $customFacet;
