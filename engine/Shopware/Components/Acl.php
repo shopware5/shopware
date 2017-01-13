@@ -164,6 +164,8 @@ class Shopware_Components_Acl extends Zend_Acl
         $resource->setPluginId($pluginID);
 
         if (!empty($privileges)) {
+            $privilegeObjects = [];
+
             foreach ($privileges as $name) {
                 $privilege = new \Shopware\Models\User\Privilege();
                 $privilege->setName($name);
@@ -173,9 +175,9 @@ class Shopware_Components_Acl extends Zend_Acl
 
                 $privilegeObjects[] = $privilege;
             }
-        }
 
-        $resource->setPrivileges($privilegeObjects);
+            $resource->setPrivileges($privilegeObjects);
+        }
 
         $this->em->persist($resource);
         $this->em->flush();
