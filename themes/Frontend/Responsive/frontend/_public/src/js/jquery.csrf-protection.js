@@ -7,11 +7,11 @@
      * @returns {string|undefined}
      */
     $.getCookie = function(name) {
-        var value = "; " + document.cookie,
-            parts = value.split("; " + name + "=");
+        var value = '; ' + document.cookie,
+            parts = value.split('; ' + name + '=');
 
         if (parts.length == 2) {
-            return parts.pop().split(";").shift();
+            return parts.pop().split(';').shift();
         }
         return undefined;
     };
@@ -21,7 +21,7 @@
      * @param name
      */
     $.removeCookie = function(name) {
-        var basePath = window.csrfConfig.basePath || "/";
+        var basePath = window.csrfConfig.basePath || '/';
         document.cookie = name + '=; path=' + basePath + '; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
     };
 
@@ -164,9 +164,9 @@
          */
         saveToken: function(token) {
             var me = this,
-                basePath = window.csrfConfig.basePath || "/";
+                basePath = window.csrfConfig.basePath || '/';
 
-            document.cookie = me.storageKey + "=" + token + "; path=" + basePath;
+            document.cookie = me.storageKey + '=' + token + '; path=' + basePath;
         },
 
         /**
@@ -202,5 +202,4 @@
     });
 
     window.CSRF = CSRF;
-
 })(jQuery, window, document);

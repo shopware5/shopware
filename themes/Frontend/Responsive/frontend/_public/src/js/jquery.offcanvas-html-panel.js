@@ -1,5 +1,4 @@
 ;(function ($) {
-
     /**
      * Shopware Offcanvas HTML Panel
      *

@@ -1,5 +1,5 @@
 ;(function ($, window, document, undefined) {
-    "use strict";
+    'use strict';
 
     $.plugin('swSelectboxReplacement', {
 
@@ -75,7 +75,7 @@
             wrapEl = $el.wrap(wrapEl).parents('.' + me.opts.baseCls);
 
             me.$textEl = $('<div>', { 'class': me.opts.baseCls + '-text' }).appendTo(wrapEl);
-            me.$triggerEl =$('<div>', { 'class': me.opts.baseCls + '-trigger', 'html': me.opts.triggerText }).appendTo(wrapEl);
+            me.$triggerEl = $('<div>', { 'class': me.opts.baseCls + '-trigger', 'html': me.opts.triggerText }).appendTo(wrapEl);
 
             me.selected = me.$el.find(':selected');
             me.$textEl.html(me.selected.html());
@@ -152,7 +152,7 @@
 
             val = me.$el.val.apply(me.$el, arguments);
 
-            if(typeof arguments[0] !== 'function') {
+            if (typeof arguments[0] !== 'function') {
                 me.setSelectedOnTextElement();
             }
 
@@ -254,7 +254,7 @@
             var me = this;
 
             // 38 = up arrow, 40 = down arrow
-            if(event.which === 38 || event.which === 40) {
+            if (event.which === 38 || event.which === 40) {
                 me.setSelectedOnTextElement();
             }
 
@@ -305,7 +305,7 @@
                 $parent = $el.parents('.field--select'),
                 classList;
 
-            if(!$parent || !$parent.length) {
+            if (!$parent || !$parent.length) {
                 return false;
             }
             classList = $parent.attr('class').split(/\s+/);

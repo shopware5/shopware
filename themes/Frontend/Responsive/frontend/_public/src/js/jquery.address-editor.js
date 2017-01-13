@@ -1,5 +1,5 @@
 ;(function($, window) {
-    "use strict";
+    'use strict';
 
     /**
      * Shopware Address Editor Plugin.
@@ -206,7 +206,6 @@
             $.publish('plugin/swAddressEditor/onRegisterPlugins', [ this ]);
         },
 
-
         /**
          * Registers listeners for the click event on the "change address" buttons. The buttons contain the
          * needed data for the address selection. It then sends an ajax post request to the form
@@ -337,7 +336,7 @@
                 .find(me.opts.submitButtonSelector)
                 .removeAttr('disabled')
                 .data('plugin_swPreloaderButton')
-                    .reset();
+                .reset();
         }
     });
 })(jQuery, window);

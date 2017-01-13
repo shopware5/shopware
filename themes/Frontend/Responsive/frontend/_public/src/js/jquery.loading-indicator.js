@@ -1,5 +1,5 @@
 ;(function ($) {
-    "use strict";
+    'use strict';
 
     /**
      * jQuery loading indicator component.
@@ -86,7 +86,7 @@
                 me.$loader.fadeOut(opts.animationSpeed || me.defaults.animationSpeed, function () {
                     callback.call(me);
 
-                    if(me._timeout) {
+                    if (me._timeout) {
                         window.clearTimeout(me._timeout);
                     }
 

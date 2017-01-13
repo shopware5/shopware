@@ -12,9 +12,9 @@
         var qparams = {},
             parts = (url || '').split('?'),
             qparts, qpart,
-            i=0;
+            i = 0;
 
-        if(parts.length <= 1){
+        if (parts.length <= 1) {
             return qparams;
         }
 
@@ -23,7 +23,7 @@
             var key, value;
 
             qpart = qparts[i].split('=');
-            key = decodeURIComponent(qpart[0])
+            key = decodeURIComponent(qpart[0]);
             value = decodeURIComponent(qpart[1] || '');
             qparams[key] = ($.isNumeric(value) ? parseFloat(value, 10) : value);
         }
@@ -102,7 +102,7 @@
             me.applyDataAttributes();
 
             // Check if plugin is enabled
-            if(!me.opts.enabled || !me.$el.is(':visible') || !me.opts.categoryId || me.opts.ajaxUrl === null) {
+            if (!me.opts.enabled || !me.$el.is(':visible') || !me.opts.categoryId || me.opts.ajaxUrl === null) {
                 return;
             }
 
@@ -114,7 +114,7 @@
 
             // Check max pages by data attribute
             me.maxPages = me.$el.attr('data-pages');
-            if(me.maxPages <= 1) {
+            if (me.maxPages <= 1) {
                 return;
             }
 
@@ -159,13 +159,12 @@
             me.urlBasicMode = false;
 
             // if no seo url is provided, use the url basic push mode
-            if(!me.params.p) {
-
-                me.basicModeSegments = window.location.pathname.split("/");
+            if (!me.params.p) {
+                me.basicModeSegments = window.location.pathname.split('/');
                 me.basicModePageKey = $.inArray('sPage', me.basicModeSegments);
-                me.basicModePageValue = me.basicModeSegments[ me.basicModePageKey +1];
+                me.basicModePageValue = me.basicModeSegments[me.basicModePageKey + 1];
 
-                if(me.basicModePageValue) {
+                if (me.basicModePageValue) {
                     me.urlBasicMode = true;
                     me.params.p = me.basicModePageValue;
                     me.upperParams.p = me.basicModePageValue;
@@ -173,7 +172,7 @@
             }
 
             // set page index to one if not assigned
-            if(!me.params.p) {
+            if (!me.params.p) {
                 me.params.p = 1;
             }
 
@@ -184,7 +183,7 @@
             me.currentPushState = '';
 
             // Check if there is/are previous pages
-            if(me.params.p && me.params.p > 1) {
+            if (me.params.p && me.params.p > 1) {
                 me.showLoadPrevious();
             }
 
@@ -218,7 +217,7 @@
             var me = this;
 
             // stop fetch new page if is loading atm
-            if(me.isLoading || !me.opts.enabled) {
+            if (me.isLoading || !me.opts.enabled) {
                 return;
             }
 
@@ -232,15 +231,15 @@
                 bufferSize = fetchPoint.height(),
                 triggerPoint = fetchPointOffset - bufferSize;
 
-            if(docTop > triggerPoint && (me.params.p < me.maxPages)) {
+            if (docTop > triggerPoint && (me.params.p < me.maxPages)) {
                 me.fetchNewPage();
             }
 
             // collect all pages
             var $products = $('*[data-page-index]'),
                 visibleProducts = $.grep($products, function(item) {
-                return $(item).offset().top <= docTop;
-            });
+                    return $(item).offset().top <= docTop;
+                });
 
             // First visible Product
             var $firstProduct = $(visibleProducts).last(),
@@ -253,33 +252,32 @@
             delete tmpParams.c;
 
             // setting actual page index
-            if(!tmpParams.p || !tmpPageIndex) {
+            if (!tmpParams.p || !tmpPageIndex) {
                 tmpParams.p = me.startPage;
             }
 
-            if(tmpPageIndex) {
+            if (tmpPageIndex) {
                 tmpParams.p = tmpPageIndex;
             }
 
             var tmpPushState = me.baseUrl + '?' + $.param(tmpParams);
 
-            if(me.urlBasicMode) {
+            if (me.urlBasicMode) {
                 // use start page parameter if no one exists
-                if(!tmpPageIndex) {
+                if (!tmpPageIndex) {
                     tmpPageIndex = me.basicModePageValue;
                 }
 
                 // redesign push url,
                 var segments = me.basicModeSegments;
-                segments[me.basicModePageKey+1] = tmpPageIndex;
+                segments[me.basicModePageKey + 1] = tmpPageIndex;
 
                 tmpPushState = segments.join('/');
             }
 
-            if(me.currentPushState != tmpPushState) {
-
+            if (me.currentPushState != tmpPushState) {
                 me.currentPushState = tmpPushState;
-                if(!history || !history.pushState) {
+                if (!history || !history.pushState) {
                     return;
                 }
 
@@ -296,17 +294,17 @@
             var me = this;
 
             // Quit here if all pages rendered
-            if(me.isFinished || me.params.p >= me.maxPages) {
+            if (me.isFinished || me.params.p >= me.maxPages) {
                 return;
             }
 
             // stop if process is running
-            if(me.isLoading) {
+            if (me.isLoading) {
                 return;
             }
 
             // Stop automatic fetch if page threshold reached
-            if(me.fetchCount >= me.opts.threshold) {
+            if (me.fetchCount >= me.opts.threshold) {
                 var button = me.generateButton('next');
 
                 // append load more button
@@ -332,7 +330,7 @@
             me.fetchCount++;
 
             // use categoryid by settings if not defined by filters
-            if(!me.params.c) me.params.c = me.opts.categoryId;
+            if (!me.params.c) me.params.c = me.opts.categoryId;
 
             $.publish('plugin/swInfiniteScrolling/onBeforeFetchNewPage', [ me ]);
 
@@ -345,7 +343,7 @@
                 $.publish('plugin/swInfiniteScrolling/onFetchNewPageLoaded', [ me, template ]);
 
                 // Cancel is no data provided
-                if(!template) {
+                if (!template) {
                     me.isFinished = true;
 
                     me.closeLoadingIndicator();
@@ -364,7 +362,7 @@
                 me.isLoading = false;
 
                 // check if last page reached
-                if(me.params.p >= me.maxPages) {
+                if (me.params.p >= me.maxPages) {
                     me.isFinished = true;
                 }
 
@@ -406,7 +404,7 @@
             me.isFinished = false;
 
             // Increase threshold for auto fetch next page if there is a next page
-            if(me.maxPages >= me.opts.threshold) {
+            if (me.maxPages >= me.opts.threshold) {
                 me.opts.threshold++;
             }
 
@@ -453,7 +451,7 @@
             var tmpParams = me.upperParams;
 
             // use categoryid by settings if not defined by filters
-            if(!tmpParams.c) tmpParams.c = me.opts.categoryId;
+            if (!tmpParams.c) tmpParams.c = me.opts.categoryId;
 
             tmpParams.p = tmpParams.p - 1;
 
@@ -479,7 +477,7 @@
                 me.isLoading = false;
 
                 // Set load previous button if we aren't already on page one
-                if(tmpParams.p > 1) {
+                if (tmpParams.p > 1) {
                     me.showLoadPrevious();
                 }
 
@@ -498,7 +496,7 @@
             var me = this,
                 $indicator = $('.js--loading-indicator.indicator--relative');
 
-            if($indicator.length) {
+            if ($indicator.length) {
                 return;
             }
 
@@ -509,7 +507,7 @@
                 })
             });
 
-            if(!type) {
+            if (!type) {
                 me.$el.parent().after($indicator);
             } else {
                 me.$el.parent().before($indicator);
@@ -527,7 +525,7 @@
             var me = this,
                 $indicator = $('.js--loading-indicator.indicator--relative');
 
-            if(!$indicator.length) {
+            if (!$indicator.length) {
                 return;
             }
 

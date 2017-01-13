@@ -1,5 +1,5 @@
 ;(function($, window) {
-    "use strict";
+    'use strict';
 
     /**
      * Pseudo text plugin
@@ -37,7 +37,7 @@
                 selector = $(me.$el.attr('data-selector')),
                 val;
 
-            if(!selector.length) {
+            if (!selector.length) {
                 throw new Error('Given selector does not match any element on the page.');
             }
 
