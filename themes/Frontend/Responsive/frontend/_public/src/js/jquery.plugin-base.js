@@ -373,10 +373,10 @@
                             pluginData = new plugin();
                         } else {
                             var Plugin = function () {
-                                PluginBase.call(this, name, element, options);
+                                $.PluginBase.call(this, name, element, options);
                             };
 
-                            Plugin.prototype = $.extend(Object.create(PluginBase.prototype), { constructor: Plugin }, plugin);
+                            Plugin.prototype = $.extend(Object.create($.PluginBase.prototype), { constructor: Plugin }, plugin);
                             pluginData = new Plugin();
                         }
 
@@ -427,10 +427,10 @@
 
                 if (!pluginData) {
                     var Plugin = function () {
-                        PluginBase.call(this, pluginName, element, options);
+                        $.PluginBase.call(this, pluginName, element, options);
                     };
 
-                    Plugin.prototype = $.extend(Object.create(PluginBase.prototype), { constructor: Plugin, superclass: overridePlugin }, overridePlugin, override);
+                    Plugin.prototype = $.extend(Object.create($.PluginBase.prototype), { constructor: Plugin, superclass: overridePlugin }, overridePlugin, override);
                     pluginData = new Plugin();
 
                     $.data(element, 'plugin_' + pluginName, pluginData);
