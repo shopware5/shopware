@@ -377,7 +377,7 @@ The styling includes the collapsed and expanded styling and the panel component 
             }
         }
 
-            &:disabled .filter-panel--label {
+        &:disabled .filter-panel--label {
                 .opacity(0.5);
             }
         }
@@ -498,6 +498,10 @@ The styling includes the collapsed and expanded styling and the panel component 
     cursor: pointer;
     white-space: nowrap;
 
+    max-width: 32%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
     .filter--active-icon {
         .unitize-margin(0, 10, 0, 0);
         .unitize(font-size, 8);
@@ -528,6 +532,10 @@ The styling includes the collapsed and expanded styling and the panel component 
             color: @brand-primary;
         }
     }
+}
+
+.action--filter-options.off-canvas.is--open .filter--active {
+    max-width: 100%;
 }
 
 .filter--actions {
@@ -708,7 +716,6 @@ The styling includes the collapsed and expanded styling and the panel component 
 }
 
 @media screen and(min-width: @tabletLandscapeViewportWidth) {
-
     .filter-panel {
         width: 32%;
     }

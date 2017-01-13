@@ -9,7 +9,7 @@
             {$class = "{$class} without-sortings"}
         {/if}
 
-        {if ($theme.sidebarFilter || $sCategoryContent.hideFilter || $facets|count == 0)}
+        {if ($theme.sidebarFilter || $facets|count == 0)}
             {$class = "{$class} without-facets"}
         {/if}
 
