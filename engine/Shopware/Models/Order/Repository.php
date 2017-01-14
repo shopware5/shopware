@@ -287,7 +287,8 @@ class Repository extends ModelRepository
                 ->leftJoin('billing.country', 'billingCountry')
                 ->leftJoin('billing.state', 'billingState')
                 ->leftJoin('orders.shop', 'shop')
-                ->leftJoin('orders.dispatch', 'dispatch');
+                ->leftJoin('orders.dispatch', 'dispatch')
+                ->leftJoin('orders.attribute', 'attribute');
 
         if (!empty($filters)) {
             $builder = $this->filterListQuery($builder, $filters);
