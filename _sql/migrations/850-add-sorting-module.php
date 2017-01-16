@@ -206,7 +206,7 @@ INSERT INTO `s_search_custom_sorting` (`label`, `active`, `display_in_categories
 
             if (!empty($insert)) {
                 $this->addSql(
-                    "INSERT INTO s_core_translations (objecttype, objectdata, objectkey, objectlanguage)
+                    "INSERT IGNORE INTO s_core_translations (objecttype, objectdata, objectkey, objectlanguage)
                      VALUES ('custom_sorting', '" . serialize($insert) . "', '1', " . $shop['id'] . ")"
                 );
             }

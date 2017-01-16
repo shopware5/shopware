@@ -459,3 +459,17 @@ UPDATE s_core_config_elements SET `value` = 's:69:"<br/>
 Kind Regards,<br/><br/>
 
 Your {config name=shopName} team</div>";' WHERE id = 997;
+
+UPDATE s_search_custom_sorting SET label = 'Release date' WHERE id = 1;
+UPDATE s_search_custom_sorting SET label = 'Popularity' WHERE id = 2;
+UPDATE s_search_custom_sorting SET label = 'Cheapest price' WHERE id = 3;
+UPDATE s_search_custom_sorting SET label = 'Highest price' WHERE id = 4;
+UPDATE s_search_custom_sorting SET label = 'Article description' WHERE id = 5;
+UPDATE s_search_custom_sorting SET label = 'Beste hits' WHERE id = 7;
+UPDATE s_search_custom_facet SET `name` = 'Categories' WHERE id = 1;
+UPDATE s_search_custom_facet SET `name` = 'Immediate delivery' WHERE id = 2;
+UPDATE s_search_custom_facet SET `name` = 'Manufacturer' WHERE id = 3;
+UPDATE s_search_custom_facet SET `name` = 'Price' WHERE id = 4;
+UPDATE s_search_custom_facet SET `name` = 'Properties' WHERE id = 5;
+UPDATE s_search_custom_facet SET `name` = 'Shipping free' WHERE id = 6;
+UPDATE s_search_custom_facet SET `name` = 'Rating' WHERE id = 7;
