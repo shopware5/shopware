@@ -123,4 +123,12 @@ class FacetResultGroup extends Extendable implements FacetResultInterface
     {
         $this->facetResults = $facetResults;
     }
+
+    /**
+     * @param null|string $template
+     */
+    public function setTemplate($template)
+    {
+        $this->template = $template;
+    }
 }

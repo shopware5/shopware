@@ -59,7 +59,7 @@ class CategoryTreeFacetResultBuilder
      * @param CategoryFacet $facet
      * @return null|TreeFacetResult
      */
-    public function buildFacetResult(array $categories, array $activeIds = [], $systemCategoryId, CategoryFacet $facet = null)
+    public function buildFacetResult(array $categories, array $activeIds = [], $systemCategoryId, CategoryFacet $facet)
     {
         $items = $this->getCategoriesOfParent($categories, $systemCategoryId);
 
@@ -72,7 +72,7 @@ class CategoryTreeFacetResultBuilder
             $values[] = $this->createTreeItem($categories, $item, $activeIds);
         }
 
-        if ($facet && !empty($facet->getLabel())) {
+        if (!empty($facet->getLabel())) {
             $label = $facet->getLabel();
         } else {
             $label = $this->snippetManager
