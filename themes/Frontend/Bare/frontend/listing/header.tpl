@@ -7,9 +7,9 @@
 
     {$description = "{s name='IndexMetaDescriptionStandard'}{/s}"}
     {if $sCategoryContent.cmstext}
-        {$description = "{$sCategoryContent.cmstext|strip_tags|truncate:240|escapeHtml}"}
+        {$description = "{$sCategoryContent.cmstext|trim|strip_tags|truncate:240|escapeHtml}"}
     {elseif $sCategoryContent.metaDescription}
-        {$description = "{$sCategoryContent.metaDescription|strip_tags|escapeHtml}"}
+        {$description = "{$sCategoryContent.metaDescription|trim|strip_tags|escapeHtml}"}
     {/if}
 
     <meta property="og:type" content="product" />
