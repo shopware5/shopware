@@ -109,7 +109,7 @@
                         <div class="blog--comments-captcha">
 
                             {block name='frontend_blog_comments_input_captcha_placeholder'}
-                                <div class="captcha--placeholder" data-autoLoad="true" data-src="{url module=widgets controller=Captcha action=refreshCaptcha}"></div>
+                                <div class="captcha--placeholder" data-autoLoad="true"{if $sErrorFlag.sCaptcha} data-hasError="true"{/if} data-src="{url module=widgets controller=Captcha action=refreshCaptcha}"></div>
                             {/block}
 
                             {block name='frontend_blog_comments_input_captcha_placeholder'}

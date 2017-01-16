@@ -72,7 +72,7 @@
                                 {if {config name=captchaMethod} === 'legacy'}
                                     {* Deferred loading of the captcha image *}
                                     {block name='frontend_tellafriend_captcha_placeholder'}
-                                        <div class="captcha--placeholder" data-src="{url module=widgets controller=Captcha action=refreshCaptcha}"></div>
+                                        <div class="captcha--placeholder"{if $sErrorFlag.sCaptcha} data-hasError="true"{/if} data-src="{url module=widgets controller=Captcha action=refreshCaptcha}"></div>
                                     {/block}
 
                                     {block name='frontend_tellafriend_captcha_label'}
