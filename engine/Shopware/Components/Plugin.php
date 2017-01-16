@@ -24,18 +24,18 @@
 
 namespace Shopware\Components;
 
+use Enlight\Event\SubscriberInterface;
 use Shopware\Components\Console\Application;
 use Shopware\Components\Plugin\Context\ActivateContext;
 use Shopware\Components\Plugin\Context\DeactivateContext;
 use Shopware\Components\Plugin\Context\InstallContext;
 use Shopware\Components\Plugin\Context\UninstallContext;
 use Shopware\Components\Plugin\Context\UpdateContext;
+use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
-use Enlight\Event\SubscriberInterface;
 
 abstract class Plugin implements ContainerAwareInterface, SubscriberInterface
 {
@@ -145,20 +145,27 @@ abstract class Plugin implements ContainerAwareInterface, SubscriberInterface
      * other extensions, ...
      *
      * @param ContainerBuilder $container A ContainerBuilder instance
+     *
+     * @throws \Exception
      */
     public function build(ContainerBuilder $container)
     {
         $container->setParameter($this->getContainerPrefix() . '.plugin_dir', $this->getPath());
         $container->setParameter($this->getContainerPrefix() . '.plugin_name', $this->getName());
+
         $this->loadFiles($container);
     }
 
     /**
      * @param ContainerBuilder $container
+     *
+     * @param string $file
+     *
+     * @throws \Exception
      */
-    final protected function loadFiles(ContainerBuilder $container)
+    protected function loadFile(ContainerBuilder $container, $file)
     {
-        if (!is_file($this->getPath().'/Resources/services.xml')) {
+        if (!is_file($file)) {
             return;
         }
 
@@ -167,7 +174,41 @@ abstract class Plugin implements ContainerAwareInterface, SubscriberInterface
             new FileLocator()
         );
 
-        $loader->load($this->getPath().'/Resources/services.xml');
+        $loader->load($file);
+    }
+
+    /**
+     * @param ContainerBuilder $container
+     *
+     * @throws \Exception
+     */
+    protected function loadFiles(ContainerBuilder $container)
+    {
+        $this->loadFile($container, $this->getPath() . '/Resources/services.xml');
+    }
+
+    /**
+     * @return string
+     */
+    public function getConfigXmlPath()
+    {
+        return $this->getPath() . '/Resources/config.xml';
+    }
+
+    /**
+     * @return string
+     */
+    public function getMenuXmlPath()
+    {
+        return $this->getPath() . '/Resources/menu.xml';
+    }
+
+    /**
+     * @return string
+     */
+    public function getSnippetDirectoryPath()
+    {
+        return $this->getPath() . '/Resources/snippets';
     }
 
     /**
@@ -205,7 +246,7 @@ abstract class Plugin implements ContainerAwareInterface, SubscriberInterface
         return $this->camelCaseToUnderscore($this->getName());
     }
 
-     /**
+    /**
      * Gets the Plugin directory path.
      *
      * @return string The Plugin absolute path

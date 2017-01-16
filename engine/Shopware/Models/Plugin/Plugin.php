@@ -24,9 +24,9 @@
 
 namespace Shopware\Models\Plugin;
 
-use Shopware\Components\Model\ModelEntity;
-use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
 
 /**
  * @category  Shopware
@@ -586,7 +586,7 @@ class Plugin extends ModelEntity
     }
 
     /**
-     * @return
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getLicenses()
     {
@@ -594,7 +594,7 @@ class Plugin extends ModelEntity
     }
 
     /**
-     * @param  $licenses
+     * @param $licenses
      */
     public function setLicenses($licenses)
     {
