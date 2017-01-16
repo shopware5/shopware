@@ -332,15 +332,15 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
         $facetService = $this->get('shopware_storefront.custom_facet_service');
         $facets = $facetService->getFacetsOfCategories([$categoryId], $context);
 
-        /** @var \Shopware\Components\ProductStream\FacetFilter $facetFilter */
-        $facetFilter = $this->get('shopware_product_stream.facet_filter');
-        $facetFilter->add($criteria);
-
         /** @var CustomFacet[] $facets */
         $facets = array_shift($facets);
         foreach ($facets as $facet) {
             $criteria->addFacet($facet->getFacet());
         }
+
+        /** @var \Shopware\Components\ProductStream\FacetFilter $facetFilter */
+        $facetFilter = $this->get('shopware_product_stream.facet_filter');
+        $facetFilter->add($criteria);
 
         $criteria->setGeneratePartialFacets(
             $this->container->get('config')->get('listingMode') === 'filter_ajax_reload'
