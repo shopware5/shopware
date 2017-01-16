@@ -2,8 +2,9 @@
 {namespace name="frontend/listing/listing_actions"}
 
 {block name='frontend_listing_actions_filter'}
+    {$listingMode = {config name=listingMode}}
 
-    <div class="action--filter-options off-canvas{if $facets|count <= 0} is--hidden{/if}">
+    <div class="action--filter-options off-canvas{if $facets|count <= 0} is--hidden{/if}{if $listingMode != 'full_page_reload'} is--ajax-reload{/if}">
 
         {block name='frontend_listing_actions_filter_close_button'}
             <a href="#" class="filter--close-btn" data-show-products-text="{s name="ListingActionsCloseFilterShowProducts"}{/s}">
@@ -14,7 +15,6 @@
         {block name='frontend_listing_actions_filter_container'}
             <div class="filter--container">
                 {block name='frontend_listing_actions_filter_form'}
-                    {$listingMode = {config name=listingMode}}
                     <form id="filter"
                         method="get"
                         data-filter-form="true"
