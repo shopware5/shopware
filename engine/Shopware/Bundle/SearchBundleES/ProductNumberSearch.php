@@ -104,9 +104,12 @@ class ProductNumberSearch implements ProductNumberSearchInterface
 
         $facets = $this->sortFacets($criteria, $result);
 
-        $result->setFacets($facets);
-
-        return $result;
+        return new ProductNumberSearchResult(
+            $products,
+            $data['hits']['total'],
+            $facets,
+            $result->getAttributes()
+        );
     }
 
     /**

@@ -55,12 +55,14 @@ class ProductNumberSearchResult extends Extendable
      * @param BaseProduct[] $products Indexed by the product order number
      * @param int $totalCount
      * @param FacetResultInterface[] $facets
+     * @param array $attributes
      */
-    public function __construct($products, $totalCount, $facets)
+    public function __construct($products, $totalCount, $facets, $attributes = [])
     {
         $this->products = $products;
         $this->totalCount = $totalCount;
         $this->facets = $facets;
+        $this->attributes = $attributes;
     }
 
     /**
@@ -101,13 +103,5 @@ class ProductNumberSearchResult extends Extendable
     public function jsonSerialize()
     {
         return get_object_vars($this);
-    }
-
-    /**
-     * @param FacetResultInterface[] $facets
-     */
-    public function setFacets(array $facets)
-    {
-        $this->facets = $facets;
     }
 }
