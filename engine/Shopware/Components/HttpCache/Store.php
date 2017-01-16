@@ -68,7 +68,7 @@ class Store extends BaseStore
      */
     protected function generateCacheKey(Request $request)
     {
-        $uri = $request->getUri();
+        $uri = $this->sortQueryStringParameters($request->getUri());
 
         foreach ($this->cacheCookies as $cookieName) {
             if ($request->cookies->has($cookieName)) {
@@ -77,6 +77,30 @@ class Store extends BaseStore
         }
 
         return 'md' . hash('sha256', $uri);
+    }
+
+    /**
+     * @param string $url
+     * @return string
+     */
+    private function sortQueryStringParameters($url)
+    {
+        $pos = strpos($url, '?');
+        if ($pos === false) {
+            return $url;
+        }
+
+        $urlPath = substr($url, 0, $pos + 1);
+        $queryString = substr($url, $pos + 1);
+
+        $queryParts = [];
+        parse_str($queryString, $queryParts);
+        ksort($queryParts, SORT_STRING);
+
+
+        $queryString = http_build_query($queryParts);
+
+        return $urlPath . $queryString;
     }
 
     /**
