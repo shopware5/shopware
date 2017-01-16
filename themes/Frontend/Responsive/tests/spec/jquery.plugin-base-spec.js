@@ -237,4 +237,47 @@ describe('Plugin base class', function() {
 
         $testElement.remove();
     });
+
+    it('should add event listener to element', function() {
+        var $testElement, data, events;
+
+        $.plugin('yay', {
+            init: function() {}
+        });
+
+        $testElement = $('<div>', {
+            'class': 'test--element'
+        }).appendTo($('body')).yay();
+        data = $testElement.data('plugin_yay');
+        data._on($testElement, 'testEvent1', $.noop);
+        data._on($testElement, 'testEvent2', $.noop);
+
+        events = $._data($testElement[0]).events;
+        expect(Object.keys(events).length).toBe(2);
+
+        $testElement.remove();
+        data._destroy();
+    });
+
+    it('should remove event listener from element', function() {
+        var $testElement, data, events;
+
+        $.plugin('yay', {
+            init: function() {}
+        });
+
+        $testElement = $('<div>', {
+            'class': 'test--element'
+        }).appendTo($('body')).yay();
+        data = $testElement.data('plugin_yay');
+        data._on($testElement, 'testEvent1', $.noop);
+        data._on($testElement, 'testEvent2', $.noop);
+        data._off($testElement, 'testEvent1', $.noop);
+
+        events = $._data($testElement[0]).events;
+        expect(Object.keys(events).length).toBe(1);
+
+        $testElement.remove();
+        data._destroy();
+    });
 });
