@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<permissions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/shopware/shopware/5.2/engine/Shopware/Components/Plugin/schema/permissions.xsd">
+    <permission>
+        <name>read</name>
+    </permission>
+    <permission>
+        <name>write</name>
+    </permission>
+    <permission>
+        <name>blog</name>
+    </permission>
+</permissions>
