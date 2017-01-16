@@ -9,6 +9,9 @@ use Shopware\Models\Article\Supplier;
 use Shopware\Models\Category\Category;
 use Shopware\Tests\Functional\Bundle\StoreFrontBundle\TestCase;
 
+/**
+ * @group elasticSearch
+ */
 class ManufacturerFacetTest extends TestCase
 {
     /**
