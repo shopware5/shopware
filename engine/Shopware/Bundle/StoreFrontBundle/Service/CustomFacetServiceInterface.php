@@ -42,4 +42,10 @@ interface CustomFacetServiceInterface
      * @return array indexed by category id, each element contains an array of CustomFacet[]
      */
     public function getFacetsOfCategories(array $categoryIds, ShopContextInterface $context);
+
+    /**
+     * @param ShopContextInterface $context
+     * @return CustomFacet[] indexed by id, sorted by position
+     */
+    public function getAllCategoryFacets(ShopContextInterface $context);
 }

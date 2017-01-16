@@ -85,7 +85,7 @@ class FacetCriteriaRequestHandler implements CriteriaRequestHandlerInterface
             $customFacets = $this->facetService->getFacetsOfCategories([$categoryId], $context);
             $customFacets = array_shift($customFacets);
         } else {
-            $customFacets = $this->getGlobalCategoryFacets($context);
+            $customFacets = $this->facetService->getAllCategoryFacets($context);
         }
 
         /** @var CustomFacet[] $customFacets */
@@ -119,7 +119,8 @@ class FacetCriteriaRequestHandler implements CriteriaRequestHandlerInterface
      */
     private function isSearchPage(Request $request)
     {
-        return $request->has('sSearch');
+        $params = $request->getParams();
+        return array_key_exists('sSearch', $params);
     }
 
     /**
@@ -233,20 +234,5 @@ class FacetCriteriaRequestHandler implements CriteriaRequestHandlerInterface
             ||
             array_key_exists('max' . $facet->getFormFieldName(), $params)
         );
-    }
-
-    /**
-     * @param ShopContextInterface $context
-     * @return CustomFacet[]
-     */
-    private function getGlobalCategoryFacets(ShopContextInterface $context)
-    {
-        $query = $this->connection->createQueryBuilder();
-        $query->select(['id']);
-        $query->from('s_search_custom_facet', 'facets');
-        $query->where('facets.display_in_categories = 1');
-        $query->orderBy('facets.position', 'ASC');
-        $ids = $query->execute()->fetchAll(\PDO::FETCH_COLUMN);
-        return $this->facetService->getList($ids, $context);
     }
 }

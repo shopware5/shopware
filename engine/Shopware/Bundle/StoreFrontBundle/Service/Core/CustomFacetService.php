@@ -26,6 +26,7 @@ namespace Shopware\Bundle\StoreFrontBundle\Service\Core;
 
 use Shopware\Bundle\StoreFrontBundle\Gateway\CustomFacetGatewayInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\CustomFacetServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\Search\CustomFacet;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class CustomFacetService implements CustomFacetServiceInterface
@@ -57,5 +58,13 @@ class CustomFacetService implements CustomFacetServiceInterface
     public function getFacetsOfCategories(array $categoryIds, ShopContextInterface $context)
     {
         return $this->gateway->getFacetsOfCategories($categoryIds, $context);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAllCategoryFacets(ShopContextInterface $context)
+    {
+        return $this->gateway->getAllCategoryFacets($context);
     }
 }

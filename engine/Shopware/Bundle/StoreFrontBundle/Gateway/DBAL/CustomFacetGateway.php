@@ -101,6 +101,21 @@ class CustomFacetGateway implements CustomFacetGatewayInterface
     }
 
     /**
+     * @param ShopContextInterface $context
+     * @return CustomFacet[] indexed by id
+     */
+    public function getAllCategoryFacets(ShopContextInterface $context)
+    {
+        $query = $this->createQuery($context);
+        $query->andWhere('customFacet.display_in_categories = 1');
+        $query->orderBy('customFacet.position');
+        return $this->hydrate(
+            $query->execute()->fetchAll(\PDO::FETCH_ASSOC)
+        );
+    }
+
+
+    /**
      * Returns an array with all facet ids which enabled for category listings
      * @return int[]
      */

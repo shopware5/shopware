@@ -24,17 +24,28 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Gateway;
 
+use Shopware\Bundle\StoreFrontBundle\Struct\Search\CustomFacet;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 interface CustomFacetGatewayInterface
 {
     /**
-     * {@inheritdoc}
+     * @param int[] $ids
+     * @param ShopContextInterface $context
+     * @return CustomFacet[] indexed by id
      */
     public function getList(array $ids, ShopContextInterface $context);
 
     /**
-     * {@inheritdoc}
+     * @param array $categoryIds
+     * @param ShopContextInterface $context
+     * @return array indexed by category id, each element contains a list of CustomFacet
      */
     public function getFacetsOfCategories(array $categoryIds, ShopContextInterface $context);
+
+    /**
+     * @param ShopContextInterface $context
+     * @return CustomFacet[]
+     */
+    public function getAllCategoryFacets(ShopContextInterface $context);
 }
