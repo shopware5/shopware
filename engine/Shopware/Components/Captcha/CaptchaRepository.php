@@ -24,6 +24,7 @@
 
 namespace Shopware\Components\Captcha;
 
+use Monolog\Logger;
 use Shopware\Components\Captcha\Exception\CaptchaNotFoundException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -77,7 +78,7 @@ class CaptchaRepository
             $captchaMethod = DefaultCaptcha::CAPTCHA_METHOD;
         }
 
-        return $this->getCaptcha($captchaMethod);
+        return $this->getCaptchaByName($captchaMethod);
     }
 
     /**
@@ -86,6 +87,26 @@ class CaptchaRepository
     public function getList()
     {
         return $this->captchas;
+    }
+
+    /**
+     * Find and returns the captcha with the passed name
+     *
+     * @param string $captchaName
+     * @return CaptchaInterface
+     * @throws CaptchaNotFoundException
+     */
+    public function getCaptchaByName($captchaName)
+    {
+        foreach ($this->captchas as $captcha) {
+            if ($captcha->getName() == $captchaName) {
+                return $captcha;
+            }
+        }
+
+        throw new CaptchaNotFoundException(
+            sprintf("The captcha with id '%s' is configured, but could not be found", $captchaName)
+        );
     }
 
     /**
@@ -106,19 +127,5 @@ class CaptchaRepository
         }
 
         return false;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    private function getCaptcha($captchaMethod)
-    {
-        foreach ($this->captchas as $captcha) {
-            if ($captcha->getName() == $captchaMethod) {
-                return $captcha;
-            }
-        }
-
-        throw new CaptchaNotFoundException(sprintf("The captcha with id '%s' is configured, but could not be found", $captchaMethod));
     }
 }

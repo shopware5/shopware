@@ -26,6 +26,7 @@ use Shopware\Bundle\AccountBundle\Form\Account\AddressFormType;
 use Shopware\Bundle\AccountBundle\Form\Account\PersonalFormType;
 use Shopware\Bundle\AccountBundle\Service\RegisterServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Components\Captcha\Exception\CaptchaNotFoundException;
 use Shopware\Models\Customer\Address;
 use Shopware\Models\Customer\Customer;
 use Symfony\Component\Form\Form;
@@ -116,7 +117,8 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
         $errors = [
             'personal' => $this->getFormErrors($customerForm),
             'billing' => $this->getFormErrors($billingForm),
-            'shipping' => []
+            'shipping' => [],
+            'captcha' => []
         ];
 
         $shipping = null;
@@ -125,11 +127,17 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
             $shipping = $shippingForm->getData();
             $errors['shipping'] = $this->getFormErrors($shippingForm);
         }
+        
+        $captchaErrors = $this->validateCaptcha($this->request->getParam('captchaName'), $this->request);
+        if (!empty($captchaErrors)) {
+            $errors['captcha'] = [$captchaErrors];
+        }
 
         $errors['occurred'] = (
             !empty($errors['personal']) ||
             !empty($errors['shipping']) ||
-            !empty($errors['billing'])
+            !empty($errors['billing']) ||
+            !empty($errors['captcha'])
         );
 
         if ($errors['occurred']) {
@@ -213,6 +221,35 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
 
         $this->Response()->setHeader('Content-type', 'application/json', true);
         $this->Response()->setBody(json_encode($errors));
+    }
+
+    /**
+     * Validates the captcha in the request
+     *
+     * @param string $captchaName
+     * @param Enlight_Controller_Request_Request $request
+     * @return string
+     */
+    private function validateCaptcha($captchaName, Enlight_Controller_Request_Request $request)
+    {
+        /** @var \Shopware\Components\Captcha\CaptchaValidator $captchaValidator */
+        $captchaValidator = $this->container->get('shopware.captcha.validator');
+
+        try {
+            $isValid = $captchaValidator->validateByName($captchaName, $request);
+        } catch (CaptchaNotFoundException $exception) {
+            // log captchaNotFound Exception
+            $this->container->get('corelogger')->error($exception->getMessage());
+            $isValid = $captchaValidator->validateByName('nocaptcha', $request);
+        }
+
+        if ($isValid) {
+            return null;
+        }
+
+        return $this->get('snippets')
+                ->getNamespace('widgets/captcha/custom_captcha')
+                ->get('invalidCaptchaMessage');
     }
 
     /**

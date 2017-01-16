@@ -30,7 +30,6 @@
 class Shopware_Tests_Controllers_Frontend_CheckoutTest extends Enlight_Components_Test_Plugin_TestCase
 {
     const ARTICLE_NUMBER = 'SW10239';
-    const USER_AGENT = 'Mozilla/5.0 (Android; Tablet; rv:14.0) Gecko/14.0 Firefox/14.0';
 
     /**
      * reads the user agent black list and test if the bot can add an article
@@ -62,7 +61,7 @@ class Shopware_Tests_Controllers_Frontend_CheckoutTest extends Enlight_Component
      */
     public function testAddBasketArticle()
     {
-        $sessionId = $this->addBasketArticle(self::USER_AGENT);
+        $sessionId = $this->addBasketArticle(include __DIR__ . '/fixtures/UserAgent.php');
         $this->assertNotEmpty($sessionId);
         $basketId = Shopware()->Db()->fetchOne(
             "SELECT id FROM s_order_basket WHERE sessionID = ?",

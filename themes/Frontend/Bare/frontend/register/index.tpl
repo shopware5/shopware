@@ -103,6 +103,10 @@
             {block name='frontend_register_index_form'}
                 <form method="post" action="{url action=saveRegister sTarget=$sTarget sTargetAction=$sTargetAction}" class="panel register--form">
 
+                    {block name='frontend_register_index_form_captcha_fieldset'}
+                        {include file="frontend/register/error_message.tpl" error_messages=$errors.captcha}
+                    {/block}
+
                     {block name='frontend_register_index_form_personal_fieldset'}
                         {include file="frontend/register/error_message.tpl" error_messages=$errors.personal}
                         {include file="frontend/register/personal_fieldset.tpl" form_data=$register.personal error_flags=$errors.personal}
@@ -135,6 +139,13 @@
                         <div class="register--required-info required_fields">
                             {s name='RegisterPersonalRequiredText' namespace='frontend/register/personal_fieldset'}{/s}
                         </div>
+                    {/block}
+
+                    {* Captcha *}
+                    {block name='frontend_register_index_form_captcha'}
+                        {$captchaHasError = $errors.captcha}
+                        {$captchaName = {config name=registerCaptcha}}
+                        {include file="widgets/captcha/custom_captcha.tpl" captchaName=$captchaName captchaHasError=$captchaHasError}
                     {/block}
 
                     {block name='frontend_register_index_form_submit'}
