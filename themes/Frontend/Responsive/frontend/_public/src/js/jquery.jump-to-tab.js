@@ -19,8 +19,7 @@
 
         init: function () {
             var me = this,
-                param = decodeURI((RegExp('action=(.+?)(&|$)').exec(location.search) || [, null])[1]),
-                tabId;
+                param = decodeURI((RegExp('action=(.+?)(&|$)').exec(location.search) || [null, null])[1]);
 
             me.$htmlBody = $('body, html');
             me.tabMenuProduct = me.$el.find(me.opts.tabDetail).data('plugin_swTabMenu');
@@ -92,5 +91,4 @@
             $.publish('plugin/swJumpToTab/onJumpToTab', [ me, tabIndex, jumpTo ]);
         }
     });
-
 })(jQuery, window);

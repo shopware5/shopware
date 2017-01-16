@@ -1,5 +1,4 @@
 ;(function ($) {
-
     var emptyObj = {};
 
     /**
@@ -10,7 +9,7 @@
      * The created list will be showed as a product slider.
      */
     $.plugin('swLastSeenProducts', {
-        
+
         defaults: {
 
             /**
@@ -253,7 +252,7 @@
             if (image) {
                 srcSet = image.sourceSet;
             } else {
-                srcSet = me.opts.noPicture
+                srcSet = me.opts.noPicture;
             }
 
             $('<img>', {
@@ -301,7 +300,8 @@
 
             // Remove category from query string
             delete urlQuery.c;
-            if (linkDetailsQuery = $.param(urlQuery)) {
+            if ($.param(urlQuery)) {
+                linkDetailsQuery = $.param(urlQuery);
                 linkDetailsQuery = '?' + linkDetailsQuery;
             }
 

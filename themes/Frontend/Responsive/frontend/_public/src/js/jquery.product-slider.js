@@ -227,7 +227,7 @@
              */
             itemSelector: '.product-slider--item',
 
-            /**** Ajax Config ****/
+            /** ** Ajax Config ****/
 
             /**
              * The controller url for ajax loading.
@@ -351,27 +351,23 @@
             var copyCount = me.itemsCount - me.totalUniqueItems,
                 copySize = me.itemsPerPage + me.itemsPerSlide;
 
-            /**
-             * If the page size is bigger as the total amount of items
-             * the copied items have to be removed, because the slider is not active anymore.
-             */
             if (me.totalUniqueItems && me.totalUniqueItems <= me.itemsPerPage) {
+                /**
+                 * If the page size is bigger as the total amount of items
+                 * the copied items have to be removed, because the slider is not active anymore.
+                 */
                 me.$items.slice(me.totalUniqueItems, me.itemsCount).remove();
                 me.trackItems();
-            }
-
-            /**
-             * If the page size gets bigger we have to copy more items for infinite sliding.
-             */
-            else if (me.totalUniqueItems && copySize > copyCount) {
+            } else if (me.totalUniqueItems && copySize > copyCount) {
+                /**
+                 * If the page size gets bigger we have to copy more items for infinite sliding.
+                 */
                 me.cloneItems(copyCount, copySize);
                 me.trackItems();
-            }
-
-            /**
-             *  The slider changes from inactive to active and we have to init the infinite sliding.
-             */
-            else if (!me.totalUniqueItems && me.isActive() && me.opts.mode !== 'ajax') {
+            } else if (!me.totalUniqueItems && me.isActive() && me.opts.mode !== 'ajax') {
+                /**
+                 *  The slider changes from inactive to active and we have to init the infinite sliding.
+                 */
                 me.initInfiniteSlide();
             }
 
@@ -556,7 +552,7 @@
         trackArrows: function() {
             var me = this;
 
-            if(!me.$arrowPrev || !me.$arrowNext) {
+            if (!me.$arrowPrev || !me.$arrowNext) {
                 if (me.isActive() && me.opts.arrowControls) me.createArrows();
                 return;
             }
@@ -570,7 +566,7 @@
             /**
              * Five pixel tolerance for momentum scrolling.
              */
-            var slideEnd = me.currentPosition + me.$container[(me.opts.orientation === 'vertical') ? 'outerHeight': 'outerWidth']();
+            var slideEnd = me.currentPosition + me.$container[(me.opts.orientation === 'vertical') ? 'outerHeight' : 'outerWidth']();
             me.$arrowPrev[(me.currentPosition > 5) ? 'show' : 'hide']();
             me.$arrowNext[(slideEnd >= parseInt(me.itemSize * me.itemsCount, 10) - 5) ? 'hide' : 'show']();
 
@@ -627,7 +623,7 @@
                 };
 
             if (me.opts.ajaxCategoryID !== null) {
-                data['category'] = me.opts.ajaxCategoryID
+                data['category'] = me.opts.ajaxCategoryID;
             }
 
             me.isLoading = true;

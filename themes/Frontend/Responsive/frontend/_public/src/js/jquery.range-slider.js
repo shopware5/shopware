@@ -516,9 +516,9 @@
         },
 
         roundTo: function(value, num) {
-            var resto = value%num;
+            var resto = value % num;
 
-            if (resto <= (num/2)) {
+            if (resto <= (num / 2)) {
                 return value - resto;
             } else {
                 return value + num - resto;
@@ -528,7 +528,7 @@
         getPositionByValue: function(value) {
             var me = this;
 
-            if(me.opts.stepCurve == 'log') {
+            if (me.opts.stepCurve == 'log') {
                 return me._getPositionLog(value);
             }
 
@@ -541,7 +541,7 @@
                 maxp = me.opts.stepCount,
                 minv = Math.log(me.opts.rangeMin),
                 maxv = Math.log(me.opts.rangeMax),
-                scale = (maxv-minv) / (maxp-minp),
+                scale = (maxv - minv) / (maxp - minp),
                 pos = minp + (Math.log(value) - minv) / scale;
 
             pos = Math.round(pos * me.stepWidth);
@@ -558,7 +558,7 @@
         getValueByPosition: function(position) {
             var me = this;
 
-            if(me.opts.stepCurve == 'log') {
+            if (me.opts.stepCurve == 'log') {
                 return me._getValueLog(position);
             }
 
@@ -584,11 +584,11 @@
                 maxp = me.opts.stepCount,
                 minv = Math.log(me.opts.rangeMin),
                 maxv = Math.log(me.opts.rangeMax),
-                scale = (maxv-minv) / (maxp-minp);
+                scale = (maxv - minv) / (maxp - minp);
 
             position = position / me.stepWidth;
 
-            return Math.exp(minv + scale*(position-minp));
+            return Math.exp(minv + scale * (position - minp));
         },
 
         getStepWidth: function(value) {
