@@ -28,7 +28,7 @@ Ext.define('Shopware.apps.MediaManager.view.replace.Upload', {
     extend: 'Ext.container.Container',
     uploadUrl: '{url action=singleReplace controller=MediaManager}',
     layout: 'anchor',
-    margin: '10 0 0 10',
+    margin: '10 10 0 10',
     height: 120,
 
     style: {
