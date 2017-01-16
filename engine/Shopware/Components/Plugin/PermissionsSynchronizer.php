@@ -92,17 +92,17 @@ class PermissionsSynchronizer
      */
     private function synchronizePrivileges(\Shopware\Models\User\Resource $resource, array $permissions)
     {
-        $existingPrivileges = array_filter($resource->getPrivileges()->toArray(), function(Privilege $privilege) use ($permissions) {
+        $existingPrivileges = array_filter($resource->getPrivileges()->toArray(), function (Privilege $privilege) use ($permissions) {
             return in_array($privilege->getName(), $permissions, true);
         });
 
-        $existingPrivileges = array_map(function(Privilege $privilege) {
+        $existingPrivileges = array_map(function (Privilege $privilege) {
             return $privilege->getName();
         }, $existingPrivileges);
 
         $newPrivileges = array_diff($permissions, $existingPrivileges);
 
-        array_walk($newPrivileges, function($name) use ($resource) {
+        array_walk($newPrivileges, function ($name) use ($resource) {
             $this->acl->createPrivilege($resource->getId(), $name);
         });
     }
@@ -115,7 +115,7 @@ class PermissionsSynchronizer
     {
         $existingPrivileges = $resource->getPrivileges()->toArray();
 
-        $orphanedPrivileges = array_filter($existingPrivileges, function(Privilege $privilege) use ($permissions) {
+        $orphanedPrivileges = array_filter($existingPrivileges, function (Privilege $privilege) use ($permissions) {
             return !in_array($privilege->getName(), $permissions, true);
         });
 
@@ -123,7 +123,7 @@ class PermissionsSynchronizer
             return;
         }
 
-        array_walk($orphanedPrivileges, function(Privilege $privilege) {
+        array_walk($orphanedPrivileges, function (Privilege $privilege) {
             $this->em->remove($privilege);
         });
 
