@@ -331,6 +331,8 @@
 
             $.subscribe('action/fetchListing', $.proxy(me.onSendListingRequest, me));
 
+            me.disableActiveFilterContainer(true);
+
             var isFiltered = me.$filterForm.attr('data-is-filtered');
             if (isFiltered > 0 && me.loadFacets) {
                 me.getFilterResult(me.urlParams, true, false);
@@ -373,13 +375,28 @@
             me.$filterFacetContainer.removeAttr('style');
             me.$filterActionButtonBottom.removeAttr('style');
 
-            me.$activeFilterCont.removeAttr('style').removeClass(opts.disabledCls);
+            me.disableActiveFilterContainer(false);
 
             me.$filterCont.removeClass(opts.collapsedCls);
 
             me.$filterTrigger.removeClass(opts.activeCls);
 
             $.publish('plugin/swListingActions/onEnterMobile', [ me ]);
+        },
+
+        disableActiveFilterContainer: function(disabled) {
+            var me = this;
+
+            if (me.showInstantFilterResult) {
+                return;
+            }
+
+            if (disabled) {
+                me.$activeFilterCont.addClass(me.opts.disabledCls);
+
+            } else if (me.$activeFilterCont.hasClass(me.opts.disabledCls)) {
+                me.$activeFilterCont.removeClass(me.opts.disabledCls);
+            }
         },
 
         /**
@@ -395,7 +412,7 @@
             }
 
             if (Object.keys(me.activeFilterElements).length && !me.isFilterpanelInSidebar) {
-                me.$activeFilterCont.addClass(me.opts.disabledCls);
+                me.disableActiveFilterContainer(true);
             }
 
             $.publish('plugin/swListingActions/onExitMobile', [ me ]);
@@ -1436,7 +1453,7 @@
             me.$filterFacetContainer.slideDown(me.opts.animationSpeed);
             me.$filterActionButtonBottom.slideDown(me.opts.animationSpeed);
 
-            me.$activeFilterCont.removeClass(me.opts.disabledCls);
+            me.disableActiveFilterContainer(false);
             me.$filterCont.addClass(me.opts.collapsedCls);
             me.$filterTrigger.addClass(me.opts.activeCls);
 
@@ -1456,7 +1473,7 @@
             me.$filterFacetContainer.slideUp(me.opts.animationSpeed);
             me.$filterActionButtonBottom.slideUp(me.opts.animationSpeed);
 
-            me.$activeFilterCont.addClass(me.opts.disabledCls);
+            me.disableActiveFilterContainer(true);
             me.$filterCont.removeClass(me.opts.collapsedCls);
             me.$filterTrigger.removeClass(me.opts.activeCls);
 
