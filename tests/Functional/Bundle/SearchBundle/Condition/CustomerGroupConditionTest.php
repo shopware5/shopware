@@ -8,6 +8,9 @@ use Shopware\Models\Category\Category;
 use Shopware\Models\Customer\Group;
 use Shopware\Tests\Functional\Bundle\StoreFrontBundle\TestCase;
 
+/**
+ * @group elasticSearch
+ */
 class CustomerGroupConditionTest extends TestCase
 {
     /**

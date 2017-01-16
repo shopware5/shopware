@@ -6,6 +6,9 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
 use Shopware\Models\Category\Category;
 
+/**
+ * @group elasticSearch
+ */
 class SimilarProductsTest extends TestCase
 {
     /**
