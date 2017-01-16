@@ -11,19 +11,18 @@
     var parseQueryString = function(url) {
         var qparams = {},
             parts = (url || '').split('?'),
-            qparts, qpart,
-            i=0;
+            qparts, qpart;
 
-        if(parts.length <= 1){
+        if (parts.length <= 1) {
             return qparams;
         }
 
         qparts = parts[1].split('&');
-        for (i in qparts) {
+        for (var i = 0, len = qparts.length; i < len; i++) {
             var key, value;
 
             qpart = qparts[i].split('=');
-            key = decodeURIComponent(qpart[0])
+            key = decodeURIComponent(qpart[0]);
             value = decodeURIComponent(qpart[1] || '');
             qparams[key] = ($.isNumeric(value) ? parseFloat(value, 10) : value);
         }
