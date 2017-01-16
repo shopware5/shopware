@@ -83,7 +83,7 @@ class PopularitySortingTest extends TestCase
                 'third'  => 1,
                 'fourth'  => 20
             ),
-            array('fourth', 'second', 'first', 'third'),
+            array('second', 'fourth', 'first', 'third'),
             null,
             array(),
             array(),
