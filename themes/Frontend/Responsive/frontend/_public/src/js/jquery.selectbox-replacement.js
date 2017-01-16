@@ -1,5 +1,5 @@
 ;(function ($, window, document, undefined) {
-    "use strict";
+    'use strict';
 
     /**
      * @Deprecated
@@ -67,5 +67,4 @@
             return me.$wrapEl;
         }
     });
-
 })(jQuery, window, document);

@@ -230,9 +230,7 @@
                 initial = me.rangeSlider.opts;
 
                 isFiltered = (
-                    me.rangeSlider.minValue != initial.rangeMin
-                    ||
-                    me.rangeSlider.maxValue != initial.rangeMax
+                    me.rangeSlider.minValue != initial.rangeMin || me.rangeSlider.maxValue != initial.rangeMax
                 );
 
                 if (!isFiltered && data) {
@@ -293,9 +291,9 @@
                 me._on(me.$starInputs, 'change', function(event) {
                     var $el = $(event.currentTarget);
                     me.$starInputs.parents('.rating-star--outer-container').removeClass('is--active');
-                    me.$starInputs.not($el).prop("checked", false);
+                    me.$starInputs.not($el).prop('checked', false);
 
-                    if ($el.is(":checked")) {
+                    if ($el.is(':checked')) {
                         $el.parents('.rating-star--outer-container').addClass('is--active');
                         $el.removeAttr('disabled');
                     }
@@ -323,7 +321,7 @@
                     $element.addClass('is--disabled');
                     $element.parents('.rating-star--outer-container').addClass('is--disabled');
                 }
-            },
+            }
         }
     };
 
@@ -507,7 +505,7 @@
         /**
          * Closes the component flyout panel.
          */
-        close: function()  {
+        close: function() {
             var me = this;
 
             me.$el.removeClass(me.opts.collapseCls);

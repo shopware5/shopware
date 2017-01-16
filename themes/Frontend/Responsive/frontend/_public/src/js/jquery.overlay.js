@@ -257,5 +257,4 @@
 
     // Expose overlay globally to the `window` object
     window.Overlay = Overlay;
-})
-(jQuery);
+})(jQuery);

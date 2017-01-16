@@ -453,7 +453,13 @@ $app->map('/finish/', function () use ($app, $menuHelper, $container) {
     $systemLocker();
 
     $container['uniqueid.persister']->store();
-    $container['shopware.notify']->doTrackEvent('Installer finished');
+
+    $additionalInformation = [
+        'language' => $container->offsetGet('install.language'),
+        'method' => 'installer'
+    ];
+
+    $container->offsetGet('shopware.notify')->doTrackEvent('Installer finished', $additionalInformation);
 
     $app->render(
         "finish.php",

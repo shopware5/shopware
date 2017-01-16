@@ -2,6 +2,27 @@
 
 This changelog references changes done in Shopware 5.2 patch versions.
 
+## 5.2.15
+
+[View all changes from v5.2.14...v5.2.15](https://github.com/shopware/shopware/compare/v5.2.14...v5.2.15)
+
+* Fixed article api resource when creating a new article with new configurator options and an image mapping for this new options
+
+## 5.2.14
+
+### Add property "valueField" to the media field.
+* The shopping world element "Media field" supports now to change the value field. All possible properties you can find in the file: ../themes/Backend/ExtJs/backend/media_manager/model/media.js 
+
+ Example:
+ 
+ ´´´
+ $emotionElement->createMediaField([
+     'name' => 'preview_image',
+     'fieldLabel' => 'The preview image',
+     'valueField' => 'virtualPath'
+ ]);
+ ´´´
+
 ## 5.2.13
 
 [View all changes from v5.2.12...v5.2.13](https://github.com/shopware/shopware/compare/v5.2.12...v5.2.13)

@@ -117,10 +117,9 @@
             }
 
             me.$privacyLink.attr('href', [
-                    prefix,
-                    href
-                ].join('')
-            );
+                prefix,
+                href
+            ].join(''));
         },
 
         /**
@@ -203,5 +202,4 @@
             me.$el.addClass(me.opts.isHiddenClass);
         }
     });
-
 }(jQuery, window));

@@ -1,5 +1,5 @@
 ;(function ($) {
-    "use strict";
+    'use strict';
 
     /**
      * LoadingIndicator constructor
@@ -331,5 +331,4 @@
 
     // Expose overlay globally to the `window` object
     window.LoadingIndicator = LoadingIndicator;
-})
-(jQuery);
+})(jQuery);

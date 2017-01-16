@@ -287,7 +287,7 @@
             me.$actionForms = $(me.opts.actionFormSelector);
             me.$actionLinks = $(me.opts.actionLinkSelector);
             me.$activeFilterCont = me.$filterForm.find(me.opts.activeFilterContSelector);
-            me.$applyFilterBtn =  me.$filterForm.find(me.opts.applyFilterBtnSelector);
+            me.$applyFilterBtn = me.$filterForm.find(me.opts.applyFilterBtnSelector);
             me.$listing = $(me.opts.listingSelector);
             me.$pageInput = $(me.$filterForm.find(me.opts.pageInputSelector));
             me.$sortInput = $(me.$filterForm.find(me.opts.sortInputSelector));
@@ -295,7 +295,7 @@
             me.$listingWrapper = me.$el.parent(me.opts.listingWrapperSelector);
             me.$closeFilterOffCanvasBtn = $(me.opts.filterCloseBtnSelector);
             me.$filterFacetContainer = me.$filterForm.find(me.opts.filterFacetContainerSelector);
-            me.$filterActionButtonBottom =  me.$filterForm.find(me.opts.filterActionButtonBottomSelector);
+            me.$filterActionButtonBottom = me.$filterForm.find(me.opts.filterActionButtonBottomSelector);
             me.$sidebarModeLoadionIndicator = $(me.opts.sidebarLoadingIndicatorParentSelector);
 
             me.searchHeadlineProductCount = $(me.opts.searchHeadlineProductCountSelector);
@@ -408,6 +408,8 @@
             var me = this;
 
             me._on(me.$filterForm, 'submit', $.proxy(me.onFilterSubmit, me));
+            me._on(me.$actionForms, 'submit', $.proxy(me.onActionSubmit, me));
+            me._on(me.$actionLinks, 'click', $.proxy(me.onActionLink, me));
             me._on(me.$filterComponents, 'onChange', $.proxy(me.onComponentChange, me));
             me._on(me.$filterTrigger, 'click', $.proxy(me.onFilterTriggerClick, me));
 
@@ -462,7 +464,7 @@
                 if (me.isSortAction($form)) {
                     me.setSortInput(formData[1].value);
                 } else if (me.isPerPageAction($form)) {
-                    me.setPerPageInput(formData[1].value)
+                    me.setPerPageInput(formData[1].value);
                 }
             }
 
@@ -646,8 +648,7 @@
                 if (!isMobile && !me.$filterCont.hasClass(me.opts.collapsedCls)) {
                     me.applyCategoryParams();
                 }
-
-            } else if (isMobile || !me.$activeFilterCont.hasClass(me.opts.disabledCls) || me.isFilterpanelInSidebar) {
+            } else if (isMobile || !me.$activeFilterCont.hasClass(me.opts.disabledCls)) {
                 me.removeActiveFilter(param);
                 me.resetFilterProperty(param);
             }
@@ -750,14 +751,12 @@
 
                 if (param[1] == 'reset') {
                     delete categoryParams[param[0]];
-
                 } else if (me.propertyFieldNames.indexOf(param[0]) != -1) {
                     var properties = param[1].split('|');
 
                     $.each(properties, function(index, property) {
                         categoryParams[me.opts.propertyPrefixChar + param[0] + me.opts.propertyPrefixChar + property] = property;
                     });
-
                 } else {
                     categoryParams[param[0]] = param[1];
                 }
@@ -792,8 +791,8 @@
          */
         createUrlParams: function(categoryParams) {
             var me = this,
-                categoryParams = categoryParams || me.categoryParams,
-                params = me.cleanParams(categoryParams),
+                catParams = categoryParams || me.categoryParams,
+                params = me.cleanParams(catParams),
                 filterList = [];
 
             $.each(params, function(key, value) {
@@ -960,22 +959,18 @@
 
             if (me.$filterCont.is('.off-canvas.is--open')) {
                 loadingIndicator = me.$offCanvasLoadingIndicator;
-            } else if (me.isFilterpanelInSidebar)  {
+            } else if (me.isFilterpanelInSidebar) {
                 loadingIndicator = me.$sidebarModeLoadionIndicator;
             }
 
             me.resetBuffer();
-
             me.enableLoading(loadingIndicator, loadProducts, function() {
-
-                //send ajax request to load products and facets
+                // send ajax request to load products and facets
                 me.sendListingRequest(params, loadFacets, loadProducts, function(response) {
-
                     me.disableLoading(loadingIndicator, loadProducts, response, function() {
-
                         me.updateListing(response);
 
-                        //publish finish event to update filter panels
+                        // publish finish event to update filter panels
                         $.publish('plugin/swListingActions/onGetFilterResultFinished', [ me, response, params ]);
                     });
                 });
@@ -990,8 +985,8 @@
          * @param {function} callback
          */
         enableLoading: function(loadingIndicator, loadProducts, callback) {
-            var me = this,
-                callback = $.isFunction(callback) ? callback : $.noop;
+            var me = this;
+            callback = $.isFunction(callback) ? callback : $.noop;
 
             if (loadProducts) {
                 me.$listing.addClass(me.opts.isLoadingCls);
@@ -1027,11 +1022,11 @@
          * @param {function} callback
          */
         disableLoading: function(loadingIndicator, loadProducts, response, callback) {
-            var me = this,
-                callback = $.isFunction(callback) ? callback : $.noop;
+            var me = this;
+            callback = $.isFunction(callback) ? callback : $.noop;
 
             if (loadProducts) {
-                //disable loading indicator
+                // disable loading indicator
                 loadingIndicator.setLoading(false).then(
                     $.proxy(callback, me)
                 );
@@ -1093,7 +1088,7 @@
             if (me.isInfiniteScrolling) {
                 pages = Math.ceil(response.totalCount / me.$perPageInput.val());
 
-                //update infinite scrolling plugin and data attributes for infinite scrolling
+                // update infinite scrolling plugin and data attributes for infinite scrolling
                 me.$listing.attr('data-pages', pages);
                 me.$listing.data('plugin_swInfiniteScrolling').destroy();
                 StateManager.addPlugin(me.opts.listingSelector, 'swInfiniteScrolling');
@@ -1243,7 +1238,7 @@
 
             if (label !== undefined && label.length) {
                 if (me.activeFilterElements[param] !== undefined) {
-                    me.updateActiveFilterElement(param, label)
+                    me.updateActiveFilterElement(param, label);
                 } else {
                     me.createActiveFilterElement(param, label);
                 }
@@ -1310,12 +1305,16 @@
                 $input,
                 rangeSlider;
 
-            $input = me.$filterForm.find('[name="' + me.escapeDoubleQuotes(param) + '"]');
-            if ($input.is('[data-range-input]')) {
-                rangeSlider = $input.parents('[data-range-slider="true"]').data('plugin_swRangeSlider');
-                rangeSlider.reset($input.attr('data-range-input'));
+            if (param == 'rating') {
+                me.$el.find('#star--reset').prop('checked', true).trigger('change');
             } else {
-                $input.removeAttr('checked').trigger('change');
+                $input = me.$el.find('[name="' + me.escapeDoubleQuotes(param) + '"]');
+                if ($input.is('[data-range-input]')) {
+                    rangeSlider = $input.parents('[data-range-slider="true"]').data('plugin_swRangeSlider');
+                    rangeSlider.reset($input.attr('data-range-input'));
+                } else {
+                    $input.removeAttr('checked').trigger('change');
+                }
             }
 
             $.publish('plugin/swListingActions/onResetFilterProperty', [ me, param ]);
@@ -1360,7 +1359,7 @@
          * @returns string
          */
         escapeDoubleQuotes: function(str) {
-            return str.replace(/\\([\s\S])|(")/g, "\\$1$2");
+            return str.replace(/\\([\s\S])|(")/g, '\\$1$2');
         },
 
         /**

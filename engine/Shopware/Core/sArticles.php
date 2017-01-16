@@ -377,45 +377,27 @@ class sArticles
 
         $date = date("Y-m-d H:i:s");
 
-        $container = Shopware()->Container();
-        $shopId = null;
-        if ($container->initialized('Shop')) {
-            $shopId = $container->get('Shop')->getId();
-        }
+        $sql = '
+            INSERT INTO s_articles_vote (articleID, name, headline, comment, points, datum, active, email)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        ';
 
-        $connection = $container->get('dbal_connection');
-        $query = $connection->createQueryBuilder();
-        $query->insert('s_articles_vote');
-        $query->values([
-            'articleID' => ':articleID',
-            'name' => ':name',
-            'headline' => ':headline',
-            'comment' => ':comment',
-            'points' => ':points',
-            'datum' => ':datum',
-            'active' => ':active',
-            'email' => ':email',
-            'shop_id' => ':shopId'
-        ]);
+        $insertComment = $this->db->executeUpdate($sql, array(
+            $article,
+            $sVoteName,
+            $sVoteSummary,
+            $sVoteComment,
+            $sVoteStars,
+            $date,
+            $active,
+            $sVoteMail
+        ));
 
-        $query->setParameters([
-            ':articleID'  => $article,
-            ':name'  => $sVoteName,
-            ':headline'  => $sVoteSummary,
-            ':comment'  => $sVoteComment,
-            ':points'  => $sVoteStars,
-            ':datum'  => $date,
-            ':active'  => $active,
-            ':email'  => $sVoteMail,
-            ':shopId' => $shopId
-        ]);
-
-        $success = $query->execute();
-        if (empty($success)) {
+        if (empty($insertComment)) {
             throw new Enlight_Exception("sSaveComment #00: Could not save comment");
         }
 
-        $insertId = $connection->lastInsertId();
+        $insertId = $this->db->lastInsertId();
         if (!isset($this->session['sArticleCommentInserts'])) {
             $this->session['sArticleCommentInserts'] = new ArrayObject();
         }
@@ -2308,9 +2290,9 @@ class sArticles
         }
 
         $pageSizes = explode('|', $this->config->get('numberArticlesToShow'));
-        $sPage = $request->getParam('sPage', 1);
+        $sPage = (int) $request->getParam('sPage', 1);
 
-        return [
+        return array(
             'sArticles'       => $articles,
             'criteria'        => $criteria,
             'facets'          => $searchResult->getFacets(),
@@ -2322,7 +2304,7 @@ class sArticles
             'shortParameters' => $this->queryAliasMapper->getQueryAliases(),
             'sTemplate'       => $request->getParam('sTemplate'),
             'sSort'           => $request->getParam('sSort', $this->config->get('defaultListingSorting'))
-        ];
+        );
     }
 
     /**
@@ -2395,11 +2377,11 @@ class sArticles
      * Creates different links for the product like `add to basket`, `add to note`, `view detail page`, ...
      *
      * @param StoreFrontBundle\Struct\ListProduct $product
-     * @param null $categoryId
+     * @param int $categoryId
      * @param bool $addNumber
      * @return array
      */
-    private function getLinksOfProduct(StoreFrontBundle\Struct\ListProduct $product, $categoryId = null, $addNumber = false)
+    private function getLinksOfProduct(StoreFrontBundle\Struct\ListProduct $product, $categoryId, $addNumber)
     {
         $baseFile = $this->config->get('baseFile');
         $context = $this->contextService->getShopContext();
@@ -2408,10 +2390,13 @@ class sArticles
         if ($categoryId) {
             $detail .= '&sCategory=' . $categoryId;
         }
-        if ($addNumber) {
-            $detail .= '&number=' . $product->getNumber();
-        }
+
         $rewrite = Shopware()->Modules()->Core()->sRewriteLink($detail, $product->getName());
+
+        if ($addNumber) {
+            $rewrite .= strpos($rewrite, '?') !== false ? '&' : '?';
+            $rewrite .= 'number=' . $product->getNumber();
+        }
 
         $basket = $baseFile . "?sViewport=basket&sAdd=" . $product->getNumber();
         $note = $baseFile . "?sViewport=note&sAdd=" . $product->getNumber();

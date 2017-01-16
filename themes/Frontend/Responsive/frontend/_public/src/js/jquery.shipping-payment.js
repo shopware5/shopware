@@ -47,7 +47,7 @@
             $.loadingIndicator.open();
 
             $.ajax({
-                type: "POST",
+                type: 'POST',
                 url: url,
                 data: data,
                 success: function(res) {
@@ -58,7 +58,7 @@
 
                     $.publish('plugin/swShippingPayment/onInputChanged', [ me ]);
                 }
-            })
+            });
         },
 
         /**

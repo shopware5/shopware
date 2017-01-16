@@ -474,6 +474,36 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
             'sKey'      => $hash
         );
 
+        $sql = 'SELECT 
+          s_user.accountmode,
+          s_user.active,
+          s_user.affiliate,
+          s_user.birthday,
+          s_user.confirmationkey,
+          s_user.customergroup,
+          s_user.customernumber,
+          s_user.email,
+          s_user.failedlogins,
+          s_user.firstlogin,
+          s_user.lastlogin,
+          s_user.language,
+          s_user.internalcomment,
+          s_user.lockeduntil,
+          s_user.subshopID,
+          s_user.title,
+          s_user.salutation,
+          s_user.firstname,
+          s_user.lastname,
+          s_user.lastlogin,
+          s_user.newsletter
+          FROM s_user
+          WHERE id = ?';
+
+        $user = $this->get('dbal_connection')->fetchAssoc($sql, [$userID]);
+        $user['attributes'] = $this->get('dbal_connection')->fetchAssoc('SELECT * FROM s_user_attributes WHERE userID = ?', [$userID]);
+
+        $context['user'] = $user;
+
         // Send mail
         $mail = Shopware()->TemplateMail()->createMail('sCONFIRMPASSWORDCHANGE', $context);
         $mail->addTo($email);

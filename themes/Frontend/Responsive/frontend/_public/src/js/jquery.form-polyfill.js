@@ -14,7 +14,7 @@
             var me = this;
 
             // If the browser supports the feature, we don't need to take action
-            if(!me.isSupportedBrowser()) {
+            if (!me.isSupportedBrowser()) {
                 return false;
             }
 
@@ -77,7 +77,7 @@
                 $form = $(id);
 
             // We can't find the form
-            if(!$form.length) {
+            if (!$form.length) {
                 return false;
             }
 

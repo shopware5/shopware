@@ -23,7 +23,7 @@
             var key, value;
 
             qpart = qparts[i].split('=');
-            key = decodeURIComponent(qpart[0])
+            key = decodeURIComponent(qpart[0]);
             value = decodeURIComponent(qpart[1] || '');
             qparams[key] = ($.isNumeric(value) ? parseFloat(value, 10) : value);
         }
@@ -164,10 +164,9 @@
 
             // if no seo url is provided, use the url basic push mode
             if (!me.params.p) {
-
-                me.basicModeSegments = window.location.pathname.split("/");
+                me.basicModeSegments = window.location.pathname.split('/');
                 me.basicModePageKey = $.inArray('sPage', me.basicModeSegments);
-                me.basicModePageValue = me.basicModeSegments[ me.basicModePageKey + 1 ];
+                me.basicModePageValue = me.basicModeSegments[me.basicModePageKey + 1];
 
                 if (me.basicModePageValue) {
                     me.urlBasicMode = true;
@@ -279,7 +278,6 @@
             }
 
             if (me.currentPushState != tmpPushState) {
-
                 me.currentPushState = tmpPushState;
                 if (!history || !history.pushState) {
                     return;

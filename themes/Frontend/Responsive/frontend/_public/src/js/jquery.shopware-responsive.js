@@ -1,5 +1,4 @@
 (function($, window) {
-
     window.StateManager.init([
         {
             state: 'xs',
@@ -119,7 +118,6 @@
     ;
 
     $(function($) {
-
         // Check if cookies are disabled and show notification
         if (!StorageManager.hasCookiesSupport) {
             createNoCookiesNoticeBox(window.snippets.noCookiesNotice);
@@ -170,7 +168,6 @@
         });
 
         $('.table--shipping-costs-trigger').on('click touchstart', function (event) {
-
             event.preventDefault();
 
             var $this = $(this),
@@ -196,14 +193,14 @@
                 'success': function (response) {
                     var cart = JSON.parse(response);
 
-                    if(!cart.amount || !cart.quantity) {
+                    if (!cart.amount || !cart.quantity) {
                         return;
                     }
 
                     $cartAmount.html(cart.amount);
                     $cartQuantity.html(cart.quantity).removeClass('is--hidden');
 
-                    if(cart.quantity == 0) {
+                    if (cart.quantity == 0) {
                         $cartQuantity.addClass('is--hidden');
                     }
                 }
