@@ -74,18 +74,24 @@
                     {block name="frontend_listing_listing_container"}
                         <div class="listing--container">
 
+                            {block name="frontend_listing_no_filter_result"}
+                                <div class="listing-no-filter-result">
+                                    {include file="frontend/_includes/messages.tpl" type="info" content="{s name=noFilterResult}Für die Filterung wurden keine Ergebnisse gefunden!{/s}" visible=false}
+                                </div>
+                            {/block}
+
                             {block name="frontend_listing_listing_content"}
                                 <div class="listing"
                                      data-ajax-wishlist="true"
                                      data-compare-ajax="true"
-                                     {if $theme.infiniteScrolling}
-                                        data-infinite-scrolling="true"
-                                        data-loadPreviousSnippet="{s name="ListingActionsLoadPrevious"}{/s}"
-                                        data-loadMoreSnippet="{s name="ListingActionsLoadMore"}{/s}"
-                                        data-categoryId="{$sCategoryContent.id}"
-                                        data-pages="{$pages}"
-                                        data-threshold="{$theme.infiniteThreshold}"
-                                    {/if}>
+                                        {if $theme.infiniteScrolling}
+                                    data-infinite-scrolling="true"
+                                    data-loadPreviousSnippet="{s name="ListingActionsLoadPrevious"}{/s}"
+                                    data-loadMoreSnippet="{s name="ListingActionsLoadMore"}{/s}"
+                                    data-categoryId="{$sCategoryContent.id}"
+                                    data-pages="{$pages}"
+                                    data-threshold="{$theme.infiniteThreshold}"
+                                        {/if}>
 
                                     {* Actual listing *}
                                     {block name="frontend_listing_list_inline"}

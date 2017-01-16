@@ -226,6 +226,11 @@
             loadingIndSelector: '.listing--content-wrapper',
 
             /**
+             * The selector for "no filter result found" container
+             */
+            noResultContainerSelector: '.listing-no-filter-result .alert',
+
+            /**
              * Class for loading indicator, added and removed on the configurable `listingSelector` element
              */
             isLoadingCls: 'is--loading',
@@ -297,6 +302,7 @@
             me.$filterFacetContainer = me.$filterForm.find(me.opts.filterFacetContainerSelector);
             me.$filterActionButtonBottom = me.$filterForm.find(me.opts.filterActionButtonBottomSelector);
             me.$sidebarModeLoadionIndicator = $(me.opts.sidebarLoadingIndicatorParentSelector);
+            me.$noFilterResultContainer = $(me.opts.noResultContainerSelector);
 
             me.searchHeadlineProductCount = $(me.opts.searchHeadlineProductCountSelector);
             me.listingUrl = me.$filterForm.attr('data-listing-url');
@@ -1114,6 +1120,7 @@
 
             me.updateFilterCloseButton(response.totalCount);
             me.updateSearchHeadline(response.totalCount);
+            me.updateNoResultContainer(response.totalCount);
 
             html = response.listing.trim();
 
@@ -1169,6 +1176,24 @@
 
             if (me.searchHeadlineProductCount.length > 0) {
                 me.searchHeadlineProductCount.html(totalCount);
+            }
+        },
+
+        /**
+         *
+         * @param {int} totalCount
+         */
+        updateNoResultContainer: function(totalCount) {
+            var me = this;
+
+            if (totalCount > 0) {
+                if (!me.$noFilterResultContainer.hasClass('is--hidden')) {
+                    me.$noFilterResultContainer.addClass('is--hidden');
+                }
+                return;
+            }
+            if (me.$noFilterResultContainer.hasClass('is--hidden')) {
+                me.$noFilterResultContainer.removeClass('is--hidden');
             }
         },
 
