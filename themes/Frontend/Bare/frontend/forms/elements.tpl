@@ -33,7 +33,7 @@
                 {block name='frontend_forms_elements_form_captcha'}
                     <div class="forms--captcha">
                         {if {config name=captchaMethod} === 'legacy'}
-                            <div class="captcha--placeholder" data-src="{url module=widgets controller=Captcha action=refreshCaptcha}"></div>
+                            <div class="captcha--placeholder"{if $sSupport.sErrors.e.sCaptcha} data-hasError="true"{/if} data-src="{url module=widgets controller=Captcha action=refreshCaptcha}"></div>
                             <strong class="captcha--notice">{s name='SupportLabelCaptcha'}{/s}</strong>
                             <div class="captcha--code">
                                 <input type="text" required="required" aria-required="true" name="sCaptcha"{if $sSupport.sErrors.e.sCaptcha} class="has--error"{/if} />
