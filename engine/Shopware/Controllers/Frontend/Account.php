@@ -499,8 +499,10 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
           FROM s_user
           WHERE id = ?';
 
-        $context = array_merge($context, $this->get('dbal_connection')->fetchAssoc($sql, [$userID]));
-        $context['attribtues'] = $this->get('dbal_connection')->fetchAssoc('SELECT * FROM s_user_attributes WHERE userID = ?', [$userID]);
+        $user = $this->get('dbal_connection')->fetchAssoc($sql, [$userID]);
+        $user['attributes'] = $this->get('dbal_connection')->fetchAssoc('SELECT * FROM s_user_attributes WHERE userID = ?', [$userID]);
+
+        $context['user'] = $user;
 
         // Send mail
         $mail = Shopware()->TemplateMail()->createMail('sCONFIRMPASSWORDCHANGE', $context);
