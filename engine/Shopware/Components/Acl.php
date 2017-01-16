@@ -49,8 +49,8 @@ class Shopware_Components_Acl extends Zend_Acl
     private function initShopwareAclTree()
     {
         $this->initAclResources()
-             ->initAclRoles()
-             ->initAclRoleConditions();
+            ->initAclRoles()
+            ->initAclRoleConditions();
     }
 
     /**
@@ -163,14 +163,24 @@ class Shopware_Components_Acl extends Zend_Acl
         $resource->setName($resourceName);
         $resource->setPluginId($pluginID);
 
+        if (!empty($privileges)) {
+            $privilegeObjects = [];
+
+            foreach ($privileges as $name) {
+                $privilege = new \Shopware\Models\User\Privilege();
+                $privilege->setName($name);
+                $privilege->setResource($resource);
+
+                $this->em->persist($privilege);
+
+                $privilegeObjects[] = $privilege;
+            }
+
+            $resource->setPrivileges($privilegeObjects);
+        }
+
         $this->em->persist($resource);
         $this->em->flush();
-
-        if (!empty($privileges)) {
-            foreach ($privileges as $privilege) {
-                $this->createPrivilege($resource->getId(), $privilege);
-            }
-        }
     }
 
     /**
@@ -207,6 +217,10 @@ class Shopware_Components_Acl extends Zend_Acl
             "DELETE FROM s_core_acl_roles WHERE resourceID = ?",
             [$resource->getId()]
         );
+
+        foreach ($resource->getPrivileges()->toArray() as $privilege) {
+            $this->em->remove($privilege);
+        }
 
         //The privileges will be removed automatically
         $this->em->remove($resource);
