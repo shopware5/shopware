@@ -12,6 +12,7 @@
     "grunt-chokidar": "^1.0.0",
     "grunt-contrib-less": "^1.0.1",
     "grunt-contrib-uglify": "^0.9.1",
+    "grunt-subgrunt": "^1.2.0",
     "gruntify-eslint": "^3.1.0"
   }
 }
