@@ -212,6 +212,27 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
             labelWidth: me.defaults.labelWidth
         });
 
+        me.displayInListingSelection = Ext.create('Ext.form.field.ComboBox', {
+            store: Ext.create('Ext.data.Store', {
+                fields: ['key', 'label'],
+                data: [
+                    { key: 'only_start', label: '{s name="listing_visibility_only_start"}{/s}' },
+                    { key: 'start_and_listing', label: '{s name="listing_visibility_start_and_listing"}{/s}' },
+                    { key: 'only_listing', label: '{s name="listing_visibility_only_listing"}{/s}' }
+                ]
+            }),
+            editable: false,
+            forceSelection: true,
+            allowBlank: false,
+            fieldLabel: '{s name="listing_visibility_label"}{/s}',
+            name: 'listingVisibility',
+            helpText: '{s name="listing_visibility_help_text"}{/s}',
+            helpTitle: '{s name="listing_visibility_help_title"}{/s}',
+            labelWidth: me.defaults.labelWidth,
+            displayField: 'label',
+            valueField: 'key'
+        });
+
         store = me.emotion.getShops();
         if (!store) {
             store = Ext.create('Ext.data.Store', {
@@ -228,7 +249,9 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
             items: [
                 me.categories,
                 me.listingCheckbox,
-                me.shopGrid
+                me.shopGrid,
+                me.listingCheckbox,
+                me.displayInListingSelection
             ]
         });
     },

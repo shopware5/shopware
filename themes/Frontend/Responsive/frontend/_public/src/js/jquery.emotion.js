@@ -64,6 +64,13 @@
             loadingOverlaySelector: '.emotion--overlay',
 
             /**
+             * Defines if a product listing will be displayed
+             *
+             * @type {boolean}
+             */
+            hasListing: false,
+
+            /**
              * Should the emotion loaded with ajax
              * @property ajax
              * @type {boolean}
@@ -220,6 +227,8 @@
                 return;
             }
 
+            me.$emotion.attr('data-hasListing', me.opts.hasListing);
+
             me.$emotion.swEmotion();
 
             $.publish('plugin/swEmotionLoader/onInitEmotion', [ me, html ]);
@@ -355,7 +364,13 @@
              * @property wrapperSelector
              * @type {string}
              */
-            wrapperSelector: '.emotion--wrapper'
+            wrapperSelector: '.emotion--wrapper',
+
+            /**
+             * flag to prevent `is--no-sidebar` for fullscreen emotions with listing below
+             * @type {boolean}
+             */
+            hasListing: false
         },
 
         /**
@@ -469,7 +484,9 @@
         initFullscreen: function() {
             var me = this;
 
-            $body.addClass('is--no-sidebar');
+            if (!me.opts.hasListing) {
+                $body.addClass('is--no-sidebar');
+            }
             me.$contentMain.addClass('is--fullscreen');
             me.$wrapper.addClass('is--fullscreen');
 
