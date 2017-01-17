@@ -343,7 +343,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
         $search = $this->get('shopware_search.product_search');
 
         if (!$this->Request()->getParam('loadProducts')) {
-            $criteria->limit(0);
+            $criteria->limit(null);
         }
 
         $result = $search->search($criteria, $context);
@@ -384,7 +384,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
         $search = $this->get('shopware_search.product_search');
 
         if (!$this->Request()->getParam('loadProducts')) {
-            $criteria->limit(0);
+            $criteria->limit(null);
         }
 
         return $search->search($criteria, $context);
@@ -415,7 +415,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
         $search = $this->get('shopware_search.product_search');
 
         if (!$this->Request()->getParam('loadProducts')) {
-            $criteria->limit(0);
+            $criteria->limit(null);
         }
 
         return $search->search($criteria, $context);
