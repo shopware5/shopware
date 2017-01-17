@@ -140,7 +140,7 @@ class InstallContext implements \JsonSerializable
     }
 
     /**
-     * @return mixed[]
+     * @return string[]
      */
     public function getScheduled()
     {
