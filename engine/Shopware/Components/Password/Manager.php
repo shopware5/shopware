@@ -129,7 +129,11 @@ class Manager
     {
         $encoder = $this->getEncoderByName($encoderName);
 
-        return $encoder->isPasswordValid($password, $hash);
+        if ($encoder->isPasswordValid($password, $hash)) {
+            return true;
+        }
+
+        return $encoder->isPasswordValid(strip_tags($password), $hash);
     }
 
     /**
