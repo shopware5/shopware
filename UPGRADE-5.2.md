@@ -35,6 +35,8 @@ The service `shopware_media.optimizer_service` optimizes files using external to
 
 * Fixed article api resource when creating a new article with new configurator options and an image mapping for this new options
 * Added cronjob registration via `Resources/cronjob.xml` file
+* Removed call to `strip_tags` in inputfilter on all request parameters.
+    * Please make sure untrusted input is escaped in plugins 
 
 ## 5.2.14
 
@@ -52,7 +54,6 @@ The service `shopware_media.optimizer_service` optimizes files using external to
      'valueField' => 'virtualPath'
  ]);
  ```
-
 
 ## 5.2.13
 
