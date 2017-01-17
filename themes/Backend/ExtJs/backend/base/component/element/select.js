@@ -41,6 +41,42 @@ Ext.define('Shopware.apps.Base.view.element.Select', {
     valueField: 'id',
     displayField: 'name',
 
+    listeners: {
+        //@todo Find a way to add the custom filter if there is one
+        beforequery: function(qe, eOpts) {
+            var me = this;
+            if (! me.store instanceof Ext.data.Store ||  ! me.store.remoteFilter)
+                return;
+
+            var queryString = qe.query;
+            var delimiter = Ext.String.trim(me.delimiter + '');
+            //@todo Find a way to keep the previous values selected after store filtering in multiSelect Mode
+            if (me.multiSelect && queryString.indexOf(delimiter) !== -1 ) {
+                values = queryString.split(delimiter);
+                var filters = [],
+                    i = 0,
+                    len = values.length;
+                for(; i < len; i++) {
+                    value = Ext.String.trim(values[i] + '');
+                    if (! value)
+                        continue;
+                    value = '%' + value + '%';
+                    filters.push(new Ext.util.Filter({
+                        property: me.displayField,
+                        value: value,
+                        operator : 'OR'
+                    }));
+                }
+                me.store.filters.clear();
+                me.store.filter(filters);
+                me.getPicker().refresh();
+                return false;
+            }else {
+                qe.query = '%' + qe.query + '%';
+            }
+        }
+    },
+
     initComponent:function () {
         var me = this;
 

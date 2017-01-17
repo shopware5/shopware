@@ -75,6 +75,7 @@ class Repository extends ModelRepository
                 ->setParameter(1, 'payment');
 
         if ($filter !== null) {
+            $builder->setAlias('status');
             $builder->addFilter($filter);
         }
         if ($order !== null) {
@@ -127,6 +128,7 @@ class Repository extends ModelRepository
 
 
         if ($filter !== null) {
+            $builder->setAlias('status');
             $builder->addFilter($filter);
         }
         if ($order !== null) {

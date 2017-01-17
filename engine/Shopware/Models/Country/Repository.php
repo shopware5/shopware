@@ -80,6 +80,7 @@ class Repository extends ModelRepository
             $builder->where('area.id = :areaId');
             $builder->setParameter('areaId', $filter[0]['value']);
         } elseif ($filter !== null) {
+            $builder->setAlias('countries');
             $builder->addFilter($filter);
         }
 
