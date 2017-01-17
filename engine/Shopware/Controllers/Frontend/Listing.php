@@ -349,9 +349,10 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
      */
     protected function getEmotionConfiguration($categoryId)
     {
-        $emotions = $this->get('emotion_device_configuration')->get($categoryId);
-
-        $emotions = $this->filterListingEmotions($emotions);
+        $emotions = $this->get('emotion_device_configuration')->getListingEmotions(
+            $categoryId,
+            (int) $this->Request()->getParam('sPage')
+        );
 
         return [
             'emotions' => $emotions,
@@ -385,7 +386,21 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
 
         $devices = $this->getDevicesWithListing($emotions);
 
-        return !empty($devices);
+        if (!empty($devices)) {
+            return true;
+        }
+
+        $entryPageEmotions = array_filter($emotions, function ($emotion) {
+            return in_array(
+                $emotion['listing_visibility'],
+                [
+                    Emotion::LISTING_VISIBILITY_ONLY_START,
+                    Emotion::LISTING_VISIBILITY_ONLY_START_AND_LISTING
+                ]
+            );
+        });
+
+        return empty($entryPageEmotions);
     }
 
     /**
@@ -421,38 +436,5 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
     private function loadListing($emotionConfiguration)
     {
         return $emotionConfiguration['showListing'] || $this->Request()->getParam('sPage');
-    }
-
-    /**
-     * @param array $emotions
-     * @return array
-     */
-    private function filterListingEmotions($emotions)
-    {
-        if (max(array_column($emotions, 'showListing')) > 0) {
-            return $emotions;
-        }
-
-        if ((int) $this->Request()->getParam('sPage') > 0) {
-            return array_filter($emotions, function ($emotion) {
-                return in_array(
-                    $emotion['listing_visibility'],
-                    [
-                        Emotion::LISTING_VISIBILITY_ONLY_LISTING,
-                        Emotion::LISTING_VISIBILITY_ONLY_START_AND_LISTING
-                    ]
-                );
-            });
-        }
-
-        return array_filter($emotions, function ($emotion) {
-            return in_array(
-                $emotion['listing_visibility'],
-                [
-                    Emotion::LISTING_VISIBILITY_ONLY_START,
-                    Emotion::LISTING_VISIBILITY_ONLY_START_AND_LISTING
-                ]
-            );
-        });
     }
 }

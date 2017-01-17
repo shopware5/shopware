@@ -26,6 +26,7 @@ namespace Shopware\Components\Emotion;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
+use Shopware\Models\Emotion\Emotion;
 
 class DeviceConfiguration
 {
@@ -40,6 +41,41 @@ class DeviceConfiguration
     public function __construct(Connection $connection)
     {
         $this->connection = $connection;
+    }
+
+    /**
+     * @param int $categoryId
+     * @param int $pageIndex
+     * @return array[]
+     */
+    public function getListingEmotions($categoryId, $pageIndex)
+    {
+        $emotions = $this->get($categoryId);
+
+        if (max(array_column($emotions, 'showListing')) > 0) {
+            return $emotions;
+        }
+
+        if ((int) $pageIndex > 0) {
+            return $this->getEmotionsByVisibility($emotions, [
+                Emotion::LISTING_VISIBILITY_ONLY_LISTING,
+                Emotion::LISTING_VISIBILITY_ONLY_START_AND_LISTING
+            ]);
+        }
+
+        $entryPageEmotions = $this->getEmotionsByVisibility($emotions, [
+            Emotion::LISTING_VISIBILITY_ONLY_START,
+            Emotion::LISTING_VISIBILITY_ONLY_START_AND_LISTING
+        ]);
+
+        if (!empty($entryPageEmotions)) {
+            return $entryPageEmotions;
+        }
+
+        return $this->getEmotionsByVisibility($emotions, [
+            Emotion::LISTING_VISIBILITY_ONLY_LISTING,
+            Emotion::LISTING_VISIBILITY_ONLY_START_AND_LISTING
+        ]);
     }
 
     /**
@@ -245,5 +281,17 @@ class DeviceConfiguration
         });
 
         return $emotions;
+    }
+
+    /**
+     * @param array $emotions
+     * @param array $visibility
+     * @return array
+     */
+    private function getEmotionsByVisibility(array $emotions, array $visibility)
+    {
+        return array_filter($emotions, function ($emotion) use ($visibility) {
+            return in_array($emotion['listing_visibility'], $visibility);
+        });
     }
 }
