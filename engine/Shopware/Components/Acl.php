@@ -23,6 +23,10 @@
  */
 
 use Shopware\Components\Model\ModelManager;
+use Shopware\Models\User\Privilege;
+use Shopware\Models\User\Role;
+use Shopware\Models\User\Rule;
+use Shopware\Models\User\Resource;
 
 /**
  * Shopware ACL Components
@@ -60,7 +64,7 @@ class Shopware_Components_Acl extends Zend_Acl
      */
     public function initAclResources()
     {
-        $repository = $this->em->getRepository('Shopware\Models\User\Resource');
+        $repository = $this->em->getRepository(Resource::class);
         $resources = $repository->findAll();
 
         /**@var $resource Shopware\Models\User\Resource */
@@ -78,7 +82,7 @@ class Shopware_Components_Acl extends Zend_Acl
      */
     public function initAclRoles()
     {
-        $repository = $this->em->getRepository('Shopware\Models\User\Role');
+        $repository = $this->em->getRepository(Role::class);
         $roles = $repository->findAll();
 
         /** @var $role \Shopware\Models\User\Role */
@@ -110,7 +114,7 @@ class Shopware_Components_Acl extends Zend_Acl
      */
     public function initAclRoleConditions()
     {
-        $rules = $this->em->getRepository('Shopware\Models\User\Rule')->findAll();
+        $rules = $this->em->getRepository(Rule::class)->findAll();
 
         /** @var $rule \Shopware\Models\User\Rule */
         foreach ($rules as $rule) {
@@ -138,8 +142,8 @@ class Shopware_Components_Acl extends Zend_Acl
      */
     public function hasResourceInDatabase($resourceName)
     {
-        $repository = $this->em->getRepository('Shopware\Models\User\Resource');
-        $resource = $repository->findOneBy(array("name" => $resourceName));
+        $repository = $this->em->getRepository(Resource::class);
+        $resource = $repository->findOneBy(['name' => $resourceName]);
 
         return !empty($resource);
     }
@@ -159,7 +163,7 @@ class Shopware_Components_Acl extends Zend_Acl
             throw new Enlight_Exception("Resource $resourceName already exists");
         }
 
-        $resource = new \Shopware\Models\User\Resource();
+        $resource = new Resource();
         $resource->setName($resourceName);
         $resource->setPluginId($pluginID);
 
@@ -167,7 +171,7 @@ class Shopware_Components_Acl extends Zend_Acl
             $privilegeObjects = [];
 
             foreach ($privileges as $name) {
-                $privilege = new \Shopware\Models\User\Privilege();
+                $privilege = new Privilege();
                 $privilege->setName($name);
                 $privilege->setResource($resource);
 
@@ -190,7 +194,7 @@ class Shopware_Components_Acl extends Zend_Acl
      */
     public function createPrivilege($resourceId, $name)
     {
-        $privilege = new \Shopware\Models\User\Privilege();
+        $privilege = new Privilege();
         $privilege->setName($name);
         $privilege->setResourceId($resourceId);
 
@@ -205,23 +209,23 @@ class Shopware_Components_Acl extends Zend_Acl
      */
     public function deleteResource($resourceName)
     {
-        $repository = $this->em->getRepository('Shopware\Models\User\Resource');
-        /** @var $resource \Shopware\Models\User\Resource */
-        $resource = $repository->findOneBy(array("name" => $resourceName));
+        $repository = $this->em->getRepository(Resource::class);
+
+        /** @var $resource Resource */
+        $resource = $repository->findOneBy(['name' => $resourceName]);
         if (empty($resource)) {
             return false;
         }
 
         //The mapping table s_core_acl_roles must be cleared manually.
         $this->em->getConnection()->executeUpdate(
-            "DELETE FROM s_core_acl_roles WHERE resourceID = ?",
+            'DELETE FROM s_core_acl_roles WHERE resourceID = ?',
             [$resource->getId()]
         );
 
-        foreach ($resource->getPrivileges()->toArray() as $privilege) {
+        foreach ($resource->getPrivileges() as $privilege) {
             $this->em->remove($privilege);
         }
-
         //The privileges will be removed automatically
         $this->em->remove($resource);
         $this->em->flush();
