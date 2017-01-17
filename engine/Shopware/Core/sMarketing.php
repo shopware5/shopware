@@ -462,7 +462,7 @@ class sMarketing
                 return array(
                     'ordernumber' => $elem->getNumber(),
                     'additionaltext' => $elem->getAdditional(),
-                    'stock' => $elem->getStock()
+                    'instock' => $elem->getStock()
                 );
             },
             $products
