@@ -51,30 +51,23 @@ class DeviceConfiguration
     {
         $query = $this->connection->createQueryBuilder();
 
-        $query->select(array(
+        $query->select([
             'emotion.id',
             'emotion.device as devices',
             'emotion.show_listing as showListing',
-            'emotion.fullscreen'
-        ));
+            'emotion.fullscreen',
+            'emotion.position',
+            'emotion.listing_visibility'
+        ]);
 
-        $query->from('s_emotion', 'emotion')
-            ->where('emotion.active = 1')
-            ->andWhere('emotion.is_landingpage = 0')
-            ->andWhere('(emotion.valid_to   >= NOW() OR emotion.valid_to IS NULL)')
-            ->andWhere('(emotion.valid_from <= NOW() OR emotion.valid_from IS NULL)')
-            ->andWhere('emotion.preview_id IS NULL')
-            ->addOrderBy('emotion.position', 'ASC')
-            ->addOrderBy('emotion.id', 'ASC')
-            ->setParameter(':categoryId', $categoryId);
-
-        $query->innerJoin(
-            'emotion',
-            's_emotion_categories',
-            'category',
-            'category.emotion_id = emotion.id
-             AND category.category_id = :categoryId'
-        );
+        $query->from('s_emotion', 'emotion');
+        $query->where('emotion.active = 1');
+        $query->andWhere('emotion.is_landingpage = 0');
+        $query->andWhere('(emotion.valid_to  >= NOW() OR emotion.valid_to IS NULL)');
+        $query->andWhere('(emotion.valid_from <= NOW() OR emotion.valid_from IS NULL)');
+        $query->andWhere('emotion.preview_id IS NULL');
+        $query->setParameter(':categoryId', $categoryId);
+        $query->innerJoin('emotion', 's_emotion_categories', 'category', 'category.emotion_id = emotion.id AND category.category_id = :categoryId');
 
         /**@var $statement \PDOStatement */
         $statement = $query->execute();
@@ -86,11 +79,11 @@ class DeviceConfiguration
             return $emotion;
         }, $emotions);
 
-        return $emotions;
+        return $this->sortEmotionsByPositionAndId($emotions);
     }
 
     /**
-     * @param $emotionId
+     * @param int $emotionId
      * @throws \Exception
      * @return array
      */
@@ -98,11 +91,11 @@ class DeviceConfiguration
     {
         $query = $this->connection->createQueryBuilder();
 
-        $query->select(array(
+        $query->select([
             'emotion.id',
             'emotion.device as devices',
             'emotion.show_listing as showListing'
-        ));
+        ]);
 
         $query->from('s_emotion', 'emotion')
             ->where('emotion.id = :emotionId')
@@ -148,16 +141,14 @@ class DeviceConfiguration
      */
     public function getLandingPageShops($emotionId)
     {
-        $query = $this->getLandingpageShopsQuery();
+        $query = $this->getLandingPageShopsQuery();
 
         $query->setParameter(':id', $emotionId);
 
         /**@var $statement \PDOStatement */
         $statement = $query->execute();
 
-        $shops = $statement->fetchAll(\PDO::FETCH_COLUMN);
-
-        return $shops;
+        return $statement->fetchAll(\PDO::FETCH_COLUMN);
     }
 
     /**
@@ -189,7 +180,9 @@ class DeviceConfiguration
         /**@var $statement \PDOStatement */
         $statement = $query->execute();
 
-        return $statement->fetchAll(\PDO::FETCH_ASSOC);
+        $emotions = $statement->fetchAll(\PDO::FETCH_ASSOC);
+
+        return $this->sortEmotionsByPositionAndId($emotions);
     }
 
     /**
@@ -201,6 +194,7 @@ class DeviceConfiguration
 
         $query->select([
             'emotion.id',
+            'emotion.position',
             'emotion.device as devices',
             'emotion.name',
             'emotion.seo_title',
@@ -216,8 +210,6 @@ class DeviceConfiguration
             ->andWhere('emotion.is_landingpage = 1')
             ->andWhere('(emotion.valid_from IS NULL OR emotion.valid_from <= now())')
             ->andWhere('(emotion.valid_to IS NULL OR emotion.valid_to >= now())')
-            ->orderBy('emotion.position', 'ASC')
-            ->addOrderBy('emotion.id', 'ASC')
         ;
 
         return $query;
@@ -228,7 +220,7 @@ class DeviceConfiguration
      *
      * @return QueryBuilder
      */
-    private function getLandingpageShopsQuery()
+    private function getLandingPageShopsQuery()
     {
         $query = $this->connection->createQueryBuilder();
 
@@ -237,5 +229,21 @@ class DeviceConfiguration
             ->where('shops.emotion_id = :id');
 
         return $query;
+    }
+
+    /**
+     * @param array $emotions
+     * @return array
+     */
+    private function sortEmotionsByPositionAndId(array $emotions)
+    {
+        usort($emotions, function ($a, $b) {
+            if ($a['position'] === $b['position']) {
+                return ($a['id'] < $b['id']) ? -1 : 1;
+            }
+            return ($a['position'] < $b['position']) ? -1 : 1;
+        });
+
+        return $emotions;
     }
 }
