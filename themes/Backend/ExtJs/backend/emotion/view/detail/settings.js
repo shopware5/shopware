@@ -218,6 +218,8 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
             }),
             fieldLabel: '{s name="listing_visibility_label"}{/s}',
             name: 'listingVisibility',
+            helpText: '{s name="listing_visibility_help_text"}{/s}',
+            helpTitle: '{s name="listing_visibility_help_title"}{/s}',
             labelWidth: me.defaults.labelWidth,
             displayField: 'label',
             valueField: 'key'
@@ -228,8 +230,8 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
             defaults: me.defaults,
             items: [
                 me.categories,
-                me.listingCheckbox,
-                me.displayInListingSelection
+                me.displayInListingSelection,
+                me.listingCheckbox
             ]
         });
     },
