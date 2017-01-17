@@ -158,7 +158,8 @@ class Manager
     {
         $encoder = $this->getEncoderByName($encoderName);
 
-        if (!$encoder->isReencodeNeeded($hash)) {
+        $truncated = $password !== strip_tags($password);
+        if (!$truncated && !$encoder->isReencodeNeeded($hash)) {
             return $hash;
         }
 
