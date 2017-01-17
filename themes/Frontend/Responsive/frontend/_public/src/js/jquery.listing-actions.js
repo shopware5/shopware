@@ -218,12 +218,12 @@
             /**
              * selector for the wrapper of the whole listing
              */
-            listingWrapperSelector: '.listing--wrapper',
+            listingWrapperSelector: '.listing--content-wrapper',
 
             /**
              * The selector for the element which get the loading indicator after customer activates a filter
              */
-            loadingIndSelector: '.listing--wrapper',
+            loadingIndSelector: '.listing--content-wrapper',
 
             /**
              * Class for loading indicator, added and removed on the configurable `listingSelector` element

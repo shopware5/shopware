@@ -58,6 +58,7 @@
 
         <div class="{$listingCssClass}">
             {if $hasFullScreenEmotion}
+                {$countCtrlUrl = "{url module="widgets" controller="listing" action="listingCount" params=$ajaxCountUrlParams fullPath}"}
                 {include file='frontend/listing/sidebar.tpl'}
             {/if}
 
