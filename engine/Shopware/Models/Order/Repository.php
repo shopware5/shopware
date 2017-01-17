@@ -596,6 +596,7 @@ class Repository extends ModelRepository
 
         $builder->select(['orders.id']);
         $builder->from('Shopware\Models\Order\Order', 'orders');
+        $builder->leftJoin('orders.attribute', 'attribute');
         $builder->andWhere('orders.number IS NOT NULL');
         $builder->andWhere('orders.status != :cancelStatus');
         $builder->setParameter(':cancelStatus', -1);
