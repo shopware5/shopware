@@ -32,15 +32,18 @@ use Shopware\Components\Plugin\Context\DeactivateContext;
 use Shopware\Components\Plugin\Context\InstallContext;
 use Shopware\Components\Plugin\Context\UninstallContext;
 use Shopware\Components\Plugin\Context\UpdateContext;
+use Shopware\Components\Plugin\FormSynchronizer;
+use Shopware\Components\Plugin\MenuSynchronizer;
+use Shopware\Components\Plugin\PermissionsSynchronizer;
 use Shopware\Components\Plugin\RequirementValidator;
+use Shopware\Components\Plugin\XmlConfigDefinitionReader;
+use Shopware\Components\Plugin\XmlMenuReader;
+use Shopware\Components\Plugin\XmlPermissionsReader;
+use Shopware\Components\Plugin\XmlPluginInfoReader;
 use Shopware\Components\Snippet\DatabaseHandler;
 use Shopware\Kernel;
 use Shopware\Models\Plugin\Plugin;
-use Shopware\Components\Plugin\FormSynchronizer;
-use Shopware\Components\Plugin\MenuSynchronizer;
-use Shopware\Components\Plugin\XmlMenuReader;
-use Shopware\Components\Plugin\XmlConfigDefinitionReader;
-use Shopware\Components\Plugin\XmlPluginInfoReader;
+use Shopware_Components_Acl;
 
 class PluginInstaller
 {
@@ -70,6 +73,11 @@ class PluginInstaller
     private $pdo;
 
     /**
+     * @var Shopware_Components_Acl
+     */
+    private $acl;
+
+    /**
      * @var string
      */
     private $rootDirectory;
@@ -79,6 +87,7 @@ class PluginInstaller
      * @param DatabaseHandler $snippetHandler
      * @param RequirementValidator $requirementValidator
      * @param \PDO $pdo
+     * @param Shopware_Components_Acl $acl
      * @param $rootDirectory
      */
     public function __construct(
@@ -86,6 +95,7 @@ class PluginInstaller
         DatabaseHandler $snippetHandler,
         RequirementValidator $requirementValidator,
         \PDO $pdo,
+        Shopware_Components_Acl $acl,
         $rootDirectory
     ) {
         $this->em = $em;
@@ -93,6 +103,7 @@ class PluginInstaller
         $this->snippetHandler = $snippetHandler;
         $this->requirementValidator = $requirementValidator;
         $this->pdo = $pdo;
+        $this->acl = $acl;
         $this->rootDirectory = $rootDirectory;
     }
 
@@ -147,6 +158,7 @@ class PluginInstaller
 
         $this->removeEventSubscribers($pluginId);
         $this->removeCrontabEntries($pluginId);
+        $this->removePermissions($plugin->getName());
         $this->removeMenuEntries($pluginId);
         $this->removeTemplates($pluginId);
         $this->removeEmotionComponents($pluginId);
@@ -213,6 +225,10 @@ class PluginInstaller
 
         if (is_file($bootstrap->getPath().'/Resources/menu.xml')) {
             $this->installMenu($plugin, $bootstrap->getPath().'/Resources/menu.xml');
+        }
+
+        if (is_file($bootstrap->getPath().'/Resources/permissions.xml')) {
+            $this->installPermissions($plugin, $bootstrap->getPath().'/Resources/permissions.xml');
         }
 
         if (file_exists($bootstrap->getPath() . '/Resources/snippets')) {
@@ -367,6 +383,19 @@ class PluginInstaller
     }
 
     /**
+     * @param Plugin $plugin
+     * @param $file
+     */
+    private function installPermissions(Plugin $plugin, $file)
+    {
+        $menuReader = new XmlPermissionsReader();
+        $permissions = $menuReader->read($file);
+
+        $permissionSynchronizer = new PermissionsSynchronizer($this->em, $this->acl);
+        $permissionSynchronizer->synchronize($plugin, $permissions);
+    }
+
+    /**
      * @param string $updateVersion
      * @param string $currentVersion
      * @return boolean
@@ -475,6 +504,14 @@ SQL;
     {
         $sql = 'DELETE FROM s_crontab WHERE pluginID = :pluginId';
         $this->connection->executeUpdate($sql, [':pluginId' => $pluginId]);
+    }
+
+    /**
+     * @param string $name
+     */
+    private function removePermissions($name)
+    {
+        $this->acl->deleteResource($name);
     }
 
     /**
