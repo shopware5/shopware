@@ -72,7 +72,7 @@ class InstallContext implements \JsonSerializable
     private $plugin;
 
     /**
-     * @var string[]
+     * @var array
      */
     private $scheduled = [];
 
@@ -129,7 +129,7 @@ class InstallContext implements \JsonSerializable
 
     /**
      * Adds the defer task to clear the frontend cache
-     * @param array $caches
+     * @param string[] $caches
      */
     public function scheduleClearCache(array $caches)
     {
@@ -140,7 +140,7 @@ class InstallContext implements \JsonSerializable
     }
 
     /**
-     * @return mixed[]
+     * @return array
      */
     public function getScheduled()
     {
