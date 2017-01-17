@@ -96,8 +96,8 @@
                                 <a href="{$information.link}"
                                    target="{if $information.target}{$information.target}{else}_blank{/if}"
                                    class="content--link link--further-links"
-                                   title="{$information.description}">
-                                    <i class="icon--arrow-right"></i> {$information.description}
+                                   title="{$information.description|escapeHtml}">
+                                    <i class="icon--arrow-right"></i> {$information.description|escapeHtml}
                                 </a>
                             </li>
                         {/block}
