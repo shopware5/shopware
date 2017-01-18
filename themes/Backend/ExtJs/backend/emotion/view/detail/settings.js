@@ -216,6 +216,9 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
                     { key: 'only_listing', label: '{s name="listing_visibility_only_listing"}{/s}' }
                 ]
             }),
+            editable: false,
+            forceSelection: true,
+            allowBlank: false,
             fieldLabel: '{s name="listing_visibility_label"}{/s}',
             name: 'listingVisibility',
             helpText: '{s name="listing_visibility_help_text"}{/s}',

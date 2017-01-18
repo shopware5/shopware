@@ -12,6 +12,7 @@
                     {/if}
 
                     <div class="emotion--wrapper"
+                         data-hasListing="{$showListing}"
                          data-controllerUrl="{url module=widgets controller=emotion action=index emotionId=$emotion.id controllerName=$Controller}"
                          data-availableDevices="{$emotion.devices}">
                     </div>

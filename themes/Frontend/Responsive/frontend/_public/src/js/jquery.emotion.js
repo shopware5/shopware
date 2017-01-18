@@ -61,7 +61,13 @@
              * @property loadingOverlaySelector
              * @type {string}
              */
-            loadingOverlaySelector: '.emotion--overlay'
+            loadingOverlaySelector: '.emotion--overlay',
+
+            /**
+             * Defines if a product listing will be displayed
+             * @type {boolean}
+             */
+            hasListing: false
         },
 
         /**
@@ -203,7 +209,7 @@
                 return;
             }
 
-            me.$emotion.attr('data-hasListing', true);
+            me.$emotion.attr('data-hasListing', me.opts.hasListing);
 
             me.$emotion.swEmotion();
 
