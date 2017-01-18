@@ -29,6 +29,7 @@ use Shopware\Bundle\SearchBundle\StoreFrontCriteriaFactoryInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\Manufacturer;
 use Shopware\Bundle\StoreFrontBundle\Struct\ProductContextInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Models\Emotion\Emotion;
 
 /**
  * Listing controller
@@ -76,7 +77,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         ]);
 
         // only show the listing if an emotion viewport is empty or the showListing option is active
-        if (!$emotionConfiguration['showListing']) {
+        if (!$this->loadListing($emotionConfiguration)) {
             return;
         }
 
@@ -348,19 +349,15 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
      */
     protected function getEmotionConfiguration($categoryId)
     {
-        if ($this->Request()->getParam('sPage')) {
-            return [
-                'hasEmotion'  => false,
-                'showListing' => true,
-                'showListingDevices' => []
-            ];
-        }
-
-        $emotions = $this->get('emotion_device_configuration')->get($categoryId);
+        $emotions = $this->get('emotion_device_configuration')->getListingEmotions(
+            $categoryId,
+            (int) $this->Request()->getParam('sPage')
+        );
 
         return [
             'emotions' => $emotions,
             'hasEmotion' => !empty($emotions),
+            'hasFullScreenEmotion' => max(array_column($emotions, 'fullscreen')),
             'showListing' => $this->hasListing($emotions),
             'showListingDevices' => $this->getDevicesWithListing($emotions)
         ];
@@ -378,6 +375,10 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
             return true;
         }
 
+        if ($this->Request()->getParam('sPage')) {
+            return true;
+        }
+
         $showListing = (bool) max(array_column($emotions, 'showListing'));
         if ($showListing) {
             return true;
@@ -385,7 +386,21 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
 
         $devices = $this->getDevicesWithListing($emotions);
 
-        return !empty($devices);
+        if (!empty($devices)) {
+            return true;
+        }
+
+        $entryPageEmotions = array_filter($emotions, function ($emotion) {
+            return in_array(
+                $emotion['listing_visibility'],
+                [
+                    Emotion::LISTING_VISIBILITY_ONLY_START,
+                    Emotion::LISTING_VISIBILITY_ONLY_START_AND_LISTING
+                ]
+            );
+        });
+
+        return empty($entryPageEmotions);
     }
 
     /**
@@ -412,5 +427,14 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         $visibleDevices = array_merge($permanentVisibleDevices, $visibleDevices);
 
         return array_values($visibleDevices);
+    }
+
+    /**
+     * @param array $emotionConfiguration
+     * @return bool
+     */
+    private function loadListing($emotionConfiguration)
+    {
+        return $emotionConfiguration['showListing'] || $this->Request()->getParam('sPage');
     }
 }
