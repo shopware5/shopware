@@ -399,7 +399,6 @@
 
             if (disabled) {
                 me.$activeFilterCont.addClass(me.opts.disabledCls);
-
             } else if (me.$activeFilterCont.hasClass(me.opts.disabledCls)) {
                 me.$activeFilterCont.removeClass(me.opts.disabledCls);
             }
@@ -487,9 +486,8 @@
                 // second array element is always whether sorting or products per pages
                 if (me.isSortAction($form)) {
                     me.setSortInput(me.getFormValue(formData, 'o'));
-
                 } else if (me.isPerPageAction($form)) {
-                    me.setPerPageInput(me.getFormValue(formData, 'n'))
+                    me.setPerPageInput(me.getFormValue(formData, 'n'));
                 }
             }
 
@@ -506,7 +504,7 @@
                     return;
                 }
             });
-            return value
+            return value;
         },
 
         /**
