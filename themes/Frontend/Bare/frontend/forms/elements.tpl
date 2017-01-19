@@ -11,7 +11,7 @@
                             <div {if $sSupport.sElements[$sKey].typ eq 'textarea'}class="textarea"{elseif $sSupport.sElements[$sKey].typ eq 'checkbox'}class="forms--checkbox"{elseif $sSupport.sElements[$sKey].typ eq 'select'}class="field--select"{/if}>
                                 {if $sSupport.sElements[$sKey].typ eq 'select'}<span class="arrow"></span>{/if}
 
-                                {eval var=$sSupport.sFields[$sKey]|replace:'%*%':"{s name='RequiredField' namespace='frontend/register/index'}{/s}"}
+                                {$sSupport.sFields[$sKey]|replace:'{literal}':''|replace:'{/literal}':''|replace:'%*%':"{s name='RequiredField' namespace='frontend/register/index'}{/s}"}
 
                                 {if $sSupport.sElements[$sKey].typ eq 'checkbox'}
                                     {$sSupport.sLabels.$sKey|replace:':':''}
