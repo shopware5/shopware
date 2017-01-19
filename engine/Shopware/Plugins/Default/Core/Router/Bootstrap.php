@@ -138,14 +138,17 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
 
         /** @var $repository Shopware\Models\Shop\Repository */
         $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
-        $requestShop = $repository->getActiveByRequest($request);
+        $requestShop = $repository->getActiveShopByRequestAsArray($request);
 
-        if ($requestShop && $requestShop->getId() !== $shop->getId()) {
-            $requestUri = $this->removeShopBaseUrl(
-                $requestUri,
-                $request,
-                $requestShop
-            );
+        if ($requestShop && $requestShop['id'] !== $shop->getId()) {
+            $url = $requestShop['base_url'];
+            $path = $requestShop['base_path'];
+            if ($request->isSecure()) {
+                $url = $requestShop['secure_base_url'];
+                $path = $requestShop['secure_base_path'];
+            }
+            $requestUri = $this->removePartOfUrl($requestUri, $url);
+            $requestUri = $this->removePartOfUrl($requestUri, $path);
         }
 
         $requestUri = $this->removeShopBaseUrl(
@@ -442,15 +445,14 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
         Request $request,
         Shop $newShop
     ) {
-        /** @var Repository $repository */
-        $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
-        $requestShop = $repository->getActiveByRequest($request);
-
         // Remove baseUrl from request url
         $url = $request->getRequestUri();
 
-        if ($requestShop && strpos($url, $requestShop->getBaseUrl()) === 0) {
-            $url = substr($url, strlen($requestShop->getBaseUrl()));
+        /** @var Repository $repository */
+        $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
+        $requestShop = $repository->getActiveShopByRequestAsArray($request);
+        if ($requestShop && strpos($url, $requestShop['base_url']) === 0) {
+            $url = substr($url, strlen($requestShop['base_url']));
         }
 
         $baseUrl = $request->getBaseUrl();
