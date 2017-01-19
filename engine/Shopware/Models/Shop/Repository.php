@@ -416,9 +416,24 @@ class Repository extends ModelRepository
         $query->andWhere('shop.active = 1');
         $query->andWhere('(shop.host = :host OR (shop.host IS NULL AND main_shop.host = :host))');
         $query->setParameter(':host', $host);
-        $query->orderBy('shop.main_id');
-        $query->addOrderBy('shop.position');
         $shops = $query->execute()->fetchAll(\PDO::FETCH_ASSOC);
+
+        usort($shops, function ($a, $b) {
+            if ($a['is_main'] && !$b['is_main']) {
+                return -1;
+            }
+
+            if (!$a['is_main'] && $b['is_main']) {
+                return 1;
+            }
+
+            if ($a['is_main'] === $b['is_main']) {
+                return $a['position'] > $b['position'];
+            }
+
+            return 0;
+        });
+
         $this->setShopsArrayUrls($shops);
         return $shops;
     }
@@ -438,7 +453,7 @@ class Repository extends ModelRepository
         $query->orderBy('shop.main_id');
         $query->addOrderBy('shop.position');
         $query->setMaxResults(1);
-        return $query->execute()->fetchAll(\PDO::FETCH_ASSOC);
+        return $query->execute()->fetch(\PDO::FETCH_ASSOC);
     }
 
     /**
@@ -451,6 +466,7 @@ class Repository extends ModelRepository
             'shop.id',
             'shop.name',
             'shop.base_url',
+            'shop.position',
             'IF(main_shop.id IS NULL, 1, 0) is_main',
             'IFNULL(main_shop.host, shop.host) as host',
             'IFNULL(main_shop.hosts, shop.hosts) as hosts',
@@ -569,8 +585,6 @@ class Repository extends ModelRepository
 
             ->addSelect('mainTemplate')
             ->leftJoin('main.template', 'mainTemplate')
-
-
             ->leftJoin('main.currencies', 'mainCurrencies')
 
             ->where('shop.active = 1')
@@ -578,7 +592,9 @@ class Repository extends ModelRepository
             ->addOrderBy('shop.position');
     }
 
-
+    /**
+     * @return \Doctrine\ORM\QueryBuilder
+     */
     private function getActiveMainShopQueryBuilder()
     {
         /** @var $builder QueryBuilder */
@@ -606,7 +622,10 @@ class Repository extends ModelRepository
             ->where('shop.active = 1');
     }
 
-    public function getActiveSubShopQueryBuilder()
+    /**
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    private function getActiveSubShopQueryBuilder()
     {
         /** @var $builder QueryBuilder */
         return $this->createQueryBuilder('shop')
