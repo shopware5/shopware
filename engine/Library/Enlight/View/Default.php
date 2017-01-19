@@ -78,6 +78,7 @@ class Enlight_View_Default extends Enlight_View implements Enlight_View_Cache
 
     /**
      * Returns the instance of the Enlight_Template_Manager which has been set in the class constructor.
+     *
      * @return  Enlight_Template_Manager
      */
     public function Engine()
@@ -172,6 +173,7 @@ class Enlight_View_Default extends Enlight_View implements Enlight_View_Cache
 
     /**
      * This function extends the internal array with the given template.
+     *
      * @param   $template_name
      * @return  Enlight_View_Default
      */
@@ -213,10 +215,10 @@ class Enlight_View_Default extends Enlight_View implements Enlight_View_Cache
      * Assigns a specified value to the template.
      * If no cache or scope given, the default settings for this property will be used.
      *
-     * @param   string $spec
-     * @param   mixed  $value
-     * @param   bool   $nocache
-     * @param   int    $scope
+     * @param   array|string    $spec
+     * @param   mixed           $value
+     * @param   bool            $nocache
+     * @param   int             $scope
      * @return \Enlight_View|\Enlight_View_Default
      */
     public function assign($spec, $value = null, $nocache = null, $scope = null)
@@ -299,6 +301,7 @@ class Enlight_View_Default extends Enlight_View implements Enlight_View_Cache
 
     /**
      * Setter method for the scope property. Used as default if the parameter is not given in the assign method.
+     *
      * @param   int|null $scope
      * @return  Enlight_View_Default
      */
@@ -357,6 +360,7 @@ class Enlight_View_Default extends Enlight_View implements Enlight_View_Cache
 
     /**
      * Returns the cache id of the internal template object.
+     *
      * @return  string
      */
     public function getCacheId()
