@@ -302,7 +302,7 @@ class Repository extends ModelRepository
     public function getActiveDefault()
     {
         $builder = $this->getActiveQueryBuilder();
-        $builder->where('shop.default = 1');
+        $builder->andWhere('shop.default = 1');
         $shop = $builder->getQuery()->getOneOrNullResult();
 
         if ($shop !== null) {
