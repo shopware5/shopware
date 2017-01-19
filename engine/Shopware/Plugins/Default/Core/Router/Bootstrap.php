@@ -238,6 +238,8 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
                 $this->upgradeShop($request, $response);
                 $this->initServiceMode($request);
             }
+
+            Shopware()->Container()->get('shopware_storefront.context_service')->initializeShopContext();
         }
     }
 
