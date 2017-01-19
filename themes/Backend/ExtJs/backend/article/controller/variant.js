@@ -1039,6 +1039,11 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
         variantListing.getStore().load();
         var configuratorSet = me.prepareConfiguratorSet();
         me.onSaveConfiguratorSet(configuratorSet, null);
+
+        // create the image relation process window
+        Ext.create('Shopware.apps.Article.view.variant.ImageRelationProcess', {
+            article: article
+        }).show();
     },
 
     /**
