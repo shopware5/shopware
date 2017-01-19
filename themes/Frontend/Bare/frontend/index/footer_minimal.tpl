@@ -4,7 +4,7 @@
         {* Service menu *}
         {block name="frontend_index_minimal_footer_menu"}
             <div class="footer--service-menu">
-                {action module=widgets controller=index action=menu group=gLeft}
+                {include file="widgets/index/menu.tpl" sGroup=gLeft}
             </div>
         {/block}
 
