@@ -24,6 +24,7 @@
 
 namespace Shopware\Components\Theme;
 
+use PDO;
 use Shopware\Bundle\MediaBundle\MediaServiceInterface;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Theme;
@@ -168,7 +169,10 @@ class Inheritance
      */
     public function getTemplateDirectories(Shop\Template $template)
     {
-        $directories = $this->getTemplateDirectoriesRecursive($template);
+        $directories= $this->getTemplateDirectoriesRecursive(
+            $template->getId(),
+            $this->fetchTemplates()
+        );
 
         $directories = $this->eventManager->filter(
             'Theme_Inheritance_Template_Directories_Collected',
@@ -329,19 +333,22 @@ class Inheritance
      * The function returns an array with all template directories
      * for the inheritance of the passed template.
      *
-     * @param \Shopware\Models\Shop\Template $template
+     * @param int $templateId
+     * @param array[] $templates
      * @return array
      */
-    private function getTemplateDirectoriesRecursive(Shop\Template $template)
+    private function getTemplateDirectoriesRecursive($templateId, $templates)
     {
+        $template = $templates[$templateId];
+
         $directories = array(
-            $this->pathResolver->getDirectory($template)
+            $this->pathResolver->getDirectoryByArray($template)
         );
 
-        if ($template->getParent() instanceof Shop\Template) {
+        if ($template['parent_id'] !== null) {
             $directories = array_merge(
                 $directories,
-                $this->getTemplateDirectoriesRecursive($template->getParent())
+                $this->getTemplateDirectoriesRecursive($template['parent_id'], $templates)
             );
         }
 
@@ -485,5 +492,25 @@ class Inheritance
         ));
 
         return $builder;
+    }
+
+    /**
+     * @return array
+     */
+    private function fetchTemplates()
+    {
+        $query = $this->entityManager->getConnection()->createQueryBuilder();
+        $query->select([
+            'template.id',
+            'template.template',
+            'template.plugin_id',
+            'template.parent_id',
+            'plugin.name as plugin_name',
+            'plugin.namespace as plugin_namespace',
+            'plugin.source as plugin_source',
+        ]);
+        $query->leftJoin('template', 's_core_plugins', 'plugin', 'plugin.id = template.plugin_id');
+        $query->from('s_core_templates', 'template');
+        return $query->execute()->fetchAll(PDO::FETCH_GROUP | PDO::FETCH_UNIQUE);
     }
 }
