@@ -750,6 +750,7 @@ class sExport
         $sql_add_join   = array();
         $sql_add_select = array();
         $sql_add_where  = array();
+        $sql_select_attributes = array();
 
         $skipBackend = $this->shop->get('skipbackend');
         $isoCode = $this->shop->get('isocode');
@@ -836,6 +837,18 @@ class sExport
             $sql_add_group_by = "d.id";
             $sql_add_article_detail_join_condition ='';
         }
+
+        $tableColumns = Shopware()->Container()->get('models')->getConnection()->getSchemaManager()->listTableDetails('s_articles_attributes')->getColumns();
+        foreach ($tableColumns as $column) {
+            $columnName = $column->getName();
+            if (
+                $columnName !== 'id'
+                && $columnName !== 'articleID'
+                && $columnName !== 'articledetailsID') {
+                $sql_select_attributes[] = 'at.' . $columnName;
+            }
+        }
+        $sql_select_attributes = implode(", ", $sql_select_attributes);
 
         $grouppricefield = "gp.price";
         if (
@@ -947,8 +960,7 @@ class sExport
                 d.weight,
                 d.position,
 
-                at.attr1, at.attr2, at.attr3, at.attr4, at.attr5, at.attr6, at.attr7, at.attr8, at.attr9, at.attr10,
-                at.attr11, at.attr12, at.attr13, at.attr14, at.attr15, at.attr16, at.attr17, at.attr18, at.attr19, at.attr20,
+                $sql_select_attributes,
 
                 s.name as supplier,
                 u.unit,
