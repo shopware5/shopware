@@ -344,7 +344,7 @@ class CoreCriteriaRequestHandler implements CriteriaRequestHandlerInterface
         $limit = (int) $request->getParam('sPerPage', $this->config->get('articlesPerPage'));
         $limit = $limit >= 1 ? $limit: 1;
 
-        if (!in_array($limit, $pageSizes) && $request->getControllerName() == 'listing' && $request->getModuleName() == 'frontend') {
+        if (!in_array($limit, $pageSizes) && in_array($request->getControllerName(), ['listing', 'search']) && $request->getModuleName() == 'frontend') {
             $limit = (int)$this->config->get('articlesPerPage');
         }
 
