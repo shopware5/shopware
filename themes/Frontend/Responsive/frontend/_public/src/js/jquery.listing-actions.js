@@ -887,6 +887,9 @@
                     labelText = $label.prev('span').html() + $label.html();
                 } else if ($label.find('img').length) {
                     labelText = $label.find('img').attr('alt');
+                } else if ($label.closest(me.opts.filterComponentSelector).is('[data-filter-type="radio"]')) {
+                    var activeRadioId = $label.closest(me.opts.filterComponentSelector).find('input:checked').attr('id');
+                    labelText = me.$filterForm.find('label[for="'+me.escapeDoubleQuotes(activeRadioId)+'"]').html();
                 } else if (value > 0 || valueString.length > 0) {
                     labelText = $label.html();
                 }
