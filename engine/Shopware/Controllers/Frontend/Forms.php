@@ -389,25 +389,19 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
                     $post = str_replace('"', '', $post);
                 }
 
-                $post = '{literal}' . $post . '{/literal}';
-
                 break;
-
             case 'text2':
                 $post[0] = $this->_filterInput($post[0]);
                 if (empty($post[0]) && !empty($element['value'][0])) {
                     $post[0] = $element['value'][0];
                 }
                 $post[0] = str_replace('"', '', $post[0]);
-                $post[0] = '{literal}' . $post[0] . '{/literal}';
 
                 $post[1] = $this->_filterInput($post[1]);
                 if (empty($post[0]) && !empty($element['value'][1])) {
                     $post[1] = $element['value'][1];
                 }
                 $post[1] = str_replace('"', '', $post[1]);
-                $post[1] = '{literal}' . $post[1] . '{/literal}';
-
                 break;
             default:
                 break;

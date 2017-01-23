@@ -72,6 +72,9 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Changed command `sw:thumbnail:cleanup` to search the filesystem to remove orphaned thumbnails
 * Moved `defaultListingSorting` configuration from performance module to base settings > `categories / listings`
 * Changed the jQuery plugin `src/js/jquery.selectbox-replacement.js` to be used only as a polyfill. Use the CSS-only version for select fields instead.
+* Removed template `frontend/forms/elements.tpl` to `frontend/forms/form-elements.tpl`
+    * Renamed smarty block `frontend_forms_index_elements` to `frontend_forms_index_form_elements`
+    * Renamed all smarty blocks `frontend_forms_elements*` to `frontend_forms_form_elements*`
 
 ### Removals
 
