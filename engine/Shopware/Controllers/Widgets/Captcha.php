@@ -22,6 +22,8 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Components\Captcha\Exception\CaptchaNotFoundException;
+
 /**
  * Shopware Captcha Controller
  */
@@ -58,6 +60,29 @@ class Shopware_Controllers_Widgets_Captcha extends Enlight_Controller_Action
 
         $captchaName = $captcha->getName();
         $this->View()->loadTemplate(sprintf('widgets/captcha/%s.tpl', $captchaName));
+        $this->View()->assign($captcha->getTemplateData());
+    }
+
+    /**
+     * Assigns a captcha by the passed name in the request to the view.
+     * If no name assign noCaptcha
+     */
+    public function getCaptchaByNameAction()
+    {
+        $captchaName = $this->request->getParam('captchaName', 'nocaptcha');
+
+        /** @var \Shopware\Components\Captcha\CaptchaRepository $captchaRepository */
+        $captchaRepository = $this->container->get('shopware.captcha.repository');
+        try {
+            /** @var \Shopware\Components\Captcha\CaptchaInterface $captcha */
+            $captcha = $captchaRepository->getCaptchaByName($captchaName);
+        } catch (CaptchaNotFoundException $exception) {
+            // log captchaNotFound Exception
+            $this->container->get('corelogger')->error($exception->getMessage());
+            $captcha = $captchaRepository->getCaptchaByName('nocaptcha');
+        }
+
+        $this->View()->loadTemplate(sprintf('widgets/captcha/%s.tpl', $captcha->getName()));
         $this->View()->assign($captcha->getTemplateData());
     }
 }

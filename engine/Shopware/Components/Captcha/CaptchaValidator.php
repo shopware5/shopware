@@ -34,7 +34,6 @@ class CaptchaValidator
      */
     private $repository;
 
-
     /**
      * @param CaptchaRepository $repository
      */
@@ -51,7 +50,22 @@ class CaptchaValidator
      */
     public function validate(Enlight_Controller_Request_Request $request)
     {
-        $captcha = $this->repository->getConfiguredCaptcha();
+        return $this->validateByName(
+            $this->repository->getConfiguredCaptcha()->getName(),
+            $request
+        );
+    }
+
+    /**
+     * Validates a custom captcha by the template name which has passed in the request
+     *
+     * @param string $name
+     * @param Enlight_Controller_Request_Request $request
+     * @return bool
+     */
+    public function validateByName($name, Enlight_Controller_Request_Request $request)
+    {
+        $captcha = $this->repository->getCaptchaByName($name);
         return $captcha->validate($request);
     }
 }
