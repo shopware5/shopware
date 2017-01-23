@@ -112,6 +112,14 @@ class ManufacturerGateway implements Gateway\ManufacturerGatewayInterface
             $manufacturers[$id] = $this->manufacturerHydrator->hydrate($row);
         }
 
-        return $manufacturers;
+        $sorted = [];
+        foreach ($ids as $id) {
+            if (!array_key_exists($id, $manufacturers)) {
+                continue;
+            }
+            $sorted[$id] = $manufacturers[$id];
+        }
+
+        return $sorted;
     }
 }
