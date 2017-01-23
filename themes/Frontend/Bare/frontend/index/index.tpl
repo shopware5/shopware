@@ -157,7 +157,7 @@
                 'vat_check_enabled': '{config name='vatcheckendabled'}',
                 'vat_check_required': '{config name='vatcheckrequired'}',
                 'ajax_cart': '{url controller='checkout' action='ajaxCart'}',
-                'ajax_search': '{url controller="ajax_search"}',
+                'ajax_search': '{url controller="ajax_search" _seo=false}',
                 'register': '{url controller="register"}',
                 'checkout': '{url controller="checkout"}',
                 'ajax_validate': '{url controller="register"}',

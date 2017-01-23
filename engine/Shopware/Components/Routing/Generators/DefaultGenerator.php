@@ -91,6 +91,10 @@ class DefaultGenerator implements GeneratorInterface
             $route[] = $action;
         }
 
+        if (array_key_exists('_seo', $params)) {
+            unset($params['_seo']);
+        }
+
         foreach ($params as $key => $value) {
             $route[] = $key;
             $route[] = $value;
