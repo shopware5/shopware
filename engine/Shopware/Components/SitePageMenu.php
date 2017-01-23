@@ -25,6 +25,7 @@
 namespace Shopware\Components;
 
 use Doctrine\DBAL\Connection;
+use Shopware\Components\Routing\Router;
 
 /**
  * Class SitePageMenu
@@ -62,6 +63,7 @@ class SitePageMenu
         $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
 
         $menu = [];
+        $links = [];
         foreach ($data as $site) {
             $key = !empty($site['mapping']) ? $site['mapping'] : $site['group'];
 
@@ -69,8 +71,24 @@ class SitePageMenu
                 $menu[$key] = [];
             }
 
+            $id = (int) $site['id'];
+            if (!empty($site['link'])) {
+                $links[$id] = $site['link'];
+            } else {
+                $links[$id] = [
+                    'controller' => 'custom',
+                    'action' => 'index',
+                    'sCustom' => $id
+                ];
+            }
+
             $menu[$key][] = $site;
         }
+
+        /** @var Router $router */
+        $router = Shopware()->Container()->get('router');
+        $seoUrls = $router->generateList($links);
+        $menu = $this->assignSeoUrls($menu, $seoUrls);
 
         $result = [];
         foreach ($menu as $key => $group) {
@@ -96,7 +114,7 @@ class SitePageMenu
             if ($site['parentID'] != $parentId) {
                 continue;
             }
-            $id = $site['id'];
+            $id = (int) $site['id'];
 
             //call recursive for tree building
             $site['subPages'] = $this->buildSiteTree(
@@ -188,5 +206,23 @@ class SitePageMenu
     public function overrideExisting($menu, $key, $site)
     {
         return (!empty($site['mapping']) && empty($menu[$key][0]['mapping']));
+    }
+
+    /**
+     * @param array[] $menu
+     * @param string[] $seoUrls
+     * @return array
+     */
+    private function assignSeoUrls($menu, $seoUrls)
+    {
+        foreach ($menu as &$group) {
+            foreach ($group as &$site) {
+                $key = (int) $site['id'];
+                if (array_key_exists($key, $seoUrls)) {
+                    $site['link'] = $seoUrls[$key];
+                }
+            }
+        }
+        return $menu;
     }
 }
