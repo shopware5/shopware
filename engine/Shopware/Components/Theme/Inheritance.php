@@ -169,7 +169,7 @@ class Inheritance
      */
     public function getTemplateDirectories(Shop\Template $template)
     {
-        $directories= $this->getTemplateDirectoriesRecursive(
+        $directories = $this->getTemplateDirectoriesRecursive(
             $template->getId(),
             $this->fetchTemplates()
         );
@@ -195,7 +195,14 @@ class Inheritance
      */
     public function getSmartyDirectories(Shop\Template $template)
     {
-        $directories = $this->getSmartyDirectoriesRecursive($template);
+        $directories = $this->getTemplateDirectoriesRecursive(
+            $template->getId(),
+            $this->fetchTemplates()
+        );
+
+        $directories = array_map(function ($dir) {
+            return implode(DIRECTORY_SEPARATOR, [$dir, '_private', 'smarty']);
+        }, $directories);
 
         $directories = $this->eventManager->filter(
             'Theme_Inheritance_Smarty_Directories_Collected',
@@ -240,68 +247,6 @@ class Inheritance
 
         foreach ($files as &$file) {
             $file = $directory . DIRECTORY_SEPARATOR . $file;
-        }
-
-        return $files;
-    }
-
-
-    /**
-     * Helper function which collects the defined theme css
-     * files for the passed shop template.
-     * This function uses a recursive call to collect
-     * all files of the template inheritance.
-     *
-     * @param Shop\Template $template
-     * @return array
-     */
-    private function getCssFilesRecursive(Shop\Template $template)
-    {
-        $theme = $this->util->getThemeByTemplate($template);
-
-        $css = $theme->getCss();
-
-        $directory = $this->pathResolver->getPublicDirectory($template);
-        foreach ($css as &$file) {
-            $file = $directory . DIRECTORY_SEPARATOR . $file;
-        }
-
-        if ($template->getParent() instanceof Shop\Template) {
-            $css = array_merge(
-                $css,
-                $this->getCssFilesRecursive($template->getParent())
-            );
-        }
-
-        return $css;
-    }
-
-    /**
-     * Helper function which collects the defined theme javascript
-     * files for the passed shop template.
-     * This function uses a recursive call to collect
-     * all files of the template inheritance.
-     *
-     * @param Shop\Template $template
-     * @return array
-     */
-    private function getJavascriptFilesRecursive(Shop\Template $template)
-    {
-        $theme = $this->util->getThemeByTemplate($template);
-
-        $files = $theme->getJavascript();
-
-        $directory = $this->pathResolver->getPublicDirectory($template);
-
-        foreach ($files as &$file) {
-            $file = $directory . DIRECTORY_SEPARATOR . $file;
-        }
-
-        if ($template->getParent() instanceof Shop\Template) {
-            $files = array_merge(
-                $this->getJavascriptFilesRecursive($template->getParent()),
-                $files
-            );
         }
 
         return $files;
@@ -355,30 +300,6 @@ class Inheritance
         return $directories;
     }
 
-    /**
-     * Helper function which returns all smarty directories for the
-     * passed templates.
-     * The function returns an array with all smarty directories
-     * for the inheritance of the passed template.
-     *
-     * @param \Shopware\Models\Shop\Template $template
-     * @return array
-     */
-    private function getSmartyDirectoriesRecursive(Shop\Template $template)
-    {
-        $directories = array(
-            $this->pathResolver->getSmartyDirectory($template)
-        );
-
-        if ($template->getParent() instanceof Shop\Template) {
-            $directories = array_merge(
-                $directories,
-                $this->getSmartyDirectoriesRecursive($template->getParent())
-            );
-        }
-
-        return $directories;
-    }
 
     /**
      * Helper function which builds the theme configuration key value array.
