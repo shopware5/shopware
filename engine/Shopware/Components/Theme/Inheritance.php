@@ -24,6 +24,7 @@
 
 namespace Shopware\Components\Theme;
 
+use Doctrine\DBAL\Connection;
 use PDO;
 use Shopware\Bundle\MediaBundle\MediaServiceInterface;
 use Shopware\Components\Model\ModelManager;
@@ -69,14 +70,14 @@ class Inheritance
      * can be selected in the shop configuration query.
      * @var array
      */
-    private $validLessFields = array(
+    private $validLessFields = [
         'theme-color-picker',
         'theme-em-field',
         'theme-percent-field',
         'theme-pixel-field',
         'theme-select-field',
         'theme-text-field'
-    );
+    ];
 
     /**
      * @var MediaServiceInterface
@@ -149,13 +150,28 @@ class Inheritance
      */
     public function buildConfig(Shop\Template $template, Shop\Shop $shop, $lessCompatible = true)
     {
-        $config = $this->buildConfigRecursive($template, $shop, $lessCompatible);
+        $templates = $this->fetchTemplates();
 
-        $config = $this->eventManager->filter('Theme_Inheritance_Config_Created', $config, array(
+        $templates = $this->filterAffectedTemplates($template->getId(), $templates);
+
+        $configs = $this->getConfigs(
+            array_keys($templates),
+            $shop->getId(),
+            $lessCompatible
+        );
+
+        $config = $this->buildConfigRecursive(
+            $template->getId(),
+            $templates,
+            $configs,
+            $lessCompatible
+        );
+
+        $config = $this->eventManager->filter('Theme_Inheritance_Config_Created', $config, [
             'shop' => $shop,
             'template' => $template,
             'lessCompatible' => $lessCompatible
-        ));
+        ]);
         return $config;
     }
 
@@ -177,7 +193,7 @@ class Inheritance
         $directories = $this->eventManager->filter(
             'Theme_Inheritance_Template_Directories_Collected',
             $directories,
-            array('template' => $template)
+            ['template' => $template]
         );
 
         return $directories;
@@ -207,7 +223,7 @@ class Inheritance
         $directories = $this->eventManager->filter(
             'Theme_Inheritance_Smarty_Directories_Collected',
             $directories,
-            array('template' => $template)
+            ['template' => $template]
         );
 
         return $directories;
@@ -261,7 +277,7 @@ class Inheritance
      */
     private function buildInheritanceRecursive(Shop\Template $template)
     {
-        $hierarchy = array($template);
+        $hierarchy = [$template];
 
         if ($template->getParent() instanceof Shop\Template) {
             $hierarchy = array_merge(
@@ -286,9 +302,9 @@ class Inheritance
     {
         $template = $templates[$templateId];
 
-        $directories = array(
+        $directories = [
             $this->pathResolver->getDirectoryByArray($template)
-        );
+        ];
 
         if ($template['parent_id'] !== null) {
             $directories = array_merge(
@@ -313,23 +329,32 @@ class Inheritance
      * This fields are defined as class property within this class and can be extended
      * over a shopware event.
      *
-     * @param Shop\Template $template
-     * @param Shop\Shop $shop
-     * @param bool $lessCompatible
+     * @param $templateId
+     * @param $templates
+     * @param array[] $configs
      * @return array
      */
-    private function buildConfigRecursive(Shop\Template $template, Shop\Shop $shop, $lessCompatible = true)
+    private function buildConfigRecursive($templateId, $templates, $configs, $lessCompatible = true)
     {
-        $config = $this->getShopConfig($template, $shop, $lessCompatible);
+        $template = $templates[$templateId];
 
-        if ($template->getParent() instanceof Shop\Template) {
+        $config = [];
+        if (array_key_exists($templateId, $configs)) {
+            $config = $configs[$templateId];
+        }
+
+        $config = $this->parseConfig($config, $lessCompatible);
+
+        if ($template['parent_id']) {
             $parent = $this->buildConfigRecursive(
-                $template->getParent(),
-                $shop,
+                $template['parent_id'],
+                $templates,
+                $configs,
                 $lessCompatible
             );
-            $config = array_merge($parent, $config);
+            return array_merge($parent, $config);
         }
+
         return $config;
     }
 
@@ -341,23 +366,17 @@ class Inheritance
      * as value. If no shop config saved, the value will fallback to
      * the default value.
      *
-     * @param \Shopware\Models\Shop\Template $template
-     * @param \Shopware\Models\Shop\Shop $shop
+     * @param array $config
      * @param bool $lessCompatible
      * @return array
      */
-    private function getShopConfig(Shop\Template $template, Shop\Shop $shop, $lessCompatible = true)
+    private function parseConfig(array $config, $lessCompatible = true)
     {
-        $builder = $this->getShopConfigQuery($template, $lessCompatible);
-
-        $builder->setParameter('templateId', $template->getId())
-            ->setParameter('shopId', $shop->getMain() ? $shop->getMain()->getId() : $shop->getId());
-
-        $data = $builder->getQuery()->getArrayResult();
-
-        foreach ($data as &$row) {
+        foreach ($config as &$row) {
             if (!isset($row['value'])) {
-                $row['value'] = $row['defaultValue'];
+                $row['value'] = unserialize($row['defaultValue']);
+            } else {
+                $row['value'] = unserialize($row['value']);
             }
 
             if ($lessCompatible && $row['type'] === 'theme-media-selection') {
@@ -369,14 +388,14 @@ class Inheritance
             }
         }
 
-        if (!is_array($data) || empty($data)) {
-            return array();
+        if (!is_array($config) || empty($config)) {
+            return [];
         }
 
         //creates a key value array for the configuration.
         return array_combine(
-            array_column($data, 'name'),
-            array_column($data, 'value')
+            array_column($config, 'name'),
+            array_column($config, 'value')
         );
     }
 
@@ -392,12 +411,12 @@ class Inheritance
     private function getShopConfigQuery(Shop\Template $template, $lessCompatible)
     {
         $builder = $this->entityManager->createQueryBuilder();
-        $builder->select(array(
+        $builder->select([
             'element.name',
             'values.value',
             'element.defaultValue',
             'element.type'
-        ));
+        ]);
 
         $builder->from('Shopware\Models\Shop\TemplateConfig\Element', 'element')
             ->leftJoin('element.values', 'values', 'WITH', 'values.shopId = :shopId')
@@ -407,10 +426,10 @@ class Inheritance
             $builder->andWhere('element.lessCompatible = 1');
         }
 
-        $this->eventManager->notify('Theme_Inheritance_Shop_Query_Built', array(
+        $this->eventManager->notify('Theme_Inheritance_Shop_Query_Built', [
             'builder' => $builder,
             'template' => $template
-        ));
+        ]);
 
         return $builder;
     }
@@ -423,6 +442,7 @@ class Inheritance
         $query = $this->entityManager->getConnection()->createQueryBuilder();
         $query->select([
             'template.id',
+            'template.id',
             'template.template',
             'template.plugin_id',
             'template.parent_id',
@@ -433,5 +453,56 @@ class Inheritance
         $query->leftJoin('template', 's_core_plugins', 'plugin', 'plugin.id = template.plugin_id');
         $query->from('s_core_templates', 'template');
         return $query->execute()->fetchAll(PDO::FETCH_GROUP | PDO::FETCH_UNIQUE);
+    }
+
+    /**
+     * @param int $id
+     * @param array[] $templates
+     * @return array
+     */
+    private function filterAffectedTemplates($id, $templates)
+    {
+        $active = $templates[$id];
+
+        if ($active['parent_id']) {
+            $children = $this->filterAffectedTemplates($active['parent_id'], $templates);
+            $directories = [ $id => $active ];
+            $directories += $children;
+            return $directories;
+        }
+
+        return [ $id => $active ];
+    }
+
+    /**
+     * @param int[] $templateIds
+     * @param int $shopId
+     * @param boolean $lessCompatible
+     * @return array[] indexed by template id
+     */
+    private function getConfigs($templateIds, $shopId, $lessCompatible)
+    {
+        $query = $this->entityManager->getConnection()->createQueryBuilder();
+
+        $query->select([
+            'element.template_id',
+            'element.name',
+            'element_value.value',
+            'element.default_value as defaultValue',
+            'element.type'
+        ]);
+
+        $query->from('s_core_templates_config_elements', 'element');
+        $query->leftJoin('element', 's_core_templates_config_values', 'element_value', 'element_value.element_id = element.id AND element_value.shop_id = :shopId');
+        $query->where('element.template_id IN (:ids)');
+
+        if ($lessCompatible) {
+            $query->andWhere('element.less_compatible = 1');
+        }
+
+        $query->setParameter(':shopId', $shopId);
+        $query->setParameter(':ids', $templateIds, Connection::PARAM_INT_ARRAY);
+
+        return $query->execute()->fetchAll(PDO::FETCH_GROUP);
     }
 }
