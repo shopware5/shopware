@@ -244,7 +244,7 @@
                                                     {block name='frontend_checkout_confirm_information_addresses_equal_panel_billing'}
                                                         <div class="billing--panel">
                                                             {if $sUserData.billingaddress.company}
-                                                                <span class="address--company is--bold">{$sUserData.billingaddress.company|escapeHtml}</span>{if $sUserData.billingaddress.department|escapeHtml}<br /><span class="address--department is--bold">{$sUserData.billingaddress.department}</span>{/if}
+                                                                <span class="address--company is--bold">{$sUserData.billingaddress.company|escapeHtml}</span>{if $sUserData.billingaddress.department|escapeHtml}<br /><span class="address--department is--bold">{$sUserData.billingaddress.department|escapeHtml}</span>{/if}
                                                                 <br />
                                                             {/if}
 

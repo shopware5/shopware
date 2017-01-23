@@ -149,7 +149,7 @@ Ext.define('Enlight.app.WindowManagement', {
         btn = Ext.create('Ext.button.Button', {
             cls: me.defaultCls,
             iconCls: me.defaultIconCls,
-            text: text || 'Window',
+            text: Ext.util.Format.htmlEncode(text || 'Window'),
             responsibleView: view,
             handler: me.onButtonClick
         });
