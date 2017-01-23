@@ -363,11 +363,24 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         $context = $this->get('shopware_storefront.context_service')->getShopContext();
         $medias = $this->get('shopware_storefront.media_service')->getList($mediaIds, $context);
 
-        //now we get the configured image and thumbnail dir.
-        $imageDir = $context->getBaseUrl() . '/media/image/';
-        $imageDir = str_replace('/media/image/', '/', $imageDir);
+        $links = [];
+        foreach ($result as $blog) {
+            $links[$blog['id']] = [
+                'controller' => 'blog',
+                'action' => 'detail',
+                'sCategory' => $blog['categoryId'],
+                'blogArticle' => $blog['id']
+            ];
+        }
+        $urls = $this->get('router')->generateList($links);
 
         foreach ($result as &$entry) {
+            $entry['link'] = null;
+
+            if (array_key_exists($entry['id'], $urls)) {
+                $entry['link'] = $urls[$entry['id']];
+            }
+
             foreach ($entry['media'] as $media) {
                 if (empty($media['mediaId'])) {
                     continue;
@@ -578,7 +591,6 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         // Get all manufacturers
         if ($data["manufacturer_type"] == "manufacturers_by_cat") {
             $data["values"] = Shopware()->Modules()->Articles()->sGetAffectedSuppliers($data["manufacturer_category"], 12);
-
         } else {
             $ids = array_column($data["selected_manufacturers"], 'supplierId');
             $context = $this->get('shopware_storefront.context_service')
@@ -587,7 +599,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
             $manufacturers = $this->get('shopware_storefront.manufacturer_service')
                 ->getList($ids, $context);
 
-            $values = array_map(function(Manufacturer $manufacturer) {
+            $values = array_map(function (Manufacturer $manufacturer) {
                 return $this->get('legacy_struct_converter')
                     ->convertManufacturerStruct($manufacturer);
             }, $manufacturers);
