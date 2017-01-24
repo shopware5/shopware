@@ -799,6 +799,9 @@ class Variant extends Resource implements BatchInterface
 
                 $option = new Option();
                 $option->setPosition(0);
+                if (array_key_exists('position', $optionData)) {
+                    $option->setPosition((int) $optionData['position']);
+                }
                 $option->setName($optionData['option']);
                 $option->setGroup($availableGroup);
                 $this->getManager()->persist($option);
