@@ -498,9 +498,11 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
      */
     protected function _filterInput($input)
     {
-        $pattern = '#{\s*/literal\s*}#i';
+        // remove all control characters, unassigned, private use, formatting and surrogate code points
+        $input = preg_replace('#[^\PC\s]#u', '', $input);
 
-        if (preg_match($pattern, $input) > 0) {
+        $temp = str_replace('"', '', $input);
+        if (preg_match('#{\s*/*literal\s*}#i', $temp) > 0) {
             return '';
         }
 
