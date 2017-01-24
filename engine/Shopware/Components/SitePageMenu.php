@@ -26,6 +26,7 @@ namespace Shopware\Components;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Components\Routing\Router;
+use Shopware\Components\Routing\RouterInterface;
 
 /**
  * Class SitePageMenu
@@ -39,11 +40,18 @@ class SitePageMenu
     private $connection;
 
     /**
-     * @param Connection $connection
+     * @var RouterInterface
      */
-    public function __construct(Connection $connection)
+    private $router;
+
+    /**
+     * @param Connection $connection
+     * @param RouterInterface $router
+     */
+    public function __construct(Connection $connection, RouterInterface $router)
     {
         $this->connection = $connection;
+        $this->router = $router;
     }
 
     /**
@@ -86,8 +94,7 @@ class SitePageMenu
         }
 
         /** @var Router $router */
-        $router = Shopware()->Container()->get('router');
-        $seoUrls = $router->generateList($links);
+        $seoUrls = $this->router->generateList($links);
         $menu = $this->assignSeoUrls($menu, $seoUrls);
 
         $result = [];
