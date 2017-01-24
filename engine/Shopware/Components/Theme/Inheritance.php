@@ -217,7 +217,7 @@ class Inheritance
         );
 
         $directories = array_map(function ($dir) {
-            return implode(DIRECTORY_SEPARATOR, [$dir, '_private', 'smarty']);
+            return implode(DIRECTORY_SEPARATOR, [$dir, '_private', 'smarty']) . DIRECTORY_SEPARATOR;
         }, $directories);
 
         $directories = $this->eventManager->filter(

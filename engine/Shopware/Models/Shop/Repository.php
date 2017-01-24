@@ -434,8 +434,7 @@ class Repository extends ModelRepository
             return 0;
         });
 
-        $this->setShopsArrayUrls($shops);
-        return $shops;
+        return $this->setShopsArrayUrls($shops);
     }
 
     /**
