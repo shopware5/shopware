@@ -60,7 +60,7 @@
                     expires = '; expires=' + date.toGMTString();
                 }
 
-                value = encodeURI(value);
+                value = encodeURIComponent(value);
 
                 document.cookie = name + '=' + value + expires + '; path=/';
             }
@@ -86,7 +86,7 @@
                     }
 
                     if (cookie.indexOf(nameEq) == 0) {
-                        return decodeURI(cookie.substring(nameEq.length, cookie.length));
+                        return decodeURIComponent(cookie.substring(nameEq.length, cookie.length));
                     }
                 }
                 return null;
