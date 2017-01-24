@@ -261,6 +261,11 @@ Ext.define('Shopware.form.field.Grid', {
         };
     },
 
+    /**
+     * allows to override the select event
+     * @param combo
+     * @param records
+     */
     onSelect: function(combo, records) {
 
     },
