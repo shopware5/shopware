@@ -24,6 +24,7 @@
 
 namespace Shopware\Bundle\SearchBundle\FacetResult;
 
+use Shopware\Bundle\SearchBundle\Facet\CategoryFacet;
 use Shopware\Bundle\StoreFrontBundle\Struct\Category;
 use Shopware\Components\QueryAliasMapper;
 
@@ -55,9 +56,10 @@ class CategoryTreeFacetResultBuilder
      * @param Category[] $categories
      * @param int[] $activeIds
      * @param int $systemCategoryId
+     * @param CategoryFacet $facet
      * @return null|TreeFacetResult
      */
-    public function buildFacetResult(array $categories, array $activeIds = [], $systemCategoryId)
+    public function buildFacetResult(array $categories, array $activeIds = [], $systemCategoryId, CategoryFacet $facet)
     {
         $items = $this->getCategoriesOfParent($categories, $systemCategoryId);
 
@@ -70,12 +72,16 @@ class CategoryTreeFacetResultBuilder
             $values[] = $this->createTreeItem($categories, $item, $activeIds);
         }
 
-        $label = $this->snippetManager
-            ->getNamespace('frontend/listing/facet_labels')
-            ->get('category', 'Categories');
+        if (!empty($facet->getLabel())) {
+            $label = $facet->getLabel();
+        } else {
+            $label = $this->snippetManager
+                ->getNamespace('frontend/listing/facet_labels')
+                ->get('category', 'Categories');
+        }
 
-        if (!$fieldName = $this->queryAliasMapper->getShortAlias('sCategory')) {
-            $fieldName = 'sCategory';
+        if (!$fieldName = $this->queryAliasMapper->getShortAlias('categoryFilter')) {
+            $fieldName = 'categoryFilter';
         }
 
         return new TreeFacetResult(

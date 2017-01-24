@@ -120,15 +120,16 @@ class ManufacturerFacetHandler implements PartialFacetHandlerInterface
 
         $activeManufacturers = $this->getActiveIds($criteria);
 
-        return $this->createFacetResult($manufacturers, $activeManufacturers);
+        return $this->createFacetResult($facet, $manufacturers, $activeManufacturers);
     }
 
     /**
+     * @param Facet\ManufacturerFacet $facet
      * @param Manufacturer[] $manufacturers
      * @param int[] $activeIds
      * @return ValueListFacetResult
      */
-    private function createFacetResult($manufacturers, $activeIds)
+    private function createFacetResult(Facet\ManufacturerFacet $facet, $manufacturers, $activeIds)
     {
         $listItems = [];
 
@@ -147,10 +148,16 @@ class ManufacturerFacetHandler implements PartialFacetHandlerInterface
             return strcasecmp($a->getLabel(), $b->getLabel());
         });
 
+        if (!empty($facet->getLabel())) {
+            $label = $facet->getLabel();
+        } else {
+            $label = $this->snippetNamespace->get('manufacturer', 'Manufacturer');
+        }
+
         return new ValueListFacetResult(
             'manufacturer',
             !empty($activeIds),
-            $this->snippetNamespace->get('manufacturer', 'Manufacturer'),
+            $label,
             $listItems,
             $this->fieldName
         );

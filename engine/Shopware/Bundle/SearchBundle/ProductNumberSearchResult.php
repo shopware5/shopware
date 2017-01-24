@@ -34,7 +34,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
  * @package   Shopware\Bundle\SearchBundle
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class ProductNumberSearchResult extends Extendable implements \JsonSerializable
+class ProductNumberSearchResult extends Extendable
 {
     /**
      * @var BaseProduct[] Indexed by the product order number
@@ -55,12 +55,14 @@ class ProductNumberSearchResult extends Extendable implements \JsonSerializable
      * @param BaseProduct[] $products Indexed by the product order number
      * @param int $totalCount
      * @param FacetResultInterface[] $facets
+     * @param array $attributes
      */
-    public function __construct($products, $totalCount, $facets)
+    public function __construct($products, $totalCount, $facets, $attributes = [])
     {
         $this->products = $products;
         $this->totalCount = $totalCount;
         $this->facets = $facets;
+        $this->attributes = $attributes;
     }
 
     /**

@@ -5,6 +5,10 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
+        <service id="shopware_search_es.handler_collection" class="Doctrine\Common\Collections\ArrayCollection">
+            <factory service="shopware_search_es.product_number_search_factory" method="registerHandlerCollection" />
+            <argument type="service" id="service_container" />
+        </service>
 
         <service id="shopware_search_es.struct_hydrator" class="Shopware\Bundle\SearchBundleES\StructHydrator" />
 
@@ -182,5 +186,20 @@
             <argument type="service" id="service_container" />
             <tag name="shopware.event_subscriber" />
         </service>
+
+        <service id="shopware_search_es.combined_condition_query_builder" class="Shopware\Bundle\SearchBundleES\CombinedConditionQueryBuilder">
+            <argument type="service" id="service_container" />
+        </service>
+
+        <service id="shopware_search_es.combined_condition_facet_handler" class="Shopware\Bundle\SearchBundleES\FacetHandler\CombinedConditionFacetHandler">
+            <argument type="service" id="shopware_search_es.combined_condition_query_builder" />
+            <tag name="shopware_search_es.search_handler" />
+        </service>
+
+        <service id="shopware_search_es.combined_condition_handler" class="Shopware\Bundle\SearchBundleES\ConditionHandler\CombinedConditionHandler">
+            <argument type="service" id="shopware_search_es.combined_condition_query_builder" />
+            <tag name="shopware_search_es.search_handler" />
+        </service>
+
     </services>
 </container>

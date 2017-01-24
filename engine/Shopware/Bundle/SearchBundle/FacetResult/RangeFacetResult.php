@@ -83,7 +83,7 @@ class RangeFacetResult extends Extendable implements FacetResultInterface
     /**
      * @var null|string
      */
-    protected $template = null;
+    protected $template;
 
     /**
      * @param string $facetName

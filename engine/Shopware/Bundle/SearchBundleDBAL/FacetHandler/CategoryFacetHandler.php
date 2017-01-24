@@ -113,7 +113,7 @@ class CategoryFacetHandler implements PartialFacetHandlerInterface
 
         $ids = $this->categoryDepthService->get(
             $context->getShop()->getCategory(),
-            (int) $this->config->get('categoryFilterDepth', 2),
+            $facet->getDepth(),
             $ids
         );
 
@@ -122,7 +122,8 @@ class CategoryFacetHandler implements PartialFacetHandlerInterface
         return $this->categoryTreeFacetResultBuilder->buildFacetResult(
             $categories,
             $this->getFilteredIds($criteria),
-            $context->getShop()->getCategory()->getId()
+            $context->getShop()->getCategory()->getId(),
+            $facet
         );
     }
 

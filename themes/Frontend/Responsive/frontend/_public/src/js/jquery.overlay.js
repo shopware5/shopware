@@ -34,6 +34,11 @@
             /** @string CSS class for the overlay element */
             overlayCls: 'js--overlay',
 
+            /**
+             * @string Css class for the render element to set relative position
+             */
+            relativeClass: 'js--overlay-relative',
+
             /** @string CSS class which indicates that the overlay is open - mainly used for styling purpose */
             openClass: 'is--open',
 
@@ -88,7 +93,8 @@
                 window.clearTimeout(me._timeout);
                 delete me._timeout;
 
-                $renderElement.css('position', 'relative');
+                $renderElement.addClass(me.options.relativeClass);
+
                 me.$overlay.appendTo($renderElement);
 
                 // Fixes a timing issue in Chrome with delayed CSS3 translations
@@ -124,6 +130,7 @@
          */
         close: function(callback, scope) {
             var me = this,
+                $renderElement = $(me.options.renderElement),
                 deferred = $.Deferred();
 
             callback = callback || $.noop;
@@ -141,6 +148,10 @@
             me.isOpen = false;
 
             me.$overlay.removeClass(me.options.openClass + ' ' + me.options.closableClass);
+            if (!$renderElement.hasClass(me.options.relativeClass)) {
+                $renderElement.removeClass(me.options.relativeClass);
+            }
+
             me.$overlay.one('transitionend webkitTransitionEnd oTransitionEnd MSTransitionEnd', function() {
                 me.$overlay.off(me.options.events).removeAttr('style').remove();
                 deferred.resolve(me);

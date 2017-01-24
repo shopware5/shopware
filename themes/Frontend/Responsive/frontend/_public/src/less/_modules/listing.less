@@ -60,7 +60,7 @@ It contains the viewport specific styles inside media queries.
     }
 }
 
-    // Listing actions
+// Listing actions
 .listing--actions {
     .clearfix();
     .tap-highlight-color();
@@ -270,6 +270,15 @@ It contains the viewport specific styles inside media queries.
             display: block;
             border-top: 1px solid @border-color;
         }
+    }
+
+    .listing--actions.without-facets.without-sortings.without-pagination {
+        display: none;
+    }
+
+    .listing--actions.without-facets.without-sortings {
+        .unitize(padding-top, 0);
+        border-top: none;
     }
 
     .action--per-page {

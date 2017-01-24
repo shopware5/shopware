@@ -226,6 +226,11 @@
             loadingIndSelector: '.listing--content-wrapper',
 
             /**
+             * The selector for "no filter result found" container
+             */
+            noResultContainerSelector: '.listing-no-filter-result .alert',
+
+            /**
              * Class for loading indicator, added and removed on the configurable `listingSelector` element
              */
             isLoadingCls: 'is--loading',
@@ -297,6 +302,7 @@
             me.$filterFacetContainer = me.$filterForm.find(me.opts.filterFacetContainerSelector);
             me.$filterActionButtonBottom = me.$filterForm.find(me.opts.filterActionButtonBottomSelector);
             me.$sidebarModeLoadionIndicator = $(me.opts.sidebarLoadingIndicatorParentSelector);
+            me.$noFilterResultContainer = $(me.opts.noResultContainerSelector);
 
             me.searchHeadlineProductCount = $(me.opts.searchHeadlineProductCountSelector);
             me.listingUrl = me.$filterForm.attr('data-listing-url');
@@ -330,6 +336,8 @@
             me.$offCanvasLoadingIndicator = $(me.opts.filterInnerContainerSelector);
 
             $.subscribe('action/fetchListing', $.proxy(me.onSendListingRequest, me));
+
+            me.disableActiveFilterContainer(true);
 
             var isFiltered = me.$filterForm.attr('data-is-filtered');
             if (isFiltered > 0 && me.loadFacets) {
@@ -373,13 +381,27 @@
             me.$filterFacetContainer.removeAttr('style');
             me.$filterActionButtonBottom.removeAttr('style');
 
-            me.$activeFilterCont.removeAttr('style').removeClass(opts.disabledCls);
+            me.disableActiveFilterContainer(false);
 
             me.$filterCont.removeClass(opts.collapsedCls);
 
             me.$filterTrigger.removeClass(opts.activeCls);
 
             $.publish('plugin/swListingActions/onEnterMobile', [ me ]);
+        },
+
+        disableActiveFilterContainer: function(disabled) {
+            var me = this;
+
+            if (me.showInstantFilterResult) {
+                return;
+            }
+
+            if (disabled) {
+                me.$activeFilterCont.addClass(me.opts.disabledCls);
+            } else if (me.$activeFilterCont.hasClass(me.opts.disabledCls)) {
+                me.$activeFilterCont.removeClass(me.opts.disabledCls);
+            }
         },
 
         /**
@@ -395,7 +417,7 @@
             }
 
             if (Object.keys(me.activeFilterElements).length && !me.isFilterpanelInSidebar) {
-                me.$activeFilterCont.addClass(me.opts.disabledCls);
+                me.disableActiveFilterContainer(true);
             }
 
             $.publish('plugin/swListingActions/onExitMobile', [ me ]);
@@ -459,18 +481,30 @@
 
             if (me.showInstantFilterResult) {
                 // first array element is always page number
-                me.setPageInput(formData[0].value);
+                me.setPageInput(me.getFormValue(formData, 'p'));
+
                 // second array element is always whether sorting or products per pages
                 if (me.isSortAction($form)) {
-                    me.setSortInput(formData[1].value);
+                    me.setSortInput(me.getFormValue(formData, 'o'));
                 } else if (me.isPerPageAction($form)) {
-                    me.setPerPageInput(formData[1].value);
+                    me.setPerPageInput(me.getFormValue(formData, 'n'));
                 }
             }
 
             me.applyCategoryParams(categoryParams);
 
             $.publish('plugin/swListingActions/onActionSubmit', [ me, event ]);
+        },
+
+        getFormValue: function(data, key) {
+            var value = '';
+            $.each(data, function(index, item) {
+                if (item.name == key) {
+                    value = item.value;
+                    return;
+                }
+            });
+            return value;
         },
 
         /**
@@ -910,15 +944,22 @@
          * Event listener which allows to send listing ajax request to load facets, total count and/or listings
          *
          * @param {object} event
-         * @param {string} params
+         * @param {object} params
          * @param {boolean} loadFacets
          * @param {boolean} loadProducts
          * @param {function} callback
          */
         onSendListingRequest: function(event, params, loadFacets, loadProducts, callback) {
-            var me = this;
+            var me = this,
+                formData = me.$filterForm.serializeArray();
 
-            me.sendListingRequest(params, loadFacets, loadProducts, callback);
+            $.each(formData, function(index, item) {
+                if (!params.hasOwnProperty(item.name)) {
+                    params[item.name] = item.value;
+                }
+            });
+
+            me.sendListingRequest(params, loadFacets, loadProducts, callback, true);
         },
 
         /**
@@ -926,8 +967,9 @@
          * @param {boolean} loadFacets
          * @param {boolean} loadProducts
          * @param {function} callback
+         * @param {boolean} appendDefaults
          */
-        sendListingRequest: function(params, loadFacets, loadProducts, callback) {
+        sendListingRequest: function(params, loadFacets, loadProducts, callback, appendDefaults) {
             var me = this;
 
             if (typeof params == 'object') {
@@ -935,6 +977,7 @@
             }
 
             me.resetBuffer();
+
             $.ajax({
                 type: 'get',
                 url: me.buildListingUrl(params, loadFacets, loadProducts),
@@ -1075,6 +1118,7 @@
 
             me.updateFilterCloseButton(response.totalCount);
             me.updateSearchHeadline(response.totalCount);
+            me.updateNoResultContainer(response.totalCount);
 
             html = response.listing.trim();
 
@@ -1130,6 +1174,24 @@
 
             if (me.searchHeadlineProductCount.length > 0) {
                 me.searchHeadlineProductCount.html(totalCount);
+            }
+        },
+
+        /**
+         *
+         * @param {int} totalCount
+         */
+        updateNoResultContainer: function(totalCount) {
+            var me = this;
+
+            if (totalCount > 0) {
+                if (!me.$noFilterResultContainer.hasClass('is--hidden')) {
+                    me.$noFilterResultContainer.addClass('is--hidden');
+                }
+                return;
+            }
+            if (me.$noFilterResultContainer.hasClass('is--hidden')) {
+                me.$noFilterResultContainer.removeClass('is--hidden');
             }
         },
 
@@ -1414,7 +1476,7 @@
             me.$filterFacetContainer.slideDown(me.opts.animationSpeed);
             me.$filterActionButtonBottom.slideDown(me.opts.animationSpeed);
 
-            me.$activeFilterCont.removeClass(me.opts.disabledCls);
+            me.disableActiveFilterContainer(false);
             me.$filterCont.addClass(me.opts.collapsedCls);
             me.$filterTrigger.addClass(me.opts.activeCls);
 
@@ -1434,7 +1496,7 @@
             me.$filterFacetContainer.slideUp(me.opts.animationSpeed);
             me.$filterActionButtonBottom.slideUp(me.opts.animationSpeed);
 
-            me.$activeFilterCont.addClass(me.opts.disabledCls);
+            me.disableActiveFilterContainer(true);
             me.$filterCont.removeClass(me.opts.collapsedCls);
             me.$filterTrigger.removeClass(me.opts.activeCls);
 

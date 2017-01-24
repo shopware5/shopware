@@ -43,6 +43,7 @@ Ext.define('Shopware.apps.ProductStream.model.Stream', {
         { name : 'description', type: 'string', useNull: false },
         { name : 'type', type: 'int', defaultValue: 1 },
         { name : 'sorting' },
+        { name : 'sortingId', type: 'int', useNull: true },
         { name : 'conditions', useNull: false }
     ]
 });

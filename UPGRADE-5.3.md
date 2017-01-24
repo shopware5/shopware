@@ -25,7 +25,6 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Added support for callback methods and jQuery promises in `jQuery.overlay` and `jQuery.loadingIndicators`
 * Added jQuery method `setLoading()` to apply a loading indicator to an element `$('selector').setLoading()`
 * Added required attribute `data-facet-name` for filter elements
-* Added config element `categoryFilterDepth` to configure how many levels of the category facet will be displayed
 * Added new type for the filter panels `value-list-single`
 * Added new Smarty blocks for the unified filter panel:
     * `frontend_listing_filter_facet_multi_selection`
@@ -49,6 +48,7 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Added method `Shopware\Bundle\MediaBundle\MediaServiceInterface::listContents()`
 * Added method `Shopware\Bundle\MediaBundle\MediaService::listContents()`
 
+
 ### Changes
 
 * Changed theme path for new plugins from `/resources` into `/Resources`
@@ -70,6 +70,7 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Changed template `component_article_slider.tpl` to show provided products instead of always fetching them via ajax
 * Changed emotion preview to not save the current state before showing preview 
 * Changed command `sw:thumbnail:cleanup` to search the filesystem to remove orphaned thumbnails
+* Moved `defaultListingSorting` configuration from performance module to base settings > `categories / listings`
 * Changed the jQuery plugin `src/js/jquery.selectbox-replacement.js` to be used only as a polyfill. Use the CSS-only version for select fields instead.
 
 ### Removals
@@ -209,6 +210,25 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Removed method `Shopware_Controllers_Widgets_Emotion::getArticleSlider()`, has been replaced by `Shopware\Bundle\EmotionBundle\ComponentHandler\ArticleSliderComponentHandler`
 * Removed method `Shopware_Controllers_Widgets_Emotion::getHtml5Video()`, has been replaced by `Shopware\Bundle\EmotionBundle\ComponentHandler\Html5VideoComponentHandler`
 * Removed LESS variable `@zindex-fancy-select`
+* Removed select field replacement via JavaScript
+    * Removed the jQuery plugin `src/js/jquery.selectbox-replacement.js` completely
+    * Removed LESS variable `@zindex-fancy-select`
+* Removed smarty blocks:
+    * `frontend_listing_actions_sort_field_relevance`
+    * `frontend_listing_actions_sort_field_release`
+    * `frontend_listing_actions_sort_field_rating`
+    * `frontend_listing_actions_sort_field_price_asc`
+    * `frontend_listing_actions_sort_field_price_desc`
+    * `frontend_listing_actions_sort_field_name`
+* Removed `\Shopware_Controllers_Backend_Performance::getListingSortingsAction`
+* Removed constants of `\Shopware\Bundle\SearchBundle\CriteriaRequestHandler\CoreCriteriaRequestHandler` and `Shopware\Bundle\SearchBundle\StoreFrontCriteriaFactory`:
+    * `SORTING_RELEASE_DATE`
+    * `SORTING_POPULARITY`
+    * `SORTING_CHEAPEST_PRICE`
+    * `SORTING_HIGHEST_PRICE`
+    * `SORTING_PRODUCT_NAME_ASC`
+    * `SORTING_PRODUCT_NAME_DESC`
+    * `SORTING_SEARCH_RANKING`
 
 ### Deprecations
 

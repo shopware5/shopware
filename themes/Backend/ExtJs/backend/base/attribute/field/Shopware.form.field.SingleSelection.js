@@ -35,6 +35,7 @@ Ext.define('Shopware.form.field.SingleSelection', {
     layout: 'anchor',
     defaults: { anchor: '100%' },
     baseBodyCls: Ext.baseCSSPrefix + 'form-item-body shopware-single-selection-form-item-body',
+    allowBlank: true,
 
     mixins: {
         formField: 'Ext.form.field.Base',
@@ -145,6 +146,7 @@ Ext.define('Shopware.form.field.SingleSelection', {
             valueField: 'id',
             queryMode: 'remote',
             store: me.store,
+            allowBlank: me.allowBlank,
             isFormField: false,
             pageSize: me.store.pageSize,
             labelWidth: 180,
@@ -160,12 +162,7 @@ Ext.define('Shopware.form.field.SingleSelection', {
         var me = this;
 
         if (value && !Ext.isObject(value)) {
-            me.store.load({
-                params: { ids: Ext.JSON.encode([value]) },
-                callback: function(records) {
-                    me.combo.setValue(records);
-                }
-            });
+            me.resolveValue(value);
             return;
         }
         if (!value) {
@@ -179,5 +176,16 @@ Ext.define('Shopware.form.field.SingleSelection', {
         var value = { };
         value[this.name] = this.getValue();
         return value;
+    },
+
+    resolveValue: function(value) {
+        var me = this;
+
+        me.store.load({
+            params: { ids: Ext.JSON.encode([value]) },
+            callback: function(records) {
+                me.combo.setValue(records);
+            }
+        });
     }
 });

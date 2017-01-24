@@ -50,7 +50,6 @@ Ext.define('Shopware.apps.ProductStream.view.selected_list.Window', {
         var me = this;
 
         me.formPanel.loadRecord(record);
-        me.settingsPanel.setSorting(record);
         if (record.get('id')) {
             me.activateProductGrid(record);
             me.attributeForm.loadAttribute(record.get('id'));

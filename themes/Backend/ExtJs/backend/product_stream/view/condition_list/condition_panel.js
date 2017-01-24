@@ -44,10 +44,18 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.ConditionPanel', {
 
         me.conditions = [];
         me.items = [];
-        me.conditionHandlers = me.createConditionHandlers();
+        me.conditionHandlers = me.sort(
+            me.createConditionHandlers()
+        );
         me.dockedItems = [me.createToolbar()];
 
         me.callParent(arguments);
+    },
+
+    sort: function(handlers) {
+        return handlers.sort(function(a, b) {
+            return a.getLabel().localeCompare(b.getLabel());
+        });
     },
 
     loadPreview: function(conditions) {
@@ -82,9 +90,8 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.ConditionPanel', {
         me.add(container);
     },
 
-    loadConditions: function(record) {
+    loadConditions: function(conditions) {
         var me = this;
-        var conditions = record.get('conditions');
 
         for (var key in conditions) {
             var condition = conditions[key];
@@ -98,12 +105,6 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.ConditionPanel', {
                 }
             });
         }
-
-        if (!record.get('id')) {
-            return;
-        }
-
-        me.loadPreview(conditions);
     },
 
     createConditionHandlers: function() {
@@ -190,11 +191,25 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.ConditionPanel', {
         var me = this,
             items = [];
 
-        me.addButton = Ext.create('Ext.button.Split', {
+        items.push(me.createAddButton());
+        items.push('->');
+        items.push(me.createPreviewButton());
+        return items;
+    },
+
+    createAddButton: function() {
+        var me = this;
+
+        me.addButton =Ext.create('Ext.button.Split', {
             text: '{s name=add_condition}Add condition{/s}',
             iconCls: 'sprite-plus-circle-frame',
             menu: me.createMenu()
         });
+        return me.addButton;
+    },
+
+    createPreviewButton: function() {
+        var me = this;
 
         me.previewButton = Ext.create('Ext.button.Button', {
             text: '{s name=refresh_preview}Refresh preview{/s}',
@@ -203,11 +218,7 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.ConditionPanel', {
                 me.loadPreview();
             }
         });
-
-        items.push(me.addButton);
-        items.push('->');
-        items.push(me.previewButton);
-        return items;
+        return me.previewButton;
     },
 
     createMenu: function() {

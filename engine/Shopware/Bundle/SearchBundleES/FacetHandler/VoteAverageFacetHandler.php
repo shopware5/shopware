@@ -125,10 +125,15 @@ class VoteAverageFacetHandler implements HandlerInterface, ResultHydratorInterfa
 
         $values = $this->buildItems($buckets, $activeAverage);
 
-        $label = $this->snippetManager
-            ->getNamespace('frontend/listing/facet_labels')
-            ->get('vote_average', 'Ranking')
-        ;
+        /** @var VoteAverageFacet $facet */
+        $facet = $criteria->getFacet('vote_average');
+        if ($facet && !empty($facet->getLabel())) {
+            $label = $facet->getLabel();
+        } else {
+            $label = $this->snippetManager
+                ->getNamespace('frontend/listing/facet_labels')
+                ->get('vote_average', 'Ranking');
+        }
 
         if (!$fieldName = $this->queryAliasMapper->getShortAlias('rating')) {
             $fieldName = 'rating';

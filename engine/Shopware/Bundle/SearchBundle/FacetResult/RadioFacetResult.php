@@ -63,7 +63,7 @@ class RadioFacetResult extends Extendable implements FacetResultInterface
     /**
      * @var string|null
      */
-    protected $template = null;
+    protected $template;
 
     /**
      * @param string $facetName
@@ -138,5 +138,13 @@ class RadioFacetResult extends Extendable implements FacetResultInterface
     public function getTemplate()
     {
         return $this->template;
+    }
+
+    /**
+     * @param null|string $template
+     */
+    public function setTemplate($template)
+    {
+        $this->template = $template;
     }
 }

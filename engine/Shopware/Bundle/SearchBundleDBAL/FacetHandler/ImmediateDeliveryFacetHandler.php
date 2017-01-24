@@ -117,11 +117,18 @@ class ImmediateDeliveryFacetHandler implements PartialFacetHandlerInterface
             return null;
         }
 
+        /** @var Facet\ImmediateDeliveryFacet $facet */
+        if (!empty($facet->getLabel())) {
+            $label = $facet->getLabel();
+        } else {
+            $label = $this->snippetNamespace->get($facet->getName(), 'Immediate delivery');
+        }
+
         return new BooleanFacetResult(
             $facet->getName(),
             $this->fieldName,
             $criteria->hasCondition($facet->getName()),
-            $this->snippetNamespace->get($facet->getName(), 'Immediate delivery')
+            $label
         );
     }
 

@@ -21,19 +21,25 @@
  * our trademarks remain entirely with us.
  */
 
-//{block name="backend/performance/store/listing_sorting"}
-Ext.define('Shopware.apps.Performance.store.ListingSorting', {
-    extend: 'Ext.data.Store',
+//{namespace name=backend/custom_search/translation}
 
-    fields: [ 'id', 'name' ],
+//{block name="backend/config/view/custom_search/facet/classes/manufacturerfacet"}
 
-    proxy: {
-        type: 'ajax',
-        url: '{url controller=Performance action=getListingSortings}',
-        reader: {
-            type: 'json',
-            root: 'data'
-        }
+Ext.define('Shopware.apps.Config.view.custom_search.facet.classes.ManufacturerFacet', {
+
+    getClass: function() {
+        return 'Shopware\\Bundle\\SearchBundle\\Facet\\ManufacturerFacet';
+    },
+
+    createItems: function () {
+        return [{
+            xtype: 'textfield',
+            name: 'label',
+            labelWidth: 150,
+            translatable: true,
+            fieldLabel: '{s name="label"}{/s}'
+        }];
     }
 });
+
 //{/block}

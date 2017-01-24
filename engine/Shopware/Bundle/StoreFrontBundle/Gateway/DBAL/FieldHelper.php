@@ -277,6 +277,7 @@ class FieldHelper
             'category.hidefilter as __category_hidefilter',
             'category.hidetop as __category_hidetop',
             'category.stream_id as __category_stream_id',
+            'category.hide_sortings as __category_hide_sortings',
         ];
 
         $fields = array_merge(
@@ -975,6 +976,36 @@ class FieldHelper
     }
 
     /**
+     * @return string[]
+     */
+    public function getCustomFacetFields()
+    {
+        return [
+            'customFacet.id as __customFacet_id',
+            'customFacet.unique_key as __customFacet_unique_key',
+            'customFacet.active as __customFacet_active',
+            'customFacet.position as __customFacet_position',
+            'customFacet.name as __customFacet_name',
+            'customFacet.facet as __customFacet_facet'
+        ];
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getCustomSortingFields()
+    {
+        return [
+            'customSorting.id as __customSorting_id',
+            'customSorting.label as __customSorting_label',
+            'customSorting.active as __customSorting_active',
+            'customSorting.display_in_categories as __customSorting_display_in_categories',
+            'customSorting.position as __customSorting_position',
+            'customSorting.sortings as __customSorting_sortings'
+        ];
+    }
+
+    /**
      * Returns an array with all required blog fields.
      * Requires that the s_blog table is included with table alias 'blog'
      *
@@ -1266,5 +1297,23 @@ class FieldHelper
     public function addEmotionElementTranslation(QueryBuilder $query, ShopContextInterface $context)
     {
         $this->addTranslation('emotionElementValue', 'emotionElement', $query, $context, 'emotionElementValue.elementID');
+    }
+
+    /**
+     * @param QueryBuilder $query
+     * @param ShopContextInterface $context
+     */
+    public function addCustomSortingTranslation(QueryBuilder $query, ShopContextInterface $context)
+    {
+        $this->addTranslation('customSorting', 'custom_sorting', $query, $context, 1);
+    }
+
+    /**
+     * @param QueryBuilder $query
+     * @param ShopContextInterface $context
+     */
+    public function addCustomFacetTranslation($query, $context)
+    {
+        $this->addTranslation('customFacet', 'custom_facet', $query, $context, 1);
     }
 }

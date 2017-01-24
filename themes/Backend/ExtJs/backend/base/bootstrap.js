@@ -269,7 +269,9 @@
 {include file='backend/base/attribute/field/Shopware.form.field.ProductStreamGrid.js'}
 {include file='backend/base/attribute/field/Shopware.form.field.ProductStreamSingleSelection.js'}
 {include file='backend/base/attribute/field/Shopware.form.field.ShopGrid.js'}
-
+{include file='backend/base/attribute/field/Shopware.form.field.CustomSortingGrid.js'}
+{include file='backend/base/attribute/field/Shopware.form.field.CustomFacetGrid.js'}
+{include file='backend/base/attribute/field/Shopware.form.field.AttributeSingleSelection.js'}
 
 {include file='backend/base/attribute/field_handler/Shopware.attribute.AbstractEntityFieldHandler.js'}
 {include file='backend/base/attribute/field_handler/Shopware.attribute.CategoryFieldHandler.js'}
@@ -296,3 +298,8 @@
 {include file='backend/base/attribute/Shopware.attribute.Window.js'}
 {include file='backend/base/attribute/Shopware.attribute.Button.js'}
 {include file='backend/base/attribute/Shopware.grid.plugin.Attribute.js'}
+
+{include file='backend/base/model/custom_sorting.js'}
+{include file='backend/base/store/custom_sorting.js'}
+{include file='backend/base/model/custom_facet.js'}
+{include file='backend/base/store/custom_facet.js'}

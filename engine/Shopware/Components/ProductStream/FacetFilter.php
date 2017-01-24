@@ -27,16 +27,9 @@ namespace Shopware\Components\ProductStream;
 use Shopware\Bundle\SearchBundle\Condition\PriceCondition;
 use Shopware\Bundle\SearchBundle\Condition\PropertyCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
-use Shopware\Bundle\SearchBundle\Facet\ImmediateDeliveryFacet;
-use Shopware\Bundle\SearchBundle\Facet\ManufacturerFacet;
-use Shopware\Bundle\SearchBundle\Facet\PriceFacet;
-use Shopware\Bundle\SearchBundle\Facet\PropertyFacet;
-use Shopware\Bundle\SearchBundle\Facet\ShippingFreeFacet;
-use Shopware\Bundle\SearchBundle\Facet\VoteAverageFacet;
 use Shopware\Bundle\SearchBundle\FacetResult\FacetResultGroup;
 use Shopware\Bundle\SearchBundle\FacetResult\RangeFacetResult;
 use Shopware\Bundle\SearchBundle\FacetResult\ValueListFacetResult;
-use Shopware\Bundle\SearchBundle\FacetResult\ValueListItem;
 use Shopware\Bundle\SearchBundle\FacetResultInterface;
 
 /**
@@ -59,34 +52,25 @@ class FacetFilter implements FacetFilterInterface
         $this->config = $config;
     }
 
-
     /**
      * @param Criteria $criteria
      */
     public function add(Criteria $criteria)
     {
-        if (!$criteria->hasBaseCondition('immediate_delivery') && $this->config->get('showImmediateDeliveryFacet')) {
-            $criteria->addFacet(new ImmediateDeliveryFacet());
+        if ($criteria->hasBaseCondition('immediate_delivery')) {
+            $criteria->removeFacet('immediate_delivery');
         }
 
-        if (!$criteria->hasBaseCondition('shipping_free') && $this->config->get('showShippingFreeFacet')) {
-            $criteria->addFacet(new ShippingFreeFacet());
+        if ($criteria->hasBaseCondition('shipping_free')) {
+            $criteria->removeFacet('shipping_free');
         }
 
-        if ($this->config->get('showPriceFacet')) {
-            $criteria->addFacet(new PriceFacet());
+        if ($criteria->hasBaseCondition('vote_average')) {
+            $criteria->removeFacet('vote_average');
         }
 
-        if (!$criteria->hasBaseCondition('vote_average') && $this->config->get('showVoteAverageFacet')) {
-            $criteria->addFacet(new VoteAverageFacet());
-        }
-
-        if (!$criteria->hasBaseCondition('manufacturer') && $this->config->get('showSupplierInCategories')) {
-            $criteria->addFacet(new ManufacturerFacet());
-        }
-
-        if ($this->config->get('displayFiltersInListings')) {
-            $criteria->addFacet(new PropertyFacet());
+        if ($criteria->hasBaseCondition('manufacturer')) {
+            $criteria->removeFacet('manufacturer');
         }
     }
 
@@ -192,7 +176,7 @@ class FacetFilter implements FacetFilterInterface
     private function removeStreamPropertyConditions(array $facets, Criteria $criteria)
     {
         /** @var PropertyCondition[] $conditions */
-        $conditions = $this->getBaseConditionsByClass('\Shopware\Bundle\SearchBundle\Condition\PropertyCondition', $criteria);
+        $conditions = $this->getBaseConditionsByClass(PropertyCondition::class, $criteria);
         if (!$conditions) {
             return;
         }

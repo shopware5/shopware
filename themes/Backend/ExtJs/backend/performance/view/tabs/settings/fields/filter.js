@@ -89,65 +89,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Filter', {
                 xtype: 'fieldset',
                 defaults: me.defaults,
                 title: '{s name=fieldset/listings}Listings{/s}',
-                items: [
-                    {
-                        name: 'filters[showSupplierInCategories]',
-                        fieldLabel: '{s name=fieldset/filter/text/showManufacturerFacet}{/s}',
-                        helpText: '{s name=fieldset/filter/text/showManufacturerFacetHelp}{/s}',
-
-                        xtype: 'checkbox',
-                        uncheckedValue: false,
-                        inputValue: true
-                    }, {
-                        name: 'filters[showImmediateDeliveryFacet]',
-                        fieldLabel: '{s name=fieldset/filter/text/showImmediateDeliveryFacet}{/s}',
-                        helpText: '{s name=fieldset/filter/text/showImmediateDeliveryFacetHelp}{/s}',
-
-                        xtype: 'checkbox',
-                        uncheckedValue: false,
-                        inputValue: true
-                    }, {
-                        name: 'filters[showShippingFreeFacet]',
-                        fieldLabel: '{s name=fieldset/filter/text/showShippingFreeFacet}{/s}',
-                        helpText: '{s name=fieldset/filter/text/showShippingFreeFacetHelp}{/s}',
-
-                        xtype: 'checkbox',
-                        uncheckedValue: false,
-                        inputValue: true
-                    }, {
-                        name: 'filters[showPriceFacet]',
-                        fieldLabel: '{s name=fieldset/filter/text/showPriceFacet}{/s}',
-                        helpText: '{s name=fieldset/filter/text/showPriceFacetHelp}{/s}',
-
-                        xtype: 'checkbox',
-                        uncheckedValue: false,
-                        inputValue: true
-                    }, {
-                        name: 'filters[showVoteAverageFacet]',
-                        fieldLabel: '{s name=fieldset/filter/text/showVoteAverageFacet}{/s}',
-                        helpText: '{s name=fieldset/filter/text/showVoteAverageFacetHelp}{/s}',
-
-                        xtype: 'checkbox',
-                        uncheckedValue: false,
-                        inputValue: true
-                    }, {
-                        name: 'filters[displayFiltersInListings]',
-                        fieldLabel: '{s name=fieldset/filter/text/showPropertyFacet}{/s}',
-                        helpText: '{s name=fieldset/filter/text/showPropertyFacetHelp}{/s}',
-
-                        xtype: 'checkbox',
-                        uncheckedValue: false,
-                        inputValue: true
-                    },
-                    me.listingModeField,
-                    {
-                        xtype: 'numberfield',
-                        minValue: 1,
-                        name: 'filters[categoryFilterDepth]',
-                        fieldLabel: '{s name=fieldset/filter/text/categoryFilterDepth}{/s}',
-                        helpText: '{s name=fieldset/filter/text/categoryFilterDepthHelp}{/s}'
-                    }
-                ]
+                items: [ me.listingModeField ]
             }
         ];
     }

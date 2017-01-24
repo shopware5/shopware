@@ -24,7 +24,6 @@
 
 namespace Shopware\Bundle\SearchBundle\CriteriaRequestHandler;
 
-use Doctrine\DBAL\Connection;
 use Enlight_Controller_Request_RequestHttp as Request;
 use Shopware\Bundle\SearchBundle\Condition\CategoryCondition;
 use Shopware\Bundle\SearchBundle\Condition\CustomerGroupCondition;
@@ -37,19 +36,7 @@ use Shopware\Bundle\SearchBundle\Condition\ShippingFreeCondition;
 use Shopware\Bundle\SearchBundle\Condition\VoteAverageCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\CriteriaRequestHandlerInterface;
-use Shopware\Bundle\SearchBundle\Facet\CategoryFacet;
-use Shopware\Bundle\SearchBundle\Facet\ImmediateDeliveryFacet;
-use Shopware\Bundle\SearchBundle\Facet\ManufacturerFacet;
-use Shopware\Bundle\SearchBundle\Facet\PriceFacet;
-use Shopware\Bundle\SearchBundle\Facet\ShippingFreeFacet;
-use Shopware\Bundle\SearchBundle\Facet\VoteAverageFacet;
 use Shopware\Bundle\SearchBundle\SearchTermPreProcessorInterface;
-use Shopware\Bundle\SearchBundle\Sorting\PopularitySorting;
-use Shopware\Bundle\SearchBundle\Sorting\PriceSorting;
-use Shopware\Bundle\SearchBundle\Sorting\ProductNameSorting;
-use Shopware\Bundle\SearchBundle\Sorting\ReleaseDateSorting;
-use Shopware\Bundle\SearchBundle\Sorting\SearchRankingSorting;
-use Shopware\Bundle\SearchBundle\SortingInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 /**
@@ -58,23 +45,10 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
  */
 class CoreCriteriaRequestHandler implements CriteriaRequestHandlerInterface
 {
-    const SORTING_RELEASE_DATE = 1;
-    const SORTING_POPULARITY = 2;
-    const SORTING_CHEAPEST_PRICE = 3;
-    const SORTING_HIGHEST_PRICE = 4;
-    const SORTING_PRODUCT_NAME_ASC = 5;
-    const SORTING_PRODUCT_NAME_DESC = 6;
-    const SORTING_SEARCH_RANKING = 7;
-
     /**
      * @var \Shopware_Components_Config
      */
     private $config;
-
-    /**
-     * @var Connection
-     */
-    private $connection;
 
     /**
      * @var SearchTermPreProcessorInterface
@@ -83,16 +57,13 @@ class CoreCriteriaRequestHandler implements CriteriaRequestHandlerInterface
 
     /**
      * @param \Shopware_Components_Config $config
-     * @param Connection $connection
      * @param SearchTermPreProcessorInterface $searchTermPreProcessor
      */
     public function __construct(
         \Shopware_Components_Config $config,
-        Connection $connection,
         SearchTermPreProcessorInterface $searchTermPreProcessor
     ) {
         $this->config = $config;
-        $this->connection = $connection;
         $this->searchTermPreProcessor = $searchTermPreProcessor;
     }
 
@@ -116,40 +87,7 @@ class CoreCriteriaRequestHandler implements CriteriaRequestHandlerInterface
         $this->addImmediateDeliveryCondition($request, $criteria);
         $this->addRatingCondition($request, $criteria);
         $this->addPriceCondition($request, $criteria);
-
-        $this->addSorting($request, $criteria);
-
-        $this->addFacets($criteria);
     }
-
-    /**
-     * @param Criteria $criteria
-     */
-    private function addFacets(Criteria $criteria)
-    {
-        if ($this->config->get('showImmediateDeliveryFacet')) {
-            $criteria->addFacet(new ImmediateDeliveryFacet());
-        }
-
-        if ($this->config->get('showShippingFreeFacet')) {
-            $criteria->addFacet(new ShippingFreeFacet());
-        }
-
-        if ($this->config->get('showPriceFacet')) {
-            $criteria->addFacet(new PriceFacet());
-        }
-
-        if ($this->config->get('showVoteAverageFacet')) {
-            $criteria->addFacet(new VoteAverageFacet());
-        }
-
-        if ($this->config->get('showSupplierInCategories')) {
-            $criteria->addFacet(new ManufacturerFacet());
-        }
-
-        $criteria->addFacet(new CategoryFacet());
-    }
-
 
     /**
      * @param Request $request
@@ -157,13 +95,19 @@ class CoreCriteriaRequestHandler implements CriteriaRequestHandlerInterface
      */
     private function addCategoryCondition(Request $request, Criteria $criteria)
     {
-        $category = $request->getParam('sCategory', null);
-        if (!$category) {
-            return;
-        }
+        if ($request->has('sCategory')) {
+            $ids = explode('|', $request->getParam('sCategory'));
 
-        $condition = new CategoryCondition([$category]);
-        $criteria->addBaseCondition($condition);
+            $criteria->addBaseCondition(
+                new CategoryCondition($ids)
+            );
+        } elseif ($request->has('categoryFilter')) {
+            $ids = explode('|', $request->getParam('categoryFilter'));
+
+            $criteria->addCondition(
+                new CategoryCondition($ids)
+            );
+        }
     }
 
     /**
@@ -257,54 +201,6 @@ class CoreCriteriaRequestHandler implements CriteriaRequestHandlerInterface
         }
         $term = $this->searchTermPreProcessor->process($term);
         $criteria->addBaseCondition(new SearchTermCondition($term));
-    }
-
-    /**
-     * @param Request $request
-     * @param Criteria $criteria
-     */
-    private function addSorting(Request $request, Criteria $criteria)
-    {
-        $defaultSort = $this->config->get('defaultListingSorting');
-        $sort = $request->getParam('sSort', $defaultSort);
-
-        switch ($sort) {
-            case self::SORTING_RELEASE_DATE:
-                $criteria->addSorting(
-                    new ReleaseDateSorting(SortingInterface::SORT_DESC)
-                );
-                break;
-            case self::SORTING_POPULARITY:
-                $criteria->addSorting(
-                    new PopularitySorting(SortingInterface::SORT_DESC)
-                );
-                break;
-            case self::SORTING_CHEAPEST_PRICE:
-                $criteria->addSorting(
-                    new PriceSorting(SortingInterface::SORT_ASC)
-                );
-                break;
-            case self::SORTING_HIGHEST_PRICE:
-                $criteria->addSorting(
-                    new PriceSorting(SortingInterface::SORT_DESC)
-                );
-                break;
-            case self::SORTING_PRODUCT_NAME_ASC:
-                $criteria->addSorting(
-                    new ProductNameSorting(SortingInterface::SORT_ASC)
-                );
-                break;
-            case self::SORTING_PRODUCT_NAME_DESC:
-                $criteria->addSorting(
-                    new ProductNameSorting(SortingInterface::SORT_DESC)
-                );
-                break;
-            case self::SORTING_SEARCH_RANKING:
-                $criteria->addSorting(
-                    new SearchRankingSorting(SortingInterface::SORT_DESC)
-                );
-                break;
-        }
     }
 
     /**

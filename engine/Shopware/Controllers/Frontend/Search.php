@@ -47,9 +47,7 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
      */
     public function defaultSearchAction()
     {
-        if (!$this->Request()->has('sSort')) {
-            $this->Request()->setParam('sSort', 7);
-        }
+        $this->setDefaultSorting();
 
         $term = $this->getSearchTerm();
 
@@ -92,6 +90,12 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
         /** @var $mapper \Shopware\Components\QueryAliasMapper */
         $mapper = $this->get('query_alias_mapper');
 
+        $service = Shopware()->Container()->get('shopware_storefront.custom_sorting_service');
+
+        $sortingIds = $this->container->get('config')->get('searchSortings');
+        $sortingIds = array_filter(explode('|', $sortingIds));
+        $sortings = $service->getList($sortingIds, $context);
+
         $this->View()->assign([
             'term' => $term,
             'criteria' => $criteria,
@@ -104,6 +108,7 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
             'shortParameters' => $mapper->getQueryAliases(),
             'pageSizes' => array_values(explode("|", $pageCounts)),
             'ajaxCountUrlParams' => [],
+            'sortings' => $sortings,
             'sSearchResults' => [
                 'sArticles' => $articles,
                 'sArticlesCount' => $result->getTotalCount()
@@ -223,5 +228,16 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
 
             return $this->get('router')->assemble($assembleParams);
         }
+    }
+
+    private function setDefaultSorting()
+    {
+        if ($this->Request()->has('sSort')) {
+            return;
+        }
+
+        $sortings = $this->container->get('config')->get('searchSortings');
+        $sortings = array_filter(explode('|', $sortings));
+        $this->Request()->setParam('sSort', array_shift($sortings));
     }
 }

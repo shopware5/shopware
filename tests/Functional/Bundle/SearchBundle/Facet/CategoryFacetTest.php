@@ -130,10 +130,6 @@ class CategoryFacetTest extends TestCase
             'parent' => $baseCategory->getId()
         ));
 
-        /** @var \Shopware_Components_Config $config */
-        $config = Shopware()->Container()->get('config');
-        $config->offsetSet('categoryFilterDepth', 4);
-
         $result = $this->search(
             array(
                 'first' => $subCategory1,
@@ -145,7 +141,7 @@ class CategoryFacetTest extends TestCase
             array('first', 'second', 'third'),
             $subCategory1,
             array(),
-            array(new CategoryFacet())
+            array(new CategoryFacet(null, 4))
         );
 
         $facet = $result->getFacets();

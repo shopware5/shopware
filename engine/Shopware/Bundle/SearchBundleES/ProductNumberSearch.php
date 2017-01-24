@@ -28,9 +28,9 @@ use Elasticsearch\Client;
 use ONGR\ElasticsearchDSL\Search;
 use Shopware\Bundle\ESIndexingBundle\IndexFactoryInterface;
 use Shopware\Bundle\ESIndexingBundle\Product\ProductMapping;
-use Shopware\Bundle\SearchBundle\ConditionInterface;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\CriteriaPartInterface;
+use Shopware\Bundle\SearchBundle\FacetInterface;
 use Shopware\Bundle\SearchBundle\ProductNumberSearchInterface;
 use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
 use Shopware\Bundle\StoreFrontBundle\Struct\Attribute;
@@ -48,7 +48,6 @@ class ProductNumberSearch implements ProductNumberSearchInterface
      * @var HandlerInterface[]
      */
     private $handlers;
-
 
     /**
      * @var IndexFactoryInterface
@@ -103,7 +102,14 @@ class ProductNumberSearch implements ProductNumberSearchInterface
             $handler->hydrate($data, $result, $criteria, $context);
         }
 
-        return $result;
+        $facets = $this->sortFacets($criteria, $result);
+
+        return new ProductNumberSearchResult(
+            $products,
+            $data['hits']['total'],
+            $facets,
+            $result->getAttributes()
+        );
     }
 
     /**
@@ -244,5 +250,35 @@ class ProductNumberSearch implements ProductNumberSearchInterface
                 $handler->handle($criteriaPart, $criteria, $search, $context);
             }
         }
+    }
+
+    /**
+     * @param Criteria $criteria
+     * @param ProductNumberSearchResult $result
+     * @return array
+     */
+    private function sortFacets(Criteria $criteria, ProductNumberSearchResult $result)
+    {
+        $sorting = array_map(function (FacetInterface $facet) {
+            return $facet->getName();
+        }, $criteria->getFacets());
+
+        $sorting = array_flip(array_values($sorting));
+
+        $sortedFacets = [];
+
+        foreach ($result->getFacets() as $facetResult) {
+            if (array_key_exists($facetResult->getFacetName(), $sorting)) {
+                $position = $sorting[$facetResult->getFacetName()];
+            } else {
+                $position = count($sorting) + count($sortedFacets) + 1;
+            }
+
+            $sortedFacets[$position] = $facetResult;
+        }
+
+        ksort($sortedFacets, SORT_NUMERIC);
+
+        return $sortedFacets;
     }
 }

@@ -164,25 +164,6 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
         ]);
     }
 
-    public function getListingSortingsAction()
-    {
-        /**@var $namespace Enlight_Components_Snippet_Namespace*/
-        $namespace = $this->get('snippets')->getNamespace('frontend/listing/listing_actions');
-
-        $coreSortings = [
-            ['id' => 1, 'name' => $namespace->get('ListingSortRelease')],
-            ['id' => 2, 'name' => $namespace->get('ListingSortRating')],
-            ['id' => 3, 'name' => $namespace->get('ListingSortPriceLowest')],
-            ['id' => 4, 'name' => $namespace->get('ListingSortPriceHighest')],
-            ['id' => 5, 'name' => $namespace->get('ListingSortName')],
-        ];
-
-        $this->View()->assign([
-            'success' => true,
-            'data' => $coreSortings
-        ]);
-    }
-
     /**
      * Gets a list of id-name of all active shops
      */
@@ -255,19 +236,10 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
             'search'    => $this->prepareSearchConfig(),
             'categories' => $this->genericConfigLoader([
                 'moveBatchModeEnabled',
-                'articlesperpage',
-                'defaultListingSorting'
+                'articlesperpage'
             ]),
             'filters' => $this->genericConfigLoader([
-                'showSupplierInCategories',
-                'showImmediateDeliveryFacet',
-                'showShippingFreeFacet',
-                'showPriceFacet',
-                'showVoteAverageFacet',
-                'displayFiltersInListings',
-                'defaultListingSorting',
-                'listingMode',
-                'categoryFilterDepth'
+                'listingMode'
             ]),
             'various' => $this->genericConfigLoader([
                 'disableShopwareStatistics',

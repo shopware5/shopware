@@ -25,6 +25,7 @@
 use Shopware\Bundle\SearchBundle\ProductSearchInterface;
 use Shopware\Bundle\SearchBundle\ProductSearchResult;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\Search\CustomFacet;
 use Shopware\Components\Compatibility\LegacyStructConverter;
 use Shopware\Components\Routing\RouterInterface;
 
@@ -142,7 +143,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
         $productStreamId = $this->findStreamIdByCategoryId($categoryId);
 
         if ($productStreamId) {
-            $result = $this->fetchStreamListing($productStreamId);
+            $result = $this->fetchStreamListing($categoryId, $productStreamId);
             $this->setSearchResultResponse($result);
             return;
         }
@@ -313,7 +314,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
      * @param int $productStreamId
      * @return ProductSearchResult
      */
-    private function fetchStreamListing($productStreamId)
+    private function fetchStreamListing($categoryId, $productStreamId)
     {
         /** @var ContextServiceInterface $contextService */
         $contextService = $this->get('shopware_storefront.context_service');
@@ -326,6 +327,16 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
         /** @var \Shopware\Components\ProductStream\RepositoryInterface $streamRepository */
         $streamRepository = $this->get('shopware_product_stream.repository');
         $streamRepository->prepareCriteria($criteria, $productStreamId);
+
+        /** @var \Shopware\Bundle\StoreFrontBundle\Service\CustomFacetServiceInterface $facetService */
+        $facetService = $this->get('shopware_storefront.custom_facet_service');
+        $facets = $facetService->getFacetsOfCategories([$categoryId], $context);
+
+        /** @var CustomFacet[] $facets */
+        $facets = array_shift($facets);
+        foreach ($facets as $facet) {
+            $criteria->addFacet($facet->getFacet());
+        }
 
         /** @var \Shopware\Components\ProductStream\FacetFilter $facetFilter */
         $facetFilter = $this->get('shopware_product_stream.facet_filter');
@@ -343,7 +354,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
         $search = $this->get('shopware_search.product_search');
 
         if (!$this->Request()->getParam('loadProducts')) {
-            $criteria->limit(null);
+            $criteria->limit(1);
         }
 
         $result = $search->search($criteria, $context);
@@ -384,7 +395,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
         $search = $this->get('shopware_search.product_search');
 
         if (!$this->Request()->getParam('loadProducts')) {
-            $criteria->limit(null);
+            $criteria->limit(1);
         }
 
         return $search->search($criteria, $context);
@@ -415,7 +426,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
         $search = $this->get('shopware_search.product_search');
 
         if (!$this->Request()->getParam('loadProducts')) {
-            $criteria->limit(null);
+            $criteria->limit(1);
         }
 
         return $search->search($criteria, $context);
@@ -429,10 +440,16 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
     {
         $categoryId = $this->Request()->getParam('sCategory', null);
 
-        $boxLayout = $categoryId ? Shopware()->Modules()->Categories()
-            ->getProductBoxLayout($categoryId) : $this->get('config')->get('searchProductBoxLayout');
+        if ($this->Request()->has('productBoxLayout')) {
+            $boxLayout = $this->Request()->get('productBoxLayout');
+        } else {
+            $boxLayout = $categoryId ? Shopware()->Modules()->Categories()
+                ->getProductBoxLayout($categoryId) : $this->get('config')->get('searchProductBoxLayout');
+        }
 
         $articles = $this->convertArticlesResult($result, $categoryId);
+
+        $this->View()->assign($this->Request()->getParams());
 
         $this->View()->assign([
             'sArticles' => $articles,

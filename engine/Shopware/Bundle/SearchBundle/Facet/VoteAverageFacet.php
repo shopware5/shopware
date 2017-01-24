@@ -25,7 +25,6 @@
 namespace Shopware\Bundle\SearchBundle\Facet;
 
 use Shopware\Bundle\SearchBundle\FacetInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
  * @category  Shopware
@@ -34,6 +33,27 @@ use Shopware\Bundle\StoreFrontBundle\Struct;
  */
 class VoteAverageFacet implements FacetInterface
 {
+    /**
+     * @var null|string
+     */
+    private $label;
+
+    /**
+     * @param string|null $label
+     */
+    public function __construct($label = null)
+    {
+        $this->label = $label;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getLabel()
+    {
+        return $this->label;
+    }
+
     /**
      * @inheritdoc
      */

@@ -29,7 +29,7 @@ use Shopware\Bundle\SearchBundle\Condition\OrdernumberCondition;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\SortingInterface;
-use Shopware\Components\ReflectionHelper;
+use Shopware\Components\LogawareReflectionHelper;
 
 class Repository implements RepositoryInterface
 {
@@ -39,17 +39,18 @@ class Repository implements RepositoryInterface
     private $conn;
 
     /**
-     * @var ReflectionHelper
+     * @var LogawareReflectionHelper
      */
     private $reflector;
 
     /**
      * @param Connection $conn
+     * @param LogawareReflectionHelper $reflector
      */
-    public function __construct(Connection $conn)
+    public function __construct(Connection $conn, LogawareReflectionHelper $reflector)
     {
         $this->conn = $conn;
-        $this->reflector = new ReflectionHelper();
+        $this->reflector = $reflector;
     }
 
     /**
@@ -107,15 +108,7 @@ class Repository implements RepositoryInterface
      */
     public function unserialize($serializedConditions)
     {
-        $conditions = [];
-        foreach ($serializedConditions as $className => $arguments) {
-            $className = explode('|', $className);
-            $className = $className[0];
-
-            $conditions[] = $this->reflector->createInstanceFromNamedArguments($className, $arguments);
-        }
-
-        return $conditions;
+        return $this->reflector->unserialize($serializedConditions, 'Serialization error in Product stream');
     }
 
     /**
@@ -148,7 +141,12 @@ SQL;
     private function getStreamById($productStreamId)
     {
         $row = $this->conn->fetchAssoc(
-            "SELECT * FROM s_product_streams WHERE id = :productStreamId LIMIT 1",
+            "SELECT streams.*, customSorting.sortings as customSortings
+             FROM s_product_streams streams
+             LEFT JOIN s_search_custom_sorting customSorting
+                 ON customSorting.id = streams.sorting_id
+             WHERE streams.id = :productStreamId
+             LIMIT 1",
             ['productStreamId' => $productStreamId]
         );
 
@@ -161,9 +159,14 @@ SQL;
      */
     private function assignSortings(array $productStream, Criteria $criteria)
     {
-        $serializedSortings = json_decode($productStream['sorting'], true);
+        $sorting = $productStream['sorting'];
+        if (!empty($productStream['customSortings'])) {
+            $sorting = $productStream['customSortings'];
+        }
 
-        /** @var SortingInterface $sortings */
+        $serializedSortings = json_decode($sorting, true);
+
+        /** @var SortingInterface[] $sortings */
         $sortings = $this->unserialize($serializedSortings);
         foreach ($sortings as $sorting) {
             $criteria->addSorting($sorting);

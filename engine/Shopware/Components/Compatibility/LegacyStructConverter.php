@@ -274,6 +274,7 @@ class LegacyStructConverter
             'sSelf'           => $detailUrl,
             'sSelfCanonical'  => $canonical,
             'canonicalParams' => $canonicalParams,
+            'hide_sortings'   => $category->hideSortings(),
             'rssFeed'         => $detailUrl . '&sRss=1',
             'atomFeed'        => $detailUrl . '&sAtom=1'
         ];
@@ -658,7 +659,7 @@ class LegacyStructConverter
      * @param StoreFrontBundle\Struct\Media $media
      * @return array
      */
-    public function convertMediaStruct(StoreFrontBundle\Struct\Media $media)
+    public function convertMediaStruct(StoreFrontBundle\Struct\Media $media = null)
     {
         if (!$media instanceof StoreFrontBundle\Struct\Media) {
             return [];

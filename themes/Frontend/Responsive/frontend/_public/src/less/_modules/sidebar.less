@@ -245,9 +245,33 @@ body > .sidebar-main {
 
 .listing--sidebar .sidebar-filter {
 
+    .off-canvas.is--open.is--ajax-reload {
+        overflow: hidden;
+
+        .filter--container {
+            overflow: auto;
+            position: absolute;
+            top: 43px;
+            width: 100%;
+            bottom: 0;
+            left: 0;
+            right: 0;
+        }
+
+        .filter--close-btn {
+            position: absolute;
+            width: 100%;
+            z-index: 10;
+        }
+    }
+
     .action--filter-options {
         .border-radius();
         border: 1px solid @border-color;
+    }
+
+    .filter--active {
+        max-width: 100%;
     }
 
     .filter--container {

@@ -129,6 +129,11 @@ class Category extends Extendable implements \JsonSerializable
     protected $productStream;
 
     /**
+     * @var boolean
+     */
+    protected $hideSortings;
+
+    /**
      * @param CategoryEntity $category
      * @return Category
      */
@@ -464,5 +469,21 @@ class Category extends Extendable implements \JsonSerializable
     public function setProductStream(ProductStream $productStream = null)
     {
         $this->productStream = $productStream;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function hideSortings()
+    {
+        return $this->hideSortings;
+    }
+
+    /**
+     * @param boolean $hideSortings
+     */
+    public function setHideSortings($hideSortings)
+    {
+        $this->hideSortings = $hideSortings;
     }
 }

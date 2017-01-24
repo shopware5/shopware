@@ -26,8 +26,11 @@ use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\FacetResultInterface;
 use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
 use Shopware\Bundle\SearchBundle\StoreFrontCriteriaFactoryInterface;
+use Shopware\Bundle\StoreFrontBundle\Service\CustomFacetServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\Manufacturer;
 use Shopware\Bundle\StoreFrontBundle\Struct\ProductContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\Search\CustomFacet;
+use Shopware\Bundle\StoreFrontBundle\Struct\Search\CustomSorting;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Models\Emotion\Emotion;
 
@@ -83,18 +86,18 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
 
         $context = $this->get('shopware_storefront.context_service')->getShopContext();
 
+        /** @var \Shopware\Bundle\StoreFrontBundle\Service\CustomSortingServiceInterface $service */
+        $service = $this->get('shopware_storefront.custom_sorting_service');
+
+        $sortings = $service->getSortingsOfCategories([$categoryId], $context);
+
+        /** @var CustomSorting[] $sortings */
+        $sortings = array_shift($sortings);
+
+        $this->setDefaultSorting($sortings);
+
         if ($categoryContent['streamId']) {
-            /** @var \Shopware\Components\ProductStream\CriteriaFactoryInterface $factory */
-            $factory = $this->get('shopware_product_stream.criteria_factory');
-            $criteria = $factory->createCriteria($this->Request(), $context);
-
-            /** @var \Shopware\Components\ProductStream\RepositoryInterface $streamRepository */
-            $streamRepository = $this->get('shopware_product_stream.repository');
-            $streamRepository->prepareCriteria($criteria, $categoryContent['streamId']);
-
-            /** @var \Shopware\Components\ProductStream\FacetFilter $facetFilter */
-            $facetFilter = $this->get('shopware_product_stream.facet_filter');
-            $facetFilter->add($criteria);
+            $criteria = $this->createCategoryStreamCriteria($categoryId, $categoryContent['streamId']);
         } else {
             /**@var $criteria Criteria*/
             $criteria = $this->get('shopware_search.store_front_criteria_factory')
@@ -132,6 +135,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         $categoryArticles['facets'] = $facets;
 
         $this->View()->assign($categoryArticles);
+        $this->View()->assign('sortings', $sortings);
     }
 
     /**
@@ -282,15 +286,6 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
     }
 
     /**
-     * Helper function which checks the configuration for listing filters.
-     * @return boolean
-     */
-    protected function displayFiltersInListing()
-    {
-        return Shopware()->Config()->get('displayFiltersInListings', true);
-    }
-
-    /**
      * Returns listing breadcrumb
      *
      * @param int $categoryId
@@ -427,6 +422,61 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         $visibleDevices = array_merge($permanentVisibleDevices, $visibleDevices);
 
         return array_values($visibleDevices);
+    }
+
+    /**
+     * @param CustomSorting[] $sortings
+     */
+    private function setDefaultSorting($sortings)
+    {
+        if ($this->Request()->has('sSort')) {
+            return;
+        }
+
+        /** @var CustomSorting $default */
+        $default = array_shift($sortings);
+
+        if (!$default) {
+            return;
+        }
+
+        $this->Request()->setParam('sSort', $default->getId());
+    }
+
+    /**
+     * @param int $categoryId
+     * @param int $streamId
+     * @return Criteria
+     */
+    private function createCategoryStreamCriteria($categoryId, $streamId)
+    {
+        /** @var \Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface $contextService */
+        $contextService = $this->get('shopware_storefront.context_service');
+        $context = $contextService->getShopContext();
+
+        /** @var \Shopware\Components\ProductStream\CriteriaFactoryInterface $factory */
+        $factory = $this->get('shopware_product_stream.criteria_factory');
+        $criteria = $factory->createCriteria($this->Request(), $context);
+
+        /** @var \Shopware\Components\ProductStream\RepositoryInterface $streamRepository */
+        $streamRepository = $this->get('shopware_product_stream.repository');
+        $streamRepository->prepareCriteria($criteria, $streamId);
+
+        /** @var CustomFacetServiceInterface $facetService */
+        $facetService = $this->get('shopware_storefront.custom_facet_service');
+        $facets = $facetService->getFacetsOfCategories([$categoryId], $context);
+
+        /** @var CustomFacet[] $facets */
+        $facets = array_shift($facets);
+        foreach ($facets as $facet) {
+            $criteria->addFacet($facet->getFacet());
+        }
+
+        /** @var \Shopware\Components\ProductStream\FacetFilter $facetFilter */
+        $facetFilter = $this->get('shopware_product_stream.facet_filter');
+        $facetFilter->add($criteria);
+
+        return $criteria;
     }
 
     /**
