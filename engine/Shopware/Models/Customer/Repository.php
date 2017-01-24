@@ -89,7 +89,7 @@ class Repository extends ModelRepository
         ));
 
         $builder->from($this->getEntityName(), 'customer')
-                ->join('customer.billing', 'billing')
+                ->leftJoin('customer.billing', 'billing')
                 ->leftJoin('customer.group', 'customergroups')
                 ->leftJoin('customer.orders', 'orders', \Doctrine\ORM\Query\Expr\Join::WITH, 'orders.status != -1 AND orders.status != 4')
                 ->groupBy('customer.id');
