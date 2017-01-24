@@ -229,6 +229,7 @@ This changelog references changes done in Shopware 5.3 patch versions.
     * `SORTING_PRODUCT_NAME_ASC`
     * `SORTING_PRODUCT_NAME_DESC`
     * `SORTING_SEARCH_RANKING`
+* Removed smarty modifier `rewrite`
 
 ### Deprecations
 
