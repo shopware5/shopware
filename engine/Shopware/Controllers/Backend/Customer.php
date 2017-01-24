@@ -24,6 +24,7 @@
 
 use Shopware\Components\CSRFWhitelistAware;
 use Shopware\Components\NumberRangeIncrementerInterface;
+use Shopware\Models\Customer\Address;
 use Shopware\Models\Customer\Customer as Customer;
 use Shopware\Models\Customer\PaymentData;
 
@@ -564,6 +565,10 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
             $data['birthday'] = $birthday->format('d.m.Y');
         }
 
+        if (empty($data['billing'])) {
+            $data['billing'] = $this->fetchAddress($data['default_billing_address_id']);
+        }
+
         $namespace = Shopware()->Container()->get('snippets')->getNamespace('frontend/salutation');
         $data['billing']['salutationSnippet'] = $namespace->get($data['billing']['salutation']);
         $data['shipping']['salutationSnippet'] = $namespace->get($data['shipping']['salutation']);
@@ -778,5 +783,21 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
     private function createPerformOrderRedirectHash($userPasswordHash)
     {
         return sha1($userPasswordHash);
+    }
+
+    /**
+     * @param int $id
+     * @return array|null
+     */
+    private function fetchAddress($id)
+    {
+        /** @var \Doctrine\ORM\QueryBuilder $query */
+        $query = $this->get('models')->createQueryBuilder();
+        $query->select('address');
+        $query->from(Address::class, 'address');
+        $query->where('address.id = :id');
+        $query->setParameter('id', $id);
+        $query->setMaxResults(1);
+        return $query->getQuery()->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
     }
 }
