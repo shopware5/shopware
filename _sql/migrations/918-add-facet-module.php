@@ -7,7 +7,7 @@ use Shopware\Bundle\SearchBundle\Sorting\ReleaseDateSorting;
 use Shopware\Bundle\SearchBundle\Sorting\SearchRankingSorting;
 use Shopware\Components\Migrations\AbstractMigration;
 
-class Migrations_Migration917 extends AbstractMigration
+class Migrations_Migration918 extends AbstractMigration
 {
     /**
      * @inheritdoc
