@@ -10,12 +10,12 @@ module.exports = function (grunt) {
 
     lessTargetFile['../' + config.lessTarget] = '../web/cache/all.less';
 
-    config['js'].forEach(function (item) {
+    config.js.forEach(function (item) {
         jsFiles.push('../' + item);
     });
     jsTargetFile['../' + config.jsTarget] = jsFiles;
 
-    config['less'].forEach(function (item) {
+    config.less.forEach(function (item) {
         content += `@import "../${item}";`;
     });
     grunt.file.write('../web/cache/all.less', content);
@@ -93,6 +93,9 @@ module.exports = function (grunt) {
                 'Gruntfile.js',
                 'Frontend/Responsive/frontend/_public/src/js/*.js'
             ]
+        },
+        fileExists: {
+            js: jsFiles
         }
     });
 
@@ -100,8 +103,9 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-chokidar');
     grunt.loadNpmTasks('gruntify-eslint');
+    grunt.loadNpmTasks('grunt-file-exists');
 
     grunt.renameTask('chokidar', 'watch');
     grunt.registerTask('production', [ 'eslint', 'less:production', 'uglify:production' ]);
-    grunt.registerTask('default', [ 'less:development', 'uglify:development', 'watch' ]);
+    grunt.registerTask('default', [ 'fileExists:js', 'less:development', 'uglify:development', 'watch' ]);
 };
