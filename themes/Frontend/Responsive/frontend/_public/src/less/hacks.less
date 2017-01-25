@@ -99,3 +99,17 @@ More precise designations are commented inside the document.
         font-size: 5px;
     }
 }
+
+// hide ios video play-button
+video::-webkit-media-controls-panel {
+    display: none !important;
+    -webkit-appearance: none;
+}
+video::--webkit-media-controls-play-button {
+    display: none !important;
+    -webkit-appearance: none;
+}
+video::-webkit-media-controls-start-playback-button {
+    display: none !important;
+    -webkit-appearance: none;
+}
