@@ -59,7 +59,7 @@ class WarmUpHttpCacheCommand extends ShopwareCommand
             $shopIds = $this->container->get('db')->fetchCol('SELECT id FROM s_core_shops WHERE active = 1');
         }
 
-        if ($input->getOption('clearcache')) {
+        if ($input->getOption('clear-cache')) {
             $output->writeln('Clearing httpcache.');
             $this->container->get('shopware.cache_manager')->clearHttpCache();
         }
