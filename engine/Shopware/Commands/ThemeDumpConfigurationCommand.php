@@ -62,7 +62,7 @@ class ThemeDumpConfigurationCommand extends ShopwareCommand
             $configuration = $compiler->getThemeConfiguration($shop);
             $file = $this->dumpConfiguration($shop, $configuration);
             $file = str_replace($rootDir, '', $file);
-            $output->writeln("file : " . $file . " generated");
+            $output->writeln("file: " . $file . " generated");
         }
     }
 
