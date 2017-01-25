@@ -26,6 +26,7 @@ namespace Shopware\Bundle\SearchBundleES;
 
 use Elasticsearch\Client;
 use ONGR\ElasticsearchDSL\Search;
+use ONGR\ElasticsearchDSL\Sort\FieldSort;
 use Shopware\Bundle\ESIndexingBundle\IndexFactoryInterface;
 use Shopware\Bundle\ESIndexingBundle\Product\ProductMapping;
 use Shopware\Bundle\SearchBundle\Criteria;
@@ -125,9 +126,13 @@ class ProductNumberSearch implements ProductNumberSearchInterface
         $this->addCriteriaParts($criteria, $context, $search, $criteria->getSortings());
         $this->addCriteriaParts($criteria, $context, $search, $criteria->getFacets());
 
-        $search->setFrom($criteria->getOffset())
-            ->setSize($criteria->getLimit());
-
+        if ($criteria->getOffset() !== null) {
+            $search->setFrom($criteria->getOffset());
+        }
+        if ($criteria->getLimit() !== null) {
+            $search->setSize($criteria->getLimit());
+        }
+        $search->addSort(new FieldSort('id', 'ASC'));
         return $search;
     }
 
