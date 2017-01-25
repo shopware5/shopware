@@ -2882,6 +2882,8 @@ SQL;
             if (!empty($object[$dispatch['id']]['dispatch_description'])) {
                 $dispatch['description'] = $object[$dispatch['id']]['dispatch_description'];
             }
+
+            $dispatch['attribute'] = Shopware()->Container()->get('shopware_attribute.data_loader')->load('s_premium_dispatch_attributes', $dispatch['id']);
         }
         return $dispatches;
     }
