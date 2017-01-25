@@ -750,7 +750,7 @@ class sExport
         $sql_add_join   = array();
         $sql_add_select = array();
         $sql_add_where  = array();
-        $sql_select_attributes = array();
+        $sql_select_article_attributes = array();
 
         $skipBackend = $this->shop->get('skipbackend');
         $isoCode = $this->shop->get('isocode');
@@ -845,10 +845,14 @@ class sExport
                 $columnName !== 'id'
                 && $columnName !== 'articleID'
                 && $columnName !== 'articledetailsID') {
-                $sql_select_attributes[] = 'at.' . $columnName;
+                if (substr($columnName, 0, 4) === "attr") {
+                    $sql_select_article_attributes[] = 'at.' . $columnName;
+                } else {
+                    $sql_select_article_attributes[] = 'at.' . $columnName . ' as "attribute.' . $columnName . '"';
+                }
             }
         }
-        $sql_select_attributes = implode(", ", $sql_select_attributes);
+        $sql_select_article_attributes = implode(", ", $sql_select_article_attributes);
 
         $grouppricefield = "gp.price";
         if (
@@ -960,7 +964,7 @@ class sExport
                 d.weight,
                 d.position,
 
-                $sql_select_attributes,
+                $sql_select_article_attributes,
 
                 s.name as supplier,
                 u.unit,
