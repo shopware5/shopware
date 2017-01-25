@@ -4040,7 +4040,8 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         }
 
         //first we execute the current command on the cursor object
-        $result = $cursor->$commands[$index]['command']();
+        $result = $cursor->{$commands[$index]['command']}();
+
         //now we increment the command index
         $index++;
 
@@ -4114,16 +4115,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         //now we convert the property names to the getter functions.
         foreach ($paths as $path) {
             $commands[] = array('origin' => $path, 'command' => 'get' . ucfirst($path));
-        }
-
-        $sql = "
-            SELECT name, `default`
-            FROM s_core_engine_elements
-        ";
-        $attributes = Shopware()->Db()->fetchAssoc($sql);
-        $prepared = array();
-        foreach ($attributes as $name => $attr) {
-            $prepared[$name] = $attr['default'];
         }
 
         return array(
