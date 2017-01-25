@@ -286,7 +286,7 @@ class <namespace>_<proxyClassName> extends <className> implements Enlight_Hook_P
                 $proxy_params .= '$' . $rp->getName();
                 $array_param .= '$' . $rp->getName();
                 $array_params .= '\'' . $rp->getName() . '\'=>' . $array_param;
-                if ($rp->isOptional()) {
+                if ($rp->isOptional() && $rp->isDefaultValueAvailable()) {
                     $params .= ' = ' . str_replace("\n", '', var_export($rp->getDefaultValue(), true));
                 }
             }
