@@ -218,6 +218,8 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
             $this->saveElement($elementData, $defaultShop);
         }
 
+        $this->get('shopware.cache_manager')->clearConfigCache();
+
         $this->View()->assign(array('success' => true));
     }
 
