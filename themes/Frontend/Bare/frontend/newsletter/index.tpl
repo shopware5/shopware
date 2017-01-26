@@ -5,6 +5,24 @@
     {$sBreadcrumb = [['name'=>"{s name='NewsletterTitle'}{/s}", 'link'=>{url}]]}
 {/block}
 
+{* Meta description *}
+{block name='frontend_index_header_meta_description'}{s name='NewsletterMetaDescriptionStandard'}{/s}{/block}
+
+{* Meta opengraph tags *}
+{block name='frontend_index_header_meta_tags_opengraph'}
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="{{config name=sShopname}|escapeHtml}" />
+    <meta property="og:title" content="{{config name=sShopname}|escapeHtml}" />
+    <meta property="og:description" content="{s name='NewsletterMetaDescriptionStandard'}{/s}" />
+    <meta property="og:image" content="{link file=$theme.desktopLogo fullPath}" />
+
+    <meta name="twitter:card" content="website" />
+    <meta name="twitter:site" content="{{config name=sShopname}|escapeHtml}" />
+    <meta name="twitter:title" content="{{config name=sShopname}|escapeHtml}" />
+    <meta name="twitter:description" content="{s name='NewsletterMetaDescriptionStandard'}{/s}" />
+    <meta name="twitter:image" content="{link file=$theme.desktopLogo fullPath}" />
+{/block}
+
 {block name="frontend_index_content"}
     <div class="newsletter--content content block">
 
