@@ -18,6 +18,24 @@ class Md5StrategyTest extends TestCase
     }
 
     /**
+     * Call protected/private method of a class.
+     *
+     * @param object $object    Instantiated object that we will run method on.
+     * @param string $methodName Method name to call
+     * @param array  $parameters Array of parameters to pass into method.
+     *
+     * @return mixed Method return.
+     */
+    public function invokeMethod($object, $methodName, array $parameters = array())
+    {
+        $reflection = new \ReflectionClass(get_class($object));
+        $method = $reflection->getMethod($methodName);
+        $method->setAccessible(true);
+
+        return $method->invokeArgs($object, $parameters);
+    }
+
+    /**
      * @return array
      */
     public function getNormalizedData()
@@ -44,6 +62,27 @@ class Md5StrategyTest extends TestCase
             ['media/image/53/fa/a3/foo.'],
             ['www.shopware.com/media/image/53/'],
             ['/var/www/local/media/image/53/'],
+        ];
+    }
+
+    public function getSubstringPathDataSet()
+    {
+        return [
+            ['media/image/f3/a2/ee/image.jpg', 'media/image/f3/a2/ee/image.jpg'],
+            ['http://shop.internal/media/image/f3/a2/ee/image.jpg', 'media/image/f3/a2/ee/image.jpg'],
+            ['media/media/image/f3/a2/ee/image.jpg', 'media/image/f3/a2/ee/image.jpg']
+        ];
+    }
+
+    public function getEncodeDataSet()
+    {
+        return [
+            ['media/image/f3/aa/32/image.jpg', 'media/image/f3/aa/32/image.jpg'],
+            ['media/media/image/f3/aa/32/image.jpg', 'media/image/f3/aa/32/image.jpg'],
+            ['media/image/image.jpg', 'media/image/65/d9/11/image.jpg'],
+
+            // implicit blacklist test
+            ['media/image/1430.jpg', 'media/image/g0/bf/bf/1430.jpg'],
         ];
     }
 
@@ -83,5 +122,30 @@ class Md5StrategyTest extends TestCase
     public function testEncodingWithInvalidPaths($path)
     {
         $this->assertEquals("", $this->strategy->encode($path));
+    }
+
+    public function testEncodingBlacklist()
+    {
+        $this->assertFalse($this->invokeMethod($this->strategy, 'isEncoded', ['media/image/f1/d3/ad/foo.jpg']));
+    }
+
+    /**
+     * @dataProvider getSubstringPathDataSet
+     * @param string $path
+     * @param string $expectedPath
+     */
+    public function testSubstringPath($path, $expectedPath)
+    {
+        $this->assertEquals($expectedPath, $this->invokeMethod($this->strategy, 'substringPath', [$path]));
+    }
+
+    /**
+     * @dataProvider getEncodeDataSet
+     * @param string $path
+     * @param string $expectedPath
+     */
+    public function testEncode($path, $expectedPath)
+    {
+        $this->assertEquals($expectedPath, $this->strategy->encode($path));
     }
 }
