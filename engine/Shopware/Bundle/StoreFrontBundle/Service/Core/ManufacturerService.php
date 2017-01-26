@@ -75,10 +75,9 @@ class ManufacturerService implements Service\ManufacturerServiceInterface
     {
         $manufacturers = $this->manufacturerGateway->getList($ids, $context);
 
+        //fetch all manufacturer links instead of calling {url ...} smarty function which executes a query for each link
         $links = $this->collectLinks($manufacturers);
-
         $urls = $this->router->generateList($links);
-
         foreach ($manufacturers as $manufacturer) {
             if (array_key_exists($manufacturer->getId(), $urls)) {
                 $manufacturer->setLink($urls[$manufacturer->getId()]);
