@@ -28,6 +28,9 @@
                         <a class="btn is--secondary is--icon-left" href="{url controller='index'}" title="{"{s name='AccountLogoutButton'}{/s}"|escape}">
                             <i class="icon--arrow-left"></i>{s name="AccountLogoutButton"}{/s}
                         </a>
+                        <a class="btn is--primary is--icon-right" href="{url controller='account'}" title="{"{s name='AccountLogoutAccountButton'}{/s}"|escape}">
+                            <i class="icon--arrow-right"></i>{s name="AccountLogoutAccountButton"}{/s}
+                        </a>
                     </div>
                 {/block}
             </div>
