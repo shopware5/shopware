@@ -19,16 +19,9 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Emotion
- * @subpackage View
- * @version    $Id$
- * @author shopware AG
  */
 
 //{namespace name=backend/emotion/view/detail}
-
 //{block name="backend_emotion_view_components_banner_mapping"}
 Ext.define('Shopware.apps.Emotion.view.components.BannerMapping', {
     extend: 'Enlight.app.Window',
@@ -37,8 +30,8 @@ Ext.define('Shopware.apps.Emotion.view.components.BannerMapping', {
     autoShow: true,
     layout: 'border',
     alias: 'widget.emotion-components-banner-mapping',
-    width:'80%',
-    height:'90%',
+    width: '80%',
+    height: '90%',
     basePath: '',
     resizeCollection: Ext.create('Ext.util.MixedCollection'),
 
@@ -57,7 +50,7 @@ Ext.define('Shopware.apps.Emotion.view.components.BannerMapping', {
         me.callParent(arguments);
 
         me.on('afterrender', function() {
-            if(me.element) {
+            if (me.element) {
                 var mapping = me.getMapping(me.element);
 
                 if (mapping) {
@@ -106,21 +99,10 @@ Ext.define('Shopware.apps.Emotion.view.components.BannerMapping', {
 
     createMappingGrid: function() {
         var me = this;
-        me.mappingStore = Ext.create('Ext.data.Store', {
-            fields: [ 'x', 'y', 'width', 'height', 'link', 'resizerIndex', 'linkLocation', 'title', { name: 'as_tooltip', type: 'int' } ]
-        });
 
-        me.rowEdit = Ext.create('Ext.grid.plugin.RowEditing', {
-            clicksToEdit: 2,
-            listeners: {
-                scope: me,
-                beforeedit: function(editor, eOpts) {
-                    if(eOpts.field === 'link') {
-                        me.articleSearch.getSearchField().focus(true, true);
-                    }
-                }
-            }
-        });
+        me.mappingStore = me.createMappingStore();
+
+        me.rowEdit = me.createMappingRowEditor();
 
         me.mappingGrid = Ext.create('Ext.grid.Panel', {
             title: '{s name=banner_mapping/title_grid}Mapping{/s}',
@@ -140,10 +122,10 @@ Ext.define('Shopware.apps.Emotion.view.components.BannerMapping', {
 
                     var cmp = me.resizeCollection.getAt(record.get('resizerIndex'));
 
-                    if(newValues.width !== oldValues.width || newValues.height !== oldValues.height){
+                    if (newValues.width !== oldValues.width || newValues.height !== oldValues.height) {
                         cmp.setSize(newValues.width, newValues.height);
                     }
-                    if(newValues.x !== oldValues.x || newValues.y !== oldValues.y) {
+                    if (newValues.x !== oldValues.x || newValues.y !== oldValues.y) {
                         cmp.setPosition(newValues.x, newValues.y);
                     }
 
@@ -162,12 +144,50 @@ Ext.define('Shopware.apps.Emotion.view.components.BannerMapping', {
         return me.mappingGrid;
     },
 
+    /**
+     * @return { Ext.data.Store }
+     */
+    createMappingStore: function() {
+        return Ext.create('Ext.data.Store', {
+            fields: [
+                'x',
+                'y',
+                'width',
+                'height',
+                'link',
+                'resizerIndex',
+                'linkLocation',
+                'title',
+                { name: 'as_tooltip', type: 'int' }
+            ]
+        });
+    },
+
+    /**
+     * @return { Ext.grid.plugin.RowEditing }
+     */
+    createMappingRowEditor: function() {
+        var me = this;
+
+        return Ext.create('Ext.grid.plugin.RowEditing', {
+            clicksToEdit: 2,
+            listeners: {
+                scope: me,
+                beforeedit: function(editor, eOpts) {
+                    if (eOpts.field === 'link') {
+                        me.articleSearch.getSearchField().focus(true, true);
+                    }
+                }
+            }
+        });
+    },
+
     createMappingGridColumns: function() {
         var me = this;
 
         me.articleSearch = Ext.create('Shopware.form.field.ArticleSearch', {
             name: 'link',
-            articleStore: Ext.create('Shopware.store.Article'),
+            articleStore: Ext.create('Shopware.apps.Base.store.Variant'),
             returnValue: 'number',
             hiddenReturnValue: 'number',
             allowBlank: false,
@@ -185,8 +205,8 @@ Ext.define('Shopware.apps.Emotion.view.components.BannerMapping', {
              * Shows the trigger button and starts the search.
              *
              * @event keyup
-             * @param [object] el - Ext.form.field.Trigger which has fired the event
-             * @param [object] event - Ext.EventObject
+             * @param { Object } el - Ext.form.field.Trigger which has fired the event
+             * @param { Object } event - Ext.EventObject
              * @return void
              */
             onSearchKeyUp: function(el, event) {
@@ -198,13 +218,13 @@ Ext.define('Shopware.apps.Emotion.view.components.BannerMapping', {
                 var value = el.getValue();
 
                 // Check if we're dealing with a link
-                if(value.substr(0,1) === '/' || Ext.isArray(value.match(/(http|https|shopware\.php)/))) {
+                if (value.substr(0, 1) === '/' || Ext.isArray(value.match(/(http|https|shopware\.php)/))) {
                     me.fireEvent('valueselect', me, value, value, value);
                     return;
                 }
 
                 // Check if we've a value and the user did press the ESC key
-                if(event.keyCode === Ext.EventObject.ESC || !el.value) {
+                if (event.keyCode === Ext.EventObject.ESC || !el.value) {
                     event.preventDefault();
                     el.setValue('');
                     me.dropDownStore.filters.clear();
@@ -218,10 +238,9 @@ Ext.define('Shopware.apps.Emotion.view.components.BannerMapping', {
                     curIndex = me.dropDownStore.indexOf(record),
                     lastIndex = me.dropDownStore.getCount() - 1;
 
-
                 // Keyboard up pressed
-                if(event.keyCode === Ext.EventObject.UP) {
-                    if(curIndex === undefined) {
+                if (event.keyCode === Ext.EventObject.UP) {
+                    if (curIndex === undefined) {
                         selModel.select(0);
                     } else {
                         selModel.select(curIndex === 0 ? lastIndex : (curIndex - 1));
@@ -229,8 +248,8 @@ Ext.define('Shopware.apps.Emotion.view.components.BannerMapping', {
                 }
 
                 // Keyboard down pressed
-                else if(event.keyCode === Ext.EventObject.DOWN) {
-                    if(curIndex == undefined) {
+                else if (event.keyCode === Ext.EventObject.DOWN) {
+                    if (curIndex == undefined) {
                         selModel.select(0);
                     } else {
                         selModel.select(curIndex === lastIndex ? 0 : (curIndex + 1));
@@ -238,7 +257,7 @@ Ext.define('Shopware.apps.Emotion.view.components.BannerMapping', {
                 }
 
                 // Keyboard enter pressed
-                else if(event.keyCode === Ext.EventObject.ENTER) {
+                else if (event.keyCode === Ext.EventObject.ENTER) {
                     event.preventDefault();
                     record && me.onSelectArticle(null, record);
                 }
@@ -291,7 +310,7 @@ Ext.define('Shopware.apps.Emotion.view.components.BannerMapping', {
             editor: me.linkComboBox,
             renderer: function(value) {
 
-                if(value === 'external') {
+                if (value === 'external') {
                     return '{s name=banner_mapping/column/location/external}External link{/s}';
                 }
                 return '{s name=banner_mapping/column/location/interal}Internal link{/s}';
@@ -314,7 +333,7 @@ Ext.define('Shopware.apps.Emotion.view.components.BannerMapping', {
                 xtype: 'numberfield',
                 minValue: 0
             }
-        },  {
+        }, {
             dataIndex: 'width',
             header: '{s name=banner_mapping/column/width}Width{/s}',
             width: 80,
@@ -381,7 +400,7 @@ Ext.define('Shopware.apps.Emotion.view.components.BannerMapping', {
     pixelRenderer: function(value) {
         // Cast value to a string
         value += '';
-        if(!value.length) {
+        if (!value.length) {
             return '-';
         }
         return Ext.String.format('[0]px', value);
@@ -391,12 +410,12 @@ Ext.define('Shopware.apps.Emotion.view.components.BannerMapping', {
      * Column renderer which renders an icon which represents the `checked` state
      * based on the incoming value.
      *
-     * @param { Integer } value - The column content
+     * @param { Number } value - The column content
      * @returns { String } formatted output
      */
     checkboxRenderer: function(value) {
         var cls;
-        if(value === 1) {
+        if (value === 1) {
             cls = 'sprite-tick-small';
         } else {
             cls = 'sprite-cross-small';
@@ -444,9 +463,11 @@ Ext.define('Shopware.apps.Emotion.view.components.BannerMapping', {
         }];
     },
 
-    createMappingResizer: function(item) {
-        var me = this, imageEl = me.image.imgEl, size = imageEl.getSize(), config;
-
+    createMappingResizer: function (item) {
+        var me = this,
+            imageEl = me.image.imgEl,
+            size = imageEl.getSize(),
+            config;
 
         if (item) {
             config = item;
@@ -494,22 +515,12 @@ Ext.define('Shopware.apps.Emotion.view.components.BannerMapping', {
         cmp.setPosition(config.x, config.y);
 
         // Create the record for the `me.mappingStore`
-        var record = me.mappingStore.add({
-            x: config.x,
-            y: config.y,
-            height: config.height,
-            width: config.width,
-            resizerIndex: id,
-            link: config.link,
-            linkLocation: config.linkLocation || 'internal',
-            title: config.title || '',
-            as_tooltip: config.as_tooltip || 0
-        });
+        var record = me.mappingStore.add(me.createMappingRecord(id, config));
         record = record[0];
-        Ext.defer(function() {
+        Ext.defer(function () {
             cmp.doComponentLayout();
             size = imageEl.getSize();
-            cmp.dd.on('dragend', function() {
+            cmp.dd.on('dragend', function () {
                 var y = cmp.getEl().getTop() - imageEl.getTop(),
                     x = cmp.getEl().getLeft() - imageEl.getLeft();
                 record.set({
@@ -529,6 +540,25 @@ Ext.define('Shopware.apps.Emotion.view.components.BannerMapping', {
                 });
             });
         }, 1000);
+    },
+
+    /**
+     * @param { Number } id
+     * @param { Object } config
+     * @return { Object }
+     */
+    createMappingRecord: function(id, config) {
+        return {
+            x: config.x,
+            y: config.y,
+            height: config.height,
+            width: config.width,
+            resizerIndex: id,
+            link: config.link,
+            linkLocation: config.linkLocation || 'internal',
+            title: config.title || '',
+            as_tooltip: config.as_tooltip || 0
+        };
     }
 });
 //{/block}
