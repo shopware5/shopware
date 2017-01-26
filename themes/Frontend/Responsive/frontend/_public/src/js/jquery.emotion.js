@@ -61,13 +61,7 @@
              * @property loadingOverlaySelector
              * @type {string}
              */
-            loadingOverlaySelector: '.emotion--overlay',
-
-            /**
-             * Defines if a product listing will be displayed
-             * @type {boolean}
-             */
-            hasListing: false
+            loadingOverlaySelector: '.emotion--overlay'
         },
 
         /**
@@ -209,8 +203,6 @@
                 return;
             }
 
-            me.$emotion.attr('data-hasListing', me.opts.hasListing);
-
             me.$emotion.swEmotion();
 
             $.publish('plugin/swEmotionLoader/onInitEmotion', [ me, html ]);
@@ -338,13 +330,7 @@
              * @property videoElSelector
              * @type {string}
              */
-            videoElSelector: '.emotion--video',
-
-            /**
-             * flag to prevent `is--no-sidebar` for fullscreen emotions with listing below
-             * @type {boolean}
-             */
-            hasListing: false
+            videoElSelector: '.emotion--video'
         },
 
         /**
@@ -457,9 +443,7 @@
         initFullscreen: function() {
             var me = this;
 
-            if (!me.opts.hasListing) {
-                $body.addClass('is--no-sidebar');
-            }
+            $body.addClass('is--no-sidebar');
             me.$contentMain.addClass('is--fullscreen');
             me.$wrapper.addClass('is--fullscreen');
 

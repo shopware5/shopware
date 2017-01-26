@@ -45,10 +45,6 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Emotion extends ModelEntity
 {
-    const LISTING_VISIBILITY_ONLY_START = 'only_start';
-    const LISTING_VISIBILITY_ONLY_START_AND_LISTING = 'start_and_listing';
-    const LISTING_VISIBILITY_ONLY_LISTING = 'only_listing';
-
     /**
      * Unique identifier field for the shopware emotion.
      *
@@ -316,16 +312,6 @@ class Emotion extends ModelEntity
      * @ORM\Column(name="preview_secret", type="string", nullable=true)
      */
     private $previewSecret;
-
-    /**
-     * only_start => displayed only on category page
-     * start_and_listing => display in listing (?p=1) and category page
-     * only_listing => only displayed in category listing page
-     *
-     * @var string
-     * @ORM\Column(name="listing_visibility", type="string", nullable=false)
-     */
-    private $listingVisibility = self::LISTING_VISIBILITY_ONLY_START;
 
     /**
      * Class constructor.
@@ -904,21 +890,5 @@ class Emotion extends ModelEntity
     public function setPreviewSecret($previewSecret)
     {
         $this->previewSecret = $previewSecret;
-    }
-
-    /**
-     * @return string
-     */
-    public function getListingVisibility()
-    {
-        return $this->listingVisibility;
-    }
-
-    /**
-     * @param string $listingVisibility
-     */
-    public function setListingVisibility($listingVisibility)
-    {
-        $this->listingVisibility = $listingVisibility;
     }
 }

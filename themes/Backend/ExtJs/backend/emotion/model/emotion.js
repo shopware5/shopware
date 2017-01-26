@@ -54,7 +54,6 @@ Ext.define('Shopware.apps.Emotion.model.Emotion', {
         { name: 'templateId', type: 'int', useNull: true, defaultValue: 1 },
         { name: 'active', type: 'boolean' },
         { name: 'showListing', type: 'boolean' },
-        { name: 'listingVisibility', type: 'string' },
         { name: 'name', type: 'string' },
 
         { name: 'position', type: 'int', useNull: false, defaultValue: 1 },
