@@ -361,11 +361,6 @@ class sArticles
             $active = 1;
         }
 
-        $sBADWORDS = "#sex|porn|viagra|url\=|src\=|link\=#i";
-        if (preg_match($sBADWORDS, $sVoteComment)) {
-            return false;
-        }
-
         if (!empty($this->session['sArticleCommentInserts'][$article])) {
             $sql = '
                 DELETE FROM s_articles_vote WHERE id=?
