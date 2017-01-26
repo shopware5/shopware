@@ -63,34 +63,14 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.OptionEdit', {
      * @boolean
      */
     autoShow:false,
-    /**
-     * Set border layout for the window
-     * @string
-     */
-    layout:'fit',
-    /**
-     * Define window width
-     * @integer
-     */
-    width:500,
-    /**
-     * Define window height
-     * @integer
-     */
-    height:450,
-    /**
-     * A flag which causes the object to attempt to restore the state of internal properties from a saved state on startup.
-     */
-    stateful:true,
 
-    /**
-     * The unique id for this object to use for state management purposes.
-     */
-    stateId:'shopware-article-option-window',
-    footerButton: false,
-    minimizable: false,
-    maximizable: false,
+    width: 700,
     modal: true,
+    stateful:true,
+    layout: 'anchor',
+    autoScroll: true,
+
+    footerButton: false,
 
     /**
      * Contains all snippets for the component
@@ -158,21 +138,25 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.OptionEdit', {
         var nameField = Ext.create('Ext.form.field.Text', {
             name: 'name',
             allowBlank: false,
+            translatable: true,
+            anchor: '100%',
             fieldLabel: me.snippets.nameField
         });
 
         me.formPanel = Ext.create('Ext.form.Panel', {
             layout: 'anchor',
-            bodyPadding: 10,
-            defaults: {
-                anchor: '100%'
-            },
-            items: [ nameField ]
+            bodyPadding: 20,
+            items: [ nameField ],
+            plugins: [{
+                ptype: 'translation',
+                translationType: 'configuratoroption'
+            }]
         });
 
         me.attributeForm = Ext.create('Shopware.attribute.Form', {
             table: me.attributeTable,
             allowTranslation: false,
+            translationForm: me.formPanel,
             margin: '20 0 0'
         });
 
