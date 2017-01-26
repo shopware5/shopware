@@ -510,7 +510,7 @@ class PdoSessionHandler implements \SessionHandlerInterface
             $sessionRows = $selectStmt->fetchAll(\PDO::FETCH_NUM);
 
             if ($sessionRows) {
-                if ($sessionRows[0][1] + $sessionRows[0][2] < time()) {
+                if ($sessionRows[0][1] < time()) {
                     $this->sessionExpired = true;
 
                     return '';
