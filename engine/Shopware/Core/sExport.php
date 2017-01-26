@@ -22,6 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Bundle\AttributeBundle\Service\CrudService;
 use Shopware\Bundle\StoreFrontBundle;
 use Shopware\Bundle\StoreFrontBundle\Service\AdditionalTextServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
@@ -681,8 +682,13 @@ class sExport
                     "txtArtikel" => "name",
                     "txtzusatztxt" => "additionaltext"
                 );
-                for ($i=1; $i<=20; $i++) {
-                    $map["attr$i"] = "attr$i";
+
+                $attributes = Shopware()->Container()->get('shopware_attribute.crud_service')->getList('s_articles_attributes');
+                foreach ($attributes as $attribute) {
+                    if ($attribute->isIdentifier()) {
+                        continue;
+                    }
+                    $map[CrudService::EXT_JS_PREFIX . $attribute->getColumnName()] = $attribute->getColumnName();
                 }
                 break;
             case "link":
