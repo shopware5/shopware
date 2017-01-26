@@ -780,7 +780,7 @@ class sRewriteTable
     {
         $parts = $this->modelManager->getRepository('Shopware\Models\Category\Category')
             ->getPathById($categoryId, 'name');
-        $level = Shopware()->Shop()->getCategory()->getLevel();
+        $level = Shopware()->Shop()->getCategory()->getLevel() ? : 1;
         $parts = array_slice($parts, $level);
 
         return $parts;

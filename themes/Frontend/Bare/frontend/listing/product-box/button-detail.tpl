@@ -1,7 +1,7 @@
 {block name="frontend_listing_product_box_button_detail"}
 
     {block name="frontend_listing_product_box_button_detail_url"}
-        {$url = {$sArticle.linkDetails|rewrite:$sArticle.articleName} }
+        {$url = {$sArticle.linkDetails} }
     {/block}
 
     {block name="frontend_listing_product_box_button_detail_title"}

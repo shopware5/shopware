@@ -244,25 +244,6 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
                 }
             }
         }
-
-        $isSpam = false;
-        foreach ($this->_postData as $value) {
-            if (is_array($value)) {
-                continue;
-            }
-
-            $badwords = array(' sex ', ' porn ', ' viagra ', 'url=', 'src=', 'link=');
-            foreach ($badwords as $badword) {
-                if (strpos($value, $badword) !== false) {
-                    $isSpam = true;
-                }
-            }
-        }
-
-        if ($isSpam) {
-            sleep(3);
-            $this->_errors[] = array('1');
-        }
     }
 
     /**

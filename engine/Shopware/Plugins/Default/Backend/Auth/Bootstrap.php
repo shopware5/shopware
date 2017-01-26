@@ -24,7 +24,7 @@
 
 use Shopware\Components\DependencyInjection\Bridge\Db;
 use Shopware\Components\DependencyInjection\Container;
-use Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler;
+use Shopware\Components\Session\PdoSessionHandler;
 
 /**
  *
@@ -495,7 +495,7 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
                 'db_table'        => 's_core_sessions_backend',
                 'db_id_col'       => 'id',
                 'db_data_col'     => 'data',
-                'db_lifetime_col' => 'expiry',
+                'db_expiry_col'   => 'expiry',
                 'db_time_col'     => 'modified',
                 'lock_mode'       => $sessionOptions['locking'] ? PdoSessionHandler::LOCK_TRANSACTIONAL : PdoSessionHandler::LOCK_NONE,
             ]

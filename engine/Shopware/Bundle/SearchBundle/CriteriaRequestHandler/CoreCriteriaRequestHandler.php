@@ -237,6 +237,10 @@ class CoreCriteriaRequestHandler implements CriteriaRequestHandlerInterface
     private function addLimit(Request $request, Criteria $criteria)
     {
         $limit = (int) $request->getParam('sPerPage', $this->config->get('articlesPerPage'));
+        $max = $this->config->get('maxStoreFrontLimit', null);
+        if ($max) {
+            $limit = min($limit, $max);
+        }
         $limit = $limit >= 1 ? $limit: 1;
         $criteria->limit($limit);
     }

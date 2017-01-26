@@ -33,7 +33,7 @@
 
                         {* Product name *}
                         {block name='frontend_listing_box_article_name'}
-                            <a href="{$sArticle.linkDetails|rewrite:$sArticle.articleName}"
+                            <a href="{$sArticle.linkDetails}"
                                class="product--title"
                                title="{$sArticle.articleName|escapeHtml}">
                                 {$sArticle.articleName|truncate:50|escapeHtml}

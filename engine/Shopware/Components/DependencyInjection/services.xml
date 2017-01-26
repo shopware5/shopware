@@ -50,7 +50,7 @@
         </service>
 
         <service id="session_factory" class="Shopware\Components\DependencyInjection\Bridge\Session" />
-        <service id="session.save_handler" class="SessionHandlerInterface" public="false">
+        <service id="session.save_handler" class="SessionHandlerInterface">
             <factory service="session_factory" method="createSaveHandler" />
             <argument type="service" id="service_container"/>
         </service>

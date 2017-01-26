@@ -902,6 +902,7 @@ class sExport
                 d.shippingfree,
                 a.topseller,
                 a.keywords,
+                d.active as variantActive,
                 d.minpurchase,
                 d.purchasesteps,
                 d.maxpurchase,

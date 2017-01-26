@@ -44,7 +44,7 @@ Ext.define('Shopware.apps.CanceledOrder.view.tabs.baskets.Overview', {
         columns : {
             time: '{s name=columns/date}Date{/s}',
             price: '{s name=columns/amount}Total amount{/s}',
-            average: '{s name=columns/averageBasketValue}Ø Basket Value{/s}',
+            average: '{s name=columns/averageItemValue}Ø Item Value{/s}',
             number: '{s name=columns/number}Number of Baskets{/s}'
         },
         days: '{s name=days}Days{/s}',
