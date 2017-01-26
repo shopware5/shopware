@@ -2,6 +2,15 @@
 
 This changelog references changes done in Shopware 5.2 patch versions.
 
+## 5.2.17
+
+[View all changes from v5.2.14...v5.2.15](https://github.com/shopware/shopware/compare/v5.2.16...v5.2.17)
+
+* Added new Smarty blocks to `documents/index.tpl`
+    * `document_index_address`
+    * `document_index_address_sender`
+    * `document_index_address_base`
+
 ## 5.2.15
 
 [View all changes from v5.2.14...v5.2.15](https://github.com/shopware/shopware/compare/v5.2.14...v5.2.15)
