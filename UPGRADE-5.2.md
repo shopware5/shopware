@@ -11,6 +11,7 @@ This changelog references changes done in Shopware 5.2 patch versions.
 * Added console command `sw:session:cleanup` to cleanup expired sessions.
 * Changed database field `s_core_sessions.expiry` to contain the timestamp when the session should expire, not the session lifetime.
 * Changed database field `s_core_sessions_backend.expiry` to contain the timestamp when the session should expire, not the session lifetime.
+* Added `$sAmountNumeric` and `$sAmountNetNumeric` to sOrder mail
 
 ## 5.2.15
 
