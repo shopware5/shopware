@@ -3,7 +3,7 @@
         {block name='frontend_detail_product_quick_view_inner'}
 
             {block name='frontend_detail_product_quick_view_image_link'}
-                <a class="quick-view--image-link" href="{$sArticle.linkDetails|rewrite:$sArticle.articleName}" title="{if $sArticle.image.res.description}{$sArticle.image.res.description|escape}{else}{$sArticle.articlename|escape}{/if}">
+                <a class="quick-view--image-link" href="{$sArticle.linkDetails}" title="{if $sArticle.image.res.description}{$sArticle.image.res.description|escape}{else}{$sArticle.articlename|escape}{/if}">
                     {block name='frontend_detail_product_quick_view_image'}
 
                         {$alt = $sArticle.articlename|escape}
@@ -31,7 +31,7 @@
                 <div class="quick-view--header">
                     {block name='frontend_detail_product_quick_view_header_inner'}
                         {block name='frontend_detail_product_quick_view_title'}
-                            <a href="{$sArticle.linkDetails|rewrite:$sArticle.articleName}" class="quick-view--title" title="{$sArticle.articleName|escape}">
+                            <a href="{$sArticle.linkDetails}" class="quick-view--title" title="{$sArticle.articleName|escape}">
                                 {block name='frontend_detail_product_quick_view_title_inner'}
                                     {$sArticle.articleName|escape}
                                 {/block}
