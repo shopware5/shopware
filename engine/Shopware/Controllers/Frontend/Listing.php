@@ -139,6 +139,13 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
                 $manufacturerId,
                 $this->get('shopware_storefront.context_service')->getShopContext()
             );
+            
+            if ($manufacturer === null) {
+                throw new Enlight_Controller_Exception(
+                    'Manufacturer missing, non-existent or invalid',
+                    404
+                );
+            }
 
             $manufacturerContent = $this->getSeoDataOfManufacturer($manufacturer);
 
