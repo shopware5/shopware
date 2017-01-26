@@ -19,13 +19,8 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    UserManager
- * @subpackage View
- * @version    $Id$
- * @author shopware AG
  */
+
 //{namespace name=backend/emotion/view/components/article_slider_type}
 Ext.define('Shopware.apps.Emotion.view.components.fields.ArticleSliderType', {
     extend: 'Ext.form.field.ComboBox',
@@ -38,16 +33,17 @@ Ext.define('Shopware.apps.Emotion.view.components.fields.ArticleSliderType', {
      */
     snippets: {
         fields: {
-            'article_slider_type': '{s name=article_slider_type/fields/article_slider_type}Artikeltyp{/s}',
-            'empty_text': '{s name=article_slider_type/fields/empty_text}Please select...{/s}'
+            'article_slider_type': '{s name=article_slider_type/fields/article_slider_type}{/s}',
+            'empty_text': '{s name=article_slider_type/fields/empty_text}{/s}'
         },
         store: {
-            'selected_article': '{s name=article_slider_type/store/selected_article}Selected article(s){/s}',
-            'newcomer': '{s name=article_slider_type/store/newcomer}Newer articles{/s}',
-            'topseller': '{s name=article_slider_type/store/topseller}Top selling articles{/s}',
-            'price_asc': '{s name=article_slider_type/store/price_asc}Price (low to high){/s}',
-            'price_desc': '{s name=article_slider_type/store/price_desc}Price (high to low){/s}',
-            'product_stream': '{s name=article_slider_type/store/product_stream}Product stream{/s}'
+            'selected_article': '{s name=article_slider_type/store/selected_article}{/s}',
+            'selected_variant': '{s name=article_slider_type/store/selected_variant}{/s}',
+            'newcomer': '{s name=article_slider_type/store/newcomer}{/s}',
+            'topseller': '{s name=article_slider_type/store/topseller}{/s}',
+            'price_asc': '{s name=article_slider_type/store/price_asc}{/s}',
+            'price_desc': '{s name=article_slider_type/store/price_desc}{/s}',
+            'product_stream': '{s name=article_slider_type/store/product_stream}{/s}'
         }
     },
 
@@ -78,16 +74,19 @@ Ext.define('Shopware.apps.Emotion.view.components.fields.ArticleSliderType', {
      * for the combo box. We don't need that data.
      *
      * @public
-     * @return [object] Ext.data.Store
+     * @return { Ext.data.JsonStore }
      */
     createStore: function() {
         var me = this, snippets = me.snippets.store;
 
         return Ext.create('Ext.data.JsonStore', {
-            fields: [ 'value', 'display' ],
+            fields: ['value', 'display'],
             data: [{
                 value: 'selected_article',
                 display: snippets.selected_article
+            }, {
+                value: 'selected_variant',
+                display: snippets.selected_variant
             }, {
                 value: 'newcomer',
                 display: snippets.newcomer

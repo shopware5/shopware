@@ -5,6 +5,13 @@
 {block name="frontend_listing_box_article"}
     <div class="product--box box--{$productBoxLayout}" data-ordernumber="{$sArticle.ordernumber}">
 
+        {block name="frontend_listing_box_article_product_name"}
+            {$productName = $sArticle.articleName}
+            {if $sArticle.additionaltext}
+                {$productName = $productName|cat:' '|cat:$sArticle.additionaltext}
+            {/if}
+        {/block}
+
         {block name="frontend_listing_box_article_content"}
             <div class="box--content">
 
@@ -21,7 +28,7 @@
                         {* Product image *}
                         {block name='frontend_listing_box_article_picture'}
                             <a href="{$sArticle.linkDetails}"
-                               title="{$sArticle.articleName|escape}"
+                               title="{$productName|escape}"
                                class="product--image{if $imageOnly} is--large{/if}">
 
                                 {block name='frontend_listing_box_article_image_element'}
@@ -55,16 +62,15 @@
                                                         {$baseSource = "{link file='frontend/_public/src/img/no-picture.jpg'}"}
                                                     {/if}
 
-                                                    {$desc = $sArticle.articleName|escape}
+                                                    {$desc = $productName|escape}
 
                                                     {if $sArticle.image.description}
                                                         {$desc = $sArticle.image.description|escape}
                                                     {/if}
-
                                                     <picture>
                                                         {if $srcSetRetina}<source sizes="(min-width: 48em) {$itemSize}, 100vw" srcset="{$srcSetRetina}" media="(min-resolution: 192dpi)" />{/if}
                                                         {if $srcSet}<source sizes="(min-width: 48em) {$itemSize}, 100vw" srcset="{$srcSet}" />{/if}
-                                                        <img src="{$baseSource}" alt="{$desc}" title="{$desc|truncate:160}" />
+                                                        <img src="{$baseSource}" alt="{$desc}" title="{$desc|truncate:160}"/>
                                                     </picture>
                                                 {/block}
                                             </span>
@@ -81,8 +87,8 @@
                                 {block name='frontend_listing_box_article_name'}
                                     <a href="{$sArticle.linkDetails}"
                                        class="product--title"
-                                       title="{$sArticle.articleName|escapeHtml}">
-                                        {$sArticle.articleName|truncate:50|escapeHtml}
+                                       title="{$productName|escapeHtml}">
+                                        {$productName|truncate:50|escapeHtml}
                                     </a>
                                 {/block}
 

@@ -54,6 +54,7 @@ This changelog references changes done in Shopware 5.3 patch versions.
     * `themes/Frontend/Bare/frontend/detail/content/buy_container.tpl`
     * `themes/Frontend/Bare/frontend/detail/content/tab_navigation.tpl`
     * `themes/Frontend/Bare/frontend/detail/content/tab_container.tpl`
+* Added new option to select variants in `Shopware.apps.Emotion.view.components.Article` and `Shopware.apps.Emotion.view.components.ArticleSlider`
 
 
 ### Changes
@@ -87,6 +88,7 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Changed the inline script for the statistics update to vanilla JavaScript
 * Changed template file `themes/Frontend/Bare/frontend/detail/index.tpl` to split it into separated files
 * Changed the `linkDetails` property of the `sArticle` template variable. The URL also contains now the order number of the product
+* Changed the product selection to variant selection in `Shopware.apps.Emotion.view.components.BannerMapping`
 
 ### Removals
 
