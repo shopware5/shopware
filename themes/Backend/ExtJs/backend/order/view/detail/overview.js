@@ -425,7 +425,7 @@ Ext.define('Shopware.apps.Order.view.detail.Overview', {
                             '<span>{department}</span>',
                         '</p>',
                         '<p>',
-                            '<span>{salutationSnippet}</span>&nbsp;',
+                            '<tpl if="salutationSnippet"><span>{salutationSnippet}</span>&nbsp;</tpl>',
                             '<tpl if="title"><span>{title}</span><br /></tpl>',
                             '<span>{firstName}</span>&nbsp;',
                             '<span>{lastName}</span>',
