@@ -86,6 +86,7 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Changed the script tag for the generated JavaScript file for asynchronous loading, can be changed in theme configuration
 * Changed the inline script for the statistics update to vanilla JavaScript
 * Changed template file `themes/Frontend/Bare/frontend/detail/index.tpl` to split it into separated files
+* Changed the `linkDetails` property of the `sArticle` template variable. The URL also contains now the order number of the product
 
 ### Removals
 
