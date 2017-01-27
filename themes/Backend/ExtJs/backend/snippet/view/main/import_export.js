@@ -33,7 +33,7 @@ Ext.define('Shopware.apps.Snippet.view.main.ImportExport', {
     layout: 'fit',
 
     width: 500,
-    height: 280,
+    height: 220,
 
     /**
      * Contains all snippets for this view
@@ -45,7 +45,8 @@ Ext.define('Shopware.apps.Snippet.view.main.ImportExport', {
         emptyTextChooseFile:    '{s name=empty_text_choose_file}Please choose a file..{/s}',
         messageUploadFile:      '{s name=message_upload_file}Uploading your file...{/s}',
         buttonStartImport:      '{s name=button_start_import}Start Import{/s}',
-        buttonExport:           '{s name=button_export}Export{/s}'
+        buttonExport:           '{s name=button_export}Export{/s}',
+        fieldFile:              '{s name=field_file}File{/s}'
     },
 
     /**
@@ -89,9 +90,13 @@ Ext.define('Shopware.apps.Snippet.view.main.ImportExport', {
                 emptyText: me.snippets.emptyTextChooseFile,
                 buttonText: me.snippets.buttonChooseFile,
                 name: 'file',
-                fieldLabel: 'File',
+                fieldLabel: me.snippets.fieldFile,
                 allowBlank: false,
-                anchor: '100%'
+                anchor: '100%',
+                buttonConfig : {
+                    iconCls: 'sprite-inbox-upload',
+                    cls: 'small secondary'
+                }
             }],
 
             buttons: [{
