@@ -451,6 +451,8 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
 
         $this->View()->assign($this->Request()->getParams());
 
+        $this->loadThemeConfig();
+
         $this->View()->assign([
             'sArticles' => $articles,
             'pageIndex' => $this->Request()->getParam('sPage'),
@@ -516,5 +518,22 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
         }
 
         return $articles;
+    }
+
+    private function loadThemeConfig()
+    {
+        $inheritance = $this->container->get('theme_inheritance');
+
+        /** @var \Shopware\Models\Shop\Shop $shop */
+        $shop = $this->container->get('Shop');
+
+        $config = $inheritance->buildConfig($shop->getTemplate(), $shop, false);
+
+        $this->get('template')->addPluginsDir(
+            $inheritance->getSmartyDirectories(
+                $shop->getTemplate()
+            )
+        );
+        $this->View()->assign('theme', $config);
     }
 }
