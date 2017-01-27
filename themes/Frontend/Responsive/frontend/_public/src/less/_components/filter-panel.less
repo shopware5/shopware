@@ -248,19 +248,19 @@ The styling includes the collapsed and expanded styling and the panel component 
             &:checked ~ .input--state {
                 .primary-gradient();
 
-            &:before {
-                .unitize-width(12);
-                .unitize-height(12);
-                .unitize(line-height, 12);
-                .unitize(font-size, 7);
-                display: block;
-                font-family: @sw-icon-fontname;
-                font-weight: normal;
-                text-align: center;
-                color: #fff;
-                content: @sw-icon-check;
+                &:before {
+                    .unitize-width(12);
+                    .unitize-height(12);
+                    .unitize(line-height, 12);
+                    .unitize(font-size, 7);
+                    display: block;
+                    font-family: @sw-icon-fontname;
+                    font-weight: normal;
+                    text-align: center;
+                    color: #fff;
+                    content: @sw-icon-check;
+                }
             }
-        }
 
             &:checked ~ .filter-panel--label {
                 color: @brand-primary;
@@ -338,6 +338,10 @@ The styling includes the collapsed and expanded styling and the panel component 
             padding: 0;
         }
 
+        input.is--disabled ~ label {
+            opacity: 0.5;
+        }
+
         input[type="checkbox"], input[type="radio"] {
             .opacity(0);
             display: block;
@@ -358,26 +362,26 @@ The styling includes the collapsed and expanded styling and the panel component 
             &:checked ~ .filter-panel--label {
                 border-color: @brand-primary;
 
-            &:after {
-                .unitize-width(16);
-                .unitize-height(16);
-                .unitize(line-height, 16);
-                .unitize(font-size, 7);
-                .unitize(-4, 16, top);
-                .unitize(-4, 16, right);
-                .primary-gradient();
-                .border-radius(8px);
-                display: block;
-                position: absolute;
-                font-family: @sw-icon-fontname;
-                font-weight: normal;
-                text-align: center;
-                color: #fff;
-                content: @sw-icon-check;
+                &:after {
+                    .unitize-width(16);
+                    .unitize-height(16);
+                    .unitize(line-height, 16);
+                    .unitize(font-size, 7);
+                    .unitize(-4, 16, top);
+                    .unitize(-4, 16, right);
+                    .primary-gradient();
+                    .border-radius(8px);
+                    display: block;
+                    position: absolute;
+                    font-family: @sw-icon-fontname;
+                    font-weight: normal;
+                    text-align: center;
+                    color: #fff;
+                    content: @sw-icon-check;
+                }
             }
-        }
 
-        &:disabled .filter-panel--label {
+            &:disabled .filter-panel--label {
                 .opacity(0.5);
             }
         }
