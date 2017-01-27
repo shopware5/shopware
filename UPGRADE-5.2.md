@@ -3,7 +3,6 @@
 This changelog references changes done in Shopware 5.2 patch versions.
 
 ## 5.2.17
-
 [View all changes from v5.2.16...v5.2.17](https://github.com/shopware/shopware/compare/v5.2.16...v5.2.17)
 
 * Deprecated Smarty modifier `rewrite`. Modifier will be removed in 5.3.0.
@@ -13,6 +12,10 @@ This changelog references changes done in Shopware 5.2 patch versions.
 * Changed database field `s_core_sessions_backend.expiry` to contain the timestamp when the session should expire, not the session lifetime.
 * Added `$sAmountNumeric` and `$sAmountNetNumeric` to sOrder mail
 * Added command `sw:media:optimize` to optimize media files without quality loss.
+* Added new Smarty blocks to `documents/index.tpl`
+    * `document_index_address`
+    * `document_index_address_sender`
+    * `document_index_address_base`
 
 ### Media Optimizer
 
