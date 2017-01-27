@@ -1618,7 +1618,11 @@ class Media extends ModelEntity
             $this->updateAssociations();
 
             //create album thumbnails
-            $this->createAlbumThumbnails($this->album);
+            if ($isAlbumChanged) {
+                $this->createThumbnailsForMovedMedia($changeSet['albumId'][1]);
+            } else {
+                $this->createAlbumThumbnails($this->album);
+            }
         }
 
         //name changed? Then rename the file and set the new path
@@ -1644,6 +1648,20 @@ class Media extends ModelEntity
     public function onLoad()
     {
         $this->thumbnails = $this->loadThumbnails();
+    }
+
+    /**
+     * @param integer $newAlbumId
+     */
+    private function createThumbnailsForMovedMedia($newAlbumId)
+    {
+        $albumRepository = Shopware()->Container()->get('models')->getRepository(Album::class);
+
+        /** @var Album $album */
+        $album = $albumRepository->find($newAlbumId);
+        if ($album) {
+            $this->createAlbumThumbnails($album);
+        }
     }
 
     /**
