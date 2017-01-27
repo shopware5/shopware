@@ -18,6 +18,12 @@ This changelog references changes done in Shopware 5.2 patch versions.
     * `document_index_address_base`
 * Added `s_article_configurator_options_attributes` and `s_article_configurator_groups_attributes`
 * Added new plugin config element type `button`
+* Changed `\Enlight_Controller_Plugins_ViewRenderer_Bootstrap::setNoRender` resets now the view template to prevent `PostDispatchSecure` events
+* Changed `\Shopware\Bundle\StoreFrontBundle\Service\Core\ManufacturerService::getList` fetch now the seo urls for each manufacturer
+* Removed duplicated initialisation of `\Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface`.
+* Added `_seo` parameter for smarty url plugin which allows to prevent s_core_rewrite_url query for none seo urls
+* Removed unnecessary `/widget/index/menu` call in `themes/Frontend/Bare/frontend/index/topbar-navigation.tpl` and `themes/Frontend/Bare/frontend/index/footer_minimal.tpl`. The `widgets/index/menu.tpl` template is now included directly.
+* Added `\Shopware\Components\Theme\PathResolver::getDirectoryByArray` function which allows to load theme inheritances without doctrine models
 
 ### Media Optimizer
 
