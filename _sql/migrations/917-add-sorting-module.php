@@ -242,7 +242,7 @@ INSERT INTO `s_core_config_elements` (`form_id`, `name`, `value`, `label`, `desc
 VALUES (@formId, 'searchSortings', 's:13:\"|7|1|2|3|4|5|\";', 'Verfügbare Sortierungen', '', 'custom-sorting-grid', '1', '0', '1', NULL);
         ");
 
-        $this->addSql("SET @elementId = (SELECT id FROM s_core_config_elements WHERE name = 'defaultSearchSorting' LIMIT 1)");
+        $this->addSql("SET @elementId = (SELECT id FROM s_core_config_elements WHERE name = 'searchSortings' LIMIT 1)");
         $this->addSql("
 INSERT IGNORE INTO `s_core_config_element_translations` (`id` ,`element_id` ,`locale_id` ,`label` ,`description`)
 VALUES (NULL,  @elementId,  '2',  'Available sortings', NULL);
