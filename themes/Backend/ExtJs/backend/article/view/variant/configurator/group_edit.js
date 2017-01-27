@@ -77,7 +77,7 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.GroupEdit', {
      * Define window height
      * @integer
      */
-    height:250,
+    height:450,
     /**
      * A flag which causes the object to attempt to restore the state of internal properties from a saved state on startup.
      */
@@ -106,6 +106,8 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.GroupEdit', {
             support:  '{s name=variant/configurator/group_edit/description_support}Displayed in store front as group description{/s}'
         }
     },
+
+    attributeTable: 's_article_configurator_groups_attributes',
 
     /**
      * The initComponent template method is an important initialization step for a Component.
@@ -179,6 +181,18 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.GroupEdit', {
             },
             items: [ nameField, descriptionArea ]
         });
+
+        me.attributeForm = Ext.create('Shopware.attribute.Form', {
+            table: me.attributeTable,
+            allowTranslation: false,
+            margin: '20 0 0'
+        });
+
+        if (me.record) {
+            me.attributeForm.loadAttribute(me.record.get('id'));
+        }
+
+        me.formPanel.add(me.attributeForm);
 
         return [ me.formPanel ];
     },

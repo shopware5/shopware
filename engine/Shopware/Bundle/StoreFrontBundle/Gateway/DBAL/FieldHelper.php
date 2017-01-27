@@ -347,12 +347,19 @@ class FieldHelper
      */
     public function getConfiguratorGroupFields()
     {
-        return [
+        $fields =  [
             'configuratorGroup.id as __configuratorGroup_id',
             'configuratorGroup.name as __configuratorGroup_name',
             'configuratorGroup.description as __configuratorGroup_description',
             'configuratorGroup.position as __configuratorGroup_position'
         ];
+
+        $fields = array_merge(
+            $fields,
+            $this->getTableFields('s_article_configurator_groups_attributes', 'configuratorGroupAttribute')
+        );
+
+        return $fields;
     }
 
     /**
@@ -360,11 +367,18 @@ class FieldHelper
      */
     public function getConfiguratorOptionFields()
     {
-        return [
+        $fields = [
             'configuratorOption.id as __configuratorOption_id',
             'configuratorOption.name as __configuratorOption_name',
             'configuratorOption.position as __configuratorOption_position'
         ];
+
+        $fields = array_merge(
+            $fields,
+            $this->getTableFields('s_article_configurator_options_attributes', 'configuratorOptionAttribute')
+        );
+
+        return $fields;
     }
 
     /**
