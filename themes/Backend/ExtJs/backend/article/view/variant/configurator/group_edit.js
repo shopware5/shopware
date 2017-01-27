@@ -43,11 +43,13 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.GroupEdit', {
      * @string
      */
     extend:'Enlight.app.Window',
+
     /**
      * Set base css class prefix and module individual css class for css styling
      * @string
      */
     cls:Ext.baseCSSPrefix + 'article-group-window',
+
     /**
      * List of short aliases for class names. Most useful for defining xtypes for widgets.
      * @string
@@ -63,34 +65,14 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.GroupEdit', {
      * @boolean
      */
     autoShow:false,
-    /**
-     * Set border layout for the window
-     * @string
-     */
-    layout:'fit',
-    /**
-     * Define window width
-     * @integer
-     */
-    width:500,
-    /**
-     * Define window height
-     * @integer
-     */
-    height:250,
-    /**
-     * A flag which causes the object to attempt to restore the state of internal properties from a saved state on startup.
-     */
-    stateful:true,
 
-    /**
-     * The unique id for this object to use for state management purposes.
-     */
-    stateId:'shopware-article-group-window',
+    width: 700,
     footerButton: false,
-    minimizable: false,
-    maximizable: false,
     modal: true,
+    stateful:true,
+    layout: 'anchor',
+    autoScroll: true,
+    stateId:'shopware-article-group-window',
 
     /**
      * Contains all snippets for the component
@@ -106,6 +88,8 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.GroupEdit', {
             support:  '{s name=variant/configurator/group_edit/description_support}Displayed in store front as group description{/s}'
         }
     },
+
+    attributeTable: 's_article_configurator_groups_attributes',
 
     /**
      * The initComponent template method is an important initialization step for a Component.
@@ -160,25 +144,42 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.GroupEdit', {
         var nameField = Ext.create('Ext.form.field.Text', {
             name: 'name',
             allowBlank: false,
+            translatable: true,
+            anchor: '100%',
             fieldLabel: me.snippets.nameField
         });
         var descriptionArea = Ext.create('Ext.form.field.TextArea', {
             name: 'description',
             grow: true,
             growMin: 30,
+            anchor: '100%',
             growMax: 300,
+            translatable: true,
             fieldLabel: me.snippets.description.label,
             supportText: me.snippets.description.support
         });
 
         me.formPanel = Ext.create('Ext.form.Panel', {
-            layout: 'anchor',
-            bodyPadding: 10,
-            defaults: {
-                anchor: '100%'
-            },
+            bodyPadding: 20,
+            plugins: [{
+                ptype: 'translation',
+                translationType: 'configuratorgroup'
+            }],
             items: [ nameField, descriptionArea ]
         });
+
+        me.attributeForm = Ext.create('Shopware.attribute.Form', {
+            table: me.attributeTable,
+            allowTranslation: false,
+            translationForm: me.formPanel,
+            margin: '20 0 0'
+        });
+
+        if (me.record) {
+            me.attributeForm.loadAttribute(me.record.get('id'));
+        }
+
+        me.formPanel.add(me.attributeForm);
 
         return [ me.formPanel ];
     },
