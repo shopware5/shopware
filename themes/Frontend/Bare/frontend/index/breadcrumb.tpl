@@ -9,10 +9,16 @@
                 <li class="breadcrumb--entry{if $breadcrumb@last} is--active{/if}" itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
                     {if $breadcrumb.name}
                         {block name="frontend_index_breadcrumb_entry_inner"}
-                            <a class="breadcrumb--link" href="{if $breadcrumb.link}{$breadcrumb.link}{else}#{/if}" title="{$breadcrumb.name|escape}" itemprop="item">
-                                <link itemprop="url" href="{if $breadcrumb.link}{$breadcrumb.link}{else}#{/if}" />
-                                <span class="breadcrumb--title" itemprop="name">{$breadcrumb.name}</span>
-                            </a>
+                            {if $breadcrumb.link}
+                                <a class="breadcrumb--link" href="{$breadcrumb.link}" title="{$breadcrumb.name|escape}" itemprop="item">
+                                    <link itemprop="url" href="{$breadcrumb.link}" />
+                                    <span class="breadcrumb--title" itemprop="name">{$breadcrumb.name}</span>
+                                </a>
+                            {else}
+                                <span class="breadcrumb--link" itemprop="item">
+                                    <span class="breadcrumb--title" itemprop="name">{$breadcrumb.name}</span>
+                                </span>
+                            {/if}
                             <meta itemprop="position" content="{$breadcrumb@index}" />
                         {/block}
                     {/if}
