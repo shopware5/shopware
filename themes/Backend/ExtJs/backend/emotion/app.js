@@ -73,7 +73,7 @@ Ext.define('Shopware.apps.Emotion', {
      * Required views for module (subapplication)
      * @array
      */
-    views: [ 'main.Window', 'list.Toolbar', 'list.Grid', 'presets.Window', 'presets.List', 'presets.Info', 'detail.Window', 'detail.Preview', 'detail.Designer', 'detail.Grid',
+    views: [ 'main.Window', 'list.Toolbar', 'list.Grid', 'presets.Window', 'presets.List', 'presets.Info', 'presets.Form', 'detail.Window', 'detail.Preview', 'detail.Designer', 'detail.Grid',
         'detail.Settings', 'detail.Layout', 'detail.Widgets', 'detail.elements.Base', 'detail.elements.Banner', 'detail.elements.BannerSlider',
         'detail.elements.Html', 'detail.elements.Article', 'detail.elements.ArticleSlider', 'detail.elements.HtmlCode', 'detail.elements.Blog',
         'detail.elements.CategoryTeaser', 'detail.elements.HtmlVideo', 'detail.elements.Iframe', 'detail.elements.ManufacturerSlider', 'detail.elements.Youtube',
@@ -105,7 +105,8 @@ Ext.define('Shopware.apps.Emotion', {
         'ManufacturerSlider',
         'ArticleSlider',
         'Template',
-        'Preset'
+        'Preset',
+        'Presetdata'
     ],
 
     /**

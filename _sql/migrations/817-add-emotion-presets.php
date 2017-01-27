@@ -6,6 +6,7 @@ class Migrations_Migration817 extends Shopware\Components\Migrations\AbstractMig
     {
         $this->createPresetsTable();
         $this->createPresetsTranslationTable();
+        $this->createPresetsRequirementsTable();
         $this->insertPresets();
         $this->insertTranslations();
     }
@@ -21,7 +22,7 @@ CREATE TABLE IF NOT EXISTS `s_emotion_presets` (
   `thumbnail` TEXT COLLATE utf8_unicode_ci DEFAULT NULL,  
   `preview` TEXT COLLATE utf8_unicode_ci DEFAULT NULL,  
   `presetData` MEDIUMTEXT COLLATE utf8_unicode_ci NOT NULL,
-  UNIQUE KEY `UNIQUENAME` (`name`),
+  UNIQUE KEY `name` (`name`),
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 EOD;
@@ -31,15 +32,30 @@ EOD;
     private function createPresetsTranslationTable()
     {
         $sql = <<<'EOD'
-CREATE TABLE IF NOT EXISTS `s_emotion_presets_translation` (
+CREATE TABLE IF NOT EXISTS `s_emotion_preset_translations` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `emotionID` int(10) unsigned NOT NULL,
+  `presetID` int(10) unsigned NOT NULL,
   `label` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `description` text COLLATE utf8_unicode_ci NOT NULL,
-  `locale` varchar(15) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'de',
+  `locale` varchar(15) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'de_DE',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `UNIQUETRANS` (`emotionID`,`locale`),
-  CONSTRAINT `EMOTIONPRESET` FOREIGN KEY (`emotionID`) REFERENCES `s_emotion_presets` (`id`)
+  UNIQUE KEY `presetID` (`presetID`,`locale`),
+  CONSTRAINT `s_emotion_preset_translations_preset_fk` FOREIGN KEY (`presetID`) REFERENCES `s_emotion_presets` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+EOD;
+        $this->addSql($sql);
+    }
+
+    private function createPresetsRequirementsTable()
+    {
+        $sql = <<<'EOD'
+CREATE TABLE IF NOT EXISTS `s_emotion_preset_requirements` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `presetID` int(10) unsigned NOT NULL,
+  `technical_name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `label` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  CONSTRAINT `s_emotion_preset_requirements_preset_fk` FOREIGN KEY (`presetID`) REFERENCES `s_emotion_presets` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 EOD;
         $this->addSql($sql);
@@ -111,8 +127,8 @@ EOD;
     private function insertTranslations()
     {
         $sql = <<<'EOD'
-INSERT IGNORE INTO `s_emotion_presets_translation`
-(`emotionID`, `label`, `description`, `locale`) VALUES
+INSERT IGNORE INTO `s_emotion_preset_translations`
+(`presetID`, `label`, `description`, `locale`) VALUES
 
 (@idForBlogCat, 'Blog-category teaser', 'Blog-category teaser', 'en_GB'),
 (@idForBlogCat, 'Blog-Kategorie Teaser', 'Blog-Kategorie Teaser', 'de_DE'),

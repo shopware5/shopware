@@ -32,16 +32,49 @@ Ext.define('Shopware.apps.Emotion.model.Preset', {
 
     fields: [
         //{block name="backend/emotion/model/preset/fields"}{/block}
-        { name: 'id', type: 'int' },
+        { name: 'id', type: 'int', useNull: true },
         { name: 'name', type: 'string' },
-        { name: 'premium', type: 'bool' },
-        { name: 'custom', type: 'bool' },
+        { name: 'premium', type: 'bool', defaultValue: false },
+        { name: 'custom', type: 'bool', defaultValue: true },
         { name: 'thumbnail', type: 'string' },
+        { name: 'thumbnailUrl', type: 'string', persist: false },
         { name: 'preview', type: 'string' },
+        { name: 'previewUrl', type: 'string', persist: false },
         { name: 'presetData', type: 'string' },
-        { name: 'label', type: 'string' },
-        { name: 'description', type: 'string' }
-    ]
+        { name: 'label', type: 'string', persist: false },
+        { name: 'description', type: 'string', persist: false },
+        { name: 'translations', type: 'array' },
+        { name: 'requiredPlugins', type: 'array' }
+    ],
+
+    proxy:{
+        /**
+         * Set proxy type to ajax
+         * @string
+         */
+        type:'ajax',
+
+        /**
+         * Configure the url mapping for the different
+         * store operations based on
+         * @object
+         */
+        api: {
+            create: '{url action="savePreset"}',
+            update: '{url action="savePreset"}',
+            destroy: '{url action="deletePreset"}'
+        },
+
+        /**
+         * Configure the data reader
+         * @object
+         */
+        reader:{
+            type:'json',
+            root:'data',
+            totalProperty:'total'
+        }
+    }
 
 });
 //{/block}

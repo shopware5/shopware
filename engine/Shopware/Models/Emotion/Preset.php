@@ -36,7 +36,6 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Entity
  * @ORM\Table(name="s_emotion_presets")
- * @ORM\HasLifecycleCallbacks
  */
 class Preset extends ModelEntity
 {
@@ -101,12 +100,16 @@ class Preset extends ModelEntity
     private $presetData;
 
     /**
-     * INVERSE SIDE
-     *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Emotion\PresetTranslation", mappedBy="preset", orphanRemoval=true, cascade={"persist"})
      * @var \Doctrine\Common\Collections\ArrayCollection
      */
     protected $translations;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Emotion\PresetRequirement", mappedBy="preset", orphanRemoval=true, cascade={"persist"})
+     * @var $requiredPlugins
+     */
+    protected $requiredPlugins;
 
     /**
      * Preset constructor.
@@ -114,6 +117,7 @@ class Preset extends ModelEntity
     public function __construct()
     {
         $this->translations = new ArrayCollection();
+        $this->requiredPlugins = new ArrayCollection();
         $this->custom = true;
     }
 
@@ -125,6 +129,7 @@ class Preset extends ModelEntity
         $this->id = null;
 
         $translations = new ArrayCollection();
+        $requiredPlugins = new ArrayCollection();
 
         /** @var PresetTranslation $translation */
         foreach ($this->translations as $translation) {
@@ -134,6 +139,15 @@ class Preset extends ModelEntity
             $translations->add($newTranslation);
         }
         $this->translations = $translations;
+
+        /** @var PresetRequirement $requiredPlugins */
+        foreach ($this->requiredPlugins as $requiredPlugin) {
+            $newRequirement = clone $requiredPlugin;
+            $newRequirement->setPreset($this);
+
+            $requiredPlugins->add($newRequirement);
+        }
+        $this->requiredPlugins = $requiredPlugins;
 
         $this->custom = true;
     }
@@ -240,5 +254,39 @@ class Preset extends ModelEntity
     public function setPresetData($presetData)
     {
         $this->presetData = $presetData;
+    }
+
+    /**
+     * @param array $translations
+     * @return ModelEntity
+     */
+    public function setTranslations(array $translations)
+    {
+        return $this->setOneToMany($translations, '\Shopware\Models\Emotion\PresetTranslation', 'translations', 'preset');
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getTranslations()
+    {
+        return $this->translations;
+    }
+
+    /**
+     * @param array $requiredPlugins
+     * @return ModelEntity
+     */
+    public function setRequiredPlugins(array $requiredPlugins)
+    {
+        return $this->setOneToMany($requiredPlugins, '\Shopware\Models\Emotion\PresetRequirement', 'requiredPlugins', 'preset');
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getRequiredPlugins()
+    {
+        return $this->requiredPlugins;
     }
 }

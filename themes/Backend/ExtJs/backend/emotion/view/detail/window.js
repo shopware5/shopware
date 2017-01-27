@@ -151,6 +151,13 @@ Ext.define('Shopware.apps.Emotion.view.detail.Window', {
             items: [
                 '->',
                 {
+                    text: '{s name="window/button/save_as_preset"}{/s}',
+                    cls: 'secondary',
+                    handler: function() {
+                        me.fireEvent('saveAsPreset', me.emotion);
+                    }
+                },
+                {
                     text: me.snippets.saveBtnLabel,
                     cls: 'primary',
                     action: 'emotion-detail-settings-save',

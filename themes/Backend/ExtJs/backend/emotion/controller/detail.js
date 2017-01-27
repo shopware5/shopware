@@ -86,7 +86,8 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
 
         me.control({
             'emotion-detail-window': {
-                'saveEmotion': me.onSaveEmotion
+                'saveEmotion': me.onSaveEmotion,
+                'saveAsPreset': me.onSaveAsPreset
             },
             'emotion-detail-settings-window': {
                 'saveComponent': me.onSaveComponent
@@ -117,6 +118,9 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
             },
             'emotion-presets-window presets-list': {
                 'showpresetdetails': me.onShowPresetDetails
+            },
+            'emotion-presets-form-window': {
+                'savepreset': me.savePreset
             },
             'emotion-main-window emotion-list-grid': {
                 'editemotion': me.onEditEmotion,
@@ -386,6 +390,93 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
         });
 
         return true;
+    },
+
+    /**
+     *
+     * @param { Shopware.apps.Emotion.model.Emotion } record
+     */
+    onSaveAsPreset: function(record) {
+        var me = this,
+            settings = me.getSettingsForm(),
+            sidebar = me.getSidebar(),
+            layout = me.getLayoutForm(),
+            presetDataRecord,
+            presetRecord;
+
+        settings.getForm().updateRecord(record);
+        layout.getForm().updateRecord(record);
+
+        if (!settings.getForm().isValid()) {
+            sidebar.setActiveTab(0);
+            Shopware.Notification.createGrowlMessage(me.snippets.errorTitle, me.snippets.onSaveChangesNotValid);
+            return false;
+        }
+
+        if (!layout.getForm().isValid()) {
+            sidebar.setActiveTab(1);
+            Shopware.Notification.createGrowlMessage(me.snippets.errorTitle, me.snippets.onSaveChangesNotValid);
+            return false;
+        }
+
+        // Prepare emotion data and filter out relevant data for presets
+        presetDataRecord = Ext.create('Shopware.apps.Emotion.model.Presetdata');
+        presetDataRecord.createFromEmotionData(record.getData(true));
+
+        presetRecord = Ext.create('Shopware.apps.Emotion.model.Preset', {
+            presetData: Ext.JSON.encode(presetDataRecord.getData()),
+            requiredPlugins: presetDataRecord.getRequiredPlugins()
+        });
+
+        Ext.create('Shopware.apps.Emotion.view.presets.Form').show(null, function() {
+            this.down('form').loadRecord(presetRecord);
+        });
+    },
+
+    /**
+     *
+     * @param { Shopware.apps.Emotion.view.presets.Form } win
+     */
+    savePreset: function(win) {
+        var me = this,
+            form = win.down('form'),
+            record, translations;
+
+        if (!form.getForm().isValid() || Ext.isEmpty(win.mediafield.value)) {
+            return Shopware.Notification.createGrowlMessage(
+                win.title,
+                '{s name=error/not_all_required_fields_filled_preset}{/s}'
+            );
+        }
+        record = form.getRecord();
+        form.getForm().updateRecord();
+
+        translations = [{
+            label: record.get('name'),
+            description: record.get('description')
+        }];
+        record.set('translations', translations);
+        record.set('thumbnail', record.get('preview'));
+
+        record.save({
+            callback: function(savedRecord, action) {
+                var result = savedRecord.proxy.getReader().rawData;
+
+                if (!result.success) {
+                    return Shopware.Notification.createGrowlMessage(
+                        me.snippets.errorTitle,
+                        me.snippets.saveErrorMessage + '<br>' + result.message,
+                        me.snippets.growlMessage
+                    );
+                }
+
+                win.close();
+                Shopware.Notification.createGrowlMessage(
+                    '{s name=preset/save_success}{/s}',
+                    '{s name=preset/save_success_msg}{/s}'
+                );
+            }
+        });
     },
 
     onEditEmotion: function(scope, view, rowIndex, colIndex) {

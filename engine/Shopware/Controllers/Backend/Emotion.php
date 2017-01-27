@@ -24,6 +24,7 @@
 
 use \Shopware\Models\Emotion\Element;
 use Doctrine\Common\Collections\ArrayCollection;
+use Shopware\Bundle\MediaBundle\MediaService;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Emotion\Emotion;
 use Shopware\Models\Emotion\Library\Field;
@@ -284,6 +285,79 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
                 'success' => false,
                 'message' => $e->getMessage(),
             ]);
+        }
+    }
+
+
+    /**
+     * Model event listener function which fired when the user configure an emotion preset over the backend
+     * module and clicks the save button.
+     */
+    public function savePresetAction()
+    {
+        /** @var Enlight_Components_Snippet_Namespace $snippetNamespace */
+        $snippetNamespace = $this->container->get('snippets')->getNamespace('backend/emotion/view/detail');
+        $slugService = $this->container->get('shopware.slug');
+
+        try {
+            $data = $this->Request()->getParams();
+            $identity = $this->container->get('Auth')->getIdentity();
+            $locale = $identity->locale->getLocale();
+
+            if (!empty($data['id'])) {
+                /** @var $preset Preset */
+                $preset = $this->container->get('models')->getRepository(Preset::class)->find($data['id']);
+                if ($preset) {
+                    $preset->getTranslations()->clear();
+                    $preset->getRequiredPlugins()->clear();
+                    $this->getManager()->flush($preset);
+                }
+            } else {
+                /** @var $preset Preset */
+                $preset = new Preset();
+            }
+
+            // fill translation locale when not yet set
+            if (!empty($data['translations'])) {
+                foreach ($data['translations'] as &$translation) {
+                    if (!isset($translation['locale']) && $locale) {
+                        $translation['locale'] = $locale;
+                    }
+                }
+            }
+            // get technical names and label of required plugins
+            if (!empty($data['requiredPlugins'])) {
+                $requiredPlugins = $this->getRequiredPlugins($data['requiredPlugins']);
+                $data['requiredPlugins'] = [];
+
+                if ($requiredPlugins) {
+                    $data['requiredPlugins'] = $requiredPlugins;
+                }
+            }
+            // slugify technical name of preset
+            $data['name'] = $slugService->slugify($data['name']);
+            $preset->fromArray($data);
+
+            if ($this->presetNameExists($preset)) {
+                $this->View()->assign(array(
+                    'success' => false,
+                    'message' => $snippetNamespace->get('preset_duplicate_error_message')
+                ));
+            } else {
+                $this->getManager()->persist($preset);
+                $this->getManager()->flush();
+
+                $this->View()->assign(array(
+                    'data' => $preset,
+                    'success' => true
+                ));
+            }
+        } catch (\Exception $e) {
+            $this->View()->assign(array(
+                'data' => $this->Request()->getParams(),
+                'success' => false,
+                'message' => $e->getMessage()
+            ));
         }
     }
 
@@ -723,7 +797,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
      */
     public function getPresetsAction()
     {
-        $identity = Shopware()->Container()->get('Auth')->getIdentity();
+        $identity = $this->container->get('Auth')->getIdentity();
         $locale = $identity->locale->getLocale();
 
         if (empty($locale)) {
@@ -754,8 +828,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
             foreach ($query->getQuery()->getArrayResult() as $preset) {
                 $translation = $preset['translations'];
                 if (!is_array($translation) || !array_key_exists(0, $translation)) {
-                    $translation = [];
-                    $translation[0] = [
+                    $translation[] = [
                         'label' => $preset['name'],
                         'description' => ''
                     ];
@@ -766,7 +839,9 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
                     'premium' => $preset['premium'],
                     'custom' => $preset['custom'],
                     'thumbnail' => $preset['thumbnail'],
+                    'thumbnailUrl' => $this->getPresetImageUrl($preset['thumbnail']),
                     'preview' => $preset['preview'],
+                    'previewUrl' => $this->getPresetImageUrl($preset['preview']),
                     'presetData' => $preset['presetData'],
                     'label' => $translation[0]['label'],
                     'description' => $translation[0]['description']
@@ -780,12 +855,28 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
     }
 
     /**
+     * @param string $path
+     * @return null|string
+     */
+    private function getPresetImageUrl($path)
+    {
+        /** @var MediaService $mediaService */
+        $mediaService = $this->container->get('shopware_media.media_service');
+
+        if (strpos($path, 'media') === 0) {
+            return $mediaService->getUrl($path);
+        }
+
+        return $this->View()->fetch(sprintf('string:{url file="%s"}', $path));
+    }
+
+    /**
      * @param $locale
      * @return \Doctrine\ORM\QueryBuilder|\Shopware\Components\Model\QueryBuilder
      */
     private function getPresetsQuery($locale)
     {
-        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder = $this->container->get('models')->createQueryBuilder();
         $builder->select('presets', 'translations')
             ->from(Preset::class, 'presets')
             ->leftJoin('presets.translations', 'translations')
@@ -1443,6 +1534,29 @@ EOD;
             'emotionId' => $emotionId,
             'fullPath' => true,
         ]);
+    }
+
+    /**
+     * @param Preset $preset
+     * @return boolean
+     */
+    private function presetNameExists(Preset $preset)
+    {
+        $qb = $this->container->get('models')->createQueryBuilder()
+            ->select('COUNT(preset)')
+            ->from(Preset::class, 'preset')
+            ->where('preset.name = :name');
+
+        if ($preset->getId()) {
+            $qb->andWhere('preset.id != :id')
+                ->setParameter('id', $preset->getId());
+        }
+
+        $result = $qb->setParameter('name', $preset->getName())
+            ->getQuery()
+            ->getSingleScalarResult();
+
+        return $result > 0;
     }
 
     /**

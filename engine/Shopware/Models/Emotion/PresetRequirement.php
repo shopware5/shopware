@@ -27,19 +27,21 @@ use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Shopware Emotion Model - Preset translation
+ * Shopware Emotion Model - Preset requirement
+ *
+ * Contains information about by preset required plugins.
  *
  * @category   Shopware
  * @package    Shopware\Models
  * @copyright  Copyright (c) shopware AG (http://www.shopware.de)
  *
  * @ORM\Entity
- * @ORM\Table(name="s_emotion_preset_translations")
+ * @ORM\Table(name="s_emotion_preset_requirements")
  */
-class PresetTranslation extends ModelEntity
+class PresetRequirement extends ModelEntity
 {
     /**
-     * Unique identifier field for the shopware emotion translation.
+     * Unique identifier field for the shopware emotion preset requirement.
      *
      * @var integer $id
      *
@@ -50,7 +52,16 @@ class PresetTranslation extends ModelEntity
     private $id;
 
     /**
-     * Contains the name of the emotion preset.
+     * Contains the technical name of the emotion preset requirement (i.e. plugin).
+     *
+     * @var string $technicalName
+     *
+     * @ORM\Column(name="technical_name", type="string", length=255, nullable=false)
+     */
+    private $technicalName;
+
+    /**
+     * Contains the label of the emotion preset requirement (i.e. plugin name).
      *
      * @var string $label
      *
@@ -59,30 +70,12 @@ class PresetTranslation extends ModelEntity
     private $label;
 
     /**
-     * Contains the name of the emotion preset.
-     *
-     * @var string $description
-     *
-     * @ORM\Column(name="description", type="text", nullable=false)
-     */
-    private $description;
-
-    /**
-     * Contains the name of the locale, e.g. `en_GB`.
-     *
-     * @var string $locale
-     *
-     * @ORM\Column(name="locale", type="string", length=15, nullable=false)
-     */
-    private $locale;
-
-    /**
      * @var \Shopware\Models\Emotion\Preset $preset
      *
-     * @ORM\ManyToOne(targetEntity="Shopware\Models\Emotion\Preset", inversedBy="translations")
+     * @ORM\ManyToOne(targetEntity="Shopware\Models\Emotion\Preset", inversedBy="requirements")
      * @ORM\JoinColumn(name="presetID", referencedColumnName="id")
      */
-    protected $preset;
+    private $preset;
 
     /**
      * Clone function for this model.
@@ -101,6 +94,22 @@ class PresetTranslation extends ModelEntity
     }
 
     /**
+     * @param string $technicalName
+     */
+    public function setTechnicalName($technicalName)
+    {
+        $this->technicalName = $technicalName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTechnicalName()
+    {
+        return $this->technicalName;
+    }
+
+    /**
      * @param string $label
      */
     public function setLabel($label)
@@ -114,38 +123,6 @@ class PresetTranslation extends ModelEntity
     public function getLabel()
     {
         return $this->label;
-    }
-
-    /**
-     * @return string
-     */
-    public function getDescription()
-    {
-        return $this->description;
-    }
-
-    /**
-     * @param string $description
-     */
-    public function setDescription($description)
-    {
-        $this->description = $description;
-    }
-
-    /**
-     * @return string
-     */
-    public function getLocale()
-    {
-        return $this->locale;
-    }
-
-    /**
-     * @param string $locale
-     */
-    public function setLocale($locale)
-    {
-        $this->locale = $locale;
     }
 
     /**

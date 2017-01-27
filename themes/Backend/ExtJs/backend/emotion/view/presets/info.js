@@ -67,7 +67,7 @@ Ext.define('Shopware.apps.Emotion.view.presets.Info', {
         return new Ext.XTemplate(
             '<tpl for=".">',
             '<div class="item" style="">',
-                '{literal}<div class="screen"><img src="{preview}" alt="{label}" /></div>{/literal}',
+                '{literal}<div class="screen"><img src="{previewUrl}" alt="{label}" /></div>{/literal}',
                 '<div class="info-item"> <p class="label">{s name=name}{/s}:</p> <p class="value">{literal}{label}{/literal}</p></div>',
                 '<div class="info-item"> <p class="label">{s name=description}{/s}:</p> <p class="value">{literal}{description}{/literal}</p></div>',
             '</div>',

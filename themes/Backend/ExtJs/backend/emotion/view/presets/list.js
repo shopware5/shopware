@@ -70,8 +70,15 @@ Ext.define('Shopware.apps.Emotion.view.presets.List', {
             cls: 'emotion-listing',
             listeners: {
                 render: Ext.bind(me.onAddInfoViewEvents, me),
-                selectionchange: function(view, selected) {
-                    me.selectedPreset = selected[0];
+                // because of custom tpl with grouping we cannot trust selection model here
+                // and have to use the data-preset-id attribute
+                itemclick: function(view, record, item, index, e) {
+                    var targetNode = e.getTarget(null, 10, true),
+                        selectorElement = targetNode.findParent('div.thumbnail', 50, true),
+                        presetId = parseInt(selectorElement.getAttribute('data-preset-id')),
+                        record = me.store.getById(presetId);
+
+                    me.selectedPreset = record;
                     me.showDetails();
                 }
             }
@@ -143,16 +150,16 @@ Ext.define('Shopware.apps.Emotion.view.presets.List', {
                         var itemTpl = '';
 
                         if (preset.premium) {
-                            itemTpl += '<div class="thumbnail premium">';
+                            itemTpl += '<div class="thumbnail premium" data-preset-id="' + preset.id + '">';
                             itemTpl += '<div class="hint premium"><span>{s name=premium_hint}{/s}</span></div>';
                         } else {
-                            itemTpl += '<div class="thumbnail">';
+                            itemTpl += '<div class="thumbnail" data-preset-id="' + preset.id + '">';
                         }
 
                         itemTpl += '<div class="thumb"><div class="inner-preset-thumb">';
 
-                        if (preset.thumbnail) {
-                            itemTpl += Ext.String.format('<img src="[0]" alt="[1]" />', preset.thumbnail, preset.label);
+                        if (preset.thumbnailUrl) {
+                            itemTpl += Ext.String.format('<img src="[0]" alt="[1]" />', preset.thumbnailUrl, preset.label);
                         } else {
                             itemTpl += Ext.String.format('<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="[0]" />', preset.label);
                         }
