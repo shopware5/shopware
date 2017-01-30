@@ -82,7 +82,7 @@
             {/block}
 
             {block name='frontend_index_content_main'}
-                <section class="content-main container block-group">
+                <section class="{block name="frontend_index_content_main_classes"}content-main container block-group{/block}">
 
                     {* Breadcrumb *}
                     {block name='frontend_index_breadcrumb'}
