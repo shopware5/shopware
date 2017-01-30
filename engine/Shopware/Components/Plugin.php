@@ -167,7 +167,11 @@ abstract class Plugin implements ContainerAwareInterface, SubscriberInterface
             new FileLocator()
         );
 
-        $loader->load($this->getPath().'/Resources/services.xml');
+        try {
+            $loader->load($this->getPath().'/Resources/services.xml');
+        } catch (\InvalidArgumentException $e) {
+            error_log($e);
+        }
     }
 
     /**
