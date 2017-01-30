@@ -37,6 +37,8 @@ use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Constraints\EqualTo;
@@ -110,6 +112,23 @@ class PersonalFormType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $builder->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event) {
+            $whitelist = [
+                'password',
+                'passwordConfirmation'
+            ];
+
+            $data = $event->getData();
+
+            array_walk_recursive($data, function(&$item, $key) use ($whitelist) {
+                if (in_array($key, $whitelist, true)) {
+                    return $item;
+                }
+                $item = strip_tags($item);
+            });
+            $event->setData($data);
+        });
+
         $builder->add('email', EmailType::class, [
             'constraints' => [
                 new FormEmail(['shop' => $this->context->getShopContext()->getShop()])
