@@ -44,13 +44,13 @@
 
                         {block name='frontend_register_login_input_email'}
                             <div class="register--login-email">
-                                <input name="email" placeholder="{s name="LoginPlaceholderMail"}{/s}" type="email" tabindex="1" value="{$sFormData.email|escape}" id="email" class="register--login-field{if $sErrorFlag.email} has--error{/if}" />
+                                <input name="email" placeholder="{s name="LoginPlaceholderMail"}{/s}" type="email" autocomplete="email" tabindex="1" value="{$sFormData.email|escape}" id="email" class="register--login-field{if $sErrorFlag.email} has--error{/if}" />
                             </div>
                         {/block}
 
                         {block name='frontend_register_login_input_password'}
                             <div class="register--login-password">
-                                <input name="password" placeholder="{s name="LoginPlaceholderPassword"}{/s}" type="password" tabindex="2" id="passwort" class="register--login-field{if $sErrorFlag.password} has--error{/if}" />
+                                <input name="password" placeholder="{s name="LoginPlaceholderPassword"}{/s}" type="password" autocomplete="current-password" tabindex="2" id="passwort" class="register--login-field{if $sErrorFlag.password} has--error{/if}" />
                             </div>
                         {/block}
 
