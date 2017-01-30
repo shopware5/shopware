@@ -360,6 +360,7 @@ CREATE TABLE IF NOT EXISTS `s_articles_prices` (
   `articledetailsID` int(11) NOT NULL DEFAULT '0',
   `price` double NOT NULL DEFAULT '0',
   `pseudoprice` double DEFAULT NULL,
+  `baseprice` double DEFAULT NULL,
   `percent` decimal(10,2) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `articleID` (`articleID`),
