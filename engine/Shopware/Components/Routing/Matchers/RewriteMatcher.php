@@ -75,7 +75,6 @@ class RewriteMatcher implements MatcherInterface
           SELECT subshopID as shopId, path, org_path as orgPath, main
           FROM s_core_rewrite_urls
           WHERE path LIKE :pathInfo
-             OR path LIKE :pathInfoWithSlash
           ORDER BY main DESC, subshopID = :shopId DESC
           LIMIT 1
         ';
@@ -117,11 +116,9 @@ class RewriteMatcher implements MatcherInterface
         }
 
         $pathInfo = ltrim($pathInfo, '/');
-
         $statement = $this->getRouteStatement();
         $statement->bindValue(':shopId', $context->getShopId(), \PDO::PARAM_INT);
-        $statement->bindValue(':pathInfo', trim($pathInfo, '/'), \PDO::PARAM_STR);
-        $statement->bindValue(':pathInfoWithSlash', trim($pathInfo, '/') . '/', \PDO::PARAM_STR);
+        $statement->bindValue(':pathInfo', $pathInfo, \PDO::PARAM_STR);
 
         if ($statement->execute() && $statement->rowCount() > 0) {
             $route = $statement->fetch(\PDO::FETCH_ASSOC);
