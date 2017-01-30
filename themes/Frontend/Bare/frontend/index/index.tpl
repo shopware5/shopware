@@ -17,7 +17,7 @@
     {if $sTarget} is--target-{$sTarget|escapeHtml}{/if}
     {if $theme.checkoutHeader && (({controllerName|lower} == "checkout" && {controllerAction|lower} != "cart") || ({controllerName|lower} == "register" && $sTarget != "account"))} is--minimal-header{/if}
     {if !$theme.displaySidebar} is--no-sidebar{/if}
-    {/strip}{/block}">
+    {/strip}{/block}" {block name="frontend_index_body_attributes"}{/block}>
 
     {block name='frontend_index_after_body'}{/block}
 
