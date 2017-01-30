@@ -4,7 +4,12 @@ class Migrations_Migration814 extends Shopware\Components\Migrations\AbstractMig
 {
     public function up($modus)
     {
-        $sql = 'ALTER TABLE `s_articles_prices` DROP `baseprice`;';
-        $this->addSql($sql);
+        $statement = $this->connection->query('SELECT * FROM s_articles_prices');
+        $price = $statement->fetch(PDO::FETCH_ASSOC);
+
+        if (array_key_exists('baseprice', $price)) {
+            $sql = 'ALTER TABLE `s_articles_prices` DROP `baseprice`;';
+            $this->addSql($sql);
+        }
     }
 }
