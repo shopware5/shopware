@@ -24,13 +24,13 @@
                             {block name='frontend_blog_comments_comment_author'}
                                 <div class="meta--author">
 
-                                    {block name='frontned_blog_comments_comment_author_label'}
+                                    {block name='frontend_blog_comments_comment_author_label'}
                                         <strong class="author--label">
                                             {s name="DetailCommentInfoFrom" namespace='frontend/detail/comment'}{/s}
                                         </strong>
                                     {/block}
 
-                                    {block name='frontned_blog_comments_comment_author_name'}
+                                    {block name='frontend_blog_comments_comment_author_name'}
                                         <span class="author--name" itemprop="creator">{$vote.name}</span>
                                     {/block}
 

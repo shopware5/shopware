@@ -43,7 +43,7 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Added event `action/fetchListing` which allows to load listings, facet data or listing counts
 * Added property `path` to `Shopware\Bundle\StoreFrontBundle\Struct\Media` which reflects the virtual path
 * Added service `Shopware\Bundle\StoreFrontBundle\Service\Core\BlogService` to fetch blog entries by id
-* Added filter event `Shopware_Core_HttpCache_CacheIdsFromController` in HttpCache to extend cache keys to be invalidated based on the controller 
+* Added filter event `Shopware_Core_HttpCache_CacheIdsFromController` in HttpCache to extend cache keys to be invalidated based on the controller
 * Added smarty function `convertEmotion` to convert an emotion struct to the legacy array structure
 * Added method `Shopware\Bundle\MediaBundle\MediaServiceInterface::listContents()`
 * Added method `Shopware\Bundle\MediaBundle\MediaService::listContents()`
@@ -68,13 +68,14 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Changed removal version of method `Shopware\Components\Model\ModelManager::addAttribute` to 5.4
 * Changed removal version of method `Shopware\Components\Model\ModelManager::removeAttribute` to 5.4
 * Changed template `component_article_slider.tpl` to show provided products instead of always fetching them via ajax
-* Changed emotion preview to not save the current state before showing preview 
+* Changed emotion preview to not save the current state before showing preview
 * Changed command `sw:thumbnail:cleanup` to search the filesystem to remove orphaned thumbnails
 * Moved `defaultListingSorting` configuration from performance module to base settings > `categories / listings`
 * Changed the jQuery plugin `src/js/jquery.selectbox-replacement.js` to be used only as a polyfill. Use the CSS-only version for select fields instead.
 * Removed template `frontend/forms/elements.tpl` to `frontend/forms/form-elements.tpl`
     * Renamed smarty block `frontend_forms_index_elements` to `frontend_forms_index_form_elements`
     * Renamed all smarty blocks `frontend_forms_elements*` to `frontend_forms_form_elements*`
+* Renamed smarty blocks `frontned_blog_comments_comment_author_*` to `frontend_blog_comments_comment_author_*`
 
 ### Removals
 
@@ -122,7 +123,7 @@ This changelog references changes done in Shopware 5.3 patch versions.
          * Removed `Zend_Loader_Autoloader_Resource`
          * Removed method `Zend_Loader::autoload()`
          * Removed method `Zend_Loader::registerAutoload()`
-    * Changes to `Zend_DB` 
+    * Changes to `Zend_DB`
         * Removed unused adapters like Db2, Mysqli, Oracle, Ibm, MsSql, Oci, PgSQL, Sqlsrv
     * `Zend_Controller`
     * `Zend_Navigation`
@@ -153,10 +154,10 @@ This changelog references changes done in Shopware 5.3 patch versions.
          * Also removed `Zend_Auth_Adapter_OpenId`
     * `Zend_TimeSync`
         * Also removed TimeSync support from `Zend_Date`
-    * `Zend_ProgressBar` 
+    * `Zend_ProgressBar`
         * Also removed ProgressBar support from `Zend_File_Transfer_Adapter_Http`
-    * `Zend_Ldap` 
-        * Also removed `Zend_Auth_Adapter_Ldap` 
+    * `Zend_Ldap`
+        * Also removed `Zend_Auth_Adapter_Ldap`
         * Also removed `Zend_Validate_Ldap_Dn`
     * `Zend_Wildfire`
         * Also removed `Zend_Db_Profiler_Firebug`
@@ -312,9 +313,9 @@ $request->setCriteria('criteria-2', $anotherCriteria);
 
 $result = $this->container->get('shopware_search.batch_product_search')->search($request, $context);
 
-$result->get('numbers-1'); // ['SW10004' => ListProduct, 'SW10006' => ListProduct] 
-$result->get('criteria-1'); // ['SW10006' => ListProduct, 'SW10007' => ListProduct, 'SW10008' => ListProduct] 
-$result->get('criteria-2'); // ['SW10009' => ListProduct, 'SW10010' => ListProduct, 'SW10011' => ListProduct, 'SW10012' => ListProduct, 'SW10013' => ListProduct] 
+$result->get('numbers-1'); // ['SW10004' => ListProduct, 'SW10006' => ListProduct]
+$result->get('criteria-1'); // ['SW10006' => ListProduct, 'SW10007' => ListProduct, 'SW10008' => ListProduct]
+$result->get('criteria-2'); // ['SW10009' => ListProduct, 'SW10010' => ListProduct, 'SW10011' => ListProduct, 'SW10012' => ListProduct, 'SW10013' => ListProduct]
 ```
 
 ### Partial facets
@@ -434,7 +435,7 @@ class BonusConditionHandler implements HandlerInterface, PartialConditionHandler
 
 ### CookiePermission
 
-Cookie permissions is now a part of shopware and you can configure it in the shop settings. 
+Cookie permissions is now a part of shopware and you can configure it in the shop settings.
 
 We implement a basic cookie permission hint. If you want to change the decision whether the item is displayed or not, overwrite the jQuery plugin in the jquery.cookie-permission.js
 
@@ -496,7 +497,7 @@ public function handle(ResolvedDataCollection $collection, Element $element, Sho
 }
 ```
 
-Keep in mind to use a unique key for requesting and getting products. For best practise, use the element's id in your key (`$element->getId()`). 
+Keep in mind to use a unique key for requesting and getting products. For best practise, use the element's id in your key (`$element->getId()`).
 
 #### View changes
 
