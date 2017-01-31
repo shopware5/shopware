@@ -63,10 +63,14 @@ class MenuSynchronizer
 
         $items = [];
         foreach ($menu as $menuItem) {
-            $childMenuNames = array_column($menuItem['children'], 'name');
-            if ($childMenuNames) {
-                $menuNames = array_merge($menuNames, $childMenuNames);
+            if (isset($menuItem['children'])) {
+                $childMenuNames = array_column($menuItem['children'], 'name');
+
+                if ($childMenuNames) {
+                    $menuNames = array_merge($menuNames, $childMenuNames);
+                }
             }
+
             if ($menuItem['isRootMenu']) {
                 $parent = null;
             } else {
