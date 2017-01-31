@@ -43,6 +43,7 @@
         "symfony/finder": "2.8.6",
         "symfony/console": "2.8.6",
         "symfony/form": "2.8.6",
+        "symfony/process": "2.8.6",
         "monolog/monolog": "1.19.0",
         "doctrine/common": "2.6.1",
         "doctrine/dbal": "2.5.4",
