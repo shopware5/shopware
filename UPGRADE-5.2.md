@@ -17,6 +17,7 @@ This changelog references changes done in Shopware 5.2 patch versions.
     * `document_index_address_sender`
     * `document_index_address_base`
 * Added `s_article_configurator_options_attributes` and `s_article_configurator_groups_attributes`
+* Added new plugin config element type `button`
 
 ### Media Optimizer
 
