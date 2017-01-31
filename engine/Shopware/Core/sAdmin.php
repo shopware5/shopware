@@ -343,14 +343,16 @@ class sAdmin
                 ['paymentID' => $resetPayment],
                 ['id = ?' => $user['additional']['user']['id']]
             );
-            $data = $this->db->fetchRow(
-                'SELECT * FROM s_core_paymentmeans WHERE id = ?',
-                [$resetPayment]
-            ) ?: [];
+            $data = ['id' => $resetPayment];
         }
 
-        // Get translation
-        $data = $this->sGetPaymentTranslation($data);
+        if (isset($data['id'])) {
+            $data = Shopware()->Container()->get('shopware_storefront.payment_gateway')->getList([$data['id']], $this->contextService->getShopContext());
+
+            if (!empty($data)) {
+                $data = Shopware()->Container()->get('legacy_struct_converter')->convertPaymentStruct(current($data));
+            }
+        }
 
         $data = $this->eventManager->filter(
             'Shopware_Modules_Admin_GetPaymentMeanById_DataFilter',
@@ -382,7 +384,7 @@ class sAdmin
             );
         }
         $sql = '
-            SELECT p.*
+            SELECT p.id, p.active, p.esdactive, p.mobile_inactive
             FROM s_core_paymentmeans p
 
             LEFT JOIN s_core_paymentmeans_subshops ps
@@ -425,7 +427,7 @@ class sAdmin
 
         if ($getPaymentMeans === false) {
             $getPaymentMeans = $this->db->fetchAll(
-                'SELECT * FROM s_core_paymentmeans ORDER BY position, name'
+                'SELECT id, active, esdactive, mobile_inactive FROM s_core_paymentmeans ORDER BY position, name'
             );
         }
 
@@ -456,21 +458,18 @@ class sAdmin
                 unset($getPaymentMeans[$payKey]);
                 continue;
             }
-
-            // Get possible translation
-            $getPaymentMeans[$payKey] = $this->sGetPaymentTranslation($getPaymentMeans[$payKey]);
         }
 
         // If no payment is left use always the fallback payment no matter if it has any restrictions too
         if (!count($getPaymentMeans)) {
-            $fallBackPayment = $this->db->fetchRow(
-                'SELECT * FROM s_core_paymentmeans WHERE id = ?',
-                [$this->config->offsetGet('paymentdefault')]
-            );
-            $fallBackPayment = $fallBackPayment ?: [];
-
-            $getPaymentMeans[] = $this->sGetPaymentTranslation($fallBackPayment);
+            $getPaymentMeans[] = ['id' => $this->config->offsetGet('paymentdefault')];
         }
+
+        $getPaymentMeans = Shopware()->Container()->get('shopware_storefront.payment_gateway')->getList(array_column($getPaymentMeans, 'id'), $this->contextService->getShopContext());
+
+        $getPaymentMeans = array_map(function ($payment) {
+            return Shopware()->Container()->get('legacy_struct_converter')->convertPaymentStruct($payment);
+        }, $getPaymentMeans);
 
         $getPaymentMeans = $this->eventManager->filter(
             'Shopware_Modules_Admin_GetPaymentMeans_DataFilter',
