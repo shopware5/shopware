@@ -221,9 +221,8 @@ class RewriteGenerator implements GeneratorListInterface
                 }
                 $orgQuery['emotionId'] = $query['emotionId'];
                 break;
-            case 'support':
-            case 'ticket':
-                $orgQuery['sViewport'] = 'ticket';
+            case 'forms':
+                $orgQuery['sViewport'] = 'forms';
                 if (isset($query['sFid'])) {
                     $orgQuery['sFid'] = $query['sFid'];
                 }

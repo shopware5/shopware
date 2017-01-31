@@ -2,7 +2,7 @@
 
 {* Breadcrumb *}
 {block name='frontend_index_start' prepend}
-    {$sBreadcrumb = [['name'=>{$sSupport.name}, 'link'=>{url controller=ticket sFid=$sSupport.id}]]}
+    {$sBreadcrumb = [['name'=>{$sSupport.name}, 'link'=>{url controller=forms sFid=$sSupport.id}]]}
 {/block}
 
 {* Sidebar left *}
