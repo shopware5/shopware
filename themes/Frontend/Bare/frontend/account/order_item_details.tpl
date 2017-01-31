@@ -250,7 +250,7 @@
                     {if $offerPosition.trackingcode}
                         <p>
                             {if $offerPosition.dispatch.status_link}
-                                {eval var=$offerPosition.dispatch.status_link}
+                                {include file="string:{$offerPosition.dispatch.status_link}"}
                             {else}
                                 {$offerPosition.trackingcode}
                             {/if}
