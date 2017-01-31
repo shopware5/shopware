@@ -44,7 +44,7 @@ Ext.define('Shopware.apps.Form.model.Field', {
      * @array
      */
     fields : [
-		//{block name="backend/form/model/field/fields"}{/block}
+        //{block name="backend/form/model/field/fields"}{/block}
         { name : 'id',       type : 'int' },
         { name : 'name',     type : 'string' },
         { name : 'label',    type : 'string' },

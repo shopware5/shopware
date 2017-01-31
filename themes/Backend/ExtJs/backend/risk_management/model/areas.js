@@ -34,20 +34,20 @@
  */
 //{block name="backend/risk_management/model/areas"}
 Ext.define('Shopware.apps.RiskManagement.model.Areas', {
-	extend: 'Ext.data.Model',
-	fields: [
-		//{block name="backend/risk_management/model/areas/fields"}{/block}
-		'id', 'name','active'],
-	proxy: {
-		type: 'ajax',
-		api: {
-			read: '{url controller="Config" action="getList" _repositoryClass="countryArea"}'
-		},
-		reader: {
-			type: 'json',
-			root: 'data',
+    extend: 'Ext.data.Model',
+    fields: [
+        //{block name="backend/risk_management/model/areas/fields"}{/block}
+        'id', 'name','active'],
+    proxy: {
+        type: 'ajax',
+        api: {
+            read: '{url controller="Config" action="getList" _repositoryClass="countryArea"}'
+        },
+        reader: {
+            type: 'json',
+            root: 'data',
             totalProperty:'total'
-		}
-	}
+        }
+    }
 });
 //{/block}

@@ -41,7 +41,7 @@ Ext.define('Shopware.apps.UserManager.controller.Rules', {
      * Extend from the standard ExtJS 4 controller
      * @string
      */
-	extend: 'Ext.app.Controller',
+    extend: 'Ext.app.Controller',
 
     /**
      * Holder property which saves the instance of the application
@@ -52,9 +52,9 @@ Ext.define('Shopware.apps.UserManager.controller.Rules', {
     appContent: null,
 
     refs: [
-   		{ ref: 'rulesTree', selector: 'user-manager-rules-tree' },
-   		{ ref: 'saveRolePrivilegesButton', selector: 'user-manager-rules-tree button[name=saveRolePrivileges]' }
-   	],
+        { ref: 'rulesTree', selector: 'user-manager-rules-tree' },
+        { ref: 'saveRolePrivilegesButton', selector: 'user-manager-rules-tree button[name=saveRolePrivileges]' }
+    ],
 
     /**
      * Contains all snippets for this component
@@ -81,18 +81,18 @@ Ext.define('Shopware.apps.UserManager.controller.Rules', {
             successMessage:'{s name=message/role/save_success_title}Role rules have been saved{/s}'
         },
 
-		growlMessage: '{s name=growlMessage}User Management{/s}'
+        growlMessage: '{s name=growlMessage}User Management{/s}'
     },
 
-	/**
-	 * Creates the necessary event listener for this
-	 * specific controller and opens a new Ext.window.Window
-	 * to display the subapplication
+    /**
+     * Creates the necessary event listener for this
+     * specific controller and opens a new Ext.window.Window
+     * to display the subapplication
      *
      * @return void
-	 */
-	init: function() {
-		var me = this;
+     */
+    init: function() {
+        var me = this;
         me.control({
             'user-manager-rules-tree': {
                 deleteResource: me.onDeleteResource,
@@ -109,7 +109,7 @@ Ext.define('Shopware.apps.UserManager.controller.Rules', {
             }
 
        });
-	},
+    },
 
 
 

@@ -46,7 +46,7 @@ Ext.define('Shopware.apps.Order.model.OrderHistory', {
     * @array
     */
     fields: [
-	   //{block name="backend/order/model/history/fields"}{/block}
+       //{block name="backend/order/model/history/fields"}{/block}
         { name : 'id', type: 'int' },
         { name : 'userName', type: 'string' },
         { name : 'changeDate', type: 'date' },

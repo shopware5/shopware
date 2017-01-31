@@ -364,7 +364,7 @@ class LazyLoadingTest extends PHPUnit_Framework_TestCase
     {
         /** @var \Shopware\Models\Premium\Premium $premium */
         $premium = $this->em->getRepository('Shopware\Models\Premium\Premium')->find(1);
-        $this->assertEquals('SW10209',  $premium->getArticleDetail()->getNumber());
+        $this->assertEquals('SW10209', $premium->getArticleDetail()->getNumber());
     }
 
     /**

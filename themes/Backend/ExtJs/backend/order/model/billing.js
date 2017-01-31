@@ -52,7 +52,7 @@ Ext.define('Shopware.apps.Order.model.Billing', {
      * @array
      */
     fields: [
-		//{block name="backend/order/model/billing/fields"}{/block}
+        //{block name="backend/order/model/billing/fields"}{/block}
         { name: 'orderId', type: 'int' },
         { name: 'stateId', type:'int', useNull: true }
     ]

@@ -151,7 +151,7 @@ class PropertyFacetHandler implements HandlerInterface, ResultHydratorInterface
         $search = new Search();
         $search->addFilter(new IdsQuery($groupIds));
         $search->addFilter(new TermQuery('filterable', 1));
-        $search->addSort(new FieldSort('name'));
+        $search->addSort(new FieldSort('name', 'asc'));
         $search->setFrom(0);
         $search->setSize(self::AGGREGATION_SIZE);
 

@@ -57,7 +57,7 @@
         onShowPreloader: function() {
             var me = this;
 
-            if(me.opts.checkFormIsValid) {
+            if (me.opts.checkFormIsValid) {
                 var $form = $('#' + me.$el.attr('form'));
 
                 if (!$form.length) {
@@ -69,7 +69,7 @@
                 }
             }
 
-            //... we have to use a timeout, otherwise the element will not be inserted in the page.
+            // ... we have to use a timeout, otherwise the element will not be inserted in the page.
             window.setTimeout(function() {
                 me.$el.html(me.$el.text() + '<div class="' + me.opts.loaderCls + '"></div>').attr('disabled', 'disabled');
 

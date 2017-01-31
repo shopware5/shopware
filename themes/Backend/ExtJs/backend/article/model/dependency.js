@@ -44,7 +44,7 @@ Ext.define('Shopware.apps.Article.model.Dependency', {
      * @array
      */
     fields: [
-		//{block name="backend/article/model/dependency/fields"}{/block}
+        //{block name="backend/article/model/dependency/fields"}{/block}
         { name: 'id', type: 'integer', useNull: true },
         { name: 'configuratorSetId', type: 'integer', useNull: true },
         { name: 'parentId', type: 'integer', useNull: true },

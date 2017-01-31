@@ -88,8 +88,8 @@ class AttributeHydrator extends Hydrator
 
         if ($translationKey) {
             $translationKey = '__' . $translationKey . '_translation';
-            $attribute['translation'] = $data[$translationKey];
-            $attribute['translation_fallback'] = $data[$translationKey . '_fallback'];
+            $attribute['translation'] = !empty($data[$translationKey]) ? $data[$translationKey] : null;
+            $attribute['translation_fallback'] = !empty($data[$translationKey . '_fallback']) ? $data[$translationKey . '_fallback'] : null;
         }
 
         $struct->addAttribute($attributeKey, $this->hydrate($attribute));

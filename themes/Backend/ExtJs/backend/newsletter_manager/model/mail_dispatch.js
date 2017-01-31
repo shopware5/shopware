@@ -44,7 +44,7 @@ Ext.define('Shopware.apps.NewsletterManager.model.MailDispatch', {
      * @array
      */
     fields: [
-		//{block name="backend/newsletter_manager/model/mail_dispatch/fields"}{/block}
+        //{block name="backend/newsletter_manager/model/mail_dispatch/fields"}{/block}
         { name: 'id', type: 'int' },
         { name: 'name', type: 'string' }
     ]

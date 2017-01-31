@@ -1264,7 +1264,7 @@ Example: `<i class="icon--cart"></i>`
 */
 
 @font-face {
-	font-family: 'shopware';
+	font-family: @sw-icon-fontname;
 	src:url('@{font-directory}/shopware.eot?@{shopware-revision}');
 	src:url('@{font-directory}/shopware.eot?#@{shopware-revision}') format('embedded-opentype'),
 		url('@{font-directory}/shopware.woff?@{shopware-revision}') format('woff'),
@@ -1275,7 +1275,7 @@ Example: `<i class="icon--cart"></i>`
 }
 
 [class^="icon--"], [class*=" icon--"] {
-	font-family: 'shopware';
+	font-family: @sw-icon-fontname;
 	speak: none;
 	font-style: normal;
 	font-weight: normal;

@@ -39,8 +39,8 @@ Ext.define('Shopware.apps.Systeminfo.model.Path', {
     extend: 'Ext.data.Model',
 
     fields: [
-		//{block name="backend/systeminfo/model/path/fields"}{/block}
-		'name', 'version', 'result'],
+        //{block name="backend/systeminfo/model/path/fields"}{/block}
+        'name', 'version', 'result'],
     /**
     * Configure the data communication
     * @object

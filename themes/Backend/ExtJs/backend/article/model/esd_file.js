@@ -43,7 +43,7 @@ Ext.define('Shopware.apps.Article.model.EsdFile', {
      * @array
      */
     fields: [
-		//{block name="backend/article/model/esd_file/fields"}{/block}
+        //{block name="backend/article/model/esd_file/fields"}{/block}
         { name: 'id', type: 'int' },
         { name: 'filename' }
     ],

@@ -60,7 +60,7 @@ EOT
 
     'database-import_header'            => 'Datenbank importieren',
     'database-import_skip_import'       => 'Überspringen',
-    'database-import_progress_text'     => 'Bitte starten Sie das Datenbank-Update mit einen Klick auf den Button "Starten".<br> <strong>Bestehende Shopware Tabellen werden enfernt.</strong>',
+    'database-import_progress_text'     => 'Bitte starten Sie das Datenbank-Update mit einen Klick auf den Button "Starten".<br> <strong>Bestehende Shopware Tabellen werden entfernt.</strong>',
 
     'migration_counter_text_migrations' => 'Datenbank-Update wird durchgeführt',
     'migration_counter_text_snippets'   => 'Textbausteine werden aktualisiert',

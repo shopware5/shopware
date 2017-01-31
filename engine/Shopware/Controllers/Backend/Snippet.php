@@ -101,23 +101,23 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
      *
      * <code>
      * (
-     * 	SELECT `s`.`id`, `s`.`namespace`, `s`.`name`, `s`.`value`, `s`.`shopId`, `s`.`localeId`
-     * 	FROM `s_core_snippets` AS `s`
-     * 	WHERE (s.localeId = 1)
-     * 	AND (s.shopID = 1)
+     * SELECT `s`.`id`, `s`.`namespace`, `s`.`name`, `s`.`value`, `s`.`shopId`, `s`.`localeId`
+     * FROM `s_core_snippets` AS `s`
+     * WHERE (s.localeId = 1)
+     *     AND (s.shopID = 1)
      * )
      * UNION ALL
      * (
-     * 	SELECT `s2`.`id`, `s1`.`namespace`, `s1`.`name`, `s2`.`value`, 1 as shopId, 1 as localeID
-     * 	FROM `s_core_snippets` AS `s1`
-     * 	LEFT JOIN `s_core_snippets` AS `s2`
-     * 		ON s1.namespace = s2.namespace
-     * 		AND s1.name = s2.name
-     * 		AND s2.localeId = 1
-     * 		AND s2.shopId = 1
-     * 	WHERE (s1.localeId = 1)
-     * 	AND (s1.shopID = 1)
-     * 	AND (s2.id IS NULL)
+     *     SELECT `s2`.`id`, `s1`.`namespace`, `s1`.`name`, `s2`.`value`, 1 as shopId, 1 as localeID
+     *     FROM `s_core_snippets` AS `s1`
+     *     LEFT JOIN `s_core_snippets` AS `s2`
+     *         ON s1.namespace = s2.namespace
+     *         AND s1.name = s2.name
+     *         AND s2.localeId = 1
+     *         AND s2.shopId = 1
+     *     WHERE (s1.localeId = 1)
+     *     AND (s1.shopID = 1)
+     *     AND (s2.id IS NULL)
      * )
      * ORDER BY `namespace` ASC LIMIT 30
      * </code>
@@ -169,9 +169,9 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
         $stmt = Shopware()->Db()
           ->select()
           ->from(
-                array('s' => 's_core_snippets'),
-                array('id', 'namespace', 'name', 'value', 'value as defaultValue', 'shopId', 'localeId')
-            );
+              array('s' => 's_core_snippets'),
+              array('id', 'namespace', 'name', 'value', 'value as defaultValue', 'shopId', 'localeId')
+          );
 
         // Filter by locale
         if (!empty($localeId)) {
@@ -269,6 +269,7 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
             $snippet->setDirty(true);
 
             if (!$this->isSnippetValid($snippet)) {
+                $result[$snippet->getId()] = $params;
                 continue;
             }
 

@@ -102,6 +102,13 @@ class Option extends ModelEntity
     protected $sets;
 
     /**
+     * INVERSE SIDE
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\ConfiguratorOption", mappedBy="configuratorOption", orphanRemoval=true, cascade={"persist"})
+     * @var \Shopware\Models\Attribute\ConfiguratorOption
+     */
+    protected $attribute;
+
+    /**
      * Class constructor, initials the array collections for the associations.
      */
     public function __construct()
@@ -196,5 +203,22 @@ class Option extends ModelEntity
     public function setDependencyChildren($dependencyChildren)
     {
         $this->dependencyChildren = $dependencyChildren;
+    }
+
+    /**
+     * @return \Shopware\Models\Attribute\ConfiguratorOption
+     */
+    public function getAttribute()
+    {
+        return $this->attribute;
+    }
+
+    /**
+     * @param \Shopware\Models\Attribute\ConfiguratorOption|array|null $attribute
+     * @return \Shopware\Models\Attribute\ConfiguratorOption
+     */
+    public function setAttribute($attribute)
+    {
+        return $this->setOneToOne($attribute, '\Shopware\Models\Attribute\ConfiguratorOption', 'attribute', 'configuratorOption');
     }
 }

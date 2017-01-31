@@ -32,7 +32,7 @@
  */
 //{block name="backend/base/model/media"}
 Ext.define('Shopware.apps.Base.model.Media', {
-	extend: 'Shopware.data.Model',
+    extend: 'Shopware.data.Model',
 
     configure: function() {
         return {
@@ -40,8 +40,8 @@ Ext.define('Shopware.apps.Base.model.Media', {
         };
     },
 
-	fields: [
-		//{block name="backend/base/model/media/fields"}{/block}
+    fields: [
+        //{block name="backend/base/model/media/fields"}{/block}
         'created',
         'description',
         'extension',

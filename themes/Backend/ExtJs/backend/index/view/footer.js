@@ -35,13 +35,13 @@
  */
 //{block name="backend/index/view/footer"}
 Ext.define('Shopware.apps.Index.view.Footer', {
-	extend: 'Ext.toolbar.Toolbar',
-	alias: 'widget.footer',
-	alternateClassName: 'Shopware.Footer',
+    extend: 'Ext.toolbar.Toolbar',
+    alias: 'widget.footer',
+    alternateClassName: 'Shopware.Footer',
     requires: [ 'Shopware.app.WindowManagement' ],
 
-	height: 40,
-	dock: 'bottom',
+    height: 40,
+    dock: 'bottom',
     cls: 'shopware-footer',
 
     /**
@@ -61,16 +61,16 @@ Ext.define('Shopware.apps.Index.view.Footer', {
      *
      * @return void
      */
-	initComponent: function() {
-		var me = this;
+    initComponent: function() {
+        var me = this;
 
-		me.createBasicItems();
-		me.callParent(arguments);
+        me.createBasicItems();
+        me.callParent(arguments);
 
         if(Ext.isObject(Shopware.app.WindowManagement)) {
             Shopware.app.WindowManagement.init(me);
         }
-	},
+    },
 
     afterRender: function() {
         var me = this;
@@ -80,13 +80,13 @@ Ext.define('Shopware.apps.Index.view.Footer', {
         me.callParent(arguments);
     },
 
-	/**
-	 * Creates the default buttons for the footer taskbar
+    /**
+     * Creates the default buttons for the footer taskbar
      *
      * @return void
-	 */
-	createBasicItems: function() {
-		var me = this;
+     */
+    createBasicItems: function() {
+        var me = this;
 
         me.logoutBtn = me.createLogoutBtn();
         me.windowBtn = me.createWindowManagementMenu();
@@ -100,7 +100,7 @@ Ext.define('Shopware.apps.Index.view.Footer', {
             me.widgetBtn
         ];
 
-	},
+    },
 
     /**
      * Creates the logout button and the responsible tooltip

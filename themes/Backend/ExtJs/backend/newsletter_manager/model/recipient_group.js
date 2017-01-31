@@ -45,7 +45,7 @@ Ext.define('Shopware.apps.NewsletterManager.model.RecipientGroup', {
      * @array
      */
     fields: [
-		//{block name="backend/newsletter_manager/model/recipient_group/fields"}{/block}
+        //{block name="backend/newsletter_manager/model/recipient_group/fields"}{/block}
         { name: 'id', type: 'int' },
         { name: 'internalId', type: 'int' },
         { name: 'number', type: 'int' },

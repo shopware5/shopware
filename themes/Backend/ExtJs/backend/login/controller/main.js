@@ -38,17 +38,17 @@ Ext.define('Shopware.apps.Login.controller.Main', {
      * Extend from the standard ExtJS 4 controller
      * @string
      */
-	extend: 'Ext.app.Controller',
+    extend: 'Ext.app.Controller',
 
-	/**
-	 * Creates the necessary event listener for this
-	 * specific controller and opens a new Ext.window.Window
-	 * to display the subapplication
+    /**
+     * Creates the necessary event listener for this
+     * specific controller and opens a new Ext.window.Window
+     * to display the subapplication
      *
      * @return void
-	 */
-	init: function() {
-		var me = this;
+     */
+    init: function() {
+        var me = this;
 
         me.control({
 
@@ -74,7 +74,7 @@ Ext.define('Shopware.apps.Login.controller.Main', {
                 localeStore: this.getStore('Locale')
             }) ]
         }).show();
-	},
+    },
 
     /**
      * Event listener method which handles the login process

@@ -447,21 +447,10 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
      */
     private function getUnique()
     {
-        $config = $this->getPluginConfig();
+        /** @var UniqueIdGeneratorInterface $uniqueIdGenerator */
+        $uniqueIdGenerator = $this->container->get('shopware_plugininstaller.unique_id_generator');
 
-        if (isset($config['update-unique-id']) &&  !empty($config['update-unique-id'])) {
-            return $config['update-unique-id'];
-        }
-
-        $uniqueid = Random::getAlphanumericString(32);
-
-        $shop = $this->get('models')->getRepository('Shopware\Models\Shop\Shop')->findOneBy(array('default' => true));
-
-        $pluginManager  = $this->container->get('shopware_plugininstaller.plugin_manager');
-        $plugin = $pluginManager->getPluginByName('SwagUpdate');
-        $pluginManager->saveConfigElement($plugin, 'update-unique-id', $uniqueid, $shop);
-
-        return $uniqueid;
+        return $uniqueIdGenerator->getUniqueId();
     }
 
     /**

@@ -39,7 +39,7 @@ Ext.define('Shopware.apps.ArticleList.model.Operator', {
      * @array
      */
     fields: [
-		//{block name="backend/article_list/model/operator/fields"}{/block}
+        //{block name="backend/article_list/model/operator/fields"}{/block}
         { name: 'id', type: 'int', useNull: true },
         { name: 'name', type: 'string' }
     ]

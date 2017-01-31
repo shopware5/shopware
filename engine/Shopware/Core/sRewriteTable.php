@@ -111,7 +111,7 @@ class sRewriteTable
      * @var ContextServiceInterface
      */
     private $contextService;
-    
+
     /**
      * @var ShopPageServiceInterface
      */
@@ -224,7 +224,7 @@ class sRewriteTable
         MemoryLimit::setMinimumMemoryLimit(1024*1024*512);
         @set_time_limit(0);
 
-        $keys = array_keys($this->template->registered_plugins['function']);
+        $keys = isset($this->template->registered_plugins['function']) ? array_keys($this->template->registered_plugins['function']) : [];
         if (!(in_array('sCategoryPath', $keys))) {
             $this->template->registerPlugin(
                 Smarty::PLUGIN_FUNCTION, 'sCategoryPath',
@@ -659,7 +659,7 @@ class sRewriteTable
         $routerCampaignTemplate
     ) {
         $translation = $translator->readWithFallback($shopId, $fallbackShopId, 'emotion', $campaign['id']);
-        
+
         $campaign = array_merge($campaign, $translation);
 
         $this->data->assign('campaign', $campaign);
@@ -750,6 +750,7 @@ class sRewriteTable
      */
     public function sSmartyCategoryPath($params)
     {
+        $parts = null;
         if (!empty($params['articleID'])) {
             $parts = $this->sCategoryPathByArticleId(
                 $params['articleID'],
@@ -761,10 +762,12 @@ class sRewriteTable
         if (empty($params['separator'])) {
             $params['separator'] = '/';
         }
-        foreach ($parts as &$part) {
-            $part = str_replace($params['separator'], '', $part);
+        if (!empty($parts)) {
+            foreach ($parts as &$part) {
+                $part = str_replace($params['separator'], '', $part);
+            }
+            $parts = implode($params['separator'], $parts);
         }
-        $parts = implode($params['separator'], $parts);
         return $parts;
     }
 
@@ -778,7 +781,7 @@ class sRewriteTable
     {
         $parts = $this->modelManager->getRepository('Shopware\Models\Category\Category')
             ->getPathById($categoryId, 'name');
-        $level = Shopware()->Shop()->getCategory()->getLevel();
+        $level = Shopware()->Shop()->getCategory()->getLevel() ? : 1;
         $parts = array_slice($parts, $level);
 
         return $parts;
@@ -874,8 +877,8 @@ class sRewriteTable
                 continue;
             }
 
-            $objectData = unserialize($article['objectdata']);
-            $objectDataFallback = unserialize($article['objectdataFallback']);
+            $objectData = @unserialize($article['objectdata']);
+            $objectDataFallback = @unserialize($article['objectdataFallback']);
 
             if (empty($objectData)) {
                 $objectData = [];

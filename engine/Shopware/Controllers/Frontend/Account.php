@@ -61,9 +61,16 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
             && !$this->admin->sCheckUser()) {
             return $this->forward('index', 'register');
         }
-        $this->View()->sUserData = $this->admin->sGetUserData();
-        $this->View()->sUserLoggedIn = $this->admin->sCheckUser();
-        $this->View()->sAction = $this->Request()->getActionName();
+        $userData = $this->admin->sGetUserData();
+
+        $activeBillingAddressId = $userData['additional']['user']['default_billing_address_id'];
+        $activeShippingAddressId = $userData['additional']['user']['default_shipping_address_id'];
+
+        $this->View()->assign('activeBillingAddressId', $activeBillingAddressId);
+        $this->View()->assign('activeShippingAddressId', $activeShippingAddressId);
+        $this->View()->assign('sUserData', $userData);
+        $this->View()->assign('sUserLoggedIn', $this->admin->sCheckUser());
+        $this->View()->assign('sAction', $this->Request()->getActionName());
     }
 
     /**
@@ -352,7 +359,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
             SELECT file, articleID
             FROM s_articles_esd ae, s_order_esd oe
             WHERE ae.id=oe.esdID
-            AND	oe.userID=?
+            AND oe.userID=?
             AND oe.orderdetailsID=?
         ';
         $download = Shopware()->Db()->fetchRow($sql, array(Shopware()->Session()->sUserId, $esdID));
@@ -453,7 +460,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
         if (empty($email)) {
             return array('sErrorMessages' => array($snippets->get('ErrorForgotMail')));
         }
-        
+
         $userID = Shopware()->Modules()->Admin()->sGetUserByMail($email);
         if (empty($userID)) {
             return;
@@ -466,6 +473,36 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
             'sUrl'      => $this->Front()->Router()->assemble(array('controller' => 'account', 'action'=>'resetPassword')),
             'sKey'      => $hash
         );
+
+        $sql = 'SELECT 
+          s_user.accountmode,
+          s_user.active,
+          s_user.affiliate,
+          s_user.birthday,
+          s_user.confirmationkey,
+          s_user.customergroup,
+          s_user.customernumber,
+          s_user.email,
+          s_user.failedlogins,
+          s_user.firstlogin,
+          s_user.lastlogin,
+          s_user.language,
+          s_user.internalcomment,
+          s_user.lockeduntil,
+          s_user.subshopID,
+          s_user.title,
+          s_user.salutation,
+          s_user.firstname,
+          s_user.lastname,
+          s_user.lastlogin,
+          s_user.newsletter
+          FROM s_user
+          WHERE id = ?';
+
+        $user = $this->get('dbal_connection')->fetchAssoc($sql, [$userID]);
+        $user['attributes'] = $this->get('dbal_connection')->fetchAssoc('SELECT * FROM s_user_attributes WHERE userID = ?', [$userID]);
+
+        $context['user'] = $user;
 
         // Send mail
         $mail = Shopware()->TemplateMail()->createMail('sCONFIRMPASSWORDCHANGE', $context);

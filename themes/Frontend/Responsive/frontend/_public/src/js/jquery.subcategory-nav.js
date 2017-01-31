@@ -319,7 +319,6 @@
             }
 
             $.get(opts.fetchUrl, function (template) {
-
                 me.$sidebarWrapper.css('display', 'none');
 
                 me.$sidebar.addClass(opts.disableScrollingClass).append(template);
@@ -456,7 +455,7 @@
                 $.get(url, function (template) {
                     $.publish('plugin/swSubCategoryNav/onLoadTemplate', [ me ]);
 
-                    callback.call(me, template)
+                    callback.call(me, template);
                 });
                 return;
             }

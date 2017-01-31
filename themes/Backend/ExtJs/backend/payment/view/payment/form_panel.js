@@ -52,12 +52,12 @@ Ext.define('Shopware.apps.Payment.view.payment.FormPanel', {
         labelWidth:130,
         anchor:'100%'
     },
-	plugins: [{
-		pluginId: 'translation',
-		ptype: 'translation',
-		translationType: 'config_payment',
-		translationMerge: true
-	}],
+    plugins: [{
+        pluginId: 'translation',
+        ptype: 'translation',
+        translationType: 'config_payment',
+        translationMerge: true
+    }],
 
     /**
      * This function is called, when the component is initiated
@@ -78,7 +78,7 @@ Ext.define('Shopware.apps.Payment.view.payment.FormPanel', {
             xtype: 'textfield',
             fieldLabel: '{s name=formpanel_description_label}Description{/s}',
             name: 'description',
-			translatable: true
+            translatable: true
         },{
             xtype: 'textfield',
             fieldLabel: '{s name=formpanel_name_label}Name{/s}',
@@ -103,7 +103,7 @@ Ext.define('Shopware.apps.Payment.view.payment.FormPanel', {
             xtype: 'textarea',
             fieldLabel: '{s name=formpanel_additional-description_label}Additional description{/s}',
             name: 'additionalDescription',
-			translatable: true
+            translatable: true
         },{
             xtype: 'textfield',
             fieldLabel: '{s name=formpanel_surcharge_label}Surcharge in %{/s}',
@@ -112,7 +112,7 @@ Ext.define('Shopware.apps.Payment.view.payment.FormPanel', {
             xtype: 'textfield',
             fieldLabel: '{s name=formpanel_generalSurcharge_label}General Surcharge{/s}',
             name: 'surcharge',
-			supportText: '{s name=payment/surcharge/supportText}Use \',\' or \'.\' for decimal numbers{/s}'
+            supportText: '{s name=payment/surcharge/supportText}Use \',\' or \'.\' for decimal numbers{/s}'
         },{
             xtype: 'textfield',
             fieldLabel: '{s name=formpanel_position_surcharge}Position{/s}',

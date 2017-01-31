@@ -24,7 +24,9 @@
 
 namespace Shopware\Components\Thumbnail\Generator;
 
+use Shopware\Bundle\MediaBundle\Exception\OptimizerNotFoundException;
 use Shopware\Bundle\MediaBundle\MediaServiceInterface;
+use Shopware\Bundle\MediaBundle\OptimizerServiceInterface;
 
 /**
  * Shopware Basic Thumbnail Generator
@@ -41,11 +43,6 @@ use Shopware\Bundle\MediaBundle\MediaServiceInterface;
 class Basic implements GeneratorInterface
 {
     /**
-     * @var \Shopware_Components_Config
-     */
-    private $config;
-
-    /**
      * @var bool
      */
     private $fixGdImageBlur;
@@ -56,14 +53,20 @@ class Basic implements GeneratorInterface
     private $mediaService;
 
     /**
-     * @param $config \Shopware_Components_Config
-     * @param MediaServiceInterface $mediaService
+     * @var OptimizerServiceInterface
      */
-    public function __construct($config, MediaServiceInterface $mediaService)
+    private $optimizerService;
+
+    /**
+     * @param \Shopware_Components_Config $config
+     * @param MediaServiceInterface $mediaService
+     * @param OptimizerServiceInterface $optimizerService
+     */
+    public function __construct(\Shopware_Components_Config $config, MediaServiceInterface $mediaService, OptimizerServiceInterface $optimizerService)
     {
-        $this->config = $config;
-        $this->fixGdImageBlur = $this->config->get('thumbnailNoiseFilter');
+        $this->fixGdImageBlur = $config->get('thumbnailNoiseFilter');
         $this->mediaService = $mediaService;
+        $this->optimizerService = $optimizerService;
     }
 
     /**
@@ -101,6 +104,7 @@ class Basic implements GeneratorInterface
         }
 
         $this->saveImage($destination, $newImage, $quality);
+        $this->optimizeImage($destination);
 
         // Removes both the original and the new created image from memory
         imagedestroy($newImage);
@@ -280,5 +284,23 @@ class Basic implements GeneratorInterface
         ob_end_clean();
 
         $this->mediaService->write($destination, $content);
+    }
+
+    /**
+     * @param string $destination
+     */
+    private function optimizeImage($destination)
+    {
+        if ($this->mediaService->getAdapterType() !== 'local') {
+            return;
+        }
+
+        $destination = $this->mediaService->encode($destination);
+
+        try {
+            $this->optimizerService->optimize($destination);
+        } catch (OptimizerNotFoundException $exception) {
+            // empty catch intended since no optimizer is available
+        }
     }
 }

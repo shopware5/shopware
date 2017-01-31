@@ -25,6 +25,7 @@
 namespace Shopware\Components\DependencyInjection\Bridge;
 
 use Shopware\Components\DependencyInjection\Container;
+use Shopware\Components\Session\PdoSessionHandler;
 
 /**
  * Session Dependency Injection Bridge
@@ -38,9 +39,37 @@ class Session
 {
     /**
      * @param Container $container
+     * @return \SessionHandlerInterface|null
+     */
+    public function createSaveHandler(Container $container)
+    {
+        $sessionOptions = $container->getParameter('shopware.session');
+        if (isset($sessionOptions['save_handler']) && $sessionOptions['save_handler'] !== 'db') {
+            return null;
+        }
+
+        $dbOptions = $container->getParameter('shopware.db');
+        $conn = Db::createPDO($dbOptions);
+
+        return new PdoSessionHandler(
+            $conn,
+            [
+                'db_table'        => 's_core_sessions',
+                'db_id_col'       => 'id',
+                'db_data_col'     => 'data',
+                'db_expiry_col'   => 'expiry',
+                'db_time_col'     => 'modified',
+                'lock_mode'       => $sessionOptions['locking'] ? PdoSessionHandler::LOCK_TRANSACTIONAL : PdoSessionHandler::LOCK_NONE,
+            ]
+        );
+    }
+
+    /**
+     * @param Container $container
+     * @param \SessionHandlerInterface $saveHandler
      * @return \Enlight_Components_Session_Namespace
      */
-    public function factory(Container $container)
+    public function createSession(Container $container, \SessionHandlerInterface $saveHandler = null)
     {
         $sessionOptions = $container->getParameter('shopware.session');
 
@@ -64,20 +93,12 @@ class Session
             $sessionOptions['cookie_secure'] = true;
         }
 
-        if (!isset($sessionOptions['save_handler']) || $sessionOptions['save_handler'] == 'db') {
-            $config_save_handler = array(
-                'db'             => $container->get('Db'),
-                'name'           => 's_core_sessions',
-                'primary'        => 'id',
-                'modifiedColumn' => 'modified',
-                'dataColumn'     => 'data',
-                'lifetimeColumn' => 'expiry'
-            );
-            \Enlight_Components_Session::setSaveHandler(
-                new \Enlight_Components_Session_SaveHandler_DbTable($config_save_handler)
-            );
+        if ($saveHandler) {
+            session_set_save_handler($saveHandler);
             unset($sessionOptions['save_handler']);
         }
+
+        unset($sessionOptions['locking']);
 
         \Enlight_Components_Session::start($sessionOptions);
 

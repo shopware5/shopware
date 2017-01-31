@@ -85,6 +85,7 @@ Ext.define('Shopware.apps.Article', {
         'variant.Detail',
         'variant.NumberProgress',
         'variant.Progress',
+        'variant.ImageRelationProcess',
         'variant.configurator.Dependency',
         'variant.configurator.Sets',
         'variant.configurator.GroupEdit',

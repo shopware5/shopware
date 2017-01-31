@@ -44,7 +44,7 @@ Ext.define('Shopware.apps.Performance.model.Customer', {
      * @array
      */
     fields:[
-		//{block name="backend/performance/model/customer/fields"}{/block}
+        //{block name="backend/performance/model/customer/fields"}{/block}
         { name:'id', type:'int' },
 
         { name:'similarRefreshStrategy', type:'int' },

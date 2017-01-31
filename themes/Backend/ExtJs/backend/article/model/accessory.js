@@ -45,7 +45,7 @@ Ext.define('Shopware.apps.Article.model.Accessory', {
      * @array
      */
     fields: [
-		//{block name="backend/article/model/accessory/fields"}{/block}
+        //{block name="backend/article/model/accessory/fields"}{/block}
         { name: 'id', type: 'int' },
         { name: 'cross', type: 'boolean' },
         { name: 'bundle', type: 'boolean' },

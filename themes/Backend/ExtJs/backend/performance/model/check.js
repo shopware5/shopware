@@ -44,7 +44,7 @@ Ext.define('Shopware.apps.Performance.model.Check', {
      * @array
      */
     fields:[
-		//{block name="backend/performance/model/description/fields"}{/block}
+        //{block name="backend/performance/model/description/fields"}{/block}
         { name:'id', type:'int' },
         { name:'name', type:'string' },
         { name:'value', type:'string' },

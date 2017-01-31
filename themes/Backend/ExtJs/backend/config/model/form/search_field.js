@@ -34,7 +34,7 @@
 Ext.define('Shopware.apps.Config.model.form.SearchField', {
     extend: 'Ext.data.Model',
     fields: [
-		//{block name="backend/config/model/form/search_field/fields"}{/block}
+        //{block name="backend/config/model/form/search_field/fields"}{/block}
         { name: 'id', type: 'int' },
         { name: 'name', type: 'string' },
         { name: 'field', type: 'string' },

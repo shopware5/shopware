@@ -789,22 +789,24 @@ class sOrder
             $this->sBasketData["content"]
         );
 
-        $variables = array(
-            "sOrderDetails"=>$details,
-            "billingaddress"=>$this->sUserData["billingaddress"],
-            "shippingaddress"=>$this->sUserData["shippingaddress"],
-            "additional"=>$this->sUserData["additional"],
-            "sShippingCosts"=>$this->sSYSTEM->sMODULES['sArticles']->sFormatPrice($this->sShippingcosts)." ".$this->sSYSTEM->sCurrency["currency"],
-            "sAmount"=>$this->sAmountWithTax ? $this->sSYSTEM->sMODULES['sArticles']->sFormatPrice($this->sAmountWithTax)." ".$this->sSYSTEM->sCurrency["currency"] : $this->sSYSTEM->sMODULES['sArticles']->sFormatPrice($this->sAmount)." ".$this->sSYSTEM->sCurrency["currency"],
-            "sAmountNet"=>$this->sSYSTEM->sMODULES['sArticles']->sFormatPrice($this->sBasketData["AmountNetNumeric"])." ".$this->sSYSTEM->sCurrency["currency"],
-            "sTaxRates"   => $this->sBasketData["sTaxRates"],
-            "ordernumber"=>$orderNumber,
-            "sOrderDay" => date("d.m.Y"),
-            "sOrderTime" => date("H:i"),
-            "sComment"=>$this->sComment,
-            'attributes' => $attributes,
-            "sEsd"=>$esdOrder
-        );
+        $variables = [
+            "sOrderDetails"     => $details,
+            "billingaddress"    => $this->sUserData["billingaddress"],
+            "shippingaddress"   => $this->sUserData["shippingaddress"],
+            "additional"        => $this->sUserData["additional"],
+            "sShippingCosts"    => $this->sSYSTEM->sMODULES['sArticles']->sFormatPrice($this->sShippingcosts)." ".$this->sSYSTEM->sCurrency["currency"],
+            "sAmount"           => $this->sAmountWithTax ? $this->sSYSTEM->sMODULES['sArticles']->sFormatPrice($this->sAmountWithTax)." ".$this->sSYSTEM->sCurrency["currency"] : $this->sSYSTEM->sMODULES['sArticles']->sFormatPrice($this->sAmount)." ".$this->sSYSTEM->sCurrency["currency"],
+            "sAmountNumeric"    => $this->sAmountWithTax ? $this->sAmountWithTax : $this->sAmount,
+            "sAmountNet"        => $this->sSYSTEM->sMODULES['sArticles']->sFormatPrice($this->sBasketData["AmountNetNumeric"])." ".$this->sSYSTEM->sCurrency["currency"],
+            "sAmountNetNumeric" => $this->sBasketData["AmountNetNumeric"],
+            "sTaxRates"         => $this->sBasketData["sTaxRates"],
+            "ordernumber"       => $orderNumber,
+            "sOrderDay"         => date("d.m.Y"),
+            "sOrderTime"        => date("H:i"),
+            "sComment"          => $this->sComment,
+            'attributes'        => $attributes,
+            "sEsd"              => $esdOrder
+        ];
 
         if ($dispatchId) {
             $variables["sDispatch"] = $this->sSYSTEM->sMODULES['sAdmin']->sGetPremiumDispatch($dispatchId);
@@ -1135,33 +1137,35 @@ class sOrder
 
         $shopContext = $this->contextService->getShopContext();
 
-        $context = array(
-            'sOrderDetails' => $variables["sOrderDetails"],
+        $context = [
+            'sOrderDetails'     => $variables["sOrderDetails"],
 
-            'billingaddress'  => $variables["billingaddress"],
-            'shippingaddress' => $variables["shippingaddress"],
-            'additional'      => $variables["additional"],
+            'billingaddress'    => $variables["billingaddress"],
+            'shippingaddress'   => $variables["shippingaddress"],
+            'additional'        => $variables["additional"],
 
-            'sTaxRates'      => $variables["sTaxRates"],
-            'sShippingCosts' => $variables["sShippingCosts"],
-            'sAmount'        => $variables["sAmount"],
-            'sAmountNet'     => $variables["sAmountNet"],
+            'sTaxRates'         => $variables["sTaxRates"],
+            'sShippingCosts'    => $variables["sShippingCosts"],
+            'sAmount'           => $variables["sAmount"],
+            'sAmountNumeric'    => $variables["sAmountNumeric"],
+            'sAmountNet'        => $variables["sAmountNet"],
+            'sAmountNetNumeric' => $variables["sAmountNetNumeric"],
 
-            'sOrderNumber' => $variables["ordernumber"],
-            'sOrderDay'    => $variables["sOrderDay"],
-            'sOrderTime'   => $variables["sOrderTime"],
-            'sComment'     => $variables["sComment"],
+            'sOrderNumber'      => $variables["ordernumber"],
+            'sOrderDay'         => $variables["sOrderDay"],
+            'sOrderTime'        => $variables["sOrderTime"],
+            'sComment'          => $variables["sComment"],
 
-            'attributes'     => $variables["attributes"],
-            'sCurrency'    => $this->sSYSTEM->sCurrency["currency"],
+            'attributes'        => $variables["attributes"],
+            'sCurrency'         => $this->sSYSTEM->sCurrency["currency"],
 
-            'sLanguage'    => $shopContext->getShop()->getId(),
+            'sLanguage'         => $shopContext->getShop()->getId(),
 
-            'sSubShop'     => $shopContext->getShop()->getId(),
+            'sSubShop'          => $shopContext->getShop()->getId(),
 
-            'sEsd'    => $variables["sEsd"],
-            'sNet'    => $this->sNet,
-        );
+            'sEsd'              => $variables["sEsd"],
+            'sNet'              => $this->sNet,
+        ];
 
         // Support for individual payment means with custom-tables
         if ($variables["additional"]["payment"]["table"]) {
@@ -1787,20 +1791,20 @@ SELECT
     `s`.`name` as `status_name`,
     `s`.`description` as `status_description`,
     `p`.`description` as `payment_description`,
-    `d`.`name` 		  as `dispatch_description`,
-    `cu`.`name` 	  as `currency_description`
+    `d`.`name` as `dispatch_description`,
+    `cu`.`name` as `currency_description`
 FROM
     `s_order` as `o`
 LEFT JOIN `s_core_states` as `s`
-    ON	(`o`.`status` = `s`.`id`)
+    ON  (`o`.`status` = `s`.`id`)
 LEFT JOIN `s_core_states` as `c`
-    ON	(`o`.`cleared` = `c`.`id`)
+    ON  (`o`.`cleared` = `c`.`id`)
 LEFT JOIN `s_core_paymentmeans` as `p`
-    ON	(`o`.`paymentID` = `p`.`id`)
+    ON  (`o`.`paymentID` = `p`.`id`)
 LEFT JOIN `s_premium_dispatch` as `d`
-    ON	(`o`.`dispatchID` = `d`.`id`)
+    ON  (`o`.`dispatchID` = `d`.`id`)
 LEFT JOIN `s_core_currencies` as `cu`
-    ON	(`o`.`currency` = `cu`.`currency`)
+    ON  (`o`.`currency` = `cu`.`currency`)
 WHERE
     `o`.`id` = :orderId
 EOT;

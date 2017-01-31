@@ -37,7 +37,7 @@
 
 //{block name="backend/translation/view/main/toolbar"}
 Ext.define('Shopware.apps.Translation.view.main.Toolbar', {
-	extend: 'Ext.toolbar.Toolbar',
+    extend: 'Ext.toolbar.Toolbar',
     alias: 'widget.translation-main-toolbar',
     ui: 'shopware-ui',
 

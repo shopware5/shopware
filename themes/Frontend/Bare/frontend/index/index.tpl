@@ -8,7 +8,7 @@
 {/block}
 
 {block name='frontend_index_header'}
-	{include file='frontend/index/header.tpl'}
+    {include file='frontend/index/header.tpl'}
 {/block}
 
 <body class="{block name="frontend_index_body_classes"}{strip}
@@ -148,7 +148,7 @@
     {/block}
 
 {block name="frontend_index_header_javascript"}
-    <script type="text/javascript">
+    <script type="text/javascript" id="footer--js-inline">
         //<![CDATA[
         {block name="frontend_index_header_javascript_inline"}
             var timeNow = {time() nocache};
@@ -169,7 +169,7 @@
             {rdelim};
 
             var snippets = snippets || {ldelim}
-                'noCookiesNotice': '{s name="IndexNoCookiesNotice"}{/s}'
+                'noCookiesNotice': '{"{s name='IndexNoCookiesNotice'}{/s}"|escape}'
             {rdelim};
 
             var themeConfig = themeConfig || {ldelim}
@@ -187,17 +187,17 @@
                     {/foreach}
                     'articleId': ~~('{$sArticle.articleID}'),
                     'linkDetailsRewritten': '{$sArticle.linkDetailsRewrited}',
-                    'articleName': '{$sArticle.articleName|escape:"javascript"}',
+                    'articleName': '{$sArticle.articleName|escape:"javascript"}{if $sArticle.additionaltext} {$sArticle.additionaltext|escape:"javascript"}{/if}',
                     'imageTitle': '{$sArticle.image.description|escape:"javascript"}',
                     'images': {ldelim}
-						{foreach $sArticle.image.thumbnails as $key => $image}
-							'{$key}': {ldelim}
+                        {foreach $sArticle.image.thumbnails as $key => $image}
+                            '{$key}': {ldelim}
                                 'source': '{$image.source}',
                                 'retinaSource': '{$image.retinaSource}',
                                 'sourceSet': '{$image.sourceSet}'
                             {rdelim},
-						{/foreach}
-					{rdelim}
+                        {/foreach}
+                    {rdelim}
                 {/if}{rdelim}
             {rdelim};
 
@@ -208,7 +208,7 @@
             {rdelim};
         {/block}
         //]]>
-	</script>
+    </script>
 
     {if $theme.additionalJsLibraries}
         {$theme.additionalJsLibraries}

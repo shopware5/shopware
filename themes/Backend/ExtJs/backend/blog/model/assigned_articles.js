@@ -46,7 +46,7 @@ Ext.define('Shopware.apps.Blog.model.AssignedArticles', {
      * @array
      */
     fields: [
-		//{block name="backend/blog/model/assigned_articles/fields"}{/block}
+        //{block name="backend/blog/model/assigned_articles/fields"}{/block}
         { name: 'id', type: 'int' },
         { name: 'name', type: 'string' },
         { name: 'number', type: 'string', mapping: 'mainDetail.number' }

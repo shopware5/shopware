@@ -57,8 +57,8 @@ Ext.define('Shopware.apps.Config.view.tax.Rule', {
             flex:1,
             editor: {
                 xtype: 'config-element-select',
-				queryMode:'local',
-				queryCaching:true,
+                queryMode:'local',
+                queryCaching:true,
                 store: Ext.data.StoreManager.lookup('base.CountryArea').load(),
                 displayField: 'name',
                 valueField: 'id',
@@ -71,8 +71,8 @@ Ext.define('Shopware.apps.Config.view.tax.Rule', {
             flex:1,
             editor: {
                 xtype: 'config-element-select',
-				queryMode:'local',
-				queryCaching:true,
+                queryMode:'local',
+                queryCaching:true,
                 store: Ext.data.StoreManager.lookup('base.Country').load(),
                 displayField:'name',
                 valueField:'id',
@@ -85,8 +85,8 @@ Ext.define('Shopware.apps.Config.view.tax.Rule', {
             flex:1,
             editor: {
                 xtype: 'config-element-select',
-				queryMode:'local',
-				queryCaching:true,
+                queryMode:'local',
+                queryCaching:true,
                 store:Ext.data.StoreManager.lookup('base.CountryState').load(),
                 displayField:'name',
                 valueField:'id',

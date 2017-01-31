@@ -45,7 +45,7 @@ Ext.define('Shopware.apps.Property.model.Group', {
      * @array
      */
     fields : [
-		//{block name="backend/property/model/Group/fields"}{/block}
+        //{block name="backend/property/model/Group/fields"}{/block}
         { name: 'id',         type: 'integer' },
         { name: 'name',       type: 'string' },
         { name: 'filterable', type: 'boolean' },

@@ -34,20 +34,20 @@
  */
 //{block name="backend/tax/model/countries"}
 Ext.define('Shopware.apps.Tax.model.Countries', {
-	extend: 'Ext.data.Model',
-	fields: [
-		//{block name="backend/tax/model/countries/fields"}{/block}
-		'id', 'name', 'areaId'],
-	proxy: {
-		type: 'ajax',
-		api: {
-			read: '{url controller="Tax" action="getCountries"}'
-		},
-		reader: {
-			type: 'json',
-			root: 'data',
+    extend: 'Ext.data.Model',
+    fields: [
+        //{block name="backend/tax/model/countries/fields"}{/block}
+        'id', 'name', 'areaId'],
+    proxy: {
+        type: 'ajax',
+        api: {
+            read: '{url controller="Tax" action="getCountries"}'
+        },
+        reader: {
+            type: 'json',
+            root: 'data',
             totalProperty:'total'
-		}
-	}
+        }
+    }
 });
 //{/block}

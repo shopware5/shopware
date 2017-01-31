@@ -118,5 +118,4 @@
             return $overlay;
         }
     };
-
 })(jQuery);

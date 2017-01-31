@@ -83,4 +83,47 @@ class EnlightLoaderTest extends TestCase
 
         $this->assertFalse($found);
     }
+
+    /**
+     * Test realpath abstraction
+     *
+     * @dataProvider dataProviderRealpath
+     */
+    public function testRealpath($path, $expected)
+    {
+        $oldCWD = getcwd();
+        chdir(__DIR__);
+
+        $result = \Enlight_Loader::realpath($path);
+        $this->assertEquals($expected, $result);
+
+        chdir($oldCWD);
+    }
+
+    /**
+     * Provide test cases
+     *
+     * @return array
+     */
+    public function dataProviderRealpath()
+    {
+        return [
+            // Nonexisting paths
+            ['/nonexisting', false],
+            ['../nonexisting', false],
+            ['nonexisting', false],
+            [' ', false],
+
+            // Relative paths
+            ['', __DIR__],
+            ['./', __DIR__],
+            ['../', dirname(__DIR__)],
+            ['Bundle/MediaBundle/Strategy/../../', __DIR__.'/Bundle'],
+
+            // Absolute paths
+            ['/', '/'],
+            [__DIR__.'/', __DIR__],
+            [__DIR__.'/tests/..', __DIR__],
+        ];
+    }
 }

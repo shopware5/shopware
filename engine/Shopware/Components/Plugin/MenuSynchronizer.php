@@ -24,6 +24,7 @@
 
 namespace Shopware\Components\Plugin;
 
+use Doctrine\DBAL\Connection;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Snippet\Writer\DatabaseWriter;
 use Shopware\Models\Menu\Menu;
@@ -36,7 +37,6 @@ class MenuSynchronizer
      * @var ModelManager
      */
     private $em;
-
 
     /**
      * @var \Shopware\Models\Menu\Repository
@@ -55,20 +55,27 @@ class MenuSynchronizer
     /**
      * @param Plugin $plugin
      * @param array $menu
+     * @throws \InvalidArgumentException
      */
     public function synchronize(Plugin $plugin, array $menu)
     {
+        $menuNames = array_column($menu, 'name');
+
         $items = [];
         foreach ($menu as $menuItem) {
+            $childMenuNames = array_column($menuItem['children'], 'name');
+            if ($childMenuNames) {
+                $menuNames = array_merge($menuNames, $childMenuNames);
+            }
             if ($menuItem['isRootMenu']) {
                 $parent = null;
             } else {
                 if (!isset($menuItem['parent'])) {
-                    throw new \InvalidArgumentException("Root Menu Item must provide parent element");
+                    throw new \InvalidArgumentException('Root Menu Item must provide parent element');
                 }
                 $parent = $this->menuRepository->findOneBy($menuItem['parent']);
                 if (!$parent) {
-                    throw new \InvalidArgumentException(sprintf("Unable to find parent for query %s", print_r($menuItem['parent'], true)));
+                    throw new \InvalidArgumentException(sprintf('Unable to find parent for query %s', print_r($menuItem['parent'], true)));
                 }
             }
 
@@ -76,6 +83,7 @@ class MenuSynchronizer
         }
 
         $this->em->flush($items);
+        $this->removeNotExistingEntries($plugin->getId(), $menuNames);
     }
 
     /**
@@ -85,6 +93,7 @@ class MenuSynchronizer
      */
     private function saveMenuTranslation(array $labels, $name)
     {
+        $databaseWriter = new DatabaseWriter($this->em->getConnection());
         foreach ($labels as $locale => $text) {
             if ($locale === 'en') {
                 $locale = 'en_GB';
@@ -96,7 +105,6 @@ class MenuSynchronizer
 
             $locale = Shopware()->Models()->getRepository(Locale::class)->findOneBy(['locale' => $locale]);
 
-            $databaseWriter = new DatabaseWriter(Shopware()->Models()->getConnection());
             $databaseWriter->write([$name => $text], 'backend/index/view/main', $locale->getId(), 1);
         }
     }
@@ -106,6 +114,7 @@ class MenuSynchronizer
      * @param Menu|null $parent
      * @param array $menuItem
      * @return Menu
+     * @throws \RuntimeException
      */
     private function createMenuItem(Plugin $plugin, Menu $parent = null, array $menuItem)
     {
@@ -114,7 +123,7 @@ class MenuSynchronizer
         if ($plugin->getId()) {
             $item = $this->menuRepository->findOneBy([
                 'pluginId' => $plugin->getId(),
-                'label'    =>  $menuItem['name'],
+                'label' => $menuItem['name'],
             ]);
         }
 
@@ -126,7 +135,7 @@ class MenuSynchronizer
         $item->setPlugin($plugin);
 
         if (!isset($menuItem['label']['en']) || empty($menuItem['label']['en'])) {
-            throw new \RuntimeException("Label with lang en required");
+            throw new \RuntimeException('Label with lang en required');
         }
         $item->setLabel($menuItem['name']);
 
@@ -145,17 +154,17 @@ class MenuSynchronizer
         $item->setClass($menuItem['class']);
 
         if (isset($menuItem['active'])) {
-            $item->setActive((bool)$menuItem['active']);
+            $item->setActive((bool) $menuItem['active']);
         } else {
             $item->setActive(true);
         }
 
         $item->setPosition(
-            isset($menuItem['position']) ? (int)$menuItem['position'] : 0
+            isset($menuItem['position']) ? (int) $menuItem['position'] : 0
         );
 
         if (isset($menuItem['controller'])) {
-            $this->saveMenuTranslation($menuItem['label'], $menuItem['controller']);
+            $this->saveMenuTranslation($menuItem['label'], $menuItem['controller'] . '/' . $menuItem['action']);
         }
 
         if (isset($menuItem['children'])) {
@@ -167,5 +176,20 @@ class MenuSynchronizer
         $this->em->persist($item);
 
         return $item;
+    }
+
+    /**
+     * @param int $pluginId
+     * @param array $menuNames
+     */
+    private function removeNotExistingEntries($pluginId, array $menuNames)
+    {
+        $builder = $this->em->getConnection()->createQueryBuilder();
+        $builder->delete('s_core_menu');
+        $builder->where('name NOT IN (:menuNames)');
+        $builder->andWhere('pluginID = :pluginId');
+        $builder->setParameter(':menuNames', $menuNames, Connection::PARAM_STR_ARRAY);
+        $builder->setParameter(':pluginId', $pluginId);
+        $builder->execute();
     }
 }

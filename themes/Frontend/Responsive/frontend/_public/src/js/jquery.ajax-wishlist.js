@@ -183,7 +183,7 @@
                 $btn = me.$wishlistButton,
                 animate = 'transition';
 
-            if(me.$counter.length) {
+            if (me.$counter.length) {
                 me.$counter.html(count);
                 return me.$counter;
             }

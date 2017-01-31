@@ -30,7 +30,6 @@
             </call>
         </service>
 
-
         <!-- FingersCrossed handler-->
         <service id="monolog.handler.fingers_crossed" class="Monolog\Handler\FingersCrossedHandler" public="false">
             <argument type="service" id="monolog.handler.rotating_file" />
@@ -72,5 +71,7 @@
         <service id="debuglogger" class="Shopware\Components\Logger">
             <argument>debug</argument>
         </service>
+
+        <service id="shopware.log.fileparser" class="Shopware\Components\Log\Parser\LogfileParser"/>
     </services>
  </container>

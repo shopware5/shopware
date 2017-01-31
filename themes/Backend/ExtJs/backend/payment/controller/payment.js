@@ -148,14 +148,14 @@ Ext.define('Shopware.apps.Payment.controller.Payment', {
             callback: function(){
                 var matches = [];
                 //Selects each country and sets the surcharge
-				if(recordStore){
-					Ext.each(recordStore.data.items, function(item){
-						var tmpRecord = store.getById(item.get('id'));
-						matches.push(tmpRecord);
-						tmpRecord.data.surcharge = item.get('surcharge');
-					});
-					grid.getSelectionModel().select(matches);
-				}
+                if(recordStore){
+                    Ext.each(recordStore.data.items, function(item){
+                        var tmpRecord = store.getById(item.get('id'));
+                        matches.push(tmpRecord);
+                        tmpRecord.data.surcharge = item.get('surcharge');
+                    });
+                    grid.getSelectionModel().select(matches);
+                }
             }
         });
     },
@@ -166,19 +166,19 @@ Ext.define('Shopware.apps.Payment.controller.Payment', {
      */
     onCreatePayment:function(btn){
         var win = btn.up('window'),
-			tabPanel = win.down('tabpanel'),
-			formPanel = win.down('form'),
+            tabPanel = win.down('tabpanel'),
+            formPanel = win.down('form'),
             paymentModel = Ext.create('Shopware.apps.Payment.model.Payment'),
-			gridToolBar = win.down('toolbar[name=gridToolBar]'),
-			btnSave = gridToolBar.down('button[name=save]');
+            gridToolBar = win.down('toolbar[name=gridToolBar]'),
+            btnSave = gridToolBar.down('button[name=save]');
 
-		paymentModel.set('source', 1);
+        paymentModel.set('source', 1);
 
-		tabPanel.setDisabled(false);
-		tabPanel.setActiveTab(0);
-		formPanel.loadRecord(paymentModel);
+        tabPanel.setDisabled(false);
+        tabPanel.setActiveTab(0);
+        formPanel.loadRecord(paymentModel);
         this.getAttributeForm().loadAttribute(null);
-		btnSave.enable(true);
+        btnSave.enable(true);
     },
 
     /**
@@ -191,13 +191,13 @@ Ext.define('Shopware.apps.Payment.controller.Payment', {
      */
     onSavePayment:function(generalForm, countryGrid, subShopGrid, surchargeGrid){
         var record = generalForm.getRecord(),
-			win = generalForm.up('window'),
-			tree = win.down('treepanel'),
-			paymentStore = tree.getStore(),
-			tabPanel = win.down('tabpanel'),
-			me = this;
+            win = generalForm.up('window'),
+            tree = win.down('treepanel'),
+            paymentStore = tree.getStore(),
+            tabPanel = win.down('tabpanel'),
+            me = this;
 
-		generalForm.getForm().updateRecord(record);
+        generalForm.getForm().updateRecord(record);
 
         var surchargeStore = Ext.clone(record['getCountriesStore']),
             surchargeString = "";
@@ -256,10 +256,10 @@ Ext.define('Shopware.apps.Payment.controller.Payment', {
 
                 if(operation.success){
                     me.getAttributeForm().saveAttribute(record.get('id'));
-					paymentStore.load();
+                    paymentStore.load();
 
-					//tabPanel, newTab, oldTab, formPanel
-					me.onChangeTab(tabPanel, tabPanel.getActiveTab(), '', generalForm);
+                    //tabPanel, newTab, oldTab, formPanel
+                    me.onChangeTab(tabPanel, tabPanel.getActiveTab(), '', generalForm);
                     Shopware.Notification.createGrowlMessage('{s name=update_growl_message_subject}Update payment{/s}', "{s name=update_growl_message_content}The payment was successfully updated.{/s}", '{s name=payment_title}{/s}');
                 } else {
                     Shopware.Notification.createGrowlMessage('{s name=update_growl_message_subject}Update payment{/s}', rawData.errorMsg, '{s name=payment_title}{/s}');
@@ -286,11 +286,11 @@ Ext.define('Shopware.apps.Payment.controller.Payment', {
 
         surchargeGrid.reconfigure(Ext.clone(record.getCountriesStore));
 
-		if(record.get('source') == 1){
-			btnDelete.enable();
-		}else{
-			btnDelete.disable();
-		}
+        if(record.get('source') == 1){
+            btnDelete.enable();
+        }else{
+            btnDelete.disable();
+        }
         tabPanel.setDisabled(false);
         btnSave.enable(true);
         tabPanel.setActiveTab(0);

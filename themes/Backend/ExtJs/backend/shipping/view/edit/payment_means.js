@@ -122,16 +122,16 @@ Ext.define('Shopware.apps.Shipping.view.edit.PaymentMeans', {
                 fromStore:me.availablePayments,
                 buttons:['add', 'remove'],
                 gridHeight:200,
-				fromColumns :[{
-					text: 'name',
-					flex: 1,
-					dataIndex: 'description'
-				}],
-				toColumns :[{
-					text: 'name',
-					flex: 1,
-					dataIndex: 'description'
-				}],
+                fromColumns :[{
+                    text: 'name',
+                    flex: 1,
+                    dataIndex: 'description'
+                }],
+                toColumns :[{
+                    text: 'name',
+                    flex: 1,
+                    dataIndex: 'description'
+                }],
                 /**
                  * FromTitle which holds Title on the Left Side
                  *
