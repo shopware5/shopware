@@ -410,7 +410,7 @@ class sAdmin
 
         $getPaymentMeans = Shopware()->Container()->get('shopware_storefront.payment_gateway')->getList(array_column($getPaymentMeans, 'id'), $this->contextService->getShopContext());
 
-        $getPaymentMeans = array_map(function($payment) {
+        $getPaymentMeans = array_map(function ($payment) {
             return Shopware()->Container()->get('legacy_struct_converter')->convertPaymentStruct($payment);
         }, $getPaymentMeans);
 
