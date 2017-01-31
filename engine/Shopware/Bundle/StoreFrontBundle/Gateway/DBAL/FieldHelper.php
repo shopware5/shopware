@@ -795,6 +795,45 @@ class FieldHelper
     }
 
     /**
+     * Returns an array with all required payment fields.
+     * Requires that the s_core_paymentmeans table is included with table alias 'payment'
+     *
+     * @return array
+     */
+    public function getPaymentFields()
+    {
+        $fields = [
+            'payment.id as __payment_id',
+            'payment.name as __payment_name',
+            'payment.description as __payment_description',
+            'payment.template as __payment_template',
+            'payment.class as __payment_class',
+            'payment.table as __payment_table',
+            'payment.hide as __payment_hide',
+            'payment.additionaldescription as __payment_additionaldescription',
+            'payment.debit_percent as __payment_debit_percent',
+            'payment.surcharge as __payment_surcharge',
+            'payment.surchargestring as __payment_surchargestring',
+            'payment.position as __payment_position',
+            'payment.active as __payment_active',
+            'payment.esdactive as __payment_esdactive',
+            'payment.embediframe as __payment_embediframe',
+            'payment.hideprospect as __payment_hideprospect',
+            'payment.action as __payment_action',
+            'payment.pluginID as __payment_pluginID',
+            'payment.source as __payment_source',
+            'payment.mobile_inactive as __payment_mobile_inactive',
+        ];
+
+        $fields = array_merge(
+            $fields,
+            $this->getTableFields('s_core_paymentmeans_attributes', 'paymentAttribute')
+        );
+
+        return $fields;
+    }
+
+    /**
      * Joins the translation table and selects the objectdata for the provided join conditions
      *
      * @param string $fromPart Table which uses as from part
@@ -1044,5 +1083,15 @@ class FieldHelper
     public function addProductStreamTranslation(QueryBuilder $query, ShopContextInterface $context)
     {
         $this->addTranslation('stream', 'productStream', $query, $context);
+    }
+
+    /**
+     * @param QueryBuilder $query
+     * @param ShopContextInterface $context
+     */
+    public function addPaymentTranslation(QueryBuilder $query, ShopContextInterface $context)
+    {
+        $this->addTranslation('payment', 'config_payment', $query, $context, '1');
+        $this->addTranslation('paymentAttribute', 's_core_paymentmeans_attributes', $query, $context, 'paymentAttribute.paymentmeanID');
     }
 }

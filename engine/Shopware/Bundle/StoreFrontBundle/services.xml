@@ -282,6 +282,12 @@
             <argument type="service" id="shopware_storefront.category_hydrator_dbal"/>
         </service>
 
+        <service id="shopware_storefront.payment_gateway" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\PaymentGateway">
+            <argument type="service" id="dbal_connection"/>
+            <argument type="service" id="shopware_storefront.field_helper_dbal"/>
+            <argument type="service" id="shopware_storefront.payment_hydrator_dbal"/>
+        </service>
+
         <!-- Helper classes -->
         <service id="shopware_storefront.field_helper_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\FieldHelper">
             <argument type="service" id="dbal_connection"/>
@@ -382,7 +388,12 @@
 
         <service id="shopware_storefront.template_hydrator_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\TemplateHydrator" />
         <service id="shopware_storefront.currency_hydrator_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\CurrencyHydrator" />
+
         <service id="shopware_storefront.locale_hydrator_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\LocaleHydrator" />
+
+        <service id="shopware_storefront.payment_hydrator_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\PaymentHydrator">
+            <argument type="service" id="shopware_storefront.attribute_hydrator_dbal"/>
+        </service>
 
         <service id="shopware_storefront.shop_gateway_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\ShopGateway">
             <argument type="service" id="shopware_storefront.shop_hydrator_dbal" />

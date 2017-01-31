@@ -194,7 +194,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         $this->assertInternalType('array', $result['checkPayment']);
         $this->assertCount(2, $result['checkPayment']);
         $this->assertInternalType('array', $result['paymentData']);
-        $this->assertCount(20, $result['paymentData']);
+        $this->assertCount(21, $result['paymentData']);
         $this->assertInternalType('boolean', $result['sProcessed']);
         $this->assertTrue($result['sProcessed']);
         $this->assertInternalType('object', $result['sPaymentObject']);
