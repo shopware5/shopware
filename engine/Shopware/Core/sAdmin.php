@@ -294,8 +294,13 @@ class sAdmin
             $data = ['id' => $resetPayment];
         }
 
-        $data = Shopware()->Container()->get('shopware_storefront.payment_gateway')->getList([$data['id']], $this->contextService->getShopContext());
-        $data = Shopware()->Container()->get('legacy_struct_converter')->convertPaymentStruct(current($data));
+        if (isset($data['id'])) {
+            $data = Shopware()->Container()->get('shopware_storefront.payment_gateway')->getList([$data['id']], $this->contextService->getShopContext());
+
+            if (!empty($data)) {
+                $data = Shopware()->Container()->get('legacy_struct_converter')->convertPaymentStruct(current($data));
+            }
+        }
 
         $data = $this->eventManager->filter(
             'Shopware_Modules_Admin_GetPaymentMeanById_DataFilter',
