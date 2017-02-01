@@ -29,6 +29,7 @@ The service `shopware_media.optimizer_service` optimizes files using external to
 
 * Fixed article api resource when creating a new article with new configurator options and an image mapping for this new options
 * Added cronjob registration via `Resources/cronjob.xml` file
+* Deprecated Smarty modifer `rewrite`
 
 ## 5.2.14
 
