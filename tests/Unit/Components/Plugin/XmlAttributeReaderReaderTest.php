@@ -26,7 +26,7 @@ class XmlAttributeReaderReaderTest extends TestCase
                         'displayInBackend' => true,
                         'custom' => true,
                         'updateDependingTables' => true,
-                        'arrayStore' =>
+                        'store' =>
                             [
                                 0 =>
                                     [
@@ -39,7 +39,7 @@ class XmlAttributeReaderReaderTest extends TestCase
                                         'value' => 'No',
                                     ],
                             ],
-                        'defaultValue' => NULL,
+                        'defaultValue' => null,
                     ],
             ],
     ];

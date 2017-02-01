@@ -11,10 +11,10 @@
             <translatable>true</translatable>
             <custom>true</custom>
             <updateDependingTables>true</updateDependingTables>
-            <arrayStore>
+            <store>
                 <option key="1">Yes</option>
                 <option key="0">No</option>
-            </arrayStore>
+            </store>
         </attribute>
     </table>
 </tables>

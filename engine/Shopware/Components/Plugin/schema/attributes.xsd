@@ -29,7 +29,7 @@
             <xsd:element name="defaultValue" type="xsd:string" minOccurs="0" maxOccurs="1"/>
             <xsd:element name="entity" type="xsd:string" minOccurs="0" maxOccurs="1"/>
             <xsd:element name="position" type="xsd:int" minOccurs="0" maxOccurs="1"/>
-            <xsd:element name="arrayStore" type="arrayStore" minOccurs="0" maxOccurs="1"/>
+            <xsd:element name="store" type="arrayStore" minOccurs="0" maxOccurs="1"/>
         </xsd:sequence>
         <xsd:attribute name="name" type="xsd:string" use="required"/>
         <xsd:attribute name="type" type="types" use="required"/>

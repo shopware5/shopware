@@ -93,7 +93,7 @@ class XmlAttributeReader
             $entryArray['entity'] = $this->getFirstChild($child, 'entity');
             $entryArray['position'] = $this->getFirstChild($child, 'position');
 
-            $arrayStore = $this->getChildren($child, 'arrayStore');
+            $arrayStore = $this->getChildren($child, 'store');
             if ($arrayStore[0]) {
                 $entryArray['arrayStore'] = $this->parseArrayStore($this->getChildren($arrayStore[0], 'option'));
             }
