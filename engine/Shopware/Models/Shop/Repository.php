@@ -376,10 +376,18 @@ class Repository extends ModelRepository
         }
 
         $builder = $this->getActiveQueryBuilder();
-        $builder->andWhere('shop.hosts LIKE :host1 OR shop.hosts LIKE :host2 OR shop.hosts LIKE :host3')
+        $builder->andWhere(
+            $builder->expr()->orX(
+                'shop.hosts LIKE :host1',
+                'shop.hosts LIKE :host2',
+                'shop.hosts LIKE :host3',
+                'shop.hosts LIKE :host4'
+            )
+        )
             ->setParameter('host1', "%\n" . $host . "\n%")
             ->setParameter('host2', $host . "\n%")
-            ->setParameter('host3', "%\n" . $host);
+            ->setParameter('host3', "%\n" . $host)
+            ->setParameter('host4', $host);
 
         $shop = $builder->getQuery()->getOneOrNullResult();
 
