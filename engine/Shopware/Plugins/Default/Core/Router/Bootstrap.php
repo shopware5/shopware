@@ -331,9 +331,17 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
             return;
         }
 
+        // Start session in frontend controllers
+        $session = Shopware()->Session();
+
+        if ($cookieKey !== null) {
+            $session->$cookieKey = $cookieValue;
+        }
+
         // Upgrade currency
-        if ($request->getCookie('currency') !== null) {
-            $currencyValue = $request->getCookie('currency');
+        if ( ($request->getCookie('currency') !== null) ||
+            (isset($session->sBasketCurrency) && $shop->getCurrency()->getId() != $session->sBasketCurrency && Shopware()->Modules()->Admin()->sCheckUser()) ) {
+            $currencyValue = ($request->getCookie('currency') !== null) ? $request->getCookie('currency'): $session->sBasketCurrency;
             foreach ($shop->getCurrencies() as $currency) {
                 if ($currencyValue == $currency->getId()
                     || $currencyValue == $currency->getCurrency()) {
@@ -341,13 +349,6 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
                     break;
                 }
             }
-        }
-
-        // Start session in frontend controllers
-        $session = Shopware()->Session();
-
-        if ($cookieKey !== null) {
-            $session->$cookieKey = $cookieValue;
         }
 
         // Refresh basket on currency change

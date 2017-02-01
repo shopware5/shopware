@@ -85,13 +85,13 @@ class Session
         /** @var $shop \Shopware\Models\Shop\Shop */
         $shop = $container->get('Shop');
 
-        $name = 'session-' . $shop->getId();
-        $sessionOptions['name'] = $name;
-
         $mainShop = $shop->getMain() ?: $shop;
         if ($mainShop->getAlwaysSecure()) {
             $sessionOptions['cookie_secure'] = true;
         }
+
+        $name = 'session-' . $mainShop->getId();
+        $sessionOptions['name'] = $name;
 
         if ($saveHandler) {
             session_set_save_handler($saveHandler);
