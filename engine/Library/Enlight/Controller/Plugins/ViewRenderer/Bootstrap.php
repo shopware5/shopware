@@ -287,7 +287,9 @@ class Enlight_Controller_Plugins_ViewRenderer_Bootstrap extends Enlight_Plugin_B
     public function setNoRender($flag = true)
     {
         $this->noRender = $flag ? true : false;
-        ;
+        if ($this->action && $this->action->View()) {
+            $this->action->View()->setTemplate(null);
+        }
         return $this;
     }
 

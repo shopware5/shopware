@@ -709,8 +709,6 @@ class Shop extends ModelEntity
             }
         }
 
-        $container->get('shopware_storefront.context_service')->initializeShopContext();
-
         if ($this->getTemplate() !== null) {
             /** @var $templateManager \Enlight_Template_Manager */
             $templateManager = $container->get('Template');
