@@ -158,6 +158,7 @@ class AddressRepository extends ModelRepository
 
         $builder->select([
             'address',
+            'customer',
             'attribute',
             'country',
             'state'
@@ -166,7 +167,8 @@ class AddressRepository extends ModelRepository
         $builder->from('Shopware\Models\Customer\Address', 'address')
             ->leftJoin('address.country', 'country')
             ->leftJoin('address.state', 'state')
-            ->leftJoin('address.attribute', 'attribute');
+            ->leftJoin('address.attribute', 'attribute')
+            ->join('address.customer', 'customer');
 
         if (!empty($filterBy)) {
             $builder->addFilter($filterBy);
