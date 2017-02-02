@@ -66,12 +66,12 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.GroupEdit', {
      */
     autoShow:false,
 
-    width: 700,
+    width: 940,
     footerButton: false,
     modal: true,
-    stateful:true,
-    layout: 'anchor',
-    autoScroll: true,
+    stateful: true,
+    autoScroll: true, 
+    layout: 'fit',
     stateId:'shopware-article-group-window',
 
     /**
@@ -160,7 +160,9 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.GroupEdit', {
         });
 
         me.formPanel = Ext.create('Ext.form.Panel', {
+            layout: 'anchor',
             bodyPadding: 20,
+            autoScroll: true,
             plugins: [{
                 ptype: 'translation',
                 translationType: 'configuratorgroup'
@@ -176,7 +178,9 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.GroupEdit', {
         });
 
         if (me.record) {
-            me.attributeForm.loadAttribute(me.record.get('id'));
+            me.attributeForm.loadAttribute(me.record.get('id'), function () {
+                me.attributeForm.setHeight(me.attributeForm.fieldSet.getHeight());
+            });
         }
 
         me.formPanel.add(me.attributeForm);
@@ -200,7 +204,7 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.GroupEdit', {
                     cls:'primary',
                     text: me.snippets.save,
                     handler: function() {
-                        me.fireEvent('saveGroup', me.record,me.formPanel, me);
+                        me.fireEvent('saveGroup', me.record, me.formPanel, me);
                     }
                 },
                 {

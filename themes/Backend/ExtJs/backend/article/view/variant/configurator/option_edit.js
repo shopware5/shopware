@@ -64,13 +64,13 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.OptionEdit', {
      */
     autoShow:false,
 
-    width: 700,
+    width: 940,
     modal: true,
-    stateful:true,
-    layout: 'anchor',
+    stateful: true,
     autoScroll: true,
-
+    layout: 'fit',
     footerButton: false,
+    stateId:'shopware-article-option-window',
 
     /**
      * Contains all snippets for the component
@@ -146,6 +146,7 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.OptionEdit', {
         me.formPanel = Ext.create('Ext.form.Panel', {
             layout: 'anchor',
             bodyPadding: 20,
+            autoScroll: true,
             items: [ nameField ],
             plugins: [{
                 ptype: 'translation',
@@ -161,7 +162,9 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.OptionEdit', {
         });
 
         if (me.record) {
-            me.attributeForm.loadAttribute(me.record.get('id'));
+            me.attributeForm.loadAttribute(me.record.get('id'), function () {
+                me.attributeForm.setHeight(me.attributeForm.fieldSet.getHeight());
+            });
         }
 
         me.formPanel.add(me.attributeForm);
