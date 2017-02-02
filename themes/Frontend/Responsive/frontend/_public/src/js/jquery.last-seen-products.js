@@ -164,21 +164,19 @@
                 itemKey = 'lastSeenProducts-' + opts.shopId + '-' + opts.baseUrl,
                 productsJson = me.storage.getItem(itemKey),
                 products = productsJson ? JSON.parse(productsJson) : [],
-                len = Math.min(opts.productLimit, products.length),
-                i = 0;
+                len = Math.min(opts.productLimit, products.length);
 
             if (len > 0) {
                 me.$el.removeClass('is--hidden');
             }
 
-            for (; i < len; i++) {
-                if (products[i] && me.opts.currentArticle && products[i].articleId === me.opts.currentArticle.articleId) {
-                    len++;
-                    continue;
+            $.each(products, function(i, product) {
+                if (product.articleId === opts.currentArticle.articleId) {
+                    return;
                 }
 
-                me.$container.append(me.createTemplate(products[i]));
-            }
+                me.$container.append(me.createTemplate(product));
+            });
 
             me.productSlider.initSlider();
 
