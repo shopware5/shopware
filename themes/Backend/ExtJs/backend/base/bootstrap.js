@@ -23,6 +23,7 @@
 
 {* Include overrides *}
 {include file='ExtJs/overrides/Ext.Base.js'}
+{include file='ExtJs/overrides/Ext.grid.header.Container.js'}
 {include file='ExtJs/overrides/Ext.ClassManager.js'}
 {include file='ExtJs/overrides/Ext.data.proxy.Server.js'}
 {include file='ExtJs/overrides/Ext.app.Application.js'}
