@@ -147,6 +147,13 @@
         </div>
     {/block}
 
+    {* If required add the cookiePermission hint *}
+    {block name='frontend_index_cookie_permission'}
+        {if {config name="show_cookie_note"}}
+            {include file="frontend/_includes/cookie_permission_note.tpl"}
+        {/if}
+    {/block}
+
 {block name="frontend_index_header_javascript"}
     <script type="text/javascript" id="footer--js-inline">
         //<![CDATA[
@@ -215,14 +222,6 @@
     {/if}
 {/block}
 
-{* Include jQuery and all other javascript files at the bottom of the page *}
-{block name="frontend_index_header_javascript_jquery_lib"}
-    {compileJavascript timestamp={themeTimestamp} output="javascriptFiles"}
-    {foreach $javascriptFiles as $file}
-        <script src="{$file}"></script>
-    {/foreach}
-{/block}
-
 {block name="frontend_index_header_javascript_jquery"}
     {* Add the partner statistics widget, if configured *}
     {if !{config name=disableShopwareStatistics} }
@@ -230,11 +229,12 @@
     {/if}
 {/block}
 
-{* If required add the cookiePermission hint *}
-{block name='frontend_index_cookie_permission'}
-    {if {config name="show_cookie_note"}}
-        {include file="frontend/_includes/cookie_permission_note.tpl"}
-    {/if}
+{* Include jQuery and all other javascript files at the bottom of the page *}
+{block name="frontend_index_header_javascript_jquery_lib"}
+    {compileJavascript timestamp={themeTimestamp} output="javascriptFiles"}
+    {foreach $javascriptFiles as $file}
+        <script{if $theme.asyncJavascriptLoading} async{/if} src="{$file}"></script>
+    {/foreach}
 {/block}
 
 </body>

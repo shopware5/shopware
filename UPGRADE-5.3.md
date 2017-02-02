@@ -47,7 +47,7 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Added smarty function `convertEmotion` to convert an emotion struct to the legacy array structure
 * Added method `Shopware\Bundle\MediaBundle\MediaServiceInterface::listContents()`
 * Added method `Shopware\Bundle\MediaBundle\MediaService::listContents()`
-
+* Added local path to `@font-face` integration of the Open Sans font
 
 ### Changes
 
@@ -75,6 +75,9 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Removed template `frontend/forms/elements.tpl` to `frontend/forms/form-elements.tpl`
     * Renamed smarty block `frontend_forms_index_elements` to `frontend_forms_index_form_elements`
     * Renamed all smarty blocks `frontend_forms_elements*` to `frontend_forms_form_elements*`
+* Changed the integration of `modernizr.js` and added it to the compressed main JavaScript files
+* Changed the script tag for the generated JavaScript file for asynchronous loading, can be changed in theme configuration
+* Changed the inline script for the statistics update to vanilla JavaScript
 
 ### Removals
 
@@ -213,6 +216,7 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Removed method `Shopware_Controllers_Widgets_Emotion::getArticleSlider()`, has been replaced by `Shopware\Bundle\EmotionBundle\ComponentHandler\ArticleSliderComponentHandler`
 * Removed method `Shopware_Controllers_Widgets_Emotion::getHtml5Video()`, has been replaced by `Shopware\Bundle\EmotionBundle\ComponentHandler\Html5VideoComponentHandler`
 * Removed LESS variable `@zindex-fancy-select`
+* Removed unused `@font-face` for "extra-bold" and "light" of the Open Sans font type
 * Removed select field replacement via JavaScript
     * Removed the jQuery plugin `src/js/jquery.selectbox-replacement.js` completely
     * Removed LESS variable `@zindex-fancy-select`
