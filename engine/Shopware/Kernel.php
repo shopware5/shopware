@@ -563,10 +563,7 @@ class Kernel implements HttpKernelInterface
         $loader->load('FormBundle/services.xml');
         $loader->load('AccountBundle/services.xml');
         $loader->load('AttributeBundle/services.xml');
-
-        if ($this->isElasticSearchEnabled()) {
-            $loader->load('SearchBundleES/services.xml');
-        }
+        $loader->load('SearchBundleES/services.xml');
 
         if (is_file($file = __DIR__ . '/Components/DependencyInjection/services_local.xml')) {
             $loader->load($file);
@@ -590,10 +587,7 @@ class Kernel implements HttpKernelInterface
         $container->addCompilerPass(new AddConsoleCommandPass());
         $container->addCompilerPass(new MediaAdapterCompilerPass());
         $container->addCompilerPass(new MediaOptimizerCompilerPass());
-
-        if ($this->isElasticSearchEnabled()) {
-            $container->addCompilerPass(new SearchHandlerCompilerPass());
-        }
+        $container->addCompilerPass(new SearchHandlerCompilerPass());
 
         $this->loadPlugins($container);
     }
