@@ -57,7 +57,9 @@ Ext.override(Ext.grid.header.Container,
              * cell renderer. Therefore we still have the ability to unescape
              * them in a custom renderer.
              */
-            value = Ext.String.htmlEncode(value);
+            if (typeof value === "string") {
+                value = Ext.String.htmlEncode(value);
+            }
 
             if (typeof renderer == "function") {
                 value = renderer.call(
