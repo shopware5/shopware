@@ -429,11 +429,15 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
             $expiredPlugins
         );
 
-        /** @var PluginStoreService $pluginStoreService */
-        $pluginStoreService = $this->get('shopware_plugininstaller.plugin_service_store_production');
-        $plugins = $pluginStoreService->getPlugins($context);
+        try {
+            /** @var PluginStoreService $pluginStoreService */
+            $pluginStoreService = $this->get('shopware_plugininstaller.plugin_service_store_production');
+            $plugins = $pluginStoreService->getPlugins($context);
 
-        $this->View()->assign(['success' => true, 'data' => array_values($plugins)]);
+            $this->View()->assign(['success' => true, 'data' => array_values($plugins)]);
+        } catch (\Exception $e) {
+            $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);
+        }
     }
 
     public function checkLicencePluginAction()
