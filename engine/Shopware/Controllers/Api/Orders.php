@@ -73,6 +73,25 @@ class Shopware_Controllers_Api_Orders extends Shopware_Controllers_Api_Rest
     }
 
     /**
+     * Create new order
+     *
+     * POST /api/orders
+     */
+    public function postAction()
+    {
+        $order = $this->resource->create($this->Request()->getPost());
+
+        $location = $this->apiBaseUrl . 'orders/' . $order->getId();
+        $data = [
+            'id'       => $order->getId(),
+            'location' => $location
+        ];
+
+        $this->View()->assign(['success' => true, 'data' => $data]);
+        $this->Response()->setHeader('Location', $location);
+    }
+
+    /**
      * Update order
      *
      * PUT /api/orders/{id}
