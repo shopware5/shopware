@@ -131,7 +131,7 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
 
         if (!empty(Shopware()->Config()->InquiryValue)) {
             $this->View()->sInquiry = $this->Front()->Router()->assemble(array(
-                'sViewport' => 'support',
+                'sViewport' => 'forms',
                 'sFid' => Shopware()->Config()->InquiryID,
                 'sInquiry' => 'detail',
                 'sOrdernumber' => $article['ordernumber']

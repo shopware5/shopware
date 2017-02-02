@@ -105,7 +105,7 @@ Ext.define('Shopware.apps.Form.view.main.Formpanel', {
             names = [];
 
         if (record !== undefined) {
-            linkToForm =  '{s name=label_linktoform}Link to Form{/s}: ' + 'shopware.php?sViewport=ticket&sFid=' + record.get('id');
+            linkToForm =  '{s name=label_linktoform}Link to Form{/s}: ' + 'shopware.php?sViewport=forms&sFid=' + record.get('id');
 
             record.getFields().each(function(item) {
                 /* {literal} */

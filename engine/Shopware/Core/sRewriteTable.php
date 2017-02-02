@@ -280,10 +280,10 @@ class sRewriteTable
             LEFT JOIN s_cms_static cs
               ON ru.org_path LIKE CONCAT('sViewport=custom&sCustom=', cs.id)
             LEFT JOIN s_cms_support ct
-              ON ru.org_path LIKE CONCAT('sViewport=ticket&sFid=', ct.id)
+              ON ru.org_path LIKE CONCAT('sViewport=forms&sFid=', ct.id)
             WHERE (
                 ru.org_path LIKE 'sViewport=custom&sCustom=%'
-                OR ru.org_path LIKE 'sViewport=ticket&sFid=%'
+                OR ru.org_path LIKE 'sViewport=forms&sFid=%'
                 OR ru.org_path LIKE 'sViewport=campaign&sCampaign=%'
                 OR ru.org_path LIKE 'sViewport=content&sContent=%'
             )
@@ -825,7 +825,7 @@ class sRewriteTable
             ->getListQuery(array(), array(), $offset, $limit)->getArrayResult();
 
         foreach ($formListData as $form) {
-            $org_path = 'sViewport=ticket&sFid=' . $form['id'];
+            $org_path = 'sViewport=forms&sFid=' . $form['id'];
             $this->data->assign('form', $form);
             $path = $this->template->fetch('string:' . $this->config->get('seoFormRouteTemplate'), $this->data);
             $path = $this->sCleanupPath($path);

@@ -1199,7 +1199,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
      */
     public function getInquiryLink()
     {
-        return Shopware()->Config()->get('sBASEFILE').'?sViewport=support&sFid='.Shopware()->Config()->get('sINQUIRYID').'&sInquiry=basket';
+        return Shopware()->Config()->get('sBASEFILE').'?sViewport=forms&sFid='.Shopware()->Config()->get('sINQUIRYID').'&sInquiry=basket';
     }
 
     /**

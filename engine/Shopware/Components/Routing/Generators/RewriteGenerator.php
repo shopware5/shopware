@@ -226,7 +226,8 @@ class RewriteGenerator implements GeneratorListInterface
                 break;
             case 'support':
             case 'ticket':
-                $orgQuery['sViewport'] = 'ticket';
+            case 'forms':
+                $orgQuery['sViewport'] = 'forms';
                 if (isset($query['sFid'])) {
                     $orgQuery['sFid'] = $query['sFid'];
                 }

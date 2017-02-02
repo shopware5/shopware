@@ -75,6 +75,7 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Removed template `frontend/forms/elements.tpl` to `frontend/forms/form-elements.tpl`
     * Renamed smarty block `frontend_forms_index_elements` to `frontend_forms_index_form_elements`
     * Renamed all smarty blocks `frontend_forms_elements*` to `frontend_forms_form_elements*`
+* Changed seo url of forms from `sViewport=ticket` to `sViewport=forms`
 
 ### Removals
 
@@ -167,6 +168,7 @@ This changelog references changes done in Shopware 5.3 patch versions.
         * Also removed `Zend_Validate_File_*`
 * Removed method `Shopware\Components\Model\ModelManager::__call()`
 * Removed class `Enlight_Bootstrap`
+* Removed class `Shopware_Controllers_Frontend_Ticket`
 * Removed parameter `$checkProxy` from `Enlight_Controller_Request_Request::getClientIp()`
 * Removed smarty block `frontend_search_category_filter`
 * Removed template file `themes/Frontend/Bare/frontend/search/category-filter.tpl`
