@@ -32,6 +32,7 @@ use Shopware\Components\Model\ModelEntity;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Model\ModelRepository;
 use Shopware\Components\Api\Exception\BatchInterfaceNotImplementedException;
+use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 
 /**
  * Abstract API Resource Class
@@ -113,8 +114,17 @@ abstract class Resource
      */
     protected function getResource($name)
     {
-        /** @var $resource \Shopware\Components\Api\Resource\Resource */
-        $resource = $this->getContainer()->get('shopware.api.' . strtolower($name));
+        try {
+            /** @var $resource \Shopware\Components\Api\Resource\Resource */
+            $resource = $this->getContainer()->get('shopware.api.' . strtolower($name));
+        } catch (ServiceNotFoundException $e) {
+            $name = ucfirst($name);
+            $class = __NAMESPACE__ . '\\Resource\\' . $name;
+
+            /** @var $resource \Shopware\Components\Api\Resource\Resource */
+            $resource = new $class();
+        }
+
         $resource->setManager($this->getManager());
 
         if ($this->getAcl()) {

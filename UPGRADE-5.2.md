@@ -24,10 +24,27 @@ This changelog references changes done in Shopware 5.2 patch versions.
 * Added `_seo` parameter for smarty url plugin which allows to prevent s_core_rewrite_url query for none seo urls
 * Removed unnecessary `/widget/index/menu` call in `themes/Frontend/Bare/frontend/index/topbar-navigation.tpl` and `themes/Frontend/Bare/frontend/index/footer_minimal.tpl`. The `widgets/index/menu.tpl` template is now included directly.
 * Added `\Shopware\Components\Theme\PathResolver::getDirectoryByArray` function which allows to load theme inheritances without doctrine models
+* Added api resources to dependency injection container
 
 ### Media Optimizer
 
 The service `shopware_media.optimizer_service` optimizes files using external tools. Further external tools can be implemented using the interface `Shopware\Bundle\MediaBundle\Optimizer\OptimizerInterface` and the dependency injection tag `shopware_media.optimizer`.
+
+### Api resources
+The api resources are now available in the dependency injection container using the namespace `shopware.api`. It is now possible to add your own resources as services or decorate others in your plugins `services.xml`.
+```
+/** Register new resource as service */
+<service id="shopware.api.example" class="SwagExampleApi\Components\Api\Resource\Example" />
+
+/** Replace existing resource service */
+<service 
+    id="swag_example_plugin.article_api"
+    class="SwagExampleApi\Components\Api\Resource\Article"
+    decorates="shopware.api.article"
+    public="false"
+    shared="false">
+</service>
+```
 
 ## 5.2.15
 
