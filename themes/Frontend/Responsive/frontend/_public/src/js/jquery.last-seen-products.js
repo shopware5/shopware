@@ -172,6 +172,11 @@
             }
 
             for (; i < len; i++) {
+                if (products[i] && me.opts.currentArticle && products[i].articleId === me.opts.currentArticle.articleId) {
+                    len++;
+                    continue;
+                }
+
                 me.$container.append(me.createTemplate(products[i]));
             }
 
@@ -279,11 +284,11 @@
                 itemKey = 'lastSeenProducts-' + opts.shopId + '-' + opts.baseUrl,
                 productsJson = me.storage.getItem(itemKey),
                 products = productsJson ? $.parseJSON(productsJson) : [],
+                linkDetailsQuery = '',
                 len = products.length,
                 i = 0,
                 url,
-                urlQuery,
-                linkDetailsQuery;
+                urlQuery;
 
             if (!newProduct || $.isEmptyObject(newProduct)) {
                 return;
@@ -314,7 +319,7 @@
 
             products.splice(0, 0, newProduct);
 
-            while (products.length > opts.productLimit) {
+            while (products.length > opts.productLimit + 1) {
                 products.pop();
             }
 

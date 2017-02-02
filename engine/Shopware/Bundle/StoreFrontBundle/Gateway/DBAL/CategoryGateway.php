@@ -143,8 +143,6 @@ class CategoryGateway implements Gateway\CategoryGatewayInterface
             ->where('category.id IN (:categories)')
             ->andWhere('category.active = 1')
             ->addGroupBy('category.id')
-            ->addOrderBy('category.position')
-            ->addOrderBy('category.id')
             ->setParameter(':categories', $ids, Connection::PARAM_INT_ARRAY);
 
         $this->fieldHelper->addMediaTranslation($query, $context);
@@ -154,6 +152,14 @@ class CategoryGateway implements Gateway\CategoryGatewayInterface
         $statement = $query->execute();
 
         $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
+
+        //use php usort instead of running mysql order by to prevent file-sort and temporary table statement
+        usort($data, function ($a, $b) {
+            if ($a['__category_position'] === $b['__category_position']) {
+                return $a['__category_id'] > $b['__category_id'];
+            }
+            return $a['__category_position'] > $b['__category_position'];
+        });
 
         $categories = [];
         foreach ($data as $row) {

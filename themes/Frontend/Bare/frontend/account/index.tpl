@@ -40,8 +40,8 @@
                         {if {config name="displayprofiletitle"}}
                             {$sUserData.additional.user.title}
                         {/if}
-                        {$sUserData.additional.user.firstname}
-                        {$sUserData.additional.user.lastname}
+                        {$sUserData.additional.user.firstname|escapeHtml}
+                        {$sUserData.additional.user.lastname|escapeHtml}
                     </h1>
                 {/block}
 
@@ -67,13 +67,13 @@
                             <p>
                                 {$sUserData.additional.user.salutation|salutation}
                                 {if {config name="displayprofiletitle"}}
-                                    {$sUserData.additional.user.title}<br/>
+                                    {$sUserData.additional.user.title|escapeHtml}<br/>
                                 {/if}
-                                {$sUserData.additional.user.firstname} {$sUserData.additional.user.lastname}<br />
+                                {$sUserData.additional.user.firstname|escapeHtml} {$sUserData.additional.user.lastname|escapeHtml}<br />
                                 {if $sUserData.additional.user.birthday}
                                     {$sUserData.additional.user.birthday|date:'dd.MM.y'}<br />
                                 {/if}
-                                {$sUserData.additional.user.email}
+                                {$sUserData.additional.user.email|escapeHtml}
                             </p>
                         </div>
                     {/block}
@@ -137,25 +137,25 @@
                             <div class="panel--body is--wide">
                                 {if $sUserData.billingaddress.company}
                                     <p>
-                                        <span class="address--company">{$sUserData.billingaddress.company}</span>{if $sUserData.billingaddress.department} - <span class="address--department">{$sUserData.billingaddress.department}</span>{/if}
+                                        <span class="address--company">{$sUserData.billingaddress.company|escapeHtml}</span>{if $sUserData.billingaddress.department} - <span class="address--department">{$sUserData.billingaddress.department|escapeHtml}</span>{/if}
                                     </p>
                                 {/if}
                                 <p>
-                                    <span class="address--salutation">{$sUserData.billingaddress.salutation|salutation}</span>
+                                    <span class="address--salutation">{$sUserData.billingaddress.salutation|salutation|escapeHtml}</span>
                                     {if {config name="displayprofiletitle"}}
-                                        <span class="address--title">{$sUserData.billingaddress.title}</span><br/>
+                                        <span class="address--title">{$sUserData.billingaddress.title|escapeHtml}</span><br/>
                                     {/if}
-                                    <span class="address--firstname">{$sUserData.billingaddress.firstname}</span> <span class="address--lastname">{$sUserData.billingaddress.lastname}</span><br />
-                                    <span class="address--street">{$sUserData.billingaddress.street}</span><br />
-                                    {if $sUserData.billingaddress.additional_address_line1}<span class="address--additional-one">{$sUserData.billingaddress.additional_address_line1}</span><br />{/if}
-                                    {if $sUserData.billingaddress.additional_address_line2}<span class="address--additional-two">{$sUserData.billingaddress.additional_address_line2}</span><br />{/if}
+                                    <span class="address--firstname">{$sUserData.billingaddress.firstname|escapeHtml}</span> <span class="address--lastname">{$sUserData.billingaddress.lastname|escapeHtml}</span><br />
+                                    <span class="address--street">{$sUserData.billingaddress.street|escapeHtml}</span><br />
+                                    {if $sUserData.billingaddress.additional_address_line1}<span class="address--additional-one">{$sUserData.billingaddress.additional_address_line1|escapeHtml}</span><br />{/if}
+                                    {if $sUserData.billingaddress.additional_address_line2}<span class="address--additional-two">{$sUserData.billingaddress.additional_address_line2|escapeHtml}</span><br />{/if}
                                     {if {config name=showZipBeforeCity}}
-                                        <span class="address--zipcode">{$sUserData.billingaddress.zipcode}</span> <span class="address--city">{$sUserData.billingaddress.city}</span>
+                                        <span class="address--zipcode">{$sUserData.billingaddress.zipcode|escapeHtml}</span> <span class="address--city">{$sUserData.billingaddress.city|escapeHtml}</span>
                                     {else}
-                                        <span class="address--city">{$sUserData.billingaddress.city}</span> <span class="address--zipcode">{$sUserData.billingaddress.zipcode}</span>
+                                        <span class="address--city">{$sUserData.billingaddress.city|escapeHtml}</span> <span class="address--zipcode">{$sUserData.billingaddress.zipcode|escapeHtml}</span>
                                     {/if}<br />
-                                    {if $sUserData.additional.state.statename}<span class="address--statename">{$sUserData.additional.state.statename}</span><br />{/if}
-                                    <span class="address--countryname">{$sUserData.additional.country.countryname}</span>
+                                    {if $sUserData.additional.state.statename}<span class="address--statename">{$sUserData.additional.state.statename|escapeHtml}</span><br />{/if}
+                                    <span class="address--countryname">{$sUserData.additional.country.countryname|escapeHtml}</span>
                                 </p>
                             </div>
                         {/block}
@@ -200,25 +200,25 @@
                                     {block name="frontend_account_index_primary_shipping_content_address"}
                                         {if $sUserData.shippingaddress.company}
                                             <p>
-                                                <span class="address--company">{$sUserData.shippingaddress.company}</span>{if $sUserData.shippingaddress.department} - <span class="address--department">{$sUserData.shippingaddress.department}</span>{/if}
+                                                <span class="address--company">{$sUserData.shippingaddress.company|escapeHtml}</span>{if $sUserData.shippingaddress.department} - <span class="address--department">{$sUserData.shippingaddress.department|escapeHtml}</span>{/if}
                                             </p>
                                         {/if}
                                         <p>
                                             <span class="address--salutation">{$sUserData.shippingaddress.salutation|salutation}</span>
                                             {if {config name="displayprofiletitle"}}
-                                                <span class="address--title">{$sUserData.shippingaddress.title}</span><br/>
+                                                <span class="address--title">{$sUserData.shippingaddress.title|escapeHtml}</span><br/>
                                             {/if}
-                                            <span class="address--firstname">{$sUserData.shippingaddress.firstname}</span> <span class="address--lastname">{$sUserData.shippingaddress.lastname}</span><br />
-                                            <span class="address--street">{$sUserData.shippingaddress.street}</span><br />
-                                            {if $sUserData.shippingaddress.additional_address_line1}<span class="address--additional-one">{$sUserData.shippingaddress.additional_address_line1}</span><br />{/if}
-                                            {if $sUserData.shippingaddress.additional_address_line2}<span class="address--additional-two">{$sUserData.shippingaddress.additional_address_line2}</span><br />{/if}
+                                            <span class="address--firstname">{$sUserData.shippingaddress.firstname|escapeHtml}</span> <span class="address--lastname">{$sUserData.shippingaddress.lastname|escapeHtml}</span><br />
+                                            <span class="address--street">{$sUserData.shippingaddress.street|escapeHtml}</span><br />
+                                            {if $sUserData.shippingaddress.additional_address_line1}<span class="address--additional-one">{$sUserData.shippingaddress.additional_address_line1|escapeHtml}</span><br />{/if}
+                                            {if $sUserData.shippingaddress.additional_address_line2}<span class="address--additional-two">{$sUserData.shippingaddress.additional_address_line2|escapeHtml}</span><br />{/if}
                                             {if {config name=showZipBeforeCity}}
-                                                <span class="address--zipcode">{$sUserData.shippingaddress.zipcode}</span> <span class="address--city">{$sUserData.shippingaddress.city}</span>
+                                                <span class="address--zipcode">{$sUserData.shippingaddress.zipcode|escapeHtml}</span> <span class="address--city">{$sUserData.shippingaddress.city|escapeHtml}</span>
                                             {else}
-                                                <span class="address--city">{$sUserData.shippingaddress.city}</span> <span class="address--zipcode">{$sUserData.shippingaddress.zipcode}</span>
+                                                <span class="address--city">{$sUserData.shippingaddress.city|escapeHtml}</span> <span class="address--zipcode">{$sUserData.shippingaddress.zipcode|escapeHtml}</span>
                                             {/if}<br />
-                                            {if $sUserData.additional.stateShipping.statename}<span class="address--statename">{$sUserData.additional.stateShipping.statename}</span><br />{/if}
-                                            <span class="address--countryname">{$sUserData.additional.countryShipping.countryname}</span>
+                                            {if $sUserData.additional.stateShipping.statename}<span class="address--statename">{$sUserData.additional.stateShipping.statename|escapeHtml}</span><br />{/if}
+                                            <span class="address--countryname">{$sUserData.additional.countryShipping.countryname|escapeHtml}</span>
                                         </p>
                                     {/block}
                                 {/if}

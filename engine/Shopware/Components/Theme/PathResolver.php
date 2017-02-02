@@ -76,6 +76,42 @@ class PathResolver
     }
 
     /**
+     * @param array $template
+     * @return null|string
+     */
+    public function getDirectoryByArray(array $template)
+    {
+        if ($template['plugin_id'] === null) {
+            return $this->getFrontendThemeDirectory() . DIRECTORY_SEPARATOR . $template['template'];
+        }
+
+        if ($template['plugin_namespace'] == 'ShopwarePlugins') {
+            return implode(
+                DIRECTORY_SEPARATOR,
+                [
+                    $this->rootDir . '/custom/plugins/' . $template['plugin_name'] . '/Resources',
+                    'Themes',
+                    'Frontend',
+                    $template['template']
+                ]
+            );
+        }
+
+        return implode(
+            DIRECTORY_SEPARATOR,
+            [
+                $this->pluginDirectories[$template['plugin_source']],
+                $template['plugin_namespace'],
+                $template['plugin_name'],
+                'Themes',
+                'Frontend',
+                $template['template']
+            ]
+        );
+    }
+
+
+    /**
      * Helper function to build the path to the passed plugin.
      *
      * @param Plugin $plugin

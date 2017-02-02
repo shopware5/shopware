@@ -48,6 +48,21 @@ class PlainStrategyTest extends TestCase
     }
 
     /**
+     * @return array
+     */
+    public function getThumbnailEncodingPaths()
+    {
+        return [
+            ['media/image/foo.jpg', 'media/image/foo.jpg'],
+            ['media/image/foo_200x200.jpg', 'media/image/thumbnail/foo_200x200.jpg'],
+            ['media/image/foo_200x200@2.jpg', 'media/image/thumbnail/foo_200x200@2.jpg'],
+            ['media/image/200x200_foo.jpg', 'media/image/200x200_foo.jpg'],
+            ['media/image/200x200@2_foo.jpg', 'media/image/200x200@2_foo.jpg'],
+            ['media/wusel/200x200@2_foo.jpg', 'media/wusel/200x200@2_foo.jpg']
+        ];
+    }
+
+    /**
      * @dataProvider getNormalizedData
      * @param string $path
      * @param string $expected
@@ -82,5 +97,15 @@ class PlainStrategyTest extends TestCase
     public function testEncodingWithInvalidPaths($path)
     {
         $this->assertEquals("", $this->strategy->encode($path));
+    }
+
+    /**
+     * @dataProvider getThumbnailEncodingPaths
+     * @param string $expectedPath
+     * @param string $path
+     */
+    public function testEncodeForThumbnails($path, $expectedPath)
+    {
+        $this->assertEquals($expectedPath, $this->strategy->encode($path));
     }
 }

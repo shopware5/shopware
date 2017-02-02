@@ -527,6 +527,8 @@ class sArticles
             $id
         ));
 
+        $links = [];
+
         foreach ($getSupplier as $supplierKey => $supplierValue) {
             if (!Shopware()->Shop()->getDefault()) {
                 $getSupplier[$supplierKey] = $this->sGetTranslation($supplierValue, $supplierValue['id'], 'supplier');
@@ -536,23 +538,29 @@ class sArticles
                 $getSupplier[$supplierKey]["image"] = $mediaService->getUrl($supplierValue['image']);
             }
 
+            $supplierId = $supplierValue['id'];
             if ($id !== Shopware()->Shop()->getCategory()->getId()) {
-                $query = array(
+                $links[$supplierId] = [
                     'sViewport' => 'cat',
                     'sCategory' => $id,
                     'sPage' => 1,
                     'sSupplier' => $supplierValue["id"]
-                );
+                ];
             } else {
-                $query = array(
+                $links[$supplierId] = [
                     'controller' => 'listing',
                     'action' => 'manufacturer',
                     'sSupplier' => $supplierValue["id"]
-                );
+                ];
             }
+        }
 
-            $getSupplier[$supplierKey]["link"] = Shopware()->Config()->get('baseFile')
-                .'?'.http_build_query($query, '', '&');
+        $seoUrls = Shopware()->Container()->get('router')->generateList($links);
+        foreach ($getSupplier as &$supplier) {
+            $id = $supplier['id'];
+            if (array_key_exists($supplier, $seoUrls)) {
+                $supplier['link'] = $seoUrls[$id];
+            }
         }
 
         return $getSupplier;

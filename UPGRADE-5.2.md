@@ -3,7 +3,6 @@
 This changelog references changes done in Shopware 5.2 patch versions.
 
 ## 5.2.17
-
 [View all changes from v5.2.16...v5.2.17](https://github.com/shopware/shopware/compare/v5.2.16...v5.2.17)
 
 * Deprecated Smarty modifier `rewrite`. Modifier will be removed in 5.3.0.
@@ -11,6 +10,24 @@ This changelog references changes done in Shopware 5.2 patch versions.
 * Added console command `sw:session:cleanup` to cleanup expired sessions.
 * Changed database field `s_core_sessions.expiry` to contain the timestamp when the session should expire, not the session lifetime.
 * Changed database field `s_core_sessions_backend.expiry` to contain the timestamp when the session should expire, not the session lifetime.
+* Added `$sAmountNumeric` and `$sAmountNetNumeric` to sOrder mail
+* Added command `sw:media:optimize` to optimize media files without quality loss.
+* Added new Smarty blocks to `documents/index.tpl`
+    * `document_index_address`
+    * `document_index_address_sender`
+    * `document_index_address_base`
+* Added `s_article_configurator_options_attributes` and `s_article_configurator_groups_attributes`
+* Added new plugin config element type `button`
+* Changed `\Enlight_Controller_Plugins_ViewRenderer_Bootstrap::setNoRender` resets now the view template to prevent `PostDispatchSecure` events
+* Changed `\Shopware\Bundle\StoreFrontBundle\Service\Core\ManufacturerService::getList` fetch now the seo urls for each manufacturer
+* Removed duplicated initialisation of `\Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface`.
+* Added `_seo` parameter for smarty url plugin which allows to prevent s_core_rewrite_url query for none seo urls
+* Removed unnecessary `/widget/index/menu` call in `themes/Frontend/Bare/frontend/index/topbar-navigation.tpl` and `themes/Frontend/Bare/frontend/index/footer_minimal.tpl`. The `widgets/index/menu.tpl` template is now included directly.
+* Added `\Shopware\Components\Theme\PathResolver::getDirectoryByArray` function which allows to load theme inheritances without doctrine models
+
+### Media Optimizer
+
+The service `shopware_media.optimizer_service` optimizes files using external tools. Further external tools can be implemented using the interface `Shopware\Bundle\MediaBundle\Optimizer\OptimizerInterface` and the dependency injection tag `shopware_media.optimizer`.
 
 ## 5.2.15
 
@@ -18,24 +35,25 @@ This changelog references changes done in Shopware 5.2 patch versions.
 
 * Fixed article api resource when creating a new article with new configurator options and an image mapping for this new options
 * Added cronjob registration via `Resources/cronjob.xml` file
+* Removed call to `strip_tags` in inputfilter on all request parameters.
+    * Please make sure untrusted input is escaped in plugins 
 
 ## 5.2.14
 
 [View all changes from v5.2.13...v5.2.14](https://github.com/shopware/shopware/compare/v5.2.13...v5.2.14)
 
 ### Add property "valueField" to the media field.
-* The shopping world element "Media field" supports now to change the value field. All possible properties you can find in the file: ../themes/Backend/ExtJs/backend/media_manager/model/media.js 
+* The shopping world element "Media field" supports now to change the value field. All possible properties you can find in the file: `themes/Backend/ExtJs/backend/media_manager/model/media.js`
 
  Example:
  
- ´´´
+```php
  $emotionElement->createMediaField([
      'name' => 'preview_image',
      'fieldLabel' => 'The preview image',
      'valueField' => 'virtualPath'
  ]);
- ´´´
-
+ ```
 
 ## 5.2.13
 
