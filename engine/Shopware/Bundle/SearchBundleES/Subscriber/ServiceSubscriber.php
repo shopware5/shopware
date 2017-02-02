@@ -54,7 +54,7 @@ class ServiceSubscriber implements SubscriberInterface
 
     public function registerProductNumberSearch()
     {
-        if (!$this->container->get('kernel')->isElasticSearchEnabled()) {
+        if (!$this->container->getParameter('shopware.es.enabled')) {
             return;
         }
         $this->container->set(
