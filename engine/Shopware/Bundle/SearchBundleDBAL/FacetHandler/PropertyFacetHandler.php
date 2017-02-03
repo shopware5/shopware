@@ -29,12 +29,12 @@ use Shopware\Bundle\SearchBundle\FacetResult\FacetResultGroup;
 use Shopware\Bundle\SearchBundle\FacetResult\MediaListFacetResult;
 use Shopware\Bundle\SearchBundle\FacetResult\MediaListItem;
 use Shopware\Bundle\SearchBundle\FacetResult\ValueListFacetResult;
-use Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactory;
 use Shopware\Bundle\SearchBundle\FacetInterface;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\Facet;
 use Shopware\Bundle\SearchBundleDBAL\FacetHandlerInterface;
+use Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactoryInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 use Shopware\Bundle\StoreFrontBundle\Gateway\PropertyGatewayInterface;
 use Shopware\Components\QueryAliasMapper;
@@ -52,7 +52,7 @@ class PropertyFacetHandler implements FacetHandlerInterface
     private $propertyGateway;
 
     /**
-     * @var QueryBuilderFactory
+     * @var QueryBuilderFactoryInterface
      */
     private $queryBuilderFactory;
 
@@ -63,12 +63,12 @@ class PropertyFacetHandler implements FacetHandlerInterface
 
     /**
      * @param PropertyGatewayInterface $propertyGateway
-     * @param QueryBuilderFactory $queryBuilderFactory
+     * @param QueryBuilderFactoryInterface $queryBuilderFactory
      * @param QueryAliasMapper $queryAliasMapper
      */
     public function __construct(
         PropertyGatewayInterface $propertyGateway,
-        QueryBuilderFactory $queryBuilderFactory,
+        QueryBuilderFactoryInterface $queryBuilderFactory,
         QueryAliasMapper $queryAliasMapper
     ) {
         $this->propertyGateway = $propertyGateway;
