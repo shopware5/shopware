@@ -20,9 +20,9 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-Ext.define('Shopware.apps.Emotion.view.components.fields.Article', {
+Ext.define('Shopware.apps.Emotion.view.components.fields.Variant', {
     extend: 'Shopware.form.field.ProductSingleSelection',
-    alias: 'widget.emotion-components-fields-article',
+    alias: 'widget.emotion-components-fields-variant',
 
     initComponent: function() {
         var me = this;
@@ -33,7 +33,7 @@ Ext.define('Shopware.apps.Emotion.view.components.fields.Article', {
             model: 'Shopware.model.Dynamic',
             proxy: {
                 type: 'ajax',
-                url: '{url controller="EntitySearch" action="search"}?model=Shopware\\Models\\Article\\Article',
+                url: '{url controller="EntitySearch" action="search"}?model=Shopware\\Models\\Article\\Detail',
                 reader: Ext.create('Shopware.model.DynamicReader')
             }
         });

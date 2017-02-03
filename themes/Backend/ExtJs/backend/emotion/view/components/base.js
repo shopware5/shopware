@@ -19,12 +19,6 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    UserManager
- * @subpackage View
- * @version    $Id$
- * @author shopware AG
  */
 
 //{namespace name=backend/emotion/view/detail}
@@ -209,7 +203,7 @@ Ext.define('Shopware.apps.Emotion.view.components.Base', {
                         columns   : 2,
                         items     : []
                     };
-                    items.push(radios[constructedItem.name]);
+                    items = me.pushItemToElements(radios[constructedItem.name], items);
                 }
                 delete constructedItem.fieldLabel;
                 constructedItem.checked = radios[constructedItem.name].items.length == 0;
@@ -217,8 +211,17 @@ Ext.define('Shopware.apps.Emotion.view.components.Base', {
                 radios[constructedItem.name].items.push(constructedItem);
                 return;
             }
-            items.push(constructedItem);
+            items = me.pushItemToElements(constructedItem, items);
         });
+
+        return items;
+    },
+
+    /**
+     * pushes a created element to the form
+     */
+    pushItemToElements: function(item, items) {
+        items.push(item);
 
         return items;
     },
@@ -227,7 +230,7 @@ Ext.define('Shopware.apps.Emotion.view.components.Base', {
      * Contains the global settings form elements.
      *
      * @private
-     * @return [object] Ext.form.field.Text
+     * @return { Ext.form.field.Text }
      */
     createGlobalFormElements: function() {
         var me = this, record = me.getSettings('record');
@@ -269,7 +272,7 @@ Ext.define('Shopware.apps.Emotion.view.components.Base', {
      * Creates a fieldset with the element description.
      *
      * @private
-     * @return [object] Ext.form.FieldSet
+     * @return { Ext.form.FieldSet }
      */
     createDescriptionContainer: function() {
         var me = this, component = me.getSettings('component', true);
@@ -289,8 +292,8 @@ Ext.define('Shopware.apps.Emotion.view.components.Base', {
      * object.
      *
      * @public
-     * @param [string] type - Type of the settings (fields, component, grid)
-     * @param [boolean] data - Should the method return the data object
+     * @param { string } type - Type of the settings (fields, component, grid)
+     * @param { boolean } data - Should the method return the data object
      * @return [object|boolean] settings or false
      */
     getSettings: function(type, data) {

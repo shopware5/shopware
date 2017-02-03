@@ -268,8 +268,7 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
 
         if (fieldName === 'banner_slider' ||
             fieldName === 'bannerMapping' ||
-            fieldName === 'selected_manufacturers' ||
-            fieldName === 'selected_articles') {
+            fieldName === 'selected_manufacturers') {
 
             data['value'] = record.get('mapping');
 

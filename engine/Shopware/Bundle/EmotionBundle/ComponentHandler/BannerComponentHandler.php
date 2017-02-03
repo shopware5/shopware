@@ -27,8 +27,6 @@ namespace Shopware\Bundle\EmotionBundle\ComponentHandler;
 use Shopware\Bundle\EmotionBundle\Struct\Collection\PrepareDataCollection;
 use Shopware\Bundle\EmotionBundle\Struct\Collection\ResolvedDataCollection;
 use Shopware\Bundle\EmotionBundle\Struct\Element;
-use Shopware\Bundle\EmotionBundle\Struct\Library\Component;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class BannerComponentHandler implements ComponentHandlerInterface
@@ -37,8 +35,7 @@ class BannerComponentHandler implements ComponentHandlerInterface
     const COMPONENT_NAME = 'emotion-components-banner';
 
     /**
-     * @param Element $element
-     * @return bool
+     * @inheritdoc
      */
     public function supports(Element $element)
     {
@@ -47,9 +44,7 @@ class BannerComponentHandler implements ComponentHandlerInterface
     }
 
     /**
-     * @param PrepareDataCollection $collection
-     * @param Element $element
-     * @param ShopContext|ShopContextInterface $context
+     * @inheritdoc
      */
     public function prepare(PrepareDataCollection $collection, Element $element, ShopContextInterface $context)
     {
@@ -60,9 +55,7 @@ class BannerComponentHandler implements ComponentHandlerInterface
     }
 
     /**
-     * @param ResolvedDataCollection $collection
-     * @param Element $element
-     * @param ShopContextInterface $context
+     * @inheritdoc
      */
     public function handle(ResolvedDataCollection $collection, Element $element, ShopContextInterface $context)
     {
@@ -181,6 +174,6 @@ class BannerComponentHandler implements ComponentHandlerInterface
      */
     private function getMappingKey(array $mapping)
     {
-        return md5($mapping['x'].$mapping['y'].$mapping['width'].$mapping['height'].$mapping['link']);
+        return md5($mapping['x'] . $mapping['y'] . $mapping['width'] . $mapping['height'] . $mapping['link']);
     }
 }

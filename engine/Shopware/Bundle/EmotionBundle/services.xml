@@ -60,12 +60,16 @@
 
         <service id="shopware_emotion.component_handler.article" class="Shopware\Bundle\EmotionBundle\ComponentHandler\ArticleComponentHandler">
             <argument type="service" id="shopware_search.store_front_criteria_factory" />
+            <argument type="service" id="config" />
+            <argument type="service" id="shopware_storefront.additional_text_service" />
             <tag name="shopware_emotion.component_handler"/>
         </service>
 
         <service id="shopware_emotion.component_handler.article_slider" class="Shopware\Bundle\EmotionBundle\ComponentHandler\ArticleSliderComponentHandler">
             <argument type="service" id="shopware_search.store_front_criteria_factory" />
             <argument type="service" id="shopware_product_stream.repository" />
+            <argument type="service" id="config" />
+            <argument type="service" id="shopware_storefront.additional_text_service" />
             <tag name="shopware_emotion.component_handler"/>
         </service>
 
