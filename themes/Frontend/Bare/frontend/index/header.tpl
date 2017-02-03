@@ -93,9 +93,7 @@
 
 {* Add Modernizr in the "<head>"-element to have all the classes before the page was rendered *}
 {block name="frontend_index_header_javascript_modernizr_lib"}
-    {if !$theme.asyncJavascriptLoading}
-        <script src="{link file='frontend/_public/src/js/vendors/modernizr/modernizr.custom.35977.js'}"></script>
-    {/if}
+    <script src="{link file='frontend/_public/src/js/vendors/modernizr/modernizr.custom.35977.js'}"></script>
 {/block}
 
 {* Block for IE specific stylesheets - @deprecated due to the stylesheets are now merged *}
