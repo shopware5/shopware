@@ -44,7 +44,24 @@ Ext.define('Shopware.apps.Emotion.model.Preset', {
         { name: 'label', type: 'string', persist: false },
         { name: 'description', type: 'string', persist: false },
         { name: 'translations', type: 'array' },
-        { name: 'requiredPlugins', type: 'array' }
+        { name: 'requiredPlugins', type: 'array' },
+        {
+            name: 'actionRequired',
+            persist: false,
+            mapping: 'requiredPlugins',
+            convert: function(value) {
+                var i, count;
+
+                for (i = 0, count = value.length; i < count; i++) {
+                    var plugin = value[i];
+
+                    if (plugin['installationRequired'] || plugin['activationRequired']) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+        }
     ],
 
     proxy:{

@@ -111,7 +111,6 @@ Ext.define('Shopware.apps.Emotion.view.presets.Window', {
             cls: 'primary',
             handler: function () {
                 me.fireEvent('emotionpresetselect');
-                me.close();
             }
         }];
     }

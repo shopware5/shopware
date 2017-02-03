@@ -24,6 +24,7 @@
 
 use \Shopware\Models\Emotion\Element;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\DBAL\Connection;
 use Shopware\Bundle\MediaBundle\MediaService;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Emotion\Emotion;
@@ -116,6 +117,27 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
         $data = $statement->fetchAll(PDO::FETCH_ASSOC);
 
         $this->View()->assign(['success' => true, 'data' => $data]);
+    }
+
+    /**
+     * @return Enlight_View|Enlight_View_Default
+     */
+    public function getPresetsAction()
+    {
+        try {
+            $presets = $this->getPresets();
+            $data = $this->preparePresetData($presets);
+        } catch (\Exception $e) {
+            return $this->View()->assign([
+                'success' => false,
+                'message' => $e->getMessage()
+            ]);
+        }
+
+        return $this->View()->assign([
+            'success' => true,
+            'data' => $data
+        ]);
     }
 
     /**
@@ -793,100 +815,6 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
     }
 
     /**
-     * Controller action to get a list of all defined presets.
-     */
-    public function getPresetsAction()
-    {
-        $identity = $this->container->get('Auth')->getIdentity();
-        $locale = $identity->locale->getLocale();
-
-        if (empty($locale)) {
-            return;
-        }
-
-        $result = $this->getPresets($locale);
-
-        $this->View()->assign($result);
-    }
-
-    /**
-     * Returns all emotion presets, including translations for the given locale.
-     *
-     * @param $locale
-     * @return array
-     */
-    private function getPresets($locale)
-    {
-        try {
-            $query = $this->getPresetsQuery($locale);
-
-            $result = [
-                'success' => true,
-                'data' => []
-            ];
-
-            foreach ($query->getQuery()->getArrayResult() as $preset) {
-                $translation = $preset['translations'];
-                if (!is_array($translation) || !array_key_exists(0, $translation)) {
-                    $translation[] = [
-                        'label' => $preset['name'],
-                        'description' => ''
-                    ];
-                }
-                $result['data'][] = [
-                    'id' => $preset['id'],
-                    'name' => $preset['name'],
-                    'premium' => $preset['premium'],
-                    'custom' => $preset['custom'],
-                    'thumbnail' => $preset['thumbnail'],
-                    'thumbnailUrl' => $this->getPresetImageUrl($preset['thumbnail']),
-                    'preview' => $preset['preview'],
-                    'previewUrl' => $this->getPresetImageUrl($preset['preview']),
-                    'presetData' => $preset['presetData'],
-                    'label' => $translation[0]['label'],
-                    'description' => $translation[0]['description']
-                ];
-            }
-        } catch (Exception $e) {
-            $result = ['success' => false, 'error' => $e->getMessage()];
-        }
-
-        return $result;
-    }
-
-    /**
-     * @param string $path
-     * @return null|string
-     */
-    private function getPresetImageUrl($path)
-    {
-        /** @var MediaService $mediaService */
-        $mediaService = $this->container->get('shopware_media.media_service');
-
-        if (strpos($path, 'media') === 0) {
-            return $mediaService->getUrl($path);
-        }
-
-        return $this->View()->fetch(sprintf('string:{url file="%s"}', $path));
-    }
-
-    /**
-     * @param $locale
-     * @return \Doctrine\ORM\QueryBuilder|\Shopware\Components\Model\QueryBuilder
-     */
-    private function getPresetsQuery($locale)
-    {
-        $builder = $this->container->get('models')->createQueryBuilder();
-        $builder->select('presets', 'translations')
-            ->from(Preset::class, 'presets')
-            ->leftJoin('presets.translations', 'translations')
-            ->where('translations.locale = :locale')
-            ->setParameter('locale', $locale);
-
-        return $builder;
-    }
-
-    /**
      * Deletes a single template which will be identified over
      * the passed id parameter. The return value is
      * every time an array.
@@ -1036,6 +964,43 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
     }
 
     /**
+     * @param array $requiredPlugins
+     * @return array
+     */
+    private function getExtendedPluginInformation(array $requiredPlugins)
+    {
+        if (empty($requiredPlugins)) {
+            return [];
+        }
+        $pluginData = [];
+
+        foreach ($requiredPlugins as $requiredPlugin) {
+            $pluginData[$requiredPlugin['technicalName']] = $requiredPlugin;
+        }
+
+        $query = $this->container->get('models')->getConnection()->createQueryBuilder();
+        $plugins = $query->select(['plugin.id, plugin.name, plugin.active'])
+            ->from('s_core_plugins', 'plugin')
+            ->where('plugin.name IN (:names)')
+            ->setParameter(':names', array_keys($pluginData), Connection::PARAM_STR_ARRAY)
+            ->execute()
+            ->fetchAll(\PDO::FETCH_ASSOC);
+
+        foreach ($plugins as $plugin) {
+            if (!array_key_exists($plugin['name'], $pluginData)) {
+                $pluginData[$plugin['name']]['installationRequired'] = true;
+                $pluginData[$plugin['name']]['activationRequired'] = true;
+
+                continue;
+            }
+            $pluginData[$plugin['name']]['installationRequired'] = false;
+            $pluginData[$plugin['name']]['activationRequired'] = !(bool) $plugin['active'];
+        }
+
+        return array_values($pluginData);
+    }
+
+    /**
      * Internal helper function to get access to the entity manager.
      */
     private function getManager()
@@ -1045,6 +1010,41 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
         }
 
         return $this->manager;
+    }
+
+    /**
+     * @return array
+     */
+    private function getPresets()
+    {
+        $builder = $this->container->get('models')
+            ->createQueryBuilder();
+
+        $result = $builder->select('preset', 'translation', 'requiredPlugin')
+            ->from(Preset::class, 'preset')
+            ->leftJoin('preset.translations', 'translation')
+            ->leftJoin('preset.requiredPlugins', 'requiredPlugin')
+            ->orderBy('preset.id')
+            ->getQuery()
+            ->getArrayResult();
+
+        return $result;
+    }
+
+    /**
+     * @param string $path
+     * @return null|string
+     */
+    private function getPresetImageUrl($path)
+    {
+        /** @var MediaService $mediaService */
+        $mediaService = $this->container->get('shopware_media.media_service');
+
+        if (strpos($path, 'media') === 0) {
+            return $mediaService->getUrl($path);
+        }
+
+        return $this->View()->fetch(sprintf('string:{url file="%s"}', $path));
     }
 
     /**
@@ -1063,6 +1063,73 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
                 ->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_OBJECT);
 
         return $emotion;
+    }
+
+    /**
+     * @param array $translations
+     * @param $locale
+     * @return array
+     */
+    private function findTranslationByUserLocale(array $translations, $locale)
+    {
+        if (empty($translations) || !in_array($locale, array_column($translations, 'locale'))) {
+            return [];
+        }
+
+        $requiredTranslation = [];
+        /** @var array $translation */
+        foreach ($translations as $translation) {
+            if ($translation['locale'] === $locale) {
+                $requiredTranslation = $translation;
+                break;
+            }
+        }
+
+        return $requiredTranslation;
+    }
+
+    /**
+     * @param array $presets
+     * @return array
+     */
+    private function preparePresetData(array $presets)
+    {
+        $identity = $this->container->get('Auth')->getIdentity();
+        $locale = $identity->locale->getLocale();
+
+        if (empty($locale)) {
+            $locale = 'de_DE';
+        }
+
+        $preparedPresets = [];
+
+        foreach ($presets as $preset) {
+            $label = $description = $preset['name'];
+            $translation = $this->findTranslationByUserLocale($preset['translations'], $locale);
+            $requiredPlugins = $this->getExtendedPluginInformation($preset['requiredPlugins']);
+
+            if (!empty($translation)) {
+                $label = $translation['label'];
+                $description = $translation['description'];
+            }
+
+            $preparedPresets[] = [
+                'id' => $preset['id'],
+                'name' => $preset['name'],
+                'premium' => $preset['premium'],
+                'custom' => $preset['custom'],
+                'thumbnail' => $preset['thumbnail'],
+                'thumbnailUrl' => $this->getPresetImageUrl($preset['thumbnail']),
+                'preview' => $preset['preview'],
+                'previewUrl' => $this->getPresetImageUrl($preset['preview']),
+                'presetData' => $preset['presetData'],
+                'label' => $label,
+                'description' => $description,
+                'requiredPlugins' => $requiredPlugins
+            ];
+        }
+
+        return $preparedPresets;
     }
 
     /**

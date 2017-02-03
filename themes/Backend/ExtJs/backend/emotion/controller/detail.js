@@ -49,7 +49,7 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
         { ref: 'listing', selector: 'emotion-main-window emotion-list-grid' },
         { ref: 'deleteButton', selector: 'emotion-main-window button[action=emotion-list-toolbar-delete]' },
         { ref: 'attributeForm', selector: 'emotion-detail-window shopware-attribute-form' },
-        { ref: 'listingView', selector: 'presets-list dataview' },
+        { ref: 'listingView', selector: 'presets-list' },
         { ref: 'presetWindow', selector: 'emotion-presets-window' }
     ],
     
@@ -114,7 +114,7 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
                 'click': me.onOpenPreset
             },
             'emotion-presets-window, presets-list': {
-                'emotionpresetselect': me.onOpenDetail
+                'emotionpresetselect': me.onEmotionPresetSelection
             },
             'emotion-presets-window presets-list': {
                 'showpresetdetails': me.onShowPresetDetails
@@ -538,13 +538,68 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
         });
     },
 
+    onEmotionPresetSelection: function() {
+        var me = this,
+            record = Ext.create('Shopware.apps.Emotion.model.Emotion'),
+            listingView = me.getListingView(),
+            window = me.getPresetWindow(),
+            selectedPreset = listingView.selectedPreset,
+            presetData,
+            requiredPlugins,
+            pluginNames;
+
+        if (selectedPreset) {
+            if (selectedPreset.get('actionRequired')) {
+                requiredPlugins = selectedPreset.get('requiredPlugins');
+
+                pluginNames = requiredPlugins.map(function (plugin) {
+                    return plugin.label + ' (' + plugin.technicalName + ')';
+                });
+
+                Ext.Msg.confirm(
+                    '{s name=preset/required_plugins_title}{/s}',
+                    Ext.String.format('{s name=preset/required_plugins_confirmation}{/s}', pluginNames.join('<br />')),
+                    function(btn) {
+                        if (btn === 'yes') {
+                            window.close();
+                            me.openPluginManager();
+                        }
+                    }
+                );
+
+                return;
+            }
+            presetData = selectedPreset.get('presetData');
+            record = me.decodeEmotionPresetData(presetData);
+        }
+
+        window.close();
+        me.getMainWindow().setLoading(true);
+        me.openDetailWindow(record);
+    },
+
+    openPluginManager: function() {
+        var me = this;
+
+        Shopware.app.Application.addSubApplication({
+                name: 'Shopware.apps.PluginManager'
+            },
+            undefined,
+            function() {
+                Ext.Function.defer(function () {
+                    Shopware.app.Application.fireEvent('display-installed-plugins');
+                }, 2000);
+            }
+        );
+    },
+
     onOpenDetail: function() {
         var me = this,
             record;
 
         me.getMainWindow().setLoading(true);
 
-        record = me.getSelectedPreset();
+        record = Ext.create('Shopware.apps.Emotion.model.Emotion');
 
         me.openDetailWindow(record);
     },
@@ -554,25 +609,6 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
             win = me.getPresetWindow();
 
         win.infoView.updateInfoView(selectedPreset);
-    },
-
-    getSelectedPreset: function() {
-        var me = this,
-            selModel,
-            presetData;
-
-        if (!(me.getListingView())) {
-            return Ext.create('Shopware.apps.Emotion.model.Emotion');
-        }
-
-        selModel = me.getListingView().getSelectionModel();
-
-        if (selModel.getSelection().length > 0) {
-            presetData = selModel.getSelection()[0].get('presetData');
-            return me.decodeEmotionPresetData(presetData);
-        } else {
-            return Ext.create('Shopware.apps.Emotion.model.Emotion');
-        }
     },
 
     decodeEmotionPresetData: function(presetData){

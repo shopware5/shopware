@@ -69,22 +69,35 @@ Ext.define('Shopware.apps.Emotion.view.presets.List', {
             store: me.store,
             cls: 'emotion-listing',
             listeners: {
-                render: Ext.bind(me.onAddInfoViewEvents, me),
                 // because of custom tpl with grouping we cannot trust selection model here
                 // and have to use the data-preset-id attribute
                 itemclick: function(view, record, item, index, e) {
-                    var targetNode = e.getTarget(null, 10, true),
-                        selectorElement = targetNode.findParent('div.thumbnail', 50, true),
-                        presetId = parseInt(selectorElement.getAttribute('data-preset-id')),
-                        record = me.store.getById(presetId);
-
-                    me.selectedPreset = record;
+                    me.setSelectedPreset(view, record, item, index, e);
                     me.showDetails();
+                },
+                itemdblclick: function(view, record, item, index, e) {
+                    me.setSelectedPreset(view, record, item, index, e);
+                    me.fireEvent('emotionpresetselect');
+                },
+                selectionchange: function(view, selection) {
+                    if (selection.length === 0) {
+                        me.selectedPreset = null;
+                    }
                 }
             }
         });
 
         return me.infoView;
+    },
+
+    setSelectedPreset: function(view, record, item, index, e) {
+        var me = this,
+            targetNode = e.getTarget(null, 10, true),
+            selectorElement = targetNode.findParent('div.thumbnail', 50, true),
+            presetId = parseInt(selectorElement.getAttribute('data-preset-id')),
+            selectedRecord = me.store.getById(presetId);
+
+        me.selectedPreset = selectedRecord;
     },
 
     createTemplate: function () {
@@ -174,27 +187,6 @@ Ext.define('Shopware.apps.Emotion.view.presets.List', {
                 }
             }
         );
-    },
-
-    onAddInfoViewEvents: function() {
-        var me = this,
-            view = me.infoView,
-            viewEl = view.getEl();
-
-        viewEl.on({
-            'dblclick': {
-                scope: me,
-                delegate: '.thumbnail',
-                fn: Ext.bind(me.selectPreset, me)
-            }
-        });
-    },
-
-    selectPreset: function() {
-        var me = this;
-
-        me.fireEvent('emotionpresetselect');
-        me.up('emotion-presets-window').close();
     },
 
     showDetails: function() {
