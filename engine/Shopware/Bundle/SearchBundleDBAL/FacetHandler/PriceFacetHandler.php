@@ -26,12 +26,12 @@ namespace Shopware\Bundle\SearchBundleDBAL\FacetHandler;
 
 use Shopware\Bundle\SearchBundle\Condition\PriceCondition;
 use Shopware\Bundle\SearchBundle\FacetResult\RangeFacetResult;
-use Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactory;
 use Shopware\Bundle\SearchBundle\FacetInterface;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundleDBAL\PriceHelperInterface;
 use Shopware\Bundle\SearchBundleDBAL\FacetHandlerInterface;
 use Shopware\Bundle\SearchBundle\Facet;
+use Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactoryInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\QueryAliasMapper;
 
@@ -48,7 +48,7 @@ class PriceFacetHandler implements FacetHandlerInterface
     private $priceHelper;
 
     /**
-     * @var QueryBuilderFactory
+     * @var QueryBuilderFactoryInterface
      */
     private $queryBuilderFactory;
 
@@ -69,13 +69,13 @@ class PriceFacetHandler implements FacetHandlerInterface
 
     /**
      * @param PriceHelperInterface $priceHelper
-     * @param QueryBuilderFactory $queryBuilderFactory
+     * @param QueryBuilderFactoryInterface $queryBuilderFactory
      * @param \Shopware_Components_Snippet_Manager $snippetManager
      * @param QueryAliasMapper $queryAliasMapper
      */
     public function __construct(
         PriceHelperInterface $priceHelper,
-        QueryBuilderFactory $queryBuilderFactory,
+        QueryBuilderFactoryInterface $queryBuilderFactory,
         \Shopware_Components_Snippet_Manager $snippetManager,
         QueryAliasMapper $queryAliasMapper
     ) {

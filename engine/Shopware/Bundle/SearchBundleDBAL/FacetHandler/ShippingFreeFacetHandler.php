@@ -27,9 +27,9 @@ namespace Shopware\Bundle\SearchBundleDBAL\FacetHandler;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\FacetResult\BooleanFacetResult;
 use Shopware\Bundle\SearchBundleDBAL\FacetHandlerInterface;
-use Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactory;
 use Shopware\Bundle\SearchBundle\Facet;
 use Shopware\Bundle\SearchBundle\FacetInterface;
+use Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactoryInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\QueryAliasMapper;
 
@@ -41,7 +41,7 @@ use Shopware\Components\QueryAliasMapper;
 class ShippingFreeFacetHandler implements FacetHandlerInterface
 {
     /**
-     * @var QueryBuilderFactory
+     * @var QueryBuilderFactoryInterface
      */
     private $queryBuilderFactory;
 
@@ -56,12 +56,12 @@ class ShippingFreeFacetHandler implements FacetHandlerInterface
     private $fieldName;
 
     /**
-     * @param QueryBuilderFactory $queryBuilderFactory
+     * @param QueryBuilderFactoryInterface $queryBuilderFactory
      * @param \Shopware_Components_Snippet_Manager $snippetManager
      * @param QueryAliasMapper $queryAliasMapper
      */
     public function __construct(
-        QueryBuilderFactory $queryBuilderFactory,
+        QueryBuilderFactoryInterface $queryBuilderFactory,
         \Shopware_Components_Snippet_Manager $snippetManager,
         QueryAliasMapper $queryAliasMapper
     ) {
