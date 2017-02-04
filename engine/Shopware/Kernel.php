@@ -43,6 +43,7 @@ use Shopware\Components\DependencyInjection\Compiler\DoctrineEventSubscriberComp
 use Shopware\Components\DependencyInjection\Compiler\EventListenerCompilerPass;
 use Shopware\Components\DependencyInjection\Compiler\EventSubscriberCompilerPass;
 use Shopware\Components\ConfigLoader;
+use Shopware\Components\DependencyInjection\Compiler\RouterCompilerPass;
 use Shopware\Components\DependencyInjection\Container;
 use Shopware\Components\Plugin;
 use Symfony\Component\ClassLoader\Psr4ClassLoader;
@@ -590,6 +591,7 @@ class Kernel implements HttpKernelInterface
         $container->addCompilerPass(new AddConsoleCommandPass());
         $container->addCompilerPass(new MediaAdapterCompilerPass());
         $container->addCompilerPass(new MediaOptimizerCompilerPass());
+        $container->addCompilerPass(new RouterCompilerPass());
 
         if ($this->isElasticSearchEnabled()) {
             $container->addCompilerPass(new SearchHandlerCompilerPass());

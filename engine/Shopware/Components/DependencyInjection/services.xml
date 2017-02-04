@@ -97,8 +97,11 @@
         <service id="router_factory" class="Shopware\Components\DependencyInjection\Bridge\Router" />
         <service id="router" class="Shopware\Components\Routing\Router">
             <factory service="router_factory" method="factory" />
-            <argument type="service" id="service_container"/>
             <argument type="service" id="events"/>
+            <argument type="collection"/>
+            <argument type="collection"/>
+            <argument type="collection"/>
+            <argument type="collection"/>
         </service>
 
         <service id="dispatcher" class="Enlight_Controller_Dispatcher_Default" />
@@ -512,5 +515,47 @@
         <service id="shopware.api.shop" class="Shopware\Components\Api\Resource\Shop" shared="false" />
         <service id="shopware.api.translation" class="Shopware\Components\Api\Resource\Translation" shared="false" />
         <service id="shopware.api.variant" class="Shopware\Components\Api\Resource\Variant" shared="false" />
+
+        <service id="shopware.routing.matchers.rewrite_matcher" class="Shopware\Components\Routing\Matchers\RewriteMatcher">
+            <argument type="service" id="dbal_connection"/>
+            <argument type="service" id="query_alias_mapper"/>
+            <tag name="router.matcher"/>
+        </service>
+
+        <service id="shopware.routing.matchers.event_matcher" class="Shopware\Components\Routing\Matchers\EventMatcher">
+            <argument type="service" id="events"/>
+            <tag name="router.matcher"/>
+        </service>
+
+        <service id="shopware.routing.matchers.default_matcher" class="Shopware\Components\Routing\Matchers\DefaultMatcher">
+            <argument type="service" id="dispatcher"/>
+            <tag name="router.matcher"/>
+        </service>
+
+        <service id="shopware.routing.generators.rewrite_generator" class="Shopware\Components\Routing\Generators\RewriteGenerator">
+            <argument type="service" id="dbal_connection"/>
+            <argument type="service" id="query_alias_mapper"/>
+            <argument type="service" id="events"/>
+            <tag name="router.generator"/>
+        </service>
+
+        <service id="shopware.routing.generators.default_generator" class="Shopware\Components\Routing\Generators\DefaultGenerator">
+            <argument type="service" id="dispatcher"/>
+            <tag name="router.generator"/>
+        </service>
+
+        <service id="shopware.routing.prefilter.default_prefilter" class="Shopware\Components\Routing\GeneratorFilters\DefaultPreFilter">
+            <tag name="router.prefilter"/>
+        </service>
+        <service id="shopware.routing.prefilter.frontend_prefilter" class="Shopware\Components\Routing\GeneratorFilters\FrontendPreFilter">
+            <tag name="router.prefilter"/>
+        </service>
+
+        <service id="shopware.routing.postfilter.default_prefilter" class="Shopware\Components\Routing\GeneratorFilters\DefaultPostFilter">
+            <tag name="router.postfilter"/>
+        </service>
+        <service id="shopware.routing.postfilter.frontend_prefilter" class="Shopware\Components\Routing\GeneratorFilters\FrontendPostFilter">
+            <tag name="router.postfilter"/>
+        </service>
     </services>
 </container>
