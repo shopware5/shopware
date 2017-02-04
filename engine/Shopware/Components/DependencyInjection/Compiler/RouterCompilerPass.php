@@ -33,7 +33,7 @@ use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
  */
 class RouterCompilerPass implements CompilerPassInterface
 {
-    Use TagReplaceTrait;
+    use TagReplaceTrait;
 
     public function process(ContainerBuilder $container)
     {
