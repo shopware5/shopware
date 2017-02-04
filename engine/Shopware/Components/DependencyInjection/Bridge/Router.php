@@ -27,9 +27,8 @@ namespace Shopware\Components\DependencyInjection\Bridge;
 use Enlight_Event_EventManager as EnlightEventManager;
 use Shopware\Components\DependencyInjection\Container;
 use Shopware\Components\Routing\Context;
-use Shopware\Components\Routing\GeneratorFilters;
-use Shopware\Components\Routing\Generators;
-use Shopware\Components\Routing\Matchers;
+use Shopware\Components\Routing\Router as RoutingRouter;
+use Shopware\Components\Routing\RouterInterface;
 
 /**
  * @category  Shopware
@@ -39,40 +38,21 @@ use Shopware\Components\Routing\Matchers;
 class Router
 {
     /**
-     * @param Container           $container
      * @param EnlightEventManager $eventManager
-     *
-     * @throws \Exception
-     *
-     * @return \Shopware\Components\Routing\RouterInterface
+     * @param array $matchers
+     * @param array $generators
+     * @param array $preFilters
+     * @param array $postFilters
+     * @return RouterInterface
      */
     public function factory(
-        Container $container, EnlightEventManager $eventManager
+        EnlightEventManager $eventManager,
+        array $matchers,
+        array $generators,
+        array $preFilters,
+        array $postFilters
     ) {
-        $queryAliasMapper = $container->get('query_alias_mapper');
-
-        $matchers = [
-            new Matchers\RewriteMatcher($container->get('dbal_connection'), $queryAliasMapper),
-            new Matchers\EventMatcher($eventManager),
-            new Matchers\DefaultMatcher($container->get('dispatcher')),
-        ];
-
-        $generators = [
-            new Generators\RewriteGenerator($container->get('dbal_connection'), $queryAliasMapper, $eventManager),
-            new Generators\DefaultGenerator($container->get('dispatcher')),
-        ];
-
-        $preFilters = [
-            new GeneratorFilters\DefaultPreFilter(),
-            new GeneratorFilters\FrontendPreFilter(),
-        ];
-
-        $postFilters = [
-            new GeneratorFilters\FrontendPostFilter(),
-            new GeneratorFilters\DefaultPostFilter(),
-        ];
-
-        $router = new \Shopware\Components\Routing\Router(
+        $router = new RoutingRouter(
             Context::createEmpty(), // Request object will created on dispatch :/
             $matchers,
             $generators,
@@ -103,7 +83,7 @@ class Router
     {
         /** @var $container Container */
         $container = $args->getSubject();
-        /** @var $router \Shopware\Components\Routing\RouterInterface */
+        /** @var $router RouterInterface  */
         $router = $container->get('router');
         /** @var $shop \Shopware\Models\Shop\Shop */
         $shop = $container->get('shop');
@@ -138,7 +118,7 @@ class Router
         /** @var $front \Enlight_Controller_Front */
         $front = $args->getSubject();
         $request = $front->Request();
-        /** @var $router \Shopware\Components\Routing\RouterInterface */
+        /** @var $router RouterInterface */
         $router = $front->Router();
         // Fix context on forward
         $context = $router->getContext();

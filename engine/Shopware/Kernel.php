@@ -49,6 +49,8 @@ use Shopware\Components\DependencyInjection\Compiler\DoctrineEventSubscriberComp
 use Shopware\Components\DependencyInjection\Compiler\EmotionPresetCompilerPass;
 use Shopware\Components\DependencyInjection\Compiler\EventListenerCompilerPass;
 use Shopware\Components\DependencyInjection\Compiler\EventSubscriberCompilerPass;
+use Shopware\Components\ConfigLoader;
+use Shopware\Components\DependencyInjection\Compiler\RouterCompilerPass;
 use Shopware\Components\DependencyInjection\Container;
 use Shopware\Components\Plugin;
 use Symfony\Component\Config\ConfigCache;
@@ -645,6 +647,7 @@ class Kernel implements HttpKernelInterface
         $container->addCompilerPass(new HandlerRegistryCompilerPass());
         $container->addCompilerPass(new SearchHandlerCompilerPass());
         $container->addCompilerPass(new EmotionPresetCompilerPass());
+        $container->addCompilerPass(new RouterCompilerPass());
 
         $container->setParameter('active_plugins', $this->activePlugins);
 
