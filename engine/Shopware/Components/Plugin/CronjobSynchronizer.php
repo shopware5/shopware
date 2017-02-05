@@ -77,7 +77,10 @@ class CronjobSynchronizer
             unset($cronjob['interval']);
         }
 
-        $id = $this->connection->fetchColumn('SELECT id FROM s_crontab WHERE `action` = ? AND pluginID = ?', [$cronjob['action'], $plugin->getId()]);
+        $id = $this->connection->fetchColumn('SELECT id FROM s_crontab WHERE `action` = ? AND pluginID = ?', [
+            $cronjob['action'],
+            $plugin->getId()
+        ]);
 
         if ($id) {
             // Don't overwrite user cronjob state

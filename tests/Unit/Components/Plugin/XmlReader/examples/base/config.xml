@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="../../../../../../../engine/Shopware/Components/Plugin/schema/config.xsd">
+
+    <label lang="en">My Form Label</label>
+    <label lang="de">Mein Form</label>
+
+    <description>My description</description>
+    <description lang="de">Meine Beschreibung</description>
+    <description lang="fr">Ma description</description>
+
+    <elements>
+        <element required="true">
+            <name>test</name>
+            <label>label</label>
+        </element>
+        <element>
+            <name>test2</name>
+            <label>label2</label>
+        </element>
+        <element>
+            <name>test3</name>
+            <label>label3</label>
+            <store type="extjs">EXTJS-STORE</store>
+        </element>
+        <element>
+            <name>test4</name>
+            <label>label5</label>
+            <store>
+                <option>
+                    <value>value</value>
+                    <label>label</label>
+                </option>
+                <option>
+                    <value>value2</value>
+                    <label>label2</label>
+                </option>
+                <option>
+                    <value>value3</value>
+                    <label>label3</label>
+                </option>
+            </store>
+        </element>
+        <element>
+            <name>test4</name>
+            <label>label4</label>
+            <!-- no store -->
+        </element>
+        <element>
+            <name>Name</name>
+            <label>Label</label>
+            <options>
+                <minValue>1</minValue>
+                <maxValue>2</maxValue>
+            </options>
+        </element>
+    </elements>
+</config>

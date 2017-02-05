@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:noNamespaceSchemaLocation="../../../../../engine/Shopware/Components/Plugin/schema/menu.xsd">
+      xsi:noNamespaceSchemaLocation="../../../../../../../engine/Shopware/Components/Plugin/schema/menu.xsd">
 
     <entries>
         <entry>
@@ -12,6 +12,11 @@
             <parent identifiedBy="label">Einstellungen</parent>
             <active>false</active>
             <position>-1</position>
+            <children>
+                <entry>
+                    <name>Test</name>
+                </entry>
+            </children>
         </entry>
 
         <entry>

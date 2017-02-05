@@ -28,7 +28,7 @@ use PHPUnit\Framework\TestCase;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Model\ModelRepository;
 use Shopware\Components\Plugin\RequirementValidator;
-use Shopware\Components\Plugin\XmlPluginInfoReader;
+use Shopware\Components\Plugin\XmlReader\XmlPluginReader;
 use Shopware\Models\Plugin\Plugin;
 
 class RequirementValidatorTest extends TestCase
@@ -245,6 +245,6 @@ class RequirementValidatorTest extends TestCase
 
         $em = $this->createConfiguredMock(ModelManager::class, ['getRepository' => $repo]);
 
-        return new RequirementValidator($em, new XmlPluginInfoReader());
+        return new RequirementValidator($em, new XmlPluginReader());
     }
 }

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="../../../../../../../engine/Shopware/Components/Plugin/schema/config.xsd">
+
+    <label lang="en">My Form Label</label>
+    <description>My description</description>
+</config>

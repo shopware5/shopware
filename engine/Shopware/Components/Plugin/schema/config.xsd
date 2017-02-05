@@ -72,16 +72,17 @@
                 </xsd:unique>
             </xsd:element>
         </xsd:sequence>
-        <xsd:attribute type="storeType" name="storeType" use="optional"/>
+        <xsd:attribute type="storeType" name="type" use="optional" default="xml"/>
     </xsd:complexType>
 
     <xsd:simpleType name="storeType">
         <xsd:restriction base="xsd:string">
-            <xsd:enumeration value="php"/>
+            <xsd:enumeration value="xml"/>
+            <xsd:enumeration value="extjs"/>
         </xsd:restriction>
     </xsd:simpleType>
 
-    <xsd:complexType name="storeOption">
+    <xsd:complexType name="storeOption" mixed="true">
         <xsd:sequence>
             <xsd:element name="value" type="xsd:string" minOccurs="1" maxOccurs="1"/>
             <xsd:element name="label" type="translatableString" minOccurs="1" maxOccurs="unbounded"/>

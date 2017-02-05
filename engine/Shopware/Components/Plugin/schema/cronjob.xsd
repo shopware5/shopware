@@ -12,11 +12,11 @@
 
     <xsd:complexType name="cronjobType">
         <xsd:sequence>
-            <xsd:element name="name" type="xsd:string" minOccurs="1" maxOccurs="1"/>
-            <xsd:element name="action" type="xsd:string" minOccurs="1" maxOccurs="1"/>
-            <xsd:element name="active" type="xsd:boolean" minOccurs="1" maxOccurs="1"/>
-            <xsd:element name="interval" type="xsd:int" minOccurs="1" maxOccurs="1"/>
-            <xsd:element name="disableOnError" type="xsd:boolean" minOccurs="1" maxOccurs="1"/>
+            <xsd:element name="name" type="xsd:string"/>
+            <xsd:element name="action" type="xsd:string"/>
+            <xsd:element name="active" type="xsd:boolean"/>
+            <xsd:element name="interval" type="xsd:int"/>
+            <xsd:element name="disableOnError" type="xsd:boolean"/>
         </xsd:sequence>
     </xsd:complexType>
 

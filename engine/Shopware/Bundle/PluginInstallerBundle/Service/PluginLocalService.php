@@ -49,7 +49,7 @@ class PluginLocalService
     private $hydrator;
 
     /**
-     * @param Connection     $connection
+     * @param Connection $connection
      * @param StructHydrator $hydrator
      */
     public function __construct(Connection $connection, StructHydrator $hydrator)
@@ -67,17 +67,15 @@ class PluginLocalService
     {
         $query = $this->getQuery();
 
-        $query
-            ->andWhere("plugin.name != 'PluginManager'")
-            ->andWhere('plugin.capability_enable = 1')
-        ;
+        $query->andWhere("plugin.name != 'PluginManager'")
+            ->andWhere('plugin.capability_enable = 1');
 
         $this->addSortings($context, $query);
 
         $query->setFirstResult($context->getOffset())
             ->setMaxResults($context->getLimit());
 
-        /** @var $statement \PDOStatement */
+        /** @var \PDOStatement $statement */
         $statement = $query->execute();
 
         $data = $statement->fetchAll(\PDO::FETCH_ASSOC);

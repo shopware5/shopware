@@ -47,6 +47,11 @@ class FirstRunWizardPluginStoreService
      */
     private $localPluginService;
 
+    /**
+     * @param StructHydrator $hydrator
+     * @param PluginLocalService $localPluginService
+     * @param StoreClient $storeClient
+     */
     public function __construct(
         StructHydrator $hydrator,
         PluginLocalService $localPluginService,
