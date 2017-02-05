@@ -22,41 +22,21 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Unit\Components\Plugin;
+namespace Shopware\Components\Plugin\XmlReader\StoreValueParser;
 
-use PHPUnit\Framework\TestCase;
-use Shopware\Components\Plugin\XmlCronjobReader;
+use DOMElement;
 
-class XmlCronjobReaderReaderTest extends TestCase
+class StoreExtjsValueParser implements StoreValueParserInterface
 {
     /**
-     * @var XmlCronjobReader
+     * Parses store options.
+     *
+     * @param DOMElement $element
+     *
+     * @return string|array
      */
-    private $SUT;
-
-    private $result = [
-        'name' => 'Article Importer',
-        'action' => 'ImportArticle',
-        'active' => true,
-        'interval' => 3600,
-        'disable_on_error' => false,
-    ];
-
-    protected function setUp()
+    public function parse(DOMElement $element)
     {
-        $this->SUT = new XmlCronjobReader();
-    }
-
-    public function testCanReadAndVerify()
-    {
-        $result = $this->SUT->read(__DIR__ . '/examples/cronjob.xml');
-        $this->assertInternalType('array', $result);
-    }
-
-    public function testReadCronjob()
-    {
-        $result = $this->SUT->read(__DIR__ . '/examples/cronjob.xml');
-
-        $this->assertArraySubset(current($result), $this->result);
+        return $element->nodeValue ?: '';
     }
 }
