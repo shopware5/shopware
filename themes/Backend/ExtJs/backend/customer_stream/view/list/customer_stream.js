@@ -26,5 +26,24 @@
 Ext.define('Shopware.apps.CustomerStream.view.list.CustomerStream', {
     extend: 'Shopware.grid.Panel',
     alias:  'widget.customer-stream-listing',
-    region: 'center'
+    // region: 'center',
+
+    configure: function() {
+        var me = this;
+
+        return {
+            pagingbar: false,
+            toolbar: false,
+            columns: {
+                name: {
+                    renderer: me.nameRenderer
+                }
+                // description: null
+            }
+        };
+    },
+
+    nameRenderer: function (value) {
+        return '<span class="stream-name-column"><i>'+value+'</i></span>'
+    }
 });

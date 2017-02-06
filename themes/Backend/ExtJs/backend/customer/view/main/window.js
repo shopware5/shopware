@@ -65,12 +65,12 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
      * Set border layout for the window
      * @string
      */
-    layout:'fit',
+    layout:'border',
     /**
      * Define window width
      * @integer
      */
-    width:800,
+    width:'90%',
     /**
      * Define window height
      * @integer
@@ -110,11 +110,69 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
 
         Ext.suspendLayouts();
 
+        me.listStore = Ext.create('Shopware.apps.CustomerStream.store.Preview', {
+            pageSize: 10
+        }).load({
+            conditions: null
+        });
+
+        me.gridPanel = Ext.create('Shopware.apps.Customer.view.list.List', {
+            store: me.listStore,
+            region: 'center'
+        });
+
+        me.streamListing = Ext.create('Shopware.apps.CustomerStream.view.list.CustomerStream', {
+            store: Ext.create('Shopware.apps.CustomerStream.store.CustomerStream').load(),
+            subApp: me.subApp,
+            collapsible: true,
+            title: 'Definierte Streams',
+            height: 200,
+            selectionChanged: function(selModel, selection) {
+                if (selection.length <= 0) {
+                    me.filterPanel.setValue(null);
+                    return;
+                }
+                var record = selection[0];
+                me.streamListing.setLoading(true);
+                me.filterPanel.loadRecord(record);
+                me.filterPanel.setValue(record.get('conditions'));
+                me.streamListing.setLoading(false);
+                me.listStore.getProxy().extraParams = record.get('conditions');
+                me.listStore.load();
+            }
+        });
+
+        me.filterPanel = Ext.create('Shopware.apps.CustomerStream.view.detail.ConditionPanel', {
+            flex: 4
+        });
+
+        me.filterPanel.on('load-preview', function(conditions) {
+            if (!me.filterPanel.getForm().isValid()) {
+                return;
+            }
+            me.listStore.getProxy().extraParams = conditions;
+            me.listStore.load();
+        });
+
         //add the customer list grid panel and set the store
-        me.items = [{
-            xtype:'customer-list',
-            store: me.listStore
-        }];
+        me.items = [
+            {
+                xtype: 'panel',
+                region: 'west',
+                collapsible: true,
+                layout: {
+                    type: 'vbox',
+                    align: 'stretch'
+                },
+                width: 300,
+                title: 'Filter & Customer Streams',
+                items: [
+                    me.filterPanel,
+                    me.streamListing
+                ]
+            },
+            me.gridPanel
+        ];
         Ext.resumeLayouts(true);
 
         me.callParent(arguments);

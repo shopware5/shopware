@@ -42,13 +42,11 @@ Ext.define('Shopware.apps.CustomerStream.view.conditions.HasTotalOrderAmountCond
 
     _create: function() {
         return {
-            title: this.getLabel(),
+            title: '{s name="total_order_amount_condition_input"}{/s}',
             conditionClass: 'Shopware\\Bundle\\CustomerSearchBundle\\Condition\\HasTotalOrderAmountCondition',
             items: [{
                 xtype: 'numberfield',
                 minValue: 1,
-                labelWidth: 180,
-                fieldLabel: '{s name="total_order_amount_condition_input"}{/s}',
                 name: 'minimumOrderAmount'
             }]
         };

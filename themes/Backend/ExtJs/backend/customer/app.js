@@ -78,6 +78,7 @@ Ext.define('Shopware.apps.Customer', {
         'detail.Comment',
         'detail.Additional' ,
         'list.List',
+        'list.Filter',
         'main.Window',
         'order.List',
         'order.Chart',

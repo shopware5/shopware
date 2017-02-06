@@ -44,12 +44,10 @@ Ext.define('Shopware.apps.CustomerStream.view.conditions.OrderedProductOfManufac
         var factory = Ext.create('Shopware.attribute.SelectionFactory');
 
         return {
-            title: this.getLabel(),
+            title: '{s name="ordered_product_of_manufacturer_condition_selection"}{/s}',
             conditionClass: 'Shopware\\Bundle\\CustomerSearchBundle\\Condition\\OrderedProductOfManufacturerCondition',
             items: [{
                 xtype: 'shopware-form-field-grid',
-                labelWidth: 180,
-                fieldLabel: '{s name="ordered_product_of_manufacturer_condition_selection"}{/s}',
                 name: 'manufacturerIds',
                 flex: 1,
                 allowSorting: false,

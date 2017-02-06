@@ -42,5 +42,20 @@
     {else}
         <script type="text/javascript" src="{url controller=base action=index}?file=bootstrap&{Shopware::REVISION}"></script>
     {/if}
+
+
+    <style>
+        .x-customer-grid .x-grid-cell-inner {
+            line-height: 16px !important;
+            padding-top: 10px;
+            padding-bottom: 10px;
+
+        }
+        .stream-name-column {
+            line-height: 20px !important;
+            font-size: 12px;
+            color: #35404B;
+        }
+    </style>
 {/block}
 </head>

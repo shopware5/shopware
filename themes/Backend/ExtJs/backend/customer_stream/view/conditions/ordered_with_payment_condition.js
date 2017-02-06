@@ -44,12 +44,10 @@ Ext.define('Shopware.apps.CustomerStream.view.conditions.OrderedWithPaymentCondi
         var factory = Ext.create('Shopware.attribute.SelectionFactory');
 
         return {
-            title: this.getLabel(),
+            title: '{s name="ordered_with_payment_condition_selection"}{/s}',
             conditionClass: 'Shopware\\Bundle\\CustomerSearchBundle\\Condition\\OrderedWithPaymentCondition',
             items: [{
                 xtype: 'shopware-form-field-payment-grid',
-                labelWidth: 180,
-                fieldLabel: '{s name="ordered_with_payment_condition_selection"}{/s}',
                 name: 'paymentIds',
                 flex: 1,
                 allowSorting: false,

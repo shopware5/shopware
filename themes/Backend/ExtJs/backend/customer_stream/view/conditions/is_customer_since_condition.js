@@ -42,13 +42,11 @@ Ext.define('Shopware.apps.CustomerStream.view.conditions.IsCustomerSinceConditio
 
     _create: function() {
         return {
-            title: this.getLabel(),
+            title: '{s name="is_customer_since_condition_label"}{/s}',
             conditionClass: 'Shopware\\Bundle\\CustomerSearchBundle\\Condition\\IsCustomerSinceCondition',
             items: [{
                 xtype: 'datefield',
                 name: 'customerSince',
-                labelWidth: 180,
-                fieldLabel: '{s name="is_customer_since_condition_label"}{/s}',
                 allowBlank: false
             }]
         };

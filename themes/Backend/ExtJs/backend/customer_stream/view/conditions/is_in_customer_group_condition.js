@@ -44,12 +44,10 @@ Ext.define('Shopware.apps.CustomerStream.view.conditions.IsInCustomerGroupCondit
         var factory = Ext.create('Shopware.attribute.SelectionFactory');
 
         return {
-            title: this.getLabel(),
+            title: '{s name="is_in_customer_group_condition_selection"}{/s}',
             conditionClass: 'Shopware\\Bundle\\CustomerSearchBundle\\Condition\\IsInCustomerGroupCondition',
             items: [{
                 xtype: 'shopware-form-field-grid',
-                labelWidth: 180,
-                fieldLabel: '{s name="is_in_customer_group_condition_selection"}{/s}',
                 name: 'customerGroupKeys',
                 flex: 1,
                 allowSorting: false,
