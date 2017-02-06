@@ -2,9 +2,10 @@
 
 namespace Shopware\tests\Unit\Controllers\Backend;
 
+use PHPUnit\Framework\TestCase;
 use Shopware_Controllers_Backend_Order;
 
-class OrderTest extends \PHPUnit_Framework_TestCase
+class OrderTest extends TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -23,7 +24,7 @@ class OrderTest extends \PHPUnit_Framework_TestCase
         $this->method = $class->getMethod('resolveSortParameter');
         $this->method->setAccessible(true);
     }
-    
+
     public function testSortByNonePrefixedColumn()
     {
         $sorts = [

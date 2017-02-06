@@ -43,7 +43,7 @@ use Shopware\Bundle\PluginInstallerBundle\Service\InstallerService;
  * @package   Shopware\Components\Test\Plugin
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-abstract class TestCase extends \PHPUnit_Framework_TestCase
+abstract class TestCase extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var InstallerService

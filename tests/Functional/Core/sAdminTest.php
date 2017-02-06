@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-class sAdminTest extends PHPUnit_Framework_TestCase
+class sAdminTest extends PHPUnit\Framework\TestCase
 {
     /**
      * @var sAdmin
