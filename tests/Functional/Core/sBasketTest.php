@@ -2237,6 +2237,80 @@ class sBasketTest extends PHPUnit\Framework\TestCase
     }
 
     /**
+     * @covers sBasket::getTaxesForUpdateArticle
+     */
+    public function testsPriceCalculationTaxfreeWithPriceGroupDiscount()
+    {
+        $resourceHelper = new \Shopware\Tests\Functional\Bundle\StoreFrontBundle\Helper();
+
+        // Create pricegroup
+        $priceGroup = $resourceHelper->createPriceGroup(array(
+            array(
+                'key' => 'EK',
+                'quantity' => 1,
+                'discount' => 15
+            )
+        ));
+
+        // Create test article
+        $article = $resourceHelper->createArticle(array(
+            'name' => 'Testartikel',
+            'description' => 'Test description',
+            'active' => true,
+            'mainDetail' => array(
+                'number' => 'swTEST' . uniqid(rand()),
+                'inStock' => 15,
+                'unitId' => 1,
+                'prices' => array(
+                    array(
+                        'customerGroupKey' => 'EK',
+                        'from' => 1,
+                        'to' => '-',
+                        'price' => 38.90,
+                    )
+                )
+            ),
+            'taxId' => 4,
+            'supplierId' => 2,
+            'categories' => [10],
+            'priceGroupActive' => true,
+            'priceGroupId' => $priceGroup->getId()
+        ));
+
+        // Set customergroup to taxfree in session
+        $customerGroupData = Shopware()->Db()->fetchRow(
+            "SELECT * FROM s_core_customergroups WHERE groupkey = :key",
+            array(':key' => 'EK')
+        );
+        $customerGroupData['tax'] = 0;
+        $this->module->sSYSTEM->sUSERGROUPDATA = $customerGroupData;
+        Shopware()->Session()->sUserGroupData = $customerGroupData;
+
+        // Setup session
+        $this->module->sSYSTEM->sSESSION_ID = uniqid(rand());
+        $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
+
+        $basketItemId = $this->module->sAddArticle($article->getMainDetail()->getNumber(), 1);
+
+        // Check that the article has been added to the basket
+        $this->assertNotEquals(false, $basketItemId);
+
+        // Check that the final price equals the net price for the basket item
+        $basketItem = Shopware()->Db()->fetchRow(
+            "SELECT * FROM s_order_basket WHERE id = :id",
+            array(':id' => $basketItemId)
+        );
+        $this->assertEquals($basketItem['price'], $basketItem['netprice']);
+
+        // Check that the final price equals the net price for the whole basket
+        $basketData = $this->module->sGetBasketData();
+        $this->assertEquals($basketData['AmountNumeric'], $basketData['AmountNetNumeric']);
+
+        // Delete test resources
+        $resourceHelper->cleanUp();
+    }
+
+    /**
      * Create dummy customer entity
      *
      * @return \Shopware\Models\Customer\Customer
