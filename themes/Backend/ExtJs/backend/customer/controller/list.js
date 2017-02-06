@@ -92,9 +92,6 @@ Ext.define('Shopware.apps.Customer.controller.List', {
             },
             'customer-list textfield[name=searchfield]':{
                 change:me.onSearchField
-            },
-            'customer-list combobox[name=customerGroupSearch]':{
-                change:me.onSearchComboBox
             }
         });
 

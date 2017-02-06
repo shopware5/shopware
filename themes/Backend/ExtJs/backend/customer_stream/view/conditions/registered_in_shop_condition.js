@@ -44,12 +44,10 @@ Ext.define('Shopware.apps.CustomerStream.view.conditions.RegisteredInShopConditi
         var factory = Ext.create('Shopware.attribute.SelectionFactory');
 
         return {
-            title: this.getLabel(),
+            title: '{s name="registered_in_shop_condition_selection"}{/s}',
             conditionClass: 'Shopware\\Bundle\\CustomerSearchBundle\\Condition\\RegisteredInShopCondition',
             items: [{
                 xtype: 'shopware-form-field-shop-grid',
-                labelWidth: 180,
-                fieldLabel: '{s name="registered_in_shop_condition_selection"}{/s}',
                 name: 'shopIds',
                 flex: 1,
                 allowSorting: false,

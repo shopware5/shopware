@@ -43,15 +43,13 @@ Ext.define('Shopware.apps.CustomerStream.view.conditions.HasOrderCountCondition'
 
     _create: function() {
         return {
-            title: this.getLabel(),
+            title: '{s name="order_count_condition_input"}{/s}',
             conditionClass: 'Shopware\\Bundle\\CustomerSearchBundle\\Condition\\HasOrderCountCondition',
             items: [{
                 xtype: 'numberfield',
                 minValue: 1,
                 value: 1,
                 allowBlank: false,
-                labelWidth: 180,
-                fieldLabel: '{s name="order_count_condition_input"}{/s}',
                 name: 'minimumOrderCount'
             }]
         };

@@ -107,9 +107,7 @@ Ext.define('Shopware.apps.Customer.controller.Main', {
             }
         } else {
             //open the customer listing window
-            me.mainWindow = me.getView('main.Window').create({
-                listStore:me.subApplication.getStore('List').load()
-            });
+            me.mainWindow = me.getView('main.Window').create();
         }
 
         me.callParent(arguments);

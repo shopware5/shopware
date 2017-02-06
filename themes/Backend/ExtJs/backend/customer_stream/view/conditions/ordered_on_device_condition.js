@@ -51,12 +51,10 @@ Ext.define('Shopware.apps.CustomerStream.view.conditions.OrderedOnDeviceConditio
         });
 
         return {
-            title: this.getLabel(),
+            title: '{s name="ordered_on_device_condition_selection"}{/s}',
             conditionClass: 'Shopware\\Bundle\\CustomerSearchBundle\\Condition\\OrderedOnDeviceCondition',
             items: [{
                 xtype: 'shopware-form-field-grid',
-                labelWidth: 180,
-                fieldLabel: '{s name="ordered_on_device_condition_selection"}{/s}',
                 name: 'devices',
                 flex: 1,
                 allowSorting: false,

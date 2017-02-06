@@ -83,16 +83,22 @@ Ext.define('Shopware.apps.CustomerStream.view.detail.ConditionPanel', {
             dock: 'top',
             style: 'border: 1px solid #9aacb8;',
             ui: 'shopware-ui',
-            items: [{
-                xtype: 'button',
-                text: '{s name=add}{/s}',
-                iconCls: 'sprite-plus-circle-frame',
-                menu: me.createMenu()
-            }, '->', {
-                text: '{s name=preview}{/s}',
-                iconCls: 'sprite-arrow-circle-225-left',
-                handler: Ext.bind(me.loadPreview, me)
-            }]
+            items: me.createToolbarItems()
+        }];
+    },
+
+    createToolbarItems: function() {
+        var me = this;
+        return [{
+            xtype: 'button',
+            tooltip: '{s name=add}{/s}',
+            // iconCls: 'sprite-plus-circle-frame',
+            iconCls: 'sprite-funnel',
+            menu: me.createMenu()
+        }, '->', {
+            tooltip: '{s name=preview}{/s}',
+            iconCls: 'sprite-arrow-circle-225-left',
+            handler: Ext.bind(me.loadPreview, me)
         }];
     },
 
@@ -122,7 +128,7 @@ Ext.define('Shopware.apps.CustomerStream.view.detail.ConditionPanel', {
         });
     },
 
-    addCondition: function(configuration) {
+    createConditionContainer: function(configuration) {
         var me = this;
 
         var panel = Ext.create('Shopware.apps.CustomerStream.view.detail.ConditionField', {
@@ -131,12 +137,12 @@ Ext.define('Shopware.apps.CustomerStream.view.detail.ConditionPanel', {
             items: configuration.items
         });
 
-        var container = Ext.create('Ext.panel.Panel', {
+        return Ext.create('Ext.panel.Panel', {
             title: configuration.title,
             layout: { type: 'hbox', align: 'stretch' },
             minHeight: 90,
             conditionClass: configuration.conditionClass,
-            maxHeight: 180,
+            maxHeight: 150,
             bodyPadding: 10,
             collapsible: true,
             closable: true,
@@ -144,17 +150,28 @@ Ext.define('Shopware.apps.CustomerStream.view.detail.ConditionPanel', {
             conditionField: panel,
             items: [panel]
         });
+    },
 
-        var exists = false;
-        Ext.each(me.items.items, function(item) {
+    addCondition: function(configuration) {
+        var me = this,
+            container = me.createConditionContainer(configuration);
+
+        if (!me.conditionExists(me.items.items, configuration)) {
+            me.add(container);
+        }
+    },
+
+    conditionExists: function(items, configuration) {
+        var me = this,
+            exists = false;
+
+        Ext.each(items, function(item) {
             if (item.conditionClass === configuration.conditionClass) {
                 exists = true;
             }
         });
 
-        if (!exists) {
-            me.add(container);
-        }
+        return exists;
     },
 
     getValue: function() {
@@ -170,14 +187,21 @@ Ext.define('Shopware.apps.CustomerStream.view.detail.ConditionPanel', {
 
         value = Ext.JSON.decode(value);
 
+        var containers = [];
+
         for (var conditionClass in value) {
             var items = value[conditionClass];
             var handler = me.getHandler(conditionClass);
 
             handler.load(conditionClass, items, function(configuration) {
-                me.addCondition(configuration);
+                if (!me.conditionExists(containers, configuration)) {
+                    var container = me.createConditionContainer(configuration);
+                    container.collapsed = true;
+                    containers.push(container);
+                }
             });
         }
+        me.add(containers);
         me.getForm().setValues(value);
     },
 

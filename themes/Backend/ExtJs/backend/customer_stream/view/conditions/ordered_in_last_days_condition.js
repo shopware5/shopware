@@ -42,13 +42,11 @@ Ext.define('Shopware.apps.CustomerStream.view.conditions.OrderedInLastDaysCondit
 
     _create: function() {
         return {
-            title: this.getLabel(),
+            title:  '{s name="ordered_in_last_days_condition_input"}{/s}',
             conditionClass: 'Shopware\\Bundle\\CustomerSearchBundle\\Condition\\OrderedInLastDaysCondition',
             items: [{
                 xtype: 'numberfield',
                 minValue: 1,
-                labelWidth: 180,
-                fieldLabel: '{s name="ordered_in_last_days_condition_input"}{/s}',
                 name: 'lastDays'
             }]
         };

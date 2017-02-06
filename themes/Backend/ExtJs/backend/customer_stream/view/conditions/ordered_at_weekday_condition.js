@@ -55,12 +55,10 @@ Ext.define('Shopware.apps.CustomerStream.view.conditions.OrderedAtWeekdayConditi
         });
 
         return {
-            title: this.getLabel(),
+            title: '{s name="ordered_at_weekday_condition_selection"}{/s}',
             conditionClass: 'Shopware\\Bundle\\CustomerSearchBundle\\Condition\\OrderedAtWeekdayCondition',
             items: [{
                 xtype: 'shopware-form-field-grid',
-                labelWidth: 180,
-                fieldLabel: '{s name="ordered_at_weekday_condition_selection"}{/s}',
                 name: 'weekdays',
                 flex: 1,
                 allowSorting: false,

@@ -96,7 +96,12 @@ class Shopware_Controllers_Backend_CustomerStream extends Shopware_Controllers_B
 
         $offset = (int) $request->getParam('start', 0);
         $limit = (int) $request->getParam('limit', 50);
-        $conditions = json_decode($conditions, true);
+
+        if ($conditions !== null) {
+            $conditions = json_decode($conditions, true);
+        } else {
+            $conditions = [];
+        }
 
         $criteria = $this->createCriteria($conditions);
 
@@ -133,5 +138,4 @@ class Shopware_Controllers_Backend_CustomerStream extends Shopware_Controllers_B
         }
         return $criteria;
     }
-
 }

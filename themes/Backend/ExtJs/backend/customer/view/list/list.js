@@ -156,6 +156,77 @@ Ext.define('Shopware.apps.Customer.view.list.List', {
     getColumns:function () {
         var me = this;
 
+        return [
+            {
+                header: 'Information',
+                dataIndex: 'meta',
+                flex: 2,
+                renderer: function () {
+                    return '<span class="customer-list-meta"><b>20001</b> - Händler' +
+                        '<br>Kunde seit: 01.01.2017</span>';
+                }
+            },
+        {
+            header: 'Kunde',
+            dataIndex: 'customer',
+            flex: 3,
+            renderer: function () {
+                return 'Dr. Rainer Schmitz (45 män.)' +
+                    '<br><i>CEO (Muster AG)</i>';
+            }
+        } ,{
+            header: 'Anschrift',
+            dataIndex: 'address',
+            flex: 3,
+            renderer: function() {
+                return 'Zum Borndal 6' +
+                    '<br>48341 Altenberge, Deutschland';
+            }
+        }
+        , {
+            header: 'Umsatz',
+            dataIndex: 'orders',
+            flex: 2,
+            renderer: function() {
+                return 'Durschn.: <b>83,50€</b>' +
+                    '<br>Gesamt: <b>400,00 €</b>';
+
+            }
+        }, {
+                header: 'Bestellungen',
+                dataIndex: 'orders',
+                flex: 2,
+                renderer: function() {
+                    return 'Bestellungen: 20' +
+                        '<br>Letzte: 01.01.2017';
+
+                }
+            }
+        , {
+            header: 'Interessen',
+            dataIndex: 'interesting',
+            flex: 2,
+            renderer: function() {
+                return '<i>Herrenschuhe - Nikè</i>' +
+                    '<i><br>Edelbrände - Sasse</i>';
+
+            }
+        }
+        , {
+            header: 'Kategoriesierung',
+            dataIndex: 'categories',
+            flex: 2,
+            renderer: function() {
+                return '<i>Stammkunde</i>' +
+                    '<br><i>Herrenmode</i>';
+            }
+        }
+        ];
+
+
+
+
+
         var columns = [{
             header:me.snippets.columns.number,
             dataIndex:'number',
@@ -255,7 +326,6 @@ Ext.define('Shopware.apps.Customer.view.list.List', {
         });
     },
 
-
     /**
      * Creates the grid toolbar with the add and delete button
      *
@@ -285,19 +355,7 @@ Ext.define('Shopware.apps.Customer.view.list.List', {
                 /*{if {acl_is_allowed privilege=delete}}*/
                     me.deleteCustomerButton,
                 /*{/if}*/
-                {
-                    xtype:'combobox',
-                    triggerAction:'all',
-                    name:'customerGroupSearch',
-                    fieldLabel:me.snippets.toolbar.customerGroup,
-                    store:Ext.create('Shopware.store.CustomerGroup').load(),
-                    emptyText: me.snippets.toolbar.groupEmpty,
-                    valueField:'id',
-                    displayField:'name',
-                    enableKeyEvents:true,
-                    checkChangeBuffer:500,
-                    marginRight:10
-                },
+
                 '->',
                 {
                     xtype:'textfield',

@@ -44,12 +44,10 @@ Ext.define('Shopware.apps.CustomerStream.view.conditions.OrderedWithDeliveryCond
         var factory = Ext.create('Shopware.attribute.SelectionFactory');
 
         return {
-            title: this.getLabel(),
+            title: '{s name="ordered_with_delivery_condition_selection"}{/s}',
             conditionClass: 'Shopware\\Bundle\\CustomerSearchBundle\\Condition\\OrderedWithDeliveryCondition',
             items: [{
                 xtype: 'shopware-form-field-dispatch-grid',
-                labelWidth: 180,
-                fieldLabel: '{s name="ordered_with_delivery_condition_selection"}{/s}',
                 name: 'dispatchIds',
                 flex: 1,
                 allowSorting: false,

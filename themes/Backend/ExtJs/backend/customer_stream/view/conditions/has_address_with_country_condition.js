@@ -49,12 +49,10 @@ Ext.define('Shopware.apps.CustomerStream.view.conditions.HasAddressWithCountryCo
         var factory = Ext.create('Shopware.attribute.SelectionFactory');
 
         return {
-            title: this.getLabel(),
+            title: '{s name="has_address_with_country_condition_selection"}{/s}',
             conditionClass: 'Shopware\\Bundle\\CustomerSearchBundle\\Condition\\HasAddressWithCountryCondition',
             items: [{
                 xtype: 'shopware-form-field-grid',
-                labelWidth: 180,
-                fieldLabel: '{s name="has_address_with_country_condition_selection"}{/s}',
                 name: 'countryIds',
                 flex: 1,
                 allowSorting: false,
