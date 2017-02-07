@@ -141,7 +141,7 @@ class sOrderTest extends PHPUnit\Framework\TestCase
 
     public function testRefreshOrderedVariant()
     {
-        $detail = Shopware()->Db()->fetchRow('SELECT * FROM s_articles_details WHERE instock > 10 ORDER BY RAND() LIMIT 1');
+        $detail = Shopware()->Db()->fetchRow('SELECT * FROM s_articles_details WHERE instock > 10 LIMIT 1');
 
         $this->invokeMethod($this->module, 'refreshOrderedVariant', array(
             $detail['ordernumber'],
@@ -699,7 +699,7 @@ class sOrderTest extends PHPUnit\Framework\TestCase
     private function getRandomDispatch()
     {
         return Shopware()->Db()->fetchRow(
-            "SELECT * FROM s_premium_dispatch ORDER BY RAND() LIMIT 1"
+            "SELECT * FROM s_premium_dispatch LIMIT 1"
         );
     }
 
@@ -730,7 +730,6 @@ class sOrderTest extends PHPUnit\Framework\TestCase
                INNER JOIN s_core_tax t
                  ON t.id = a.taxID
              WHERE a.id = 162
-             ORDER BY RAND()
              LIMIT 2
             "
         );
@@ -840,7 +839,7 @@ class sOrderTest extends PHPUnit\Framework\TestCase
         if ($number) {
             $article = $this->getArticleResource()->getOneByNumber($number);
         } else {
-            $id = Shopware()->Db()->fetchOne('SELECT id FROM s_articles ORDER BY RAND() LIMIT 1');
+            $id = Shopware()->Db()->fetchOne('SELECT id FROM s_articles LIMIT 1');
             $article = $this->getArticleResource()->getOne($id);
         }
 
