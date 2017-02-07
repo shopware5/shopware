@@ -24,7 +24,7 @@ use Shopware\Models\Customer\Customer;
  * our trademarks remain entirely with us.
  */
 
-class Shopware_Tests_Api_CustomerTest extends PHPUnit_Framework_TestCase
+class Shopware_Tests_Api_CustomerTest extends PHPUnit\Framework\TestCase
 {
     public $apiBaseUrl = '';
 

@@ -165,12 +165,10 @@ class ProductMediaTest extends TestCase
     {
         $this->assertInstanceOf('Shopware\Bundle\StoreFrontBundle\Struct\Media', $media);
         $this->assertNotEmpty($media->getThumbnails());
-
-        $matcher = $this->stringContains($expected);
-        $matcher->evaluate($media->getFile());
+        $this->assertContains($expected, $media->getFile());
 
         foreach ($media->getThumbnails() as $thumbnail) {
-            $matcher->evaluate($thumbnail);
+            $this->assertContains($expected, $thumbnail->getSource());
         }
     }
 

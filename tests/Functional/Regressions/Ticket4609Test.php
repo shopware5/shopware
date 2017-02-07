@@ -22,6 +22,8 @@
  * our trademarks remain entirely with us.
  */
 
+use PHPUnit\DbUnit\DataSet\IDataSet;
+
 /**
  * @category  Shopware
  * @package   Shopware\Tests
@@ -32,7 +34,7 @@ class Shopware_RegressionTests_Ticket4609 extends Enlight_Components_Test_Plugin
     /**
      * Returns the test dataset
      *
-     * @return PHPUnit_Extensions_Database_DataSet_IDataSet
+     * @return IDataSet
      */
     protected function getDataSet()
     {

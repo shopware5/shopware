@@ -9,7 +9,7 @@ use Shopware\Bundle\SearchBundleDBAL\SearchBundleDBALSubscriber;
 use Shopware\Bundle\SearchBundleDBAL\SortingHandler\PopularitySortingHandler;
 use Shopware\Bundle\SearchBundleDBAL\SortingHandler\ProductNameSortingHandler;
 
-class SearchBundleDBALSubscriberTest extends \PHPUnit_Framework_TestCase
+class SearchBundleDBALSubscriberTest extends \PHPUnit\Framework\TestCase
 {
     public function testValidCreate()
     {

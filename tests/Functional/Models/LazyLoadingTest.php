@@ -27,7 +27,7 @@ use Doctrine\ORM\Mapping\ClassMetadata;
 use Shopware\Models\Customer\Group;
 use Shopware\Models\Customer\Customer;
 
-class LazyLoadingTest extends PHPUnit_Framework_TestCase
+class LazyLoadingTest extends PHPUnit\Framework\TestCase
 {
     /**
      * @var EntityManager
