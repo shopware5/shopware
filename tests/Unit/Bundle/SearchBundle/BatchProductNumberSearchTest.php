@@ -32,7 +32,7 @@ use Shopware\Bundle\SearchBundle\Sorting\PriceSorting;
 use Shopware\Bundle\SearchBundle\Sorting\ReleaseDateSorting;
 use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
 
-class BatchProductNumberSearchTest extends \PHPUnit_Framework_TestCase
+class BatchProductNumberSearchTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var BatchProductNumberSearch

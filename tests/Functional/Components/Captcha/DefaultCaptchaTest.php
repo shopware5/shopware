@@ -9,7 +9,7 @@ use Shopware\Components\Captcha\DefaultCaptcha;
  * @package   Shopware\Components\Captcha
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
-class DefaultCaptchaTest extends \PHPUnit_Framework_TestCase
+class DefaultCaptchaTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var DefaultCaptcha

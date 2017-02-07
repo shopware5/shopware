@@ -29,7 +29,7 @@ use Shopware\Bundle\SearchBundle\BatchProductSearchResult;
 use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 
-class BatchProductSearchTest extends \PHPUnit_Framework_TestCase
+class BatchProductSearchTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var BatchProductNumberSearch

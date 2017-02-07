@@ -24,11 +24,10 @@
 
 namespace Shopware\Tests\Functional\Components;
 
-use PHPUnit_Framework_TestCase;
 use Shopware\Components\Captcha\CaptchaValidator;
 use Shopware\Components\Captcha\DefaultCaptcha;
 
-class CaptchaValidatorTest extends PHPUnit_Framework_TestCase
+class CaptchaValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var DefaultCaptcha

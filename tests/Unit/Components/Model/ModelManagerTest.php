@@ -26,7 +26,7 @@ namespace Shopware\Tests\Unit\Components\Model;
 
 use Shopware\Components\Model\ModelManager;
 
-class ModelManagerTest extends \PHPUnit_Framework_TestCase
+class ModelManagerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ModelManager
