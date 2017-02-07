@@ -76,6 +76,7 @@ class Theme extends \Shopware\Components\Theme
     protected $javascript = [
 
         // Third party plugins / libraries
+        'src/js/vendors/modernizr/modernizr.custom.35977.js',
         'vendors/js/jquery/jquery.min.js',
         'vendors/js/picturefill/picturefill.min.js',
         'vendors/js/jquery.transit/jquery.transit.js',
@@ -1343,6 +1344,18 @@ class Theme extends \Shopware\Components\Theme
                 ['attributes' => [
                     'lessCompatible' => false,
                     'boxLabel' => Shopware()->Snippets()->getNamespace('themes/bare/backend/config')->get('ajax_variant_switch_description')
+                ]]
+            )
+        );
+
+        $fieldSet->addElement(
+            $this->createCheckboxField(
+                'asyncJavascriptLoading',
+                '__async_javascript_loading__',
+                true,
+                ['attributes' => [
+                    'lessCompatible' => false,
+                    'boxLabel' => Shopware()->Snippets()->getNamespace('themes/bare/backend/config')->get('async_javascript_loading_description')
                 ]]
             )
         );

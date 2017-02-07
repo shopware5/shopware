@@ -54,7 +54,7 @@ This changelog references changes done in Shopware 5.3 patch versions.
     * `themes/Frontend/Bare/frontend/detail/content/tab_navigation.tpl`
     * `themes/Frontend/Bare/frontend/detail/content/tab_container.tpl`
 * Added new option to select variants in `Shopware.apps.Emotion.view.components.Article` and `Shopware.apps.Emotion.view.components.ArticleSlider`
-
+* Added local path to `@font-face` integration of the Open Sans font
 
 ### Changes
 
@@ -85,27 +85,30 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Changed template file `themes/Frontend/Bare/frontend/detail/index.tpl` to split it into separated files
 * Changed the `linkDetails` property of the `sArticle` template variable. The URL also contains now the order number of the product
 * Changed the product selection to variant selection in `Shopware.apps.Emotion.view.components.BannerMapping`
+* Changed the integration of `modernizr.js` and added it to the compressed main JavaScript files
+* Changed the script tag for the generated JavaScript file for asynchronous loading, can be changed in theme configuration
+* Changed the inline script for the statistics update to vanilla JavaScript
 * Change behavior of the smarty rendering in forms fields comment.
     * Only variables that were previously assign to the view are rendered.
     * smarty function calls are no longer executed.
     * Only simple variables can be used.
-    
+
     Example:
-    
+
     {sElement.name} **works**
-    
+
     {sElement.name|currency} **works but did not execute the currency function**
-    
+
     {sElement.value[$key]|currency} **did not work**
 * Change behavior of the tracking url rendering.
     * only the smarty variable **{$offerPosition.trackingcode}** is in use.
     * use now only the url of the tracking service like: https://gls-group.eu/DE/de/paketverfolgung?match={$offerPosition.trackingcode}
-    
+
 ```xml
 <a href="https://gls-group.eu/DE/de/paketverfolgung?match={$offerPosition.trackingcode}" onclick="return !window.open(this.href, 'popup', 'width=500,height=600,left=20,top=20');" target="_blank">{$offerPosition.trackingcode}</a>
 ```
 
-did not work anymore because the smarty rendering is off. The string {$offerPosition.trackingcode} is only a placeholder. 
+did not work anymore because the smarty rendering is off. The string {$offerPosition.trackingcode} is only a placeholder.
 
 ### Removals
 
@@ -264,6 +267,7 @@ did not work anymore because the smarty rendering is off. The string {$offerPosi
     * `SORTING_PRODUCT_NAME_DESC`
     * `SORTING_SEARCH_RANKING`
 * Removed smarty modifier `rewrite`
+* Removed unused `@font-face` for "extra-bold" and "light" of the Open Sans font type
 * Removed scrollbar styling on filter-panels (Selector `.filter-panel--content`)
 * Removed support for `.swf` file type in banner module
 * Removed deprecated template block `frontend_listing_swf_banner` in `themes/Frontend/Bare/frontend/listing/banner.tpl`
