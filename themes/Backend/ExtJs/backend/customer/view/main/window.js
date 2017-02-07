@@ -101,6 +101,19 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
     title:'{s name=window_title}Customer list{/s}',
 
     /**
+     * Contains all snippets for the view component
+     * @object
+     */
+    snippets:{
+        toolbar:{
+            add:'{s name=toolbar/button_add}Add{/s}',
+            remove:'{s name=toolbar/button_delete}Delete all selected{/s}',
+            customerGroup:'{s name=toolbar/customer_group}Customer group{/s}',
+            groupEmpty:'{s name=toolbar/customer_group_empty}Select...{/s}',
+            search:'{s name=toolbar/search_empty_text}Search...{/s}'
+        }
+    },
+    /**
      * Initializes the component and builds up the main interface
      *
      * @return void
@@ -113,8 +126,9 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
         me.listStore = Ext.create('Shopware.apps.CustomerStream.store.Preview', {
             pageSize: 10
         }).load({
-            conditions: null
+            conditions: null,
         });
+        console.log(me.listStore);
 
         me.gridPanel = Ext.create('Shopware.apps.Customer.view.list.List', {
             store: me.listStore,
@@ -173,9 +187,59 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
             },
             me.gridPanel
         ];
+        me.dockedItems = [ me.getToolbar()];
+
         Ext.resumeLayouts(true);
 
         me.callParent(arguments);
-    }
+    },
+    /**
+     * Creates the grid toolbar with the add and delete button
+     *
+     * @return [Ext.toolbar.Toolbar] grid toolbar
+     */
+    getToolbar:function () {
+        var me = this;
+
+        me.deleteCustomerButton = Ext.create('Ext.button.Button', {
+            iconCls:'sprite-minus-circle-frame',
+            text:me.snippets.toolbar.remove,
+            disabled:true,
+            action:'deleteCustomer'
+        });
+
+        var items = me.filterPanel.createToolbarItems();
+
+        /*{if {acl_is_allowed privilege=create}}*/
+            items.push({
+                iconCls:'sprite-plus-circle-frame',
+                text:me.snippets.toolbar.add,
+                action:'addCustomer'
+            });
+        /*{/if}*/
+
+        /*{if {acl_is_allowed privilege=delete}}*/
+            items.push(me.deleteCustomerButton);
+        /*{/if}*/
+
+        items.push('->');
+        items.push({
+            xtype:'textfield',
+            name:'searchfield',
+            cls:'searchfield',
+            width:170,
+            emptyText:me.snippets.toolbar.search,
+            enableKeyEvents:true,
+            checkChangeBuffer:500
+        });
+
+        items.push({ xtype:'tbspacer', width:6 });
+
+        return Ext.create('Ext.toolbar.Toolbar', {
+            dock:'top',
+            ui: 'shopware-ui',
+            items: items
+        });
+    },
 });
 //{/block}

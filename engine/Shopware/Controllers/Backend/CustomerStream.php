@@ -24,6 +24,7 @@
 
 use Shopware\Bundle\CustomerSearchBundle\Criteria;
 use Shopware\Bundle\CustomerSearchBundle\CustomerNumberSearch;
+use Shopware\Bundle\CustomerSearchBundle\CustomerSearchResult;
 use Shopware\Bundle\CustomerSearchBundle\CustomerStream\CustomerStreamCriteriaFactory;
 use Shopware\Bundle\CustomerSearchBundle\CustomerStream\StreamIndexer;
 use Shopware\Components\ReflectionHelper;
@@ -108,15 +109,15 @@ class Shopware_Controllers_Backend_CustomerStream extends Shopware_Controllers_B
         $criteria->offset($offset);
         $criteria->limit($limit);
 
-        /** @var CustomerNumberSearch $numberSearch */
-        $numberSearch = $this->get('shopware_customer_search.customer_number_search');
+        /** @var \Shopware\Bundle\CustomerSearchBundle\CustomerSearch $numberSearch */
+        $numberSearch = $this->get('shopware_customer_search.customer_search');
 
         $result = $numberSearch->search($criteria);
 
         $this->View()->assign([
             'success' => true,
             'total' => $result->getTotal(),
-            'data' => $result->getRows()
+            'data' => array_values($result->getCustomers())
         ]);
     }
 

@@ -86,13 +86,6 @@ Ext.define('Shopware.apps.Customer.view.list.List', {
             sales:'{s name=column/sales}Turnover{/s}',
             remove:'{s name=column/delete}Delete customer{/s}',
             edit:'{s name=column/detail}Show customer details{/s}'
-        },
-        toolbar:{
-            add:'{s name=toolbar/button_add}Add{/s}',
-            remove:'{s name=toolbar/button_delete}Delete all selected{/s}',
-            customerGroup:'{s name=toolbar/customer_group}Customer group{/s}',
-            groupEmpty:'{s name=toolbar/customer_group_empty}Select...{/s}',
-            search:'{s name=toolbar/search_empty_text}Search...{/s}'
         }
     },
 
@@ -110,7 +103,7 @@ Ext.define('Shopware.apps.Customer.view.list.List', {
         /*{/if}*/
         me.columns = me.getColumns();
 
-        me.dockedItems = [ me.getToolbar(), me.getPagingBar() ];
+        me.dockedItems = [ me.getPagingBar() ];
         me.callParent(arguments);
     },
 
@@ -185,31 +178,39 @@ Ext.define('Shopware.apps.Customer.view.list.List', {
         }
         , {
             header: 'Umsatz',
-            dataIndex: 'orders',
+            dataIndex: 'aggregation',
             flex: 2,
-            renderer: function() {
-                return 'Durschn.: <b>83,50€</b>' +
-                    '<br>Gesamt: <b>400,00 €</b>';
+            renderer: function(v) {
+                if (!v) {
+                    return 'Unbekannt';
+                }
 
+                return 'Durschn.: <b>' + v.invoice_amount_avg + '</b>' +
+                    '<br>Gesamt: <b>' + v.invoice_amount_sum + '</b>';
             }
         }, {
                 header: 'Bestellungen',
-                dataIndex: 'orders',
+                dataIndex: 'aggregation',
                 flex: 2,
-                renderer: function() {
-                    return 'Bestellungen: 20' +
-                        '<br>Letzte: 01.01.2017';
+                renderer: function(v) {
+                    return 'Bestellungen: ' + v.count_orders +
+                        '<br>Letzte: ' + v.last_order_time;
 
                 }
             }
         , {
             header: 'Interessen',
-            dataIndex: 'interesting',
-            flex: 2,
-            renderer: function() {
-                return '<i>Herrenschuhe - Nikè</i>' +
-                    '<i><br>Edelbrände - Sasse</i>';
-
+            dataIndex: 'interests',
+            flex: 4,
+            renderer: function(v, meta, record) {
+                if (v.length <= 0) {
+                    return 'Nicht bekannt';
+                }
+                var interests = [];
+                Ext.each(v, function(interest) {
+                    interests.push('<i>' + interest.category + ' - ' + interest.manufacturer + '</i>');
+                });
+                return interests.join('<br>');
             }
         }
         , {
@@ -326,50 +327,7 @@ Ext.define('Shopware.apps.Customer.view.list.List', {
         });
     },
 
-    /**
-     * Creates the grid toolbar with the add and delete button
-     *
-     * @return [Ext.toolbar.Toolbar] grid toolbar
-     */
-    getToolbar:function () {
-        var me = this;
 
-        me.deleteCustomerButton = Ext.create('Ext.button.Button', {
-            iconCls:'sprite-minus-circle-frame',
-            text:me.snippets.toolbar.remove,
-            disabled:true,
-            action:'deleteCustomer'
-        });
-
-        return Ext.create('Ext.toolbar.Toolbar', {
-            dock:'top',
-            ui: 'shopware-ui',
-            items:[
-                /*{if {acl_is_allowed privilege=create}}*/
-                {
-                    iconCls:'sprite-plus-circle-frame',
-                    text:me.snippets.toolbar.add,
-                    action:'addCustomer'
-                } ,
-                /*{/if}*/
-                /*{if {acl_is_allowed privilege=delete}}*/
-                    me.deleteCustomerButton,
-                /*{/if}*/
-
-                '->',
-                {
-                    xtype:'textfield',
-                    name:'searchfield',
-                    cls:'searchfield',
-                    width:170,
-                    emptyText:me.snippets.toolbar.search,
-                    enableKeyEvents:true,
-                    checkChangeBuffer:500
-                },
-                { xtype:'tbspacer', width:6 }
-            ]
-        });
-    },
 
     /**
      * Creates the paging toolbar for the customer grid to allow

@@ -29,6 +29,7 @@ Ext.define('Shopware.apps.CustomerStream.view.detail.ConditionField', {
         formField: 'Ext.form.field.Base'
     },
 
+
     getValue: function() {
         var me = this,
             values = { };

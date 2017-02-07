@@ -26,7 +26,7 @@
 
 Ext.define('Shopware.apps.CustomerStream.store.Preview', {
     extend: 'Ext.data.Store',
-    fields: ['id', 'email', 'number'],
+    model: 'Shopware.model.Dynamic',
     pageSize: 20,
 
     proxy: {
@@ -34,10 +34,6 @@ Ext.define('Shopware.apps.CustomerStream.store.Preview', {
         api: {
             read: '{url controller="CustomerStream" action="loadStream"}'
         },
-        reader: {
-            type: 'json',
-            root: 'data',
-            totalProperty: 'total'
-        }
+        reader: Ext.create('Shopware.model.DynamicReader')
     }
 });

@@ -5,6 +5,11 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
+
+        <service id="shopware_customer_search.customer_search" class="Shopware\Bundle\CustomerSearchBundle\CustomerSearch">
+            <argument type="service" id="shopware_customer_search.customer_number_search" />
+            <argument type="service" id="dbal_connection" />
+        </service>
         <service id="shopware_customer_search.customer_number_search" class="Shopware\Bundle\CustomerSearchBundle\CustomerNumberSearch">
             <argument type="service" id="shopware_customer_search.handler_registry"/>
             <argument type="service" id="dbal_connection"/>
