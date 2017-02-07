@@ -30,6 +30,7 @@ our trademarks remain entirely with us.
 EOF;
 
 return PhpCsFixer\Config::create()
+    ->setUsingCache(false)
     ->setRules([
         '@PSR2' => true,
         '@Symfony' => true,
