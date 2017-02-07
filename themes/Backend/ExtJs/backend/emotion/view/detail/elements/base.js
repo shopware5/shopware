@@ -498,8 +498,6 @@ Ext.define('Shopware.apps.Emotion.view.detail.elements.Base', {
                     me.gridView.previewElement.remove();
                 }
 
-                //me.dragZone.proxy.getEl().remove();
-
                 me.removeCls('is--dragging');
             }
         });
