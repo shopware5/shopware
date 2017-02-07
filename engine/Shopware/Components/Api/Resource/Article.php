@@ -1956,6 +1956,7 @@ class Article extends Resource implements BatchInterface
     {
         $whitelist = $this->getAttributeProperties();
         $whitelist = array_merge($whitelist, array(
+            'metaTitle',
             'name',
             'description',
             'descriptionLong',
