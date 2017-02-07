@@ -394,7 +394,7 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
      */
     public function save($data)
     {
-        /** @var $model \Shopware\Components\Model\ModelEntity */
+        /* @var $model \Shopware\Components\Model\ModelEntity */
         if (!empty($data['id'])) {
             $model = $this->getRepository()->find($data['id']);
         } else {
@@ -1131,7 +1131,7 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
     protected function formatSearchValue($value, array $field, $expression = null)
     {
         switch ($field['type']) {
-            case 'boolean' :
+            case 'boolean':
                 break;
             case 'date':
             case 'datetime':

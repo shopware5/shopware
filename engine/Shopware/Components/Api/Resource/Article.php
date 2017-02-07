@@ -1539,7 +1539,7 @@ class Article extends Resource implements BatchInterface
                 );
             }
 
-            /** @var $relatedArticle ArticleModel */
+            /* @var $relatedArticle ArticleModel */
             if ($relatedData['cross']) {
                 $relatedArticle->getRelated()->add($article);
             }
@@ -1603,7 +1603,7 @@ class Article extends Resource implements BatchInterface
                 );
             }
 
-            /** @var $similarArticle ArticleModel */
+            /* @var $similarArticle ArticleModel */
             if ($similarData['cross']) {
                 $similarArticle->getSimilar()->add($article);
             }

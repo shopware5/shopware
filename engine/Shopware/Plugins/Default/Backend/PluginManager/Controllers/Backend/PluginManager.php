@@ -111,7 +111,7 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
         if ($result instanceof FinishResult) {
             $this->View()->assign(['success' => true, 'finish' => true, 'destination' => $destination]);
         } else {
-            /** @var $result \Shopware\Recovery\Update\Steps\ValidResult */
+            /* @var $result \Shopware\Recovery\Update\Steps\ValidResult */
             $this->View()->assign(['success' => true, 'finish' => false, 'offset' => $result->getOffset()]);
         }
     }

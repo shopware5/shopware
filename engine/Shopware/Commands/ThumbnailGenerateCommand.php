@@ -175,7 +175,7 @@ class ThumbnailGenerateCommand extends ShopwareCommand
         $progressBar = new ProgressBar($this->output, $total);
         $progressBar->start();
 
-        /**
+        /*
          * @var Media
          */
         foreach ($paginator->getIterator() as $media) {

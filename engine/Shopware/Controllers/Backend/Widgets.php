@@ -760,7 +760,7 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
             return [];
         }
 
-        /**
+        /*
          * @var \SimpleXMLElement
          */
         foreach ($xml->channel->item as $news) {

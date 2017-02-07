@@ -2018,7 +2018,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             ]
         );
 
-        /** @var $shop Shop */
+        /* @var $shop Shop */
         $this->Response()->setCookie('shop', $shopId, 0, $shop->getBasePath());
         $this->redirect($url);
     }

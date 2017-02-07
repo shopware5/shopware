@@ -70,7 +70,7 @@ class Shopware_Controllers_Backend_Address extends Shopware_Controllers_Backend_
      */
     public function save($data)
     {
-        /** @var $model \Shopware\Models\Customer\Address */
+        /* @var $model \Shopware\Models\Customer\Address */
         if (!empty($data['id'])) {
             $model = $this->getRepository()->find($data['id']);
         } else {

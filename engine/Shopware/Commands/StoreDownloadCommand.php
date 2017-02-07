@@ -222,7 +222,7 @@ class StoreDownloadCommand extends StoreCommand
 
         $request = new DownloadRequest($plugin->getTechnicalName(), $version, $domain, $token);
 
-        /** @var $service PluginLicenceService */
+        /* @var $service PluginLicenceService */
         $this->container->get('shopware_plugininstaller.plugin_download_service')->download($request);
     }
 
