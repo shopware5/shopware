@@ -2087,7 +2087,9 @@ class sArticles
             $mainKey = 0;
 
             if (empty($sCombination)) {
-                $sArticle["image"]["description"] = is_null($sArticle["image"]["res"]["description"]) ? $sArticle["image"]["description"] : $sArticle["image"]["res"]["description"];;
+                if(!empty($sArticle["image"]["res"]["description"])) {
+                    $sArticle["image"]["description"] = $sArticle["image"]["res"]["description"];
+                }
                 $sArticle["image"]["relations"] = $sArticle["image"]["res"]["relations"];
                 foreach ($sArticle["sConfigurator"] as $key => $group) {
                     foreach ($group["values"] as $key2 => $option) {
