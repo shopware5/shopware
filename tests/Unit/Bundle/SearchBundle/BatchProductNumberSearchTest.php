@@ -16,7 +16,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU Affero General Public License for more details.
  *
- * 'Shopware' is a registered trademark of shopware AG.
+ * "Shopware" is a registered trademark of shopware AG.
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
@@ -24,9 +24,9 @@
 
 use Shopware\Bundle\SearchBundle\BatchProductNumberSearch;
 use Shopware\Bundle\SearchBundle\Condition\CategoryCondition;
-use Shopware\Bundle\SearchBundle\Condition\PriceCondition;
 use Shopware\Bundle\SearchBundle\Condition\CloseoutCondition;
 use Shopware\Bundle\SearchBundle\Condition\IsNewCondition;
+use Shopware\Bundle\SearchBundle\Condition\PriceCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\Sorting\PriceSorting;
 use Shopware\Bundle\SearchBundle\Sorting\ReleaseDateSorting;
@@ -47,13 +47,13 @@ class BatchProductNumberSearchTest extends \PHPUnit\Framework\TestCase
     /**
      * Call protected/private method of a class.
      *
-     * @param object $object    Instantiated object that we will run method on.
+     * @param object $object     instantiated object that we will run method on
      * @param string $methodName Method name to call
-     * @param array  $parameters Array of parameters to pass into method.
+     * @param array  $parameters array of parameters to pass into method
      *
-     * @return mixed Method return.
+     * @return mixed method return
      */
-    public function invokeMethod($object, $methodName, array $parameters = array())
+    public function invokeMethod($object, $methodName, array $parameters = [])
     {
         $reflection = new \ReflectionClass(get_class($object));
         $method = $reflection->getMethod($methodName);
@@ -63,7 +63,7 @@ class BatchProductNumberSearchTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers BatchProductNumberSearch::getOptimizedCriteriaList
+     * @covers \BatchProductNumberSearch::getOptimizedCriteriaList
      */
     public function testOptimizeCriteriaListWithEmptyCriteria()
     {
@@ -73,7 +73,7 @@ class BatchProductNumberSearchTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers BatchProductNumberSearch::getOptimizedCriteriaList
+     * @covers \BatchProductNumberSearch::getOptimizedCriteriaList
      */
     public function testOptimizeCriteriaListWithSingleCriteria()
     {
@@ -82,7 +82,7 @@ class BatchProductNumberSearchTest extends \PHPUnit\Framework\TestCase
         $criteria->limit(5);
 
         $testCriterias = [
-            'unit-test-1' => $criteria
+            'unit-test-1' => $criteria,
         ];
 
         $criteriaList = $this->invokeMethod($this->batchSearch, 'getOptimizedCriteriaList', [$testCriterias]);
@@ -96,15 +96,15 @@ class BatchProductNumberSearchTest extends \PHPUnit\Framework\TestCase
                 'criteria' => $expectedCriteria1,
                 'requests' => [
                     ['criteria' => $criteria, 'key' => 'unit-test-1'],
-                ]
-            ]
+                ],
+            ],
         ];
 
         $this->assertEquals($expectedOptimizedCriteriaList, $criteriaList);
     }
 
     /**
-     * @covers BatchProductNumberSearch::getOptimizedCriteriaList
+     * @covers \BatchProductNumberSearch::getOptimizedCriteriaList
      */
     public function testOptimizeCriteriaListWithMultipleEqualCriteriaButMixedBaseConditions()
     {
@@ -112,13 +112,13 @@ class BatchProductNumberSearchTest extends \PHPUnit\Framework\TestCase
         $criteria->addBaseCondition(new CategoryCondition([3]));
         $criteria->limit(5);
 
-        $criteria2 = new Criteria;
+        $criteria2 = new Criteria();
         $criteria2->addCondition(new CategoryCondition([3]));
         $criteria2->limit(5);
 
         $testCriterias = [
             'unit-test-1' => $criteria,
-            'unit-test-2' => $criteria2
+            'unit-test-2' => $criteria2,
         ];
 
         $criteriaList = $this->invokeMethod($this->batchSearch, 'getOptimizedCriteriaList', [$testCriterias]);
@@ -133,15 +133,15 @@ class BatchProductNumberSearchTest extends \PHPUnit\Framework\TestCase
                 'requests' => [
                     ['criteria' => $criteria, 'key' => 'unit-test-1'],
                     ['criteria' => $criteria2, 'key' => 'unit-test-2'],
-                ]
-            ]
+                ],
+            ],
         ];
 
         $this->assertEquals($expectedOptimizedCriteriaList, $criteriaList);
     }
 
     /**
-     * @covers BatchProductNumberSearch::getOptimizedCriteriaList
+     * @covers \BatchProductNumberSearch::getOptimizedCriteriaList
      */
     public function testOptimizeCriteriaListWithMultipleDifferentCriteria()
     {
@@ -159,7 +159,7 @@ class BatchProductNumberSearchTest extends \PHPUnit\Framework\TestCase
         $testCriterias = [
             'unit-test-1' => $criteria,
             'unit-test-2' => $criteria2,
-            'unit-test-3-different' => $criteria3
+            'unit-test-3-different' => $criteria3,
         ];
 
         $criteriaList = $this->invokeMethod($this->batchSearch, 'getOptimizedCriteriaList', [$testCriterias]);
@@ -177,22 +177,22 @@ class BatchProductNumberSearchTest extends \PHPUnit\Framework\TestCase
                 'criteria' => $expectedCriteria1,
                 'requests' => [
                     ['criteria' => $criteria, 'key' => 'unit-test-1'],
-                    ['criteria' => $criteria2, 'key' => 'unit-test-2']
-                ]
+                    ['criteria' => $criteria2, 'key' => 'unit-test-2'],
+                ],
             ],
             [
                 'criteria' => $expectedCriteria2,
                 'requests' => [
-                    ['criteria' => $criteria3, 'key' => 'unit-test-3-different']
-                ]
-            ]
+                    ['criteria' => $criteria3, 'key' => 'unit-test-3-different'],
+                ],
+            ],
         ];
 
         $this->assertEquals($expectedOptimizedCriteriaList, $criteriaList);
     }
 
     /**
-     * @covers BatchProductNumberSearch::getOptimizedCriteriaList
+     * @covers \BatchProductNumberSearch::getOptimizedCriteriaList
      */
     public function testOptimizeCriteriaListWithDifferentCriteriaSorting()
     {
@@ -216,7 +216,7 @@ class BatchProductNumberSearchTest extends \PHPUnit\Framework\TestCase
 
         $testCriterias = [
             'unit-test-1' => $criteria,
-            'unit-test-2' => $criteria2
+            'unit-test-2' => $criteria2,
         ];
 
         $criteriaList = $this->invokeMethod($this->batchSearch, 'getOptimizedCriteriaList', [$testCriterias]);
@@ -235,16 +235,16 @@ class BatchProductNumberSearchTest extends \PHPUnit\Framework\TestCase
                 'criteria' => $expectedCriteria1,
                 'requests' => [
                     ['criteria' => $criteria, 'key' => 'unit-test-1'],
-                    ['criteria' => $criteria2, 'key' => 'unit-test-2']
-                ]
-            ]
+                    ['criteria' => $criteria2, 'key' => 'unit-test-2'],
+                ],
+            ],
         ];
 
         $this->assertEquals($expectedOptimizedCriteriaList, $criteriaList);
     }
 
     /**
-     * @covers BatchProductNumberSearch::getOptimizedCriteriaList
+     * @covers \BatchProductNumberSearch::getOptimizedCriteriaList
      */
     public function testOptimizeCriteriaListWithMultipleEqualCriteria()
     {
@@ -261,7 +261,7 @@ class BatchProductNumberSearchTest extends \PHPUnit\Framework\TestCase
         $testCriterias = [
             'unit-test-1' => $criteria,
             'unit-test-2' => $criteria2,
-            'unit-test-3' => $criteria3
+            'unit-test-3' => $criteria3,
         ];
 
         $criteriaList = $this->invokeMethod($this->batchSearch, 'getOptimizedCriteriaList', [$testCriterias]);
@@ -277,15 +277,15 @@ class BatchProductNumberSearchTest extends \PHPUnit\Framework\TestCase
                     ['criteria' => $criteria, 'key' => 'unit-test-1'],
                     ['criteria' => $criteria2, 'key' => 'unit-test-2'],
                     ['criteria' => $criteria3, 'key' => 'unit-test-3'],
-                ]
-            ]
+                ],
+            ],
         ];
 
         $this->assertEquals($expectedOptimizedCriteriaList, $criteriaList);
     }
 
     /**
-     * @covers BatchProductNumberSearch::getOptimizedCriteriaList
+     * @covers \BatchProductNumberSearch::getOptimizedCriteriaList
      */
     public function testOptimizeCriteriaListWithMultipleEqualAndDifferentCriteria()
     {
@@ -312,7 +312,7 @@ class BatchProductNumberSearchTest extends \PHPUnit\Framework\TestCase
             'unit-test-2' => $criteria2,
             'unit-test-3-different' => $criteria3,
             'unit-test-4-different' => $criteria4,
-            'unit-test-5-different-different' => $criteria5
+            'unit-test-5-different-different' => $criteria5,
         ];
 
         $criteriaList = $this->invokeMethod($this->batchSearch, 'getOptimizedCriteriaList', [$testCriterias]);
@@ -334,22 +334,22 @@ class BatchProductNumberSearchTest extends \PHPUnit\Framework\TestCase
                 'criteria' => $expectedCriteria1,
                 'requests' => [
                     ['criteria' => $criteria, 'key' => 'unit-test-1'],
-                    ['criteria' => $criteria2, 'key' => 'unit-test-2']
-                ]
+                    ['criteria' => $criteria2, 'key' => 'unit-test-2'],
+                ],
             ],
             [
                 'criteria' => $expectedCriteria2,
                 'requests' => [
                     ['criteria' => $criteria3, 'key' => 'unit-test-3-different'],
-                    ['criteria' => $criteria4, 'key' => 'unit-test-4-different']
-                ]
+                    ['criteria' => $criteria4, 'key' => 'unit-test-4-different'],
+                ],
             ],
             [
                 'criteria' => $expectedCriteria3,
                 'requests' => [
-                    ['criteria' => $criteria5, 'key' => 'unit-test-5-different-different']
-                ]
-            ]
+                    ['criteria' => $criteria5, 'key' => 'unit-test-5-different-different'],
+                ],
+            ],
         ];
 
         $this->assertEquals($expectedOptimizedCriteriaList, $criteriaList);
@@ -371,7 +371,7 @@ class BatchProductNumberSearchTest extends \PHPUnit\Framework\TestCase
         $testCriterias = [
             'unit-test-1' => $criteria,
             'unit-test-2' => $criteria2,
-            'unit-test-3-different' => $criteria3
+            'unit-test-3-different' => $criteria3,
         ];
 
         $criteriaList = $this->invokeMethod($this->batchSearch, 'getOptimizedCriteriaList', [$testCriterias]);
@@ -390,22 +390,22 @@ class BatchProductNumberSearchTest extends \PHPUnit\Framework\TestCase
                 'criteria' => $expectedCriteria1,
                 'requests' => [
                     ['criteria' => $criteria, 'key' => 'unit-test-1'],
-                    ['criteria' => $criteria2, 'key' => 'unit-test-2']
-                ]
+                    ['criteria' => $criteria2, 'key' => 'unit-test-2'],
+                ],
             ],
             [
                 'criteria' => $expectedCriteria2,
                 'requests' => [
-                    ['criteria' => $criteria3, 'key' => 'unit-test-3-different']
-                ]
-            ]
+                    ['criteria' => $criteria3, 'key' => 'unit-test-3-different'],
+                ],
+            ],
         ];
 
         $this->assertEquals($expectedOptimizedCriteriaList, $criteriaList);
     }
 
     /**
-     * @covers BatchProductNumberSearch::getBaseProductsRange
+     * @covers \BatchProductNumberSearch::getBaseProductsRange
      */
     public function testGetBaseProductsRangeWithEmptyProducts()
     {
@@ -414,7 +414,7 @@ class BatchProductNumberSearchTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers BatchProductNumberSearch::getBaseProductsRange
+     * @covers \BatchProductNumberSearch::getBaseProductsRange
      */
     public function testGetBaseProductsRangeWithMoreProductsThanRequested()
     {
@@ -427,14 +427,14 @@ class BatchProductNumberSearchTest extends \PHPUnit\Framework\TestCase
 
         $result = $this->invokeMethod($this->batchSearch, 'getBaseProductsRange', [0, $products, 1]);
         $expectedProducts = [
-            new BaseProduct(1, 1, 1)
+            new BaseProduct(1, 1, 1),
         ];
 
         $this->assertEquals($expectedProducts, $result);
     }
 
     /**
-     * @covers BatchProductNumberSearch::getBaseProductsRange
+     * @covers \BatchProductNumberSearch::getBaseProductsRange
      */
     public function testMultipleCallGetBaseProductsRangeWithMoreProductsThanRequested()
     {
@@ -448,7 +448,7 @@ class BatchProductNumberSearchTest extends \PHPUnit\Framework\TestCase
         // first call
         $result = $this->invokeMethod($this->batchSearch, 'getBaseProductsRange', [0, $products, 1]);
         $expectedProducts = [
-            new BaseProduct(1, 1, 1)
+            new BaseProduct(1, 1, 1),
         ];
 
         $this->assertEquals($expectedProducts, $result);
@@ -457,14 +457,14 @@ class BatchProductNumberSearchTest extends \PHPUnit\Framework\TestCase
         $result = $this->invokeMethod($this->batchSearch, 'getBaseProductsRange', [0, $products, 2]);
         $expectedProducts = [
             new BaseProduct(2, 2, 2),
-            new BaseProduct(3, 3, 3)
+            new BaseProduct(3, 3, 3),
         ];
 
         $this->assertEquals($expectedProducts, $result);
     }
 
     /**
-     * @covers BatchProductNumberSearch::getBaseProductsRange
+     * @covers \BatchProductNumberSearch::getBaseProductsRange
      */
     public function testGetBaseProductsRangeWithLessProductsThanRequested()
     {
@@ -489,7 +489,7 @@ class BatchProductNumberSearchTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers BatchProductNumberSearch::getBaseProductsRange
+     * @covers \BatchProductNumberSearch::getBaseProductsRange
      */
     public function testGetBaseProductsRangeWithLessProductsThanRequestedAndDifferentHashes()
     {

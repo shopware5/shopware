@@ -38,8 +38,6 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 
 /**
  * Form reflects the needed fields for changing the email address in the account
- *
- * @package Shopware\Bundle\AccountBundle\Form\Account
  */
 class ProfileUpdateFormType extends AbstractType
 {
@@ -55,7 +53,7 @@ class ProfileUpdateFormType extends AbstractType
 
     /**
      * @param \Shopware_Components_Snippet_Manager $snippetManager
-     * @param \Shopware_Components_Config $config
+     * @param \Shopware_Components_Config          $config
      */
     public function __construct(
         \Shopware_Components_Snippet_Manager $snippetManager,
@@ -72,40 +70,40 @@ class ProfileUpdateFormType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Customer::class,
-            'allow_extra_fields' => true
+            'allow_extra_fields' => true,
         ]);
     }
 
     /**
      * @param FormBuilderInterface $builder
-     * @param array $options
+     * @param array                $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event) {
             $data = $event->getData();
-            array_walk_recursive($data, function(&$item, $key) {
+            array_walk_recursive($data, function (&$item, $key) {
                 $item = strip_tags($item);
             });
             $event->setData($data);
         });
 
         $builder->add('salutation', SalutationType::class, [
-            'constraints' => [new NotBlank(['message' => null])]
+            'constraints' => [new NotBlank(['message' => null])],
         ]);
 
         $builder->add('title', TextType::class);
 
         $builder->add('firstname', TextType::class, [
-            'constraints' => [new NotBlank(['message' => null])]
+            'constraints' => [new NotBlank(['message' => null])],
         ]);
 
         $builder->add('lastname', TextType::class, [
-            'constraints' => [new NotBlank(['message' => null])]
+            'constraints' => [new NotBlank(['message' => null])],
         ]);
 
         $builder->add('birthday', BirthdayType::class, [
-            'constraints' => $this->getBirthdayConstraints()
+            'constraints' => $this->getBirthdayConstraints(),
         ]);
     }
 
@@ -126,7 +124,7 @@ class ProfileUpdateFormType extends AbstractType
 
         if ($this->config->get('showBirthdayField') && $this->config->get('requireBirthdayField')) {
             $constraints[] = new NotBlank([
-                'message' => $this->getSnippet(PersonalFormType::SNIPPET_BIRTHDAY)
+                'message' => $this->getSnippet(PersonalFormType::SNIPPET_BIRTHDAY),
             ]);
         }
 
@@ -135,6 +133,7 @@ class ProfileUpdateFormType extends AbstractType
 
     /**
      * @param array $snippet with namespace, name and default value
+     *
      * @return string
      */
     private function getSnippet(array $snippet)

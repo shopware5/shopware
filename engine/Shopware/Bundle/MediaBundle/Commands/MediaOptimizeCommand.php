@@ -37,7 +37,7 @@ use Symfony\Component\Finder\Finder;
 
 /**
  * @category  Shopware
- * @package   Shopware\Components\Console\Commands
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class MediaOptimizeCommand extends ShopwareCommand
@@ -67,6 +67,7 @@ class MediaOptimizeCommand extends ShopwareCommand
 
         if ($input->getOption('info')) {
             $this->displayCapabilities($output, $optimizerService->getOptimizers());
+
             return;
         }
 
@@ -97,7 +98,7 @@ class MediaOptimizeCommand extends ShopwareCommand
     }
 
     /**
-     * @param OutputInterface $output
+     * @param OutputInterface      $output
      * @param OptimizerInterface[] $capabilities
      */
     private function displayCapabilities(OutputInterface $output, array $capabilities)
@@ -108,15 +109,16 @@ class MediaOptimizeCommand extends ShopwareCommand
             $table->addRow([
                 $optimizer->getName(),
                 $optimizer->isRunnable() ? 'Yes' : 'No',
-                implode(', ', $optimizer->getSupportedMimeTypes())
+                implode(', ', $optimizer->getSupportedMimeTypes()),
             ]);
         }
         $table->render();
     }
 
     /**
-     * @param InputInterface $input
+     * @param InputInterface  $input
      * @param OutputInterface $output
+     *
      * @return Finder
      */
     private function createMediaFinder(InputInterface $input, OutputInterface $output)

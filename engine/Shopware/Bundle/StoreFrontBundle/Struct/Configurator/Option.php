@@ -29,7 +29,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Media;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\StoreFrontBundle\Struct\Configurator
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Option extends Extendable implements \JsonSerializable
@@ -92,7 +92,7 @@ class Option extends Extendable implements \JsonSerializable
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isSelected()
     {
@@ -100,7 +100,7 @@ class Option extends Extendable implements \JsonSerializable
     }
 
     /**
-     * @param boolean $selected
+     * @param bool $selected
      */
     public function setSelected($selected)
     {
@@ -124,7 +124,7 @@ class Option extends Extendable implements \JsonSerializable
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function getActive()
     {
@@ -132,7 +132,7 @@ class Option extends Extendable implements \JsonSerializable
     }
 
     /**
-     * @param boolean $active
+     * @param bool $active
      */
     public function setActive($active)
     {
@@ -140,7 +140,7 @@ class Option extends Extendable implements \JsonSerializable
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function jsonSerialize()
     {

@@ -29,7 +29,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\StoreFrontBundle\Struct\Product
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class PriceRule extends Extendable implements \JsonSerializable
@@ -190,7 +190,7 @@ class PriceRule extends Extendable implements \JsonSerializable
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function jsonSerialize()
     {

@@ -28,7 +28,6 @@ use Doctrine\DBAL\Connection;
 use Shopware\Bundle\EmotionBundle\Struct\Collection\PrepareDataCollection;
 use Shopware\Bundle\EmotionBundle\Struct\Collection\ResolvedDataCollection;
 use Shopware\Bundle\EmotionBundle\Struct\Element;
-use Shopware\Bundle\EmotionBundle\Struct\Library\Component;
 use Shopware\Bundle\StoreFrontBundle\Service\ManufacturerServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
@@ -52,7 +51,7 @@ class ManufacturerSliderComponentHandler implements ComponentHandlerInterface
 
     /**
      * @param ManufacturerServiceInterface $manufacturerService
-     * @param Connection $connection
+     * @param Connection                   $connection
      */
     public function __construct(ManufacturerServiceInterface $manufacturerService, Connection $connection)
     {
@@ -61,7 +60,7 @@ class ManufacturerSliderComponentHandler implements ComponentHandlerInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function supports(Element $element)
     {
@@ -70,14 +69,14 @@ class ManufacturerSliderComponentHandler implements ComponentHandlerInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function prepare(PrepareDataCollection $collection, Element $element, ShopContextInterface $context)
     {
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function handle(ResolvedDataCollection $collection, Element $element, ShopContextInterface $context)
     {
@@ -107,8 +106,9 @@ class ManufacturerSliderComponentHandler implements ComponentHandlerInterface
     }
 
     /**
-     * @param int $categoryId
+     * @param int                  $categoryId
      * @param ShopContextInterface $context
+     *
      * @return int[]
      */
     private function getManufacturerIdsByCategoryId($categoryId, ShopContextInterface $context)

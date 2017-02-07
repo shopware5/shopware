@@ -27,18 +27,18 @@ namespace Shopware\Bundle\SearchBundleDBAL\FacetHandler;
 use Shopware\Bundle\SearchBundle\Condition\CategoryCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\Facet\CategoryFacet;
+use Shopware\Bundle\SearchBundle\FacetInterface;
 use Shopware\Bundle\SearchBundle\FacetResult\CategoryTreeFacetResultBuilder;
 use Shopware\Bundle\SearchBundle\FacetResultInterface;
 use Shopware\Bundle\SearchBundleDBAL\PartialFacetHandlerInterface;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactory;
-use Shopware\Bundle\SearchBundle\FacetInterface;
-use Shopware\Bundle\StoreFrontBundle\Service\Core\CategoryDepthService;
 use Shopware\Bundle\StoreFrontBundle\Service\CategoryServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Service\Core\CategoryDepthService;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\SearchBundleDBAL\FacetHandler
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class CategoryFacetHandler implements PartialFacetHandlerInterface
@@ -54,7 +54,6 @@ class CategoryFacetHandler implements PartialFacetHandlerInterface
     private $queryBuilderFactory;
 
     /**
-     *
      * @var \Shopware_Components_Config
      */
     private $config;
@@ -70,10 +69,10 @@ class CategoryFacetHandler implements PartialFacetHandlerInterface
     private $categoryTreeFacetResultBuilder;
 
     /**
-     * @param CategoryServiceInterface $categoryService
-     * @param QueryBuilderFactory $queryBuilderFactory
-     * @param \Shopware_Components_Config $config
-     * @param CategoryDepthService $categoryDepthService
+     * @param CategoryServiceInterface       $categoryService
+     * @param QueryBuilderFactory            $queryBuilderFactory
+     * @param \Shopware_Components_Config    $config
+     * @param CategoryDepthService           $categoryDepthService
      * @param CategoryTreeFacetResultBuilder $categoryTreeFacetResultBuilder
      */
     public function __construct(
@@ -92,9 +91,10 @@ class CategoryFacetHandler implements PartialFacetHandlerInterface
 
     /**
      * @param FacetInterface|CategoryFacet $facet
-     * @param Criteria $reverted
-     * @param Criteria $criteria
-     * @param ShopContextInterface $context
+     * @param Criteria                     $reverted
+     * @param Criteria                     $criteria
+     * @param ShopContextInterface         $context
+     *
      * @return FacetResultInterface
      */
     public function generatePartialFacet(
@@ -132,12 +132,13 @@ class CategoryFacetHandler implements PartialFacetHandlerInterface
      */
     public function supportsFacet(FacetInterface $facet)
     {
-        return ($facet instanceof CategoryFacet);
+        return $facet instanceof CategoryFacet;
     }
 
     /**
-     * @param array $ids
+     * @param array                $ids
      * @param ShopContextInterface $context
+     *
      * @return array
      */
     private function filterSystemCategories(array $ids, ShopContextInterface $context)
@@ -153,8 +154,9 @@ class CategoryFacetHandler implements PartialFacetHandlerInterface
     }
 
     /**
-     * @param Criteria $reverted
+     * @param Criteria             $reverted
      * @param ShopContextInterface $context
+     *
      * @return int[]
      */
     private function fetchCategoriesOfProducts(Criteria $reverted, ShopContextInterface $context)
@@ -165,11 +167,13 @@ class CategoryFacetHandler implements PartialFacetHandlerInterface
         $query->select(['productCategory.categoryID']);
         $query->innerJoin('product', 's_articles_categories_ro', 'productCategory', 'productCategory.articleID = product.id');
         $query->groupBy('productCategory.categoryID');
+
         return $query->execute()->fetchAll(\PDO::FETCH_COLUMN);
     }
 
     /**
      * @param Criteria $criteria
+     *
      * @return int[]
      */
     private function getFilteredIds(Criteria $criteria)
@@ -180,6 +184,7 @@ class CategoryFacetHandler implements PartialFacetHandlerInterface
                 $active = array_merge($active, $condition->getCategoryIds());
             }
         }
+
         return $active;
     }
 }

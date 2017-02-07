@@ -26,14 +26,15 @@ namespace Shopware\Components\Routing;
 
 /**
  * @category  Shopware
- * @package   Shopware\Components\Routing
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 interface PreFilterInterface
 {
     /**
-     * @param array $params
+     * @param array   $params
      * @param Context $context
+     *
      * @return array
      */
     public function preFilter($params, Context $context);

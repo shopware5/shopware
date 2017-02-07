@@ -41,7 +41,7 @@ class Shopware_Controllers_Api_Countries extends Shopware_Controllers_Api_Rest
      */
     public function indexAction()
     {
-        $limit  = $this->Request()->getParam('limit', 1000);
+        $limit = $this->Request()->getParam('limit', 1000);
         $offset = $this->Request()->getParam('start', 0);
         $sort = $this->Request()->getParam('sort', []);
         $filter = $this->Request()->getParam('filter', []);
@@ -81,7 +81,7 @@ class Shopware_Controllers_Api_Countries extends Shopware_Controllers_Api_Rest
         $location = $this->apiBaseUrl . 'countries/' . $country->getId();
         $data = [
             'id' => $country->getId(),
-            'location' => $location
+            'location' => $location,
         ];
 
         $this->View()->assign('data', $data);
@@ -104,7 +104,7 @@ class Shopware_Controllers_Api_Countries extends Shopware_Controllers_Api_Rest
         $location = $this->apiBaseUrl . 'countries/' . $country->getId();
         $data = [
             'id' => $country->getId(),
-            'location' => $location
+            'location' => $location,
         ];
 
         $this->View()->assign('data', $data);

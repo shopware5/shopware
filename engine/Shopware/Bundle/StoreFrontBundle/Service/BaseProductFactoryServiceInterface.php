@@ -28,7 +28,6 @@ use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
 
 /**
  * Class BaseProductFactory
- * @package Shopware\Bundle\StoreFrontBundle\Struct
  */
 interface BaseProductFactoryServiceInterface
 {
@@ -37,6 +36,7 @@ interface BaseProductFactoryServiceInterface
      * for other store front services
      *
      * @param $number
+     *
      * @return BaseProduct
      */
     public function createBaseProduct($number);
@@ -46,6 +46,7 @@ interface BaseProductFactoryServiceInterface
      * for other store front services
      *
      * @param $numbers
+     *
      * @return BaseProduct[]
      */
     public function createBaseProducts($numbers);

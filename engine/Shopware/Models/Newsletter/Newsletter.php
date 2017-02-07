@@ -24,9 +24,8 @@
 
 namespace   Shopware\Models\Newsletter;
 
-use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
+use Shopware\Components\Model\ModelEntity;
 
 /**
  * Shopware newsletter model represents a newsletter.
@@ -37,9 +36,19 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Newsletter extends ModelEntity
 {
     /**
+     * INVERSE SIDE
+     *
+     * This is the inverse side of the association between newsletters and mail-addreses which have already
+     * received the given newsletter.
+     *
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Newsletter\Address", mappedBy="lastNewsletter")
+     */
+    protected $addresses;
+    /**
      * Autoincrement ID
      *
-     * @var integer $id
+     * @var int
      *
      * @ORM\Id
      * @ORM\Column(name="id", type="integer", nullable=false)
@@ -50,7 +59,7 @@ class Newsletter extends ModelEntity
     /**
      * Date of the newsletter
      *
-     * @var \DateTime $date
+     * @var \DateTime
      *
      * @ORM\Column(name="datum", type="date", nullable=true)
      */
@@ -59,14 +68,14 @@ class Newsletter extends ModelEntity
     /**
      * groups
      *
-     * @var string $group
+     * @var string
      *
      * @ORM\Column(name="groups", type="string", nullable=false)
      */
     private $groups = '';
 
     /**
-     * @var string $subject
+     * @var string
      *
      * @ORM\Column(name="subject", type="string", length=100, nullable=false)
      */
@@ -75,7 +84,7 @@ class Newsletter extends ModelEntity
     /**
      * Mail address of the sender
      *
-     * @var string $senderMail
+     * @var string
      * @ORM\Column(name="sendermail", type="string", length=255, nullable=false)
      */
     private $senderMail = '';
@@ -83,7 +92,7 @@ class Newsletter extends ModelEntity
     /**
      * Name of the sender
      *
-     * @var string $senderName
+     * @var string
      * @ORM\Column(name="sendername", type="string", length=16777215 , nullable=false)
      */
     private $senderName = '';
@@ -91,7 +100,7 @@ class Newsletter extends ModelEntity
     /**
      * Is this mail a plaintext mail?
      *
-     * @var boolean $plaintext
+     * @var bool
      * @ORM\Column(name="plaintext", type="boolean", nullable=false)
      */
     private $plaintext = false;
@@ -100,7 +109,7 @@ class Newsletter extends ModelEntity
      * Id of the used template
      * Defaults to one as long as templates are not supported by the newsletter backend module
      *
-     * @var integer $templateId
+     * @var int
      * @ORM\Column(name="templateID", type="integer", length=11, nullable=false)
      */
     private $templateId = 1;
@@ -108,7 +117,7 @@ class Newsletter extends ModelEntity
     /**
      * Id of the mail's language
      *
-     * @var integer $languageId
+     * @var int
      * @ORM\Column(name="languageID", type="integer", nullable=false)
      */
     private $languageId = 0;
@@ -116,66 +125,61 @@ class Newsletter extends ModelEntity
     /**
      * Status of the mail
      *
-     * @var integer $status
+     * @var int
      * @ORM\Column(name="status", type="integer", nullable=false)
      */
     private $status = 0;
 
     /**
-     * @var \DateTime $locked
+     * @var \DateTime
      * @ORM\Column(name="locked", type="datetime", nullable=true)
      */
     private $locked = null;
 
     /**
      * Number of recipients
-     * @var integer $recipients
+     *
+     * @var int
      * @ORM\Column(name="recipients", type="integer", nullable=false)
      */
     private $recipients = 0;
 
     /**
      * Number of recipients who read the mail
-     * @var integer $read
+     *
+     * @var int
      * @ORM\Column(name="`read`", type="integer", nullable=false)
      */
     private $read = 0;
 
     /**
      * Number of recipients who clicked a link in the mail
-     * @var integer $clicked
+     *
+     * @var int
      * @ORM\Column(name="clicked", type="integer", nullable=false)
      */
     private $clicked = 0;
 
     /**
      * groupkey of the customerGroup this mail was sent to
-     * @var string $customerGroup
+     *
+     * @var string
      * @ORM\Column(name="customergroup", type="string", length=255, nullable=false)
      */
     private $customerGroup = '';
 
     /**
-     * INVERSE SIDE
-     *
-     * This is the inverse side of the association between newsletters and mail-addreses which have already
-     * received the given newsletter.
-     *
-     * @var \Doctrine\Common\Collections\ArrayCollection
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Newsletter\Address", mappedBy="lastNewsletter")
-     */
-    protected $addresses;
-
-    /**
      * Is this a published mail?
-     * @var boolean $published
+     *
+     * @var bool
      * @ORM\Column(name="publish", type="boolean", nullable=false)
      */
     private $publish = false;
 
     /**
      * Should the mail delivered in future?
-     * @var \DateTime $timedDelivery
+     *
+     * @var \DateTime
      * @ORM\Column(name="timed_delivery", type="datetime", nullable=true)
      */
     private $timedDelivery = null;
@@ -184,6 +188,7 @@ class Newsletter extends ModelEntity
      * INVERSE SIDE
      *
      * Inverse side of the mailing-container association
+     *
      * @var \Doctrine\Common\Collections\ArrayCollection
      * @ORM\OneToMany(targetEntity="Shopware\Models\Newsletter\Container", mappedBy="newsletter", cascade={"persist", "remove"})
      */
@@ -194,7 +199,7 @@ class Newsletter extends ModelEntity
      */
     public function __construct()
     {
-        $this->containers     = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->containers = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -294,7 +299,7 @@ class Newsletter extends ModelEntity
     }
 
     /**
-     * @param boolean $plaintext
+     * @param bool $plaintext
      */
     public function setPlaintext($plaintext)
     {
@@ -302,7 +307,7 @@ class Newsletter extends ModelEntity
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function getPlaintext()
     {
@@ -310,7 +315,7 @@ class Newsletter extends ModelEntity
     }
 
     /**
-     * @param boolean $publish
+     * @param bool $publish
      */
     public function setPublish($publish)
     {
@@ -318,7 +323,7 @@ class Newsletter extends ModelEntity
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function getPublish()
     {

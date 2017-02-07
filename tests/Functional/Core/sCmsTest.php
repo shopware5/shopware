@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 class sCmsTest extends Enlight_Components_Test_Controller_TestCase
 {
     /**
@@ -35,7 +36,7 @@ class sCmsTest extends Enlight_Components_Test_Controller_TestCase
     }
 
     /**
-     * @covers sCms::sGetStaticPage
+     * @covers \sCms::sGetStaticPage
      */
     public function testsGetStaticPage()
     {
@@ -45,8 +46,7 @@ class sCmsTest extends Enlight_Components_Test_Controller_TestCase
         // Non-existent id returns false
         $this->assertFalse($this->module->sGetStaticPage(0));
 
-
-        $pageIds = Shopware()->Db()->fetchCol("SELECT id FROM s_cms_static ORDER BY RAND() LIMIT 10");
+        $pageIds = Shopware()->Db()->fetchCol('SELECT id FROM s_cms_static ORDER BY RAND() LIMIT 10');
 
         foreach ($pageIds as $pageId) {
             $page = $this->module->sGetStaticPage($pageId);

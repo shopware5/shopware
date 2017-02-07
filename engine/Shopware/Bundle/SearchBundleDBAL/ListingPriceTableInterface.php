@@ -31,6 +31,7 @@ interface ListingPriceTableInterface
 {
     /**
      * @param ShopContextInterface $context
+     *
      * @return QueryBuilder
      */
     public function get(ShopContextInterface $context);

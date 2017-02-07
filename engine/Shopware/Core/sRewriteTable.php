@@ -35,20 +35,19 @@ use Shopware\Models\Article\Supplier;
  * Deprecated Shopware Class that handles url rewrites
  *
  * @category  Shopware
- * @package   Shopware\Core
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class sRewriteTable
 {
     /**
-     * @var string|null
-     */
-    protected $rewriteArticleslastId;
-
-    /**
      * @var sSystem
      */
     public $sSYSTEM;
+    /**
+     * @var string|null
+     */
+    protected $rewriteArticleslastId;
 
     /**
      * @var Enlight_Template_Manager
@@ -64,6 +63,20 @@ class sRewriteTable
      * @var ModelManager
      */
     protected $modelManager;
+
+    /**
+     * Prepared update PDOStatement for the s_core_rewrite_urls table.
+     *
+     * @var PDOStatement
+     */
+    protected $preparedUpdate = null;
+
+    /**
+     * Prepared insert PDOStatement for the s_core_rewrite_urls table.
+     *
+     * @var PDOStatement
+     */
+    protected $preparedInsert = null;
 
     /**
      * Database connection which used for each database operation in this class.
@@ -90,19 +103,6 @@ class sRewriteTable
     private $moduleManager;
 
     /**
-     * Prepared update PDOStatement for the s_core_rewrite_urls table.
-     *
-     * @var PDOStatement
-     */
-    protected $preparedUpdate = null;
-
-    /**
-     * Prepared insert PDOStatement for the s_core_rewrite_urls table.
-     * @var PDOStatement
-     */
-    protected $preparedInsert = null;
-
-    /**
      * @var SlugInterface
      */
     private $slug;
@@ -119,14 +119,14 @@ class sRewriteTable
 
     /**
      * @param Enlight_Components_Db_Adapter_Pdo_Mysql $db
-     * @param Shopware_Components_Config $config
-     * @param ModelManager $modelManager
-     * @param sSystem $systemModule
-     * @param Enlight_Template_Manager $template
-     * @param Shopware_Components_Modules $moduleManager
-     * @param SlugInterface $slug
-     * @param ContextServiceInterface $contextService
-     * @param ShopPageServiceInterface $shopPageService
+     * @param Shopware_Components_Config              $config
+     * @param ModelManager                            $modelManager
+     * @param sSystem                                 $systemModule
+     * @param Enlight_Template_Manager                $template
+     * @param Shopware_Components_Modules             $moduleManager
+     * @param SlugInterface                           $slug
+     * @param ContextServiceInterface                 $contextService
+     * @param ShopPageServiceInterface                $shopPageService
      */
     public function __construct(
         Enlight_Components_Db_Adapter_Pdo_Mysql $db = null,
@@ -152,6 +152,7 @@ class sRewriteTable
 
     /**
      * Getter function for retriving last ID from sCreateRewriteTableArticles()
+     *
      * @return string|null
      */
     public function getRewriteArticleslastId()
@@ -160,46 +161,10 @@ class sRewriteTable
     }
 
     /**
-     * Getter function of the prepared insert PDOStatement
-     *
-     * @return null|PDOStatement
-     */
-    protected function getPreparedInsert()
-    {
-        if ($this->preparedInsert === null) {
-            $this->preparedInsert = $this->db->prepare('
-                INSERT IGNORE INTO s_core_rewrite_urls (org_path, path, main, subshopID)
-                VALUES (?, ?, 1, ?)
-                ON DUPLICATE KEY UPDATE main=1
-            ');
-        }
-        return $this->preparedInsert;
-    }
-
-
-    /**
-     * Getter function of the prepared update PDOStatement
-     *
-     * @return null|PDOStatement
-     */
-    protected function getPreparedUpdate()
-    {
-        if ($this->preparedUpdate === null) {
-            $this->preparedUpdate = $this->db->prepare(
-                'UPDATE s_core_rewrite_urls
-                SET main = 0
-                WHERE org_path = ?
-                AND path != ?
-                AND subshopID = ?
-            ');
-        }
-        return $this->preparedUpdate;
-    }
-
-    /**
      * Replace special chars with a URL compliant representation
      *
      * @param string $path
+     *
      * @return string
      */
     public function sCleanupPath($path)
@@ -220,21 +185,21 @@ class sRewriteTable
      */
     public function baseSetup()
     {
-        MemoryLimit::setMinimumMemoryLimit(1024*1024*512);
+        MemoryLimit::setMinimumMemoryLimit(1024 * 1024 * 512);
         @set_time_limit(0);
 
         $keys = isset($this->template->registered_plugins['function']) ? array_keys($this->template->registered_plugins['function']) : [];
         if (!(in_array('sCategoryPath', $keys))) {
             $this->template->registerPlugin(
                 Smarty::PLUGIN_FUNCTION, 'sCategoryPath',
-                array($this, 'sSmartyCategoryPath')
+                [$this, 'sSmartyCategoryPath']
             );
         }
 
         if (!(in_array('createSupplierPath', $keys))) {
             $this->template->registerPlugin(
                 Smarty::PLUGIN_FUNCTION, 'createSupplierPath',
-                array($this, 'createSupplierPath')
+                [$this, 'createSupplierPath']
             );
         }
 
@@ -249,6 +214,7 @@ class sRewriteTable
      * Main method for re-creating the rewrite table. Triggers all other (more specific) methods
      *
      * @param string $lastUpdate
+     *
      * @return string
      */
     public function sCreateRewriteTable($lastUpdate)
@@ -340,7 +306,7 @@ class sRewriteTable
         if (empty($seoStaticUrls)) {
             return;
         }
-        $static = array();
+        $static = [];
         $urls = $this->template->fetch('string:' . $seoStaticUrls, $this->data);
 
         if (!empty($urls)) {
@@ -407,8 +373,9 @@ class sRewriteTable
      * Create rewrite rules for articles
      *
      * @param string $lastUpdate
-     * @param int $limit
-     * @param int $offset
+     * @param int    $limit
+     * @param int    $offset
+     *
      * @return string
      */
     public function sCreateRewriteTableArticles($lastUpdate, $limit = 1000, $offset = 0)
@@ -422,7 +389,7 @@ class sRewriteTable
 
         $this->db->query(
             'UPDATE `s_articles` SET `changetime`= NOW() WHERE `changetime`=?',
-            array('0000-00-00 00:00:00')
+            ['0000-00-00 00:00:00']
         );
 
         $sql = $this->getSeoArticleQuery();
@@ -432,12 +399,12 @@ class sRewriteTable
 
         $result = $this->db->fetchAll(
             $sql,
-            array(
+            [
                 Shopware()->Shop()->get('parentID'),
                 Shopware()->Shop()->getId(),
                 $shopFallbackId,
-                $lastUpdate
-            )
+                $lastUpdate,
+            ]
         );
 
         $result = $this->mapArticleTranslationObjectData($result);
@@ -445,9 +412,9 @@ class sRewriteTable
         $result = Shopware()->Events()->filter(
             'Shopware_Modules_RewriteTable_sCreateRewriteTableArticles_filterArticles',
             $result,
-            array(
-                'shop' => Shopware()->Shop()->getId()
-            )
+            [
+                'shop' => Shopware()->Shop()->getId(),
+            ]
         );
 
         foreach ($result as $row) {
@@ -467,7 +434,7 @@ class sRewriteTable
                 SET changetime = DATE_ADD(changetime, INTERVAL 1 SECOND)
                 WHERE changetime=?
                 AND id > ?',
-                array($lastUpdate, $lastId)
+                [$lastUpdate, $lastId]
             );
         }
 
@@ -539,9 +506,9 @@ class sRewriteTable
         $blogCategories = $query->getArrayResult();
 
         //get all blog category ids
-        $blogCategoryIds = array();
+        $blogCategoryIds = [];
         foreach ($blogCategories as $blogCategory) {
-            $blogCategoryIds[] = $blogCategory["id"];
+            $blogCategoryIds[] = $blogCategory['id'];
         }
 
         /** @var $repository \Shopware\Models\Blog\Repository */
@@ -563,8 +530,9 @@ class sRewriteTable
 
     /**
      * @deprecated since 5.2 will be removed in 5.3, use \sRewriteTable::createManufacturerUrls
-     * @param null $offset
-     * @param null $limit
+     *
+     * @param null                 $offset
+     * @param null                 $limit
      * @param ShopContextInterface $context
      */
     public function sCreateRewriteTableSuppliers($offset = null, $limit = null, ShopContextInterface $context = null)
@@ -575,8 +543,9 @@ class sRewriteTable
 
     /**
      * @param ShopContextInterface $context
-     * @param null $offset
-     * @param null $limit
+     * @param null                 $offset
+     * @param null                 $limit
+     *
      * @throws Exception
      * @throws SmartyException
      */
@@ -597,7 +566,7 @@ class sRewriteTable
             $path = $this->template->fetch('string:' . $seoSupplierRouteTemplate, $this->data);
             $path = $this->sCleanupPath($path);
 
-            $org_path = 'sViewport=listing&sAction=manufacturer&sSupplier=' . (int)$manufacturer['id'];
+            $org_path = 'sViewport=listing&sAction=manufacturer&sSupplier=' . (int) $manufacturer['id'];
             $this->sInsertUrl($org_path, $path);
         }
     }
@@ -610,7 +579,7 @@ class sRewriteTable
      */
     public function sCreateRewriteTableCampaigns($offset = null, $limit = null)
     {
-        /**@var $repo \Shopware\Models\Emotion\Repository */
+        /** @var $repo \Shopware\Models\Emotion\Repository */
         $repo = $this->modelManager->getRepository('Shopware\Models\Emotion\Emotion');
         $queryBuilder = $repo->getListQueryBuilder();
 
@@ -644,9 +613,10 @@ class sRewriteTable
 
     /**
      * @param Shopware_Components_Translation $translator
-     * @param int $languageId
-     * @param int $fallbackId
-     * @param array $campaign
+     * @param int                             $languageId
+     * @param int                             $fallbackId
+     * @param array                           $campaign
+     *
      * @throws Exception
      * @throws SmartyException
      */
@@ -674,8 +644,8 @@ class sRewriteTable
      * Create CMS rewrite rules
      * Used in multiple locations
      *
-     * @param int $offset
-     * @param int $limit
+     * @param int                  $offset
+     * @param int                  $limit
      * @param ShopContextInterface $context
      */
     public function sCreateRewriteTableContent($offset = null, $limit = null, ShopContextInterface $context = null)
@@ -692,6 +662,7 @@ class sRewriteTable
      *
      * @param $org_path
      * @param $path
+     *
      * @return false|null False on empty args, null otherwise
      */
     public function sInsertUrl($org_path, $path)
@@ -703,18 +674,18 @@ class sRewriteTable
         }
 
         $update = $this->getPreparedUpdate();
-        $update->execute(array(
+        $update->execute([
             $org_path,
             $path,
-            Shopware()->Shop()->getId()
-        ));
+            Shopware()->Shop()->getId(),
+        ]);
 
         $insert = $this->getPreparedInsert();
-        $insert->execute(array(
+        $insert->execute([
             $org_path,
             $path,
-            Shopware()->Shop()->getId()
-        ));
+            Shopware()->Shop()->getId(),
+        ]);
     }
 
     /**
@@ -722,11 +693,12 @@ class sRewriteTable
      * Used internally as a Smarty extension
      *
      * @param array $params
+     *
      * @return string|null
      */
     public function createSupplierPath($params)
     {
-        $parts = array();
+        $parts = [];
         if (!empty($params['supplierID'])) {
             $parts[] = $this->modelManager->getRepository('Shopware\Models\Article\Supplier')
                 ->find($params['supplierID'])->getName();
@@ -737,6 +709,7 @@ class sRewriteTable
         foreach ($parts as &$part) {
             $part = str_replace($params['separator'], '', $part);
         }
+
         return implode($params['separator'], $parts);
     }
 
@@ -745,6 +718,7 @@ class sRewriteTable
      * Used internally as a Smarty extension
      *
      * @param array $params
+     *
      * @return null|string Category path
      */
     public function sSmartyCategoryPath($params)
@@ -753,7 +727,7 @@ class sRewriteTable
         if (!empty($params['articleID'])) {
             $parts = $this->sCategoryPathByArticleId(
                 $params['articleID'],
-                isset($params['categoryID']) ? $params["categoryID"] : null
+                isset($params['categoryID']) ? $params['categoryID'] : null
             );
         } elseif (!empty($params['categoryID'])) {
             $parts = $this->sCategoryPath($params['categoryID']);
@@ -767,6 +741,7 @@ class sRewriteTable
             }
             $parts = implode($params['separator'], $parts);
         }
+
         return $parts;
     }
 
@@ -774,35 +749,17 @@ class sRewriteTable
      * Given a category id, returns the category path
      *
      * @param int $categoryId Id of the category
+     *
      * @return array Array containing the path parts
      */
     public function sCategoryPath($categoryId)
     {
         $parts = $this->modelManager->getRepository('Shopware\Models\Category\Category')
             ->getPathById($categoryId, 'name');
-        $level = Shopware()->Shop()->getCategory()->getLevel() ? : 1;
+        $level = Shopware()->Shop()->getCategory()->getLevel() ?: 1;
         $parts = array_slice($parts, $level);
 
         return $parts;
-    }
-
-    /**
-     * Returns the category path to which the
-     * article belongs, inside the category subtree.
-     * Used internally in sSmartyCategoryPath
-     *
-     * @param int $articleId Id of the article to look for
-     * @param int $parentId Category subtree root id. If null, the shop category is used.
-     * @return null|array Category path, or null if no category found
-     */
-    private function sCategoryPathByArticleId($articleId, $parentId = null)
-    {
-        $categoryId = $this->moduleManager->Categories()->sGetCategoryIdByArticleId(
-            $articleId,
-            $parentId
-        );
-
-        return empty($categoryId) ? null : $this->sCategoryPath($categoryId);
     }
 
     /**
@@ -814,58 +771,10 @@ class sRewriteTable
     }
 
     /**
-     * Generates and inserts the form seo urls
-     *
-     * @param $offset
-     * @param $limit
-     */
-    private function insertFormUrls($offset, $limit)
-    {
-        $formListData = $this->modelManager->getRepository('Shopware\Models\Form\Form')
-            ->getListQuery(array(), array(), $offset, $limit)->getArrayResult();
-
-        foreach ($formListData as $form) {
-            $org_path = 'sViewport=ticket&sFid=' . $form['id'];
-            $this->data->assign('form', $form);
-            $path = $this->template->fetch('string:' . $this->config->get('seoFormRouteTemplate'), $this->data);
-            $path = $this->sCleanupPath($path);
-            $this->sInsertUrl($org_path, $path);
-        }
-    }
-
-    /**
-     * Generates and inserts static page urls
-     *
-     * @param $offset
-     * @param $limit
-     * @param ShopContextInterface $context
-     * @throws Exception
-     * @throws SmartyException
-     */
-    private function insertStaticPageUrls($offset, $limit, ShopContextInterface $context = null)
-    {
-        $context = $this->createFallbackContext($context);
-
-        $sitesData = $this->modelManager->getRepository('Shopware\Models\Site\Site')
-            ->getSitesWithoutLinkQuery($context->getShop()->getId(), $offset, $limit)
-            ->getArrayResult();
-
-        $pages = $this->shopPageService->getList(array_column($sitesData, 'id'), $context);
-
-        foreach ($pages as $site) {
-            $site = json_decode(json_encode($site), true);
-
-            $org_path = 'sViewport=custom&sCustom=' . $site['id'];
-            $this->data->assign('site', $site);
-            $path = $this->template->fetch('string:' . $this->config->get('seoCustomSiteRouteTemplate'), $this->data);
-            $path = $this->sCleanupPath($path);
-            $this->sInsertUrl($org_path, $path);
-        }
-    }
-
-    /**
      * Maps the translation of the objectdata from the s_core_translations in the article array
+     *
      * @param array $articles
+     *
      * @return mixed
      */
     public function mapArticleTranslationObjectData($articles)
@@ -909,12 +818,122 @@ class sRewriteTable
     }
 
     /**
+     * Getter function of the prepared insert PDOStatement
+     *
+     * @return null|PDOStatement
+     */
+    protected function getPreparedInsert()
+    {
+        if ($this->preparedInsert === null) {
+            $this->preparedInsert = $this->db->prepare('
+                INSERT IGNORE INTO s_core_rewrite_urls (org_path, path, main, subshopID)
+                VALUES (?, ?, 1, ?)
+                ON DUPLICATE KEY UPDATE main=1
+            ');
+        }
+
+        return $this->preparedInsert;
+    }
+
+    /**
+     * Getter function of the prepared update PDOStatement
+     *
+     * @return null|PDOStatement
+     */
+    protected function getPreparedUpdate()
+    {
+        if ($this->preparedUpdate === null) {
+            $this->preparedUpdate = $this->db->prepare(
+                'UPDATE s_core_rewrite_urls
+                SET main = 0
+                WHERE org_path = ?
+                AND path != ?
+                AND subshopID = ?
+            ');
+        }
+
+        return $this->preparedUpdate;
+    }
+
+    /**
+     * Returns the category path to which the
+     * article belongs, inside the category subtree.
+     * Used internally in sSmartyCategoryPath
+     *
+     * @param int $articleId Id of the article to look for
+     * @param int $parentId  Category subtree root id. If null, the shop category is used.
+     *
+     * @return null|array Category path, or null if no category found
+     */
+    private function sCategoryPathByArticleId($articleId, $parentId = null)
+    {
+        $categoryId = $this->moduleManager->Categories()->sGetCategoryIdByArticleId(
+            $articleId,
+            $parentId
+        );
+
+        return empty($categoryId) ? null : $this->sCategoryPath($categoryId);
+    }
+
+    /**
+     * Generates and inserts the form seo urls
+     *
+     * @param $offset
+     * @param $limit
+     */
+    private function insertFormUrls($offset, $limit)
+    {
+        $formListData = $this->modelManager->getRepository('Shopware\Models\Form\Form')
+            ->getListQuery([], [], $offset, $limit)->getArrayResult();
+
+        foreach ($formListData as $form) {
+            $org_path = 'sViewport=ticket&sFid=' . $form['id'];
+            $this->data->assign('form', $form);
+            $path = $this->template->fetch('string:' . $this->config->get('seoFormRouteTemplate'), $this->data);
+            $path = $this->sCleanupPath($path);
+            $this->sInsertUrl($org_path, $path);
+        }
+    }
+
+    /**
+     * Generates and inserts static page urls
+     *
+     * @param $offset
+     * @param $limit
+     * @param ShopContextInterface $context
+     *
+     * @throws Exception
+     * @throws SmartyException
+     */
+    private function insertStaticPageUrls($offset, $limit, ShopContextInterface $context = null)
+    {
+        $context = $this->createFallbackContext($context);
+
+        $sitesData = $this->modelManager->getRepository('Shopware\Models\Site\Site')
+            ->getSitesWithoutLinkQuery($context->getShop()->getId(), $offset, $limit)
+            ->getArrayResult();
+
+        $pages = $this->shopPageService->getList(array_column($sitesData, 'id'), $context);
+
+        foreach ($pages as $site) {
+            $site = json_decode(json_encode($site), true);
+
+            $org_path = 'sViewport=custom&sCustom=' . $site['id'];
+            $this->data->assign('site', $site);
+            $path = $this->template->fetch('string:' . $this->config->get('seoCustomSiteRouteTemplate'), $this->data);
+            $path = $this->sCleanupPath($path);
+            $this->sInsertUrl($org_path, $path);
+        }
+    }
+
+    /**
      * map article core translation including fallback fields for given article
      *
      * @param array $article
      * @param array $objectData
      * @param array $objectDataFallback
-     * @param array $fieldMappings array(articleFieldName => objectDataFieldName)
+     * @param array $fieldMappings      array(articleFieldName => objectDataFieldName)
+     *
      * @return array $article
      */
     private function mapArticleObjectFields(
@@ -933,6 +952,7 @@ class sRewriteTable
                 $article[$articleFieldName] = $objectDataFallback[$objectDataFieldName];
             }
         }
+
         return $article;
     }
 
@@ -941,6 +961,7 @@ class sRewriteTable
      *
      * @param array $article
      * @param array $translations
+     *
      * @return array $article
      */
     private function mapArticleObjectAttributeFields($article, $translations)
@@ -961,6 +982,7 @@ class sRewriteTable
     /**
      * @param int $offset
      * @param int $limit
+     *
      * @return array
      */
     private function getManufacturerIds($offset = null, $limit = null)
@@ -979,11 +1001,13 @@ class sRewriteTable
         $result = $repo->search($criteria);
         $suppliers = $result->getData();
         $ids = array_column($suppliers, 'id');
+
         return $ids;
     }
 
     /**
      * @param ShopContextInterface $context
+     *
      * @return ShopContextInterface
      */
     private function createFallbackContext(ShopContextInterface $context = null)
@@ -992,9 +1016,10 @@ class sRewriteTable
             return $context;
         }
 
-        /** @var \Shopware\Models\Shop\Shop $shop */
+        /* @var \Shopware\Models\Shop\Shop $shop */
         if (Shopware()->Container()->has('shop')) {
             $shop = Shopware()->Container()->get('shop');
+
             return $this->contextService->createShopContext($shop->getId());
         }
 

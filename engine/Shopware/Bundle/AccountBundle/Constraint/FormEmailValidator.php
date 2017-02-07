@@ -37,7 +37,7 @@ class FormEmailValidator extends ConstraintValidator
     const SNIPPET_EMAIL_CONFIRMATION = [
         'namespace' => 'frontend/account/internalMessages',
         'name' => 'MailFailureNotEqual',
-        'default' => 'The mail addresses entered are not equal'
+        'default' => 'The mail addresses entered are not equal',
     ];
 
     /**
@@ -52,7 +52,7 @@ class FormEmailValidator extends ConstraintValidator
 
     /**
      * @param Shopware_Components_Snippet_Manager $snippets
-     * @param CustomerEmailValidator $customerEmailValidator
+     * @param CustomerEmailValidator              $customerEmailValidator
      */
     public function __construct(
         Shopware_Components_Snippet_Manager $snippets,
@@ -63,7 +63,7 @@ class FormEmailValidator extends ConstraintValidator
     }
 
     /**
-     * @param string $email
+     * @param string     $email
      * @param Constraint $constraint
      */
     public function validate($email, Constraint $constraint)
@@ -83,7 +83,7 @@ class FormEmailValidator extends ConstraintValidator
         $emailConstraint = new CustomerEmail([
             'shop' => $constraint->getShop(),
             'customerId' => $customer->getId(),
-            'accountMode' => $accountMode
+            'accountMode' => $accountMode,
         ]);
 
         $this->customerEmailValidator->initialize($this->context);
@@ -97,7 +97,16 @@ class FormEmailValidator extends ConstraintValidator
     }
 
     /**
+     * @return string
+     */
+    public function validatedBy()
+    {
+        return 'FormEmailValidator';
+    }
+
+    /**
      * @param FormInterface $form
+     *
      * @return int
      */
     private function getAccountMode(FormInterface $form)
@@ -108,23 +117,17 @@ class FormEmailValidator extends ConstraintValidator
 
         /** @var Customer $customer */
         $customer = $form->getData();
+
         return $customer->getAccountMode();
     }
 
     /**
      * @param array $snippet with namespace, name and default value
+     *
      * @return string
      */
     private function getSnippet(array $snippet)
     {
         return $this->snippets->getNamespace($snippet['namespace'])->get($snippet['name'], $snippet['default'], true);
-    }
-
-    /**
-     * @return string
-     */
-    public function validatedBy()
-    {
-        return 'FormEmailValidator';
     }
 }

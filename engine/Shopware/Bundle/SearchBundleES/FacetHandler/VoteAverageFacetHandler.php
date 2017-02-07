@@ -26,14 +26,14 @@ namespace Shopware\Bundle\SearchBundleES\FacetHandler;
 
 use ONGR\ElasticsearchDSL\Aggregation\TermsAggregation;
 use ONGR\ElasticsearchDSL\Search;
-use Shopware\Bundle\SearchBundleES\HandlerInterface;
 use Shopware\Bundle\SearchBundle\Condition\VoteAverageCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
-use Shopware\Bundle\SearchBundle\Facet\VoteAverageFacet;
 use Shopware\Bundle\SearchBundle\CriteriaPartInterface;
+use Shopware\Bundle\SearchBundle\Facet\VoteAverageFacet;
 use Shopware\Bundle\SearchBundle\FacetResult\RadioFacetResult;
 use Shopware\Bundle\SearchBundle\FacetResult\ValueListItem;
 use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
+use Shopware\Bundle\SearchBundleES\HandlerInterface;
 use Shopware\Bundle\SearchBundleES\ResultHydratorInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\QueryAliasMapper;
@@ -52,7 +52,7 @@ class VoteAverageFacetHandler implements HandlerInterface, ResultHydratorInterfa
 
     /**
      * @param \Shopware_Components_Snippet_Manager $snippetManager
-     * @param QueryAliasMapper $queryAliasMapper
+     * @param QueryAliasMapper                     $queryAliasMapper
      */
     public function __construct(
         \Shopware_Components_Snippet_Manager $snippetManager,
@@ -67,7 +67,7 @@ class VoteAverageFacetHandler implements HandlerInterface, ResultHydratorInterfa
      */
     public function supports(CriteriaPartInterface $criteriaPart)
     {
-        return ($criteriaPart instanceof VoteAverageFacet);
+        return $criteriaPart instanceof VoteAverageFacet;
     }
 
     /**
@@ -111,14 +111,15 @@ class VoteAverageFacetHandler implements HandlerInterface, ResultHydratorInterfa
 
     /**
      * @param Criteria $criteria
-     * @param array $buckets
+     * @param array    $buckets
+     *
      * @return RadioFacetResult
      */
     private function createFacet(Criteria $criteria, array $buckets)
     {
         $activeAverage = null;
         if ($criteria->hasCondition('vote_average')) {
-            /**@var $condition VoteAverageCondition*/
+            /** @var $condition VoteAverageCondition */
             $condition = $criteria->getCondition('vote_average');
             $activeAverage = $condition->getAverage();
         }
@@ -152,7 +153,8 @@ class VoteAverageFacetHandler implements HandlerInterface, ResultHydratorInterfa
 
     /**
      * @param array $data
-     * @param int $activeAverage
+     * @param int   $activeAverage
+     *
      * @return array
      */
     private function buildItems($data, $activeAverage)
@@ -162,7 +164,7 @@ class VoteAverageFacetHandler implements HandlerInterface, ResultHydratorInterfa
         });
 
         $values = [];
-        for ($i = 1; $i <= 4; $i++) {
+        for ($i = 1; $i <= 4; ++$i) {
             $affected = array_filter($data, function ($value) use ($i) {
                 return ($value['key'] / 2) >= $i;
             });

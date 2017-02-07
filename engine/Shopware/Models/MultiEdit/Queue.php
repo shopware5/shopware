@@ -24,15 +24,15 @@
 
 namespace Shopware\Models\MultiEdit;
 
-use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
 
 /**
  * Shopware SwagMultiEdit Plugin - Queue Model
  *
  * @category  Shopware
- * @package   Shopware\Plugins\SwagMultiEdit\Models
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  *
  * @ORM\Entity(repositoryClass="Repository")
@@ -41,9 +41,17 @@ use Shopware\Components\Model\ModelEntity;
 class Queue extends ModelEntity
 {
     /**
+     * INVERSE SIDE
+     *
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="Shopware\Models\MultiEdit\QueueArticle", mappedBy="queue", cascade={"persist"},  fetch="EXTRA_LAZY")
+     */
+    protected $articleDetails;
+    /**
      * Unique identifier
      *
-     * @var integer $id
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
@@ -80,7 +88,7 @@ class Queue extends ModelEntity
     private $initialSize;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="active", type="boolean", nullable=false)
      */
@@ -92,17 +100,6 @@ class Queue extends ModelEntity
      * @ORM\Column(name="created", type="datetime", nullable=false)
      */
     private $created;
-
-
-    /**
-     * INVERSE SIDE
-     *
-     * @var ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Shopware\Models\MultiEdit\QueueArticle", mappedBy="queue", cascade={"persist"},  fetch="EXTRA_LAZY")
-     */
-    protected $articleDetails;
-
 
     /**
      * Class constructor.
@@ -121,7 +118,6 @@ class Queue extends ModelEntity
     {
         $this->created = $created;
     }
-
 
     /**
      * @return \DateTime
@@ -220,7 +216,7 @@ class Queue extends ModelEntity
     }
 
     /**
-     * @param boolean $active
+     * @param bool $active
      */
     public function setActive($active)
     {
@@ -228,7 +224,7 @@ class Queue extends ModelEntity
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function getActive()
     {

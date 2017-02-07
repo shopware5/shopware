@@ -48,8 +48,8 @@ class ShopGateway implements ShopGatewayInterface
 
     /**
      * @param ShopHydrator $hydrator
-     * @param FieldHelper $fieldHelper
-     * @param Connection $connection
+     * @param FieldHelper  $fieldHelper
+     * @param Connection   $connection
      */
     public function __construct(
         ShopHydrator $hydrator,
@@ -63,16 +63,19 @@ class ShopGateway implements ShopGatewayInterface
 
     /**
      * @param int $id
+     *
      * @return Shop
      */
     public function get($id)
     {
         $shops = $this->getList([$id]);
+
         return array_shift($shops);
     }
 
     /**
      * @param int[] $ids
+     *
      * @return Shop[] indexed by id
      */
     public function getList($ids)
@@ -90,7 +93,7 @@ class ShopGateway implements ShopGatewayInterface
 
         $result = [];
         foreach ($shops as $row) {
-            $id     = $row['__shop_id'];
+            $id = $row['__shop_id'];
             $mainId = $row['__shop_main_id'];
 
             if ($mainId && isset($parents[$mainId])) {
@@ -109,6 +112,7 @@ class ShopGateway implements ShopGatewayInterface
 
     /**
      * @param int[] $ids
+     *
      * @return \array[]
      */
     private function getShops($ids)

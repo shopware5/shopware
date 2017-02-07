@@ -54,9 +54,9 @@ class CustomSortingGateway implements CustomSortingGatewayInterface
     private $config;
 
     /**
-     * @param Connection $connection
-     * @param FieldHelper $fieldHelper
-     * @param CustomListingHydrator $hydrator
+     * @param Connection                  $connection
+     * @param FieldHelper                 $fieldHelper
+     * @param CustomListingHydrator       $hydrator
      * @param \Shopware_Components_Config $config
      */
     public function __construct(
@@ -84,6 +84,7 @@ class CustomSortingGateway implements CustomSortingGatewayInterface
         $sortings = $this->hydrate(
             $query->execute()->fetchAll(\PDO::FETCH_ASSOC)
         );
+
         return $this->getAndSortElementsByIds($ids, $sortings);
     }
 
@@ -106,6 +107,7 @@ class CustomSortingGateway implements CustomSortingGatewayInterface
                 $sortings
             );
         }
+
         return $categorySortings;
     }
 
@@ -117,9 +119,9 @@ class CustomSortingGateway implements CustomSortingGatewayInterface
         return $this->getList($this->getAllCategorySortingIds(), $context);
     }
 
-
     /**
      * Returns an array with all sorting ids which enabled for category listings
+     *
      * @return int[]
      */
     private function getAllCategorySortingIds()
@@ -132,6 +134,7 @@ class CustomSortingGateway implements CustomSortingGatewayInterface
         $ids = $query->execute()->fetchAll(\PDO::FETCH_COLUMN);
 
         $default = $this->config->get('defaultListingSorting', 1);
+
         return array_unique(array_merge([$default], $ids));
     }
 
@@ -139,6 +142,7 @@ class CustomSortingGateway implements CustomSortingGatewayInterface
      * Returns the base query to select the custom sorting data.
      *
      * @param ShopContextInterface $context
+     *
      * @return QueryBuilder
      */
     private function createQuery(ShopContextInterface $context)
@@ -148,11 +152,13 @@ class CustomSortingGateway implements CustomSortingGatewayInterface
         $query->from('s_search_custom_sorting', 'customSorting');
         $query->andWhere('customSorting.active = 1');
         $this->fieldHelper->addCustomSortingTranslation($query, $context);
+
         return $query;
     }
 
     /**
      * @param array $data
+     *
      * @return CustomSorting[]
      */
     private function hydrate(array $data)
@@ -167,8 +173,9 @@ class CustomSortingGateway implements CustomSortingGatewayInterface
     }
 
     /**
-     * @param int[] $sortingIds
+     * @param int[]           $sortingIds
      * @param CustomSorting[] $sortings
+     *
      * @return CustomSorting[] indexed by id
      */
     private function getAndSortElementsByIds(array $sortingIds, array $sortings)
@@ -179,11 +186,13 @@ class CustomSortingGateway implements CustomSortingGatewayInterface
                 $filtered[$sortingId] = $sortings[$sortingId];
             }
         }
+
         return $filtered;
     }
 
     /**
      * @param int[] $categoryIds
+     *
      * @return string[] indexed by id
      */
     private function getCategoryMapping(array $categoryIds)
@@ -209,6 +218,7 @@ class CustomSortingGateway implements CustomSortingGatewayInterface
                 if (!empty($ids)) {
                     return $ids;
                 }
+
                 return $allSortingIds;
             },
             $mapping

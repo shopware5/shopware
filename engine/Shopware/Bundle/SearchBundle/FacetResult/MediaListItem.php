@@ -29,7 +29,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Media;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\SearchBundle\FacetResult
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class MediaListItem extends ValueListItem
@@ -40,10 +40,10 @@ class MediaListItem extends ValueListItem
     protected $media;
 
     /**
-     * @param int|string $id
-     * @param string $label
-     * @param boolean $active
-     * @param Media $media
+     * @param int|string  $id
+     * @param string      $label
+     * @param bool        $active
+     * @param Media       $media
      * @param Attribute[] $attributes
      */
     public function __construct($id, $label, $active, Media $media = null, $attributes = [])

@@ -28,12 +28,14 @@ class SearchTermPreProcessor implements SearchTermPreProcessorInterface
 {
     /**
      * @param string $term
+     *
      * @return string
      */
     public function process($term)
     {
         //we have to strip the / otherwise broken urls would be created e.g. wrong pager urls
         $term = trim(strip_tags(htmlspecialchars_decode(stripslashes($term))));
-        return str_replace("/", " ", $term);
+
+        return str_replace('/', ' ', $term);
     }
 }

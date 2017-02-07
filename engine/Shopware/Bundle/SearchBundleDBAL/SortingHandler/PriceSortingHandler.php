@@ -24,17 +24,17 @@
 
 namespace Shopware\Bundle\SearchBundleDBAL\SortingHandler;
 
-use Shopware\Bundle\SearchBundleDBAL\ConditionHandler\PriceConditionHandler;
-use Shopware\Bundle\SearchBundleDBAL\ListingPriceTable;
-use Shopware\Bundle\SearchBundleDBAL\SortingHandlerInterface;
 use Shopware\Bundle\SearchBundle\Sorting\PriceSorting;
 use Shopware\Bundle\SearchBundle\SortingInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Bundle\SearchBundleDBAL\ConditionHandler\PriceConditionHandler;
+use Shopware\Bundle\SearchBundleDBAL\ListingPriceTable;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
+use Shopware\Bundle\SearchBundleDBAL\SortingHandlerInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\SearchBundleDBAL\SortingHandler
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class PriceSortingHandler implements SortingHandlerInterface
@@ -57,7 +57,7 @@ class PriceSortingHandler implements SortingHandlerInterface
      */
     public function supportsSorting(SortingInterface $sorting)
     {
-        return ($sorting instanceof PriceSorting);
+        return $sorting instanceof PriceSorting;
     }
 
     /**
@@ -77,7 +77,7 @@ class PriceSortingHandler implements SortingHandlerInterface
             $query->addState(PriceConditionHandler::LISTING_PRICE_JOINED);
         }
 
-        /** @var PriceSorting $sorting */
+        /* @var PriceSorting $sorting */
         $query->addOrderBy('listing_price.cheapest_price', $sorting->getDirection());
     }
 }

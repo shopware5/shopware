@@ -56,47 +56,6 @@ class Shopware_Components_Check_Path implements IteratorAggregate, Countable
     }
 
     /**
-     * Checks all requirements
-     */
-    protected function checkAll()
-    {
-        foreach ($this->list as $requirement) {
-            $requirement->version = $this->check($requirement->name);
-            $requirement->result = $this->compare(
-                $requirement->name,
-                $requirement->version,
-                $requirement->required
-            );
-        }
-    }
-
-    /**
-     * Checks a requirement
-     *
-     * @param string $name
-     * @return bool
-     */
-    protected function check($name)
-    {
-        $name = $this->basePath . $name;
-
-        return file_exists($name) && is_readable($name) && is_writeable($name);
-    }
-
-    /**
-     * Compares the requirement with the version
-     *
-     * @param string $name
-     * @param string $version
-     * @param string $required
-     * @return bool
-     */
-    protected function compare($name, $version, $required)
-    {
-        return $version;
-    }
-
-    /**
      * Returns the check list
      *
      * @return Iterator
@@ -109,6 +68,7 @@ class Shopware_Components_Check_Path implements IteratorAggregate, Countable
 
             $this->checkAll();
         }
+
         return $this->list;
     }
 
@@ -140,5 +100,48 @@ class Shopware_Components_Check_Path implements IteratorAggregate, Countable
     public function count()
     {
         return $this->getList()->count();
+    }
+
+    /**
+     * Checks all requirements
+     */
+    protected function checkAll()
+    {
+        foreach ($this->list as $requirement) {
+            $requirement->version = $this->check($requirement->name);
+            $requirement->result = $this->compare(
+                $requirement->name,
+                $requirement->version,
+                $requirement->required
+            );
+        }
+    }
+
+    /**
+     * Checks a requirement
+     *
+     * @param string $name
+     *
+     * @return bool
+     */
+    protected function check($name)
+    {
+        $name = $this->basePath . $name;
+
+        return file_exists($name) && is_readable($name) && is_writable($name);
+    }
+
+    /**
+     * Compares the requirement with the version
+     *
+     * @param string $name
+     * @param string $version
+     * @param string $required
+     *
+     * @return bool
+     */
+    protected function compare($name, $version, $required)
+    {
+        return $version;
     }
 }

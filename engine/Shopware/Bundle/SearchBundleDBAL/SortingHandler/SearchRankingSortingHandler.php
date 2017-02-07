@@ -24,16 +24,16 @@
 
 namespace Shopware\Bundle\SearchBundleDBAL\SortingHandler;
 
-use Shopware\Bundle\SearchBundleDBAL\ConditionHandler\SearchTermConditionHandler;
-use Shopware\Bundle\SearchBundleDBAL\SortingHandlerInterface;
 use Shopware\Bundle\SearchBundle\Sorting\SearchRankingSorting;
 use Shopware\Bundle\SearchBundle\SortingInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Bundle\SearchBundleDBAL\ConditionHandler\SearchTermConditionHandler;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
+use Shopware\Bundle\SearchBundleDBAL\SortingHandlerInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\SearchBundleDBAL\SortingHandler
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class SearchRankingSortingHandler implements SortingHandlerInterface
@@ -43,7 +43,7 @@ class SearchRankingSortingHandler implements SortingHandlerInterface
      */
     public function supportsSorting(SortingInterface $sorting)
     {
-        return ($sorting instanceof SearchRankingSorting);
+        return $sorting instanceof SearchRankingSorting;
     }
 
     /**
@@ -58,7 +58,7 @@ class SearchRankingSortingHandler implements SortingHandlerInterface
             return;
         }
 
-        /** @var SearchRankingSorting $sorting */
+        /* @var SearchRankingSorting $sorting */
         $query->addOrderBy('searchTable.ranking', $sorting->getDirection());
     }
 }

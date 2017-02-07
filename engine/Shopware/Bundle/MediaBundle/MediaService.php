@@ -31,7 +31,6 @@ use Shopware\Models\Shop\Shop;
 
 /**
  * Class MediaService
- * @package Shopware\Bundle\MediaBundle
  */
 class MediaService implements MediaServiceInterface
 {
@@ -62,9 +61,10 @@ class MediaService implements MediaServiceInterface
 
     /**
      * @param FilesystemInterface $filesystem
-     * @param StrategyInterface $strategy
-     * @param Container $container
-     * @param array $config
+     * @param StrategyInterface   $strategy
+     * @param Container           $container
+     * @param array               $config
+     *
      * @throws \Exception
      */
     public function __construct(FilesystemInterface $filesystem, StrategyInterface $strategy, Container $container, array $config)
@@ -83,7 +83,7 @@ class MediaService implements MediaServiceInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function read($path)
     {
@@ -94,7 +94,7 @@ class MediaService implements MediaServiceInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function readStream($path)
     {
@@ -105,7 +105,7 @@ class MediaService implements MediaServiceInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getUrl($path)
     {
@@ -124,7 +124,7 @@ class MediaService implements MediaServiceInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function write($path, $contents, $append = false)
     {
@@ -138,7 +138,7 @@ class MediaService implements MediaServiceInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function writeStream($path, $resource, $append = false)
     {
@@ -152,7 +152,7 @@ class MediaService implements MediaServiceInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function has($path)
     {
@@ -163,7 +163,7 @@ class MediaService implements MediaServiceInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function delete($path)
     {
@@ -173,7 +173,7 @@ class MediaService implements MediaServiceInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getSize($path)
     {
@@ -184,7 +184,7 @@ class MediaService implements MediaServiceInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function rename($path, $newPath)
     {
@@ -196,7 +196,7 @@ class MediaService implements MediaServiceInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function normalize($path)
     {
@@ -204,17 +204,95 @@ class MediaService implements MediaServiceInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getAdapterType()
+    {
+        return $this->config['type'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function listFiles($directory = '')
+    {
+        $files = [];
+        foreach ($this->filesystem->listContents($directory, true) as $file) {
+            if ($file['type'] == 'dir' || strstr($file['path'], '/.') !== false) {
+                continue;
+            }
+
+            $files[] = $file['path'];
+        }
+
+        return $files;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function createDir($dirname)
+    {
+        return $this->filesystem->createDir($dirname);
+    }
+
+    /**
+     * Migrates a file to the new strategy if it's not present
+     *
+     * @internal
+     *
+     * @param $path
+     */
+    public function migrateFile($path)
+    {
+        if ($this->getAdapterType() !== 'local' || $this->isEncoded($path)) {
+            return;
+        }
+
+        $encodedPath = $this->strategy->encode($path);
+
+        if ($this->filesystem->has($path) && !$this->filesystem->has($encodedPath)) {
+            $this->filesystem->rename($path, $encodedPath);
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function encode($path)
+    {
+        return $this->strategy->encode($path);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isEncoded($path)
+    {
+        return $this->strategy->isEncoded($path);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAdapter()
+    {
+        return $this->filesystem;
+    }
+
+    /**
      * Generates a mediaUrl based on the request or router
      *
-     * @return string
      * @throws \Exception
+     *
+     * @return string
      */
     private function createFallbackMediaUrl()
     {
         $request = $this->container->get('front')->Request();
 
         if ($request && $request->getHttpHost()) {
-            return ($request->isSecure() ? 'https' : 'http') . '://' . $request->getHttpHost() . $request->getBasePath() . "/";
+            return ($request->isSecure() ? 'https' : 'http') . '://' . $request->getHttpHost() . $request->getBasePath() . '/';
         }
 
         if ($this->container->has('Shop')) {
@@ -237,39 +315,6 @@ class MediaService implements MediaServiceInterface
     }
 
     /**
-     * @inheritdoc
-     */
-    public function getAdapterType()
-    {
-        return $this->config['type'];
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function listFiles($directory = '')
-    {
-        $files = [];
-        foreach ($this->filesystem->listContents($directory, true) as $file) {
-            if ($file['type'] == 'dir' || strstr($file['path'], '/.') !== false) {
-                continue;
-            }
-
-            $files[] = $file['path'];
-        }
-
-        return $files;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function createDir($dirname)
-    {
-        return $this->filesystem->createDir($dirname);
-    }
-
-    /**
      * Used as internal check for the liveMigration config flag.
      *
      * @param string $path
@@ -281,49 +326,5 @@ class MediaService implements MediaServiceInterface
         }
 
         $this->migrateFile($path);
-    }
-
-    /**
-     * Migrates a file to the new strategy if it's not present
-     *
-     * @internal
-     * @param $path
-     * @return void
-     */
-    public function migrateFile($path)
-    {
-        if ($this->getAdapterType() !== 'local' || $this->isEncoded($path)) {
-            return;
-        }
-
-        $encodedPath = $this->strategy->encode($path);
-
-        if ($this->filesystem->has($path) && !$this->filesystem->has($encodedPath)) {
-            $this->filesystem->rename($path, $encodedPath);
-        }
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function encode($path)
-    {
-        return $this->strategy->encode($path);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function isEncoded($path)
-    {
-        return $this->strategy->isEncoded($path);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getAdapter()
-    {
-        return $this->filesystem;
     }
 }

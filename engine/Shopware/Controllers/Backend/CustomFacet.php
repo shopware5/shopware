@@ -36,18 +36,17 @@ class Shopware_Controllers_Backend_CustomFacet extends Shopware_Controllers_Back
         $connection = $this->container->get('dbal_connection');
 
         $connection->executeUpdate(
-            "UPDATE s_search_custom_facet SET position = position - 1 WHERE position <= :position",
+            'UPDATE s_search_custom_facet SET position = position - 1 WHERE position <= :position',
             [':position' => $position]
         );
 
         $connection->executeUpdate(
-            "UPDATE s_search_custom_facet SET position = :position WHERE id = :id",
+            'UPDATE s_search_custom_facet SET position = :position WHERE id = :id',
             [':position' => $position, ':id' => $id]
         );
 
         $this->View()->assign('success', true);
     }
-
 
     public function copyCategorySettingsAction()
     {
@@ -61,11 +60,11 @@ class Shopware_Controllers_Backend_CustomFacet extends Shopware_Controllers_Back
         );
 
         $connection->executeUpdate(
-            "UPDATE s_categories SET `hideFilter` = :hideFilter, `facet_ids` = :facetIds WHERE path LIKE :path",
+            'UPDATE s_categories SET `hideFilter` = :hideFilter, `facet_ids` = :facetIds WHERE path LIKE :path',
             [
                 ':hideFilter' => (int) $data['hideFilter'],
                 ':facetIds' => (string) $data['facet_ids'],
-                ':path' => '%|'. $categoryId .'|%'
+                ':path' => '%|' . $categoryId . '|%',
             ]
         );
 

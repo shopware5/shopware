@@ -30,21 +30,24 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 interface CustomFacetServiceInterface
 {
     /**
-     * @param int[] $ids
+     * @param int[]                $ids
      * @param ShopContextInterface $context
+     *
      * @return CustomFacet[]
      */
     public function getList(array $ids, ShopContextInterface $context);
 
     /**
-     * @param int[] $categoryIds
+     * @param int[]                $categoryIds
      * @param ShopContextInterface $context
+     *
      * @return array indexed by category id, each element contains an array of CustomFacet[]
      */
     public function getFacetsOfCategories(array $categoryIds, ShopContextInterface $context);
 
     /**
      * @param ShopContextInterface $context
+     *
      * @return CustomFacet[] indexed by id, sorted by position
      */
     public function getAllCategoryFacets(ShopContextInterface $context);

@@ -28,7 +28,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\StoreFrontBundle\Service
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 interface BlogServiceInterface
@@ -39,9 +39,10 @@ interface BlogServiceInterface
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\BlogGatewayInterface::getList()
      *
-     * @param int[] $ids
+     * @param int[]                       $ids
      * @param Struct\ShopContextInterface $context
-     * @return Struct\Blog[] Indexed by the blog id.
+     *
+     * @return Struct\Blog[] indexed by the blog id
      */
     public function getList(array $ids, Struct\ShopContextInterface $context);
 }

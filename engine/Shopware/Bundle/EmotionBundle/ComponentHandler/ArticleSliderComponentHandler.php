@@ -62,20 +62,20 @@ class ArticleSliderComponentHandler implements ComponentHandlerInterface
     private $productStreamRepository;
 
     /**
-     * @var ShopwareConfig $shopwareConfig
+     * @var ShopwareConfig
      */
     private $shopwareConfig;
 
     /**
-     * @var AdditionalTextService $additionalTextService
+     * @var AdditionalTextService
      */
     private $additionalTextService;
 
     /**
      * @param StoreFrontCriteriaFactoryInterface $criteriaFactory
-     * @param RepositoryInterface $productStreamRepository
-     * @param ShopwareConfig $shopwareConfig
-     * @param AdditionalTextService $additionalTextService
+     * @param RepositoryInterface                $productStreamRepository
+     * @param ShopwareConfig                     $shopwareConfig
+     * @param AdditionalTextService              $additionalTextService
      */
     public function __construct(
         StoreFrontCriteriaFactoryInterface $criteriaFactory,
@@ -90,7 +90,7 @@ class ArticleSliderComponentHandler implements ComponentHandlerInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function supports(Element $element)
     {
@@ -99,7 +99,7 @@ class ArticleSliderComponentHandler implements ComponentHandlerInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function prepare(PrepareDataCollection $collection, Element $element, ShopContextInterface $context)
     {
@@ -141,7 +141,7 @@ class ArticleSliderComponentHandler implements ComponentHandlerInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function handle(ResolvedDataCollection $collection, Element $element, ShopContextInterface $context)
     {
@@ -184,7 +184,6 @@ class ArticleSliderComponentHandler implements ComponentHandlerInterface
                     $products[$productNumber] = $product;
                 }
 
-
                 $element->getData()->set('products', $products);
                 break;
         }
@@ -208,8 +207,9 @@ class ArticleSliderComponentHandler implements ComponentHandlerInterface
     }
 
     /**
-     * @param Element $element
+     * @param Element              $element
      * @param ShopContextInterface $context
+     *
      * @return \Shopware\Bundle\SearchBundle\Criteria
      */
     private function generateCriteria(Element $element, ShopContextInterface $context)

@@ -29,7 +29,7 @@
  * in the s_articles_top_seller
  *
  * @category  Shopware
- * @package   Shopware\Plugins\MarketingAggregate\Components
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Components_TopSeller extends Enlight_Class
@@ -43,21 +43,23 @@ class Shopware_Components_TopSeller extends Enlight_Class
      */
     public function incrementTopSeller($articleId, $quantity)
     {
-        $sql = "
+        $sql = '
             INSERT INTO s_articles_top_seller_ro (article_id, sales, last_cleared)
             VALUES (:article_id, :quantity, now())
             ON DUPLICATE KEY UPDATE sales = sales + :quantity, last_cleared=now();
-            ";
+            ';
 
-        Shopware()->Db()->query($sql, array(
+        Shopware()->Db()->query($sql, [
             'article_id' => $articleId,
             'quantity' => $quantity,
-        ));
+        ]);
     }
 
     /**
      * Helper function to refresh the top seller data for a single article.
+     *
      * @param $articleId
+     *
      * @throws Exception
      */
     public function refreshTopSellerForArticleId($articleId)
@@ -67,19 +69,19 @@ class Shopware_Components_TopSeller extends Enlight_Class
         }
         Shopware()->Db()->query(
             'DELETE FROM s_articles_top_seller_ro WHERE article_id = :articleId',
-            array(
-                'articleId' => (int) $articleId
-            )
+            [
+                'articleId' => (int) $articleId,
+            ]
         );
 
         $select = $this->getTopSellerSelect();
         $orderTime = $this->getTopSellerOrderTime();
 
-        $sql = "
+        $sql = '
             INSERT IGNORE INTO s_articles_top_seller_ro (article_id, last_cleared, sales)
             SELECT articles.id as article_id,
                     NOW() as last_cleared,
-            " . $select . "
+            ' . $select . '
             FROM s_articles articles
                 LEFT JOIN s_order_details details
                     ON  articles.id = details.articleID
@@ -89,12 +91,12 @@ class Shopware_Components_TopSeller extends Enlight_Class
                     AND s_order.id = details.orderID
                     AND s_order.ordertime >= :orderTime
             WHERE articles.id = :articleId
-        ";
+        ';
 
-        Shopware()->Db()->query($sql, array(
+        Shopware()->Db()->query($sql, [
             'orderTime' => $orderTime->format('Y-m-d 00:00:00'),
-            'articleId' => (int) $articleId
-        ));
+            'articleId' => (int) $articleId,
+        ]);
     }
 
     /**
@@ -107,10 +109,10 @@ class Shopware_Components_TopSeller extends Enlight_Class
         $select = $this->getTopSellerSelect();
         $orderTime = $this->getTopSellerOrderTime();
 
-        $sql = "
+        $sql = '
             SELECT articles.id as article_id,
                     NOW() as last_cleared,
-                    " . $select . "
+                    ' . $select . '
             FROM s_articles articles
                 LEFT JOIN s_order_details details
                     ON  articles.id = details.articleID
@@ -122,15 +124,15 @@ class Shopware_Components_TopSeller extends Enlight_Class
             WHERE articles.id NOT IN (
                 SELECT s_articles_top_seller_ro.article_id FROM s_articles_top_seller_ro
             )
-            GROUP BY articles.id ";
+            GROUP BY articles.id ';
 
         if ($limit !== null) {
             $sql = Shopware()->Db()->limit($sql, $limit);
         }
 
-        $articles = Shopware()->Db()->fetchAll($sql, array(
-            'orderTime' => $orderTime->format('Y-m-d 00:00:00')
-        ));
+        $articles = Shopware()->Db()->fetchAll($sql, [
+            'orderTime' => $orderTime->format('Y-m-d 00:00:00'),
+        ]);
 
         $prepared = Shopware()->Db()->prepare(
             'INSERT IGNORE INTO s_articles_top_seller_ro (article_id, last_cleared, sales)
@@ -145,7 +147,8 @@ class Shopware_Components_TopSeller extends Enlight_Class
     /**
      * Refresh the elapsed top seller data of the s_articles_top_seller table.
      * This function is used
-     * @param $limit int Limit the update count.
+     *
+     * @param $limit int Limit the update count
      */
     public function updateElapsedTopSeller($limit = null)
     {
@@ -153,12 +156,12 @@ class Shopware_Components_TopSeller extends Enlight_Class
         $orderTime = $this->getTopSellerOrderTime();
         $validationTime = $this->getTopSellerValidationTime();
 
-        $sql = "
+        $sql = '
             UPDATE s_articles_top_seller_ro
             SET last_cleared = NOW(),
                 sales = (
                     SELECT
-                       " . $select . "
+                       ' . $select . '
                     FROM s_articles articles
                         LEFT JOIN s_order_details details
                             ON  articles.id = details.articleID
@@ -170,18 +173,17 @@ class Shopware_Components_TopSeller extends Enlight_Class
                     WHERE articles.id = s_articles_top_seller_ro.article_id
                 )
             WHERE last_cleared <= :validationTime
-        ";
+        ';
 
         if ($limit !== null) {
             $sql = Shopware()->Db()->limit($sql, $limit);
         }
 
-        Shopware()->Db()->query($sql, array(
+        Shopware()->Db()->query($sql, [
             'orderTime' => $orderTime->format('Y-m-d 00:00:00'),
-            'validationTime' => $validationTime->format('Y-m-d 00:00:00')
-        ));
+            'validationTime' => $validationTime->format('Y-m-d 00:00:00'),
+        ]);
     }
-
 
     /**
      * Returns a DateTime instance which can be used to refresh or update the top seller
@@ -202,7 +204,6 @@ class Shopware_Components_TopSeller extends Enlight_Class
         return $orderTime;
     }
 
-
     /**
      * Returns a DateTime instance which can be used to validate the top seller
      * data.
@@ -222,7 +223,6 @@ class Shopware_Components_TopSeller extends Enlight_Class
         return $orderTime;
     }
 
-
     /**
      * Returns the SUM() select path of the top seller calculation statement.
      * Used from the updateElapsedTopSeller and initTopSeller function.
@@ -235,12 +235,12 @@ class Shopware_Components_TopSeller extends Enlight_Class
     {
         //check the pseudo sales configuration value
         $usePseudoSales = Shopware()->Config()->get('topSellerPseudoSales', true);
-        $sumSelect = " SUM(IF(s_order.id, IFNULL(details.quantity, 0), 0))  ";
+        $sumSelect = ' SUM(IF(s_order.id, IFNULL(details.quantity, 0), 0))  ';
         if ($usePseudoSales) {
             //if this value is set to true, the articles.pseudosales column has to be added to the sales value.
-            $sumSelect = $sumSelect . " + articles.pseudosales ";
+            $sumSelect = $sumSelect . ' + articles.pseudosales ';
         }
-        $sumSelect = $sumSelect . " as sales ";
+        $sumSelect = $sumSelect . ' as sales ';
 
         return $sumSelect;
     }

@@ -29,7 +29,7 @@ use Shopware\Bundle\StoreFrontBundle\Service\CacheInterface;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\StoreFrontBundle\Service\Core
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
 class CoreCache implements CacheInterface

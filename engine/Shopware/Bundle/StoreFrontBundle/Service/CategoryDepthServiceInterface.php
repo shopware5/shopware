@@ -30,8 +30,9 @@ interface CategoryDepthServiceInterface
 {
     /**
      * @param Category $category
-     * @param int $depth
-     * @param int[] $filterIds
+     * @param int      $depth
+     * @param int[]    $filterIds
+     *
      * @return int[]
      */
     public function get(Category $category, $depth, array $filterIds = []);

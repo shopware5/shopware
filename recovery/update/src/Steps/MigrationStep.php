@@ -43,8 +43,9 @@ class MigrationStep
     }
 
     /**
-     * @param  int                                  $offset
-     * @param  int                                  $totalCount
+     * @param int $offset
+     * @param int $totalCount
+     *
      * @return ErrorResult|FinishResult|ValidResult
      */
     public function run($offset, $totalCount = null)
@@ -72,15 +73,15 @@ class MigrationStep
             $classFile = $reflection->getFileName();
 
             return new ErrorResult($e->getMessage(), $e, [
-                'deltaFile'    => $classFile,
+                'deltaFile' => $classFile,
                 'deltaVersion' => $migration->getVersion(),
-                'deltaLabel'   => $migration->getLabel()
+                'deltaLabel' => $migration->getLabel(),
             ]);
         }
 
-        return new ValidResult($offset+1, $totalCount, [
+        return new ValidResult($offset + 1, $totalCount, [
             'deltaVersion' => $migration->getVersion(),
-            'deltaLabel'   => $migration->getLabel()
+            'deltaLabel' => $migration->getLabel(),
         ]);
     }
 }

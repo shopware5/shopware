@@ -30,8 +30,9 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 interface EmotionServiceInterface
 {
     /**
-     * @param int[] $emotionIds
+     * @param int[]                $emotionIds
      * @param ShopContextInterface $context
+     *
      * @return Emotion[] indexed by id
      */
     public function getList(array $emotionIds, ShopContextInterface $context);

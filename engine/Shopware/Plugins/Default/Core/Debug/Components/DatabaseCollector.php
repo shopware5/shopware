@@ -28,7 +28,7 @@ use Shopware\Components\Logger;
 
 /**
  * @category  Shopware
- * @package   Shopware\Plugin\Debug\Components
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class DatabaseCollector implements CollectorInterface
@@ -46,9 +46,6 @@ class DatabaseCollector implements CollectorInterface
         $this->db = $db;
     }
 
-    /**
-     *
-     */
     public function start()
     {
         $this->db->getProfiler()->setEnabled(true);
@@ -64,8 +61,8 @@ class DatabaseCollector implements CollectorInterface
         /** @var $profiler \Zend_Db_Profiler */
         $profiler = $this->db->getProfiler();
 
-        $rows = array(array('time', 'count', 'sql', 'params'));
-        $counts = array(10000);
+        $rows = [['time', 'count', 'sql', 'params']];
+        $counts = [10000];
         $total_time = 0;
         $queryProfiles = $profiler->getQueryProfiles();
 
@@ -78,15 +75,15 @@ class DatabaseCollector implements CollectorInterface
             $id = md5($query->getQuery());
             $total_time += $query->getElapsedSecs();
             if (!isset($rows[$id])) {
-                $rows[$id] = array(
+                $rows[$id] = [
                     number_format($query->getElapsedSecs(), 5, '.', ''),
                     1,
                     $query->getQuery(),
-                    $query->getQueryParams()
-                );
+                    $query->getQueryParams(),
+                ];
                 $counts[$id] = $query->getElapsedSecs();
             } else {
-                $rows[$id][1]++;
+                ++$rows[$id][1];
                 $counts[$id] += $query->getElapsedSecs();
                 $rows[$id][0] = number_format($counts[$id], 5, '.', '');
             }
@@ -98,7 +95,7 @@ class DatabaseCollector implements CollectorInterface
         $total_count = $profiler->getTotalNumQueries();
 
         $label = "Database Querys ($total_count @ $total_time sec)";
-        $table = array($label, $rows);
+        $table = [$label, $rows];
 
         $log->table($table);
     }

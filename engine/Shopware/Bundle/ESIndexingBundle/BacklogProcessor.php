@@ -41,7 +41,7 @@ class BacklogProcessor implements BacklogProcessorInterface
     private $synchronizer;
 
     /**
-     * @param Connection $connection
+     * @param Connection            $connection
      * @param SynchronizerInterface $synchronizer
      */
     public function __construct(
@@ -77,16 +77,16 @@ class BacklogProcessor implements BacklogProcessorInterface
      */
     private function writeBacklog(array $backlogs)
     {
-        $statement = $this->connection->prepare("
+        $statement = $this->connection->prepare('
             INSERT IGNORE INTO s_es_backlog (`event`, `payload`, `time`)
             VALUES (:event, :payload, :time);
-        ");
+        ');
 
         foreach ($backlogs as $backlog) {
             $statement->execute([
-                ':event'   => $backlog->getEvent(),
+                ':event' => $backlog->getEvent(),
                 ':payload' => json_encode($backlog->getPayload()),
-                ':time'    => $backlog->getTime()->format('Y-m-d H:i:s')
+                ':time' => $backlog->getTime()->format('Y-m-d H:i:s'),
             ]);
         }
     }

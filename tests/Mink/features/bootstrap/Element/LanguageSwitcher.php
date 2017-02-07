@@ -1,4 +1,26 @@
 <?php
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
 
 namespace Shopware\Tests\Mink\Element;
 
@@ -15,22 +37,22 @@ use Shopware\Tests\Mink\Helper;
 class LanguageSwitcher extends Element implements \Shopware\Tests\Mink\HelperSelectorInterface
 {
     /**
-     * @var array $selector
+     * @var array
      */
     protected $selector = ['css' => 'div.top-bar--language select.language--select'];
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getCssSelectors()
     {
         return [
-            'languages' => 'option'
+            'languages' => 'option',
         ];
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getNamedSelectors()
     {
@@ -40,11 +62,12 @@ class LanguageSwitcher extends Element implements \Shopware\Tests\Mink\HelperSel
     /**
      * Returns the current language
      * Use this only for asserts. If you only need the current language, use Helper::getCurrentLanguage().
+     *
      * @return string
      */
     public function getCurrentLanguage()
     {
-        $languageKeys = array(1 => 'de', 2 => 'en');
+        $languageKeys = [1 => 'de', 2 => 'en'];
 
         $languages = $this->findAll('css', Helper::getRequiredSelector($this, 'languages'));
 
@@ -60,7 +83,9 @@ class LanguageSwitcher extends Element implements \Shopware\Tests\Mink\HelperSel
 
     /**
      * Changes the language
+     *
      * @param string $language
+     *
      * @throws \Behat\Mink\Exception\ElementNotFoundException
      */
     public function setLanguage($language)

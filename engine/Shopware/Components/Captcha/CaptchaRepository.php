@@ -24,7 +24,6 @@
 
 namespace Shopware\Components\Captcha;
 
-use Monolog\Logger;
 use Shopware\Components\Captcha\Exception\CaptchaNotFoundException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -46,9 +45,9 @@ class CaptchaRepository
     private $container;
 
     /**
-     * @param array $captchas
+     * @param array                       $captchas
      * @param \Shopware_Components_Config $config
-     * @param ContainerInterface $container
+     * @param ContainerInterface          $container
      */
     public function __construct(
         array $captchas,
@@ -63,8 +62,9 @@ class CaptchaRepository
     /**
      * Returns an object of the currently configured Captcha
      *
-     * @return CaptchaInterface
      * @throws \Exception
+     *
+     * @return CaptchaInterface
      */
     public function getConfiguredCaptcha()
     {
@@ -93,8 +93,10 @@ class CaptchaRepository
      * Find and returns the captcha with the passed name
      *
      * @param string $captchaName
-     * @return CaptchaInterface
+     *
      * @throws CaptchaNotFoundException
+     *
+     * @return CaptchaInterface
      */
     public function getCaptchaByName($captchaName)
     {

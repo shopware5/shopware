@@ -26,7 +26,7 @@ namespace Shopware\Bundle\EmotionBundle\Struct;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\StoreFrontBundle\Struct
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ElementData implements \JsonSerializable
@@ -52,7 +52,8 @@ class ElementData implements \JsonSerializable
      * Returns a single storage value.
      *
      * @param string $name
-     * @param mixed $default
+     * @param mixed  $default
+     *
      * @return mixed
      */
     public function get($name, $default = null)
@@ -70,7 +71,7 @@ class ElementData implements \JsonSerializable
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function jsonSerialize()
     {

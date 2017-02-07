@@ -26,7 +26,6 @@ namespace Shopware\Bundle\PluginInstallerBundle\Struct;
 
 /**
  * Class AddressStruct
- * @package Shopware\Bundle\PluginInstallerBundle\Struct
  */
 class AddressStruct implements \JsonSerializable
 {
@@ -64,7 +63,6 @@ class AddressStruct implements \JsonSerializable
      * @var string
      */
     private $lastName;
-
 
     /**
      * @param string $countryName
@@ -127,7 +125,7 @@ class AddressStruct implements \JsonSerializable
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function jsonSerialize()
     {

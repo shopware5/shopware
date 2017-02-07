@@ -30,7 +30,6 @@ use Shopware\Bundle\MediaBundle\Struct\MediaPosition;
 
 /**
  * Class GarbageCollector
- * @package Shopware\Bundle\MediaBundle
  */
 class GarbageCollector
 {
@@ -54,12 +53,12 @@ class GarbageCollector
      */
     private $queue = [
         'id' => [],
-        'path' => []
+        'path' => [],
     ];
 
     /**
-     * @param MediaPosition[] $mediaPositions
-     * @param Connection $dbConnection
+     * @param MediaPosition[]       $mediaPositions
+     * @param Connection            $dbConnection
      * @param MediaServiceInterface $mediaService
      */
     public function __construct(array $mediaPositions, Connection $dbConnection, MediaServiceInterface $mediaService)
@@ -94,6 +93,21 @@ class GarbageCollector
 
     /**
      * @throws \Doctrine\DBAL\DBALException
+     *
+     * @return bool|string
+     */
+    public function getCount()
+    {
+        return $this->connection->createQueryBuilder()
+            ->select('count(*) as cnt')
+            ->from('s_media')
+            ->where('albumID = -13')
+            ->execute()
+            ->fetchColumn();
+    }
+
+    /**
+     * @throws \Doctrine\DBAL\DBALException
      */
     private function createTempTable()
     {
@@ -117,6 +131,7 @@ class GarbageCollector
 
     /**
      * @param MediaPosition $mediaPosition
+     *
      * @throws \Doctrine\DBAL\DBALException
      */
     private function find(MediaPosition $mediaPosition)
@@ -144,22 +159,10 @@ class GarbageCollector
     }
 
     /**
-     * @return bool|string
-     * @throws \Doctrine\DBAL\DBALException
-     */
-    public function getCount()
-    {
-        return $this->connection->createQueryBuilder()
-            ->select('count(*) as cnt')
-            ->from('s_media')
-            ->where('albumID = -13')
-            ->execute()
-            ->fetchColumn();
-    }
-
-    /**
      * Handles tables with json content
+     *
      * @param MediaPosition $mediaPosition
+     *
      * @throws \Doctrine\DBAL\DBALException
      */
     private function handleJsonTable(MediaPosition $mediaPosition)
@@ -248,6 +251,7 @@ class GarbageCollector
 
     /**
      * @param MediaPosition $mediaPosition
+     *
      * @throws \Doctrine\DBAL\DBALException
      */
     private function handleTable(MediaPosition $mediaPosition)
@@ -314,6 +318,7 @@ class GarbageCollector
 
     /**
      * @param MediaPosition $mediaPosition
+     *
      * @return array
      */
     private function fetchColumn(MediaPosition $mediaPosition)

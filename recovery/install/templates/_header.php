@@ -23,9 +23,9 @@
 
     <script>
         var shopwareTranslations = {
-            'counterTextMigrations': '<?= $t->t("migration_counter_text_migrations") ?>',
-            'counterTextSnippets':   '<?= $t->t("migration_counter_text_snippets") ?>',
-            'updateSuccess':         '<?= $t->t("migration_update_success") ?>'
+            'counterTextMigrations': '<?= $t->t('migration_counter_text_migrations') ?>',
+            'counterTextSnippets':   '<?= $t->t('migration_counter_text_snippets') ?>',
+            'updateSuccess':         '<?= $t->t('migration_update_success') ?>'
         }
     </script>
 </head>
@@ -39,7 +39,7 @@
         <img src="<?= $baseUrl ?>../common/assets/images/logo-sw5.png" alt="Shopware 5" class="header-shopware5-logo is--right">
 
         <div class="version--notice">
-            <?= $t->t("version_text") ?> <?= $version ?>
+            <?= $t->t('version_text') ?> <?= $version ?>
         </div>
     </header>
 

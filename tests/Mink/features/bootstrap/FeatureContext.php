@@ -1,14 +1,36 @@
 <?php
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
 
 namespace Shopware\Tests\Mink;
 
 use Behat\Behat\Context\SnippetAcceptingContext;
 use Behat\Behat\Hook\Scope\AfterStepScope;
-use Behat\Mink\Driver\BrowserKitDriver;
-use Behat\Mink\Exception\Exception as MinkException;
 use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use Behat\Behat\Hook\Scope\ScenarioScope;
+use Behat\Mink\Driver\BrowserKitDriver;
 use Behat\Mink\Driver\Selenium2Driver;
+use Behat\Mink\Exception\Exception as MinkException;
 use Behat\Mink\Session;
 use Behat\Testwork\Hook\Scope\BeforeSuiteScope;
 use Behat\Testwork\Suite\Suite;
@@ -46,6 +68,7 @@ class FeatureContext extends SubContext implements SnippetAcceptingContext
 
     /**
      * @BeforeSuite
+     *
      * @param BeforeSuiteScope $scope
      */
     public static function setup(BeforeSuiteScope $scope)
@@ -55,6 +78,7 @@ class FeatureContext extends SubContext implements SnippetAcceptingContext
 
     /**
      * @BeforeScenario
+     *
      * @param BeforeScenarioScope $scope
      */
     public function before(BeforeScenarioScope $scope)
@@ -70,6 +94,194 @@ class FeatureContext extends SubContext implements SnippetAcceptingContext
         }
 
         self::$lastScenarioLine = $scope->getScenario()->getLine();
+    }
+
+    /**
+     * @BeforeScenario @captchaInactive
+     */
+    public function deactivateCaptchas()
+    {
+        $this->changeConfigValue('captchaMethod', 'nocaptcha');
+    }
+
+    /**
+     * Resize Browser Window. Works only with Selenium2Driver.
+     *
+     * @BeforeScenario
+     */
+    public function setupWindowSize()
+    {
+        $driver = $this->getSession()->getDriver();
+        if (!$driver instanceof Selenium2Driver) {
+            return;
+        }
+
+        $this->getSession()->resizeWindow(1440, 900, 'current');
+    }
+
+    /**
+     * Take screenshot when step fails. Works only with Selenium2Driver.
+     *
+     * @AfterStep
+     *
+     * @param AfterStepScope $scope
+     */
+    public function takeScreenshotAfterFailedStep(AfterStepScope $scope)
+    {
+        if (TestResult::FAILED === $scope->getTestResult()->getResultCode()) {
+            $this->takeScreenshot();
+            $this->logRequest();
+        }
+    }
+
+    /**
+     * Save a screenshot of the current window to the file system.
+     *
+     * @param string $filename Desired filename, defaults to
+     *                         <browser_name>_<ISO 8601 date>_<randomId>.png
+     * @param string $filepath Desired filepath, defaults to
+     *                         upload_tmp_dir, falls back to sys_get_temp_dir()
+     */
+    public function saveScreenshot($filename = null, $filepath = null)
+    {
+        // Under Cygwin, uniqid with more_entropy must be set to true.
+        // No effect in other environments.
+        $filename = $filename ?: sprintf('%s_%s_%s.%s', $this->getMinkParameter('browser_name'), date('c'), uniqid('', true), 'png');
+        $filepath = $filepath ? $filepath : (ini_get('upload_tmp_dir') ? ini_get('upload_tmp_dir') : sys_get_temp_dir());
+        file_put_contents($filepath . '/' . $filename, $this->getSession()->getScreenshot());
+    }
+
+    /**
+     * @param string $configName
+     * @param mixed  $value
+     */
+    public function changeConfigValue($configName, $value)
+    {
+        /** @var Connection $dbal */
+        $dbal = $this->getService('dbal_connection');
+        $configId = $dbal->fetchColumn(
+            'SELECT `id` FROM `s_core_config_elements` WHERE `name` = ?',
+            [$configName]
+        );
+
+        if (!$configId) {
+            $message = sprintf('Configuration "%s" doesn\'t exist!', $configName);
+            Helper::throwException($message);
+        }
+
+        $this->dirtyConfigElements[] = $configId;
+
+        /** @var \Shopware\Components\ConfigWriter $configWriter */
+        $configWriter = $this->getService('config_writer');
+
+        $configWriter->save($configName, $value, null, 1);
+        $configWriter->save($configName, $value, null, 2);
+
+        $config = $this->getService('config');
+        $config->offsetSet($configName, $value);
+
+        $this->clearCache();
+    }
+
+    /**
+     * @AfterScenario @captchaInactive,@configChange
+     */
+    public function clearConfigValues()
+    {
+        if (!$this->dirtyConfigElements) {
+            return;
+        }
+
+        $dirtyElements = implode(',', $this->dirtyConfigElements);
+        $this->dirtyConfigElements = [];
+
+        $sql = sprintf('DELETE FROM `s_core_config_values` WHERE `element_id` IN (%s)', $dirtyElements);
+        $this->getService('db')->exec($sql);
+
+        $this->clearCache();
+    }
+
+    /**
+     * @BeforeScenario @configChange
+     *
+     * @param ScenarioScope $scope
+     */
+    public function clearCache(ScenarioScope $scope = null)
+    {
+        /** @var CacheManager $cacheManager */
+        $cacheManager = $this->getService('shopware.cache_manager');
+        $cacheManager->clearConfigCache();
+        $cacheManager->clearTemplateCache();
+    }
+
+    public function registerErrorHandler()
+    {
+        error_reporting(-1);
+        $errorNameMap = [
+            E_ERROR => 'E_ERROR',
+            E_WARNING => 'E_WARNING',
+            E_PARSE => 'E_PARSE',
+            E_NOTICE => 'E_NOTICE',
+            E_CORE_ERROR => 'E_CORE_ERROR',
+            E_CORE_WARNING => 'E_CORE_WARNING',
+            E_COMPILE_ERROR => 'E_COMPILE_ERROR',
+            E_COMPILE_WARNING => 'E_COMPILE_WARNING',
+            E_USER_ERROR => 'E_USER_ERROR',
+            E_USER_WARNING => 'E_USER_WARNING',
+            E_USER_NOTICE => 'E_USER_NOTICE',
+            E_STRICT => 'E_STRICT',
+            E_RECOVERABLE_ERROR => 'E_RECOVERABLE_ERROR',
+            E_DEPRECATED => 'E_DEPRECATED',
+            E_USER_DEPRECATED => 'E_USER_DEPRECATED',
+            E_ALL => 'E_ALL',
+        ];
+
+        set_error_handler(function ($errno, $errstr, $errfile, $errline) use ($errorNameMap) {
+            $filepath = $this->getService('kernel')->getRootdir() . '/build/logs/mink';
+
+            // No effect in other environments.
+            $filename = sprintf('errors_%s_%s.%s', date('c'), uniqid('', true), 'log');
+            $filepath = $filepath . '/' . $filename;
+            file_put_contents($filepath, $errorNameMap[$errno] . ': ' . $errstr, FILE_APPEND);
+
+            return true;
+        });
+    }
+
+    /**
+     * @BeforeScenario @noinfinitescrolling
+     */
+    public static function deactivateInfiniteScrolling()
+    {
+        /** @var Connection $dbal */
+        $dbal = Shopware()->Container()->get('dbal_connection');
+
+        $sql = "SET @elementId = (SELECT id FROM `s_core_templates_config_elements` WHERE `name` = 'infiniteScrolling');
+                INSERT INTO `s_core_templates_config_values` (`element_id`, `shop_id`, `value`)
+                VALUES (@elementId, '1', 'b:0;')
+                ON DUPLICATE KEY UPDATE `value` = 'b:0;';";
+
+        $dbal->query($sql);
+
+        self::clearTemplateCache();
+    }
+
+    /**
+     * @AfterScenario @noinfinitescrolling
+     */
+    public static function activateInfiniteScrolling()
+    {
+        /** @var Connection $dbal */
+        $dbal = Shopware()->Container()->get('dbal_connection');
+
+        $sql = "SET @elementId = (SELECT id FROM `s_core_templates_config_elements` WHERE `name` = 'infiniteScrolling');
+                INSERT INTO `s_core_templates_config_values` (`element_id`, `shop_id`, `value`)
+                VALUES (@elementId, '1', 'b:1;')
+                ON DUPLICATE KEY UPDATE `value` = 'b:1;';";
+
+        $dbal->query($sql);
+
+        self::clearTemplateCache();
     }
 
     private function prepare()
@@ -130,43 +342,6 @@ EOD;
             DELETE FROM s_user WHERE id > 2;
 EOD;
         $this->getService('db')->exec($sql);
-    }
-
-    /**
-     * @BeforeScenario @captchaInactive
-     */
-    public function deactivateCaptchas()
-    {
-        $this->changeConfigValue('captchaMethod', 'nocaptcha');
-    }
-
-    /**
-     * Resize Browser Window. Works only with Selenium2Driver.
-     *
-     * @BeforeScenario
-     */
-    public function setupWindowSize()
-    {
-        $driver = $this->getSession()->getDriver();
-        if (!$driver instanceof Selenium2Driver) {
-            return;
-        }
-
-        $this->getSession()->resizeWindow(1440, 900, 'current');
-    }
-
-    /**
-     * Take screenshot when step fails. Works only with Selenium2Driver.
-     *
-     * @AfterStep
-     * @param AfterStepScope $scope
-     */
-    public function takeScreenshotAfterFailedStep(AfterStepScope $scope)
-    {
-        if (TestResult::FAILED === $scope->getTestResult()->getResultCode()) {
-            $this->takeScreenshot();
-            $this->logRequest();
-        }
     }
 
     private function logRequest()
@@ -263,155 +438,6 @@ EOD;
         $filePath = $this->getService('kernel')->getRootdir() . '/build/logs/mink';
 
         $this->saveScreenshot(null, $filePath);
-    }
-
-    /**
-     * Save a screenshot of the current window to the file system.
-     *
-     * @param string $filename Desired filename, defaults to
-     *                         <browser_name>_<ISO 8601 date>_<randomId>.png
-     * @param string $filepath Desired filepath, defaults to
-     *                         upload_tmp_dir, falls back to sys_get_temp_dir()
-     */
-    public function saveScreenshot($filename = null, $filepath = null)
-    {
-        // Under Cygwin, uniqid with more_entropy must be set to true.
-        // No effect in other environments.
-        $filename = $filename ?: sprintf('%s_%s_%s.%s', $this->getMinkParameter('browser_name'), date('c'), uniqid('', true), 'png');
-        $filepath = $filepath ? $filepath : (ini_get('upload_tmp_dir') ? ini_get('upload_tmp_dir') : sys_get_temp_dir());
-        file_put_contents($filepath . '/' . $filename, $this->getSession()->getScreenshot());
-    }
-
-    /**
-     * @param string $configName
-     * @param mixed $value
-     */
-    public function changeConfigValue($configName, $value)
-    {
-        /** @var Connection $dbal */
-        $dbal = $this->getService('dbal_connection');
-        $configId = $dbal->fetchColumn(
-            'SELECT `id` FROM `s_core_config_elements` WHERE `name` = ?',
-            [$configName]
-        );
-
-        if (!$configId) {
-            $message = sprintf('Configuration "%s" doesn\'t exist!', $configName);
-            Helper::throwException($message);
-        }
-
-        $this->dirtyConfigElements[] = $configId;
-
-        /** @var \Shopware\Components\ConfigWriter $configWriter */
-        $configWriter = $this->getService('config_writer');
-
-        $configWriter->save($configName, $value, null, 1);
-        $configWriter->save($configName, $value, null, 2);
-
-        $config = $this->getService('config');
-        $config->offsetSet($configName, $value);
-
-        $this->clearCache();
-    }
-
-    /**
-     * @AfterScenario @captchaInactive,@configChange
-     */
-    public function clearConfigValues()
-    {
-        if (!$this->dirtyConfigElements) {
-            return;
-        }
-
-        $dirtyElements = implode(',', $this->dirtyConfigElements);
-        $this->dirtyConfigElements = [];
-
-        $sql = sprintf('DELETE FROM `s_core_config_values` WHERE `element_id` IN (%s)', $dirtyElements);
-        $this->getService('db')->exec($sql);
-
-        $this->clearCache();
-    }
-
-    /**
-     * @BeforeScenario @configChange
-     * @param ScenarioScope $scope
-     */
-    public function clearCache(ScenarioScope $scope = null)
-    {
-        /** @var CacheManager $cacheManager */
-        $cacheManager = $this->getService('shopware.cache_manager');
-        $cacheManager->clearConfigCache();
-        $cacheManager->clearTemplateCache();
-    }
-
-    public function registerErrorHandler()
-    {
-        error_reporting(-1);
-        $errorNameMap = [
-            E_ERROR             => 'E_ERROR',
-            E_WARNING           => 'E_WARNING',
-            E_PARSE             => 'E_PARSE',
-            E_NOTICE            => 'E_NOTICE',
-            E_CORE_ERROR        => 'E_CORE_ERROR',
-            E_CORE_WARNING      => 'E_CORE_WARNING',
-            E_COMPILE_ERROR     => 'E_COMPILE_ERROR',
-            E_COMPILE_WARNING   => 'E_COMPILE_WARNING',
-            E_USER_ERROR        => 'E_USER_ERROR',
-            E_USER_WARNING      => 'E_USER_WARNING',
-            E_USER_NOTICE       => 'E_USER_NOTICE',
-            E_STRICT            => 'E_STRICT',
-            E_RECOVERABLE_ERROR => 'E_RECOVERABLE_ERROR',
-            E_DEPRECATED        => 'E_DEPRECATED',
-            E_USER_DEPRECATED   => 'E_USER_DEPRECATED',
-            E_ALL               => 'E_ALL',
-        ];
-
-        set_error_handler(function ($errno, $errstr, $errfile, $errline) use ($errorNameMap) {
-            $filepath = $this->getService('kernel')->getRootdir() . '/build/logs/mink';
-
-            // No effect in other environments.
-            $filename = sprintf('errors_%s_%s.%s', date('c'), uniqid('', true), 'log');
-            $filepath = $filepath . '/' . $filename;
-            file_put_contents($filepath, $errorNameMap[$errno] . ': ' . $errstr, FILE_APPEND);
-
-            return true;
-        });
-    }
-
-    /**
-     * @BeforeScenario @noinfinitescrolling
-     */
-    public static function deactivateInfiniteScrolling()
-    {
-        /** @var Connection $dbal */
-        $dbal = Shopware()->Container()->get('dbal_connection');
-
-        $sql = "SET @elementId = (SELECT id FROM `s_core_templates_config_elements` WHERE `name` = 'infiniteScrolling');
-                INSERT INTO `s_core_templates_config_values` (`element_id`, `shop_id`, `value`)
-                VALUES (@elementId, '1', 'b:0;')
-                ON DUPLICATE KEY UPDATE `value` = 'b:0;';";
-
-        $dbal->query($sql);
-
-        self::clearTemplateCache();
-    }
-
-    /**
-     * @AfterScenario @noinfinitescrolling
-     */
-    public static function activateInfiniteScrolling()
-    {
-        /** @var Connection $dbal */
-        $dbal = Shopware()->Container()->get('dbal_connection');
-
-        $sql = "SET @elementId = (SELECT id FROM `s_core_templates_config_elements` WHERE `name` = 'infiniteScrolling');
-                INSERT INTO `s_core_templates_config_values` (`element_id`, `shop_id`, `value`)
-                VALUES (@elementId, '1', 'b:1;')
-                ON DUPLICATE KEY UPDATE `value` = 'b:1;';";
-
-        $dbal->query($sql);
-
-        self::clearTemplateCache();
     }
 
     private static function clearTemplateCache()

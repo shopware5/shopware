@@ -24,8 +24,8 @@
 
 namespace Shopware\Models\Search;
 
-use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
 
 /**
  * @ORM\Table(name="s_search_custom_sorting")
@@ -34,28 +34,19 @@ use Doctrine\ORM\Mapping as ORM;
 class CustomSorting extends ModelEntity
 {
     /**
-     * @var integer $id
-     *
-     * @ORM\Column(type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
-    /**
      * @var string
      * @ORM\Column(nullable=false)
      */
     protected $label;
 
     /**
-     * @var boolean
+     * @var bool
      * @ORM\Column(name="display_in_categories", type="boolean")
      */
     protected $displayInCategories;
 
     /**
-     * @var boolean
+     * @var bool
      * @ORM\Column(name="active", type="boolean")
      */
     protected $active;
@@ -71,6 +62,14 @@ class CustomSorting extends ModelEntity
      * @ORM\Column(nullable=true)
      */
     protected $sortings;
+    /**
+     * @var int
+     *
+     * @ORM\Column(type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
 
     /**
      * @return int
@@ -129,7 +128,7 @@ class CustomSorting extends ModelEntity
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function displayInCategories()
     {
@@ -137,7 +136,7 @@ class CustomSorting extends ModelEntity
     }
 
     /**
-     * @param boolean $displayInCategories
+     * @param bool $displayInCategories
      */
     public function setDisplayInCategories($displayInCategories)
     {
@@ -145,7 +144,7 @@ class CustomSorting extends ModelEntity
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isActive()
     {
@@ -153,7 +152,7 @@ class CustomSorting extends ModelEntity
     }
 
     /**
-     * @param boolean $active
+     * @param bool $active
      */
     public function setActive($active)
     {

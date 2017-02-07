@@ -1,14 +1,37 @@
 <?php
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
 
 namespace Shopware\Tests\Functional\Bundle\StoreFrontBundle;
 
-use Shopware\Models;
 use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Models;
 
 class Converter
 {
     /**
      * @param Models\Tax\Tax $tax
+     *
      * @return Struct\Tax
      */
     public function convertTax(Models\Tax\Tax $tax)
@@ -23,6 +46,7 @@ class Converter
 
     /**
      * @param Models\Price\Group $entity
+     *
      * @return Struct\Product\PriceGroup
      */
     public function convertPriceGroup(Models\Price\Group $entity)
@@ -33,7 +57,7 @@ class Converter
 
         $struct->setName($entity->getName());
 
-        $discounts = array();
+        $discounts = [];
 
         foreach ($entity->getDiscounts() as $discountEntity) {
             $discount = new Struct\Product\PriceDiscount();
@@ -52,7 +76,6 @@ class Converter
         return $struct;
     }
 
-
     public function convertCategory(Models\Category\Category $category)
     {
         $struct = new Struct\Category();
@@ -67,6 +90,7 @@ class Converter
      * Converts a currency doctrine model to a currency struct
      *
      * @param \Shopware\Models\Shop\Currency $currency
+     *
      * @return Struct\Currency
      */
     public function convertCurrency(Models\Shop\Currency $currency)
@@ -84,7 +108,9 @@ class Converter
 
     /**
      * Converts a shop doctrine model to a shop struct
+     *
      * @param \Shopware\Models\Shop\Shop $shop
+     *
      * @return Struct\Shop
      */
     public function convertShop(Models\Shop\Shop $shop)
@@ -121,6 +147,7 @@ class Converter
 
     /**
      * @param Models\Customer\Group $group
+     *
      * @return Struct\Customer\Group
      */
     public function convertCustomerGroup(Models\Customer\Group $group)
@@ -140,6 +167,7 @@ class Converter
 
     /**
      * @param Models\Shop\Locale $locale
+     *
      * @return Struct\Locale
      */
     public function convertLocale($locale)
@@ -153,6 +181,7 @@ class Converter
         $struct->setLocale($locale->getLocale());
         $struct->setLanguage($locale->getLanguage());
         $struct->setTerritory($locale->getTerritory());
+
         return $struct;
     }
 }

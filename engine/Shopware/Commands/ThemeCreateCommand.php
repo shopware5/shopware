@@ -31,12 +31,11 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Output\Output;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * @category  Shopware
- * @package   Shopware\Components\Console\Command
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ThemeCreateCommand extends ShopwareCommand
@@ -85,7 +84,7 @@ class ThemeCreateCommand extends ShopwareCommand
                 'Licence of the theme to be created.'
             )
             ->setHelp(
-                <<<EOF
+                <<<'EOF'
                 The <info>%command.name%</info> creates a theme.
 EOF
             );
@@ -104,6 +103,7 @@ EOF
 
         if ($this->getRepository()->findOneByTemplate($arguments['template'])) {
             $output->writeln('A theme with that name already exists');
+
             return 1;
         }
 
@@ -117,6 +117,7 @@ EOF
                     $arguments['parent']
                 )
             );
+
             return 1;
         }
 
@@ -131,6 +132,7 @@ EOF
 
     /**
      * Helper function to get the repository of the configured model.
+     *
      * @return \Shopware\Models\Shop\Template
      */
     private function getRepository()
@@ -138,18 +140,21 @@ EOF
         if ($this->repository === null) {
             $this->repository = $this->container->get('models')->getRepository('Shopware\Models\Shop\Template');
         }
+
         return $this->repository;
     }
 
     /**
      * Helper function to ask for optional data
-     * @param InputInterface $input
+     *
+     * @param InputInterface  $input
      * @param OutputInterface $output
+     *
      * @return array
      */
     private function dialog(InputInterface $input, OutputInterface $output)
     {
-        $options = array();
+        $options = [];
 
         $options['description'] = $this->askForOptionalData($input, $output, 'description');
         $options['author'] = $this->askForOptionalData($input, $output, 'author');
@@ -160,9 +165,11 @@ EOF
 
     /**
      * Helper function to ask the user a question
-     * @param InputInterface $input
+     *
+     * @param InputInterface  $input
      * @param OutputInterface $output
      * @param $optionKey
+     *
      * @return mixed
      */
     private function askForOptionalData(InputInterface $input, OutputInterface $output, $optionKey)

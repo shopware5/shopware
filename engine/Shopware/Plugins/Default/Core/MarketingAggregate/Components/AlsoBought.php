@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 /**
  * Also bought component which contains all logic about the shopware
  * Also bought functions.
@@ -28,7 +29,7 @@
  * in the s_articles_also_bought_ro
  *
  * @category  Shopware
- * @package   Shopware\Plugins\MarketingAggregate\Components
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Components_AlsoBought extends Enlight_Class
@@ -42,14 +43,14 @@ class Shopware_Components_AlsoBought extends Enlight_Class
      */
     public function initAlsoBought($offset = null, $limit = null)
     {
-        $sql = "SELECT id FROM s_articles ";
+        $sql = 'SELECT id FROM s_articles ';
         if ($limit !== null) {
             $sql = Shopware()->Db()->limit($sql, $limit, $offset);
         }
 
         $articles = Shopware()->Db()->fetchCol($sql);
 
-        $preparedSelect = Shopware()->Db()->prepare("
+        $preparedSelect = Shopware()->Db()->prepare('
             SELECT
                 detail1.articleID as article_id,
                 detail2.articleID as related_article_id,
@@ -63,17 +64,17 @@ class Shopware_Components_AlsoBought extends Enlight_Class
                   AND detail2.articleID > 0
                   AND detail1.articleID = :articleId
             GROUP BY detail2.articleID
-        ");
+        ');
 
-        $preparedInsert = Shopware()->Db()->prepare("
+        $preparedInsert = Shopware()->Db()->prepare('
             INSERT IGNORE INTO s_articles_also_bought_ro (article_id, related_article_id, sales)
             VALUES (:article_id, :related_article_id, :sales);
-        ");
+        ');
 
         //iterate all selected articles which has to be initialed
         foreach ($articles as $articleId) {
             //now we select all bought articles for the current article id
-            $preparedSelect->execute(array('articleId' => $articleId));
+            $preparedSelect->execute(['articleId' => $articleId]);
             $combinations = $preparedSelect->fetchAll();
 
             //at least we have to insert each combination in the aggregate s_articles_also_bought_ro table.
@@ -82,7 +83,6 @@ class Shopware_Components_AlsoBought extends Enlight_Class
             }
         }
     }
-
 
     /**
      * This function is used to insert or update the bought articles table
@@ -93,16 +93,16 @@ class Shopware_Components_AlsoBought extends Enlight_Class
      */
     public function refreshBoughtArticles($articleId, $relatedArticleId)
     {
-        $sql = "
+        $sql = '
             INSERT INTO s_articles_also_bought_ro (article_id, related_article_id, sales)
             VALUES (:articleId, :relatedArticleId, 1)
             ON DUPLICATE KEY UPDATE sales = sales + 1;
-        ";
+        ';
 
-        Shopware()->Db()->query($sql, array(
+        Shopware()->Db()->query($sql, [
             'articleId' => $articleId,
-            'relatedArticleId' => $relatedArticleId
-        ));
+            'relatedArticleId' => $relatedArticleId,
+        ]);
     }
 
     /**
@@ -118,29 +118,31 @@ class Shopware_Components_AlsoBought extends Enlight_Class
         }
 
         $sqlCombinations = [];
-        $sql = "INSERT INTO s_articles_also_bought_ro (article_id, related_article_id, sales) VALUES ";
+        $sql = 'INSERT INTO s_articles_also_bought_ro (article_id, related_article_id, sales) VALUES ';
 
         foreach ($combinations as $combination) {
-            $sqlCombinations[] = "(" . (int) $combination['article_id'] . ", " . (int) $combination['related_article_id'] . ", 1)";
+            $sqlCombinations[] = '(' . (int) $combination['article_id'] . ', ' . (int) $combination['related_article_id'] . ', 1)';
         }
 
-        $sql .= join(",", $sqlCombinations);
+        $sql .= implode(',', $sqlCombinations);
 
-        $sql .= " ON DUPLICATE KEY UPDATE sales = sales + 1;";
+        $sql .= ' ON DUPLICATE KEY UPDATE sales = sales + 1;';
 
         Shopware()->Db()->query($sql);
     }
 
-
     /**
      * Helper function to get the date of one year ago.
+     *
      * @param int $interval
+     *
      * @return DateTime
      */
     public function getOrderTime($interval = 365)
     {
         $orderTime = new DateTime();
-        $orderTime->sub(new DateInterval('P'. (int) $interval .'D'));
+        $orderTime->sub(new DateInterval('P' . (int) $interval . 'D'));
+
         return $orderTime;
     }
 }

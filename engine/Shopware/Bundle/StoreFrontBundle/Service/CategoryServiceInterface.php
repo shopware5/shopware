@@ -28,7 +28,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\StoreFrontBundle\Service
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 interface CategoryServiceInterface
@@ -41,7 +41,8 @@ interface CategoryServiceInterface
      *
      * @param $ids
      * @param Struct\ShopContextInterface $context
-     * @return Struct\Category[] Indexed by the category id.
+     *
+     * @return Struct\Category[] indexed by the category id
      */
     public function getList($ids, Struct\ShopContextInterface $context);
 
@@ -53,13 +54,15 @@ interface CategoryServiceInterface
      *
      * @param $id
      * @param Struct\ShopContextInterface $context
+     *
      * @return Struct\Category
      */
     public function get($id, Struct\ShopContextInterface $context);
 
     /**
-     * @param Struct\BaseProduct[] $products
+     * @param Struct\BaseProduct[]        $products
      * @param Struct\ShopContextInterface $context
+     *
      * @return array Indexed by product number, contains all categories of a product
      */
     public function getProductsCategories(array $products, Struct\ShopContextInterface $context);

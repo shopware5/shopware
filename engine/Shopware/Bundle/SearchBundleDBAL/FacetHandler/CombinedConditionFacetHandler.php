@@ -87,6 +87,6 @@ class CombinedConditionFacetHandler implements PartialFacetHandlerInterface
      */
     public function supportsFacet(FacetInterface $facet)
     {
-        return ($facet instanceof CombinedConditionFacet);
+        return $facet instanceof CombinedConditionFacet;
     }
 }

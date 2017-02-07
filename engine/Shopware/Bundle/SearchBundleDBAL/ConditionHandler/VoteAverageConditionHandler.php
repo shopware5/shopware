@@ -32,7 +32,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\SearchBundleDBAL\ConditionHandler
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class VoteAverageConditionHandler implements ConditionHandlerInterface
@@ -54,11 +54,12 @@ class VoteAverageConditionHandler implements ConditionHandlerInterface
      * Checks if the passed condition can be handled by this class.
      *
      * @param ConditionInterface $condition
+     *
      * @return bool
      */
     public function supportsCondition(ConditionInterface $condition)
     {
-        return ($condition instanceof VoteAverageCondition);
+        return $condition instanceof VoteAverageCondition;
     }
 
     /**
@@ -83,13 +84,13 @@ GROUP BY vote.articleID';
 
         $query->innerJoin(
             'product',
-            '('. $table .')',
+            '(' . $table . ')',
             'voteAverage',
             'voteAverage.product_id = product.id
              AND voteAverage.average >= :average'
         );
 
-        /** @var VoteAverageCondition $condition */
+        /* @var VoteAverageCondition $condition */
         $query->setParameter(':average', (float) $condition->getAverage());
         $query->addState(VoteAverageCondition::STATE_INCLUDES_VOTE_TABLE);
     }

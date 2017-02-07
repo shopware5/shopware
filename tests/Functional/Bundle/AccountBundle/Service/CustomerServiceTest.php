@@ -27,13 +27,11 @@ namespace Shopware\Tests\Functional\Bundle\AccountBundle\Service;
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\AccountBundle\Service\CustomerServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Customer\Customer;
 
 /**
  * Class AddressServiceTest
- * @package Shopware\Tests\Functional\Bundle\AccountBundle\Service
  */
 class CustomerServiceTest extends \Enlight_Components_Test_TestCase
 {
@@ -131,7 +129,7 @@ class CustomerServiceTest extends \Enlight_Components_Test_TestCase
         $updateData = [
             'firstname' => '',
             'lastname' => '',
-            'salutation' => ''
+            'salutation' => '',
         ];
 
         $customer = self::$modelManager->find(Customer::class, 2);
@@ -146,7 +144,7 @@ class CustomerServiceTest extends \Enlight_Components_Test_TestCase
             'firstname' => 'Victoria',
             'lastname' => 'Palmer',
             'salutation' => 'ms',
-            'birthday' => '1957-02-03'
+            'birthday' => '1957-02-03',
         ];
 
         $customer = self::$modelManager->find(Customer::class, 2);

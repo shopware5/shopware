@@ -24,9 +24,6 @@
 
 namespace Shopware\Bundle\PluginInstallerBundle\Struct;
 
-/**
- * @package Shopware\Bundle\PluginInstallerBundle\Struct
- */
 class DomainStruct implements \JsonSerializable
 {
     /**
@@ -45,14 +42,14 @@ class DomainStruct implements \JsonSerializable
     private $dispo;
 
     /**
-     * @var boolean
+     * @var bool
      */
     private $isPartner;
 
     /**
      * @param string $domain
-     * @param float $balance
-     * @param float $dispo
+     * @param float  $balance
+     * @param float  $dispo
      * @param $isPartner
      */
     public function __construct($domain, $balance, $dispo, $isPartner)
@@ -88,7 +85,7 @@ class DomainStruct implements \JsonSerializable
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isPartner()
     {
@@ -96,7 +93,7 @@ class DomainStruct implements \JsonSerializable
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function jsonSerialize()
     {

@@ -29,13 +29,14 @@ use Shopware\Recovery\Install\Struct\LicenseUnpackRequest;
 
 /**
  * @category  Shopware
- * @package   Shopware\Recovery\Install\Service
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 interface LicenseUnpackService
 {
     /**
-     * @param  LicenseUnpackRequest $request
+     * @param LicenseUnpackRequest $request
+     *
      * @return LicenseInformation
      */
     public function evaluateLicense(LicenseUnpackRequest $request);

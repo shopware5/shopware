@@ -27,11 +27,43 @@ use Shopware\Models\Order\Status;
 
 /**
  * @category  Shopware
- * @package   Shopware\Tests
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Tests_Models_MailTest extends Enlight_Components_Test_TestCase
 {
+    /**
+     * @var array
+     */
+    public $testData = [
+        'name' => 'Testmail123',
+        'fromMail' => 'Shopware Demoshop',
+        'fromName' => 'test@example.com',
+        'subject' => 'Test Email Subject',
+        'content' => 'Plaintext Content Example',
+        'contentHtml' => 'HTML Context Example',
+        'isHtml' => true,
+        'mailtype' => 2,
+        'context' => [
+            'sShop' => 'Shopware',
+            'sConfig' => [
+                'lang' => [
+                    'iso' => 'de',
+                    'id' => 5,
+                ],
+                'sMail' => 'test@example.com',
+            ],
+        ],
+    ];
+
+    /**
+     * @var array
+     */
+    public $translation = [
+        'fromMail' => 'Shopware Demoshop EN',
+        'subject' => 'Test Email Subject EN',
+        'content' => 'Plaintext Content Example EN',
+    ];
     /**
      * @var Shopware\Components\Model\ModelManager
      */
@@ -41,39 +73,6 @@ class Shopware_Tests_Models_MailTest extends Enlight_Components_Test_TestCase
      * @var Shopware\Models\User\Repository
      */
     protected $repo;
-
-    /**
-     * @var array
-     */
-    public $testData = array(
-        'name'        => 'Testmail123',
-        'fromMail'    => 'Shopware Demoshop',
-        'fromName'    => 'test@example.com',
-        'subject'     => 'Test Email Subject',
-        'content'     => 'Plaintext Content Example',
-        'contentHtml' => 'HTML Context Example',
-        'isHtml'      => true,
-        'mailtype'    => 2,
-        'context'     => array(
-            'sShop' => 'Shopware',
-            'sConfig' => array(
-                'lang' => array(
-                    'iso' => 'de',
-                    'id'  => 5,
-                ),
-                'sMail' => 'test@example.com',
-            )
-        )
-    );
-
-    /**
-     * @var array
-     */
-    public $translation = array(
-        'fromMail' => 'Shopware Demoshop EN',
-        'subject'  => 'Test Email Subject EN',
-        'content'  => 'Plaintext Content Example EN',
-    );
 
     /**
      * Sets up the fixture, for example, opens a network connection.
@@ -93,7 +92,7 @@ class Shopware_Tests_Models_MailTest extends Enlight_Components_Test_TestCase
      */
     protected function tearDown()
     {
-        $mail = $this->repo->findOneBy(array('name' => 'Testmail123'));
+        $mail = $this->repo->findOneBy(['name' => 'Testmail123']);
 
         if (!empty($mail)) {
             $this->em->remove($mail);
@@ -138,7 +137,6 @@ class Shopware_Tests_Models_MailTest extends Enlight_Components_Test_TestCase
             } else {
                 $getMethod = 'get' . ucfirst($fieldname);
             }
-
 
             $this->assertEquals($mail->$getMethod(), $value);
         }
@@ -204,7 +202,7 @@ class Shopware_Tests_Models_MailTest extends Enlight_Components_Test_TestCase
     public function testGetAttachmentShouldReturnEmptyArrayInitial()
     {
         $mail = new Mail();
-        $this->assertEquals($mail->getAttachments(), array());
+        $this->assertEquals($mail->getAttachments(), []);
     }
 
     /**
@@ -265,7 +263,6 @@ class Shopware_Tests_Models_MailTest extends Enlight_Components_Test_TestCase
         $mail = new Mail();
         $mail->setMailtype(Mail::MAILTYPE_SYSTEM);
 
-
         $this->assertFalse($mail->isUserMail());
         $this->assertTrue($mail->isSystemMail());
         $this->assertFalse($mail->isOrderStateMail());
@@ -319,23 +316,23 @@ class Shopware_Tests_Models_MailTest extends Enlight_Components_Test_TestCase
      */
     public function testArrayGetPath()
     {
-        $input = array(
+        $input = [
             'sShop' => 'Shopware',
-            'sConfig' => array(
-                'lang' => array(
+            'sConfig' => [
+                'lang' => [
                     'iso' => 'de',
-                    'id'  => 5,
-                ),
+                    'id' => 5,
+                ],
                 'sMail' => 'test@example.com',
-            )
-        );
+            ],
+        ];
 
-        $exceptedOutput = array(
-            'sShop'            => 'Shopware',
+        $exceptedOutput = [
+            'sShop' => 'Shopware',
             'sConfig.lang.iso' => 'de',
-            'sConfig.lang.id'  => 5,
-            'sConfig.sMail'   => 'test@example.com'
-        );
+            'sConfig.lang.id' => 5,
+            'sConfig.sMail' => 'test@example.com',
+        ];
 
         $mail = new Mail();
 

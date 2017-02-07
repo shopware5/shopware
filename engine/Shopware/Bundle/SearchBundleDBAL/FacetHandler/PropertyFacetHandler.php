@@ -25,25 +25,25 @@
 namespace Shopware\Bundle\SearchBundleDBAL\FacetHandler;
 
 use Shopware\Bundle\SearchBundle\Condition\PropertyCondition;
+use Shopware\Bundle\SearchBundle\Criteria;
+use Shopware\Bundle\SearchBundle\Facet;
+use Shopware\Bundle\SearchBundle\FacetInterface;
 use Shopware\Bundle\SearchBundle\FacetResult\FacetResultGroup;
 use Shopware\Bundle\SearchBundle\FacetResult\MediaListFacetResult;
 use Shopware\Bundle\SearchBundle\FacetResult\MediaListItem;
 use Shopware\Bundle\SearchBundle\FacetResult\ValueListFacetResult;
 use Shopware\Bundle\SearchBundle\FacetResultInterface;
 use Shopware\Bundle\SearchBundleDBAL\PartialFacetHandlerInterface;
-use Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactory;
-use Shopware\Bundle\SearchBundle\FacetInterface;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
-use Shopware\Bundle\SearchBundle\Criteria;
-use Shopware\Bundle\SearchBundle\Facet;
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactory;
 use Shopware\Bundle\StoreFrontBundle\Gateway\PropertyGatewayInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\QueryAliasMapper;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\SearchBundleDBAL\FacetHandler
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class PropertyFacetHandler implements PartialFacetHandlerInterface
@@ -65,8 +65,8 @@ class PropertyFacetHandler implements PartialFacetHandlerInterface
 
     /**
      * @param PropertyGatewayInterface $propertyGateway
-     * @param QueryBuilderFactory $queryBuilderFactory
-     * @param QueryAliasMapper $queryAliasMapper
+     * @param QueryBuilderFactory      $queryBuilderFactory
+     * @param QueryAliasMapper         $queryAliasMapper
      */
     public function __construct(
         PropertyGatewayInterface $propertyGateway,
@@ -86,14 +86,15 @@ class PropertyFacetHandler implements PartialFacetHandlerInterface
      */
     public function supportsFacet(FacetInterface $facet)
     {
-        return ($facet instanceof Facet\PropertyFacet);
+        return $facet instanceof Facet\PropertyFacet;
     }
 
     /**
      * @param FacetInterface|Facet\PropertyFacet $facet
-     * @param Criteria $reverted
-     * @param Criteria $criteria
-     * @param ShopContextInterface $context
+     * @param Criteria                           $reverted
+     * @param Criteria                           $criteria
+     * @param ShopContextInterface               $context
+     *
      * @return FacetResultInterface|null
      */
     public function generatePartialFacet(
@@ -108,7 +109,37 @@ class PropertyFacetHandler implements PartialFacetHandlerInterface
             return null;
         }
         $actives = $this->getFilteredValues($criteria);
+
         return $this->createCollectionResult($facet, $properties, $actives);
+    }
+
+    /**
+     * @param Struct\ShopContextInterface $context
+     * @param Criteria                    $queryCriteria
+     *
+     * @return Struct\Property\Set[]
+     */
+    protected function getProperties(Struct\ShopContextInterface $context, Criteria $queryCriteria)
+    {
+        $query = $this->queryBuilderFactory->createQuery($queryCriteria, $context);
+        $this->rebuildQuery($query);
+
+        /** @var $statement \Doctrine\DBAL\Driver\ResultStatement */
+        $statement = $query->execute();
+
+        /** @var $facet Facet\PropertyFacet */
+        $valueIds = $statement->fetchAll(\PDO::FETCH_COLUMN);
+
+        if (empty($valueIds)) {
+            return null;
+        }
+
+        $properties = $this->propertyGateway->getList(
+            $valueIds,
+            $context
+        );
+
+        return $properties;
     }
 
     /**
@@ -125,6 +156,7 @@ class PropertyFacetHandler implements PartialFacetHandlerInterface
 
     /**
      * @param Criteria $criteria
+     *
      * @return array
      */
     private function getFilteredValues(Criteria $criteria)
@@ -135,14 +167,15 @@ class PropertyFacetHandler implements PartialFacetHandlerInterface
                 $values = array_merge($values, $condition->getValueIds());
             }
         }
+
         return $values;
     }
 
-
     /**
-     * @param Facet\PropertyFacet $facet
+     * @param Facet\PropertyFacet   $facet
      * @param Struct\Property\Set[] $sets
-     * @param int[] $actives
+     * @param int[]                 $actives
+     *
      * @return FacetResultGroup
      */
     private function createCollectionResult(
@@ -203,33 +236,5 @@ class PropertyFacetHandler implements PartialFacetHandlerInterface
             null,
             $facet->getName()
         );
-    }
-
-    /**
-     * @param Struct\ShopContextInterface $context
-     * @param Criteria $queryCriteria
-     * @return Struct\Property\Set[]
-     */
-    protected function getProperties(Struct\ShopContextInterface $context, Criteria $queryCriteria)
-    {
-        $query = $this->queryBuilderFactory->createQuery($queryCriteria, $context);
-        $this->rebuildQuery($query);
-
-        /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
-        $statement = $query->execute();
-
-        /**@var $facet Facet\PropertyFacet */
-        $valueIds = $statement->fetchAll(\PDO::FETCH_COLUMN);
-
-        if (empty($valueIds)) {
-            return null;
-        }
-
-        $properties = $this->propertyGateway->getList(
-            $valueIds,
-            $context
-        );
-
-        return $properties;
     }
 }

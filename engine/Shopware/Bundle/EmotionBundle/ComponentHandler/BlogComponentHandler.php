@@ -28,7 +28,6 @@ use Doctrine\DBAL\Connection;
 use Shopware\Bundle\EmotionBundle\Struct\Collection\PrepareDataCollection;
 use Shopware\Bundle\EmotionBundle\Struct\Collection\ResolvedDataCollection;
 use Shopware\Bundle\EmotionBundle\Struct\Element;
-use Shopware\Bundle\EmotionBundle\Struct\Library\Component;
 use Shopware\Bundle\StoreFrontBundle\Service\BlogServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Blog\Blog;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
@@ -50,7 +49,7 @@ class BlogComponentHandler implements ComponentHandlerInterface
 
     /**
      * @param BlogServiceInterface $blogService
-     * @param Connection $connection
+     * @param Connection           $connection
      */
     public function __construct(BlogServiceInterface $blogService, Connection $connection)
     {
@@ -60,6 +59,7 @@ class BlogComponentHandler implements ComponentHandlerInterface
 
     /**
      * @param Element $element
+     *
      * @return bool
      */
     public function supports(Element $element)
@@ -68,8 +68,8 @@ class BlogComponentHandler implements ComponentHandlerInterface
     }
 
     /**
-     * @param PrepareDataCollection $collection
-     * @param Element $element
+     * @param PrepareDataCollection            $collection
+     * @param Element                          $element
      * @param ShopContext|ShopContextInterface $context
      */
     public function prepare(PrepareDataCollection $collection, Element $element, ShopContextInterface $context)
@@ -78,8 +78,8 @@ class BlogComponentHandler implements ComponentHandlerInterface
 
     /**
      * @param ResolvedDataCollection $collection
-     * @param Element $element
-     * @param ShopContextInterface $context
+     * @param Element                $element
+     * @param ShopContextInterface   $context
      */
     public function handle(ResolvedDataCollection $collection, Element $element, ShopContextInterface $context)
     {
@@ -92,9 +92,10 @@ class BlogComponentHandler implements ComponentHandlerInterface
     }
 
     /**
-     * @param int $numberOfEntries
-     * @param int $categoryId
+     * @param int                  $numberOfEntries
+     * @param int                  $categoryId
      * @param ShopContextInterface $context
+     *
      * @return Blog[]
      */
     private function getRandomBlogEntries($numberOfEntries, $categoryId, ShopContextInterface $context)
@@ -107,6 +108,7 @@ class BlogComponentHandler implements ComponentHandlerInterface
     /**
      * @param int $numberOfEntries
      * @param int $categoryId
+     *
      * @return int[]
      */
     private function findBlogIds($numberOfEntries, $categoryId)

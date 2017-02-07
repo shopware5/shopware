@@ -28,7 +28,7 @@ namespace Shopware\Components\Model;
  * Abstract class for shopware standard models.
  *
  * @category  Shopware
- * @package   Shopware\Components\Model
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 abstract class ModelEntity
@@ -41,9 +41,10 @@ abstract class ModelEntity
      *
      * @param array $array
      * @param array $fillable optional property whitelist for mass-assignment
+     *
      * @return ModelEntity
      */
-    public function fromArray(array $array = array(), array $fillable = [])
+    public function fromArray(array $array = [], array $fillable = [])
     {
         foreach ($array as $key => $value) {
             if (count($fillable) && !in_array($key, $fillable)) {
@@ -55,6 +56,7 @@ abstract class ModelEntity
                 $this->$method($value);
             }
         }
+
         return $this;
     }
 
@@ -88,16 +90,17 @@ abstract class ModelEntity
      * <li>So the parameter expect <b>"customer"</b></li>
      * </ul>
      *
-     * @param ModelEntity|array|null $data Model data, example: an instance of \Shopware\Models\Order\Order
-     * @param string $model Full namespace of the association model, example: '\Shopware\Models\Order\Order'
-     * @param string $property Name of the association property, example: 'orders'
-     * @param string|null $reference Name of the reference property, example: 'customer'
+     * @param ModelEntity|array|null $data      Model data, example: an instance of \Shopware\Models\Order\Order
+     * @param string                 $model     Full namespace of the association model, example: '\Shopware\Models\Order\Order'
+     * @param string                 $property  Name of the association property, example: 'orders'
+     * @param string|null            $reference Name of the reference property, example: 'customer'
+     *
      * @return ModelEntity
      */
     public function setOneToOne($data, $model, $property, $reference = null)
     {
-        $getterFunction = "get" . ucfirst($property);
-        $setterFunction = ($reference !== null) ? "set" . ucfirst($reference) : false;
+        $getterFunction = 'get' . ucfirst($property);
+        $setterFunction = ($reference !== null) ? 'set' . ucfirst($reference) : false;
 
         $this->$getterFunction();
 
@@ -107,6 +110,7 @@ abstract class ModelEntity
             if ($setterFunction) {
                 $this->$property->$setterFunction($this);
             }
+
             return $this;
         }
 
@@ -116,6 +120,7 @@ abstract class ModelEntity
                 $this->$property->$setterFunction(null);
             }
             $this->$property = null;
+
             return $this;
         }
 
@@ -134,6 +139,7 @@ abstract class ModelEntity
         if ($setterFunction) {
             $this->$property->$setterFunction($this);
         }
+
         return $this;
     }
 
@@ -166,23 +172,25 @@ abstract class ModelEntity
      * <li>So the parameter expect <b>"customer"</b></li>
      * </ul>
      *
-     * @param array|null $data Model data, example: an array of \Shopware\Models\Order\Order
-     * @param string $model Full namespace of the association model, example: '\Shopware\Models\Order\Order'
-     * @param string $property Name of the association property, example: 'orders'
-     * @param string $reference Name of the reference property, example: 'customer'
+     * @param array|null $data      Model data, example: an array of \Shopware\Models\Order\Order
+     * @param string     $model     Full namespace of the association model, example: '\Shopware\Models\Order\Order'
+     * @param string     $property  Name of the association property, example: 'orders'
+     * @param string     $reference Name of the reference property, example: 'customer'
+     *
      * @return ModelEntity
      */
     public function setOneToMany($data, $model, $property, $reference = null)
     {
-        $getterFunction = "get" . ucfirst($property);
+        $getterFunction = 'get' . ucfirst($property);
         $setterFunction = null;
         if ($reference !== null) {
-            $setterFunction = "set" . ucfirst($reference);
+            $setterFunction = 'set' . ucfirst($reference);
         }
 
         //to remove the whole one to many association, u can pass null as parameter.
         if ($data === null) {
             $this->$getterFunction()->clear();
+
             return $this;
         }
         //if no array passed or if false passed, return
@@ -264,26 +272,30 @@ abstract class ModelEntity
      * <li>In the setSupplier() function of the article model we would expects <b>"supplier"</b>.</li>
      * </ul>
      *
-     * @param ModelEntity|array|null $data Model data, example: an data array or an instance of the model
-     * @param string $model Full namespace of the association model, example: '\Shopware\Models\Article\Supplier'
-     * @param string $property Name of the association property, example: 'supplier'
+     * @param ModelEntity|array|null $data     Model data, example: an data array or an instance of the model
+     * @param string                 $model    Full namespace of the association model, example: '\Shopware\Models\Article\Supplier'
+     * @param string                 $property Name of the association property, example: 'supplier'
+     *
      * @throws \InvalidArgumentException
+     *
      * @return ModelEntity
      */
     public function setManyToOne($data, $model, $property)
     {
-        $getterFunction = "get" . ucfirst($property);
+        $getterFunction = 'get' . ucfirst($property);
         $this->$getterFunction();
 
         //if an expected instance passed, set this in the internal property
         if ($data instanceof $model) {
             $this->$property = $data;
+
             return $this;
         }
 
         //check if expected model already exists but null passed, than clear the association.
         if ($data === null && $this->$getterFunction()) {
             $this->$property = null;
+
             return $this;
         }
 
@@ -303,7 +315,7 @@ abstract class ModelEntity
         //if an id passed, the already assigned model has an id and the ids are not equal, we can't update the model instance.
         //otherwise we would update the instance with the id 1 with the data for the instance with id 2.
         if (!empty($data['id']) && !empty($id) && $data['id'] !== $id) {
-            throw new \InvalidArgumentException("Passed id and id of the already assigned model are not equal");
+            throw new \InvalidArgumentException('Passed id and id of the already assigned model are not equal');
         }
 
         $instance->fromArray($data);
@@ -314,7 +326,8 @@ abstract class ModelEntity
 
     /**
      * @param \Doctrine\Common\Collections\ArrayCollection|array $collection
-     * @param int $id
+     * @param int                                                $id
+     *
      * @return null|ModelEntity
      */
     private function getArrayCollectionElementById($collection, $id)

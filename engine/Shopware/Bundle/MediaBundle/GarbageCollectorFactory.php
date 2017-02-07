@@ -30,7 +30,6 @@ use Shopware\Bundle\MediaBundle\Struct\MediaPosition;
 
 /**
  * Class GarbageCollectorFactory
- * @package Shopware\Bundle\MediaBundle
  */
 class GarbageCollectorFactory
 {
@@ -51,8 +50,8 @@ class GarbageCollectorFactory
 
     /**
      * @param \Enlight_Event_EventManager $events
-     * @param Connection $connection
-     * @param MediaServiceInterface $mediaService
+     * @param Connection                  $connection
+     * @param MediaServiceInterface       $mediaService
      */
     public function __construct(\Enlight_Event_EventManager $events, Connection $connection, MediaServiceInterface $mediaService)
     {
@@ -138,7 +137,7 @@ class GarbageCollectorFactory
             ->andWhere('column_type = :columnType')
             ->setParameters([
                 'entityName' => 'Shopware\Models\Media\Media',
-                'columnType' => 'single_selection'
+                'columnType' => 'single_selection',
             ])
             ->execute()
             ->fetchAll();
@@ -155,7 +154,7 @@ class GarbageCollectorFactory
             ->andWhere('column_type = :columnType')
             ->setParameters([
                 'entityName' => 'Shopware\Models\Media\Media',
-                'columnType' => 'multi_selection'
+                'columnType' => 'multi_selection',
             ])
             ->execute()
             ->fetchAll();

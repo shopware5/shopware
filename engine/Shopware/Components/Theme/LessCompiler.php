@@ -21,14 +21,13 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 namespace Shopware\Components\Theme;
 
 interface LessCompiler
 {
     /**
      * Resets all configurations.
-     *
-     * @return void
      */
     public function reset();
 
@@ -37,7 +36,6 @@ interface LessCompiler
      * like the compress mode or css source maps.
      *
      * @param array $configuration
-     * @return void
      */
     public function setConfiguration(array $configuration);
 
@@ -57,9 +55,8 @@ interface LessCompiler
     public function setVariables(array $variables);
 
     /**
-     * @param string $file File which should be compiled.
-     * @param string $url Url which is used for css urls
-     * @return void
+     * @param string $file file which should be compiled
+     * @param string $url  Url which is used for css urls
      */
     public function compile($file, $url);
 

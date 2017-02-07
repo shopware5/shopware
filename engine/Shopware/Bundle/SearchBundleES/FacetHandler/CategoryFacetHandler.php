@@ -26,13 +26,13 @@ namespace Shopware\Bundle\SearchBundleES\FacetHandler;
 
 use ONGR\ElasticsearchDSL\Aggregation\TermsAggregation;
 use ONGR\ElasticsearchDSL\Search;
-use Shopware\Bundle\SearchBundle\FacetResult\CategoryTreeFacetResultBuilder;
-use Shopware\Bundle\SearchBundleES\HandlerInterface;
 use Shopware\Bundle\SearchBundle\Condition\CategoryCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
-use Shopware\Bundle\SearchBundle\Facet\CategoryFacet;
 use Shopware\Bundle\SearchBundle\CriteriaPartInterface;
+use Shopware\Bundle\SearchBundle\Facet\CategoryFacet;
+use Shopware\Bundle\SearchBundle\FacetResult\CategoryTreeFacetResultBuilder;
 use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
+use Shopware\Bundle\SearchBundleES\HandlerInterface;
 use Shopware\Bundle\SearchBundleES\ResultHydratorInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\CategoryServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\Core\CategoryDepthService;
@@ -63,9 +63,9 @@ class CategoryFacetHandler implements HandlerInterface, ResultHydratorInterface
     private $categoryTreeFacetResultBuilder;
 
     /**
-     * @param CategoryServiceInterface $categoryService
-     * @param CategoryDepthService $categoryDepthService
-     * @param \Shopware_Components_Config $config
+     * @param CategoryServiceInterface       $categoryService
+     * @param CategoryDepthService           $categoryDepthService
+     * @param \Shopware_Components_Config    $config
      * @param CategoryTreeFacetResultBuilder $categoryTreeFacetResultBuilder
      */
     public function __construct(
@@ -85,7 +85,7 @@ class CategoryFacetHandler implements HandlerInterface, ResultHydratorInterface
      */
     public function supports(CriteriaPartInterface $criteriaPart)
     {
-        return ($criteriaPart instanceof CategoryFacet);
+        return $criteriaPart instanceof CategoryFacet;
     }
 
     /**
@@ -146,8 +146,9 @@ class CategoryFacetHandler implements HandlerInterface, ResultHydratorInterface
     }
 
     /**
-     * @param array $ids
+     * @param array                $ids
      * @param ShopContextInterface $context
+     *
      * @return array
      */
     private function filterSystemCategories(array $ids, ShopContextInterface $context)
@@ -164,6 +165,7 @@ class CategoryFacetHandler implements HandlerInterface, ResultHydratorInterface
 
     /**
      * @param Criteria $criteria
+     *
      * @return int[]
      */
     private function getFilteredIds(Criteria $criteria)
@@ -174,6 +176,7 @@ class CategoryFacetHandler implements HandlerInterface, ResultHydratorInterface
                 $active = array_merge($active, $condition->getCategoryIds());
             }
         }
+
         return $active;
     }
 }

@@ -28,7 +28,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @category  Shopware
- * @package   Shopware\Tests
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class EnlightLoaderTest extends TestCase
@@ -39,7 +39,7 @@ class EnlightLoaderTest extends TestCase
     public function testEnlightLoaderCheckFile()
     {
         $this->assertTrue(\Enlight_Loader::checkFile('H:\Apache Group\Apache\htdocs\shopware.php'));
-        $this->assertFalse(\Enlight_Loader::checkFile('H:\Apache Group\Apache\htdocs\shopware.php'."\0"));
+        $this->assertFalse(\Enlight_Loader::checkFile('H:\Apache Group\Apache\htdocs\shopware.php' . "\0"));
     }
 
     /**
@@ -118,12 +118,12 @@ class EnlightLoaderTest extends TestCase
             ['', __DIR__],
             ['./', __DIR__],
             ['../', dirname(__DIR__)],
-            ['Bundle/MediaBundle/Strategy/../../', __DIR__.'/Bundle'],
+            ['Bundle/MediaBundle/Strategy/../../', __DIR__ . '/Bundle'],
 
             // Absolute paths
             ['/', '/'],
-            [__DIR__.'/', __DIR__],
-            [__DIR__.'/tests/..', __DIR__],
+            [__DIR__ . '/', __DIR__],
+            [__DIR__ . '/tests/..', __DIR__],
         ];
     }
 }

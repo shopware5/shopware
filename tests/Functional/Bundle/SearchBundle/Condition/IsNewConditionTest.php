@@ -1,4 +1,26 @@
 <?php
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
 
 namespace Shopware\Tests\Functional\Bundle\SearchBundle\Condition;
 
@@ -17,25 +39,26 @@ class IsNewConditionTest extends TestCase
         $condition = new IsNewCondition();
 
         $this->search(
-            array(
-                'first'  => array('added' => date("Y-m-d", strtotime('-60 days'))),
-                'second' => array('added' => date("Y-m-d", strtotime('-31 days'))),
-                'third'  => array('added' => '2011-01-01'),
-                'fourth' => array('added' => date("Y-m-d", strtotime('-20 days'))),
-                'fifth' => array('added' => date("Y-m-d")),
-                'sixth' => array('added' => date("Y-m-d", strtotime('-30 days')))
-            ),
-            array('fourth', 'fifth', 'sixth'),
+            [
+                'first' => ['added' => date('Y-m-d', strtotime('-60 days'))],
+                'second' => ['added' => date('Y-m-d', strtotime('-31 days'))],
+                'third' => ['added' => '2011-01-01'],
+                'fourth' => ['added' => date('Y-m-d', strtotime('-20 days'))],
+                'fifth' => ['added' => date('Y-m-d')],
+                'sixth' => ['added' => date('Y-m-d', strtotime('-30 days'))],
+            ],
+            ['fourth', 'fifth', 'sixth'],
             null,
-            array($condition)
+            [$condition]
         );
     }
 
     /**
      * @param $number
      * @param \Shopware\Models\Category\Category $category
-     * @param ShopContext $context
-     * @param array $data
+     * @param ShopContext                        $context
+     * @param array                              $data
+     *
      * @return array
      */
     protected function getProduct(

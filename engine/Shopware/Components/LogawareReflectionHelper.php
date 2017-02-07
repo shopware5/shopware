@@ -28,7 +28,6 @@ use Psr\Log\LoggerInterface;
 
 class LogawareReflectionHelper
 {
-
     /**
      * @var LoggerInterface
      */
@@ -49,8 +48,9 @@ class LogawareReflectionHelper
     }
 
     /**
-     * @param array $serialized
+     * @param array  $serialized
      * @param string $errorSource
+     *
      * @return array
      */
     public function unserialize($serialized, $errorSource)
@@ -64,7 +64,7 @@ class LogawareReflectionHelper
             try {
                 $classes[] = $this->reflector->createInstanceFromNamedArguments($className, $arguments);
             } catch (\Exception $e) {
-                $this->logger->critical($errorSource . ": " . $e->getMessage());
+                $this->logger->critical($errorSource . ': ' . $e->getMessage());
             }
         }
 

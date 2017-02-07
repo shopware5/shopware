@@ -26,7 +26,6 @@ namespace Shopware\Bundle\PluginInstallerBundle\Struct;
 
 /**
  * Class PluginInformationStruct
- * @package Shopware\Bundle\PluginInstallerBundle\Struct
  */
 class PluginInformationStruct implements \JsonSerializable
 {
@@ -34,9 +33,9 @@ class PluginInformationStruct implements \JsonSerializable
      * @const array
      */
     const TYPE_MAPPING = [
-        'buy'   => 1,
-        'rent'  => 2,
-        'test'  => 3
+        'buy' => 1,
+        'rent' => 2,
+        'test' => 3,
     ];
 
     /**
@@ -161,7 +160,7 @@ class PluginInformationStruct implements \JsonSerializable
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isUnknownLicense()
     {
@@ -185,7 +184,7 @@ class PluginInformationStruct implements \JsonSerializable
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isWrongSubscription()
     {
@@ -193,7 +192,7 @@ class PluginInformationStruct implements \JsonSerializable
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isSubscriptionUpgradeRequired()
     {
@@ -201,7 +200,7 @@ class PluginInformationStruct implements \JsonSerializable
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function jsonSerialize()
     {

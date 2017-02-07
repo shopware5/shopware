@@ -29,7 +29,7 @@ use Shopware\Models\Shop;
 
 /**
  * @category  Shopware
- * @package   Shopware\Components\Theme
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
 class LessCollector
@@ -50,8 +50,8 @@ class LessCollector
     private $eventManager;
 
     /**
-     * @param PathResolver $pathResolver
-     * @param Inheritance $inheritance
+     * @param PathResolver                $pathResolver
+     * @param Inheritance                 $inheritance
      * @param \Enlight_Event_EventManager $eventManager
      */
     public function __construct(
@@ -66,7 +66,8 @@ class LessCollector
 
     /**
      * @param Shop\Template $template
-     * @param Shop\Shop $shop
+     * @param Shop\Shop     $shop
+     *
      * @return LessDefinition[]
      */
     public function collectLessDefinitions(Shop\Template $template, Shop\Shop $shop)
@@ -105,7 +106,7 @@ class LessCollector
             $definitions,
             [
                 'shop' => $shop,
-                'template' => $template
+                'template' => $template,
             ]
         );
 
@@ -114,6 +115,7 @@ class LessCollector
 
     /**
      * @param $inheritance
+     *
      * @return LessDefinition[]
      */
     private function collectInheritanceLess($inheritance)
@@ -128,7 +130,7 @@ class LessCollector
             );
 
             $definition->setFiles([
-                $this->pathResolver->getThemeLessFile($shopTemplate)
+                $this->pathResolver->getThemeLessFile($shopTemplate),
             ]);
 
             $definitions[] = $definition;
@@ -139,6 +141,7 @@ class LessCollector
 
     /**
      * @param $inheritance
+     *
      * @return LessDefinition[]
      */
     private function collectInheritanceCss($inheritance)
@@ -162,9 +165,11 @@ class LessCollector
 
     /**
      * @param Shop\Template $template
-     * @param Shop\Shop $shop
-     * @return LessDefinition[]
+     * @param Shop\Shop     $shop
+     *
      * @throws \Enlight_Event_Exception
+     *
+     * @return LessDefinition[]
      */
     private function collectPluginLess(Shop\Template $template, Shop\Shop $shop)
     {
@@ -180,9 +185,11 @@ class LessCollector
 
     /**
      * @param Shop\Template $template
-     * @param Shop\Shop $shop
-     * @return LessDefinition[]
+     * @param Shop\Shop     $shop
+     *
      * @throws \Enlight_Event_Exception
+     *
+     * @return LessDefinition[]
      */
     private function collectPluginCss(Shop\Template $template, Shop\Shop $shop)
     {

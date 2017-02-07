@@ -28,7 +28,6 @@ use Doctrine\DBAL\Connection;
 use Shopware\Bundle\EmotionBundle\Struct\Collection\PrepareDataCollection;
 use Shopware\Bundle\EmotionBundle\Struct\Collection\ResolvedDataCollection;
 use Shopware\Bundle\EmotionBundle\Struct\Element;
-use Shopware\Bundle\EmotionBundle\Struct\Library\Component;
 use Shopware\Bundle\SearchBundle\Sorting\ReleaseDateSorting;
 use Shopware\Bundle\SearchBundle\SortingInterface;
 use Shopware\Bundle\SearchBundle\StoreFrontCriteriaFactoryInterface;
@@ -69,9 +68,9 @@ class CategoryTeaserComponentHandler implements ComponentHandlerInterface
 
     /**
      * @param StoreFrontCriteriaFactoryInterface $criteriaFactory
-     * @param CategoryServiceInterface $categoryService
-     * @param Connection $connection
-     * @param BlogServiceInterface $blogService
+     * @param CategoryServiceInterface           $categoryService
+     * @param Connection                         $connection
+     * @param BlogServiceInterface               $blogService
      */
     public function __construct(StoreFrontCriteriaFactoryInterface $criteriaFactory, CategoryServiceInterface $categoryService, Connection $connection, BlogServiceInterface $blogService)
     {
@@ -83,6 +82,7 @@ class CategoryTeaserComponentHandler implements ComponentHandlerInterface
 
     /**
      * @param Element $element
+     *
      * @return bool
      */
     public function supports(Element $element)
@@ -92,8 +92,8 @@ class CategoryTeaserComponentHandler implements ComponentHandlerInterface
     }
 
     /**
-     * @param PrepareDataCollection $collection
-     * @param Element $element
+     * @param PrepareDataCollection            $collection
+     * @param Element                          $element
      * @param ShopContext|ShopContextInterface $context
      */
     public function prepare(PrepareDataCollection $collection, Element $element, ShopContextInterface $context)
@@ -128,8 +128,8 @@ class CategoryTeaserComponentHandler implements ComponentHandlerInterface
 
     /**
      * @param ResolvedDataCollection $collection
-     * @param Element $element
-     * @param ShopContextInterface $context
+     * @param Element                $element
+     * @param ShopContextInterface   $context
      */
     public function handle(ResolvedDataCollection $collection, Element $element, ShopContextInterface $context)
     {
@@ -179,7 +179,7 @@ class CategoryTeaserComponentHandler implements ComponentHandlerInterface
     }
 
     /**
-     * @param Element $element
+     * @param Element              $element
      * @param ShopContextInterface $context
      */
     private function fetchCategory(Element $element, ShopContextInterface $context)
@@ -195,8 +195,9 @@ class CategoryTeaserComponentHandler implements ComponentHandlerInterface
     }
 
     /**
-     * @param int $categoryId
+     * @param int                  $categoryId
      * @param ShopContextInterface $context
+     *
      * @return Blog
      */
     private function getRandomBlog($categoryId, ShopContextInterface $context)
@@ -209,6 +210,7 @@ class CategoryTeaserComponentHandler implements ComponentHandlerInterface
 
     /**
      * @param int $categoryId
+     *
      * @return int
      */
     private function findBlogIdByCategoryId($categoryId)
@@ -229,6 +231,6 @@ class CategoryTeaserComponentHandler implements ComponentHandlerInterface
         $blogIds = $builder->execute()->fetchAll(\PDO::FETCH_COLUMN);
         shuffle($blogIds);
 
-        return (int)reset($blogIds);
+        return (int) reset($blogIds);
     }
 }

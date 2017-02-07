@@ -29,7 +29,7 @@ use Shopware\Components\Api\Resource\Resource;
 
 /**
  * @category  Shopware
- * @package   Shopware\Tests
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class OrderTest extends TestCase
@@ -45,21 +45,21 @@ class OrderTest extends TestCase
     private $order;
 
     /**
-     * @return Order
-     */
-    public function createResource()
-    {
-        return new Order();
-    }
-
-    /**
      * Sets up the fixture, for example, opens a network connection.
      * This method is called before a test is executed.
      */
     protected function setUp()
     {
         parent::setUp();
-        $this->order = Shopware()->Db()->fetchRow("SELECT * FROM  `s_order` LIMIT 1");
+        $this->order = Shopware()->Db()->fetchRow('SELECT * FROM  `s_order` LIMIT 1');
+    }
+
+    /**
+     * @return Order
+     */
+    public function createResource()
+    {
+        return new Order();
     }
 
     public function testGetOneShouldBeSuccessful()
@@ -90,7 +90,6 @@ class OrderTest extends TestCase
         $this->assertEquals($this->order['ordernumber'], $order['number']);
     }
 
-
     public function testGetOneShouldBeAbleToReturnObject()
     {
         $this->resource->setResultMode(Resource::HYDRATE_OBJECT);
@@ -117,36 +116,36 @@ class OrderTest extends TestCase
         $firstOrder = $result['data'][0];
 
         $expectedKeys = [
-            "id",
-            "number",
-            "customerId",
-            "paymentId",
-            "dispatchId",
-            "partnerId",
-            "shopId",
-            "invoiceAmount",
-            "invoiceAmountNet",
-            "invoiceShipping",
-            "invoiceShippingNet",
-            "orderTime",
-            "transactionId",
-            "comment",
-            "customerComment",
-            "internalComment",
-            "net",
-            "taxFree",
-            "temporaryId",
-            "referer",
-            "clearedDate",
-            "trackingCode",
-            "languageIso",
-            "currency",
-            "currencyFactor",
-            "remoteAddress",
-            "deviceType",
-            "customer",
-            "paymentStatusId",
-            "orderStatusId",
+            'id',
+            'number',
+            'customerId',
+            'paymentId',
+            'dispatchId',
+            'partnerId',
+            'shopId',
+            'invoiceAmount',
+            'invoiceAmountNet',
+            'invoiceShipping',
+            'invoiceShippingNet',
+            'orderTime',
+            'transactionId',
+            'comment',
+            'customerComment',
+            'internalComment',
+            'net',
+            'taxFree',
+            'temporaryId',
+            'referer',
+            'clearedDate',
+            'trackingCode',
+            'languageIso',
+            'currency',
+            'currencyFactor',
+            'remoteAddress',
+            'deviceType',
+            'customer',
+            'paymentStatusId',
+            'orderStatusId',
         ];
 
         foreach ($expectedKeys as $expectedKey) {
@@ -177,7 +176,7 @@ class OrderTest extends TestCase
      */
     public function testUpdateWithInvalidIdShouldThrowNotFoundException()
     {
-        $this->resource->update(9999999, array());
+        $this->resource->update(9999999, []);
     }
 
     /**
@@ -185,10 +184,8 @@ class OrderTest extends TestCase
      */
     public function testUpdateWithMissingIdShouldThrowParameterMissingException()
     {
-        $this->resource->update('', array());
+        $this->resource->update('', []);
     }
-
-
 
     public function testUpdateOrderPositionStatusShouldBeSuccessful()
     {
@@ -197,9 +194,9 @@ class OrderTest extends TestCase
         $order = $this->resource->getOne($this->order['id']);
 
         // Update the order details of that order
-        $updateArray = array();
+        $updateArray = [];
         foreach ($order['details'] as $detail) {
-            $updateArray['details'][$detail['id']] = array('id' => $detail['id'], 'status' => rand(0, 3), 'shipped' => 1);
+            $updateArray['details'][$detail['id']] = ['id' => $detail['id'], 'status' => rand(0, 3), 'shipped' => 1];
         }
         $this->resource->update($this->order['id'], $updateArray);
 

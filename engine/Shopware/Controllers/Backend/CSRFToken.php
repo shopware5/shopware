@@ -37,12 +37,12 @@ class Shopware_Controllers_Backend_CSRFToken extends Shopware_Controllers_Backen
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getWhitelistedCSRFActions()
     {
         return [
-            'generate'
+            'generate',
         ];
     }
 

@@ -28,7 +28,7 @@ use Shopware\Bundle\SearchBundle\FacetInterface;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\SearchBundle\Facet
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class CategoryFacet implements FacetInterface
@@ -45,7 +45,7 @@ class CategoryFacet implements FacetInterface
 
     /**
      * @param string|null $label
-     * @param int $depth
+     * @param int         $depth
      */
     public function __construct($label = null, $depth = 2)
     {
@@ -62,7 +62,7 @@ class CategoryFacet implements FacetInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getName()
     {

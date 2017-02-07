@@ -24,13 +24,13 @@
 
 /**
  * @category  Shopware
- * @package   Shopware\Tests
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Components_Test_Plugin_TestCase
 {
-    protected $articles = array(
-        2 => array(
+    protected $articles = [
+        2 => [
             'articleID' => '2',
             'articleDetailsID' => '125',
             'ordernumber' => 'SW10002.3',
@@ -92,24 +92,24 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
             'crossbundlelook' => false,
             'sUpcoming' => '0',
             'sReleasedate' => '',
-            'sLinks' => array(
-                0 => array(
+            'sLinks' => [
+                0 => [
                     'id' => '3',
                     'description' => 'Feinbrennerei Sasse',
                     'link' => 'http://www.sassekorn.de',
                     'target' => '',
                     'supplierSearch' => false,
-                ),
-                1 => array(
+                ],
+                1 => [
                     'supplierSearch' => true,
                     'description' => 'Feinbrennerei Sasse',
                     'link' => 'shopware.php?sViewport=search&sSearch=2&sSearchMode=supplier&sSearchText=Feinbrennerei+Sasse',
                     'target' => '_parent',
-                ),
-            ),
-            'sRelatedArticles' => array(),
-            'sSimilarArticles' => array(
-                0 => array(
+                ],
+            ],
+            'sRelatedArticles' => [],
+            'sSimilarArticles' => [
+                0 => [
                     'articleID' => '4',
                     'articleDetailsID' => '4',
                     'ordernumber' => 'SW10004',
@@ -158,15 +158,15 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                     'additionaltext' => '',
                     'sConfigurator' => '0',
                     'esd' => '0',
-                    'sVoteAverage' => array('average' => 0, 'count' => 0,),
+                    'sVoteAverage' => ['average' => 0, 'count' => 0],
                     'newArticle' => '0',
                     'topseller' => '0',
                     'sUpcoming' => '0',
                     'sReleasedate' => '',
                     'sVariantArticle' => null,
                     'sReleaseDate' => '',
-                    'sProperties' => array(
-                        7 => array(
+                    'sProperties' => [
+                        7 => [
                             'id' => '7',
                             'optionID' => '7',
                             'name' => 'Trinktemperatur',
@@ -177,9 +177,9 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                             'nameTranslation' => null,
                             'groupNameTranslation' => null,
                             'valueTranslation' => null,
-                            'values' => array(0 => 'Gekühlt',),
-                        ),
-                        6 => array(
+                            'values' => [0 => 'Gekühlt'],
+                        ],
+                        6 => [
                             'id' => '6',
                             'optionID' => '6',
                             'name' => 'Geschmack',
@@ -190,9 +190,9 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                             'nameTranslation' => null,
                             'groupNameTranslation' => null,
                             'valueTranslation' => null,
-                            'values' => array(0 => 'mild',),
-                        ),
-                        4 => array(
+                            'values' => [0 => 'mild'],
+                        ],
+                        4 => [
                             'id' => '4',
                             'optionID' => '4',
                             'name' => 'Farbe',
@@ -203,9 +203,9 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                             'nameTranslation' => null,
                             'groupNameTranslation' => null,
                             'valueTranslation' => null,
-                            'values' => array(0 => 'schokobraun',),
-                        ),
-                        2 => array(
+                            'values' => [0 => 'schokobraun'],
+                        ],
+                        2 => [
                             'id' => '2',
                             'optionID' => '2',
                             'name' => 'Flaschengröße',
@@ -216,9 +216,9 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                             'nameTranslation' => null,
                             'groupNameTranslation' => null,
                             'valueTranslation' => null,
-                            'values' => array(0 => '0,7 Liter',),
-                        ),
-                        1 => array(
+                            'values' => [0 => '0,7 Liter'],
+                        ],
+                        1 => [
                             'id' => '1',
                             'optionID' => '1',
                             'name' => 'Alkoholgehalt',
@@ -229,14 +229,14 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                             'nameTranslation' => null,
                             'groupNameTranslation' => null,
                             'valueTranslation' => null,
-                            'values' => array(0 => '< 20%',),
-                        ),
-                    ),
+                            'values' => [0 => '< 20%'],
+                        ],
+                    ],
                     'priceStartingFrom' => 0,
                     'referenceprice' => '11.414285714286',
-                    'sUnit' => array('unit' => 'l', 'description' => 'Liter',),
-                    'image' => array(
-                        'src' => array(
+                    'sUnit' => ['unit' => 'l', 'description' => 'Liter'],
+                    'image' => [
+                        'src' => [
                             'original' => 'http://dr.test.shopware.in/next/media/image/LatteMacchiato502bc1efd65b6.jpg',
                             0 => 'http://dr.test.shopware.in/next/media/image/thumbnail/LatteMacchiato502bc1efd65b6_30x30.jpg',
                             1 => 'http://dr.test.shopware.in/next/media/image/thumbnail/LatteMacchiato502bc1efd65b6_57x57.jpg',
@@ -244,26 +244,26 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                             3 => 'http://dr.test.shopware.in/next/media/image/thumbnail/LatteMacchiato502bc1efd65b6_140x140.jpg',
                             4 => 'http://dr.test.shopware.in/next/media/image/thumbnail/LatteMacchiato502bc1efd65b6_285x255.jpg',
                             5 => 'http://dr.test.shopware.in/next/media/image/thumbnail/LatteMacchiato502bc1efd65b6_720x600.jpg',
-                        ),
-                        'res' => array(
-                            'original' => array(
+                        ],
+                        'res' => [
+                            'original' => [
                                 'width' => 0,
                                 'height' => 0,
-                            ),
+                            ],
                             'description' => '',
-                        ),
+                        ],
                         'position' => 1,
                         'extension' => 'jpg',
                         'main' => 1,
                         'id' => 12,
                         'parentId' => null,
-                        'attribute' => array(),
-                    ),
+                        'attribute' => [],
+                    ],
                     'linkBasket' => 'shopware.php?sViewport=basket&sAdd=SW10004',
                     'linkDetails' => 'shopware.php?sViewport=detail&sArticle=4',
                     'mode' => 'fix',
-                ),
-                1 => array(
+                ],
+                1 => [
                     'articleID' => '5',
                     'articleDetailsID' => '252',
                     'ordernumber' => 'SW10005.1',
@@ -312,15 +312,15 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                     'additionaltext' => '0,2 Liter',
                     'sConfigurator' => '1',
                     'esd' => '0',
-                    'sVoteAverage' => array('average' => 0, 'count' => 0,),
+                    'sVoteAverage' => ['average' => 0, 'count' => 0],
                     'newArticle' => '0',
                     'topseller' => '0',
                     'sUpcoming' => '0',
                     'sReleasedate' => '',
                     'sVariantArticle' => '1',
                     'sReleaseDate' => '',
-                    'sProperties' => array(
-                        7 => array(
+                    'sProperties' => [
+                        7 => [
                             'id' => '7',
                             'optionID' => '7',
                             'name' => 'Trinktemperatur',
@@ -331,9 +331,9 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                             'nameTranslation' => null,
                             'groupNameTranslation' => null,
                             'valueTranslation' => null,
-                            'values' => array(0 => 'Gekühlt',),
-                        ),
-                        6 => array(
+                            'values' => [0 => 'Gekühlt'],
+                        ],
+                        6 => [
                             'id' => '6',
                             'optionID' => '6',
                             'name' => 'Geschmack',
@@ -344,9 +344,9 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                             'nameTranslation' => null,
                             'groupNameTranslation' => null,
                             'valueTranslation' => null,
-                            'values' => array(0 => 'mild',),
-                        ),
-                        4 => array(
+                            'values' => [0 => 'mild'],
+                        ],
+                        4 => [
                             'id' => '4',
                             'optionID' => '4',
                             'name' => 'Farbe',
@@ -357,9 +357,9 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                             'nameTranslation' => null,
                             'groupNameTranslation' => null,
                             'valueTranslation' => null,
-                            'values' => array(0 => 'rot',),
-                        ),
-                        2 => array(
+                            'values' => [0 => 'rot'],
+                        ],
+                        2 => [
                             'id' => '2',
                             'optionID' => '2',
                             'name' => 'Flaschengröße',
@@ -370,14 +370,14 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                             'nameTranslation' => null,
                             'groupNameTranslation' => null,
                             'valueTranslation' => null,
-                            'values' => array(
+                            'values' => [
                                 0 => '0,2 Liter',
                                 1 => '0,7 Liter',
                                 2 => '1,0 Liter',
                                 3 => '1,5 Liter',
-                            ),
-                        ),
-                        1 => array(
+                            ],
+                        ],
+                        1 => [
                             'id' => '1',
                             'optionID' => '1',
                             'name' => 'Alkoholgehalt',
@@ -388,14 +388,14 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                             'nameTranslation' => null,
                             'groupNameTranslation' => null,
                             'valueTranslation' => null,
-                            'values' => array(0 => '< 20%',),
-                        ),
-                    ),
+                            'values' => [0 => '< 20%'],
+                        ],
+                    ],
                     'priceStartingFrom' => '10,95',
                     'referenceprice' => '15.642857142857',
-                    'sUnit' => array('unit' => 'l', 'description' => 'Liter',),
-                    'image' => array(
-                        'src' => array(
+                    'sUnit' => ['unit' => 'l', 'description' => 'Liter'],
+                    'image' => [
+                        'src' => [
                             'original' => 'http://dr.test.shopware.in/next/media/image/Emmelkamper_Holunderlikoer_200ml-1.jpg',
                             0 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Emmelkamper_Holunderlikoer_200ml-1_30x30.jpg',
                             1 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Emmelkamper_Holunderlikoer_200ml-1_57x57.jpg',
@@ -403,26 +403,26 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                             3 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Emmelkamper_Holunderlikoer_200ml-1_140x140.jpg',
                             4 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Emmelkamper_Holunderlikoer_200ml-1_285x255.jpg',
                             5 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Emmelkamper_Holunderlikoer_200ml-1_720x600.jpg',
-                        ),
-                        'res' => array(
-                            'original' => array(
+                        ],
+                        'res' => [
+                            'original' => [
                                 'width' => 0,
                                 'height' => 0,
-                            ),
+                            ],
                             'description' => 'Emmelkamper Holunderlikör 0,2 Liter',
-                        ),
+                        ],
                         'position' => 2,
                         'extension' => 'jpg',
                         'main' => 1,
                         'id' => 17,
                         'parentId' => null,
-                        'attribute' => array(),
-                    ),
+                        'attribute' => [],
+                    ],
                     'linkBasket' => 'shopware.php?sViewport=basket&sAdd=SW10005.1',
                     'linkDetails' => 'shopware.php?sViewport=detail&sArticle=5',
                     'mode' => 'fix',
-                ),
-                2 => array(
+                ],
+                2 => [
                     'articleID' => '6',
                     'articleDetailsID' => '6',
                     'ordernumber' => 'SW10006',
@@ -471,15 +471,15 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                     'additionaltext' => '',
                     'sConfigurator' => '0',
                     'esd' => '0',
-                    'sVoteAverage' => array('average' => 0, 'count' => 0,),
+                    'sVoteAverage' => ['average' => 0, 'count' => 0],
                     'newArticle' => '0',
                     'topseller' => '0',
                     'sUpcoming' => '0',
                     'sReleasedate' => '',
                     'sVariantArticle' => null,
                     'sReleaseDate' => '',
-                    'sProperties' => array(
-                        7 => array(
+                    'sProperties' => [
+                        7 => [
                             'id' => '7',
                             'optionID' => '7',
                             'name' => 'Trinktemperatur',
@@ -490,9 +490,9 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                             'nameTranslation' => null,
                             'groupNameTranslation' => null,
                             'valueTranslation' => null,
-                            'values' => array(0 => 'Zimmertemperatur',),
-                        ),
-                        6 => array(
+                            'values' => [0 => 'Zimmertemperatur'],
+                        ],
+                        6 => [
                             'id' => '6',
                             'optionID' => '6',
                             'name' => 'Geschmack',
@@ -503,9 +503,9 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                             'nameTranslation' => null,
                             'groupNameTranslation' => null,
                             'valueTranslation' => null,
-                            'values' => array(0 => 'mild',),
-                        ),
-                        2 => array(
+                            'values' => [0 => 'mild'],
+                        ],
+                        2 => [
                             'id' => '2',
                             'optionID' => '2',
                             'name' => 'Flaschengröße',
@@ -516,9 +516,9 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                             'nameTranslation' => null,
                             'groupNameTranslation' => null,
                             'valueTranslation' => null,
-                            'values' => array(0 => '0,5 Liter',),
-                        ),
-                        1 => array(
+                            'values' => [0 => '0,5 Liter'],
+                        ],
+                        1 => [
                             'id' => '1',
                             'optionID' => '1',
                             'name' => 'Alkoholgehalt',
@@ -529,14 +529,14 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                             'nameTranslation' => null,
                             'groupNameTranslation' => null,
                             'valueTranslation' => null,
-                            'values' => array(0 => '>30%',),
-                        ),
-                    ),
+                            'values' => [0 => '>30%'],
+                        ],
+                    ],
                     'priceStartingFrom' => 0,
                     'referenceprice' => '71.9',
-                    'sUnit' => array('unit' => 'l', 'description' => 'Liter',),
-                    'image' => array(
-                        'src' => array(
+                    'sUnit' => ['unit' => 'l', 'description' => 'Liter'],
+                    'image' => [
+                        'src' => [
                             'original' => 'http://dr.test.shopware.in/next/media/image/Cigar_Special.jpg',
                             0 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Cigar_Special_30x30.jpg',
                             1 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Cigar_Special_57x57.jpg',
@@ -544,26 +544,26 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                             3 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Cigar_Special_140x140.jpg',
                             4 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Cigar_Special_285x255.jpg',
                             5 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Cigar_Special_720x600.jpg',
-                        ),
-                        'res' => array(
-                            'original' => array(
+                        ],
+                        'res' => [
+                            'original' => [
                                 'width' => 0,
                                 'height' => 0,
-                            ),
+                            ],
                             'description' => '',
-                        ),
+                        ],
                         'position' => 1,
                         'extension' => 'jpg',
                         'main' => 1,
                         'id' => 14,
                         'parentId' => null,
-                        'attribute' => array(),
-                    ),
+                        'attribute' => [],
+                    ],
                     'linkBasket' => 'shopware.php?sViewport=basket&sAdd=SW10006',
                     'linkDetails' => 'shopware.php?sViewport=detail&sArticle=6',
                     'mode' => 'fix',
-                ),
-                3 => array(
+                ],
+                3 => [
                     'articleID' => '7',
                     'articleDetailsID' => '249',
                     'ordernumber' => 'SW10007.1',
@@ -612,15 +612,15 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                     'additionaltext' => '0,2 Liter',
                     'sConfigurator' => '1',
                     'esd' => '0',
-                    'sVoteAverage' => array('average' => 0, 'count' => 0,),
+                    'sVoteAverage' => ['average' => 0, 'count' => 0],
                     'newArticle' => '0',
                     'topseller' => '0',
                     'sUpcoming' => '0',
                     'sReleasedate' => '',
                     'sVariantArticle' => '1',
                     'sReleaseDate' => '',
-                    'sProperties' => array(
-                        7 => array(
+                    'sProperties' => [
+                        7 => [
                             'id' => '7',
                             'optionID' => '7',
                             'name' => 'Trinktemperatur',
@@ -631,9 +631,9 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                             'nameTranslation' => null,
                             'groupNameTranslation' => null,
                             'valueTranslation' => null,
-                            'values' => array(0 => 'Gekühlt',),
-                        ),
-                        6 => array(
+                            'values' => [0 => 'Gekühlt'],
+                        ],
+                        6 => [
                             'id' => '6',
                             'optionID' => '6',
                             'name' => 'Geschmack',
@@ -644,9 +644,9 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                             'nameTranslation' => null,
                             'groupNameTranslation' => null,
                             'valueTranslation' => null,
-                            'values' => array(0 => 'herb',),
-                        ),
-                        4 => array(
+                            'values' => [0 => 'herb'],
+                        ],
+                        4 => [
                             'id' => '4',
                             'optionID' => '4',
                             'name' => 'Farbe',
@@ -657,9 +657,9 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                             'nameTranslation' => null,
                             'groupNameTranslation' => null,
                             'valueTranslation' => null,
-                            'values' => array(0 => 'klar',),
-                        ),
-                        2 => array(
+                            'values' => [0 => 'klar'],
+                        ],
+                        2 => [
                             'id' => '2',
                             'optionID' => '2',
                             'name' => 'Flaschengröße',
@@ -670,13 +670,13 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                             'nameTranslation' => null,
                             'groupNameTranslation' => null,
                             'valueTranslation' => null,
-                            'values' => array(
+                            'values' => [
                                 0 => '0,2 Liter',
                                 1 => '0,7 Liter',
                                 2 => '1,0 Liter',
-                            ),
-                        ),
-                        1 => array(
+                            ],
+                        ],
+                        1 => [
                             'id' => '1',
                             'optionID' => '1',
                             'name' => 'Alkoholgehalt',
@@ -687,14 +687,14 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                             'nameTranslation' => null,
                             'groupNameTranslation' => null,
                             'valueTranslation' => null,
-                            'values' => array(0 => '>30%',),
-                        ),
-                    ),
+                            'values' => [0 => '>30%'],
+                        ],
+                    ],
                     'priceStartingFrom' => '2,49',
                     'referenceprice' => '3.5571428571429',
-                    'sUnit' => array('unit' => 'l', 'description' => 'Liter',),
-                    'image' => array(
-                        'src' => array(
+                    'sUnit' => ['unit' => 'l', 'description' => 'Liter'],
+                    'image' => [
+                        'src' => [
                             'original' => 'http://dr.test.shopware.in/next/media/image/WacholderFlasche_frei.jpg',
                             0 => 'http://dr.test.shopware.in/next/media/image/thumbnail/WacholderFlasche_frei_30x30.jpg',
                             1 => 'http://dr.test.shopware.in/next/media/image/thumbnail/WacholderFlasche_frei_57x57.jpg',
@@ -702,26 +702,26 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                             3 => 'http://dr.test.shopware.in/next/media/image/thumbnail/WacholderFlasche_frei_140x140.jpg',
                             4 => 'http://dr.test.shopware.in/next/media/image/thumbnail/WacholderFlasche_frei_285x255.jpg',
                             5 => 'http://dr.test.shopware.in/next/media/image/thumbnail/WacholderFlasche_frei_720x600.jpg',
-                        ),
-                        'res' => array(
-                            'original' => array(
+                        ],
+                        'res' => [
+                            'original' => [
                                 'width' => 0,
                                 'height' => 0,
-                            ),
+                            ],
                             'description' => '',
-                        ),
+                        ],
                         'position' => 1,
                         'extension' => 'jpg',
                         'main' => 1,
                         'id' => 19,
                         'parentId' => null,
-                        'attribute' => array(),
-                    ),
+                        'attribute' => [],
+                    ],
                     'linkBasket' => 'shopware.php?sViewport=basket&sAdd=SW10007.1',
                     'linkDetails' => 'shopware.php?sViewport=detail&sArticle=7',
                     'mode' => 'fix',
-                ),
-                4 => array(
+                ],
+                4 => [
                     'articleID' => '8',
                     'articleDetailsID' => '14',
                     'ordernumber' => 'SW10008',
@@ -770,15 +770,15 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                     'additionaltext' => '',
                     'sConfigurator' => '0',
                     'esd' => '0',
-                    'sVoteAverage' => array('average' => 0, 'count' => 0,),
+                    'sVoteAverage' => ['average' => 0, 'count' => 0],
                     'newArticle' => '0',
                     'topseller' => '0',
                     'sUpcoming' => '0',
                     'sReleasedate' => '',
                     'sVariantArticle' => null,
                     'sReleaseDate' => '',
-                    'sProperties' => array(
-                        7 => array(
+                    'sProperties' => [
+                        7 => [
                             'id' => '7',
                             'optionID' => '7',
                             'name' => 'Trinktemperatur',
@@ -789,9 +789,9 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                             'nameTranslation' => null,
                             'groupNameTranslation' => null,
                             'valueTranslation' => null,
-                            'values' => array(0 => 'Zimmertemperatur',),
-                        ),
-                        6 => array(
+                            'values' => [0 => 'Zimmertemperatur'],
+                        ],
+                        6 => [
                             'id' => '6',
                             'optionID' => '6',
                             'name' => 'Geschmack',
@@ -802,9 +802,9 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                             'nameTranslation' => null,
                             'groupNameTranslation' => null,
                             'valueTranslation' => null,
-                            'values' => array(0 => 'mild',),
-                        ),
-                        4 => array(
+                            'values' => [0 => 'mild'],
+                        ],
+                        4 => [
                             'id' => '4',
                             'optionID' => '4',
                             'name' => 'Farbe',
@@ -815,9 +815,9 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                             'nameTranslation' => null,
                             'groupNameTranslation' => null,
                             'valueTranslation' => null,
-                            'values' => array(0 => 'goldig',),
-                        ),
-                        2 => array(
+                            'values' => [0 => 'goldig'],
+                        ],
+                        2 => [
                             'id' => '2',
                             'optionID' => '2',
                             'name' => 'Flaschengröße',
@@ -828,9 +828,9 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                             'nameTranslation' => null,
                             'groupNameTranslation' => null,
                             'valueTranslation' => null,
-                            'values' => array(0 => '0,5 Liter',),
-                        ),
-                        1 => array(
+                            'values' => [0 => '0,5 Liter'],
+                        ],
+                        1 => [
                             'id' => '1',
                             'optionID' => '1',
                             'name' => 'Alkoholgehalt',
@@ -841,14 +841,14 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                             'nameTranslation' => null,
                             'groupNameTranslation' => null,
                             'valueTranslation' => null,
-                            'values' => array(0 => '>30%',),
-                        ),
-                    ),
+                            'values' => [0 => '>30%'],
+                        ],
+                    ],
                     'priceStartingFrom' => 0,
                     'referenceprice' => '99.9',
-                    'sUnit' => array('unit' => 'l', 'description' => 'Liter',),
-                    'image' => array(
-                        'src' => array(
+                    'sUnit' => ['unit' => 'l', 'description' => 'Liter'],
+                    'image' => [
+                        'src' => [
                             'original' => 'http://dr.test.shopware.in/next/media/image/Lagerkorn_TS.jpg',
                             0 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Lagerkorn_TS_30x30.jpg',
                             1 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Lagerkorn_TS_57x57.jpg',
@@ -856,26 +856,26 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                             3 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Lagerkorn_TS_140x140.jpg',
                             4 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Lagerkorn_TS_285x255.jpg',
                             5 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Lagerkorn_TS_720x600.jpg',
-                        ),
-                        'res' => array(
-                            'original' => array(
+                        ],
+                        'res' => [
+                            'original' => [
                                 'width' => 0,
                                 'height' => 0,
-                            ),
+                            ],
                             'description' => '',
-                        ),
+                        ],
                         'position' => 1,
                         'extension' => 'jpg',
                         'main' => 1,
                         'id' => 20,
                         'parentId' => null,
-                        'attribute' => array(),
-                    ),
+                        'attribute' => [],
+                    ],
                     'linkBasket' => 'shopware.php?sViewport=basket&sAdd=SW10008',
                     'linkDetails' => 'shopware.php?sViewport=detail&sArticle=8',
                     'mode' => 'fix',
-                ),
-                5 => array(
+                ],
+                5 => [
                     'articleID' => '9',
                     'articleDetailsID' => '15',
                     'ordernumber' => 'SW10009',
@@ -924,15 +924,15 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                     'additionaltext' => '',
                     'sConfigurator' => '0',
                     'esd' => '0',
-                    'sVoteAverage' => array('average' => 0, 'count' => 0,),
+                    'sVoteAverage' => ['average' => 0, 'count' => 0],
                     'newArticle' => '0',
                     'topseller' => '0',
                     'sUpcoming' => '0',
                     'sReleasedate' => '',
                     'sVariantArticle' => null,
                     'sReleaseDate' => '',
-                    'sProperties' => array(
-                        7 => array(
+                    'sProperties' => [
+                        7 => [
                             'id' => '7',
                             'optionID' => '7',
                             'name' => 'Trinktemperatur',
@@ -943,9 +943,9 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                             'nameTranslation' => null,
                             'groupNameTranslation' => null,
                             'valueTranslation' => null,
-                            'values' => array(0 => 'Zimmertemperatur',),
-                        ),
-                        6 => array(
+                            'values' => [0 => 'Zimmertemperatur'],
+                        ],
+                        6 => [
                             'id' => '6',
                             'optionID' => '6',
                             'name' => 'Geschmack',
@@ -956,9 +956,9 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                             'nameTranslation' => null,
                             'groupNameTranslation' => null,
                             'valueTranslation' => null,
-                            'values' => array(0 => 'mild',),
-                        ),
-                        4 => array(
+                            'values' => [0 => 'mild'],
+                        ],
+                        4 => [
                             'id' => '4',
                             'optionID' => '4',
                             'name' => 'Farbe',
@@ -969,9 +969,9 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                             'nameTranslation' => null,
                             'groupNameTranslation' => null,
                             'valueTranslation' => null,
-                            'values' => array(0 => 'goldig',),
-                        ),
-                        2 => array(
+                            'values' => [0 => 'goldig'],
+                        ],
+                        2 => [
                             'id' => '2',
                             'optionID' => '2',
                             'name' => 'Flaschengröße',
@@ -982,9 +982,9 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                             'nameTranslation' => null,
                             'groupNameTranslation' => null,
                             'valueTranslation' => null,
-                            'values' => array(0 => '0,5 Liter',),
-                        ),
-                        1 => array(
+                            'values' => [0 => '0,5 Liter'],
+                        ],
+                        1 => [
                             'id' => '1',
                             'optionID' => '1',
                             'name' => 'Alkoholgehalt',
@@ -995,14 +995,14 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                             'nameTranslation' => null,
                             'groupNameTranslation' => null,
                             'valueTranslation' => null,
-                            'values' => array(0 => '>30%',),
-                        ),
-                    ),
+                            'values' => [0 => '>30%'],
+                        ],
+                    ],
                     'priceStartingFrom' => 0,
                     'referenceprice' => '49.98',
-                    'sUnit' => array('unit' => 'l', 'description' => 'Liter',),
-                    'image' => array(
-                        'src' => array(
+                    'sUnit' => ['unit' => 'l', 'description' => 'Liter'],
+                    'image' => [
+                        'src' => [
                             'original' => 'http://dr.test.shopware.in/next/media/image/Lagerkorn_XO.jpg',
                             0 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Lagerkorn_XO_30x30.jpg',
                             1 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Lagerkorn_XO_57x57.jpg',
@@ -1010,37 +1010,37 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                             3 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Lagerkorn_XO_140x140.jpg',
                             4 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Lagerkorn_XO_285x255.jpg',
                             5 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Lagerkorn_XO_720x600.jpg',
-                        ),
-                        'res' => array(
-                            'original' => array(
+                        ],
+                        'res' => [
+                            'original' => [
                                 'width' => 0,
                                 'height' => 0,
-                            ),
+                            ],
                             'description' => '',
-                        ),
+                        ],
                         'position' => 1,
                         'extension' => 'jpg',
                         'main' => 1,
                         'id' => 21,
                         'parentId' => null,
-                        'attribute' => array(),
-                    ),
+                        'attribute' => [],
+                    ],
                     'linkBasket' => 'shopware.php?sViewport=basket&sAdd=SW10009',
                     'linkDetails' => 'shopware.php?sViewport=detail&sArticle=9',
                     'mode' => 'fix',
-                ),
-            ),
+                ],
+            ],
             'esd' => false,
-            'sBlockPrices' => array(),
-            'sVariants' => array(),
+            'sBlockPrices' => [],
+            'sVariants' => [],
             'referenceprice' => '39.98',
-            'sUnit' => array('unit' => 'l', 'description' => 'Liter',),
+            'sUnit' => ['unit' => 'l', 'description' => 'Liter'],
             'priceStartingFrom' => '19,99',
             'quantity' => 1,
             'active' => 1,
-            'sConfiguratorValues' => array(),
-            'sConfigurator' => array(
-                0 => array(
+            'sConfiguratorValues' => [],
+            'sConfigurator' => [
+                0 => [
                     'groupID' => 5,
                     'groupname' => 'Flascheninhalt',
                     'groupnameOrig' => 'Flascheninhalt',
@@ -1050,8 +1050,8 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                     'postion' => 3,
                     'selected_value' => null,
                     'selected' => false,
-                    'values' => array(
-                        35 => array(
+                    'values' => [
+                        35 => [
                             'optionID' => 35,
                             'groupID' => 5,
                             'optionnameOrig' => '0,5 Liter',
@@ -1060,8 +1060,8 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                             'optionactive' => 1,
                             'user_selected' => 1,
                             'selected' => 1,
-                        ),
-                        33 => array(
+                        ],
+                        33 => [
                             'optionID' => 33,
                             'groupID' => 5,
                             'optionnameOrig' => '1,5 Liter',
@@ -1070,8 +1070,8 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                             'optionactive' => 1,
                             'user_selected' => 0,
                             'selected' => 0,
-                        ),
-                        34 => array(
+                        ],
+                        34 => [
                             'optionID' => 34,
                             'groupID' => 5,
                             'optionnameOrig' => '5 Liter',
@@ -1080,20 +1080,20 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                             'optionactive' => 1,
                             'user_selected' => 0,
                             'selected' => 0,
-                        ),
-                    ),
+                        ],
+                    ],
                     'user_selected' => false,
-                ),
-            ),
-            'sConfiguratorSettings' => array(
+                ],
+            ],
+            'sConfiguratorSettings' => [
                 'articleID' => 2,
                 'type' => 0,
                 'template' => 'article_config_upprice.tpl',
                 'instock' => false,
                 'upprice' => 0,
-            ),
-            'image' => array(
-                'src' => array(
+            ],
+            'image' => [
+                'src' => [
                     'original' => 'http://dr.test.shopware.in/next/media/image/Muensterlaender_Lagerkorn.jpg',
                     0 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Muensterlaender_Lagerkorn_30x30.jpg',
                     1 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Muensterlaender_Lagerkorn_57x57.jpg',
@@ -1101,21 +1101,21 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                     3 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Muensterlaender_Lagerkorn_140x140.jpg',
                     4 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Muensterlaender_Lagerkorn_285x255.jpg',
                     5 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Muensterlaender_Lagerkorn_720x600.jpg',
-                ),
-                'res' => array(
-                    'original' => array('width' => 0, 'height' => 0,),
+                ],
+                'res' => [
+                    'original' => ['width' => 0, 'height' => 0],
                     'description' => '',
-                ),
+                ],
                 'position' => 2,
                 'extension' => 'jpg',
                 'main' => 1,
                 'id' => 5,
                 'parentId' => null,
-                'attribute' => array(),
-            ),
-            'images' => array(
-                0 => array(
-                    'src' => array(
+                'attribute' => [],
+            ],
+            'images' => [
+                0 => [
+                    'src' => [
                         'original' => 'http://dr.test.shopware.in/next/media/image/Muensterlaender_Lagerkorn_Imagefoto.jpg',
                         0 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Muensterlaender_Lagerkorn_Imagefoto_30x30.jpg',
                         1 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Muensterlaender_Lagerkorn_Imagefoto_57x57.jpg',
@@ -1123,31 +1123,31 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                         3 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Muensterlaender_Lagerkorn_Imagefoto_140x140.jpg',
                         4 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Muensterlaender_Lagerkorn_Imagefoto_285x255.jpg',
                         5 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Muensterlaender_Lagerkorn_Imagefoto_720x600.jpg',
-                    ),
-                    'res' => array(
-                        'original' => array('width' => 0, 'height' => 0,),
+                    ],
+                    'res' => [
+                        'original' => ['width' => 0, 'height' => 0],
                         'description' => '',
-                    ),
+                    ],
                     'position' => 1,
                     'extension' => 'jpg',
                     'main' => 2,
                     'id' => 3,
                     'parentId' => null,
-                    'attribute' => array(),
-                ),
-            ),
+                    'attribute' => [],
+                ],
+            ],
             'linkBasket' => 'shopware.php?sViewport=basket&sAdd=SW10002.3',
             'linkDetails' => 'shopware.php?sViewport=detail&sArticle=2',
             'linkDetailsRewrited' => 'http://dr.test.shopware.in/next/genusswelten/2/muensterlaender-lagerkorn-32',
             'linkNote' => 'shopware.php?sViewport=note&sAdd=SW10002.3',
             'linkTellAFriend' => 'shopware.php?sViewport=tellafriend&sDetails=2',
             'linkCheaper' => 'shopware.php?sViewport=cheaper&sDetails=2',
-            'sDownloads' => array(),
+            'sDownloads' => [],
             'sAccessories' => false,
-            'sVoteAverage' => array('average' => '0.00', 'count' => '0',),
-            'sVoteComments' => array(),
-            'sProperties' => array(
-                7 => array(
+            'sVoteAverage' => ['average' => '0.00', 'count' => '0'],
+            'sVoteComments' => [],
+            'sProperties' => [
+                7 => [
                     'id' => '7',
                     'optionID' => '7',
                     'name' => 'Trinktemperatur',
@@ -1158,9 +1158,9 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                     'nameTranslation' => null,
                     'groupNameTranslation' => null,
                     'valueTranslation' => null,
-                    'values' => array(0 => 'Zimmertemperatur',),
-                ),
-                6 => array(
+                    'values' => [0 => 'Zimmertemperatur'],
+                ],
+                6 => [
                     'id' => '6',
                     'optionID' => '6',
                     'name' => 'Geschmack',
@@ -1171,9 +1171,9 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                     'nameTranslation' => null,
                     'groupNameTranslation' => null,
                     'valueTranslation' => null,
-                    'values' => array(0 => 'mild',),
-                ),
-                4 => array(
+                    'values' => [0 => 'mild'],
+                ],
+                4 => [
                     'id' => '4',
                     'optionID' => '4',
                     'name' => 'Farbe',
@@ -1184,9 +1184,9 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                     'nameTranslation' => null,
                     'groupNameTranslation' => null,
                     'valueTranslation' => null,
-                    'values' => array(0 => 'goldig',),
-                ),
-                2 => array(
+                    'values' => [0 => 'goldig'],
+                ],
+                2 => [
                     'id' => '2',
                     'optionID' => '2',
                     'name' => 'Flaschengröße',
@@ -1197,13 +1197,13 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                     'nameTranslation' => null,
                     'groupNameTranslation' => null,
                     'valueTranslation' => null,
-                    'values' => array(
+                    'values' => [
                         0 => '0,5 Liter',
                         1 => '1,5 Liter',
                         2 => '5,0 Liter',
-                    ),
-                ),
-                1 => array(
+                    ],
+                ],
+                1 => [
                     'id' => '1',
                     'optionID' => '1',
                     'name' => 'Alkoholgehalt',
@@ -1214,14 +1214,13 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                     'nameTranslation' => null,
                     'groupNameTranslation' => null,
                     'valueTranslation' => null,
-                    'values' => array(0 => '>30%',),
-                ),
-            ),
+                    'values' => [0 => '>30%'],
+                ],
+            ],
             'sNavigation' => null,
             'sDescriptionKeywords' => 'iam, his, per, tam, incrementabiliter, ops, se, res, dux, ita, hac, qui, mos, quo, pio, Ico, oro, ora, edo, magnificabiliter',
-        )
-        ,
-        161 => array(
+        ],
+        161 => [
             'articleID' => '161',
             'articleDetailsID' => '372',
             'ordernumber' => 'SW10161.1',
@@ -1282,17 +1281,17 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
             'crossbundlelook' => false,
             'sUpcoming' => '0',
             'sReleasedate' => '',
-            'sLinks' => array(
-                0 => array(
+            'sLinks' => [
+                0 => [
                     'supplierSearch' => true,
                     'description' => 'Beachdreams Clothes',
                     'link' => 'shopware.php?sViewport=search&sSearch=12&sSearchMode=supplier&sSearchText=Beachdreams+Clothes',
                     'target' => '_parent',
-                ),
-            ),
-            'sRelatedArticles' => array(),
-            'sSimilarArticles' => array(
-                0 => array(
+                ],
+            ],
+            'sRelatedArticles' => [],
+            'sSimilarArticles' => [
+                0 => [
                     'articleID' => '160',
                     'articleDetailsID' => '364',
                     'ordernumber' => 'SW10160.1',
@@ -1341,7 +1340,7 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                     'additionaltext' => '36',
                     'sConfigurator' => '1',
                     'esd' => '0',
-                    'sVoteAverage' => array('average' => 0, 'count' => 0,),
+                    'sVoteAverage' => ['average' => 0, 'count' => 0],
                     'newArticle' => '0',
                     'topseller' => '0',
                     'sUpcoming' => '0',
@@ -1349,8 +1348,8 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                     'sVariantArticle' => '1',
                     'sReleaseDate' => '',
                     'priceStartingFrom' => 0,
-                    'image' => array(
-                        'src' => array(
+                    'image' => [
+                        'src' => [
                             'original' => 'http://dr.test.shopware.in/next/media/image/Sandale-Beach-blau.jpg',
                             0 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Sandale-Beach-blau_30x30.jpg',
                             1 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Sandale-Beach-blau_57x57.jpg',
@@ -1358,26 +1357,26 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                             3 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Sandale-Beach-blau_140x140.jpg',
                             4 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Sandale-Beach-blau_285x255.jpg',
                             5 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Sandale-Beach-blau_720x600.jpg',
-                        ),
-                        'res' => array(
-                            'original' => array(
+                        ],
+                        'res' => [
+                            'original' => [
                                 'width' => 0,
                                 'height' => 0,
-                            ),
+                            ],
                             'description' => '',
-                        ),
+                        ],
                         'position' => 1,
                         'extension' => 'jpg',
                         'main' => 1,
                         'id' => 420,
                         'parentId' => null,
-                        'attribute' => array(),
-                    ),
+                        'attribute' => [],
+                    ],
                     'linkBasket' => 'shopware.php?sViewport=basket&sAdd=SW10160.1',
                     'linkDetails' => 'shopware.php?sViewport=detail&sArticle=160',
                     'mode' => 'fix',
-                ),
-                1 => array(
+                ],
+                1 => [
                     'articleID' => '174',
                     'articleDetailsID' => '403',
                     'ordernumber' => 'SW10174',
@@ -1426,7 +1425,7 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                     'additionaltext' => '',
                     'sConfigurator' => '0',
                     'esd' => '0',
-                    'sVoteAverage' => array('average' => 0, 'count' => 0,),
+                    'sVoteAverage' => ['average' => 0, 'count' => 0],
                     'newArticle' => '0',
                     'topseller' => '0',
                     'sUpcoming' => '0',
@@ -1434,8 +1433,8 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                     'sVariantArticle' => null,
                     'sReleaseDate' => '',
                     'priceStartingFrom' => 0,
-                    'image' => array(
-                        'src' => array(
+                    'image' => [
+                        'src' => [
                             'original' => 'http://dr.test.shopware.in/next/media/image/Strandkleid-rot.jpg',
                             0 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Strandkleid-rot_30x30.jpg',
                             1 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Strandkleid-rot_57x57.jpg',
@@ -1443,35 +1442,35 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                             3 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Strandkleid-rot_140x140.jpg',
                             4 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Strandkleid-rot_285x255.jpg',
                             5 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Strandkleid-rot_720x600.jpg',
-                        ),
-                        'res' => array(
-                            'original' => array(
+                        ],
+                        'res' => [
+                            'original' => [
                                 'width' => 0,
                                 'height' => 0,
-                            ),
+                            ],
                             'description' => '',
-                        ),
+                        ],
                         'position' => 1,
                         'extension' => 'jpg',
                         'main' => 1,
                         'id' => 434,
                         'parentId' => null,
-                        'attribute' => array(),
-                    ),
+                        'attribute' => [],
+                    ],
                     'linkBasket' => 'shopware.php?sViewport=basket&sAdd=SW10174',
                     'linkDetails' => 'shopware.php?sViewport=detail&sArticle=174',
                     'mode' => 'fix',
-                ),
-            ),
+                ],
+            ],
             'esd' => false,
-            'sBlockPrices' => array(),
-            'sVariants' => array(),
+            'sBlockPrices' => [],
+            'sVariants' => [],
             'priceStartingFrom' => 0,
             'quantity' => 1,
             'active' => 1,
-            'sConfiguratorValues' => array(),
-            'sConfigurator' => array(
-                0 => array(
+            'sConfiguratorValues' => [],
+            'sConfigurator' => [
+                0 => [
                     'groupID' => 7,
                     'groupname' => 'Größe',
                     'groupnameOrig' => 'Größe',
@@ -1481,8 +1480,8 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                     'postion' => 9,
                     'selected_value' => null,
                     'selected' => false,
-                    'values' => array(
-                        61 => array(
+                    'values' => [
+                        61 => [
                             'optionID' => 61,
                             'groupID' => 7,
                             'optionnameOrig' => '36',
@@ -1491,8 +1490,8 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                             'optionactive' => 1,
                             'user_selected' => 1,
                             'selected' => 1,
-                        ),
-                        62 => array(
+                        ],
+                        62 => [
                             'optionID' => 62,
                             'groupID' => 7,
                             'optionnameOrig' => '37',
@@ -1501,8 +1500,8 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                             'optionactive' => 1,
                             'user_selected' => 0,
                             'selected' => 0,
-                        ),
-                        63 => array(
+                        ],
+                        63 => [
                             'optionID' => 63,
                             'groupID' => 7,
                             'optionnameOrig' => '38',
@@ -1511,8 +1510,8 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                             'optionactive' => 1,
                             'user_selected' => 0,
                             'selected' => 0,
-                        ),
-                        64 => array(
+                        ],
+                        64 => [
                             'optionID' => 64,
                             'groupID' => 7,
                             'optionnameOrig' => '39',
@@ -1521,8 +1520,8 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                             'optionactive' => 1,
                             'user_selected' => 0,
                             'selected' => 0,
-                        ),
-                        65 => array(
+                        ],
+                        65 => [
                             'optionID' => 65,
                             'groupID' => 7,
                             'optionnameOrig' => '40',
@@ -1531,8 +1530,8 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                             'optionactive' => 1,
                             'user_selected' => 0,
                             'selected' => 0,
-                        ),
-                        66 => array(
+                        ],
+                        66 => [
                             'optionID' => 66,
                             'groupID' => 7,
                             'optionnameOrig' => '41',
@@ -1541,8 +1540,8 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                             'optionactive' => 1,
                             'user_selected' => 0,
                             'selected' => 0,
-                        ),
-                        67 => array(
+                        ],
+                        67 => [
                             'optionID' => 67,
                             'groupID' => 7,
                             'optionnameOrig' => '42',
@@ -1551,20 +1550,20 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                             'optionactive' => 1,
                             'user_selected' => 0,
                             'selected' => 0,
-                        ),
-                    ),
+                        ],
+                    ],
                     'user_selected' => false,
-                ),
-            ),
-            'sConfiguratorSettings' => array(
+                ],
+            ],
+            'sConfiguratorSettings' => [
                 'articleID' => 161,
                 'type' => 0,
                 'template' => 'article_config_upprice.tpl',
                 'instock' => true,
                 'upprice' => 0,
-            ),
-            'image' => array(
-                'src' => array(
+            ],
+            'image' => [
+                'src' => [
                     'original' => 'http://dr.test.shopware.in/next/media/image/Sandale-Beach-braun.jpg',
                     0 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Sandale-Beach-braun_30x30.jpg',
                     1 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Sandale-Beach-braun_57x57.jpg',
@@ -1572,34 +1571,33 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                     3 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Sandale-Beach-braun_140x140.jpg',
                     4 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Sandale-Beach-braun_285x255.jpg',
                     5 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Sandale-Beach-braun_720x600.jpg',
-                ),
-                'res' => array(
-                    'original' => array('width' => 0, 'height' => 0,),
+                ],
+                'res' => [
+                    'original' => ['width' => 0, 'height' => 0],
                     'description' => '',
-                ),
+                ],
                 'position' => 1,
                 'extension' => 'jpg',
                 'main' => 1,
                 'id' => 421,
                 'parentId' => null,
-                'attribute' => array(),
-            ),
-            'images' => array(),
+                'attribute' => [],
+            ],
+            'images' => [],
             'linkBasket' => 'shopware.php?sViewport=basket&sAdd=SW10161.1',
             'linkDetails' => 'shopware.php?sViewport=detail&sArticle=161',
             'linkDetailsRewrited' => 'http://dr.test.shopware.in/next/sommerwelten/161/sommer-sandale-leder-rot-braun',
             'linkNote' => 'shopware.php?sViewport=note&sAdd=SW10161.1',
             'linkTellAFriend' => 'shopware.php?sViewport=tellafriend&sDetails=161',
             'linkCheaper' => 'shopware.php?sViewport=cheaper&sDetails=161',
-            'sDownloads' => array(),
+            'sDownloads' => [],
             'sAccessories' => false,
-            'sVoteAverage' => array('average' => '0.00', 'count' => '0',),
-            'sVoteComments' => array(),
+            'sVoteAverage' => ['average' => '0.00', 'count' => '0'],
+            'sVoteComments' => [],
             'sNavigation' => null,
             'sDescriptionKeywords' => 'credulitas, Lego, res, sol, tum, pavor, pertingo, vas, Tam, incurro, quod, secus, ne, reddo, praesumo, Patria, pluo, per, Motus, iam',
-        )
-        ,
-        11 => array(
+        ],
+        11 => [
             'articleID' => '11',
             'articleDetailsID' => '17',
             'ordernumber' => 'SW10011',
@@ -1660,30 +1658,30 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
             'crossbundlelook' => false,
             'sUpcoming' => '0',
             'sReleasedate' => '',
-            'sLinks' => array(
-                0 => array(
+            'sLinks' => [
+                0 => [
                     'id' => '9',
                     'description' => 'Feinbrennerei Sasse',
                     'link' => 'http://www.sassekorn.de/',
                     'target' => '',
                     'supplierSearch' => false,
-                ),
-                1 => array(
+                ],
+                1 => [
                     'supplierSearch' => true,
                     'description' => 'Feinbrennerei Sasse',
                     'link' => 'shopware.php?sViewport=search&sSearch=2&sSearchMode=supplier&sSearchText=Feinbrennerei+Sasse',
                     'target' => '_parent',
-                ),
-            ),
-            'sRelatedArticles' => array(),
-            'sSimilarArticles' => array(),
+                ],
+            ],
+            'sRelatedArticles' => [],
+            'sSimilarArticles' => [],
             'esd' => false,
-            'sBlockPrices' => array(),
-            'sVariants' => array(),
-            'sUnit' => array('unit' => 'l', 'description' => 'Liter',),
+            'sBlockPrices' => [],
+            'sVariants' => [],
+            'sUnit' => ['unit' => 'l', 'description' => 'Liter'],
             'priceStartingFrom' => 0,
-            'image' => array(
-                'src' => array(
+            'image' => [
+                'src' => [
                     'original' => 'http://dr.test.shopware.in/next/media/image/Muensterlaender_Aperitif-Box.jpg',
                     0 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Muensterlaender_Aperitif-Box_30x30.jpg',
                     1 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Muensterlaender_Aperitif-Box_57x57.jpg',
@@ -1691,34 +1689,33 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                     3 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Muensterlaender_Aperitif-Box_140x140.jpg',
                     4 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Muensterlaender_Aperitif-Box_285x255.jpg',
                     5 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Muensterlaender_Aperitif-Box_720x600.jpg',
-                ),
-                'res' => array(
-                    'original' => array('width' => 0, 'height' => 0,),
+                ],
+                'res' => [
+                    'original' => ['width' => 0, 'height' => 0],
                     'description' => '',
-                ),
+                ],
                 'position' => 1,
                 'extension' => 'jpg',
                 'main' => 1,
                 'id' => 23,
                 'parentId' => null,
-                'attribute' => array(),
-            ),
-            'images' => array(),
+                'attribute' => [],
+            ],
+            'images' => [],
             'linkBasket' => 'shopware.php?sViewport=basket&sAdd=SW10011',
             'linkDetails' => 'shopware.php?sViewport=detail&sArticle=11',
             'linkDetailsRewrited' => 'http://dr.test.shopware.in/next/genusswelten/edelbraende/11/muensterlaender-aperitif-praesent-box',
             'linkNote' => 'shopware.php?sViewport=note&sAdd=SW10011',
             'linkTellAFriend' => 'shopware.php?sViewport=tellafriend&sDetails=11',
             'linkCheaper' => 'shopware.php?sViewport=cheaper&sDetails=11',
-            'sDownloads' => array(),
+            'sDownloads' => [],
             'sAccessories' => false,
-            'sVoteAverage' => array('average' => '0.00', 'count' => '0',),
-            'sVoteComments' => array(),
+            'sVoteAverage' => ['average' => '0.00', 'count' => '0'],
+            'sVoteComments' => [],
             'sNavigation' => null,
             'sDescriptionKeywords' => 'ego, nam, edo, vis, Sollertia, se, ile, ferito, os, De, refero, abeo, Personam, arma, texo, arca, Optatus, Refero, penitus, Strepitus',
-        )
-        ,
-        12 => array(
+        ],
+        12 => [
             'articleID' => '12',
             'articleDetailsID' => '18',
             'ordernumber' => 'SW10012',
@@ -1780,24 +1777,24 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
             'crossbundlelook' => false,
             'sUpcoming' => '0',
             'sReleasedate' => '',
-            'sLinks' => array(
-                0 => array(
+            'sLinks' => [
+                0 => [
                     'id' => '10',
                     'description' => 'Feinbrennerei Sasse',
                     'link' => 'http://www.sassekorn.de',
                     'target' => '',
                     'supplierSearch' => false,
-                ),
-                1 => array(
+                ],
+                1 => [
                     'supplierSearch' => true,
                     'description' => 'Feinbrennerei Sasse',
                     'link' => 'shopware.php?sViewport=search&sSearch=2&sSearchMode=supplier&sSearchText=Feinbrennerei+Sasse',
                     'target' => '_parent',
-                ),
-            ),
-            'sRelatedArticles' => array(),
-            'sSimilarArticles' => array(
-                0 => array(
+                ],
+            ],
+            'sRelatedArticles' => [],
+            'sSimilarArticles' => [
+                0 => [
                     'articleID' => '7',
                     'articleDetailsID' => '249',
                     'ordernumber' => 'SW10007.1',
@@ -1846,15 +1843,15 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                     'additionaltext' => '0,2 Liter',
                     'sConfigurator' => '1',
                     'esd' => '0',
-                    'sVoteAverage' => array('average' => 0, 'count' => 0,),
+                    'sVoteAverage' => ['average' => 0, 'count' => 0],
                     'newArticle' => '0',
                     'topseller' => '0',
                     'sUpcoming' => '0',
                     'sReleasedate' => '',
                     'sVariantArticle' => '1',
                     'sReleaseDate' => '',
-                    'sProperties' => array(
-                        7 => array(
+                    'sProperties' => [
+                        7 => [
                             'id' => '7',
                             'optionID' => '7',
                             'name' => 'Trinktemperatur',
@@ -1865,9 +1862,9 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                             'nameTranslation' => null,
                             'groupNameTranslation' => null,
                             'valueTranslation' => null,
-                            'values' => array(0 => 'Gekühlt',),
-                        ),
-                        6 => array(
+                            'values' => [0 => 'Gekühlt'],
+                        ],
+                        6 => [
                             'id' => '6',
                             'optionID' => '6',
                             'name' => 'Geschmack',
@@ -1878,9 +1875,9 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                             'nameTranslation' => null,
                             'groupNameTranslation' => null,
                             'valueTranslation' => null,
-                            'values' => array(0 => 'herb',),
-                        ),
-                        4 => array(
+                            'values' => [0 => 'herb'],
+                        ],
+                        4 => [
                             'id' => '4',
                             'optionID' => '4',
                             'name' => 'Farbe',
@@ -1891,9 +1888,9 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                             'nameTranslation' => null,
                             'groupNameTranslation' => null,
                             'valueTranslation' => null,
-                            'values' => array(0 => 'klar',),
-                        ),
-                        2 => array(
+                            'values' => [0 => 'klar'],
+                        ],
+                        2 => [
                             'id' => '2',
                             'optionID' => '2',
                             'name' => 'Flaschengröße',
@@ -1904,13 +1901,13 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                             'nameTranslation' => null,
                             'groupNameTranslation' => null,
                             'valueTranslation' => null,
-                            'values' => array(
+                            'values' => [
                                 0 => '0,2 Liter',
                                 1 => '0,7 Liter',
                                 2 => '1,0 Liter',
-                            ),
-                        ),
-                        1 => array(
+                            ],
+                        ],
+                        1 => [
                             'id' => '1',
                             'optionID' => '1',
                             'name' => 'Alkoholgehalt',
@@ -1921,14 +1918,14 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                             'nameTranslation' => null,
                             'groupNameTranslation' => null,
                             'valueTranslation' => null,
-                            'values' => array(0 => '>30%',),
-                        ),
-                    ),
+                            'values' => [0 => '>30%'],
+                        ],
+                    ],
                     'priceStartingFrom' => '2,49',
                     'referenceprice' => '3.5571428571429',
-                    'sUnit' => array('unit' => 'l', 'description' => 'Liter',),
-                    'image' => array(
-                        'src' => array(
+                    'sUnit' => ['unit' => 'l', 'description' => 'Liter'],
+                    'image' => [
+                        'src' => [
                             'original' => 'http://dr.test.shopware.in/next/media/image/WacholderFlasche_frei.jpg',
                             0 => 'http://dr.test.shopware.in/next/media/image/thumbnail/WacholderFlasche_frei_30x30.jpg',
                             1 => 'http://dr.test.shopware.in/next/media/image/thumbnail/WacholderFlasche_frei_57x57.jpg',
@@ -1936,34 +1933,34 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                             3 => 'http://dr.test.shopware.in/next/media/image/thumbnail/WacholderFlasche_frei_140x140.jpg',
                             4 => 'http://dr.test.shopware.in/next/media/image/thumbnail/WacholderFlasche_frei_285x255.jpg',
                             5 => 'http://dr.test.shopware.in/next/media/image/thumbnail/WacholderFlasche_frei_720x600.jpg',
-                        ),
-                        'res' => array(
-                            'original' => array(
+                        ],
+                        'res' => [
+                            'original' => [
                                 'width' => 0,
                                 'height' => 0,
-                            ),
+                            ],
                             'description' => '',
-                        ),
+                        ],
                         'position' => 1,
                         'extension' => 'jpg',
                         'main' => 1,
                         'id' => 19,
                         'parentId' => null,
-                        'attribute' => array(),
-                    ),
+                        'attribute' => [],
+                    ],
                     'linkBasket' => 'shopware.php?sViewport=basket&sAdd=SW10007.1',
                     'linkDetails' => 'shopware.php?sViewport=detail&sArticle=7',
                     'mode' => 'fix',
-                ),
-            ),
+                ],
+            ],
             'esd' => false,
-            'sBlockPrices' => array(),
-            'sVariants' => array(),
+            'sBlockPrices' => [],
+            'sVariants' => [],
             'referenceprice' => '14.271',
-            'sUnit' => array('unit' => 'l', 'description' => 'Liter',),
+            'sUnit' => ['unit' => 'l', 'description' => 'Liter'],
             'priceStartingFrom' => 0,
-            'image' => array(
-                'src' => array(
+            'image' => [
+                'src' => [
                     'original' => 'http://dr.test.shopware.in/next/media/image/KobraVodka.jpg',
                     0 => 'http://dr.test.shopware.in/next/media/image/thumbnail/KobraVodka_30x30.jpg',
                     1 => 'http://dr.test.shopware.in/next/media/image/thumbnail/KobraVodka_57x57.jpg',
@@ -1971,31 +1968,31 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                     3 => 'http://dr.test.shopware.in/next/media/image/thumbnail/KobraVodka_140x140.jpg',
                     4 => 'http://dr.test.shopware.in/next/media/image/thumbnail/KobraVodka_285x255.jpg',
                     5 => 'http://dr.test.shopware.in/next/media/image/thumbnail/KobraVodka_720x600.jpg',
-                ),
-                'res' => array(
-                    'original' => array('width' => 0, 'height' => 0,),
+                ],
+                'res' => [
+                    'original' => ['width' => 0, 'height' => 0],
                     'description' => '',
-                ),
+                ],
                 'position' => 1,
                 'extension' => 'jpg',
                 'main' => 1,
                 'id' => 25,
                 'parentId' => null,
-                'attribute' => array(),
-            ),
-            'images' => array(),
+                'attribute' => [],
+            ],
+            'images' => [],
             'linkBasket' => 'shopware.php?sViewport=basket&sAdd=SW10012',
             'linkDetails' => 'shopware.php?sViewport=detail&sArticle=12',
             'linkDetailsRewrited' => 'http://dr.test.shopware.in/next/genusswelten/12/kobra-vodka-37-5',
             'linkNote' => 'shopware.php?sViewport=note&sAdd=SW10012',
             'linkTellAFriend' => 'shopware.php?sViewport=tellafriend&sDetails=12',
             'linkCheaper' => 'shopware.php?sViewport=cheaper&sDetails=12',
-            'sDownloads' => array(),
+            'sDownloads' => [],
             'sAccessories' => false,
-            'sVoteAverage' => array('average' => '0.00', 'count' => '0',),
-            'sVoteComments' => array(),
-            'sProperties' => array(
-                6 => array(
+            'sVoteAverage' => ['average' => '0.00', 'count' => '0'],
+            'sVoteComments' => [],
+            'sProperties' => [
+                6 => [
                     'id' => '6',
                     'optionID' => '6',
                     'name' => 'Geschmack',
@@ -2006,9 +2003,9 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                     'nameTranslation' => null,
                     'groupNameTranslation' => null,
                     'valueTranslation' => null,
-                    'values' => array(0 => 'herb',),
-                ),
-                4 => array(
+                    'values' => [0 => 'herb'],
+                ],
+                4 => [
                     'id' => '4',
                     'optionID' => '4',
                     'name' => 'Farbe',
@@ -2019,9 +2016,9 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                     'nameTranslation' => null,
                     'groupNameTranslation' => null,
                     'valueTranslation' => null,
-                    'values' => array(0 => 'klar',),
-                ),
-                1 => array(
+                    'values' => [0 => 'klar'],
+                ],
+                1 => [
                     'id' => '1',
                     'optionID' => '1',
                     'name' => 'Alkoholgehalt',
@@ -2032,14 +2029,13 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                     'nameTranslation' => null,
                     'groupNameTranslation' => null,
                     'valueTranslation' => null,
-                    'values' => array(0 => '>30%',),
-                ),
-            ),
+                    'values' => [0 => '>30%'],
+                ],
+            ],
             'sNavigation' => null,
             'sDescriptionKeywords' => 'alter, res, ut, mei, cum, for, ruo, tam, per, Raptor, contactus, cui, malus, pes, qui, Sero, everbero, ile, castigatus, solator',
-        )
-        ,
-        13 => array(
+        ],
+        13 => [
             'articleID' => '13',
             'articleDetailsID' => '19',
             'ordernumber' => 'SW10013',
@@ -2101,23 +2097,23 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
             'crossbundlelook' => false,
             'sUpcoming' => '0',
             'sReleasedate' => '',
-            'sLinks' => array(
-                0 => array(
+            'sLinks' => [
+                0 => [
                     'id' => '12',
                     'description' => 'Teapavilion',
                     'link' => 'http://www.teapavilion.com',
                     'target' => '',
                     'supplierSearch' => false,
-                ),
-                1 => array(
+                ],
+                1 => [
                     'supplierSearch' => true,
                     'description' => 'Teapavilion',
                     'link' => 'shopware.php?sViewport=search&sSearch=3&sSearchMode=supplier&sSearchText=Teapavilion',
                     'target' => '_parent',
-                ),
-            ),
-            'sRelatedArticles' => array(
-                0 => array(
+                ],
+            ],
+            'sRelatedArticles' => [
+                0 => [
                     'articleID' => '22',
                     'articleDetailsID' => '28',
                     'ordernumber' => 'SW10021',
@@ -2166,7 +2162,7 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                     'additionaltext' => '',
                     'sConfigurator' => '0',
                     'esd' => '0',
-                    'sVoteAverage' => array('average' => 0, 'count' => 0,),
+                    'sVoteAverage' => ['average' => 0, 'count' => 0],
                     'newArticle' => '0',
                     'topseller' => '0',
                     'sUpcoming' => '0',
@@ -2174,8 +2170,8 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                     'sVariantArticle' => null,
                     'sReleaseDate' => '',
                     'priceStartingFrom' => 0,
-                    'image' => array(
-                        'src' => array(
+                    'image' => [
+                        'src' => [
                             'original' => 'http://dr.test.shopware.in/next/media/image/Tee-Tasse-Glas.jpg',
                             0 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Tee-Tasse-Glas_30x30.jpg',
                             1 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Tee-Tasse-Glas_57x57.jpg',
@@ -2183,26 +2179,26 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                             3 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Tee-Tasse-Glas_140x140.jpg',
                             4 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Tee-Tasse-Glas_285x255.jpg',
                             5 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Tee-Tasse-Glas_720x600.jpg',
-                        ),
-                        'res' => array(
-                            'original' => array(
+                        ],
+                        'res' => [
+                            'original' => [
                                 'width' => 0,
                                 'height' => 0,
-                            ),
+                            ],
                             'description' => '',
-                        ),
+                        ],
                         'position' => 1,
                         'extension' => 'jpg',
                         'main' => 1,
                         'id' => 69,
                         'parentId' => null,
-                        'attribute' => array(),
-                    ),
+                        'attribute' => [],
+                    ],
                     'linkBasket' => 'shopware.php?sViewport=basket&sAdd=SW10021',
                     'linkDetails' => 'shopware.php?sViewport=detail&sArticle=22',
                     'mode' => 'fix',
-                ),
-                1 => array(
+                ],
+                1 => [
                     'articleID' => '23',
                     'articleDetailsID' => '29',
                     'ordernumber' => 'SW10022',
@@ -2251,7 +2247,7 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                     'additionaltext' => '',
                     'sConfigurator' => '0',
                     'esd' => '0',
-                    'sVoteAverage' => array('average' => 0, 'count' => 0,),
+                    'sVoteAverage' => ['average' => 0, 'count' => 0],
                     'newArticle' => '0',
                     'topseller' => '0',
                     'sUpcoming' => '0',
@@ -2259,8 +2255,8 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                     'sVariantArticle' => null,
                     'sReleaseDate' => '',
                     'priceStartingFrom' => 0,
-                    'image' => array(
-                        'src' => array(
+                    'image' => [
+                        'src' => [
                             'original' => 'http://dr.test.shopware.in/next/media/image/Glasbecher-Seite.jpg',
                             0 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Glasbecher-Seite_30x30.jpg',
                             1 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Glasbecher-Seite_57x57.jpg',
@@ -2268,26 +2264,26 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                             3 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Glasbecher-Seite_140x140.jpg',
                             4 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Glasbecher-Seite_285x255.jpg',
                             5 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Glasbecher-Seite_720x600.jpg',
-                        ),
-                        'res' => array(
-                            'original' => array(
+                        ],
+                        'res' => [
+                            'original' => [
                                 'width' => 0,
                                 'height' => 0,
-                            ),
+                            ],
                             'description' => '',
-                        ),
+                        ],
                         'position' => 3,
                         'extension' => 'jpg',
                         'main' => 1,
                         'id' => 73,
                         'parentId' => null,
-                        'attribute' => array(),
-                    ),
+                        'attribute' => [],
+                    ],
                     'linkBasket' => 'shopware.php?sViewport=basket&sAdd=SW10022',
                     'linkDetails' => 'shopware.php?sViewport=detail&sArticle=23',
                     'mode' => 'fix',
-                ),
-                2 => array(
+                ],
+                2 => [
                     'articleID' => '25',
                     'articleDetailsID' => '31',
                     'ordernumber' => 'SW10024',
@@ -2336,7 +2332,7 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                     'additionaltext' => '',
                     'sConfigurator' => '0',
                     'esd' => '0',
-                    'sVoteAverage' => array('average' => 0, 'count' => 0,),
+                    'sVoteAverage' => ['average' => 0, 'count' => 0],
                     'newArticle' => '0',
                     'topseller' => '0',
                     'sUpcoming' => '0',
@@ -2344,8 +2340,8 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                     'sVariantArticle' => null,
                     'sReleaseDate' => '',
                     'priceStartingFrom' => 0,
-                    'image' => array(
-                        'src' => array(
+                    'image' => [
+                        'src' => [
                             'original' => 'http://dr.test.shopware.in/next/media/image/Teekanne-Glas-Zubehoer.jpg',
                             0 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Teekanne-Glas-Zubehoer_30x30.jpg',
                             1 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Teekanne-Glas-Zubehoer_57x57.jpg',
@@ -2353,26 +2349,26 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                             3 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Teekanne-Glas-Zubehoer_140x140.jpg',
                             4 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Teekanne-Glas-Zubehoer_285x255.jpg',
                             5 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Teekanne-Glas-Zubehoer_720x600.jpg',
-                        ),
-                        'res' => array(
-                            'original' => array(
+                        ],
+                        'res' => [
+                            'original' => [
                                 'width' => 0,
                                 'height' => 0,
-                            ),
+                            ],
                             'description' => '',
-                        ),
+                        ],
                         'position' => 3,
                         'extension' => 'jpg',
                         'main' => 1,
                         'id' => 79,
                         'parentId' => null,
-                        'attribute' => array(),
-                    ),
+                        'attribute' => [],
+                    ],
                     'linkBasket' => 'shopware.php?sViewport=basket&sAdd=SW10024',
                     'linkDetails' => 'shopware.php?sViewport=detail&sArticle=25',
                     'mode' => 'fix',
-                ),
-                3 => array(
+                ],
+                3 => [
                     'articleID' => '26',
                     'articleDetailsID' => '32',
                     'ordernumber' => 'SW10025',
@@ -2421,7 +2417,7 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                     'additionaltext' => '',
                     'sConfigurator' => '0',
                     'esd' => '0',
-                    'sVoteAverage' => array('average' => 0, 'count' => 0,),
+                    'sVoteAverage' => ['average' => 0, 'count' => 0],
                     'newArticle' => '0',
                     'topseller' => '0',
                     'sUpcoming' => '0',
@@ -2429,8 +2425,8 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                     'sVariantArticle' => null,
                     'sReleaseDate' => '',
                     'priceStartingFrom' => 0,
-                    'image' => array(
-                        'src' => array(
+                    'image' => [
+                        'src' => [
                             'original' => 'http://dr.test.shopware.in/next/media/image/Glas-Teezubereiter-Seite.jpg',
                             0 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Glas-Teezubereiter-Seite_30x30.jpg',
                             1 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Glas-Teezubereiter-Seite_57x57.jpg',
@@ -2438,28 +2434,28 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                             3 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Glas-Teezubereiter-Seite_140x140.jpg',
                             4 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Glas-Teezubereiter-Seite_285x255.jpg',
                             5 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Glas-Teezubereiter-Seite_720x600.jpg',
-                        ),
-                        'res' => array(
-                            'original' => array(
+                        ],
+                        'res' => [
+                            'original' => [
                                 'width' => 0,
                                 'height' => 0,
-                            ),
+                            ],
                             'description' => '',
-                        ),
+                        ],
                         'position' => 3,
                         'extension' => 'jpg',
                         'main' => 1,
                         'id' => 82,
                         'parentId' => null,
-                        'attribute' => array(),
-                    ),
+                        'attribute' => [],
+                    ],
                     'linkBasket' => 'shopware.php?sViewport=basket&sAdd=SW10025',
                     'linkDetails' => 'shopware.php?sViewport=detail&sArticle=26',
                     'mode' => 'fix',
-                ),
-            ),
-            'sSimilarArticles' => array(
-                0 => array(
+                ],
+            ],
+            'sSimilarArticles' => [
+                0 => [
                     'articleID' => '15',
                     'articleDetailsID' => '21',
                     'ordernumber' => 'SW10015',
@@ -2508,7 +2504,7 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                     'additionaltext' => '',
                     'sConfigurator' => '0',
                     'esd' => '0',
-                    'sVoteAverage' => array('average' => 0, 'count' => 0,),
+                    'sVoteAverage' => ['average' => 0, 'count' => 0],
                     'newArticle' => '0',
                     'topseller' => '0',
                     'sUpcoming' => '0',
@@ -2517,9 +2513,9 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                     'sReleaseDate' => '',
                     'priceStartingFrom' => 0,
                     'referenceprice' => '24.00',
-                    'sUnit' => array('unit' => 'g', 'description' => 'Gramm',),
-                    'image' => array(
-                        'src' => array(
+                    'sUnit' => ['unit' => 'g', 'description' => 'Gramm'],
+                    'image' => [
+                        'src' => [
                             'original' => 'http://dr.test.shopware.in/next/media/image/Tee-gruen-Lung-Ching.jpg',
                             0 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Tee-gruen-Lung-Ching_30x30.jpg',
                             1 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Tee-gruen-Lung-Ching_57x57.jpg',
@@ -2527,26 +2523,26 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                             3 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Tee-gruen-Lung-Ching_140x140.jpg',
                             4 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Tee-gruen-Lung-Ching_285x255.jpg',
                             5 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Tee-gruen-Lung-Ching_720x600.jpg',
-                        ),
-                        'res' => array(
-                            'original' => array(
+                        ],
+                        'res' => [
+                            'original' => [
                                 'width' => 0,
                                 'height' => 0,
-                            ),
+                            ],
                             'description' => '',
-                        ),
+                        ],
                         'position' => 4,
                         'extension' => 'jpg',
                         'main' => 1,
                         'id' => 55,
                         'parentId' => null,
-                        'attribute' => array(),
-                    ),
+                        'attribute' => [],
+                    ],
                     'linkBasket' => 'shopware.php?sViewport=basket&sAdd=SW10015',
                     'linkDetails' => 'shopware.php?sViewport=detail&sArticle=15',
                     'mode' => 'fix',
-                ),
-                1 => array(
+                ],
+                1 => [
                     'articleID' => '17',
                     'articleDetailsID' => '23',
                     'ordernumber' => 'SW10016',
@@ -2595,7 +2591,7 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                     'additionaltext' => '',
                     'sConfigurator' => '0',
                     'esd' => '0',
-                    'sVoteAverage' => array('average' => 0, 'count' => 0,),
+                    'sVoteAverage' => ['average' => 0, 'count' => 0],
                     'newArticle' => '0',
                     'topseller' => '0',
                     'sUpcoming' => '0',
@@ -2604,9 +2600,9 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                     'sReleaseDate' => '',
                     'priceStartingFrom' => 0,
                     'referenceprice' => '19.00',
-                    'sUnit' => array('unit' => 'g', 'description' => 'Gramm',),
-                    'image' => array(
-                        'src' => array(
+                    'sUnit' => ['unit' => 'g', 'description' => 'Gramm'],
+                    'image' => [
+                        'src' => [
                             'original' => 'http://dr.test.shopware.in/next/media/image/Tee-gruen-Mao-Feng.jpg',
                             0 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Tee-gruen-Mao-Feng_30x30.jpg',
                             1 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Tee-gruen-Mao-Feng_57x57.jpg',
@@ -2614,26 +2610,26 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                             3 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Tee-gruen-Mao-Feng_140x140.jpg',
                             4 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Tee-gruen-Mao-Feng_285x255.jpg',
                             5 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Tee-gruen-Mao-Feng_720x600.jpg',
-                        ),
-                        'res' => array(
-                            'original' => array(
+                        ],
+                        'res' => [
+                            'original' => [
                                 'width' => 0,
                                 'height' => 0,
-                            ),
+                            ],
                             'description' => '',
-                        ),
+                        ],
                         'position' => 4,
                         'extension' => 'jpg',
                         'main' => 1,
                         'id' => 51,
                         'parentId' => null,
-                        'attribute' => array(),
-                    ),
+                        'attribute' => [],
+                    ],
                     'linkBasket' => 'shopware.php?sViewport=basket&sAdd=SW10016',
                     'linkDetails' => 'shopware.php?sViewport=detail&sArticle=17',
                     'mode' => 'fix',
-                ),
-                2 => array(
+                ],
+                2 => [
                     'articleID' => '19',
                     'articleDetailsID' => '25',
                     'ordernumber' => 'SW10018',
@@ -2682,7 +2678,7 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                     'additionaltext' => '',
                     'sConfigurator' => '0',
                     'esd' => '0',
-                    'sVoteAverage' => array('average' => 0, 'count' => 0,),
+                    'sVoteAverage' => ['average' => 0, 'count' => 0],
                     'newArticle' => '0',
                     'topseller' => '0',
                     'sUpcoming' => '0',
@@ -2691,9 +2687,9 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                     'sReleaseDate' => '',
                     'priceStartingFrom' => 0,
                     'referenceprice' => '17.50',
-                    'sUnit' => array('unit' => 'g', 'description' => 'Gramm',),
-                    'image' => array(
-                        'src' => array(
+                    'sUnit' => ['unit' => 'g', 'description' => 'Gramm'],
+                    'image' => [
+                        'src' => [
                             'original' => 'http://dr.test.shopware.in/next/media/image/Tee-Oriental-Jasmine.jpg',
                             0 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Tee-Oriental-Jasmine_30x30.jpg',
                             1 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Tee-Oriental-Jasmine_57x57.jpg',
@@ -2701,26 +2697,26 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                             3 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Tee-Oriental-Jasmine_140x140.jpg',
                             4 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Tee-Oriental-Jasmine_285x255.jpg',
                             5 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Tee-Oriental-Jasmine_720x600.jpg',
-                        ),
-                        'res' => array(
-                            'original' => array(
+                        ],
+                        'res' => [
+                            'original' => [
                                 'width' => 0,
                                 'height' => 0,
-                            ),
+                            ],
                             'description' => '',
-                        ),
+                        ],
                         'position' => 4,
                         'extension' => 'jpg',
                         'main' => 1,
                         'id' => 59,
                         'parentId' => null,
-                        'attribute' => array(),
-                    ),
+                        'attribute' => [],
+                    ],
                     'linkBasket' => 'shopware.php?sViewport=basket&sAdd=SW10018',
                     'linkDetails' => 'shopware.php?sViewport=detail&sArticle=19',
                     'mode' => 'fix',
-                ),
-                3 => array(
+                ],
+                3 => [
                     'articleID' => '20',
                     'articleDetailsID' => '26',
                     'ordernumber' => 'SW10019',
@@ -2769,7 +2765,7 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                     'additionaltext' => '',
                     'sConfigurator' => '0',
                     'esd' => '0',
-                    'sVoteAverage' => array('average' => 0, 'count' => 0,),
+                    'sVoteAverage' => ['average' => 0, 'count' => 0],
                     'newArticle' => '0',
                     'topseller' => '0',
                     'sUpcoming' => '0',
@@ -2778,9 +2774,9 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                     'sReleaseDate' => '',
                     'priceStartingFrom' => 0,
                     'referenceprice' => '28.50',
-                    'sUnit' => array('unit' => 'g', 'description' => 'Gramm',),
-                    'image' => array(
-                        'src' => array(
+                    'sUnit' => ['unit' => 'g', 'description' => 'Gramm'],
+                    'image' => [
+                        'src' => [
                             'original' => 'http://dr.test.shopware.in/next/media/image/Tee-Jasmine-Phoenix-Pearls.jpg',
                             0 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Tee-Jasmine-Phoenix-Pearls_30x30.jpg',
                             1 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Tee-Jasmine-Phoenix-Pearls_57x57.jpg',
@@ -2788,26 +2784,26 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                             3 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Tee-Jasmine-Phoenix-Pearls_140x140.jpg',
                             4 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Tee-Jasmine-Phoenix-Pearls_285x255.jpg',
                             5 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Tee-Jasmine-Phoenix-Pearls_720x600.jpg',
-                        ),
-                        'res' => array(
-                            'original' => array(
+                        ],
+                        'res' => [
+                            'original' => [
                                 'width' => 0,
                                 'height' => 0,
-                            ),
+                            ],
                             'description' => '',
-                        ),
+                        ],
                         'position' => 4,
                         'extension' => 'jpg',
                         'main' => 1,
                         'id' => 47,
                         'parentId' => null,
-                        'attribute' => array(),
-                    ),
+                        'attribute' => [],
+                    ],
                     'linkBasket' => 'shopware.php?sViewport=basket&sAdd=SW10019',
                     'linkDetails' => 'shopware.php?sViewport=detail&sArticle=20',
                     'mode' => 'fix',
-                ),
-                4 => array(
+                ],
+                4 => [
                     'articleID' => '21',
                     'articleDetailsID' => '27',
                     'ordernumber' => 'SW10020',
@@ -2856,7 +2852,7 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                     'additionaltext' => '',
                     'sConfigurator' => '0',
                     'esd' => '0',
-                    'sVoteAverage' => array('average' => 0, 'count' => 0,),
+                    'sVoteAverage' => ['average' => 0, 'count' => 0],
                     'newArticle' => '0',
                     'topseller' => '0',
                     'sUpcoming' => '0',
@@ -2865,9 +2861,9 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                     'sReleaseDate' => '',
                     'priceStartingFrom' => 0,
                     'referenceprice' => '29.50',
-                    'sUnit' => array('unit' => 'g', 'description' => 'Gramm',),
-                    'image' => array(
-                        'src' => array(
+                    'sUnit' => ['unit' => 'g', 'description' => 'Gramm'],
+                    'image' => [
+                        'src' => [
                             'original' => 'http://dr.test.shopware.in/next/media/image/Tee-Jasmine-Lotus.jpg',
                             0 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Tee-Jasmine-Lotus_30x30.jpg',
                             1 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Tee-Jasmine-Lotus_57x57.jpg',
@@ -2875,34 +2871,34 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                             3 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Tee-Jasmine-Lotus_140x140.jpg',
                             4 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Tee-Jasmine-Lotus_285x255.jpg',
                             5 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Tee-Jasmine-Lotus_720x600.jpg',
-                        ),
-                        'res' => array(
-                            'original' => array(
+                        ],
+                        'res' => [
+                            'original' => [
                                 'width' => 0,
                                 'height' => 0,
-                            ),
+                            ],
                             'description' => '',
-                        ),
+                        ],
                         'position' => 4,
                         'extension' => 'jpg',
                         'main' => 1,
                         'id' => 67,
                         'parentId' => null,
-                        'attribute' => array(),
-                    ),
+                        'attribute' => [],
+                    ],
                     'linkBasket' => 'shopware.php?sViewport=basket&sAdd=SW10020',
                     'linkDetails' => 'shopware.php?sViewport=detail&sArticle=21',
                     'mode' => 'fix',
-                ),
-            ),
+                ],
+            ],
             'esd' => false,
-            'sBlockPrices' => array(),
-            'sVariants' => array(),
+            'sBlockPrices' => [],
+            'sVariants' => [],
             'referenceprice' => '25.00',
-            'sUnit' => array('unit' => 'g', 'description' => 'Gramm',),
+            'sUnit' => ['unit' => 'g', 'description' => 'Gramm'],
             'priceStartingFrom' => 0,
-            'image' => array(
-                'src' => array(
+            'image' => [
+                'src' => [
                     'original' => 'http://dr.test.shopware.in/next/media/image/Tee-weiss-Pai-Mu-Tan.jpg',
                     0 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Tee-weiss-Pai-Mu-Tan_30x30.jpg',
                     1 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Tee-weiss-Pai-Mu-Tan_57x57.jpg',
@@ -2910,21 +2906,21 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                     3 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Tee-weiss-Pai-Mu-Tan_140x140.jpg',
                     4 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Tee-weiss-Pai-Mu-Tan_285x255.jpg',
                     5 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Tee-weiss-Pai-Mu-Tan_720x600.jpg',
-                ),
-                'res' => array(
-                    'original' => array('width' => 0, 'height' => 0,),
+                ],
+                'res' => [
+                    'original' => ['width' => 0, 'height' => 0],
                     'description' => '',
-                ),
+                ],
                 'position' => 3,
                 'extension' => 'jpg',
                 'main' => 1,
                 'id' => 28,
                 'parentId' => null,
-                'attribute' => array(),
-            ),
-            'images' => array(
-                0 => array(
-                    'src' => array(
+                'attribute' => [],
+            ],
+            'images' => [
+                0 => [
+                    'src' => [
                         'original' => 'http://dr.test.shopware.in/next/media/image/Tee-weiss-Pai-Mu-Tan-Dose.jpg',
                         0 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Tee-weiss-Pai-Mu-Tan-Dose_30x30.jpg',
                         1 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Tee-weiss-Pai-Mu-Tan-Dose_57x57.jpg',
@@ -2932,20 +2928,20 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                         3 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Tee-weiss-Pai-Mu-Tan-Dose_140x140.jpg',
                         4 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Tee-weiss-Pai-Mu-Tan-Dose_285x255.jpg',
                         5 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Tee-weiss-Pai-Mu-Tan-Dose_720x600.jpg',
-                    ),
-                    'res' => array(
-                        'original' => array('width' => 0, 'height' => 0,),
+                    ],
+                    'res' => [
+                        'original' => ['width' => 0, 'height' => 0],
                         'description' => '',
-                    ),
+                    ],
                     'position' => 1,
                     'extension' => 'jpg',
                     'main' => 2,
                     'id' => 26,
                     'parentId' => null,
-                    'attribute' => array(),
-                ),
-                1 => array(
-                    'src' => array(
+                    'attribute' => [],
+                ],
+                1 => [
+                    'src' => [
                         'original' => 'http://dr.test.shopware.in/next/media/image/Tee-weiss-Pai-Mu-Tan-Schale.jpg',
                         0 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Tee-weiss-Pai-Mu-Tan-Schale_30x30.jpg',
                         1 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Tee-weiss-Pai-Mu-Tan-Schale_57x57.jpg',
@@ -2953,20 +2949,20 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                         3 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Tee-weiss-Pai-Mu-Tan-Schale_140x140.jpg',
                         4 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Tee-weiss-Pai-Mu-Tan-Schale_285x255.jpg',
                         5 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Tee-weiss-Pai-Mu-Tan-Schale_720x600.jpg',
-                    ),
-                    'res' => array(
-                        'original' => array('width' => 0, 'height' => 0,),
+                    ],
+                    'res' => [
+                        'original' => ['width' => 0, 'height' => 0],
                         'description' => '',
-                    ),
+                    ],
                     'position' => 2,
                     'extension' => 'jpg',
                     'main' => 2,
                     'id' => 27,
                     'parentId' => null,
-                    'attribute' => array(),
-                ),
-                2 => array(
-                    'src' => array(
+                    'attribute' => [],
+                ],
+                2 => [
+                    'src' => [
                         'original' => 'http://dr.test.shopware.in/next/media/image/Tee-weiss-Pai-Mu-Anbaugebiet.jpg',
                         0 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Tee-weiss-Pai-Mu-Anbaugebiet_30x30.jpg',
                         1 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Tee-weiss-Pai-Mu-Anbaugebiet_57x57.jpg',
@@ -2974,34 +2970,33 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                         3 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Tee-weiss-Pai-Mu-Anbaugebiet_140x140.jpg',
                         4 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Tee-weiss-Pai-Mu-Anbaugebiet_285x255.jpg',
                         5 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Tee-weiss-Pai-Mu-Anbaugebiet_720x600.jpg',
-                    ),
-                    'res' => array(
-                        'original' => array('width' => 0, 'height' => 0,),
+                    ],
+                    'res' => [
+                        'original' => ['width' => 0, 'height' => 0],
                         'description' => '',
-                    ),
+                    ],
                     'position' => 4,
                     'extension' => 'jpg',
                     'main' => 2,
                     'id' => 43,
                     'parentId' => null,
-                    'attribute' => array(),
-                ),
-            ),
+                    'attribute' => [],
+                ],
+            ],
             'linkBasket' => 'shopware.php?sViewport=basket&sAdd=SW10013',
             'linkDetails' => 'shopware.php?sViewport=detail&sArticle=13',
             'linkDetailsRewrited' => 'http://dr.test.shopware.in/next/genusswelten/tees-und-zubeh/13/pai-mu-tan-tee-weiss',
             'linkNote' => 'shopware.php?sViewport=note&sAdd=SW10013',
             'linkTellAFriend' => 'shopware.php?sViewport=tellafriend&sDetails=13',
             'linkCheaper' => 'shopware.php?sViewport=cheaper&sDetails=13',
-            'sDownloads' => array(),
+            'sDownloads' => [],
             'sAccessories' => false,
-            'sVoteAverage' => array('average' => '0.00', 'count' => '0',),
-            'sVoteComments' => array(),
+            'sVoteAverage' => ['average' => '0.00', 'count' => '0'],
+            'sVoteComments' => [],
             'sNavigation' => null,
             'sDescriptionKeywords' => 'vis, me, nec, pie, do, nos, qua, perfringo, de, hi, se, crus, In, ora, ius, os, to, Maxime, congelo, extrico',
-        )
-        ,
-        122 => array(
+        ],
+        122 => [
             'articleID' => '122',
             'articleDetailsID' => '256',
             'ordernumber' => 'SW10123.1',
@@ -3063,34 +3058,34 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
             'crossbundlelook' => false,
             'sUpcoming' => '0',
             'sReleasedate' => '',
-            'sLinks' => array(
-                0 => array(
+            'sLinks' => [
+                0 => [
                     'id' => '101',
                     'description' => 'Feinbrennerei Sasse',
                     'link' => 'http://www.sassekorn.de/',
                     'target' => '',
                     'supplierSearch' => false,
-                ),
-                1 => array(
+                ],
+                1 => [
                     'supplierSearch' => true,
                     'description' => 'Feinbrennerei Sasse',
                     'link' => 'shopware.php?sViewport=search&sSearch=2&sSearchMode=supplier&sSearchText=Feinbrennerei+Sasse',
                     'target' => '_parent',
-                ),
-            ),
-            'sRelatedArticles' => array(),
-            'sSimilarArticles' => array(),
+                ],
+            ],
+            'sRelatedArticles' => [],
+            'sSimilarArticles' => [],
             'esd' => false,
-            'sBlockPrices' => array(),
-            'sVariants' => array(),
+            'sBlockPrices' => [],
+            'sVariants' => [],
             'referenceprice' => '14.95',
-            'sUnit' => array('unit' => 'l', 'description' => 'Liter',),
+            'sUnit' => ['unit' => 'l', 'description' => 'Liter'],
             'priceStartingFrom' => '2,99',
             'quantity' => 1,
             'active' => 1,
-            'sConfiguratorValues' => array(),
-            'sConfigurator' => array(
-                0 => array(
+            'sConfiguratorValues' => [],
+            'sConfigurator' => [
+                0 => [
                     'groupID' => 5,
                     'groupname' => 'Flascheninhalt',
                     'groupnameOrig' => 'Flascheninhalt',
@@ -3100,8 +3095,8 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                     'postion' => 3,
                     'selected_value' => null,
                     'selected' => false,
-                    'values' => array(
-                        11 => array(
+                    'values' => [
+                        11 => [
                             'optionID' => 11,
                             'groupID' => 5,
                             'optionnameOrig' => '0,2 Liter',
@@ -3110,8 +3105,8 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                             'optionactive' => 1,
                             'user_selected' => 1,
                             'selected' => 1,
-                        ),
-                        12 => array(
+                        ],
+                        12 => [
                             'optionID' => 12,
                             'groupID' => 5,
                             'optionnameOrig' => '0,7 Liter',
@@ -3120,8 +3115,8 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                             'optionactive' => 1,
                             'user_selected' => 0,
                             'selected' => 0,
-                        ),
-                        32 => array(
+                        ],
+                        32 => [
                             'optionID' => 32,
                             'groupID' => 5,
                             'optionnameOrig' => '1,0 Liter',
@@ -3130,8 +3125,8 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                             'optionactive' => 1,
                             'user_selected' => 0,
                             'selected' => 0,
-                        ),
-                        33 => array(
+                        ],
+                        33 => [
                             'optionID' => 33,
                             'groupID' => 5,
                             'optionnameOrig' => '1,5 Liter',
@@ -3140,20 +3135,20 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                             'optionactive' => 1,
                             'user_selected' => 0,
                             'selected' => 0,
-                        ),
-                    ),
+                        ],
+                    ],
                     'user_selected' => false,
-                ),
-            ),
-            'sConfiguratorSettings' => array(
+                ],
+            ],
+            'sConfiguratorSettings' => [
                 'articleID' => 122,
                 'type' => 0,
                 'template' => 'article_config_upprice.tpl',
                 'instock' => false,
                 'upprice' => 0,
-            ),
-            'image' => array(
-                'src' => array(
+            ],
+            'image' => [
+                'src' => [
                     'original' => 'http://dr.test.shopware.in/next/media/image/Sasse-Korn-02-l.jpg',
                     0 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Sasse-Korn-02-l_30x30.jpg',
                     1 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Sasse-Korn-02-l_57x57.jpg',
@@ -3161,31 +3156,31 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                     3 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Sasse-Korn-02-l_140x140.jpg',
                     4 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Sasse-Korn-02-l_285x255.jpg',
                     5 => 'http://dr.test.shopware.in/next/media/image/thumbnail/Sasse-Korn-02-l_720x600.jpg',
-                ),
-                'res' => array(
-                    'original' => array('width' => 0, 'height' => 0,),
+                ],
+                'res' => [
+                    'original' => ['width' => 0, 'height' => 0],
                     'description' => '',
-                ),
+                ],
                 'position' => 1,
                 'extension' => 'jpg',
                 'main' => 1,
                 'id' => 330,
                 'parentId' => null,
-                'attribute' => array(),
-            ),
-            'images' => array(),
+                'attribute' => [],
+            ],
+            'images' => [],
             'linkBasket' => 'shopware.php?sViewport=basket&sAdd=SW10123.1',
             'linkDetails' => 'shopware.php?sViewport=detail&sArticle=122',
             'linkDetailsRewrited' => 'http://dr.test.shopware.in/next/genusswelten/edelbraende/122/sasse-korn-32',
             'linkNote' => 'shopware.php?sViewport=note&sAdd=SW10123.1',
             'linkTellAFriend' => 'shopware.php?sViewport=tellafriend&sDetails=122',
             'linkCheaper' => 'shopware.php?sViewport=cheaper&sDetails=122',
-            'sDownloads' => array(),
+            'sDownloads' => [],
             'sAccessories' => false,
-            'sVoteAverage' => array('average' => '0.00', 'count' => '0',),
-            'sVoteComments' => array(),
-            'sProperties' => array(
-                7 => array(
+            'sVoteAverage' => ['average' => '0.00', 'count' => '0'],
+            'sVoteComments' => [],
+            'sProperties' => [
+                7 => [
                     'id' => '7',
                     'optionID' => '7',
                     'name' => 'Trinktemperatur',
@@ -3196,9 +3191,9 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                     'nameTranslation' => null,
                     'groupNameTranslation' => null,
                     'valueTranslation' => null,
-                    'values' => array(0 => 'Gekühlt',),
-                ),
-                6 => array(
+                    'values' => [0 => 'Gekühlt'],
+                ],
+                6 => [
                     'id' => '6',
                     'optionID' => '6',
                     'name' => 'Geschmack',
@@ -3209,9 +3204,9 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                     'nameTranslation' => null,
                     'groupNameTranslation' => null,
                     'valueTranslation' => null,
-                    'values' => array(0 => 'herb',),
-                ),
-                4 => array(
+                    'values' => [0 => 'herb'],
+                ],
+                4 => [
                     'id' => '4',
                     'optionID' => '4',
                     'name' => 'Farbe',
@@ -3222,9 +3217,9 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                     'nameTranslation' => null,
                     'groupNameTranslation' => null,
                     'valueTranslation' => null,
-                    'values' => array(0 => 'klar',),
-                ),
-                2 => array(
+                    'values' => [0 => 'klar'],
+                ],
+                2 => [
                     'id' => '2',
                     'optionID' => '2',
                     'name' => 'Flaschengröße',
@@ -3235,14 +3230,14 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                     'nameTranslation' => null,
                     'groupNameTranslation' => null,
                     'valueTranslation' => null,
-                    'values' => array(
+                    'values' => [
                         0 => '0,2 Liter',
                         1 => '0,7 Liter',
                         2 => '1,0 Liter',
                         3 => '1,5 Liter',
-                    ),
-                ),
-                1 => array(
+                    ],
+                ],
+                1 => [
                     'id' => '1',
                     'optionID' => '1',
                     'name' => 'Alkoholgehalt',
@@ -3253,14 +3248,13 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                     'nameTranslation' => null,
                     'groupNameTranslation' => null,
                     'valueTranslation' => null,
-                    'values' => array(0 => '>30%',),
-                ),
-            ),
+                    'values' => [0 => '>30%'],
+                ],
+            ],
             'sNavigation' => null,
             'sDescriptionKeywords' => 'arx, edo, incomposite, cupio, subsidarius, Diffinio, Fervesco, quo, ut, Quidne, oro, sanctimonialis, vae, ferramentum, Promo, laqueus, Marcieniensis, quicumque, adula, per',
-        )
-        ,
-        216 => array(
+        ],
+        216 => [
             'articleID' => '216',
             'articleDetailsID' => '761',
             'ordernumber' => 'SW10214.1',
@@ -3322,33 +3316,33 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
             'crossbundlelook' => false,
             'sUpcoming' => '0',
             'sReleasedate' => '',
-            'sLinks' => array(
-                0 => array(
+            'sLinks' => [
+                0 => [
                     'id' => '137',
                     'description' => 'stop the water while using me',
                     'link' => 'http://stop-the-water-while-using-me.com',
                     'target' => '',
                     'supplierSearch' => false,
-                ),
-                1 => array(
+                ],
+                1 => [
                     'supplierSearch' => true,
                     'description' => 'stop the water while using me',
                     'link' => 'shopware.php?sViewport=search&sSearch=15&sSearchMode=supplier&sSearchText=stop+the+water+while+using+me',
                     'target' => '_parent',
-                ),
-            ),
-            'sRelatedArticles' => array(),
-            'sSimilarArticles' => array(),
+                ],
+            ],
+            'sRelatedArticles' => [],
+            'sSimilarArticles' => [],
             'esd' => false,
-            'sBlockPrices' => array(),
-            'sVariants' => array(),
+            'sBlockPrices' => [],
+            'sVariants' => [],
             'referenceprice' => '10.70',
             'priceStartingFrom' => '21,40',
             'quantity' => 1,
             'active' => 1,
-            'sConfiguratorValues' => array(),
-            'sConfigurator' => array(
-                0 => array(
+            'sConfiguratorValues' => [],
+            'sConfigurator' => [
+                0 => [
                     'groupID' => 14,
                     'groupname' => 'Inhalt',
                     'groupnameOrig' => 'Inhalt',
@@ -3358,8 +3352,8 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                     'postion' => 16,
                     'selected_value' => null,
                     'selected' => false,
-                    'values' => array(
-                        88 => array(
+                    'values' => [
+                        88 => [
                             'optionID' => 88,
                             'groupID' => 14,
                             'optionnameOrig' => '200ml',
@@ -3368,8 +3362,8 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                             'optionactive' => 1,
                             'user_selected' => 1,
                             'selected' => 1,
-                        ),
-                        89 => array(
+                        ],
+                        89 => [
                             'optionID' => 89,
                             'groupID' => 14,
                             'optionnameOrig' => '500ml',
@@ -3378,8 +3372,8 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                             'optionactive' => 1,
                             'user_selected' => 0,
                             'selected' => 0,
-                        ),
-                        90 => array(
+                        ],
+                        90 => [
                             'optionID' => 90,
                             'groupID' => 14,
                             'optionnameOrig' => '5l',
@@ -3388,20 +3382,20 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                             'optionactive' => 1,
                             'user_selected' => 0,
                             'selected' => 0,
-                        ),
-                    ),
+                        ],
+                    ],
                     'user_selected' => false,
-                ),
-            ),
-            'sConfiguratorSettings' => array(
+                ],
+            ],
+            'sConfiguratorSettings' => [
                 'articleID' => 216,
                 'type' => 0,
                 'template' => 'article_config_upprice.tpl',
                 'instock' => false,
                 'upprice' => 0,
-            ),
-            'image' => array(
-                'src' => array(
+            ],
+            'image' => [
+                'src' => [
                     'original' => 'http://dr.test.shopware.in/next/media/image/All-Natural-Sesame-Sage-Body-Lotion.jpg',
                     0 => 'http://dr.test.shopware.in/next/media/image/thumbnail/All-Natural-Sesame-Sage-Body-Lotion_30x30.jpg',
                     1 => 'http://dr.test.shopware.in/next/media/image/thumbnail/All-Natural-Sesame-Sage-Body-Lotion_57x57.jpg',
@@ -3409,21 +3403,21 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                     3 => 'http://dr.test.shopware.in/next/media/image/thumbnail/All-Natural-Sesame-Sage-Body-Lotion_140x140.jpg',
                     4 => 'http://dr.test.shopware.in/next/media/image/thumbnail/All-Natural-Sesame-Sage-Body-Lotion_285x255.jpg',
                     5 => 'http://dr.test.shopware.in/next/media/image/thumbnail/All-Natural-Sesame-Sage-Body-Lotion_720x600.jpg',
-                ),
-                'res' => array(
-                    'original' => array('width' => 0, 'height' => 0,),
+                ],
+                'res' => [
+                    'original' => ['width' => 0, 'height' => 0],
                     'description' => '',
-                ),
+                ],
                 'position' => 1,
                 'extension' => 'jpg',
                 'main' => 1,
                 'id' => 530,
                 'parentId' => null,
-                'attribute' => array(),
-            ),
-            'images' => array(
-                0 => array(
-                    'src' => array(
+                'attribute' => [],
+            ],
+            'images' => [
+                0 => [
+                    'src' => [
                         'original' => 'http://dr.test.shopware.in/next/media/image/All-Natural-Sesame-Sage-Body-Lotion-Hintergrund.jpg',
                         0 => 'http://dr.test.shopware.in/next/media/image/thumbnail/All-Natural-Sesame-Sage-Body-Lotion-Hintergrund_30x30.jpg',
                         1 => 'http://dr.test.shopware.in/next/media/image/thumbnail/All-Natural-Sesame-Sage-Body-Lotion-Hintergrund_57x57.jpg',
@@ -3431,35 +3425,35 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
                         3 => 'http://dr.test.shopware.in/next/media/image/thumbnail/All-Natural-Sesame-Sage-Body-Lotion-Hintergrund_140x140.jpg',
                         4 => 'http://dr.test.shopware.in/next/media/image/thumbnail/All-Natural-Sesame-Sage-Body-Lotion-Hintergrund_285x255.jpg',
                         5 => 'http://dr.test.shopware.in/next/media/image/thumbnail/All-Natural-Sesame-Sage-Body-Lotion-Hintergrund_720x600.jpg',
-                    ),
-                    'res' => array(
-                        'original' => array('width' => 0, 'height' => 0,),
+                    ],
+                    'res' => [
+                        'original' => ['width' => 0, 'height' => 0],
                         'description' => '',
-                    ),
+                    ],
                     'position' => 2,
                     'extension' => 'jpg',
                     'main' => 2,
                     'id' => 531,
                     'parentId' => null,
-                    'attribute' => array(),
-                ),
-            ),
+                    'attribute' => [],
+                ],
+            ],
             'linkBasket' => 'shopware.php?sViewport=basket&sAdd=SW10214.1',
             'linkDetails' => 'shopware.php?sViewport=detail&sArticle=216',
             'linkDetailsRewrited' => 'http://dr.test.shopware.in/next/sommerwelten/beauty-und-care/216/all-natural-sesame-sage-bodylotion',
             'linkNote' => 'shopware.php?sViewport=note&sAdd=SW10214.1',
             'linkTellAFriend' => 'shopware.php?sViewport=tellafriend&sDetails=216',
             'linkCheaper' => 'shopware.php?sViewport=cheaper&sDetails=216',
-            'sDownloads' => array(),
+            'sDownloads' => [],
             'sAccessories' => false,
-            'sVoteAverage' => array('average' => '0.00', 'count' => '0',),
-            'sVoteComments' => array(),
+            'sVoteAverage' => ['average' => '0.00', 'count' => '0'],
+            'sVoteComments' => [],
             'sNavigation' => null,
             'sDescriptionKeywords' => 'res, dux, pars, Nos, arx, Alternis, eniteo, Subnoto, qualiscumque, appositus, instigatus, vas, inhumanitas, iam, Charybdis, sano, industrius, perspicuus, flagitiosa, eveho',
-        )
-    );
+        ],
+    ];
 
-    protected $articleProperties = array(
+    protected $articleProperties = [
         'articleID',
         'articleDetailsID',
         'additionaltext',
@@ -3479,8 +3473,8 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
         'taxID',
         'unitID',
         'supplierImg',
-        'tax'
-    );
+        'tax',
+    ];
 
     /**
      * Module instance
@@ -3511,7 +3505,7 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
     public function testArticles()
     {
         Shopware()->Container()->get('shopware_storefront.context_service')->initializeShopContext();
-        $this->dispatch("/");
+        $this->dispatch('/');
 
         foreach ($this->articles as $id => $expected) {
             $data = $this->Module()->sGetArticleById($id);
@@ -3524,15 +3518,15 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
 
     public function testGetDisabledArticleById()
     {
-        $this->dispatch("/");
+        $this->dispatch('/');
 
         $id = $this->articles[2]['articleID'];
 
-        Shopware()->Db()->query('UPDATE s_articles SET active = 0 WHERE id = ?', array($id));
+        Shopware()->Db()->query('UPDATE s_articles SET active = 0 WHERE id = ?', [$id]);
 
         $this->assertCount(0, $this->Module()->sGetArticleById($id));
 
-        Shopware()->Db()->query('UPDATE s_articles SET active = 1 WHERE id = ?', array($id));
+        Shopware()->Db()->query('UPDATE s_articles SET active = 1 WHERE id = ?', [$id]);
 
         $this->assertGreaterThan(0, count($this->Module()->sGetArticleById($id)));
     }
@@ -3548,7 +3542,7 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
             $this->assertEquals(
                 $expected[$property],
                 $data[$property],
-                sprintf("Property %s dont match for article : %s - %s", $property, $expected['ordernumber'], $expected['articleName'])
+                sprintf('Property %s dont match for article : %s - %s', $property, $expected['ordernumber'], $expected['articleName'])
             );
         }
     }
@@ -3567,7 +3561,7 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
         $this->assertCount(count($expected['sRelatedArticles']), $data['sRelatedArticles']);
         $mediaService = Shopware()->Container()->get('shopware_media.media_service');
 
-        for ($i=0; $i < count($expected['sRelatedArticles']); $i++) {
+        for ($i = 0; $i < count($expected['sRelatedArticles']); ++$i) {
             $expectedArticle = $expected['sRelatedArticles'][$i];
 
             if (isset($expectedArticle['supplierImg'])) {

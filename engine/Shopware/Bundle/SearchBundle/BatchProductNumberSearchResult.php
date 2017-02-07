@@ -16,7 +16,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU Affero General Public License for more details.
  *
- * 'Shopware' is a registered trademark of shopware AG.
+ * "Shopware" is a registered trademark of shopware AG.
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
@@ -47,8 +47,10 @@ class BatchProductNumberSearchResult
      * Returns a single storage value.
      *
      * @param string $key
-     * @return BaseProduct[]
+     *
      * @throws \OutOfBoundsException
+     *
+     * @return BaseProduct[]
      */
     public function get($key)
     {

@@ -35,7 +35,7 @@ use Shopware\Models\Shop\Shop;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\AttributeBundle\Repository\Reader
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
 class ProductReader extends GenericReader
@@ -52,9 +52,10 @@ class ProductReader extends GenericReader
 
     /**
      * ProductReader constructor.
-     * @param string $entity
-     * @param ModelManager $entityManager
-     * @param ContextServiceInterface $contextService
+     *
+     * @param string                         $entity
+     * @param ModelManager                   $entityManager
+     * @param ContextServiceInterface        $contextService
      * @param AdditionalTextServiceInterface $additionalTextService
      */
     public function __construct(
@@ -70,17 +71,50 @@ class ProductReader extends GenericReader
 
     /**
      * @param int[]|string[] $identifiers
+     *
      * @return array[]
      */
     public function getList($identifiers)
     {
         $products = parent::getList($identifiers);
         $products = $this->assignAdditionalText($products);
+
         return $products;
     }
 
     /**
+     * {@inheritdoc}
+     */
+    protected function createListQuery()
+    {
+        $query = $this->entityManager->createQueryBuilder();
+        $query->select([
+            'variant.id as variantId',
+            'article.id as articleId',
+            'article.name',
+            'variant.number',
+            'variant.inStock',
+            'variant.additionalText',
+            'article.active as articleActive',
+            'variant.active as variantActive',
+        ]);
+        $query->from(Detail::class, 'variant', $this->getIdentifierField());
+        $query->innerJoin('variant.article', 'article');
+
+        return $query;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getIdentifierField()
+    {
+        return 'variant.number';
+    }
+
+    /**
      * @param array[] $articles
+     *
      * @return array[]
      */
     private function assignAdditionalText(array $articles)
@@ -113,6 +147,7 @@ class ProductReader extends GenericReader
 
     /**
      * @param array[] $articles
+     *
      * @return ListProduct[]
      */
     private function buildListProducts(array $articles)
@@ -123,35 +158,7 @@ class ProductReader extends GenericReader
             $product->setAdditional($article['additionalText']);
             $products[$article['number']] = $product;
         }
+
         return $products;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    protected function createListQuery()
-    {
-        $query = $this->entityManager->createQueryBuilder();
-        $query->select([
-            'variant.id as variantId',
-            'article.id as articleId',
-            'article.name',
-            'variant.number',
-            'variant.inStock',
-            'variant.additionalText',
-            'article.active as articleActive',
-            'variant.active as variantActive',
-        ]);
-        $query->from(Detail::class, 'variant', $this->getIdentifierField());
-        $query->innerJoin('variant.article', 'article');
-        return $query;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    protected function getIdentifierField()
-    {
-        return 'variant.number';
     }
 }

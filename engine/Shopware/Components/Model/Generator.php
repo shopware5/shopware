@@ -168,38 +168,42 @@ class %className% extends ModelEntity
 
     /**
      * Contains the schema manager which is used to get the database definition
+     *
      * @var AbstractSchemaManager
      */
     protected $schemaManager = null;
 
     /**
      * Contains the table mapping for the existing showpare models.
+     *
      * @var array
      */
-    protected $tableMapping = array();
+    protected $tableMapping = [];
 
     /**
      * Target path for the generated models
+     *
      * @var string
      */
     protected $path = '';
 
     /**
      * Path of the shopware models directory.
+     *
      * @var string
      */
     protected $modelPath = '';
 
     /**
      * @param AbstractSchemaManager $schemaManager
-     * @param string $path
-     * @param string $modelPath
+     * @param string                $path
+     * @param string                $modelPath
      */
     public function __construct(AbstractSchemaManager $schemaManager, $path, $modelPath)
     {
         $this->schemaManager = $schemaManager;
-        $this->path          = $path;
-        $this->modelPath     = $modelPath;
+        $this->path = $path;
+        $this->modelPath = $modelPath;
     }
 
     /**
@@ -242,11 +246,13 @@ class %className% extends ModelEntity
         if (empty($this->tableMapping)) {
             $this->tableMapping = $this->createTableMapping();
         }
+
         return $this->tableMapping;
     }
 
     /**
      * @param string $tableName
+     *
      * @return int
      */
     public function getSourceCodeForTable($tableName)
@@ -263,9 +269,10 @@ class %className% extends ModelEntity
      * @param array $tableNames
      *
      * @throws \Exception
+     *
      * @return array
      */
-    public function generateAttributeModels($tableNames = array())
+    public function generateAttributeModels($tableNames = [])
     {
         if (empty($this->tableMapping)) {
             $this->tableMapping = $this->createTableMapping();
@@ -274,10 +281,10 @@ class %className% extends ModelEntity
         try {
             $this->createTargetDirectory($this->getPath());
         } catch (\Exception $e) {
-            return array('success' => false, 'error' => self::CREATE_TARGET_DIRECTORY_FAILED, 'message' => $e->getMessage());
+            return ['success' => false, 'error' => self::CREATE_TARGET_DIRECTORY_FAILED, 'message' => $e->getMessage()];
         }
 
-        $errors = array();
+        $errors = [];
         foreach ($this->getSchemaManager()->listTableNames() as $tableName) {
             if (!empty($tableNames) && !in_array($tableName, $tableNames)) {
                 continue;
@@ -295,15 +302,16 @@ class %className% extends ModelEntity
             }
         }
 
-        return array('success' => empty($errors), 'errors' => $errors);
+        return ['success' => empty($errors), 'errors' => $errors];
     }
 
     /**
      * @param $table \Doctrine\DBAL\Schema\Table
      * @param $sourceCode string
      *
-     * @return int
      * @throws \Exception
+     *
+     * @return int
      */
     public function createModelFile($table, $sourceCode)
     {
@@ -321,16 +329,95 @@ class %className% extends ModelEntity
         $file = $this->getPath() . $className . '.php';
 
         if (file_exists($file) && !is_writable($file)) {
-            throw new \Exception("File: " . $file . " isn't writable, please check the file permissions for this model!", 501);
+            throw new \Exception('File: ' . $file . " isn't writable, please check the file permissions for this model!", 501);
         }
 
         $result = file_put_contents($file, $sourceCode);
 
-        return ($result !== false);
+        return $result !== false;
+    }
+
+    /**
+     * Helper function to convert some database types into supported
+     * php types. For example the database type "text" will be converted
+     * to "string"
+     *
+     * @param $column \Doctrine\DBAL\Schema\Column
+     *
+     * @return string
+     */
+    public function getPropertyTypeOfColumnType($column)
+    {
+        if ($column->getType() instanceof \Doctrine\DBAL\Types\TextType) {
+            return 'string';
+        }
+
+        return $column->getType()->getName();
+    }
+
+    /**
+     * Helper function to create an table - class mapping of all defined
+     * shopware models.
+     * Used for the parent classes of attributes and association target entities.
+     *
+     * @return array
+     */
+    public function createTableMapping()
+    {
+        $iterator = new \RecursiveIteratorIterator(
+            new \RecursiveDirectoryIterator($this->getModelPath()),
+            \RecursiveIteratorIterator::SELF_FIRST
+        );
+
+        $classes = [];
+
+        /** @var $file \SplFileInfo */
+        foreach ($iterator as $file) {
+            $extension = pathinfo($file->getFilename(), PATHINFO_EXTENSION);
+            if ($file->isDir() || $extension !== 'php') {
+                continue;
+            }
+
+            $content = file_get_contents($file->getPathname());
+
+            //preg match for the model class name!
+            $matches = [];
+            preg_match('/class\s+([a-zA-Z0-9_]+)/', $content, $matches);
+            if (count($matches) === 0) {
+                continue;
+            }
+            $className = $matches[1];
+
+            //preg match for the model namespace!
+            $matches = [];
+            preg_match('/namespace\s+(.*);/', $content, $matches);
+            if (count($matches) === 0) {
+                continue;
+            }
+            $namespace = $matches[1];
+
+            //preg match for the model table name!
+            $matches = [];
+            preg_match('/@ORM\\\Table\\(name="(.*)"\\)/', $content, $matches);
+
+            //repositories has no table annoation.
+            if (count($matches) === 0) {
+                continue;
+            }
+            $tableName = $matches[1];
+
+            $classes[$tableName] = [
+                'class' => $className,
+                'namespace' => $namespace,
+            ];
+        }
+
+        return $classes;
     }
 
     /**
      * Creates a new directory for the models which will be generated.
+     *
      * @param string $dir
      */
     protected function createTargetDirectory($dir)
@@ -349,6 +436,7 @@ class %className% extends ModelEntity
      * the passed table name.
      *
      * @param $table \Doctrine\DBAL\Schema\Table
+     *
      * @return int
      */
     protected function generateModel($table)
@@ -382,7 +470,7 @@ class %className% extends ModelEntity
         $associationFunctions = $this->getAssociationsFunctions($table);
 
         //to concat the different source code paths, we create an array with all source code fragments
-        $paths = array(
+        $paths = [
             $fileHeader,
             $licenceHeader,
             $namespaceHeader,
@@ -392,8 +480,8 @@ class %className% extends ModelEntity
             $constructor,
             implode("\n", $columnFunctions),
             implode("\n", $associationFunctions),
-            '}'
-        );
+            '}',
+        ];
 
         //than we implode the source code paths with a line break
         $sourceCode = implode("\n", $paths);
@@ -403,7 +491,9 @@ class %className% extends ModelEntity
 
     /**
      * Returns the class definition for the passed table object
+     *
      * @param $table \Doctrine\DBAL\Schema\Table
+     *
      * @return mixed
      */
     protected function getClassDefinition($table)
@@ -413,20 +503,19 @@ class %className% extends ModelEntity
 
         //check if the passed table is an shopware attribute table.
         if (strpos($table->getName(), '_attributes')) {
-
             //if the table is an attribute table we have to use the class name of the parent table.
             $parentClass = str_replace('_attributes', '', $table->getName());
             $className = $this->getClassNameOfTableName($parentClass);
 
             //if the passed table is not an attribute table, we have to check if the table is already declared
         } elseif (array_key_exists($table->getName(), $this->getTableMapping())) {
-
             //if this is the case we will use the already declared class name
             $className = $this->tableMapping[$table->getName()]['class'];
         }
 
         $source = str_replace('%className%', $className, $source);
         $source = str_replace('%tableName%', $table->getName(), $source);
+
         return $source;
     }
 
@@ -437,6 +526,7 @@ class %className% extends ModelEntity
      * each already declared shopware model/table.
      *
      * @param $tableName
+     *
      * @return string
      */
     protected function getClassNameOfTableName($tableName)
@@ -446,7 +536,7 @@ class %className% extends ModelEntity
         }
 
         $parentTable = $this->tableMapping[$tableName];
-        $fragments = explode("\\", $parentTable['namespace']);
+        $fragments = explode('\\', $parentTable['namespace']);
         $lastFragment = array_pop($fragments);
 
         if ($lastFragment === $parentTable['class']) {
@@ -464,15 +554,17 @@ class %className% extends ModelEntity
      * only the defintion of the properties, not of the getters and seters.
      *
      * @param $table \Doctrine\DBAL\Schema\Table
+     *
      * @return array
      */
     protected function getColumnsProperties($table)
     {
-        $columns = array();
-        /**@var $column \Doctrine\DBAL\Schema\Column*/
+        $columns = [];
+        /** @var $column \Doctrine\DBAL\Schema\Column */
         foreach ($table->getColumns() as $column) {
             $columns[] = $this->getColumnProperty($table, $column);
         }
+
         return $columns;
     }
 
@@ -485,6 +577,7 @@ class %className% extends ModelEntity
      *
      * @param $table \Doctrine\DBAL\Schema\Table
      * @param $column \Doctrine\DBAL\Schema\Column
+     *
      * @return string
      */
     protected function getColumnProperty($table, $column)
@@ -511,7 +604,6 @@ class %className% extends ModelEntity
         return $source;
     }
 
-
     /**
      * Helper function to convert the table column name to the shopware standard definition of
      * a class property. Filters the under score words to camcel case and
@@ -531,16 +623,18 @@ class %className% extends ModelEntity
             $table = $foreignKey->getForeignTableName();
 
             $fullName = $this->getClassNameOfTableName($table);
+
             return lcfirst($fullName) . 'Id';
-        } else {
-            return lcfirst($this->underscoreToCamelCase($column->getName()));
         }
+
+        return lcfirst($this->underscoreToCamelCase($column->getName()));
     }
 
     /**
      * Converts underscore separated string into a camelCase separated string
      *
      * @param string $str
+     *
      * @return string
      */
     protected function underscoreToCamelCase($str)
@@ -560,11 +654,12 @@ class %className% extends ModelEntity
      *
      * @param $table \Doctrine\DBAL\Schema\Table
      * @param $column \Doctrine\DBAL\Schema\Column
+     *
      * @return bool|\Doctrine\DBAL\Schema\ForeignKeyConstraint
      */
     protected function getColumnForeignKey($table, $column)
     {
-        /**@var $foreignKey \Doctrine\DBAL\Schema\ForeignKeyConstraint*/
+        /** @var $foreignKey \Doctrine\DBAL\Schema\ForeignKeyConstraint */
         foreach ($table->getForeignKeys() as $foreignKey) {
             foreach ($foreignKey->getLocalColumns() as $foreignKeyColumn) {
                 if ($foreignKeyColumn === $column->getName()) {
@@ -572,6 +667,7 @@ class %className% extends ModelEntity
                 }
             }
         }
+
         return null;
     }
 
@@ -580,32 +676,16 @@ class %className% extends ModelEntity
      * a string which can be used for the doctrine annoation.
      *
      * @param $column \Doctrine\DBAL\Schema\Column
+     *
      * @return string
      */
     protected function getColumnNullProperty($column)
     {
         if ($column->getNotnull()) {
             return 'false';
-        } else {
-            return 'true';
         }
-    }
 
-    /**
-     * Helper function to convert some database types into supported
-     * php types. For example the database type "text" will be converted
-     * to "string"
-     *
-     * @param $column \Doctrine\DBAL\Schema\Column
-     * @return string
-     */
-    public function getPropertyTypeOfColumnType($column)
-    {
-        if ($column->getType() instanceof \Doctrine\DBAL\Types\TextType) {
-            return 'string';
-        } else {
-            return $column->getType()->getName();
-        }
+        return 'true';
     }
 
     /**
@@ -616,6 +696,7 @@ class %className% extends ModelEntity
      *
      * @param $table \Doctrine\DBAL\Schema\Table
      * @param $column \Doctrine\DBAL\Schema\Column
+     *
      * @return bool
      */
     protected function isPrimaryColumn($table, $column)
@@ -628,6 +709,7 @@ class %className% extends ModelEntity
                 return true;
             }
         }
+
         return false;
     }
 
@@ -636,16 +718,19 @@ class %className% extends ModelEntity
      * code for the doctrine associaton properties for the passed table object.
      * This function creates only the property definition source code, not the getter
      * and setter source code for the properties.
+     *
      * @param $table \Doctrine\DBAL\Schema\Table
+     *
      * @return array
      */
     protected function getAssociationProperties($table)
     {
-        $associations = array();
-        /**@var $foreignKey \Doctrine\DBAL\Schema\ForeignKeyConstraint*/
+        $associations = [];
+        /** @var $foreignKey \Doctrine\DBAL\Schema\ForeignKeyConstraint */
         foreach ($table->getForeignKeys() as $foreignKey) {
             $associations[] = $this->getAssociationProperty($table, $foreignKey);
         }
+
         return $associations;
     }
 
@@ -657,6 +742,7 @@ class %className% extends ModelEntity
      *
      * @param $table \Doctrine\DBAL\Schema\Table
      * @param $foreignKey \Doctrine\DBAL\Schema\ForeignKeyConstraint
+     *
      * @return string
      */
     protected function getAssociationProperty($table, $foreignKey)
@@ -678,6 +764,7 @@ class %className% extends ModelEntity
         $source = str_replace('%localColumn%', $localColumn[0], $source);
         $source = str_replace('%foreignColumn%', $foreignColumn[0], $source);
         $source = str_replace('%property%', lcfirst($className), $source);
+
         return $source;
     }
 
@@ -686,12 +773,13 @@ class %className% extends ModelEntity
      * not-null properties with their respective default vaulue.
      *
      * @param $table \Doctrine\DBAL\Schema\Table
+     *
      * @return string
      */
     protected function getConstructor($table)
     {
         // Create the property initializations
-        $initializations = array();
+        $initializations = [];
         foreach ($table->getColumns() as $column) {
             if ($column->getDefault() === null || $this->isPrimaryColumn($table, $column)) {
                 continue;
@@ -715,17 +803,17 @@ class %className% extends ModelEntity
             $default = $column->getDefault();
             switch ($type) {
                 case 'string':
-                    $default = '"'.$default.'"';
+                    $default = '"' . $default . '"';
                     break;
                 case 'boolean':
                     $default = ($default) ? 'true' : 'false';
                     break;
                 case 'date':
                 case 'datetime':
-                    $default = 'new \DateTime("'.$default.'")';
+                    $default = 'new \DateTime("' . $default . '")';
             }
 
-            $initializations[] = '$this->'.lcfirst($property).' = '.$default.';';
+            $initializations[] = '$this->' . lcfirst($property) . ' = ' . $default . ';';
         }
         if (count($initializations) === 0) {
             // No need for a constructor
@@ -744,14 +832,16 @@ class %className% extends ModelEntity
      * getter and setter for all table columns properties.
      *
      * @param $table \Doctrine\DBAL\Schema\Table
+     *
      * @return array
      */
     protected function getColumnsFunctions($table)
     {
-        $functions = array();
+        $functions = [];
         foreach ($table->getColumns() as $column) {
             $functions[] = $this->getColumnFunctions($table, $column);
         }
+
         return $functions;
     }
 
@@ -761,6 +851,7 @@ class %className% extends ModelEntity
      *
      * @param $table \Doctrine\DBAL\Schema\Table
      * @param $column \Doctrine\DBAL\Schema\Column
+     *
      * @return string
      */
     protected function getColumnFunctions($table, $column)
@@ -780,15 +871,17 @@ class %className% extends ModelEntity
      * properties of the passed table object.
      *
      * @param $table \Doctrine\DBAL\Schema\Table
+     *
      * @return array
      */
     protected function getAssociationsFunctions($table)
     {
-        $columns = array();
-        /**@var $foreignKey \Doctrine\DBAL\Schema\ForeignKeyConstraint*/
+        $columns = [];
+        /** @var $foreignKey \Doctrine\DBAL\Schema\ForeignKeyConstraint */
         foreach ($table->getForeignKeys() as $foreignKey) {
             $columns[] = $this->getAssociationFunctions($foreignKey);
         }
+
         return $columns;
     }
 
@@ -797,6 +890,7 @@ class %className% extends ModelEntity
      * foreign key constraint object.
      *
      * @param $foreignKey \Doctrine\DBAL\Schema\ForeignKeyConstraint
+     *
      * @return string
      */
     protected function getAssociationFunctions($foreignKey)
@@ -806,65 +900,8 @@ class %className% extends ModelEntity
 
         $source = str_replace('%upperPropertyName%', ucfirst($className), $source);
         $source = str_replace('%lowerPropertyName%', lcfirst($className), $source);
+
         return $source;
-    }
-
-    /**
-     * Helper function to create an table - class mapping of all defined
-     * shopware models.
-     * Used for the parent classes of attributes and association target entities.
-     * @return array
-     */
-    public function createTableMapping()
-    {
-        $iterator = new \RecursiveIteratorIterator(
-            new \RecursiveDirectoryIterator($this->getModelPath()),
-            \RecursiveIteratorIterator::SELF_FIRST
-        );
-
-        $classes = array();
-
-        /**@var $file \SplFileInfo*/
-        foreach ($iterator as $file) {
-            $extension = pathinfo($file->getFilename(), PATHINFO_EXTENSION);
-            if ($file->isDir() || $extension !== 'php') {
-                continue;
-            }
-
-            $content = file_get_contents($file->getPathname());
-
-            //preg match for the model class name!
-            $matches = array();
-            preg_match('/class\s+([a-zA-Z0-9_]+)/', $content, $matches);
-            if (count($matches) === 0) {
-                continue;
-            }
-            $className = $matches[1];
-
-            //preg match for the model namespace!
-            $matches = array();
-            preg_match('/namespace\s+(.*);/', $content, $matches);
-            if (count($matches) === 0) {
-                continue;
-            }
-            $namespace = $matches[1];
-
-            //preg match for the model table name!
-            $matches = array();
-            preg_match('/@ORM\\\Table\\(name="(.*)"\\)/', $content, $matches);
-
-            //repositories has no table annoation.
-            if (count($matches) === 0) {
-                continue;
-            }
-            $tableName = $matches[1];
-
-            $classes[$tableName] = array(
-                'class' => $className,
-                'namespace' => $namespace
-            );
-        }
-        return $classes;
     }
 
     /**
@@ -872,6 +909,7 @@ class %className% extends ModelEntity
      *
      * @param string $haystack
      * @param string $needle
+     *
      * @return bool
      */
     private function stringEndsWith($haystack, $needle)
@@ -881,6 +919,6 @@ class %className% extends ModelEntity
             return true;
         }
 
-        return (substr($haystack, -$length) === $needle);
+        return substr($haystack, -$length) === $needle;
     }
 }

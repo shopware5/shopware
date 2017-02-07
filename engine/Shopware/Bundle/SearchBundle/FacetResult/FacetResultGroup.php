@@ -30,7 +30,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\SearchBundle\FacetResult
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class FacetResultGroup extends Extendable implements FacetResultInterface
@@ -57,10 +57,10 @@ class FacetResultGroup extends Extendable implements FacetResultInterface
 
     /**
      * @param FacetResultInterface[] $facetResults
-     * @param string|null $headline
-     * @param string $facetName
-     * @param Attribute[] $attributes
-     * @param string|null $template
+     * @param string|null            $headline
+     * @param string                 $facetName
+     * @param Attribute[]            $attributes
+     * @param string|null            $template
      */
     public function __construct(
         $facetResults,
@@ -85,7 +85,7 @@ class FacetResultGroup extends Extendable implements FacetResultInterface
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isActive()
     {
@@ -109,7 +109,7 @@ class FacetResultGroup extends Extendable implements FacetResultInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getTemplate()
     {

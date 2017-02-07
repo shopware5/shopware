@@ -1,4 +1,26 @@
 <?php
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
 
 namespace Shopware\Tests\Functional\Bundle\SearchBundle\Facet;
 
@@ -20,23 +42,23 @@ class VoteAverageFacetTest extends TestCase
         $result = $this->search(
             [
                 'first' => [
-                    1 => [1, 2]     //shop = 1    1x vote with 1 point    1x vote with 2 points
+                    1 => [1, 2],     //shop = 1    1x vote with 1 point    1x vote with 2 points
                 ],
                 'second' => [
-                    1 => [4, 5]
+                    1 => [4, 5],
                 ],
                 'third' => [
-                    1 => [3, 5]
+                    1 => [3, 5],
                 ],
                 'first-2' => [
-                    1 => [1, 2]
+                    1 => [1, 2],
                 ],
                 'second-2' => [
-                    1 => [4, 5]
+                    1 => [4, 5],
                 ],
                 'third-2' => [
-                    1 => [3, 5]
-                ]
+                    1 => [3, 5],
+                ],
             ],
             ['first', 'second', 'third', 'first-2', 'second-2', 'third-2'],
             null,
@@ -57,8 +79,8 @@ class VoteAverageFacetTest extends TestCase
         $result = $this->search(
             [
                 'first' => [
-                    1 => [1, 2]     //shop = 1    1x vote with 1 point    1x vote with 2 points
-                ]
+                    1 => [1, 2],     //shop = 1    1x vote with 1 point    1x vote with 2 points
+                ],
             ],
             ['first'],
             $this->createCategory($context->getShop()),
@@ -79,8 +101,8 @@ class VoteAverageFacetTest extends TestCase
         $result = $this->search(
             [
                 'first' => [
-                    2 => [1, 2]     //shop = 1    1x vote with 1 point    1x vote with 2 points
-                ]
+                    2 => [1, 2],     //shop = 1    1x vote with 1 point    1x vote with 2 points
+                ],
             ],
             ['first'],
             $this->createCategory($context->getShop()),
@@ -93,7 +115,6 @@ class VoteAverageFacetTest extends TestCase
 
         $this->assertInstanceOf('Shopware\Bundle\SearchBundle\FacetResult\RadioFacetResult', $result->getFacets()[0]);
     }
-
 
     public function testVoteFacetWithNotAssignedSubShop()
     {
@@ -103,8 +124,8 @@ class VoteAverageFacetTest extends TestCase
             [
                 'first' => [
                     null => [1, 2],      //shop = 1    1x vote with 1 point    1x vote with 2 points
-                    1 => [1, 2]         //shop = null    1x vote with 1 point    1x vote with 2 points
-                ]
+                    1 => [1, 2],         //shop = null    1x vote with 1 point    1x vote with 2 points
+                ],
             ],
             ['first'],
             $this->createCategory($context->getShop()),
@@ -116,17 +137,6 @@ class VoteAverageFacetTest extends TestCase
         );
 
         $this->assertInstanceOf('Shopware\Bundle\SearchBundle\FacetResult\RadioFacetResult', $result->getFacets()[0]);
-    }
-
-    /**
-     * @param Shop $shop
-     * @return Category
-     */
-    private function createCategory(Shop $shop)
-    {
-        $em = Shopware()->Container()->get('models');
-        $category = $em->find(Category::class, $shop->getCategory()->getId());
-        return $this->helper->createCategory(['parent' => $category]);
     }
 
     protected function createProduct(
@@ -150,5 +160,18 @@ class VoteAverageFacetTest extends TestCase
         }
 
         return $article;
+    }
+
+    /**
+     * @param Shop $shop
+     *
+     * @return Category
+     */
+    private function createCategory(Shop $shop)
+    {
+        $em = Shopware()->Container()->get('models');
+        $category = $em->find(Category::class, $shop->getCategory()->getId());
+
+        return $this->helper->createCategory(['parent' => $category]);
     }
 }

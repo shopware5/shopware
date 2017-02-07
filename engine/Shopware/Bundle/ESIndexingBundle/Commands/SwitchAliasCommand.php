@@ -34,7 +34,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * @category  Shopware
- * @package   Shopware\Components\Console\Commands
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class SwitchAliasCommand extends ShopwareCommand
@@ -59,23 +59,23 @@ class SwitchAliasCommand extends ShopwareCommand
         $shopId = $input->getArgument('shopId');
         $indexName = $input->getArgument('index');
 
-        /**@var $shop Shop*/
+        /** @var $shop Shop */
         $shop = $this->container->get('shopware_storefront.shop_gateway_dbal')->get($shopId);
 
-        /**@var $index ShopIndex*/
+        /** @var $index ShopIndex */
         $index = $this->container->get('shopware_elastic_search.index_factory')
             ->createShopIndex($shop);
 
-        /**@var $client Client*/
+        /** @var $client Client */
         $client = $this->container->get('shopware_elastic_search.client');
 
         $exist = $client->indices()->exists(['index' => $indexName]);
         if (!$exist) {
-            throw new \RuntimeException(sprintf("Index %s not exist", $indexName));
+            throw new \RuntimeException(sprintf('Index %s not exist', $indexName));
         }
 
         $actions = [
-            ['add' => ['index' => $indexName, 'alias' => $index->getName()]]
+            ['add' => ['index' => $indexName, 'alias' => $index->getName()]],
         ];
 
         $current = $client->indices()->getAlias(['name' => $index->getName()]);

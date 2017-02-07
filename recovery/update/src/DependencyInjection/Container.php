@@ -72,7 +72,7 @@ class Container extends BaseContainer
         };
 
         $container['path.builder'] = function () use ($me, $backupDir) {
-            $baseDir   = SW_PATH;
+            $baseDir = SW_PATH;
             $updateDir = UPDATE_FILES_PATH;
 
             return new PathBuilder($baseDir, $updateDir, $backupDir);
@@ -89,7 +89,7 @@ class Container extends BaseContainer
 
         $container['dump'] = function () use ($me) {
             $snippetsSql = UPDATE_ASSET_PATH . '/snippets.sql';
-            $snippetsSql = file_exists($snippetsSql) ? $snippetsSql :null;
+            $snippetsSql = file_exists($snippetsSql) ? $snippetsSql : null;
 
             if (!$snippetsSql) {
                 return null;

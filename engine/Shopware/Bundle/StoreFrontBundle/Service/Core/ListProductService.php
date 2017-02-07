@@ -21,15 +21,16 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 namespace Shopware\Bundle\StoreFrontBundle\Service\Core;
 
-use Shopware\Bundle\StoreFrontBundle\Struct;
-use Shopware\Bundle\StoreFrontBundle\Service;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
+use Shopware\Bundle\StoreFrontBundle\Service;
+use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\StoreFrontBundle\Service\Core
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ListProductService implements Service\ListProductServiceInterface
@@ -80,15 +81,15 @@ class ListProductService implements Service\ListProductServiceInterface
     private $config;
 
     /**
-     * @param Gateway\ListProductGatewayInterface $productGateway
-     * @param Service\GraduatedPricesServiceInterface $graduatedPricesService
-     * @param Service\CheapestPriceServiceInterface $cheapestPriceService
+     * @param Gateway\ListProductGatewayInterface      $productGateway
+     * @param Service\GraduatedPricesServiceInterface  $graduatedPricesService
+     * @param Service\CheapestPriceServiceInterface    $cheapestPriceService
      * @param Service\PriceCalculationServiceInterface $priceCalculationService
-     * @param Service\MediaServiceInterface $mediaService
-     * @param Service\MarketingServiceInterface $marketingService
-     * @param Service\VoteServiceInterface $voteService
-     * @param Service\CategoryServiceInterface $categoryService
-     * @param \Shopware_Components_Config $config
+     * @param Service\MediaServiceInterface            $mediaService
+     * @param Service\MarketingServiceInterface        $marketingService
+     * @param Service\VoteServiceInterface             $voteService
+     * @param Service\CategoryServiceInterface         $categoryService
+     * @param \Shopware_Components_Config              $config
      */
     public function __construct(
         Gateway\ListProductGatewayInterface $productGateway,
@@ -113,7 +114,7 @@ class ListProductService implements Service\ListProductServiceInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function get($number, Struct\ProductContextInterface $context)
     {
@@ -123,7 +124,7 @@ class ListProductService implements Service\ListProductServiceInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getList(array $numbers, Struct\ProductContextInterface $context)
     {
@@ -194,8 +195,9 @@ class ListProductService implements Service\ListProductServiceInterface
      * Checks if the provided product is allowed to display in the store front for
      * the provided context.
      *
-     * @param Struct\ListProduct $product
+     * @param Struct\ListProduct             $product
      * @param Struct\ProductContextInterface $context
+     *
      * @return bool
      */
     private function isProductValid(Struct\ListProduct $product, Struct\ProductContextInterface $context)
@@ -222,6 +224,7 @@ class ListProductService implements Service\ListProductServiceInterface
 
     /**
      * @param Struct\ListProduct $product
+     *
      * @return bool
      */
     private function allowBuyInListing(Struct\ListProduct $product)

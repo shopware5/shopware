@@ -42,19 +42,22 @@ abstract class LazyFetchModelEntity extends ModelEntity
 
     /**
      * @param $object
+     *
      * @return bool
      */
     public function isProxy($object)
     {
-        return ($object instanceof \Doctrine\ORM\Proxy\Proxy);
+        return $object instanceof \Doctrine\ORM\Proxy\Proxy;
     }
 
     /**
      * @param $object
-     * @param array $condition
+     * @param array         $condition
      * @param EntityManager $em
-     * @return null|object
+     *
      * @throws \Exception
+     *
+     * @return null|object
      */
     public function fetchLazy($object, $condition, EntityManager $em = null)
     {
@@ -73,7 +76,7 @@ abstract class LazyFetchModelEntity extends ModelEntity
         }
 
         if ($em === null) {
-            throw new \Exception("Lazy fetch class not supported.");
+            throw new \Exception('Lazy fetch class not supported.');
         }
 
         $class = get_parent_class($object);

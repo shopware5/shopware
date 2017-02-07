@@ -46,7 +46,7 @@ class Blog extends Extendable
     protected $authorId;
 
     /**
-     * @var boolean
+     * @var bool
      */
     protected $active;
 
@@ -169,7 +169,7 @@ class Blog extends Extendable
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isActive()
     {
@@ -177,7 +177,7 @@ class Blog extends Extendable
     }
 
     /**
-     * @param boolean $active
+     * @param bool $active
      */
     public function setActive($active)
     {

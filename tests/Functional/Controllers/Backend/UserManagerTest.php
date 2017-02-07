@@ -24,21 +24,21 @@
 
 /**
  * @category  Shopware
- * @package   Shopware\Tests
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Tests_Controllers_Backend_UserManagerTest extends Enlight_Components_Test_Controller_TestCase
 {
     protected $temporaryUsername;
-    protected $temporaryUserData = array(
+    protected $temporaryUserData = [
       'username' => '',
       'password' => 'test',
       'localeId' => 1,
       'roleId' => 1,
-      'name' => "PHPUnit Testuser",
+      'name' => 'PHPUnit Testuser',
       'email' => 'test@example.com',
-      'active' => 1
-    );
+      'active' => 1,
+    ];
     protected $temporaryRoleName;
 
     public function setUp()
@@ -65,9 +65,9 @@ class Shopware_Tests_Controllers_Backend_UserManagerTest extends Enlight_Compone
      */
     public function testUserDetails()
     {
-        $getRandomUserId = Shopware()->Db()->fetchOne("
+        $getRandomUserId = Shopware()->Db()->fetchOne('
         SELECT id FROM s_core_auth
-        ");
+        ');
 
         $this->Request()->setParam('id', $getRandomUserId);
         $this->dispatch('backend/UserManager/getUserDetails');
@@ -80,14 +80,15 @@ class Shopware_Tests_Controllers_Backend_UserManagerTest extends Enlight_Compone
         $this->assertTrue(is_array($this->View()->data));
 
         // Check that data matches the requested one
-        $this->assertEquals($this->View()->data["id"], $getRandomUserId);
+        $this->assertEquals($this->View()->data['id'], $getRandomUserId);
 
         // Check that result does not contain passwords
-        $this->assertNull($this->View()->data["password"]);
+        $this->assertNull($this->View()->data['password']);
     }
 
     /**
      * Test user creation
+     *
      * @return mixed
      */
     public function testUserAdd()
@@ -100,47 +101,47 @@ class Shopware_Tests_Controllers_Backend_UserManagerTest extends Enlight_Compone
         $this->dispatch('backend/UserManager/updateUser');
 
         $this->assertTrue($this->View()->success);
-        $this->assertEquals($this->View()->data["username"], $this->temporaryUsername);
+        $this->assertEquals($this->View()->data['username'], $this->temporaryUsername);
 
         return $this->temporaryUsername;
     }
 
-
     /**
      * Test edit of users
+     *
      * @depends testUserAdd
      */
     public function testUserEdit($username)
     {
         $this->assertTrue(true);
-        $getRandomUserId = Shopware()->Db()->fetchOne("
+        $getRandomUserId = Shopware()->Db()->fetchOne('
         SELECT id FROM s_core_auth WHERE username = ?
-        ", $username);
+        ', $username);
 
         $this->assertGreaterThan(0, $getRandomUserId);
         $this->Request()->setParam('id', $getRandomUserId);
         $this->Request()->setParam('name', 'Random');
         $this->dispatch('backend/UserManager/updateUser');
         $this->assertTrue($this->View()->success);
-        $this->assertEquals('Random', Shopware()->Db()->fetchOne("SELECT name FROM s_core_auth WHERE id = ?", array($getRandomUserId)));
+        $this->assertEquals('Random', Shopware()->Db()->fetchOne('SELECT name FROM s_core_auth WHERE id = ?', [$getRandomUserId]));
 
         return $username;
     }
 
-
     /**
      * Test deleting of users
+     *
      * @depends testUserEdit
      */
     public function testUserDelete($username)
     {
-        $getRandomUserId = Shopware()->Db()->fetchOne("
+        $getRandomUserId = Shopware()->Db()->fetchOne('
        SELECT id FROM s_core_auth WHERE username = ?
-       ", $username);
+       ', $username);
 
         $this->Request()->setParam('id', $getRandomUserId);
         $this->dispatch('backend/UserManager/deleteUser');
-        $this->assertTrue($this->View()->success, "User ".$this->temporaryUsername." with id ".$getRandomUserId." not found");
+        $this->assertTrue($this->View()->success, 'User ' . $this->temporaryUsername . ' with id ' . $getRandomUserId . ' not found');
     }
 
     /**
@@ -157,6 +158,7 @@ class Shopware_Tests_Controllers_Backend_UserManagerTest extends Enlight_Compone
 
     /**
      * Test creating of roles
+     *
      * @return string
      */
     public function testCreateRole()
@@ -164,24 +166,26 @@ class Shopware_Tests_Controllers_Backend_UserManagerTest extends Enlight_Compone
         $randomRoleName = md5(uniqid(rand()));
         $this->Request()->setParam('parentID', null);
         $this->Request()->setParam('name', $randomRoleName);
-        $this->Request()->setParam('description', "Test");
-        $this->Request()->setParam('source', "Test");
+        $this->Request()->setParam('description', 'Test');
+        $this->Request()->setParam('source', 'Test');
         $this->Request()->setParam('enabled', 1);
         $this->Request()->setParam('admin', 1);
         $this->dispatch('backend/UserManager/updateRole');
         $this->assertTrue($this->View()->success);
+
         return $randomRoleName;
     }
 
     /**
      * Test editing of roles
+     *
      * @depends testCreateRole
      */
     public function testEditRole($randomRoleName)
     {
-        $getRandomRoleId = Shopware()->Db()->fetchOne("
+        $getRandomRoleId = Shopware()->Db()->fetchOne('
         SELECT id FROM s_core_auth_roles WHERE name = ?
-        ", $randomRoleName);
+        ', $randomRoleName);
         $this->assertGreaterThan(0, $getRandomRoleId);
 
         $this->Request()->setParam('id', $getRandomRoleId);
@@ -194,6 +198,7 @@ class Shopware_Tests_Controllers_Backend_UserManagerTest extends Enlight_Compone
 
     /**
      * Test deleting of roles
+     *
      * @depends testEditRole
      */
     public function testDeleteRole($randomRoleId)

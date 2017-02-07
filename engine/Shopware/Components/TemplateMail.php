@@ -22,7 +22,6 @@
  * our trademarks remain entirely with us.
  */
 
-
 /**
  * Shopware TemplateMail Component
  */
@@ -50,6 +49,7 @@ class Shopware_Components_TemplateMail
 
     /**
      * @param \Shopware\Components\Model\ModelManager $modelManager
+     *
      * @return \Shopware_Components_TemplateMail
      */
     public function setModelManager(\Shopware\Components\Model\ModelManager $modelManager)
@@ -69,6 +69,7 @@ class Shopware_Components_TemplateMail
 
     /**
      * @param $shop
+     *
      * @return \Shopware_Components_TemplateMail
      */
     public function setShop($shop)
@@ -100,6 +101,7 @@ class Shopware_Components_TemplateMail
 
     /**
      * @param \Shopware_Components_Translation $translationReader
+     *
      * @return \Shopware_Components_TemplateMail
      */
     public function setTranslationReader($translationReader)
@@ -111,6 +113,7 @@ class Shopware_Components_TemplateMail
 
     /**
      * @param \Shopware_Components_StringCompiler $stringCompiler
+     *
      * @return \Shopware_Components_TemplateMail
      */
     public function setStringCompiler(\Shopware_Components_StringCompiler $stringCompiler)
@@ -130,13 +133,15 @@ class Shopware_Components_TemplateMail
 
     /**
      * @param string|\Shopware\Models\Mail\Mail $mailModel
-     * @param array $context
-     * @param \Shopware\Models\Shop\Shop $shop
-     * @param array $overrideConfig
-     * @return \Enlight_Components_Mail
+     * @param array                             $context
+     * @param \Shopware\Models\Shop\Shop        $shop
+     * @param array                             $overrideConfig
+     *
      * @throws \Enlight_Exception
+     *
+     * @return \Enlight_Components_Mail
      */
-    public function createMail($mailModel, $context = array(), $shop = null, $overrideConfig = array())
+    public function createMail($mailModel, $context = [], $shop = null, $overrideConfig = [])
     {
         if (null !== $shop) {
             $this->setShop($shop);
@@ -146,7 +151,7 @@ class Shopware_Components_TemplateMail
             $modelName = $mailModel;
             /* @var $mailModel \Shopware\Models\Mail\Mail */
             $mailModel = $this->getModelManager()->getRepository('Shopware\Models\Mail\Mail')->findOneBy(
-                array('name' => $modelName)
+                ['name' => $modelName]
             );
             if (!$mailModel) {
                 throw new \Enlight_Exception("Mail-Template with name '{$modelName}' could not be found.");
@@ -157,19 +162,19 @@ class Shopware_Components_TemplateMail
         $config = Shopware()->Config();
 
         if ($this->getShop() !== null) {
-            $defaultContext = array(
+            $defaultContext = [
                 'sConfig' => $config,
                 'sShop' => $config->get('shopName'),
                 'sShopURL' => 'http://' . $config->basePath,
-            );
+            ];
             $isoCode = $this->getShop()->get('isocode');
             $translationReader = $this->getTranslationReader();
             $translation = $translationReader->read($isoCode, 'config_mails', $mailModel->getId());
             $mailModel->setTranslation($translation);
         } else {
-            $defaultContext = array(
+            $defaultContext = [
                 'sConfig' => $config,
-            );
+            ];
         }
 
         // save current context to mail model
@@ -188,13 +193,15 @@ class Shopware_Components_TemplateMail
     /**
      * Loads values from MailModel into Mail
      *
-     * @param \Enlight_Components_Mail $mail
+     * @param \Enlight_Components_Mail   $mail
      * @param \Shopware\Models\Mail\Mail $mailModel
-     * @param array $overrideConfig
-     * @return \Enlight_Components_Mail
+     * @param array                      $overrideConfig
+     *
      * @throws \Enlight_Exception
+     *
+     * @return \Enlight_Components_Mail
      */
-    public function loadValues(\Enlight_Components_Mail $mail, \Shopware\Models\Mail\Mail $mailModel, $overrideConfig = array())
+    public function loadValues(\Enlight_Components_Mail $mail, \Shopware\Models\Mail\Mail $mailModel, $overrideConfig = [])
     {
         $stringCompiler = $this->getStringCompiler();
 
@@ -203,14 +210,14 @@ class Shopware_Components_TemplateMail
             $mail->setSubject($subject);
         }
 
-        if (!empty($overrideConfig["fromMail"])) {
-            $fromMail = $overrideConfig["fromMail"];
+        if (!empty($overrideConfig['fromMail'])) {
+            $fromMail = $overrideConfig['fromMail'];
         } else {
             $fromMail = $stringCompiler->compileString($mailModel->getFromMail());
         }
 
-        if (!empty($overrideConfig["fromName"])) {
-            $fromName = $overrideConfig["fromName"];
+        if (!empty($overrideConfig['fromName'])) {
+            $fromName = $overrideConfig['fromName'];
         } else {
             $fromName = $stringCompiler->compileString($mailModel->getFromName());
         }

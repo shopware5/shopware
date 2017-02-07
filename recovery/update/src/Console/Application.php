@@ -33,7 +33,7 @@ use Symfony\Component\Console\Input\InputOption;
 
 /**
  * @category  Shopware
- * @package   Shopware\Recovery\Update\Console
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Application extends BaseApplication
@@ -66,16 +66,17 @@ class Application extends BaseApplication
         return $this->container;
     }
 
-    private function registerErrorHandler()
+    /**
+     * Overridden so that the application doesn't expect the command
+     * name to be the first argument.
+     */
+    public function getDefinition()
     {
-        set_error_handler(function ($errno, $errstr, $errfile, $errline, array $errcontext) {
-            // error was suppressed with the @-operator
-            if (0 === error_reporting()) {
-                return false;
-            }
+        $inputDefinition = parent::getDefinition();
+        // clear out the normal first argument, which is the command name
+        $inputDefinition->setArguments();
 
-            throw new \ErrorException($errstr, 0, $errno, $errfile, $errline);
-        });
+        return $inputDefinition;
     }
 
     /**
@@ -107,16 +108,15 @@ class Application extends BaseApplication
         return $defaultCommands;
     }
 
-    /**
-     * Overridden so that the application doesn't expect the command
-     * name to be the first argument.
-     */
-    public function getDefinition()
+    private function registerErrorHandler()
     {
-        $inputDefinition = parent::getDefinition();
-        // clear out the normal first argument, which is the command name
-        $inputDefinition->setArguments();
+        set_error_handler(function ($errno, $errstr, $errfile, $errline, array $errcontext) {
+            // error was suppressed with the @-operator
+            if (0 === error_reporting()) {
+                return false;
+            }
 
-        return $inputDefinition;
+            throw new \ErrorException($errstr, 0, $errno, $errfile, $errline);
+        });
     }
 }

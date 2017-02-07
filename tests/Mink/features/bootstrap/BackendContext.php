@@ -24,8 +24,6 @@
 
 namespace Shopware\Tests\Mink;
 
-use Behat\Behat\Tester\Exception\PendingException;
-
 class BackendContext extends SubContext
 {
     /**
@@ -56,6 +54,7 @@ class BackendContext extends SubContext
     {
         $this->spin(function ($context) use ($moduleName) {
             $context->getPage('Backend')->openModule($moduleName);
+
             return true;
         });
     }
@@ -69,17 +68,22 @@ class BackendContext extends SubContext
 
         $this->spin(function ($context) use ($page) {
             $context->getPage('Backend')->verifyModule();
+
             return true;
         });
     }
 
     /**
      * Based on Behat's own example
+     *
      * @see http://docs.behat.org/en/v2.5/cookbook/using_spin_functions.html#adding-a-timeout
+     *
      * @param $lambda
      * @param int $wait
-     * @return bool
+     *
      * @throws \Exception
+     *
+     * @return bool
      */
     public function spin($lambda, $wait = 60)
     {

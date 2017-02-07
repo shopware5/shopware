@@ -25,12 +25,12 @@
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Bundle\StoreFrontBundle\Struct;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
+use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\StoreFrontBundle\Gateway\DBAL
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class VoteAverageGateway implements Gateway\VoteAverageGatewayInterface
@@ -51,8 +51,8 @@ class VoteAverageGateway implements Gateway\VoteAverageGatewayInterface
     private $config;
 
     /**
-     * @param Connection $connection
-     * @param Hydrator\VoteHydrator $voteHydrator
+     * @param Connection                  $connection
+     * @param Hydrator\VoteHydrator       $voteHydrator
      * @param \Shopware_Components_Config $config
      */
     public function __construct(
@@ -66,7 +66,7 @@ class VoteAverageGateway implements Gateway\VoteAverageGatewayInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function get(Struct\BaseProduct $product, Struct\ShopContextInterface $context)
     {
@@ -76,7 +76,7 @@ class VoteAverageGateway implements Gateway\VoteAverageGatewayInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getList($products, Struct\ShopContextInterface $context)
     {
@@ -91,7 +91,7 @@ class VoteAverageGateway implements Gateway\VoteAverageGatewayInterface
         $query->select([
             'articleID',
             'COUNT(id) as total',
-            'points'
+            'points',
         ]);
 
         $query->from('s_articles_vote', 'vote')
@@ -107,7 +107,7 @@ class VoteAverageGateway implements Gateway\VoteAverageGatewayInterface
             $query->setParameter(':shopId', $context->getShop()->getId());
         }
 
-        /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
+        /** @var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
 
         $data = $statement->fetchAll(\PDO::FETCH_GROUP);

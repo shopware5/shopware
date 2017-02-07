@@ -24,7 +24,7 @@
 
 /**
  * @category  Shopware
- * @package   Shopware\Tests
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Tests_Controllers_Backend_RiskManagementTest extends Enlight_Components_Test_Controller_TestCase
@@ -48,7 +48,7 @@ class Shopware_Tests_Controllers_Backend_RiskManagementTest extends Enlight_Comp
      */
     public function testGetPayments()
     {
-        /** @var Enlight_Controller_Response_ResponseTestCase */
+        /* @var Enlight_Controller_Response_ResponseTestCase */
         $this->dispatch('backend/risk_management/getPayments');
         $this->assertTrue($this->View()->success);
 
@@ -63,17 +63,18 @@ class Shopware_Tests_Controllers_Backend_RiskManagementTest extends Enlight_Comp
      * This test tests the creating of a new premium-article.
      * The response has to contain the id of the created article.
      * This function is called before testEditPremiumArticle and testDeletePremiumArticle
+     *
      * @return mixed
      */
     public function testCreateRule()
     {
-        $manager    = Shopware()->Models();
+        $manager = Shopware()->Models();
         /**
-         * @var $repository Shopware\Models\Payment\RuleSet
+         * @var Shopware\Models\Payment\RuleSet
          */
         $repository = Shopware()->Models()->getRepository('Shopware\Models\Payment\RuleSet');
 
-        $rules = $repository->findBy(array('paymentId' => 2));
+        $rules = $repository->findBy(['paymentId' => 2]);
         foreach ($rules as $rule) {
             $manager->remove($rule);
         }
@@ -81,13 +82,13 @@ class Shopware_Tests_Controllers_Backend_RiskManagementTest extends Enlight_Comp
         $manager->flush();
 
         $this->Request()->setMethod('POST')->setPost(
-            array(
+            [
                 'paymentId' => 2,
-                'rule1'    => 'CUSTOMERGROUPISNOT',
-                'rule2'    => '',
-                'value1'    => '5',
-                'value2'    => ''
-            )
+                'rule1' => 'CUSTOMERGROUPISNOT',
+                'rule2' => '',
+                'value1' => '5',
+                'value2' => '',
+            ]
         );
 
         $this->dispatch('backend/risk_management/createRule');
@@ -113,14 +114,14 @@ class Shopware_Tests_Controllers_Backend_RiskManagementTest extends Enlight_Comp
     public function testEditRule($lastId)
     {
         $this->Request()->setMethod('POST')->setPost(
-            array(
+            [
                 'id' => $lastId,
                 'paymentId' => 2,
-                'rule1'    => 'CUSTOMERGROUPISNOT',
-                'rule2'    => '',
-                'value1'    => '8',
-                'value2'    => ''
-            )
+                'rule1' => 'CUSTOMERGROUPISNOT',
+                'rule2' => '',
+                'value1' => '8',
+                'value2' => '',
+            ]
         );
 
         $this->dispatch('backend/risk_management/editRule');
@@ -135,11 +136,12 @@ class Shopware_Tests_Controllers_Backend_RiskManagementTest extends Enlight_Comp
      * This test-method tests the deleting of a premium-article.
      *
      * @depends testCreateRule
+     *
      * @param $lastId
      */
     public function testDeleteRule($lastId)
     {
-        $this->Request()->setMethod('POST')->setPost(array('id'=>$lastId));
+        $this->Request()->setMethod('POST')->setPost(['id' => $lastId]);
 
         $this->dispatch('backend/risk_management/deleteRule');
 

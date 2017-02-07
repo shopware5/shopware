@@ -24,14 +24,12 @@
 
 namespace Shopware\Components\DependencyInjection\Compiler;
 
-use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
-use Symfony\Component\DependencyInjection\Definition;
-use Symfony\Component\DependencyInjection\Reference;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\SearchBundleDBAL\DependencyInjection\Compiler
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class AddCaptchaCompilerPass implements CompilerPassInterface

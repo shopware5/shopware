@@ -26,14 +26,14 @@ namespace Shopware\Bundle\SearchBundleES\FacetHandler;
 
 use ONGR\ElasticsearchDSL\Aggregation\TermsAggregation;
 use ONGR\ElasticsearchDSL\Search;
-use Shopware\Bundle\SearchBundleES\HandlerInterface;
 use Shopware\Bundle\SearchBundle\Condition\ManufacturerCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
-use Shopware\Bundle\SearchBundle\Facet\ManufacturerFacet;
 use Shopware\Bundle\SearchBundle\CriteriaPartInterface;
+use Shopware\Bundle\SearchBundle\Facet\ManufacturerFacet;
 use Shopware\Bundle\SearchBundle\FacetResult\ValueListFacetResult;
 use Shopware\Bundle\SearchBundle\FacetResult\ValueListItem;
 use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
+use Shopware\Bundle\SearchBundleES\HandlerInterface;
 use Shopware\Bundle\SearchBundleES\ResultHydratorInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ManufacturerServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\Manufacturer;
@@ -60,9 +60,9 @@ class ManufacturerFacetHandler implements HandlerInterface, ResultHydratorInterf
     private $queryAliasMapper;
 
     /**
-     * @param ManufacturerServiceInterface $manufacturerService
+     * @param ManufacturerServiceInterface         $manufacturerService
      * @param \Shopware_Components_Snippet_Manager $snippetManager
-     * @param QueryAliasMapper $queryAliasMapper
+     * @param QueryAliasMapper                     $queryAliasMapper
      */
     public function __construct(
         ManufacturerServiceInterface $manufacturerService,
@@ -79,7 +79,7 @@ class ManufacturerFacetHandler implements HandlerInterface, ResultHydratorInterf
      */
     public function supports(CriteriaPartInterface $criteriaPart)
     {
-        return ($criteriaPart instanceof ManufacturerFacet);
+        return $criteriaPart instanceof ManufacturerFacet;
     }
 
     /**
@@ -126,20 +126,21 @@ class ManufacturerFacetHandler implements HandlerInterface, ResultHydratorInterf
     }
 
     /**
-     * @param Criteria $criteria
+     * @param Criteria       $criteria
      * @param Manufacturer[] $manufacturers
+     *
      * @return array
      */
     private function createListItems(Criteria $criteria, $manufacturers)
     {
         $actives = [];
-        /**@var $condition ManufacturerCondition*/
+        /** @var $condition ManufacturerCondition */
         if ($condition = $criteria->getCondition('manufacturer')) {
             $actives = $condition->getManufacturerIds();
         }
 
         $items = [];
-        /**@var $manufacturer Manufacturer */
+        /** @var $manufacturer Manufacturer */
         foreach ($manufacturers as $manufacturer) {
             $items[] = new ValueListItem(
                 $manufacturer->getId(),
@@ -159,6 +160,7 @@ class ManufacturerFacetHandler implements HandlerInterface, ResultHydratorInterf
     /**
      * @param Criteria $criteria
      * @param $items
+     *
      * @return ValueListFacetResult
      */
     private function createFacet(Criteria $criteria, $items)

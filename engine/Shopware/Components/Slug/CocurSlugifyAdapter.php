@@ -28,7 +28,7 @@ use Cocur\Slugify\SlugifyInterface;
 
 /**
  * @category  Shopware
- * @package   Shopware\Components\Slug
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class CocurSlugifyAdapter implements SlugInterface
@@ -47,7 +47,7 @@ class CocurSlugifyAdapter implements SlugInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function slugify($string, $separator = null)
     {

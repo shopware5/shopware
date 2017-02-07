@@ -24,8 +24,6 @@
 
 namespace Shopware\Components;
 
-;
-
 /**
  * Class Config
  * This class is responsible to load and parse the shopware configuration
@@ -36,7 +34,7 @@ namespace Shopware\Components;
  * into the Shopware_Application.
  *
  * @category  Shopware
- * @package   Shopware\ConfigLoader
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ConfigLoader
@@ -44,6 +42,7 @@ class ConfigLoader
     /**
      * Contains the document root.
      * This path points to the shopware installation directory.
+     *
      * @var string
      */
     protected $documentRoot;
@@ -62,6 +61,7 @@ class ConfigLoader
 
     /**
      * Contains the application name like 'Shopware'.
+     *
      * @var string
      */
     protected $applicationName;
@@ -74,9 +74,9 @@ class ConfigLoader
      */
     public function __construct($documentRoot, $cacheDir, $environment, $applicationName)
     {
-        $this->documentRoot    = rtrim($documentRoot, '/') . '/';
-        $this->cacheDir        = $cacheDir;
-        $this->environment     = $environment;
+        $this->documentRoot = rtrim($documentRoot, '/') . '/';
+        $this->cacheDir = $cacheDir;
+        $this->environment = $environment;
         $this->applicationName = $applicationName;
     }
 
@@ -89,14 +89,16 @@ class ConfigLoader
      * The loaded configuration file will be injected into the Shopware_Application
      *
      * @param string $file
-     * @return array
+     *
      * @throws \Exception
+     *
+     * @return array
      */
     public function loadConfig($file)
     {
         $suffix = strtolower(pathinfo($file, PATHINFO_EXTENSION));
 
-        if (!in_array($suffix, array('php', 'inc'))) {
+        if (!in_array($suffix, ['php', 'inc'])) {
             throw new \Exception('Invalid configuration file provided; unknown config type');
         }
 
@@ -117,12 +119,14 @@ class ConfigLoader
      * Legacy function for the DocPath function within configuration files.
      *
      * @param string|null $path
+     *
      * @return string
      */
     public function DocPath($path = null)
     {
         if ($path !== null) {
             $path = str_replace('_', DIRECTORY_SEPARATOR, $path);
+
             return $this->documentRoot . $path . DIRECTORY_SEPARATOR;
         }
 
@@ -133,13 +137,15 @@ class ConfigLoader
      * Legacy function for the AppPath function within configuration files.
      *
      * @param string|null $path
+     *
      * @return string
      */
     public function AppPath($path = null)
     {
         if ($path !== null) {
             $path = str_replace('_', DIRECTORY_SEPARATOR, $path);
-            return $this->documentRoot . 'engine/Shopware/'. $path . DIRECTORY_SEPARATOR;
+
+            return $this->documentRoot . 'engine/Shopware/' . $path . DIRECTORY_SEPARATOR;
         }
 
         return $this->documentRoot . 'engine/Shopware/';
@@ -149,13 +155,15 @@ class ConfigLoader
      * Legacy function for the TestPath function within configuration files.
      *
      * @param string|null $path
+     *
      * @return string
      */
     public function TestPath($path = null)
     {
         if ($path !== null) {
             $path = str_replace('_', DIRECTORY_SEPARATOR, $path);
-            return $this->documentRoot . 'tests/Shopware/'. $path . DIRECTORY_SEPARATOR;
+
+            return $this->documentRoot . 'tests/Shopware/' . $path . DIRECTORY_SEPARATOR;
         }
 
         return $this->documentRoot . 'tests/Shopware/';

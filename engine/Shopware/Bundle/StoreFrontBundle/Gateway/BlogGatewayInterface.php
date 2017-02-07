@@ -28,7 +28,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\StoreFrontBundle\Gateway
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 interface BlogGatewayInterface
@@ -43,8 +43,9 @@ interface BlogGatewayInterface
      * - Assigned media objects
      * - Core attribute of the media object
      *
-     * @param int[] $ids
+     * @param int[]                       $ids
      * @param Struct\ShopContextInterface $context
+     *
      * @return Struct\Blog\Blog
      */
     public function getList(array $ids, Struct\ShopContextInterface $context);

@@ -31,7 +31,7 @@ class XmlPluginInfoReader
     public function read($file)
     {
         try {
-            $dom = XmlUtils::loadFile($file, __DIR__.'/schema/plugin.xsd');
+            $dom = XmlUtils::loadFile($file, __DIR__ . '/schema/plugin.xsd');
         } catch (\Exception $e) {
             throw new \InvalidArgumentException(sprintf('Unable to parse file "%s".', $file), $e->getCode(), $e);
         }
@@ -41,6 +41,7 @@ class XmlPluginInfoReader
 
     /**
      * @param \DOMDocument $xml
+     *
      * @return array
      */
     private function parseInfo(\DOMDocument $xml)
@@ -85,7 +86,7 @@ class XmlPluginInfoReader
             $info['compatibility'] = [
                 'minVersion' => $compatibility->getAttribute('minVersion'),
                 'maxVersion' => $compatibility->getAttribute('maxVersion'),
-                'blacklist' => $this->getChildrenValues($compatibility, 'blacklist')
+                'blacklist' => $this->getChildrenValues($compatibility, 'blacklist'),
             ];
         }
 
@@ -107,7 +108,7 @@ class XmlPluginInfoReader
      */
     private function getChildren(\DOMNode $node, $name)
     {
-        $children = array();
+        $children = [];
         foreach ($node->childNodes as $child) {
             if ($child instanceof \DOMElement && $child->localName === $name) {
                 $children[] = $child;
@@ -120,6 +121,7 @@ class XmlPluginInfoReader
     /**
      * @param \DOMNode $node
      * @param $name
+     *
      * @return null|\DOMElement
      */
     private function getFirstChild(\DOMNode $node, $name)
@@ -141,7 +143,7 @@ class XmlPluginInfoReader
      */
     private function getChildrenValues(\DOMNode $node, $name)
     {
-        $children = array();
+        $children = [];
         foreach ($node->childNodes as $child) {
             if ($child instanceof \DOMElement && $child->localName === $name) {
                 $children[] = $child->nodeValue;
@@ -153,6 +155,7 @@ class XmlPluginInfoReader
 
     /**
      * @param $requiredPlugins
+     *
      * @return array
      */
     private function parseRequiredPlugins($requiredPlugins)
@@ -164,9 +167,10 @@ class XmlPluginInfoReader
                 'pluginName' => $requiredPlugin->getAttribute('pluginName'),
                 'minVersion' => $requiredPlugin->getAttribute('minVersion'),
                 'maxVersion' => $requiredPlugin->getAttribute('maxVersion'),
-                'blacklist' => $this->getChildrenValues($requiredPlugin, 'blacklist')
+                'blacklist' => $this->getChildrenValues($requiredPlugin, 'blacklist'),
             ];
         }
+
         return $plugins;
     }
 }

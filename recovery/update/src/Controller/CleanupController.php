@@ -25,7 +25,6 @@
 namespace Shopware\Recovery\Update\Controller;
 
 use DirectoryIterator;
-use FilesystemIterator;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use Shopware\Recovery\Update\Cleanup;
@@ -39,7 +38,7 @@ use SplFileInfo;
 
 /**
  * @category  Shopware
- * @package   Shopware\Recovery\Update\Controller
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class CleanupController
@@ -90,14 +89,14 @@ class CleanupController
     private $cleanupService;
 
     /**
-     * @param Request $request
-     * @param Response $response
-     * @param DummyPluginFinder $pluginFinder
+     * @param Request            $request
+     * @param Response           $response
+     * @param DummyPluginFinder  $pluginFinder
      * @param CleanupFilesFinder $filesFinder
-     * @param Slim $app
-     * @param string $shopwarePath
-     * @param \PDO $conn
-     * @param string $backupDir
+     * @param Slim               $app
+     * @param string             $shopwarePath
+     * @param \PDO               $conn
+     * @param string             $backupDir
      */
     public function __construct(
         Request $request,
@@ -169,6 +168,15 @@ class CleanupController
         }
     }
 
+    /**
+     * Deletes outdated folders from earlier shopware versions.
+     */
+    public function deleteOutdatedFolders()
+    {
+        echo $this->cleanupService->cleanup();
+        exit();
+    }
+
     private function cleanupMedia()
     {
         $mediaPath = $this->shopwarePath . '/media/image';
@@ -195,16 +203,16 @@ class CleanupController
             }
 
             if ($isThumbnail) {
-                rename($a->getPathname(), $thumbnailPath . "/" . $a->getFilename());
+                rename($a->getPathname(), $thumbnailPath . '/' . $a->getFilename());
             } else {
-                rename($a->getPathname(), $mediaPath . "/" . $a->getFilename());
+                rename($a->getPathname(), $mediaPath . '/' . $a->getFilename());
             }
         }
     }
 
     private function cleanupTemplateRelations()
     {
-        $affectedShopsSql = <<<SQL
+        $affectedShopsSql = <<<'SQL'
 SELECT shops.id, template.id as tplId, doctemplate.id as docTplId, template.version as tplVersion, doctemplate.version as docTplVersion
 FROM `s_core_shops` as shops
 LEFT JOIN `s_core_templates` as template ON shops.template_id = template.id
@@ -224,7 +232,7 @@ SQL;
             return;
         }
 
-        $sql = "SELECT id FROM `s_core_templates` WHERE version = 3 AND parent_id IS NOT NULL ORDER BY id ASC LIMIT 1";
+        $sql = 'SELECT id FROM `s_core_templates` WHERE version = 3 AND parent_id IS NOT NULL ORDER BY id ASC LIMIT 1';
         $templateId = $this->conn->query($sql)->fetchColumn();
 
         foreach ($affectedShops as $shop) {
@@ -247,15 +255,16 @@ SQL;
      */
     private function updateShopConfig($field, $value, $shopId)
     {
-        $this->conn->prepare("UPDATE `s_core_shops` SET " . $field . " = :newValue WHERE id = :shopId")
+        $this->conn->prepare('UPDATE `s_core_shops` SET ' . $field . ' = :newValue WHERE id = :shopId')
             ->execute([
                 ':newValue' => $value,
-                ':shopId' => $shopId
+                ':shopId' => $shopId,
             ]);
     }
 
     /**
      * @param string $path
+     *
      * @return array|DirectoryIterator
      */
     private function getDirectoryIterator($path)
@@ -287,15 +296,6 @@ SQL;
         );
 
         return $cleanupList;
-    }
-
-    /**
-     * Deletes outdated folders from earlier shopware versions.
-     */
-    public function deleteOutdatedFolders()
-    {
-        echo $this->cleanupService->cleanup();
-        exit();
     }
 
     /**

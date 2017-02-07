@@ -32,7 +32,6 @@ use Shopware\Bundle\SearchBundle\CriteriaRequestHandlerInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 /**
- * @package Shopware\Bundle\SearchBundleDBAL\CriteriaRequestHandler
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class PropertyCriteriaRequestHandler implements CriteriaRequestHandlerInterface
@@ -51,8 +50,8 @@ class PropertyCriteriaRequestHandler implements CriteriaRequestHandlerInterface
     }
 
     /**
-     * @param Request $request
-     * @param Criteria $criteria
+     * @param Request              $request
+     * @param Criteria             $criteria
      * @param ShopContextInterface $context
      */
     public function handleRequest(Request $request, Criteria $criteria, ShopContextInterface $context)
@@ -61,7 +60,7 @@ class PropertyCriteriaRequestHandler implements CriteriaRequestHandlerInterface
     }
 
     /**
-     * @param Request $request
+     * @param Request  $request
      * @param Criteria $criteria
      */
     private function addPropertyCondition(Request $request, Criteria $criteria)
@@ -91,6 +90,7 @@ class PropertyCriteriaRequestHandler implements CriteriaRequestHandlerInterface
      * object
      *
      * @param $filters
+     *
      * @return array
      */
     private function getGroupedFilters($filters)

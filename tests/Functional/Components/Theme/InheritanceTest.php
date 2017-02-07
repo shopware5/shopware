@@ -46,9 +46,9 @@ class InheritanceTest extends Base
     {
         if ($template->getParent() === null) {
             return $this->getBareTheme();
-        } else {
-            return $this->getResponsiveTheme();
         }
+
+        return $this->getResponsiveTheme();
     }
 
     public function testBuildInheritance()
@@ -62,7 +62,7 @@ class InheritanceTest extends Base
                 $this->equalTo($custom),
                 $this->equalTo($custom->getParent())
             ))
-            ->will($this->returnCallback(array($this, 'getTheme')));
+            ->will($this->returnCallback([$this, 'getTheme']));
 
         $inheritance = new \Shopware\Components\Theme\Inheritance(
             Shopware()->Container()->get('models'),
@@ -164,7 +164,6 @@ class InheritanceTest extends Base
         }
     }
 
-
     private function getDummyTemplates()
     {
         $master = new \Shopware\Models\Shop\Template();
@@ -183,6 +182,7 @@ class InheritanceTest extends Base
 
         Shopware()->Container()->get('models')->persist($slave);
         Shopware()->Container()->get('models')->flush();
+
         return $slave;
     }
 }

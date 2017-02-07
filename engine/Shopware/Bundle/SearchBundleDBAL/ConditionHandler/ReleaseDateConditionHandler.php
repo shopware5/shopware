@@ -32,7 +32,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\SearchBundleDBAL\ConditionHandler
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ReleaseDateConditionHandler implements ConditionHandlerInterface
@@ -42,7 +42,7 @@ class ReleaseDateConditionHandler implements ConditionHandlerInterface
      */
     public function supportsCondition(ConditionInterface $condition)
     {
-        return ($condition instanceof ReleaseDateCondition);
+        return $condition instanceof ReleaseDateCondition;
     }
 
     /**

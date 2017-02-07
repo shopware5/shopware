@@ -26,8 +26,8 @@ namespace Shopware\Bundle\SearchBundleES\ConditionHandler;
 
 use ONGR\ElasticsearchDSL\Search;
 use Shopware\Bundle\SearchBundle\Condition\SearchTermCondition;
-use Shopware\Bundle\SearchBundle\CriteriaPartInterface;
 use Shopware\Bundle\SearchBundle\Criteria;
+use Shopware\Bundle\SearchBundle\CriteriaPartInterface;
 use Shopware\Bundle\SearchBundleES\PartialConditionHandlerInterface;
 use Shopware\Bundle\SearchBundleES\SearchTermQueryBuilderInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
@@ -52,7 +52,7 @@ class SearchTermConditionHandler implements PartialConditionHandlerInterface
      */
     public function supports(CriteriaPartInterface $criteriaPart)
     {
-        return ($criteriaPart instanceof SearchTermCondition);
+        return $criteriaPart instanceof SearchTermCondition;
     }
 
     /**
@@ -64,7 +64,7 @@ class SearchTermConditionHandler implements PartialConditionHandlerInterface
         Search $search,
         ShopContextInterface $context
     ) {
-        /** @var SearchTermCondition $criteriaPart */
+        /* @var SearchTermCondition $criteriaPart */
         $search->addQuery(
             $this->queryBuilder->buildQuery($context, $criteriaPart->getTerm())
         );

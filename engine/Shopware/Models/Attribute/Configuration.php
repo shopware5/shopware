@@ -24,18 +24,17 @@
 
 namespace Shopware\Models\Attribute;
 
-use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
 
 /**
- *
  * @ORM\Table(name="s_attribute_configuration")
  * @ORM\Entity
  */
 class Configuration extends ModelEntity
 {
     /**
-     * @var integer $id
+     * @var int
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -43,25 +42,25 @@ class Configuration extends ModelEntity
     private $id;
 
     /**
-     * @var string $tableName
+     * @var string
      * @ORM\Column(name="table_name", type="string", nullable=false)
      */
     private $tableName;
 
     /**
-     * @var string $name
+     * @var string
      * @ORM\Column(name="column_name", type="string", nullable=false)
      */
     private $columnName;
 
     /**
-     * @var string $type
+     * @var string
      * @ORM\Column(name="column_type", type="string", nullable=false)
      */
     private $columnType;
 
     /**
-     * @var string $type
+     * @var string
      * @ORM\Column(name="default_value", type="string", nullable=true)
      */
     private $defaultValue;
@@ -73,25 +72,25 @@ class Configuration extends ModelEntity
     private $entity;
 
     /**
-     * @var string $label
+     * @var string
      * @ORM\Column(name="label", type="string", nullable=true)
      */
     private $label;
 
     /**
-     * @var string $help
+     * @var string
      * @ORM\Column(name="help_text", type="string", nullable=true)
      */
     private $helpText;
 
     /**
-     * @var string $help
+     * @var string
      * @ORM\Column(name="support_text", type="string", nullable=true)
      */
     private $supportText;
 
     /**
-     * @var boolean $translatable
+     * @var bool
      * @ORM\Column(name="translatable", type="boolean")
      */
     private $translatable = false;
@@ -109,7 +108,7 @@ class Configuration extends ModelEntity
     private $custom = false;
 
     /**
-     * @var string $position
+     * @var string
      * @ORM\Column(name="position", type="integer", nullable=false)
      */
     private $position = 0;
@@ -225,7 +224,7 @@ class Configuration extends ModelEntity
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isTranslatable()
     {
@@ -233,7 +232,7 @@ class Configuration extends ModelEntity
     }
 
     /**
-     * @param boolean $translatable
+     * @param bool $translatable
      */
     public function setTranslatable($translatable)
     {
@@ -241,7 +240,7 @@ class Configuration extends ModelEntity
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isDisplayInBackend()
     {
@@ -249,7 +248,7 @@ class Configuration extends ModelEntity
     }
 
     /**
-     * @param boolean $displayInBackend
+     * @param bool $displayInBackend
      */
     public function setDisplayInBackend($displayInBackend)
     {
@@ -273,7 +272,7 @@ class Configuration extends ModelEntity
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isCustom()
     {
@@ -281,7 +280,7 @@ class Configuration extends ModelEntity
     }
 
     /**
-     * @param boolean $custom
+     * @param bool $custom
      */
     public function setCustom($custom)
     {

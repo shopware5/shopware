@@ -35,7 +35,7 @@ class BannerComponentHandler implements ComponentHandlerInterface
     const COMPONENT_NAME = 'emotion-components-banner';
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function supports(Element $element)
     {
@@ -44,7 +44,7 @@ class BannerComponentHandler implements ComponentHandlerInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function prepare(PrepareDataCollection $collection, Element $element, ShopContextInterface $context)
     {
@@ -55,7 +55,7 @@ class BannerComponentHandler implements ComponentHandlerInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function handle(ResolvedDataCollection $collection, Element $element, ShopContextInterface $context)
     {
@@ -73,7 +73,7 @@ class BannerComponentHandler implements ComponentHandlerInterface
     }
 
     /**
-     * @param Element $element
+     * @param Element              $element
      * @param ShopContextInterface $context
      */
     private function generateLink(Element $element, ShopContextInterface $context)
@@ -94,8 +94,8 @@ class BannerComponentHandler implements ComponentHandlerInterface
 
     /**
      * @param PrepareDataCollection $collection
-     * @param Element $element
-     * @param ShopContextInterface $context
+     * @param Element               $element
+     * @param ShopContextInterface  $context
      */
     private function addMappings(PrepareDataCollection $collection, Element $element, ShopContextInterface $context)
     {
@@ -131,7 +131,7 @@ class BannerComponentHandler implements ComponentHandlerInterface
 
     /**
      * @param ResolvedDataCollection $collection
-     * @param Element $element
+     * @param Element                $element
      */
     private function resolveMappings(ResolvedDataCollection $collection, Element $element)
     {
@@ -170,6 +170,7 @@ class BannerComponentHandler implements ComponentHandlerInterface
 
     /**
      * @param array $mapping
+     *
      * @return string
      */
     private function getMappingKey(array $mapping)

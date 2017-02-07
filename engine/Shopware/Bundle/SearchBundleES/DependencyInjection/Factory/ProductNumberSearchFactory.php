@@ -46,6 +46,7 @@ class ProductNumberSearchFactory
 
     /**
      * @param Container $container
+     *
      * @return ProductNumberSearch
      */
     public function factory(Container $container)
@@ -59,18 +60,22 @@ class ProductNumberSearchFactory
 
     /**
      * @param Container $container
+     *
      * @return ArrayCollection
      */
     public function registerHandlerCollection(Container $container)
     {
         $handlers = $this->registerHandlers($container);
+
         return new ArrayCollection($handlers);
     }
 
     /**
      * @param Container $container
-     * @return \Shopware\Bundle\SearchBundleES\HandlerInterface[]
+     *
      * @throws \Exception
+     *
+     * @return \Shopware\Bundle\SearchBundleES\HandlerInterface[]
      */
     private function registerHandlers(Container $container)
     {

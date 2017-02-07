@@ -28,13 +28,19 @@ use Shopware\Models\Customer\Customer;
 
 /**
  * @category  Shopware
- * @package   Shopware\Tests
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class RegisterTest extends \Enlight_Components_Test_Controller_TestCase
 {
     const TEST_MAIL = 'unittest@mail.com';
     const SAVE_URL = '/register/saveRegister/sTarget/account/sTargetAction/index';
+
+    public static function tearDownAfterClass()
+    {
+        parent::tearDownAfterClass();
+        Shopware()->Container()->reset('router');
+    }
 
     public function setUp()
     {
@@ -50,12 +56,6 @@ class RegisterTest extends \Enlight_Components_Test_Controller_TestCase
         Shopware()->Container()->get('models')->clear();
     }
 
-    public static function tearDownAfterClass()
-    {
-        parent::tearDownAfterClass();
-        Shopware()->Container()->reset('router');
-    }
-
     public function testSimpleRegistration()
     {
         $this->Request()->setMethod('POST');
@@ -63,7 +63,7 @@ class RegisterTest extends \Enlight_Components_Test_Controller_TestCase
             'register' => [
                 'personal' => $this->getPersonalData(),
                 'billing' => $this->getBillingData(),
-            ]
+            ],
         ]);
 
         $this->sendRequestAndAssertCustomer(
@@ -96,10 +96,10 @@ class RegisterTest extends \Enlight_Components_Test_Controller_TestCase
             'register' => [
                 'personal' => $this->getPersonalData(),
                 'billing' => $this->getBillingData([
-                    'shippingAddress' => 1
+                    'shippingAddress' => 1,
                 ]),
-                'shipping' => $this->getShippingData()
-            ]
+                'shipping' => $this->getShippingData(),
+            ],
         ]);
 
         $this->sendRequestAndAssertCustomer(
@@ -115,7 +115,7 @@ class RegisterTest extends \Enlight_Components_Test_Controller_TestCase
                 'street' => 'street 2',
                 'zipcode' => 'zipcode 2',
                 'city' => 'city 2',
-                'country_id' => 3
+                'country_id' => 3,
             ]
         );
     }
@@ -126,30 +126,29 @@ class RegisterTest extends \Enlight_Components_Test_Controller_TestCase
         $this->Request()->setPost([
             'register' => [
                 'personal' => $this->getPersonalData([
-                    'customer_type' => Customer::CUSTOMER_TYPE_BUSINESS
+                    'customer_type' => Customer::CUSTOMER_TYPE_BUSINESS,
                 ]),
                 'billing' => $this->getBillingData([
                     'vatId' => 'xxxxxxxxxxxxxx',
                     'company' => 'company',
-                    'department' => 'department'
-                ])
-            ]
+                    'department' => 'department',
+                ]),
+            ],
         ]);
 
         $this->sendRequestAndAssertCustomer(
             self::TEST_MAIL,
             [
-                'firstname' => 'first name'
+                'firstname' => 'first name',
             ],
             [
                 'street' => 'street',
                 'ustid' => 'xxxxxxxxxxxxxx',
                 'company' => 'company',
-                'department' => 'department'
+                'department' => 'department',
             ]
         );
     }
-
 
     public function testFastRegistration()
     {
@@ -158,10 +157,10 @@ class RegisterTest extends \Enlight_Components_Test_Controller_TestCase
             'register' => [
                 'personal' => $this->getPersonalData([
                     'password' => null,
-                    'accountmode' => Customer::ACCOUNT_MODE_FAST_LOGIN
+                    'accountmode' => Customer::ACCOUNT_MODE_FAST_LOGIN,
                 ]),
                 'billing' => $this->getBillingData(),
-            ]
+            ],
         ]);
 
         $this->sendRequestAndAssertCustomer(
@@ -171,7 +170,7 @@ class RegisterTest extends \Enlight_Components_Test_Controller_TestCase
                 'lastname' => 'last name',
                 'salutation' => 'mr',
                 'email' => self::TEST_MAIL,
-                'accountmode' => 1
+                'accountmode' => 1,
             ],
             [
                 'street' => 'street',
@@ -191,7 +190,7 @@ class RegisterTest extends \Enlight_Components_Test_Controller_TestCase
             'register' => [
                 'personal' => $this->getPersonalData(),
                 'billing' => $this->getBillingData(),
-            ]
+            ],
         ]);
 
         $this->sendRequestAndAssertCustomer(
@@ -201,7 +200,7 @@ class RegisterTest extends \Enlight_Components_Test_Controller_TestCase
                 'paymentID' => 6,
                 'lastname' => 'last name',
                 'salutation' => 'mr',
-                'email' => self::TEST_MAIL
+                'email' => self::TEST_MAIL,
             ],
             [
                 'street' => 'street',
@@ -227,7 +226,7 @@ class RegisterTest extends \Enlight_Components_Test_Controller_TestCase
         $this->assertNotEmpty($session->offsetGet('sUserId'));
 
         $customer = Shopware()->Container()->get('dbal_connection')->fetchAssoc(
-            "SELECT * FROM s_user WHERE email = :mail LIMIT 1",
+            'SELECT * FROM s_user WHERE email = :mail LIMIT 1',
             [':mail' => $email]
         );
         $this->assertNotEmpty($customer);
@@ -251,13 +250,14 @@ class RegisterTest extends \Enlight_Components_Test_Controller_TestCase
     private function deleteCustomer($email)
     {
         Shopware()->Container()->get('dbal_connection')->executeQuery(
-            "DELETE FROM s_user WHERE email = :mail",
+            'DELETE FROM s_user WHERE email = :mail',
             [':mail' => $email]
         );
     }
 
     /**
      * @param array $data
+     *
      * @return array
      */
     private function getPersonalData($data = [])
@@ -269,7 +269,7 @@ class RegisterTest extends \Enlight_Components_Test_Controller_TestCase
             'email' => self::TEST_MAIL,
             'firstname' => 'first name',
             'lastname' => 'last name',
-            'accountmode' => Customer::ACCOUNT_MODE_CUSTOMER
+            'accountmode' => Customer::ACCOUNT_MODE_CUSTOMER,
         ], $data);
     }
 
@@ -284,7 +284,7 @@ class RegisterTest extends \Enlight_Components_Test_Controller_TestCase
             'street' => 'street 2',
             'zipcode' => 'zipcode 2',
             'city' => 'city 2',
-            'country' => 3
+            'country' => 3,
         ], $data);
     }
 
@@ -295,13 +295,13 @@ class RegisterTest extends \Enlight_Components_Test_Controller_TestCase
             'zipcode' => 'zipcode',
             'city' => 'city',
             'country' => 2,
-            'country_state_2' => 6
+            'country_state_2' => 6,
         ], $data);
     }
 
     /**
      * @param string $email
-     * @param array $data
+     * @param array  $data
      * @param string $type
      */
     private function assertAddress($email, $data, $type = 'billing')
@@ -314,11 +314,11 @@ class RegisterTest extends \Enlight_Components_Test_Controller_TestCase
         }
 
         $legacy = Shopware()->Container()->get('dbal_connection')->fetchAssoc(
-            "SELECT address.id FROM ".$table." address, s_user user WHERE user.email = :mail AND address.userID = user.id LIMIT 1",
+            'SELECT address.id FROM ' . $table . ' address, s_user user WHERE user.email = :mail AND address.userID = user.id LIMIT 1',
             [':mail' => $email]
         );
         $address = Shopware()->Container()->get('dbal_connection')->fetchAssoc(
-            "SELECT address.* FROM s_user_addresses address, s_user user WHERE user.".$column." = address.id AND user.email = :mail",
+            'SELECT address.* FROM s_user_addresses address, s_user user WHERE user.' . $column . ' = address.id AND user.email = :mail',
             [':mail' => $email]
         );
 
@@ -333,6 +333,7 @@ class RegisterTest extends \Enlight_Components_Test_Controller_TestCase
 
     /**
      * @param \Enlight_Controller_Response_Response $response
+     *
      * @return null|string
      */
     private function getHeaderLocation(\Enlight_Controller_Response_Response $response)
@@ -343,6 +344,7 @@ class RegisterTest extends \Enlight_Components_Test_Controller_TestCase
                 return $header['value'];
             }
         }
+
         return null;
     }
 }

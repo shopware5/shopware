@@ -22,10 +22,8 @@
  * our trademarks remain entirely with us.
  */
 
-use Shopware\Bundle\AttributeBundle\Service\ConfigurationStruct;
-use Shopware\Models\Search\CustomSorting;
 use Enlight_Controller_Request_Request as Request;
-use Shopware\Bundle\AttributeBundle\Repository\SearchCriteria;
+use Shopware\Models\Search\CustomSorting;
 
 class Shopware_Controllers_Backend_CustomSorting extends Shopware_Controllers_Backend_Application
 {
@@ -43,11 +41,11 @@ class Shopware_Controllers_Backend_CustomSorting extends Shopware_Controllers_Ba
         );
 
         $connection->executeUpdate(
-            "UPDATE s_categories SET `hide_sortings` = :hideSortings, `sorting_ids` = :sortingIds WHERE path LIKE :path",
+            'UPDATE s_categories SET `hide_sortings` = :hideSortings, `sorting_ids` = :sortingIds WHERE path LIKE :path',
             [
                 ':hideSortings' => (int) $data['hide_sortings'],
                 ':sortingIds' => (string) $data['sorting_ids'],
-                ':path' => '%|'. $categoryId .'|%'
+                ':path' => '%|' . $categoryId . '|%',
             ]
         );
 
@@ -62,12 +60,12 @@ class Shopware_Controllers_Backend_CustomSorting extends Shopware_Controllers_Ba
         $connection = $this->container->get('dbal_connection');
 
         $connection->executeUpdate(
-            "UPDATE s_search_custom_sorting SET position = position - 1 WHERE position <= :position",
+            'UPDATE s_search_custom_sorting SET position = position - 1 WHERE position <= :position',
             [':position' => $position]
         );
 
         $connection->executeUpdate(
-            "UPDATE s_search_custom_sorting SET position = :position WHERE id = :id",
+            'UPDATE s_search_custom_sorting SET position = :position WHERE id = :id',
             [':position' => $position, ':id' => $id]
         );
 

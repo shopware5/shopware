@@ -61,14 +61,14 @@ class ConfigWriter
         $this->em = $em;
 
         $this->elementRepository = $this->em->getRepository(Element::class);
-        $this->formRepository    = $this->em->getRepository(Form::class);
-        $this->valueRepository   = $this->em->getRepository(Value::class);
+        $this->formRepository = $this->em->getRepository(Form::class);
+        $this->valueRepository = $this->em->getRepository(Value::class);
     }
 
     /**
      * @param Plugin $plugin
-     * @param array $elements
-     * @param Shop $shop
+     * @param array  $elements
+     * @param Shop   $shop
      */
     public function savePluginConfig(Plugin $plugin, $elements, Shop $shop)
     {
@@ -80,13 +80,14 @@ class ConfigWriter
     /**
      * @param Plugin $plugin
      * @param string $name
-     * @param mixed $value
-     * @param Shop $shop
+     * @param mixed  $value
+     * @param Shop   $shop
+     *
      * @throws \Exception
      */
     public function saveConfigElement(Plugin $plugin, $name, $value, Shop $shop)
     {
-        /** @var $form Form*/
+        /** @var $form Form */
         $form = $this->formRepository->findOneBy(['pluginId' => $plugin->getId()]);
 
         /** @var $element Element */

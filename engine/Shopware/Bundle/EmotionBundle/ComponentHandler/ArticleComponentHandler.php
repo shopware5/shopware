@@ -53,19 +53,19 @@ class ArticleComponentHandler implements ComponentHandlerInterface
     private $criteriaFactory;
 
     /**
-     * @var ShopwareConfig $shopwareConfig
+     * @var ShopwareConfig
      */
     private $shopwareConfig;
 
     /**
-     * @var AdditionalTextService $additionalTextService
+     * @var AdditionalTextService
      */
     private $additionalTextService;
 
     /**
      * @param StoreFrontCriteriaFactoryInterface $criteriaFactory
-     * @param ShopwareConfig $shopwareConfig
-     * @param AdditionalTextService $additionalTextService
+     * @param ShopwareConfig                     $shopwareConfig
+     * @param AdditionalTextService              $additionalTextService
      */
     public function __construct(
         StoreFrontCriteriaFactoryInterface $criteriaFactory,
@@ -79,7 +79,7 @@ class ArticleComponentHandler implements ComponentHandlerInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function supports(Element $element)
     {
@@ -88,7 +88,7 @@ class ArticleComponentHandler implements ComponentHandlerInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function prepare(PrepareDataCollection $collection, Element $element, ShopContextInterface $context)
     {
@@ -97,9 +97,11 @@ class ArticleComponentHandler implements ComponentHandlerInterface
 
         if ($type === self::TYPE_STATIC_PRODUCT) {
             $collection->getBatchRequest()->setProductNumbers($key, [$element->getConfig()->get('article')]);
+
             return;
         } elseif ($type === self::TYPE_STATIC_VARIANT) {
             $collection->getBatchRequest()->setProductNumbers($key, [$element->getConfig()->get('variant')]);
+
             return;
         }
 
@@ -110,7 +112,7 @@ class ArticleComponentHandler implements ComponentHandlerInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function handle(ResolvedDataCollection $collection, Element $element, ShopContextInterface $context)
     {
@@ -144,8 +146,9 @@ class ArticleComponentHandler implements ComponentHandlerInterface
     }
 
     /**
-     * @param Element $element
+     * @param Element              $element
      * @param ShopContextInterface $context
+     *
      * @return \Shopware\Bundle\SearchBundle\Criteria
      */
     private function generateCriteria(Element $element, ShopContextInterface $context)

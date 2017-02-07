@@ -27,8 +27,8 @@ namespace Shopware\Bundle\SearchBundleES\ConditionHandler;
 use ONGR\ElasticsearchDSL\Query\RangeQuery;
 use ONGR\ElasticsearchDSL\Search;
 use Shopware\Bundle\SearchBundle\Condition\IsNewCondition;
-use Shopware\Bundle\SearchBundle\CriteriaPartInterface;
 use Shopware\Bundle\SearchBundle\Criteria;
+use Shopware\Bundle\SearchBundle\CriteriaPartInterface;
 use Shopware\Bundle\SearchBundleES\PartialConditionHandlerInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
@@ -52,7 +52,7 @@ class IsNewConditionHandler implements PartialConditionHandlerInterface
      */
     public function supports(CriteriaPartInterface $criteriaPart)
     {
-        return ($criteriaPart instanceof IsNewCondition);
+        return $criteriaPart instanceof IsNewCondition;
     }
 
     /**
@@ -92,7 +92,7 @@ class IsNewConditionHandler implements PartialConditionHandlerInterface
         $timestamp = strtotime('-' . $dayLimit . ' days');
 
         return new RangeQuery('formattedCreatedAt', [
-            'gte' => date("Y-m-d", $timestamp),
+            'gte' => date('Y-m-d', $timestamp),
             'lte' => date('Y-m-d'),
         ]);
     }
