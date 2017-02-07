@@ -1,0 +1,157 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service id="shopware_cart.store_front_cart_service" class="Shopware\Bundle\CartBundle\Infrastructure\StoreFrontCartService">
+            <argument type="service" id="shopware_cart.cart_calculator" />
+            <argument type="service" id="shopware_cart.cart_persister" />
+            <argument type="service" id="shopware_cart.cart_context_service" />
+            <argument type="service" id="session" />
+        </service>
+
+        <service id="shopware_cart.amount_calculator" class="Shopware\Bundle\CartBundle\Domain\Price\AmountCalculator" >
+            <argument type="service" id="shopware_cart.tax_detector" />
+            <argument type="service" id="shopware_cart.price_rounding" />
+        </service>
+
+        <service id="shopware_cart.tax_detector" class="Shopware\Bundle\CartBundle\Domain\Tax\TaxDetector" />
+
+        <service id="shopware_cart.cart_calculator" class="Shopware\Bundle\CartBundle\Domain\Cart\CartCalculator">
+            <!--cart processors-->
+            <argument type="collection" />
+
+            <argument type="service" id="shopware_cart.amount_calculator" />
+        </service>
+
+        <service id="shopware_cart.cart_persister" class="Shopware\Bundle\CartBundle\Domain\Cart\CartPersister">
+            <argument type="service" id="dbal_connection" />
+        </service>
+
+        <service id="shopware_cart.price_rounding" class="Shopware\Bundle\CartBundle\Domain\Price\PriceRounding">
+            <argument>2</argument>
+        </service>
+
+        <service id="shopware_cart.product_price_gateway" class="Shopware\Bundle\CartBundle\Infrastructure\Product\ProductPriceGateway">
+            <argument type="service" id="dbal_connection" />
+            <argument type="service" id="shopware_storefront.field_helper_dbal" />
+        </service>
+
+        <service id="shopware_cart.tax_calculator" class="Shopware\Bundle\CartBundle\Domain\Tax\TaxCalculator" >
+            <argument type="service" id="shopware_cart.price_rounding" />
+            <argument type="collection" />
+        </service>
+
+        <service id="shopware_cart.simple_tax_rule_calculator" class="Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCalculator">
+            <argument type="service" id="shopware_cart.price_rounding" />
+            <tag name="shopware_cart.tax_rule_calculator" />
+        </service>
+
+        <service id="shopware_cart.percentage_tax_rule_calculator" class="Shopware\Bundle\CartBundle\Domain\Tax\PercentageTaxRuleCalculator">
+            <argument type="service" id="shopware_cart.simple_tax_rule_calculator" />
+            <tag name="shopware_cart.tax_rule_calculator" />
+        </service>
+
+
+        <service id="shopware_cart.price_calculator" class="Shopware\Bundle\CartBundle\Domain\Price\PriceCalculator">
+            <argument type="service" id="shopware_cart.tax_calculator" />
+            <argument type="service" id="shopware_cart.price_rounding" />
+            <argument type="service" id="shopware_cart.tax_detector" />
+        </service>
+
+        <service id="shopware_cart.cart_context_service" class="Shopware\Bundle\CartBundle\Infrastructure\Cart\CartContextService">
+            <argument type="service" id="shopware_storefront.context_service" />
+            <argument type="service" id="session" />
+            <argument type="service" id="shopware_cart.delivery_service_gateway_dbal" />
+            <argument type="service" id="shopware_cart.payment_service_gateway_dbal" />
+            <argument type="service" id="shopware_cart.address_gateway_dbal" />
+            <argument type="service" id="shopware_cart.customer_service" />
+            <argument type="service" id="config" />
+        </service>
+
+        <service id="shopware_cart.product_processor" class="Shopware\Bundle\CartBundle\Domain\Product\ProductProcessor">
+            <argument type="service" id="shopware_cart.product_price_gateway" />
+            <argument type="service" id="shopware_cart.price_calculator" />
+            <argument type="service" id="shopware_cart.product_delivery_information_gateway" />
+            <tag name="cart_processor" priority="30000" />
+        </service>
+
+        <service id="shopware_cart.percentage_voucher_processor" class="Shopware\Bundle\CartBundle\Domain\Voucher\PercentageVoucherProcessor">
+            <argument type="service" id="shopware_cart.percentage_price_calculator" />
+            <tag name="cart_processor" priority="20000" />
+        </service>
+
+        <service id="shopware_cart.delivery_separator" class="Shopware\Bundle\CartBundle\Domain\Delivery\DeliverySeparatorProcessor">
+            <argument type="service" id="shopware_cart.stock_delivery_separator" />
+            <tag name="cart_processor" priority="10000" />
+        </service>
+
+        <service id="shopware_cart.product_delivery_information_gateway" class="Shopware\Bundle\CartBundle\Infrastructure\Product\ProductDeliveryGateway">
+            <argument type="service" id="dbal_connection" />
+        </service>
+
+        <service id="shopware_cart.percentage_price_calculator" class="Shopware\Bundle\CartBundle\Domain\Price\PercentagePriceCalculator">
+            <argument type="service" id="shopware_cart.price_rounding"/>
+            <argument type="service" id="shopware_cart.price_calculator"/>
+        </service>
+
+        <service id="shopware_cart.percentage_tax_calculator" class="Shopware\Bundle\CartBundle\Domain\Tax\PercentageTaxRuleCalculator">
+            <argument type="service" id="shopware_cart.tax_calculator" />
+        </service>
+
+        <service id="shopware_cart.address_hydrator_dbal" class="Shopware\Bundle\CartBundle\Infrastructure\Customer\AddressHydrator">
+            <argument type="service" id="shopware_storefront.attribute_hydrator_dbal" />
+            <argument type="service" id="shopware_storefront.country_hydrator_dbal" />
+        </service>
+
+        <service id="shopware_cart.customer_hydrator_dbal" class="Shopware\Bundle\CartBundle\Infrastructure\Customer\CustomerHydrator">
+            <argument type="service" id="shopware_storefront.attribute_hydrator_dbal" />
+            <argument type="service" id="shopware_storefront.customer_group_hydrator_dbal" />
+        </service>
+
+        <service id="shopware_cart.customer_gateway_dbal" class="Shopware\Bundle\CartBundle\Infrastructure\Customer\CustomerGateway">
+            <argument type="service" id="shopware_storefront.field_helper_dbal" />
+            <argument type="service" id="shopware_cart.customer_hydrator_dbal" />
+            <argument type="service" id="dbal_connection" />
+        </service>
+
+        <service id="shopware_cart.address_gateway_dbal" class="Shopware\Bundle\CartBundle\Infrastructure\Customer\AddressGateway">
+            <argument type="service" id="shopware_storefront.field_helper_dbal" />
+            <argument type="service" id="shopware_cart.address_hydrator_dbal" />
+            <argument type="service" id="dbal_connection" />
+        </service>
+
+        <service id="shopware_cart.customer_service" class="Shopware\Bundle\CartBundle\Infrastructure\Customer\CustomerService">
+            <argument type="service" id="shopware_cart.customer_gateway_dbal" />
+            <argument type="service" id="shopware_cart.address_gateway_dbal" />
+            <argument type="service" id="shopware_storefront.shop_gateway_dbal" />
+            <argument type="service" id="shopware_cart.payment_service_gateway_dbal" />
+        </service>
+
+        <service id="shopware_cart.payment_service_gateway_dbal" class="Shopware\Bundle\CartBundle\Infrastructure\Payment\PaymentServiceGateway">
+            <argument type="service" id="shopware_storefront.field_helper_dbal" />
+            <argument type="service" id="shopware_cart.payment_service_hydrator_dbal" />
+            <argument type="service" id="dbal_connection" />
+        </service>
+
+        <service id="shopware_cart.payment_service_hydrator_dbal" class="Shopware\Bundle\CartBundle\Infrastructure\Payment\PaymentServiceHydrator">
+            <argument type="service" id="shopware_storefront.attribute_hydrator_dbal" />
+        </service>
+
+        <service id="shopware_cart.delivery_service_gateway_dbal" class="Shopware\Bundle\CartBundle\Infrastructure\Delivery\DeliveryServiceGateway">
+            <argument type="service" id="shopware_storefront.field_helper_dbal" />
+            <argument type="service" id="shopware_cart.delivery_service_hydrator_dbal" />
+            <argument type="service" id="dbal_connection" />
+        </service>
+
+        <service id="shopware_cart.delivery_service_hydrator_dbal" class="Shopware\Bundle\CartBundle\Infrastructure\Delivery\DeliveryServiceHydrator">
+            <argument type="service" id="shopware_storefront.attribute_hydrator_dbal" />
+        </service>
+
+        <service id="shopware_cart.stock_delivery_separator" class="Shopware\Bundle\CartBundle\Domain\Delivery\StockDeliverySeparator">
+            <argument type="service" id="shopware_cart.price_calculator" />
+        </service>
+    </services>
+</container>

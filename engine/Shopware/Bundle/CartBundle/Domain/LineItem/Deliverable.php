@@ -22,32 +22,24 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\StoreFrontBundle\Struct;
+namespace Shopware\Bundle\CartBundle\Domain\LineItem;
 
-use Shopware\Bundle\StoreFrontBundle\Struct\Country\Area;
-use Shopware\Bundle\StoreFrontBundle\Struct\Country\State;
+use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryDate;
 
-/**
- * @deprecated since version 5.2, to be removed in 6.0 - Use ShopContextInterface instead
- *
- * @category  Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
-interface LocationContextInterface
+interface Deliverable
 {
     /**
-     * @return Area
+     * @return float
      */
-    public function getArea();
+    public function getStock();
 
     /**
-     * @return Country
+     * @return DeliveryDate
      */
-    public function getCountry();
+    public function getInStockDeliveryDate();
 
     /**
-     * @return State
+     * @return DeliveryDate
      */
-    public function getState();
+    public function getOutOfStockDeliveryDate();
 }

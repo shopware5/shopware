@@ -29,7 +29,7 @@ namespace Shopware\Bundle\StoreFrontBundle\Struct;
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-abstract class Extendable extends Struct implements \JsonSerializable
+abstract class Extendable extends Struct implements \JsonSerializable, ExtendableInterface
 {
     /**
      * Contains an array of attribute structs.

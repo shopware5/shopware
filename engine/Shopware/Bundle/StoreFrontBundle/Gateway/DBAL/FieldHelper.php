@@ -815,6 +815,133 @@ class FieldHelper
         return $fields;
     }
 
+    public function getCustomerFields()
+    {
+        $fields = [
+            'customer.id as __customer_id',
+            'customer.email as __customer_email',
+            'customer.active as __customer_active',
+            'customer.accountmode as __customer_accountmode',
+            'customer.confirmationkey as __customer_confirmationkey',
+            'customer.paymentID as __customer_paymentID',
+            'customer.firstlogin as __customer_firstlogin',
+            'customer.lastlogin as __customer_lastlogin',
+            'customer.newsletter as __customer_newsletter',
+            'customer.validation as __customer_validation',
+            'customer.affiliate as __customer_affiliate',
+            'customer.customergroup as __customer_customergroup',
+            'customer.paymentpreset as __customer_paymentpreset',
+            'customer.language as __customer_language',
+            'customer.subshopID as __customer_subshopID',
+            'customer.referer as __customer_referer',
+            'customer.internalcomment as __customer_internalcomment',
+            'customer.failedlogins as __customer_failedlogins',
+            'customer.lockeduntil as __customer_lockeduntil',
+            'customer.default_billing_address_id as __customer_default_billing_address_id',
+            'customer.default_shipping_address_id as __customer_default_shipping_address_id',
+            'customer.title as __customer_title',
+            'customer.salutation as __customer_salutation',
+            'customer.firstname as __customer_firstname',
+            'customer.lastname as __customer_lastname',
+            'customer.birthday as __customer_birthday',
+            'customer.customernumber as __customer_customernumber'
+        ];
+        $fields = array_merge(
+            $fields,
+            $this->getTableFields('s_user_attributes', 'customerAttribute')
+        );
+        return $fields;
+    }
+
+    public function getDeliveryServiceFields()
+    {
+        $fields = [
+            'deliveryService.id as __deliveryService_id',
+            'deliveryService.name as __deliveryService_name',
+            'deliveryService.type as __deliveryService_type',
+            'deliveryService.description as __deliveryService_description',
+            'deliveryService.comment as __deliveryService_comment',
+            'deliveryService.active as __deliveryService_active',
+            'deliveryService.position as __deliveryService_position',
+            'deliveryService.calculation as __deliveryService_calculation',
+            'deliveryService.surcharge_calculation as __deliveryService_surcharge_calculation',
+            'deliveryService.tax_calculation as __deliveryService_tax_calculation',
+            'deliveryService.shippingfree as __deliveryService_shippingfree',
+            'deliveryService.multishopID as __deliveryService_multishopID',
+            'deliveryService.customergroupID as __deliveryService_customergroupID',
+            'deliveryService.bind_shippingfree as __deliveryService_bind_shippingfree',
+            'deliveryService.bind_time_from as __deliveryService_bind_time_from',
+            'deliveryService.bind_time_to as __deliveryService_bind_time_to',
+            'deliveryService.bind_instock as __deliveryService_bind_instock',
+            'deliveryService.bind_laststock as __deliveryService_bind_laststock',
+            'deliveryService.bind_weekday_from as __deliveryService_bind_weekday_from',
+            'deliveryService.bind_weekday_to as __deliveryService_bind_weekday_to',
+            'deliveryService.bind_weight_from as __deliveryService_bind_weight_from',
+            'deliveryService.bind_weight_to as __deliveryService_bind_weight_to',
+            'deliveryService.bind_price_from as __deliveryService_bind_price_from',
+            'deliveryService.bind_price_to as __deliveryService_bind_price_to',
+            'deliveryService.status_link as __deliveryService_status_link'
+        ];
+
+        return array_merge($fields, $this->getTableFields('s_premium_dispatch_attributes', 'deliveryServiceAttribute'));
+    }
+
+    public function getPaymentServiceFields()
+    {
+        $fields = [
+            'paymentService.id as __paymentService_id',
+            'paymentService.name as __paymentService_name',
+            'paymentService.description as __paymentService_description',
+            'paymentService.template as __paymentService_template',
+            'paymentService.class as __paymentService_class',
+            'paymentService.table as __paymentService_table',
+            'paymentService.hide as __paymentService_hide',
+            'paymentService.additionaldescription as __paymentService_additionaldescription',
+            'paymentService.debit_percent as __paymentService_debit_percent',
+            'paymentService.surcharge as __paymentService_surcharge',
+            'paymentService.surchargestring as __paymentService_surchargestring',
+            'paymentService.position as __paymentService_position',
+            'paymentService.active as __paymentService_active',
+            'paymentService.esdactive as __paymentService_esdactive',
+            'paymentService.embediframe as __paymentService_embediframe',
+            'paymentService.hideprospect as __paymentService_hideprospect',
+            'paymentService.action as __paymentService_action',
+            'paymentService.pluginID as __paymentService_pluginID',
+            'paymentService.source as __paymentService_source',
+            'paymentService.mobile_inactive as __paymentService_mobile_inactive'
+        ];
+        return array_merge($fields, $this->getTableFields('s_core_paymentmeans_attributes', 'paymentServiceAttribute'));
+    }
+
+    public function getAddressFields()
+    {
+        $fields = [
+            'address.id as __address_id',
+            'address.user_id as __address_user_id',
+            'address.company as __address_company',
+            'address.department as __address_department',
+            'address.salutation as __address_salutation',
+            'address.title as __address_title',
+            'address.firstname as __address_firstname',
+            'address.lastname as __address_lastname',
+            'address.street as __address_street',
+            'address.zipcode as __address_zipcode',
+            'address.city as __address_city',
+            'address.country_id as __address_country_id',
+            'address.state_id as __address_state_id',
+            'address.ustid as __address_ustid',
+            'address.phone as __address_phone',
+            'address.additional_address_line1 as __address_additional_address_line1',
+            'address.additional_address_line2 as __address_additional_address_line2',
+        ];
+        $fields = array_merge(
+            $fields,
+            $this->getTableFields('s_user_addresses_attributes', 'addressAttribute')
+        );
+        return $fields;
+    }
+
+
     /**
      * Returns an array with all required emotion fields.
      * Requires that the s_emotion table is included with table alias 'emotion'
@@ -1273,6 +1400,24 @@ class FieldHelper
 
     /**
      * @param QueryBuilder         $query
+     * @param ShopContextInterface $context
+     */
+    public function addCustomerTranslation(QueryBuilder $query, ShopContextInterface $context)
+    {
+        $this->addTranslation('customerAttribute', 's_user_attributes', $query, $context, 'customerAttribute.id');
+    }
+
+    /**
+     * @param QueryBuilder $query
+     * @param ShopContextInterface $context
+     */
+    public function addAddressTranslation(QueryBuilder $query, ShopContextInterface $context)
+    {
+        $this->addTranslation('addressAttribute', 's_user_addresses_attributes', $query, $context, 'addressAttribute.id');
+    }
+
+    /**
+     * @param QueryBuilder $query
      * @param ShopContextInterface $context
      */
     public function addEmotionElementTranslation(QueryBuilder $query, ShopContextInterface $context)

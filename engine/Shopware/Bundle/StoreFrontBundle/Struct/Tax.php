@@ -54,6 +54,18 @@ class Tax extends Extendable implements \JsonSerializable
 
     /**
      * @param int $id
+     * @param string $name
+     * @param float $tax
+     */
+    public function __construct($id, $name, $tax)
+    {
+        $this->id = $id;
+        $this->name = $name;
+        $this->tax = $tax;
+    }
+
+    /**
+     * @param int $id
      */
     public function setId($id)
     {

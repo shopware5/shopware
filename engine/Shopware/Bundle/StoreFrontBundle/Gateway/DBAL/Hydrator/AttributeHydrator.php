@@ -80,7 +80,7 @@ class AttributeHydrator extends Hydrator
      * @param string            $attributeKey
      * @param null|string       $translationKey
      */
-    public function addAttribute(Struct\Extendable $struct, $data, $arrayKey, $attributeKey = null, $translationKey = null)
+    public function addAttribute(Struct\ExtendableInterface $struct, $data, $arrayKey, $attributeKey = null, $translationKey = null)
     {
         $arrayKey = '__' . $arrayKey . '_';
         $attribute = $this->extractFields($arrayKey, $data);
