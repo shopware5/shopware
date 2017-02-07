@@ -67,7 +67,7 @@ class CategoryFacetTest extends TestCase
         $facet = $result->getFacets();
         $facet = $facet[0];
 
-        /** @var $facet TreeFacetResult */
+        /* @var $facet TreeFacetResult */
         $this->assertInstanceOf('Shopware\Bundle\SearchBundle\FacetResult\TreeFacetResult', $facet);
 
         $this->assertCount(1, $facet->getValues());
@@ -109,7 +109,7 @@ class CategoryFacetTest extends TestCase
         $facet = $result->getFacets();
         $facet = $facet[0];
 
-        /** @var $facet TreeFacetResult */
+        /* @var $facet TreeFacetResult */
         $this->assertInstanceOf('Shopware\Bundle\SearchBundle\FacetResult\TreeFacetResult', $facet);
 
         $this->assertCount(1, $facet->getValues());
@@ -160,7 +160,7 @@ class CategoryFacetTest extends TestCase
         $facet = $result->getFacets();
         $facet = $facet[0];
 
-        /** @var $facet TreeFacetResult */
+        /* @var $facet TreeFacetResult */
         $this->assertInstanceOf('Shopware\Bundle\SearchBundle\FacetResult\TreeFacetResult', $facet);
 
         $this->assertCount(1, $facet->getValues());

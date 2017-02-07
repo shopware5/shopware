@@ -71,11 +71,11 @@ class Validation
     /**
      * @param array $requirements {
      *
-     * @var string     type => Type of the requirement check.
+     * @var string     type => Type of the requirement check
      * @var array      directories => Array of directories which should be iterated
      * @var string     errorLevel => Flag how critical the error is (1 => Warning, 2 => Exception)
-     * @var string     errorMessage => Error message which can be set for the validation, 1x %s will be replaced with all found files.
-     * @var [optional] string value => Only used for regular expressions, contains the regular expression.
+     * @var string     errorMessage => Error message which can be set for the validation, 1x %s will be replaced with all found files
+     * @var [optional] string value => Only used for regular expressions, contains the regular expression
      * @var [optional] string fileRegex => Regular expression for file types.
      *                 }
      *
@@ -83,7 +83,7 @@ class Validation
      *
      * @return array {
      *
-     * @var string type       => Type of the requirement check.
+     * @var string type       => Type of the requirement check
      * @var int    errorLevel => Flag how critical the error is (1 => Warning, 2 => Exception)
      * @var string message    => Passed error message for failed checks.
      *             }

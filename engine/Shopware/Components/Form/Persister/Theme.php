@@ -195,47 +195,47 @@ class Theme implements Form\Interfaces\Persister
 
         switch ($class) {
             case 'Shopware\\Components\\Form\\Field\\Text':
-                /** @var $field Form\Field\Text */
+                /* @var $field Form\Field\Text */
                 $data += ['type' => 'theme-text-field'];
                 break;
             case 'Shopware\\Components\\Form\\Field\\Boolean':
-                /** @var $field Form\Field\Boolean */
+                /* @var $field Form\Field\Boolean */
                 $data += ['type' => 'theme-checkbox-field'];
                 break;
             case 'Shopware\\Components\\Form\\Field\\Date':
-                /** @var $field Form\Field\Date */
+                /* @var $field Form\Field\Date */
                 $data += ['type' => 'theme-date-field'];
                 break;
             case 'Shopware\\Components\\Form\\Field\\Color':
-                /** @var $field Form\Field\Color */
+                /* @var $field Form\Field\Color */
                 $data += ['type' => 'theme-color-picker'];
                 break;
             case 'Shopware\\Components\\Form\\Field\\Media':
-                /** @var $field Form\Field\Media */
+                /* @var $field Form\Field\Media */
                 $data += ['type' => 'theme-media-selection'];
                 break;
             case 'Shopware\\Components\\Form\\Field\\Number':
-                /** @var $field Form\Field\Number */
+                /* @var $field Form\Field\Number */
                 $data += ['type' => 'numberfield'];
                 break;
             case 'Shopware\\Components\\Form\\Field\\Em':
-                /** @var $field Form\Field\Number */
+                /* @var $field Form\Field\Number */
                 $data += ['type' => 'theme-em-field'];
                 break;
             case 'Shopware\\Components\\Form\\Field\\Percent':
-                /** @var $field Form\Field\Number */
+                /* @var $field Form\Field\Number */
                 $data += ['type' => 'theme-percent-field'];
                 break;
             case 'Shopware\\Components\\Form\\Field\\Pixel':
-                /** @var $field Form\Field\Number */
+                /* @var $field Form\Field\Number */
                 $data += ['type' => 'theme-pixel-field'];
                 break;
             case 'Shopware\\Components\\Form\\Field\\TextArea':
-                /** @var $field Form\Field\Number */
+                /* @var $field Form\Field\Number */
                 $data += ['type' => 'theme-text-area-field'];
                 break;
             case 'Shopware\\Components\\Form\\Field\\Selection':
-                /** @var $field Form\Field\Selection */
+                /* @var $field Form\Field\Selection */
                 $data += [
                     'type' => 'theme-select-field',
                     'selection' => $field->getStore(),
