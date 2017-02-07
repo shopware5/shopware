@@ -30,19 +30,22 @@ use Shopware\Components\Model\ModelRepository;
  * Shopware SwagAboCommerce Plugin - Repository
  *
  * @category  Shopware
- * @package   Shopware\Plugins\SwagMultiEdit\Models
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Repository extends ModelRepository
 {
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which selects all filters for the listing
+     *
      * @param $filter
+     *
      * @return \Doctrine\ORM\Query
      */
     public function getListQuery($filter = null)
     {
         $builder = $this->getListQueryBuilder($filter);
+
         return $builder->getQuery();
     }
 
@@ -51,6 +54,7 @@ class Repository extends ModelRepository
      * This function can be hooked to modify the query builder of the query object.
      *
      * @param $filter
+     *
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getListQueryBuilder($filter)
@@ -58,16 +62,19 @@ class Repository extends ModelRepository
         $builder = $this->getEntityManager()->createQueryBuilder()
             ->select('filter')
             ->from('Shopware\Models\MultiEdit\Filter', 'filter');
+
         return $builder;
     }
 
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which selects all backup entities
+     *
      * @param $offset
      * @param $limit
+     *
      * @return \Doctrine\ORM\Query
      */
-    public function getBackupListQuery($offset = null, $limit)
+    public function getBackupListQuery($offset, $limit)
     {
         $builder = $this->getBackupListQueryBuilder();
 
@@ -82,6 +89,7 @@ class Repository extends ModelRepository
     /**
      * Helper function to create the query builder for the "getBackupListQuery" function.
      * This function can be hooked to modify the query builder of the query object.
+     *
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getBackupListQueryBuilder()
@@ -90,7 +98,6 @@ class Repository extends ModelRepository
             ->select('backup')
             ->from('Shopware\Models\MultiEdit\Backup', 'backup')
             ->orderBy('backup.date', 'DESC');
-
 
         return $builder;
     }

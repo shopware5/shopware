@@ -47,9 +47,10 @@ class CombinedConditionQueryBuilder
     }
 
     /**
-     * @param array $conditions
-     * @param Criteria $criteria
+     * @param array                $conditions
+     * @param Criteria             $criteria
      * @param ShopContextInterface $context
+     *
      * @return BoolQuery
      */
     public function build(array $conditions, Criteria $criteria, ShopContextInterface $context)
@@ -77,11 +78,13 @@ class CombinedConditionQueryBuilder
         if ($search->getQueries()) {
             $query->add($search->getQueries());
         }
+
         return $query;
     }
 
     /**
      * @param CriteriaPartInterface $condition
+     *
      * @return PartialConditionHandlerInterface|HandlerInterface
      */
     private function getHandler(CriteriaPartInterface $condition)
@@ -92,6 +95,6 @@ class CombinedConditionQueryBuilder
                 return $handler;
             }
         }
-        throw new \RuntimeException(sprintf("%s class not supported", get_class($condition)));
+        throw new \RuntimeException(sprintf('%s class not supported', get_class($condition)));
     }
 }

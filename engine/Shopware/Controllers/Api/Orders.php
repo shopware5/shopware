@@ -41,10 +41,10 @@ class Shopware_Controllers_Api_Orders extends Shopware_Controllers_Api_Rest
      */
     public function indexAction()
     {
-        $limit  = $this->Request()->getParam('limit', 1000);
+        $limit = $this->Request()->getParam('limit', 1000);
         $offset = $this->Request()->getParam('start', 0);
-        $sort   = $this->Request()->getParam('sort', array());
-        $filter = $this->Request()->getParam('filter', array());
+        $sort = $this->Request()->getParam('sort', []);
+        $filter = $this->Request()->getParam('filter', []);
 
         $result = $this->resource->getList($offset, $limit, $filter, $sort);
 
@@ -60,7 +60,7 @@ class Shopware_Controllers_Api_Orders extends Shopware_Controllers_Api_Rest
     public function getAction()
     {
         $id = $this->Request()->getParam('id');
-        $useNumberAsId = (boolean) $this->Request()->getParam('useNumberAsId', 0);
+        $useNumberAsId = (bool) $this->Request()->getParam('useNumberAsId', 0);
 
         if ($useNumberAsId) {
             $order = $this->resource->getOneByNumber($id);
@@ -80,7 +80,7 @@ class Shopware_Controllers_Api_Orders extends Shopware_Controllers_Api_Rest
     public function putAction()
     {
         $id = $this->Request()->getParam('id');
-        $useNumberAsId = (boolean) $this->Request()->getParam('useNumberAsId', 0);
+        $useNumberAsId = (bool) $this->Request()->getParam('useNumberAsId', 0);
         $params = $this->Request()->getPost();
 
         if ($useNumberAsId) {
@@ -90,11 +90,11 @@ class Shopware_Controllers_Api_Orders extends Shopware_Controllers_Api_Rest
         }
 
         $location = $this->apiBaseUrl . 'orders/' . $order->getId();
-        $data = array(
-            'id'       => $order->getId(),
-            'location' => $location
-        );
+        $data = [
+            'id' => $order->getId(),
+            'location' => $location,
+        ];
 
-        $this->View()->assign(array('success' => true, 'data' => $data));
+        $this->View()->assign(['success' => true, 'data' => $data]);
     }
 }

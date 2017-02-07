@@ -28,7 +28,6 @@ use Shopware\Models\Customer\Customer;
 
 /**
  * Interface AccountServiceInterface
- * @package Shopware\Bundle\AccountBundle\Service
  */
 interface CustomerServiceInterface
 {

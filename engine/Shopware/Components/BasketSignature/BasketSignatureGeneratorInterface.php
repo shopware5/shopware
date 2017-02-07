@@ -32,7 +32,8 @@ interface BasketSignatureGeneratorInterface
      * payment process and checkout finish.
      *
      * @param array $basket
-     * @param int $customerId
+     * @param int   $customerId
+     *
      * @return string
      */
     public function generateSignature(array $basket, $customerId);

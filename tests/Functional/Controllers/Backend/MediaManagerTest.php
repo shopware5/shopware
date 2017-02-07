@@ -24,7 +24,7 @@
 
 /**
  * @category  Shopware
- * @package   Shopware\Tests
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Tests_Controllers_Backend_MediaManagerTest extends Enlight_Components_Test_Controller_TestCase
@@ -48,18 +48,18 @@ class Shopware_Tests_Controllers_Backend_MediaManagerTest extends Enlight_Compon
      */
     public function testAlbumInheritance()
     {
-        $params = array(
-            'albumID'           => '',
-            'createThumbnails'  => '',
-            'iconCls'           => 'sprite-target',
-            'id'                => '',
-            'leaf'              => false,
-            'mediaCount'        => '',
-            'parentId'          => '-11',
-            'position'          => '',
-            'text'              => 'PHPUNIT_ALBUM',
-            'thumbnailSize'     => ''
-        );
+        $params = [
+            'albumID' => '',
+            'createThumbnails' => '',
+            'iconCls' => 'sprite-target',
+            'id' => '',
+            'leaf' => false,
+            'mediaCount' => '',
+            'parentId' => '-11',
+            'position' => '',
+            'text' => 'PHPUNIT_ALBUM',
+            'thumbnailSize' => '',
+        ];
 
         $this->Request()->setMethod('POST')->setPost($params);
         $this->dispatch('/backend/MediaManager/saveAlbum');
@@ -69,7 +69,7 @@ class Shopware_Tests_Controllers_Backend_MediaManagerTest extends Enlight_Compon
 
         $this->resetRequest();
         $this->resetResponse();
-        $this->Request()->setMethod('GET')->setParams(array('albumId'=> '-11'));
+        $this->Request()->setMethod('GET')->setParams(['albumId' => '-11']);
         $this->dispatch('/backend/MediaManager/getAlbums');
 
         $jsonBody = $this->View()->getAssign();
@@ -86,9 +86,9 @@ class Shopware_Tests_Controllers_Backend_MediaManagerTest extends Enlight_Compon
 
         $this->resetRequest();
         $this->resetResponse();
-        $this->Request()->setMethod('POST')->setPost(array(
-            'albumID' => $newAlbum['id']
-        ));
+        $this->Request()->setMethod('POST')->setPost([
+            'albumID' => $newAlbum['id'],
+        ]);
         $this->dispatch('/backend/MediaManager/removeAlbum');
 
         $jsonBody = $this->View()->getAssign();

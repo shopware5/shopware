@@ -30,21 +30,24 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 interface CustomSortingServiceInterface
 {
     /**
-     * @param int[] $ids
+     * @param int[]                $ids
      * @param ShopContextInterface $context
+     *
      * @return CustomSorting[] indexed by id, sorted by provided id array
      */
     public function getList(array $ids, ShopContextInterface $context);
 
     /**
-     * @param int[] $categoryIds
+     * @param int[]                $categoryIds
      * @param ShopContextInterface $context
+     *
      * @return array[] indexed by category id, sorted by category mapping or position
      */
     public function getSortingsOfCategories(array $categoryIds, ShopContextInterface $context);
 
     /**
      * @param ShopContextInterface $context
+     *
      * @return CustomSorting[] indexed by id, sorted by position
      */
     public function getAllCategorySortings(ShopContextInterface $context);

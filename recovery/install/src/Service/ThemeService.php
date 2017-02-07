@@ -28,7 +28,7 @@ use Shopware\Components\Theme\Installer as ThemeInstaller;
 
 /**
  * @category  Shopware
- * @package   Shopware\Recovery\Install\Service
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ThemeService
@@ -53,9 +53,6 @@ class ThemeService
         $this->conn = $conn;
     }
 
-    /**
-     *
-     */
     public function activateResponsiveTheme()
     {
         $this->themeInstaller->synchronize();
@@ -75,7 +72,7 @@ class ThemeService
         $templateId = $statement->fetchColumn(0);
 
         if (!$templateId) {
-            throw new \RuntimeException("Could not get id for default template");
+            throw new \RuntimeException('Could not get id for default template');
         }
 
         return (int) $templateId;
@@ -86,7 +83,7 @@ class ThemeService
      */
     private function updateDefaultTemplateId($templateId)
     {
-        $sql = <<<EOF
+        $sql = <<<'EOF'
 UPDATE s_core_shops
 SET template_id = :templateId,
     document_template_id = :templateId

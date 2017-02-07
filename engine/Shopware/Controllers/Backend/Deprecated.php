@@ -38,18 +38,18 @@ class Shopware_Controllers_Backend_Deprecated extends Enlight_Controller_Action 
 
     public function preDispatch()
     {
-        if (!in_array($this->Request()->getActionName(), array('index', 'load'))) {
+        if (!in_array($this->Request()->getActionName(), ['index', 'load'])) {
             $this->Front()->Plugins()->ViewRenderer()->setNoRender();
         }
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getWhitelistedCSRFActions()
     {
         return [
-            'include'
+            'include',
         ];
     }
 

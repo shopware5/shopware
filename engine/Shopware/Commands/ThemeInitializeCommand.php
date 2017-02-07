@@ -25,17 +25,12 @@
 namespace Shopware\Commands;
 
 use Shopware\Components\Theme\Installer;
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Output\Output;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * @category  Shopware
- * @package   Shopware\Components\Console\Command
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ThemeInitializeCommand extends ShopwareCommand
@@ -69,7 +64,7 @@ class ThemeInitializeCommand extends ShopwareCommand
         $templateId = $this->getResponsiveTemplateId();
         $this->updateDefaultTemplateId($templateId);
 
-        $output->writeln("Themes initializes");
+        $output->writeln('Themes initializes');
     }
 
     /**
@@ -82,7 +77,7 @@ class ThemeInitializeCommand extends ShopwareCommand
         $templateId = $statement->fetchColumn(0);
 
         if (!$templateId) {
-            throw new \RuntimeException("Could not get id for default template");
+            throw new \RuntimeException('Could not get id for default template');
         }
 
         return (int) $templateId;
@@ -93,7 +88,7 @@ class ThemeInitializeCommand extends ShopwareCommand
      */
     private function updateDefaultTemplateId($templateId)
     {
-        $sql = <<<EOF
+        $sql = <<<'EOF'
 UPDATE s_core_shops
 SET template_id = :templateId,
     document_template_id = :templateId

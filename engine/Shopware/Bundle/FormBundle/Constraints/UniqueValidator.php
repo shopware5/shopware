@@ -37,6 +37,7 @@ class UniqueValidator extends ConstraintValidator
 
     /**
      * ExistsValidator constructor.
+     *
      * @param Connection $connection
      */
     public function __construct(Connection $connection)
@@ -47,7 +48,7 @@ class UniqueValidator extends ConstraintValidator
     /**
      * Checks if the passed value is valid.
      *
-     * @param mixed $value The value that should be validated
+     * @param mixed      $value      The value that should be validated
      * @param Constraint $constraint The constraint for the validation
      */
     public function validate($value, Constraint $constraint)

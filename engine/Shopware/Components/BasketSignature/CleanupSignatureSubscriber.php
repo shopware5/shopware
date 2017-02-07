@@ -48,7 +48,7 @@ class CleanupSignatureSubscriber implements SubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            'Shopware_CronJob_CleanupSignatures' => 'cleanup'
+            'Shopware_CronJob_CleanupSignatures' => 'cleanup',
         ];
     }
 
@@ -59,9 +59,10 @@ class CleanupSignatureSubscriber implements SubscriberInterface
             ->format('Y-m-d');
 
         $this->connection->executeUpdate(
-            "DELETE FROM " . BasketPersister::DBAL_TABLE . " WHERE created_at < :createdAt",
+            'DELETE FROM ' . BasketPersister::DBAL_TABLE . ' WHERE created_at < :createdAt',
             [':createdAt' => $date]
         );
+
         return true;
     }
 }

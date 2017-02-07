@@ -45,7 +45,7 @@ class Shopware_Components_Config implements ArrayAccess
     /**
      * @var bool|int
      */
-    protected $_cacheTags = array('Shopware_Config');
+    protected $_cacheTags = ['Shopware_Config'];
 
     /**
      * @var array
@@ -80,7 +80,58 @@ class Shopware_Components_Config implements ArrayAccess
     }
 
     /**
+     * Magic getter
+     *
+     * @param string $name
+     *
+     * @return bool
+     */
+    public function __isset($name)
+    {
+        return $this->offsetExists($name);
+    }
+
+    /**
+     * Magic getter
+     *
+     * @param string $name
+     *
+     * @return mixed
+     */
+    public function __get($name)
+    {
+        return $this->offsetGet($name);
+    }
+
+    /**
+     * Magic setter
+     *
+     * @param string $name
+     * @param mixed  $value
+     *
+     * @return mixed
+     */
+    public function __set($name, $value)
+    {
+        return $this->offsetSet($name, $value);
+    }
+
+    /**
+     * Magic caller method
+     *
+     * @param string $name
+     * @param array  $args
+     *
+     * @return mixed
+     */
+    public function __call($name, $args = null)
+    {
+        return $this->get($name);
+    }
+
+    /**
      * @param Shopware\Models\Shop\Shop $shop
+     *
      * @return \Shopware_Components_Config
      */
     public function setShop($shop)
@@ -92,7 +143,106 @@ class Shopware_Components_Config implements ArrayAccess
         if ($shop->getTitle() !== null) {
             $this->offsetSet('shopName', $shop->getTitle());
         }
+
         return $this;
+    }
+
+    /**
+     * Format name method
+     *
+     * @param string $name
+     *
+     * @return string
+     */
+    public function formatName($name)
+    {
+        if (strpos($name, 's') === 0 && preg_match('#^s[A-Z]#', $name)) {
+            $name = substr($name, 1);
+        }
+
+        return str_replace('_', '', strtolower($name));
+    }
+
+    /**
+     * Get config by namespace (form). Each config name is unique by namespace + name
+     *
+     * @param string $namespace
+     * @param string $name
+     * @param mixed  $default
+     *
+     * @return mixed
+     */
+    public function getByNamespace($namespace, $name, $default = null)
+    {
+        return $this->get($namespace . '::' . $name, $default);
+    }
+
+    /**
+     * @param string $name
+     * @param mixed  $default
+     *
+     * @return mixed
+     */
+    public function get($name, $default = null)
+    {
+        $value = $this->offsetGet($name);
+
+        return $value !== null ? $value : $default;
+    }
+
+    /**
+     * @param string $name
+     *
+     * @return mixed
+     */
+    public function offsetGet($name)
+    {
+        if (!isset($this->_data[$name])) {
+            $baseName = $this->formatName($name);
+            if (!isset($this->_data[$baseName])) {
+                $this->_data[$baseName] = null;
+            }
+            $this->_data[$name] = &$this->_data[$baseName];
+        }
+
+        return $this->_data[$name];
+    }
+
+    /**
+     * @param string $name
+     */
+    public function offsetUnset($name)
+    {
+        $this->_data[$name] = null;
+    }
+
+    /**
+     * @param string $name
+     *
+     * @return bool
+     */
+    public function offsetExists($name)
+    {
+        if (!isset($this->_data[$name])) {
+            $baseName = $this->formatName($name);
+
+            return isset($this->_data[$baseName]) && $this->_data[$baseName] !== null;
+        }
+
+        return true;
+    }
+
+    /**
+     * @param string $name
+     * @param mixed  $value
+     *
+     * @return mixed
+     */
+    public function offsetSet($name, $value)
+    {
+        $baseName = $this->formatName($name);
+
+        return $this->_data[$baseName] = $value;
     }
 
     /**
@@ -153,13 +303,13 @@ class Shopware_Components_Config implements ArrayAccess
               ON forms.id = e.form_id
         ";
 
-        $data = $this->_db->fetchAll($sql, array(
+        $data = $this->_db->fetchAll($sql, [
             'fallbackShopId' => 1, //Shop parent id
-            'parentShopId'   => isset($this->_shop) && $this->_shop->getMain() !== null ? $this->_shop->getMain()->getId() : 1,
-            'currentShopId'  => isset($this->_shop) ? $this->_shop->getId() : null,
-        ));
+            'parentShopId' => isset($this->_shop) && $this->_shop->getMain() !== null ? $this->_shop->getMain()->getId() : 1,
+            'currentShopId' => isset($this->_shop) ? $this->_shop->getId() : null,
+        ]);
 
-        $result = array();
+        $result = [];
         foreach ($data as $row) {
             $value = !empty($row['value']) ? @unserialize($row['value']) : null;
             $result[$row['name']] = $value;
@@ -172,138 +322,5 @@ class Shopware_Components_Config implements ArrayAccess
         $result['versiontext'] = Shopware::VERSION_TEXT;
 
         return $result;
-    }
-
-    /**
-     * Format name method
-     *
-     * @param string $name
-     * @return string
-     */
-    public function formatName($name)
-    {
-        if (strpos($name, 's') === 0 && preg_match('#^s[A-Z]#', $name)) {
-            $name = substr($name, 1);
-        }
-        return str_replace('_', '', strtolower($name));
-    }
-
-    /**
-     * Get config by namespace (form). Each config name is unique by namespace + name
-     *
-     * @param string $namespace
-     * @param string $name
-     * @param mixed $default
-     * @return mixed
-     */
-    public function getByNamespace($namespace, $name, $default = null)
-    {
-        return $this->get($namespace . '::' . $name, $default);
-    }
-
-    /**
-     * @param string $name
-     * @param mixed $default
-     * @return mixed
-     */
-    public function get($name, $default = null)
-    {
-        $value = $this->offsetGet($name);
-        return $value !== null ? $value : $default;
-    }
-
-    /**
-     * @param string $name
-     * @return mixed
-     */
-    public function offsetGet($name)
-    {
-        if (!isset($this->_data[$name])) {
-            $baseName = $this->formatName($name);
-            if (!isset($this->_data[$baseName])) {
-                $this->_data[$baseName] = null;
-            }
-            $this->_data[$name] =& $this->_data[$baseName];
-        }
-        return $this->_data[$name];
-    }
-
-    /**
-     * @param string $name
-     */
-    public function offsetUnset($name)
-    {
-        $this->_data[$name] = null;
-    }
-
-    /**
-     * @param string $name
-     * @return bool
-     */
-    public function offsetExists($name)
-    {
-        if (!isset($this->_data[$name])) {
-            $baseName = $this->formatName($name);
-            return isset($this->_data[$baseName]) && $this->_data[$baseName] !== null;
-        }
-
-        return true;
-    }
-
-    /**
-     * @param string $name
-     * @param mixed $value
-     * @return mixed
-     */
-    public function offsetSet($name, $value)
-    {
-        $baseName = $this->formatName($name);
-        return $this->_data[$baseName] = $value;
-    }
-
-    /**
-     * Magic getter
-     *
-     * @param   string $name
-     * @return  bool
-     */
-    public function __isset($name)
-    {
-        return $this->offsetExists($name);
-    }
-
-    /**
-     * Magic getter
-     *
-     * @param   string $name
-     * @return  mixed
-     */
-    public function __get($name)
-    {
-        return $this->offsetGet($name);
-    }
-
-    /**
-     * Magic setter
-     *
-     * @param   string $name
-     * @param   mixed $value
-     * @return  mixed
-     */
-    public function __set($name, $value)
-    {
-        return $this->offsetSet($name, $value);
-    }
-
-    /**
-     * Magic caller method
-     *
-     * @param string $name
-     * @param array $args
-     * @return mixed
-     */
-    public function __call($name, $args = null)
-    {
-        return $this->get($name);
     }
 }

@@ -28,7 +28,7 @@ use Doctrine\DBAL\Connection;
 
 /**
  * @category  Shopware
- * @package   Shopware\Components\Snippet\Writer
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class DatabaseWriter
@@ -39,14 +39,14 @@ class DatabaseWriter
     private $db;
 
     /**
-     * @var boolean
+     * @var bool
      */
     private $update;
 
     /**
      * Whether or not overwrite dirty snippets
      *
-     * @var boolean
+     * @var bool
      */
     private $force;
 
@@ -55,17 +55,18 @@ class DatabaseWriter
      */
     public function __construct(Connection $db)
     {
-        $this->db         = $db;
-        $this->update     = true;
+        $this->db = $db;
+        $this->update = true;
 
-        $this->force      = false;
+        $this->force = false;
     }
 
     /**
-     * @param array $data
+     * @param array  $data
      * @param string $namespace
-     * @param int $localeId
-     * @param int $shopId
+     * @param int    $localeId
+     * @param int    $shopId
+     *
      * @throws \Exception
      */
     public function write($data, $namespace, $localeId, $shopId)
@@ -80,18 +81,17 @@ class DatabaseWriter
 
         $this->db->beginTransaction();
         try {
-
             // If no update are allowed, we can speed up using INSERT IGNORE
             if (!$this->update) {
                 $this->insertBatch($data, $namespace, $localeId, $shopId);
             } else {
                 $rows = $this->db->fetchAll(
                     'SELECT * FROM s_core_snippets WHERE shopID = :shopId AND localeID = :localeId AND namespace = :namespace',
-                    array(
-                        'shopId'    => $shopId,
-                        'localeId'  => $localeId,
-                        'namespace' => $namespace
-                    )
+                    [
+                        'shopId' => $shopId,
+                        'localeId' => $localeId,
+                        'namespace' => $namespace,
+                    ]
                 );
 
                 foreach ($data as $name => $value) {
@@ -123,10 +123,42 @@ class DatabaseWriter
     }
 
     /**
-     * @param array $data
+     * @param bool $update
+     */
+    public function setUpdate($update)
+    {
+        $this->update = $update;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getUpdate()
+    {
+        return $this->update;
+    }
+
+    /**
+     * @param bool $force
+     */
+    public function setForce($force)
+    {
+        $this->force = $force;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getForce()
+    {
+        return $this->force;
+    }
+
+    /**
+     * @param array  $data
      * @param string $namespace
-     * @param int $localeId
-     * @param int $shopId
+     * @param int    $localeId
+     * @param int    $shopId
      */
     private function insertBatch($data, $namespace, $localeId, $shopId)
     {
@@ -136,15 +168,15 @@ class DatabaseWriter
         $insertStmt = $this->db->prepare($insertSql);
         foreach ($data as $name => $value) {
             $insertStmt->execute(
-                array(
+                [
                     'namespace' => $namespace,
                     'shopId' => $shopId,
                     'localeId' => $localeId,
                     'name' => $name,
                     'value' => $value,
                     'created' => date('Y-m-d H:i:s', time()),
-                    'updated' => date('Y-m-d H:i:s', time())
-                )
+                    'updated' => date('Y-m-d H:i:s', time()),
+                ]
             );
         }
     }
@@ -153,33 +185,33 @@ class DatabaseWriter
      * @param string $name
      * @param string $value
      * @param string $namespace
-     * @param int $localeId
-     * @param int $shopId
+     * @param int    $localeId
+     * @param int    $shopId
      */
     private function insertRecord($name, $value, $namespace, $localeId, $shopId)
     {
-        $queryData = array(
+        $queryData = [
             'namespace' => $namespace,
-            'shopID'    => $shopId,
-            'localeID'  => $localeId,
-            'name'      => $name,
-            'value'     => $value,
-            'created'   => date('Y-m-d H:i:s', time()),
-            'updated'   => date('Y-m-d H:i:s', time()),
-            'dirty'     => 0
-        );
+            'shopID' => $shopId,
+            'localeID' => $localeId,
+            'name' => $name,
+            'value' => $value,
+            'created' => date('Y-m-d H:i:s', time()),
+            'updated' => date('Y-m-d H:i:s', time()),
+            'dirty' => 0,
+        ];
 
         $this->db->insert('s_core_snippets', $queryData);
     }
 
     /**
      * @param string $value
-     * @param array $row
+     * @param array  $row
      */
     private function updateRecord($value, $row)
     {
         $hasSameValue = $row['value'] == $value;
-        $isDirty      = $row['dirty'] == 1;
+        $isDirty = $row['dirty'] == 1;
 
         // snippet was never touched after insert
         if (!$this->force && $hasSameValue && !$isDirty) {
@@ -191,44 +223,12 @@ class DatabaseWriter
             return;
         }
 
-        $queryData = array(
-            'value'   => $value,
+        $queryData = [
+            'value' => $value,
             'updated' => date('Y-m-d H:i:s', time()),
-            'dirty'   => 0
-        );
+            'dirty' => 0,
+        ];
 
-        $this->db->update('s_core_snippets', $queryData, array('id' => $row['id']));
-    }
-
-    /**
-     * @param boolean $update
-     */
-    public function setUpdate($update)
-    {
-        $this->update = $update;
-    }
-
-    /**
-     * @return boolean
-     */
-    public function getUpdate()
-    {
-        return $this->update;
-    }
-
-    /**
-     * @param boolean $force
-     */
-    public function setForce($force)
-    {
-        $this->force = $force;
-    }
-
-    /**
-     * @return boolean
-     */
-    public function getForce()
-    {
-        return $this->force;
+        $this->db->update('s_core_snippets', $queryData, ['id' => $row['id']]);
     }
 }

@@ -30,6 +30,7 @@ interface CurrencyGatewayInterface
 {
     /**
      * @param int[] $ids
+     *
      * @return Currency[] indexed by id
      */
     public function getList($ids);

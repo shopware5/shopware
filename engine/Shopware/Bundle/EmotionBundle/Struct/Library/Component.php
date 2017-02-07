@@ -22,7 +22,6 @@
  * our trademarks remain entirely with us.
  */
 
-
 namespace Shopware\Bundle\EmotionBundle\Struct\Library;
 
 class Component implements \JsonSerializable
@@ -196,7 +195,7 @@ class Component implements \JsonSerializable
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function jsonSerialize()
     {

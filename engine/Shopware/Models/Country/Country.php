@@ -24,12 +24,11 @@
 
 namespace   Shopware\Models\Country;
 
-use Shopware\Components\Model\ModelEntity;
-use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
 
 /**
- *
  * Shopware country model represents a single country.
  * <br>
  * The Shopware country model represents a row of the s_core_countries table.
@@ -49,121 +48,11 @@ use Doctrine\Common\Collections\ArrayCollection;
 class Country extends ModelEntity
 {
     /**
-     * @var integer $id
-     *
-     * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
-    /**
-     * @var string $name
-     *
-     * @ORM\Column(name="countryname", type="string", length=255, nullable=false)
-     */
-    private $name;
-
-    /**
-     * @var string $iso
-     *
-     * @ORM\Column(name="countryiso", type="string", length=255, nullable=false)
-     */
-    private $iso;
-
-    /**
-     * @var string $en
-     *
-     * @ORM\Column(name="countryen", type="string", length=70, nullable=false)
-     */
-    private $isoName;
-
-    /**
-     * @var integer $position
-     *
-     * @ORM\Column(name="position", type="integer", nullable=false)
-     */
-    private $position;
-
-    /**
-     * @var string $description
-     *
-     * @ORM\Column(name="notice", type="text", nullable=false)
-     */
-    private $description;
-
-    /**
-     * @var bool $shippingFree
-     *
-     * @ORM\Column(name="shippingfree", type="boolean", nullable=false)
-     */
-    private $shippingFree;
-
-    /**
-     * @var integer $taxFree
-     *
-     * @ORM\Column(name="taxfree", type="integer", nullable=false)
-     */
-    private $taxFree;
-
-    /**
-     * @var integer $taxFreeUstId
-     *
-     * @ORM\Column(name="taxfree_ustid", type="integer", nullable=false)
-     */
-    private $taxFreeUstId;
-
-    /**
-     * @var integer $taxFreeUstIdChecked
-     *
-     * @ORM\Column(name="taxfree_ustid_checked", type="integer", nullable=false)
-     */
-    private $taxFreeUstIdChecked;
-
-    /**
-     * @var boolean $active
-     *
-     * @ORM\Column(name="active", type="boolean", nullable=false)
-     */
-    private $active;
-
-    /**
-     * @var string $iso3
-     *
-     * @ORM\Column(name="iso3", type="string", length=3, nullable=false)
-     */
-    private $iso3;
-
-    /**
-    * @var integer $displayStateInRegistration
-    *
-    * @ORM\Column(name="display_state_in_registration", type="boolean", nullable=false)
-    */
-    private $displayStateInRegistration = false;
-
-    /**
-    * @var integer $forceStateInRegistration
-    *
-    * @ORM\Column(name="force_state_in_registration", type="boolean", nullable=false)
-    */
-    private $forceStateInRegistration = false;
-
-    /**
-     * @var \Doctrine\Common\Collections\ArrayCollection
-     * @ORM\ManyToMany(targetEntity="Shopware\Models\Payment\Payment", mappedBy="countries")
-     * @ORM\JoinTable(name="s_core_paymentmeans_countries",
-     *      joinColumns={@ORM\JoinColumn(name="countryID", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="paymentID", referencedColumnName="id")}
-     * )
-    */
-    private $payments;
-
-    /**
      * OWNING SIDE
      * The area property is the owning side of the association between area and countries.
      * The association is joined over the area id field and the areaID field of the country.
      *
-     * @var \Shopware\Models\Country\Area $area
+     * @var \Shopware\Models\Country\Area
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Country\Area", inversedBy="countries")
      * @ORM\JoinColumn(name="areaID", referencedColumnName="id")
      */
@@ -175,19 +64,131 @@ class Country extends ModelEntity
      * The association is joined over the area id field and the areaID field of the country.
      *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Country\State", mappedBy="country", orphanRemoval=true, cascade={"persist"})
+     *
      * @var \Doctrine\Common\Collections\ArrayCollection
      */
     protected $states;
 
     /**
      * INVERSE SIDE
+     *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Country", mappedBy="country", orphanRemoval=true, cascade={"persist"})
+     *
      * @var \Shopware\Models\Attribute\Country
      */
     protected $attribute;
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
 
     /**
-     * @var integer $areaId
+     * @var string
+     *
+     * @ORM\Column(name="countryname", type="string", length=255, nullable=false)
+     */
+    private $name;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="countryiso", type="string", length=255, nullable=false)
+     */
+    private $iso;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="countryen", type="string", length=70, nullable=false)
+     */
+    private $isoName;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="position", type="integer", nullable=false)
+     */
+    private $position;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="notice", type="text", nullable=false)
+     */
+    private $description;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="shippingfree", type="boolean", nullable=false)
+     */
+    private $shippingFree;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="taxfree", type="integer", nullable=false)
+     */
+    private $taxFree;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="taxfree_ustid", type="integer", nullable=false)
+     */
+    private $taxFreeUstId;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="taxfree_ustid_checked", type="integer", nullable=false)
+     */
+    private $taxFreeUstIdChecked;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="active", type="boolean", nullable=false)
+     */
+    private $active;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="iso3", type="string", length=3, nullable=false)
+     */
+    private $iso3;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="display_state_in_registration", type="boolean", nullable=false)
+     */
+    private $displayStateInRegistration = false;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="force_state_in_registration", type="boolean", nullable=false)
+     */
+    private $forceStateInRegistration = false;
+
+    /**
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @ORM\ManyToMany(targetEntity="Shopware\Models\Payment\Payment", mappedBy="countries")
+     * @ORM\JoinTable(name="s_core_paymentmeans_countries",
+     *      joinColumns={@ORM\JoinColumn(name="countryID", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="paymentID", referencedColumnName="id")}
+     * )
+     */
+    private $payments;
+
+    /**
+     * @var int
      * @ORM\Column(name="areaID", type="integer", nullable=false)
      */
     private $areaId;
@@ -201,7 +202,7 @@ class Country extends ModelEntity
     /**
      * Get id
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -212,11 +213,13 @@ class Country extends ModelEntity
      * Set name
      *
      * @param string $name
+     *
      * @return Country
      */
     public function setName($name)
     {
         $this->name = $name;
+
         return $this;
     }
 
@@ -234,11 +237,13 @@ class Country extends ModelEntity
      * Set iso
      *
      * @param string $iso
+     *
      * @return Country
      */
     public function setIso($iso)
     {
         $this->iso = $iso;
+
         return $this;
     }
 
@@ -256,11 +261,13 @@ class Country extends ModelEntity
      * Set en
      *
      * @param $isoName
+     *
      * @return Country
      */
     public function setIsoName($isoName)
     {
         $this->isoName = $isoName;
+
         return $this;
     }
 
@@ -277,19 +284,21 @@ class Country extends ModelEntity
     /**
      * Set position
      *
-     * @param integer $position
+     * @param int $position
+     *
      * @return Country
      */
     public function setPosition($position)
     {
         $this->position = $position;
+
         return $this;
     }
 
     /**
      * Get position
      *
-     * @return integer
+     * @return int
      */
     public function getPosition()
     {
@@ -300,11 +309,13 @@ class Country extends ModelEntity
      * Set description
      *
      * @param string $description
+     *
      * @return Country
      */
     public function setDescription($description)
     {
         $this->description = $description;
+
         return $this;
     }
 
@@ -322,11 +333,13 @@ class Country extends ModelEntity
      * Set shippingFree
      *
      * @param bool $shippingFree
+     *
      * @return Country
      */
     public function setShippingFree($shippingFree)
     {
         $this->shippingFree = $shippingFree;
+
         return $this;
     }
 
@@ -343,19 +356,21 @@ class Country extends ModelEntity
     /**
      * Set taxFree
      *
-     * @param integer $taxFree
+     * @param int $taxFree
+     *
      * @return Country
      */
     public function setTaxFree($taxFree)
     {
         $this->taxFree = $taxFree;
+
         return $this;
     }
 
     /**
      * Get taxFree
      *
-     * @return integer
+     * @return int
      */
     public function getTaxFree()
     {
@@ -365,19 +380,21 @@ class Country extends ModelEntity
     /**
      * Set taxFreeUstId
      *
-     * @param integer $taxFreeUstId
+     * @param int $taxFreeUstId
+     *
      * @return Country
      */
     public function setTaxFreeUstId($taxFreeUstId)
     {
         $this->taxFreeUstId = $taxFreeUstId;
+
         return $this;
     }
 
     /**
      * Get taxFreeUstId
      *
-     * @return integer
+     * @return int
      */
     public function getTaxFreeUstId()
     {
@@ -387,19 +404,21 @@ class Country extends ModelEntity
     /**
      * Set taxFreeUstIdChecked
      *
-     * @param integer $taxFreeUstIdChecked
+     * @param int $taxFreeUstIdChecked
+     *
      * @return Country
      */
     public function setTaxFreeUstIdChecked($taxFreeUstIdChecked)
     {
         $this->taxFreeUstIdChecked = $taxFreeUstIdChecked;
+
         return $this;
     }
 
     /**
      * Get taxFreeUstIdChecked
      *
-     * @return integer
+     * @return int
      */
     public function getTaxFreeUstIdChecked()
     {
@@ -409,19 +428,21 @@ class Country extends ModelEntity
     /**
      * Set active
      *
-     * @param boolean $active
+     * @param bool $active
+     *
      * @return Country
      */
     public function setActive($active)
     {
         $this->active = $active;
+
         return $this;
     }
 
     /**
      * Get active
      *
-     * @return boolean
+     * @return bool
      */
     public function getActive()
     {
@@ -432,11 +453,13 @@ class Country extends ModelEntity
      * Set iso3
      *
      * @param string $iso3
+     *
      * @return Country
      */
     public function setIso3($iso3)
     {
         $this->iso3 = $iso3;
+
         return $this;
     }
 
@@ -460,12 +483,14 @@ class Country extends ModelEntity
 
     /**
      * @param \Shopware\Models\Attribute\Country|array|null $attribute
+     *
      * @return \Shopware\Models\Attribute\Country
      */
     public function setAttribute($attribute)
     {
         return $this->setOneToOne($attribute, '\Shopware\Models\Attribute\Country', 'attribute', 'country');
     }
+
     /**
      * @return \Doctrine\Common\Collections\ArrayCollection
      */
@@ -476,6 +501,7 @@ class Country extends ModelEntity
 
     /**
      * @param \Doctrine\Common\Collections\ArrayCollection|array|null $states
+     *
      * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function setStates($states)
@@ -486,6 +512,7 @@ class Country extends ModelEntity
     /**
      * OWNING SIDE
      * of the association between countries and area
+     *
      * @return \Shopware\Models\Country\Area
      */
     public function getArea()
@@ -495,30 +522,33 @@ class Country extends ModelEntity
 
     /**
      * @param \Shopware\Models\Country\Area|array|null $area
+     *
      * @return \Shopware\Models\Country\Country
      */
     public function setArea($area)
     {
         $this->area = $area;
+
         return $this;
     }
 
-
-/**
-    * @return \Doctrine\Common\Collections\ArrayCollection
-    */
+    /**
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
     public function getPayments()
     {
         return $this->payments;
     }
 
-   /**
-    * @param \Doctrine\Common\Collections\ArrayCollection $payments
-    * @return Country
-    */
+    /**
+     * @param \Doctrine\Common\Collections\ArrayCollection $payments
+     *
+     * @return Country
+     */
     public function setPayments($payments)
     {
         $this->payments = $payments;
+
         return $this;
     }
 
@@ -539,7 +569,7 @@ class Country extends ModelEntity
     }
 
     /**
-     * @param boolean $forceStateInRegistration
+     * @param bool $forceStateInRegistration
      */
     public function setForceStateInRegistration($forceStateInRegistration)
     {
@@ -547,7 +577,7 @@ class Country extends ModelEntity
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function getForceStateInRegistration()
     {

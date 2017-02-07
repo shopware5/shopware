@@ -24,18 +24,18 @@
 
 namespace Shopware\Components\Model;
 
+use Doctrine\Common\EventManager;
+use Doctrine\Common\Util\Inflector;
+use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder as DBALQueryBuilder;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Mapping\ClassMetadata;
+use Doctrine\ORM\ORMException;
+use Doctrine\ORM\Query;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Shopware\Bundle\AttributeBundle\Service\CrudService;
 use Shopware\Bundle\AttributeBundle\Service\TypeMapping;
 use Shopware\Components\Model\Query\SqlWalker;
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\ORMException;
-use Doctrine\ORM\Mapping\ClassMetadata;
-use Doctrine\ORM\Query;
-use Doctrine\ORM\Tools\Pagination\Paginator;
-use Doctrine\DBAL\Connection;
-use Doctrine\Common\Util\Inflector;
-use Doctrine\Common\EventManager;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -43,13 +43,14 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
  * Global Manager which is responsible for initializing the adapter classes.
  *
  * @category  Shopware
- * @package   Shopware\Components\Model
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ModelManager extends EntityManager
 {
     /**
      * Debug mode flag for the query builders.
+     *
      * @var bool
      */
     protected $debugMode = false;
@@ -65,10 +66,12 @@ class ModelManager extends EntityManager
     /**
      * Factory method to create EntityManager instances.
      *
-     * @param Connection $conn
+     * @param Connection    $conn
      * @param Configuration $config
-     * @param EventManager $eventManager
+     * @param EventManager  $eventManager
+     *
      * @throws \Doctrine\ORM\ORMException
+     *
      * @return ModelManager
      */
     public static function createInstance(Connection $conn, Configuration $config, EventManager $eventManager = null)
@@ -85,65 +88,11 @@ class ModelManager extends EntityManager
     }
 
     /**
-     * Serialize an entity to an array
-     *
-     * @author      Boris Guéry <guery.b@gmail.com>
-     * @license     http://sam.zoy.org/wtfpl/COPYING
-     * @link        http://borisguery.github.com/bgylibrary
-     * @see         https://gist.github.com/1034079#file_serializable_entity.php
-     * @param       $entity
-     * @return      array
-     */
-    protected function serializeEntity($entity)
-    {
-        if ($entity === null) {
-            return [];
-        }
-
-        if ($entity instanceof \Doctrine\ORM\Proxy\Proxy) {
-            /** @var $entity \Doctrine\ORM\Proxy\Proxy */
-            $entity->__load();
-            $className = get_parent_class($entity);
-        } else {
-            $className = get_class($entity);
-        }
-        $metadata = $this->getClassMetadata($className);
-        $data = array();
-
-        foreach ($metadata->fieldMappings as $field => $mapping) {
-            $data[$field] = $metadata->reflFields[$field]->getValue($entity);
-        }
-
-        foreach ($metadata->associationMappings as $field => $mapping) {
-            $key = Inflector::tableize($field);
-            if ($mapping['isCascadeDetach']) {
-                $data[$key] = $metadata->reflFields[$field]->getValue($entity);
-                if (null !== $data[$key]) {
-                    $data[$key] = $this->serializeEntity($data[$key]);
-                }
-            } elseif ($mapping['isOwningSide'] && $mapping['type'] & ClassMetadata::TO_ONE) {
-                if (null !== $metadata->reflFields[$field]->getValue($entity)) {
-                    $data[$key] = $this->getUnitOfWork()
-                        ->getEntityIdentifier(
-                            $metadata->reflFields[$field]
-                                ->getValue($entity)
-                            );
-                } else {
-                    // In some case the relationship may not exist, but we want
-                    // to know about it
-                    $data[$key] = null;
-                }
-            }
-        }
-
-        return $data;
-    }
-
-    /**
      * Serialize an entity or an array of entities to an array
      *
      * @param   $entity
-     * @return  array
+     *
+     * @return array
      */
     public function toArray($entity)
     {
@@ -152,7 +101,7 @@ class ModelManager extends EntityManager
         }
 
         if (is_array($entity)) {
-            return array_map(array($this, 'serializeEntity'), $entity);
+            return array_map([$this, 'serializeEntity'], $entity);
         }
 
         return $this->serializeEntity($entity);
@@ -162,6 +111,7 @@ class ModelManager extends EntityManager
      * Returns the total count of the passed query builder.
      *
      * @param Query $query
+     *
      * @return int|null
      */
     public function getQueryCount(Query $query)
@@ -180,7 +130,9 @@ class ModelManager extends EntityManager
      * As of SW 4.2 $paginator->setUseOutputWalkers(false) will be set here.
      *
      * @since 4.1.4
+     *
      * @param Query $query
+     *
      * @return Paginator
      */
     public function createPaginator(Query $query)
@@ -209,6 +161,7 @@ class ModelManager extends EntityManager
 
     /**
      * @param $object
+     *
      * @return ConstraintViolationListInterface
      */
     public function validate($object)
@@ -219,7 +172,7 @@ class ModelManager extends EntityManager
     /**
      * @param array $tableNames
      */
-    public function generateAttributeModels($tableNames = array())
+    public function generateAttributeModels($tableNames = [])
     {
         $generator = $this->createModelGenerator();
         $generator->generateAttributeModels($tableNames);
@@ -232,7 +185,7 @@ class ModelManager extends EntityManager
      *
      * @param array $tableNames
      */
-    public function regenerateAttributeProxies($tableNames = array())
+    public function regenerateAttributeProxies($tableNames = [])
     {
         $metaDataCache = $this->getConfiguration()->getMetadataCacheImpl();
 
@@ -243,8 +196,8 @@ class ModelManager extends EntityManager
         $allMetaData = $this->getMetadataFactory()->getAllMetadata();
         $proxyFactory = $this->getProxyFactory();
 
-        $attributeMetaData = array();
-        /**@var $metaData \Doctrine\ORM\Mapping\ClassMetadata*/
+        $attributeMetaData = [];
+        /** @var $metaData \Doctrine\ORM\Mapping\ClassMetadata */
         foreach ($allMetaData as $metaData) {
             $tableName = $metaData->getTableName();
             if (strpos($tableName, '_attributes') === false) {
@@ -272,9 +225,10 @@ class ModelManager extends EntityManager
      * Helper function to add mysql specified command to increase the sql performance.
      *
      * @param Query $query
-     * @param null $index Name of the forced index
-     * @param bool $straightJoin true or false. Allow to add STRAIGHT_JOIN select condition
-     * @param bool $sqlNoCache
+     * @param null  $index        Name of the forced index
+     * @param bool  $straightJoin true or false. Allow to add STRAIGHT_JOIN select condition
+     * @param bool  $sqlNoCache
+     *
      * @return Query
      */
     public function addCustomHints(Query $query, $index = null, $straightJoin = false, $sqlNoCache = false)
@@ -299,6 +253,7 @@ class ModelManager extends EntityManager
 
     /**
      * Checks if the debug mode for doctrine orm queries is enabled.
+     *
      * @return bool
      */
     public function isDebugModeEnabled()
@@ -339,11 +294,13 @@ class ModelManager extends EntityManager
     /**
      * Shopware helper function to extend an attribute table.
      *
-     * @param string $table Full table name. Example: "s_user_attributes"
+     * @param string $table  Full table name. Example: "s_user_attributes"
      * @param string $prefix Column prefix. The prefix and column parameter will be the column name. Example: "swag".
      * @param string $column The column name
-     * @param string $type Full type declaration. Example: "VARCHAR( 5 )" / "DECIMAL( 10, 2 )"
+     * @param string $type   Full type declaration. Example: "VARCHAR( 5 )" / "DECIMAL( 10, 2 )"
+     *
      * @throws \InvalidArgumentException
+     *
      * @deprecated since version 5.2.2, to be removed in 5.4 - Use \Shopware\Bundle\AttributeBundle\Service\CrudService::update instead
      */
     public function addAttribute($table, $prefix, $column, $type)
@@ -378,7 +335,9 @@ class ModelManager extends EntityManager
      * @param string $table
      * @param string $prefix
      * @param string $column
+     *
      * @throws \InvalidArgumentException
+     *
      * @deprecated since version 5.2.2, to be removed in 5.4 - Use \Shopware\Bundle\AttributeBundle\Service\CrudService::delete instead
      */
     public function removeAttribute($table, $prefix, $column)
@@ -404,33 +363,92 @@ class ModelManager extends EntityManager
     }
 
     /**
+     * Serialize an entity to an array
+     *
+     * @author      Boris Guéry <guery.b@gmail.com>
+     * @license     http://sam.zoy.org/wtfpl/COPYING
+     *
+     * @see        http://borisguery.github.com/bgylibrary
+     * @see         https://gist.github.com/1034079#file_serializable_entity.php
+     *
+     * @param   $entity
+     *
+     * @return array
+     */
+    protected function serializeEntity($entity)
+    {
+        if ($entity === null) {
+            return [];
+        }
+
+        if ($entity instanceof \Doctrine\ORM\Proxy\Proxy) {
+            /* @var $entity \Doctrine\ORM\Proxy\Proxy */
+            $entity->__load();
+            $className = get_parent_class($entity);
+        } else {
+            $className = get_class($entity);
+        }
+        $metadata = $this->getClassMetadata($className);
+        $data = [];
+
+        foreach ($metadata->fieldMappings as $field => $mapping) {
+            $data[$field] = $metadata->reflFields[$field]->getValue($entity);
+        }
+
+        foreach ($metadata->associationMappings as $field => $mapping) {
+            $key = Inflector::tableize($field);
+            if ($mapping['isCascadeDetach']) {
+                $data[$key] = $metadata->reflFields[$field]->getValue($entity);
+                if (null !== $data[$key]) {
+                    $data[$key] = $this->serializeEntity($data[$key]);
+                }
+            } elseif ($mapping['isOwningSide'] && $mapping['type'] & ClassMetadata::TO_ONE) {
+                if (null !== $metadata->reflFields[$field]->getValue($entity)) {
+                    $data[$key] = $this->getUnitOfWork()
+                        ->getEntityIdentifier(
+                            $metadata->reflFields[$field]
+                                ->getValue($entity)
+                            );
+                } else {
+                    // In some case the relationship may not exist, but we want
+                    // to know about it
+                    $data[$key] = null;
+                }
+            }
+        }
+
+        return $data;
+    }
+
+    /**
      * Convert SQL column types to attribute bundle type mapping
      *
      * @param string $type
+     *
      * @return string
      */
     private function convertColumnType($type)
     {
         switch (true) {
-            case ((bool) preg_match('#\b(char\b|varchar)\b#i', $type)):
+            case (bool) preg_match('#\b(char\b|varchar)\b#i', $type):
                 $type = TypeMapping::TYPE_STRING;
                 break;
-            case ((bool) preg_match('#\b(text|blob|array|simple_array|json_array|object|binary|guid)\b#i', $type)):
+            case (bool) preg_match('#\b(text|blob|array|simple_array|json_array|object|binary|guid)\b#i', $type):
                 $type = TypeMapping::TYPE_TEXT;
                 break;
-            case ((bool) preg_match('#\b(datetime|timestamp)\b#i', $type)):
+            case (bool) preg_match('#\b(datetime|timestamp)\b#i', $type):
                 $type = TypeMapping::TYPE_DATETIME;
                 break;
-            case ((bool) preg_match('#\b(date|datetimetz)\b#i', $type)):
+            case (bool) preg_match('#\b(date|datetimetz)\b#i', $type):
                 $type = TypeMapping::TYPE_DATE;
                 break;
-            case ((bool) preg_match('#\b(int|integer|smallint|tinyint|mediumint|bigint)\b#i', $type)):
+            case (bool) preg_match('#\b(int|integer|smallint|tinyint|mediumint|bigint)\b#i', $type):
                 $type = TypeMapping::TYPE_INTEGER;
                 break;
-            case ((bool) preg_match('#\b(float|double|decimal|dec|fixed|numeric)\b#i', $type)):
+            case (bool) preg_match('#\b(float|double|decimal|dec|fixed|numeric)\b#i', $type):
                 $type = TypeMapping::TYPE_FLOAT;
                 break;
-            case ((bool) preg_match('#\b(bool|boolean)\b#i', $type)):
+            case (bool) preg_match('#\b(bool|boolean)\b#i', $type):
                 $type = TypeMapping::TYPE_BOOLEAN;
                 break;
             default:

@@ -34,7 +34,6 @@ use Shopware\Models\Customer\Customer;
 
 /**
  * Class AddressServiceTest
- * @package Shopware\Tests\Functional\Bundle\AccountBundle\Service
  */
 class AddressServiceTest extends \Enlight_Components_Test_TestCase
 {
@@ -149,7 +148,7 @@ class AddressServiceTest extends \Enlight_Components_Test_TestCase
             'street' => 'Mayerstreet 22',
             'zipcode' => '4498',
             'city' => 'Oslo',
-            'country' => $this->createCountry()
+            'country' => $this->createCountry(),
         ];
 
         $address = new Address();
@@ -298,7 +297,7 @@ class AddressServiceTest extends \Enlight_Components_Test_TestCase
         $this->assertGreaterThan(0, $unusedAddressId, 'No unused address found.');
 
         $unusedAddress = self::$modelManager->find(Address::class, $unusedAddressId);
-        $this->assertNotNull($unusedAddress, 'Unused address entity ('.$unusedAddressId.') not found.');
+        $this->assertNotNull($unusedAddress, 'Unused address entity (' . $unusedAddressId . ') not found.');
 
         self::$addressService->setDefaultBillingAddress($unusedAddress);
         self::$addressService->setDefaultShippingAddress($unusedAddress);
@@ -339,7 +338,7 @@ class AddressServiceTest extends \Enlight_Components_Test_TestCase
         $customer->setEmail(uniqid(rand()) . 'test@foo.bar');
         $customer->setActive(true);
         $customer->setLastLogin(date('Y-m-d', strtotime('-8 days')));
-        $customer->setPassword(uniqid(rand()).uniqid(rand()));
+        $customer->setPassword(uniqid(rand()) . uniqid(rand()));
 
         $customer->setSalutation('mr');
         $customer->setFirstname('Max');

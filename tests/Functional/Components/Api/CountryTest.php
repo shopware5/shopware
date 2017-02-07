@@ -29,7 +29,7 @@ use Shopware\Models\Country\State;
 
 /**
  * @category  Shopware
- * @package   Shopware\Tests
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class CountryTest extends TestCase
@@ -48,14 +48,6 @@ class CountryTest extends TestCase
      * @var array
      */
     private static $existingStatesIds = 0;
-
-    /**
-     * @return \Shopware\Components\Api\Resource\Country
-     */
-    public function createResource()
-    {
-        return new Country();
-    }
 
     /**
      * Saves the IDs of currently existing countries and states.
@@ -93,6 +85,14 @@ class CountryTest extends TestCase
     }
 
     /**
+     * @return \Shopware\Components\Api\Resource\Country
+     */
+    public function createResource()
+    {
+        return new Country();
+    }
+
+    /**
      * @return \Shopware\Models\Country\Country
      */
     public function testCreate()
@@ -103,7 +103,7 @@ class CountryTest extends TestCase
             'iso' => 'TC',
             'iso3' => 'TCY',
             'isoName' => 'TEST COUNTRY',
-            'area' => $area->getId()
+            'area' => $area->getId(),
         ];
 
         $country = $this->resource->create($data);
@@ -127,7 +127,7 @@ class CountryTest extends TestCase
         $state = new State();
         $state->fromArray([
             'name' => 'Test State',
-            'shortCode' => 'TS'
+            'shortCode' => 'TS',
         ]);
         Shopware()->Models()->persist($state);
         Shopware()->Models()->flush($state);
@@ -143,9 +143,9 @@ class CountryTest extends TestCase
                 [
                     'id' => $state->getId(),
                     'name' => 'New State Name',
-                    'shortCode' => 'NSC'
-                ]
-            ]
+                    'shortCode' => 'NSC',
+                ],
+            ],
         ];
 
         $country = $this->resource->create($data);
@@ -171,6 +171,7 @@ class CountryTest extends TestCase
      * @depends testCreateWithState
      *
      * @param \Shopware\Models\Country\Country $country
+     *
      * @return \Shopware\Models\Country\Country
      */
     public function testGetOne(\Shopware\Models\Country\Country $country)
@@ -199,6 +200,7 @@ class CountryTest extends TestCase
      * @depends testGetOne
      *
      * @param \Shopware\Models\Country\Country $country
+     *
      * @return \Shopware\Models\Country\Country
      */
     public function testUpdate(\Shopware\Models\Country\Country $country)
@@ -207,7 +209,7 @@ class CountryTest extends TestCase
         $state = new State();
         $state->fromArray([
             'name' => 'Test State 2',
-            'shortCode' => 'TS2'
+            'shortCode' => 'TS2',
         ]);
         Shopware()->Models()->persist($state);
         Shopware()->Models()->flush($state);
@@ -221,14 +223,14 @@ class CountryTest extends TestCase
             'area' => $area->getId(),
             'states' => [
                 [
-                    'id' => $oldState->getId()
+                    'id' => $oldState->getId(),
                 ],
                 [
                     'id' => $state->getId(),
                     'name' => 'New State 2 Name',
-                    'shortCode' => 'NSC2'
-                ]
-            ]
+                    'shortCode' => 'NSC2',
+                ],
+            ],
         ];
 
         $country = $this->resource->update($country->getId(), $data);
@@ -258,6 +260,7 @@ class CountryTest extends TestCase
      * @depends testUpdate
      *
      * @param \Shopware\Models\Country\Country $country
+     *
      * @return \Shopware\Models\Country\Country
      */
     public function testGetList(\Shopware\Models\Country\Country $country)
@@ -287,6 +290,7 @@ class CountryTest extends TestCase
 
     /**
      * @param int $index
+     *
      * @return \Shopware\Models\Country\Area
      */
     private function getArea($index = 0)

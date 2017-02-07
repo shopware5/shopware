@@ -37,7 +37,7 @@ use Shopware\Components\DependencyInjection\ContainerAwareInterface;
  * It is used internally by the Cache/Performance backend module
  *
  * @category  Shopware
- * @package   Shopware\Components\Api\Resource
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Cache extends Resource implements ContainerAwareInterface, BatchInterface
@@ -51,14 +51,6 @@ class Cache extends Resource implements ContainerAwareInterface, BatchInterface
      * @var CacheManager
      */
     private $cacheManager;
-
-    /**
-     * @return \Enlight_Controller_Request_Request
-     */
-    protected function getRequest()
-    {
-        return $this->request;
-    }
 
     /**
      * Sets the Container.
@@ -75,9 +67,11 @@ class Cache extends Resource implements ContainerAwareInterface, BatchInterface
 
     /**
      * @param string $id
-     * @return array
+     *
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
      * @throws \Shopware\Components\Api\Exception\NotFoundException
+     *
+     * @return array
      */
     public function getOne($id)
     {
@@ -97,24 +91,25 @@ class Cache extends Resource implements ContainerAwareInterface, BatchInterface
     {
         $this->checkPrivilege('read');
 
-        $data = array(
+        $data = [
             $this->getCacheInfo('config'),
             $this->getCacheInfo('http'),
             $this->getCacheInfo('template'),
             $this->getCacheInfo('proxy'),
             $this->getCacheInfo('doctrine-proxy'),
-            $this->getCacheInfo('opcache')
-        );
+            $this->getCacheInfo('opcache'),
+        ];
 
-        return array('data' => $data, 'total' => count($data));
+        return ['data' => $data, 'total' => count($data)];
     }
-
 
     /**
      * @param string $id
-     * @return array
+     *
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
      * @throws \Shopware\Components\Api\Exception\NotFoundException
+     *
+     * @return array
      */
     public function delete($id)
     {
@@ -130,9 +125,63 @@ class Cache extends Resource implements ContainerAwareInterface, BatchInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getIdByData($data)
+    {
+        if (isset($data['id'])) {
+            return $data['id'];
+        }
+
+        return false;
+    }
+
+    /**
+     * Overwrites the base implementation as the cache endpoint does not involve any entity related logic
+     *
+     * @param $data
+     *
+     * @return array
+     */
+    public function batchDelete($data)
+    {
+        $results = [];
+        foreach ($data as $key => $datum) {
+            $id = $this->getIdByData($datum);
+
+            try {
+                $results[$key] = [
+                    'success' => true,
+                    'operation' => 'delete',
+                    'data' => $this->delete($id),
+                ];
+            } catch (\Exception $e) {
+                $message = $e->getMessage();
+
+                $results[$key] = [
+                    'success' => false,
+                    'message' => $message,
+                    'trace' => $e->getTraceAsString(),
+                ];
+            }
+        }
+
+        return $results;
+    }
+
+    /**
+     * @return \Enlight_Controller_Request_Request
+     */
+    protected function getRequest()
+    {
+        return $this->request;
+    }
+
+    /**
      * Clears a given cache info item. This method maintains compatibility with the odl cache module's behaviour.
      *
      * @param string $cache
+     *
      * @throws \Shopware\Components\Api\Exception\NotFoundException
      */
     protected function clearCache($cache)
@@ -206,9 +255,12 @@ class Cache extends Resource implements ContainerAwareInterface, BatchInterface
 
     /**
      * Returns a given cache info item
+     *
      * @param $cache
-     * @return array
+     *
      * @throws \Shopware\Components\Api\Exception\NotFoundException
+     *
+     * @return array
      */
     private function getCacheInfo($cache)
     {
@@ -238,49 +290,5 @@ class Cache extends Resource implements ContainerAwareInterface, BatchInterface
         $cacheInfo['id'] = $cache;
 
         return $cacheInfo;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getIdByData($data)
-    {
-        if (isset($data['id'])) {
-            return $data['id'];
-        }
-
-        return false;
-    }
-
-    /**
-     * Overwrites the base implementation as the cache endpoint does not involve any entity related logic
-     *
-     * @param $data
-     * @return array
-     */
-    public function batchDelete($data)
-    {
-        $results = array();
-        foreach ($data as $key => $datum) {
-            $id = $this->getIdByData($datum);
-
-            try {
-                $results[$key] = array(
-                    'success' => true,
-                    'operation' => 'delete',
-                    'data' => $this->delete($id)
-                );
-            } catch (\Exception $e) {
-                $message = $e->getMessage();
-
-                $results[$key] = array(
-                    'success' => false,
-                    'message' => $message,
-                    'trace' => $e->getTraceAsString()
-                );
-            }
-        }
-
-        return $results;
     }
 }

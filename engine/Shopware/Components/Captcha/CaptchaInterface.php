@@ -28,7 +28,6 @@ use Enlight_Controller_Request_Request;
 
 interface CaptchaInterface
 {
-
     /**
      * Returns the name of the Captcha implementation.
      * Will be used as template name, snippet name and identifier.
@@ -39,6 +38,7 @@ interface CaptchaInterface
 
     /**
      * @param Enlight_Controller_Request_Request $request
+     *
      * @return bool
      */
     public function validate(Enlight_Controller_Request_Request $request);

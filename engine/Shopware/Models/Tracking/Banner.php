@@ -24,8 +24,8 @@
 
 namespace   Shopware\Models\Tracking;
 
-use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
 
 /**
  * Banner Statistics
@@ -52,7 +52,7 @@ class Banner extends ModelEntity
     /**
      * Autoincrement Identifier
      *
-     * @var integer $id
+     * @var int
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -63,7 +63,7 @@ class Banner extends ModelEntity
      * Date when the banner has been shown or has been clicked.
      * Part one of the composite primary key
      *
-     * @var \DateTime $displayDate
+     * @var \DateTime
      *
      * @ORM\Column(name="display_date", type="date", nullable=false)
      */
@@ -72,7 +72,7 @@ class Banner extends ModelEntity
     /**
      * ID of the banner which should be tracked
      *
-     * @var integer $bannerId
+     * @var int
      *
      * @ORM\Column(name="bannerID", type="integer", nullable=true)
      */
@@ -81,7 +81,7 @@ class Banner extends ModelEntity
     /**
      * Accumulated number of clicks
      *
-     * @var integer $clicks
+     * @var int
      *
      * @ORM\Column(name="clicks", type="integer", nullable=true)
      */
@@ -90,7 +90,7 @@ class Banner extends ModelEntity
     /**
      * Accumulated number of views
      *
-     * @var integer $views
+     * @var int
      *
      * @ORM\Column(name="views", type="integer", nullable=true)
      */
@@ -102,7 +102,7 @@ class Banner extends ModelEntity
      * @param $bannerId
      * @param $date
      */
-    public function __construct($bannerId, $date=null)
+    public function __construct($bannerId, $date = null)
     {
         if (is_null($date)) {
             $date = new \DateTime();
@@ -125,11 +125,13 @@ class Banner extends ModelEntity
      * Set the Date on when the event happened
      *
      * @param \DateTime $displayDate
+     *
      * @return \Shopware\Models\Banner\Banner
      */
     public function setDisplayDate($displayDate)
     {
         $this->displayDate = $displayDate;
+
         return $this;
     }
 
@@ -147,11 +149,13 @@ class Banner extends ModelEntity
      * Set the banner ID which should be tracked.
      *
      * @param int $bannerId
+     *
      * @return \Shopware\Models\Banner\Banner
      */
     public function setBannerId($bannerId)
     {
         $this->bannerId = $bannerId;
+
         return $this;
     }
 
@@ -169,11 +173,13 @@ class Banner extends ModelEntity
      * Sets the numbers of clicks this banner received
      *
      * @param int $clicks
+     *
      * @return \Shopware\Models\Banner\Banner
      */
     public function setClicks($clicks)
     {
         $this->clicks = $clicks;
+
         return $this;
     }
 
@@ -191,11 +197,13 @@ class Banner extends ModelEntity
      * Sets the number of times the banner has been displayed.
      *
      * @param int $views
+     *
      * @return \Shopware\Models\Banner\Banner
      */
     public function setViews($views)
     {
         $this->views = $views;
+
         return $this;
     }
 
@@ -203,22 +211,27 @@ class Banner extends ModelEntity
      * Increases the number of times the banner has been displayed by one.
      *
      * @internal param int $views
+     *
      * @return \Shopware\Models\Banner\Banner
      */
     public function increaseViews()
     {
-        $this->views++;
+        ++$this->views;
+
         return $this;
     }
+
     /**
      * Increases the number of times the banner has been clicked by one.
      *
      * @internal param int $views
+     *
      * @return \Shopware\Models\Banner\Banner
      */
     public function increaseClicks()
     {
-        $this->clicks++;
+        ++$this->clicks;
+
         return $this;
     }
 

@@ -28,7 +28,7 @@ use Shopware\Components\Logger;
 
 /**
  * @category  Shopware
- * @package   Shopware\Plugin\Debug\Components
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class TemplateCollector implements CollectorInterface
@@ -50,19 +50,16 @@ class TemplateCollector implements CollectorInterface
 
     /**
      * @param \Enlight_Template_Manager $template
-     * @param Utils $utils
-     * @param string $rootDir
+     * @param Utils                     $utils
+     * @param string                    $rootDir
      */
     public function __construct(\Enlight_Template_Manager $template, Utils $utils, $rootDir)
     {
         $this->template = $template;
-        $this->rootDir  = $rootDir;
-        $this->utils    = $utils;
+        $this->rootDir = $rootDir;
+        $this->utils = $utils;
     }
 
-    /**
-     *
-     */
     public function start()
     {
         $this->template->setDebugging(true);
@@ -76,7 +73,7 @@ class TemplateCollector implements CollectorInterface
      */
     public function logResults(Logger $log)
     {
-        $rows = array(array('name', 'compile_time', 'render_time', 'cache_time'));
+        $rows = [['name', 'compile_time', 'render_time', 'cache_time']];
         $total_time = 0;
         foreach (\Smarty_Internal_Debug::$template_data as $template_file) {
             $total_time += $template_file['render_time'];
@@ -91,7 +88,7 @@ class TemplateCollector implements CollectorInterface
         $total_time = round($total_time, 5);
         $total_count = count($rows) - 1;
         $label = "Benchmark Template ($total_count @ $total_time sec)";
-        $table = array($label, $rows);
+        $table = [$label, $rows];
 
         $log->table($table);
     }

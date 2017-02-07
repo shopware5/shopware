@@ -53,7 +53,7 @@ class CleanupFilesFinder
 
         $cleanupList = [];
         foreach ($lines as $path) {
-            $realpath = $this->shopwarePath.'/'.$path;
+            $realpath = $this->shopwarePath . '/' . $path;
             if (file_exists($realpath)) {
                 $cleanupList[] = $realpath;
             }

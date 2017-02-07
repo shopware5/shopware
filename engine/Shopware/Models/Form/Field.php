@@ -24,8 +24,8 @@
 
 namespace   Shopware\Models\Form;
 
-use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
 
 /**
  * Shopware field model represents a single form-field
@@ -48,9 +48,18 @@ use Doctrine\ORM\Mapping as ORM;
 class Field extends ModelEntity
 {
     /**
+     * The associated form
+     *
+     * @var \Shopware\Models\Form\Form
+     *
+     * @ORM\ManyToOne(targetEntity="Form", inversedBy="fields")
+     * @ORM\JoinColumn(name="supportID", referencedColumnName="id")
+     */
+    protected $form;
+    /**
      * Primary Key - autoincrement value
      *
-     * @var integer $id
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
@@ -61,7 +70,7 @@ class Field extends ModelEntity
     /**
      * Error Message to display
      *
-     * @var string $errorMsg
+     * @var string
      *
      * @ORM\Column(name="error_msg", type="string", length=255, nullable=false)
      */
@@ -70,7 +79,7 @@ class Field extends ModelEntity
     /**
      * Name of Formfield
      *
-     * @var string $name
+     * @var string
      *
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
@@ -79,7 +88,7 @@ class Field extends ModelEntity
     /**
      * Addition note to display
      *
-     * @var string $note
+     * @var string
      *
      * @ORM\Column(name="note", type="string", length=255, nullable=true)
      */
@@ -88,7 +97,7 @@ class Field extends ModelEntity
     /**
      * Type of formfield e.G. text / email / radio / textarea
      *
-     * @var string $typ
+     * @var string
      *
      * @ORM\Column(name="typ", type="string", length=255, nullable=false)
      */
@@ -97,7 +106,7 @@ class Field extends ModelEntity
     /**
      * Whether not this field is required
      *
-     * @var integer $required
+     * @var int
      *
      * @ORM\Column(name="required", type="integer", nullable=false)
      */
@@ -106,7 +115,7 @@ class Field extends ModelEntity
     /**
      * The label to show in forms
      *
-     * @var string $label
+     * @var string
      *
      * @ORM\Column(name="label", type="string", length=255, nullable=false)
      */
@@ -115,7 +124,7 @@ class Field extends ModelEntity
     /**
      * Class of display type. e.G. normal / strasse;nr
      *
-     * @var string $class
+     * @var string
      *
      * @ORM\Column(name="class", type="string", length=255, nullable=false)
      */
@@ -124,7 +133,7 @@ class Field extends ModelEntity
     /**
      * Prefilled value of field. Mandatory on Dropdowns.
      *
-     * @var string $value
+     * @var string
      *
      * @ORM\Column(name="value", type="string", length=255, nullable=false)
      */
@@ -133,7 +142,7 @@ class Field extends ModelEntity
     /**
      * Defines the date and time when the field was created
      *
-     * @var \DateTime $added
+     * @var \DateTime
      * @ORM\Column(name="added", type="datetime", nullable=false)
      */
     private $added;
@@ -141,14 +150,14 @@ class Field extends ModelEntity
     /**
      * Position of this field in the current form
      *
-     * @var integer $position
+     * @var int
      *
      * @ORM\Column(name="position", type="integer", nullable=false)
      */
     private $position;
 
     /**
-     * @var string $ticketTask
+     * @var string
      *
      * @ORM\Column(name="ticket_task", type="string", length=200, nullable=false)
      */
@@ -157,26 +166,17 @@ class Field extends ModelEntity
     /**
      * Primary key of associated form
      *
-     * @var integer $supportid
+     * @var int
      *
      * @ORM\Column(name="supportID", type="integer", nullable=false)
      */
     private $formId;
 
     /**
-     * The associated form
-     *
-     * @var \Shopware\Models\Form\Form $form
-     *
-     * @ORM\ManyToOne(targetEntity="Form", inversedBy="fields")
-     * @ORM\JoinColumn(name="supportID", referencedColumnName="id")
-     */
-    protected $form;
-
-    /**
      * Set the associated form
      *
      * @param \Shopware\Models\Form\Form $form
+     *
      * @return \Shopware\Models\Form\Field
      */
     public function setForm(Form $form)
@@ -189,7 +189,7 @@ class Field extends ModelEntity
     /**
      * Get the unique identifier
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -199,7 +199,7 @@ class Field extends ModelEntity
     /**
      * Get id of related form
      *
-     * @return integer
+     * @return int
      */
     public function getFormId()
     {
@@ -210,11 +210,13 @@ class Field extends ModelEntity
      * Set error message
      *
      * @param string $errorMsg
+     *
      * @return \Shopware\Models\Form\Field
      */
     public function setErrorMsg($errorMsg)
     {
         $this->errorMsg = $errorMsg;
+
         return $this;
     }
 
@@ -232,11 +234,13 @@ class Field extends ModelEntity
      * Set name of field
      *
      * @param string $name
+     *
      * @return \Shopware\Models\Form\Field
      */
     public function setName($name)
     {
         $this->name = $name;
+
         return $this;
     }
 
@@ -254,11 +258,13 @@ class Field extends ModelEntity
      * Set note of field
      *
      * @param string $note
+     *
      * @return \Shopware\Models\Form\Field
      */
     public function setNote($note)
     {
         $this->note = $note;
+
         return $this;
     }
 
@@ -276,11 +282,13 @@ class Field extends ModelEntity
      * Set typ of field
      *
      * @param string $typ
+     *
      * @return \Shopware\Models\Form\Field
      */
     public function setTyp($typ)
     {
         $this->typ = $typ;
+
         return $this;
     }
 
@@ -297,19 +305,21 @@ class Field extends ModelEntity
     /**
      * Set wether or not this field is required
      *
-     * @param integer $required
+     * @param int $required
+     *
      * @return \Shopware\Models\Form\Field
      */
     public function setRequired($required)
     {
         $this->required = $required;
+
         return $this;
     }
 
     /**
      * Get wether or not this field is required
      *
-     * @return integer
+     * @return int
      */
     public function getRequired()
     {
@@ -320,11 +330,13 @@ class Field extends ModelEntity
      * Set label of field
      *
      * @param string $label
+     *
      * @return \Shopware\Models\Form\Field
      */
     public function setLabel($label)
     {
         $this->label = $label;
+
         return $this;
     }
 
@@ -342,11 +354,13 @@ class Field extends ModelEntity
      * Set class of field
      *
      * @param string $class
+     *
      * @return \Shopware\Models\Form\Field
      */
     public function setClass($class)
     {
         $this->class = $class;
+
         return $this;
     }
 
@@ -364,11 +378,13 @@ class Field extends ModelEntity
      * Set value of field
      *
      * @param string $value
+     *
      * @return \Shopware\Models\Form\Field
      */
     public function setValue($value)
     {
         $this->value = $value;
+
         return $this;
     }
 
@@ -385,19 +401,21 @@ class Field extends ModelEntity
     /**
      * Set position of field
      *
-     * @param integer $position
+     * @param int $position
+     *
      * @return \Shopware\Models\Form\Field
      */
     public function setPosition($position)
     {
         $this->position = $position;
+
         return $this;
     }
 
     /**
      * Get position of field
      *
-     * @return integer
+     * @return int
      */
     public function getPosition()
     {
@@ -418,16 +436,19 @@ class Field extends ModelEntity
      * Set TicketTask
      *
      * @param string $ticketTask
+     *
      * @return \Shopware\Models\Form\Field
      */
     public function setTicketTask($ticketTask)
     {
         $this->ticketTask = $ticketTask;
+
         return $this;
     }
 
     /**
      * Get Ticket Task
+     *
      * @return string
      */
     public function getTicketTask()

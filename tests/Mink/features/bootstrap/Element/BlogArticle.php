@@ -1,4 +1,26 @@
 <?php
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
 
 namespace Shopware\Tests\Mink\Element;
 
@@ -18,12 +40,12 @@ use Shopware\Tests\Mink\Helper;
 class BlogArticle extends MultipleElement implements \Shopware\Tests\Mink\HelperSelectorInterface
 {
     /**
-     * @var array $selector
+     * @var array
      */
     protected $selector = ['css' => 'div.emotion--blog'];
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getCssSelectors()
     {
@@ -31,13 +53,15 @@ class BlogArticle extends MultipleElement implements \Shopware\Tests\Mink\Helper
             'article' => '.blog--entry',
             'articleTitle' => '.blog--title',
             'articleLink' => '.blog--image',
-            'articleText' => '.blog--description'
+            'articleText' => '.blog--description',
         ];
     }
 
     /**
      * Returns all blog articles of the element
+     *
      * @param string[] $properties
+     *
      * @return array[]
      */
     public function getArticles(array $properties)
@@ -63,7 +87,9 @@ class BlogArticle extends MultipleElement implements \Shopware\Tests\Mink\Helper
 
     /**
      * Returns the title of the blog article
+     *
      * @param NodeElement $article
+     *
      * @return string
      */
     public function getTitleProperty(NodeElement $article)
@@ -75,7 +101,7 @@ class BlogArticle extends MultipleElement implements \Shopware\Tests\Mink\Helper
         $titles = [
             'titleTitle' => $title->getAttribute('title'),
             'linkTitle' => $article->find('css', $selectors['articleLink'])->getAttribute('title'),
-            'title' => rtrim($title->getText(), '.')
+            'title' => rtrim($title->getText(), '.'),
         ];
 
         return $this->getUniqueTitle($titles);
@@ -83,18 +109,23 @@ class BlogArticle extends MultipleElement implements \Shopware\Tests\Mink\Helper
 
     /**
      * Returns the image of the blog article
+     *
      * @param NodeElement $article
+     *
      * @return string|null
      */
     public function getImageProperty(NodeElement $article)
     {
         $selector = Helper::getRequiredSelector($this, 'articleLink');
+
         return $article->find('css', $selector)->getAttribute('style');
     }
 
     /**
      * Returns the link to the blog article
+     *
      * @param NodeElement $article
+     *
      * @return string
      */
     public function getLinkProperty(NodeElement $article)
@@ -103,7 +134,7 @@ class BlogArticle extends MultipleElement implements \Shopware\Tests\Mink\Helper
 
         $links = [
             'titleLink' => $article->find('css', $selectors['articleTitle'])->getAttribute('href'),
-            'link' => $article->find('css', $selectors['articleLink'])->getAttribute('href')
+            'link' => $article->find('css', $selectors['articleLink'])->getAttribute('href'),
         ];
 
         return Helper::getUnique($links);
@@ -111,20 +142,26 @@ class BlogArticle extends MultipleElement implements \Shopware\Tests\Mink\Helper
 
     /**
      * Returns the text preview of the blog article
+     *
      * @param NodeElement $article
+     *
      * @return null|string
      */
     public function getTextProperty(NodeElement $article)
     {
         $selector = Helper::getRequiredSelector($this, 'articleText');
+
         return $article->find('css', $selector)->getText();
     }
 
     /**
      * Helper method to get the unique title
+     *
      * @param string[] $titles
-     * @return string
+     *
      * @throws \Exception
+     *
+     * @return string
      */
     protected function getUniqueTitle(array $titles)
     {

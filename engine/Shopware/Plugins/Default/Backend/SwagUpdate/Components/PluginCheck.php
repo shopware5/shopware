@@ -30,7 +30,7 @@ use Shopware\Components\DependencyInjection\Container;
 
 /**
  * @category  Shopware
- * @package   ShopwarePlugins\SwagUpdate\Components;
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class PluginCheck
@@ -49,21 +49,10 @@ class PluginCheck
     }
 
     /**
-     * @return null|string
-     */
-    private function getLocale()
-    {
-        try {
-            return $this->container->get('Auth')->getIdentity()->locale->getLocale();
-        } catch (\Exception $e) {
-            return null;
-        }
-    }
-
-    /**
      * Check if the currently installed plugin where marked to be compatible with the selected sw version
      *
      * @param $version
+     *
      * @return array
      */
     public function checkInstalledPluginsAvailableForNewVersion($version)
@@ -82,30 +71,30 @@ class PluginCheck
         try {
             $results = [];
             foreach ($installedPlugins as $plugin) {
-                $key         = strtolower($plugin['name']);
-                $name        = $plugin['label'];
-                $inStore     = array_key_exists($key, $storePlugins);
-                $available   = array_key_exists($key, $updatesAvailable);
-                $updatable   = $available && $plugin['version'] < $updatesAvailable[$key]->getVersion();
+                $key = strtolower($plugin['name']);
+                $name = $plugin['label'];
+                $inStore = array_key_exists($key, $storePlugins);
+                $available = array_key_exists($key, $updatesAvailable);
+                $updatable = $available && $plugin['version'] < $updatesAvailable[$key]->getVersion();
                 $description = $this->getPluginStateDescription($inStore, $available);
 
                 $results[] = [
-                    'inStore'    => $inStore,
-                    'name'       => $name,
-                    'message'    => $description,
-                    'updatable'  => $updatable,
-                    'id'         => sprintf('plugin_incompatible-%s', $name),
-                    'errorLevel' => ($available) ? Validation::REQUIREMENT_VALID : Validation::REQUIREMENT_WARNING
+                    'inStore' => $inStore,
+                    'name' => $name,
+                    'message' => $description,
+                    'updatable' => $updatable,
+                    'id' => sprintf('plugin_incompatible-%s', $name),
+                    'errorLevel' => ($available) ? Validation::REQUIREMENT_VALID : Validation::REQUIREMENT_WARNING,
                 ];
             }
         } catch (\Exception $e) {
-            $results[] = array(
-                'name'       => 'Error',
-                'message'    => 'Could not query plugins which are available for your shopware version',
-                'details'    => $e->getCode() . ': ' . $e->getMessage(),
+            $results[] = [
+                'name' => 'Error',
+                'message' => 'Could not query plugins which are available for your shopware version',
+                'details' => $e->getCode() . ': ' . $e->getMessage(),
                 'errorLevel' => Validation::REQUIREMENT_WARNING,
-                'id'         => 'plugin_available_error'
-            );
+                'id' => 'plugin_available_error',
+            ];
         }
 
         usort($results, function ($a, $b) {
@@ -119,6 +108,28 @@ class PluginCheck
         });
 
         return $results;
+    }
+
+    /**
+     * Helper which returns an snippet-instance
+     *
+     * @return \Enlight_Components_Snippet_Namespace
+     */
+    public function getSnippetNamespace()
+    {
+        return $this->container->get('snippets')->getNamespace('backend/swag_update/main');
+    }
+
+    /**
+     * @return null|string
+     */
+    private function getLocale()
+    {
+        try {
+            return $this->container->get('Auth')->getIdentity()->locale->getLocale();
+        } catch (\Exception $e) {
+            return null;
+        }
     }
 
     /**
@@ -136,34 +147,24 @@ class PluginCheck
             ->setParameter(':source', 'Default')
             ->setParameter(':names', ['PluginManager', 'StoreApi'], Connection::PARAM_STR_ARRAY);
 
-        /**@var $statement \PDOStatement*/
+        /** @var $statement \PDOStatement */
         $statement = $query->execute();
 
         return $statement->fetchAll(\PDO::FETCH_ASSOC);
     }
 
-
-    /**
-     * Helper which returns an snippet-instance
-     *
-     * @return \Enlight_Components_Snippet_Namespace
-     */
-    public function getSnippetNamespace()
-    {
-        return $this->container->get('snippets')->getNamespace('backend/swag_update/main');
-    }
-
     /**
      * @param bool $inStore
      * @param bool $available
+     *
      * @return string
      */
     private function getPluginStateDescription($inStore, $available)
     {
         switch (true) {
-            case ($inStore && $available):
+            case $inStore && $available:
                 return $this->getSnippetNamespace()->get('controller/plugin_compatible', 'The author of the plugin marked the plugin as compatible.');
-            case ($inStore && !$available):
+            case $inStore && !$available:
                 return $this->getSnippetNamespace()->get('controller/plugin_not_compatible', 'The author of the plugin did not mark the plugin as compatible with the shopware version');
             default:
                 return $this->getSnippetNamespace()->get('controller/plugin_not_in_store', 'The plugin is not available in the store.');

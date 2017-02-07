@@ -24,11 +24,10 @@
 
 namespace Shopware\Models\Payment;
 
-use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
 
 /**
- *
  * Shopware payment model represents a single payment transaction.
  * <br>
  * The Shopware Payment Instance model represents a row of the s_core_payment_instance.
@@ -43,16 +42,7 @@ use Doctrine\ORM\Mapping as ORM;
 class PaymentInstance extends ModelEntity
 {
     /**
-     * @var integer $id
-     *
-     * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
-    /**
-     * @var integer
+     * @var int
      * @ORM\Column(name="order_id", type="integer")
      */
     protected $orderId;
@@ -76,95 +66,103 @@ class PaymentInstance extends ModelEntity
     protected $customer;
 
     /**
-     * @var string $firstName
+     * @var string
      *
      * @ORM\Column(name="firstname", type="string", length=255, nullable=true)
      */
     protected $firstName;
 
     /**
-     * @var string $lastName
+     * @var string
      *
      * @ORM\Column(name="lastname", type="string", length=255, nullable=true)
      */
     protected $lastName;
 
     /**
-     * @var string $address
+     * @var string
      *
      * @ORM\Column(name="address", type="string", length=255, nullable=true)
      */
     protected $address;
 
     /**
-     * @var string $zipCode
+     * @var string
      *
      * @ORM\Column(name="zipcode", type="string", length=15, nullable=true)
      */
     protected $zipCode;
 
     /**
-     * @var string $city
+     * @var string
      *
      * @ORM\Column(name="city", type="string", length=50, nullable=true)
      */
     protected $city;
 
     /**
-     * @var string $bankName
+     * @var string
      *
      * @ORM\Column(name="bank_name", type="string", length=255, nullable=true)
      */
     protected $bankName;
 
     /**
-     * @var string $bankCode
+     * @var string
      *
      * @ORM\Column(name="bank_code", type="string", length=255, nullable=true)
      */
     protected $bankCode;
 
     /**
-     * @var string $accountNumber
+     * @var string
      *
      * @ORM\Column(name="account_number", type="string", length=50, nullable=true)
      */
     protected $accountNumber;
 
     /**
-     * @var string $accountHolder
+     * @var string
      *
      * @ORM\Column(name="account_holder", type="string", length=255, nullable=true)
      */
     protected $accountHolder;
 
     /**
-     * @var string $bic
+     * @var string
      *
      * @ORM\Column(name="bic", type="string", length=50, nullable=true)
      */
     protected $bic;
 
     /**
-     * @var string $iban
+     * @var string
      *
      * @ORM\Column(name="iban", type="string", length=50, nullable=true)
      */
     protected $iban;
 
     /**
-     * @var float $amount
+     * @var float
      *
      * @ORM\Column(name="amount", type="decimal", precision=20, scale=4)
      */
     protected $amount;
 
     /**
-     * @var \DateTime $createdAt
+     * @var \DateTime
      *
      * @ORM\Column(name="created_at", type="date", nullable=false)
      */
     protected $createdAt;
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
 
     public function __construct()
     {
@@ -174,7 +172,7 @@ class PaymentInstance extends ModelEntity
     /**
      * Gets the id of the payment
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {

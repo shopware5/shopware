@@ -21,12 +21,13 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 namespace Shopware\Components\Theme;
 
 use Doctrine\ORM\AbstractQuery;
 use Shopware\Components\Model\ModelManager;
-use Shopware\Models\Shop as Shop;
 use Shopware\Components\Theme;
+use Shopware\Models\Shop as Shop;
 
 /**
  * The Theme\Util class is a helper class
@@ -34,19 +35,21 @@ use Shopware\Components\Theme;
  * which used in all other Theme\* classes.
  *
  * @category  Shopware
- * @package   Shopware\Components\Theme
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Util
 {
     /**
      * Required for different path operations.
+     *
      * @var PathResolver
      */
     private $pathResolver;
 
     /**
      * Only used to get all active plugins.
+     *
      * @var ModelManager
      */
     private $entityManager;
@@ -68,6 +71,7 @@ class Util
      * The image will be encoded as base 64 image.
      *
      * @param Shop\Template $template
+     *
      * @return null|string
      */
     public function getPreviewImage(Shop\Template $template)
@@ -82,13 +86,15 @@ class Util
      * getDirectory function of the PathResolver
      *
      * @param Shop\Template $template
-     * @return Theme
+     *
      * @throws \Exception
+     *
+     * @return Theme
      */
     public function getThemeByTemplate(Shop\Template $template)
     {
-        $namespace = "Shopware\\Themes\\" . $template->getTemplate();
-        $class = $namespace . "\\Theme";
+        $namespace = 'Shopware\\Themes\\' . $template->getTemplate();
+        $class = $namespace . '\\Theme';
 
         $directory = $this->pathResolver->getDirectory($template);
 
@@ -96,7 +102,7 @@ class Util
 
         if (!file_exists($file)) {
             throw new \Exception(sprintf(
-                "Theme directory %s contains no Theme.php",
+                'Theme directory %s contains no Theme.php',
                 $template->getTemplate()
             ));
         }
@@ -111,19 +117,21 @@ class Util
      * Returns a new instance of the \Shopware\Theme
      *
      * @param \DirectoryIterator $directory
-     * @return Theme
+     *
      * @throws \Exception
+     *
+     * @return Theme
      */
     public function getThemeByDirectory(\DirectoryIterator $directory)
     {
-        $namespace = "Shopware\\Themes\\" . $directory->getFilename();
-        $class = $namespace . "\\Theme";
+        $namespace = 'Shopware\\Themes\\' . $directory->getFilename();
+        $class = $namespace . '\\Theme';
 
         $file = $directory->getPathname() . DIRECTORY_SEPARATOR . 'Theme.php';
 
         if (!file_exists($file)) {
             throw new \Exception(sprintf(
-                "Theme directory %s contains no Theme.php",
+                'Theme directory %s contains no Theme.php',
                 $directory->getFilename()
             ));
         }
@@ -132,7 +140,7 @@ class Util
 
         if (!class_exists($class)) {
             throw new \Exception(sprintf(
-                "Theme file %s contains unexpected class %s",
+                'Theme file %s contains unexpected class %s',
                 $file,
                 $class
             ));
@@ -142,30 +150,10 @@ class Util
     }
 
     /**
-     * Returns the theme preview thumbnail.
-     *
-     * @param \Shopware\Models\Shop\Template $theme
-     * @return null|string
-     */
-    private function getThemeImage(Shop\Template $theme)
-    {
-        $directory = $this->pathResolver->getDirectory($theme);
-
-        $thumbnail = $directory . '/preview.png';
-
-        if (!file_exists($thumbnail)) {
-            return null;
-        }
-
-        $thumbnail = file_get_contents($thumbnail);
-        return 'data:image/png;base64,' . base64_encode($thumbnail);
-    }
-
-
-    /**
      * Returns the snippet namespace for the passed theme.
      *
      * @param Shop\Template $template
+     *
      * @return string
      */
     public function getSnippetNamespace(Shop\Template $template)
@@ -182,7 +170,7 @@ class Util
     {
         $builder = $this->entityManager->createQueryBuilder();
 
-        $builder->select(array('plugins'))
+        $builder->select(['plugins'])
             ->from('Shopware\Models\Plugin\Plugin', 'plugins')
             ->where('plugins.active = true')
             ->andWhere('plugins.installed IS NOT NULL');
@@ -190,5 +178,27 @@ class Util
         return $builder->getQuery()->getResult(
             AbstractQuery::HYDRATE_OBJECT
         );
+    }
+
+    /**
+     * Returns the theme preview thumbnail.
+     *
+     * @param \Shopware\Models\Shop\Template $theme
+     *
+     * @return null|string
+     */
+    private function getThemeImage(Shop\Template $theme)
+    {
+        $directory = $this->pathResolver->getDirectory($theme);
+
+        $thumbnail = $directory . '/preview.png';
+
+        if (!file_exists($thumbnail)) {
+            return null;
+        }
+
+        $thumbnail = file_get_contents($thumbnail);
+
+        return 'data:image/png;base64,' . base64_encode($thumbnail);
     }
 }

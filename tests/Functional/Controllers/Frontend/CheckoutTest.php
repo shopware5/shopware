@@ -24,7 +24,7 @@
 
 /**
  * @category  Shopware
- * @package   Shopware\Tests
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Tests_Controllers_Frontend_CheckoutTest extends Enlight_Components_Test_Plugin_TestCase
@@ -38,14 +38,14 @@ class Shopware_Tests_Controllers_Frontend_CheckoutTest extends Enlight_Component
      */
     public function testBotAddBasketArticle()
     {
-        $botBlackList = array('digout4u', 'fast-webcrawler', 'googlebot', 'ia_archiver', 'w3m2', 'frooglebot');
+        $botBlackList = ['digout4u', 'fast-webcrawler', 'googlebot', 'ia_archiver', 'w3m2', 'frooglebot'];
         foreach ($botBlackList as $userAgent) {
             if (!empty($userAgent)) {
                 $sessionId = $this->addBasketArticle($userAgent);
                 $this->assertNotEmpty($sessionId);
                 $basketId = Shopware()->Db()->fetchOne(
-                    "SELECT id FROM s_order_basket WHERE sessionID = ?",
-                    array($sessionId)
+                    'SELECT id FROM s_order_basket WHERE sessionID = ?',
+                    [$sessionId]
                 );
                 $this->assertEmpty($basketId);
             }
@@ -64,8 +64,8 @@ class Shopware_Tests_Controllers_Frontend_CheckoutTest extends Enlight_Component
         $sessionId = $this->addBasketArticle(include __DIR__ . '/fixtures/UserAgent.php');
         $this->assertNotEmpty($sessionId);
         $basketId = Shopware()->Db()->fetchOne(
-            "SELECT id FROM s_order_basket WHERE sessionID = ?",
-            array($sessionId)
+            'SELECT id FROM s_order_basket WHERE sessionID = ?',
+            [$sessionId]
         );
         $this->assertNotEmpty($basketId);
 
@@ -74,14 +74,17 @@ class Shopware_Tests_Controllers_Frontend_CheckoutTest extends Enlight_Component
 
     /**
      * fires the add article request with the given user agent
+     *
      * @param $userAgent
-     * @return String | session id
+     *
+     * @return string | session id
      */
     private function addBasketArticle($userAgent)
     {
         $this->reset();
         $this->Request()->setHeader('User-Agent', $userAgent);
-        $this->dispatch('/checkout/addArticle/sAdd/'.self::ARTICLE_NUMBER);
+        $this->dispatch('/checkout/addArticle/sAdd/' . self::ARTICLE_NUMBER);
+
         return Shopware()->Container()->get('SessionID');
     }
 }

@@ -42,7 +42,7 @@ use Shopware\Recovery\Install\Service\WebserverCheck;
 
 /**
  * @category  Shopware
- * @package   Shopware\Recovery\Install
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ContainerProvider implements ServiceProviderInterface
@@ -65,7 +65,7 @@ class ContainerProvider implements ServiceProviderInterface
      */
     public function register(Container $container)
     {
-        $container['config']  = $this->config;
+        $container['config'] = $this->config;
 
         $container['shopware.version'] = function () {
             $version = trim(file_get_contents(__DIR__ . '/../data/version'));
@@ -78,7 +78,7 @@ class ContainerProvider implements ServiceProviderInterface
             $slim = new \Slim\Slim($slimOptions);
             $slim->contentType('text/html; charset=utf-8');
 
-            $c['slim.request']  = $slim->request();
+            $c['slim.request'] = $slim->request();
             $c['slim.response'] = $slim->response();
 
             return $slim;
@@ -96,7 +96,7 @@ class ContainerProvider implements ServiceProviderInterface
 
         // dump class contains state so we define it as factory here
         $container['database.dump_iterator'] = $container->factory(function ($c) {
-            $dumpFile   = __DIR__ . '/../data/sql/install.sql';
+            $dumpFile = __DIR__ . '/../data/sql/install.sql';
 
             return new DumpIterator($dumpFile);
         });
@@ -114,7 +114,6 @@ class ContainerProvider implements ServiceProviderInterface
 
             return new DumpIterator($dumpFile);
         });
-
 
         $container['shopware.container'] = function (Container $c) {
             require_once SW_PATH . '/autoload.php';

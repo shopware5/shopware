@@ -33,7 +33,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * @category  Shopware
- * @package   Shopware\Components\Console\Commands
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class CronRunCommand extends ShopwareCommand
@@ -46,7 +46,7 @@ class CronRunCommand extends ShopwareCommand
         $this
             ->setName('sw:cron:run')
             ->setDescription('Runs cronjobs.')
-            ->setHelp(<<<EOF
+            ->setHelp(<<<'EOF'
 The <info>%command.name%</info> runs due cronjobs.
 EOF
             )
@@ -82,18 +82,20 @@ EOF
             try {
                 $this->runSingleCronjob($output, $manager, $cronjob, $force);
             } catch (\Exception $e) {
-                $output->writeln('<error>'.$e->getMessage().'</error>');
+                $output->writeln('<error>' . $e->getMessage() . '</error>');
                 $output->writeln('Please use the action name of a cronjob. You can see existing cronjobs in shopware backend or via <info>sw:cron:list</info> command.');
+
                 return 1;
             }
+
             return 0;
         }
 
-        $stack = array();
+        $stack = [];
 
         while (($job = $manager->getNextJob($force)) !== null && !isset($stack[$job->getId()])) {
             $stack[$job->getId()] = true;
-            $output->writeln("Processing " . $job->getName());
+            $output->writeln('Processing ' . $job->getName());
             $manager->runJob($job);
         }
 
@@ -101,10 +103,10 @@ EOF
     }
 
     /**
-     * @param OutputInterface $output
+     * @param OutputInterface                 $output
      * @param Enlight_Components_Cron_Manager $manager
-     * @param string $cronjob
-     * @param bool $force
+     * @param string                          $cronjob
+     * @param bool                            $force
      */
     private function runSingleCronjob(OutputInterface $output, Enlight_Components_Cron_Manager $manager, $cronjob, $force)
     {
@@ -114,13 +116,14 @@ EOF
             return;
         }
 
-        $output->writeln("Processing " . $job->getName());
+        $output->writeln('Processing ' . $job->getName());
         $manager->runJob($job);
     }
 
     /**
-     * @param boolean $force
+     * @param bool                        $force
      * @param Enlight_Components_Cron_Job $job
+     *
      * @return bool
      */
     private function allowRun($force, Enlight_Components_Cron_Job $job)
@@ -133,7 +136,7 @@ EOF
         $nextRun = $job->getNext();
         $nextRun = new \DateTime($nextRun->getIso());
 
-        return ($nextRun <= new \DateTime());
+        return $nextRun <= new \DateTime();
     }
 
     /**
@@ -143,9 +146,11 @@ EOF
      * unknown format
      *
      * @param Enlight_Components_Cron_Manager $manager
-     * @param string $action
-     * @return Enlight_Components_Cron_Job
+     * @param string                          $action
+     *
      * @throws \RuntimeException
+     *
+     * @return Enlight_Components_Cron_Job
      */
     private function getJobByActionName(Enlight_Components_Cron_Manager $manager, $action)
     {

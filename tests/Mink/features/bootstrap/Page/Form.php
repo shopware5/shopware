@@ -1,4 +1,27 @@
 <?php
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
+
 namespace Shopware\Tests\Mink\Page;
 
 use Behat\Mink\Element\NodeElement;
@@ -9,12 +32,12 @@ use Shopware\Tests\Mink\HelperSelectorInterface;
 class Form extends Page implements HelperSelectorInterface
 {
     /**
-     * @var string $path
+     * @var string
      */
     protected $path = 'shopware.php?sViewport=ticket&sFid={formId}';
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getCssSelectors()
     {
@@ -22,22 +45,23 @@ class Form extends Page implements HelperSelectorInterface
             'captchaPlaceholder' => 'div.captcha--placeholder',
             'captchaImage' => 'div.captcha--placeholder img',
             'captchaHidden' => 'div.captcha--placeholder input',
-            'inquiryForm' => 'form#support'
+            'inquiryForm' => 'form#support',
         ];
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getNamedSelectors()
     {
         return [
-            'submitButton' => ['de' => 'Senden', 'en' => 'Send']
+            'submitButton' => ['de' => 'Senden', 'en' => 'Send'],
         ];
     }
 
     /**
      * Verify if we're on an expected page. Throw an exception if not.
+     *
      * @throws \Exception
      */
     public function verifyPage()
@@ -45,7 +69,7 @@ class Form extends Page implements HelperSelectorInterface
         $errors = [];
 
         if (!Helper::hasNamedButton($this, 'submitButton')) {
-            $errors[] = "- submit button not found!";
+            $errors[] = '- submit button not found!';
         }
 
         if (!$errors) {
@@ -60,6 +84,7 @@ class Form extends Page implements HelperSelectorInterface
 
     /**
      * Checks, whether a captcha exists and has loaded correctly
+     *
      * @throws \Exception
      */
     public function checkCaptcha()
@@ -86,6 +111,7 @@ class Form extends Page implements HelperSelectorInterface
 
     /**
      * Fills the fields of the inquiry form with $data and submits it
+     *
      * @param array $data
      */
     public function submitInquiryForm(array $data)

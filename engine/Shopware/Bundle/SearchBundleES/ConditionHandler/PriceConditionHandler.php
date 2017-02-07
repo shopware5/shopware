@@ -28,8 +28,8 @@ use ONGR\ElasticsearchDSL\Query\RangeQuery;
 use ONGR\ElasticsearchDSL\Search;
 use Shopware\Bundle\ESIndexingBundle\FieldMappingInterface;
 use Shopware\Bundle\SearchBundle\Condition\PriceCondition;
-use Shopware\Bundle\SearchBundle\CriteriaPartInterface;
 use Shopware\Bundle\SearchBundle\Criteria;
+use Shopware\Bundle\SearchBundle\CriteriaPartInterface;
 use Shopware\Bundle\SearchBundleES\PartialConditionHandlerInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
@@ -53,7 +53,7 @@ class PriceConditionHandler implements PartialConditionHandlerInterface
      */
     public function supports(CriteriaPartInterface $criteriaPart)
     {
-        return ($criteriaPart instanceof PriceCondition);
+        return $criteriaPart instanceof PriceCondition;
     }
 
     /**
@@ -86,7 +86,8 @@ class PriceConditionHandler implements PartialConditionHandlerInterface
 
     /**
      * @param CriteriaPartInterface $criteriaPart
-     * @param ShopContextInterface $context
+     * @param ShopContextInterface  $context
+     *
      * @return RangeQuery
      */
     private function createQuery(CriteriaPartInterface $criteriaPart, ShopContextInterface $context)
@@ -100,6 +101,7 @@ class PriceConditionHandler implements PartialConditionHandlerInterface
         if ($criteriaPart->getMaxPrice()) {
             $range['lte'] = $criteriaPart->getMaxPrice();
         }
+
         return new RangeQuery($this->fieldMapping->getPriceField($context), $range);
     }
 }

@@ -31,7 +31,6 @@ use Shopware\Components\DependencyInjection\Container;
 
 /**
  * Class CSRFTokenValidator
- * @package Shopware\Components
  */
 class CSRFTokenValidator implements SubscriberInterface
 {
@@ -57,9 +56,10 @@ class CSRFTokenValidator implements SubscriberInterface
 
     /**
      * CSRFTokenValidator constructor.
+     *
      * @param Container $container
-     * @param bool $isEnabledFrontend
-     * @param bool $isEnabledBackend
+     * @param bool      $isEnabledFrontend
+     * @param bool      $isEnabledBackend
      */
     public function __construct(Container $container, $isEnabledFrontend = true, $isEnabledBackend = true)
     {
@@ -69,7 +69,7 @@ class CSRFTokenValidator implements SubscriberInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public static function getSubscribedEvents()
     {
@@ -77,12 +77,13 @@ class CSRFTokenValidator implements SubscriberInterface
             'Enlight_Controller_Action_PreDispatch_Backend' => 'checkBackendTokenValidation',
 
             'Enlight_Controller_Action_PreDispatch_Frontend' => 'checkFrontendTokenValidation',
-            'Enlight_Controller_Action_PreDispatch_Widgets' => 'checkFrontendTokenValidation'
+            'Enlight_Controller_Action_PreDispatch_Widgets' => 'checkFrontendTokenValidation',
         ];
     }
 
     /**
      * Send invalidate csrf token cookie
+     *
      * @param \Enlight_Controller_Response_Response $response
      */
     public function invalidateToken(\Enlight_Controller_Response_Response $response)
@@ -93,6 +94,7 @@ class CSRFTokenValidator implements SubscriberInterface
 
     /**
      * @param ActionEventArgs $args
+     *
      * @throws CSRFTokenValidationException
      */
     public function checkBackendTokenValidation(ActionEventArgs $args)
@@ -121,6 +123,7 @@ class CSRFTokenValidator implements SubscriberInterface
 
     /**
      * @param \Enlight_Event_EventArgs $args
+     *
      * @throws CSRFTokenValidationException
      */
     public function checkFrontendTokenValidation(\Enlight_Event_EventArgs $args)
@@ -155,7 +158,7 @@ class CSRFTokenValidator implements SubscriberInterface
         }
 
         if ($request->isPost()) {
-            $requestToken = $request->getParam('__csrf_token') ? : $request->getHeader('X-CSRF-Token');
+            $requestToken = $request->getParam('__csrf_token') ?: $request->getHeader('X-CSRF-Token');
             if (!hash_equals($token, $requestToken)) {
                 $this->generateToken($controller->Response());
                 throw new CSRFTokenValidationException(sprintf('The provided X-CSRF-Token for path "%s" is invalid. Please go back, reload the page and try again.', $request->getRequestUri()));
@@ -165,6 +168,7 @@ class CSRFTokenValidator implements SubscriberInterface
 
     /**
      * @param \Enlight_Controller_Response_ResponseHttp $response
+     *
      * @return string
      */
     private function generateToken(\Enlight_Controller_Response_ResponseHttp $response)
@@ -178,6 +182,7 @@ class CSRFTokenValidator implements SubscriberInterface
 
     /**
      * @param \Enlight_Controller_Action $controller
+     *
      * @return bool
      */
     private function isWhitelisted(\Enlight_Controller_Action $controller)

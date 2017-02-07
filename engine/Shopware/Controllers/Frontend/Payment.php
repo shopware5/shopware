@@ -29,7 +29,7 @@ use Shopware\Components\BasketSignature\BasketSignatureGeneratorInterface;
  * Shopware Payment Controller
  *
  * @category  Shopware
- * @package   Shopware\Controllers\Frontend
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 abstract class Shopware_Controllers_Frontend_Payment extends Enlight_Controller_Action
@@ -44,9 +44,9 @@ abstract class Shopware_Controllers_Frontend_Payment extends Enlight_Controller_
         if (($user = $this->getUser()) !== null
                 && !empty($user['additional']['payment']['name'])) {
             return $user['additional']['payment']['name'];
-        } else {
-            return null;
         }
+
+        return null;
     }
 
     /**
@@ -74,8 +74,9 @@ abstract class Shopware_Controllers_Frontend_Payment extends Enlight_Controller_
      *
      * @param string $transactionId
      * @param string $paymentUniqueId
-     * @param int $paymentStatusId
-     * @param bool $sendStatusMail
+     * @param int    $paymentStatusId
+     * @param bool   $sendStatusMail
+     *
      * @return int
      */
     public function saveOrder($transactionId, $paymentUniqueId, $paymentStatusId = null, $sendStatusMail = false)
@@ -89,11 +90,11 @@ abstract class Shopware_Controllers_Frontend_Payment extends Enlight_Controller_
             WHERE transactionID=? AND temporaryID=?
             AND status!=-1 AND userID=?
         ';
-        $orderNumber = Shopware()->Db()->fetchOne($sql, array(
+        $orderNumber = Shopware()->Db()->fetchOne($sql, [
                 $transactionId,
                 $paymentUniqueId,
-                Shopware()->Session()->sUserId
-            ));
+                Shopware()->Session()->sUserId,
+            ]);
 
         if (empty($orderNumber)) {
             $user = $this->getUser();
@@ -122,6 +123,101 @@ abstract class Shopware_Controllers_Frontend_Payment extends Enlight_Controller_
         }
 
         return $orderNumber;
+    }
+
+    /**
+     * Saves the payment status an sends and possibly sends a status email.
+     *
+     * @param string $transactionId
+     * @param string $paymentUniqueId
+     * @param int    $paymentStatusId
+     * @param bool   $sendStatusMail
+     */
+    public function savePaymentStatus($transactionId, $paymentUniqueId, $paymentStatusId, $sendStatusMail = false)
+    {
+        $sql = '
+            SELECT id FROM s_order
+            WHERE transactionID=? AND temporaryID=?
+            AND status!=-1
+        ';
+        $orderId = Shopware()->Db()->fetchOne($sql, [
+                $transactionId,
+                $paymentUniqueId,
+            ]);
+        $order = Shopware()->Modules()->Order();
+        $order->setPaymentStatus($orderId, $paymentStatusId, $sendStatusMail);
+    }
+
+    /**
+     * Return the full amount to pay.
+     *
+     * @return float
+     */
+    public function getAmount()
+    {
+        $user = $this->getUser();
+        $basket = $this->getBasket();
+        if (!empty($user['additional']['charge_vat'])) {
+            return empty($basket['AmountWithTaxNumeric']) ? $basket['AmountNumeric'] : $basket['AmountWithTaxNumeric'];
+        }
+
+        return $basket['AmountNetNumeric'];
+    }
+
+    /**
+     * Returns shipment amount as float
+     *
+     * @return float
+     */
+    public function getShipment()
+    {
+        $user = $this->getUser();
+        $basket = $this->getBasket();
+        if (!empty($user['additional']['charge_vat'])) {
+            return $basket['sShippingcostsWithTax'];
+        }
+
+        return str_replace(',', '.', $basket['sShippingcosts']);
+    }
+
+    /**
+     * Returns the full user data as array.
+     *
+     * @return array
+     */
+    public function getUser()
+    {
+        if (!empty(Shopware()->Session()->sOrderVariables['sUserData'])) {
+            return Shopware()->Session()->sOrderVariables['sUserData'];
+        }
+
+        return null;
+    }
+
+    /**
+     * Returns the full basket data as array.
+     *
+     * @return array
+     */
+    public function getBasket()
+    {
+        if (!empty(Shopware()->Session()->sOrderVariables['sBasket'])) {
+            return Shopware()->Session()->sOrderVariables['sBasket'];
+        }
+
+        return null;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getOrderNumber()
+    {
+        if (!empty(Shopware()->Session()->sOrderVariables['sOrderNumber'])) {
+            return Shopware()->Session()->sOrderVariables['sOrderNumber'];
+        }
+
+        return null;
     }
 
     /**
@@ -154,6 +250,7 @@ abstract class Shopware_Controllers_Frontend_Payment extends Enlight_Controller_
      * Converted ArrayObject for shopware session is already created and stored in session for following checkout processes.
      *
      * @param string $signature
+     *
      * @return ArrayObject
      */
     protected function loadBasketFromSignature($signature)
@@ -175,8 +272,9 @@ abstract class Shopware_Controllers_Frontend_Payment extends Enlight_Controller_
     }
 
     /**
-     * @param string $signature
+     * @param string      $signature
      * @param ArrayObject $basket
+     *
      * @throws RuntimeException if signature does not match with provided basket
      */
     protected function verifyBasketSignature($signature, ArrayObject $basket)
@@ -226,101 +324,5 @@ EOD;
         /** @var \Shopware\Components\Logger $logger */
         $logger = $this->get('corelogger');
         $logger->log('error', $content);
-    }
-
-    /**
-     * Saves the payment status an sends and possibly sends a status email.
-     *
-     * @param string $transactionId
-     * @param string $paymentUniqueId
-     * @param int $paymentStatusId
-     * @param bool $sendStatusMail
-     * @return void
-     */
-    public function savePaymentStatus($transactionId, $paymentUniqueId, $paymentStatusId, $sendStatusMail = false)
-    {
-        $sql = '
-            SELECT id FROM s_order
-            WHERE transactionID=? AND temporaryID=?
-            AND status!=-1
-        ';
-        $orderId = Shopware()->Db()->fetchOne($sql, array(
-                $transactionId,
-                $paymentUniqueId
-            ));
-        $order = Shopware()->Modules()->Order();
-        $order->setPaymentStatus($orderId, $paymentStatusId, $sendStatusMail);
-    }
-
-    /**
-     * Return the full amount to pay.
-     *
-     * @return float
-     */
-    public function getAmount()
-    {
-        $user = $this->getUser();
-        $basket = $this->getBasket();
-        if (!empty($user['additional']['charge_vat'])) {
-            return empty($basket['AmountWithTaxNumeric']) ? $basket['AmountNumeric'] : $basket['AmountWithTaxNumeric'];
-        } else {
-            return $basket['AmountNetNumeric'];
-        }
-    }
-
-    /**
-     * Returns shipment amount as float
-     *
-     * @return float
-     */
-    public function getShipment()
-    {
-        $user = $this->getUser();
-        $basket = $this->getBasket();
-        if (!empty($user['additional']['charge_vat'])) {
-            return $basket['sShippingcostsWithTax'];
-        } else {
-            return str_replace(',', '.', $basket['sShippingcosts']);
-        }
-    }
-
-    /**
-     * Returns the full user data as array.
-     *
-     * @return array
-     */
-    public function getUser()
-    {
-        if (!empty(Shopware()->Session()->sOrderVariables['sUserData'])) {
-            return Shopware()->Session()->sOrderVariables['sUserData'];
-        } else {
-            return null;
-        }
-    }
-
-    /**
-     * Returns the full basket data as array.
-     *
-     * @return array
-     */
-    public function getBasket()
-    {
-        if (!empty(Shopware()->Session()->sOrderVariables['sBasket'])) {
-            return Shopware()->Session()->sOrderVariables['sBasket'];
-        } else {
-            return null;
-        }
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getOrderNumber()
-    {
-        if (!empty(Shopware()->Session()->sOrderVariables['sOrderNumber'])) {
-            return Shopware()->Session()->sOrderVariables['sOrderNumber'];
-        } else {
-            return null;
-        }
     }
 }

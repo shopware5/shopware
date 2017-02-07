@@ -30,7 +30,6 @@ use Shopware\Components\Routing\RouterInterface;
 
 /**
  * Class SitePageMenu
- * @package Shopware\Components
  */
 class SitePageMenu
 {
@@ -45,7 +44,7 @@ class SitePageMenu
     private $router;
 
     /**
-     * @param Connection $connection
+     * @param Connection      $connection
      * @param RouterInterface $router
      */
     public function __construct(Connection $connection, RouterInterface $router)
@@ -59,13 +58,14 @@ class SitePageMenu
      *
      * @param $shopId
      * @param $activeId
+     *
      * @return array
      */
     public function getTree($shopId, $activeId)
     {
         $query = $this->getQuery($shopId);
 
-        /**@var $statement \PDOStatement*/
+        /** @var $statement \PDOStatement */
         $statement = $query->execute();
 
         $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
@@ -86,7 +86,7 @@ class SitePageMenu
                 $links[$id] = [
                     'controller' => 'custom',
                     'action' => 'index',
-                    'sCustom' => $id
+                    'sCustom' => $id,
                 ];
             }
 
@@ -107,9 +107,25 @@ class SitePageMenu
     }
 
     /**
+     * Checks if the provided menu contains already an entry for the provided site.
+     * If the provided site contains a mapping but the existing not, override the existing.
+     *
+     * @param $menu
+     * @param $key
+     * @param $site
+     *
+     * @return bool
+     */
+    public function overrideExisting($menu, $key, $site)
+    {
+        return !empty($site['mapping']) && empty($menu[$key][0]['mapping']);
+    }
+
+    /**
      * @param $parentId
      * @param $sites
      * @param $activeId
+     *
      * @return array
      */
     private function buildSiteTree($parentId, $sites, $activeId)
@@ -144,6 +160,7 @@ class SitePageMenu
 
     /**
      * @param $shopId
+     *
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
     private function getQuery($shopId)
@@ -157,7 +174,7 @@ class SitePageMenu
             'page.target',
             'page.parentID',
             'groups.key as `group`',
-            'mapping.key as mapping'
+            'mapping.key as mapping',
         ]);
 
         $query->from('s_cms_static', 'page');
@@ -198,26 +215,13 @@ class SitePageMenu
         $query->setParameter(':shopId', $shopId)
             ->setParameter(':staticShopId', '%|' . $shopId . '|%');
 
-
         return $query;
     }
 
     /**
-     * Checks if the provided menu contains already an entry for the provided site.
-     * If the provided site contains a mapping but the existing not, override the existing.
-     * @param $menu
-     * @param $key
-     * @param $site
-     * @return bool
-     */
-    public function overrideExisting($menu, $key, $site)
-    {
-        return (!empty($site['mapping']) && empty($menu[$key][0]['mapping']));
-    }
-
-    /**
-     * @param array[] $menu
+     * @param array[]  $menu
      * @param string[] $seoUrls
+     *
      * @return array
      */
     private function assignSeoUrls($menu, $seoUrls)
@@ -230,6 +234,7 @@ class SitePageMenu
                 }
             }
         }
+
         return $menu;
     }
 }

@@ -26,31 +26,34 @@ namespace Shopware\Models\Form;
 
 use Shopware\Components\Model\ModelRepository;
 
-/**
- */
 class Repository extends ModelRepository
 {
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which selects all list of forms.
+     *
      * @param null $filter
      * @param null $orderBy
      * @param      $offset
      * @param      $limit
+     *
      * @return \Doctrine\ORM\Query
      */
-    public function getListQuery($filter = null, $orderBy = null, $offset, $limit)
+    public function getListQuery($filter, $orderBy, $offset, $limit)
     {
         $builder = $this->getListQueryBuilder($filter, $orderBy);
         $builder->setFirstResult($offset)
             ->setMaxResults($limit);
+
         return $builder->getQuery();
     }
 
     /**
      * Helper function to create the query builder for the "getListQuery" function.
      * This function can be hooked to modify the query builder of the query object.
+     *
      * @param null $filter
      * @param null $orderBy
+     *
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getListQueryBuilder($filter = null, $orderBy = null)
@@ -72,11 +75,13 @@ class Repository extends ModelRepository
      *
      * @param $formId
      * @param $shopId
+     *
      * @return \Doctrine\ORM\Query
      */
     public function getFormQuery($formId, $shopId = null)
     {
         $builder = $this->getFormQueryBuilder($formId, $shopId);
+
         return $builder->getQuery();
     }
 
@@ -86,12 +91,13 @@ class Repository extends ModelRepository
      *
      * @param $formId
      * @param $shopId
+     *
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getFormQueryBuilder($formId, $shopId = null)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
-        $builder->select(array('forms', 'fields', 'attribute'))
+        $builder->select(['forms', 'fields', 'attribute'])
             ->from('Shopware\Models\Form\Form', 'forms')
             ->leftJoin('forms.fields', 'fields')
             ->leftJoin('forms.attribute', 'attribute')
@@ -115,25 +121,30 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which search defined attributes
      * for the passed form id.
+     *
      * @param $formId
+     *
      * @return \Doctrine\ORM\Query
      */
     public function getAttributesQuery($formId)
     {
         $builder = $this->getAttributesQueryBuilder($formId);
+
         return $builder->getQuery();
     }
 
     /**
      * Helper function to create the query builder for the "getAttributesQuery" function.
      * This function can be hooked to modify the query builder of the query object.
+     *
      * @param $formId
+     *
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getAttributesQueryBuilder($formId)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
-        $builder->select(array('attribute'))
+        $builder->select(['attribute'])
             ->from('Shopware\Models\Attribute\Form', 'attribute')
             ->where('attribute.formId = ?1')
             ->setParameter(1, $formId);

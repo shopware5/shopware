@@ -29,7 +29,7 @@ use Enlight_Controller_Router as EnlightRouter;
 
 /**
  * @category  Shopware
- * @package   Shopware\Components\Routing
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Router extends EnlightRouter implements RouterInterface
@@ -62,10 +62,10 @@ class Router extends EnlightRouter implements RouterInterface
     /**
      * The di constructor of shopware router
      *
-     * @param Context $context
-     * @param MatcherInterface[] $matchers
-     * @param array $generators
-     * @param PreFilterInterface[] $preFilters
+     * @param Context               $context
+     * @param MatcherInterface[]    $matchers
+     * @param array                 $generators
+     * @param PreFilterInterface[]  $preFilters
      * @param PostFilterInterface[] $postFilters
      */
     public function __construct(
@@ -84,6 +84,7 @@ class Router extends EnlightRouter implements RouterInterface
 
     /**
      * Switch the context
+     *
      * @param Context $context
      */
     public function setContext(Context $context)
@@ -122,6 +123,7 @@ class Router extends EnlightRouter implements RouterInterface
     /**
      * @param array[] $list
      * @param Context $context
+     *
      * @return string[]|false[]
      */
     public function generateList(array $list, Context $context = null)
@@ -165,7 +167,8 @@ class Router extends EnlightRouter implements RouterInterface
 
     /**
      * @param array|string $userParams
-     * @param Context $context
+     * @param Context      $context
+     *
      * @return string|false
      */
     public function assemble($userParams = [], Context $context = null)
@@ -195,6 +198,7 @@ class Router extends EnlightRouter implements RouterInterface
                 $url = $postFilter->postFilter($url, $context);
             }
         }
+
         return $url;
     }
 
@@ -264,21 +268,23 @@ class Router extends EnlightRouter implements RouterInterface
 
     /**
      * @param EnlightRequest $request
+     *
      * @deprecated Use self::match()
-     * @return  EnlightRequest
+     *
+     * @return EnlightRequest
      */
     public function route(EnlightRequest $request)
     {
-        /** For enlight routing  */
+        /* For enlight routing  */
         $this->context->updateFromEnlightRequest($request);
 
         $params = $this->match($request->getPathInfo(), $this->context);
         if ($params !== false) {
-            /** For shopware routing (query === userParams)  */
+            /* For shopware routing (query === userParams)  */
             $request->setQuery($params);
         }
 
-        /** For enlight routing  */
+        /* For enlight routing  */
         $this->context->updateFromEnlightRequest($request);
         $this->context->setParams([]);
 
@@ -291,8 +297,10 @@ class Router extends EnlightRouter implements RouterInterface
      * @see \Shopware_Controllers_Backend_Newsletter::initMailing
      * @see \Enlight_Controller_Router::setGlobalParam
      * @deprecated Use the context
+     *
      * @param string $name
      * @param string $value
+     *
      * @return self
      */
     public function setGlobalParam($name, $value)

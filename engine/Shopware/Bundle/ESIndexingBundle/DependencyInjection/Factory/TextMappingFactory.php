@@ -33,6 +33,7 @@ class TextMappingFactory
 {
     /**
      * @param Client $client
+     *
      * @return TextMappingInterface
      */
     public static function factory(Client $client)
@@ -42,6 +43,7 @@ class TextMappingFactory
         if (version_compare($info['version']['number'], '5', '>=')) {
             return new TextMappingES5();
         }
+
         return new TextMappingES2();
     }
 }

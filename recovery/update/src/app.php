@@ -61,7 +61,7 @@ $app->hook('slim.before.dispatch', function () use ($app, $container) {
     @set_time_limit(0);
 
     $selectedLanguage = Utils::getLanguage($app->request, $lang);
-    $language = require __DIR__ .  "/../data/lang/$selectedLanguage.php";
+    $language = require __DIR__ . "/../data/lang/$selectedLanguage.php";
 
     $clientIp = Utils::getRealIpAddr();
 
@@ -98,11 +98,11 @@ $app->error(function (Exception $e) use ($app) {
 
     $response = $app->response();
     $data = [
-        'code'    => $e->getCode(),
+        'code' => $e->getCode(),
         'message' => $e->getMessage(),
-        'file'    => $e->getFile(),
-        'line'    => $e->getLine(),
-        'trace'   => $e->getTraceAsString(),
+        'file' => $e->getFile(),
+        'line' => $e->getLine(),
+        'trace' => $e->getTraceAsString(),
     ];
     $response['Content-Type'] = 'application/json';
     $response->body(json_encode($data));
@@ -113,22 +113,22 @@ $app->map('/noaccess', function () use ($app) {
 
     $app->render('noaccess.php');
     $app->response()->status(403);
-})->via('GET', 'POST')->name("noAccess");
+})->via('GET', 'POST')->name('noAccess');
 
 $app->map('/', function () use ($app) {
     $app->render('welcome.php');
 
     if (!UPDATE_IS_MANUAL) {
-        $app->redirect($app->urlFor("checks"));
+        $app->redirect($app->urlFor('checks'));
 
         return;
     }
-})->via('GET', 'POST')->name("welcome");
+})->via('GET', 'POST')->name('welcome');
 
 // Check file & directory permissions
 $app->map('/checks', function () use ($app, $container) {
     $container->get('controller.requirements')->checkRequirements();
-})->via('GET', 'POST')->name("checks");
+})->via('GET', 'POST')->name('checks');
 
 $app->map('/plugin-checks', function () use ($app, $container) {
     /** @var PluginCheck $pluginCheck */
@@ -136,7 +136,7 @@ $app->map('/plugin-checks', function () use ($app, $container) {
     $plugins = $pluginCheck->checkPlugins();
 
     $app->render('plugins.php', ['plugins' => $plugins]);
-})->via('GET', 'POST')->name("plugin-checks");
+})->via('GET', 'POST')->name('plugin-checks');
 
 $app->map('/dbmigration', function () use ($app) {
     $app->render('dbmigration.php');
@@ -152,7 +152,7 @@ $app->map('/importSnippets', function () use ($container) {
 
 $app->map('/unpack', function () use ($container) {
     $container->get('controller.batch')->unpack();
-})->via('GET', 'POST')->name("unpack");
+})->via('GET', 'POST')->name('unpack');
 
 $app->map('/cleanup', function () use ($container) {
     $container->get('controller.cleanup')->cleanupOldFiles();
@@ -167,13 +167,13 @@ $app->map('/done', function () use ($app, $container) {
     $themeService = $container->get('shopware.theme_installer');
     $themeService->synchronize();
 
-    if (is_dir(SW_PATH.'/recovery/install')) {
+    if (is_dir(SW_PATH . '/recovery/install')) {
         /** @var \Shopware\Recovery\Common\SystemLocker $systemLocker */
         $systemLocker = $container->get('system.locker');
         $systemLocker();
     }
 
-    $changedTheme = (bool) !empty($_SESSION['changedTheme']) ? : false;
+    $changedTheme = (bool) !empty($_SESSION['changedTheme']) ?: false;
     $app->view()->set('changedTheme', $changedTheme);
 
     if (UPDATE_IS_MANUAL) {

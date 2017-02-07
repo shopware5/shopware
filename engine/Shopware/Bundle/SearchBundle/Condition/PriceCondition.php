@@ -29,7 +29,7 @@ use Shopware\Bundle\SearchBundle\ConditionInterface;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\SearchBundle\Condition
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class PriceCondition implements ConditionInterface
@@ -52,8 +52,8 @@ class PriceCondition implements ConditionInterface
     {
         Assertion::numeric($minPrice);
         Assertion::numeric($maxPrice);
-        $this->minPrice = (float)$minPrice;
-        $this->maxPrice = (float)$maxPrice;
+        $this->minPrice = (float) $minPrice;
+        $this->maxPrice = (float) $maxPrice;
     }
 
     /**

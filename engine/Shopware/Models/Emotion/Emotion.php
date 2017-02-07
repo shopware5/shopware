@@ -24,8 +24,8 @@
 
 namespace Shopware\Models\Emotion;
 
-use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
 
 /**
  * The Shopware Emotion Model enables you to adapt the view of a category individually according to a grid system.
@@ -36,7 +36,7 @@ use Doctrine\ORM\Mapping as ORM;
  * from the component library, such as banners, items or text elements.
  *
  * @category   Shopware
- * @package    Shopware\Models
+ *
  * @copyright  Copyright (c) shopware AG (http://www.shopware.de)
  *
  * @ORM\Entity(repositoryClass="Repository")
@@ -46,9 +46,76 @@ use Doctrine\ORM\Mapping as ORM;
 class Emotion extends ModelEntity
 {
     /**
+     * Contains the assigned \Shopware\Models\Category\Category
+     * which can be configured in the backend emotion module.
+     * The assigned grid will be displayed in front of the categories.
+     *
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @ORM\ManyToMany(targetEntity="Shopware\Models\Category\Category", inversedBy="emotions")
+     * @ORM\JoinTable(name="s_emotion_categories",
+     *      joinColumns={
+     *          @ORM\JoinColumn(name="emotion_id", referencedColumnName="id")
+     *      },
+     *      inverseJoinColumns={
+     *          @ORM\JoinColumn(name="category_id", referencedColumnName="id")
+     *      }
+     * )
+     */
+    protected $categories;
+
+    /**
+     * OWNING SIDE
+     * Contains the assigned \Shopware\Models\User\User which created this emotion.
+     *
+     * @var \Shopware\Models\User\User
+     * @ORM\ManyToOne(targetEntity="Shopware\Models\User\User")
+     * @ORM\JoinColumn(name="userID", referencedColumnName="id")
+     */
+    protected $user;
+
+    /**
+     * INVERSE SIDE
+     * Contains all the assigned \Shopware\Models\Emotion\Element models.
+     * The element model contains the configuration about the size and position of the element
+     * and the assigned \Shopware\Models\Emotion\Library\Component which contains the data configuration.
+     *
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Emotion\Element", mappedBy="emotion", orphanRemoval=true, cascade={"persist"})
+     *
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     */
+    protected $elements;
+
+    /**
+     * INVERSE SIDE
+     *
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Emotion", mappedBy="emotion", orphanRemoval=true, cascade={"persist"})
+     *
+     * @var \Shopware\Models\Attribute\Emotion
+     */
+    protected $attribute;
+
+    /**
+     * @var bool
+     * @ORM\Column(name="show_listing", type="boolean", nullable=false)
+     */
+    protected $showListing;
+
+    /**
+     * @var
+     * @ORM\Column(name="template_id", type="integer", nullable=true)
+     */
+    protected $templateId = null;
+
+    /**
+     * @var Template
+     * @ORM\ManyToOne(targetEntity="Shopware\Models\Emotion\Template", inversedBy="emotions")
+     * @ORM\JoinColumn(name="template_id", referencedColumnName="id")
+     */
+    protected $template;
+    /**
      * Unique identifier field for the shopware emotion.
      *
-     * @var integer $id
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
@@ -57,7 +124,7 @@ class Emotion extends ModelEntity
     private $id;
 
     /**
-     * @var integer $id
+     * @var int
      *
      * @ORM\Column(name="parent_id", type="integer", nullable=true)
      */
@@ -66,7 +133,7 @@ class Emotion extends ModelEntity
     /**
      * Is this emotion active
      *
-     * @var integer $active
+     * @var int
      *
      * @ORM\Column(name="active", type="integer", nullable=false)
      */
@@ -75,7 +142,7 @@ class Emotion extends ModelEntity
     /**
      * Contains the name of the emotion.
      *
-     * @var string $name
+     * @var string
      *
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
@@ -85,28 +152,28 @@ class Emotion extends ModelEntity
      * Id of the associated \Shopware\Models\User\User which
      * created this emotion.
      *
-     * @var integer $userID
+     * @var int
      *
      * @ORM\Column(name="userID", type="integer", nullable=false)
      */
     private $userId;
 
     /**
-     * @var integer $position
+     * @var int
      *
      * @ORM\Column(name="position", type="integer", nullable=false)
      */
     private $position = 1;
 
     /**
-     * @var integer $device
+     * @var int
      *
      * @ORM\Column(name="device", type="string", length=255, nullable=true)
      */
     private $device;
 
     /**
-     * @var integer $fullscreen
+     * @var int
      *
      * @ORM\Column(name="fullscreen", type="integer", nullable=false)
      */
@@ -116,35 +183,35 @@ class Emotion extends ModelEntity
      * With the $validFrom and $validTo property you can define
      * a date range in which the emotion will be displayed.
      *
-     * @var \DateTime $validFrom
+     * @var \DateTime
      *
      * @ORM\Column(name="valid_from", type="datetime", nullable=true)
      */
     private $validFrom;
 
     /**
-     * @var integer $isLandingPage
+     * @var int
      *
      * @ORM\Column(name="is_landingpage", type="integer", nullable=false)
      */
     private $isLandingPage;
 
     /**
-     * @var string $seoTitle
+     * @var string
      *
      * @ORM\Column(name="seo_title", type="string",length=255, nullable=false)
      */
     private $seoTitle;
 
     /**
-     * @var string $seoKeywords
+     * @var string
      *
      * @ORM\Column(name="seo_keywords", type="string",length=255, nullable=false)
      */
     private $seoKeywords;
 
     /**
-     * @var string $seoDescription
+     * @var string
      *
      * @ORM\Column(name="seo_description", type="string",length=255, nullable=false)
      */
@@ -154,7 +221,7 @@ class Emotion extends ModelEntity
      * With the $validFrom and $validTo property you can define
      * a date range in which the emotion will be displayed.
      *
-     * @var \DateTime $validTo
+     * @var \DateTime
      *
      * @ORM\Column(name="valid_to", type="datetime", nullable=true)
      */
@@ -163,7 +230,7 @@ class Emotion extends ModelEntity
     /**
      * Create date of the emotion.
      *
-     * @var \DateTime $createDate
+     * @var \DateTime
      *
      * @ORM\Column(name="create_date", type="datetime", nullable=false)
      */
@@ -172,7 +239,7 @@ class Emotion extends ModelEntity
     /**
      * Date of the last edit.
      *
-     * @var \DateTime $modified
+     * @var \DateTime
      *
      * @ORM\Column(name="modified", type="datetime", nullable=false)
      */
@@ -209,24 +276,6 @@ class Emotion extends ModelEntity
     private $articleHeight;
 
     /**
-     * Contains the assigned \Shopware\Models\Category\Category
-     * which can be configured in the backend emotion module.
-     * The assigned grid will be displayed in front of the categories.
-     *
-     * @var \Doctrine\Common\Collections\ArrayCollection
-     * @ORM\ManyToMany(targetEntity="Shopware\Models\Category\Category", inversedBy="emotions")
-     * @ORM\JoinTable(name="s_emotion_categories",
-     *      joinColumns={
-     *          @ORM\JoinColumn(name="emotion_id", referencedColumnName="id")
-     *      },
-     *      inverseJoinColumns={
-     *          @ORM\JoinColumn(name="category_id", referencedColumnName="id")
-     *      }
-     * )
-     */
-    protected $categories;
-
-    /**
      * Contains the assigned Shopware\Models\Shop\Shop.
      * Used for shop limitation of single emotion landingpages.
      *
@@ -244,56 +293,9 @@ class Emotion extends ModelEntity
     private $shops;
 
     /**
-     * OWNING SIDE
-     * Contains the assigned \Shopware\Models\User\User which created this emotion.
-     *
-     * @var \Shopware\Models\User\User $user
-     * @ORM\ManyToOne(targetEntity="Shopware\Models\User\User")
-     * @ORM\JoinColumn(name="userID", referencedColumnName="id")
-     */
-    protected $user;
-
-    /**
-     * INVERSE SIDE
-     * Contains all the assigned \Shopware\Models\Emotion\Element models.
-     * The element model contains the configuration about the size and position of the element
-     * and the assigned \Shopware\Models\Emotion\Library\Component which contains the data configuration.
-     *
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Emotion\Element", mappedBy="emotion", orphanRemoval=true, cascade={"persist"})
-     * @var \Doctrine\Common\Collections\ArrayCollection
-     */
-    protected $elements;
-
-    /**
-     * INVERSE SIDE
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Emotion", mappedBy="emotion", orphanRemoval=true, cascade={"persist"})
-     * @var \Shopware\Models\Attribute\Emotion
-     */
-    protected $attribute;
-
-    /**
-     * @var boolean $isLandingPage
-     * @ORM\Column(name="show_listing", type="boolean", nullable=false)
-     */
-    protected $showListing;
-
-    /**
-     * @var
-     * @ORM\Column(name="template_id", type="integer", nullable=true)
-     */
-    protected $templateId = null;
-
-    /**
-     * @var Template
-     * @ORM\ManyToOne(targetEntity="Shopware\Models\Emotion\Template", inversedBy="emotions")
-     * @ORM\JoinColumn(name="template_id", referencedColumnName="id")
-     */
-    protected $template;
-
-    /**
      * Contains the responsive mode of the emotion.
      *
-     * @var string $mode
+     * @var string
      *
      * @ORM\Column(name="mode", type="string", length=255, nullable=false)
      */
@@ -329,8 +331,45 @@ class Emotion extends ModelEntity
         $this->setArticleHeight(2);
     }
 
+    public function __clone()
+    {
+        $this->id = null;
+
+        $categories = [];
+        foreach ($this->getCategories() as $category) {
+            $categories[] = $category;
+        }
+
+        $elements = [];
+        /** @var $element Element */
+        foreach ($this->getElements() as $element) {
+            $newElement = clone $element;
+            $newElement->setEmotion($this);
+
+            if ($newElement->getData()) {
+                /** @var $data Data */
+                foreach ($newElement->getData() as $data) {
+                    $data->setEmotion($this);
+                }
+            }
+
+            $elements[] = $newElement;
+        }
+
+        if ($attribute = $this->getAttribute()) {
+            /** @var Shopware\Models\Attribute\Emotion $newAttribute */
+            $newAttribute = clone $attribute;
+            $newAttribute->setEmotion($this);
+            $this->attribute = $newAttribute;
+        }
+
+        $this->elements = $elements;
+        $this->categories = $categories;
+    }
+
     /**
      * Unique identifier field for the shopware emotion.
+     *
      * @return int
      */
     public function getId()
@@ -340,6 +379,7 @@ class Emotion extends ModelEntity
 
     /**
      * Contains the name of the emotion.
+     *
      * @param string $name
      */
     public function setName($name)
@@ -349,6 +389,7 @@ class Emotion extends ModelEntity
 
     /**
      * Contains the name of the emotion.
+     *
      * @return string
      */
     public function getName()
@@ -437,11 +478,13 @@ class Emotion extends ModelEntity
      * created this emotion.
      *
      * @param \Shopware\Models\User\User $user
+     *
      * @return \Shopware\Models\Emotion\Emotion
      */
     public function setUser($user)
     {
         $this->user = $user;
+
         return $this;
     }
 
@@ -455,7 +498,6 @@ class Emotion extends ModelEntity
     {
         return $this->user;
     }
-
 
     /**
      * @return \DateTime
@@ -487,6 +529,7 @@ class Emotion extends ModelEntity
 
     /**
      * @param \Shopware\Models\Attribute\Emotion|array|null $attribute
+     *
      * @return \Shopware\Models\Attribute\Emotion
      */
     public function setAttribute($attribute)
@@ -513,6 +556,7 @@ class Emotion extends ModelEntity
      * and the assigned \Shopware\Models\Emotion\Library\Component which contains the data configuration.
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|array|null $elements
+     *
      * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function setElements($elements)
@@ -633,7 +677,7 @@ class Emotion extends ModelEntity
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function getShowListing()
     {
@@ -641,7 +685,7 @@ class Emotion extends ModelEntity
     }
 
     /**
-     * @param boolean $showListing
+     * @param bool $showListing
      */
     public function setShowListing($showListing)
     {
@@ -774,42 +818,6 @@ class Emotion extends ModelEntity
     public function setArticleHeight($articleHeight)
     {
         $this->articleHeight = $articleHeight;
-    }
-
-    public function __clone()
-    {
-        $this->id = null;
-
-        $categories = array();
-        foreach ($this->getCategories() as $category) {
-            $categories[] = $category;
-        }
-
-        $elements = array();
-        /**@var $element Element*/
-        foreach ($this->getElements() as $element) {
-            $newElement = clone $element;
-            $newElement->setEmotion($this);
-
-            if ($newElement->getData()) {
-                /**@var $data Data*/
-                foreach ($newElement->getData() as $data) {
-                    $data->setEmotion($this);
-                }
-            }
-
-            $elements[] = $newElement;
-        }
-
-        if ($attribute = $this->getAttribute()) {
-            /** @var Shopware\Models\Attribute\Emotion $newAttribute */
-            $newAttribute = clone $attribute;
-            $newAttribute->setEmotion($this);
-            $this->attribute = $newAttribute;
-        }
-
-        $this->elements = $elements;
-        $this->categories = $categories;
     }
 
     /*

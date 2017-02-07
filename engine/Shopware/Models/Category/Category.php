@@ -24,17 +24,17 @@
 
 namespace Shopware\Models\Category;
 
-use Shopware\Components\Model\ModelEntity;
-use Shopware\Models\Article\Article;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
+use Shopware\Models\Article\Article;
 use Shopware\Models\ProductStream\ProductStream;
 
 /**
  * Shopware Categories
  *
  * @category  Shopware
- * @package   Shopware\Models
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  *
  * @ORM\Table(name="s_categories")
@@ -43,9 +43,75 @@ use Shopware\Models\ProductStream\ProductStream;
 class Category extends ModelEntity
 {
     /**
+     * @var ArrayCollection
+     *
+     * @ORM\ManyToMany(targetEntity="Shopware\Models\Customer\Group")
+     * @ORM\JoinTable(name="s_categories_avoid_customergroups",
+     *      joinColumns={
+     *          @ORM\JoinColumn(name="categoryID", referencedColumnName="id")
+     *      },
+     *      inverseJoinColumns={
+     *          @ORM\JoinColumn(name="customergroupID", referencedColumnName="id", unique=true)
+     *      }
+     * )
+     */
+    protected $customerGroups;
+
+    /**
+     * INVERSE SIDE
+     *
+     * @var \Shopware\Models\Attribute\Category
+     *
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Category", mappedBy="category", cascade={"persist"})
+     */
+    protected $attribute;
+
+    /**
+     * @var ArrayCollection
+     *
+     * @ORM\ManyToMany(targetEntity="Shopware\Models\Emotion\Emotion", mappedBy="categories")
+     * @ORM\JoinTable(name="s_emotion_categories",
+     *      joinColumns={
+     *          @ORM\JoinColumn(name="category_id", referencedColumnName="id")
+     *      },
+     *      inverseJoinColumns={
+     *          @ORM\JoinColumn(name="emotion_id", referencedColumnName="id")
+     *      }
+     * )
+     */
+    protected $emotions;
+
+    /**
+     * OWNING SIDE
+     *
+     * @var \Shopware\Models\Media\Media
+     *
+     * @ORM\ManyToOne(targetEntity="Shopware\Models\Media\Media")
+     * @ORM\JoinColumn(name="mediaID", referencedColumnName="id")
+     */
+    protected $media;
+
+    /**
+     * @var string
+     * @ORM\Column(name="sorting_ids", type="string", nullable=true)
+     */
+    protected $sortingIds;
+
+    /**
+     * @var bool
+     * @ORM\Column(name="hide_sortings", type="boolean", nullable=false)
+     */
+    protected $hideSortings = false;
+
+    /**
+     * @var string
+     * @ORM\Column(name="facet_ids", type="string", nullable=true)
+     */
+    protected $facetIds;
+    /**
      * Identifier for a single category. This is an autoincrement value.
      *
-     * @var integer $id
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
@@ -56,7 +122,7 @@ class Category extends ModelEntity
     /**
      * The id of the parent category
      *
-     * @var integer $parentId
+     * @var int
      *
      * @ORM\Column(name="parent", type="integer", nullable=true)
      */
@@ -90,7 +156,7 @@ class Category extends ModelEntity
     /**
      * String representation of the category
      *
-     * @var string $name
+     * @var string
      *
      * @ORM\Column(name="description", type="string", length=255, nullable=false)
      */
@@ -99,7 +165,7 @@ class Category extends ModelEntity
     /**
      * Integer value on which the return values are ordered (asc)
      *
-     * @var integer $position
+     * @var int
      *
      * @ORM\Column(name="position", type="integer", nullable=true)
      */
@@ -108,7 +174,7 @@ class Category extends ModelEntity
     /**
      * SEO friendly title which is displayed in the HTML page.
      *
-     * @var string $metaTitle
+     * @var string
      *
      * @ORM\Column(name="meta_title", type="text", nullable=true)
      */
@@ -117,7 +183,7 @@ class Category extends ModelEntity
     /**
      * Keeps the meta keywords which are displayed in the HTML page.
      *
-     * @var string $metaKeywords
+     * @var string
      *
      * @ORM\Column(name="metakeywords", type="text", nullable=true)
      */
@@ -126,7 +192,7 @@ class Category extends ModelEntity
     /**
      * Keeps the meta description which is displayed in the HTML page.
      *
-     * @var string $metaDescription
+     * @var string
      *
      * @ORM\Column(name="metadescription", type="text", nullable=true)
      */
@@ -137,7 +203,7 @@ class Category extends ModelEntity
      *
      * Max chars: 255
      *
-     * @var string $cmsHeadline
+     * @var string
      *
      * @ORM\Column(name="cmsheadline", type="string", length=255, nullable=true)
      */
@@ -146,7 +212,7 @@ class Category extends ModelEntity
     /**
      * Keeps the CMS Text for this category
      *
-     * @var string $cmsText
+     * @var string
      *
      * @ORM\Column(name="cmstext", type="text", nullable=true)
      */
@@ -155,7 +221,7 @@ class Category extends ModelEntity
     /**
      * Flag which shows if the category is active or not. 1= active otherwise inactive
      *
-     * @var boolean $active
+     * @var bool
      *
      * @ORM\Column(name="active", type="boolean", nullable=false)
      */
@@ -164,28 +230,28 @@ class Category extends ModelEntity
     /**
      * If this field is set the category page will uses this template
      *
-     * @var string $template
+     * @var string
      *
      * @ORM\Column(name="template", type="string", length=255, nullable=true)
      */
     private $template;
 
     /**
-     * @var string $productBoxLayout
+     * @var string
      *
      * @ORM\Column(name="product_box_layout", type="string", length=50, nullable=true)
      */
     private $productBoxLayout = null;
 
     /**
-     * @var boolean $blog
+     * @var bool
      *
      * @ORM\Column(name="blog", type="boolean", nullable=false)
      */
     private $blog = false;
 
     /**
-     * @var string $path
+     * @var string
      *
      * @ORM\Column(name="path", type="string", nullable=false)
      */
@@ -194,7 +260,7 @@ class Category extends ModelEntity
     /**
      * Is this category based outside from the shop?
      *
-     * @var string $external
+     * @var string
      *
      * @ORM\Column(name="external", type="string", length=255, nullable=true)
      */
@@ -203,7 +269,7 @@ class Category extends ModelEntity
     /**
      * Should any filter shown on the category page be hidden?
      *
-     * @var integer $hideFilter
+     * @var int
      *
      * @ORM\Column(name="hidefilter", type="boolean", nullable=false)
      */
@@ -212,7 +278,7 @@ class Category extends ModelEntity
     /**
      * Should the top part of that category be displayed?
      *
-     * @var integer $hideTop
+     * @var int
      *
      * @ORM\Column(name="hidetop", type="boolean", nullable=false)
      */
@@ -259,104 +325,37 @@ class Category extends ModelEntity
     private $allArticles;
 
     /**
-     * @var ArrayCollection
-     *
-     * @ORM\ManyToMany(targetEntity="Shopware\Models\Customer\Group")
-     * @ORM\JoinTable(name="s_categories_avoid_customergroups",
-     *      joinColumns={
-     *          @ORM\JoinColumn(name="categoryID", referencedColumnName="id")
-     *      },
-     *      inverseJoinColumns={
-     *          @ORM\JoinColumn(name="customergroupID", referencedColumnName="id", unique=true)
-     *      }
-     * )
-     */
-    protected $customerGroups;
-
-    /**
-     * @var \DateTime $changed
+     * @var \DateTime
      *
      * @ORM\Column(name="changed", type="datetime", nullable=false)
      */
     private $changed;
 
     /**
-     * @var \DateTime $added
+     * @var \DateTime
      *
      * @ORM\Column(name="added", type="datetime", nullable=false)
      */
     private $added;
 
     /**
-     * @var int $mediaId
+     * @var int
      *
      * @ORM\Column(name="mediaID", type="integer", nullable=true)
      */
     private $mediaId;
 
     /**
-     * INVERSE SIDE
-     *
-     * @var \Shopware\Models\Attribute\Category
-     *
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Category", mappedBy="category", cascade={"persist"})
-     */
-    protected $attribute;
-
-    /**
-     * @var ArrayCollection
-     *
-     * @ORM\ManyToMany(targetEntity="Shopware\Models\Emotion\Emotion", mappedBy="categories")
-     * @ORM\JoinTable(name="s_emotion_categories",
-     *      joinColumns={
-     *          @ORM\JoinColumn(name="category_id", referencedColumnName="id")
-     *      },
-     *      inverseJoinColumns={
-     *          @ORM\JoinColumn(name="emotion_id", referencedColumnName="id")
-     *      }
-     * )
-     */
-    protected $emotions;
-
-    /**
-     * OWNING SIDE
-     *
-     * @var \Shopware\Models\Media\Media
-     *
-     * @ORM\ManyToOne(targetEntity="Shopware\Models\Media\Media")
-     * @ORM\JoinColumn(name="mediaID", referencedColumnName="id")
-     */
-    protected $media;
-
-    /**
-     * @var string
-     * @ORM\Column(name="sorting_ids", type="string", nullable=true)
-     */
-    protected $sortingIds;
-
-    /**
-     * @var boolean
-     * @ORM\Column(name="hide_sortings", type="boolean", nullable=false)
-     */
-    protected $hideSortings = false;
-
-    /**
-     * @var string
-     * @ORM\Column(name="facet_ids", type="string", nullable=true)
-     */
-    protected $facetIds;
-
-    /**
      * Class constructor.
      */
     public function __construct()
     {
-        $this->children    = new ArrayCollection();
-        $this->articles    = new ArrayCollection();
+        $this->children = new ArrayCollection();
+        $this->articles = new ArrayCollection();
         $this->allArticles = new ArrayCollection();
-        $this->emotions    = new ArrayCollection();
-        $this->changed     = new \DateTime();
-        $this->added       = new \DateTime();
+        $this->emotions = new ArrayCollection();
+        $this->changed = new \DateTime();
+        $this->added = new \DateTime();
     }
 
     /**
@@ -372,7 +371,7 @@ class Category extends ModelEntity
     /**
      * Get id
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -383,7 +382,8 @@ class Category extends ModelEntity
      * Set id
      *
      * @param $id
-     * @return integer
+     *
+     * @return int
      */
     public function setId($id)
     {
@@ -395,7 +395,7 @@ class Category extends ModelEntity
     /**
      * Get parent id
      *
-     * @return integer
+     * @return int
      */
     public function getParentId()
     {
@@ -406,6 +406,7 @@ class Category extends ModelEntity
      * Sets the id of the parent category
      *
      * @param Category $parent
+     *
      * @return Category
      */
     public function setParent(Category $parent = null)
@@ -427,6 +428,7 @@ class Category extends ModelEntity
 
     /**
      * @param int $level
+     *
      * @return int
      */
     public function getLevel($level = 0)
@@ -442,6 +444,7 @@ class Category extends ModelEntity
 
     /**
      * @param Category[] $children
+     *
      * @return Category
      */
     public function setChildren($children)
@@ -450,6 +453,7 @@ class Category extends ModelEntity
             $child->setParent($this);
         }
         $this->children = $children;
+
         return $this;
     }
 
@@ -468,13 +472,14 @@ class Category extends ModelEntity
      */
     public function isLeaf()
     {
-        return ($this->getChildren()->count() == 0);
+        return $this->getChildren()->count() == 0;
     }
 
     /**
      * Sets the string representation of the category
      *
      * @param string $name
+     *
      * @return Category
      */
     public function setName($name)
@@ -497,7 +502,8 @@ class Category extends ModelEntity
     /**
      * Sets an integer value on which the return values are ordered (asc)
      *
-     * @param integer $position
+     * @param int $position
+     *
      * @return Category
      */
     public function setPosition($position)
@@ -510,7 +516,7 @@ class Category extends ModelEntity
     /**
      * Returns position
      *
-     * @return integer
+     * @return int
      */
     public function getPosition()
     {
@@ -521,6 +527,7 @@ class Category extends ModelEntity
      * Set changed
      *
      * @param \DateTime|string $changed
+     *
      * @return Article
      */
     public function setChanged($changed = 'now')
@@ -558,6 +565,7 @@ class Category extends ModelEntity
      * Set the meta keywords.
      *
      * @param string $metaKeywords
+     *
      * @return Category
      */
     public function setMetaKeywords($metaKeywords)
@@ -585,6 +593,7 @@ class Category extends ModelEntity
      * Sets the  meta description text.
      *
      * @param string $metaDescription
+     *
      * @return Category
      */
     public function setMetaDescription($metaDescription)
@@ -608,6 +617,7 @@ class Category extends ModelEntity
      * Sets the CMS headline
      *
      * @param string $cmsHeadline
+     *
      * @return Category
      */
     public function setCmsHeadline($cmsHeadline)
@@ -631,6 +641,7 @@ class Category extends ModelEntity
      * Sets the CMS text
      *
      * @param string $cmsText
+     *
      * @return Category
      */
     public function setCmsText($cmsText)
@@ -654,6 +665,7 @@ class Category extends ModelEntity
      * Set template
      *
      * @param string $template
+     *
      * @return Category
      */
     public function setTemplate($template)
@@ -677,6 +689,7 @@ class Category extends ModelEntity
      * Set active
      *
      * @param bool $active
+     *
      * @return Category
      */
     public function setActive($active)
@@ -699,7 +712,7 @@ class Category extends ModelEntity
     /**
      * Returns if the category is blog category or nor
      *
-     * @return boolean
+     * @return bool
      */
     public function getBlog()
     {
@@ -709,7 +722,7 @@ class Category extends ModelEntity
     /**
      * Set category as a blog category
      *
-     * @param boolean $blog
+     * @param bool $blog
      */
     public function setBlog($blog)
     {
@@ -720,6 +733,7 @@ class Category extends ModelEntity
      * Sets the flag if this category goes to an  external source
      *
      * @param string $external
+     *
      * @return Category
      */
     public function setExternal($external)
@@ -742,12 +756,13 @@ class Category extends ModelEntity
     /**
      * Set the flag which hides the filter
      *
-     * @param boolean $hideFilter
+     * @param bool $hideFilter
+     *
      * @return Category
      */
     public function setHideFilter($hideFilter)
     {
-        $this->hideFilter = (boolean) $hideFilter;
+        $this->hideFilter = (bool) $hideFilter;
 
         return $this;
     }
@@ -755,7 +770,7 @@ class Category extends ModelEntity
     /**
      * Returns if the filters should be displayed
      *
-     * @return boolean
+     * @return bool
      */
     public function getHideFilter()
     {
@@ -765,7 +780,8 @@ class Category extends ModelEntity
     /**
      * Sets the flag if the top of the category should be hidden
      *
-     * @param boolean $hideTop
+     * @param bool $hideTop
+     *
      * @return Category
      */
     public function setHideTop($hideTop)
@@ -778,7 +794,7 @@ class Category extends ModelEntity
     /**
      * Returns the flag if the should be shown or not
      *
-     * @return boolean
+     * @return bool
      */
     public function getHideTop()
     {
@@ -807,6 +823,7 @@ class Category extends ModelEntity
      * Sets all Articles associated with this category
      *
      * @param ArrayCollection $articles
+     *
      * @return Category
      */
     public function setArticles($articles)
@@ -830,6 +847,7 @@ class Category extends ModelEntity
      * Returns the category attribute
      *
      * @param \Shopware\Models\Attribute\Category|array|null $attribute
+     *
      * @return Category
      */
     public function setAttribute($attribute)
@@ -851,6 +869,7 @@ class Category extends ModelEntity
      * Returns all Customer group associated data
      *
      * @param ArrayCollection $customerGroups
+     *
      * @return Category
      */
     public function setCustomerGroups($customerGroups)
@@ -874,6 +893,7 @@ class Category extends ModelEntity
      * Sets the Media model
      *
      * @param \Shopware\Models\Media\Media $media
+     *
      * @return Category
      */
     public function setMedia($media)
@@ -893,6 +913,7 @@ class Category extends ModelEntity
 
     /**
      * @param ArrayCollection $emotions
+     *
      * @return Category
      */
     public function setEmotions($emotions)
@@ -902,11 +923,11 @@ class Category extends ModelEntity
         return $this;
     }
 
-
     /**
      * The path is set via Event Listener in \Shopware\Components\Model\CategorySubscriber
      *
      * @param string $path
+     *
      * @return Category
      */
     public function internalSetPath($path)
@@ -926,7 +947,9 @@ class Category extends ModelEntity
 
     /**
      * Helper function which checks, if this category is child of a given parent category
+     *
      * @param $parent \Shopware\Models\Category\Category
+     *
      * @return bool
      */
     public function isChildOf(\Shopware\Models\Category\Category $parent)
@@ -935,27 +958,7 @@ class Category extends ModelEntity
     }
 
     /**
-     * Helper function for the isChildOf function. This function is used for a recursive call.
-     *
-     * @param $category Category
-     * @param $searched Category
-     * @return bool
-     */
-    protected function isChildOfInternal(Category $category, Category $searched)
-    {
-        if ($category->getParent() && $category->getParent()->getId() === $searched->getId()) {
-            return true;
-        }
-
-        if ($category->getParent() instanceof Category) {
-            return $this->isChildOfInternal($category->getParent(), $searched);
-        }
-
-        return false;
-    }
-
-    /**
-     * @return integer
+     * @return int
      */
     public function getProductBoxLayout()
     {
@@ -963,7 +966,8 @@ class Category extends ModelEntity
     }
 
     /**
-     * @param integer $productBoxLayout
+     * @param int $productBoxLayout
+     *
      * @return Category
      */
     public function setProductBoxLayout($productBoxLayout)
@@ -1030,7 +1034,7 @@ class Category extends ModelEntity
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function hideSortings()
     {
@@ -1038,7 +1042,7 @@ class Category extends ModelEntity
     }
 
     /**
-     * @param boolean $hideSortings
+     * @param bool $hideSortings
      */
     public function setHideSortings($hideSortings)
     {
@@ -1059,5 +1063,26 @@ class Category extends ModelEntity
     public function setFacetIds($facetIds)
     {
         $this->facetIds = $facetIds;
+    }
+
+    /**
+     * Helper function for the isChildOf function. This function is used for a recursive call.
+     *
+     * @param $category Category
+     * @param $searched Category
+     *
+     * @return bool
+     */
+    protected function isChildOfInternal(Category $category, Category $searched)
+    {
+        if ($category->getParent() && $category->getParent()->getId() === $searched->getId()) {
+            return true;
+        }
+
+        if ($category->getParent() instanceof self) {
+            return $this->isChildOfInternal($category->getParent(), $searched);
+        }
+
+        return false;
     }
 }

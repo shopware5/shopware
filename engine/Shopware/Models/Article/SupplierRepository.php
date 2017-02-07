@@ -24,8 +24,8 @@
 
 namespace Shopware\Models\Article;
 
-use Shopware\Components\Model\ModelRepository;
 use Doctrine\ORM\Query;
+use Shopware\Components\Model\ModelRepository;
 
 /**
  * Repository class for Supplier entity
@@ -52,7 +52,7 @@ class SupplierRepository extends ModelRepository
     public function getFriendlyUrlSuppliersBuilder($offset = null, $limit = null)
     {
         $builder = $this->createQueryBuilder('supplier')
-            ->select(array('supplier.id'));
+            ->select(['supplier.id']);
 
         if ($limit != null) {
             $builder->setFirstResult($offset)
@@ -100,10 +100,10 @@ class SupplierRepository extends ModelRepository
     public function getDetailQueryBuilder($manufacturerId)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
-        $builder->select(array(
+        $builder->select([
             'supplier',
             'attribute',
-        ))
+        ])
             ->from('Shopware\Models\Article\Supplier', 'supplier')
             ->leftJoin('supplier.attribute', 'attribute')
             ->where('supplier.id = ?1')
@@ -133,16 +133,16 @@ class SupplierRepository extends ModelRepository
      * Helper method to create the query builder for the "getListQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param   array $filterBy
-     * @param   array $orderBy
-     * @param   null  $limit
-     * @param   null  $offset
+     * @param array $filterBy
+     * @param array $orderBy
+     * @param null  $limit
+     * @param null  $offset
      *
-     * @return  \Doctrine\ORM\Query
+     * @return \Doctrine\ORM\Query
      */
     public function getListQueryBuilder(array $filterBy, array $orderBy, $limit = null, $offset = null)
     {
-        /**@var $builder \Shopware\Components\Model\QueryBuilder */
+        /** @var $builder \Shopware\Components\Model\QueryBuilder */
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(['supplier'])
             ->from('Shopware\Models\Article\Supplier', 'supplier');

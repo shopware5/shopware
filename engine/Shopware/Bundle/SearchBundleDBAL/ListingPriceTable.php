@@ -41,7 +41,7 @@ class ListingPriceTable implements ListingPriceTableInterface
     private $config;
 
     /**
-     * @param Connection $connection
+     * @param Connection                  $connection
      * @param \Shopware_Components_Config $config
      */
     public function __construct(Connection $connection, \Shopware_Components_Config $config)
@@ -52,6 +52,7 @@ class ListingPriceTable implements ListingPriceTableInterface
 
     /**
      * @param ShopContextInterface $context
+     *
      * @return DoctrineQueryBuilder
      */
     public function get(ShopContextInterface $context)
@@ -65,7 +66,7 @@ class ListingPriceTable implements ListingPriceTableInterface
         $query->select(['prices.*', $selection]);
         $query->from('s_articles', 'product');
         $query->innerJoin('product', 's_core_tax', 'tax', 'tax.id = product.taxID');
-        $query->innerJoin('product', '('. $priceTable->getSQL() .')', 'prices', 'product.id = prices.articleID');
+        $query->innerJoin('product', '(' . $priceTable->getSQL() . ')', 'prices', 'product.id = prices.articleID');
 
         $this->joinAvailableVariant($query);
         $this->joinPriceGroup($query);
@@ -92,11 +93,12 @@ class ListingPriceTable implements ListingPriceTableInterface
 
     /**
      * @param ShopContextInterface $context
+     *
      * @return bool
      */
     private function hasDifferentCustomerGroups(ShopContextInterface $context)
     {
-        return $context->getCurrentCustomerGroup()->getId() !== $context->getFallbackCustomerGroup()->getId() ;
+        return $context->getCurrentCustomerGroup()->getId() !== $context->getFallbackCustomerGroup()->getId();
     }
 
     /**
@@ -109,6 +111,7 @@ class ListingPriceTable implements ListingPriceTableInterface
         foreach ($this->getPriceColumns() as $column) {
             $switch[] = sprintf($template, $column, $column, $column);
         }
+
         return implode(',', $switch);
     }
 
@@ -127,17 +130,18 @@ class ListingPriceTable implements ListingPriceTableInterface
             '`price`',
             '`pseudoprice`',
             '`baseprice`',
-            '`percent`'
+            '`percent`',
         ];
     }
 
     /**
      * @param ShopContextInterface $context
+     *
      * @return string
      */
     private function getSelection(ShopContextInterface $context)
     {
-        $current  = $context->getCurrentCustomerGroup();
+        $current = $context->getCurrentCustomerGroup();
         $currency = $context->getCurrency();
 
         $discount = $current->useDiscount() ? $current->getPercentageDiscount() : 0;
@@ -160,13 +164,13 @@ class ListingPriceTable implements ListingPriceTableInterface
             ' * ((100 - IFNULL(priceGroup.discount, 0)) / 100)' .
 
             //multiplied with the product tax if the current customer group should see gross prices
-            ($current->displayGrossPrices() ? " * (( ".$taxCase." + 100) / 100)" : '') .
+            ($current->displayGrossPrices() ? ' * (( ' . $taxCase . ' + 100) / 100)' : '') .
 
             //multiplied with the percentage discount of the current customer group
-            ($discount ? " * " . (100 - (float) $discount) / 100 : '') .
+            ($discount ? ' * ' . (100 - (float) $discount) / 100 : '') .
 
             //multiplied with the shop currency factor
-            ($currency->getFactor() ? " * " . $currency->getFactor() : '') .
+            ($currency->getFactor() ? ' * ' . $currency->getFactor() : '') .
 
             ', 2)';
 
@@ -175,7 +179,9 @@ class ListingPriceTable implements ListingPriceTableInterface
 
     /**
      * Builds the tax cases for the price selection query
+     *
      * @param ShopContextInterface $context
+     *
      * @return string
      */
     private function buildTaxCase(ShopContextInterface $context)
@@ -184,11 +190,13 @@ class ListingPriceTable implements ListingPriceTableInterface
         foreach ($context->getTaxRules() as $rule) {
             $cases[] = ' WHEN ' . $rule->getId() . ' THEN ' . $rule->getTax();
         }
+
         return '(CASE tax.id ' . implode(' ', $cases) . ' END)';
     }
 
     /**
      * @param ShopContextInterface $context
+     *
      * @return DoctrineQueryBuilder
      */
     private function getPriceTable(ShopContextInterface $context)
@@ -210,7 +218,6 @@ class ListingPriceTable implements ListingPriceTableInterface
             'customerPrice.articledetailsID = defaultPrice.articledetailsID
             AND customerPrice.pricegroup = :currentCustomerGroup'
         );
-
 
         return $priceTable;
     }

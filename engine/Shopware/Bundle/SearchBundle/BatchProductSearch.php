@@ -41,7 +41,7 @@ class BatchProductSearch
     private $listProductService;
 
     /**
-     * @param BatchProductNumberSearch $productNumberSearch
+     * @param BatchProductNumberSearch    $productNumberSearch
      * @param ListProductServiceInterface $listProductService
      */
     public function __construct(
@@ -57,7 +57,8 @@ class BatchProductSearch
      * get the product result for the passed criteria object.
      *
      * @param BatchProductNumberSearchRequest $request
-     * @param Struct\ShopContextInterface $context
+     * @param Struct\ShopContextInterface     $context
+     *
      * @return BatchProductSearchResult
      */
     public function search(BatchProductNumberSearchRequest $request, Struct\ShopContextInterface $context)
@@ -70,7 +71,8 @@ class BatchProductSearch
 
     /**
      * @param BatchProductNumberSearchResult $searchResult
-     * @param ListProduct[] $listProducts
+     * @param ListProduct[]                  $listProducts
+     *
      * @return BatchProductSearchResult
      */
     private function mapListProducts(BatchProductNumberSearchResult $searchResult, array $listProducts)
@@ -90,6 +92,7 @@ class BatchProductSearch
     /**
      * @param Struct\ListProduct[] $products
      * @param Struct\BaseProduct[] $searchProducts
+     *
      * @return Struct\ListProduct[]
      */
     private function assignAttributes($products, $searchProducts)

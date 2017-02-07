@@ -26,13 +26,14 @@ namespace Shopware\Bundle\PluginInstallerBundle\Service;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\PluginInstallerBundle\Service
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
 class PluginZipDetector
 {
     /**
      * @param \ZipArchive $archive
+     *
      * @return bool
      */
     public function isLegacyPlugin(\ZipArchive $archive)
@@ -45,6 +46,7 @@ class PluginZipDetector
 
     /**
      * @param \ZipArchive $archive
+     *
      * @return bool
      */
     public function isPlugin(\ZipArchive $archive)
@@ -52,7 +54,7 @@ class PluginZipDetector
         $entry = $archive->statIndex(0);
 
         $pluginName = explode('/', $entry['name'])[0];
-        $bootstrapFile = $pluginName.'/'.$pluginName.'.php';
+        $bootstrapFile = $pluginName . '/' . $pluginName . '.php';
 
         $stat = $archive->statName($bootstrapFile);
 

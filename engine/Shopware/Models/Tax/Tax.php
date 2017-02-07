@@ -24,12 +24,10 @@
 
 namespace Shopware\Models\Tax;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
 use Symfony\Component\Validator\Constraints as Assert;
-use Doctrine\ORM\Mapping as ORM;
-use Doctrine\Common\Collections\ArrayCollection;
-
-;
 
 /**
  * The Shopware Model represents the Taxes.
@@ -51,7 +49,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 class Tax extends ModelEntity
 {
     /**
-     * @var integer $id
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
@@ -60,14 +58,14 @@ class Tax extends ModelEntity
     private $id;
 
     /**
-     * @var float $tax
+     * @var float
      * @Assert\NotBlank()
      * @ORM\Column(name="tax", type="decimal", nullable=false)
      */
     private $tax;
 
     /**
-     * @var string $name
+     * @var string
      *
      * @Assert\NotBlank()
      * @ORM\Column(name="description", type="string", nullable=false)
@@ -95,7 +93,7 @@ class Tax extends ModelEntity
     /**
      * Get id
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -106,11 +104,13 @@ class Tax extends ModelEntity
      * Set tax
      *
      * @param float $tax
+     *
      * @return Tax
      */
     public function setTax($tax)
     {
         $this->tax = $tax;
+
         return $this;
     }
 
@@ -128,11 +128,13 @@ class Tax extends ModelEntity
      * Set description
      *
      * @param string $name
+     *
      * @return Tax
      */
     public function setName($name)
     {
         $this->name = $name;
+
         return $this;
     }
 

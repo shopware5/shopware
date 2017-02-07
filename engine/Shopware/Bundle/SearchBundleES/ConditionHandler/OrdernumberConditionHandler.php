@@ -34,7 +34,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\SearchBundleES\ConditionHandler
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
 class OrdernumberConditionHandler implements PartialConditionHandlerInterface
@@ -44,7 +44,7 @@ class OrdernumberConditionHandler implements PartialConditionHandlerInterface
      */
     public function supports(CriteriaPartInterface $criteriaPart)
     {
-        return ($criteriaPart instanceof OrdernumberCondition);
+        return $criteriaPart instanceof OrdernumberCondition;
     }
 
     /**
@@ -56,7 +56,7 @@ class OrdernumberConditionHandler implements PartialConditionHandlerInterface
         Search $search,
         ShopContextInterface $context
     ) {
-        /** @var OrdernumberCondition $criteriaPart */
+        /* @var OrdernumberCondition $criteriaPart */
         $search->addFilter(
             new TermsQuery('number', $criteriaPart->getOrdernumbers())
         );
@@ -71,7 +71,7 @@ class OrdernumberConditionHandler implements PartialConditionHandlerInterface
         Search $search,
         ShopContextInterface $context
     ) {
-        /** @var OrdernumberCondition $criteriaPart */
+        /* @var OrdernumberCondition $criteriaPart */
         $search->addPostFilter(
             new TermsQuery('number', $criteriaPart->getOrdernumbers())
         );

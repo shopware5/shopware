@@ -136,6 +136,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
         if ($this->Request()->getParam('sSearch')) {
             $result = $this->fetchSearchListing();
             $this->setSearchResultResponse($result);
+
             return;
         }
 
@@ -145,6 +146,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
         if ($productStreamId) {
             $result = $this->fetchStreamListing($categoryId, $productStreamId);
             $this->setSearchResultResponse($result);
+
             return;
         }
 
@@ -192,7 +194,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
             'sArticles' => $articles,
             'pageIndex' => $pageIndex,
             'productBoxLayout' => $layout,
-            'sCategoryCurrent' => $categoryId
+            'sCategoryCurrent' => $categoryId,
         ]);
     }
 
@@ -225,7 +227,8 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
     /**
      * Helper function to return the category information by category id
      *
-     * @param integer $categoryId
+     * @param int $categoryId
+     *
      * @return array
      */
     private function getCategoryById($categoryId)
@@ -255,8 +258,10 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
 
     /**
      * @param $categoryId
-     * @return array
+     *
      * @throws Exception
+     *
+     * @return array
      */
     private function getCategoryChildrenIds($categoryId)
     {
@@ -272,6 +277,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
 
     /**
      * @param int $categoryId
+     *
      * @return int|null
      */
     private function findStreamIdByCategoryId($categoryId)
@@ -312,6 +318,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
 
     /**
      * @param int $productStreamId
+     *
      * @return ProductSearchResult
      */
     private function fetchStreamListing($categoryId, $productStreamId)
@@ -434,6 +441,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
 
     /**
      * @param ProductSearchResult $result
+     *
      * @return string
      */
     private function fetchListing(ProductSearchResult $result)
@@ -457,7 +465,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
             'sArticles' => $articles,
             'pageIndex' => $this->Request()->getParam('sPage'),
             'productBoxLayout' => $boxLayout,
-            'sCategoryCurrent' => $categoryId
+            'sCategoryCurrent' => $categoryId,
         ]);
 
         return $this->View()->fetch('frontend/listing/listing_ajax.tpl');
@@ -465,6 +473,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
 
     /**
      * @param ProductSearchResult $result
+     *
      * @return string
      */
     private function fetchPagination(ProductSearchResult $result)
@@ -476,7 +485,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
             'baseUrl' => $this->Request()->getBaseUrl() . $this->Request()->getPathInfo(),
             'pageSizes' => explode('|', $this->container->get('config')->get('numberArticlesToShow')),
             'shortParameters' => $this->container->get('query_alias_mapper')->getQueryAliases(),
-            'limit' => $sPerPage
+            'limit' => $sPerPage,
         ]);
 
         return $this->View()->fetch('frontend/listing/actions/action-pagination.tpl');
@@ -484,7 +493,8 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
 
     /**
      * @param ProductSearchResult $result
-     * @param null|int $categoryId
+     * @param null|int            $categoryId
+     *
      * @return array
      */
     private function convertArticlesResult(ProductSearchResult $result, $categoryId)
@@ -503,9 +513,9 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
         $urls = array_map(function ($article) use ($categoryId) {
             if ($categoryId !== null) {
                 return $article['linkDetails'] . '&sCategory=' . (int) $categoryId;
-            } else {
-                return $article['linkDetails'];
             }
+
+            return $article['linkDetails'];
         }, $articles);
 
         $rewrite = $router->generateList($urls);

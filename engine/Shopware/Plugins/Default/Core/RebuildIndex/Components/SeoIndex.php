@@ -24,7 +24,7 @@
 
 /**
  * @category  Shopware
- * @package   Shopware\Plugins\RebuildIndex\Components
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Components_SeoIndex extends Enlight_Class
@@ -40,7 +40,7 @@ class Shopware_Components_SeoIndex extends Enlight_Class
 
         $cache = (int) Shopware()->Config()->routerCache;
         $cache = $cache < 360 ? 86400 : $cache;
-        $currentTime = Shopware()->Db()->fetchOne('SELECT ?', array(new Zend_Date()));
+        $currentTime = Shopware()->Db()->fetchOne('SELECT ?', [new Zend_Date()]);
 
         if (strtotime($cachedTime) < strtotime($currentTime) - $cache) {
             $this->setCachedTime($currentTime, $elementId, $shopId);
@@ -71,12 +71,12 @@ class Shopware_Components_SeoIndex extends Enlight_Class
         $shopId = Shopware()->Shop()->getId();
 
         // Read config
-        $sql = "
+        $sql = '
             SELECT v.value
             FROM s_core_config_elements e, s_core_config_values v
             WHERE v.element_id=e.id AND e.id=? AND v.shop_id=?
-        ";
-        $cachedTime = Shopware()->Db()->fetchOne($sql, array($elementId, $shopId));
+        ';
+        $cachedTime = Shopware()->Db()->fetchOne($sql, [$elementId, $shopId]);
         if (!empty($cachedTime)) {
             $cachedTime = unserialize($cachedTime);
         }
@@ -84,7 +84,7 @@ class Shopware_Components_SeoIndex extends Enlight_Class
             $cachedTime = '0000-00-00 00:00:00';
         }
 
-        return array($cachedTime, $elementId, $shopId);
+        return [$cachedTime, $elementId, $shopId];
     }
 
     /**
@@ -100,18 +100,19 @@ class Shopware_Components_SeoIndex extends Enlight_Class
             DELETE FROM s_core_config_values
             WHERE element_id=? AND shop_id=?
         ';
-        Shopware()->Db()->query($sql, array($elementId, $shopId));
+        Shopware()->Db()->query($sql, [$elementId, $shopId]);
         $sql = '
             INSERT INTO s_core_config_values (element_id, shop_id, value)
             VALUES (?, ?, ?)
         ';
-        Shopware()->Db()->query($sql, array($elementId, $shopId, serialize($resultTime)));
+        Shopware()->Db()->query($sql, [$elementId, $shopId, serialize($resultTime)]);
     }
 
     /**
      * Register a shop in order to be able to use the sRewriteTable core class
      *
      * @param $shopId
+     *
      * @return \Shopware\Models\Shop\Shop
      */
     public function registerShop($shopId)
@@ -137,19 +138,21 @@ class Shopware_Components_SeoIndex extends Enlight_Class
      * Count categories for the current shop
      *
      * @param $shopId
+     *
      * @return mixed
      */
     public function countCategories($shopId)
     {
         if (empty(Shopware()->Config()->routerCategoryTemplate)) {
-            return 0 ;
+            return 0;
         }
 
         $shop = $this->registerShop($shopId);
         $parentId = $shop->getCategory()->getId();
+
         return Shopware()->Db()->fetchOne(
             'SELECT COUNT(id) FROM s_categories WHERE path LIKE :path',
-            array('path' => '%|' . $parentId . '|%')
+            ['path' => '%|' . $parentId . '|%']
         );
     }
 
@@ -157,6 +160,7 @@ class Shopware_Components_SeoIndex extends Enlight_Class
      * Count blog articles
      *
      * @param $shopId
+     *
      * @return int
      */
     public function countBlogs($shopId)
@@ -169,9 +173,9 @@ class Shopware_Components_SeoIndex extends Enlight_Class
         $blogCategories = $query->getArrayResult();
 
         // Get list of blogCategory ids
-        $blogCategoryIds = array();
+        $blogCategoryIds = [];
         foreach ($blogCategories as $blogCategory) {
-            $blogCategoryIds[] = $blogCategory["id"];
+            $blogCategoryIds[] = $blogCategory['id'];
         }
 
         // Count total number of associated blog articles
@@ -182,7 +186,6 @@ class Shopware_Components_SeoIndex extends Enlight_Class
             ->getQuery()
             ->getSingleScalarResult();
 
-
         return (int) $numResults;
     }
 
@@ -190,6 +193,7 @@ class Shopware_Components_SeoIndex extends Enlight_Class
      * Count the number of articles which need an update
      *
      * @param $shopId
+     *
      * @return string
      */
     public function countArticles($shopId)
@@ -197,7 +201,7 @@ class Shopware_Components_SeoIndex extends Enlight_Class
         $this->registerShop($shopId);
 
         // Calculate the number of articles which have been update since the last update time
-        $sql = "
+        $sql = '
             SELECT COUNT(DISTINCT a.id)
             FROM s_articles a
 
@@ -223,12 +227,12 @@ class Shopware_Components_SeoIndex extends Enlight_Class
 
             WHERE a.active=1
             ORDER BY a.changetime, a.id
-        ";
+        ';
 
-        return (int) Shopware()->Db()->fetchOne($sql, array(
+        return (int) Shopware()->Db()->fetchOne($sql, [
             Shopware()->Shop()->get('parentID'),
-            Shopware()->Shop()->getId()
-        ));
+            Shopware()->Shop()->getId(),
+        ]);
     }
 
     /**
@@ -238,7 +242,7 @@ class Shopware_Components_SeoIndex extends Enlight_Class
      */
     public function countEmotions()
     {
-        /**@var $repo \Shopware\Models\Emotion\Repository*/
+        /** @var $repo \Shopware\Models\Emotion\Repository */
         $repo = Shopware()->Models()->getRepository('Shopware\Models\Emotion\Emotion');
         $builder = $repo->getListingQuery();
 
@@ -279,7 +283,9 @@ class Shopware_Components_SeoIndex extends Enlight_Class
 
     /**
      * Count Static routes
+     *
      * @param $shopId
+     *
      * @return int
      */
     public function countStatic($shopId)
@@ -290,7 +296,7 @@ class Shopware_Components_SeoIndex extends Enlight_Class
         if (empty($urls)) {
             return 0;
         }
-        $static = array();
+        $static = [];
 
         if (!empty($urls)) {
             foreach (explode("\n", $urls) as $url) {
@@ -309,6 +315,7 @@ class Shopware_Components_SeoIndex extends Enlight_Class
      * Get the number of supplier which friendly url will be updated
      *
      * @param $shopId
+     *
      * @return int
      */
     public function countSuppliers($shopId)

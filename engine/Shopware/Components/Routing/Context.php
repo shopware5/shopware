@@ -25,8 +25,8 @@
 namespace Shopware\Components\Routing;
 
 use Enlight_Controller_Request_Request as EnlightRequest;
+use Shopware\Models\Shop\Shop as ShopwareShop;
 use Shopware_Components_Config as ShopwareConfig;
-use \Shopware\Models\Shop\Shop as ShopwareShop;
 
 /**
  * Class Context
@@ -34,22 +34,27 @@ use \Shopware\Models\Shop\Shop as ShopwareShop;
  * @see http://php.net/manual/en/reflectionclass.iscloneable.php
  * @see http://api.symfony.com/2.0/Symfony/Component/Routing/RequestContext.html
  * @see \Enlight_Controller_Request_Request
- * @package Shopware\Components\Routing
  *
  * @category  Shopware
- * @package   Shopware\Components\Routing
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Context implements \JsonSerializable
 {
     /**
+     * @var array
+     */
+    public $params = [];
+    /**
      * only for NOT mode_rewrite mode
+     *
      * @var string
      */
     protected $baseFile = 'shopware.php';
 
     /**
      * @see \Enlight_Controller_Request_Request::getHttpHost
+     *
      * @var string
      */
     protected $host = 'localhost';
@@ -70,22 +75,22 @@ class Context implements \JsonSerializable
     protected $secureBaseUrl = null;
 
     /**
-     * @var boolean
+     * @var bool
      */
     protected $secure = false;
 
     /**
-     * @var boolean
+     * @var bool
      */
     protected $alwaysSecure = false;
 
     /**
-     * @var boolean
+     * @var bool
      */
     protected $removeCategory = false;
 
     /**
-     * @var boolean
+     * @var bool
      */
     protected $urlToLower = false;
 
@@ -97,28 +102,27 @@ class Context implements \JsonSerializable
     /**
      * @var array
      */
-    public $params = [];
-
-    /**
-     * @var array
-     */
     protected $globalParams = [];
 
     /**
      * Module keys for retrieving module from params
+     *
      * @see \Enlight_Controller_Request_Request::$_moduleKey
+     *
      * @var string
      */
     protected $moduleKey = 'module';
 
     /**
      * Controller key for retrieving controller from params
+     *
      * @var string
      */
     protected $controllerKey = 'controller';
 
     /**
      * Action key for retrieving action from params
+     *
      * @var string
      */
     protected $actionKey = 'action';
@@ -126,8 +130,8 @@ class Context implements \JsonSerializable
     /**
      * @param string $host
      * @param string $baseUrl
-     * @param bool $secure
-     * @param array $globalParams
+     * @param bool   $secure
+     * @param array  $globalParams
      */
     public function __construct($host = 'localhost', $baseUrl = '', $secure = false, $globalParams = [])
     {
@@ -220,7 +224,7 @@ class Context implements \JsonSerializable
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isSecure()
     {
@@ -228,7 +232,7 @@ class Context implements \JsonSerializable
     }
 
     /**
-     * @param boolean $secure
+     * @param bool $secure
      */
     public function setSecure($secure)
     {
@@ -236,7 +240,7 @@ class Context implements \JsonSerializable
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isAlwaysSecure()
     {
@@ -244,7 +248,7 @@ class Context implements \JsonSerializable
     }
 
     /**
-     * @param boolean $alwaysSecure
+     * @param bool $alwaysSecure
      */
     public function setAlwaysSecure($alwaysSecure)
     {
@@ -252,7 +256,7 @@ class Context implements \JsonSerializable
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isRemoveCategory()
     {
@@ -260,7 +264,7 @@ class Context implements \JsonSerializable
     }
 
     /**
-     * @param boolean $removeCategory
+     * @param bool $removeCategory
      */
     public function setRemoveCategory($removeCategory)
     {
@@ -268,7 +272,7 @@ class Context implements \JsonSerializable
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isUrlToLower()
     {
@@ -276,7 +280,7 @@ class Context implements \JsonSerializable
     }
 
     /**
-     * @param boolean $urlToLower
+     * @param bool $urlToLower
      */
     public function setUrlToLower($urlToLower)
     {
@@ -300,9 +304,10 @@ class Context implements \JsonSerializable
     }
 
     /**
-     * @param   $name
-     * @param   null $default
-     * @return  null|string
+     * @param      $name
+     * @param null $default
+     *
+     * @return null|string
      */
     public function getParam($name, $default = null)
     {
@@ -337,6 +342,7 @@ class Context implements \JsonSerializable
     /**
      * @param string $name
      * @param string $default
+     *
      * @return string
      */
     public function getGlobalParam($name, $default = null)
@@ -354,7 +360,7 @@ class Context implements \JsonSerializable
 
     /**
      * @param string $name
-     * @param mixed $globalParam
+     * @param mixed  $globalParam
      */
     public function setGlobalParam($name, $globalParam)
     {
@@ -363,6 +369,7 @@ class Context implements \JsonSerializable
 
     /**
      * @see Enlight_Controller_Router::setGlobalParam
+     *
      * @param array $globalParams
      */
     public function setGlobalParams($globalParams)
@@ -404,6 +411,7 @@ class Context implements \JsonSerializable
 
     /**
      * @param EnlightRequest $request
+     *
      * @return Context
      */
     public static function createFromEnlightRequest(EnlightRequest $request)
@@ -417,7 +425,9 @@ class Context implements \JsonSerializable
 
     /**
      * @see \Enlight_Controller_Router::setGlobalParam
-     * @param  EnlightRequest $request
+     *
+     * @param EnlightRequest $request
+     *
      * @return array
      */
     public static function getGlobalParamsFromRequest(EnlightRequest $request)
@@ -432,6 +442,7 @@ class Context implements \JsonSerializable
                 }
             }
         }
+
         return $globalParams;
     }
 
@@ -448,8 +459,9 @@ class Context implements \JsonSerializable
     }
 
     /**
-     * @param ShopwareShop $shop
+     * @param ShopwareShop   $shop
      * @param ShopwareConfig $config
+     *
      * @return Context
      */
     public static function createFromShop(ShopwareShop $shop, ShopwareConfig $config)
@@ -463,7 +475,8 @@ class Context implements \JsonSerializable
         $self->setUrlToLower($config->get('routerToLower'));
         $self->setBaseFile($config->get('baseFile'));
         $self->setAlwaysSecure($shop->getAlwaysSecure());
-        $self->setRemoveCategory((bool)$config->get('routerRemoveCategory'));
+        $self->setRemoveCategory((bool) $config->get('routerRemoveCategory'));
+
         return $self;
     }
 

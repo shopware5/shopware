@@ -24,8 +24,8 @@
 
 namespace Shopware\Models\User;
 
-use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
 
 /**
  * Shopware role model represents a acl role in shopware.
@@ -49,7 +49,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Role extends ModelEntity implements \Zend_Acl_Role_Interface
 {
     /**
-     * @var integer $id
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
@@ -58,42 +58,42 @@ class Role extends ModelEntity implements \Zend_Acl_Role_Interface
     private $id;
 
     /**
-     * @var integer $parentId
+     * @var int
      *
      * @ORM\Column(name="parentID", type="integer", nullable=true)
      */
     private $parentId;
 
     /**
-     * @var string $name
+     * @var string
      *
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
     private $name;
 
     /**
-     * @var string $description
+     * @var string
      *
      * @ORM\Column(name="description", type="text", nullable=false)
      */
     private $description;
 
     /**
-     * @var string $source
+     * @var string
      *
      * @ORM\Column(name="source", type="string", length=255, nullable=false)
      */
     private $source;
 
     /**
-     * @var integer $enabled
+     * @var int
      *
      * @ORM\Column(name="enabled", type="integer", nullable=false)
      */
     private $enabled;
 
     /**
-     * @var integer $admin
+     * @var int
      *
      * @ORM\Column(name="admin", type="integer", nullable=false)
      */
@@ -103,7 +103,7 @@ class Role extends ModelEntity implements \Zend_Acl_Role_Interface
      * The users property is the inverse side of the association between user and role.
      * The association is joined over the s_core_auth_roles.id field and the s_core_auth.roleID
      *
-     * @var $role \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\ArrayCollection
      * @ORM\OneToMany(targetEntity="User", mappedBy="role")
      */
     private $users;
@@ -114,7 +114,7 @@ class Role extends ModelEntity implements \Zend_Acl_Role_Interface
      *
      * @ORM\OneToMany(targetEntity="Shopware\Models\User\Rule", mappedBy="role", cascade={"remove"})
      *
-     * @var $rules \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\ArrayCollection
      */
     private $rules;
 
@@ -131,7 +131,7 @@ class Role extends ModelEntity implements \Zend_Acl_Role_Interface
      * The parent property contains the instance of the inherited Shopware\Models\User\Role
      * model. The Role inherits all privileges from his parent.
      *
-     * @var null|\Shopware\Models\User\Role $parent
+     * @var null|\Shopware\Models\User\Role
      * @ORM\ManyToOne(targetEntity="\Shopware\Models\User\Role", inversedBy="children")
      * @ORM\JoinColumn(name="parentID", referencedColumnName="id")
      */
@@ -142,14 +142,14 @@ class Role extends ModelEntity implements \Zend_Acl_Role_Interface
      */
     public function __construct()
     {
-        $this->rules    = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->rules = new \Doctrine\Common\Collections\ArrayCollection();
         $this->children = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
      * Get id
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -159,19 +159,21 @@ class Role extends ModelEntity implements \Zend_Acl_Role_Interface
     /**
      * Set parentId
      *
-     * @param integer $parentId
+     * @param int $parentId
+     *
      * @return Role
      */
     public function setParentId($parentId)
     {
         $this->parentId = $parentId;
+
         return $this;
     }
 
     /**
      * Get parentId
      *
-     * @return integer
+     * @return int
      */
     public function getParentId()
     {
@@ -182,11 +184,13 @@ class Role extends ModelEntity implements \Zend_Acl_Role_Interface
      * Set name
      *
      * @param string $name
+     *
      * @return Role
      */
     public function setName($name)
     {
         $this->name = $name;
+
         return $this;
     }
 
@@ -204,11 +208,13 @@ class Role extends ModelEntity implements \Zend_Acl_Role_Interface
      * Set description
      *
      * @param string $description
+     *
      * @return Role
      */
     public function setDescription($description)
     {
         $this->description = $description;
+
         return $this;
     }
 
@@ -226,11 +232,13 @@ class Role extends ModelEntity implements \Zend_Acl_Role_Interface
      * Set source
      *
      * @param string $source
+     *
      * @return Role
      */
     public function setSource($source)
     {
         $this->source = $source;
+
         return $this;
     }
 
@@ -247,19 +255,21 @@ class Role extends ModelEntity implements \Zend_Acl_Role_Interface
     /**
      * Set enabled
      *
-     * @param integer $enabled
+     * @param int $enabled
+     *
      * @return Role
      */
     public function setEnabled($enabled)
     {
         $this->enabled = $enabled;
+
         return $this;
     }
 
     /**
      * Get enabled
      *
-     * @return integer
+     * @return int
      */
     public function getEnabled()
     {
@@ -269,19 +279,21 @@ class Role extends ModelEntity implements \Zend_Acl_Role_Interface
     /**
      * Set admin
      *
-     * @param integer $admin
+     * @param int $admin
+     *
      * @return Role
      */
     public function setAdmin($admin)
     {
         $this->admin = $admin;
+
         return $this;
     }
 
     /**
      * Get admin
      *
-     * @return integer
+     * @return int
      */
     public function getAdmin()
     {
@@ -308,11 +320,13 @@ class Role extends ModelEntity implements \Zend_Acl_Role_Interface
      * The user data is joined over the s_core_auth.roleID field.
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $users
+     *
      * @return \Shopware\Models\User\Role
      */
     public function setUsers($users)
     {
         $this->users = $users;
+
         return $this;
     }
 
@@ -350,11 +364,13 @@ class Role extends ModelEntity implements \Zend_Acl_Role_Interface
      * the Role.id property and the Role.parentId property.
      *
      * @param $children \Doctrine\Common\Collections\ArrayCollection
+     *
      * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function setChildren($children)
     {
         $this->children = $children;
+
         return $this;
     }
 

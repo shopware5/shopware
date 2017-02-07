@@ -33,21 +33,22 @@ interface ComponentHandlerInterface
 {
     /**
      * @param Element $element
-     * @return boolean
+     *
+     * @return bool
      */
     public function supports(Element $element);
 
     /**
      * @param PrepareDataCollection $collection
-     * @param Element $element
-     * @param ShopContextInterface $context
+     * @param Element               $element
+     * @param ShopContextInterface  $context
      */
     public function prepare(PrepareDataCollection $collection, Element $element, ShopContextInterface $context);
 
     /**
      * @param ResolvedDataCollection $collection
-     * @param Element $element
-     * @param ShopContextInterface $context
+     * @param Element                $element
+     * @param ShopContextInterface   $context
      */
     public function handle(ResolvedDataCollection $collection, Element $element, ShopContextInterface $context);
 }

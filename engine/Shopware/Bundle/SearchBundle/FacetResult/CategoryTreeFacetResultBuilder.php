@@ -42,7 +42,7 @@ class CategoryTreeFacetResultBuilder
 
     /**
      * @param \Shopware_Components_Snippet_Manager $snippetManager
-     * @param QueryAliasMapper $queryAliasMapper
+     * @param QueryAliasMapper                     $queryAliasMapper
      */
     public function __construct(
         \Shopware_Components_Snippet_Manager $snippetManager,
@@ -53,13 +53,14 @@ class CategoryTreeFacetResultBuilder
     }
 
     /**
-     * @param Category[] $categories
-     * @param int[] $activeIds
-     * @param int $systemCategoryId
+     * @param Category[]    $categories
+     * @param int[]         $activeIds
+     * @param int           $systemCategoryId
      * @param CategoryFacet $facet
+     *
      * @return null|TreeFacetResult
      */
-    public function buildFacetResult(array $categories, array $activeIds = [], $systemCategoryId, CategoryFacet $facet)
+    public function buildFacetResult(array $categories, array $activeIds, $systemCategoryId, CategoryFacet $facet)
     {
         $items = $this->getCategoriesOfParent($categories, $systemCategoryId);
 
@@ -95,7 +96,8 @@ class CategoryTreeFacetResultBuilder
 
     /**
      * @param Category[] $categories
-     * @param int|null $parentId
+     * @param int|null   $parentId
+     *
      * @return array
      */
     private function getCategoriesOfParent(array $categories, $parentId)
@@ -125,8 +127,9 @@ class CategoryTreeFacetResultBuilder
 
     /**
      * @param Category[] $categories
-     * @param Category $category
-     * @param int[] $actives
+     * @param Category   $category
+     * @param int[]      $actives
+     *
      * @return \Shopware\Bundle\SearchBundle\FacetResult\TreeItem
      */
     private function createTreeItem(array $categories, Category $category, array $actives = [])

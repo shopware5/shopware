@@ -26,13 +26,12 @@ namespace Shopware\Commands;
 
 use Doctrine\ORM\AbstractQuery;
 use Shopware\Components\CacheManager;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * @category  Shopware
- * @package   Shopware\Components\Console\Command
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ThemeCacheGenerateCommand extends ShopwareCommand
@@ -63,6 +62,7 @@ class ThemeCacheGenerateCommand extends ShopwareCommand
 
         if (empty($shops)) {
             $output->writeln('No theme shops found');
+
             return;
         }
 

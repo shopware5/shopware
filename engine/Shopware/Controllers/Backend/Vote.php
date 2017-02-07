@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Doctrine\DBAL\Connection;
 use Shopware\Models\Article\Vote;
 
@@ -35,8 +36,19 @@ class Shopware_Controllers_Backend_Vote extends Shopware_Controllers_Backend_App
     protected $model = Vote::class;
     protected $alias = 'vote';
 
+    public function save($data)
+    {
+        if (!empty($data['answer']) && $data['answer_date'] == null) {
+            $data['answerDate'] = new DateTime();
+        }
+        if (empty($data['shopId'])) {
+            $data['shop'] = null;
+        }
 
-    protected function getList($offset, $limit, $sort = array(), $filter = array(), array $wholeParams = array())
+        return parent::save($data);
+    }
+
+    protected function getList($offset, $limit, $sort = [], $filter = [], array $wholeParams = [])
     {
         $list = parent::getList($offset, $limit, $sort, $filter, $wholeParams);
 
@@ -50,6 +62,7 @@ class Shopware_Controllers_Backend_Vote extends Shopware_Controllers_Backend_App
         //assign shops over additional query to improve performance
         $shops = $this->getShops($shopIds);
         $list = $this->assignShops($list, $shops);
+
         return $list;
     }
 
@@ -58,11 +71,13 @@ class Shopware_Controllers_Backend_Vote extends Shopware_Controllers_Backend_App
         $query = parent::getListQuery();
         $query->addSelect(['PARTIAL article.{id, name}']);
         $query->leftJoin('vote.article', 'article');
+
         return $query;
     }
 
     /**
      * @param int $id
+     *
      * @return \Shopware\Components\Model\QueryBuilder
      */
     protected function getDetailQuery($id)
@@ -72,18 +87,8 @@ class Shopware_Controllers_Backend_Vote extends Shopware_Controllers_Backend_App
         $query->addSelect('shop');
         $query->leftJoin('vote.article', 'article');
         $query->leftJoin('vote.shop', 'shop');
-        return $query;
-    }
 
-    public function save($data)
-    {
-        if (!empty($data['answer']) && $data['answer_date'] == null) {
-            $data['answerDate'] = new DateTime();
-        }
-        if (empty($data['shopId'])) {
-            $data['shop'] = null;
-        }
-        return parent::save($data);
+        return $query;
     }
 
     protected function getSearchAssociationQuery($association, $model, $search)
@@ -99,26 +104,9 @@ class Shopware_Controllers_Backend_Vote extends Shopware_Controllers_Backend_App
     }
 
     /**
-     * @param int[] $shopIds
-     * @return array indexed by id
-     */
-    private function getShops(array $shopIds)
-    {
-        if (empty($shopIds)) {
-            return [];
-        }
-
-        $query = $this->container->get('dbal_connection')->createQueryBuilder();
-        $query->select('*');
-        $query->from('s_core_shops', 'shops');
-        $query->where('shops.id IN (:ids)');
-        $query->setParameter(':ids', $shopIds, Connection::PARAM_INT_ARRAY);
-        return $query->execute()->fetchAll(PDO::FETCH_GROUP|PDO::FETCH_UNIQUE);
-    }
-
-    /**
      * @param array[] $list
      * @param array[] $shops indexed by id
+     *
      * @return array[]
      */
     protected function assignShops($list, $shops)
@@ -133,5 +121,25 @@ class Shopware_Controllers_Backend_Vote extends Shopware_Controllers_Backend_App
         }
 
         return $list;
+    }
+
+    /**
+     * @param int[] $shopIds
+     *
+     * @return array indexed by id
+     */
+    private function getShops(array $shopIds)
+    {
+        if (empty($shopIds)) {
+            return [];
+        }
+
+        $query = $this->container->get('dbal_connection')->createQueryBuilder();
+        $query->select('*');
+        $query->from('s_core_shops', 'shops');
+        $query->where('shops.id IN (:ids)');
+        $query->setParameter(':ids', $shopIds, Connection::PARAM_INT_ARRAY);
+
+        return $query->execute()->fetchAll(PDO::FETCH_GROUP | PDO::FETCH_UNIQUE);
     }
 }

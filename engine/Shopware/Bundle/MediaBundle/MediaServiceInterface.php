@@ -28,7 +28,6 @@ use League\Flysystem\FilesystemInterface;
 
 /**
  * Interface MediaServiceInterface
- * @package Shopware\Bundle\MediaBundle
  */
 interface MediaServiceInterface
 {
@@ -36,6 +35,7 @@ interface MediaServiceInterface
      * Get media path including configured mediaUrl
      *
      * @param string $path
+     *
      * @return string|null
      */
     public function getUrl($path);
@@ -43,40 +43,40 @@ interface MediaServiceInterface
     /**
      * Read a file.
      *
-     * @param string $path The path to the file.
+     * @param string $path the path to the file
      *
-     * @return string|false The file contents or false on failure.
+     * @return string|false the file contents or false on failure
      */
     public function read($path);
 
     /**
      * Retrieves a read-stream for a path.
      *
-     * @param string $path The path to the file.
+     * @param string $path the path to the file
      *
-     * @return resource|false The path resource or false on failure.
+     * @return resource|false the path resource or false on failure
      */
     public function readStream($path);
 
     /**
      * Create a file or update if exists using a string as content.
      *
-     * @param string $path The path to the file.
-     * @param string $contents The file contents.
-     * @param bool $append Append file
+     * @param string $path     the path to the file
+     * @param string $contents the file contents
+     * @param bool   $append   Append file
      *
-     * @return bool True on success, false on failure.
+     * @return bool true on success, false on failure
      */
     public function write($path, $contents, $append = false);
 
     /**
      * Write a new file using a stream.
      *
-     * @param string $path The path of the new file.
-     * @param resource $resource The file handle.
-     * @param bool $append Append file
+     * @param string   $path     the path of the new file
+     * @param resource $resource the file handle
+     * @param bool     $append   Append file
      *
-     * @return bool True on success, false on failure.
+     * @return bool true on success, false on failure
      */
     public function writeStream($path, $resource, $append = false);
 
@@ -84,7 +84,8 @@ interface MediaServiceInterface
      * List files of the file system
      *
      * @param string $directory
-     * @return array A list of file paths.
+     *
+     * @return array a list of file paths
      */
     public function listFiles($directory = '');
 
@@ -102,26 +103,26 @@ interface MediaServiceInterface
      *
      * @param string $path
      *
-     * @return bool True on success, false on failure.
+     * @return bool true on success, false on failure
      */
     public function delete($path);
 
     /**
      * Get a file's size.
      *
-     * @param string $path The path to the file.
+     * @param string $path the path to the file
      *
-     * @return int|false The file size or false on failure.
+     * @return int|false the file size or false on failure
      */
     public function getSize($path);
 
     /**
      * Rename a file.
      *
-     * @param string $path    Path to the existing file.
-     * @param string $newpath The new path of the file.
+     * @param string $path    path to the existing file
+     * @param string $newpath the new path of the file
      *
-     * @return bool True on success, false on failure.
+     * @return bool true on success, false on failure
      */
     public function rename($path, $newpath);
 
@@ -129,6 +130,7 @@ interface MediaServiceInterface
      * Normalizes the path based on the configured strategy
      *
      * @param string $path
+     *
      * @return string
      */
     public function normalize($path);
@@ -137,6 +139,7 @@ interface MediaServiceInterface
      * Builds the path on the filesystem
      *
      * @param string $path
+     *
      * @return string
      */
     public function encode($path);
@@ -145,6 +148,7 @@ interface MediaServiceInterface
      * Checks if the provided path matches the algorithm format
      *
      * @param string $path
+     *
      * @return string
      */
     public function isEncoded($path);
@@ -159,9 +163,9 @@ interface MediaServiceInterface
     /**
      * Create a directory.
      *
-     * @param string $dirname The name of the new directory.
+     * @param string $dirname the name of the new directory
      *
-     * @return bool True on success, false on failure.
+     * @return bool true on success, false on failure
      */
     public function createDir($dirname);
 
@@ -169,6 +173,7 @@ interface MediaServiceInterface
      * Migrates a file to the new strategy if it's not present
      *
      * @param string $path
+     *
      * @return bool
      */
     public function migrateFile($path);

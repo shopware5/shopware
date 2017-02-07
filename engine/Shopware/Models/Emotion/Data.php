@@ -24,12 +24,12 @@
 
 namespace Shopware\Models\Emotion;
 
-use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
 
 /**
  * @category   Shopware
- * @package    Shopware\Models
+ *
  * @copyright  Copyright (c) shopware AG (http://www.shopware.de)
  *
  * @ORM\Entity
@@ -37,54 +37,6 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Data extends ModelEntity
 {
-    /**
-     * Unique identifier field for the shopware emotion.
-     *
-     * @var integer $id
-     *
-     * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
-    /**
-     * Contains the id of the emotion
-     *
-     * @var string $emotionId
-     *
-     * @ORM\Column(name="emotionID", type="integer", nullable=false)
-     */
-    private $emotionId;
-
-    /**
-     * Contains the name of the emotion.
-     *
-     * @var string $elementId
-     *
-     * @ORM\Column(name="elementID", type="integer", nullable=false)
-     */
-    private $elementId;
-
-    /**
-     * Contains the id of the assigned element component
-     * @var integer $componentId
-     * @ORM\Column(name="componentID", type="integer", nullable=false)
-     */
-    private $componentId;
-
-    /**
-     * @var integer $fieldId
-     * @ORM\Column(name="fieldID", type="integer", nullable=false)
-     */
-    private $fieldId;
-
-    /**
-     * @var string $value
-     * @ORM\Column(name="value", type="text", nullable=true)
-     */
-    private $value = null;
-
     /**
      * @ORM\ManyToOne(targetEntity="\Shopware\Models\Emotion\Element", inversedBy="data")
      * @ORM\JoinColumn(name="elementID", referencedColumnName="id")
@@ -108,6 +60,65 @@ class Data extends ModelEntity
      * @ORM\JoinColumn(name="fieldID", referencedColumnName="id")
      */
     protected $field;
+    /**
+     * Unique identifier field for the shopware emotion.
+     *
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * Contains the id of the emotion
+     *
+     * @var string
+     *
+     * @ORM\Column(name="emotionID", type="integer", nullable=false)
+     */
+    private $emotionId;
+
+    /**
+     * Contains the name of the emotion.
+     *
+     * @var string
+     *
+     * @ORM\Column(name="elementID", type="integer", nullable=false)
+     */
+    private $elementId;
+
+    /**
+     * Contains the id of the assigned element component
+     *
+     * @var int
+     * @ORM\Column(name="componentID", type="integer", nullable=false)
+     */
+    private $componentId;
+
+    /**
+     * @var int
+     * @ORM\Column(name="fieldID", type="integer", nullable=false)
+     */
+    private $fieldId;
+
+    /**
+     * @var string
+     * @ORM\Column(name="value", type="text", nullable=true)
+     */
+    private $value = null;
+
+    public function __clone()
+    {
+        $this->id = null;
+
+        $this->emotionId = null;
+
+        $this->elementId = null;
+
+        $this->fieldId = null;
+    }
 
     /**
      * @param int $componentId
@@ -225,17 +236,6 @@ class Data extends ModelEntity
     public function setEmotionId($emotionId)
     {
         $this->emotionId = $emotionId;
-    }
-
-    public function __clone()
-    {
-        $this->id = null;
-
-        $this->emotionId = null;
-
-        $this->elementId = null;
-
-        $this->fieldId = null;
     }
 
     /**

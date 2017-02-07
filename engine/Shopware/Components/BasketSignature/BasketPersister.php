@@ -28,12 +28,11 @@ use Doctrine\DBAL\Connection;
 
 class BasketPersister
 {
+    const DBAL_TABLE = 's_order_basket_signatures';
     /**
      * @var Connection
      */
     private $connection;
-
-    const DBAL_TABLE = 's_order_basket_signatures';
 
     /**
      * @param Connection $connection
@@ -47,7 +46,8 @@ class BasketPersister
      * saves signed basket
      *
      * @param string $signature
-     * @param array $basket
+     * @param array  $basket
+     *
      * @throws \Exception
      */
     public function persist($signature, $basket)
@@ -61,7 +61,7 @@ class BasketPersister
                 $this->connection->insert(self::DBAL_TABLE, [
                     'signature' => $signature,
                     'basket' => json_encode($basket),
-                    'created_at' => $createdAt->format('Y-m-d')
+                    'created_at' => $createdAt->format('Y-m-d'),
                 ]);
             }
         );
@@ -71,14 +71,16 @@ class BasketPersister
      * loads a signed basket by the given signature
      *
      * @param string $signature
+     *
      * @return array
      */
     public function load($signature)
     {
         $basket = $this->connection->fetchColumn(
-            "SELECT basket FROM " . self::DBAL_TABLE . " WHERE signature = :signature",
-            [':signature' => $signature ]
+            'SELECT basket FROM ' . self::DBAL_TABLE . ' WHERE signature = :signature',
+            [':signature' => $signature]
         );
+
         return json_decode($basket, true);
     }
 
@@ -90,7 +92,7 @@ class BasketPersister
     public function delete($signature)
     {
         $this->connection->executeQuery(
-            "DELETE FROM " . self::DBAL_TABLE . " WHERE signature = :signature",
+            'DELETE FROM ' . self::DBAL_TABLE . ' WHERE signature = :signature',
             [':signature' => $signature]
         );
     }

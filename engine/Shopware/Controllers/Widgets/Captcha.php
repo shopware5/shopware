@@ -39,7 +39,7 @@ class Shopware_Controllers_Widgets_Captcha extends Enlight_Controller_Action
         $img = $templateData['img'];
         $rand = $templateData['sRand'];
 
-        $body = '<img src="data:image/png;base64,' . $img. '" alt="Captcha" />';
+        $body = '<img src="data:image/png;base64,' . $img . '" alt="Captcha" />';
         $body .= '<input type="hidden" name="sRand" value="' . $rand . '" />';
 
         $this->Response()->setBody($body);

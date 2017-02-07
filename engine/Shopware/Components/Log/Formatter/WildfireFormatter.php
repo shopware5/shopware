@@ -31,47 +31,49 @@ use Monolog\Logger;
  * Serializes a log message according to Wildfire's header requirements
  *
  * @category  Shopware
- * @package   Shopware\Components\Log\Formatter
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class WildfireFormatter extends BaseWildfireFormatter
 {
     /**
-     * Translates Monolog log levels to Wildfire levels.
-     */
-    private $logLevels = array(
-        Logger::DEBUG     => 'LOG',
-        Logger::INFO      => 'INFO',
-        Logger::NOTICE    => 'INFO',
-        Logger::WARNING   => 'WARN',
-        Logger::ERROR     => 'ERROR',
-        Logger::CRITICAL  => 'ERROR',
-        Logger::ALERT     => 'ERROR',
-        Logger::EMERGENCY => 'ERROR',
-    );
-
-    /**
      * Options for the object
+     *
      * @var array
      */
-    protected $options = array(
+    protected $options = [
         'traceOffset' => 6, /* The offset in the trace which identifies the source of the message */
         'maxTraceDepth' => 15, /* Maximum depth for stack traces */
         'maxObjectDepth' => 5, /* The maximum depth to traverse objects when encoding */
         'maxArrayDepth' => 20, /* The maximum depth to traverse nested arrays when encoding */
-    );
+    ];
 
     /**
      * Filters used to exclude object members when encoding
+     *
      * @var array
      */
-    protected $objectFilters = array();
+    protected $objectFilters = [];
 
     /**
      * A stack of objects used during encoding to detect recursion
+     *
      * @var array
      */
-    protected $objectStack = array();
+    protected $objectStack = [];
+    /**
+     * Translates Monolog log levels to Wildfire levels.
+     */
+    private $logLevels = [
+        Logger::DEBUG => 'LOG',
+        Logger::INFO => 'INFO',
+        Logger::NOTICE => 'INFO',
+        Logger::WARNING => 'WARN',
+        Logger::ERROR => 'ERROR',
+        Logger::CRITICAL => 'ERROR',
+        Logger::ALERT => 'ERROR',
+        Logger::EMERGENCY => 'ERROR',
+    ];
 
     /**
      * {@inheritdoc}
@@ -91,7 +93,7 @@ class WildfireFormatter extends BaseWildfireFormatter
 
         $record = $this->normalize($record);
 
-        $message = array('message' => $record['message']);
+        $message = ['message' => $record['message']];
         $handleError = false;
         if ($record['context']) {
             $message['context'] = $record['context'];
@@ -118,7 +120,7 @@ class WildfireFormatter extends BaseWildfireFormatter
             $label = $record['message'];
 
             $trace = $this->getStackTrace($this->options);
-            $message = array(
+            $message = [
                 'Class' => $trace[0]['class'],
                 'Type' => $trace[0]['type'],
                 'Function' => $trace[0]['function'],
@@ -126,8 +128,8 @@ class WildfireFormatter extends BaseWildfireFormatter
                 'File' => isset($trace[0]['file']) ? $trace[0]['file'] : '',
                 'Line' => isset($trace[0]['line']) ? $trace[0]['line'] : '',
                 'Args' => isset($trace[0]['args']) ? $this->encodeObject($trace[0]['args']) : '',
-                'Trace' => $this->encodeTrace(array_splice($trace, 1))
-            );
+                'Trace' => $this->encodeTrace(array_splice($trace, 1)),
+            ];
         } else {
             $type = $this->logLevels[$record['level']];
             $label = $record['channel'];
@@ -135,15 +137,15 @@ class WildfireFormatter extends BaseWildfireFormatter
 
         // Create JSON object describing the appearance of the message in the console
         $json = $this->toJson(
-            array(
-                array(
-                    'Type'  => $type,
-                    'File'  => $file,
-                    'Line'  => $line,
+            [
+                [
+                    'Type' => $type,
+                    'File' => $file,
+                    'Line' => $line,
                     'Label' => $label,
-                ),
+                ],
                 $message,
-            ),
+            ],
             $handleError
         );
 
@@ -154,6 +156,7 @@ class WildfireFormatter extends BaseWildfireFormatter
      * Encodes a trace by encoding all "args" with encodeObject()
      *
      * @param $trace
+     *
      * @return array The encoded trace
      */
     protected function encodeTrace($trace)
@@ -162,7 +165,7 @@ class WildfireFormatter extends BaseWildfireFormatter
             return $trace;
         }
 
-        for ($i = 0; $i < sizeof($trace); $i++) {
+        for ($i = 0; $i < count($trace); ++$i) {
             if (isset($trace[$i]['args'])) {
                 $trace[$i]['args'] = $this->encodeObject($trace[$i]['args']);
             }
@@ -175,6 +178,7 @@ class WildfireFormatter extends BaseWildfireFormatter
      * Gets a stack trace
      *
      * @param array $options Options to change how the stack trace is returned
+     *
      * @return array The stack trace
      */
     protected function getStackTrace($options)
@@ -196,14 +200,15 @@ class WildfireFormatter extends BaseWildfireFormatter
      * All private and protected members are included. Some meta info about
      * the object class is added.
      *
-     * @param mixed $object The object/array/value to be encoded
-     * @param int $objectDepth
-     * @param int $arrayDepth
+     * @param mixed $object      The object/array/value to be encoded
+     * @param int   $objectDepth
+     * @param int   $arrayDepth
+     *
      * @return array The encoded object
      */
     protected function encodeObject($object, $objectDepth = 1, $arrayDepth = 1)
     {
-        $return = array();
+        $return = [];
 
         if (is_resource($object)) {
             return '** ' . (string) $object . ' **';
@@ -222,7 +227,7 @@ class WildfireFormatter extends BaseWildfireFormatter
             $return['__className'] = $class = get_class($object);
 
             $reflectionClass = new \ReflectionClass($class);
-            $properties = array();
+            $properties = [];
             foreach ($reflectionClass->getProperties() as $property) {
                 $properties[$property->getName()] = $property;
             }
@@ -274,7 +279,7 @@ class WildfireFormatter extends BaseWildfireFormatter
             foreach ($members as $just_name => $value) {
                 $name = $raw_name = $just_name;
 
-                if ($name{0} == "\0") {
+                if ($name[0] == "\0") {
                     $parts = explode("\0", $name);
                     $name = $parts[2];
                 }
@@ -300,7 +305,6 @@ class WildfireFormatter extends BaseWildfireFormatter
             }
 
             foreach ($object as $key => $val) {
-
                 // Encoding the $GLOBALS PHP array causes an infinite loop
                 // if the recursion is not reset here as it contains
                 // a reference to itself. This is the only way I have come up

@@ -28,7 +28,7 @@ namespace ShopwarePlugins\SwagUpdate\Components;
  * Used for plugin and system requirement validation.
  *
  * @category  Shopware
- * @package   ShopwarePlugins\SwagUpdate\Components;
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Validation
@@ -70,25 +70,27 @@ class Validation
 
     /**
      * @param array $requirements {
-     * @type            string type => Type of the requirement check.
-     * @type            array  directories => Array of directories which should be iterated
-     * @type            string errorLevel => Flag how critical the error is (1 => Warning, 2 => Exception)
-     * @type            string errorMessage => Error message which can be set for the validation, 1x %s will be replaced with all found files.
-     * @type [optional] string value => Only used for regular expressions, contains the regular expression.
-     * @type [optional] string fileRegex => Regular expression for file types.
-     *                            }
      *
-     * @return array {
-     * @type string type       => Type of the requirement check.
-     * @type int    errorLevel => Flag how critical the error is (1 => Warning, 2 => Exception)
-     * @type string message    => Passed error message for failed checks.
-     *               }
+     * @var string     type => Type of the requirement check.
+     * @var array      directories => Array of directories which should be iterated
+     * @var string     errorLevel => Flag how critical the error is (1 => Warning, 2 => Exception)
+     * @var string     errorMessage => Error message which can be set for the validation, 1x %s will be replaced with all found files.
+     * @var [optional] string value => Only used for regular expressions, contains the regular expression.
+     * @var [optional] string fileRegex => Regular expression for file types.
+     *                 }
      *
      * @throws \Exception
+     *
+     * @return array {
+     *
+     * @var string type       => Type of the requirement check.
+     * @var int    errorLevel => Flag how critical the error is (1 => Warning, 2 => Exception)
+     * @var string message    => Passed error message for failed checks.
+     *             }
      */
     public function checkRequirements($requirements)
     {
-        $results = array();
+        $results = [];
         foreach ($requirements as $requirement) {
             $result = $this->handleRequirement($requirement);
             if ($result) {
@@ -101,6 +103,7 @@ class Validation
 
     /**
      * @param $requirement
+     *
      * @return array
      */
     private function handleRequirement($requirement)

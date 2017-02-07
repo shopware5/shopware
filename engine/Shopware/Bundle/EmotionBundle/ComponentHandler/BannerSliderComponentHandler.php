@@ -27,7 +27,6 @@ namespace Shopware\Bundle\EmotionBundle\ComponentHandler;
 use Shopware\Bundle\EmotionBundle\Struct\Collection\PrepareDataCollection;
 use Shopware\Bundle\EmotionBundle\Struct\Collection\ResolvedDataCollection;
 use Shopware\Bundle\EmotionBundle\Struct\Element;
-use Shopware\Bundle\EmotionBundle\Struct\Library\Component;
 use Shopware\Bundle\MediaBundle\MediaServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
@@ -51,7 +50,8 @@ class BannerSliderComponentHandler implements ComponentHandlerInterface
 
     /**
      * @param Element $element
-     * @return boolean
+     *
+     * @return bool
      */
     public function supports(Element $element)
     {
@@ -61,8 +61,8 @@ class BannerSliderComponentHandler implements ComponentHandlerInterface
 
     /**
      * @param PrepareDataCollection $collection
-     * @param Element $element
-     * @param ShopContextInterface $context
+     * @param Element               $element
+     * @param ShopContextInterface  $context
      */
     public function prepare(PrepareDataCollection $collection, Element $element, ShopContextInterface $context)
     {
@@ -76,14 +76,14 @@ class BannerSliderComponentHandler implements ComponentHandlerInterface
                 $slider['link'] = $context->getBaseUrl() . $slider['link'];
             }
         }
-        
+
         $element->getConfig()->set('banner_slider', $sliderList);
     }
 
     /**
      * @param ResolvedDataCollection $collection
-     * @param Element $element
-     * @param ShopContextInterface $context
+     * @param Element                $element
+     * @param ShopContextInterface   $context
      */
     public function handle(ResolvedDataCollection $collection, Element $element, ShopContextInterface $context)
     {

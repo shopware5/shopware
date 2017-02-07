@@ -32,9 +32,9 @@ class Theme extends \Shopware\Components\Theme
 
     protected $inheritanceConfig = true;
 
-    protected $javascript = array('responsive_1.js', 'responsive_2.js');
+    protected $javascript = ['responsive_1.js', 'responsive_2.js'];
 
-    protected $css = array('responsive_1.css', 'responsive_2.css');
+    protected $css = ['responsive_1.css', 'responsive_2.css'];
 
     protected $injectBeforePlugins = false;
 
@@ -45,7 +45,7 @@ class Theme extends \Shopware\Components\Theme
 
     public function createConfigSets(\Doctrine\Common\Collections\ArrayCollection $collection)
     {
-        $collection->add(new ConfigSet('set1', array('value1' => 1)));
-        $collection->add(new ConfigSet('set2', array('value1' => 2)));
+        $collection->add(new ConfigSet('set1', ['value1' => 1]));
+        $collection->add(new ConfigSet('set2', ['value1' => 2]));
     }
 }

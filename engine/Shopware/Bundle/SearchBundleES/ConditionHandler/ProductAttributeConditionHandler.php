@@ -36,8 +36,8 @@ use ONGR\ElasticsearchDSL\Query\WildcardQuery;
 use ONGR\ElasticsearchDSL\Search;
 use Shopware\Bundle\AttributeBundle\Service\CrudService;
 use Shopware\Bundle\SearchBundle\Condition\ProductAttributeCondition;
-use Shopware\Bundle\SearchBundle\CriteriaPartInterface;
 use Shopware\Bundle\SearchBundle\Criteria;
+use Shopware\Bundle\SearchBundle\CriteriaPartInterface;
 use Shopware\Bundle\SearchBundleES\PartialConditionHandlerInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
@@ -50,6 +50,7 @@ class ProductAttributeConditionHandler implements PartialConditionHandlerInterfa
 
     /**
      * ProductAttributeConditionHandler constructor.
+     *
      * @param CrudService $attributeService
      */
     public function __construct(CrudService $attributeService)
@@ -62,7 +63,7 @@ class ProductAttributeConditionHandler implements PartialConditionHandlerInterfa
      */
     public function supports(CriteriaPartInterface $criteriaPart)
     {
-        return ($criteriaPart instanceof ProductAttributeCondition);
+        return $criteriaPart instanceof ProductAttributeCondition;
     }
 
     /**
@@ -74,7 +75,7 @@ class ProductAttributeConditionHandler implements PartialConditionHandlerInterfa
         Search $search,
         ShopContextInterface $context
     ) {
-        /** @var ProductAttributeCondition $criteriaPart */
+        /* @var ProductAttributeCondition $criteriaPart */
         $search->addFilter(
             $this->createQuery($criteriaPart)
         );
@@ -89,7 +90,7 @@ class ProductAttributeConditionHandler implements PartialConditionHandlerInterfa
         Search $search,
         ShopContextInterface $context
     ) {
-        /** @var ProductAttributeCondition $criteriaPart */
+        /* @var ProductAttributeCondition $criteriaPart */
         $search->addPostFilter(
             $this->createQuery($criteriaPart)
         );
@@ -97,6 +98,7 @@ class ProductAttributeConditionHandler implements PartialConditionHandlerInterfa
 
     /**
      * @param ProductAttributeCondition $criteriaPart
+     *
      * @return BuilderInterface
      */
     private function createQuery(ProductAttributeCondition $criteriaPart)
@@ -115,8 +117,10 @@ class ProductAttributeConditionHandler implements PartialConditionHandlerInterfa
                 if ($criteriaPart->getValue() === null) {
                     $filter = new BoolQuery();
                     $filter->add(new ExistsQuery($field), BoolQuery::MUST_NOT);
+
                     return $filter;
                 }
+
                 return new TermQuery($field, $criteriaPart->getValue());
 
             case ProductAttributeCondition::OPERATOR_NEQ:
@@ -125,6 +129,7 @@ class ProductAttributeConditionHandler implements PartialConditionHandlerInterfa
                 }
                 $filter = new BoolQuery();
                 $filter->add(new TermQuery($field, $criteriaPart->getValue()), BoolQuery::MUST_NOT);
+
                 return $filter;
 
             case ProductAttributeCondition::OPERATOR_LT:
@@ -135,6 +140,7 @@ class ProductAttributeConditionHandler implements PartialConditionHandlerInterfa
 
             case ProductAttributeCondition::OPERATOR_BETWEEN:
                 $value = $criteriaPart->getValue();
+
                 return new RangeQuery($field, ['gte' => $value['min'], 'lte' => $value['max']]);
 
             case ProductAttributeCondition::OPERATOR_GT:
@@ -150,22 +156,25 @@ class ProductAttributeConditionHandler implements PartialConditionHandlerInterfa
                 if ($type === 'string') {
                     $field .= '.raw';
                 }
+
                 return new TermsQuery($field, $criteriaPart->getValue());
 
             case ProductAttributeCondition::OPERATOR_STARTS_WITH:
                 if ($type === 'string') {
                     $field .= '.raw';
                 }
+
                 return new PrefixQuery($field, $criteriaPart->getValue());
 
             case ProductAttributeCondition::OPERATOR_ENDS_WITH:
                 if ($type === 'string') {
                     $field .= '.raw';
                 }
-                return new WildcardQuery($field, '*'. $criteriaPart->getValue());
+
+                return new WildcardQuery($field, '*' . $criteriaPart->getValue());
 
             default:
-                throw new \RuntimeException(sprintf("Operator %s is not supported in elastic search", $criteriaPart->getOperator()));
+                throw new \RuntimeException(sprintf('Operator %s is not supported in elastic search', $criteriaPart->getOperator()));
         }
     }
 }

@@ -1,8 +1,29 @@
 <?php
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
 
 namespace Shopware\Components;
 
-use Doctrine\DBAL\Connection;
 use Enlight\Event\SubscriberInterface;
 use Shopware\Components\DependencyInjection\Container;
 
@@ -22,14 +43,14 @@ class LastArticlesSubscriber implements SubscriberInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public static function getSubscribedEvents()
     {
         return [
             'Enlight_Controller_Action_PostDispatchSecure_Frontend' => 'onPostDispatch',
             'Enlight_Controller_Action_PostDispatchSecure_Widgets_Index' => 'onRefreshStatistics',
-            'Shopware_Modules_Admin_Regenerate_Session_Id' => 'refreshSessionId'
+            'Shopware_Modules_Admin_Regenerate_Session_Id' => 'refreshSessionId',
         ];
     }
 
@@ -92,7 +113,7 @@ class LastArticlesSubscriber implements SubscriberInterface
     private function cleanupLastArticles()
     {
         if (rand(0, 100) === 0) {
-            $time = (int)$this->container->get('config')->get('lastarticles_time', 15);
+            $time = (int) $this->container->get('config')->get('lastarticles_time', 15);
 
             $sql = 'DELETE FROM s_emarketing_lastarticles WHERE `time` < DATE_SUB(CONCAT_WS(" ", CURDATE(), ?), INTERVAL ? DAY)';
             $this->container->get('dbal_connection')->executeQuery($sql, ['00:00:00', $time]);
@@ -116,7 +137,7 @@ class LastArticlesSubscriber implements SubscriberInterface
 
         $this->container->get('events')->notify('Shopware_Modules_Articles_Before_SetLastArticle', [
             'subject' => $this,
-            'article' => $articleId
+            'article' => $articleId,
         ]);
 
         $insertSql = 'INSERT INTO s_emarketing_lastarticles (`articleID`, `sessionID`, `time`, `userID`, `shopID`)
@@ -128,8 +149,8 @@ class LastArticlesSubscriber implements SubscriberInterface
             [
                 'articleId' => $articleId,
                 'sessionId' => $sessionId,
-                'userId' => (int)Shopware()->Session()->get('sUserId'),
-                'shopId' => $this->container->get('shop')->getId()
+                'userId' => (int) Shopware()->Session()->get('sUserId'),
+                'shopId' => $this->container->get('shop')->getId(),
             ]
         );
     }

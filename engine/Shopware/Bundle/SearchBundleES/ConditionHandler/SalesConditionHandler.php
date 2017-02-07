@@ -27,8 +27,8 @@ namespace Shopware\Bundle\SearchBundleES\ConditionHandler;
 use ONGR\ElasticsearchDSL\Query\RangeQuery;
 use ONGR\ElasticsearchDSL\Search;
 use Shopware\Bundle\SearchBundle\Condition\SalesCondition;
-use Shopware\Bundle\SearchBundle\CriteriaPartInterface;
 use Shopware\Bundle\SearchBundle\Criteria;
+use Shopware\Bundle\SearchBundle\CriteriaPartInterface;
 use Shopware\Bundle\SearchBundleES\PartialConditionHandlerInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
@@ -39,7 +39,7 @@ class SalesConditionHandler implements PartialConditionHandlerInterface
      */
     public function supports(CriteriaPartInterface $criteriaPart)
     {
-        return ($criteriaPart instanceof SalesCondition);
+        return $criteriaPart instanceof SalesCondition;
     }
 
     /**
@@ -51,7 +51,7 @@ class SalesConditionHandler implements PartialConditionHandlerInterface
         Search $search,
         ShopContextInterface $context
     ) {
-        /** @var SalesCondition $criteriaPart */
+        /* @var SalesCondition $criteriaPart */
         $search->addFilter(
             new RangeQuery('sales', ['gt' => $criteriaPart->getMinSales()])
         );
@@ -66,7 +66,7 @@ class SalesConditionHandler implements PartialConditionHandlerInterface
         Search $search,
         ShopContextInterface $context
     ) {
-        /** @var SalesCondition $criteriaPart */
+        /* @var SalesCondition $criteriaPart */
         $search->addPostFilter(
             new RangeQuery('sales', ['gt' => $criteriaPart->getMinSales()])
         );

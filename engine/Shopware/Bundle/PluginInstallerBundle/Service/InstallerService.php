@@ -73,11 +73,11 @@ class InstallerService
     private $pluginInstaller;
 
     /**
-     * @param ModelManager $em
-     * @param PluginInstaller $pluginInstaller
+     * @param ModelManager          $em
+     * @param PluginInstaller       $pluginInstaller
      * @param LegacyPluginInstaller $legacyPluginInstaller
-     * @param ConfigWriter $configWriter
-     * @param ConfigReader $configReader
+     * @param ConfigWriter          $configWriter
+     * @param ConfigReader          $configReader
      */
     public function __construct(
         ModelManager $em,
@@ -97,8 +97,10 @@ class InstallerService
 
     /**
      * @param string $pluginName
-     * @return string
+     *
      * @throws \Exception
+     *
+     * @return string
      */
     public function getPluginPath($pluginName)
     {
@@ -113,7 +115,9 @@ class InstallerService
 
     /**
      * @param string $pluginName
+     *
      * @throws \Exception
+     *
      * @return Plugin
      */
     public function getPluginByName($pluginName)
@@ -132,6 +136,7 @@ class InstallerService
      * Returns a certain plugin by plugin id.
      *
      * @param Plugin $plugin
+     *
      * @return \Shopware_Components_Plugin_Bootstrap|null
      */
     public function getPluginBootstrap(Plugin $plugin)
@@ -141,8 +146,10 @@ class InstallerService
 
     /**
      * @param Plugin $plugin
-     * @return InstallContext
+     *
      * @throws \Exception
+     *
+     * @return InstallContext
      */
     public function installPlugin(Plugin $plugin)
     {
@@ -157,14 +164,17 @@ class InstallerService
 
         $result = $this->legacyPluginInstaller->installPlugin($plugin);
         $this->applyLegacyResultToContext($result, $context);
+
         return $context;
     }
 
     /**
      * @param Plugin $plugin
-     * @param bool $removeData
-     * @return UninstallContext
+     * @param bool   $removeData
+     *
      * @throws \Exception
+     *
+     * @return UninstallContext
      */
     public function uninstallPlugin(Plugin $plugin, $removeData = true)
     {
@@ -179,13 +189,16 @@ class InstallerService
 
         $result = $this->legacyPluginInstaller->uninstallPlugin($plugin, $removeData);
         $this->applyLegacyResultToContext($result, $context);
+
         return $context;
     }
 
     /**
      * @param Plugin $plugin
-     * @return UpdateContext
+     *
      * @throws \Exception
+     *
+     * @return UpdateContext
      */
     public function updatePlugin(Plugin $plugin)
     {
@@ -200,13 +213,16 @@ class InstallerService
 
         $result = $this->legacyPluginInstaller->updatePlugin($plugin);
         $this->applyLegacyResultToContext($result, $context);
+
         return $context;
     }
 
     /**
      * @param Plugin $plugin
-     * @return ActivateContext
+     *
      * @throws \Exception
+     *
+     * @return ActivateContext
      */
     public function activatePlugin(Plugin $plugin)
     {
@@ -225,13 +241,16 @@ class InstallerService
 
         $result = $this->legacyPluginInstaller->activatePlugin($plugin);
         $this->applyLegacyResultToContext($result, $context);
+
         return $context;
     }
 
     /**
      * @param Plugin $plugin
-     * @return DeactivateContext
+     *
      * @throws \Exception
+     *
+     * @return DeactivateContext
      */
     public function deactivatePlugin(Plugin $plugin)
     {
@@ -246,12 +265,14 @@ class InstallerService
 
         $result = $this->legacyPluginInstaller->deactivatePlugin($plugin);
         $this->applyLegacyResultToContext($result, $context);
+
         return $context;
     }
 
     /**
      * @param Plugin $plugin
-     * @param Shop $shop
+     * @param Shop   $shop
+     *
      * @return array
      */
     public function getPluginConfig(Plugin $plugin, Shop $shop = null)
@@ -261,8 +282,8 @@ class InstallerService
 
     /**
      * @param Plugin $plugin
-     * @param array $elements
-     * @param Shop $shop
+     * @param array  $elements
+     * @param Shop   $shop
      */
     public function savePluginConfig(Plugin $plugin, $elements, Shop $shop = null)
     {
@@ -277,8 +298,9 @@ class InstallerService
     /**
      * @param Plugin $plugin
      * @param string $name
-     * @param mixed $value
-     * @param Shop $shop
+     * @param mixed  $value
+     * @param Shop   $shop
+     *
      * @throws \Exception
      */
     public function saveConfigElement(Plugin $plugin, $name, $value, Shop $shop = null)
@@ -317,7 +339,7 @@ class InstallerService
     }
 
     /**
-     * @param boolean|array $result
+     * @param bool|array                                                                      $result
      * @param InstallContext|ActivateContext|DeactivateContext|UninstallContext|UpdateContext $context
      */
     private function applyLegacyResultToContext($result, InstallContext $context)

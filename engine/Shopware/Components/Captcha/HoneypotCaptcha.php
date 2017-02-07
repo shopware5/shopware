@@ -31,7 +31,7 @@ class HoneypotCaptcha implements CaptchaInterface
     const CAPTCHA_METHOD = 'honeypot';
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function validate(Enlight_Controller_Request_Request $request)
     {
@@ -39,7 +39,7 @@ class HoneypotCaptcha implements CaptchaInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getTemplateData()
     {
@@ -47,7 +47,7 @@ class HoneypotCaptcha implements CaptchaInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getName()
     {

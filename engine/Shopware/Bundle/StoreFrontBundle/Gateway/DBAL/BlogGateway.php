@@ -25,12 +25,12 @@
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Bundle\StoreFrontBundle\Struct;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
+use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\StoreFrontBundle\Gateway\DBAL
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class BlogGateway implements Gateway\BlogGatewayInterface
@@ -61,8 +61,8 @@ class BlogGateway implements Gateway\BlogGatewayInterface
     private $connection;
 
     /**
-     * @param Connection $connection
-     * @param FieldHelper $fieldHelper
+     * @param Connection            $connection
+     * @param FieldHelper           $fieldHelper
      * @param Hydrator\BlogHydrator $blogHydrator
      */
     public function __construct(
@@ -76,7 +76,7 @@ class BlogGateway implements Gateway\BlogGatewayInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getList(array $blogIds, Struct\ShopContextInterface $context)
     {
@@ -86,11 +86,11 @@ class BlogGateway implements Gateway\BlogGatewayInterface
 
         $articles = $this->getArticlesQuery(array_column($data, '__blog_id'))
             ->execute()
-            ->fetchAll(\PDO::FETCH_GROUP|\PDO::FETCH_COLUMN);
+            ->fetchAll(\PDO::FETCH_GROUP | \PDO::FETCH_COLUMN);
 
         $medias = $this->getMediaQuery(array_column($data, '__blog_id'))
             ->execute()
-            ->fetchAll(\PDO::FETCH_GROUP|\PDO::FETCH_COLUMN);
+            ->fetchAll(\PDO::FETCH_GROUP | \PDO::FETCH_COLUMN);
 
         $blogs = [];
         foreach ($data as $row) {
@@ -114,6 +114,7 @@ class BlogGateway implements Gateway\BlogGatewayInterface
 
     /**
      * @param int[] $ids
+     *
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
     private function getQuery(array $ids)
@@ -139,6 +140,7 @@ class BlogGateway implements Gateway\BlogGatewayInterface
 
     /**
      * @param int[] $blogIds
+     *
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
     private function getArticlesQuery(array $blogIds)
@@ -156,6 +158,7 @@ class BlogGateway implements Gateway\BlogGatewayInterface
 
     /**
      * @param int[] $blogIds
+     *
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
     private function getMediaQuery(array $blogIds)

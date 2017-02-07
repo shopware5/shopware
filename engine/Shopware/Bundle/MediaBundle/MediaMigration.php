@@ -30,7 +30,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Class MediaMigration
- * @package Shopware\Bundle\MediaBundle
  */
 class MediaMigration
 {
@@ -40,7 +39,7 @@ class MediaMigration
     private $counter = [
         'migrated' => 0,
         'skipped' => 0,
-        'moved' => 0
+        'moved' => 0,
     ];
 
     /**
@@ -48,8 +47,8 @@ class MediaMigration
      *
      * @param MediaServiceInterface $fromFilesystem
      * @param MediaServiceInterface $toFileSystem
-     * @param OutputInterface $output
-     * @param bool $skipScan
+     * @param OutputInterface       $output
+     * @param bool                  $skipScan
      */
     public function migrate(MediaServiceInterface $fromFilesystem, MediaServiceInterface $toFileSystem, OutputInterface $output, $skipScan = false)
     {
@@ -86,9 +85,10 @@ class MediaMigration
     /**
      * Migrate a single file
      *
-     * @param string $path
+     * @param string                $path
      * @param MediaServiceInterface $fromFilesystem
      * @param MediaServiceInterface $toFileSystem
+     *
      * @throws \RuntimeException
      */
     private function migrateFile($path, MediaServiceInterface $fromFilesystem, MediaServiceInterface $toFileSystem)
@@ -97,20 +97,21 @@ class MediaMigration
         // to read and write all the files
         if ($fromFilesystem->getAdapterType() === 'local') {
             if (!$fromFilesystem->isEncoded($path)) {
-                $this->counter['migrated']++;
+                ++$this->counter['migrated'];
                 $fromFilesystem->migrateFile($path);
             }
         }
 
         // file already exists
         if ($toFileSystem->has($path)) {
-            $this->counter['skipped']++;
+            ++$this->counter['skipped'];
+
             return;
         }
 
         // move file to new filesystem and remove the old one
         if ($fromFilesystem->has($path)) {
-            $this->counter['moved']++;
+            ++$this->counter['moved'];
             $success = $this->writeStream($toFileSystem, $path, $fromFilesystem->readStream($path));
             if ($success) {
                 $fromFilesystem->delete($path);
@@ -124,9 +125,10 @@ class MediaMigration
 
     /**
      * @param MediaServiceInterface $toFileSystem
-     * @param string $path
-     * @param resource $contents
-     * @return boolean
+     * @param string                $path
+     * @param resource              $contents
+     *
+     * @return bool
      */
     private function writeStream(MediaServiceInterface $toFileSystem, $path, $contents)
     {
@@ -145,10 +147,10 @@ class MediaMigration
     }
 
     /**
-     * @param string $directory
+     * @param string                $directory
      * @param MediaServiceInterface $fromFilesystem
      * @param MediaServiceInterface $toFilesystem
-     * @param ProgressBar $progressBar
+     * @param ProgressBar           $progressBar
      */
     private function migrateFilesIn($directory, MediaServiceInterface $fromFilesystem, MediaServiceInterface $toFilesystem, ProgressBar $progressBar)
     {
@@ -174,8 +176,9 @@ class MediaMigration
     }
 
     /**
-     * @param string $directory
+     * @param string                $directory
      * @param MediaServiceInterface $filesystem
+     *
      * @return int
      */
     private function countFilesToMigrate($directory, MediaServiceInterface $filesystem)

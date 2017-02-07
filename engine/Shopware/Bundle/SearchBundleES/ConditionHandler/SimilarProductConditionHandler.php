@@ -45,6 +45,7 @@ class SimilarProductConditionHandler implements PartialConditionHandlerInterface
 
     /**
      * SimilarProductConditionHandler constructor.
+     *
      * @param Connection $connection
      */
     public function __construct(Connection $connection)
@@ -57,7 +58,7 @@ class SimilarProductConditionHandler implements PartialConditionHandlerInterface
      */
     public function supports(CriteriaPartInterface $criteriaPart)
     {
-        return ($criteriaPart instanceof SimilarProductCondition);
+        return $criteriaPart instanceof SimilarProductCondition;
     }
 
     /**
@@ -103,11 +104,13 @@ class SimilarProductConditionHandler implements PartialConditionHandlerInterface
 
     /**
      * @param int $productId
+     *
      * @return int[]
      */
     private function getProductCategories($productId)
     {
         $query = $this->connection->createQueryBuilder();
+
         return $query->select('categoryID')
             ->from('s_articles_categories', 'category')
             ->where('articleID = :productId')

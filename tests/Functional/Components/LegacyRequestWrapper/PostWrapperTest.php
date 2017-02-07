@@ -21,12 +21,13 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 /**
  * @covers \Shopware\Components\LegacyRequestWrapper\PostWrapper
  */
 class Shopware_Tests_Components_LegacyRequestWrapper_PostWrapperTest extends Enlight_Components_Test_Controller_TestCase
 {
-    private static $resources = array(
+    private static $resources = [
         'Admin',
         'Articles',
         'Basket',
@@ -36,8 +37,8 @@ class Shopware_Tests_Components_LegacyRequestWrapper_PostWrapperTest extends Enl
         'Export',
         'Marketing',
         'Order',
-        'RewriteTable'
-    );
+        'RewriteTable',
+    ];
 
     public function setUp()
     {
@@ -57,7 +58,7 @@ class Shopware_Tests_Components_LegacyRequestWrapper_PostWrapperTest extends Enl
         $previousGetData = Shopware()->Front()->Request()->getPost();
 
         foreach (self::$resources as $name) {
-            Shopware()->Front()->Request()->setPost($name, $name.'Value');
+            Shopware()->Front()->Request()->setPost($name, $name . 'Value');
         }
 
         $getData = Shopware()->Front()->Request()->getPost();
@@ -77,6 +78,7 @@ class Shopware_Tests_Components_LegacyRequestWrapper_PostWrapperTest extends Enl
      * global $_POST
      *
      * @param $getData
+     *
      * @return mixed
      * @depends testSetPost
      */
@@ -87,7 +89,7 @@ class Shopware_Tests_Components_LegacyRequestWrapper_PostWrapperTest extends Enl
         foreach (self::$resources as $name) {
             if (property_exists($name, 'sSYSTEM')) {
                 $this->assertEquals($getData, Shopware()->Modules()->getModule($name)->sSYSTEM->_POST->toArray());
-                Shopware()->Modules()->getModule($name)->sSYSTEM->_POST = array();
+                Shopware()->Modules()->getModule($name)->sSYSTEM->_POST = [];
                 Shopware()->Front()->Request()->setPost($getData);
                 $this->assertNotEquals($getData, Shopware()->Modules()->getModule($name)->sSYSTEM->_POST->toArray());
             }
@@ -107,7 +109,7 @@ class Shopware_Tests_Components_LegacyRequestWrapper_PostWrapperTest extends Enl
         $previousGetData = Shopware()->Front()->Request()->getPost();
 
         foreach (self::$resources as $name) {
-            Shopware()->Modules()->getModule($name)->sSYSTEM->_POST[$name] = $name.'Value';
+            Shopware()->Modules()->getModule($name)->sSYSTEM->_POST[$name] = $name . 'Value';
         }
 
         $getData = Shopware()->Front()->Request()->getPost();

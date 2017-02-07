@@ -21,13 +21,14 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 namespace Shopware\Bundle\StoreFrontBundle\Gateway;
 
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\StoreFrontBundle\Gateway
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 interface RelatedProductsGatewayInterface
@@ -49,7 +50,8 @@ interface RelatedProductsGatewayInterface
      * )
      *
      * @param Struct\BaseProduct[] $products
-     * @return array Indexed by the product number.
+     *
+     * @return array indexed by the product number
      */
     public function getList($products);
 
@@ -60,6 +62,7 @@ interface RelatedProductsGatewayInterface
      * Example result: array('SW101', 'SW102')
      *
      * @param Struct\BaseProduct $product
+     *
      * @return array Array of order numbers
      */
     public function get(Struct\BaseProduct $product);

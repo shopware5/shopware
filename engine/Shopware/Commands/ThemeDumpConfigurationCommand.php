@@ -31,7 +31,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * @category  Shopware
- * @package   Shopware\Components\Console\Command
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ThemeDumpConfigurationCommand extends ShopwareCommand
@@ -53,31 +53,34 @@ class ThemeDumpConfigurationCommand extends ShopwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $repository = $this->container->get('models')->getRepository('Shopware\Models\Shop\Shop');
-        $shops      = $repository->getShopsWithThemes()->getResult();
-        $compiler   = $this->container->get('theme_compiler');
-        $rootDir    = $this->container->getParameter('kernel.root_dir');
+        $shops = $repository->getShopsWithThemes()->getResult();
+        $compiler = $this->container->get('theme_compiler');
+        $rootDir = $this->container->getParameter('kernel.root_dir');
 
-        /**@var $shop Shop*/
+        /** @var $shop Shop */
         foreach ($shops as $shop) {
             $configuration = $compiler->getThemeConfiguration($shop);
             $file = $this->dumpConfiguration($shop, $configuration);
             $file = str_replace($rootDir, '', $file);
-            $output->writeln("file : " . $file . " generated");
+            $output->writeln('file : ' . $file . ' generated');
         }
     }
 
     /**
-     * @param Shop $shop
+     * @param Shop          $shop
      * @param Configuration $configuration
-     * @return string
+     *
      * @throws \Exception
+     *
+     * @return string
      */
     private function dumpConfiguration(Shop $shop, Configuration $configuration)
     {
         $pathResolver = $this->container->get('theme_path_resolver');
-        $file         = $pathResolver->getCacheDirectory() . '/config_' . $shop->getId() . '.json';
+        $file = $pathResolver->getCacheDirectory() . '/config_' . $shop->getId() . '.json';
 
         file_put_contents($file, json_encode($configuration, JSON_PRETTY_PRINT));
+
         return $file;
     }
 }

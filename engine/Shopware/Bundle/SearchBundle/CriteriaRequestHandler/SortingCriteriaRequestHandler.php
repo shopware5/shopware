@@ -46,8 +46,8 @@ class SortingCriteriaRequestHandler implements CriteriaRequestHandlerInterface
     }
 
     /**
-     * @param Request $request
-     * @param Criteria $criteria
+     * @param Request              $request
+     * @param Criteria             $criteria
      * @param ShopContextInterface $context
      */
     public function handleRequest(
@@ -60,7 +60,7 @@ class SortingCriteriaRequestHandler implements CriteriaRequestHandlerInterface
         }
 
         $customSortings = $this->customSortingService->getList(
-            [ (int) $request->getParam('sSort') ],
+            [(int) $request->getParam('sSort')],
             $context
         );
 

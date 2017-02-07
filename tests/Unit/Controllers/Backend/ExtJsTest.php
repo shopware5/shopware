@@ -28,7 +28,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @category  Shopware
- * @package   Shopware\Tests
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ExtJsTest extends TestCase
@@ -46,10 +46,10 @@ class ExtJsTest extends TestCase
         ];
     }
 
-
     /**
      * @dataProvider exampleData
-     * @param array $args
+     *
+     * @param array  $args
      * @param string $expectedResult
      */
     public function testInflectPath($args, $expectedResult)

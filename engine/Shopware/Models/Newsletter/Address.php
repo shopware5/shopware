@@ -24,8 +24,8 @@
 
 namespace   Shopware\Models\Newsletter;
 
-use Shopware\Components\Model\LazyFetchModelEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\LazyFetchModelEntity;
 
 /**
  * Shopware Address model represents a mail address.
@@ -36,49 +36,13 @@ use Doctrine\ORM\Mapping as ORM;
 class Address extends LazyFetchModelEntity
 {
     /**
-     * Autoincrement ID
-     *
-     * @var integer $id
-     *
-     * @ORM\Id
-     * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
-    /**
-     * Does this address belong to a customer?
-     *
-     * @var boolean $isCustomer
-     *
-     * @ORM\Column(name="customer", type="boolean", nullable=false)
-     */
-    private $isCustomer;
-
-    /**
-     * ID of the newsletter-group this mail address belongs to
-     *
-     * @var integer $groupId
-     *
-     * @ORM\Column(name="groupID", type="integer", length=11, nullable=true)
-     */
-    private $groupId = 0;
-
-    /**
-     * The actual email address
-     *
-     * @var string $email
-     * @ORM\Column(name="email", type="string", length=90, nullable=false)
-     */
-    private $email;
-
-    /**
      * OWNING SIDE
      * The customer property is the owning side of the association between customer and newsletter address.
      * The association is joined over the newsletter mail address and the customer mail address
      *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Customer\Customer")
      * @ORM\JoinColumn(name="email", referencedColumnName="email")
+     *
      * @var \Shopware\Models\Customer\Customer
      */
     protected $customer;
@@ -90,14 +54,51 @@ class Address extends LazyFetchModelEntity
      *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Newsletter\Group")
      * @ORM\JoinColumn(name="groupID", referencedColumnName="id")
+     *
      * @var \Shopware\Models\Newsletter\Group
      */
     protected $newsletterGroup;
+    /**
+     * Autoincrement ID
+     *
+     * @var int
+     *
+     * @ORM\Id
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * Does this address belong to a customer?
+     *
+     * @var bool
+     *
+     * @ORM\Column(name="customer", type="boolean", nullable=false)
+     */
+    private $isCustomer;
+
+    /**
+     * ID of the newsletter-group this mail address belongs to
+     *
+     * @var int
+     *
+     * @ORM\Column(name="groupID", type="integer", length=11, nullable=true)
+     */
+    private $groupId = 0;
+
+    /**
+     * The actual email address
+     *
+     * @var string
+     * @ORM\Column(name="email", type="string", length=90, nullable=false)
+     */
+    private $email;
 
     /**
      * ID of the last newsletter this user received
      *
-     * @var integer $lastNewsletter
+     * @var int
      * @ORM\Column(name="lastmailing", type="integer", length=11, nullable=false)
      */
     private $lastNewsletterId = 0;
@@ -109,6 +110,7 @@ class Address extends LazyFetchModelEntity
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Newsletter\Newsletter", inversedBy="addresses")
      * @ORM\JoinColumn(name="lastmailing", referencedColumnName="id")
+     *
      * @var \Shopware\Models\Newsletter\Newsletter
      */
     private $lastNewsletter;
@@ -116,7 +118,7 @@ class Address extends LazyFetchModelEntity
     /**
      * ID of the last mailing this user read
      *
-     * @var integer $lastReadId
+     * @var int
      * @ORM\Column(name="lastread", type="integer", length=11, nullable=false)
      */
     private $lastReadId = 0;
@@ -124,7 +126,7 @@ class Address extends LazyFetchModelEntity
     /**
      * The Double-Opt-In date
      *
-     * @var \DateTime $added
+     * @var \DateTime
      * @ORM\Column(name="added", type="datetime", nullable=true)
      */
     private $added;
@@ -162,7 +164,7 @@ class Address extends LazyFetchModelEntity
     }
 
     /**
-     * @param boolean $isCustomer
+     * @param bool $isCustomer
      */
     public function setIsCustomer($isCustomer)
     {
@@ -170,7 +172,7 @@ class Address extends LazyFetchModelEntity
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function getIsCustomer()
     {
@@ -248,7 +250,7 @@ class Address extends LazyFetchModelEntity
      */
     public function getCustomer()
     {
-        return $this->fetchLazy($this->customer, array('email' => $this->email));
+        return $this->fetchLazy($this->customer, ['email' => $this->email]);
     }
 
     /**

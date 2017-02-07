@@ -26,7 +26,6 @@ namespace Shopware\Bundle\PluginInstallerBundle\Struct;
 
 /**
  * Class PictureStruct
- * @package Shopware\Bundle\PluginInstallerBundle\Struct
  */
 class PictureStruct implements \JsonSerializable
 {
@@ -41,7 +40,7 @@ class PictureStruct implements \JsonSerializable
     private $remoteLink;
 
     /**
-     * @var boolean
+     * @var bool
      */
     private $cover = false;
 
@@ -78,7 +77,7 @@ class PictureStruct implements \JsonSerializable
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isCover()
     {
@@ -86,7 +85,7 @@ class PictureStruct implements \JsonSerializable
     }
 
     /**
-     * @param boolean $cover
+     * @param bool $cover
      */
     public function setCover($cover)
     {
@@ -94,7 +93,7 @@ class PictureStruct implements \JsonSerializable
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function jsonSerialize()
     {

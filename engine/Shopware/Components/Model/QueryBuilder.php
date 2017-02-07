@@ -32,7 +32,7 @@ use Doctrine\ORM\QueryBuilder as BaseQueryBuilder;
  * The Shopware QueryBuilder is an extension of the standard Doctrine QueryBuilder.
  *
  * @category  Shopware
- * @package   Shopware\Components\Model
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class QueryBuilder extends BaseQueryBuilder
@@ -44,11 +44,13 @@ class QueryBuilder extends BaseQueryBuilder
 
     /**
      * @param string $alias
+     *
      * @return QueryBuilder
      */
     public function setAlias($alias)
     {
         $this->alias = $alias;
+
         return $this;
     }
 
@@ -63,7 +65,7 @@ class QueryBuilder extends BaseQueryBuilder
      *         ->setParameters(new ArrayCollection(array(
      *             new Parameter('user_id1', 1),
      *             new Parameter('user_id2', 2)
-    )));
+     )));
      * </code>
      *
      * Notice: This method overrides ALL parameters in Doctrine 2.3 and up.
@@ -72,8 +74,9 @@ class QueryBuilder extends BaseQueryBuilder
      * instead or call {@link setParameters()} only once, or with all the
      * parameters.
      *
-     * @param \Doctrine\Common\Collections\ArrayCollection|array $parameters The query parameters to set.
-     * @return QueryBuilder This QueryBuilder instance.
+     * @param \Doctrine\Common\Collections\ArrayCollection|array $parameters the query parameters to set
+     *
+     * @return QueryBuilder this QueryBuilder instance
      */
     public function setParameters($parameters)
     {
@@ -95,8 +98,10 @@ class QueryBuilder extends BaseQueryBuilder
      * {@link setParameters()} behavior.
      *
      * @deprecated
+     *
      * @param array $parameters
-     * @return QueryBuilder This QueryBuilder instance.
+     *
+     * @return QueryBuilder this QueryBuilder instance
      */
     public function addParameters(array $parameters)
     {
@@ -144,6 +149,7 @@ class QueryBuilder extends BaseQueryBuilder
      * </code>
      *
      * @param array $filter
+     *
      * @return QueryBuilder
      */
     public function addFilter(array $filter)
@@ -175,7 +181,7 @@ class QueryBuilder extends BaseQueryBuilder
                 continue;
             }
 
-            $parameterKey = str_replace(array('.'), array('_'), $exprKey) . uniqid();
+            $parameterKey = str_replace(['.'], ['_'], $exprKey) . uniqid();
             if (isset($this->alias) && strpos($exprKey, '.') === false) {
                 $exprKey = $this->alias . '.' . $exprKey;
             }
@@ -204,7 +210,7 @@ class QueryBuilder extends BaseQueryBuilder
 
             $exprParameterKey = ':' . $parameterKey;
             if (is_array($where)) {
-                $exprParameterKey = '('.$exprParameterKey.')' ;
+                $exprParameterKey = '(' . $exprParameterKey . ')';
             }
             $expression = new Expr\Comparison($exprKey, $expression, $where !== null ? $exprParameterKey : null);
 
@@ -232,8 +238,9 @@ class QueryBuilder extends BaseQueryBuilder
      *      )));
      * </code>
      *
-     * @param string|array $orderBy The ordering expression.
-     * @param string $order The ordering direction.
+     * @param string|array $orderBy the ordering expression
+     * @param string       $order   the ordering direction
+     *
      * @return QueryBuilder
      */
     public function addOrderBy($orderBy, $order = null)
@@ -271,17 +278,17 @@ class QueryBuilder extends BaseQueryBuilder
         return $this;
     }
 
-
     /**
      * Overrides the original function to add the SQL_NO_CACHE parameter
      * for each doctrine orm query if the global shopware debug mode is activated.
+     *
      * @return \Doctrine\ORM\Query
      */
     public function getQuery()
     {
         $query = parent::getQuery();
 
-        /**@var $em ModelManager*/
+        /** @var $em ModelManager */
         $em = $this->getEntityManager();
 
         if ($em->isDebugModeEnabled() && $this->getType() === self::SELECT) {

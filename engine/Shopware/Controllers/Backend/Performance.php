@@ -38,21 +38,18 @@ use Shopware\Models\Shop\Shop;
 class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Backend_ExtJs
 {
     const PHP_RECOMMENDED_VERSION = '7.0.0';
-    const PHP_MINIMUM_VERSION     = '5.6.4';
+    const PHP_MINIMUM_VERSION = '5.6.4';
 
-    const PERFORMANCE_VALID       = 1;
-    const PERFORMANCE_WARNING     = 2;
-    const PERFORMANCE_INVALID     = 0;
+    const PERFORMANCE_VALID = 1;
+    const PERFORMANCE_WARNING = 2;
+    const PERFORMANCE_INVALID = 0;
 
     /**
      * Stores a list of all needed config data
+     *
      * @var array
      */
     protected $configData = [];
-
-    protected function initAcl()
-    {
-    }
 
     /**
      * get productive mode
@@ -65,7 +62,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
 
         $this->View()->assign([
             'success' => true,
-            'productiveMode' => $active
+            'productiveMode' => $active,
         ]);
     }
 
@@ -80,6 +77,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
 
         if (!$httpCache) {
             $this->View()->assign(['success' => false, 'state' => 'not_found']);
+
             return;
         }
 
@@ -96,51 +94,6 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
     }
 
     /**
-     * activate httpCache-Plugin
-     * @param Plugin $httpCache
-     */
-    private function activeHttpCache($httpCache)
-    {
-        /**@var $service InstallerService*/
-        $service = Shopware()->Container()->get('shopware.plugin_manager');
-
-        if (!$httpCache->getInstalled()) {
-            $service->installPlugin($httpCache);
-        }
-        if (!$httpCache->getActive()) {
-            $service->activatePlugin($httpCache);
-        }
-    }
-
-    /**
-     * deactivate httpCache-Plugin
-     * @param Plugin $httpCache
-     */
-    private function deactivateHttpCache($httpCache)
-    {
-        if (!$httpCache->getActive()) {
-            return;
-        }
-
-        /**@var $service InstallerService*/
-        $service = Shopware()->Container()->get('shopware.plugin_manager');
-        $service->deactivatePlugin($httpCache);
-    }
-
-    /**
-     * Get plugin orm-model by name
-     * @param $name
-     * @return null|Plugin
-     */
-    private function getPluginByName($name)
-    {
-        /** @var ModelRepository $repo */
-        $repo = $this->get('models')->getRepository('Shopware\Models\Plugin\Plugin');
-
-        return $repo->findOneBy(['name' => $name]);
-    }
-
-    /**
      * Gets a list of id-name of all existing shops
      */
     public function getShopsAction()
@@ -148,19 +101,16 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
         $shops = Shopware()->Db()->fetchAll('SELECT id, name FROM s_core_shops');
         $this->View()->assign([
             'success' => true,
-            'data' => $shops
+            'data' => $shops,
         ]);
     }
 
-    /**
-     *
-     */
     public function getConfigAction()
     {
         Shopware()->Container()->get('cache')->remove('Shopware_Config');
         $this->View()->assign([
             'success' => true,
-            'data' => $this->prepareConfigData()
+            'data' => $this->prepareConfigData(),
         ]);
     }
 
@@ -176,7 +126,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
             'success' => true,
             'data' => array_map(function ($item) {
                 return ['id' => $item['id'], 'name' => $item['name']];
-            }, $shops)
+            }, $shops),
         ]);
     }
 
@@ -199,12 +149,13 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
 
         $this->View()->assign([
             'success' => true,
-            'data' => $this->configData
+            'data' => $this->configData,
         ]);
     }
 
     /**
      * Iterates the given data array and persists all config variables
+     *
      * @param array $data
      */
     public function saveConfigData(array $data)
@@ -217,70 +168,32 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
     }
 
     /**
-     * Reads all config data and prepares it for our models
-     * @return array
-     */
-    protected function prepareConfigData()
-    {
-        return [
-            'check'     => $this->getPerformanceCheckData(),
-            'httpCache' => $this->prepareHttpCacheConfig(),
-            'topSeller' => $this->genericConfigLoader([
-                'topSellerActive',
-                'topSellerValidationTime',
-                'chartinterval',
-                'topSellerRefreshStrategy',
-                'topSellerPseudoSales'
-            ]),
-            'seo'       => $this->prepareSeoConfig(),
-            'search'    => $this->prepareSearchConfig(),
-            'categories' => $this->genericConfigLoader([
-                'moveBatchModeEnabled',
-                'articlesperpage'
-            ]),
-            'filters' => $this->genericConfigLoader([
-                'listingMode'
-            ]),
-            'various' => $this->genericConfigLoader([
-                'disableShopwareStatistics',
-                'LastArticles:show',
-                'LastArticles:lastarticlestoshow',
-                'disableArticleNavigation'
-            ]),
-            'customer' => $this->genericConfigLoader([
-                'alsoBoughtShow',
-                'similarViewedShow',
-                'similarRefreshStrategy',
-                'similarValidationTime',
-                'similarActive'
-            ])
-        ];
-    }
-
-    /**
      * General helper method which triggers the prepare...ConfigForSaving methods
      *
      * @param $data
+     *
      * @return array
      */
     public function prepareDataForSaving($data)
     {
         $output = [];
-        $output['httpCache']  = $this->prepareHttpCacheConfigForSaving($data['httpCache'][0]);
-        $output['topSeller']  = $this->prepareForSavingDefault($data['topSeller'][0]);
-        $output['seo']        = $this->prepareSeoConfigForSaving($data['seo'][0]);
-        $output['search']     = $this->prepareForSavingDefault($data['search'][0]);
-        $output['filters']    = $this->prepareForSavingDefault($data['filters'][0]);
+        $output['httpCache'] = $this->prepareHttpCacheConfigForSaving($data['httpCache'][0]);
+        $output['topSeller'] = $this->prepareForSavingDefault($data['topSeller'][0]);
+        $output['seo'] = $this->prepareSeoConfigForSaving($data['seo'][0]);
+        $output['search'] = $this->prepareForSavingDefault($data['search'][0]);
+        $output['filters'] = $this->prepareForSavingDefault($data['filters'][0]);
         $output['categories'] = $this->prepareForSavingDefault($data['categories'][0]);
-        $output['various']    = $this->prepareForSavingDefault($data['various'][0]);
-        $output['customer']   = $this->prepareForSavingDefault($data['customer'][0]);
+        $output['various'] = $this->prepareForSavingDefault($data['various'][0]);
+        $output['customer'] = $this->prepareForSavingDefault($data['customer'][0]);
 
         return $output;
     }
 
     /**
      * Generic helper method which prepares a given array for saving
+     *
      * @param array $data
+     *
      * @return array
      */
     public function prepareForSavingDefault(array $data)
@@ -294,6 +207,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
      * Prepare seo array for saving
      *
      * @param array $data
+     *
      * @return array
      */
     public function prepareSeoConfigForSaving(array $data)
@@ -318,6 +232,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
      * Prepare the http config array so that it can easily be saved
      *
      * @param array $data
+     *
      * @return array
      */
     public function prepareHttpCacheConfigForSaving(array $data)
@@ -351,6 +266,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
                     if (empty($url) || strpos($url, '://') !== false) {
                         return $url;
                     }
+
                     return 'http://' . $url;
                 },
                 explode(',', $data['HttpCache:proxy'])
@@ -366,15 +282,15 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
      * Helper method to persist a given config value
      *
      * @param string $name
-     * @param mixed $value
+     * @param mixed  $value
      */
     public function saveConfig($name, $value)
     {
         $modelManager = $this->container->get('models');
         /** @var ShopRepository $shopRepository */
-        $shopRepository    = $modelManager->getRepository(Shop::class);
+        $shopRepository = $modelManager->getRepository(Shop::class);
         $elementRepository = $modelManager->getRepository(Element::class);
-        $formRepository    = $modelManager->getRepository(Form::class);
+        $formRepository = $modelManager->getRepository(Form::class);
 
         $shop = $shopRepository->find($shopRepository->getActiveDefault()->getId());
 
@@ -422,7 +338,8 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
      * Read a given config by name
      *
      * @param $configName
-     * @param  string      $defaultValue
+     * @param string $defaultValue
+     *
      * @return null|string
      */
     public function readConfig($configName, $defaultValue = '')
@@ -462,6 +379,163 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
     }
 
     /**
+     * Helpers to fix categories
+     */
+
+    /**
+     * Fixes categorie tree
+     */
+    public function fixCategoriesAction()
+    {
+        $offset = $this->Request()->getParam('offset', 0);
+        $limit = $this->Request()->getParam('limit', null);
+
+        $component = Shopware()->Container()->get('CategoryDenormalization');
+
+        if ($offset == 0) {
+            $component->rebuildCategoryPath();
+            $component->removeAllAssignments();
+        }
+
+        $count = $component->rebuildAllAssignments($limit, $offset);
+
+        $this->View()->assign([
+            'success' => true,
+            'total' => $count,
+        ]);
+    }
+
+    public function prepareTreeAction()
+    {
+        $component = Shopware()->Container()->get('CategoryDenormalization');
+
+        $component->removeOrphanedAssignments();
+
+        $count = $component->rebuildAllAssignmentsCount();
+
+        $this->View()->assign([
+            'success' => true,
+            'data' => ['count' => $count],
+        ]);
+    }
+
+    /**
+     * calculates the number of all urls to create a cache entry for
+     */
+    public function getHttpURLsAction()
+    {
+        $shopId = (int) $this->Request()->getParam('shopId', 1);
+
+        /** @var $cacheWarmer CacheWarmer */
+        $cacheWarmer = $this->get('http_cache_warmer');
+
+        $this->View()->assign([
+            'success' => true,
+            'data' => [
+                'counts' => [
+                    'category' => $cacheWarmer->getSEOURLByViewPortCount($cacheWarmer::CATEGORY_PATH, $shopId),
+                    'article' => $cacheWarmer->getSEOURLByViewPortCount($cacheWarmer::ARTICLE_PATH, $shopId),
+                    'blog' => $cacheWarmer->getSEOURLByViewPortCount($cacheWarmer::BlOG_PATH, $shopId),
+                    'static' => $cacheWarmer->getSEOURLByViewPortCount($cacheWarmer::CUSTOM_PATH, $shopId),
+                    'supplier' => $cacheWarmer->getSEOURLByViewPortCount($cacheWarmer::SUPPLIER_PATH, $shopId),
+                ],
+            ],
+        ]);
+    }
+
+    /**
+     * calculates and call every url depending on the shopId and the resource
+     */
+    public function warmUpCacheAction()
+    {
+        $shopId = (int) $this->Request()->getParam('shopId', 1);
+        $limit = $this->Request()->get('limit');
+        $offset = $this->Request()->get('offset');
+        $resource = $this->Request()->get('resource');
+
+        /** @var CacheWarmer $cacheWarmer */
+        $cacheWarmer = $this->get('http_cache_warmer');
+
+        $viewPorts = [];
+        switch ($resource) {
+            case 'article':
+                $viewPorts[] = $cacheWarmer::ARTICLE_PATH;
+                break;
+            case 'category':
+                $viewPorts[] = $cacheWarmer::CATEGORY_PATH;
+                break;
+            case 'blog':
+                $viewPorts[] = $cacheWarmer::BlOG_PATH;
+                break;
+            case 'static':
+                $viewPorts[] = $cacheWarmer::CUSTOM_PATH;
+                $viewPorts[] = $cacheWarmer::EMOTION_LANDING_PAGE_PATH;
+                break;
+            case 'supplier':
+                $viewPorts[] = $cacheWarmer::SUPPLIER_PATH;
+                break;
+            default:
+                $this->View()->assign(['success' => false]);
+
+                return;
+        }
+
+        $urls = $cacheWarmer->getSEOUrlByViewPort($viewPorts, $shopId, $limit, $offset);
+        $cacheWarmer->callUrls($urls, $shopId);
+
+        $this->View()->assign([
+            'success' => true,
+            'data' => ['count' => count($urls)],
+        ]);
+    }
+
+    protected function initAcl()
+    {
+    }
+
+    /**
+     * Reads all config data and prepares it for our models
+     *
+     * @return array
+     */
+    protected function prepareConfigData()
+    {
+        return [
+            'check' => $this->getPerformanceCheckData(),
+            'httpCache' => $this->prepareHttpCacheConfig(),
+            'topSeller' => $this->genericConfigLoader([
+                'topSellerActive',
+                'topSellerValidationTime',
+                'chartinterval',
+                'topSellerRefreshStrategy',
+                'topSellerPseudoSales',
+            ]),
+            'seo' => $this->prepareSeoConfig(),
+            'search' => $this->prepareSearchConfig(),
+            'categories' => $this->genericConfigLoader([
+                'moveBatchModeEnabled',
+                'articlesperpage',
+            ]),
+            'filters' => $this->genericConfigLoader([
+                'listingMode',
+            ]),
+            'various' => $this->genericConfigLoader([
+                'disableShopwareStatistics',
+                'LastArticles:show',
+                'LastArticles:lastarticlestoshow',
+                'disableArticleNavigation',
+            ]),
+            'customer' => $this->genericConfigLoader([
+                'alsoBoughtShow',
+                'similarViewedShow',
+                'similarRefreshStrategy',
+                'similarValidationTime',
+                'similarActive',
+            ]),
+        ];
+    }
+
+    /**
      * Helper function to check some performance configurations.
      */
     protected function getPerformanceCheckData()
@@ -482,27 +556,29 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
                 'id' => 1,
                 'name' => Shopware()->Snippets()->getNamespace('backend/performance/main')->get('cache/apc'),
                 'value' => extension_loaded('apcu'),
-                'valid' => extension_loaded('apcu') === true ? self::PERFORMANCE_VALID : self::PERFORMANCE_INVALID
+                'valid' => extension_loaded('apcu') === true ? self::PERFORMANCE_VALID : self::PERFORMANCE_INVALID,
             ],
             [
                 'id' => 3,
                 'name' => Shopware()->Snippets()->getNamespace('backend/performance/main')->get('cache/zend'),
                 'value' => extension_loaded('Zend OPcache'),
-                'valid' => extension_loaded('Zend OPcache') === true ? self::PERFORMANCE_VALID : self::PERFORMANCE_INVALID
+                'valid' => extension_loaded('Zend OPcache') === true ? self::PERFORMANCE_VALID : self::PERFORMANCE_INVALID,
             ],
             [
                 'id' => 4,
                 'name' => Shopware()->Snippets()->getNamespace('backend/performance/main')->get('cache/php_version'),
                 'value' => phpversion(),
                 'valid' => $validPHPVersion,
-                'description' => $descriptionPHPVersion
-            ]
+                'description' => $descriptionPHPVersion,
+            ],
         ];
     }
 
     /**
      * Generic helper method to build an array of config which needs to be loaded
+     *
      * @param array $config
+     *
      * @return array
      */
     protected function genericConfigLoader(array $config)
@@ -527,18 +603,18 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
         $datetime = date_create_from_format('Y-m-d H:i:s', $formatted);
 
         if ($datetime) {
-            $date = $datetime ->format('d.m.Y');
-            $time = $datetime ->format('H:i:s');
+            $date = $datetime->format('d.m.Y');
+            $time = $datetime->format('H:i:s');
         } else {
             $date = null;
             $time = null;
         }
 
         return [
-            'routercache'          => (int) Shopware()->Config()->get('routercache'),
+            'routercache' => (int) Shopware()->Config()->get('routercache'),
             'routerlastupdateDate' => $date,
             'routerlastupdateTime' => $time,
-            'seoRefreshStrategy'   => Shopware()->Config()->get('seoRefreshStrategy')
+            'seoRefreshStrategy' => Shopware()->Config()->get('seoRefreshStrategy'),
         ];
     }
 
@@ -577,135 +653,74 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
         $plugin = $repo->findOneBy(['name' => 'HttpCache']);
 
         return [
-            'enabled'            => $plugin->getActive(),
-            'cacheControllers'   => $cacheControllers,
+            'enabled' => $plugin->getActive(),
+            'cacheControllers' => $cacheControllers,
             'noCacheControllers' => $noCacheControllers,
             'HttpCache:proxyPrune' => $this->readConfig('HttpCache:proxyPrune'),
-            'HttpCache:admin'    => $this->readConfig('HttpCache:admin'),
-            'HttpCache:proxy'    => $this->readConfig('HttpCache:proxy')
+            'HttpCache:admin' => $this->readConfig('HttpCache:admin'),
+            'HttpCache:proxy' => $this->readConfig('HttpCache:proxy'),
         ];
     }
 
     /**
+     * activate httpCache-Plugin
      *
-     * Helpers to fix categories
-     *
+     * @param Plugin $httpCache
      */
+    private function activeHttpCache($httpCache)
+    {
+        /** @var $service InstallerService */
+        $service = Shopware()->Container()->get('shopware.plugin_manager');
+
+        if (!$httpCache->getInstalled()) {
+            $service->installPlugin($httpCache);
+        }
+        if (!$httpCache->getActive()) {
+            $service->activatePlugin($httpCache);
+        }
+    }
 
     /**
-     * Fixes categorie tree
+     * deactivate httpCache-Plugin
+     *
+     * @param Plugin $httpCache
      */
-    public function fixCategoriesAction()
+    private function deactivateHttpCache($httpCache)
     {
-        $offset = $this->Request()->getParam('offset', 0);
-        $limit  = $this->Request()->getParam('limit', null);
-
-        $component = Shopware()->Container()->get('CategoryDenormalization');
-
-        if ($offset == 0) {
-            $component->rebuildCategoryPath();
-            $component->removeAllAssignments();
+        if (!$httpCache->getActive()) {
+            return;
         }
 
-        $count = $component->rebuildAllAssignments($limit, $offset);
-
-        $this->View()->assign([
-            'success' => true,
-            'total'   => $count,
-        ]);
-    }
-
-    public function prepareTreeAction()
-    {
-        $component = Shopware()->Container()->get('CategoryDenormalization');
-
-        $component->removeOrphanedAssignments();
-
-        $count = $component->rebuildAllAssignmentsCount();
-
-        $this->View()->assign([
-            'success' => true,
-            'data' => ['count' => $count]
-        ]);
+        /** @var $service InstallerService */
+        $service = Shopware()->Container()->get('shopware.plugin_manager');
+        $service->deactivatePlugin($httpCache);
     }
 
     /**
-     * calculates the number of all urls to create a cache entry for
+     * Get plugin orm-model by name
+     *
+     * @param $name
+     *
+     * @return null|Plugin
      */
-    public function getHttpURLsAction()
+    private function getPluginByName($name)
     {
-        $shopId = (int)$this->Request()->getParam('shopId', 1);
+        /** @var ModelRepository $repo */
+        $repo = $this->get('models')->getRepository('Shopware\Models\Plugin\Plugin');
 
-        /**@var $cacheWarmer CacheWarmer*/
-        $cacheWarmer = $this->get('http_cache_warmer');
-
-        $this->View()->assign([
-            'success' => true,
-            'data' => [
-                'counts' => [
-                    'category' => $cacheWarmer->getSEOURLByViewPortCount($cacheWarmer::CATEGORY_PATH, $shopId),
-                    'article' => $cacheWarmer->getSEOURLByViewPortCount($cacheWarmer::ARTICLE_PATH, $shopId),
-                    'blog' => $cacheWarmer->getSEOURLByViewPortCount($cacheWarmer::BlOG_PATH, $shopId),
-                    'static' => $cacheWarmer->getSEOURLByViewPortCount($cacheWarmer::CUSTOM_PATH, $shopId),
-                    'supplier' => $cacheWarmer->getSEOURLByViewPortCount($cacheWarmer::SUPPLIER_PATH, $shopId)
-                ]
-            ]
-        ]);
-    }
-
-    /**
-     * calculates and call every url depending on the shopId and the resource
-     */
-    public function warmUpCacheAction()
-    {
-        $shopId = (int)$this->Request()->getParam('shopId', 1);
-        $limit = $this->Request()->get('limit');
-        $offset = $this->Request()->get('offset');
-        $resource = $this->Request()->get('resource');
-
-        /** @var CacheWarmer $cacheWarmer */
-        $cacheWarmer = $this->get('http_cache_warmer');
-
-        $viewPorts = [];
-        switch ($resource) {
-            case 'article':
-                $viewPorts[] = $cacheWarmer::ARTICLE_PATH;
-                break;
-            case 'category':
-                $viewPorts[] = $cacheWarmer::CATEGORY_PATH;
-                break;
-            case 'blog':
-                $viewPorts[] = $cacheWarmer::BlOG_PATH;
-                break;
-            case 'static':
-                $viewPorts[] = $cacheWarmer::CUSTOM_PATH;
-                $viewPorts[] = $cacheWarmer::EMOTION_LANDING_PAGE_PATH;
-                break;
-            case 'supplier':
-                $viewPorts[] = $cacheWarmer::SUPPLIER_PATH;
-                break;
-            default:
-                $this->View()->assign(['success' => false]);
-                return;
-        }
-
-        $urls = $cacheWarmer->getSEOUrlByViewPort($viewPorts, $shopId, $limit, $offset);
-        $cacheWarmer->callUrls($urls, $shopId);
-
-        $this->View()->assign([
-            'success' => true,
-            'data' => ['count' => count($urls)]
-        ]);
+        return $repo->findOneBy(['name' => $name]);
     }
 
     /**
      * Converts the fuzzysearchlastupdate to a DateTime object
+     *
      * @return array
      */
     private function prepareSearchConfig()
     {
         $data = $this->genericConfigLoader(['searchRefreshStrategy', 'cachesearch', 'traceSearch', 'fuzzysearchlastupdate']);
         $data['fuzzysearchlastupdate'] = new DateTime($data['fuzzysearchlastupdate']);
+
         return $data;
     }
 }

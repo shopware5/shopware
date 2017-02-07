@@ -36,7 +36,7 @@ class Emotion extends Extendable
     protected $id;
 
     /**
-     * @var boolean
+     * @var bool
      */
     protected $active;
 
@@ -86,12 +86,12 @@ class Emotion extends Extendable
     protected $userId;
 
     /**
-     * @var boolean
+     * @var bool
      */
     protected $showListing;
 
     /**
-     * @var boolean
+     * @var bool
      */
     protected $isLandingPage;
 
@@ -131,7 +131,7 @@ class Emotion extends Extendable
     protected $devices;
 
     /**
-     * @var boolean
+     * @var bool
      */
     protected $fullscreen;
 
@@ -199,7 +199,7 @@ class Emotion extends Extendable
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isActive()
     {
@@ -279,7 +279,7 @@ class Emotion extends Extendable
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isShowListing()
     {
@@ -287,7 +287,7 @@ class Emotion extends Extendable
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isLandingPage()
     {
@@ -351,7 +351,7 @@ class Emotion extends Extendable
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isFullscreen()
     {
@@ -391,7 +391,7 @@ class Emotion extends Extendable
     }
 
     /**
-     * @param boolean $active
+     * @param bool $active
      */
     public function setActive($active)
     {
@@ -471,7 +471,7 @@ class Emotion extends Extendable
     }
 
     /**
-     * @param boolean $showListing
+     * @param bool $showListing
      */
     public function setShowListing($showListing)
     {
@@ -479,7 +479,7 @@ class Emotion extends Extendable
     }
 
     /**
-     * @param boolean $isLandingPage
+     * @param bool $isLandingPage
      */
     public function setIsLandingPage($isLandingPage)
     {
@@ -543,7 +543,7 @@ class Emotion extends Extendable
     }
 
     /**
-     * @param boolean $fullscreen
+     * @param bool $fullscreen
      */
     public function setFullscreen($fullscreen)
     {
@@ -703,7 +703,7 @@ class Emotion extends Extendable
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function jsonSerialize()
     {

@@ -24,18 +24,18 @@
 
 namespace Shopware\Bundle\MediaBundle\Commands;
 
-use Doctrine\ORM\ORMException;
 use Doctrine\ORM\AbstractQuery;
+use Doctrine\ORM\ORMException;
 use Shopware\Commands\ShopwareCommand;
+use Shopware\Models\Media\Media;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Shopware\Models\Media\Media;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
  * @category  Shopware
- * @package   Shopware\Components\Console\Commands
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class MediaCleanupCommand extends ShopwareCommand
@@ -74,17 +74,18 @@ class MediaCleanupCommand extends ShopwareCommand
 
             $deleted = $this->handleCleanup($io);
             $io->success(sprintf('%d item(s) deleted.', $deleted));
+
             return;
         }
 
         $io->success(sprintf('%d item(s) in recycle bin.', $total));
     }
 
-
     /**
      * Handles cleaning process and returns the number of deleted media objects
      *
      * @param SymfonyStyle $io
+     *
      * @return int
      */
     private function handleCleanup(SymfonyStyle $io)

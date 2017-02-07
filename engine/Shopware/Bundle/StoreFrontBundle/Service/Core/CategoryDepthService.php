@@ -71,6 +71,7 @@ class CategoryDepthService implements CategoryDepthServiceInterface
             $rootPath = explode('|', $plain[0]);
             $rootPath = array_filter(array_unique($rootPath));
             $ids = array_merge($ids, $rootPath);
+
             return $ids;
         }
 

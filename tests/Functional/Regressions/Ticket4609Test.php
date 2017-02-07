@@ -26,21 +26,11 @@ use PHPUnit\DbUnit\DataSet\IDataSet;
 
 /**
  * @category  Shopware
- * @package   Shopware\Tests
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_RegressionTests_Ticket4609 extends Enlight_Components_Test_Plugin_TestCase
 {
-    /**
-     * Returns the test dataset
-     *
-     * @return IDataSet
-     */
-    protected function getDataSet()
-    {
-        return $this->createXMLDataSet(__DIR__.'/testdata/Log.xml');
-    }
-
     /**
      * Test case method
      */
@@ -56,5 +46,15 @@ class Shopware_RegressionTests_Ticket4609 extends Enlight_Components_Test_Plugin
         }
 
         $this->assertNull($e);
+    }
+
+    /**
+     * Returns the test dataset
+     *
+     * @return IDataSet
+     */
+    protected function getDataSet()
+    {
+        return $this->createXMLDataSet(__DIR__ . '/testdata/Log.xml');
     }
 }

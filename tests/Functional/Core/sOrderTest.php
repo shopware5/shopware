@@ -24,27 +24,15 @@
 
 class sOrderTest extends PHPUnit\Framework\TestCase
 {
+    public static $sessionId;
     /**
      * @var sOrder
      */
     private $module;
 
-    public static $sessionId;
-
     public static function setUpBeforeClass()
     {
         self::$sessionId = rand(111111111, 999999999);
-    }
-
-    /**
-     * @return \Shopware\Components\Api\Resource\Article
-     */
-    private function getArticleResource()
-    {
-        $resource = new \Shopware\Components\Api\Resource\Article();
-        $resource->setManager(Shopware()->Models());
-        $resource->setResultMode(1);
-        return $resource;
     }
 
     public function setUp()
@@ -55,7 +43,7 @@ class sOrderTest extends PHPUnit\Framework\TestCase
 
     public function testGetOrderNumber()
     {
-        $current = (int)Shopware()->Db()->fetchOne(
+        $current = (int) Shopware()->Db()->fetchOne(
             "SELECT number FROM s_order_number WHERE name='invoice'"
         );
 
@@ -65,7 +53,7 @@ class sOrderTest extends PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers sOrder::sendMail()
+     * @covers \sOrder::sendMail()
      * @ticket SW-8261
      */
     public function testSendMailPaymentData()
@@ -81,24 +69,24 @@ class sOrderTest extends PHPUnit\Framework\TestCase
         $this->invokeMethod(
             $this->module,
             'setConfig',
-            array(
-                $config
-            )
+            [
+                $config,
+            ]
         );
 
         // Register the event listener, so that we test the value of "$context"
         Shopware()->Events()->addListener(
             'Shopware_Modules_Order_SendMail_Create',
-            array($this, 'validatePaymentContextData')
+            [$this, 'validatePaymentContextData']
         );
 
-        $variables = array(
-            'additional' => array(
+        $variables = [
+            'additional' => [
                 'payment' => Shopware()->Modules()->Admin()->sGetPaymentMeanById(
                         Shopware()->Db()->fetchRow('SELECT * FROM s_core_paymentmeans WHERE name LIKE "debit"')
-                    )
-            )
-        );
+                    ),
+            ],
+        ];
 
         $this->module->sendMail($variables);
     }
@@ -115,27 +103,27 @@ class sOrderTest extends PHPUnit\Framework\TestCase
         $orderId = $this->createDummyOrder();
         $transaction = uniqid('TRANS-');
         Shopware()->Db()->query(
-            "UPDATE s_order SET transactionID = :transaction WHERE id = :id",
-            array(
+            'UPDATE s_order SET transactionID = :transaction WHERE id = :id',
+            [
                 ':id' => $orderId,
-                ':transaction' => $transaction
-            )
+                ':transaction' => $transaction,
+            ]
         );
 
-        $this->assertTrue($this->invokeMethod($this->module, 'isTransactionExist', array($transaction)));
+        $this->assertTrue($this->invokeMethod($this->module, 'isTransactionExist', [$transaction]));
     }
 
     public function testTransactionExistFalse()
     {
         $this->assertFalse(
-            $this->invokeMethod($this->module, 'isTransactionExist', array(uniqid('TRANS-')))
+            $this->invokeMethod($this->module, 'isTransactionExist', [uniqid('TRANS-')])
         );
     }
 
     public function testTransactionExistInvalid()
     {
         $this->assertFalse(
-            $this->invokeMethod($this->module, 'isTransactionExist', array('ABC'))
+            $this->invokeMethod($this->module, 'isTransactionExist', ['ABC'])
         );
     }
 
@@ -143,14 +131,14 @@ class sOrderTest extends PHPUnit\Framework\TestCase
     {
         $detail = Shopware()->Db()->fetchRow('SELECT * FROM s_articles_details WHERE instock > 10 ORDER BY RAND() LIMIT 1');
 
-        $this->invokeMethod($this->module, 'refreshOrderedVariant', array(
+        $this->invokeMethod($this->module, 'refreshOrderedVariant', [
             $detail['ordernumber'],
-            10
-        ));
+            10,
+        ]);
 
-        $updated = Shopware()->Db()->fetchRow('SELECT * FROM s_articles_details WHERE id = :id', array(
-            ':id' => $detail['id']
-        ));
+        $updated = Shopware()->Db()->fetchRow('SELECT * FROM s_articles_details WHERE id = :id', [
+            ':id' => $detail['id'],
+        ]);
 
         $this->assertEquals($updated['sales'], $detail['sales'] + 10);
         $this->assertEquals($updated['instock'], $detail['instock'] - 10);
@@ -158,17 +146,17 @@ class sOrderTest extends PHPUnit\Framework\TestCase
 
     public function testGetOrderDetailsForMail()
     {
-        $rows = array(
-            array('articlename' => 'Lorem &euro; ipsum'),
-            array('articlename' => 'Lorem <br> ipsum'),
-            array('articlename' => 'Lorem <br /> ipsum'),
-            array('articlename' => ' Lorem &euro; ipsum '),
-        );
+        $rows = [
+            ['articlename' => 'Lorem &euro; ipsum'],
+            ['articlename' => 'Lorem <br> ipsum'],
+            ['articlename' => 'Lorem <br /> ipsum'],
+            ['articlename' => ' Lorem &euro; ipsum '],
+        ];
 
         $rows = $this->invokeMethod(
             $this->module,
             'getOrderDetailsForMail',
-            array($rows)
+            [$rows]
         );
 
         $this->assertTrue(
@@ -181,17 +169,17 @@ class sOrderTest extends PHPUnit\Framework\TestCase
             strpos($rows[2]['articlename'], "\n") > 0
         );
         $this->assertTrue(
-            strpos($rows[3]['articlename'], " ") > 0
+            strpos($rows[3]['articlename'], ' ') > 0
         );
     }
 
     public function testGetOrderForStatusMail()
     {
-        $dummyOrderId= $this->createDummyOrder();
+        $dummyOrderId = $this->createDummyOrder();
         $order = $this->invokeMethod(
             $this->module,
             'getOrderForStatusMail',
-            array($dummyOrderId)
+            [$dummyOrderId]
         );
 
         $this->assertArrayNotHasKey('orderID', $order['attributes']);
@@ -213,29 +201,29 @@ class sOrderTest extends PHPUnit\Framework\TestCase
 
     public function testGetUserDataForMail()
     {
-        $rawUserData = array(
-            'billingaddress' => array(
+        $rawUserData = [
+            'billingaddress' => [
                 1 => "I'll &quot;walk&quot; the &lt;b&gt;dog&lt;/b&gt; now",
-                2 => "I'll &quot;walk&quot; the &lt;b&gt;dog&lt;/b&gt; later"
-            ),
-            'shippingaddress' => array(
+                2 => "I'll &quot;walk&quot; the &lt;b&gt;dog&lt;/b&gt; later",
+            ],
+            'shippingaddress' => [
                 1 => "I won't &quot;walk&quot; the &lt;b&gt;dog&lt;/b&gt; now",
-                2 => "I won't &quot;walk&quot; the &lt;b&gt;dog&lt;/b&gt; later"
-            ),
-            'additional' => array(
-                'country' => array(
-                    1 => '&lt;span&gt;dog&lt;/span&gt;'
-                ),
-                'payment' => array(
-                    'description' => '&lt;span&gt;dog&lt;/span&gt;'
-                )
-            )
-        );
+                2 => "I won't &quot;walk&quot; the &lt;b&gt;dog&lt;/b&gt; later",
+            ],
+            'additional' => [
+                'country' => [
+                    1 => '&lt;span&gt;dog&lt;/span&gt;',
+                ],
+                'payment' => [
+                    'description' => '&lt;span&gt;dog&lt;/span&gt;',
+                ],
+            ],
+        ];
 
         $processedUserData = $this->invokeMethod(
             $this->module,
             'getUserDataForMail',
-            array($rawUserData)
+            [$rawUserData]
         );
 
         $this->assertArrayHasKey('billingaddress', $processedUserData);
@@ -254,14 +242,14 @@ class sOrderTest extends PHPUnit\Framework\TestCase
 
     public function testFormatBasketRow()
     {
-        $rawBasketRowOne = array(
-            'articlename' =>  "This is a very &lt;tag&gt;fancy&lt;/tag&gt; <br /> article name"
-        );
+        $rawBasketRowOne = [
+            'articlename' => 'This is a very &lt;tag&gt;fancy&lt;/tag&gt; <br /> article name',
+        ];
 
         $processedBasketRowOne = $this->invokeMethod(
             $this->module,
             'formatBasketRow',
-            array($rawBasketRowOne)
+            [$rawBasketRowOne]
         );
 
         $this->assertArrayHasKey('articlename', $processedBasketRowOne);
@@ -276,19 +264,18 @@ class sOrderTest extends PHPUnit\Framework\TestCase
         $this->assertEquals('0', $processedBasketRowOne['modus']);
         $this->assertEquals('0', $processedBasketRowOne['taxID']);
 
-
-        $rawBasketRowTwo = array(
-            'articlename' =>  "This is a very &lt;tag&gt;fancy&lt;/tag&gt; <br /> article name",
+        $rawBasketRowTwo = [
+            'articlename' => 'This is a very &lt;tag&gt;fancy&lt;/tag&gt; <br /> article name',
             'price' => '1,00',
             'esdarticle' => '3',
             'modus' => '2',
             'taxID' => '4',
-        );
+        ];
 
         $processedBasketRowTwo = $this->invokeMethod(
             $this->module,
             'formatBasketRow',
-            array($rawBasketRowTwo)
+            [$rawBasketRowTwo]
         );
 
         $this->assertArrayHasKey('articlename', $processedBasketRowTwo);
@@ -313,23 +300,23 @@ class sOrderTest extends PHPUnit\Framework\TestCase
 
         $this->assertEquals(1, $this->module->sSaveBillingAddress($originalBillingAddress, $orderNumber));
 
-        $billing = Shopware()->Models()->getRepository('Shopware\Models\Order\Billing')->findOneBy(array('order' => $orderNumber));
+        $billing = Shopware()->Models()->getRepository('Shopware\Models\Order\Billing')->findOneBy(['order' => $orderNumber]);
 
-        $this->assertEquals($originalBillingAddress["userID"], $billing->getCustomer()->getId());
-        $this->assertEquals($originalBillingAddress["company"], $billing->getCompany());
-        $this->assertEquals($originalBillingAddress["firstname"], $billing->getFirstName());
-        $this->assertEquals($originalBillingAddress["lastname"], $billing->getLastName());
-        $this->assertEquals($originalBillingAddress["street"], $billing->getStreet());
+        $this->assertEquals($originalBillingAddress['userID'], $billing->getCustomer()->getId());
+        $this->assertEquals($originalBillingAddress['company'], $billing->getCompany());
+        $this->assertEquals($originalBillingAddress['firstname'], $billing->getFirstName());
+        $this->assertEquals($originalBillingAddress['lastname'], $billing->getLastName());
+        $this->assertEquals($originalBillingAddress['street'], $billing->getStreet());
 
         $billingAttr = $billing->getAttribute();
 
         if ($billingAttr !== null) {
-            $this->assertEquals($originalBillingAddress["text1"], $billingAttr->getText1());
-            $this->assertEquals($originalBillingAddress["text2"], $billingAttr->getText2());
-            $this->assertEquals($originalBillingAddress["text3"], $billingAttr->getText3());
-            $this->assertEquals($originalBillingAddress["text4"], $billingAttr->getText4());
-            $this->assertEquals($originalBillingAddress["text5"], $billingAttr->getText5());
-            $this->assertEquals($originalBillingAddress["text6"], $billingAttr->getText6());
+            $this->assertEquals($originalBillingAddress['text1'], $billingAttr->getText1());
+            $this->assertEquals($originalBillingAddress['text2'], $billingAttr->getText2());
+            $this->assertEquals($originalBillingAddress['text3'], $billingAttr->getText3());
+            $this->assertEquals($originalBillingAddress['text4'], $billingAttr->getText4());
+            $this->assertEquals($originalBillingAddress['text5'], $billingAttr->getText5());
+            $this->assertEquals($originalBillingAddress['text6'], $billingAttr->getText6());
             Shopware()->Models()->remove($billingAttr);
         }
         Shopware()->Models()->remove($billing);
@@ -345,23 +332,23 @@ class sOrderTest extends PHPUnit\Framework\TestCase
 
         $this->assertEquals(1, $this->module->sSaveShippingAddress($originalBillingAddress, $orderNumber));
 
-        $shipping = Shopware()->Models()->getRepository('Shopware\Models\Order\Shipping')->findOneBy(array('order' => $orderNumber));
+        $shipping = Shopware()->Models()->getRepository('Shopware\Models\Order\Shipping')->findOneBy(['order' => $orderNumber]);
 
-        $this->assertEquals($originalBillingAddress["userID"], $shipping->getCustomer()->getId());
-        $this->assertEquals($originalBillingAddress["company"], $shipping->getCompany());
-        $this->assertEquals($originalBillingAddress["firstname"], $shipping->getFirstName());
-        $this->assertEquals($originalBillingAddress["lastname"], $shipping->getLastName());
-        $this->assertEquals($originalBillingAddress["street"], $shipping->getStreet());
+        $this->assertEquals($originalBillingAddress['userID'], $shipping->getCustomer()->getId());
+        $this->assertEquals($originalBillingAddress['company'], $shipping->getCompany());
+        $this->assertEquals($originalBillingAddress['firstname'], $shipping->getFirstName());
+        $this->assertEquals($originalBillingAddress['lastname'], $shipping->getLastName());
+        $this->assertEquals($originalBillingAddress['street'], $shipping->getStreet());
 
         $shippingAttr = $shipping->getAttribute();
 
         if ($shippingAttr !== null) {
-            $this->assertEquals($originalBillingAddress["text1"], $shippingAttr->getText1());
-            $this->assertEquals($originalBillingAddress["text2"], $shippingAttr->getText2());
-            $this->assertEquals($originalBillingAddress["text3"], $shippingAttr->getText3());
-            $this->assertEquals($originalBillingAddress["text4"], $shippingAttr->getText4());
-            $this->assertEquals($originalBillingAddress["text5"], $shippingAttr->getText5());
-            $this->assertEquals($originalBillingAddress["text6"], $shippingAttr->getText6());
+            $this->assertEquals($originalBillingAddress['text1'], $shippingAttr->getText1());
+            $this->assertEquals($originalBillingAddress['text2'], $shippingAttr->getText2());
+            $this->assertEquals($originalBillingAddress['text3'], $shippingAttr->getText3());
+            $this->assertEquals($originalBillingAddress['text4'], $shippingAttr->getText4());
+            $this->assertEquals($originalBillingAddress['text5'], $shippingAttr->getText5());
+            $this->assertEquals($originalBillingAddress['text6'], $shippingAttr->getText6());
             Shopware()->Models()->remove($shippingAttr);
         }
 
@@ -372,13 +359,13 @@ class sOrderTest extends PHPUnit\Framework\TestCase
     /**
      * Call protected/private method of a class.
      *
-     * @param object &$object Instantiated object that we will run method on.
+     * @param object &$object    Instantiated object that we will run method on
      * @param string $methodName Method name to call
-     * @param array $parameters Array of parameters to pass into method.
+     * @param array  $parameters array of parameters to pass into method
      *
-     * @return mixed Method return.
+     * @return mixed method return
      */
-    public function invokeMethod(&$object, $methodName, array $parameters = array())
+    public function invokeMethod(&$object, $methodName, array $parameters = [])
     {
         $reflection = new \ReflectionClass(get_class($object));
         $method = $reflection->getMethod($methodName);
@@ -389,7 +376,7 @@ class sOrderTest extends PHPUnit\Framework\TestCase
 
     public function testSCreateTemporaryOrder()
     {
-        $order = Shopware()->Models()->getRepository('Shopware\Models\Order\Order')->findOneBy(array('temporaryId' => self::$sessionId));
+        $order = Shopware()->Models()->getRepository('Shopware\Models\Order\Order')->findOneBy(['temporaryId' => self::$sessionId]);
 
         $this->assertNull($order);
 
@@ -416,7 +403,7 @@ class sOrderTest extends PHPUnit\Framework\TestCase
     public function testSDeleteTemporaryOrder()
     {
         $order = Shopware()->Models()->createQueryBuilder()
-            ->select(array('orders'))
+            ->select(['orders'])
             ->from('Shopware\Models\Order\Order', 'orders')
             ->where('orders.temporaryId = :orderId')
             ->setParameter('orderId', self::$sessionId)
@@ -431,7 +418,7 @@ class sOrderTest extends PHPUnit\Framework\TestCase
 
         $this->module->sDeleteTemporaryOrder();
 
-        $order = Shopware()->Models()->getRepository('Shopware\Models\Order\Order')->findOneBy(array('temporaryId' => self::$sessionId));
+        $order = Shopware()->Models()->getRepository('Shopware\Models\Order\Order')->findOneBy(['temporaryId' => self::$sessionId]);
 
         $this->assertNull($order);
     }
@@ -449,9 +436,9 @@ class sOrderTest extends PHPUnit\Framework\TestCase
         $this->invokeMethod(
             $this->module,
             'setConfig',
-            array(
-                $config
-            )
+            [
+                $config,
+            ]
         );
 
         $basketRows = $this->getBasketRows();
@@ -460,13 +447,13 @@ class sOrderTest extends PHPUnit\Framework\TestCase
             $esdArticle = $this->invokeMethod(
                 $this->module,
                 'getVariantEsd',
-                array($basketRow["ordernumber"])
+                [$basketRow['ordernumber']]
             );
 
             $availableSerials = $this->invokeMethod(
                 $this->module,
                 'getAvailableSerialsOfEsd',
-                array($esdArticle["id"])
+                [$esdArticle['id']]
             );
 
             $basketRow = $this->module->handleESDOrder($basketRow, 1234, 4567);
@@ -474,35 +461,35 @@ class sOrderTest extends PHPUnit\Framework\TestCase
             if (!$esdArticle['id']) {
                 // Not ESD, ensure nothing happened
                 $this->assertFalse(Shopware()->Db()->fetchRow(
-                    "SELECT id FROM s_order_esd WHERE orderID = ? AND orderdetailsID = ?",
-                    array(1234, 4567)
+                    'SELECT id FROM s_order_esd WHERE orderID = ? AND orderdetailsID = ?',
+                    [1234, 4567]
                 ));
-            } elseif (!$esdArticle["serials"]) {
+            } elseif (!$esdArticle['serials']) {
                 // ESD without serial
                 $this->assertFalse(Shopware()->Db()->fetchRow(
-                    "SELECT id FROM s_order_esd WHERE orderID = ? AND orderdetailsID = ? AND serialID = 0",
-                    array(1234, 4567)
+                    'SELECT id FROM s_order_esd WHERE orderID = ? AND orderdetailsID = ? AND serialID = 0',
+                    [1234, 4567]
                 ));
-            } elseif (count($availableSerials) < $basketRow["quantity"]) {
+            } elseif (count($availableSerials) < $basketRow['quantity']) {
                 // ESD with serial but not enough available, ensure nothing is done
                 $this->assertFalse(Shopware()->Db()->fetchRow(
-                    "SELECT id FROM s_order_esd WHERE orderID = ? AND orderdetailsID = ?",
-                    array(1234, 4567)
+                    'SELECT id FROM s_order_esd WHERE orderID = ? AND orderdetailsID = ?',
+                    [1234, 4567]
                 ));
             } else {
                 // ESD with serial and enough available
                 // Assert serial is used
-                $this->assertEquals($basketRow["quantity"], Shopware()->Db()->fetchRow(
-                    "SELECT id FROM s_order_esd WHERE orderID = ? AND orderdetailsID = ?",
-                    array(1234, 4567)
+                $this->assertEquals($basketRow['quantity'], Shopware()->Db()->fetchRow(
+                    'SELECT id FROM s_order_esd WHERE orderID = ? AND orderdetailsID = ?',
+                    [1234, 4567]
                 ));
-                $this->assertCount($basketRow["quantity"], $basketRow['assignedSerials']);
+                $this->assertCount($basketRow['quantity'], $basketRow['assignedSerials']);
             }
 
             // Restore previous state
             Shopware()->Db()->query(
-                "DELETE FROM s_order_esd WHERE orderID = ? AND orderdetailsID = ?",
-                array(1234, 4567)
+                'DELETE FROM s_order_esd WHERE orderID = ? AND orderdetailsID = ?',
+                [1234, 4567]
             );
         }
     }
@@ -513,7 +500,7 @@ class sOrderTest extends PHPUnit\Framework\TestCase
 
         $orderNumber = $this->module->sSaveOrder();
 
-        $order = Shopware()->Models()->getRepository('Shopware\Models\Order\Order')->findOneBy(array('number' => $orderNumber));
+        $order = Shopware()->Models()->getRepository('Shopware\Models\Order\Order')->findOneBy(['number' => $orderNumber]);
 
         $this->assertEquals('1113', $order->getInvoiceAmount());
         $this->assertEquals('1113', $order->getInvoiceAmountNet());
@@ -531,34 +518,34 @@ class sOrderTest extends PHPUnit\Framework\TestCase
 
         $previousTellAFriendCount = Shopware()->Db()->fetchAll('
             SELECT * FROM s_emarketing_tellafriend WHERE recipient=?',
-            array($user['additional']['user']['email'])
+            [$user['additional']['user']['email']]
         );
 
         $this->assertCount(0, $previousTellAFriendCount);
 
-        Shopware()->Db()->insert('s_emarketing_tellafriend', array(
+        Shopware()->Db()->insert('s_emarketing_tellafriend', [
             'recipient' => $user['additional']['user']['email'],
             'confirmed' => 0,
-            'sender'    => $user['additional']['user']['id']
-        ));
+            'sender' => $user['additional']['user']['id'],
+        ]);
 
         $this->module->sTellFriend();
 
         $afterTellAFriendCount = Shopware()->Db()->fetchAll('
             SELECT * FROM s_emarketing_tellafriend WHERE confirmed=1 AND recipient=?',
-            array($user['additional']['user']['email'])
+            [$user['additional']['user']['email']]
         );
 
         $this->assertCount(1, $afterTellAFriendCount);
 
         Shopware()->Db()->query('
             DELETE FROM s_emarketing_tellafriend WHERE recipient=?',
-            array($user['additional']['user']['email'])
+            [$user['additional']['user']['email']]
         );
 
         $cleanTellAFriendCount = Shopware()->Db()->fetchAll('
             SELECT * FROM s_emarketing_tellafriend WHERE recipient=?',
-            array($user['additional']['user']['email'])
+            [$user['additional']['user']['email']]
         );
 
         $this->assertCount(0, $cleanTellAFriendCount);
@@ -570,13 +557,13 @@ class sOrderTest extends PHPUnit\Framework\TestCase
 
         $orderNumber = $this->module->sSaveOrder();
 
-        $order = Shopware()->Models()->getRepository('Shopware\Models\Order\Order')->findOneBy(array('number' => $orderNumber));
+        $order = Shopware()->Models()->getRepository('Shopware\Models\Order\Order')->findOneBy(['number' => $orderNumber]);
 
         $orderId = $order->getId();
 
         $orderHistory = Shopware()->Db()->fetchAll('
             SELECT * FROM s_order_history WHERE orderID=?',
-            array($orderId)
+            [$orderId]
         );
 
         $this->assertCount(0, $orderHistory);
@@ -588,7 +575,7 @@ class sOrderTest extends PHPUnit\Framework\TestCase
 
         $orderHistory = Shopware()->Db()->fetchRow('
             SELECT * FROM s_order_history WHERE orderID=? LIMIT 1',
-            array($orderId)
+            [$orderId]
         );
 
         $this->assertNotEmpty($orderHistory);
@@ -607,13 +594,13 @@ class sOrderTest extends PHPUnit\Framework\TestCase
 
         $orderNumber = $this->module->sSaveOrder();
 
-        $order = Shopware()->Models()->getRepository('Shopware\Models\Order\Order')->findOneBy(array('number' => $orderNumber));
+        $order = Shopware()->Models()->getRepository('Shopware\Models\Order\Order')->findOneBy(['number' => $orderNumber]);
 
         $orderId = $order->getId();
 
         $orderHistory = Shopware()->Db()->fetchAll('
             SELECT * FROM s_order_history WHERE orderID=?',
-            array($orderId)
+            [$orderId]
         );
 
         $this->assertCount(0, $orderHistory);
@@ -625,7 +612,7 @@ class sOrderTest extends PHPUnit\Framework\TestCase
 
         $orderHistory = Shopware()->Db()->fetchRow('
             SELECT * FROM s_order_history WHERE orderID=? LIMIT 1',
-            array($orderId)
+            [$orderId]
         );
 
         $this->assertNotEmpty($orderHistory);
@@ -636,6 +623,23 @@ class sOrderTest extends PHPUnit\Framework\TestCase
 
         Shopware()->Models()->remove($order);
         Shopware()->Models()->flush();
+    }
+
+    public function testEKOrder()
+    {
+        $this->module->sUserData = $this->getDummyUserDataForBasket();
+        $this->module->sNet = $this->module->sUserData['additional']['charge_vat'];
+
+        $this->module->sAmount = 105.83;
+        $this->module->sAmountWithTax = 105.83;
+        $this->module->sAmountNet = 88.936134453780994;
+
+        $this->module->sShippingcosts = 3.8999999999999999;
+        $this->module->sShippingcostsNumeric = 3.8999999999999999;
+        $this->module->sShippingcostsNumericNet = 3.2799999999999998;
+        $this->module->dispatchId = 9;
+        $this->module->sBasketData = $this->getBasketRows();
+        $this->module->sSaveOrder();
     }
 
     protected function createOrder()
@@ -656,14 +660,103 @@ class sOrderTest extends PHPUnit\Framework\TestCase
 
         $this->module->sShippingcosts = $costs['value'];
         $this->module->sShippingcostsNumeric = $costs['value'];
-        $this->module->sShippingcostsNumericNet = $costs['value'] * 100 / (100+$highestTax);
+        $this->module->sShippingcostsNumericNet = $costs['value'] * 100 / (100 + $highestTax);
 
-        $this->module->sBasketData = array(
+        $this->module->sBasketData = [
             'content' => $articles,
             'AmountNumeric' => 1116,
             'AmountWithTaxNumeric' => 1,
-            'AmountNetNumeric' => 1113
-        );
+            'AmountNetNumeric' => 1113,
+        ];
+    }
+
+    protected function createDummyOrder()
+    {
+        $number = 'SW-' . uniqid(rand());
+        Shopware()->Db()->insert('s_order', [
+            'id' => null,
+            'userID' => 1,
+            'ordernumber' => $number,
+            'invoice_amount' => 100,
+            'invoice_amount_net' => 100 / 1.19,
+            'invoice_shipping' => 3.9,
+            'invoice_shipping_net' => 3.28,
+            'ordertime' => new Zend_Db_Expr('NOW()'),
+            'status' => 0,
+            'cleared' => 10,
+            'paymentID' => 4,
+            'net' => 0,
+            'taxfree' => 0,
+        ]);
+        $id = Shopware()->Db()->lastInsertId('s_order');
+
+        Shopware()->Db()->insert('s_order_attributes', [
+            'orderID' => $id,
+            'attribute1' => 'attribute1',
+            'attribute2' => 'attribute2',
+            'attribute3' => 'attribute3',
+            'attribute4' => 'attribute4',
+            'attribute5' => 'attribute5',
+            'attribute6' => 'attribute6',
+        ]);
+
+        return $id;
+    }
+
+    protected function createDummyPosition($orderId, $number = null)
+    {
+        if ($number) {
+            $article = $this->getArticleResource()->getOneByNumber($number);
+        } else {
+            $id = Shopware()->Db()->fetchOne('SELECT id FROM s_articles ORDER BY RAND() LIMIT 1');
+            $article = $this->getArticleResource()->getOne($id);
+        }
+
+        $mainDetail = $article->getMainDetail();
+
+        /** @var $price \Shopware\Models\Article\Price */
+        $price = $mainDetail->getPrices()->first();
+
+        $quantity = rand(1, 10);
+
+        Shopware()->Db()->insert('s_order_details', [
+            'orderID' => $orderId,
+            'ordernumber' => '0',
+            'articleID' => $article->getId(),
+            'articleordernumber' => $mainDetail->getNumber(),
+            'price' => $quantity * $price->getPrice(),
+            'quantity' => $quantity,
+            'name' => $article->getName(),
+            'modus' => '0',
+            'taxID' => $article->getTax()->getId(),
+            'tax_rate' => $article->getTax()->getTax(),
+        ]);
+
+        $detailId = Shopware()->Db()->lastInsertId('s_order_details');
+
+        Shopware()->Db()->insert('s_order_details_attributes', [
+            'detailID' => $detailId,
+            'attribute1' => uniqid('SW-'),
+            'attribute2' => uniqid('SW-'),
+            'attribute3' => uniqid('SW-'),
+            'attribute4' => uniqid('SW-'),
+            'attribute5' => uniqid('SW-'),
+            'attribute6' => uniqid('SW-'),
+        ]);
+
+        return $detailId;
+    }
+
+    /**
+     * @return \Shopware\Components\Api\Resource\Article
+     */
+    private function getArticleResource()
+    {
+        $resource = new \Shopware\Components\Api\Resource\Article();
+        $resource->setManager(Shopware()->Models());
+        $resource->setResultMode(1);
+
+        return $resource;
     }
 
     private function getHighestArticlesTax($articles)
@@ -680,26 +773,27 @@ class sOrderTest extends PHPUnit\Framework\TestCase
         $articleAmount = array_map(function ($article) {
             return $article['priceNumeric'];
         }, $articles);
+
         return array_sum($articleAmount);
     }
 
     private function getShippingCosts($id, $amount)
     {
         return Shopware()->Db()->fetchRow(
-            "SELECT s.*
+            'SELECT s.*
             FROM  s_premium_shippingcosts s
             WHERE s.dispatchID = :id
             AND   s.from <= :amount
             ORDER BY s.from DESC
-            LIMIT 1",
-            array(':id' => $id, ':amount' => $amount)
+            LIMIT 1',
+            [':id' => $id, ':amount' => $amount]
         );
     }
 
     private function getRandomDispatch()
     {
         return Shopware()->Db()->fetchRow(
-            "SELECT * FROM s_premium_dispatch ORDER BY RAND() LIMIT 1"
+            'SELECT * FROM s_premium_dispatch ORDER BY RAND() LIMIT 1'
         );
     }
 
@@ -734,42 +828,43 @@ class sOrderTest extends PHPUnit\Framework\TestCase
              LIMIT 2
             "
         );
+
         return $details;
     }
 
     private function getRandomUser()
     {
-        $user = Shopware()->Db()->fetchRow("SELECT * FROM s_user WHERE id = 1 LIMIT 1");
+        $user = Shopware()->Db()->fetchRow('SELECT * FROM s_user WHERE id = 1 LIMIT 1');
 
         $billing = Shopware()->Db()->fetchRow(
-            "SELECT * FROM s_user_billingaddress WHERE userID = :id",
-            array(':id' => $user['id'])
+            'SELECT * FROM s_user_billingaddress WHERE userID = :id',
+            [':id' => $user['id']]
         );
-        $billing['stateID'] = isset($billing['stateId'])?$billing['stateID']:'1';
+        $billing['stateID'] = isset($billing['stateId']) ? $billing['stateID'] : '1';
         $shipping = Shopware()->Db()->fetchRow(
-            "SELECT * FROM s_user_shippingaddress WHERE userID = :id",
-            array(':id' => $user['id'])
+            'SELECT * FROM s_user_shippingaddress WHERE userID = :id',
+            [':id' => $user['id']]
         );
-        $shipping['stateID'] = isset($shipping['stateId'])?$shipping['stateID']:'1';
+        $shipping['stateID'] = isset($shipping['stateId']) ? $shipping['stateID'] : '1';
         $country = Shopware()->Db()->fetchRow(
-            "SELECT * FROM s_core_countries WHERE id = :id",
-            array(':id' => $billing['countryID'])
+            'SELECT * FROM s_core_countries WHERE id = :id',
+            [':id' => $billing['countryID']]
         );
         $state = Shopware()->Db()->fetchRow(
-            "SELECT * FROM s_core_countries_states WHERE id = :id",
-            array(':id' => $billing['stateID'])
+            'SELECT * FROM s_core_countries_states WHERE id = :id',
+            [':id' => $billing['stateID']]
         );
         $countryShipping = Shopware()->Db()->fetchRow(
-            "SELECT * FROM s_core_countries WHERE id = :id",
-            array(':id' => $shipping['countryID'])
+            'SELECT * FROM s_core_countries WHERE id = :id',
+            [':id' => $shipping['countryID']]
         );
         $payment = Shopware()->Db()->fetchRow(
-            "SELECT * FROM s_core_paymentmeans WHERE id = :id",
-            array(':id' => $user['paymentID'])
+            'SELECT * FROM s_core_paymentmeans WHERE id = :id',
+            [':id' => $user['paymentID']]
         );
         $customerGroup = Shopware()->Db()->fetchRow(
-            "SELECT * FROM s_core_customergroups WHERE groupkey = :key",
-            array(':key' => $user['customergroup'])
+            'SELECT * FROM s_core_customergroups WHERE groupkey = :key',
+            [':key' => $user['customergroup']]
         );
 
         $taxFree = (bool) ($countryShipping['taxfree']);
@@ -786,124 +881,30 @@ class sOrderTest extends PHPUnit\Framework\TestCase
         $this->module->sSYSTEM->sUSERGROUPDATA = $customerGroup;
         Shopware()->Session()->sUserGroupData = $customerGroup;
 
-        return array(
+        return [
             'user' => $user,
             'billingaddress' => $billing,
             'shippingaddress' => $shipping,
             'customerGroup' => $customerGroup,
-            'additional' => array(
+            'additional' => [
                 'country' => $country,
-                'state'   => $state,
-                'user'    => $user,
+                'state' => $state,
+                'user' => $user,
                 'countryShipping' => $countryShipping,
                 'payment' => $payment,
-                'charge_vat' => !$taxFree
-            )
-        );
-    }
-
-    protected function createDummyOrder()
-    {
-        $number = 'SW-' . uniqid(rand());
-        Shopware()->Db()->insert('s_order', array(
-            'id' => null,
-            'userID' => 1,
-            'ordernumber' => $number,
-            'invoice_amount' => 100,
-            'invoice_amount_net' => 100 / 1.19,
-            'invoice_shipping' => 3.9,
-            'invoice_shipping_net' => 3.28,
-            'ordertime' => new Zend_Db_Expr('NOW()'),
-            'status' => 0,
-            'cleared' => 10,
-            'paymentID' => 4,
-            'net' => 0,
-            'taxfree' => 0
-        ));
-        $id = Shopware()->Db()->lastInsertId('s_order');
-
-        Shopware()->Db()->insert('s_order_attributes', array(
-            'orderID' => $id,
-            'attribute1' => 'attribute1',
-            'attribute2' => 'attribute2',
-            'attribute3' => 'attribute3',
-            'attribute4' => 'attribute4',
-            'attribute5' => 'attribute5',
-            'attribute6' => 'attribute6'
-        ));
-
-        return $id;
-    }
-
-    protected function createDummyPosition($orderId, $number = null)
-    {
-        if ($number) {
-            $article = $this->getArticleResource()->getOneByNumber($number);
-        } else {
-            $id = Shopware()->Db()->fetchOne('SELECT id FROM s_articles ORDER BY RAND() LIMIT 1');
-            $article = $this->getArticleResource()->getOne($id);
-        }
-
-        $mainDetail = $article->getMainDetail();
-
-        /**@var $price \Shopware\Models\Article\Price */
-        $price = $mainDetail->getPrices()->first();
-
-        $quantity = rand(1, 10);
-
-        Shopware()->Db()->insert('s_order_details', array(
-            'orderID' => $orderId,
-            'ordernumber' => '0',
-            'articleID' => $article->getId(),
-            'articleordernumber' => $mainDetail->getNumber(),
-            'price' => $quantity * $price->getPrice(),
-            'quantity' => $quantity,
-            'name' => $article->getName(),
-            'modus' => '0',
-            'taxID' => $article->getTax()->getId(),
-            'tax_rate' => $article->getTax()->getTax()
-        ));
-
-        $detailId = Shopware()->Db()->lastInsertId('s_order_details');
-
-        Shopware()->Db()->insert('s_order_details_attributes', array(
-            'detailID' => $detailId,
-            'attribute1' => uniqid('SW-'),
-            'attribute2' => uniqid('SW-'),
-            'attribute3' => uniqid('SW-'),
-            'attribute4' => uniqid('SW-'),
-            'attribute5' => uniqid('SW-'),
-            'attribute6' => uniqid('SW-')
-        ));
-
-        return $detailId;
-    }
-
-    public function testEKOrder()
-    {
-        $this->module->sUserData = $this->getDummyUserDataForBasket();
-        $this->module->sNet = $this->module->sUserData['additional']['charge_vat'];
-
-        $this->module->sAmount = 105.83;
-        $this->module->sAmountWithTax = 105.83;
-        $this->module->sAmountNet = 88.936134453780994;
-
-        $this->module->sShippingcosts = 3.8999999999999999;
-        $this->module->sShippingcostsNumeric = 3.8999999999999999;
-        $this->module->sShippingcostsNumericNet = 3.2799999999999998;
-        $this->module->dispatchId = 9;
-        $this->module->sBasketData = $this->getBasketRows();
-        $this->module->sSaveOrder();
+                'charge_vat' => !$taxFree,
+            ],
+        ];
     }
 
     private function getBasketRows()
     {
-        return array(
+        return [
            'AmountNumeric' => 105.83,
            'AmountNetNumeric' => 88.936134453780994,
            'AmountWithTaxNumeric' => 0,
-           'content' => array(
-               array(
+           'content' => [
+               [
                    'id' => 1,
                    'articlename' => 'Strandtuch "Ibiza"',
                    'articleID' => '178',
@@ -916,9 +917,9 @@ class sOrderTest extends PHPUnit\Framework\TestCase
                    'taxID' => '1',
                    'esdarticle' => '0',
                    'laststock' => '0',
-                   'priceNet' => 16.764705882353
-               ),
-               array(
+                   'priceNet' => 16.764705882353,
+               ],
+               [
                    'id' => 2,
                    'articlename' => 'Strandtuch Sunny',
                    'articleID' => '175',
@@ -930,9 +931,9 @@ class sOrderTest extends PHPUnit\Framework\TestCase
                    'taxID' => '1',
                    'laststock' => '1',
                    'priceNumeric' => '59.99',
-                   'priceNet' => 50.411764705882
-               ),
-               array(
+                   'priceNet' => 50.411764705882,
+               ],
+               [
                    'id' => 3,
                    'articlename' => 'Sommer-Sandale Pink 36',
                    'articleID' => '162',
@@ -944,9 +945,9 @@ class sOrderTest extends PHPUnit\Framework\TestCase
                    'taxID' => '1',
                    'laststock' => '1',
                    'priceNumeric' => '23.99',
-                   'priceNet' => 20.159663865546
-               ),
-               array(
+                   'priceNet' => 20.159663865546,
+               ],
+               [
                    'id' => 4,
                    'articlename' => 'ESD Download Artikel',
                    'articleID' => '197',
@@ -958,9 +959,9 @@ class sOrderTest extends PHPUnit\Framework\TestCase
                    'taxID' => '1',
                    'laststock' => '1',
                    'priceNumeric' => '29.99',
-                   'priceNet' => 25,201680672
-               ),
-               array(
+                   'priceNet' => 25, 201680672,
+               ],
+               [
                    'id' => 5,
                    'articlename' => 'Warenkorbrabatt',
                    'articleID' => '0',
@@ -972,16 +973,16 @@ class sOrderTest extends PHPUnit\Framework\TestCase
                    'taxID' => null,
                    'laststock' => null,
                    'priceNumeric' => '-2',
-                   'priceNet' => 1.68067226891
-               )
-           )
-       );
+                   'priceNet' => 1.68067226891,
+               ],
+           ],
+       ];
     }
 
     private function getDummyUserDataForBasket()
     {
-        return array(
-            'billingaddress' => array(
+        return [
+            'billingaddress' => [
                 'id' => '1',
                 'userID' => '1',
                 'company' => '',
@@ -996,9 +997,9 @@ class sOrderTest extends PHPUnit\Framework\TestCase
                 'countryID' => '2',
                 'stateID' => '3',
                 'ustid' => '',
-            ),
-            'additional' => array(
-                'country' => array(
+            ],
+            'additional' => [
+                'country' => [
                     'id' => '2',
                     'countryname' => 'Deutschland',
                     'countryiso' => 'DE',
@@ -1009,13 +1010,13 @@ class sOrderTest extends PHPUnit\Framework\TestCase
                     'taxfree_ustid_checked' => '0',
                     'active' => '1',
                     'iso3' => 'DEU',
-                ),
-                'state' => array(
+                ],
+                'state' => [
                     'id' => '3',
                     'countryID' => '2',
                     'name' => 'Nordrhein-Westfalen',
-                ),
-                'user' => array(
+                ],
+                'user' => [
                     'id' => '1',
                     'email' => 'test@example.com',
                     'customernumber' => '20001',
@@ -1038,8 +1039,8 @@ class sOrderTest extends PHPUnit\Framework\TestCase
                     'internalcomment' => '',
                     'failedlogins' => '0',
                     'lockeduntil' => null,
-                ),
-                'countryShipping' => array(
+                ],
+                'countryShipping' => [
                     'id' => '2',
                     'countryname' => 'Deutschland',
                     'countryiso' => 'DE',
@@ -1056,9 +1057,9 @@ class sOrderTest extends PHPUnit\Framework\TestCase
                     'display_state_in_registration' => '0',
                     'force_state_in_registration' => '0',
                     'countryarea' => 'deutschland',
-                ),
-                'stateShipping' => array(),
-                'payment' => array(
+                ],
+                'stateShipping' => [],
+                'payment' => [
                     'id' => '5',
                     'name' => 'prepayment',
                     'description' => 'Vorkasse',
@@ -1078,11 +1079,11 @@ class sOrderTest extends PHPUnit\Framework\TestCase
                     'action' => null,
                     'pluginID' => null,
                     'source' => null,
-                ),
+                ],
                 'charge_vat' => true,
                 'show_net' => true,
-            ),
-            'shippingaddress' => array(
+            ],
+            'shippingaddress' => [
                 'id' => '2',
                 'userID' => '1',
                 'company' => 'shopware AG',
@@ -1095,7 +1096,7 @@ class sOrderTest extends PHPUnit\Framework\TestCase
                 'city' => 'SchÃ¶ppingen',
                 'countryID' => '2',
                 'stateID' => null,
-            ),
-        );
+            ],
+        ];
     }
 }

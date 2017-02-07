@@ -25,12 +25,11 @@
 namespace   Shopware\Models\Customer;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\LazyFetchModelEntity;
 use Symfony\Component\Validator\Constraints as Assert;
-use Doctrine\ORM\Mapping as ORM;
 
 /**
- *
  * Shopware customer model represents a single customer.
  *
  * The Shopware customer model represents a row of the s_user table.
@@ -66,243 +65,12 @@ class Customer extends LazyFetchModelEntity
     const CUSTOMER_TYPE_BUSINESS = 'business';
 
     /**
-     * The id property is an identifier property which means
-     * doctrine associations can be defined over this field
-     *
-     * @var integer $id
-     * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
-    /**
-     * Contains the id of the customer default payment method.
-     * Used for the payment association.
-     * @var integer $paymentId
-     * @ORM\Column(name="paymentID", type="integer", nullable=false)
-     */
-    private $paymentId = 0;
-
-    /**
-     * Key of the assigned customer group.
-     *
-     * @var string $groupKey
-     * @ORM\Column(name="customergroup", type="string", length=15, nullable=false)
-     */
-    private $groupKey = '';
-
-    /**
-     * Id shop where the customer has registered.
-     * @var integer $shopId
-     * @ORM\Column(name="subshopID", type="integer", nullable=false)
-     */
-    private $shopId = 0;
-
-    /**
-     * Id of the price group, which the customer is assigned
-     * @var integer $priceGroupId
-     * @ORM\Column(name="pricegroupID", type="integer", nullable=true)
-     */
-    private $priceGroupId = null;
-
-    /**
-     * If this property is set, set password will be encoded with md5 on save.
-     * To check the customer password use the hashPassword field.
-     * @var string $password
-     */
-    private $password = '';
-
-    /**
-     * Tells which hash was used for password encryption
-     * @var string
-     * @ORM\Column(name="encoder", type="string", length=255, nullable=false)
-     */
-    private $encoderName = 'md5';
-
-    /**
-     * If this property is set, the password will not be encoded on save.
-     * @var string $rawPassword
-     */
-    private $rawPassword = null;
-
-    /**
-     * Contains the md5 encoded password
-     * @var string
-     * @ORM\Column(name="password", type="string", length=1024, nullable=false)
-     */
-    private $hashPassword = '';
-
-    /**
-     * Flag whether the customer account is activated.
-     * @var integer $active
-     * @ORM\Column(name="active", type="boolean", nullable=false)
-     */
-    private $active = 0;
-
-    /**
-     * Contains the customer email address which is used to send the order confirmation mail
-     * or the newsletter.
-     * @var string $email
-     * @Assert\Email(strict=false)
-     * @Assert\NotBlank
-     * @ORM\Column(name="email", type="string", length=70, nullable=false)
-     */
-    private $email;
-
-    /**
-     * Contains the date on which the customer account was created.
-     * @var \DateTime $firstLogin
-     * @ORM\Column(name="firstlogin", type="date", nullable=false)
-     */
-    private $firstLogin;
-
-    /**
-     * Contains the date on which the customer has logged in recently.
-     * @var \DateTime $lastLogin
-     * @ORM\Column(name="lastlogin", type="datetime", nullable=false)
-     */
-    private $lastLogin;
-
-    /**
-     * Flag whether the customer checks the "don't create a shop account" checkbox
-     * @var integer $accountMode
-     * @ORM\Column(name="accountmode", type="integer", nullable=false)
-     */
-    private $accountMode = 0;
-
-    /**
-     *
-     * @var string $confirmationKey
-     * @ORM\Column(name="confirmationkey", type="string", length=100, nullable=false)
-     */
-    private $confirmationKey = '';
-
-    /**
-     * Contains the session id of the last customer session.
-     * @var string $sessionId
-     * @ORM\Column(name="sessionID", type="string", length=255, nullable=false)
-     */
-    private $sessionId= '';
-
-    /**
-     * Flag whether the customer wishes to receive the store newsletter
-     * @var integer $newsletter
-     * @ORM\Column(name="newsletter", type="integer", nullable=false)
-     */
-    private $newsletter = 0;
-
-    /**
-     * @var string $validation
-     * @ORM\Column(name="validation", type="string", length=255, nullable=false)
-     */
-    private $validation = '';
-
-    /**
-     * Flag whether the customer is a shop partner.
-     * @var integer $affiliate
-     * @ORM\Column(name="affiliate", type="integer", nullable=false)
-     */
-    private $affiliate = 0;
-
-    /**
-     * Flag whether a payment default has been filed
-     * @var integer $paymentPreset
-     * @ORM\Column(name="paymentpreset", type="integer", nullable=false)
-     */
-    private $paymentPreset = 0;
-
-    /**
-     * Id of the language sub shop
-     *
-     * @var string $languageId
-     * @ORM\Column(name="language", type="string", length=10, nullable=false)
-     */
-    private $languageId = 1;
-
-    /**
-     * OWNING SIDE
-     *
-     * Used for the language subshop association
-     * @ORM\ManyToOne(targetEntity="Shopware\Models\Shop\Shop")
-     * @ORM\JoinColumn(name="language", referencedColumnName="id")
-     */
-    private $languageSubShop;
-
-    /**
-     * @var string $referer
-     * @ORM\Column(name="referer", type="string", length=255, nullable=false)
-     */
-    private $referer = '';
-
-    /**
-     * Contains the internal comment for the customer.
-     *
-     * @var string $internalComment
-     * @ORM\Column(name="internalcomment", type="text", nullable=false)
-     */
-    private $internalComment = '';
-
-    /**
-     * Count of the failed customer logins
-     *
-     * @var integer $failedLogins
-     * @ORM\Column(name="failedlogins", type="integer", nullable=false)
-     */
-    private $failedLogins = 0;
-
-    /**
-     * Contains the time, since the customer is logged into a session.
-     * @var \DateTime $lockedUntil
-     * @ORM\Column(name="lockedUntil", type="datetime", nullable=true)
-     */
-    private $lockedUntil = null;
-
-    /**
-     * @var string $salutation
-     *
-     * @Assert\NotBlank
-     *
-     * @ORM\Column(name="salutation", type="text", nullable=false)
-     */
-    private $salutation;
-
-    /**
-     * @var string $title
-     * @ORM\Column(name="title", type="text", nullable=false)
-     */
-    private $title;
-
-    /**
-     * @var string $firstname
-     *
-     * @Assert\NotBlank
-     *
-     * @ORM\Column(name="firstname", type="text", nullable=false)
-     */
-    private $firstname;
-
-    /**
      * Contains the unique customer number
-     * @var string $number
+     *
+     * @var string
      * @ORM\Column(name="customernumber", type="string", length=30, nullable=true)
      */
     protected $number = '';
-
-    /**
-     * @var string $lastname
-     *
-     * @Assert\NotBlank
-     *
-     * @ORM\Column(name="lastname", type="text", nullable=false)
-     */
-    private $lastname;
-
-    /**
-     * @var \DateTime $birthday
-     * @ORM\Column(name="birthday", type="date", nullable=true)
-     */
-    private $birthday;
 
     /**
      * @deprecated Since 5.2 removed in 5.4 use $defaultBillingAddress
@@ -335,7 +103,7 @@ class Customer extends LazyFetchModelEntity
      * The group property is the owning side of the association between customer and customer group.
      * The association is joined over the group id field and the groupkey field of the customer.
      *
-     * @var \Shopware\Models\Customer\Group $group
+     * @var \Shopware\Models\Customer\Group
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Customer\Group", inversedBy="customers", cascade={"persist"})
      * @ORM\JoinColumn(name="customergroup", referencedColumnName="groupkey")
      */
@@ -353,7 +121,8 @@ class Customer extends LazyFetchModelEntity
 
     /**
      * OWNING SIDE
-     * @var \Shopware\Models\Shop\Shop $shop
+     *
+     * @var \Shopware\Models\Shop\Shop
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Shop\Shop")
      * @ORM\JoinColumn(name="subshopID", referencedColumnName="id")
@@ -362,6 +131,7 @@ class Customer extends LazyFetchModelEntity
 
     /**
      * INVERSE SIDE
+     *
      * @var \Shopware\Models\Attribute\Customer
      * @Assert\Valid
      * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Customer", mappedBy="customer", orphanRemoval=true, cascade={"persist"})
@@ -373,7 +143,7 @@ class Customer extends LazyFetchModelEntity
      * The price group property represents the owning side for the association between customer and customer price group.
      * The association is joined over the pricegroup id field and the pricegroupID field of the customer.
      *
-     * @var \Shopware\Models\Customer\PriceGroup $priceGroup
+     * @var \Shopware\Models\Customer\PriceGroup
      * @ORM\ManyToOne(targetEntity="\Shopware\Models\Customer\PriceGroup", inversedBy="customers")
      * @ORM\JoinColumn(name="pricegroupID", referencedColumnName="id")
      */
@@ -383,19 +153,20 @@ class Customer extends LazyFetchModelEntity
      * INVERSE SIDE
      *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Notification", mappedBy="customer")
+     *
      * @var ArrayCollection
      */
     protected $notifications;
 
     /**
-     * @var ArrayCollection $paymentInstances
+     * @var ArrayCollection
      *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Payment\PaymentInstance", mappedBy="customer")
      */
     protected $paymentInstances;
 
     /**
-     * @var ArrayCollection $paymentData
+     * @var ArrayCollection
      *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Customer\PaymentData", mappedBy="customer", orphanRemoval=true, cascade={"persist"})
      */
@@ -404,7 +175,7 @@ class Customer extends LazyFetchModelEntity
     /**
      * OWNING SIDE
      *
-     * @var \Shopware\Models\Customer\Address $defaultBillingAddress
+     * @var \Shopware\Models\Customer\Address
      * @ORM\ManyToOne(targetEntity="\Shopware\Models\Customer\Address", inversedBy="customer")
      * @ORM\JoinColumn(name="default_billing_address_id", referencedColumnName="id")
      */
@@ -413,16 +184,11 @@ class Customer extends LazyFetchModelEntity
     /**
      * OWNING SIDE
      *
-     * @var \Shopware\Models\Customer\Address $defaultShippingAddress
+     * @var \Shopware\Models\Customer\Address
      * @ORM\ManyToOne(targetEntity="\Shopware\Models\Customer\Address", inversedBy="customer")
      * @ORM\JoinColumn(name="default_shipping_address_id", referencedColumnName="id")
      */
     protected $defaultShippingAddress;
-
-    /**
-     * @var string
-     */
-    private $customerType;
 
     /**
      * @var array
@@ -430,13 +196,267 @@ class Customer extends LazyFetchModelEntity
     protected $additional;
 
     /**
+     * The id property is an identifier property which means
+     * doctrine associations can be defined over this field
+     *
+     * @var int
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * Contains the id of the customer default payment method.
+     * Used for the payment association.
+     *
+     * @var int
+     * @ORM\Column(name="paymentID", type="integer", nullable=false)
+     */
+    private $paymentId = 0;
+
+    /**
+     * Key of the assigned customer group.
+     *
+     * @var string
+     * @ORM\Column(name="customergroup", type="string", length=15, nullable=false)
+     */
+    private $groupKey = '';
+
+    /**
+     * Id shop where the customer has registered.
+     *
+     * @var int
+     * @ORM\Column(name="subshopID", type="integer", nullable=false)
+     */
+    private $shopId = 0;
+
+    /**
+     * Id of the price group, which the customer is assigned
+     *
+     * @var int
+     * @ORM\Column(name="pricegroupID", type="integer", nullable=true)
+     */
+    private $priceGroupId = null;
+
+    /**
+     * If this property is set, set password will be encoded with md5 on save.
+     * To check the customer password use the hashPassword field.
+     *
+     * @var string
+     */
+    private $password = '';
+
+    /**
+     * Tells which hash was used for password encryption
+     *
+     * @var string
+     * @ORM\Column(name="encoder", type="string", length=255, nullable=false)
+     */
+    private $encoderName = 'md5';
+
+    /**
+     * If this property is set, the password will not be encoded on save.
+     *
+     * @var string
+     */
+    private $rawPassword = null;
+
+    /**
+     * Contains the md5 encoded password
+     *
+     * @var string
+     * @ORM\Column(name="password", type="string", length=1024, nullable=false)
+     */
+    private $hashPassword = '';
+
+    /**
+     * Flag whether the customer account is activated.
+     *
+     * @var int
+     * @ORM\Column(name="active", type="boolean", nullable=false)
+     */
+    private $active = 0;
+
+    /**
+     * Contains the customer email address which is used to send the order confirmation mail
+     * or the newsletter.
+     *
+     * @var string
+     * @Assert\Email(strict=false)
+     * @Assert\NotBlank
+     * @ORM\Column(name="email", type="string", length=70, nullable=false)
+     */
+    private $email;
+
+    /**
+     * Contains the date on which the customer account was created.
+     *
+     * @var \DateTime
+     * @ORM\Column(name="firstlogin", type="date", nullable=false)
+     */
+    private $firstLogin;
+
+    /**
+     * Contains the date on which the customer has logged in recently.
+     *
+     * @var \DateTime
+     * @ORM\Column(name="lastlogin", type="datetime", nullable=false)
+     */
+    private $lastLogin;
+
+    /**
+     * Flag whether the customer checks the "don't create a shop account" checkbox
+     *
+     * @var int
+     * @ORM\Column(name="accountmode", type="integer", nullable=false)
+     */
+    private $accountMode = 0;
+
+    /**
+     * @var string
+     * @ORM\Column(name="confirmationkey", type="string", length=100, nullable=false)
+     */
+    private $confirmationKey = '';
+
+    /**
+     * Contains the session id of the last customer session.
+     *
+     * @var string
+     * @ORM\Column(name="sessionID", type="string", length=255, nullable=false)
+     */
+    private $sessionId = '';
+
+    /**
+     * Flag whether the customer wishes to receive the store newsletter
+     *
+     * @var int
+     * @ORM\Column(name="newsletter", type="integer", nullable=false)
+     */
+    private $newsletter = 0;
+
+    /**
+     * @var string
+     * @ORM\Column(name="validation", type="string", length=255, nullable=false)
+     */
+    private $validation = '';
+
+    /**
+     * Flag whether the customer is a shop partner.
+     *
+     * @var int
+     * @ORM\Column(name="affiliate", type="integer", nullable=false)
+     */
+    private $affiliate = 0;
+
+    /**
+     * Flag whether a payment default has been filed
+     *
+     * @var int
+     * @ORM\Column(name="paymentpreset", type="integer", nullable=false)
+     */
+    private $paymentPreset = 0;
+
+    /**
+     * Id of the language sub shop
+     *
+     * @var string
+     * @ORM\Column(name="language", type="string", length=10, nullable=false)
+     */
+    private $languageId = 1;
+
+    /**
+     * OWNING SIDE
+     *
+     * Used for the language subshop association
+     *
+     * @ORM\ManyToOne(targetEntity="Shopware\Models\Shop\Shop")
+     * @ORM\JoinColumn(name="language", referencedColumnName="id")
+     */
+    private $languageSubShop;
+
+    /**
+     * @var string
+     * @ORM\Column(name="referer", type="string", length=255, nullable=false)
+     */
+    private $referer = '';
+
+    /**
+     * Contains the internal comment for the customer.
+     *
+     * @var string
+     * @ORM\Column(name="internalcomment", type="text", nullable=false)
+     */
+    private $internalComment = '';
+
+    /**
+     * Count of the failed customer logins
+     *
+     * @var int
+     * @ORM\Column(name="failedlogins", type="integer", nullable=false)
+     */
+    private $failedLogins = 0;
+
+    /**
+     * Contains the time, since the customer is logged into a session.
+     *
+     * @var \DateTime
+     * @ORM\Column(name="lockedUntil", type="datetime", nullable=true)
+     */
+    private $lockedUntil = null;
+
+    /**
+     * @var string
+     *
+     * @Assert\NotBlank
+     *
+     * @ORM\Column(name="salutation", type="text", nullable=false)
+     */
+    private $salutation;
+
+    /**
+     * @var string
+     * @ORM\Column(name="title", type="text", nullable=false)
+     */
+    private $title;
+
+    /**
+     * @var string
+     *
+     * @Assert\NotBlank
+     *
+     * @ORM\Column(name="firstname", type="text", nullable=false)
+     */
+    private $firstname;
+
+    /**
+     * @var string
+     *
+     * @Assert\NotBlank
+     *
+     * @ORM\Column(name="lastname", type="text", nullable=false)
+     */
+    private $lastname;
+
+    /**
+     * @var \DateTime
+     * @ORM\Column(name="birthday", type="date", nullable=true)
+     */
+    private $birthday;
+
+    /**
+     * @var string
+     */
+    private $customerType;
+
+    /**
      * Class constructor. Initials the orders array and the date fields.
      */
     public function __construct()
     {
-        $this->orders     = new ArrayCollection();
+        $this->orders = new ArrayCollection();
         $this->firstLogin = new \DateTime();
-        $this->lastLogin  = new \DateTime();
+        $this->lastLogin = new \DateTime();
         $this->notifications = new ArrayCollection();
         $this->paymentInstances = new ArrayCollection();
         $this->paymentData = new ArrayCollection();
@@ -445,7 +465,7 @@ class Customer extends LazyFetchModelEntity
     /**
      * Returns the unique identifier "id"
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -456,13 +476,15 @@ class Customer extends LazyFetchModelEntity
      * Setter method for the password column property which used for the customer login.
      *
      * @param string $password
+     *
      * @return Customer
      */
     public function setPassword($password)
     {
         // Force hashPassword to change with the password
         $this->hashPassword = null;
-        $this->password     = $password;
+        $this->password = $password;
+
         return $this;
     }
 
@@ -486,18 +508,20 @@ class Customer extends LazyFetchModelEntity
     {
         // Force hashPassword to change with the rawPassword
         $this->hashPassword = null;
-        $this->rawPassword  = $rawPassword;
+        $this->rawPassword = $rawPassword;
     }
 
     /**
      * Setter function for the email column property of the customer.
      *
      * @param string $email
+     *
      * @return Customer
      */
     public function setEmail($email)
     {
         $this->email = $email;
+
         return $this;
     }
 
@@ -514,19 +538,21 @@ class Customer extends LazyFetchModelEntity
     /**
      * Setter function for the active column property which is a flag whether the customer account is activated.
      *
-     * @param boolean $active
+     * @param bool $active
+     *
      * @return Customer
      */
     public function setActive($active)
     {
         $this->active = $active;
+
         return $this;
     }
 
     /**
      * Getter function for the active column property which is a flag whether the customer account is activated.
      *
-     * @return boolean
+     * @return bool
      */
     public function getActive()
     {
@@ -539,12 +565,14 @@ class Customer extends LazyFetchModelEntity
      * 0 => normal account ("don't create customer account" wasn't checked)<br>
      * 1 => hidden account ("don't create customer account" was checked)
      *
-     * @param integer $accountMode
+     * @param int $accountMode
+     *
      * @return Customer
      */
     public function setAccountMode($accountMode)
     {
         $this->accountMode = $accountMode;
+
         return $this;
     }
 
@@ -553,7 +581,8 @@ class Customer extends LazyFetchModelEntity
      * the checkbox "don't create customer account".<br>
      * 0 => normal account ("don't create customer account" wasn't checked)<br>
      * 1 => hidden account ("don't create customer account" was checked)
-     * @return integer
+     *
+     * @return int
      */
     public function getAccountMode()
     {
@@ -564,11 +593,13 @@ class Customer extends LazyFetchModelEntity
      * Setter function for the confirmationKey column property.
      *
      * @param string $confirmationKey
+     *
      * @return Customer
      */
     public function setConfirmationKey($confirmationKey)
     {
         $this->confirmationKey = $confirmationKey;
+
         return $this;
     }
 
@@ -588,6 +619,7 @@ class Customer extends LazyFetchModelEntity
      * or a string with the date. If a string is passed, the string converts to an DateTime object.
      *
      * @param \DateTime|string $firstLogin
+     *
      * @return Customer
      */
     public function setFirstLogin($firstLogin)
@@ -596,6 +628,7 @@ class Customer extends LazyFetchModelEntity
             $firstLogin = new \DateTime($firstLogin);
         }
         $this->firstLogin = $firstLogin;
+
         return $this;
     }
 
@@ -616,6 +649,7 @@ class Customer extends LazyFetchModelEntity
      * or a string with the date. If a string is passed, the string converts to an DateTime object.
      *
      * @param \DateTime|string $lastLogin
+     *
      * @return Customer
      */
     public function setLastLogin($lastLogin)
@@ -624,6 +658,7 @@ class Customer extends LazyFetchModelEntity
             $lastLogin = new \DateTime($lastLogin);
         }
         $this->lastLogin = $lastLogin;
+
         return $this;
     }
 
@@ -642,11 +677,13 @@ class Customer extends LazyFetchModelEntity
      * Setter function of the session id column property. Used to verify the login without the credentials.
      *
      * @param string $sessionId
+     *
      * @return Customer
      */
     public function setSessionId($sessionId)
     {
         $this->sessionId = $sessionId;
+
         return $this;
     }
 
@@ -665,12 +702,14 @@ class Customer extends LazyFetchModelEntity
      * 0 => Customer don't want to receive the newsletter
      * 1 => Customer want to receive the newsletter
      *
-     * @param integer $newsletter
+     * @param int $newsletter
+     *
      * @return Customer
      */
     public function setNewsletter($newsletter)
     {
         $this->newsletter = $newsletter;
+
         return $this;
     }
 
@@ -679,7 +718,7 @@ class Customer extends LazyFetchModelEntity
      * 0 => Customer doesn't want to receive the newsletter
      * 1 => Customer wants to receive the newsletter
      *
-     * @return integer
+     * @return int
      */
     public function getNewsletter()
     {
@@ -690,11 +729,13 @@ class Customer extends LazyFetchModelEntity
      * Setter function of the validation column property.
      *
      * @param string $validation
+     *
      * @return Customer
      */
     public function setValidation($validation)
     {
         $this->validation = $validation;
+
         return $this;
     }
 
@@ -713,12 +754,14 @@ class Customer extends LazyFetchModelEntity
      * 0 => Customer isn't a shop partner
      * 1 => Customer is a shop partner
      *
-     * @param integer $affiliate
+     * @param int $affiliate
+     *
      * @return Customer
      */
     public function setAffiliate($affiliate)
     {
         $this->affiliate = $affiliate;
+
         return $this;
     }
 
@@ -727,7 +770,7 @@ class Customer extends LazyFetchModelEntity
      * 0 => Customer isn't a shop partner
      * 1 => Customer is a shop partner
      *
-     * @return integer
+     * @return int
      */
     public function getAffiliate()
     {
@@ -737,35 +780,38 @@ class Customer extends LazyFetchModelEntity
     /**
      * Setter function for the paymentPreset column property, which is a flag whether a payment default has been filed
      *
-     * @param integer $paymentPreset
+     * @param int $paymentPreset
+     *
      * @return Customer
      */
     public function setPaymentPreset($paymentPreset)
     {
         $this->paymentPreset = $paymentPreset;
+
         return $this;
     }
 
     /**
      * Getter function for the paymentPreset column property, which is a flag whether a payment default has been filed
      *
-     * @return integer
+     * @return int
      */
     public function getPaymentPreset()
     {
         return $this->paymentPreset;
     }
 
-
     /**
      * Setter function for the referer column property.
      *
      * @param string $referer
+     *
      * @return Customer
      */
     public function setReferer($referer)
     {
         $this->referer = $referer;
+
         return $this;
     }
 
@@ -783,11 +829,13 @@ class Customer extends LazyFetchModelEntity
      * Setter function for the internalComment column property.
      *
      * @param string $internalComment
+     *
      * @return Customer
      */
     public function setInternalComment($internalComment)
     {
         $this->internalComment = $internalComment;
+
         return $this;
     }
 
@@ -804,19 +852,21 @@ class Customer extends LazyFetchModelEntity
     /**
      * Setter function for the failedLogins column property.
      *
-     * @param integer $failedLogins
+     * @param int $failedLogins
+     *
      * @return Customer
      */
     public function setFailedLogins($failedLogins)
     {
         $this->failedLogins = $failedLogins;
+
         return $this;
     }
 
     /**
      * Getter function for the failedLogins column property.
      *
-     * @return integer
+     * @return int
      */
     public function getFailedLogins()
     {
@@ -826,7 +876,9 @@ class Customer extends LazyFetchModelEntity
     /**
      * Setter function for the lockedUntil column property, which contains the time since the customer is logged into a session.
      * Expects a \DateTime object or a time string which will be converted to a \DateTime object.
+     *
      * @param string|\DateTime $lockedUntil
+     *
      * @return Customer
      */
     public function setLockedUntil($lockedUntil)
@@ -835,6 +887,7 @@ class Customer extends LazyFetchModelEntity
             $lockedUntil = new \DateTime($lockedUntil);
         }
         $this->lockedUntil = $lockedUntil;
+
         return $this;
     }
 
@@ -851,6 +904,7 @@ class Customer extends LazyFetchModelEntity
     /**
      * Event listener method which fired when the model will be saved.
      * Initials the date time fields if this fields are null.
+     *
      * @ORM\PrePersist
      */
     public function onSave()
@@ -865,13 +919,14 @@ class Customer extends LazyFetchModelEntity
         if (!empty($this->rawPassword)) {
             $this->hashPassword = $this->rawPassword;
         } elseif (!empty($this->password)) {
-            $this->encoderName     = Shopware()->PasswordEncoder()->getDefaultPasswordEncoderName();
+            $this->encoderName = Shopware()->PasswordEncoder()->getDefaultPasswordEncoderName();
             $this->hashPassword = Shopware()->PasswordEncoder()->encodePassword($this->password, $this->encoderName);
         }
     }
 
     /**
      * Event listener method which fired when the model will be updated.
+     *
      * @ORM\PreUpdate
      */
     public function onUpdate()
@@ -879,11 +934,10 @@ class Customer extends LazyFetchModelEntity
         if (!empty($this->rawPassword)) {
             $this->hashPassword = $this->rawPassword;
         } elseif (!empty($this->password)) {
-            $this->encoderName     = Shopware()->PasswordEncoder()->getDefaultPasswordEncoderName();
+            $this->encoderName = Shopware()->PasswordEncoder()->getDefaultPasswordEncoderName();
             $this->hashPassword = Shopware()->PasswordEncoder()->encodePassword($this->password, $this->encoderName);
         }
     }
-
 
     /**
      * @return \Shopware\Models\Attribute\Customer
@@ -895,6 +949,7 @@ class Customer extends LazyFetchModelEntity
 
     /**
      * @param \Shopware\Models\Attribute\Customer|array|null $attribute
+     *
      * @return \Shopware\Models\Attribute\Customer
      */
     public function setAttribute($attribute)
@@ -909,6 +964,7 @@ class Customer extends LazyFetchModelEntity
      * The shop association is only used on the customer side.
      *
      * of the association between customers and shop
+     *
      * @return \Shopware\Models\Shop\Shop
      */
     public function getShop()
@@ -922,11 +978,13 @@ class Customer extends LazyFetchModelEntity
      * The shop association is only used on the customer side.
      *
      * @param \Shopware\Models\Shop\Shop|array|null $shop
+     *
      * @return \Shopware\Models\Customer\Customer
      */
     public function setShop($shop)
     {
         $this->shop = $shop;
+
         return $this;
     }
 
@@ -950,11 +1008,13 @@ class Customer extends LazyFetchModelEntity
      * The order data is joined over the s_order.userID field.
      *
      * @param ArrayCollection|array|null $orders
+     *
      * @return \Shopware\Models\Customer\Customer
      */
     public function setOrders($orders)
     {
         $this->orders = $orders;
+
         return $this;
     }
 
@@ -966,11 +1026,12 @@ class Customer extends LazyFetchModelEntity
      * The group data is joined over the s_core_customergroup.id field.
      *
      * of the association between customers and group
+     *
      * @return \Shopware\Models\Customer\Group
      */
     public function getGroup()
     {
-        return $this->fetchLazy($this->group, array('key' => $this->groupKey));
+        return $this->fetchLazy($this->group, ['key' => $this->groupKey]);
     }
 
     /**
@@ -980,6 +1041,7 @@ class Customer extends LazyFetchModelEntity
      * The group data is joined over the s_core_customergroup.id field.
      *
      * @param \Shopware\Models\Customer\Group|array|null $group
+     *
      * @return \Shopware\Models\Customer\Customer
      */
     public function setGroup($group)
@@ -1009,6 +1071,7 @@ class Customer extends LazyFetchModelEntity
      * The shipping data is joined over the s_user_shippingaddress.userID field.
      *
      * @param \Shopware\Models\Customer\Shipping|array|null $shipping
+     *
      * @return \Shopware\Models\Customer\Shipping
      */
     public function setShipping($shipping)
@@ -1038,6 +1101,7 @@ class Customer extends LazyFetchModelEntity
      * The billing data is joined over the s_user_billingaddress.userID field.
      *
      * @param \Shopware\Models\Customer\Billing|array|null $billing
+     *
      * @return \Shopware\Models\Customer\Billing
      */
     public function setBilling($billing)
@@ -1147,7 +1211,6 @@ class Customer extends LazyFetchModelEntity
     {
         return $this->groupKey;
     }
-
 
     /**
      * @return Address

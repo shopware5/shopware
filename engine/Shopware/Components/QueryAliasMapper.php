@@ -26,7 +26,7 @@ namespace Shopware\Components;
 
 /**
  * @category  Shopware
- * @package   Shopware\Components
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class QueryAliasMapper
@@ -37,38 +37,6 @@ class QueryAliasMapper
      * @var string[]
      */
     private $queryAliasMappings;
-
-    /**
-     * @param \Shopware_Components_Config $config
-     * @return QueryAliasMapper
-     */
-    public static function createFromConfig(\Shopware_Components_Config $config)
-    {
-        $queryAliases = $config->get('SeoQueryAlias');
-
-        return self::createFromString($queryAliases);
-    }
-
-    /**
-     * @param string $aliases Example: "sSearch=q,sPage=p,sPerPage=n"
-     * @return QueryAliasMapper
-     */
-    public static function createFromString($aliases)
-    {
-        if (empty($aliases)) {
-            return new self(array());
-        }
-
-        $queryAliases = [];
-
-        foreach (explode(',', $aliases) as $alias) {
-            list($key, $value) = explode('=', trim($alias));
-            $queryAliases[$key] = $value;
-        }
-
-        return new self($queryAliases);
-    }
-
 
     /**
      * [
@@ -83,6 +51,38 @@ class QueryAliasMapper
         $this->queryAliasMappings = $queryAliasMappings;
     }
 
+    /**
+     * @param \Shopware_Components_Config $config
+     *
+     * @return QueryAliasMapper
+     */
+    public static function createFromConfig(\Shopware_Components_Config $config)
+    {
+        $queryAliases = $config->get('SeoQueryAlias');
+
+        return self::createFromString($queryAliases);
+    }
+
+    /**
+     * @param string $aliases Example: "sSearch=q,sPage=p,sPerPage=n"
+     *
+     * @return QueryAliasMapper
+     */
+    public static function createFromString($aliases)
+    {
+        if (empty($aliases)) {
+            return new self([]);
+        }
+
+        $queryAliases = [];
+
+        foreach (explode(',', $aliases) as $alias) {
+            list($key, $value) = explode('=', trim($alias));
+            $queryAliases[$key] = $value;
+        }
+
+        return new self($queryAliases);
+    }
 
     /**
      * Return a key / value array containing
@@ -107,6 +107,7 @@ class QueryAliasMapper
      * $this->getQueryAlias('sSearch') returns 'q'
      *
      * @param string $key
+     *
      * @return string|null
      */
     public function getShortAlias($key)
@@ -148,6 +149,7 @@ class QueryAliasMapper
      * ]
      *
      * @param string[]
+     *
      * @return string[]
      */
     public function replaceLongParams($params)
@@ -181,6 +183,7 @@ class QueryAliasMapper
      * ]
      *
      * @param string[]
+     *
      * @return string[]
      */
     public function replaceShortParams($params)

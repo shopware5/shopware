@@ -48,8 +48,8 @@ class EmotionGateway
 
     /**
      * @param EmotionHydrator $hydrator
-     * @param FieldHelper $fieldHelper
-     * @param Connection $connection
+     * @param FieldHelper     $fieldHelper
+     * @param Connection      $connection
      */
     public function __construct(EmotionHydrator $hydrator, FieldHelper $fieldHelper, Connection $connection)
     {
@@ -59,8 +59,9 @@ class EmotionGateway
     }
 
     /**
-     * @param int[] $emotionIds
+     * @param int[]                $emotionIds
      * @param ShopContextInterface $context
+     *
      * @return Emotion[]
      */
     public function getList(array $emotionIds, ShopContextInterface $context)
@@ -79,6 +80,7 @@ class EmotionGateway
 
     /**
      * @param int[] $emotionIds
+     *
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
     private function getQuery(array $emotionIds)

@@ -56,7 +56,7 @@ class FacetCriteriaRequestHandler implements CriteriaRequestHandlerInterface
     /**
      * @param \Shopware_Components_Config $config
      * @param CustomFacetServiceInterface $facetService
-     * @param Connection $connection
+     * @param Connection                  $connection
      */
     public function __construct(
         \Shopware_Components_Config $config,
@@ -106,6 +106,7 @@ class FacetCriteriaRequestHandler implements CriteriaRequestHandlerInterface
 
     /**
      * @param Request $request
+     *
      * @return bool
      */
     private function isCategoryListing(Request $request)
@@ -115,17 +116,19 @@ class FacetCriteriaRequestHandler implements CriteriaRequestHandlerInterface
 
     /**
      * @param Request $request
+     *
      * @return bool
      */
     private function isSearchPage(Request $request)
     {
         $params = $request->getParams();
+
         return array_key_exists('sSearch', $params);
     }
 
     /**
-     * @param Request $request
-     * @param Criteria $criteria
+     * @param Request               $request
+     * @param Criteria              $criteria
      * @param ProductAttributeFacet $facet
      */
     private function handleProductAttributeFacet(
@@ -148,6 +151,7 @@ class FacetCriteriaRequestHandler implements CriteriaRequestHandlerInterface
                         null
                     )
                 );
+
                 return;
 
             case ProductAttributeFacet::MODE_RADIO_LIST_RESULT:
@@ -159,6 +163,7 @@ class FacetCriteriaRequestHandler implements CriteriaRequestHandlerInterface
                         $data
                     )
                 );
+
                 return;
 
             case ProductAttributeFacet::MODE_RANGE_RESULT:
@@ -176,6 +181,7 @@ class FacetCriteriaRequestHandler implements CriteriaRequestHandlerInterface
                     $range
                 );
                 $criteria->addCondition($condition);
+
                 return;
 
             case ProductAttributeFacet::MODE_VALUE_LIST_RESULT:
@@ -187,6 +193,7 @@ class FacetCriteriaRequestHandler implements CriteriaRequestHandlerInterface
                         explode('|', $data)
                     )
                 );
+
                 return;
             default:
                 return;
@@ -194,8 +201,8 @@ class FacetCriteriaRequestHandler implements CriteriaRequestHandlerInterface
     }
 
     /**
-     * @param Request $request
-     * @param Criteria $criteria
+     * @param Request                $request
+     * @param Criteria               $criteria
      * @param CombinedConditionFacet $facet
      */
     private function handleCombinedConditionFacet(
@@ -215,7 +222,8 @@ class FacetCriteriaRequestHandler implements CriteriaRequestHandlerInterface
 
     /**
      * @param ProductAttributeFacet $facet
-     * @param Request $request
+     * @param Request               $request
+     *
      * @return bool
      */
     private function isAttributeInRequest(ProductAttributeFacet $facet, Request $request)
@@ -229,10 +237,10 @@ class FacetCriteriaRequestHandler implements CriteriaRequestHandlerInterface
             return false;
         }
 
-        return (
+        return
             array_key_exists('min' . $facet->getFormFieldName(), $params)
             ||
             array_key_exists('max' . $facet->getFormFieldName(), $params)
-        );
+        ;
     }
 }

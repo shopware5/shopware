@@ -16,7 +16,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU Affero General Public License for more details.
  *
- * 'Shopware' is a registered trademark of shopware AG.
+ * "Shopware" is a registered trademark of shopware AG.
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
@@ -24,13 +24,12 @@
 
 namespace Shopware\Tests\Functional\Bundle\SearchBundle;
 
-use Shopware\Bundle\SearchBundle\BatchProductNumberSearchRequest;
 use Shopware\Bundle\SearchBundle\BatchProductNumberSearch;
+use Shopware\Bundle\SearchBundle\BatchProductNumberSearchRequest;
 use Shopware\Bundle\SearchBundle\Condition\CategoryCondition;
 use Shopware\Bundle\SearchBundle\Condition\PriceCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\Sorting\ProductNameSorting;
-use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
 use Shopware\Models\Category\Category;
 use Shopware\Tests\Functional\Bundle\StoreFrontBundle\TestCase;
@@ -53,7 +52,7 @@ class BatchProductNumberSearchTest extends TestCase
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function createProducts($products, ShopContext $context, Category $category)
     {
@@ -65,19 +64,7 @@ class BatchProductNumberSearchTest extends TestCase
     }
 
     /**
-     * @param array $result
-     * @param string[] $numbers
-     */
-    private function assertProductNumbersExists(array $result, array $numbers)
-    {
-        array_walk($numbers, function ($number) use ($result) {
-            $this->assertArrayHasKey($number, $result, sprintf('Expected "%s" to be in [%s]', $number, implode(', ', array_keys($result))));
-            $this->assertSame($number, $result[$number]->getNumber());
-        });
-    }
-
-    /**
-     * @covers BatchProductNumberSearch::search
+     * @covers \BatchProductNumberSearch::search
      */
     public function testSearchWithMatchingProducts()
     {
@@ -97,7 +84,7 @@ class BatchProductNumberSearchTest extends TestCase
     }
 
     /**
-     * @covers BatchProductNumberSearch::search
+     * @covers \BatchProductNumberSearch::search
      */
     public function testSearchIncludingMissingProducts()
     {
@@ -118,7 +105,7 @@ class BatchProductNumberSearchTest extends TestCase
     }
 
     /**
-     * @covers BatchProductNumberSearch::search
+     * @covers \BatchProductNumberSearch::search
      */
     public function testSearchWithCriteria()
     {
@@ -141,7 +128,7 @@ class BatchProductNumberSearchTest extends TestCase
     }
 
     /**
-     * @covers BatchProductNumberSearch::search
+     * @covers \BatchProductNumberSearch::search
      */
     public function testSearchWithMultipleCriteria()
     {
@@ -155,7 +142,7 @@ class BatchProductNumberSearchTest extends TestCase
                 'BATCH-D' => ['name' => 'BATCH-D'],
                 'BATCH-E' => ['name' => 'BATCH-E'],
                 'BATCH-F' => ['name' => 'BATCH-F'],
-                'BATCH-G' => ['name' => 'BATCH-G']
+                'BATCH-G' => ['name' => 'BATCH-G'],
             ],
             $context,
             $category
@@ -187,7 +174,7 @@ class BatchProductNumberSearchTest extends TestCase
     }
 
     /**
-     * @covers BatchProductNumberSearch::search
+     * @covers \BatchProductNumberSearch::search
      */
     public function testSearchWithMultipleCriteriaAndProductNumbers()
     {
@@ -275,5 +262,17 @@ class BatchProductNumberSearchTest extends TestCase
         $result = $this->batchSearch->search($request, $context);
 
         $this->assertSame([], $result->get('test-1'));
+    }
+
+    /**
+     * @param array    $result
+     * @param string[] $numbers
+     */
+    private function assertProductNumbersExists(array $result, array $numbers)
+    {
+        array_walk($numbers, function ($number) use ($result) {
+            $this->assertArrayHasKey($number, $result, sprintf('Expected "%s" to be in [%s]', $number, implode(', ', array_keys($result))));
+            $this->assertSame($number, $result[$number]->getNumber());
+        });
     }
 }

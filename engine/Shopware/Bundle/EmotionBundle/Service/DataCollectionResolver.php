@@ -49,8 +49,8 @@ class DataCollectionResolver implements DataCollectionResolverInterface
     private $batchProductSearch;
 
     /**
-     * @param BatchProductSearch $batchProductSearch
-     * @param Connection $connection
+     * @param BatchProductSearch    $batchProductSearch
+     * @param Connection            $connection
      * @param MediaServiceInterface $mediaService
      */
     public function __construct(
@@ -65,7 +65,8 @@ class DataCollectionResolver implements DataCollectionResolverInterface
 
     /**
      * @param PrepareDataCollection $prepareDataCollection
-     * @param ShopContextInterface $context
+     * @param ShopContextInterface  $context
+     *
      * @return ResolvedDataCollection
      */
     public function resolve(PrepareDataCollection $prepareDataCollection, ShopContextInterface $context)
@@ -83,7 +84,8 @@ class DataCollectionResolver implements DataCollectionResolverInterface
 
     /**
      * @param PrepareDataCollection $prepareDataCollection
-     * @param ShopContextInterface $context
+     * @param ShopContextInterface  $context
+     *
      * @return array
      */
     private function resolveMedia(PrepareDataCollection $prepareDataCollection, ShopContextInterface $context)
@@ -111,6 +113,7 @@ class DataCollectionResolver implements DataCollectionResolverInterface
 
     /**
      * @param string[] $mediaPaths
+     *
      * @return int[]
      */
     private function convertMediaPathsToIds(array $mediaPaths = [])
@@ -126,7 +129,8 @@ class DataCollectionResolver implements DataCollectionResolverInterface
 
     /**
      * @param PrepareDataCollection $prepareDataCollection
-     * @param ShopContextInterface $context
+     * @param ShopContextInterface  $context
+     *
      * @return \Shopware\Bundle\SearchBundle\BatchProductNumberSearchResult
      */
     private function resolveBatchRequest(PrepareDataCollection $prepareDataCollection, ShopContextInterface $context)

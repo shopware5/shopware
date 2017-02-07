@@ -24,8 +24,8 @@
 
 namespace   Shopware\Models\Newsletter;
 
-use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
 
 /**
  * Shopware container model represents a newsletter container.
@@ -35,44 +35,6 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Container extends ModelEntity
 {
-    /**
-     * Autoincrement ID
-     *
-     * @var integer $id
-     *
-     * @ORM\Id
-     * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
-    /**
-     * Newsletter ID
-     *
-     * @var integer $newsletterId
-     *
-     * @ORM\Column(name="promotionID", type="integer", length=11, nullable=true)
-     */
-    private $newsletterId = null;
-
-    /**
-     * value of the container
-     *
-     * @var string
-     *
-     * @ORM\Column(name="value", type="string", length=255, nullable=false)
-     */
-    private $value;
-
-    /**
-     * Type of the container (sText, sBanner etc)
-     *
-     * @var string $type
-     *
-     * @ORM\Column(name="type", type="string", length=255, nullable=false)
-     */
-    private $type;
-
     /**
      * INVERSE SIDE
      *
@@ -104,19 +66,67 @@ class Container extends ModelEntity
     protected $links;
 
     /**
-    * INVERSE SIDE
-    *
-    * Inverse side of the association between the container and its article childs
-    *
+     * INVERSE SIDE
+     *
+     * Inverse side of the association between the container and its article childs
+     *
      * @var \Doctrine\Common\Collections\ArrayCollection
-    * @ORM\OneToMany(targetEntity="Shopware\Models\Newsletter\ContainerType\Article", mappedBy="container", cascade={"persist",  "remove"})
-    */
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Newsletter\ContainerType\Article", mappedBy="container", cascade={"persist",  "remove"})
+     */
     protected $articles;
+
+    /**
+     * OWNING SIDE
+     * Owning side of the newsletter-container association
+     *
+     * @ORM\ManyToOne(targetEntity="Shopware\Models\Newsletter\Newsletter", inversedBy="containers")
+     * @ORM\JoinColumn(name="promotionID", referencedColumnName="id")
+     *
+     * @var \Shopware\Models\Newsletter\Newsletter
+     */
+    protected $newsletter;
+    /**
+     * Autoincrement ID
+     *
+     * @var int
+     *
+     * @ORM\Id
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * Newsletter ID
+     *
+     * @var int
+     *
+     * @ORM\Column(name="promotionID", type="integer", length=11, nullable=true)
+     */
+    private $newsletterId = null;
+
+    /**
+     * value of the container
+     *
+     * @var string
+     *
+     * @ORM\Column(name="value", type="string", length=255, nullable=false)
+     */
+    private $value;
+
+    /**
+     * Type of the container (sText, sBanner etc)
+     *
+     * @var string
+     *
+     * @ORM\Column(name="type", type="string", length=255, nullable=false)
+     */
+    private $type;
 
     /**
      * Description of the container
      *
-     * @var string $description
+     * @var string
      *
      * @ORM\Column(name="description", type="string", length=255, nullable=false)
      */
@@ -125,28 +135,18 @@ class Container extends ModelEntity
     /**
      * Position of the container - containers will be selected ordered by position
      *
-     * @var integer $position
+     * @var int
      * @ORM\Column(name="position", type="integer", length=11, nullable=false)
      */
     private $position = 0;
-
-    /**
-     * OWNING SIDE
-     * Owning side of the newsletter-container association
-     *
-     * @ORM\ManyToOne(targetEntity="Shopware\Models\Newsletter\Newsletter", inversedBy="containers")
-     * @ORM\JoinColumn(name="promotionID", referencedColumnName="id")
-     * @var \Shopware\Models\Newsletter\Newsletter
-     */
-    protected $newsletter;
 
     /**
      * Class constructor. Initials the containers array.
      */
     public function __construct()
     {
-        $this->links     = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->articles     = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->links = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->articles = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -232,12 +232,14 @@ class Container extends ModelEntity
 
     /**
      * @param \Shopware\Models\Newsletter\ContainerType\Text $text
+     *
      * @return \Shopware\Models\Newsletter\ContainerType\Text
      */
     public function setText($text)
     {
         $return = $this->setOneToOne($text, '\Shopware\Models\Newsletter\ContainerType\Text', 'text', 'container');
         $this->setType('ctText');
+
         return $return;
     }
 
@@ -249,15 +251,16 @@ class Container extends ModelEntity
         return $this->text;
     }
 
-
     /**
      * @param \Shopware\Models\Newsletter\ContainerType\Article $articles
+     *
      * @return \Shopware\Models\Newsletter\ContainerType\Article
      */
     public function setArticles($articles)
     {
         $return = $this->setOneToMany($articles, '\Shopware\Models\Newsletter\ContainerType\Article', 'articles', 'container');
         $this->setType('ctArticles');
+
         return $return;
     }
 
@@ -271,12 +274,14 @@ class Container extends ModelEntity
 
     /**
      * @param \Shopware\Models\Newsletter\ContainerType\Banner $banner
+     *
      * @return \Shopware\Models\Newsletter\ContainerType\Banner
      */
     public function setBanner($banner)
     {
         $return = $this->setOneToOne($banner, '\Shopware\Models\Newsletter\ContainerType\Banner', 'banner', 'container');
         $this->setType('ctBanner');
+
         return $return;
     }
 
@@ -290,12 +295,14 @@ class Container extends ModelEntity
 
     /**
      * @param \Shopware\Models\Newsletter\ContainerType\Link $links
+     *
      * @return \Shopware\Models\Newsletter\ContainerType\Link
      */
     public function setLinks($links)
     {
         $return = $this->setOneToMany($links, '\Shopware\Models\Newsletter\ContainerType\Link', 'links', 'container');
         $this->setType('ctLinks');
+
         return $return;
     }
 

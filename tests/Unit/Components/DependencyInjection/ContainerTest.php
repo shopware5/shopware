@@ -33,7 +33,7 @@ use Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceExce
 
 /**
  * @category  Shopware
- * @package   Components\DependencyInjection
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
 class ContainerTest extends TestCase
@@ -89,7 +89,6 @@ class ContainerTest extends TestCase
             $this->container->get('foo', ContainerInterface::NULL_ON_INVALID_REFERENCE)
         );
     }
-
 
     public function testGetOnNonExistentWithIgnoreBehaviour()
     {
@@ -251,7 +250,7 @@ class ProjectServiceContainer extends Container
         parent::__construct();
 
         $this->__bar = new \stdClass();
-        $this->aliases = array('alias' => 'bar');
+        $this->aliases = ['alias' => 'bar'];
 
         $this->__parent = new \stdClass();
         $this->__child = new \stdClass();
@@ -265,6 +264,7 @@ class ProjectServiceContainer extends Container
     protected function getParentService()
     {
         $this->__parent->child = $this->get('child');
+
         return $this->__parent;
     }
 
