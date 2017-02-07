@@ -33,15 +33,16 @@ Ext.define('Shopware.apps.CustomerStream.view.conditions.HasOrderCountCondition'
         return (conditionClass == 'Shopware\\Bundle\\CustomerSearchBundle\\Condition\\HasOrderCountCondition');
     },
 
-    create: function(callback) {
-        callback(this._create());
+    create: function(callback, loadPreviewFn) {
+        console.log(loadPreviewFn);
+        callback(this._create(loadPreviewFn));
     },
 
-    load: function(conditionClass, items, callback) {
-        callback(this._create());
+    load: function(conditionClass, items, callback, loadPreviewFn) {
+        callback(this._create(loadPreviewFn));
     },
 
-    _create: function() {
+    _create: function(loadPreviewFn) {
         return {
             title: '{s name="order_count_condition_input"}{/s}',
             conditionClass: 'Shopware\\Bundle\\CustomerSearchBundle\\Condition\\HasOrderCountCondition',
@@ -50,7 +51,10 @@ Ext.define('Shopware.apps.CustomerStream.view.conditions.HasOrderCountCondition'
                 minValue: 1,
                 value: 1,
                 allowBlank: false,
-                name: 'minimumOrderCount'
+                name: 'minimumOrderCount',
+                listeners: {
+                    'change': loadPreviewFn
+                }
             }]
         };
     }

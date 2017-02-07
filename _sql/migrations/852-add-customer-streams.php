@@ -9,6 +9,12 @@ class Migrations_Migration852 extends AbstractMigration
      */
     public function up($modus)
     {
+        $this->addSql("
+CREATE TABLE multiplier ( `id` int(11) unsigned NOT NULL AUTO_INCREMENT, PRIMARY KEY (`id`)) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+INSERT INTO `multiplier` (`id`) VALUES (1), (2), (3), (4);
+        ");
+
         $sql = <<<SQL
 CREATE TABLE `s_customer_streams` (
     `id` int(11) unsigned NOT NULL AUTO_INCREMENT,

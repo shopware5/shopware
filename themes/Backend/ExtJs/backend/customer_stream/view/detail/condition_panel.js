@@ -48,7 +48,7 @@ Ext.define('Shopware.apps.CustomerStream.view.detail.ConditionPanel', {
         });
 
         me.items = [];
-        me.dockedItems = me.createDockedItems();
+        // me.dockedItems = me.createDockedItems();
 
         me.callParent(arguments);
     },
@@ -78,13 +78,13 @@ Ext.define('Shopware.apps.CustomerStream.view.detail.ConditionPanel', {
     createDockedItems: function() {
         var me = this;
 
-        return [{
-            xtype: 'toolbar',
+        me.toolbar = Ext.create('Ext.toolbar.Toolbar', {
             dock: 'top',
             style: 'border: 1px solid #9aacb8;',
             ui: 'shopware-ui',
             items: me.createToolbarItems()
-        }];
+        });
+        return me.toolbar;
     },
 
     createToolbarItems: function() {
@@ -95,7 +95,7 @@ Ext.define('Shopware.apps.CustomerStream.view.detail.ConditionPanel', {
             // iconCls: 'sprite-plus-circle-frame',
             iconCls: 'sprite-funnel',
             menu: me.createMenu()
-        }, '->', {
+        }, {
             tooltip: '{s name=preview}{/s}',
             iconCls: 'sprite-arrow-circle-225-left',
             handler: Ext.bind(me.loadPreview, me)
@@ -103,6 +103,7 @@ Ext.define('Shopware.apps.CustomerStream.view.detail.ConditionPanel', {
     },
 
     loadPreview: function() {
+        console.log("this", this);
         this.fireEvent('load-preview', this.getSubmitData());
     },
 
@@ -125,7 +126,7 @@ Ext.define('Shopware.apps.CustomerStream.view.detail.ConditionPanel', {
 
         handler.create(function(configuration) {
             me.addCondition(configuration);
-        });
+        }, Ext.bind(me.loadPreview, me));
     },
 
     createConditionContainer: function(configuration) {

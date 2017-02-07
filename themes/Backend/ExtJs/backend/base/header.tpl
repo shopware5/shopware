@@ -47,8 +47,8 @@
     <style>
         .x-customer-grid .x-grid-cell-inner {
             line-height: 16px !important;
-            padding-top: 10px;
-            padding-bottom: 10px;
+            /*padding-top: 10px;*/
+            /*padding-bottom: 10px;*/
 
         }
         .stream-name-column {
