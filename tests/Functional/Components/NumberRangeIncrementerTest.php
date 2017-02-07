@@ -32,7 +32,7 @@ use Shopware\Components\NumberRangeIncrementerInterface;
  * @package   Shopware\Tests\Components
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class NumberRangeIncrementerTest extends \PHPUnit_Framework_TestCase
+class NumberRangeIncrementerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Doctrine\DBAL\Connection

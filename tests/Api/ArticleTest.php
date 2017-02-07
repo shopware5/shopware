@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-class Shopware_Tests_Api_ArticleTest extends PHPUnit_Framework_TestCase
+class Shopware_Tests_Api_ArticleTest extends PHPUnit\Framework\TestCase
 {
     public $apiBaseUrl = '';
 

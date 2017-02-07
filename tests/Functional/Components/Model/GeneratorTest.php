@@ -31,7 +31,7 @@ use Shopware\Components\Model\Generator;
  * @package   Shopware\Tests\Components
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class GeneratorTest extends \PHPUnit_Framework_TestCase
+class GeneratorTest extends \PHPUnit\Framework\TestCase
 {
     const TEST_TABLE_NAME = 's_articles_attributes';
     const TEST_ATTRIBUTE_FIELD_PREFIX = 'test_';

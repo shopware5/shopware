@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-class Shopware_Tests_Api_MediaTest extends PHPUnit_Framework_TestCase
+class Shopware_Tests_Api_MediaTest extends PHPUnit\Framework\TestCase
 {
     const UPLOAD_FILE_NAME = 'test-bild';
     const UPLOAD_OVERWRITTEN_FILE_NAME = 'a-different-file-name';

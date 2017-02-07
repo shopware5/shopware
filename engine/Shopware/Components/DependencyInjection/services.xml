@@ -550,5 +550,21 @@
             <argument type="service" id="config" />
             <argument type="service" id="service_container" />
         </service>
+
+        <service id="shopware.api.resource" class="Shopware\Components\Api\Resource\Resource" shared="false" />
+        <service id="shopware.api.address" class="Shopware\Components\Api\Resource\Address" shared="false" />
+        <service id="shopware.api.article" class="Shopware\Components\Api\Resource\Article" shared="false" />
+        <service id="shopware.api.cache" class="Shopware\Components\Api\Resource\Cache" shared="false" />
+        <service id="shopware.api.category" class="Shopware\Components\Api\Resource\Category" shared="false" />
+        <service id="shopware.api.country" class="Shopware\Components\Api\Resource\Country" shared="false" />
+        <service id="shopware.api.customer" class="Shopware\Components\Api\Resource\Customer" shared="false" />
+        <service id="shopware.api.customergroup" class="Shopware\Components\Api\Resource\CustomerGroup" shared="false" />
+        <service id="shopware.api.manufacturer" class="Shopware\Components\Api\Resource\Manufacturer" shared="false" />
+        <service id="shopware.api.media" class="Shopware\Components\Api\Resource\Media" shared="false" />
+        <service id="shopware.api.order" class="Shopware\Components\Api\Resource\Order" shared="false" />
+        <service id="shopware.api.propertygroup" class="Shopware\Components\Api\Resource\PropertyGroup" shared="false" />
+        <service id="shopware.api.shop" class="Shopware\Components\Api\Resource\Shop" shared="false" />
+        <service id="shopware.api.translation" class="Shopware\Components\Api\Resource\Translation" shared="false" />
+        <service id="shopware.api.variant" class="Shopware\Components\Api\Resource\Variant" shared="false" />
     </services>
 </container>

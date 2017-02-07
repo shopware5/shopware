@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-class sOrderTest extends PHPUnit_Framework_TestCase
+class sOrderTest extends PHPUnit\Framework\TestCase
 {
     /**
      * @var sOrder
