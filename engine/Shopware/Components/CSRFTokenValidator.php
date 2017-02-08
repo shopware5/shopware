@@ -131,7 +131,6 @@ class CSRFTokenValidator implements SubscriberInterface
 
         /** @var \Enlight_Controller_Action $controller */
         $controller = $args->getSubject();
-
         $request = $controller->Request();
 
         // do not check internal subrequests
@@ -139,22 +138,20 @@ class CSRFTokenValidator implements SubscriberInterface
             return;
         }
 
-        /** @var \Enlight_Controller_Action $controller */
-        $controller = $args->getSubject();
-
-        /** @var \Enlight_Components_Session_Namespace $session */
-        $session = $this->container->get('session');
-        $token = $session->offsetGet('X-CSRF-Token');
-
-        if (!$token) {
-            $token = $this->generateToken($controller->Response());
-        }
-
+        // skip whitelisted actions
         if ($this->isWhitelisted($controller)) {
             return;
         }
 
         if ($request->isPost()) {
+            /** @var \Enlight_Components_Session_Namespace $session */
+            $session = $this->container->get('session');
+            $token = $session->offsetGet('X-CSRF-Token');
+
+            if (!$token) {
+                $token = $this->generateToken($controller->Response());
+            }
+
             $requestToken = $request->getParam('__csrf_token') ? : $request->getHeader('X-CSRF-Token');
             if (!hash_equals($token, $requestToken)) {
                 $this->generateToken($controller->Response());
