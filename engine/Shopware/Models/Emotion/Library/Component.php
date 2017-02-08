@@ -374,7 +374,7 @@ class Component extends ModelEntity
      * @param array $options {
      *
      *     @var string $name               Required; Logical name of the component field
-     *     @var string $fieldLabel         Optional; Ext JS form field label.
+     *     @var string $fieldLabel         optional; Ext JS form field label
      *     @var string $allowBlank         Optional; Defines if the value can contains null
      * }
      *
@@ -408,7 +408,7 @@ class Component extends ModelEntity
      *     @var string $store              Required; Store class which used for the combo class
      *     @var string $displayField       Required; Field name of the model which displays as text
      *     @var string $valueField         Required; Identifier field of the combo box
-     *     @var string $fieldLabel         Optional; Ext JS form field label.
+     *     @var string $fieldLabel         optional; Ext JS form field label
      *     @var string $allowBlank         Optional; Defines if the value can contains null
      * }
      *
@@ -433,7 +433,7 @@ class Component extends ModelEntity
      * @param array $options {
      *
      *     @var string $name               Required; Logical name of the component field
-     *     @var string $fieldLabel         Optional; Ext JS form field label.
+     *     @var string $fieldLabel         optional; Ext JS form field label
      *     @var string $allowBlank         Optional; Defines if the value can contains null
      *     @var string $defaultValue       Optional; date string in format Y-m-d
      * }
@@ -461,7 +461,7 @@ class Component extends ModelEntity
      * @param array $options {
      *
      *     @var string $name               Required; Logical name of the component field
-     *     @var string $fieldLabel         Optional; Ext JS form field label.
+     *     @var string $fieldLabel         optional; Ext JS form field label
      *     @var string $allowBlank         Optional; Defines if the value can contains null
      * }
      *
@@ -485,7 +485,7 @@ class Component extends ModelEntity
      * @param array $options {
      *
      *     @var string $name               Required; Logical name of the component field
-     *     @var string $fieldLabel         Optional; Ext JS form field label.
+     *     @var string $fieldLabel         optional; Ext JS form field label
      *     @var string $allowBlank         Optional; Defines if the value can contains null
      * }
      *
@@ -507,7 +507,7 @@ class Component extends ModelEntity
      * @param array $options {
      *
      *     @var string $name               Required; Logical name of the component field
-     *     @var string $fieldLabel         Optional; Ext JS form field label.
+     *     @var string $fieldLabel         optional; Ext JS form field label
      *     @var string $allowBlank         Optional; Defines if the value can contains null
      * }
      *
@@ -529,7 +529,7 @@ class Component extends ModelEntity
      * @param array $options {
      *
      *     @var string $name               Required; Logical name of the component field
-     *     @var string $fieldLabel         Optional; Ext JS form field label.
+     *     @var string $fieldLabel         optional; Ext JS form field label
      *     @var string $allowBlank         Optional; Defines if the value can contains null
      * }
      *
@@ -551,7 +551,7 @@ class Component extends ModelEntity
      * @param array $options {
      *
      *     @var string $name               Required; Logical name of the component field
-     *     @var string $fieldLabel         Optional; Ext JS form field label.
+     *     @var string $fieldLabel         optional; Ext JS form field label
      *     @var string $allowBlank         Optional; Defines if the value can contains null
      * }
      *
@@ -573,7 +573,7 @@ class Component extends ModelEntity
      * @param array $options {
      *
      *     @var string $name               Required; Logical name of the component field
-     *     @var string $fieldLabel         Optional; Ext JS form field label.
+     *     @var string $fieldLabel         optional; Ext JS form field label
      *     @var string $allowBlank         Optional; Defines if the value can contains null
      * }
      *
@@ -595,7 +595,7 @@ class Component extends ModelEntity
      * @param array $options {
      *
      *     @var string $name               Required; Logical name of the component field
-     *     @var string $fieldLabel         Optional; Ext JS form field label.
+     *     @var string $fieldLabel         optional; Ext JS form field label
      *     @var string $allowBlank         Optional; Defines if the value can contains null
      * }
      *
@@ -617,7 +617,7 @@ class Component extends ModelEntity
      * @param array $options {
      *
      *     @var string $name               Required; Logical name of the component field
-     *     @var string $fieldLabel         Optional; Ext JS form field label.
+     *     @var string $fieldLabel         optional; Ext JS form field label
      *     @var string $allowBlank         Optional; Defines if the value can contains null
      *     @var string $defaultValue       Optional; default value as string in format H:i
      * }
@@ -639,7 +639,7 @@ class Component extends ModelEntity
      * @param array $options {
      *
      *     @var string $name               Required; Logical name of the component field
-     *     @var string $fieldLabel         Optional; Ext JS form field label.
+     *     @var string $fieldLabel         optional; Ext JS form field label
      *     @var string $allowBlank         Optional; Defines if the value can contains null
      * }
      *
@@ -660,7 +660,7 @@ class Component extends ModelEntity
      * @param array $options {
      *
      *     @var string $name               Required; Logical name of the component field
-     *     @var string $fieldLabel         Optional; Ext JS form field label.
+     *     @var string $fieldLabel         optional; Ext JS form field label
      *     @var string $allowBlank         Optional; Defines if the value can contains null
      * }
      *
@@ -681,7 +681,7 @@ class Component extends ModelEntity
      * @param array $options {
      *
      *     @var string $name               Required; Logical name of the component field
-     *     @var string $fieldLabel         Optional; Ext JS form field label.
+     *     @var string $fieldLabel         optional; Ext JS form field label
      *     @var string $allowBlank         Optional; Defines if the value can contains null
      * }
      *

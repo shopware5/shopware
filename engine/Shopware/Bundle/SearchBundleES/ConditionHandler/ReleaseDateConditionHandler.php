@@ -51,7 +51,7 @@ class ReleaseDateConditionHandler implements PartialConditionHandlerInterface
         Search $search,
         ShopContextInterface $context
     ) {
-        /** @var ReleaseDateCondition $criteriaPart */
+        /* @var ReleaseDateCondition $criteriaPart */
         $search->addFilter(
             $this->createQuery($criteriaPart)
         );
@@ -66,7 +66,7 @@ class ReleaseDateConditionHandler implements PartialConditionHandlerInterface
         Search $search,
         ShopContextInterface $context
     ) {
-        /** @var ReleaseDateCondition $criteriaPart */
+        /* @var ReleaseDateCondition $criteriaPart */
         $search->addPostFilter(
             $this->createQuery($criteriaPart)
         );

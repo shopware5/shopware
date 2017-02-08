@@ -70,7 +70,7 @@ class ManufacturerFacetTest extends TestCase
 
         $facet = $result->getFacets()[0];
 
-        /** @var $facet ValueListFacetResult */
+        /* @var $facet ValueListFacetResult */
         $this->assertInstanceOf('Shopware\Bundle\SearchBundle\FacetResult\ValueListFacetResult', $facet);
 
         $this->assertCount(1, $facet->getValues());
@@ -98,7 +98,6 @@ class ManufacturerFacetTest extends TestCase
         );
 
         /** @var $facet ValueListFacetResult */
-
         $facet = $result->getFacets()[0];
         $this->assertCount(2, $facet->getValues());
     }

@@ -551,7 +551,7 @@ class Shopware_Controllers_Backend_Blog extends Shopware_Controllers_Backend_Ext
      */
     private function prepareAuthorAssociatedData($data)
     {
-        /** @var $author \Shopware\Models\User\User */
+        /* @var $author \Shopware\Models\User\User */
         if (!empty($data['authorId'])) {
             $data['author'] = $this->getManager()->find('Shopware\Models\User\User', $data['authorId']);
         } else {

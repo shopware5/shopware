@@ -204,7 +204,7 @@ class Shopware_Controllers_Backend_Premium extends Shopware_Controllers_Backend_
             //Replace a comma with a dot
             $params['startPrice'] = str_replace(',', '.', $params['startPrice']);
 
-            /** @var $premiumModel Premium */
+            /* @var $premiumModel Premium */
             $premiumModel->fromArray($params);
 
             Shopware()->Models()->persist($premiumModel);
