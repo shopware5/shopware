@@ -69,6 +69,7 @@ Ext.define('Shopware.apps.Emotion.view.presets.List', {
             store: me.store,
             cls: 'emotion-listing',
             listeners: {
+                render: Ext.bind(me.addGroupHeaderEvent, me),
                 // because of custom tpl with grouping we cannot trust selection model here
                 // and have to use the data-preset-id attribute
                 itemclick: function(view, record, item, index, e) {
@@ -187,6 +188,31 @@ Ext.define('Shopware.apps.Emotion.view.presets.List', {
                 }
             }
         );
+    },
+
+    addGroupHeaderEvent: function() {
+        var me = this,
+            view = me.infoView,
+            viewEl = view.getEl();
+
+        viewEl.on('click', function(e, target) {
+            var el = Ext.get(target),
+                parent, presetContainer;
+
+            if (!el.hasCls('x-grid-group-title')) {
+                return;
+            }
+            parent = el.parent('.preset--outer-container');
+            presetContainer = parent.down('.preset--container');
+
+            if(parent.hasCls('x-grid-group-hd-collapsed')) {
+                parent.removeCls('x-grid-group-hd-collapsed');
+                presetContainer.setStyle('display', 'block');
+            } else {
+                parent.addCls('x-grid-group-hd-collapsed');
+                presetContainer.setStyle('display', 'none');
+            }
+        });
     },
 
     showDetails: function() {
