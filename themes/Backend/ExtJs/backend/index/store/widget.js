@@ -25,9 +25,9 @@
 
 Ext.define('Shopware.apps.Index.store.Widget', {
 
-	extend: 'Ext.data.Store',
+    extend: 'Ext.data.Store',
 
-	model: 'Shopware.apps.Index.model.Widget',
+    model: 'Shopware.apps.Index.model.Widget',
 
     batch: true,
     remoteFilter: true,

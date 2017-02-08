@@ -47,7 +47,7 @@ Ext.define('Shopware.apps.Notification.model.Article', {
      * @array
      */
     fields:[
-		//{block name="backend/notification/model/article/fields"}{/block}
+        //{block name="backend/notification/model/article/fields"}{/block}
         { name:'name', type:'string' },
         { name:'number', type:'string' },
         { name:'registered', type:'int' },

@@ -38,14 +38,17 @@ Ext.define('Shopware.apps.Base.store.ProductBoxLayout', {
 
     storeId: 'base.ProductBoxLayout',
 
-    model : 'Shopware.apps.Base.model.ProductBoxLayout',
+    model: 'Shopware.apps.Base.model.ProductBoxLayout',
 
     pageSize: 1000,
 
-    displayExtendLayout: false,
-    displayBasicLayout: true,
-    displayMinimalLayout: true,
-    displayImageLayout: true,
+    defaultLayouts: {
+        displayExtendLayout: false,
+        displayBasicLayout: true,
+        displayMinimalLayout: true,
+        displayImageLayout: true,
+        displayListLayout: false
+    },
 
     snippets: {
         displayExtendLayout: {
@@ -63,6 +66,10 @@ Ext.define('Shopware.apps.Base.store.ProductBoxLayout', {
         displayImageLayout: {
             label: '{s name=settings_box_layout_image_title}Big image{/s}',
             description: '{s name=settings_box_layout_image_description}The layout of the product box is based on a big image of the product.{/s}'
+        },
+        displayListLayout: {
+            label: '{s name=settings_box_layout_list_title}Product list{/s}',
+            description: '{s name=settings_box_layout_list_description}The layout of the product box shows a small image and only one product in a row.{/s}'
         }
     },
 
@@ -102,6 +109,14 @@ Ext.define('Shopware.apps.Base.store.ProductBoxLayout', {
                 image: '{link file="backend/_resources/images/category/layout_box_image.png"}'
             });
         }
+        if (this.getConfigValue(config, 'displayListLayout')) {
+            data.push({
+                key: 'list',
+                label: me.snippets.displayListLayout.label,
+                description: me.snippets.displayListLayout.description,
+                image: '{link file="backend/_resources/images/category/layout_box_list.png"}'
+            });
+        }
 
         this.data = data;
 
@@ -110,11 +125,11 @@ Ext.define('Shopware.apps.Base.store.ProductBoxLayout', {
 
     getConfigValue: function(config, property) {
         if (!Ext.isObject(config)) {
-            return this[property];
+            return this.defaultLayouts[property];
         }
 
         if (!config.hasOwnProperty(property)) {
-            return this[property];
+            return this.defaultLayouts[property];
         }
 
         return config[property];

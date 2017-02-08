@@ -77,7 +77,7 @@ class SearchIndexer implements SearchIndexerInterface
         }
 
 
-        $interval = (int) $this->config->get('cacheSearch');
+        $interval = (int)$this->config->get('cacheSearch');
 
         if (empty($interval) || $interval < 360) {
             $interval = 86400;
@@ -112,7 +112,7 @@ class SearchIndexer implements SearchIndexerInterface
      */
     public function build()
     {
-        MemoryLimit::setMinimumMemoryLimit(1024*1024*512);
+        MemoryLimit::setMinimumMemoryLimit(1024 * 1024 * 512);
         @set_time_limit(0);
 
         $this->setNextUpdateTimestamp();
@@ -134,6 +134,10 @@ class SearchIndexer implements SearchIndexerInterface
                 // Set primary key
                 $table['elementID'] = empty($table['foreign_key']) && $table['table'] != 's_articles' ? 'articleID' : 'id';
 
+                if ($table['table'] === 's_articles_attributes') {
+                    $table['elementID'] = '(SELECT articleID FROM s_articles_details WHERE id = articledetailsID LIMIT 1)';
+                }
+
                 // Build sql query to fetch values from this table
                 $sql = 'SELECT ' . $table['elementID'] . ' as id, ' . $table['fields'] . ' FROM ' . $table['table'];
 
@@ -143,7 +147,6 @@ class SearchIndexer implements SearchIndexerInterface
                 }
 
                 // Get all fields & values from current table
-
                 $getTableKeywords = $this->connection->fetchAll($sql);
 
                 // If no result, return
@@ -295,7 +298,8 @@ class SearchIndexer implements SearchIndexerInterface
                 st.id AS tableID,
                 st.table,
                 st.where,
-                st.referenz_table, st.foreign_key,
+                st.referenz_table, 
+                st.foreign_key,
                 GROUP_CONCAT(sf.id SEPARATOR ', ') AS fieldIDs,
                 GROUP_CONCAT(sf.field SEPARATOR ', ') AS `fields`
             FROM s_search_fields sf FORCE INDEX (tableID)

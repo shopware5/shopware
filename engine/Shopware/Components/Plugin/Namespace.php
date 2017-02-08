@@ -550,7 +550,7 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
         $sql = "
             DELETE widgets, views, priv
             FROM s_core_widgets widgets
-                INNER JOIN s_core_widget_views views
+                LEFT JOIN s_core_widget_views views
                     ON views.widget_id = widgets.id
                 LEFT JOIN s_core_acl_privileges priv
                     ON priv.name = widgets.name

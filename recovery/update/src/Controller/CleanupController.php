@@ -24,12 +24,18 @@
 
 namespace Shopware\Recovery\Update\Controller;
 
+use DirectoryIterator;
+use FilesystemIterator;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
+use Shopware\Recovery\Update\Cleanup;
 use Shopware\Recovery\Update\CleanupFilesFinder;
 use Shopware\Recovery\Update\DummyPluginFinder;
 use Shopware\Recovery\Update\Utils;
 use Slim\Http\Request;
 use Slim\Http\Response;
 use Slim\Slim;
+use SplFileInfo;
 
 /**
  * @category  Shopware
@@ -74,6 +80,16 @@ class CleanupController
     private $conn;
 
     /**
+     * @var string
+     */
+    private $backupDirectory;
+
+    /**
+     * @var Cleanup
+     */
+    private $cleanupService;
+
+    /**
      * @param Request $request
      * @param Response $response
      * @param DummyPluginFinder $pluginFinder
@@ -81,35 +97,39 @@ class CleanupController
      * @param Slim $app
      * @param string $shopwarePath
      * @param \PDO $conn
+     * @param string $backupDir
      */
     public function __construct(
         Request $request,
         Response $response,
         DummyPluginFinder $pluginFinder,
         CleanupFilesFinder $filesFinder,
+        Cleanup $cleanupService,
         Slim $app,
         $shopwarePath,
-        \PDO $conn
+        \PDO $conn,
+        $backupDir
     ) {
-        $this->request      = $request;
-        $this->response     = $response;
-        $this->app          = $app;
+        $this->request = $request;
+        $this->response = $response;
+        $this->app = $app;
         $this->pluginFinder = $pluginFinder;
-        $this->filesFinder  = $filesFinder;
+        $this->filesFinder = $filesFinder;
+        $this->cleanupService = $cleanupService;
         $this->shopwarePath = $shopwarePath;
         $this->conn = $conn;
+        $this->backupDirectory = $backupDir;
     }
 
     public function cleanupOldFiles()
     {
         $_SESSION['DB_DONE'] = true;
 
-        $cleanupList = array_merge(
-            $this->pluginFinder->getDummyPlugins(),
-            $this->filesFinder->getCleanupFiles()
-        );
+        $cleanupList = $this->getCleanupList();
 
-        $this->cleanupMedia();
+        if ($this->request->isPost()) {
+            $this->cleanupMedia();
+        }
 
         if (count($cleanupList) == 0) {
             $_SESSION['CLEANUP_DONE'] = true;
@@ -130,21 +150,22 @@ class CleanupController
             } else {
                 $result = array_map(
                     function ($path) {
-                        return substr($path, strlen(SW_PATH)+1);
+                        return substr($path, strlen(SW_PATH) + 1);
                     },
                     $result
                 );
+
                 $this->app->render('cleanup.php', ['cleanupList' => $result, 'error' => true]);
             }
         } else {
             $cleanupList = array_map(
                 function ($path) {
-                    return substr($path, strlen(SW_PATH)+1);
+                    return substr($path, strlen(SW_PATH) + 1);
                 },
                 $cleanupList
             );
 
-            $this->app->render('cleanup.php', ['cleanupList' => $cleanupList, 'error' => false ]);
+            $this->app->render('cleanup.php', ['cleanupList' => $cleanupList, 'error' => false]);
         }
     }
 
@@ -153,19 +174,19 @@ class CleanupController
         $mediaPath = $this->shopwarePath . '/media/image';
         $thumbnailPath = $this->shopwarePath . '/media/image/thumbnail';
 
-        $iterator = new \RecursiveIteratorIterator(
+        $iterator = new RecursiveIteratorIterator(
             new \RecursiveRegexIterator(
-                new \RecursiveDirectoryIterator($mediaPath, \RecursiveDirectoryIterator::SKIP_DOTS),
+                new RecursiveDirectoryIterator($mediaPath, RecursiveDirectoryIterator::SKIP_DOTS),
                 '/ad/'
             ),
-            \RecursiveIteratorIterator::LEAVES_ONLY
+            RecursiveIteratorIterator::LEAVES_ONLY
         );
 
         if (!file_exists($thumbnailPath)) {
             mkdir($thumbnailPath);
         }
 
-        /** @var \SplFileInfo $a */
+        /** @var SplFileInfo $a */
         foreach ($iterator as $a) {
             $isThumbnail = preg_match('#_(\d)+x(\d)+\.#', $a->getFilename());
 
@@ -226,10 +247,91 @@ SQL;
      */
     private function updateShopConfig($field, $value, $shopId)
     {
-        $this->conn->prepare("UPDATE `s_core_shops` SET ".$field." = :newValue WHERE id = :shopId")
+        $this->conn->prepare("UPDATE `s_core_shops` SET " . $field . " = :newValue WHERE id = :shopId")
             ->execute([
                 ':newValue' => $value,
                 ':shopId' => $shopId
             ]);
+    }
+
+    /**
+     * @param string $path
+     * @return array|DirectoryIterator
+     */
+    private function getDirectoryIterator($path)
+    {
+        if (is_dir($path)) {
+            return new DirectoryIterator($path);
+        }
+
+        return [];
+    }
+
+    private function getCleanupList()
+    {
+        $cleanupList = array_merge(
+            $this->pluginFinder->getDummyPlugins(),
+            $this->filesFinder->getCleanupFiles()
+        );
+
+        $cacheDirectoryList = $this->getCacheDirectoryList();
+        $cleanupList = array_merge(
+            $cacheDirectoryList,
+            $cleanupList
+        );
+
+        $temporaryBackupDirectories = $this->getTemporaryBackupDirectoryList();
+        $cleanupList = array_merge(
+            $temporaryBackupDirectories,
+            $cleanupList
+        );
+
+        return $cleanupList;
+    }
+
+    /**
+     * Deletes outdated folders from earlier shopware versions.
+     */
+    public function deleteOutdatedFolders()
+    {
+        echo $this->cleanupService->cleanup();
+        exit();
+    }
+
+    /**
+     * returns a array of directory names in the cache directory
+     *
+     * @return array
+     */
+    private function getCacheDirectoryList()
+    {
+        $cacheDirectories = $this->getDirectoryIterator($this->shopwarePath . '/var/cache');
+
+        $directoryNames = [];
+        foreach ($cacheDirectories as $directory) {
+            if ($directory->isDot() || $directory->isFile()) {
+                continue;
+            }
+
+            $directoryNames[] = $directory->getRealPath();
+        }
+
+        return $directoryNames;
+    }
+
+    private function getTemporaryBackupDirectoryList()
+    {
+        $directories = $this->getDirectoryIterator($this->backupDirectory);
+
+        $directoryNames = [];
+        foreach ($directories as $directory) {
+            if ($directory->isDot() || $directory->isFile()) {
+                continue;
+            }
+
+            $directoryNames[] = $directory->getRealPath();
+        }
+
+        return $directoryNames;
     }
 }

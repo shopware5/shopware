@@ -24,8 +24,24 @@
 
 namespace Shopware\Tests\Functional\Components\Theme;
 
+use Doctrine\DBAL\Connection;
+
 class InheritanceTest extends Base
 {
+    protected function setUp()
+    {
+        /** @var Connection $connection */
+        $connection = Shopware()->Container()->get('dbal_connection');
+        $connection->beginTransaction();
+    }
+
+    protected function tearDown()
+    {
+        /** @var Connection $connection */
+        $connection = Shopware()->Container()->get('dbal_connection');
+        $connection->rollBack();
+    }
+
     public function getTheme(\Shopware\Models\Shop\Template $template)
     {
         if ($template->getParent() === null) {
@@ -156,12 +172,17 @@ class InheritanceTest extends Base
         $master->setTemplate('TestBare');
         $master->setVersion(3);
 
+        Shopware()->Container()->get('models')->persist($master);
+        Shopware()->Container()->get('models')->flush();
+
         $slave = new \Shopware\Models\Shop\Template();
         $slave->setName('TestResponsive');
         $slave->setTemplate('TestResponsive');
         $slave->setParent($master);
         $slave->setVersion(3);
 
+        Shopware()->Container()->get('models')->persist($slave);
+        Shopware()->Container()->get('models')->flush();
         return $slave;
     }
 }

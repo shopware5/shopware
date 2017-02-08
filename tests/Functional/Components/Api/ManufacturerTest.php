@@ -25,6 +25,10 @@
 namespace Shopware\Tests\Functional\Components\Api;
 
 use Shopware\Components\Api\Resource\Manufacturer;
+use Shopware\Components\Api\Resource\Resource;
+use Shopware\Components\Model\ModelRepository;
+use Shopware\Models\Media\Album;
+use Shopware\Models\Media\Media;
 
 class ManufacturerTest extends TestCase
 {
@@ -156,5 +160,50 @@ class ManufacturerTest extends TestCase
     public function testDeleteWithMissingIdShouldThrowParameterMissingException()
     {
         $this->resource->delete('');
+    }
+
+    public function testMediaUploadOnCreate()
+    {
+        $manufacturer = $this->resource->create([
+            'name' => 'foo',
+            'image' => [
+                'link' => 'file://' . __DIR__ . '/fixtures/test-bild.jpg'
+            ]
+        ]);
+
+        $this->assertNotEmpty($manufacturer->getImage());
+
+        /** @var ModelRepository $repo */
+        $repo = Shopware()->Container()->get('models')->getRepository(Media::class);
+        /** @var Media $media */
+        $media = $repo->findOneBy(['path' => $manufacturer->getImage()]);
+
+        $this->assertEquals($media->getAlbumId(), Album::ALBUM_SUPPLIER);
+    }
+
+    public function testMediaUploadOnUpdate()
+    {
+        $manufacturer = $this->resource->create([
+            'name' => 'bar'
+        ]);
+
+        $this->resource->update($manufacturer->getId(), [
+            'name' => 'bar',
+            'image' => [
+                'link' => 'file://' . __DIR__ . '/fixtures/test-bild.jpg'
+            ]
+        ]);
+
+        $this->resource->setResultMode(Resource::HYDRATE_OBJECT);
+        $manufacturer = $this->resource->getOne($manufacturer->getId());
+        $this->assertNotEmpty($manufacturer->getImage());
+
+        /** @var ModelRepository $repo */
+        $repo = Shopware()->Container()->get('models')->getRepository(Media::class);
+
+        /** @var Media $media */
+        $media = $repo->findOneBy(['path' => $manufacturer->getImage()]);
+
+        $this->assertEquals($media->getAlbumId(), Album::ALBUM_SUPPLIER);
     }
 }

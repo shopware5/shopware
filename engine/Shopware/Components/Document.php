@@ -341,7 +341,9 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
 
         $articleModule = Shopware()->Modules()->Articles();
         foreach ($positions as &$position) {
-            $position['meta'] = $articleModule->sGetPromotionById('fix', 0, (int) $position['articleID']);
+            if ($position['modus'] == 0) {
+                $position['meta'] = $articleModule->sGetPromotionById('fix', 0, $position['articleordernumber']);
+            }
         }
 
         if ($this->_config["_previewForcePagebreak"]) {
@@ -458,12 +460,12 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
 
         // Check if voucher is available
         $sqlVoucher = "SELECT s_emarketing_voucher_codes.id AS id, code, description, value, percental FROM s_emarketing_vouchers, s_emarketing_voucher_codes
-         WHERE  modus = 1 AND (valid_to >= now() OR valid_to IS NULL)
+         WHERE  modus = 1 AND (valid_to >= CURDATE() OR valid_to IS NULL)
          AND s_emarketing_voucher_codes.voucherID = s_emarketing_vouchers.id
          AND s_emarketing_voucher_codes.userID IS NULL
          AND s_emarketing_voucher_codes.cashed = 0
          AND s_emarketing_vouchers.id=?
-         GROUP BY s_emarketing_voucher_codes.voucherID
+         Limit 1
          ";
 
         $getVoucher = Shopware()->Db()->fetchRow($sqlVoucher, array($id));

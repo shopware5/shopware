@@ -61,7 +61,7 @@ class EnlightLoaderTest extends TestCase
      */
     public function testAddIncludePath2()
     {
-        $old = \Enlight_Loader::addIncludePath('.',  \Enlight_Loader::POSITION_PREPEND);
+        $old = \Enlight_Loader::addIncludePath('.', \Enlight_Loader::POSITION_PREPEND);
         $new = \Enlight_Loader::explodeIncludePath();
         $first = array_shift($new);
 
@@ -82,5 +82,48 @@ class EnlightLoaderTest extends TestCase
         \Enlight_Loader::setIncludePath($old);
 
         $this->assertFalse($found);
+    }
+
+    /**
+     * Test realpath abstraction
+     *
+     * @dataProvider dataProviderRealpath
+     */
+    public function testRealpath($path, $expected)
+    {
+        $oldCWD = getcwd();
+        chdir(__DIR__);
+
+        $result = \Enlight_Loader::realpath($path);
+        $this->assertEquals($expected, $result);
+
+        chdir($oldCWD);
+    }
+
+    /**
+     * Provide test cases
+     *
+     * @return array
+     */
+    public function dataProviderRealpath()
+    {
+        return [
+            // Nonexisting paths
+            ['/nonexisting', false],
+            ['../nonexisting', false],
+            ['nonexisting', false],
+            [' ', false],
+
+            // Relative paths
+            ['', __DIR__],
+            ['./', __DIR__],
+            ['../', dirname(__DIR__)],
+            ['Bundle/MediaBundle/Strategy/../../', __DIR__.'/Bundle'],
+
+            // Absolute paths
+            ['/', '/'],
+            [__DIR__.'/', __DIR__],
+            [__DIR__.'/tests/..', __DIR__],
+        ];
     }
 }

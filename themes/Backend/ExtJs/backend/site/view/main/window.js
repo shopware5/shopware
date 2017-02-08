@@ -79,7 +79,7 @@ Ext.define('Shopware.apps.Site.view.main.Window', {
                 xtype: 'site-form',
                 region: 'center',
                 groupStore: me.groupStore,
-				selectedStore: me.selectedStore,
+                selectedStore: me.selectedStore,
                 shopStore: me.shopStore
             }
         ]

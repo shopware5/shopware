@@ -799,6 +799,9 @@ class Variant extends Resource implements BatchInterface
 
                 $option = new Option();
                 $option->setPosition(0);
+                if (array_key_exists('position', $optionData)) {
+                    $option->setPosition((int) $optionData['position']);
+                }
                 $option->setName($optionData['option']);
                 $option->setGroup($availableGroup);
                 $this->getManager()->persist($option);
@@ -928,7 +931,6 @@ class Variant extends Resource implements BatchInterface
         //to create a new unit, the unit name and unit is required. Otherwise we throw an exception
         if (!$unit && isset($unitData['name']) && isset($unitData['unit'])) {
             $unit = new Unit();
-            $this->getManager()->persist($unit);
         } elseif (!$unit) {
             throw new ApiException\CustomValidationException(sprintf('To create a unit you need to pass `name` and `unit`'));
         }

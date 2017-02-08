@@ -39,7 +39,7 @@ Ext.define('Shopware.apps.Snippet.model.Shoplocale', {
      * @array
      */
     fields : [
-		//{block name="backend/snippet/model/shoplocale/fields"}{/block}
+        //{block name="backend/snippet/model/shoplocale/fields"}{/block}
         { name: 'displayName', type: 'string' },
         { name: 'localeId',    type: 'int' },
         { name: 'shopId',      type: 'int' }

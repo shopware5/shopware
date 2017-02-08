@@ -48,10 +48,6 @@ class ProductNumberSearch implements SearchBundle\ProductNumberSearchInterface
      */
     private $facetHandlers;
 
-    /**
-     * @var AttributeHydrator
-     */
-    private $attributeHydrator;
 
     /**
      * @var \Enlight_Event_EventManager
@@ -60,18 +56,15 @@ class ProductNumberSearch implements SearchBundle\ProductNumberSearchInterface
 
     /**
      * @param QueryBuilderFactory $queryBuilderFactory
-     * @param AttributeHydrator $attributeHydrator
      * @param \Enlight_Event_EventManager $eventManager
      * @param FacetHandlerInterface[] $facetHandlers
      */
     public function __construct(
         QueryBuilderFactory $queryBuilderFactory,
-        AttributeHydrator $attributeHydrator,
         \Enlight_Event_EventManager $eventManager,
         $facetHandlers = []
     ) {
         $this->queryBuilderFactory = $queryBuilderFactory;
-        $this->attributeHydrator = $attributeHydrator;
         $this->facetHandlers = $facetHandlers;
         $this->eventManager = $eventManager;
         $this->facetHandlers = $this->registerFacetHandlers();
@@ -95,17 +88,13 @@ class ProductNumberSearch implements SearchBundle\ProductNumberSearchInterface
 
         $products = $this->getProducts($query);
 
-        $total = $this->getTotalCount($query);
+        $total = count($products);
+        if ($criteria->fetchCount()) {
+            $total = $this->getTotalCount($query);
+        }
 
         $facets = $this->createFacets($criteria, $context);
-
-        $result = new SearchBundle\ProductNumberSearchResult(
-            $products,
-            intval($total),
-            $facets
-        );
-
-        return $result;
+        return new SearchBundle\ProductNumberSearchResult($products, (int) $total, $facets);
     }
 
     /**

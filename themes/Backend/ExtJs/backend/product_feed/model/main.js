@@ -35,17 +35,17 @@
  */
 //{block name="backend/product_feed/model/main"}
 Ext.define('Shopware.apps.ProductFeed.model.Main', {
-	/**
-	* Extends the standard ExtJS 4
-	* @string
-	*/
+    /**
+    * Extends the standard ExtJS 4
+    * @string
+    */
     extend : 'Ext.data.Model',
-	/**
-	* The fields used for this model
-	* @array
-	*/
+    /**
+    * The fields used for this model
+    * @array
+    */
     fields : [
-		//{block name="backend/product_feed/model/main/fields"}{/block}
+        //{block name="backend/product_feed/model/main/fields"}{/block}
         { name : 'id', type : 'int' },
         { name : 'name', type : 'string' },
         { name : 'fileName', type : 'string' },
@@ -53,15 +53,15 @@ Ext.define('Shopware.apps.ProductFeed.model.Main', {
         { name : 'countArticles', type : 'int' },
         { name : 'lastExport', type : 'date' }
     ],
-	/**
-	* If the name of the field is 'id' extjs assumes autmagical that
-	* this field is an unique identifier.
-	*/
+    /**
+    * If the name of the field is 'id' extjs assumes autmagical that
+    * this field is an unique identifier.
+    */
     idProperty : 'id',
-	/**
-	* Configure the data communication
-	* @object
-	*/
+    /**
+    * Configure the data communication
+    * @object
+    */
     proxy : {
         type : 'ajax',
         api:{

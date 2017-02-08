@@ -97,9 +97,12 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
         // Set new ordernumber
         $numberModel->setNumber($newOrderNumber);
 
-        // set new ordernumber to the order
+        // Set new ordernumber to the order and its details
         $orderModel = Shopware()->Models()->find('Shopware\Models\Order\Order', $orderId);
         $orderModel->setNumber($newOrderNumber);
+        foreach ($orderModel->getDetails() as $detailModel) {
+            $detailModel->setNumber($newOrderNumber);
+        }
 
         // refreshes the in stock correctly for this order if the user confirmed it
         if ((bool) $this->Request()->getParam('refreshInStock')) {
@@ -124,6 +127,9 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
         if ($result[0]['customer']['shipping'] === null) {
             $result[0]['customer']['shipping'] = $result[0]['customer']['billing'];
         }
+
+        // copy customer number into billing address from customer
+        $result[0]['customer']['billing']['number'] = $result[0]['customer']['number'];
 
         // Create new entry in s_order_billingaddress
         $billingModel = new Shopware\Models\Order\Billing();
@@ -251,10 +257,10 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
     {
         $orderId = $this->Request()->getParam('id', null);
 
-        $sql = "SELECT s_emarketing_vouchers.id, s_emarketing_vouchers.description, s_emarketing_vouchers.value
+        $sql = "SELECT s_emarketing_vouchers.id, s_emarketing_vouchers.description, s_emarketing_vouchers.value, s_emarketing_vouchers.percental
             FROM s_emarketing_vouchers
-            WHERE  s_emarketing_vouchers.modus = 1 AND (s_emarketing_vouchers.valid_to >= now() OR s_emarketing_vouchers.valid_to is NULL)
-            AND (s_emarketing_vouchers.valid_from <= now() OR s_emarketing_vouchers.valid_from is NULL)
+            WHERE  s_emarketing_vouchers.modus = 1 AND (s_emarketing_vouchers.valid_to >= CURDATE() OR s_emarketing_vouchers.valid_to is NULL)
+            AND (s_emarketing_vouchers.valid_from <= CURDATE() OR s_emarketing_vouchers.valid_from is NULL)
             AND (
                 SELECT s_emarketing_voucher_codes.id
                 FROM s_emarketing_voucher_codes
@@ -281,12 +287,19 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
     private function getFreeVoucherCode($voucherId)
     {
         $builder = Shopware()->Models()->createQueryBuilder();
-        $builder->select(array('voucherCodes.id', 'voucherCodes.code'))
+        $builder->select(array(
+            'voucherCodes.id',
+            'voucherCodes.code',
+            'voucher.validTo',
+            'voucher.value',
+            'voucher.percental',
+            'voucher.validFrom'
+        ))
                 ->from('Shopware\Models\Voucher\Voucher', 'voucher')
                 ->leftJoin('voucher.codes', 'voucherCodes')
                 ->where('voucher.modus = ?1')
                 ->andWhere('voucher.id = :voucherId')
-                ->andWhere('voucher.validTo >= CURRENT_TIMESTAMP() OR voucher.validTo is NULL')
+                ->andWhere('voucher.validTo >= CURRENT_DATE() OR voucher.validTo is NULL')
                 ->andWhere('voucherCodes.customerId is NULL')
                 ->andWhere('voucherCodes.cashed = 0')
                 ->setParameter(1, 1)
@@ -359,8 +372,18 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
                 ]);
                 return;
             }
+            if ($code[0]['validTo'] !== null) {
+                $code[0]['validTo'] = $code[0]['validTo']->format('Y-m-d');
+            }
+            if ($code[0]['validFrom'] !== null) {
+                $code[0]['validFrom'] = $code[0]['validFrom']->format('Y-m-d');
+            }
             $context = array(
-                'sVouchercode' => $code[0]['code']
+                'sVouchercode' => $code[0]['code'],
+                'sVouchervalue' => $code[0]['value'],
+                'sVouchervalidto' => $code[0]['validTo'],
+                'sVouchervalidfrom' => $code[0]['validFrom'],
+                'sVoucherpercental' => $code[0]['percental']
             );
         }
 

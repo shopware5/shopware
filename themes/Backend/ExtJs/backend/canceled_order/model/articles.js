@@ -44,7 +44,7 @@ Ext.define('Shopware.apps.CanceledOrder.model.Articles', {
      * @array
      */
     fields: [
-		//{block name="backend/canceled_order/model/article/fields"}{/block}
+        //{block name="backend/canceled_order/model/article/fields"}{/block}
         { name: 'id', type: 'int' },
         { name: 'ordernumber', type: 'string' },
         { name: 'article', type: 'string' },

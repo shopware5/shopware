@@ -379,28 +379,20 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
      */
     public function createPayment($options, $description = null, $action = null)
     {
+        /** @var \Shopware\Components\Plugin\PaymentInstaller $installer */
+        $installer = $this->get('shopware.plugin_payment_installer');
+
         if (is_string($options)) {
             $options = ['name' => $options];
         }
-        $payment = $this->Payments()->findOneBy(['name' => $options['name']]);
-        if ($payment === null) {
-            $payment = new Payment();
-            $payment->setName($options['name']);
-            Shopware()->Models()->persist($payment);
-        }
-        $payment->fromArray($options);
         if ($description !== null) {
-            $payment->setDescription($description);
+            $options['description'] = $description;
         }
         if ($action !== null) {
-            $payment->setAction($action);
+            $options['action'] = $action;
         }
-        $plugin = $this->Plugin();
-        $plugin->getPayments()->add($payment);
-        $payment->setPlugin($plugin);
-        Shopware()->Models()->flush($payment);
 
-        return $payment;
+        return $installer->createOrUpdate($this->getName(), $options);
     }
 
     /**
@@ -436,22 +428,24 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
      * @param string $action
      * @param int $interval
      * @param int $active
+     * @param boolean $disableOnError
      */
-    public function createCronJob($name, $action, $interval = 86400, $active = 1)
+    public function createCronJob($name, $action, $interval = 86400, $active = 1, $disableOnError = true)
     {
         /** @var \Doctrine\DBAL\Connection $connection */
         $connection = $this->get('dbal_connection');
         $connection->insert(
             's_crontab',
             [
-                'name'       => $name,
-                'action'     => $action,
-                'next'       => new \DateTime(),
-                'start'      => null,
-                '`interval`' => $interval,
-                'active'     => $active,
-                'end'        => new \DateTime(),
-                'pluginID'   => $this->getId(),
+                'name'             => $name,
+                'action'           => $action,
+                'next'             => new \DateTime(),
+                'start'            => null,
+                '`interval`'       => $interval,
+                'active'           => $active,
+                'disable_on_error' => $disableOnError ? 1 : 0,
+                'end'              => new \DateTime(),
+                'pluginID'         => $this->getId(),
             ],
             [
                 'next' => 'datetime',
@@ -814,29 +808,10 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
      */
     public function createEmotionComponent(array $options)
     {
-        $config = array_merge([
-            'convertFunction' => null,
-            'description' => '',
-            'cls' => '',
-            'xtype' => 'emotion-components-base'
-        ], $options);
+        /** @var \Shopware\Components\Emotion\ComponentInstaller $installer */
+        $installer = $this->get('shopware.emotion_component_installer');
 
-        $component = Shopware()->Models()->getRepository(Component::class)->findOneBy([
-            'name' => $options['name'],
-            'pluginId' => $this->getId()
-        ]);
-
-        if (!$component) {
-            $component = new Component();
-        }
-
-        $component->fromArray($config);
-
-        $component->setPluginId($this->getId());
-        $component->setPlugin($this->Plugin());
-
-        //saves the component automatically if the plugin is saved
-        $this->Plugin()->getEmotionComponents()->add($component);
+        $component = $installer->createOrUpdate($this->getName(), $options['name'], $options);
 
         //register post dispatch of backend and widgets emotion controller to load the template extensions of the plugin
         $this->subscribeEvent('Enlight_Controller_Action_PostDispatchSecure_Widgets_Emotion', 'extendsEmotionTemplates');
@@ -870,7 +845,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
         }
 
         $directoryIterator = new \DirectoryIterator($backendPath);
-        $regex = new \RegexIterator($directoryIterator,  '/^.+\.js$/i', \RecursiveRegexIterator::GET_MATCH);
+        $regex = new \RegexIterator($directoryIterator, '/^.+\.js$/i', \RecursiveRegexIterator::GET_MATCH);
         foreach ($regex as $file) {
             $path = 'backend/' . $file[0];
             $view->extendsBlock(

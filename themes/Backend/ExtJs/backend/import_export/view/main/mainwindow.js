@@ -67,26 +67,26 @@ Ext.define('Shopware.apps.ImportExport.view.main.Mainwindow', {
         updateOrderState:  '{s name=update_order_state}Update Orderstate{/s}',
         offset: '{s name=offset}Offset{/s}',
         limit:  '{s name=limit}Limit{/s}',
-		start: '{s name=start}Start{/s}',
-		data: '{s name=data}Data{/s}',
-		uploading: '{s name=uploading}uploading...{/s}',
+        start: '{s name=start}Start{/s}',
+        data: '{s name=data}Data{/s}',
+        uploading: '{s name=uploading}uploading...{/s}',
         exportType:  '{s name=export_type}Export Type{/s}',
         exportVariants: '{s name=export_variants}Export Variants{/s}',
         exportTranslations: '{s name=export_translations}Export Translations{/s}',
         exportCustomergroupPrices: '{s name=export_customergroup_prices}Export Customergroup Prices{/s}',
-		categories: '{s name=categories}Categories{/s}',
-		articles: '{s name=articles}Articles{/s}',
-		in_stock: '{s name=in_stock}In stock{/s}',
-		not_in_stock: '{s name=not_in_stock}Articles not in stock{/s}',
-		prices: '{s name=prices}Article prices{/s}',
-		article_images: '{s name=article_images}Article images{/s}',
-		newsletter: '{s name=newsletter}Newsletter receiver{/s}',
-		article: '{s name=article}Article{/s}',
-		neither: '{s name=neither}none{/s}',
-		all_before_import: '{s name=all_before_import}all before import{/s}',
-    	not_imported: '{s name=not_imported}not imported{/s}',
-		empty: '{s name=empty}empty{/s}',
-		file: '{s name=file}File{/s}',
+        categories: '{s name=categories}Categories{/s}',
+        articles: '{s name=articles}Articles{/s}',
+        in_stock: '{s name=in_stock}In stock{/s}',
+        not_in_stock: '{s name=not_in_stock}Articles not in stock{/s}',
+        prices: '{s name=prices}Article prices{/s}',
+        article_images: '{s name=article_images}Article images{/s}',
+        newsletter: '{s name=newsletter}Newsletter receiver{/s}',
+        article: '{s name=article}Article{/s}',
+        neither: '{s name=neither}none{/s}',
+        all_before_import: '{s name=all_before_import}all before import{/s}',
+        not_imported: '{s name=not_imported}not imported{/s}',
+        empty: '{s name=empty}empty{/s}',
+        file: '{s name=file}File{/s}',
         noticeMessage: '{s name=notice_message}The import / export options do possibly not support all of your maintained fields. Please read our \<a href=\'http://wiki.shopware.de/Datenaustausch_detail_308.html\' target=\'_blank\' \>wiki\</a\> documentation before using the module.{/s}',
         deprecationMessage: '{s name=deprecated_message}The import / export is now marked as deprecated and will be removed soon. Please refer to our new import / export module.{/s}',
         deprecationButton: '{s name=deprecated_button}get new import / export{/s}',
@@ -105,7 +105,7 @@ Ext.define('Shopware.apps.ImportExport.view.main.Mainwindow', {
 
         /* {if {acl_is_allowed privilege=read}} */
         me.items = [
-			me.getCreateHeader(),
+            me.getCreateHeader(),
             me.getInformationText(),
             me.getExportArticlesForm(),
             me.getExportOrdersForm(),
@@ -685,7 +685,7 @@ Ext.define('Shopware.apps.ImportExport.view.main.Mainwindow', {
      * @return [Ext.data.SimpleStore]
      */
     getDataComboStore: function() {
-		var me = this;
+        var me = this;
         return new Ext.data.SimpleStore({
             fields: ['id', 'label'],
             data: [
@@ -701,7 +701,7 @@ Ext.define('Shopware.apps.ImportExport.view.main.Mainwindow', {
      * @return [Ext.data.SimpleStore]
      */
     getMiscComboStore: function() {
-		var me = this;
+        var me = this;
         return new Ext.data.SimpleStore({
             fields: ['id', 'label'],
             data: [
@@ -720,7 +720,7 @@ Ext.define('Shopware.apps.ImportExport.view.main.Mainwindow', {
      * @return [Ext.data.SimpleStore]
      */
     getImportComboStore: function() {
-		var me = this;
+        var me = this;
         return new Ext.data.SimpleStore({
             fields: ['id', 'label'],
             data: [
@@ -740,7 +740,7 @@ Ext.define('Shopware.apps.ImportExport.view.main.Mainwindow', {
      * @return [Ext.data.SimpleStore]
      */
     getDeleteCategoriesComboStore: function() {
-		var me = this;
+        var me = this;
         return new Ext.data.SimpleStore({
             fields: ['id', 'label'],
             data: [
@@ -758,7 +758,7 @@ Ext.define('Shopware.apps.ImportExport.view.main.Mainwindow', {
      * @return [Ext.data.SimpleStore]
      */
     getDeleteArticlesComboStore: function() {
-		var me = this;
+        var me = this;
         return new Ext.data.SimpleStore({
             fields: ['id', 'label'],
             data: [

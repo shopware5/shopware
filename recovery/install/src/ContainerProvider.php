@@ -28,6 +28,9 @@ use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 use Shopware\Recovery\Common\DumpIterator;
 use Shopware\Recovery\Common\HttpClient\CurlClient;
+use Shopware\Recovery\Common\Service\Notification;
+use Shopware\Recovery\Common\Service\UniqueIdGenerator;
+use Shopware\Recovery\Common\Service\UniqueIdPersister;
 use Shopware\Recovery\Common\SystemLocker;
 use Shopware\Recovery\Install\Service\ConfigWriter;
 use Shopware\Recovery\Install\Service\DatabaseService;
@@ -192,6 +195,27 @@ class ContainerProvider implements ServiceProviderInterface
                 $c['slim.app'],
                 $c['translation.service'],
                 $routes
+            );
+        };
+
+        $container['uniqueid.generator'] = function ($c) {
+            return new UniqueIdGenerator(
+                SW_PATH . '/recovery/install/data/uniqueid.txt'
+            );
+        };
+
+        $container['uniqueid.persister'] = function ($c) {
+            return new UniqueIdPersister(
+                $c['uniqueid.generator'],
+                $c['db']
+            );
+        };
+
+        $container['shopware.notify'] = function ($c) {
+            return new Notification(
+                $c['config']['api.endpoint'],
+                $c['uniqueid.generator']->getUniqueId(),
+                $c['http-client']
             );
         };
     }

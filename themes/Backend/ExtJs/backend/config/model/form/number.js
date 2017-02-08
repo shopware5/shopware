@@ -35,7 +35,7 @@ Ext.define('Shopware.apps.Config.model.form.Number', {
     extend:'Ext.data.Model',
 
     fields: [
-		//{block name="backend/config/model/form/number/fields"}{/block}
+        //{block name="backend/config/model/form/number/fields"}{/block}
         { name: 'id', type:'int' },
         { name: 'description', type:'string' },
         { name: 'name', type:'string' },

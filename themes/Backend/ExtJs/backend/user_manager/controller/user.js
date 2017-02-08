@@ -41,7 +41,7 @@ Ext.define('Shopware.apps.UserManager.controller.User', {
      * Extend from the standard ExtJS 4 controller
      * @string
      */
-	extend: 'Enlight.app.Controller',
+    extend: 'Enlight.app.Controller',
 
     /**
      * Holder property which saves the instance of the application
@@ -60,7 +60,7 @@ Ext.define('Shopware.apps.UserManager.controller.User', {
             errorTitle: '{s name=message/password/form/error_title}Error saving the form{/s}',
             errorMessage: '{s name=message/password/form/error_message}The field -[0]- is not valid{/s}'
         },
-		growlMessage:'{s name=message/growlMessage}User manager{/s}'
+        growlMessage:'{s name=message/growlMessage}User manager{/s}'
     },
 
     refs: [
@@ -69,15 +69,15 @@ Ext.define('Shopware.apps.UserManager.controller.User', {
         { ref: 'attributeForm', selector: 'usermanager-user-create shopware-attribute-form' }
     ],
 
-	/**
-	 * Creates the necessary event listener for this
-	 * specific controller and opens a new Ext.window.Window
-	 * to display the subapplication
+    /**
+     * Creates the necessary event listener for this
+     * specific controller and opens a new Ext.window.Window
+     * to display the subapplication
      *
      * @return void
-	 */
-	init: function() {
-		var me = this;
+     */
+    init: function() {
+        var me = this;
 
         me.control({
             'usermanager-user-create': {
@@ -95,7 +95,7 @@ Ext.define('Shopware.apps.UserManager.controller.User', {
                 change:me.onSearchUser
             }
         });
-	},
+    },
 
     /**
      * Filters the grid with the passed search value to find the right voucher

@@ -26,6 +26,7 @@ namespace Shopware\Tests\Functional\Components\Api;
 
 use Shopware\Components\Api\Resource\Article;
 use Shopware\Components\Api\Resource\Resource;
+use Shopware\Models\Article\Image;
 
 /**
  * @category  Shopware
@@ -218,6 +219,63 @@ class ArticleTest extends TestCase
                 $this->assertGreaterThan(0, $price->getFrom());
             }
         }
+
+        return $article->getId();
+    }
+
+    public function testCreateWithNewUnitShouldBeSuccessful()
+    {
+        $testData = [
+            'name' => 'Testarticle',
+            'description' => 'testdescription',
+            'descriptionLong' => 'Test descriptionLong',
+            'active' => true,
+            'pseudoSales' => 999,
+            'highlight' => true,
+            'keywords' => 'test, testarticle',
+            'tax' => 19,
+            'categories' => [
+                array('id' => 15),
+                array('id' => 10),
+            ],
+            'mainDetail' => [
+                'number' => 'swTEST' . uniqid(rand()),
+                // create new unit
+                'unit' => array(
+                    'name' => 'newunit',
+                    'unit' => 'newunit'
+                ),
+                'prices' => [
+                    [
+                        'customerGroupKey' => 'EK',
+                        'price' => 999,
+                    ]
+                ]
+            ]
+        ];
+
+        $article = $this->resource->create($testData);
+        // change number for second article
+        $testData['mainDetail']['number'] = 'swTEST' . uniqid(rand());
+        $secondArticle = $this->resource->create($testData);
+
+        $this->assertInstanceOf('\Shopware\Models\Article\Article', $article);
+        $this->assertGreaterThan(0, $article->getId());
+
+        $this->assertEquals($article->getName(), $testData['name']);
+        $this->assertEquals($article->getDescription(), $testData['description']);
+        $this->assertEquals($article->getMetaTitle(), $testData['metaTitle']);
+
+        foreach ($article->getMainDetail()->getPrices() as $price) {
+            $this->assertGreaterThan(0, $price->getFrom());
+        }
+
+        $this->assertInstanceOf('\Shopware\Models\Article\Unit', $article->getMainDetail()->getUnit());
+        $this->assertGreaterThan(0, $article->getMainDetail()->getUnit()->getId());
+        $this->assertEquals($article->getMainDetail()->getUnit()->getName(), $testData['mainDetail']['unit']['name']);
+        $this->assertEquals($article->getMainDetail()->getUnit()->getUnit(), $testData['mainDetail']['unit']['unit']);
+
+        $this->assertEquals($article->getMainDetail()->getUnit()->getId(), $secondArticle->getMainDetail()->getUnit()->getId());
 
         return $article->getId();
     }
@@ -2871,6 +2929,126 @@ class ArticleTest extends TestCase
                 $denormalized,
                 "Denormalized array contains not the expected category id"
             );
+        }
+    }
+
+
+    public function testVariantImagesOnArticleCreate()
+    {
+        $data = [
+            'descriptionLong' => 'test1',
+            'name' => 'test1',
+            'active' => true,
+            'configuratorSet' => [
+                'type' => 2,
+                'groups' => [
+                    [
+                        'name' => 'New1',
+                        'options' => [
+                            ['name' => 'NewVal1'],
+                            ['name' => 'Newval2']
+                        ]
+                    ]
+                ]
+            ],
+            'taxId' => 1,
+            'mainDetail' => [
+                'number' => uniqid(rand()),
+                'active' => true,
+                'prices' => [
+                    [
+                        'price' => 0.0,
+                        'pseudoPrice' => 0.0,
+                        'customerGroupKey' => 'EK',
+                    ]
+                ],
+                'configuratorOptions' => [
+                    [
+                        'group' => 'New1',
+                        'option' => 'NewVal1',
+                    ]
+                ],
+                'shippingTime' => 7.0,
+                'width' => 0,
+                'inStock' => 2,
+            ],
+            'filterGroupId' => null,
+            'images' =>
+                [
+                    [
+                        'position' => 0,
+                        'main' => 1,
+                        'mediaId' => 2,
+                        'description' => '147quad1809 603994396334907 1063748094 n',
+                        'options' => [
+                            [
+                                [
+                                    'name' => 'NewVal1',
+                                ]
+                            ]
+                        ]
+                    ],
+                    [
+                        'position' => 0,
+                        'main' => 2,
+                        'mediaId' => 3,
+                        'description' => 'IMG 7228',
+                        'options' => [
+                            [
+                                [
+                                    'name' => 'Newval2',
+                                ]
+                            ]
+                        ]
+                    ]
+                ],
+            'lastStock' => true,
+            'variants' => [
+                [
+                    'number' => uniqid(rand()) . '.1',
+                    'active' => true,
+                    'prices' => [
+                        [
+                            'price' => 0.0,
+                            'pseudoPrice' => 0.0,
+                            'customerGroupKey' => 'EK',
+                        ]
+                    ],
+                    'configuratorOptions' => [
+                        [
+                            'group' => 'New1',
+                            'option' => 'Newval2',
+                        ]
+                    ],
+                    'shippingTime' => 7.0,
+                    'width' => 0,
+                    'isMain' => 0,
+                    'inStock' => 2,
+                ],
+            ]
+        ];
+
+        $article = $this->resource->create($data);
+
+        /** @var Image $image */
+        foreach ($article->getImages() as $image) {
+            $media = $image->getMedia();
+
+            $this->assertCount(1, $image->getMappings());
+
+            /** @var Image\Mapping $mapping */
+            $mapping = array_shift($image->getMappings()->getValues());
+
+            $this->assertCount(1, $mapping->getRules());
+
+            /** @var Image\Rule $rule */
+            $rule = array_shift($mapping->getRules()->getValues());
+
+            if ($media->getId() === 2) {
+                $this->assertEquals('NewVal1', $rule->getOption()->getName());
+            } elseif ($media->getId() === 3) {
+                $this->assertEquals('Newval2', $rule->getOption()->getName());
+            }
         }
     }
 }

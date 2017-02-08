@@ -53,7 +53,7 @@ Ext.define('Shopware.apps.Customer.model.List', {
      * @array
      */
     fields:[
-		//{block name="backend/customer/model/list/fields"}{/block}
+        //{block name="backend/customer/model/list/fields"}{/block}
         { name:'id', type:'int' },
         { name:'number', type:'string' },
         { name:'firstname', type:'string' },

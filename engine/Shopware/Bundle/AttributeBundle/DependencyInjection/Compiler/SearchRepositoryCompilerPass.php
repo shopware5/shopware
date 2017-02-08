@@ -24,10 +24,9 @@
 
 namespace Shopware\Bundle\AttributeBundle\DependencyInjection\Compiler;
 
+use Shopware\Components\DependencyInjection\Compiler\TagReplaceTrait;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
-use Symfony\Component\DependencyInjection\Definition;
-use Symfony\Component\DependencyInjection\Reference;
 
 /**
  * @category  Shopware
@@ -36,33 +35,13 @@ use Symfony\Component\DependencyInjection\Reference;
  */
 class SearchRepositoryCompilerPass implements CompilerPassInterface
 {
+    use TagReplaceTrait;
+
     /**
      * @param ContainerBuilder $container
      */
     public function process(ContainerBuilder $container)
     {
-        if (!$container->hasDefinition('shopware_attribute.repository_registry')) {
-            return;
-        }
-
-        $definition = $container->getDefinition('shopware_attribute.repository_registry');
-        $this->replaceArgument($container, $definition, 'attribute_search_repository', 0);
-    }
-
-    /**
-     * @param ContainerBuilder $container
-     * @param Definition       $definition
-     * @param string           $tag
-     * @param int              $argumentIndex
-     */
-    public function replaceArgument(ContainerBuilder $container, Definition $definition, $tag, $argumentIndex)
-    {
-        $transports = $definition->getArgument($argumentIndex);
-        $taggedServices = $container->findTaggedServiceIds($tag);
-
-        foreach ($taggedServices as $id => $attributes) {
-            $transports[] = new Reference($id);
-        }
-        $definition->replaceArgument($argumentIndex, $transports);
+        $this->replaceArgumentWithTaggedServices($container, 'shopware_attribute.repository_registry', 'attribute_search_repository', 0);
     }
 }

@@ -45,7 +45,7 @@ Ext.define('Shopware.apps.Property.model.Option', {
      * @array
      */
     fields : [
-		//{block name="backend/property/model/option/fields"}{/block}
+        //{block name="backend/property/model/option/fields"}{/block}
         { name: 'id', type: 'integer' },
         { name: 'mediaId', type: 'integer' },
         { name: 'value', type: 'string' }

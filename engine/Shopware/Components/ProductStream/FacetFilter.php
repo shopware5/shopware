@@ -65,28 +65,28 @@ class FacetFilter implements FacetFilterInterface
      */
     public function add(Criteria $criteria)
     {
-        if ($this->config->get('displayFiltersInListings')) {
-            $criteria->addFacet(new PropertyFacet());
-        }
-
-        if ($this->config->get('showPriceFacet')) {
-            $criteria->addFacet(new PriceFacet());
-        }
-
         if (!$criteria->hasBaseCondition('immediate_delivery') && $this->config->get('showImmediateDeliveryFacet')) {
             $criteria->addFacet(new ImmediateDeliveryFacet());
-        }
-
-        if (!$criteria->hasBaseCondition('manufacturer') && $this->config->get('showSupplierInCategories')) {
-            $criteria->addFacet(new ManufacturerFacet());
         }
 
         if (!$criteria->hasBaseCondition('shipping_free') && $this->config->get('showShippingFreeFacet')) {
             $criteria->addFacet(new ShippingFreeFacet());
         }
 
+        if ($this->config->get('showPriceFacet')) {
+            $criteria->addFacet(new PriceFacet());
+        }
+
         if (!$criteria->hasBaseCondition('vote_average') && $this->config->get('showVoteAverageFacet')) {
             $criteria->addFacet(new VoteAverageFacet());
+        }
+
+        if (!$criteria->hasBaseCondition('manufacturer') && $this->config->get('showSupplierInCategories')) {
+            $criteria->addFacet(new ManufacturerFacet());
+        }
+
+        if ($this->config->get('displayFiltersInListings')) {
+            $criteria->addFacet(new PropertyFacet());
         }
     }
 
@@ -179,7 +179,9 @@ class FacetFilter implements FacetFilterInterface
             $condition = $criteria->getBaseCondition('price');
 
             $facet->setMin($condition->getMinPrice());
-            $facet->setMax($condition->getMaxPrice());
+            if ($condition->getMaxPrice() != 0) {
+                $facet->setMax($condition->getMaxPrice());
+            }
         }
     }
 

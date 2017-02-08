@@ -34,7 +34,7 @@
 Ext.define('Shopware.apps.Config.model.form.PageGroup', {
     extend: 'Ext.data.Model',
     fields: [
-		//{block name="backend/config/model/form/page_group/fields"}{/block}
+        //{block name="backend/config/model/form/page_group/fields"}{/block}
         { name: 'id', type: 'int' },
         { name: 'name', type: 'string' },
         { name: 'key', type: 'string' },

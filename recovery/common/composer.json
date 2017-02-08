@@ -5,7 +5,8 @@
         "slim/slim": "~2.4.3",
         "symfony/console": "~2.6.1",
         "pimple/pimple": "~3.0",
-        "knplabs/gaufrette": "~0.1.8"
+        "knplabs/gaufrette": "~0.1.8",
+        "paragonie/random_compat": "1.4.1"
     },
     "autoload": {
         "psr-4": {

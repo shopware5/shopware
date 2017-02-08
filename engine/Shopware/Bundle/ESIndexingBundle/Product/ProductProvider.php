@@ -231,7 +231,7 @@ class ProductProvider implements ProductProviderInterface
         }
 
         return array_map(function ($row) {
-             return array_values(array_unique(array_filter($row)));
+            return array_values(array_unique(array_filter($row)));
         }, $result);
     }
 

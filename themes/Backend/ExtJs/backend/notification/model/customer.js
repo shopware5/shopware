@@ -46,7 +46,7 @@ Ext.define('Shopware.apps.Notification.model.Customer', {
      * @array
      */
     fields:[
-		//{block name="backend/notification/model/customer/fields"}{/block}
+        //{block name="backend/notification/model/customer/fields"}{/block}
         { name:'id', type:'int' },
         { name:'mail', type:'string' },
         { name:'name', type:'string' },

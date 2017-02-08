@@ -61,16 +61,16 @@ Ext.define('Shopware.apps.Index.view.themeCache.ThemeCacheWarmUp', {
      * Define window height
      * @integer
      */
-    height: 300,
+    height: 390,
 
     /**
-     * Set vbox layout and stretch align to display the toolbar on top and the button container
-     * under the toolbar.
+     * Set anchor layout
      * @object
      */
-    layout: {
-        type: 'vbox',
-        align: 'stretch'
+    layout: 'anchor',
+
+    defaults: {
+        anchor: '100%'
     },
 
     /**
@@ -152,10 +152,12 @@ Ext.define('Shopware.apps.Index.view.themeCache.ThemeCacheWarmUp', {
         var me = this;
 
         me.progressBar = me.createProgressBar();
+        me.shopSelector = me.createShopSelector();
 
         return [
             {
                 xtype: 'fieldset',
+                height: 230,
                 defaults: me.defaults,
                 title: me.snippets.infoTitle,
                 items: [
@@ -165,6 +167,7 @@ Ext.define('Shopware.apps.Index.view.themeCache.ThemeCacheWarmUp', {
                     })
                 ]
             },
+            me.shopSelector,
             me.progressBar,
             me.createButtons()
         ];
@@ -185,6 +188,25 @@ Ext.define('Shopware.apps.Index.view.themeCache.ThemeCacheWarmUp', {
         });
     },
 
+    createShopSelector: function() {
+        var me = this;
+
+        return Ext.create('Ext.form.field.ComboBox', {
+            displayField: 'name',
+            valueField: 'id',
+            forceSelection: true,
+            multiSelect: true,
+            editable: false,
+            emptyText: '{s name=fieldset/information/shopselection}Shop selection{/s}',
+            listeners: {
+                scope: me,
+                select: function(combo, records) {
+                    me.setShops(records);
+                }
+            }
+        });
+    },
+
     /**
      * Sets the shops and changes view accordingly
      * @param records
@@ -192,7 +214,7 @@ Ext.define('Shopware.apps.Index.view.themeCache.ThemeCacheWarmUp', {
     setShops: function(records) {
         var me = this;
 
-        if (Ext.isEmpty(me.singleShopId)) {
+        if (Ext.isEmpty(me.singleShopId) && records.length > 1) {
             me.progressBar.updateProgress(
                 0, me.snippets.progressBar.replace('0', records.length)
             );
@@ -249,8 +271,26 @@ Ext.define('Shopware.apps.Index.view.themeCache.ThemeCacheWarmUp', {
                     this.disable();
                 }
                 me.closeButton.disable();
+                me.filterThemes();
+                me.shopSelector.disable();
                 me.fireEvent('themeCacheWarmUpStartProcess');
             }
+        });
+    },
+
+    /**
+     * Filter shop store with selected shops before starting
+     * warumup process.
+     */
+    filterThemes: function() {
+        var me = this,
+            selectedShops = me.shopSelector.getValue();
+        if (Ext.isEmpty(selectedShops)) {
+            return;
+        }
+
+        me.shopSelector.getStore().filterBy(function(record, id) {
+            return Ext.Array.contains(selectedShops, id);
         });
     },
 
@@ -269,6 +309,7 @@ Ext.define('Shopware.apps.Index.view.themeCache.ThemeCacheWarmUp', {
             hidden: true,
             handler: function() {
                 this.disable();
+                me.shopSelector.enable();
                 me.fireEvent('themeCacheWarmUpCancelProcess');
             }
         });

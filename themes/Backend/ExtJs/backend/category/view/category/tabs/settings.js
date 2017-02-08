@@ -365,7 +365,8 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
                 displayExtendLayout: true,
                 displayBasicLayout: true,
                 displayMinimalLayout: true,
-                displayImageLayout: true
+                displayImageLayout: true,
+                displayListLayout: true
             }
         });
 

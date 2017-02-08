@@ -27,7 +27,7 @@ use Doctrine\ORM\Mapping\ClassMetadata;
 use Shopware\Models\Customer\Group;
 use Shopware\Models\Customer\Customer;
 
-class LazyLoadingTest extends PHPUnit_Framework_TestCase
+class LazyLoadingTest extends PHPUnit\Framework\TestCase
 {
     /**
      * @var EntityManager
@@ -364,7 +364,7 @@ class LazyLoadingTest extends PHPUnit_Framework_TestCase
     {
         /** @var \Shopware\Models\Premium\Premium $premium */
         $premium = $this->em->getRepository('Shopware\Models\Premium\Premium')->find(1);
-        $this->assertEquals('SW10209',  $premium->getArticleDetail()->getNumber());
+        $this->assertEquals('SW10209', $premium->getArticleDetail()->getNumber());
     }
 
     /**

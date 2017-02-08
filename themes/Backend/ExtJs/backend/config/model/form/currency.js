@@ -36,7 +36,7 @@ Ext.define('Shopware.apps.Config.model.form.Currency', {
     extend: 'Shopware.apps.Base.model.Currency',
 
     fields: [
-		//{block name="backend/config/model/form/currency/fields"}{/block}
+        //{block name="backend/config/model/form/currency/fields"}{/block}
         { name: 'symbol', type: 'string', useNull: true },
         { name: 'symbolPosition', type: 'int', useNull: true },
         { name: 'default', type: 'boolean' },

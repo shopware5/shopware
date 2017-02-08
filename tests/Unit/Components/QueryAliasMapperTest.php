@@ -65,11 +65,10 @@ class QueryAliasMapperTest extends TestCase
             'omg' => 'baz',
         ];
 
-        $mock = $this->createMock(\Shopware_Components_Config::class);
-
-        $mock->expects($this->any())
-             ->method('get')
-             ->willReturn('foo=bar,omg=baz');
+        $mock = $this->createConfiguredMock(
+            \Shopware_Components_Config::class,
+            ['get' => 'foo=bar,omg=baz']
+        );
 
         $mapper = QueryAliasMapper::createFromConfig($mock);
 
@@ -147,7 +146,7 @@ class QueryAliasMapperTest extends TestCase
         $request = new \Enlight_Controller_Request_RequestTestCase();
         $request->setQuery('q', 'someValue');
         $request->setQuery('p', 'someOtherValue');
-        $request->setQuery('someParam',  'someValue');
+        $request->setQuery('someParam', 'someValue');
 
         $mapping = [
             'sSearch' => 'q',

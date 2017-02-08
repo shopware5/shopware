@@ -106,7 +106,7 @@ class Repository extends ModelRepository
                     $builder->expr()->isNull('forms.shopIds')
                 )
             )
-            ->setParameter('shopId',  '%|' . $shopId . '|%');
+            ->setParameter('shopId', '%|' . $shopId . '|%');
         }
 
         return $builder;

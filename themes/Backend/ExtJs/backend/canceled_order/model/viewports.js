@@ -44,7 +44,7 @@ Ext.define('Shopware.apps.CanceledOrder.model.Viewports', {
      * @array
      */
     fields: [
-		//{block name="backend/canceled_order/model/viewports/fields"}{/block}
+        //{block name="backend/canceled_order/model/viewports/fields"}{/block}
         { name: 'number', type: 'int' },
         { name: 'name', type: 'string' },
         { name: 'percent', type: 'float' }

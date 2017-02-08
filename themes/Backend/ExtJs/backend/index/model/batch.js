@@ -26,10 +26,10 @@
  */
 //{block name="backend/index/model/batch"}
 Ext.define('Shopware.apps.Index.model.Batch', {
-	extend: 'Ext.data.Model',
+    extend: 'Ext.data.Model',
     fields: [
-		//{block name="backend/index/model/batch/fields"}{/block}
-		'id',
+        //{block name="backend/index/model/batch/fields"}{/block}
+        'id',
         'currentUsers'
     ],
 

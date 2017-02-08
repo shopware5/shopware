@@ -52,7 +52,7 @@ Ext.define('Shopware.apps.Base.model.BillingAddress', {
      * @array
      */
     fields:[
-		//{block name="backend/base/model/billing_address/fields"}{/block}
+        //{block name="backend/base/model/billing_address/fields"}{/block}
         /**
          * the number field is an alias for the customer number
          */

@@ -129,7 +129,11 @@ class Manager
     {
         $encoder = $this->getEncoderByName($encoderName);
 
-        return $encoder->isPasswordValid($password, $hash);
+        if ($encoder->isPasswordValid($password, $hash)) {
+            return true;
+        }
+
+        return $encoder->isPasswordValid(strip_tags($password), $hash);
     }
 
     /**
@@ -154,7 +158,8 @@ class Manager
     {
         $encoder = $this->getEncoderByName($encoderName);
 
-        if (!$encoder->isReencodeNeeded($hash)) {
+        $truncated = $password !== strip_tags($password);
+        if (!$truncated && !$encoder->isReencodeNeeded($hash)) {
             return $hash;
         }
 

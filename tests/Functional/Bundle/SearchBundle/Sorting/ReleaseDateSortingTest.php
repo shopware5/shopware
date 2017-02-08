@@ -48,7 +48,8 @@ class ReleaseDateSortingTest extends TestCase
         $conditions = array(),
         $facets = array(),
         $sortings = array(),
-        $context = null
+        $context = null,
+        array $configs = []
     ) {
         $result = parent::search(
             $products,

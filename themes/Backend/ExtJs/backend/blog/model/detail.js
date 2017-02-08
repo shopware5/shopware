@@ -35,17 +35,17 @@
  */
 //{block name="backend/blog/model/detail"}
 Ext.define('Shopware.apps.Blog.model.Detail', {
-	/**
-	* Extends the standard ExtJS 4
-	* @string
-	*/
+    /**
+    * Extends the standard ExtJS 4
+    * @string
+    */
     extend : 'Ext.data.Model',
-	/**
-	* The fields used for this model
-	* @array
-	*/
+    /**
+    * The fields used for this model
+    * @array
+    */
     fields : [
-		//{block name="backend/blog/model/detail/fields"}{/block}
+        //{block name="backend/blog/model/detail/fields"}{/block}
         { name : 'id', type : 'int', useNull: true, defaultValue: null },
         { name : 'title', type : 'string' },
         { name : 'shortDescription', type : 'string' },
@@ -62,10 +62,10 @@ Ext.define('Shopware.apps.Blog.model.Detail', {
         { name : 'displayTime', type: 'date', dateFormat: 'H:i' }
     ],
 
-	/**
-	* Configure the data communication
-	* @object
-	*/
+    /**
+    * Configure the data communication
+    * @object
+    */
     proxy : {
         type : 'ajax',
         api:{

@@ -51,7 +51,7 @@ Ext.define('Shopware.apps.Base.model.Address', {
      * @array
      */
     fields:[
-		//{block name="backend/base/model/address/fields"}{/block}
+        //{block name="backend/base/model/address/fields"}{/block}
         { name:'salutation', type:'string' },
         { name:'company', type:'string' },
         { name:'department', type:'string' },

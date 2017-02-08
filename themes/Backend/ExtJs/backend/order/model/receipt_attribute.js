@@ -42,7 +42,7 @@ Ext.define('Shopware.apps.Order.model.ReceiptAttribute', {
      * @array
      */
     fields: [
-		//{block name="backend/order/model/receipt_attribute/fields"}{/block}
+        //{block name="backend/order/model/receipt_attribute/fields"}{/block}
         { name: 'id', type: 'int' },
         { name: 'orderDocumentId', type: 'int', useNull: true }
     ]

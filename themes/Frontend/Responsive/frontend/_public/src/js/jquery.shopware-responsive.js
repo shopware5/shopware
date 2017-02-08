@@ -1,5 +1,4 @@
 (function($, window) {
-
     window.StateManager.init([
         {
             state: 'xs',
@@ -118,7 +117,6 @@
     ;
 
     $(function($) {
-
         // Check if cookies are disabled and show notification
         if (!StorageManager.hasCookiesSupport) {
             createNoCookiesNoticeBox(window.snippets.noCookiesNotice);
@@ -126,7 +124,7 @@
 
         // Create the no cookies notification message
         function createNoCookiesNoticeBox(message) {
-            $('<div/>', { 'class': 'alert is--warning' }).append(
+            $('<div/>', { 'class': 'alert is--warning no--cookies' }).append(
                 $('<div/>', {'class': 'alert--icon'}).append(
                     $('<i/>', {'class': 'icon--element icon--warning'})
                 )
@@ -134,8 +132,16 @@
                 $('<div/>', {
                     'class': 'alert--content',
                     'html': message
-                })
-            ).prependTo('.page-wrap');
+                }).append(
+                    $('<a/>', {
+                        'class': 'close--alert',
+                        'html': '✕'
+                    })
+                    .on('click', function () {
+                        $(this).closest('.no--cookies').hide();
+                    })
+                )
+            ).appendTo('.page-wrap');
         }
 
         // Lightbox auto trigger
@@ -161,7 +167,6 @@
         });
 
         $('.table--shipping-costs-trigger').on('click touchstart', function (event) {
-
             event.preventDefault();
 
             var $this = $(this),
@@ -187,14 +192,14 @@
                 'success': function (response) {
                     var cart = JSON.parse(response);
 
-                    if(!cart.amount || !cart.quantity) {
+                    if (!cart.amount || !cart.quantity) {
                         return;
                     }
 
                     $cartAmount.html(cart.amount);
                     $cartQuantity.html(cart.quantity).removeClass('is--hidden');
 
-                    if(cart.quantity == 0) {
+                    if (cart.quantity == 0) {
                         $cartQuantity.addClass('is--hidden');
                     }
                 }

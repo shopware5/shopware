@@ -33,6 +33,10 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
             )
         );
 
+        /** @var \Shopware\Bundle\PluginInstallerBundle\StoreClient $storeClient */
+        $storeClient = $this->container->get('shopware_plugininstaller.store_client');
+        $storeClient->doTrackEvent('First Run Wizard completed');
+
         $this->Request()->setParam('elements', $requestElements);
 
         $this->forward('saveForm', 'Config');
@@ -490,7 +494,9 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
             return;
         }
 
-        $shopsDomains = array_map(function ($shopData) { return $shopData->domain; }, $shopsData);
+        $shopsDomains = array_map(function ($shopData) {
+            return $shopData->domain;
+        }, $shopsData);
 
         return $shopsDomains;
     }

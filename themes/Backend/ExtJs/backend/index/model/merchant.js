@@ -26,9 +26,9 @@
  */
 //{block name="backend/index/model/merchant"}
 Ext.define('Shopware.apps.Index.model.Merchant', {
-	extend: 'Ext.data.Model',
-	fields: [
-		//{block name="backend/index/model/merchant/fields"}{/block}
+    extend: 'Ext.data.Model',
+    fields: [
+        //{block name="backend/index/model/merchant/fields"}{/block}
         { name: 'id' },
         { name: 'company_name' },
         { name: 'customer' },

@@ -22,6 +22,15 @@ Feature: Search things
         Then I should see "Zu \"str\" wurden 13 Artikel gefunden!"
         But  I should see 12 elements of type "ArticleBox"
 
+    @javascript
+    Scenario: Search with special uri characters
+        When I search for "20% alle"
+        Then I should see "Zu \"20% alle\" wurden 14 Artikel gefunden!"
+        But  I should see 12 elements of type "ArticleBox"
+        When I browse to next page
+        Then I should see 2 elements of type "ArticleBox"
+        But  I should see "Zu \"20% alle\" wurden 14 Artikel gefunden!"
+
     Scenario: Search with no hits
         When I search for "foo"
         Then I should see the no results message for keyword "foo"

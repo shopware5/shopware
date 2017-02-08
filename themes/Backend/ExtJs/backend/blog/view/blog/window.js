@@ -36,7 +36,7 @@
  */
 //{block name="backend/blog/view/blog/window"}
 Ext.define('Shopware.apps.Blog.view.blog.Window', {
-	extend: 'Enlight.app.Window',
+    extend: 'Enlight.app.Window',
     title: '{s name=window/detail_title}Blog article configuration{/s}',
     alias: 'widget.blog-blog-window',
     border: false,
@@ -185,13 +185,13 @@ Ext.define('Shopware.apps.Blog.view.blog.Window', {
                     this.destroy();
                 }
             }
-		/* {if {acl_is_allowed privilege=create}} */
-			,{
+        /* {if {acl_is_allowed privilege=create}} */
+            ,{
                 text:'{s name=detail_general/button/save}Save{/s}',
                 action:'save',
                 cls:'primary'
             }
-		/* {/if} */
+        /* {/if} */
         ];
     }
 });

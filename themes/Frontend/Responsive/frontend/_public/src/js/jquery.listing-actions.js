@@ -271,8 +271,8 @@
         registerEvents: function() {
             var me = this;
 
-            me._on(me.$filterForm, 'submit',  $.proxy(me.onFilterSubmit, me));
-            me._on(me.$actionForms, 'submit',  $.proxy(me.onActionSubmit, me));
+            me._on(me.$filterForm, 'submit', $.proxy(me.onFilterSubmit, me));
+            me._on(me.$actionForms, 'submit', $.proxy(me.onActionSubmit, me));
             me._on(me.$actionLinks, 'click', $.proxy(me.onActionLink, me));
             me._on(me.$filterComponents, 'onChange', $.proxy(me.onComponentChange, me));
             me._on(me.$filterTrigger, 'click', $.proxy(me.onFilterTriggerClick, me));
@@ -428,7 +428,6 @@
                 if (!isMobile && !me.$filterCont.hasClass(me.opts.collapsedCls)) {
                     me.applyCategoryParams();
                 }
-
             } else if (isMobile || !me.$activeFilterCont.hasClass(me.opts.disabledCls)) {
                 me.removeActiveFilter(param);
                 me.resetFilterProperty(param);
@@ -488,9 +487,9 @@
          *
          * @returns {*}
          */
-        setCategoryParamsFromTopLocation: function() {
+        setCategoryParamsFromTopLocation: function () {
             var me = this,
-                urlParams = decodeURI(window.location.search).substr(1),
+                urlParams = window.location.search.substr(1),
                 categoryParams = me.setCategoryParamsFromUrlParams(urlParams);
 
             $.publish('plugin/swListingActions/onSetCategoryParamsFromData', [ me, categoryParams ]);
@@ -504,7 +503,7 @@
          * @param urlParamString
          * @returns {{}|*}
          */
-        setCategoryParamsFromUrlParams: function(urlParamString) {
+        setCategoryParamsFromUrlParams: function (urlParamString) {
             var me = this,
                 categoryParams,
                 params;
@@ -520,21 +519,22 @@
             categoryParams = me.categoryParams;
             params = urlParamString.split('&');
 
-            $.each(params, function(index, item) {
+            $.each(params, function (index, item) {
                 var param = item.split('=');
 
-                param = $.map(param, function(val) { return decodeURIComponent(val); });
+                param = $.map(param, function (val) {
+                    val = val.replace(/\+/g, '%20');
+                    return decodeURIComponent(val);
+                });
 
                 if (param[1] == 'reset') {
                     delete categoryParams[param[0]];
-
                 } else if (me.propertyFieldNames.indexOf(param[0]) != -1) {
                     var properties = param[1].split('|');
 
-                    $.each(properties, function(index, property) {
+                    $.each(properties, function (index, property) {
                         categoryParams[me.opts.propertyPrefixChar + param[0] + me.opts.propertyPrefixChar + property] = property;
                     });
-
                 } else {
                     categoryParams[param[0]] = param[1];
                 }
@@ -569,8 +569,8 @@
          */
         createUrlParams: function(categoryParams) {
             var me = this,
-                categoryParams = categoryParams || me.categoryParams,
-                params = me.cleanParams(categoryParams),
+                catParams = categoryParams || me.categoryParams,
+                params = me.cleanParams(catParams),
                 filterList = [];
 
             $.each(params, function(key, value) {
@@ -782,7 +782,7 @@
 
             if (label !== undefined && label.length) {
                 if (me.activeFilterElements[param] !== undefined) {
-                    me.updateActiveFilterElement(param, label)
+                    me.updateActiveFilterElement(param, label);
                 } else {
                     me.createActiveFilterElement(param, label);
                 }
@@ -852,7 +852,7 @@
             if (param == 'rating') {
                 me.$el.find('#star--reset').prop('checked', true).trigger('change');
             } else {
-                $input = me.$el.find('[name="'+me.escapeDoubleQuotes(param)+'"]');
+                $input = me.$el.find('[name="' + me.escapeDoubleQuotes(param) + '"]');
                 if ($input.is('[data-range-input]')) {
                     rangeSlider = $input.parents('[data-range-slider="true"]').data('plugin_swRangeSlider');
                     rangeSlider.reset($input.attr('data-range-input'));
@@ -881,7 +881,7 @@
             if (param == 'rating' && value > 0) {
                 labelText = me.createStarLabel(value);
             } else {
-                $label = me.$filterForm.find('label[for="'+me.escapeDoubleQuotes(param)+'"]');
+                $label = me.$filterForm.find('label[for="' + me.escapeDoubleQuotes(param) + '"]');
 
                 if ($label.is('[data-range-label]')) {
                     labelText = $label.prev('span').html() + $label.html();
@@ -903,7 +903,7 @@
          * @returns string
          */
         escapeDoubleQuotes: function (str) {
-            return str.replace(/\\([\s\S])|(")/g,"\\$1$2");
+            return str.replace(/\\([\s\S])|(")/g, '\\$1$2');
         },
 
         /**

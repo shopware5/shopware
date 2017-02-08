@@ -26,9 +26,6 @@ namespace Shopware\Tests\Unit\Components\LegacyRequestWrapper;
 
 use PHPUnit\Framework\TestCase;
 
-/**
- * @covers \Shopware\Components\LegacyRequestWrapper\PostWrapper
- */
 class PostWrapperTest extends TestCase
 {
     /**
@@ -52,9 +49,6 @@ class PostWrapperTest extends TestCase
         $this->request->clearAll();
     }
 
-    /**
-     * @covers \Shopware\Components\LegacyRequestWrapper\PostWrapper::offsetSet()
-     */
     public function testSet()
     {
         $this->system->_POST->offsetSet('foo', 'bar');
@@ -68,9 +62,6 @@ class PostWrapperTest extends TestCase
         $this->assertInternalType('array', $this->request->getPost('foo'));
     }
 
-    /**
-     * @covers \Shopware\Components\LegacyRequestWrapper\PostWrapper::offsetSet()
-     */
     public function testGet()
     {
         $this->request->setPost('foo', 'bar');
@@ -84,9 +75,6 @@ class PostWrapperTest extends TestCase
         $this->assertInternalType('array', $this->system->_POST->offsetGet('foo'));
     }
 
-    /**
-     * @covers \Shopware\Components\LegacyRequestWrapper\PostWrapper::offsetUnset()
-     */
     public function testUnset()
     {
         $this->system->_POST->offsetSet('foo', 'bar');
@@ -95,9 +83,6 @@ class PostWrapperTest extends TestCase
         $this->assertNull($this->request->getPost('foo'));
     }
 
-    /**
-     * @covers \Shopware\Components\LegacyRequestWrapper\PostWrapper::setAll()
-     */
     public function testSetAll()
     {
         $this->system->_POST->offsetSet('foo', 'bar');
@@ -108,9 +93,6 @@ class PostWrapperTest extends TestCase
         $this->assertEquals('too', $this->request->getPost('foo'));
     }
 
-    /**
-     * @covers \Shopware\Components\LegacyRequestWrapper\PostWrapper::toArray()
-     */
     public function testToArray()
     {
         $this->request->setPost('foo', 'bar');

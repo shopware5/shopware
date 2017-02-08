@@ -541,7 +541,7 @@ It contains the product actions, the product information such as pictures and de
         top: 50%;
         margin-top: -9px;
         content: "";
-        font-family: shopware;
+        font-family: @sw-icon-fontname;
     }
 }
 
@@ -566,7 +566,7 @@ It contains the product actions, the product information such as pictures and de
             border-bottom: 1px solid @panel-border;
 
             .tab--title:after {
-                content: "\e68e";
+                content: @sw-icon-minus3;
             }
         }
     }
@@ -578,7 +578,7 @@ It contains the product actions, the product information such as pictures and de
         display: block;
 
         &:after {
-            content: "\e68f";
+            content: @sw-icon-plus3;
         }
     }
 }
@@ -844,8 +844,8 @@ It contains the product actions, the product information such as pictures and de
             float: left;
 
             &:before {
-                font-family: 'shopware';
-                content: "\e611";
+                font-family: @sw-icon-fontname;
+                content: @sw-icon-arrow-left;
             }
         }
 
@@ -854,8 +854,8 @@ It contains the product actions, the product information such as pictures and de
             float: right;
 
             &:before {
-                font-family: 'shopware';
-                content: "\e60f";
+                font-family: @sw-icon-fontname;
+                content: @sw-icon-arrow-right;
             }
         }
 

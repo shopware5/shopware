@@ -757,7 +757,6 @@
             }
 
             if (touches.length === 1) {
-
                 if (event.originalEvent instanceof MouseEvent && !me._grabImage) {
                     return;
                 }
@@ -1440,7 +1439,6 @@
             me._$images = me._$slide.find(opts.imageSelector);
 
             if (opts.thumbnails) {
-
                 /**
                  * Array of all thumbnail elements.
                  *
@@ -1660,7 +1658,6 @@
                 orientation = me.getThumbnailOrientation();
 
             if (me._thumbnailOrientation !== orientation) {
-
                 $prevArr
                     .toggleClass(opts.thumbnailArrowLeftCls, !isHorizontal)
                     .toggleClass(opts.thumbnailArrowTopCls, isHorizontal);
@@ -1788,13 +1785,11 @@
             me._touchDistance = 0;
 
             if (me._imageScale !== 1 || translation.x !== 0 || translation.y !== 0) {
-
                 me._imageScale = 1;
 
                 me._imageTranslation.set(0, 0);
 
                 me.updateTransform(animate, callback);
-
             } else if (callback) {
                 callback.call(me);
             }

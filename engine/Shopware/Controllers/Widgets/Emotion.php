@@ -28,6 +28,7 @@ use Shopware\Bundle\SearchBundle\Sorting\PopularitySorting;
 use Shopware\Bundle\SearchBundle\Sorting\PriceSorting;
 use Shopware\Bundle\SearchBundle\Sorting\ReleaseDateSorting;
 use Shopware\Bundle\SearchBundle\SortingInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\Product\Manufacturer;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
 use Shopware\Components\Model\Query\SqlWalker;
 use Shopware\Models\Emotion\Repository;
@@ -362,11 +363,24 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         $context = $this->get('shopware_storefront.context_service')->getShopContext();
         $medias = $this->get('shopware_storefront.media_service')->getList($mediaIds, $context);
 
-        //now we get the configured image and thumbnail dir.
-        $imageDir = $context->getBaseUrl() . '/media/image/';
-        $imageDir = str_replace('/media/image/', '/', $imageDir);
+        $links = [];
+        foreach ($result as $blog) {
+            $links[$blog['id']] = [
+                'controller' => 'blog',
+                'action' => 'detail',
+                'sCategory' => $blog['categoryId'],
+                'blogArticle' => $blog['id']
+            ];
+        }
+        $urls = $this->get('router')->generateList($links);
 
         foreach ($result as &$entry) {
+            $entry['link'] = null;
+
+            if (array_key_exists($entry['id'], $urls)) {
+                $entry['link'] = $urls[$entry['id']];
+            }
+
             foreach ($entry['media'] as $media) {
                 if (empty($media['mediaId'])) {
                     continue;
@@ -578,46 +592,25 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         if ($data["manufacturer_type"] == "manufacturers_by_cat") {
             $data["values"] = Shopware()->Modules()->Articles()->sGetAffectedSuppliers($data["manufacturer_category"], 12);
         } else {
-            $mediaService = Shopware()->Container()->get('shopware_media.media_service');
-            $selectedManufacturers = $data["selected_manufacturers"];
-            $manufacturers = array();
+            $ids = array_column($data["selected_manufacturers"], 'supplierId');
+            $context = $this->get('shopware_storefront.context_service')
+                ->getShopContext();
 
-            foreach ($selectedManufacturers as $k => $manufacturer) {
-                $manufacturers[] = $manufacturer["supplierId"];
-            }
+            $manufacturers = $this->get('shopware_storefront.manufacturer_service')
+                ->getList($ids, $context);
 
-            $builder = Shopware()->Models()->createQueryBuilder();
-            $builder->select('supplier.id', 'supplier.name', 'supplier.image', 'supplier.link', 'supplier.description')
-                ->from('Shopware\Models\Article\Supplier', 'supplier')
-                ->where('supplier.id IN (?1)')
-                ->setParameter(1, $manufacturers);
+            $values = array_map(function (Manufacturer $manufacturer) {
+                return $this->get('legacy_struct_converter')
+                    ->convertManufacturerStruct($manufacturer);
+            }, $manufacturers);
 
-            $data["values"] = $builder->getQuery()->getArrayResult();
-
-            $temporaryValues = array();
-            foreach ($manufacturers as $manufacturer) {
-                foreach ($data["values"] as $value) {
-                    if ($value["id"] == $manufacturer) {
-                        $value['image'] = $mediaService->getUrl($value['image']);
-                        $temporaryValues[] = $value;
-                    }
+            if (!empty($category) && $category != Shopware()->Shop()->getCategory()->getId()) {
+                foreach ($values as &$value) {
+                    $value['link'] = $value['link'] . '?c=' . (int) $category;
                 }
             }
 
-            $data["values"] = $temporaryValues;
-
-            foreach ($data["values"] as &$value) {
-                $query = array(
-                    'controller' => 'listing',
-                    'action'     => 'manufacturer',
-                    'sSupplier'  => $value['id']
-                );
-                if (!empty($category) && $category != Shopware()->Shop()->getCategory()->getId()) {
-                    $query['sCategory'] = $category;
-                }
-
-                $value["link"] = Shopware()->Container()->get('router')->assemble($query);
-            }
+            $data['values'] = $values;
         }
 
         return $data;
@@ -746,7 +739,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
                 );
                 $data["ajaxFeed"] = Shopware()->Container()->get('router')->assemble($query);
                 break;
-            default;
+            default:
                 // Prevent the slider form endless loading
                 $data['article_slider_type'] = 'selected_article';
                 return $data;

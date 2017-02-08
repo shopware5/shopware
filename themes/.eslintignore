@@ -1,0 +1,7 @@
+Frontend/Responsive/frontend/_public/src/js/vendors/modernizr/
+Frontend/Responsive/frontend/_public/src/js/vendors/raphael/
+
+# The pre commit hook will be called in the root directory instead of the theme folder, therefore we have to define
+# them twice with the "themes" directory as prefix
+themes/Frontend/Responsive/frontend/_public/src/js/vendors/modernizr/
+themes/Frontend/Responsive/frontend/_public/src/js/vendors/raphael/

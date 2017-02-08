@@ -41,6 +41,7 @@ Ext.define('Shopware.apps.Base.store.Currency', {
     storeId: 'base.Currency',
     model : 'Shopware.apps.Base.model.Currency',
     pageSize: 1000,
+    remoteFilter: true,
 
     proxy: {
         type: 'ajax',

@@ -135,15 +135,15 @@ The user can see the registration steps, advantages and required information.
                 .unitize(font-size, 6);
                 .unitize(right, 10);
                 position: absolute;
-                font-family: "shopware";
+                font-family: @sw-icon-fontname;
                 font-weight: normal;
-                content: "\e612";
+                content: @sw-icon-arrow-down;
                 color: inherit;
                 top: 50%;
             }
 
             &.is--active:after {
-                content: "\e610";
+                content: @sw-icon-arrow-up;
             }
         }
     }

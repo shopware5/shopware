@@ -367,25 +367,25 @@ Ext.define('Shopware.apps.Config.controller.Form', {
         }
 
         //todo@hl
-		var values = formPanel.getValues();
-		if(values['elements']){
-			var elementFieldSet = formPanel.down('fieldset[name=elementFieldSet]'),
-				elementComboBox = elementFieldSet.down('combo'),
-				elementStore = elementComboBox.getStore(),
-				activeRecord = elementStore.getById(values['elements']),
-				fieldName = activeRecord.get('name');
+        var values = formPanel.getValues();
+        if(values['elements']){
+            var elementFieldSet = formPanel.down('fieldset[name=elementFieldSet]'),
+                elementComboBox = elementFieldSet.down('combo'),
+                elementStore = elementComboBox.getStore(),
+                activeRecord = elementStore.getById(values['elements']),
+                fieldName = activeRecord.get('name');
 
-			activeRecord.set('value', values[fieldName + '_Value']);
-			activeRecord.set('style', values[fieldName + '_Style']);
-		}
+            activeRecord.set('value', values[fieldName + '_Value']);
+            activeRecord.set('style', values[fieldName + '_Style']);
+        }
 
         formPanel.disable();
         formPanel.loadRecord();
 
-		record.associations.each(function(association) {
-			var store = record[association.name]();
-			store.clearFilter(true);
-		});
+        record.associations.each(function(association) {
+            var store = record[association.name]();
+            store.clearFilter(true);
+        });
 
         var message,
             title = me.messages.saveEntryTitle;

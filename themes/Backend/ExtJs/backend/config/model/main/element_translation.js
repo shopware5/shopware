@@ -34,7 +34,7 @@
 Ext.define('Shopware.apps.Config.model.main.ElementTranslation', {
     extend: 'Ext.data.Model',
     fields: [
-		//{block name="backend/config/model/main/element_translation/fields"}{/block}
+        //{block name="backend/config/model/main/element_translation/fields"}{/block}
         { name: 'id', type: 'int', useNull: true },
         { name: 'label', type: 'string' },
         { name: 'description', type: 'string', useNull: true }

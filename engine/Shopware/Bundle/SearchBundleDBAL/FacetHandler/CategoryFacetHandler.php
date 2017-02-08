@@ -204,7 +204,8 @@ class CategoryFacetHandler implements FacetHandlerInterface
             $category->getId(),
             $category->getName(),
             in_array($category->getId(), $active),
-            $values
+            $values,
+            $category->getAttributes()
         );
     }
 

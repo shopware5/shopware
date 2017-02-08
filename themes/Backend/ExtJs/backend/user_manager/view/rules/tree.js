@@ -82,7 +82,7 @@ Ext.define('Shopware.apps.UserManager.view.rules.Tree', {
         notSelectedTitle: '{s name=rules/not_selected_title}Error{/s}',
         notSelectedMessage: '{s name=rules/not_selected_message}No resource selected!{/s}',
 
-		growlMessage: '{s name=growlMessage}User Management{/s}'
+        growlMessage: '{s name=growlMessage}User Management{/s}'
     },
 
     /**

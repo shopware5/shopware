@@ -52,7 +52,7 @@
              * @property typeFieldSelector
              * @type {String}
              */
-            typeFieldSelector: '.register--customertype select,.address--customertype select',
+            typeFieldSelector: '.register--customertype select,.address--customertype select,.address--customertype input',
 
             /**
              * Type name for a company selection.
@@ -201,7 +201,7 @@
              * @property personalPasswordConfirmationSelector
              * @type {String}
              */
-            personalGuestSelector: '#register_personal_skipLogin',
+            personalGuestSelector: '#register_personal_skipLogin'
         },
 
         /**
@@ -411,7 +411,8 @@
                 $stateContainer = $(stateContainer);
                 $select = $stateContainer.find('select');
 
-                if (plugin = $select.data('plugin_swSelectboxReplacement')) {
+                if ($select.data('plugin_swSelectboxReplacement')) {
+                    plugin = $select.data('plugin_swSelectboxReplacement');
                     plugin.setDisabled();
                 } else {
                     $select.attr('disabled', 'disabled');
@@ -500,19 +501,19 @@
             me.$targetElement = $(relatedTarget);
 
             switch (id) {
-                case 'register_personal_email':
-                case 'register_personal_emailConfirmation':
-                    action = 'ajax_validate_email';
-                    break;
-                case 'register_billing_ustid':
-                    action = 'ajax_validate_billing';
-                    break;
-                case 'register_personal_password':
-                case 'register_personal_passwordConfirmation':
-                    action = 'ajax_validate_password';
-                    break;
-                default:
-                    break;
+            case 'register_personal_email':
+            case 'register_personal_emailConfirmation':
+                action = 'ajax_validate_email';
+                break;
+            case 'register_billing_ustid':
+                action = 'ajax_validate_billing';
+                break;
+            case 'register_personal_password':
+            case 'register_personal_passwordConfirmation':
+                action = 'ajax_validate_password';
+                break;
+            default:
+                break;
             }
 
             if (!$el.val() && $el.attr('required')) {
@@ -661,8 +662,8 @@
             }
 
             for (var key in result) {
-                //fields with `false` are now valid
-                isError = result[key] ? true : false;
+                // fields with `false` are now valid
+                isError = !!result[key];
 
                 if (!isError) {
                     continue;

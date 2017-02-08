@@ -23,7 +23,11 @@
  */
 namespace Shopware\Tests\Unit\Components\Model;
 
+use PHPUnit\DbUnit\Database\DefaultConnection;
+use PHPUnit\DbUnit\DataSet\IDataSet;
 use Shopware\Components\Model\CategoryDenormalization;
+use PHPUnit\DbUnit\TestCase;
+use PHPUnit\DbUnit\DataSet\ReplacementDataSet;
 
 class PDOMock extends \PDO
 {
@@ -37,7 +41,7 @@ class PDOMock extends \PDO
  * @package   Shopware\Tests
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class CategoryDenormalizationTest extends \PHPUnit_Extensions_Database_TestCase
+class CategoryDenormalizationTest extends TestCase
 {
     /**
      * @var CategoryDenormalization
@@ -53,7 +57,7 @@ class CategoryDenormalizationTest extends \PHPUnit_Extensions_Database_TestCase
     {
         if (!extension_loaded('sqlite3')) {
             $this->markTestSkipped(
-              'The Sqlite3 extension is not available.'
+                'The Sqlite3 extension is not available.'
             );
 
             parent::setUp();
@@ -68,7 +72,7 @@ class CategoryDenormalizationTest extends \PHPUnit_Extensions_Database_TestCase
             $conn->setAttribute(\PDO::ATTR_DEFAULT_FETCH_MODE, \PDO::FETCH_ASSOC);
         } catch (\PDOException $e) {
             $this->markTestSkipped(
-              'Could not create sqlite connection, got error:  ' . $e->getMessage()
+                'Could not create sqlite connection, got error:  ' . $e->getMessage()
             );
         }
 
@@ -82,7 +86,7 @@ class CategoryDenormalizationTest extends \PHPUnit_Extensions_Database_TestCase
     }
 
     /**
-     * @return \PHPUnit_Extensions_Database_DB_IDatabaseConnection
+     * @return DefaultConnection
      */
     public function getConnection()
     {
@@ -101,13 +105,13 @@ class CategoryDenormalizationTest extends \PHPUnit_Extensions_Database_TestCase
      *   6. World of food
      *     7. Spirits
      *
-     * @return \PHPUnit_Extensions_Database_DataSet_IDataSet
+     * @return IDataSet
      */
     public function getDataSet()
     {
         $dataset = $this->createFlatXMLDataSet(__DIR__ . '/_CategoryDenormalization/category-seed.xml');
 
-        $dataset = new \PHPUnit_Extensions_Database_DataSet_ReplacementDataSet($dataset);
+        $dataset = new ReplacementDataSet($dataset);
         $dataset->addFullReplacement('##NULL##', null);
 
         return $dataset;

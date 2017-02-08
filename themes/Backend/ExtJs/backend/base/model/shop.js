@@ -52,7 +52,7 @@ Ext.define('Shopware.apps.Base.model.Shop', {
      * @array
      */
     fields:[
-		//{block name="backend/base/model/shop/fields"}{/block}
+        //{block name="backend/base/model/shop/fields"}{/block}
         { name:'id', type:'int' },
         { name:'default', type:'boolean' },
         { name:'localeId', type:'int' },

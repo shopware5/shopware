@@ -33,7 +33,6 @@
      * var sessionStorage = StorageManager.getSessionStorage();
      */
     window.StorageManager = (function () {
-
         /**
          * The polyfill for localStorage and sessionStorage.
          * Uses cookies for storing items.
@@ -154,7 +153,7 @@
                     var me = this,
                         p;
 
-                    for(p in data) {
+                    for (p in data) {
                         if (!data.hasOwnProperty(p)) {
                             continue;
                         }
@@ -243,8 +242,16 @@
          * @returns {boolean}
          */
         function hasCookiesSupport() {
-            return ('cookie' in document && (document.cookie.length > 0 ||
-            (document.cookie = 'test').indexOf.call(document.cookie, 'test') > -1));
+            // if cookies are already present assume cookie support
+            if ('cookie' in document && (document.cookie.length > 0)) {
+                return true;
+            }
+
+            document.cookie = 'testcookie=1;';
+            var writeTest = (document.cookie.indexOf('testcookie') !== -1);
+            document.cookie = 'testcookie=1' + ';expires=Sat, 01-Jan-2000 00:00:00 GMT';
+
+            return writeTest;
         }
 
         /**
@@ -254,8 +261,7 @@
         function hasLocalStorageSupport() {
             try {
                 return (typeof window.localStorage !== 'undefined');
-            }
-            catch (err) {
+            } catch (err) {
                 return false;
             }
         }
@@ -267,8 +273,7 @@
         function hasSessionStorageSupport() {
             try {
                 return (typeof window.sessionStorage !== 'undefined');
-            }
-            catch (err) {
+            } catch (err) {
                 return false;
             }
         }
@@ -290,8 +295,7 @@
             try {
                 storage[p].setItem('storage', '');
                 storage[p].removeItem('storage');
-            }
-            catch (err) {
+            } catch (err) {
                 storage[p] = new StoragePolyFill(p);
             }
         }

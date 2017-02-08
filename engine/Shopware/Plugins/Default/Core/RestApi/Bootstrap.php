@@ -158,10 +158,8 @@ class Shopware_Plugins_Core_RestApi_Bootstrap extends Shopware_Components_Plugin
             return;
         }
 
-        foreach ((array) $input as $key => $value) {
-            if ($value !== null) {
-                $request->setPost($key, $value);
-            }
+        if ($input !== null) {
+            $request->replacePost($input);
         }
     }
 

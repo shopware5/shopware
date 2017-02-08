@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-class Shopware_Tests_Api_ArticleTest extends PHPUnit_Framework_TestCase
+class Shopware_Tests_Api_ArticleTest extends PHPUnit\Framework\TestCase
 {
     public $apiBaseUrl = '';
 
@@ -520,7 +520,9 @@ class Shopware_Tests_Api_ArticleTest extends PHPUnit_Framework_TestCase
         $result = $response->getBody();
         $result = Zend_Json::decode($result);
 
-        $variantNumbers = array_map(function ($item) { return $item['number']; }, $result['data']['details']);
+        $variantNumbers = array_map(function ($item) {
+            return $item['number'];
+        }, $result['data']['details']);
 
         $oldMain = $result['data']['mainDetail']['number'];
 

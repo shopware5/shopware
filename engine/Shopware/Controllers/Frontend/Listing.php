@@ -139,6 +139,13 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
                 $manufacturerId,
                 $this->get('shopware_storefront.context_service')->getShopContext()
             );
+            
+            if ($manufacturer === null) {
+                throw new Enlight_Controller_Exception(
+                    'Manufacturer missing, non-existent or invalid',
+                    404
+                );
+            }
 
             $manufacturerContent = $this->getSeoDataOfManufacturer($manufacturer);
 
@@ -259,12 +266,13 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
                 ->resetConditions()
                 ->resetSorting()
                 ->offset(0)
-                ->limit(1);
+                ->limit(2)
+                ->setFetchCount(false);
 
             /**@var $result ProductNumberSearchResult*/
             $result = $this->get('shopware_search.product_number_search')->search($criteria, $context);
 
-            if ($result->getTotalCount() == 1) {
+            if (count($result->getProducts()) === 1) {
                 /**@var $first \Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct*/
                 $first = array_shift($result->getProducts());
                 $location = ['controller' => 'detail', 'sArticle' => $first->getId()];

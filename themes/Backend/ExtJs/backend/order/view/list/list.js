@@ -108,15 +108,15 @@ Ext.define('Shopware.apps.Order.view.list.List', {
     },
 
     /**
-	 * The initComponent template method is an important initialization step for a Component.
+     * The initComponent template method is an important initialization step for a Component.
      * It is intended to be implemented by each subclass of Ext.Component to provide any needed constructor logic.
      * The initComponent method of the class being created is called first,
      * with each initComponent method up the hierarchy to Ext.Component being called thereafter.
      * This makes it easy to implement and, if needed, override the constructor logic of the Component at any step in the hierarchy.
      * The initComponent method must contain a call to callParent in order to ensure that the parent class' initComponent method is also called.
-	 *
-	 * @return void
-	 */
+     *
+     * @return void
+     */
     initComponent:function () {
         var me = this;
 
@@ -318,8 +318,11 @@ Ext.define('Shopware.apps.Order.view.list.List', {
             {
                 header: me.snippets.columns.customer,
                 dataIndex: 'customerId',
-                flex:2,
-                renderer: me.customerColumn
+                flex: 3,
+                renderer: me.customerColumn,
+                getSortParam: function() {
+                    return 'customerName';
+                }
             },
             {
                 header: me.snippets.columns.customerEmail,
@@ -659,10 +662,13 @@ Ext.define('Shopware.apps.Order.view.list.List', {
 
         if (billing instanceof Ext.data.Store && billing.first() instanceof Ext.data.Model) {
             billing = billing.first();
+
+            name = Ext.String.trim(
+                billing.get('lastName') + ', ' + billing.get('firstName')
+            );
+
             if (billing.get('company').length > 0) {
-                name = billing.get('company');
-            } else {
-                name = Ext.String.trim(billing.get('firstName') + ' ' + billing.get('lastName'));
+                name += ' (' + billing.get('company') + ')';
             }
         }
 
@@ -688,7 +694,6 @@ Ext.define('Shopware.apps.Order.view.list.List', {
         } else {
             return name;
         }
-
     }
 
 });

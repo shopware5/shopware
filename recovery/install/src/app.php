@@ -150,6 +150,8 @@ $app->error(function (\Exception $e) use ($app) {
 $app->map('/', function () use ($app, $container, $menuHelper) {
     $menuHelper->setCurrent('language-selection');
 
+    $container['shopware.notify']->doTrackEvent('Installer started');
+
     $app->view()->set('languages', ['de', 'en', 'nl']);
 
     $app->render('/language-selection.php');
@@ -449,6 +451,15 @@ $app->map('/finish/', function () use ($app, $menuHelper, $container) {
     /** @var \Shopware\Recovery\Common\SystemLocker $systemLocker */
     $systemLocker = $container->offsetGet('system.locker');
     $systemLocker();
+
+    $container['uniqueid.persister']->store();
+
+    $additionalInformation = [
+        'language' => $container->offsetGet('install.language'),
+        'method' => 'installer'
+    ];
+
+    $container->offsetGet('shopware.notify')->doTrackEvent('Installer finished', $additionalInformation);
 
     $app->render(
         "finish.php",

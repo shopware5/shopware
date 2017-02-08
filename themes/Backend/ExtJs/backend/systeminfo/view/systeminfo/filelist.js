@@ -68,7 +68,7 @@ Ext.define('Shopware.apps.Systeminfo.view.systeminfo.Filelist', {
     */
     autoScroll: true,
 
-	border: 0,
+    border: 0,
     /**
     * Set the used store. You just need to set the store name
     * due to the fact that the store is defined in the same

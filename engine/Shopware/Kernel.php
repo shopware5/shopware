@@ -25,11 +25,15 @@
 namespace Shopware;
 
 use Shopware\Bundle\AttributeBundle\DependencyInjection\Compiler\SearchRepositoryCompilerPass;
+use Shopware\Bundle\ControllerBundle\DependencyInjection\Compiler\RegisterControllerCompilerPass;
 use Shopware\Bundle\ESIndexingBundle\DependencyInjection\CompilerPass\SettingsCompilerPass;
 use Shopware\Bundle\ESIndexingBundle\DependencyInjection\CompilerPass\SynchronizerCompilerPass;
 use Shopware\Bundle\ESIndexingBundle\DependencyInjection\CompilerPass\DataIndexerCompilerPass;
 use Shopware\Bundle\ESIndexingBundle\DependencyInjection\CompilerPass\MappingCompilerPass;
 use Shopware\Bundle\FormBundle\DependencyInjection\CompilerPass\FormPass;
+use Shopware\Bundle\MediaBundle\DependencyInjection\Compiler\MediaAdapterCompilerPass;
+use Shopware\Bundle\MediaBundle\DependencyInjection\Compiler\MediaOptimizerCompilerPass;
+use Shopware\Bundle\PluginInstallerBundle\Service\PluginInitializer;
 use Shopware\Bundle\SearchBundle\DependencyInjection\Compiler\CriteriaRequestHandlerCompilerPass;
 use Shopware\Bundle\SearchBundleDBAL\DependencyInjection\Compiler\DBALCompilerPass;
 use Shopware\Bundle\SearchBundleES\DependencyInjection\CompilerPass\SearchHandlerCompilerPass;
@@ -204,16 +208,6 @@ class Kernel implements HttpKernelInterface
         // Create englight request from global state
         $enlightRequest = new EnlightRequest();
 
-        // Set commandline args as request uri
-        // This is used for legacy cronjob routing.
-        // e.g: /usr/bin/php shopware.php /backend/cron
-        if (PHP_SAPI === 'cli'
-            && is_array($argv = $request->server->get('argv'))
-            && isset($argv[1])
-        ) {
-            $enlightRequest->setRequestUri($argv[1]);
-        }
-
         // Let the symfony request handle the trusted proxies
         $enlightRequest->setRemoteAddress($request->getClientIp());
         $enlightRequest->setSecure($request->isSecure());
@@ -288,6 +282,7 @@ class Kernel implements HttpKernelInterface
             }
 
             $this->container->get('events')->addSubscriber($plugin);
+            $this->container->get('events')->addSubscriber(new Plugin\ResourceSubscriber($plugin->getPath()));
         }
 
         $this->booted = true;
@@ -303,36 +298,12 @@ class Kernel implements HttpKernelInterface
 
     protected function initializePlugins()
     {
-        $this->plugins = [];
+        $initializer = new PluginInitializer(
+            $this->connection,
+            $this->getRootDir() . '/custom/plugins'
+        );
 
-        $classLoader = new Psr4ClassLoader();
-        $classLoader->register(true);
-
-        $stmt = $this->connection->query('SELECT name FROM s_core_plugins WHERE namespace LIKE "ShopwarePlugins" AND active = 1 AND installation_date IS NOT NULL;');
-        $activePlugins = $stmt->fetchAll(\PDO::FETCH_COLUMN);
-
-        $pluginRoot = $this->getRootDir().'/custom/plugins';
-        foreach (new \DirectoryIterator($pluginRoot) as $pluginDir) {
-            if ($pluginDir->getBasename()[0] === '.' || $pluginDir->isFile()) {
-                continue;
-            }
-
-            $pluginName = $pluginDir->getBasename();
-            if (!is_file($pluginDir->getPathname() . '/'. $pluginName . '.php')) {
-                continue;
-            }
-
-            $namespace = $pluginName;
-            $className = '\\' . $namespace . '\\' .  $pluginName;
-
-            $classLoader->addPrefix($namespace, $pluginDir->getPathname());
-
-            $isActive = in_array($pluginName, $activePlugins);
-
-            /** @var Plugin $plugin */
-            $plugin = new $className($isActive);
-            $this->plugins[$plugin->getName()] = $plugin;
-        }
+        $this->plugins = $initializer->initializePlugins();
 
         $this->pluginHash = $this->createPluginHash($this->plugins);
     }
@@ -617,6 +588,8 @@ class Kernel implements HttpKernelInterface
         $container->addCompilerPass(new AddConstraintValidatorsPass());
         $container->addCompilerPass(new SearchRepositoryCompilerPass());
         $container->addCompilerPass(new AddConsoleCommandPass());
+        $container->addCompilerPass(new MediaAdapterCompilerPass());
+        $container->addCompilerPass(new MediaOptimizerCompilerPass());
 
         if ($this->isElasticSearchEnabled()) {
             $container->addCompilerPass(new SearchHandlerCompilerPass());
@@ -758,6 +731,7 @@ class Kernel implements HttpKernelInterface
             return;
         }
 
+        $activePlugins = [];
         foreach ($this->plugins as $plugin) {
             if (!$plugin->isActive()) {
                 continue;
@@ -765,6 +739,9 @@ class Kernel implements HttpKernelInterface
 
             $container->addObjectResource($plugin);
             $plugin->build($container);
+            $activePlugins[] = $plugin;
         }
+
+        $container->addCompilerPass(new RegisterControllerCompilerPass($activePlugins));
     }
 }

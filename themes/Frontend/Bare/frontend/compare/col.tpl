@@ -8,7 +8,7 @@
                 {block name="frontend_compare_article_picture"}
                     <li class="list--entry entry--picture">
                         {* Product image - uses the picturefill polyfill for the HTML5 "picture" element *}
-                        <a href="{$sArticle.linkDetails|rewrite:$sArticle.articleName}" title="{$sArticle.articleName|escape}" class="box--image">
+                        <a href="{$sArticle.linkDetails}" title="{$sArticle.articleName|escape}" class="box--image">
                             <span class="image--element">
                                 <span class="image--media">
 
@@ -22,11 +22,11 @@
 
                                         <img srcset="{$sArticle.image.thumbnails[0].sourceSet}"
                                              alt="{$desc}"
-                                             title="{$desc|truncate:25:""}" />
+                                             title="{$desc|truncate:160}" />
                                     {else}
                                         <img src="{link file='frontend/_public/src/img/no-picture.jpg'}"
                                              alt="{$desc}"
-                                             title="{$desc|truncate:25:""}" />
+                                             title="{$desc|truncate:160}" />
                                     {/if}
                                 </span>
                             </span>
@@ -39,7 +39,7 @@
                         <a class="link--name" href="{$sArticle.linkDetails}" title="{$sArticle.articleName|escape}">{$sArticle.articleName|truncate:47}</a>
 
                         {block name='frontend_compare_article_name_button'}
-                            <a href="{$sArticle.linkDetails|rewrite:$sArticle.articleName}" title="{$sArticle.articleName|escape}" class="btn is--primary is--center is--full is--icon-right btn--product">
+                            <a href="{$sArticle.linkDetails}" title="{$sArticle.articleName|escape}" class="btn is--primary is--center is--full is--icon-right btn--product">
                                 {s name='ListingBoxLinkDetails' namespace="frontend/listing/box_article"}{/s}
                                 <i class="icon--arrow-right"></i>
                             </a>

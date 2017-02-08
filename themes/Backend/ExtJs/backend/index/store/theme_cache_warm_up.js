@@ -28,8 +28,8 @@
  */
 //{block name="backend/index/store/theme_cache_warm_up"}
 Ext.define('Shopware.apps.Index.store.ThemeCacheWarmUp', {
-	extend: 'Shopware.apps.Base.store.Shop',
-	model: 'Shopware.apps.Index.model.ThemeCacheWarmUp',
+    extend: 'Shopware.apps.Base.store.Shop',
+    model: 'Shopware.apps.Index.model.ThemeCacheWarmUp',
     remoteFilter: true,
     clearOnLoad: false,
 

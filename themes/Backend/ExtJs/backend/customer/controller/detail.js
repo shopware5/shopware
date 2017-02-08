@@ -80,7 +80,7 @@ Ext.define('Shopware.apps.Customer.controller.Detail', {
             errorText:'{s name=message/account/error_text}There is an error occurred while saving.{/s}'
         },
 
-		growlMessage:'{s name=message/growlMessage}Customer{/s}'
+        growlMessage:'{s name=message/growlMessage}Customer{/s}'
     },
 
     /**
@@ -345,7 +345,7 @@ Ext.define('Shopware.apps.Customer.controller.Detail', {
             // check which field is not valid in order to tell the user, why the customer cannot be saved
             // SW-4322
             form.getForm().getFields().each(function(f){
-          		 if(!f.validate()){
+                 if(!f.validate()){
                     if(f.fieldLabel){
                         missingField = f.fieldLabel;
                     }else if(f.name){
@@ -353,9 +353,9 @@ Ext.define('Shopware.apps.Customer.controller.Detail', {
                     }
                     Shopware.Notification.createGrowlMessage(me.snippets.form.errorTitle, Ext.String.format(me.snippets.form.errorMessage, missingField), me.snippets.growlMessage);
                     return false;
-          		 }
+                 }
 
-          	 });
+             });
             return;
         }
 

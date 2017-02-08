@@ -29,9 +29,9 @@
 
 //{block name="backend/site/model/nodes"}
 Ext.define('Shopware.apps.Site.model.Nodes', {
-	extend: 'Ext.data.Model',
+    extend: 'Ext.data.Model',
     fields: [
-		//{block name="backend/site/model/nodes/fields"}{/block}
+        //{block name="backend/site/model/nodes/fields"}{/block}
         { name: 'key', type: 'string' },
         { name: 'id', type: 'string', convert: function(v, r) { return r.data.key || v; } },
         { name: 'description', type: 'string' },
@@ -57,18 +57,18 @@ Ext.define('Shopware.apps.Site.model.Nodes', {
         { name: 'metaDescription', type: 'string' }
     ],
 
-	proxy: {
-		type: 'ajax',
+    proxy: {
+        type: 'ajax',
         api: {
             read: '{url action="getNodes"}',
             create: '{url action="saveSite"}',
             update: '{url action="saveSite"}',
             destroy: '{url action="deleteSite"}'
         },
-		reader: {
-			type: 'json',
-			root: 'nodes'
-		}
-	}
+        reader: {
+            type: 'json',
+            root: 'nodes'
+        }
+    }
 });
 //{/block}

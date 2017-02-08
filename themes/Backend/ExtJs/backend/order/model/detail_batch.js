@@ -49,8 +49,8 @@ Ext.define('Shopware.apps.Order.model.DetailBatch', {
     * @array
     */
     fields: [
-	   //{block name="backend/order/model/detail_batch/fields"}{/block}
-	   'id'
+       //{block name="backend/order/model/detail_batch/fields"}{/block}
+       'id'
     ],
 
     /**

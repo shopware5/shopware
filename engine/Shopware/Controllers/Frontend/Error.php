@@ -95,6 +95,7 @@ class Shopware_Controllers_Frontend_Error extends Enlight_Controller_Action impl
                 break;
             case 400:
             case 401:
+            case 413:
                 $this->forward('genericError', null, null, ['code' => $code]);
                 break;
             default:
@@ -115,10 +116,12 @@ class Shopware_Controllers_Frontend_Error extends Enlight_Controller_Action impl
 
         $response->setHttpResponseCode($targetErrorCode);
 
+        // Page not Found should not get logged in error handler
+        $response->unsetExceptions();
+
         switch ($targetEmotionId) {
             case -2:
             case null:
-                $response->unsetExceptions();
                 $this->forward(
                     Shopware()->Front()->Dispatcher()->getDefaultAction(),
                     Shopware()->Front()->Dispatcher()->getDefaultControllerName()
@@ -128,7 +131,6 @@ class Shopware_Controllers_Frontend_Error extends Enlight_Controller_Action impl
                 $this->forward('genericError', null, null, array('code' => $targetErrorCode));
                 break;
             default:
-                $response->unsetExceptions();
                 $this->forward('index', 'campaign', 'frontend', array('emotionId' => $targetEmotionId));
         }
     }

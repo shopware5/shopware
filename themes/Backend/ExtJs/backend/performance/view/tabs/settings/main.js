@@ -44,26 +44,26 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.Main', {
      */
     alias:'widget.performance-tabs-settings-main',
 
-	// Title of the panel shown in the tab
+    // Title of the panel shown in the tab
     title: '{s name=tabs/settings/title}Settings{/s}',
 
-	// Define the layout of the panel to be a border layut
-	layout: 'border',
+    // Define the layout of the panel to be a border layut
+    layout: 'border',
 
     /**
-	 * The initComponent template method is an important initialization step for a Component.
+     * The initComponent template method is an important initialization step for a Component.
      * It is intended to be implemented by each subclass of Ext.Component to provide any needed constructor logic.
      * The initComponent method of the class being created is called first,
      * with each initComponent method up the hierarchy to Ext.Component being called thereafter.
      * This makes it easy to implement and, if needed, override the constructor logic of the Component at any step in the hierarchy.
      * The initComponent method must contain a call to callParent in order to ensure that the parent class' initComponent method is also called.
-	 *
-	 * @return void
-	 */
+     *
+     * @return void
+     */
     initComponent:function () {
         var me = this;
 
-		me.items = me.createItems();
+        me.items = me.createItems();
 
         me.dockedItems = [{
             xtype: 'toolbar',
@@ -76,12 +76,12 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.Main', {
         me.callParent(arguments);
     },
 
-	/*
-	 * Helper method which creates the items of the panel
-	 * @return Array
-	 */
-	createItems: function() {
-		var me = this;
+    /*
+     * Helper method which creates the items of the panel
+     * @return Array
+     */
+    createItems: function() {
+        var me = this;
 
         me.panel = Ext.create('Ext.form.Panel', {
             region: 'center',
@@ -120,7 +120,7 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.Main', {
             me.navigation,
             me.panel
         ];
-	},
+    },
 
     /**
      * @return Array

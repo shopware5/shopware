@@ -45,7 +45,7 @@ Ext.define('Shopware.apps.Property.model.Set', {
      * @array
      */
     fields : [
-		//{block name="backend/property/model/set/fields"}{/block}
+        //{block name="backend/property/model/set/fields"}{/block}
         { name: 'id',         type: 'integer' },
         { name: 'name',       type: 'string' },
         { name: 'position',   type: 'integer' },

@@ -1,5 +1,4 @@
 ;(function ($) {
-
     var emptyObj = {};
 
     /**
@@ -10,7 +9,7 @@
      * The created list will be showed as a product slider.
      */
     $.plugin('swLastSeenProducts', {
-        
+
         defaults: {
 
             /**
@@ -120,9 +119,36 @@
 
             if ($('body').hasClass('is--ctl-detail')) {
                 me.collectProduct(me.opts.currentArticle);
+                $.subscribe(me.getEventName('plugin/swAjaxVariant/onRequestData'), $.proxy(me.onAjaxVariantChange, me));
             }
 
             me.createProductList();
+        },
+
+        /**
+         * Refresh the last seen article if the customer switches between variants
+         *
+         * @private
+         * @method onAjaxVariantChange
+         */
+        onAjaxVariantChange: function() {
+            var me = this;
+
+            me.collectProduct(window.lastSeenProductsConfig.currentArticle);
+            me.clearProductList();
+            me.createProductList();
+        },
+
+        /**
+         * Removes all products from the displayed slider
+         *
+         * @public
+         * @method clearProductList
+         */
+        clearProductList: function () {
+            var me = this;
+
+            me.$container.children().remove();
         },
 
         /**
@@ -138,16 +164,19 @@
                 itemKey = 'lastSeenProducts-' + opts.shopId + '-' + opts.baseUrl,
                 productsJson = me.storage.getItem(itemKey),
                 products = productsJson ? JSON.parse(productsJson) : [],
-                len = Math.min(opts.productLimit, products.length),
-                i = 0;
+                len = Math.min(opts.productLimit, products.length);
 
             if (len > 0) {
                 me.$el.removeClass('is--hidden');
             }
 
-            for (; i < len; i++) {
-                me.$container.append(me.createTemplate(products[i]));
-            }
+            $.each(products, function(i, product) {
+                if (product.articleId === opts.currentArticle.articleId) {
+                    return;
+                }
+
+                me.$container.append(me.createTemplate(product));
+            });
 
             me.productSlider.initSlider();
 
@@ -226,7 +255,7 @@
             if (image) {
                 srcSet = image.sourceSet;
             } else {
-                srcSet = me.opts.noPicture
+                srcSet = me.opts.noPicture;
             }
 
             $('<img>', {
@@ -253,39 +282,83 @@
                 itemKey = 'lastSeenProducts-' + opts.shopId + '-' + opts.baseUrl,
                 productsJson = me.storage.getItem(itemKey),
                 products = productsJson ? $.parseJSON(productsJson) : [],
+                linkDetailsQuery = '',
                 len = products.length,
                 i = 0,
-                url;
+                url,
+                urlQuery;
 
             if (!newProduct || $.isEmptyObject(newProduct)) {
                 return;
             }
 
             for (; i < len; i++) {
-                if (products[i].articleId === newProduct.articleId) {
-                    newProduct = products.splice(i, 1)[0];
-                    break;
+                if (products[i] && products[i].articleId === newProduct.articleId) {
+                    products.splice(i, 1);
                 }
             }
 
             url = newProduct.linkDetailsRewritten;
+            urlQuery = me.extractQueryParameters(url);
+
+            // Remove category from query string
+            delete urlQuery.c;
+            if ($.param(urlQuery)) {
+                linkDetailsQuery = $.param(urlQuery);
+                linkDetailsQuery = '?' + linkDetailsQuery;
+            }
 
             // Remove query string from article url
             if (url.indexOf('/sCategory') !== -1) {
-                newProduct.linkDetailsRewritten = url.substring(0, url.indexOf('/sCategory'));
+                newProduct.linkDetailsRewritten = url.replace(/\/?sCategory\/[0-9]+/i, '');
             } else if (url.indexOf('?') !== -1) {
-                newProduct.linkDetailsRewritten = url.substring(0, url.indexOf('?'));
+                newProduct.linkDetailsRewritten = url.substring(0, url.indexOf('?')) + linkDetailsQuery;
             }
 
             products.splice(0, 0, newProduct);
 
-            while (products.length > opts.productLimit) {
+            while (products.length > opts.productLimit + 1) {
                 products.pop();
             }
 
             me.storage.setItem(itemKey, JSON.stringify(products));
 
             $.publish('plugin/swLastSeenProducts/onCollectProduct', [ me, newProduct ]);
+        },
+
+        /**
+         * Extracts the query string as object from a given url
+         *
+         * @private
+         * @method extractQueryParameters
+         * @param {string} url
+         * @return {Object}
+         */
+        extractQueryParameters: function (url) {
+            var queryParams = {};
+
+            if (url.indexOf('?') === -1) {
+                return {};
+            }
+
+            // strip everything until query parameters
+            url = url.substring(url.indexOf('?'));
+
+            // remove leading "?" symbol
+            url = url.substring(1);
+
+            $.each(url.split('&'), function (key, param) {
+                param = param.split('=');
+
+                param[0] = decodeURIComponent(param[0]);
+                param[1] = decodeURIComponent(param[1]);
+
+                if (param[0].length && param[1].length && !queryParams.hasOwnProperty(param[0])) {
+                    queryParams[param[0]] = param[1];
+                }
+            });
+
+            return queryParams;
         }
     });
 }(jQuery));

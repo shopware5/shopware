@@ -71,28 +71,4 @@ class sArticlesTest extends TestCase
 
         $this->assertSame($expectedResult, $sArticles->sOptimizeText($input));
     }
-
-    /**
-     * Override method to backport a PHPUnit 5.5.3 feature.
-     * See: https://github.com/sebastianbergmann/phpunit/commit/3c423b889e4833b7dc5f77c1c20ce1aa29b2e48d
-     *
-     * @param string $originalClassName
-     * @param array  $methods
-     *
-     * @return \PHPUnit_Framework_MockObject_MockObject
-     *
-     * @throws \PHPUnit_Framework_Exception
-     *
-     * @todo Remove once PHPUnit 5.5.3 is in use
-     */
-    protected function createPartialMock($originalClassName, array $methods)
-    {
-        return $this->getMockBuilder($originalClassName)
-            ->disableOriginalConstructor()
-            ->disableOriginalClone()
-            ->disableArgumentCloning()
-            ->disallowMockingUnknownTypes()
-            ->setMethods(empty($methods) ? null : $methods)
-            ->getMock();
-    }
 }

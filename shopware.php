@@ -40,7 +40,11 @@ if (is_file('files/update/update.json') || is_dir('update-assets')) {
     header('Content-type: text/html; charset=utf-8', true, 503);
     header('Status: 503 Service Temporarily Unavailable');
     header('Retry-After: 1200');
-    echo file_get_contents(__DIR__ . '/recovery/update/maintenance.html');
+    if (file_exists(__DIR__ . '/maintenance.html')) {
+        echo file_get_contents(__DIR__ . '/maintenance.html');
+    } else {
+        echo file_get_contents(__DIR__ . '/recovery/update/maintenance.html');
+    }
     return;
 }
 
@@ -94,6 +98,18 @@ $environment = getenv('SHOPWARE_ENV') ?: getenv('REDIRECT_SHOPWARE_ENV') ?: 'pro
 $kernel = new Kernel($environment, $environment !== 'production');
 if ($kernel->isHttpCacheEnabled()) {
     $kernel = new AppCache($kernel, $kernel->getHttpCacheConfig());
+}
+
+// Set commandline args as request uri
+// This is used for legacy cronjob routing.
+// e.g: /usr/bin/php shopware.php /backend/cron
+if (PHP_SAPI === 'cli' && isset($_SERVER['argv'][1])) {
+    $_SERVER['REQUEST_URI'] = $_SERVER['argv'][1];
+    // We have to use a shutdown function to prevent "headers already sent" errors.
+    register_shutdown_function(function () {
+        echo PHP_EOL;
+        echo 'WARNING: Executing shopware.php via CLI is deprecated. Please use the command line tool in bin/console instead.'.PHP_EOL;
+    });
 }
 
 $request = Request::createFromGlobals();

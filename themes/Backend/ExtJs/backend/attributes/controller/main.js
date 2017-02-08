@@ -128,6 +128,26 @@ Ext.define('Shopware.apps.Attributes.controller.Main', {
         }
     },
 
+    isColumnNameValid: function(record, callback) {
+        var me = this;
+
+        me.sendAjaxRequest(
+            '{url controller=attributes action=columnNameExists}',
+            {
+                tableName: me.getCurrentTable().get('name'),
+                columnName: record.get('columnName')
+            },
+            function(response) {
+                callback(
+                    (response.exists === false)
+                    ||
+                    (record.get('columnName') == record.get('originalName')),
+                    response.table
+                );
+            }
+        );
+    },
+
     saveColumn: function(record, callback) {
         var me = this;
         var window = me.getWindow();
@@ -139,7 +159,7 @@ Ext.define('Shopware.apps.Attributes.controller.Main', {
         me.disableForm();
 
         record.save({
-            callback: function(data, operation) {
+            callback: function (data, operation) {
                 var message = Ext.String.format(
                     '{s name="save_success"}{/s}',
                     record.get('tableName'),
@@ -153,7 +173,7 @@ Ext.define('Shopware.apps.Attributes.controller.Main', {
                     return;
                 }
 
-                me.generateModel(record.get('tableName'), function() {
+                me.generateModel(record.get('tableName'), function () {
                     callback();
                 });
             }
@@ -270,35 +290,60 @@ Ext.define('Shopware.apps.Attributes.controller.Main', {
         var record = form.getRecord();
         var table = me.getCurrentTable();
         var tables = Ext.clone(table.get('dependingTables'));
+        var window = me.getWindow();
 
         if (!form.getForm().isValid()) {
             return;
         }
+
         form.getForm().updateRecord(record);
 
-        if (me.columnTypeChanged(record)) {
-            Ext.Msg.show({
-                title: '{s name="change_column_type_title"}{/s}',
-                msg: '{s name="change_column_type_message"}{/s}',
-                buttons: Ext.Msg.OKCANCEL,
-                icon: Ext.Msg.WARNING,
-                fn: function(btn) {
-                    if (btn === 'ok') {
-                        me.saveColumn(record, function() {
-                            me.updateDependingTables(record, tables, function() {
-                                me.reloadListing();
-                            });
-                        });
-                    }
-                }
-            });
-        } else {
-            me.saveColumn(record, function() {
-                me.updateDependingTables(record, tables, function() {
+        me.isColumnNameValid(
+            record,
+            function(isValid, foundInTable) {
+                window.setLoading(false);
+
+                if (isValid == false) {
+                    Shopware.Notification.createGrowlMessage(
+                        '{s name="error_name_check_title"}The name already exists{/s}',
+                        Ext.String.format('{s name="error_name_check_message"}The name already exists in table [0]. Please choose an unique column name.{/s}', foundInTable)
+                    );
                     me.reloadListing();
+                    return;
+                }
+
+                me.askForTypeChange(record, function() {
+                    me.saveColumn(record, function () {
+                        me.updateDependingTables(record, tables, function () {
+                            me.reloadListing();
+                        });
+                    });
                 });
-            });
+            }
+        );
+    },
+
+    askForTypeChange: function(record, callback) {
+        var me = this;
+
+        if (!me.columnTypeChanged(record)) {
+            callback();
+            return;
         }
+
+        Ext.Msg.show({
+            title: '{s name="change_column_type_title"}{/s}',
+            msg: '{s name="change_column_type_message"}{/s}',
+            buttons: Ext.Msg.OKCANCEL,
+            icon: Ext.Msg.WARNING,
+            fn: function(btn) {
+                if (btn === 'ok') {
+                    callback();
+                } else {
+                    me.reloadListing();
+                }
+            }
+        });
     },
 
     updateDependingTables: function(column, tables, callback) {

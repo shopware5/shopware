@@ -86,7 +86,7 @@ class Shopware_Plugins_Core_CronBirthday_Bootstrap extends Shopware_Components_P
         $sql = '
             SELECT evc.voucherID
             FROM s_emarketing_vouchers ev, s_emarketing_voucher_codes evc
-            WHERE  modus = 1 AND (valid_to >= now() OR valid_to IS NULL)
+            WHERE  modus = 1 AND (valid_to >= CURDATE() OR valid_to IS NULL)
             AND evc.voucherID = ev.id
             AND evc.userID IS NULL
             AND evc.cashed = 0
@@ -99,9 +99,10 @@ class Shopware_Plugins_Core_CronBirthday_Bootstrap extends Shopware_Components_P
 
         foreach ($users as $user) {
             $sql = '
-                SELECT evc.id as vouchercodeID, evc.code
-                FROM s_emarketing_voucher_codes evc
+                SELECT evc.id as vouchercodeID, evc.code, ev.value, ev.percental, ev.valid_to, ev.valid_from
+                FROM s_emarketing_voucher_codes evc, s_emarketing_vouchers ev
                 WHERE evc.voucherID = ?
+                AND ev.id = evc.voucherID
                 AND evc.userID IS NULL
                 AND evc.cashed = 0
             ';
@@ -132,7 +133,7 @@ class Shopware_Plugins_Core_CronBirthday_Bootstrap extends Shopware_Components_P
             $shop = $repository->getActiveById($shopId);
             $shop->registerResources();
 
-            //language 	subshopID
+            //language subshopID
             $context = array(
                 'sUser' => $user,
                 'sVoucher' => $voucher,

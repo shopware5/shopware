@@ -129,7 +129,7 @@ class LessDefinition
     }
 
     /**
-     * @return mixed
+     * @return string[]
      */
     public function getFiles()
     {
@@ -137,7 +137,7 @@ class LessDefinition
     }
 
     /**
-     * @param mixed $importDirectory
+     * @param string $importDirectory
      */
     public function setImportDirectory($importDirectory)
     {
@@ -145,7 +145,7 @@ class LessDefinition
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getImportDirectory()
     {

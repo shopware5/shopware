@@ -28,7 +28,7 @@ use Shopware\Tests\Unit\Components\MemoryMock;
 
 function ini_get($varname)
 {
-    if ($varname != 'memory_limit') {
+    if ($varname !== 'memory_limit') {
         return \ini_get($varname);
     }
 
@@ -37,11 +37,11 @@ function ini_get($varname)
 
 function ini_set($varname, $value)
 {
-    if ($varname != 'memory_limit') {
+    if ($varname !== 'memory_limit') {
         return \ini_set($varname, $value);
     }
 
-    MemoryMock::setLimit($value);
+    return MemoryMock::setLimit($value);
 }
 
 namespace Shopware\Tests\Unit\Components;
@@ -55,7 +55,10 @@ class MemoryMock
 
     public static function setLimit($limit)
     {
+        $oldValue = self::$limit;
         self::$limit = $limit;
+
+        return $oldValue;
     }
 
     public static function getLimit()

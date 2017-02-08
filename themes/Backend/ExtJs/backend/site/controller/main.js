@@ -106,8 +106,8 @@ Ext.define('Shopware.apps.Site.controller.Main', {
     onCreateSite: function() {
         var me = this,
             form = me.getDetailForm().getForm(),
-			detailForm = me.getDetailForm(),
-			ddselector = detailForm.down('ddselector'),
+            detailForm = me.getDetailForm(),
+            ddselector = detailForm.down('ddselector'),
             tree = me.getNavigationTree(),
             saveSiteButton = me.getSaveSiteButton(),
             record = Ext.create('Shopware.apps.Site.model.Nodes'),
@@ -123,16 +123,16 @@ Ext.define('Shopware.apps.Site.controller.Main', {
             //ask if the user wants to create a subSite of the currently selected one
             Ext.Msg.confirm('{s name=onCreateNewSiteConfirmationBoxCaption}Create subpage?{/s}', Ext.String.format('{s name=onCreateNewSiteConfirmationBoxText}Are you sure you want to create a subpage of \'[0]\'?{/s}', parentName), function(btn){
                 if (btn == 'yes'){
-					ddselector.toStore.removeAll();
-					ddselector.fromStore.load();
+                    ddselector.toStore.removeAll();
+                    ddselector.fromStore.load();
                     form.reset();
                     form.loadRecord(record);
 
                     //set the parentId so we know this will be a subSite
                     me.getParentIdField().setValue(parentId);
                 } else {
-					ddselector.toStore.removeAll();
-					ddselector.fromStore.load();
+                    ddselector.toStore.removeAll();
+                    ddselector.fromStore.load();
                     form.reset();
                     form.loadRecord(record);
                 }
@@ -143,8 +143,8 @@ Ext.define('Shopware.apps.Site.controller.Main', {
                 /*{/if}*/
             });
         } else {
-			ddselector.toStore.removeAll();
-			ddselector.fromStore.load();
+            ddselector.toStore.removeAll();
+            ddselector.fromStore.load();
             form.reset();
             form.loadRecord(record);
         }

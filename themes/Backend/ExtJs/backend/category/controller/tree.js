@@ -78,7 +78,7 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
         onSaveChangesError      : '{s name=settings/save_error}An error has occurred while saving the changes.{/s}',
         emptySubcategoryField   : '{s name=tree/empty_subcategory}Required field.{/s}',
         subCategoryNameRequired : '{s name=tree/sub_category_name_required}A name is required in order to create a sub category.{/s}',
-		growlMessage			: '{s name=window/main_title}{/s}'
+        growlMessage            : '{s name=window/main_title}{/s}'
     },
 
     productMappingRendered: false,

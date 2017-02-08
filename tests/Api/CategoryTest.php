@@ -1,5 +1,5 @@
 <?php
-class Shopware_Tests_Api_CategoryTest extends PHPUnit_Framework_TestCase
+class Shopware_Tests_Api_CategoryTest extends PHPUnit\Framework\TestCase
 {
     public $apiBaseUrl = '';
 

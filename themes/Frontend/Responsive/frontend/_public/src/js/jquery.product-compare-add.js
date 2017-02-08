@@ -1,5 +1,5 @@
 ;(function($) {
-    "use strict";
+    'use strict';
 
     /**
      * Shopware Article Compare Add Plugin.
@@ -52,7 +52,7 @@
                 addArticleUrl = $form.attr('action');
             }
 
-            if(!addArticleUrl) {
+            if (!addArticleUrl) {
                 return;
             }
 
@@ -79,13 +79,11 @@
 
                     // Check if error thrown
                     if (data.indexOf('data-max-reached="true"') !== -1) {
-
                         $.loadingIndicator.close(function() {
                             $.modal.open(data, {
                                 sizing: 'content'
                             });
                         });
-
                     } else {
                         compareMenu.html(data);
 
@@ -99,7 +97,7 @@
                             }, 'slow');
 
                             $.overlay.close();
-                        })
+                        });
                     }
 
                     $.publish('plugin/swProductCompareAdd/onAddArticleCompareSuccess', [ me, event, data, compareMenu ]);

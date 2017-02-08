@@ -21,7 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-class sBasketTest extends PHPUnit_Framework_TestCase
+class sBasketTest extends PHPUnit\Framework\TestCase
 {
     /**
      * Database connection which used for each database operation in this class.

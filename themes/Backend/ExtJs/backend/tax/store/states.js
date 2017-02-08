@@ -34,9 +34,9 @@
  */
 //{block name="backend/countries/tax/states"}
 Ext.define('Shopware.apps.Tax.store.States', {
-	extend: 'Ext.data.Store',
-	autoLoad: false,
-	pageSize: 30,
-	model : 'Shopware.apps.Tax.model.States'
+    extend: 'Ext.data.Store',
+    autoLoad: false,
+    pageSize: 30,
+    model : 'Shopware.apps.Tax.model.States'
 });
 //{/block}

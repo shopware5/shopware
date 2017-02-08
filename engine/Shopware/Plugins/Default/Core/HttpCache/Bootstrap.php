@@ -22,10 +22,13 @@
  * our trademarks remain entirely with us.
  */
 
+use Doctrine\Common\EventArgs;
 use Shopware\Bundle\StoreFrontBundle\Struct\ProductContextInterface;
+use Shopware\Components\HttpCache\Store;
 use Shopware\Components\Model\ModelManager;
 use Enlight_Controller_Request_Request as Request;
 use Enlight_Controller_Response_ResponseHttp as Response;
+use Symfony\Component\HttpKernel\HttpCache\HttpCache;
 
 /**
  * @category  Shopware
@@ -58,6 +61,11 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
      * @var Response
      */
     protected $response;
+
+    /**
+     * @var array
+     */
+    private $cacheInvalidationBuffer = [];
 
     /**
      * @return string
@@ -119,6 +127,9 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
             'Shopware_CronJob_ClearHttpCache',
             'onClearHttpCache'
         );
+
+        $this->subscribeEvent('Shopware\Models\Article\Price::postUpdate', 'onPostPersist');
+        $this->subscribeEvent('Shopware\Models\Article\Price::postPersist', 'onPostPersist');
 
         $this->subscribeEvent('Shopware\Models\Article\Article::postUpdate', 'onPostPersist');
         $this->subscribeEvent('Shopware\Models\Article\Article::postPersist', 'onPostPersist');
@@ -906,6 +917,20 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
     }
 
     /**
+     * Execute cache invalidation after Doctrine flush
+     *
+     * @param EventArgs $eventArgs
+     */
+    public function postFlush(EventArgs $eventArgs)
+    {
+        $cacheIds = array_keys($this->cacheInvalidationBuffer);
+        foreach ($cacheIds as $cacheId) {
+            $this->invalidateCacheId($cacheId);
+        }
+        $this->cacheInvalidationBuffer = [];
+    }
+
+    /**
      * Cache invalidation based on model events
      *
      * @param Enlight_Event_EventArgs $eventArgs
@@ -926,29 +951,36 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
         $cacheIds = array();
 
         switch ($entityName) {
-            case 'Shopware\Models\Article\Article':
+            case Shopware\Models\Article\Price::class:
+                $cacheIds[] = 'a' . $entity->getArticle()->getId();
+                break;
+            case Shopware\Models\Article\Article::class:
                 $cacheIds[] = 'a' . $entity->getId();
                 break;
-            case 'Shopware\Models\Article\Detail':
+            case Shopware\Models\Article\Detail::class:
                 $cacheIds[] = 'a' . $entity->getArticleId();
                 break;
-            case 'Shopware\Models\Category\Category':
+            case Shopware\Models\Category\Category::class:
                 $cacheIds[] = 'c' . $entity->getId();
                 break;
-            case 'Shopware\Models\Banner\Banner':
+            case Shopware\Models\Banner\Banner::class:
                 $cacheIds[] = 'c' . $entity->getCategoryId();
                 break;
-            case 'Shopware\Models\Blog\Blog':
+            case Shopware\Models\Blog\Blog::class:
                 $cacheIds[] = 'c' . $entity->getCategoryId();
                 break;
-            case 'Shopware\Models\Emotion\Emotion':
+            case Shopware\Models\Emotion\Emotion::class:
                 $cacheIds[] = 'e' . $entity->getId();
                 break;
         }
 
         foreach ($cacheIds as $cacheId) {
-            $this->invalidateCacheId($cacheId);
+            $this->cacheInvalidationBuffer[$cacheId] = true;
         }
+
+        /** @var \Doctrine\ORM\EntityManager $entityManager */
+        $entityManager = Shopware()->Container()->get('models');
+        $entityManager->getEventManager()->addEventListener(['postFlush'], $this);
     }
 
     /**
@@ -983,22 +1015,40 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
      * Will send BAN requests to all configured reverse proxies. If cacheId is provided,
      * the corresponding headers will be set.
      *
-     * @param null $cacheId    If set, only pages including these cacheIds will be invalidated
+     * @param string $cacheId    If set, only pages including these cacheIds will be invalidated
      * @return bool            True will be returned, if *all* operations succeeded
      */
-    private function invalidate($cacheId=null)
+    private function invalidate($cacheId = null)
     {
-        $proxy = $this->getProxyUrl($this->request);
-
-        // if no explicit proxy was configured + no host is configured
-        if ($proxy === null) {
-            return false;
+        $proxyUrl = trim($this->Config()->get('proxy'));
+        if (!empty($proxyUrl)) {
+            return $this->invalidateWithBANRequest($proxyUrl, $cacheId);
         }
 
+        if ($this->get('service_container')->has('httpCache')) {
+            return $this->invalidateWithStore($cacheId);
+        }
+
+        // if no explicit proxy was configured + no host is configured
+        $proxyUrl = $this->getProxyUrl($this->request);
+        if ($proxyUrl !== null) {
+            return $this->invalidateWithBANRequest($proxyUrl, $cacheId);
+        }
+
+        return false;
+    }
+
+    /**
+     * @param string $urls Comma separated URLs
+     * @param string $cacheId
+     * @return bool
+     */
+    private function invalidateWithBANRequest($urls, $cacheId)
+    {
         // expand + trim proxies (comma separated)
         $urls = array_map(
             'trim',
-            explode(',', $proxy)
+            explode(',', $urls)
         );
 
         $success = true;
@@ -1014,7 +1064,6 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
                 }
 
                 $response = $client->request('BAN');
-
                 if ($response->getStatus() < 200 || $response->getStatus() >= 300) {
                     $this->get('corelogger')->error(
                         'Reverse proxy returned invalid status code',
@@ -1028,6 +1077,25 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
         }
 
         return $success;
+    }
+
+    /**
+     * @param string $cacheId
+     * @return bool
+     */
+    private function invalidateWithStore($cacheId = null)
+    {
+        /** @var HttpCache $httpCache */
+        $httpCache = $this->get('httpCache');
+
+        /** @var Store $store */
+        $store = $httpCache->getStore();
+
+        if (!$cacheId) {
+            return $store->purgeAll();
+        }
+
+        return $store->purgeByHeader('x-shopware-cache-id', $cacheId);
     }
 
     /**

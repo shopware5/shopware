@@ -213,4 +213,28 @@ class Shopware_Controllers_Backend_Attributes extends Shopware_Controllers_Backe
 
         $this->View()->assign('success', true);
     }
+
+    public function columnNameExistsAction()
+    {
+        $name = $this->Request()->getParam('columnName');
+        $table = $this->Request()->getParam('tableName');
+
+        /** @var TableMapping $mapping */
+        $mapping = $this->get('shopware_attribute.table_mapping');
+
+        $tables = array_merge([$table], $mapping->getDependingTables($table));
+
+        $table = null;
+        foreach ($tables as $attributeTable) {
+            if ($mapping->isTableColumn($attributeTable, $name)) {
+                $table = $attributeTable;
+                break;
+            }
+        }
+
+        $this->View()->assign([
+            'exists' => ($table !== null),
+            'table' => $table
+        ]);
+    }
 }

@@ -33,8 +33,8 @@
 //{block name="backend/first_run_wizard/model/locale"}
 
 Ext.define('Shopware.apps.FirstRunWizard.model.Locale', {
-	extend: 'Ext.data.Model',
-	fields: [ 'id', 'name' ]
+    extend: 'Ext.data.Model',
+    fields: [ 'id', 'name' ]
 });
 
 //{/block}

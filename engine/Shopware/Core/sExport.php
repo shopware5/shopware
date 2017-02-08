@@ -22,6 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Bundle\AttributeBundle\Service\CrudService;
 use Shopware\Bundle\StoreFrontBundle;
 use Shopware\Bundle\StoreFrontBundle\Service\AdditionalTextServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
@@ -107,16 +108,22 @@ class sExport
      */
     private $config;
 
+    /** @var StoreFrontBundle\Service\ConfiguratorServiceInterface  */
+    private $configuratorService;
+
     /**
      * @param ContextServiceInterface $contextService
      * @param AdditionalTextServiceInterface $additionalTextService
      * @param Enlight_Components_Db_Adapter_Pdo_Mysql $db
+     * @param Shopware_Components_Config $config
+     * @param StoreFrontBundle\Service\ConfiguratorServiceInterface $configuratorService
      */
     public function __construct(
         ContextServiceInterface $contextService = null,
         AdditionalTextServiceInterface $additionalTextService = null,
         Enlight_Components_Db_Adapter_Pdo_Mysql $db = null,
-        Shopware_Components_Config $config = null
+        Shopware_Components_Config $config = null,
+        StoreFrontBundle\Service\ConfiguratorServiceInterface $configuratorService = null
     ) {
         $container = Shopware()->Container();
 
@@ -124,6 +131,7 @@ class sExport
         $this->additionalTextService = $container->get('shopware_storefront.additional_text_service');
         $this->db = $db ?: $container->get('db');
         $this->config = $config ?: $container->get('config');
+        $this->configuratorService = $configuratorService ?: $container->get('shopware_storefront.configurator_service');
     }
 
     /**
@@ -674,8 +682,13 @@ class sExport
                     "txtArtikel" => "name",
                     "txtzusatztxt" => "additionaltext"
                 );
-                for ($i=1; $i<=20; $i++) {
-                    $map["attr$i"] = "attr$i";
+
+                $attributes = Shopware()->Container()->get('shopware_attribute.crud_service')->getList('s_articles_attributes');
+                foreach ($attributes as $attribute) {
+                    if ($attribute->isIdentifier()) {
+                        continue;
+                    }
+                    $map[CrudService::EXT_JS_PREFIX . $attribute->getColumnName()] = $attribute->getColumnName();
                 }
                 break;
             case "link":
@@ -859,7 +872,7 @@ class sExport
         if (!empty($this->sSettings["own_filter"])&&trim($this->sSettings["own_filter"])) {
             $sql_add_where[] = "(".$this->sSettings["own_filter"].")";
         }
-        if ($this->config->offsetGet('hideNoInstock')) {
+        if ($this->config->offsetGet('hideNoInStock')) {
             $sql_add_where[] = "(
                 (a.laststock * v.instock >= a.laststock * v.minpurchase)
                 OR
@@ -895,6 +908,7 @@ class sExport
                 d.shippingfree,
                 a.topseller,
                 a.keywords,
+                d.active as variantActive,
                 d.minpurchase,
                 d.purchasesteps,
                 d.maxpurchase,
@@ -904,6 +918,7 @@ class sExport
                 a.filtergroupID,
                 a.supplierID,
                 d.unitID,
+                d.purchaseprice,
                 IF(a.changetime!='0000-00-00 00:00:00',a.changetime,'') as `changed`,
                 IF(a.datum!='0000-00-00',a.datum,'') as `added`,
                 IF(d.releasedate!='0000-00-00',d.releasedate,'') as `releasedate`,
@@ -951,7 +966,9 @@ class sExport
                 a.configurator_set_id as configurator,
 
                 ROUND(CAST(IFNULL($grouppricefield, $pricefield)*(100-IF(pd.discount,pd.discount,0)-{$this->sCustomergroup["discount"]})/100*{$this->sCurrency["factor"]} AS DECIMAL(10,3)),2) as netprice,
+                IFNULL($grouppricefield, $pricefield)*(100-IF(pd.discount,pd.discount,0)-{$this->sCustomergroup["discount"]})/100*{$this->sCurrency["factor"]} as netprice_numeric,
                 ROUND(CAST(IFNULL($grouppricefield, $pricefield)*(100+t.tax)/100*(100-IF(pd.discount,pd.discount,0)-{$this->sCustomergroup["discount"]})/100*{$this->sCurrency["factor"]} AS DECIMAL(10,3)),2) as price,
+                IFNULL($grouppricefield, $pricefield)*(100+t.tax)/100*(100-IF(pd.discount,pd.discount,0)-{$this->sCustomergroup["discount"]})/100*{$this->sCurrency["factor"]} as price_numeric,
                 pd.discount,
                 ROUND(CAST($pseudoprice*{$this->sCurrency["factor"]} AS DECIMAL(10,3)),2) as netpseudoprice,
                 ROUND(CAST($pseudoprice*(100+t.tax)*{$this->sCurrency["factor"]}/100 AS DECIMAL(10,3)),2) as pseudoprice,
@@ -975,7 +992,7 @@ class sExport
 
             LEFT JOIN s_core_pricegroups_discounts pd
             ON a.pricegroupActive=1
-            AND	a.pricegroupID=groupID
+            AND a.pricegroupID=groupID
             AND customergroupID = 1
             AND discountstart=1
 
@@ -1166,6 +1183,15 @@ class sExport
                 $product = $this->additionalTextService->buildAdditionalText($product, $context);
 
                 $row['additionaltext'] = $product->getAdditional();
+                $row['configurator_options'] = [];
+
+                $configurationGroups = $this->configuratorService->getProductConfiguration($product, $context);
+
+                /** @var StoreFrontBundle\Struct\Configurator\Group $configuratorOption */
+                foreach ($configurationGroups as $configurationGroup) {
+                    $option = current($configurationGroup->getOptions());
+                    $row['configurator_options'][$configurationGroup->getName()] = $option->getName();
+                }
             }
             $rows[] = $row;
 
@@ -1290,10 +1316,10 @@ class sExport
         }
 
         if (!empty($sql_where)) {
-            $sql_from = " s_premium_dispatch_countries sc,	s_core_countries c";
+            $sql_from = ' s_premium_dispatch_countries sc, s_core_countries c';
             $sql_where = "AND $sql_where AND c.id=sc.countryID";
         } else {
-            $sql_from = "";
+            $sql_from = '';
         }
         $sql = "
             SELECT sd.id, name, sd.description, sd.shippingfree
@@ -1301,7 +1327,7 @@ class sExport
                 s_premium_dispatch sd,
                 $sql_from
             WHERE sd.active = 1
-            AND	sd.id = sc.dispatchID
+            AND sd.id = sc.dispatchID
             $sql_where
             ORDER BY $sql_order sd.position ASC LIMIT 1
         ";
@@ -1403,10 +1429,12 @@ class sExport
         if (empty($basket)) {
             return false;
         }
+        $mainID = $this->shopData['main_id'];
+        $shopID = $this->shopData['id'];
         $basket['countryID'] = $countryID;
         $basket['paymentID'] = $paymentID;
         $basket['customergroupID'] = $this->sCustomergroup['id'];
-        $basket['multishopID'] = $this->sMultishop['id'];
+        $basket['multishopID'] = $mainID === null ? $shopID : $mainID;
         $basket['sessionID'] = null;
         return $basket;
     }
@@ -1639,7 +1667,7 @@ class sExport
                 } elseif ($dispatch['calculation']==2) {
                     $from = round($basket['count_article']);
                 } elseif ($dispatch['calculation']==3) {
-                    $from = round($basket['calculation_value_'.$dispatch['id']]);
+                    $from = round($basket['calculation_value_'.$dispatch['id']], 2);
                 } else {
                     continue;
                 }
@@ -1693,7 +1721,7 @@ class sExport
         } elseif ($dispatch['calculation']==2) {
             $from = round($basket['count_article']);
         } elseif ($dispatch['calculation']==3) {
-            $from = round($basket['calculation_value_'.$dispatch['id']]);
+            $from = round($basket['calculation_value_'.$dispatch['id']], 2);
         } else {
             return false;
         }
