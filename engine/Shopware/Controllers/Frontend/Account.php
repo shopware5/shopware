@@ -132,6 +132,8 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
     {
         $destinationPage = (int) $this->Request()->sPage;
         $orderData = $this->admin->sGetOpenOrderData($destinationPage);
+        $orderData = $this->applyTrackingUrl($orderData);
+
         $this->View()->sOpenOrders = $orderData['orderData'];
         $this->View()->sNumberPages = $orderData['numberOfPages'];
         $this->View()->sPages = $orderData['pages'];
@@ -693,6 +695,38 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
     protected function refreshBasket()
     {
         Shopware()->Modules()->Basket()->sRefreshBasket();
+    }
+
+    /**
+     * @param array $orderData
+     *
+     * @return array
+     */
+    private function applyTrackingUrl(array $orderData)
+    {
+        foreach ($orderData['orderData'] as &$order) {
+            if (!empty($order['trackingcode']) && !empty($order['dispatch']) && !empty($order['dispatch']['status_link'])) {
+                $order['dispatch']['status_link'] = $this->renderTrackingLink(
+                    $order['dispatch']['status_link'],
+                    $order['trackingcode']
+                );
+            }
+        }
+
+        return $orderData;
+    }
+
+    /**
+     * @param string $link
+     * @param string $trackingCode
+     *
+     * @return string
+     */
+    private function renderTrackingLink($link, $trackingCode)
+    {
+        $regEx = '/(\{\$offerPosition.trackingcode\})/';
+
+        return preg_replace($regEx, $trackingCode, $link);
     }
 
     /**

@@ -40,5 +40,7 @@
             <argument type="service" id="dbal_connection" />
             <tag name="validator.constraint_validator" alias="shopware.form.constraint.unique" />
         </service>
+
+        <service id="shopware.form.string_renderer_service" class="Shopware\Bundle\FormBundle\StringRendererService" />
     </services>
 </container>
