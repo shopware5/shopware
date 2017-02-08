@@ -72,8 +72,10 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
 
         $success = $this->Request()->getParam('success');
         if ($success) {
-            $this->View()->sSupport = array_merge($this->View()->sSupport, ['sElements' => '']);
+            $this->View()->sSupport = array_merge($this->View()->sSupport, ['sElements' => []]);
         }
+
+        $this->renderElementNote($this->View());
 
         $this->View()->assign('success', $success);
 
@@ -502,6 +504,27 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
         }
 
         return $errors;
+    }
+
+    /**
+     * @param Enlight_View_Default $view
+     */
+    private function renderElementNote(Enlight_View_Default $view)
+    {
+        $rendererService = $this->container->get('shopware.form.string_renderer_service');
+
+        $elements = [];
+        foreach ($view->sSupport['sElements'] as $key => &$element) {
+            if (empty($element['note'])) {
+                $elements[$key] = $element;
+                continue;
+            }
+
+            $element['note'] = $rendererService->render($element['note'], $view->getAssign(), $element);
+            $elements[$key] = $element;
+        }
+
+        $view->sSupport = array_merge($view->sSupport, ['sElements' => $elements]);
     }
 
     /**

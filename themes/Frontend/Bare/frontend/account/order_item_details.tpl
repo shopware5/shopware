@@ -250,7 +250,10 @@
                     {if $offerPosition.trackingcode}
                         <p>
                             {if $offerPosition.dispatch.status_link}
-                                {include file="string:{$offerPosition.dispatch.status_link}"}
+                                <a href="{$offerPosition.dispatch.status_link}"
+                                   title="{$offerPosition.dispatch.name}"
+                                   onclick="return !window.open(this.href, 'popup', 'width=500,height=600,left=20,top=20');"
+                                   target="_blank">{$offerPosition.trackingcode}</a>
                             {else}
                                 {$offerPosition.trackingcode}
                             {/if}
