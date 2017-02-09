@@ -1368,9 +1368,9 @@
                 rangeSlider;
 
             if (param == 'rating') {
-                me.$el.find('#star--reset').prop('checked', true).trigger('change');
+                me.$filterForm.find('#star--reset').prop('checked', true).trigger('change');
             } else {
-                $input = me.$el.find('[name="' + me.escapeDoubleQuotes(param) + '"]');
+                $input = me.$filterForm.find('[name="' + me.escapeDoubleQuotes(param) + '"]');
                 if ($input.is('[data-range-input]')) {
                     rangeSlider = $input.parents('[data-range-slider="true"]').data('plugin_swRangeSlider');
                     rangeSlider.reset($input.attr('data-range-input'));
