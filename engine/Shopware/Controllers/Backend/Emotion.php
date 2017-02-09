@@ -130,13 +130,13 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
         } catch (\Exception $e) {
             return $this->View()->assign([
                 'success' => false,
-                'message' => $e->getMessage()
+                'message' => $e->getMessage(),
             ]);
         }
 
         return $this->View()->assign([
             'success' => true,
-            'data' => $data
+            'data' => $data,
         ]);
     }
 
@@ -310,7 +310,6 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
         }
     }
 
-
     /**
      * Model event listener function which fired when the user configure an emotion preset over the backend
      * module and clicks the save button.
@@ -361,25 +360,25 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
             $preset->fromArray($data);
 
             if ($this->presetNameExists($preset)) {
-                $this->View()->assign(array(
+                $this->View()->assign([
                     'success' => false,
-                    'message' => $snippetNamespace->get('preset_duplicate_error_message')
-                ));
+                    'message' => $snippetNamespace->get('preset_duplicate_error_message'),
+                ]);
             } else {
                 $this->getManager()->persist($preset);
                 $this->getManager()->flush();
 
-                $this->View()->assign(array(
+                $this->View()->assign([
                     'data' => $preset,
-                    'success' => true
-                ));
+                    'success' => true,
+                ]);
             }
         } catch (\Exception $e) {
-            $this->View()->assign(array(
+            $this->View()->assign([
                 'data' => $this->Request()->getParams(),
                 'success' => false,
-                'message' => $e->getMessage()
-            ));
+                'message' => $e->getMessage(),
+            ]);
         }
     }
 
@@ -965,6 +964,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
 
     /**
      * @param array $requiredPlugins
+     *
      * @return array
      */
     private function getExtendedPluginInformation(array $requiredPlugins)
@@ -1033,6 +1033,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
 
     /**
      * @param string $path
+     *
      * @return null|string
      */
     private function getPresetImageUrl($path)
@@ -1068,6 +1069,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
     /**
      * @param array $translations
      * @param $locale
+     *
      * @return array
      */
     private function findTranslationByUserLocale(array $translations, $locale)
@@ -1090,6 +1092,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
 
     /**
      * @param array $presets
+     *
      * @return array
      */
     private function preparePresetData(array $presets)
@@ -1125,7 +1128,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
                 'presetData' => $preset['presetData'],
                 'label' => $label,
                 'description' => $description,
-                'requiredPlugins' => $requiredPlugins
+                'requiredPlugins' => $requiredPlugins,
             ];
         }
 
@@ -1576,6 +1579,24 @@ EOD;
     }
 
     /**
+     * Get detailed plugin information by plugin ids
+     *
+     * @param array $pluginIds
+     *
+     * @return array
+     */
+    private function getRequiredPlugins(array $pluginIds)
+    {
+        return $this->getManager()->getDBALQueryBuilder()
+            ->select('name AS technicalName, label')
+            ->from('s_core_plugins', 's')
+            ->where('s.id IN (:ids)')
+            ->setParameter('ids', implode(',', $pluginIds))
+            ->execute()
+            ->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
      * @param int $emotionId
      * @param int $shopId
      *
@@ -1605,7 +1626,8 @@ EOD;
 
     /**
      * @param Preset $preset
-     * @return boolean
+     *
+     * @return bool
      */
     private function presetNameExists(Preset $preset)
     {
