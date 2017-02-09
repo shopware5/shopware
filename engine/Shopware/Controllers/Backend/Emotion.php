@@ -25,7 +25,6 @@
 use \Shopware\Models\Emotion\Element;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\Connection;
-use Shopware\Bundle\MediaBundle\MediaService;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Emotion\Emotion;
 use Shopware\Models\Emotion\Library\Field;
@@ -117,27 +116,6 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
         $data = $statement->fetchAll(PDO::FETCH_ASSOC);
 
         $this->View()->assign(['success' => true, 'data' => $data]);
-    }
-
-    /**
-     * @return Enlight_View|Enlight_View_Default
-     */
-    public function getPresetsAction()
-    {
-        try {
-            $presets = $this->getPresets();
-            $data = $this->preparePresetData($presets);
-        } catch (\Exception $e) {
-            return $this->View()->assign([
-                'success' => false,
-                'message' => $e->getMessage(),
-            ]);
-        }
-
-        return $this->View()->assign([
-            'success' => true,
-            'data' => $data,
-        ]);
     }
 
     /**
@@ -311,78 +289,6 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
     }
 
     /**
-     * Model event listener function which fired when the user configure an emotion preset over the backend
-     * module and clicks the save button.
-     */
-    public function savePresetAction()
-    {
-        /** @var Enlight_Components_Snippet_Namespace $snippetNamespace */
-        $snippetNamespace = $this->container->get('snippets')->getNamespace('backend/emotion/view/detail');
-        $slugService = $this->container->get('shopware.slug');
-
-        try {
-            $data = $this->Request()->getParams();
-            $identity = $this->container->get('Auth')->getIdentity();
-            $locale = $identity->locale->getLocale();
-
-            if (!empty($data['id'])) {
-                /** @var $preset Preset */
-                $preset = $this->container->get('models')->getRepository(Preset::class)->find($data['id']);
-                if ($preset) {
-                    $preset->getTranslations()->clear();
-                    $preset->getRequiredPlugins()->clear();
-                    $this->getManager()->flush($preset);
-                }
-            } else {
-                /** @var $preset Preset */
-                $preset = new Preset();
-                $this->getManager()->persist($preset);
-            }
-
-            // fill translation locale when not yet set
-            if (!empty($data['translations'])) {
-                foreach ($data['translations'] as &$translation) {
-                    if (!isset($translation['locale']) && $locale) {
-                        $translation['locale'] = $locale;
-                    }
-                }
-            }
-            // get technical names and label of required plugins
-            if (!empty($data['requiredPlugins'])) {
-                $requiredPlugins = $this->getRequiredPlugins($data['requiredPlugins']);
-                $data['requiredPlugins'] = [];
-
-                if ($requiredPlugins) {
-                    $data['requiredPlugins'] = $requiredPlugins;
-                }
-            }
-            // slugify technical name of preset
-            $data['name'] = $slugService->slugify($data['name']);
-            $preset->fromArray($data);
-
-            if ($this->presetNameExists($preset)) {
-                $this->View()->assign([
-                    'success' => false,
-                    'message' => $snippetNamespace->get('preset_duplicate_error_message'),
-                ]);
-            } else {
-                $this->getManager()->flush();
-
-                $this->View()->assign([
-                    'data' => $preset,
-                    'success' => true,
-                ]);
-            }
-        } catch (\Exception $e) {
-            $this->View()->assign([
-                'data' => $this->Request()->getParams(),
-                'success' => false,
-                'message' => $e->getMessage(),
-            ]);
-        }
-    }
-
-    /**
      * Model event listener function which fired when the user configure an emotion over the backend
      * module and clicks the save button.
      */
@@ -546,32 +452,6 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
         }
     }
 
-    public function deletePresetAction()
-    {
-        $presetId = $this->Request()->getParam('id');
-
-        if (!$presetId) {
-            return $this->View()->assign(['success' => false]);
-        }
-
-        /** @var Preset $preset */
-        $preset = $this->container->get('models')->find(Preset::class, $presetId);
-
-        if (!$preset || !$preset->getCustom()) {
-            $this->View()->assign(['success' => false]);
-        } else {
-            /** @var ModelManager $modelManager */
-            $modelManager = $this->container->get('models');
-            $modelManager->remove($preset);
-            $modelManager->flush($preset);
-
-            $this->View()->assign([
-                'success' => true,
-                'data' => [],
-            ]);
-        }
-    }
-
     public function duplicateAction()
     {
         $emotionId = (int) $this->Request()->getParam('emotionId');
@@ -603,7 +483,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
                 break;
         }
 
-        $copyName = $emotion->getName() . ' - Copy';
+        $copyName = $emotion->getName().' - Copy';
         $new->setName($copyName);
 
         $new->setDevice($device);
@@ -704,6 +584,42 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
                 $this->Request()->getParam('limit', null)
             )
         );
+    }
+
+    public function getPresetsAction()
+    {
+        $resource = $this->container->get('shopware.api.emotionpreset');
+
+        $this->View()->assign([
+            'success' => true,
+            'data' => $resource->getList(),
+        ]);
+    }
+
+    /**
+     * Model event listener function which fired when the user configure an emotion preset over the backend
+     * module and clicks the save button.
+     */
+    public function savePresetAction()
+    {
+        $resource = $this->container->get('shopware.api.emotionpreset');
+
+        $resource->save(
+            $this->Request()->getParams()
+        );
+
+        $this->View()->assign(['success' => true]);
+    }
+
+    public function deletePresetAction()
+    {
+        $id = $this->Request()->getParam('id');
+
+        $resource = $this->container->get('shopware.api.emotionpreset');
+
+        $resource->delete($id);
+
+        $this->View()->assign(['success' => true]);
     }
 
     protected function initAcl()
@@ -1039,42 +955,6 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
     }
 
     /**
-     * @return array
-     */
-    private function getPresets()
-    {
-        $builder = $this->container->get('models')
-            ->createQueryBuilder();
-
-        $result = $builder->select('preset', 'translation', 'requiredPlugin')
-            ->from(Preset::class, 'preset')
-            ->leftJoin('preset.translations', 'translation')
-            ->leftJoin('preset.requiredPlugins', 'requiredPlugin')
-            ->orderBy('preset.id')
-            ->getQuery()
-            ->getArrayResult();
-
-        return $result;
-    }
-
-    /**
-     * @param string $path
-     *
-     * @return null|string
-     */
-    private function getPresetImageUrl($path)
-    {
-        /** @var MediaService $mediaService */
-        $mediaService = $this->container->get('shopware_media.media_service');
-
-        if (strpos($path, 'media') === 0) {
-            return $mediaService->getUrl($path);
-        }
-
-        return $this->View()->fetch(sprintf('string:{url file="%s"}', $path));
-    }
-
-    /**
      * @param int $emotionId
      *
      * @return Emotion
@@ -1114,51 +994,6 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
         }
 
         return $requiredTranslation;
-    }
-
-    /**
-     * @param array $presets
-     *
-     * @return array
-     */
-    private function preparePresetData(array $presets)
-    {
-        $identity = $this->container->get('Auth')->getIdentity();
-        $locale = $identity->locale->getLocale();
-
-        if (empty($locale)) {
-            $locale = 'de_DE';
-        }
-
-        $preparedPresets = [];
-
-        foreach ($presets as $preset) {
-            $label = $description = $preset['name'];
-            $translation = $this->findTranslationByUserLocale($preset['translations'], $locale);
-            $requiredPlugins = $this->getExtendedPluginInformation($preset['requiredPlugins']);
-
-            if (!empty($translation)) {
-                $label = $translation['label'];
-                $description = $translation['description'];
-            }
-
-            $preparedPresets[] = [
-                'id' => $preset['id'],
-                'name' => $preset['name'],
-                'premium' => $preset['premium'],
-                'custom' => $preset['custom'],
-                'thumbnail' => $preset['thumbnail'],
-                'thumbnailUrl' => $this->getPresetImageUrl($preset['thumbnail']),
-                'preview' => $preset['preview'],
-                'previewUrl' => $this->getPresetImageUrl($preset['preview']),
-                'presetData' => $preset['presetData'],
-                'label' => $label,
-                'description' => $description,
-                'requiredPlugins' => $requiredPlugins,
-            ];
-        }
-
-        return $preparedPresets;
     }
 
     /**
@@ -1205,7 +1040,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
             $fromDate = new \DateTime($data['validFrom']);
             $fromTime = new \DateTime($data['validFromTime']);
 
-            $validFrom = $fromDate->format('d.m.Y') . ' ' . $fromTime->format('H:i');
+            $validFrom = $fromDate->format('d.m.Y').' '.$fromTime->format('H:i');
         }
 
         $validTo = null;
@@ -1214,7 +1049,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
             $toDate = new \DateTime($data['validTo']);
             $toTime = new \DateTime($data['validToTime']);
 
-            $validTo = $toDate->format('d.m.Y') . ' ' . $toTime->format('H:i');
+            $validTo = $toDate->format('d.m.Y').' '.$toTime->format('H:i');
         }
 
         $categories = new \Doctrine\Common\Collections\ArrayCollection();
@@ -1459,7 +1294,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
                 continue;
             }
 
-            $data['name'] = $data['name'] . ' - Copy';
+            $data['name'] = $data['name'].' - Copy';
             $translation->write($id, 'emotion', $newId, $data);
         }
     }
@@ -1570,7 +1405,7 @@ EOD;
      */
     private function getElementIdentifier(Element $el)
     {
-        return $el->getStartCol() . $el->getStartRow() . $el->getEndCol() . $el->getEndRow();
+        return $el->getStartCol().$el->getStartRow().$el->getEndCol().$el->getEndRow();
     }
 
     /**
@@ -1605,24 +1440,6 @@ EOD;
     }
 
     /**
-     * Get detailed plugin information by plugin ids
-     *
-     * @param array $pluginIds
-     *
-     * @return array
-     */
-    private function getRequiredPlugins(array $pluginIds)
-    {
-        return $this->getManager()->getDBALQueryBuilder()
-            ->select('name AS technicalName, label')
-            ->from('s_core_plugins', 's')
-            ->where('s.id IN (:ids)')
-            ->setParameter('ids', $pluginIds, Connection::PARAM_INT_ARRAY)
-            ->execute()
-            ->fetchAll(PDO::FETCH_ASSOC);
-    }
-
-    /**
      * @param int $emotionId
      * @param int $shopId
      *
@@ -1648,30 +1465,6 @@ EOD;
             'emotionId' => $emotionId,
             'fullPath' => true,
         ]);
-    }
-
-    /**
-     * @param Preset $preset
-     *
-     * @return bool
-     */
-    private function presetNameExists(Preset $preset)
-    {
-        $qb = $this->container->get('models')->createQueryBuilder()
-            ->select('COUNT(preset)')
-            ->from(Preset::class, 'preset')
-            ->where('preset.name = :name');
-
-        if ($preset->getId()) {
-            $qb->andWhere('preset.id != :id')
-                ->setParameter('id', $preset->getId());
-        }
-
-        $result = $qb->setParameter('name', $preset->getName())
-            ->getQuery()
-            ->getSingleScalarResult();
-
-        return $result > 0;
     }
 
     /**

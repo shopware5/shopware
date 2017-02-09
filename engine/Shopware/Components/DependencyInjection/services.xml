@@ -567,10 +567,9 @@
         <service id="shopware.api.translation" class="Shopware\Components\Api\Resource\Translation" shared="false" />
         <service id="shopware.api.variant" class="Shopware\Components\Api\Resource\Variant" shared="false" />
 
-        <service id="shopware.customer_stream.repository" class="Shopware\Models\Customer\CustomerStreamRepository" >
+        <service id="customer_search.dbal.gateway.interests" class="Shopware\Components\CustomerStream\CustomerInterestsGateway">
             <argument id="dbal_connection" type="service"/>
         </service>
-
 
         <service id="customer_search.dbal.gateway.order" class="Shopware\Components\CustomerStream\CustomerOrderGateway" >
             <argument id="dbal_connection" type="service"/>
@@ -578,6 +577,7 @@
         </service>
 
         <service id="shopware_customer_search.gateway.customer_order_hydrator" class="Shopware\Components\CustomerStream\CustomerOrderHydrator"/>
+
 
         <service id="customer_search.dbal.indexing.stream_indexer" class="Shopware\Components\CustomerStream\StreamIndexer">
             <argument type="service" id="shopware_customer_search.stream_criteria_factory" />
@@ -588,6 +588,13 @@
         <service id="shopware_customer_search.stream_criteria_factory" class="Shopware\Components\CustomerStream\CustomerStreamCriteriaFactory">
             <argument type="service" id="dbal_connection" />
             <argument type="service" id="shopware.logaware_reflection_helper" />
+        </service>
+
+        <service id="shopware.api.emotionpreset" class="Shopware\Components\Api\Resource\EmotionPreset" shared="false">
+            <argument type="service" id="dbal_connection" />
+            <argument type="service" id="models" />
+            <argument type="service" id="shopware_media.media_service" />
+            <argument type="service" id="template" />
         </service>
 
     </services>
