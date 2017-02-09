@@ -10,6 +10,7 @@
             <argument type="service" id="shopware_cart.cart_persister" />
             <argument type="service" id="shopware_cart.cart_context_service" />
             <argument type="service" id="session" />
+            <argument type="service" id="shopware_cart.view_cart_transformer" />
         </service>
 
         <service id="shopware_cart.amount_calculator" class="Shopware\Bundle\CartBundle\Domain\Price\AmountCalculator" >
@@ -98,7 +99,7 @@
         </service>
 
         <service id="shopware_cart.percentage_tax_calculator" class="Shopware\Bundle\CartBundle\Domain\Tax\PercentageTaxRuleCalculator">
-            <argument type="service" id="shopware_cart.tax_calculator" />
+            <argument type="service" id="shopware_cart.simple_tax_rule_calculator" />
         </service>
 
         <service id="shopware_cart.address_hydrator_dbal" class="Shopware\Bundle\CartBundle\Infrastructure\Customer\AddressHydrator">
@@ -152,6 +153,17 @@
 
         <service id="shopware_cart.stock_delivery_separator" class="Shopware\Bundle\CartBundle\Domain\Delivery\StockDeliverySeparator">
             <argument type="service" id="shopware_cart.price_calculator" />
+        </service>
+
+        <service id="shopware_cart.view_product_transformer" class="Shopware\Bundle\CartBundle\Infrastructure\View\ViewProductTransformer">
+            <argument type="service" id="shopware_storefront.list_product_gateway" />
+            <argument type="service" id="shopware_storefront.variant_cover_service" />
+        </service>
+
+        <service id="shopware_cart.view_cart_transformer" class="Shopware\Bundle\CartBundle\Infrastructure\View\ViewCartTransformer">
+            <argument type="collection">
+                <argument type="service" id="shopware_cart.view_product_transformer" />
+            </argument>
         </service>
     </services>
 </container>

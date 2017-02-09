@@ -31,6 +31,8 @@ use Shopware\Bundle\CartBundle\Infrastructure\Cart\CartContextServiceInterface;
 use Shopware\Bundle\CartBundle\Domain\Cart\CartPersisterInterface;
 use Shopware\Bundle\CartBundle\Domain\LineItem\LineItemInterface;
 use Shopware\Bundle\CartBundle\Domain\LineItem\Stackable;
+use Shopware\Bundle\CartBundle\Infrastructure\View\ViewCart;
+use Shopware\Bundle\CartBundle\Infrastructure\View\ViewCartTransformer;
 
 class StoreFrontCartService
 {
@@ -59,36 +61,45 @@ class StoreFrontCartService
     private $session;
 
     /**
+     * @var ViewCartTransformer
+     */
+    private $viewCartTransformer;
+
+    /**
      * @param CartCalculator $calculation
      * @param CartPersisterInterface $persister
      * @param CartContextServiceInterface $contextService
      * @param \Enlight_Components_Session_Namespace $session
+     * @param ViewCartTransformer $viewCartTransformer
      */
     public function __construct(
         CartCalculator $calculation,
         CartPersisterInterface $persister,
         CartContextServiceInterface $contextService,
-        \Enlight_Components_Session_Namespace $session
+        \Enlight_Components_Session_Namespace $session,
+        ViewCartTransformer $viewCartTransformer
     ) {
         $this->calculation = $calculation;
         $this->persister = $persister;
         $this->contextService = $contextService;
         $this->session = $session;
+        $this->viewCartTransformer = $viewCartTransformer;
     }
 
     /**
-     * @return CalculatedCart
+     * @return ViewCart
      */
     public function createNew()
     {
         $cart = $this->createNewCart();
-        return $this->calculate($cart);
+        $this->calculate($cart);
+        return $this->getCart();
     }
 
     /**
-     * @return CalculatedCart
+     * @return ViewCart
      */
-    public function getCalculated()
+    public function getCart()
     {
         if ($this->getCartToken() === null) {
             //first access for frontend session
@@ -103,7 +114,13 @@ class StoreFrontCartService
             }
         }
 
-        return $this->calculate($cart);
+        $calculated = $this->calculate($cart);
+
+        $context = $this->contextService->getCartContext();
+
+        $viewCart = $this->viewCartTransformer->transform($calculated, $context);
+
+        return $viewCart;
     }
 
     /**
@@ -123,7 +140,7 @@ class StoreFrontCartService
      */
     public function add(LineItemInterface $item)
     {
-        $calculated = $this->getCalculated();
+        $calculated = $this->getCart()->getCalculatedCart();
 
         $exists = $calculated->getLineItems()->get($item->getIdentifier());
         if ($exists instanceof Stackable) {
@@ -137,10 +154,32 @@ class StoreFrontCartService
 
     /**
      * @param string $identifier
+     * @param int $quantity
+     * @throws \Exception
+     */
+    public function changeQuantity($identifier, $quantity)
+    {
+        $calculated = $this->getCart()->getCalculatedCart();
+
+        $lineItem = $calculated->getLineItems()->get($identifier);
+        if (!$lineItem) {
+            throw new \Exception(sprintf("Item with identifier %s not found", $identifier));
+        }
+        if (!$lineItem instanceof Stackable) {
+            throw new \Exception(sprintf("Quantity of line item %s can not be changed", $identifier));
+        }
+
+        $lineItem->getLineItem()->setQuantity($quantity);
+
+        $this->calculate($calculated->getCart());
+    }
+
+    /**
+     * @param string $identifier
      */
     public function remove($identifier)
     {
-        $cart = $this->getCalculated()->getCart();
+        $cart = $this->getCart()->getCalculatedCart()->getCart();
         $cart->getLineItems()->remove($identifier);
         $this->calculate($cart);
     }
