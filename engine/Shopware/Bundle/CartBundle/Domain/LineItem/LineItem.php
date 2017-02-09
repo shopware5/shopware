@@ -24,8 +24,12 @@
 
 namespace Shopware\Bundle\CartBundle\Domain\LineItem;
 
+use Shopware\Bundle\CartBundle\Domain\JsonSerializableTrait;
+
 class LineItem implements LineItemInterface
 {
+    use JsonSerializableTrait;
+
     /**
      * @var string
      */
@@ -65,7 +69,7 @@ class LineItem implements LineItemInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getIdentifier()
     {
@@ -73,7 +77,7 @@ class LineItem implements LineItemInterface
     }
 
     /**
-     * @return float
+     * {@inheritdoc}
      */
     public function getQuantity()
     {
@@ -81,7 +85,7 @@ class LineItem implements LineItemInterface
     }
 
     /**
-     * @param float $quantity
+     * {@inheritdoc}
      */
     public function setQuantity($quantity)
     {
@@ -89,7 +93,7 @@ class LineItem implements LineItemInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getType()
     {
@@ -97,7 +101,7 @@ class LineItem implements LineItemInterface
     }
 
     /**
-     * @return array
+     * {@inheritdoc}
      */
     public function getExtraData()
     {
@@ -105,7 +109,7 @@ class LineItem implements LineItemInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function serialize()
     {
@@ -113,8 +117,7 @@ class LineItem implements LineItemInterface
     }
 
     /**
-     * @param string $json
-     * @return LineItem
+     * {@inheritdoc}
      */
     public static function unserialize($json)
     {

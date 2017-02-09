@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\CartBundle\Domain\LineItem;
 
-interface LineItemInterface
+interface LineItemInterface extends \JsonSerializable
 {
     /**
      * Defines the unique identifier for a cart line item

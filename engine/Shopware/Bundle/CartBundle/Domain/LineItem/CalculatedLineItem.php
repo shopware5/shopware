@@ -24,10 +24,13 @@
 
 namespace Shopware\Bundle\CartBundle\Domain\LineItem;
 
+use Shopware\Bundle\CartBundle\Domain\JsonSerializableTrait;
 use Shopware\Bundle\CartBundle\Domain\Price\Price;
 
 class CalculatedLineItem implements CalculatedLineItemInterface
 {
+    use JsonSerializableTrait;
+
     /**
      * @var string
      */
@@ -49,7 +52,7 @@ class CalculatedLineItem implements CalculatedLineItemInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getIdentifier()
     {
@@ -57,7 +60,7 @@ class CalculatedLineItem implements CalculatedLineItemInterface
     }
 
     /**
-     * @return Price
+     * {@inheritdoc}
      */
     public function getPrice()
     {

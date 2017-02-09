@@ -24,8 +24,12 @@
 
 namespace Shopware\Bundle\CartBundle\Domain\Tax;
 
-class CalculatedTax
+use Shopware\Bundle\CartBundle\Domain\JsonSerializableTrait;
+
+class CalculatedTax implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     /**
      * @var float
      */

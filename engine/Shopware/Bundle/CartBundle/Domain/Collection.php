@@ -27,7 +27,7 @@ namespace Shopware\Bundle\CartBundle\Domain;
 use Countable;
 use IteratorAggregate;
 
-class Collection implements Countable, IteratorAggregate
+class Collection implements Countable, IteratorAggregate, \JsonSerializable
 {
     /**
      * @var array
@@ -107,7 +107,7 @@ class Collection implements Countable, IteratorAggregate
     }
 
     /**
-     * @return int
+     * {@inheritdoc}
      */
     public function count()
     {
@@ -124,10 +124,18 @@ class Collection implements Countable, IteratorAggregate
     }
 
     /**
-     * @return \ArrayIterator
+     * {@inheritdoc}
      */
     public function getIterator()
     {
         return new \ArrayIterator($this->items);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function jsonSerialize()
+    {
+        return $this->items;
     }
 }

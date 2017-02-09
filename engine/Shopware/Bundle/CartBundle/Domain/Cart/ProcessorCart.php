@@ -25,10 +25,13 @@
 namespace Shopware\Bundle\CartBundle\Domain\Cart;
 
 use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryCollection;
+use Shopware\Bundle\CartBundle\Domain\JsonSerializableTrait;
 use Shopware\Bundle\CartBundle\Domain\LineItem\CalculatedLineItemCollection;
 
-class ProcessorCart
+class ProcessorCart implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     /**
      * @var CalculatedLineItemCollection
      */

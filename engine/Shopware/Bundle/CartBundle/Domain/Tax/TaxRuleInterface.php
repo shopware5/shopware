@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\CartBundle\Domain\Tax;
 
-interface TaxRuleInterface
+interface TaxRuleInterface extends \JsonSerializable
 {
     /**
      * @return float

@@ -25,12 +25,15 @@
 namespace Shopware\Bundle\CartBundle\Domain\Cart;
 
 use Ramsey\Uuid\Uuid;
+use Shopware\Bundle\CartBundle\Domain\JsonSerializableTrait;
 use Shopware\Bundle\CartBundle\Domain\LineItem\LineItem;
 use Shopware\Bundle\CartBundle\Domain\LineItem\LineItemCollection;
 use Shopware\Bundle\CartBundle\Domain\LineItem\LineItemInterface;
 
-class Cart
+class Cart implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     /**
      * @var string
      */

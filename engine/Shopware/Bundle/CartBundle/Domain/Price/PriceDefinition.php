@@ -24,10 +24,13 @@
 
 namespace Shopware\Bundle\CartBundle\Domain\Price;
 
+use Shopware\Bundle\CartBundle\Domain\JsonSerializableTrait;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCollection;
 
-class PriceDefinition
+class PriceDefinition implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     /**
      * @var float
      */

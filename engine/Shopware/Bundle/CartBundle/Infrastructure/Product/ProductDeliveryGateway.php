@@ -47,9 +47,7 @@ class ProductDeliveryGateway implements ProductDeliveryGatewayInterface
     }
 
     /**
-     * @param LineItemCollection $collection
-     * @param CartContextInterface $context
-     * @return DeliveryInformation[] indexed by number
+     * {@inheritdoc}
      */
     public function get(LineItemCollection $collection, CartContextInterface $context)
     {

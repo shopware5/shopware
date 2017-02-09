@@ -24,8 +24,8 @@
 
 namespace Shopware\Bundle\CartBundle\Domain\Product;
 
-use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryDate;
 use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryInformation;
+use Shopware\Bundle\CartBundle\Domain\JsonSerializableTrait;
 use Shopware\Bundle\CartBundle\Domain\LineItem\CalculatedLineItemInterface;
 use Shopware\Bundle\CartBundle\Domain\LineItem\Deliverable;
 use Shopware\Bundle\CartBundle\Domain\LineItem\Goods;
@@ -35,6 +35,8 @@ use Shopware\Bundle\CartBundle\Domain\Price\Price;
 
 class CalculatedProduct implements CalculatedLineItemInterface, Stackable, Deliverable, Goods
 {
+    use JsonSerializableTrait;
+
     /**
      * @var LineItemInterface
      */
@@ -77,14 +79,14 @@ class CalculatedProduct implements CalculatedLineItemInterface, Stackable, Deliv
         DeliveryInformation $deliveryInformation
     ) {
         $this->identifier = $identifier;
+        $this->price = $price;
         $this->quantity = $quantity;
         $this->lineItem = $lineItem;
-        $this->price = $price;
         $this->deliveryInformation = $deliveryInformation;
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getIdentifier()
     {
@@ -92,15 +94,7 @@ class CalculatedProduct implements CalculatedLineItemInterface, Stackable, Deliv
     }
 
     /**
-     * @return float
-     */
-    public function getQuantity()
-    {
-        return $this->quantity;
-    }
-
-    /**
-     * @return Price
+     * {@inheritdoc}
      */
     public function getPrice()
     {
@@ -108,7 +102,15 @@ class CalculatedProduct implements CalculatedLineItemInterface, Stackable, Deliv
     }
 
     /**
-     * @return float
+     * {@inheritdoc}
+     */
+    public function getQuantity()
+    {
+        return $this->quantity;
+    }
+
+    /**
+     * {@inheritdoc}
      */
     public function getStock()
     {
@@ -116,7 +118,7 @@ class CalculatedProduct implements CalculatedLineItemInterface, Stackable, Deliv
     }
 
     /**
-     * @return DeliveryDate
+     * {@inheritdoc}
      */
     public function getInStockDeliveryDate()
     {
@@ -124,7 +126,7 @@ class CalculatedProduct implements CalculatedLineItemInterface, Stackable, Deliv
     }
 
     /**
-     * @return DeliveryDate
+     * {@inheritdoc}
      */
     public function getOutOfStockDeliveryDate()
     {
@@ -132,7 +134,7 @@ class CalculatedProduct implements CalculatedLineItemInterface, Stackable, Deliv
     }
 
     /**
-     * @param float $quantity
+     * {@inheritdoc}
      */
     public function setQuantity($quantity)
     {
@@ -140,7 +142,7 @@ class CalculatedProduct implements CalculatedLineItemInterface, Stackable, Deliv
     }
 
     /**
-     * @return LineItemInterface
+     * {@inheritdoc}
      */
     public function getLineItem()
     {

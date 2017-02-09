@@ -105,6 +105,9 @@ class CartContextService implements CartContextServiceInterface
         $this->config = $config;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getCartContext()
     {
         if ($this->context) {

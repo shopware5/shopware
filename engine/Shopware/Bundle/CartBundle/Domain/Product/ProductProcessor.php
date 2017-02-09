@@ -66,10 +66,7 @@ class ProductProcessor implements CartProcessorInterface
     }
 
     /**
-     * @param Cart $cart
-     * @param ProcessorCart $processorCart
-     * @param CartContextInterface $context
-     * @throws \RuntimeException
+     * {@inheritdoc}
      */
     public function process(
         Cart $cart,

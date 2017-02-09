@@ -24,8 +24,12 @@
 
 namespace Shopware\Bundle\CartBundle\Domain\Delivery;
 
-class DeliveryDate
+use Shopware\Bundle\CartBundle\Domain\JsonSerializableTrait;
+
+class DeliveryDate implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     /**
      * @var \DateTime
      */

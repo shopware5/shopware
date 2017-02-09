@@ -42,8 +42,7 @@ class TaxRuleCalculator implements TaxRuleCalculatorInterface
     }
 
     /**
-     * @param TaxRuleInterface $rule
-     * @return bool
+     * {@inheritdoc}
      */
     public function supports(TaxRuleInterface $rule)
     {
@@ -51,9 +50,7 @@ class TaxRuleCalculator implements TaxRuleCalculatorInterface
     }
 
     /**
-     * @param float $gross
-     * @param TaxRuleInterface|TaxRule $rule
-     * @return CalculatedTax
+     * {@inheritdoc}
      */
     public function calculateTaxFromGrossPrice($gross, TaxRuleInterface $rule)
     {
@@ -63,9 +60,7 @@ class TaxRuleCalculator implements TaxRuleCalculatorInterface
     }
 
     /**
-     * @param float $net
-     * @param TaxRuleInterface|TaxRule $rule
-     * @return CalculatedTax
+     * {@inheritdoc}
      */
     public function calculateTaxFromNetPrice($net, TaxRuleInterface $rule)
     {

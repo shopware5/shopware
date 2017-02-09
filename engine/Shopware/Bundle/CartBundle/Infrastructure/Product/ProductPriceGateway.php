@@ -59,17 +59,13 @@ class ProductPriceGateway implements ProductPriceGatewayInterface
     }
 
     /**
-     * @param LineItemCollection $collection
-     * @param CartContextInterface $context
-     * @return PriceDefinition[] indexed by number
+     * {@inheritdoc}
      */
     public function get(LineItemCollection $collection, CartContextInterface $context)
     {
         $query = $this->buildQuery($collection->getIdentifiers(), $context);
-
         $statement = $query->execute();
         $data = $statement->fetchAll(\PDO::FETCH_GROUP);
-
         $prices = [];
 
         /** @var LineItemInterface $lineItem */
@@ -95,7 +91,6 @@ class ProductPriceGateway implements ProductPriceGatewayInterface
                 $lineItem->getQuantity()
             );
         }
-
         return $prices;
     }
 

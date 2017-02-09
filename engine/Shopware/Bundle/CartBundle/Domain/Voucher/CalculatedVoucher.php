@@ -24,12 +24,15 @@
 
 namespace Shopware\Bundle\CartBundle\Domain\Voucher;
 
+use Shopware\Bundle\CartBundle\Domain\JsonSerializableTrait;
 use Shopware\Bundle\CartBundle\Domain\LineItem\CalculatedLineItemInterface;
 use Shopware\Bundle\CartBundle\Domain\LineItem\LineItemInterface;
 use Shopware\Bundle\CartBundle\Domain\Price\Price;
 
 class CalculatedVoucher implements CalculatedLineItemInterface
 {
+    use JsonSerializableTrait;
+
     /**
      * @var LineItemInterface
      */
@@ -48,12 +51,12 @@ class CalculatedVoucher implements CalculatedLineItemInterface
         LineItemInterface $lineItem,
         Price $price
     ) {
-        $this->lineItem = $lineItem;
         $this->price = $price;
+        $this->lineItem = $lineItem;
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getIdentifier()
     {
@@ -61,7 +64,7 @@ class CalculatedVoucher implements CalculatedLineItemInterface
     }
 
     /**
-     * @return Price
+     * {@inheritdoc}
      */
     public function getPrice()
     {

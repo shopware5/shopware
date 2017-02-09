@@ -81,7 +81,7 @@ class StockDeliverySeparator
                 $item->getInStockDeliveryDate()
             );
 
-            //completly in stock?
+            //completely in stock?
             if ($item->getStock() >= $quantity) {
                 $this->addGoodsToDelivery(
                     $deliveries,

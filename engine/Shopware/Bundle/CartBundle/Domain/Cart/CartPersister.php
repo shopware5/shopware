@@ -41,6 +41,9 @@ class CartPersister implements CartPersisterInterface
         $this->connection = $connection;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function load($token)
     {
         $content = $this->connection->fetchColumn(
@@ -55,6 +58,9 @@ class CartPersister implements CartPersisterInterface
         return Cart::unserialize($content);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function save(Cart $cart)
     {
         $this->connection->executeQuery(

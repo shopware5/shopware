@@ -26,7 +26,7 @@ namespace Shopware\Bundle\CartBundle\Domain\LineItem;
 
 use Shopware\Bundle\CartBundle\Domain\Price\Price;
 
-interface CalculatedLineItemInterface
+interface CalculatedLineItemInterface extends \JsonSerializable
 {
     /**
      * @return string

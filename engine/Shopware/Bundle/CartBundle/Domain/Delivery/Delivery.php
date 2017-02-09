@@ -25,9 +25,12 @@
 namespace Shopware\Bundle\CartBundle\Domain\Delivery;
 
 use Shopware\Bundle\CartBundle\Domain\Customer\Address;
+use Shopware\Bundle\CartBundle\Domain\JsonSerializableTrait;
 
-class Delivery
+class Delivery implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     /**
      * @var DeliveryPositionCollection
      */

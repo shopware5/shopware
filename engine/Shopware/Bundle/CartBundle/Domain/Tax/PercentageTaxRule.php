@@ -24,8 +24,12 @@
 
 namespace Shopware\Bundle\CartBundle\Domain\Tax;
 
+use Shopware\Bundle\CartBundle\Domain\JsonSerializableTrait;
+
 class PercentageTaxRule implements TaxRuleInterface
 {
+    use JsonSerializableTrait;
+
     /**
      * @var float
      */
@@ -47,7 +51,7 @@ class PercentageTaxRule implements TaxRuleInterface
     }
 
     /**
-     * @return float
+     * {@inheritdoc}
      */
     public function getRate()
     {

@@ -24,8 +24,12 @@
 
 namespace Shopware\Bundle\CartBundle\Domain\Delivery;
 
-class DeliveryInformation
+use Shopware\Bundle\CartBundle\Domain\JsonSerializableTrait;
+
+class DeliveryInformation implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     /**
      * @var float
      */

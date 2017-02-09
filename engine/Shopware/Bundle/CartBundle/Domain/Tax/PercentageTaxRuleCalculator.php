@@ -27,21 +27,20 @@ namespace Shopware\Bundle\CartBundle\Domain\Tax;
 class PercentageTaxRuleCalculator implements TaxRuleCalculatorInterface
 {
     /**
-     * @var TaxRuleCalculator
+     * @var TaxRuleCalculatorInterface
      */
     private $taxRuleCalculator;
 
     /**
-     * @param TaxRuleCalculator $taxRuleCalculator
+     * @param TaxRuleCalculatorInterface $taxRuleCalculator
      */
-    public function __construct(TaxRuleCalculator $taxRuleCalculator)
+    public function __construct(TaxRuleCalculatorInterface $taxRuleCalculator)
     {
         $this->taxRuleCalculator = $taxRuleCalculator;
     }
 
     /**
-     * @param TaxRuleInterface $rule
-     * @return bool
+     * {@inheritdoc}
      */
     public function supports(TaxRuleInterface $rule)
     {
@@ -49,12 +48,11 @@ class PercentageTaxRuleCalculator implements TaxRuleCalculatorInterface
     }
 
     /**
-     * @param float $gross
-     * @param TaxRuleInterface|PercentageTaxRule $rule
-     * @return CalculatedTax
+     * {@inheritdoc}
      */
     public function calculateTaxFromGrossPrice($gross, TaxRuleInterface $rule)
     {
+        /** @var PercentageTaxRule $rule */
         return $this->taxRuleCalculator->calculateTaxFromGrossPrice(
             $gross / 100 * $rule->getPercentage(),
             new TaxRule($rule->getRate())
@@ -62,12 +60,11 @@ class PercentageTaxRuleCalculator implements TaxRuleCalculatorInterface
     }
 
     /**
-     * @param float $net
-     * @param TaxRuleInterface|PercentageTaxRule $rule
-     * @return CalculatedTax
+     * {@inheritdoc}
      */
     public function calculateTaxFromNetPrice($net, TaxRuleInterface $rule)
     {
+        /** @var PercentageTaxRule $rule */
         return $this->taxRuleCalculator->calculateTaxFromGrossPrice(
             $net / 100 * $rule->getPercentage(),
             new TaxRule($rule->getRate())

@@ -93,7 +93,7 @@ class CartContext implements CartContextInterface, \JsonSerializable
     }
 
     /**
-     * @return Customer|null
+     * {@inheritdoc}
      */
     public function getCustomer()
     {
@@ -101,7 +101,7 @@ class CartContext implements CartContextInterface, \JsonSerializable
     }
 
     /**
-     * @return Address|null
+     * {@inheritdoc}
      */
     public function getShippingAddress()
     {
@@ -109,7 +109,7 @@ class CartContext implements CartContextInterface, \JsonSerializable
     }
 
     /**
-     * @return Address|null
+     * {@inheritdoc}
      */
     public function getBillingAddress()
     {
@@ -117,7 +117,7 @@ class CartContext implements CartContextInterface, \JsonSerializable
     }
 
     /**
-     * @return PaymentService
+     * {@inheritdoc}
      */
     public function getPaymentService()
     {
@@ -125,7 +125,7 @@ class CartContext implements CartContextInterface, \JsonSerializable
     }
 
     /**
-     * @return DeliveryService
+     * {@inheritdoc}
      */
     public function getDeliveryService()
     {
@@ -133,7 +133,7 @@ class CartContext implements CartContextInterface, \JsonSerializable
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getShop()
     {
@@ -141,7 +141,7 @@ class CartContext implements CartContextInterface, \JsonSerializable
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getCurrency()
     {
@@ -149,7 +149,7 @@ class CartContext implements CartContextInterface, \JsonSerializable
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getCurrentCustomerGroup()
     {
@@ -157,7 +157,7 @@ class CartContext implements CartContextInterface, \JsonSerializable
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getFallbackCustomerGroup()
     {
@@ -165,7 +165,7 @@ class CartContext implements CartContextInterface, \JsonSerializable
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getBaseUrl()
     {
@@ -173,7 +173,7 @@ class CartContext implements CartContextInterface, \JsonSerializable
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getTaxRules()
     {
@@ -181,7 +181,7 @@ class CartContext implements CartContextInterface, \JsonSerializable
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getTaxRule($taxId)
     {
@@ -189,7 +189,7 @@ class CartContext implements CartContextInterface, \JsonSerializable
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getPriceGroups()
     {
@@ -197,7 +197,7 @@ class CartContext implements CartContextInterface, \JsonSerializable
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getArea()
     {
@@ -205,7 +205,7 @@ class CartContext implements CartContextInterface, \JsonSerializable
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getCountry()
     {
@@ -213,7 +213,7 @@ class CartContext implements CartContextInterface, \JsonSerializable
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getState()
     {
@@ -221,7 +221,7 @@ class CartContext implements CartContextInterface, \JsonSerializable
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function addAttribute($name, Attribute $attribute)
     {
@@ -229,7 +229,7 @@ class CartContext implements CartContextInterface, \JsonSerializable
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function addAttributes(array $attributes)
     {
@@ -237,7 +237,7 @@ class CartContext implements CartContextInterface, \JsonSerializable
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getAttribute($name)
     {
@@ -245,7 +245,7 @@ class CartContext implements CartContextInterface, \JsonSerializable
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function hasAttribute($name)
     {
@@ -253,7 +253,7 @@ class CartContext implements CartContextInterface, \JsonSerializable
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getAttributes()
     {
