@@ -117,6 +117,7 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
                 'emotionpresetselect': me.onEmotionPresetSelection
             },
             'emotion-presets-window presets-list': {
+                'deletepreset': me.onDeletePreset,
                 'showpresetdetails': me.onShowPresetDetails
             },
             'emotion-presets-form-window': {
@@ -602,6 +603,50 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
         record = Ext.create('Shopware.apps.Emotion.model.Emotion');
 
         me.openDetailWindow(record);
+    },
+
+    /**
+     * @param { Ext.data.Store } store
+     * @param { Ext.data.Model } preset
+     */
+    onDeletePreset: function(store, preset) {
+        var me = this;
+
+        Ext.MessageBox.confirm(
+            '{s name=preset/delete_preset}{/s}',
+            '{s name=preset/delete_preset_confirmation}{/s}',
+            function (response) {
+                if (response !== 'yes') {
+                    return;
+                }
+
+                if (!(store instanceof Ext.data.Store)) {
+                    return;
+                }
+
+                preset.destroy({
+                    callback: function(record, operation) {
+                        store.load();
+                        var result = record.proxy.getReader().rawData,
+                            failureMsg = '{s name=preset/delete_failure_msg}{/s}';
+
+                        if (result.message) {
+                            failureMsg = Ext.String.format('[0]<br>[1]', failureMsg, result.message);
+                        }
+
+                        if (!result.success) {
+                            return Shopware.Notification.createGrowlMessage(
+                                '{s name=preset/delete_failure}{/s}',
+                                failureMsg
+                            );
+                        }
+                        Shopware.Notification.createGrowlMessage(
+                            '{s name=preset/delete_success}{/s}',
+                            '{s name=preset/delete_success_msg}{/s}'
+                        );
+                    }
+                });
+            });
     },
 
     onShowPresetDetails: function(selectedPreset) {

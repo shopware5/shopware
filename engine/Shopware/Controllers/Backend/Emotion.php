@@ -546,6 +546,32 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
         }
     }
 
+    public function deletePresetAction()
+    {
+        $presetId = $this->Request()->getParam('id');
+
+        if (!$presetId) {
+            return $this->View()->assign(['success' => false]);
+        }
+
+        /** @var Preset $preset */
+        $preset = $this->container->get('models')->find(Preset::class, $presetId);
+
+        if (!$preset || !$preset->getCustom()) {
+            $this->View()->assign(['success' => false]);
+        } else {
+            /** @var ModelManager $modelManager */
+            $modelManager = $this->container->get('models');
+            $modelManager->remove($preset);
+            $modelManager->flush($preset);
+
+            $this->View()->assign([
+                'success' => true,
+                'data' => [],
+            ]);
+        }
+    }
+
     public function duplicateAction()
     {
         $emotionId = (int) $this->Request()->getParam('emotionId');
