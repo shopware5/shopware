@@ -46,7 +46,7 @@ class sCmsTest extends Enlight_Components_Test_Controller_TestCase
         $this->assertFalse($this->module->sGetStaticPage(0));
 
 
-        $pageIds = Shopware()->Db()->fetchCol("SELECT id FROM s_cms_static ORDER BY RAND() LIMIT 10");
+        $pageIds = Shopware()->Db()->fetchCol("SELECT id FROM s_cms_static  LIMIT 10");
 
         foreach ($pageIds as $pageId) {
             $page = $this->module->sGetStaticPage($pageId);
