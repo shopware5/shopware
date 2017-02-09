@@ -186,12 +186,18 @@ Ext.define('Shopware.apps.Emotion.view.components.Base', {
                 constructedItem.queryMode = 'local';
                 constructedItem.listeners = {
                     boxready: function(combo) {
-                        this.relayEvents(combo.getStore(), ['load'], 'store');
-                        combo.getStore().load();
-                    },
-                    storeload: function(store) {
-                        var record = store.findRecord(this.valueField, this.getValue());
-                        this.setValue(record);
+                        combo.relayEvents(combo.getStore(), ['load'], 'store');
+                        var store = combo.getStore();
+                        store.load();
+                        // on initial load read displayField from store
+                        store.addListener('load', function() {
+                            var record = store.findRecord(this.valueField, this.getValue());
+                            if (record) {
+                                this.setValue(record);
+                            }
+                        }, combo, {
+                            single: true
+                        });
                     }
                 };
             } else if (xtype === 'datefield') {
