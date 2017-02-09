@@ -40,9 +40,11 @@ class Hydrator
     public function extractFields($prefix, $data)
     {
         $result = [];
+        $len = strlen($prefix);
+
         foreach ($data as $field => $value) {
             if (strpos($field, $prefix) === 0) {
-                $key = str_replace($prefix, '', $field);
+                $key = substr($field, $len);
                 $result[$key] = $value;
             }
         }

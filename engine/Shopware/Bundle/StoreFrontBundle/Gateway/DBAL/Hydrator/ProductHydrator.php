@@ -259,7 +259,7 @@ class ProductHydrator extends Hydrator
         $translation = $this->extractFields('__attribute_', $translation);
         $attributeData = $this->extractFields('__productAttribute_', $data);
         $attributeData = array_merge($attributeData, $translation);
-        $attribute = $this->attributeHydrator->hydrate($attributeData);
+        $attribute = new Struct\Attribute($attributeData);
         $product->addAttribute('core', $attribute);
     }
 }
