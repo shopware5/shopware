@@ -483,7 +483,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
                 break;
         }
 
-        $copyName = $emotion->getName().' - Copy';
+        $copyName = $emotion->getName() . ' - Copy';
         $new->setName($copyName);
 
         $new->setDevice($device);
@@ -604,9 +604,13 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
     {
         $resource = $this->container->get('shopware.api.emotionpreset');
 
-        $resource->save(
-            $this->Request()->getParams()
-        );
+        $data = $this->Request()->getParams();
+
+        if ($data['id']) {
+            $resource->update($data['id'], $data);
+        } else {
+            $resource->create($data);
+        }
 
         $this->View()->assign(['success' => true]);
     }
@@ -1040,7 +1044,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
             $fromDate = new \DateTime($data['validFrom']);
             $fromTime = new \DateTime($data['validFromTime']);
 
-            $validFrom = $fromDate->format('d.m.Y').' '.$fromTime->format('H:i');
+            $validFrom = $fromDate->format('d.m.Y') . ' ' . $fromTime->format('H:i');
         }
 
         $validTo = null;
@@ -1049,7 +1053,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
             $toDate = new \DateTime($data['validTo']);
             $toTime = new \DateTime($data['validToTime']);
 
-            $validTo = $toDate->format('d.m.Y').' '.$toTime->format('H:i');
+            $validTo = $toDate->format('d.m.Y') . ' ' . $toTime->format('H:i');
         }
 
         $categories = new \Doctrine\Common\Collections\ArrayCollection();
@@ -1294,7 +1298,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
                 continue;
             }
 
-            $data['name'] = $data['name'].' - Copy';
+            $data['name'] = $data['name'] . ' - Copy';
             $translation->write($id, 'emotion', $newId, $data);
         }
     }
@@ -1405,7 +1409,7 @@ EOD;
      */
     private function getElementIdentifier(Element $el)
     {
-        return $el->getStartCol().$el->getStartRow().$el->getEndCol().$el->getEndRow();
+        return $el->getStartCol() . $el->getStartRow() . $el->getEndCol() . $el->getEndRow();
     }
 
     /**
