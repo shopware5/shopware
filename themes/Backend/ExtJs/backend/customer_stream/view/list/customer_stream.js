@@ -26,7 +26,6 @@
 Ext.define('Shopware.apps.CustomerStream.view.list.CustomerStream', {
     extend: 'Shopware.grid.Panel',
     alias:  'widget.customer-stream-listing',
-    // region: 'center',
 
     configure: function() {
         var me = this;
@@ -38,7 +37,6 @@ Ext.define('Shopware.apps.CustomerStream.view.list.CustomerStream', {
                 name: {
                     renderer: me.nameRenderer
                 }
-                // description: null
             }
         };
     },

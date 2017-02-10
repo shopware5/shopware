@@ -52,9 +52,9 @@ Ext.define('Shopware.apps.CustomerStream.view.conditions.HasOrderCountCondition'
                 value: 1,
                 allowBlank: false,
                 name: 'minimumOrderCount',
-                listeners: {
-                    'change': loadPreviewFn
-                }
+                // listeners: {
+                //     'change': loadPreviewFn
+                // }
             }]
         };
     }

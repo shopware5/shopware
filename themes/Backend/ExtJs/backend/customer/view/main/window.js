@@ -113,6 +113,7 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
             search:'{s name=toolbar/search_empty_text}Search...{/s}'
         }
     },
+
     /**
      * Initializes the component and builds up the main interface
      *
@@ -122,51 +123,22 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
         var me = this;
 
         Ext.suspendLayouts();
-
-        me.listStore = Ext.create('Shopware.apps.CustomerStream.store.Preview', {
-            pageSize: 10
-        }).load({
-            conditions: null,
-        });
-        console.log(me.listStore);
-
-        me.gridPanel = Ext.create('Shopware.apps.Customer.view.list.List', {
-            store: me.listStore,
-            region: 'center'
-        });
+        me.listStore = Ext.create('Shopware.apps.CustomerStream.store.Preview', { pageSize: 10}).load({ conditions: null });
+        me.gridPanel = Ext.create('Shopware.apps.Customer.view.list.List', { store: me.listStore, region: 'center' });
 
         me.streamListing = Ext.create('Shopware.apps.CustomerStream.view.list.CustomerStream', {
             store: Ext.create('Shopware.apps.CustomerStream.store.CustomerStream').load(),
             subApp: me.subApp,
             collapsible: true,
+            hideHeaders: true,
             title: 'Definierte Streams',
             height: 200,
-            selectionChanged: function(selModel, selection) {
-                if (selection.length <= 0) {
-                    me.filterPanel.setValue(null);
-                    return;
-                }
-                var record = selection[0];
-                me.streamListing.setLoading(true);
-                me.filterPanel.loadRecord(record);
-                me.filterPanel.setValue(record.get('conditions'));
-                me.streamListing.setLoading(false);
-                me.listStore.getProxy().extraParams = record.get('conditions');
-                me.listStore.load();
-            }
+            iconCls: 'sprite-product-streams',
+            selectionChanged: Ext.bind(me.streamSelected, me)
         });
 
-        me.filterPanel = Ext.create('Shopware.apps.CustomerStream.view.detail.ConditionPanel', {
-            flex: 4
-        });
-
-        me.filterPanel.on('load-preview', function(conditions) {
-            if (!me.filterPanel.getForm().isValid()) {
-                return;
-            }
-            me.listStore.getProxy().extraParams = conditions;
-            me.listStore.load();
-        });
+        me.filterPanel = Ext.create('Shopware.apps.CustomerStream.view.detail.ConditionPanel', { flex: 4 });
+        me.filterPanel.on('load-preview', Ext.bind(me.loadPreview, me));
 
         //add the customer list grid panel and set the store
         me.items = [
@@ -193,6 +165,41 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
 
         me.callParent(arguments);
     },
+
+    loadPreview: function(conditions) {
+        var me = this;
+
+        if (!me.filterPanel.getForm().isValid()) {
+            return;
+        }
+        me.listStore.getProxy().extraParams = conditions;
+        me.listStore.load();
+    },
+
+    streamSelected: function(selModel, selection) {
+        var me = this;
+
+        if (selection.length <= 0) {
+            me.filterPanel.setValue(null);
+            return;
+        }
+        var record = selection[0];
+        me.streamListing.setLoading(true);
+        me.filterPanel.loadRecord(record);
+        me.filterPanel.setValue(record.get('conditions'));
+        me.streamListing.setLoading(false);
+        me.listStore.getProxy().extraParams = record.get('conditions');
+        me.listStore.load();
+    },
+
+    saveStream: function () {
+        var me = this;
+
+        if (!me.filterPanel.getForm().isValid()) {
+            return;
+        }
+    },
+
     /**
      * Creates the grid toolbar with the add and delete button
      *
@@ -209,6 +216,13 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
         });
 
         var items = me.filterPanel.createToolbarItems();
+
+        Ext.Array.insert(items, 0, [{
+            iconCls: 'sprite-product-streams',
+            text: 'Stream speichern',
+            name: 'save-stream',
+            handler: Ext.bind(me.saveStream)
+        }]);
 
         /*{if {acl_is_allowed privilege=create}}*/
             items.push({

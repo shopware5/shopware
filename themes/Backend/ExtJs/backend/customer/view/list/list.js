@@ -154,26 +154,46 @@ Ext.define('Shopware.apps.Customer.view.list.List', {
                 header: 'Information',
                 dataIndex: 'meta',
                 flex: 2,
-                renderer: function () {
-                    return '<span class="customer-list-meta"><b>20001</b> - Händler' +
-                        '<br>Kunde seit: 01.01.2017</span>';
+                renderer: function (value, meta, record) {
+                    return '<b>'+ record.get('customernumber') +'</b> - '+ record.get('customerGroup') +
+                        '<br>Kunde seit: ' + record.get('firstlogin')  +'</span>';
                 }
             },
         {
             header: 'Kunde',
             dataIndex: 'customer',
             flex: 3,
-            renderer: function () {
-                return 'Dr. Rainer Schmitz (45 män.)' +
-                    '<br><i>CEO (Muster AG)</i>';
+            renderer: function (v, meta, record) {
+                var names = [
+                    record.get('title'),
+                    record.get('firstname'),
+                    record.get('lastname')
+                ];
+                console.log("names", names);
+
+                var name = names.join(' ');
+                var age = '';
+                if (record.get('age')) {
+                    age = ' ('+ record.get('age') +')';
+                }
+                var company = '';
+                if (record.get('company')) {
+                    company = '<br><i>' + record.get('company') + '</i>';
+                }
+                return name + age + company;
             }
         } ,{
             header: 'Anschrift',
             dataIndex: 'address',
             flex: 3,
-            renderer: function() {
-                return 'Zum Borndal 6' +
-                    '<br>48341 Altenberge, Deutschland';
+            renderer: function(v, meta, record) {
+                var lines = [
+                    record.get('street'),
+                    [record.get('zipcode'), record.get('city'), record.get('country')].join(' '),
+                    record.get('additional_address_line1'),
+                    record.get('additional_address_line2')
+                ];
+                return lines.join('<br>');
             }
         }
         , {
@@ -210,6 +230,7 @@ Ext.define('Shopware.apps.Customer.view.list.List', {
                 Ext.each(v, function(interest) {
                     interests.push('<i>' + interest.category + ' - ' + interest.manufacturer + '</i>');
                 });
+                interests = interests.slice(0, 3);
                 return interests.join('<br>');
             }
         }
@@ -223,7 +244,6 @@ Ext.define('Shopware.apps.Customer.view.list.List', {
             }
         }
         ];
-
 
 
 
