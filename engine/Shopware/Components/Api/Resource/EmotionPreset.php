@@ -81,12 +81,11 @@ class EmotionPreset extends Resource
         $this->slugService = $slugService;
     }
 
-    public function getList()
+    public function getList($locale = 'de_DE')
     {
         $query = $this->createQuery();
         $presets = $query->getQuery()->getArrayResult();
-
-        $data = $this->preparePresetData($presets);
+        $data = $this->preparePresetData($presets, $locale);
 
         return $data;
     }
@@ -119,7 +118,7 @@ class EmotionPreset extends Resource
      *
      * @return Preset
      */
-    public function create(array $data)
+    public function create(array $data, $locale = 'de_DE')
     {
         if (!array_key_exists('name', $data)) {
             throw new ParameterMissingException('name');
@@ -128,7 +127,7 @@ class EmotionPreset extends Resource
             throw new ParameterMissingException('presetData');
         }
 
-        return $this->save($data, new Preset());
+        return $this->save($data, new Preset(), $locale);
     }
 
     /**
@@ -139,7 +138,7 @@ class EmotionPreset extends Resource
      *
      * @return Preset
      */
-    public function update($id, array $data)
+    public function update($id, array $data, $locale = 'de_DE')
     {
         /** @var $preset Preset */
         $preset = $this->models->getRepository(Preset::class)->find($id);
@@ -147,7 +146,7 @@ class EmotionPreset extends Resource
             throw new \Exception(sprintf('Preset with id %s not found', $id));
         }
 
-        return $this->save($data, $preset);
+        return $this->save($data, $preset, $locale);
     }
 
     /**
@@ -172,11 +171,11 @@ class EmotionPreset extends Resource
                 }
             }
         }
+
         // get technical names and label of required plugins
         if (!empty($data['requiredPlugins'])) {
             $requiredPlugins = $this->getRequiredPlugins($data['requiredPlugins']);
             $data['requiredPlugins'] = [];
-
             if ($requiredPlugins) {
                 $data['requiredPlugins'] = $requiredPlugins;
             }
@@ -185,7 +184,6 @@ class EmotionPreset extends Resource
         // slugify technical name of preset
         $data['name'] = $this->slugService->slugify($data['name']);
         $preset->fromArray($data);
-
         $this->validateName($preset);
 
         $violations = $this->models->validate($preset);

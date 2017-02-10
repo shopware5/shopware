@@ -592,7 +592,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
 
         $this->View()->assign([
             'success' => true,
-            'data' => $resource->getList(),
+            'data' => $resource->getList($this->getLocale()),
         ]);
     }
 
@@ -607,9 +607,9 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
         $data = $this->Request()->getParams();
 
         if ($data['id']) {
-            $resource->update($data['id'], $data);
+            $resource->update($data['id'], $data, $this->getLocale());
         } else {
-            $resource->create($data);
+            $resource->create($data, $this->getLocale());
         }
 
         $this->View()->assign(['success' => true]);
@@ -906,6 +906,14 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
         return $builder->getQuery()->getOneOrNullResult(
             \Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY
         );
+    }
+
+    /**
+     * @return string
+     */
+    private function getLocale()
+    {
+        return $this->container->get('Auth')->getIdentity()->locale->getLocale();
     }
 
     /**
