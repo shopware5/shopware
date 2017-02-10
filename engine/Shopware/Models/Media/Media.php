@@ -27,6 +27,7 @@ namespace   Shopware\Models\Media;
 use Doctrine\Common\Collections\ArrayCollection;
 use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Thumbnail\Manager;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -1660,7 +1661,11 @@ class Media extends ModelEntity
         /** @var Album $album */
         $album = $albumRepository->find($newAlbumId);
         if ($album) {
-            $this->createAlbumThumbnails($album);
+            $this->album = $album;
+
+            /** @var $manager Manager **/
+            $manager = Shopware()->Container()->get('thumbnail_manager');
+            $manager->createMediaThumbnail($this, [], true);
         }
     }
 
