@@ -89,6 +89,7 @@ Ext.define('Shopware.apps.CustomerStream.view.detail.ConditionPanel', {
 
     createToolbarItems: function() {
         var me = this;
+
         return [{
             xtype: 'button',
             tooltip: '{s name=add}{/s}',
@@ -103,7 +104,6 @@ Ext.define('Shopware.apps.CustomerStream.view.detail.ConditionPanel', {
     },
 
     loadPreview: function() {
-        console.log("this", this);
         this.fireEvent('load-preview', this.getSubmitData());
     },
 

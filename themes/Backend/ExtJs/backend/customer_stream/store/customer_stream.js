@@ -26,7 +26,6 @@
 
 Ext.define('Shopware.apps.CustomerStream.store.CustomerStream', {
     extend:'Shopware.store.Listing',
-
     configure: function() {
         return {
             controller: 'CustomerStream'

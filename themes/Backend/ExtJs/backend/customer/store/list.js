@@ -58,7 +58,7 @@ Ext.define('Shopware.apps.Customer.store.List', {
      * Amount of data loaded at once
      * @integer
      */
-    pageSize:15,
+    pageSize:20,
     /**
      * to upload all selected items in one request
      * @boolean

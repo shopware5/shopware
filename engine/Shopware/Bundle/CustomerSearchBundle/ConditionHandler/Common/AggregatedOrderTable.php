@@ -64,7 +64,7 @@ class AggregatedOrderTable
         ]);
         $query->from('s_order', 'orders');
         $query->where('orders.ordernumber != 0');
-        $query->andWhere('orders.status = 2');
+//        $query->andWhere('orders.status = 2');
         $query->groupBy('orders.userID');
 
         return $query;
