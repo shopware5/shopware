@@ -69,7 +69,7 @@ class ThemeCacheGenerateCommand extends ShopwareCommand
                 AbstractQuery::HYDRATE_OBJECT
             );
         } else {
-            $shops = array_map(function($shop) use ($repository) {
+            $shops = array_map(function ($shop) use ($repository) {
                 return $repository->getActiveById($shop);
             }, $shops);
             $shops = array_filter($shops);
