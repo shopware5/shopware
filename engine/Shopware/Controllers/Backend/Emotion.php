@@ -24,7 +24,6 @@
 
 use \Shopware\Models\Emotion\Element;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\DBAL\Connection;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Emotion\Emotion;
 use Shopware\Models\Emotion\Library\Field;
@@ -917,44 +916,6 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
     }
 
     /**
-     * @param array $requiredPlugins
-     *
-     * @return array
-     */
-    private function getExtendedPluginInformation(array $requiredPlugins)
-    {
-        if (empty($requiredPlugins)) {
-            return [];
-        }
-        $pluginData = [];
-
-        foreach ($requiredPlugins as $requiredPlugin) {
-            $pluginData[$requiredPlugin['technicalName']] = $requiredPlugin;
-        }
-
-        $query = $this->container->get('models')->getConnection()->createQueryBuilder();
-        $plugins = $query->select(['plugin.id, plugin.name, plugin.active'])
-            ->from('s_core_plugins', 'plugin')
-            ->where('plugin.name IN (:names)')
-            ->setParameter(':names', array_keys($pluginData), Connection::PARAM_STR_ARRAY)
-            ->execute()
-            ->fetchAll(\PDO::FETCH_ASSOC);
-
-        foreach ($plugins as $plugin) {
-            if (!array_key_exists($plugin['name'], $pluginData)) {
-                $pluginData[$plugin['name']]['installationRequired'] = true;
-                $pluginData[$plugin['name']]['activationRequired'] = true;
-
-                continue;
-            }
-            $pluginData[$plugin['name']]['installationRequired'] = false;
-            $pluginData[$plugin['name']]['activationRequired'] = !(bool) $plugin['active'];
-        }
-
-        return array_values($pluginData);
-    }
-
-    /**
      * Internal helper function to get access to the entity manager.
      */
     private function getManager()
@@ -982,30 +943,6 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
                 ->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_OBJECT);
 
         return $emotion;
-    }
-
-    /**
-     * @param array $translations
-     * @param $locale
-     *
-     * @return array
-     */
-    private function findTranslationByUserLocale(array $translations, $locale)
-    {
-        if (empty($translations) || !in_array($locale, array_column($translations, 'locale'))) {
-            return [];
-        }
-
-        $requiredTranslation = [];
-        /** @var array $translation */
-        foreach ($translations as $translation) {
-            if ($translation['locale'] === $locale) {
-                $requiredTranslation = $translation;
-                break;
-            }
-        }
-
-        return $requiredTranslation;
     }
 
     /**
