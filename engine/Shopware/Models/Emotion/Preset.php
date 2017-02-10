@@ -21,17 +21,18 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 namespace Shopware\Models\Emotion;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
 
 /**
  * Shopware Emotion Model - Template
  *
  * @category   Shopware
- * @package    Shopware\Models
+ *
  * @copyright  Copyright (c) shopware AG (http://www.shopware.de)
  *
  * @ORM\Entity
@@ -40,9 +41,22 @@ use Doctrine\ORM\Mapping as ORM;
 class Preset extends ModelEntity
 {
     /**
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Emotion\PresetTranslation", mappedBy="preset", orphanRemoval=true, cascade={"persist"})
+     *
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     */
+    protected $translations;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Emotion\PresetRequirement", mappedBy="preset", orphanRemoval=true, cascade={"persist"})
+     *
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     */
+    protected $requiredPlugins;
+    /**
      * Unique identifier field for the shopware emotion.
      *
-     * @var integer $id
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
@@ -53,7 +67,7 @@ class Preset extends ModelEntity
     /**
      * Contains the technical name of the emotion preset.
      *
-     * @var string $name
+     * @var string
      *
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
@@ -62,7 +76,7 @@ class Preset extends ModelEntity
     /**
      * Indicates if the preset contains elements only available through premium plugins.
      *
-     * @var boolean $premium
+     * @var bool
      * @ORM\Column(name="premium", type="boolean", nullable=false)
      */
     private $premium;
@@ -70,7 +84,7 @@ class Preset extends ModelEntity
     /**
      * Indicates if the preset is a custom user created preset.
      *
-     * @var boolean $custom
+     * @var bool
      * @ORM\Column(name="custom", type="boolean", nullable=false)
      */
     private $custom;
@@ -78,7 +92,7 @@ class Preset extends ModelEntity
     /**
      * Contains the thumbnail path
      *
-     * @var string $thumbnail
+     * @var string
      * @ORM\Column(name="thumbnail", type="text", nullable=true)
      */
     private $thumbnail;
@@ -86,7 +100,7 @@ class Preset extends ModelEntity
     /**
      * Contains the preview image path
      *
-     * @var string $preview
+     * @var string
      * @ORM\Column(name="preview", type="text", nullable=true)
      */
     private $preview;
@@ -94,22 +108,10 @@ class Preset extends ModelEntity
     /**
      * Contains the thumbnail path
      *
-     * @var string $presetData
+     * @var string
      * @ORM\Column(name="presetData", type="text", nullable=false)
      */
     private $presetData;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Emotion\PresetTranslation", mappedBy="preset", orphanRemoval=true, cascade={"persist"})
-     * @var \Doctrine\Common\Collections\ArrayCollection
-     */
-    protected $translations;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Emotion\PresetRequirement", mappedBy="preset", orphanRemoval=true, cascade={"persist"})
-     * @var $requiredPlugins
-     */
-    protected $requiredPlugins;
 
     /**
      * Preset constructor.
@@ -177,7 +179,7 @@ class Preset extends ModelEntity
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function getPremium()
     {
@@ -185,7 +187,7 @@ class Preset extends ModelEntity
     }
 
     /**
-     * @param boolean $premium
+     * @param bool $premium
      */
     public function setPremium($premium)
     {
@@ -201,7 +203,7 @@ class Preset extends ModelEntity
     }
 
     /**
-     * @param boolean $custom
+     * @param bool $custom
      */
     public function setCustom($custom)
     {
@@ -258,6 +260,7 @@ class Preset extends ModelEntity
 
     /**
      * @param array $translations
+     *
      * @return ModelEntity
      */
     public function setTranslations(array $translations)
@@ -275,6 +278,7 @@ class Preset extends ModelEntity
 
     /**
      * @param array $requiredPlugins
+     *
      * @return ModelEntity
      */
     public function setRequiredPlugins(array $requiredPlugins)

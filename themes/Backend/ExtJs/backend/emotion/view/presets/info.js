@@ -71,9 +71,9 @@ Ext.define('Shopware.apps.Emotion.view.presets.Info', {
                 '<div class="info-item"> <p class="label">{s name=name}{/s}:</p> <p class="value">{literal}{label}{/literal}</p></div>',
                 '<div class="info-item"> <p class="label">{s name=description}{/s}:</p> <p class="value">{literal}{description}{/literal}</p></div>',
                 '<tpl for="requiredPlugins">',
-                        '<tpl if="xindex==1"><div class="info-item"><p class="label">{s name=required_plugins}{/s}:</p></tpl>',
-                        '<span>{literal}{label}{/literal}</span><br />',
-                        '<tpl if="xindex==xcount"></div></tpl>',
+                        '<tpl if="xindex==1"><div class="info-item"><p class="label">{s name=required_plugins}{/s}:</p><ul></tpl>',
+                        '<li>{literal}{label}{/literal}</li>',
+                        '<tpl if="xindex==xcount"></ul></div></tpl>',
                 '</tpl>',
             '</div>',
             '</tpl>'

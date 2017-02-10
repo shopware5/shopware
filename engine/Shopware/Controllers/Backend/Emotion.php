@@ -336,6 +336,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
             } else {
                 /** @var $preset Preset */
                 $preset = new Preset();
+                $this->getManager()->persist($preset);
             }
 
             // fill translation locale when not yet set
@@ -365,7 +366,6 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
                     'message' => $snippetNamespace->get('preset_duplicate_error_message'),
                 ]);
             } else {
-                $this->getManager()->persist($preset);
                 $this->getManager()->flush();
 
                 $this->View()->assign([
@@ -1617,7 +1617,7 @@ EOD;
             ->select('name AS technicalName, label')
             ->from('s_core_plugins', 's')
             ->where('s.id IN (:ids)')
-            ->setParameter('ids', implode(',', $pluginIds))
+            ->setParameter('ids', $pluginIds, Connection::PARAM_INT_ARRAY)
             ->execute()
             ->fetchAll(PDO::FETCH_ASSOC);
     }
