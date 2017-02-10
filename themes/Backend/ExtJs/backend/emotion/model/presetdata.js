@@ -106,6 +106,7 @@ Ext.define('Shopware.apps.Emotion.model.Presetdata', {
                     startCol: element['startCol'],
                     endRow: element['endRow'],
                     endCol: element['endCol'],
+                    data: element['data'],
                     viewports: me.prepareViewports(viewports),
                     component: me.prepareComponent(component)
                 };

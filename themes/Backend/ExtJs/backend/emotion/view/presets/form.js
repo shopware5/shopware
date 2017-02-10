@@ -142,8 +142,7 @@ Ext.define('Shopware.apps.Emotion.view.presets.Form', {
             {
                 xtype: 'textarea',
                 fieldLabel: '{s name=form_window/description}{/s}',
-                name: 'description',
-                allowBlank: false
+                name: 'description'
             },
             me.mediafield
         ];
@@ -153,7 +152,6 @@ Ext.define('Shopware.apps.Emotion.view.presets.Form', {
         return Ext.create('Shopware.form.field.Media', {
             valueField: 'virtualPath',
             name: 'preview',
-            allowBlank: false,
             fieldLabel: '{s name=form_window/preview_image}{/s}',
             requestMediaData: function(value) {
                 var me = this, params = {};

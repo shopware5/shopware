@@ -443,7 +443,7 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
             form = win.down('form'),
             record, translations;
 
-        if (!form.getForm().isValid() || Ext.isEmpty(win.mediafield.value)) {
+        if (!form.getForm().isValid()) {
             return Shopware.Notification.createGrowlMessage(
                 win.title,
                 '{s name=error/not_all_required_fields_filled_preset}{/s}'
