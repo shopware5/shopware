@@ -28,6 +28,7 @@ use Doctrine\DBAL\Connection;
 use Shopware\Bundle\MediaBundle\MediaService;
 use Shopware\Components\Api\Exception\NotFoundException;
 use Shopware\Components\Api\Exception\ParameterMissingException;
+use Shopware\Components\Api\Exception\ValidationException;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Slug\SlugInterface;
 use Shopware\Models\Emotion\Preset;
@@ -53,6 +54,7 @@ class EmotionPreset extends Resource
      * @var \Enlight_Template_Manager
      */
     private $template;
+
     /**
      * @var SlugInterface
      */
@@ -113,26 +115,52 @@ class EmotionPreset extends Resource
     /**
      * @param array $data
      *
+     * @throws ParameterMissingException
+     *
+     * @return Preset
+     */
+    public function create(array $data)
+    {
+        if (!array_key_exists('name', $data)) {
+            throw new ParameterMissingException('name');
+        }
+        if (!array_key_exists('presetData', $data)) {
+            throw new ParameterMissingException('presetData');
+        }
+
+        return $this->save($data, new Preset());
+    }
+
+    /**
+     * @param int   $id
+     * @param array $data
+     *
      * @throws \Exception
      *
      * @return Preset
      */
-    public function save(array $data)
+    public function update($id, array $data)
     {
-        $locale = $this->container->get('Auth')->getIdentity()->locale->getLocale();
-
         /** @var $preset Preset */
-        $preset = new Preset();
-
-        if (!empty($data['id'])) {
-            /** @var $preset Preset */
-            $preset = $this->models->getRepository(Preset::class)->find($data['id']);
-        }
-
+        $preset = $this->models->getRepository(Preset::class)->find($id);
         if (!$preset) {
-            throw new \Exception(sprintf('Preset with id %s not found', $data['id']));
+            throw new \Exception(sprintf('Preset with id %s not found', $id));
         }
 
+        return $this->save($data, $preset);
+    }
+
+    /**
+     * @param array  $data
+     * @param Preset $preset
+     * @param string $locale
+     *
+     * @throws ValidationException
+     *
+     * @return Preset
+     */
+    private function save(array $data, Preset $preset, $locale = 'de_DE')
+    {
         $preset->getTranslations()->clear();
         $preset->getRequiredPlugins()->clear();
 
@@ -160,8 +188,13 @@ class EmotionPreset extends Resource
 
         $this->validateName($preset);
 
-        $this->getManager()->persist($preset);
-        $this->getManager()->flush();
+        $violations = $this->models->validate($preset);
+        if ($violations->count() > 0) {
+            throw new ValidationException($violations);
+        }
+
+        $this->models->persist($preset);
+        $this->models->flush();
 
         return $preset;
     }
@@ -213,18 +246,13 @@ class EmotionPreset extends Resource
     }
 
     /**
-     * @param array $presets
+     * @param array  $presets
+     * @param string $locale
      *
      * @return array
      */
-    private function preparePresetData(array $presets)
+    private function preparePresetData(array $presets, $locale = 'de_DE')
     {
-        $locale = $this->container->get('Auth')->getIdentity()->locale->getLocale();
-
-        if (empty($locale)) {
-            $locale = 'de_DE';
-        }
-
         $preparedPresets = [];
 
         foreach ($presets as $preset) {
@@ -296,7 +324,7 @@ class EmotionPreset extends Resource
             $pluginData[$requiredPlugin['technicalName']] = $requiredPlugin;
         }
 
-        $query = $this->container->get('models')->getConnection()->createQueryBuilder();
+        $query = $this->models->getConnection()->createQueryBuilder();
         $plugins = $query->select(['plugin.id, plugin.name, plugin.active'])
             ->from('s_core_plugins', 'plugin')
             ->where('plugin.name IN (:names)')
@@ -341,7 +369,7 @@ class EmotionPreset extends Resource
      */
     private function getRequiredPlugins(array $pluginIds)
     {
-        return $this->getManager()->getDBALQueryBuilder()
+        return $this->models->getDBALQueryBuilder()
             ->select('name AS technicalName, label')
             ->from('s_core_plugins', 's')
             ->where('s.id IN (:ids)')

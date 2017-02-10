@@ -27,6 +27,7 @@ namespace Shopware\Models\Emotion;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Shopware Emotion Model - Template
@@ -50,9 +51,10 @@ class Preset extends ModelEntity
     /**
      * @ORM\OneToMany(targetEntity="Shopware\Models\Emotion\PresetRequirement", mappedBy="preset", orphanRemoval=true, cascade={"persist"})
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var
      */
     protected $requiredPlugins;
+
     /**
      * Unique identifier field for the shopware emotion.
      *
@@ -69,6 +71,7 @@ class Preset extends ModelEntity
      *
      * @var string
      *
+     * @Assert\NotBlank()
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
     private $name;
@@ -79,7 +82,7 @@ class Preset extends ModelEntity
      * @var bool
      * @ORM\Column(name="premium", type="boolean", nullable=false)
      */
-    private $premium;
+    private $premium = false;
 
     /**
      * Indicates if the preset is a custom user created preset.
@@ -87,7 +90,7 @@ class Preset extends ModelEntity
      * @var bool
      * @ORM\Column(name="custom", type="boolean", nullable=false)
      */
-    private $custom;
+    private $custom = true;
 
     /**
      * Contains the thumbnail path
@@ -109,6 +112,7 @@ class Preset extends ModelEntity
      * Contains the thumbnail path
      *
      * @var string
+     * @Assert\NotBlank()
      * @ORM\Column(name="presetData", type="text", nullable=false)
      */
     private $presetData;
@@ -120,7 +124,6 @@ class Preset extends ModelEntity
     {
         $this->translations = new ArrayCollection();
         $this->requiredPlugins = new ArrayCollection();
-        $this->custom = true;
     }
 
     /**
