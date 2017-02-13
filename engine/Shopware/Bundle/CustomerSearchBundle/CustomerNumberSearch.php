@@ -98,9 +98,9 @@ class CustomerNumberSearch
     {
         $query = new QueryBuilder($this->connection);
 
-        $query->from('s_user', 'customer');
-        $query->leftJoin('customer', 's_user_attributes', 'customerAttribute', 'customerAttribute.userID = customer.id');
-        $query->groupBy('customer.id');
+        $query->from('s_user', 'user');
+        $query->leftJoin('user', 's_customer_search_index', 'customer', 'user.id = customer.id');
+        $query->leftJoin('user', 's_user_attributes', 'customerAttribute', 'customerAttribute.userID = user.id');
 
         foreach ($criteria->getConditions() as $condition) {
             $handler = $this->handlerRegistry->getConditionHandler($condition);
@@ -123,11 +123,7 @@ class CustomerNumberSearch
             $query->setMaxResults($criteria->getLimit());
         }
 
-        $query->addSelect([
-            'customer.id as __customer_id',
-            'customer.customernumber as __customer_number',
-            'customer.email as __customer_email'
-        ]);
+        $query->addSelect(['user.*']);
 
         return $query->execute()->fetchAll(\PDO::FETCH_ASSOC);
     }

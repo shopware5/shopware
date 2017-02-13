@@ -4,11 +4,10 @@ namespace Shopware\Bundle\CustomerSearchBundle;
 
 class CustomerSearchResult
 {
-
     /**
      * @var int
      */
-    protected  $total;
+    protected $total;
 
     /**
      * @var array[]

@@ -44,7 +44,7 @@ class IndexPopulateCommand extends ShopwareCommand
     protected function configure()
     {
         $this
-            ->setName('sw:customer:stream:index:populate')
+            ->setName('sw:customer:stream:populate')
             ->setDescription('Reindex all customer streams.')
             ->addOption('streamId', null, InputOption::VALUE_OPTIONAL)
         ;

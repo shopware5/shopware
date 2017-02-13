@@ -126,6 +126,10 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
         me.listStore = Ext.create('Shopware.apps.CustomerStream.store.Preview', { pageSize: 10}).load({ conditions: null });
         me.gridPanel = Ext.create('Shopware.apps.Customer.view.list.List', { store: me.listStore, region: 'center' });
 
+        me.gridPanel.on('selection-changed', function(selection) {
+            me.deleteCustomerButton.setDisabled(selection.length == 0);
+        });
+
         me.streamListing = Ext.create('Shopware.apps.CustomerStream.view.list.CustomerStream', {
             store: Ext.create('Shopware.apps.CustomerStream.store.CustomerStream').load(),
             subApp: me.subApp,
@@ -138,25 +142,24 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
         });
 
         me.filterPanel = Ext.create('Shopware.apps.CustomerStream.view.detail.ConditionPanel', { flex: 4 });
-        me.filterPanel.on('load-preview', Ext.bind(me.loadPreview, me));
 
+        me.formPanel = Ext.create('Ext.form.Panel', {
+            region: 'west',
+            collapsible: true,
+            layout: {
+                type: 'vbox',
+                align: 'stretch'
+            },
+            width: 300,
+            title: 'Filter & Customer Streams',
+            items: [
+                me.filterPanel,
+                me.streamListing
+            ]
+        });
         //add the customer list grid panel and set the store
         me.items = [
-            {
-                xtype: 'panel',
-                region: 'west',
-                collapsible: true,
-                layout: {
-                    type: 'vbox',
-                    align: 'stretch'
-                },
-                width: 300,
-                title: 'Filter & Customer Streams',
-                items: [
-                    me.filterPanel,
-                    me.streamListing
-                ]
-            },
+            me.formPanel,
             me.gridPanel
         ];
         me.dockedItems = [ me.getToolbar()];
@@ -166,38 +169,90 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
         me.callParent(arguments);
     },
 
-    loadPreview: function(conditions) {
+    loadPreview: function() {
         var me = this;
 
         if (!me.filterPanel.getForm().isValid()) {
             return;
         }
-        me.listStore.getProxy().extraParams = conditions;
+        me.listStore.getProxy().extraParams = me.filterPanel.getSubmitData();
         me.listStore.load();
     },
 
     streamSelected: function(selModel, selection) {
         var me = this;
 
-        if (selection.length <= 0) {
-            me.filterPanel.setValue(null);
+        if (me.preventStreamChanged) {
             return;
         }
-        var record = selection[0];
+        if (selection.length <= 0) {
+            me.resetConditions();
+            return;
+        }
+
+        me.loadStream(selection[0]);
+    },
+
+    loadStream: function(record) {
+        var me = this;
+
+        me.saveStreamButton.setText('Save: ' + record.get('name'));
         me.streamListing.setLoading(true);
-        me.filterPanel.loadRecord(record);
-        me.filterPanel.setValue(record.get('conditions'));
+
+        me.setTitle('Kundenliste: ' + record.get('name'));
+        me.formPanel.loadRecord(record);
+
         me.streamListing.setLoading(false);
-        me.listStore.getProxy().extraParams = record.get('conditions');
+
+        console.log("record", record);
+        me.listStore.getProxy().extraParams = {
+            conditions: record.get('conditions')
+        };
         me.listStore.load();
     },
 
-    saveStream: function () {
+    saveStream: function (record) {
         var me = this;
 
         if (!me.filterPanel.getForm().isValid()) {
             return;
         }
+
+        var isNew = (record.get('id') === null);
+
+        me.formPanel.getForm().updateRecord(record);
+
+        record.save({
+            callback: function() {
+                if (isNew) {
+                    me.streamListing.getStore().insert(0, record);
+                    me.streamListing.cellEditor.startEdit(record, 1);
+                }
+                me.preventStreamChanged = true;
+                me.streamListing.selModel.deselectAll(true);
+                me.preventStreamChanged = false;
+                me.streamListing.selModel.select([record], false, true);
+            }
+        });
+    },
+
+    createOrUpdateStream: function() {
+        var me = this;
+        var record = me.formPanel.getForm().getRecord();
+        if (record) {
+            me.saveStream(me.formPanel.getForm().getRecord());
+            return;
+        }
+        me.createStream();
+    },
+
+    createStream: function() {
+        var me = this;
+        var record = Ext.create('Shopware.apps.CustomerStream.model.CustomerStream', {
+            id: null,
+            name: 'New stream'
+        });
+        me.saveStream(record);
     },
 
     /**
@@ -206,7 +261,48 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
      * @return [Ext.toolbar.Toolbar] grid toolbar
      */
     getToolbar:function () {
-        var me = this;
+        var me = this, items = [];
+
+        me.saveStreamButton = Ext.create('Ext.button.Split', {
+            showText: true,
+            textAlign: 'left',
+            iconCls: 'sprite-product-streams',
+            text: 'Stream speichern',
+            name: 'save-stream',
+            handler: Ext.bind(me.createOrUpdateStream, me),
+            menu: {
+                xtype: 'menu',
+                items: [{
+                    xtype: 'menuitem',
+                    iconCls: 'sprite-plus-circle-frame',
+                    text: 'Als neuen stream speichern',
+                    action: 'create',
+                    handler: Ext.bind(me.createStream, me)
+                }]
+            }
+        });
+
+        items.push(me.saveStreamButton);
+        items.push({ xtype: 'tbspacer', width: 10 });
+        items.push({ xtype: 'tbseparator' });
+        items.push({ xtype: 'tbspacer', width: 10 });
+
+        items.push({
+            xtype: 'button',
+            text: 'Filter hinzufügen',
+            iconCls: 'sprite-funnel',
+            menu: me.createMenu()
+        });
+
+        items.push({
+            text: 'Aktualisieren',
+            iconCls: 'sprite-arrow-circle-225-left',
+            handler: Ext.bind(me.loadPreview, me)
+        });
+
+        items.push({ xtype: 'tbspacer', width: 10 });
+        items.push({ xtype: 'tbseparator' });
+        items.push({ xtype: 'tbspacer', width: 10 });
 
         me.deleteCustomerButton = Ext.create('Ext.button.Button', {
             iconCls:'sprite-minus-circle-frame',
@@ -214,15 +310,6 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
             disabled:true,
             action:'deleteCustomer'
         });
-
-        var items = me.filterPanel.createToolbarItems();
-
-        Ext.Array.insert(items, 0, [{
-            iconCls: 'sprite-product-streams',
-            text: 'Stream speichern',
-            name: 'save-stream',
-            handler: Ext.bind(me.saveStream)
-        }]);
 
         /*{if {acl_is_allowed privilege=create}}*/
             items.push({
@@ -255,5 +342,32 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
             items: items
         });
     },
+
+    createMenu: function() {
+        var me = this, items = [];
+
+        Ext.each(me.filterPanel.handlers, function(handler) {
+            items.push({
+                text: handler.getLabel(),
+                conditionHandler: handler,
+                handler: Ext.bind(me.filterPanel.createCondition, me.filterPanel)
+            });
+        });
+
+        items.push({ xtype: 'menuseparator' });
+        items.push({
+            text: 'Reset',
+            handler: Ext.bind(me.resetConditions, me)
+        });
+        return new Ext.menu.Menu({ items: items });
+    },
+
+    resetConditions: function() {
+        var me = this;
+        me.filterPanel.removeAll();
+        me.filterPanel.loadRecord(null);
+        me.loadPreview();
+    }
+
 });
 //{/block}

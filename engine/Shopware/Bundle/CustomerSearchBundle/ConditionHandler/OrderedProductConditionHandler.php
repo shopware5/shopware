@@ -39,6 +39,15 @@ class OrderedProductConditionHandler implements ConditionHandlerInterface
 
     public function handle(ConditionInterface $condition, QueryBuilder $query)
     {
+        $wheres = [];
+        /** @var OrderedProductCondition $condition */
+        foreach ($condition->getNumbers() as $i => $number) {
+            $wheres[] = 'products LIKE :product' . $i;
+            $query->setParameter(':product' . $i, '%||'.$number.'||%');
+        }
+        $query->andWhere(implode(' OR ', $wheres));
+        return;
+
         $query->innerJoin(
             'customer',
             's_order',

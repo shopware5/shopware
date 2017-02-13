@@ -26,6 +26,59 @@ CREATE TABLE `s_customer_streams` (
 SQL;
         $this->addSql($sql);
 
+
+        $sql = <<<SQL
+CREATE TABLE `s_customer_search_index` (
+    id int(11),
+    email varchar(70) NULL,
+    active int(1),
+    accountmode int(11),
+    firstlogin date,
+    newsletter int(1),
+    shopId int(11),
+    default_billing_address_id int(11),
+    title varchar(100) NULL,
+    salutation varchar(30) NULL,
+    firstname varchar(255) NULL,
+    lastname varchar(255) NULL,
+    birthday date NULL,
+    customernumber varchar(30) NULL,
+    customerGroupId int(11),
+    customerGroup varchar(255) NULL,
+    paymentId int(11),
+    payment varchar(255) NULL,
+    shop varchar(255) NULL,
+    company varchar(255) NULL,
+    department varchar(255) NULL,
+    street varchar(255) NULL,
+    zipcode varchar(255) NULL,
+    city varchar(255) NULL,
+    phone varchar(255) NULL,
+    additional_address_line1 varchar(255) NULL,
+    additional_address_line2 varchar(255) NULL,
+    countryId int(11),
+    country varchar(255) NULL,
+    stateId int(11),
+    state varchar(255) NULL,
+    age int(11) NULL,
+    count_orders  int(11) NULL,
+    invoice_amount_sum double NULL,
+    invoice_amount_avg double NULL,
+    invoice_amount_min double NULL,
+    invoice_amount_max double NULL,
+    first_order_time date NULL,
+    last_order_time date NULL,
+    product_avg double NULL,
+    products LONGTEXT NULL,
+    categories LONGTEXT NULL,
+    manufacturers LONGTEXT NULL,
+    interests LONGTEXT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+SQL;
+
+        $this->addSql($sql);
+
+
         $this->addSql("SET @menuId = (SELECT id FROM s_core_menu WHERE name = 'Kunden' LIMIT 1)");
 
         $this->addSql("

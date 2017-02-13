@@ -39,6 +39,28 @@ class OrderedProductOfManufacturerConditionHandler implements ConditionHandlerIn
 
     public function handle(ConditionInterface $condition, QueryBuilder $query)
     {
+        $wheres = [];
+        /** @var OrderedProductOfManufacturerCondition $condition */
+        foreach ($condition->getManufacturerIds() as $i => $id) {
+            $wheres[] = 'manufacturers LIKE :manufacturer' . $i;
+            $query->setParameter(':manufacturer' . $i, '%||'.$id.'||%');
+        }
+        $query->andWhere(implode(' OR ', $wheres));
+        return;
+
+//        $query->andWhere(
+//            'customer.id IN (
+//                SELECT DISTINCT o.userID
+//                FROM s_order o
+//                INNER JOIN s_order_details d
+//                    ON d.orderID = o.id
+//                    AND d.modus = 0
+//                INNER JOIN s_articles a
+//                    ON a.id = d.articleID
+//                    AND a.supplierID IN (:OrderedProductOfManufacturerCondition)
+//            )'
+//        );
+
         $query->innerJoin(
             'customer',
             's_order',
@@ -53,16 +75,16 @@ class OrderedProductOfManufacturerConditionHandler implements ConditionHandlerIn
             'orderedManufacturerDetails.orderID = orderedManufacturer.id
              AND orderedManufacturerDetails.modus = 0'
         );
+//
+//        $query->innerJoin(
+//            'orderedManufacturerDetails',
+//            's_articles',
+//            'orderedManufacturerMapping',
+//            'orderedManufacturerMapping.id = orderedManufacturerDetails.articleID
+//            AND orderedManufacturerMapping.supplierID IN (:OrderedProductOfManufacturerCondition)'
+//        );
 
-        $query->innerJoin(
-            'orderedManufacturerDetails',
-            's_articles',
-            'orderedManufacturerMapping',
-            'orderedManufacturerMapping.id = orderedManufacturerDetails.articleID
-            AND orderedManufacturerMapping.supplierID IN (:OrderedProductOfManufacturerCondition)'
-        );
-
-        /** @var OrderedProductOfManufacturerCondition $condition */
-        $query->setParameter(':OrderedProductOfManufacturerCondition', $condition->getManufacturerIds(), Connection::PARAM_INT_ARRAY);
+//        /** @var OrderedProductOfManufacturerCondition $condition */
+//        $query->setParameter(':OrderedProductOfManufacturerCondition', $condition->getManufacturerIds(), Connection::PARAM_INT_ARRAY);
     }
 }

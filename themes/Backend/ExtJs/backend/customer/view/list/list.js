@@ -156,7 +156,7 @@ Ext.define('Shopware.apps.Customer.view.list.List', {
                 flex: 2,
                 renderer: function (value, meta, record) {
                     return '<b>'+ record.get('customernumber') +'</b> - '+ record.get('customerGroup') +
-                        '<br>Kunde seit: ' + record.get('firstlogin')  +'</span>';
+                        '<br><i>Kunde seit: ' + Ext.util.Format.date(record.get('firstlogin'))  +'</i></span>';
                 }
             },
         {
@@ -169,9 +169,8 @@ Ext.define('Shopware.apps.Customer.view.list.List', {
                     record.get('firstname'),
                     record.get('lastname')
                 ];
-                console.log("names", names);
 
-                var name = names.join(' ');
+                var name = '<b>'+names.join(' ')+'</b>';
                 var age = '';
                 if (record.get('age')) {
                     age = ' ('+ record.get('age') +')';
@@ -205,16 +204,21 @@ Ext.define('Shopware.apps.Customer.view.list.List', {
                     return 'Unbekannt';
                 }
 
-                return 'Durschn.: <b>' + v.invoice_amount_avg + '</b>' +
-                    '<br>Gesamt: <b>' + v.invoice_amount_sum + '</b>';
+                return '' +
+                    'Gesamt: <b>' + v.invoice_amount_sum + '</b>' +
+                    '<br>Ø Warenkorb: <b>' + v.invoice_amount_avg + '</b>' +
+                    '<br>Ø Warenwert: <b>'+v.product_avg+'</b>';
             }
         }, {
                 header: 'Bestellungen',
                 dataIndex: 'aggregation',
                 flex: 2,
                 renderer: function(v) {
-                    return 'Bestellungen: ' + v.count_orders +
-                        '<br>Letzte: ' + v.last_order_time;
+                    if (!v) {
+                        return 'Unbekannt';
+                    }
+                    return '<b>Bestellungen: ' + v.count_orders + '</b>' +
+                        '<br>Letzte: ' + Ext.util.Format.date(v.last_order_time);
 
                 }
             }
@@ -223,12 +227,12 @@ Ext.define('Shopware.apps.Customer.view.list.List', {
             dataIndex: 'interests',
             flex: 4,
             renderer: function(v, meta, record) {
-                if (v.length <= 0) {
+                if (!v || v.length <= 0) {
                     return 'Nicht bekannt';
                 }
                 var interests = [];
                 Ext.each(v, function(interest) {
-                    interests.push('<i>' + interest.category + ' - ' + interest.manufacturer + '</i>');
+                    interests.push('<b>' + interest.category + '</b> - <i>' + interest.manufacturer + '</i>');
                 });
                 interests = interests.slice(0, 3);
                 return interests.join('<br>');
@@ -242,91 +246,34 @@ Ext.define('Shopware.apps.Customer.view.list.List', {
                 return '<i>Stammkunde</i>' +
                     '<br><i>Herrenmode</i>';
             }
-        }
+        }, {
+                xtype:'actioncolumn',
+                width:70,
+                items:[
+                    /*{if {acl_is_allowed privilege=delete}}*/
+                    {
+                        iconCls:'sprite-minus-circle-frame',
+                        action:'deleteCustomer',
+                        tooltip:me.snippets.columns.remove,
+                        handler:function (view, rowIndex, colIndex, item, opts, record) {
+                            me.fireEvent('deleteColumn', record);
+                        }
+                    } ,
+                    /*{/if}*/
+
+                    /*{if {acl_is_allowed privilege=detail}}*/
+                    {
+                        iconCls:'sprite-pencil',
+                        action:'editCustomer',
+                        tooltip:me.snippets.columns.edit,
+                        handler:function (view, rowIndex, colIndex, item, opts, record) {
+                            me.fireEvent('editColumn', record);
+                        }
+                    }
+                    /*{/if}*/
+                ]
+            }
         ];
-
-
-
-
-        var columns = [{
-            header:me.snippets.columns.number,
-            dataIndex:'number',
-            flex:1.5
-        }, {
-            header:me.snippets.columns.firstName,
-            dataIndex:'firstname',
-            flex: 1
-        }, {
-            header:me.snippets.columns.lastName,
-            dataIndex:'lastname',
-            flex: 1
-        }, {
-            header:me.snippets.columns.date,
-            dataIndex:'firstLogin',
-            flex:0.5,
-            renderer:me.dateColumn
-        }, {
-            header:me.snippets.columns.customerGroup,
-            dataIndex:'customerGroup',
-            flex: 1
-        }, {
-            header:me.snippets.columns.company,
-            dataIndex:'company',
-            flex: 1
-        }, {
-            header:me.snippets.columns.zipCode,
-            dataIndex:'zipCode',
-            flex:0.5
-        }, {
-            header:me.snippets.columns.city,
-            dataIndex:'city',
-            flex: 1
-        }, {
-            header:me.snippets.columns.accountMode,
-            dataIndex:'accountMode',
-            flex: 1,
-            renderer:me.accountModeRenderer
-        }, {
-            header:me.snippets.columns.orderCount,
-            dataIndex:'orderCount',
-            flex: 1
-        }, {
-            header:me.snippets.columns.sales,
-            dataIndex:'amount',
-            flex: 1,
-            renderer:me.salesColumn
-        }, {
-            /**
-             * Special column type which provides
-             * clickable icons in each row
-             */
-            xtype:'actioncolumn',
-            width:70,
-            items:[
-                /*{if {acl_is_allowed privilege=delete}}*/
-                {
-                    iconCls:'sprite-minus-circle-frame',
-                    action:'deleteCustomer',
-                    tooltip:me.snippets.columns.remove,
-                    handler:function (view, rowIndex, colIndex, item) {
-                        me.fireEvent('deleteColumn', view, rowIndex, colIndex, item);
-                    }
-                } ,
-                /*{/if}*/
-                /*{if {acl_is_allowed privilege=detail}}*/
-                {
-                    iconCls:'sprite-pencil',
-                    action:'editCustomer',
-                    tooltip:me.snippets.columns.edit,
-                    handler:function (view, rowIndex, colIndex, item) {
-                        me.fireEvent('editColumn', view, rowIndex, colIndex, item);
-                    }
-                }
-                /*{/if}*/
-            ]
-        }];
-
-        return columns;
     },
 
     /**
@@ -338,16 +285,14 @@ Ext.define('Shopware.apps.Customer.view.list.List', {
         var me = this;
 
         return Ext.create('Ext.selection.CheckboxModel', {
-            listeners:{
+            listeners: {
                 // Unlocks the save button if the user has checked at least one checkbox
                 selectionchange:function (sm, selections) {
-                    me.deleteCustomerButton.setDisabled(selections.length == 0);
+                    me.fireEvent('selection-changed', selections);
                 }
             }
         });
     },
-
-
 
     /**
      * Creates the paging toolbar for the customer grid to allow
