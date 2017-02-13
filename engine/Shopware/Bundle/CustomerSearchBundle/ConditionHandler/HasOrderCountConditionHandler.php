@@ -56,6 +56,12 @@ class HasOrderCountConditionHandler implements ConditionHandlerInterface
      */
     public function handle(ConditionInterface $condition, QueryBuilder $query)
     {
+        $query->andWhere('customer.count_orders >= :HasOrderCountCondition');
+
+        /** @var HasOrderCountCondition $condition */
+        $query->setParameter(':HasOrderCountCondition', $condition->getMinimumOrderCount());
+        return;
+
         if (!$query->hasState(AggregatedOrderTable::JOINED_STATE)) {
             $orderTable = $this->aggregatedOrderTable->getQuery();
 

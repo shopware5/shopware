@@ -48,7 +48,6 @@ Ext.define('Shopware.apps.CustomerStream.view.detail.ConditionPanel', {
         });
 
         me.items = [];
-        // me.dockedItems = me.createDockedItems();
 
         me.callParent(arguments);
     },
@@ -73,51 +72,6 @@ Ext.define('Shopware.apps.CustomerStream.view.detail.ConditionPanel', {
             Ext.create('Shopware.apps.CustomerStream.view.conditions.HasTotalOrderAmountCondition'),
             Ext.create('Shopware.apps.CustomerStream.view.conditions.CustomerAttributeCondition')
         ];
-    },
-
-    createDockedItems: function() {
-        var me = this;
-
-        me.toolbar = Ext.create('Ext.toolbar.Toolbar', {
-            dock: 'top',
-            style: 'border: 1px solid #9aacb8;',
-            ui: 'shopware-ui',
-            items: me.createToolbarItems()
-        });
-        return me.toolbar;
-    },
-
-    createToolbarItems: function() {
-        var me = this;
-
-        return [{
-            xtype: 'button',
-            tooltip: '{s name=add}{/s}',
-            // iconCls: 'sprite-plus-circle-frame',
-            iconCls: 'sprite-funnel',
-            menu: me.createMenu()
-        }, {
-            tooltip: '{s name=preview}{/s}',
-            iconCls: 'sprite-arrow-circle-225-left',
-            handler: Ext.bind(me.loadPreview, me)
-        }];
-    },
-
-    loadPreview: function() {
-        this.fireEvent('load-preview', this.getSubmitData());
-    },
-
-    createMenu: function() {
-        var me = this, items = [];
-
-        Ext.each(me.handlers, function(handler) {
-            items.push({
-                text: handler.getLabel(),
-                conditionHandler: handler,
-                handler: Ext.bind(me.createCondition, me)
-            });
-        });
-        return new Ext.menu.Menu({ items: items });
     },
 
     createCondition: function(button) {

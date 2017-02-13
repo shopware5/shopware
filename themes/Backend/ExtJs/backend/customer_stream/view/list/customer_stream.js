@@ -41,6 +41,31 @@ Ext.define('Shopware.apps.CustomerStream.view.list.CustomerStream', {
         };
     },
 
+    createSelectionModel: function() {
+        var me = this;
+
+        me.selModel = Ext.create('Ext.selection.CheckboxModel', {
+            mode: 'SINGLE',
+            listeners: {
+                selectionchange: me.selectionChanged
+            }
+        });
+        return me.selModel;
+    },
+
+    createPlugins: function () {
+        var me = this;
+        me.cellEditor = Ext.create('Ext.grid.plugin.CellEditing', {
+            clicksToEdit: 2,
+            listeners: {
+                edit: function(editor, e) {
+                    e.record.save();
+                }
+            }
+        });
+        return [me.cellEditor];
+    },
+
     nameRenderer: function (value) {
         return '<span class="stream-name-column"><i>'+value+'</i></span>'
     }

@@ -51,6 +51,14 @@ class HasTotalOrderAmountConditionHandler implements ConditionHandlerInterface
      */
     public function handle(ConditionInterface $condition, QueryBuilder $query)
     {
+        $query->andWhere('customer.invoice_amount_sum >= :HasTotalOrderAmountCondition');
+
+        /** @var HasTotalOrderAmountCondition $condition */
+        $query->setParameter(':HasTotalOrderAmountCondition', $condition->getMinimumOrderAmount());
+        return;
+
+
+
         if (!$query->hasState(AggregatedOrderTable::JOINED_STATE)) {
             $orderTable = $this->aggregatedOrderTable->getQuery();
             $query->innerJoin(

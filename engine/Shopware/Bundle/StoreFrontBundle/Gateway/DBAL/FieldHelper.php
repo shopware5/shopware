@@ -1337,4 +1337,106 @@ class FieldHelper
         $query->setParameter(':' . $translationTable, $translationType);
         $query->addSelect($translationTable . '.objectdata as ' . $selectName);
     }
+
+
+    public function getCustomerFields()
+    {
+        $fields = [
+            'customer.id as __customer_id',
+            'customer.password as __customer_password',
+            'customer.encoder as __customer_encoder',
+            'customer.email as __customer_email',
+            'customer.active as __customer_active',
+            'customer.accountmode as __customer_accountmode',
+            'customer.confirmationkey as __customer_confirmationkey',
+            'customer.paymentID as __customer_paymentID',
+            'customer.firstlogin as __customer_firstlogin',
+            'customer.lastlogin as __customer_lastlogin',
+            'customer.sessionID as __customer_sessionID',
+            'customer.newsletter as __customer_newsletter',
+            'customer.validation as __customer_validation',
+            'customer.affiliate as __customer_affiliate',
+            'customer.customergroup as __customer_customergroup',
+            'customer.paymentpreset as __customer_paymentpreset',
+            'customer.language as __customer_language',
+            'customer.subshopID as __customer_subshopID',
+            'customer.referer as __customer_referer',
+            'customer.pricegroupID as __customer_pricegroupID',
+            'customer.internalcomment as __customer_internalcomment',
+            'customer.failedlogins as __customer_failedlogins',
+            'customer.lockeduntil as __customer_lockeduntil',
+            'customer.default_billing_address_id as __customer_default_billing_address_id',
+            'customer.default_shipping_address_id as __customer_default_shipping_address_id',
+            'customer.title as __customer_title',
+            'customer.salutation as __customer_salutation',
+            'customer.firstname as __customer_firstname',
+            'customer.lastname as __customer_lastname',
+            'customer.birthday as __customer_birthday',
+            'customer.customernumber as __customer_customernumber'
+        ];
+
+        return array_merge(
+            $fields,
+            $this->getTableFields('s_user_attributes', 'customerAttribute')
+        );
+    }
+
+    public function getPaymentFields()
+    {
+        $fields = [
+            'payment.id as __payment_id',
+            'payment.name as __payment_name',
+            'payment.description as __payment_description',
+            'payment.template as __payment_template',
+            'payment.class as __payment_class',
+            'payment.table as __payment_table',
+            'payment.hide as __payment_hide',
+            'payment.additionaldescription as __payment_additionaldescription',
+            'payment.debit_percent as __payment_debit_percent',
+            'payment.surcharge as __payment_surcharge',
+            'payment.surchargestring as __payment_surchargestring',
+            'payment.position as __payment_position',
+            'payment.active as __payment_active',
+            'payment.esdactive as __payment_esdactive',
+            'payment.embediframe as __payment_embediframe',
+            'payment.hideprospect as __payment_hideprospect',
+            'payment.action as __payment_action',
+            'payment.pluginID as __payment_pluginID',
+            'payment.source as __payment_source',
+            'payment.mobile_inactive as __payment_mobile_inactive',
+        ];
+
+        return array_merge(
+            $fields,
+            $this->getTableFields('s_core_paymentmeans_attributes', 'paymentAttribute')
+        );
+    }
+
+    public function getAddressFields()
+    {
+        $fields = [
+            'address.id as __address_id',
+            'address.user_id as __address_user_id',
+            'address.company as __address_company',
+            'address.department as __address_department',
+            'address.salutation as __address_salutation',
+            'address.title as __address_title',
+            'address.firstname as __address_firstname',
+            'address.lastname as __address_lastname',
+            'address.street as __address_street',
+            'address.zipcode as __address_zipcode',
+            'address.city as __address_city',
+            'address.country_id as __address_country_id',
+            'address.state_id as __address_state_id',
+            'address.ustid as __address_ustid',
+            'address.phone as __address_phone',
+            'address.additional_address_line1 as __address_additional_address_line1',
+            'address.additional_address_line2 as __address_additional_address_line2',
+        ];
+
+        return array_merge(
+            $fields,
+            $this->getTableFields('s_user_address_attributes', 'addressAttribute')
+        );
+    }
 }

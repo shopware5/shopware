@@ -25,18 +25,31 @@
 Ext.define('Shopware.apps.CustomerStream.view.detail.IndexingWindow', {
     extend: 'Shopware.window.BatchRequests',
     title: '{s name="indexing_window"}{/s}',
+    cls: 'customer-stream-indexing-window',
 
     prepareRequest: function(request, requests) {
         var me = this;
 
-        Ext.Ajax.request({
-            url: '{url controller=CustomerStream action=loadStream}',
-            params: request.params,
-            success: function(operation) {
-                var response = Ext.decode(operation.responseText);
-                request.params.total = response.total;
-                me.send(request, requests);
-            }
-        });
+        if (request.name === 'search_index') {
+            Ext.Ajax.request({
+                url: '{url controller=CustomerStream action=getCustomerCount}',
+                params: request.params,
+                success: function(operation) {
+                    var response = Ext.decode(operation.responseText);
+                    request.params.total = response.total;
+                    me.send(request, requests);
+                }
+            });
+        } else {
+            Ext.Ajax.request({
+                url: '{url controller=CustomerStream action=loadStream}',
+                params: request.params,
+                success: function(operation) {
+                    var response = Ext.decode(operation.responseText);
+                    request.params.total = response.total;
+                    me.send(request, requests);
+                }
+            });
+        }
     }
 });

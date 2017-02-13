@@ -82,6 +82,28 @@ class Shopware_Controllers_Backend_CustomerStream extends Shopware_Controllers_B
         ]);
     }
 
+    public function buildSearchIndexAction()
+    {
+        $total = (int) $this->Request()->getParam('total');
+        $iteration = (int) $this->Request()->getParam('iteration', 1);
+        $offset = ($iteration - 1) * self::INDEXING_LIMIT;
+
+//        $indexer =
+
+        if ($offset === 0) {
+            $indexer->clearSearchIndex();
+        }
+    }
+
+    public function getCustomerCount()
+    {
+        /** @var \Doctrine\DBAL\Query\QueryBuilder $query */
+        $query = $this->get('dbal_connection')->createQueryBuilder();
+        $query->select('COUNT(id)');
+        $query->from('s_user', 'user');
+        $this->View()->assign('total', $query->execute()->fetch(PDO::FETCH_COLUMN));
+    }
+
     public function loadStreamAction()
     {
         $request = $this->Request();
@@ -134,6 +156,7 @@ class Shopware_Controllers_Backend_CustomerStream extends Shopware_Controllers_B
         foreach ($conditions as $className => $arguments) {
             $className = explode('|', $className);
             $className = $className[0];
+            /** @var \Shopware\Bundle\SearchBundle\ConditionInterface $condition */
             $condition = $reflector->createInstanceFromNamedArguments($className, $arguments);
             $criteria->addCondition($condition);
         }

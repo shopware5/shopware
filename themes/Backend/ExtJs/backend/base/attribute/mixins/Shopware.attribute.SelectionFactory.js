@@ -35,7 +35,7 @@ Ext.define('Shopware.attribute.SelectionFactory', {
     getLabelField: function(record) {
         var fields = this.getRelevantFields();
         var found = null;
-        var recordFields = record.fields.keys;
+        var recordFields = Ext.Object.getKeys(record.data);
 
         Ext.each(fields, function(field) {
             if (recordFields.indexOf(field) >= 0) {

@@ -6,10 +6,52 @@
 
     <services>
 
-        <service id="shopware_customer_search.customer_search" class="Shopware\Bundle\CustomerSearchBundle\CustomerSearch">
-            <argument type="service" id="shopware_customer_search.customer_number_search" />
-            <argument type="service" id="dbal_connection" />
+        <service class="Shopware\Bundle\CustomerSearchBundle\CustomerStream\CustomerProvider" id="shopware_bundle_customer_search.customer_stream.customer_provider">
+            <argument id="shopware_bundle_customer_search.gateway.customer_service" type="service"/>
+            <argument id="shopware_bundle_customer_search.gateway.customer_order_gateway" type="service"/>
+            <argument id="shopware_bundle_customer_search.gateway.customer_interests_gateway" type="service"/>
         </service>
+
+        <service class="Shopware\Bundle\CustomerSearchBundle\Gateway\CustomerService" id="shopware_bundle_customer_search.gateway.customer_service">
+            <argument id="shopware_bundle_customer_search.gateway.customer_gateway" type="service"/>
+            <argument id="shopware_bundle_customer_search.gateway.address_gateway" type="service"/>
+        </service>
+
+        <service class="Shopware\Bundle\CustomerSearchBundle\Gateway\CustomerInterestsGateway" id="shopware_bundle_customer_search.gateway.customer_interests_gateway">
+            <argument id="dbal_connection" type="service"/>
+        </service>
+
+        <service class="Shopware\Bundle\CustomerSearchBundle\Gateway\CustomerGateway" id="shopware_bundle_customer_search.gateway.customer_gateway">
+            <argument id="dbal_connection" type="service"/>
+            <argument id="shopware_storefront.field_helper_dbal" type="service"/>
+            <argument id="shopware_bundle_customer_search.gateway.customer_hydrator" type="service"/>
+        </service>
+
+        <service class="Shopware\Bundle\CustomerSearchBundle\Gateway\CustomerHydrator" id="shopware_bundle_customer_search.gateway.customer_hydrator">
+            <argument id="shopware_storefront.attribute_hydrator_dbal" type="service"/>
+            <argument id="shopware_storefront.customer_group_hydrator_dbal" type="service"/>
+        </service>
+
+        <service class="Shopware\Bundle\CustomerSearchBundle\Gateway\AddressGateway" id="shopware_bundle_customer_search.gateway.address_gateway">
+            <argument id="dbal_connection" type="service"/>
+            <argument id="shopware_storefront.field_helper_dbal" type="service"/>
+            <argument id="shopware_bundle_customer_search.gateway.address_hydrator" type="service"/>
+        </service>
+
+        <service class="Shopware\Bundle\CustomerSearchBundle\Gateway\CustomerOrderGateway" id="shopware_bundle_customer_search.gateway.customer_order_gateway">
+            <argument id="dbal_connection" type="service"/>
+            <argument id="shopware_bundle_customer_search.gateway.customer_order_hydrator" type="service"/>
+        </service>
+
+        <service class="Shopware\Bundle\CustomerSearchBundle\Gateway\AddressHydrator" id="shopware_bundle_customer_search.gateway.address_hydrator">
+            <argument id="shopware_storefront.country_hydrator_dbal" type="service"/>
+            <argument id="shopware_storefront.attribute_hydrator_dbal" type="service"/>
+        </service>
+
+        <service class="Shopware\Bundle\CustomerSearchBundle\Gateway\CustomerOrderHydrator" id="shopware_bundle_customer_search.gateway.customer_order_hydrator"/>
+
+
+
         <service id="shopware_customer_search.customer_number_search" class="Shopware\Bundle\CustomerSearchBundle\CustomerNumberSearch">
             <argument type="service" id="shopware_customer_search.handler_registry"/>
             <argument type="service" id="dbal_connection"/>
@@ -100,6 +142,10 @@
         </service>
 
         <service id="shopware_customer_search.index_populate_command" class="Shopware\Bundle\CustomerSearchBundle\Commands\IndexPopulateCommand">
+            <tag name="console.command" />
+        </service>
+
+        <service id="shopware_customer_search.search_index_populate_command" class="Shopware\Bundle\CustomerSearchBundle\Commands\SearchIndexPopulate">
             <tag name="console.command" />
         </service>
     </services>

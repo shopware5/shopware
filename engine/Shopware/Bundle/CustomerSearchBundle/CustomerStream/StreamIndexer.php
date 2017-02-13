@@ -68,8 +68,7 @@ class StreamIndexer
      */
     public function populate($streamId, ProgressHelperInterface $helper)
     {
-        $this->connection->transactional(function() use ($streamId, $helper) {
-
+        $this->connection->transactional(function () use ($streamId, $helper) {
             $criteria = $this->criteriaFactory->createCriteria($streamId);
             $criteria->offset(0)
                 ->limit(100);

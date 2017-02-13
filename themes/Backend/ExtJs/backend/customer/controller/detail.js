@@ -315,10 +315,8 @@ Ext.define('Shopware.apps.Customer.controller.Detail', {
      * @param [integer] rowIndex - On which row position has been clicked
      * @return void
      */
-    onEditCustomer:function (view, rowIndex) {
-        var me = this,
-            listStore = me.subApplication.getStore('List'),
-            record = listStore.getAt(rowIndex);
+    onEditCustomer:function (record) {
+        var me = this;
 
         /*{if {acl_is_allowed privilege=update}}*/
             me.openCustomerDetailPage(record);

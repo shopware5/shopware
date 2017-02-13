@@ -84,7 +84,7 @@ Ext.define('Shopware.apps.Customer.controller.List', {
 
         //controls the event for the customer list (delete single/multiple customers)
         me.control({
-            'customer-list button[action=deleteCustomer]':{
+            'customer-list-main-window button[action=deleteCustomer]':{
                 click:me.onDeleteMultipleCustomers
             },
             'customer-list':{
@@ -106,10 +106,8 @@ Ext.define('Shopware.apps.Customer.controller.List', {
      * @param [integer] rowIndex - On which row position has been clicked
      * @return void
      */
-    onDeleteSingleCustomer:function (view, rowIndex) {
+    onDeleteSingleCustomer:function (record) {
         var me = this,
-            store = me.subApplication.getStore('List'),
-            record = store.getAt(rowIndex),
             customers = [record],
             message = me.snippets.singleDeleteMessage + ' ' + record.get('number'),
             title = me.snippets.singleDeleteTitle;
@@ -146,14 +144,14 @@ Ext.define('Shopware.apps.Customer.controller.List', {
      */
     deleteCustomers:function (customers, title, message) {
         var me = this,
-            counter = 0,
-            store = me.subApplication.getStore('List');
+            counter = 0;
 
         // we do not just delete - we are polite and ask the user if he is sure.
         Ext.MessageBox.confirm(title, message, function (response) {
             if ( response !== 'yes' ) {
                 return;
             }
+
             Ext.each(customers, function (customer) {
                 customer.destroy({
                     callback:function (data, operation) {
@@ -168,7 +166,7 @@ Ext.define('Shopware.apps.Customer.controller.List', {
                         }
                         counter++;
                         if (counter >= customers.length) {
-                            store.load();
+                            me.getStore().load();
                         }
                     }
                 });
