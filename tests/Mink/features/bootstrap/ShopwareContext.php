@@ -228,7 +228,7 @@ class ShopwareContext extends SubContext
      */
     public function theEmotionWorldHasLoaded()
     {
-        $this->getSession()->wait(5000, "$('.emotion--element').length > 0");
+        $this->getSession()->wait(15000, "$($(':plugin-swEmotionLoader').get(0)).data('plugin_swEmotionLoader').isLoading == false");
     }
 
     /**
