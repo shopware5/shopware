@@ -81,13 +81,14 @@ class EmotionPreset extends Resource
         $this->slugService = $slugService;
     }
 
+    /**
+     * @param string $locale
+     *
+     * @return array[]
+     */
     public function getList($locale = 'de_DE')
     {
-        $query = $this->createQuery();
-        $presets = $query->getQuery()->getArrayResult();
-        $data = $this->preparePresetData($presets, $locale);
-
-        return $data;
+        return $this->hydrate($this->fetch(), $locale);
     }
 
     public function delete($presetId)
@@ -175,11 +176,7 @@ class EmotionPreset extends Resource
 
         // get technical names and label of required plugins
         if (!empty($data['requiredPlugins'])) {
-            $requiredPlugins = $this->getRequiredPlugins($data['requiredPlugins']);
-            $data['requiredPlugins'] = [];
-            if ($requiredPlugins) {
-                $data['requiredPlugins'] = $requiredPlugins;
-            }
+            $data['requiredPlugins'] = $this->formatRequiredPlugins($data['requiredPlugins']);
         }
 
         // slugify technical name of preset
@@ -225,124 +222,70 @@ class EmotionPreset extends Resource
     }
 
     /**
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return array[]
      */
-    private function createQuery()
+    private function fetch()
     {
         $builder = $this->models->createQueryBuilder();
-
-        $builder->select([
-            'preset',
-            'translation',
-            'requiredPlugin',
-        ]);
-
-        $builder->from(Preset::class, 'preset');
+        $builder->select(['preset', 'translation', 'requiredPlugin']);
+        $builder->from(Preset::class, 'preset', 'preset.id');
         $builder->leftJoin('preset.translations', 'translation');
-        $builder->leftJoin('preset.requiredPlugins', 'requiredPlugin');
+        $builder->leftJoin('preset.requiredPlugins', 'requiredPlugin', null, null, 'requiredPlugin.technicalName');
 
-        return $builder;
+        return $builder->getQuery()->getArrayResult();
     }
 
     /**
      * @param array  $presets
      * @param string $locale
      *
-     * @return array
+     * @return array[]
      */
-    private function preparePresetData(array $presets, $locale = 'de_DE')
+    private function hydrate(array $presets, $locale = 'de_DE')
     {
-        $preparedPresets = [];
+        $localPlugins = $this->getPlugins(
+            $this->extractTechnicalNames($presets)
+        );
 
+        $result = [];
         foreach ($presets as $preset) {
-            $label = $description = $preset['name'];
-            $translation = $this->findTranslationByUserLocale($preset['translations'], $locale);
-            $requiredPlugins = $this->getExtendedPluginInformation($preset['requiredPlugins']);
-
-            if (!empty($translation)) {
-                $label = $translation['label'];
-                $description = $translation['description'];
-            }
-
-            $preparedPresets[] = [
+            $data = [
                 'id' => $preset['id'],
                 'name' => $preset['name'],
+                'label' => $preset['name'],
+                'description' => $preset['name'],
                 'premium' => $preset['premium'],
                 'custom' => $preset['custom'],
                 'thumbnail' => $preset['thumbnail'],
-                'thumbnailUrl' => $this->getPresetImageUrl($preset['thumbnail']),
                 'preview' => $preset['preview'],
-                'previewUrl' => $this->getPresetImageUrl($preset['preview']),
                 'presetData' => $preset['presetData'],
-                'label' => $label,
-                'description' => $description,
-                'requiredPlugins' => $requiredPlugins,
+                'thumbnailUrl' => $this->getPresetImageUrl($preset['thumbnail']),
+                'previewUrl' => $this->getPresetImageUrl($preset['preview']),
+                'requiredPlugins' => $this->getPluginsForPreset($preset, $localPlugins),
             ];
+
+            $result[] = array_merge($data, $this->extractTranslation($preset['translations'], $locale));
         }
 
-        return $preparedPresets;
+        return $result;
     }
 
     /**
-     * @param array $translations
-     * @param $locale
+     * @param array  $translations
+     * @param string $locale
      *
      * @return array
      */
-    private function findTranslationByUserLocale(array $translations, $locale)
+    private function extractTranslation(array $translations, $locale)
     {
-        if (empty($translations) || !in_array($locale, array_column($translations, 'locale'))) {
-            return [];
-        }
-
-        $requiredTranslation = [];
         /** @var array $translation */
         foreach ($translations as $translation) {
             if ($translation['locale'] === $locale) {
-                $requiredTranslation = $translation;
-                break;
+                return $translation;
             }
         }
 
-        return $requiredTranslation;
-    }
-
-    /**
-     * @param array $requiredPlugins
-     *
-     * @return array
-     */
-    private function getExtendedPluginInformation(array $requiredPlugins)
-    {
-        if (empty($requiredPlugins)) {
-            return [];
-        }
-        $pluginData = [];
-
-        foreach ($requiredPlugins as $requiredPlugin) {
-            $pluginData[$requiredPlugin['technicalName']] = $requiredPlugin;
-        }
-
-        $query = $this->models->getConnection()->createQueryBuilder();
-        $plugins = $query->select(['plugin.id, plugin.name, plugin.active'])
-            ->from('s_core_plugins', 'plugin')
-            ->where('plugin.name IN (:names)')
-            ->setParameter(':names', array_keys($pluginData), Connection::PARAM_STR_ARRAY)
-            ->execute()
-            ->fetchAll(\PDO::FETCH_ASSOC);
-
-        foreach ($plugins as $plugin) {
-            if (!array_key_exists($plugin['name'], $pluginData)) {
-                $pluginData[$plugin['name']]['installationRequired'] = true;
-                $pluginData[$plugin['name']]['activationRequired'] = true;
-
-                continue;
-            }
-            $pluginData[$plugin['name']]['installationRequired'] = false;
-            $pluginData[$plugin['name']]['activationRequired'] = !(bool) $plugin['active'];
-        }
-
-        return array_values($pluginData);
+        return [];
     }
 
     /**
@@ -366,14 +309,67 @@ class EmotionPreset extends Resource
      *
      * @return array
      */
-    private function getRequiredPlugins(array $pluginIds)
+    private function formatRequiredPlugins(array $pluginIds)
     {
         return $this->models->getDBALQueryBuilder()
-            ->select('name AS technicalName, label')
+            ->select('name AS technicalName, label', 'version')
             ->from('s_core_plugins', 's')
             ->where('s.id IN (:ids)')
             ->setParameter('ids', $pluginIds, Connection::PARAM_INT_ARRAY)
             ->execute()
             ->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * @param string[] $technicalNames
+     *
+     * @return array
+     */
+    private function getPlugins($technicalNames)
+    {
+        $query = $this->connection->createQueryBuilder();
+        $query->select([
+            'plugin.name as array_key',
+            'plugin.name as plugin_name',
+            'plugin.label as plugin_label',
+            'plugin.active',
+            'plugin.installation_date IS NOT NULL as installed',
+            'plugin.version as current_version',
+        ]);
+        $query->from('s_core_plugins', 'plugin');
+        $query->where('plugin.name IN (:names)');
+        $query->setParameter(':names', $technicalNames, Connection::PARAM_STR_ARRAY);
+
+        return $query->execute()->fetchAll(\PDO::FETCH_GROUP | \PDO::FETCH_UNIQUE);
+    }
+
+    /**
+     * @param array $preset
+     * @param array $localPlugins
+     *
+     * @return array
+     */
+    private function getPluginsForPreset(array $preset, array $localPlugins)
+    {
+        $required = $preset['requiredPlugins'];
+        $merged = array_merge_recursive($required, $localPlugins);
+        $requiredPlugins = array_values(array_intersect_key($merged, $required));
+
+        return $requiredPlugins;
+    }
+
+    /**
+     * @param array $presets
+     *
+     * @return array
+     */
+    private function extractTechnicalNames(array $presets)
+    {
+        $technicalNames = [];
+        foreach ($presets as $preset) {
+            $technicalNames = array_merge($technicalNames, array_keys($preset['requiredPlugins']));
+        }
+
+        return $technicalNames;
     }
 }
