@@ -393,7 +393,7 @@
         disableActiveFilterContainer: function(disabled) {
             var me = this;
 
-            if (me.showInstantFilterResult) {
+            if (me.showInstantFilterResult || me.isFilterpanelInSidebar) {
                 return;
             }
 
@@ -682,7 +682,7 @@
                 if (!isMobile && !me.$filterCont.hasClass(me.opts.collapsedCls)) {
                     me.applyCategoryParams();
                 }
-            } else if (isMobile || !me.$activeFilterCont.hasClass(me.opts.disabledCls)) {
+            } else if (!me.$activeFilterCont.hasClass(me.opts.disabledCls)) {
                 me.removeActiveFilter(param);
                 me.resetFilterProperty(param);
             }
@@ -1273,15 +1273,16 @@
             }
 
             me.$filterCont.toggleClass(me.opts.hasActiveFilterCls, (count > 0));
-
             if (me.showInstantFilterResult && count > 0) {
                 me.$filterCont.addClass(me.opts.instantFilterActiveCls);
             }
 
-            me.$activeFilterCont.toggleClass(
-                me.opts.collapsedCls,
-                !(me.opts.isFilterpanelInSidebar || me.$filterCont.hasClass(me.opts.collapsedCls))
-            );
+            if (!me.opts.isFilterpanelInSidebar) {
+                me.$activeFilterCont.toggleClass(
+                    me.opts.collapsedCls,
+                    me.$filterCont.hasClass(me.opts.collapsedCls)
+                );
+            }
 
             $.publish('plugin/swListingActions/onCreateActiveFiltersFromCategoryParams', [ me, categoryParams ]);
         },
@@ -1368,7 +1369,8 @@
                 rangeSlider;
 
             if (param == 'rating') {
-                me.$filterForm.find('#star--reset').prop('checked', true).trigger('change');
+                $input = me.$filterForm.find('.filter--rating .is--active input[name="rating"]');
+                $input.removeAttr('checked').trigger('change');
             } else {
                 $input = me.$filterForm.find('[name="' + me.escapeDoubleQuotes(param) + '"]');
                 if ($input.is('[data-range-input]')) {

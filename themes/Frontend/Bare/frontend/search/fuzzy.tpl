@@ -51,9 +51,7 @@
             {/block}
 
 			{block name="frontend_search_sidebar"}
-				{if $theme.sidebarFilter}
-					{include file='frontend/listing/sidebar.tpl'}
-				{/if}
+                {include file='frontend/listing/sidebar.tpl'}
 			{/block}
 
             {block name="frontend_search_results"}
