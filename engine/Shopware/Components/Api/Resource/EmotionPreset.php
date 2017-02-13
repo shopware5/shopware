@@ -146,6 +146,10 @@ class EmotionPreset extends Resource
             throw new \Exception(sprintf('Preset with id %s not found', $id));
         }
 
+        $preset->getTranslations()->clear();
+        $preset->getRequiredPlugins()->clear();
+        $this->models->flush($preset);
+
         return $this->save($data, $preset, $locale);
     }
 
@@ -160,9 +164,6 @@ class EmotionPreset extends Resource
      */
     private function save(array $data, Preset $preset, $locale = 'de_DE')
     {
-        $preset->getTranslations()->clear();
-        $preset->getRequiredPlugins()->clear();
-
         // fill translation locale when not yet set
         if (!empty($data['translations'])) {
             foreach ($data['translations'] as &$translation) {
@@ -371,7 +372,7 @@ class EmotionPreset extends Resource
             ->select('name AS technicalName, label')
             ->from('s_core_plugins', 's')
             ->where('s.id IN (:ids)')
-            ->setParameter('ids', implode(',', $pluginIds))
+            ->setParameter('ids', $pluginIds, Connection::PARAM_INT_ARRAY)
             ->execute()
             ->fetchAll(\PDO::FETCH_ASSOC);
     }
