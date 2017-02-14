@@ -287,9 +287,7 @@ class sBasketTest extends PHPUnit\Framework\TestCase
             )
         );
 
-        // Create session id
-        $this->module->sSYSTEM->sSESSION_ID = uniqid(rand());
-        $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
+        $this->generateBasketSession();
 
         // Add two articles to the basket
         $randomArticleOne = $this->db->fetchRow(
@@ -300,6 +298,7 @@ class sBasketTest extends PHPUnit\Framework\TestCase
               ON article.id = detail.articleID
             WHERE detail.active = 1
             AND detail.ordernumber IS NOT NULL
+            AND article.supplierID IS NOT NULL
             LIMIT 1'
         );
         $randomArticleTwo = $this->db->fetchRow(
@@ -309,11 +308,12 @@ class sBasketTest extends PHPUnit\Framework\TestCase
             INNER JOIN s_articles article
               ON article.id = detail.articleID
             WHERE detail.active = 1
-            AND supplierID <> ?
+            AND article.supplierID <> ?
             AND detail.ordernumber IS NOT NULL
             LIMIT 1',
             array($randomArticleOne['supplierID'])
         );
+
         $this->db->insert(
             's_order_basket',
             array(
@@ -1818,6 +1818,7 @@ class sBasketTest extends PHPUnit\Framework\TestCase
               ON article.id = detail.articleID
             WHERE detail.active = 1 and article.active = 1
             AND ordernumber IS NOT NULL
+            AND article.supplierID IS NOT NULL
             AND article.name IS NOT NULL
             LIMIT 1'
         );
