@@ -43,6 +43,9 @@
 
 {* Canonical link *}
 {block name='frontend_index_header_canonical'}
+
+    <link rel="canonical" href="{url controller=cat sCategory=$sCategoryContent.id}" />
+
     {* Count of available product pages *}
     {$pages = ceil($sNumberArticles / $criteria->getLimit())}
 
@@ -58,8 +61,6 @@
             {$sCategoryContent.canonicalParams.sPage = $sPage + 1}
             <link rel="next" href="{url params = $sCategoryContent.canonicalParams}">
         {/if}
-    {elseif !{config name=seoIndexPaginationLinks} || !$showListing}
-        <link rel="canonical" href="{url params = $sCategoryContent.canonicalParams}" />
     {/if}
 {/block}
 
