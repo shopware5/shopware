@@ -137,19 +137,19 @@
             var me = this,
                 opts = me.opts,
                 $targetEl = me.$targetEl,
-                siblings = $('.' + opts.collapseTargetCls).not($targetEl),
+                $siblings = $('.' + opts.collapseTargetCls).not($targetEl),
                 tabId = $targetEl.parent().attr('data-tab-id');
 
             me.$el.addClass(opts.activeTriggerCls);
 
-            $targetEl.slideDown(opts.animationSpeed, function () {
+            $targetEl.finish().slideDown(opts.animationSpeed, function () {
                 $.publish('plugin/swCollapsePanel/onOpen', [ me ]);
             }).addClass(opts.collapsedStateCls);
 
             if (opts.closeSiblings) {
-                siblings.slideUp(opts.animationSpeed, function () {
-                    siblings.removeClass(opts.collapsedStateCls);
-                    siblings.prev().removeClass(opts.activeTriggerCls);
+                $siblings.finish().slideUp(opts.animationSpeed, function () {
+                    $siblings.removeClass(opts.collapsedStateCls);
+                    $siblings.prev().removeClass(opts.activeTriggerCls);
                 });
             }
 
@@ -171,9 +171,10 @@
                 opts = me.opts;
 
             me.$el.removeClass(opts.activeTriggerCls);
-            me.$targetEl.slideUp(opts.animationSpeed, function() {
+            me.$targetEl.finish().slideUp(opts.animationSpeed, function() {
+                me.$targetEl.removeClass(opts.collapsedStateCls);
                 $.publish('plugin/swCollapsePanel/onClose', [ me ]);
-            }).removeClass(opts.collapsedStateCls);
+            });
 
             $.publish('plugin/swCollapsePanel/onClosePanel', [ me ]);
         },
