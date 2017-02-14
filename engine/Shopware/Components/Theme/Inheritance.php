@@ -66,20 +66,6 @@ class Inheritance
     private $eventManager;
 
     /**
-     * Contains all valid less fields which
-     * can be selected in the shop configuration query.
-     * @var array
-     */
-    private $validLessFields = [
-        'theme-color-picker',
-        'theme-em-field',
-        'theme-percent-field',
-        'theme-pixel-field',
-        'theme-select-field',
-        'theme-text-field'
-    ];
-
-    /**
      * @var MediaServiceInterface
      */
     private $mediaService;
