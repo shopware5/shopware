@@ -35,7 +35,7 @@ class Migrations_Migration817 extends Shopware\Components\Migrations\AbstractMig
     {
         $sql = <<<'EOD'
 CREATE TABLE IF NOT EXISTS `s_emotion_presets` (
-  `id` INT(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` INT(11) unsigned NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `premium` TINYINT(1) NOT NULL DEFAULT '0',
   `custom` TINYINT(1) NOT NULL DEFAULT '1',
@@ -53,8 +53,8 @@ EOD;
     {
         $sql = <<<'EOD'
 CREATE TABLE IF NOT EXISTS `s_emotion_preset_translations` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `presetID` int(10) unsigned NOT NULL,
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `presetID` int(11) unsigned NOT NULL,
   `label` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `description` text COLLATE utf8_unicode_ci NOT NULL,
   `locale` varchar(15) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'de_DE',
@@ -70,8 +70,8 @@ EOD;
     {
         $sql = <<<'EOD'
 CREATE TABLE IF NOT EXISTS `s_emotion_preset_requirements` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `presetID` int(10) unsigned NOT NULL,
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `presetID` int(11) unsigned NOT NULL,
   `technical_name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `label` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),

@@ -25,7 +25,6 @@
 namespace Shopware\Components\Api\Resource;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Bundle\MediaBundle\MediaService;
 use Shopware\Components\Api\Exception\NotFoundException;
 use Shopware\Components\Api\Exception\ParameterMissingException;
 use Shopware\Components\Api\Exception\ValidationException;
@@ -46,11 +45,6 @@ class EmotionPreset extends Resource
     private $models;
 
     /**
-     * @var MediaService
-     */
-    private $mediaService;
-
-    /**
      * @var \Enlight_Template_Manager
      */
     private $template;
@@ -63,20 +57,17 @@ class EmotionPreset extends Resource
     /**
      * @param Connection                $connection
      * @param ModelManager              $models
-     * @param MediaService              $mediaService
      * @param \Enlight_Template_Manager $template
      * @param SlugInterface             $slugService
      */
     public function __construct(
         Connection $connection,
         ModelManager $models,
-        MediaService $mediaService,
         \Enlight_Template_Manager $template,
         SlugInterface $slugService
     ) {
         $this->connection = $connection;
         $this->models = $models;
-        $this->mediaService = $mediaService;
         $this->template = $template;
         $this->slugService = $slugService;
     }
@@ -259,12 +250,11 @@ class EmotionPreset extends Resource
                 'thumbnail' => $preset['thumbnail'],
                 'preview' => $preset['preview'],
                 'presetData' => $preset['presetData'],
-                'thumbnailUrl' => $this->getPresetImageUrl($preset['thumbnail']),
-                'previewUrl' => $this->getPresetImageUrl($preset['preview']),
                 'requiredPlugins' => $this->getPluginsForPreset($preset, $localPlugins),
             ];
 
-            $result[] = array_merge($data, $this->extractTranslation($preset['translations'], $locale));
+            $translation = $this->extractTranslation($preset['translations'], $locale);
+            $result[] = array_merge($data, $translation);
         }
 
         return $result;
@@ -281,6 +271,8 @@ class EmotionPreset extends Resource
         /** @var array $translation */
         foreach ($translations as $translation) {
             if ($translation['locale'] === $locale) {
+                unset($translation['id']);
+
                 return $translation;
             }
         }
@@ -289,23 +281,9 @@ class EmotionPreset extends Resource
     }
 
     /**
-     * @param string $path
-     *
-     * @return null|string
-     */
-    private function getPresetImageUrl($path)
-    {
-        if (strpos($path, 'media') === 0) {
-            return $this->mediaService->getUrl($path);
-        }
-
-        return $this->template->fetch(sprintf('string:{url file="%s"}', $path));
-    }
-
-    /**
      * Get detailed plugin information by plugin ids
      *
-     * @param array $pluginIds
+     * @param int[] $pluginIds
      *
      * @return array
      */

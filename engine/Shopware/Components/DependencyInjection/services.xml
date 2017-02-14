@@ -593,7 +593,6 @@
         <service id="shopware.api.emotionpreset" class="Shopware\Components\Api\Resource\EmotionPreset" shared="false">
             <argument type="service" id="dbal_connection" />
             <argument type="service" id="models" />
-            <argument type="service" id="shopware_media.media_service" />
             <argument type="service" id="template" />
             <argument type="service" id="shopware.slug" />
         </service>
