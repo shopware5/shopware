@@ -136,6 +136,24 @@ class Inheritance
     }
 
     /**
+     * Returns the inheritance-path of a given shop theme as an array of
+     * template-names. The names are sorted descending in priority.
+     * @param \Shopware\Models\Shop\Template $template
+     * @return array
+     */
+    public function getInheritancePath(Shop\Template $template)
+    {
+        $hierarchy = $this->buildInheritanceRecursive($template);
+        $path = [];
+
+        foreach ($hierarchy as $template) {
+            $path[] = $template->getTemplate();
+        }
+
+        return $path;
+    }
+
+    /**
      * Returns the shop theme configuration for the passed template.
      * The configuration is built recursive to include the configuration
      * of the template inheritance.

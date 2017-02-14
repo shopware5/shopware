@@ -6,7 +6,10 @@ module.exports = function (grunt) {
         jsFiles = [],
         jsTargetFile = {},
         content = '',
-        variables = {};
+        variables = {},
+        inheritancePath = config.config['shopware-theme-inheritance'],
+        themesTasks = {},
+        path = require('path');
 
     lessTargetFile['../' + config.lessTarget] = '../web/cache/all.less';
 
@@ -19,6 +22,15 @@ module.exports = function (grunt) {
         content += `@import "../${item}";`;
     });
     grunt.file.write('../web/cache/all.less', content);
+
+    inheritancePath.forEach(function (item) {
+        var folderPath = path.join('Frontend', item);
+        if (!grunt.file.exists(folderPath, 'Gruntfile.js')) {
+            return;
+        }
+        themesTasks[item] = {};
+        themesTasks[item][folderPath] = 'default';
+    });
 
     for (var key in config.config) {
         variables[key] = config.config[key];
@@ -93,15 +105,18 @@ module.exports = function (grunt) {
                 'Gruntfile.js',
                 'Frontend/Responsive/frontend/_public/src/js/*.js'
             ]
-        }
+        },
+        themes: themesTasks
     });
 
     grunt.loadNpmTasks('grunt-contrib-less');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-chokidar');
     grunt.loadNpmTasks('gruntify-eslint');
+    grunt.loadNpmTasks('grunt-subgrunt');
 
     grunt.renameTask('chokidar', 'watch');
+    grunt.renameTask('subgrunt', 'themes');
     grunt.registerTask('production', [ 'eslint', 'less:production', 'uglify:production' ]);
     grunt.registerTask('default', [ 'less:development', 'uglify:development', 'watch' ]);
 };
