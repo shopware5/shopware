@@ -154,9 +154,11 @@ class Inheritance
 
         $templates = $this->filterAffectedTemplates($template->getId(), $templates);
 
+        $shopId = $shop->getMain() ? $shop->getMain()->getId() : $shop->getId();
+
         $configs = $this->getConfigs(
             array_keys($templates),
-            $shop->getId(),
+            $shopId,
             $lessCompatible
         );
 
