@@ -51,7 +51,7 @@ class Preset extends ModelEntity
     /**
      * @ORM\OneToMany(targetEntity="Shopware\Models\Emotion\PresetRequirement", mappedBy="preset", orphanRemoval=true, cascade={"persist"})
      *
-     * @var
+     * @var \Doctrine\Common\Collections\ArrayCollection
      */
     protected $requiredPlugins;
 

@@ -25,11 +25,10 @@
 namespace Shopware\Tests\Functional\Components\Api;
 
 use Doctrine\DBAL\Connection;
-use PHPUnit\Framework\TestCase;
 use Shopware\Components\Api\Resource\EmotionPreset;
 use Shopware\Models\Emotion\Preset;
 
-class EmotionPresetTest extends TestCase
+class EmotionPresetTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Connection
@@ -230,6 +229,50 @@ class EmotionPresetTest extends TestCase
             ],
             $presets
         );
+    }
+
+    public function testCreateWithTranslation()
+    {
+        $preset = $this->resource->create([
+            'name' => 'Test preset',
+            'presetData' => json_encode([]),
+            'translations' => [
+                ['locale' => 'de_DE', 'label' => 'German', 'description' => 'German'],
+                ['locale' => 'en_GB', 'label' => 'English', 'description' => 'English'],
+            ],
+        ]);
+
+        $this->assertNotNull($preset->getId());
+        $english = array_shift($this->resource->getList('en_GB'));
+
+        $english = $this->removeIds($english);
+        $this->assertSame([
+            'name' => 'Test-preset',
+            'label' => 'English',
+            'description' => 'English',
+            'premium' => false,
+            'custom' => true,
+            'thumbnail' => null,
+            'preview' => null,
+            'presetData' => '[]',
+            'requiredPlugins' => [],
+            'locale' => 'en_GB',
+        ], $english);
+
+        $german = array_shift($this->resource->getList('de_DE'));
+        $german = $this->removeIds($german);
+        $this->assertSame([
+            'name' => 'Test-preset',
+            'label' => 'German',
+            'description' => 'German',
+            'premium' => false,
+            'custom' => true,
+            'thumbnail' => null,
+            'preview' => null,
+            'presetData' => '[]',
+            'requiredPlugins' => [],
+            'locale' => 'de_DE',
+        ], $german);
     }
 
     public function testUpdate()
