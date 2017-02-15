@@ -5,6 +5,7 @@ This changelog references changes done in Shopware 5.2 patch versions.
 ## 5.2.19
 * Changed the loading of backend widgets to disable widgets of deactivated plugins
 * Added new Event `Shopware_Modules_Admin_regenerateSessionId_Start` in sAdmin::regenerateSessionId
+* Changed `convertCategory` method in `engine/Shopware/Core/sCategories.php` from private to public
 
 ## 5.2.17
 [View all changes from v5.2.16...v5.2.17](https://github.com/shopware/shopware/compare/v5.2.16...v5.2.17)
