@@ -162,7 +162,7 @@ class Shopware_Components_TemplateMail
                 'sShop' => $config->get('shopName'),
                 'sShopURL' => 'http://' . $config->basePath,
             );
-            $isoCode = $this->getShop()->get('isocode');
+            $isoCode = $this->getShop()->getId();
             $translationReader = $this->getTranslationReader();
             $translation = $translationReader->read($isoCode, 'config_mails', $mailModel->getId());
             $mailModel->setTranslation($translation);
