@@ -113,12 +113,40 @@ Ext.define('Shopware.apps.Emotion.view.presets.List', {
                 handler: function() {
                     me.fireEvent('deletepreset', me.store, me.selectedPreset);
                 }
+            }, '->', {
+                xtype: 'textfield',
+                cls: 'searchfield',
+                emptyText: '{s name=search}Search...{/s}',
+                width: 170,
+                enableKeyEvents: true,
+                listeners: {
+                    change: Ext.bind(me.search, me)
+                }
             }]
         });
 
         return [
             me.topToolbar
         ];
+    },
+
+    /**
+     * @param { Ext.form.field.Text } field
+     * @param { string } term
+     */
+    search: function(field, term) {
+        var me = this;
+        term = term.trim();
+        if (term.length <= 0) {
+            me.store.clearFilter();
+            return;
+        }
+
+        me.store.filter({
+            filterFn: function(item) {
+                return item.get('name').toLowerCase().indexOf(term.toLowerCase()) >= 0;
+            }
+        });
     },
 
     setSelectedPreset: function(view, record, item, index, e) {
