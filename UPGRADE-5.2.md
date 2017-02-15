@@ -7,6 +7,11 @@ This changelog references changes done in Shopware 5.2 patch versions.
 * Added new Event `Shopware_Modules_Admin_regenerateSessionId_Start` in sAdmin::regenerateSessionId
 * Changed `convertCategory` method in `engine/Shopware/Core/sCategories.php` from private to public
 * Added left join of `s_order_basket_attributes` in `sAdmin::sGetDispatchBasket()` and `sExport::sGetDispatchBasket()`
+* Added event `blog-save-successfully` to `onSaveBlogArticle()` method in `themes/Backend/ExtJs/backend/blog/controller/blog.js`
+* Added event `customer-address-save-successfully` to `onSaveCustomer()` method in `themes/Backend/ExtJs/backend/customer/controller/detail.js`
+* Added event `customer-save-successfully` to  `onSaveCustomer()` method in `themes/Backend/ExtJs/backend/customer/controller/detail.js`
+* Added event `site-save-successfully` to `onSaveSite()` method in `themes/Backend/ExtJs/backend/site/controller/form.js`
+* Added event `supplier-save-successfully` to `onSupplierSave()` method in `themes/Backend/ExtJs/backend/supplier/controller/main.js`
 
 ## 5.2.17
 [View all changes from v5.2.16...v5.2.17](https://github.com/shopware/shopware/compare/v5.2.16...v5.2.17)
