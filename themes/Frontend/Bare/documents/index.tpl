@@ -74,7 +74,11 @@ td.head  {
 </head>
 
 <body>
-{foreach from=$Pages item=postions name="pagingLoop" key=page}
+{foreach from=$Pages item=positions name="pagingLoop" key=page}
+
+    {* @Deprecated: Wrong variable will be removed in next major release *}
+    {$postions = $positions}
+
     <div id="head_logo">
         {$Containers.Logo.value}
     </div>
@@ -193,7 +197,7 @@ td.head  {
             {/if}
         {/block}
     </tr>
-    {foreach from=$postions item=position key=number}
+    {foreach from=$positions item=position key=number}
     {block name="document_index_table_each"}
     <tr>
         {block name="document_index_table_pos"}
