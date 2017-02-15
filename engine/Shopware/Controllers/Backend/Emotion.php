@@ -27,7 +27,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Emotion\Emotion;
 use Shopware\Models\Emotion\Library\Field;
-use Shopware\Models\Emotion\Preset;
 use Shopware\Models\Shop\Shop;
 
 class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_ExtJs
@@ -585,46 +584,6 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
         );
     }
 
-    public function getPresetsAction()
-    {
-        $resource = $this->container->get('shopware.api.emotionpreset');
-
-        $this->View()->assign([
-            'success' => true,
-            'data' => $resource->getList($this->getLocale()),
-        ]);
-    }
-
-    /**
-     * Model event listener function which fired when the user configure an emotion preset over the backend
-     * module and clicks the save button.
-     */
-    public function savePresetAction()
-    {
-        $resource = $this->container->get('shopware.api.emotionpreset');
-
-        $data = $this->Request()->getParams();
-
-        if ($data['id']) {
-            $resource->update($data['id'], $data, $this->getLocale());
-        } else {
-            $resource->create($data, $this->getLocale());
-        }
-
-        $this->View()->assign(['success' => true]);
-    }
-
-    public function deletePresetAction()
-    {
-        $id = $this->Request()->getParam('id');
-
-        $resource = $this->container->get('shopware.api.emotionpreset');
-
-        $resource->delete($id);
-
-        $this->View()->assign(['success' => true]);
-    }
-
     protected function initAcl()
     {
         $this->addAclPermission('list', 'read', 'Insufficient Permissions');
@@ -905,14 +864,6 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
         return $builder->getQuery()->getOneOrNullResult(
             \Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY
         );
-    }
-
-    /**
-     * @return string
-     */
-    private function getLocale()
-    {
-        return $this->container->get('Auth')->getIdentity()->locale->getLocale();
     }
 
     /**
