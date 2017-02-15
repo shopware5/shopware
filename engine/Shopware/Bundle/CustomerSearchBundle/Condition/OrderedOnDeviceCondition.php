@@ -22,7 +22,6 @@
  * our trademarks remain entirely with us.
  */
 
-
 namespace Shopware\Bundle\CustomerSearchBundle\Condition;
 
 use Shopware\Bundle\SearchBundle\ConditionInterface;

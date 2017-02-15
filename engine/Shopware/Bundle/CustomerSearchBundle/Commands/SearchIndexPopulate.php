@@ -24,7 +24,8 @@
 
 namespace Shopware\Bundle\CustomerSearchBundle\Commands;
 
-use Doctrine\DBAL\Connection;
+use Shopware\Bundle\CustomerSearchBundle\CustomerStream\AnalyzedCustomerStruct;
+use Shopware\Bundle\CustomerSearchBundle\Gateway\InterestsStruct;
 use Shopware\Bundle\ESIndexingBundle\Console\ConsoleProgressHelper;
 use Shopware\Bundle\ESIndexingBundle\LastIdQuery;
 use Shopware\Commands\ShopwareCommand;
@@ -34,7 +35,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * @category  Shopware
- * @package   Shopware\Components\Console\Commands
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class SearchIndexPopulate extends ShopwareCommand
@@ -58,21 +59,19 @@ class SearchIndexPopulate extends ShopwareCommand
     {
         $query = $this->createQuery();
 
-        $gateway = $this->container->get('shopware_customer_search.customer_list_gateway');
+        $provider = $this->container->get('shopware_bundle_customer_search.customer_stream.customer_provider');
 
         $helper = new ConsoleProgressHelper($output);
         $helper->start($query->fetchCount(), 'Start indexing stream search data');
 
         $this->container->get('dbal_connection')->beginTransaction();
 
-        $this->container->get('dbal_connection')->executeUpdate(
-            "DELETE FROM s_customer_search_index"
-        );
+        $this->container->get('dbal_connection')->executeUpdate('DELETE FROM s_customer_search_index');
 
         $insert = $this->createInsertQuery();
 
         while ($ids = $query->fetch()) {
-            $customers = $gateway->getList($ids);
+            $customers = $provider->get($ids);
 
             foreach ($customers as $customer) {
                 $insert->execute($this->buildData($customer));
@@ -86,6 +85,76 @@ class SearchIndexPopulate extends ShopwareCommand
         $helper->finish();
     }
 
+    /**
+     * @param $customer
+     *
+     * @return array
+     */
+    protected function buildData(AnalyzedCustomerStruct $customer)
+    {
+        $data = [
+            'id' => $customer->getId(),
+            'email' => $customer->getEmail(),
+            'active' => $customer->getActive(),
+            'accountmode' => $customer->getAccountMode(),
+            'firstlogin' => $this->formatDate($customer->getFirstLogin()),
+            'newsletter' => $customer->isNewsletter(),
+            'shopId' => $customer->getShopId(),
+            'default_billing_address_id' => $customer->getDefaultBillingAddressId(),
+            'title' => $customer->getTitle(),
+            'salutation' => $customer->getSalutation(),
+            'firstname' => $customer->getFirstname(),
+            'lastname' => $customer->getLastname(),
+            'birthday' => $this->formatDate($customer->getBirthday()),
+            'customernumber' => $customer->getNumber(),
+            'customerGroupId' => $customer->getCustomerGroup()->getId(),
+            'customerGroup' => $customer->getCustomerGroup()->getName(),
+            'paymentId' => $customer->getPaymentId(),
+            'payment' => $customer->getPayment() ? $customer->getPayment()->getName() : null,
+            'shop' => $customer->getShopId(),
+            'company' => $customer->getBillingAddress()->getCompany(),
+            'department' => $customer->getBillingAddress()->getDepartment(),
+            'street' => $customer->getBillingAddress()->getStreet(),
+            'zipcode' => $customer->getBillingAddress()->getZipcode(),
+            'city' => $customer->getBillingAddress()->getCity(),
+            'phone' => $customer->getBillingAddress()->getPhone(),
+            'additional_address_line1' => $customer->getBillingAddress()->getAdditionalAddressLine1(),
+            'additional_address_line2' => $customer->getBillingAddress()->getAdditionalAddressLine2(),
+            'countryId' => $customer->getBillingAddress()->getCountryId(),
+            'country' => $customer->getBillingAddress()->getCountry()->getName(),
+            'stateId' => $customer->getBillingAddress()->getStateId(),
+            'state' => $customer->getBillingAddress()->getState() ? $customer->getBillingAddress()->getState()->getName() : null,
+            'age' => $customer->getAge(),
+            'count_orders' => $customer->getOrderInformation()->getOrderCount(),
+            'product_avg' => $customer->getOrderInformation()->getAvgProductPrice(),
+            'invoice_amount_sum' => $customer->getOrderInformation()->getTotalAmount(),
+            'invoice_amount_avg' => $customer->getOrderInformation()->getAvgAmount(),
+            'invoice_amount_min' => $customer->getOrderInformation()->getMinAmount(),
+            'invoice_amount_max' => $customer->getOrderInformation()->getMaxAmount(),
+            'first_order_time' => $this->formatDate($customer->getOrderInformation()->getFirstOrderTime()),
+            'last_order_time' => $this->formatDate($customer->getOrderInformation()->getLastOrderTime()),
+            'products' => $this->implodeUnique(
+                array_map(function (InterestsStruct $interest) {
+                    return $interest->getProductNumber();
+                }, $customer->getInterests())
+            ),
+            'categories' => $this->implodeUnique(
+                array_map(function (InterestsStruct $interest) {
+                    return $interest->getCategoryId();
+                }, $customer->getInterests())
+            ),
+            'manufacturers' => $this->implodeUnique(
+                array_map(function (InterestsStruct $interest) {
+                    return $interest->getManufacturerId();
+                }, $customer->getInterests())
+            ),
+            'interests' => json_encode(array_slice($customer->getInterests(), 0, 5)),
+            'newest_interests' => json_encode(array_slice($customer->getNewestInterests(), 0, 5)),
+        ];
+
+        return $data;
+    }
+
     private function createQuery()
     {
         $query = $this->container->get('dbal_connection')->createQueryBuilder();
@@ -94,14 +163,15 @@ class SearchIndexPopulate extends ShopwareCommand
         $query->where('u.id > :lastId');
         $query->setParameter(':lastId', 0);
         $query->orderBy('u.id', 'ASC');
-        $query->setMaxResults(100);
+        $query->setMaxResults(50);
+
         return new LastIdQuery($query);
     }
 
     private function createInsertQuery()
     {
         return $this->container->get('dbal_connection')->prepare(
-            "INSERT INTO s_customer_search_index (
+            'INSERT INTO s_customer_search_index (
                 id,
                 email,
                 active,
@@ -145,7 +215,8 @@ class SearchIndexPopulate extends ShopwareCommand
                 products,
                 categories,
                 manufacturers,
-                interests
+                interests,
+                newest_interests
             ) VALUES (
                 :id,
                 :email,
@@ -190,10 +261,11 @@ class SearchIndexPopulate extends ShopwareCommand
                 :products,
                 :categories,
                 :manufacturers,
-                :interests)
-      ");
+                :interests,
+                :newest_interests
+            )
+      ');
     }
-
 
     private function implodeUnique($array)
     {
@@ -205,58 +277,17 @@ class SearchIndexPopulate extends ShopwareCommand
     }
 
     /**
-     * @param $customer
-     * @return array
+     * @param \DateTime|null $date
+     * @param string         $format
+     *
+     * @return null|string
      */
-    protected function buildData($customer)
+    private function formatDate(\DateTime $date = null, $format = 'Y-m-d H:i:s')
     {
-        $data = [
-            'id' => $customer['id'],
-            'email' => $customer['email'],
-            'active' => $customer['active'],
-            'accountmode' => $customer['accountmode'],
-            'firstlogin' => $customer['firstlogin'],
-            'newsletter' => $customer['newsletter'],
-            'shopId' => $customer['shopId'],
-            'default_billing_address_id' => $customer['default_billing_address_id'],
-            'title' => $customer['title'],
-            'salutation' => $customer['salutation'],
-            'firstname' => $customer['firstname'],
-            'lastname' => $customer['lastname'],
-            'birthday' => $customer['birthday'],
-            'customernumber' => $customer['customernumber'],
-            'customerGroupId' => $customer['customerGroupId'],
-            'customerGroup' => $customer['customerGroup'],
-            'paymentId' => $customer['paymentId'],
-            'payment' => $customer['payment'],
-            'shop' => $customer['shop'],
-            'company' => $customer['company'],
-            'department' => $customer['department'],
-            'street' => $customer['street'],
-            'zipcode' => $customer['zipcode'],
-            'city' => $customer['city'],
-            'phone' => $customer['phone'],
-            'additional_address_line1' => $customer['additional_address_line1'],
-            'additional_address_line2' => $customer['additional_address_line2'],
-            'countryId' => $customer['countryId'],
-            'country' => $customer['country'],
-            'stateId' => $customer['stateId'],
-            'state' => $customer['state'],
-            'age' => $customer['age'],
-            'count_orders' => $customer['aggregation']['count_orders'],
-            'product_avg' => $customer['aggregation']['product_avg'],
-            'invoice_amount_sum' => $customer['aggregation']['invoice_amount_sum'],
-            'invoice_amount_avg' => $customer['aggregation']['invoice_amount_avg'],
-            'invoice_amount_min' => $customer['aggregation']['invoice_amount_min'],
-            'invoice_amount_max' => $customer['aggregation']['invoice_amount_max'],
-            'first_order_time' => $customer['aggregation']['first_order_time'],
-            'last_order_time' => $customer['aggregation']['last_order_time'],
-            'products' => $this->implodeUnique(array_column($customer['interests'], 'articleordernumber')),
-            'categories' => $this->implodeUnique(array_column($customer['interests'], 'categoryId')),
-            'manufacturers' => $this->implodeUnique(array_column($customer['interests'], 'manufacturerId')),
-            'interests' => json_encode(array_slice($customer['interests'], 0, 10))
-        ];
+        if ($date === null) {
+            return null;
+        }
 
-        return $data;
+        return $date->format($format);
     }
 }

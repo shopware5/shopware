@@ -25,10 +25,10 @@
 namespace Shopware\Bundle\CustomerSearchBundle\CustomerStream;
 
 use Doctrine\DBAL\Connection;
+use Shopware\Bundle\CustomerSearchBundle\Criteria;
 use Shopware\Bundle\CustomerSearchBundle\CustomerNumberSearch;
 use Shopware\Bundle\CustomerSearchBundle\CustomerNumberSearchResult;
 use Shopware\Bundle\ESIndexingBundle\Console\ProgressHelperInterface;
-use Shopware\Bundle\CustomerSearchBundle\Criteria;
 
 class StreamIndexer
 {
@@ -49,8 +49,8 @@ class StreamIndexer
 
     /**
      * @param CustomerStreamCriteriaFactory $criteriaFactory
-     * @param CustomerNumberSearch $numberSearch
-     * @param Connection $connection
+     * @param CustomerNumberSearch          $numberSearch
+     * @param Connection                    $connection
      */
     public function __construct(
         CustomerStreamCriteriaFactory $criteriaFactory,
@@ -63,7 +63,7 @@ class StreamIndexer
     }
 
     /**
-     * @param int $streamId
+     * @param int                     $streamId
      * @param ProgressHelperInterface $helper
      */
     public function populate($streamId, ProgressHelperInterface $helper)
@@ -82,7 +82,7 @@ class StreamIndexer
                 foreach ($customers->getIds() as $customerId) {
                     $this->connection->insert('s_customer_streams_mapping', [
                         'stream_id' => $streamId,
-                        'customer_id' => $customerId
+                        'customer_id' => $customerId,
                     ]);
                 }
 
@@ -96,8 +96,9 @@ class StreamIndexer
     }
 
     /**
-     * @param int $streamId
+     * @param int      $streamId
      * @param Criteria $criteria
+     *
      * @return CustomerNumberSearchResult
      */
     public function populatePartial($streamId, Criteria $criteria)
@@ -107,9 +108,10 @@ class StreamIndexer
         foreach ($result->getIds() as $customerId) {
             $this->connection->insert('s_customer_streams_mapping', [
                 'stream_id' => $streamId,
-                'customer_id' => $customerId
+                'customer_id' => $customerId,
             ]);
         }
+
         return $result;
     }
 
@@ -119,7 +121,7 @@ class StreamIndexer
     public function clearStreamIndex($streamId)
     {
         $this->connection->delete('s_customer_streams_mapping', [
-            'stream_id' => $streamId
+            'stream_id' => $streamId,
         ]);
     }
 }

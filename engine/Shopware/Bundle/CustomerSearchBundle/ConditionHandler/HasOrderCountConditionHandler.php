@@ -24,11 +24,11 @@
 
 namespace Shopware\Bundle\CustomerSearchBundle\ConditionHandler;
 
-use Shopware\Bundle\CustomerSearchBundle\ConditionHandler\Common\AggregatedOrderTable;
-use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 use Shopware\Bundle\CustomerSearchBundle\Condition\HasOrderCountCondition;
+use Shopware\Bundle\CustomerSearchBundle\ConditionHandler\Common\AggregatedOrderTable;
 use Shopware\Bundle\CustomerSearchBundle\ConditionHandlerInterface;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
+use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 
 class HasOrderCountConditionHandler implements ConditionHandlerInterface
 {
@@ -52,14 +52,15 @@ class HasOrderCountConditionHandler implements ConditionHandlerInterface
 
     /**
      * @param ConditionInterface $condition
-     * @param QueryBuilder $query
+     * @param QueryBuilder       $query
      */
     public function handle(ConditionInterface $condition, QueryBuilder $query)
     {
         $query->andWhere('customer.count_orders >= :HasOrderCountCondition');
 
-        /** @var HasOrderCountCondition $condition */
+        /* @var HasOrderCountCondition $condition */
         $query->setParameter(':HasOrderCountCondition', $condition->getMinimumOrderCount());
+
         return;
 
         if (!$query->hasState(AggregatedOrderTable::JOINED_STATE)) {
@@ -67,7 +68,7 @@ class HasOrderCountConditionHandler implements ConditionHandlerInterface
 
             $query->innerJoin(
                 'customer',
-                '( '. $orderTable->getSQL() .' )',
+                '( ' . $orderTable->getSQL() . ' )',
                 'order_aggregation',
                 'order_aggregation.customer_id = customer.id'
             );
@@ -76,7 +77,7 @@ class HasOrderCountConditionHandler implements ConditionHandlerInterface
 
         $query->andWhere('order_aggregation.count_orders >= :HasOrderCountCondition');
 
-        /** @var HasOrderCountCondition $condition */
+        /* @var HasOrderCountCondition $condition */
         $query->setParameter(':HasOrderCountCondition', $condition->getMinimumOrderCount());
     }
 }

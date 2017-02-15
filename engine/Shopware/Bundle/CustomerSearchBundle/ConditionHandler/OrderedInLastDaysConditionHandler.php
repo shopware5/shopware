@@ -24,10 +24,10 @@
 
 namespace Shopware\Bundle\CustomerSearchBundle\ConditionHandler;
 
-use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 use Shopware\Bundle\CustomerSearchBundle\Condition\OrderedInLastDaysCondition;
 use Shopware\Bundle\CustomerSearchBundle\ConditionHandlerInterface;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
+use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 
 class OrderedInLastDaysConditionHandler implements ConditionHandlerInterface
 {
@@ -43,6 +43,7 @@ class OrderedInLastDaysConditionHandler implements ConditionHandlerInterface
         $date = new \DateTime();
         $date->sub(new \DateInterval('P' . $condition->getLastDays() . 'D'));
         $query->setParameter(':OrderedInLastDaysCondition', $date->format('Y-m-d H:i:s'));
+
         return;
 
         $query->innerJoin(

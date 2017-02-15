@@ -25,10 +25,10 @@
 namespace Shopware\Bundle\CustomerSearchBundle\ConditionHandler;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 use Shopware\Bundle\CustomerSearchBundle\Condition\OrderedWithDeliveryCondition;
 use Shopware\Bundle\CustomerSearchBundle\ConditionHandlerInterface;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
+use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 
 class OrderedWithDeliveryConditionHandler implements ConditionHandlerInterface
 {
@@ -47,7 +47,7 @@ class OrderedWithDeliveryConditionHandler implements ConditionHandlerInterface
              AND orderedWithDelivery.dispatchID IN (:OrderedWithDeliveryCondition)'
         );
 
-        /** @var OrderedWithDeliveryCondition $condition */
+        /* @var OrderedWithDeliveryCondition $condition */
         $query->setParameter(':OrderedWithDeliveryCondition', $condition->getDispatchIds(), Connection::PARAM_INT_ARRAY);
     }
 }

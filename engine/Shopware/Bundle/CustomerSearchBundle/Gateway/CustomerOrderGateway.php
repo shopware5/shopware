@@ -1,4 +1,26 @@
 <?php
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
 
 namespace Shopware\Bundle\CustomerSearchBundle\Gateway;
 
@@ -17,7 +39,7 @@ class CustomerOrderGateway
     private $hydrator;
 
     /**
-     * @param Connection $connection
+     * @param Connection            $connection
      * @param CustomerOrderHydrator $hydrator
      */
     public function __construct(Connection $connection, CustomerOrderHydrator $hydrator)
@@ -28,6 +50,7 @@ class CustomerOrderGateway
 
     /**
      * @param int[] $customerIds
+     *
      * @return CustomerOrderStruct[] indexed by customer id
      */
     public function getList($customerIds)
@@ -40,13 +63,16 @@ class CustomerOrderGateway
                 $structs[$customerId] = new CustomerOrderStruct();
                 continue;
             }
+
             $structs[$customerId] = $this->hydrator->hydrate($data[$customerId]);
         }
+
         return $structs;
     }
 
     /**
      * @param int[] $ids
+     *
      * @return array
      */
     private function getCustomerOrders($ids)
@@ -67,14 +93,18 @@ class CustomerOrderGateway
             "GROUP_CONCAT(DISTINCT orders.subshopID SEPARATOR ',') as ordered_in_shops",
             "GROUP_CONCAT(DISTINCT orders.deviceType SEPARATOR ',') as ordered_with_devices",
             "GROUP_CONCAT(DISTINCT LOWER(DAYNAME(orders.ordertime)) SEPARATOR ',') as weekdays",
-            '(SELECT 1 FROM s_order o2 WHERE status = -1 AND o2.userID = orders.userID LIMIT 1) as has_canceled_orders'
+            '(SELECT 1 FROM s_order o2 WHERE status = -1 AND o2.userID = orders.userID LIMIT 1) as has_canceled_orders',
         ]);
         $query->from('s_order', 'orders');
-        $query->where('orders.ordernumber != 0');
+        $query->andWhere('orders.status != :cancelStatus');
+        $query->andWhere('orders.ordernumber IS NOT NULL');
+        $query->andWhere('orders.ordernumber != 0');
         $query->innerJoin('orders', 's_order_details', 'details', 'details.orderID = orders.id AND details.modus = 0');
-        $query->where('orders.userID IN (:ids)');
+        $query->andWhere('orders.userID IN (:ids)');
+        $query->setParameter(':cancelStatus', -1);
         $query->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
         $query->groupBy('orders.userID');
-        return $query->execute()->fetchAll(\PDO::FETCH_GROUP|\PDO::FETCH_UNIQUE);
+
+        return $query->execute()->fetchAll(\PDO::FETCH_GROUP | \PDO::FETCH_UNIQUE);
     }
 }

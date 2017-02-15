@@ -25,10 +25,10 @@
 namespace Shopware\Bundle\CustomerSearchBundle\ConditionHandler;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 use Shopware\Bundle\CustomerSearchBundle\Condition\OrderedOnDeviceCondition;
 use Shopware\Bundle\CustomerSearchBundle\ConditionHandlerInterface;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
+use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 
 class OrderedOnDeviceConditionHandler implements ConditionHandlerInterface
 {
@@ -47,7 +47,7 @@ class OrderedOnDeviceConditionHandler implements ConditionHandlerInterface
              AND orderedOnDevice.deviceType IN (:OrderedOnDeviceCondition)'
         );
 
-        /** @var OrderedOnDeviceCondition $condition */
+        /* @var OrderedOnDeviceCondition $condition */
         $query->setParameter(':OrderedOnDeviceCondition', $condition->getDevices(), Connection::PARAM_STR_ARRAY);
     }
 }

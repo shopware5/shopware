@@ -17,6 +17,11 @@
             <argument id="shopware_bundle_customer_search.gateway.address_gateway" type="service"/>
         </service>
 
+        <service class="Shopware\Bundle\CustomerSearchBundle\Gateway\PaymentHydrator" id="shopware_bundle_customer_search.gateway.payment_hydrator">
+            <argument id="shopware_storefront.attribute_hydrator_dbal" type="service"/>
+        </service>
+
+
         <service class="Shopware\Bundle\CustomerSearchBundle\Gateway\CustomerInterestsGateway" id="shopware_bundle_customer_search.gateway.customer_interests_gateway">
             <argument id="dbal_connection" type="service"/>
         </service>
@@ -30,6 +35,7 @@
         <service class="Shopware\Bundle\CustomerSearchBundle\Gateway\CustomerHydrator" id="shopware_bundle_customer_search.gateway.customer_hydrator">
             <argument id="shopware_storefront.attribute_hydrator_dbal" type="service"/>
             <argument id="shopware_storefront.customer_group_hydrator_dbal" type="service"/>
+            <argument id="shopware_bundle_customer_search.gateway.payment_hydrator" type="service"/>
         </service>
 
         <service class="Shopware\Bundle\CustomerSearchBundle\Gateway\AddressGateway" id="shopware_bundle_customer_search.gateway.address_gateway">
@@ -50,11 +56,16 @@
 
         <service class="Shopware\Bundle\CustomerSearchBundle\Gateway\CustomerOrderHydrator" id="shopware_bundle_customer_search.gateway.customer_order_hydrator"/>
 
+        <service class="Shopware\Bundle\CustomerSearchBundle\CustomerStream\SearchIndexer" id="shopware_bundle_customer_search.customer_stream.search_indexer">
+            <argument id="dbal_connection" type="service"/>
+            <argument id="shopware_bundle_customer_search.customer_stream.customer_provider" type="service"/>
+        </service>
 
 
         <service id="shopware_customer_search.customer_number_search" class="Shopware\Bundle\CustomerSearchBundle\CustomerNumberSearch">
             <argument type="service" id="shopware_customer_search.handler_registry"/>
             <argument type="service" id="dbal_connection"/>
+            <argument type="service" id="shopware_storefront.field_helper_dbal"/>
         </service>
 
         <service id="shopware_customer_search.handler_registry" class="Shopware\Bundle\CustomerSearchBundle\HandlerRegistry">

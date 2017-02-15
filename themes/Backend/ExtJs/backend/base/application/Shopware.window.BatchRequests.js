@@ -5,11 +5,11 @@
 
 Ext.define('Shopware.window.BatchRequests', {
     extend: 'Ext.window.Window',
-    modal: true,
+    modal: false,
     bodyPadding: 20,
     requests: [],
     autoClose: true,
-    closeDelay: 750,
+    closeDelay: 50,
 
     initComponent: function() {
         var me = this,
@@ -29,7 +29,6 @@ Ext.define('Shopware.window.BatchRequests', {
 
         Ext.each(requests, function(request) {
             request.progressBar = Ext.create('Ext.ProgressBar', {
-                animate: true,
                 text: request.text,
                 value: 0,
                 height: 20,
@@ -120,18 +119,27 @@ Ext.define('Shopware.window.BatchRequests', {
         var me = this;
 
         me.cancelButton.disable();
-        if (me.autoClose) {
-            Ext.defer(Ext.bind(me.destroy, me), me.closeDelay);
+        me.closeWindow();
+    },
+
+    closeWindow: function() {
+        var me = this;
+
+        if (!me.autoClose) {
+            me.fireEvent('finish');
+            return;
         }
+
+        Ext.defer(function() {
+            me.fireEvent('finish');
+            me.destroy();
+        }, me.closeDelay);
     },
 
     canceled: function() {
         var me = this;
-
         me.cancelButton.disable();
-        if (me.autoClose) {
-            Ext.defer(Ext.bind(me.destroy, me), me.closeDelay);
-        }
+        me.closeWindow();
     },
 
     createToolbar: function () {

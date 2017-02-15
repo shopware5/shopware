@@ -22,7 +22,6 @@
  * our trademarks remain entirely with us.
  */
 
-
 namespace Shopware\Bundle\CustomerSearchBundle\ConditionHandler\Common;
 
 use Doctrine\DBAL\Connection;

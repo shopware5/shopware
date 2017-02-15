@@ -22,7 +22,6 @@
  * our trademarks remain entirely with us.
  */
 
-
 namespace Shopware\Bundle\CustomerSearchBundle\Condition;
 
 use Shopware\Bundle\SearchBundle\ConditionInterface;
@@ -44,7 +43,6 @@ class IsCustomerSinceCondition implements ConditionInterface
         }
         $this->customerSince = $customerSince;
     }
-
 
     public function getName()
     {

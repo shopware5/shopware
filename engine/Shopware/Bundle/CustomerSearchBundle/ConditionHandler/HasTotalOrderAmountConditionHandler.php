@@ -24,11 +24,11 @@
 
 namespace Shopware\Bundle\CustomerSearchBundle\ConditionHandler;
 
-use Shopware\Bundle\CustomerSearchBundle\ConditionHandler\Common\AggregatedOrderTable;
-use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 use Shopware\Bundle\CustomerSearchBundle\Condition\HasTotalOrderAmountCondition;
+use Shopware\Bundle\CustomerSearchBundle\ConditionHandler\Common\AggregatedOrderTable;
 use Shopware\Bundle\CustomerSearchBundle\ConditionHandlerInterface;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
+use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 
 class HasTotalOrderAmountConditionHandler implements ConditionHandlerInterface
 {
@@ -47,23 +47,22 @@ class HasTotalOrderAmountConditionHandler implements ConditionHandlerInterface
 
     /**
      * @param ConditionInterface $condition
-     * @param QueryBuilder $query
+     * @param QueryBuilder       $query
      */
     public function handle(ConditionInterface $condition, QueryBuilder $query)
     {
         $query->andWhere('customer.invoice_amount_sum >= :HasTotalOrderAmountCondition');
 
-        /** @var HasTotalOrderAmountCondition $condition */
+        /* @var HasTotalOrderAmountCondition $condition */
         $query->setParameter(':HasTotalOrderAmountCondition', $condition->getMinimumOrderAmount());
+
         return;
-
-
 
         if (!$query->hasState(AggregatedOrderTable::JOINED_STATE)) {
             $orderTable = $this->aggregatedOrderTable->getQuery();
             $query->innerJoin(
                 'customer',
-                '( '. $orderTable->getSQL() .' )',
+                '( ' . $orderTable->getSQL() . ' )',
                 'order_aggregation',
                 'order_aggregation.customer_id = customer.id'
             );
@@ -72,7 +71,7 @@ class HasTotalOrderAmountConditionHandler implements ConditionHandlerInterface
 
         $query->andWhere('order_aggregation.invoice_amount_sum >= :HasTotalOrderAmountCondition');
 
-        /** @var HasTotalOrderAmountCondition $condition */
+        /* @var HasTotalOrderAmountCondition $condition */
         $query->setParameter(':HasTotalOrderAmountCondition', $condition->getMinimumOrderAmount());
     }
 
