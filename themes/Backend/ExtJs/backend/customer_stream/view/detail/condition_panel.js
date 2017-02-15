@@ -27,6 +27,7 @@ Ext.define('Shopware.apps.CustomerStream.view.detail.ConditionPanel', {
     alias: 'widget.customer-stream-condition-panel',
     name: 'conditions',
     autoScroll: true,
+    cls: 'shopware-form',
 
     mixins: {
         formField: 'Ext.form.field.Base',

@@ -170,7 +170,7 @@ Ext.define('Shopware.apps.Customer.view.list.List', {
                     record.get('lastname')
                 ];
 
-                var name = '<b>'+names.join(' ')+'</b>';
+                var name = '<b>'+ names.join(' ') + '</b>';
                 var age = '';
                 if (record.get('age')) {
                     age = ' ('+ record.get('age') +')';
@@ -199,32 +199,25 @@ Ext.define('Shopware.apps.Customer.view.list.List', {
             header: 'Umsatz',
             dataIndex: 'aggregation',
             flex: 2,
-            renderer: function(v) {
-                if (!v) {
-                    return 'Unbekannt';
-                }
-
+            renderer: function(v, meta, record) {
                 return '' +
-                    'Gesamt: <b>' + v.invoice_amount_sum + '</b>' +
-                    '<br>Ø Warenkorb: <b>' + v.invoice_amount_avg + '</b>' +
-                    '<br>Ø Warenwert: <b>'+v.product_avg+'</b>';
+                    'Gesamt: <b>' + record.get('invoice_amount_sum') + '</b>' +
+                    '<br>Ø Warenkorb: <b>' + record.get('invoice_amount_avg') + '</b>' +
+                    '<br>Ø Warenwert: <b>'+ record.get('product_avg') +'</b>';
             }
         }, {
                 header: 'Bestellungen',
                 dataIndex: 'aggregation',
                 flex: 2,
-                renderer: function(v) {
-                    if (!v) {
-                        return 'Unbekannt';
-                    }
-                    return '<b>Bestellungen: ' + v.count_orders + '</b>' +
-                        '<br>Letzte: ' + Ext.util.Format.date(v.last_order_time);
+                renderer: function(v, meta, record) {
+                    return '<b>Bestellungen: ' + record.get('count_orders') + '</b>' +
+                        '<br>Letzte: ' + Ext.util.Format.date(record.get('last_order_time'));
 
                 }
             }
         , {
-            header: 'Interessen',
-            dataIndex: 'interests',
+            header: 'Letzte Interessen',
+            dataIndex: 'newest_interests',
             flex: 4,
             renderer: function(v, meta, record) {
                 if (!v || v.length <= 0) {
@@ -232,7 +225,24 @@ Ext.define('Shopware.apps.Customer.view.list.List', {
                 }
                 var interests = [];
                 Ext.each(v, function(interest) {
-                    interests.push('<b>' + interest.category + '</b> - <i>' + interest.manufacturer + '</i>');
+                    interests.push('<b>' + interest.categoryName + '</b> - <i>' + interest.manufacturerName + '</i>');
+                });
+                interests = interests.slice(0, 3);
+                return interests.join('<br>');
+            }
+        }
+        , {
+            header: 'Top Interessen',
+            dataIndex: 'interests',
+            flex: 4,
+            renderer: function(v, meta, record) {
+                v = record.get('interests');
+                if (!v || v.length <= 0) {
+                    return 'Nicht bekannt';
+                }
+                var interests = [];
+                Ext.each(v, function(interest) {
+                    interests.push('<b>' + interest.categoryName + '</b> - <i>' + interest.manufacturerName + '</i>');
                 });
                 interests = interests.slice(0, 3);
                 return interests.join('<br>');

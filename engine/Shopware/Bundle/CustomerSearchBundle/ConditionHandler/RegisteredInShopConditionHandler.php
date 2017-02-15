@@ -26,9 +26,9 @@ namespace Shopware\Bundle\CustomerSearchBundle\ConditionHandler;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\CustomerSearchBundle\Condition\RegisteredInShopCondition;
-use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 use Shopware\Bundle\CustomerSearchBundle\ConditionHandlerInterface;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
+use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 
 class RegisteredInShopConditionHandler implements ConditionHandlerInterface
 {
@@ -41,7 +41,7 @@ class RegisteredInShopConditionHandler implements ConditionHandlerInterface
     {
         $query->andWhere('customer.subshopID IN (:RegisteredInShopCondition)');
 
-        /** @var RegisteredInShopCondition $condition */
+        /* @var RegisteredInShopCondition $condition */
         $query->setParameter(':RegisteredInShopCondition', $condition->getShopIds(), Connection::PARAM_INT_ARRAY);
     }
 }

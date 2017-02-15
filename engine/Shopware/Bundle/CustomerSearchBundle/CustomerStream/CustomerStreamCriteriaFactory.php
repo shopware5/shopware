@@ -25,8 +25,8 @@
 namespace Shopware\Bundle\CustomerSearchBundle\CustomerStream;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Bundle\SearchBundle\ConditionInterface;
 use Shopware\Bundle\CustomerSearchBundle\Criteria;
+use Shopware\Bundle\SearchBundle\ConditionInterface;
 use Shopware\Components\ReflectionHelper;
 
 class CustomerStreamCriteriaFactory
@@ -46,17 +46,18 @@ class CustomerStreamCriteriaFactory
 
     /**
      * @param int $streamId
+     *
      * @return Criteria
      */
     public function createCriteria($streamId)
     {
         $stream = $this->getStream($streamId);
         if (!$stream) {
-            throw new \RuntimeException(sprintf("Stream by id %s not found", $streamId));
+            throw new \RuntimeException(sprintf('Stream by id %s not found', $streamId));
         }
 
         if (empty($stream['conditions'])) {
-            throw new \RuntimeException(sprintf("Stream %s has no conditions", $stream['name']));
+            throw new \RuntimeException(sprintf('Stream %s has no conditions', $stream['name']));
         }
 
         $conditions = $this->unserialize(
@@ -68,11 +69,13 @@ class CustomerStreamCriteriaFactory
         foreach ($conditions as $condition) {
             $criteria->addCondition($condition);
         }
+
         return $criteria;
     }
 
     /**
      * @param int $streamId
+     *
      * @return array|false
      */
     private function getStream($streamId)
@@ -82,11 +85,13 @@ class CustomerStreamCriteriaFactory
         $query->from('s_customer_streams');
         $query->where('id = :id');
         $query->setParameter(':id', $streamId);
+
         return $query->execute()->fetch(\PDO::FETCH_ASSOC);
     }
 
     /**
      * @param array $conditions
+     *
      * @return ConditionInterface[]
      */
     private function unserialize(array $conditions)

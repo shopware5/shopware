@@ -146,6 +146,7 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
         me.formPanel = Ext.create('Ext.form.Panel', {
             region: 'west',
             collapsible: true,
+            cls: 'shopware-form',
             layout: {
                 type: 'vbox',
                 align: 'stretch'
@@ -200,11 +201,11 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
         me.streamListing.setLoading(true);
 
         me.setTitle('Kundenliste: ' + record.get('name'));
+        me.resetFilterPanel();
         me.formPanel.loadRecord(record);
 
         me.streamListing.setLoading(false);
 
-        console.log("record", record);
         me.listStore.getProxy().extraParams = {
             conditions: record.get('conditions')
         };
@@ -226,7 +227,7 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
             callback: function() {
                 if (isNew) {
                     me.streamListing.getStore().insert(0, record);
-                    me.streamListing.cellEditor.startEdit(record, 1);
+                    // me.streamListing.cellEditor.startEdit(record, 1);
                 }
                 me.preventStreamChanged = true;
                 me.streamListing.selModel.deselectAll(true);
@@ -255,6 +256,23 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
         me.saveStream(record);
     },
 
+    indexSearch: function() {
+        var me = this;
+
+        var indexingWindow = Ext.create('Shopware.apps.CustomerStream.view.detail.IndexingWindow', {
+            width: 500,
+            height: 150,
+            requests: [{
+                text: 'Analyzing customers',
+                name: 'search_index',
+                url: '{url controller=CustomerStream action=buildSearchIndex}',
+                params: { }
+            }]
+        });
+        indexingWindow.on('finish', Ext.bind(me.loadPreview, me))
+        indexingWindow.show();
+    },
+
     /**
      * Creates the grid toolbar with the add and delete button
      *
@@ -278,6 +296,12 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
                     text: 'Als neuen stream speichern',
                     action: 'create',
                     handler: Ext.bind(me.createStream, me)
+                }, {
+                    xtype: 'menuitem',
+                    iconCls: 'sprite',
+                    text: 'Indexieren',
+                    action: 'index',
+                    handler: Ext.bind(me.indexSearch, me)
                 }]
             }
         });
@@ -362,10 +386,16 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
         return new Ext.menu.Menu({ items: items });
     },
 
-    resetConditions: function() {
+    resetFilterPanel: function() {
         var me = this;
+
         me.filterPanel.removeAll();
         me.filterPanel.loadRecord(null);
+    },
+
+    resetConditions: function() {
+        var me = this;
+        me.resetFilterPanel();
         me.loadPreview();
     }
 

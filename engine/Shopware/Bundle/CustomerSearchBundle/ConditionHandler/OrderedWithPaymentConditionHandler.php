@@ -25,10 +25,10 @@
 namespace Shopware\Bundle\CustomerSearchBundle\ConditionHandler;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 use Shopware\Bundle\CustomerSearchBundle\Condition\OrderedWithPaymentCondition;
 use Shopware\Bundle\CustomerSearchBundle\ConditionHandlerInterface;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
+use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 
 class OrderedWithPaymentConditionHandler implements ConditionHandlerInterface
 {
@@ -47,7 +47,7 @@ class OrderedWithPaymentConditionHandler implements ConditionHandlerInterface
              AND orderedWithPayment.paymentID IN (:OrderedWithPaymentCondition)'
         );
 
-        /** @var OrderedWithPaymentCondition $condition */
+        /* @var OrderedWithPaymentCondition $condition */
         $query->setParameter(':OrderedWithPaymentCondition', $condition->getPaymentIds(), Connection::PARAM_INT_ARRAY);
     }
 }

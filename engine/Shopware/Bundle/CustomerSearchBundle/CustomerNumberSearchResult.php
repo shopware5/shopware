@@ -53,7 +53,7 @@ class CustomerNumberSearchResult
 
     /**
      * @param CustomerNumberRow[] $rows
-     * @param int $total
+     * @param int                 $total
      */
     public function __construct(array $rows, $total)
     {

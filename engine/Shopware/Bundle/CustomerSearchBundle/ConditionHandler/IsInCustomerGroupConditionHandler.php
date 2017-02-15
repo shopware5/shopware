@@ -25,10 +25,10 @@
 namespace Shopware\Bundle\CustomerSearchBundle\ConditionHandler;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 use Shopware\Bundle\CustomerSearchBundle\Condition\IsInCustomerGroupCondition;
 use Shopware\Bundle\CustomerSearchBundle\ConditionHandlerInterface;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
+use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 
 class IsInCustomerGroupConditionHandler implements ConditionHandlerInterface
 {
@@ -39,7 +39,7 @@ class IsInCustomerGroupConditionHandler implements ConditionHandlerInterface
 
     public function handle(ConditionInterface $condition, QueryBuilder $query)
     {
-        /** @var IsInCustomerGroupCondition $condition */
+        /* @var IsInCustomerGroupCondition $condition */
         $query->andWhere('customer.customergroup IN (:IsInCustomerGroupCondition)');
         $query->setParameter(':IsInCustomerGroupCondition', $condition->getCustomerGroupKeys(), Connection::PARAM_STR_ARRAY);
     }

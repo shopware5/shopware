@@ -25,10 +25,10 @@
 namespace Shopware\Bundle\CustomerSearchBundle\ConditionHandler;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 use Shopware\Bundle\CustomerSearchBundle\Condition\OrderedInShopCondition;
 use Shopware\Bundle\CustomerSearchBundle\ConditionHandlerInterface;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
+use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 
 class OrderedInShopConditionHandler implements ConditionHandlerInterface
 {
@@ -47,7 +47,7 @@ class OrderedInShopConditionHandler implements ConditionHandlerInterface
              AND orderedInShop.subshopID IN (:OrderedInShopCondition)'
         );
 
-        /** @var OrderedInShopCondition $condition */
+        /* @var OrderedInShopCondition $condition */
         $query->setParameter(':OrderedInShopCondition', $condition->getShopIds(), Connection::PARAM_INT_ARRAY);
     }
 }

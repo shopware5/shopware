@@ -30,12 +30,14 @@ class Criteria implements \JsonSerializable
 {
     /**
      * Offset for the limitation
+     *
      * @var int|null
      */
     protected $offset;
 
     /**
      * Count of result
+     *
      * @var int|null
      */
     protected $limit;
@@ -52,21 +54,25 @@ class Criteria implements \JsonSerializable
 
     /**
      * @param int|null $offset
+     *
      * @return $this
      */
     public function offset($offset)
     {
         $this->offset = $offset;
+
         return $this;
     }
 
     /**
      * @param int|null $limit
+     *
      * @return $this
      */
     public function limit($limit)
     {
         $this->limit = $limit;
+
         return $this;
     }
 
@@ -96,11 +102,13 @@ class Criteria implements \JsonSerializable
 
     /**
      * @param ConditionInterface $condition
+     *
      * @return $this
      */
     public function addCondition(ConditionInterface $condition)
     {
         $this->conditions[$condition->getName()] = $condition;
+
         return $this;
     }
 

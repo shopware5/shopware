@@ -25,10 +25,10 @@
 namespace Shopware\Bundle\CustomerSearchBundle\ConditionHandler;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 use Shopware\Bundle\CustomerSearchBundle\Condition\OrderedProductCondition;
 use Shopware\Bundle\CustomerSearchBundle\ConditionHandlerInterface;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
+use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 
 class OrderedProductConditionHandler implements ConditionHandlerInterface
 {
@@ -43,9 +43,10 @@ class OrderedProductConditionHandler implements ConditionHandlerInterface
         /** @var OrderedProductCondition $condition */
         foreach ($condition->getNumbers() as $i => $number) {
             $wheres[] = 'products LIKE :product' . $i;
-            $query->setParameter(':product' . $i, '%||'.$number.'||%');
+            $query->setParameter(':product' . $i, '%||' . $number . '||%');
         }
         $query->andWhere(implode(' OR ', $wheres));
+
         return;
 
         $query->innerJoin(
@@ -64,7 +65,7 @@ class OrderedProductConditionHandler implements ConditionHandlerInterface
             AND orderedProductDetails.modus = 0'
         );
 
-        /** @var OrderedProductCondition $condition */
+        /* @var OrderedProductCondition $condition */
         $query->setParameter(':OrderedProductCondition', $condition->getNumbers(), Connection::PARAM_STR_ARRAY);
     }
 }

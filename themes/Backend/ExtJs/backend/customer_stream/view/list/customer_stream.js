@@ -33,6 +33,7 @@ Ext.define('Shopware.apps.CustomerStream.view.list.CustomerStream', {
         return {
             pagingbar: false,
             toolbar: false,
+            displayProgressOnSingleDelete: false,
             columns: {
                 name: {
                     renderer: me.nameRenderer

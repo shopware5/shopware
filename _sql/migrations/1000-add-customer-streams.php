@@ -2,7 +2,7 @@
 
 use Shopware\Components\Migrations\AbstractMigration;
 
-class Migrations_Migration852 extends AbstractMigration
+class Migrations_Migration1000 extends AbstractMigration
 {
     /**
      * @inheritdoc
@@ -72,7 +72,8 @@ CREATE TABLE `s_customer_search_index` (
     products LONGTEXT NULL,
     categories LONGTEXT NULL,
     manufacturers LONGTEXT NULL,
-    interests LONGTEXT NULL
+    interests LONGTEXT NULL,
+    newest_interests LONGTEXT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 SQL;
 

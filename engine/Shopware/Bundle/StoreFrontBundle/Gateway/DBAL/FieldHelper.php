@@ -1301,44 +1301,6 @@ class FieldHelper
         $this->addTranslation('customFacet', 'custom_facet', $query, $context, 1);
     }
 
-    /**
-     * @param string       $fromPart        Table which uses as from part
-     * @param string       $joinCondition   Join condition for the objectkey column
-     * @param string       $translationType Type of the translation
-     * @param string       $selectName      Name of the additional selection
-     * @param QueryBuilder $query
-     * @param int          $shopId
-     * @param string       $suffix
-     */
-    private function addTranslationWithSuffix(
-        $fromPart,
-        $joinCondition,
-        $translationType,
-        $selectName,
-        QueryBuilder $query,
-        $shopId,
-        $suffix = ''
-    ) {
-        $selectSuffix = !empty($suffix) ? '_' . strtolower($suffix) : '';
-
-        $translationTable = uniqid('translation') . $suffix . $translationType;
-
-        $selectName .= $selectSuffix;
-
-        $query->leftJoin(
-            $fromPart,
-            's_core_translations',
-            $translationTable,
-            $translationTable . '.objecttype = :' . $translationTable . ' AND ' .
-            $translationTable . '.objectkey = ' . $joinCondition . ' AND ' .
-            $translationTable . '.objectlanguage = :language' . $suffix
-        );
-        $query->setParameter(':language' . $suffix, $shopId);
-        $query->setParameter(':' . $translationTable, $translationType);
-        $query->addSelect($translationTable . '.objectdata as ' . $selectName);
-    }
-
-
     public function getCustomerFields()
     {
         $fields = [
@@ -1372,7 +1334,7 @@ class FieldHelper
             'customer.firstname as __customer_firstname',
             'customer.lastname as __customer_lastname',
             'customer.birthday as __customer_birthday',
-            'customer.customernumber as __customer_customernumber'
+            'customer.customernumber as __customer_customernumber',
         ];
 
         return array_merge(
@@ -1436,7 +1398,44 @@ class FieldHelper
 
         return array_merge(
             $fields,
-            $this->getTableFields('s_user_address_attributes', 'addressAttribute')
+            $this->getTableFields('s_user_addresses_attributes', 'addressAttribute')
         );
+    }
+
+    /**
+     * @param string       $fromPart        Table which uses as from part
+     * @param string       $joinCondition   Join condition for the objectkey column
+     * @param string       $translationType Type of the translation
+     * @param string       $selectName      Name of the additional selection
+     * @param QueryBuilder $query
+     * @param int          $shopId
+     * @param string       $suffix
+     */
+    private function addTranslationWithSuffix(
+        $fromPart,
+        $joinCondition,
+        $translationType,
+        $selectName,
+        QueryBuilder $query,
+        $shopId,
+        $suffix = ''
+    ) {
+        $selectSuffix = !empty($suffix) ? '_' . strtolower($suffix) : '';
+
+        $translationTable = uniqid('translation') . $suffix . $translationType;
+
+        $selectName .= $selectSuffix;
+
+        $query->leftJoin(
+            $fromPart,
+            's_core_translations',
+            $translationTable,
+            $translationTable . '.objecttype = :' . $translationTable . ' AND ' .
+            $translationTable . '.objectkey = ' . $joinCondition . ' AND ' .
+            $translationTable . '.objectlanguage = :language' . $suffix
+        );
+        $query->setParameter(':language' . $suffix, $shopId);
+        $query->setParameter(':' . $translationTable, $translationType);
+        $query->addSelect($translationTable . '.objectdata as ' . $selectName);
     }
 }

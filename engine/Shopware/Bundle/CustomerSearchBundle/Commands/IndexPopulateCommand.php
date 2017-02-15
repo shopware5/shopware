@@ -33,7 +33,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * @category  Shopware
- * @package   Shopware\Components\Console\Commands
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class IndexPopulateCommand extends ShopwareCommand
@@ -66,13 +66,14 @@ class IndexPopulateCommand extends ShopwareCommand
         $helper = new ConsoleProgressHelper($output);
 
         foreach ($streams as $stream) {
-            $output->writeln("\n## Indexing customer stream: " . $stream['name'] . " ##");
+            $output->writeln("\n## Indexing customer stream: " . $stream['name'] . ' ##');
             $indexer->populate($stream['id'], $helper);
         }
     }
 
     /**
      * @param array $ids
+     *
      * @return \array[]|false
      */
     private function getStreams($ids = [])
@@ -84,6 +85,7 @@ class IndexPopulateCommand extends ShopwareCommand
             $query->andWhere('id IN (:ids)');
             $query->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
         }
+
         return $query->execute()->fetchAll(\PDO::FETCH_ASSOC);
     }
 }

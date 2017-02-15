@@ -22,14 +22,13 @@
  * our trademarks remain entirely with us.
  */
 
-
 namespace Shopware\Bundle\CustomerSearchBundle\ConditionHandler;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 use Shopware\Bundle\CustomerSearchBundle\Condition\HasAddressWithCountryCondition;
 use Shopware\Bundle\CustomerSearchBundle\ConditionHandlerInterface;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
+use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 
 class HasAddressWithCountryConditionHandler implements ConditionHandlerInterface
 {
@@ -48,7 +47,7 @@ class HasAddressWithCountryConditionHandler implements ConditionHandlerInterface
             AND addresses.country_id IN (:HasAddressWithCountryCondition)'
         );
 
-        /** @var HasAddressWithCountryCondition $condition */
+        /* @var HasAddressWithCountryCondition $condition */
         $query->setParameter(':HasAddressWithCountryCondition', $condition->getCountryIds(), Connection::PARAM_INT_ARRAY);
     }
 }

@@ -25,10 +25,10 @@
 namespace Shopware\Bundle\CustomerSearchBundle\ConditionHandler;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 use Shopware\Bundle\CustomerSearchBundle\Condition\OrderedProductOfManufacturerCondition;
 use Shopware\Bundle\CustomerSearchBundle\ConditionHandlerInterface;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
+use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 
 class OrderedProductOfManufacturerConditionHandler implements ConditionHandlerInterface
 {
@@ -43,9 +43,10 @@ class OrderedProductOfManufacturerConditionHandler implements ConditionHandlerIn
         /** @var OrderedProductOfManufacturerCondition $condition */
         foreach ($condition->getManufacturerIds() as $i => $id) {
             $wheres[] = 'manufacturers LIKE :manufacturer' . $i;
-            $query->setParameter(':manufacturer' . $i, '%||'.$id.'||%');
+            $query->setParameter(':manufacturer' . $i, '%||' . $id . '||%');
         }
         $query->andWhere(implode(' OR ', $wheres));
+
         return;
 
 //        $query->andWhere(

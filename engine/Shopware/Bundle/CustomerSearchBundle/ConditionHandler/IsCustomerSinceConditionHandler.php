@@ -24,10 +24,10 @@
 
 namespace Shopware\Bundle\CustomerSearchBundle\ConditionHandler;
 
-use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 use Shopware\Bundle\CustomerSearchBundle\Condition\IsCustomerSinceCondition;
 use Shopware\Bundle\CustomerSearchBundle\ConditionHandlerInterface;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
+use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 
 class IsCustomerSinceConditionHandler implements ConditionHandlerInterface
 {
@@ -40,7 +40,7 @@ class IsCustomerSinceConditionHandler implements ConditionHandlerInterface
     {
         $query->andWhere('customer.firstlogin >= :IsCustomerSinceCondition');
 
-        /** @var IsCustomerSinceCondition $condition */
+        /* @var IsCustomerSinceCondition $condition */
         $query->setParameter(':IsCustomerSinceCondition', $condition->getCustomerSince()->format('Y-m-d'));
     }
 }

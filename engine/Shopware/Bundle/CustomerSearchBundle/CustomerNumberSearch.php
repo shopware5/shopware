@@ -26,6 +26,7 @@ namespace Shopware\Bundle\CustomerSearchBundle;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
+use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\FieldHelper;
 use Shopware\Bundle\StoreFrontBundle\Struct\Attribute;
 
 class CustomerNumberSearch
@@ -41,17 +42,28 @@ class CustomerNumberSearch
     private $connection;
 
     /**
-     * @param HandlerRegistry $handlerRegistry
-     * @param Connection $connection
+     * @var FieldHelper
      */
-    public function __construct(HandlerRegistry $handlerRegistry, Connection $connection)
-    {
+    private $fieldHelper;
+
+    /**
+     * @param HandlerRegistry $handlerRegistry
+     * @param Connection      $connection
+     * @param FieldHelper     $fieldHelper
+     */
+    public function __construct(
+        HandlerRegistry $handlerRegistry,
+        Connection $connection,
+        FieldHelper $fieldHelper
+    ) {
         $this->handlerRegistry = $handlerRegistry;
         $this->connection = $connection;
+        $this->fieldHelper = $fieldHelper;
     }
 
     /**
      * @param Criteria $criteria
+     *
      * @return CustomerNumberSearchResult
      */
     public function search(Criteria $criteria)
@@ -60,7 +72,7 @@ class CustomerNumberSearch
 
         $customers = $this->fetchCustomers($criteria, $query);
 
-        $total = null;
+        $total = count($customers);
         if ($criteria->fetchTotal()) {
             $total = $this->fetchTotal($query);
         }
@@ -73,6 +85,7 @@ class CustomerNumberSearch
 
     /**
      * @param array[] $result
+     *
      * @return array
      */
     private function hydrate(array $result)
@@ -80,10 +93,10 @@ class CustomerNumberSearch
         $rows = [];
         foreach ($result as $row) {
             $rows[] = new CustomerNumberRow(
-                (int) $row['__customer_id'],
-                $row['__customer_number'],
-                $row['__customer_email'],
-                ['core' => new Attribute($row)]
+                (int) $row['id'],
+                $row['customernumber'],
+                $row['email'],
+                ['search' => new Attribute($row)]
             );
         }
 
@@ -92,26 +105,28 @@ class CustomerNumberSearch
 
     /**
      * @param Criteria $criteria
+     *
      * @return QueryBuilder
      */
     private function buildQuery(Criteria $criteria)
     {
         $query = new QueryBuilder($this->connection);
 
-        $query->from('s_user', 'user');
-        $query->leftJoin('user', 's_customer_search_index', 'customer', 'user.id = customer.id');
-        $query->leftJoin('user', 's_user_attributes', 'customerAttribute', 'customerAttribute.userID = user.id');
+        $query->from('s_customer_search_index', 'customer');
+        $query->leftJoin('customer', 's_user_attributes', 'customerAttribute', 'customerAttribute.userID = customer.id');
 
         foreach ($criteria->getConditions() as $condition) {
             $handler = $this->handlerRegistry->getConditionHandler($condition);
             $handler->handle($condition, $query);
         }
+
         return $query;
     }
 
     /**
-     * @param Criteria $criteria
+     * @param Criteria     $criteria
      * @param QueryBuilder $query
+     *
      * @return array[]
      */
     private function fetchCustomers(Criteria $criteria, QueryBuilder $query)
@@ -123,7 +138,7 @@ class CustomerNumberSearch
             $query->setMaxResults($criteria->getLimit());
         }
 
-        $query->addSelect(['user.*']);
+        $query->addSelect('customer.*');
 
         return $query->execute()->fetchAll(\PDO::FETCH_ASSOC);
     }

@@ -24,20 +24,21 @@
 
 namespace Shopware\Bundle\CustomerSearchBundle;
 
-use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
+use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 
 interface ConditionHandlerInterface
 {
     /**
      * @param ConditionInterface $condition
-     * @return boolean
+     *
+     * @return bool
      */
     public function supports(ConditionInterface $condition);
 
     /**
      * @param ConditionInterface $condition
-     * @param QueryBuilder $query
+     * @param QueryBuilder       $query
      */
     public function handle(ConditionInterface $condition, QueryBuilder $query);
 }

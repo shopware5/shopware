@@ -25,10 +25,10 @@
 namespace Shopware\Bundle\CustomerSearchBundle\ConditionHandler;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 use Shopware\Bundle\CustomerSearchBundle\Condition\OrderedProductOfCategoryCondition;
 use Shopware\Bundle\CustomerSearchBundle\ConditionHandlerInterface;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
+use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 
 class OrderedProductOfCategoryConditionHandler implements ConditionHandlerInterface
 {
@@ -43,11 +43,11 @@ class OrderedProductOfCategoryConditionHandler implements ConditionHandlerInterf
         /** @var OrderedProductOfCategoryCondition $condition */
         foreach ($condition->getCategoryIds() as $i => $id) {
             $wheres[] = 'categories LIKE :category' . $i;
-            $query->setParameter(':category' . $i, '%||'.$id.'||%');
+            $query->setParameter(':category' . $i, '%||' . $id . '||%');
         }
         $query->andWhere(implode(' OR ', $wheres));
-        return;
 
+        return;
 
         $query->innerJoin(
             'customer',
@@ -72,7 +72,7 @@ class OrderedProductOfCategoryConditionHandler implements ConditionHandlerInterf
             AND orderedCategoryMapping.categoryID IN (:OrderedProductOfCategoryCondition)'
         );
 
-        /** @var OrderedProductOfCategoryCondition $condition */
+        /* @var OrderedProductOfCategoryCondition $condition */
         $query->setParameter(':OrderedProductOfCategoryCondition', $condition->getCategoryIds(), Connection::PARAM_INT_ARRAY);
     }
 }

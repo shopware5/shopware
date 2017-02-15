@@ -45,9 +45,9 @@ class CustomerNumberRow extends Extendable
     protected $email;
 
     /**
-     * @param int $id
-     * @param string $number
-     * @param string $email
+     * @param int         $id
+     * @param string      $number
+     * @param string      $email
      * @param Attribute[] $attributes
      */
     public function __construct($id, $number, $email, array $attributes = [])

@@ -1,4 +1,26 @@
 <?php
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
 
 namespace Shopware\Bundle\CustomerSearchBundle\Gateway;
 
@@ -19,13 +41,20 @@ class CustomerHydrator extends Hydrator
     private $customerGroupHydrator;
 
     /**
-     * @param AttributeHydrator $attributeHydrator
-     * @param CustomerGroupHydrator $customerGroupHydrator
+     * @var PaymentHydrator
      */
-    public function __construct(AttributeHydrator $attributeHydrator, CustomerGroupHydrator $customerGroupHydrator)
+    private $paymentHydrator;
+
+    /**
+     * @param AttributeHydrator     $attributeHydrator
+     * @param CustomerGroupHydrator $customerGroupHydrator
+     * @param PaymentHydrator       $paymentHydrator
+     */
+    public function __construct(AttributeHydrator $attributeHydrator, CustomerGroupHydrator $customerGroupHydrator, PaymentHydrator $paymentHydrator)
     {
         $this->attributeHydrator = $attributeHydrator;
         $this->customerGroupHydrator = $customerGroupHydrator;
+        $this->paymentHydrator = $paymentHydrator;
     }
 
     public function hydrate(array $data)
@@ -81,6 +110,12 @@ class CustomerHydrator extends Hydrator
 
         if (isset($data['__customerAttribute_id'])) {
             $this->attributeHydrator->addAttribute($customer, $data, 'customerAttribute');
+        }
+
+        if ($customer->getPaymentId()) {
+            $customer->setPayment(
+                $this->paymentHydrator->hydrate($data)
+            );
         }
 
         return $customer;

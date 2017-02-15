@@ -43,6 +43,7 @@ class HandlerRegistry
 
     /**
      * @param ConditionInterface $condition
+     *
      * @return ConditionHandlerInterface
      */
     public function getConditionHandler(ConditionInterface $condition)
@@ -52,7 +53,7 @@ class HandlerRegistry
                 return $handler;
             }
         }
-        throw new \RuntimeException(sprintf("Condition class %s not supported", get_class($condition)));
+        throw new \RuntimeException(sprintf('Condition class %s not supported', get_class($condition)));
     }
 
     /**
