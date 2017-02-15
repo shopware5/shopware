@@ -82,6 +82,13 @@ class EmotionPreset extends Resource
         return $this->hydrate($this->fetch(), $locale);
     }
 
+    /**
+     * @param int $presetId
+     *
+     * @throws NotFoundException
+     * @throws ParameterMissingException
+     * @throws \Exception
+     */
     public function delete($presetId)
     {
         if (!$presetId) {
@@ -104,7 +111,8 @@ class EmotionPreset extends Resource
     }
 
     /**
-     * @param array $data
+     * @param array  $data
+     * @param string $locale
      *
      * @throws ParameterMissingException
      *
@@ -123,8 +131,9 @@ class EmotionPreset extends Resource
     }
 
     /**
-     * @param int   $id
-     * @param array $data
+     * @param int    $id
+     * @param array  $data
+     * @param string $locale
      *
      * @throws \Exception
      *
@@ -139,7 +148,6 @@ class EmotionPreset extends Resource
         }
 
         $preset->getTranslations()->clear();
-        $preset->getRequiredPlugins()->clear();
         $this->models->flush($preset);
 
         return $this->save($data, $preset, $locale);
@@ -165,10 +173,11 @@ class EmotionPreset extends Resource
             }
         }
 
-        // get technical names and label of required plugins
-        if (!empty($data['requiredPlugins'])) {
-            $data['requiredPlugins'] = $this->formatRequiredPlugins($data['requiredPlugins']);
-        }
+        $data['requiredPlugins'] = array_map(function ($plugin) {
+            return ['name' => $plugin['name'], 'version' => $plugin['version']];
+        }, $data['requiredPlugins']);
+
+        $data['requiredPlugins'] = json_encode($data['requiredPlugins']);
 
         // slugify technical name of preset
         $data['name'] = $this->slugService->slugify($data['name']);
@@ -218,10 +227,9 @@ class EmotionPreset extends Resource
     private function fetch()
     {
         $builder = $this->models->createQueryBuilder();
-        $builder->select(['preset', 'translation', 'requiredPlugin']);
+        $builder->select(['preset', 'translation']);
         $builder->from(Preset::class, 'preset', 'preset.id');
         $builder->leftJoin('preset.translations', 'translation');
-        $builder->leftJoin('preset.requiredPlugins', 'requiredPlugin', null, null, 'requiredPlugin.technicalName');
 
         return $builder->getQuery()->getArrayResult();
     }
@@ -234,9 +242,14 @@ class EmotionPreset extends Resource
      */
     private function hydrate(array $presets, $locale = 'de_DE')
     {
-        $localPlugins = $this->getPlugins(
-            $this->extractTechnicalNames($presets)
-        );
+        $pluginNames = [];
+        foreach ($presets as &$preset) {
+            $plugins = json_decode($preset['requiredPlugins'], true);
+            $preset['requiredPlugins'] = array_combine(array_column($plugins, 'name'), $plugins);
+            $pluginNames = array_merge($pluginNames, array_keys($preset['requiredPlugins']));
+        }
+
+        $localPlugins = $this->getPlugins($pluginNames);
 
         $result = [];
         foreach ($presets as $preset) {
@@ -281,24 +294,6 @@ class EmotionPreset extends Resource
     }
 
     /**
-     * Get detailed plugin information by plugin ids
-     *
-     * @param int[] $pluginIds
-     *
-     * @return array
-     */
-    private function formatRequiredPlugins(array $pluginIds)
-    {
-        return $this->models->getDBALQueryBuilder()
-            ->select('name AS technicalName, label', 'version')
-            ->from('s_core_plugins', 's')
-            ->where('s.id IN (:ids)')
-            ->setParameter('ids', $pluginIds, Connection::PARAM_INT_ARRAY)
-            ->execute()
-            ->fetchAll(\PDO::FETCH_ASSOC);
-    }
-
-    /**
      * @param string[] $technicalNames
      *
      * @return array
@@ -331,23 +326,15 @@ class EmotionPreset extends Resource
     {
         $required = $preset['requiredPlugins'];
         $merged = array_merge_recursive($required, $localPlugins);
-        $requiredPlugins = array_values(array_intersect_key($merged, $required));
+        $plugins = array_values(array_intersect_key($merged, $required));
 
-        return $requiredPlugins;
-    }
+        return array_map(
+            function ($plugin) {
+                $plugin['updateRequired'] = version_compare($plugin['version'], $plugin['current_version'], '>');
 
-    /**
-     * @param array $presets
-     *
-     * @return array
-     */
-    private function extractTechnicalNames(array $presets)
-    {
-        $technicalNames = [];
-        foreach ($presets as $preset) {
-            $technicalNames = array_merge($technicalNames, array_keys($preset['requiredPlugins']));
-        }
-
-        return $technicalNames;
+                return $plugin;
+            },
+            $plugins
+        );
     }
 }

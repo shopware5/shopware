@@ -22,13 +22,12 @@
  * our trademarks remain entirely with us.
  */
 
-class Migrations_Migration817 extends Shopware\Components\Migrations\AbstractMigration
+class Migrations_Migration950 extends Shopware\Components\Migrations\AbstractMigration
 {
     public function up($modus)
     {
         $this->createPresetsTable();
         $this->createPresetsTranslationTable();
-        $this->createPresetsRequirementsTable();
     }
 
     private function createPresetsTable()
@@ -39,9 +38,10 @@ CREATE TABLE IF NOT EXISTS `s_emotion_presets` (
   `name` VARCHAR(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `premium` TINYINT(1) NOT NULL DEFAULT '0',
   `custom` TINYINT(1) NOT NULL DEFAULT '1',
-  `thumbnail` TEXT COLLATE utf8_unicode_ci DEFAULT NULL,  
-  `preview` TEXT COLLATE utf8_unicode_ci DEFAULT NULL,  
+  `thumbnail` TEXT COLLATE utf8_unicode_ci DEFAULT NULL,
+  `preview` TEXT COLLATE utf8_unicode_ci DEFAULT NULL,
   `presetData` MEDIUMTEXT COLLATE utf8_unicode_ci NOT NULL,
+  `required_plugins` LONGTEXT COLLATE utf8_unicode_ci DEFAULT NULL,
   UNIQUE KEY `name` (`name`),
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -61,21 +61,6 @@ CREATE TABLE IF NOT EXISTS `s_emotion_preset_translations` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `presetID` (`presetID`,`locale`),
   CONSTRAINT `s_emotion_preset_translations_preset_fk` FOREIGN KEY (`presetID`) REFERENCES `s_emotion_presets` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-EOD;
-        $this->addSql($sql);
-    }
-
-    private function createPresetsRequirementsTable()
-    {
-        $sql = <<<'EOD'
-CREATE TABLE IF NOT EXISTS `s_emotion_preset_requirements` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `presetID` int(11) unsigned NOT NULL,
-  `technical_name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `label` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  PRIMARY KEY (`id`),
-  CONSTRAINT `s_emotion_preset_requirements_preset_fk` FOREIGN KEY (`presetID`) REFERENCES `s_emotion_presets` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 EOD;
         $this->addSql($sql);

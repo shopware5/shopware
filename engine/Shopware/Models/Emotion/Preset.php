@@ -49,12 +49,10 @@ class Preset extends ModelEntity
     protected $translations;
 
     /**
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Emotion\PresetRequirement", mappedBy="preset", orphanRemoval=true, cascade={"persist"})
-     *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var string
+     * @ORM\Column(name="required_plugins", type="text", nullable=false)
      */
     protected $requiredPlugins;
-
     /**
      * Unique identifier field for the shopware emotion.
      *
@@ -123,7 +121,6 @@ class Preset extends ModelEntity
     public function __construct()
     {
         $this->translations = new ArrayCollection();
-        $this->requiredPlugins = new ArrayCollection();
     }
 
     /**
@@ -134,7 +131,6 @@ class Preset extends ModelEntity
         $this->id = null;
 
         $translations = new ArrayCollection();
-        $requiredPlugins = new ArrayCollection();
 
         /** @var PresetTranslation $translation */
         foreach ($this->translations as $translation) {
@@ -144,16 +140,6 @@ class Preset extends ModelEntity
             $translations->add($newTranslation);
         }
         $this->translations = $translations;
-
-        /** @var PresetRequirement $requiredPlugins */
-        foreach ($this->requiredPlugins as $requiredPlugin) {
-            $newRequirement = clone $requiredPlugin;
-            $newRequirement->setPreset($this);
-
-            $requiredPlugins->add($newRequirement);
-        }
-        $this->requiredPlugins = $requiredPlugins;
-
         $this->custom = true;
     }
 
@@ -280,17 +266,17 @@ class Preset extends ModelEntity
     }
 
     /**
-     * @param array $requiredPlugins
+     * @param string $requiredPlugins
      *
      * @return ModelEntity
      */
-    public function setRequiredPlugins(array $requiredPlugins)
+    public function setRequiredPlugins($requiredPlugins)
     {
-        return $this->setOneToMany($requiredPlugins, '\Shopware\Models\Emotion\PresetRequirement', 'requiredPlugins', 'preset');
+        $this->requiredPlugins = $requiredPlugins;
     }
 
     /**
-     * @return ArrayCollection
+     * @return string
      */
     public function getRequiredPlugins()
     {
