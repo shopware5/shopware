@@ -61,7 +61,7 @@ Ext.define('Shopware.apps.Emotion.store.Presets', {
          * @object
          */
         api: {
-            read: '{url action="getPresets"}'
+            read: '{url controller="EmotionPreset" action="getPresets"}'
         },
 
         /**
