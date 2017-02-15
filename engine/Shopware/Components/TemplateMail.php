@@ -164,7 +164,22 @@ class Shopware_Components_TemplateMail
             );
             $isoCode = $this->getShop()->getId();
             $translationReader = $this->getTranslationReader();
-            $translation = $translationReader->read($isoCode, 'config_mails', $mailModel->getId());
+            
+            if ($this->getShop() instanceof \Shopware\Models\Shop\Shop) {
+                $fallbackId = $this->getShop()->getFallback()->getId();
+            } else {
+                $shopStruct = $this->getShop();
+                /* @var $shopStruct \Shopware\Bundle\StoreFrontBundle\Struct\Shop */
+                $fallbackId = $shopStruct->getFallbackId();
+            }
+            
+            $translation = $translationReader->readWithFallback(
+                $isoCode,
+                $fallbackId,
+                'config_mails',
+                $mailModel->getId()
+            );
+            
             $mailModel->setTranslation($translation);
         } else {
             $defaultContext = array(
