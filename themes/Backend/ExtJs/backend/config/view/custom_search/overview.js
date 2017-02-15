@@ -54,7 +54,7 @@ Ext.define('Shopware.apps.Config.view.custom_search.Overview', {
         var me = this;
 
         me.facetForm = Ext.create('Shopware.apps.Config.view.custom_search.facet.Detail', {
-            width: 500,
+            width: 550,
             disabled: true,
             listeners: {
                 'facet-saved': function() {
@@ -88,12 +88,12 @@ Ext.define('Shopware.apps.Config.view.custom_search.Overview', {
         var me = this;
 
         me.sortingDetail = Ext.create('Shopware.apps.Config.view.custom_search.sorting.Detail', {
-            record: Ext.create('Shopware.apps.Base.model.CustomSorting'),
-            width: 550
+            record: Ext.create('Shopware.apps.Base.model.CustomSorting')
         });
 
         me.sortingForm = Ext.create('Ext.form.Panel', {
             items: [ me.sortingDetail ],
+            width: 550,
             disabled: true,
             bodyPadding: '20 5',
             plugins: [{

@@ -42,6 +42,7 @@ Ext.define('Shopware.apps.Config.view.custom_search.facet.classes.ProductAttribu
                 labelWidth: 150,
                 name: 'formFieldName',
                 allowBlank: false,
+                helpText: '{s name="attribute_url"}{/s}',
                 fieldLabel: '{s name="request_parameter"}{/s}',
                 validator: Ext.bind(me.validateParameter, me)
             },
@@ -56,6 +57,7 @@ Ext.define('Shopware.apps.Config.view.custom_search.facet.classes.ProductAttribu
             {
                 xtype: 'textfield',
                 labelWidth: 150,
+                helpText: '{s name="attribute_template"}{/s}',
                 name: 'template',
                 fieldLabel: '{s name="template_file"}{/s}'
             }

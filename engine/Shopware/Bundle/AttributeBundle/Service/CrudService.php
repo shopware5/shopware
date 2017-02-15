@@ -226,6 +226,12 @@ class CrudService
         }
 
         usort($items, function (ConfigurationStruct $a, ConfigurationStruct $b) {
+            if ($a->getPosition() === null && $b->getPosition() !== null) {
+                return true;
+            }
+            if ($b->getPosition() === null && $a->getPosition() !== null) {
+                return false;
+            }
             if ($a->getPosition() == $b->getPosition()) {
                 return strnatcasecmp($a->getColumnName(), $b->getColumnName());
             }
