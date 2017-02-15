@@ -24,7 +24,7 @@
 
 class Shopware_Controllers_Backend_EmotionPreset extends Shopware_Controllers_Backend_ExtJs
 {
-    public function getPresetsAction()
+    public function listAction()
     {
         $resource = $this->container->get('shopware.api.emotionpreset');
 
@@ -38,7 +38,7 @@ class Shopware_Controllers_Backend_EmotionPreset extends Shopware_Controllers_Ba
      * Model event listener function which fired when the user configure an emotion preset over the backend
      * module and clicks the save button.
      */
-    public function savePresetAction()
+    public function saveAction()
     {
         $resource = $this->container->get('shopware.api.emotionpreset');
 
@@ -53,7 +53,7 @@ class Shopware_Controllers_Backend_EmotionPreset extends Shopware_Controllers_Ba
         $this->View()->assign(['success' => true]);
     }
 
-    public function deletePresetAction()
+    public function deleteAction()
     {
         $id = $this->Request()->getParam('id');
 

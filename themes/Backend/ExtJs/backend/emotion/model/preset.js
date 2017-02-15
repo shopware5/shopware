@@ -77,9 +77,9 @@ Ext.define('Shopware.apps.Emotion.model.Preset', {
          * @object
          */
         api: {
-            create: '{url controller="EmotionPreset" action="savePreset"}',
-            update: '{url controller="EmotionPreset"  action="savePreset"}',
-            destroy: '{url controller="EmotionPreset" action="deletePreset"}'
+            create: '{url controller="EmotionPreset" action="save"}',
+            update: '{url controller="EmotionPreset"  action="save"}',
+            destroy: '{url controller="EmotionPreset" action="delete"}'
         },
 
         /**
