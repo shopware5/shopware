@@ -62,27 +62,27 @@ Ext.define('Shopware.apps.Premium.store.Subshops', {
     */
     model : 'Shopware.apps.Premium.model.Subshop',
 
-	/**
-	 * A config object containing one or more event handlers to be added to this object during initialization
-	 * @object
-	 */
-	listeners: {
-		/**
-		 * Fires whenever records have been prefetched
-		 * used to add some default values to the combobox
-		 *
-		 * @event load
-		 * @param [object] store - Ext.data.Store
-		 * @return void
-		 */
-		load: function(store) {
-			var defaultSubShop = Ext.create('Shopware.apps.Premium.model.Subshop',{
-				id : 0,
-				name : '{s name=premium/subShop/comboBox_general}Universally valid{/s}'
-			});
+    /**
+     * A config object containing one or more event handlers to be added to this object during initialization
+     * @object
+     */
+    listeners: {
+        /**
+         * Fires whenever records have been prefetched
+         * used to add some default values to the combobox
+         *
+         * @event load
+         * @param [object] store - Ext.data.Store
+         * @return void
+         */
+        load: function(store) {
+            var defaultSubShop = Ext.create('Shopware.apps.Premium.model.Subshop',{
+                id : 0,
+                name : '{s name=premium/subShop/comboBox_general}Universally valid{/s}'
+            });
 
-			store.insert(0,defaultSubShop);
-		}
-	}
+            store.insert(0,defaultSubShop);
+        }
+    }
 });
 //{/block}

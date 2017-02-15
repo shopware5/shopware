@@ -46,7 +46,7 @@ Ext.define('Shopware.apps.Order.model.Mail', {
      * @array
      */
     fields:[
-		//{block name="backend/order/model/mail/fields"}{/block}
+        //{block name="backend/order/model/mail/fields"}{/block}
         { name: 'orderId', type:'int' },
         { name: 'content', type:'string' },
         { name: 'contentHtml', type:'string' },

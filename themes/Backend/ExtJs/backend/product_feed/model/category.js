@@ -47,7 +47,7 @@ Ext.define('Shopware.apps.ProductFeed.model.Category', {
      * @array
      */
     fields : [
-		//{block name="backend/product_feed/model/category/fields"}{/block}
+        //{block name="backend/product_feed/model/category/fields"}{/block}
         { name : 'checked',  type: 'boolean' }
     ],
     proxy : {

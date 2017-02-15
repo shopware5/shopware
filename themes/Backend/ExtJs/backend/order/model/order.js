@@ -46,7 +46,7 @@ Ext.define('Shopware.apps.Order.model.Order', {
     * @array
     */
     fields: [
-		//{block name="backend/order/model/order/fields"}{/block}
+        //{block name="backend/order/model/order/fields"}{/block}
         { name : 'id', type: 'int' },
         { name : 'number', type: 'string' },
         { name : 'customerId', type: 'int' },

@@ -25,6 +25,8 @@ use Shopware\Bundle\StoreFrontBundle\Service\AdditionalTextServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\Core\ContextService;
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
+use Shopware\Models\Article\Article;
+use Shopware\Models\Article\Detail;
 use Shopware\Models\Shop\Repository;
 use Shopware\Models\Shop\Shop;
 use Shopware\Components\CSRFWhitelistAware;
@@ -321,7 +323,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         if ($this->Request()->has('id')) {
             $article = $this->getRepository()->find((int)$this->Request()->getParam('id'));
         } else {
-            $article = new \Shopware\Models\Article\Article();
+            $article = new Article();
         }
         $this->saveArticle($data, $article);
     }
@@ -387,7 +389,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         Shopware()->Models()->flush();
 
         if (!empty($articleId)) {
-            /**@var $article \Shopware\Models\Article\Article */
+            /**@var $article Article */
             $article = Shopware()->Models()->find('Shopware\Models\Article\Article', $articleId);
             $article->setConfiguratorSet($configuratorSet);
             Shopware()->Models()->persist($article);
@@ -415,13 +417,13 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             return;
         }
 
-        /**@var $article \Shopware\Models\Article\Article */
+        /**@var $article Article */
         $article = Shopware()->Models()->find('Shopware\Models\Article\Article', $articleId);
         $mainDetail = $article->getMainDetail();
         $mainData = $this->getMappingData($mainDetail, $data);
         $variants = $this->getVariantsForMapping($articleId, $mainDetail, $data);
         if (!empty($variants)) {
-            /**@var $variant \Shopware\Models\Article\Detail */
+            /**@var $variant Detail */
             foreach ($variants as $variant) {
                 $variant->fromArray($mainData);
                 Shopware()->Models()->persist($variant);
@@ -469,7 +471,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
 
     /**
      * Returns the main detail data for the variant mapping action.
-     * @param $mainDetail \Shopware\Models\Article\Detail
+     * @param $mainDetail Detail
      * @param $mapping
      * @return array
      */
@@ -567,7 +569,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     /**
      * Copies translations from a configurator template into a variant
      * @param $template array The configurator template
-     * @param $detail \Shopware\Models\Article\Detail Variant
+     * @param $detail Detail Variant
      */
     protected function copyConfigurationTemplateTranslations($template, $detail)
     {
@@ -778,7 +780,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      */
     protected function duplicateArticleDownloads($articleId, $newArticleId)
     {
-        /** @var $article \Shopware\Models\Article\Article */
+        /** @var $article Article */
         $article = Shopware()->Models()->find('Shopware\Models\Article\Article', $newArticleId);
 
         $builder = Shopware()->Models()->createQueryBuilder();
@@ -907,7 +909,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         foreach ($details as $data) {
             $prices = array();
             $data['number'] = $number;
-            $detail = new \Shopware\Models\Article\Detail();
+            $detail = new Detail();
 
             foreach ($data['prices'] as $priceData) {
                 if (empty($priceData['customerGroupKey'])) {
@@ -957,7 +959,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     {
         $unique = uniqid();
 
-        /**@var $oldArticle \Shopware\Models\Article\Article */
+        /**@var $oldArticle Article */
         $oldArticle = Shopware()->Models()->find('Shopware\Models\Article\Article', $articleId);
         if (!$oldArticle->getConfiguratorSet()) {
             return null;
@@ -1034,7 +1036,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             ->getQuery()
             ->getArrayResult();
 
-        /**@var $article \Shopware\Models\Article\Article */
+        /**@var $article Article */
         $article = $this->getRepository()->find($articleId);
         $mainDetailId = $article->getMainDetail()->getId();
 
@@ -1181,7 +1183,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         if ($id > 0) {
             $detail = $this->getArticleDetailRepository()->find($id);
         } else {
-            $detail = new \Shopware\Models\Article\Detail();
+            $detail = new Detail();
         }
         $detail = $this->saveDetail($data, $detail);
         $data['id'] = $detail->getId();
@@ -1193,8 +1195,8 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
 
     /**
      * @param $data array
-     * @param $detail \Shopware\Models\Article\Detail
-     * @return \Shopware\Models\Article\Detail
+     * @param $detail Detail
+     * @return Detail
      */
     protected function saveDetail($data, $detail)
     {
@@ -1236,8 +1238,8 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     /**
      * Helper method which swaps the translations of the newMainDetail and the oldMainDetail
      * Needed because mainDetails' translations are stored for the article, not for the variant itself
-     * @param \Shopware\Models\Article\Detail $newMainDetail
-     * @param \Shopware\Models\Article\Detail $oldMainDetail
+     * @param Detail $newMainDetail
+     * @param Detail $oldMainDetail
      */
     private function swapDetailTranslations($newMainDetail, $oldMainDetail)
     {
@@ -1383,7 +1385,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     /**
      * Internal helper function to save the article data.
      * @param $data
-     * @param $article \Shopware\Models\Article\Article
+     * @param $article Article
      * @return mixed
      */
     protected function saveArticle($data, $article)
@@ -2014,7 +2016,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         }
         $articleId = $this->Request()->getParam('articleId');
 
-        /**@var $article \Shopware\Models\Article\Article */
+        /**@var $article Article */
         $article = Shopware()->Models()->find('Shopware\Models\Article\Article', $articleId);
         $tax = array(
             'tax' => $article->getTax()->getTax()
@@ -2288,7 +2290,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         //2 => Merge variants
         $mergeType = $this->Request()->getParam('mergeType', 1);
 
-        /**@var $article \Shopware\Models\Article\Article */
+        /**@var $article Article */
         $article = $this->getRepository()->find($articleId);
 
         $generatorData = $this->prepareGeneratorData($groups, $offset, $limit);
@@ -2337,7 +2339,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             if ($offset === 0 && $mergeType === 1) {
                 $detail = $article->getMainDetail();
             } else {
-                $detail = new \Shopware\Models\Article\Detail();
+                $detail = new Detail();
                 Shopware()->Models()->persist($detail);
             }
 
@@ -2371,7 +2373,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
 
     /**
      * Internal helper function to remove all article variants for the deselected options.
-     * @param \Shopware\Models\Article\Article $article
+     * @param Article $article
      * @param array $selectedOptions
      *
      */
@@ -2389,7 +2391,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
                     ->getResult();
 
                 if (!empty($details)) {
-                    /**@var $detail \Shopware\Models\Article\Detail */
+                    /**@var $detail Detail */
                     foreach ($details as $detail) {
                         if ($detail->getKind() === 1) {
                             $article->setMainDetail(null);
@@ -2429,7 +2431,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      * @param $priceVariations
      * @param $allOptions
      * @param $originals
-     * @param $article \Shopware\Models\Article\Article
+     * @param $article Article
      * @param $mergeType
      *
      * @return array|bool
@@ -2581,7 +2583,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     }
 
     /**
-     * @param $article \Shopware\Models\Article\Article
+     * @param $article Article
      */
     protected function createConfiguratorTemplate($article)
     {
@@ -2647,7 +2649,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      * This function prepares the posted extJs data. First all ids resolved to the assigned shopware models.
      * After the ids resolved, the function removes the two dimensional arrays of oneToOne associations.
      * @param $data
-     * @param $article \Shopware\Models\Article\Article
+     * @param $article Article
      * @return array
      */
     protected function prepareAssociatedData($data, $article)
@@ -2775,7 +2777,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      *
      * </code>
      * @param $data
-     * @param $article \Shopware\Models\Article\Article
+     * @param $article Article
      * @return array
      */
     protected function prepareConfiguratorAssociatedData($data, $article)
@@ -2949,7 +2951,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     /**
      * This function loads the related article models for the passed ids in the "related" parameter.
      * @param $data
-     * @param $article \Shopware\Models\Article\Article
+     * @param $article Article
      * @return array
      */
     protected function prepareRelatedAssociatedData($data, $article)
@@ -2959,11 +2961,11 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             if (empty($relatedData['id'])) {
                 continue;
             }
-            /**@var $relatedArticle \Shopware\Models\Article\Article */
+            /** @var $relatedArticle Article */
             $relatedArticle = $this->getRepository()->find($relatedData['id']);
 
             //if the user select the cross
-            if ($relatedData['cross']) {
+            if ($relatedData['cross'] && !$relatedArticle->getRelated()->contains($article)) {
                 $relatedArticle->getRelated()->add($article);
                 Shopware()->Models()->persist($relatedArticle);
             }
@@ -3001,7 +3003,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     /**
      * This function loads the similar models for the passed ids in the "similar" parameter.
      * @param $data
-     * @param $article \Shopware\Models\Article\Article
+     * @param $article Article
      * @return array
      */
     protected function prepareSimilarAssociatedData($data, $article)
@@ -3011,11 +3013,11 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             if (empty($similarData['id'])) {
                 continue;
             }
-            /**@var $similarArticle \Shopware\Models\Article\Article */
+            /** @var $similarArticle Article */
             $similarArticle = $this->getRepository()->find($similarData['id']);
 
             //if the user select the cross
-            if ($similarData['cross']) {
+            if ($similarData['cross'] && !$similarArticle->getSimilar()->contains($article)) {
                 $similarArticle->getSimilar()->add($article);
                 Shopware()->Models()->persist($similarArticle);
             }
@@ -3058,7 +3060,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     /**
      * This function prepares the prices for the article main detail object.
      * @param $data
-     * @param $article \Shopware\Models\Article\Article
+     * @param $article Article
      * @return mixed
      */
     protected function prepareMainPricesAssociatedData($data, $article)
@@ -3070,7 +3072,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
 
     /**
      * @param $prices array
-     * @param $article \Shopware\Models\Article\Article
+     * @param $article Article
      * @param $tax \Shopware\Models\Tax\Tax
      * @return array
      */
@@ -3191,7 +3193,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         }
         $id = (int)$this->Request()->getParam('id');
         $article = $this->getRepository()->find($id);
-        if (!$article instanceof \Shopware\Models\Article\Article) {
+        if (!$article instanceof Article) {
             return;
         }
         $this->removePrices($article->getId());
@@ -3239,7 +3241,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     }
 
     /**
-     * @param $article \Shopware\Models\Article\Article
+     * @param $article Article
      */
     protected function removeArticleDetails($article)
     {
@@ -3262,7 +3264,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     }
 
     /**
-     * @param $article \Shopware\Models\Article\Article
+     * @param $article Article
      */
     protected function removeArticleTranslations($article)
     {
@@ -3337,9 +3339,9 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             if (empty($detail['id'])) {
                 continue;
             }
-            /**@var $model \Shopware\Models\Article\Detail */
+            /**@var $model Detail */
             $model = Shopware()->Models()->find('Shopware\Models\Article\Detail', $detail['id']);
-            if (!$model instanceof \Shopware\Models\Article\Detail) {
+            if (!$model instanceof Detail) {
                 continue;
             }
             if ($article === null) {
@@ -3554,7 +3556,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     {
         $articleDetailId = $this->Request()->getPost('articleDetailId');
 
-        /** @var $articleDetail \Shopware\Models\Article\Detail */
+        /** @var $articleDetail Detail */
         $articleDetail = Shopware()->Models()->getRepository('Shopware\Models\Article\Detail')->find($articleDetailId);
         if (!$articleDetail) {
             $this->View()->assign(array(
@@ -3940,7 +3942,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             $counter = 1;
         }
 
-        /** @var $detail \Shopware\Models\Article\Detail */
+        /** @var $detail Detail */
         foreach ($details as $detail) {
             if ($detail->getId() === $abortId) {
                 continue;
@@ -3989,15 +3991,15 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      * Start function for number generation. Iterates the different commands,
      * resolves the cursor or counter and starts the recursive
      *
-     * @param $article
-     * @param $detail
-     * @param $commands
-     * @param $counter
+     * @param Article $article
+     * @param Detail $detail
+     * @param array $commands
+     * @param int $counter
      * @return string
      */
-    protected function interpretNumberSyntax($article, $detail, $commands, $counter)
+    protected function interpretNumberSyntax(Article $article, Detail $detail, array $commands, $counter)
     {
-        $name = array();
+        $name = [];
         foreach ($commands as $command) {
             //if the command isn't equals "n" we have to execute commands
             if ($command !== 'n') {
@@ -4024,9 +4026,9 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      * First the function executes the current command on the passed cursor object.
      * If the result is traversable
      *
-     * @param $cursor
-     * @param $index
-     * @param $commands
+     * @param Article|Detail $cursor
+     * @param int $index
+     * @param array $commands
      * @return string
      */
     protected function recursiveInterpreter($cursor, $index, $commands)
@@ -4040,14 +4042,15 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         }
 
         //first we execute the current command on the cursor object
-        $result = $cursor->$commands[$index]['command']();
+        $result = $cursor->{$commands[$index]['command']}();
+
         //now we increment the command index
         $index++;
 
         //if the result of the current command on the cursor is an array
         if ($result instanceof \Traversable) {
             //we have to execute the following command on each array element.
-            $results = array();
+            $results = [];
             foreach ($result as $object) {
                 $results[] = $this->recursiveInterpreter($object, $index, $commands);
             }
@@ -4069,7 +4072,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      * Prepares the passed number syntax. Executes a regular expression
      * to get all syntax commands and maps this commands to the rout
      * object.
-     * @param $syntax
+     * @param string $syntax
      * @return array
      */
     protected function prepareNumberSyntax($syntax)
@@ -4077,7 +4080,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         preg_match_all('#\{(.*?)\}#msi', $syntax, $result);
         $syntax = $result[1];
 
-        $properties = array();
+        $properties = [];
         foreach ($syntax as $path) {
             if ($path !== 'n') {
                 $properties[] = $this->getCommandMapping($path);
@@ -4091,6 +4094,8 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
 
     /**
      * Internal helper function which helps the get the cursor object for the passed syntax command.
+     * @param string $syntax
+     * @return array
      */
     protected function getCommandMapping($syntax)
     {
@@ -4100,36 +4105,26 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         //we have to map the different properties to define the start cursor object.
         switch ($paths[0]) {
             //options are only available for the different article variants
-            case "options":
+            case 'options':
                 $cursor = 'detail';
-                $paths[0] = "configuratorOptions";
+                $paths[0] = 'configuratorOptions';
                 break;
             //all other commands will rout to the article
             default:
                 $cursor = 'article';
         }
 
-        $commands = array();
+        $commands = [];
 
         //now we convert the property names to the getter functions.
         foreach ($paths as $path) {
-            $commands[] = array('origin' => $path, 'command' => 'get' . ucfirst($path));
+            $commands[] = ['origin' => $path, 'command' => 'get' . ucfirst($path)];
         }
 
-        $sql = "
-            SELECT name, `default`
-            FROM s_core_engine_elements
-        ";
-        $attributes = Shopware()->Db()->fetchAssoc($sql);
-        $prepared = array();
-        foreach ($attributes as $name => $attr) {
-            $prepared[$name] = $attr['default'];
-        }
-
-        return array(
+        return [
             'cursor' => $cursor,
             'commands' => $commands
-        );
+        ];
     }
 
     /**

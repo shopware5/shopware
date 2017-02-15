@@ -35,7 +35,7 @@ Ext.define('Shopware.apps.Config.model.form.CustomerGroup', {
     extend: 'Shopware.apps.Base.model.CustomerGroup',
 
     fields: [
-		//{block name="backend/config/model/form/customer_group/fields"}{/block}
+        //{block name="backend/config/model/form/customer_group/fields"}{/block}
         { name: 'minimumOrder', type: 'float', useNull:true },
         { name: 'minimumOrderSurcharge', type: 'float', useNull:true },
         { name: 'deletable', type: 'boolean', convert: function(v, r) { return r.data.key != 'EK'; } }

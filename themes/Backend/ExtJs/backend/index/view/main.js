@@ -25,8 +25,8 @@
  * todo@all: Documentation
  */
 Ext.define('Shopware.apps.Index.view.Main', {
-	extend: 'Ext.panel.Panel',
-	alias: 'widget.index-desktoppanel',
+    extend: 'Ext.panel.Panel',
+    alias: 'widget.index-desktoppanel',
     cls: 'main-backend-holder',
     border: false,
     plain: true,

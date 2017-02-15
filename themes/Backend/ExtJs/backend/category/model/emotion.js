@@ -46,7 +46,7 @@ Ext.define('Shopware.apps.Category.model.Emotion', {
      * @object
      */
     fields:[
-		//{block name="backend/category/model/emotion/fields"}{/block}
+        //{block name="backend/category/model/emotion/fields"}{/block}
         { name : 'id', type: 'int' },
         { name : 'name', type: 'string' }
     ]

@@ -100,7 +100,7 @@ Ext.define('Shopware.apps.Mail.controller.Main', {
         sendmailFailureTitle :'{s name=message_sendmail_failure_title}Failure{/s}',
         sendmailFailureMessage: '{s name=message_sendmail_failure_message}Email could not be sent. Errormessage:{/s}',
 
-		growlMessage: '{s name=growlMessage}Mail{/s}'
+        growlMessage: '{s name=growlMessage}Mail{/s}'
     },
 
     /**

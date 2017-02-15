@@ -22,6 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Bundle\AttributeBundle\Service\CrudService;
 use Shopware\Bundle\StoreFrontBundle;
 use Shopware\Bundle\StoreFrontBundle\Service\AdditionalTextServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
@@ -681,8 +682,13 @@ class sExport
                     "txtArtikel" => "name",
                     "txtzusatztxt" => "additionaltext"
                 );
-                for ($i=1; $i<=20; $i++) {
-                    $map["attr$i"] = "attr$i";
+
+                $attributes = Shopware()->Container()->get('shopware_attribute.crud_service')->getList('s_articles_attributes');
+                foreach ($attributes as $attribute) {
+                    if ($attribute->isIdentifier()) {
+                        continue;
+                    }
+                    $map[CrudService::EXT_JS_PREFIX . $attribute->getColumnName()] = $attribute->getColumnName();
                 }
                 break;
             case "link":
@@ -866,7 +872,7 @@ class sExport
         if (!empty($this->sSettings["own_filter"])&&trim($this->sSettings["own_filter"])) {
             $sql_add_where[] = "(".$this->sSettings["own_filter"].")";
         }
-        if ($this->config->offsetGet('hideNoInstock')) {
+        if ($this->config->offsetGet('hideNoInStock')) {
             $sql_add_where[] = "(
                 (a.laststock * v.instock >= a.laststock * v.minpurchase)
                 OR
@@ -902,6 +908,7 @@ class sExport
                 d.shippingfree,
                 a.topseller,
                 a.keywords,
+                d.active as variantActive,
                 d.minpurchase,
                 d.purchasesteps,
                 d.maxpurchase,
@@ -1376,6 +1383,9 @@ class sExport
                     '' as ob_attr5,
                     '' as ob_attr6
             ) as b
+
+            LEFT JOIN s_order_basket_attributes ba
+            ON b.id = ba.basketID
 
             LEFT JOIN s_articles a
             ON b.articleID=a.id

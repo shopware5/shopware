@@ -27,6 +27,7 @@ use Shopware\Bundle\SearchBundle\Sorting\PopularitySorting;
 use Shopware\Bundle\SearchBundle\Sorting\ReleaseDateSorting;
 use Shopware\Bundle\SearchBundle\SortingInterface;
 use Shopware\Bundle\StoreFrontBundle;
+use Shopware\Bundle\StoreFrontBundle\Service\Core\ConfiguratorService;
 use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product;
 use Shopware\Components\QueryAliasMapper;
@@ -360,11 +361,6 @@ class sArticles
             $active = 1;
         }
 
-        $sBADWORDS = "#sex|porn|viagra|url\=|src\=|link\=#i";
-        if (preg_match($sBADWORDS, $sVoteComment)) {
-            return false;
-        }
-
         if (!empty($this->session['sArticleCommentInserts'][$article])) {
             $sql = '
                 DELETE FROM s_articles_vote WHERE id=?
@@ -530,6 +526,8 @@ class sArticles
             $id
         ));
 
+        $links = [];
+
         foreach ($getSupplier as $supplierKey => $supplierValue) {
             if (!Shopware()->Shop()->getDefault()) {
                 $getSupplier[$supplierKey] = $this->sGetTranslation($supplierValue, $supplierValue['id'], 'supplier');
@@ -539,23 +537,29 @@ class sArticles
                 $getSupplier[$supplierKey]["image"] = $mediaService->getUrl($supplierValue['image']);
             }
 
+            $supplierId = $supplierValue['id'];
             if ($id !== Shopware()->Shop()->getCategory()->getId()) {
-                $query = array(
+                $links[$supplierId] = [
                     'sViewport' => 'cat',
                     'sCategory' => $id,
                     'sPage' => 1,
                     'sSupplier' => $supplierValue["id"]
-                );
+                ];
             } else {
-                $query = array(
+                $links[$supplierId] = [
                     'controller' => 'listing',
                     'action' => 'manufacturer',
                     'sSupplier' => $supplierValue["id"]
-                );
+                ];
             }
+        }
 
-            $getSupplier[$supplierKey]["link"] = Shopware()->Config()->get('baseFile')
-                .'?'.http_build_query($query, '', '&');
+        $seoUrls = Shopware()->Container()->get('router')->generateList($links);
+        foreach ($getSupplier as &$supplier) {
+            $id = $supplier['id'];
+            if (array_key_exists($supplier, $seoUrls)) {
+                $supplier['link'] = $seoUrls[$id];
+            }
         }
 
         return $getSupplier;
@@ -703,6 +707,8 @@ class sArticles
         $criteria->limit($sLimitChart);
 
         $criteria->addSorting(new PopularitySorting(SortingInterface::SORT_DESC));
+
+        $criteria->setFetchCount(false);
 
         $result = $this->searchService->search($criteria, $context);
         $articles = $this->legacyStructConverter->convertListProductStructList($result->getProducts());
@@ -1225,8 +1231,8 @@ class sArticles
             return [];
         }
 
-        $hideNoInstock = $this->config->get('hideNoInstock');
-        if ($hideNoInstock && !$product->isAvailable()) {
+        $hideNoInStock = $this->config->get('hideNoInStock');
+        if ($hideNoInStock && !$product->isAvailable()) {
             return [];
         }
 
@@ -1471,6 +1477,8 @@ class sArticles
             default:
                 $criteria->addSorting(new ReleaseDateSorting(SortingInterface::SORT_DESC));
         }
+
+        $criteria->setFetchCount(false);
 
         $result = $this->productNumberSearch->search($criteria, $context);
 
@@ -2289,7 +2297,7 @@ class sArticles
             'sArticles'       => $articles,
             'criteria'        => $criteria,
             'facets'          => $searchResult->getFacets(),
-            'sPage'           => $request->getParam('sPage', 1),
+            'sPage'           => (int) $request->getParam('sPage', 1),
             'pageSizes'       => $pageSizes,
             'sPerPage'        => $criteria->getLimit(),
             'sNumberArticles' => $searchResult->getTotalCount(),
@@ -2324,9 +2332,25 @@ class sArticles
 
             $convertedConfiguratorPrice = $this->legacyStructConverter->convertConfiguratorPrice($product, $configurator);
             $data = array_merge($data, $convertedConfiguratorPrice);
+
+            // generate additional text
+            if (!empty($selection)) {
+                $this->additionalTextService->buildAdditionalText($product, $this->contextService->getShopContext());
+                $data['additionaltext'] = $product->getAdditional();
+            }
+
+            if ($this->config->get('forceArticleMainImageInListing') && $configurator->getType() !== ConfiguratorService::CONFIGURATOR_TYPE_STANDARD && empty($selection)) {
+                $data['image'] = $this->legacyStructConverter->convertMediaStruct($product->getCover());
+                $data['images'] = [];
+                foreach ($product->getMedia() as $image) {
+                    if ($image->getId() !== $product->getCover()->getId()) {
+                        $data['images'][] = $this->legacyStructConverter->convertMediaStruct($image);
+                    }
+                }
+            }
         }
 
-        $data = array_merge($data, $this->getLinksOfProduct($product, $categoryId));
+        $data = array_merge($data, $this->getLinksOfProduct($product, $categoryId, !empty($selection)));
 
         $data["articleName"] = $this->sOptimizeText($data["articleName"]);
         $data["description_long"] = htmlspecialchars_decode($data["description_long"]);
@@ -2353,10 +2377,11 @@ class sArticles
      * Creates different links for the product like `add to basket`, `add to note`, `view detail page`, ...
      *
      * @param StoreFrontBundle\Struct\ListProduct $product
-     * @param null $categoryId
+     * @param int $categoryId
+     * @param bool $addNumber
      * @return array
      */
-    private function getLinksOfProduct(StoreFrontBundle\Struct\ListProduct $product, $categoryId = null)
+    private function getLinksOfProduct(StoreFrontBundle\Struct\ListProduct $product, $categoryId, $addNumber)
     {
         $baseFile = $this->config->get('baseFile');
         $context = $this->contextService->getShopContext();
@@ -2365,7 +2390,13 @@ class sArticles
         if ($categoryId) {
             $detail .= '&sCategory=' . $categoryId;
         }
+
         $rewrite = Shopware()->Modules()->Core()->sRewriteLink($detail, $product->getName());
+
+        if ($addNumber) {
+            $rewrite .= strpos($rewrite, '?') !== false ? '&' : '?';
+            $rewrite .= 'number=' . $product->getNumber();
+        }
 
         $basket = $baseFile . "?sViewport=basket&sAdd=" . $product->getNumber();
         $note = $baseFile . "?sViewport=note&sAdd=" . $product->getNumber();

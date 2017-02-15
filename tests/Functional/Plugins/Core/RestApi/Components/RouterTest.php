@@ -26,7 +26,7 @@ namespace Shopware\Tests\Functional\Plugins\Core\RestApi\Componets;
 
 use ShopwarePlugins\RestApi\Components\Router;
 
-class RouterTest extends \PHPUnit_Framework_TestCase
+class RouterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Router

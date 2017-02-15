@@ -14,12 +14,12 @@
 
         {* Per page field *}
         {block name='frontend_listing_actions_items_per_page_field'}
-			<select id="{$shortParameters.sPerPage}" name="{$shortParameters.sPerPage}" class="per-page--field action--field" data-auto-submit="true" data-class="per-page--select">
-				{foreach $pageSizes as $perPage}
-					<option value="{$perPage}" {if $perPage == $criteria->getLimit()}selected="selected"{/if}>{$perPage}</option>
-				{/foreach}
-				{block name='frontend_listing_actions_per_page_values'}{/block}
-			</select>
+            <select id="{$shortParameters.sPerPage}" name="{$shortParameters.sPerPage}" class="per-page--field action--field" data-auto-submit="true" data-class="per-page--select">
+                {foreach $pageSizes as $perPage}
+                    <option value="{$perPage}" {if $perPage == $criteria->getLimit()}selected="selected"{/if}>{$perPage}</option>
+                {/foreach}
+                {block name='frontend_listing_actions_per_page_values'}{/block}
+            </select>
         {/block}
     </form>
 {/if}

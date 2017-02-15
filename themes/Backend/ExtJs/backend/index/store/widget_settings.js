@@ -25,9 +25,9 @@
 
 Ext.define('Shopware.apps.Index.store.WidgetSettings', {
 
-	extend: 'Ext.data.Store',
+    extend: 'Ext.data.Store',
 
-	model: 'Shopware.apps.Index.model.WidgetSettings',
+    model: 'Shopware.apps.Index.model.WidgetSettings',
 
     proxy: {
         type: 'localstorage',

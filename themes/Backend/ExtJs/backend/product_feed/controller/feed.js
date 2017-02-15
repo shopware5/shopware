@@ -72,7 +72,7 @@ Ext.define('Shopware.apps.ProductFeed.controller.Feed', {
         confirmDeleteSingle: '{s name=message/confirm_delete_single}Are you sure you want to delete this article? ([0]){/s}',
         deleteSingleItemSuccess: '{s name=message/confirm_delete_single_success}The article has been deleted successfully.{/s}',
         deleteSingleItemError: '{s name=message/confirm_delete_single_error}An error has occurred while deleting the selected article: {/s}',
-		growlMessage: '{s name=window/main_title}{/s}'
+        growlMessage: '{s name=window/main_title}{/s}'
     },
 
     /**

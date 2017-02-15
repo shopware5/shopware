@@ -35,17 +35,17 @@
  */
 //{block name="backend/partner/model/main"}
 Ext.define('Shopware.apps.Partner.model.Main', {
-	/**
-	* Extends the standard ExtJS 4
-	* @string
-	*/
+    /**
+    * Extends the standard ExtJS 4
+    * @string
+    */
     extend : 'Ext.data.Model',
-	/**
-	* The fields used for this model
-	* @array
-	*/
+    /**
+    * The fields used for this model
+    * @array
+    */
     fields : [
-		//{block name="backend/partner/model/main/fields"}{/block}
+        //{block name="backend/partner/model/main/fields"}{/block}
         { name : 'id', type : 'int' },
         { name : 'company', type : 'string' },
         { name : 'date', type : 'date' },
@@ -54,15 +54,15 @@ Ext.define('Shopware.apps.Partner.model.Main', {
         { name : 'monthlyAmount', type : 'float' },
         { name : 'yearlyAmount', type : 'float' }
     ],
-	/**
-	* If the name of the field is 'id' extjs assumes autmagical that
-	* this field is an unique identifier.
-	*/
+    /**
+    * If the name of the field is 'id' extjs assumes autmagical that
+    * this field is an unique identifier.
+    */
     idProperty : 'id',
-	/**
-	* Configure the data communication
-	* @object
-	*/
+    /**
+    * Configure the data communication
+    * @object
+    */
     proxy : {
         type : 'ajax',
         api:{

@@ -53,7 +53,7 @@ Ext.define('Shopware.apps.Customer.model.PaymentData', {
      * @array
      */
     fields:[
-		//{block name="backend/customer/model/payment_data/fields"}{/block}
+        //{block name="backend/customer/model/payment_data/fields"}{/block}
         { name:'accountNumber', type:'string' },
         { name:'bankCode', type:'string' },
         { name:'bankName', type:'string' },

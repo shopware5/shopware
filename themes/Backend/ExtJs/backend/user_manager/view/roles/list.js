@@ -36,10 +36,10 @@
  */
 //{block name="backend/user_manager/view/roles/list"}
 Ext.define('Shopware.apps.UserManager.view.roles.List', {
-	extend: 'Ext.grid.Panel',
-	alias: 'widget.usermanager-roles-list',
-	region: 'center',
-	autoScroll: true,
+    extend: 'Ext.grid.Panel',
+    alias: 'widget.usermanager-roles-list',
+    region: 'center',
+    autoScroll: true,
     height: '100%',
     selType: 'rowmodel',
 
@@ -57,8 +57,8 @@ Ext.define('Shopware.apps.UserManager.view.roles.List', {
      *
      * @return void
      */
-	initComponent: function() {
-		var me = this;
+    initComponent: function() {
+        var me = this;
         me.store = this.roleStore;
         me.dockedItems = this.createDockedToolBar();
         me.plugins = Ext.create('Ext.grid.plugin.RowEditing', {
@@ -90,23 +90,23 @@ Ext.define('Shopware.apps.UserManager.view.roles.List', {
 
         me.on('edit', me.onEditRow, me);
 
-		// Define the columns and renderers
-		this.columns = [
-		{
-			header: '{s name=roleslist/colname}Name{/s}',
-			dataIndex: 'name',
-			flex: 1,
+        // Define the columns and renderers
+        this.columns = [
+        {
+            header: '{s name=roleslist/colname}Name{/s}',
+            dataIndex: 'name',
+            flex: 1,
             field: 'textfield'
-		}, {
-			header: '{s name=roleslist/coldescription}Description{/s}',
-			dataIndex: 'description',
-			flex: 1,
+        }, {
+            header: '{s name=roleslist/coldescription}Description{/s}',
+            dataIndex: 'description',
+            flex: 1,
             field: 'textfield'
-		}, {
-			header: '{s name=roleslist/colsource}Source{/s}',
-			dataIndex: 'source',
-			flex: 1
-		}, {
+        }, {
+            header: '{s name=roleslist/colsource}Source{/s}',
+            dataIndex: 'source',
+            flex: 1
+        }, {
             xtype: 'booleancolumn',
             header: '{s name=roleslist/colactive}Enabled{/s}',
             dataIndex: 'enabled',
@@ -130,12 +130,12 @@ Ext.define('Shopware.apps.UserManager.view.roles.List', {
         },
         /* {if {acl_is_allowed privilege=delete}} */
         {
-			xtype: 'actioncolumn',
-			width: 50,
-			items: [{
-				iconCls: 'sprite-minus-circle',
-				cls: 'delete',
-				tooltip: '{s name=roleslist/colactiondelete}Delete this role{/s}',
+            xtype: 'actioncolumn',
+            width: 50,
+            items: [{
+                iconCls: 'sprite-minus-circle',
+                cls: 'delete',
+                tooltip: '{s name=roleslist/colactiondelete}Delete this role{/s}',
                 handler:function (view, rowIndex, colIndex, item) {
                     me.fireEvent('deleteRole', view, rowIndex, colIndex, item);
                 },
@@ -144,30 +144,30 @@ Ext.define('Shopware.apps.UserManager.view.roles.List', {
                         return 'x-hidden';
                     }
                 }
-			}]
-		}
+            }]
+        }
         /* {/if} */];
 
 
-		// Toolbar
-		this.toolbar = Ext.create('Ext.toolbar.Toolbar', {
-			dock: 'top',
+        // Toolbar
+        this.toolbar = Ext.create('Ext.toolbar.Toolbar', {
+            dock: 'top',
             ui: 'shopware-ui',
         /* {if {acl_is_allowed privilege=create}} */
-		    items: [{
-				iconCls: 'sprite-plus-circle',
-				text: '{s name=roleslist/addrole}Add role{/s}',
-				action: 'addRole'
-			}
-			]
+            items: [{
+                iconCls: 'sprite-plus-circle',
+                text: '{s name=roleslist/addrole}Add role{/s}',
+                action: 'addRole'
+            }
+            ]
         /* {/if} */
-		});
+        });
 
 
-		this.dockedItems = Ext.clone(this.dockedItems);
-		this.dockedItems.push(this.toolbar);
+        this.dockedItems = Ext.clone(this.dockedItems);
+        this.dockedItems.push(this.toolbar);
 
-		this.callParent();
+        this.callParent();
     },
 
     getFieldsToLockForAdmin: function() {

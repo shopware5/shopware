@@ -46,7 +46,7 @@ Ext.define('Shopware.apps.Customer.model.Batch', {
      * @array
      */
     fields:[
-		//{block name="backend/customer/model/customer/fields"}{/block}
+        //{block name="backend/customer/model/customer/fields"}{/block}
         { name:'id', type:'int' }
     ],
 

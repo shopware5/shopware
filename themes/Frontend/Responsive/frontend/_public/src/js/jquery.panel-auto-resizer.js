@@ -225,7 +225,7 @@
                     me.setHeight(chunkItems, height);
                 }
             } else {
-               me.resetHeight();
+                me.resetHeight();
             }
 
             me._centerModal();
@@ -235,7 +235,7 @@
 
         /**
          * Call center() on modal
-         * 
+         *
          * @private
          */
         _centerModal: function() {
@@ -254,10 +254,10 @@
                 opts = me.opts;
 
             var allSelectorClass = [
-                    opts.panelHeaderSelector,
-                    opts.panelBodySelector,
-                    opts.panelFooterSelector
-                ].join(",");
+                opts.panelHeaderSelector,
+                opts.panelBodySelector,
+                opts.panelFooterSelector
+            ].join(',');
 
             me.$elChildren.find(allSelectorClass).each(function(index, childElement) {
                 $(childElement).css('height', 'auto');
@@ -276,5 +276,4 @@
         }
 
     });
-
 })(jQuery);

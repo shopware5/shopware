@@ -178,9 +178,13 @@ EOL
                 continue;
             }
 
-            $updated = serialize($updated);
+            $row = array_map(function ($value) {
+                return $this->connection->quote($value);
+            }, $row);
 
-            $values[$row['id']] = "('{$row['objecttype']}', '{$updated}', {$row['objectkey']}, {$row['objectlanguage']})";
+            $updated = $this->connection->quote(serialize($updated));
+
+            $values[$row['id']] = "({$row['objecttype']}, {$updated}, {$row['objectkey']}, {$row['objectlanguage']})";
         }
 
         return $values;

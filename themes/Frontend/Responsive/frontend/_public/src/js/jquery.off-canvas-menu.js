@@ -299,9 +299,7 @@
         openMenu: function () {
             var me = this,
                 opts = me.opts,
-                fromLeft = opts.direction === 'fromLeft',
-                menuWidth = me.$offCanvas.outerWidth(),
-                plugin;
+                menuWidth = me.$offCanvas.outerWidth();
 
             if (me.isOpened) {
                 return;

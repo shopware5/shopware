@@ -34,20 +34,20 @@
  */
 //{block name="backend/tax/model/states"}
 Ext.define('Shopware.apps.Tax.model.States', {
-	extend: 'Ext.data.Model',
-	fields: [
-		//{block name="backend/tax/model/states/fields"}{/block}
-		'id', 'name', 'countryId'],
-	proxy: {
-		type: 'ajax',
-		api: {
-			read: '{url controller="Tax" action="getStates"}'
-		},
-		reader: {
-			type: 'json',
-			root: 'data',
+    extend: 'Ext.data.Model',
+    fields: [
+        //{block name="backend/tax/model/states/fields"}{/block}
+        'id', 'name', 'countryId'],
+    proxy: {
+        type: 'ajax',
+        api: {
+            read: '{url controller="Tax" action="getStates"}'
+        },
+        reader: {
+            type: 'json',
+            root: 'data',
             totalProperty:'total'
-		}
-	}
+        }
+    }
 });
 //{/block}

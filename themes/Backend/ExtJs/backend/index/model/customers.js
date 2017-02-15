@@ -26,9 +26,9 @@
  */
 //{block name="backend/index/model/customers"}
 Ext.define('Shopware.apps.Index.model.Customers', {
-	extend: 'Ext.data.Model',
+    extend: 'Ext.data.Model',
     fields: [
-		//{block name="backend/index/model/customers/fields"}{/block}
-		'customer', 'amount']
+        //{block name="backend/index/model/customers/fields"}{/block}
+        'customer', 'amount']
 });
 //{/block}

@@ -44,7 +44,7 @@ Ext.define('Shopware.apps.Performance.model.Filter', {
      * @array
      */
     fields:[
-		//{block name="backend/performance/model/filter/fields"}{/block}
+        //{block name="backend/performance/model/filter/fields"}{/block}
         { name:'id', type:'int' },
         { name: 'showSupplierInCategories', type: 'bool'},
         { name: 'displayFiltersInListings', type:'bool' },

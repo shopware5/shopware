@@ -21,6 +21,8 @@
             <argument type="service" id="models"/>
             <argument type="service" id="shopware.snippet_database_handler" />
             <argument type="service" id="shopware.plugin_requirement_validator" />
+            <argument type="service" id="db_connection" />
+            <argument>%kernel.root_dir%</argument>
         </service>
 
         <service id="shopware_plugininstaller.legacy_plugin_installer" class="Shopware\Bundle\PluginInstallerBundle\Service\LegacyPluginInstaller">

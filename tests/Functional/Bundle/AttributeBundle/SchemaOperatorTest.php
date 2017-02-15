@@ -2,7 +2,7 @@
 
 namespace Shopware\Tests\Functional\Bundle\AttributeBundle;
 
-class SchemaOperatorTest extends \PHPUnit_Framework_TestCase
+class SchemaOperatorTest extends \PHPUnit\Framework\TestCase
 {
     public function testDefaultValues()
     {

@@ -24,8 +24,30 @@
 
 namespace Shopware\Tests\Functional\Components\Theme;
 
+use Doctrine\DBAL\Connection;
+use Shopware\Components\Model\ModelManager;
+use Shopware\Components\Theme\Inheritance;
+use Shopware\Components\Theme\Installer;
+use Shopware\Models\Shop\Shop;
+use Shopware\Models\Shop\Template;
+use Shopware\Recovery\Install\Service\ThemeService;
+
 class InheritanceTest extends Base
 {
+    protected function setUp()
+    {
+        /** @var Connection $connection */
+        $connection = Shopware()->Container()->get('dbal_connection');
+        $connection->beginTransaction();
+    }
+
+    protected function tearDown()
+    {
+        /** @var Connection $connection */
+        $connection = Shopware()->Container()->get('dbal_connection');
+        $connection->rollBack();
+    }
+
     public function getTheme(\Shopware\Models\Shop\Template $template)
     {
         if ($template->getParent() === null) {
@@ -148,6 +170,53 @@ class InheritanceTest extends Base
         }
     }
 
+    public function testConfigInheritanceForLanguageShop()
+    {
+        /** @var Connection $connection */
+        $connection = Shopware()->Container()->get('dbal_connection');
+        $connection->beginTransaction();
+
+        /** @var Installer $service */
+        $service = Shopware()->Container()->get('theme_installer');
+        $service->synchronize();
+
+        /** @var ModelManager $em */
+        $em = Shopware()->Container()->get('models');
+
+        $shop = new Shop();
+        $shop->setName('Main shop');
+
+        $templateId = $connection->fetchColumn("SELECT id FROM s_core_templates WHERE template = 'Responsive' LIMIT 1");
+        $template = $em->find(Template::class, $templateId);
+        $shop->setTemplate($template);
+        $em->persist($shop);
+        $em->flush($shop);
+
+        $elementId = $connection->fetchColumn("SELECT id FROM s_core_templates_config_elements WHERE template_id = :id AND name = 'brand-primary'", [':id' => $templateId]);
+        $connection->executeQuery('DELETE FROM s_core_templates_config_values');
+
+        $connection->executeQuery(
+            "INSERT INTO s_core_templates_config_values (element_id, shop_id, `value`) VALUES (:elementId, :shopId, :value)",
+            [':elementId' => $elementId, ':shopId' => $shop->getId(), ':value' => serialize('#000')]
+        );
+
+        /** @var Inheritance $inheritance */
+        $inheritance = Shopware()->Container()->get('theme_inheritance');
+        $config = $inheritance->buildConfig($template, $shop);
+        $this->assertArrayHasKey('brand-primary', $config);
+        $this->assertSame('#000', $config['brand-primary']);
+
+        $sub = new Shop();
+        $sub->setName('sub shop of main');
+        $sub->setMain($shop);
+
+        $config = $inheritance->buildConfig($template, $sub);
+        $this->assertArrayHasKey('brand-primary', $config);
+        $this->assertSame('#000', $config['brand-primary']);
+
+        $connection->rollBack();
+    }
+
 
     private function getDummyTemplates()
     {
@@ -156,12 +225,17 @@ class InheritanceTest extends Base
         $master->setTemplate('TestBare');
         $master->setVersion(3);
 
+        Shopware()->Container()->get('models')->persist($master);
+        Shopware()->Container()->get('models')->flush();
+
         $slave = new \Shopware\Models\Shop\Template();
         $slave->setName('TestResponsive');
         $slave->setTemplate('TestResponsive');
         $slave->setParent($master);
         $slave->setVersion(3);
 
+        Shopware()->Container()->get('models')->persist($slave);
+        Shopware()->Container()->get('models')->flush();
         return $slave;
     }
 }

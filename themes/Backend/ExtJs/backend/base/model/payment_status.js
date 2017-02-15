@@ -82,7 +82,7 @@ Ext.define('Shopware.apps.Base.model.PaymentStatus', {
      * @array
      */
     fields:[
-		//{block name="backend/base/model/payment_status/fields"}{/block}
+        //{block name="backend/base/model/payment_status/fields"}{/block}
         { name:'id', type: 'int' },
         { name:'name', type: 'string' },
         {

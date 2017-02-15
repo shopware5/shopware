@@ -35,7 +35,7 @@ Ext.define('Shopware.apps.Config.model.form.PriceGroup', {
     extend:'Ext.data.Model',
 
     fields:[
-		//{block name="backend/config/model/form/price_group/fields"}{/block}
+        //{block name="backend/config/model/form/price_group/fields"}{/block}
         { name: 'id', type: 'int' },
         { name: 'name', type: 'string' }
     ],
@@ -53,7 +53,7 @@ Ext.define('Shopware.apps.Config.model.form.PriceDiscount', {
     extend: 'Ext.data.Model',
 
     fields: [
-		//{block name="backend/config/model/form/price_discount/fields"}{/block}
+        //{block name="backend/config/model/form/price_discount/fields"}{/block}
         { name: 'customerGroupId', convert: function(v, record) {
             return v || record.raw && record.raw.customerGroup && record.raw.customerGroup.id;
         } },

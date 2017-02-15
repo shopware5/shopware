@@ -71,7 +71,7 @@ Ext.define('Shopware.apps.Order.controller.Batch', {
             title: '{s name=cancel_title}Cancelled{/s}'
         },
 
-		growlMessage: '{s name=growlMessage}Order{/s}'
+        growlMessage: '{s name=growlMessage}Order{/s}'
 
     },
 

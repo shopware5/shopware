@@ -190,14 +190,13 @@ class Shopware_Plugins_Core_RebuildIndex_Bootstrap extends Shopware_Components_P
 
             $this->RewriteTable()->baseSetup();
 
-            $offset = 0;
             $limit = 10000;
             $lastId = null;
             $lastUpdateVal = '0000-00-00 00:00:00';
+
             do {
-                $lastUpdateVal = $this->RewriteTable()->sCreateRewriteTableArticles($lastUpdateVal, $limit, $offset);
+                $lastUpdateVal = $this->RewriteTable()->sCreateRewriteTableArticles($lastUpdateVal, $limit);
                 $lastId = $this->RewriteTable()->getRewriteArticleslastId();
-                $offset = $offset + $limit;
             } while ($lastId !== null);
 
             $this->SeoIndex()->setCachedTime($currentTime->format('Y-m-d h:m:i'), $elementId, $shopId);

@@ -51,7 +51,7 @@ Ext.define('Shopware.apps.Order.model.Shipping', {
      * @array
      */
     fields: [
-		//{block name="backend/order/model/shipping/fields"}{/block}
+        //{block name="backend/order/model/shipping/fields"}{/block}
         { name: 'orderId', type: 'int' },
         { name: 'stateId', type:'int', useNull: true }
     ]

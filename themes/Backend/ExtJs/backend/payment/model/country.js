@@ -48,7 +48,7 @@ Ext.define('Shopware.apps.Payment.model.Country', {
      */
      //todo@ps paymentId
     fields:[
-		//{block name="backend/payment/model/country/fields"}{/block}
+        //{block name="backend/payment/model/country/fields"}{/block}
         { name: 'surcharge', type: 'double' },
         { name: 'payment', type: 'int' }
     ],

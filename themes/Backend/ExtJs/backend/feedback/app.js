@@ -32,7 +32,7 @@ Ext.define('Shopware.apps.Feedback', {
      * sub-application behavior and the event bus
      * @string
      */
-	extend: 'Enlight.app.SubApplication',
+    extend: 'Enlight.app.SubApplication',
 
     /**
      * Sets the loading path for the sub-application.
@@ -53,13 +53,13 @@ Ext.define('Shopware.apps.Feedback', {
      * The name of the module. Used for internal purpose
      * @string
      */
-	name: 'Shopware.apps.Feedback',
+    name: 'Shopware.apps.Feedback',
 
     /**
      * Required controllers for module (subapplication)
      * @array
      */
-	controllers: [ 'Main' ],
+    controllers: [ 'Main' ],
 
     /**
      * Required views for the module (subapplication)

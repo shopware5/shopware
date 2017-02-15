@@ -28,7 +28,7 @@ use Doctrine\DBAL\Connection;
 use Shopware\Bundle\MediaBundle\MediaServiceInterface;
 use Shopware\Bundle\StoreFrontBundle;
 use Shopware\Bundle\StoreFrontBundle\Service\CategoryServiceInterface;
-use Shopware\Bundle\StoreFrontBundle\Service\Core\ContextService;
+use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\Price;
 use Shopware\Components\DependencyInjection\Container;
@@ -48,7 +48,7 @@ class LegacyStructConverter
     private $config;
 
     /**
-     * @var ContextService
+     * @var ContextServiceInterface
      */
     private $contextService;
 
@@ -84,7 +84,7 @@ class LegacyStructConverter
 
     /**
      * @param \Shopware_Components_Config $config
-     * @param ContextService $contextService
+     * @param ContextServiceInterface $contextService
      * @param \Enlight_Event_EventManager $eventManager
      * @param MediaServiceInterface $mediaService
      * @param Connection $connection
@@ -94,7 +94,7 @@ class LegacyStructConverter
      */
     public function __construct(
         \Shopware_Components_Config $config,
-        ContextService $contextService,
+        ContextServiceInterface $contextService,
         \Enlight_Event_EventManager $eventManager,
         MediaServiceInterface $mediaService,
         Connection $connection,

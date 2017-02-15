@@ -27,6 +27,7 @@ namespace Shopware\Tests\Functional\Components\Api;
 use Shopware\Components\Api\Resource\Article;
 use Shopware\Components\Api\Resource\Resource;
 use Shopware\Components\Api\Resource\Variant;
+use Shopware\Models\Article\Configurator\Group;
 
 /**
  * @category  Shopware
@@ -576,7 +577,7 @@ class VariantTest extends TestCase
 
     private function getRandomId($table)
     {
-        return Shopware()->Db()->fetchOne("SELECT id FROM " . $table . " ORDER BY RAND() LIMIT 1");
+        return Shopware()->Db()->fetchOne("SELECT id FROM " . $table . " LIMIT 1");
     }
 
     private function getSimpleVariantData()
@@ -770,6 +771,75 @@ class VariantTest extends TestCase
             $option = $variant['configuratorOptions'][0];
 
             $this->assertContains($option['name'], $names);
+        }
+    }
+
+    public function testCreateConfiguratorOptionsWithPosition()
+    {
+        // required field name is missing
+        $testData = [
+            'name' => 'Testartikel',
+            'taxId' => 1,
+            'supplierId' => 2,
+            'mainDetail' => [
+                'number' => 'swTEST' . uniqid(rand()),
+                'prices' => [
+                    [
+                        'customerGroupKey' => 'EK',
+                        'from' => 1,
+                        'to' => 20,
+                        'price' => 500,
+                    ]
+                ]
+            ],
+            'configuratorSet' => [
+                'name' => 'CreateOptionsWithPosition',
+                'groups' => [
+                    [
+                        'name' => 'First group',
+                        'options' => [
+                            ['name' => 'group with 10', 'position' => 10],
+                            ['name' => 'group with 5', 'position' => 5]
+                        ]
+                    ],
+                    [
+                        'name' => 'Second group',
+                        'options' => [
+                            ['name' => 'group with 30' , 'position' => 30],
+                            ['name' => 'group with 12', 'position' => 12]
+                        ]
+                    ],
+                ]
+            ]
+        ];
+
+        $article = $this->resourceArticle->create($testData);
+        $this->assertInstanceOf('\Shopware\Models\Article\Article', $article);
+        $this->assertGreaterThan(0, $article->getId());
+
+        $groups = $article->getConfiguratorSet()->getGroups();
+        $this->assertCount(2, $groups);
+
+        /** @var Group[] $groups */
+        foreach ($groups as $group) {
+            $this->assertCount(2, $group->getOptions());
+            foreach ($group->getOptions() as $option) {
+                switch ($option->getName()) {
+                    case 'group with 10':
+                        $this->assertEquals(10, $option->getPosition());
+                        break;
+                    case 'group with 5':
+                        $this->assertEquals(5, $option->getPosition());
+                        break;
+                    case 'group with 30':
+                        $this->assertEquals(30, $option->getPosition());
+                        break;
+                    case 'group with 12':
+                        $this->assertEquals(12, $option->getPosition());
+                        break;
+
+                }
+            }
         }
     }
 }

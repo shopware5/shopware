@@ -779,6 +779,12 @@ class sAdmin
     private function regenerateSessionId()
     {
         $oldSessionId = session_id();
+
+        if ($this->eventManager->notifyUntil('Shopware_Modules_Admin_regenerateSessionId_Start',
+            ['subject' => $this, 'sessionId' => $oldSessionId])) {
+            return;
+        }
+
         session_regenerate_id(true);
         $newSessionId = session_id();
 
@@ -2576,6 +2582,9 @@ SQL;
                 u.id as userID
                 $sql_select
             FROM s_order_basket b
+
+            LEFT JOIN s_order_basket_attributes ba
+            ON b.id = ba.basketID
 
             LEFT JOIN s_articles a
             ON b.articleID = a.id

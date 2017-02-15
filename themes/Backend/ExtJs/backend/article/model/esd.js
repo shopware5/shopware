@@ -43,7 +43,7 @@ Ext.define('Shopware.apps.Article.model.Esd', {
      * @array
      */
     fields: [
-		//{block name="backend/article/model/esd/fields"}{/block}
+        //{block name="backend/article/model/esd/fields"}{/block}
         { name: 'id', type: 'int' },
         { name: 'name' },
         { name: 'additionalText', type: 'string', useNull: true, defaultValue: null },

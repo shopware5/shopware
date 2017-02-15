@@ -136,6 +136,12 @@ class Enlight_Components_Mail extends Zend_Mail
      */
     public function setFrom($email, $name = null)
     {
+        // mitigate "pwnscriptum" attack
+        // see https://framework.zend.com/security/advisory/ZF2016-04 for ZF2+ fix
+        if (preg_match('/\\\"/', $email)) {
+            throw new \RuntimeException('Potential code injection in From header');
+        }
+
         $this->_fromName = $name;
         return parent::setFrom($email, $name);
     }

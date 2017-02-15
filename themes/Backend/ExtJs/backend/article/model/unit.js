@@ -46,7 +46,7 @@ Ext.define('Shopware.apps.Article.model.Unit', {
      * @array
      */
      fields: [
-		//{block name="backend/article/model/unit/fields"}{/block}
+        //{block name="backend/article/model/unit/fields"}{/block}
         { name: 'id', type: 'int' },
         { name: 'name', type: 'string' }
      ]

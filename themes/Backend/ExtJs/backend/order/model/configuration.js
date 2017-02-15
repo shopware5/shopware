@@ -47,7 +47,7 @@ Ext.define('Shopware.apps.Order.model.Configuration', {
      * @array
      */
     fields:[
-		//{block name="backend/order/model/configuration/fields"}{/block}
+        //{block name="backend/order/model/configuration/fields"}{/block}
         { name: 'orderId', type:'int' },
 
         // todo dateFields needs type 'date', but if used the dates in the created documents are formatted improperly

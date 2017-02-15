@@ -132,7 +132,7 @@ Ext.define('Shopware.Notification', {
                 '</tpl>',
                 '<p>',
                     '<tpl if="title">',
-                        '<strong>{title}</strong>&nbsp;',
+                        '<strong>[Ext.util.Format.htmlEncode(title)]</strong>&nbsp;',
                     '</tpl>',
                     '{text}',
                 '</p>',
@@ -452,7 +452,7 @@ Ext.define('Shopware.Notification', {
      *
      * @param [string] title - Title of the message
      * @param [string] text - Text of the message
-	 * @param [string] caller - The module, which called this function
+     * @param [string] caller - The module, which called this function
      * @param [string] iconCls - Used icon class (default growl)
      * @param [boolean] log - If the growlMessage should be logged
      */
@@ -465,19 +465,19 @@ Ext.define('Shopware.Notification', {
 
         text = text || '';
 
-		if(log != false){
-			Ext.Ajax.request({
-				url: '{url controller="Log" action="createLog"}',
-				params: {
-					type: 'backend',
-					key: caller,
-					text: text,
-					user: userName,
-					value4: ''
-				},
-				scope:this
-			});
-		}
+        if(log != false){
+            Ext.Ajax.request({
+                url: '{url controller="Log" action="createLog"}',
+                params: {
+                    type: 'backend',
+                    key: caller,
+                    text: text,
+                    user: userName,
+                    value4: ''
+                },
+                scope:this
+            });
+        }
 
         // Collect message data
         msgData = {

@@ -38,9 +38,11 @@ use Shopware\Kernel;
 use Shopware\Models\Plugin\Plugin;
 use Shopware\Components\Plugin\FormSynchronizer;
 use Shopware\Components\Plugin\MenuSynchronizer;
+use Shopware\Components\Plugin\CronjobSynchronizer;
 use Shopware\Components\Plugin\XmlMenuReader;
 use Shopware\Components\Plugin\XmlConfigDefinitionReader;
 use Shopware\Components\Plugin\XmlPluginInfoReader;
+use Shopware\Components\Plugin\XmlCronjobReader;
 
 class PluginInstaller
 {
@@ -65,19 +67,35 @@ class PluginInstaller
     private $requirementValidator;
 
     /**
+     * @var \PDO
+     */
+    private $pdo;
+
+    /**
+     * @var string
+     */
+    private $rootDirectory;
+
+    /**
      * @param ModelManager $em
      * @param DatabaseHandler $snippetHandler
      * @param RequirementValidator $requirementValidator
+     * @param \PDO $pdo
+     * @param $rootDirectory
      */
     public function __construct(
         ModelManager $em,
         DatabaseHandler $snippetHandler,
-        RequirementValidator $requirementValidator
+        RequirementValidator $requirementValidator,
+        \PDO $pdo,
+        $rootDirectory
     ) {
         $this->em = $em;
         $this->connection = $this->em->getConnection();
         $this->snippetHandler = $snippetHandler;
         $this->requirementValidator = $requirementValidator;
+        $this->pdo = $pdo;
+        $this->rootDirectory = $rootDirectory;
     }
 
     /**
@@ -199,6 +217,10 @@ class PluginInstaller
             $this->installMenu($plugin, $bootstrap->getPath().'/Resources/menu.xml');
         }
 
+        if (is_file($bootstrap->getPath().'/Resources/cronjob.xml')) {
+            $this->installCronjob($plugin, $bootstrap->getPath().'/Resources/cronjob.xml');
+        }
+
         if (file_exists($bootstrap->getPath() . '/Resources/snippets')) {
             $this->installSnippets($bootstrap);
         }
@@ -250,9 +272,11 @@ class PluginInstaller
      */
     public function refreshPluginList(\DateTimeInterface $refreshDate)
     {
-        /** @var Kernel $kernel */
-        $kernel = Shopware()->Container()->get('kernel');
-        $plugins = $kernel->getPlugins();
+        $initializer = new PluginInitializer(
+            $this->pdo,
+            $this->rootDirectory . '/custom/plugins'
+        );
+        $plugins = $initializer->initializePlugins();
 
         foreach ($plugins as $plugin) {
             $pluginInfoPath = $plugin->getPath().'/plugin.xml';
@@ -346,6 +370,19 @@ class PluginInstaller
 
         $menuSynchronizer = new MenuSynchronizer($this->em);
         $menuSynchronizer->synchronize($plugin, $menu);
+    }
+
+    /**
+     * @param Plugin $plugin
+     * @param string $file
+     */
+    private function installCronjob(Plugin $plugin, $file)
+    {
+        $cronjobReader = new XmlCronjobReader();
+        $cronjobs = $cronjobReader->read($file);
+
+        $cronjobSynchronizer = new CronjobSynchronizer($this->em->getConnection());
+        $cronjobSynchronizer->synchronize($plugin, $cronjobs);
     }
 
     /**

@@ -25,6 +25,7 @@
 namespace Shopware\Components\Api;
 
 use Shopware\Components\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 
 /**
  * API Manger
@@ -41,13 +42,17 @@ class Manager
      */
     public static function getResource($name)
     {
-        $name = ucfirst($name);
-        $class = __NAMESPACE__ . '\\Resource\\' . $name;
-
-        /** @var $resource Resource\Resource */
-        $resource = new $class();
-
         $container = Shopware()->Container();
+        try {
+            /** @var $resource Resource\Resource */
+            $resource = $container->get('shopware.api.' . strtolower($name));
+        } catch (ServiceNotFoundException $e) {
+            $name = ucfirst($name);
+            $class = __NAMESPACE__ . '\\Resource\\' . $name;
+
+            /** @var $resource Resource\Resource */
+            $resource = new $class();
+        }
 
         if ($resource instanceof ContainerAwareInterface) {
             $resource->setContainer($container);

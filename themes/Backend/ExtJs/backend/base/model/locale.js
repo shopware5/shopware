@@ -53,12 +53,12 @@ Ext.define('Shopware.apps.Base.model.Locale', {
      */
     idProperty : 'id',
 
-	/**
+    /**
     * The fields used for this model
     * @array
     */
     fields: [
-		//{block name="backend/base/model/locale/fields"}{/block}
+        //{block name="backend/base/model/locale/fields"}{/block}
         { name : 'id', type : 'int' },
         { name: 'name', type: 'string', convert: function(v, record) {
             return record.data.language + ' (' + record.data.territory + ')';

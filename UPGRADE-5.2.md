@@ -2,6 +2,89 @@
 
 This changelog references changes done in Shopware 5.2 patch versions.
 
+## 5.2.19
+* Changed the loading of backend widgets to disable widgets of deactivated plugins
+* Added new Event `Shopware_Modules_Admin_regenerateSessionId_Start` in sAdmin::regenerateSessionId
+* Changed `convertCategory` method in `engine/Shopware/Core/sCategories.php` from private to public
+* Added left join of `s_order_basket_attributes` in `sAdmin::sGetDispatchBasket()` and `sExport::sGetDispatchBasket()`
+* Added event `blog-save-successfully` to `onSaveBlogArticle()` method in `themes/Backend/ExtJs/backend/blog/controller/blog.js`
+* Added event `customer-address-save-successfully` to `onSaveCustomer()` method in `themes/Backend/ExtJs/backend/customer/controller/detail.js`
+* Added event `customer-save-successfully` to  `onSaveCustomer()` method in `themes/Backend/ExtJs/backend/customer/controller/detail.js`
+* Added event `site-save-successfully` to `onSaveSite()` method in `themes/Backend/ExtJs/backend/site/controller/form.js`
+* Added event `supplier-save-successfully` to `onSupplierSave()` method in `themes/Backend/ExtJs/backend/supplier/controller/main.js`
+* Added the possibility to add a Theme info tab. Add a folder with the name "info" to your theme folder. Add a html file to the folder with the required language iso like "en_EN.html". The HTML content of the file is the content of the tab.
+* Changed internal loop variable name `positions` in `themes/Frontend/Bare/documents/index.tpl` to fix typo
+
+## 5.2.17
+[View all changes from v5.2.16...v5.2.17](https://github.com/shopware/shopware/compare/v5.2.16...v5.2.17)
+
+* Deprecated Smarty modifier `rewrite`. Modifier will be removed in 5.3.0.
+* Changed default `session.gc_divisor` to `200`. To decrease session garbade collection probability.
+* Added console command `sw:session:cleanup` to cleanup expired sessions.
+* Changed database field `s_core_sessions.expiry` to contain the timestamp when the session should expire, not the session lifetime.
+* Changed database field `s_core_sessions_backend.expiry` to contain the timestamp when the session should expire, not the session lifetime.
+* Added `$sAmountNumeric` and `$sAmountNetNumeric` to sOrder mail
+* Added command `sw:media:optimize` to optimize media files without quality loss.
+* Added new Smarty blocks to `documents/index.tpl`
+    * `document_index_address`
+    * `document_index_address_sender`
+    * `document_index_address_base`
+* Added `s_article_configurator_options_attributes` and `s_article_configurator_groups_attributes`
+* Added new plugin config element type `button`
+* Changed `\Enlight_Controller_Plugins_ViewRenderer_Bootstrap::setNoRender` resets now the view template to prevent `PostDispatchSecure` events
+* Changed `\Shopware\Bundle\StoreFrontBundle\Service\Core\ManufacturerService::getList` fetch now the seo urls for each manufacturer
+* Removed duplicated initialisation of `\Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface`.
+* Added `_seo` parameter for smarty url plugin which allows to prevent s_core_rewrite_url query for none seo urls
+* Removed unnecessary `/widget/index/menu` call in `themes/Frontend/Bare/frontend/index/topbar-navigation.tpl` and `themes/Frontend/Bare/frontend/index/footer_minimal.tpl`. The `widgets/index/menu.tpl` template is now included directly.
+* Added `\Shopware\Components\Theme\PathResolver::getDirectoryByArray` function which allows to load theme inheritances without doctrine models
+* Added api resources to dependency injection container
+
+### Media Optimizer
+
+The service `shopware_media.optimizer_service` optimizes files using external tools. Further external tools can be implemented using the interface `Shopware\Bundle\MediaBundle\Optimizer\OptimizerInterface` and the dependency injection tag `shopware_media.optimizer`.
+
+### Api resources
+The api resources are now available in the dependency injection container using the namespace `shopware.api`. It is now possible to add your own resources as services or decorate others in your plugins `services.xml`.
+```
+/** Register new resource as service */
+<service id="shopware.api.example" class="SwagExampleApi\Components\Api\Resource\Example" />
+
+/** Replace existing resource service */
+<service 
+    id="swag_example_plugin.article_api"
+    class="SwagExampleApi\Components\Api\Resource\Article"
+    decorates="shopware.api.article"
+    public="false"
+    shared="false">
+</service>
+```
+
+## 5.2.15
+
+[View all changes from v5.2.14...v5.2.15](https://github.com/shopware/shopware/compare/v5.2.14...v5.2.15)
+
+* Fixed article api resource when creating a new article with new configurator options and an image mapping for this new options
+* Added cronjob registration via `Resources/cronjob.xml` file
+* Removed call to `strip_tags` in inputfilter on all request parameters.
+    * Please make sure untrusted input is escaped in plugins 
+
+## 5.2.14
+
+[View all changes from v5.2.13...v5.2.14](https://github.com/shopware/shopware/compare/v5.2.13...v5.2.14)
+
+### Add property "valueField" to the media field.
+* The shopping world element "Media field" supports now to change the value field. All possible properties you can find in the file: `themes/Backend/ExtJs/backend/media_manager/model/media.js`
+
+ Example:
+ 
+```php
+ $emotionElement->createMediaField([
+     'name' => 'preview_image',
+     'fieldLabel' => 'The preview image',
+     'valueField' => 'virtualPath'
+ ]);
+ ```
+
 ## 5.2.13
 
 [View all changes from v5.2.12...v5.2.13](https://github.com/shopware/shopware/compare/v5.2.12...v5.2.13)
@@ -15,6 +98,9 @@ This changelog references changes done in Shopware 5.2 patch versions.
 * Changed frontendsession to a locking session handler
     * Added new configuration parameter `session.locking` which is `true` by default
     * The session handler can be overwritten by replacing the `session.save_handler`-Service. A instance of `\SessionHandlerInterface` has to be returned.
+* Changed return value of `sArticles::sGetArticleById()` to provide an additional text if none is given and display the cover image by default when using the selection configurator
+* Changed url parameter in last seen articles to deeplink to an article variant instead of the article
+* Added console command `sw:rebuild:seo:index` to rebuild the SEO index on demand
 
 ### Autoloading of plugin resources
 

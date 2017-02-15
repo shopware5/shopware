@@ -59,9 +59,9 @@ Ext.define('Shopware.apps.Site.controller.Form', {
         { ref:'detailForm', selector:'site-form' },
         { ref:'navigationTree', selector:'site-tree' },
         { ref:'itemSelector', selector:'site-form itemselector' },
-		{ ref:'navigationTree', selector:'site-tree' },
+        { ref:'navigationTree', selector:'site-tree' },
         { ref:'attributeForm', selector: 'site-mainWindow shopware-attribute-form' },
-		{ ref:'parentIdField', selector:'site-form hidden[name=parentId]' },
+        { ref:'parentIdField', selector:'site-form hidden[name=parentId]' },
         { ref:'helperIdField', selector:'site-form hidden[name=helperId]' }
     ],
 
@@ -91,10 +91,10 @@ Ext.define('Shopware.apps.Site.controller.Form', {
     onSaveSite: function() {
         var me = this,
             form = me.getDetailForm(),
-			ddselector = form.down('ddselector'),
-			toStore = ddselector.toStore,
+            ddselector = form.down('ddselector'),
+            toStore = ddselector.toStore,
             values = form.getValues(),
-			record = form.getRecord(),
+            record = form.getRecord(),
             model;
 
         form.getForm().updateRecord(record);
@@ -106,23 +106,23 @@ Ext.define('Shopware.apps.Site.controller.Form', {
             Shopware.Notification.createGrowlMessage('','{s name=onSaveGroupAndDescriptionNeeded}You need to select a title and a group{/s}','{s name=mainWindowTitle}{/s}');
             return;
         }
-		var grouping;
-		Ext.each(toStore.data.items, function(item){
-			if(grouping){
-				grouping = grouping + ',' + item.get('templateVariable');
-			}else{
-				grouping = item.get('templateVariable');
-			}
-		});
-		model.set('grouping', grouping);
+        var grouping;
+        Ext.each(toStore.data.items, function(item){
+            if(grouping){
+                grouping = grouping + ',' + item.get('templateVariable');
+            }else{
+                grouping = item.get('templateVariable');
+            }
+        });
+        model.set('grouping', grouping);
 
         //if a link is given and no target is explicitly set, set it to _blank
         if (values.link != "" && values.target == "") {
             values.target = "_blank";
         }
 
-		var selectionModel = me.getNavigationTree().getSelectionModel(),
-		    data;
+        var selectionModel = me.getNavigationTree().getSelectionModel(),
+            data;
 
         if ((selectionModel.lastSelected) && (selectionModel.getSelection()[0].parentNode)) {
             data = selectionModel.getSelection()[0].parentNode.data;
@@ -131,12 +131,14 @@ Ext.define('Shopware.apps.Site.controller.Form', {
             model.set('parentId', ~~(values.parentId) || ~~(data.helperId));
         }
 
-		//save the current form state
+        //save the current form state
         model.save({
             success: function(record,response) {
                 var responseObject = Ext.decode(response.response.responseText);
                 record.set('helperId', responseObject.data.id);
                 me.getAttributeForm().saveAttribute(record.get('helperId'));
+
+                Shopware.app.Application.fireEvent('site-save-successfully', me, record, form);
 
                 form.loadRecord(record);
                 Shopware.Notification.createGrowlMessage('','{s name=onSaveSiteSuccess}The site has been saved successfully.{/s}', '{s name=mainWindowTitle}{/s}');

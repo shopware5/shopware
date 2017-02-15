@@ -75,6 +75,13 @@ class Group extends ModelEntity
     protected $options;
 
     /**
+     * INVERSE SIDE
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\ConfiguratorGroup", mappedBy="configuratorGroup", orphanRemoval=true, cascade={"persist"})
+     * @var \Shopware\Models\Attribute\ConfiguratorGroup
+     */
+    protected $attribute;
+
+    /**
      * Class constructor, initials the array collections for the associations.
      */
     public function __construct()
@@ -170,5 +177,22 @@ class Group extends ModelEntity
     public function setOptions($options)
     {
         $this->options = $options;
+    }
+
+    /**
+     * @return \Shopware\Models\Attribute\ConfiguratorGroup
+     */
+    public function getAttribute()
+    {
+        return $this->attribute;
+    }
+
+    /**
+     * @param \Shopware\Models\Attribute\ConfiguratorGroup|array|null $attribute
+     * @return \Shopware\Models\Attribute\ConfiguratorGroup
+     */
+    public function setAttribute($attribute)
+    {
+        return $this->setOneToOne($attribute, '\Shopware\Models\Attribute\ConfiguratorGroup', 'attribute', 'configuratorGroup');
     }
 }

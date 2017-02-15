@@ -50,6 +50,7 @@
         <service id="shopware_account.form.attributeform" class="Shopware\Bundle\AccountBundle\Form\Account\AttributeFormType">
             <argument type="service" id="models" />
             <argument type="service" id="shopware_attribute.crud_service" />
+            <argument type="service" id="corelogger" />
             <tag name="form.type" />
         </service>
 

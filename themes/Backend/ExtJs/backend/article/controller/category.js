@@ -49,7 +49,7 @@ Ext.define('Shopware.apps.Article.controller.Category', {
         alreadyExist: {
             title: '{s name=category/already_exist/title}Failed{/s}',
             message: '{s name=category/already_exist/message}Category: [0] has already been assigned{/s}',
-			caller: '{s name=category/already_exist/caller}Article{/s}'
+            caller: '{s name=category/already_exist/caller}Article{/s}'
         }
     },
     /**

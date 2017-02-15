@@ -71,7 +71,7 @@ Ext.define('Shopware.apps.Voucher.controller.Voucher', {
         deleteMultipleVoucherError: '{s name=message/deleteMultipleVoucherError}An error has occured while deleting the selected vouchers: {/s}',
         onSaveVoucherSuccess: '{s name=message/onSaveVoucherSuccess}Changes saved successfully{/s}',
         onSaveVoucherError: '{s name=message/onSaveVoucherError}An error has occured while saving your changes.{/s}',
-		growlMessage: '{s name=growlMessage}Voucher{/s}'
+        growlMessage: '{s name=growlMessage}Voucher{/s}'
     },
 
     /**

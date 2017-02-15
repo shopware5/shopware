@@ -58,7 +58,7 @@ Ext.define('Shopware.apps.Base.model.User', {
      * @array
      */
     fields:[
-		//{block name="backend/base/model/user/fields"}{/block}
+        //{block name="backend/base/model/user/fields"}{/block}
         { name:'id', type:'int' },
         { name:'roleId', type:'int' },
         { name:'username', type:'string' },

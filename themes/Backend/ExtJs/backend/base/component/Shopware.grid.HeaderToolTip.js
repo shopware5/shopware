@@ -166,7 +166,7 @@ Ext.define('Shopware.grid.HeaderToolTip', {
         var column = headerCt.down('gridcolumn[id=' + tip.triggerElement.id  +']');
 
         if (column && column.tooltip) {
-            tip.update(column.tooltip);
+            tip.update(Ext.util.Format.htmlEncode(column.tooltip));
         } else {
             tip.clearTimers();
             return false;

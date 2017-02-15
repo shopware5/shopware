@@ -44,7 +44,7 @@ class FileSystem
      * @param  bool   $fixPermission
      * @return array  of errors
      */
-    public function checkDirectoryPermissions($directory, $fixPermission = false)
+    public function checkSingleDirectoryPermissions($directory, $fixPermission = false)
     {
         $errors = array();
 
@@ -62,6 +62,22 @@ class FileSystem
         if (!is_writable($directory)) {
             $errors[] = $directory;
 
+            return $errors;
+        }
+
+        return $errors;
+    }
+    
+    /**
+     * @param  string $directory
+     * @param  bool   $fixPermission
+     * @return array  of errors
+     */
+    public function checkDirectoryPermissions($directory, $fixPermission = false)
+    {
+        $errors = $this->checkSingleDirectoryPermissions($directory, $fixPermission);
+
+        if (!empty($errors)) {
             return $errors;
         }
 

@@ -46,7 +46,7 @@ Ext.define('Shopware.apps.Article.model.Category', {
      * @array
      */
     fields: [
-		//{block name="backend/article/model/category/fields"}{/block}
+        //{block name="backend/article/model/category/fields"}{/block}
         'id',
         'name',
         {

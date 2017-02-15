@@ -42,7 +42,7 @@ Ext.define('Shopware.apps.Blog.model.Media', {
      * @array
      */
     fields: [
-		//{block name="backend/blog/model/media/fields"}{/block}
+        //{block name="backend/blog/model/media/fields"}{/block}
         { name: 'id', type: 'int' },
         { name: 'mediaId', type: 'int' },
         { name: 'preview', type: 'boolean' },

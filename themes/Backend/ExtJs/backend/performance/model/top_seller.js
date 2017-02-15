@@ -44,7 +44,7 @@ Ext.define('Shopware.apps.Performance.model.TopSeller', {
      * @array
      */
     fields:[
-		//{block name="backend/performance/model/top_seller/fields"}{/block}
+        //{block name="backend/performance/model/top_seller/fields"}{/block}
         { name:'id', type:'int' },
         { name: 'topSellerActive', type: 'bool'},
         { name: 'topSellerValidationTime', type: 'int'},

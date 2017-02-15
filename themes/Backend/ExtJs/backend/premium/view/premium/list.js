@@ -193,7 +193,7 @@ Ext.define('Shopware.apps.Premium.view.premium.List', {
                 header: '{s name=column/subshop}Subshop{/s}',
                 dataIndex: 'subShopName',
                 flex: 1,
-				renderer: this.renderSubShop
+                renderer: this.renderSubShop
             },{
                 header: '{s name=column/startprice}Minimum order value{/s}',
                 dataIndex: 'startPrice',
@@ -208,13 +208,13 @@ Ext.define('Shopware.apps.Premium.view.premium.List', {
         return columns;
     },
 
-	renderSubShop: function(value,a,record){
-		if(value){
-			return value;
-		}else if(record.data.shopId == 0){
-			return "{s name=premium/subShop/comboBox_general}Universally valid{/s}";
-		}
-	},
+    renderSubShop: function(value,a,record){
+        if(value){
+            return value;
+        }else if(record.data.shopId == 0){
+            return "{s name=premium/subShop/comboBox_general}Universally valid{/s}";
+        }
+    },
 
     /**
      * Creates the toolbar with a save-button, a delete-button and a textfield to search for articles

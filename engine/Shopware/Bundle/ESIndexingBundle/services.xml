@@ -64,8 +64,6 @@
         <service id="shopware_elastic_search.backlog_processor" class="Shopware\Bundle\ESIndexingBundle\BacklogProcessor">
             <argument type="service" id="dbal_connection" />
             <argument type="service" id="shopware_elastic_search.composite_synchronizer" />
-            <argument type="service" id="shopware_elastic_search.index_factory" />
-            <argument type="service" id="shopware_elastic_search.identifier_selector" />
         </service>
 
         <service id="shopware_elastic_search.backlog_reader" class="Shopware\Bundle\ESIndexingBundle\BacklogReader">
@@ -136,6 +134,7 @@
 
         <service id="shopware_elastic_search.orm_backlog_save_subscriber" class="Shopware\Bundle\ESIndexingBundle\Subscriber\ORMBacklogSaveSubscriber">
             <argument type="service" id="shopware_elastic_search.orm_backlog_subscriber" />
+            <argument type="service" id="service_container" />
             <tag name="shopware.event_subscriber" />
         </service>
 

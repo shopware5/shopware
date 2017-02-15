@@ -1,5 +1,5 @@
 ;(function($) {
-    "use strict";
+    'use strict';
 
     /**
      * Shopware product Compare Plugin.
@@ -47,7 +47,7 @@
             var me = this,
                 $compareMenu = $(me.opts.compareMenuSelector);
 
-            if(!$compareMenu.is(':empty')) {
+            if (!$compareMenu.is(':empty')) {
                 $compareMenu.removeClass(me.opts.hiddenCls);
             }
 
@@ -95,7 +95,6 @@
                     $.publish('plugin/swProductCompareMenu/onStartCompareSuccess', [ me, template ]);
 
                     $.loadingIndicator.close(function() {
-
                         $.modal.open(template, {
                             title: modalTitle,
                             sizing: 'content'
@@ -109,7 +108,7 @@
 
                         // Resize every property row height to biggest height in cell
                         var maxRows = 0;
-                        $(".entry--property").each(function () {
+                        $('.entry--property').each(function () {
                             var row = ~~($(this).attr('data-property-row'));
                             if (row > maxRows) {
                                 maxRows = row;
@@ -120,14 +119,14 @@
                             rowSelector,
                             i = 1;
 
-                        for( ; i <= maxRows; i++) {
+                        for (; i <= maxRows; i++) {
                             rowSelector = '.entry--property[data-property-row="' + i + '"]';
 
                             maximumHeight = 0;
                             $(rowSelector).each(function () {
                                 var rowHeight = $(this).height();
 
-                                if (rowHeight > maximumHeight ) {
+                                if (rowHeight > maximumHeight) {
                                     maximumHeight = rowHeight;
                                 }
                             });
@@ -199,8 +198,7 @@
                 deleteUrl = $form.attr('action');
             }
 
-            if(compareCount > 1) {
-
+            if (compareCount > 1) {
                 // slide up and remove product from unordered list
                 rowElement.slideUp('fast', function() {
                     rowElement.remove();
@@ -217,7 +215,6 @@
                         $.publish('plugin/swProductCompareMenu/onDeleteItemSuccess', [ me, response ]);
                     }
                 });
-
             } else {
                 // remove last product, reload full compare plugin
                 $.ajax({
@@ -226,7 +223,7 @@
                     'success': function (response) {
                         $(me.opts.compareMenuSelector).empty().addClass(me.opts.hiddenCls);
 
-                        //Reload compare menu plugin
+                        // Reload compare menu plugin
                         $('*[data-product-compare-menu="true"]').swProductCompareMenu();
 
                         $.publish('plugin/swProductCompareMenu/onDeleteItemSuccess', [ me, response ]);

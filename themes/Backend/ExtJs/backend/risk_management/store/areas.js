@@ -35,9 +35,9 @@
  */
 //{block name="backend/risk_management/store/areas"}
 Ext.define('Shopware.apps.RiskManagement.store.Areas', {
-	extend: 'Ext.data.Store',
-	autoLoad: false,
-	pageSize: 30,
-	model : 'Shopware.apps.RiskManagement.model.Areas'
+    extend: 'Ext.data.Store',
+    autoLoad: false,
+    pageSize: 30,
+    model : 'Shopware.apps.RiskManagement.model.Areas'
 });
 //{/block}

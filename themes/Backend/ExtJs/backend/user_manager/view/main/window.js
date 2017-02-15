@@ -37,7 +37,7 @@
  */
 //{block name="backend/user_manager/view/main/window"}
 Ext.define('Shopware.apps.UserManager.view.main.Window', {
-	extend: 'Enlight.app.Window',
+    extend: 'Enlight.app.Window',
     title: '{s name=window/title}Backend user administration{/s}',
     alias: 'widget.usermanager-main-window',
     border: false,

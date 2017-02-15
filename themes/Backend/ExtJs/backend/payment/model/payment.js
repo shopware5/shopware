@@ -52,7 +52,7 @@ Ext.define('Shopware.apps.Payment.model.Payment', {
      * @array
      */
     fields : [
-		//{block name="backend/payment/model/payment/fields"}{/block}
+        //{block name="backend/payment/model/payment/fields"}{/block}
         { name : 'text', type: 'string' },
         { name : 'id', type: 'int' },
         { name : 'name', type: 'string' },
