@@ -1737,8 +1737,6 @@ class sExport
               COALESCE (s.base_url, m.base_url) AS base_url,
               COALESCE (s.hosts, m.hosts) AS hosts,
               COALESCE (s.secure, m.secure) AS secure,
-              COALESCE (s.secure_host, m.secure_host) AS secure_host,
-              COALESCE (s.secure_base_path, m.secure_base_path) AS secure_base_path,
               COALESCE (s.template_id, m.template_id) AS template_id,
               COALESCE (s.document_template_id, m.document_template_id) AS document_template_id,
               s.category_id,
@@ -1747,8 +1745,7 @@ class sExport
               s.fallback_id,
               s.customer_scope,
               s.`default`,
-              s.active,
-              s.always_secure
+              s.active
             FROM s_core_shops s
             LEFT JOIN s_core_shops m
               ON m.id=s.main_id

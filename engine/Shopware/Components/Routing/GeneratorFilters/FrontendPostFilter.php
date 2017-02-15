@@ -35,27 +35,19 @@ use Shopware\Components\Routing\PostFilterInterface;
 class FrontendPostFilter implements PostFilterInterface
 {
     /**
-     * legacy default secure controllers
-     *
-     * @var string[]
-     */
-    private $secureControllers = ['account', 'checkout', 'register', 'ticket', 'note', 'compare'];
-
-    /**
      * {@inheritdoc}
      */
     public function postFilter($url, Context $context)
     {
         $params = $context->getParams();
+
         if ($this->isFullPath($params)) {
-            $secure = $this->isSecure($context, $params);
-            $url = ($secure ? 'https://' : 'http://')
-                . ($secure ? $context->getSecureHost() : $context->getHost())
-                . ($secure ? $context->getSecureBaseUrl() : $context->getBaseUrl())
+            $url = ($context->isSecure() ? 'https://' : 'http://')
+                . $context->getHost()
+                . $context->getBaseUrl()
                 . '/' . $url;
         }
 
-        //@todo make session postfilter
         if (!empty($params['appendSession'])) {
             $url .= strpos($url, '?') === false ? '?' : '&';
             $url .= session_name() . '=' . session_id();
@@ -65,30 +57,16 @@ class FrontendPostFilter implements PostFilterInterface
         return $url;
     }
 
-    private function isSecure(Context $context, $params)
-    {
-        if ($context->isAlwaysSecure()) {
-            $secure = true;
-        } elseif (!$context->isSecure()) {
-            $secure = false;
-        } elseif (!empty($params['sUseSSL']) || !empty($params['forceSecure'])) {
-            $secure = true;
-        } elseif (!empty($params['controller']) &&
-            in_array($params['controller'], $this->secureControllers)
-        ) {
-            $secure = true;
-        } else {
-            $secure = false;
-        }
 
-        return $secure;
-    }
-
+    /**
+     * @param string[]
+     * @return bool
+     */
     private function isFullPath($params)
     {
         if (!empty($params['fullPath']) || !empty($params['sUseSSL']) || !empty($params['forceSecure'])) {
             $fullPath = true;
-        } elseif (isset($params['module']) && $params['module'] != 'frontend') {
+        } elseif (isset($params['module']) && $params['module'] !== 'frontend') {
             $fullPath = false;
         } elseif (isset($params['fullPath']) && empty($params['fullPath'])) {
             $fullPath = false;

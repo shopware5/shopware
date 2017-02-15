@@ -223,24 +223,6 @@ Ext.define('Shopware.apps.Config.view.shop.Detail', {
                 });
             }
         }, {
-            xtype: 'config-element-boolean',
-            name: 'alwaysSecure',
-            fieldLabel: '{s name=shop/detail/always_secure}Use always SSL{/s}',
-            hidden: true,
-            isSecure: true
-        }, {
-            name: 'secureHost',
-            emptyText: '{s name=shop/detail/secure_host_empty_text}secure.example.com{/s}',
-            fieldLabel: '{s name=shop/detail/secure_host_label}SSL host{/s}',
-            hidden: true,
-            isSecure: true
-        },{
-            name: 'secureBasePath',
-            emptyText: '{s name=shop/detail/secure_path_empty_text}/secure{/s}',
-            fieldLabel: '{s name=shop/detail/secure_path_label}SSL base path{/s}',
-            hidden: true,
-            isSecure: true
-        },{
             xtype: 'config-element-textarea',
             name: 'hosts',
             fieldLabel: '{s name=shop/detail/hosts_label}Host aliases{/s}',

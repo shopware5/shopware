@@ -85,34 +85,22 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
         if (!$shop->getBasePath()) {
             $shop->setBasePath($request->getBasePath());
         }
-        if (!$shop->getSecureBasePath()) {
-            $shop->setSecureBasePath($shop->getBasePath());
-        }
-        if (!$shop->getSecureHost()) {
-            $shop->setSecureHost($shop->getHost());
-        }
 
         // Read original base path for resources
         $request->getBasePath();
+        $request->setBaseUrl($shop->getBaseUrl());
 
-        if ($request->isSecure()) {
-            $request->setBaseUrl($shop->getSecureBaseUrl());
-        } else {
-            $request->setBaseUrl($shop->getBaseUrl());
-        }
 
         // Update path info
         $request->setPathInfo(
             $this->createPathInfo($request, $shop)
         );
 
-        if (($host = $request->getHeader('X_FORWARDED_HOST')) !== null
-            && $host === $shop->getSecureHost()
-        ) {
+        if (($host = $request->getHeader('X_FORWARDED_HOST')) !== null && $host === $shop->getHost()) {
             $request->setSecure();
-            $request->setBasePath($shop->getSecureBasePath());
-            $request->setBaseUrl($shop->getSecureBaseUrl());
-            $request->setHttpHost($shop->getSecureHost());
+            $request->setBasePath($shop->getBasePath());
+            $request->setBaseUrl($shop->getBaseUrl());
+            $request->setHttpHost($shop->getHost());
         }
 
         $this->validateShop($shop);
@@ -133,10 +121,12 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
             /** @var DetachedShop $shop */
             $shop = $this->get('Shop');
 
-            if ($request->isSecure() && $request->getHttpHost() !== $shop->getSecureHost()) {
-                $newPath = 'https://' . $shop->getSecureHost() . $request->getRequestUri();
-            } elseif (!$request->isSecure() && $request->getHttpHost() !== $shop->getHost()) {
-                $newPath = 'http://' . $shop->getHost() . $shop->getBaseUrl();
+            if ($request->getHttpHost() !== $shop->getHost()) {
+                if ($request->isSecure()) {
+                    $newPath = 'https://' . $shop->getHost() . $request->getRequestUri();
+                } else {
+                    $newPath = 'http://' . $shop->getHost() . $shop->getBaseUrl();
+                }
             }
 
             // Strip /shopware.php/ from string and perform a redirect
@@ -221,7 +211,7 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
                 break;
         }
 
-        if ($cookieKey === 'shop' && $this->shouldRedirect($request, $shop) == true) {
+        if ($cookieKey === 'shop' && $this->shouldRedirect($request, $shop)) {
             /** @var $repository Shopware\Models\Shop\Repository */
             $repository = $this->get('models')->getRepository(Shop::class);
 
@@ -383,11 +373,7 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
         $baseUrl = $newShop->getBaseUrl() ?: $request->getBasePath();
 
         if ($request->isSecure()) {
-            $host = $newShop->getSecureHost() ?: $newShop->getHost();
-
-            if ($newShop->getSecureBaseUrl()) {
-                $baseUrl = $newShop->getSecureBaseUrl();
-            } elseif ($newShop->getBaseUrl()) {
+            if ($newShop->getBaseUrl()) {
                 $baseUrl = $newShop->getBaseUrl();
             } else {
                 $baseUrl = $request->getBaseUrl();
@@ -465,17 +451,13 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
         if ($requestShop && $requestShop['id'] !== $shop->getId()) {
             $url = $requestShop['base_url'];
             $path = $requestShop['base_path'];
-            if ($request->isSecure()) {
-                $url = $requestShop['secure_base_url'];
-                $path = $requestShop['secure_base_path'];
-            }
+
             $requestUri = $this->removePartOfUrl($requestUri, $url);
             $requestUri = $this->removePartOfUrl($requestUri, $path);
         }
 
         $requestUri = $this->removeShopBaseUrl(
             $requestUri,
-            $request,
             $shop
         );
 
@@ -485,26 +467,21 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
 
         return $this->removeShopBaseUrl(
             $requestUri,
-            $request,
             $shop->getMain()
         );
     }
 
     /**
      * @param string  $requestUri
-     * @param Request $request
      * @param Shop    $shop
      *
      * @return string
      */
-    private function removeShopBaseUrl($requestUri, Request $request, Shop $shop)
+    private function removeShopBaseUrl($requestUri, Shop $shop)
     {
         $url = $shop->getBaseUrl();
         $path = $shop->getBasePath();
-        if ($request->isSecure()) {
-            $url = $shop->getSecureBaseUrl();
-            $path = $shop->getSecureBasePath();
-        }
+
         $requestUri = $this->removePartOfUrl($requestUri, $url);
         $requestUri = $this->removePartOfUrl($requestUri, $path);
 

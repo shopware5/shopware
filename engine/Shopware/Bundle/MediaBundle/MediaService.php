@@ -307,8 +307,8 @@ class MediaService implements MediaServiceInterface
             $shop = $shop->getMain();
         }
 
-        if ($shop->getAlwaysSecure()) {
-            return 'https://' . $shop->getSecureHost() . $shop->getSecureBasePath() . '/';
+        if ($shop->getSecure()) {
+            return 'https://' . $shop->getHost() . $shop->getBasePath() . '/';
         }
 
         return 'http://' . $shop->getHost() . $shop->getBasePath() . '/';

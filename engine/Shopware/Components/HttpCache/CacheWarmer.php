@@ -235,7 +235,7 @@ class CacheWarmer
 
         //if not already the main shop get it
         $mainShop = !empty($shop['main_id']) ? $this->getShopDataById($shop['main_id']) : $shop;
-        $httpHost = $mainShop['always_secure'] ? 'https://' : 'http://';
+        $httpHost = $mainShop['secure'] ? 'https://' : 'http://';
         if ($shop['base_url']) {
             $baseUrl = $shop['base_url'];
         } else {

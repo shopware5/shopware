@@ -123,8 +123,6 @@ class Converter
         $struct->setPath($shop->getBasePath());
         $struct->setUrl($shop->getBaseUrl());
         $struct->setSecure($shop->getSecure());
-        $struct->setSecureHost($shop->getSecureHost());
-        $struct->setSecurePath($struct->getSecurePath());
 
         if ($shop->getMain()) {
             $struct->setParentId($shop->getMain()->getId());

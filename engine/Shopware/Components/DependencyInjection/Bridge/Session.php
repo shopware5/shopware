@@ -91,7 +91,7 @@ class Session
         $sessionOptions['name'] = $name;
 
         $mainShop = $shop->getMain() ?: $shop;
-        if ($mainShop->getAlwaysSecure()) {
+        if ($mainShop->getSecure()) {
             $sessionOptions['cookie_secure'] = true;
         }
 

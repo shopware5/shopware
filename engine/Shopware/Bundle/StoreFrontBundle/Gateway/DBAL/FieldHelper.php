@@ -699,8 +699,6 @@ class FieldHelper
             'shop.base_url as __shop_base_url',
             'shop.hosts as __shop_hosts',
             'shop.secure as __shop_secure',
-            'shop.secure_host as __shop_secure_host',
-            'shop.secure_base_path as __shop_secure_base_path',
             'shop.template_id as __shop_template_id',
             'shop.document_template_id as __shop_document_template_id',
             'shop.category_id as __shop_category_id',
@@ -711,7 +709,6 @@ class FieldHelper
             'shop.customer_scope as __shop_customer_scope',
             'shop.default as __shop_default',
             'shop.active as __shop_active',
-            'shop.always_secure as __shop_always_secure',
         ];
     }
 

@@ -112,29 +112,6 @@ class Shop extends ModelEntity
     protected $secure = false;
 
     /**
-     * @var bool
-     * @ORM\Column(name="always_secure", type="boolean", nullable=false)
-     */
-    protected $alwaysSecure = false;
-
-    /**
-     * @var string
-     * @ORM\Column(name="secure_host", type="string", length=255, nullable=true)
-     */
-    protected $secureHost;
-
-    /**
-     * @var string
-     * @ORM\Column(name="secure_base_path", type="string", length=255, nullable=true)
-     */
-    protected $secureBasePath;
-
-    /**
-     * @var string
-     */
-    protected $secureBaseUrl;
-
-    /**
      * @var int
      * @ORM\Column(name="template_id", type="integer", nullable=true)
      */
@@ -516,54 +493,6 @@ class Shop extends ModelEntity
     }
 
     /**
-     * @return string
-     */
-    public function getSecureHost()
-    {
-        return $this->secureHost;
-    }
-
-    /**
-     * @param string $secureHost
-     */
-    public function setSecureHost($secureHost)
-    {
-        $this->secureHost = $secureHost;
-    }
-
-    /**
-     * @return string
-     */
-    public function getSecureBasePath()
-    {
-        return $this->secureBasePath;
-    }
-
-    /**
-     * @param string $secureBasePath
-     */
-    public function setSecureBasePath($secureBasePath)
-    {
-        $this->secureBasePath = $secureBasePath;
-    }
-
-    /**
-     * @return string
-     */
-    public function getSecureBaseUrl()
-    {
-        return $this->secureBaseUrl;
-    }
-
-    /**
-     * @param string $secureBaseUrl
-     */
-    public function setSecureBaseUrl($secureBaseUrl)
-    {
-        $this->secureBaseUrl = $secureBaseUrl;
-    }
-
-    /**
      * @return \Shopware\Models\Shop\Shop
      */
     public function getFallback()
@@ -747,22 +676,6 @@ class Shop extends ModelEntity
         $templateMail->setShop($this);
 
         return $this;
-    }
-
-    /**
-     * @return bool
-     */
-    public function getAlwaysSecure()
-    {
-        return $this->alwaysSecure;
-    }
-
-    /**
-     * @param bool $alwaysSecure
-     */
-    public function setAlwaysSecure($alwaysSecure)
-    {
-        $this->alwaysSecure = $alwaysSecure;
     }
 
     /**
