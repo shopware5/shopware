@@ -40,9 +40,9 @@ class Shopware_Components_SeoIndex extends Enlight_Class
 
         $cache = (int) Shopware()->Config()->routerCache;
         $cache = $cache < 360 ? 86400 : $cache;
-        $currentTime = Shopware()->Db()->fetchOne('SELECT ?', array(new Zend_Date()));
+        $currentTime = date('Y-m-d H:i:s');
 
-        if (strtotime($cachedTime) < strtotime($currentTime) - $cache) {
+        if (strtotime($cachedTime) < time() - $cache) {
             $this->setCachedTime($currentTime, $elementId, $shopId);
 
             $resultTime = Shopware()->Modules()->RewriteTable()->sCreateRewriteTable($cachedTime);
