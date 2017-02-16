@@ -120,6 +120,8 @@ class Detail extends ModelEntity
 
     /**
      * @var float
+     *
+     * @ORM\Column(name="tax_rate", type="float", nullable=false)
      */
     private $taxRate;
 
