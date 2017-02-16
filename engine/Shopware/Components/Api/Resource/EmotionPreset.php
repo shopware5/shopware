@@ -25,8 +25,10 @@
 namespace Shopware\Components\Api\Resource;
 
 use Doctrine\DBAL\Connection;
+use Shopware\Components\Api\Exception\CustomValidationException;
 use Shopware\Components\Api\Exception\NotFoundException;
 use Shopware\Components\Api\Exception\ParameterMissingException;
+use Shopware\Components\Api\Exception\PrivilegeException;
 use Shopware\Components\Api\Exception\ValidationException;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Slug\SlugInterface;
@@ -102,8 +104,8 @@ class EmotionPreset extends Resource
             throw new NotFoundException(sprintf('Emotion preset with id %s not found', $presetId));
         }
 
-        if (!$preset || !$preset->getCustom()) {
-            throw new \Exception(sprintf('Emotion preset %s is not defined as custom preset', $preset->getName()));
+        if (!$preset->getCustom()) {
+            throw new PrivilegeException(sprintf('Emotion preset %s is not defined as custom preset', $preset->getName()));
         }
 
         $this->models->remove($preset);
@@ -135,7 +137,7 @@ class EmotionPreset extends Resource
      * @param array  $data
      * @param string $locale
      *
-     * @throws \Exception
+     * @throws \Shopware\Components\Api\Exception\NotFoundException
      *
      * @return Preset
      */
@@ -144,7 +146,7 @@ class EmotionPreset extends Resource
         /** @var $preset Preset */
         $preset = $this->models->getRepository(Preset::class)->find($id);
         if (!$preset) {
-            throw new \Exception(sprintf('Preset with id %s not found', $id));
+            throw new NotFoundException(sprintf('Preset with id %s not found', $id));
         }
 
         $preset->getTranslations()->clear();
@@ -198,7 +200,7 @@ class EmotionPreset extends Resource
     /**
      * @param Preset $preset
      *
-     * @throws \Exception
+     * @throws CustomValidationException
      */
     private function validateName(Preset $preset)
     {
@@ -217,7 +219,7 @@ class EmotionPreset extends Resource
             ->getSingleScalarResult();
 
         if ($result > 0) {
-            throw new \Exception(sprintf('Preset with name %s already exists', $preset->getName()));
+            throw new CustomValidationException(sprintf('Preset with name %s already exists', $preset->getName()));
         }
     }
 
@@ -243,12 +245,12 @@ class EmotionPreset extends Resource
     private function hydrate(array $presets, $locale = 'de_DE')
     {
         $pluginNames = [];
-        foreach ($presets as &$preset) {
+        foreach ($presets as $id => $preset) {
             $plugins = json_decode($preset['requiredPlugins'], true);
             $preset['requiredPlugins'] = array_combine(array_column($plugins, 'name'), $plugins);
             $pluginNames = array_merge($pluginNames, array_keys($preset['requiredPlugins']));
+            $presets[$id] = $preset;
         }
-
         $localPlugins = $this->getPlugins($pluginNames);
 
         $result = [];
@@ -303,6 +305,7 @@ class EmotionPreset extends Resource
         $query = $this->connection->createQueryBuilder();
         $query->select([
             'plugin.name as array_key',
+            '(plugin.id > 0) as plugin_exists',
             'plugin.name as plugin_name',
             'plugin.label as plugin_label',
             'plugin.active',
@@ -330,6 +333,15 @@ class EmotionPreset extends Resource
 
         return array_map(
             function ($plugin) {
+                $plugin = array_merge([
+                    'active' => false,
+                    'plugin_exists' => false,
+                    'installed' => false,
+                    'plugin_label' => $plugin['label'],
+                    'plugin_name' => $plugin['name'],
+                    'current_version' => null,
+                ], $plugin);
+
                 $plugin['updateRequired'] = version_compare($plugin['version'], $plugin['current_version'], '>');
 
                 return $plugin;
