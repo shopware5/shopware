@@ -24,7 +24,6 @@
 
 namespace Shopware\Bundle\CustomerSearchBundle\ConditionHandler;
 
-use Doctrine\DBAL\Connection;
 use Shopware\Bundle\CustomerSearchBundle\Condition\OrderedProductCondition;
 use Shopware\Bundle\CustomerSearchBundle\ConditionHandlerInterface;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
@@ -42,30 +41,9 @@ class OrderedProductConditionHandler implements ConditionHandlerInterface
         $wheres = [];
         /** @var OrderedProductCondition $condition */
         foreach ($condition->getNumbers() as $i => $number) {
-            $wheres[] = 'products LIKE :product' . $i;
+            $wheres[] = 'customer.products LIKE :product' . $i;
             $query->setParameter(':product' . $i, '%||' . $number . '||%');
         }
         $query->andWhere(implode(' OR ', $wheres));
-
-        return;
-
-        $query->innerJoin(
-            'customer',
-            's_order',
-            'orderedProduct',
-            'orderedProduct.userID = customer.id'
-        );
-
-        $query->innerJoin(
-            'customer',
-            's_order_details',
-            'orderedProductDetails',
-            'orderedProductDetails.orderID = orderedProduct.id
-            AND orderedProductDetails.articleordernumber IN (:OrderedProductCondition)
-            AND orderedProductDetails.modus = 0'
-        );
-
-        /* @var OrderedProductCondition $condition */
-        $query->setParameter(':OrderedProductCondition', $condition->getNumbers(), Connection::PARAM_STR_ARRAY);
     }
 }

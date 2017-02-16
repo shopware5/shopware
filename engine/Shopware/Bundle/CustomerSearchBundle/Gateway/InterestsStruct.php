@@ -59,6 +59,11 @@ class InterestsStruct extends Extendable
     protected $categoryId;
 
     /**
+     * @var int[]
+     */
+    protected $categoryPath = [];
+
+    /**
      * @var int
      */
     protected $manufacturerId;
@@ -215,5 +220,21 @@ class InterestsStruct extends Extendable
     public function setProductName($productName)
     {
         $this->productName = $productName;
+    }
+
+    /**
+     * @return \int[]
+     */
+    public function getCategoryPath()
+    {
+        return $this->categoryPath;
+    }
+
+    /**
+     * @param \int[] $categoryPath
+     */
+    public function setCategoryPath($categoryPath)
+    {
+        $this->categoryPath = $categoryPath;
     }
 }

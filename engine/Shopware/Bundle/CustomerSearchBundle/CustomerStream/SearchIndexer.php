@@ -106,7 +106,7 @@ class SearchIndexer
             'additional_address_line1' => $customer->getBillingAddress()->getAdditionalAddressLine1(),
             'additional_address_line2' => $customer->getBillingAddress()->getAdditionalAddressLine2(),
             'countryId' => $customer->getBillingAddress()->getCountryId(),
-            'country' => $customer->getBillingAddress()->getCountry()->getName(),
+            'country' => $customer->getBillingAddress()->getCountry() ? $customer->getBillingAddress()->getCountry()->getName() : '',
             'stateId' => $customer->getBillingAddress()->getStateId(),
             'state' => $customer->getBillingAddress()->getState() ? $customer->getBillingAddress()->getState()->getName() : null,
             'age' => $customer->getAge(),
@@ -118,16 +118,18 @@ class SearchIndexer
             'invoice_amount_max' => $customer->getOrderInformation()->getMaxAmount(),
             'first_order_time' => $this->formatDate($customer->getOrderInformation()->getFirstOrderTime()),
             'last_order_time' => $this->formatDate($customer->getOrderInformation()->getLastOrderTime()),
+            'has_canceled_orders' => $customer->getOrderInformation()->hasCanceledOrders(),
+            'weekdays' => $this->implodeUnique($customer->getOrderInformation()->getWeekdays()),
+            'shops' => $this->implodeUnique($customer->getOrderInformation()->getShops()),
+            'devices' => $this->implodeUnique($customer->getOrderInformation()->getDevices()),
+            'deliveries' => $this->implodeUnique($customer->getOrderInformation()->getDispatches()),
+            'payments' => $this->implodeUnique($customer->getOrderInformation()->getPayments()),
             'products' => $this->implodeUnique(
                 array_map(function (InterestsStruct $interest) {
                     return $interest->getProductNumber();
                 }, $customer->getInterests())
             ),
-            'categories' => $this->implodeUnique(
-                array_map(function (InterestsStruct $interest) {
-                    return $interest->getCategoryId();
-                }, $customer->getInterests())
-            ),
+            'categories' => $this->getCategories($customer->getInterests()),
             'manufacturers' => $this->implodeUnique(
                 array_map(function (InterestsStruct $interest) {
                     return $interest->getManufacturerId();
@@ -183,6 +185,12 @@ class SearchIndexer
                 invoice_amount_max,
                 first_order_time,
                 last_order_time,
+                has_canceled_orders,
+                weekdays,
+                shops,
+                devices,
+                deliveries,
+                payments,
                 product_avg,
                 products,
                 categories,
@@ -229,6 +237,12 @@ class SearchIndexer
                 :invoice_amount_max,
                 :first_order_time,
                 :last_order_time,
+                :has_canceled_orders,
+                :weekdays,
+                :shops,
+                :devices,
+                :deliveries,
+                :payments,
                 :product_avg,
                 :products,
                 :categories,
@@ -261,5 +275,18 @@ class SearchIndexer
         }
 
         return $date->format($format);
+    }
+
+    /**
+     * @param InterestsStruct[] $interests
+     */
+    private function getCategories($interests)
+    {
+        $categories = [];
+        foreach ($interests as $interest) {
+            $categories = array_merge($categories, [$interest->getCategoryId()], $interest->getCategoryPath());
+        }
+
+        return $this->implodeUnique($categories);
     }
 }

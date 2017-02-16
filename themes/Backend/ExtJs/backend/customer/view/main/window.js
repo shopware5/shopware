@@ -187,22 +187,21 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
                 label: {
                     renderer: Ext.util.Format.numberRenderer('0,0')
                 },
-                title: 'Sample Values',
+                title: 'Umsatz',
                 grid: true,
                 minimum: 0
             }, {
                 type: 'Category',
                 position: 'bottom',
                 fields: ['yearMonth'],
-                title: 'Sample Metrics'
             }],
             series: [
-                me.createLineSeries('count_orders', null, false, true),
-                me.createLineSeries('invoice_amount_avg', null, false, true),
-                me.createLineSeries('invoice_amount_max', null, false, false),
-                me.createLineSeries('invoice_amount_min', null, false, true),
-                me.createLineSeries('invoice_amount_sum', null, true, false),
-                me.createLineSeries('product_avg', null, false, true)
+                me.createLineSeries('count_orders', 'Anzahl Bestellungen'),
+                me.createLineSeries('invoice_amount_avg', 'Ø Warenkorb'),
+                me.createLineSeries('invoice_amount_max', 'Größte Bestellung'),
+                me.createLineSeries('invoice_amount_min', 'Kleinste Bestellung'),
+                me.createLineSeries('invoice_amount_sum', 'Gesamt Umsatz'),
+                me.createLineSeries('product_avg', 'Ø Warenwert')
             ]
         });
 
@@ -239,37 +238,18 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
         me.callParent(arguments);
     },
 
-    createLineSeries: function(field, type, fill, hidden) {
-        type = type || 'circle';
-
+    createLineSeries: function(field, title) {
         return {
             type: 'line',
             highlight: { size: 7, radius: 7 },
             axis: 'left',
             fill: true,
-            hidden: hidden,
-            // smooth: true,
+            title: title,
+            smooth: true,
             xField: 'yearMonth',
             yField: field,
-            markerConfig: { type: type, size: 4, radius: 4, 'stroke-width': 0 }
-            // markerConfig: { type: 'cross', size: 4, radius: 4, 'stroke-width': 0 }
+            markerConfig: { type: 'circle', size: 4, radius: 4, 'stroke-width': 0 }
         };
-
-        // return {
-        //     type: 'column',
-        //     axis: 'left',
-        //     highlight: true,
-        //     label: {
-        //         display: 'insideEnd',
-        //         'text-anchor': 'middle',
-        //         field: 'data',
-        //         renderer: Ext.util.Format.numberRenderer('0,0'),
-        //         orientation: 'vertical',
-        //         // color: '#333'
-        //     },
-        //     xField: 'yearMonth',
-        //     yField: field
-        // };
     },
 
     loadPreview: function() {
@@ -371,7 +351,7 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
                 params: { }
             }]
         });
-        indexingWindow.on('finish', Ext.bind(me.loadPreview, me))
+        indexingWindow.on('finish', Ext.bind(me.loadPreview, me));
         indexingWindow.show();
     },
 
@@ -401,7 +381,7 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
                 }, {
                     xtype: 'menuitem',
                     iconCls: 'sprite',
-                    text: 'Indexieren',
+                    text: 'Kunden analyzieren',
                     action: 'index',
                     handler: Ext.bind(me.indexSearch, me)
                 }]
@@ -415,13 +395,13 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
 
         items.push({
             xtype: 'button',
-            text: 'Filter hinzufügen',
+            // text: 'Filter hinzufügen',
             iconCls: 'sprite-funnel',
             menu: me.createMenu()
         });
 
         items.push({
-            text: 'Aktualisieren',
+            // text: 'Aktualisieren',
             iconCls: 'sprite-arrow-circle-225-left',
             handler: Ext.bind(me.loadPreview, me)
         });
@@ -432,7 +412,8 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
 
         me.deleteCustomerButton = Ext.create('Ext.button.Button', {
             iconCls:'sprite-minus-circle-frame',
-            text:me.snippets.toolbar.remove,
+            // text:me.snippets.toolbar.remove,
+            text: 'Markierte löschen',
             disabled:true,
             action:'deleteCustomer'
         });
@@ -450,7 +431,7 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
         /*{/if}*/
 
         items.push({
-            showText: true,
+            // showText: true,
             xtype: 'cycle',
             prependText: '{s name=toolbar/view}Display as{/s} ',
             action: 'layout',
@@ -462,12 +443,12 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
             menu: {
                 items: [
                     {
-                        text: '{s name=view_chart}Chart{/s}',
+                        text: '{s name=view_chart}Umsatz{/s}',
                         layout: 'chart',
                         iconCls: 'sprite-chart'
                     },
                     {
-                        text: '{s name=view_table}Table{/s}',
+                        text: '{s name=view_table}Kundenliste{/s}',
                         layout: 'table',
                         iconCls: 'sprite-table',
                         checked: true

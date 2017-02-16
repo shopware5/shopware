@@ -110,6 +110,7 @@ class CustomerInterestsGateway
             $struct->setCategoryName($row['category']);
             $struct->setManufacturerId($row['manufacturerId']);
             $struct->setManufacturerName($row['manufacturer']);
+            $struct->setCategoryPath(array_filter(explode('|', $row['categoryPath'])));
             $struct->setSales((int) $row['sales']);
             $structs[] = $struct;
         }
@@ -134,6 +135,7 @@ class CustomerInterestsGateway
             'COUNT(details.articleID) + (SUM(details.quantity) / 30) as ranking',
             'category.description as category',
             'category.id as categoryId',
+            'category.path as categoryPath',
             'product.name as product',
             'manufacturer.name as manufacturer',
             'manufacturer.id as manufacturerId',
@@ -141,18 +143,26 @@ class CustomerInterestsGateway
         ]);
 
         $query->from('s_order', 'orders');
+        $query->innerJoin('orders', 's_core_shops', 'shops', 'shops.id = orders.language');
+
         $query->innerJoin('orders', 's_order_details', 'details', 'orders.id = details.orderID');
         $query->innerJoin('details', 's_articles', 'product', 'product.id = details.articleID');
-        $query->innerJoin('product', 's_articles_categories', 'mapping', 'mapping.articleID = product.id');
-        $query->innerJoin('mapping', 's_categories', 'category', 'category.id = mapping.categoryID');
+        $query->innerJoin('product', 's_articles_categories_ro', 'mapping', 'mapping.articleID = product.id AND mapping.categoryID = shops.category_id');
         $query->innerJoin('product', 's_articles_supplier', 'manufacturer', 'manufacturer.id = product.supplierID');
+        $query->innerJoin('mapping', 's_categories', 'category', 'category.id = mapping.parentcategoryID');
+
         $query->andWhere('orders.userID IN (:users)');
         $query->andWhere('details.articleID IN (:products)');
         $query->andWhere('orders.status != :cancelStatus');
         $query->andWhere('details.modus = 0');
         $query->andWhere('orders.ordernumber IS NOT NULL');
+
         $query->addGroupBy('orders.userID');
+        $query->addGroupBy('orders.language');
         $query->addGroupBy('mapping.articleID');
+        $query->addGroupBy('mapping.categoryID');
+        $query->addGroupBy('product.supplierID');
+
         $query->setParameter(':cancelStatus', -1);
         $query->setParameter(':users', $ids, Connection::PARAM_INT_ARRAY);
         $query->setParameter(':products', $products, Connection::PARAM_INT_ARRAY);

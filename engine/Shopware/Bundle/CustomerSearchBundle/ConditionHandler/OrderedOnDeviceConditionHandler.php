@@ -24,7 +24,6 @@
 
 namespace Shopware\Bundle\CustomerSearchBundle\ConditionHandler;
 
-use Doctrine\DBAL\Connection;
 use Shopware\Bundle\CustomerSearchBundle\Condition\OrderedOnDeviceCondition;
 use Shopware\Bundle\CustomerSearchBundle\ConditionHandlerInterface;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
@@ -39,15 +38,12 @@ class OrderedOnDeviceConditionHandler implements ConditionHandlerInterface
 
     public function handle(ConditionInterface $condition, QueryBuilder $query)
     {
-        $query->innerJoin(
-            'customer',
-            's_order',
-            'orderedOnDevice',
-            'orderedOnDevice.userID = customer.id
-             AND orderedOnDevice.deviceType IN (:OrderedOnDeviceCondition)'
-        );
-
         /* @var OrderedOnDeviceCondition $condition */
-        $query->setParameter(':OrderedOnDeviceCondition', $condition->getDevices(), Connection::PARAM_STR_ARRAY);
+        $wheres = [];
+        foreach ($condition->getDevices() as $i => $id) {
+            $wheres[] = 'customer.devices LIKE :device' . $i;
+            $query->setParameter(':device' . $i, '%||' . $id . '||%');
+        }
+        $query->andWhere(implode(' OR ', $wheres));
     }
 }

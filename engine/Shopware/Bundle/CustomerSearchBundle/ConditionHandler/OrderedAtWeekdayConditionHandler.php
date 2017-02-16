@@ -24,7 +24,6 @@
 
 namespace Shopware\Bundle\CustomerSearchBundle\ConditionHandler;
 
-use Doctrine\DBAL\Connection;
 use Shopware\Bundle\CustomerSearchBundle\Condition\OrderedAtWeekdayCondition;
 use Shopware\Bundle\CustomerSearchBundle\ConditionHandlerInterface;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
@@ -39,15 +38,12 @@ class OrderedAtWeekdayConditionHandler implements ConditionHandlerInterface
 
     public function handle(ConditionInterface $condition, QueryBuilder $query)
     {
-        $query->innerJoin(
-            'customer',
-            's_order',
-            'weekdayOrder',
-            'weekdayOrder.userID = customer.id
-             AND LOWER(DAYNAME(weekdayOrder.ordertime)) IN (:OrderedAtWeekdayCondition)'
-        );
-
-        /* @var OrderedAtWeekdayCondition $condition */
-        $query->setParameter(':OrderedAtWeekdayCondition', $condition->getWeekdays(), Connection::PARAM_STR_ARRAY);
+        /** @var OrderedAtWeekdayCondition $condition */
+        $wheres = [];
+        foreach ($condition->getWeekdays() as $i => $id) {
+            $wheres[] = 'customer.weekdays LIKE :weekday' . $i;
+            $query->setParameter(':weekday' . $i, '%||' . $id . '||%');
+        }
+        $query->andWhere(implode(' OR ', $wheres));
     }
 }

@@ -24,7 +24,6 @@
 
 namespace Shopware\Bundle\CustomerSearchBundle\ConditionHandler;
 
-use Doctrine\DBAL\Connection;
 use Shopware\Bundle\CustomerSearchBundle\Condition\OrderedProductOfCategoryCondition;
 use Shopware\Bundle\CustomerSearchBundle\ConditionHandlerInterface;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
@@ -42,37 +41,9 @@ class OrderedProductOfCategoryConditionHandler implements ConditionHandlerInterf
         $wheres = [];
         /** @var OrderedProductOfCategoryCondition $condition */
         foreach ($condition->getCategoryIds() as $i => $id) {
-            $wheres[] = 'categories LIKE :category' . $i;
+            $wheres[] = 'customer.categories LIKE :category' . $i;
             $query->setParameter(':category' . $i, '%||' . $id . '||%');
         }
         $query->andWhere(implode(' OR ', $wheres));
-
-        return;
-
-        $query->innerJoin(
-            'customer',
-            's_order',
-            'orderedCategory',
-            'orderedCategory.userID = customer.id'
-        );
-
-        $query->innerJoin(
-            'orderedCategory',
-            's_order_details',
-            'orderedCategoryDetails',
-            'orderedCategoryDetails.orderID = orderedCategory.id
-             AND orderedCategoryDetails.modus = 0'
-        );
-
-        $query->innerJoin(
-            'orderedCategoryDetails',
-            's_articles_categories_ro',
-            'orderedCategoryMapping',
-            'orderedCategoryMapping.articleID = orderedCategoryDetails.articleID
-            AND orderedCategoryMapping.categoryID IN (:OrderedProductOfCategoryCondition)'
-        );
-
-        /* @var OrderedProductOfCategoryCondition $condition */
-        $query->setParameter(':OrderedProductOfCategoryCondition', $condition->getCategoryIds(), Connection::PARAM_INT_ARRAY);
     }
 }

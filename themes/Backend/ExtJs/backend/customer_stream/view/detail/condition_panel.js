@@ -100,9 +100,8 @@ Ext.define('Shopware.apps.CustomerStream.view.detail.ConditionPanel', {
             conditionClass: configuration.conditionClass,
             maxHeight: 150,
             bodyPadding: 10,
-            collapsible: true,
-            closable: true,
             margin: '10 0 0',
+            closable: true,
             conditionField: panel,
             items: [panel]
         });
@@ -152,7 +151,6 @@ Ext.define('Shopware.apps.CustomerStream.view.detail.ConditionPanel', {
             handler.load(conditionClass, items, function(configuration) {
                 if (!me.conditionExists(containers, configuration)) {
                     var container = me.createConditionContainer(configuration);
-                    container.collapsed = true;
                     containers.push(container);
                 }
             });

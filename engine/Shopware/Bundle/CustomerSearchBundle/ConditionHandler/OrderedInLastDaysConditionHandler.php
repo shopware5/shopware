@@ -38,26 +38,10 @@ class OrderedInLastDaysConditionHandler implements ConditionHandlerInterface
 
     public function handle(ConditionInterface $condition, QueryBuilder $query)
     {
+        /* @var OrderedInLastDaysCondition $condition */
         $query->andWhere('customer.last_order_time >= :OrderedInLastDaysCondition');
-        /** @var OrderedInLastDaysCondition $condition */
         $date = new \DateTime();
         $date->sub(new \DateInterval('P' . $condition->getLastDays() . 'D'));
-        $query->setParameter(':OrderedInLastDaysCondition', $date->format('Y-m-d H:i:s'));
-
-        return;
-
-        $query->innerJoin(
-            'customer',
-            's_order',
-            'inLastDayOrders',
-            'inLastDayOrders.userID = customer.id
-            AND inLastDayOrders.ordertime >= :OrderedInLastDaysCondition'
-        );
-
-        /** @var OrderedInLastDaysCondition $condition */
-        $date = new \DateTime();
-        $date->sub(new \DateInterval('P' . $condition->getLastDays() . 'D'));
-
         $query->setParameter(':OrderedInLastDaysCondition', $date->format('Y-m-d H:i:s'));
     }
 }

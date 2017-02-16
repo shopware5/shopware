@@ -24,7 +24,6 @@
 
 namespace Shopware\Bundle\CustomerSearchBundle\ConditionHandler;
 
-use Doctrine\DBAL\Connection;
 use Shopware\Bundle\CustomerSearchBundle\Condition\OrderedWithDeliveryCondition;
 use Shopware\Bundle\CustomerSearchBundle\ConditionHandlerInterface;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
@@ -39,15 +38,12 @@ class OrderedWithDeliveryConditionHandler implements ConditionHandlerInterface
 
     public function handle(ConditionInterface $condition, QueryBuilder $query)
     {
-        $query->innerJoin(
-            'customer',
-            's_order',
-            'orderedWithDelivery',
-            'orderedWithDelivery.userID = customer.id
-             AND orderedWithDelivery.dispatchID IN (:OrderedWithDeliveryCondition)'
-        );
-
-        /* @var OrderedWithDeliveryCondition $condition */
-        $query->setParameter(':OrderedWithDeliveryCondition', $condition->getDispatchIds(), Connection::PARAM_INT_ARRAY);
+        $wheres = [];
+        /** @var OrderedWithDeliveryCondition $condition */
+        foreach ($condition->getDispatchIds() as $i => $number) {
+            $wheres[] = 'customer.deliveries LIKE :delivery' . $i;
+            $query->setParameter(':delivery' . $i, '%||' . $number . '||%');
+        }
+        $query->andWhere(implode(' OR ', $wheres));
     }
 }

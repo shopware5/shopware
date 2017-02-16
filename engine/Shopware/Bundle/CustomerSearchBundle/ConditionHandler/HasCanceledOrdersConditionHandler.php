@@ -38,11 +38,6 @@ class HasCanceledOrdersConditionHandler implements ConditionHandlerInterface
 
     public function handle(ConditionInterface $condition, QueryBuilder $query)
     {
-        $query->innerJoin(
-            'customer',
-            's_order',
-            'canceledOrders',
-            'canceledOrders.userID = customer.id AND canceledOrders.status = -1'
-        );
+        $query->andWhere('customer.has_canceled_orders = 1');
     }
 }
