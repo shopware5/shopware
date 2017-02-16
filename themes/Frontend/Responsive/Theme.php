@@ -226,7 +226,7 @@ class Theme extends \Shopware\Components\Theme
     ];
 
     /**
-     * Holds default default configuration
+     * Holds default font configuration
      *
      * @var array
      */
