@@ -1139,10 +1139,11 @@ class sAdmin
             return false;
         }
 
+        $shop = $this->contextService->getShopContext()->getShop();
         $context = array(
             'sMAIL'     => $email,
             'sShop'     => $this->config->get('ShopName'),
-            'sShopURL'  => 'http://' . $this->config->get('BasePath'),
+            'sShopURL'  => 'http' . ($shop->getSecure() ? 's' : '') . '://' . $this->config->get('BasePath'),
             'sConfig'   => $this->config,
         );
 
