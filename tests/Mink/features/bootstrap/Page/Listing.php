@@ -277,7 +277,7 @@ class Listing extends Page implements HelperSelectorInterface
      */
     private function pressShowResults()
     {
-        $this->getSession()->wait(5000, "$('.filter--btn-apply:not(.is--loading):not([disabled=disabled])').length > 0");
+        $this->getSession()->wait(15000, '$($(":plugin-swListingActions").data("plugin_swListingActions").$applyFilterBtn.get(0)).not(".is--loading").is(":enabled");');
         $elements = Helper::findElements($this, ['filterShowResults']);
         /** @var NodeElement $showResults */
         $showResults = $elements['filterShowResults'];

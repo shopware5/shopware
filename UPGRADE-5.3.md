@@ -85,6 +85,27 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Changed template file `themes/Frontend/Bare/frontend/detail/index.tpl` to split it into separated files
 * Changed the `linkDetails` property of the `sArticle` template variable. The URL also contains now the order number of the product
 * Changed the product selection to variant selection in `Shopware.apps.Emotion.view.components.BannerMapping`
+* Change behavior of the smarty rendering in forms fields comment.
+    * Only variables that were previously assign to the view are rendered.
+    * smarty function calls are no longer executed.
+    * Only simple variables can be used.
+    
+    Example:
+    
+    {sElement.name} **works**
+    
+    {sElement.name|currency} **works but did not execute the currency function**
+    
+    {sElement.value[$key]|currency} **did not work**
+* Change behavior of the tracking url rendering.
+    * only the smarty variable **{$offerPosition.trackingcode}** is in use.
+    * use now only the url of the tracking service like: https://gls-group.eu/DE/de/paketverfolgung?match={$offerPosition.trackingcode}
+    
+```xml
+<a href="https://gls-group.eu/DE/de/paketverfolgung?match={$offerPosition.trackingcode}" onclick="return !window.open(this.href, 'popup', 'width=500,height=600,left=20,top=20');" target="_blank">{$offerPosition.trackingcode}</a>
+```
+
+did not work anymore because the smarty rendering is off. The string {$offerPosition.trackingcode} is only a placeholder. 
 
 ### Removals
 
@@ -243,6 +264,7 @@ This changelog references changes done in Shopware 5.3 patch versions.
     * `SORTING_PRODUCT_NAME_DESC`
     * `SORTING_SEARCH_RANKING`
 * Removed smarty modifier `rewrite`
+* Removed scrollbar styling on filter-panels (Selector `.filter-panel--content`)
 
 ### Deprecations
 
