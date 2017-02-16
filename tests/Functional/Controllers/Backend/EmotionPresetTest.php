@@ -55,7 +55,7 @@ class EmotionPresetTest extends \Enlight_Components_Test_Controller_TestCase
         $this->resource->create(['name' => 'third', 'presetData' => '{}']);
 
         $this->Request()->setMethod('GET');
-        $this->dispatch('/backend/emotion/getPresets');
+        $this->dispatch('/backend/EmotionPreset/list');
 
         $data = $this->View()->getAssign();
         $this->assertArrayHasKey('success', $data);
@@ -71,7 +71,7 @@ class EmotionPresetTest extends \Enlight_Components_Test_Controller_TestCase
         $this->resource->create(['name' => 'third', 'presetData' => '{}']);
 
         $this->Request()->setMethod('POST')->setPost(['id' => $first->getId()]);
-        $this->dispatch('/backend/emotion/deletePreset');
+        $this->dispatch('/backend/EmotionPreset/delete');
 
         $data = $this->View()->getAssign();
         $this->assertArrayHasKey('success', $data);
@@ -82,7 +82,7 @@ class EmotionPresetTest extends \Enlight_Components_Test_Controller_TestCase
     {
         $this->Request()->setMethod('POST')->setPost(['name' => 'first', 'presetData' => '{}']);
 
-        $this->dispatch('/backend/emotion/savePreset');
+        $this->dispatch('/backend/EmotionPreset/save');
 
         $data = $this->View()->getAssign();
         $this->assertArrayHasKey('success', $data);
@@ -93,7 +93,7 @@ class EmotionPresetTest extends \Enlight_Components_Test_Controller_TestCase
     {
         $preset = $this->resource->create(['name' => 'first', 'presetData' => '{}']);
         $this->Request()->setMethod('POST')->setPost(['id' => $preset->getId(), 'name' => 'updated', 'presetData' => '{}']);
-        $this->dispatch('/backend/emotion/savePreset');
+        $this->dispatch('/backend/EmotionPreset/save');
 
         $data = $this->View()->getAssign();
         $this->assertArrayHasKey('success', $data);

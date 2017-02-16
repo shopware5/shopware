@@ -22,15 +22,21 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Bundle\PluginInstallerBundle\Context\PluginsByTechnicalNameRequest;
+
 class Shopware_Controllers_Backend_EmotionPreset extends Shopware_Controllers_Backend_ExtJs
 {
     public function listAction()
     {
         $resource = $this->container->get('shopware.api.emotionpreset');
 
+        $presets = $resource->getList($this->getLocale());
+
+        $presets = $this->enrichPlugins($presets);
+
         $this->View()->assign([
             'success' => true,
-            'data' => $resource->getList($this->getLocale()),
+            'data' => $presets,
         ]);
     }
 
@@ -69,6 +75,48 @@ class Shopware_Controllers_Backend_EmotionPreset extends Shopware_Controllers_Ba
      */
     private function getLocale()
     {
-        return $this->container->get('Auth')->getIdentity()->locale->getLocale();
+        /** @var Shopware_Components_Auth $auth */
+        if (!$auth = $this->container->get('Auth')) {
+            return 'de_DE';
+        }
+        if (!$identity = $auth->getIdentity()) {
+            return 'de_DE';
+        }
+        /** @var \Shopware\Models\Shop\Locale $locale */
+        if (!$locale = $identity->locale) {
+            return 'de_DE';
+        }
+
+        return $locale->getLocale();
+    }
+
+    /**
+     * @param array[] $presets
+     *
+     * @return array[]
+     */
+    private function enrichPlugins($presets)
+    {
+        $pluginManager = $this->container->get('shopware_plugininstaller.plugin_service_view');
+
+        $names = [];
+        foreach ($presets as $preset) {
+            $names = array_merge($names, array_column($preset['requiredPlugins'], 'name'));
+        }
+        if (empty($names)) {
+            return $presets;
+        }
+
+        $plugins = $pluginManager->getPlugins(
+            new PluginsByTechnicalNameRequest($this->getLocale(), Shopware::VERSION, $names)
+        );
+
+        foreach ($presets as &$preset) {
+            foreach ($preset['requiredPlugins'] as &$plugin) {
+                $plugin['in_store'] = array_key_exists(strtolower($plugin['name']), $plugins);
+            }
+        }
+
+        return $presets;
     }
 }

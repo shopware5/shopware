@@ -56,8 +56,7 @@ Ext.define('Shopware.apps.Emotion.view.presets.Info', {
             padding: 5,
             style: 'color: #6c818f;font-size:11px',
             emptyText: '<div style="font-size:13px; text-align: center;">' + me.emptyText + '</div>',
-            deferEmptyText: false,
-            itemSelector: 'div.item'
+            deferEmptyText: false
         });
 
         return me.infoView;
@@ -75,7 +74,7 @@ Ext.define('Shopware.apps.Emotion.view.presets.Info', {
                             '<p class="label" style="margin-bottom: 5px;">{s name=required_plugins}{/s}:</p>',
                             '<ul>',
                                 '<tpl for="requiredPlugins">',
-                                    '<li class="value" style="margin-left: 10px; margin-bottom: 5px;">' +
+                                    '<li class="required-plugin" style="cursor: pointer; margin-left: 10px; margin-bottom: 5px;" id="{literal}{name}{/literal}" data-in-store="{literal}{in_store}{/literal}">' +
                                         '<tpl if="valid">' +
                                             '<span style="width: 16px; height: 16px; display: inline-block; line-height: 15px;" class="sprite-ui-check-box">&nbsp;</span>' +
                                         '<tpl else>' +
@@ -97,6 +96,26 @@ Ext.define('Shopware.apps.Emotion.view.presets.Info', {
 
         if (record && record.getData()) {
             me.infoView.update(record.getData());
+            var $el = me.infoView.getEl();
+            var plugins = $el.query('.required-plugin');
+
+            Ext.each(plugins, function(item) {
+                item = Ext.get(item);
+                item.on('click', function() {
+                    var inStore = item.getAttribute('data-in-store') === "true";
+                    if (!inStore) {
+                        return;
+                    }
+                    Shopware.app.Application.addSubApplication({
+                        name: 'Shopware.apps.PluginManager',
+                        params: {
+                            hidden: true,
+                            displayPlugin: item.id
+                        }
+                    });
+                });
+            });
+
         } else {
             me.infoView.update('<div class="item" style="">{s name="info_panel/empty_text"}{/s}</div>');
         }

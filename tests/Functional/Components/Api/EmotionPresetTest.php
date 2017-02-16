@@ -44,6 +44,8 @@ class EmotionPresetTest extends \PHPUnit\Framework\TestCase
     {
         $this->connection = Shopware()->Container()->get('dbal_connection');
         $this->connection->beginTransaction();
+        $this->connection->executeQuery('DELETE FROM s_emotion_presets');
+        $this->connection->executeQuery('DELETE FROM s_core_plugins');
         $this->resource = Shopware()->Container()->get('shopware.api.emotionpreset');
         parent::setUp();
     }
@@ -130,6 +132,7 @@ class EmotionPresetTest extends \PHPUnit\Framework\TestCase
                     'active' => false,
                     'plugin_exists' => false,
                     'installed' => false,
+                    'valid' => false,
                     'current_version' => null,
                     'updateRequired' => true,
                     'name' => 'SwagLiveShopping',
@@ -175,6 +178,7 @@ class EmotionPresetTest extends \PHPUnit\Framework\TestCase
                     'installed' => 1,
                     'current_version' => '2.0.0',
                     'updateRequired' => false,
+                    'valid' => true,
                     'name' => 'SwagLiveShopping',
                     'version' => '1.0.0',
                     'label' => 'Live shopping',
@@ -216,6 +220,7 @@ class EmotionPresetTest extends \PHPUnit\Framework\TestCase
                     'active' => 1,
                     'plugin_exists' => 1,
                     'installed' => 1,
+                    'valid' => true,
                     'current_version' => '2.0.0',
                     'updateRequired' => false,
                     'name' => 'SwagLiveShopping',
@@ -427,7 +432,6 @@ class EmotionPresetTest extends \PHPUnit\Framework\TestCase
             $this->connection->insert('s_emotion_preset_translations', $translation);
         }
 
-        $this->connection->executeQuery('DELETE FROM s_core_plugins');
         foreach ($localPlugins as $plugin) {
             $this->connection->insert('s_core_plugins', $plugin);
         }
