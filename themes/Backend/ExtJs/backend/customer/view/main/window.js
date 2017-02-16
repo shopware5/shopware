@@ -124,7 +124,7 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
 
         Ext.suspendLayouts();
         me.listStore = Ext.create('Shopware.apps.CustomerStream.store.Preview', { pageSize: 10}).load({ conditions: null });
-        me.gridPanel = Ext.create('Shopware.apps.Customer.view.list.List', { store: me.listStore, region: 'center' });
+        me.gridPanel = Ext.create('Shopware.apps.Customer.view.list.List', { store: me.listStore });
 
         me.gridPanel.on('selection-changed', function(selection) {
             me.deleteCustomerButton.setDisabled(selection.length == 0);
@@ -142,6 +142,75 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
         });
 
         me.filterPanel = Ext.create('Shopware.apps.CustomerStream.view.detail.ConditionPanel', { flex: 4 });
+
+        me.chartStore = Ext.create('Ext.data.Store', {
+            fields:[
+                { name:'count_orders', type: 'int'},
+                { name:'invoice_amount_avg', type: 'float'},
+                { name:'invoice_amount_max', type: 'float'},
+                { name:'invoice_amount_min', type: 'float'},
+                { name:'invoice_amount_sum', type: 'float'},
+                { name:'product_avg', type: 'float'},
+                { name:'yearMonth', type: 'string'},
+            ],
+            proxy:{
+                type:'ajax',
+                url: '{url controller="CustomerStream" action="loadChart"}',
+                reader:{
+                    type:'json',
+                    root:'data'
+                }
+            }
+        });
+        me.chartStore.load();
+        me.chart = Ext.create('Ext.chart.Chart', {
+            shadow:true,
+            margin:30,
+            legend: true,
+            animate:true,
+            snippets:{
+                yAxis:'{s name=chart/y_axis}Turnover{/s}',
+                xAxis:'{s name=chart/x_axis}Month{/s}'
+            },
+            store: me.chartStore,
+            axes: [{
+                type: 'Numeric',
+                position: 'left',
+                fields: [
+                    'count_orders',
+                    'invoice_amount_avg',
+                    'invoice_amount_max',
+                    'invoice_amount_min',
+                    'invoice_amount_sum',
+                    'product_avg',
+                ],
+                label: {
+                    renderer: Ext.util.Format.numberRenderer('0,0')
+                },
+                title: 'Sample Values',
+                grid: true,
+                minimum: 0
+            }, {
+                type: 'Category',
+                position: 'bottom',
+                fields: ['yearMonth'],
+                title: 'Sample Metrics'
+            }],
+            series: [
+                me.createLineSeries('count_orders', null, false, true),
+                me.createLineSeries('invoice_amount_avg', null, false, true),
+                me.createLineSeries('invoice_amount_max', null, false, false),
+                me.createLineSeries('invoice_amount_min', null, false, true),
+                me.createLineSeries('invoice_amount_sum', null, true, false),
+                me.createLineSeries('product_avg', null, false, true)
+            ]
+        });
+
+        me.cardContainer = Ext.create('Ext.container.Container', {
+            items: [me.gridPanel, me.chart] ,
+            region: 'center',
+            layout: 'card',
+        });
 
         me.formPanel = Ext.create('Ext.form.Panel', {
             region: 'west',
@@ -161,13 +230,46 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
         //add the customer list grid panel and set the store
         me.items = [
             me.formPanel,
-            me.gridPanel
+            me.cardContainer
         ];
         me.dockedItems = [ me.getToolbar()];
 
         Ext.resumeLayouts(true);
 
         me.callParent(arguments);
+    },
+
+    createLineSeries: function(field, type, fill, hidden) {
+        type = type || 'circle';
+
+        return {
+            type: 'line',
+            highlight: { size: 7, radius: 7 },
+            axis: 'left',
+            fill: true,
+            hidden: hidden,
+            // smooth: true,
+            xField: 'yearMonth',
+            yField: field,
+            markerConfig: { type: type, size: 4, radius: 4, 'stroke-width': 0 }
+            // markerConfig: { type: 'cross', size: 4, radius: 4, 'stroke-width': 0 }
+        };
+
+        // return {
+        //     type: 'column',
+        //     axis: 'left',
+        //     highlight: true,
+        //     label: {
+        //         display: 'insideEnd',
+        //         'text-anchor': 'middle',
+        //         field: 'data',
+        //         renderer: Ext.util.Format.numberRenderer('0,0'),
+        //         orientation: 'vertical',
+        //         // color: '#333'
+        //     },
+        //     xField: 'yearMonth',
+        //     yField: field
+        // };
     },
 
     loadPreview: function() {
@@ -347,7 +449,35 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
             items.push(me.deleteCustomerButton);
         /*{/if}*/
 
+        items.push({
+            showText: true,
+            xtype: 'cycle',
+            prependText: '{s name=toolbar/view}Display as{/s} ',
+            action: 'layout',
+            listeners: {
+                change: function (button, item) {
+                    me.cardContainer.getLayout().setActiveItem(item.layout == 'table' ? 0 : 1);
+                }
+            },
+            menu: {
+                items: [
+                    {
+                        text: '{s name=view_chart}Chart{/s}',
+                        layout: 'chart',
+                        iconCls: 'sprite-chart'
+                    },
+                    {
+                        text: '{s name=view_table}Table{/s}',
+                        layout: 'table',
+                        iconCls: 'sprite-table',
+                        checked: true
+                    }
+                ]
+            }
+        });
+
         items.push('->');
+
         items.push({
             xtype:'textfield',
             name:'searchfield',
