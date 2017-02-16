@@ -103,6 +103,16 @@ Ext.define('Shopware.apps.Order.view.list.List', {
         }
     },
 
+    /**
+     * Make the grid statefull
+     */
+    stateful: true,
+
+    /**
+     * StateId (used in the cookiename later)
+     */
+    stateId: 'order-grid',
+
     viewConfig: {
         enableTextSelection: true
     },

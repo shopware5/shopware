@@ -93,6 +93,16 @@ Ext.define('Shopware.apps.Order.view.list.Position', {
     },
 
     /**
+     * Make the grid statefull
+     */
+    stateful: true,
+
+    /**
+     * StateId (used in the cookiename later)
+     */
+    stateId: 'order-position-grid',
+
+    /**
      * The initComponent template method is an important initialization step for a Component.
      * It is intended to be implemented by each subclass of Ext.Component to provide any needed constructor logic.
      * The initComponent method of the class being created is called first,

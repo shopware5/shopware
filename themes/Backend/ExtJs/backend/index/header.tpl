@@ -18,7 +18,10 @@ iframe { border: 0 none !important; width: 100%; height: 100%; }
     var userName = '{$user->name}',
         maxParameterLength = '{$maxParameterLength}';
 
-    Ext.define('Shopware.app.Application', {
+        var stateManager = new Ext.state.LocalStorageProvider({ });
+        Ext.state.Manager.setProvider(stateManager);
+
+        Ext.define('Shopware.app.Application', {
         extend: 'Ext.app.Application',
         name: 'Shopware',
         singleton: true,
