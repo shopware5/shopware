@@ -184,6 +184,72 @@ class Shopware_Controllers_Backend_CustomerStream extends Shopware_Controllers_B
         ]);
     }
 
+    public function loadChartAction()
+    {
+        /** @var \Doctrine\DBAL\Query\QueryBuilder $query */
+        $query = $this->get('dbal_connection')->createQueryBuilder();
+        $query->select([
+            "DATE_FORMAT(orders.ordertime, '%Y/%m')",
+            "DATE_FORMAT(orders.ordertime, '%Y/%m') as yearMonth",
+            'COUNT(DISTINCT orders.id) count_orders',
+            'ROUND(SUM(orders.invoice_amount), 2) as invoice_amount_sum',
+            'ROUND(AVG(orders.invoice_amount), 2) as invoice_amount_avg',
+            'MIN(orders.invoice_amount) as invoice_amount_min',
+            'MAX(orders.invoice_amount) as invoice_amount_max',
+            'MIN(orders.ordertime) as first_order_time',
+            'MAX(orders.ordertime) as last_order_time',
+            'ROUND(AVG(details.price), 2) as product_avg',
+        ]);
+
+        $date = (new \DateTime())->sub(new \DateInterval('P' . (int) 5 . 'M'));
+        $now = new DateTime();
+
+        $query->from('s_order', 'orders');
+        $query->innerJoin('orders', 's_order_details', 'details', 'details.orderID = orders.id AND details.modus = 0');
+        $query->andWhere('orders.status != :cancelStatus');
+        $query->andWhere('orders.ordernumber IS NOT NULL');
+        $query->andWhere('orders.ordertime >= :orderTime');
+        $query->andWhere('orders.ordernumber != 0');
+        $query->setParameter(':cancelStatus', -1);
+        $query->setParameter(':orderTime', $date->format('Y-m'));
+        $query->groupBy("DATE_FORMAT(orders.ordertime,'%Y-%m')");
+
+        if ($streamId = $this->Request()->getParam('streamId')) {
+            $query->innerJoin('orders', 's_customer_streams_mapping', 'stream', 'stream.customer_id = orders.userID AND stream.stream_id = :streamId');
+            $query->setParameter(':streamId', $streamId);
+        }
+
+        $data = $query->execute()->fetchAll(PDO::FETCH_GROUP | PDO::FETCH_UNIQUE);
+        $diff = $now->diff($date);
+        $total = $diff->m + ($diff->y * 12);
+
+        $chart = [];
+        for ($i = 0; $i < $total; ++$i) {
+            $month = $date->add(new DateInterval('P' . 1 . 'M'));
+            $format = $month->format('Y/m');
+
+            if (array_key_exists($format, $data)) {
+                $chart[] = $data[$format];
+            } else {
+                $chart[] = [
+                    'yearMonth' => $format,
+                    'count_orders' => 0,
+                    'invoice_amount_sum' => 0,
+                    'invoice_amount_avg' => 0,
+                    'invoice_amount_min' => 0,
+                    'invoice_amount_max' => 0,
+                    'first_order_time' => 0,
+                    'last_order_time' => 0,
+                    'product_avg' => 0,
+                ];
+            }
+        }
+
+        $this->View()->assign([
+            'data' => array_values($chart),
+        ]);
+    }
+
     /**
      * @param array $conditions
      *
