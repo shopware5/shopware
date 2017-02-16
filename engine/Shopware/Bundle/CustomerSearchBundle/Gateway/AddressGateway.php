@@ -63,6 +63,10 @@ class AddressGateway
      */
     public function getList($ids)
     {
+        if (empty($ids)) {
+            return [];
+        }
+        $ids = array_filter($ids);
         $ids = array_keys(array_flip($ids));
 
         $query = $this->createQuery();

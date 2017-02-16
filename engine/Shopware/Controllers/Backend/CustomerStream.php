@@ -201,7 +201,7 @@ class Shopware_Controllers_Backend_CustomerStream extends Shopware_Controllers_B
             'ROUND(AVG(details.price), 2) as product_avg',
         ]);
 
-        $date = (new \DateTime())->sub(new \DateInterval('P' . (int) 5 . 'M'));
+        $date = (new \DateTime())->sub(new \DateInterval('P' . (int) 12 . 'M'));
         $now = new DateTime();
 
         $query->from('s_order', 'orders');

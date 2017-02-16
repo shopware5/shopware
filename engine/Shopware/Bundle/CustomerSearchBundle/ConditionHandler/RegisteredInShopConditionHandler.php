@@ -39,7 +39,7 @@ class RegisteredInShopConditionHandler implements ConditionHandlerInterface
 
     public function handle(ConditionInterface $condition, QueryBuilder $query)
     {
-        $query->andWhere('customer.subshopID IN (:RegisteredInShopCondition)');
+        $query->andWhere('customer.shopId IN (:RegisteredInShopCondition)');
 
         /* @var RegisteredInShopCondition $condition */
         $query->setParameter(':RegisteredInShopCondition', $condition->getShopIds(), Connection::PARAM_INT_ARRAY);

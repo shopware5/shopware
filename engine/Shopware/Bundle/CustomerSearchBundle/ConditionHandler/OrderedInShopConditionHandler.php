@@ -24,7 +24,6 @@
 
 namespace Shopware\Bundle\CustomerSearchBundle\ConditionHandler;
 
-use Doctrine\DBAL\Connection;
 use Shopware\Bundle\CustomerSearchBundle\Condition\OrderedInShopCondition;
 use Shopware\Bundle\CustomerSearchBundle\ConditionHandlerInterface;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
@@ -39,15 +38,12 @@ class OrderedInShopConditionHandler implements ConditionHandlerInterface
 
     public function handle(ConditionInterface $condition, QueryBuilder $query)
     {
-        $query->innerJoin(
-            'customer',
-            's_order',
-            'orderedInShop',
-            'orderedInShop.userID = customer.id
-             AND orderedInShop.subshopID IN (:OrderedInShopCondition)'
-        );
-
         /* @var OrderedInShopCondition $condition */
-        $query->setParameter(':OrderedInShopCondition', $condition->getShopIds(), Connection::PARAM_INT_ARRAY);
+        $wheres = [];
+        foreach ($condition->getShopIds() as $i => $id) {
+            $wheres[] = 'customer.shops LIKE :shop' . $i;
+            $query->setParameter(':shop' . $i, '%||' . $id . '||%');
+        }
+        $query->andWhere(implode(' OR ', $wheres));
     }
 }

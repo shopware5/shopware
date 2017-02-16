@@ -24,7 +24,6 @@
 
 namespace Shopware\Bundle\CustomerSearchBundle\ConditionHandler;
 
-use Doctrine\DBAL\Connection;
 use Shopware\Bundle\CustomerSearchBundle\Condition\OrderedWithPaymentCondition;
 use Shopware\Bundle\CustomerSearchBundle\ConditionHandlerInterface;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
@@ -39,15 +38,12 @@ class OrderedWithPaymentConditionHandler implements ConditionHandlerInterface
 
     public function handle(ConditionInterface $condition, QueryBuilder $query)
     {
-        $query->innerJoin(
-            'customer',
-            's_order',
-            'orderedWithPayment',
-            'orderedWithPayment.userID = customer.id
-             AND orderedWithPayment.paymentID IN (:OrderedWithPaymentCondition)'
-        );
-
-        /* @var OrderedWithPaymentCondition $condition */
-        $query->setParameter(':OrderedWithPaymentCondition', $condition->getPaymentIds(), Connection::PARAM_INT_ARRAY);
+        $wheres = [];
+        /** @var OrderedWithPaymentCondition $condition */
+        foreach ($condition->getPaymentIds() as $i => $number) {
+            $wheres[] = 'customer.payments LIKE :payment' . $i;
+            $query->setParameter(':payment' . $i, '%||' . $number . '||%');
+        }
+        $query->andWhere(implode(' OR ', $wheres));
     }
 }

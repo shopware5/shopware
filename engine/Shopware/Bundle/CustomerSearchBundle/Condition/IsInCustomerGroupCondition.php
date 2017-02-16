@@ -31,22 +31,22 @@ class IsInCustomerGroupCondition implements ConditionInterface
     /**
      * @var string[]
      */
-    private $customerGroupKeys;
+    private $ids;
 
     /**
-     * @param int[] $customerGroupKeys
+     * @param int[] $ids
      */
-    public function __construct(array $customerGroupKeys)
+    public function __construct(array $ids)
     {
-        $this->customerGroupKeys = $customerGroupKeys;
+        $this->ids = $ids;
     }
 
     /**
      * @return string[]
      */
-    public function getCustomerGroupKeys()
+    public function getCustomerGroupIds()
     {
-        return $this->customerGroupKeys;
+        return $this->ids;
     }
 
     public function getName()
