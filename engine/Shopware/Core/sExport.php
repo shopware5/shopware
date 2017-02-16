@@ -1065,7 +1065,7 @@ class sExport
             return;
         }
 
-        Shopware()->Container()->get('events')->filter(
+        $result = Shopware()->Container()->get('events')->filter(
             'Shopware_Modules_Export_ExportResult_Filter',
             $result,
             ['feedId' => $this->sFeedID, 'subject' => $this]
