@@ -225,6 +225,11 @@ class Theme extends \Shopware\Components\Theme
         "badge-download-color" => "#FFFFFF"
     ];
 
+    /**
+     * Holds default default configuration
+     *
+     * @var array
+     */
     private $themeFontDefaults = [
         'font-base-stack' => '"Open Sans", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;',
         'font-headline-stack' => '@font-base-stack',
