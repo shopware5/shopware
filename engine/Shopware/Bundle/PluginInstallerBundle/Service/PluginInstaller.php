@@ -27,12 +27,14 @@ namespace Shopware\Bundle\PluginInstallerBundle\Service;
 use Doctrine\DBAL\Connection;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Plugin as PluginBootstrap;
+use Shopware\Components\Plugin\AttributeSynchronizer;
 use Shopware\Components\Plugin\Context\ActivateContext;
 use Shopware\Components\Plugin\Context\DeactivateContext;
 use Shopware\Components\Plugin\Context\InstallContext;
 use Shopware\Components\Plugin\Context\UninstallContext;
 use Shopware\Components\Plugin\Context\UpdateContext;
 use Shopware\Components\Plugin\RequirementValidator;
+use Shopware\Components\Plugin\XmlAttributeReader;
 use Shopware\Components\Snippet\DatabaseHandler;
 use Shopware\Kernel;
 use Shopware\Models\Plugin\Plugin;
@@ -77,18 +79,25 @@ class PluginInstaller
     private $rootDirectory;
 
     /**
+     * @var AttributeSynchronizer
+     */
+    private $attributeSynchronizer;
+
+    /**
      * @param ModelManager $em
      * @param DatabaseHandler $snippetHandler
      * @param RequirementValidator $requirementValidator
      * @param \PDO $pdo
      * @param $rootDirectory
+     * @param AttributeSynchronizer $attributeSynchronizer
      */
     public function __construct(
         ModelManager $em,
         DatabaseHandler $snippetHandler,
         RequirementValidator $requirementValidator,
         \PDO $pdo,
-        $rootDirectory
+        $rootDirectory,
+        AttributeSynchronizer $attributeSynchronizer
     ) {
         $this->em = $em;
         $this->connection = $this->em->getConnection();
@@ -96,6 +105,7 @@ class PluginInstaller
         $this->requirementValidator = $requirementValidator;
         $this->pdo = $pdo;
         $this->rootDirectory = $rootDirectory;
+        $this->attributeSynchronizer = $attributeSynchronizer;
     }
 
     /**
@@ -146,7 +156,6 @@ class PluginInstaller
         $this->em->flush($plugin);
 
         $pluginId = $plugin->getId();
-
         $this->removeEventSubscribers($pluginId);
         $this->removeCrontabEntries($pluginId);
         $this->removeMenuEntries($pluginId);
@@ -156,6 +165,7 @@ class PluginInstaller
         $this->removeSnippets($bootstrap, $removeData);
         if ($removeData) {
             $this->removeFormsAndElements($pluginId);
+            $this->removeAttributes($bootstrap);
         }
 
         return $context;
@@ -219,6 +229,10 @@ class PluginInstaller
 
         if (is_file($bootstrap->getPath().'/Resources/cronjob.xml')) {
             $this->installCronjob($plugin, $bootstrap->getPath().'/Resources/cronjob.xml');
+        }
+
+        if (is_file($bootstrap->getPath().'/Resources/attributes.xml')) {
+            $this->installAttributes($bootstrap->getPath().'/Resources/attributes.xml');
         }
 
         if (file_exists($bootstrap->getPath() . '/Resources/snippets')) {
@@ -386,6 +400,17 @@ class PluginInstaller
     }
 
     /**
+     * @param string $file
+     */
+    private function installAttributes($file)
+    {
+        $attributeReader = new XmlAttributeReader();
+        $attributes = $attributeReader->read($file);
+
+        $this->attributeSynchronizer->installAttributes($attributes);
+    }
+
+    /**
      * @param string $updateVersion
      * @param string $currentVersion
      * @return boolean
@@ -504,5 +529,18 @@ SQL;
     {
         $sql = 'DELETE FROM s_core_subscribes WHERE pluginID = :pluginId';
         $this->connection->executeUpdate($sql, [':pluginId' => $pluginId]);
+    }
+
+    /**
+     * @param PluginBootstrap $plugin
+     */
+    private function removeAttributes(PluginBootstrap $plugin)
+    {
+        if (is_file($plugin->getPath().'/Resources/attributes.xml')) {
+            $attributeReader = new XmlAttributeReader();
+            $attributes = $attributeReader->read($plugin->getPath().'/Resources/attributes.xml');
+
+            $this->attributeSynchronizer->uninstallAttributes($attributes);
+        }
     }
 }

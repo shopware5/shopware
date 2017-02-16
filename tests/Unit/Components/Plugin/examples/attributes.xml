@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tables xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../engine/Shopware/Components/Plugin/schema/attributes.xsd">
+
+    <table name="s_articles_attributes">
+        <attribute name="test" type="combobox">
+            <label>I am a checkbox</label>
+            <supportText>supportText</supportText>
+            <helpText>helpText</helpText>
+            <displayInBackend>true</displayInBackend>
+            <translatable>true</translatable>
+            <custom>true</custom>
+            <updateDependingTables>true</updateDependingTables>
+            <store>
+                <option key="1">Yes</option>
+                <option key="0">No</option>
+            </store>
+        </attribute>
+    </table>
+</tables>

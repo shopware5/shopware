@@ -23,6 +23,7 @@
             <argument type="service" id="shopware.plugin_requirement_validator" />
             <argument type="service" id="db_connection" />
             <argument>%kernel.root_dir%</argument>
+            <argument type="service" id="shopware_plugininstaller.synchronizer.attribute"/>
         </service>
 
         <service id="shopware_plugininstaller.legacy_plugin_installer" class="Shopware\Bundle\PluginInstallerBundle\Service\LegacyPluginInstaller">
@@ -94,6 +95,12 @@
             <argument type="service" id="shopware_plugininstaller.store_client" />
             <argument type="service" id="models"/>
             <argument type="service" id="shopware_plugininstaller.plugin_licence_service" />
+        </service>
+
+        <service id="shopware_plugininstaller.synchronizer.attribute" class="Shopware\Components\Plugin\AttributeSynchronizer">
+            <argument type="service" id="dbal_connection" />
+            <argument type="service" id="models" />
+            <argument type="service" id="shopware_attribute.crud_service"/>
         </service>
     </services>
 </container>
