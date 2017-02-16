@@ -44,6 +44,7 @@ Ext.define('Shopware.apps.Emotion.model.Preset', {
         { name: 'label', type: 'string', persist: false },
         { name: 'description', type: 'string', persist: false },
         { name: 'translations', type: 'array' },
+        { name: 'assetsImported', type: 'boolean', defaultValue: true },
         { name: 'requiredPlugins', type: 'array' },
         {
             name: 'actionRequired',
@@ -63,6 +64,33 @@ Ext.define('Shopware.apps.Emotion.model.Preset', {
             }
         }
     ],
+
+    allowUsage: function() {
+        return this.get('assetsImported') && this.pluginsInstalled();
+    },
+
+    pluginsInstalled: function() {
+        var valid = true;
+        Ext.each(this.get('requiredPlugins', function(plugin) {
+            if (!plugin.active) {
+                valid = false;
+                return false;
+            }
+            if (!plugin.installed) {
+                valid = false;
+                return false;
+            }
+            if (!plugin.plugin_exists) {
+                valid = false;
+                return false;
+            }
+            if (plugin.updateRequired) {
+                valid = false;
+                return false;
+            }
+        }));
+        return valid;
+    },
 
     proxy:{
         /**
