@@ -179,7 +179,7 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
 
         $defaultContext = array(
             'sShop'    => Shopware()->Config()->get('ShopName'),
-            'sShopURL' => 'http://'. $shop->getHost() . $shop->getBasePath(),
+            'sShopURL' => 'http' . ($shop->getAlwaysSecure() ? 's' : '') . '://'. $shop->getHost() . $shop->getBasePath(),
             'sConfig'  => Shopware()->Config(),
         );
 
@@ -409,7 +409,7 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
 
         $defaultContext = array(
             'sShop'    => Shopware()->Config()->get('ShopName'),
-            'sShopURL' => 'http://' . $shop->getHost() . $shop->getBasePath(),
+            'sShopURL' => 'http' . ($shop->getAlwaysSecure() ? 's' : '') . '://'. $shop->getHost() . $shop->getBasePath(),
             'sConfig'  => Shopware()->Config(),
         );
 
@@ -457,7 +457,7 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
 
         $defaultContext = array(
             'sShop'    => Shopware()->Config()->get('ShopName'),
-            'sShopURL' => 'http://' . $shop->getHost() . $shop->getBasePath(),
+            'sShopURL' => 'http' . ($shop->getAlwaysSecure() ? 's' : '') . '://'. $shop->getHost() . $shop->getBasePath(),
             'sConfig'  => Shopware()->Config(),
         );
 
