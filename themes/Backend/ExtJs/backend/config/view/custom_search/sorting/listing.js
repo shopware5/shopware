@@ -130,6 +130,7 @@ Ext.define('Shopware.apps.Config.view.custom_search.sorting.Listing', {
                 active: true
             })
         );
+        me.sortingForm.down('field[name=label]').focus();
     },
 
     onSelectionChange: function(selModel, selection) {
