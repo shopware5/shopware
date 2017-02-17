@@ -19,7 +19,7 @@ This changelog references changes done in Shopware 5.2 patch versions.
 [View all changes from v5.2.16...v5.2.17](https://github.com/shopware/shopware/compare/v5.2.16...v5.2.17)
 
 * Deprecated Smarty modifier `rewrite`. Modifier will be removed in 5.3.0.
-* Changed default `session.gc_divisor` to `200`. To decrease session garbade collection probability.
+* Changed default `session.gc_divisor` to `200`. To decrease session garbage collection probability.
 * Added console command `sw:session:cleanup` to cleanup expired sessions.
 * Changed database field `s_core_sessions.expiry` to contain the timestamp when the session should expire, not the session lifetime.
 * Changed database field `s_core_sessions_backend.expiry` to contain the timestamp when the session should expire, not the session lifetime.
