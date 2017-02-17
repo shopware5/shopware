@@ -79,7 +79,8 @@ Ext.define('Shopware.apps.MediaManager.controller.Media', {
 
         me.control({
             'mediamanager-album-tree': {
-                itemclick: me.onChangeMediaAlbum
+                itemclick: me.onChangeMediaAlbum,
+                startBatchMoveMedia: me.moveMedias
 
         /* {if {acl_is_allowed privilege=upload}} */
                 ,reload: me.onTreeLoad
@@ -116,6 +117,14 @@ Ext.define('Shopware.apps.MediaManager.controller.Media', {
         });
 
         me.callParent(arguments);
+    },
+
+    moveMedias: function(view, medias) {
+        var me = this;
+        Ext.create(
+            'Shopware.apps.MediaManager.view.BatchMove.BatchMove',
+            { sourceView: view, mediasToMove: medias, mediaGrid: me.getMediaGrid(), mediaView: me.getMediaView() }
+        ).show();
     },
 
     /**
