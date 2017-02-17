@@ -300,7 +300,7 @@ class Kernel implements HttpKernelInterface
     {
         $initializer = new PluginInitializer(
             $this->connection,
-            $this->getRootDir() . '/custom/plugins'
+            $this->config['plugin_directories']['ShopwarePlugins']
         );
 
         $this->plugins = $initializer->initializePlugins();
