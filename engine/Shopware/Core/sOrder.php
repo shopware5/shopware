@@ -748,6 +748,13 @@ class sOrder
 
             // save attributes
             $attributeData = $this->attributeLoader->load('s_order_basket_attributes', $basketRow['id']);
+
+            $attributeData = $this->eventManager->filter('Shopware_Modules_Order_SaveOrder_FilterDetailAttributes', $attributeData, [
+                'subject' => $this,
+                'basketRow' => $basketRow,
+                'orderdetailsID' => $orderdetailsID
+            ]);
+
             $this->attributePersister->persist($attributeData, 's_order_details_attributes', $orderdetailsID);
             $detailAttributes = $this->attributeLoader->load('s_order_details_attributes', $orderdetailsID) ?: [];
             unset($detailAttributes['id']);
