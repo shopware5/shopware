@@ -3604,6 +3604,12 @@ SQL;
             }
         }
 
+        $this->eventManager->notify(
+            'Shopware_Modules_Admin_Newsletter_Registration_Success',
+            $result,
+            ['email' => $email, 'groupID' => $groupID]
+        );
+
         $result = array(
             "code" => 3,
             "message" => $this->snippetManager->getNamespace('frontend/account/internalMessages')
