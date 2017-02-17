@@ -1824,6 +1824,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         $context = $this->get('shopware_storefront.context_service')->getShopContext();
 
         $sourceTable = $source === 'billing' ? 's_order_billingaddress' : 's_order_shippingaddress';
+        $sourceAttributeTable = $sourceTable . '_attributes';
 
         $address = $builder->select(['address.*'])
             ->from($sourceTable, 'address')
@@ -1834,9 +1835,11 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
 
         $countryStruct = $this->get('shopware_storefront.country_gateway')->getCountry($address['countryID'], $context);
         $stateStruct = $this->get('shopware_storefront.country_gateway')->getState($address['stateID'], $context);
+        $attributes = $this->get('shopware_attribute.data_loader')->load($sourceAttributeTable, $address['id']);
 
         $address['country'] = json_decode(json_encode($countryStruct), true);
         $address['state'] = json_decode(json_encode($stateStruct), true);
+        $address['attribute'] = $attributes;
 
         return $address;
     }
