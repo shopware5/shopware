@@ -1065,6 +1065,12 @@ class sExport
             return;
         }
 
+        $result = Shopware()->Container()->get('events')->filter(
+            'Shopware_Modules_Export_ExportResult_Filter',
+            $result,
+            ['feedId' => $this->sFeedID, 'subject' => $this]
+        );
+
         // Update db with the latest values
         $count = (int) $result->rowCount();
         $this->db->update(
