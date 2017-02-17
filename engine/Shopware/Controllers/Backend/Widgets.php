@@ -37,7 +37,7 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
      */
     public function getListAction()
     {
-        $auth = Shopware()->Container()->get('auth');
+        $auth = $this->container->get('auth');
 
         if (!$auth->hasIdentity()) {
             $this->View()->assign(array('success' => false));
@@ -47,7 +47,7 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
         $identity = $auth->getIdentity();
         $userID = (int)$identity->id;
 
-        $builder = Shopware()->Container()->get('models')->createQueryBuilder();
+        $builder = $this->container->get('models')->createQueryBuilder();
         $builder->select(array('widget', 'view', 'plugin'))
             ->from('Shopware\Models\Widget\Widget', 'widget')
             ->leftJoin('widget.views', 'view', 'WITH', 'view.authId = ?1')
@@ -64,7 +64,7 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
                 continue;
             }
 
-            $widgetData['label'] = Shopware()->Container()->get('snippets')->getNamespace('backend/widget/labels')
+            $widgetData['label'] = $this->container->get('snippets')->getNamespace('backend/widget/labels')
                 ->get($widgetData['name'], $widgetData['label']);
 
             $widgets[] = $widgetData;
@@ -78,7 +78,7 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
      */
     public function savePositionAction()
     {
-        $auth = Shopware()->Container()->get('auth');
+        $auth = $this->container->get('auth');
 
         if (!$auth->hasIdentity()) {
             $this->View()->assign(array('success' => false));
@@ -105,7 +105,7 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
      */
     public function savePositionsAction()
     {
-        $auth = Shopware()->Container()->get('auth');
+        $auth = $this->container->get('auth');
 
         if (!$auth->hasIdentity()) {
             $this->View()->assign(array('success' => false));
@@ -131,12 +131,12 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
      */
     private function setWidgetPosition($viewId, $position, $column)
     {
-        $model = Shopware()->Container()->get('models')->find('Shopware\Models\Widget\View', $viewId);
+        $model = $this->container->get('models')->find('Shopware\Models\Widget\View', $viewId);
         $model->setPosition($position);
         $model->setColumn($column);
 
-        Shopware()->Container()->get('models')->persist($model);
-        Shopware()->Container()->get('models')->flush();
+        $this->container->get('models')->persist($model);
+        $this->container->get('models')->flush();
     }
 
     /**
@@ -144,7 +144,7 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
      */
     public function addWidgetViewAction()
     {
-        $auth = Shopware()->Container()->get('auth');
+        $auth = $this->container->get('auth');
 
         if (!$auth->hasIdentity()) {
             $this->View()->assign(array('success' => false));
@@ -161,16 +161,16 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
 
         $model = new \Shopware\Models\Widget\View();
         $model->setWidget(
-            Shopware()->Container()->get('models')->find('Shopware\Models\Widget\Widget', $widgetId)
+            $this->container->get('models')->find('Shopware\Models\Widget\Widget', $widgetId)
         );
         $model->setAuth(
-            Shopware()->Container()->get('models')->find('Shopware\Models\User\User', $userID)
+            $this->container->get('models')->find('Shopware\Models\User\User', $userID)
         );
         $model->setColumn($column);
         $model->setPosition($position);
 
-        Shopware()->Container()->get('models')->persist($model);
-        Shopware()->Container()->get('models')->flush();
+        $this->container->get('models')->persist($model);
+        $this->container->get('models')->flush();
         $viewId = $model->getId();
 
         $this->View()->assign(array('success' => !empty($viewId), 'viewId' => $viewId));
@@ -181,7 +181,7 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
      */
     public function removeWidgetViewAction()
     {
-        $auth = Shopware()->Container()->get('auth');
+        $auth = $this->container->get('auth');
 
         if (!$auth->hasIdentity()) {
             $this->View()->assign(array('success' => false));
@@ -191,9 +191,9 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
         $request = $this->Request();
         $id = $request->getParam('id');
 
-        $model = Shopware()->Container()->get('models')->find('Shopware\Models\Widget\View', $id);
-        Shopware()->Container()->get('models')->remove($model);
-        Shopware()->Container()->get('models')->flush();
+        $model = $this->container->get('models')->find('Shopware\Models\Widget\View', $id);
+        $this->container->get('models')->remove($model);
+        $this->container->get('models')->flush();
 
         $this->View()->assign(array('success' => true));
     }
@@ -209,7 +209,7 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
     public function getTurnOverVisitorsAction()
     {
         // Get turnovers
-        $fetchAmount = Shopware()->Container()->get('db')->fetchRow(
+        $fetchAmount = $this->container->get('db')->fetchRow(
             "SELECT
                 (
                     SELECT sum(invoice_amount/currencyFactor) AS amount
@@ -239,7 +239,7 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
         $fetchAmount['yesterday'] = round($fetchAmount['yesterday'], 2);
 
         // Get visitors
-        $fetchVisitors = Shopware()->Container()->get('db')->fetchRow(
+        $fetchVisitors = $this->container->get('db')->fetchRow(
             "SELECT
                 (
                     SELECT SUM(uniquevisits)
@@ -255,7 +255,7 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
         );
 
         // Get new customers
-        $fetchCustomers = Shopware()->Container()->get('db')->fetchRow(
+        $fetchCustomers = $this->container->get('db')->fetchRow(
             "SELECT
                 (
                     SELECT COUNT(DISTINCT id)
@@ -271,7 +271,7 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
         );
 
         // Get order-count
-        $fetchOrders = Shopware()->Container()->get('db')->fetchRow(
+        $fetchOrders = $this->container->get('db')->fetchRow(
             "SELECT
                 (
                     SELECT COUNT(DISTINCT id) AS orders
@@ -309,7 +309,7 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
         GROUP BY
             DATE_SUB(now(), INTERVAL ? DAY)
         ";
-        $fetchConversion = Shopware()->Container()->get('db')->fetchRow(
+        $fetchConversion = $this->container->get('db')->fetchRow(
             $sql,
             array($timeBack, $timeBack, $timeBack, $timeBack, $timeBack)
         );
@@ -320,7 +320,7 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
             $fetchConversion = number_format(0, 2);
         }
 
-        $namespace = Shopware()->Container()->get('snippets')->getNamespace('backend/widget/controller');
+        $namespace = $this->container->get('snippets')->getNamespace('backend/widget/controller');
         $this->View()->assign(
             array(
                 'success' => true,
@@ -366,7 +366,7 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
         GROUP BY datum
         ";
 
-        $data = Shopware()->Container()->get('db')->fetchAll($sql, array($timeBack));
+        $data = $this->container->get('db')->fetchAll($sql, array($timeBack));
 
         $result[] = array();
         foreach ($data as $row) {
@@ -378,7 +378,7 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
         }
 
         // Get current users online
-        $currentUsers = Shopware()->Container()->get('db')->fetchOne(
+        $currentUsers = $this->container->get('db')->fetchOne(
             "SELECT COUNT(DISTINCT remoteaddr)
             FROM s_statistics_currentusers
             WHERE time > DATE_SUB(NOW(), INTERVAL 3 MINUTE)"
@@ -388,7 +388,7 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
         }
 
         // Get current users logged in
-        $fetchLoggedInUsers = Shopware()->Container()->get('db')->fetchAll("
+        $fetchLoggedInUsers = $this->container->get('db')->fetchAll("
             SELECT s.userID,
             (SELECT SUM(quantity * price) AS amount FROM s_order_basket WHERE userID = s.userID GROUP BY sessionID ORDER BY id DESC LIMIT 1) AS amount,
             (SELECT IF(ub.company,ub.company,CONCAT(ub.firstname,' ',ub.lastname)) FROM s_user_billingaddress AS ub WHERE ub.userID = s.userID) AS customer
@@ -418,7 +418,7 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
     public function getShopwareNewsAction()
     {
         /** @var $auth Shopware_Components_Auth */
-        $auth = Shopware()->Container()->get('Auth');
+        $auth = $this->container->get('Auth');
         $user = $auth->getIdentity();
         $result = $this->fetchRssFeedData($user->locale, 5);
 
@@ -442,12 +442,12 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
         $addSqlSubshop = "";
         if (!empty($subshopID)) {
             $addSqlSubshop = "
-            AND s_order.subshopID = " . Shopware()->Container()->get('db')->quote($subshopID);
+            AND s_order.subshopID = " . $this->container->get('db')->quote($subshopID);
         }
 
         if (!empty($restrictPayment)) {
             $addSqlPayment = "
-            AND s_order.paymentID = " . Shopware()->Container()->get('db')->quote($restrictPayment);
+            AND s_order.paymentID = " . $this->container->get('db')->quote($restrictPayment);
         }
 
         $sql = "
@@ -465,7 +465,7 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
         LIMIT 20
         ";
 
-        $result = Shopware()->Container()->get('db')->fetchAll($sql);
+        $result = $this->container->get('db')->fetchAll($sql);
         foreach ($result as &$order) {
             $order["customer"] = htmlentities(
                 $order["company"] ? $order["company"] : $order["firstname"] . " " . $order["lastname"],
@@ -506,7 +506,7 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
     {
         $userID = $_SESSION["Shopware"]["Auth"]->id;
 
-        $noticeMsg = Shopware()->Container()->get('db')->fetchOne(
+        $noticeMsg = $this->container->get('db')->fetchOne(
             "
                     SELECT notes FROM s_plugin_widgets_notes WHERE userID = ?
                     ",
@@ -532,9 +532,9 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
             $this->View()->assign(array('success' => false, 'message' => 'No user id'));
             return;
         }
-        if (Shopware()->Container()->get('db')->fetchOne("SELECT id FROM s_plugin_widgets_notes WHERE userID = ?", array($userID))) {
+        if ($this->container->get('db')->fetchOne("SELECT id FROM s_plugin_widgets_notes WHERE userID = ?", array($userID))) {
             // Update
-            Shopware()->Container()->get('db')->query(
+            $this->container->get('db')->query(
                 "
                             UPDATE s_plugin_widgets_notes SET notes = ? WHERE userID = ?
                             ",
@@ -542,7 +542,7 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
             );
         } else {
             // Insert
-            Shopware()->Container()->get('db')->query(
+            $this->container->get('db')->query(
                 "
                             INSERT INTO s_plugin_widgets_notes (userID, notes)
                             VALUES (?,?)
@@ -576,7 +576,7 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
             AND validation != '0'
         ORDER BY s_user.firstlogin DESC";
 
-        $fetchUsersToUnlock = Shopware()->Container()->get('db')->fetchAll($sql);
+        $fetchUsersToUnlock = $this->container->get('db')->fetchAll($sql);
 
         foreach ($fetchUsersToUnlock as &$user) {
             $user["customergroup_name"] = htmlentities($user["customergroup_name"], null, "UTF-8");
@@ -674,7 +674,7 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
     public function sendMailToMerchantAction()
     {
         $params = $this->Request()->getParams();
-        $mail = clone Shopware()->Container()->get('mail');
+        $mail = clone $this->container->get('mail');
 
         $toMail = $params['toMail'];
         $fromName = $params['fromName'];
@@ -711,14 +711,14 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
             return false;
         } else {
             if ($status == "accepted") {
-                Shopware()->Container()->get('db')->query(
+                $this->container->get('db')->query(
                     "
                                     UPDATE s_user SET customergroup = validation, validation = '' WHERE id = ?
                                     ",
                     array($userId)
                 );
             } else {
-                Shopware()->Container()->get('db')->query(
+                $this->container->get('db')->query(
                     "
                                     UPDATE s_user SET validation = '' WHERE id = ?
                                     ",

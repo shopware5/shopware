@@ -99,7 +99,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
     private function activeHttpCache($httpCache)
     {
         /**@var $service InstallerService*/
-        $service = Shopware()->Container()->get('shopware.plugin_manager');
+        $service = $this->container->get('shopware.plugin_manager');
 
         if (!$httpCache->getInstalled()) {
             $service->installPlugin($httpCache);
@@ -120,7 +120,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
         }
 
         /**@var $service InstallerService*/
-        $service = Shopware()->Container()->get('shopware.plugin_manager');
+        $service = $this->container->get('shopware.plugin_manager');
         $service->deactivatePlugin($httpCache);
     }
 
@@ -153,7 +153,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
      */
     public function getConfigAction()
     {
-        Shopware()->Container()->get('cache')->remove('Shopware_Config');
+        $this->container->get('cache')->remove('Shopware_Config');
         $this->View()->assign(array(
             'success' => true,
             'data' => $this->prepareConfigData()
@@ -206,7 +206,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
         $data = $this->prepareDataForSaving($data);
         $this->saveConfigData($data);
 
-        Shopware()->Container()->get('cache')->remove('Shopware_Config');
+        $this->container->get('cache')->remove('Shopware_Config');
 
         // Reload config, so that the actual config from the
         // db is returned
@@ -625,7 +625,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
         $offset = $this->Request()->getParam('offset', 0);
         $limit  = $this->Request()->getParam('limit', null);
 
-        $component = Shopware()->Container()->get('CategoryDenormalization');
+        $component = $this->container->get('CategoryDenormalization');
 
         if ($offset == 0) {
             $component->rebuildCategoryPath();
@@ -642,7 +642,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
 
     public function prepareTreeAction()
     {
-        $component = Shopware()->Container()->get('CategoryDenormalization');
+        $component = $this->container->get('CategoryDenormalization');
 
         $component->removeOrphanedAssignments();
 

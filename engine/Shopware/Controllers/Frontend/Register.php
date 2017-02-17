@@ -458,7 +458,7 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
             Shopware()->Modules()->Admin()->sSaveRegisterSendConfirmation($customer->getEmail());
         } catch (\Exception $e) {
             $message = sprintf("Could not send user registration email to address %s", $customer->getEmail());
-            Shopware()->Container()->get('corelogger')->error($message, ['exception' => $e]);
+            $this->container->get('corelogger')->error($message, ['exception' => $e]);
         }
     }
 }

@@ -260,7 +260,7 @@ class Shopware_Controllers_Backend_Form extends Shopware_Controllers_Backend_Ext
         $this->getManager()->persist($clonedForm);
         $this->getManager()->flush();
 
-        $persister = Shopware()->Container()->get('shopware_attribute.data_persister');
+        $persister = $this->container->get('shopware_attribute.data_persister');
         $persister->cloneAttribute('s_cms_support_attributes', $id, $clonedForm->getId());
 
         $this->View()->assign(array('success' => true));
