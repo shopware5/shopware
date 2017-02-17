@@ -545,54 +545,58 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
             listingView = me.getListingView(),
             window = me.getPresetWindow(),
             selectedPreset = listingView.selectedPreset,
-            presetData,
-            requiredPlugins,
-            pluginNames;
+            presetData;
 
-        if (selectedPreset) {
-            if (selectedPreset.get('actionRequired')) {
-                requiredPlugins = selectedPreset.get('requiredPlugins');
-
-                pluginNames = requiredPlugins.map(function (plugin) {
-                    return plugin.label + ' (' + plugin.technicalName + ')';
-                });
-
-                Ext.Msg.confirm(
-                    '{s name=preset/required_plugins_title}{/s}',
-                    Ext.String.format('{s name=preset/required_plugins_confirmation}{/s}', pluginNames.join('<br />')),
-                    function(btn) {
-                        if (btn === 'yes') {
-                            window.close();
-                            me.openPluginManager();
-                        }
-                    }
-                );
-
-                return;
-            }
-            presetData = selectedPreset.get('presetData');
-            record = me.decodeEmotionPresetData(presetData);
+        if (!selectedPreset) {
+            window.close();
+            me.getMainWindow().setLoading(true);
+            me.openDetailWindow(record);
+            return;
         }
 
-        window.close();
-        me.getMainWindow().setLoading(true);
-        me.openDetailWindow(record);
+        if (selectedPreset.allowUsage()) {
+            window.close();
+            me.getMainWindow().setLoading(true);
+            me.openDetailWindow(
+                me.decodeEmotionPresetData(selectedPreset.get('presetData'))
+            );
+            return;
+        }
+
+        if (!selectedPreset.get('assetsImported')) {
+            me.askAssetImport(selectedPreset);
+            return;
+        }
+
+        Ext.Msg.alert('{s name=preset/required_plugins_title}{/s}', Ext.String.format('{s name="preset/required_plugins_info"}{/s}'));
     },
 
-    openPluginManager: function() {
+    askAssetImport: function(preset) {
         var me = this;
 
-        Shopware.app.Application.addSubApplication({
-                name: 'Shopware.apps.PluginManager'
-            },
-            undefined,
-            function() {
-                Ext.Function.defer(function () {
-                    Shopware.app.Application.fireEvent('display-installed-plugins');
-                }, 2000);
+        Ext.Msg.confirm(
+            '{s name="preset/assets_import_title"}{/s}',
+            Ext.String.format('{s name="preset/assets_import_info"}{/s}'),
+            function(btn) {
+                if (btn !== 'yes') {
+                    return;
+                }
+
+                me.importAssets(preset, function(preset) {
+                    window.close();
+                    me.getMainWindow().setLoading(true);
+                    me.openDetailWindow(
+                        me.decodeEmotionPresetData(preset.get('presetData'))
+                    );
+                });
             }
         );
     },
+
+    importAssets: function(preset, callback) {
+        callback(preset);
+    },
+
 
     onOpenDetail: function() {
         var me = this,

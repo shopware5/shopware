@@ -71,24 +71,12 @@ Ext.define('Shopware.apps.Emotion.model.Preset', {
 
     pluginsInstalled: function() {
         var valid = true;
-        Ext.each(this.get('requiredPlugins', function(plugin) {
-            if (!plugin.active) {
+        Ext.each(this.get('requiredPlugins'), function(plugin) {
+            if (!plugin.valid) {
                 valid = false;
                 return false;
             }
-            if (!plugin.installed) {
-                valid = false;
-                return false;
-            }
-            if (!plugin.plugin_exists) {
-                valid = false;
-                return false;
-            }
-            if (plugin.updateRequired) {
-                valid = false;
-                return false;
-            }
-        }));
+        });
         return valid;
     },
 
