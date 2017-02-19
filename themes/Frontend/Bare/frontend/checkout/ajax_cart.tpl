@@ -78,7 +78,7 @@
                             </a>
                         {/block}
                     {else}
-                        {block name='frontend_checkout_ajax_cart_open_checkout'}
+                        {block name='frontend_checkout_ajax_cart_open_checkout_disabled'}
                             <span class="btn is--disabled is--primary button--checkout is--icon-right" title="{"{s name='AjaxCartLinkConfirm'}{/s}"|escape}">
                                 <i class="icon--arrow-right"></i>
                                 {s name='AjaxCartLinkConfirm'}{/s}
