@@ -36,7 +36,6 @@ Ext.define('Shopware.apps.CustomerStream.view.detail.IndexingWindow', {
                 params: request.params,
                 success: function(operation) {
                     var response = Ext.decode(operation.responseText);
-                    console.log(response);
                     request.params.total = response.total;
                     me.send(request, requests);
                 }

@@ -305,3 +305,5 @@
 {include file='backend/base/store/custom_sorting.js'}
 {include file='backend/base/model/custom_facet.js'}
 {include file='backend/base/store/custom_facet.js'}
+
+{include file='backend/base/application/Shopware.helper.BatchRequests.js'}

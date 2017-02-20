@@ -47,6 +47,7 @@ Ext.define('Shopware.apps.CustomerStream.view.list.CustomerStream', {
 
         me.selModel = Ext.create('Ext.selection.CheckboxModel', {
             mode: 'SINGLE',
+            allowDeselect: true,
             listeners: {
                 selectionchange: me.selectionChanged
             }

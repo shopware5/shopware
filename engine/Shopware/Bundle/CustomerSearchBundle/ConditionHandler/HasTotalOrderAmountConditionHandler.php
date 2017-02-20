@@ -25,26 +25,12 @@
 namespace Shopware\Bundle\CustomerSearchBundle\ConditionHandler;
 
 use Shopware\Bundle\CustomerSearchBundle\Condition\HasTotalOrderAmountCondition;
-use Shopware\Bundle\CustomerSearchBundle\ConditionHandler\Common\AggregatedOrderTable;
 use Shopware\Bundle\CustomerSearchBundle\ConditionHandlerInterface;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 
 class HasTotalOrderAmountConditionHandler implements ConditionHandlerInterface
 {
-    /**
-     * @var AggregatedOrderTable
-     */
-    private $aggregatedOrderTable;
-
-    /**
-     * @param AggregatedOrderTable $aggregatedOrderTable
-     */
-    public function __construct(AggregatedOrderTable $aggregatedOrderTable)
-    {
-        $this->aggregatedOrderTable = $aggregatedOrderTable;
-    }
-
     /**
      * @param ConditionInterface $condition
      * @param QueryBuilder       $query

@@ -81,12 +81,10 @@
         </service>
 
         <service id="shopware_customer_search.has_order_count_condition_handler" class="Shopware\Bundle\CustomerSearchBundle\ConditionHandler\HasOrderCountConditionHandler">
-            <argument type="service" id="shopware_customer_search.aggregated_order_table" />
             <tag name="customer_search_condition_handler"/>
         </service>
 
         <service id="shopware_customer_search.has_total_order_amount_condition_handler" class="Shopware\Bundle\CustomerSearchBundle\ConditionHandler\HasTotalOrderAmountConditionHandler">
-            <argument type="service" id="shopware_customer_search.aggregated_order_table" />
             <tag name="customer_search_condition_handler"/>
         </service>
 
@@ -145,10 +143,6 @@
         </service>
 
         <service id="shopware_customer_search.stream_criteria_factory" class="Shopware\Bundle\CustomerSearchBundle\CustomerStream\CustomerStreamCriteriaFactory">
-            <argument type="service" id="dbal_connection" />
-        </service>
-
-        <service id="shopware_customer_search.aggregated_order_table" class="Shopware\Bundle\CustomerSearchBundle\ConditionHandler\Common\AggregatedOrderTable">
             <argument type="service" id="dbal_connection" />
         </service>
 
