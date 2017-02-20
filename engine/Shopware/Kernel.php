@@ -46,6 +46,7 @@ use Shopware\Components\ConfigLoader;
 use Shopware\Components\DependencyInjection\Compiler\AddCaptchaCompilerPass;
 use Shopware\Components\DependencyInjection\Compiler\AddConsoleCommandPass;
 use Shopware\Components\DependencyInjection\Compiler\DoctrineEventSubscriberCompilerPass;
+use Shopware\Components\DependencyInjection\Compiler\EmotionPresetCompilerPass;
 use Shopware\Components\DependencyInjection\Compiler\EventListenerCompilerPass;
 use Shopware\Components\DependencyInjection\Compiler\EventSubscriberCompilerPass;
 use Shopware\Components\DependencyInjection\Container;
@@ -637,6 +638,7 @@ class Kernel implements HttpKernelInterface
         $container->addCompilerPass(new MediaOptimizerCompilerPass());
         $container->addCompilerPass(new HandlerRegistryCompilerPass());
         $container->addCompilerPass(new SearchHandlerCompilerPass());
+        $container->addCompilerPass(new EmotionPresetCompilerPass());
 
         $this->loadPlugins($container);
     }

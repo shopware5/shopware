@@ -72,6 +72,8 @@ class EmotionPreset extends Resource
         $this->models = $models;
         $this->template = $template;
         $this->slugService = $slugService;
+
+        $this->setManager($models);
     }
 
     /**
@@ -175,6 +177,10 @@ class EmotionPreset extends Resource
             }
         }
 
+        if ($data['presetData']) {
+            $data['presetData'] = $this->generateElementSyncKeys($data['presetData']);
+        }
+
         $data['requiredPlugins'] = array_map(function ($plugin) {
             return ['name' => $plugin['name'], 'version' => $plugin['version']];
         }, $data['requiredPlugins']);
@@ -266,6 +272,7 @@ class EmotionPreset extends Resource
                 'preview' => $preset['preview'],
                 'presetData' => $preset['presetData'],
                 'requiredPlugins' => $this->getPluginsForPreset($preset, $localPlugins),
+                'assetsImported' => $preset['assetsImported'],
             ];
 
             $translation = $this->extractTranslation($preset['translations'], $locale);
@@ -350,5 +357,31 @@ class EmotionPreset extends Resource
             },
             $plugins
         );
+    }
+
+    /**
+     * @param string $presetData
+     *
+     * @return string
+     */
+    private function generateElementSyncKeys($presetData)
+    {
+        $decodedData = json_decode($presetData, true);
+
+        if (!is_array($decodedData) || !array_key_exists('elements', $decodedData)) {
+            return $presetData;
+        }
+
+        $elements = $decodedData['elements'];
+
+        foreach ($elements as &$element) {
+            if (!array_key_exists('syncKey', $element)) {
+                $element['syncKey'] = uniqid('preset-element-');
+            }
+        }
+
+        $decodedData['elements'] = $elements;
+
+        return json_encode($decodedData);
     }
 }

@@ -53,6 +53,7 @@ class Preset extends ModelEntity
      * @ORM\Column(name="required_plugins", type="text", nullable=false)
      */
     protected $requiredPlugins;
+
     /**
      * Unique identifier field for the shopware emotion.
      *
@@ -111,9 +112,17 @@ class Preset extends ModelEntity
      *
      * @var string
      * @Assert\NotBlank()
-     * @ORM\Column(name="presetData", type="text", nullable=false)
+     * @ORM\Column(name="preset_data", type="text", nullable=false)
      */
     private $presetData;
+
+    /**
+     * Contains the asset data for imports
+     *
+     * @var string
+     * @ORM\Column(name="assets_imported", type="boolean", nullable=false)
+     */
+    private $assetsImported = true;
 
     /**
      * Preset constructor.
@@ -245,6 +254,22 @@ class Preset extends ModelEntity
     public function setPresetData($presetData)
     {
         $this->presetData = $presetData;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getAssetsImported()
+    {
+        return $this->assetsImported;
+    }
+
+    /**
+     * @param bool $assetsImported
+     */
+    public function setAssetsImported($assetsImported)
+    {
+        $this->assetsImported = $assetsImported;
     }
 
     /**

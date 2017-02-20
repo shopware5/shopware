@@ -40,8 +40,9 @@ CREATE TABLE IF NOT EXISTS `s_emotion_presets` (
   `custom` TINYINT(1) NOT NULL DEFAULT '1',
   `thumbnail` TEXT COLLATE utf8_unicode_ci DEFAULT NULL,
   `preview` TEXT COLLATE utf8_unicode_ci DEFAULT NULL,
-  `presetData` MEDIUMTEXT COLLATE utf8_unicode_ci NOT NULL,
+  `preset_data` LONGTEXT COLLATE utf8_unicode_ci NOT NULL,
   `required_plugins` LONGTEXT COLLATE utf8_unicode_ci DEFAULT NULL,
+  `assets_imported` TINYINT(1) NOT NULL DEFAULT '1',
   UNIQUE KEY `name` (`name`),
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;

@@ -58,13 +58,13 @@ class EmotionPresetTest extends \PHPUnit\Framework\TestCase
 
     public function testCreate()
     {
-        $this->resource->create(['name' => 'test', 'presetData' => 'data']);
+        $this->resource->create(['name' => 'test', 'presetData' => '[]']);
         $this->assertCount(1, $this->connection->fetchAll('SELECT * FROM s_emotion_presets'));
     }
 
     public function testCreateReturnsPersistedEntity()
     {
-        $preset = $this->resource->create(['name' => 'test', 'presetData' => 'data']);
+        $preset = $this->resource->create(['name' => 'test', 'presetData' => '[]']);
         $this->assertInstanceOf(Preset::class, $preset);
         $this->assertNotNull($preset->getId());
     }
@@ -82,7 +82,7 @@ class EmotionPresetTest extends \PHPUnit\Framework\TestCase
      */
     public function testPresetNameIsRequiredOnCreate()
     {
-        $this->resource->create(['presetData' => 'test']);
+        $this->resource->create(['presetData' => '[]']);
     }
 
     /**
@@ -90,7 +90,7 @@ class EmotionPresetTest extends \PHPUnit\Framework\TestCase
      */
     public function testPresetNameCannotBeEmpty()
     {
-        $this->resource->create(['name' => '', 'presetData' => 'test']);
+        $this->resource->create(['name' => '', 'presetData' => '[]']);
     }
 
     /**
@@ -106,7 +106,7 @@ class EmotionPresetTest extends \PHPUnit\Framework\TestCase
         $this->insertPreset(
             [
                 'name' => 'First preset',
-                'presetData' => '{}',
+                'preset_data' => '[]',
                 'required_plugins' => json_encode([
                     ['name' => 'SwagLiveShopping', 'label' => 'Live shopping', 'version' => '1.0.0'],
                 ]),
@@ -124,7 +124,7 @@ class EmotionPresetTest extends \PHPUnit\Framework\TestCase
             'custom' => true,
             'thumbnail' => null,
             'preview' => null,
-            'presetData' => '{}',
+            'presetData' => '[]',
             'requiredPlugins' => [
                 [
                     'plugin_name' => 'SwagLiveShopping',
@@ -140,6 +140,7 @@ class EmotionPresetTest extends \PHPUnit\Framework\TestCase
                     'label' => 'Live shopping',
                 ],
             ],
+            'assetsImported' => true,
         ], $preset);
     }
 
@@ -148,7 +149,7 @@ class EmotionPresetTest extends \PHPUnit\Framework\TestCase
         $this->insertPreset(
             [
                 'name' => 'First preset',
-                'presetData' => 'empty',
+                'preset_data' => '[]',
                 'required_plugins' => json_encode([
                     ['name' => 'SwagLiveShopping', 'label' => 'Live shopping', 'version' => '1.0.0'],
                 ]),
@@ -168,7 +169,7 @@ class EmotionPresetTest extends \PHPUnit\Framework\TestCase
             'custom' => true,
             'thumbnail' => null,
             'preview' => null,
-            'presetData' => 'empty',
+            'presetData' => '[]',
             'requiredPlugins' => [
                 [
                     'plugin_name' => 'SwagLiveShopping',
@@ -184,6 +185,7 @@ class EmotionPresetTest extends \PHPUnit\Framework\TestCase
                     'label' => 'Live shopping',
                 ],
             ],
+            'assetsImported' => true,
         ], $preset);
     }
 
@@ -192,7 +194,7 @@ class EmotionPresetTest extends \PHPUnit\Framework\TestCase
         $this->insertPreset(
             [
                 'name' => 'First preset',
-                'presetData' => 'empty',
+                'preset_data' => '[]',
                 'required_plugins' => json_encode([
                     ['name' => 'SwagLiveShopping', 'label' => 'Live shopping', 'version' => '2.0.0'],
                 ]),
@@ -212,7 +214,7 @@ class EmotionPresetTest extends \PHPUnit\Framework\TestCase
             'custom' => true,
             'thumbnail' => null,
             'preview' => null,
-            'presetData' => 'empty',
+            'presetData' => '[]',
             'requiredPlugins' => [
                 [
                     'plugin_name' => 'SwagLiveShopping',
@@ -228,13 +230,14 @@ class EmotionPresetTest extends \PHPUnit\Framework\TestCase
                     'label' => 'Live shopping',
                 ],
             ],
+            'assetsImported' => true,
         ], $preset);
     }
 
     public function testListItemWithTranslation()
     {
         $this->insertPreset(
-            ['name' => 'First preset', 'presetData' => 'empty'],
+            ['name' => 'First preset', 'preset_data' => '[]'],
             [['label' => 'English label', 'description' => 'English description', 'locale' => 'en_GB']]
         );
 
@@ -249,8 +252,9 @@ class EmotionPresetTest extends \PHPUnit\Framework\TestCase
             'custom' => true,
             'thumbnail' => null,
             'preview' => null,
-            'presetData' => 'empty',
+            'presetData' => '[]',
             'requiredPlugins' => null,
+            'assetsImported' => true,
             'locale' => 'en_GB',
         ], $preset);
     }
@@ -258,12 +262,12 @@ class EmotionPresetTest extends \PHPUnit\Framework\TestCase
     public function testListItemsWithAndWithoutTranslation()
     {
         $this->insertPreset(
-            ['name' => 'First preset', 'presetData' => 'empty'],
+            ['name' => 'First preset', 'preset_data' => '[]'],
             [['label' => 'English label', 'description' => 'English description', 'locale' => 'en_GB']]
         );
 
         $this->insertPreset(
-            ['name' => 'Second preset', 'presetData' => 'empty'],
+            ['name' => 'Second preset', 'preset_data' => '[]'],
             [['label' => 'German label', 'description' => 'German description', 'locale' => 'de_DE']]
         );
 
@@ -282,8 +286,9 @@ class EmotionPresetTest extends \PHPUnit\Framework\TestCase
                     'custom' => true,
                     'thumbnail' => null,
                     'preview' => null,
-                    'presetData' => 'empty',
+                    'presetData' => '[]',
                     'requiredPlugins' => null,
+                    'assetsImported' => true,
                     'locale' => 'en_GB',
                 ],
                 [
@@ -294,8 +299,9 @@ class EmotionPresetTest extends \PHPUnit\Framework\TestCase
                     'custom' => true,
                     'thumbnail' => null,
                     'preview' => null,
-                    'presetData' => 'empty',
+                    'presetData' => '[]',
                     'requiredPlugins' => null,
+                    'assetsImported' => true,
                 ],
             ],
             $presets
@@ -306,7 +312,7 @@ class EmotionPresetTest extends \PHPUnit\Framework\TestCase
     {
         $preset = $this->resource->create([
             'name' => 'Test preset',
-            'presetData' => json_encode([]),
+            'presetData' => '[]',
             'translations' => [
                 ['locale' => 'de_DE', 'label' => 'German', 'description' => 'German'],
                 ['locale' => 'en_GB', 'label' => 'English', 'description' => 'English'],
@@ -327,6 +333,7 @@ class EmotionPresetTest extends \PHPUnit\Framework\TestCase
             'preview' => null,
             'presetData' => '[]',
             'requiredPlugins' => null,
+            'assetsImported' => true,
             'locale' => 'en_GB',
         ], $english);
 
@@ -342,13 +349,14 @@ class EmotionPresetTest extends \PHPUnit\Framework\TestCase
             'preview' => null,
             'presetData' => '[]',
             'requiredPlugins' => null,
+            'assetsImported' => true,
             'locale' => 'de_DE',
         ], $german);
     }
 
     public function testUpdate()
     {
-        $preset = $this->resource->create(['name' => 'test', 'presetData' => 'data']);
+        $preset = $this->resource->create(['name' => 'test', 'presetData' => json_encode(['data'])]);
         $updated = $this->resource->update($preset->getId(), ['name' => 'updated']);
         $this->assertSame('updated', $updated->getName());
         $this->assertCount(1, $this->connection->fetchAll("SELECT * FROM s_emotion_presets WHERE name = 'updated'"));
@@ -374,8 +382,8 @@ class EmotionPresetTest extends \PHPUnit\Framework\TestCase
      */
     public function testValidateExistingName()
     {
-        $this->resource->create(['name' => 'test', 'presetData' => 'data']);
-        $this->resource->create(['name' => 'test', 'presetData' => 'data2']);
+        $this->resource->create(['name' => 'test', 'presetData' => '[]']);
+        $this->resource->create(['name' => 'test', 'presetData' => '[]']);
     }
 
     /**
@@ -400,7 +408,7 @@ class EmotionPresetTest extends \PHPUnit\Framework\TestCase
      */
     public function testDeleteNoneCustomPreset()
     {
-        $preset = $this->resource->create(['name' => 'test', 'presetData' => 'data', 'custom' => false]);
+        $preset = $this->resource->create(['name' => 'test', 'presetData' => '[]', 'custom' => false]);
         $this->resource->delete($preset->getId());
     }
 

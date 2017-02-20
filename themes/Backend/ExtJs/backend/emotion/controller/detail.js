@@ -582,21 +582,124 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
                     return;
                 }
 
-                me.importAssets(preset, function(preset) {
-                    window.close();
-                    me.getMainWindow().setLoading(true);
-                    me.openDetailWindow(
-                        me.decodeEmotionPresetData(preset.get('presetData'))
-                    );
-                });
-            }
+                me.getMainWindow().setLoading(true);
+                me.importAssets(preset, function(success) {
+                    me.getMainWindow().setLoading(false);
+                    if (!success) {
+                        return Shopware.Notification.createGrowlMessage(
+                            '{s name=preset/assets_import_failure}{/s}',
+                            '{s name=preset/assets_import_failure_message}{/s}'
+                        );
+                    }
+
+                    // because of data synchronisation we have to reload preset here
+                    me.reloadPreset(preset, function(reloadedPreset) {
+                        me.getPresetWindow().close();
+                        me.openDetailWindow(
+                            me.decodeEmotionPresetData(reloadedPreset.get('presetData'))
+                        );
+                    }, me);
+                }, me);
+            },
+            me
         );
     },
 
-    importAssets: function(preset, callback) {
-        callback(preset);
+    importAssets: function(preset, callback, scope) {
+        var me = this,
+            presetId = preset.get('id'),
+            presetData = Ext.JSON.decode(preset.get('presetData')),
+            elements;
+
+        if (!Ext.isObject(presetData)) {
+            return Ext.callback(callback, scope, [preset]);
+        }
+
+        elements = presetData['elements'];
+        me.createProgressBar();
+
+        me.processAssetImport(presetId, 0, elements, callback, me.assetImportCallback, me);
     },
 
+    processAssetImport: function(presetId, index, elements, outerCallback, importCallback, scope) {
+        var elementSyncKey = elements[index]['syncKey'];
+
+        Ext.Ajax.request({
+            url: '{url controller=emotionPreset action=importAsset}',
+            methid: 'POST',
+            timeout: 4000000,
+            params: {
+                id: presetId,
+                syncKey: elementSyncKey
+            },
+            success: function(response) {
+                var result = Ext.JSON.decode(response.responseText);
+
+                return Ext.callback(importCallback, scope, [result.success, outerCallback, presetId, index, elements]);
+            },
+            failure: function() {
+                return Ext.callback(importCallback, scope, [false]);
+            }
+        });
+    },
+
+    assetImportCallback: function(success, callback, presetId, index, elements) {
+        var me = this;
+
+        if (!success) {
+            return Ext.callback(callback, me, [false]);
+        }
+        index++;
+        me.progressbarWindow.down('progressbar').updateProgress(index, Ext.String.format('{s name=preset/assets_import_progress}{/s}', index, elements.length));
+        if (index < elements.length) {
+            me.processAssetImport(presetId, index, elements, callback, me.assetImportCallback, me);
+        } else {
+            me.progressbarWindow.down('progressbar').updateText('{s name=preset/assets_import_success}{/s}');
+
+            return Ext.callback(callback, me, [true]);
+        }
+    },
+
+    reloadPreset: function(preset, callback, scope) {
+        var store = preset.store;
+
+        store.load({
+            callback: function() {
+                return Ext.callback(callback, scope, [store.getById(preset.get('id'))]);
+            }
+        });
+    },
+
+    createProgressBar: function() {
+        var me = this;
+
+        me.progressbarWindow = Ext.create('Ext.Window', {
+            title: '{s name=preset/assets_import_title}{/s}',
+            autoShow: true,
+            height: 150,
+            width: 350,
+            bodyPadding: 20,
+            items: [{
+                xtype: 'progressbar',
+                animate: true,
+                text: '{s name=preset/assets_import_text}{/s}',
+                value: 0
+            }],
+            dockedItems: [{
+                xtype: 'toolbar',
+                dock: 'bottom',
+                ui: 'shopware-ui',
+                items: ['->', {
+                    xtype: 'button',
+                    text: '{s name=preset/button_close}{/s}',
+                    cls: 'primary',
+                    handler: function(btn) {
+                        btn.up('window').close();
+                    }
+                }]
+            }]
+        });
+    },
 
     onOpenDetail: function() {
         var me = this,

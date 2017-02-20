@@ -23,6 +23,7 @@
  */
 
 use Shopware\Bundle\PluginInstallerBundle\Context\PluginsByTechnicalNameRequest;
+use Shopware\Models\Emotion\Preset;
 
 class Shopware_Controllers_Backend_EmotionPreset extends Shopware_Controllers_Backend_ExtJs
 {
@@ -66,6 +67,36 @@ class Shopware_Controllers_Backend_EmotionPreset extends Shopware_Controllers_Ba
         $resource = $this->container->get('shopware.api.emotionpreset');
 
         $resource->delete($id);
+
+        $this->View()->assign(['success' => true]);
+    }
+
+    /**
+     * Imports preset assets and synchronizes media path inside the
+     * preset data based on unique asset key.
+     */
+    public function importAssetAction()
+    {
+        $id = $this->Request()->getParam('id');
+        $syncKey = $this->Request()->getParam('syncKey');
+
+        if (!$id || !$syncKey) {
+            $this->View()->assign(['success' => false]);
+
+            return;
+        }
+
+        /** @var Preset $preset */
+        $preset = $this->container->get('models')->getRepository(Preset::class)->find($id);
+
+        if (!$preset || !$syncKey || $preset->getAssetsImported()) {
+            $this->View()->assign(['success' => false]);
+
+            return;
+        }
+
+        $synchronizerService = $this->container->get('shopware.emotion.preset_data_synchronizer');
+        $synchronizerService->importElementAssets($preset, $syncKey);
 
         $this->View()->assign(['success' => true]);
     }

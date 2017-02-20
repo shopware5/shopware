@@ -597,5 +597,27 @@
             <argument type="service" id="shopware.slug" />
         </service>
 
+        <service id="shopware.emotion.preset_service" class="Shopware\Components\Emotion\Preset\PresetService">
+            <argument type="service" id="shopware.api.emotionpreset" />
+            <argument type="service" id="shopware.slug" />
+        </service>
+
+        <service id="shopware.emotion.preset_data_synchronizer" class="Shopware\Components\Emotion\Preset\PresetDataSynchronizer">
+            <argument type="service" id="models" />
+            <argument type="service" id="events" />
+            <!--preset element handlers-->
+            <argument type="collection" />
+        </service>
+
+        <service id="shopware.emotion.preset_banner_component_handler" class="Shopware\Components\Emotion\Preset\ComponentHandler\BannerComponentHandler">
+            <argument type="service" id="shopware_media.media_service" />
+            <tag name="shopware.emotion.preset_component_handler" />
+        </service>
+
+        <service id="shopware.emotion.preset_bannerslider_component_handler" class="Shopware\Components\Emotion\Preset\ComponentHandler\BannerSliderComponentHandler">
+            <argument type="service" id="shopware_media.media_service" />
+            <tag name="shopware.emotion.preset_component_handler" />
+        </service>
+
     </services>
 </container>
