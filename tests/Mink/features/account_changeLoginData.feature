@@ -148,7 +148,7 @@ Feature: Successful changes of login data
 
         Then  I should see "Die persönlichen Daten wurden erfolgreich gespeichert."
         Then  I follow "Übersicht"
-        And   I should be welcome'd with with "Willkommen, <firstname> <lastname>"
+        And   I should be welcomed with "Willkommen, <firstname> <lastname>"
 
         Examples:
           | salutation | firstname | lastname   |
