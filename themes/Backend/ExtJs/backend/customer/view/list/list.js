@@ -104,7 +104,31 @@ Ext.define('Shopware.apps.Customer.view.list.List', {
         me.columns = me.getColumns();
 
         me.dockedItems = [ me.getPagingBar() ];
+
         me.callParent(arguments);
+
+        var header = me.headerCt ;
+        header.on('menucreate', function (ct, menu, eOpts) {
+            menu.add({
+                itemId: 'sort_name',
+                text: 'Sort name'
+            });
+        });
+
+        header.on('headertriggerclick', function (ct, column, e, t, eOpts) {
+            me.showColumnMenu(header.getMenu(), column);
+        });
+    },
+
+    showColumnMenu: function(menu, column) {
+        var me = this;
+
+        var mapping = {
+            'meta': ['customernumber', 'firstlogin'],
+            'customer': ['firstname', 'lastname', 'company', 'age']
+        };
+
+        // menu.items.getByKey('sort_name').setVisible(false);
     },
 
     /**
@@ -185,6 +209,7 @@ Ext.define('Shopware.apps.Customer.view.list.List', {
             header: 'Anschrift',
             dataIndex: 'address',
             flex: 3,
+
             renderer: function(v, meta, record) {
                 var lines = [
                     record.get('street'),

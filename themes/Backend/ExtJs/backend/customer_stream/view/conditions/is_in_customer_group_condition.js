@@ -48,16 +48,13 @@ Ext.define('Shopware.apps.CustomerStream.view.conditions.IsInCustomerGroupCondit
             conditionClass: 'Shopware\\Bundle\\CustomerSearchBundle\\Condition\\IsInCustomerGroupCondition',
             items: [{
                 xtype: 'shopware-form-field-grid',
-                name: 'customerGroupKeys',
+                name: 'ids',
                 flex: 1,
                 allowSorting: false,
                 useSeparator: false,
                 allowBlank: false,
                 store: factory.createEntitySearchStore("Shopware\\Models\\Customer\\Group"),
-                searchStore: factory.createEntitySearchStore("Shopware\\Models\\Customer\\Group"),
-                getItemData: function(item) {
-                    return item.get('key');
-                }
+                searchStore: factory.createEntitySearchStore("Shopware\\Models\\Customer\\Group")
             }]
         };
     }

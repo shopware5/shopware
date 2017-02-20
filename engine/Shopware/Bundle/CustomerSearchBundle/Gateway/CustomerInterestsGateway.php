@@ -144,7 +144,6 @@ class CustomerInterestsGateway
 
         $query->from('s_order', 'orders');
         $query->innerJoin('orders', 's_core_shops', 'shops', 'shops.id = orders.language');
-
         $query->innerJoin('orders', 's_order_details', 'details', 'orders.id = details.orderID');
         $query->innerJoin('details', 's_articles', 'product', 'product.id = details.articleID');
         $query->innerJoin('product', 's_articles_categories_ro', 'mapping', 'mapping.articleID = product.id AND mapping.categoryID = shops.category_id');
@@ -158,9 +157,9 @@ class CustomerInterestsGateway
         $query->andWhere('orders.ordernumber IS NOT NULL');
 
         $query->addGroupBy('orders.userID');
-        $query->addGroupBy('orders.language');
-        $query->addGroupBy('mapping.articleID');
-        $query->addGroupBy('mapping.categoryID');
+//        $query->addGroupBy('orders.language');
+//        $query->addGroupBy('mapping.articleID');
+        $query->addGroupBy('mapping.parentcategoryID');
         $query->addGroupBy('product.supplierID');
 
         $query->setParameter(':cancelStatus', -1);

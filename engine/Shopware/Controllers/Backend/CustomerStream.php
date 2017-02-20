@@ -35,6 +35,18 @@ class Shopware_Controllers_Backend_CustomerStream extends Shopware_Controllers_B
 
     protected $model = CustomerStream::class;
 
+    public function delete($id)
+    {
+        $success = parent::delete($id);
+
+        $this->get('dbal_connection')->executeQuery(
+            'DELETE FROM s_customer_streams_mapping WHERE stream_id = :id',
+            [':id' => $id]
+        );
+
+        return $success;
+    }
+
     public function indexStreamAction()
     {
         $streamId = (int) $this->Request()->getParam('streamId');
@@ -68,7 +80,7 @@ class Shopware_Controllers_Backend_CustomerStream extends Shopware_Controllers_B
                 'success' => true,
                 'finish' => true,
                 'progress' => 1,
-                'text' => 'All customers indexed',
+                'text' => 'Stream wurde aktualisiert',
             ]);
 
             return;
@@ -77,9 +89,18 @@ class Shopware_Controllers_Backend_CustomerStream extends Shopware_Controllers_B
         $this->View()->assign([
             'success' => true,
             'finish' => false,
-            'text' => sprintf('Indexing %s of %s customers', $handled, $total),
+            'text' => sprintf('Aktualisiere %s von %s Streamkunden', $handled, $total),
             'progress' => $handled / $total,
         ]);
+    }
+
+    public function getLastFullIndexTimeAction()
+    {
+        $query = $this->container->get('dbal_connection')->createQueryBuilder();
+        $query->select('MIN(index_time)');
+        $query->from('s_customer_search_index', 'search_index');
+        $time = $query->execute()->fetch(PDO::FETCH_COLUMN);
+        $this->View()->assign('last_index_time', $time);
     }
 
     public function buildSearchIndexAction()
@@ -87,13 +108,16 @@ class Shopware_Controllers_Backend_CustomerStream extends Shopware_Controllers_B
         $total = (int) $this->Request()->getParam('total');
         $iteration = (int) $this->Request()->getParam('iteration', 1);
         $offset = ($iteration - 1) * self::INDEXING_LIMIT;
+        $handled = $offset + self::INDEXING_LIMIT;
 
         /** @var \Doctrine\DBAL\Query\QueryBuilder $query */
         $query = $this->get('dbal_connection')->createQueryBuilder();
         $query->select('id');
         $query->from('s_user', 'user');
         $query->where('user.id > :lastId');
+        $query->andWhere('user.id <= :maxId');
         $query->setParameter(':lastId', $offset);
+        $query->setParameter(':maxId', $handled);
         $query->orderBy('id');
         $query->setMaxResults(self::INDEXING_LIMIT);
 
@@ -105,14 +129,12 @@ class Shopware_Controllers_Backend_CustomerStream extends Shopware_Controllers_B
         }
         $indexer->populate($ids);
 
-        $handled = $offset + self::INDEXING_LIMIT;
-
         if ($handled >= $total) {
             $this->View()->assign([
                 'success' => true,
                 'finish' => true,
                 'progress' => 1,
-                'text' => 'All customers indexed',
+                'text' => 'Kunden erfolgreich analyisiert',
             ]);
 
             return;
@@ -121,7 +143,7 @@ class Shopware_Controllers_Backend_CustomerStream extends Shopware_Controllers_B
         $this->View()->assign([
             'success' => true,
             'finish' => false,
-            'text' => sprintf('Indexing %s of %s customers', $handled, $total),
+            'text' => sprintf('Analysiere %s von %s Kunden', $handled, $total),
             'progress' => $handled / $total,
         ]);
     }
@@ -144,14 +166,9 @@ class Shopware_Controllers_Backend_CustomerStream extends Shopware_Controllers_B
         if ($request->has('conditions')) {
             $conditions = $request->getParam('conditions', '');
         } else {
-            $stream = $this->getDetail(
-                $request->getParam('streamId')
-            );
+            $stream = $this->getDetail($request->getParam('streamId'));
             $conditions = $stream['data']['conditions'];
         }
-
-        $offset = (int) $request->getParam('start', 0);
-        $limit = (int) $request->getParam('limit', 50);
 
         if ($conditions !== null) {
             $conditions = json_decode($conditions, true);
@@ -161,8 +178,12 @@ class Shopware_Controllers_Backend_CustomerStream extends Shopware_Controllers_B
 
         $criteria = $this->createCriteria($conditions);
 
-        $criteria->offset($offset);
-        $criteria->limit($limit);
+        $criteria->offset(
+            (int) $request->getParam('start', 0)
+        );
+        $criteria->limit(
+            (int) $request->getParam('limit', 50)
+        );
 
         /** @var \Shopware\Bundle\CustomerSearchBundle\CustomerNumberSearch $numberSearch */
         $numberSearch = $this->get('shopware_customer_search.customer_number_search');
@@ -173,7 +194,6 @@ class Shopware_Controllers_Backend_CustomerStream extends Shopware_Controllers_B
             $data = $row->getAttribute('search')->toArray();
             $data['interests'] = json_decode($data['interests'], true);
             $data['newest_interests'] = json_decode($data['newest_interests'], true);
-
             return $data;
         }, $result->getRows());
 
@@ -248,6 +268,64 @@ class Shopware_Controllers_Backend_CustomerStream extends Shopware_Controllers_B
         $this->View()->assign([
             'data' => array_values($chart),
         ]);
+    }
+
+    public function loadAmountPerStreamChartAction()
+    {
+        $streams = $this->getList(0, 50000);
+        $streams = array_column($streams['data'], 'name');
+
+        /** @var \Doctrine\DBAL\Query\QueryBuilder $query */
+        $query = $this->get('dbal_connection')->createQueryBuilder();
+        $query->select([
+            "DATE_FORMAT(orders.ordertime, '%Y/%m')",
+            'ROUND(SUM(orders.invoice_amount), 2) as invoice_amount_sum',
+            'stream.name as stream'
+        ]);
+
+        $date = (new \DateTime())->sub(new \DateInterval('P' . (int) 12 . 'M'));
+        $now = new DateTime();
+
+        $query->from('s_order', 'orders');
+        $query->leftJoin('orders', 's_customer_streams_mapping', 'stream_mapping', 'stream_mapping.customer_id = orders.userID');
+        $query->leftJoin('stream_mapping', 's_customer_streams', 'stream', 'stream.id = stream_mapping.stream_id');
+        $query->andWhere('orders.status != :cancelStatus');
+        $query->andWhere('orders.ordernumber IS NOT NULL');
+        $query->andWhere('orders.ordertime >= :orderTime');
+        $query->andWhere('orders.ordernumber != 0');
+        $query->setParameter(':cancelStatus', -1);
+        $query->setParameter(':orderTime', $date->format('Y-m'));
+        $query->groupBy('stream.id');
+        $query->addGroupBy("DATE_FORMAT(orders.ordertime,'%Y-%m')");
+        $data = $query->execute()->fetchAll(PDO::FETCH_GROUP);
+
+        $default = ['unassigned' => 0];
+        foreach ($streams as $id) {
+            $default[$id] = 0;
+        }
+
+        $diff = $now->diff($date);
+        $total = $diff->m + ($diff->y * 12);
+
+        $chart = [];
+        for ($i = 0; $i < $total; ++$i) {
+            $month = $date->add(new DateInterval('P' . 1 . 'M'));
+            $format = $month->format('Y/m');
+
+            $chart[$format] = array_merge(['yearMonth' => $format], $default);
+
+            if (!array_key_exists($format, $data)) {
+                continue;
+            }
+            foreach($data[$format] as $row) {
+                if ($row['stream']) {
+                    $chart[$format][$row['stream']] += $row['invoice_amount_sum'];
+                } else {
+                    $chart[$format]['unassigned'] += $row['invoice_amount_sum'];
+                }
+            }
+        }
+        $this->View()->assign('data', array_values($chart));
     }
 
     /**
