@@ -252,7 +252,7 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
                 $mpdf->Output();
                 exit;
             } else {
-                $path = Shopware()->DocPath()."files/documents"."/".$this->_documentHash.".pdf";
+                $path = Shopware()->DocPath("files/documents").$this->_documentHash.".pdf";
                 $mpdf = new mPDF("utf-8", "A4", "", "", $this->_document["left"], $this->_document["right"], $this->_document["top"], $this->_document["bottom"]);
                 $mpdf->WriteHTML($data);
                 $mpdf->Output($path, "F");
