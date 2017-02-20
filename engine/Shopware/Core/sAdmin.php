@@ -1715,7 +1715,7 @@ SQL;
      * @param integer $paymentID
      * @return bool
      */
-    public function executeRiskRule($rule, $user, $basket, $value, $paymentID)
+    public function executeRiskRule($rule, $user, $basket, $value, $paymentID = null)
     {
         if ($event = $this->eventManager->notifyUntil(
             'Shopware_Modules_Admin_Execute_Risk_Rule_' . $rule,
