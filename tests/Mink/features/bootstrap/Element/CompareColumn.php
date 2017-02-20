@@ -64,7 +64,6 @@ class CompareColumn extends MultipleElement implements \Shopware\Tests\Mink\Help
         $elements = Helper::findElements($this, ['thumbnailImage', 'thumbnailLink', 'name', 'detailsButton']);
 
         $names = array(
-            'articleThumbnailImageAlt' => $elements['thumbnailImage']->getAttribute('alt'),
             'articleThumbnailLinkTitle' => $elements['thumbnailLink']->getAttribute('title'),
             'articleName' => $elements['name']->getText(),
             'articleTitle' => $elements['name']->getAttribute('title'),

@@ -105,8 +105,7 @@ class BackendContext extends SubContext
         if ($this->waitIfThereIsText('Marketing', 5)) {
             return;
         }
-
-        // waitForText() is defined in Trait
+        
         $this->waitForText('Shopware Backend Login', 10);
 
         $page->login('demo', 'demo');
