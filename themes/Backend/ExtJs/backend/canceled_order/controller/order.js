@@ -42,7 +42,9 @@ Ext.define('Shopware.apps.CanceledOrder.controller.Order', {
     refs: [
         { ref: 'orderGrid', selector: 'canceled-order-tabs-order-orders' },
         { ref: 'orderPositionGrid', selector:'canceled-order-view-order-position' },
-        { ref: 'detailView', selector : 'canceled-order-view-order-detail' }
+        { ref: 'detailView', selector : 'canceled-order-view-order-detail' },
+        { ref: 'fromField', selector: 'canceled-order-toolbar datefield[name=fromdate]' },
+        { ref: 'toField', selector: 'canceled-order-toolbar datefield[name=todate]' }
     ],
 
     snippets : {
@@ -92,7 +94,8 @@ Ext.define('Shopware.apps.CanceledOrder.controller.Order', {
             'canceled-order-toolbar': {
                 search: me.onSearch,
                 filter: me.onFilter,
-                dateEnter: me.onFilter
+                dateEnter: me.onFilter,
+                exportOrder: me.onExportOrder
             },
             'canceled-order-view-order-position': {
                 openArticle: me.onOpenArticle
@@ -393,6 +396,33 @@ Ext.define('Shopware.apps.CanceledOrder.controller.Order', {
         });
     },
 
+    /**
+     * Will be called when the user clicks on the export button in the toolbar.
+     * Build export url together with date.
+     * Creates a new form and sets its url to the build one.
+     * Submits the form which leads to a download of a csv file.
+     */
+    onExportOrder: function () {
+        var me = this,
+            fromField = me.getFromField(),
+            toField = me.getToField();
+
+        var url = '{url controller=CanceledOrder action="getOrder"}';
+        url += '?format=csv';
+        url += '&fromDate=' + Ext.Date.format(fromField.getValue(), 'Y-m-d');
+        url += '&toDate=' + Ext.Date.format(toField.getValue(), 'Y-m-d');
+
+        var form = Ext.create('Ext.form.Panel', {
+            standardSubmit: true,
+            target: 'iframe'
+        });
+
+        form.submit({
+            method: 'POST',
+            url: url
+        });
+    },
+    
     /**
      * Callback function for openOrder. Will open the articles subApplication
      *
