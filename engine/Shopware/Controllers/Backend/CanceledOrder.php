@@ -668,7 +668,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
         $total = $paginator->count();
         $orders = $paginator->getIterator()->getArrayCopy();
 
-        if(strtolower($this->format) == "csv"){
+        if(strtolower($this->format) == "csv") {
 
             foreach ($orders as &$value) {
 
@@ -690,7 +690,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
                 unset($value["details"]);
 
                 /* Parse data*/
-                if($value["orderTime"] instanceof \DateTime){
+                if($value["orderTime"] instanceof \DateTime) {
                     $value["orderTime"] = $value["orderTime"]->format("d.m.Y");
                 }
 
@@ -702,7 +702,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
 
             $this->exportCSV($orders);
 
-        }else {
+        } else {
             $this->View()->assign([
                 'success' => true,
                 'data' => $orders,
