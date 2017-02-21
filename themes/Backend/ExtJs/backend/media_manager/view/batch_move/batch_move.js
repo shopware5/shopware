@@ -23,8 +23,12 @@
 
 //{namespace name=backend/media_manager/view/main}
 //{block name="backend/media_manager/view/main/batchMove"}
-Ext.define('Shopware.apps.MediaManager.view.BatchMove.BatchMove', {
+Ext.define('Shopware.apps.MediaManager.view.batchMove.BatchMove', {
     extend: 'Enlight.app.SubWindow',
+    alias: 'widget.batchMove.BatchMove',
+
+    footerButton: false,
+    modal: true,
 
     height: 135,
     width: 400,
