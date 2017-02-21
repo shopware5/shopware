@@ -63,7 +63,7 @@ Ext.define('Shopware.apps.CanceledOrder.view.Toolbar', {
         me.items = me.getItems();
 
         // register search event
-        me.addEvents('search', 'filter', 'dateEnter', 'exportOrder');
+        me.addEvents('search', 'filter', 'dateEnter', 'exportOrders');
 
         me.callParent(arguments);
     },
@@ -117,7 +117,7 @@ Ext.define('Shopware.apps.CanceledOrder.view.Toolbar', {
             iconCls : 'sprite-drive-download',
             handler: function(){
 
-                me.fireEvent('exportOrder');
+                me.fireEvent('exportOrders');
             }
         });
         
