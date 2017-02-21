@@ -57,13 +57,6 @@
             </div>
         {/if}
     {/block}
-
-    {* Tagcloud *}
-    {block name='frontend_home_index_tagcloud'}
-        {if {config name=show namespace=TagCloud } && !$isEmotionLandingPage}
-            {action module=widgets controller=listing action=tag_cloud sController=index}
-        {/if}
-    {/block}
 </div>
 {/block}
 

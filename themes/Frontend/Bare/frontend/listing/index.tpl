@@ -64,13 +64,6 @@
         {block name="frontend_listing_index_listing"}
             {include file='frontend/listing/listing.tpl'}
         {/block}
-
-        {* Tagcloud *}
-        {block name="frontend_listing_index_tagcloud"}
-            {if {config name=show namespace=TagCloud }}
-                {action module=widgets controller=listing action=tag_cloud sController=listing sCategory=$sCategoryContent.id}
-            {/if}
-        {/block}
     </div>
 {/block}
 

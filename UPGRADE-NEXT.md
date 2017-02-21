@@ -29,5 +29,14 @@ This changelog references changes done in Shopware Next patch versions.
         - `\Shopware\Models\Shop\Shop::setSecureBaseUrl`
         - `\Shopware\Models\Shop\Shop::getAlwaysSecure`
         - `\Shopware\Models\Shop\Shop::setAlwaysSecure`
+        - `\Shopware_Controllers_Widgets_Listing::tagCloudAction`
+        - `\sMarketing::sBuildTagCloud`
+
+    * Removed plugins
+        - `TagCloud`
+        
+    * Removed blocks
+        - `frontend_listing_index_tagcloud` in file `themes/Frontend/Bare/frontend/listing/index.tpl`
+        - `frontend_home_index_tagcloud` in file `themes/Frontend/Bare/frontend/home/index.tpl`
 
     * Deprecated `forceSecure` and `sUseSSL` smarty flags
