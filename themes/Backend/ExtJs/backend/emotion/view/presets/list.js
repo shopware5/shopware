@@ -136,11 +136,13 @@ Ext.define('Shopware.apps.Emotion.view.presets.List', {
      */
     search: function(field, term) {
         var me = this;
+
         term = term.trim();
         if (term.length <= 0) {
             me.store.clearFilter();
             return;
         }
+        me.store.clearFilter();
 
         me.store.filter({
             filterFn: function(item) {
