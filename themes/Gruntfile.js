@@ -17,7 +17,6 @@ module.exports = function (grunt) {
 
     config['less'].forEach(function (item) {
         if (/(\.css)$/.test(item)) {
-            console.log(item);
             // Entry is a css file and needs to be imported inline
             content += `@import (inline) "../${item}";`;
         } else {
