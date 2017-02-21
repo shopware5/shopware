@@ -82,7 +82,7 @@ class CartPosition extends MultipleElement
         $names = [
             'articleTitle' => $elements['name']->getAttribute('title'),
             'articleThumbnailLinkTitle' => $elements['thumbnailLink']->getAttribute('title'),
-            'articleName' => rtrim($elements['name']->getText(), '.')
+            'articleName' => rtrim($elements['name']->getText(), '.'),
         ];
 
         return $this->getUniqueName($names);

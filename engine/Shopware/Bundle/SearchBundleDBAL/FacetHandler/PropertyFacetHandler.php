@@ -64,9 +64,9 @@ class PropertyFacetHandler implements PartialFacetHandlerInterface
     private $fieldName;
 
     /**
-     * @param PropertyGatewayInterface $propertyGateway
-     * @param QueryBuilderFactoryInterface      $queryBuilderFactory
-     * @param QueryAliasMapper         $queryAliasMapper
+     * @param PropertyGatewayInterface     $propertyGateway
+     * @param QueryBuilderFactoryInterface $queryBuilderFactory
+     * @param QueryAliasMapper             $queryAliasMapper
      */
     public function __construct(
         PropertyGatewayInterface $propertyGateway,

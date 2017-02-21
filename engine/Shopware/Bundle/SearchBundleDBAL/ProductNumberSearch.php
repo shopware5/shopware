@@ -30,7 +30,6 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Attribute;
 use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\DependencyInjection\Container;
-use Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactoryInterface;
 
 /**
  * @category  Shopware
@@ -55,10 +54,10 @@ class ProductNumberSearch implements SearchBundle\ProductNumberSearchInterface
     private $eventManager;
 
     /**
-     * @param QueryBuilderFactoryInterface         $queryBuilderFactory
-     * @param \Enlight_Event_EventManager $eventManager
-     * @param FacetHandlerInterface[]     $facetHandlers
-     * @param Container                   $container
+     * @param QueryBuilderFactoryInterface $queryBuilderFactory
+     * @param \Enlight_Event_EventManager  $eventManager
+     * @param FacetHandlerInterface[]      $facetHandlers
+     * @param Container                    $container
      */
     public function __construct(
         QueryBuilderFactoryInterface $queryBuilderFactory,

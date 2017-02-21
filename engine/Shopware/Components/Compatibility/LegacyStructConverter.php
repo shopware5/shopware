@@ -84,7 +84,7 @@ class LegacyStructConverter
 
     /**
      * @param \Shopware_Components_Config $config
-     * @param ContextServiceInterface $contextService
+     * @param ContextServiceInterface     $contextService
      * @param \Enlight_Event_EventManager $eventManager
      * @param MediaServiceInterface       $mediaService
      * @param Connection                  $connection

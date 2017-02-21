@@ -68,11 +68,12 @@ class FileSystem
 
         return $errors;
     }
-    
+
     /**
-     * @param  string $directory
-     * @param  bool   $fixPermission
-     * @return array  of errors
+     * @param string $directory
+     * @param bool   $fixPermission
+     *
+     * @return array of errors
      */
     public function checkDirectoryPermissions($directory, $fixPermission = false)
     {

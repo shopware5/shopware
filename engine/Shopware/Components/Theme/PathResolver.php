@@ -320,6 +320,7 @@ class PathResolver
      *
      * @param Shop\Shop $shop
      * @param $timestamp
+     *
      * @return string
      */
     public function getCssFilePath(Shop\Shop $shop, $timestamp)
@@ -336,6 +337,7 @@ class PathResolver
      *
      * @param Shop\Shop $shop
      * @param $timestamp
+     *
      * @return string
      */
     public function getJsFilePath(Shop\Shop $shop, $timestamp)

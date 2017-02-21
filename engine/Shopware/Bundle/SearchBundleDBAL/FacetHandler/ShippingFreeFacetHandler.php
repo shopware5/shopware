@@ -56,7 +56,7 @@ class ShippingFreeFacetHandler implements PartialFacetHandlerInterface
     private $fieldName;
 
     /**
-     * @param QueryBuilderFactoryInterface                  $queryBuilderFactory
+     * @param QueryBuilderFactoryInterface         $queryBuilderFactory
      * @param \Shopware_Components_Snippet_Manager $snippetManager
      * @param QueryAliasMapper                     $queryAliasMapper
      */

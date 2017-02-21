@@ -732,7 +732,7 @@ class sOrder
                 [
                     'subject' => $this,
                     'basketRow' => $basketRow,
-                    'orderdetailsID' => $orderdetailsID
+                    'orderdetailsID' => $orderdetailsID,
                 ]
             );
 
