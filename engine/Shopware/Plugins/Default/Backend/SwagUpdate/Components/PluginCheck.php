@@ -82,20 +82,22 @@ class PluginCheck
         try {
             $results = [];
             foreach ($installedPlugins as $plugin) {
-                $key         = strtolower($plugin['name']);
-                $name        = $plugin['label'];
-                $inStore     = array_key_exists($key, $storePlugins);
-                $available   = array_key_exists($key, $updatesAvailable);
-                $updatable   = $available && $plugin['version'] < $updatesAvailable[$key]->getVersion();
-                $description = $this->getPluginStateDescription($inStore, $available);
+                $key            = strtolower($plugin['name']);
+                $name           = $plugin['label'];
+                $inStore        = array_key_exists($key, $storePlugins);
+                $available      = array_key_exists($key, $updatesAvailable);
+                $updatable      = version_compare($plugin['version'], $updatesAvailable[$key]->getVersion(), '<');
+                $technicalName  = $plugin['name'];
+                $description    = $this->getPluginStateDescription($inStore, $available);
 
                 $results[] = [
-                    'inStore'    => $inStore,
-                    'name'       => $name,
-                    'message'    => $description,
-                    'updatable'  => $updatable,
-                    'id'         => sprintf('plugin_incompatible-%s', $name),
-                    'errorLevel' => ($available) ? Validation::REQUIREMENT_VALID : Validation::REQUIREMENT_WARNING
+                    'inStore'       => $inStore,
+                    'name'          => $name,
+                    'message'       => $description,
+                    'updatable'     => $updatable,
+                    'id'            => sprintf('plugin_incompatible-%s', $name),
+                    'technicalName' => $technicalName,
+                    'errorLevel'    => ($available) ? Validation::REQUIREMENT_VALID : Validation::REQUIREMENT_WARNING
                 ];
             }
         } catch (\Exception $e) {
