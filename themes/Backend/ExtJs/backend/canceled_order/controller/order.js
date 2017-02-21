@@ -95,7 +95,7 @@ Ext.define('Shopware.apps.CanceledOrder.controller.Order', {
                 search: me.onSearch,
                 filter: me.onFilter,
                 dateEnter: me.onFilter,
-                exportOrder: me.onExportOrder
+                exportOrders: me.onExportOrders
             },
             'canceled-order-view-order-position': {
                 openArticle: me.onOpenArticle
@@ -402,7 +402,7 @@ Ext.define('Shopware.apps.CanceledOrder.controller.Order', {
      * Creates a new form and sets its url to the build one.
      * Submits the form which leads to a download of a csv file.
      */
-    onExportOrder: function () {
+    onExportOrders: function () {
         var me = this,
             fromField = me.getFromField(),
             toField = me.getToField();
