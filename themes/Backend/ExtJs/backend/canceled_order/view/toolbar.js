@@ -46,6 +46,7 @@ Ext.define('Shopware.apps.CanceledOrder.view.Toolbar', {
         },
         filter: {
             button: '{s name=filter/button}Filter{/s}',
+            export: '{s name=filter/export}Export{/s}',
             tooltip: '{s name=filter/tooltip}Filter by selected dates{/s}'
         }
     },
@@ -112,7 +113,7 @@ Ext.define('Shopware.apps.CanceledOrder.view.Toolbar', {
         });
         
         me.exportOrdersButton =Ext.create('Ext.button.Button', {
-            text: 'Export',
+            text: me.snippets.filter.export,
             iconCls : 'sprite-drive-download',
             handler: function(){
 
