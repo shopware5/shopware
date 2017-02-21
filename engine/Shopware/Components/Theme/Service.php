@@ -393,6 +393,18 @@ class Service
                 $namespace
             );
 
+            if ($element['attributes']) {
+                $element['attributes']['supportText'] = $this->convertSnippet(
+                    $element['attributes']['supportText'],
+                    $namespace
+                );
+
+                $element['attributes']['helpText'] = $this->convertSnippet(
+                    $element['attributes']['helpText'],
+                    $namespace
+                );
+            }
+
             if (isset($element['selection'])) {
                 foreach ($element['selection'] as &$selection) {
                     foreach ($selection as &$value) {

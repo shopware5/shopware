@@ -92,7 +92,7 @@ class PathResolver
             return implode(
                 DIRECTORY_SEPARATOR,
                 [
-                    $this->rootDir . '/custom/plugins/' . $template['plugin_name'] . '/Resources',
+                    $this->pluginDirectories['ShopwarePlugins'] . '/' . $template['plugin_name'] . '/Resources',
                     'Themes',
                     'Frontend',
                     $template['template'],
@@ -126,7 +126,7 @@ class PathResolver
             return $this->pluginDirectories[$plugin->getSource()] . $plugin->getNamespace() . DIRECTORY_SEPARATOR . $plugin->getName();
         }
 
-        return $this->rootDir . '/custom/plugins/' . $plugin->getName() . '/Resources';
+        return $this->pluginDirectories['ShopwarePlugins'] . '/' . $plugin->getName() . '/Resources';
     }
 
     /**
@@ -321,7 +321,7 @@ class PathResolver
      * @param Shop\Shop $shop
      * @param $timestamp
      *
-     * @return array
+     * @return string
      */
     public function getCssFilePath(Shop\Shop $shop, $timestamp)
     {
@@ -338,7 +338,7 @@ class PathResolver
      * @param Shop\Shop $shop
      * @param $timestamp
      *
-     * @return array
+     * @return string
      */
     public function getJsFilePath(Shop\Shop $shop, $timestamp)
     {

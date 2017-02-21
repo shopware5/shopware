@@ -83,8 +83,8 @@ class sOrderTest extends PHPUnit\Framework\TestCase
         $variables = [
             'additional' => [
                 'payment' => Shopware()->Modules()->Admin()->sGetPaymentMeanById(
-                        Shopware()->Db()->fetchRow('SELECT * FROM s_core_paymentmeans WHERE name LIKE "debit"')
-                    ),
+                    Shopware()->Db()->fetchRow('SELECT * FROM s_core_paymentmeans WHERE name LIKE "debit"')
+                ),
             ],
         ];
 
@@ -129,7 +129,7 @@ class sOrderTest extends PHPUnit\Framework\TestCase
 
     public function testRefreshOrderedVariant()
     {
-        $detail = Shopware()->Db()->fetchRow('SELECT * FROM s_articles_details WHERE instock > 10 ORDER BY RAND() LIMIT 1');
+        $detail = Shopware()->Db()->fetchRow('SELECT * FROM s_articles_details WHERE instock > 10 LIMIT 1');
 
         $this->invokeMethod($this->module, 'refreshOrderedVariant', [
             $detail['ordernumber'],
@@ -708,7 +708,7 @@ class sOrderTest extends PHPUnit\Framework\TestCase
         if ($number) {
             $article = $this->getArticleResource()->getOneByNumber($number);
         } else {
-            $id = Shopware()->Db()->fetchOne('SELECT id FROM s_articles ORDER BY RAND() LIMIT 1');
+            $id = Shopware()->Db()->fetchOne('SELECT id FROM s_articles LIMIT 1');
             $article = $this->getArticleResource()->getOne($id);
         }
 
@@ -793,7 +793,7 @@ class sOrderTest extends PHPUnit\Framework\TestCase
     private function getRandomDispatch()
     {
         return Shopware()->Db()->fetchRow(
-            'SELECT * FROM s_premium_dispatch ORDER BY RAND() LIMIT 1'
+            'SELECT * FROM s_premium_dispatch LIMIT 1'
         );
     }
 
@@ -824,7 +824,6 @@ class sOrderTest extends PHPUnit\Framework\TestCase
                INNER JOIN s_core_tax t
                  ON t.id = a.taxID
              WHERE a.id = 162
-             ORDER BY RAND()
              LIMIT 2
             "
         );
@@ -900,83 +899,83 @@ class sOrderTest extends PHPUnit\Framework\TestCase
     private function getBasketRows()
     {
         return [
-           'AmountNumeric' => 105.83,
-           'AmountNetNumeric' => 88.936134453780994,
-           'AmountWithTaxNumeric' => 0,
-           'content' => [
-               [
-                   'id' => 1,
-                   'articlename' => 'Strandtuch "Ibiza"',
-                   'articleID' => '178',
-                   'modus' => '0',
-                   'tax_rate' => '19',
-                   'price' => '19,95',
-                   'priceNumeric' => '19.95',
-                   'ordernumber' => 'SW10178',
-                   'quantity' => '1',
-                   'taxID' => '1',
-                   'esdarticle' => '0',
-                   'laststock' => '0',
-                   'priceNet' => 16.764705882353,
-               ],
-               [
-                   'id' => 2,
-                   'articlename' => 'Strandtuch Sunny',
-                   'articleID' => '175',
-                   'ordernumber' => 'SW10175',
-                   'quantity' => '1',
-                   'price' => '59,99',
-                   'tax_rate' => '19',
-                   'esdarticle' => '0',
-                   'taxID' => '1',
-                   'laststock' => '1',
-                   'priceNumeric' => '59.99',
-                   'priceNet' => 50.411764705882,
-               ],
-               [
-                   'id' => 3,
-                   'articlename' => 'Sommer-Sandale Pink 36',
-                   'articleID' => '162',
-                   'ordernumber' => 'SW10162.1',
-                   'quantity' => '1',
-                   'price' => '23,99',
-                   'tax_rate' => '19',
-                   'esdarticle' => '0',
-                   'taxID' => '1',
-                   'laststock' => '1',
-                   'priceNumeric' => '23.99',
-                   'priceNet' => 20.159663865546,
-               ],
-               [
-                   'id' => 4,
-                   'articlename' => 'ESD Download Artikel',
-                   'articleID' => '197',
-                   'ordernumber' => 'SW10196',
-                   'quantity' => '3',
-                   'price' => '29,99',
-                   'tax_rate' => '19',
-                   'esdarticle' => '1',
-                   'taxID' => '1',
-                   'laststock' => '1',
-                   'priceNumeric' => '29.99',
-                   'priceNet' => 25, 201680672,
-               ],
-               [
-                   'id' => 5,
-                   'articlename' => 'Warenkorbrabatt',
-                   'articleID' => '0',
-                   'ordernumber' => 'SHIPPINGDISCOUNT',
-                   'quantity' => '1',
-                   'price' => '-2,00',
-                   'tax_rate' => '19',
-                   'esdarticle' => '0',
-                   'taxID' => null,
-                   'laststock' => null,
-                   'priceNumeric' => '-2',
-                   'priceNet' => 1.68067226891,
-               ],
-           ],
-       ];
+            'AmountNumeric' => 105.83,
+            'AmountNetNumeric' => 88.936134453780994,
+            'AmountWithTaxNumeric' => 0,
+            'content' => [
+                [
+                    'id' => 1,
+                    'articlename' => 'Strandtuch "Ibiza"',
+                    'articleID' => '178',
+                    'modus' => '0',
+                    'tax_rate' => '19',
+                    'price' => '19,95',
+                    'priceNumeric' => '19.95',
+                    'ordernumber' => 'SW10178',
+                    'quantity' => '1',
+                    'taxID' => '1',
+                    'esdarticle' => '0',
+                    'laststock' => '0',
+                    'priceNet' => 16.764705882353,
+                ],
+                [
+                    'id' => 2,
+                    'articlename' => 'Strandtuch Sunny',
+                    'articleID' => '175',
+                    'ordernumber' => 'SW10175',
+                    'quantity' => '1',
+                    'price' => '59,99',
+                    'tax_rate' => '19',
+                    'esdarticle' => '0',
+                    'taxID' => '1',
+                    'laststock' => '1',
+                    'priceNumeric' => '59.99',
+                    'priceNet' => 50.411764705882,
+                ],
+                [
+                    'id' => 3,
+                    'articlename' => 'Sommer-Sandale Pink 36',
+                    'articleID' => '162',
+                    'ordernumber' => 'SW10162.1',
+                    'quantity' => '1',
+                    'price' => '23,99',
+                    'tax_rate' => '19',
+                    'esdarticle' => '0',
+                    'taxID' => '1',
+                    'laststock' => '1',
+                    'priceNumeric' => '23.99',
+                    'priceNet' => 20.159663865546,
+                ],
+                [
+                    'id' => 4,
+                    'articlename' => 'ESD Download Artikel',
+                    'articleID' => '197',
+                    'ordernumber' => 'SW10196',
+                    'quantity' => '3',
+                    'price' => '29,99',
+                    'tax_rate' => '19',
+                    'esdarticle' => '1',
+                    'taxID' => '1',
+                    'laststock' => '1',
+                    'priceNumeric' => '29.99',
+                    'priceNet' => 25, 201680672,
+                ],
+                [
+                    'id' => 5,
+                    'articlename' => 'Warenkorbrabatt',
+                    'articleID' => '0',
+                    'ordernumber' => 'SHIPPINGDISCOUNT',
+                    'quantity' => '1',
+                    'price' => '-2,00',
+                    'tax_rate' => '19',
+                    'esdarticle' => '0',
+                    'taxID' => null,
+                    'laststock' => null,
+                    'priceNumeric' => '-2',
+                    'priceNet' => 1.68067226891,
+                ],
+            ],
+        ];
     }
 
     private function getDummyUserDataForBasket()
@@ -1004,7 +1003,6 @@ class sOrderTest extends PHPUnit\Framework\TestCase
                     'countryname' => 'Deutschland',
                     'countryiso' => 'DE',
                     'areaID' => '1',
-                    'shippingfree' => '0',
                     'taxfree' => '0',
                     'taxfree_ustid' => '0',
                     'taxfree_ustid_checked' => '0',
@@ -1048,7 +1046,6 @@ class sOrderTest extends PHPUnit\Framework\TestCase
                     'countryen' => 'GERMANY',
                     'position' => '1',
                     'notice' => '',
-                    'shippingfree' => '0',
                     'taxfree' => '0',
                     'taxfree_ustid' => '0',
                     'taxfree_ustid_checked' => '0',

@@ -35,6 +35,7 @@ use Shopware\Recovery\Update\Controller\BatchController;
 use Shopware\Recovery\Update\Controller\CleanupController;
 use Shopware\Recovery\Update\Controller\RequirementsController;
 use Shopware\Recovery\Update\DummyPluginFinder;
+use Shopware\Recovery\Update\FilePermissionChanger;
 use Shopware\Recovery\Update\FilesystemFactory;
 use Shopware\Recovery\Update\PathBuilder;
 use Shopware\Recovery\Update\PluginCheck;

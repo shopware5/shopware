@@ -493,19 +493,19 @@ class sAdmin
         if (!count($paymentData)) {
             throw new Enlight_Exception('sValidateStep3 #01: Could not load paymentmean');
         }
-            // Include management class and check input data
-            if (!empty($paymentData['class'])) {
-                $sPaymentObject = $this->sInitiatePaymentClass($paymentData);
-                $requestData = $this->front->Request()->getParams();
-                $checkPayment = $sPaymentObject->validate($requestData);
-            }
+        // Include management class and check input data
+        if (!empty($paymentData['class'])) {
+            $sPaymentObject = $this->sInitiatePaymentClass($paymentData);
+            $requestData = $this->front->Request()->getParams();
+            $checkPayment = $sPaymentObject->validate($requestData);
+        }
 
         return [
-                'checkPayment' => $checkPayment,
-                'paymentData' => $paymentData,
-                'sProcessed' => true,
-                'sPaymentObject' => &$sPaymentObject,
-            ];
+            'checkPayment' => $checkPayment,
+            'paymentData' => $paymentData,
+            'sProcessed' => true,
+            'sPaymentObject' => &$sPaymentObject,
+        ];
     }
 
     /**
@@ -851,9 +851,9 @@ class sAdmin
         $this->session->offsetUnset('sUserPassword');
         $this->session->offsetUnset('sUserId');
         $this->eventManager->notify(
-                'Shopware_Modules_Admin_CheckUser_Failure',
-                ['subject' => $this, 'session' => $this->session, 'user' => $getUser]
-            );
+            'Shopware_Modules_Admin_CheckUser_Failure',
+            ['subject' => $this, 'session' => $this->session, 'user' => $getUser]
+        );
 
         return false;
     }
@@ -2220,7 +2220,7 @@ class sAdmin
                 return [
                     'code' => 5,
                     'message' => $this->snippetManager->getNamespace('frontend/account/internalMessages')
-                            ->get('ErrorFillIn', 'Please fill in all red fields'),
+                        ->get('ErrorFillIn', 'Please fill in all red fields'),
                     'sErrorFlag' => $errorFlag,
                 ];
             }
@@ -2240,14 +2240,14 @@ class sAdmin
             return [
                 'code' => 6,
                 'message' => $this->snippetManager->getNamespace('frontend/account/internalMessages')
-                        ->get('NewsletterFailureMail', 'Enter eMail address'),
+                    ->get('NewsletterFailureMail', 'Enter eMail address'),
             ];
         }
         if (!$this->emailValidator->isValid($email)) {
             return [
                 'code' => 1,
                 'message' => $this->snippetManager->getNamespace('frontend/account/internalMessages')
-                        ->get('NewsletterFailureInvalid', 'Enter valid eMail address'),
+                    ->get('NewsletterFailureInvalid', 'Enter valid eMail address'),
             ];
         }
         if (!$unsubscribe) {
@@ -2260,13 +2260,13 @@ class sAdmin
                 $result = [
                     'code' => 4,
                     'message' => $this->snippetManager->getNamespace('frontend/account/internalMessages')
-                            ->get('NewsletterFailureNotFound', 'This mail address could not be found'),
+                        ->get('NewsletterFailureNotFound', 'This mail address could not be found'),
                 ];
             } else {
                 $result = [
                     'code' => 5,
                     'message' => $this->snippetManager->getNamespace('frontend/account/internalMessages')
-                            ->get('NewsletterMailDeleted', 'Your mail address was deleted'),
+                        ->get('NewsletterMailDeleted', 'Your mail address was deleted'),
                 ];
             }
         }
@@ -3132,6 +3132,12 @@ class sAdmin
     private function regenerateSessionId()
     {
         $oldSessionId = session_id();
+
+        if ($this->eventManager->notifyUntil('Shopware_Modules_Admin_regenerateSessionId_Start',
+            ['subject' => $this, 'sessionId' => $oldSessionId])) {
+            return;
+        }
+
         session_regenerate_id(true);
         $newSessionId = session_id();
 
@@ -3651,6 +3657,15 @@ SQL;
                 return $result;
             }
         }
+
+        $this->eventManager->notify(
+            'Shopware_Modules_Admin_Newsletter_Registration_Success',
+            [
+                'subject' => $this,
+                'email' => $email,
+                'groupID' => $groupID,
+            ]
+        );
 
         $result = [
             'code' => 3,
