@@ -71,7 +71,7 @@ class PriceFacetHandler implements PartialFacetHandlerInterface
 
     /**
      * @param ListingPriceTable                    $listingPriceTable
-     * @param QueryBuilderFactoryInterface                  $queryBuilderFactory
+     * @param QueryBuilderFactoryInterface         $queryBuilderFactory
      * @param \Shopware_Components_Snippet_Manager $snippetManager
      * @param QueryAliasMapper                     $queryAliasMapper
      *

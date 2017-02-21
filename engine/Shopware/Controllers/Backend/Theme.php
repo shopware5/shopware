@@ -473,6 +473,7 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
 
     /**
      * @param Template $template
+     *
      * @return string|null
      */
     private function getThemeInfo(Template $template)

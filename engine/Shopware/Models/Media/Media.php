@@ -1773,7 +1773,7 @@ class Media extends ModelEntity
         $defaultSize = implode('x', $defaultSizes[0]);
         //load the configured album thumbnail sizes
         $sizes = $album->getSettings()->getThumbnailSize();
-        $sizes[]= $defaultSize;
+        $sizes[] = $defaultSize;
 
         //iterate the sizes and create the thumbnails
         foreach ($sizes as $size) {

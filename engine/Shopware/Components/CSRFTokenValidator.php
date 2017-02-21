@@ -155,7 +155,7 @@ class CSRFTokenValidator implements SubscriberInterface
                 $token = $this->generateToken($controller->Response());
             }
 
-            $requestToken = $request->getParam('__csrf_token') ? : $request->getHeader('X-CSRF-Token');
+            $requestToken = $request->getParam('__csrf_token') ?: $request->getHeader('X-CSRF-Token');
             if (!hash_equals($token, $requestToken)) {
                 $this->generateToken($controller->Response());
                 throw new CSRFTokenValidationException(sprintf('The provided X-CSRF-Token for path "%s" is invalid. Please go back, reload the page and try again.', $request->getRequestUri()));

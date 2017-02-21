@@ -3666,7 +3666,7 @@ SQL;
             [
                 'subject' => $this,
                 'email' => $email,
-                'groupID' => $groupID
+                'groupID' => $groupID,
             ]
         );
 

@@ -65,7 +65,7 @@ class VoteAverageFacetHandler implements PartialFacetHandlerInterface
     private $config;
 
     /**
-     * @param QueryBuilderFactoryInterface                  $queryBuilderFactory
+     * @param QueryBuilderFactoryInterface         $queryBuilderFactory
      * @param \Shopware_Components_Snippet_Manager $snippetManager
      * @param QueryAliasMapper                     $queryAliasMapper
      * @param \Shopware_Components_Config          $config

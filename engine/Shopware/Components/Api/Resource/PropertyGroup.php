@@ -95,7 +95,7 @@ class PropertyGroup extends Resource
         //returns the property groups data
         $propertyGroups = $paginator->getIterator()->getArrayCopy();
 
-        return array('data' => $propertyGroups, 'total' => $totalResult);
+        return ['data' => $propertyGroups, 'total' => $totalResult];
     }
 
     /**
@@ -181,7 +181,7 @@ class PropertyGroup extends Resource
             throw new ApiException\ParameterMissingException();
         }
 
-        /** @var \Shopware\Models\Property\Group $propertyGroup*/
+        /** @var \Shopware\Models\Property\Group $propertyGroup */
         $propertyGroup = $this->getRepository()->find($id);
 
         if (!$propertyGroup) {

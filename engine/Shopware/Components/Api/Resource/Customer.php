@@ -408,6 +408,14 @@ class Customer extends Resource
         return $data;
     }
 
+    /**
+     * @return \Shopware\Components\Model\QueryBuilder
+     */
+    protected function getListQuery()
+    {
+        return $this->getRepository()->createQueryBuilder('customer');
+    }
+
     private function prepareCustomerData($params, CustomerModel $customer)
     {
         if (array_key_exists('groupKey', $params)) {
@@ -539,13 +547,5 @@ class Customer extends Resource
         $customer->getDefaultShippingAddress()->fromArray($shippingData);
 
         return $params;
-    }
-
-    /**
-     * @return \Shopware\Components\Model\QueryBuilder
-     */
-    protected function getListQuery()
-    {
-        return $this->getRepository()->createQueryBuilder('customer');
     }
 }

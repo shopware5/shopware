@@ -30,7 +30,6 @@ use Shopware\Components\Theme\Inheritance;
 use Shopware\Components\Theme\Installer;
 use Shopware\Models\Shop\Shop;
 use Shopware\Models\Shop\Template;
-use Shopware\Recovery\Install\Service\ThemeService;
 
 class InheritanceTest extends Base
 {
@@ -196,7 +195,7 @@ class InheritanceTest extends Base
         $connection->executeQuery('DELETE FROM s_core_templates_config_values');
 
         $connection->executeQuery(
-            "INSERT INTO s_core_templates_config_values (element_id, shop_id, `value`) VALUES (:elementId, :shopId, :value)",
+            'INSERT INTO s_core_templates_config_values (element_id, shop_id, `value`) VALUES (:elementId, :shopId, :value)',
             [':elementId' => $elementId, ':shopId' => $shop->getId(), ':value' => serialize('#000')]
         );
 
@@ -216,7 +215,6 @@ class InheritanceTest extends Base
 
         $connection->rollBack();
     }
-
 
     private function getDummyTemplates()
     {
