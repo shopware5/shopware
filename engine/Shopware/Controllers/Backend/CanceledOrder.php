@@ -700,7 +700,6 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
             }
 
             $this->exportCSV($orders);
-
         } else {
             $this->View()->assign([
                 'success' => true,
