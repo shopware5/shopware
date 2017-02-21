@@ -148,7 +148,15 @@ class MediaHydrator extends Hydrator
         $translation = $this->getTranslation($data, '__image');
         $data = array_merge($data, $translation);
 
-        $media->setName($data['__image_description']);
+        // For legacy reasons we check if the __image_description can be used
+        if (!empty($data['__image_description'])) {
+            $media->setName($data['__image_description']);
+        }
+
+        if (!$media->getName() && $media->getDescription()) {
+            $media->setName($media->getDescription());
+        }
+
         $media->setPreview((bool) ($data['__image_main'] == 1));
 
         if (!empty($data['__imageAttribute_id'])) {

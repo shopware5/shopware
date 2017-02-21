@@ -77,21 +77,20 @@ class sCms
      * Read a specific, static page (E.g. terms and conditions, etc.)
      *
      * @param int $staticId The page id
-     * @param int $shopId   Id of the shop
-     *
+     * @param int $shopId Id of the shop
      * @return array|false Page data, or false if none found by given id
      */
     public function sGetStaticPage($staticId = null, $shopId = null)
     {
         if (empty($staticId)) {
-            $staticId = (int) $this->front->Request()->getQuery('sCustom', $staticId);
+            $staticId = (int)$this->front->Request()->getQuery('sCustom', $staticId);
         }
         if (empty($staticId)) {
             return false;
         }
 
-        $sql = 'SELECT * FROM s_cms_static WHERE id = :pageId';
-        $params = ['pageId' => $staticId];
+        $sql = "SELECT * FROM s_cms_static WHERE id = :pageId";
+        $params = array('pageId' => $staticId);
 
         if ($shopId) {
             $sql .= ' AND (shop_ids IS NULL OR shop_ids LIKE :shopId)';
@@ -107,7 +106,10 @@ class sCms
             return false;
         }
 
-        /*
+        // load attributes
+        $staticPage['attribute'] = Shopware()->Container()->get('shopware_attribute.data_loader')->load('s_cms_static_attributes', $staticId);
+
+        /**
          * Add support for sub pages
          */
         if (!empty($staticPage['parentID'])) {
@@ -122,26 +124,25 @@ class sCms
     /**
      * List all static page children's and their childrenCount by Id and groupKey
      *
-     * @param int    $pageId
+     * @param int $pageId
      * @param string $groupKey
-     *
      * @return array
      */
     public function sGetStaticPageChildrensById($pageId = 0, $groupKey = 'gLeft')
     {
-        $menu = [];
+        $menu = array();
 
         // fetch parent if exists
         if ($pageId) {
-            $sql = '
+            $sql = "
                 SELECT
                 p.id, p.description, p.link, p.target, p.parentID,
                 (SELECT COUNT(*) FROM s_cms_static WHERE parentID = p.id) as childrenCount
                 FROM s_cms_static p
                 WHERE p.id = :parentId
-            ';
+            ";
 
-            $menu['parent'] = Shopware()->Db()->fetchRow($sql, ['parentId' => $pageId]);
+            $menu['parent'] = Shopware()->Db()->fetchRow($sql, array('parentId' => $pageId));
         }
 
         // fetch childrens
@@ -163,21 +164,20 @@ class sCms
      * Gets related pages for the given subpage
      * If a shop id is provided, only content for that shop is displayed
      *
-     * @param array    $staticPage
+     * @param array $staticPage
      * @param int|null $shopId
-     *
      * @return mixed
      */
     private function getRelatedForSubPage($staticPage, $shopId = null)
     {
         $andWhere = '';
-        $siblingsParams = [
+        $siblingsParams = array(
             'pageId' => $staticPage['id'],
-            'parentId' => $staticPage['parentID'],
-        ];
-        $parentParams = [
-            'parentId' => $staticPage['parentID'],
-        ];
+            'parentId' => $staticPage['parentID']
+        );
+        $parentParams = array(
+            'parentId' => $staticPage['parentID']
+        );
 
         if ($shopId) {
             $andWhere .= ' AND (p.shop_ids IS NULL OR p.shop_ids LIKE :shopId)';
@@ -194,6 +194,7 @@ class sCms
             ';
         $staticPage['siblingPages'] = $this->db->fetchAll($siblingsSql, $siblingsParams);
 
+
         $parentSql = '
                 SELECT p.id, p.description, p.link, p.target, p.page_title
                 FROM s_cms_static p
@@ -201,25 +202,23 @@ class sCms
                 ' . $andWhere;
 
         $staticPage['parent'] = $this->db->fetchRow($parentSql, $parentParams);
-        $staticPage['parent'] = $staticPage['parent'] ?: [];
-
+        $staticPage['parent'] = $staticPage['parent'] ?: array();
         return $staticPage;
     }
 
     /**
      * Gets related pages for the given page
      *
-     * @param array    $staticPage
+     * @param array $staticPage
      * @param int|null $shopId
-     *
      * @return mixed
      */
     private function getRelatedForPage($staticPage, $shopId = null)
     {
         $andWhere = '';
-        $params = [
-            'pageId' => $staticPage['id'],
-        ];
+        $params = array(
+            'pageId' => $staticPage['id']
+        );
 
         if ($shopId) {
             $andWhere .= ' AND (p.shop_ids IS NULL OR p.shop_ids LIKE :shopId)';
@@ -234,7 +233,6 @@ class sCms
                 ORDER BY p.position
             ';
         $staticPage['subPages'] = $this->db->fetchAll($sql, $params);
-
         return $staticPage;
     }
 }

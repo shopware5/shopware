@@ -2,11 +2,25 @@
 
 This changelog references changes done in Shopware 5.2 patch versions.
 
+## 5.2.19
+* Changed the loading of backend widgets to disable widgets of deactivated plugins
+* Added new Event `Shopware_Modules_Admin_regenerateSessionId_Start` in sAdmin::regenerateSessionId
+* Changed `convertCategory` method in `engine/Shopware/Core/sCategories.php` from private to public
+* Added left join of `s_order_basket_attributes` in `sAdmin::sGetDispatchBasket()` and `sExport::sGetDispatchBasket()`
+* Added event `blog-save-successfully` to `onSaveBlogArticle()` method in `themes/Backend/ExtJs/backend/blog/controller/blog.js`
+* Added event `customer-address-save-successfully` to `onSaveCustomer()` method in `themes/Backend/ExtJs/backend/customer/controller/detail.js`
+* Added event `customer-save-successfully` to  `onSaveCustomer()` method in `themes/Backend/ExtJs/backend/customer/controller/detail.js`
+* Added event `site-save-successfully` to `onSaveSite()` method in `themes/Backend/ExtJs/backend/site/controller/form.js`
+* Added event `supplier-save-successfully` to `onSupplierSave()` method in `themes/Backend/ExtJs/backend/supplier/controller/main.js`
+* Added the possibility to add a Theme info tab. Add a folder with the name "info" to your theme folder. Add a html file to the folder with the required language iso like "en_EN.html". The HTML content of the file is the content of the tab.
+* Changed internal loop variable name `positions` in `themes/Frontend/Bare/documents/index.tpl` to fix typo
+* Added configuration option `ShopwarePlugins` to `plugin_directories` in the `engine/Shopware/Configs/Default.php` to make the path of the plugin system directory configurable
+
 ## 5.2.17
 [View all changes from v5.2.16...v5.2.17](https://github.com/shopware/shopware/compare/v5.2.16...v5.2.17)
 
 * Deprecated Smarty modifier `rewrite`. Modifier will be removed in 5.3.0.
-* Changed default `session.gc_divisor` to `200`. To decrease session garbade collection probability.
+* Changed default `session.gc_divisor` to `200`. To decrease session garbage collection probability.
 * Added console command `sw:session:cleanup` to cleanup expired sessions.
 * Changed database field `s_core_sessions.expiry` to contain the timestamp when the session should expire, not the session lifetime.
 * Changed database field `s_core_sessions_backend.expiry` to contain the timestamp when the session should expire, not the session lifetime.

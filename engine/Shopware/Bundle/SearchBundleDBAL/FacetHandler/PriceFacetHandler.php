@@ -33,7 +33,7 @@ use Shopware\Bundle\SearchBundle\FacetResultInterface;
 use Shopware\Bundle\SearchBundleDBAL\ConditionHandler\PriceConditionHandler;
 use Shopware\Bundle\SearchBundleDBAL\ListingPriceTable;
 use Shopware\Bundle\SearchBundleDBAL\PartialFacetHandlerInterface;
-use Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactory;
+use Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactoryInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\QueryAliasMapper;
 
@@ -45,7 +45,7 @@ use Shopware\Components\QueryAliasMapper;
 class PriceFacetHandler implements PartialFacetHandlerInterface
 {
     /**
-     * @var QueryBuilderFactory
+     * @var QueryBuilderFactoryInterface
      */
     private $queryBuilderFactory;
 
@@ -71,7 +71,7 @@ class PriceFacetHandler implements PartialFacetHandlerInterface
 
     /**
      * @param ListingPriceTable                    $listingPriceTable
-     * @param QueryBuilderFactory                  $queryBuilderFactory
+     * @param QueryBuilderFactoryInterface                  $queryBuilderFactory
      * @param \Shopware_Components_Snippet_Manager $snippetManager
      * @param QueryAliasMapper                     $queryAliasMapper
      *
@@ -79,7 +79,7 @@ class PriceFacetHandler implements PartialFacetHandlerInterface
      */
     public function __construct(
         ListingPriceTable $listingPriceTable,
-        QueryBuilderFactory $queryBuilderFactory,
+        QueryBuilderFactoryInterface $queryBuilderFactory,
         \Shopware_Components_Snippet_Manager $snippetManager,
         QueryAliasMapper $queryAliasMapper
     ) {

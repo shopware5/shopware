@@ -163,7 +163,7 @@ class Customer extends Resource
     {
         $this->checkPrivilege('read');
 
-        $builder = $this->getRepository()->createQueryBuilder('customer');
+        $builder = $this->getListQuery();
 
         $builder->addFilter($criteria);
         $builder->addOrderBy($orderBy);
@@ -539,5 +539,13 @@ class Customer extends Resource
         $customer->getDefaultShippingAddress()->fromArray($shippingData);
 
         return $params;
+    }
+
+    /**
+     * @return \Shopware\Components\Model\QueryBuilder
+     */
+    protected function getListQuery()
+    {
+        return $this->getRepository()->createQueryBuilder('customer');
     }
 }

@@ -30,7 +30,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Category;
  * Shopware Class that handles categories
  *
  * @category  Shopware
- *
+ * @package   Shopware\Core
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class sCategories
@@ -54,7 +54,6 @@ class sCategories
 
     /**
      * Url to the blog controller
-     *
      * @var string
      */
     public $blogBaseUrl;
@@ -131,7 +130,6 @@ class sCategories
      * category path.
      *
      * @param int $id Id of the category to load
-     *
      * @return array Tree of categories
      */
     public function sGetCategories($id)
@@ -160,15 +158,241 @@ class sCategories
         return $result;
     }
 
+
+    /**
+     * Returns a key value array which contains the category id
+     * as key and the count of category children as value.
+     *
+     * @param $ids
+     * @return array
+     */
+    private function getChildrenCountOfCategories($ids)
+    {
+        $query = $this->connection->createQueryBuilder();
+
+        $query->select(array('parent as id', 'COUNT(id) as childrenCount'));
+        $query->from('s_categories', 'category')
+            ->where('parent IN ( :ids )')
+            ->andWhere('category.active = 1')
+            ->groupBy('parent')
+            ->setParameter(':ids', $ids, \Doctrine\DBAL\Connection::PARAM_INT_ARRAY);
+
+        /**@var $statement PDOStatement*/
+        $statement = $query->execute();
+
+        return $statement->fetchAll(PDO::FETCH_KEY_PAIR);
+    }
+
+
+    /**
+     * Returns a associated array with the category id and the parent id
+     * of the category.
+     * The category id is used as array key and the parent id as array value.
+     *
+     * @param $ids
+     * @return array
+     */
+    private function getCategoryIdsWithParent($ids)
+    {
+        $query = $this->connection->createQueryBuilder();
+        $query->select(array('category.id', 'category.parent'));
+
+        $query->from('s_categories', 'category')
+            ->where('(category.parent IN( :parentId ) OR category.id IN ( :parentId ))')
+            ->andWhere('category.active = 1')
+            ->orderBy('category.position', 'ASC')
+            ->addOrderBy('category.id')
+            ->setParameter(':parentId', $ids, \Doctrine\DBAL\Connection::PARAM_INT_ARRAY);
+
+        /**@var $statement PDOStatement*/
+        $statement = $query->execute();
+
+        return $statement->fetchAll(PDO::FETCH_KEY_PAIR);
+    }
+
+    /**
+     * Returns all ids, additionally with the provided one,
+     * of the category path of the provided id.
+     * @param $id
+     * @return array
+     */
+    private function getCategoryPath($id)
+    {
+        $query = $this->connection->createQueryBuilder();
+        $query->select(array('category.path'))
+            ->from('s_categories', 'category')
+            ->where('category.id = :id')
+            ->setParameter(':id', $id);
+
+        /**@var $statement PDOStatement*/
+        $statement = $query->execute();
+
+        $path = $statement->fetch(PDO::FETCH_COLUMN);
+
+        $ids = array($id);
+
+        if (!$path) {
+            return $ids;
+        }
+
+        $pathIds = explode('|', $path);
+        return array_filter(array_merge($ids, $pathIds));
+    }
+
+    /**
+     * Creates a nested category id tree.
+     *
+     * @param array $associated Contains a id => parentId array
+     * @param int $parentId
+     * @return array
+     */
+    private function buildTree($associated, $parentId)
+    {
+        $categories = array();
+        foreach ($associated as $id => $parent) {
+            if ($parentId == $parent) {
+                unset($associated[$id]);
+
+                $categories[$id] = $this->buildTree(
+                    $associated,
+                    $id
+                );
+            }
+        }
+        return $categories;
+    }
+
+    /**
+     * Assigns the provided categories to the nested tree structure.
+     * @param array $categories
+     * @param array $tree
+     * @param array $activePath
+     * @param array $childrenCounts
+     * @return array
+     */
+    private function assignCategoriesToTree($categories, $tree, $activePath, $childrenCounts)
+    {
+        $result = array();
+        foreach ($tree as $categoryId => $children) {
+            if (!isset($categories[$categoryId])) {
+                continue;
+            }
+
+            $category = $this->convertCategory(
+                $categories[$categoryId],
+                $childrenCounts
+            );
+
+            if (!empty($children)) {
+                $category['subcategories'] = $this->assignCategoriesToTree(
+                    $categories,
+                    $children,
+                    $activePath,
+                    $childrenCounts
+                );
+            }
+
+            $category['flag'] = in_array($categoryId, $activePath);
+
+            $result[$categoryId] = $category;
+        }
+        return $result;
+    }
+
+    /**
+     * @param Category $category
+     * @param $childrenCounts
+     * @return array
+     */
+    public function convertCategory(Category $category, $childrenCounts)
+    {
+        $childrenCount = 0;
+        if (isset($childrenCounts[$category->getId()])) {
+            $childrenCount = $childrenCounts[$category->getId()];
+        }
+
+        $url = $category->isBlog() ? $this->blogBaseUrl : $this->baseUrl;
+
+        $attribute = array();
+        foreach ($category->getAttributes() as $struct) {
+            $attribute = array_merge($attribute, $struct->toArray());
+        }
+
+        $media = array();
+        if ($category->getMedia()) {
+            $media = array(
+                'id'          => $category->getMedia()->getId(),
+                'name'        => $category->getMedia()->getName(),
+                'description' => $category->getMedia()->getDescription(),
+                'path'        => $category->getMedia()->getFile(),
+                'type'        => $category->getMedia()->getType(),
+                'extension'   => $category->getMedia()->getExtension(),
+            );
+        }
+
+        $path = $category->getPath() ? '|' . implode('|', $category->getPath()) . '|' :'';
+
+        return array(
+            'id'                => $category->getId(),
+            'name'              => $category->getName(),
+            'metaKeywords'      => $category->getMetaKeywords(),
+            'metaDescription'   => $category->getMetaDescription(),
+            'cmsHeadline'       => $category->getCmsHeadline(),
+            'cmsText'           => $category->getCmsText(),
+            'active'            => true,
+            'template'          => $category->getTemplate(),
+            'blog'              => $category->isBlog(),
+            'path'              => $path,
+            'external'          => $category->getExternalLink(),
+            'hideFilter'        => !$category->displayFacets(),
+            'hideTop'           => !$category->displayInNavigation(),
+            'hidetop'           => !$category->displayInNavigation(),
+            'attribute'         => $attribute,
+            'media'             => $media,
+            'description'       => $category->getName(),
+            'link'              => $category->getExternalLink()?: $url . $category->getId(),
+            'flag'              => false,
+            'subcategories'     => array(),
+            'childrenCount'     => $childrenCount
+        );
+    }
+
+    /**
+     * Loads category details from db
+     *
+     * @param int $id Id of the category to load
+     * @return array Category details
+     */
+    protected function sGetCategoriesByParentId($id)
+    {
+        $categories = $this->repository
+            ->getActiveByParentIdQuery($id, $this->customerGroupId)
+            ->getArrayResult();
+        $resultCategories = array();
+        foreach ($categories as $category) {
+            $url = $category['category']['blog'] ? $this->blogBaseUrl : $this->baseUrl;
+            $resultCategories[$category['category']['id']] = array_merge($category['category'], array(
+                'description' => $category['category']['name'],
+                'childrenCount' => $category['childrenCount'],
+                'articleCount' => $category['articleCount'],
+                'hidetop' => $category['category']['hideTop'],
+                'subcategories' => array(),
+                'link' => $category['category']['external'] ?: $url . $category['category']['id'],
+                'flag' => false
+            ));
+        }
+
+        return $resultCategories;
+    }
+
     /**
      * Returns the leaf category to which the
      * article belongs, inside the category subtree.
      *
-     * @param int  $articleId Id of the article to look for
-     * @param int  $parentId  Category subtree root id. If null, the shop category is used.
+     * @param int $articleId Id of the article to look for
+     * @param int $parentId Category subtree root id. If null, the shop category is used.
      * @param null $shopId
-     *
-     * @return int id of the leaf category, or 0 if none found
+     * @return int Id of the leaf category, or 0 if none found.
      */
     public function sGetCategoryIdByArticleId($articleId, $parentId = null, $shopId = null)
     {
@@ -184,7 +408,7 @@ class sCategories
              FROM s_articles_categories_seo
              WHERE article_id = :articleId
              AND shop_id = :shopId',
-            [':articleId' => $articleId, ':shopId' => $shopId]
+            array(':articleId' => $articleId, ':shopId' => $shopId)
         );
 
         if ($id) {
@@ -206,10 +430,10 @@ class sCategories
             LIMIT 1
         ';
 
-        $id = (int) $this->db->fetchOne($sql, [
+        $id = (int) $this->db->fetchOne($sql, array(
             '%|' . $parentId . '|%',
-            $articleId,
-        ]);
+            $articleId
+        ));
 
         return $id;
     }
@@ -228,22 +452,21 @@ class sCategories
      * Returns category path for the given category id
      *
      * @param int $id Id of the category
-     *
      * @return array Array of categories in path
      */
     public function sGetCategoriesByParent($id)
     {
-        $pathCategories = $this->repository->getPathById($id, ['id', 'name', 'blog']);
+        $pathCategories = $this->repository->getPathById($id, array('id', 'name', 'blog'));
 
         $pathCategories = array_reverse($pathCategories);
 
-        $categories = [];
+        $categories = array();
         foreach ($pathCategories as $category) {
             if ($category['id'] == $this->baseId) {
                 break;
             }
 
-            $url = ($category['blog']) ? $this->blogBaseUrl : $this->baseUrl;
+            $url = ($category["blog"]) ? $this->blogBaseUrl : $this->baseUrl;
             $category['link'] = $url . $category['id'];
             $categories[] = $category;
         }
@@ -254,9 +477,8 @@ class sCategories
     /**
      * Return a the category subtree for the given root
      *
-     * @param int $parentId Id of the root category, defaults to the current shop category
-     * @param int $depth    Depth to use, defaults to null (unlimited depth)
-     *
+     * @param  int $parentId Id of the root category, defaults to the current shop category
+     * @param  int $depth Depth to use, defaults to null (unlimited depth)
      * @return array Category tree for the provided args
      */
     public function sGetWholeCategoryTree($parentId = null, $depth = null)
@@ -272,10 +494,28 @@ class sCategories
     }
 
     /**
+     * @param array $categories
+     * @return array
+     */
+    protected function mapCategoryTree($categories)
+    {
+        foreach ($categories as &$category) {
+            $url = ($category['blog']) ? $this->blogBaseUrl : $this->baseUrl;
+            $category['description'] = $category['name'];
+            $category['link'] = $category['external'] ? : $url . $category['id'];
+            $category['hidetop'] = $category['hideTop'];
+            if ($category['sub']) {
+                $category['sub'] = $this->mapCategoryTree($category['sub']);
+            }
+        }
+
+        return $categories;
+    }
+
+    /**
      * Returns category content for the given category id
      *
      * @param int $id
-     *
      * @return array
      */
     public function sGetCategoryContent($id)
@@ -295,7 +535,6 @@ class sCategories
 
     /**
      * @param int $categoryId
-     *
      * @return int
      */
     public function getProductBoxLayout($categoryId)
@@ -321,9 +560,8 @@ class sCategories
     /**
      * Returns the category path from root to the given category id
      *
-     * @param int      $id       Category id
+     * @param int $id Category id
      * @param int|null $parentId If provided
-     *
      * @return array
      */
     public function sGetCategoryPath($id, $parentId = null)
@@ -340,262 +578,5 @@ class sCategories
         }
 
         return $path;
-    }
-
-    /**
-     * Loads category details from db
-     *
-     * @param int $id Id of the category to load
-     *
-     * @return array Category details
-     */
-    protected function sGetCategoriesByParentId($id)
-    {
-        $categories = $this->repository
-            ->getActiveByParentIdQuery($id, $this->customerGroupId)
-            ->getArrayResult();
-        $resultCategories = [];
-        foreach ($categories as $category) {
-            $url = $category['category']['blog'] ? $this->blogBaseUrl : $this->baseUrl;
-            $resultCategories[$category['category']['id']] = array_merge($category['category'], [
-                'description' => $category['category']['name'],
-                'childrenCount' => $category['childrenCount'],
-                'articleCount' => $category['articleCount'],
-                'hidetop' => $category['category']['hideTop'],
-                'subcategories' => [],
-                'link' => $category['category']['external'] ?: $url . $category['category']['id'],
-                'flag' => false,
-            ]);
-        }
-
-        return $resultCategories;
-    }
-
-    /**
-     * @param array $categories
-     *
-     * @return array
-     */
-    protected function mapCategoryTree($categories)
-    {
-        foreach ($categories as &$category) {
-            $url = ($category['blog']) ? $this->blogBaseUrl : $this->baseUrl;
-            $category['description'] = $category['name'];
-            $category['link'] = $category['external'] ?: $url . $category['id'];
-            $category['hidetop'] = $category['hideTop'];
-            if ($category['sub']) {
-                $category['sub'] = $this->mapCategoryTree($category['sub']);
-            }
-        }
-
-        return $categories;
-    }
-
-    /**
-     * Returns a key value array which contains the category id
-     * as key and the count of category children as value.
-     *
-     * @param $ids
-     *
-     * @return array
-     */
-    private function getChildrenCountOfCategories($ids)
-    {
-        $query = $this->connection->createQueryBuilder();
-
-        $query->select(['parent as id', 'COUNT(id) as childrenCount']);
-        $query->from('s_categories', 'category')
-            ->where('parent IN ( :ids )')
-            ->andWhere('category.active = 1')
-            ->groupBy('parent')
-            ->setParameter(':ids', $ids, \Doctrine\DBAL\Connection::PARAM_INT_ARRAY);
-
-        /** @var $statement PDOStatement */
-        $statement = $query->execute();
-
-        return $statement->fetchAll(PDO::FETCH_KEY_PAIR);
-    }
-
-    /**
-     * Returns a associated array with the category id and the parent id
-     * of the category.
-     * The category id is used as array key and the parent id as array value.
-     *
-     * @param $ids
-     *
-     * @return array
-     */
-    private function getCategoryIdsWithParent($ids)
-    {
-        $query = $this->connection->createQueryBuilder();
-        $query->select(['category.id', 'category.parent']);
-
-        $query->from('s_categories', 'category')
-            ->where('(category.parent IN( :parentId ) OR category.id IN ( :parentId ))')
-            ->andWhere('category.active = 1')
-            ->orderBy('category.position', 'ASC')
-            ->addOrderBy('category.id')
-            ->setParameter(':parentId', $ids, \Doctrine\DBAL\Connection::PARAM_INT_ARRAY);
-
-        /** @var $statement PDOStatement */
-        $statement = $query->execute();
-
-        return $statement->fetchAll(PDO::FETCH_KEY_PAIR);
-    }
-
-    /**
-     * Returns all ids, additionally with the provided one,
-     * of the category path of the provided id.
-     *
-     * @param $id
-     *
-     * @return array
-     */
-    private function getCategoryPath($id)
-    {
-        $query = $this->connection->createQueryBuilder();
-        $query->select(['category.path'])
-            ->from('s_categories', 'category')
-            ->where('category.id = :id')
-            ->setParameter(':id', $id);
-
-        /** @var $statement PDOStatement */
-        $statement = $query->execute();
-
-        $path = $statement->fetch(PDO::FETCH_COLUMN);
-
-        $ids = [$id];
-
-        if (!$path) {
-            return $ids;
-        }
-
-        $pathIds = explode('|', $path);
-
-        return array_filter(array_merge($ids, $pathIds));
-    }
-
-    /**
-     * Creates a nested category id tree.
-     *
-     * @param array $associated Contains a id => parentId array
-     * @param int   $parentId
-     *
-     * @return array
-     */
-    private function buildTree($associated, $parentId)
-    {
-        $categories = [];
-        foreach ($associated as $id => $parent) {
-            if ($parentId == $parent) {
-                unset($associated[$id]);
-
-                $categories[$id] = $this->buildTree(
-                    $associated,
-                    $id
-                );
-            }
-        }
-
-        return $categories;
-    }
-
-    /**
-     * Assigns the provided categories to the nested tree structure.
-     *
-     * @param array $categories
-     * @param array $tree
-     * @param array $activePath
-     * @param array $childrenCounts
-     *
-     * @return array
-     */
-    private function assignCategoriesToTree($categories, $tree, $activePath, $childrenCounts)
-    {
-        $result = [];
-        foreach ($tree as $categoryId => $children) {
-            if (!isset($categories[$categoryId])) {
-                continue;
-            }
-
-            $category = $this->convertCategory(
-                $categories[$categoryId],
-                $childrenCounts
-            );
-
-            if (!empty($children)) {
-                $category['subcategories'] = $this->assignCategoriesToTree(
-                    $categories,
-                    $children,
-                    $activePath,
-                    $childrenCounts
-                );
-            }
-
-            $category['flag'] = in_array($categoryId, $activePath);
-
-            $result[$categoryId] = $category;
-        }
-
-        return $result;
-    }
-
-    /**
-     * @param Category $category
-     * @param $childrenCounts
-     *
-     * @return array
-     */
-    private function convertCategory(Category $category, $childrenCounts)
-    {
-        $childrenCount = 0;
-        if (isset($childrenCounts[$category->getId()])) {
-            $childrenCount = $childrenCounts[$category->getId()];
-        }
-
-        $url = $category->isBlog() ? $this->blogBaseUrl : $this->baseUrl;
-
-        $attribute = [];
-        foreach ($category->getAttributes() as $struct) {
-            $attribute = array_merge($attribute, $struct->toArray());
-        }
-
-        $media = [];
-        if ($category->getMedia()) {
-            $media = [
-                'id' => $category->getMedia()->getId(),
-                'name' => $category->getMedia()->getName(),
-                'description' => $category->getMedia()->getDescription(),
-                'path' => $category->getMedia()->getFile(),
-                'type' => $category->getMedia()->getType(),
-                'extension' => $category->getMedia()->getExtension(),
-            ];
-        }
-
-        $path = $category->getPath() ? '|' . implode('|', $category->getPath()) . '|' : '';
-
-        return [
-            'id' => $category->getId(),
-            'name' => $category->getName(),
-            'metaKeywords' => $category->getMetaKeywords(),
-            'metaDescription' => $category->getMetaDescription(),
-            'cmsHeadline' => $category->getCmsHeadline(),
-            'cmsText' => $category->getCmsText(),
-            'active' => true,
-            'template' => $category->getTemplate(),
-            'blog' => $category->isBlog(),
-            'path' => $path,
-            'external' => $category->getExternalLink(),
-            'hideFilter' => !$category->displayFacets(),
-            'hideTop' => !$category->displayInNavigation(),
-            'hidetop' => !$category->displayInNavigation(),
-            'attribute' => $attribute,
-            'media' => $media,
-            'description' => $category->getName(),
-            'link' => $category->getExternalLink() ?: $url . $category->getId(),
-            'flag' => false,
-            'subcategories' => [],
-            'childrenCount' => $childrenCount,
-        ];
     }
 }

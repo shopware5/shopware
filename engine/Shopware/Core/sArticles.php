@@ -421,9 +421,9 @@ class sArticles
     public function sGetArticlesByCategory($categoryId = null, SearchBundle\Criteria $criteria = null)
     {
         if (Shopware()->Events()->notifyUntil('Shopware_Modules_Articles_sGetArticlesByCategory_Start', [
-                'subject' => $this,
-                'id' => $categoryId,
-            ])) {
+            'subject' => $this,
+            'id' => $categoryId,
+        ])) {
             return false;
         }
 
@@ -1519,7 +1519,7 @@ class sArticles
             WHERE ordernumber = :orderNumber
                 AND s_articles.id = s_articles_details.articleID
         ', [
-            'orderNumber' => $orderNumber,
+                'orderNumber' => $orderNumber,
             ]
         );
 
@@ -1809,7 +1809,9 @@ class sArticles
             $mainKey = 0;
 
             if (empty($sCombination)) {
-                $sArticle['image']['description'] = $sArticle['image']['res']['description'];
+                if (!empty($sArticle["image"]["res"]["description"])) {
+                    $sArticle["image"]["description"] = $sArticle["image"]["res"]["description"];
+                }
                 $sArticle['image']['relations'] = $sArticle['image']['res']['relations'];
                 foreach ($sArticle['sConfigurator'] as $key => $group) {
                     foreach ($group['values'] as $key2 => $option) {

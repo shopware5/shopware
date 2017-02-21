@@ -35,7 +35,7 @@ use Shopware\Bundle\SearchBundle\FacetResult\ValueListFacetResult;
 use Shopware\Bundle\SearchBundle\FacetResultInterface;
 use Shopware\Bundle\SearchBundleDBAL\PartialFacetHandlerInterface;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
-use Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactory;
+use Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactoryInterface;
 use Shopware\Bundle\StoreFrontBundle\Gateway\PropertyGatewayInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
@@ -54,7 +54,7 @@ class PropertyFacetHandler implements PartialFacetHandlerInterface
     private $propertyGateway;
 
     /**
-     * @var QueryBuilderFactory
+     * @var QueryBuilderFactoryInterface
      */
     private $queryBuilderFactory;
 
@@ -65,12 +65,12 @@ class PropertyFacetHandler implements PartialFacetHandlerInterface
 
     /**
      * @param PropertyGatewayInterface $propertyGateway
-     * @param QueryBuilderFactory      $queryBuilderFactory
+     * @param QueryBuilderFactoryInterface      $queryBuilderFactory
      * @param QueryAliasMapper         $queryAliasMapper
      */
     public function __construct(
         PropertyGatewayInterface $propertyGateway,
-        QueryBuilderFactory $queryBuilderFactory,
+        QueryBuilderFactoryInterface $queryBuilderFactory,
         QueryAliasMapper $queryAliasMapper
     ) {
         $this->propertyGateway = $propertyGateway;

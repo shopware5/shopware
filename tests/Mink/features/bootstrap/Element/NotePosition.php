@@ -79,8 +79,7 @@ class NotePosition extends CartPosition implements HelperSelectorInterface
             'articleName' => $elements['name']->getText(),
             'articleTitle' => $elements['name']->getAttribute('title'),
             'articleThumbnailLinkTitle' => $elements['thumbnailLink']->getAttribute('title'),
-            'articleThumbnailImageAlt' => $elements['thumbnailImage']->getAttribute('alt'),
-            'articleDetailLinkTitle' => $elements['detailLink']->getAttribute('title'),
+            'articleDetailLinkTitle' => $elements['detailLink']->getAttribute('title')
         ];
 
         return Helper::getUnique($names);

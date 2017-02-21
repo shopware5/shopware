@@ -34,6 +34,7 @@ use Shopware\Bundle\SearchBundleDBAL\PartialFacetHandlerInterface;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactory;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\QueryAliasMapper;
+use Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactoryInterface;
 
 /**
  * @category  Shopware
@@ -58,12 +59,12 @@ class ImmediateDeliveryFacetHandler implements PartialFacetHandlerInterface
     private $fieldName;
 
     /**
-     * @param QueryBuilderFactory                  $queryBuilderFactory
+     * @param QueryBuilderFactoryInterface $queryBuilderFactory
      * @param \Shopware_Components_Snippet_Manager $snippetManager
      * @param QueryAliasMapper                     $queryAliasMapper
      */
     public function __construct(
-        QueryBuilderFactory $queryBuilderFactory,
+        QueryBuilderFactoryInterface $queryBuilderFactory,
         \Shopware_Components_Snippet_Manager $snippetManager,
         QueryAliasMapper $queryAliasMapper
     ) {
