@@ -16,7 +16,13 @@ module.exports = function (grunt) {
     jsTargetFile['../' + config.jsTarget] = jsFiles;
 
     config['less'].forEach(function (item) {
-        content += `@import "../${item}";`;
+        if (/(\.css)$/.test(item)) {
+            console.log(item);
+            // Entry is a css file and needs to be imported inline
+            content += `@import (inline) "../${item}";`;
+        } else {
+            content += `@import "../${item}";`;
+        }
     });
     grunt.file.write('../web/cache/all.less', content);
 
@@ -68,8 +74,11 @@ module.exports = function (grunt) {
             less: {
                 files: [
                     '../engine/Shopware/Plugins/**/*.less',
+                    '../engine/Shopware/Plugins/**/*.css',
                     '../themes/Frontend/**/*.less',
-                    '../custom/plugins/**/*.less'
+                    '../themes/Frontend/**/*.css',
+                    '../custom/plugins/**/*.less',
+                    '../custom/plugins/**/*.css'
                 ],
                 tasks: ['less:development', 'eslint'],
                 options: {
