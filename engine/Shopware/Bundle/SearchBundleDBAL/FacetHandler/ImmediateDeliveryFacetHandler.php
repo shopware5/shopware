@@ -31,7 +31,6 @@ use Shopware\Bundle\SearchBundle\FacetResult\BooleanFacetResult;
 use Shopware\Bundle\SearchBundle\FacetResultInterface;
 use Shopware\Bundle\SearchBundleDBAL\ConditionHandler\ImmediateDeliveryConditionHandler;
 use Shopware\Bundle\SearchBundleDBAL\PartialFacetHandlerInterface;
-use Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactory;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactoryInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\QueryAliasMapper;
@@ -44,7 +43,7 @@ use Shopware\Components\QueryAliasMapper;
 class ImmediateDeliveryFacetHandler implements PartialFacetHandlerInterface
 {
     /**
-     * @var QueryBuilderFactory
+     * @var QueryBuilderFactoryInterface
      */
     private $queryBuilderFactory;
 
