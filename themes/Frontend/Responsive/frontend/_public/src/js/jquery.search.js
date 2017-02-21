@@ -253,6 +253,10 @@
              */
             me._isSubmitting = false;
 
+            if (opts.activeOnStart) {
+                me.openMobileSearch();
+            }
+
             me.registerListeners();
         },
 
@@ -278,18 +282,6 @@
                     window.location.href = $(event.currentTarget).attr('href');
                 });
             }
-
-            StateManager.registerListener({
-                state: 'xs',
-                enter: function () {
-                    if (opts.activeOnStart) {
-                        me.openMobileSearch();
-                    }
-                },
-                exit: function () {
-                    me.closeMobileSearch();
-                }
-            });
 
             $.publish('plugin/swSearch/onRegisterEvents', [ me ]);
         },
@@ -411,10 +403,6 @@
             me.$loader.fadeOut(opts.animationSpeed);
             me.$results.empty().html(response).addClass(opts.activeCls).show();
 
-            if (!StateManager.isCurrentState('xs')) {
-                $body.on(me.getEventName('click touchstart'), $.proxy(me.onClickBody, me));
-            }
-
             picturefill();
 
             $.publish('plugin/swSearch/onShowResult', [ me ]);
@@ -524,10 +512,6 @@
                 opts = me.opts;
 
             $.publish('plugin/swSearch/onClickSearchEntry', [ me, event ]);
-
-            if (!StateManager.isCurrentState('xs')) {
-                return;
-            }
 
             event.preventDefault();
             event.stopPropagation();
