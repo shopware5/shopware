@@ -23,7 +23,7 @@
  */
 
 use Enlight_Controller_Request_Request as Request;
-use Shopware\Components\BasketSignature\Basket;
+use Shopware\Bundle\CartBundle\Infrastructure\StoreFrontCartService;
 use Shopware\Components\BasketSignature\BasketPersister;
 use Shopware\Components\BasketSignature\BasketSignatureGeneratorInterface;
 use Shopware\Models\Customer\Address;
@@ -35,6 +35,18 @@ use Shopware\Models\Customer\Address;
  */
 class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
 {
+    public function cartAction()
+    {
+        /** @var StoreFrontCartService $service */
+        $service = $this->get('shopware_cart.store_front_cart_service');
+
+        $cart = json_decode(json_encode($service->getCart()), true);
+
+        $this->View()->assign('cart', $cart);
+        $this->View()->assign('targetAction', 'cart');
+    }
+
+
     /**
      * Reference to sAdmin object (core/class/sAdmin.php)
      *
@@ -111,40 +123,6 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         } else {
             $this->forward('confirm');
         }
-    }
-
-    /**
-     * Read all data from objects / models that are required in cart view
-     * (User-Data / Payment-Data / Basket-Data etc.)
-     */
-    public function cartAction()
-    {
-        $this->View()->sCountry = $this->getSelectedCountry();
-        $this->View()->sPayment = $this->getSelectedPayment();
-        $this->View()->sDispatch = $this->getSelectedDispatch();
-        $this->View()->sCountryList = $this->getCountryList();
-        $this->View()->sPayments = $this->getPayments();
-        $this->View()->sDispatches = $this->getDispatches();
-        $this->View()->sDispatchNoOrder = $this->getDispatchNoOrder();
-        $this->View()->sState = $this->getSelectedState();
-
-        $this->View()->sUserData = $this->getUserData();
-        $this->View()->sBasket = $this->getBasket();
-
-        $this->View()->sShippingcosts = $this->View()->sBasket['sShippingcosts'];
-        $this->View()->sShippingcostsDifference = $this->View()->sBasket['sShippingcostsDifference'];
-        $this->View()->sAmount = $this->View()->sBasket['sAmount'];
-        $this->View()->sAmountWithTax = $this->View()->sBasket['sAmountWithTax'];
-        $this->View()->sAmountTax = $this->View()->sBasket['sAmountTax'];
-        $this->View()->sAmountNet = $this->View()->sBasket['AmountNetNumeric'];
-
-        $this->View()->sMinimumSurcharge = $this->getMinimumCharge();
-        $this->View()->sPremiums = $this->getPremiums();
-
-        $this->View()->sInquiry = $this->getInquiry();
-        $this->View()->sInquiryLink = $this->getInquiryLink();
-
-        $this->View()->sTargetAction = 'cart';
     }
 
     /**
