@@ -16,6 +16,7 @@ This changelog references changes done in Shopware 5.2 patch versions.
 * Changed internal loop variable name `positions` in `themes/Frontend/Bare/documents/index.tpl` to fix typo
 * Added configuration option `ShopwarePlugins` to `plugin_directories` in the `engine/Shopware/Configs/Default.php` to make the path of the plugin system directory configurable
 * Support for custom CSS files in themes added to Grunt tasks
+* Added command option `shopId` for `sw:theme:cache:generate`
 
 ## 5.2.17
 [View all changes from v5.2.16...v5.2.17](https://github.com/shopware/shopware/compare/v5.2.16...v5.2.17)
