@@ -108,16 +108,32 @@
             {/block}
 
             {block name='frontend_checkout_cart_item_quantity_selection'}
-                {if !$sBasketItem.additional_details.laststock || ($sBasketItem.additional_details.laststock && $sBasketItem.additional_details.instock > 0)}
-                    <form name="basket_change_quantity{$sBasketItem.id}" class="select-field" method="post" action="{url action='changeQuantity' sTargetAction=$sTargetAction}">
-                        <select name="sQuantity" data-auto-submit="true">
-                            {section name="i" start=$sBasketItem.minpurchase loop=$sBasketItem.maxpurchase+1 step=$sBasketItem.purchasesteps}
-                                <option value="{$smarty.section.i.index}" {if $smarty.section.i.index==$sBasketItem.quantity}selected="selected"{/if}>
+                {if $calculated.quantity}
+
+                    {$start = $lineItem.unit.minPurchase}
+                    {$end = $lineItem.unit.maxPurchase}
+                    {$step = $lineItem.unit.purchaseStep}
+
+                    {if !$start}
+                        {$start = 1}
+                    {/if}
+                    {if !$end}
+                        {$end = 100}
+                    {/if}
+
+                    {if !$step}
+                        {$step = 1}
+                    {/if}
+
+                    <form name="basket_change_quantity{$calculated.identifier}" class="select-field" method="post" action="{url controller='checkout' action='changeQuantity' target=$targetAction}">
+                        <select name="quantity" data-auto-submit="true">
+                            {section name="i" start=$start loop=$end step=$step}
+                                <option value="{$smarty.section.i.index}" {if $smarty.section.i.index==$calculated.quantity}selected="selected"{/if}>
                                     {$smarty.section.i.index}
                                 </option>
                             {/section}
                         </select>
-                        <input type="hidden" name="sArticle" value="{$sBasketItem.id}" />
+                        <input type="hidden" name="identifier" value="{$calculated.identifier}" />
                     </form>
                 {else}
                     {s name="CartColumnQuantityEmpty" namespace="frontend/checkout/cart_item"}{/s}

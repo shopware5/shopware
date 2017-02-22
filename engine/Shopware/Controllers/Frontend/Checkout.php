@@ -86,6 +86,34 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
     }
 
 
+    public function changeQuantityAction()
+    {
+        if (!$this->Request()->isPost()) {
+            throw new Exception('Only post request allowed');
+        }
+
+        /** @var StoreFrontCartService $service */
+        $service = $this->get('shopware_cart.store_front_cart_service');
+
+        $identifier = $this->Request()->getPost('identifier');
+        if (!$identifier) {
+            throw new Exception("Missing parameter identifier");
+        }
+
+        $quantity = $this->Request()->getPost('quantity');
+        if (!$quantity) {
+            throw new Exception("Missing parameter quantity");
+        }
+
+        $service->changeQuantity($identifier, $quantity);
+
+        $this->forward(
+            $this->Request()->getParam('target', 'cart')
+        );
+    }
+
+
+
     /**
      * Reference to sAdmin object (core/class/sAdmin.php)
      *
@@ -547,21 +575,6 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
             $this->basket->sDeleteArticle($this->Request()->getParam('sDelete'));
         }
         $this->forward($this->Request()->getParam('sTargetAction', 'index'));
-    }
-
-    /**
-     * Change quantity of a certain product
-     *
-     * @param sArticle = The article to update
-     * @param sQuantity = new quantity
-     * Forward to cart / confirm view after success
-     */
-    public function changeQuantityAction()
-    {
-        if ($this->Request()->getParam('sArticle') && $this->Request()->getParam('sQuantity')) {
-            $this->View()->sBasketInfo = $this->basket->sUpdateArticle($this->Request()->getParam('sArticle'), $this->Request()->getParam('sQuantity'));
-        }
-        $this->redirect(['action' => $this->Request()->getParam('sTargetAction', 'index')]);
     }
 
     /**
