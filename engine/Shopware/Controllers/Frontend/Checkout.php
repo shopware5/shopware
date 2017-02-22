@@ -68,6 +68,23 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         );
     }
 
+    public function deleteItemAction()
+    {
+        if (!$this->Request()->isPost()) {
+            throw new Exception('Only post request allowed');
+        }
+
+        $identifier = $this->Request()->getParam('identifier');
+
+        /** @var StoreFrontCartService $service */
+        $service = $this->get('shopware_cart.store_front_cart_service');
+        $service->remove($identifier);
+
+        $this->forward(
+            $this->Request()->getParam('target', 'ajaxCart')
+        );
+    }
+
 
     /**
      * Reference to sAdmin object (core/class/sAdmin.php)
