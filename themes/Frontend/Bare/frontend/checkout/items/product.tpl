@@ -2,11 +2,9 @@
 
 <div class="table--tr block-group row--product{if $isLast} is--last-row{/if}">
 
-    {if $sBasketItem.additional_details.sConfigurator}
-        {$detailLink={url controller=detail sArticle=$sBasketItem.articleID number=$sBasketItem.ordernumber}}
-    {else}
-        {$detailLink=$sBasketItem.linkDetails}
-    {/if}
+    {$calculated = $lineItem.product}
+
+    {$link = {url controller=detail sArticle=$lineItem.id number=$calculated.identifier}}
 
     {* Product information column *}
     {block name='frontend_checkout_cart_item_name'}
@@ -22,30 +20,31 @@
                                     <div class="table--media-inner">
                                         {block name="frontend_checkout_cart_item_image_container_inner"}
 
-                                            {$image = $sBasketItem.additional_details.image}
-                                            {$desc = $sBasketItem.articlename|escape}
+                                            {$name = $lineItem.name|escape|strip_tags}
 
-                                            {if $image.thumbnails[0]}
-                                                <a href="{$detailLink}" title="{$sBasketItem.articlename|strip_tags}" class="table--media-link"
-                                                    {if {config name=detailmodal} && {controllerAction|lower} === 'confirm'}
-                                                   data-modalbox="true"
-                                                   data-content="{url controller="detail" action="productQuickView" ordernumber="{$sBasketItem.ordernumber}" fullPath}"
-                                                   data-mode="ajax"
-                                                   data-width="750"
-                                                   data-sizing="content"
-                                                   data-title="{$sBasketItem.articlename|strip_tags|escape}"
-                                                   data-updateImages="true"
-                                                   {/if}>
-
-                                                    {if $image.description}
-                                                        {$desc = $image.description|escape}
-                                                    {/if}
-
-                                                    <img srcset="{$image.thumbnails[0].sourceSet}" alt="{$desc}" title="{$desc|truncate:160}" />
-                                                </a>
+                                            {if $lineItem.cover.description}
+                                                {$coverDescription = $lineItem.cover.description|escape|strip_tags}
                                             {else}
-                                                <img src="{link file='frontend/_public/src/img/no-picture.jpg'}" alt="{$desc}" title="{$desc|truncate:160}" />
+                                                {$coverDescription = $name}
                                             {/if}
+
+                                            <a href="{$link}" title="{$name}" class="table--media-link"
+                                                    {if {config name=detailmodal} && {controllerAction|lower} === 'confirm'}
+                                                        data-modalbox="true"
+                                                        data-content="{url controller="detail" action="productQuickView" ordernumber="{$calculated.identifier}" fullPath forceSecure}"
+                                                        data-mode="ajax"
+                                                        data-width="750"
+                                                        data-sizing="content"
+                                                        data-title="{$name|strip_tags|escape}"
+                                                        data-updateImages="true"
+                                                    {/if}>
+
+                                                {if $lineItem.cover}
+                                                    <img srcset="{$lineItem.cover.thumbnails[0].sourceSet}" alt="{$coverDescription}" title="{$coverDescription|truncate:160}" />
+                                                {else}
+                                                    <img src="{link file='frontend/_public/src/img/no-picture.jpg'}" alt="{$coverDescription}" title="{$coverDescription|truncate:160}" />
+                                                {/if}
+                                            </a>
                                         {/block}
                                     </div>
                                 {/block}
@@ -62,24 +61,24 @@
                     {* Product name *}
                     {block name='frontend_checkout_cart_item_details_title'}
 
-                        <a class="content--title" href="{$detailLink}" title="{$sBasketItem.articlename|strip_tags|escape}"
-                            {if {config name=detailmodal} && {controllerAction|lower} === 'confirm'}
-                               data-modalbox="true"
-                               data-content="{url controller="detail" action="productQuickView" ordernumber="{$sBasketItem.ordernumber}" fullPath}"
-                               data-mode="ajax"
-                               data-width="750"
-                               data-sizing="content"
-                               data-title="{$sBasketItem.articlename|strip_tags|escape}"
-                               data-updateImages="true"
-                            {/if}>
-                            {$sBasketItem.articlename|strip_tags|truncate:60}
+                        <a class="content--title" href="{$link}" title="{$name}"
+                                {if {config name=detailmodal} && {controllerAction|lower} === 'confirm'}
+                            data-modalbox="true"
+                            data-content="{url controller="detail" action="productQuickView" ordernumber="{$calculated.identifier}" fullPath forceSecure}"
+                            data-mode="ajax"
+                            data-width="750"
+                            data-sizing="content"
+                            data-title="{$name}"
+                            data-updateImages="true"
+                                {/if}>
+                            {$name|truncate:60}
                         </a>
                     {/block}
 
                     {* Product SKU number *}
                     {block name='frontend_checkout_cart_item_details_sku'}
                         <p class="content--sku content">
-                            {s name="CartItemInfoId"}{/s} {$sBasketItem.ordernumber}
+                            {s name="CartItemInfoId"}{/s} {$calculated.identifier}
                         </p>
                     {/block}
 
@@ -131,15 +130,13 @@
     {block name='frontend_checkout_cart_item_price'}
         <div class="panel--td column--unit-price is--align-right">
 
-            {if !$sBasketItem.modus}
-                {block name='frontend_checkout_cart_item_unit_price_label'}
-                    <div class="column--label unit-price--label">
-                        {s name="CartColumnPrice" namespace="frontend/checkout/cart_header"}{/s}
-                    </div>
-                {/block}
+            {block name='frontend_checkout_cart_item_unit_price_label'}
+                <div class="column--label unit-price--label">
+                    {s name="CartColumnPrice" namespace="frontend/checkout/cart_header"}{/s}
+                </div>
+            {/block}
 
-                {$sBasketItem.price|currency}{block name='frontend_checkout_cart_tax_symbol'}{s name="Star" namespace="frontend/listing/box_article"}{/s}{/block}
-            {/if}
+            {$calculated.price.unitPrice|currency}{block name='frontend_checkout_cart_tax_symbol'}{s name="Star" namespace="frontend/listing/box_article"}{/s}{/block}
         </div>
     {/block}
 
@@ -154,7 +151,7 @@
                     {s name="CartColumnTotal" namespace="frontend/checkout/cart_header"}{/s}
                 </div>
             {/block}
-            {$sBasketItem.amount|currency}{block name='frontend_checkout_cart_tax_symbol'}{s name="Star" namespace="frontend/listing/box_article"}{/s}{/block}
+            {$calculated.price.totalPrice|currency}{block name='frontend_checkout_cart_tax_symbol'}{s name="Star" namespace="frontend/listing/box_article"}{/s}{/block}
         </div>
     {/block}
 

@@ -5,7 +5,7 @@
 {$IS_REBATE = 3}
 {$IS_SURCHARGE_DISCOUNT = 4}
 
-{if $sBasketItem.modus == $IS_PRODUCT}
+{if $lineItem._class === "Shopware\Bundle\CartBundle\Infrastructure\View\ViewProduct"}
 
     {* Product *}
     {block name='frontend_checkout_cart_item_product'}
