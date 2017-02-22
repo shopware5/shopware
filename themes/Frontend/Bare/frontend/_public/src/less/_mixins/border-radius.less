@@ -19,12 +19,13 @@ Resetting border radius:<br/>
 `.reset-border-radius();`
 */
 
-.border-radius(@radius: 3px) {
+.border-radius(@radius: 3px) when (@enableBorderRadiusMixin = true) {
+
 	border-radius: @radius;
 	// Prevent the background color leaks out
 	background-clip: padding-box;
 }
-.border-radius-multi(@leftTop: 0, @rightTop:0, @rightBottom: 0, @leftBottom: 0) {
+.border-radius-multi(@leftTop: 0, @rightTop:0, @rightBottom: 0, @leftBottom: 0) when (@enableBorderRadiusMixin = true) {
 	border-top-left-radius: @leftTop;
 	border-top-right-radius:  @rightTop;
 	border-bottom-right-radius: @rightBottom;

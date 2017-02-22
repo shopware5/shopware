@@ -20,14 +20,17 @@ Shopware 5 also provides gradient mixins based on the basic color variables that
 
 .linear-gradient(@start, @end) {
 	background-color: @start;
-	background-image: -ms-linear-gradient(top, @start, @end);
-	background-image: linear-gradient(to bottom, @start 0%, @end 100%);
+    .linear-gradient-vertical(@start, @end);
 }
-.linear-gradient-horizontal(@start, @end) {
+.linear-gradient-vertical(@start, @end) when (@enableGradientMixin = true) {
+    background-image: -ms-linear-gradient(top, @start, @end);
+    background-image: linear-gradient(to bottom, @start 0%, @end 100%);
+}
+.linear-gradient-horizontal(@start, @end) when (@enableGradientMixin = true) {
 	background-image: -ms-linear-gradient(left, @start, @end);
 	background-image: linear-gradient(to right, @start 0%, @end 100%);
 }
-.linear-gradient-multi(@firstPos, @firstColor, @secondPos, @secondColor, @thirdPos, @thirdColor, @startFrom: top, @endTo: bottom) {
+.linear-gradient-multi(@firstPos, @firstColor, @secondPos, @secondColor, @thirdPos, @thirdColor, @startFrom: top, @endTo: bottom) when (@enableGradientMixin = true) {
 	background-image: -ms-linear-gradient(@startFrom, @firstColor @firstPos,@secondColor @secondPos,@thirdColor @thirdPos);
 	background-image: linear-gradient(to @endTo, @firstColor @firstPos,@secondColor @secondPos,@thirdColor @thirdPos);
 }
