@@ -12,12 +12,13 @@
               data-add-article="true"
               data-eventName="submit"
               {if $theme.offcanvasCart}
-              data-showModal="false"
-              data-addArticleUrl="{url controller=checkout action=ajaxAddArticleCart}"
+                 data-showModal="false"
+                 data-addArticleUrl="{url controller=checkout action=addProduct}"
               {/if}>
 
             {block name="frontend_listing_product_box_button_buy_order_number"}
-                <input type="hidden" name="sAdd" value="{$sArticle.ordernumber}"/>
+                <input type="hidden" name="number" value="{$sArticle.ordernumber}"/>
+                <input type="hidden" name="quantity" value="1"/>
             {/block}
 
             {block name="frontend_listing_product_box_button_buy_button"}

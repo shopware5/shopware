@@ -23,6 +23,8 @@
  */
 
 use Enlight_Controller_Request_Request as Request;
+use Shopware\Bundle\CartBundle\Domain\LineItem\LineItem;
+use Shopware\Bundle\CartBundle\Domain\Product\ProductProcessor;
 use Shopware\Bundle\CartBundle\Infrastructure\StoreFrontCartService;
 use Shopware\Components\BasketSignature\BasketPersister;
 use Shopware\Components\BasketSignature\BasketSignatureGeneratorInterface;
@@ -44,6 +46,26 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
 
         $this->View()->assign('cart', $cart);
         $this->View()->assign('targetAction', 'cart');
+    }
+
+    public function addProductAction()
+    {
+        $number = $this->Request()->getParam('number');
+        if (!$number) {
+            throw new Exception("No product number given");
+        }
+
+        $quantity = (int) $this->Request()->getParam('quantity', 1);
+
+        /** @var StoreFrontCartService $service */
+        $service = $this->get('shopware_cart.store_front_cart_service');
+        $service->add(
+            new LineItem($number, ProductProcessor::TYPE_PRODUCT, $quantity)
+        );
+
+        $this->forward(
+            $this->Request()->getParam('target', 'ajaxCart')
+        );
     }
 
 
