@@ -62,6 +62,7 @@ class Shopware_Plugins_Core_CronRating_Bootstrap extends Shopware_Components_Plu
         $customers = $this->getCustomers($orderIds);
         $positions = $this->getPositions($orderIds);
 
+        $count = 0;
         foreach ($orders as $orderId => $order) {
             if (empty($customers[$orderId]['email']) || count($positions[$orderId]) === 0) {
                 continue;
@@ -94,9 +95,14 @@ class Shopware_Plugins_Core_CronRating_Bootstrap extends Shopware_Components_Plu
             $mail = Shopware()->TemplateMail()->createMail('sARTICLECOMMENT', $context);
             $mail->addTo($customers[$orderId]['email']);
             $mail->send();
+            $count++;
         }
 
-        return count($order) . ' rating mails was sent.';
+        if ($count <= 0) {
+            return 'No rating mails sent.';
+        }
+
+        return $count . ' rating mail(s) sent.';
     }
 
     /**
@@ -144,20 +150,20 @@ class Shopware_Plugins_Core_CronRating_Bootstrap extends Shopware_Components_Plu
                 c.description as cleared_description,
                 s.description as status_description,
                 p.description as payment_description,
-                d.name 		  as dispatch_description,
-                cu.name 	  as currency_description
+                d.name        as dispatch_description,
+                cu.name       as currency_description
             FROM
                 s_order as o
             LEFT JOIN s_core_states as s
-            ON	(o.status = s.id)
+            ON  (o.status = s.id)
             LEFT JOIN s_core_states as c
-            ON	(o.cleared = c.id)
+            ON  (o.cleared = c.id)
             LEFT JOIN s_core_paymentmeans as p
-            ON	(o.paymentID = p.id)
+            ON  (o.paymentID = p.id)
             LEFT JOIN s_premium_dispatch as d
-            ON	(o.dispatchID = d.id)
+            ON  (o.dispatchID = d.id)
             LEFT JOIN s_core_currencies as cu
-            ON	(o.currency = cu.currency)
+            ON  (o.currency = cu.currency)
 
             WHERE o.status IN (2, 7)
             AND o.ordertime LIKE CONCAT(DATE_SUB(CURDATE(), INTERVAL ? DAY), '%')

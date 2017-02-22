@@ -64,7 +64,7 @@ Ext.define('Shopware.apps.Systeminfo.view.systeminfo.Versionlist', {
     */
     region: 'center',
 
-	border: 0,
+    border: 0,
     /**
     * The view needs to be scrollable
     * @string

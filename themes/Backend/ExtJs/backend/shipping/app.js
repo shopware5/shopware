@@ -79,7 +79,7 @@ Ext.define('Shopware.apps.Shipping', {
         'Holiday',
         'Country',
         'Payment',
-		'Tax'
+        'Tax'
     ],
 
     /**
@@ -108,7 +108,7 @@ Ext.define('Shopware.apps.Shipping', {
         'Dispatch',
         'DispatchList',
         'Holiday',
-		'Tax'
+        'Tax'
     ],
 
     /**

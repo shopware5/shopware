@@ -133,6 +133,26 @@ class Application extends BaseApplication
     }
 
     /**
+     * {@inheritdoc}
+     */
+    protected function doRunCommand(Command $command, InputInterface $input, OutputInterface $output)
+    {
+        $exitCode = parent::doRunCommand($command, $input, $output);
+
+       /** @var \Enlight_Event_EventManager $eventManager */
+       $eventManager = $this->kernel->getContainer()->get('events');
+
+        $eventManager->notify('Shopware_Command_After_Run', [
+           'exitCode' => $exitCode,
+           'command'  => $command,
+           'input'    => $input,
+           'output'   => $output,
+       ]);
+
+        return $exitCode;
+    }
+
+    /**
      * @param OutputInterface $output
      */
     protected function registerCommands(OutputInterface $output)

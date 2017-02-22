@@ -68,7 +68,7 @@ class Enlight_Plugin_Namespace_Loader extends Enlight_Plugin_Namespace
     public function addPrefixPath($prefix, $path)
     {
         $prefix = trim($prefix, '_');
-        $path = realpath($path) . DIRECTORY_SEPARATOR;
+        $path = Enlight_Loader::realpath($path) . DIRECTORY_SEPARATOR;
         $this->prefixPaths[$path] = $prefix;
         return $this;
     }

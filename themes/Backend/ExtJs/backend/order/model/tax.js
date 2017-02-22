@@ -46,7 +46,7 @@ Ext.define('Shopware.apps.Order.model.Tax', {
      * @array
      */
     fields:[
-		//{block name="backend/order/model/tax/fields"}{/block}
+        //{block name="backend/order/model/tax/fields"}{/block}
         { name: 'id', type:'int' },
         { name: 'tax', type:'float' },
         { name: 'name', type:'string' }

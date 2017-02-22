@@ -44,8 +44,8 @@
         </div>
     {/block}
 
-	{* Review content - Title and content *}
-	{block name='frontend_detail_comment_text'}
+    {* Review content - Title and content *}
+    {block name='frontend_detail_comment_text'}
         <div class="entry--content">
 
             {* Headline *}
@@ -62,5 +62,5 @@
                 </p>
             {/block}
         </div>
-	{/block}
+    {/block}
 </div>

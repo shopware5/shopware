@@ -113,7 +113,6 @@ $app->map('/noaccess', function () use ($app) {
 
     $app->render('noaccess.php');
     $app->response()->status(403);
-
 })->via('GET', 'POST')->name("noAccess");
 
 $app->map('/', function () use ($app) {
@@ -159,7 +158,13 @@ $app->map('/cleanup', function () use ($container) {
     $container->get('controller.cleanup')->cleanupOldFiles();
 })->via('GET', 'POST')->name('cleanup');
 
+$app->map('/clearCache', function () use ($container) {
+    $container->get('controller.cleanup')->deleteOutdatedFolders();
+})->via('GET', 'POST')->name('clearCache');
+
 $app->map('/done', function () use ($app, $container) {
+    $container->get('shopware.update.chmod')->changePermissions();
+
     /** @var \Shopware\Components\Theme\Installer $themeService */
     $themeService = $container->get('shopware.theme_installer');
     $themeService->synchronize();
@@ -191,7 +196,6 @@ $app->get('/redirect/:target', function ($target) use ($app) {
 
     session_destroy();
     $app->response()->redirect($url);
-
 })->name('redirect');
 
 return $app;

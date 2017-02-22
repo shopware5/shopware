@@ -177,6 +177,13 @@ class Partner extends ModelEntity
     private $orders;
 
     /**
+     * INVERSE SIDE
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Partner", mappedBy="partner", orphanRemoval=true, cascade={"persist"})
+     * @var \Shopware\Models\Attribute\Partner
+     */
+    protected $attribute;
+
+    /**
      * Get id
      *
      * @return integer
@@ -615,5 +622,22 @@ class Partner extends ModelEntity
     public function setCustomerId($customerId)
     {
         $this->customerId = $customerId;
+    }
+
+    /**
+     * @return \Shopware\Models\Attribute\Partner
+     */
+    public function getAttribute()
+    {
+        return $this->attribute;
+    }
+
+    /**
+     * @param \Shopware\Models\Attribute\Partner|array|null $attribute
+     * @return \Shopware\Models\Partner\Partner
+     */
+    public function setAttribute($attribute)
+    {
+        return $this->setOneToOne($attribute, '\Shopware\Models\Attribute\Partner', 'attribute', 'partner');
     }
 }

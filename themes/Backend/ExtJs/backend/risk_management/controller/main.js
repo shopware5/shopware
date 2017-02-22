@@ -54,9 +54,9 @@ Ext.define('Shopware.apps.RiskManagement.controller.Main', {
         me.subApplication.subShopStore = me.subApplication.getStore('Subshops').load();
 
         me.mainWindow = me.getView('main.Window').create({
-			paymentStore: me.subApplication.paymentStore,
-			areasStore: me.subApplication.areasStore,
-			subShopStore: me.subApplication.subShopStore
+            paymentStore: me.subApplication.paymentStore,
+            areasStore: me.subApplication.areasStore,
+            subShopStore: me.subApplication.subShopStore
         });
         me.callParent(arguments);
     }

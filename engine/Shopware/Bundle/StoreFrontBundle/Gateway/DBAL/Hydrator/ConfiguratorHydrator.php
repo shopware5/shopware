@@ -111,6 +111,10 @@ class ConfiguratorHydrator extends Hydrator
         $group->setName($data['__configuratorGroup_name']);
         $group->setDescription($data['__configuratorGroup_description']);
 
+        if ($data['__configuratorGroupAttribute_id']) {
+            $this->attributeHydrator->addAttribute($group, $data, 'configuratorGroupAttribute', null, 'configuratorGroup');
+        }
+
         return $group;
     }
 
@@ -127,6 +131,11 @@ class ConfiguratorHydrator extends Hydrator
 
         $option->setId((int) $data['__configuratorOption_id']);
         $option->setName($data['__configuratorOption_name']);
+
+        if ($data['__configuratorOptionAttribute_id']) {
+            $this->attributeHydrator->addAttribute($option, $data, 'configuratorOptionAttribute', null, 'configuratorOption');
+        }
+
         return $option;
     }
 }

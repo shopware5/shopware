@@ -1877,10 +1877,15 @@ class Article extends Resource implements BatchInterface
             $options = new ArrayCollection();
 
             foreach ($mappingData as $option) {
-                $available = $this->getCollectionElementByProperties($configuratorOptions, [
-                    'id' => $option['id'],
-                    'name' => $option['name'],
-                ]);
+                $conditions = [];
+
+                if ($option['id']) {
+                    $conditions['id'] = $option['id'];
+                }
+
+                $conditions['name'] = $option['name'];
+
+                $available = $this->getCollectionElementByProperties($configuratorOptions, $conditions);
 
                 if (!$available) {
                     $property = $option['id'] ? $option['id'] : $option['name'];
@@ -1951,6 +1956,7 @@ class Article extends Resource implements BatchInterface
     {
         $whitelist = $this->getAttributeProperties();
         $whitelist = array_merge($whitelist, array(
+            'metaTitle',
             'name',
             'description',
             'descriptionLong',

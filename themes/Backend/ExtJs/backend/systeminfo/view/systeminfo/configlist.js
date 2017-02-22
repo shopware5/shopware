@@ -63,7 +63,7 @@ Ext.define('Shopware.apps.Systeminfo.view.systeminfo.Configlist', {
     * @string
     */
     region: 'center',
-	autoScroll: true,
+    autoScroll: true,
     /**
     * Set the used store. You just need to set the store name
     * due to the fact that the store is defined in the same
@@ -75,11 +75,11 @@ Ext.define('Shopware.apps.Systeminfo.view.systeminfo.Configlist', {
     initComponent: function(){
         this.columns = this.getColumns();
 
-		var translations = [];
-		translations['config'] = '{s name=systeminfo/groupingFeature_config}Settings{/s}';
-		translations['core'] = '{s name=systeminfo/groupingFeature_core}General{/s}';
-		translations['extension'] = '{s name=systeminfo/groupingFeature_extension}Extensions{/s}';
-		translations['other'] = '{s name=systeminfo/groupingFeature_other}Other{/s}';
+        var translations = [];
+        translations['config'] = '{s name=systeminfo/groupingFeature_config}Settings{/s}';
+        translations['core'] = '{s name=systeminfo/groupingFeature_core}General{/s}';
+        translations['extension'] = '{s name=systeminfo/groupingFeature_extension}Extensions{/s}';
+        translations['other'] = '{s name=systeminfo/groupingFeature_other}Other{/s}';
 
 //        Row grouping
         this.groupingFeature = Ext.create('Ext.grid.feature.Grouping', {

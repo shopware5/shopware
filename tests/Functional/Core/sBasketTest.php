@@ -21,7 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-class sBasketTest extends PHPUnit_Framework_TestCase
+class sBasketTest extends PHPUnit\Framework\TestCase
 {
     /**
      * Database connection which used for each database operation in this class.
@@ -100,20 +100,33 @@ class sBasketTest extends PHPUnit_Framework_TestCase
         );
     }
 
+    private function generateBasketSession()
+    {
+        // Create session id
+        $sessionId = md5(uniqid('sCheckBasket', true));
+        $this->module->sSYSTEM->sSESSION_ID = $sessionId;
+        $this->session->offsetSet('sessionId', $sessionId);
+
+        return $sessionId;
+    }
+
     /**
      * @covers sBasket::sCheckBasketQuantities
      */
-    public function testsCheckBasketQuantities()
+    public function testsCheckBasketQuantitiesWithEmptySession()
     {
+        $this->generateBasketSession();
+
         // Test with empty session, expect empty array
         $this->assertEquals(
             array('hideBasket' => false, 'articles' => null),
             $this->module->sCheckBasketQuantities()
         );
+    }
 
-        // Create session id
-        $this->module->sSYSTEM->sSESSION_ID = uniqid(rand());
-        $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
+    public function testsCheckBasketQuantitiesWithLowerQuantityThanAvailable()
+    {
+        $this->generateBasketSession();
 
         // Fetch an article in stock with stock control
         // Add stock-1 to basket
@@ -125,14 +138,14 @@ class sBasketTest extends PHPUnit_Framework_TestCase
             WHERE detail.instock > 2
             AND detail.active = 1
             AND article.laststock = 1
-            ORDER BY RAND() LIMIT 1'
+            LIMIT 1'
         );
 
         $this->db->insert(
             's_order_basket',
             array(
                 'price' => 123,
-                'quantity' => $inStockArticle['instock']-1,
+                'quantity' => $inStockArticle['instock'] - 1,
                 'sessionID' => $this->session->get('sessionId'),
                 'ordernumber' => $inStockArticle['ordernumber'],
                 'articleID' => $inStockArticle['articleID']
@@ -146,6 +159,11 @@ class sBasketTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($result['hideBasket']);
         $this->assertArrayHasKey($inStockArticle['ordernumber'], $result['articles']);
         $this->assertFalse($result['articles'][$inStockArticle['ordernumber']]['OutOfStock']);
+    }
+
+    public function testsCheckBasketQuantitiesWithHigherQuantityThanAvailable()
+    {
+        $this->generateBasketSession();
 
         // Fetch an article in stock with stock control
         // Add stock+1 to basket
@@ -154,20 +172,44 @@ class sBasketTest extends PHPUnit_Framework_TestCase
             'SELECT * FROM s_articles_details detail
             INNER JOIN s_articles article
               ON article.id = detail.articleID
-            WHERE detail.instock > 2
+            WHERE detail.instock > 5
             AND detail.active = 1
             AND article.laststock = 1
-            ORDER BY RAND() LIMIT 1'
+            AND article.active = 1
+            LIMIT 1'
         );
 
         $this->db->insert(
             's_order_basket',
             array(
                 'price' => 123,
-                'quantity' => $outStockArticle['instock']+1,
+                'quantity' => $outStockArticle['instock'] + 1,
                 'sessionID' => $this->session->get('sessionId'),
                 'ordernumber' => $outStockArticle['ordernumber'],
                 'articleID' => $outStockArticle['articleID']
+            )
+        );
+
+        $inStockArticle = $this->db->fetchRow(
+            'SELECT * FROM s_articles_details detail
+            INNER JOIN s_articles article
+              ON article.id = detail.articleID
+            WHERE detail.instock > 5
+            AND detail.active = 1
+            AND article.laststock = 1
+            AND article.active = 1
+            AND article.id != "'.$outStockArticle['articleID'].'"
+            LIMIT 1'
+        );
+
+        $this->db->insert(
+            's_order_basket',
+            array(
+                'price' => 123,
+                'quantity' => $inStockArticle['instock'] - 1,
+                'sessionID' => $this->session->get('sessionId'),
+                'ordernumber' => $inStockArticle['ordernumber'],
+                'articleID' => $inStockArticle['articleID']
             )
         );
 
@@ -186,6 +228,11 @@ class sBasketTest extends PHPUnit_Framework_TestCase
             's_order_basket',
             array('sessionID = ?' => $this->session->get('sessionId'))
         );
+    }
+
+    public function testsCheckBasketQuantitiesWithoutStockControl()
+    {
+        $this->generateBasketSession();
 
         // Fetch an article in stock without stock control
         // Add stock+1 to basket
@@ -196,7 +243,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
               ON article.id = detail.articleID
             WHERE detail.active = 1
             AND article.laststock = 0
-            ORDER BY RAND() LIMIT 1'
+            LIMIT 1'
         );
 
         $this->db->insert(
@@ -240,9 +287,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
             )
         );
 
-        // Create session id
-        $this->module->sSYSTEM->sSESSION_ID = uniqid(rand());
-        $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
+        $this->generateBasketSession();
 
         // Add two articles to the basket
         $randomArticleOne = $this->db->fetchRow(
@@ -253,7 +298,8 @@ class sBasketTest extends PHPUnit_Framework_TestCase
               ON article.id = detail.articleID
             WHERE detail.active = 1
             AND detail.ordernumber IS NOT NULL
-            ORDER BY RAND() LIMIT 1'
+            AND article.supplierID IS NOT NULL
+            LIMIT 1'
         );
         $randomArticleTwo = $this->db->fetchRow(
             'SELECT detail.articleID AS articleID, detail.ordernumber AS ordernumber,
@@ -262,11 +308,12 @@ class sBasketTest extends PHPUnit_Framework_TestCase
             INNER JOIN s_articles article
               ON article.id = detail.articleID
             WHERE detail.active = 1
-            AND supplierID <> ?
+            AND article.supplierID <> ?
             AND detail.ordernumber IS NOT NULL
-            ORDER BY RAND() LIMIT 1',
+            LIMIT 1',
             array($randomArticleOne['supplierID'])
         );
+
         $this->db->insert(
             's_order_basket',
             array(
@@ -399,7 +446,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
             AND detail.articleId NOT IN (
               SELECT id FROM s_addon_premiums
             )
-            ORDER BY RAND() LIMIT 1'
+            LIMIT 1'
         );
 
         $premiumArticleOne = $this->db->fetchRow(
@@ -411,7 +458,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
             AND detail.ordernumber NOT IN (
               SELECT ordernumber FROM s_addon_premiums
             )
-            ORDER BY RAND() LIMIT 1'
+            LIMIT 1'
         );
         $premiumArticleTwo = $this->db->fetchRow(
             'SELECT article.id, detail.ordernumber
@@ -422,7 +469,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
             AND detail.ordernumber IN (
               SELECT ordernumber FROM s_addon_premiums
             )
-            ORDER BY RAND() LIMIT 1'
+            LIMIT 1'
         );
 
         // Add one normal article to basket
@@ -549,7 +596,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
             INNER JOIN s_articles article
               ON article.id = detail.articleID
             WHERE detail.active = 1
-            ORDER BY RAND() LIMIT 1'
+            LIMIT 1'
         );
 
         $randOne = rand(1, 100);
@@ -660,7 +707,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
             INNER JOIN s_articles article
               ON article.id = detail.articleID
             WHERE detail.active = 1
-            ORDER BY RAND() LIMIT 1'
+            LIMIT 1'
         );
         $this->db->insert(
             's_order_basket',
@@ -795,7 +842,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
             INNER JOIN s_articles article
               ON article.id = detail.articleID
             WHERE detail.active = 1
-            ORDER BY RAND() LIMIT 1'
+            LIMIT 1'
         );
         $this->db->insert(
             's_order_basket',
@@ -890,7 +937,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
             INNER JOIN s_articles article
               ON article.id = detail.articleID
             WHERE detail.active = 1
-            ORDER BY RAND() LIMIT 1'
+            LIMIT 1'
         );
         $this->db->insert(
             's_order_basket',
@@ -994,7 +1041,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
             INNER JOIN s_articles article
               ON article.id = detail.articleID
             WHERE detail.active = 1
-            ORDER BY RAND() LIMIT 1'
+            LIMIT 1'
         );
         $this->db->insert(
             's_order_basket',
@@ -1052,7 +1099,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
     {
         $randomCustomerGroup = $this->db->fetchAll(
             'SELECT * FROM s_core_customergroups
-            ORDER BY RAND() LIMIT 2'
+             LIMIT 2'
         );
         $voucherData = array(
             'vouchercode' => 'testTwo',
@@ -1088,7 +1135,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
             INNER JOIN s_articles article
               ON article.id = detail.articleID
             WHERE detail.active = 1
-            ORDER BY RAND() LIMIT 1'
+            LIMIT 1'
         );
         $this->db->insert(
             's_order_basket',
@@ -1150,7 +1197,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
             INNER JOIN s_articles article
               ON article.id = detail.articleID
             WHERE detail.active = 1
-            ORDER BY RAND() LIMIT 2'
+             LIMIT 2'
         );
         $voucherData = array(
             'vouchercode' => 'testOne',
@@ -1238,7 +1285,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
             INNER JOIN s_articles article
               ON article.id = detail.articleID
             WHERE detail.active = 1
-            ORDER BY RAND() LIMIT 1'
+            LIMIT 1'
         );
         $randomArticleTwo = $this->db->fetchRow(
             'SELECT * FROM s_articles_details detail
@@ -1246,7 +1293,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
               ON article.id = detail.articleID
             WHERE detail.active = 1
             AND supplierID <> ?
-            ORDER BY RAND() LIMIT 1',
+            LIMIT 1,5',
             array($randomArticleOne['supplierID'])
         );
 
@@ -1257,7 +1304,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
             'numorder' => 1,
             'value' => 10,
             'minimumcharge' => 10,
-            'ordercode' => uniqid(rand()),
+            'ordercode' => uniqid('ordercode', true),
             'modus' => 0,
             'bindtosupplier' => $randomArticleOne['supplierID']
         );
@@ -1269,8 +1316,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
 
         $customer = $this->createDummyCustomer();
         $this->session['sUserId'] = $customer->getId();
-        $this->module->sSYSTEM->sSESSION_ID = uniqid(rand());
-        $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
+        $this->generateBasketSession();
 
         // Add first article to the basket with enough value to use discount, should fail
         $this->db->insert(
@@ -1285,8 +1331,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
         );
 
         $supplierOne = $this->db->fetchOne(
-            'SELECT name FROM s_articles_supplier
-            WHERE id = ?',
+            'SELECT name FROM s_articles_supplier WHERE id = ?',
             array($randomArticleOne['supplierID'])
         );
         $result = $this->module->sAddVoucher($voucherData['vouchercode']);
@@ -1344,7 +1389,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
             INNER JOIN s_articles article
               ON article.id = detail.articleID
             WHERE detail.active = 1
-            ORDER BY RAND() LIMIT 2'
+             LIMIT 2'
         );
 
         $this->module->sSYSTEM->sSESSION_ID = uniqid(rand());
@@ -1441,7 +1486,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
             INNER JOIN s_articles article
               ON article.id = detail.articleID
             WHERE detail.active = 1
-            ORDER BY RAND() LIMIT 1'
+            LIMIT 1'
         );
         $this->db->insert(
             's_order_basket',
@@ -1506,7 +1551,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
             INNER JOIN s_articles article
               ON article.id = detail.articleID
             WHERE detail.active = 1
-            ORDER BY RAND() LIMIT 1'
+            LIMIT 1'
         );
         $this->db->insert(
             's_order_basket',
@@ -1601,7 +1646,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
             INNER JOIN s_articles article
               ON article.id = detail.articleID
             WHERE detail.active = 1
-            ORDER BY RAND() LIMIT 1'
+            LIMIT 1'
         );
         $this->db->insert(
             's_order_basket',
@@ -1667,7 +1712,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
             INNER JOIN s_articles article
               ON article.id = detail.articleID
             WHERE detail.active = 1
-            ORDER BY RAND() LIMIT 1'
+            LIMIT 1'
         );
         $this->db->insert(
             's_order_basket',
@@ -1763,7 +1808,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
      */
     public function testsAddNote()
     {
-        $_COOKIE['sUniqueID'] = md5(uniqid(rand()));
+        $_COOKIE['sUniqueID'] = md5(uniqid('sAddNote', true));
 
         // Add one article to the basket with low amount
         $randomArticle = $this->db->fetchRow(
@@ -1771,10 +1816,11 @@ class sBasketTest extends PHPUnit_Framework_TestCase
             FROM s_articles_details detail
             INNER JOIN s_articles article
               ON article.id = detail.articleID
-            WHERE detail.active = 1
+            WHERE detail.active = 1 and article.active = 1
             AND ordernumber IS NOT NULL
+            AND article.supplierID IS NOT NULL
             AND article.name IS NOT NULL
-            ORDER BY RAND() LIMIT 1'
+            LIMIT 1'
         );
 
         $this->assertEquals(0, $this->db->fetchOne(
@@ -1840,7 +1886,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
               ON article.id = detail.articleID
             WHERE detail.active = 1
             AND detail.id <> ?
-            ORDER BY RAND() LIMIT 1',
+            LIMIT 1',
             array($randomArticleOne['id'])
         );
 
@@ -1874,7 +1920,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
               ON article.id = detail.articleID
             WHERE detail.active = 1
             AND detail.id NOT IN (?)
-            ORDER BY RAND() LIMIT 1',
+            LIMIT 1',
             array(array_column($randomArticles, 'id'))
         );
 
@@ -1914,8 +1960,8 @@ class sBasketTest extends PHPUnit_Framework_TestCase
         // Null args, false result
         $this->assertFalse($this->module->sUpdateArticle(null, null));
 
-        $this->module->sSYSTEM->sSESSION_ID = uniqid(rand());
-        $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
+        $this->generateBasketSession();
+
         // Get random article
         $randomArticle = $this->db->fetchRow(
             'SELECT detail.articleID, detail.ordernumber
@@ -1923,7 +1969,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
             INNER JOIN s_articles article
               ON article.id = detail.articleID
             WHERE detail.active = 1
-            ORDER BY RAND() LIMIT 1'
+            LIMIT 1'
         );
         $this->db->insert(
             's_order_basket',
@@ -1994,7 +2040,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
             INNER JOIN s_articles_esd esd
               ON esd.articledetailsID = detail.id
             WHERE esd.id IS NOT NULL
-            ORDER BY RAND() LIMIT 1'
+            LIMIT 1'
         );
         $this->db->update(
             's_articles_details',
@@ -2055,7 +2101,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
               WHERE customergroupID = 1
             )
             AND (article.laststock = 0 OR detail.instock > 0)
-            ORDER BY RAND() LIMIT 1'
+            LIMIT 1'
         );
 
         $this->module->sAddArticle($randomArticle['ordernumber'], 1);
@@ -2096,7 +2142,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
               WHERE customergroupID = 1
             )
             AND (article.laststock = 0 OR detail.instock > 0)
-            ORDER BY RAND() LIMIT 1'
+            LIMIT 1'
         );
         $idOne = $this->module->sAddArticle($randomArticle['ordernumber'], 1);
         $this->assertEquals(1, $this->module->sCountBasket());
@@ -2132,7 +2178,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
               FROM s_articles_avoid_customergroups
               WHERE customergroupID = 1
             )
-            ORDER BY RAND() LIMIT 1'
+            LIMIT 1'
         );
 
         // Adding article without quantity adds one
@@ -2174,7 +2220,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
               FROM s_articles_avoid_customergroups
               WHERE customergroupID = 1
             )
-            ORDER BY RAND() LIMIT 1'
+            LIMIT 1'
         );
 
         // Adding article with quantity over stock, check that we have the desired quantity

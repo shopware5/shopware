@@ -13,39 +13,21 @@ class Backend extends Page
      */
     protected $path = '/backend/';
 
-    public function verifyLogin()
+    public function getXPathSelectors()
     {
-        $this->getSession()->wait(self::TIMEOUT_MILLISECONDS, 'document.querySelector(".login-window") !== null');
-
-        $loginFormPresent = (
-            $this->hasField('username') &&
-            $this->hasField('password')
-        );
-
-        if (!$loginFormPresent) {
-            throw new \Exception("Login form not there");
-        }
-
-        return true;
+        return [
+            'loginUsernameInput' => "//input[@name='username']",
+            'loginUsernamepassword' => "//input[@name='password']",
+            'loginLoginButton' => "//button[@data-action='login']",
+        ];
     }
 
-    public function login($username, $password)
+    public function login($user, $password)
     {
-        $this->fillField('username', $username);
-        $this->fillField('password', $password);
-        $this->pressButton('Login');
-
-        return true;
-    }
-
-    public function verifyIsLoggedIn()
-    {
-        $result = $this->getSession()->wait(self::TIMEOUT_MILLISECONDS, 'document.querySelector(".shopware-menu") !== null');
-        if (!$result) {
-            throw new \Exception("Could not login");
-        }
-
-        return true;
+        $xpath = $this->getXPathSelectors();
+        $this->find('xpath', $xpath['loginUsernameInput'])->setValue($user);
+        $this->find('xpath', $xpath['loginUsernamepassword'])->setValue($password);
+        $this->find('xpath', $xpath['loginLoginButton'])->click();
     }
 
     /**

@@ -43,7 +43,7 @@ Ext.define('Shopware.apps.Article.model.Serial', {
      * @array
      */
     fields: [
-		//{block name="backend/article/model/serial/fields"}{/block}
+        //{block name="backend/article/model/serial/fields"}{/block}
         { name: 'id', type: 'int' },
         { name: 'serialnumber' },
         { name: 'customerId'},

@@ -37,11 +37,11 @@
  */
 //{block name="backend/user_manager/view/main/navigation"}
 Ext.define('Shopware.apps.UserManager.view.main.Navigation', {
-	extend: 'Ext.panel.Panel',
-	region: 'west',
+    extend: 'Ext.panel.Panel',
+    region: 'west',
     alias: 'widget.usermanager-main-navigation',
     layout: 'accordion',
-	autoScroll: true,
+    autoScroll: true,
     border: false,
     items: [],
     width: 250,
@@ -53,7 +53,7 @@ Ext.define('Shopware.apps.UserManager.view.main.Navigation', {
      *
      * @return void
      */
-	initComponent: function() {
+    initComponent: function() {
 
         // Panel with a button to push
         /* {if {acl_is_allowed privilege=read}} */

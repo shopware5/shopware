@@ -52,11 +52,11 @@ Ext.define('Shopware.apps.Article.controller.Main', {
         additional: {
             title:'{s name=detail/additional_fields/title}Additional fields{/s}'
         },
-		generateNeeded: {
-			title: '{s name=detail/needGenerate/title}Duplicate article{/s}',
-			message: '{s name=detail/needGenerate/message}You have just duplicated a configurator article. The corresponding configurator variants were not duplicated for performance and stability reasons. ' +
-					 'Please go to the tab \'Variants\' and then click \'Generate variants\' to duplicate the configurator variants, too.{/s}'
-		}
+        generateNeeded: {
+            title: '{s name=detail/needGenerate/title}Duplicate article{/s}',
+            message: '{s name=detail/needGenerate/message}You have just duplicated a configurator article. The corresponding configurator variants were not duplicated for performance and stability reasons. ' +
+                     'Please go to the tab \'Variants\' and then click \'Generate variants\' to duplicate the configurator variants, too.{/s}'
+        }
     },
 
     refs: [
@@ -95,9 +95,9 @@ Ext.define('Shopware.apps.Article.controller.Main', {
 
         //article id passed? Then open the detail page with the passed article id
         if (me.subApplication.params && me.subApplication.params.articleId > 0) {
-			if(me.subApplication.params.needGenerate){
-				Ext.Msg.alert(me.snippets.generateNeeded.title, me.snippets.generateNeeded.message);
-			}
+            if(me.subApplication.params.needGenerate){
+                Ext.Msg.alert(me.snippets.generateNeeded.title, me.snippets.generateNeeded.message);
+            }
             me.openExistingArticle(me.subApplication.params.articleId);
         //no parameter passed? open article detail page with new record
         } else {
@@ -395,10 +395,10 @@ Ext.define('Shopware.apps.Article.controller.Main', {
         }
 
         // Cache the last selected row, so the user will not be
-		// interrupted in the split view mode
-		if(options.hasOwnProperty('selection')) {
-			me.subApplication.lastSelection = options.selection;
-		}
+        // interrupted in the split view mode
+        if(options.hasOwnProperty('selection')) {
+            me.subApplication.lastSelection = options.selection;
+        }
 
         // Both function calls could throw an error...
         try {

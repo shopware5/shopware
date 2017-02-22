@@ -34,7 +34,7 @@
  */
 //{block name="backend/premium/view/main/window"}
 Ext.define('Shopware.apps.Premium.view.main.Window', {
-	extend: 'Enlight.app.Window',
+    extend: 'Enlight.app.Window',
     title: '{s name=window_title}Premium articles{/s}',
     cls: Ext.baseCSSPrefix + 'premium-window',
     alias: 'widget.premium-main-window',

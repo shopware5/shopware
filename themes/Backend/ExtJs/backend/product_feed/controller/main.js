@@ -39,18 +39,18 @@ Ext.define('Shopware.apps.ProductFeed.controller.Main', {
      * Extend from the standard ExtJS 4 controller
      * @string
      */
-	extend: 'Ext.app.Controller',
+    extend: 'Ext.app.Controller',
 
     mainWindow: null,
 
     /**
-	 * Creates the necessary event listener for this
-	 * specific controller and opens a new Ext.window.Window
-	 * to display the subapplication
+     * Creates the necessary event listener for this
+     * specific controller and opens a new Ext.window.Window
+     * to display the subapplication
      *
      * @return void
-	 */
-	init: function() {
+     */
+    init: function() {
         var me = this;
         me.subApplication.listStore = me.getStore('List');
         me.subApplication.detailStore = me.getStore('Detail');

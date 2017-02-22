@@ -97,6 +97,7 @@ class XmlMenuReader
             $menuEntry['position'] = (int)$position[0]->nodeValue;
         }
 
+        $menuEntry['children'] = [];
         if ($children = $this->getChildren($entry, 'children')) {
             foreach ($this->getChildren($children[0], 'entry') as $child) {
                 $menuEntry['children'][] = $this->parseEntry($child);

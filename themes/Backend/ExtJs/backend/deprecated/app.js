@@ -29,9 +29,9 @@
 
 //{block name="backend/deprecated/app"}
 Ext.define('Shopware.apps.Deprecated', {
-	extend: 'Enlight.app.SubApplication',
+    extend: 'Enlight.app.SubApplication',
     loadPath: "{url action=load}",
-	controllers: [ 'Main' ],
+    controllers: [ 'Main' ],
 
     /**
      * Returns the main application window for this is expected

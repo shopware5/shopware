@@ -20,7 +20,7 @@
         onClickMenu: function (event) {
             var me = this;
 
-            if($(event.target).is('.service--link, .compare--list, .compare--entry, .compare--link, .btn--item-delete, .compare--icon-remove')) {
+            if ($(event.target).is('.service--link, .compare--list, .compare--entry, .compare--link, .btn--item-delete, .compare--icon-remove')) {
                 return;
             }
 
@@ -41,7 +41,7 @@
         onClickBody: function(event) {
             var me = this;
 
-            if($(event.target).is('.service--link, .compare--list, .compare--entry, .compare--link, .btn--item-delete, .compare--icon-remove')) {
+            if ($(event.target).is('.service--link, .compare--list, .compare--entry, .compare--link, .btn--item-delete, .compare--icon-remove')) {
                 return;
             }
 

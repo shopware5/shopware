@@ -26,9 +26,9 @@
  */
 //{block name="backend/index/model/merchant_mail"}
 Ext.define('Shopware.apps.Index.model.MerchantMail', {
-	extend: 'Ext.data.Model',
+    extend: 'Ext.data.Model',
     fields: [
-		//{block name="backend/index/model/merchant_mail/fields"}{/block}
-		'content', 'fromMail', 'fromName', 'subject', 'toMail', 'userId', 'status' ]
+        //{block name="backend/index/model/merchant_mail/fields"}{/block}
+        'content', 'fromMail', 'fromName', 'subject', 'toMail', 'userId', 'status' ]
 });
 //{/block}

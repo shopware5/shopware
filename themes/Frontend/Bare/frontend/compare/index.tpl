@@ -8,7 +8,7 @@
                 {block name='frontend_compare_product_dropdown_entry'}
                 <li class="compare--entry" role="menuitem">
                     {block name='frontend_compare_product_dropdown_article_name'}
-                        <a href="{url controller=detail sArticle=$compare.articleId|rewrite:$compare.articlename}" title="{$compare.articlename|escape}" class="compare--link">{$compare.articlename}</a>
+                        <a href="{url controller=detail sArticle=$compare.articleId}" title="{$compare.articlename|escape}" class="compare--link">{$compare.articlename}</a>
                     {/block}
 
                     {block name='frontend_compare_product_dropdown_article_link'}

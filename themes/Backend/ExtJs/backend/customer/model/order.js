@@ -53,7 +53,7 @@ Ext.define('Shopware.apps.Customer.model.Order', {
      * @array
      */
     fields:[
-		//{block name="backend/customer/model/order/fields"}{/block}
+        //{block name="backend/customer/model/order/fields"}{/block}
         { name:'id', type:'int' },
         { name:'orderNumber', type:'string' },
         { name:'invoiceAmount', type:'string' },

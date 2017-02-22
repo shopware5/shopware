@@ -22,6 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Bundle\AttributeBundle\Service\CrudService;
 use Shopware\Bundle\StoreFrontBundle;
 use Shopware\Bundle\StoreFrontBundle\Service\AdditionalTextServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
@@ -681,8 +682,13 @@ class sExport
                     "txtArtikel" => "name",
                     "txtzusatztxt" => "additionaltext"
                 );
-                for ($i=1; $i<=20; $i++) {
-                    $map["attr$i"] = "attr$i";
+
+                $attributes = Shopware()->Container()->get('shopware_attribute.crud_service')->getList('s_articles_attributes');
+                foreach ($attributes as $attribute) {
+                    if ($attribute->isIdentifier()) {
+                        continue;
+                    }
+                    $map[CrudService::EXT_JS_PREFIX . $attribute->getColumnName()] = $attribute->getColumnName();
                 }
                 break;
             case "link":
@@ -866,7 +872,7 @@ class sExport
         if (!empty($this->sSettings["own_filter"])&&trim($this->sSettings["own_filter"])) {
             $sql_add_where[] = "(".$this->sSettings["own_filter"].")";
         }
-        if ($this->config->offsetGet('hideNoInstock')) {
+        if ($this->config->offsetGet('hideNoInStock')) {
             $sql_add_where[] = "(
                 (a.laststock * v.instock >= a.laststock * v.minpurchase)
                 OR
@@ -902,6 +908,7 @@ class sExport
                 d.shippingfree,
                 a.topseller,
                 a.keywords,
+                d.active as variantActive,
                 d.minpurchase,
                 d.purchasesteps,
                 d.maxpurchase,
@@ -985,7 +992,7 @@ class sExport
 
             LEFT JOIN s_core_pricegroups_discounts pd
             ON a.pricegroupActive=1
-            AND	a.pricegroupID=groupID
+            AND a.pricegroupID=groupID
             AND customergroupID = 1
             AND discountstart=1
 
@@ -1057,6 +1064,12 @@ class sExport
         if ($result === false) {
             return;
         }
+
+        $result = Shopware()->Container()->get('events')->filter(
+            'Shopware_Modules_Export_ExportResult_Filter',
+            $result,
+            ['feedId' => $this->sFeedID, 'subject' => $this]
+        );
 
         // Update db with the latest values
         $count = (int) $result->rowCount();
@@ -1309,10 +1322,10 @@ class sExport
         }
 
         if (!empty($sql_where)) {
-            $sql_from = " s_premium_dispatch_countries sc,	s_core_countries c";
+            $sql_from = ' s_premium_dispatch_countries sc, s_core_countries c';
             $sql_where = "AND $sql_where AND c.id=sc.countryID";
         } else {
-            $sql_from = "";
+            $sql_from = '';
         }
         $sql = "
             SELECT sd.id, name, sd.description, sd.shippingfree
@@ -1320,7 +1333,7 @@ class sExport
                 s_premium_dispatch sd,
                 $sql_from
             WHERE sd.active = 1
-            AND	sd.id = sc.dispatchID
+            AND sd.id = sc.dispatchID
             $sql_where
             ORDER BY $sql_order sd.position ASC LIMIT 1
         ";
@@ -1377,6 +1390,9 @@ class sExport
                     '' as ob_attr6
             ) as b
 
+            LEFT JOIN s_order_basket_attributes ba
+            ON b.id = ba.basketID
+
             LEFT JOIN s_articles a
             ON b.articleID=a.id
             AND b.modus=0
@@ -1422,10 +1438,12 @@ class sExport
         if (empty($basket)) {
             return false;
         }
+        $mainID = $this->shopData['main_id'];
+        $shopID = $this->shopData['id'];
         $basket['countryID'] = $countryID;
         $basket['paymentID'] = $paymentID;
         $basket['customergroupID'] = $this->sCustomergroup['id'];
-        $basket['multishopID'] = $this->sMultishop['id'];
+        $basket['multishopID'] = $mainID === null ? $shopID : $mainID;
         $basket['sessionID'] = null;
         return $basket;
     }
@@ -1658,7 +1676,7 @@ class sExport
                 } elseif ($dispatch['calculation']==2) {
                     $from = round($basket['count_article']);
                 } elseif ($dispatch['calculation']==3) {
-                    $from = round($basket['calculation_value_'.$dispatch['id']]);
+                    $from = round($basket['calculation_value_'.$dispatch['id']], 2);
                 } else {
                     continue;
                 }
@@ -1712,7 +1730,7 @@ class sExport
         } elseif ($dispatch['calculation']==2) {
             $from = round($basket['count_article']);
         } elseif ($dispatch['calculation']==3) {
-            $from = round($basket['calculation_value_'.$dispatch['id']]);
+            $from = round($basket['calculation_value_'.$dispatch['id']], 2);
         } else {
             return false;
         }

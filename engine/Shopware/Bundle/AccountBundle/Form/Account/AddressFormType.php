@@ -91,6 +91,14 @@ class AddressFormType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $builder->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event) {
+            $data = $event->getData();
+            array_walk_recursive($data, function(&$item, $key) {
+                $item = strip_tags($item);
+            });
+            $event->setData($data);
+        });
+
         $builder->add('salutation', SalutationType::class, [
             'constraints' => [new NotBlank(['message' => null])]
         ]);

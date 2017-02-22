@@ -44,7 +44,7 @@ class FileSystem
      * @param  bool   $fixPermission
      * @return array  of errors
      */
-    public function checkDirectoryPermissions($directory, $fixPermission = false)
+    public function checkSingleDirectoryPermissions($directory, $fixPermission = false)
     {
         $errors = array();
 
@@ -62,6 +62,22 @@ class FileSystem
         if (!is_writable($directory)) {
             $errors[] = $directory;
 
+            return $errors;
+        }
+
+        return $errors;
+    }
+    
+    /**
+     * @param  string $directory
+     * @param  bool   $fixPermission
+     * @return array  of errors
+     */
+    public function checkDirectoryPermissions($directory, $fixPermission = false)
+    {
+        $errors = $this->checkSingleDirectoryPermissions($directory, $fixPermission);
+
+        if (!empty($errors)) {
             return $errors;
         }
 
@@ -145,6 +161,13 @@ class FileSystem
         $newPermission[1] = '6';
         // set group-bit to writable
         $newPermission[2] = '6';
+
+        if ($fileInfo->isExecutable()) {
+            // set owner-bit to writable/executable
+            $newPermission[1] = '7';
+            // set group-bit to writable/executable
+            $newPermission[2] = '7';
+        }
 
         $newPermission = octdec($newPermission);
         chmod($fileInfo->getPathname(), $newPermission);

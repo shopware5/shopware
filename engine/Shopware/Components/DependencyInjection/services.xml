@@ -50,9 +50,14 @@
         </service>
 
         <service id="session_factory" class="Shopware\Components\DependencyInjection\Bridge\Session" />
-        <service id="session" class="Enlight_Components_Session_Namespace">
-            <factory service="session_factory" method="factory" />
+        <service id="session.save_handler" class="SessionHandlerInterface">
+            <factory service="session_factory" method="createSaveHandler" />
             <argument type="service" id="service_container"/>
+        </service>
+        <service id="session" class="Enlight_Components_Session_Namespace">
+            <factory service="session_factory" method="createSession" />
+            <argument type="service" id="service_container"/>
+            <argument type="service" id="session.save_handler"/>
         </service>
 
         <service id="mailtransport_factory" class="Shopware\Components\DependencyInjection\Bridge\MailTransport" />
@@ -279,6 +284,7 @@
         <service id="thumbnail_generator_basic" class="Shopware\Components\Thumbnail\Generator\Basic">
             <argument type="service" id="config" />
             <argument type="service" id="shopware_media.media_service" />
+            <argument type="service" id="shopware_media.optimizer_service" />
         </service>
 
         <service id="thumbnail_manager" class="Shopware\Components\Thumbnail\Manager">
@@ -373,6 +379,7 @@
 
         <service id="shop_page_menu" class="Shopware\Components\SitePageMenu">
             <argument type="service" id="dbal_connection" />
+            <argument type="service" id="router" />
         </service>
 
         <service id="emotion_device_configuration" class="Shopware\Components\Emotion\DeviceConfiguration">
@@ -393,8 +400,10 @@
         <service id="validator.email" class="Shopware\Components\Validator\EmailValidator" />
 
         <service id="sitemapxml.repository" class="Shopware\Components\SitemapXMLRepository">
+            <argument type="service" id="shopware_search.product_number_search" />
+            <argument type="service" id="shopware_search.store_front_criteria_factory" />
             <argument type="service" id="models" />
-            <argument type="service" id="shopware_storefront.context_service" />
+            <argument type="service" id="shopware_storefront.context_service"/>
         </service>
 
         <service id="AttributeSubscriber" class="Shopware\Components\AttributeSubscriber">
@@ -483,5 +492,25 @@
         <service id="shopware.emotion_component_installer" class="Shopware\Components\Emotion\ComponentInstaller">
             <argument type="service" id="models" />
         </service>
+
+        <service id="shopware.plugin_payment_installer" class="Shopware\Components\Plugin\PaymentInstaller">
+            <argument type="service" id="models" />
+        </service>
+
+        <service id="shopware.api.resource" class="Shopware\Components\Api\Resource\Resource" shared="false" />
+        <service id="shopware.api.address" class="Shopware\Components\Api\Resource\Address" shared="false" />
+        <service id="shopware.api.article" class="Shopware\Components\Api\Resource\Article" shared="false" />
+        <service id="shopware.api.cache" class="Shopware\Components\Api\Resource\Cache" shared="false" />
+        <service id="shopware.api.category" class="Shopware\Components\Api\Resource\Category" shared="false" />
+        <service id="shopware.api.country" class="Shopware\Components\Api\Resource\Country" shared="false" />
+        <service id="shopware.api.customer" class="Shopware\Components\Api\Resource\Customer" shared="false" />
+        <service id="shopware.api.customergroup" class="Shopware\Components\Api\Resource\CustomerGroup" shared="false" />
+        <service id="shopware.api.manufacturer" class="Shopware\Components\Api\Resource\Manufacturer" shared="false" />
+        <service id="shopware.api.media" class="Shopware\Components\Api\Resource\Media" shared="false" />
+        <service id="shopware.api.order" class="Shopware\Components\Api\Resource\Order" shared="false" />
+        <service id="shopware.api.propertygroup" class="Shopware\Components\Api\Resource\PropertyGroup" shared="false" />
+        <service id="shopware.api.shop" class="Shopware\Components\Api\Resource\Shop" shared="false" />
+        <service id="shopware.api.translation" class="Shopware\Components\Api\Resource\Translation" shared="false" />
+        <service id="shopware.api.variant" class="Shopware\Components\Api\Resource\Variant" shared="false" />
     </services>
 </container>

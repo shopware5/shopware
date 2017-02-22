@@ -35,17 +35,17 @@
  */
 //{block name="backend/blog/model/main"}
 Ext.define('Shopware.apps.Blog.model.Main', {
-	/**
-	* Extends the standard ExtJS 4
-	* @string
-	*/
+    /**
+    * Extends the standard ExtJS 4
+    * @string
+    */
     extend : 'Ext.data.Model',
-	/**
-	* The fields used for this model
-	* @array
-	*/
+    /**
+    * The fields used for this model
+    * @array
+    */
     fields : [
-		//{block name="backend/blog/model/main/fields"}{/block}
+        //{block name="backend/blog/model/main/fields"}{/block}
         { name : 'id', type : 'int' },
         { name : 'title', type : 'string' },
         { name : 'shortDescription', type : 'string' },
@@ -56,10 +56,10 @@ Ext.define('Shopware.apps.Blog.model.Main', {
         { name : 'numberOfComments', type : 'int' }
     ],
 
-	/**
-	* Configure the data communication
-	* @object
-	*/
+    /**
+    * Configure the data communication
+    * @object
+    */
     proxy : {
         type : 'ajax',
         api:{

@@ -19,7 +19,7 @@
 
     <link rel="stylesheet" type="text/css" href="<?= $baseUrl ?>../common/assets/styles/reset.css" media="all"/>
     <link rel="stylesheet" type="text/css" href="<?= $baseUrl ?>../common/assets/styles/icons.css" media="all"/>
-    <link rel="stylesheet" type="text/css" href="<?= $baseUrl ?>../common/assets/styles/style.css" media="all"/>
+    <link rel="stylesheet" type="text/css" href="<?= $baseUrl ?>../common/assets/styles/style.css?<?= $version ?>" media="all"/>
 
     <script>
         var shopwareTranslations = {
@@ -49,7 +49,7 @@
         <nav class="navigation--main block">
             <ul class="navigation--list">
                 <li class="navigation--entry <?= ($tab == "start") ? "is--active" : "" ?>">
-                    <span class="navigation--link is--complete"><?= $language["tab_start"];?></span>
+                    <span class="navigation--link"><?= $language["tab_start"];?></span>
                 </li>
 
                 <li class="navigation--entry  <?= ($tab == "system") ? "is--active" : "" ?>">

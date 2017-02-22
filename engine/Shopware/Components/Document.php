@@ -341,7 +341,9 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
 
         $articleModule = Shopware()->Modules()->Articles();
         foreach ($positions as &$position) {
-            $position['meta'] = $articleModule->sGetPromotionById('fix', 0, (int) $position['articleID']);
+            if ($position['modus'] == 0) {
+                $position['meta'] = $articleModule->sGetPromotionById('fix', 0, $position['articleordernumber']);
+            }
         }
 
         if ($this->_config["_previewForcePagebreak"]) {

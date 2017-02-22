@@ -44,7 +44,7 @@ Ext.define('Shopware.apps.Article.model.PropertyGroup', {
      * @array
      */
     fields: [
-		//{block name="backend/article/model/property_group/fields"}{/block}
+        //{block name="backend/article/model/property_group/fields"}{/block}
        { name: 'id', type: 'int' },
        { name: 'name', type: 'string' },
        { name: 'position', type: 'int' }

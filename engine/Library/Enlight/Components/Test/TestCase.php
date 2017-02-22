@@ -20,19 +20,20 @@
  * @author     Heiner Lohaus
  * @author     $Author$
  */
+use PHPUnit\DbUnit\DataSet\XmlDataSet;
 
 /**
  * Basic class for each specified test case.
  *
  * The Enlight_Components_Test_TestCase is the basic class for all specified test cases.
- * The enlight test case basic class extends PHPUnit_Framework_TestCase and sets the database link automatically.
+ * The enlight test case basic class extends PHPUnit\Framework\TestCase and sets the database link automatically.
  *
  * @category   Enlight
  * @package    Enlight_Test
  * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
  * @license    http://enlight.de/license     New BSD License
  */
-abstract class Enlight_Components_Test_TestCase extends PHPUnit_Framework_TestCase
+abstract class Enlight_Components_Test_TestCase extends PHPUnit\Framework\TestCase
 {
     /**
      * @var PHPUnit_Extensions_Database_ITester The IDatabaseTester for this testCase
@@ -112,10 +113,10 @@ abstract class Enlight_Components_Test_TestCase extends PHPUnit_Framework_TestCa
      * Creates a new XMLDataSet with the given $xmlFile. (absolute path.)
      *
      * @param string $xmlFile
-     * @return PHPUnit_Extensions_Database_DataSet_XmlDataSet
+     * @return XmlDataSet
      */
     protected function createXMLDataSet($xmlFile)
     {
-        return new PHPUnit_Extensions_Database_DataSet_XmlDataSet($xmlFile);
+        return new XmlDataSet($xmlFile);
     }
 }

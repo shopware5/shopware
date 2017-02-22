@@ -243,25 +243,6 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
                 }
             }
         }
-
-        $isSpam = false;
-        foreach ($this->_postData as $value) {
-            if (is_array($value)) {
-                continue;
-            }
-
-            $badwords = array(' sex ', ' porn ', ' viagra ', 'url=', 'src=', 'link=');
-            foreach ($badwords as $badword) {
-                if (strpos($value, $badword) !== false) {
-                    $isSpam = true;
-                }
-            }
-        }
-
-        if ($isSpam) {
-            sleep(3);
-            $this->_errors[] = array('1');
-        }
     }
 
     /**
@@ -326,6 +307,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
         $content = str_replace("{sIP}", $_SERVER['REMOTE_ADDR'], $content);
         $content = str_replace("{sDateTime}", date("d.m.Y h:i:s"), $content);
         $content = str_replace('{sShopname}', Shopware()->Config()->shopName, $content);
+
         return strip_tags($content);
     }
 
@@ -378,25 +360,34 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
             case 'text':
             case 'textarea':
             case 'file':
+                $post = $this->_filterInput($post);
                 if (empty($post) && !empty($element['value'])) {
                     $post = $element['value'];
-                } elseif (!empty($post) && $element['typ'] !== 'textarea') {
-                    $post = '{literal}' . str_replace(['{/literal}', '"'], '', $post) . '{/literal}';
-                } else {
-                    $post = '{literal}' . str_replace('{/literal}', '', $post) . '{/literal}';
                 }
+
+                if ($element['typ'] !== 'textarea') {
+                    $post = str_replace('"', '', $post);
+                }
+
+                $post = '{literal}' . $post . '{/literal}';
+
                 break;
+
             case 'text2':
+                $post[0] = $this->_filterInput($post[0]);
                 if (empty($post[0]) && !empty($element['value'][0])) {
                     $post[0] = $element['value'][0];
-                } elseif (!empty($post[0])) {
-                    $post[0] = '{literal}' . str_replace(['{/literal}', '"'], '', $post[0]) . '{/literal}';
                 }
-                if (empty($post[1]) && !empty($element['value'][1])) {
+                $post[0] = str_replace('"', '', $post[0]);
+                $post[0] = '{literal}' . $post[0] . '{/literal}';
+
+                $post[1] = $this->_filterInput($post[1]);
+                if (empty($post[0]) && !empty($element['value'][1])) {
                     $post[1] = $element['value'][1];
-                } elseif (!empty($post[1])) {
-                    $post[1] = '{literal}' . str_replace(['{/literal}', '"'], '', $post[1]) . '{/literal}';
                 }
+                $post[1] = str_replace('"', '', $post[1]);
+                $post[1] = '{literal}' . $post[1] . '{/literal}';
+
                 break;
             default:
                 break;
@@ -480,6 +471,23 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
                 break;
         }
         return $output;
+    }
+
+    /**
+     * @param string $input
+     * @return string
+     */
+    protected function _filterInput($input)
+    {
+        // remove all control characters, unassigned, private use, formatting and surrogate code points
+        $input = preg_replace('#[^\PC\s]#u', '', $input);
+
+        $temp = str_replace('"', '', $input);
+        if (preg_match('#{\s*/*literal\s*}#i', $temp) > 0) {
+            return '';
+        }
+
+        return $input;
     }
 
     /**

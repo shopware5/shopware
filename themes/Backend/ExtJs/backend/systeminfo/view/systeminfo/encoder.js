@@ -65,12 +65,12 @@ Ext.define('Shopware.apps.Systeminfo.view.systeminfo.Encoder', {
     */
     region: 'north',
 
-	style: 'margin-left: 15px; margin-right: 15px; margin-top: 10px;',
+    style: 'margin-left: 15px; margin-right: 15px; margin-top: 10px;',
 
     initComponent: function(){
         var me = this;
-		var block = Shopware.Notification.createBlockMessage('', 'notice');
-		me.items = block;
+        var block = Shopware.Notification.createBlockMessage('', 'notice');
+        me.items = block;
 
         Ext.Ajax.request({
             url:'{url controller="Systeminfo" action="getEncoder"}',

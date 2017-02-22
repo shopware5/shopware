@@ -46,7 +46,7 @@ Ext.define('Shopware.apps.Supplier.model.Supplier', {
      * @array
      */
     fields : [
-		//{block name="backend/supplier/model/supplier/fields"}{/block}
+        //{block name="backend/supplier/model/supplier/fields"}{/block}
         { name : 'id', type : 'int' },
         { name : 'name', type : 'string' },
         { name : 'count', type : 'int' },

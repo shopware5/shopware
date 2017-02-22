@@ -134,15 +134,15 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.elements.BaseGrid', {
                     action:'add-entry',
                     handler: function() {
                         var record = Ext.create('Shopware.apps.Performance.model.KeyValue'),
-                        	field = textField,
-                        	key = field.getValue(),
-                        	split = key.split(' '),
-                        	value = '';
+                            field = textField,
+                            key = field.getValue(),
+                            split = key.split(' '),
+                            value = '';
 
-						if (split[1]) {
-        	           		key = split[0];
-        	           		value = split[1];
-        	           	}
+                        if (split[1]) {
+                            key = split[0];
+                            value = split[1];
+                        }
 
                         record.set('key', key);
                         record.set('value', value);

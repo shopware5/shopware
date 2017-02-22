@@ -69,7 +69,7 @@ Ext.define('Shopware.apps.Blog.controller.Blog', {
         assignedArticleExistTitle: '{s name=message/add/assigned_article/exist/title}Already exists{/s}',
         onSaveChangesError: '{s name=message/save/error}An error has occurred while saving your changes.{/s}',
         chars: '{s name=seo_description/chars}Chars{/s}',
-		growlMessage: '{s name=growlMessage}Blog{/s}'
+        growlMessage: '{s name=growlMessage}Blog{/s}'
     },
 
 
@@ -445,6 +445,9 @@ Ext.define('Shopware.apps.Blog.controller.Blog', {
                     var data = response.data;
 
                     me.getAttributeForm().saveAttribute(data.id);
+
+                    Shopware.app.Application.fireEvent('blog-save-successfully', me, data, form);
+
                     record.set('id', data.id);
 
                     //enable the tabpanel

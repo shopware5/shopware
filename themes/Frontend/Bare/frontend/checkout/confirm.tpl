@@ -244,25 +244,25 @@
                                                     {block name='frontend_checkout_confirm_information_addresses_equal_panel_billing'}
                                                         <div class="billing--panel">
                                                             {if $sUserData.billingaddress.company}
-                                                                <span class="address--company is--bold">{$sUserData.billingaddress.company}</span>{if $sUserData.billingaddress.department}<br /><span class="address--department is--bold">{$sUserData.billingaddress.department}</span>{/if}
+                                                                <span class="address--company is--bold">{$sUserData.billingaddress.company|escapeHtml}</span>{if $sUserData.billingaddress.department|escapeHtml}<br /><span class="address--department is--bold">{$sUserData.billingaddress.department|escapeHtml}</span>{/if}
                                                                 <br />
                                                             {/if}
 
                                                             <span class="address--salutation">{$sUserData.billingaddress.salutation|salutation}</span>
                                                             {if {config name="displayprofiletitle"}}
-                                                                <span class="address--title">{$sUserData.billingaddress.title}</span><br/>
+                                                                <span class="address--title">{$sUserData.billingaddress.title|escapeHtml}</span><br/>
                                                             {/if}
-                                                            <span class="address--firstname">{$sUserData.billingaddress.firstname}</span> <span class="address--lastname">{$sUserData.billingaddress.lastname}</span><br/>
-                                                            <span class="address--street">{$sUserData.billingaddress.street}</span><br />
-                                                            {if $sUserData.billingaddress.additional_address_line1}<span class="address--additional-one">{$sUserData.billingaddress.additional_address_line1}</span><br />{/if}
-                                                            {if $sUserData.billingaddress.additional_address_line2}<span class="address--additional-two">{$sUserData.billingaddress.additional_address_line2}</span><br />{/if}
+                                                            <span class="address--firstname">{$sUserData.billingaddress.firstname|escapeHtml}</span> <span class="address--lastname">{$sUserData.billingaddress.lastname|escapeHtml}</span><br/>
+                                                            <span class="address--street">{$sUserData.billingaddress.street|escapeHtml}</span><br />
+                                                            {if $sUserData.billingaddress.additional_address_line1}<span class="address--additional-one">{$sUserData.billingaddress.additional_address_line1|escapeHtml}</span><br />{/if}
+                                                            {if $sUserData.billingaddress.additional_address_line2}<span class="address--additional-two">{$sUserData.billingaddress.additional_address_line2|escapeHtml}</span><br />{/if}
                                                             {if {config name=showZipBeforeCity}}
-                                                                <span class="address--zipcode">{$sUserData.billingaddress.zipcode}</span> <span class="address--city">{$sUserData.billingaddress.city}</span>
+                                                                <span class="address--zipcode">{$sUserData.billingaddress.zipcode|escapeHtml}</span> <span class="address--city">{$sUserData.billingaddress.city|escapeHtml}</span>
                                                             {else}
-                                                                <span class="address--city">{$sUserData.billingaddress.city}</span> <span class="address--zipcode">{$sUserData.billingaddress.zipcode}</span>
+                                                                <span class="address--city">{$sUserData.billingaddress.city|escapeHtml}</span> <span class="address--zipcode">{$sUserData.billingaddress.zipcode|escapeHtml}</span>
                                                             {/if}<br />
-                                                            {if $sUserData.additional.state.name}<span class="address--statename">{$sUserData.additional.state.name}</span><br />{/if}
-                                                            <span class="address--countryname">{$sUserData.additional.country.countryname}</span>
+                                                            {if $sUserData.additional.state.name}<span class="address--statename">{$sUserData.additional.state.name|escapeHtml}</span><br />{/if}
+                                                            <span class="address--countryname">{$sUserData.additional.country.countryname|escapeHtml}</span>
 
                                                             {block name="frontend_checkout_confirm_information_addresses_equal_panel_billing_invalid_data"}
                                                                 {if $invalidBillingAddress}
@@ -312,7 +312,7 @@
                                                                     </a>
                                                                 {/block}
 
-                                                                {block name='frontend_checkout_confirm_information_addresses_equal_panel_shipping_select_address'}
+                                                                {block name='frontend_checkout_confirm_information_addresses_equal_panel_shipping_add_address'}
                                                                     <a href="{url controller=address}"
                                                                        class="btn choose-different-address"
                                                                        data-address-selection="true"
@@ -361,24 +361,24 @@
                                             {block name='frontend_checkout_confirm_information_addresses_billing_panel_body'}
                                                 <div class="panel--body is--wide">
                                                     {if $sUserData.billingaddress.company}
-                                                    <span class="address--company is--bold">{$sUserData.billingaddress.company}</span>{if $sUserData.billingaddress.department}<br /><span class="address--department is--bold">{$sUserData.billingaddress.department}</span>{/if}
+                                                    <span class="address--company is--bold">{$sUserData.billingaddress.company|escapeHtml}</span>{if $sUserData.billingaddress.department}<br /><span class="address--department is--bold">{$sUserData.billingaddress.department|escapeHtml}</span>{/if}
                                                         <br />
                                                     {/if}
                                                     <span class="address--salutation">{$sUserData.billingaddress.salutation|salutation}</span>
                                                     {if {config name="displayprofiletitle"}}
-                                                        <span class="address--title">{$sUserData.billingaddress.title}</span><br/>
+                                                        <span class="address--title">{$sUserData.billingaddress.title|escapeHtml}</span><br/>
                                                     {/if}
-                                                    <span class="address--firstname">{$sUserData.billingaddress.firstname}</span> <span class="address--lastname">{$sUserData.billingaddress.lastname}</span><br />
-                                                    <span class="address--street">{$sUserData.billingaddress.street}</span><br />
-                                                    {if $sUserData.billingaddress.additional_address_line1}<span class="address--additional-one">{$sUserData.billingaddress.additional_address_line1}</span><br />{/if}
-                                                    {if $sUserData.billingaddress.additional_address_line2}<span class="address--additional-two">{$sUserData.billingaddress.additional_address_line2}</span><br />{/if}
+                                                    <span class="address--firstname">{$sUserData.billingaddress.firstname|escapeHtml}</span> <span class="address--lastname">{$sUserData.billingaddress.lastname|escapeHtml}</span><br />
+                                                    <span class="address--street">{$sUserData.billingaddress.street|escapeHtml}</span><br />
+                                                    {if $sUserData.billingaddress.additional_address_line1}<span class="address--additional-one">{$sUserData.billingaddress.additional_address_line1|escapeHtml}</span><br />{/if}
+                                                    {if $sUserData.billingaddress.additional_address_line2}<span class="address--additional-two">{$sUserData.billingaddress.additional_address_line2|escapeHtml}</span><br />{/if}
                                                     {if {config name=showZipBeforeCity}}
-                                                        <span class="address--zipcode">{$sUserData.billingaddress.zipcode}</span> <span class="address--city">{$sUserData.billingaddress.city}</span>
+                                                        <span class="address--zipcode">{$sUserData.billingaddress.zipcode|escapeHtml}</span> <span class="address--city">{$sUserData.billingaddress.city|escapeHtml}</span>
                                                     {else}
-                                                        <span class="address--city">{$sUserData.billingaddress.city}</span> <span class="address--zipcode">{$sUserData.billingaddress.zipcode}</span>
+                                                        <span class="address--city">{$sUserData.billingaddress.city|escapeHtml}</span> <span class="address--zipcode">{$sUserData.billingaddress.zipcode|escapeHtml}</span>
                                                     {/if}<br />
-                                                    {if $sUserData.additional.state.name}<span class="address--statename">{$sUserData.additional.state.name}</span><br />{/if}
-                                                    <span class="address--countryname">{$sUserData.additional.country.countryname}</span>
+                                                    {if $sUserData.additional.state.name}<span class="address--statename">{$sUserData.additional.state.name|escapeHtml}</span><br />{/if}
+                                                    <span class="address--countryname">{$sUserData.additional.country.countryname|escapeHtml}</span>
 
                                                     {block name="frontend_checkout_confirm_information_addresses_billing_panel_body_invalid_data"}
                                                         {if $invalidBillingAddress}
@@ -446,25 +446,25 @@
                                             {block name='frontend_checkout_confirm_information_addresses_shipping_panel_body'}
                                                 <div class="panel--body is--wide">
                                                     {if $sUserData.shippingaddress.company}
-                                                        <span class="address--company is--bold">{$sUserData.shippingaddress.company}</span>{if $sUserData.shippingaddress.department}<br /><span class="address--department is--bold">{$sUserData.shippingaddress.department}</span>{/if}
+                                                        <span class="address--company is--bold">{$sUserData.shippingaddress.company|escapeHtml}</span>{if $sUserData.shippingaddress.department}<br /><span class="address--department is--bold">{$sUserData.shippingaddress.department|escapeHtml}</span>{/if}
                                                         <br />
                                                     {/if}
 
                                                     <span class="address--salutation">{$sUserData.shippingaddress.salutation|salutation}</span>
                                                     {if {config name="displayprofiletitle"}}
-                                                        <span class="address--title">{$sUserData.shippingaddress.title}</span><br/>
+                                                        <span class="address--title">{$sUserData.shippingaddress.title|escapeHtml}</span><br/>
                                                     {/if}
-                                                    <span class="address--firstname">{$sUserData.shippingaddress.firstname}</span> <span class="address--lastname">{$sUserData.shippingaddress.lastname}</span><br/>
-                                                    <span class="address--street">{$sUserData.shippingaddress.street}</span><br />
-                                                    {if $sUserData.shippingaddress.additional_address_line1}<span class="address--additional-one">{$sUserData.shippingaddress.additional_address_line1}</span><br />{/if}
-                                                    {if $sUserData.shippingaddress.additional_address_line2}<span class="address--additional-one">{$sUserData.shippingaddress.additional_address_line2}</span><br />{/if}
+                                                    <span class="address--firstname">{$sUserData.shippingaddress.firstname|escapeHtml}</span> <span class="address--lastname">{$sUserData.shippingaddress.lastname|escapeHtml}</span><br/>
+                                                    <span class="address--street">{$sUserData.shippingaddress.street|escapeHtml}</span><br />
+                                                    {if $sUserData.shippingaddress.additional_address_line1}<span class="address--additional-one">{$sUserData.shippingaddress.additional_address_line1|escapeHtml}</span><br />{/if}
+                                                    {if $sUserData.shippingaddress.additional_address_line2}<span class="address--additional-one">{$sUserData.shippingaddress.additional_address_line2|escapeHtml}</span><br />{/if}
                                                     {if {config name=showZipBeforeCity}}
-                                                        <span class="address--zipcode">{$sUserData.shippingaddress.zipcode}</span> <span class="address--city">{$sUserData.shippingaddress.city}</span>
+                                                        <span class="address--zipcode">{$sUserData.shippingaddress.zipcode|escapeHtml}</span> <span class="address--city">{$sUserData.shippingaddress.city|escapeHtml}</span>
                                                     {else}
-                                                        <span class="address--city">{$sUserData.shippingaddress.city}</span> <span class="address--zipcode">{$sUserData.shippingaddress.zipcode}</span>
+                                                        <span class="address--city">{$sUserData.shippingaddress.city|escapeHtml}</span> <span class="address--zipcode">{$sUserData.shippingaddress.zipcode|escapeHtml}</span>
                                                     {/if}<br />
-                                                    {if $sUserData.additional.stateShipping.name}<span class="address--statename">{$sUserData.additional.stateShipping.name}</span><br />{/if}
-                                                    <span class="address--countryname">{$sUserData.additional.countryShipping.countryname}</span>
+                                                    {if $sUserData.additional.stateShipping.name}<span class="address--statename">{$sUserData.additional.stateShipping.name|escapeHtml}</span><br />{/if}
+                                                    <span class="address--countryname">{$sUserData.additional.countryShipping.countryname|escapeHtml}</span>
 
                                                     {block name="frontend_checkout_confirm_information_addresses_shipping_panel_body_invalid_data"}
                                                         {if $invalidShippingAddress}

@@ -27,17 +27,17 @@
                                         <div class="panel address--item-content has--border is--rounded block">
                                             {block name='frontend_address_selection_modal_container_item_body'}
                                                 <div class="address--item-body panel--body is--wide">
-                                                    <span class="address--firstname is--bold">{$address.firstname}</span> <span class="address--lastname is--bold">{$address.lastname}</span><br />
-                                                    {if $address.company}<span class="address--company">{$address.company}</span><br/>{/if}
-                                                    <span class="address--street">{$address.street}</span><br />
-                                                    {if $address.additionalAddressLine1}<span class="address--additional-one">{$address.additionalAddressLine1}</span><br />{/if}
-                                                    {if $address.additionalAddressLine2}<span class="address--additional-two">{$address.additionalAddressLine2}</span><br />{/if}
+                                                    <span class="address--firstname is--bold">{$address.firstname|escapeHtml}</span> <span class="address--lastname is--bold">{$address.lastname|escapeHtml}</span><br />
+                                                    {if $address.company}<span class="address--company">{$address.company|escapeHtml}</span><br/>{/if}
+                                                    <span class="address--street">{$address.street|escapeHtml}</span><br />
+                                                    {if $address.additionalAddressLine1}<span class="address--additional-one">{$address.additionalAddressLine1|escapeHtml}</span><br />{/if}
+                                                    {if $address.additionalAddressLine2}<span class="address--additional-two">{$address.additionalAddressLine2|escapeHtml}</span><br />{/if}
                                                     {if {config name=showZipBeforeCity}}
-                                                        <span class="address--zipcode">{$address.zipcode}</span> <span class="address--city">{$address.city}</span>
+                                                        <span class="address--zipcode">{$address.zipcode|escapeHtml}</span> <span class="address--city">{$address.city|escapeHtml}</span>
                                                     {else}
-                                                        <span class="address--city">{$address.city}</span> <span class="address--zipcode">{$address.zipcode}</span>
+                                                        <span class="address--city">{$address.city|escapeHtml}</span> <span class="address--zipcode">{$address.zipcode|escapeHtml}</span>
                                                     {/if}<br />
-                                                    <span class="address--countryname">{$address.country.name}</span>
+                                                    <span class="address--countryname">{$address.country.name|escapeHtml}</span>
                                                 </div>
                                             {/block}
 

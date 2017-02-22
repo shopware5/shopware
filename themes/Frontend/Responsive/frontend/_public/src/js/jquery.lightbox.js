@@ -33,7 +33,7 @@
         open: function(imageURL) {
             var me = this, size;
 
-            me.image =  new Image();
+            me.image = new Image();
             me.content = me.createContent(imageURL);
 
             me.image.onload = function() {
@@ -67,12 +67,12 @@
         createContent: function(imageURL) {
             var me = this,
                 content = $('<div>', {
-                'class': 'lightbox--container',
-                'html':  $('<img>', {
-                    'src': imageURL,
-                    'class': 'lightbox--image'
-                })
-            });
+                    'class': 'lightbox--container',
+                    'html': $('<img>', {
+                        'src': imageURL,
+                        'class': 'lightbox--image'
+                    })
+                });
 
             $.publish('plugin/swLightbox/onCreateContent', [ me, content, imageURL ]);
 
@@ -133,5 +133,5 @@
 
             return size;
         }
-    }
+    };
 })(jQuery, window, Math);

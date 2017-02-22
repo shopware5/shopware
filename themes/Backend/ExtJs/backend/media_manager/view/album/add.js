@@ -37,18 +37,18 @@
  */
 //{block name="backend/media_manager/view/album/add"}
 Ext.define('Shopware.apps.MediaManager.view.album.Add', {
-	extend: 'Ext.window.Window',
+    extend: 'Ext.window.Window',
     title: '{s name="addAlbumTitle"}Mediamanager - Add Album{/s}',
     alias: 'widget.mediamanager-album-add',
     border: false,
     width: 400,
     autoShow: true,
     parentId: null,
-	snippets: {
-		albumName: '{s name="addAlbum/albumName"}Album name{/s}',
-		add: '{s name="addAlbum/add"}Add album{/s}',
-		cancel: '{s name="addAlbum/cancel"}Cancel{/s}'
-	},
+    snippets: {
+        albumName: '{s name="addAlbum/albumName"}Album name{/s}',
+        add: '{s name="addAlbum/add"}Add album{/s}',
+        cancel: '{s name="addAlbum/cancel"}Cancel{/s}'
+    },
 
     initComponent: function() {
         var me = this;
@@ -94,7 +94,7 @@ Ext.define('Shopware.apps.MediaManager.view.album.Add', {
     },
 
     createActionButtons: function() {
-		var me = this;
+        var me = this;
 
         me.closeBtn = Ext.create('Ext.button.Button', {
             text: me.snippets.cancel,

@@ -37,7 +37,7 @@
 Ext.define('Shopware.apps.UserManager.model.Rules', {
    extend: 'Ext.data.Model',
    fields: [
-	   //{block name="backend/user_manager/model/rules/fields"}{/block}
+       //{block name="backend/user_manager/model/rules/fields"}{/block}
       /**
        * unique id. If the model is a resource (type=resource) the id is equals to the resource id.
        * If the model is a privilege (type=privilege) the unique id is concat with resourceID_privilegeID

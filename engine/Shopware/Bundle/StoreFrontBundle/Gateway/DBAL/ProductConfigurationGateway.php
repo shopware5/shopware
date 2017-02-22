@@ -132,6 +132,8 @@ class ProductConfigurationGateway implements Gateway\ProductConfigurationGateway
             ->innerJoin('relations', 's_articles_details', 'variants', 'variants.id = relations.article_id')
             ->innerJoin('relations', 's_article_configurator_options', 'configuratorOption', 'configuratorOption.id = relations.option_id')
             ->innerJoin('configuratorOption', 's_article_configurator_groups', 'configuratorGroup', 'configuratorGroup.id = configuratorOption.group_id')
+            ->leftJoin('configuratorGroup', 's_article_configurator_groups_attributes', 'configuratorGroupAttribute', 'configuratorGroupAttribute.groupID = configuratorGroup.id')
+            ->leftJoin('configuratorOption', 's_article_configurator_options_attributes', 'configuratorOptionAttribute', 'configuratorOptionAttribute.optionID = configuratorOption.id')
             ->where('relations.article_id IN (:ids)')
             ->addOrderBy('configuratorGroup.position')
             ->addOrderBy('configuratorGroup.id')

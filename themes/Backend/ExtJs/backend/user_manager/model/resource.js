@@ -44,8 +44,8 @@ Ext.define('Shopware.apps.UserManager.model.Resource', {
      * The field property contains all model fields.
      * @array
      */
-	fields: [
-		//{block name="backend/user_manager/model/resource/fields"}{/block}
+    fields: [
+        //{block name="backend/user_manager/model/resource/fields"}{/block}
         { name: 'id',     type: 'int'},
         { name: 'name',     type: 'string'},
         { name: 'pluginID',     type: 'string'}

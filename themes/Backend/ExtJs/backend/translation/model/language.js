@@ -41,14 +41,14 @@ Ext.define('Shopware.apps.Translation.model.Language',
      * The parent class that this class extends
      * @string
      */
-	extend: 'Ext.data.Model',
+    extend: 'Ext.data.Model',
 
     /**
      * The fields for this model.
      * @array
      */
-	fields: [
-		//{block name="backend/translation/model/language/fields"}{/block}
+    fields: [
+        //{block name="backend/translation/model/language/fields"}{/block}
         { name: 'id', type: 'int' },
         { name: 'text', convert: function(v, record) { return record.data.name; } },
         { name: 'leaf', convert: function(v, record) { return record.data.childrenCount <= 0; } },
@@ -62,20 +62,20 @@ Ext.define('Shopware.apps.Translation.model.Language',
      * The proxy to use for this model.
      * @object
      */
-	proxy: {
-		type: 'ajax',
+    proxy: {
+        type: 'ajax',
         url: '{url action=getLanguages}',
 
         /**
          * The Ext.data.reader.Reader to use to decode the server's response or data read from client.
          * @object
          */
-		reader: {
-			type: 'json',
-			root: 'data',
+        reader: {
+            type: 'json',
+            root: 'data',
             idProperty: 'id',
             totalProperty: 'total'
-		}
-	}
+        }
+    }
 });
 //{/block}

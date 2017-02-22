@@ -10,12 +10,19 @@
             <argument>%shopware.store.apiEndpoint%</argument>
             <argument type="service" id="shopware_plugininstaller.plugin_installer_struct_hydrator" />
             <argument type="service" id="shopware.openssl_verificator"/>
+            <argument type="service" id="shopware_plugininstaller.unique_id_generator" />
+        </service>
+
+        <service id="shopware_plugininstaller.unique_id_generator" class="Shopware\Bundle\PluginInstallerBundle\Service\UniqueIdGenerator\UniqueIdGenerator">
+            <argument type="service" id="dbal_connection" />
         </service>
 
         <service id="shopware_plugininstaller.plugin_installer" class="Shopware\Bundle\PluginInstallerBundle\Service\PluginInstaller">
             <argument type="service" id="models"/>
             <argument type="service" id="shopware.snippet_database_handler" />
             <argument type="service" id="shopware.plugin_requirement_validator" />
+            <argument type="service" id="db_connection" />
+            <argument>%shopware.plugin_directories.ShopwarePlugins%</argument>
         </service>
 
         <service id="shopware_plugininstaller.legacy_plugin_installer" class="Shopware\Bundle\PluginInstallerBundle\Service\LegacyPluginInstaller">

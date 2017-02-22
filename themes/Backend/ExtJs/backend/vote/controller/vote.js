@@ -92,10 +92,10 @@ Ext.define('Shopware.apps.Vote.controller.Vote', {
         me.callParent(arguments);
     },
 
-	/**
-	 * This function is called, when the user wants to save his edits
-	 * @param btn
-	 */
+    /**
+     * This function is called, when the user wants to save his edits
+     * @param btn
+     */
     onSaveEdit: function(btn){
         var win = btn.up('window'),
             form = win.down('form'),
@@ -112,16 +112,16 @@ Ext.define('Shopware.apps.Vote.controller.Vote', {
 
         win.close();
         model.save({
-			callback: function(data, operation){
-				var records = operation.getRecords(),
-					record = records[0],
-					rawData = record.getProxy().getReader().rawData;
-				if(operation.success){
-					Shopware.Notification.createGrowlMessage('{s name=growlMessage/saveVote/title/success}Vote saved{/s}', '{s name=growlMessage/saveVote/content/success}The vote was successfully saved{/s}', '{s name=window_title}{/s}');
-					store.load();
-				}else{
-					Shopware.Notification.createGrowlMessage('{s name=growlMessage/error}An error occurred{/s}', rawData.errorMsg, '{s name=window_title}{/s}');
-				}
+            callback: function(data, operation){
+                var records = operation.getRecords(),
+                    record = records[0],
+                    rawData = record.getProxy().getReader().rawData;
+                if(operation.success){
+                    Shopware.Notification.createGrowlMessage('{s name=growlMessage/saveVote/title/success}Vote saved{/s}', '{s name=growlMessage/saveVote/content/success}The vote was successfully saved{/s}', '{s name=window_title}{/s}');
+                    store.load();
+                }else{
+                    Shopware.Notification.createGrowlMessage('{s name=growlMessage/error}An error occurred{/s}', rawData.errorMsg, '{s name=window_title}{/s}');
+                }
             }
         });
     },
@@ -176,16 +176,16 @@ Ext.define('Shopware.apps.Vote.controller.Vote', {
 
             var model = Ext.create('Shopware.apps.Vote.model.Vote', data);
             model.destroy({
-				callback: function(data, operation){
-					var records = operation.getRecords(),
-						record = records[0],
-						rawData = record.getProxy().getReader().rawData;
-					if(operation.success){
-						Shopware.Notification.createGrowlMessage('{s name=growlMessage/singleDelete/title/success}Vote deleted{/s}', '{s name=growlMessage/singleDelete/content/success}The vote was successfully deleted{/s}', '{s name=window_title}{/s}');
-						store.load();
-					}else{
-						Shopware.Notification.createGrowlMessage('{s name=growlMessage/error}An error occurred{/s}', rawData.errorMsg, '{s name=window_title}{/s}');
-					}
+                callback: function(data, operation){
+                    var records = operation.getRecords(),
+                        record = records[0],
+                        rawData = record.getProxy().getReader().rawData;
+                    if(operation.success){
+                        Shopware.Notification.createGrowlMessage('{s name=growlMessage/singleDelete/title/success}Vote deleted{/s}', '{s name=growlMessage/singleDelete/content/success}The vote was successfully deleted{/s}', '{s name=window_title}{/s}');
+                        store.load();
+                    }else{
+                        Shopware.Notification.createGrowlMessage('{s name=growlMessage/error}An error occurred{/s}', rawData.errorMsg, '{s name=window_title}{/s}');
+                    }
                 }
             });
         });
@@ -206,16 +206,16 @@ Ext.define('Shopware.apps.Vote.controller.Vote', {
 
         var model = Ext.create('Shopware.apps.Vote.model.Vote', data);
         model.save({
-			callback: function(data, operation){
-				var records = operation.getRecords(),
-					record = records[0],
-					rawData = record.getProxy().getReader().rawData;
-				if(operation.success){
-					Shopware.Notification.createGrowlMessage('{s name=growlMessage/singleAccept/title/success}Vote accepted{/s}', '{s name=growlMessage/singleAccept/content/success}The vote was successfully accepted{/s}', '{s name=window_title}{/s}');
-					store.load();
-				}else{
-					Shopware.Notification.createGrowlMessage('{s name=growlMessage/error}An error occurred{/s}', rawData.errorMsg, '{s name=window_title}{/s}');
-				}
+            callback: function(data, operation){
+                var records = operation.getRecords(),
+                    record = records[0],
+                    rawData = record.getProxy().getReader().rawData;
+                if(operation.success){
+                    Shopware.Notification.createGrowlMessage('{s name=growlMessage/singleAccept/title/success}Vote accepted{/s}', '{s name=growlMessage/singleAccept/content/success}The vote was successfully accepted{/s}', '{s name=window_title}{/s}');
+                    store.load();
+                }else{
+                    Shopware.Notification.createGrowlMessage('{s name=growlMessage/error}An error occurred{/s}', rawData.errorMsg, '{s name=window_title}{/s}');
+                }
             }
         });
     },
@@ -235,16 +235,16 @@ Ext.define('Shopware.apps.Vote.controller.Vote', {
 
         model = Ext.create('Shopware.apps.Vote.model.Vote', data);
         model.save({
-			callback: function(data, operation){
-				var records = operation.getRecords(),
-					record = records[0],
-					rawData = record.getProxy().getReader().rawData;
-				if(operation.success){
-					Shopware.Notification.createGrowlMessage('{s name=growlMessage/singleAccept/title/success}Vote accepted{/s}', '{s name=growlMessage/singleAccept/content/success}The vote was successfully accepted{/s}', '{s name=window_title}{/s}');
-					store.load();
-				}else{
-					Shopware.Notification.createGrowlMessage('{s name=growlMessage/error}An error occurred{/s}', rawData.errorMsg, '{s name=window_title}{/s}');
-				}
+            callback: function(data, operation){
+                var records = operation.getRecords(),
+                    record = records[0],
+                    rawData = record.getProxy().getReader().rawData;
+                if(operation.success){
+                    Shopware.Notification.createGrowlMessage('{s name=growlMessage/singleAccept/title/success}Vote accepted{/s}', '{s name=growlMessage/singleAccept/content/success}The vote was successfully accepted{/s}', '{s name=window_title}{/s}');
+                    store.load();
+                }else{
+                    Shopware.Notification.createGrowlMessage('{s name=growlMessage/error}An error occurred{/s}', rawData.errorMsg, '{s name=window_title}{/s}');
+                }
             }
         });
     },
@@ -267,17 +267,17 @@ Ext.define('Shopware.apps.Vote.controller.Vote', {
 
             model = Ext.create('Shopware.apps.Vote.model.Vote', data);
             model.destroy({
-				callback: function(data, operation){
-					var records = operation.getRecords(),
-						record = records[0],
-						rawData = record.getProxy().getReader().rawData;
-					if(operation.success){
-						Shopware.Notification.createGrowlMessage('{s name=growlMessage/singleDelete/title/success}Vote deleted{/s}', '{s name=growlMessage/singleDelete/content/success}The vote was successfully deleted{/s}', '{s name=window_title}{/s}');
-						store.load();
-					}else{
-						Shopware.Notification.createGrowlMessage('{s name=growlMessage/error}An error occurred{/s}', rawData.errorMsg, '{s name=window_title}{/s}');
-					}
-				}
+                callback: function(data, operation){
+                    var records = operation.getRecords(),
+                        record = records[0],
+                        rawData = record.getProxy().getReader().rawData;
+                    if(operation.success){
+                        Shopware.Notification.createGrowlMessage('{s name=growlMessage/singleDelete/title/success}Vote deleted{/s}', '{s name=growlMessage/singleDelete/content/success}The vote was successfully deleted{/s}', '{s name=window_title}{/s}');
+                        store.load();
+                    }else{
+                        Shopware.Notification.createGrowlMessage('{s name=growlMessage/error}An error occurred{/s}', rawData.errorMsg, '{s name=window_title}{/s}');
+                    }
+                }
             });
         });
     },
@@ -301,19 +301,19 @@ Ext.define('Shopware.apps.Vote.controller.Vote', {
             }
             Ext.each(selection, function(item){
                 item.set('active', 1);
-			});
+            });
 
-			store.sync({
-				callback: function(batch, operation) {
-					var rawData = batch.proxy.getReader().rawData;
-					if (rawData.success) {
-						store.load();
-						Shopware.Notification.createGrowlMessage('{s name=growlMessage_title/acceptMultipleSuccess}Votes accepted{/s}', "{s name=growlMessage_message/acceptMultipleSuccess}The votes were successfully accepted{/s}", '{s name=window_title}{/s}');
-					}else{
-						Shopware.Notification.createGrowlMessage('{s name=growlMessage/error}An error occurred{/s}', rawData.errorMsg, '{s name=window_title}{/s}');
-					}
-				}
-			})
+            store.sync({
+                callback: function(batch, operation) {
+                    var rawData = batch.proxy.getReader().rawData;
+                    if (rawData.success) {
+                        store.load();
+                        Shopware.Notification.createGrowlMessage('{s name=growlMessage_title/acceptMultipleSuccess}Votes accepted{/s}', "{s name=growlMessage_message/acceptMultipleSuccess}The votes were successfully accepted{/s}", '{s name=window_title}{/s}');
+                    }else{
+                        Shopware.Notification.createGrowlMessage('{s name=growlMessage/error}An error occurred{/s}', rawData.errorMsg, '{s name=window_title}{/s}');
+                    }
+                }
+            })
         });
 
     },
@@ -338,20 +338,20 @@ Ext.define('Shopware.apps.Vote.controller.Vote', {
             }
 
             Ext.each(selection, function(item){
-				store.remove(item);
-			});
+                store.remove(item);
+            });
 
-			store.sync({
-				callback: function(batch, operation) {
-					var rawData = batch.proxy.getReader().rawData;
-					if (rawData.success) {
-						store.load();
-						Shopware.Notification.createGrowlMessage('{s name=growlMessage_title/deleteMultipleSuccess}Votes deleted{/s}', "{s name=growlMessage_message/deleteMultipleSuccess}The votes were successfully deleted{/s}", '{s name=window_title}{/s}');
-					}else{
-						Shopware.Notification.createGrowlMessage('{s name=growlMessage/error}An error occurred{/s}', rawData.errorMsg, '{s name=window_title}{/s}');
-					}
-				}
-			})
+            store.sync({
+                callback: function(batch, operation) {
+                    var rawData = batch.proxy.getReader().rawData;
+                    if (rawData.success) {
+                        store.load();
+                        Shopware.Notification.createGrowlMessage('{s name=growlMessage_title/deleteMultipleSuccess}Votes deleted{/s}', "{s name=growlMessage_message/deleteMultipleSuccess}The votes were successfully deleted{/s}", '{s name=window_title}{/s}');
+                    }else{
+                        Shopware.Notification.createGrowlMessage('{s name=growlMessage/error}An error occurred{/s}', rawData.errorMsg, '{s name=window_title}{/s}');
+                    }
+                }
+            })
         });
     },
 

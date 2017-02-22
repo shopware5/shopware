@@ -1704,18 +1704,16 @@ class Media extends ModelEntity
             return;
         }
 
+        $defaultSizes = $this->getDefaultThumbnails();
+        $defaultSize = implode('x', $defaultSizes[0]);
         //load the configured album thumbnail sizes
         $sizes = $album->getSettings()->getThumbnailSize();
+        $sizes[]= $defaultSize;
 
         //iterate the sizes and create the thumbnails
         foreach ($sizes as $size) {
             //split the width and height (example: $size = 70x70)
             $data = explode('x', $size);
-
-            //check if the album thumbnail is already configured over the default thumbnails, so we don't have to create the same thumbnail again.
-            if (in_array($data, $this->defaultThumbnails)) {
-                continue;
-            }
 
             // To avoid any confusing, we're mapping the index based to an association based array and remove the index based elements.
             $data['width'] = $data[0];

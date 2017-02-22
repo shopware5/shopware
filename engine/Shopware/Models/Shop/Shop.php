@@ -709,7 +709,8 @@ class Shop extends ModelEntity
             }
         }
 
-        $container->get('shopware_storefront.context_service')->initializeShopContext();
+        //Initializes the frontend session to prevent output before session started.
+        $container->get('session');
 
         if ($this->getTemplate() !== null) {
             /** @var $templateManager \Enlight_Template_Manager */

@@ -35,7 +35,7 @@ Ext.define('Shopware.apps.Config.model.main.Value', {
     extend: 'Ext.data.Model',
 
     fields: [
-		//{block name="backend/config/model/main/navigation/fields"}{/block}
+        //{block name="backend/config/model/main/navigation/fields"}{/block}
         { name: 'id', type: 'int', useNull: true },
         { name: 'shopId', type: 'int' },
         { name: 'value', defaultValue: null, useNull: true }

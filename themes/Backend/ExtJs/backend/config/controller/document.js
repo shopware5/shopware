@@ -40,18 +40,18 @@ Ext.define('Shopware.apps.Config.controller.Document', {
     extend: 'Enlight.app.Controller',
 
     views: [
-		'form.Document'
+        'form.Document'
     ],
 
     stores:[
-		'form.Document',
-		'detail.Document',
-		'form.Number'
+        'form.Document',
+        'detail.Document',
+        'form.Number'
     ],
 
     models:[
-		'form.Document',
-		'form.DocumentElement'
+        'form.Document',
+        'form.DocumentElement'
     ],
 
     refs: [
@@ -65,64 +65,64 @@ Ext.define('Shopware.apps.Config.controller.Document', {
         var me = this;
 
         me.control({
-			'config-form-document config-base-table': {
-				selectionchange: function(table, records) {
-					var me = this,
-						elementFieldSet = me.getDetail().down('fieldset[name=elementFieldSet]'),
-						contentField = elementFieldSet.down('tinymce[name$=Value]'),
-						styleField = elementFieldSet.down('textarea[name$=Style]');
+            'config-form-document config-base-table': {
+                selectionchange: function(table, records) {
+                    var me = this,
+                        elementFieldSet = me.getDetail().down('fieldset[name=elementFieldSet]'),
+                        contentField = elementFieldSet.down('tinymce[name$=Value]'),
+                        styleField = elementFieldSet.down('textarea[name$=Style]');
 
-					Ext.each(elementFieldSet.items.items, function(item){
-						if(item.xtype == 'tinymce' || item.xtype == 'textarea'){
-							item.hide();
-							item.setValue(null);
-						}
-					});
-				}
-			},
-			'config-base-detail combo[name=elements]': {
-				change: me.onSelectElement
-			}
+                    Ext.each(elementFieldSet.items.items, function(item){
+                        if(item.xtype == 'tinymce' || item.xtype == 'textarea'){
+                            item.hide();
+                            item.setValue(null);
+                        }
+                    });
+                }
+            },
+            'config-base-detail combo[name=elements]': {
+                change: me.onSelectElement
+            }
         });
 
         me.callParent(arguments);
     },
 
-	onSelectElement: function(combo, newValue, oldValue){
-		//If there is no new value selected, so the event got fired otherwise
-		if(!newValue){
-			return;
-		}
-		var me = this,
-			elementFieldSet = me.getDetail().down('fieldset[name=elementFieldSet]'),
-			elementComboBox = elementFieldSet.down('combo'),
-			elementStore = elementComboBox.getStore();
-		//Checks if there was an value selected before changing it
-		//Needed to save the values to the record
-		if(oldValue){
-			var oldRecord = elementStore.getById(oldValue),
-				oldFieldName = oldRecord.get('name'),
-				oldContentField = elementFieldSet.down('tinymce[name=' + oldFieldName + '_Value]'),
-				oldStyleField = elementFieldSet.down('textarea[name=' + oldFieldName + '_Style]');
+    onSelectElement: function(combo, newValue, oldValue){
+        //If there is no new value selected, so the event got fired otherwise
+        if(!newValue){
+            return;
+        }
+        var me = this,
+            elementFieldSet = me.getDetail().down('fieldset[name=elementFieldSet]'),
+            elementComboBox = elementFieldSet.down('combo'),
+            elementStore = elementComboBox.getStore();
+        //Checks if there was an value selected before changing it
+        //Needed to save the values to the record
+        if(oldValue){
+            var oldRecord = elementStore.getById(oldValue),
+                oldFieldName = oldRecord.get('name'),
+                oldContentField = elementFieldSet.down('tinymce[name=' + oldFieldName + '_Value]'),
+                oldStyleField = elementFieldSet.down('textarea[name=' + oldFieldName + '_Style]');
 
-			oldRecord.set('value', oldContentField.getValue());
-			oldRecord.set('style', oldStyleField.getValue());
-			oldContentField.hide();
-			oldStyleField.hide();
-		}
+            oldRecord.set('value', oldContentField.getValue());
+            oldRecord.set('style', oldStyleField.getValue());
+            oldContentField.hide();
+            oldStyleField.hide();
+        }
 
-		var newRecord = elementStore.getById(newValue),
-		    newFieldName = newRecord.get('name'),
-			newContentField = elementFieldSet.down('tinymce[name=' + newFieldName + '_Value]'),
-			newStyleField = elementFieldSet.down('textarea[name=' + newFieldName + '_Style]');
+        var newRecord = elementStore.getById(newValue),
+            newFieldName = newRecord.get('name'),
+            newContentField = elementFieldSet.down('tinymce[name=' + newFieldName + '_Value]'),
+            newStyleField = elementFieldSet.down('textarea[name=' + newFieldName + '_Style]');
 
 
-		//Show the dynamical fields and fill them
-		newContentField.show();
-		newStyleField.show();
-		newContentField.setValue(newRecord.get('value'));
-		newStyleField.setValue(newRecord.get('style'));
-	}
+        //Show the dynamical fields and fill them
+        newContentField.show();
+        newStyleField.show();
+        newContentField.setValue(newRecord.get('value'));
+        newStyleField.setValue(newRecord.get('style'));
+    }
 
 });
 //{/block}

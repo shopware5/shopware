@@ -282,7 +282,9 @@ Ext.define('Shopware.form.plugin.Translation',
                 config.xtype = field.xtype;
             }
             if (field.getValue()) {
-                config.emptyText = field.getValue();
+                if (config.xtype != 'tinymce') {
+                    config.emptyText = field.getValue();
+                }
             }
             result.push(config)
         });

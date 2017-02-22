@@ -39,10 +39,10 @@ Ext.define('Shopware.apps.UserManager.store.Detail', {
     /**
      * Define that the detail store is an extension of the Ext.data.Store
      */
-	extend: 'Ext.data.Store',
+    extend: 'Ext.data.Store',
     /**
      * Defines which model the store used.
      */
-	model : 'Shopware.apps.UserManager.model.Detail'
+    model : 'Shopware.apps.UserManager.model.Detail'
 });
 //{/block}

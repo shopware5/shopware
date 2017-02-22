@@ -53,7 +53,7 @@ Ext.define('Shopware.apps.Category.model.Template', {
      * @array
      */
     fields:[
-		// {block name="backend/category/model/template/fields"}{/block}
+        // {block name="backend/category/model/template/fields"}{/block}
         { name : 'template', type: 'string' },
         { name : 'name', type: 'string' }
     ]

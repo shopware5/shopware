@@ -35,17 +35,17 @@
  */
 //{block name="backend/blog/model/comment"}
 Ext.define('Shopware.apps.Blog.model.Comment', {
-	/**
-	* Extends the standard ExtJS 4
-	* @string
-	*/
+    /**
+    * Extends the standard ExtJS 4
+    * @string
+    */
     extend : 'Ext.data.Model',
-	/**
-	* The fields used for this model
-	* @array
-	*/
+    /**
+    * The fields used for this model
+    * @array
+    */
     fields : [
-		//{block name="backend/blog/model/comment/fields"}{/block}
+        //{block name="backend/blog/model/comment/fields"}{/block}
         { name : 'id', type : 'int' },
         { name : 'name', type : 'string' },
         { name : 'headline', type : 'string' },
@@ -55,15 +55,15 @@ Ext.define('Shopware.apps.Blog.model.Comment', {
         { name : 'points', type : 'float' },
         { name : 'eMail', type : 'string' }
     ],
-	/**
-	* If the name of the field is 'id' extjs assumes autmagical that
-	* this field is an unique identifier.
-	*/
+    /**
+    * If the name of the field is 'id' extjs assumes autmagical that
+    * this field is an unique identifier.
+    */
     idProperty : 'id',
-	/**
-	* Configure the data communication
-	* @object
-	*/
+    /**
+    * Configure the data communication
+    * @object
+    */
     proxy : {
         type : 'ajax',
         api:{

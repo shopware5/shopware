@@ -44,7 +44,7 @@ Ext.define('Shopware.apps.CanceledOrder.model.Basket', {
      * @array
      */
     fields: [
-		//{block name="backend/canceled_order/model/basket/fields"}{/block}
+        //{block name="backend/canceled_order/model/basket/fields"}{/block}
         { name: 'date' },
         { name: 'price', type: 'int' },
         { name: 'average', type: 'int' },

@@ -19,9 +19,9 @@ iframe { border: 0 none !important; width: 100%; height: 100%; }
         maxParameterLength = '{$maxParameterLength}';
 
     Ext.define('Shopware.app.Application', {
-    	extend: 'Ext.app.Application',
-    	name: 'Shopware',
-    	singleton: true,
+        extend: 'Ext.app.Application',
+        name: 'Shopware',
+        singleton: true,
         autoCreateViewport: false,
         requires: [ 'Shopware.container.Viewport' ],
         baseComponents: {
@@ -33,7 +33,7 @@ iframe { border: 0 none !important; width: 100%; height: 100%; }
         launch: function() {
             var me = this,
                 preloader = Ext.create('Shopware.component.Preloader').bindEvents(Shopware.app.Application),
-				errorReporter = Ext.create('Shopware.global.ErrorReporter').bindEvents(Shopware.app.Application)
+                errorReporter = Ext.create('Shopware.global.ErrorReporter').bindEvents(Shopware.app.Application)
 
             /**
              * Activates the Ext.fx.Anim class globally and
@@ -52,17 +52,17 @@ iframe { border: 0 none !important; width: 100%; height: 100%; }
 
             this.callParent(arguments);
 {if $user}
-			this.addSubApplication({
-				name: "Shopware.apps.{$app|escape}",
-				controller: {$controller},
-				params: {$params},
+            this.addSubApplication({
+                name: "Shopware.apps.{$app|escape}",
+                controller: {$controller},
+                params: {$params},
                 localizedName: 'Shopware',
                 firstRunWizardEnabled: {$firstRunWizardEnabled|intval},
                 sbpLogin: {$sbpLogin},
                 updateWizardStarted: {$updateWizardStarted|intval},
                 enableInstallationFeedback: {$installationSurvey|intval},
                 enableBetaFeedback: {$feedbackRequired|intval}
-			});
+            });
 {else}
             this.addSubApplication({
                 name: "Shopware.apps.Login",
@@ -70,10 +70,10 @@ iframe { border: 0 none !important; width: 100%; height: 100%; }
             });
 {/if}
 
-			// Start preloading the icon sets
-			me.iconPreloader = Ext.create('Shopware.component.IconPreloader', {
-       			loadPath: "{link file='backend/_resources/resources/css' fullPath}"
-   			});
+            // Start preloading the icon sets
+            me.iconPreloader = Ext.create('Shopware.component.IconPreloader', {
+                loadPath: "{link file='backend/_resources/resources/css' fullPath}"
+            });
         },
 
         /**
@@ -105,11 +105,11 @@ iframe { border: 0 none !important; width: 100%; height: 100%; }
 
     /** Basic loader configuration  */
     Ext.Loader.setConfig({
-		enabled: true,
-		disableCaching: true,
-		disableCachingParam: 'no-cache',
-		disableCachingValue: '{timestamp}{if $user && $user->locale}+{$user->locale->getId()}+{$user->role->getId()}{/if}'
-	});
+        enabled: true,
+        disableCaching: true,
+        disableCachingParam: 'no-cache',
+        disableCachingValue: '{timestamp}{if $user && $user->locale}+{$user->locale->getId()}+{$user->role->getId()}{/if}'
+    });
     Ext.Loader.setPath('Shopware.apps', '{url module=backend action=index}', '?file=app');
 
     Ext.onReady(function() {

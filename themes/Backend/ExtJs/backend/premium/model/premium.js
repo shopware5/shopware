@@ -42,8 +42,8 @@ Ext.define('Shopware.apps.Premium.model.Premium', {
     * @array
     */
     fields: [
-		//{block name="backend/premium/model/premium/fields"}{/block}
-		'id',
+        //{block name="backend/premium/model/premium/fields"}{/block}
+        'id',
         {
             name: 'startPrice',
             type: 'double'

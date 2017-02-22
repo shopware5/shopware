@@ -26,8 +26,8 @@
  */
 //{block name="backend/ubdex/store/orders"}
 Ext.define('Shopware.apps.Index.store.Orders', {
-	extend: 'Ext.data.Store',
-	model: 'Shopware.apps.Index.model.Orders',
+    extend: 'Ext.data.Store',
+    model: 'Shopware.apps.Index.model.Orders',
     remoteFilter: true,
     clearOnLoad: false,
 

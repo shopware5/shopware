@@ -24,10 +24,14 @@
 
 namespace Shopware\Bundle\AccountBundle\Form\Account;
 
+use Psr\Log\LoggerInterface;
 use Shopware\Bundle\AttributeBundle\Service\CrudService;
+use Shopware\Components\Model\ModelEntity;
 use Shopware\Components\Model\ModelManager;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class AttributeFormType extends AbstractType
@@ -43,14 +47,24 @@ class AttributeFormType extends AbstractType
     private $attributeService;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * AttributeFormType constructor.
      * @param ModelManager $entityManager
      * @param CrudService $attributeService
+     * @param LoggerInterface $logger
      */
-    public function __construct(ModelManager $entityManager, CrudService $attributeService)
-    {
+    public function __construct(
+        ModelManager $entityManager,
+        CrudService $attributeService,
+        LoggerInterface $logger
+    ) {
         $this->entityManager = $entityManager;
         $this->attributeService = $attributeService;
+        $this->logger = $logger;
     }
 
     /**
@@ -85,8 +99,33 @@ class AttributeFormType extends AbstractType
             }
 
             $field = $metaData->getFieldForColumn($attribute->getColumnName());
-
             $builder->add($field);
         }
+
+        //set default value for all attribute fields to prevent null override if a field isn't in the submit data
+        $builder->addEventListener(FormEvents::POST_SET_DATA, function (FormEvent $event) use ($attributes, $metaData) {
+            try {
+                $form = $event->getForm();
+                $data = $event->getData();
+
+                if (!$data instanceof ModelEntity) {
+                    return;
+                }
+
+                foreach ($attributes as $attribute) {
+                    if ($attribute->isIdentifier()) {
+                        continue;
+                    }
+                    $field = $metaData->getFieldForColumn($attribute->getColumnName());
+
+                    $method = "get" . ucfirst($field);
+                    if (method_exists($data, $method)) {
+                        $form->add($field, null, [ 'empty_data' => $data->$method() ]);
+                    }
+                }
+            } catch (\Exception $e) {
+                $this->logger->error($e->getMessage());
+            }
+        });
     }
 }

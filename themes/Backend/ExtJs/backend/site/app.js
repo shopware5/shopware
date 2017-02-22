@@ -34,17 +34,17 @@
  */
 //{block name="backend/site/app"}
 Ext.define('Shopware.apps.Site', {
-	/**
-	* Extends from our special controller, which handles the
-	* sub-application behavior and the event bus
-	* @string
-	*/
+    /**
+    * Extends from our special controller, which handles the
+    * sub-application behavior and the event bus
+    * @string
+    */
     extend : 'Enlight.app.SubApplication',
-	/**
-	* The name of the module. Used for internal purpose
-	* @string
-	*/
-	name: 'Shopware.apps.Site',
+    /**
+    * The name of the module. Used for internal purpose
+    * @string
+    */
+    name: 'Shopware.apps.Site',
 
     /**
      * Sets the loading path for the sub-application.

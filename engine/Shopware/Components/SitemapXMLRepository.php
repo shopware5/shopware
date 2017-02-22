@@ -26,8 +26,11 @@ namespace Shopware\Components;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\QueryBuilder;
-use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Components\Model\ModelManager;
+use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
+use Shopware\Bundle\SearchBundle\ProductNumberSearchInterface;
+use Shopware\Bundle\SearchBundle\StoreFrontCriteriaFactoryInterface;
+use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 
 /**
  * @category  Shopware
@@ -51,14 +54,32 @@ class SitemapXMLRepository
     private $contextService;
 
     /**
+     * @var ProductNumberSearchInterface
+     */
+    private $productNumberSearch;
+
+    /**
+     * @var StoreFrontCriteriaFactoryInterface
+     */
+    private $storeFrontCriteriaFactory;
+
+    /**
+     * @param ProductNumberSearchInterface $productNumberSearch
+     * @param StoreFrontCriteriaFactoryInterface $storeFrontCriteriaFactory
      * @param ModelManager $em
      * @param ContextServiceInterface $contextService
      */
-    public function __construct(ModelManager $em, ContextServiceInterface $contextService)
+    public function __construct(
+        ProductNumberSearchInterface $productNumberSearch,
+        StoreFrontCriteriaFactoryInterface $storeFrontCriteriaFactory,
+        ModelManager $em,
+        ContextServiceInterface $contextService)
     {
         $this->em = $em;
         $this->connection = $this->em->getConnection();
         $this->contextService = $contextService;
+        $this->productNumberSearch = $productNumberSearch;
+        $this->storeFrontCriteriaFactory = $storeFrontCriteriaFactory;
     }
 
     /**
@@ -121,28 +142,25 @@ class SitemapXMLRepository
             return [];
         }
 
-        $sql = "
-            SELECT
-                a.id,
-                DATE(a.changetime) as changed
-            FROM
-              s_articles_categories_ro ac
-            INNER JOIN
-              s_articles a ON ac.articleID = a.id AND a.active = 1
-            WHERE
-              ac.categoryID IN (:categoryIds)
-            GROUP BY a.id
-        ";
+        // We are using the ProductNumberSearchService to make sure all basic checks for valid articles are fulfilled.
+        $productNumberSearchResult = $this->productNumberSearch->search(
+            $this->storeFrontCriteriaFactory->createBaseCriteria($categoryIds, $this->contextService->getShopContext()),
+            $this->contextService->getShopContext()
+        );
 
-        $result = $this->connection->executeQuery(
-            $sql,
-            [':categoryIds' => $categoryIds],
-            [':categoryIds' => Connection::PARAM_INT_ARRAY]
+        $articleIds = array_map(function (BaseProduct $baseProduct) {
+            return $baseProduct->getId();
+        }, array_values($productNumberSearchResult->getProducts()));
+
+        $statement = $this->connection->executeQuery(
+            'SELECT id,changetime FROM s_articles WHERE id IN (:articleIds)',
+            [':articleIds' => $articleIds],
+            [':articleIds' => Connection::PARAM_INT_ARRAY]
         );
 
         $articles = array();
-        while ($article = $result->fetch()) {
-            $article['changed'] = new \DateTime($article['changed']);
+        while ($article = $statement->fetch()) {
+            $article['changed'] = new \DateTime($article['changetime']);
             $article['urlParams'] = array(
                 'sViewport' => 'detail',
                 'sArticle'  => $article['id']

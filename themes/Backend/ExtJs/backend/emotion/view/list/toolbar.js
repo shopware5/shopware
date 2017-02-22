@@ -37,7 +37,7 @@
  */
 //{block name="backend/emotion/list/toolbar"}
 Ext.define('Shopware.apps.Emotion.view.list.Toolbar', {
-	extend: 'Ext.toolbar.Toolbar',
+    extend: 'Ext.toolbar.Toolbar',
     ui: 'shopware-ui',
     alias: 'widget.emotion-list-toolbar',
 
@@ -86,21 +86,21 @@ Ext.define('Shopware.apps.Emotion.view.list.Toolbar', {
      * Registers additional component events.
      */
     registerEvents: function() {
-    	this.addEvents(
-    		/**
-    		 * Event will be fired when the user insert a value into the search field
-    		 *
-    		 * @event
-    		 * @param [string] The inserted value
-    		 */
-    		'searchEmotions',
+        this.addEvents(
+            /**
+             * Event will be fired when the user insert a value into the search field
+             *
+             * @event
+             * @param [string] The inserted value
+             */
+            'searchEmotions',
             /**
              * Event will be fired when the user clicks the "remove all selected" button
              *
              * @event
              */
              'removeEmotions'
-    	);
+        );
     }
 
 });

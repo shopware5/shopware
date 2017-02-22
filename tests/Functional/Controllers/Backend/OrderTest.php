@@ -108,7 +108,9 @@ class Shopware_Tests_Controllers_Backend_OrderTest extends Enlight_Components_Te
 
         $response = $this->dispatch('backend/Order/batchProcess');
 
-        $this->assertEquals('{"success":true,"data":', substr($response->getBody(), 0, strlen('{"success":true,"data":')));
+        $data = json_decode($response->getBody(), true);
+        $this->assertArrayHasKey('success', $data);
+        $this->assertTrue($data['success']);
 
         $finalShopCount = Shopware()->Db()->fetchOne('SELECT count(distinct id) FROM s_core_shops');
         $this->assertEquals($initialShopCount, $finalShopCount);
