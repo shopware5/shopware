@@ -48,6 +48,19 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         $this->View()->assign('targetAction', 'cart');
     }
 
+    public function ajaxCartAction()
+    {
+        Shopware()->Plugins()->Controller()->Json()->setPadding();
+
+        /** @var StoreFrontCartService $service */
+        $service = $this->get('shopware_cart.store_front_cart_service');
+
+        $cart = json_decode(json_encode($service->getCart()), true);
+
+        $this->View()->assign('cart', $cart);
+        $this->View()->assign('targetAction', 'ajaxCart');
+    }
+
     public function addProductAction()
     {
         $number = $this->Request()->getParam('number');
@@ -84,7 +97,6 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
             $this->Request()->getParam('target', 'ajaxCart')
         );
     }
-
 
     public function changeQuantityAction()
     {
@@ -1484,32 +1496,6 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         }
 
         $this->forward('ajaxCart');
-    }
-
-    /**
-     * Ajax cart action
-     *
-     * This action loads the cart content and returns it.
-     * Its purpose is to return all necessary informations in a minimal template
-     * for a good performance so e.g. ajax requests are finished more quickly.
-     */
-    public function ajaxCartAction()
-    {
-        Shopware()->Plugins()->Controller()->Json()->setPadding();
-
-        $view = $this->View();
-        $basket = $this->getBasket();
-
-        $view->sBasket = $basket;
-
-        $view->sShippingcosts = $basket['sShippingcosts'];
-        $view->sShippingcostsDifference = $basket['sShippingcostsDifference'];
-        $view->sAmount = $basket['sAmount'];
-        $view->sAmountWithTax = $basket['sAmountWithTax'];
-        $view->sAmountTax = $basket['sAmountTax'];
-        $view->sAmountNet = $basket['AmountNetNumeric'];
-        $view->sDispatches = $this->getDispatches();
-        $view->sDispatchNoOrder = $this->getDispatchNoOrder();
     }
 
     /**
