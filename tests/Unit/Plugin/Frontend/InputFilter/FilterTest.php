@@ -76,6 +76,43 @@ class FilterTest extends TestCase
     }
 
     /**
+     * @return array
+     */
+    public function striptagsDataProvider()
+    {
+        return [
+            [
+                '<foo',
+                [
+                    'enabled' => '',
+                    'disabled' => '<foo'
+                ]
+            ],
+            [
+                'The rest will be cut <foo',
+                [
+                    'enabled' => 'The rest will be cut ',
+                    'disabled' => 'The rest will be cut <foo'
+                ]
+            ],
+            [
+                'This should not < be touched',
+                [
+                    'enabled' => 'This should not < be touched',
+                    'disabled' => 'This should not < be touched'
+                ]
+            ],
+            [
+                'This should <be> touched',
+                [
+                    'enabled' => 'This should  touched',
+                    'disabled' => 'This should <be> touched'
+                ]
+            ],
+        ];
+    }
+
+    /**
      * @dataProvider sqlProvider
      * @param string $statement
      */
@@ -85,5 +122,31 @@ class FilterTest extends TestCase
         $statement = \Shopware_Plugins_Frontend_InputFilter_Bootstrap::filterValue($statement, $regex);
 
         $this->assertNull($statement);
+    }
+
+    /**
+     * @dataProvider striptagsDataProvider
+     * @param string $input
+     * @param array $expected
+     */
+    public function testStripTagsEnabled($input, array $expected)
+    {
+        $this->assertEquals(
+            $expected['enabled'],
+            \Shopware_Plugins_Frontend_InputFilter_Bootstrap::filterValue($input, '#PreventRegexMatch#', true)
+        );
+    }
+
+    /**
+     * @dataProvider striptagsDataProvider
+     * @param string $input
+     * @param $expected
+     */
+    public function testStripTagsDisabled($input, array $expected)
+    {
+        $this->assertEquals(
+            $expected['disabled'],
+            \Shopware_Plugins_Frontend_InputFilter_Bootstrap::filterValue($input, '#PreventRegexMatch#', false)
+        );
     }
 }

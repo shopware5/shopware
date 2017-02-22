@@ -64,13 +64,13 @@
                         <div class="entry--content">
                             {* Comments headline *}
                             {block name='frontend_blog_comments_comment_headline'}
-                                <h3 class="content--headline">{$vote.headline}</h3>
+                                <h3 class="content--headline">{$vote.headline|escapeHtml}</h3>
                             {/block}
 
                             {* Comment *}
                             {block name='frontend_blog_comments_comment_text'}
                                 <p class="content--comment" itemprop="commentText">
-                                    {$vote.comment|nl2br}
+                                    {$vote.comment|escapeHtml|nl2br}
                                 </p>
                             {/block}
                         </div>

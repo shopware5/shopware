@@ -45,12 +45,14 @@ class Shopware_Plugins_Frontend_InputFilter_Bootstrap extends Shopware_Component
         );
 
         $form = $this->Form();
+        /** @var \Shopware\Models\Config\Form $parent */
         $parent = $this->Forms()->findOneBy(array('name' => 'Core'));
         $form->setParent($parent);
 
         $form->setElement('boolean', 'sql_protection', array('label' => 'SQL-Injection-Schutz aktivieren', 'value' => true));
         $form->setElement('boolean', 'xss_protection', array('label' => 'XSS-Schutz aktivieren', 'value' => true));
-        $form->setElement('boolean', 'rfi_protection', array('label' => 'RemoteFileInclusion-Schutz aktivieren', 'value' => true));
+        $form->setElement('boolean', 'rfi_protection', array('label' => 'RemoteFileInclusion-Sch    utz aktivieren', 'value' => true));
+        $form->setElement('boolean', 'strip_tags', array('label' => 'Global strip_tags verwenden', 'value' => true));
         $form->setElement('textarea', 'own_filter', array('label' => 'Eigener Filter', 'value' => null));
 
         return true;
@@ -71,6 +73,8 @@ class Shopware_Plugins_Frontend_InputFilter_Bootstrap extends Shopware_Component
         if ($request->getModuleName() == 'backend' || $request->getModuleName() == 'api') {
             return;
         }
+
+        $stripTags = $config->strip_tags;
 
         $intVars = array('sCategory', 'sContent', 'sCustom');
         foreach ($intVars as $parameter) {
@@ -112,10 +116,10 @@ class Shopware_Plugins_Frontend_InputFilter_Bootstrap extends Shopware_Component
             foreach ($val as $k => $v) {
                 unset($process[$key][$k]);
                 if (is_array($v)) {
-                    $process[$key][self::filterValue($k, $regex)] = $v;
-                    $process[] = &$process[$key][self::filterValue($k, $regex)];
+                    $process[$key][self::filterValue($k, $regex, $stripTags)] = $v;
+                    $process[] = &$process[$key][self::filterValue($k, $regex, $stripTags)];
                 } else {
-                    $process[$key][self::filterValue($k, $regex)] = self::filterValue($v, $regex);
+                    $process[$key][self::filterValue($k, $regex, $stripTags)] = self::filterValue($v, $regex, $stripTags);
                 }
             }
         }
@@ -129,11 +133,15 @@ class Shopware_Plugins_Frontend_InputFilter_Bootstrap extends Shopware_Component
      *
      * @param string $value
      * @param string $regex
+     * @param bool $stripTags
      * @return string
      */
-    public static function filterValue($value, $regex)
+    public static function filterValue($value, $regex, $stripTags = true)
     {
         if (!empty($value)) {
+            if ($stripTags) {
+                $value = strip_tags($value);
+            }
             if (preg_match($regex, $value)) {
                 $value = null;
             }
