@@ -22,18 +22,42 @@
  * our trademarks remain entirely with us.
  */
 
-class Migrations_Migration920 extends Shopware\Components\Migrations\AbstractMigration
+namespace Shopware\Recovery\Update;
+
+/**
+ * Changes the permissions defined in the given array.
+ */
+class FilePermissionChanger
 {
-    public function up($modus)
+    /**
+     * Format:
+     * [
+     *      ['chmod' => 0755, 'filePath' => '/path/to/some/file'],
+     * ]
+     *
+     * @var array
+     */
+    private $filePermissions = [];
+
+    /**
+     * @param array
+     */
+    public function __construct(array $filePermissions)
     {
-        // detect if english shop is installed
-        $isEnglish = (bool) $this->getConnection()->query('SELECT 1 FROM s_core_units WHERE id = 9 AND unit = "unit" AND description = "Unit"')->rowCount();
-        if ($isEnglish) {
-            $this->addSql('UPDATE s_core_units SET description = "Linear meter(s)", unit = "lm" WHERE id = 5');
+        $this->filePermissions = $filePermissions;
+    }
 
-            return;
+    /**
+     * Performs the chmod command on all permission arrays previously provided.
+     */
+    public function changePermissions()
+    {
+        foreach ($this->filePermissions as $filePermission) {
+            if (array_key_exists('filePath', $filePermission) &&
+                array_key_exists('chmod', $filePermission) &&
+                is_writable($filePermission['filePath'])) {
+                chmod($filePermission['filePath'], $filePermission['chmod']);
+            }
         }
-
-        $this->addSql('UPDATE s_core_units SET description = "Laufende(r) Meter" WHERE id = 5');
     }
 }

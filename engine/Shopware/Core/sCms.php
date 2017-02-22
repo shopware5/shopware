@@ -107,6 +107,9 @@ class sCms
             return false;
         }
 
+        // load attributes
+        $staticPage['attribute'] = Shopware()->Container()->get('shopware_attribute.data_loader')->load('s_cms_static_attributes', $staticId);
+
         /*
          * Add support for sub pages
          */

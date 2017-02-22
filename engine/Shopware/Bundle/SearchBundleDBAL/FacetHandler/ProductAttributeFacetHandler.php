@@ -36,7 +36,7 @@ use Shopware\Bundle\SearchBundle\FacetResult\ValueListItem;
 use Shopware\Bundle\SearchBundle\FacetResultInterface;
 use Shopware\Bundle\SearchBundleDBAL\PartialFacetHandlerInterface;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
-use Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactory;
+use Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactoryInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
@@ -48,14 +48,14 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 class ProductAttributeFacetHandler implements PartialFacetHandlerInterface
 {
     /**
-     * @var QueryBuilderFactory
+     * @var QueryBuilderFactoryInterface
      */
     private $queryBuilderFactory;
 
     /**
-     * @param QueryBuilderFactory $queryBuilderFactory
+     * @param QueryBuilderFactoryInterface $queryBuilderFactory
      */
-    public function __construct(QueryBuilderFactory $queryBuilderFactory)
+    public function __construct(QueryBuilderFactoryInterface $queryBuilderFactory)
     {
         $this->queryBuilderFactory = $queryBuilderFactory;
     }
@@ -172,12 +172,12 @@ class ProductAttributeFacetHandler implements PartialFacetHandlerInterface
         }
 
         return new ValueListFacetResult(
-                $facet->getName(),
-                $criteria->hasCondition($facet->getName()),
-                $facet->getLabel(),
-                $items,
-                $facet->getFormFieldName()
-            );
+            $facet->getName(),
+            $criteria->hasCondition($facet->getName()),
+            $facet->getLabel(),
+            $items,
+            $facet->getFormFieldName()
+        );
     }
 
     /**

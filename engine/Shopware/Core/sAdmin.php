@@ -493,19 +493,19 @@ class sAdmin
         if (!count($paymentData)) {
             throw new Enlight_Exception('sValidateStep3 #01: Could not load paymentmean');
         }
-            // Include management class and check input data
-            if (!empty($paymentData['class'])) {
-                $sPaymentObject = $this->sInitiatePaymentClass($paymentData);
-                $requestData = $this->front->Request()->getParams();
-                $checkPayment = $sPaymentObject->validate($requestData);
-            }
+        // Include management class and check input data
+        if (!empty($paymentData['class'])) {
+            $sPaymentObject = $this->sInitiatePaymentClass($paymentData);
+            $requestData = $this->front->Request()->getParams();
+            $checkPayment = $sPaymentObject->validate($requestData);
+        }
 
         return [
-                'checkPayment' => $checkPayment,
-                'paymentData' => $paymentData,
-                'sProcessed' => true,
-                'sPaymentObject' => &$sPaymentObject,
-            ];
+            'checkPayment' => $checkPayment,
+            'paymentData' => $paymentData,
+            'sProcessed' => true,
+            'sPaymentObject' => &$sPaymentObject,
+        ];
     }
 
     /**
@@ -851,9 +851,9 @@ class sAdmin
         $this->session->offsetUnset('sUserPassword');
         $this->session->offsetUnset('sUserId');
         $this->eventManager->notify(
-                'Shopware_Modules_Admin_CheckUser_Failure',
-                ['subject' => $this, 'session' => $this->session, 'user' => $getUser]
-            );
+            'Shopware_Modules_Admin_CheckUser_Failure',
+            ['subject' => $this, 'session' => $this->session, 'user' => $getUser]
+        );
 
         return false;
     }
@@ -1052,8 +1052,8 @@ class sAdmin
 
             $countryList[$key]['flag'] =
                 ($countryList[$key]['id'] == $this->front->Request()->getPost('country')
-                || $countryList[$key]['id'] == $this->front->Request()->getPost('countryID')
-            );
+                    || $countryList[$key]['id'] == $this->front->Request()->getPost('countryID')
+                );
         }
 
         $countryList = $this->eventManager->filter(
@@ -1325,23 +1325,23 @@ class sAdmin
                 $pagesStructure['numbers'][$i]['markup'] = ($i == $destinationPage);
                 $pagesStructure['numbers'][$i]['value'] = $i;
                 $pagesStructure['numbers'][$i]['link'] = $baseFile . $this->moduleManager->Core()->sBuildLink(
-                    $additionalParams + ['sPage' => $i]
-                );
+                        $additionalParams + ['sPage' => $i]
+                    );
             }
             // Previous page
             if ($destinationPage != 1) {
                 $pagesStructure['previous'] = $baseFile . $this->moduleManager->Core()->sBuildLink(
-                    $additionalParams + ['sPage' => $destinationPage - 1]
-                );
+                        $additionalParams + ['sPage' => $destinationPage - 1]
+                    );
             } else {
                 $pagesStructure['previous'] = null;
             }
             // Next page
             if ($destinationPage != $numberOfPages) {
                 $pagesStructure['next'] = $baseFile . $this->moduleManager->Core()->sBuildLink(
-                    $additionalParams + ['sPage' => $destinationPage + 1],
-                    false
-                );
+                        $additionalParams + ['sPage' => $destinationPage + 1],
+                        false
+                    );
             } else {
                 $pagesStructure['next'] = null;
             }
@@ -1416,7 +1416,7 @@ class sAdmin
         $userData = [];
 
         $countryQuery =
-          'SELECT c.*, a.name AS countryarea
+            'SELECT c.*, a.name AS countryarea
           FROM s_core_countries c
           LEFT JOIN s_core_countries_areas a
            ON a.id = c.areaID AND a.active = 1
@@ -1797,7 +1797,7 @@ class sAdmin
         return
             $user['additional']['user']['firstlogin'] == date('Y-m-d')
             || !$user['additional']['user']['firstlogin']
-        ;
+            ;
     }
 
     /**
@@ -1813,7 +1813,7 @@ class sAdmin
     {
         return
             is_array($order['content']) ? count($order['content']) : $order['content'] >= $value
-        ;
+            ;
     }
 
     /**
@@ -2102,7 +2102,7 @@ class sAdmin
                 trim($user['shippingaddress']['zipcode'])
                 != trim($user['billingaddress']['zipcode'])
             )
-        ;
+            ;
     }
 
     /**
@@ -2135,7 +2135,7 @@ class sAdmin
         return
             preg_match("/$value/", strtolower($user['shippingaddress']['lastname']))
             || preg_match("/$value/", strtolower($user['billingaddress']['lastname']))
-        ;
+            ;
     }
 
     /**
@@ -2220,7 +2220,7 @@ class sAdmin
                 return [
                     'code' => 5,
                     'message' => $this->snippetManager->getNamespace('frontend/account/internalMessages')
-                            ->get('ErrorFillIn', 'Please fill in all red fields'),
+                        ->get('ErrorFillIn', 'Please fill in all red fields'),
                     'sErrorFlag' => $errorFlag,
                 ];
             }
@@ -2240,14 +2240,14 @@ class sAdmin
             return [
                 'code' => 6,
                 'message' => $this->snippetManager->getNamespace('frontend/account/internalMessages')
-                        ->get('NewsletterFailureMail', 'Enter eMail address'),
+                    ->get('NewsletterFailureMail', 'Enter eMail address'),
             ];
         }
         if (!$this->emailValidator->isValid($email)) {
             return [
                 'code' => 1,
                 'message' => $this->snippetManager->getNamespace('frontend/account/internalMessages')
-                        ->get('NewsletterFailureInvalid', 'Enter valid eMail address'),
+                    ->get('NewsletterFailureInvalid', 'Enter valid eMail address'),
             ];
         }
         if (!$unsubscribe) {
@@ -2260,13 +2260,13 @@ class sAdmin
                 $result = [
                     'code' => 4,
                     'message' => $this->snippetManager->getNamespace('frontend/account/internalMessages')
-                            ->get('NewsletterFailureNotFound', 'This mail address could not be found'),
+                        ->get('NewsletterFailureNotFound', 'This mail address could not be found'),
                 ];
             } else {
                 $result = [
                     'code' => 5,
                     'message' => $this->snippetManager->getNamespace('frontend/account/internalMessages')
-                            ->get('NewsletterMailDeleted', 'Your mail address was deleted'),
+                        ->get('NewsletterMailDeleted', 'Your mail address was deleted'),
                 ];
             }
         }
@@ -2450,6 +2450,9 @@ class sAdmin
                 u.id as userID
                 $sql_select
             FROM s_order_basket b
+            
+            LEFT JOIN s_order_basket_attributes ba
+            ON b.id = ba.basketID
 
             LEFT JOIN s_articles a
             ON b.articleID = a.id
@@ -3132,6 +3135,12 @@ class sAdmin
     private function regenerateSessionId()
     {
         $oldSessionId = session_id();
+
+        if ($this->eventManager->notifyUntil('Shopware_Modules_Admin_regenerateSessionId_Start',
+            ['subject' => $this, 'sessionId' => $oldSessionId])) {
+            return;
+        }
+
         session_regenerate_id(true);
         $newSessionId = session_id();
 
@@ -3497,7 +3506,7 @@ SQL;
     {
         // Query country information
         $userData['additional']['country'] = $this->db->fetchRow(
-        'SELECT c.*, a.name AS countryarea
+            'SELECT c.*, a.name AS countryarea
           FROM s_core_countries c
           LEFT JOIN s_core_countries_areas a
            ON a.id = c.areaID AND a.active = 1
@@ -3621,7 +3630,7 @@ SQL;
             $result = [
                 'code' => 10,
                 'message' => $this->snippetManager->getNamespace('frontend/account/internalMessages')
-                        ->get('UnknownError', 'Unknown error'),
+                    ->get('UnknownError', 'Unknown error'),
             ];
 
             return $result;
@@ -3645,12 +3654,21 @@ SQL;
                 $result = [
                     'code' => 10,
                     'message' => $this->snippetManager->getNamespace('frontend/account/internalMessages')
-                            ->get('UnknownError', 'Unknown error'),
+                        ->get('UnknownError', 'Unknown error'),
                 ];
 
                 return $result;
             }
         }
+
+        $this->eventManager->notify(
+            'Shopware_Modules_Admin_Newsletter_Registration_Success',
+            [
+                'subject' => $this,
+                'email' => $email,
+                'groupID' => $groupID,
+            ]
+        );
 
         $result = [
             'code' => 3,

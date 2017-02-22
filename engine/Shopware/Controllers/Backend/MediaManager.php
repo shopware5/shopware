@@ -970,9 +970,15 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
             $media->setName($oldName);
         }
 
-        //check if the album id passed and is valid
+        //check if a new album id is passed and is valid
         if (isset($params['newAlbumID']) && !empty($params['newAlbumID'])) {
-            $media->setAlbumId($params['newAlbumID']);
+            $album = Shopware()->Container()->get('models')->getRepository(Album::class)->find($params['newAlbumID']);
+            if ($album) {
+                $media->setAlbum($album);
+                $media->setAlbumId($params['newAlbumID']);
+            }
+
+            $this->createThumbnailsForMovedMedia($media);
         }
 
         //check if the description is passed
@@ -991,6 +997,21 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
             $this->View()->assign(['success' => true, 'data' => $data, 'total' => 1]);
         } catch (\Doctrine\ORM\ORMException $e) {
             $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);
+        }
+    }
+
+    /**
+     * @param Media $media
+     */
+    private function createThumbnailsForMovedMedia(Media $media)
+    {
+        $albumRepository = Shopware()->Container()->get('models')->getRepository(Album::class);
+
+        /** @var Album $album */
+        $album = $albumRepository->find($media->getAlbumId());
+        if ($album) {
+            $media->removeAlbumThumbnails($album->getSettings()->getThumbnailSize(), $media->getFileName());
+            $media->createAlbumThumbnails($album);
         }
     }
 

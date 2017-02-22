@@ -339,6 +339,8 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
             $shop
         );
 
+        $data['themeInfo'] = $this->getThemeInfo($template);
+
         return $this->get('events')->filter('Shopware_Theme_Detail_Loaded', $data, [
             'shop' => $shop,
             'template' => $template,
@@ -467,5 +469,31 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
         return Shopware()->Db()->fetchOne(
             'SELECT id FROM s_core_shops WHERE `default` = 1'
         );
+    }
+
+    /**
+     * @param Template $template
+     *
+     * @return string|null
+     */
+    private function getThemeInfo(Template $template)
+    {
+        $user = $this->get('Auth')->getIdentity();
+        /** @var $locale Locale */
+        $locale = $user->locale;
+        $localeCode = $locale->getLocale();
+
+        $path = $this->container->get('theme_path_resolver')->getDirectory($template);
+
+        $languagePath = $path . '/info/' . $localeCode . '.html';
+        if (file_exists($languagePath)) {
+            return file_get_contents($languagePath);
+        }
+
+        if (file_exists($path . '/info/en_GB.html')) {
+            return file_get_contents($path . '/info/en_GB.html');
+        }
+
+        return null;
     }
 }

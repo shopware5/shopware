@@ -161,6 +161,65 @@ class sCategories
     }
 
     /**
+     * @param Category $category
+     * @param $childrenCounts
+     *
+     * @return array
+     */
+    public function convertCategory(Category $category, $childrenCounts)
+    {
+        $childrenCount = 0;
+        if (isset($childrenCounts[$category->getId()])) {
+            $childrenCount = $childrenCounts[$category->getId()];
+        }
+
+        $url = $category->isBlog() ? $this->blogBaseUrl : $this->baseUrl;
+
+        $attribute = [];
+        foreach ($category->getAttributes() as $struct) {
+            $attribute = array_merge($attribute, $struct->toArray());
+        }
+
+        $media = [];
+        if ($category->getMedia()) {
+            $media = [
+                'id' => $category->getMedia()->getId(),
+                'name' => $category->getMedia()->getName(),
+                'description' => $category->getMedia()->getDescription(),
+                'path' => $category->getMedia()->getFile(),
+                'type' => $category->getMedia()->getType(),
+                'extension' => $category->getMedia()->getExtension(),
+            ];
+        }
+
+        $path = $category->getPath() ? '|' . implode('|', $category->getPath()) . '|' : '';
+
+        return [
+            'id' => $category->getId(),
+            'name' => $category->getName(),
+            'metaKeywords' => $category->getMetaKeywords(),
+            'metaDescription' => $category->getMetaDescription(),
+            'cmsHeadline' => $category->getCmsHeadline(),
+            'cmsText' => $category->getCmsText(),
+            'active' => true,
+            'template' => $category->getTemplate(),
+            'blog' => $category->isBlog(),
+            'path' => $path,
+            'external' => $category->getExternalLink(),
+            'hideFilter' => !$category->displayFacets(),
+            'hideTop' => !$category->displayInNavigation(),
+            'hidetop' => !$category->displayInNavigation(),
+            'attribute' => $attribute,
+            'media' => $media,
+            'description' => $category->getName(),
+            'link' => $category->getExternalLink() ?: $url . $category->getId(),
+            'flag' => false,
+            'subcategories' => [],
+            'childrenCount' => $childrenCount,
+        ];
+    }
+
+    /**
      * Returns the leaf category to which the
      * article belongs, inside the category subtree.
      *
@@ -538,64 +597,5 @@ class sCategories
         }
 
         return $result;
-    }
-
-    /**
-     * @param Category $category
-     * @param $childrenCounts
-     *
-     * @return array
-     */
-    private function convertCategory(Category $category, $childrenCounts)
-    {
-        $childrenCount = 0;
-        if (isset($childrenCounts[$category->getId()])) {
-            $childrenCount = $childrenCounts[$category->getId()];
-        }
-
-        $url = $category->isBlog() ? $this->blogBaseUrl : $this->baseUrl;
-
-        $attribute = [];
-        foreach ($category->getAttributes() as $struct) {
-            $attribute = array_merge($attribute, $struct->toArray());
-        }
-
-        $media = [];
-        if ($category->getMedia()) {
-            $media = [
-                'id' => $category->getMedia()->getId(),
-                'name' => $category->getMedia()->getName(),
-                'description' => $category->getMedia()->getDescription(),
-                'path' => $category->getMedia()->getFile(),
-                'type' => $category->getMedia()->getType(),
-                'extension' => $category->getMedia()->getExtension(),
-            ];
-        }
-
-        $path = $category->getPath() ? '|' . implode('|', $category->getPath()) . '|' : '';
-
-        return [
-            'id' => $category->getId(),
-            'name' => $category->getName(),
-            'metaKeywords' => $category->getMetaKeywords(),
-            'metaDescription' => $category->getMetaDescription(),
-            'cmsHeadline' => $category->getCmsHeadline(),
-            'cmsText' => $category->getCmsText(),
-            'active' => true,
-            'template' => $category->getTemplate(),
-            'blog' => $category->isBlog(),
-            'path' => $path,
-            'external' => $category->getExternalLink(),
-            'hideFilter' => !$category->displayFacets(),
-            'hideTop' => !$category->displayInNavigation(),
-            'hidetop' => !$category->displayInNavigation(),
-            'attribute' => $attribute,
-            'media' => $media,
-            'description' => $category->getName(),
-            'link' => $category->getExternalLink() ?: $url . $category->getId(),
-            'flag' => false,
-            'subcategories' => [],
-            'childrenCount' => $childrenCount,
-        ];
     }
 }

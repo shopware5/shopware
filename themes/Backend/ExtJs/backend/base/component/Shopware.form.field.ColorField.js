@@ -42,13 +42,20 @@ Ext.define('Shopware.form.field.ColorField', {
      * @type { Object }
      */
     layout: {
-        type: 'hbox',
-        align: 'stretch'
+        type: 'hbox'
     },
 
     pickerButton: true,
 
     editable: true,
+
+    /**
+     * List of classes to mix into this class.
+     * @type { Object }
+     */
+    mixins: [
+        'Ext.form.Field'
+    ],
 
     initComponent: function () {
         var me = this;
@@ -66,6 +73,26 @@ Ext.define('Shopware.form.field.ColorField', {
         });
 
         me.callParent(arguments);
+    },
+
+    /**
+     * Overwrite to create help text if passed
+     *
+     * @override
+     */
+    afterRender: function() {
+        var me = this;
+
+        me.callParent(arguments);
+
+        if (me.helpText) {
+            me.createHelp();
+            me.helpIconEl.dom.style.marginLeft = '5px';
+        }
+
+        if (me.supportText) {
+            me.createSupport()
+        }
     },
 
     createItems: function() {

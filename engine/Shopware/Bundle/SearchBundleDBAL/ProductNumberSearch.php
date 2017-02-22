@@ -39,7 +39,7 @@ use Shopware\Components\DependencyInjection\Container;
 class ProductNumberSearch implements SearchBundle\ProductNumberSearchInterface
 {
     /**
-     * @var \Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactory
+     * @var QueryBuilderFactoryInterface
      */
     private $queryBuilderFactory;
 
@@ -54,13 +54,13 @@ class ProductNumberSearch implements SearchBundle\ProductNumberSearchInterface
     private $eventManager;
 
     /**
-     * @param QueryBuilderFactory         $queryBuilderFactory
-     * @param \Enlight_Event_EventManager $eventManager
-     * @param FacetHandlerInterface[]     $facetHandlers
-     * @param Container                   $container
+     * @param QueryBuilderFactoryInterface $queryBuilderFactory
+     * @param \Enlight_Event_EventManager  $eventManager
+     * @param FacetHandlerInterface[]      $facetHandlers
+     * @param Container                    $container
      */
     public function __construct(
-        QueryBuilderFactory $queryBuilderFactory,
+        QueryBuilderFactoryInterface $queryBuilderFactory,
         \Enlight_Event_EventManager $eventManager,
         $facetHandlers,
         Container $container

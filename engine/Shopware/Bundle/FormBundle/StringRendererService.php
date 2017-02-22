@@ -24,8 +24,6 @@
 
 namespace Shopware\Bundle\FormBundle;
 
-use Enlight_View_Default as View;
-
 class StringRendererService implements StringRendererServiceInterface
 {
     /**
@@ -44,11 +42,11 @@ class StringRendererService implements StringRendererServiceInterface
     private $whiteListTypeArray = [
         'string',
         'integer',
-        'double'
+        'double',
     ];
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function render($string, array $viewVariables, array $sElement)
     {
@@ -81,8 +79,10 @@ class StringRendererService implements StringRendererServiceInterface
      * @param array $placeholder
      * @param array $viewVariables
      * @param array $sElement
-     * @return string
+     *
      * @throws \Exception
+     *
+     * @return string
      */
     private function getValue(array $placeholder, array $viewVariables, array $sElement)
     {
@@ -110,6 +110,6 @@ class StringRendererService implements StringRendererServiceInterface
             throw new \Exception(sprintf('Could not render type of %s', gettype($variable)));
         }
 
-        return (string)$variable;
+        return (string) $variable;
     }
 }

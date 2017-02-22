@@ -47,6 +47,6 @@ class JpegoptimOptimizer extends BinaryOptimizer
      */
     public function getCommandArguments($filepath)
     {
-        return ['--strip-all', '--all-progressive'];
+        return ['--strip-all', '--all-progressive', '--preserve-perms'];
     }
 }
