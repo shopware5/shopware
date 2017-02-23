@@ -55,6 +55,7 @@ Ext.override(Ext.form.Basic, {
      */
     updateRecord: function(record) {
         record = record || this._record;
+        var me = this;
 
         var values = this.getValues(),
             fields = record.fields,
@@ -101,6 +102,12 @@ Ext.override(Ext.form.Basic, {
             var name = field.name;
             if (name in values) {
                 data[name] = values[name];
+            } else {
+                if (me.findField(name)) {
+                    // form field exists but is empty.
+                    // set empty string as "null" will be filtered server side
+                    data[name] = "";
+                }
             }
         });
 
