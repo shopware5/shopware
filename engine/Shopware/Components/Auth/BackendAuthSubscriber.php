@@ -26,8 +26,7 @@ namespace Shopware\Components\Auth;
 
 use Enlight\Event\SubscriberInterface;
 use Enlight_Event_EventArgs;
-use Shopware\Components\DependencyInjection\Bridge\Db;
-use Shopware\Components\DependencyInjection\Container;
+use Shopware\Models\Shop\Locale;
 
 class BackendAuthSubscriber implements SubscriberInterface
 {
@@ -36,54 +35,53 @@ class BackendAuthSubscriber implements SubscriberInterface
      *
      * @var bool
      */
-    protected $noAuth = false;
+    private $noAuth = false;
 
     /**
      * Disable acl checks in backend controllers
      *
      * @var bool
      */
-    protected $noAcl = false;
+    private $noAcl = false;
 
     /**
      * The acl instance
      *
      * @var \Zend_Acl
      */
-    protected $acl;
+    private $acl;
 
     /**
      * The current acl role
      *
      * @var string
      */
-    protected $aclRole;
+    private $aclRole;
 
     /**
      * The current acl resource
      *
      * @var string
      */
-    protected $aclResource;
+    private $aclResource;
 
     /**
      * The current request instance
      *
      * @var \Enlight_Controller_Action
      */
-    protected $action;
+    private $action;
 
     /**
      * The current request instance
      *
      * @var \Enlight_Controller_Request_Request
      */
-    protected $request;
+    private $request;
 
     public static function getSubscribedEvents()
     {
         return [
-            'Enlight_Bootstrap_InitResource_Auth' => 'onInitResourceAuth',
             'Enlight_Controller_Action_PreDispatch' => 'onPreDispatchBackend',
         ];
     }
@@ -101,6 +99,10 @@ class BackendAuthSubscriber implements SubscriberInterface
             return true;
         }
         $resourceId = isset($params['resource']) ? $params['resource'] : $this->aclResource;
+
+        if (!$this->acl) {
+            return true;
+        }
 
         if (!$this->acl->has($resourceId)) {
             return true;
@@ -285,30 +287,6 @@ class BackendAuthSubscriber implements SubscriberInterface
     }
 
     /**
-     * Initiate shopware auth resource
-     * database adapter by default
-     *
-     * @param Enlight_Event_EventArgs $args
-     *
-     * @return \Zend_Auth
-     */
-    public function onInitResourceAuth(Enlight_Event_EventArgs $args)
-    {
-        Shopware()->Container()->load('backend_session');
-
-        $resource = \Shopware_Components_Auth::getInstance();
-        $adapter = new \Shopware_Components_Auth_Adapter_Default();
-        $storage = new \Zend_Auth_Storage_Session('Shopware', 'Auth');
-        $resource->setBaseAdapter($adapter);
-        $resource->addAdapter($adapter);
-        $resource->setStorage($storage);
-
-        $this->registerAclPlugin($resource);
-
-        return $resource;
-    }
-
-    /**
      * Init backend locales
      */
     private function initLocale()
@@ -316,9 +294,10 @@ class BackendAuthSubscriber implements SubscriberInterface
         $container = Shopware()->Container();
 
         $locale = $this->getCurrentLocale();
-        $container->get('Locale')->setLocale($locale->toString());
-        $container->get('Snippets')->setLocale($locale);
-        $template = $container->get('Template');
+        $container->get('locale')->setLocale($locale->toString());
+        $container->get('snippets')->setLocale($locale);
+        $template = $container->get('template');
+
         $baseHash = $this->request->getScheme() . '://'
             . $this->request->getHttpHost()
             . $this->request->getBaseUrl() . '?'
@@ -354,7 +333,7 @@ class BackendAuthSubscriber implements SubscriberInterface
         }
 
         $default = $this->getDefaultLocale();
-        $locale = Shopware()->Models()->getRepository('Shopware\Models\Shop\Locale')->find($default);
+        $locale = Shopware()->Models()->getRepository(Locale::class)->find($default);
 
         return $locale;
     }
@@ -380,36 +359,6 @@ class BackendAuthSubscriber implements SubscriberInterface
         unset($options['locking']);
 
         return $options;
-    }
-
-    /**
-     * Register acl plugin
-     *
-     * @param \Zend_Auth $auth
-     */
-    private function registerAclPlugin($auth)
-    {
-        $container = Shopware()->Container();
-        if ($this->acl === null) {
-            $this->acl = $container->get('Acl');
-        }
-        if ($auth->hasIdentity()) {
-            $identity = $auth->getIdentity();
-            $this->aclRole = $identity->role;
-        }
-
-        /** @var $engine \Enlight_Template_Manager */
-        $engine = $container->get('template');
-        $engine->unregisterPlugin(
-            \Smarty::PLUGIN_FUNCTION,
-            'acl_is_allowed'
-        );
-
-        $engine->registerPlugin(
-            \Enlight_Template_Manager::PLUGIN_FUNCTION,
-            'acl_is_allowed',
-            [$this, 'isAllowed']
-        );
     }
 
     /**
