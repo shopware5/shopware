@@ -755,7 +755,7 @@
             event.preventDefault();
 
             var me = this,
-                target = me.$target.length === 1 && me.$target || $(event.target);
+                target = me.$target.length === 1 && me.$target || $(event.currentTarget);
 
             $.modal.open(me.opts.content || (me.opts.mode !== 'local' ? target.attr('href') : target), me.opts);
 
