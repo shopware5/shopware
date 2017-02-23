@@ -74,28 +74,28 @@ class PluginInstaller
     /**
      * @var string
      */
-    private $rootDirectory;
+    private $pluginDirectory;
 
     /**
      * @param ModelManager $em
      * @param DatabaseHandler $snippetHandler
      * @param RequirementValidator $requirementValidator
      * @param \PDO $pdo
-     * @param $rootDirectory
+     * @param $pluginDirectory
      */
     public function __construct(
         ModelManager $em,
         DatabaseHandler $snippetHandler,
         RequirementValidator $requirementValidator,
         \PDO $pdo,
-        $rootDirectory
+        $pluginDirectory
     ) {
         $this->em = $em;
         $this->connection = $this->em->getConnection();
         $this->snippetHandler = $snippetHandler;
         $this->requirementValidator = $requirementValidator;
         $this->pdo = $pdo;
-        $this->rootDirectory = $rootDirectory;
+        $this->pluginDirectory = $pluginDirectory;
     }
 
     /**
@@ -274,7 +274,7 @@ class PluginInstaller
     {
         $initializer = new PluginInitializer(
             $this->pdo,
-            $this->rootDirectory . '/custom/plugins'
+            $this->pluginDirectory
         );
         $plugins = $initializer->initializePlugins();
 

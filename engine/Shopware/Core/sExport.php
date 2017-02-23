@@ -1065,6 +1065,12 @@ class sExport
             return;
         }
 
+        $result = Shopware()->Container()->get('events')->filter(
+            'Shopware_Modules_Export_ExportResult_Filter',
+            $result,
+            ['feedId' => $this->sFeedID, 'subject' => $this]
+        );
+
         // Update db with the latest values
         $count = (int) $result->rowCount();
         $this->db->update(
@@ -1383,6 +1389,9 @@ class sExport
                     '' as ob_attr5,
                     '' as ob_attr6
             ) as b
+
+            LEFT JOIN s_order_basket_attributes ba
+            ON b.id = ba.basketID
 
             LEFT JOIN s_articles a
             ON b.articleID=a.id

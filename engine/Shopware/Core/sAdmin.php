@@ -779,6 +779,12 @@ class sAdmin
     private function regenerateSessionId()
     {
         $oldSessionId = session_id();
+
+        if ($this->eventManager->notifyUntil('Shopware_Modules_Admin_regenerateSessionId_Start',
+            ['subject' => $this, 'sessionId' => $oldSessionId])) {
+            return;
+        }
+
         session_regenerate_id(true);
         $newSessionId = session_id();
 
@@ -2577,6 +2583,9 @@ SQL;
                 $sql_select
             FROM s_order_basket b
 
+            LEFT JOIN s_order_basket_attributes ba
+            ON b.id = ba.basketID
+
             LEFT JOIN s_articles a
             ON b.articleID = a.id
             AND b.modus = 0
@@ -3594,6 +3603,15 @@ SQL;
                 return $result;
             }
         }
+
+        $this->eventManager->notify(
+            'Shopware_Modules_Admin_Newsletter_Registration_Success',
+            [
+                'subject' => $this,
+                'email' => $email,
+                'groupID' => $groupID
+            ]
+        );
 
         $result = array(
             "code" => 3,

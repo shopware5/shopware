@@ -61,7 +61,7 @@ class PropertyGroup extends Resource
         $filters = array(array('property' => 'groups.id','expression' => '=','value' => $id));
         $query = $this->getRepository()->getListGroupsQuery($filters);
 
-        /** @var $category \Shopware\Models\Property\Group */
+        /** @var \Shopware\Models\Property\Group $property */
         $property = $query->getOneOrNullResult($this->getResultMode());
 
 
@@ -91,10 +91,10 @@ class PropertyGroup extends Resource
         //returns the total count of the query
         $totalResult = $paginator->count();
 
-        //returns the category data
-        $categories = $paginator->getIterator()->getArrayCopy();
+        //returns the property groups data
+        $propertyGroups = $paginator->getIterator()->getArrayCopy();
 
-        return array('data' => $categories, 'total' => $totalResult);
+        return array('data' => $propertyGroups, 'total' => $totalResult);
     }
 
     /**
@@ -174,17 +174,17 @@ class PropertyGroup extends Resource
             throw new ApiException\ParameterMissingException();
         }
 
-        /** @var $category \Shopware\Models\Category\Category */
-        $category = $this->getRepository()->find($id);
+        /** @var \Shopware\Models\Property\Group $propertyGroup*/
+        $propertyGroup = $this->getRepository()->find($id);
 
-        if (!$category) {
-            throw new ApiException\NotFoundException("Category by id $id not found");
+        if (!$propertyGroup) {
+            throw new ApiException\NotFoundException("PropertyGroup by id $id not found");
         }
 
-        $this->getManager()->remove($category);
+        $this->getManager()->remove($propertyGroup);
         $this->flush();
 
-        return $category;
+        return $propertyGroup;
     }
 
     private function preparePropertyData($params, $propertyGroup = null)

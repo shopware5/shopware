@@ -22,31 +22,42 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\MediaBundle\Optimizer;
+namespace Shopware\Recovery\Update;
 
-class JpegoptimOptimizer extends BinaryOptimizer
+/**
+ * Changes the permissions defined in the given array.
+ */
+class FilePermissionChanger
 {
     /**
-     * @inheritdoc
+     * Format:
+     * [
+     *      ['chmod' => 0755, 'filePath' => '/path/to/some/file'],
+     * ]
+     *
+     * @var array
      */
-    public function getCommand()
+    private $filePermissions = [];
+
+    /**
+     * @param array
+     */
+    public function __construct(array $filePermissions)
     {
-        return 'jpegoptim';
+        $this->filePermissions = $filePermissions;
     }
 
     /**
-     * @inheritdoc
+     * Performs the chmod command on all permission arrays previously provided.
      */
-    public function getSupportedMimeTypes()
+    public function changePermissions()
     {
-        return ['image/jpeg', 'image/jpg'];
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getCommandArguments($filepath)
-    {
-        return ['--strip-all', '--all-progressive', '--preserve-perms'];
+        foreach ($this->filePermissions as $filePermission) {
+            if (array_key_exists('filePath', $filePermission) &&
+                array_key_exists('chmod', $filePermission) &&
+                is_writable($filePermission['filePath'])) {
+                chmod($filePermission['filePath'], $filePermission['chmod']);
+            }
+        }
     }
 }

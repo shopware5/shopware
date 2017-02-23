@@ -74,7 +74,11 @@ td.head  {
 </head>
 
 <body>
-{foreach from=$Pages item=postions name="pagingLoop" key=page}
+{foreach from=$Pages item=positions name="pagingLoop" key=page}
+
+    {* @Deprecated: Wrong variable will be removed in next major release *}
+    {$postions = $positions}
+
     <div id="head_logo">
         {$Containers.Logo.value}
     </div>
@@ -135,7 +139,7 @@ td.head  {
                 </strong>
         </div>
     </div>
-    
+
     <div id="head_bottom" style="clear:both">
         {block name="document_index_head_bottom"}
             <h1>{s name="DocumentIndexInvoiceNumber"}Rechnung Nr. {$Document.id}{/s}</h1>
@@ -193,7 +197,7 @@ td.head  {
             {/if}
         {/block}
     </tr>
-    {foreach from=$postions item=position key=number}
+    {foreach from=$positions item=position key=number}
     {block name="document_index_table_each"}
     <tr>
         {block name="document_index_table_pos"}
@@ -211,7 +215,7 @@ td.head  {
             {if $position.name == 'Versandkosten'}
                 {s name="DocumentIndexPositionNameShippingCosts"}{$position.name}{/s}
             {else}
-                {s name="DocumentIndexPositionNameDefault"}{$position.name|nl2br}{/s}
+                {s name="DocumentIndexPositionNameDefault"}{$position.name|nl2br|wordwrap:65:"<br />\n"}{/s}
             {/if}
             </td>
         {/block}
@@ -250,7 +254,7 @@ td.head  {
     </tbody>
     </table>
     </div>
-    
+
     {if $smarty.foreach.pagingLoop.last}
         {block name="document_index_amount"}
             <div id="amount">
@@ -324,7 +328,7 @@ td.head  {
                     </div>
                 {/if}
             {/block}
-                
+
                 {$Containers.Content_Info.value}
             {block name="document_index_info_currency"}
                 {if $Order._currency.factor > 1}{s name="DocumentIndexCurrency"}
@@ -335,7 +339,7 @@ td.head  {
             </div>
         {/block}
     {/if}
-    
+
     <div id="footer">
     {$Containers.Footer.value}
     </div>

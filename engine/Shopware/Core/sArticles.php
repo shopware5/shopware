@@ -543,13 +543,13 @@ class sArticles
                     'sViewport' => 'cat',
                     'sCategory' => $id,
                     'sPage' => 1,
-                    'sSupplier' => $supplierValue["id"]
+                    'sSupplier' => $supplierId
                 ];
             } else {
                 $links[$supplierId] = [
                     'controller' => 'listing',
                     'action' => 'manufacturer',
-                    'sSupplier' => $supplierValue["id"]
+                    'sSupplier' => $supplierId
                 ];
             }
         }
@@ -557,7 +557,7 @@ class sArticles
         $seoUrls = Shopware()->Container()->get('router')->generateList($links);
         foreach ($getSupplier as &$supplier) {
             $id = $supplier['id'];
-            if (array_key_exists($supplier, $seoUrls)) {
+            if (array_key_exists($id, $seoUrls)) {
                 $supplier['link'] = $seoUrls[$id];
             }
         }
@@ -2087,7 +2087,9 @@ class sArticles
             $mainKey = 0;
 
             if (empty($sCombination)) {
-                $sArticle["image"]["description"] = $sArticle["image"]["res"]["description"];
+                if (!empty($sArticle["image"]["res"]["description"])) {
+                    $sArticle["image"]["description"] = $sArticle["image"]["res"]["description"];
+                }
                 $sArticle["image"]["relations"] = $sArticle["image"]["res"]["relations"];
                 foreach ($sArticle["sConfigurator"] as $key => $group) {
                     foreach ($group["values"] as $key2 => $option) {
