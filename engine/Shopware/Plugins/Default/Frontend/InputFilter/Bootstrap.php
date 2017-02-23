@@ -51,7 +51,7 @@ class Shopware_Plugins_Frontend_InputFilter_Bootstrap extends Shopware_Component
 
         $form->setElement('boolean', 'sql_protection', array('label' => 'SQL-Injection-Schutz aktivieren', 'value' => true));
         $form->setElement('boolean', 'xss_protection', array('label' => 'XSS-Schutz aktivieren', 'value' => true));
-        $form->setElement('boolean', 'rfi_protection', array('label' => 'RemoteFileInclusion-Sch    utz aktivieren', 'value' => true));
+        $form->setElement('boolean', 'rfi_protection', array('label' => 'RemoteFileInclusion-Schutz aktivieren', 'value' => true));
         $form->setElement('boolean', 'strip_tags', array('label' => 'Global strip_tags verwenden', 'value' => true));
         $form->setElement('textarea', 'own_filter', array('label' => 'Eigener Filter', 'value' => null));
 
@@ -74,7 +74,7 @@ class Shopware_Plugins_Frontend_InputFilter_Bootstrap extends Shopware_Component
             return;
         }
 
-        $stripTags = $config->strip_tags;
+        $stripTagsConf = $config->strip_tags;
 
         $intVars = array('sCategory', 'sContent', 'sCustom');
         foreach ($intVars as $parameter) {
@@ -112,9 +112,41 @@ class Shopware_Plugins_Frontend_InputFilter_Bootstrap extends Shopware_Component
             &$_GET, &$_POST, &$_COOKIE, &$_REQUEST, &$_SERVER, &$userParams
         );
 
+        $whiteList = [
+            'frontend/account/login' => [
+                'password',
+            ],
+            'frontend/account/savepassword' => [
+                'password',
+                'passwordConfirmation',
+                'currentPassword',
+            ],
+            'frontend/register/ajax_validate_email' => [
+                'password',
+            ],
+            'frontend/register/ajax_validate_password' => [
+                'password',
+            ],
+            'frontend/register/saveregister' => [
+                'password',
+            ],
+            'frontend/account/resetpassword' => [
+                'password',
+            ],
+        ];
+
+        $route = strtolower(
+            implode('/',
+                [$request->getModuleName(), $request->getControllerName(), $request->getActionName()]
+            )
+        );
+
+        $whiteList = array_key_exists($route, $whiteList) ? $whiteList[$route] : [];
+
         while (list($key, $val) = each($process)) {
             foreach ($val as $k => $v) {
                 unset($process[$key][$k]);
+                $stripTags = in_array($k, $whiteList) ? false : $stripTagsConf;
                 if (is_array($v)) {
                     $process[$key][self::filterValue($k, $regex, $stripTags)] = $v;
                     $process[] = &$process[$key][self::filterValue($k, $regex, $stripTags)];
