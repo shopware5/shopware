@@ -113,7 +113,7 @@
                     {$start = $lineItem.unit.minPurchase}
                     {$end = $lineItem.unit.maxPurchase}
                     {$step = $lineItem.unit.purchaseStep}
-
++
                     {if !$start}
                         {$start = 1}
                     {/if}
@@ -125,7 +125,7 @@
                         {$step = 1}
                     {/if}
 
-                    <form name="basket_change_quantity{$calculated.identifier}" class="select-field" method="post" action="{url controller='checkout' action='changeQuantity' target=$targetAction}">
+                    <form name="basket_change_quantity{$calculated.identifier}" class="select-field" method="post" action="{url controller='checkout' action='changeQuantity' sTargetAction=$sTargetAction}">
                         <select name="quantity" data-auto-submit="true">
                             {section name="i" start=$start loop=$end step=$step}
                                 <option value="{$smarty.section.i.index}" {if $smarty.section.i.index==$calculated.quantity}selected="selected"{/if}>
@@ -174,7 +174,7 @@
     {* Remove product from basket *}
     {block name='frontend_checkout_cart_item_delete_article'}
         <div class="panel--td column--actions">
-            <form action="{url action='deleteItem' identifier=$calculated.identifier target=$targetAction}"
+            <form action="{url action='deleteItem' identifier=$calculated.identifier sTargetAction=$sTargetAction}"
                   method="post">
                 <button type="submit" class="btn is--small column--actions-link"
                         title="{"{s name='CartItemLinkDelete'}{/s}"|escape}">

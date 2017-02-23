@@ -37,6 +37,9 @@ use Shopware\Models\Customer\Address;
  */
 class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
 {
+    const ACTION_AJAX_CART = 'ajaxCart';
+    const ACTION_CART = 'cart';
+
     public function cartAction()
     {
         /** @var StoreFrontCartService $service */
@@ -44,8 +47,10 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
 
         $cart = json_decode(json_encode($service->getCart()), true);
 
-        $this->View()->assign('cart', $cart);
-        $this->View()->assign('targetAction', 'cart');
+        $this->View()->assign([
+            'cart' => $cart,
+            'sTargetAction' => self::ACTION_CART
+        ]);
     }
 
     public function ajaxCartAction()
@@ -57,8 +62,10 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
 
         $cart = json_decode(json_encode($service->getCart()), true);
 
-        $this->View()->assign('cart', $cart);
-        $this->View()->assign('targetAction', 'ajaxCart');
+        $this->View()->assign([
+            'cart' => $cart,
+            'sTargetAction' => self::ACTION_AJAX_CART
+        ]);
     }
 
     public function addProductAction()
@@ -77,7 +84,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         );
 
         $this->forward(
-            $this->Request()->getParam('target', 'ajaxCart')
+            $this->Request()->getParam('sTargetAction', self::ACTION_AJAX_CART)
         );
     }
 
@@ -94,7 +101,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         $service->remove($identifier);
 
         $this->forward(
-            $this->Request()->getParam('target', 'ajaxCart')
+            $this->Request()->getParam('sTargetAction', self::ACTION_AJAX_CART)
         );
     }
 

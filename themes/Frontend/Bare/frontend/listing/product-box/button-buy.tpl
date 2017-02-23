@@ -1,7 +1,7 @@
 {block name="frontend_listing_product_box_button_buy"}
 
     {block name="frontend_listing_product_box_button_buy_url"}
-        {$url = {url controller=checkout action=addArticle} }
+        {$url = {url controller=checkout action=addProduct sTargetAction=ajaxAddArticle}}
     {/block}
 
     {block name="frontend_listing_product_box_button_buy_form"}
@@ -13,7 +13,7 @@
               data-eventName="submit"
               {if $theme.offcanvasCart}
                  data-showModal="false"
-                 data-addArticleUrl="{url controller=checkout action=addProduct}"
+                 data-addArticleUrl="{url controller=checkout action=addProduct sTargetAction=ajaxCart}"
               {/if}>
 
             {block name="frontend_listing_product_box_button_buy_order_number"}

@@ -1,5 +1,5 @@
 {block name="frontend_detail_buy"}
-    <form name="sAddToBasket" method="post" action="{url controller=checkout action=addProduct}" class="buybox--form" data-add-article="true" data-eventName="submit"{if $theme.offcanvasCart} data-showModal="false" data-addArticleUrl="{url controller=checkout action=addProduct}"{/if}>
+    <form name="sAddToBasket" method="post" action="{url controller=checkout action=addProduct sTargetAction=cart}" class="buybox--form" data-add-article="true" data-eventName="submit"{if $theme.offcanvasCart} data-showModal="false" data-addArticleUrl="{url controller=checkout action=addProduct sTargetAction=ajaxCart}"{/if}>
         {block name="frontend_detail_buy_configurator_inputs"}
             {if $sArticle.sConfigurator&&$sArticle.sConfiguratorSettings.type==3}
                 {foreach $sArticle.sConfigurator as $group}
