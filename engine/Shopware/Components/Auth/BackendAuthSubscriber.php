@@ -100,15 +100,12 @@ class BackendAuthSubscriber implements SubscriberInterface
         }
         $resourceId = isset($params['resource']) ? $params['resource'] : $this->aclResource;
 
-        if (!$this->acl) {
+        $acl = Shopware()->Container()->get('acl');
+        if (!$acl->has($resourceId)) {
             return true;
         }
 
-        if (!$this->acl->has($resourceId)) {
-            return true;
-        }
-
-        return $this->acl->isAllowed(
+        return $acl->isAllowed(
             isset($params['role']) ? $params['role'] : $this->aclRole,
             $resourceId,
             isset($params['privilege']) ? $params['privilege'] : null
@@ -193,10 +190,10 @@ class BackendAuthSubscriber implements SubscriberInterface
         if ($auth->hasIdentity()) {
             $identity = $auth->getIdentity();
 
-            $this->acl = Shopware()->Acl();
             $this->aclRole = $identity->role;
 
-            if (!$this->acl->has($this->aclResource)) {
+            $acl = Shopware()->Container()->get('acl');
+            if (!$acl->has($this->aclResource)) {
                 return $auth;
             }
 
