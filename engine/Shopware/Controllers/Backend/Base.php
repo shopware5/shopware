@@ -56,7 +56,8 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
         ) {
             $this->View()->addTemplateDir('.');
             $this->Front()->Plugins()->ScriptRenderer()->setRender();
-            Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
+            Shopware()->Container()->get('shopware.subscriber.auth')->setNoAuth();
+            Shopware()->Container()->get('shopware.subscriber.auth')->setNoAuth();
         } else {
             parent::init();
         }

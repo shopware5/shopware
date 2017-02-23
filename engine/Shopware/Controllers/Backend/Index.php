@@ -36,7 +36,7 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action imple
     const MIN_DAYS_INSTALLATION_SURVEY = 14;
 
     /**
-     * @var Shopware_Plugins_Backend_Auth_Bootstrap
+     * @var \Shopware\Components\Auth\BackendAuthSubscriber
      */
     protected $auth;
 
@@ -45,7 +45,7 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action imple
      */
     public function init()
     {
-        $this->auth = Shopware()->Plugins()->Backend()->Auth();
+        $this->auth = Shopware()->Container()->get('shopware.subscriber.auth');
         $this->auth->setNoAuth();
         $this->Front()->Plugins()->ScriptRenderer()->setRender();
     }

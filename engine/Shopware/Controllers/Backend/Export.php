@@ -46,7 +46,7 @@ class Shopware_Controllers_Backend_Export extends Enlight_Controller_Action impl
      */
     public function init()
     {
-        Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
+        Shopware()->Container()->get('shopware.subscriber.auth')->setNoAuth();
         Shopware()->Plugins()->Controller()->ViewRenderer()->setNoRender();
         $this->Front()->setParam('disableOutputBuffering', true);
         $this->export = Shopware()->Modules()->Export();

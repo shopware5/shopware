@@ -32,7 +32,7 @@
 class Shopware_Controllers_Backend_ExtJs extends Enlight_Controller_Action
 {
     /**
-     * @var Shopware_Plugins_Backend_Auth_Bootstrap
+     * @var \Shopware\Components\Auth\BackendAuthSubscriber
      */
     protected $auth;
 
@@ -220,7 +220,7 @@ class Shopware_Controllers_Backend_ExtJs extends Enlight_Controller_Action
      */
     protected function _isAllowed($privilege, $resource = null, $role = null)
     {
-        return Shopware()->Plugins()->Backend()->Auth()->isAllowed([
+        return Shopware()->Container()->get('shopware.subscriber.auth')->isAllowed([
             'privilege' => $privilege,
             'resource' => $resource,
             'role' => $role,

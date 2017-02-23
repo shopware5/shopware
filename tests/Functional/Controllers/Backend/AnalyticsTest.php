@@ -51,8 +51,8 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
         parent::setUp();
 
         // disable auth and acl
-        Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
-        Shopware()->Plugins()->Backend()->Auth()->setNoAcl();
+        Shopware()->Container()->get('shopware.subscriber.auth')->setNoAuth();
+        Shopware()->Container()->get('shopware.subscriber.auth')->setNoAcl();
 
         $this->repository = new Repository(Shopware()->Models()->getConnection(), Shopware()->Events());
 

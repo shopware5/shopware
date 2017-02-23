@@ -34,7 +34,7 @@ class Shopware_Controllers_Backend_Login extends Shopware_Controllers_Backend_Ex
      */
     public function init()
     {
-        Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
+        Shopware()->Container()->get('shopware.subscriber.auth')->setNoAuth();
         parent::init();
     }
 
@@ -122,7 +122,7 @@ class Shopware_Controllers_Backend_Login extends Shopware_Controllers_Backend_Ex
      */
     public function getPlugin()
     {
-        return Shopware()->Plugins()->Backend()->Auth();
+        return Shopware()->Container()->get('shopware.subscriber.auth');
     }
 
     /**

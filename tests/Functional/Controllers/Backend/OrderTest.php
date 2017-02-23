@@ -51,7 +51,7 @@ class Shopware_Tests_Controllers_Backend_OrderTest extends Enlight_Components_Te
         Shopware()->Db()->query($sql, ['orderId' => '15315351']);
 
         $this->assertEquals('126.82', $this->getInvoiceAmount());
-        Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
+        Shopware()->Container()->get('shopware.subscriber.auth')->setNoAuth();
 
         //delete the order position
         $this->Request()
@@ -79,8 +79,8 @@ class Shopware_Tests_Controllers_Backend_OrderTest extends Enlight_Components_Te
     {
         // Insert test data
         $orderId = Shopware()->Db()->fetchOne('SELECT id FROM s_order WHERE ordernumber = 20001');
-        Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
-        Shopware()->Plugins()->Backend()->Auth()->setNoAcl();
+        Shopware()->Container()->get('shopware.subscriber.auth')->setNoAuth();
+        Shopware()->Container()->get('shopware.subscriber.auth')->setNoAcl();
 
         $postData = $this->getPostData();
         $initialShopCount = Shopware()->Db()->fetchOne('SELECT count(distinct id) FROM s_core_shops');

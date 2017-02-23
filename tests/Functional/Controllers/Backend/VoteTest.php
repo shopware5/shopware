@@ -37,8 +37,8 @@ class Shopware_Tests_Controllers_Backend_VoteTest extends Enlight_Components_Tes
         parent::setUp();
 
         // disable auth and acl
-        Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
-        Shopware()->Plugins()->Backend()->Auth()->setNoAcl();
+        Shopware()->Container()->get('shopware.subscriber.auth')->setNoAuth();
+        Shopware()->Container()->get('shopware.subscriber.auth')->setNoAcl();
     }
 
     /**

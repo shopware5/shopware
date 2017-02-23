@@ -566,5 +566,9 @@
         <service id="shopware.api.shop" class="Shopware\Components\Api\Resource\Shop" shared="false" />
         <service id="shopware.api.translation" class="Shopware\Components\Api\Resource\Translation" shared="false" />
         <service id="shopware.api.variant" class="Shopware\Components\Api\Resource\Variant" shared="false" />
+
+        <service id="shopware.subscriber.auth" class="Shopware\Components\Auth\BackendAuthSubscriber">
+            <tag name="shopware.event_subscriber" />
+        </service>
     </services>
 </container>

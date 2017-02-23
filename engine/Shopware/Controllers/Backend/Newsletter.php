@@ -36,7 +36,7 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
      */
     public function init()
     {
-        Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
+        Shopware()->Container()->get('shopware.subscriber.auth')->setNoAuth();
         Shopware()->Plugins()->Controller()->ViewRenderer()->setNoRender();
     }
 
