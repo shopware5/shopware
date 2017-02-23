@@ -113,7 +113,7 @@
                     {$start = $lineItem.unit.minPurchase}
                     {$end = $lineItem.unit.maxPurchase}
                     {$step = $lineItem.unit.purchaseStep}
-+
+
                     {if !$start}
                         {$start = 1}
                     {/if}

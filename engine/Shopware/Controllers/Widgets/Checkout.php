@@ -21,39 +21,28 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+use Shopware\Bundle\CartBundle\Infrastructure\StoreFrontCartService;
 
 /**
  * Shopware Application
  */
 class Shopware_Controllers_Widgets_Checkout extends Enlight_Controller_Action
 {
-    /**
-     * @var sBasket
-     */
-    public $module;
-
-    /**
-     * Reference to Shopware session object (Shopware()->Session)
-     *
-     * @var Zend_Session_Namespace
-     */
-    protected $session;
-
-    /**
-     * Pre dispatch method
-     */
-    public function preDispatch()
-    {
-        $this->module = Shopware()->Modules()->Basket();
-        $this->session = Shopware()->Session();
-    }
-
     public function infoAction()
     {
-        $view = $this->View();
-        $view->sBasketQuantity = isset($this->session->sBasketQuantity) ? $this->session->sBasketQuantity : 0;
-        $view->sBasketAmount = isset($this->session->sBasketAmount) ? $this->session->sBasketAmount : 0;
-        $view->sNotesQuantity = isset($this->session->sNotesQuantity) ? $this->session->sNotesQuantity : $this->module->sCountNotes();
-        $view->sUserLoggedIn = !empty(Shopware()->Session()->sUserId);
+        /** @var StoreFrontCartService $service */
+        $service = $this->get('shopware_cart.store_front_cart_service');
+
+        /** @var Enlight_Components_Session_Namespace $session */
+        $session = $this->get('session');
+
+        $cart = $service->getCart();
+
+        $this->View()->assign([
+            'sBasketQuantity' => $cart->getCalculatedCart()->getLineItems()->filterGoods()->count(),
+            'sBasketAmount' => $cart->getPrice()->getTotalPrice(),
+            'sUserLoggedIn' => !empty($session->get('sUserId')),
+            'sNotesQuantity' => $session->get('sNotesQuantity') ?: Shopware()->Modules()->Basket()->sCountNotes()
+        ]);
     }
 }

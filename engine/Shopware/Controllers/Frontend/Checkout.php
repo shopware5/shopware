@@ -68,6 +68,29 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         ]);
     }
 
+    public function ajaxAmountAction()
+    {
+        Shopware()->Plugins()->Controller()->Json()->setPadding();
+
+        /** @var StoreFrontCartService $service */
+        $service = $this->get('shopware_cart.store_front_cart_service');
+
+        $cart = $service->getCart();
+
+        $quantity = $cart->getCalculatedCart()->getLineItems()->filterGoods()->count();
+
+        $this->View()->assign([
+            'sBasketQuantity' => $quantity,
+            'sBasketAmount' => $cart->getPrice()->getTotalPrice()
+        ]);
+
+        $template = Shopware()->Template()->fetch('frontend/checkout/ajax_amount.tpl');
+
+        $this->Front()->Plugins()->ViewRenderer()->setNoRender();
+
+        $this->Response()->setBody(json_encode(['amount' => $template, 'quantity' => $quantity]));
+    }
+
     public function addProductAction()
     {
         $number = $this->Request()->getParam('number');
@@ -1513,31 +1536,6 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         }
 
         $this->forward('ajaxCart');
-    }
-
-    /**
-     * Get current amount from cart via ajax to display in realtime
-     */
-    public function ajaxAmountAction()
-    {
-        Shopware()->Plugins()->Controller()->Json()->setPadding();
-
-        $amount = $this->basket->sGetAmount();
-        $quantity = $this->basket->sCountBasket();
-
-        $this->View()->sBasketQuantity = $quantity;
-        $this->View()->sBasketAmount = empty($amount) ? 0 : array_shift($amount);
-
-        $this->Front()->Plugins()->ViewRenderer()->setNoRender();
-
-        $this->Response()->setBody(
-            json_encode(
-                [
-                    'amount' => Shopware()->Template()->fetch('frontend/checkout/ajax_amount.tpl'),
-                    'quantity' => $quantity,
-                ]
-            )
-        );
     }
 
     /**
