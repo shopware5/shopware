@@ -2,6 +2,10 @@
 
 This changelog references changes done in Shopware Next patch versions.
 
+## Changes
+   
+* Changed `BackendSession` service name to `backend_session`
+
 ## Removals
 
 * Removed support for separate SSL host and SSL path. Also the `Use SSL` and `Always SSL` options were merged.

@@ -108,12 +108,12 @@ class Shopware_Controllers_Backend_UpdateWizard extends Shopware_Controllers_Bac
      */
     private function getAccessToken()
     {
-        if (!$this->get('BackendSession')->offsetExists('store_token')) {
+        if (!$this->get('backend_session')->offsetExists('store_token')) {
             return null;
         }
 
         /** @var $token AccessTokenStruct */
-        $token = $this->get('BackendSession')->offsetGet('store_token');
+        $token = $this->get('backend_session')->offsetGet('store_token');
         $token = unserialize($token);
 
         return $token;

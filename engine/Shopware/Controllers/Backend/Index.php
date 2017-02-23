@@ -130,7 +130,7 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action imple
         $sbpLogin = 0;
         if ($firstRunWizardEnabled) {
             /** @var \Shopware\Bundle\PluginInstallerBundle\Struct\AccessTokenStruct $tokenData */
-            $tokenData = Shopware()->BackendSession()->accessToken;
+            $tokenData = Shopware()->Container()->get('backend_session')->accessToken;
 
             $sbpLogin = (int) (!empty($tokenData) && $tokenData->getExpire() >= new DateTime('+30 seconds'));
         }

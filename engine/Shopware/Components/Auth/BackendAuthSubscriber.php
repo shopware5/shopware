@@ -1,4 +1,26 @@
 <?php
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
 
 namespace Shopware\Components\Auth;
 
@@ -6,7 +28,6 @@ use Enlight\Event\SubscriberInterface;
 use Enlight_Event_EventArgs;
 use Shopware\Components\DependencyInjection\Bridge\Db;
 use Shopware\Components\DependencyInjection\Container;
-use Shopware\Components\Session\PdoSessionHandler;
 
 class BackendAuthSubscriber implements SubscriberInterface
 {
@@ -59,13 +80,11 @@ class BackendAuthSubscriber implements SubscriberInterface
      */
     protected $request;
 
-
     public static function getSubscribedEvents()
     {
         return [
             'Enlight_Bootstrap_InitResource_Auth' => 'onInitResourceAuth',
             'Enlight_Controller_Action_PreDispatch' => 'onPreDispatchBackend',
-            'Enlight_Bootstrap_InitResource_BackendSession' => 'onInitResourceBackendSession',
         ];
     }
 
@@ -112,16 +131,6 @@ class BackendAuthSubscriber implements SubscriberInterface
     public function setNoAcl($flag = true)
     {
         $this->noAcl = $flag ? true : false;
-    }
-
-    /**
-     * Is authentication is necessary?
-     *
-     * @return bool
-     */
-    public function shouldAuth()
-    {
-        return !$this->noAuth;
     }
 
     /**
@@ -213,35 +222,6 @@ class BackendAuthSubscriber implements SubscriberInterface
     }
 
     /**
-     * Register acl plugin
-     *
-     * @param \Zend_Auth $auth
-     */
-    public function registerAclPlugin($auth)
-    {
-        $container = Shopware()->Container();
-        if ($this->acl === null) {
-            $this->acl = $container->get('Acl');
-        }
-        if ($auth->hasIdentity()) {
-            $identity = $auth->getIdentity();
-            $this->aclRole = $identity->role;
-        }
-
-        /** @var $engine \Enlight_Template_Manager */
-        $engine = $container->get('template');
-        $engine->unregisterPlugin(
-            \Smarty::PLUGIN_FUNCTION,
-            'acl_is_allowed'
-        );
-        $engine->registerPlugin(
-            \Enlight_Template_Manager::PLUGIN_FUNCTION,
-            'acl_is_allowed',
-            [$this, 'isAllowed']
-        );
-    }
-
-    /**
      * @return string
      */
     public function getDefaultLocale()
@@ -305,26 +285,6 @@ class BackendAuthSubscriber implements SubscriberInterface
     }
 
     /**
-     * @param Enlight_Event_EventArgs $args
-     *
-     * @throws \Exception
-     *
-     * @return \Enlight_Components_Session_Namespace
-     */
-    public function onInitResourceBackendSession(Enlight_Event_EventArgs $args)
-    {
-        $options = $this->getSessionOptions();
-        $saveHandler = $this->createSaveHandler(Shopware()->Container());
-        if ($saveHandler) {
-            session_set_save_handler($saveHandler);
-        }
-
-        \Enlight_Components_Session::start($options);
-
-        return new \Enlight_Components_Session_Namespace('ShopwareBackend');
-    }
-
-    /**
      * Initiate shopware auth resource
      * database adapter by default
      *
@@ -334,7 +294,7 @@ class BackendAuthSubscriber implements SubscriberInterface
      */
     public function onInitResourceAuth(Enlight_Event_EventArgs $args)
     {
-        Shopware()->Container()->load('BackendSession');
+        Shopware()->Container()->load('backend_session');
 
         $resource = \Shopware_Components_Auth::getInstance();
         $adapter = new \Shopware_Components_Auth_Adapter_Default();
@@ -349,21 +309,9 @@ class BackendAuthSubscriber implements SubscriberInterface
     }
 
     /**
-     * Returns capabilities
-     */
-    public function getCapabilities()
-    {
-        return [
-            'install' => false,
-            'enable' => false,
-            'update' => true,
-        ];
-    }
-
-    /**
      * Init backend locales
      */
-    protected function initLocale()
+    private function initLocale()
     {
         $container = Shopware()->Container();
 
@@ -375,6 +323,7 @@ class BackendAuthSubscriber implements SubscriberInterface
             . $this->request->getHttpHost()
             . $this->request->getBaseUrl() . '?'
             . \Shopware::REVISION;
+
         $baseHash = substr(sha1($baseHash), 0, 5);
         $template->setCompileId('backend_' . $locale->toString() . '_' . $baseHash);
 
@@ -390,9 +339,9 @@ class BackendAuthSubscriber implements SubscriberInterface
      */
     private function getCurrentLocale()
     {
-        $options = $this->getSessionOptions();
-
-        \Enlight_Components_Session::setOptions($options);
+        \Enlight_Components_Session::setOptions(
+            $this->getSessionOptions()
+        );
 
         if (\Enlight_Components_Session::sessionExists()) {
             $auth = Shopware()->Container()->get('auth');
@@ -434,30 +383,42 @@ class BackendAuthSubscriber implements SubscriberInterface
     }
 
     /**
-     * @param Container $container
+     * Register acl plugin
      *
-     * @return \SessionHandlerInterface|null
+     * @param \Zend_Auth $auth
      */
-    private function createSaveHandler(Container $container)
+    private function registerAclPlugin($auth)
     {
-        $sessionOptions = $container->getParameter('shopware.backendsession');
-        if (isset($sessionOptions['save_handler']) && $sessionOptions['save_handler'] !== 'db') {
-            return null;
+        $container = Shopware()->Container();
+        if ($this->acl === null) {
+            $this->acl = $container->get('Acl');
+        }
+        if ($auth->hasIdentity()) {
+            $identity = $auth->getIdentity();
+            $this->aclRole = $identity->role;
         }
 
-        $dbOptions = $container->getParameter('shopware.db');
-        $conn = Db::createPDO($dbOptions);
-
-        return new PdoSessionHandler(
-            $conn,
-            [
-                'db_table' => 's_core_sessions_backend',
-                'db_id_col' => 'id',
-                'db_data_col' => 'data',
-                'db_expiry_col' => 'expiry',
-                'db_time_col' => 'modified',
-                'lock_mode' => $sessionOptions['locking'] ? PdoSessionHandler::LOCK_TRANSACTIONAL : PdoSessionHandler::LOCK_NONE,
-            ]
+        /** @var $engine \Enlight_Template_Manager */
+        $engine = $container->get('template');
+        $engine->unregisterPlugin(
+            \Smarty::PLUGIN_FUNCTION,
+            'acl_is_allowed'
         );
+
+        $engine->registerPlugin(
+            \Enlight_Template_Manager::PLUGIN_FUNCTION,
+            'acl_is_allowed',
+            [$this, 'isAllowed']
+        );
+    }
+
+    /**
+     * Is authentication is necessary?
+     *
+     * @return bool
+     */
+    private function shouldAuth()
+    {
+        return !$this->noAuth;
     }
 }

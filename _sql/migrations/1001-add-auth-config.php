@@ -28,6 +28,6 @@ class Migrations_Migration1001 extends Shopware\Components\Migrations\AbstractMi
     {
         $this->addSql("SET @pluginId = (SELECT id FROM s_core_plugins WHERE name = 'Auth' AND namespace = 'Backend' LIMIT 1);");
         $this->addSql('UPDATE s_core_config_forms SET plugin_id = NULL WHERE plugin_id = @pluginId;');
-        $this->addSql('DELETE FROM s_core_subscribes WHERE s_core_config_forms pluginID = @pluginId;');
+        $this->addSql('DELETE FROM s_core_subscribes WHERE pluginID = @pluginId;');
     }
 }

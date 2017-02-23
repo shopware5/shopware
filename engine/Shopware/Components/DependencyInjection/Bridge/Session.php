@@ -39,12 +39,13 @@ class Session
 {
     /**
      * @param Container $container
+     * @param string    $table
+     * @param array     $sessionOptions
      *
-     * @return \SessionHandlerInterface|null
+     * @return null|\SessionHandlerInterface
      */
-    public function createSaveHandler(Container $container)
+    public function createSaveHandler(Container $container, $table, array $sessionOptions)
     {
-        $sessionOptions = $container->getParameter('shopware.session');
         if (isset($sessionOptions['save_handler']) && $sessionOptions['save_handler'] !== 'db') {
             return null;
         }
@@ -55,7 +56,7 @@ class Session
         return new PdoSessionHandler(
             $conn,
             [
-                'db_table' => 's_core_sessions',
+                'db_table' => $table,
                 'db_id_col' => 'id',
                 'db_data_col' => 'data',
                 'db_expiry_col' => 'expiry',
@@ -110,5 +111,55 @@ class Session
         $namespace->offsetSet('sessionId', \Enlight_Components_Session::getId());
 
         return $namespace;
+    }
+
+    /**
+     * @param \Shopware_Components_Config   $config
+     * @param \Enlight_Controller_Front     $controller
+     * @param array                         $options
+     * @param \SessionHandlerInterface|null $saveHandler
+     *
+     * @return \Enlight_Components_Session_Namespace
+     */
+    public function createBackendSession(
+        \Shopware_Components_Config $config,
+        array $options,
+        \SessionHandlerInterface $saveHandler = null,
+        \Enlight_Controller_Front $controller = null
+    ) {
+        $options = $this->getSessionOptions($config, $options, $controller);
+        if ($saveHandler) {
+            session_set_save_handler($saveHandler);
+        }
+
+        \Enlight_Components_Session::start($options);
+
+        return new \Enlight_Components_Session_Namespace('ShopwareBackend');
+    }
+
+    /**
+     * @param \Shopware_Components_Config    $config
+     * @param array                          $options
+     * @param \Enlight_Controller_Front|null $controller
+     *
+     * @return array
+     */
+    private function getSessionOptions(
+        \Shopware_Components_Config $config,
+        array $options,
+        \Enlight_Controller_Front $controller = null
+    ) {
+        if (!isset($options['cookie_path']) && $controller && $controller->Request() !== null) {
+            $options['cookie_path'] = rtrim($controller->Request()->getBaseUrl(), '/') . '/backend/';
+        }
+
+        if (empty($options['gc_maxlifetime'])) {
+            $backendTimeout = $config->get('backendTimeout', 60 * 90);
+            $options['gc_maxlifetime'] = (int) $backendTimeout ?: PHP_INT_MAX;
+        }
+
+        unset($options['locking']);
+
+        return $options;
     }
 }
