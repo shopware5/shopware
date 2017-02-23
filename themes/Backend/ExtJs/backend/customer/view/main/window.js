@@ -147,6 +147,10 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
 
         me.chart = me.createChart();
 
+        // me.streamChartContainer = Ext.create('Ext.container.Container', {
+        //     items: []
+        // });
+
         me.cardContainer = Ext.create('Ext.container.Container', {
             items: [me.gridPanel, me.chart, me.createStreamChart()] ,
             region: 'center',
@@ -168,7 +172,6 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
                 me.streamListing
             ]
         });
-        //add the customer list grid panel and set the store
         me.items = [
             me.formPanel,
             me.cardContainer
@@ -202,25 +205,24 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
         var fields = [];
         var modelFields = [];
 
-        var series = me.streamChart.series;
-        series.removeAll(series.items);
-        console.log(series);
-        series.add(me.createLineSeries('unassigned', 'Nicht zugewiesen'));
+        // var series = me.streamChart.series;
+        // series.removeAll(series.items);
+        // series.add(me.createLineSeries('unassigned', 'Nicht zugewiesen'));
 
         me.streamListing.getStore().each(function (item) {
             fields.push(item.get('name'));
             modelFields.push({ name: item.get('name'), type: 'float' });
-            series.add(me.createLineSeries(item.get('name'), item.get('name')));
+            // series.add(me.createLineSeries(item.get('name'), item.get('name')));
         });
-
-        var axes = me.streamChart.axes.first();
-        // var series = me.streamChart.series.first();
-        // series.yField = fields;
-        axes.fields = fields;
 
         fields.push('unassigned');
         modelFields.push({ name: 'unassigned', type: 'float' });
         modelFields.push({ name: 'yearMonth', type: 'string'});
+
+        var axes = me.streamChart.axes.first();
+        var series = me.streamChart.series.first();
+        series.yField = fields;
+        axes.fields = fields;
 
         me.streamChart.setLoading(true);
 
@@ -292,7 +294,7 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
                 xField: 'yearMonth',
                 yField: ['unassigned'],
                 markerConfig: { type: 'circle', size: 4, radius: 4, 'stroke-width': 0 }
-            }],
+            }]
             // series: [{
             //     type: 'column',
             //     axis: 'left',
