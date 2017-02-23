@@ -127,10 +127,32 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         $service->changeQuantity($identifier, $quantity);
 
         $this->forward(
-            $this->Request()->getParam('target', 'cart')
+            $this->Request()->getParam('sTargetAction', self::ACTION_CART)
         );
     }
 
+    /**
+     * Ajax add article action
+     *
+     * This action will get redirected from the default addArticleAction
+     * when the request was an AJAX request.
+     *
+     * The json padding will be set so that the content type will get to
+     * 'text/javascript' so the template can be returned via jsonp
+     */
+    public function ajaxAddArticleAction()
+    {
+        Shopware()->Plugins()->Controller()->Json()->setPadding();
+
+        /** @var StoreFrontCartService $service */
+        $service = $this->get('shopware_cart.store_front_cart_service');
+
+        $number = $this->Request()->getParam('number');
+
+        $product = $service->getCart()->getLineItems()->get($number);
+
+        $this->View()->assign(['lineItem' => json_decode(json_encode($product), true)]);
+    }
 
 
     /**
@@ -1437,19 +1459,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         return $this->session['sDispatch'];
     }
 
-    /**
-     * Ajax add article action
-     *
-     * This action will get redirected from the default addArticleAction
-     * when the request was an AJAX request.
-     *
-     * The json padding will be set so that the content type will get to
-     * 'text/javascript' so the template can be returned via jsonp
-     */
-    public function ajaxAddArticleAction()
-    {
-        Shopware()->Plugins()->Controller()->Json()->setPadding();
-    }
+
 
     /**
      * Ajax add article cart action
