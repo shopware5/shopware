@@ -108,26 +108,6 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
     }
 
     /**
-     * tag cloud by category
-     */
-    public function tagCloudAction()
-    {
-        $config = Shopware()->Plugins()->Frontend()->TagCloud()->Config();
-
-        if (empty($config->show)) {
-            return;
-        }
-
-        $controller = $this->Request()->getParam('sController', $this->Request()->getControllerName());
-
-        if (strpos($config->controller, $controller) !== false) {
-            $this->View()->assign('sCloud', Shopware()->Modules()->Marketing()->sBuildTagCloud(
-                $this->Request()->getParam('sCategory')
-            ));
-        }
-    }
-
-    /**
      * Loads the listing count for the provided listing parameters.
      * Sets a json response with: `facets`, `totalCount` and `products`.
      */
