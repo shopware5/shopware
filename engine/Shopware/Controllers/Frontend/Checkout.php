@@ -111,12 +111,8 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         );
     }
 
-    public function deleteItemAction()
+    public function removeLineItemAction()
     {
-        if (!$this->Request()->isPost()) {
-            throw new Exception('Only post request allowed');
-        }
-
         $identifier = $this->Request()->getParam('identifier');
 
         /** @var StoreFrontCartService $service */

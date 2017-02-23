@@ -28,7 +28,7 @@
         {* Article actions *}
         {block name='frontend_checkout_ajax_cart_actions'}
             <div class="action--container">
-                {$deleteUrl = {url action='deleteItem' identifier=$calculated.identifier sTargetAction=$sTargetAction}}
+                {$deleteUrl = {url action='removeLineItem' identifier=$calculated.identifier sTargetAction=$sTargetAction}}
 
                 <form action="{$deleteUrl}" method="post">
                     <button type="submit" class="btn is--small action--remove" title="{s name="AjaxCartRemoveArticle"}{/s}">
