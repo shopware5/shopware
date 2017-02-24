@@ -132,6 +132,10 @@ class Shopware_Plugins_Frontend_InputFilter_Bootstrap extends Shopware_Component
             ],
             'frontend/account/resetpassword' => [
                 'password',
+                'passwordConfirmation',
+            ],
+            'frontend/account/saveemail' => [
+                'currentPassword',
             ],
         ];
 
