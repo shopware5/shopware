@@ -40,3 +40,4 @@ This changelog references changes done in Shopware Next patch versions.
         - `frontend_home_index_tagcloud` in file `themes/Frontend/Bare/frontend/home/index.tpl`
 
     * Deprecated `forceSecure` and `sUseSSL` smarty flags
+* Removed `s_core_engine_elements` and `Shopware\Models\Article\Element` 
