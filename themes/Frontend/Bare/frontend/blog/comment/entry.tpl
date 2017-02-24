@@ -24,14 +24,20 @@
                             {block name='frontend_blog_comments_comment_author'}
                                 <div class="meta--author">
 
-                                    {block name='frontned_blog_comments_comment_author_label'}
-                                        <strong class="author--label">
-                                            {s name="DetailCommentInfoFrom" namespace='frontend/detail/comment'}{/s}
-                                        </strong>
+                                    {block name='frontend_blog_comments_comment_author_label'}
+                                        {* Legacy block with typo. *}
+                                        {block name='frontned_blog_comments_comment_author_label'}
+                                                <strong class="author--label">
+                                                {s name="DetailCommentInfoFrom" namespace='frontend/detail/comment'}{/s}
+                                                </strong>
+                                        {/block}
                                     {/block}
 
-                                    {block name='frontned_blog_comments_comment_author_name'}
-                                        <span class="author--name" itemprop="creator">{$vote.name}</span>
+                                    {block name='frontend_blog_comments_comment_author_name'}
+                                        {* Legacy block with typo. *}
+                                        {block name='frontned_blog_comments_comment_author_name'}
+                                                <span itemprop="creator" class="author--name">{$vote.name|escapeHtml}</span>
+                                        {/block}
                                     {/block}
 
                                 </div>
