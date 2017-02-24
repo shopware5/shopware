@@ -211,7 +211,8 @@ Ext.define('Shopware.apps.SwagUpdate.view.Window', {
             {
                 header: '{s name="columns/message"}Message{/s}',
                 dataIndex: 'message',
-                flex: 2
+                flex: 2,
+                allowHtml: true
             }],
             dockedItems: [{
                 xtype: 'pagingtoolbar',
