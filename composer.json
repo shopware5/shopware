@@ -60,7 +60,9 @@
         "paragonie/random_compat": "1.4.1",
         "cocur/slugify": "2.2",
         "bcremer/line-reader": "^0.2.0",
-        "ramsey/uuid": "3.5.2"
+        "ramsey/uuid": "3.5.2",
+        "setasign/fpdf": "1.8.1",
+        "setasign/fpdi": "1.6.1"
     },
     "suggest": {
         "ext-apcu": "*",
