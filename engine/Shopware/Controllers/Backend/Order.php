@@ -1268,9 +1268,6 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
      */
     private function mergeDocuments($paths)
     {
-        include_once 'engine/Library/Fpdf/fpdf.php';
-        include_once 'engine/Library/Fpdf/fpdi.php';
-
         $pdf = new FPDI();
 
         foreach ($paths as $path) {
