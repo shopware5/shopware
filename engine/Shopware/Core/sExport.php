@@ -1390,9 +1390,6 @@ class sExport
                     '' as ob_attr6
             ) as b
 
-            LEFT JOIN s_order_basket_attributes ba
-            ON b.id = ba.basketID
-
             LEFT JOIN s_articles a
             ON b.articleID=a.id
             AND b.modus=0
