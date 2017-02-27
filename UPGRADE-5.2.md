@@ -2,7 +2,16 @@
 
 This changelog references changes done in Shopware 5.2 patch versions.
 
+## 5.2.20
+
+[View all changes from v5.2.19...v5.2.20](https://github.com/shopware/shopware/compare/v5.2.19...v5.2.20)
+
+* Removed left join of `s_order_basket_attributes` in `sExport::sGetDispatchBasket()`
+
 ## 5.2.19
+
+[View all changes from v5.2.18...v5.2.19](https://github.com/shopware/shopware/compare/v5.2.18...v5.2.19)
+
 * Changed the loading of backend widgets to disable widgets of deactivated plugins
 * Added new Event `Shopware_Modules_Admin_regenerateSessionId_Start` in sAdmin::regenerateSessionId
 * Changed `convertCategory` method in `engine/Shopware/Core/sCategories.php` from private to public
@@ -18,7 +27,12 @@ This changelog references changes done in Shopware 5.2 patch versions.
 * Support for custom CSS files in themes added to Grunt tasks
 * Added command option `shopId` for `sw:theme:cache:generate`
 
+## 5.2.18
+
+[View all changes from v5.2.17...v5.2.18](https://github.com/shopware/shopware/compare/v5.2.17...v5.2.18)
+
 ## 5.2.17
+
 [View all changes from v5.2.16...v5.2.17](https://github.com/shopware/shopware/compare/v5.2.16...v5.2.17)
 
 * Deprecated Smarty modifier `rewrite`. Modifier will be removed in 5.3.0.
