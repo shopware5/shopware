@@ -34,7 +34,7 @@ class PresetMetaData implements PresetMetaDataInterface
     /**
      * @var bool
      */
-    private $premium;
+    private $premium = false;
 
     /**
      * @var bool
@@ -54,22 +54,22 @@ class PresetMetaData implements PresetMetaDataInterface
     /**
      * @var array
      */
-    private $translations;
+    private $translations = [];
 
     /**
      * @var array
      */
-    private $presetData;
+    private $presetData = [];
 
     /**
      * @var array
      */
-    private $requiredPlugins;
+    private $requiredPlugins = [];
 
     /**
      * @var bool
      */
-    private $assetsImported;
+    private $assetsImported = true;
 
     /**
      * {@inheritdoc}
@@ -77,6 +77,14 @@ class PresetMetaData implements PresetMetaDataInterface
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * @param string $name
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
     }
 
     /**
@@ -88,11 +96,27 @@ class PresetMetaData implements PresetMetaDataInterface
     }
 
     /**
+     * @param bool $premium
+     */
+    public function setPremium($premium)
+    {
+        $this->premium = $premium;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getCustom()
     {
         return $this->custom;
+    }
+
+    /**
+     * @param bool $custom
+     */
+    public function setCustom($custom)
+    {
+        $this->custom = $custom;
     }
 
     /**
@@ -104,11 +128,27 @@ class PresetMetaData implements PresetMetaDataInterface
     }
 
     /**
+     * @param string $thumbnail
+     */
+    public function setThumbnail($thumbnail)
+    {
+        $this->thumbnail = $thumbnail;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getPreview()
     {
         return $this->preview;
+    }
+
+    /**
+     * @param string $preview
+     */
+    public function setPreview($preview)
+    {
+        $this->preview = $preview;
     }
 
     /**
@@ -120,11 +160,27 @@ class PresetMetaData implements PresetMetaDataInterface
     }
 
     /**
+     * @param array $translations
+     */
+    public function setTranslations(array $translations)
+    {
+        $this->translations = $translations;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getPresetData()
     {
         return $this->presetData;
+    }
+
+    /**
+     * @param array $presetData
+     */
+    public function setPresetData(array $presetData)
+    {
+        $this->presetData = $presetData;
     }
 
     /**
@@ -136,10 +192,40 @@ class PresetMetaData implements PresetMetaDataInterface
     }
 
     /**
+     * @param array $requiredPlugins
+     */
+    public function setRequiredPlugins(array $requiredPlugins)
+    {
+        $this->requiredPlugins = $requiredPlugins;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getAssetsImported()
     {
         return $this->assetsImported;
+    }
+
+    /**
+     * @var bool
+     */
+    public function setAssetsImported($assetsImported)
+    {
+        $this->assetsImported = $assetsImported;
+    }
+
+    /**
+     * @param array $data
+     */
+    public function fromArray(array $data)
+    {
+        foreach ($data as $key => $value) {
+            $method = 'set' . ucfirst($key);
+
+            if (method_exists($this, $method)) {
+                $this->$method($value);
+            }
+        }
     }
 }

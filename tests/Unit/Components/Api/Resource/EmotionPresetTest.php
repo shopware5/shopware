@@ -63,10 +63,10 @@ class EmotionPresetTest extends TestCase
         $method = new \ReflectionMethod($this->emotionPresetResource, 'generateElementSyncKeys');
         $method->setAccessible(true);
 
-        $presetData = [];
+        $presetData = '[]';
 
-        $this->assertInternalType('array', $presetData);
-        $this->assertEquals([], $method->invoke($this->emotionPresetResource, $presetData));
+        $this->assertInternalType('string', $presetData);
+        $this->assertEquals('[]', $method->invoke($this->emotionPresetResource, $presetData));
     }
 
     public function testCreateElementSyncKeysWithEmptyElementsData()

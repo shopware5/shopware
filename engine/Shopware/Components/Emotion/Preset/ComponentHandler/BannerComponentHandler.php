@@ -105,6 +105,11 @@ class BannerComponentHandler implements ComponentHandlerInterface
      */
     private function doAssetImport($assetPath)
     {
-        return Manager::getResource('Media')->internalCreateMediaByFileLink($assetPath, -3);
+        $mediaResource = Manager::getResource('Media');
+
+        $media = $mediaResource->internalCreateMediaByFileLink($assetPath, -3);
+        $mediaResource->getManager()->flush($media);
+
+        return $media;
     }
 }
