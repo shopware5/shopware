@@ -6,7 +6,7 @@ This changelog references changes done in Shopware 5.2 patch versions.
 
 [View all changes from v5.2.19...v5.2.20](https://github.com/shopware/shopware/compare/v5.2.19...v5.2.20)
 
-* Removed left join of `s_order_basket_attributes` in `sExport::sGetDispatchBasket()`
+* Reverted shopware/shopware#821 which added left joins for basket attributes in `sAdmin::sGetDispatchBasket()` and `sExport::sGetDispatchBasket()`
 
 ## 5.2.19
 
