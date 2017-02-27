@@ -437,11 +437,6 @@ UPDATE s_core_units SET `description` = 'Kilogram' WHERE id = 6;
 UPDATE s_core_units SET `description` = 'Package(s)', `unit` = 'Package(s)' WHERE id = 8;
 UPDATE s_core_units SET `description` = 'Unit', `unit` = 'unit' WHERE id = 9;
 
--- s_core_engine_elements --
-UPDATE s_core_engine_elements SET `label` = 'Comment', `help` = 'Optional comment' WHERE id = 22;
-UPDATE s_core_engine_elements SET `label` = 'Free text 1', `help` = 'Free text to display on the detail page' WHERE id = 33;
-UPDATE s_core_engine_elements SET `label` = 'Free text 2', `help` = 'Free text to display on the detail page' WHERE id = 34;
-
 -- s_core_config_elements --
 UPDATE s_core_config_elements SET `value` = 's:226:"0,a,according,against,all,and,are,as,be,before,but,by,can,etc,for,from,has,have,he,her,his,I,in,it,itis,its,just,like,make,more,new,not,now,of,on,one,or,over,players,style,that,the,thewhy,to,well,who,will,with,yet,you,you,your";' WHERE id = 625;
 UPDATE s_core_config_elements SET `value` = 's:7:"Voucher";' WHERE id = 614;
