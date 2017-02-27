@@ -135,7 +135,6 @@ class ThumbnailCleanupCommand extends ShopwareCommand
     private function indexFile($file)
     {
         $baseName = pathinfo($file, PATHINFO_FILENAME);
-        $fileName = pathinfo($file, PATHINFO_BASENAME);
 
         // check if the filename matches thumbnail syntax like "*_200x200" or "*_200x200@2x"
         if (preg_match('/(_[0-9]+x[0-9]+(@2x)?)$/', $baseName)) {

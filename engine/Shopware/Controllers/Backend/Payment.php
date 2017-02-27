@@ -235,18 +235,6 @@ class Shopware_Controllers_Backend_Payment extends Shopware_Controllers_Backend_
     }
 
     /**
-     * Internal helper function to get access to the entity manager.
-     */
-    private function getManager()
-    {
-        if ($this->manager === null) {
-            $this->manager = Shopware()->Models();
-        }
-
-        return $this->manager;
-    }
-
-    /**
      * Internal helper function to get access to the country repository.
      *
      * @return null|Shopware\Models\Country\Repository

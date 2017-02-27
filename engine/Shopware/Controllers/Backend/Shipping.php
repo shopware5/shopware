@@ -336,7 +336,6 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
      */
     public function getCountriesAction()
     {
-        $limit = $this->Request()->getParam('limit', 999);
         $offset = $this->Request()->getParam('start', 0);
         $sort = $this->Request()->getParam('sort', []);
         $filter = $this->Request()->getParam('filter', []);

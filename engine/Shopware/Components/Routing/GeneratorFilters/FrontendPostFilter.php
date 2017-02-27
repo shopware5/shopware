@@ -57,9 +57,9 @@ class FrontendPostFilter implements PostFilterInterface
         return $url;
     }
 
-
     /**
      * @param string[]
+     *
      * @return bool
      */
     private function isFullPath($params)

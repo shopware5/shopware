@@ -1804,7 +1804,6 @@ class sArticles
     public function sGetConfiguratorImage($sArticle, $sCombination = '')
     {
         if (!empty($sArticle['sConfigurator']) || !empty($sCombination)) {
-            $foundImage = false;
             $configuratorImages = false;
             $mainKey = 0;
 
@@ -1882,9 +1881,6 @@ class sArticles
 
                     foreach ($available as $checkKey => $checkCombination) {
                         $getCombination = explode(':', $checkCombination);
-                        $group = $getCombination[0];
-                        $option = $getCombination[1];
-
                         if (isset($referenceImages[strtolower($checkCombination)])) {
                             $imageFailedCheck[] = true;
                         }

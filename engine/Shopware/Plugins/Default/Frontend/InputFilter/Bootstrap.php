@@ -65,7 +65,6 @@ class Shopware_Plugins_Frontend_InputFilter_Bootstrap extends Shopware_Component
     {
         $request = $args->getRequest();
         $front = $args->getSubject();
-        $response = $front->Response();
         $config = $this->Config();
 
         if ($request->getModuleName() == 'backend' || $request->getModuleName() == 'api') {

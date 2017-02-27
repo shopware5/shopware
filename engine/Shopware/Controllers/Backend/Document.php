@@ -81,7 +81,7 @@ class Shopware_Controllers_Backend_Document extends Enlight_Controller_Action im
             [$id]
         );
         foreach ($getDocumentTypes as $targetID) {
-            $deleteOldRows = Shopware()->Db()->query(
+            Shopware()->Db()->query(
                 'DELETE FROM s_core_documents_box WHERE documentID = ?',
                 [$targetID['id']]
             );

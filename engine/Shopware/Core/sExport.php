@@ -1769,20 +1769,6 @@ class sExport
     }
 
     /**
-     * Helper function to get access to the article repository.
-     *
-     * @return \Shopware\Models\Article\Repository
-     */
-    private function getArticleRepository()
-    {
-        if ($this->articleRepository === null) {
-            $this->articleRepository = Shopware()->Models()->getRepository('Shopware\Models\Article\Article');
-        }
-
-        return $this->articleRepository;
-    }
-
-    /**
      * Helper function to get access to the media repository.
      *
      * @return \Shopware\Models\Media\Repository

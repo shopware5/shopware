@@ -74,7 +74,6 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
         $limit = (empty($params['limit'])) ? 20 : $params['limit'];
         $offset = (empty($params['start'])) ? 0 : $params['start'];
         $filter = (empty($params['search'])) ? null : $params['search'];
-        $order = (empty($params['order'])) ? '' : $params['order'];
 
         if (!empty($filter)) {
             $offset = 0;
@@ -612,18 +611,6 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
         }
 
         return $this->userRepository;
-    }
-
-    /**
-     * Internal helper function to get access to the entity manager.
-     */
-    private function getManager()
-    {
-        if ($this->manager === null) {
-            $this->manager = Shopware()->Models();
-        }
-
-        return $this->manager;
     }
 
     /**

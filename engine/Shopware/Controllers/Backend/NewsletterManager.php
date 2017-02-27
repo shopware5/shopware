@@ -107,10 +107,7 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
      */
     public function getGroupsAction()
     {
-        $filter = $this->Request()->getParam('filter', null);
         $sort = $this->Request()->getParam('sort', null);
-        $limit = $this->Request()->getParam('limit', 10);
-        $offset = $this->Request()->getParam('start', 0);
 
         if ($sort === null || $sort[1] === null) {
             $field = 'name';
@@ -559,8 +556,6 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
         $totalResult = $paginator->count();
         //returns the customer data
         $result = $paginator->getIterator()->getArrayCopy();
-
-        $sender = $query->getArrayResult();
 
         $this->View()->assign([
             'success' => true,

@@ -25,7 +25,6 @@
 namespace Shopware\Components\DependencyInjection\Bridge;
 
 use Zend_Cache_Core;
-use Zend_Locale_Data;
 
 /**
  * Wrapper for accessing the used zend cache instance
