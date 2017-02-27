@@ -2,6 +2,12 @@
 
 This changelog references changes done in Shopware 5.2 patch versions.
 
+## 5.2.21
+
+[View all changes from v5.2.20...v5.2.21](https://github.com/shopware/shopware/compare/v5.2.20...v5.2.21)
+
+* Updated Symfony to version 2.8.17
+
 ## 5.2.20
 
 [View all changes from v5.2.19...v5.2.20](https://github.com/shopware/shopware/compare/v5.2.19...v5.2.20)
