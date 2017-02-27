@@ -505,7 +505,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
                 'id' => 1,
                 'name' => Shopware()->Snippets()->getNamespace('backend/performance/main')->get('cache/apc'),
                 'value' => extension_loaded('apcu'),
-                'valid' => extension_loaded('apcu') === true ? self::PERFORMANCE_VALID : self::PERFORMANCE_INVALID
+                'valid' => extension_loaded('apcu') === true && ini_get('opcache.enable') === '1' ? self::PERFORMANCE_VALID : self::PERFORMANCE_INVALID
             ),
             array(
                 'id' => 3,
