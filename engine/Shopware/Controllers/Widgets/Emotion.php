@@ -595,22 +595,26 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
             $ids = array_column($data["selected_manufacturers"], 'supplierId');
             $context = $this->get('shopware_storefront.context_service')
                 ->getShopContext();
+			
+			$mediaService = Shopware()->Container()->get('shopware_media.media_service');
 
             $manufacturers = $this->get('shopware_storefront.manufacturer_service')
                 ->getList($ids, $context);
-
-            $values = array_map(function (Manufacturer $manufacturer) {
-                return $this->get('legacy_struct_converter')
+			
+			$data['values'] = [];
+			
+			foreach($manufacturers as &$manufacturer) {
+				$value = $this->get('legacy_struct_converter')
                     ->convertManufacturerStruct($manufacturer);
-            }, $manufacturers);
-
-            if (!empty($category) && $category != Shopware()->Shop()->getCategory()->getId()) {
-                foreach ($values as &$value) {
-                    $value['link'] = $value['link'] . '?c=' . (int) $category;
-                }
-            }
-
-            $data['values'] = $values;
+				
+				if (!empty($category) && $category != Shopware()->Shop()->getCategory()->getId()) {
+					$value['link'] .= '?c=' . (int) $category;
+				}
+				
+				$value['image'] = $mediaService->getUrl($value['image']);
+				
+				$data['values'][] = $value;
+			}
         }
 
         return $data;
