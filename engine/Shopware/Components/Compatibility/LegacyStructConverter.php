@@ -875,7 +875,7 @@ class LegacyStructConverter
             'attributes' => $manufacturer->getAttributes()
         ];
 		
-		if(!empty($data['image'])) {
+		if (!empty($data['image'])) {
 			$data['image'] = $this->mediaService->getUrl($data['image']);
 		}
 
