@@ -545,12 +545,25 @@ class LegacyStructConverter
             $data["sLinks"][] = $temp;
         }
 
-        $data["sLinks"][] = array(
+        /*$data["sLinks"][] = array(
             'supplierSearch' => true,
             'description' => $product->getManufacturer()->getName(),
             'target' => '_parent',
             'link' => $this->getSupplierListingLink($product->getManufacturer())
-        );
+        );*/
+        // load manufacturer
+        $manufacturer = $product->getManufacturer();
+
+        // check if manufacturer is not null
+        // prevent Call to am member function getName() on null if manufactuer was not set via API
+        if ($manufacturer != null) {
+            $data["sLinks"][] = array(
+                'supplierSearch' => true,
+                'description' => $manufacturer->getName(),
+                'target' => '_parent',
+                'link' => $this->getSupplierListingLink($manufacturer)
+            );
+        }
 
         $data['sRelatedArticles'] = array();
         foreach ($product->getRelatedProducts() as $relatedProduct) {
