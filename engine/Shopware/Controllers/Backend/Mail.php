@@ -22,9 +22,9 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Models\Shop\Shop;
 use Shopware\Models\Mail\Mail;
 use Shopware\Models\Mail\Attachment;
-use Shopware\Models\Shop\Shop;
 
 /**
  * Backend Controller for the mail backend module
@@ -214,6 +214,7 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
 
         $data = $query->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
         $data['type'] = $type;
+
         return array(
             'data' => $data,
             'mail' => $mail
@@ -248,7 +249,7 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
     /**
      * Updates mail
      *
-     * @return bool
+     * @return void
      */
     public function updateMailAction()
     {
@@ -258,7 +259,7 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
         }
 
         /* @var $mail Mail */
-        $mail = Shopware()->Models()->getRepository('Shopware\Models\Mail\Mail')->find($id);
+        $mail = Shopware()->Models()->getRepository(Mail::class)->find($id);
         if (!$mail) {
             $this->View()->assign(array('success' => false, 'message' => 'Mail not found'));
             return;
@@ -479,7 +480,7 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
         }
 
         /* @var $media \Shopware\Models\Media\Media */
-        $media = Shopware()->Models()->getRepository('\Shopware\Models\Media\Media')->find($mediaId);
+        $media = Shopware()->Models()->getRepository(\Shopware\Models\Media\Media::class)->find($mediaId);
         if (!$media) {
             $this->View()->assign(array('success' => false, 'message' => 'Media not found'));
             return;
@@ -510,7 +511,7 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
         }
 
         /* @var $attachment Attachment */
-        $attachment = Shopware()->Models()->getRepository('\Shopware\Models\Mail\Attachment')->find($attachmentId);
+        $attachment = Shopware()->Models()->getRepository(Attachment::class)->find($attachmentId);
         if (!$attachment) {
             $this->View()->assign(array('success' => false, 'message' => 'Attachment not found'));
             return;
@@ -546,7 +547,7 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
             $shop = null;
         } else {
             /* @var $shop Shop */
-            $shop = Shopware()->Models()->getRepository('\Shopware\Models\Shop\Shop')->find($shopId);
+            $shop = Shopware()->Models()->getRepository(Shop::class)->find($shopId);
             if (!$shop) {
                 $this->View()->assign(array('success' => false, 'message' => 'Shop not found'));
                 return;
@@ -554,7 +555,7 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
         }
 
         /* @var $attachment Attachment */
-        $attachment = Shopware()->Models()->getRepository('\Shopware\Models\Mail\Attachment')->find($attachmentId);
+        $attachment = Shopware()->Models()->getRepository(Attachment::class)->find($attachmentId);
         if (!$attachment) {
             $this->View()->assign(array('success' => false, 'message' => 'Attachment not found'));
             return;
@@ -591,7 +592,7 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
         $nodes = array();
 
         /** @var $shop Shop */
-        $shops = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop')->findAll();
+        $shops = Shopware()->Models()->getRepository(Shop::class)->findAll();
         foreach ($shops as $shop) {
             $shopNode = array(
                 'allowDrag' => false,
@@ -651,12 +652,18 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
         $this->View()->assign(array('success' => true, 'data' => $nodes));
     }
 
+    /**
+     * @param Shop $shop
+     * @return array
+     */
     private function getDefaultMailContext(Shop $shop)
     {
         return [
-            'sShop'    => $this->container->get('config')->get('ShopName'),
-            'sShopURL' => 'http' . ($shop->getAlwaysSecure() ? 's' : '') . '://'. $shop->getHost() . $shop->getBasePath(),
-            'sConfig'  => $this->container->get('config'),
+            'sShop' => $this->container->get('config')->get('ShopName'),
+            'sShopURL' => ($shop->getAlwaysSecure() ?
+                'https://' . $shop->getSecureHost() . $shop->getSecureBasePath() :
+                'http://' . $shop->getHost() . $shop->getBasePath()),
+            'sConfig' => $this->container->get('config'),
         ];
     }
 }
