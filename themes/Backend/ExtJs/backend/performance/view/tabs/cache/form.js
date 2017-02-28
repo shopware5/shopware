@@ -133,11 +133,6 @@ Ext.define('Shopware.apps.Performance.view.tabs.cache.Form', {
                         name: 'cache[router]',
                         boxLabel: '{s name=form/items/router}Index SEO-URLs{/s}',
                         supportText: '{s name=form/items/router/support}Cache for SEO-Routes and index{/s}'
-                    },
-                    {
-                        name: 'cache[opcache]',
-                        boxLabel: '{s name=form/items/opcache}Zend OPCache{/s}',
-                        supportText: '{s name=form/items/opcache/support}Cache for pre-compiled php scripts{/s}'
                     }
                 ]}
         ];

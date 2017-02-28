@@ -199,7 +199,7 @@ class CacheManager
      * - Shopware Proxies
      * - Classmap
      * - Doctrine-Proxies
-     * - Doctrine-Anotations
+     * - Doctrine-Annotations
      * - Doctrine-Metadata
      */
     public function clearProxyCache()
@@ -219,13 +219,13 @@ class CacheManager
         // Clear Shopware Proxies / Classmaps / Container
         $this->clearDirectory($this->container->getParameter('shopware.hook.proxyDir'));
 
-        // Clear Anotation file cache
+        // Clear Annotation file cache
         $this->clearDirectory($this->container->getParameter('shopware.model.proxyDir'));
     }
 
     public function clearOpCache()
     {
-        if (extension_loaded('Zend OPcache')) {
+        if (extension_loaded('Zend OPcache') && ini_get('opcache.enable')) {
             opcache_reset();
         }
     }
@@ -349,7 +349,6 @@ class CacheManager
         return $info;
     }
 
-
     /**
      * Returns cache information
      *
@@ -358,11 +357,13 @@ class CacheManager
     public function getOpCacheCacheInfo()
     {
         $info = [];
-        if (extension_loaded('Zend OPcache')) {
+        if (extension_loaded('Zend OPcache') && ini_get('opcache.enable')) {
             $status = opcache_get_status(false);
             $info['files'] = $status['opcache_statistics']['num_cached_scripts'];
             $info['size'] = $this->encodeSize($status['memory_usage']['used_memory']);
             $info['freeSpace'] = $this->encodeSize($status['memory_usage']['free_memory']);
+        } else {
+            $info['message'] = 'Zend OPcache is not available';
         }
         $info['name'] = 'Zend OPcache';
 
@@ -430,7 +431,7 @@ class CacheManager
     /**
      * Clear directory contents
      *
-     * @param $dir
+     * @param string $dir
      */
     private function clearDirectory($dir)
     {
