@@ -342,7 +342,7 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
         $articleModule = Shopware()->Modules()->Articles();
         foreach ($positions as &$position) {
             if ($position['modus'] == 0) {
-                $position['meta'] = $articleModule->sGetPromotionById('fix', 0, $position['articleordernumber']);
+                $position['meta'] = $articleModule->sGetPromotionById('fix', 0, $position['articleID']);
             }
         }
 
