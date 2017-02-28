@@ -103,7 +103,7 @@ Ext.override(Ext.form.Basic, {
             if (name in values) {
                 data[name] = values[name];
             } else {
-                if (me.findField(name)) {
+                if (me.findField(name) && !me.findField(name).disabled) {
                     // form field exists but is empty.
                     // set empty string as "null" will be filtered server side
                     data[name] = "";
