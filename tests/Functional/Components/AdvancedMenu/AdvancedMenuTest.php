@@ -25,48 +25,32 @@
 namespace Shopware\Tests\Functional\Components\AdvancedMenu;
 
 use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\TestCase;
+use Shopware\Bundle\StoreFrontBundle\Struct\Category;
 
-class AdvancedMenuTest extends \Enlight_Components_Test_TestCase
+class AdvancedMenuTest extends TestCase
 {
     /**
      * @var Connection
      */
     private $connection;
 
+    /**
+     * @var int
+     */
+    private $mainCategoryId;
+
     public function setUp()
     {
         $this->connection = Shopware()->Container()->get('dbal_connection');
         $this->connection->beginTransaction();
 
-        Shopware()->Container()->get('front')->setRequest(new \Enlight_Controller_Request_RequestHttp());
-
         $this->connection->insert('s_categories', [
-            'parent' => '1',
-            'description' => 'SwagTestCategory',
-            'active' => '1',
+            'parent' => 1,
+            'description' => 'MainCategory',
+            'active' => 1,
         ]);
-        $mainCatId = $this->getCategoryID('SwagTestCategory');
-
-        $this->connection->insert('s_categories', [
-            'parent' => $mainCatId,
-            'description' => 'SwagTestSubCategory1',
-            'active' => '1',
-            'path' => '|' . $mainCatId . '|',
-        ]);
-        $subCat1Id = $this->getCategoryID('SwagTestSubCategory1');
-
-        $this->connection->insert('s_categories', [
-            'parent' => $mainCatId,
-            'description' => 'SwagTestSubCategory2',
-            'active' => '1',
-            'path' => '|' . $mainCatId . '|',
-        ]);
-        $this->connection->insert('s_categories', [
-            'parent' => $mainCatId,
-            'description' => 'SwagTestSubSubCategory1',
-            'active' => '1',
-            'path' => '|' . $mainCatId . '|' . $subCat1Id . '|',
-        ]);
+        $this->mainCategoryId = $this->connection->lastInsertId('s_categories');
 
         parent::setUp();
     }
@@ -80,173 +64,386 @@ class AdvancedMenuTest extends \Enlight_Components_Test_TestCase
 
     public function testGetAdvancedMenu()
     {
-        $subscriber = Shopware()->Container()->get('AdvancedMenuSubscriber');
+        $reader = Shopware()->Container()->get('shopware_storefront.advanced_menu_reader');
 
-        $mainCatId = $this->getCategoryID('SwagTestCategory');
+        $context = Shopware()->Container()->get('shopware_storefront.context_service')->createShopContext(1);
 
-        /* First Call creates the menu and saves it in cache */
-        $menu = $subscriber->getAdvancedMenu($mainCatId, $mainCatId, 5);
-        $this->assertSame($this->getExprectedArray(), $menu);
+        $categories = [
+            [
+                'name' => 'first level',
+                'sub' => [
+                    ['name' => 'second level'],
+                    ['name' => 'third level'],
+                    [
+                        'name' => 'fourth level',
+                        'sub' => [
+                            ['name' => 'fourth sub level'],
+                            ['name' => 'fourth sub level 02'],
+                        ],
+                    ],
+                ],
+            ],
+            [
+                'name' => 'first level 02',
+                'sub' => [
+                    ['name' => 'second level 02'],
+                    ['name' => 'third level 02'],
+                    ['name' => 'fourth level 02'],
+                ],
+            ],
+        ];
 
-        /* second call reads the menu from cache */
-        $menu = $subscriber->getAdvancedMenu($mainCatId, $mainCatId, 2);
-        $this->assertSame($this->getExprectedArray(), $menu);
+        $category = Shopware()->Container()->get('shopware_storefront.category_service')->get($this->mainCategoryId, $context);
+        $context->getShop()->setCategory($category);
+
+        $this->saveTree($categories, [$this->mainCategoryId]);
+
+        $menu = $reader->get($context, 10);
+
+        $menu = $this->extractTree($menu);
+
+        $this->assertSame($categories, $menu);
     }
 
-    private function getCategoryID($name)
+    public function testGetAdvancedMenuFromSubcategory()
     {
-        return $this->connection->fetchColumn('SELECT `id` FROM `s_categories` WHERE `description` = ?', [$name]);
+        $reader = Shopware()->Container()->get('shopware_storefront.advanced_menu_reader');
+
+        $context = Shopware()->Container()->get('shopware_storefront.context_service')->createShopContext(1);
+
+        $categories = [
+            [
+                'name' => 'first level',
+                'sub' => [
+                    ['name' => 'second level'],
+                    ['name' => 'third level'],
+                    [
+                        'name' => 'fourth level',
+                        'sub' => [
+                            ['name' => 'fourth sub level'],
+                            [
+                                'name' => 'fourth sub level 02',
+                                'sub' => [
+                                    ['name' => 'fourth sub sub level'],
+                                    ['name' => 'fourth sub sub level 02'],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            [
+                'name' => 'first level 02',
+                'sub' => [
+                    ['name' => 'second level 02'],
+                    ['name' => 'third level 02'],
+                    ['name' => 'fourth level 02'],
+                ],
+            ],
+        ];
+
+        $tree = $this->saveTree($categories, [$this->mainCategoryId]);
+
+        $category = Shopware()->Container()->get('shopware_storefront.category_service')->get((int) $tree[0]['sub'][2]['id'], $context);
+        $context->getShop()->setCategory($category);
+
+        $menu = $reader->get($context, 10);
+
+        $menu = $this->extractTree($menu);
+
+        $this->assertSame($categories[0]['sub'][2]['sub'], $menu);
     }
 
-    private function getExprectedArray()
+    public function testGetAdvancedMenuWithInactiveCategory()
     {
-        $json = <<<'JSON'
-[
-  {
-    "id": SwagTestSubCategory1_id,
-    "parentId": SwagTestCategory_id,
-    "name": "SwagTestSubCategory1",
-    "position": 0,
-    "metaTitle": null,
-    "metaKeywords": null,
-    "metaDescription": null,
-    "cmsHeadline": null,
-    "cmsText": null,
-    "active": true,
-    "template": null,
-    "productBoxLayout": "basic",
-    "blog": false,
-    "path": "|SwagTestCategory_id|",
-    "external": null,
-    "hideFilter": false,
-    "hideTop": false,
-    "changed": null,
-    "added": null,
-    "attribute": [],
-    "attributes": [],
-    "media": null,
-    "mediaId": null,
-    "link": "shopware.php?sViewport=cat&sCategory=SwagTestSubCategory1_id",
-    "streamId": null,
-    "productStream": null,
-    "childrenCount": 0,
-    "description": "SwagTestSubCategory1",
-    "cmsheadline": null,
-    "cmstext": null,
-    "sSelf": "shopware.php?sViewport=cat&sCategory=SwagTestSubCategory1_id",
-    "sSelfCanonical": "shopware.php?sViewport=cat&sCategory=SwagTestSubCategory1_id",
-    "canonicalParams": {
-      "sViewport": "cat",
-      "sCategory": SwagTestSubCategory1_id
-    },
-    "hide_sortings": false,
-    "rssFeed": "shopware.php?sViewport=cat&sCategory=SwagTestSubCategory1_id&sRss=1",
-    "atomFeed": "shopware.php?sViewport=cat&sCategory=SwagTestSubCategory1_id&sAtom=1",
-    "flag": false,
-    "sub": [],
-    "activeCategories": 0
-  },
-  {
-    "id": SwagTestSubCategory2_id,
-    "parentId": SwagTestCategory_id,
-    "name": "SwagTestSubCategory2",
-    "position": 0,
-    "metaTitle": null,
-    "metaKeywords": null,
-    "metaDescription": null,
-    "cmsHeadline": null,
-    "cmsText": null,
-    "active": true,
-    "template": null,
-    "productBoxLayout": "basic",
-    "blog": false,
-    "path": "|SwagTestCategory_id|",
-    "external": null,
-    "hideFilter": false,
-    "hideTop": false,
-    "changed": null,
-    "added": null,
-    "attribute": [],
-    "attributes": [],
-    "media": null,
-    "mediaId": null,
-    "link": "shopware.php?sViewport=cat&sCategory=SwagTestSubCategory2_id",
-    "streamId": null,
-    "productStream": null,
-    "childrenCount": 0,
-    "description": "SwagTestSubCategory2",
-    "cmsheadline": null,
-    "cmstext": null,
-    "sSelf": "shopware.php?sViewport=cat&sCategory=SwagTestSubCategory2_id",
-    "sSelfCanonical": "shopware.php?sViewport=cat&sCategory=SwagTestSubCategory2_id",
-    "canonicalParams": {
-      "sViewport": "cat",
-      "sCategory": SwagTestSubCategory2_id
-    },
-    "hide_sortings": false,
-    "rssFeed": "shopware.php?sViewport=cat&sCategory=SwagTestSubCategory2_id&sRss=1",
-    "atomFeed": "shopware.php?sViewport=cat&sCategory=SwagTestSubCategory2_id&sAtom=1",
-    "flag": false,
-    "sub": [],
-    "activeCategories": 0
-  },
-  {
-    "id": SwagTestSubSubCategory1_id,
-    "parentId": SwagTestCategory_id,
-    "name": "SwagTestSubSubCategory1",
-    "position": 0,
-    "metaTitle": null,
-    "metaKeywords": null,
-    "metaDescription": null,
-    "cmsHeadline": null,
-    "cmsText": null,
-    "active": true,
-    "template": null,
-    "productBoxLayout": "basic",
-    "blog": false,
-    "path": "|SwagTestSubCategory1_id|SwagTestCategory_id|",
-    "external": null,
-    "hideFilter": false,
-    "hideTop": false,
-    "changed": null,
-    "added": null,
-    "attribute": [],
-    "attributes": [],
-    "media": null,
-    "mediaId": null,
-    "link": "shopware.php?sViewport=cat&sCategory=SwagTestSubSubCategory1_id",
-    "streamId": null,
-    "productStream": null,
-    "childrenCount": 0,
-    "description": "SwagTestSubSubCategory1",
-    "cmsheadline": null,
-    "cmstext": null,
-    "sSelf": "shopware.php?sViewport=cat&sCategory=SwagTestSubSubCategory1_id",
-    "sSelfCanonical": "shopware.php?sViewport=cat&sCategory=SwagTestSubSubCategory1_id",
-    "canonicalParams": {
-      "sViewport": "cat",
-      "sCategory": SwagTestSubSubCategory1_id
-    },
-    "hide_sortings": false,
-    "rssFeed": "shopware.php?sViewport=cat&sCategory=SwagTestSubSubCategory1_id&sRss=1",
-    "atomFeed": "shopware.php?sViewport=cat&sCategory=SwagTestSubSubCategory1_id&sAtom=1",
-    "flag": false,
-    "sub": [],
-    "activeCategories": 0
-  }
-]
-JSON;
+        $reader = Shopware()->Container()->get('shopware_storefront.advanced_menu_reader');
 
-        return json_decode(str_replace([
-            'SwagTestCategory_id',
-            'SwagTestSubCategory1_id',
-            'SwagTestSubCategory2_id',
-            'SwagTestSubSubCategory1_id',
-        ], [
-            $this->getCategoryID('SwagTestCategory'),
-            $this->getCategoryID('SwagTestSubCategory1'),
-            $this->getCategoryID('SwagTestSubCategory2'),
-            $this->getCategoryID('SwagTestSubSubCategory1'),
-        ], $json), true);
+        $context = Shopware()->Container()->get('shopware_storefront.context_service')->createShopContext(1);
+
+        $categories = [
+            [
+                'name' => 'first level',
+                'sub' => [
+                    ['name' => 'second level'],
+                    ['name' => 'third level'],
+                    [
+                        'name' => 'fourth level',
+                        'active' => 0,
+                        'sub' => [
+                            ['name' => 'fourth sub level'],
+                            [
+                                'name' => 'fourth sub level 02',
+                                'sub' => [
+                                    ['name' => 'fourth sub sub level'],
+                                    ['name' => 'fourth sub sub level 02'],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            [
+                'name' => 'first level 02',
+                'sub' => [
+                    ['name' => 'second level 02'],
+                    ['name' => 'third level 02'],
+                    ['name' => 'fourth level 02'],
+                ],
+            ],
+        ];
+
+        $this->saveTree($categories, [$this->mainCategoryId]);
+
+        $category = Shopware()->Container()->get('shopware_storefront.category_service')->get($this->mainCategoryId, $context);
+
+        $context->getShop()->setCategory($category);
+
+        $menu = $reader->get($context, 10);
+
+        $menu = $this->extractTree($menu);
+
+        $categories = $this->prepareExpectedCategories($categories, (int) 2);
+
+        $this->assertSame($categories, $menu);
+    }
+
+    public function testGetAdvancedMenuDepth()
+    {
+        $reader = Shopware()->Container()->get('shopware_storefront.advanced_menu_reader');
+
+        $context = Shopware()->Container()->get('shopware_storefront.context_service')->createShopContext(1);
+
+        $categories = [
+            [
+                'name' => 'first level',
+                'sub' => [
+                    ['name' => 'second level'],
+                    ['name' => 'third level'],
+                    [
+                        'name' => 'fourth level',
+                        'active' => 0,
+                        'sub' => [
+                            ['name' => 'fourth sub level'],
+                            [
+                                'name' => 'fourth sub level 02',
+                                'sub' => [
+                                    ['name' => 'fourth sub sub level'],
+                                    ['name' => 'fourth sub sub level 02'],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            [
+                'name' => 'first level 02',
+                'sub' => [
+                    ['name' => 'second level 02'],
+                    ['name' => 'third level 02'],
+                    [
+                        'name' => 'fourth level 02',
+                        'sub' => [
+                            ['name' => 'fourth sub sub level'],
+                            [
+                                'name' => 'fourth sub sub level 02',
+                                'sub' => [
+                                    [
+                                        'name' => 'fifth sub sub sub level',
+                                        'sub' => [
+                                            ['name' => 'fifth sub sub sub level'],
+                                            [
+                                                'name' => 'fifth sub sub sub level 02',
+                                                'active' => 0,
+                                                'sub' => [
+                                                    ['name' => 'fifth sub sub sub sub level'],
+                                                    [
+                                                        'name' => 'fifth sub sub sub sub level 02',
+                                                        'sub' => [
+                                                            ['name' => 'fifth sub sub sub sub sub  level'],
+                                                            ['name' => 'fifth sub sub sub sub sub level 02'],
+                                                        ],
+                                                    ],
+                                                ],
+                                            ],
+                                        ],
+                                    ],
+                                    [
+                                        'name' => 'fourth sub sub sub level 02',
+                                        'sub' => [
+                                            ['name' => 'fourth sub sub sub sub level'],
+                                            [
+                                                'name' => 'fourth sub sub sub sub level 02',
+                                                'sub' => [
+                                                    ['name' => 'fourth sub sub sub sub sub  level'],
+                                                    ['name' => 'fourth sub sub sub sub sub level 02'],
+                                                ],
+                                            ],
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
+
+        $depth = 5;
+
+        $this->saveTree($categories, [$this->mainCategoryId]);
+
+        $category = Shopware()->Container()->get('shopware_storefront.category_service')->get($this->mainCategoryId, $context);
+
+        $context->getShop()->setCategory($category);
+
+        $menu = $reader->get($context, $depth);
+
+        $menu = $this->extractTree($menu);
+
+        $categories = $this->prepareExpectedCategories($categories, $depth);
+
+        $this->assertSame($categories, $menu);
+    }
+
+    public function testGetAdvancedMenuDepthAndActive()
+    {
+        $reader = Shopware()->Container()->get('shopware_storefront.advanced_menu_reader');
+
+        $context = Shopware()->Container()->get('shopware_storefront.context_service')->createShopContext(1);
+
+        $categories = [
+            [
+                'name' => 'first level 02',
+                'sub' => [
+                    ['name' => 'second level 02'],
+                    ['name' => 'third level 02'],
+                    [
+                        'name' => 'fourth level 02',
+                        'sub' => [
+                            ['name' => 'fourth sub sub level'],
+                            [
+                                'name' => 'fourth sub sub level 02',
+                                'sub' => [
+                                    ['name' => 'fourth sub sub sub level'],
+                                    [
+                                        'name' => 'fourth sub sub sub level 02',
+                                        'sub' => [
+                                            ['name' => 'fourth sub sub sub sub level'],
+                                            [
+                                                'name' => 'fourth sub sub sub sub level 02',
+                                                'sub' => [
+                                                    ['name' => 'fourth sub sub sub sub sub  level'],
+                                                    ['name' => 'fourth sub sub sub sub sub level 02'],
+                                                ],
+                                            ],
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
+
+        $depth = 2;
+
+        $this->saveTree($categories, [$this->mainCategoryId]);
+
+        $category = Shopware()->Container()->get('shopware_storefront.category_service')->get($this->mainCategoryId, $context);
+
+        $context->getShop()->setCategory($category);
+
+        $menu = $reader->get($context, $depth);
+
+        $menu = $this->extractTree($menu);
+
+        $categories = $this->prepareExpectedCategories($categories, $depth);
+
+        $this->assertSame($categories, $menu);
+    }
+
+    /**
+     * Saves the given categories to the database and returns an array with the ids of the inserted categories.
+     *
+     * @param array[] $categories
+     * @param array   $path
+     *
+     * @return array[]
+     */
+    private function saveTree(array $categories, array $path): array
+    {
+        $result = [];
+        foreach ($categories as &$category) {
+            $item = [];
+            $category['active'] = array_key_exists('active', $category) ? $category['active'] : 1;
+
+            $this->connection->insert('s_categories', [
+                'active' => $category['active'],
+                'path' => '|' . implode('|', $path) . '|',
+                'description' => $category['name'],
+                'parent' => $path[count($path) - 1],
+            ]);
+
+            $category['id'] = $this->connection->lastInsertId('s_categories');
+
+            $item['name'] = $category['name'];
+            $item['id'] = $category['id'];
+            $item['active'] = $category['active'];
+
+            if ($category['sub']) {
+                $item['sub'] = $this->saveTree($category['sub'], array_merge($path, [$category['id']]));
+            }
+            $result[] = $item;
+        }
+
+        return $result;
+    }
+
+    /**
+     * Resolves advancedMenu data structure to the simple nested tree array
+     *
+     * @param array[] $menu
+     *
+     * @return array[]
+     */
+    private function extractTree(array $menu): array
+    {
+        $result = [];
+        foreach ($menu as $item) {
+            $new = ['name' => $item['name']];
+            if ($item['sub']) {
+                $new['sub'] = $this->extractTree($item['sub']);
+            }
+            $result[] = $new;
+        }
+
+        return $result;
+    }
+
+    /**
+     * Removes incative categorys and takes care of the category tree depth
+     *
+     * @param array[] $categories
+     * @param int     $depth
+     *
+     * @return array[]
+     */
+    private function prepareExpectedCategories(array $categories, int $depth): array
+    {
+        $result = [];
+        foreach ($categories as $category) {
+            if ($depth == 0 || (array_key_exists('active', $category) && !$category['active'])) {
+                continue;
+            }
+            if ($category['sub'] && $depth > 1) {
+                $category['sub'] = $this->prepareExpectedCategories($category['sub'], $depth - 1);
+            } else {
+                unset($category['sub']);
+            }
+            $result[] = $category;
+        }
+
+        return $result;
     }
 }

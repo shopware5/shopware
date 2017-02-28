@@ -83,4 +83,23 @@ class Shopware_Controllers_Widgets_Index extends Enlight_Controller_Action
         array_unshift($languages, $main);
         $this->View()->languages = $languages;
     }
+
+    public function advancedMenuAction()
+    {
+        /** @var \Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface $service */
+        $service = $this->get('shopware_storefront.context_service');
+        $context = $service->getShopContext();
+
+        /** @var Shopware_Components_Config $config */
+        $config = $this->get('config');
+
+        $reader = $this->get('shopware_storefront.advanced_menu_reader');
+
+        $depth = (int) $config->getByNamespace('advancedMenu', 'levels');
+        $menu = $reader->get($context, $depth);
+
+        $this->View()->assign('advancedMenu', $menu);
+        $this->View()->assign('columnAmount', $config->getByNamespace('advancedMenu', 'columnAmount'));
+        $this->View()->assign('hoverDelay', $config->getByNamespace('advancedMenu', 'hoverDelay'));
+    }
 }
