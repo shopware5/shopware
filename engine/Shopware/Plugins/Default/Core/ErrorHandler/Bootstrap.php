@@ -127,7 +127,7 @@ class Shopware_Plugins_Core_ErrorHandler_Bootstrap extends Shopware_Components_P
     {
         $this->throwOnRecoverableError = Shopware()->Container()->getParameter('shopware.errorHandler.throwOnRecoverableError');
 
-        // Register ErrorHanlder for all errors, including strict
+        // Register ErrorHandler for all errors, including strict
         $this->registerErrorHandler(E_ALL | E_STRICT);
 
         if ($this->Config()->get('logMail')) {
