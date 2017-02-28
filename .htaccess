@@ -1,6 +1,9 @@
 <IfModule mod_rewrite.c>
 RewriteEngine on
 
+# Fix missing authorization-header on fast_cgi installations
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
 #RewriteBase /shopware/
 
 # Https config for the backend
@@ -17,8 +20,7 @@ RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.*)$ shopware.php [PT,L,QSA]
 
-# Fix missing authorization-header on fast_cgi installations
-RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization},L]
+
 </IfModule>
 
 <IfModule mod_alias.c>
