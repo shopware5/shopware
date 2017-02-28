@@ -37,6 +37,20 @@ if (!is_array($customConfig)) {
 return array_replace_recursive([
     'custom' => [],
     'trustedproxies' => [],
+    'filesystem' => [
+        'private' => [
+            'type' => 'local',
+            'config' => [
+                'root' => realpath(__DIR__ . '/../../../files/'),
+            ],
+        ],
+        'public' => [
+            'type' => 'local',
+            'config' => [
+                'root' => realpath(__DIR__ . '/../../../web/'),
+            ],
+        ],
+    ],
     'cdn' => [
         'backend' => 'local',
         'strategy' => 'md5',

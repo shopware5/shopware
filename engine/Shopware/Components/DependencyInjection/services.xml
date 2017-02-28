@@ -596,5 +596,36 @@
             <argument type="service" id="shopware.subscriber.auth" />
             <argument type="service" id="template" />
         </service>
+
+        <!-- Filesystem -->
+        <service id="shopware.filesystem_factory" class="Shopware\Components\Filesystem\FilesystemFactory">
+            <argument type="collection" />
+        </service>
+
+        <service id="shopware.filesystem.public" class="League\Flysystem\FilesystemInterface">
+            <factory service="shopware.filesystem_factory" method="factory" />
+            <argument>%shopware.filesystem.public%</argument>
+        </service>
+
+        <service id="shopware.filesystem.private" class="League\Flysystem\FilesystemInterface">
+            <factory service="shopware.filesystem_factory" method="factory" />
+            <argument>%shopware.filesystem.private%</argument>
+        </service>
+
+        <service id="shopware.filesystem.factory.local" class="Shopware\Components\Filesystem\Adapter\LocalFactory">
+            <tag name="shopware.filesystem.factory" />
+        </service>
+
+        <service id="shopware.filesystem.factory.s3" class="Shopware\Components\Filesystem\Adapter\AwsS3v3Factory">
+            <tag name="shopware.filesystem.factory" />
+        </service>
+
+        <service id="shopware.filesystem.factory.gcp" class="Shopware\Components\Filesystem\Adapter\GoogleCloudPlatformFactory">
+            <tag name="shopware.filesystem.factory" />
+        </service>
+
+        <service id="shopware.filesystem.factory.azure" class="Shopware\Components\Filesystem\Adapter\AzureFactory">
+            <tag name="shopware.filesystem.factory" />
+        </service>
     </services>
 </container>

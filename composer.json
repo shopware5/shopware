@@ -52,14 +52,17 @@
         "beberlei/assert": "2.5.0",
         "zendframework/zend-escaper": "2.5.1",
         "oyejorge/less.php": "1.7.0.10",
-        "guzzlehttp/guzzle": "5.3.1",
+        "guzzlehttp/guzzle": "6.2.3",
         "egulias/email-validator": "1.2.12",
         "elasticsearch/elasticsearch": "2.2.0",
         "ongr/elasticsearch-dsl": "2.0.2",
-        "league/flysystem": "1.0.22",
+        "league/flysystem": "1.0.35",
         "paragonie/random_compat": "1.4.1",
         "cocur/slugify": "2.2",
-        "bcremer/line-reader": "^0.2.0"
+        "bcremer/line-reader": "^0.2.0",
+        "league/flysystem-aws-s3-v3": "1.0.13",
+        "superbalist/flysystem-google-storage": "4.0.2",
+        "league/flysystem-azure": "1.0.4"
     },
     "suggest": {
         "ext-apcu": "*",
