@@ -292,18 +292,23 @@ class PluginInstaller
                 [$plugin->getName()]
             );
 
-            $description = '';
-            if (isset($info['description'])) {
-                foreach ($info['description'] as $locale => $string) {
-                    $description .= sprintf('<div lang="%s">%s</div>', $locale, $string);
+            $translations = [];
+            $translatableInfoKeys = ['label', 'description'];
+            foreach ($info as $key => $value) {
+                if (!in_array($key, $translatableInfoKeys, true)) {
+                    continue;
+                }
+
+                foreach ($value as $lang => $translation) {
+                    $translations[$lang][$key] = $translation;
                 }
             }
 
-            $info['description'] = $description;
+            $info['label'] = isset($info['label']['en']) ? $info['label']['en'] : $plugin->getName();
+            $info['description'] = isset($info['description']['en']) ? $info['description']['en'] : null;
             $info['version'] = isset($info['version']) ? $info['version'] : '0.0.1';
             $info['author'] = isset($info['author']) ? $info['author'] : null;
             $info['link'] = isset($info['link']) ? $info['link'] : null;
-            $info['label'] = isset($info['label']) && isset($info['label']['en']) ? $info['label']['en'] : $plugin->getName();
 
             $data = [
                 'namespace' => 'ShopwarePlugins',
@@ -317,7 +322,8 @@ class PluginInstaller
                 'capability_install' => true,
                 'capability_enable' => true,
                 'capability_secure_uninstall' => true,
-                'refresh_date' => $refreshDate
+                'refresh_date' => $refreshDate,
+                'translations' => $translations ? json_encode($translations) : null,
             ];
 
             if ($currentPluginInfo) {
@@ -430,21 +436,21 @@ class PluginInstaller
     private function removeEmotionComponents($pluginId)
     {
         // Remove emotion-components
-        $sql = "DELETE s_emotion_element_value, s_emotion_element
+        $sql = 'DELETE s_emotion_element_value, s_emotion_element
                 FROM s_emotion_element_value
                 RIGHT JOIN s_emotion_element
                     ON s_emotion_element.id = s_emotion_element_value.elementID
                 INNER JOIN s_library_component
                     ON s_library_component.id = s_emotion_element.componentID
-                    AND s_library_component.pluginID = :pluginId";
+                    AND s_library_component.pluginID = :pluginId';
 
         $this->connection->executeUpdate($sql, [':pluginId' => $pluginId]);
 
-        $sql = "DELETE s_library_component_field, s_library_component
+        $sql = 'DELETE s_library_component_field, s_library_component
                 FROM s_library_component_field
                 INNER JOIN s_library_component
                     ON s_library_component.id = s_library_component_field.componentID
-                    AND s_library_component.pluginID = :pluginId";
+                    AND s_library_component.pluginID = :pluginId';
 
         $this->connection->executeUpdate($sql, [':pluginId' => $pluginId]);
     }

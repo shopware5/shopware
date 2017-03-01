@@ -185,7 +185,14 @@ class Plugin extends ModelEntity
     private $capabilitySecureUninstall = false;
 
     /**
+     * @var string
+     * @ORM\Column(name="translations", type="text")
+     */
+    private $translations;
+
+    /**
      * INVERSE SIDE
+     *
      * @var \Shopware\Models\Config\Form[]|ArrayCollection
      * @ORM\OneToMany(targetEntity="\Shopware\Models\Config\Form", mappedBy="plugin", cascade={"all"})
      * @ORM\JoinColumn(name="id", referencedColumnName="plugin_id")
@@ -195,6 +202,7 @@ class Plugin extends ModelEntity
 
     /**
      * INVERSE SIDE
+     *
      * @var \Shopware\Models\Menu\Menu[]|ArrayCollection
      * @ORM\OneToMany(targetEntity="\Shopware\Models\Menu\Menu", mappedBy="plugin", cascade={"all"})
      * @ORM\JoinColumn(name="id", referencedColumnName="pluginID")
@@ -204,6 +212,7 @@ class Plugin extends ModelEntity
 
     /**
      * INVERSE SIDE
+     *
      * @var \Shopware\Models\Payment\Payment[]|ArrayCollection
      * @ORM\OneToMany(targetEntity="\Shopware\Models\Payment\Payment", mappedBy="plugin", cascade={"all"})
      * @ORM\JoinColumn(name="id", referencedColumnName="pluginID")
@@ -213,6 +222,7 @@ class Plugin extends ModelEntity
 
     /**
      * INVERSE SIDE
+     *
      * @var \Shopware\Models\Shop\Template[]|ArrayCollection
      * @ORM\OneToMany(targetEntity="\Shopware\Models\Shop\Template", mappedBy="plugin", cascade={"all"})
      * @ORM\JoinColumn(name="id", referencedColumnName="plugin_id")
@@ -222,6 +232,7 @@ class Plugin extends ModelEntity
 
     /**
      * INVERSE SIDE
+     *
      * @var \Shopware\Models\Widget\Widget[]|ArrayCollection
      * @ORM\OneToMany(targetEntity="\Shopware\Models\Widget\Widget", mappedBy="plugin", cascade={"all"})
      * @ORM\JoinColumn(name="id", referencedColumnName="plugin_id")
@@ -586,7 +597,7 @@ class Plugin extends ModelEntity
     }
 
     /**
-     * @return
+     * @return ArrayCollection
      */
     public function getLicenses()
     {
@@ -594,7 +605,7 @@ class Plugin extends ModelEntity
     }
 
     /**
-     * @param  $licenses
+     * @param $licenses
      */
     public function setLicenses($licenses)
     {
@@ -703,5 +714,21 @@ class Plugin extends ModelEntity
     public function isLegacyPlugin()
     {
         return $this->namespace !== 'ShopwarePlugins';
+    }
+
+    /**
+     * @return string
+     */
+    public function getTranslations()
+    {
+        return $this->translations;
+    }
+
+    /**
+     * @param string $translations
+     */
+    public function setTranslations($translations)
+    {
+        $this->translations = $translations;
     }
 }
