@@ -1,37 +1,33 @@
 {block name="frontend_listing_banner"}
-    {if $sBanner}
-        <div class="banner--container">
+    {foreach $sBanner as $banner}
+        {block name="frontend_listing_banner_single"}
+            <div class="banner--container">
+                {if $banner.media.thumbnails}
+                    {if !$banner.link || $banner.link == "#" || $banner.link == ""}
 
-            {if $sBanner.extension=="swf"}
-
-                {* @deprecated Flash banner *}
-                {block name='frontend_listing_swf_banner'}{/block}
-
-            {elseif $sBanner.media.thumbnails}
-                {if !$sBanner.link || $sBanner.link == "#" || $sBanner.link == ""}
-
-                    {* Image only banner *}
-                    {block name='frontend_listing_image_only_banner'}
-                        <picture>
-                            <source srcset="{$sBanner.media.thumbnails[1].sourceSet}" media="(min-width: 48em)">
-
-                            <img srcset="{$sBanner.media.thumbnails[0].sourceSet}" alt="{$sBanner.description|escape}" class="banner--img" />
-                        </picture>
-                    {/block}
-                {else}
-
-                    {* Normal banner *}
-                    {block name='frontend_listing_normal_banner'}
-                        <a href="{$sBanner.link}" class="banner--link" {if $sBanner.link_target}target="{$sBanner.link_target}"{/if} title="{$sBanner.description|escape}">
+                        {* Image only banner *}
+                        {block name='frontend_listing_image_only_banner'}
                             <picture>
-                                <source srcset="{$sBanner.media.thumbnails[1].sourceSet}" media="(min-width: 48em)">
+                                <source srcset="{$banner.media.thumbnails[1].sourceSet}" media="(min-width: 48em)">
 
-                                <img srcset="{$sBanner.media.thumbnails[0].sourceSet}" alt="{$sBanner.description|escape}" class="banner--img" />
+                                <img srcset="{$banner.media.thumbnails[0].sourceSet}" alt="{$banner.description|escape}" class="banner--img" />
                             </picture>
-                        </a>
-                    {/block}
+                        {/block}
+                    {else}
+
+                        {* Normal banner *}
+                        {block name='frontend_listing_normal_banner'}
+                            <a href="{$banner.link}" class="banner--link" {if $banner.link_target}target="{$banner.link_target}"{/if} title="{$banner.description|escape}">
+                                <picture>
+                                    <source srcset="{$banner.media.thumbnails[1].sourceSet}" media="(min-width: 48em)">
+
+                                    <img srcset="{$banner.media.thumbnails[0].sourceSet}" alt="{$banner.description|escape}" class="banner--img" />
+                                </picture>
+                            </a>
+                        {/block}
+                    {/if}
                 {/if}
-            {/if}
-        </div>
-    {/if}
+            </div>
+        {/block}
+    {/foreach}
 {/block}

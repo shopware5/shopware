@@ -231,7 +231,7 @@ class sMarketing
      *
      * @return array Contains all information about the banner-object
      */
-    public function sBanner($sCategory, $limit = 1)
+    public function sBanner($sCategory, $limit = 0)
     {
         $limit = (int) $limit;
         try {
