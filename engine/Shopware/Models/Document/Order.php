@@ -535,7 +535,7 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
    
     /**
      * Get class parameters
-     * @return Arrat $parameters
+     * @return Array $parameters
      */
     private function getParameters()
     {
