@@ -160,7 +160,7 @@ class Shopware_Components_TemplateMail
             $defaultContext = array(
                 'sConfig' => $config,
                 'sShop' => $config->get('shopName'),
-                'sShopURL' => 'http://' . $config->basePath,
+                'sShopURL' => 'http' . ($this->getShop()->getAlwaysSecure() ? 's' : '') .'://' . $config->basePath,
             );
             $isoCode = $this->getShop()->get('isocode');
             $translationReader = $this->getTranslationReader();
