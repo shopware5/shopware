@@ -7,6 +7,7 @@ This changelog references changes done in Shopware 5.2 patch versions.
 [View all changes from v5.2.20...v5.2.21](https://github.com/shopware/shopware/compare/v5.2.20...v5.2.21)
 
 * Updated Symfony to version 2.8.17
+* Added paymentID as event property in `Shopware_Modules_Admin_Execute_Risk_Rule_RuleName`
 
 ## 5.2.20
 
@@ -36,6 +37,9 @@ This changelog references changes done in Shopware 5.2 patch versions.
 ## 5.2.18
 
 [View all changes from v5.2.17...v5.2.18](https://github.com/shopware/shopware/compare/v5.2.17...v5.2.18)
+
+* Fixed invalid permissions after running media optimizer on some hosting systems
+* Fixed session error in exports
 
 ## 5.2.17
 
@@ -81,6 +85,12 @@ The api resources are now available in the dependency injection container using 
     shared="false">
 </service>
 ```
+
+## 5.2.16
+
+[View all changes from v5.2.15...v5.2.16](https://github.com/shopware/shopware/compare/v5.2.15...v5.2.16)
+
+* Improved form input filtering
 
 ## 5.2.15
 

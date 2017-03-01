@@ -1690,14 +1690,14 @@ SQL;
         foreach ($queryRules as $rule) {
             if ($rule["rule1"] && !$rule["rule2"]) {
                 $rule["rule1"] = "sRisk".$rule["rule1"];
-                if ($this->executeRiskRule($rule["rule1"], $user, $basket, $rule["value1"])) {
+                if ($this->executeRiskRule($rule["rule1"], $user, $basket, $rule["value1"], $paymentID)) {
                     return true;
                 }
             } elseif ($rule["rule1"] && $rule["rule2"]) {
                 $rule["rule1"] = "sRisk".$rule["rule1"];
                 $rule["rule2"] = "sRisk".$rule["rule2"];
-                if ($this->executeRiskRule($rule["rule1"], $user, $basket, $rule["value1"])
-                    && $this->executeRiskRule($rule["rule2"], $user, $basket, $rule["value2"])
+                if ($this->executeRiskRule($rule["rule1"], $user, $basket, $rule["value1"], $paymentID)
+                    && $this->executeRiskRule($rule["rule2"], $user, $basket, $rule["value2"], $paymentID)
                 ) {
                     return true;
                 }
@@ -1712,9 +1712,10 @@ SQL;
      * @param array $user
      * @param array $basket
      * @param string $value
+     * @param integer $paymentID
      * @return bool
      */
-    public function executeRiskRule($rule, $user, $basket, $value)
+    public function executeRiskRule($rule, $user, $basket, $value, $paymentID = null)
     {
         if ($event = $this->eventManager->notifyUntil(
             'Shopware_Modules_Admin_Execute_Risk_Rule_' . $rule,
@@ -1722,7 +1723,8 @@ SQL;
                 'rule' => $rule,
                 'user' => $user,
                 'basket' => $basket,
-                'value' => $value
+                'value' => $value,
+                'paymentID' => $paymentID
             ]
         )) {
             return $event->getReturn();
