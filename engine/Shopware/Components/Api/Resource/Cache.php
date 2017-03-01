@@ -147,6 +147,7 @@ class Cache extends Resource implements ContainerAwareInterface, BatchInterface
             $this->cacheManager->clearTemplateCache();
             $this->cacheManager->clearProxyCache();
             $this->cacheManager->clearSearchCache();
+            $this->cacheManager->clearOpCache();
 
             return;
         }
