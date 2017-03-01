@@ -374,7 +374,9 @@ Ext.define('Shopware.apps.Order.view.list.List', {
             width:90,
             items:[
                 me.createOpenCustomerColumn(),
-                me.createDeleteOrderColumn(),
+                /*{if {acl_is_allowed privilege=delete}}*/
+                    me.createDeleteOrderColumn(),
+                /*{/if}*/
                 me.createEditOrderColumn()
             ]
         });

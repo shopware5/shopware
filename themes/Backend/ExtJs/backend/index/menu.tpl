@@ -1,7 +1,7 @@
 {block name="backend/index/menu/function"}
     {function name=backend_menu level=0}
         [{foreach $menu as $category}
-            {if ($category['onclick'] || $category['action'] || $category['children']) && {acl_is_allowed privilege=read resource=$category['controller']|lower}}
+            {if ($category['onclick'] || ($category['action']|lower !== 'detail' || ($category['action']|lower == 'detail' && {acl_is_allowed privilege=create resource=$category['controller']|lower})) || $category['children']) && {acl_is_allowed privilege=read resource=$category['controller']|lower}}
                 {
                 {if $level === 0}{if $category['children']}xtype: 'hoverbutton',{else}xtype: 'button',{/if}{/if}
                 {$name = null}

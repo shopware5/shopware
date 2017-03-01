@@ -92,6 +92,21 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
     public static $documentRepository = null;
 
     /**
+     * Registers the different acl permission for the different controller actions.
+     *
+     * @return void
+     */
+    public function initAcl()
+    {
+        $this->addAclPermission('loadStores', 'read', 'Insufficient Permissions');
+        $this->addAclPermission('save', 'update', 'Insufficient Permissions');
+        $this->addAclPermission('deletePosition', 'update', 'Insufficient Permissions');
+        $this->addAclPermission('savePosition', 'update', 'Insufficient Permissions');
+        $this->addAclPermission('createDocument', 'update', 'Insufficient Permissions');
+        $this->addAclPermission('delete', 'delete', 'Insufficient Permissions');
+    }
+
+    /**
      * Returns the shopware model manager
      *
      * @return Shopware\Components\Model\ModelManager
