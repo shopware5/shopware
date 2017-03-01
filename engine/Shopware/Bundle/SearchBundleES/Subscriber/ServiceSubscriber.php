@@ -54,6 +54,9 @@ class ServiceSubscriber implements SubscriberInterface
 
     public function registerProductNumberSearch()
     {
+        if (!$this->container->getParameter('shopware.es.enabled')) {
+            return;
+        }
         $this->container->set(
             'shopware_search.product_number_search',
             $this->container->get('shopware_search_es.product_number_search')
