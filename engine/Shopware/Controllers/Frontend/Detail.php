@@ -113,13 +113,15 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
             return $this->forward('error');
         }
 
-        $template = trim($article['template']);
-        if (!empty($template)) {
-            $this->View()->loadTemplate('frontend/detail/' . $article['template']);
-        } elseif (!empty($article['mode'])) {
-            $this->View()->loadTemplate('frontend/blog/detail.tpl');
-        } elseif ($tpl === 'ajax') {
+        if ($tpl && $tpl === 'ajax') {
             $this->View()->loadTemplate('frontend/detail/ajax.tpl');
+        } else {
+            $template = trim($article['template']);
+            if (!empty($template)) {
+                $this->View()->loadTemplate('frontend/detail/' . $template);
+            } elseif (!empty($article['mode'])) {
+                $this->View()->loadTemplate('frontend/blog/detail.tpl');
+            }
         }
 
         $article = Shopware()->Modules()->Articles()->sGetConfiguratorImage($article);
