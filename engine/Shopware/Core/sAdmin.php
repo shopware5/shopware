@@ -2586,7 +2586,7 @@ SQL;
             LEFT JOIN s_articles a
             ON b.articleID = a.id
             AND b.modus = 0
-            AND b.esdarticle = 0
+           
 
             LEFT JOIN s_articles_details d
             ON (d.ordernumber = b.ordernumber)
