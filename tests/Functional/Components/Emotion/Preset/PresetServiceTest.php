@@ -28,6 +28,7 @@ use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
 use Shopware\Components\Api\Exception\ValidationException;
 use Shopware\Components\Emotion\Preset\PresetMetaData;
+use Shopware\Components\Emotion\Preset\PresetMetaDataInterface;
 use Shopware\Components\Emotion\Preset\PresetService;
 
 class PresetServiceTest extends TestCase
@@ -61,6 +62,7 @@ class PresetServiceTest extends TestCase
     {
         $presetMetaData = new PresetMetaData();
 
+        $this->assertInstanceOf(PresetMetaDataInterface::class, $presetMetaData);
         $this->expectException(ValidationException::class);
         $this->presetService->installOrUpdatePresets([$presetMetaData]);
     }
@@ -73,6 +75,7 @@ class PresetServiceTest extends TestCase
             'presetData' => [],
         ]);
 
+        $this->assertInstanceOf(PresetMetaDataInterface::class, $presetMetaData);
         $this->presetService->installOrUpdatePresets([$presetMetaData]);
         $presets = $this->connection->fetchAll('SELECT * FROM s_emotion_presets');
 
@@ -84,6 +87,7 @@ class PresetServiceTest extends TestCase
     public function testPresetUninstallationShouldSucceed()
     {
         $firstPreset = new PresetMetaData();
+        $this->assertInstanceOf(PresetMetaDataInterface::class, $firstPreset);
         $firstPreset->fromArray([
             'name' => 'foo',
             'custom' => true,
@@ -91,6 +95,8 @@ class PresetServiceTest extends TestCase
         ]);
 
         $secondPreset = new PresetMetaData();
+        $this->assertInstanceOf(PresetMetaDataInterface::class, $secondPreset);
+
         $secondPreset->fromArray([
             'name' => 'bar',
             'custom' => true,

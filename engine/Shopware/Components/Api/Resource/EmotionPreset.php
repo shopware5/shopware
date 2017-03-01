@@ -175,15 +175,19 @@ class EmotionPreset extends Resource
                     $translation['locale'] = $locale;
                 }
             }
+            unset($translation);
         }
 
         if ($data['presetData']) {
             $data['presetData'] = $this->generateElementSyncKeys($data['presetData']);
         }
 
-        $data['requiredPlugins'] = array_map(function ($plugin) {
-            return ['name' => $plugin['name'], 'version' => $plugin['version']];
-        }, $data['requiredPlugins']);
+        if ($data['requiredPlugins']) {
+            $pluginData = $this->getRequiredPluginsById($data['requiredPlugins']);
+            $data['requiredPlugins'] = array_map(function ($plugin) {
+                return ['name' => $plugin['name'], 'version' => $plugin['version']];
+            }, $pluginData);
+        }
 
         $data['requiredPlugins'] = json_encode($data['requiredPlugins']);
 
@@ -303,6 +307,22 @@ class EmotionPreset extends Resource
     }
 
     /**
+     * @param array $pluginIds
+     *
+     * @return array
+     */
+    private function getRequiredPluginsById(array $pluginIds)
+    {
+        return $this->models->getConnection()->createQueryBuilder()
+            ->select('name, label, version')
+            ->from('s_core_plugins', 's')
+            ->where('s.id IN (:ids)')
+            ->setParameter('ids', $pluginIds, Connection::PARAM_INT_ARRAY)
+            ->execute()
+            ->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
+    /**
      * @param string[] $technicalNames
      *
      * @return array
@@ -376,9 +396,10 @@ class EmotionPreset extends Resource
 
         foreach ($elements as &$element) {
             if (!array_key_exists('syncKey', $element)) {
-                $element['syncKey'] = uniqid('preset-element-');
+                $element['syncKey'] = uniqid('preset-element-', false);
             }
         }
+        unset($element);
 
         $decodedData['elements'] = $elements;
 

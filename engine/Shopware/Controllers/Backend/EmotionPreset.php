@@ -126,7 +126,7 @@ class Shopware_Controllers_Backend_EmotionPreset extends Shopware_Controllers_Ba
      *
      * @return array[]
      */
-    private function enrichPlugins($presets)
+    private function enrichPlugins(array $presets)
     {
         $pluginManager = $this->container->get('shopware_plugininstaller.plugin_service_view');
 

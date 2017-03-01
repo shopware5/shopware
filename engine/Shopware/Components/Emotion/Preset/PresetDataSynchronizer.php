@@ -102,10 +102,6 @@ class PresetDataSynchronizer implements PresetDataSynchronizerInterface
     {
         $presetData = json_decode($preset->getPresetData(), true);
 
-        if (!array_key_exists('elements', $presetData)) {
-            throw new PresetAssetImportException('No elements found while synchronizing.');
-        }
-
         foreach ($presetData['elements'] as &$presetElement) {
             if ($presetElement['syncKey'] === $element['syncKey']) {
                 $presetElement = $element;
@@ -113,6 +109,7 @@ class PresetDataSynchronizer implements PresetDataSynchronizerInterface
                 break;
             }
         }
+        unset($presetElement);
 
         $preset->setPresetData(json_encode($presetData));
 

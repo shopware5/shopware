@@ -55,7 +55,7 @@ Ext.define('Shopware.apps.Emotion.view.presets.Info', {
             autoScroll: true,
             padding: 5,
             style: 'color: #6c818f;font-size:11px',
-            emptyText: '<div style="font-size:13px; text-align: center;">' + me.emptyText + '</div>',
+            emptyText: '<div style="font-size:13px; text-align: center;">{s name="info_panel/empty_text"}{/s}</div>',
             deferEmptyText: false
         });
 
