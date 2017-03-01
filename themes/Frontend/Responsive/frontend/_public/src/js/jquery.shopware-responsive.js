@@ -187,6 +187,8 @@
                 return;
             }
 
+            $.publish('plugin/swResponsive/onCartRefresh');
+
             $.ajax({
                 'url': ajaxCartRefresh,
                 'dataType': 'jsonp',
@@ -203,6 +205,8 @@
                     if (cart.quantity == 0) {
                         $cartQuantity.addClass('is--hidden');
                     }
+
+                    $.publish('plugin/swResponsive/onCartRefreshSuccess', [ cart ]);
                 }
             });
         }
