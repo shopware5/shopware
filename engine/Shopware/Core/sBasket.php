@@ -1137,7 +1137,7 @@ class sBasket
             $totalAmountNet
         ) = $this->getBasketArticles($getArticles);
 
-        if ($totalAmount < 0 || empty($totalCount)) {
+        if (static::roundTotal($totalAmount)  < 0 || empty($totalCount)) {
             if (!$this->eventManager->notifyUntil('Shopware_Modules_Basket_sGetBasket_AllowEmptyBasket', array(
                 'articles' => $getArticles,
                 'totalAmount' => $totalAmount,
@@ -1212,6 +1212,26 @@ class sBasket
 
         return $result;
     }
+
+    /**
+     * Round a total to two decimal places. Also make sure to round to positive zero instead of negative zero.
+     *
+     * @param float|double $total a number to round
+     * @return double the number rounded to two decimal places, with -0.0 replaced with 0.0
+     */
+    private static function roundTotal($total)
+    {
+        $roundedTotal = round($total, 2);
+
+        // -0.0 == 0.0 in PHP
+        if (((float) $roundedTotal) == 0.0) {
+            // prevent -0.0 (FP negative zero) from being returned from this function
+            return 0.0;
+        }
+
+        return $roundedTotal;
+    }
+
 
     /**
      * Add product to wishlist
