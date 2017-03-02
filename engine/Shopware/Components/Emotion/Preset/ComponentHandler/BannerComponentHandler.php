@@ -70,13 +70,6 @@ class BannerComponentHandler implements ComponentHandlerInterface
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function export(array $element)
-    {
-    }
-
-    /**
      * @param array $data
      *
      * @return array
