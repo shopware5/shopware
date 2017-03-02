@@ -1139,10 +1139,22 @@ class sAdmin
             return false;
         }
 
+        /** @var Shopware\Bundle\StoreFrontBundle\Struct\Shop $shop */
+        $shop = $this->contextService->getShopContext()->getShop();
+        $shopUrl = 'http://' . $shop->getHost() . $shop->getPath();
+        // The -Secure variables don't fall back to the normal values, so we need to do some checks
+        if ($shop->getSecure()) {
+            if ($shop->getSecureHost() && $shop->getSecurePath()) {
+                $shopUrl = 'https://' . $shop->getSecureHost()  . $shop->getSecurePath();
+            } else {
+                $shopUrl = 'https://' . $shop->getHost() . $shop->getPath();
+            }
+        }
+
         $context = array(
             'sMAIL'     => $email,
             'sShop'     => $this->config->get('ShopName'),
-            'sShopURL'  => 'http://' . $this->config->get('BasePath'),
+            'sShopURL'  => $shopUrl,
             'sConfig'   => $this->config,
         );
 
