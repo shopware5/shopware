@@ -240,7 +240,7 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
         ftp_close($connection);
 
         /** @var \Enlight_Components_Session_Namespace $session */
-        $session = Shopware()->BackendSession();
+        $session = Shopware()->Container()->get('backend_session');
         $session->offsetSet('update_ftp', $ftpParams);
 
         $this->View()->assign([
@@ -300,7 +300,7 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
         $payload['version'] = $version->version;
 
         /** @var \Enlight_Components_Session_Namespace $session */
-        $session = Shopware()->BackendSession();
+        $session = Shopware()->Container()->get('backend_session');
         if ($session->offsetExists('update_ftp')) {
             $payload['ftp_credentials'] = $session->offsetGet('update_ftp');
         }

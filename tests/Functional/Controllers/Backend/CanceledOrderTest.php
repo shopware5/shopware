@@ -76,7 +76,7 @@ class Shopware_Tests_Controllers_Backend_CanceledOrderTest extends Enlight_Compo
      */
     public function testCanceledOrderSummary()
     {
-        Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
+        Shopware()->Container()->get('shopware.subscriber.auth')->setNoAuth();
 
         $this->dispatch('backend/CanceledOrder/getBasket?fromDate=2101-09-10T00%3A00%3A00&toDate=2101-09-11T00%3A00%3A00');
         $data = $this->View()->getAssign('data');

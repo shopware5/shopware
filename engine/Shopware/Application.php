@@ -275,7 +275,7 @@ class Shopware extends Enlight_Application
      */
     public function BackendSession()
     {
-        return $this->container->get('backendsession');
+        return $this->container->get('backend_session');
     }
 
     /**

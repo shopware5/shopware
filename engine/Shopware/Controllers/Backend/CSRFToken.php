@@ -31,7 +31,7 @@ class Shopware_Controllers_Backend_CSRFToken extends Shopware_Controllers_Backen
      */
     public function init()
     {
-        Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
+        Shopware()->Container()->get('shopware.subscriber.auth')->setNoAuth();
         $this->Front()->Plugins()->ViewRenderer()->setNoRender(true);
         parent::init();
     }
@@ -52,7 +52,7 @@ class Shopware_Controllers_Backend_CSRFToken extends Shopware_Controllers_Backen
     public function generateAction()
     {
         /** @var Enlight_Components_Session_Namespace $session */
-        $session = Shopware()->BackendSession();
+        $session = Shopware()->Container()->get('backend_session');
 
         if (!$token = $session->offsetGet('X-CSRF-Token')) {
             $token = \Shopware\Components\Random::getAlphanumericString(30);

@@ -628,7 +628,7 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
             return;
         }
 
-        $this->get('BackendSession')->offsetSet('store_token', serialize($token));
+        $this->get('backend_session')->offsetSet('store_token', serialize($token));
 
         $this->View()->clearAssign();
         $this->View()->assign('success', true);
@@ -688,7 +688,7 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
      */
     private function getAccessToken()
     {
-        if (!$this->get('BackendSession')->offsetExists('store_token')) {
+        if (!$this->get('backend_session')->offsetExists('store_token')) {
             return null;
         }
 
@@ -697,7 +697,7 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
         }
 
         /** @var $token AccessTokenStruct */
-        $token = $this->get('BackendSession')->offsetGet('store_token');
+        $token = $this->get('backend_session')->offsetGet('store_token');
         $token = unserialize($token);
 
         return $token;
@@ -783,8 +783,8 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
      */
     private function isApiAvailable()
     {
-        if ($this->get('BackendSession')->offsetExists('sbp_available')) {
-            return (bool) $this->get('BackendSession')->offsetGet('sbp_available');
+        if ($this->get('backend_session')->offsetExists('sbp_available')) {
+            return (bool) $this->get('backend_session')->offsetGet('sbp_available');
         }
 
         return $this->checkStoreApi();
@@ -797,12 +797,12 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
     {
         try {
             $this->get('shopware_plugininstaller.account_manager_service')->pingServer();
-            $this->get('BackendSession')->offsetSet('sbp_available', 1);
+            $this->get('backend_session')->offsetSet('sbp_available', 1);
         } catch (Exception $e) {
-            $this->get('BackendSession')->offsetSet('sbp_available', 0);
+            $this->get('backend_session')->offsetSet('sbp_available', 0);
         }
 
-        return (bool) $this->get('BackendSession')->offsetGet('sbp_available');
+        return (bool) $this->get('backend_session')->offsetGet('sbp_available');
     }
 
     /**

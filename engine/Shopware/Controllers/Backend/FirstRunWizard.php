@@ -254,7 +254,7 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
         /** @var Zend_Locale $baseLocale */
         $baseLocale = Shopware()->Container()->get('locale');
 
-        $locales = Shopware()->Plugins()->Backend()->Auth()->getLocales();
+        $locales = Shopware()->Container()->get('shopware.subscriber.auth')->getLocales();
 
         if (($key = array_search($targetLocale->getId(), $locales)) !== false) {
             unset($locales[$key]);
@@ -551,7 +551,7 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
     private function getToken($shopwareId, $password)
     {
         /** @var AccessTokenStruct $token */
-        $token = Shopware()->BackendSession()->accessToken;
+        $token = Shopware()->Container()->get('backend_session')->accessToken;
 
         if (empty($token) || $token->getExpire()->getTimestamp() <= strtotime('+30 seconds')) {
             if (empty($shopwareId) || empty($password)) {
@@ -563,7 +563,7 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
 
             $token = $accountManagerService->getToken($shopwareId, $password);
 
-            Shopware()->BackendSession()->accessToken = $token;
+            Shopware()->Container()->get('backend_session')->accessToken = $token;
         }
 
         return $token;

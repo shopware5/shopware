@@ -34,12 +34,12 @@ class Shopware_Tests_Controllers_Backend_ConfigTest extends Enlight_Components_T
      */
     public function testCronJobPaginationConfig()
     {
-        Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
+        Shopware()->Container()->get('shopware.subscriber.auth')->setNoAuth();
         $this->checkTableListConfig('cronJob');
 
         $this->reset();
 
-        Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
+        Shopware()->Container()->get('shopware.subscriber.auth')->setNoAuth();
         $this->checkGetTableListConfigPagination('cronJob');
     }
 
@@ -65,12 +65,12 @@ class Shopware_Tests_Controllers_Backend_ConfigTest extends Enlight_Components_T
      */
     public function testSearchFieldConfig()
     {
-        Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
+        Shopware()->Container()->get('shopware.subscriber.auth')->setNoAuth();
         $this->checkTableListConfig('searchField');
 
         $this->reset();
 
-        Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
+        Shopware()->Container()->get('shopware.subscriber.auth')->setNoAuth();
         $this->checkGetTableListConfigPagination('searchField');
     }
 
@@ -145,7 +145,7 @@ class Shopware_Tests_Controllers_Backend_ConfigTest extends Enlight_Components_T
         ];
         $query = http_build_query($queryParams);
         $url = 'backend/Config/getTableList/_repositoryClass/' . $tableListName . '?';
-        Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
+        Shopware()->Container()->get('shopware.subscriber.auth')->setNoAuth();
         $this->dispatch($url . $query);
         $returnData = $this->View()->getAssign('data');
         $this->assertGreaterThan(0, count($returnData));
@@ -177,7 +177,7 @@ class Shopware_Tests_Controllers_Backend_ConfigTest extends Enlight_Components_T
 
         $query = http_build_query($queryParams);
         $url = 'backend/Config/getTableList/_repositoryClass/' . $tableListName . '?';
-        Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
+        Shopware()->Container()->get('shopware.subscriber.auth')->setNoAuth();
         $this->dispatch($url . $query);
         $returnData = $this->View()->getAssign('data');
         $this->assertCount(2, $returnData);

@@ -45,8 +45,8 @@ class Shopware_Tests_Controllers_Backend_UserManagerTest extends Enlight_Compone
     {
         parent::setUp();
 
-        Shopware()->Plugins()->Backend()->Auth()->setNoAcl();
-        Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
+        Shopware()->Container()->get('shopware.subscriber.auth')->setNoAcl();
+        Shopware()->Container()->get('shopware.subscriber.auth')->setNoAuth();
     }
 
     /**

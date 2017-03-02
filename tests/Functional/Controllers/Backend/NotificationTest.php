@@ -36,8 +36,8 @@ class Shopware_Tests_Controllers_Backend_NotificationTest extends Enlight_Compon
     {
         parent::setUp();
         // disable auth and acl
-        Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
-        Shopware()->Plugins()->Backend()->Auth()->setNoAcl();
+        Shopware()->Container()->get('shopware.subscriber.auth')->setNoAuth();
+        Shopware()->Container()->get('shopware.subscriber.auth')->setNoAcl();
 
         $sql = "INSERT IGNORE INTO `s_articles_notification` (`id`, `ordernumber`, `date`, `mail`, `send`, `language`, `shopLink`) VALUES
                 (1111111111, 'SW2001', '2010-10-04 10:46:56', 'test@example.de', 0, '1', 'http://example.com/'),

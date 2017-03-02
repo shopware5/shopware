@@ -36,7 +36,7 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action imple
     const MIN_DAYS_INSTALLATION_SURVEY = 14;
 
     /**
-     * @var Shopware_Plugins_Backend_Auth_Bootstrap
+     * @var \Shopware\Components\Auth\BackendAuthSubscriber
      */
     protected $auth;
 
@@ -45,7 +45,7 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action imple
      */
     public function init()
     {
-        $this->auth = Shopware()->Plugins()->Backend()->Auth();
+        $this->auth = Shopware()->Container()->get('shopware.subscriber.auth');
         $this->auth->setNoAuth();
         $this->Front()->Plugins()->ScriptRenderer()->setRender();
     }
@@ -130,7 +130,7 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action imple
         $sbpLogin = 0;
         if ($firstRunWizardEnabled) {
             /** @var \Shopware\Bundle\PluginInstallerBundle\Struct\AccessTokenStruct $tokenData */
-            $tokenData = Shopware()->BackendSession()->accessToken;
+            $tokenData = Shopware()->Container()->get('backend_session')->accessToken;
 
             $sbpLogin = (int) (!empty($tokenData) && $tokenData->getExpire() >= new DateTime('+30 seconds'));
         }

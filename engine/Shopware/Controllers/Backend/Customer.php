@@ -88,7 +88,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
     public function init()
     {
         if (in_array($this->Request()->getActionName(), ['performOrderRedirect'])) {
-            Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
+            Shopware()->Container()->get('shopware.subscriber.auth')->setNoAuth();
         }
         parent::init();
     }

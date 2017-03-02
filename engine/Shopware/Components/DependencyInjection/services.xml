@@ -50,14 +50,33 @@
         </service>
 
         <service id="session_factory" class="Shopware\Components\DependencyInjection\Bridge\Session" />
+
         <service id="session.save_handler" class="SessionHandlerInterface">
             <factory service="session_factory" method="createSaveHandler" />
             <argument type="service" id="service_container"/>
+            <argument>s_core_sessions</argument>
+            <argument>%shopware.session%</argument>
         </service>
+
+        <service id="session.backend_save_handler" class="SessionHandlerInterface">
+            <factory service="session_factory" method="createSaveHandler" />
+            <argument type="service" id="service_container"/>
+            <argument>s_core_sessions_backend</argument>
+            <argument>%shopware.backendsession%</argument>
+        </service>
+
         <service id="session" class="Enlight_Components_Session_Namespace">
             <factory service="session_factory" method="createSession" />
             <argument type="service" id="service_container"/>
             <argument type="service" id="session.save_handler"/>
+        </service>
+
+        <service id="backend_session" class="Enlight_Components_Session_Namespace">
+            <factory service="session_factory" method="createBackendSession" />
+            <argument type="service" id="config" />
+            <argument>%shopware.backendsession%</argument>
+            <argument type="service" id="session.backend_save_handler" />
+            <argument type="service" id="front" />
         </service>
 
         <service id="mailtransport_factory" class="Shopware\Components\DependencyInjection\Bridge\MailTransport" />
@@ -566,5 +585,16 @@
         <service id="shopware.api.shop" class="Shopware\Components\Api\Resource\Shop" shared="false" />
         <service id="shopware.api.translation" class="Shopware\Components\Api\Resource\Translation" shared="false" />
         <service id="shopware.api.variant" class="Shopware\Components\Api\Resource\Variant" shared="false" />
+
+        <service id="shopware.subscriber.auth" class="Shopware\Components\Auth\BackendAuthSubscriber">
+            <tag name="shopware.event_subscriber" />
+        </service>
+
+        <service id="auth" class="Zend_Auth">
+            <factory class="Shopware\Components\DependencyInjection\Bridge\Auth" method="createAuth" />
+            <argument type="service" id="service_container" />
+            <argument type="service" id="shopware.subscriber.auth" />
+            <argument type="service" id="template" />
+        </service>
     </services>
 </container>
