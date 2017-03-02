@@ -24,12 +24,12 @@
 
 namespace Shopware\Components\Emotion\Preset;
 
-interface PresetServiceInterface
+interface PresetInstallerInterface
 {
     /**
      * @param PresetMetaDataInterface[] $presetMetaData
      */
-    public function installOrUpdatePresets(array $presetMetaData);
+    public function installOrUpdate(array $presetMetaData);
 
     /**
      * @param array $presetNames

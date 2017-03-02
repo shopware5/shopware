@@ -597,7 +597,7 @@
             <argument type="service" id="shopware.slug" />
         </service>
 
-        <service id="shopware.emotion.preset_service" class="Shopware\Components\Emotion\Preset\PresetService">
+        <service id="shopware.emotion.preset_installer" class="Shopware\Components\Emotion\Preset\PresetInstaller">
             <argument type="service" id="shopware.api.emotionpreset" />
             <argument type="service" id="shopware.slug" />
         </service>

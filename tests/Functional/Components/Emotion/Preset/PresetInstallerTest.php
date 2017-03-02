@@ -26,18 +26,16 @@ namespace Shopware\tests\Functional\Components\Emotion\Preset;
 
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
-use Shopware\Components\Api\Exception\ValidationException;
-use Shopware\Components\Emotion\Preset\PresetMetaData;
+use Shopware\Components\Emotion\Preset\PresetInstaller;
 use Shopware\Components\Emotion\Preset\PresetMetaDataInterface;
-use Shopware\Components\Emotion\Preset\PresetService;
 
 /**
  * @group EmotionPreset
  */
-class PresetServiceTest extends TestCase
+class PresetInstallerTest extends TestCase
 {
-    /** @var PresetService */
-    private $presetService;
+    /** @var PresetInstaller */
+    private $presetInstaller;
 
     /** @var Connection */
     private $connection;
@@ -50,7 +48,7 @@ class PresetServiceTest extends TestCase
         $this->connection->executeQuery('DELETE FROM s_emotion_presets');
         $this->connection->executeQuery('DELETE FROM s_core_plugins');
 
-        $this->presetService = Shopware()->Container()->get('shopware.emotion.preset_service');
+        $this->presetInstaller = Shopware()->Container()->get('shopware.emotion.preset_installer');
     }
 
     protected function tearDown()
@@ -58,60 +56,49 @@ class PresetServiceTest extends TestCase
         $this->connection->rollBack();
     }
 
-    /**
-     * @expectedException
-     */
-    public function testPresetInstallationShouldFail()
-    {
-        $presetMetaData = new PresetMetaData();
-
-        $this->assertInstanceOf(PresetMetaDataInterface::class, $presetMetaData);
-        $this->expectException(ValidationException::class);
-        $this->presetService->installOrUpdatePresets([$presetMetaData]);
-    }
-
     public function testPresetInstallationShouldSucceedWithEmptyPresetData()
     {
-        $presetMetaData = new PresetMetaData();
-        $presetMetaData->fromArray([
-            'name' => 'test_foo_preset',
-            'presetData' => [],
-        ]);
+        $presetMetaData = $this->buildMetaDataMock('foo');
 
         $this->assertInstanceOf(PresetMetaDataInterface::class, $presetMetaData);
-        $this->presetService->installOrUpdatePresets([$presetMetaData]);
+        $this->presetInstaller->installOrUpdate([$presetMetaData]);
         $presets = $this->connection->fetchAll('SELECT * FROM s_emotion_presets');
 
         $this->assertCount(1, $presets);
         // check slugified name
-        $this->assertEquals('test-foo-preset', $presets[0]['name']);
+        $this->assertEquals('foo', $presets[0]['name']);
     }
 
     public function testPresetUninstallationShouldSucceed()
     {
-        $firstPreset = new PresetMetaData();
-        $this->assertInstanceOf(PresetMetaDataInterface::class, $firstPreset);
-        $firstPreset->fromArray([
-            'name' => 'foo',
-            'custom' => true,
-            'presetData' => [],
-        ]);
+        $firstPreset = $this->buildMetaDataMock('foo', true);
+        $secondPreset = $this->buildMetaDataMock('bar');
 
-        $secondPreset = new PresetMetaData();
-        $this->assertInstanceOf(PresetMetaDataInterface::class, $secondPreset);
-
-        $secondPreset->fromArray([
-            'name' => 'bar',
-            'custom' => true,
-            'presetData' => [],
-        ]);
-
-        $this->presetService->installOrUpdatePresets([$firstPreset, $secondPreset]);
+        $this->presetInstaller->installOrUpdate([$firstPreset, $secondPreset]);
         $this->assertCount(2, $this->connection->fetchAll('SELECT * FROM s_emotion_presets'));
 
-        $this->presetService->uninstall(['foo']);
+        $this->presetInstaller->uninstall(['foo']);
         $presets = $this->connection->fetchAll('SELECT * FROM s_emotion_presets');
         $this->assertCount(1, $presets);
         $this->assertEquals('bar', $presets[0]['name']);
+    }
+
+    /**
+     * @param string $name
+     * @param bool   $custom
+     *
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    private function buildMetaDataMock($name, $custom = false)
+    {
+        $presetMetaData = $this->createMock(PresetMetaDataInterface::class);
+        $presetMetaData->method('getName')->willReturn($name);
+        $presetMetaData->method('getPresetData')->willReturn([]);
+        $presetMetaData->method('getTranslations')->willReturn([]);
+        $presetMetaData->method('getPremium')->willReturn(false);
+        $presetMetaData->method('getCustom')->willReturn($custom);
+        $presetMetaData->method('getAssetsImported')->willReturn(false);
+
+        return $presetMetaData;
     }
 }

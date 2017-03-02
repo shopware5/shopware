@@ -29,7 +29,7 @@ use Shopware\Components\Api\Resource\EmotionPreset;
 use Shopware\Components\Slug\SlugInterface;
 use Shopware\Models\Emotion\Preset;
 
-class PresetService
+class PresetInstaller
 {
     /**
      * @var EmotionPreset
@@ -54,7 +54,7 @@ class PresetService
     /**
      * {@inheritdoc}
      */
-    public function installOrUpdatePresets(array $presetMetaData)
+    public function installOrUpdate(array $presetMetaData)
     {
         $modelManager = $this->presetResource->getManager();
 

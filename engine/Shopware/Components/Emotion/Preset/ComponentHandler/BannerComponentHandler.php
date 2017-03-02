@@ -25,7 +25,7 @@
 namespace Shopware\Components\Emotion\Preset\ComponentHandler;
 
 use Shopware\Bundle\MediaBundle\MediaService;
-use Shopware\Components\Api\Manager;
+use Shopware\Components\Api\Resource\Media as MediaResource;
 use Shopware\Models\Media\Media;
 
 class BannerComponentHandler implements ComponentHandlerInterface
@@ -33,6 +33,11 @@ class BannerComponentHandler implements ComponentHandlerInterface
     const COMPONENT_TYPE = 'emotion-components-banner';
 
     const ELEMENT_DATA_KEY = 'file';
+
+    /**
+     * @var MediaResource
+     */
+    private $mediaResource;
 
     /**
      * @var MediaService
@@ -45,6 +50,12 @@ class BannerComponentHandler implements ComponentHandlerInterface
     public function __construct(MediaService $mediaService)
     {
         $this->mediaService = $mediaService;
+
+        $mediaResource = new MediaResource();
+        $mediaResource->setContainer(Shopware()->Container());
+        $mediaResource->setManager(Shopware()->Container()->get('models'));
+
+        $this->mediaResource = $mediaResource;
     }
 
     /**
@@ -98,10 +109,8 @@ class BannerComponentHandler implements ComponentHandlerInterface
      */
     private function doAssetImport($assetPath)
     {
-        $mediaResource = Manager::getResource('Media');
-
-        $media = $mediaResource->internalCreateMediaByFileLink($assetPath, -3);
-        $mediaResource->getManager()->flush($media);
+        $media = $this->mediaResource->internalCreateMediaByFileLink($assetPath, -3);
+        $this->mediaResource->getManager()->flush($media);
 
         return $media;
     }

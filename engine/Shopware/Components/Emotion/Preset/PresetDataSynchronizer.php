@@ -117,7 +117,7 @@ class PresetDataSynchronizer implements PresetDataSynchronizerInterface
     }
 
     /**
-     * @param array  $presetdata
+     * @param array  $presetData
      * @param string $elementSyncKey
      *
      * @return array
@@ -148,7 +148,7 @@ class PresetDataSynchronizer implements PresetDataSynchronizerInterface
     }
 
     /**
-     * @param string $element
+     * @param array $element
      *
      * @return ComponentHandlerInterface|bool
      */
