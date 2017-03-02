@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -44,7 +46,7 @@ class Session
      *
      * @return null|\SessionHandlerInterface
      */
-    public function createSaveHandler(Container $container, $table, array $sessionOptions)
+    public function createSaveHandler(Container $container, string $table, array $sessionOptions): ?\SessionHandlerInterface
     {
         if (isset($sessionOptions['save_handler']) && $sessionOptions['save_handler'] !== 'db') {
             return null;
@@ -72,7 +74,7 @@ class Session
      *
      * @return \Enlight_Components_Session_Namespace
      */
-    public function createSession(Container $container, \SessionHandlerInterface $saveHandler = null)
+    public function createSession(Container $container, \SessionHandlerInterface $saveHandler = null): \Enlight_Components_Session_Namespace
     {
         $sessionOptions = $container->getParameter('shopware.session');
 
@@ -86,7 +88,7 @@ class Session
         }
 
         /** @var $shop \Shopware\Models\Shop\Shop */
-        $shop = $container->get('Shop');
+        $shop = $container->get('shop');
 
         $name = 'session-' . $shop->getId();
         $sessionOptions['name'] = $name;
@@ -126,7 +128,7 @@ class Session
         array $options,
         \SessionHandlerInterface $saveHandler = null,
         \Enlight_Controller_Front $controller = null
-    ) {
+    ): \Enlight_Components_Session_Namespace {
         $options = $this->getSessionOptions($config, $options, $controller);
         if ($saveHandler) {
             session_set_save_handler($saveHandler);
@@ -148,7 +150,7 @@ class Session
         \Shopware_Components_Config $config,
         array $options,
         \Enlight_Controller_Front $controller = null
-    ) {
+    ): array {
         if (!isset($options['cookie_path']) && $controller && $controller->Request() !== null) {
             $options['cookie_path'] = rtrim($controller->Request()->getBaseUrl(), '/') . '/backend/';
         }

@@ -590,11 +590,8 @@
             <tag name="shopware.event_subscriber" />
         </service>
 
-
-        <service id="auth_factory" class="Shopware\Components\DependencyInjection\Bridge\Auth" />
-
         <service id="auth" class="Zend_Auth">
-            <factory service="auth_factory" method="createAuth" />
+            <factory class="Shopware\Components\DependencyInjection\Bridge\Auth" method="createAuth" />
             <argument type="service" id="service_container" />
             <argument type="service" id="shopware.subscriber.auth" />
             <argument type="service" id="template" />

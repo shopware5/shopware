@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -29,11 +31,18 @@ use Shopware\Components\DependencyInjection\Container;
 
 class Auth
 {
-    public function createAuth(
+    /**
+     * @param Container                 $container
+     * @param BackendAuthSubscriber     $subscriber
+     * @param \Enlight_Template_Manager $templateManager
+     *
+     * @return \Shopware_Components_Auth
+     */
+    public static function createAuth(
         Container $container,
         BackendAuthSubscriber $subscriber,
         \Enlight_Template_Manager $templateManager
-    ) {
+    ): \Shopware_Components_Auth {
         $container->load('backend_session');
 
         $resource = \Shopware_Components_Auth::getInstance();

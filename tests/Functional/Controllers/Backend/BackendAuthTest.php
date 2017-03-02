@@ -40,9 +40,17 @@ class BackendAuthTest extends \Enlight_Components_Test_Controller_TestCase
         $this->connection = Shopware()->Container()->get('dbal_connection');
         $this->connection->beginTransaction();
 
+        /** @var BackendAuthSubscriber $auth */
+        $auth = Shopware()->Container()->get('shopware.subscriber.auth');
+        $auth->setNoAuth(false);
+        $auth->setNoAcl(false);
+
+        /** @var \Shopware_Components_Auth $comp */
+        $comp = Shopware()->Container()->get('auth');
+        $comp->clearIdentity();
+
         /** @var Manager $encoder */
         $encoder = Shopware()->Container()->get('PasswordEncoder');
-
         $encoderName = Shopware()->PasswordEncoder()->getDefaultPasswordEncoderName();
 
         $this->connection->insert('s_core_auth', [
@@ -64,16 +72,8 @@ class BackendAuthTest extends \Enlight_Components_Test_Controller_TestCase
         /** @var BackendAuthSubscriber $auth */
         $auth = Shopware()->Container()->get('shopware.subscriber.auth');
         $auth->setNoAuth(false);
-
         $this->connection->rollBack();
-
         parent::tearDown();
-    }
-
-    public function testAccessWithNoAuth()
-    {
-        $response = $this->dispatch('/backend/ProductStream/list');
-        $this->assertSame(302, $response->getHttpResponseCode());
     }
 
     public function testICanDisableAuth()

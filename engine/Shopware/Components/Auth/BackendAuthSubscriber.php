@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -45,13 +47,6 @@ class BackendAuthSubscriber implements SubscriberInterface
     private $noAcl = false;
 
     /**
-     * The acl instance
-     *
-     * @var \Zend_Acl
-     */
-    private $acl;
-
-    /**
      * The current acl role
      *
      * @var string
@@ -79,7 +74,10 @@ class BackendAuthSubscriber implements SubscriberInterface
      */
     private $request;
 
-    public static function getSubscribedEvents()
+    /**
+     * {@inheritdoc}
+     */
+    public static function getSubscribedEvents(): array
     {
         return [
             'Enlight_Controller_Action_PreDispatch' => 'onPreDispatchBackend',
@@ -89,11 +87,11 @@ class BackendAuthSubscriber implements SubscriberInterface
     /**
      * Returns true if and only if the Role has access to the Resource
      *
-     * @param $params
+     * @param array $params
      *
      * @return bool
      */
-    public function isAllowed($params)
+    public function isAllowed(array $params): bool
     {
         if (empty($params) || $this->shouldUseAcl() == false) {
             return true;
@@ -117,7 +115,7 @@ class BackendAuthSubscriber implements SubscriberInterface
      *
      * @param bool $flag
      */
-    public function setNoAuth($flag = true)
+    public function setNoAuth(bool $flag = true): void
     {
         $this->noAuth = $flag ? true : false;
     }
@@ -127,7 +125,7 @@ class BackendAuthSubscriber implements SubscriberInterface
      *
      * @param bool $flag
      */
-    public function setNoAcl($flag = true)
+    public function setNoAcl(bool $flag = true): void
     {
         $this->noAcl = $flag ? true : false;
     }
@@ -137,7 +135,7 @@ class BackendAuthSubscriber implements SubscriberInterface
      *
      * @return bool
      */
-    public function shouldUseAcl()
+    public function shouldUseAcl(): bool
     {
         return !$this->noAcl;
     }
@@ -149,7 +147,7 @@ class BackendAuthSubscriber implements SubscriberInterface
      *
      * @throws \Enlight_Controller_Exception
      */
-    public function onPreDispatchBackend(Enlight_Event_EventArgs $args)
+    public function onPreDispatchBackend(Enlight_Event_EventArgs $args): void
     {
         $this->action = $args->getSubject();
         $this->request = $this->action->Request();
@@ -177,7 +175,7 @@ class BackendAuthSubscriber implements SubscriberInterface
      *
      * @return null|\Shopware_Components_Auth
      */
-    public function checkAuth()
+    public function checkAuth(): ?\Shopware_Components_Auth
     {
         /** @var $auth \Shopware_Components_Auth */
         $auth = Shopware()->Container()->get('auth');
@@ -187,43 +185,42 @@ class BackendAuthSubscriber implements SubscriberInterface
 
         $this->initLocale();
 
-        if ($auth->hasIdentity()) {
-            $identity = $auth->getIdentity();
+        if (!$auth->hasIdentity()) {
+            return null;
+        }
+        $identity = $auth->getIdentity();
 
-            $this->aclRole = $identity->role;
+        $this->aclRole = $identity->role;
 
-            $acl = Shopware()->Container()->get('acl');
-            if (!$acl->has($this->aclResource)) {
-                return $auth;
-            }
-
-            $actionName = $this->request->getActionName();
-            if ($this->action instanceof \Shopware_Controllers_Backend_ExtJs) {
-                $rules = $this->action->getAclRules();
-            }
-            if (isset($rules[$actionName])) {
-                $test = $rules[$actionName];
-            } else {
-                $test = ['privilege' => 'read'];
-            }
-
-            if (!$this->isAllowed($test)) {
-                throw new \Enlight_Controller_Exception(
-                    $test['errorMessage'] ?: 'Permission denied',
-                    401
-                );
-            }
-
+        $acl = Shopware()->Container()->get('acl');
+        if (!$acl->has($this->aclResource)) {
             return $auth;
         }
 
-        return null;
+        $actionName = $this->request->getActionName();
+        if ($this->action instanceof \Shopware_Controllers_Backend_ExtJs) {
+            $rules = $this->action->getAclRules();
+        }
+        if (isset($rules[$actionName])) {
+            $test = $rules[$actionName];
+        } else {
+            $test = ['privilege' => 'read'];
+        }
+
+        if (!$this->isAllowed($test)) {
+            throw new \Enlight_Controller_Exception(
+                $test['errorMessage'] ?: 'Permission denied',
+                401
+            );
+        }
+
+        return $auth;
     }
 
     /**
      * @return string
      */
-    public function getDefaultLocale()
+    public function getDefaultLocale(): string
     {
         $backendLocales = $this->getLocales();
         $browserLocales = array_keys(\Zend_Locale::getBrowser());
@@ -273,7 +270,7 @@ class BackendAuthSubscriber implements SubscriberInterface
      *
      * @return array
      */
-    public function getLocales()
+    public function getLocales(): array
     {
         $locales = Shopware()->Container()->get('config')->get('backendLocales', [1]);
         if ($locales instanceof \Enlight_Config) {
@@ -286,7 +283,7 @@ class BackendAuthSubscriber implements SubscriberInterface
     /**
      * Init backend locales
      */
-    private function initLocale()
+    private function initLocale(): void
     {
         $container = Shopware()->Container();
 
@@ -313,7 +310,7 @@ class BackendAuthSubscriber implements SubscriberInterface
      *
      * @return \Shopware\Models\Shop\Locale
      */
-    private function getCurrentLocale()
+    private function getCurrentLocale(): Locale
     {
         \Enlight_Components_Session::setOptions(
             $this->getSessionOptions()
@@ -341,7 +338,7 @@ class BackendAuthSubscriber implements SubscriberInterface
      *
      * @return array
      */
-    private function getSessionOptions()
+    private function getSessionOptions(): array
     {
         $options = Shopware()->Container()->getParameter('shopware.backendsession');
         $config = Shopware()->Container()->get('config');
@@ -363,7 +360,7 @@ class BackendAuthSubscriber implements SubscriberInterface
      *
      * @return bool
      */
-    private function shouldAuth()
+    private function shouldAuth(): bool
     {
         return !$this->noAuth;
     }
