@@ -31,6 +31,9 @@ use Shopware\Components\Emotion\Preset\PresetMetaData;
 use Shopware\Components\Emotion\Preset\PresetMetaDataInterface;
 use Shopware\Components\Emotion\Preset\PresetService;
 
+/**
+ * @group EmotionPreset
+ */
 class PresetServiceTest extends TestCase
 {
     /** @var PresetService */

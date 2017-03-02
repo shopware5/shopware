@@ -31,6 +31,9 @@ use Shopware\Components\Api\Resource\EmotionPreset;
 use Shopware\Components\Emotion\Preset\Exception\PresetAssetImportException;
 use Shopware\Components\Emotion\Preset\PresetDataSynchronizer;
 
+/**
+ * @group EmotionPreset
+ */
 class PresetDataSynchronizerTest extends TestCase
 {
     /** @var PresetDataSynchronizer */

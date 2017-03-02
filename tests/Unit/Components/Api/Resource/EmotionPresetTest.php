@@ -30,6 +30,9 @@ use Shopware\Components\Api\Resource\EmotionPreset;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Slug\SlugInterface;
 
+/**
+ * @group EmotionPreset
+ */
 class EmotionPresetTest extends TestCase
 {
     /**

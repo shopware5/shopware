@@ -182,6 +182,10 @@ class EmotionPreset extends Resource
             $data['presetData'] = $this->generateElementSyncKeys($data['presetData']);
         }
 
+        if (!is_array($data['requiredPlugins'])) {
+            $data['requiredPlugins'] = [];
+        }
+
         if ($data['requiredPlugins']) {
             $pluginData = $this->getRequiredPluginsById($data['requiredPlugins']);
             $data['requiredPlugins'] = array_map(function ($plugin) {

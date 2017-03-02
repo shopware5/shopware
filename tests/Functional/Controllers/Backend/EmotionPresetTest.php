@@ -27,6 +27,9 @@ namespace Shopware\Tests\Unit\Controller\Backend;
 use Shopware\Components\Api\Resource\EmotionPreset;
 use Shopware\Models\Emotion\Preset;
 
+/**
+ * @group EmotionPreset
+ */
 class EmotionPresetTest extends \Enlight_Components_Test_Controller_TestCase
 {
     /**

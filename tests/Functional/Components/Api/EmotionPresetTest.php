@@ -28,6 +28,9 @@ use Doctrine\DBAL\Connection;
 use Shopware\Components\Api\Resource\EmotionPreset;
 use Shopware\Models\Emotion\Preset;
 
+/**
+ * @group EmotionPreset
+ */
 class EmotionPresetTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -332,7 +335,7 @@ class EmotionPresetTest extends \PHPUnit\Framework\TestCase
             'thumbnail' => null,
             'preview' => null,
             'presetData' => '[]',
-            'requiredPlugins' => null,
+            'requiredPlugins' => [],
             'assetsImported' => true,
             'locale' => 'en_GB',
         ], $english);
@@ -348,7 +351,7 @@ class EmotionPresetTest extends \PHPUnit\Framework\TestCase
             'thumbnail' => null,
             'preview' => null,
             'presetData' => '[]',
-            'requiredPlugins' => null,
+            'requiredPlugins' => [],
             'assetsImported' => true,
             'locale' => 'de_DE',
         ], $german);
@@ -410,6 +413,35 @@ class EmotionPresetTest extends \PHPUnit\Framework\TestCase
     {
         $preset = $this->resource->create(['name' => 'test', 'presetData' => '[]', 'custom' => false]);
         $this->resource->delete($preset->getId());
+    }
+
+    public function testGettingRequiredPluginsByIdShouldReturnEmptyArray()
+    {
+        $method = new \ReflectionMethod($this->resource, 'getRequiredPluginsById');
+        $method->setAccessible(true);
+
+        $ids = [];
+
+        $result = $method->invoke($this->resource, $ids);
+
+        $this->assertInternalType('array', $result);
+        $this->assertEmpty($result);
+    }
+
+    public function testGettingRequiredPluginsByIdShouldSucceed()
+    {
+        $this->connection->insert('s_core_plugins', ['name' => 'SwagLiveShopping', 'label' => 'Live shopping', 'version' => '1.0.0']);
+        $pluginId = $this->connection->fetchColumn('SELECT id FROM s_core_plugins');
+
+        $method = new \ReflectionMethod($this->resource, 'getRequiredPluginsById');
+        $method->setAccessible(true);
+
+        $ids = [$pluginId];
+
+        $result = $method->invoke($this->resource, $ids);
+
+        $this->assertInternalType('array', $result);
+        $this->assertEquals('SwagLiveShopping', $result[0]['name']);
     }
 
     /**
