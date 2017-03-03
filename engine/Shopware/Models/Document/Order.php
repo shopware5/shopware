@@ -529,7 +529,7 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
         }
         
         $parameters = $this->getParameters();
-        $parameters = Shopware()->Events()->filter('DOCUMENT_ORDER_POSITIONS_PROCESSED', $parameters, array('subject' => $this, 'params' => $parameters));
+        $parameters = Shopware()->Events()->filter('DOCUMENT_ORDER_POSITIONS_PROCESSED', $parameters, ['subject' => $this, 'params' => $parameters]);
         $this->setParameters($parameters);
     }
    
