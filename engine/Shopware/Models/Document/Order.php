@@ -556,7 +556,7 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
      * @param  $parameters
      * @return void
      */
-    private function setParameters( $parameters )
+    private function setParameters($parameters)
     {
         $this->_positions = $parameters['positions'];
         $this->_amountNetto = $parameters['amountNetto'];
