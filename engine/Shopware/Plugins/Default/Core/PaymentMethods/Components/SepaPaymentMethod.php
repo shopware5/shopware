@@ -35,6 +35,19 @@ use Doctrine\ORM\AbstractQuery;
 class SepaPaymentMethod extends GenericPaymentMethod
 {
     /**
+     * Event manager which is used for the event system of shopware.
+     * Injected over the class constructor
+     *
+     * @var \Enlight_Event_EventManager
+     */
+    private $eventManager;
+
+    public function __construct()
+    {
+        $this->eventManager = Shopware()->Events();
+    }
+
+    /**
      * @inheritdoc
      */
     public function validate($paymentData)
@@ -51,6 +64,11 @@ class SepaPaymentMethod extends GenericPaymentMethod
         if (Shopware()->Config()->sepaShowBankName && Shopware()->Config()->sepaRequireBankName && (!$paymentData["sSepaBankName"] || strlen(trim($paymentData["sSepaBankName"])) === 0)) {
             $sErrorFlag["sSepaBankName"] = true;
         }
+
+        $sErrorFlag = $this->eventManager->filter('Sepa_Payment_Method_Validate_Data_Required', $sErrorFlag, [
+            'subject' => $this,
+            'paymentData' => $paymentData
+        ]);
 
         if (count($sErrorFlag)) {
             $sErrorMessages[] = Shopware()->Snippets()->getNamespace('frontend/account/internalMessages')->get('ErrorFillIn', 'Please fill in all red fields');
@@ -123,6 +141,11 @@ class SepaPaymentMethod extends GenericPaymentMethod
             'bic' => $request->getParam("sSepaBic")
         );
 
+        $data = $this->eventManager->filter('Sepa_Payment_Method_Save_Payment_Data', $data, [
+                'subject' => $this,
+                'params' => $request->getParams()
+        ]);
+
         if (!$lastPayment) {
             $date = new \DateTime();
             $data['created_at'] = $date->format('Y-m-d');
@@ -154,6 +177,11 @@ class SepaPaymentMethod extends GenericPaymentMethod
                 "sSepaIban" => $paymentData['iban'],
                 "sSepaBic" =>  $paymentData['bic']
             );
+
+            $arrayData = $this->eventManager->filter('Sepa_Payment_Method_Current_Payment_Data_Array', $arrayData, [
+                    'subject' => $this,
+                    'paymentData' => $paymentData
+            ]);
 
             return $arrayData;
         }
@@ -198,6 +226,11 @@ class SepaPaymentMethod extends GenericPaymentMethod
             'amount' => $order['invoiceAmount'],
             'created_at' => $date->format('Y-m-d')
         );
+
+        $data = $this->eventManager->filter('Sepa_Payment_Method_Create_Payment_Instance_Data', $data, [
+            'subject' => $this,
+            'paymentData' => $paymentData
+        ]);
 
         Shopware()->Db()->insert('s_core_payment_instance', $data);
 
