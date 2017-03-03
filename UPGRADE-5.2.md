@@ -8,6 +8,7 @@ This changelog references changes done in Shopware 5.2 patch versions.
 
 * Updated Symfony to version 2.8.17
 * Added paymentID as event property in `Shopware_Modules_Admin_Execute_Risk_Rule_RuleName`
+* Added support for creating new orders using the `Order` API resource
 
 ## 5.2.20
 
