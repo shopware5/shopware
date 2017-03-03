@@ -527,7 +527,7 @@ class OrderTest extends TestCase
         $newOrder = $this->resource->create($order);
 
         // Checking some fields in all models
-        $this->assertEquals($newOrder->getId(), $this->order['id'] + 1);
+        $this->assertGreaterThan($this->order['id'], $newOrder->getId());
         $this->assertNotNull($newOrder->getNumber());
         $this->assertNotSame((int)$newOrder->getNumber(), $oldOrderNumber);
         $this->assertEquals($newOrder->getCustomer()->getId(), $order['customer']['id']);
