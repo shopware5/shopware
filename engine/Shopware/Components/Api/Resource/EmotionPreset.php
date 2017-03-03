@@ -47,30 +47,22 @@ class EmotionPreset extends Resource
     private $models;
 
     /**
-     * @var \Enlight_Template_Manager
-     */
-    private $template;
-
-    /**
      * @var SlugInterface
      */
     private $slugService;
 
     /**
-     * @param Connection                $connection
-     * @param ModelManager              $models
-     * @param \Enlight_Template_Manager $template
-     * @param SlugInterface             $slugService
+     * @param Connection    $connection
+     * @param ModelManager  $models
+     * @param SlugInterface $slugService
      */
     public function __construct(
         Connection $connection,
         ModelManager $models,
-        \Enlight_Template_Manager $template,
         SlugInterface $slugService
     ) {
         $this->connection = $connection;
         $this->models = $models;
-        $this->template = $template;
         $this->slugService = $slugService;
 
         $this->setManager($models);
@@ -176,10 +168,6 @@ class EmotionPreset extends Resource
                 }
             }
             unset($translation);
-        }
-
-        if ($data['presetData']) {
-            $data['presetData'] = $this->generateElementSyncKeys($data['presetData']);
         }
 
         if (!is_array($data['requiredPlugins'])) {
@@ -381,32 +369,5 @@ class EmotionPreset extends Resource
             },
             $plugins
         );
-    }
-
-    /**
-     * @param string $presetData
-     *
-     * @return string
-     */
-    private function generateElementSyncKeys($presetData)
-    {
-        $decodedData = json_decode($presetData, true);
-
-        if (!is_array($decodedData) || !array_key_exists('elements', $decodedData)) {
-            return $presetData;
-        }
-
-        $elements = $decodedData['elements'];
-
-        foreach ($elements as &$element) {
-            if (!array_key_exists('syncKey', $element)) {
-                $element['syncKey'] = uniqid('preset-element-', false);
-            }
-        }
-        unset($element);
-
-        $decodedData['elements'] = $elements;
-
-        return json_encode($decodedData);
     }
 }

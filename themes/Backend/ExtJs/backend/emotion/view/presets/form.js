@@ -69,6 +69,10 @@ Ext.define('Shopware.apps.Emotion.view.presets.Form', {
     buildFormElements: function() {
         var me = this;
 
+        me.hiddenField = Ext.create('Ext.form.field.Hidden', {
+            name: 'emotionId'
+        });
+
         me.displayField = Ext.create('Ext.form.field.Display', {
             fieldStyle: 'font-style: italic; font-size: 11px; color: #999999',
             value: '{s name=form_window/info_text}{/s}'
@@ -130,6 +134,7 @@ Ext.define('Shopware.apps.Emotion.view.presets.Form', {
         me.mediafield = me.buildMediaSelectionField();
 
         return [
+            me.hiddenField,
             me.displayField,
             me.radiogroup,
             me.presetSelection,

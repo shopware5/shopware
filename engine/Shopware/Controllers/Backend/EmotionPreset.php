@@ -48,8 +48,16 @@ class Shopware_Controllers_Backend_EmotionPreset extends Shopware_Controllers_Ba
     public function saveAction()
     {
         $resource = $this->container->get('shopware.api.emotionpreset');
-
+        $transformer = $this->container->get('shopware.emotion.emotion_presetdata_transformer');
         $data = $this->Request()->getParams();
+
+        if (!$data['emotionId']) {
+            $this->View()->assign(['success' => true]);
+
+            return;
+        }
+
+        $data = array_merge($data, $transformer->transform($data['emotionId']));
 
         if ($data['id']) {
             $resource->update($data['id'], $data, $this->getLocale());

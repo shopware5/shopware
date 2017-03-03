@@ -420,17 +420,8 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
             return false;
         }
 
-        // Prepare emotion data and filter out relevant data for presets
-        presetDataRecord = Ext.create('Shopware.apps.Emotion.model.Presetdata');
-        presetDataRecord.createFromEmotionData(record.getData(true));
-
-        presetRecord = Ext.create('Shopware.apps.Emotion.model.Preset', {
-            presetData: Ext.JSON.encode(presetDataRecord.getData()),
-            requiredPlugins: presetDataRecord.getRequiredPlugins()
-        });
-
         Ext.create('Shopware.apps.Emotion.view.presets.Form').show(null, function() {
-            this.down('form').loadRecord(presetRecord);
+            this.down('form').getForm().setValues({ emotionId: record.get('id') });
         });
     },
 
@@ -441,7 +432,7 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
     savePreset: function(win) {
         var me = this,
             form = win.down('form'),
-            record, translations;
+            values;
 
         if (!form.getForm().isValid()) {
             return Shopware.Notification.createGrowlMessage(
@@ -449,28 +440,29 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
                 '{s name=error/not_all_required_fields_filled_preset}{/s}'
             );
         }
-        record = form.getRecord();
-        form.getForm().updateRecord();
 
-        translations = [{
-            label: record.get('name'),
-            description: record.get('description')
+        values = form.getForm().getValues();
+        values.thumbnail = values.preview;
+        values.translations = [{
+            label: values.name,
+            description: values.description
         }];
-        record.set('translations', translations);
-        record.set('thumbnail', record.get('preview'));
+        delete values.save;
 
-        record.save({
-            callback: function(savedRecord, action) {
-                var result = savedRecord.proxy.getReader().rawData;
+        Ext.Ajax.request({
+            url: '{url controller="EmotionPreset" action="save"}',
+            jsonData: values,
+            method: 'POST',
+            callback: function(operation, success, response) {
+                var result = Ext.JSON.decode(response.responseText);
 
-                if (!result.success) {
+                if (!success) {
                     return Shopware.Notification.createGrowlMessage(
                         me.snippets.errorTitle,
                         me.snippets.saveErrorMessage + '<br>' + result.message,
                         me.snippets.growlMessage
                     );
                 }
-
                 win.close();
                 Shopware.Notification.createGrowlMessage(
                     '{s name=preset/save_success}{/s}',
@@ -595,6 +587,7 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
 
                     // because of data synchronisation we have to reload preset here
                     me.reloadPreset(preset, function(reloadedPreset) {
+                        me.progressbarWindow.close();
                         me.getPresetWindow().close();
                         me.openDetailWindow(
                             me.decodeEmotionPresetData(reloadedPreset.get('presetData'))
@@ -685,19 +678,6 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
                 animate: true,
                 text: '{s name=preset/assets_import_text}{/s}',
                 value: 0
-            }],
-            dockedItems: [{
-                xtype: 'toolbar',
-                dock: 'bottom',
-                ui: 'shopware-ui',
-                items: ['->', {
-                    xtype: 'button',
-                    text: '{s name=preset/button_close}{/s}',
-                    cls: 'primary',
-                    handler: function(btn) {
-                        btn.up('window').close();
-                    }
-                }]
             }]
         });
     },

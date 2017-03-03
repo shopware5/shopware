@@ -597,6 +597,10 @@
             <argument type="service" id="shopware.slug" />
         </service>
 
+        <service id="shopware.emotion.emotion_presetdata_transformer" class="Shopware\Components\Emotion\Preset\EmotionToPresetDataTransformer">
+            <argument type="service" id="models" />
+        </service>
+
         <service id="shopware.emotion.preset_installer" class="Shopware\Components\Emotion\Preset\PresetInstaller">
             <argument type="service" id="shopware.api.emotionpreset" />
             <argument type="service" id="shopware.slug" />
