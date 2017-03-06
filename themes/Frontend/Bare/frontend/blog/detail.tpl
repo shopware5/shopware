@@ -50,7 +50,7 @@
                                 {block name='frontend_blog_detail_category'}{/block}
 
                                 {* Comments *}
-                                {block name='frontend_blog_detail_comments'}
+                                {block name='frontend_blog_detail_comments_count'}
                                     <span class="blog--metadata-comments blog--metadata">
                                         <a data-scroll="true" data-scrollTarget="#blog--comments-start" href="#blog--comments-start" title="{"{s name="BlogLinkComments"}{/s}"|escape}">{$sArticle.comments|count|default:0} {s name="BlogInfoComments"}{/s}</a>
                                     </span>
