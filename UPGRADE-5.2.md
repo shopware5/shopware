@@ -10,6 +10,7 @@ This changelog references changes done in Shopware 5.2 patch versions.
 * Added paymentID as event property in `Shopware_Modules_Admin_Execute_Risk_Rule_RuleName`
 * Added support for creating new orders using the `Order` API resource
 * Added option `allowHtml` for ExtJS grid columns and display form fields in order to allow unescaped html output. Default value is: `false`
+* Added optional `Guzzle` client config parameter to `Shopware\Components\HttpClient\GuzzleFactory::createClient` method
 
 ## 5.2.20
 
