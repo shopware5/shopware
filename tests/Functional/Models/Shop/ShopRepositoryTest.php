@@ -59,7 +59,9 @@ class Shopware_Tests_Models_ShopRepositoryTest extends Enlight_Components_Test_C
             (101, 1, 'testShop2', 'Testshop', 0, NULL, NULL, ?, '', 0, 11, 11, 11, 2, 1, 1, 2, 0, 0, 1),
             (102, 1, 'testShop3', 'Testshop', 0, NULL, NULL, ?, '', 0, 11, 11, 11, 2, 1, 1, 2, 0, 0, 1),
             (103, 1, 'testShop4', 'Testshop', 0, NULL, NULL, ?, '', 0, 11, 11, 11, 2, 1, 1, 2, 0, 0, 1),
-            (104, 1, 'testShop5', 'Testshop', 0, NULL, NULL, ?, '', 0, 11, 11, 11, 2, 1, 1, 2, 0, 0, 1);
+            (104, 1, 'testShop5', 'Testshop', 0, NULL, NULL, ?, '', 0, 11, 11, 11, 2, 1, 1, 2, 0, 0, 1),
+            (200, NULL, 'testShopPath', 'Testshop', 0, NULL, '/path', '', '', 0, 11, 11, 11, 2, 1, 1, 2, 0, 0, 1),
+            (201, NULL, 'testShopPath2', 'Testshop', 0, NULL, '/path', NULL, '', 0, 11, 11, 11, 2, 1, 1, 2, 0, 0, 1);
         ";
         Shopware()->Db()->query($sql, [
             $this->mainShop['base_path'] . '/english',
@@ -75,7 +77,7 @@ class Shopware_Tests_Models_ShopRepositoryTest extends Enlight_Components_Test_C
         parent::tearDown();
 
         // Remove test data and restore previous status
-        Shopware()->Db()->exec('DELETE FROM s_core_shops WHERE id IN (100, 101, 102, 103, 104);');
+        Shopware()->Db()->exec('DELETE FROM s_core_shops WHERE id IN (100, 101, 102, 103, 104, 200, 201);');
         unset($this->mainShopBackup['id']);
         Shopware()->Db()->update('s_core_shops', $this->mainShopBackup, 'id = 1');
     }
@@ -86,70 +88,78 @@ class Shopware_Tests_Models_ShopRepositoryTest extends Enlight_Components_Test_C
      * @ticket SW-7774
      * @ticket SW-6768
      */
-    public function testGetActiveByRequest()
+    public function getActiveByRequestDataProvider()
     {
-        // Tests copied for SW-6768
-        $this->callGetActiveShopByRequest($this->mainShop['base_path'] . '/en', 'testShop3');
+        $mainShop = Shopware()->Container()->get('dbal_connection')
+            ->executeQuery('SELECT * FROM s_core_shops WHERE id = 1')
+            ->fetch();
 
-        //check virtual url with superfluous / like localhost/en/
-        $this->callGetActiveShopByRequest($this->mainShop['base_path'] . '/en/', 'testShop3');
+        return [
+            // Tests copied for SW-6768
+            [$mainShop['base_path'] . '/en', 'testShop3'],
 
-        //check virtual url with direct controller call like localhost/en/blog
-        $this->callGetActiveShopByRequest($this->mainShop['base_path'] . '/en/blog', 'testShop3');
+            //check virtual url with superfluous / like localhost/en/
+            [$mainShop['base_path'] . '/en/', 'testShop3'],
 
-        //check base shop with direct controller call like localhost/en/blog
-        $this->callGetActiveShopByRequest($this->mainShop['base_path'] . '/blog', $this->mainShop['name']);
+            //check virtual url with direct controller call like localhost/en/blog
+            [$mainShop['base_path'] . '/en/blog', 'testShop3'],
 
-        //check without virtual url but an url with the same beginning like localhost/entsorgung
-        $this->callGetActiveShopByRequest($this->mainShop['base_path'] . '/entsorgung', $this->mainShop['name']);
+            //check base shop with direct controller call like localhost/en/blog
+            [$mainShop['base_path'] . '/blog', $mainShop['name']],
 
-        //check different virtual url with like localhost/ente
-        $this->callGetActiveShopByRequest($this->mainShop['base_path'] . '/en/uk', 'testShop2');
+            //check without virtual url but an url with the same beginning like localhost/entsorgung
+            [$mainShop['base_path'] . '/entsorgung', $mainShop['name']],
 
-        //check without virtual url it has to choose the main shop instead of the language shop without the virtual url
-        $this->callGetActiveShopByRequest($this->mainShop['base_path'], $this->mainShop['name']);
+            //check different virtual url with like localhost/ente
+            [$mainShop['base_path'] . '/en/uk', 'testShop2'],
 
-        // These are just some basic urls
-        $this->callGetActiveShopByRequest($this->mainShop['base_path'] . '', $this->mainShop['name']);
-        $this->callGetActiveShopByRequest($this->mainShop['base_path'] . '/', $this->mainShop['name']);
-        $this->callGetActiveShopByRequest($this->mainShop['base_path'] . '/foo/en', $this->mainShop['name']);
-        $this->callGetActiveShopByRequest($this->mainShop['base_path'] . '/foo/entsorgung', $this->mainShop['name']);
-        $this->callGetActiveShopByRequest($this->mainShop['base_path'] . '/fenglish', $this->mainShop['name']);
-        $this->callGetActiveShopByRequest($this->mainShop['base_path'] . '/english', 'testShop1');
-        $this->callGetActiveShopByRequest($this->mainShop['base_path'] . '/en', 'testShop3');
+            //check without virtual url it has to choose the main shop instead of the language shop without the virtual url
+            [$mainShop['base_path'], $mainShop['name']],
 
-        // These cover the cases affected by the ticket, where the base_path would be present in the middle of the url
-        $this->callGetActiveShopByRequest($this->mainShop['base_path'] . '/foo/english', $this->mainShop['name']);
-        $this->callGetActiveShopByRequest($this->mainShop['base_path'] . '/foo/en', $this->mainShop['name']);
-        $this->callGetActiveShopByRequest($this->mainShop['base_path'] . '/foo/enaaa/', $this->mainShop['name']);
-        $this->callGetActiveShopByRequest($this->mainShop['base_path'] . '/foo/uk/', $this->mainShop['name']);
-        $this->callGetActiveShopByRequest($this->mainShop['base_path'] . '/foo/en/uk/', $this->mainShop['name']);
-        $this->callGetActiveShopByRequest($this->mainShop['base_path'] . '/foo/en/uk/things', $this->mainShop['name']);
+            // These are just some basic urls
+            [$mainShop['base_path'] . '', $mainShop['name']],
+            [$mainShop['base_path'] . '/', $mainShop['name']],
+            [$mainShop['base_path'] . '/foo/en', $mainShop['name']],
+            [$mainShop['base_path'] . '/foo/entsorgung', $mainShop['name']],
+            [$mainShop['base_path'] . '/fenglish', $mainShop['name']],
+            [$mainShop['base_path'] . '/english', 'testShop1'],
+            [$mainShop['base_path'] . '/en', 'testShop3'],
 
-        // And these are some extreme cases, due to the overlapping of urls
-        $this->callGetActiveShopByRequest($this->mainShop['base_path'] . '/en/ukfoooo', 'testShop3');
-        $this->callGetActiveShopByRequest($this->mainShop['base_path'] . '/en/uk', 'testShop2');
-        $this->callGetActiveShopByRequest($this->mainShop['base_path'] . '/en', 'testShop3');
-        $this->callGetActiveShopByRequest($this->mainShop['base_path'] . '/en/uk/things', 'testShop2');
+            // These cover the cases affected by the ticket, where the base_path would be present in the middle of the url
+            [$mainShop['base_path'] . '/foo/english', $mainShop['name']],
+            [$mainShop['base_path'] . '/foo/en', $mainShop['name']],
+            [$mainShop['base_path'] . '/foo/enaaa/', $mainShop['name']],
+            [$mainShop['base_path'] . '/foo/uk/', $mainShop['name']],
+            [$mainShop['base_path'] . '/foo/en/uk/', $mainShop['name']],
+            [$mainShop['base_path'] . '/foo/en/uk/things', $mainShop['name']],
 
-        // Tests for secure
-        $this->callGetActiveShopByRequest($this->mainShop['base_path'] . '/en/us', 'testShop4');
-        $this->callGetActiveShopByRequest($this->mainShop['base_path'] . '/en/us', 'testShop4');
-        $this->callGetActiveShopByRequest($this->mainShop['base_path'] . '/en/ukfoooo', 'testShop3');
-        $this->callGetActiveShopByRequest($this->mainShop['base_path'] . '/en/ukfoooo', 'testShop3');
-        $this->callGetActiveShopByRequest($this->mainShop['base_path'] . '/en/uk', 'testShop2');
-        $this->callGetActiveShopByRequest($this->mainShop['base_path'] . '/en/uk', 'testShop2');
-        $this->callGetActiveShopByRequest($this->mainShop['base_path'] . '/en/uk/things', 'testShop2');
-        $this->callGetActiveShopByRequest($this->mainShop['base_path'] . '/en/uk/things', 'testShop2');
+            // And these are some extreme cases, due to the overlapping of urls
+            [$mainShop['base_path'] . '/en/ukfoooo', 'testShop3'],
+            [$mainShop['base_path'] . '/en/uk', 'testShop2'],
+            [$mainShop['base_path'] . '/en', 'testShop3'],
+            [$mainShop['base_path'] . '/en/uk/things', 'testShop2'],
+
+            // Tests for secure
+            [$mainShop['base_path'] . '/en/us', 'testShop4'],
+            [$mainShop['base_path'] . '/en/us', 'testShop4'],
+            [$mainShop['base_path'] . '/en/ukfoooo', 'testShop3'],
+            [$mainShop['base_path'] . '/en/ukfoooo', 'testShop3'],
+            [$mainShop['base_path'] . '/en/uk', 'testShop2'],
+            [$mainShop['base_path'] . '/en/uk', 'testShop2'],
+            [$mainShop['base_path'] . '/en/uk/things', 'testShop2'],
+            [$mainShop['base_path'] . '/en/uk/things', 'testShop2'],
+        ];
     }
 
     /**
      * helper method to call the getActiveByRequest Method with different params
      *
+     * @dataProvider getActiveByRequestDataProvider
+     *
      * @param string $url
      * @param string $shopName
      */
-    public function callGetActiveShopByRequest($url, $shopName)
+    public function testGetActiveByRequest($url, $shopName)
     {
         $request = new Enlight_Controller_Request_RequestTestCase();
         $request->setHttpHost($this->mainShop['host']);
@@ -245,5 +255,36 @@ class Shopware_Tests_Models_ShopRepositoryTest extends Enlight_Components_Test_C
         // Clean up comment
         $order->setComment('');
         Shopware()->Models()->flush($order);
+    }
+
+    public function testGetDbalShopsQueryWithEmptyUrl()
+    {
+        $query = $this->invokeMethod($this->shopRepository, 'getDbalShopsQuery');
+        $shops = $query->andWhere('shop.id >= 200 AND shop.id < 205')
+            ->execute()
+            ->fetchAll();
+
+        foreach ($shops as $shop) {
+            $this->assertNotFalse($shop);
+            $this->assertEquals($shop['base_url'], $shop['base_path']);
+        }
+    }
+
+    /**
+     * Call protected/private method of a class.
+     *
+     * @param object $object     instantiated object that we will run method on
+     * @param string $methodName Method name to call
+     * @param array  $parameters array of parameters to pass into method
+     *
+     * @return mixed method return
+     */
+    public function invokeMethod($object, $methodName, array $parameters = [])
+    {
+        $reflection = new \ReflectionClass(get_class($object));
+        $method = $reflection->getMethod($methodName);
+        $method->setAccessible(true);
+
+        return $method->invokeArgs($object, $parameters);
     }
 }
