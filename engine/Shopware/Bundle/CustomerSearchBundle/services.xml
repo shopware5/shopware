@@ -146,11 +146,11 @@
             <argument type="service" id="dbal_connection" />
         </service>
 
-        <service id="shopware_customer_search.index_populate_command" class="Shopware\Bundle\CustomerSearchBundle\Commands\IndexPopulateCommand">
+        <service id="shopware_customer_search.index_populate_command" class="Shopware\Bundle\CustomerSearchBundle\Commands\StreamIndexPopulateCommand">
             <tag name="console.command" />
         </service>
 
-        <service id="shopware_customer_search.search_index_populate_command" class="Shopware\Bundle\CustomerSearchBundle\Commands\SearchIndexPopulate">
+        <service id="shopware_customer_search.search_index_populate_command" class="Shopware\Bundle\CustomerSearchBundle\Commands\SearchIndexPopulateCommand">
             <tag name="console.command" />
         </service>
     </services>

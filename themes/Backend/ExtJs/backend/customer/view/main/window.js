@@ -29,81 +29,18 @@
 
 //{namespace name=backend/customer/view/main}
 
-/**
- * Shopware UI - Customer list main window.
- *
- * todo@all: Documentation
- */
 //{block name="backend/customer/view/main/window"}
 Ext.define('Shopware.apps.Customer.view.main.Window', {
-    /**
-     * Define that the customer main window is an extension of the enlight application window
-     * @string
-     */
     extend:'Enlight.app.Window',
-    /**
-     * Set base css class prefix and module individual css class for css styling
-     * @string
-     */
     cls:Ext.baseCSSPrefix + 'customer-list-window',
-    /**
-     * List of short aliases for class names. Most useful for defining xtypes for widgets.
-     * @string
-     */
     alias:'widget.customer-list-main-window',
-    /**
-     * Set no border for the window
-     * @boolean
-     */
     border:false,
-    /**
-     * True to automatically show the component upon creation.
-     * @boolean
-     */
     autoShow:true,
-    /**
-     * Set border layout for the window
-     * @string
-     */
     layout:'border',
-    /**
-     * Define window width
-     * @integer
-     */
     width:'90%',
-    /**
-     * Define window height
-     * @integer
-     */
     height:'90%',
-    /**
-     * True to display the 'maximize' tool button and allow the user to maximize the window, false to hide the button and disallow maximizing the window.
-     * @boolean
-     */
-    maximizable:true,
-    /**
-     * True to display the 'minimize' tool button and allow the user to minimize the window, false to hide the button and disallow minimizing the window.
-     * @boolean
-     */
-    minimizable:true,
-    /**
-     * A flag which causes the object to attempt to restore the state of internal properties from a saved state on startup.
-     */
-    stateful:true,
-    /**
-     * The unique id for this object to use for state management purposes.
-     */
-    stateId:'shopware-customer-main-window',
-    /**
-     * Set window title which is displayed in the window header
-     * @string
-     */
     title:'{s name=window_title}Customer list{/s}',
 
-    /**
-     * Contains all snippets for the view component
-     * @object
-     */
     snippets:{
         toolbar:{
             add:'{s name=toolbar/button_add}Add{/s}',
@@ -129,7 +66,9 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
         Ext.suspendLayouts();
         me.listStore = Ext.create('Shopware.apps.CustomerStream.store.Preview', { pageSize: 10}).load({ conditions: null });
 
-        me.gridPanel = Ext.create('Shopware.apps.Customer.view.list.List', { store: me.listStore });
+        me.gridPanel = Ext.create('Shopware.apps.Customer.view.list.List', {
+            store: me.listStore
+        });
         me.gridPanel.on('selection-changed', Ext.bind(me.customerSelected, me));
 
         me.streamListing = Ext.create('Shopware.apps.CustomerStream.view.list.CustomerStream', {
@@ -145,14 +84,26 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
 
         me.filterPanel = Ext.create('Shopware.apps.CustomerStream.view.detail.ConditionPanel', { flex: 4 });
 
-        me.chart = me.createChart();
+        me.metaChart = me.createChart(
+            [
+                { name: 'count_orders', title: 'Anzahl Bestellungen' },
+                { name: 'invoice_amount_avg', title: 'Ø Warenkorb' },
+                { name: 'invoice_amount_max', title: 'Größte Bestellung' },
+                { name: 'invoice_amount_min', title: 'Kleinste Bestellung' },
+                { name: 'invoice_amount_sum', title: 'Gesamt Umsatz' },
+                { name: 'product_avg', title: 'Ø Warenwert' }
+            ],
+            me.metaChartStore = Ext.create('Shopware.apps.Customer.store.MetaChart')
+        );
 
-        // me.streamChartContainer = Ext.create('Ext.container.Container', {
-        //     items: []
-        // });
+        me.streamChartContainer = Ext.create('Ext.container.Container', {
+            items: [],
+            flex: 1,
+            layout: 'border'
+        });
 
         me.cardContainer = Ext.create('Ext.container.Container', {
-            items: [me.gridPanel, me.chart, me.createStreamChart()] ,
+            items: [me.gridPanel, me.metaChart, me.streamChartContainer] ,
             region: 'center',
             layout: 'card'
         });
@@ -192,149 +143,26 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
             url: '{url controller=CustomerStream action=getLastFullIndexTime}',
             success: function(operation) {
                 var response = Ext.decode(operation.responseText);
-
                 Ext.defer(function () {
                     me.indexingBar.updateProgress(0, 'Letzte Analyze am: ' + Ext.util.Format.date(response.last_index_time), true);
-                }, 500);
+                }, 1000);
             }
         });
     },
 
-    loadStreamChart: function() {
+
+    createChart: function(fields, store) {
         var me = this;
-        var fields = [];
-        var modelFields = [];
+        var axesFields = [];
+        var series = [];
 
-        // var series = me.streamChart.series;
-        // series.removeAll(series.items);
-        // series.add(me.createLineSeries('unassigned', 'Nicht zugewiesen'));
+        Ext.each(fields, function(item) {
+            axesFields.push(item.name);
 
-        me.streamListing.getStore().each(function (item) {
-            fields.push(item.get('name'));
-            modelFields.push({ name: item.get('name'), type: 'float' });
-            // series.add(me.createLineSeries(item.get('name'), item.get('name')));
-        });
-
-        fields.push('unassigned');
-        modelFields.push({ name: 'unassigned', type: 'float' });
-        modelFields.push({ name: 'yearMonth', type: 'string'});
-
-        var axes = me.streamChart.axes.first();
-        var series = me.streamChart.series.first();
-        series.yField = fields;
-        axes.fields = fields;
-
-        me.streamChart.setLoading(true);
-
-        me.streamChart.store = me.streamChartStore = Ext.create('Ext.data.Store', {
-            fields: modelFields,
-            proxy:{
-                type:'ajax',
-                url: '{url controller="CustomerStream" action="loadAmountPerStreamChart"}',
-                reader:{
-                    type:'json',
-                    root:'data'
-                }
-            }
-        }).load({
-            callback: function() {
-                me.streamChart.setLoading(false);
-                me.streamChart.updateLayout();
-            }
-        });
-
-
-        // me.streamChart.redraw();
-    },
-
-    createStreamChart: function () {
-        var me = this;
-
-        me.streamChartStore = Ext.create('Ext.data.Store', {
-            fields: [
-                { name: 'unassigned', type: 'float' },
-                { name: 'yearMonth', type: 'string'}
-            ],
-            proxy:{
-                type:'ajax',
-                url: '{url controller="CustomerStream" action="loadAmountPerStreamChart"}',
-                reader:{
-                    type:'json',
-                    root:'data'
-                }
-            }
-        });
-
-        me.streamChart = Ext.create('Ext.chart.Chart', {
-            shadow: true,
-            margin: 30,
-            flex: 1,
-            legend: true,
-            store: me.streamChartStore,
-            animate: true,
-            axes: [{
-                type: 'Numeric',
-                position: 'left',
-                fields: ['unassigned'],
-                title: false,
-                grid: true
-            }, {
-                type: 'Category',
-                position: 'bottom',
-                fields: ['yearMonth'],
-                title: false
-            }],
-            series: [{
-                type: 'line',
-                highlight: { size: 7, radius: 7 },
-                axis: 'left',
-                fill: true,
-                title: 'Nicht zugewiesen',
-                smooth: true,
-                xField: 'yearMonth',
-                yField: ['unassigned'],
-                markerConfig: { type: 'circle', size: 4, radius: 4, 'stroke-width': 0 }
-            }]
-            // series: [{
-            //     type: 'column',
-            //     axis: 'left',
-            //     gutter: 80,
-            //     xField: 'yearMonth',
-            //     yField: ['unassigned'],
-            //     stacked: true,
-            //     tips: {
-            //         trackMouse: true,
-            //         width: 65,
-            //         height: 28,
-            //         renderer: function(storeItem, item) {
-            //             this.setTitle(item.value[1]);
-            //         }
-            //     }
-            // }]
-        });
-        return me.streamChart;
-    },
-
-    createChart: function () {
-        var me = this;
-
-        me.chartStore = Ext.create('Ext.data.Store', {
-            fields:[
-                { name:'count_orders', type: 'int'},
-                { name:'invoice_amount_avg', type: 'float'},
-                { name:'invoice_amount_max', type: 'float'},
-                { name:'invoice_amount_min', type: 'float'},
-                { name:'invoice_amount_sum', type: 'float'},
-                { name:'product_avg', type: 'float'},
-                { name:'yearMonth', type: 'string'}
-            ],
-            proxy:{
-                type:'ajax',
-                url: '{url controller="CustomerStream" action="loadChart"}',
-                reader:{
-                    type:'json',
-                    root:'data'
-                }
+            if (item.hasOwnProperty('title')) {
+                series.push(me.createLineSeries(item.name, item.title));
+            } else {
+                series.push(me.createLineSeries(item.name, item.name));
             }
         });
 
@@ -343,41 +171,24 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
             margin:30,
             legend: true,
             animate:true,
-            snippets:{
-                yAxis:'{s name=chart/y_axis}Turnover{/s}',
-                xAxis:'{s name=chart/x_axis}Month{/s}'
-            },
-            store: me.chartStore,
+            store: store,
             axes: [{
                 type: 'Numeric',
                 position: 'left',
-                fields: [
-                    'count_orders',
-                    'invoice_amount_avg',
-                    'invoice_amount_max',
-                    'invoice_amount_min',
-                    'invoice_amount_sum',
-                    'product_avg'
-                ],
+                fields: axesFields,
                 label: {
                     renderer: Ext.util.Format.numberRenderer('0,0')
                 },
-                title: 'Umsatz',
+                title: '{s name="amount"}Amout{/s}',
                 grid: true,
                 minimum: 0
             }, {
                 type: 'Category',
                 position: 'bottom',
+                title: '{s name="chart_month"}Month{/s}',
                 fields: ['yearMonth']
             }],
-            series: [
-                me.createLineSeries('count_orders', 'Anzahl Bestellungen'),
-                me.createLineSeries('invoice_amount_avg', 'Ø Warenkorb'),
-                me.createLineSeries('invoice_amount_max', 'Größte Bestellung'),
-                me.createLineSeries('invoice_amount_min', 'Kleinste Bestellung'),
-                me.createLineSeries('invoice_amount_sum', 'Gesamt Umsatz'),
-                me.createLineSeries('product_avg', 'Ø Warenwert')
-            ]
+            series: series
         });
     },
 
@@ -395,195 +206,6 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
         };
     },
 
-    customerSelected: function (selection) {
-        var me = this;
-        me.deleteCustomerButton.setDisabled(selection.length == 0);
-    },
-
-    loadPreview: function() {
-        var me = this;
-
-        if (!me.filterPanel.getForm().isValid()) {
-            return;
-        }
-        me.listStore.getProxy().extraParams = me.filterPanel.getSubmitData();
-        me.listStore.load();
-        me.loadChart();
-        me.loadStreamChart();
-    },
-
-    streamSelected: function(selModel, selection) {
-        var me = this;
-
-        if (me.preventStreamChanged) {
-            return;
-        }
-        if (selection.length <= 0) {
-            me.resetConditions();
-            return;
-        }
-
-        me.loadStream(selection[0]);
-    },
-
-    loadStream: function(record) {
-        var me = this;
-
-        me.streamListing.setLoading(true);
-
-        me.setTitle('Kundenliste: ' + record.get('name'));
-        me.resetFilterPanel();
-        me.formPanel.loadRecord(record);
-
-        me.streamListing.setLoading(false);
-        me.listStore.getProxy().extraParams = {
-            conditions: record.get('conditions')
-        };
-        me.listStore.load();
-
-        me.loadChart();
-    },
-
-    saveStream: function (record, callback) {
-        var me = this;
-
-        if (!me.filterPanel.getForm().isValid()) {
-            return;
-        }
-
-        var isNew = (record.get('id') === null);
-
-        me.formPanel.getForm().updateRecord(record);
-
-        record.save({
-            callback: function() {
-                if (isNew) {
-                    me.streamListing.getStore().insert(0, record);
-                }
-                me.preventStreamChanged = true;
-                me.streamListing.selModel.deselectAll(true);
-                me.preventStreamChanged = false;
-                me.streamListing.selModel.select([record], false, true);
-                me.startPopulate(record);
-            }
-        });
-    },
-
-    createOrUpdateStream: function(callback) {
-        var me = this;
-        var record = me.formPanel.getForm().getRecord();
-        if (record) {
-            me.saveStream(me.formPanel.getForm().getRecord(), callback);
-            return;
-        }
-        me.createStream(callback);
-    },
-
-    loadChart: function() {
-        var me = this;
-        me.setChartParameter();
-        me.chartStore.load();
-    },
-
-    setChartParameter: function() {
-        var me = this;
-        me.chartStore.getProxy().extraParams = { };
-
-        var record = me.formPanel.getForm().getRecord();
-        if (record && record.get('id')) {
-            me.chartStore.getProxy().extraParams = {
-                streamId: record.get('id')
-            };
-        }
-    },
-
-    createStream: function(callback) {
-        var me = this;
-        var record = Ext.create('Shopware.apps.CustomerStream.model.CustomerStream', {
-            id: null,
-            name: 'New stream'
-        });
-        me.saveStream(record, callback);
-    },
-
-    startPopulate: function(record) {
-        var me = this;
-
-        me.indexingBar.value = 0;
-        me.formPanel.setDisabled(true);
-        Ext.Ajax.request({
-            url: '{url controller=CustomerStream action=loadStream}',
-            params: {
-                streamId: record.get('id')
-            },
-            success: function(operation) {
-                var response = Ext.decode(operation.responseText);
-                me.start([{
-                    text: 'Indexing customers',
-                    url: '{url controller=CustomerStream action=indexStream}',
-                    params: {
-                        total: response.total,
-                        streamId: record.get('id')
-                    }
-                }]);
-
-            }
-        });
-    },
-
-    indexSearch: function() {
-        var me = this;
-
-        me.indexingBar.value = 0;
-        me.formPanel.setDisabled(true);
-        Ext.Ajax.request({
-            url: '{url controller=CustomerStream action=getCustomerCount}',
-            params: { },
-            success: function(operation) {
-                var response = Ext.decode(operation.responseText);
-
-                me.start([{
-                    text: 'Analyzing customers',
-                    url: '{url controller=CustomerStream action=buildSearchIndex}',
-                    params: {
-                        total: response.total
-                    }
-                }]);
-            }
-        });
-    },
-
-    updateProgressBar: function(request, response) {
-        var me = this;
-        me.indexingBar.updateProgress(response.progress, response.text, true);
-    },
-
-    finish: function() {
-        this.formPanel.setDisabled(false);
-        this.loadPreview();
-        this.resetProgressbar();
-    },
-
-    switchLayout: function (layout) {
-        var me = this;
-
-        switch (layout) {
-            case 'table':
-                me.cardContainer.getLayout().setActiveItem(0);
-                me.gridPanel.getStore().load();
-                break;
-
-            case 'amount_chart':
-                me.cardContainer.getLayout().setActiveItem(1);
-                me.chartStore.load();
-                break;
-
-            case 'stream_chart':
-                me.cardContainer.getLayout().setActiveItem(2);
-                me.loadStreamChart();
-                break;
-        }
-    },
 
     /**
      * Creates the grid toolbar with the add and delete button
@@ -631,7 +253,7 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
 
         items.push({
             iconCls: 'sprite-arrow-circle-225-left',
-            handler: Ext.bind(me.loadPreview, me)
+            handler: Ext.bind(me.reloadView, me)
         });
 
         me.indexingBar = Ext.create('Ext.ProgressBar', {
@@ -742,18 +364,294 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
         return new Ext.menu.Menu({ items: items });
     },
 
+
+
+    customerSelected: function (selection) {
+        var me = this;
+        me.deleteCustomerButton.setDisabled(selection.length == 0);
+    },
+
+
+    switchLayout: function (layout) {
+        var me = this;
+
+        switch (layout) {
+            case 'table':
+                me.cardContainer.getLayout().setActiveItem(0);
+                me.gridPanel.getStore().load();
+                break;
+
+            case 'amount_chart':
+                me.cardContainer.getLayout().setActiveItem(1);
+                me.metaChartStore.load();
+                break;
+
+            case 'stream_chart':
+                me.cardContainer.getLayout().setActiveItem(2);
+                me.loadStreamChart();
+                break;
+        }
+    },
+
+
+
+
+
+
     resetFilterPanel: function() {
         var me = this;
+        var newStream = Ext.create('Shopware.apps.CustomerStream.model.CustomerStream', {
+            id: null,
+            name: 'New stream'
+        });
 
         me.filterPanel.removeAll();
         me.filterPanel.loadRecord(null);
+        me.formPanel.loadRecord(null);
     },
 
     resetConditions: function() {
         var me = this;
+
         me.resetFilterPanel();
-        me.loadPreview();
-    }
+        me.loadListing();
+    },
+
+
+
+
+
+
+
+
+
+    reloadView: function() {
+        var me = this;
+
+        if (me.filterPanel.getForm().isValid()) {
+            me.listStore.getProxy().extraParams = me.filterPanel.getSubmitData();
+            me.listStore.load();
+        }
+
+        me.metaChartStore.load();
+        me.loadStreamChart();
+    },
+
+    loadListing: function() {
+        var me = this;
+
+        if (!me.filterPanel.getForm().isValid()) {
+            return;
+        }
+
+        me.listStore.getProxy().extraParams = me.filterPanel.getSubmitData();
+        me.listStore.load();
+    },
+
+    streamSelected: function(selModel, selection) {
+        var me = this;
+
+        if (me.preventStreamChanged) {
+            return;
+        }
+
+        if (selection.length <= 0) {
+            me.resetConditions();
+            me.loadChart();
+            return;
+        }
+
+        me.loadStream(selection[0]);
+        me.loadChart();
+    },
+
+    loadStream: function(record) {
+        var me = this;
+
+        me.streamListing.setLoading(true);
+
+        me.setTitle('Kundenliste: ' + record.get('name'));
+
+        me.resetFilterPanel();
+        me.formPanel.loadRecord(record);
+
+        me.streamListing.setLoading(false);
+        me.listStore.getProxy().extraParams = {
+            conditions: record.get('conditions')
+        };
+
+        me.listStore.load();
+    },
+
+    loadChart: function() {
+        var me = this;
+        var record = me.formPanel.getForm().getRecord();
+
+        me.metaChartStore.getProxy().extraParams = { };
+
+        if (record && record.get('id')) {
+            me.metaChartStore.getProxy().extraParams = {
+                streamId: record.get('id')
+            };
+        }
+
+        me.metaChartStore.load();
+    },
+
+
+
+    loadStreamChart: function() {
+        var me = this;
+        var fields = [];
+        var modelFields = [];
+
+        me.streamListing.getStore().each(function (item) {
+            fields.push({ name: item.get('name') });
+            modelFields.push({ name: item.get('name'), type: 'float' });
+        });
+
+        fields.push({ name: 'unassigned' });
+        modelFields.push({ name: 'unassigned', type: 'float' });
+        modelFields.push({ name: 'yearMonth', type: 'string'});
+
+        me.streamChartContainer.removeAll();
+        me.streamChartContainer.setLoading(true);
+
+        var store = Ext.create('Ext.data.Store', {
+            fields: modelFields,
+            proxy:{
+                type:'ajax',
+                url: '{url controller="CustomerStream" action="loadAmountPerStreamChart"}',
+                reader:{
+                    type:'json',
+                    root:'data'
+                }
+            }
+        }).load({
+            callback: function () {
+                var chart = me.createChart(fields, store);
+                me.streamChartContainer.add(chart);
+                me.streamChartContainer.setLoading(false);
+            }
+        });
+    },
+
+
+
+    saveStream: function (record, callback) {
+        var me = this;
+
+        if (!me.filterPanel.getForm().isValid()) {
+            return;
+        }
+
+        var isNew = (record.get('id') === null);
+
+        me.formPanel.getForm().updateRecord(record);
+
+        record.save({
+            callback: function() {
+                if (isNew) {
+                    me.streamListing.getStore().insert(0, record);
+                }
+                me.preventStreamChanged = true;
+                me.streamListing.selModel.deselectAll(true);
+                me.preventStreamChanged = false;
+                me.streamListing.selModel.select([record], false, true);
+                me.startPopulate(record);
+            }
+        });
+    },
+
+    createOrUpdateStream: function(callback) {
+        var me = this;
+        var record = me.formPanel.getForm().getRecord();
+
+        if (record) {
+            me.saveStream(me.formPanel.getForm().getRecord(), callback);
+            return;
+        }
+        me.createStream(callback);
+    },
+
+    createStream: function(callback) {
+        var me = this;
+        var record = Ext.create('Shopware.apps.CustomerStream.model.CustomerStream', {
+            id: null,
+            name: 'New stream'
+        });
+        me.saveStream(record, callback);
+    },
+
+
+
+
+
+
+
+
+    startPopulate: function(record) {
+        var me = this;
+
+        me.indexingBar.value = 0;
+        me.formPanel.setDisabled(true);
+
+        Ext.Ajax.request({
+            url: '{url controller=CustomerStream action=loadStream}',
+            params: {
+                streamId: record.get('id')
+            },
+            success: function(operation) {
+                var response = Ext.decode(operation.responseText);
+                me.start([{
+                    text: 'Indexing customers',
+                    url: '{url controller=CustomerStream action=indexStream}',
+                    params: {
+                        total: response.total,
+                        streamId: record.get('id')
+                    }
+                }]);
+
+            }
+        });
+    },
+
+    indexSearch: function() {
+        var me = this;
+
+        me.indexingBar.value = 0;
+        me.formPanel.setDisabled(true);
+
+        Ext.Ajax.request({
+            url: '{url controller=CustomerStream action=getCustomerCount}',
+            params: { },
+            success: function(operation) {
+                var response = Ext.decode(operation.responseText);
+
+                me.start([{
+                    text: 'Analyzing customers',
+                    url: '{url controller=CustomerStream action=buildSearchIndex}',
+                    params: {
+                        total: response.total
+                    }
+                }]);
+            }
+        });
+    },
+
+    updateProgressBar: function(request, response) {
+        var me = this;
+        me.indexingBar.updateProgress(response.progress, response.text, true);
+    },
+
+    finish: function() {
+        this.formPanel.setDisabled(false);
+        this.loadListing();
+        this.resetProgressbar();
+    },
+
+
+
 
 });
 //{/block}

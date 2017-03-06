@@ -57,6 +57,8 @@ class CustomerOrderGateway
     {
         $data = $this->getCustomerOrders($customerIds);
 
+        $canceled = $this->getCustomersWithCanceledOrders($customerIds);
+
         $structs = [];
         foreach ($customerIds as $customerId) {
             if (!array_key_exists($customerId, $data)) {
@@ -64,7 +66,10 @@ class CustomerOrderGateway
                 continue;
             }
 
-            $structs[$customerId] = $this->hydrator->hydrate($data[$customerId]);
+            $struct = $this->hydrator->hydrate($data[$customerId]);
+            $struct->setHasCanceledOrders(in_array($customerId, $canceled));
+
+            $structs[$customerId] = $struct;
         }
 
         return $structs;
@@ -93,7 +98,7 @@ class CustomerOrderGateway
             "GROUP_CONCAT(DISTINCT orders.subshopID SEPARATOR ',') as ordered_in_shops",
             "GROUP_CONCAT(DISTINCT orders.deviceType SEPARATOR ',') as ordered_with_devices",
             "GROUP_CONCAT(DISTINCT LOWER(DAYNAME(orders.ordertime)) SEPARATOR ',') as weekdays",
-            '(SELECT 1 FROM s_order o2 WHERE status = -1 AND o2.userID = orders.userID LIMIT 1) as has_canceled_orders',
+//            '(SELECT 1 FROM s_order o2 WHERE status = -1 AND o2.userID = orders.userID LIMIT 1) as has_canceled_orders',
         ]);
         $query->from('s_order', 'orders');
         $query->andWhere('orders.status != :cancelStatus');
@@ -106,5 +111,23 @@ class CustomerOrderGateway
         $query->groupBy('orders.userID');
 
         return $query->execute()->fetchAll(\PDO::FETCH_GROUP | \PDO::FETCH_UNIQUE);
+    }
+
+    /**
+     * @param int[] $ids
+     * @return int[]
+     */
+    private function getCustomersWithCanceledOrders($ids)
+    {
+        $query = $this->connection->createQueryBuilder();
+        $query->addSelect(['orders.userID']);
+        $query->from('s_order', 'orders');
+        $query->andWhere('orders.status = :cancelStatus');
+        $query->andWhere('orders.userID IN (:ids)');
+        $query->setParameter(':cancelStatus', -1);
+        $query->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
+        $query->groupBy('orders.userID');
+
+        return $query->execute()->fetchAll(\PDO::FETCH_COLUMN);
     }
 }

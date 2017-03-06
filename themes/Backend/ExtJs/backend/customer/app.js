@@ -92,7 +92,7 @@ Ext.define('Shopware.apps.Customer', {
      * The other shops are global stores which used for combo boxes.
      * @array
      */
-    stores:[ 'Detail', 'List', 'Orders', 'Chart', 'Batch', 'Address' ],
+    stores:[ 'Detail', 'MetaChart', 'List', 'Orders', 'Chart', 'Batch', 'Address' ],
 
     /**
      * All store's required models. The detail store handles the base, billing, shipping and debit model.
