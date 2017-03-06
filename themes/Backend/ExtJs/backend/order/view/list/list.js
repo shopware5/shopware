@@ -472,7 +472,6 @@ Ext.define('Shopware.apps.Order.view.list.List', {
     getToolbar:function () {
         var me = this;
 
-        /*{if {acl_is_allowed privilege=update}}*/
         me.createDocumentButton = Ext.create('Ext.button.Button', {
             iconCls:'sprite-documents-stack',
             text:me.snippets.toolbar.batch,
@@ -482,14 +481,14 @@ Ext.define('Shopware.apps.Order.view.list.List', {
                 me.fireEvent('showBatch', me);
             }
         });
-        /*{/if}*/
-
 
         return Ext.create('Ext.toolbar.Toolbar', {
             dock:'top',
             ui: 'shopware-ui',
             items:[
+                /*{if {acl_is_allowed privilege=update}}*/
                 me.createDocumentButton,
+                /*{/if}*/
                 '->',
                 {
                     xtype:'textfield',
