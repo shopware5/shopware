@@ -23,6 +23,10 @@ This changelog references changes done in Shopware Next patch versions.
 * Added container tag `shopware_media.strategy` for strategy registration
 * Added abstract class `Shopware\Components\Filesystem\AbstractFilesystem`
 * Added service `shopware_media.filesystem` which is build on top of `shopware.filesystem.public`
+* Added `\Shopware\Bundle\StoreFrontBundle\Struct\Category::__construct` which requires id, parentId, path and name
+* Added `\Shopware\Bundle\StoreFrontBundle\Service\Core\AdvancedMenuService` to get advanced menu
+* Added `\Shopware\Bundle\StoreFrontBundle\Struct\Collection` 
+* Added `\Shopware\Bundle\StoreFrontBundle\Struct\CategoryCollection`
 
 ## Changes
 
@@ -33,6 +37,7 @@ This changelog references changes done in Shopware Next patch versions.
 * Changed 3rd constructor parameter in `shopware_media.garbage_collector_factory` from `Shopware\Bundle\MediaBundle\MediaServiceInterface` to `Shopware\Bundle\MediaBundle\Strategy\StrategyInterface`
 * Changed constructor of `shopware_media.strategy_factory` to require a collection of `Shopware\Bundle\MediaBundle\Strategy\StrategyInterface`
 * Changed default path of `media` to `web/media`
+* Changed `category.sub` variable to `category.children` in advanced menu template.
 
 ## Removals
 
@@ -223,3 +228,67 @@ The following example will store all `public` files on Google Cloud Platform.
     ],
 ],
 ```
+
+## `\Shopware\Bundle\StoreFrontBundle\Struct\CategoryCollection`
+The category collection provides different helper function to work with categories:
+
+* `getIds` - returns all ids of contained categories
+    ```
+    $collection = new CategoryCollection([
+        new Category(1, null, [], 'First level 01'),
+        new Category(2, 1, [1], 'Second level 01'),
+    ]);
+    
+    $this->assertSame([1,2], $collection->getIds());
+    ```
+
+* `getPaths` - returns all path variables of the contained categories
+    ```
+    $collection = new CategoryCollection([
+        new Category(1, null, [1], 'First level 01'),
+        new Category(2, 1, [1, 2], 'Second level 01'),
+    ]);
+    $this->assertSame(
+        [ [1], [2, 1] ],
+        $collection->getPaths()
+    );
+    ```
+    
+* `getIdsIncludingPaths` - returns all ids, including ids of the categories path
+    ```
+    $collection = new CategoryCollection([
+        new Category(2, 1, [1], 'Second level 01'),
+        new Category(5, 50, [50, 1], 'Third level 02'),
+    ]);
+    
+    $this->assertSame(
+        [1,2,5,50],
+        $collection->getIdsIncludingPaths()
+    );
+    ```
+
+
+* `getTree` - Allows to build a category tree, started with the provided parent
+    ```
+    $collection = new CategoryCollection([
+        new Category(1, null, [], 'First level 01'),
+        new Category(2, 1, [1], 'Second level 01'),
+        new Category(3, 2, [2, 1], 'Third level 01'),
+        new Category(4, 1, [1], 'Second level 02'),
+        new Category(5, 4, [4, 1], 'Third level 02'),
+    ]);
+    
+    $this->assertEquals(
+        [
+            new Category(1, null, [], 'First level 01', [
+                new Category(2, 1, [1], 'Second level 01', [
+                    new Category(3, 2, [2, 1], 'Third level 01'),
+                ]),
+                new Category(4, 1, [1], 'Second level 02', [
+                    new Category(5, 4, [4, 1], 'Third level 02'),
+                ]),
+            ]),
+        ],
+        $collection->getTree(null)
+    );
+    ```

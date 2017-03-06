@@ -134,13 +134,37 @@ class Category extends Extendable implements \JsonSerializable
     protected $hideSortings;
 
     /**
+     * @var Category[]
+     */
+    protected $children = [];
+
+    /**
+     * @param int      $id
+     * @param int|null $parentId
+     * @param array    $path
+     * @param string   $name
+     */
+    public function __construct(int $id, ?int $parentId, array $path, string $name)
+    {
+        $this->id = $id;
+        $this->parentId = $parentId;
+        $this->path = $path;
+        $this->name = $name;
+    }
+
+    /**
      * @param CategoryEntity $category
      *
      * @return Category
      */
     public static function createFromCategoryEntity(CategoryEntity $category)
     {
-        $struct = new self();
+        $struct = new self(
+            $category->getId(),
+            $category->getParentId(),
+            array_filter(explode('|', $category->getPath())),
+            $category->getName()
+        );
 
         $struct->setId($category->getId());
         $struct->setName($category->getName());
@@ -486,5 +510,29 @@ class Category extends Extendable implements \JsonSerializable
     public function setHideSortings($hideSortings)
     {
         $this->hideSortings = $hideSortings;
+    }
+
+    /**
+     * @return Category[]
+     */
+    public function getChildren(): array
+    {
+        return $this->children;
+    }
+
+    /**
+     * @param Category[] $children
+     */
+    public function setChildren(array $children)
+    {
+        $this->children = $children;
+    }
+
+    /**
+     * @param Category $category
+     */
+    public function addChildren(Category $category)
+    {
+        $this->children[] = $category;
     }
 }

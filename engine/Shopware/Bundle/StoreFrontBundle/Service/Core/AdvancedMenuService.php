@@ -24,18 +24,20 @@ declare(strict_types=1);
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Components\AdvancedMenu;
+namespace Shopware\Bundle\StoreFrontBundle\Service\Core;
 
-use Shopware\Bundle\StoreFrontBundle\Service\Core\CategoryDepthService;
-use Shopware\Bundle\StoreFrontBundle\Service\Core\CategoryService;
+use Shopware\Bundle\StoreFrontBundle\Service\AdvancedMenuServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Service\CategoryDepthServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Service\CategoryServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\CategoryCollection;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
-class AdvancedMenuReader
+class AdvancedMenuService implements AdvancedMenuServiceInterface
 {
     /**
      * @var CategoryDepthService
      */
-    private $categoryDepthsService;
+    private $categoryDepthService;
 
     /**
      * @var CategoryService
@@ -43,16 +45,16 @@ class AdvancedMenuReader
     private $categoryService;
 
     /**
-     * AdvancedMenuReader constructor.
+     * AdvancedMenuService constructor.
      *
-     * @param CategoryDepthService $categoryDepthsService
-     * @param CategoryService      $categoryService
+     * @param CategoryDepthServiceInterface $categoryDepthService
+     * @param CategoryServiceInterface $categoryService
      */
     public function __construct(
-        CategoryDepthService $categoryDepthsService,
-        CategoryService $categoryService
+        CategoryDepthServiceInterface $categoryDepthService,
+        CategoryServiceInterface $categoryService
     ) {
-        $this->categoryDepthsService = $categoryDepthsService;
+        $this->categoryDepthService = $categoryDepthService;
         $this->categoryService = $categoryService;
     }
 
@@ -60,36 +62,14 @@ class AdvancedMenuReader
      * @param ShopContextInterface $context
      * @param int                  $depth
      *
-     * @return array[]
+     * @return CategoryCollection
      */
-    public function get(ShopContextInterface $context, int $depth): array
+    public function get(ShopContextInterface $context, int $depth): CategoryCollection
     {
-        $ids = $this->categoryDepthsService->get($context->getShop()->getCategory(), $depth);
+        $ids = $this->categoryDepthService->get($context->getShop()->getCategory(), $depth);
 
         $categories = $this->categoryService->getList($ids, $context);
 
-        $categories = json_decode(json_encode($categories), true);
-
-        return $this->buildTree($categories, $context->getShop()->getCategory()->getId());
-    }
-
-    /**
-     * @param array[] $categories
-     * @param int     $parentId
-     *
-     * @return array[]
-     */
-    private function buildTree(array $categories, int $parentId): array
-    {
-        $result = [];
-        foreach ($categories as $category) {
-            if ($category['parentId'] != $parentId) {
-                continue;
-            }
-            $category['sub'] = $this->buildTree($categories, (int) $category['id']);
-            $result[] = $category;
-        }
-
-        return $result;
+        return new CategoryCollection($categories);
     }
 }

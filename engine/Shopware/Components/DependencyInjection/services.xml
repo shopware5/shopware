@@ -596,6 +596,7 @@
             <argument type="service" id="shopware.subscriber.auth" />
             <argument type="service" id="template" />
         </service>
+
         <!-- Filesystem -->
         <service id="shopware.filesystem_factory" class="Shopware\Components\Filesystem\FilesystemFactory">
             <argument type="collection" />

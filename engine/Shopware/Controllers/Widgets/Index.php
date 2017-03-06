@@ -22,6 +22,9 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Bundle\StoreFrontBundle\Service\AdvancedMenuServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+
 /**
  * Shopware Application
  */
@@ -86,20 +89,23 @@ class Shopware_Controllers_Widgets_Index extends Enlight_Controller_Action
 
     public function advancedMenuAction()
     {
-        /** @var \Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface $service */
-        $service = $this->get('shopware_storefront.context_service');
-        $context = $service->getShopContext();
+        /** @var ShopContextInterface $context */
+        $context = $this->get('shopware_storefront.context_service')->getShopContext();
 
-        /** @var Shopware_Components_Config $config */
-        $config = $this->get('config');
+        /** @var AdvancedMenuServiceInterface $reader */
+        $reader = $this->get('shopware_storefront.advanced_menu_service');
 
-        $reader = $this->get('shopware_storefront.advanced_menu_reader');
+        $categories = $reader->get(
+            $context,
+            (int) $this->get('config')->getByNamespace('advancedMenu', 'levels')
+        );
 
-        $depth = (int) $config->getByNamespace('advancedMenu', 'levels');
-        $menu = $reader->get($context, $depth);
+        $tree = $categories->getTree($context->getShop()->getCategory()->getId());
 
-        $this->View()->assign('advancedMenu', $menu);
-        $this->View()->assign('columnAmount', $config->getByNamespace('advancedMenu', 'columnAmount'));
-        $this->View()->assign('hoverDelay', $config->getByNamespace('advancedMenu', 'hoverDelay'));
+        $this->View()->assign([
+            'advancedMenu' => json_decode(json_encode($tree), true),
+            'columnAmount' => $this->get('config')->getByNamespace('advancedMenu', 'columnAmount'),
+            'hoverDelay' => $this->get('config')->getByNamespace('advancedMenu', 'hoverDelay'),
+        ]);
     }
 }

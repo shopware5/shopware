@@ -20,8 +20,8 @@
 					{block name="frontend_advanced_menu_list_item"}
 						<a href="{$categoryLink|escapeHtml}" class="menu--list-item-link" title="{$category.name|escape}">{$category.name}</a>
 
-						{if $category.sub}
-							{call name=categories_top categories=$category.sub level=$level+1}
+						{if $category.children}
+							{call name=categories_top categories=$category.children level=$level+1}
 						{/if}
 					{/block}
 				</li>
@@ -42,7 +42,7 @@
 				{$link = $mainCategory.external}
 			{/if}
 
-			{$hasCategories = $mainCategory.sub|count > 0  && $columnAmount < 4}
+			{$hasCategories = $mainCategory.children|count > 0  && $columnAmount < 4}
 			{$hasTeaser = (!empty($mainCategory.media) || !empty($mainCategory.cmsHeadline) || !empty($mainCategory.cmsText)) && $columnAmount > 0}
 
 			<div class="menu--container">
@@ -66,7 +66,7 @@
 						<div class="content--wrapper{if $hasCategories} has--content{/if}{if $hasTeaser} has--teaser{/if}">
 							{if $hasCategories}
 								{block name="frontend_advanced_menu_sub_categories"}
-									{call name="categories_top" categories=$mainCategory.sub}
+									{call name="categories_top" categories=$mainCategory.children}
 								{/block}
 							{/if}
 

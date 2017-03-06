@@ -70,7 +70,12 @@ class CategoryHydrator extends Hydrator
      */
     public function hydrate(array $data)
     {
-        $category = new Struct\Category();
+        $category = new Struct\Category(
+            (int) $data['__category_id'],
+            (int) $data['__category_parent_id'],
+            array_filter(explode('|', $data['__category_path'])),
+            (string) $data['__category_description']
+        );
 
         $this->assignCategoryData($category, $data);
 
@@ -99,25 +104,6 @@ class CategoryHydrator extends Hydrator
      */
     private function assignCategoryData(Struct\Category $category, array $data)
     {
-        if (isset($data['__category_id'])) {
-            $category->setId((int) $data['__category_id']);
-        }
-
-        if (isset($data['__category_path'])) {
-            $path = ltrim($data['__category_path'], '|');
-            $path = rtrim($path, '|');
-
-            $path = explode('|', $path);
-
-            $category->setPath(array_reverse($path));
-        }
-
-        if (isset($data['__category_description'])) {
-            $category->setName($data['__category_description']);
-        }
-
-        $category->setParentId((int) $data['__category_parent_id']);
-
         $category->setPosition((int) $data['__category_position']);
 
         $category->setProductBoxLayout($data['__category_product_box_layout']);
