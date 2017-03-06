@@ -135,8 +135,7 @@ class SearchIndexer
                     return $interest->getManufacturerId();
                 }, $customer->getInterests())
             ),
-            'interests' => json_encode(array_slice($customer->getInterests(), 0, 5)),
-            'newest_interests' => json_encode(array_slice($customer->getNewestInterests(), 0, 5)),
+            'interests' => json_encode(array_slice($customer->getInterests(), 0, 5))
         ];
 
         return $data;
@@ -195,8 +194,7 @@ class SearchIndexer
                 products,
                 categories,
                 manufacturers,
-                interests,
-                newest_interests
+                interests
             ) VALUES (
                 :id,
                 :email,
@@ -247,8 +245,7 @@ class SearchIndexer
                 :products,
                 :categories,
                 :manufacturers,
-                :interests,
-                :newest_interests
+                :interests
             )
       ');
     }

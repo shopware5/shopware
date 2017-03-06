@@ -157,8 +157,6 @@ class CustomerInterestsGateway
         $query->andWhere('orders.ordernumber IS NOT NULL');
 
         $query->addGroupBy('orders.userID');
-//        $query->addGroupBy('orders.language');
-//        $query->addGroupBy('mapping.articleID');
         $query->addGroupBy('mapping.parentcategoryID');
         $query->addGroupBy('product.supplierID');
 

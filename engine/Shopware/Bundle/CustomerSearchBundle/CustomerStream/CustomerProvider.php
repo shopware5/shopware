@@ -66,9 +66,7 @@ class CustomerProvider
 
         $orders = $this->customerOrderGateway->getList($customerIds);
 
-        $interests = $this->customerInterestsGateway->getInterests($customerIds);
-
-        $newest = $this->customerInterestsGateway->getInterests($customerIds, 30);
+        $interests = $this->customerInterestsGateway->getInterests($customerIds, 180);
 
         $analyzedCustomers = [];
         foreach ($customers as $id => $customer) {
@@ -79,9 +77,6 @@ class CustomerProvider
 
             if (array_key_exists($id, $interests)) {
                 $analyzedCustomer->setInterests($interests[$id]);
-            }
-            if (array_key_exists($id, $newest)) {
-                $analyzedCustomer->setNewestInterests($newest[$id]);
             }
         }
 

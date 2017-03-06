@@ -31,12 +31,6 @@ class Migrations_Migration1000 extends AbstractMigration
      */
     public function up($modus)
     {
-        $this->addSql('
-CREATE TABLE multiplier ( `id` int(11) unsigned NOT NULL AUTO_INCREMENT, PRIMARY KEY (`id`)) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
-INSERT INTO `multiplier` (`id`) VALUES (1), (2), (3), (4);
-        ');
-
         $sql = <<<'SQL'
 CREATE TABLE `s_customer_streams` (
     `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -100,7 +94,6 @@ CREATE TABLE `s_customer_search_index` (
     categories LONGTEXT NULL,
     manufacturers LONGTEXT NULL,
     interests LONGTEXT NULL,
-    newest_interests LONGTEXT NULL,
     index_time datetime DEFAULT NOW()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 SQL;

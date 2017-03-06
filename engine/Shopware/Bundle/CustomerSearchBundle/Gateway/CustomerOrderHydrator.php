@@ -37,7 +37,6 @@ class CustomerOrderHydrator
         $struct->setAvgProductPrice((float) $data['product_avg']);
         $struct->setFirstOrderTime(new \DateTime($data['first_order_time']));
         $struct->setLastOrderTime(new \DateTime($data['last_order_time']));
-        $struct->setHasCanceledOrders((bool) $data['has_canceled_orders']);
         $struct->setPayments(explode(',', $data['selected_payments']));
         $struct->setShops(explode(',', $data['ordered_in_shops']));
         $struct->setDevices(explode(',', $data['ordered_with_devices']));

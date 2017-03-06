@@ -24,11 +24,10 @@
 
 namespace Shopware\Bundle\CustomerSearchBundle\Commands;
 
-use Doctrine\DBAL\Connection;
 use Shopware\Bundle\ESIndexingBundle\Console\ConsoleProgressHelper;
+use Shopware\Bundle\ESIndexingBundle\LastIdQuery;
 use Shopware\Commands\ShopwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -36,7 +35,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class IndexPopulateCommand extends ShopwareCommand
+class SearchIndexPopulateCommand extends ShopwareCommand
 {
     /**
      * {@inheritdoc}
@@ -44,9 +43,8 @@ class IndexPopulateCommand extends ShopwareCommand
     protected function configure()
     {
         $this
-            ->setName('sw:customer:stream:populate')
-            ->setDescription('Reindex all customer streams.')
-            ->addOption('streamId', null, InputOption::VALUE_OPTIONAL)
+            ->setName('sw:customer:search:index:populate')
+            ->setDescription('Refreshs the search index for the customer search')
         ;
     }
 
@@ -55,37 +53,37 @@ class IndexPopulateCommand extends ShopwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $streamIds = [];
-        if ($streamId = $input->getOption('streamId')) {
-            $streamIds = [$streamId];
-        }
-        $streams = $this->getStreams($streamIds);
-
-        $indexer = $this->container->get('shopware_customer_search.stream_indexer');
+        $query = $this->createQuery();
 
         $helper = new ConsoleProgressHelper($output);
+        $helper->start($query->fetchCount(), 'Start indexing stream search data');
 
-        foreach ($streams as $stream) {
-            $output->writeln("\n## Indexing customer stream: " . $stream['name'] . ' ##');
-            $indexer->populate($stream['id'], $helper);
+        $this->container->get('dbal_connection')->beginTransaction();
+
+        $this->container->get('dbal_connection')->executeUpdate('DELETE FROM s_customer_search_index');
+
+        $indexer = $this->container->get('shopware_bundle_customer_search.customer_stream.search_indexer');
+
+        while ($ids = $query->fetch()) {
+            $indexer->populate($ids);
+            $helper->advance(count($ids));
         }
+
+        $this->container->get('dbal_connection')->commit();
+
+        $helper->finish();
     }
 
-    /**
-     * @param array $ids
-     *
-     * @return \array[]|false
-     */
-    private function getStreams($ids = [])
+    private function createQuery()
     {
         $query = $this->container->get('dbal_connection')->createQueryBuilder();
-        $query->select('*');
-        $query->from('s_customer_streams');
-        if (!empty($ids)) {
-            $query->andWhere('id IN (:ids)');
-            $query->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
-        }
+        $query->select(['id', 'id']);
+        $query->from('s_user', 'u');
+        $query->where('u.id > :lastId');
+        $query->setParameter(':lastId', 0);
+        $query->orderBy('u.id', 'ASC');
+        $query->setMaxResults(50);
 
-        return $query->execute()->fetchAll(\PDO::FETCH_ASSOC);
+        return new LastIdQuery($query);
     }
 }

@@ -241,22 +241,6 @@ Ext.define('Shopware.apps.Customer.view.list.List', {
                 }
             }
         , {
-            header: 'Letzte Interessen',
-            dataIndex: 'newest_interests',
-            flex: 4,
-            renderer: function(v, meta, record) {
-                if (!v || v.length <= 0) {
-                    return 'Nicht bekannt';
-                }
-                var interests = [];
-                Ext.each(v, function(interest) {
-                    interests.push('<b>' + interest.categoryName + '</b> - <i>' + interest.manufacturerName + '</i>');
-                });
-                interests = interests.slice(0, 3);
-                return interests.join('<br>');
-            }
-        }
-        , {
             header: 'Top Interessen',
             dataIndex: 'interests',
             flex: 4,
