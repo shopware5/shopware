@@ -1,6 +1,6 @@
 {extends file='frontend/index/index.tpl'}
 
-{block name='frontend_index_header_title' prepend}{s name="ServiceIndexTitle"}{/s} | {/block}
+{block name='frontend_index_header_title'}{s name="ServiceIndexTitle"}{/s} | {$smarty.block.parent}{/block}
 
 {block name='frontend_index_content'}
     {block name="frontend_error_service_content_outer"}

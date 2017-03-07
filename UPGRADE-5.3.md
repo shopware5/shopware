@@ -12,6 +12,10 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Added service `translation`
 * Added smarty function `is_object` to the list of allowed functions
 * Added grunt task support for child themes so that their tasks are run as well by the Shopware grunt
+* Added dispatch attributes to frontend
+* Added smarty block `frontend_home_index_emotion_wrapper`
+* Added smarty block `frontend_address_success_messages_content` for custom success messages
+* Added smarty block `frontend_index_header_javascript_data` for user modifications
 
 ### Changes
 
@@ -20,6 +24,10 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Changed method `\Shopware\Components\SitemapXMLRepository::readCategoryUrls` to only export public category links 
 * Changed method visibility of `\Shopware_Controllers_Backend_Search::createEntitySearchQuery` from `private` to `public`
 * Changed the `I am` select option for the registration: If it is deactivated in the backend, it effects only the registration
+* Changed the update, delete and insert backlog from product number to the main detail product number by variant and price model
+* Changed the creation of Cronjobs to insert active Cronjobs by a `cronjob.xml`
+* Changed smarty templates (replaced prepend / append with smart.block.parent, code formatting)
+* Changed inline JS in `themes/Frontend/Bare/index/index.tpl`
 
 ## 5.3.3
 

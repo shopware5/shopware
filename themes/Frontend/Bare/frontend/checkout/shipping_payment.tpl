@@ -10,7 +10,8 @@
 {/block}
 
 {* Back to the shop button *}
-{block name='frontend_index_logo_trusted_shops' append}
+{block name='frontend_index_logo_trusted_shops'}
+    {$smarty.block.parent}
     {if $theme.checkoutHeader}
         <a href="{url controller='index'}"
            class="btn is--small btn--back-top-shop is--icon-left"
