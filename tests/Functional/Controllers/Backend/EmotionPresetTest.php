@@ -85,7 +85,7 @@ class EmotionPresetTest extends \Enlight_Components_Test_Controller_TestCase
 
     public function testCreate()
     {
-        $this->Request()->setMethod('POST')->setPost(['name' => 'first', 'presetData' => '{}']);
+        $this->Request()->setMethod('POST')->setPost(['name' => 'first', 'presetData' => '{}', 'emotionId' => 1]);
 
         $this->dispatch('/backend/EmotionPreset/save');
 
@@ -96,11 +96,12 @@ class EmotionPresetTest extends \Enlight_Components_Test_Controller_TestCase
 
     public function testUpdate()
     {
-        $preset = $this->resource->create(['name' => 'first', 'presetData' => '{}']);
+        $preset = $this->resource->create(['name' => 'first', 'presetData' => '{}', 'emotionId' => 1]);
         $this->Request()->setMethod('POST')->setPost([
             'id' => $preset->getId(),
             'name' => 'updated',
             'presetData' => '{}',
+            'emotionId' => 1,
         ]);
         $this->dispatch('/backend/EmotionPreset/save');
 

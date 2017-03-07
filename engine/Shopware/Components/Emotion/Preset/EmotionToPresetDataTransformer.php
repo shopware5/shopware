@@ -24,6 +24,7 @@
 
 namespace Shopware\Components\Emotion\Preset;
 
+use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\Query;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Emotion\Emotion;
@@ -53,6 +54,8 @@ class EmotionToPresetDataTransformer implements EmotionToPresetDataTransformerIn
 
     /**
      * @param $emotionId
+     *
+     * @throws NoResultException
      *
      * @return array
      */

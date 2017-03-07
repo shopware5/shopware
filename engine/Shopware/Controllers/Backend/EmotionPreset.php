@@ -54,7 +54,7 @@ class Shopware_Controllers_Backend_EmotionPreset extends Shopware_Controllers_Ba
         $data = $this->Request()->getParams();
 
         if (!$data['emotionId']) {
-            $this->View()->assign(['success' => true]);
+            $this->View()->assign(['success' => false]);
 
             return;
         }
