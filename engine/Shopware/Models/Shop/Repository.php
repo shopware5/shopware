@@ -548,7 +548,7 @@ class Repository extends ModelRepository
             return 0;
         });
 
-        return $this->setShopsArrayUrls($shops);
+        return $shops;
     }
 
     /**
@@ -580,7 +580,7 @@ class Repository extends ModelRepository
         $query->select([
             'shop.id',
             'shop.name',
-            'shop.base_url',
+            'IF((shop.base_url IS NULL OR shop.base_url = ""), shop.base_path, shop.base_url) AS base_url',
             'shop.position',
             'IF(main_shop.id IS NULL, 1, 0) is_main',
             'IFNULL(main_shop.host, shop.host) as host',
@@ -657,36 +657,5 @@ class Repository extends ModelRepository
             ->leftJoin('main.currencies', 'currencies')
 
             ->where('shop.active = 1');
-    }
-
-    /**
-     * @param array $shops
-     *
-     * @return array
-     */
-    private function setShopsArrayUrls($shops)
-    {
-        foreach ($shops as &$shop) {
-            $shop['base_url'] = $shop['base_url'] ?: $shop['base_path'];
-            if (!$shop['secure']) {
-                continue;
-            }
-
-            if ($shop['base_url'] == $shop['base_path']) {
-                continue;
-            }
-
-            if (!$shop['base_path']) {
-                $shop['base_url'] .= $shop['base_url'];
-                continue;
-            }
-
-            if (strpos($shop['base_url'], $shop['base_path']) === 0) {
-                $shop['base_url'] .= substr($shop['base_url'], strlen($shop['base_path']));
-                continue;
-            }
-        }
-
-        return $shops;
     }
 }
