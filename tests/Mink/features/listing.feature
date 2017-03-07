@@ -12,16 +12,16 @@ Feature: Show Listing
             | Geschmack     | mild      |
             | Flaschengröße | 0,5 Liter |
             | Alkoholgehalt | >30%      |
-        Then  I should see 4 elements of type "ArticleBox"
+        Then  I should see 4 elements of type "ArticleBox" eventually
 
         When  I set the filter to:
             | filter          | value   |
             | Trinktemperatur | Gekühlt |
             | Farbe           | rot     |
-        Then  I should see 2 elements of type "ArticleBox"
+        Then  I should see 2 elements of type "ArticleBox" eventually
 
         When  I reset all filters
-        Then  I should see 10 elements of type "ArticleBox"
+        Then  I should see 10 elements of type "ArticleBox" eventually
 
     @sort @javascript
     Scenario: I can change the sort

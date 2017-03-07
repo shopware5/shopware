@@ -231,10 +231,10 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.sidebar.Options', {
 
     /**
      * Method to set the allowed file extension for the media manager
-     * @return array of strings
+     * @return []
      */
     getAllowedExtensions : function() {
-        return [ 'gif', 'png', 'jpeg', 'jpg', 'swf' ]
+        return [ 'gif', 'png', 'jpeg', 'jpg' ]
     },
     /**
      * Creates the template for the media view panel
