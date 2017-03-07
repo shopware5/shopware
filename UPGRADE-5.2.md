@@ -11,6 +11,7 @@ This changelog references changes done in Shopware 5.2 patch versions.
 * Added support for creating new orders using the `Order` API resource
 * Added option `allowHtml` for ExtJS grid columns and display form fields in order to allow unescaped html output. Default value is: `false`
 * Added optional `Guzzle` client config parameter to `Shopware\Components\HttpClient\GuzzleFactory::createClient` method
+* Added events `sendRequestSuccess` and `sendRequestFailure` to `_sendRequest` in `themes/Backend/ExtJs/backend/category/controller/article_mapping.js`
 
 ## 5.2.20
 
