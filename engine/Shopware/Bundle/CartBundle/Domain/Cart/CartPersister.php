@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -44,7 +45,7 @@ class CartPersister implements CartPersisterInterface
     /**
      * {@inheritdoc}
      */
-    public function load($token)
+    public function load(string $token): Cart
     {
         $content = $this->connection->fetchColumn(
             'SELECT content FROM s_cart WHERE `token` = :token',
@@ -61,7 +62,7 @@ class CartPersister implements CartPersisterInterface
     /**
      * {@inheritdoc}
      */
-    public function save(Cart $cart)
+    public function save(Cart $cart): void
     {
         $this->connection->executeQuery(
             'INSERT INTO `s_cart` (`token`, `name`, `content`) 

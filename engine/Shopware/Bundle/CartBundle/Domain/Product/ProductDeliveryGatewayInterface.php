@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -36,5 +37,5 @@ interface ProductDeliveryGatewayInterface
      *
      * @return DeliveryInformation[] indexed by number
      */
-    public function get(LineItemCollection $collection, CartContextInterface $context);
+    public function get(LineItemCollection $collection, CartContextInterface $context): array;
 }

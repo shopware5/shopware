@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -45,34 +46,25 @@ class ViewCart implements \JsonSerializable
     final private function __construct(CalculatedCart $calculatedCart)
     {
         $this->calculatedCart = $calculatedCart;
-        $this->lineItems = new ViewLineItemCollection();
+        $this->lineItems = new ViewLineItemCollection([]);
     }
 
-    public static function createFromCalculatedCart(CalculatedCart $calculatedCart)
+    public static function createFromCalculatedCart(CalculatedCart $calculatedCart): ViewCart
     {
         return new self($calculatedCart);
     }
 
-    /**
-     * @return CartPrice
-     */
-    public function getPrice()
+    public function getPrice(): CartPrice
     {
         return $this->calculatedCart->getPrice();
     }
 
-    /**
-     * @return ViewLineItemCollection
-     */
-    public function getLineItems()
+    public function getLineItems(): ViewLineItemCollection
     {
         return $this->lineItems;
     }
 
-    /**
-     * @return CalculatedCart
-     */
-    public function getCalculatedCart()
+    public function getCalculatedCart(): CalculatedCart
     {
         return $this->calculatedCart;
     }

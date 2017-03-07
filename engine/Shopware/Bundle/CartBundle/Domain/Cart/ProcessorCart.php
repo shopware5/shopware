@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -42,10 +43,6 @@ class ProcessorCart implements \JsonSerializable
      */
     protected $deliveries;
 
-    /**
-     * @param CalculatedLineItemCollection $lineItems
-     * @param DeliveryCollection           $deliveries
-     */
     public function __construct(
         CalculatedLineItemCollection $lineItems,
         DeliveryCollection $deliveries
@@ -54,18 +51,12 @@ class ProcessorCart implements \JsonSerializable
         $this->deliveries = $deliveries;
     }
 
-    /**
-     * @return CalculatedLineItemCollection
-     */
-    public function getLineItems()
+    public function getLineItems(): CalculatedLineItemCollection
     {
         return $this->lineItems;
     }
 
-    /**
-     * @return DeliveryCollection
-     */
-    public function getDeliveries()
+    public function getDeliveries(): DeliveryCollection
     {
         return $this->deliveries;
     }

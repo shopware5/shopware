@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -57,19 +58,12 @@ class Price implements \JsonSerializable
      */
     protected $quantity;
 
-    /**
-     * @param float                   $unitPrice
-     * @param float                   $totalPrice
-     * @param CalculatedTaxCollection $calculatedTaxes
-     * @param TaxRuleCollection       $taxRules
-     * @param int                     $quantity
-     */
     public function __construct(
-        $unitPrice,
-        $totalPrice,
+        float $unitPrice,
+        float $totalPrice,
         CalculatedTaxCollection $calculatedTaxes,
         TaxRuleCollection $taxRules,
-        $quantity = 1
+        int $quantity = 1
     ) {
         $this->unitPrice = $unitPrice;
         $this->totalPrice = $totalPrice;
@@ -78,42 +72,27 @@ class Price implements \JsonSerializable
         $this->quantity = $quantity;
     }
 
-    /**
-     * @return float
-     */
-    public function getPrice()
+    public function getTotalPrice(): float
     {
         return $this->totalPrice;
     }
 
-    /**
-     * @return CalculatedTaxCollection
-     */
-    public function getCalculatedTaxes()
+    public function getCalculatedTaxes(): CalculatedTaxCollection
     {
         return $this->calculatedTaxes;
     }
 
-    /**
-     * @return TaxRuleCollection
-     */
-    public function getTaxRules()
+    public function getTaxRules(): TaxRuleCollection
     {
         return $this->taxRules;
     }
 
-    /**
-     * @return float|null
-     */
-    public function getUnitPrice()
+    public function getUnitPrice(): float
     {
         return $this->unitPrice;
     }
 
-    /**
-     * @return int
-     */
-    public function getQuantity()
+    public function getQuantity(): int
     {
         return $this->quantity;
     }

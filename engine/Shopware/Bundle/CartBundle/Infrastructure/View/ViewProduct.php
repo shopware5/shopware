@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -25,6 +26,7 @@
 namespace Shopware\Bundle\CartBundle\Infrastructure\View;
 
 use Shopware\Bundle\CartBundle\Domain\JsonSerializableTrait;
+use Shopware\Bundle\CartBundle\Domain\LineItem\CalculatedLineItemInterface;
 use Shopware\Bundle\CartBundle\Domain\Product\CalculatedProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\SimpleProduct;
 
@@ -37,7 +39,7 @@ class ViewProduct extends SimpleProduct implements ViewLineItemInterface
      */
     protected $product;
 
-    final public function __construct($id, $variantId, $number)
+    final public function __construct(int $id, int $variantId, string $number)
     {
         parent::__construct($id, $variantId, $number);
     }
@@ -53,7 +55,7 @@ class ViewProduct extends SimpleProduct implements ViewLineItemInterface
     /**
      * {@inheritdoc}
      */
-    public function getLineItem()
+    public function getLineItem(): CalculatedLineItemInterface
     {
         return $this->product;
     }
@@ -61,21 +63,15 @@ class ViewProduct extends SimpleProduct implements ViewLineItemInterface
     /**
      * {@inheritdoc}
      */
-    public function getLabel()
+    public function getLabel(): string
     {
         return $this->name;
     }
 
-    /**
-     * @param SimpleProduct     $simpleProduct
-     * @param CalculatedProduct $calculatedProduct
-     *
-     * @return ViewProduct
-     */
     public static function createFromProducts(
         SimpleProduct $simpleProduct,
         CalculatedProduct $calculatedProduct
-    ) {
+    ): ViewProduct {
         $product = new self(
             $simpleProduct->getId(),
             $simpleProduct->getVariantId(),

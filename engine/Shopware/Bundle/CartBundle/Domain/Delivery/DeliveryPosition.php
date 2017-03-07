@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -85,7 +86,7 @@ class DeliveryPosition implements \JsonSerializable
      *
      * @return DeliveryPosition
      */
-    public static function createByLineItemForInStockDate($lineItem)
+    public static function createByLineItemForInStockDate($lineItem): DeliveryPosition
     {
         return new self(
             $lineItem->getIdentifier(),
@@ -101,7 +102,7 @@ class DeliveryPosition implements \JsonSerializable
      *
      * @return DeliveryPosition
      */
-    public static function createByLineItemForOutOfStockDate($lineItem)
+    public static function createByLineItemForOutOfStockDate($lineItem): DeliveryPosition
     {
         return new self(
             $lineItem->getIdentifier(),
@@ -112,42 +113,27 @@ class DeliveryPosition implements \JsonSerializable
         );
     }
 
-    /**
-     * @return CalculatedLineItemInterface|Deliverable
-     */
     public function getItem()
     {
         return $this->item;
     }
 
-    /**
-     * @return float
-     */
-    public function getQuantity()
+    public function getQuantity(): float
     {
         return $this->quantity;
     }
 
-    /**
-     * @return Price
-     */
-    public function getPrice()
+    public function getPrice(): Price
     {
         return $this->price;
     }
 
-    /**
-     * @return string
-     */
-    public function getIdentifier()
+    public function getIdentifier(): string
     {
         return $this->identifier;
     }
 
-    /**
-     * @return DeliveryDate
-     */
-    public function getDeliveryDate()
+    public function getDeliveryDate(): DeliveryDate
     {
         return $this->deliveryDate;
     }

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -41,28 +42,18 @@ class CalculatedLineItem implements CalculatedLineItemInterface
      */
     private $price;
 
-    /**
-     * @param string $identifier
-     * @param Price  $price
-     */
-    public function __construct($identifier, Price $price)
+    public function __construct(string $identifier, Price $price)
     {
         $this->identifier = $identifier;
         $this->price = $price;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getIdentifier()
+    public function getIdentifier(): string
     {
         return $this->identifier;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getPrice()
+    public function getPrice(): Price
     {
         return $this->price;
     }

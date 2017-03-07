@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -51,12 +52,7 @@ class AddressHydrator extends Hydrator
         $this->countryHydrator = $countryHydrator;
     }
 
-    /**
-     * @param array $data
-     *
-     * @return Address
-     */
-    public function hydrate($data)
+    public function hydrate(array $data): Address
     {
         $address = new Address();
         $address->setId((int) $data['__address_id']);

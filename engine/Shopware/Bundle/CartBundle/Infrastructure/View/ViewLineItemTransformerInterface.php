@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -29,14 +30,9 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 interface ViewLineItemTransformerInterface
 {
-    /**
-     * @param CalculatedCart       $cart
-     * @param ViewCart             $templateCart
-     * @param ShopContextInterface $context
-     */
     public function transform(
         CalculatedCart $cart,
         ViewCart $templateCart,
         ShopContextInterface $context
-    );
+    ): void;
 }

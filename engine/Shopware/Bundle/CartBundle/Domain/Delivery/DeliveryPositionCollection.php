@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -30,79 +31,59 @@ use Shopware\Bundle\CartBundle\Domain\Price\PriceCollection;
 
 class DeliveryPositionCollection extends Collection
 {
-    /**
-     * @var DeliveryPosition[]
-     */
-    protected $items = [];
-
-    /**
-     * @param DeliveryPosition $position
-     */
-    public function add($position)
+    public function add(DeliveryPosition $position): void
     {
-        $this->items[$position->getIdentifier()] = $position;
+        $this->elements[] = $position;
+    }
+
+    public function remove($key): ? DeliveryPosition
+    {
+        return parent::remove($key);
+    }
+
+    public function offsetGet($offset): ? DeliveryPosition
+    {
+        return parent::offsetGet($offset);
+    }
+
+    public function set($key, DeliveryPosition $value): void
+    {
+        parent::set($key, $value);
+    }
+
+    public function get($key): ? DeliveryPosition
+    {
+        return parent::get($key);
     }
 
     /**
-     * @param string $identifier
-     *
-     * @return DeliveryPosition
+     * @return DeliveryPosition[]
      */
-    public function get($identifier)
+    public function getValues(): array
     {
-        return parent::get($identifier);
+        return parent::getValues();
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function has($identifier)
-    {
-        return parent::has($identifier);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function remove($identifier)
-    {
-        parent::remove($identifier);
-    }
-
-    /**
-     * @return string[]
-     */
-    public function getIdentifiers()
-    {
-        return $this->keys();
-    }
-
-    /**
-     * @return PriceCollection
-     */
-    public function getPrices()
+    public function getPrices(): PriceCollection
     {
         return new PriceCollection(
             array_map(
                 function (DeliveryPosition $position) {
                     return $position->getPrice();
                 },
-                $this->items
+                $this->elements
             )
         );
     }
 
-    /**
-     * @return CalculatedLineItemCollection
-     */
-    public function getLineItems()
+    public function getLineItems(): CalculatedLineItemCollection
     {
         return new CalculatedLineItemCollection(
             array_map(
                 function (DeliveryPosition $position) {
                     return $position->getItem();
                 },
-                $this->items
+                $this->elements
             )
         );
     }

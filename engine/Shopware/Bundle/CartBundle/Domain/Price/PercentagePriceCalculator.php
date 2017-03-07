@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -41,10 +42,6 @@ class PercentagePriceCalculator
      */
     private $priceCalculator;
 
-    /**
-     * @param PriceRounding   $rounding
-     * @param PriceCalculator $priceCalculator
-     */
     public function __construct(
         PriceRounding $rounding,
         PriceCalculator $priceCalculator
@@ -66,7 +63,7 @@ class PercentagePriceCalculator
         $percentage,
         PriceCollection $prices,
         CartContextInterface $context
-    ) {
+    ): Price {
         $price = $prices->getTotalPrice();
 
         $discount = $this->rounding->round($price->getPrice() / 100 * $percentage);
@@ -78,14 +75,9 @@ class PercentagePriceCalculator
         return $this->priceCalculator->calculate($definition, $context);
     }
 
-    /**
-     * @param Price $price
-     *
-     * @return TaxRuleCollection
-     */
-    private function buildPercentageTaxRule(Price $price)
+    private function buildPercentageTaxRule(Price $price): TaxRuleCollection
     {
-        $rules = new TaxRuleCollection();
+        $rules = new TaxRuleCollection([]);
 
         /** @var CalculatedTax $tax */
         foreach ($price->getCalculatedTaxes() as $tax) {

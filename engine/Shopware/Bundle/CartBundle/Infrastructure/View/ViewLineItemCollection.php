@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -31,49 +32,47 @@ class ViewLineItemCollection extends Collection
     /**
      * @var ViewLineItemInterface[]
      */
-    protected $items = [];
+    protected $elements;
 
-    /**
-     * @param ViewLineItemInterface $item
-     */
-    public function add($item)
+    public function add(ViewLineItemInterface $lineItem): void
     {
-        $this->items[$item->getLineItem()->getIdentifier()] = $item;
+        $this->elements[] = $lineItem;
+    }
+
+    public function remove($key): ? ViewLineItemInterface
+    {
+        return parent::remove($key);
+    }
+
+    public function offsetGet($offset): ? ViewLineItemInterface
+    {
+        return parent::offsetGet($offset);
+    }
+
+    public function set($key, ViewLineItemInterface $value): void
+    {
+        parent::set($key, $value);
+    }
+
+    public function get($key): ? ViewLineItemInterface
+    {
+        return parent::get($key);
     }
 
     /**
-     * @param string $identifier
-     *
-     * @return bool
+     * @return ViewLineItemInterface[]
      */
-    public function has($identifier)
+    public function getValues(): array
     {
-        return parent::has($identifier);
+        return parent::getValues();
     }
 
-    /**
-     * @param string $identifier
-     *
-     * @return null|ViewLineItemInterface
-     */
-    public function get($identifier)
+    public function getIdentifiers(): array
     {
-        return parent::get($identifier);
-    }
-
-    /**
-     * @param string $identifier
-     */
-    public function remove($identifier)
-    {
-        return parent::remove($identifier);
-    }
-
-    /**
-     * @return string[]
-     */
-    public function getIdentifiers()
-    {
-        return array_keys($this->items);
+        return $this->map(
+            function (ViewLineItemInterface $lineItem) {
+                return $lineItem->getLineItem()->getIdentifier();
+            }
+        );
     }
 }

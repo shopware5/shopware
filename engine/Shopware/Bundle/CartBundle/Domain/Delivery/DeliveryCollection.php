@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -36,18 +37,43 @@ class DeliveryCollection extends Collection
      */
     protected $items = [];
 
-    /**
-     * @param Delivery $delivery
-     */
-    public function add($delivery)
+    public function add(Delivery $delivery): void
     {
         $this->items[] = $delivery;
+    }
+
+    public function remove($key): ? Delivery
+    {
+        return parent::remove($key);
+    }
+
+    public function offsetGet($offset): ? Delivery
+    {
+        return parent::offsetGet($offset);
+    }
+
+    public function set($key, Delivery $value): void
+    {
+        parent::set($key, $value);
+    }
+
+    public function get($key): ? Delivery
+    {
+        return parent::get($key);
+    }
+
+    /**
+     * @return Delivery[]
+     */
+    public function getValues(): array
+    {
+        return parent::getValues();
     }
 
     /**
      * Sorts the delivery collection by earliest delivery date
      */
-    public function sort()
+    public function sort(): void
     {
         usort(
             $this->items,
@@ -61,13 +87,7 @@ class DeliveryCollection extends Collection
         );
     }
 
-    /**
-     * @param DeliveryDate $deliveryDate
-     * @param Address      $address
-     *
-     * @return null|Delivery
-     */
-    public function getDelivery(DeliveryDate $deliveryDate, Address $address)
+    public function getDelivery(DeliveryDate $deliveryDate, Address $address): ? Delivery
     {
         foreach ($this->items as $delivery) {
             if ($delivery->getDeliveryDate() != $deliveryDate) {

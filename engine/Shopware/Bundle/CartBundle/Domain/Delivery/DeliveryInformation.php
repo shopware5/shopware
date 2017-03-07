@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -75,11 +76,11 @@ class DeliveryInformation implements \JsonSerializable
      * @param DeliveryDate $outOfStockDeliveryDate
      */
     public function __construct(
-        $stock,
-        $height,
-        $width,
-        $length,
-        $weight,
+        float $stock,
+        float $height,
+        float $width,
+        float $length,
+        float $weight,
         DeliveryDate $inStockDeliveryDate,
         DeliveryDate $outOfStockDeliveryDate
     ) {
@@ -92,58 +93,37 @@ class DeliveryInformation implements \JsonSerializable
         $this->outOfStockDeliveryDate = $outOfStockDeliveryDate;
     }
 
-    /**
-     * @return float
-     */
-    public function getStock()
+    public function getStock(): float
     {
         return $this->stock;
     }
 
-    /**
-     * @return float
-     */
-    public function getHeight()
+    public function getHeight(): float
     {
         return $this->height;
     }
 
-    /**
-     * @return float
-     */
-    public function getWidth()
+    public function getWidth(): float
     {
         return $this->width;
     }
 
-    /**
-     * @return float
-     */
-    public function getLength()
+    public function getLength(): float
     {
         return $this->length;
     }
 
-    /**
-     * @return float
-     */
-    public function getWeight()
+    public function getWeight(): float
     {
         return $this->weight;
     }
 
-    /**
-     * @return DeliveryDate
-     */
-    public function getInStockDeliveryDate()
+    public function getInStockDeliveryDate(): DeliveryDate
     {
         return $this->inStockDeliveryDate;
     }
 
-    /**
-     * @return DeliveryDate
-     */
-    public function getOutOfStockDeliveryDate()
+    public function getOutOfStockDeliveryDate(): DeliveryDate
     {
         return $this->outOfStockDeliveryDate;
     }

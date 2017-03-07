@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -216,563 +217,353 @@ class Customer extends Extendable
      */
     protected $lastPaymentMethod;
 
-    /**
-     * @return int
-     */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
 
-    /**
-     * @param int $id
-     */
-    public function setId($id)
+    public function setId(int $id): void
     {
         $this->id = $id;
     }
 
-    /**
-     * @return string
-     */
-    public function getNumber()
+    public function getNumber(): string
     {
         return $this->number;
     }
 
-    /**
-     * @param string $number
-     */
-    public function setNumber($number)
+    public function setNumber(string $number): void
     {
         $this->number = $number;
     }
 
-    /**
-     * @return string
-     */
-    public function getEmail()
+    public function getEmail(): string
     {
         return $this->email;
     }
 
-    /**
-     * @param string $email
-     */
-    public function setEmail($email)
+    public function setEmail(string $email): void
     {
         $this->email = $email;
     }
 
-    /**
-     * @return bool
-     */
-    public function isActive()
+    public function isActive(): bool
     {
         return $this->active;
     }
 
-    /**
-     * @param bool $active
-     */
-    public function setActive($active)
+    public function setActive(bool $active): void
     {
         $this->active = $active;
     }
 
-    /**
-     * @return string
-     */
-    public function getSalutation()
+    public function getSalutation(): string
     {
         return $this->salutation;
     }
 
-    /**
-     * @param string $salutation
-     */
-    public function setSalutation($salutation)
+    public function setSalutation(string $salutation): void
     {
         $this->salutation = $salutation;
     }
 
-    /**
-     * @return string
-     */
-    public function getTitle()
+    public function getTitle(): string
     {
         return $this->title;
     }
 
-    /**
-     * @param string $title
-     */
-    public function setTitle($title)
+    public function setTitle(string $title): void
     {
         $this->title = $title;
     }
 
-    /**
-     * @return string
-     */
-    public function getFirstname()
+    public function getFirstname(): string
     {
         return $this->firstname;
     }
 
-    /**
-     * @param string $firstname
-     */
-    public function setFirstname($firstname)
+    public function setFirstname(string $firstname): void
     {
         $this->firstname = $firstname;
     }
 
-    /**
-     * @return string
-     */
-    public function getLastname()
+    public function getLastname(): string
     {
         return $this->lastname;
     }
 
-    /**
-     * @param string $lastname
-     */
-    public function setLastname($lastname)
+    public function setLastname(string $lastname): void
     {
         $this->lastname = $lastname;
     }
 
-    /**
-     * @return Shop
-     */
-    public function getAssignedShop()
+    public function getAssignedShop(): Shop
     {
         return $this->assignedShop;
     }
 
-    /**
-     * @param Shop $assignedShop
-     */
-    public function setAssignedShop($assignedShop)
+    public function setAssignedShop(Shop $assignedShop): void
     {
         $this->assignedShop = $assignedShop;
     }
 
-    /**
-     * @return Shop
-     */
-    public function getAssignedLanguageShop()
+    public function getAssignedLanguageShop(): Shop
     {
         return $this->assignedLanguageShop;
     }
 
-    /**
-     * @param Shop $assignedLanguageShop
-     */
-    public function setAssignedLanguageShop($assignedLanguageShop)
+    public function setAssignedLanguageShop(Shop $assignedLanguageShop): void
     {
         $this->assignedLanguageShop = $assignedLanguageShop;
     }
 
-    /**
-     * @return \DateTime
-     */
-    public function getFirstLogin()
-    {
-        return $this->firstLogin;
-    }
-
-    /**
-     * @param \DateTime $firstLogin
-     */
-    public function setFirstLogin($firstLogin)
-    {
-        $this->firstLogin = $firstLogin;
-    }
-
-    /**
-     * @return \DateTime
-     */
-    public function getLastLogin()
-    {
-        return $this->lastLogin;
-    }
-
-    /**
-     * @param \DateTime $lastLogin
-     */
-    public function setLastLogin($lastLogin)
-    {
-        $this->lastLogin = $lastLogin;
-    }
-
-    /**
-     * @return \DateTime|null
-     */
-    public function getLockedUntil()
-    {
-        return $this->lockedUntil;
-    }
-
-    /**
-     * @param \DateTime|null $lockedUntil
-     */
-    public function setLockedUntil($lockedUntil)
-    {
-        $this->lockedUntil = $lockedUntil;
-    }
-
-    /**
-     * @return int
-     */
-    public function getFailedLogins()
-    {
-        return $this->failedLogins;
-    }
-
-    /**
-     * @param int $failedLogins
-     */
-    public function setFailedLogins($failedLogins)
-    {
-        $this->failedLogins = $failedLogins;
-    }
-
-    /**
-     * @return \DateTime|null
-     */
-    public function getBirthday()
-    {
-        return $this->birthday;
-    }
-
-    /**
-     * @param \DateTime|null $birthday
-     */
-    public function setBirthday($birthday)
-    {
-        $this->birthday = $birthday;
-    }
-
-    /**
-     * @return int
-     */
-    public function getAccountMode()
-    {
-        return $this->accountMode;
-    }
-
-    /**
-     * @param int $accountMode
-     */
-    public function setAccountMode($accountMode)
-    {
-        $this->accountMode = $accountMode;
-    }
-
-    /**
-     * @return string
-     */
-    public function getCustomerType()
-    {
-        return $this->customerType;
-    }
-
-    /**
-     * @param string $customerType
-     */
-    public function setCustomerType($customerType)
-    {
-        $this->customerType = $customerType;
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getValidation()
-    {
-        return $this->validation;
-    }
-
-    /**
-     * @param null|string $validation
-     */
-    public function setValidation($validation)
-    {
-        $this->validation = $validation;
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getConfirmationKey()
-    {
-        return $this->confirmationKey;
-    }
-
-    /**
-     * @param null|string $confirmationKey
-     */
-    public function setConfirmationKey($confirmationKey)
-    {
-        $this->confirmationKey = $confirmationKey;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isOrderedNewsletter()
-    {
-        return $this->orderedNewsletter;
-    }
-
-    /**
-     * @param bool $orderedNewsletter
-     */
-    public function setOrderedNewsletter($orderedNewsletter)
-    {
-        $this->orderedNewsletter = $orderedNewsletter;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isIsPartner()
-    {
-        return $this->isPartner;
-    }
-
-    /**
-     * @param bool $isPartner
-     */
-    public function setIsPartner($isPartner)
-    {
-        $this->isPartner = $isPartner;
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getReferer()
-    {
-        return $this->referer;
-    }
-
-    /**
-     * @param null|string $referer
-     */
-    public function setReferer($referer)
-    {
-        $this->referer = $referer;
-    }
-
-    /**
-     * @return string
-     */
-    public function getInternalComment()
-    {
-        return $this->internalComment;
-    }
-
-    /**
-     * @param string $internalComment
-     */
-    public function setInternalComment($internalComment)
-    {
-        $this->internalComment = $internalComment;
-    }
-
-    /**
-     * @return Group
-     */
-    public function getCustomerGroup()
-    {
-        return $this->customerGroup;
-    }
-
-    /**
-     * @param Group $customerGroup
-     */
-    public function setCustomerGroup($customerGroup)
-    {
-        $this->customerGroup = $customerGroup;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isHasNotifications()
-    {
-        return $this->hasNotifications;
-    }
-
-    /**
-     * @param bool $hasNotifications
-     */
-    public function setHasNotifications($hasNotifications)
-    {
-        $this->hasNotifications = $hasNotifications;
-    }
-
-    /**
-     * @return int
-     */
-    public function getDefaultBillingAddressId()
-    {
-        return $this->defaultBillingAddressId;
-    }
-
-    /**
-     * @param int $defaultBillingAddressId
-     */
-    public function setDefaultBillingAddressId($defaultBillingAddressId)
-    {
-        $this->defaultBillingAddressId = $defaultBillingAddressId;
-    }
-
-    /**
-     * @return int
-     */
-    public function getDefaultShippingAddressId()
-    {
-        return $this->defaultShippingAddressId;
-    }
-
-    /**
-     * @param int $defaultShippingAddressId
-     */
-    public function setDefaultShippingAddressId($defaultShippingAddressId)
-    {
-        $this->defaultShippingAddressId = $defaultShippingAddressId;
-    }
-
-    /**
-     * @return Address
-     */
-    public function getDefaultBillingAddress()
-    {
-        return $this->defaultBillingAddress;
-    }
-
-    /**
-     * @param Address $defaultBillingAddress
-     */
-    public function setDefaultBillingAddress($defaultBillingAddress)
-    {
-        $this->defaultBillingAddress = $defaultBillingAddress;
-    }
-
-    /**
-     * @return Address
-     */
-    public function getDefaultShippingAddress()
-    {
-        return $this->defaultShippingAddress;
-    }
-
-    /**
-     * @param Address $defaultShippingAddress
-     */
-    public function setDefaultShippingAddress($defaultShippingAddress)
-    {
-        $this->defaultShippingAddress = $defaultShippingAddress;
-    }
-
-    /**
-     * @return PaymentMethod
-     */
-    public function getPresetPaymentMethod()
-    {
-        return $this->presetPaymentMethod;
-    }
-
-    /**
-     * @param PaymentMethod $presetPaymentMethod
-     */
-    public function setPresetPaymentMethod($presetPaymentMethod)
-    {
-        $this->presetPaymentMethod = $presetPaymentMethod;
-    }
-
-    /**
-     * @return PaymentMethod
-     */
-    public function getLastPaymentMethod()
-    {
-        return $this->lastPaymentMethod;
-    }
-
-    /**
-     * @param PaymentMethod $lastPaymentMethod
-     */
-    public function setLastPaymentMethod($lastPaymentMethod)
-    {
-        $this->lastPaymentMethod = $lastPaymentMethod;
-    }
-
-    /**
-     * @return int|null
-     */
     public function getAssignedShopId()
     {
         return $this->assignedShopId;
     }
 
-    /**
-     * @param int|null $assignedShopId
-     */
-    public function setAssignedShopId($assignedShopId)
+    public function setAssignedShopId($assignedShopId): void
     {
         $this->assignedShopId = $assignedShopId;
     }
 
-    /**
-     * @return int|null
-     */
     public function getAssignedLanguageShopId()
     {
         return $this->assignedLanguageShopId;
     }
 
-    /**
-     * @param int|null $assignedLanguageShopId
-     */
-    public function setAssignedLanguageShopId($assignedLanguageShopId)
+    public function setAssignedLanguageShopId($assignedLanguageShopId): void
     {
         $this->assignedLanguageShopId = $assignedLanguageShopId;
     }
 
-    /**
-     * @return int
-     */
-    public function getPresetPaymentMethodId()
+    public function getFirstLogin(): \DateTime
+    {
+        return $this->firstLogin;
+    }
+
+    public function setFirstLogin(\DateTime $firstLogin): void
+    {
+        $this->firstLogin = $firstLogin;
+    }
+
+    public function getLastLogin(): \DateTime
+    {
+        return $this->lastLogin;
+    }
+
+    public function setLastLogin(\DateTime $lastLogin): void
+    {
+        $this->lastLogin = $lastLogin;
+    }
+
+    public function getLockedUntil()
+    {
+        return $this->lockedUntil;
+    }
+
+    public function setLockedUntil($lockedUntil): void
+    {
+        $this->lockedUntil = $lockedUntil;
+    }
+
+    public function getFailedLogins(): int
+    {
+        return $this->failedLogins;
+    }
+
+    public function setFailedLogins(int $failedLogins): void
+    {
+        $this->failedLogins = $failedLogins;
+    }
+
+    public function getBirthday()
+    {
+        return $this->birthday;
+    }
+
+    public function setBirthday($birthday): void
+    {
+        $this->birthday = $birthday;
+    }
+
+    public function getAccountMode(): int
+    {
+        return $this->accountMode;
+    }
+
+    public function setAccountMode(int $accountMode): void
+    {
+        $this->accountMode = $accountMode;
+    }
+
+    public function getCustomerType(): string
+    {
+        return $this->customerType;
+    }
+
+    public function setCustomerType(string $customerType): void
+    {
+        $this->customerType = $customerType;
+    }
+
+    public function getValidation()
+    {
+        return $this->validation;
+    }
+
+    public function setValidation($validation): void
+    {
+        $this->validation = $validation;
+    }
+
+    public function getConfirmationKey()
+    {
+        return $this->confirmationKey;
+    }
+
+    public function setConfirmationKey($confirmationKey): void
+    {
+        $this->confirmationKey = $confirmationKey;
+    }
+
+    public function isOrderedNewsletter(): bool
+    {
+        return $this->orderedNewsletter;
+    }
+
+    public function setOrderedNewsletter(bool $orderedNewsletter): void
+    {
+        $this->orderedNewsletter = $orderedNewsletter;
+    }
+
+    public function isIsPartner(): bool
+    {
+        return $this->isPartner;
+    }
+
+    public function setIsPartner(bool $isPartner): void
+    {
+        $this->isPartner = $isPartner;
+    }
+
+    public function getReferer()
+    {
+        return $this->referer;
+    }
+
+    public function setReferer($referer): void
+    {
+        $this->referer = $referer;
+    }
+
+    public function getInternalComment(): string
+    {
+        return $this->internalComment;
+    }
+
+    public function setInternalComment(string $internalComment): void
+    {
+        $this->internalComment = $internalComment;
+    }
+
+    public function getCustomerGroup(): Group
+    {
+        return $this->customerGroup;
+    }
+
+    public function setCustomerGroup(Group $customerGroup): void
+    {
+        $this->customerGroup = $customerGroup;
+    }
+
+    public function isHasNotifications(): bool
+    {
+        return $this->hasNotifications;
+    }
+
+    public function setHasNotifications(bool $hasNotifications): void
+    {
+        $this->hasNotifications = $hasNotifications;
+    }
+
+    public function getDefaultBillingAddressId(): int
+    {
+        return $this->defaultBillingAddressId;
+    }
+
+    public function setDefaultBillingAddressId(int $defaultBillingAddressId): void
+    {
+        $this->defaultBillingAddressId = $defaultBillingAddressId;
+    }
+
+    public function getDefaultShippingAddressId(): int
+    {
+        return $this->defaultShippingAddressId;
+    }
+
+    public function setDefaultShippingAddressId(int $defaultShippingAddressId): void
+    {
+        $this->defaultShippingAddressId = $defaultShippingAddressId;
+    }
+
+    public function getDefaultBillingAddress(): Address
+    {
+        return $this->defaultBillingAddress;
+    }
+
+    public function setDefaultBillingAddress(Address $defaultBillingAddress): void
+    {
+        $this->defaultBillingAddress = $defaultBillingAddress;
+    }
+
+    public function getDefaultShippingAddress(): Address
+    {
+        return $this->defaultShippingAddress;
+    }
+
+    public function setDefaultShippingAddress(Address $defaultShippingAddress): void
+    {
+        $this->defaultShippingAddress = $defaultShippingAddress;
+    }
+
+    public function getPresetPaymentMethodId(): int
     {
         return $this->presetPaymentMethodId;
     }
 
-    /**
-     * @param int $presetPaymentMethodId
-     */
-    public function setPresetPaymentMethodId($presetPaymentMethodId)
+    public function setPresetPaymentMethodId(int $presetPaymentMethodId): void
     {
         $this->presetPaymentMethodId = $presetPaymentMethodId;
     }
 
-    /**
-     * @return int
-     */
-    public function getLastPaymentMethodId()
+    public function getLastPaymentMethodId(): int
     {
         return $this->lastPaymentMethodId;
     }
 
-    /**
-     * @param int $lastPaymentMethodId
-     */
-    public function setLastPaymentMethodId($lastPaymentMethodId)
+    public function setLastPaymentMethodId(int $lastPaymentMethodId): void
     {
         $this->lastPaymentMethodId = $lastPaymentMethodId;
+    }
+
+    public function getPresetPaymentMethod(): PaymentMethod
+    {
+        return $this->presetPaymentMethod;
+    }
+
+    public function setPresetPaymentMethod(PaymentMethod $presetPaymentMethod): void
+    {
+        $this->presetPaymentMethod = $presetPaymentMethod;
+    }
+
+    public function getLastPaymentMethod(): PaymentMethod
+    {
+        return $this->lastPaymentMethod;
+    }
+
+    public function setLastPaymentMethod(PaymentMethod $lastPaymentMethod): void
+    {
+        $this->lastPaymentMethod = $lastPaymentMethod;
     }
 }

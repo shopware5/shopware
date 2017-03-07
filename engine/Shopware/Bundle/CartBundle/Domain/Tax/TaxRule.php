@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -35,26 +36,17 @@ class TaxRule implements TaxRuleInterface
      */
     protected $rate;
 
-    /**
-     * @param float $rate
-     */
-    public function __construct($rate)
+    public function __construct(float $rate)
     {
         $this->rate = $rate;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getRate()
+    public function getRate(): float
     {
         return $this->rate;
     }
 
-    /**
-     * @return string
-     */
-    public function getKey()
+    public function getKey(): string
     {
         return $this->rate . '';
     }

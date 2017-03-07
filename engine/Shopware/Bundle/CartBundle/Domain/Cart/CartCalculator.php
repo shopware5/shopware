@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -41,24 +42,18 @@ class CartCalculator
     private $amountCalculator;
 
     /**
-     * @param  $processors
-     * @param AmountCalculator $amountCalculator
+     * @param CartProcessorInterface[] $processors
+     * @param AmountCalculator         $amountCalculator
      */
     public function __construct(
-        $processors,
+        array $processors,
         AmountCalculator $amountCalculator
     ) {
         $this->processors = $processors;
         $this->amountCalculator = $amountCalculator;
     }
 
-    /**
-     * @param Cart                 $cart
-     * @param CartContextInterface $context
-     *
-     * @return CalculatedCart
-     */
-    public function calculate(Cart $cart, CartContextInterface $context)
+    public function calculate(Cart $cart, CartContextInterface $context): CalculatedCart
     {
         $processorCart = new ProcessorCart(
             new CalculatedLineItemCollection(),

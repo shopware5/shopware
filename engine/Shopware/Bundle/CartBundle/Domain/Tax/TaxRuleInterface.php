@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -26,8 +27,5 @@ namespace Shopware\Bundle\CartBundle\Domain\Tax;
 
 interface TaxRuleInterface extends \JsonSerializable
 {
-    /**
-     * @return float
-     */
-    public function getRate();
+    public function getRate(): float;
 }

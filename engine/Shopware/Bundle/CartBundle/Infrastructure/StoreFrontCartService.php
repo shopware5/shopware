@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -86,10 +87,7 @@ class StoreFrontCartService
         $this->viewCartTransformer = $viewCartTransformer;
     }
 
-    /**
-     * @return ViewCart
-     */
-    public function createNew()
+    public function createNew(): ViewCart
     {
         $cart = $this->createNewCart();
         $this->calculate($cart);
@@ -97,10 +95,7 @@ class StoreFrontCartService
         return $this->getCart();
     }
 
-    /**
-     * @return ViewCart
-     */
-    public function getCart()
+    public function getCart(): ViewCart
     {
         if ($this->getCartToken() === null) {
             //first access for frontend session
@@ -124,12 +119,7 @@ class StoreFrontCartService
         return $viewCart;
     }
 
-    /**
-     * @param Cart $cart
-     *
-     * @return CalculatedCart
-     */
-    public function calculate(Cart $cart)
+    public function calculate(Cart $cart): CalculatedCart
     {
         $context = $this->contextService->getCartContext();
         $calculated = $this->calculation->calculate($cart, $context);
@@ -138,10 +128,7 @@ class StoreFrontCartService
         return $calculated;
     }
 
-    /**
-     * @param LineItemInterface $item
-     */
-    public function add(LineItemInterface $item)
+    public function add(LineItemInterface $item): void
     {
         $calculated = $this->getCart()->getCalculatedCart();
 
@@ -155,13 +142,7 @@ class StoreFrontCartService
         $this->calculate($calculated->getCart());
     }
 
-    /**
-     * @param string $identifier
-     * @param int    $quantity
-     *
-     * @throws \Exception
-     */
-    public function changeQuantity($identifier, $quantity)
+    public function changeQuantity(string $identifier, int $quantity): void
     {
         $calculated = $this->getCart()->getCalculatedCart();
 
@@ -178,29 +159,20 @@ class StoreFrontCartService
         $this->calculate($calculated->getCart());
     }
 
-    /**
-     * @param string $identifier
-     */
-    public function remove($identifier)
+    public function remove(string $identifier): void
     {
         $cart = $this->getCart()->getCalculatedCart()->getCart();
         $cart->getLineItems()->remove($identifier);
         $this->calculate($cart);
     }
 
-    /**
-     * @param Cart $cart
-     */
-    private function save(Cart $cart)
+    private function save(Cart $cart): void
     {
         $this->persister->save($cart);
         $this->session->offsetSet(self::CART_TOKEN_KEY, $cart->getToken());
     }
 
-    /**
-     * @return Cart
-     */
-    private function createNewCart()
+    private function createNewCart(): Cart
     {
         $cart = Cart::createNew(self::CART_NAME);
         $this->session->offsetSet(self::CART_TOKEN_KEY, $cart->getToken());
@@ -208,10 +180,7 @@ class StoreFrontCartService
         return $cart;
     }
 
-    /**
-     * @return string
-     */
-    private function getCartToken()
+    private function getCartToken(): ? string
     {
         if ($this->session->offsetExists(self::CART_TOKEN_KEY)) {
             return $this->session->offsetGet(self::CART_TOKEN_KEY);

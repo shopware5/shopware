@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -28,75 +29,22 @@ use Shopware\Bundle\CartBundle\Domain\Collection;
 
 class LineItemCollection extends Collection
 {
-    /**
-     * @var LineItemInterface[]
-     */
-    protected $items;
-
-    /**
-     * @param LineItemInterface $item
-     */
-    public function add($item)
+    public function filterType(string $type): LineItemCollection
     {
-        $this->items[$item->getIdentifier()] = $item;
-    }
-
-    /**
-     * @param string $identifier
-     *
-     * @return LineItemInterface
-     */
-    public function get($identifier)
-    {
-        return parent::get($identifier);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function has($identifier)
-    {
-        return parent::has($identifier);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function remove($identifier)
-    {
-        parent::remove($identifier);
-    }
-
-    /**
-     * @param string $type
-     *
-     * @return LineItemCollection
-     */
-    public function filterType($type)
-    {
-        return new self($this->getLineItemsOfType($type));
-    }
-
-    /**
-     * @return string[]
-     */
-    public function getIdentifiers()
-    {
-        return $this->keys();
-    }
-
-    /**
-     * @param string $type
-     *
-     * @return LineItemInterface[]
-     */
-    private function getLineItemsOfType($type)
-    {
-        return array_filter(
-            $this->items,
+        return $this->filter(
             function (LineItemInterface $lineItem) use ($type) {
                 return $lineItem->getType() === $type;
             }
+        );
+    }
+
+    public function getIdentifiers(): array
+    {
+        return array_map(
+            function (LineItemInterface $lineItem) {
+                return $lineItem->getIdentifier();
+            },
+            $this->elements
         );
     }
 }

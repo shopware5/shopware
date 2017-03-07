@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -29,96 +30,75 @@ use Shopware\Bundle\CartBundle\Domain\Price\PriceCollection;
 
 class CalculatedLineItemCollection extends Collection
 {
-    /**
-     * @var CalculatedLineItemInterface[]
-     */
-    protected $items = [];
-
-    /**
-     * @param CalculatedLineItemInterface $item
-     */
-    public function add($item)
+    public function add(CalculatedLineItemInterface $lineItem): void
     {
-        $this->items[$item->getIdentifier()] = $item;
+        $this->elements[] = $lineItem;
+    }
+
+    public function remove($key): ? CalculatedLineItemInterface
+    {
+        return parent::remove($key);
+    }
+
+    public function offsetGet($offset): ? CalculatedLineItemInterface
+    {
+        return parent::offsetGet($offset);
+    }
+
+    public function set($key, CalculatedLineItemInterface $value): void
+    {
+        parent::set($key, $value);
+    }
+
+    public function get($key): ? CalculatedLineItemInterface
+    {
+        return parent::get($key);
     }
 
     /**
-     * @param string $identifier
-     *
-     * @return bool
+     * @return CalculatedLineItemInterface[]
      */
-    public function has($identifier)
+    public function getValues(): array
     {
-        return parent::has($identifier);
+        return parent::getValues();
     }
 
-    /**
-     * @param string $identifier
-     *
-     * @return null|CalculatedLineItemInterface
-     */
-    public function get($identifier)
+    public function getIdentifiers(): array
     {
-        return parent::get($identifier);
+        return array_map(
+            function (CalculatedLineItemInterface $lineItem) {
+                return $lineItem->getIdentifier();
+            },
+            $this->elements
+        );
     }
 
-    /**
-     * @param string $identifier
-     */
-    public function remove($identifier)
-    {
-        return parent::remove($identifier);
-    }
-
-    /**
-     * @return string[]
-     */
-    public function getIdentifiers()
-    {
-        return array_keys($this->items);
-    }
-
-    /**
-     * @return PriceCollection
-     */
-    public function getPrices()
+    public function getPrices(): PriceCollection
     {
         return new PriceCollection(
-            $this->map(
+            array_map(
                 function (CalculatedLineItemInterface $item) {
                     return $item->getPrice();
-                }
+                },
+                $this->elements
             )
         );
     }
 
-    /**
-     * @param string $class
-     *
-     * @return CalculatedLineItemCollection
-     */
-    public function filterClass($class)
+    public function filterClass(string $class): CalculatedLineItemCollection
     {
-        return new self($this->getItemsOfClass($class));
+        return $this->filter(
+            function (CalculatedLineItemInterface $lineItem) use ($class) {
+                return $lineItem instanceof $class;
+            }
+        );
     }
 
-    /**
-     * @return CalculatedLineItemCollection
-     */
-    public function filterGoods()
+    public function filterGoods(): CalculatedLineItemCollection
     {
-        return new self($this->getItemsOfClass(Goods::class));
-    }
+        $class = Goods::class;
 
-    /**
-     * @param string $class
-     *
-     * @return CalculatedLineItemInterface[]
-     */
-    private function getItemsOfClass($class)
-    {
-        return array_filter(
-            $this->items,
+        return $this->filter(
             function (CalculatedLineItemInterface $lineItem) use ($class) {
                 return $lineItem instanceof $class;
             }

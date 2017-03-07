@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -24,6 +25,7 @@
 
 namespace Shopware\Bundle\CartBundle\Domain\Product;
 
+use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryDate;
 use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryInformation;
 use Shopware\Bundle\CartBundle\Domain\JsonSerializableTrait;
 use Shopware\Bundle\CartBundle\Domain\LineItem\CalculatedLineItemInterface;
@@ -62,19 +64,9 @@ class CalculatedProduct implements CalculatedLineItemInterface, Stackable, Deliv
      */
     protected $deliveryInformation;
 
-    /**
-     * @param string              $identifier
-     * @param float               $quantity
-     * @param LineItemInterface   $lineItem
-     * @param Price               $price
-     * @param DeliveryInformation $deliveryInformation
-     *
-     * @internal param \DateTime $earliestDeliveryDate
-     * @internal param \DateTime $latestDeliveryDate
-     */
     public function __construct(
-        $identifier,
-        $quantity,
+        string $identifier,
+        int $quantity,
         LineItemInterface $lineItem,
         Price $price,
         DeliveryInformation $deliveryInformation
@@ -86,66 +78,42 @@ class CalculatedProduct implements CalculatedLineItemInterface, Stackable, Deliv
         $this->deliveryInformation = $deliveryInformation;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getIdentifier()
+    public function getIdentifier(): string
     {
         return $this->identifier;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getPrice()
+    public function getPrice(): Price
     {
         return $this->price;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getQuantity()
-    {
-        return $this->quantity;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getStock()
+    public function getStock(): int
     {
         return $this->deliveryInformation->getStock();
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getInStockDeliveryDate()
+    public function getInStockDeliveryDate(): DeliveryDate
     {
         return $this->deliveryInformation->getInStockDeliveryDate();
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getOutOfStockDeliveryDate()
+    public function getOutOfStockDeliveryDate(): DeliveryDate
     {
         return $this->deliveryInformation->getOutOfStockDeliveryDate();
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function setQuantity($quantity)
+    public function getQuantity(): int
+    {
+        return $this->quantity;
+    }
+
+    public function setQuantity(int $quantity): void
     {
         $this->quantity = $quantity;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getLineItem()
+    public function getLineItem(): LineItemInterface
     {
         return $this->lineItem;
     }

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -50,16 +51,10 @@ class LineItem implements LineItemInterface
      */
     protected $extraData;
 
-    /**
-     * @param string $identifier
-     * @param string $type
-     * @param float  $quantity
-     * @param array  $extraData
-     */
     public function __construct(
-        $identifier,
-        $type,
-        $quantity,
+        string $identifier,
+        string $type,
+        int $quantity,
         array $extraData = []
     ) {
         $this->identifier = $identifier;
@@ -68,66 +63,45 @@ class LineItem implements LineItemInterface
         $this->extraData = $extraData;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getIdentifier()
+    public function getIdentifier(): string
     {
         return $this->identifier;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getQuantity()
+    public function getQuantity(): int
     {
         return $this->quantity;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function setQuantity($quantity)
+    public function setQuantity(int $quantity): void
     {
         $this->quantity = $quantity;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getType()
+    public function getType(): string
     {
         return $this->type;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getExtraData()
+    public function getExtraData(): array
     {
         return $this->extraData;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function serialize()
+    public function serialize(): string
     {
         return json_encode(get_object_vars($this));
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public static function unserialize($json)
+    public static function unserialize(string $data): LineItemInterface
     {
-        $data = json_decode($json, true);
+        $data = json_decode($data, true);
 
         return new self(
-            $data['identifier'],
-            $data['type'],
-            $data['quantity'],
-            $data['extraData']
+            (string) $data['identifier'],
+            (string) $data['type'],
+            (int) $data['quantity'],
+            (array) $data['extraData']
         );
     }
 }

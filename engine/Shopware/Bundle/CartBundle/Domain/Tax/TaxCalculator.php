@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -50,13 +51,7 @@ class TaxCalculator
         $this->calculators = $calculators;
     }
 
-    /**
-     * @param float             $netPrice
-     * @param TaxRuleCollection $rules
-     *
-     * @return float
-     */
-    public function calculateGross($netPrice, TaxRuleCollection $rules)
+    public function calculateGross(float $netPrice, TaxRuleCollection $rules): float
     {
         $taxes = $this->calculateNetTaxes($netPrice, $rules);
         $gross = $netPrice + $taxes->getAmount();
@@ -64,13 +59,7 @@ class TaxCalculator
         return $this->rounding->round($gross);
     }
 
-    /**
-     * @param float             $price
-     * @param TaxRuleCollection $rules
-     *
-     * @return CalculatedTaxCollection
-     */
-    public function calculateGrossTaxes($price, TaxRuleCollection $rules)
+    public function calculateGrossTaxes(float $price, TaxRuleCollection $rules): CalculatedTaxCollection
     {
         return new CalculatedTaxCollection(
             $rules->map(
@@ -82,13 +71,7 @@ class TaxCalculator
         );
     }
 
-    /**
-     * @param float             $price
-     * @param TaxRuleCollection $rules
-     *
-     * @return CalculatedTaxCollection
-     */
-    public function calculateNetTaxes($price, TaxRuleCollection $rules)
+    public function calculateNetTaxes(float $price, TaxRuleCollection $rules): CalculatedTaxCollection
     {
         return new CalculatedTaxCollection(
             $rules->map(
@@ -100,14 +83,7 @@ class TaxCalculator
         );
     }
 
-    /**
-     * @param TaxRuleInterface $rule
-     *
-     * @throws \Exception
-     *
-     * @return TaxRuleCalculatorInterface
-     */
-    private function getTaxRuleCalculator(TaxRuleInterface $rule)
+    private function getTaxRuleCalculator(TaxRuleInterface $rule): TaxRuleCalculatorInterface
     {
         foreach ($this->calculators as $calculator) {
             if ($calculator->supports($rule)) {

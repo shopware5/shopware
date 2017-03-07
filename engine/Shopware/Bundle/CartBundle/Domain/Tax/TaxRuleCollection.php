@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -31,53 +32,32 @@ class TaxRuleCollection extends Collection
     /**
      * @var TaxRuleInterface[]
      */
-    protected $items = [];
+    protected $elements;
 
-    /**
-     * @param TaxRuleInterface $rule
-     */
-    public function add($rule)
+    public function add(TaxRuleInterface $rule): void
     {
         $key = $this->getKey($rule->getRate());
-        $this->items[$key] = $rule;
+        $this->elements[$key] = $rule;
     }
 
-    /**
-     * @param float $rate
-     *
-     * @return bool
-     */
-    public function has($rate)
+    public function has(float $rate): bool
     {
         return parent::has($this->getKey($rate));
     }
 
-    /**
-     * @param float $rate
-     *
-     * @return null|TaxRuleInterface
-     */
-    public function get($rate)
+    public function get(float $rate): ? TaxRuleInterface
     {
         return parent::get($this->getKey($rate));
     }
 
-    /**
-     * @param float $rate
-     */
-    public function remove($rate)
+    public function remove(float $rate): ? TaxRuleInterface
     {
         return parent::remove($this->getKey($rate));
     }
 
-    /**
-     * @param TaxRuleCollection $rules
-     *
-     * @return TaxRuleCollection
-     */
-    public function merge(TaxRuleCollection $rules)
+    public function merge(TaxRuleCollection $rules): TaxRuleCollection
     {
-        $new = new self($this->items);
+        $new = new self($this->elements);
 
         $rules->map(
             function (TaxRuleInterface $rule) use ($new) {
@@ -90,12 +70,7 @@ class TaxRuleCollection extends Collection
         return $new;
     }
 
-    /**
-     * @param float $rate
-     *
-     * @return string
-     */
-    private function getKey($rate)
+    private function getKey(float $rate): string
     {
         return $rate . '';
     }

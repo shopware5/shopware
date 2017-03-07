@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -40,7 +41,7 @@ class DeliveryCalculatorProcessor implements CartProcessorInterface
         Cart $cart,
         ProcessorCart $processorCart,
         CartContextInterface $context
-    ) {
+    ): void {
         foreach ($processorCart->getDeliveries() as $delivery) {
             $this->calculator->calculate($delivery, $context);
         }

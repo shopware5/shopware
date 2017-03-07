@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -49,7 +50,7 @@ class ProductDeliveryGateway implements ProductDeliveryGatewayInterface
     /**
      * {@inheritdoc}
      */
-    public function get(LineItemCollection $collection, CartContextInterface $context)
+    public function get(LineItemCollection $collection, CartContextInterface $context): array
     {
         $query = $this->connection->createQueryBuilder();
         $query->select([

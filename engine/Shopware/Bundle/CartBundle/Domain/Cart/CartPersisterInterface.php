@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -26,15 +27,7 @@ namespace Shopware\Bundle\CartBundle\Domain\Cart;
 
 interface CartPersisterInterface
 {
-    /**
-     * @param string $token
-     *
-     * @return Cart
-     */
-    public function load($token);
+    public function load(string $token): Cart;
 
-    /**
-     * @param Cart $cart
-     */
-    public function save(Cart $cart);
+    public function save(Cart $cart): void;
 }

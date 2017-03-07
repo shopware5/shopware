@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -49,68 +50,39 @@ class Cart implements \JsonSerializable
      */
     private $token;
 
-    /**
-     * @param string $name
-     * @param $token
-     * @param LineItemCollection $items
-     */
-    private function __construct($name, $token, LineItemCollection $items)
+    private function __construct(string $name, string $token, LineItemCollection $items)
     {
         $this->name = $name;
         $this->token = $token;
         $this->items = $items;
     }
 
-    /**
-     * @param string $name
-     *
-     * @return Cart
-     */
-    public static function createNew($name)
+    public static function createNew(string $name): Cart
     {
         return new self($name, Uuid::uuid4()->toString(), new LineItemCollection());
     }
 
-    /**
-     * @param string              $name
-     * @param string              $token
-     * @param LineItemInterface[] $items
-     *
-     * @return Cart
-     */
-    public static function createExisting($name, $token, array $items = [])
+    public static function createExisting(string $name, string $token, array $items): Cart
     {
         return new self($name, $token, new LineItemCollection($items));
     }
 
-    /**
-     * @return string
-     */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @return string
-     */
-    public function getToken()
+    public function getToken(): string
     {
         return $this->token;
     }
 
-    /**
-     * @return LineItemCollection
-     */
-    public function getLineItems()
+    public function getLineItems(): LineItemCollection
     {
         return $this->items;
     }
 
-    /**
-     * @return string
-     */
-    public function serialize()
+    public function serialize(): string
     {
         $items = $this->items->map(function (LineItemInterface $item) {
             return $item->serialize();
@@ -123,12 +95,7 @@ class Cart implements \JsonSerializable
         ]);
     }
 
-    /**
-     * @param string $json
-     *
-     * @return Cart
-     */
-    public static function unserialize($json)
+    public static function unserialize(string $json): Cart
     {
         $data = json_decode($json, true);
 
@@ -139,12 +106,7 @@ class Cart implements \JsonSerializable
         return self::createExisting($data['name'], $data['token'], $items);
     }
 
-    /**
-     * @param string $json
-     *
-     * @return LineItem|LineItemInterface
-     */
-    public static function unserializeItem($json)
+    public static function unserializeItem(string $json): LineItemInterface
     {
         $decoded = json_decode($json, true);
 

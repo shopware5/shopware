@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -33,33 +34,52 @@ class PriceCollection extends Collection
     /**
      * @var Price[]
      */
-    protected $items = [];
+    protected $elements;
 
-    /**
-     * @param Price $price
-     */
-    public function add($price)
+    public function add(Price $price): void
     {
-        $this->items[] = $price;
+        $this->elements[] = $price;
+    }
+
+    public function remove($key): ? Price
+    {
+        return parent::remove($key);
+    }
+
+    public function offsetGet($offset): ? Price
+    {
+        return parent::offsetGet($offset);
+    }
+
+    public function set($key, Price $value): void
+    {
+        parent::set($key, $value);
+    }
+
+    public function get($key): ? Price
+    {
+        return parent::get($key);
     }
 
     /**
-     * @return TaxRuleCollection
+     * @return Price[]
      */
-    public function getTaxRules()
+    public function getValues(): array
     {
-        $rules = new TaxRuleCollection();
-        foreach ($this->items as $price) {
+        return parent::getValues();
+    }
+
+    public function getTaxRules(): TaxRuleCollection
+    {
+        $rules = new TaxRuleCollection([]);
+        foreach ($this->elements as $price) {
             $rules = $rules->merge($price->getTaxRules());
         }
 
         return $rules;
     }
 
-    /**
-     * @return Price
-     */
-    public function getTotalPrice()
+    public function getTotalPrice(): Price
     {
         $amount = $this->getAmount();
 
@@ -71,28 +91,20 @@ class PriceCollection extends Collection
         );
     }
 
-    /**
-     * @return CalculatedTaxCollection
-     */
-    public function getCalculatedTaxes()
+    public function getCalculatedTaxes(): CalculatedTaxCollection
     {
-        $taxes = new CalculatedTaxCollection();
-        foreach ($this->items as $price) {
+        $taxes = new CalculatedTaxCollection([]);
+        foreach ($this->elements as $price) {
             $taxes = $taxes->merge($price->getCalculatedTaxes());
         }
 
         return $taxes;
     }
 
-    /**
-     * Sum of all total prices
-     *
-     * @return float
-     */
-    private function getAmount()
+    private function getAmount(): float
     {
         $prices = $this->map(function (Price $price) {
-            return $price->getPrice();
+            return $price->getTotalPrice();
         });
 
         return array_sum($prices);

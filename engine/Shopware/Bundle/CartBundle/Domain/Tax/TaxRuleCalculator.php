@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -41,18 +42,12 @@ class TaxRuleCalculator implements TaxRuleCalculatorInterface
         $this->rounding = $rounding;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function supports(TaxRuleInterface $rule)
+    public function supports(TaxRuleInterface $rule): bool
     {
         return $rule instanceof TaxRule;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function calculateTaxFromGrossPrice($gross, TaxRuleInterface $rule)
+    public function calculateTaxFromGrossPrice(float $gross, TaxRuleInterface $rule): CalculatedTax
     {
         $calculatedTax = $gross / ((100 + $rule->getRate()) / 100) * ($rule->getRate() / 100);
         $calculatedTax = $this->rounding->round($calculatedTax);
@@ -60,10 +55,7 @@ class TaxRuleCalculator implements TaxRuleCalculatorInterface
         return new CalculatedTax($calculatedTax, $rule->getRate(), $gross);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function calculateTaxFromNetPrice($net, TaxRuleInterface $rule)
+    public function calculateTaxFromNetPrice(float $net, TaxRuleInterface $rule): CalculatedTax
     {
         $calculatedTax = $net * ($rule->getRate() / 100);
         $calculatedTax = $this->rounding->round($calculatedTax);

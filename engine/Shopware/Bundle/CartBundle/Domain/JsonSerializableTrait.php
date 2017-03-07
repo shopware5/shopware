@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -26,7 +27,7 @@ namespace Shopware\Bundle\CartBundle\Domain;
 
 trait JsonSerializableTrait
 {
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         $data = get_object_vars($this);
         $data['_class'] = get_class($this);

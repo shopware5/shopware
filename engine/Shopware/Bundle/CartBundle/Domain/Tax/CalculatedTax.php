@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -45,48 +46,31 @@ class CalculatedTax implements \JsonSerializable
      */
     protected $price = 0;
 
-    /**
-     * @param float $tax
-     * @param float $taxRate
-     * @param float $price
-     */
-    public function __construct($tax, $taxRate, $price)
+    public function __construct(float $tax, float $taxRate, float $price)
     {
         $this->tax = $tax;
         $this->taxRate = $taxRate;
         $this->price = $price;
     }
 
-    /**
-     * @return float
-     */
-    public function getTax()
+    public function getTax(): float
     {
         return $this->tax;
     }
 
-    /**
-     * @return float
-     */
-    public function getTaxRate()
+    public function getTaxRate(): float
     {
         return $this->taxRate;
     }
 
-    /**
-     * @param CalculatedTax $calculatedTax
-     */
-    public function increment(CalculatedTax $calculatedTax)
+    public function getPrice(): float
+    {
+        return $this->price;
+    }
+
+    public function increment(CalculatedTax $calculatedTax): void
     {
         $this->tax += $calculatedTax->getTax();
         $this->price += $calculatedTax->getPrice();
-    }
-
-    /**
-     * @return float
-     */
-    public function getPrice()
-    {
-        return $this->price;
     }
 }

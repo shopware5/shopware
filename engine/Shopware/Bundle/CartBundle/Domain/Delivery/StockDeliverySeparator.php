@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -40,26 +41,16 @@ class StockDeliverySeparator
      */
     private $priceCalculator;
 
-    /**
-     * @param PriceCalculator $priceCalculator
-     */
     public function __construct(PriceCalculator $priceCalculator)
     {
         $this->priceCalculator = $priceCalculator;
     }
 
-    /**
-     * @param DeliveryCollection           $deliveries
-     * @param CalculatedLineItemCollection $items
-     * @param CartContextInterface         $context
-     *
-     * @return DeliveryCollection
-     */
     public function addItemsToDeliveries(
         DeliveryCollection $deliveries,
         CalculatedLineItemCollection $items,
         CartContextInterface $context
-    ) {
+    ): DeliveryCollection {
         foreach ($items as $item) {
             if (!$item instanceof Deliverable) {
                 continue;
@@ -159,7 +150,7 @@ class StockDeliverySeparator
         $quantity,
         DeliveryDate $deliveryDate,
         CartContextInterface $context
-    ) {
+    ): DeliveryPosition {
         $definition = new PriceDefinition(
             $item->getPrice()->getUnitPrice(),
             $item->getPrice()->getTaxRules(),
@@ -178,18 +169,12 @@ class StockDeliverySeparator
         );
     }
 
-    /**
-     * @param DeliveryCollection $deliveries
-     * @param DeliveryPosition   $position
-     * @param Address            $address
-     * @param DeliveryService    $deliveryService
-     */
     private function addGoodsToDelivery(
         DeliveryCollection $deliveries,
         DeliveryPosition $position,
         Address $address,
         DeliveryService $deliveryService
-    ) {
+    ): void {
         $delivery = $deliveries->getDelivery(
             $position->getDeliveryDate(),
             $address

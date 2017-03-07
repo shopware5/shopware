@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -31,26 +32,17 @@ class PercentageTaxRuleCalculator implements TaxRuleCalculatorInterface
      */
     private $taxRuleCalculator;
 
-    /**
-     * @param TaxRuleCalculatorInterface $taxRuleCalculator
-     */
     public function __construct(TaxRuleCalculatorInterface $taxRuleCalculator)
     {
         $this->taxRuleCalculator = $taxRuleCalculator;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function supports(TaxRuleInterface $rule)
+    public function supports(TaxRuleInterface $rule): bool
     {
         return $rule instanceof PercentageTaxRule;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function calculateTaxFromGrossPrice($gross, TaxRuleInterface $rule)
+    public function calculateTaxFromGrossPrice(float $gross, TaxRuleInterface $rule): CalculatedTax
     {
         /* @var PercentageTaxRule $rule */
         return $this->taxRuleCalculator->calculateTaxFromGrossPrice(
@@ -59,10 +51,7 @@ class PercentageTaxRuleCalculator implements TaxRuleCalculatorInterface
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function calculateTaxFromNetPrice($net, TaxRuleInterface $rule)
+    public function calculateTaxFromNetPrice(float $net, TaxRuleInterface $rule): CalculatedTax
     {
         /* @var PercentageTaxRule $rule */
         return $this->taxRuleCalculator->calculateTaxFromGrossPrice(

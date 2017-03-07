@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -32,7 +33,7 @@ trait SortArrayByKeysTrait
      *
      * @return array
      */
-    private function sortIndexedArrayByKeys(array $sortedKeys, array $indexedArray)
+    private function sortIndexedArrayByKeys(array $sortedKeys, array $indexedArray): array
     {
         $sorted = [];
         foreach ($sortedKeys as $index) {

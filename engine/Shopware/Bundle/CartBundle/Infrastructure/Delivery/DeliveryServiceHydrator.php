@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -43,12 +44,7 @@ class DeliveryServiceHydrator extends Hydrator
         $this->attributeHydrator = $attributeHydrator;
     }
 
-    /**
-     * @param array $data
-     *
-     * @return DeliveryService
-     */
-    public function hydrate(array $data)
+    public function hydrate(array $data): DeliveryService
     {
         $service = new DeliveryService();
         $service->setId($data['__deliveryService_id']);

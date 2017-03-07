@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -34,21 +35,12 @@ class ViewCartTransformer
      */
     private $transformers = [];
 
-    /**
-     * @param ViewLineItemTransformerInterface[] $transformers
-     */
     public function __construct(array $transformers)
     {
         $this->transformers = $transformers;
     }
 
-    /**
-     * @param CalculatedCart       $calculatedCart
-     * @param ShopContextInterface $context
-     *
-     * @return ViewCart
-     */
-    public function transform(CalculatedCart $calculatedCart, ShopContextInterface $context)
+    public function transform(CalculatedCart $calculatedCart, ShopContextInterface $context): ViewCart
     {
         $viewCart = ViewCart::createFromCalculatedCart($calculatedCart);
 

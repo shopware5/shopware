@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -31,37 +32,17 @@ interface LineItemInterface extends \JsonSerializable
      *
      * @return string
      */
-    public function getIdentifier();
+    public function getIdentifier(): string;
 
-    /**
-     * @return float
-     */
-    public function getQuantity();
+    public function getQuantity(): int;
 
-    /**
-     * @return string
-     */
-    public function getType();
+    public function getType(): string;
 
-    /**
-     * @return array
-     */
-    public function getExtraData();
+    public function getExtraData(): array;
 
-    /**
-     * @param float $quantity
-     */
-    public function setQuantity($quantity);
+    public function setQuantity(int $quantity): void;
 
-    /**
-     * @return string
-     */
-    public function serialize();
+    public function serialize(): string;
 
-    /**
-     * @param string $data
-     *
-     * @return LineItemInterface
-     */
-    public static function unserialize($data);
+    public static function unserialize(string $data): LineItemInterface;
 }

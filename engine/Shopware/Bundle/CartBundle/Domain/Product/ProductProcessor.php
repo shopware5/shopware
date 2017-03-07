@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -50,11 +51,6 @@ class ProductProcessor implements CartProcessorInterface
      */
     private $deliveryGateway;
 
-    /**
-     * @param ProductPriceGatewayInterface    $priceGateway
-     * @param PriceCalculator                 $priceCalculator
-     * @param ProductDeliveryGatewayInterface $deliveryGateway
-     */
     public function __construct(
         ProductPriceGatewayInterface $priceGateway,
         PriceCalculator $priceCalculator,
@@ -65,14 +61,11 @@ class ProductProcessor implements CartProcessorInterface
         $this->deliveryGateway = $deliveryGateway;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function process(
         Cart $cart,
         ProcessorCart $processorCart,
         CartContextInterface $context
-    ) {
+    ): void {
         $collection = $cart->getLineItems()->filterType(self::TYPE_PRODUCT);
         if (count($collection) === 0) {
             return;

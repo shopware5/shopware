@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -42,10 +43,6 @@ class ViewProductTransformer implements ViewLineItemTransformerInterface
      */
     private $mediaService;
 
-    /**
-     * @param ListProductGatewayInterface  $listProductGateway
-     * @param VariantCoverServiceInterface $mediaService
-     */
     public function __construct(
         ListProductGatewayInterface $listProductGateway,
         VariantCoverServiceInterface $mediaService
@@ -61,7 +58,7 @@ class ViewProductTransformer implements ViewLineItemTransformerInterface
         CalculatedCart $cart,
         ViewCart $templateCart,
         ShopContextInterface $context
-    ) {
+    ): void {
         $collection = $cart->getLineItems()->filterClass(CalculatedProduct::class);
 
         if ($collection->count() === 0) {

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -26,12 +27,7 @@ namespace Shopware\Bundle\CartBundle\Domain\Tax;
 
 interface TaxRuleCalculatorInterface
 {
-    /**
-     * @param TaxRuleInterface $rule
-     *
-     * @return bool
-     */
-    public function supports(TaxRuleInterface $rule);
+    public function supports(TaxRuleInterface $rule): bool;
 
     /**
      * Returns the inclusive taxes of the price
@@ -45,7 +41,7 @@ interface TaxRuleCalculatorInterface
      *
      * @return CalculatedTax
      */
-    public function calculateTaxFromGrossPrice($gross, TaxRuleInterface $rule);
+    public function calculateTaxFromGrossPrice(float $gross, TaxRuleInterface $rule): CalculatedTax;
 
     /**
      * Returns the additional taxes for the price.
@@ -59,5 +55,5 @@ interface TaxRuleCalculatorInterface
      *
      * @return CalculatedTax
      */
-    public function calculateTaxFromNetPrice($net, TaxRuleInterface $rule);
+    public function calculateTaxFromNetPrice(float $net, TaxRuleInterface $rule): CalculatedTax;
 }

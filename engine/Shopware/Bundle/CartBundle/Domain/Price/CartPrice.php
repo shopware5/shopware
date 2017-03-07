@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -52,15 +53,9 @@ class CartPrice implements \JsonSerializable
      */
     protected $taxRules;
 
-    /**
-     * @param float                   $netPrice
-     * @param float                   $totalPrice
-     * @param CalculatedTaxCollection $calculatedTaxes
-     * @param TaxRuleCollection       $taxRules
-     */
     public function __construct(
-        $netPrice,
-        $totalPrice,
+        float $netPrice,
+        float $totalPrice,
         CalculatedTaxCollection $calculatedTaxes,
         TaxRuleCollection $taxRules
     ) {
@@ -70,34 +65,22 @@ class CartPrice implements \JsonSerializable
         $this->taxRules = $taxRules;
     }
 
-    /**
-     * @return float
-     */
-    public function getNetPrice()
+    public function getNetPrice(): float
     {
         return $this->netPrice;
     }
 
-    /**
-     * @return float
-     */
-    public function getTotalPrice()
+    public function getTotalPrice(): float
     {
         return $this->totalPrice;
     }
 
-    /**
-     * @return CalculatedTaxCollection
-     */
-    public function getCalculatedTaxes()
+    public function getCalculatedTaxes(): CalculatedTaxCollection
     {
         return $this->calculatedTaxes;
     }
 
-    /**
-     * @return TaxRuleCollection
-     */
-    public function getTaxRules()
+    public function getTaxRules(): TaxRuleCollection
     {
         return $this->taxRules;
     }

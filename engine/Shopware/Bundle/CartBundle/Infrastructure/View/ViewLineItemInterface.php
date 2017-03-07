@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -29,18 +30,9 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Media;
 
 interface ViewLineItemInterface extends \JsonSerializable
 {
-    /**
-     * @return CalculatedLineItemInterface
-     */
-    public function getLineItem();
+    public function getLineItem(): CalculatedLineItemInterface;
 
-    /**
-     * @return string
-     */
-    public function getLabel();
+    public function getLabel(): string;
 
-    /**
-     * @return Media|null
-     */
-    public function getCover();
+    public function getCover(): ? Media;
 }

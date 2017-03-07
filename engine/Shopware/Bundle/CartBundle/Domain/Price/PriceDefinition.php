@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -51,48 +52,34 @@ class PriceDefinition implements \JsonSerializable
      */
     private $isCalculated;
 
-    /**
-     * @param float             $price
-     * @param TaxRuleCollection $taxRules
-     * @param float|int         $quantity
-     * @param bool              $isCalculated
-     */
-    public function __construct($price, TaxRuleCollection $taxRules, $quantity = 1, $isCalculated = false)
-    {
+    public function __construct(
+        float $price,
+        TaxRuleCollection $taxRules,
+        int $quantity = 1,
+        bool $isCalculated = false
+    ) {
         $this->price = $price;
         $this->taxRules = $taxRules;
         $this->quantity = $quantity;
         $this->isCalculated = $isCalculated;
     }
 
-    /**
-     * @return float
-     */
-    public function getPrice()
+    public function getPrice(): float
     {
         return $this->price;
     }
 
-    /**
-     * @return TaxRuleCollection
-     */
-    public function getTaxRules()
+    public function getTaxRules(): TaxRuleCollection
     {
         return $this->taxRules;
     }
 
-    /**
-     * @return float
-     */
-    public function getQuantity()
+    public function getQuantity(): float
     {
         return $this->quantity;
     }
 
-    /**
-     * @return bool
-     */
-    public function isCalculated()
+    public function isCalculated(): bool
     {
         return $this->isCalculated;
     }

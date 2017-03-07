@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -75,7 +76,7 @@ class CustomerService
      *
      * @return Customer[]
      */
-    public function getList($ids, ShopContextInterface $context)
+    public function getList($ids, ShopContextInterface $context): array
     {
         if (0 === count($ids)) {
             return [];
@@ -94,6 +95,7 @@ class CustomerService
             $context
         );
 
+        /** @var Customer $customer */
         foreach ($customers as $customer) {
             $id = $customer->getDefaultBillingAddressId();
             if (array_key_exists($id, $addresses)) {
@@ -134,7 +136,7 @@ class CustomerService
      *
      * @return int[]
      */
-    private function collectAddressIds($customers)
+    private function collectAddressIds(array $customers): array
     {
         $ids = [];
         foreach ($customers as $customer) {
@@ -150,7 +152,7 @@ class CustomerService
      *
      * @return int[]
      */
-    private function collectShopIds($customers)
+    private function collectShopIds(array $customers): array
     {
         $ids = [];
         foreach ($customers as $customer) {
@@ -166,7 +168,7 @@ class CustomerService
      *
      * @return int[]
      */
-    private function collectPaymentIds($customers)
+    private function collectPaymentIds(array $customers): array
     {
         $ids = [];
         foreach ($customers as $customer) {

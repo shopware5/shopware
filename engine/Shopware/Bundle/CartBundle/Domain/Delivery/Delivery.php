@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -51,15 +52,6 @@ class Delivery implements \JsonSerializable
      */
     protected $deliveryDate;
 
-    /**
-     * @param DeliveryPositionCollection $positions
-     * @param DeliveryDate               $deliveryDate
-     * @param DeliveryService            $deliveryService
-     * @param Address                    $address
-     *
-     * @internal param \DateTime $earliestDeliveryDate
-     * @internal param \DateTime $latestDeliveryDate
-     */
     public function __construct(
         DeliveryPositionCollection $positions,
         DeliveryDate $deliveryDate,
@@ -71,34 +63,22 @@ class Delivery implements \JsonSerializable
         $this->deliveryDate = $deliveryDate;
     }
 
-    /**
-     * @return DeliveryPositionCollection
-     */
-    public function getPositions()
+    public function getPositions(): DeliveryPositionCollection
     {
         return $this->positions;
     }
 
-    /**
-     * @return Address
-     */
-    public function getAddress()
+    public function getAddress(): Address
     {
         return $this->address;
     }
 
-    /**
-     * @return DeliveryService
-     */
-    public function getDeliveryService()
+    public function getDeliveryService(): DeliveryService
     {
         return $this->deliveryService;
     }
 
-    /**
-     * @return DeliveryDate
-     */
-    public function getDeliveryDate()
+    public function getDeliveryDate(): DeliveryDate
     {
         return $this->deliveryDate;
     }

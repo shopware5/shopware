@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -28,13 +29,7 @@ use Shopware\Bundle\CartBundle\Domain\Price\Price;
 
 interface CalculatedLineItemInterface extends \JsonSerializable
 {
-    /**
-     * @return string
-     */
-    public function getIdentifier();
+    public function getIdentifier(): string;
 
-    /**
-     * @return Price
-     */
-    public function getPrice();
+    public function getPrice(): Price;
 }

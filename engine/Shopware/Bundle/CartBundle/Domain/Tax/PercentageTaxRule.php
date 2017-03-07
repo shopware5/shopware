@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -40,28 +41,18 @@ class PercentageTaxRule implements TaxRuleInterface
      */
     private $percentage;
 
-    /**
-     * @param float $rate
-     * @param float $percentage
-     */
-    public function __construct($rate, $percentage)
+    public function __construct(float $rate, float $percentage)
     {
         $this->rate = $rate;
         $this->percentage = $percentage;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getRate()
+    public function getRate(): float
     {
         return $this->rate;
     }
 
-    /**
-     * @return float
-     */
-    public function getPercentage()
+    public function getPercentage(): float
     {
         return $this->percentage;
     }

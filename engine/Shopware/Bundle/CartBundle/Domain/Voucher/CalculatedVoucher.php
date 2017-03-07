@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -43,10 +44,6 @@ class CalculatedVoucher implements CalculatedLineItemInterface
      */
     protected $price;
 
-    /**
-     * @param LineItemInterface $lineItem
-     * @param Price             $price
-     */
     public function __construct(
         LineItemInterface $lineItem,
         Price $price
@@ -55,18 +52,12 @@ class CalculatedVoucher implements CalculatedLineItemInterface
         $this->lineItem = $lineItem;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getIdentifier()
+    public function getIdentifier(): string
     {
         return $this->lineItem->getIdentifier();
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getPrice()
+    public function getPrice(): Price
     {
         return $this->price;
     }

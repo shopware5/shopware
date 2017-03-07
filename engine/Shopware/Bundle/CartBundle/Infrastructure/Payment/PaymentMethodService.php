@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -26,6 +27,7 @@ namespace Shopware\Bundle\CartBundle\Infrastructure\Payment;
 
 use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
 use Shopware\Bundle\CartBundle\Domain\Cart\CartContextInterface;
+use Shopware\Bundle\CartBundle\Domain\Payment\PaymentMethod;
 
 class PaymentMethodService
 {
@@ -34,15 +36,18 @@ class PaymentMethodService
      */
     private $gateway;
 
-    /**
-     * @param PaymentMethodGateway $gateway
-     */
     public function __construct(PaymentMethodGateway $gateway)
     {
         $this->gateway = $gateway;
     }
 
-    public function getAvailable(CalculatedCart $cart, CartContextInterface $context)
+    /**
+     * @param CalculatedCart       $cart
+     * @param CartContextInterface $context
+     *
+     * @return PaymentMethod[]
+     */
+    public function getAvailable(CalculatedCart $cart, CartContextInterface $context): array
     {
         $payments = $this->gateway->getAll($context);
 

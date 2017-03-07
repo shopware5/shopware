@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -31,41 +32,25 @@ class CalculatedTaxCollection extends Collection
     /**
      * @var CalculatedTax[]
      */
-    protected $items = [];
+    protected $elements = [];
 
-    /**
-     * @param CalculatedTax $tax
-     */
-    public function add($tax)
+    public function add(CalculatedTax $tax): void
     {
         $key = $this->getKey($tax->getTaxRate());
-        $this->items[$key] = $tax;
+        $this->elements[$key] = $tax;
     }
 
-    /**
-     * @param float $rate
-     *
-     * @return bool
-     */
-    public function has($rate)
+    public function has(float $rate): bool
     {
         return parent::has($this->getKey($rate));
     }
 
-    /**
-     * @param float $rate
-     *
-     * @return null|CalculatedTax
-     */
-    public function get($rate)
+    public function get(float $rate): ? CalculatedTax
     {
         return parent::get($this->getKey($rate));
     }
 
-    /**
-     * @param float $rate
-     */
-    public function remove($rate)
+    public function remove(float $rate)
     {
         return parent::remove($this->getKey($rate));
     }
@@ -75,23 +60,20 @@ class CalculatedTaxCollection extends Collection
      *
      * @return float
      */
-    public function getAmount()
+    public function getAmount(): float
     {
-        $amounts = $this->map(function (CalculatedTax $calculatedTax) {
-            return $calculatedTax->getTax();
-        });
+        $amounts = $this->map(
+            function (CalculatedTax $calculatedTax) {
+                return $calculatedTax->getTax();
+            }
+        );
 
         return array_sum($amounts);
     }
 
-    /**
-     * @param CalculatedTaxCollection $taxCollection
-     *
-     * @return CalculatedTaxCollection
-     */
-    public function merge(CalculatedTaxCollection $taxCollection)
+    public function merge(CalculatedTaxCollection $taxCollection): CalculatedTaxCollection
     {
-        $new = new self($this->items);
+        $new = new self($this->elements);
 
         /** @var CalculatedTax $calculatedTax */
         foreach ($taxCollection as $calculatedTax) {
@@ -107,12 +89,7 @@ class CalculatedTaxCollection extends Collection
         return $new;
     }
 
-    /**
-     * @param float $rate
-     *
-     * @return string
-     */
-    private function getKey($rate)
+    private function getKey(float $rate): string
     {
         return $rate . '';
     }

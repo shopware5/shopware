@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -31,23 +32,11 @@ use Shopware\Bundle\CartBundle\Domain\Price\Price;
  */
 interface Stackable
 {
-    /**
-     * @return float
-     */
-    public function getQuantity();
+    public function getQuantity(): int;
 
-    /**
-     * @param float $quantity
-     */
-    public function setQuantity($quantity);
+    public function setQuantity(int $quantity): void;
 
-    /**
-     * @return Price
-     */
-    public function getPrice();
+    public function getPrice(): Price;
 
-    /**
-     * @return LineItemInterface
-     */
-    public function getLineItem();
+    public function getLineItem(): LineItemInterface;
 }

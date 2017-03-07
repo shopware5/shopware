@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -28,22 +29,12 @@ use Shopware\Bundle\CartBundle\Domain\Cart\CartContextInterface;
 
 class TaxDetector
 {
-    /**
-     * @param CartContextInterface $context
-     *
-     * @return bool
-     */
-    public function useGross(CartContextInterface $context)
+    public function useGross(CartContextInterface $context): bool
     {
         return $context->getCurrentCustomerGroup()->displayGrossPrices();
     }
 
-    /**
-     * @param CartContextInterface $context
-     *
-     * @return bool
-     */
-    public function isNetDelivery(CartContextInterface $context)
+    public function isNetDelivery(CartContextInterface $context): bool
     {
         return false;
     }

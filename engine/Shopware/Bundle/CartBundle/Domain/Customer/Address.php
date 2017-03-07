@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -137,258 +138,162 @@ class Address extends Extendable
      */
     protected $state;
 
-    /**
-     * @return int
-     */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
 
-    /**
-     * @param int $id
-     */
-    public function setId($id)
+    public function setId(int $id): void
     {
         $this->id = $id;
     }
 
-    /**
-     * @return string
-     */
-    public function getCompany()
+    public function getCompany(): string
     {
         return $this->company;
     }
 
-    /**
-     * @param string $company
-     */
-    public function setCompany($company)
+    public function setCompany(string $company): void
     {
         $this->company = $company;
     }
 
-    /**
-     * @return string
-     */
-    public function getDepartment()
+    public function getDepartment(): string
     {
         return $this->department;
     }
 
-    /**
-     * @param string $department
-     */
-    public function setDepartment($department)
+    public function setDepartment(string $department): void
     {
         $this->department = $department;
     }
 
-    /**
-     * @return string
-     */
-    public function getSalutation()
+    public function getSalutation(): string
     {
         return $this->salutation;
     }
 
-    /**
-     * @param string $salutation
-     */
-    public function setSalutation($salutation)
+    public function setSalutation(string $salutation): void
     {
         $this->salutation = $salutation;
     }
 
-    /**
-     * @return string
-     */
-    public function getFirstname()
+    public function getFirstname(): string
     {
         return $this->firstname;
     }
 
-    /**
-     * @param string $firstname
-     */
-    public function setFirstname($firstname)
+    public function setFirstname(string $firstname): void
     {
         $this->firstname = $firstname;
     }
 
-    /**
-     * @return string
-     */
-    public function getTitle()
+    public function getTitle(): string
     {
         return $this->title;
     }
 
-    /**
-     * @param string $title
-     */
-    public function setTitle($title)
+    public function setTitle(string $title): void
     {
         $this->title = $title;
     }
 
-    /**
-     * @return string
-     */
-    public function getLastname()
+    public function getLastname(): string
     {
         return $this->lastname;
     }
 
-    /**
-     * @param string $lastname
-     */
-    public function setLastname($lastname)
+    public function setLastname(string $lastname): void
     {
         $this->lastname = $lastname;
     }
 
-    /**
-     * @return string
-     */
-    public function getStreet()
+    public function getStreet(): string
     {
         return $this->street;
     }
 
-    /**
-     * @param string $street
-     */
-    public function setStreet($street)
+    public function setStreet(string $street): void
     {
         $this->street = $street;
     }
 
-    /**
-     * @return string
-     */
-    public function getZipcode()
+    public function getZipcode(): string
     {
         return $this->zipcode;
     }
 
-    /**
-     * @param string $zipcode
-     */
-    public function setZipcode($zipcode)
+    public function setZipcode(string $zipcode): void
     {
         $this->zipcode = $zipcode;
     }
 
-    /**
-     * @return string
-     */
-    public function getCity()
+    public function getCity(): string
     {
         return $this->city;
     }
 
-    /**
-     * @param string $city
-     */
-    public function setCity($city)
+    public function setCity(string $city): void
     {
         $this->city = $city;
     }
 
-    /**
-     * @return string
-     */
-    public function getPhone()
+    public function getPhone(): string
     {
         return $this->phone;
     }
 
-    /**
-     * @param string $phone
-     */
-    public function setPhone($phone)
+    public function setPhone(string $phone): void
     {
         $this->phone = $phone;
     }
 
-    /**
-     * @return string
-     */
-    public function getVatId()
+    public function getVatId(): string
     {
         return $this->vatId;
     }
 
-    /**
-     * @param string $vatId
-     */
-    public function setVatId($vatId)
+    public function setVatId(string $vatId): void
     {
         $this->vatId = $vatId;
     }
 
-    /**
-     * @return string
-     */
-    public function getAdditionalAddressLine1()
+    public function getAdditionalAddressLine1(): string
     {
         return $this->additionalAddressLine1;
     }
 
-    /**
-     * @param string $additionalAddressLine1
-     */
-    public function setAdditionalAddressLine1($additionalAddressLine1)
+    public function setAdditionalAddressLine1(string $additionalAddressLine1): void
     {
         $this->additionalAddressLine1 = $additionalAddressLine1;
     }
 
-    /**
-     * @return string
-     */
-    public function getAdditionalAddressLine2()
+    public function getAdditionalAddressLine2(): string
     {
         return $this->additionalAddressLine2;
     }
 
-    /**
-     * @param string $additionalAddressLine2
-     */
-    public function setAdditionalAddressLine2($additionalAddressLine2)
+    public function setAdditionalAddressLine2(string $additionalAddressLine2): void
     {
         $this->additionalAddressLine2 = $additionalAddressLine2;
     }
 
-    /**
-     * @return Country
-     */
-    public function getCountry()
+    public function getCountry(): Country
     {
         return $this->country;
     }
 
-    /**
-     * @param Country $country
-     */
-    public function setCountry($country)
+    public function setCountry(Country $country): void
     {
         $this->country = $country;
     }
 
-    /**
-     * @return Country\State
-     */
-    public function getState()
+    public function getState(): Country\State
     {
         return $this->state;
     }
 
-    /**
-     * @param Country\State $state
-     */
-    public function setState($state)
+    public function setState(Country\State $state): void
     {
         $this->state = $state;
     }

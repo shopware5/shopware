@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -31,35 +32,17 @@ class PriceRounding
      */
     private $precisions = 2;
 
-    /**
-     * @param int $precisions
-     */
-    public function __construct($precisions)
+    public function __construct(int $precisions)
     {
         $this->precisions = $precisions;
     }
 
-    /**
-     * @param float $price
-     *
-     * @throws \RuntimeException
-     *
-     * @return float
-     */
-    public function round($price)
+    public function round(float $price): float
     {
         if (!is_numeric($price)) {
             throw new \RuntimeException('Provided price is not numeric');
         }
 
         return round((float) $price, $this->precisions);
-    }
-
-    /**
-     * @return int
-     */
-    public function getPrecisions()
-    {
-        return $this->precisions;
     }
 }

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -37,24 +38,16 @@ class DeliverySeparatorProcessor implements CartProcessorInterface
      */
     private $stockDeliverySeparator;
 
-    /**
-     * @param StockDeliverySeparator $stockDeliverySeparator
-     */
     public function __construct(StockDeliverySeparator $stockDeliverySeparator)
     {
         $this->stockDeliverySeparator = $stockDeliverySeparator;
     }
 
-    /**
-     * @param Cart                 $cart
-     * @param ProcessorCart        $processorCart
-     * @param CartContextInterface $context
-     */
     public function process(
         Cart $cart,
         ProcessorCart $processorCart,
         CartContextInterface $context
-    ) {
+    ): void {
         if (!$context->getShippingAddress()) {
             return;
         }

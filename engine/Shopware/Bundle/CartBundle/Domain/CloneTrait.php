@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -37,12 +38,7 @@ trait CloneTrait
         }
     }
 
-    /**
-     * @param array $array
-     *
-     * @return array
-     */
-    private function cloneArray($array)
+    private function cloneArray(array $array): array
     {
         $newValue = [];
 

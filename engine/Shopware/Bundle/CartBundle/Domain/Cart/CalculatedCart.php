@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -53,12 +54,6 @@ class CalculatedCart implements \JsonSerializable
      */
     protected $deliveries;
 
-    /**
-     * @param Cart                         $cart
-     * @param CalculatedLineItemCollection $lineItems
-     * @param CartPrice                    $price
-     * @param DeliveryCollection           $deliveries
-     */
     public function __construct(
         Cart $cart,
         CalculatedLineItemCollection $lineItems,
@@ -71,50 +66,32 @@ class CalculatedCart implements \JsonSerializable
         $this->deliveries = $deliveries;
     }
 
-    /**
-     * @return string
-     */
-    public function getName()
+    public function getName(): string
     {
         return $this->cart->getName();
     }
 
-    /**
-     * @return CartPrice
-     */
-    public function getPrice()
+    public function getPrice(): CartPrice
     {
         return $this->price;
     }
 
-    /**
-     * @return string
-     */
-    public function getToken()
+    public function getToken(): string
     {
         return $this->cart->getToken();
     }
 
-    /**
-     * @return Cart
-     */
-    public function getCart()
+    public function getCart(): Cart
     {
         return $this->cart;
     }
 
-    /**
-     * @return CalculatedLineItemCollection
-     */
-    public function getLineItems()
+    public function getLineItems(): CalculatedLineItemCollection
     {
         return $this->lineItems;
     }
 
-    /**
-     * @return DeliveryCollection
-     */
-    public function getDeliveries()
+    public function getDeliveries(): DeliveryCollection
     {
         return $this->deliveries;
     }

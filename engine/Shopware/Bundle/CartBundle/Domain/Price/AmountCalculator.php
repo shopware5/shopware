@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -41,23 +42,13 @@ class AmountCalculator
      */
     private $rounding;
 
-    /**
-     * @param TaxDetector   $taxDetector
-     * @param PriceRounding $rounding
-     */
     public function __construct(TaxDetector $taxDetector, PriceRounding $rounding)
     {
         $this->taxDetector = $taxDetector;
         $this->rounding = $rounding;
     }
 
-    /**
-     * @param PriceCollection      $prices
-     * @param CartContextInterface $context
-     *
-     * @return CartPrice
-     */
-    public function calculateAmount(PriceCollection $prices, CartContextInterface $context)
+    public function calculateAmount(PriceCollection $prices, CartContextInterface $context): CartPrice
     {
         if ($this->taxDetector->isNetDelivery($context)) {
             return $this->calculateNetDeliveryAmount($prices);
@@ -77,15 +68,15 @@ class AmountCalculator
      *
      * @return CartPrice
      */
-    private function calculateNetDeliveryAmount(PriceCollection $prices)
+    private function calculateNetDeliveryAmount(PriceCollection $prices): CartPrice
     {
         $total = $prices->getTotalPrice();
 
         return new CartPrice(
             $total->getPrice(),
             $total->getPrice(),
-            new CalculatedTaxCollection(),
-            new TaxRuleCollection()
+            new CalculatedTaxCollection([]),
+            new TaxRuleCollection([])
         );
     }
 
@@ -99,7 +90,7 @@ class AmountCalculator
      *
      * @return CartPrice
      */
-    private function calculateGrossAmount(PriceCollection $prices)
+    private function calculateGrossAmount(PriceCollection $prices): CartPrice
     {
         $total = $prices->getTotalPrice();
         $net = $total->getPrice() - $prices->getCalculatedTaxes()->getAmount();
@@ -118,7 +109,7 @@ class AmountCalculator
      *
      * @return CartPrice
      */
-    private function calculateNetAmount(PriceCollection $prices)
+    private function calculateNetAmount(PriceCollection $prices): CartPrice
     {
         $total = $prices->getTotalPrice();
         $gross = $total->getPrice() + $prices->getCalculatedTaxes()->getAmount();

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -53,12 +54,7 @@ class CustomerHydrator extends Hydrator
         $this->customerGroupHydrator = $customerGroupHydrator;
     }
 
-    /**
-     * @param array $data
-     *
-     * @return Customer
-     */
-    public function hydrate(array $data)
+    public function hydrate(array $data): Customer
     {
         $customer = new Customer();
 

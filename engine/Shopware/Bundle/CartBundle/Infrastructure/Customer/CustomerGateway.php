@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -67,7 +68,7 @@ class CustomerGateway
      *
      * @return Customer[]
      */
-    public function getList($ids, ShopContextInterface $context)
+    public function getList(array $ids, ShopContextInterface $context): array
     {
         if (0 === count($ids)) {
             return [];

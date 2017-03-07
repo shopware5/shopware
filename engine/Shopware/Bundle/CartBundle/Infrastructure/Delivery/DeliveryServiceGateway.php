@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -49,11 +50,6 @@ class DeliveryServiceGateway
      */
     private $connection;
 
-    /**
-     * @param FieldHelper             $fieldHelper
-     * @param DeliveryServiceHydrator $hydrator
-     * @param Connection              $connection
-     */
     public function __construct(
         FieldHelper $fieldHelper,
         DeliveryServiceHydrator $hydrator,
@@ -70,7 +66,7 @@ class DeliveryServiceGateway
      *
      * @return DeliveryService[]
      */
-    public function getList($ids, ShopContextInterface $context)
+    public function getList(array $ids, ShopContextInterface $context): array
     {
         if (0 === count($ids)) {
             return [];

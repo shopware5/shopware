@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -47,11 +48,6 @@ class PriceCalculator
      */
     private $taxDetector;
 
-    /**
-     * @param TaxCalculator $taxCalculator
-     * @param PriceRounding $priceRounding
-     * @param TaxDetector   $taxDetector
-     */
     public function __construct(
         TaxCalculator $taxCalculator,
         PriceRounding $priceRounding,
@@ -62,16 +58,10 @@ class PriceCalculator
         $this->taxDetector = $taxDetector;
     }
 
-    /**
-     * @param PriceDefinition      $definition
-     * @param CartContextInterface $context
-     *
-     * @return Price
-     */
     public function calculate(
         PriceDefinition $definition,
         CartContextInterface $context
-    ) {
+    ): Price {
         $unitPrice = $this->getUnitPrice($definition, $context);
 
         $price = $this->priceRounding->round(
@@ -89,8 +79,8 @@ class PriceCalculator
                 break;
 
             case $this->taxDetector->isNetDelivery($context):
-                $taxRules = new TaxRuleCollection();
-                $calculatedTaxes = new CalculatedTaxCollection();
+                $taxRules = new TaxRuleCollection([]);
+                $calculatedTaxes = new CalculatedTaxCollection([]);
                 break;
 
             default:
@@ -104,13 +94,7 @@ class PriceCalculator
         return new Price($unitPrice, $price, $calculatedTaxes, $taxRules, $definition->getQuantity());
     }
 
-    /**
-     * @param PriceDefinition      $definition
-     * @param CartContextInterface $context
-     *
-     * @return float
-     */
-    private function getUnitPrice(PriceDefinition $definition, CartContextInterface $context)
+    private function getUnitPrice(PriceDefinition $definition, CartContextInterface $context): float
     {
         //unit price already calculated?
         if ($definition->isCalculated()) {

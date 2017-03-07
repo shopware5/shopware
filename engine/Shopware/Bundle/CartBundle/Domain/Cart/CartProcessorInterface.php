@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -26,16 +27,9 @@ namespace Shopware\Bundle\CartBundle\Domain\Cart;
 
 interface CartProcessorInterface
 {
-    /**
-     * @param Cart                 $cart
-     * @param ProcessorCart        $processorCart
-     * @param CartContextInterface $context
-     *
-     * @throws \RuntimeException
-     */
     public function process(
         Cart $cart,
         ProcessorCart $processorCart,
         CartContextInterface $context
-    );
+    ): void;
 }

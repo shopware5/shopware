@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -40,9 +41,6 @@ class PercentageVoucherProcessor implements CartProcessorInterface
      */
     private $percentagePriceCalculator;
 
-    /**
-     * @param PercentagePriceCalculator $discountCalculator
-     */
     public function __construct(PercentagePriceCalculator $discountCalculator)
     {
         $this->percentagePriceCalculator = $discountCalculator;
@@ -52,7 +50,7 @@ class PercentageVoucherProcessor implements CartProcessorInterface
         Cart $cart,
         ProcessorCart $processorCart,
         CartContextInterface $context
-    ) {
+    ): void {
         $vouchers = $cart->getLineItems()->filterType(
             self::TYPE_PERCENTAGE_VOUCHER
         );

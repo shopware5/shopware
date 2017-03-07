@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -24,122 +25,217 @@
 
 namespace Shopware\Bundle\CartBundle\Domain;
 
+use ArrayAccess;
+use ArrayIterator;
+use Closure;
 use Countable;
 use IteratorAggregate;
 
-class Collection implements Countable, IteratorAggregate, \JsonSerializable
+class Collection implements Countable, IteratorAggregate, ArrayAccess, \JsonSerializable
 {
     /**
      * @var array
      */
-    protected $items = [];
+    protected $elements = [];
 
     /**
-     * @param array $items
+     * @param array $elements
      */
-    public function __construct(array $items = [])
+    public function __construct(array $elements)
     {
-        $this->clear();
-        array_map([$this, 'add'], $items);
+        $this->elements = $elements;
     }
 
     /**
-     * @param array $items
+     * @param string|int $key
+     *
+     * @return mixed|null
      */
-    public function fill(array $items)
+    public function remove($key)
     {
-        array_map([$this, 'add'], $items);
+        if (!isset($this->elements[$key]) && !array_key_exists($key, $this->elements)) {
+            return null;
+        }
+
+        $removed = $this->elements[$key];
+        unset($this->elements[$key]);
+
+        return $removed;
     }
 
     /**
-     * @param mixed $item
+     * Required by interface ArrayAccess.
+     * {@inheritdoc}
      */
-    public function add($item)
+    public function offsetExists($offset): bool
     {
-        $this->items[] = $item;
+        return $this->has($offset);
     }
 
     /**
-     * @return string[]
+     * Required by interface ArrayAccess.
+     *
+     * {@inheritdoc}
      */
-    public function keys()
+    public function offsetGet($offset)
     {
-        return array_keys($this->items);
+        return $this->get($offset);
     }
 
     /**
-     * @param string $key
+     * Required by interface ArrayAccess.
+     *
+     * {@inheritdoc}
+     */
+    public function offsetSet($offset, $value): void
+    {
+        if (!isset($offset)) {
+            $this->add($value);
+
+            return;
+        }
+        $this->set($offset, $value);
+    }
+
+    /**
+     * Required by interface ArrayAccess.
+     *
+     * @param mixed $offset
+     *
+     * @return mixed|null|void
+     */
+    public function offsetUnset($offset): void
+    {
+        $this->remove($offset);
+    }
+
+    /**
+     * @param $key
      *
      * @return mixed|null
      */
     public function get($key)
     {
-        if ($this->has($key)) {
-            return $this->items[$key];
-        }
-
-        return null;
+        return isset($this->elements[$key]) ? $this->elements[$key] : null;
     }
 
     /**
-     * @param string $key
+     * @return array
+     */
+    public function getKeys(): array
+    {
+        return array_keys($this->elements);
+    }
+
+    /**
+     * @return array
+     */
+    public function getValues(): array
+    {
+        return array_values($this->elements);
+    }
+
+    /**
+     * @return int
+     */
+    public function count(): int
+    {
+        return count($this->elements);
+    }
+
+    /**
+     * @param int|string $key
+     * @param mixed      $value
+     */
+    public function set($key, $value): void
+    {
+        $this->elements[$key] = $value;
+    }
+
+    /**
+     * @param mixed $element
+     */
+    public function add($element): void
+    {
+        $this->elements[] = $element;
+    }
+
+    public function isEmpty(): bool
+    {
+        return empty($this->elements);
+    }
+
+    /**
+     * Required by interface IteratorAggregate.
+     *
+     * {@inheritdoc}
+     */
+    public function getIterator(): ArrayIterator
+    {
+        return new ArrayIterator($this->elements);
+    }
+
+    public function map(Closure $func): Collection
+    {
+        return array_map($func, $this->elements);
+    }
+
+    public function filter(Closure $p): Collection
+    {
+        return $this->createFrom(array_filter($this->elements, $p));
+    }
+
+    public function exists(Closure $p): bool
+    {
+        foreach ($this->elements as $key => $element) {
+            if ($p($key, $element)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public function clear(): void
+    {
+        $this->elements = [];
+    }
+
+    public function fill(array $elements): void
+    {
+        array_map([$this, 'add'], $elements);
+    }
+
+    /**
+     * @param int|string $offset
      *
      * @return bool
      */
-    public function has($key)
+    public function has($offset): bool
     {
-        return array_key_exists($key, $this->items);
-    }
-
-    /**
-     * @param $key
-     */
-    public function remove($key)
-    {
-        if ($this->has($key)) {
-            unset($this->items[$key]);
-        }
-    }
-
-    /**
-     * Removes all elements from the collection
-     */
-    public function clear()
-    {
-        $this->items = [];
+        return isset($this->elements[$offset]) || array_key_exists($offset, $this->elements);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function count()
+    public function jsonSerialize(): array
     {
-        return count($this->items);
+        return $this->elements;
     }
 
     /**
-     * @param callable $fn
+     * Creates a new instance from the specified elements.
      *
-     * @return array
+     * This method is provided for derived classes to specify how a new
+     * instance should be created when constructor semantics have changed.
+     *
+     * @param array $elements elements
+     *
+     * @return Collection
      */
-    public function map(callable $fn)
+    protected function createFrom(array $elements): Collection
     {
-        return array_map($fn, $this->items);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getIterator()
-    {
-        return new \ArrayIterator($this->items);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function jsonSerialize()
-    {
-        return $this->items;
+        return new static($elements);
     }
 }

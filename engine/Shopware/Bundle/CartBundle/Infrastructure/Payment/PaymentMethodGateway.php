@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -71,7 +72,7 @@ class PaymentMethodGateway
      *
      * @return PaymentMethod[]
      */
-    public function getList($ids, ShopContextInterface $context)
+    public function getList(array $ids, ShopContextInterface $context): array
     {
         if (0 === count($ids)) {
             return [];
@@ -95,7 +96,7 @@ class PaymentMethodGateway
      *
      * @return PaymentMethod[]
      */
-    public function getAll(ShopContextInterface $context)
+    public function getAll(ShopContextInterface $context): array
     {
         $query = $this->createQuery();
 
@@ -109,9 +110,6 @@ class PaymentMethodGateway
         return $services;
     }
 
-    /**
-     * @return QueryBuilder
-     */
     private function createQuery(): QueryBuilder
     {
         $query = $this->connection->createQueryBuilder();

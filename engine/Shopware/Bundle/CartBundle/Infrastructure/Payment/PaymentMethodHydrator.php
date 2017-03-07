@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -43,12 +44,7 @@ class PaymentMethodHydrator extends Hydrator
         $this->attributeHydrator = $attributeHydrator;
     }
 
-    /**
-     * @param array $data
-     *
-     * @return PaymentMethod
-     */
-    public function hydrate(array $data)
+    public function hydrate(array $data): PaymentMethod
     {
         $paymentMethod = new PaymentMethod(
             (int) $data['__paymentMethod_id'],

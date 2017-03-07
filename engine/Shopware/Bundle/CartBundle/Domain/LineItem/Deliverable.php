@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -28,18 +29,9 @@ use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryDate;
 
 interface Deliverable
 {
-    /**
-     * @return float
-     */
-    public function getStock();
+    public function getStock(): int;
 
-    /**
-     * @return DeliveryDate
-     */
-    public function getInStockDeliveryDate();
+    public function getInStockDeliveryDate(): DeliveryDate;
 
-    /**
-     * @return DeliveryDate
-     */
-    public function getOutOfStockDeliveryDate();
+    public function getOutOfStockDeliveryDate(): DeliveryDate;
 }

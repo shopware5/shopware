@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -61,7 +62,7 @@ class ProductPriceGateway implements ProductPriceGatewayInterface
     /**
      * {@inheritdoc}
      */
-    public function get(LineItemCollection $collection, CartContextInterface $context)
+    public function get(LineItemCollection $collection, CartContextInterface $context): array
     {
         $query = $this->buildQuery($collection->getIdentifiers(), $context);
         $statement = $query->execute();

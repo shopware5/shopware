@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -37,10 +38,7 @@ class CartProcessorCompilerPass implements CompilerPassInterface
 {
     use TagReplaceTrait;
 
-    /**
-     * @param ContainerBuilder $container
-     */
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         $this->replaceArgumentWithTaggedServices($container, 'shopware_cart.cart_calculator', 'cart_processor', 0);
     }
