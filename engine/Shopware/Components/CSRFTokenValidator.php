@@ -143,10 +143,9 @@ class CSRFTokenValidator implements SubscriberInterface
             return;
         }
 
-        if ($request->isPost()) {
-            /** @var \Enlight_Components_Session_Namespace $session */
-            $session = $this->container->get('session');
-            $token = $session->offsetGet('X-CSRF-Token');
+        if ($request->isPost() && !$request->isXmlHttpRequest()) {
+            $context = $this->container->get('shopware_storefront.context_service')->getShopContext();
+            $token = $request->getCookie('__csrf_token-' . $context->getShop()->getId());
 
             if (!$token) {
                 $token = $this->generateToken($controller->Response());
