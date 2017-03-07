@@ -1,8 +1,9 @@
 {extends file='frontend/index/index.tpl'}
 
 {* Breadcrumb *}
-{block name='frontend_index_start' prepend}
-    {$sBreadcrumb = [['name'=>{$sSupport.name}, 'link'=>{url controller=ticket sFid=$sSupport.id}]]}
+{block name='frontend_index_start'}
+    {$sBreadcrumb = [['name' => $sSupport.name, 'link' => {url controller=ticket sFid=$sSupport.id}]]}
+    {$smarty.block.parent}
 {/block}
 
 {* Sidebar left *}

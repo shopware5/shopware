@@ -9,7 +9,7 @@
 {* hide left sidebar *}
 {block name='frontend_index_content_left'}{/block}
 
-{block name="frontend_index_body_classes" append}{strip} emotion--preview{/strip}{/block}
+{block name="frontend_index_body_classes"}{$smarty.block.parent}{strip} emotion--preview{/strip}{/block}
 
 {block name="frontend_index_content"}
 

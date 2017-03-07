@@ -3,8 +3,9 @@
 {namespace name="frontend/account/ajax_logout"}
 
 {* Breadcrumb *}
-{block name='frontend_index_start' append}
-    {$sBreadcrumb = [['name'=>"{s name='AccountLogoutTitle'}{/s}", 'link'=>{url}]]}
+{block name='frontend_index_start'}
+    {$smarty.block.parent}
+    {$sBreadcrumb = [['name' => "{s name='AccountLogoutTitle'}{/s}", 'link' => {url}]]}
 {/block}
 
 {block name='frontend_index_content'}

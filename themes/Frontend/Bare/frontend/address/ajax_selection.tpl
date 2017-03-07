@@ -9,16 +9,16 @@
             <div class="panel--body is--wide">
 
                 {block name="frontend_address_selection_modal_create_text"}
-                <p>
-                    {s name="CreateNewAddressText"}{/s}
-                    <a href="{url controller=address action=create}"
-                       title="{s name="CreateNewAddressTitle"}{/s}"
-                       data-address-editor="true"
-                       data-showSelectionOnClose="true">{s name="CreateNewAddressLinkText"}{/s}</a>.
-                </p>
+                    <p>
+                        {s name="CreateNewAddressText"}{/s}
+                        <a href="{url controller=address action=create}"
+                           title="{s name="CreateNewAddressTitle"}{/s}"
+                           data-address-editor="true"
+                           data-showSelectionOnClose="true">{s name="CreateNewAddressLinkText"}{/s}</a>.
+                    </p>
                 {/block}
 
-                {if count($addresses) > 0}
+                {if $addresses|count > 0}
                     {block name="frontend_address_selection_modal_container"}
                         <div class="modal--container" data-panel-auto-resizer="true">
                             {foreach $addresses as $address}
@@ -33,10 +33,13 @@
                                                     {if $address.additionalAddressLine1}<span class="address--additional-one">{$address.additionalAddressLine1|escapeHtml}</span><br />{/if}
                                                     {if $address.additionalAddressLine2}<span class="address--additional-two">{$address.additionalAddressLine2|escapeHtml}</span><br />{/if}
                                                     {if {config name=showZipBeforeCity}}
-                                                        <span class="address--zipcode">{$address.zipcode|escapeHtml}</span> <span class="address--city">{$address.city|escapeHtml}</span>
+                                                        <span class="address--zipcode">{$address.zipcode|escapeHtml}</span>
+                                                        <span class="address--city">{$address.city|escapeHtml}</span>
                                                     {else}
-                                                        <span class="address--city">{$address.city|escapeHtml}</span> <span class="address--zipcode">{$address.zipcode|escapeHtml}</span>
-                                                    {/if}<br />
+                                                        <span class="address--city">{$address.city|escapeHtml}</span>
+                                                        <span class="address--zipcode">{$address.zipcode|escapeHtml}</span>
+                                                    {/if}
+                                                    <br />
                                                     <span class="address--countryname">{$address.country.name|escapeHtml}</span>
                                                 </div>
                                             {/block}

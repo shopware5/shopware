@@ -1,18 +1,19 @@
 {extends file="frontend/index/index.tpl"}
 
 {* Breadcrumb *}
-{block name="frontend_index_start" append}
-{$sBreadcrumb = []}
-{if $sCustomPage.parent}
+{block name="frontend_index_start"}
+    {$smarty.block.parent}
+    {$sBreadcrumb = []}
+    {if $sCustomPage.parent}
+        {$sBreadcrumb[] = [
+            'name' => $sCustomPage.parent.page_title|default:$sCustomPage.parent.description,
+            'link' => {url sCustom=$sCustomPage.parent.id}
+        ]}
+    {/if}
     {$sBreadcrumb[] = [
-        'name' => {$sCustomPage.parent.page_title|default:$sCustomPage.parent.description},
-        'link'=>{url sCustom=$sCustomPage.parent.id}
+        'name' => $sCustomPage.page_title|default:$sCustomPage.description,
+        'link' => {url sCustom=$sCustomPage.id}
     ]}
-{/if}
-{$sBreadcrumb[] = [
-    'name' => {$sCustomPage.page_title|default:$sCustomPage.description},
-    'link'=>{url sCustom=$sCustomPage.id}
-]}
 {/block}
 
 {block name="frontend_index_header"}

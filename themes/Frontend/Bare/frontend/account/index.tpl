@@ -1,17 +1,19 @@
 {extends file='frontend/index/index.tpl'}
 
 {* Breadcrumb *}
-{block name='frontend_index_start' append}
-    {assign var='sBreadcrumb' value=[['name'=>"{s name='AccountTitle'}{/s}", 'link' =>{url controller='account' action='index'}]]}
+{block name='frontend_index_start'}
+    {$smarty.block.parent}
+    {assign var='sBreadcrumb' value=[['name' => "{s name='AccountTitle'}{/s}", 'link' => {url controller='account' action='index'}]]}
 {/block}
 
 {block name="frontend_index_left_categories_my_account"}{/block}
 
 {* Account Sidebar *}
-{block name="frontend_index_left_categories" prepend}
+{block name="frontend_index_left_categories"}
     {block name="frontend_account_sidebar"}
         {include file="frontend/account/sidebar.tpl"}
     {/block}
+    {$smarty.block.parent}
 {/block}
 
 {* Account Main Content *}

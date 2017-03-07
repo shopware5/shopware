@@ -3,9 +3,9 @@
         {block name="frontend_address_editor_modal_title"}
             <div class="panel--title is--underline">
                 {if $formData.id}
-                        {s name="AddressesTitleEdit" namespace="frontend/address/index"}{/s}
-                    {else}
-                        {s name="AddressesTitleCreate" namespace="frontend/address/index"}{/s}
+                    {s name="AddressesTitleEdit" namespace="frontend/address/index"}{/s}
+                {else}
+                    {s name="AddressesTitleCreate" namespace="frontend/address/index"}{/s}
                 {/if}
             </div>
         {/block}

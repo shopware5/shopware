@@ -13,5 +13,8 @@
         {$content = "{s name='AddressesDeleteSuccess'}{/s}"}
     {/if}
 
+    {* for your custom messages *}
+    {block name="frontend_address_success_messages_content"}{/block}
+
     {include file="frontend/_includes/messages.tpl" type="success" content="{$content}"}
 </div>
