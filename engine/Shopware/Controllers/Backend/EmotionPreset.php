@@ -22,6 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Bundle\MediaBundle\MediaService;
 use Shopware\Bundle\PluginInstallerBundle\Context\PluginsByTechnicalNameRequest;
 use Shopware\Models\Emotion\Preset;
 
@@ -33,6 +34,7 @@ class Shopware_Controllers_Backend_EmotionPreset extends Shopware_Controllers_Ba
 
         $presets = $resource->getList($this->getLocale());
 
+        $presets = $this->enrichImagePaths($presets);
         $presets = $this->enrichPlugins($presets);
 
         $this->View()->assign([
@@ -127,6 +129,41 @@ class Shopware_Controllers_Backend_EmotionPreset extends Shopware_Controllers_Ba
         }
 
         return $locale->getLocale();
+    }
+
+    /**
+     * @param array $presets
+     *
+     * @return array
+     */
+    private function enrichImagePaths(array $presets)
+    {
+        foreach ($presets as &$preset) {
+            $preset['thumbnailUrl'] = $this->getImagePath($preset['thumbnail']);
+            $preset['previewUrl'] = $this->getImagePath($preset['preview']);
+        }
+
+        return $presets;
+    }
+
+    /**
+     * @param $path
+     *
+     * @return null|string
+     */
+    private function getImagePath($path)
+    {
+        if (empty($path)) {
+            return $path;
+        }
+        /** @var MediaService $mediaService */
+        $mediaService = $this->container->get('shopware_media.media_service');
+
+        if (strpos($path, 'media') === 0) {
+            return $mediaService->getUrl($path);
+        }
+
+        return $this->View()->fetch(sprintf('string:{url file="%s"}', $path));
     }
 
     /**
