@@ -407,7 +407,9 @@ class Repository extends ModelRepository
                 ->where($builder->expr()->eq('history.orderId', '?1'))
                 ->setParameter(1, $orderId);
 
-        $builder->addOrderBy($orderBy);
+        if (!empty($orderBy)) {
+            $builder->addOrderBy($orderBy);
+        }
         return $builder;
     }
 
