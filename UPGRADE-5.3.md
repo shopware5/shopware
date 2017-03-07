@@ -55,6 +55,23 @@ This changelog references changes done in Shopware 5.3 patch versions.
     * `themes/Frontend/Bare/frontend/detail/content/tab_container.tpl`
 * Added new option to select variants in `Shopware.apps.Emotion.view.components.Article` and `Shopware.apps.Emotion.view.components.ArticleSlider`
 * Added local path to `@font-face` integration of the Open Sans font
+* Added new Smarty blocks for registration:
+    * `frontend_register_billing_fieldset_company_panel`
+    * `frontend_register_billing_fieldset_company_title`
+    * `frontend_register_billing_fieldset_company_body`
+    * `frontend_register_billing_fieldset_panel`
+    * `frontend_register_billing_fieldset_title`
+    * `frontend_register_billing_fieldset_body`
+    * `frontend_register_index_cgroup_header_title`
+    * `frontend_register_index_cgroup_header_body`
+    * `frontend_register_index_advantages_title`
+    * `frontend_register_login_customer_title`
+    * `frontend_register_personal_fieldset_panel`
+    * `frontend_register_personal_fieldset_title`
+    * `frontend_register_personal_fieldset_body`
+    * `frontend_register_shipping_fieldset_panel`
+    * `frontend_register_shipping_fieldset_title`
+    * `frontend_register_shipping_fieldset_body`
 
 ### Changes
 
