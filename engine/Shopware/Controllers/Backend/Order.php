@@ -26,7 +26,6 @@ use Doctrine\DBAL\Connection;
 use Shopware\Components\CSRFWhitelistAware;
 use Shopware\Models\Order\Billing as Billing;
 use Shopware\Models\Order\Detail as Detail;
-use Shopware\Models\Order\Document\Document as Document;
 use Shopware\Models\Order\Order as Order;
 use Shopware\Models\Order\Shipping as Shipping;
 

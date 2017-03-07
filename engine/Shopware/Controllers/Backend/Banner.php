@@ -48,6 +48,7 @@ class Shopware_Controllers_Backend_Banner extends Shopware_Controllers_Backend_E
      */
     private $repository;
 
+    /** @noinspection PhpUnusedPrivateFieldInspection */
     /**
      * Contains the user role who is executing this controller
      *
@@ -55,6 +56,7 @@ class Shopware_Controllers_Backend_Banner extends Shopware_Controllers_Backend_E
      */
     private $userRole;
 
+    /** @noinspection PhpUnusedPrivateFieldInspection */
     /**
      * Name of the default resource (Name of this controller)
      *

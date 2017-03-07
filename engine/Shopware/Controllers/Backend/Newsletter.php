@@ -110,11 +110,6 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
         }
 
         $body = $template->fetch('newsletter/index/' . $mailing['template'], $template);
-
-        if (!$this->Request()->getParam('id')) {
-            $body = $this->trackFilter($body, $mailing['id']);
-        }
-
         if (empty($mailing['plaintext'])) {
             $body = $template->fetch('newsletter/index/' . $mailing['template'], $template);
         } else {

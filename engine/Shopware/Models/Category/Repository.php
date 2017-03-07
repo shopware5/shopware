@@ -24,7 +24,6 @@
 
 namespace Shopware\Models\Category;
 
-use Doctrine\ORM\Query;
 use Doctrine\ORM\Query\Expr;
 use Shopware\Components\Model\ModelRepository;
 

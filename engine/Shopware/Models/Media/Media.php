@@ -2043,20 +2043,6 @@ class Media extends ModelEntity
     }
 
     /**
-     * @param int $newAlbumId
-     */
-    private function createThumbnailsForMovedMedia($newAlbumId)
-    {
-        $albumRepository = Shopware()->Container()->get('models')->getRepository(Album::class);
-
-        /** @var Album $album */
-        $album = $albumRepository->find($newAlbumId);
-        if ($album) {
-            $this->createAlbumThumbnails($album);
-        }
-    }
-
-    /**
      * Internal helper function which updates all associated data which has the image path as own property.
      *
      * @internal param $name
@@ -2236,65 +2222,6 @@ class Media extends ModelEntity
             'original' => $this->getThumbnailDir() . $originalName,
             'originalHD' => $this->getThumbnailDir() . $originalHDName,
         ];
-    }
-
-    /**
-     * Calculate image proportion and set the new resolution
-     *
-     * @param $originalSize
-     * @param $width
-     * @param $height
-     *
-     * @return array
-     */
-    private function calculateThumbnailSize(array $originalSize, $width, $height)
-    {
-        // Source image size
-        $srcWidth = $originalSize[0];
-        $srcHeight = $originalSize[1];
-
-        // Calculate the scale factor
-        if ($width === 0) {
-            $factor = $height / $srcHeight;
-        } elseif ($height === 0) {
-            $factor = $width / $srcWidth;
-        } else {
-            $factor = min($width / $srcWidth, $height / $srcHeight);
-        }
-
-        // Get the destination size
-        $dstWidth = round($srcWidth * $factor);
-        $dstHeight = round($srcHeight * $factor);
-
-        return [
-            'width' => $dstWidth,
-            'height' => $dstHeight,
-            'proportion' => $factor,
-        ];
-    }
-
-    /**
-     * Creates the image resource
-     *
-     * @return bool|resource
-     */
-    private function createFileImage()
-    {
-        switch (strtolower($this->extension)) {
-            case 'gif':
-                $image = imagecreatefromgif($this->path);
-                break;
-            case 'png':
-                $image = imagecreatefrompng($this->path);
-                break;
-            case 'jpg':
-                $image = imagecreatefromjpeg($this->path);
-                break;
-            default:
-                return false;
-        }
-
-        return $image;
     }
 
     /**

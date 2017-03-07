@@ -27,7 +27,6 @@ namespace   Shopware\Models\Dispatch;
 use Doctrine\ORM\Query\Expr\Join;
 use Shopware\Components\Model\ModelRepository;
 use Shopware\Components\Model\QueryBuilder;
-use Shopware\Models\Customer;
 
 /**
  * Repository for the customer model (Shopware\Models\Dispatch\Dispatch).

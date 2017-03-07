@@ -24,7 +24,6 @@
 
 namespace   Shopware\Models\Site;
 
-use Doctrine\ORM\Query\Expr;
 use Shopware\Components\Model\ModelRepository;
 
 /**

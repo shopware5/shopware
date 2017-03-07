@@ -25,7 +25,6 @@
 namespace Shopware\Commands;
 
 use Shopware\Bundle\PluginInstallerBundle\Context\DownloadRequest;
-use Shopware\Bundle\PluginInstallerBundle\Context\PluginLicenceRequest;
 use Shopware\Bundle\PluginInstallerBundle\Context\PluginsByTechnicalNameRequest;
 use Shopware\Bundle\PluginInstallerBundle\Service\PluginLicenceService;
 use Shopware\Bundle\PluginInstallerBundle\Struct\AccessTokenStruct;
@@ -224,35 +223,6 @@ class StoreDownloadCommand extends StoreCommand
 
         /* @var $service PluginLicenceService */
         $this->container->get('shopware_plugininstaller.plugin_download_service')->download($request);
-    }
-
-    /**
-     * @param AccessTokenStruct $token
-     * @param string            $domain
-     * @param string            $version
-     * @param PluginStruct      $plugin
-     *
-     * @throws \Exception
-     *
-     * @return null|\Shopware\Bundle\PluginInstallerBundle\Struct\LicenceStruct
-     */
-    private function getLicence(AccessTokenStruct $token, $domain, $version, PluginStruct $plugin)
-    {
-        $request = new PluginLicenceRequest($token, $domain, $version, $plugin->getTechnicalName());
-        $licence = null;
-
-        try {
-            $licence = $this->container->get('shopware_plugininstaller.plugin_service_store_production')
-                ->getPluginLicence($request);
-        } catch (\Exception $e) {
-            $this->handleError(['message' => $e->getMessage(), 'code' => $e->getCode()]);
-        }
-
-        if (!$licence) {
-            $this->handleError(['message' => sprintf('Licence for plugin %s not found', $plugin->getLabel())]);
-        }
-
-        return $licence;
     }
 
     /**

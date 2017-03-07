@@ -24,7 +24,6 @@
 
 use Doctrine\ORM\AbstractQuery;
 use Shopware\Components\CSRFWhitelistAware;
-use Shopware\Components\Thumbnail\Manager;
 use Shopware\Models\Media\Album as Album;
 use Shopware\Models\Media\Media as Media;
 use Shopware\Models\Media\Settings as Settings;

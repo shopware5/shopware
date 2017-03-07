@@ -237,8 +237,6 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
      * */
     public function getVoucherAction()
     {
-        $orderId = $this->Request()->getParam('id', null);
-
         $sql = 'SELECT s_emarketing_vouchers.id, s_emarketing_vouchers.description, s_emarketing_vouchers.value, s_emarketing_vouchers.percental
             FROM s_emarketing_vouchers
             WHERE  s_emarketing_vouchers.modus = 1 AND (s_emarketing_vouchers.valid_to >= CURDATE() OR s_emarketing_vouchers.valid_to is NULL)

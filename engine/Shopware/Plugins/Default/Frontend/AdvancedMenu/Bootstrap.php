@@ -366,19 +366,4 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
             return $data;
         }, $categories);
     }
-
-    /**
-     * @param array $categories
-     * @param array $path
-     *
-     * @return array
-     */
-    private function setActiveCategoriesFlag($categories, $path)
-    {
-        foreach ($path as $categoryId) {
-            $categories[$categoryId]['flag'] = true;
-        }
-
-        return $categories;
-    }
 }

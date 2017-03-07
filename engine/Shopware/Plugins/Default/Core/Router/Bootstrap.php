@@ -90,7 +90,6 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
         $request->getBasePath();
         $request->setBaseUrl($shop->getBaseUrl());
 
-
         // Update path info
         $request->setPathInfo(
             $this->createPathInfo($request, $shop)
@@ -472,8 +471,8 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
     }
 
     /**
-     * @param string  $requestUri
-     * @param Shop    $shop
+     * @param string $requestUri
+     * @param Shop   $shop
      *
      * @return string
      */

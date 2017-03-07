@@ -177,6 +177,8 @@ class Requirements
         return $requiredValue == $value;
     }
 
+    /** @noinspection PhpUnusedPrivateMethodInspection */
+
     /**
      * Checks the ion cube loader
      *
@@ -195,6 +197,8 @@ class Requirements
         return ioncube_loader_version();
     }
 
+    /** @noinspection PhpUnusedPrivateMethodInspection */
+
     /**
      * Checks the php version
      *
@@ -209,6 +213,7 @@ class Requirements
         return phpversion();
     }
 
+    /** @noinspection PhpUnusedPrivateMethodInspection */
     private function checkMysqlStrictMode()
     {
         try {
@@ -224,6 +229,8 @@ class Requirements
         return false;
     }
 
+    /** @noinspection PhpUnusedPrivateMethodInspection */
+
     /**
      * Checks the mysql version
      *
@@ -238,6 +245,8 @@ class Requirements
 
         return $v;
     }
+
+    /** @noinspection PhpUnusedPrivateMethodInspection */
 
     /**
      * Checks the curl version
@@ -257,6 +266,8 @@ class Requirements
         return false;
     }
 
+    /** @noinspection PhpUnusedPrivateMethodInspection */
+
     /**
      * Checks the lib xml version
      *
@@ -270,6 +281,8 @@ class Requirements
 
         return false;
     }
+
+    /** @noinspection PhpUnusedPrivateMethodInspection */
 
     /**
      * Checks the gd version
@@ -294,6 +307,8 @@ class Requirements
         return false;
     }
 
+    /** @noinspection PhpUnusedPrivateMethodInspection */
+
     /**
      * Checks the gd jpg support
      *
@@ -309,6 +324,8 @@ class Requirements
 
         return false;
     }
+
+    /** @noinspection PhpUnusedPrivateMethodInspection */
 
     /**
      * Checks the freetype support
@@ -326,6 +343,8 @@ class Requirements
         return false;
     }
 
+    /** @noinspection PhpUnusedPrivateMethodInspection */
+
     /**
      * Checks the session save path config
      *
@@ -341,6 +360,8 @@ class Requirements
 
         return false;
     }
+
+    /** @noinspection PhpUnusedPrivateMethodInspection */
 
     /**
      * Checks the disk free space
@@ -359,6 +380,8 @@ class Requirements
         return false;
     }
 
+    /** @noinspection PhpUnusedPrivateMethodInspection */
+
     /**
      * Checks the suhosin.get.max_value_length which limits the max get parameter length.
      *
@@ -373,6 +396,8 @@ class Requirements
 
         return $length;
     }
+
+    /** @noinspection PhpUnusedPrivateMethodInspection */
 
     /**
      * Checks the include path config
@@ -390,6 +415,8 @@ class Requirements
         return false;
     }
 
+    /** @noinspection PhpUnusedPrivateMethodInspection */
+
     /**
      * Compare max execution time config
      *
@@ -406,6 +433,8 @@ class Requirements
 
         return version_compare($required, $version, '<=');
     }
+
+    /** @noinspection PhpUnusedPrivateMethodInspection */
 
     /**
      * Decode php size format
