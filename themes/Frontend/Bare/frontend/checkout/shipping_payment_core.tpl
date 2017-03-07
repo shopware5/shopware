@@ -19,7 +19,7 @@
             {* Payment method *}
             <div class="confirm--inner-container block">
                 {block name='frontend_checkout_shipping_payment_core_payment_fields'}
-                    {include file='frontend/checkout/change_payment.tpl' form_data=$sFormData error_flags=$sErrorFlag payment_means=$sPaymentMeans}
+                    {include file='frontend/checkout/change_payment.tpl' payments=$payments}
                 {/block}
             </div>
 
