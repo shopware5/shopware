@@ -384,10 +384,16 @@
 
             $.publish('plugin/swSearch/onSearchRequest', [ me, searchTerm ]);
 
-            $.ajax({
+            me.triggerSearchRequest.xhr =  $.ajax({
                 'url': me.requestURL,
                 'data': {
                     'sSearch': me.lastSearchTerm
+                },
+                'beforeSend': function() {
+                    // Abort any pending request before starting a new one
+                    if (me.triggerSearchRequest.xhr != null) {
+                       me.triggerSearchRequest.xhr.abort();
+                    }
                 },
                 'success': function (response) {
                     me.showResult(response);
