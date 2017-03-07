@@ -38,8 +38,8 @@ class Converter
     {
         return new Struct\Tax(
             $tax->getId(),
-            $tax->getTax(),
-            $tax->getName()
+            $tax->getName(),
+            $tax->getTax()
         );
     }
 

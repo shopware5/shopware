@@ -855,7 +855,10 @@ class Helper
             $this->converter->convertCustomerGroup($currentCustomerGroup),
             $this->converter->convertCustomerGroup($fallbackCustomerGroup),
             $this->buildTaxRules($taxes),
-            []
+            [],
+            null,
+            null,
+            null
         );
     }
 

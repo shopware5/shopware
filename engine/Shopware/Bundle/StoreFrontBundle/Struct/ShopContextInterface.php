@@ -43,7 +43,7 @@ interface ShopContextInterface extends ExtendableInterface
      *
      * @return Shop
      */
-    public function getShop();
+    public function getShop(): Shop;
 
     /**
      * Contains the currency of the store front.
@@ -56,7 +56,7 @@ interface ShopContextInterface extends ExtendableInterface
      *
      * @return Currency
      */
-    public function getCurrency();
+    public function getCurrency(): Currency;
 
     /**
      * Contains the current customer group for the store front.
@@ -66,7 +66,7 @@ interface ShopContextInterface extends ExtendableInterface
      *
      * @return Group
      */
-    public function getCurrentCustomerGroup();
+    public function getCurrentCustomerGroup(): Group;
 
     /**
      * Contains the fallback customer group for the current shop.
@@ -77,48 +77,32 @@ interface ShopContextInterface extends ExtendableInterface
      *
      * @return Group
      */
-    public function getFallbackCustomerGroup();
+    public function getFallbackCustomerGroup(): Group;
 
     /**
      * @return string
      */
-    public function getBaseUrl();
+    public function getBaseUrl(): string;
 
     /**
      * Returns all tax rules
      *
      * @return Tax[]
      */
-    public function getTaxRules();
+    public function getTaxRules(): array;
 
-    /**
-     * Returns the active tax rule for the provided tax id.
-     *
-     * @param int $taxId
-     *
-     * @return Tax
-     */
-    public function getTaxRule($taxId);
+    public function getTaxRule(int $taxId): Tax;
 
     /**
      * Returns the active price groups
      *
      * @return PriceGroup[]
      */
-    public function getPriceGroups();
+    public function getPriceGroups(): array;
 
-    /**
-     * @return Area|null
-     */
-    public function getArea();
+    public function getArea(): ? Area;
 
-    /**
-     * @return Country|null
-     */
-    public function getCountry();
+    public function getCountry(): ? Country;
 
-    /**
-     * @return State|null
-     */
-    public function getState();
+    public function getState(): ? State;
 }

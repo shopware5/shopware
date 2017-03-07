@@ -1,9 +1,33 @@
 <?php
+declare(strict_types=1);
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
+
 namespace Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\StoreFrontBundle\Struct
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 interface ExtendableInterface
@@ -12,33 +36,19 @@ interface ExtendableInterface
      * Adds a new attribute struct into the class storage.
      * The passed name is used as unique identifier and has to be stored too.
      *
-     * @param string $name
+     * @param string    $name
      * @param Attribute $attribute
      */
-    public function addAttribute($name, Attribute $attribute);
+    public function addAttribute(string $name, Attribute $attribute): void;
 
     /**
      * @param Attribute[] $attributes
      */
-    public function addAttributes(array $attributes);
+    public function addAttributes(array $attributes): void;
 
-    /**
-     * Returns a single attribute struct element of this class.
-     * The passed name is used as unique identifier.
-     *
-     * @param $name
-     * @return Attribute
-     */
-    public function getAttribute($name);
+    public function getAttribute(string $name): Attribute;
 
-    /**
-     * Helper function which checks if an associated
-     * attribute exists.
-     *
-     * @param $name
-     * @return bool
-     */
-    public function hasAttribute($name);
+    public function hasAttribute(string $name): bool;
 
     /**
      * Returns all stored attribute structures of this class.
@@ -46,5 +56,5 @@ interface ExtendableInterface
      *
      * @return Attribute[]
      */
-    public function getAttributes();
+    public function getAttributes(): array;
 }

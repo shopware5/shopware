@@ -32,28 +32,13 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 interface CartContextInterface extends ShopContextInterface
 {
-    /**
-     * @return Customer|null
-     */
-    public function getCustomer();
+    public function getCustomer(): ? Customer;
 
-    /**
-     * @return Address|null
-     */
-    public function getShippingAddress();
+    public function getShippingAddress(): ? Address;
 
-    /**
-     * @return Address|null
-     */
-    public function getBillingAddress();
+    public function getBillingAddress(): ? Address;
 
-    /**
-     * @return PaymentMethod
-     */
-    public function getPaymentMethod();
+    public function getPaymentMethod(): ? PaymentMethod;
 
-    /**
-     * @return DeliveryService
-     */
-    public function getDeliveryService();
+    public function getDeliveryService(): ? DeliveryService;
 }

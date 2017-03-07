@@ -614,7 +614,7 @@ class sArticles
     public function getTaxRateByConditions($taxId)
     {
         $context = $this->contextService->getShopContext();
-        $taxRate = $context->getTaxRule($taxId);
+        $taxRate = $context->getTaxRule((int) $taxId);
         if ($taxRate) {
             return number_format($taxRate->getTax(), 2);
         }

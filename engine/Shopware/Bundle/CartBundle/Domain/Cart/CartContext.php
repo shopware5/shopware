@@ -31,7 +31,14 @@ use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryService;
 use Shopware\Bundle\CartBundle\Domain\JsonSerializableTrait;
 use Shopware\Bundle\CartBundle\Domain\Payment\PaymentMethod;
 use Shopware\Bundle\StoreFrontBundle\Struct\Attribute;
+use Shopware\Bundle\StoreFrontBundle\Struct\Country;
+use Shopware\Bundle\StoreFrontBundle\Struct\Country\Area;
+use Shopware\Bundle\StoreFrontBundle\Struct\Country\State;
+use Shopware\Bundle\StoreFrontBundle\Struct\Currency;
+use Shopware\Bundle\StoreFrontBundle\Struct\Customer\Group;
+use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\Tax;
 
 class CartContext implements CartContextInterface, \JsonSerializable
 {
@@ -79,9 +86,9 @@ class CartContext implements CartContextInterface, \JsonSerializable
         ShopContextInterface $shopContext,
         PaymentMethod $paymentMethod,
         DeliveryService $deliveryService,
-        Customer $customer = null,
-        Address $billingAddress = null,
-        Address $shippingAddress = null
+        ?Customer $customer,
+        ?Address $billingAddress,
+        ?Address $shippingAddress
     ) {
         $this->customer = $customer;
         $this->shippingAddress = $shippingAddress;
@@ -91,171 +98,108 @@ class CartContext implements CartContextInterface, \JsonSerializable
         $this->shopContext = $shopContext;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getCustomer()
+    public function getCustomer(): ? Customer
     {
         return $this->customer;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getShippingAddress()
+    public function getShippingAddress(): ? Address
     {
         return $this->shippingAddress;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getBillingAddress()
+    public function getBillingAddress(): ? Address
     {
         return $this->billingAddress;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getPaymentMethod()
+    public function getPaymentMethod(): PaymentMethod
     {
         return $this->paymentMethod;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getDeliveryService()
+    public function getDeliveryService(): DeliveryService
     {
         return $this->deliveryService;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getShop()
-    {
-        return $this->shopContext->getShop();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getCurrency()
-    {
-        return $this->shopContext->getCurrency();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getCurrentCustomerGroup()
-    {
-        return $this->shopContext->getCurrentCustomerGroup();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getFallbackCustomerGroup()
-    {
-        return $this->shopContext->getFallbackCustomerGroup();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getBaseUrl()
-    {
-        return $this->shopContext->getBaseUrl();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getTaxRules()
-    {
-        return $this->shopContext->getTaxRules();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getTaxRule($taxId)
-    {
-        return $this->shopContext->getTaxRule($taxId);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getPriceGroups()
-    {
-        return $this->shopContext->getPriceGroups();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getArea()
-    {
-        return $this->shopContext->getArea();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getCountry()
-    {
-        return $this->shopContext->getCountry();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getState()
-    {
-        return $this->shopContext->getState();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function addAttribute($name, Attribute $attribute)
+    public function addAttribute(string $name, Attribute $attribute): void
     {
         $this->shopContext->addAttribute($name, $attribute);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function addAttributes(array $attributes)
+    public function addAttributes(array $attributes): void
     {
         $this->shopContext->addAttributes($attributes);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getAttribute($name)
+    public function getAttribute(string $name): Attribute
     {
         return $this->shopContext->getAttribute($name);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function hasAttribute($name)
+    public function hasAttribute(string $name): bool
     {
         return $this->shopContext->hasAttribute($name);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getAttributes()
+    public function getAttributes(): array
     {
         return $this->shopContext->getAttributes();
+    }
+
+    public function getShop(): Shop
+    {
+        return $this->shopContext->getShop();
+    }
+
+    public function getCurrency(): Currency
+    {
+        return $this->shopContext->getCurrency();
+    }
+
+    public function getCurrentCustomerGroup(): Group
+    {
+        return $this->shopContext->getCurrentCustomerGroup();
+    }
+
+    public function getFallbackCustomerGroup(): Group
+    {
+        return $this->shopContext->getFallbackCustomerGroup();
+    }
+
+    public function getBaseUrl(): string
+    {
+        return $this->shopContext->getBaseUrl();
+    }
+
+    public function getTaxRules(): array
+    {
+        return $this->shopContext->getTaxRules();
+    }
+
+    public function getTaxRule(int $taxId): Tax
+    {
+        return $this->shopContext->getTaxRule($taxId);
+    }
+
+    public function getPriceGroups(): array
+    {
+        return $this->shopContext->getPriceGroups();
+    }
+
+    public function getArea(): ? Area
+    {
+        return $this->shopContext->getArea();
+    }
+
+    public function getCountry(): ? Country
+    {
+        return $this->shopContext->getCountry();
+    }
+
+    public function getState(): ? State
+    {
+        return $this->shopContext->getState();
     }
 }

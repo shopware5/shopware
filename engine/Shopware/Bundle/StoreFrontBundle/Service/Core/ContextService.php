@@ -359,7 +359,7 @@ class ContextService implements ContextServiceInterface
             $currency = $shop->getCurrency();
         }
 
-        $context = new ShopContext($baseUrl, $shop, $currency, $currentCustomerGroup, $fallbackCustomerGroup, [], []);
+        $context = new ShopContext($baseUrl, $shop, $currency, $currentCustomerGroup, $fallbackCustomerGroup, [], [], null, null, null);
 
         $area = null;
         if ($areaId !== null) {

@@ -106,9 +106,9 @@ class ShopContext extends Extendable implements ProductContextInterface, \JsonSe
         Group $fallbackCustomerGroup,
         array $taxRules,
         array $priceGroups,
-        Area $area = null,
-        Country $country = null,
-        State $state = null
+        ?Area $area,
+        ?Country $country,
+        ?State $state
     ) {
         $this->baseUrl = $baseUrl;
         $this->shop = $shop;
@@ -122,92 +122,52 @@ class ShopContext extends Extendable implements ProductContextInterface, \JsonSe
         $this->state = $state;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getShop()
+    public function getShop(): Shop
     {
         return $this->shop;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getCurrency()
+    public function getCurrency(): Currency
     {
         return $this->currency;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getCurrentCustomerGroup()
+    public function getCurrentCustomerGroup(): Group
     {
         return $this->currentCustomerGroup;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getFallbackCustomerGroup()
+    public function getFallbackCustomerGroup(): Group
     {
         return $this->fallbackCustomerGroup;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getBaseUrl()
+    public function getBaseUrl(): string
     {
         return $this->baseUrl;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getTaxRules()
+    public function getTaxRules(): array
     {
         return $this->taxRules;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getTaxRule($taxId)
-    {
-        $key = 'tax_' . $taxId;
-
-        return $this->taxRules[$key];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getPriceGroups()
+    public function getPriceGroups(): array
     {
         return $this->priceGroups;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getArea()
+    public function getArea(): ? Area
     {
         return $this->area;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getCountry()
+    public function getCountry(): ? Country
     {
         return $this->country;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getState()
+    public function getState(): ? State
     {
         return $this->state;
     }
@@ -215,8 +175,10 @@ class ShopContext extends Extendable implements ProductContextInterface, \JsonSe
     /**
      * {@inheritdoc}
      */
-    public function jsonSerialize()
+    public function getTaxRule(int $taxId): Tax
     {
-        return get_object_vars($this);
+        $key = 'tax_' . $taxId;
+
+        return $this->taxRules[$key];
     }
 }

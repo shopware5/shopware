@@ -207,12 +207,7 @@ class CartContextService implements CartContextServiceInterface
         return $result;
     }
 
-    /**
-     * @param ShopContextInterface $context
-     *
-     * @return DeliveryService
-     */
-    private function getStoreFrontDeliveryService(ShopContextInterface $context)
+    private function getStoreFrontDeliveryService(ShopContextInterface $context): DeliveryService
     {
         if (!($id = $this->session->get('sDispatch'))) {
             $id = 9;
@@ -223,13 +218,7 @@ class CartContextService implements CartContextServiceInterface
         return array_shift($services);
     }
 
-    /**
-     * @param ShopContextInterface $context
-     * @param Customer             $customer
-     *
-     * @return PaymentMethod
-     */
-    private function getStoreFrontPaymentMethod(ShopContextInterface $context, Customer $customer = null)
+    private function getStoreFrontPaymentMethod(ShopContextInterface $context, ?Customer $customer): PaymentMethod
     {
         $id = $this->session->get('sPaymentID');
 
@@ -252,12 +241,7 @@ class CartContextService implements CartContextServiceInterface
         return array_shift($services);
     }
 
-    /**
-     * @param Customer|null $customer
-     *
-     * @return bool
-     */
-    private function hasPresetPayment(Customer $customer = null)
+    private function hasPresetPayment(?Customer $customer): bool
     {
         if ($customer === null) {
             return false;
@@ -266,12 +250,7 @@ class CartContextService implements CartContextServiceInterface
         return $customer->getPresetPaymentMethod() !== null;
     }
 
-    /**
-     * @param Customer|null $customer
-     *
-     * @return bool
-     */
-    private function hasLastPayment($customer)
+    private function hasLastPayment(?Customer $customer): bool
     {
         if ($customer === null) {
             return false;
