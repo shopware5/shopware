@@ -27,10 +27,10 @@ namespace Shopware\Bundle\CartBundle\Infrastructure;
 use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
 use Shopware\Bundle\CartBundle\Domain\Cart\Cart;
 use Shopware\Bundle\CartBundle\Domain\Cart\CartCalculator;
-use Shopware\Bundle\CartBundle\Infrastructure\Cart\CartContextServiceInterface;
 use Shopware\Bundle\CartBundle\Domain\Cart\CartPersisterInterface;
 use Shopware\Bundle\CartBundle\Domain\LineItem\LineItemInterface;
 use Shopware\Bundle\CartBundle\Domain\LineItem\Stackable;
+use Shopware\Bundle\CartBundle\Infrastructure\Cart\CartContextServiceInterface;
 use Shopware\Bundle\CartBundle\Infrastructure\View\ViewCart;
 use Shopware\Bundle\CartBundle\Infrastructure\View\ViewCartTransformer;
 
@@ -66,11 +66,11 @@ class StoreFrontCartService
     private $viewCartTransformer;
 
     /**
-     * @param CartCalculator $calculation
-     * @param CartPersisterInterface $persister
-     * @param CartContextServiceInterface $contextService
+     * @param CartCalculator                        $calculation
+     * @param CartPersisterInterface                $persister
+     * @param CartContextServiceInterface           $contextService
      * @param \Enlight_Components_Session_Namespace $session
-     * @param ViewCartTransformer $viewCartTransformer
+     * @param ViewCartTransformer                   $viewCartTransformer
      */
     public function __construct(
         CartCalculator $calculation,
@@ -93,6 +93,7 @@ class StoreFrontCartService
     {
         $cart = $this->createNewCart();
         $this->calculate($cart);
+
         return $this->getCart();
     }
 
@@ -125,6 +126,7 @@ class StoreFrontCartService
 
     /**
      * @param Cart $cart
+     *
      * @return CalculatedCart
      */
     public function calculate(Cart $cart)
@@ -132,6 +134,7 @@ class StoreFrontCartService
         $context = $this->contextService->getCartContext();
         $calculated = $this->calculation->calculate($cart, $context);
         $this->save($calculated->getCart());
+
         return $calculated;
     }
 
@@ -154,7 +157,8 @@ class StoreFrontCartService
 
     /**
      * @param string $identifier
-     * @param int $quantity
+     * @param int    $quantity
+     *
      * @throws \Exception
      */
     public function changeQuantity($identifier, $quantity)
@@ -163,10 +167,10 @@ class StoreFrontCartService
 
         $lineItem = $calculated->getLineItems()->get($identifier);
         if (!$lineItem) {
-            throw new \Exception(sprintf("Item with identifier %s not found", $identifier));
+            throw new \Exception(sprintf('Item with identifier %s not found', $identifier));
         }
         if (!$lineItem instanceof Stackable) {
-            throw new \Exception(sprintf("Quantity of line item %s can not be changed", $identifier));
+            throw new \Exception(sprintf('Quantity of line item %s can not be changed', $identifier));
         }
 
         $lineItem->getLineItem()->setQuantity($quantity);
@@ -200,6 +204,7 @@ class StoreFrontCartService
     {
         $cart = Cart::createNew(self::CART_NAME);
         $this->session->offsetSet(self::CART_TOKEN_KEY, $cart->getToken());
+
         return $cart;
     }
 
@@ -211,6 +216,7 @@ class StoreFrontCartService
         if ($this->session->offsetExists(self::CART_TOKEN_KEY)) {
             return $this->session->offsetGet(self::CART_TOKEN_KEY);
         }
+
         return null;
     }
 }

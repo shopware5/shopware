@@ -24,9 +24,9 @@
 
 namespace Shopware\Bundle\CartBundle\Domain\Customer;
 
-use Shopware\Bundle\CartBundle\Domain\Payment\PaymentMethod;
 use Shopware\Bundle\CartBundle\Domain\CloneTrait;
 use Shopware\Bundle\CartBundle\Domain\JsonSerializableTrait;
+use Shopware\Bundle\CartBundle\Domain\Payment\PaymentMethod;
 use Shopware\Bundle\StoreFrontBundle\Struct\Customer\Group;
 use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
 use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
@@ -57,7 +57,7 @@ class Customer extends Extendable
     protected $email;
 
     /**
-     * @var boolean
+     * @var bool
      */
     protected $active;
 
@@ -172,7 +172,7 @@ class Customer extends Extendable
     protected $customerGroup;
 
     /**
-     * @var boolean
+     * @var bool
      */
     protected $hasNotifications;
 
@@ -215,7 +215,7 @@ class Customer extends Extendable
      * @var PaymentMethod
      */
     protected $lastPaymentMethod;
-    #
+
     /**
      * @return int
      */
@@ -265,7 +265,7 @@ class Customer extends Extendable
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isActive()
     {
@@ -273,7 +273,7 @@ class Customer extends Extendable
     }
 
     /**
-     * @param boolean $active
+     * @param bool $active
      */
     public function setActive($active)
     {
@@ -521,7 +521,7 @@ class Customer extends Extendable
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isOrderedNewsletter()
     {
@@ -529,7 +529,7 @@ class Customer extends Extendable
     }
 
     /**
-     * @param boolean $orderedNewsletter
+     * @param bool $orderedNewsletter
      */
     public function setOrderedNewsletter($orderedNewsletter)
     {
@@ -537,7 +537,7 @@ class Customer extends Extendable
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isIsPartner()
     {
@@ -545,7 +545,7 @@ class Customer extends Extendable
     }
 
     /**
-     * @param boolean $isPartner
+     * @param bool $isPartner
      */
     public function setIsPartner($isPartner)
     {
@@ -601,7 +601,7 @@ class Customer extends Extendable
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isHasNotifications()
     {
@@ -609,7 +609,7 @@ class Customer extends Extendable
     }
 
     /**
-     * @param boolean $hasNotifications
+     * @param bool $hasNotifications
      */
     public function setHasNotifications($hasNotifications)
     {

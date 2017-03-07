@@ -28,7 +28,8 @@ trait SortArrayByKeysTrait
 {
     /**
      * @param int[]|string[] $sortedKeys
-     * @param array $indexedArray - indexed with keys
+     * @param array          $indexedArray - indexed with keys
+     *
      * @return array
      */
     private function sortIndexedArrayByKeys(array $sortedKeys, array $indexedArray)
@@ -39,6 +40,7 @@ trait SortArrayByKeysTrait
                 $sorted[$index] = $indexedArray[$index];
             }
         }
+
         return $sorted;
     }
 }

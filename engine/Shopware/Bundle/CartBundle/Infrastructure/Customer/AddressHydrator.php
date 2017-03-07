@@ -43,7 +43,7 @@ class AddressHydrator extends Hydrator
 
     /**
      * @param AttributeHydrator $attributeHydrator
-     * @param CountryHydrator $countryHydrator
+     * @param CountryHydrator   $countryHydrator
      */
     public function __construct(AttributeHydrator $attributeHydrator, CountryHydrator $countryHydrator)
     {
@@ -53,6 +53,7 @@ class AddressHydrator extends Hydrator
 
     /**
      * @param array $data
+     *
      * @return Address
      */
     public function hydrate($data)

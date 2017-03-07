@@ -24,8 +24,8 @@
 
 namespace Shopware\Bundle\CartBundle\Domain\LineItem;
 
-use Shopware\Bundle\CartBundle\Domain\Price\PriceCollection;
 use Shopware\Bundle\CartBundle\Domain\Collection;
+use Shopware\Bundle\CartBundle\Domain\Price\PriceCollection;
 
 class CalculatedLineItemCollection extends Collection
 {
@@ -44,6 +44,7 @@ class CalculatedLineItemCollection extends Collection
 
     /**
      * @param string $identifier
+     *
      * @return bool
      */
     public function has($identifier)
@@ -53,6 +54,7 @@ class CalculatedLineItemCollection extends Collection
 
     /**
      * @param string $identifier
+     *
      * @return null|CalculatedLineItemInterface
      */
     public function get($identifier)
@@ -92,6 +94,7 @@ class CalculatedLineItemCollection extends Collection
 
     /**
      * @param string $class
+     *
      * @return CalculatedLineItemCollection
      */
     public function filterClass($class)
@@ -109,6 +112,7 @@ class CalculatedLineItemCollection extends Collection
 
     /**
      * @param string $class
+     *
      * @return CalculatedLineItemInterface[]
      */
     private function getItemsOfClass($class)

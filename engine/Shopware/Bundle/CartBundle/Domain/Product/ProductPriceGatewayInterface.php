@@ -31,8 +31,9 @@ use Shopware\Bundle\CartBundle\Domain\Price\PriceDefinition;
 interface ProductPriceGatewayInterface
 {
     /**
-     * @param LineItemCollection $collection
+     * @param LineItemCollection   $collection
      * @param CartContextInterface $context
+     *
      * @return PriceDefinition[] indexed by number
      */
     public function get(LineItemCollection $collection, CartContextInterface $context);

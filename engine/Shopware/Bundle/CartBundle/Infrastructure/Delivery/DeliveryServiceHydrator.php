@@ -45,6 +45,7 @@ class DeliveryServiceHydrator extends Hydrator
 
     /**
      * @param array $data
+     *
      * @return DeliveryService
      */
     public function hydrate(array $data)
@@ -56,6 +57,7 @@ class DeliveryServiceHydrator extends Hydrator
         if (!empty($data['__deliveryServiceAttribute_id'])) {
             $this->attributeHydrator->addAttribute($service, $data, 'deliveryServiceAttribute');
         }
+
         return $service;
     }
 }

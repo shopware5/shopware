@@ -47,7 +47,7 @@ class ProductPriceGateway implements ProductPriceGatewayInterface
     private $fieldHelper;
 
     /**
-     * @param Connection $connection
+     * @param Connection  $connection
      * @param FieldHelper $fieldHelper
      */
     public function __construct(
@@ -91,14 +91,16 @@ class ProductPriceGateway implements ProductPriceGatewayInterface
                 $lineItem->getQuantity()
             );
         }
+
         return $prices;
     }
 
     /**
-     * @param int $quantity
-     * @param array $prices
+     * @param int    $quantity
+     * @param array  $prices
      * @param string $currentKey
      * @param string $fallbackKey
+     *
      * @return array
      */
     private function findCustomerGroupPrice($quantity, $prices, $currentKey, $fallbackKey)
@@ -112,8 +114,9 @@ class ProductPriceGateway implements ProductPriceGatewayInterface
     }
 
     /**
-     * @param array $prices
+     * @param array  $prices
      * @param string $key
+     *
      * @return array
      */
     private function filterCustomerGroupPrices($prices, $key)
@@ -125,9 +128,11 @@ class ProductPriceGateway implements ProductPriceGatewayInterface
 
     /**
      * @param array[] $prices
-     * @param float $quantity
-     * @return array|null
+     * @param float   $quantity
+     *
      * @throws \Exception
+     *
+     * @return array|null
      */
     private function getQuantityPrice($prices, $quantity)
     {
@@ -147,8 +152,9 @@ class ProductPriceGateway implements ProductPriceGatewayInterface
     }
 
     /**
-     * @param string[] $numbers
+     * @param string[]             $numbers
      * @param CartContextInterface $context
+     *
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
     private function buildQuery($numbers, CartContextInterface $context)
@@ -161,7 +167,7 @@ class ProductPriceGateway implements ProductPriceGatewayInterface
             'price.pricegroup as price_customer_group_key',
             'price.from as price_from_quantity',
             'price.to as price_to_quantity',
-            'price.price as price_net'
+            'price.price as price_net',
         ]);
 
         $query->addSelect($this->fieldHelper->getTaxFields());
@@ -175,7 +181,7 @@ class ProductPriceGateway implements ProductPriceGatewayInterface
 
         $customerGroups = array_unique([
             $context->getCurrentCustomerGroup()->getKey(),
-            $context->getFallbackCustomerGroup()->getKey()
+            $context->getFallbackCustomerGroup()->getKey(),
         ]);
         $query->andWhere('price.pricegroup IN (:customerGroups)');
         $query->setParameter(':customerGroups', $customerGroups, Connection::PARAM_STR_ARRAY);

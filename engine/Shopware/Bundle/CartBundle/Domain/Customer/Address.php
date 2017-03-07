@@ -34,31 +34,35 @@ class Address extends Extendable
     use CloneTrait, JsonSerializableTrait;
 
     /**
-     * @var integer $id
+     * @var int
      */
     protected $id;
 
     /**
      * Contains the name of the address address company
-     * @var string $company
+     *
+     * @var string
      */
     protected $company;
 
     /**
      * Contains the department name of the address address company
-     * @var string $department
+     *
+     * @var string
      */
     protected $department;
 
     /**
      * Contains the customer salutation (Mr, Ms, Company)
-     * @var string $salutation
+     *
+     * @var string
      */
     protected $salutation = '';
 
     /**
      * Contains the first name of the address
-     * @var string $firstname
+     *
+     * @var string
      */
     protected $firstname;
 
@@ -69,48 +73,56 @@ class Address extends Extendable
 
     /**
      * Contains the last name of the address
-     * @var string $lastname
+     *
+     * @var string
      */
     protected $lastname;
 
     /**
      * Contains the street name of the address
-     * @var string $street
+     *
+     * @var string
      */
     protected $street;
 
     /**
      * Contains the zip code of the address
-     * @var string $zipcode
+     *
+     * @var string
      */
     protected $zipcode;
 
     /**
      * Contains the city name of the address
-     * @var string $city
+     *
+     * @var string
      */
     protected $city;
 
     /**
      * Contains the phone number of the address
-     * @var string $phone
+     *
+     * @var string
      */
     protected $phone;
 
     /**
      * Contains the vat id of the address
-     * @var string $vatId
+     *
+     * @var string
      */
     protected $vatId;
 
     /**
      * Contains the additional address line data
+     *
      * @var string
      */
     protected $additionalAddressLine1;
 
     /**
      * Contains the additional address line data 2
+     *
      * @var string
      */
     protected $additionalAddressLine2;

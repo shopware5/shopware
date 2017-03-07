@@ -28,7 +28,8 @@ interface TaxRuleCalculatorInterface
 {
     /**
      * @param TaxRuleInterface $rule
-     * @return boolean
+     *
+     * @return bool
      */
     public function supports(TaxRuleInterface $rule);
 
@@ -39,8 +40,9 @@ interface TaxRuleCalculatorInterface
      *            provided price 119.00
      *            returns 19.00 calculated tax
      *
-     * @param float $gross
+     * @param float            $gross
      * @param TaxRuleInterface $rule
+     *
      * @return CalculatedTax
      */
     public function calculateTaxFromGrossPrice($gross, TaxRuleInterface $rule);
@@ -52,8 +54,9 @@ interface TaxRuleCalculatorInterface
      *            provided price 100.00
      *            returns 19.00 calculated tax
      *
-     * @param float $net
+     * @param float            $net
      * @param TaxRuleInterface $rule
+     *
      * @return CalculatedTax
      */
     public function calculateTaxFromNetPrice($net, TaxRuleInterface $rule);

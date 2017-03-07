@@ -63,6 +63,7 @@ class Cart implements \JsonSerializable
 
     /**
      * @param string $name
+     *
      * @return Cart
      */
     public static function createNew($name)
@@ -71,9 +72,10 @@ class Cart implements \JsonSerializable
     }
 
     /**
-     * @param string $name
-     * @param string $token
+     * @param string              $name
+     * @param string              $token
      * @param LineItemInterface[] $items
+     *
      * @return Cart
      */
     public static function createExisting($name, $token, array $items = [])
@@ -117,12 +119,13 @@ class Cart implements \JsonSerializable
         return json_encode([
             'items' => $items,
             'token' => $this->getToken(),
-            'name' => $this->getName()
+            'name' => $this->getName(),
         ]);
     }
 
     /**
      * @param string $json
+     *
      * @return Cart
      */
     public static function unserialize($json)
@@ -138,6 +141,7 @@ class Cart implements \JsonSerializable
 
     /**
      * @param string $json
+     *
      * @return LineItem|LineItemInterface
      */
     public static function unserializeItem($json)
@@ -147,6 +151,7 @@ class Cart implements \JsonSerializable
         if (is_array($decoded) && array_key_exists('_class', $decoded)) {
             /** @var LineItemInterface $class */
             $class = $decoded['_class'];
+
             return $class::unserialize($json);
         }
 

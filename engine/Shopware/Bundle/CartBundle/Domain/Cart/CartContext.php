@@ -22,15 +22,14 @@
  * our trademarks remain entirely with us.
  */
 
-
 namespace Shopware\Bundle\CartBundle\Domain\Cart;
 
-use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryService;
+use Shopware\Bundle\CartBundle\Domain\CloneTrait;
 use Shopware\Bundle\CartBundle\Domain\Customer\Address;
 use Shopware\Bundle\CartBundle\Domain\Customer\Customer;
-use Shopware\Bundle\CartBundle\Domain\Payment\PaymentMethod;
-use Shopware\Bundle\CartBundle\Domain\CloneTrait;
+use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryService;
 use Shopware\Bundle\CartBundle\Domain\JsonSerializableTrait;
+use Shopware\Bundle\CartBundle\Domain\Payment\PaymentMethod;
 use Shopware\Bundle\StoreFrontBundle\Struct\Attribute;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
@@ -70,11 +69,11 @@ class CartContext implements CartContextInterface, \JsonSerializable
 
     /**
      * @param ShopContextInterface $shopContext
-     * @param PaymentMethod $paymentMethod
-     * @param DeliveryService $deliveryService
-     * @param Customer|null $customer
-     * @param Address|null $billingAddress
-     * @param Address|null $shippingAddress
+     * @param PaymentMethod        $paymentMethod
+     * @param DeliveryService      $deliveryService
+     * @param Customer|null        $customer
+     * @param Address|null         $billingAddress
+     * @param Address|null         $shippingAddress
      */
     public function __construct(
         ShopContextInterface $shopContext,

@@ -45,6 +45,7 @@ class PaymentMethodHydrator extends Hydrator
 
     /**
      * @param array $data
+     *
      * @return PaymentMethod
      */
     public function hydrate(array $data)

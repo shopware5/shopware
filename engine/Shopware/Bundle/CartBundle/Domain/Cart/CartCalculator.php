@@ -53,8 +53,9 @@ class CartCalculator
     }
 
     /**
-     * @param Cart $cart
+     * @param Cart                 $cart
      * @param CartContextInterface $context
+     *
      * @return CalculatedCart
      */
     public function calculate(Cart $cart, CartContextInterface $context)

@@ -63,11 +63,12 @@ class CalculatedProduct implements CalculatedLineItemInterface, Stackable, Deliv
     protected $deliveryInformation;
 
     /**
-     * @param string $identifier
-     * @param float $quantity
-     * @param LineItemInterface $lineItem
-     * @param Price $price
+     * @param string              $identifier
+     * @param float               $quantity
+     * @param LineItemInterface   $lineItem
+     * @param Price               $price
      * @param DeliveryInformation $deliveryInformation
+     *
      * @internal param \DateTime $earliestDeliveryDate
      * @internal param \DateTime $latestDeliveryDate
      */

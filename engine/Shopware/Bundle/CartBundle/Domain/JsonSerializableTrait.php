@@ -30,6 +30,7 @@ trait JsonSerializableTrait
     {
         $data = get_object_vars($this);
         $data['_class'] = get_class($this);
+
         return $data;
     }
 }

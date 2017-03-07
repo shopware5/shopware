@@ -34,15 +34,6 @@ class TaxRuleCollection extends Collection
     protected $items = [];
 
     /**
-     * @param float $rate
-     * @return string
-     */
-    private function getKey($rate)
-    {
-        return $rate . '';
-    }
-
-    /**
      * @param TaxRuleInterface $rule
      */
     public function add($rule)
@@ -53,6 +44,7 @@ class TaxRuleCollection extends Collection
 
     /**
      * @param float $rate
+     *
      * @return bool
      */
     public function has($rate)
@@ -62,6 +54,7 @@ class TaxRuleCollection extends Collection
 
     /**
      * @param float $rate
+     *
      * @return null|TaxRuleInterface
      */
     public function get($rate)
@@ -79,11 +72,12 @@ class TaxRuleCollection extends Collection
 
     /**
      * @param TaxRuleCollection $rules
+     *
      * @return TaxRuleCollection
      */
     public function merge(TaxRuleCollection $rules)
     {
-        $new = new TaxRuleCollection($this->items);
+        $new = new self($this->items);
 
         $rules->map(
             function (TaxRuleInterface $rule) use ($new) {
@@ -92,6 +86,17 @@ class TaxRuleCollection extends Collection
                 }
             }
         );
+
         return $new;
+    }
+
+    /**
+     * @param float $rate
+     *
+     * @return string
+     */
+    private function getKey($rate)
+    {
+        return $rate . '';
     }
 }

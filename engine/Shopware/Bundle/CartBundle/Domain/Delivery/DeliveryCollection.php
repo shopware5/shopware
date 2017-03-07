@@ -24,10 +24,10 @@
 
 namespace Shopware\Bundle\CartBundle\Domain\Delivery;
 
+use Shopware\Bundle\CartBundle\Domain\Collection;
+use Shopware\Bundle\CartBundle\Domain\Customer\Address;
 use Shopware\Bundle\CartBundle\Domain\LineItem\CalculatedLineItemInterface;
 use Shopware\Bundle\CartBundle\Domain\LineItem\Deliverable;
-use Shopware\Bundle\CartBundle\Domain\Customer\Address;
-use Shopware\Bundle\CartBundle\Domain\Collection;
 
 class DeliveryCollection extends Collection
 {
@@ -55,6 +55,7 @@ class DeliveryCollection extends Collection
                 if ($a->getAddress() != $b->getAddress()) {
                     return -1;
                 }
+
                 return $a->getDeliveryDate()->getEarliest() > $b->getDeliveryDate()->getEarliest();
             }
         );
@@ -62,7 +63,8 @@ class DeliveryCollection extends Collection
 
     /**
      * @param DeliveryDate $deliveryDate
-     * @param Address $address
+     * @param Address      $address
+     *
      * @return null|Delivery
      */
     public function getDelivery(DeliveryDate $deliveryDate, Address $address)
@@ -74,13 +76,16 @@ class DeliveryCollection extends Collection
             if ($delivery->getAddress() != $address) {
                 continue;
             }
+
             return $delivery;
         }
+
         return null;
     }
 
     /**
      * @param Deliverable|CalculatedLineItemInterface $item
+     *
      * @return bool
      */
     public function contains(Deliverable $item)
@@ -90,6 +95,7 @@ class DeliveryCollection extends Collection
                 return true;
             }
         }
+
         return false;
     }
 }

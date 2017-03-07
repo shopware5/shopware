@@ -34,15 +34,6 @@ class CalculatedTaxCollection extends Collection
     protected $items = [];
 
     /**
-     * @param float $rate
-     * @return string
-     */
-    private function getKey($rate)
-    {
-        return $rate . '';
-    }
-
-    /**
      * @param CalculatedTax $tax
      */
     public function add($tax)
@@ -53,6 +44,7 @@ class CalculatedTaxCollection extends Collection
 
     /**
      * @param float $rate
+     *
      * @return bool
      */
     public function has($rate)
@@ -62,6 +54,7 @@ class CalculatedTaxCollection extends Collection
 
     /**
      * @param float $rate
+     *
      * @return null|CalculatedTax
      */
     public function get($rate)
@@ -79,6 +72,7 @@ class CalculatedTaxCollection extends Collection
 
     /**
      * Returns the total calculated tax for this item
+     *
      * @return float
      */
     public function getAmount()
@@ -86,11 +80,13 @@ class CalculatedTaxCollection extends Collection
         $amounts = $this->map(function (CalculatedTax $calculatedTax) {
             return $calculatedTax->getTax();
         });
+
         return array_sum($amounts);
     }
 
     /**
      * @param CalculatedTaxCollection $taxCollection
+     *
      * @return CalculatedTaxCollection
      */
     public function merge(CalculatedTaxCollection $taxCollection)
@@ -109,5 +105,15 @@ class CalculatedTaxCollection extends Collection
         }
 
         return $new;
+    }
+
+    /**
+     * @param float $rate
+     *
+     * @return string
+     */
+    private function getKey($rate)
+    {
+        return $rate . '';
     }
 }

@@ -60,11 +60,11 @@ class DeliveryPosition implements \JsonSerializable
     private $deliveryDate;
 
     /**
-     * @param string $identifier
+     * @param string                                  $identifier
      * @param CalculatedLineItemInterface|Deliverable $item
-     * @param float $quantity
-     * @param Price $price
-     * @param DeliveryDate $deliveryDate
+     * @param float                                   $quantity
+     * @param Price                                   $price
+     * @param DeliveryDate                            $deliveryDate
      */
     public function __construct(
         $identifier,
@@ -82,6 +82,7 @@ class DeliveryPosition implements \JsonSerializable
 
     /**
      * @param Deliverable|CalculatedLineItemInterface|Stackable $lineItem
+     *
      * @return DeliveryPosition
      */
     public static function createByLineItemForInStockDate($lineItem)
@@ -97,6 +98,7 @@ class DeliveryPosition implements \JsonSerializable
 
     /**
      * @param Deliverable|CalculatedLineItemInterface|Stackable $lineItem
+     *
      * @return DeliveryPosition
      */
     public static function createByLineItemForOutOfStockDate($lineItem)

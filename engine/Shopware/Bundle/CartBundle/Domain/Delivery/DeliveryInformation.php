@@ -66,11 +66,11 @@ class DeliveryInformation implements \JsonSerializable
     protected $outOfStockDeliveryDate;
 
     /**
-     * @param float $stock
-     * @param float $height
-     * @param float $width
-     * @param float $length
-     * @param float $weight
+     * @param float        $stock
+     * @param float        $height
+     * @param float        $width
+     * @param float        $length
+     * @param float        $weight
      * @param DeliveryDate $inStockDeliveryDate
      * @param DeliveryDate $outOfStockDeliveryDate
      */

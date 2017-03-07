@@ -39,6 +39,7 @@ trait CloneTrait
 
     /**
      * @param array $array
+     *
      * @return array
      */
     private function cloneArray($array)
@@ -54,6 +55,7 @@ trait CloneTrait
                 $newValue[$index] = $value;
             }
         }
+
         return $newValue;
     }
 }

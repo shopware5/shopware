@@ -50,9 +50,9 @@ class CustomerGateway
     private $connection;
 
     /**
-     * @param FieldHelper $fieldHelper
+     * @param FieldHelper      $fieldHelper
      * @param CustomerHydrator $hydrator
-     * @param Connection $connection
+     * @param Connection       $connection
      */
     public function __construct(FieldHelper $fieldHelper, CustomerHydrator $hydrator, Connection $connection)
     {
@@ -62,8 +62,9 @@ class CustomerGateway
     }
 
     /**
-     * @param int[] $ids
+     * @param int[]                $ids
      * @param ShopContextInterface $context
+     *
      * @return Customer[]
      */
     public function getList($ids, ShopContextInterface $context)
@@ -89,11 +90,12 @@ class CustomerGateway
 
         $this->fieldHelper->addCustomerTranslation($query, $context);
 
-        $data = $query->execute()->fetchAll(\PDO::FETCH_GROUP|\PDO::FETCH_UNIQUE);
+        $data = $query->execute()->fetchAll(\PDO::FETCH_GROUP | \PDO::FETCH_UNIQUE);
         $customers = [];
         foreach ($data as $id => $row) {
             $customers[$id] = $this->hydrator->hydrate($row);
         }
+
         return $this->sortIndexedArrayByKeys($ids, $customers);
     }
 }

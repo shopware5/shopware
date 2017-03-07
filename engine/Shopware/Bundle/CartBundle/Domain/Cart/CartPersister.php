@@ -70,7 +70,7 @@ class CartPersister implements CartPersisterInterface
             [
                 ':token' => $cart->getToken(),
                 ':name' => $cart->getName(),
-                ':content' => $cart->serialize()
+                ':content' => $cart->serialize(),
             ]
         );
     }

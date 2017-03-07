@@ -58,11 +58,11 @@ class Price implements \JsonSerializable
     protected $quantity;
 
     /**
-     * @param float $unitPrice
-     * @param float $totalPrice
+     * @param float                   $unitPrice
+     * @param float                   $totalPrice
      * @param CalculatedTaxCollection $calculatedTaxes
-     * @param TaxRuleCollection $taxRules
-     * @param int $quantity
+     * @param TaxRuleCollection       $taxRules
+     * @param int                     $quantity
      */
     public function __construct(
         $unitPrice,

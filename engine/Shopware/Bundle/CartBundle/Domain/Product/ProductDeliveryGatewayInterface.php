@@ -31,8 +31,9 @@ use Shopware\Bundle\CartBundle\Domain\LineItem\LineItemCollection;
 interface ProductDeliveryGatewayInterface
 {
     /**
-     * @param LineItemCollection $collection
+     * @param LineItemCollection   $collection
      * @param CartContextInterface $context
+     *
      * @return DeliveryInformation[] indexed by number
      */
     public function get(LineItemCollection $collection, CartContextInterface $context);

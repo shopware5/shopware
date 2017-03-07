@@ -41,8 +41,10 @@ class PriceRounding
 
     /**
      * @param float $price
-     * @return float
+     *
      * @throws \RuntimeException
+     *
+     * @return float
      */
     public function round($price)
     {

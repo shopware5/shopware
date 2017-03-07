@@ -53,8 +53,8 @@ class LineItem implements LineItemInterface
     /**
      * @param string $identifier
      * @param string $type
-     * @param float $quantity
-     * @param array $extraData
+     * @param float  $quantity
+     * @param array  $extraData
      */
     public function __construct(
         $identifier,
@@ -122,6 +122,7 @@ class LineItem implements LineItemInterface
     public static function unserialize($json)
     {
         $data = json_decode($json, true);
+
         return new self(
             $data['identifier'],
             $data['type'],

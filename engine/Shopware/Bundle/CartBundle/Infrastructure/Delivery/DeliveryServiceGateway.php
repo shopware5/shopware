@@ -50,9 +50,9 @@ class DeliveryServiceGateway
     private $connection;
 
     /**
-     * @param FieldHelper $fieldHelper
+     * @param FieldHelper             $fieldHelper
      * @param DeliveryServiceHydrator $hydrator
-     * @param Connection $connection
+     * @param Connection              $connection
      */
     public function __construct(
         FieldHelper $fieldHelper,
@@ -65,8 +65,9 @@ class DeliveryServiceGateway
     }
 
     /**
-     * @param int[] $ids
+     * @param int[]                $ids
      * @param ShopContextInterface $context
+     *
      * @return DeliveryService[]
      */
     public function getList($ids, ShopContextInterface $context)
@@ -83,11 +84,12 @@ class DeliveryServiceGateway
         $query->where('deliveryService.id IN (:ids)');
         $query->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
 
-        $data = $query->execute()->fetchAll(\PDO::FETCH_GROUP|\PDO::FETCH_UNIQUE);
+        $data = $query->execute()->fetchAll(\PDO::FETCH_GROUP | \PDO::FETCH_UNIQUE);
         $services = [];
         foreach ($data as $id => $row) {
             $services[$id] = $this->hydrator->hydrate($row);
         }
+
         return $this->sortIndexedArrayByKeys($ids, $services);
     }
 }

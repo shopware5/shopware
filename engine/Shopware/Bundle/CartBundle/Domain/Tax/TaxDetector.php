@@ -30,6 +30,7 @@ class TaxDetector
 {
     /**
      * @param CartContextInterface $context
+     *
      * @return bool
      */
     public function useGross(CartContextInterface $context)
@@ -39,6 +40,7 @@ class TaxDetector
 
     /**
      * @param CartContextInterface $context
+     *
      * @return bool
      */
     public function isNetDelivery(CartContextInterface $context)

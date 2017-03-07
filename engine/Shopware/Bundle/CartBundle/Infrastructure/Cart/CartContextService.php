@@ -22,16 +22,38 @@
  * our trademarks remain entirely with us.
  */
 declare(strict_types=1);
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
 
 namespace Shopware\Bundle\CartBundle\Infrastructure\Cart;
 
 use Shopware\Bundle\CartBundle\Domain\Cart\CartContext;
 use Shopware\Bundle\CartBundle\Domain\Cart\CartContextInterface;
-use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryService;
 use Shopware\Bundle\CartBundle\Domain\Customer\Address;
+use Shopware\Bundle\CartBundle\Domain\Customer\Customer;
+use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryService;
 use Shopware\Bundle\CartBundle\Domain\Payment\PaymentMethod;
 use Shopware\Bundle\CartBundle\Infrastructure\Customer\AddressGateway;
-use Shopware\Bundle\CartBundle\Domain\Customer\Customer;
 use Shopware\Bundle\CartBundle\Infrastructure\Customer\CustomerService;
 use Shopware\Bundle\CartBundle\Infrastructure\Delivery\DeliveryServiceGateway;
 use Shopware\Bundle\CartBundle\Infrastructure\Payment\PaymentMethodGateway;
@@ -81,13 +103,13 @@ class CartContextService implements CartContextServiceInterface
     private $config;
 
     /**
-     * @param ContextServiceInterface $shopContextService
+     * @param ContextServiceInterface               $shopContextService
      * @param \Enlight_Components_Session_Namespace $session
-     * @param DeliveryServiceGateway $deliveryServiceGateway
-     * @param PaymentMethodGateway $paymentMethodGateway
-     * @param AddressGateway $addressGateway
-     * @param  CustomerService $customerService
-     * @param \Shopware_Components_Config $config
+     * @param DeliveryServiceGateway                $deliveryServiceGateway
+     * @param PaymentMethodGateway                  $paymentMethodGateway
+     * @param AddressGateway                        $addressGateway
+     * @param CustomerService                       $customerService
+     * @param \Shopware_Components_Config           $config
      */
     public function __construct(
         ContextServiceInterface $shopContextService,
@@ -140,13 +162,14 @@ class CartContextService implements CartContextServiceInterface
         );
     }
 
-    private function getStoreFrontCustomer(ShopContextInterface $context):? Customer
+    private function getStoreFrontCustomer(ShopContextInterface $context): ? Customer
     {
         if (!($id = $this->session->get('sUserId'))) {
             return null;
         }
 
         $customer = $this->customerService->getList([$id], $context);
+
         return array_shift($customer);
     }
 
@@ -164,8 +187,8 @@ class CartContextService implements CartContextServiceInterface
 
         //set customer default address as default result
         $result = [
-            'billing' => $customer? $customer->getDefaultBillingAddress() : null,
-            'shipping' => $customer ? $customer->getDefaultShippingAddress() : null
+            'billing' => $customer ? $customer->getDefaultBillingAddress() : null,
+            'shipping' => $customer ? $customer->getDefaultShippingAddress() : null,
         ];
 
         if (0 === count($ids)) {
@@ -180,11 +203,13 @@ class CartContextService implements CartContextServiceInterface
         if ($shippingId) {
             $result['shipping'] = $addresses[$shippingId];
         }
+
         return $result;
     }
 
     /**
      * @param ShopContextInterface $context
+     *
      * @return DeliveryService
      */
     private function getStoreFrontDeliveryService(ShopContextInterface $context)
@@ -194,12 +219,14 @@ class CartContextService implements CartContextServiceInterface
         }
 
         $services = $this->deliveryServiceGateway->getList([$id], $context);
+
         return array_shift($services);
     }
 
     /**
      * @param ShopContextInterface $context
-     * @param Customer $customer
+     * @param Customer             $customer
+     *
      * @return PaymentMethod
      */
     private function getStoreFrontPaymentMethod(ShopContextInterface $context, Customer $customer = null)
@@ -221,11 +248,13 @@ class CartContextService implements CartContextServiceInterface
         }
 
         $services = $this->paymentMethodGateway->getList([$id], $context);
+
         return array_shift($services);
     }
 
     /**
      * @param Customer|null $customer
+     *
      * @return bool
      */
     private function hasPresetPayment(Customer $customer = null)
@@ -233,11 +262,13 @@ class CartContextService implements CartContextServiceInterface
         if ($customer === null) {
             return false;
         }
+
         return $customer->getPresetPaymentMethod() !== null;
     }
 
     /**
      * @param Customer|null $customer
+     *
      * @return bool
      */
     private function hasLastPayment($customer)
@@ -245,6 +276,7 @@ class CartContextService implements CartContextServiceInterface
         if ($customer === null) {
             return false;
         }
+
         return $customer->getLastPaymentMethod() !== null;
     }
 }

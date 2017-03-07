@@ -24,9 +24,9 @@
 
 namespace Shopware\Bundle\CartBundle\Domain\Price;
 
+use Shopware\Bundle\CartBundle\Domain\Collection;
 use Shopware\Bundle\CartBundle\Domain\Tax\CalculatedTaxCollection;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCollection;
-use Shopware\Bundle\CartBundle\Domain\Collection;
 
 class PriceCollection extends Collection
 {
@@ -52,19 +52,8 @@ class PriceCollection extends Collection
         foreach ($this->items as $price) {
             $rules = $rules->merge($price->getTaxRules());
         }
-        return $rules;
-    }
 
-    /**
-     * Sum of all total prices
-     * @return float
-     */
-    private function getAmount()
-    {
-        $prices = $this->map(function (Price $price) {
-            return $price->getPrice();
-        });
-        return array_sum($prices);
+        return $rules;
     }
 
     /**
@@ -73,6 +62,7 @@ class PriceCollection extends Collection
     public function getTotalPrice()
     {
         $amount = $this->getAmount();
+
         return new Price(
             $amount,
             $amount,
@@ -90,6 +80,21 @@ class PriceCollection extends Collection
         foreach ($this->items as $price) {
             $taxes = $taxes->merge($price->getCalculatedTaxes());
         }
+
         return $taxes;
+    }
+
+    /**
+     * Sum of all total prices
+     *
+     * @return float
+     */
+    private function getAmount()
+    {
+        $prices = $this->map(function (Price $price) {
+            return $price->getPrice();
+        });
+
+        return array_sum($prices);
     }
 }

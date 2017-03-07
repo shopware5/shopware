@@ -52,10 +52,10 @@ class PriceDefinition implements \JsonSerializable
     private $isCalculated;
 
     /**
-     * @param float $price
+     * @param float             $price
      * @param TaxRuleCollection $taxRules
-     * @param float|int $quantity
-     * @param bool $isCalculated
+     * @param float|int         $quantity
+     * @param bool              $isCalculated
      */
     public function __construct($price, TaxRuleCollection $taxRules, $quantity = 1, $isCalculated = false)
     {
@@ -90,7 +90,7 @@ class PriceDefinition implements \JsonSerializable
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isCalculated()
     {

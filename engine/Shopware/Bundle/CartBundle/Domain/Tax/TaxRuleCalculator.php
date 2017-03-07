@@ -56,6 +56,7 @@ class TaxRuleCalculator implements TaxRuleCalculatorInterface
     {
         $calculatedTax = $gross / ((100 + $rule->getRate()) / 100) * ($rule->getRate() / 100);
         $calculatedTax = $this->rounding->round($calculatedTax);
+
         return new CalculatedTax($calculatedTax, $rule->getRate(), $gross);
     }
 
@@ -66,6 +67,7 @@ class TaxRuleCalculator implements TaxRuleCalculatorInterface
     {
         $calculatedTax = $net * ($rule->getRate() / 100);
         $calculatedTax = $this->rounding->round($calculatedTax);
+
         return new CalculatedTax($calculatedTax, $rule->getRate(), $net);
     }
 }

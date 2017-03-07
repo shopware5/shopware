@@ -27,9 +27,10 @@ namespace Shopware\Bundle\CartBundle\Domain\Cart;
 interface CartProcessorInterface
 {
     /**
-     * @param Cart $cart
-     * @param ProcessorCart $processorCart
+     * @param Cart                 $cart
+     * @param ProcessorCart        $processorCart
      * @param CartContextInterface $context
+     *
      * @throws \RuntimeException
      */
     public function process(

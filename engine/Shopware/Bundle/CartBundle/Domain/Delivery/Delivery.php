@@ -53,9 +53,10 @@ class Delivery implements \JsonSerializable
 
     /**
      * @param DeliveryPositionCollection $positions
-     * @param DeliveryDate $deliveryDate
-     * @param DeliveryService $deliveryService
-     * @param Address $address
+     * @param DeliveryDate               $deliveryDate
+     * @param DeliveryService            $deliveryService
+     * @param Address                    $address
+     *
      * @internal param \DateTime $earliestDeliveryDate
      * @internal param \DateTime $latestDeliveryDate
      */

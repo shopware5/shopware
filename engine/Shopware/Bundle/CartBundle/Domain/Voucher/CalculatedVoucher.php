@@ -45,7 +45,7 @@ class CalculatedVoucher implements CalculatedLineItemInterface
 
     /**
      * @param LineItemInterface $lineItem
-     * @param Price $price
+     * @param Price             $price
      */
     public function __construct(
         LineItemInterface $lineItem,

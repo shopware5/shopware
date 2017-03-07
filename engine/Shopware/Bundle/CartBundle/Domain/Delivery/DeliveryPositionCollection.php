@@ -24,9 +24,9 @@
 
 namespace Shopware\Bundle\CartBundle\Domain\Delivery;
 
+use Shopware\Bundle\CartBundle\Domain\Collection;
 use Shopware\Bundle\CartBundle\Domain\LineItem\CalculatedLineItemCollection;
 use Shopware\Bundle\CartBundle\Domain\Price\PriceCollection;
-use Shopware\Bundle\CartBundle\Domain\Collection;
 
 class DeliveryPositionCollection extends Collection
 {
@@ -45,6 +45,7 @@ class DeliveryPositionCollection extends Collection
 
     /**
      * @param string $identifier
+     *
      * @return DeliveryPosition
      */
     public function get($identifier)
@@ -53,7 +54,7 @@ class DeliveryPositionCollection extends Collection
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function has($identifier)
     {
@@ -61,7 +62,7 @@ class DeliveryPositionCollection extends Collection
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function remove($identifier)
     {

@@ -28,6 +28,7 @@ interface LineItemInterface extends \JsonSerializable
 {
     /**
      * Defines the unique identifier for a cart line item
+     *
      * @return string
      */
     public function getIdentifier();
@@ -59,6 +60,7 @@ interface LineItemInterface extends \JsonSerializable
 
     /**
      * @param string $data
+     *
      * @return LineItemInterface
      */
     public static function unserialize($data);

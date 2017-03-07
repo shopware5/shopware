@@ -54,10 +54,10 @@ class CalculatedCart implements \JsonSerializable
     protected $deliveries;
 
     /**
-     * @param Cart $cart
+     * @param Cart                         $cart
      * @param CalculatedLineItemCollection $lineItems
-     * @param CartPrice $price
-     * @param DeliveryCollection $deliveries
+     * @param CartPrice                    $price
+     * @param DeliveryCollection           $deliveries
      */
     public function __construct(
         Cart $cart,

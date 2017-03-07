@@ -43,7 +43,7 @@ class CalculatedLineItem implements CalculatedLineItemInterface
 
     /**
      * @param string $identifier
-     * @param Price $price
+     * @param Price  $price
      */
     public function __construct($identifier, Price $price)
     {

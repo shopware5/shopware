@@ -39,7 +39,7 @@ class TaxCalculator
     private $calculators;
 
     /**
-     * @param PriceRounding $rounding
+     * @param PriceRounding                $rounding
      * @param TaxRuleCalculatorInterface[] $calculators
      */
     public function __construct(
@@ -51,20 +51,23 @@ class TaxCalculator
     }
 
     /**
-     * @param float $netPrice
+     * @param float             $netPrice
      * @param TaxRuleCollection $rules
+     *
      * @return float
      */
     public function calculateGross($netPrice, TaxRuleCollection $rules)
     {
         $taxes = $this->calculateNetTaxes($netPrice, $rules);
         $gross = $netPrice + $taxes->getAmount();
+
         return $this->rounding->round($gross);
     }
 
     /**
-     * @param float $price
+     * @param float             $price
      * @param TaxRuleCollection $rules
+     *
      * @return CalculatedTaxCollection
      */
     public function calculateGrossTaxes($price, TaxRuleCollection $rules)
@@ -80,8 +83,9 @@ class TaxCalculator
     }
 
     /**
-     * @param float $price
+     * @param float             $price
      * @param TaxRuleCollection $rules
+     *
      * @return CalculatedTaxCollection
      */
     public function calculateNetTaxes($price, TaxRuleCollection $rules)
@@ -98,8 +102,10 @@ class TaxCalculator
 
     /**
      * @param TaxRuleInterface $rule
-     * @return TaxRuleCalculatorInterface
+     *
      * @throws \Exception
+     *
+     * @return TaxRuleCalculatorInterface
      */
     private function getTaxRuleCalculator(TaxRuleInterface $rule)
     {

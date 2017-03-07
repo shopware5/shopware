@@ -50,9 +50,9 @@ class AddressGateway
     private $connection;
 
     /**
-     * @param FieldHelper $fieldHelper
+     * @param FieldHelper     $fieldHelper
      * @param AddressHydrator $hydrator
-     * @param Connection $connection
+     * @param Connection      $connection
      */
     public function __construct(
         FieldHelper $fieldHelper,
@@ -65,8 +65,9 @@ class AddressGateway
     }
 
     /**
-     * @param int[] $ids
+     * @param int[]                $ids
      * @param ShopContextInterface $context
+     *
      * @return Address[] indexed by id
      */
     public function getList($ids, ShopContextInterface $context)
@@ -94,12 +95,13 @@ class AddressGateway
         $this->fieldHelper->addCountryTranslation($query, $context);
         $this->fieldHelper->addCountryStateTranslation($query, $context);
 
-        $data = $query->execute()->fetchAll(\PDO::FETCH_GROUP|\PDO::FETCH_UNIQUE);
+        $data = $query->execute()->fetchAll(\PDO::FETCH_GROUP | \PDO::FETCH_UNIQUE);
 
         $addresses = [];
         foreach ($data as $id => $row) {
             $addresses[$id] = $this->hydrator->hydrate($row);
         }
+
         return $this->sortIndexedArrayByKeys($ids, $addresses);
     }
 }

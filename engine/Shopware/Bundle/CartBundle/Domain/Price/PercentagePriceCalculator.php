@@ -42,7 +42,7 @@ class PercentagePriceCalculator
     private $priceCalculator;
 
     /**
-     * @param PriceRounding $rounding
+     * @param PriceRounding   $rounding
      * @param PriceCalculator $priceCalculator
      */
     public function __construct(
@@ -56,9 +56,10 @@ class PercentagePriceCalculator
     /**
      * Provide a negative percentage value for discount or a positive percentage value for a surcharge
      *
-     * @param float $percentage 10.00 for 10%, -10.0 for -10%
-     * @param PriceCollection $prices
+     * @param float                $percentage 10.00 for 10%, -10.0 for -10%
+     * @param PriceCollection      $prices
      * @param CartContextInterface $context
+     *
      * @return Price
      */
     public function calculatePrice(
@@ -73,11 +74,13 @@ class PercentagePriceCalculator
         $rules = $this->buildPercentageTaxRule($price);
 
         $definition = new PriceDefinition($discount, $rules, 1, true);
+
         return $this->priceCalculator->calculate($definition, $context);
     }
 
     /**
      * @param Price $price
+     *
      * @return TaxRuleCollection
      */
     private function buildPercentageTaxRule(Price $price)
@@ -93,6 +96,7 @@ class PercentagePriceCalculator
                 )
             );
         }
+
         return $rules;
     }
 }

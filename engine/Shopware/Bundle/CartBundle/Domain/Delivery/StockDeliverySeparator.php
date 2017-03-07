@@ -25,12 +25,12 @@
 namespace Shopware\Bundle\CartBundle\Domain\Delivery;
 
 use Shopware\Bundle\CartBundle\Domain\Cart\CartContextInterface;
+use Shopware\Bundle\CartBundle\Domain\Customer\Address;
 use Shopware\Bundle\CartBundle\Domain\LineItem\CalculatedLineItemCollection;
 use Shopware\Bundle\CartBundle\Domain\LineItem\CalculatedLineItemInterface;
 use Shopware\Bundle\CartBundle\Domain\LineItem\Deliverable;
 use Shopware\Bundle\CartBundle\Domain\LineItem\Stackable;
 use Shopware\Bundle\CartBundle\Domain\Price\PriceCalculator;
-use Shopware\Bundle\CartBundle\Domain\Customer\Address;
 use Shopware\Bundle\CartBundle\Domain\Price\PriceDefinition;
 
 class StockDeliverySeparator
@@ -49,9 +49,10 @@ class StockDeliverySeparator
     }
 
     /**
-     * @param DeliveryCollection $deliveries
+     * @param DeliveryCollection           $deliveries
      * @param CalculatedLineItemCollection $items
-     * @param CartContextInterface $context
+     * @param CartContextInterface         $context
+     *
      * @return DeliveryCollection
      */
     public function addItemsToDeliveries(
@@ -147,9 +148,10 @@ class StockDeliverySeparator
 
     /**
      * @param Stackable|CalculatedLineItemInterface|Deliverable $item
-     * @param float $quantity
-     * @param DeliveryDate $deliveryDate
-     * @param CartContextInterface $context
+     * @param float                                             $quantity
+     * @param DeliveryDate                                      $deliveryDate
+     * @param CartContextInterface                              $context
+     *
      * @return DeliveryPosition
      */
     private function recalculatePosition(
@@ -178,9 +180,9 @@ class StockDeliverySeparator
 
     /**
      * @param DeliveryCollection $deliveries
-     * @param DeliveryPosition $position
-     * @param Address $address
-     * @param DeliveryService $deliveryService
+     * @param DeliveryPosition   $position
+     * @param Address            $address
+     * @param DeliveryService    $deliveryService
      */
     private function addGoodsToDelivery(
         DeliveryCollection $deliveries,
@@ -195,6 +197,7 @@ class StockDeliverySeparator
 
         if ($delivery) {
             $delivery->getPositions()->add($position);
+
             return;
         }
 

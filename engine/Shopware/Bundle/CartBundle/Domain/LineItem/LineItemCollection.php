@@ -43,6 +43,7 @@ class LineItemCollection extends Collection
 
     /**
      * @param string $identifier
+     *
      * @return LineItemInterface
      */
     public function get($identifier)
@@ -51,7 +52,7 @@ class LineItemCollection extends Collection
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function has($identifier)
     {
@@ -59,7 +60,7 @@ class LineItemCollection extends Collection
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function remove($identifier)
     {
@@ -68,20 +69,7 @@ class LineItemCollection extends Collection
 
     /**
      * @param string $type
-     * @return LineItemInterface[]
-     */
-    private function getLineItemsOfType($type)
-    {
-        return array_filter(
-            $this->items,
-            function (LineItemInterface $lineItem) use ($type) {
-                return $lineItem->getType() === $type;
-            }
-        );
-    }
-
-    /**
-     * @param string $type
+     *
      * @return LineItemCollection
      */
     public function filterType($type)
@@ -95,5 +83,20 @@ class LineItemCollection extends Collection
     public function getIdentifiers()
     {
         return $this->keys();
+    }
+
+    /**
+     * @param string $type
+     *
+     * @return LineItemInterface[]
+     */
+    private function getLineItemsOfType($type)
+    {
+        return array_filter(
+            $this->items,
+            function (LineItemInterface $lineItem) use ($type) {
+                return $lineItem->getType() === $type;
+            }
+        );
     }
 }

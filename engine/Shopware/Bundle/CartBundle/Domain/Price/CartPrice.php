@@ -53,10 +53,10 @@ class CartPrice implements \JsonSerializable
     protected $taxRules;
 
     /**
-     * @param float $netPrice
-     * @param float $totalPrice
+     * @param float                   $netPrice
+     * @param float                   $totalPrice
      * @param CalculatedTaxCollection $calculatedTaxes
-     * @param TaxRuleCollection $taxRules
+     * @param TaxRuleCollection       $taxRules
      */
     public function __construct(
         $netPrice,

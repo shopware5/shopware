@@ -51,8 +51,8 @@ class ProductProcessor implements CartProcessorInterface
     private $deliveryGateway;
 
     /**
-     * @param ProductPriceGatewayInterface $priceGateway
-     * @param PriceCalculator $priceCalculator
+     * @param ProductPriceGatewayInterface    $priceGateway
+     * @param PriceCalculator                 $priceCalculator
      * @param ProductDeliveryGatewayInterface $deliveryGateway
      */
     public function __construct(

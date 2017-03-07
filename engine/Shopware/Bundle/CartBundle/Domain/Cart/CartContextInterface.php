@@ -22,12 +22,11 @@
  * our trademarks remain entirely with us.
  */
 
-
 namespace Shopware\Bundle\CartBundle\Domain\Cart;
 
-use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryService;
 use Shopware\Bundle\CartBundle\Domain\Customer\Address;
 use Shopware\Bundle\CartBundle\Domain\Customer\Customer;
+use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryService;
 use Shopware\Bundle\CartBundle\Domain\Payment\PaymentMethod;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 

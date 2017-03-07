@@ -52,7 +52,7 @@ class PercentageTaxRuleCalculator implements TaxRuleCalculatorInterface
      */
     public function calculateTaxFromGrossPrice($gross, TaxRuleInterface $rule)
     {
-        /** @var PercentageTaxRule $rule */
+        /* @var PercentageTaxRule $rule */
         return $this->taxRuleCalculator->calculateTaxFromGrossPrice(
             $gross / 100 * $rule->getPercentage(),
             new TaxRule($rule->getRate())
@@ -64,7 +64,7 @@ class PercentageTaxRuleCalculator implements TaxRuleCalculatorInterface
      */
     public function calculateTaxFromNetPrice($net, TaxRuleInterface $rule)
     {
-        /** @var PercentageTaxRule $rule */
+        /* @var PercentageTaxRule $rule */
         return $this->taxRuleCalculator->calculateTaxFromGrossPrice(
             $net / 100 * $rule->getPercentage(),
             new TaxRule($rule->getRate())

@@ -46,8 +46,8 @@ class DeliverySeparatorProcessor implements CartProcessorInterface
     }
 
     /**
-     * @param Cart $cart
-     * @param ProcessorCart $processorCart
+     * @param Cart                 $cart
+     * @param ProcessorCart        $processorCart
      * @param CartContextInterface $context
      */
     public function process(

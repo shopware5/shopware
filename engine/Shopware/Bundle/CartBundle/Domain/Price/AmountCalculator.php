@@ -42,7 +42,7 @@ class AmountCalculator
     private $rounding;
 
     /**
-     * @param TaxDetector $taxDetector
+     * @param TaxDetector   $taxDetector
      * @param PriceRounding $rounding
      */
     public function __construct(TaxDetector $taxDetector, PriceRounding $rounding)
@@ -52,8 +52,9 @@ class AmountCalculator
     }
 
     /**
-     * @param PriceCollection $prices
+     * @param PriceCollection      $prices
      * @param CartContextInterface $context
+     *
      * @return CartPrice
      */
     public function calculateAmount(PriceCollection $prices, CartContextInterface $context)
@@ -73,6 +74,7 @@ class AmountCalculator
      * `Price::price` and `Price::netPrice` are equals and taxes are empty.
      *
      * @param PriceCollection $prices
+     *
      * @return CartPrice
      */
     private function calculateNetDeliveryAmount(PriceCollection $prices)
@@ -94,6 +96,7 @@ class AmountCalculator
      * Calculated taxes are based on the gross prices
      *
      * @param PriceCollection $prices
+     *
      * @return CartPrice
      */
     private function calculateGrossAmount(PriceCollection $prices)
@@ -101,6 +104,7 @@ class AmountCalculator
         $total = $prices->getTotalPrice();
         $net = $total->getPrice() - $prices->getCalculatedTaxes()->getAmount();
         $net = $this->rounding->round($net);
+
         return new CartPrice($net, $total->getPrice(), $total->getCalculatedTaxes(), $total->getTaxRules());
     }
 
@@ -111,6 +115,7 @@ class AmountCalculator
      * Calculated taxes are based on the net prices
      *
      * @param PriceCollection $prices
+     *
      * @return CartPrice
      */
     private function calculateNetAmount(PriceCollection $prices)
@@ -118,6 +123,7 @@ class AmountCalculator
         $total = $prices->getTotalPrice();
         $gross = $total->getPrice() + $prices->getCalculatedTaxes()->getAmount();
         $gross = $this->rounding->round($gross);
+
         return new CartPrice($total->getPrice(), $gross, $total->getCalculatedTaxes(), $total->getTaxRules());
     }
 }

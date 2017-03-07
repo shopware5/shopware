@@ -50,7 +50,7 @@ class PriceCalculator
     /**
      * @param TaxCalculator $taxCalculator
      * @param PriceRounding $priceRounding
-     * @param TaxDetector $taxDetector
+     * @param TaxDetector   $taxDetector
      */
     public function __construct(
         TaxCalculator $taxCalculator,
@@ -63,8 +63,9 @@ class PriceCalculator
     }
 
     /**
-     * @param PriceDefinition $definition
+     * @param PriceDefinition      $definition
      * @param CartContextInterface $context
+     *
      * @return Price
      */
     public function calculate(
@@ -104,8 +105,9 @@ class PriceCalculator
     }
 
     /**
-     * @param PriceDefinition $definition
+     * @param PriceDefinition      $definition
      * @param CartContextInterface $context
+     *
      * @return float
      */
     private function getUnitPrice(PriceDefinition $definition, CartContextInterface $context)
@@ -123,6 +125,7 @@ class PriceCalculator
             $definition->getPrice(),
             $definition->getTaxRules()
         );
+
         return $this->priceRounding->round($price);
     }
 }

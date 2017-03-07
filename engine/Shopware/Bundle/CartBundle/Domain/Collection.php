@@ -69,6 +69,7 @@ class Collection implements Countable, IteratorAggregate, \JsonSerializable
 
     /**
      * @param string $key
+     *
      * @return mixed|null
      */
     public function get($key)
@@ -76,11 +77,13 @@ class Collection implements Countable, IteratorAggregate, \JsonSerializable
         if ($this->has($key)) {
             return $this->items[$key];
         }
+
         return null;
     }
 
     /**
      * @param string $key
+     *
      * @return bool
      */
     public function has($key)
@@ -116,6 +119,7 @@ class Collection implements Countable, IteratorAggregate, \JsonSerializable
 
     /**
      * @param callable $fn
+     *
      * @return array
      */
     public function map(callable $fn)

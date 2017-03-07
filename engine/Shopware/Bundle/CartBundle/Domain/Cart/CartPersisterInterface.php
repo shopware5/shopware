@@ -28,6 +28,7 @@ interface CartPersisterInterface
 {
     /**
      * @param string $token
+     *
      * @return Cart
      */
     public function load($token);

@@ -44,7 +44,7 @@ class ProcessorCart implements \JsonSerializable
 
     /**
      * @param CalculatedLineItemCollection $lineItems
-     * @param DeliveryCollection $deliveries
+     * @param DeliveryCollection           $deliveries
      */
     public function __construct(
         CalculatedLineItemCollection $lineItems,

@@ -52,8 +52,8 @@ class CustomerService
     private $paymentMethodGateway;
 
     /**
-     * @param CustomerGateway $customerGateway
-     * @param AddressGateway $addressGateway
+     * @param CustomerGateway      $customerGateway
+     * @param AddressGateway       $addressGateway
      * @param ShopGatewayInterface $shopGatewayInterface
      * @param PaymentMethodGateway $paymentMethodGateway
      */
@@ -70,8 +70,9 @@ class CustomerService
     }
 
     /**
-     * @param int[] $ids
+     * @param int[]                $ids
      * @param ShopContextInterface $context
+     *
      * @return Customer[]
      */
     public function getList($ids, ShopContextInterface $context)
@@ -124,11 +125,13 @@ class CustomerService
                 $customer->setLastPaymentMethod($payments[$id]);
             }
         }
+
         return $customers;
     }
 
     /**
      * @param Customer[] $customers
+     *
      * @return int[]
      */
     private function collectAddressIds($customers)
@@ -138,11 +141,13 @@ class CustomerService
             $ids[] = $customer->getDefaultShippingAddressId();
             $ids[] = $customer->getDefaultBillingAddressId();
         }
+
         return $ids;
     }
 
     /**
      * @param Customer[] $customers
+     *
      * @return int[]
      */
     private function collectShopIds($customers)
@@ -152,11 +157,13 @@ class CustomerService
             $ids[] = $customer->getAssignedShopId();
             $ids[] = $customer->getAssignedLanguageShopId();
         }
+
         return $ids;
     }
 
     /**
      * @param Customer[] $customers
+     *
      * @return int[]
      */
     private function collectPaymentIds($customers)
@@ -166,6 +173,7 @@ class CustomerService
             $ids[] = $customer->getLastPaymentMethodId();
             $ids[] = $customer->getPresetPaymentMethodId();
         }
+
         return $ids;
     }
 }
