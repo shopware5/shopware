@@ -28,8 +28,7 @@ use Shopware\Bundle\CartBundle\Domain\Cart\CartContextInterface;
 
 interface CartContextServiceInterface
 {
-    /**
-     * @return CartContextInterface
-     */
-    public function getCartContext();
+    public function getCartContext(): CartContextInterface;
+
+    public function initializeContext(): void;
 }

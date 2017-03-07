@@ -25,7 +25,7 @@
 namespace Shopware\Bundle\CartBundle\Infrastructure\Customer;
 
 use Shopware\Bundle\CartBundle\Domain\Customer\Customer;
-use Shopware\Bundle\CartBundle\Infrastructure\Payment\PaymentServiceGateway;
+use Shopware\Bundle\CartBundle\Infrastructure\Payment\PaymentMethodGateway;
 use Shopware\Bundle\StoreFrontBundle\Gateway\ShopGatewayInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
@@ -47,26 +47,26 @@ class CustomerService
     private $shopGateway;
 
     /**
-     * @var PaymentServiceGateway
+     * @var PaymentMethodGateway
      */
-    private $paymentServiceGateway;
+    private $paymentMethodGateway;
 
     /**
      * @param CustomerGateway $customerGateway
      * @param AddressGateway $addressGateway
      * @param ShopGatewayInterface $shopGatewayInterface
-     * @param PaymentServiceGateway $paymentServiceGateway
+     * @param PaymentMethodGateway $paymentMethodGateway
      */
     public function __construct(
         CustomerGateway $customerGateway,
         AddressGateway $addressGateway,
         ShopGatewayInterface $shopGatewayInterface,
-        PaymentServiceGateway $paymentServiceGateway
+        PaymentMethodGateway $paymentMethodGateway
     ) {
         $this->customerGateway = $customerGateway;
         $this->addressGateway = $addressGateway;
         $this->shopGateway = $shopGatewayInterface;
-        $this->paymentServiceGateway = $paymentServiceGateway;
+        $this->paymentMethodGateway = $paymentMethodGateway;
     }
 
     /**
@@ -88,7 +88,7 @@ class CustomerService
 
         $shops = $this->shopGateway->getList($this->collectShopIds($customers));
 
-        $payments = $this->paymentServiceGateway->getList(
+        $payments = $this->paymentMethodGateway->getList(
             $this->collectPaymentIds($customers),
             $context
         );
@@ -114,14 +114,14 @@ class CustomerService
                 $customer->setAssignedShop($shops[$id]);
             }
 
-            $id = $customer->getPresetPaymentServiceId();
+            $id = $customer->getPresetPaymentMethodId();
             if (array_key_exists($id, $payments)) {
-                $customer->setPresetPaymentService($payments[$id]);
+                $customer->setPresetPaymentMethod($payments[$id]);
             }
 
-            $id = $customer->getLastPaymentServiceId();
+            $id = $customer->getLastPaymentMethodId();
             if (array_key_exists($id, $payments)) {
-                $customer->setLastPaymentService($payments[$id]);
+                $customer->setLastPaymentMethod($payments[$id]);
             }
         }
         return $customers;
@@ -163,8 +163,8 @@ class CustomerService
     {
         $ids = [];
         foreach ($customers as $customer) {
-            $ids[] = $customer->getLastPaymentServiceId();
-            $ids[] = $customer->getPresetPaymentServiceId();
+            $ids[] = $customer->getLastPaymentMethodId();
+            $ids[] = $customer->getPresetPaymentMethodId();
         }
         return $ids;
     }

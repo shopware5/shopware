@@ -25,12 +25,13 @@
 namespace Shopware\Bundle\CartBundle\Infrastructure\Payment;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Bundle\CartBundle\Domain\Payment\PaymentService;
+use Doctrine\DBAL\Query\QueryBuilder;
+use Shopware\Bundle\CartBundle\Domain\Payment\PaymentMethod;
 use Shopware\Bundle\CartBundle\Infrastructure\SortArrayByKeysTrait;
 use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\FieldHelper;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
-class PaymentServiceGateway
+class PaymentMethodGateway
 {
     use SortArrayByKeysTrait;
 
@@ -40,7 +41,7 @@ class PaymentServiceGateway
     private $fieldHelper;
 
     /**
-     * @var paymentServiceHydrator
+     * @var PaymentMethodHydrator
      */
     private $hydrator;
 
@@ -51,12 +52,12 @@ class PaymentServiceGateway
 
     /**
      * @param FieldHelper $fieldHelper
-     * @param PaymentServiceHydrator $hydrator
+     * @param PaymentMethodHydrator $hydrator
      * @param Connection $connection
      */
     public function __construct(
         FieldHelper $fieldHelper,
-        PaymentServiceHydrator $hydrator,
+        PaymentMethodHydrator $hydrator,
         Connection $connection
     ) {
         $this->fieldHelper = $fieldHelper;
@@ -67,20 +68,16 @@ class PaymentServiceGateway
     /**
      * @param int[] $ids
      * @param ShopContextInterface $context
-     * @return PaymentService[]
+     * @return PaymentMethod[]
      */
     public function getList($ids, ShopContextInterface $context)
     {
         if (0 === count($ids)) {
             return [];
         }
-        $query = $this->connection->createQueryBuilder();
-        $query->select('paymentService.id as arrayKey');
-        $query->addSelect($this->fieldHelper->getPaymentServiceFields());
-        $query->from('s_core_paymentmeans', 'paymentService');
-        $query->leftJoin('paymentService', 's_core_paymentmeans_attributes', 'paymentServiceAttribute', 'paymentServiceAttribute.paymentmeanID = paymentService.id');
 
-        $query->where('paymentService.id IN (:ids)');
+        $query = $this->createQuery();
+        $query->where('paymentMethod.id IN (:ids)');
         $query->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
         $data = $query->execute()->fetchAll(\PDO::FETCH_GROUP|\PDO::FETCH_UNIQUE);
 
@@ -89,5 +86,42 @@ class PaymentServiceGateway
             $services[$id] = $this->hydrator->hydrate($row);
         }
         return $this->sortIndexedArrayByKeys($ids, $services);
+    }
+
+    /**
+     * @param ShopContextInterface $context
+     * @return PaymentMethod[]
+     */
+    public function getAll(ShopContextInterface $context)
+    {
+        $query = $this->createQuery();
+
+        $data = $query->execute()->fetchAll(\PDO::FETCH_GROUP|\PDO::FETCH_UNIQUE);
+
+        $services = [];
+        foreach ($data as $id => $row) {
+            $services[$id] = $this->hydrator->hydrate($row);
+        }
+        return $services;
+    }
+
+    /**
+     * @return QueryBuilder
+     */
+    private function createQuery(): QueryBuilder
+    {
+        $query = $this->connection->createQueryBuilder();
+        $query->select('paymentMethod.id as arrayKey');
+        $query->addSelect($this->fieldHelper->getPaymentMethodFields());
+        $query->from('s_core_paymentmeans', 'paymentMethod');
+
+        $query->leftJoin(
+            'paymentMethod',
+            's_core_paymentmeans_attributes',
+            'paymentMethodAttribute',
+            'paymentMethodAttribute.paymentmeanID = paymentMethod.id'
+        );
+
+        return $query;
     }
 }

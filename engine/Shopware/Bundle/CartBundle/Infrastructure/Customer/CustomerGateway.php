@@ -75,14 +75,14 @@ class CustomerGateway
         $query->select('customer.id as arrayKey');
         $query->addSelect($this->fieldHelper->getCustomerFields());
         $query->addSelect($this->fieldHelper->getCustomerGroupFields());
-        $query->addSelect($this->fieldHelper->getPaymentServiceFields());
+        $query->addSelect($this->fieldHelper->getPaymentMethodFields());
 
         $query->from('s_user', 'customer');
         $query->leftJoin('customer', 's_user_attributes', 'customerAttribute', 'customer.id = customerAttribute.userID');
         $query->leftJoin('customer', 's_core_customergroups', 'customerGroup', 'customerGroup.groupkey = customer.customergroup');
         $query->leftJoin('customerGroup', 's_core_customergroups_attributes', 'customerGroupAttribute', 'customerGroupAttribute.customerGroupID = customerGroup.id');
-        $query->leftJoin('customer', 's_core_paymentmeans', 'paymentService', 'paymentService.id = customer.paymentpreset');
-        $query->leftJoin('paymentService', 's_core_paymentmeans_attributes', 'paymentServiceAttribute', 'paymentServiceAttribute.paymentmeanID = paymentService.id');
+        $query->leftJoin('customer', 's_core_paymentmeans', 'paymentMethod', 'paymentMethod.id = customer.paymentpreset');
+        $query->leftJoin('paymentMethod', 's_core_paymentmeans_attributes', 'paymentMethodAttribute', 'paymentMethodAttribute.paymentmeanID = paymentMethod.id');
 
         $query->where('customer.id IN (:ids)');
         $query->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);

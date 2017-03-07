@@ -24,8 +24,7 @@
 
 namespace Shopware\Bundle\CartBundle\Domain\Customer;
 
-use Shopware\Bundle\CartBundle\Domain\Payment\PaymentInformation;
-use Shopware\Bundle\CartBundle\Domain\Payment\PaymentService;
+use Shopware\Bundle\CartBundle\Domain\Payment\PaymentMethod;
 use Shopware\Bundle\CartBundle\Domain\CloneTrait;
 use Shopware\Bundle\CartBundle\Domain\JsonSerializableTrait;
 use Shopware\Bundle\StoreFrontBundle\Struct\Customer\Group;
@@ -178,11 +177,6 @@ class Customer extends Extendable
     protected $hasNotifications;
 
     /**
-     * @var PaymentInformation[]
-     */
-    protected $paymentInformation = [];
-
-    /**
      * @var int
      */
     protected $defaultBillingAddressId;
@@ -205,22 +199,22 @@ class Customer extends Extendable
     /**
      * @var int
      */
-    protected $presetPaymentServiceId;
+    protected $presetPaymentMethodId;
 
     /**
      * @var int
      */
-    protected $lastPaymentServiceId;
+    protected $lastPaymentMethodId;
 
     /**
-     * @var PaymentService
+     * @var PaymentMethod
      */
-    protected $presetPaymentService;
+    protected $presetPaymentMethod;
 
     /**
-     * @var PaymentService
+     * @var PaymentMethod
      */
-    protected $lastPaymentService;
+    protected $lastPaymentMethod;
     #
     /**
      * @return int
@@ -623,22 +617,6 @@ class Customer extends Extendable
     }
 
     /**
-     * @return PaymentInformation[]
-     */
-    public function getPaymentInformation()
-    {
-        return $this->paymentInformation;
-    }
-
-    /**
-     * @param PaymentInformation[] $paymentInformation
-     */
-    public function setPaymentInformation($paymentInformation)
-    {
-        $this->paymentInformation = $paymentInformation;
-    }
-
-    /**
      * @return int
      */
     public function getDefaultBillingAddressId()
@@ -703,35 +681,35 @@ class Customer extends Extendable
     }
 
     /**
-     * @return PaymentService
+     * @return PaymentMethod
      */
-    public function getPresetPaymentService()
+    public function getPresetPaymentMethod()
     {
-        return $this->presetPaymentService;
+        return $this->presetPaymentMethod;
     }
 
     /**
-     * @param PaymentService $presetPaymentService
+     * @param PaymentMethod $presetPaymentMethod
      */
-    public function setPresetPaymentService($presetPaymentService)
+    public function setPresetPaymentMethod($presetPaymentMethod)
     {
-        $this->presetPaymentService = $presetPaymentService;
+        $this->presetPaymentMethod = $presetPaymentMethod;
     }
 
     /**
-     * @return PaymentService
+     * @return PaymentMethod
      */
-    public function getLastPaymentService()
+    public function getLastPaymentMethod()
     {
-        return $this->lastPaymentService;
+        return $this->lastPaymentMethod;
     }
 
     /**
-     * @param PaymentService $lastPaymentService
+     * @param PaymentMethod $lastPaymentMethod
      */
-    public function setLastPaymentService($lastPaymentService)
+    public function setLastPaymentMethod($lastPaymentMethod)
     {
-        $this->lastPaymentService = $lastPaymentService;
+        $this->lastPaymentMethod = $lastPaymentMethod;
     }
 
     /**
@@ -769,32 +747,32 @@ class Customer extends Extendable
     /**
      * @return int
      */
-    public function getPresetPaymentServiceId()
+    public function getPresetPaymentMethodId()
     {
-        return $this->presetPaymentServiceId;
+        return $this->presetPaymentMethodId;
     }
 
     /**
-     * @param int $presetPaymentServiceId
+     * @param int $presetPaymentMethodId
      */
-    public function setPresetPaymentServiceId($presetPaymentServiceId)
+    public function setPresetPaymentMethodId($presetPaymentMethodId)
     {
-        $this->presetPaymentServiceId = $presetPaymentServiceId;
+        $this->presetPaymentMethodId = $presetPaymentMethodId;
     }
 
     /**
      * @return int
      */
-    public function getLastPaymentServiceId()
+    public function getLastPaymentMethodId()
     {
-        return $this->lastPaymentServiceId;
+        return $this->lastPaymentMethodId;
     }
 
     /**
-     * @param int $lastPaymentServiceId
+     * @param int $lastPaymentMethodId
      */
-    public function setLastPaymentServiceId($lastPaymentServiceId)
+    public function setLastPaymentMethodId($lastPaymentMethodId)
     {
-        $this->lastPaymentServiceId = $lastPaymentServiceId;
+        $this->lastPaymentMethodId = $lastPaymentMethodId;
     }
 }

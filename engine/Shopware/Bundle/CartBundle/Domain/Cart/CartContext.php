@@ -28,7 +28,7 @@ namespace Shopware\Bundle\CartBundle\Domain\Cart;
 use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryService;
 use Shopware\Bundle\CartBundle\Domain\Customer\Address;
 use Shopware\Bundle\CartBundle\Domain\Customer\Customer;
-use Shopware\Bundle\CartBundle\Domain\Payment\PaymentService;
+use Shopware\Bundle\CartBundle\Domain\Payment\PaymentMethod;
 use Shopware\Bundle\CartBundle\Domain\CloneTrait;
 use Shopware\Bundle\CartBundle\Domain\JsonSerializableTrait;
 use Shopware\Bundle\StoreFrontBundle\Struct\Attribute;
@@ -54,9 +54,9 @@ class CartContext implements CartContextInterface, \JsonSerializable
     protected $billingAddress;
 
     /**
-     * @var PaymentService
+     * @var PaymentMethod
      */
-    protected $paymentService;
+    protected $paymentMethod;
 
     /**
      * @var DeliveryService
@@ -70,7 +70,7 @@ class CartContext implements CartContextInterface, \JsonSerializable
 
     /**
      * @param ShopContextInterface $shopContext
-     * @param PaymentService $paymentService
+     * @param PaymentMethod $paymentMethod
      * @param DeliveryService $deliveryService
      * @param Customer|null $customer
      * @param Address|null $billingAddress
@@ -78,7 +78,7 @@ class CartContext implements CartContextInterface, \JsonSerializable
      */
     public function __construct(
         ShopContextInterface $shopContext,
-        PaymentService $paymentService,
+        PaymentMethod $paymentMethod,
         DeliveryService $deliveryService,
         Customer $customer = null,
         Address $billingAddress = null,
@@ -87,7 +87,7 @@ class CartContext implements CartContextInterface, \JsonSerializable
         $this->customer = $customer;
         $this->shippingAddress = $shippingAddress;
         $this->billingAddress = $billingAddress;
-        $this->paymentService = $paymentService;
+        $this->paymentMethod = $paymentMethod;
         $this->deliveryService = $deliveryService;
         $this->shopContext = $shopContext;
     }
@@ -119,9 +119,9 @@ class CartContext implements CartContextInterface, \JsonSerializable
     /**
      * {@inheritdoc}
      */
-    public function getPaymentService()
+    public function getPaymentMethod()
     {
-        return $this->paymentService;
+        return $this->paymentMethod;
     }
 
     /**

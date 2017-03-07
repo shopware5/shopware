@@ -104,8 +104,8 @@ class CustomerHydrator extends Hydrator
             $customer->setCustomerGroup($this->customerGroupHydrator->hydrate($data));
         }
 
-        $customer->setLastPaymentServiceId((int) $data['__customer_paymentID']);
-        $customer->setPresetPaymentServiceId((int) $data['__customer_paymentpreset']);
+        $customer->setLastPaymentMethodId((int) $data['__customer_paymentID']);
+        $customer->setPresetPaymentMethodId((int) $data['__customer_paymentpreset']);
 
         return $customer;
     }

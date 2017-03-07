@@ -28,7 +28,7 @@ namespace Shopware\Bundle\CartBundle\Domain\Cart;
 use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryService;
 use Shopware\Bundle\CartBundle\Domain\Customer\Address;
 use Shopware\Bundle\CartBundle\Domain\Customer\Customer;
-use Shopware\Bundle\CartBundle\Domain\Payment\PaymentService;
+use Shopware\Bundle\CartBundle\Domain\Payment\PaymentMethod;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 interface CartContextInterface extends ShopContextInterface
@@ -49,9 +49,9 @@ interface CartContextInterface extends ShopContextInterface
     public function getBillingAddress();
 
     /**
-     * @return PaymentService
+     * @return PaymentMethod
      */
-    public function getPaymentService();
+    public function getPaymentMethod();
 
     /**
      * @return DeliveryService

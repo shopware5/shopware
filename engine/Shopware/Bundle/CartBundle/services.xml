@@ -66,7 +66,7 @@
             <argument type="service" id="shopware_storefront.context_service" />
             <argument type="service" id="session" />
             <argument type="service" id="shopware_cart.delivery_service_gateway_dbal" />
-            <argument type="service" id="shopware_cart.payment_service_gateway_dbal" />
+            <argument type="service" id="shopware_cart.payment_method_gateway_dbal" />
             <argument type="service" id="shopware_cart.address_gateway_dbal" />
             <argument type="service" id="shopware_cart.customer_service" />
             <argument type="service" id="config" />
@@ -128,16 +128,20 @@
             <argument type="service" id="shopware_cart.customer_gateway_dbal" />
             <argument type="service" id="shopware_cart.address_gateway_dbal" />
             <argument type="service" id="shopware_storefront.shop_gateway_dbal" />
-            <argument type="service" id="shopware_cart.payment_service_gateway_dbal" />
+            <argument type="service" id="shopware_cart.payment_method_gateway_dbal" />
         </service>
 
-        <service id="shopware_cart.payment_service_gateway_dbal" class="Shopware\Bundle\CartBundle\Infrastructure\Payment\PaymentServiceGateway">
+        <service id="shopware_cart.payment_method_gateway_dbal" class="Shopware\Bundle\CartBundle\Infrastructure\Payment\PaymentMethodGateway">
             <argument type="service" id="shopware_storefront.field_helper_dbal" />
-            <argument type="service" id="shopware_cart.payment_service_hydrator_dbal" />
+            <argument type="service" id="shopware_cart.payment_method_hydrator_dbal" />
             <argument type="service" id="dbal_connection" />
         </service>
 
-        <service id="shopware_cart.payment_service_hydrator_dbal" class="Shopware\Bundle\CartBundle\Infrastructure\Payment\PaymentServiceHydrator">
+        <service id="shopware_cart.payment_method_service" class="Shopware\Bundle\CartBundle\Infrastructure\Payment\PaymentMethodService">
+            <argument id="shopware_cart.payment_method_gateway_dbal" type="service"/>
+        </service>
+
+        <service id="shopware_cart.payment_method_hydrator_dbal" class="Shopware\Bundle\CartBundle\Infrastructure\Payment\PaymentMethodHydrator">
             <argument type="service" id="shopware_storefront.attribute_hydrator_dbal" />
         </service>
 

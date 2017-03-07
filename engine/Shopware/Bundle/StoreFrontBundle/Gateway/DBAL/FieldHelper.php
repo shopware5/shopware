@@ -886,31 +886,31 @@ class FieldHelper
         return array_merge($fields, $this->getTableFields('s_premium_dispatch_attributes', 'deliveryServiceAttribute'));
     }
 
-    public function getPaymentServiceFields()
+    public function getPaymentMethodFields()
     {
         $fields = [
-            'paymentService.id as __paymentService_id',
-            'paymentService.name as __paymentService_name',
-            'paymentService.description as __paymentService_description',
-            'paymentService.template as __paymentService_template',
-            'paymentService.class as __paymentService_class',
-            'paymentService.table as __paymentService_table',
-            'paymentService.hide as __paymentService_hide',
-            'paymentService.additionaldescription as __paymentService_additionaldescription',
-            'paymentService.debit_percent as __paymentService_debit_percent',
-            'paymentService.surcharge as __paymentService_surcharge',
-            'paymentService.surchargestring as __paymentService_surchargestring',
-            'paymentService.position as __paymentService_position',
-            'paymentService.active as __paymentService_active',
-            'paymentService.esdactive as __paymentService_esdactive',
-            'paymentService.embediframe as __paymentService_embediframe',
-            'paymentService.hideprospect as __paymentService_hideprospect',
-            'paymentService.action as __paymentService_action',
-            'paymentService.pluginID as __paymentService_pluginID',
-            'paymentService.source as __paymentService_source',
-            'paymentService.mobile_inactive as __paymentService_mobile_inactive'
+            'paymentMethod.id as __paymentMethod_id',
+            'paymentMethod.name as __paymentMethod_name',
+            'paymentMethod.description as __paymentMethod_description',
+            'paymentMethod.template as __paymentMethod_template',
+            'paymentMethod.class as __paymentMethod_class',
+            'paymentMethod.table as __paymentMethod_table',
+            'paymentMethod.hide as __paymentMethod_hide',
+            'paymentMethod.additionaldescription as __paymentMethod_additionaldescription',
+            'paymentMethod.debit_percent as __paymentMethod_debit_percent',
+            'paymentMethod.surcharge as __paymentMethod_surcharge',
+            'paymentMethod.surchargestring as __paymentMethod_surchargestring',
+            'paymentMethod.position as __paymentMethod_position',
+            'paymentMethod.active as __paymentMethod_active',
+            'paymentMethod.esdactive as __paymentMethod_esdactive',
+            'paymentMethod.embediframe as __paymentMethod_embediframe',
+            'paymentMethod.hideprospect as __paymentMethod_hideprospect',
+            'paymentMethod.action as __paymentMethod_action',
+            'paymentMethod.pluginID as __paymentMethod_pluginID',
+            'paymentMethod.source as __paymentMethod_source',
+            'paymentMethod.mobile_inactive as __paymentMethod_mobile_inactive'
         ];
-        return array_merge($fields, $this->getTableFields('s_core_paymentmeans_attributes', 'paymentServiceAttribute'));
+        return array_merge($fields, $this->getTableFields('s_core_paymentmeans_attributes', 'paymentMethodAttribute'));
     }
 
     public function getAddressFields()
