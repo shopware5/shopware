@@ -25,13 +25,9 @@ declare(strict_types=1);
 
 namespace Shopware\Bundle\CartBundle\Domain;
 
-use ArrayAccess;
 use ArrayIterator;
-use Closure;
-use Countable;
-use IteratorAggregate;
 
-class Collection implements Countable, IteratorAggregate, ArrayAccess, \JsonSerializable
+abstract class Collection implements \IteratorAggregate, \JsonSerializable
 {
     /**
      * @var array
@@ -41,164 +37,9 @@ class Collection implements Countable, IteratorAggregate, ArrayAccess, \JsonSeri
     /**
      * @param array $elements
      */
-    public function __construct(array $elements)
+    public function __construct(array $elements = [])
     {
-        $this->elements = $elements;
-    }
-
-    /**
-     * @param string|int $key
-     *
-     * @return mixed|null
-     */
-    public function remove($key)
-    {
-        if (!isset($this->elements[$key]) && !array_key_exists($key, $this->elements)) {
-            return null;
-        }
-
-        $removed = $this->elements[$key];
-        unset($this->elements[$key]);
-
-        return $removed;
-    }
-
-    /**
-     * Required by interface ArrayAccess.
-     * {@inheritdoc}
-     */
-    public function offsetExists($offset): bool
-    {
-        return $this->has($offset);
-    }
-
-    /**
-     * Required by interface ArrayAccess.
-     *
-     * {@inheritdoc}
-     */
-    public function offsetGet($offset)
-    {
-        return $this->get($offset);
-    }
-
-    /**
-     * Required by interface ArrayAccess.
-     *
-     * {@inheritdoc}
-     */
-    public function offsetSet($offset, $value): void
-    {
-        if (!isset($offset)) {
-            $this->add($value);
-
-            return;
-        }
-        $this->set($offset, $value);
-    }
-
-    /**
-     * Required by interface ArrayAccess.
-     *
-     * @param mixed $offset
-     *
-     * @return mixed|null|void
-     */
-    public function offsetUnset($offset): void
-    {
-        $this->remove($offset);
-    }
-
-    /**
-     * @param $key
-     *
-     * @return mixed|null
-     */
-    public function get($key)
-    {
-        return isset($this->elements[$key]) ? $this->elements[$key] : null;
-    }
-
-    /**
-     * @return array
-     */
-    public function getKeys(): array
-    {
-        return array_keys($this->elements);
-    }
-
-    /**
-     * @return array
-     */
-    public function getValues(): array
-    {
-        return array_values($this->elements);
-    }
-
-    /**
-     * @return int
-     */
-    public function count(): int
-    {
-        return count($this->elements);
-    }
-
-    /**
-     * @param int|string $key
-     * @param mixed      $value
-     */
-    public function set($key, $value): void
-    {
-        $this->elements[$key] = $value;
-    }
-
-    /**
-     * @param mixed $element
-     */
-    public function add($element): void
-    {
-        $this->elements[] = $element;
-    }
-
-    public function isEmpty(): bool
-    {
-        return empty($this->elements);
-    }
-
-    /**
-     * Required by interface IteratorAggregate.
-     *
-     * {@inheritdoc}
-     */
-    public function getIterator(): ArrayIterator
-    {
-        return new ArrayIterator($this->elements);
-    }
-
-    public function map(Closure $func): Collection
-    {
-        return array_map($func, $this->elements);
-    }
-
-    public function filter(Closure $p): Collection
-    {
-        return $this->createFrom(array_filter($this->elements, $p));
-    }
-
-    public function exists(Closure $p): bool
-    {
-        foreach ($this->elements as $key => $element) {
-            if ($p($key, $element)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    public function clear(): void
-    {
-        $this->elements = [];
+        $this->fill($elements);
     }
 
     public function fill(array $elements): void
@@ -206,36 +47,71 @@ class Collection implements Countable, IteratorAggregate, ArrayAccess, \JsonSeri
         array_map([$this, 'add'], $elements);
     }
 
-    /**
-     * @param int|string $offset
-     *
-     * @return bool
-     */
-    public function has($offset): bool
+    public function clear(): void
     {
-        return isset($this->elements[$offset]) || array_key_exists($offset, $this->elements);
+        $this->elements = [];
+    }
+
+    public function count(): int
+    {
+        return count($this->elements);
+    }
+
+    public function getKeys(): array
+    {
+        return array_keys($this->elements);
+    }
+
+    public function has($key): bool
+    {
+        return array_key_exists($key, $this->elements);
+    }
+
+    public function map(\Closure $closure): array
+    {
+        return array_map($closure, $this->elements);
+    }
+
+    public function filterInstance($class): Collection
+    {
+        return $this->filter(function ($item) use ($class) {
+            return $item instanceof $class;
+        });
+    }
+
+    public function filter(\Closure $closure): Collection
+    {
+        return new static(array_filter($this->elements, $closure));
+    }
+
+    public function slice(int $offset, ?int $length = null): Collection
+    {
+        return new static(array_slice($this->elements, $offset, $length, true));
     }
 
     /**
-     * {@inheritdoc}
+     * Allows to use php-`foreach` to iterate over all elements inside the collection.
+     * Allows to use php-`count` function to count elements inside the collection
+     *
+     * @return ArrayIterator
      */
+    public function getIterator(): ArrayIterator
+    {
+        return new ArrayIterator($this->elements);
+    }
+
     public function jsonSerialize(): array
     {
         return $this->elements;
     }
 
-    /**
-     * Creates a new instance from the specified elements.
-     *
-     * This method is provided for derived classes to specify how a new
-     * instance should be created when constructor semantics have changed.
-     *
-     * @param array $elements elements
-     *
-     * @return Collection
-     */
-    protected function createFrom(array $elements): Collection
+    protected function doAdd($element): void
     {
-        return new static($elements);
+        $this->elements[] = $element;
+    }
+
+    protected function doRemoveByKey($key): void
+    {
+        unset($this->elements[$key]);
     }
 }

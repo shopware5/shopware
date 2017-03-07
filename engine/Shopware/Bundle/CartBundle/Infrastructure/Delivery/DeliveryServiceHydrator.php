@@ -47,8 +47,8 @@ class DeliveryServiceHydrator extends Hydrator
     public function hydrate(array $data): DeliveryService
     {
         $service = new DeliveryService();
-        $service->setId($data['__deliveryService_id']);
-        $service->setName($data['__deliveryService_name']);
+        $service->setId((int) $data['__deliveryService_id']);
+        $service->setName((string) $data['__deliveryService_name']);
 
         if (!empty($data['__deliveryServiceAttribute_id'])) {
             $this->attributeHydrator->addAttribute($service, $data, 'deliveryServiceAttribute');

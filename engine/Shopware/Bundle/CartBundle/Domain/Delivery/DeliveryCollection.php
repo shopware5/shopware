@@ -35,39 +35,16 @@ class DeliveryCollection extends Collection
     /**
      * @var Delivery[]
      */
-    protected $items = [];
+    protected $elements = [];
 
     public function add(Delivery $delivery): void
     {
-        $this->items[] = $delivery;
+        parent::doAdd($delivery);
     }
 
-    public function remove($key): ? Delivery
+    public function remove(string $key): void
     {
-        return parent::remove($key);
-    }
-
-    public function offsetGet($offset): ? Delivery
-    {
-        return parent::offsetGet($offset);
-    }
-
-    public function set($key, Delivery $value): void
-    {
-        parent::set($key, $value);
-    }
-
-    public function get($key): ? Delivery
-    {
-        return parent::get($key);
-    }
-
-    /**
-     * @return Delivery[]
-     */
-    public function getValues(): array
-    {
-        return parent::getValues();
+        parent::doRemoveByKey($key);
     }
 
     /**
@@ -76,7 +53,7 @@ class DeliveryCollection extends Collection
     public function sort(): void
     {
         usort(
-            $this->items,
+            $this->elements,
             function (Delivery $a, Delivery $b) {
                 if ($a->getAddress() != $b->getAddress()) {
                     return -1;
@@ -89,7 +66,7 @@ class DeliveryCollection extends Collection
 
     public function getDelivery(DeliveryDate $deliveryDate, Address $address): ? Delivery
     {
-        foreach ($this->items as $delivery) {
+        foreach ($this->elements as $delivery) {
             if ($delivery->getDeliveryDate() != $deliveryDate) {
                 continue;
             }
@@ -108,9 +85,9 @@ class DeliveryCollection extends Collection
      *
      * @return bool
      */
-    public function contains(Deliverable $item)
+    public function contains(Deliverable $item): bool
     {
-        foreach ($this->items as $delivery) {
+        foreach ($this->elements as $delivery) {
             if ($delivery->getPositions()->has($item->getIdentifier())) {
                 return true;
             }

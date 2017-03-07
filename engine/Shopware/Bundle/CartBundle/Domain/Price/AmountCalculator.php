@@ -73,8 +73,8 @@ class AmountCalculator
         $total = $prices->getTotalPrice();
 
         return new CartPrice(
-            $total->getPrice(),
-            $total->getPrice(),
+            $total->getTotalPrice(),
+            $total->getTotalPrice(),
             new CalculatedTaxCollection([]),
             new TaxRuleCollection([])
         );
@@ -93,10 +93,10 @@ class AmountCalculator
     private function calculateGrossAmount(PriceCollection $prices): CartPrice
     {
         $total = $prices->getTotalPrice();
-        $net = $total->getPrice() - $prices->getCalculatedTaxes()->getAmount();
+        $net = $total->getTotalPrice() - $prices->getCalculatedTaxes()->getAmount();
         $net = $this->rounding->round($net);
 
-        return new CartPrice($net, $total->getPrice(), $total->getCalculatedTaxes(), $total->getTaxRules());
+        return new CartPrice($net, $total->getTotalPrice(), $total->getCalculatedTaxes(), $total->getTaxRules());
     }
 
     /**
@@ -112,9 +112,9 @@ class AmountCalculator
     private function calculateNetAmount(PriceCollection $prices): CartPrice
     {
         $total = $prices->getTotalPrice();
-        $gross = $total->getPrice() + $prices->getCalculatedTaxes()->getAmount();
+        $gross = $total->getTotalPrice() + $prices->getCalculatedTaxes()->getAmount();
         $gross = $this->rounding->round($gross);
 
-        return new CartPrice($total->getPrice(), $gross, $total->getCalculatedTaxes(), $total->getTaxRules());
+        return new CartPrice($total->getTotalPrice(), $gross, $total->getCalculatedTaxes(), $total->getTaxRules());
     }
 }

@@ -67,7 +67,7 @@ class ProductProcessor implements CartProcessorInterface
         CartContextInterface $context
     ): void {
         $collection = $cart->getLineItems()->filterType(self::TYPE_PRODUCT);
-        if (count($collection) === 0) {
+        if ($collection->count() === 0) {
             return;
         }
 

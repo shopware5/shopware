@@ -1,4 +1,26 @@
 <?php
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
 
 namespace Shopware\Tests\Unit\Bundle\CartBundle\Domain\Tax;
 
@@ -18,7 +40,7 @@ class TaxRuleCollectionTest extends \PHPUnit_Framework_TestCase
         $collection = new TaxRuleCollection([
             new TaxRule(19),
             new TaxRule(18),
-            new TaxRule(17)
+            new TaxRule(17),
         ]);
         static::assertCount(3, $collection);
     }
@@ -28,7 +50,7 @@ class TaxRuleCollectionTest extends \PHPUnit_Framework_TestCase
         $collection = new TaxRuleCollection([
             new TaxRule(19),
             new TaxRule(19),
-            new TaxRule(19)
+            new TaxRule(19),
         ]);
 
         static::assertEquals(
@@ -42,7 +64,7 @@ class TaxRuleCollectionTest extends \PHPUnit_Framework_TestCase
         $collection = new TaxRuleCollection([
             new TaxRule(19),
             new TaxRule(18),
-            new TaxRule(17)
+            new TaxRule(17),
         ]);
         static::assertEquals(
             new TaxRule(19),
@@ -66,7 +88,7 @@ class TaxRuleCollectionTest extends \PHPUnit_Framework_TestCase
         $collection = new TaxRuleCollection([
             new TaxRule(19),
             new TaxRule(18),
-            new TaxRule(17)
+            new TaxRule(17),
         ]);
         $collection->clear();
 
@@ -79,14 +101,14 @@ class TaxRuleCollectionTest extends \PHPUnit_Framework_TestCase
         $collection->fill([
             new TaxRule(19),
             new TaxRule(18),
-            new TaxRule(17)
+            new TaxRule(17),
         ]);
 
         static::assertEquals(
             new TaxRuleCollection([
                 new TaxRule(19),
                 new TaxRule(18),
-                new TaxRule(17)
+                new TaxRule(17),
             ]),
             $collection
         );
@@ -111,7 +133,7 @@ class TaxRuleCollectionTest extends \PHPUnit_Framework_TestCase
         static::assertEquals(
             new TaxRuleCollection([
                 new TaxRule(19),
-                new TaxRule(18)
+                new TaxRule(18),
             ]),
             $c
         );
@@ -122,13 +144,13 @@ class TaxRuleCollectionTest extends \PHPUnit_Framework_TestCase
         $collection = new TaxRuleCollection([
             new TaxRule(19),
             new TaxRule(18),
-            new TaxRule(17)
+            new TaxRule(17),
         ]);
         $collection->remove(19);
         static::assertEquals(
             new TaxRuleCollection([
                 new TaxRule(18),
-                new TaxRule(17)
+                new TaxRule(17),
             ]),
             $collection
         );

@@ -1,4 +1,26 @@
 <?php
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
 
 namespace Shopware\Tests\Unit\Bundle\CartBundle\Domain\LineItem;
 
@@ -29,7 +51,7 @@ class CalculatedLineItemCollectionTest extends \PHPUnit_Framework_TestCase
         $collection = new CalculatedLineItemCollection([
             new ConfiguredLineItem('A'),
             new ConfiguredLineItem('B'),
-            new ConfiguredLineItem('C')
+            new ConfiguredLineItem('C'),
         ]);
         static::assertCount(3, $collection);
     }
@@ -39,12 +61,12 @@ class CalculatedLineItemCollectionTest extends \PHPUnit_Framework_TestCase
         $collection = new CalculatedLineItemCollection([
             new ConfiguredLineItem('A', 1),
             new ConfiguredLineItem('A', 2),
-            new ConfiguredLineItem('A', 3)
+            new ConfiguredLineItem('A', 3),
         ]);
 
         static::assertEquals(
             new CalculatedLineItemCollection([
-                new ConfiguredLineItem('A', 3)
+                new ConfiguredLineItem('A', 3),
             ]),
             $collection
         );
@@ -64,7 +86,7 @@ class CalculatedLineItemCollectionTest extends \PHPUnit_Framework_TestCase
             new ConfiguredLineItem('A', 3),
             new ConfiguredLineItem('B', 3),
             new ConfiguredLineItem('C', 3),
-            new ConfiguredLineItem('D', 3)
+            new ConfiguredLineItem('D', 3),
         ]);
 
         static::assertEquals(
@@ -72,9 +94,9 @@ class CalculatedLineItemCollectionTest extends \PHPUnit_Framework_TestCase
                 new ConfiguredLineItem('A', 3),
                 new ConfiguredLineItem('B', 3),
                 new ConfiguredLineItem('C', 3),
-                new ConfiguredLineItem('D', 3)
+                new ConfiguredLineItem('D', 3),
             ]),
-            $collection->filterClass(ConfiguredLineItem::class)
+            $collection->filterInstance(ConfiguredLineItem::class)
         );
 
         static::assertEquals(
@@ -86,9 +108,9 @@ class CalculatedLineItemCollectionTest extends \PHPUnit_Framework_TestCase
                 new CalculatedVoucher(
                     new LineItem(2, ProductProcessor::TYPE_PRODUCT, 1),
                     new Price(1, 1, new CalculatedTaxCollection(), new TaxRuleCollection())
-                )
+                ),
             ]),
-            $collection->filterClass(CalculatedVoucher::class)
+            $collection->filterInstance(CalculatedVoucher::class)
         );
     }
 
@@ -98,7 +120,7 @@ class CalculatedLineItemCollectionTest extends \PHPUnit_Framework_TestCase
             new ConfiguredLineItem('A', 3),
             new ConfiguredLineItem('B', 3),
             new ConfiguredLineItem('C', 3),
-            new ConfiguredLineItem('D', 3)
+            new ConfiguredLineItem('D', 3),
         ]);
 
         static::assertNotSame(
@@ -106,9 +128,9 @@ class CalculatedLineItemCollectionTest extends \PHPUnit_Framework_TestCase
                 new ConfiguredLineItem('A', 3),
                 new ConfiguredLineItem('B', 3),
                 new ConfiguredLineItem('C', 3),
-                new ConfiguredLineItem('D', 3)
+                new ConfiguredLineItem('D', 3),
             ]),
-            $collection->filterClass(ConfiguredLineItem::class)
+            $collection->filterInstance(ConfiguredLineItem::class)
         );
     }
 
@@ -118,7 +140,7 @@ class CalculatedLineItemCollectionTest extends \PHPUnit_Framework_TestCase
             new ConfiguredLineItem('A', 3),
             new ConfiguredLineItem('B', 3),
             new ConfiguredLineItem('C', 3),
-            new ConfiguredLineItem('D', 3)
+            new ConfiguredLineItem('D', 3),
         ]);
 
         $collection->clear();
@@ -131,7 +153,7 @@ class CalculatedLineItemCollectionTest extends \PHPUnit_Framework_TestCase
             new ConfiguredLineItem('A', 3),
             new ConfiguredLineItem('B', 3),
             new ConfiguredLineItem('C', 3),
-            new ConfiguredLineItem('D', 3)
+            new ConfiguredLineItem('D', 3),
         ]);
 
         $collection->remove('A');
@@ -140,7 +162,7 @@ class CalculatedLineItemCollectionTest extends \PHPUnit_Framework_TestCase
             new CalculatedLineItemCollection([
                 new ConfiguredLineItem('B', 3),
                 new ConfiguredLineItem('C', 3),
-                new ConfiguredLineItem('D', 3)
+                new ConfiguredLineItem('D', 3),
             ]),
             $collection
         );
@@ -152,7 +174,7 @@ class CalculatedLineItemCollectionTest extends \PHPUnit_Framework_TestCase
             new ConfiguredLineItem('A', 3),
             new ConfiguredLineItem('B', 3),
             new ConfiguredLineItem('C', 3),
-            new ConfiguredLineItem('D', 3)
+            new ConfiguredLineItem('D', 3),
         ]);
 
         static::assertSame(
@@ -168,7 +190,7 @@ class CalculatedLineItemCollectionTest extends \PHPUnit_Framework_TestCase
             new ConfiguredLineItem('A', 3),
             new ConfiguredLineItem('B', 3),
             new ConfiguredLineItem('C', 3),
-            new ConfiguredLineItem('D', 3)
+            new ConfiguredLineItem('D', 3),
         ]);
 
         static::assertEquals(
@@ -176,7 +198,7 @@ class CalculatedLineItemCollectionTest extends \PHPUnit_Framework_TestCase
                 new ConfiguredLineItem('A', 3),
                 new ConfiguredLineItem('B', 3),
                 new ConfiguredLineItem('C', 3),
-                new ConfiguredLineItem('D', 3)
+                new ConfiguredLineItem('D', 3),
             ]),
             $collection
         );
@@ -188,7 +210,7 @@ class CalculatedLineItemCollectionTest extends \PHPUnit_Framework_TestCase
             new ConfiguredLineItem('A', 3),
             new ConfiguredLineItem('B', 3),
             new ConfiguredLineItem('C', 3),
-            new ConfiguredLineItem('D', 3)
+            new ConfiguredLineItem('D', 3),
         ]);
 
         static::assertEquals(
@@ -209,13 +231,13 @@ class CalculatedLineItemCollectionTest extends \PHPUnit_Framework_TestCase
             new ConfiguredGoodsItem('A', 3),
             new ConfiguredLineItem('B', 3),
             new ConfiguredLineItem('C', 3),
-            new ConfiguredGoodsItem('D', 3)
+            new ConfiguredGoodsItem('D', 3),
         ]);
 
         static::assertEquals(
             new CalculatedLineItemCollection([
                 new ConfiguredGoodsItem('A', 3),
-                new ConfiguredGoodsItem('D', 3)
+                new ConfiguredGoodsItem('D', 3),
             ]),
             $collection->filterGoods()
         );
@@ -227,13 +249,13 @@ class CalculatedLineItemCollectionTest extends \PHPUnit_Framework_TestCase
             new ConfiguredGoodsItem('A', 3),
             new ConfiguredLineItem('B', 3),
             new ConfiguredLineItem('C', 3),
-            new ConfiguredGoodsItem('D', 3)
+            new ConfiguredGoodsItem('D', 3),
         ]);
 
         static::assertNotSame(
             new CalculatedLineItemCollection([
                 new ConfiguredGoodsItem('A', 3),
-                new ConfiguredGoodsItem('D', 3)
+                new ConfiguredGoodsItem('D', 3),
             ]),
             $collection->filterGoods()
         );
@@ -249,13 +271,13 @@ class CalculatedLineItemCollectionTest extends \PHPUnit_Framework_TestCase
             new CalculatedVoucher(
                 new LineItem(2, PercentageVoucherProcessor::TYPE_PERCENTAGE_VOUCHER, 1),
                 new Price(300, 300, new CalculatedTaxCollection(), new TaxRuleCollection())
-            )
+            ),
         ]);
 
         static::assertEquals(
             new PriceCollection([
                 new Price(200, 200, new CalculatedTaxCollection(), new TaxRuleCollection()),
-                new Price(300, 300, new CalculatedTaxCollection(), new TaxRuleCollection())
+                new Price(300, 300, new CalculatedTaxCollection(), new TaxRuleCollection()),
             ]),
             $collection->getPrices()
         );
@@ -267,7 +289,7 @@ class CalculatedLineItemCollectionTest extends \PHPUnit_Framework_TestCase
             new ConfiguredLineItem('A', 3),
             new ConfiguredLineItem('B', 3),
             new ConfiguredLineItem('C', 3),
-            new ConfiguredLineItem('D', 3)
+            new ConfiguredLineItem('D', 3),
         ]);
 
         $collection->remove('X');
@@ -276,7 +298,7 @@ class CalculatedLineItemCollectionTest extends \PHPUnit_Framework_TestCase
                 new ConfiguredLineItem('A', 3),
                 new ConfiguredLineItem('B', 3),
                 new ConfiguredLineItem('C', 3),
-                new ConfiguredLineItem('D', 3)
+                new ConfiguredLineItem('D', 3),
             ]),
             $collection
         );

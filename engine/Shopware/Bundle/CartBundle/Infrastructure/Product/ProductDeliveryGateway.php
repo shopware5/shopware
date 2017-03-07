@@ -81,7 +81,7 @@ class ProductDeliveryGateway implements ProductDeliveryGatewayInterface
             $delayInterval = new \DateInterval('P' . $outOfStockDelayInDays . 'D');
 
             $deliveryInformation[$number] = new DeliveryInformation(
-                (float) $row['instock'],
+                (int) $row['instock'],
                 (float) $row['height'],
                 (float) $row['width'],
                 (float) $row['length'],

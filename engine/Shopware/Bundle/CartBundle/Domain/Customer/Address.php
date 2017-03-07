@@ -42,14 +42,14 @@ class Address extends Extendable
     /**
      * Contains the name of the address address company
      *
-     * @var string
+     * @var string|null
      */
     protected $company;
 
     /**
      * Contains the department name of the address address company
      *
-     * @var string
+     * @var string|null
      */
     protected $department;
 
@@ -68,7 +68,7 @@ class Address extends Extendable
     protected $firstname;
 
     /**
-     * @var string
+     * @var string|null
      */
     protected $title;
 
@@ -82,7 +82,7 @@ class Address extends Extendable
     /**
      * Contains the street name of the address
      *
-     * @var string
+     * @var string|null
      */
     protected $street;
 
@@ -103,28 +103,28 @@ class Address extends Extendable
     /**
      * Contains the phone number of the address
      *
-     * @var string
+     * @var string|null
      */
     protected $phone;
 
     /**
      * Contains the vat id of the address
      *
-     * @var string
+     * @var string|null
      */
     protected $vatId;
 
     /**
      * Contains the additional address line data
      *
-     * @var string
+     * @var string|null
      */
     protected $additionalAddressLine1;
 
     /**
      * Contains the additional address line data 2
      *
-     * @var string
+     * @var string|null
      */
     protected $additionalAddressLine2;
 
@@ -134,7 +134,7 @@ class Address extends Extendable
     protected $country;
 
     /**
-     * @var Country\State
+     * @var Country\State|null
      */
     protected $state;
 
@@ -148,22 +148,22 @@ class Address extends Extendable
         $this->id = $id;
     }
 
-    public function getCompany(): string
+    public function getCompany(): ? string
     {
         return $this->company;
     }
 
-    public function setCompany(string $company): void
+    public function setCompany(?string $company): void
     {
         $this->company = $company;
     }
 
-    public function getDepartment(): string
+    public function getDepartment(): ? string
     {
         return $this->department;
     }
 
-    public function setDepartment(string $department): void
+    public function setDepartment(?string $department): void
     {
         $this->department = $department;
     }
@@ -188,12 +188,12 @@ class Address extends Extendable
         $this->firstname = $firstname;
     }
 
-    public function getTitle(): string
+    public function getTitle(): ? string
     {
         return $this->title;
     }
 
-    public function setTitle(string $title): void
+    public function setTitle(?string $title): void
     {
         $this->title = $title;
     }
@@ -208,12 +208,12 @@ class Address extends Extendable
         $this->lastname = $lastname;
     }
 
-    public function getStreet(): string
+    public function getStreet(): ? string
     {
         return $this->street;
     }
 
-    public function setStreet(string $street): void
+    public function setStreet(?string $street): void
     {
         $this->street = $street;
     }
@@ -238,42 +238,42 @@ class Address extends Extendable
         $this->city = $city;
     }
 
-    public function getPhone(): string
+    public function getPhone(): ? string
     {
         return $this->phone;
     }
 
-    public function setPhone(string $phone): void
+    public function setPhone(?string $phone): void
     {
         $this->phone = $phone;
     }
 
-    public function getVatId(): string
+    public function getVatId(): ? string
     {
         return $this->vatId;
     }
 
-    public function setVatId(string $vatId): void
+    public function setVatId(?string $vatId): void
     {
         $this->vatId = $vatId;
     }
 
-    public function getAdditionalAddressLine1(): string
+    public function getAdditionalAddressLine1(): ? string
     {
         return $this->additionalAddressLine1;
     }
 
-    public function setAdditionalAddressLine1(string $additionalAddressLine1): void
+    public function setAdditionalAddressLine1(?string $additionalAddressLine1): void
     {
         $this->additionalAddressLine1 = $additionalAddressLine1;
     }
 
-    public function getAdditionalAddressLine2(): string
+    public function getAdditionalAddressLine2(): ? string
     {
         return $this->additionalAddressLine2;
     }
 
-    public function setAdditionalAddressLine2(string $additionalAddressLine2): void
+    public function setAdditionalAddressLine2(?string $additionalAddressLine2): void
     {
         $this->additionalAddressLine2 = $additionalAddressLine2;
     }
@@ -288,12 +288,12 @@ class Address extends Extendable
         $this->country = $country;
     }
 
-    public function getState(): Country\State
+    public function getState(): ? Country\State
     {
         return $this->state;
     }
 
-    public function setState(Country\State $state): void
+    public function setState(?Country\State $state): void
     {
         $this->state = $state;
     }

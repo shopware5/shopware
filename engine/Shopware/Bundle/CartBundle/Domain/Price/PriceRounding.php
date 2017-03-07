@@ -39,10 +39,6 @@ class PriceRounding
 
     public function round(float $price): float
     {
-        if (!is_numeric($price)) {
-            throw new \RuntimeException('Provided price is not numeric');
-        }
-
         return round((float) $price, $this->precisions);
     }
 }

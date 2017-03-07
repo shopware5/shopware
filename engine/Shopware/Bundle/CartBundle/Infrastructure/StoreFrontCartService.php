@@ -113,7 +113,6 @@ class StoreFrontCartService
         $calculated = $this->calculate($cart);
 
         $context = $this->contextService->getCartContext();
-
         $viewCart = $this->viewCartTransformer->transform($calculated, $context);
 
         return $viewCart;

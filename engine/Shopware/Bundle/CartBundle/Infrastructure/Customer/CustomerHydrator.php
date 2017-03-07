@@ -62,10 +62,10 @@ class CustomerHydrator extends Hydrator
         $customer->setNumber($data['__customer_customernumber']);
         $customer->setEmail($data['__customer_email']);
         $customer->setActive((bool) $data['__customer_active']);
-        $customer->setSalutation($data['__customer_salutation']);
-        $customer->setTitle($data['__customer_title']);
-        $customer->setFirstname($data['__customer_firstname']);
-        $customer->setLastname($data['__customer_lastname']);
+        $customer->setSalutation((string) $data['__customer_salutation']);
+        $customer->setTitle((string) $data['__customer_title']);
+        $customer->setFirstname((string) $data['__customer_firstname']);
+        $customer->setLastname((string) $data['__customer_lastname']);
 
         if (!empty($data['__customer_firstlogin'])) {
             $customer->setFirstLogin(new \DateTime($data['__customer_firstlogin']));
@@ -81,7 +81,7 @@ class CustomerHydrator extends Hydrator
         }
         $customer->setFailedLogins((int) $data['__customer_failedlogins']);
         $customer->setAccountMode((int) $data['__customer_accountmode']);
-        $customer->setCustomerType($data['__customer_']);
+        $customer->setCustomerType((string) $data['__customer_']);
         $customer->setValidation($data['__customer_validation']);
         $customer->setConfirmationKey($data['__customer_confirmationkey']);
         $customer->setOrderedNewsletter((bool) $data['__customer_newsletter']);

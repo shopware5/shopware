@@ -1,4 +1,26 @@
 <?php
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
 
 namespace Shopware\Tests\Unit\Bundle\CartBundle\Infrastructure\Product;
 
@@ -15,7 +37,6 @@ use Shopware\Bundle\CartBundle\Infrastructure\Product\ProductPriceGateway;
 use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\FieldHelper;
 use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\TaxHydrator;
 use Shopware\Bundle\StoreFrontBundle\Struct\Customer\Group;
-
 use Shopware\Tests\Unit\Bundle\CartBundle\Common\Generator;
 
 class ProductPriceGatewayTest extends \PHPUnit_Framework_TestCase
@@ -31,7 +52,7 @@ class ProductPriceGatewayTest extends \PHPUnit_Framework_TestCase
         );
 
         $collection = new LineItemCollection([
-            new LineItem('SW1', ProductProcessor::TYPE_PRODUCT, 1)
+            new LineItem('SW1', ProductProcessor::TYPE_PRODUCT, 1),
         ]);
 
         $context = Generator::createContext(
@@ -48,15 +69,15 @@ class ProductPriceGatewayTest extends \PHPUnit_Framework_TestCase
         $gateway = new ProductPriceGateway(
             $this->createDatabaseMock([
                 'SW1' => [
-                    PriceQueryRow::create('EK1', 1, self::QUERY_TO_UNLIMITED, 20.10, 19)
-                ]
+                    PriceQueryRow::create('EK1', 1, self::QUERY_TO_UNLIMITED, 20.10, 19),
+                ],
             ]),
             $this->createMock(FieldHelper::class),
             new TaxHydrator()
         );
 
         $collection = new LineItemCollection([
-            new LineItem('SW1', ProductProcessor::TYPE_PRODUCT, 1)
+            new LineItem('SW1', ProductProcessor::TYPE_PRODUCT, 1),
         ]);
 
         $context = Generator::createContext(
@@ -78,15 +99,15 @@ class ProductPriceGatewayTest extends \PHPUnit_Framework_TestCase
             $this->createDatabaseMock([
                 'SW1' => [
                     PriceQueryRow::create('EK2', 1, self::QUERY_TO_UNLIMITED, 5.10, 19),
-                    PriceQueryRow::create('EK1', 1, self::QUERY_TO_UNLIMITED, 20.10, 19)
-                ]
+                    PriceQueryRow::create('EK1', 1, self::QUERY_TO_UNLIMITED, 20.10, 19),
+                ],
             ]),
             $this->createMock(FieldHelper::class),
             new TaxHydrator()
         );
 
         $collection = new LineItemCollection([
-            new LineItem('SW1', ProductProcessor::TYPE_PRODUCT, 1)
+            new LineItem('SW1', ProductProcessor::TYPE_PRODUCT, 1),
         ]);
 
         $context = Generator::createContext(
@@ -108,11 +129,11 @@ class ProductPriceGatewayTest extends \PHPUnit_Framework_TestCase
             $this->createDatabaseMock([
                 'SW1' => [
                     PriceQueryRow::create('EK2', 1, self::QUERY_TO_UNLIMITED, 5.10, 19),
-                    PriceQueryRow::create('EK1', 1, self::QUERY_TO_UNLIMITED, 20.10, 19)
+                    PriceQueryRow::create('EK1', 1, self::QUERY_TO_UNLIMITED, 20.10, 19),
                 ],
                 'SW2' => [
-                    PriceQueryRow::create('EK2', 1, self::QUERY_TO_UNLIMITED, 5.10, 19)
-                ]
+                    PriceQueryRow::create('EK2', 1, self::QUERY_TO_UNLIMITED, 5.10, 19),
+                ],
             ]),
             $this->createMock(FieldHelper::class),
             new TaxHydrator()
@@ -120,7 +141,7 @@ class ProductPriceGatewayTest extends \PHPUnit_Framework_TestCase
 
         $collection = new LineItemCollection([
             new LineItem('SW1', ProductProcessor::TYPE_PRODUCT, 1),
-            new LineItem('SW2', ProductProcessor::TYPE_PRODUCT, 1)
+            new LineItem('SW2', ProductProcessor::TYPE_PRODUCT, 1),
         ]);
 
         $context = Generator::createContext(
@@ -149,8 +170,8 @@ class ProductPriceGatewayTest extends \PHPUnit_Framework_TestCase
                     PriceQueryRow::create('EK1', 4, self::QUERY_TO_UNLIMITED, 15.10, 19),
                 ],
                 'SW2' => [
-                    PriceQueryRow::create('EK2', 1, self::QUERY_TO_UNLIMITED, 5.10, 19)
-                ]
+                    PriceQueryRow::create('EK2', 1, self::QUERY_TO_UNLIMITED, 5.10, 19),
+                ],
             ]),
             $this->createMock(FieldHelper::class),
             new TaxHydrator()
@@ -158,7 +179,7 @@ class ProductPriceGatewayTest extends \PHPUnit_Framework_TestCase
 
         $collection = new LineItemCollection([
             new LineItem('SW1', ProductProcessor::TYPE_PRODUCT, 4),
-            new LineItem('SW2', ProductProcessor::TYPE_PRODUCT, 2)
+            new LineItem('SW2', ProductProcessor::TYPE_PRODUCT, 2),
         ]);
 
         $context = Generator::createContext(
@@ -182,14 +203,14 @@ class ProductPriceGatewayTest extends \PHPUnit_Framework_TestCase
         $gateway = new ProductPriceGateway(
             $this->createDatabaseMock([
                 'SW1' => [
-                    PriceQueryRow::create('EK2', 1, self::QUERY_TO_UNLIMITED, 1.10, 19)
+                    PriceQueryRow::create('EK2', 1, self::QUERY_TO_UNLIMITED, 1.10, 19),
                 ],
                 'SW2' => [
-                    PriceQueryRow::create('EK2', 1, self::QUERY_TO_UNLIMITED, 5.10, 19)
+                    PriceQueryRow::create('EK2', 1, self::QUERY_TO_UNLIMITED, 5.10, 19),
                 ],
                 'SW3' => [
-                    PriceQueryRow::create('EK2', 1, self::QUERY_TO_UNLIMITED, 10.10, 19)
-                ]
+                    PriceQueryRow::create('EK2', 1, self::QUERY_TO_UNLIMITED, 10.10, 19),
+                ],
             ]),
             $this->createMock(FieldHelper::class),
             new TaxHydrator()
@@ -226,11 +247,11 @@ class ProductPriceGatewayTest extends \PHPUnit_Framework_TestCase
                     PriceQueryRow::create('EK2', 1, 2, 1.10, 19),
                     PriceQueryRow::create('EK2', 3, 4, 2.10, 19),
                     PriceQueryRow::create('EK2', 5, self::QUERY_TO_UNLIMITED, 3.10, 19),
-                    PriceQueryRow::create('EK3', 1, self::QUERY_TO_UNLIMITED, 20.10, 19)
+                    PriceQueryRow::create('EK3', 1, self::QUERY_TO_UNLIMITED, 20.10, 19),
                 ],
                 'SW2' => [
-                    PriceQueryRow::create('EK2', 1, self::QUERY_TO_UNLIMITED, 5.10, 19)
-                ]
+                    PriceQueryRow::create('EK2', 1, self::QUERY_TO_UNLIMITED, 5.10, 19),
+                ],
             ]),
             $this->createMock(FieldHelper::class),
             new TaxHydrator()
@@ -238,7 +259,7 @@ class ProductPriceGatewayTest extends \PHPUnit_Framework_TestCase
 
         $collection = new LineItemCollection([
             new LineItem('SW1', ProductProcessor::TYPE_PRODUCT, 3),
-            new LineItem('SW2', ProductProcessor::TYPE_PRODUCT, 2)
+            new LineItem('SW2', ProductProcessor::TYPE_PRODUCT, 2),
         ]);
 
         $context = Generator::createContext(
@@ -251,7 +272,7 @@ class ProductPriceGatewayTest extends \PHPUnit_Framework_TestCase
         static::assertEquals(
             [
                 'SW1' => new PriceDefinition(2.10, new TaxRuleCollection([new TaxRule(19)]), 3),
-                'SW2' => new PriceDefinition(5.10, new TaxRuleCollection([new TaxRule(19)]), 2)
+                'SW2' => new PriceDefinition(5.10, new TaxRuleCollection([new TaxRule(19)]), 2),
             ],
             $prices
         );
@@ -259,6 +280,7 @@ class ProductPriceGatewayTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param array[] $queryResult
+     *
      * @return \PHPUnit_Framework_MockObject_MockObject|Connection
      */
     private function createDatabaseMock($queryResult)
@@ -283,12 +305,14 @@ class ProductPriceGatewayTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param string $key
+     *
      * @return Group
      */
     private function createCustomerGroup($key)
     {
         $group = new Group();
         $group->setKey($key);
+
         return $group;
     }
 }
@@ -311,7 +335,7 @@ class PriceQueryRow
             'price_net' => $price,
             '__tax_id' => $taxId,
             '__tax_tax' => $taxRate,
-            '__tax_description' => $taxName
+            '__tax_description' => $taxName,
         ];
     }
 }

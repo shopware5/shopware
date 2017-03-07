@@ -25,34 +25,44 @@ declare(strict_types=1);
 
 namespace Shopware\Bundle\CartBundle\Domain\Tax;
 
-use Shopware\Bundle\CartBundle\Domain\Collection;
+use Shopware\Bundle\CartBundle\Domain\KeyCollection;
 
-class CalculatedTaxCollection extends Collection
+class CalculatedTaxCollection extends KeyCollection
 {
     /**
      * @var CalculatedTax[]
      */
     protected $elements = [];
 
-    public function add(CalculatedTax $tax): void
+    public function add(CalculatedTax $calculatedTax): void
     {
-        $key = $this->getKey($tax->getTaxRate());
-        $this->elements[$key] = $tax;
+        parent::doAdd($calculatedTax);
     }
 
-    public function has(float $rate): bool
+    public function remove(float $taxRate): void
     {
-        return parent::has($this->getKey($rate));
+        parent::doRemoveByKey((string) $taxRate);
     }
 
-    public function get(float $rate): ? CalculatedTax
+    public function removeElement(CalculatedTax $calculatedTax): void
     {
-        return parent::get($this->getKey($rate));
+        parent::doRemoveByKey($this->getKey($calculatedTax));
     }
 
-    public function remove(float $rate)
+    public function exists(CalculatedTax $calculatedTax): bool
     {
-        return parent::remove($this->getKey($rate));
+        return parent::has($this->getKey($calculatedTax));
+    }
+
+    public function get(float $taxRate): ? CalculatedTax
+    {
+        $key = (string) $taxRate;
+
+        if ($this->has($key)) {
+            return $this->elements[$key];
+        }
+
+        return null;
     }
 
     /**
@@ -77,7 +87,7 @@ class CalculatedTaxCollection extends Collection
 
         /** @var CalculatedTax $calculatedTax */
         foreach ($taxCollection as $calculatedTax) {
-            if (!$new->has($calculatedTax->getTaxRate())) {
+            if (!$new->exists($calculatedTax)) {
                 $new->add(clone $calculatedTax);
                 continue;
             }
@@ -89,8 +99,13 @@ class CalculatedTaxCollection extends Collection
         return $new;
     }
 
-    private function getKey(float $rate): string
+    /**
+     * @param CalculatedTax $element
+     *
+     * @return string
+     */
+    protected function getKey($element): string
     {
-        return $rate . '';
+        return (string) $element->getTaxRate();
     }
 }

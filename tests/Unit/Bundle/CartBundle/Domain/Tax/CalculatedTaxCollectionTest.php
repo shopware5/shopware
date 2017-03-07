@@ -1,4 +1,26 @@
 <?php
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
 
 namespace Shopware\Tests\Unit\Bundle\CartBundle\Domain\Tax;
 
@@ -20,7 +42,7 @@ class CalculatedTaxCollectionTest extends \PHPUnit_Framework_TestCase
         $collection = new CalculatedTaxCollection([
             new CalculatedTax(10.99, 19, 1),
             new CalculatedTax(5.99, 14, 1),
-            new CalculatedTax(1.99, 2, 1)
+            new CalculatedTax(1.99, 2, 1),
         ]);
         static::assertCount(3, $collection);
     }
@@ -34,7 +56,7 @@ class CalculatedTaxCollectionTest extends \PHPUnit_Framework_TestCase
 
         static::assertEquals(
             new CalculatedTaxCollection([
-                new CalculatedTax(10.99, 19, 1)
+                new CalculatedTax(10.99, 19, 1),
             ]),
             $collection
         );
@@ -46,14 +68,14 @@ class CalculatedTaxCollectionTest extends \PHPUnit_Framework_TestCase
         $collection->fill([
             new CalculatedTax(5.50, 19, 1),
             new CalculatedTax(4.40, 18, 1),
-            new CalculatedTax(3.30, 17, 1)
+            new CalculatedTax(3.30, 17, 1),
         ]);
 
         static::assertEquals(
             new CalculatedTaxCollection([
                 new CalculatedTax(5.50, 19, 1),
                 new CalculatedTax(4.40, 18, 1),
-                new CalculatedTax(3.30, 17, 1)
+                new CalculatedTax(3.30, 17, 1),
             ]),
             $collection
         );
@@ -64,7 +86,7 @@ class CalculatedTaxCollectionTest extends \PHPUnit_Framework_TestCase
         $collection = new CalculatedTaxCollection([
             new CalculatedTax(5.50, 19, 1),
             new CalculatedTax(4.40, 18, 1),
-            new CalculatedTax(3.30, 17, 1)
+            new CalculatedTax(3.30, 17, 1),
         ]);
         static::assertEquals(
             new CalculatedTax(5.50, 19, 1),
@@ -77,7 +99,7 @@ class CalculatedTaxCollectionTest extends \PHPUnit_Framework_TestCase
         $collection = new CalculatedTaxCollection([
             new CalculatedTax(5.50, 19, 1),
             new CalculatedTax(4.40, 18, 1),
-            new CalculatedTax(3.30, 17, 1)
+            new CalculatedTax(3.30, 17, 1),
         ]);
         static::assertSame(13.2, $collection->getAmount());
     }
@@ -85,7 +107,7 @@ class CalculatedTaxCollectionTest extends \PHPUnit_Framework_TestCase
     public function testIncrementFunctionAddsNewCalculatedTaxIfNotExist()
     {
         $collection = new CalculatedTaxCollection([
-            new CalculatedTax(5.50, 19, 1)
+            new CalculatedTax(5.50, 19, 1),
         ]);
 
         $collection = $collection->merge(
@@ -95,7 +117,7 @@ class CalculatedTaxCollectionTest extends \PHPUnit_Framework_TestCase
         static::assertEquals(
             new CalculatedTaxCollection([
                 new CalculatedTax(5.50, 19, 1),
-                new CalculatedTax(5.50, 18, 1)
+                new CalculatedTax(5.50, 18, 1),
             ]),
             $collection
         );
@@ -104,15 +126,15 @@ class CalculatedTaxCollectionTest extends \PHPUnit_Framework_TestCase
     public function testIncrementFunctionIncrementsExistingTaxes()
     {
         $collection = new CalculatedTaxCollection([
-            new CalculatedTax(5.50, 19, 1)
+            new CalculatedTax(5.50, 19, 1),
         ]);
         $collection = $collection->merge(new CalculatedTaxCollection([
-            new CalculatedTax(5.50, 19, 1)
+            new CalculatedTax(5.50, 19, 1),
         ]));
 
         static::assertEquals(
             new CalculatedTaxCollection([
-                new CalculatedTax(11.00, 19, 2)
+                new CalculatedTax(11.00, 19, 2),
             ]),
             $collection
         );
@@ -123,20 +145,20 @@ class CalculatedTaxCollectionTest extends \PHPUnit_Framework_TestCase
         $collection = new CalculatedTaxCollection([
             new CalculatedTax(5.50, 19, 1),
             new CalculatedTax(5.50, 18, 1),
-            new CalculatedTax(5.50, 17, 1)
+            new CalculatedTax(5.50, 17, 1),
         ]);
 
         $collection = $collection->merge(new CalculatedTaxCollection([
             new CalculatedTax(5.50, 19, 1),
             new CalculatedTax(5.50, 18, 1),
-            new CalculatedTax(5.50, 17, 1)
+            new CalculatedTax(5.50, 17, 1),
         ]));
 
         static::assertEquals(
             new CalculatedTaxCollection([
                 new CalculatedTax(11.00, 19, 2),
                 new CalculatedTax(11.00, 18, 2),
-                new CalculatedTax(11.00, 17, 2)
+                new CalculatedTax(11.00, 17, 2),
             ]),
             $collection
         );
@@ -147,7 +169,7 @@ class CalculatedTaxCollectionTest extends \PHPUnit_Framework_TestCase
         $collection = new CalculatedTaxCollection([
             new CalculatedTax(5.50, 19, 1),
             new CalculatedTax(5.50, 18, 1),
-            new CalculatedTax(5.50, 17, 1)
+            new CalculatedTax(5.50, 17, 1),
         ]);
         $collection = $collection->merge(new CalculatedTaxCollection());
 
@@ -155,7 +177,7 @@ class CalculatedTaxCollectionTest extends \PHPUnit_Framework_TestCase
             new CalculatedTaxCollection([
                 new CalculatedTax(5.50, 19, 1),
                 new CalculatedTax(5.50, 18, 1),
-                new CalculatedTax(5.50, 17, 1)
+                new CalculatedTax(5.50, 17, 1),
             ]),
             $collection
         );
@@ -167,13 +189,13 @@ class CalculatedTaxCollectionTest extends \PHPUnit_Framework_TestCase
         $collection->fill([
             new CalculatedTax(5.50, 19, 1),
             new CalculatedTax(5.50, 18, 1),
-            new CalculatedTax(5.50, 17, 1)
+            new CalculatedTax(5.50, 17, 1),
         ]);
 
         static::assertEquals(new CalculatedTaxCollection([
             new CalculatedTax(5.50, 19, 1),
             new CalculatedTax(5.50, 18, 1),
-            new CalculatedTax(5.50, 17, 1)
+            new CalculatedTax(5.50, 17, 1),
         ]), $collection);
     }
 
@@ -182,13 +204,13 @@ class CalculatedTaxCollectionTest extends \PHPUnit_Framework_TestCase
         $collection = new CalculatedTaxCollection([
             new CalculatedTax(5.50, 19, 1),
             new CalculatedTax(5.50, 18, 1),
-            new CalculatedTax(5.50, 17, 1)
+            new CalculatedTax(5.50, 17, 1),
         ]);
         $collection->remove(19);
 
         static::assertEquals(new CalculatedTaxCollection([
             new CalculatedTax(5.50, 18, 1),
-            new CalculatedTax(5.50, 17, 1)
+            new CalculatedTax(5.50, 17, 1),
         ]), $collection);
     }
 
@@ -197,7 +219,7 @@ class CalculatedTaxCollectionTest extends \PHPUnit_Framework_TestCase
         $collection = new CalculatedTaxCollection([
             new CalculatedTax(5.50, 19, 1),
             new CalculatedTax(5.50, 18, 1),
-            new CalculatedTax(5.50, 17, 1)
+            new CalculatedTax(5.50, 17, 1),
         ]);
 
         $collection->clear();

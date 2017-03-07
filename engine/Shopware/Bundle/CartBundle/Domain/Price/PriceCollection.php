@@ -34,39 +34,25 @@ class PriceCollection extends Collection
     /**
      * @var Price[]
      */
-    protected $elements;
+    protected $elements = [];
 
     public function add(Price $price): void
     {
-        $this->elements[] = $price;
+        parent::doAdd($price);
     }
 
-    public function remove($key): ? Price
+    public function remove(string $key): void
     {
-        return parent::remove($key);
+        parent::doRemoveByKey($key);
     }
 
-    public function offsetGet($offset): ? Price
+    public function get(string $key): ? Price
     {
-        return parent::offsetGet($offset);
-    }
+        if ($this->has($key)) {
+            return $this->elements[$key];
+        }
 
-    public function set($key, Price $value): void
-    {
-        parent::set($key, $value);
-    }
-
-    public function get($key): ? Price
-    {
-        return parent::get($key);
-    }
-
-    /**
-     * @return Price[]
-     */
-    public function getValues(): array
-    {
-        return parent::getValues();
+        return null;
     }
 
     public function getTaxRules(): TaxRuleCollection

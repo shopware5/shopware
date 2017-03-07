@@ -1,7 +1,30 @@
 <?php
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
 
 namespace Shopware\Tests\Unit\Bundle\CartBundle\Domain\Delivery;
 
+use Shopware\Bundle\CartBundle\Domain\Customer\Address;
 use Shopware\Bundle\CartBundle\Domain\Delivery\Delivery;
 use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryCollection;
 use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryDate;
@@ -24,7 +47,6 @@ use Shopware\Bundle\CartBundle\Domain\Tax\TaxRule;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCalculator;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCollection;
 use Shopware\Bundle\CartBundle\Domain\Voucher\CalculatedVoucher;
-use Shopware\Bundle\CartBundle\Domain\Customer\Address;
 use Shopware\Tests\Unit\Bundle\CartBundle\Common\Generator;
 
 class StockDeliverySeparatorTest extends \PHPUnit_Framework_TestCase
@@ -80,12 +102,12 @@ class StockDeliverySeparatorTest extends \PHPUnit_Framework_TestCase
             new DeliveryCollection([
                 new Delivery(
                     new DeliveryPositionCollection([
-                        DeliveryPosition::createByLineItemForInStockDate($item)
+                        DeliveryPosition::createByLineItemForInStockDate($item),
                     ]),
                     new DeliveryDate(new \DateTime('2012-01-01'), new \DateTime('2012-01-02')),
                     new DeliveryService(),
                     new Address()
-                )
+                ),
             ]),
             $this->separator->addItemsToDeliveries(
                 new DeliveryCollection(),
@@ -120,12 +142,12 @@ class StockDeliverySeparatorTest extends \PHPUnit_Framework_TestCase
                 new Delivery(
                     new DeliveryPositionCollection([
                         DeliveryPosition::createByLineItemForInStockDate($itemA),
-                        DeliveryPosition::createByLineItemForInStockDate($itemB)
+                        DeliveryPosition::createByLineItemForInStockDate($itemB),
                     ]),
                     $deliveryInformation->getInStockDeliveryDate(),
                     new DeliveryService(),
                     new Address()
-                )
+                ),
             ]),
             $this->separator->addItemsToDeliveries(
                 new DeliveryCollection(),
@@ -134,7 +156,6 @@ class StockDeliverySeparatorTest extends \PHPUnit_Framework_TestCase
             )
         );
     }
-
 
     public function testOutOfStockItemsCanBeDelivered()
     {
@@ -162,12 +183,12 @@ class StockDeliverySeparatorTest extends \PHPUnit_Framework_TestCase
                 new Delivery(
                     new DeliveryPositionCollection([
                         DeliveryPosition::createByLineItemForOutOfStockDate($itemA),
-                        DeliveryPosition::createByLineItemForOutOfStockDate($itemB)
+                        DeliveryPosition::createByLineItemForOutOfStockDate($itemB),
                     ]),
                     new DeliveryDate(new \DateTime('2012-01-04'), new \DateTime('2012-01-05')),
                     new DeliveryService(),
                     new Address()
-                )
+                ),
             ]),
             $this->separator->addItemsToDeliveries(
                 new DeliveryCollection(),
@@ -197,12 +218,12 @@ class StockDeliverySeparatorTest extends \PHPUnit_Framework_TestCase
             new DeliveryCollection([
                 new Delivery(
                     new DeliveryPositionCollection([
-                        DeliveryPosition::createByLineItemForInStockDate($product)
+                        DeliveryPosition::createByLineItemForInStockDate($product),
                     ]),
                     $product->getInStockDeliveryDate(),
                     new DeliveryService(),
                     new Address()
-                )
+                ),
             ]),
             $this->separator->addItemsToDeliveries(
                 new DeliveryCollection(),

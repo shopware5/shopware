@@ -25,43 +25,44 @@ declare(strict_types=1);
 
 namespace Shopware\Bundle\CartBundle\Domain\Delivery;
 
-use Shopware\Bundle\CartBundle\Domain\Collection;
+use Shopware\Bundle\CartBundle\Domain\KeyCollection;
 use Shopware\Bundle\CartBundle\Domain\LineItem\CalculatedLineItemCollection;
 use Shopware\Bundle\CartBundle\Domain\Price\PriceCollection;
 
-class DeliveryPositionCollection extends Collection
+class DeliveryPositionCollection extends KeyCollection
 {
-    public function add(DeliveryPosition $position): void
-    {
-        $this->elements[] = $position;
-    }
-
-    public function remove($key): ? DeliveryPosition
-    {
-        return parent::remove($key);
-    }
-
-    public function offsetGet($offset): ? DeliveryPosition
-    {
-        return parent::offsetGet($offset);
-    }
-
-    public function set($key, DeliveryPosition $value): void
-    {
-        parent::set($key, $value);
-    }
-
-    public function get($key): ? DeliveryPosition
-    {
-        return parent::get($key);
-    }
-
     /**
-     * @return DeliveryPosition[]
+     * @var DeliveryPosition[]
      */
-    public function getValues(): array
+    protected $elements = [];
+
+    public function add(DeliveryPosition $deliveryPosition): void
     {
-        return parent::getValues();
+        parent::doAdd($deliveryPosition);
+    }
+
+    public function remove(string $identifier): void
+    {
+        parent::doRemoveByKey($identifier);
+    }
+
+    public function removeElement(DeliveryPosition $deliveryPosition): void
+    {
+        parent::doRemoveByKey($this->getKey($deliveryPosition));
+    }
+
+    public function exists(DeliveryPosition $deliveryPosition): bool
+    {
+        return parent::has($this->getKey($deliveryPosition));
+    }
+
+    public function get(string $identifier): ? DeliveryPosition
+    {
+        if ($this->has($identifier)) {
+            return $this->elements[$identifier];
+        }
+
+        return null;
     }
 
     public function getPrices(): PriceCollection
@@ -86,5 +87,15 @@ class DeliveryPositionCollection extends Collection
                 $this->elements
             )
         );
+    }
+
+    /**
+     * @param DeliveryPosition $element
+     *
+     * @return string
+     */
+    protected function getKey($element): string
+    {
+        return $element->getIdentifier();
     }
 }

@@ -44,6 +44,27 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
     const ACTION_CART = 'cart';
     const ACTION_CONFIRM = 'confirm';
 
+    /**
+     * Reference to sAdmin object (core/class/sAdmin.php)
+     *
+     * @var sAdmin
+     */
+    protected $admin;
+
+    /**
+     * Reference to sBasket object (core/class/sBasket.php)
+     *
+     * @var sBasket
+     */
+    protected $basket;
+
+    /**
+     * Reference to Shopware session object (Shopware()->Session)
+     *
+     * @var Enlight_Components_Session_Namespace
+     */
+    protected $session;
+
     public function cartAction()
     {
         /** @var StoreFrontCartService $service */
@@ -53,7 +74,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
 
         $this->View()->assign([
             'cart' => $cart,
-            'sTargetAction' => self::ACTION_CART
+            'sTargetAction' => self::ACTION_CART,
         ]);
     }
 
@@ -68,7 +89,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
 
         $this->View()->assign([
             'cart' => $cart,
-            'sTargetAction' => self::ACTION_AJAX_CART
+            'sTargetAction' => self::ACTION_AJAX_CART,
         ]);
     }
 
@@ -85,7 +106,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
 
         $this->View()->assign([
             'sBasketQuantity' => $quantity,
-            'sBasketAmount' => $cart->getPrice()->getTotalPrice()
+            'sBasketAmount' => $cart->getPrice()->getTotalPrice(),
         ]);
 
         $template = Shopware()->Template()->fetch('frontend/checkout/ajax_amount.tpl');
@@ -99,7 +120,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
     {
         $number = $this->Request()->getParam('number');
         if (!$number) {
-            throw new Exception("No product number given");
+            throw new Exception('No product number given');
         }
 
         $quantity = (int) $this->Request()->getParam('quantity', 1);
@@ -139,12 +160,12 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
 
         $identifier = $this->Request()->getPost('identifier');
         if (!$identifier) {
-            throw new Exception("Missing parameter identifier");
+            throw new Exception('Missing parameter identifier');
         }
 
         $quantity = $this->Request()->getPost('quantity');
         if (!$quantity) {
-            throw new Exception("Missing parameter quantity");
+            throw new Exception('Missing parameter quantity');
         }
 
         $service->changeQuantity($identifier, $quantity);
@@ -184,6 +205,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
 
         if ($context->getCustomer() === null) {
             $this->forwardToLogin();
+
             return;
         }
 
@@ -192,12 +214,13 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
 
         if ($cart->getLineItems()->count() === 0) {
             $this->forward(self::ACTION_CART);
+
             return;
         }
 
         $this->View()->assign([
             'cart' => json_decode(json_encode($cart), true),
-            'sTargetAction' => self::ACTION_CONFIRM
+            'sTargetAction' => self::ACTION_CONFIRM,
         ]);
     }
 
@@ -220,40 +243,14 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         $this->View()->assign([
             'cart' => json_decode(json_encode($cart), true),
             'payments' => $payments,
-            'currentPaymentId' => $context->getPaymentMethod()->getId()
+            'sTargetAction' => 'shippingPayment',
+            'currentPaymentId' => $context->getPaymentMethod()->getId(),
         ]);
 
         if ($this->Request()->getParam('isXHR')) {
             return $this->View()->loadTemplate('frontend/checkout/shipping_payment_core.tpl');
         }
     }
-
-    private function forwardToLogin()
-    {
-        $this->forward('login', 'account', null, ['sTarget' => 'checkout', 'sTargetAction' => self::ACTION_CONFIRM, 'showNoAccount' => true]);
-    }
-
-
-    /**
-     * Reference to sAdmin object (core/class/sAdmin.php)
-     *
-     * @var sAdmin
-     */
-    protected $admin;
-
-    /**
-     * Reference to sBasket object (core/class/sBasket.php)
-     *
-     * @var sBasket
-     */
-    protected $basket;
-
-    /**
-     * Reference to Shopware session object (Shopware()->Session)
-     *
-     * @var Enlight_Components_Session_Namespace
-     */
-    protected $session;
 
     /**
      * Init method that get called automatically
@@ -656,7 +653,6 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
 
         $this->forward($this->Request()->getParam('sTargetAction', 'index'));
     }
-
 
     /**
      * Action to simultaneously save shipping and payment details
@@ -1368,8 +1364,6 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         return $this->session['sDispatch'];
     }
 
-
-
     /**
      * Ajax add article cart action
      *
@@ -1459,6 +1453,11 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         }
 
         return !empty($userData['shippingaddress']['ustid']);
+    }
+
+    private function forwardToLogin()
+    {
+        $this->forward('login', 'account', null, ['sTarget' => 'checkout', 'sTargetAction' => self::ACTION_CONFIRM, 'showNoAccount' => true]);
     }
 
     /**

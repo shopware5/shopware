@@ -54,7 +54,7 @@ class DeliverySeparatorProcessor implements CartProcessorInterface
 
         $items = $processorCart
             ->getLineItems()
-            ->filterClass(Deliverable::class);
+            ->filterInstance(Deliverable::class);
 
         if (0 === count($items)) {
             return;

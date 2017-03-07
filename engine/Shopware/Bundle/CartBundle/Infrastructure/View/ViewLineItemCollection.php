@@ -25,9 +25,9 @@ declare(strict_types=1);
 
 namespace Shopware\Bundle\CartBundle\Infrastructure\View;
 
-use Shopware\Bundle\CartBundle\Domain\Collection;
+use Shopware\Bundle\CartBundle\Domain\KeyCollection;
 
-class ViewLineItemCollection extends Collection
+class ViewLineItemCollection extends KeyCollection
 {
     /**
      * @var ViewLineItemInterface[]
@@ -36,43 +36,45 @@ class ViewLineItemCollection extends Collection
 
     public function add(ViewLineItemInterface $lineItem): void
     {
-        $this->elements[] = $lineItem;
+        parent::doAdd($lineItem);
     }
 
-    public function remove($key): ? ViewLineItemInterface
+    public function remove(string $identifier): void
     {
-        return parent::remove($key);
+        parent::doRemoveByKey($identifier);
     }
 
-    public function offsetGet($offset): ? ViewLineItemInterface
+    public function removeElement(ViewLineItemInterface $lineItem): void
     {
-        return parent::offsetGet($offset);
+        parent::doRemoveByKey($this->getKey($lineItem));
     }
 
-    public function set($key, ViewLineItemInterface $value): void
+    public function exists(ViewLineItemInterface $lineItem): bool
     {
-        parent::set($key, $value);
+        return parent::has($this->getKey($lineItem));
     }
 
-    public function get($key): ? ViewLineItemInterface
+    public function get(string $identifier): ? ViewLineItemInterface
     {
-        return parent::get($key);
-    }
+        if ($this->has($identifier)) {
+            return $this->elements[$identifier];
+        }
 
-    /**
-     * @return ViewLineItemInterface[]
-     */
-    public function getValues(): array
-    {
-        return parent::getValues();
+        return null;
     }
 
     public function getIdentifiers(): array
     {
-        return $this->map(
-            function (ViewLineItemInterface $lineItem) {
-                return $lineItem->getLineItem()->getIdentifier();
-            }
-        );
+        return $this->getKeys();
+    }
+
+    /**
+     * @param ViewLineItemInterface $element
+     *
+     * @return string
+     */
+    protected function getKey($element): string
+    {
+        return $element->getLineItem()->getIdentifier();
     }
 }

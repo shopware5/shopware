@@ -1,4 +1,26 @@
 <?php
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
 
 namespace Shopware\Tests\Unit\Bundle\CartBundle\Domain\Product;
 
@@ -65,7 +87,7 @@ class ProductProcessorTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->will(
                 static::returnValue([
-                    'SW1' => new PriceDefinition(0, new TaxRuleCollection())
+                    'SW1' => new PriceDefinition(0, new TaxRuleCollection()),
                 ])
             );
 
@@ -83,10 +105,9 @@ class ProductProcessorTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->will(
                 static::returnValue([
-                    'SW1' => new DefaultDeliveryInformation()
+                    'SW1' => new DefaultDeliveryInformation(),
                 ])
             );
-
 
         $processor = new ProductProcessor($priceGateway, $calculator, $deliveryGateway);
 
@@ -97,7 +118,7 @@ class ProductProcessorTest extends \PHPUnit_Framework_TestCase
 
         $processor->process(
             Cart::createExisting('test', 'test', [
-                new LineItem('SW1', ProductProcessor::TYPE_PRODUCT, 1)
+                new LineItem('SW1', ProductProcessor::TYPE_PRODUCT, 1),
             ]),
             $cart,
             Generator::createContext()
@@ -115,7 +136,7 @@ class ProductProcessorTest extends \PHPUnit_Framework_TestCase
                 static::returnValue([
                     'SW1' => new PriceDefinition(0, new TaxRuleCollection()),
                     'SW2' => new PriceDefinition(0, new TaxRuleCollection()),
-                    'SW3' => new PriceDefinition(0, new TaxRuleCollection())
+                    'SW3' => new PriceDefinition(0, new TaxRuleCollection()),
                 ])
             );
 
@@ -127,7 +148,6 @@ class ProductProcessorTest extends \PHPUnit_Framework_TestCase
                 new Price(0, 0, new CalculatedTaxCollection(), new TaxRuleCollection(), 0)
             ));
 
-
         $deliveryGateway = $this->createMock(ProductDeliveryGateway::class);
         $deliveryGateway
             ->expects(static::once())
@@ -136,7 +156,7 @@ class ProductProcessorTest extends \PHPUnit_Framework_TestCase
                 static::returnValue([
                     'SW1' => new DefaultDeliveryInformation(),
                     'SW2' => new DefaultDeliveryInformation(),
-                    'SW3' => new DefaultDeliveryInformation()
+                    'SW3' => new DefaultDeliveryInformation(),
                 ])
             );
 
@@ -151,7 +171,7 @@ class ProductProcessorTest extends \PHPUnit_Framework_TestCase
             Cart::createExisting('test', 'test', [
                 new LineItem('SW1', ProductProcessor::TYPE_PRODUCT, 1),
                 new LineItem('SW2', ProductProcessor::TYPE_PRODUCT, 1),
-                new LineItem('SW3', ProductProcessor::TYPE_PRODUCT, 1)
+                new LineItem('SW3', ProductProcessor::TYPE_PRODUCT, 1),
             ]),
             $cart,
             Generator::createContext()
@@ -196,7 +216,7 @@ class ProductProcessorTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->will(
                 static::returnValue([
-                    'SW1' => new PriceDefinition(0, new TaxRuleCollection())
+                    'SW1' => new PriceDefinition(0, new TaxRuleCollection()),
                 ])
             );
 
@@ -214,7 +234,7 @@ class ProductProcessorTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->will(
                 static::returnValue([
-                    'SW1' => new DefaultDeliveryInformation()
+                    'SW1' => new DefaultDeliveryInformation(),
                 ])
             );
 
@@ -224,7 +244,7 @@ class ProductProcessorTest extends \PHPUnit_Framework_TestCase
             Cart::createExisting('test', 'test', [
                 new LineItem('SW1', ProductProcessor::TYPE_PRODUCT, 1),
                 new LineItem('SW2', ProductProcessor::TYPE_PRODUCT, 1),
-                new LineItem('SW3', ProductProcessor::TYPE_PRODUCT, 1)
+                new LineItem('SW3', ProductProcessor::TYPE_PRODUCT, 1),
             ]),
             new ProcessorCart(
                 new CalculatedLineItemCollection(),

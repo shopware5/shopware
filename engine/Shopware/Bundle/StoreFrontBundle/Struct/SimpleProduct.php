@@ -1,7 +1,7 @@
 <?php
 /**
  * Shopware 5
- * Copyright (c) shopware AG.
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -431,18 +431,12 @@ class SimpleProduct extends BaseProduct implements \JsonSerializable
         return $this->manufacturer;
     }
 
-    /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Struct\Media $cover
-     */
-    public function setCover($cover)
+    public function setCover(?Media $cover)
     {
         $this->cover = $cover;
     }
 
-    /**
-     * @return \Shopware\Bundle\StoreFrontBundle\Struct\Media
-     */
-    public function getCover()
+    public function getCover(): ? Media
     {
         return $this->cover;
     }

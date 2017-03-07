@@ -59,7 +59,7 @@ class ViewProductTransformer implements ViewLineItemTransformerInterface
         ViewCart $templateCart,
         ShopContextInterface $context
     ): void {
-        $collection = $cart->getLineItems()->filterClass(CalculatedProduct::class);
+        $collection = $cart->getLineItems()->filterInstance(CalculatedProduct::class);
 
         if ($collection->count() === 0) {
             return;

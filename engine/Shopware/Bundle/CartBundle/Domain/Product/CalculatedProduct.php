@@ -55,7 +55,7 @@ class CalculatedProduct implements CalculatedLineItemInterface, Stackable, Deliv
     protected $identifier;
 
     /**
-     * @var float
+     * @var int
      */
     protected $quantity;
 

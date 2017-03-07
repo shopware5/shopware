@@ -1,4 +1,26 @@
 <?php
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
 
 namespace Shopware\Tests\Unit\Bundle\CartBundle\Common;
 
@@ -41,10 +63,10 @@ class ConfiguredLineItem implements Deliverable, CalculatedLineItemInterface, St
     private $deliveryInformation;
 
     /**
-     * @param string $identifier
-     * @param float $quantity
-     * @param Price $price
-     * @param LineItemInterface $lineItem
+     * @param string              $identifier
+     * @param float               $quantity
+     * @param Price               $price
+     * @param LineItemInterface   $lineItem
      * @param DeliveryInformation $deliveryInformation
      */
     public function __construct(
@@ -72,75 +94,43 @@ class ConfiguredLineItem implements Deliverable, CalculatedLineItemInterface, St
         $this->deliveryInformation = $deliveryInformation;
     }
 
-    /**
-     * @return string
-     */
-    public function getIdentifier()
+    public function getIdentifier(): string
     {
         return $this->identifier;
     }
 
-    /**
-     * @return float
-     */
-    public function getQuantity()
-    {
-        return $this->quantity;
-    }
-
-    /**
-     * @return Price
-     */
-    public function getPrice()
+    public function getPrice(): Price
     {
         return $this->price;
     }
 
-    /**
-     * @return LineItemInterface
-     */
-    public function getLineItem()
-    {
-        return $this->lineItem;
-    }
-
-    /**
-     * @return float
-     */
-    public function getStock()
+    public function getStock(): int
     {
         return $this->deliveryInformation->getStock();
     }
 
-    /**
-     * @param float $quantity
-     */
-    public function setQuantity($quantity)
-    {
-        $this->quantity = $quantity;
-    }
-
-    /**
-     * @return DeliveryDate
-     */
-    public function getInStockDeliveryDate()
+    public function getInStockDeliveryDate(): DeliveryDate
     {
         return $this->deliveryInformation->getInStockDeliveryDate();
     }
 
-    /**
-     * @return DeliveryDate
-     */
-    public function getOutOfStockDeliveryDate()
+    public function getOutOfStockDeliveryDate(): DeliveryDate
     {
         return $this->deliveryInformation->getOutOfStockDeliveryDate();
     }
 
-    /**
-     * @return DeliveryInformation
-     */
-    public function getDeliveryInformation()
+    public function getQuantity(): int
     {
-        return $this->deliveryInformation;
+        return $this->quantity;
+    }
+
+    public function setQuantity(int $quantity): void
+    {
+        $this->quantity = $quantity;
+    }
+
+    public function getLineItem(): LineItemInterface
+    {
+        return $this->lineItem;
     }
 }

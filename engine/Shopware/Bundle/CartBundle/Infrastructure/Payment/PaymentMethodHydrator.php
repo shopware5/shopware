@@ -70,7 +70,7 @@ class PaymentMethodHydrator extends Hydrator
             $paymentMethod->setPluginId((int) $data['__paymentMethod_pluginId']);
         }
         if ($data['__paymentMethod_source']) {
-            $paymentMethod->setSource((string) $data['__paymentMethod_source']);
+            $paymentMethod->setSource((int) $data['__paymentMethod_source']);
         }
         if (!empty($data['__paymentMethodAttribute_id'])) {
             $this->attributeHydrator->addAttribute($paymentMethod, $data, 'paymentMethodAttribute');

@@ -25,52 +25,48 @@ declare(strict_types=1);
 
 namespace Shopware\Bundle\CartBundle\Domain\LineItem;
 
-use Shopware\Bundle\CartBundle\Domain\Collection;
+use Shopware\Bundle\CartBundle\Domain\KeyCollection;
 use Shopware\Bundle\CartBundle\Domain\Price\PriceCollection;
 
-class CalculatedLineItemCollection extends Collection
+class CalculatedLineItemCollection extends KeyCollection
 {
+    /**
+     * @var CalculatedLineItemInterface[]
+     */
+    protected $elements = [];
+
     public function add(CalculatedLineItemInterface $lineItem): void
     {
-        $this->elements[] = $lineItem;
+        parent::doAdd($lineItem);
     }
 
-    public function remove($key): ? CalculatedLineItemInterface
+    public function remove(string $identifier): void
     {
-        return parent::remove($key);
+        parent::doRemoveByKey($identifier);
     }
 
-    public function offsetGet($offset): ? CalculatedLineItemInterface
+    public function removeElement(CalculatedLineItemInterface $lineItem): void
     {
-        return parent::offsetGet($offset);
+        parent::doRemoveByKey($this->getKey($lineItem));
     }
 
-    public function set($key, CalculatedLineItemInterface $value): void
+    public function exists(CalculatedLineItemInterface $lineItem): bool
     {
-        parent::set($key, $value);
+        return parent::has($this->getKey($lineItem));
     }
 
-    public function get($key): ? CalculatedLineItemInterface
+    public function get(string $identifier): ? CalculatedLineItemInterface
     {
-        return parent::get($key);
-    }
+        if ($this->has($identifier)) {
+            return $this->elements[$identifier];
+        }
 
-    /**
-     * @return CalculatedLineItemInterface[]
-     */
-    public function getValues(): array
-    {
-        return parent::getValues();
+        return null;
     }
 
     public function getIdentifiers(): array
     {
-        return array_map(
-            function (CalculatedLineItemInterface $lineItem) {
-                return $lineItem->getIdentifier();
-            },
-            $this->elements
-        );
+        return $this->getKeys();
     }
 
     public function getPrices(): PriceCollection
@@ -85,23 +81,18 @@ class CalculatedLineItemCollection extends Collection
         );
     }
 
-    public function filterClass(string $class): CalculatedLineItemCollection
-    {
-        return $this->filter(
-            function (CalculatedLineItemInterface $lineItem) use ($class) {
-                return $lineItem instanceof $class;
-            }
-        );
-    }
-
     public function filterGoods(): CalculatedLineItemCollection
     {
-        $class = Goods::class;
+        return $this->filterInstance(Goods::class);
+    }
 
-        return $this->filter(
-            function (CalculatedLineItemInterface $lineItem) use ($class) {
-                return $lineItem instanceof $class;
-            }
-        );
+    /**
+     * @param CalculatedLineItemInterface $element
+     *
+     * @return string
+     */
+    protected function getKey($element): string
+    {
+        return $element->getIdentifier();
     }
 }

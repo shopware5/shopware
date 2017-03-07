@@ -68,7 +68,7 @@ class Customer extends Extendable
     protected $salutation;
 
     /**
-     * @var string
+     * @var string|null
      */
     protected $title;
 

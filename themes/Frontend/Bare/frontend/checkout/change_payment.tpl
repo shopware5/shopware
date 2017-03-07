@@ -33,11 +33,6 @@
                     {* Method Logo *}
                     {block name='frontend_checkout_payment_fieldset_template'}
                         <div class="payment--method-logo payment_logo_{$payment.name}"></div>
-                        {if "frontend/plugins/payment/`$payment.template`"|template_exists}
-                            <div class="method--bankdata{if $payment.id != $form_data.payment} is--hidden{/if}">
-                                {include file="frontend/plugins/payment/`$payment.template`" form_data=$sFormData error_flags=$sErrorFlag payments=$payments}
-                            </div>
-                        {/if}
                     {/block}
                 </div>
             {/foreach}

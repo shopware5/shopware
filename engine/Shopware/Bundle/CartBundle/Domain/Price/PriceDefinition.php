@@ -43,7 +43,7 @@ class PriceDefinition implements \JsonSerializable
     protected $taxRules;
 
     /**
-     * @var float
+     * @var int
      */
     protected $quantity;
 
@@ -74,7 +74,7 @@ class PriceDefinition implements \JsonSerializable
         return $this->taxRules;
     }
 
-    public function getQuantity(): float
+    public function getQuantity(): int
     {
         return $this->quantity;
     }

@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -22,35 +24,15 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Unit\Bundle\CartBundle\Common;
+namespace Shopware\Bundle\CartBundle\Domain;
 
-use Shopware\Bundle\CartBundle\Domain\Cart\CartContextInterface;
-use Shopware\Bundle\CartBundle\Infrastructure\Cart\CartContextServiceInterface;
-
-class PresetContextService implements CartContextServiceInterface
+abstract class KeyCollection extends Collection
 {
-    /**
-     * @var CartContextInterface
-     */
-    public $context;
-
-    /**
-     * @param CartContextInterface $context
-     */
-    public function __construct(CartContextInterface $context)
+    protected function doAdd($element): void
     {
-        $this->context = $context;
+        $key = $this->getKey($element);
+        $this->elements[$key] = $element;
     }
 
-    /**
-     * @return CartContextInterface
-     */
-    public function getCartContext(): CartContextInterface
-    {
-        return $this->context;
-    }
-
-    public function initializeContext(): void
-    {
-    }
+    abstract protected function getKey($element): string;
 }

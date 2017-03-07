@@ -66,7 +66,7 @@ class PercentagePriceCalculator
     ): Price {
         $price = $prices->getTotalPrice();
 
-        $discount = $this->rounding->round($price->getPrice() / 100 * $percentage);
+        $discount = $this->rounding->round($price->getTotalPrice() / 100 * $percentage);
 
         $rules = $this->buildPercentageTaxRule($price);
 
@@ -84,7 +84,7 @@ class PercentagePriceCalculator
             $rules->add(
                 new PercentageTaxRule(
                     $tax->getTaxRate(),
-                    $tax->getPrice() / $price->getPrice() * 100
+                    $tax->getPrice() / $price->getTotalPrice() * 100
                 )
             );
         }

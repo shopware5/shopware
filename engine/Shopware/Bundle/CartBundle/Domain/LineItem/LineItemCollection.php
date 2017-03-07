@@ -25,10 +25,44 @@ declare(strict_types=1);
 
 namespace Shopware\Bundle\CartBundle\Domain\LineItem;
 
-use Shopware\Bundle\CartBundle\Domain\Collection;
+use Shopware\Bundle\CartBundle\Domain\KeyCollection;
 
-class LineItemCollection extends Collection
+class LineItemCollection extends KeyCollection
 {
+    /**
+     * @var LineItemInterface[]
+     */
+    protected $elements = [];
+
+    public function add(LineItemInterface $lineItem): void
+    {
+        parent::doAdd($lineItem);
+    }
+
+    public function remove(string $identifier): void
+    {
+        parent::doRemoveByKey($identifier);
+    }
+
+    public function removeElement(LineItemInterface $lineItem): void
+    {
+        parent::doRemoveByKey($this->getKey($lineItem));
+    }
+
+    public function exists(LineItemInterface $lineItem): bool
+    {
+        return parent::has($this->getKey($lineItem));
+    }
+
+    public function get(string $identifier): ? LineItemInterface
+    {
+        if ($this->has($identifier)) {
+            return $this->elements[$identifier];
+        }
+
+        return null;
+    }
+
     public function filterType(string $type): LineItemCollection
     {
         return $this->filter(
@@ -40,11 +74,16 @@ class LineItemCollection extends Collection
 
     public function getIdentifiers(): array
     {
-        return array_map(
-            function (LineItemInterface $lineItem) {
-                return $lineItem->getIdentifier();
-            },
-            $this->elements
-        );
+        return $this->getKeys();
+    }
+
+    /**
+     * @param LineItemInterface $element
+     *
+     * @return string
+     */
+    protected function getKey($element): string
+    {
+        return $element->getIdentifier();
     }
 }

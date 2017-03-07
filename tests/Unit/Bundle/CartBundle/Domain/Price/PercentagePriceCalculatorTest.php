@@ -1,4 +1,26 @@
 <?php
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
 
 namespace Shopware\Tests\Unit\Bundle\CartBundle\Domain\Price;
 
@@ -21,8 +43,9 @@ class PercentagePriceCalculatorTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @dataProvider calculatePercentagePriceOfGrossPricesProvider
-     * @param float $percentage
-     * @param Price $expected
+     *
+     * @param float           $percentage
+     * @param Price           $expected
      * @param PriceCollection $prices
      */
     public function testCalculatePercentagePriceOfGrossPrices(
@@ -39,7 +62,7 @@ class PercentagePriceCalculatorTest extends \PHPUnit_Framework_TestCase
                     new PriceRounding(2),
                     [
                         new TaxRuleCalculator($rounding),
-                        new PercentageTaxRuleCalculator(new TaxRuleCalculator($rounding))
+                        new PercentageTaxRuleCalculator(new TaxRuleCalculator($rounding)),
                     ]
                 ),
                 $rounding,
@@ -81,14 +104,14 @@ class PercentagePriceCalculatorTest extends \PHPUnit_Framework_TestCase
                     ]),
                     new TaxRuleCollection([
                         new PercentageTaxRule(19, 50),
-                        new PercentageTaxRule(7, 50)
+                        new PercentageTaxRule(7, 50),
                     ])
                 ),
                 //prices of cart line items
                 new PriceCollection([
                     new Price(30.00, 30.00, new CalculatedTaxCollection([new CalculatedTax(4.79, 19, 30.00)]), $highTax),
                     new Price(30.00, 30.00, new CalculatedTaxCollection([new CalculatedTax(1.96, 7, 30.00)]), $highTax),
-                ])
+                ]),
             ],
 //[
 //                -99,

@@ -32,7 +32,7 @@ class DeliveryInformation implements \JsonSerializable
     use JsonSerializableTrait;
 
     /**
-     * @var float
+     * @var int
      */
     protected $stock;
 
@@ -76,7 +76,7 @@ class DeliveryInformation implements \JsonSerializable
      * @param DeliveryDate $outOfStockDeliveryDate
      */
     public function __construct(
-        float $stock,
+        int $stock,
         float $height,
         float $width,
         float $length,
@@ -93,7 +93,7 @@ class DeliveryInformation implements \JsonSerializable
         $this->outOfStockDeliveryDate = $outOfStockDeliveryDate;
     }
 
-    public function getStock(): float
+    public function getStock(): int
     {
         return $this->stock;
     }

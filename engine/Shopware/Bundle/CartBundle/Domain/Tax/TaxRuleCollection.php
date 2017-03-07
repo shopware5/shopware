@@ -25,34 +25,44 @@ declare(strict_types=1);
 
 namespace Shopware\Bundle\CartBundle\Domain\Tax;
 
-use Shopware\Bundle\CartBundle\Domain\Collection;
+use Shopware\Bundle\CartBundle\Domain\KeyCollection;
 
-class TaxRuleCollection extends Collection
+class TaxRuleCollection extends KeyCollection
 {
     /**
      * @var TaxRuleInterface[]
      */
-    protected $elements;
+    protected $elements = [];
 
-    public function add(TaxRuleInterface $rule): void
+    public function add(TaxRuleInterface $calculatedTax): void
     {
-        $key = $this->getKey($rule->getRate());
-        $this->elements[$key] = $rule;
+        parent::doAdd($calculatedTax);
     }
 
-    public function has(float $rate): bool
+    public function remove(float $taxRate): void
     {
-        return parent::has($this->getKey($rate));
+        parent::doRemoveByKey((string) $taxRate);
     }
 
-    public function get(float $rate): ? TaxRuleInterface
+    public function removeElement(TaxRuleInterface $calculatedTax): void
     {
-        return parent::get($this->getKey($rate));
+        parent::doRemoveByKey($this->getKey($calculatedTax));
     }
 
-    public function remove(float $rate): ? TaxRuleInterface
+    public function exists(TaxRuleInterface $calculatedTax): bool
     {
-        return parent::remove($this->getKey($rate));
+        return parent::has($this->getKey($calculatedTax));
+    }
+
+    public function get(float $taxRate): ? TaxRuleInterface
+    {
+        $key = (string) $taxRate;
+
+        if ($this->has($key)) {
+            return $this->elements[$key];
+        }
+
+        return null;
     }
 
     public function merge(TaxRuleCollection $rules): TaxRuleCollection
@@ -61,7 +71,7 @@ class TaxRuleCollection extends Collection
 
         $rules->map(
             function (TaxRuleInterface $rule) use ($new) {
-                if (!$new->has($rule->getRate())) {
+                if (!$new->exists($rule)) {
                     $new->add($rule);
                 }
             }
@@ -70,8 +80,13 @@ class TaxRuleCollection extends Collection
         return $new;
     }
 
-    private function getKey(float $rate): string
+    /**
+     * @param TaxRuleInterface $element
+     *
+     * @return string
+     */
+    protected function getKey($element): string
     {
-        return $rate . '';
+        return (string) $element->getRate();
     }
 }

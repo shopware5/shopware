@@ -1,4 +1,26 @@
 <?php
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
 
 namespace Shopware\Tests\Unit\Bundle\CartBundle\Domain\Price;
 
@@ -21,7 +43,7 @@ class PriceCollectionTest extends \PHPUnit_Framework_TestCase
         $collection = new PriceCollection([
             new Price(0, 0, new CalculatedTaxCollection(), new TaxRuleCollection()),
             new Price(0, 0, new CalculatedTaxCollection(), new TaxRuleCollection()),
-            new Price(0, 0, new CalculatedTaxCollection(), new TaxRuleCollection())
+            new Price(0, 0, new CalculatedTaxCollection(), new TaxRuleCollection()),
         ]);
         static::assertCount(3, $collection);
     }
@@ -33,7 +55,7 @@ class PriceCollectionTest extends \PHPUnit_Framework_TestCase
 
         static::assertEquals(
             new PriceCollection([
-                new Price(10, 10, new CalculatedTaxCollection(), new TaxRuleCollection())
+                new Price(10, 10, new CalculatedTaxCollection(), new TaxRuleCollection()),
             ]),
             $collection
         );
@@ -44,13 +66,13 @@ class PriceCollectionTest extends \PHPUnit_Framework_TestCase
         $collection = new PriceCollection();
         $collection->fill([
             new Price(10, 10, new CalculatedTaxCollection(), new TaxRuleCollection()),
-            new Price(10, 10, new CalculatedTaxCollection(), new TaxRuleCollection())
+            new Price(10, 10, new CalculatedTaxCollection(), new TaxRuleCollection()),
         ]);
 
         static::assertEquals(
             new PriceCollection([
                 new Price(10, 10, new CalculatedTaxCollection(), new TaxRuleCollection()),
-                new Price(10, 10, new CalculatedTaxCollection(), new TaxRuleCollection())
+                new Price(10, 10, new CalculatedTaxCollection(), new TaxRuleCollection()),
             ]),
             $collection
         );
@@ -59,7 +81,7 @@ class PriceCollectionTest extends \PHPUnit_Framework_TestCase
     public function testTotalAmountWithEmptyCollection()
     {
         $collection = new PriceCollection();
-        static::assertSame(0, $collection->getTotalPrice()->getPrice());
+        static::assertSame(0.0, $collection->getTotalPrice()->getTotalPrice());
     }
 
     public function testTotalAmountWithMultiplePrices()
@@ -68,7 +90,7 @@ class PriceCollectionTest extends \PHPUnit_Framework_TestCase
             new Price(200, 200, new CalculatedTaxCollection(), new TaxRuleCollection()),
             new Price(300, 300, new CalculatedTaxCollection(), new TaxRuleCollection()),
         ]);
-        static::assertSame(500, $collection->getTotalPrice()->getPrice());
+        static::assertSame(500.0, $collection->getTotalPrice()->getTotalPrice());
     }
 
     public function testGetTaxesReturnsACalculatedTaxCollection()
@@ -86,7 +108,7 @@ class PriceCollectionTest extends \PHPUnit_Framework_TestCase
                 new CalculatedTaxCollection([
                     new CalculatedTax(1, 15, 1),
                     new CalculatedTax(2, 16, 1),
-                    new CalculatedTax(3, 17, 1)
+                    new CalculatedTax(3, 17, 1),
                 ]),
                 new TaxRuleCollection()
             ),
@@ -96,10 +118,10 @@ class PriceCollectionTest extends \PHPUnit_Framework_TestCase
                 new CalculatedTaxCollection([
                     new CalculatedTax(4, 19, 1),
                     new CalculatedTax(5, 20, 1),
-                    new CalculatedTax(6, 21, 1)
+                    new CalculatedTax(6, 21, 1),
                 ]),
                 new TaxRuleCollection()
-            )
+            ),
         ]);
 
         static::assertEquals(
@@ -109,7 +131,7 @@ class PriceCollectionTest extends \PHPUnit_Framework_TestCase
                 new CalculatedTax(3, 17, 1),
                 new CalculatedTax(4, 19, 1),
                 new CalculatedTax(5, 20, 1),
-                new CalculatedTax(6, 21, 1)
+                new CalculatedTax(6, 21, 1),
             ]),
             $collection->getCalculatedTaxes()
         );
