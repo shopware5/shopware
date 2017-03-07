@@ -166,7 +166,6 @@ class CSRFTokenValidator implements SubscriberInterface
     private function generateToken(\Enlight_Controller_Response_ResponseHttp $response)
     {
         $token = Random::getAlphanumericString(30);
-        $this->container->get('session')->offsetSet('X-CSRF-Token', $token);
         $this->invalidateToken($response);
 
         return $token;
