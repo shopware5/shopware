@@ -131,8 +131,22 @@ class Listing extends Page implements HelperSelectorInterface
     public function filter(FilterGroup $filterGroups, array $properties)
     {
         $this->clickLink('Filtern');
+
+        $this->spin(function () {
+            $elements = Helper::findElements($this, ['filterShowResults']);
+            /** @var NodeElement $showResults */
+            $showResults = $elements['filterShowResults'];
+            if ($showResults->isVisible()) {
+                return true;
+            }
+
+            return false;
+        });
+
         $this->resetFilters();
-        $this->setFilters($filterGroups, $properties);
+        if ($properties) {
+            $this->setFilters($filterGroups, $properties);
+        }
         $this->pressShowResults();
     }
 
@@ -204,17 +218,61 @@ class Listing extends Page implements HelperSelectorInterface
     }
 
     /**
+     * Based on Behat's own example
+     *
+     * @see http://docs.behat.org/en/v2.5/cookbook/using_spin_functions.html#adding-a-timeout
+     *
+     * @param $lambda
+     * @param int $wait
+     *
+     * @throws \Exception
+     *
+     * @return bool
+     */
+    public function spin($lambda, $wait = 60)
+    {
+        $time = time();
+        $stopTime = $time + $wait;
+        while (time() < $stopTime) {
+            try {
+                if ($lambda($this)) {
+                    return true;
+                }
+            } catch (\Exception $e) {
+                // do nothing
+            }
+
+            usleep(250000);
+        }
+
+        throw new \Exception("Spin function timed out after {$wait} seconds");
+    }
+
+    /**
      * Resets all filters
      */
     protected function resetFilters()
     {
         $elements = Helper::findAllOfElements($this, ['filterActiveProperties'], false);
         $activeProperties = array_reverse($elements['filterActiveProperties']);
-
-        /** @var NodeElement $property */
-        foreach ($activeProperties as $property) {
-            $property->click();
+        if (empty($activeProperties)) {
+            return;
         }
+        $elements = Helper::findElements($this, ['filterShowResults']);
+        /** @var NodeElement $showResults */
+        $showResults = $elements['filterShowResults'];
+
+        $activeProperties[0]->click();
+        $this->spin(function () use ($showResults) {
+            if (!$showResults->hasClass('is--loading')) {
+                usleep(100);
+
+                return true;
+            }
+
+            return false;
+        });
+        $this->resetFilters();
     }
 
     /**
@@ -227,6 +285,10 @@ class Listing extends Page implements HelperSelectorInterface
      */
     protected function setFilters(FilterGroup $filterGroups, array $properties)
     {
+        $elements = Helper::findElements($this, ['filterShowResults']);
+        /** @var NodeElement $showResults */
+        $showResults = $elements['filterShowResults'];
+
         foreach ($properties as $property) {
             $found = false;
 
@@ -239,10 +301,17 @@ class Listing extends Page implements HelperSelectorInterface
                     $success = $filterGroup->setProperty($property['value']);
 
                     if (!$success) {
-                        $message = sprintf('The value "%s" was not found for filter "%s"!', $property['value'],
-                            $property['filter']);
+                        $message = sprintf('The value "%s" was not found for filter "%s"!', $property['value'], $property['filter']);
                         Helper::throwException($message);
                     }
+
+                    $this->spin(function () use ($showResults) {
+                        if (!$showResults->hasClass('is--loading')) {
+                            return true;
+                        }
+
+                        return false;
+                    });
 
                     break;
                 }
@@ -253,6 +322,35 @@ class Listing extends Page implements HelperSelectorInterface
                 Helper::throwException($message);
             }
         }
+    }
+
+    /**
+     * Based on Behat's own example
+     *
+     * @see http://docs.behat.org/en/v2.5/cookbook/using_spin_functions.html#adding-a-timeout
+     *
+     * @param $lambda
+     * @param int $wait
+     *
+     * @return bool
+     */
+    protected function spinWithNoException($lambda, $wait = 60)
+    {
+        $time = time();
+        $stopTime = $time + $wait;
+        while (time() < $stopTime) {
+            try {
+                if ($lambda($this)) {
+                    return true;
+                }
+            } catch (\Exception $e) {
+                // do nothing
+            }
+
+            usleep(250000);
+        }
+
+        return false;
     }
 
     /**
@@ -277,10 +375,16 @@ class Listing extends Page implements HelperSelectorInterface
      */
     private function pressShowResults()
     {
-        $this->getSession()->wait(15000, '$($(":plugin-swListingActions").data("plugin_swListingActions").$applyFilterBtn.get(0)).not(".is--loading").is(":enabled");');
         $elements = Helper::findElements($this, ['filterShowResults']);
         /** @var NodeElement $showResults */
         $showResults = $elements['filterShowResults'];
+        $this->spin(function () use ($showResults) {
+            if (!$showResults->hasClass('is--loading')) {
+                return true;
+            }
+
+            return false;
+        });
         $showResults->press();
     }
 }
