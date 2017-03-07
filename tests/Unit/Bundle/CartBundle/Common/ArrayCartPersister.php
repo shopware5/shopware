@@ -31,6 +31,5 @@ class ArrayCartPersister implements CartPersisterInterface
     public function save(Cart $cart)
     {
         $this->carts[$cart->getToken()] = $cart;
-        $this->signatures[$cart->getSignature()] = $cart;
     }
 }

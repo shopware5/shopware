@@ -8,7 +8,7 @@ use Shopware\Bundle\CartBundle\Domain\Price\PriceDefinition;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxDetector;
 use Shopware\Bundle\CartBundle\Domain\Customer\Address;
 use Shopware\Bundle\CartBundle\Domain\Customer\Customer;
-use Shopware\Bundle\CartBundle\Domain\Payment\PaymentService;
+use Shopware\Bundle\CartBundle\Domain\Payment\PaymentMethod;
 use Shopware\Bundle\CartBundle\Infrastructure\Product\ProductPriceGateway;
 use Shopware\Bundle\StoreFrontBundle\Struct\Country;
 use Shopware\Bundle\StoreFrontBundle\Struct\Currency;
@@ -30,7 +30,7 @@ class Generator extends \PHPUnit_Framework_TestCase
      * @param null|Country\Area $area
      * @param null|Country $country
      * @param null|Country\State $state
-     * @param null|PaymentService $paymentService
+     * @param null|PaymentMethod $paymentService
      * @param null|DeliveryService $deliveryService
      * @param null|Customer $customer
      * @param null|Address $billing
@@ -71,7 +71,7 @@ class Generator extends \PHPUnit_Framework_TestCase
         $area = $area ?: new Country\Area();
         $country = $country ?: new Country();
         $state = $state ?: new Country\State();
-        $paymentService = $paymentService ?: new PaymentService();
+        $paymentService = $paymentService ?: new PaymentMethod(1, '', '', '');
         $deliveryService = $deliveryService ?: new DeliveryService();
         $customer = $customer ?: new Customer();
         $billing = $billing ?: new Address();

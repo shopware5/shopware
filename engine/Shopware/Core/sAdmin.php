@@ -608,13 +608,8 @@ class sAdmin
             ]
         );
 
-        $this->db->query(
-            $sqlPayment,
-            [
-                $paymentId ?: $this->front->Request()->getPost('sPayment'),
-                $userId,
-            ]
-        );
+        $paymentId = $paymentId ?: $this->front->Request()->getPost('sPayment');
+        $this->db->query($sqlPayment, [$paymentId, $userId]);
 
         if ($this->db->getErrorMessage()) {
             throw new Enlight_Exception(

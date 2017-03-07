@@ -85,12 +85,12 @@ class FieldHelper
             return $columns;
         }
 
-        $tableColumns = $this->connection->fetchAll('SHOW COLUMNS FROM ' . $table);
+        $tableColumns = $this->connection->fetchAll('SHOW COLUMNS FROM '.$table);
         $tableColumns = array_column($tableColumns, 'Field');
 
         $columns = [];
         foreach ($tableColumns as $column) {
-            $columns[] = $alias . '.' . $column . ' as __' . $alias . '_' . $column;
+            $columns[] = $alias.'.'.$column.' as __'.$alias.'_'.$column;
         }
 
         $this->cache->save($key, $columns);
@@ -844,12 +844,13 @@ class FieldHelper
             'customer.firstname as __customer_firstname',
             'customer.lastname as __customer_lastname',
             'customer.birthday as __customer_birthday',
-            'customer.customernumber as __customer_customernumber'
+            'customer.customernumber as __customer_customernumber',
         ];
         $fields = array_merge(
             $fields,
             $this->getTableFields('s_user_attributes', 'customerAttribute')
         );
+
         return $fields;
     }
 
@@ -880,7 +881,7 @@ class FieldHelper
             'deliveryService.bind_weight_to as __deliveryService_bind_weight_to',
             'deliveryService.bind_price_from as __deliveryService_bind_price_from',
             'deliveryService.bind_price_to as __deliveryService_bind_price_to',
-            'deliveryService.status_link as __deliveryService_status_link'
+            'deliveryService.status_link as __deliveryService_status_link',
         ];
 
         return array_merge($fields, $this->getTableFields('s_premium_dispatch_attributes', 'deliveryServiceAttribute'));
@@ -908,8 +909,9 @@ class FieldHelper
             'paymentMethod.action as __paymentMethod_action',
             'paymentMethod.pluginID as __paymentMethod_pluginID',
             'paymentMethod.source as __paymentMethod_source',
-            'paymentMethod.mobile_inactive as __paymentMethod_mobile_inactive'
+            'paymentMethod.mobile_inactive as __paymentMethod_mobile_inactive',
         ];
+
         return array_merge($fields, $this->getTableFields('s_core_paymentmeans_attributes', 'paymentMethodAttribute'));
     }
 
@@ -938,9 +940,9 @@ class FieldHelper
             $fields,
             $this->getTableFields('s_user_addresses_attributes', 'addressAttribute')
         );
+
         return $fields;
     }
-
 
     /**
      * Returns an array with all required emotion fields.
@@ -1206,10 +1208,10 @@ class FieldHelper
         }
 
         if ($joinCondition === null) {
-            $joinCondition = $fromPart . '.id';
+            $joinCondition = $fromPart.'.id';
         }
         if ($selectName === null) {
-            $selectName = '__' . $fromPart . '_translation';
+            $selectName = '__'.$fromPart.'_translation';
         }
 
         $this->addTranslationWithSuffix(
@@ -1408,7 +1410,7 @@ class FieldHelper
     }
 
     /**
-     * @param QueryBuilder $query
+     * @param QueryBuilder         $query
      * @param ShopContextInterface $context
      */
     public function addAddressTranslation(QueryBuilder $query, ShopContextInterface $context)
@@ -1417,7 +1419,7 @@ class FieldHelper
     }
 
     /**
-     * @param QueryBuilder $query
+     * @param QueryBuilder         $query
      * @param ShopContextInterface $context
      */
     public function addEmotionElementTranslation(QueryBuilder $query, ShopContextInterface $context)
@@ -1461,9 +1463,9 @@ class FieldHelper
         $shopId,
         $suffix = ''
     ) {
-        $selectSuffix = !empty($suffix) ? '_' . strtolower($suffix) : '';
+        $selectSuffix = !empty($suffix) ? '_'.strtolower($suffix) : '';
 
-        $translationTable = uniqid('translation') . $suffix . $translationType;
+        $translationTable = uniqid('translation').$suffix.$translationType;
 
         $selectName .= $selectSuffix;
 
@@ -1471,12 +1473,12 @@ class FieldHelper
             $fromPart,
             's_core_translations',
             $translationTable,
-            $translationTable . '.objecttype = :' . $translationTable . ' AND ' .
-            $translationTable . '.objectkey = ' . $joinCondition . ' AND ' .
-            $translationTable . '.objectlanguage = :language' . $suffix
+            $translationTable.'.objecttype = :'.$translationTable.' AND '.
+            $translationTable.'.objectkey = '.$joinCondition.' AND '.
+            $translationTable.'.objectlanguage = :language'.$suffix
         );
-        $query->setParameter(':language' . $suffix, $shopId);
-        $query->setParameter(':' . $translationTable, $translationType);
-        $query->addSelect($translationTable . '.objectdata as ' . $selectName);
+        $query->setParameter(':language'.$suffix, $shopId);
+        $query->setParameter(':'.$translationTable, $translationType);
+        $query->addSelect($translationTable.'.objectdata as '.$selectName);
     }
 }

@@ -23,8 +23,12 @@ class PresetContextService implements CartContextServiceInterface
     /**
      * @return CartContextInterface
      */
-    public function getCartContext()
+    public function getCartContext(): CartContextInterface
     {
         return $this->context;
+    }
+
+    public function initializeContext(): void
+    {
     }
 }

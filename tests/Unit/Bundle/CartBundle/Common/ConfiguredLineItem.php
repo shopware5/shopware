@@ -4,6 +4,7 @@ namespace Shopware\Tests\Unit\Bundle\CartBundle\Common;
 
 use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryDate;
 use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryInformation;
+use Shopware\Bundle\CartBundle\Domain\JsonSerializableTrait;
 use Shopware\Bundle\CartBundle\Domain\LineItem\CalculatedLineItemInterface;
 use Shopware\Bundle\CartBundle\Domain\LineItem\Deliverable;
 use Shopware\Bundle\CartBundle\Domain\LineItem\LineItemInterface;
@@ -12,6 +13,8 @@ use Shopware\Bundle\CartBundle\Domain\Price\Price;
 
 class ConfiguredLineItem implements Deliverable, CalculatedLineItemInterface, Stackable
 {
+    use JsonSerializableTrait;
+
     /**
      * @var string
      */
