@@ -85,12 +85,12 @@ class FieldHelper
             return $columns;
         }
 
-        $tableColumns = $this->connection->fetchAll('SHOW COLUMNS FROM '.$table);
+        $tableColumns = $this->connection->fetchAll('SHOW COLUMNS FROM ' . $table);
         $tableColumns = array_column($tableColumns, 'Field');
 
         $columns = [];
         foreach ($tableColumns as $column) {
-            $columns[] = $alias.'.'.$column.' as __'.$alias.'_'.$column;
+            $columns[] = $alias . '.' . $column . ' as __' . $alias . '_' . $column;
         }
 
         $this->cache->save($key, $columns);
@@ -1208,10 +1208,10 @@ class FieldHelper
         }
 
         if ($joinCondition === null) {
-            $joinCondition = $fromPart.'.id';
+            $joinCondition = $fromPart . '.id';
         }
         if ($selectName === null) {
-            $selectName = '__'.$fromPart.'_translation';
+            $selectName = '__' . $fromPart . '_translation';
         }
 
         $this->addTranslationWithSuffix(
@@ -1445,6 +1445,12 @@ class FieldHelper
         $this->addTranslation('customFacet', 'custom_facet', $query, $context, 1);
     }
 
+    public function addPaymentTranslation(QueryBuilder $query, ShopContextInterface $context): void
+    {
+        $this->addTranslation('paymentMethod', 'config_payment', $query, $context, 1);
+        $this->addTranslation('paymentMethodAttribute', 's_core_paymentmeans_attributes', $query, $context, 'paymentMethod.id');
+    }
+
     /**
      * @param string       $fromPart        Table which uses as from part
      * @param string       $joinCondition   Join condition for the objectkey column
@@ -1463,9 +1469,9 @@ class FieldHelper
         $shopId,
         $suffix = ''
     ) {
-        $selectSuffix = !empty($suffix) ? '_'.strtolower($suffix) : '';
+        $selectSuffix = !empty($suffix) ? '_' . strtolower($suffix) : '';
 
-        $translationTable = uniqid('translation').$suffix.$translationType;
+        $translationTable = uniqid('translation') . $suffix . $translationType;
 
         $selectName .= $selectSuffix;
 
@@ -1473,12 +1479,12 @@ class FieldHelper
             $fromPart,
             's_core_translations',
             $translationTable,
-            $translationTable.'.objecttype = :'.$translationTable.' AND '.
-            $translationTable.'.objectkey = '.$joinCondition.' AND '.
-            $translationTable.'.objectlanguage = :language'.$suffix
+            $translationTable . '.objecttype = :' . $translationTable . ' AND ' .
+            $translationTable . '.objectkey = ' . $joinCondition . ' AND ' .
+            $translationTable . '.objectlanguage = :language' . $suffix
         );
-        $query->setParameter(':language'.$suffix, $shopId);
-        $query->setParameter(':'.$translationTable, $translationType);
-        $query->addSelect($translationTable.'.objectdata as '.$selectName);
+        $query->setParameter(':language' . $suffix, $shopId);
+        $query->setParameter(':' . $translationTable, $translationType);
+        $query->addSelect($translationTable . '.objectdata as ' . $selectName);
     }
 }

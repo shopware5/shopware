@@ -46,6 +46,10 @@ class PaymentMethodHydrator extends Hydrator
 
     public function hydrate(array $data): PaymentMethod
     {
+        $id = (int) $data['__paymentMethod_id'];
+        $translation = $this->getTranslation($data, '__paymentMethod', [], $id);
+        $data = array_merge($data, $translation);
+
         $paymentMethod = new PaymentMethod(
             (int) $data['__paymentMethod_id'],
             (string) $data['__paymentMethod_name'],

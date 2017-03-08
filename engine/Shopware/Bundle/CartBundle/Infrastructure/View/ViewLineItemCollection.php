@@ -32,7 +32,7 @@ class ViewLineItemCollection extends KeyCollection
     /**
      * @var ViewLineItemInterface[]
      */
-    protected $elements;
+    protected $elements = [];
 
     public function add(ViewLineItemInterface $lineItem): void
     {

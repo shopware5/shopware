@@ -78,7 +78,7 @@ class PaymentMethodGateway
             return [];
         }
 
-        $query = $this->createQuery();
+        $query = $this->createQuery($context);
         $query->where('paymentMethod.id IN (:ids)');
         $query->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
         $data = $query->execute()->fetchAll(\PDO::FETCH_GROUP | \PDO::FETCH_UNIQUE);
@@ -98,7 +98,7 @@ class PaymentMethodGateway
      */
     public function getAll(ShopContextInterface $context): array
     {
-        $query = $this->createQuery();
+        $query = $this->createQuery($context);
 
         $data = $query->execute()->fetchAll(\PDO::FETCH_GROUP | \PDO::FETCH_UNIQUE);
 
@@ -110,12 +110,14 @@ class PaymentMethodGateway
         return $services;
     }
 
-    private function createQuery(): QueryBuilder
+    private function createQuery(ShopContextInterface $context): QueryBuilder
     {
         $query = $this->connection->createQueryBuilder();
         $query->select('paymentMethod.id as arrayKey');
         $query->addSelect($this->fieldHelper->getPaymentMethodFields());
         $query->from('s_core_paymentmeans', 'paymentMethod');
+
+        $this->fieldHelper->addPaymentTranslation($query, $context);
 
         $query->leftJoin(
             'paymentMethod',

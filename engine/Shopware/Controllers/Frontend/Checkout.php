@@ -78,6 +78,60 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         ]);
     }
 
+    public function confirmAction(): void
+    {
+        /** @var CartContextInterface $context */
+        $context = $this->get('shopware_cart.cart_context_service')->getCartContext();
+
+        if ($context->getCustomer() === null) {
+            $this->forwardToLogin();
+
+            return;
+        }
+
+        /** @var ViewCart $cart */
+        $cart = $this->get('shopware_cart.store_front_cart_service')->getCart();
+
+        if ($cart->getLineItems()->count() === 0) {
+            $this->redirect(['action' => self::ACTION_CART]);
+
+            return;
+        }
+
+        $this->View()->assign([
+            'cart' => json_decode(json_encode($cart), true),
+            'sTargetAction' => self::ACTION_CONFIRM,
+        ]);
+    }
+
+    public function shippingPaymentAction()
+    {
+        /** @var ViewCart $cart */
+        $cart = $this->get('shopware_cart.store_front_cart_service')->getCart();
+
+        /** @var CartContextInterface $context */
+        $context = $this->get('shopware_cart.cart_context_service')->getCartContext();
+
+        /** @var PaymentMethod[] $payments */
+        $payments = $this->get('shopware_cart.payment_method_service')->getAvailable(
+            $cart->getCalculatedCart(),
+            $context
+        );
+
+        $payments = json_decode(json_encode($payments), true);
+
+        $this->View()->assign([
+            'cart' => json_decode(json_encode($cart), true),
+            'payments' => $payments,
+            'sTargetAction' => 'shippingPayment',
+            'currentPaymentId' => $context->getPaymentMethod()->getId(),
+        ]);
+
+        if ($this->Request()->getParam('isXHR')) {
+            return $this->View()->loadTemplate('frontend/checkout/shipping_payment_core.tpl');
+        }
+    }
+
     public function ajaxCartAction()
     {
         Shopware()->Plugins()->Controller()->Json()->setPadding();
@@ -196,60 +250,6 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         $product = $service->getCart()->getLineItems()->get($number);
 
         $this->View()->assign(['lineItem' => json_decode(json_encode($product), true)]);
-    }
-
-    public function confirmAction(): void
-    {
-        /** @var CartContextInterface $context */
-        $context = $this->get('shopware_cart.cart_context_service')->getCartContext();
-
-        if ($context->getCustomer() === null) {
-            $this->forwardToLogin();
-
-            return;
-        }
-
-        /** @var ViewCart $cart */
-        $cart = $this->get('shopware_cart.store_front_cart_service')->getCart();
-
-        if ($cart->getLineItems()->count() === 0) {
-            $this->forward(self::ACTION_CART);
-
-            return;
-        }
-
-        $this->View()->assign([
-            'cart' => json_decode(json_encode($cart), true),
-            'sTargetAction' => self::ACTION_CONFIRM,
-        ]);
-    }
-
-    public function shippingPaymentAction()
-    {
-        /** @var ViewCart $cart */
-        $cart = $this->get('shopware_cart.store_front_cart_service')->getCart();
-
-        /** @var CartContextInterface $context */
-        $context = $this->get('shopware_cart.cart_context_service')->getCartContext();
-
-        /** @var PaymentMethod[] $payments */
-        $payments = $this->get('shopware_cart.payment_method_service')->getAvailable(
-            $cart->getCalculatedCart(),
-            $context
-        );
-
-        $payments = json_decode(json_encode($payments), true);
-
-        $this->View()->assign([
-            'cart' => json_decode(json_encode($cart), true),
-            'payments' => $payments,
-            'sTargetAction' => 'shippingPayment',
-            'currentPaymentId' => $context->getPaymentMethod()->getId(),
-        ]);
-
-        if ($this->Request()->getParam('isXHR')) {
-            return $this->View()->loadTemplate('frontend/checkout/shipping_payment_core.tpl');
-        }
     }
 
     /**

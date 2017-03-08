@@ -94,7 +94,7 @@ class Generator extends \PHPUnit_Framework_TestCase
         $area = $area ?: new Country\Area();
         $country = $country ?: new Country();
         $state = $state ?: new Country\State();
-        $paymentService = $paymentService ?: new PaymentMethod(1, '', '', '');
+        $paymentService = $paymentService ?: new PaymentMethod(1, 'cash', 'Cash', 'CashPayment');
         $deliveryService = $deliveryService ?: new DeliveryService();
         $customer = $customer ?: new Customer();
         $billing = $billing ?: new Address();
