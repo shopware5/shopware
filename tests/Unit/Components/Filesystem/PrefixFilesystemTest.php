@@ -119,14 +119,14 @@ class PrefixFilesystemTest extends TestCase
      * @param string $path
      * @param string $expectedPath
      */
-    public function testStripPrefix(string $prefix, string $path, string $expectedPath)
+    public function testStripPath(string $prefix, string $path, string $expectedPath)
     {
         $filesystem = $this->prophesize(FilesystemInterface::class)->reveal();
         $prefixFilesystem = new PrefixFilesystem($filesystem, $prefix);
 
         $this->assertSame(
             $expectedPath,
-            $this->invokeMethod($prefixFilesystem, 'stripPrefix', [$path])
+            $prefixFilesystem->stripPath($path)
         );
     }
 
@@ -501,7 +501,7 @@ class PrefixFilesystemTest extends TestCase
     public function testAddPlugin()
     {
         $this->expectException(\RuntimeException::class);
-        $this->expectExceptionMessage('Filesystem plugins are not allowed in prefixed filesystems.');
+        $this->expectExceptionMessage('Filesystem plugins are not allowed in abstract filesystems.');
 
         $filesystem = $this->prophesize(FilesystemInterface::class)->reveal();
         $prefix = 'pluginData/SwagSimpleTest/';
