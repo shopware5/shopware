@@ -78,12 +78,7 @@ class Converter
 
     public function convertCategory(Models\Category\Category $category)
     {
-        return new Struct\Category(
-            $category->getId(),
-            $category->getParentId(),
-            array_filter(explode('|', $category->getPath())),
-            $category->getName()
-        );
+        return Struct\Category::createFromCategoryEntity($category);
     }
 
     /**

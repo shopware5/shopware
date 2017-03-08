@@ -1,6 +1,5 @@
 <?php
 declare(strict_types=1);
-
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -26,19 +25,40 @@ declare(strict_types=1);
 
 namespace Shopware\Bundle\StoreFrontBundle\Struct;
 
-class CategoryCollection extends Collection implements \JsonSerializable
+class CategoryCollection extends KeyCollection implements \JsonSerializable
 {
     /**
      * @var Category[]
      */
-    protected $elements;
+    protected $elements = [];
 
-    /**
-     * @param Category[] $elements
-     */
-    public function __construct(array $elements)
+    public function add(Category $category): void
     {
-        parent::__construct($elements);
+        parent::doAdd($category);
+    }
+
+    public function remove(int $id): void
+    {
+        parent::doRemoveByKey($id);
+    }
+
+    public function removeElement(Category $category): void
+    {
+        parent::doRemoveByKey($this->getKey($category));
+    }
+
+    public function exists(Category $category): bool
+    {
+        return parent::has($this->getKey($category));
+    }
+
+    public function get(int $id): ? Category
+    {
+        if ($this->has($id)) {
+            return $this->elements[$id];
+        }
+
+        return null;
     }
 
     /**
@@ -46,9 +66,9 @@ class CategoryCollection extends Collection implements \JsonSerializable
      */
     public function getIds(): array
     {
-        return array_map(function (Category $category) {
+        return $this->map(function (Category $category) {
             return $category->getId();
-        }, $this->elements);
+        });
     }
 
     /**
@@ -56,9 +76,9 @@ class CategoryCollection extends Collection implements \JsonSerializable
      */
     public function getPaths(): array
     {
-        return array_map(function (Category $category) {
+        return $this->map(function (Category $category) {
             return $category->getPath();
-        }, $this->elements);
+        });
     }
 
     /**
@@ -96,45 +116,12 @@ class CategoryCollection extends Collection implements \JsonSerializable
     }
 
     /**
-     * @param string|int $key
-     *
-     * @return null|Category
-     */
-    public function get($key): ? Category
-    {
-        return parent::get($key);
-    }
-
-    /**
-     * @param int $id
-     *
-     * @return null|Category
-     */
-    public function getById(int $id): ? Category
-    {
-        foreach ($this->elements as $category) {
-            if ($category->getId() === $id) {
-                return $category;
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * @param $key
-     * @param Category $category
-     */
-    public function set($key, Category $category): void
-    {
-        $this->elements[$key] = $category;
-    }
-
-    /**
      * @param Category $element
+     *
+     * @return int
      */
-    public function add(Category $element): void
+    protected function getKey($element)
     {
-        parent::add($element);
+        return $element->getId();
     }
 }

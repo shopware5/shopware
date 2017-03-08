@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -39,6 +41,17 @@ abstract class Struct
             } elseif (is_array($value)) {
                 $this->$key = $this->cloneArray($value);
             }
+        }
+    }
+
+    /**
+     * @param array $options
+     */
+    protected function resolveOptions(array $options)
+    {
+        foreach ($options as $key => $value) {
+            $method = 'set' . ucfirst($key);
+            $this->$method($value);
         }
     }
 

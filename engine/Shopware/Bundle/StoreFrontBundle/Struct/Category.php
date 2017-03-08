@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -138,18 +140,31 @@ class Category extends Extendable implements \JsonSerializable
      */
     protected $children = [];
 
+    private function __construct()
+    {
+    }
+
     /**
      * @param int      $id
      * @param int|null $parentId
      * @param array    $path
      * @param string   $name
+     * @param array    $options
+     *
+     * @return Category
      */
-    public function __construct(int $id, ?int $parentId, array $path, string $name)
+    public static function create(int $id, ?int $parentId, array $path, string $name, array $options = [])
     {
-        $this->id = $id;
-        $this->parentId = $parentId;
-        $this->path = $path;
-        $this->name = $name;
+        $self = new self();
+        $self->id = $id;
+        $self->parentId = $parentId;
+        $self->path = $path;
+        $self->name = $name;
+
+        unset($options['id'], $options['parentId'], $options['path'], $options['name']);
+        $self->resolveOptions($options);
+
+        return $self;
     }
 
     /**
@@ -159,29 +174,15 @@ class Category extends Extendable implements \JsonSerializable
      */
     public static function createFromCategoryEntity(CategoryEntity $category)
     {
-        $struct = new self(
+        return self::create(
             $category->getId(),
             $category->getParentId(),
-            array_filter(explode('|', $category->getPath())),
-            $category->getName()
+            array_filter(explode('|', (string) $category->getPath())),
+            $category->getName(),
+            [
+                'position' => (int) $category->getPosition(),
+            ]
         );
-
-        $struct->setId($category->getId());
-        $struct->setName($category->getName());
-        $struct->setPosition($category->getPosition());
-        $struct->setParentId($category->getParentId());
-
-        $path = $category->getPath();
-        if ($path) {
-            $path = ltrim($path, '|');
-            $path = rtrim($path, '|');
-
-            $path = explode('|', $path);
-
-            $struct->setPath(array_reverse($path));
-        }
-
-        return $struct;
     }
 
     /**

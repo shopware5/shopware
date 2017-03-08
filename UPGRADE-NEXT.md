@@ -38,6 +38,7 @@ This changelog references changes done in Shopware Next patch versions.
 * Changed constructor of `shopware_media.strategy_factory` to require a collection of `Shopware\Bundle\MediaBundle\Strategy\StrategyInterface`
 * Changed default path of `media` to `web/media`
 * Changed `category.sub` variable to `category.children` in advanced menu template.
+* Changed `\Shopware\Bundle\StoreFrontBundle\Struct\Category::__construct` accessibility to private, use `\Shopware\Bundle\StoreFrontBundle\Struct\Category::create` instead
 
 ## Removals
 
@@ -46,7 +47,7 @@ This changelog references changes done in Shopware Next patch versions.
         - `s_core_shops.secure_host`
         - `s_core_shops.secure_base_path`
         - `s_core_shops.always_secure`
-        
+
     * Removed methods
         - `\Shopware\Bundle\StoreFrontBundle\Struct\Shop::setSecureHost`
         - `\Shopware\Bundle\StoreFrontBundle\Struct\Shop::getSecureHost`
@@ -71,7 +72,7 @@ This changelog references changes done in Shopware Next patch versions.
 
     * Removed plugins
         - `TagCloud`
-        
+
     * Removed blocks
         - `frontend_listing_index_tagcloud` in file `themes/Frontend/Bare/frontend/listing/index.tpl`
         - `frontend_home_index_tagcloud` in file `themes/Frontend/Bare/frontend/home/index.tpl`
@@ -238,7 +239,7 @@ The category collection provides different helper function to work with categori
         new Category(1, null, [], 'First level 01'),
         new Category(2, 1, [1], 'Second level 01'),
     ]);
-    
+
     $this->assertSame([1,2], $collection->getIds());
     ```
 
@@ -253,14 +254,14 @@ The category collection provides different helper function to work with categori
         $collection->getPaths()
     );
     ```
-    
+
 * `getIdsIncludingPaths` - returns all ids, including ids of the categories path
     ```
     $collection = new CategoryCollection([
         new Category(2, 1, [1], 'Second level 01'),
         new Category(5, 50, [50, 1], 'Third level 02'),
     ]);
-    
+
     $this->assertSame(
         [1,2,5,50],
         $collection->getIdsIncludingPaths()
@@ -277,7 +278,7 @@ The category collection provides different helper function to work with categori
         new Category(4, 1, [1], 'Second level 02'),
         new Category(5, 4, [4, 1], 'Third level 02'),
     ]);
-    
+
     $this->assertEquals(
         [
             new Category(1, null, [], 'First level 01', [

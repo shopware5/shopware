@@ -26,6 +26,7 @@ namespace Shopware\Bundle\SearchBundle\FacetResult;
 
 use Shopware\Bundle\SearchBundle\Facet\CategoryFacet;
 use Shopware\Bundle\StoreFrontBundle\Struct\Category;
+use Shopware\Bundle\StoreFrontBundle\Struct\CategoryCollection;
 use Shopware\Components\QueryAliasMapper;
 
 class CategoryTreeFacetResultBuilder
@@ -62,16 +63,12 @@ class CategoryTreeFacetResultBuilder
      */
     public function buildFacetResult(array $categories, array $activeIds, $systemCategoryId, CategoryFacet $facet)
     {
-        $items = $this->getCategoriesOfParent($categories, $systemCategoryId);
+        $collection = new CategoryCollection($categories);
 
-        if (!$items) {
-            return null;
-        }
-
-        $values = [];
-        foreach ($items as $item) {
-            $values[] = $this->createTreeItem($categories, $item, $activeIds);
-        }
+        $values = $this->convertItems(
+            $collection->getTree($systemCategoryId),
+            $activeIds
+        );
 
         if (!empty($facet->getLabel())) {
             $label = $facet->getLabel();
@@ -96,57 +93,26 @@ class CategoryTreeFacetResultBuilder
 
     /**
      * @param Category[] $categories
-     * @param int|null   $parentId
+     * @param int[]      $activeIds
      *
-     * @return array
+     * @return TreeItem[]
      */
-    private function getCategoriesOfParent(array $categories, $parentId)
+    private function convertItems(array $categories, $activeIds)
     {
-        $result = [];
+        $items = [];
 
         foreach ($categories as $category) {
-            if (!$category->getPath() && $parentId !== null) {
-                continue;
-            }
+            $children = $this->convertItems($category->getChildren(), $activeIds);
 
-            if ($category->getPath() == $parentId) {
-                $result[] = $category;
-                continue;
-            }
-
-            $parents = $category->getPath();
-            $lastParent = $parents[count($parents) - 1];
-
-            if ($lastParent == $parentId) {
-                $result[] = $category;
-            }
+            $items[] = new TreeItem(
+                $category->getId(),
+                $category->getName(),
+                in_array($category->getId(), $activeIds),
+                $children,
+                $category->getAttributes()
+            );
         }
 
-        return $result;
-    }
-
-    /**
-     * @param Category[] $categories
-     * @param Category   $category
-     * @param int[]      $actives
-     *
-     * @return \Shopware\Bundle\SearchBundle\FacetResult\TreeItem
-     */
-    private function createTreeItem(array $categories, Category $category, array $actives = [])
-    {
-        $children = $this->getCategoriesOfParent($categories, $category->getId());
-
-        $values = [];
-        foreach ($children as $child) {
-            $values[] = $this->createTreeItem($categories, $child, $actives);
-        }
-
-        return new TreeItem(
-            $category->getId(),
-            $category->getName(),
-            in_array($category->getId(), $actives),
-            $values,
-            $category->getAttributes()
-        );
+        return $items;
     }
 }
