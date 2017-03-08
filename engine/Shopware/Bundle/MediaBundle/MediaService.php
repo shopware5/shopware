@@ -55,31 +55,17 @@ class MediaService implements MediaServiceInterface
     private $mediaUrl;
 
     /**
-     * @var array
-     */
-    private $config;
-
-    /**
      * @param FilesystemInterface $filesystem
      * @param StrategyInterface   $strategy
      * @param Container           $container
-     * @param array               $config
-     *
-     * @throws \Exception
+     * @param string              $mediaUrl
      */
-    public function __construct(FilesystemInterface $filesystem, StrategyInterface $strategy, Container $container, array $config)
+    public function __construct(FilesystemInterface $filesystem, StrategyInterface $strategy, Container $container, string $mediaUrl)
     {
         $this->filesystem = $filesystem;
         $this->container = $container;
         $this->strategy = $strategy;
-        $this->config = $config;
-
-        if (!isset($config['mediaUrl'])) {
-            throw new \Exception(sprintf("Please provide a 'mediaUrl' in your %s adapter.", $config['type']));
-        }
-
-        $mediaUrl = $config['mediaUrl'] ?: $this->createFallbackMediaUrl();
-        $this->mediaUrl = rtrim($mediaUrl, '/');
+        $this->mediaUrl = $this->normalizeMediaUrl($mediaUrl);
     }
 
     /**
@@ -87,7 +73,6 @@ class MediaService implements MediaServiceInterface
      */
     public function read($path)
     {
-        $this->migrateFileLive($path);
         $path = $this->strategy->encode($path);
 
         return $this->filesystem->read($path);
@@ -98,7 +83,6 @@ class MediaService implements MediaServiceInterface
      */
     public function readStream($path)
     {
-        $this->migrateFileLive($path);
         $path = $this->strategy->encode($path);
 
         return $this->filesystem->readStream($path);
@@ -117,7 +101,6 @@ class MediaService implements MediaServiceInterface
             return $this->mediaUrl . '/' . ltrim($path, '/');
         }
 
-        $this->migrateFileLive($path);
         $path = $this->strategy->encode($path);
 
         return $this->mediaUrl . '/' . ltrim($path, '/');
@@ -156,7 +139,6 @@ class MediaService implements MediaServiceInterface
      */
     public function has($path)
     {
-        $this->migrateFileLive($path);
         $path = $this->strategy->encode($path);
 
         return $this->filesystem->has($path);
@@ -177,7 +159,6 @@ class MediaService implements MediaServiceInterface
      */
     public function getSize($path)
     {
-        $this->migrateFileLive($path);
         $path = $this->strategy->encode($path);
 
         return $this->filesystem->getSize($path);
@@ -188,7 +169,6 @@ class MediaService implements MediaServiceInterface
      */
     public function rename($path, $newPath)
     {
-        $this->migrateFileLive($path);
         $path = $this->strategy->encode($path);
         $newPath = $this->strategy->encode($newPath);
 
@@ -201,14 +181,6 @@ class MediaService implements MediaServiceInterface
     public function normalize($path)
     {
         return $this->strategy->normalize($path);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getAdapterType()
-    {
-        return $this->config['type'];
     }
 
     /**
@@ -237,26 +209,6 @@ class MediaService implements MediaServiceInterface
     }
 
     /**
-     * Migrates a file to the new strategy if it's not present
-     *
-     * @internal
-     *
-     * @param $path
-     */
-    public function migrateFile($path)
-    {
-        if ($this->getAdapterType() !== 'local' || $this->isEncoded($path)) {
-            return;
-        }
-
-        $encodedPath = $this->strategy->encode($path);
-
-        if ($this->filesystem->has($path) && !$this->filesystem->has($encodedPath)) {
-            $this->filesystem->rename($path, $encodedPath);
-        }
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function encode($path)
@@ -280,6 +232,24 @@ class MediaService implements MediaServiceInterface
         return $this->filesystem;
     }
 
+    public function getAdapterType()
+    {
+        return '';
+    }
+
+    /**
+     * @param string $mediaUrl
+     *
+     * @return string
+     */
+    private function normalizeMediaUrl(string $mediaUrl): string
+    {
+        $mediaUrl = !empty($mediaUrl) ?: $this->createFallbackMediaUrl();
+        $mediaUrl = rtrim($mediaUrl, '/');
+
+        return $mediaUrl;
+    }
+
     /**
      * Generates a mediaUrl based on the request or router
      *
@@ -292,7 +262,7 @@ class MediaService implements MediaServiceInterface
         $request = $this->container->get('front')->Request();
 
         if ($request && $request->getHttpHost()) {
-            return ($request->isSecure() ? 'https' : 'http') . '://' . $request->getHttpHost() . $request->getBasePath() . '/';
+            return ($request->isSecure() ? 'https' : 'http') . '://' . $request->getHttpHost() . $request->getBasePath() . '/web/';
         }
 
         if ($this->container->has('Shop')) {
@@ -308,23 +278,9 @@ class MediaService implements MediaServiceInterface
         }
 
         if ($shop->getSecure()) {
-            return 'https://' . $shop->getHost() . $shop->getBasePath() . '/';
+            return 'https://' . $shop->getHost() . $shop->getBasePath() . '/web/';
         }
 
-        return 'http://' . $shop->getHost() . $shop->getBasePath() . '/';
-    }
-
-    /**
-     * Used as internal check for the liveMigration config flag.
-     *
-     * @param string $path
-     */
-    private function migrateFileLive($path)
-    {
-        if (!$this->container->getParameter('shopware.cdn.liveMigration')) {
-            return;
-        }
-
-        $this->migrateFile($path);
+        return 'http://' . $shop->getHost() . $shop->getBasePath() . '/web/';
     }
 }

@@ -154,13 +154,6 @@ interface MediaServiceInterface
     public function isEncoded($path);
 
     /**
-     * Returns the adapter type. e.g. 'local'
-     *
-     * @return string
-     */
-    public function getAdapterType();
-
-    /**
      * Create a directory.
      *
      * @param string $dirname the name of the new directory
@@ -168,15 +161,6 @@ interface MediaServiceInterface
      * @return bool true on success, false on failure
      */
     public function createDir($dirname);
-
-    /**
-     * Migrates a file to the new strategy if it's not present
-     *
-     * @param string $path
-     *
-     * @return bool
-     */
-    public function migrateFile($path);
 
     /**
      * @return FilesystemInterface

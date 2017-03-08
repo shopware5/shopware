@@ -52,39 +52,8 @@ return array_replace_recursive([
         ],
     ],
     'cdn' => [
-        'backend' => 'local',
+        'url' => '',
         'strategy' => 'md5',
-        'liveMigration' => false,
-        'adapters' => [
-            'local' => [
-                'type' => 'local',
-                'mediaUrl' => '',
-                'permissions' => [
-                    'file' => [
-                        'public' => 0666 & ~umask(),
-                        'private' => 0600 & ~umask(),
-                    ],
-                    'dir' => [
-                        'public' => 0777 & ~umask(),
-                        'private' => 0700 & ~umask(),
-                    ],
-                ],
-                'path' => realpath(__DIR__ . '/../../../'),
-            ],
-            'ftp' => [
-                'type' => 'ftp',
-                'mediaUrl' => '',
-
-                'host' => '',
-                'username' => '',
-                'password' => '',
-                'port' => 21,
-                'root' => '/',
-                'passive' => true,
-                'ssl' => false,
-                'timeout' => 30,
-            ],
-        ],
     ],
     'csrfProtection' => [
         'frontend' => true,
