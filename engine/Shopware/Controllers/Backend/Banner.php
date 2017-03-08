@@ -261,8 +261,9 @@ class Shopware_Controllers_Backend_Banner extends Shopware_Controllers_Backend_E
         }
 
         // strip full qualified url
-        $mediaService = $this->get('shopware_media.media_service');
-        $bannerModel->setImage($mediaService->normalize($bannerModel->getImage()));
+        $bannerModel->setImage(
+            $this->get('shopware_media.strategy')->normalize($bannerModel->getImage())
+        );
 
         // write model to db
         try {

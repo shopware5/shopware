@@ -246,12 +246,9 @@ class sMarketing
             return false;
         }
 
+        $strategy = Shopware()->Container()->get('shopware_media.strategy');
         $images = array_column($getBanners, 'image');
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
-
-        array_walk($images, function (&$image) use ($mediaService) {
-            $image = $mediaService->normalize($image);
-        });
+        $images = array_map([$strategy, 'normalize'], $images);
 
         $mediaIds = $this->getMediaIdsOfPath($images);
         $context = Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext();
@@ -552,9 +549,9 @@ class sMarketing
      */
     private function getMediaByPath($media, $path)
     {
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $strategy = Shopware()->Container()->get('shopware_media.strategy');
         foreach ($media as $single) {
-            if ($mediaService->normalize($single->getFile()) == $path) {
+            if ($strategy->normalize($single->getFile()) === $path) {
                 return $single;
             }
         }

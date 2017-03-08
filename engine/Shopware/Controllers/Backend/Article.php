@@ -3880,9 +3880,9 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      */
     protected function prepareDownloadAssociatedData($data)
     {
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $strategy = Shopware()->Container()->get('shopware_media.strategy');
         foreach ($data['downloads'] as &$downloadData) {
-            $downloadData['file'] = $mediaService->normalize($downloadData['file']);
+            $downloadData['file'] = $strategy->normalize($downloadData['file']);
         }
 
         return $data;

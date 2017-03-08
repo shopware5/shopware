@@ -27,26 +27,12 @@ namespace Shopware\Bundle\EmotionBundle\ComponentHandler;
 use Shopware\Bundle\EmotionBundle\Struct\Collection\PrepareDataCollection;
 use Shopware\Bundle\EmotionBundle\Struct\Collection\ResolvedDataCollection;
 use Shopware\Bundle\EmotionBundle\Struct\Element;
-use Shopware\Bundle\MediaBundle\MediaServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class BannerSliderComponentHandler implements ComponentHandlerInterface
 {
     const LEGACY_CONVERT_FUNCTION = 'getBannerSlider';
     const COMPONENT_NAME = 'emotion-components-banner-slider';
-
-    /**
-     * @var MediaServiceInterface
-     */
-    private $mediaService;
-
-    /**
-     * @param MediaServiceInterface $mediaService
-     */
-    public function __construct(MediaServiceInterface $mediaService)
-    {
-        $this->mediaService = $mediaService;
-    }
 
     /**
      * @param Element $element

@@ -27,6 +27,7 @@ namespace Shopware\Components\Theme;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\AbstractQuery;
 use Shopware\Bundle\MediaBundle\MediaServiceInterface;
+use Shopware\Bundle\MediaBundle\Strategy\StrategyInterface;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Shop as Shop;
 use Shopware\Models\Theme\Settings;
@@ -65,26 +66,26 @@ class Service
     private $util;
 
     /**
-     * @var MediaServiceInterface
+     * @var StrategyInterface
      */
-    private $mediaService;
+    private $strategy;
 
     /**
      * @param ModelManager                         $entityManager
      * @param \Shopware_Components_Snippet_Manager $snippets
      * @param Util                                 $util
-     * @param MediaServiceInterface                $mediaService
+     * @param StrategyInterface                    $strategy
      */
     public function __construct(
         ModelManager $entityManager,
         \Shopware_Components_Snippet_Manager $snippets,
         Util $util,
-        MediaServiceInterface $mediaService
+        MediaServiceInterface $strategy
     ) {
         $this->entityManager = $entityManager;
         $this->snippets = $snippets;
         $this->util = $util;
-        $this->mediaService = $mediaService;
+        $this->strategy = $strategy;
     }
 
     /**
@@ -307,7 +308,7 @@ class Service
             );
 
             if ($element->getType() === 'theme-media-selection') {
-                $data['value'] = $this->mediaService->normalize($data['value']);
+                $data['value'] = $this->strategy->normalize($data['value']);
             }
 
             $value->setShop($shop);

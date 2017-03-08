@@ -103,8 +103,8 @@ class MediaSubscriber implements EventSubscriber
 
         $mediaService = $this->container->get('shopware_media.media_service');
 
-        if ((!$media->getHeight() || !$media->getWidth()) && $mediaService->has($media->getPath())) {
-            list($width, $height) = getimagesizefromstring($mediaService->read($media->getPath()));
+        if ((!$media->getHeight() || !$media->getWidth()) && $mediaService->getFilesystem()->has($media->getPath())) {
+            list($width, $height) = getimagesizefromstring($mediaService->getFilesystem()->read($media->getPath()));
 
             if ($media->getId()) {
                 $eventArgs->getEntityManager()->getConnection()->executeUpdate(

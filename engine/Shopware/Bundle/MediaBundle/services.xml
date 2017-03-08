@@ -22,8 +22,13 @@
             <factory service="shopware_media.garbage_collector_factory" method="factory" />
         </service>
 
-        <service id="shopware_media.media_service" class="Shopware\Bundle\MediaBundle\MediaService">
+        <service id="shopware_media.filesystem" class="Shopware\Bundle\MediaBundle\StrategyFilesystem">
             <argument type="service" id="shopware.filesystem.public" />
+            <argument type="service" id="shopware_media.strategy" />
+        </service>
+
+        <service id="shopware_media.media_service" class="Shopware\Bundle\MediaBundle\MediaService">
+            <argument type="service" id="shopware_media.filesystem" />
             <argument type="service" id="shopware_media.strategy" />
             <argument type="service" id="service_container" />
             <argument>%shopware.cdn.url%</argument>

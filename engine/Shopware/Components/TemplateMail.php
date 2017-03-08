@@ -243,10 +243,10 @@ class Shopware_Components_TemplateMail
             }
 
             $mediaService = Shopware()->Container()->get('shopware_media.media_service');
-            if (!$mediaService->has($attachment->getPath())) {
+            if (!$mediaService->getFilesystem()->has($attachment->getPath())) {
                 Shopware()->Container()->get('corelogger')->error('Could not load file: ' . $attachment->getPath());
             } else {
-                $fileAttachment = $mail->createAttachment($mediaService->read($attachment->getPath()));
+                $fileAttachment = $mail->createAttachment($mediaService->getFilesystem()->read($attachment->getPath()));
                 $fileAttachment->filename = $attachment->getFileName();
             }
         }

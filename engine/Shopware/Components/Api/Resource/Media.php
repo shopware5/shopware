@@ -359,7 +359,7 @@ class Media extends Resource
     public function getUniqueFileName($destPath, $baseFileName = null)
     {
         $mediaService = Shopware()->Container()->get('shopware_media.media_service');
-        if ($baseFileName !== null && !$mediaService->has("$destPath/$baseFileName")) {
+        if ($baseFileName !== null && !$mediaService->getFilesystem()->has("$destPath/$baseFileName")) {
             return substr($baseFileName, 0, self::FILENAME_LENGTH);
         }
 
@@ -372,7 +372,7 @@ class Media extends Resource
 
         $filename = substr($filename, 0, self::FILENAME_LENGTH);
 
-        while ($mediaService->has("$destPath/$filename")) {
+        while ($mediaService->getFilesystem()->has("$destPath/$filename")) {
             if ($baseFileName) {
                 $filename = "$counter-$baseFileName";
                 ++$counter;

@@ -862,8 +862,8 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
     protected function prepareMediaAssociatedData($data)
     {
         if (!empty($data['imagePath'])) {
-            $mediaService = Shopware()->Container()->get('shopware_media.media_service');
-            $data['imagePath'] = $mediaService->normalize($data['imagePath']);
+            $strategy = Shopware()->Container()->get('shopware_media.strategy');
+            $data['imagePath'] = $strategy->normalize($data['imagePath']);
             $mediaQuery = $this->getMediaRepository()->getMediaByPathQuery($data['imagePath']);
             $mediaModel = $mediaQuery->getOneOrNullResult();
             $data['media'] = $mediaModel;

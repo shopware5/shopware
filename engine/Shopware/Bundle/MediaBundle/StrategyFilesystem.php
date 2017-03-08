@@ -25,13 +25,34 @@
 namespace Shopware\Bundle\MediaBundle;
 
 use League\Flysystem\FilesystemInterface;
+use Shopware\Bundle\MediaBundle\Strategy\StrategyInterface;
+use Shopware\Components\Filesystem\AbstractFilesystem;
 
-interface MediaServiceInterface
+class StrategyFilesystem extends AbstractFilesystem
 {
     /**
-     * Get media path including configured mediaUrl
+     * @var StrategyInterface
      */
-    public function getUrl(string $path): string;
+    private $strategy;
 
-    public function getFilesystem(): FilesystemInterface;
+    /**
+     * @param FilesystemInterface $filesystem
+     * @param StrategyInterface   $strategy
+     */
+    public function __construct(FilesystemInterface $filesystem, StrategyInterface $strategy)
+    {
+        parent::__construct($filesystem);
+
+        $this->strategy = $strategy;
+    }
+
+    public function preparePath(string $path): string
+    {
+        return $this->strategy->encode($path);
+    }
+
+    public function stripPath(string $path): string
+    {
+        return $this->strategy->normalize($path);
+    }
 }

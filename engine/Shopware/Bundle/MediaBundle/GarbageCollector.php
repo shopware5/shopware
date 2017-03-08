@@ -26,6 +26,7 @@ namespace Shopware\Bundle\MediaBundle;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
+use Shopware\Bundle\MediaBundle\Strategy\StrategyInterface;
 use Shopware\Bundle\MediaBundle\Struct\MediaPosition;
 
 /**
@@ -46,7 +47,7 @@ class GarbageCollector
     /**
      * @var MediaServiceInterface
      */
-    private $mediaService;
+    private $strategy;
 
     /**
      * @var array
@@ -57,15 +58,15 @@ class GarbageCollector
     ];
 
     /**
-     * @param MediaPosition[]       $mediaPositions
-     * @param Connection            $dbConnection
-     * @param MediaServiceInterface $mediaService
+     * @param MediaPosition[]   $mediaPositions
+     * @param Connection        $dbConnection
+     * @param StrategyInterface $strategy
      */
-    public function __construct(array $mediaPositions, Connection $dbConnection, MediaServiceInterface $mediaService)
+    public function __construct(array $mediaPositions, Connection $dbConnection, StrategyInterface $strategy)
     {
         $this->mediaPositions = $mediaPositions;
         $this->connection = $dbConnection;
-        $this->mediaService = $mediaService;
+        $this->strategy = $strategy;
     }
 
     /**
@@ -223,7 +224,7 @@ class GarbageCollector
 
             if (isset($matches[2]) && !empty($matches[2])) {
                 foreach ($matches[2] as $match) {
-                    $match = $this->mediaService->normalize($match);
+                    $match = $this->strategy->normalize($match);
                     $this->addMediaByPath($match);
                 }
             }
@@ -277,7 +278,7 @@ class GarbageCollector
      */
     private function addMediaByPath($path)
     {
-        $path = $this->mediaService->normalize($path);
+        $path = $this->strategy->normalize($path);
         $this->queue['path'][] = $path;
     }
 
