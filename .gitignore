@@ -52,16 +52,16 @@ Thumbs.db
 
 
 # User provided content
-/media/archive/*
-/media/image/*
-!/media/image/thumbnail
-/media/image/thumbnail/*
-/media/music/*
-/media/pdf/*
-/media/temp/*
-!/media/temp/.htaccess
-/media/unknown/*
-/media/video/*
+/web/media/archive/*
+/web/media/image/*
+!/web/media/image/thumbnail
+/web/media/image/thumbnail/*
+/web/media/music/*
+/web/media/pdf/*
+/web/media/temp/*
+!/web/media/temp/.htaccess
+/web/media/unknown/*
+/web/media/video/*
 
 /files/documents/*
 !/files/documents/.htaccess
