@@ -43,6 +43,27 @@ class Shopware_Controllers_Backend_EmotionPreset extends Shopware_Controllers_Ba
         ]);
     }
 
+    public function loadPresetAction()
+    {
+        $id = $this->Request()->getParam('id');
+
+        if (!$id) {
+            $this->View()->assign([
+                'success' => false,
+            ]);
+
+            return;
+        }
+
+        $loader = $this->container->get('shopware.emotion.preset_loader');
+        $presetData = $loader->load($id);
+
+        $this->View()->assign([
+            'success' => true,
+            'data' => $presetData,
+        ]);
+    }
+
     /**
      * Model event listener function which fired when the user configure an emotion preset over the backend
      * module and clicks the save button.

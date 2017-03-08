@@ -556,12 +556,30 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
                 me.askAssetImport(selectedPreset);
             }
         } else {
-            window.close();
-            me.getMainWindow().setLoading(true);
-            me.openDetailWindow(
-                me.decodeEmotionPresetData(selectedPreset.get('presetData'))
-            );
+            me.loadPreset(selectedPreset);
         }
+    },
+
+    loadPreset: function(selectedPreset) {
+        var me = this;
+
+        Ext.Ajax.request({
+            url: '{url controller="EmotionPreset" action="loadPreset"}',
+            jsonData: {
+                id: selectedPreset.get('id')
+            },
+            callback: function(operation, success, response) {
+                var result = Ext.JSON.decode(response.responseText);
+
+                if (result.success && result.data) {
+                    me.getPresetWindow().close();
+                    me.getMainWindow().setLoading(true);
+                    me.openDetailWindow(
+                        me.decodeEmotionPresetData(result.data)
+                    );
+                }
+            }
+        });
     },
 
     askAssetImport: function(preset) {
@@ -585,14 +603,7 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
                         );
                     }
 
-                    // because of data synchronisation we have to reload preset here
-                    me.reloadPreset(preset, function(reloadedPreset) {
-                        me.progressbarWindow.close();
-                        me.getPresetWindow().close();
-                        me.openDetailWindow(
-                            me.decodeEmotionPresetData(reloadedPreset.get('presetData'))
-                        );
-                    }, me);
+                    me.loadPreset(preset);
                 }, me);
             },
             me
@@ -652,16 +663,6 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
 
             return Ext.callback(callback, me, [true]);
         }
-    },
-
-    reloadPreset: function(preset, callback, scope) {
-        var store = preset.store;
-
-        store.load({
-            callback: function() {
-                return Ext.callback(callback, scope, [store.getById(preset.get('id'))]);
-            }
-        });
     },
 
     createProgressBar: function() {
