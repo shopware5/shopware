@@ -26,6 +26,7 @@ namespace Shopware\Components;
 
 use Enlight\Event\SubscriberInterface;
 use Shopware\Components\Console\Application;
+use Shopware\Components\Filesystem\PrefixFilesystem;
 use Shopware\Components\Plugin\Context\ActivateContext;
 use Shopware\Components\Plugin\Context\DeactivateContext;
 use Shopware\Components\Plugin\Context\InstallContext;
@@ -35,7 +36,9 @@ use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
+use Symfony\Component\DependencyInjection\Reference;
 
 abstract class Plugin implements ContainerAwareInterface, SubscriberInterface
 {
@@ -155,6 +158,7 @@ abstract class Plugin implements ContainerAwareInterface, SubscriberInterface
     {
         $container->setParameter($this->getContainerPrefix() . '.plugin_dir', $this->getPath());
         $container->setParameter($this->getContainerPrefix() . '.plugin_name', $this->getName());
+        $this->registerFilesystems($container);
         $this->loadFiles($container);
     }
 
@@ -233,5 +237,34 @@ abstract class Plugin implements ContainerAwareInterface, SubscriberInterface
     private function camelCaseToUnderscore($string)
     {
         return ltrim(strtolower(preg_replace('/[A-Z]/', '_$0', $string)), '_');
+    }
+
+    /**
+     * @param ContainerBuilder $container
+     */
+    private function registerFilesystems(ContainerBuilder $container)
+    {
+        $this->registerFilesystem($container, 'private');
+        $this->registerFilesystem($container, 'public');
+    }
+
+    /**
+     * @param ContainerBuilder $container
+     * @param string           $key
+     */
+    private function registerFilesystem(ContainerBuilder $container, string $key)
+    {
+        $parameterKey = sprintf('shopware.filesystem.%s', $key);
+        $serviceId = sprintf('%s.filesystem.%s', $this->getContainerPrefix(), $key);
+
+        $filesystem = new Definition(
+            PrefixFilesystem::class,
+            [
+                new Reference($parameterKey),
+                'pluginData/' . $this->getName(),
+            ]
+        );
+
+        $container->setDefinition($serviceId, $filesystem);
     }
 }

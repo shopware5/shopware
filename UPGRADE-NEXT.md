@@ -2,8 +2,22 @@
 
 This changelog references changes done in Shopware Next patch versions.
 
+## Additions
+
+* Added interface `Shopware\Components\Filesystem\FilesystemFactoryInterface` for filesystem creation
+* Added interface `Shopware\Components\Filesystem\Adapter\AdapterFactoryInterface` for filesystem adapter creation
+* Added additional filesystem adapter implementations for services:
+	* Amazon Web Services
+	* Microsoft Azure
+	* Google Cloud Platform
+* Added container tag `shopware.filesystem.factory` for additional filesystem adapter factories
+* Added service `shopware.filesystem.public` and `shopware.filesystem.private` for file handling
+* Added automatic prefixed filesystem service registration for plugins
+	* `plugin_name.filesystem.public`
+	* `plugin_name.filesystem.private`
+
 ## Changes
-   
+
 * Changed `BackendSession` service name to `backend_session`
 
 ## Removals
@@ -44,8 +58,129 @@ This changelog references changes done in Shopware Next patch versions.
         - `frontend_home_index_tagcloud` in file `themes/Frontend/Bare/frontend/home/index.tpl`
 
     * Deprecated `forceSecure` and `sUseSSL` smarty flags
-    
-* Removed Shopware_Plugins_Backend_Auth_Bootstrap 
+
+* Removed Shopware_Plugins_Backend_Auth_Bootstrap
     * Implementation moved to \Shopware\Components\Auth\BackendAuthSubscriber
- 
-* Removed `s_core_engine_elements` and `Shopware\Models\Article\Element` 
+
+* Removed `s_core_engine_elements` and `Shopware\Models\Article\Element`
+
+## Filesystem
+
+There are two filesystems for private and public purposes. They are meant for shared files like media or invoices that need to be available on every application server.
+
+In addition, every installed and activated plugin gets its own space within your public or private filesystem. So, plugin developer don't have to worry about existing files by other plugins.
+
+* The `private` namespace should be used for files, which **are not** accessable by the webroot like invoices or temporary files.
+* The `public` namespace should be used for files, which **are** accessable by the webroot like media files, assets, ...
+
+### Usage
+
+Creating files is really easy. Just point to the file you want to write to and specify the contents or stream.
+
+```php
+$filesystem = $this->container->get('shopware.filesystem.private');
+$filesystem->write('path/to/file.pdf', $invoiceContents);
+// or using streams
+$filesystem->writeStream('path/to/file.pdf', $invoiceStream);
+```
+
+*Keep in mind, that you have to provide access to your files using a gateway controller.*
+
+Imagine to provide a download for the created file above is simple too.
+
+```php
+$filesystem = $this->container->get('shopware.filesystem.private');
+$filesystem->read('path/to/file.pdf', $invoiceContents);
+// or using streams
+$filesystem->readStream('path/to/file.pdf', $invoiceStream);
+```
+
+For a more detail overview of the filesystem api, please refer to [thephpleague/flysystem](https://github.com/thephpleague/flysystem).
+
+### Prefixed plugin filesystems
+
+Each installed and activate plugin gets its own prefixed filesystem. Imagine a plugin named `SwagBonus`, you can access the plugins filesystem using the following services:
+
+```php
+$filesystem = $this->container->get('swag_bonus.filesystem.public');
+// or private filesystem
+$filesystem = $this->container->get('swag_bonus.filesystem.private');
+```
+
+The file will be stored in the global Shopware filesystem prefixed with `pluginData/pluginName`, e.g. `pluginData/SwagBonus`.
+
+```php
+$global = $this->container->get('shopware.filesystem.private');
+$plugin->write('path/fo/file.pdf', $contents);
+// will be stored in `path/to/file.pdf`
+
+$plugin = $this->container->get('swag_bonus.filesystem.private');
+$plugin->write('path/fo/file.pdf', $contents);
+// will be saved in `pluginData/SwagBonus/path/to/file.pdf`
+```
+
+### Using external services
+
+You can choose where to store your files. By default, they will be stored on the application server where the script gets executed. There are 3 additional services supported out-of-the-box.
+
+#### Amazon Web Services
+
+To save your files on AWS S3, you have to modify your `config.php` and overwrite the filesystem you want to replace.
+
+The following example will store all `public` files on AWS S3.
+
+```php
+'filesystem' => [
+    'public' => [
+        'type' => 's3',
+        'config' => [
+            'bucket' => 'your-s3-bucket-name',
+            'region' => 'your-bucket-region',
+            'credentials' => [
+                'key' => 'your-app-key',
+                'secret' => 'your-app-secret',
+            ],
+        ],
+    ],
+],
+```
+
+#### Microsoft Azure
+
+To save your files on Microsoft Azure, you have to modify your `config.php` and overwrite the filesystem you want to replace.
+
+The following example will store all `public` files on Microsoft Azure.
+
+```php
+'filesystem' => [
+    'public' => [
+        'type' => 'azure',
+        'config' => [
+            'container' => 'my-container-name',
+            'apiKey' => 'my-api-key',
+            'accountName' => 'my-account-name',
+        ],
+    ],
+],
+```
+
+
+
+#### Google Cloud Platform
+
+To save your files on Google Cloud Platform, you have to modify your `config.php` and overwrite the filesystem you want to replace.
+
+The following example will store all `public` files on Google Cloud Platform.
+
+```php
+'filesystem' => [
+    'public' => [
+        'type' => 'gcp',
+        'config' => [
+            'projectId' => 'your-project-id',
+            'bucket' => 'your-bucket-name',
+            'keyFilePath' => 'path/to/your/application_credentials.json',
+        ],
+    ],
+],
+```

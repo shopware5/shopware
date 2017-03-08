@@ -44,6 +44,7 @@ use Shopware\Bundle\SearchBundleES\DependencyInjection\CompilerPass\SearchHandle
 use Shopware\Components\ConfigLoader;
 use Shopware\Components\DependencyInjection\Compiler\AddCaptchaCompilerPass;
 use Shopware\Components\DependencyInjection\Compiler\AddConsoleCommandPass;
+use Shopware\Components\DependencyInjection\Compiler\AddFilesystemCompilerPass;
 use Shopware\Components\DependencyInjection\Compiler\DoctrineEventSubscriberCompilerPass;
 use Shopware\Components\DependencyInjection\Compiler\EventListenerCompilerPass;
 use Shopware\Components\DependencyInjection\Compiler\EventSubscriberCompilerPass;
@@ -636,6 +637,7 @@ class Kernel implements HttpKernelInterface
         $container->addCompilerPass(new EmotionComponentHandlerCompilerPass());
         $container->addCompilerPass(new MediaAdapterCompilerPass());
         $container->addCompilerPass(new MediaOptimizerCompilerPass());
+        $container->addCompilerPass(new AddFilesystemCompilerPass());
 
         if ($this->isElasticSearchEnabled()) {
             $container->addCompilerPass(new SearchHandlerCompilerPass());
