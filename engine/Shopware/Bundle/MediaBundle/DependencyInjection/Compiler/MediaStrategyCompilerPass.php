@@ -22,33 +22,21 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\MediaBundle\Strategy;
+namespace Shopware\Bundle\MediaBundle\DependencyInjection\Compiler;
 
-/**
- * Interface StrategyInterface
- */
-interface StrategyInterface
+use Shopware\Components\DependencyInjection\Compiler\TagReplaceTrait;
+use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+
+class MediaStrategyCompilerPass implements CompilerPassInterface
 {
-    /**
-     * Name of the strategy
-     */
-    public function getName(): string;
+    use TagReplaceTrait;
 
     /**
-     * Cleans the shopware media path
-     *
-     * Eg. 'http//asdfsadf/asdf/media/image/foobar.png' -> '/media/image/foobar.png'
-     *     '/var/www/web1/media/image/foobar.png' -> '/media/image/foobar.png'
+     * {@inheritdoc}
      */
-    public function normalize(string $path): string;
-
-    /**
-     * Builds the path on the filesystem
-     */
-    public function encode(string $path): string;
-
-    /**
-     * Checks if the provided path matches the algorithm format
-     */
-    public function isEncoded(string $path): bool;
+    public function process(ContainerBuilder $container)
+    {
+        $this->replaceArgumentWithTaggedServices($container, 'shopware_media.strategy_factory', 'shopware_media.strategy', 0);
+    }
 }

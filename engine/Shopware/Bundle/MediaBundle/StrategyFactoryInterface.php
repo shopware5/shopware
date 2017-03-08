@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -22,31 +24,14 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\MediaBundle\Strategy;
+namespace Shopware\Bundle\MediaBundle;
 
-/**
- * Class StrategyFactory
- */
-class StrategyFactory
+use Shopware\Bundle\MediaBundle\Strategy\StrategyInterface;
+
+interface StrategyFactoryInterface
 {
     /**
      * Return a new storage strategy instance based on the configured strategy type
-     *
-     * @param string $strategy
-     *
-     * @throws \Exception
-     *
-     * @return StrategyInterface
      */
-    public function factory($strategy)
-    {
-        switch ($strategy) {
-            case 'md5':
-                return new Md5Strategy();
-            case 'plain':
-                return new PlainStrategy();
-            default:
-                throw new \Exception(sprintf("Unsupported strategy '%s'.", $strategy));
-        }
-    }
+    public function factory(string $strategyName): StrategyInterface;
 }

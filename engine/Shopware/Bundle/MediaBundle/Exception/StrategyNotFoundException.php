@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -22,33 +24,12 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\MediaBundle\Strategy;
+namespace Shopware\Bundle\MediaBundle\Exception;
 
-/**
- * Interface StrategyInterface
- */
-interface StrategyInterface
+class StrategyNotFoundException extends \Exception
 {
-    /**
-     * Name of the strategy
-     */
-    public function getName(): string;
-
-    /**
-     * Cleans the shopware media path
-     *
-     * Eg. 'http//asdfsadf/asdf/media/image/foobar.png' -> '/media/image/foobar.png'
-     *     '/var/www/web1/media/image/foobar.png' -> '/media/image/foobar.png'
-     */
-    public function normalize(string $path): string;
-
-    /**
-     * Builds the path on the filesystem
-     */
-    public function encode(string $path): string;
-
-    /**
-     * Checks if the provided path matches the algorithm format
-     */
-    public function isEncoded(string $path): bool;
+    public static function fromName(string $strategyName): StrategyNotFoundException
+    {
+        return new self(sprintf('Strategy by name "%s" not found.', $strategyName));
+    }
 }

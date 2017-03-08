@@ -24,51 +24,47 @@
 
 namespace Shopware\Bundle\MediaBundle;
 
-use Shopware\Components\DependencyInjection\Container;
+use Shopware\Bundle\MediaBundle\Exception\StrategyNotFoundException;
+use Shopware\Bundle\MediaBundle\Strategy\StrategyInterface;
 
-/**
- * Class MediaServiceFactory
- */
-class MediaServiceFactory
+class StrategyFactory implements StrategyFactoryInterface
 {
     /**
-     * @var array
+     * @var StrategyInterface[]
      */
-    private $cdnConfig;
+    private $strategies;
 
     /**
-     * @var Container
+     * @param StrategyInterface[] $strategies
      */
-    private $container;
-
-    /**
-     * @param Container $container
-     * @param array     $cdnConfig
-     */
-    public function __construct(Container $container, array $cdnConfig)
+    public function __construct(array $strategies)
     {
-        $this->container = $container;
-        $this->cdnConfig = $cdnConfig;
-        echo '<pre>';
-        \Doctrine\Common\Util\Debug::dump($cdnConfig);
-        echo '</pre>';
-        exit();
+        $this->strategies = $strategies;
     }
 
     /**
-     * Return a new MediaService instance based on the configured storage type
-     *
-     * @throws \Exception
-     *
-     * @return MediaServiceInterface
+     * {@inheritdoc}
      */
-    public function factory(): MediaServiceInterface
+    public function factory(string $strategyName): StrategyInterface
     {
-        return new MediaService(
-            $this->container->get('shopware.filesystem.public'),
-            $this->container->get('shopware_media.strategy'),
-            $this->container,
-            $this->cdnConfig
-        );
+        return $this->findStrategyByName($strategyName);
+    }
+
+    /**
+     * @param string $strategyName
+     *
+     * @return StrategyInterface
+     *
+     * @throws StrategyNotFoundException
+     */
+    private function findStrategyByName(string $strategyName): StrategyInterface
+    {
+        foreach ($this->strategies as $strategy) {
+            if ($strategy->getName() === $strategyName) {
+                return $strategy;
+            }
+        }
+
+        throw StrategyNotFoundException::fromName($strategyName);
     }
 }

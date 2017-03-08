@@ -36,18 +36,22 @@
             <argument type="service" id="models" />
         </service>
 
-        <service id="shopware_media.media_service_factory" class="Shopware\Bundle\MediaBundle\MediaServiceFactory">
-            <argument type="service" id="service_container" />
-            <argument>%shopware.cdn%</argument>
-        </service>
-
-        <service id="shopware_media.strategy_factory" class="Shopware\Bundle\MediaBundle\Strategy\StrategyFactory">
-            <argument>%shopware.cdn%</argument>
+        <service id="shopware_media.strategy_factory" class="Shopware\Bundle\MediaBundle\StrategyFactory">
+            <argument type="collection" />
         </service>
 
         <service id="shopware_media.strategy" class="Shopware\Bundle\MediaBundle\Strategy\StrategyInterface">
             <factory service="shopware_media.strategy_factory" method="factory" />
             <argument>%shopware.cdn.strategy%</argument>
+        </service>
+
+        <!-- Strategies -->
+        <service id="shopware_media.strategy.md5" class="Shopware\Bundle\MediaBundle\Strategy\Md5Strategy">
+            <tag name="shopware_media.strategy" />
+        </service>
+
+        <service id="shopware_media.strategy.plain" class="Shopware\Bundle\MediaBundle\Strategy\PlainStrategy">
+            <tag name="shopware_media.strategy" />
         </service>
 
         <!-- Optimizer -->
