@@ -132,7 +132,7 @@ The following example will store all `public` files on AWS S3.
 ```php
 'filesystem' => [
     'public' => [
-        'type' => 's3',
+        'type' => 'amazon-s3',
         'config' => [
             'bucket' => 'your-s3-bucket-name',
             'region' => 'your-bucket-region',
@@ -154,7 +154,7 @@ The following example will store all `public` files on Microsoft Azure.
 ```php
 'filesystem' => [
     'public' => [
-        'type' => 'azure',
+        'type' => 'microsoft-azure',
         'config' => [
             'container' => 'my-container-name',
             'apiKey' => 'my-api-key',
@@ -175,7 +175,7 @@ The following example will store all `public` files on Google Cloud Platform.
 ```php
 'filesystem' => [
     'public' => [
-        'type' => 'gcp',
+        'type' => 'google-storage',
         'config' => [
             'projectId' => 'your-project-id',
             'bucket' => 'your-bucket-name',

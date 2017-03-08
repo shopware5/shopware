@@ -616,15 +616,15 @@
             <tag name="shopware.filesystem.factory" />
         </service>
 
-        <service id="shopware.filesystem.factory.s3" class="Shopware\Components\Filesystem\Adapter\AwsS3v3Factory">
+        <service id="shopware.filesystem.factory.amazon_s3" class="Shopware\Components\Filesystem\Adapter\AwsS3v3Factory">
             <tag name="shopware.filesystem.factory" />
         </service>
 
-        <service id="shopware.filesystem.factory.gcp" class="Shopware\Components\Filesystem\Adapter\GoogleCloudPlatformFactory">
+        <service id="shopware.filesystem.factory.google_storage" class="Shopware\Components\Filesystem\Adapter\GoogleStorageFactory">
             <tag name="shopware.filesystem.factory" />
         </service>
 
-        <service id="shopware.filesystem.factory.azure" class="Shopware\Components\Filesystem\Adapter\AzureFactory">
+        <service id="shopware.filesystem.factory.microsoft_azure" class="Shopware\Components\Filesystem\Adapter\AzureFactory">
             <tag name="shopware.filesystem.factory" />
         </service>
     </services>
