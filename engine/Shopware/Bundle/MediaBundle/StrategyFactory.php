@@ -53,9 +53,9 @@ class StrategyFactory implements StrategyFactoryInterface
     /**
      * @param string $strategyName
      *
-     * @return StrategyInterface
-     *
      * @throws StrategyNotFoundException
+     *
+     * @return StrategyInterface
      */
     private function findStrategyByName(string $strategyName): StrategyInterface
     {

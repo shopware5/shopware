@@ -24,17 +24,14 @@
 
 namespace Shopware\Bundle\MediaBundle\Commands;
 
+use Shopware\Bundle\MediaBundle\MediaMigration;
 use Shopware\Commands\ShopwareCommand;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-/**
- * @category  Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
-class ImageMigrateCommand extends ShopwareCommand
+class MediaMigrateCommand extends ShopwareCommand
 {
     /**
      * {@inheritdoc}
@@ -43,9 +40,9 @@ class ImageMigrateCommand extends ShopwareCommand
     {
         $this
             ->setName('sw:media:migrate')
-            ->setDescription('Migrate images to new structure')
-            ->addOption('from', null, InputOption::VALUE_OPTIONAL)
-            ->addOption('to', null, InputOption::VALUE_OPTIONAL)
+            ->setDescription('Migrate images to another strategy')
+            ->addArgument('target-strategy', InputArgument::REQUIRED, 'Target strategy (e.g. md5, plain)')
+            ->addOption('from', null, InputOption::VALUE_REQUIRED, 'Source strategy')
             ->addOption('skip-scan', null, InputOption::VALUE_NONE, 'Skips the initial filesystem scan and migrates the files immediately.')
         ;
     }
@@ -55,15 +52,24 @@ class ImageMigrateCommand extends ShopwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $from = $input->getOption('from') ?: 'local';
-        $to = $input->getOption('to') ?: 'local';
+        $to = $input->getArgument('target-strategy');
+        $from = $input->getOption('from');
         $skipScan = $input->getOption('skip-scan');
 
-        $filesystemFactory = $this->getContainer()->get('shopware_media.media_service_factory');
-        $fromFileSystem = $filesystemFactory->factory($from);
-        $toFileSystem = $filesystemFactory->factory($to);
+        $strategyFactory = $this->getContainer()->get('shopware_media.strategy_factory');
+        $currentStrategy = $this->getContainer()->get('shopware_media.strategy');
 
-        $mediaMigration = $this->getContainer()->get('shopware_media.media_migration');
-        $mediaMigration->migrate($fromFileSystem, $toFileSystem, $output, $skipScan);
+        if (empty($from)) {
+            $from = $currentStrategy->getName();
+        }
+
+        $mediaMigration = new MediaMigration(
+            $this->getContainer()->get('shopware_media.filesystem')->getAdapter(),
+            $strategyFactory->factory($from),
+            $strategyFactory->factory($to),
+            $output
+        );
+
+        $mediaMigration->start($skipScan);
     }
 }

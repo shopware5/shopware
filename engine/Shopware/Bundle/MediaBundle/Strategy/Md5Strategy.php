@@ -110,7 +110,7 @@ class Md5Strategy implements StrategyInterface
      *
      * @return bool
      */
-    private function hasBlacklistParts($path)
+    private function hasBlacklistParts(string $path): bool
     {
         foreach ($this->blacklist as $key => $value) {
             if (strpos($path, $key) !== false) {
@@ -126,10 +126,10 @@ class Md5Strategy implements StrategyInterface
      *
      * @return null|string
      */
-    private function substringPath($path)
+    private function substringPath(string $path): string
     {
         preg_match("/(media\/(?:archive|image|music|pdf|temp|unknown|video)(?:\/thumbnail)?\/.*)/", $path, $matches);
 
-        return empty($matches) ? null : $matches[0];
+        return $matches[0] ?? '';
     }
 }
