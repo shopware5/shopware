@@ -29,11 +29,10 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Finder\Finder;
 
 /**
  * @category  Shopware
- * @package   Shopware\Command
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class SettingsLabelsFindMissingCommand extends ShopwareCommand
@@ -66,14 +65,14 @@ class SettingsLabelsFindMissingCommand extends ShopwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $dir = $this->container->get('application')->DocPath($input->getOption('target'));
-        if (!file_exists($dir) || !is_writeable($dir)) {
+        if (!file_exists($dir) || !is_writable($dir)) {
             $old = umask(0);
             mkdir($dir, 0777, true);
             chmod($dir, 0777);
             umask($old);
         }
-        if (!is_writeable($dir)) {
-            $output->writeln('<error>Output dir '.$input->getOption('file').' is not writable, aborting</error>');
+        if (!is_writable($dir)) {
+            $output->writeln('<error>Output dir ' . $input->getOption('file') . ' is not writable, aborting</error>');
 
             return 1;
         }
@@ -99,6 +98,7 @@ class SettingsLabelsFindMissingCommand extends ShopwareCommand
      * @param OutputInterface $output
      * @param $locale
      * @param $dir
+     *
      * @throws \Exception
      */
     protected function exportFormLabels(OutputInterface $output, $locale, $dir)
@@ -121,12 +121,12 @@ class SettingsLabelsFindMissingCommand extends ShopwareCommand
         $missingFormLabels = $statement->fetchAll();
 
         $output->writeln('<info></info>');
-        $output->writeln('<info>'.count($missingFormLabels).' missing form labels detected</info>');
+        $output->writeln('<info>' . count($missingFormLabels) . ' missing form labels detected</info>');
         if ($missingFormLabels) {
-            $formLabelFilePath = $dir.'formTranslations'.str_replace('_', '', $locale->getLocale()).'.php';
+            $formLabelFilePath = $dir . 'formTranslations' . str_replace('_', '', $locale->getLocale()) . '.php';
 
-            $output->writeln('<info>Writing to '.$formLabelFilePath.'</info>');
-            file_put_contents($formLabelFilePath, '<?php return '.var_export($missingFormLabels, true).';');
+            $output->writeln('<info>Writing to ' . $formLabelFilePath . '</info>');
+            file_put_contents($formLabelFilePath, '<?php return ' . var_export($missingFormLabels, true) . ';');
         }
     }
 
@@ -136,6 +136,7 @@ class SettingsLabelsFindMissingCommand extends ShopwareCommand
      * @param OutputInterface $output
      * @param $locale
      * @param $dir
+     *
      * @throws \Exception
      */
     protected function exportElementLabels(OutputInterface $output, $locale, $dir)
@@ -160,12 +161,12 @@ class SettingsLabelsFindMissingCommand extends ShopwareCommand
         $missingElementLabels = $statement->fetchAll();
 
         $output->writeln('<info></info>');
-        $output->writeln('<info>'.count($missingElementLabels).' missing element labels detected</info>');
+        $output->writeln('<info>' . count($missingElementLabels) . ' missing element labels detected</info>');
         if ($missingElementLabels) {
-            $elementLabelFilePath = $dir.'elementTranslations'.str_replace('_', '', $locale->getLocale()).'.php';
+            $elementLabelFilePath = $dir . 'elementTranslations' . str_replace('_', '', $locale->getLocale()) . '.php';
 
-            $output->writeln('<info>Writing to '.$elementLabelFilePath.'</info>');
-            file_put_contents($elementLabelFilePath, '<?php return '.var_export($missingElementLabels, true).';');
+            $output->writeln('<info>Writing to ' . $elementLabelFilePath . '</info>');
+            file_put_contents($elementLabelFilePath, '<?php return ' . var_export($missingElementLabels, true) . ';');
         }
     }
 }

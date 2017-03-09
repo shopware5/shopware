@@ -24,13 +24,13 @@
 
 namespace ShopwarePlugins\SwagUpdate\Components\Checks;
 
-use ShopwarePlugins\SwagUpdate\Components\CheckInterface;
 use Enlight_Components_Snippet_Namespace as SnippetNamespace;
+use ShopwarePlugins\SwagUpdate\Components\CheckInterface;
 use ShopwarePlugins\SwagUpdate\Components\Validation;
 
 /**
  * @category  Shopware
- * @package   ShopwarePlugins\SwagUpdate\Components\Checks
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
 class PHPExtensionCheck implements CheckInterface
@@ -69,23 +69,23 @@ class PHPExtensionCheck implements CheckInterface
         $failMessage = $this->namespace->get('controller/check_phpextension_failure');
 
         if (extension_loaded($requiredExtension)) {
-            return array(
+            return [
                 'type' => self::CHECK_TYPE,
                 'errorLevel' => Validation::REQUIREMENT_VALID,
-                'message'    => sprintf(
+                'message' => sprintf(
                     $successMessage,
                     $requiredExtension
-                )
-            );
-        } else {
-            return array(
+                ),
+            ];
+        }
+
+        return [
                 'type' => self::CHECK_TYPE,
                 'errorLevel' => $requirement['level'],
-                'message'    => sprintf(
+                'message' => sprintf(
                     $failMessage,
                     $requiredExtension
-                )
-            );
-        }
+                ),
+            ];
     }
 }

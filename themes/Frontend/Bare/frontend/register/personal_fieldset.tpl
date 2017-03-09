@@ -168,6 +168,7 @@
                     <div class="register--password">
                         <input name="register[personal][password]"
                                type="password"
+                               autocomplete="new-password"
                                required="required"
                                aria-required="true"
                                placeholder="{s name='RegisterPlaceholderPassword'}{/s}{s name="RequiredField" namespace="frontend/register/index"}{/s}"
@@ -182,6 +183,7 @@
                         <div class="register--passwordconfirm">
                             <input name="register[personal][passwordConfirmation]"
                                    type="password"
+                                   autocomplete="new-password"
                                    aria-required="true"
                                    placeholder="{s name='RegisterPlaceholderPasswordRepeat'}{/s}{s name="RequiredField" namespace="frontend/register/index"}{/s}"
                                    id="register_personal_passwordConfirmation"

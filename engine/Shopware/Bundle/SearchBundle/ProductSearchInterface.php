@@ -28,7 +28,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\SearchBundle
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 interface ProductSearchInterface
@@ -37,8 +37,9 @@ interface ProductSearchInterface
      * Creates a search request on the internal search gateway to
      * get the product result for the passed criteria object.
      *
-     * @param Criteria $criteria
+     * @param Criteria                       $criteria
      * @param Struct\ProductContextInterface $context
+     *
      * @return ProductSearchResult
      */
     public function search(Criteria $criteria, Struct\ProductContextInterface $context);

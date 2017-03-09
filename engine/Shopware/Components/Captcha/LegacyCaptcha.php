@@ -43,7 +43,7 @@ class LegacyCaptcha implements CaptchaInterface
 
     /**
      * @param \Shopware_Components_Config $config
-     * @param \Enlight_Template_Manager $templateManager
+     * @param \Enlight_Template_Manager   $templateManager
      */
     public function __construct(
         \Shopware_Components_Config $config,
@@ -54,7 +54,7 @@ class LegacyCaptcha implements CaptchaInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function validate(Enlight_Controller_Request_Request $request)
     {
@@ -71,7 +71,7 @@ class LegacyCaptcha implements CaptchaInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getTemplateData()
     {
@@ -95,9 +95,18 @@ class LegacyCaptcha implements CaptchaInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getName()
+    {
+        return self::CAPTCHA_METHOD;
+    }
+
+    /**
      * Generates the captcha challenge image from a given string
      *
      * @param string $string
+     *
      * @return resource
      */
     private function getImageResource($string)
@@ -130,14 +139,14 @@ class LegacyCaptcha implements CaptchaInterface
         $string = implode(' ', str_split($string));
 
         if (!empty($font)) {
-            for ($i = 0; $i <= strlen($string); $i++) {
+            for ($i = 0; $i <= strlen($string); ++$i) {
                 $rand1 = rand(35, 40);
                 $rand2 = rand(15, 20);
                 $rand3 = rand(60, 70);
                 imagettftext($im, $rand1, $rand2, ($i + 1) * 15, $rand3, $black, $font, substr($string, $i, 1));
                 imagettftext($im, $rand1, $rand2, (($i + 1) * 15) + 2, $rand3 + 2, $black, $font, substr($string, $i, 1));
             }
-            for ($i = 0; $i < 8; $i++) {
+            for ($i = 0; $i < 8; ++$i) {
                 imageline($im, mt_rand(30, 70), mt_rand(0, 50), mt_rand(100, 150), mt_rand(20, 100), $black);
                 imageline($im, mt_rand(30, 70), mt_rand(0, 50), mt_rand(100, 150), mt_rand(20, 100), $black);
             }
@@ -155,6 +164,7 @@ class LegacyCaptcha implements CaptchaInterface
      * If the file exists, the full file path will be returned
      *
      * @param string $fileName
+     *
      * @return null|string
      */
     private function getCaptchaFile($fileName)
@@ -169,13 +179,5 @@ class LegacyCaptcha implements CaptchaInterface
         }
 
         return null;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getName()
-    {
-        return self::CAPTCHA_METHOD;
     }
 }

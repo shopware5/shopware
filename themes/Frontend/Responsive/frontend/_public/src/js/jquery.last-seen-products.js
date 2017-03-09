@@ -164,16 +164,19 @@
                 itemKey = 'lastSeenProducts-' + opts.shopId + '-' + opts.baseUrl,
                 productsJson = me.storage.getItem(itemKey),
                 products = productsJson ? JSON.parse(productsJson) : [],
-                len = Math.min(opts.productLimit, products.length),
-                i = 0;
+                len = Math.min(opts.productLimit, products.length);
 
             if (len > 0) {
                 me.$el.removeClass('is--hidden');
             }
 
-            for (; i < len; i++) {
-                me.$container.append(me.createTemplate(products[i]));
-            }
+            $.each(products, function(i, product) {
+                if (product.articleId === opts.currentArticle.articleId) {
+                    return;
+                }
+
+                me.$container.append(me.createTemplate(product));
+            });
 
             me.productSlider.initSlider();
 
@@ -279,11 +282,11 @@
                 itemKey = 'lastSeenProducts-' + opts.shopId + '-' + opts.baseUrl,
                 productsJson = me.storage.getItem(itemKey),
                 products = productsJson ? $.parseJSON(productsJson) : [],
+                linkDetailsQuery = '',
                 len = products.length,
                 i = 0,
                 url,
-                urlQuery,
-                linkDetailsQuery;
+                urlQuery;
 
             if (!newProduct || $.isEmptyObject(newProduct)) {
                 return;
@@ -314,7 +317,7 @@
 
             products.splice(0, 0, newProduct);
 
-            while (products.length > opts.productLimit) {
+            while (products.length > opts.productLimit + 1) {
                 products.pop();
             }
 

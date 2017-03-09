@@ -36,6 +36,7 @@ class EmotionElementHydrator extends Hydrator
      * @param array $data
      * @param array $config
      * @param array $viewports
+     *
      * @return Element
      */
     public function hydrate(array $data, array $config = [], array $viewports = [])
@@ -51,6 +52,7 @@ class EmotionElementHydrator extends Hydrator
 
     /**
      * @param array $data
+     *
      * @return Element
      */
     private function assignData(array $data)
@@ -71,7 +73,7 @@ class EmotionElementHydrator extends Hydrator
 
     /**
      * @param Element $element
-     * @param array $data
+     * @param array   $data
      */
     private function assignComponent(Element $element, array $data)
     {
@@ -91,7 +93,7 @@ class EmotionElementHydrator extends Hydrator
 
     /**
      * @param Element $element
-     * @param array $config
+     * @param array   $config
      */
     private function assignConfig(Element $element, array $config = [])
     {
@@ -104,7 +106,7 @@ class EmotionElementHydrator extends Hydrator
 
     /**
      * @param Element $element
-     * @param array $viewports
+     * @param array   $viewports
      */
     private function assignViewports(Element $element, array $viewports = [])
     {
@@ -130,6 +132,7 @@ class EmotionElementHydrator extends Hydrator
 
     /**
      * @param array $config
+     *
      * @return array
      */
     private function assignConfigTranslation(array $config)

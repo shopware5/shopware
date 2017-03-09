@@ -16,7 +16,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU Affero General Public License for more details.
  *
- * 'Shopware' is a registered trademark of shopware AG.
+ * "Shopware" is a registered trademark of shopware AG.
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
@@ -46,7 +46,7 @@ class BatchProductNumberSearch
     private $pointer = [];
 
     /**
-     * @param ProductNumberSearchInterface $productNumberSearch
+     * @param ProductNumberSearchInterface       $productNumberSearch
      * @param BaseProductFactoryServiceInterface $baseProductFactoryService
      */
     public function __construct(ProductNumberSearchInterface $productNumberSearch, BaseProductFactoryServiceInterface $baseProductFactoryService)
@@ -57,7 +57,8 @@ class BatchProductNumberSearch
 
     /**
      * @param BatchProductNumberSearchRequest $request
-     * @param ShopContextInterface $context
+     * @param ShopContextInterface            $context
+     *
      * @return BatchProductNumberSearchResult
      */
     public function search(BatchProductNumberSearchRequest $request, ShopContextInterface $context)
@@ -81,9 +82,10 @@ class BatchProductNumberSearch
     }
 
     /**
-     * @param string $key
+     * @param string        $key
      * @param BaseProduct[] $baseProducts
-     * @param int $numberOfProducts
+     * @param int           $numberOfProducts
+     *
      * @return array
      */
     private function getBaseProductsRange($key, array $baseProducts, $numberOfProducts = 0)
@@ -112,8 +114,9 @@ class BatchProductNumberSearch
     }
 
     /**
-     * @param array $criteriaList
+     * @param array                $criteriaList
      * @param ShopContextInterface $context
+     *
      * @return array
      */
     private function getBaseProductsByCriteriaList(array $criteriaList, ShopContextInterface $context)
@@ -137,6 +140,7 @@ class BatchProductNumberSearch
 
     /**
      * @param Criteria[] $criteriaList
+     *
      * @return array
      */
     private function getOptimizedCriteriaList(array $criteriaList)
@@ -164,8 +168,8 @@ class BatchProductNumberSearch
             $optimizedCriteriaList[] = [
                 'criteria' => $criteria,
                 'requests' => [
-                    ['criteria' => $originalCriteria, 'key' => $key]
-                ]
+                    ['criteria' => $originalCriteria, 'key' => $key],
+                ],
             ];
         }
 
@@ -174,7 +178,8 @@ class BatchProductNumberSearch
 
     /**
      * @param Criteria $criteria
-     * @param array $criteriaList
+     * @param array    $criteriaList
+     *
      * @return int|false
      */
     private function getOptimizedCriteriaListPosition(Criteria $criteria, array $criteriaList)
@@ -184,7 +189,7 @@ class BatchProductNumberSearch
         foreach ($criteriaList as $index => $existingCriteria) {
             $existingCriteria = $this->getComparableCriteria($existingCriteria['criteria']);
 
-            /** @noinspection TypeUnsafeComparisonInspection */
+            /* @noinspection TypeUnsafeComparisonInspection */
             if ($comparableCriteria == $existingCriteria) {
                 return $index;
             }
@@ -195,6 +200,7 @@ class BatchProductNumberSearch
 
     /**
      * @param Criteria $criteria
+     *
      * @return Criteria
      */
     private function getComparableCriteria(Criteria $criteria)
@@ -220,6 +226,7 @@ class BatchProductNumberSearch
 
     /**
      * @param BatchProductNumberSearchRequest $request
+     *
      * @return BaseProduct[]
      */
     private function getBaseProductsByProductNumberRequest(BatchProductNumberSearchRequest $request)

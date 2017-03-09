@@ -23,7 +23,7 @@
                         {block name='frontend_forms_form_elements_form_description'}
                             {if $sElement.note}
                                 <p class="forms--description">
-                                    {include file="string:{$sElement.note}"}
+                                    {$sElement.note}
                                 </p>
                             {/if}
                         {/block}

@@ -47,11 +47,11 @@
                     <p>{s name="LoginHeaderFields"}{/s}</p>
                     <p>
                         <label for="email">{s name='LoginLabelMail'}{/s}</label>
-                        <input name="email" type="email" tabindex="1" value="{$sFormData.email|escape}" id="email" class="text {if $sErrorFlag.email}instyle_error{/if}" />
+                        <input name="email" type="email" autocomplete="email" tabindex="1" value="{$sFormData.email|escape}" id="email" class="text {if $sErrorFlag.email}instyle_error{/if}" />
                     </p>
                     <p class="none">
                         <label for="passwort">{s name="LoginLabelPassword"}{/s}</label>
-                        <input name="password" type="password" tabindex="2" id="passwort" class="text {if $sErrorFlag.password}instyle_error{/if}" />
+                        <input name="password" type="password" autocomplete="current-password" tabindex="2" id="passwort" class="text {if $sErrorFlag.password}instyle_error{/if}" />
                     </p>
                 </fieldset>
 

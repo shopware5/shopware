@@ -24,12 +24,12 @@
 
 namespace Shopware\Models\Emotion;
 
-use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
 
 /**
  * @category   Shopware
- * @package    Shopware\Models
+ *
  * @copyright  Copyright (c) shopware AG (http://www.shopware.de)
  *
  * @ORM\Entity
@@ -38,9 +38,22 @@ use Doctrine\ORM\Mapping as ORM;
 class ElementViewport extends ModelEntity
 {
     /**
+     * @var \Shopware\Models\Emotion\Element
+     * @ORM\ManyToOne(targetEntity="Shopware\Models\Emotion\Element", inversedBy="viewports")
+     * @ORM\JoinColumn(name="elementID", referencedColumnName="id")
+     */
+    protected $element;
+
+    /**
+     * @var \Shopware\Models\Emotion\Emotion
+     * @ORM\ManyToOne(targetEntity="\Shopware\Models\Emotion\Emotion")
+     * @ORM\JoinColumn(name="emotionID", referencedColumnName="id")
+     */
+    protected $emotion;
+    /**
      * Unique identifier field of the viewport model.
      *
-     * @var integer $id
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
@@ -51,7 +64,7 @@ class ElementViewport extends ModelEntity
     /**
      * Id of the associated \Shopware\Models\Emotion\Element
      *
-     * @var integer $elementId
+     * @var int
      *
      * @ORM\Column(name="elementID", type="integer", nullable=false)
      */
@@ -60,7 +73,7 @@ class ElementViewport extends ModelEntity
     /**
      * Id of the associated \Shopware\Models\Emotion\Emotion model.
      *
-     * @var integer $emotionId
+     * @var int
      *
      * @ORM\Column(name="emotionID", type="integer", nullable=false)
      */
@@ -69,7 +82,7 @@ class ElementViewport extends ModelEntity
     /**
      * The short name of the viewport.
      *
-     * @var string $alias;
+     * @var string;
      * @ORM\Column(name="alias", type="string", length=255, nullable=false)
      */
     private $alias;
@@ -77,7 +90,7 @@ class ElementViewport extends ModelEntity
     /**
      * Defines on which row the element starts for this viewport.
      *
-     * @var integer $startRow
+     * @var int
      * @ORM\Column(name="start_row", type="integer", nullable=false)
      */
     private $startRow;
@@ -85,7 +98,7 @@ class ElementViewport extends ModelEntity
     /**
      * Defines on which column the element starts for this viewport.
      *
-     * @var integer $startCol
+     * @var int
      * @ORM\Column(name="start_col", type="integer", nullable=false)
      */
     private $startCol;
@@ -93,7 +106,7 @@ class ElementViewport extends ModelEntity
     /**
      * Defines on which row the element ends for this viewport.
      *
-     * @var integer $endRow
+     * @var int
      * @ORM\Column(name="end_row", type="integer", nullable=false)
      */
     private $endRow;
@@ -101,7 +114,7 @@ class ElementViewport extends ModelEntity
     /**
      * Defines on which column the element ends for this viewport.
      *
-     * @var integer $endCol
+     * @var int
      * @ORM\Column(name="end_col", type="integer", nullable=false)
      */
     private $endCol;
@@ -109,24 +122,10 @@ class ElementViewport extends ModelEntity
     /**
      * Defines if the element is visible for this viewport.
      *
-     * @var boolean $visible
+     * @var bool
      * @ORM\Column(name="visible", type="boolean")
      */
     private $visible;
-
-    /**
-     * @var \Shopware\Models\Emotion\Element $element
-     * @ORM\ManyToOne(targetEntity="Shopware\Models\Emotion\Element", inversedBy="viewports")
-     * @ORM\JoinColumn(name="elementID", referencedColumnName="id")
-     */
-    protected $element;
-
-    /**
-     * @var \Shopware\Models\Emotion\Emotion $emotion
-     * @ORM\ManyToOne(targetEntity="\Shopware\Models\Emotion\Emotion")
-     * @ORM\JoinColumn(name="emotionID", referencedColumnName="id")
-     */
-    protected $emotion;
 
     public function __clone()
     {
@@ -266,7 +265,7 @@ class ElementViewport extends ModelEntity
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function getVisible()
     {
@@ -274,7 +273,7 @@ class ElementViewport extends ModelEntity
     }
 
     /**
-     * @param boolean $visible
+     * @param bool $visible
      */
     public function setVisible($visible)
     {

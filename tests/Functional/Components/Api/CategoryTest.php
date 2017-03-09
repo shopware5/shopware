@@ -28,7 +28,7 @@ use Shopware\Components\Api\Resource\Category;
 
 /**
  * @category  Shopware
- * @package   Shopware\Tests
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class CategoryTest extends TestCase
@@ -55,33 +55,33 @@ class CategoryTest extends TestCase
         $date->modify('-3 day');
         $changed = $date->format(\DateTime::ISO8601);
 
-        $testData = array(
-            "name" => "fooobar",
-            "parent"   => 1,
+        $testData = [
+            'name' => 'fooobar',
+            'parent' => 1,
 
-            "position" => 3,
+            'position' => 3,
 
-            "metaKeywords" => "test, test",
-            "metaDescription" => "Description Test",
-            "cmsHeadline" => "cms headline",
-            "cmsText" => "cmsTest",
+            'metaKeywords' => 'test, test',
+            'metaDescription' => 'Description Test',
+            'cmsHeadline' => 'cms headline',
+            'cmsText' => 'cmsTest',
 
-            "active" => true,
-            "blog" => false,
+            'active' => true,
+            'blog' => false,
 
-            "external" => false,
-            "hidefilter" => false,
-            "hideTop" => true,
+            'external' => false,
+            'hidefilter' => false,
+            'hideTop' => true,
 
-            "changed" => $changed,
-            "added" => $added,
+            'changed' => $changed,
+            'added' => $added,
 
-            "attribute" => array(
-                1 => "test1",
-                2 => "test2",
-                6 => "test6"
-            )
-        );
+            'attribute' => [
+                1 => 'test1',
+                2 => 'test2',
+                6 => 'test6',
+            ],
+        ];
 
         $category = $this->resource->create($testData);
 
@@ -154,11 +154,11 @@ class CategoryTest extends TestCase
      */
     public function testUpdateShouldBeSuccessful($id)
     {
-        $testData = array(
-            'active'  => true,
-            'name'   => uniqid(rand()) . 'testkategorie',
-            "attribute" => array(1 => "nase")
-        );
+        $testData = [
+            'active' => true,
+            'name' => uniqid(rand()) . 'testkategorie',
+            'attribute' => [1 => 'nase'],
+        ];
 
         $category = $this->resource->update($id, $testData);
 
@@ -177,7 +177,7 @@ class CategoryTest extends TestCase
      */
     public function testUpdateWithInvalidIdShouldThrowNotFoundException()
     {
-        $this->resource->update(9999999, array());
+        $this->resource->update(9999999, []);
     }
 
     /**
@@ -185,7 +185,7 @@ class CategoryTest extends TestCase
      */
     public function testUpdateWithMissingIdShouldThrowParameterMissingException()
     {
-        $this->resource->update('', array());
+        $this->resource->update('', []);
     }
 
     /**
@@ -217,15 +217,15 @@ class CategoryTest extends TestCase
 
     public function testfindCategoryByPath()
     {
-        $parts = array(
+        $parts = [
             'Deutsch',
             'Foo' . uniqid(rand()),
             'Bar' . uniqid(rand()),
-        );
+        ];
 
         $path = implode('|', $parts);
 
-        /** @var  \Shopware\Models\Category\Category $category */
+        /** @var \Shopware\Models\Category\Category $category */
         $category = $this->resource->findCategoryByPath($path);
         $this->assertEquals(null, $category);
 

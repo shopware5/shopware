@@ -31,7 +31,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * @category  Shopware
- * @package   Shopware\Components\Console\Commands
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class BacklogSyncCommand extends ShopwareCommand
@@ -52,14 +52,14 @@ class BacklogSyncCommand extends ShopwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $reader   = $this->container->get('shopware_elastic_search.backlog_reader');
+        $reader = $this->container->get('shopware_elastic_search.backlog_reader');
         $backlogs = $reader->read($reader->getLastBacklogId(), 500);
 
         if (empty($backlogs)) {
             return;
         }
 
-        /**@var $last Backlog*/
+        /** @var $last Backlog */
         $last = $backlogs[count($backlogs) - 1];
         $reader->setLastBacklogId($last->getId());
 

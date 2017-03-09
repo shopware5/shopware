@@ -21,18 +21,19 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 namespace Shopware\Bundle\SearchBundleES\FacetHandler;
 
 use ONGR\ElasticsearchDSL\Aggregation\FilterAggregation;
 use ONGR\ElasticsearchDSL\Aggregation\ValueCountAggregation;
 use ONGR\ElasticsearchDSL\Query\TermQuery;
 use ONGR\ElasticsearchDSL\Search;
-use Shopware\Bundle\SearchBundleES\HandlerInterface;
 use Shopware\Bundle\SearchBundle\Criteria;
-use Shopware\Bundle\SearchBundle\Facet\ShippingFreeFacet;
 use Shopware\Bundle\SearchBundle\CriteriaPartInterface;
+use Shopware\Bundle\SearchBundle\Facet\ShippingFreeFacet;
 use Shopware\Bundle\SearchBundle\FacetResult\BooleanFacetResult;
 use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
+use Shopware\Bundle\SearchBundleES\HandlerInterface;
 use Shopware\Bundle\SearchBundleES\ResultHydratorInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\QueryAliasMapper;
@@ -51,7 +52,7 @@ class ShippingFreeFacetHandler implements HandlerInterface, ResultHydratorInterf
 
     /**
      * @param \Shopware_Components_Snippet_Manager $snippetManager
-     * @param QueryAliasMapper $queryAliasMapper
+     * @param QueryAliasMapper                     $queryAliasMapper
      */
     public function __construct(
         \Shopware_Components_Snippet_Manager $snippetManager,
@@ -66,7 +67,7 @@ class ShippingFreeFacetHandler implements HandlerInterface, ResultHydratorInterf
      */
     public function supports(CriteriaPartInterface $criteriaPart)
     {
-        return ($criteriaPart instanceof ShippingFreeFacet);
+        return $criteriaPart instanceof ShippingFreeFacet;
     }
 
     /**
@@ -117,6 +118,7 @@ class ShippingFreeFacetHandler implements HandlerInterface, ResultHydratorInterf
 
     /**
      * @param Criteria $criteria
+     *
      * @return BooleanFacetResult
      */
     private function createFacet(Criteria $criteria)
@@ -141,6 +143,7 @@ class ShippingFreeFacetHandler implements HandlerInterface, ResultHydratorInterf
             $criteria->hasCondition('shipping_free'),
             $label
         );
+
         return $criteriaPart;
     }
 }

@@ -45,6 +45,7 @@ class CustomListingHydrator extends Hydrator
 
     /**
      * @param array $data
+     *
      * @return CustomSorting
      */
     public function hydrateSorting(array $data)
@@ -71,6 +72,7 @@ class CustomListingHydrator extends Hydrator
 
     /**
      * @param array $data
+     *
      * @return CustomFacet
      */
     public function hydrateFacet(array $data)

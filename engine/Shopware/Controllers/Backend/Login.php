@@ -39,7 +39,7 @@ class Shopware_Controllers_Backend_Login extends Shopware_Controllers_Backend_Ex
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getWhitelistedCSRFActions()
     {
@@ -47,7 +47,7 @@ class Shopware_Controllers_Backend_Login extends Shopware_Controllers_Backend_Ex
             'login',
             'logout',
             'getLocales',
-            'getLoginStatus'
+            'getLoginStatus',
         ];
     }
 
@@ -61,7 +61,8 @@ class Shopware_Controllers_Backend_Login extends Shopware_Controllers_Backend_Ex
         $password = $this->Request()->get('password');
 
         if (empty($username) || empty($password)) {
-            $this->View()->assign(array('success' => false));
+            $this->View()->assign(['success' => false]);
+
             return;
         }
 
@@ -93,18 +94,18 @@ class Shopware_Controllers_Backend_Login extends Shopware_Controllers_Backend_Ex
         }
 
         $messages = $result->getMessages();
-        /** @var $lockedUntil Zend_Date */
+        /* @var $lockedUntil Zend_Date */
         if (isset($messages['lockedUntil'])) {
             $lockedUntil = isset($messages['lockedUntil']) ? $messages['lockedUntil'] : null;
             $lockedUntil = $lockedUntil->toString(Zend_Date::ISO_8601);
         }
 
-        $this->View()->assign(array(
+        $this->View()->assign([
             'success' => $result->isValid(),
             'user' => $result->getIdentity(),
             'locale' => isset($user->locale) ? $user->locale->toString() : null,
-            'lockedUntil' => isset($lockedUntil) ? $lockedUntil : null
-        ));
+            'lockedUntil' => isset($lockedUntil) ? $lockedUntil : null,
+        ]);
     }
 
     /**
@@ -138,22 +139,22 @@ class Shopware_Controllers_Backend_Login extends Shopware_Controllers_Backend_Ex
         $sql = 'SELECT id, locale FROM s_core_locales WHERE id IN (' . $locales . ')';
         $locales = Shopware()->Db()->fetchPairs($sql);
 
-        $data = array();
+        $data = [];
         foreach ($locales as $id => $locale) {
             list($l, $t) = explode('_', $locale);
             $l = $current->getTranslation($l, 'language', $current);
             $t = $current->getTranslation($t, 'territory', $current);
-            $data[] = array(
+            $data[] = [
                 'id' => $id,
-                'name' => "$l ($t)"
-            );
+                'name' => "$l ($t)",
+            ];
         }
 
-        $this->View()->assign(array(
+        $this->View()->assign([
             'success' => true,
             'data' => $data,
-            'total' => count($data)
-        ));
+            'total' => count($data),
+        ]);
     }
 
     /**
@@ -167,15 +168,15 @@ class Shopware_Controllers_Backend_Login extends Shopware_Controllers_Backend_Ex
         }
         if ($auth->hasIdentity()) {
             $messages = $refresh->getMessages();
-            $this->View()->assign(array(
+            $this->View()->assign([
                 'success' => true,
-                'message' => $messages[0]
-            ));
+                'message' => $messages[0],
+            ]);
         } else {
             $auth->clearIdentity();
-            $this->View()->assign(array(
-                'success' => false
-            ));
+            $this->View()->assign([
+                'success' => false,
+            ]);
         }
     }
 
@@ -187,7 +188,8 @@ class Shopware_Controllers_Backend_Login extends Shopware_Controllers_Backend_Ex
         $password = $this->Request()->get('password');
 
         if (empty($username) || empty($password)) {
-            $this->View()->assign(array('success' => false));
+            $this->View()->assign(['success' => false]);
+
             return;
         }
 

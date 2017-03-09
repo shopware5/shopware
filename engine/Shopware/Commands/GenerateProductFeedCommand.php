@@ -40,7 +40,6 @@ class GenerateProductFeedCommand extends ShopwareCommand
             ->setName('sw:product:feeds:refresh')
             ->setDescription('Refreshes product feed cache files.')
             ->setHelp('The <info>%command.name%</info> refreshes the cached product feed files.');
-        ;
     }
 
     /**
@@ -53,10 +52,10 @@ class GenerateProductFeedCommand extends ShopwareCommand
 
         if (!is_dir($cacheDir)) {
             if (false === @mkdir($cacheDir, 0777, true)) {
-                throw new \RuntimeException(sprintf("Unable to create the %s directory (%s)\n", "Productexport", $cacheDir));
+                throw new \RuntimeException(sprintf("Unable to create the %s directory (%s)\n", 'Productexport', $cacheDir));
             }
         } elseif (!is_writable($cacheDir)) {
-            throw new \RuntimeException(sprintf("Unable to write in the %s directory (%s)\n", "Productexport", $cacheDir));
+            throw new \RuntimeException(sprintf("Unable to write in the %s directory (%s)\n", 'Productexport', $cacheDir));
         }
 
         /** @var $export \sExport */
@@ -77,7 +76,7 @@ class GenerateProductFeedCommand extends ShopwareCommand
             if ($feedModel->getInterval() == 0) {
                 continue;
             }
-            $output->writeln(sprintf('Refreshing cache for '.$feedModel->getName()));
+            $output->writeln(sprintf('Refreshing cache for ' . $feedModel->getName()));
 
             $export->sFeedID = $feedModel->getId();
             $export->sHash = $feedModel->getHash();

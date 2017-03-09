@@ -19,33 +19,24 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    UserManager
- * @subpackage View
- * @version    $Id$
- * @author shopware AG
  */
 Ext.define('Shopware.apps.Emotion.view.components.fields.Article', {
-    extend: 'Shopware.form.field.ArticleSearch',
+    extend: 'Shopware.form.field.ProductSingleSelection',
     alias: 'widget.emotion-components-fields-article',
-    hiddenReturnValue: 'number',
-    returnValue: 'number',
 
     initComponent: function() {
         var me = this;
-        me.hiddenFieldName = me.name;
-        me.callParent(arguments);
-    },
 
-    createHiddenField: function() {
-        var me = this,
-            input = Ext.create('Ext.form.field.Hidden', {
-            name: me.hiddenFieldName,
-            valueType: me.valueType,
-            fieldId: me.fieldId
+        me.helpText = '';
+
+        me.store = Ext.create('Ext.data.Store', {
+            model: 'Shopware.model.Dynamic',
+            proxy: {
+                type: 'ajax',
+                url: '{url controller="EntitySearch" action="search"}?model=Shopware\\Models\\Article\\Article',
+                reader: Ext.create('Shopware.model.DynamicReader')
+            }
         });
-        return input;
+        me.callParent(arguments);
     }
-
 });

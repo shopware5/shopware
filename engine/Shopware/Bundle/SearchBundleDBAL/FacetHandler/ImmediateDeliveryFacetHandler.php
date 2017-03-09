@@ -24,26 +24,26 @@
 
 namespace Shopware\Bundle\SearchBundleDBAL\FacetHandler;
 
+use Shopware\Bundle\SearchBundle\Criteria;
+use Shopware\Bundle\SearchBundle\Facet;
+use Shopware\Bundle\SearchBundle\FacetInterface;
 use Shopware\Bundle\SearchBundle\FacetResult\BooleanFacetResult;
 use Shopware\Bundle\SearchBundle\FacetResultInterface;
 use Shopware\Bundle\SearchBundleDBAL\ConditionHandler\ImmediateDeliveryConditionHandler;
-use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundleDBAL\PartialFacetHandlerInterface;
-use Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactory;
-use Shopware\Bundle\SearchBundle\Facet;
-use Shopware\Bundle\SearchBundle\FacetInterface;
+use Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactoryInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\QueryAliasMapper;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\SearchBundleDBAL\FacetHandler
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ImmediateDeliveryFacetHandler implements PartialFacetHandlerInterface
 {
     /**
-     * @var QueryBuilderFactory
+     * @var QueryBuilderFactoryInterface
      */
     private $queryBuilderFactory;
 
@@ -58,12 +58,12 @@ class ImmediateDeliveryFacetHandler implements PartialFacetHandlerInterface
     private $fieldName;
 
     /**
-     * @param QueryBuilderFactory $queryBuilderFactory
+     * @param QueryBuilderFactoryInterface         $queryBuilderFactory
      * @param \Shopware_Components_Snippet_Manager $snippetManager
-     * @param QueryAliasMapper $queryAliasMapper
+     * @param QueryAliasMapper                     $queryAliasMapper
      */
     public function __construct(
-        QueryBuilderFactory $queryBuilderFactory,
+        QueryBuilderFactoryInterface $queryBuilderFactory,
         \Shopware_Components_Snippet_Manager $snippetManager,
         QueryAliasMapper $queryAliasMapper
     ) {
@@ -76,10 +76,11 @@ class ImmediateDeliveryFacetHandler implements PartialFacetHandlerInterface
     }
 
     /**
-     * @param FacetInterface $facet
-     * @param Criteria $reverted
-     * @param Criteria $criteria
+     * @param FacetInterface       $facet
+     * @param Criteria             $reverted
+     * @param Criteria             $criteria
      * @param ShopContextInterface $context
+     *
      * @return FacetResultInterface
      */
     public function generatePartialFacet(
@@ -108,7 +109,7 @@ class ImmediateDeliveryFacetHandler implements PartialFacetHandlerInterface
         $query->select('product.id')
             ->setMaxResults(1);
 
-        /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
+        /** @var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
 
         $total = $statement->fetch(\PDO::FETCH_COLUMN);
@@ -137,6 +138,6 @@ class ImmediateDeliveryFacetHandler implements PartialFacetHandlerInterface
      */
     public function supportsFacet(FacetInterface $facet)
     {
-        return ($facet instanceof Facet\ImmediateDeliveryFacet);
+        return $facet instanceof Facet\ImmediateDeliveryFacet;
     }
 }

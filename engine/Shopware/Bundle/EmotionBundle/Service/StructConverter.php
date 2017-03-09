@@ -62,10 +62,10 @@ class StructConverter
     private $container;
 
     /**
-     * @param LegacyStructConverter $converter
-     * @param MediaServiceInterface $mediaService
+     * @param LegacyStructConverter       $converter
+     * @param MediaServiceInterface       $mediaService
      * @param \Enlight_Event_EventManager $eventManager
-     * @param Container $container
+     * @param Container                   $container
      */
     public function __construct(LegacyStructConverter $converter, MediaServiceInterface $mediaService, \Enlight_Event_EventManager $eventManager, Container $container)
     {
@@ -77,6 +77,7 @@ class StructConverter
 
     /**
      * @param Emotion $emotion
+     *
      * @return array
      */
     public function convertEmotion(Emotion $emotion)
@@ -105,7 +106,7 @@ class StructConverter
             'rows' => $data['rows'],
             'gutter' => $data['cellSpacing'],
             'cellHeight' => $data['cellHeight'],
-            'articleHeight' => $data['articleHeight']
+            'articleHeight' => $data['articleHeight'],
         ];
 
         return $this->eventManager->filter('Legacy_Struct_Converter_Convert_Emotion', $data, ['emotion' => $emotion]);
@@ -113,6 +114,7 @@ class StructConverter
 
     /**
      * @param Element $element
+     *
      * @return array
      */
     public function convertEmotionElement(Element $element)
@@ -144,7 +146,7 @@ class StructConverter
                     $media['path'] = $media['source'];
                     $media['fileInfo'] = [
                         'width' => $media['width'],
-                        'height' => $media['height']
+                        'height' => $media['height'],
                     ];
 
                     $elementArray['data']['values'][] = $media;

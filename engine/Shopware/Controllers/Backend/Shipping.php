@@ -28,10 +28,350 @@
  * Controller to handle the ExtJS-Requests
  * Handles the adding, the deletion and the editing of shipping costs by
  * calling the repository-functions
- *
  */
 class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend_ExtJs
 {
+    /**
+     * Wrapper method to create a new dispatch entry
+     */
+    public function createDispatchAction()
+    {
+        $this->saveDispatch();
+    }
+
+    /**
+     * Wrapper method to update a existing dispatch entry
+     */
+    public function updateDispatchAction()
+    {
+        $this->saveDispatch();
+    }
+
+    /**
+     * Returns all Shipping Costs
+     *
+     * @return array
+     */
+    public function getShippingCostsAction()
+    {
+        $this->deleteDispatchWithDeletedShops();
+        $dispatchID = $this->Request()->getParam('dispatchID', null);
+        $limit = $this->Request()->getParam('limit', 20);
+        $offset = $this->Request()->getParam('start', 0);
+        $sort = $this->Request()->getParam('sort', [['property' => 'dispatch.name', 'direction' => 'ASC']]);
+
+        $filter = $this->Request()->getParam('filter', null);
+        if (is_array($filter) && isset($filter[0]['value'])) {
+            $filter = $filter[0]['value'];
+        }
+
+        if ($dispatchID === null) {
+            $dispatchID = $this->Request()->getParam('id', null);
+        }
+
+        $query = $this->getRepository()->getShippingCostsQuery($dispatchID, $filter, $sort, $limit, $offset);
+        $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+
+        $paginator = $this->getModelManager()->createPaginator($query);
+        //returns the total count of the query
+        $totalResult = $paginator->count();
+        $shippingCosts = $paginator->getIterator()->getArrayCopy();
+        $shippingCosts = $this->convertShippingCostsDates($shippingCosts);
+
+        $this->View()->assign(['success' => true, 'data' => $shippingCosts, 'total' => $totalResult]);
+    }
+
+    /**
+     * Returns all Shipping Costs with basic data
+     *
+     * @return array
+     */
+    public function getListAction()
+    {
+        $limit = $this->Request()->getParam('limit', 20);
+        $offset = $this->Request()->getParam('start', 0);
+        $sort = $this->Request()->getParam('sort', [['property' => 'dispatch.name', 'direction' => 'ASC']]);
+
+        $filter = $this->Request()->getParam('filter', null);
+        if (is_array($filter) && isset($filter[0]['value'])) {
+            $filter = $filter[0]['value'];
+        }
+
+        $query = $this->getRepository()->getListQuery($filter, $sort, $limit, $offset);
+        $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+
+        $paginator = $this->getModelManager()->createPaginator($query);
+        //returns the total count of the query
+        $totalResult = $paginator->count();
+        $shippingCosts = $paginator->getIterator()->getArrayCopy();
+        $shippingCosts = $this->convertShippingCostsDates($shippingCosts);
+
+        $this->View()->assign(['success' => true, 'data' => $shippingCosts, 'total' => $totalResult]);
+    }
+
+    /**
+     * Returns all entries based on a given dispatch Id.
+     */
+    public function getCostsMatrixAction()
+    {
+        // process the parameters
+        $minChange = $this->Request()->getParam('minChange', null);
+        $dispatchId = $this->Request()->getParam('dispatchId', null);
+        $limit = $this->Request()->getParam('limit', 20);
+        $offset = $this->Request()->getParam('start', 0);
+        $sort = $this->Request()->getParam('sort', []);
+        $filter = $this->Request()->getParam('filter', []);
+
+        if (is_array($filter) && isset($filter[0]['value'])) {
+            $filter = $filter[0]['value'];
+        }
+        $query = $this->getRepository()->getShippingCostsMatrixQuery($dispatchId, $filter, $sort, $limit, $offset);
+        $result = $query->getArrayResult();
+
+        // if minChange was not passed, get it in order to show a proper cost matrix
+        if ($minChange === null) {
+            $dispatch = $this->getRepository()->getShippingCostsQuery($dispatchId)->getArrayResult();
+            if ($dispatch) {
+                $config = $this->getCalculationConfig(isset($dispatch[0]['calculation']) ? $dispatch[0]['calculation'] : 0);
+                $minChange = $config['minChange'];
+            }
+        }
+
+        $i = 0;
+        $nodes = [];
+
+        foreach ($result as $node) {
+            if ($i) {
+                $nodes[$i - 1]['to'] = $node['from'] - $minChange;
+            }
+            if (empty($node['to'])) {
+                $node['to'] = '';
+            }
+            if (empty($node['value'])) {
+                $node['value'] = '';
+            }
+            if (empty($node['factor'])) {
+                $node['factor'] = '';
+            }
+            $nodes[$i] = $node;
+            ++$i;
+        }
+
+        $totalResult = $this->getManager()->getQueryCount($query);
+        $this->View()->assign(['success' => true, 'data' => $nodes, 'total' => $totalResult]);
+    }
+
+    /**
+     * This method is used to delete one single matrix entry. This data set is addressed through a given
+     * id.
+     * //todo@js test fehlt noch
+     */
+    public function deleteCostsMatrixEntryAction()
+    {
+        $costsId = $this->Request()->getParam('id', null);
+        if (null === $costsId) {
+            $this->View()->assign(['success' => false, 'errorMsg' => 'No ID given to delete']);
+        }
+        try {
+            $costsModel = Shopware()->Models()->find('Shopware\Models\Dispatch\ShippingCost', $costsId);
+            $this->getManager()->remove($costsModel);
+            $this->getManager()->flush();
+            $this->View()->assign(['success' => true]);
+        } catch (Exception $e) {
+            $this->View()->assign(['success' => false, 'errorMsg' => $e->getMessage()]);
+        }
+    }
+
+    /**
+     * Removes all shipping costs for a given dispatch ID and returns the number of
+     * deleted records.
+     * //todo@js test fehlt noch
+     *
+     * @param $dispatchId
+     *
+     * @return int
+     */
+    public function deleteCostsMatrix($dispatchId)
+    {
+        $dispatchId = (int) $dispatchId;
+        $purge = $this->getRepository()->getPurgeShippingCostsMatrixQuery($dispatchId);
+
+        return $purge->execute();
+    }
+
+    /**
+     * Deletes a single dispatch or an array of dispatches from the database.
+     * Expects a single dispatch id or an array of dispatch ids which placed in the parameter customers
+     */
+    public function deleteAction()
+    {
+        try {
+            //get posted dispatch
+            $dispatches = $this->Request()->getParam('dispatches', [['id' => $this->Request()->getParam('id')]]);
+
+            //iterate the customers and add the remove action
+            foreach ($dispatches as $dispatch) {
+                $entity = $this->getRepository()->find($dispatch['id']);
+                $this->getManager()->remove($entity);
+                $this->deleteCostsMatrix($entity->getId());
+            }
+            //Performs all of the collected actions.
+            $this->getManager()->flush();
+            $this->View()->assign([
+                'success' => true,
+                'data' => $this->Request()->getParams(),
+            ]);
+        } catch (Exception $e) {
+            $this->View()->assign([
+                'success' => false,
+                'data' => $this->Request()->getParams(),
+                'message' => $e->getMessage(),
+            ]);
+        }
+    }
+
+    /**
+     * Wrapper around the saveCostsMatrix() to handle ACL
+     */
+    public function updateCostsMatrixAction()
+    {
+        $this->saveCostsMatrix();
+    }
+
+    /**
+     * Wrapper around the saveCostsMatrix() to handle ACL
+     */
+    public function createCostsMatrixAction()
+    {
+        $this->saveCostsMatrix();
+    }
+
+    /**
+     * Saves one entry of the shipping aka dispatch costs matrix
+     */
+    public function saveCostsMatrix()
+    {
+        $data = null;
+        if (!$this->Request()->isPost()) {
+            $this->View()->assign(['success' => false, 'errorMsg' => 'Empty Post Request']);
+
+            return;
+        }
+        $dispatchId = (int) $this->Request()->getParam('dispatchId');
+        $costsMatrix = $this->Request()->getParam('costMatrix');
+        $params = $this->Request()->getParams();
+
+        if (!empty($params) && !is_array($costsMatrix)) {
+            $costsMatrix = [$params];
+        }
+
+        if (!is_array($costsMatrix)) {
+            $this->View()->assign(['success' => false, 'errorMsg' => 'Empty data set.']);
+
+            return;
+        }
+        if ($dispatchId <= 0) {
+            $this->View()->assign(['success' => false, 'errorMsg' => 'No dispatch id given.']);
+
+            return;
+        }
+
+        $dispatch = Shopware()->Models()->find("Shopware\Models\Dispatch\Dispatch", $dispatchId);
+        if (!($dispatch instanceof \Shopware\Models\Dispatch\Dispatch)) {
+            $this->View()->assign(['success' => false, 'errorMsg' => 'No valid dispatch ID.']);
+
+            return;
+        }
+
+        $manager = $this->getManager();
+
+        // clear costs
+        $this->deleteCostsMatrix($dispatchId);
+
+        $data = [];
+        foreach ($costsMatrix as $param) {
+            $shippingCostModel = new \Shopware\Models\Dispatch\ShippingCost();
+            $param['dispatch'] = $dispatch;
+            // set data to model and overwrite the image field
+            $shippingCostModel->fromArray($param);
+
+            try {
+                $manager->persist($shippingCostModel);
+                $data[] = $this->getManager()->toArray($shippingCostModel);
+            } catch (Exception $e) {
+                $errorMsg = $e->getMessage();
+                $this->View()->assign(['success' => false, 'errorMsg' => $errorMsg]);
+
+                return;
+            }
+        }
+        $manager->flush();
+
+        $this->View()->assign(['success' => true, 'data' => $data]);
+    }
+
+    /**
+     * Get all used means of payment for a given dispatch id
+     *
+     * @return array
+     */
+    public function getPaymentsAction()
+    {
+        $limit = $this->Request()->getParam('limit', 20);
+        $offset = $this->Request()->getParam('start', 0);
+        $sort = $this->Request()->getParam('sort', []);
+        $filter = $this->Request()->getParam('filter', []);
+
+        $query = $this->getRepository()->getPaymentQuery($filter, $sort, $limit, $offset);
+
+        $result = $query->getArrayResult();
+        $totalResult = $this->getManager()->getQueryCount($query);
+        $this->View()->assign(['success' => true, 'data' => $result, 'total' => $totalResult]);
+    }
+
+    /**
+     * Get all countires who are selected for this dispatch id
+     *
+     * @return array
+     */
+    public function getCountriesAction()
+    {
+        $limit = $this->Request()->getParam('limit', 999);
+        $offset = $this->Request()->getParam('start', 0);
+        $sort = $this->Request()->getParam('sort', []);
+        $filter = $this->Request()->getParam('filter', []);
+
+        $query = $this->getRepository()->getCountryQuery($filter, $sort, 999, $offset);
+
+        $result = $query->getArrayResult();
+        $totalResult = $this->getManager()->getQueryCount($query);
+        $this->View()->assign(['success' => true, 'data' => $result, 'total' => $totalResult]);
+    }
+
+    /**
+     * Get all countries who are selected for this dispatch id
+
+     * @return array
+     */
+    public function getHolidaysAction()
+    {
+        // process the parameters
+        $limit = $this->Request()->getParam('limit', 20);
+        $offset = $this->Request()->getParam('start', 0);
+        $sort = $this->Request()->getParam('sort', null);
+        $filter = $this->Request()->getParam('filter', null);
+
+        if (is_array($filter) && isset($filter[0]['value'])) {
+            $filter = $filter[0]['value'];
+        }
+
+        $query = $this->getRepository()->getHolidayQuery($filter, $sort, $limit, $offset);
+        $result = $query->getArrayResult();
+
+        $totalResult = $this->getManager()->getQueryCount($query);
+        $this->View()->assign(['success' => true, 'data' => $result, 'total' => $totalResult]);
+    }
+
     /**
      * Returns the shopware model manager
      *
@@ -41,6 +381,7 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
     {
         return Shopware()->Models();
     }
+
     /**
      * Helper function to get access on the static declared repository
      *
@@ -78,23 +419,6 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
         $this->addAclPermission('createDispatchAction', 'create', $namespace->get('no_create_rights', 'Create access denied.'));
     }
 
-
-    /**
-     * Wrapper method to create a new dispatch entry
-     */
-    public function createDispatchAction()
-    {
-        $this->saveDispatch();
-    }
-
-    /**
-     * Wrapper method to update a existing dispatch entry
-     */
-    public function updateDispatchAction()
-    {
-        $this->saveDispatch();
-    }
-
     /**
      * Saves the dispatch to the data base.
      * //todo@js test fehlt noch
@@ -112,36 +436,35 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
         }
 
         // Clean up params and init some fields
-        $payments                  = $params['payments'];
-        $holidays                  = $params['holidays'];
-        $countries                 = $params['countries'];
-        $categories                = $params['categories'];
+        $payments = $params['payments'];
+        $holidays = $params['holidays'];
+        $countries = $params['countries'];
+        $categories = $params['categories'];
 
-
-        if (!isset($params['shippingFree']) || $params['shippingFree'] === "" || $params['shippingFree'] === "0") {
+        if (!isset($params['shippingFree']) || $params['shippingFree'] === '' || $params['shippingFree'] === '0') {
             $params['shippingFree'] = null;
         } else {
             $params['shippingFree'] = floatval(str_replace(',', '.', $params['shippingFree']));
         }
 
-        $params['payments']        = new \Doctrine\Common\Collections\ArrayCollection();
-        $params['holidays']        = new \Doctrine\Common\Collections\ArrayCollection();
-        $params['countries']       = new \Doctrine\Common\Collections\ArrayCollection();
-        $params['categories']      = new \Doctrine\Common\Collections\ArrayCollection();
+        $params['payments'] = new \Doctrine\Common\Collections\ArrayCollection();
+        $params['holidays'] = new \Doctrine\Common\Collections\ArrayCollection();
+        $params['countries'] = new \Doctrine\Common\Collections\ArrayCollection();
+        $params['categories'] = new \Doctrine\Common\Collections\ArrayCollection();
 
-        $params['multiShopId']     = $this->cleanData($params['multiShopId']);
+        $params['multiShopId'] = $this->cleanData($params['multiShopId']);
         $params['customerGroupId'] = $this->cleanData($params['customerGroupId']);
-        $params['bindTimeFrom']    = $this->cleanData($params['bindTimeFrom']);
-        $params['bindTimeTo']      = $this->cleanData($params['bindTimeTo']);
-        $params['bindInStock']     = $this->cleanData($params['bindInStock']);
+        $params['bindTimeFrom'] = $this->cleanData($params['bindTimeFrom']);
+        $params['bindTimeTo'] = $this->cleanData($params['bindTimeTo']);
+        $params['bindInStock'] = $this->cleanData($params['bindInStock']);
         $params['bindWeekdayFrom'] = $this->cleanData($params['bindWeekdayFrom']);
-        $params['bindWeekdayTo']   = $this->cleanData($params['bindWeekdayTo']);
-        $params['bindWeightFrom']  = $this->cleanData($params['bindWeightFrom']);
-        $params['bindWeightTo']    = $this->cleanData($params['bindWeightTo']);
-        $params['bindPriceFrom']   = $this->cleanData($params['bindPriceFrom']);
-        $params['bindPriceTo']     = $this->cleanData($params['bindPriceTo']);
-        $params['bindSql']         = $this->cleanData($params['bindSql']);
-        $params['calculationSql']  = $this->cleanData($params['calculationSql']);
+        $params['bindWeekdayTo'] = $this->cleanData($params['bindWeekdayTo']);
+        $params['bindWeightFrom'] = $this->cleanData($params['bindWeightFrom']);
+        $params['bindWeightTo'] = $this->cleanData($params['bindWeightTo']);
+        $params['bindPriceFrom'] = $this->cleanData($params['bindPriceFrom']);
+        $params['bindPriceTo'] = $this->cleanData($params['bindPriceTo']);
+        $params['bindSql'] = $this->cleanData($params['bindSql']);
+        $params['calculationSql'] = $this->cleanData($params['calculationSql']);
 
         if (!empty($params['bindTimeFrom'])) {
             $bindTimeFrom = new Zend_Date();
@@ -212,65 +535,34 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
             $this->getManager()->flush();
             $params['id'] = $dispatchModel->getId();
         } catch (Exception $e) {
-            $this->View()->assign(array('success' => false, 'errorMsg' => $e->getMessage()));
+            $this->View()->assign(['success' => false, 'errorMsg' => $e->getMessage()]);
+
             return;
         }
 
-        $this->View()->assign(array('success' => true, 'data' => $params));
+        $this->View()->assign(['success' => true, 'data' => $params]);
     }
 
     /**
      * Extends the database data with additional data for easier usage
+     *
      * @param array $shippingCosts
+     *
      * @return array
      */
     private function convertShippingCostsDates(array $shippingCosts)
     {
         foreach ($shippingCosts as $i => $shippingCost) {
             if (!is_null($shippingCost['bindTimeFrom'])) {
-                $shippingCosts[$i]['bindTimeFrom'] = gmdate("H:i", $shippingCost['bindTimeFrom']);
+                $shippingCosts[$i]['bindTimeFrom'] = gmdate('H:i', $shippingCost['bindTimeFrom']);
             }
 
             if (!is_null($shippingCost['bindTimeTo'])) {
-                $shippingCosts[$i]['bindTimeTo'] = gmdate("H:i", $shippingCost['bindTimeTo']);
+                $shippingCosts[$i]['bindTimeTo'] = gmdate('H:i', $shippingCost['bindTimeTo']);
             }
         }
 
         return $shippingCosts;
-    }
-
-    /**
-     * Returns all Shipping Costs
-     *
-     * @return array
-     */
-    public function getShippingCostsAction()
-    {
-        $this->deleteDispatchWithDeletedShops();
-        $dispatchID = $this->Request()->getParam('dispatchID', null);
-        $limit      = $this->Request()->getParam('limit', 20);
-        $offset     = $this->Request()->getParam('start', 0);
-        $sort       = $this->Request()->getParam('sort', [['property' => 'dispatch.name', 'direction' => 'ASC']]);
-
-        $filter = $this->Request()->getParam('filter', null);
-        if (is_array($filter) && isset($filter[0]['value'])) {
-            $filter = $filter[0]['value'];
-        }
-
-        if ($dispatchID === null) {
-            $dispatchID = $this->Request()->getParam('id', null);
-        }
-
-        $query = $this->getRepository()->getShippingCostsQuery($dispatchID, $filter, $sort, $limit, $offset);
-        $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
-
-        $paginator = $this->getModelManager()->createPaginator($query);
-        //returns the total count of the query
-        $totalResult = $paginator->count();
-        $shippingCosts = $paginator->getIterator()->getArrayCopy();
-        $shippingCosts = $this->convertShippingCostsDates($shippingCosts);
-
-        $this->View()->assign(['success' => true, 'data' => $shippingCosts, 'total' => $totalResult]);
     }
 
     /**
@@ -280,7 +572,7 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
     {
         $builder = $this->getRepository()->getDispatchWithDeletedShopsQuery();
         /** @var Shopware\Models\Dispatch\Dispatch[] $result */
-        $result  = $builder->getResult();
+        $result = $builder->getResult();
 
         $modelManager = Shopware()->Container()->get('models');
 
@@ -293,38 +585,11 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
     }
 
     /**
-     * Returns all Shipping Costs with basic data
-     *
-     * @return array
-     */
-    public function getListAction()
-    {
-        $limit      = $this->Request()->getParam('limit', 20);
-        $offset     = $this->Request()->getParam('start', 0);
-        $sort       = $this->Request()->getParam('sort', [['property' => 'dispatch.name', 'direction' => 'ASC']]);
-
-        $filter = $this->Request()->getParam('filter', null);
-        if (is_array($filter) && isset($filter[0]['value'])) {
-            $filter = $filter[0]['value'];
-        }
-
-        $query = $this->getRepository()->getListQuery($filter, $sort, $limit, $offset);
-        $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
-
-        $paginator = $this->getModelManager()->createPaginator($query);
-        //returns the total count of the query
-        $totalResult = $paginator->count();
-        $shippingCosts = $paginator->getIterator()->getArrayCopy();
-        $shippingCosts = $this->convertShippingCostsDates($shippingCosts);
-
-        $this->View()->assign(['success' => true, 'data' => $shippingCosts, 'total' => $totalResult]);
-    }
-
-    /**
      * Helper function to get some settings for the cost matrix
      * todo@all Duplicates getConfig in ExtJS main controller
      *
      * @param $calculationType
+     *
      * @return array
      */
     private function getCalculationConfig($calculationType)
@@ -334,7 +599,7 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
                 return [
                     'decimalPrecision' => 2,
                     'minChange' => 0.01,
-                    'startValue' => 0
+                    'startValue' => 0,
                 ];
                 break;
 
@@ -343,7 +608,7 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
                 return [
                     'decimalPrecision' => 0,
                     'minChange' => 1,
-                    'startValue' => 1
+                    'startValue' => 1,
                 ];
                 break;
 
@@ -352,264 +617,10 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
                 return [
                     'decimalPrecision' => 3,
                     'minChange' => 0.001,
-                    'startValue' => 0
+                    'startValue' => 0,
                 ];
                 break;
         }
-    }
-
-    /**
-     * Returns all entries based on a given dispatch Id.
-     */
-    public function getCostsMatrixAction()
-    {
-        // process the parameters
-        $minChange  = $this->Request()->getParam('minChange', null);
-        $dispatchId = $this->Request()->getParam('dispatchId', null);
-        $limit      = $this->Request()->getParam('limit', 20);
-        $offset     = $this->Request()->getParam('start', 0);
-        $sort       = $this->Request()->getParam('sort', array());
-        $filter     = $this->Request()->getParam('filter', array());
-
-        if (is_array($filter) && isset($filter[0]['value'])) {
-            $filter = $filter[0]['value'];
-        }
-        $query = $this->getRepository()->getShippingCostsMatrixQuery($dispatchId, $filter, $sort, $limit, $offset);
-        $result = $query->getArrayResult();
-
-        // if minChange was not passed, get it in order to show a proper cost matrix
-        if ($minChange === null) {
-            $dispatch = $this->getRepository()->getShippingCostsQuery($dispatchId)->getArrayResult();
-            if ($dispatch) {
-                $config = $this->getCalculationConfig(isset($dispatch[0]['calculation']) ? $dispatch[0]['calculation'] : 0);
-                $minChange = $config['minChange'];
-            }
-        }
-
-        $i     = 0;
-        $nodes = array();
-
-        foreach ($result as $node) {
-            if ($i) {
-                $nodes[$i - 1]["to"] = $node["from"] - $minChange;
-            }
-            if (empty($node["to"])) {
-                $node["to"] = "";
-            }
-            if (empty($node["value"])) {
-                $node["value"] = "";
-            }
-            if (empty($node["factor"])) {
-                $node["factor"] = "";
-            }
-            $nodes[$i] = $node;
-            $i++;
-        }
-
-        $totalResult = $this->getManager()->getQueryCount($query);
-        $this->View()->assign(array('success' => true, 'data' => $nodes, 'total' => $totalResult));
-    }
-
-    /**
-     * This method is used to delete one single matrix entry. This data set is addressed through a given
-     * id.
-     * //todo@js test fehlt noch
-     */
-    public function deleteCostsMatrixEntryAction()
-    {
-        $costsId = $this->Request()->getParam('id', null);
-        if (null === $costsId) {
-            $this->View()->assign(['success' => false, 'errorMsg' => 'No ID given to delete']);
-        }
-        try {
-            $costsModel = Shopware()->Models()->find('Shopware\Models\Dispatch\ShippingCost', $costsId);
-            $this->getManager()->remove($costsModel);
-            $this->getManager()->flush();
-            $this->View()->assign(['success' => true]);
-        } catch (Exception $e) {
-            $this->View()->assign(['success' => false, 'errorMsg' => $e->getMessage()]);
-        }
-    }
-
-    /**
-     * Removes all shipping costs for a given dispatch ID and returns the number of
-     * deleted records.
-     * //todo@js test fehlt noch
-     * @param $dispatchId
-     * @return int
-     */
-    public function deleteCostsMatrix($dispatchId)
-    {
-        $dispatchId = (int) $dispatchId;
-        $purge = $this->getRepository()->getPurgeShippingCostsMatrixQuery($dispatchId);
-
-        return $purge->execute();
-    }
-
-    /**
-     * Deletes a single dispatch or an array of dispatches from the database.
-     * Expects a single dispatch id or an array of dispatch ids which placed in the parameter customers
-     */
-    public function deleteAction()
-    {
-        try {
-            //get posted dispatch
-            $dispatches = $this->Request()->getParam('dispatches', [['id' => $this->Request()->getParam('id')]]);
-
-            //iterate the customers and add the remove action
-            foreach ($dispatches as $dispatch) {
-                $entity = $this->getRepository()->find($dispatch['id']);
-                $this->getManager()->remove($entity);
-                $this->deleteCostsMatrix($entity->getId());
-            }
-            //Performs all of the collected actions.
-            $this->getManager()->flush();
-            $this->View()->assign([
-                'success' => true,
-                'data' => $this->Request()->getParams()
-            ]);
-        } catch (Exception $e) {
-            $this->View()->assign([
-                'success' => false,
-                'data' => $this->Request()->getParams(),
-                'message' => $e->getMessage()
-            ]);
-        }
-    }
-
-    /**
-     * Wrapper around the saveCostsMatrix() to handle ACL
-     */
-    public function updateCostsMatrixAction()
-    {
-        $this->saveCostsMatrix();
-    }
-    /**
-     * Wrapper around the saveCostsMatrix() to handle ACL
-     */
-    public function createCostsMatrixAction()
-    {
-        $this->saveCostsMatrix();
-    }
-
-    /**
-     * Saves one entry of the shipping aka dispatch costs matrix
-     */
-    public function saveCostsMatrix()
-    {
-        $data = null;
-        if (!$this->Request()->isPost()) {
-            $this->View()->assign(['success' => false, 'errorMsg' => 'Empty Post Request']);
-            return;
-        }
-        $dispatchId = (int) $this->Request()->getParam('dispatchId');
-        $costsMatrix = $this->Request()->getParam('costMatrix');
-        $params = $this->Request()->getParams();
-
-        if (!empty($params) && !is_array($costsMatrix)) {
-            $costsMatrix = array($params);
-        }
-
-        if (!is_array($costsMatrix)) {
-            $this->View()->assign(['success' => false, 'errorMsg' => 'Empty data set.']);
-            return;
-        }
-        if ($dispatchId <= 0) {
-            $this->View()->assign(['success' => false, 'errorMsg' => 'No dispatch id given.']);
-            return;
-        }
-
-        $dispatch = Shopware()->Models()->find("Shopware\Models\Dispatch\Dispatch", $dispatchId);
-        if (!($dispatch instanceof \Shopware\Models\Dispatch\Dispatch)) {
-            $this->View()->assign(['success' => false, 'errorMsg' => 'No valid dispatch ID.']);
-            return;
-        }
-
-        $manager = $this->getManager();
-
-        // clear costs
-        $this->deleteCostsMatrix($dispatchId);
-
-        $data = array();
-        foreach ($costsMatrix as $param) {
-            $shippingCostModel = new \Shopware\Models\Dispatch\ShippingCost();
-            $param['dispatch'] = $dispatch;
-            // set data to model and overwrite the image field
-            $shippingCostModel->fromArray($param);
-
-            try {
-                $manager->persist($shippingCostModel);
-                $data[] = $this->getManager()->toArray($shippingCostModel);
-            } catch (Exception $e) {
-                $errorMsg = $e->getMessage();
-                $this->View()->assign(['success' => false, 'errorMsg' => $errorMsg]);
-                return;
-            }
-        }
-        $manager->flush();
-
-        $this->View()->assign(['success' => true, 'data' => $data]);
-    }
-
-     /**
-     * Get all used means of payment for a given dispatch id
-     *
-     * @return array
-     */
-    public function getPaymentsAction()
-    {
-        $limit = $this->Request()->getParam('limit', 20);
-        $offset = $this->Request()->getParam('start', 0);
-        $sort = $this->Request()->getParam('sort', []);
-        $filter = $this->Request()->getParam('filter', []);
-
-        $query = $this->getRepository()->getPaymentQuery($filter, $sort, $limit, $offset);
-
-        $result = $query->getArrayResult();
-        $totalResult = $this->getManager()->getQueryCount($query);
-        $this->View()->assign(['success' => true, 'data' => $result, 'total' => $totalResult]);
-    }
-    /**
-     * Get all countires who are selected for this dispatch id
-     *
-     * @return array
-     */
-    public function getCountriesAction()
-    {
-        $limit  = $this->Request()->getParam('limit', 999);
-        $offset = $this->Request()->getParam('start', 0);
-        $sort   = $this->Request()->getParam('sort', []);
-        $filter = $this->Request()->getParam('filter', []);
-
-        $query = $this->getRepository()->getCountryQuery($filter, $sort, 999, $offset);
-
-        $result = $query->getArrayResult();
-        $totalResult = $this->getManager()->getQueryCount($query);
-        $this->View()->assign(['success' => true, 'data' => $result, 'total' => $totalResult]);
-    }
-
-    /**
-     * Get all countries who are selected for this dispatch id
-
-     * @return array
-     */
-    public function getHolidaysAction()
-    {
-        // process the parameters
-        $limit  = $this->Request()->getParam('limit', 20);
-        $offset = $this->Request()->getParam('start', 0);
-        $sort   = $this->Request()->getParam('sort', null);
-        $filter = $this->Request()->getParam('filter', null);
-
-        if (is_array($filter) && isset($filter[0]['value'])) {
-            $filter = $filter[0]['value'];
-        }
-
-        $query = $this->getRepository()->getHolidayQuery($filter, $sort, $limit, $offset);
-        $result = $query->getArrayResult();
-
-        $totalResult = $this->getManager()->getQueryCount($query);
-        $this->View()->assign(array('success' => true, 'data' => $result, 'total' => $totalResult));
     }
 
     private function cleanData($inputValue)

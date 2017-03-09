@@ -16,7 +16,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU Affero General Public License for more details.
  *
- * 'Shopware' is a registered trademark of shopware AG.
+ * "Shopware" is a registered trademark of shopware AG.
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
@@ -29,7 +29,7 @@ use Shopware\Bundle\SearchBundle\BatchProductSearchResult;
 use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 
-class BatchProductSearchTest extends \PHPUnit_Framework_TestCase
+class BatchProductSearchTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var BatchProductNumberSearch
@@ -44,13 +44,13 @@ class BatchProductSearchTest extends \PHPUnit_Framework_TestCase
     /**
      * Call protected/private method of a class.
      *
-     * @param object $object    Instantiated object that we will run method on.
+     * @param object $object     instantiated object that we will run method on
      * @param string $methodName Method name to call
-     * @param array  $parameters Array of parameters to pass into method.
+     * @param array  $parameters array of parameters to pass into method
      *
-     * @return mixed Method return.
+     * @return mixed method return
      */
-    public function invokeMethod($object, $methodName, array $parameters = array())
+    public function invokeMethod($object, $methodName, array $parameters = [])
     {
         $reflection = new \ReflectionClass(get_class($object));
         $method = $reflection->getMethod($methodName);
@@ -60,7 +60,7 @@ class BatchProductSearchTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers BatchProductSearch::mapListProducts
+     * @covers \BatchProductSearch::mapListProducts
      */
     public function testListProductMapping()
     {
@@ -68,8 +68,8 @@ class BatchProductSearchTest extends \PHPUnit_Framework_TestCase
             'unit-test-1' => [
                 2 => new BaseProduct(2, 2, 2),
                 3 => new BaseProduct(3, 3, 3),
-                4 => new BaseProduct(4, 4, 4)
-            ]
+                4 => new BaseProduct(4, 4, 4),
+            ],
         ]);
 
         $listProducts = [
@@ -77,7 +77,7 @@ class BatchProductSearchTest extends \PHPUnit_Framework_TestCase
             2 => new ListProduct(2, 2, 2),
             3 => new ListProduct(3, 3, 3),
             4 => new ListProduct(4, 4, 4),
-            5 => new ListProduct(5, 5, 5)
+            5 => new ListProduct(5, 5, 5),
         ];
 
         $result = $this->invokeMethod($this->batchSearch, 'mapListProducts', [$searchResult, $listProducts]);
@@ -86,8 +86,8 @@ class BatchProductSearchTest extends \PHPUnit_Framework_TestCase
             'unit-test-1' => [
                 2 => new ListProduct(2, 2, 2),
                 3 => new ListProduct(3, 3, 3),
-                4 => new ListProduct(4, 4, 4)
-            ]
+                4 => new ListProduct(4, 4, 4),
+            ],
         ]);
 
         $this->assertEquals($expectedResult, $result);

@@ -24,15 +24,15 @@
 
 namespace Shopware\Bundle\MediaBundle\Subscriber;
 
-use Enlight\Event\SubscriberInterface;
 use Doctrine\Common\Collections\ArrayCollection;
-use Shopware\Bundle\MediaBundle\Commands\MediaCleanupCommand;
+use Enlight\Event\SubscriberInterface;
 use Shopware\Bundle\MediaBundle\Commands\ImageMigrateCommand;
+use Shopware\Bundle\MediaBundle\Commands\MediaCleanupCommand;
+use Shopware\Bundle\MediaBundle\Commands\MediaOptimizeCommand;
 use Shopware\Components\DependencyInjection\Container;
 
 /**
  * Class ServiceSubscriber
- * @package Shopware\Bundle\MediaBundle\Subscriber
  */
 class ServiceSubscriber implements SubscriberInterface
 {
@@ -40,6 +40,14 @@ class ServiceSubscriber implements SubscriberInterface
      * @var Container
      */
     private $container;
+
+    /**
+     * @param Container $container
+     */
+    public function __construct(Container $container)
+    {
+        $this->container = $container;
+    }
 
     /**
      * {@inheritdoc}
@@ -53,29 +61,23 @@ class ServiceSubscriber implements SubscriberInterface
     }
 
     /**
-     * @param Container $container
-     */
-    public function __construct(Container $container)
-    {
-        $this->container = $container;
-    }
-
-    /**
      * @return ArrayCollection
      */
     public function addCommands()
     {
         return new ArrayCollection([
             new MediaCleanupCommand(),
-            new ImageMigrateCommand()
+            new ImageMigrateCommand(),
+            new MediaOptimizeCommand(),
         ]);
     }
 
     /**
      * Runs the garbage collector
      *
-     * @return bool
      * @throws \Exception
+     *
+     * @return bool
      */
     public function runCronjob()
     {

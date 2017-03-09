@@ -31,7 +31,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 /**
  * Class EventComponentHandler
- * @package Shopware\Bundle\EmotionBundle\ComponentHandler
+ *
  * @deprecated since 5.3, removed in 5.5. This is a legacy layer which supports an deprecated event. Implement a ComponentHandler instead.
  */
 class EventComponentHandler implements ComponentHandlerInterface
@@ -51,7 +51,8 @@ class EventComponentHandler implements ComponentHandlerInterface
 
     /**
      * @param Element $element
-     * @return boolean
+     *
+     * @return bool
      */
     public function supports(Element $element)
     {
@@ -60,8 +61,8 @@ class EventComponentHandler implements ComponentHandlerInterface
 
     /**
      * @param PrepareDataCollection $collection
-     * @param Element $element
-     * @param ShopContextInterface $context
+     * @param Element               $element
+     * @param ShopContextInterface  $context
      */
     public function prepare(PrepareDataCollection $collection, Element $element, ShopContextInterface $context)
     {
@@ -69,8 +70,8 @@ class EventComponentHandler implements ComponentHandlerInterface
 
     /**
      * @param ResolvedDataCollection $collection
-     * @param Element $element
-     * @param ShopContextInterface $context
+     * @param Element                $element
+     * @param ShopContextInterface   $context
      */
     public function handle(ResolvedDataCollection $collection, Element $element, ShopContextInterface $context)
     {

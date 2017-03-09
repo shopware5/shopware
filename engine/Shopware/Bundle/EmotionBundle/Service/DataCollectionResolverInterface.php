@@ -32,7 +32,8 @@ interface DataCollectionResolverInterface
 {
     /**
      * @param PrepareDataCollection $prepareDataCollection
-     * @param ShopContextInterface $context
+     * @param ShopContextInterface  $context
+     *
      * @return ResolvedDataCollection
      */
     public function resolve(PrepareDataCollection $prepareDataCollection, ShopContextInterface $context);

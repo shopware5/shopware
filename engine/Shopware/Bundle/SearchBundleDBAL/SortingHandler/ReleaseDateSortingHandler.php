@@ -24,15 +24,15 @@
 
 namespace Shopware\Bundle\SearchBundleDBAL\SortingHandler;
 
-use Shopware\Bundle\SearchBundleDBAL\SortingHandlerInterface;
 use Shopware\Bundle\SearchBundle\Sorting\ReleaseDateSorting;
 use Shopware\Bundle\SearchBundle\SortingInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
+use Shopware\Bundle\SearchBundleDBAL\SortingHandlerInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\SearchBundleDBAL\SortingHandler
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ReleaseDateSortingHandler implements SortingHandlerInterface
@@ -42,7 +42,7 @@ class ReleaseDateSortingHandler implements SortingHandlerInterface
      */
     public function supportsSorting(SortingInterface $sorting)
     {
-        return ($sorting instanceof ReleaseDateSorting);
+        return $sorting instanceof ReleaseDateSorting;
     }
 
     /**
@@ -53,7 +53,7 @@ class ReleaseDateSortingHandler implements SortingHandlerInterface
         QueryBuilder $query,
         ShopContextInterface $context
     ) {
-        /** @var ReleaseDateSorting $sorting */
+        /* @var ReleaseDateSorting $sorting */
         $query->addOrderBy('product.datum', $sorting->getDirection())
             ->addOrderBy('product.changetime', $sorting->getDirection());
     }

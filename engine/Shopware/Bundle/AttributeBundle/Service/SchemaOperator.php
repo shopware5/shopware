@@ -28,7 +28,7 @@ use Doctrine\DBAL\Connection;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\AttributeBundle\Service
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
 class SchemaOperator
@@ -50,7 +50,8 @@ class SchemaOperator
 
     /**
      * SchemaOperator constructor.
-     * @param Connection $connection
+     *
+     * @param Connection   $connection
      * @param TableMapping $tableMapping
      */
     public function __construct(Connection $connection, TableMapping $tableMapping)
@@ -61,10 +62,11 @@ class SchemaOperator
     }
 
     /**
-     * @param string $table
-     * @param string $column
-     * @param string $type
+     * @param string                $table
+     * @param string                $column
+     * @param string                $type
      * @param null|string|int|float $defaultValue
+     *
      * @throws \Doctrine\DBAL\DBALException
      * @throws \Exception
      */
@@ -73,19 +75,20 @@ class SchemaOperator
         $this->validate($table, $column);
 
         if (!$type) {
-            throw new \Exception("No column type provided");
+            throw new \Exception('No column type provided');
         }
 
-        $sql = sprintf("ALTER TABLE `%s` ADD `%s` %s NULL DEFAULT %s", $table, $column, $type, $defaultValue);
+        $sql = sprintf('ALTER TABLE `%s` ADD `%s` %s NULL DEFAULT %s', $table, $column, $type, $defaultValue);
         $this->connection->executeQuery($sql);
     }
 
     /**
-     * @param string $table
-     * @param string $originalName
-     * @param string $newName
-     * @param string $type
+     * @param string                $table
+     * @param string                $originalName
+     * @param string                $newName
+     * @param string                $type
      * @param null|string|int|float $defaultValue
+     *
      * @throws \Doctrine\DBAL\DBALException
      * @throws \Exception
      */
@@ -94,13 +97,13 @@ class SchemaOperator
         $this->validate($table, $originalName);
 
         if (!$newName) {
-            throw new \Exception("No column name provided");
+            throw new \Exception('No column name provided');
         }
         if (!$type) {
-            throw new \Exception("No column type provided");
+            throw new \Exception('No column type provided');
         }
 
-        $sql = sprintf("ALTER TABLE `%s` CHANGE `%s` `%s` %s NULL DEFAULT %s;", $table, $originalName, $newName, $type, $defaultValue);
+        $sql = sprintf('ALTER TABLE `%s` CHANGE `%s` `%s` %s NULL DEFAULT %s;', $table, $originalName, $newName, $type, $defaultValue);
 
         $this->connection->executeQuery($sql);
     }
@@ -108,6 +111,7 @@ class SchemaOperator
     /**
      * @param string $table
      * @param string $column
+     *
      * @throws \Doctrine\DBAL\DBALException
      * @throws \Exception
      */
@@ -116,17 +120,19 @@ class SchemaOperator
         $this->validate($table, $column);
 
         if ($this->tableMapping->isCoreColumn($table, $column)) {
-            throw new \Exception(sprintf("Provided column is an core attribute column: %s", $column));
+            throw new \Exception(sprintf('Provided column is an core attribute column: %s', $column));
         }
 
-        $sql = sprintf("ALTER TABLE `%s` DROP `%s`", $table, $column);
+        $sql = sprintf('ALTER TABLE `%s` DROP `%s`', $table, $column);
         $this->connection->executeQuery($sql);
     }
 
     /**
      * Updates the provided column data to sql NULL value
+     *
      * @param string $table
      * @param string $column
+     *
      * @throws \Doctrine\DBAL\DBALException
      * @throws \Exception
      */
@@ -135,36 +141,37 @@ class SchemaOperator
         $this->validate($table, $column);
 
         if (!$this->tableMapping->isTableColumn($table, $column)) {
-            throw new \Exception(sprintf("Provided column %s does not exist in table %s", $column, $table));
+            throw new \Exception(sprintf('Provided column %s does not exist in table %s', $column, $table));
         }
 
-        $sql = sprintf("UPDATE %s SET %s = NULL", $table, $column);
+        $sql = sprintf('UPDATE %s SET %s = NULL', $table, $column);
         $this->connection->executeUpdate($sql);
     }
 
     /**
      * @param string $table
      * @param string $name
+     *
      * @throws \Exception
      */
     private function validate($table, $name)
     {
         if (!$table) {
-            throw new \Exception("No table name provided");
+            throw new \Exception('No table name provided');
         }
         if (!$name) {
-            throw new \Exception("No column name provided");
+            throw new \Exception('No column name provided');
         }
 
         if (!$this->tableMapping->isAttributeTable($table)) {
-            throw new \Exception(sprintf("Provided table is no attribute table: %s", $table));
+            throw new \Exception(sprintf('Provided table is no attribute table: %s', $table));
         }
         if ($this->tableMapping->isIdentifierColumn($table, $name)) {
-            throw new \Exception(sprintf("Provided column is an identifier column: %s", $name));
+            throw new \Exception(sprintf('Provided column is an identifier column: %s', $name));
         }
         $lowerCaseName = strtolower($name);
         if (in_array($lowerCaseName, $this->nameBlacklist)) {
-            throw new \Exception(sprintf("Provided name %s is a reserved keyword.", $name));
+            throw new \Exception(sprintf('Provided name %s is a reserved keyword.', $name));
         }
     }
 }

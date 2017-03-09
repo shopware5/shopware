@@ -26,11 +26,6 @@ require __DIR__ . '/../../autoload.php';
 
 class TestKernel extends \Shopware\Kernel
 {
-    protected function getConfigPath()
-    {
-        return __DIR__ . '/config.php';
-    }
-
     /**
      * Static method to start boot kernel without leaving local scope in test helper
      */
@@ -49,6 +44,11 @@ class TestKernel extends \Shopware\Kernel
         $shop->registerResources();
 
         $_SERVER['HTTP_HOST'] = $shop->getHost();
+    }
+
+    protected function getConfigPath()
+    {
+        return __DIR__ . '/config.php';
     }
 }
 

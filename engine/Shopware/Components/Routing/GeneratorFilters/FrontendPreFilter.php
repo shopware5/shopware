@@ -24,12 +24,12 @@
 
 namespace Shopware\Components\Routing\GeneratorFilters;
 
-use Shopware\Components\Routing\PreFilterInterface;
 use Shopware\Components\Routing\Context;
+use Shopware\Components\Routing\PreFilterInterface;
 
 /**
  * @category  Shopware
- * @package   Shopware\Components\Routing
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class FrontendPreFilter implements PreFilterInterface

@@ -34,7 +34,43 @@ use Shopware\Components\Model\ModelEntity;
 class Basket extends ModelEntity
 {
     /**
-     * @var integer $id
+     * @var int
+     *
+     * @ORM\Column(name="userID", type="integer", nullable=true)
+     */
+    protected $customerId = null;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="articleID", type="integer", nullable=true)
+     */
+    protected $articleId = null;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="ordernumber", type="string", length=255, nullable=true)
+     */
+    protected $orderNumber = null;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="tax_rate", type="float", nullable=false)
+     */
+    protected $taxRate = 0;
+
+    /**
+     * INVERSE SIDE
+     *
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\OrderBasket", mappedBy="orderBasket", orphanRemoval=true, cascade={"persist"})
+     *
+     * @var \Shopware\Models\Attribute\OrderBasket
+     */
+    protected $attribute;
+    /**
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
@@ -43,137 +79,102 @@ class Basket extends ModelEntity
     private $id;
 
     /**
-     * @var string $sessionId
+     * @var string
      *
      * @ORM\Column(name="sessionID", type="string", length=70, nullable=false)
      */
     private $sessionId;
 
     /**
-     * @var integer $customerId
-     *
-     * @ORM\Column(name="userID", type="integer", nullable=true)
-     */
-    protected $customerId = null;
-
-    /**
-     * @var integer $articleId
-     *
-     * @ORM\Column(name="articleID", type="integer", nullable=true)
-     */
-    protected $articleId = null;
-
-    /**
-     * @var string $partnerId
+     * @var string
      *
      * @ORM\Column(name="partnerID", type="string", length=45, nullable=true)
      */
     private $partnerId = null;
 
     /**
-     * @var string $articleName
+     * @var string
      *
      * @ORM\Column(name="articlename", type="string", length=255, nullable=false)
      */
     private $articleName = '';
 
     /**
-     * @var string $orderNumber
-     *
-     * @ORM\Column(name="ordernumber", type="string", length=255, nullable=true)
-     */
-    protected $orderNumber = null;
-
-    /**
-     * @var int $shippingFree
+     * @var int
      *
      * @ORM\Column(name="shippingfree", type="integer", nullable=false)
      */
     private $shippingFree = 0;
 
     /**
-     * @var integer $quantity
+     * @var int
      *
      * @ORM\Column(name="quantity", type="integer", nullable=false)
      */
     private $quantity = 0;
 
     /**
-     * @var float $price
+     * @var float
      *
      * @ORM\Column(name="price", type="float", nullable=false)
      */
     private $price = 0;
 
     /**
-     * @var float $netPrice
+     * @var float
      *
      * @ORM\Column(name="netprice", type="float", nullable=false)
      */
     private $netPrice = 0;
 
     /**
-     * @var \DateTime $date
+     * @var \DateTime
      *
      * @ORM\Column(name="datum", type="datetime", nullable=false)
      */
     private $date = null;
 
     /**
-     * @var integer $mode
+     * @var int
      *
      * @ORM\Column(name="modus", type="integer", nullable=false)
      */
     private $mode = 0;
 
     /**
-     * @var integer $esdArticle
+     * @var int
      *
      * @ORM\Column(name="esdarticle", type="integer", nullable=false)
      */
     private $esdArticle = 0;
 
     /**
-     * @var string $lastViewPort
+     * @var string
      *
      * @ORM\Column(name="lastviewport", type="string", length=255, nullable=false)
      */
     private $lastViewPort = '';
 
     /**
-     * @var string $userAgent
+     * @var string
      *
      * @ORM\Column(name="useragent", type="string", length=255, nullable=false)
      */
     private $userAgent = '';
 
     /**
-     * @var string $config
+     * @var string
      *
      * @ORM\Column(name="config", type="text", nullable=false)
      */
     private $config = '';
 
     /**
-     * @var float $currencyFactor
+     * @var float
      *
      * @ORM\Column(name="currencyFactor", type="float", nullable=false)
      */
     private $currencyFactor = 1;
-
-    /**
-     * @var float $taxRate
-     *
-     * @ORM\Column(name="tax_rate", type="float", nullable=false)
-     */
-    protected $taxRate = 0;
-
-    /**
-     * INVERSE SIDE
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\OrderBasket", mappedBy="orderBasket", orphanRemoval=true, cascade={"persist"})
-     * @var \Shopware\Models\Attribute\OrderBasket
-     */
-    protected $attribute;
 
     /**
      * @return \Shopware\Models\Attribute\OrderBasket
@@ -185,6 +186,7 @@ class Basket extends ModelEntity
 
     /**
      * @param \Shopware\Models\Attribute\OrderBasket|array|null $attribute
+     *
      * @return \Shopware\Models\Attribute\OrderBasket
      */
     public function setAttribute($attribute)
@@ -295,7 +297,6 @@ class Basket extends ModelEntity
     {
         return $this->mode;
     }
-
 
     /**
      * @param string $partnerId

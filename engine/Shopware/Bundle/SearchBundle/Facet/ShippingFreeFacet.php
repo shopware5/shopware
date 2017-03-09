@@ -28,7 +28,7 @@ use Shopware\Bundle\SearchBundle\FacetInterface;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\SearchBundle\Facet
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ShippingFreeFacet implements FacetInterface
@@ -55,7 +55,7 @@ class ShippingFreeFacet implements FacetInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getName()
     {

@@ -1,12 +1,25 @@
 <?php
-
-/*
- * This file is part of the Symfony package.
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
- * (c) Fabien Potencier <fabien@symfony.com>
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
  */
 
 namespace Shopware\Components\Session;
@@ -118,7 +131,7 @@ class PdoSessionHandler implements \SessionHandlerInterface
     /**
      * @var array Connection options when lazy-connect
      */
-    private $connectionOptions = array();
+    private $connectionOptions = [];
 
     /**
      * @var int The strategy for locking, see constants
@@ -130,7 +143,7 @@ class PdoSessionHandler implements \SessionHandlerInterface
      *
      * @var \PDOStatement[] An array of statements to release advisory locks
      */
-    private $unlockStatements = array();
+    private $unlockStatements = [];
 
     /**
      * @var bool True when the current session exists but expired according to session.gc_maxlifetime
@@ -171,7 +184,7 @@ class PdoSessionHandler implements \SessionHandlerInterface
      *
      * @throws \InvalidArgumentException When PDO error mode is not PDO::ERRMODE_EXCEPTION
      */
-    public function __construct($pdoOrDsn = null, array $options = array())
+    public function __construct($pdoOrDsn = null, array $options = [])
     {
         if ($pdoOrDsn instanceof \PDO) {
             if (\PDO::ERRMODE_EXCEPTION !== $pdoOrDsn->getAttribute(\PDO::ATTR_ERRMODE)) {
@@ -404,6 +417,20 @@ class PdoSessionHandler implements \SessionHandlerInterface
     }
 
     /**
+     * Return a PDO instance.
+     *
+     * @return \PDO
+     */
+    protected function getConnection()
+    {
+        if (null === $this->pdo) {
+            $this->connect($this->dsn ?: ini_get('session.save_path'));
+        }
+
+        return $this->pdo;
+    }
+
+    /**
      * Lazy-connects to the database.
      *
      * @param string $dsn DSN string
@@ -510,7 +537,7 @@ class PdoSessionHandler implements \SessionHandlerInterface
             $sessionRows = $selectStmt->fetchAll(\PDO::FETCH_NUM);
 
             if ($sessionRows) {
-                if ($sessionRows[0][1] + $sessionRows[0][2] < time()) {
+                if ($sessionRows[0][1] < time()) {
                     $this->sessionExpired = true;
 
                     return '';
@@ -556,9 +583,9 @@ class PdoSessionHandler implements \SessionHandlerInterface
      *
      * @param string $sessionId Session ID
      *
-     * @return \PDOStatement The statement that needs to be executed later to release the lock
-     *
      * @throws \DomainException When an unsupported PDO driver is used
+     *
+     * @return \PDOStatement The statement that needs to be executed later to release the lock
      *
      * @todo implement missing advisory locks
      *       - for oci using DBMS_LOCK.REQUEST
@@ -616,9 +643,9 @@ class PdoSessionHandler implements \SessionHandlerInterface
     /**
      * Return a locking or nonlocking SQL query to read session information.
      *
-     * @return string The SQL string
-     *
      * @throws \DomainException When an unsupported PDO driver is used
+     *
+     * @return string The SQL string
      */
     private function getSelectSql()
     {
@@ -657,27 +684,27 @@ class PdoSessionHandler implements \SessionHandlerInterface
         $mergeSql = null;
         switch (true) {
             case 'mysql' === $this->driver:
-                $mergeSql = "INSERT INTO $this->table ($this->idCol, $this->dataCol, $this->expiryCol, $this->timeCol) VALUES (:id, :data, :expiry, :time) ".
+                $mergeSql = "INSERT INTO $this->table ($this->idCol, $this->dataCol, $this->expiryCol, $this->timeCol) VALUES (:id, :data, :expiry, :time) " .
                     "ON DUPLICATE KEY UPDATE $this->dataCol = VALUES($this->dataCol), $this->expiryCol = VALUES($this->expiryCol), $this->timeCol = VALUES($this->timeCol)";
                 break;
             case 'oci' === $this->driver:
                 // DUAL is Oracle specific dummy table
-                $mergeSql = "MERGE INTO $this->table USING DUAL ON ($this->idCol = ?) ".
-                    "WHEN NOT MATCHED THEN INSERT ($this->idCol, $this->dataCol, $this->expiryCol, $this->timeCol) VALUES (?, ?, ?, ?) ".
+                $mergeSql = "MERGE INTO $this->table USING DUAL ON ($this->idCol = ?) " .
+                    "WHEN NOT MATCHED THEN INSERT ($this->idCol, $this->dataCol, $this->expiryCol, $this->timeCol) VALUES (?, ?, ?, ?) " .
                     "WHEN MATCHED THEN UPDATE SET $this->dataCol = ?, $this->expiryCol = ?, $this->timeCol = ?";
                 break;
             case 'sqlsrv' === $this->driver && version_compare($this->pdo->getAttribute(\PDO::ATTR_SERVER_VERSION), '10', '>='):
                 // MERGE is only available since SQL Server 2008 and must be terminated by semicolon
                 // It also requires HOLDLOCK according to http://weblogs.sqlteam.com/dang/archive/2009/01/31/UPSERT-Race-Condition-With-MERGE.aspx
-                $mergeSql = "MERGE INTO $this->table WITH (HOLDLOCK) USING (SELECT 1 AS dummy) AS src ON ($this->idCol = ?) ".
-                    "WHEN NOT MATCHED THEN INSERT ($this->idCol, $this->dataCol, $this->expiryCol, $this->timeCol) VALUES (?, ?, ?, ?) ".
+                $mergeSql = "MERGE INTO $this->table WITH (HOLDLOCK) USING (SELECT 1 AS dummy) AS src ON ($this->idCol = ?) " .
+                    "WHEN NOT MATCHED THEN INSERT ($this->idCol, $this->dataCol, $this->expiryCol, $this->timeCol) VALUES (?, ?, ?, ?) " .
                     "WHEN MATCHED THEN UPDATE SET $this->dataCol = ?, $this->expiryCol = ?, $this->timeCol = ?;";
                 break;
             case 'sqlite' === $this->driver:
                 $mergeSql = "INSERT OR REPLACE INTO $this->table ($this->idCol, $this->dataCol, $this->expiryCol, $this->timeCol) VALUES (:id, :data, :expiry, :time)";
                 break;
             case 'pgsql' === $this->driver && version_compare($this->pdo->getAttribute(\PDO::ATTR_SERVER_VERSION), '9.5', '>='):
-                $mergeSql = "INSERT INTO $this->table ($this->idCol, $this->dataCol, $this->expiryCol, $this->timeCol) VALUES (:id, :data, :expiry, :time) ".
+                $mergeSql = "INSERT INTO $this->table ($this->idCol, $this->dataCol, $this->expiryCol, $this->timeCol) VALUES (:id, :data, :expiry, :time) " .
                     "ON CONFLICT ($this->idCol) DO UPDATE SET ($this->dataCol, $this->expiryCol, $this->timeCol) = (EXCLUDED.$this->dataCol, EXCLUDED.$this->expiryCol, EXCLUDED.$this->timeCol)";
                 break;
         }
@@ -703,19 +730,5 @@ class PdoSessionHandler implements \SessionHandlerInterface
 
             return $mergeStmt;
         }
-    }
-
-    /**
-     * Return a PDO instance.
-     *
-     * @return \PDO
-     */
-    protected function getConnection()
-    {
-        if (null === $this->pdo) {
-            $this->connect($this->dsn ?: ini_get('session.save_path'));
-        }
-
-        return $this->pdo;
     }
 }

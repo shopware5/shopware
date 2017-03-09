@@ -33,7 +33,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * @category  Shopware
- * @package   Shopware\Components\Console\Command
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class PluginInstallCommand extends ShopwareCommand
@@ -57,11 +57,10 @@ class PluginInstallCommand extends ShopwareCommand
                 InputOption::VALUE_NONE,
                 'Activate plugin after intallation.'
             )
-            ->setHelp(<<<EOF
+            ->setHelp(<<<'EOF'
 The <info>%command.name%</info> installs a plugin.
 EOF
             );
-        ;
     }
 
     /**
@@ -70,18 +69,20 @@ EOF
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         /** @var InstallerService $pluginManager */
-        $pluginManager  = $this->container->get('shopware_plugininstaller.plugin_manager');
+        $pluginManager = $this->container->get('shopware_plugininstaller.plugin_manager');
         $pluginName = $input->getArgument('plugin');
 
         try {
             $plugin = $pluginManager->getPluginByName($pluginName);
         } catch (\Exception $e) {
             $output->writeln(sprintf('Plugin by name "%s" was not found.', $pluginName));
+
             return 1;
         }
 
         if ($plugin->getInstalled()) {
             $output->writeln(sprintf('The plugin %s is already installed.', $pluginName));
+
             return 1;
         }
 

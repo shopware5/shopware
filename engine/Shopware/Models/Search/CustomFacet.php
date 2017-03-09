@@ -24,8 +24,8 @@
 
 namespace Shopware\Models\Search;
 
-use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
 
 /**
  * @ORM\Table(name="s_search_custom_facet")
@@ -33,15 +33,6 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class CustomFacet extends ModelEntity
 {
-    /**
-     * @var integer $id
-     *
-     * @ORM\Column(type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
     /**
      * @var string
      * @ORM\Column(nullable=false)
@@ -55,13 +46,13 @@ class CustomFacet extends ModelEntity
     protected $uniqueKey;
 
     /**
-     * @var boolean
+     * @var bool
      * @ORM\Column(type="boolean")
      */
     protected $active;
 
     /**
-     * @var boolean
+     * @var bool
      * @ORM\Column(type="boolean")
      */
     protected $deletable;
@@ -79,10 +70,18 @@ class CustomFacet extends ModelEntity
     protected $facet;
 
     /**
-     * @var boolean
+     * @var bool
      * @ORM\Column(name="display_in_categories", type="boolean")
      */
     protected $displayInCategories;
+    /**
+     * @var int
+     *
+     * @ORM\Column(type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
 
     /**
      * @return int
@@ -101,7 +100,7 @@ class CustomFacet extends ModelEntity
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isActive()
     {
@@ -133,7 +132,7 @@ class CustomFacet extends ModelEntity
     }
 
     /**
-     * @param boolean $active
+     * @param bool $active
      */
     public function setActive($active)
     {
@@ -157,7 +156,7 @@ class CustomFacet extends ModelEntity
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isDisplayInCategories()
     {
@@ -165,7 +164,7 @@ class CustomFacet extends ModelEntity
     }
 
     /**
-     * @param boolean $displayInCategories
+     * @param bool $displayInCategories
      */
     public function setDisplayInCategories($displayInCategories)
     {
@@ -173,7 +172,7 @@ class CustomFacet extends ModelEntity
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isDeletable()
     {
@@ -181,7 +180,7 @@ class CustomFacet extends ModelEntity
     }
 
     /**
-     * @param boolean $deletable
+     * @param bool $deletable
      */
     public function setDeletable($deletable)
     {

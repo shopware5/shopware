@@ -28,7 +28,7 @@ use Enlight\Event\SubscriberInterface;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\AttributeBundle\DependencyInjection\EventListener
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
 class ControllerSubscriber implements SubscriberInterface
@@ -38,7 +38,7 @@ class ControllerSubscriber implements SubscriberInterface
         return [
             'Enlight_Controller_Dispatcher_ControllerPath_Backend_EntitySearch' => 'registerEntitySearchController',
             'Enlight_Controller_Dispatcher_ControllerPath_Backend_Attributes' => 'registerAttributesController',
-            'Enlight_Controller_Dispatcher_ControllerPath_Backend_AttributeData' => 'registerAttributeDataController'
+            'Enlight_Controller_Dispatcher_ControllerPath_Backend_AttributeData' => 'registerAttributeDataController',
         ];
     }
 

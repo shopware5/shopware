@@ -33,7 +33,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\SearchBundle
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class StoreFrontCriteriaFactory implements StoreFrontCriteriaFactoryInterface
@@ -54,8 +54,8 @@ class StoreFrontCriteriaFactory implements StoreFrontCriteriaFactoryInterface
     private $requestHandlers;
 
     /**
-     * @param \Shopware_Components_Config $config
-     * @param \Enlight_Event_EventManager $eventManager
+     * @param \Shopware_Components_Config       $config
+     * @param \Enlight_Event_EventManager       $eventManager
      * @param CriteriaRequestHandlerInterface[] $requestHandlers
      */
     public function __construct(
@@ -71,8 +71,9 @@ class StoreFrontCriteriaFactory implements StoreFrontCriteriaFactoryInterface
     }
 
     /**
-     * @param int[] $categoryIds
+     * @param int[]                $categoryIds
      * @param ShopContextInterface $context
+     *
      * @return Criteria
      */
     public function createBaseCriteria($categoryIds, ShopContextInterface $context)
@@ -92,14 +93,16 @@ class StoreFrontCriteriaFactory implements StoreFrontCriteriaFactoryInterface
         $this->eventManager->notify('Shopware_SearchBundle_Create_Base_Criteria', [
             'criteria' => $criteria,
             'context' => $context,
-            'categoryIds' => $categoryIds
+            'categoryIds' => $categoryIds,
         ]);
+
         return $criteria;
     }
 
     /**
-     * @param Request $request
+     * @param Request              $request
      * @param ShopContextInterface $context
+     *
      * @return Criteria
      */
     public function createSearchCriteria(Request $request, ShopContextInterface $context)
@@ -108,16 +111,17 @@ class StoreFrontCriteriaFactory implements StoreFrontCriteriaFactoryInterface
 
         $this->eventManager->notify('Shopware_SearchBundle_Create_Search_Criteria', [
             'criteria' => $criteria,
-            'request'  => $request,
-            'context'  => $context
+            'request' => $request,
+            'context' => $context,
         ]);
 
         return $criteria;
     }
 
     /**
-     * @param Request $request
+     * @param Request              $request
      * @param ShopContextInterface $context
+     *
      * @return Criteria
      */
     public function createListingCriteria(Request $request, ShopContextInterface $context)
@@ -126,8 +130,8 @@ class StoreFrontCriteriaFactory implements StoreFrontCriteriaFactoryInterface
 
         $this->eventManager->notify('Shopware_SearchBundle_Create_Listing_Criteria', [
             'criteria' => $criteria,
-            'request'  => $request,
-            'context'  => $context
+            'request' => $request,
+            'context' => $context,
         ]);
 
         $criteria->removeFacet('category');
@@ -136,8 +140,9 @@ class StoreFrontCriteriaFactory implements StoreFrontCriteriaFactoryInterface
     }
 
     /**
-     * @param Request $request
+     * @param Request              $request
      * @param ShopContextInterface $context
+     *
      * @return Criteria
      */
     public function createAjaxSearchCriteria(Request $request, ShopContextInterface $context)
@@ -148,8 +153,8 @@ class StoreFrontCriteriaFactory implements StoreFrontCriteriaFactoryInterface
 
         $this->eventManager->notify('Shopware_SearchBundle_Create_Ajax_Search_Criteria', [
             'criteria' => $criteria,
-            'request'  => $request,
-            'context'  => $context
+            'request' => $request,
+            'context' => $context,
         ]);
 
         $criteria->resetFacets();
@@ -158,8 +163,9 @@ class StoreFrontCriteriaFactory implements StoreFrontCriteriaFactoryInterface
     }
 
     /**
-     * @param Request $request
+     * @param Request              $request
      * @param ShopContextInterface $context
+     *
      * @return Criteria
      */
     public function createAjaxListingCriteria(Request $request, ShopContextInterface $context)
@@ -168,8 +174,8 @@ class StoreFrontCriteriaFactory implements StoreFrontCriteriaFactoryInterface
 
         $this->eventManager->notify('Shopware_SearchBundle_Create_Ajax_Listing_Criteria', [
             'criteria' => $criteria,
-            'request'  => $request,
-            'context'  => $context
+            'request' => $request,
+            'context' => $context,
         ]);
 
         $criteria->resetFacets();
@@ -178,8 +184,9 @@ class StoreFrontCriteriaFactory implements StoreFrontCriteriaFactoryInterface
     }
 
     /**
-     * @param Request $request
+     * @param Request              $request
      * @param ShopContextInterface $context
+     *
      * @return Criteria
      */
     public function createAjaxCountCriteria(Request $request, ShopContextInterface $context)
@@ -188,8 +195,8 @@ class StoreFrontCriteriaFactory implements StoreFrontCriteriaFactoryInterface
 
         $this->eventManager->notify('Shopware_SearchBundle_Create_Ajax_Count_Criteria', [
             'criteria' => $criteria,
-            'request'  => $request,
-            'context'  => $context
+            'request' => $request,
+            'context' => $context,
         ]);
 
         $criteria
@@ -202,9 +209,10 @@ class StoreFrontCriteriaFactory implements StoreFrontCriteriaFactoryInterface
     }
 
     /**
-     * @param Request $request
+     * @param Request              $request
      * @param ShopContextInterface $context
-     * @param int $categoryId
+     * @param int                  $categoryId
+     *
      * @return \Shopware\Bundle\SearchBundle\Criteria
      */
     public function createProductNavigationCriteria(
@@ -223,8 +231,8 @@ class StoreFrontCriteriaFactory implements StoreFrontCriteriaFactoryInterface
 
         $this->eventManager->notify('Shopware_SearchBundle_Create_Product_Navigation_Criteria', [
             'criteria' => $criteria,
-            'request'  => $request,
-            'context'  => $context
+            'request' => $request,
+            'context' => $context,
         ]);
 
         $criteria->resetFacets();
@@ -233,8 +241,9 @@ class StoreFrontCriteriaFactory implements StoreFrontCriteriaFactoryInterface
     }
 
     /**
-     * @param Request $request
+     * @param Request              $request
      * @param ShopContextInterface $context
+     *
      * @return Criteria
      */
     private function getSearchCriteria(Request $request, ShopContextInterface $context)
@@ -245,6 +254,7 @@ class StoreFrontCriteriaFactory implements StoreFrontCriteriaFactoryInterface
 
         if (!$criteria->hasBaseCondition('category')) {
             $criteria->addBaseCondition(new CategoryCondition([$systemId]));
+
             return $criteria;
         }
 
@@ -261,8 +271,9 @@ class StoreFrontCriteriaFactory implements StoreFrontCriteriaFactoryInterface
     }
 
     /**
-     * @param Request $request
+     * @param Request              $request
      * @param ShopContextInterface $context
+     *
      * @return Criteria
      */
     private function createCriteriaFromRequest(Request $request, ShopContextInterface $context)
@@ -277,8 +288,9 @@ class StoreFrontCriteriaFactory implements StoreFrontCriteriaFactoryInterface
     }
 
     /**
-     * @return array
      * @throws \Enlight_Event_Exception
+     *
+     * @return array
      */
     private function registerRequestHandlers()
     {

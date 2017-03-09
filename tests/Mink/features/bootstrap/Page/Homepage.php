@@ -1,39 +1,61 @@
 <?php
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
 
 namespace  Shopware\Tests\Mink\Page;
 
 use Behat\Mink\WebAssert;
+use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
 use Shopware\Tests\Mink\Element\Article;
 use Shopware\Tests\Mink\Element\Banner;
 use Shopware\Tests\Mink\Element\BlogArticle;
 use Shopware\Tests\Mink\Element\CategoryTeaser;
 use Shopware\Tests\Mink\Element\CompareColumn;
-use Shopware\Tests\Mink\Element\YouTube;
 use Shopware\Tests\Mink\Element\SliderElement;
-use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
+use Shopware\Tests\Mink\Element\YouTube;
 use Shopware\Tests\Mink\Helper;
 use Shopware\Tests\Mink\HelperSelectorInterface;
 
 class Homepage extends Page implements HelperSelectorInterface
 {
     /**
-     * @var string $path
+     * @var string
      */
     protected $path = '/';
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getCssSelectors()
     {
         return [
             'newsletterForm' => 'form.newsletter--form',
-            'newsletterFormSubmit' => 'form.newsletter--form button[type="submit"]'
+            'newsletterFormSubmit' => 'form.newsletter--form button[type="submit"]',
         ];
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getNamedSelectors()
     {
@@ -42,6 +64,7 @@ class Homepage extends Page implements HelperSelectorInterface
 
     /**
      * Verify if we're on an expected page. Throw an exception if not.
+     *
      * @throws \Exception
      */
     public function verifyPage()
@@ -58,6 +81,7 @@ class Homepage extends Page implements HelperSelectorInterface
 
     /**
      * Searches the given term in the shop
+     *
      * @param string $searchTerm
      */
     public function searchFor($searchTerm)
@@ -65,8 +89,8 @@ class Homepage extends Page implements HelperSelectorInterface
         $data = [
             [
                 'field' => 'sSearch',
-                'value' => $searchTerm
-            ]
+                'value' => $searchTerm,
+            ],
         ];
 
         $searchForm = $this->getElement('SearchForm');
@@ -77,6 +101,7 @@ class Homepage extends Page implements HelperSelectorInterface
 
     /**
      * Search the given term using live search
+     *
      * @param $searchTerm
      */
     public function receiveSearchResultsFor($searchTerm)
@@ -84,8 +109,8 @@ class Homepage extends Page implements HelperSelectorInterface
         $data = [
             [
                 'field' => 'sSearch',
-                'value' => $searchTerm
-            ]
+                'value' => $searchTerm,
+            ],
         ];
 
         $searchForm = $this->getElement('SearchForm');
@@ -103,7 +128,9 @@ class Homepage extends Page implements HelperSelectorInterface
 
     /**
      * Changes the currency
+     *
      * @param string $currency
+     *
      * @throws \Behat\Mink\Exception\ElementNotFoundException
      */
     public function changeCurrency($currency)
@@ -132,7 +159,7 @@ class Homepage extends Page implements HelperSelectorInterface
      * Available properties are: image, name, ranking, description, price, link
      *
      * @param CompareColumn $compareColumns
-     * @param array $items
+     * @param array         $items
      */
     public function checkComparisonProducts(CompareColumn $compareColumns, array $items)
     {
@@ -150,14 +177,15 @@ class Homepage extends Page implements HelperSelectorInterface
 
     /**
      * Checks an emotion banner with or without link
-     * @param Banner $banner
-     * @param string $image
+     *
+     * @param Banner      $banner
+     * @param string      $image
      * @param string|null $link
      */
     public function checkLinkedBanner(Banner $banner, $image, $link = null)
     {
         $properties = [
-            'image' => $image
+            'image' => $image,
         ];
 
         if (!is_null($link)) {
@@ -182,8 +210,9 @@ class Homepage extends Page implements HelperSelectorInterface
 
     /**
      * Checks an emotion banner with mapping
-     * @param Banner $banner
-     * @param string $image
+     *
+     * @param Banner   $banner
+     * @param string   $image
      * @param string[] $mapping
      */
     public function checkMappedBanner(Banner $banner, $image, array $mapping)
@@ -200,7 +229,7 @@ class Homepage extends Page implements HelperSelectorInterface
         $message = [
             'The banner mappings are different!',
             'Given: ' . $result['value'],
-            'Expected: ' . $result['value2']
+            'Expected: ' . $result['value2'],
         ];
 
         Helper::throwException($message);
@@ -208,8 +237,10 @@ class Homepage extends Page implements HelperSelectorInterface
 
     /**
      * Checks an emotion blog element
+     *
      * @param BlogArticle $blogArticle
-     * @param array $articles
+     * @param array       $articles
+     *
      * @throws \Exception
      */
     public function checkBlogArticles(BlogArticle $blogArticle, $articles)
@@ -227,7 +258,7 @@ class Homepage extends Page implements HelperSelectorInterface
         $message = [
             sprintf('The slides have a different %s!', $result['key']),
             'Given: ' . $result['value'],
-            'Expected: ' . $result['value2']
+            'Expected: ' . $result['value2'],
         ];
 
         Helper::throwException($message);
@@ -235,8 +266,10 @@ class Homepage extends Page implements HelperSelectorInterface
 
     /**
      * Checks an emotion Youtube element
+     *
      * @param YouTube $youtube
-     * @param string $code
+     * @param string  $code
+     *
      * @throws \Exception
      */
     public function checkYoutubeVideo(YouTube $youtube, $code)
@@ -250,7 +283,7 @@ class Homepage extends Page implements HelperSelectorInterface
         $message = [
             'The YouTube video has a different code!',
             'Given: ' . $result['value'],
-            'Expected: ' . $result['value2']
+            'Expected: ' . $result['value2'],
         ];
 
         Helper::throwException($message);
@@ -258,8 +291,9 @@ class Homepage extends Page implements HelperSelectorInterface
 
     /**
      * Checks an emotion slider element
+     *
      * @param SliderElement $slider
-     * @param array $slides
+     * @param array         $slides
      */
     public function checkSlider(SliderElement $slider, array $slides)
     {
@@ -276,7 +310,7 @@ class Homepage extends Page implements HelperSelectorInterface
         $message = [
             sprintf('The slides have a different %s!', $result['key']),
             'Given: ' . print_r($result['value'], true),
-            'Expected: ' . print_r($result['value2'], true)
+            'Expected: ' . print_r($result['value2'], true),
         ];
 
         Helper::throwException($message);
@@ -284,8 +318,9 @@ class Homepage extends Page implements HelperSelectorInterface
 
     /**
      * Checks an emotion manufacturer slider element
+     *
      * @param SliderElement $slider
-     * @param array $slides
+     * @param array         $slides
      */
     public function checkManufacturerSlider(SliderElement $slider, array $slides)
     {
@@ -309,7 +344,7 @@ class Homepage extends Page implements HelperSelectorInterface
         $message = [
             sprintf('The slides have a different %s!', $result['key']),
             'Given: ' . print_r($result['value'], true),
-            'Expected: ' . print_r($result['value2'], true)
+            'Expected: ' . print_r($result['value2'], true),
         ];
 
         Helper::throwException($message);
@@ -317,17 +352,18 @@ class Homepage extends Page implements HelperSelectorInterface
 
     /**
      * Checks an emotion category teaser element
+     *
      * @param CategoryTeaser $teaser
-     * @param string $name
-     * @param string $image
-     * @param string $link
+     * @param string         $name
+     * @param string         $image
+     * @param string         $link
      */
     public function checkCategoryTeaser(CategoryTeaser $teaser, $name, $image, $link)
     {
         $properties = [
             'name' => $name,
             'image' => $image,
-            'link'  => $link
+            'link' => $link,
         ];
 
         $result = Helper::assertElementProperties($teaser, $properties);
@@ -348,8 +384,9 @@ class Homepage extends Page implements HelperSelectorInterface
 
     /**
      * Checks an emotion article element
+     *
      * @param Article $article
-     * @param array $data
+     * @param array   $data
      */
     public function checkArticle(Article $article, array $data)
     {
@@ -374,6 +411,7 @@ class Homepage extends Page implements HelperSelectorInterface
 
     /**
      * Returns the shop url
+     *
      * @return string
      */
     public function getShopUrl()

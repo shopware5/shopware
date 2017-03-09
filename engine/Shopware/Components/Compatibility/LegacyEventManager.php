@@ -28,7 +28,7 @@ use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 
 /**
  * @category  Shopware
- * @package   Shopware\Components\Compatibility
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class LegacyEventManager
@@ -51,7 +51,7 @@ class LegacyEventManager
     /**
      * @param \Enlight_Event_EventManager $eventManager
      * @param \Shopware_Components_Config $config
-     * @param ContextServiceInterface $contextService
+     * @param ContextServiceInterface     $contextService
      */
     public function __construct(
         \Enlight_Event_EventManager $eventManager,
@@ -70,6 +70,7 @@ class LegacyEventManager
      * @param array $result
      * @param $categoryId
      * @param \sArticles $module
+     *
      * @return mixed
      */
     public function fireArticlesByCategoryEvents(
@@ -81,20 +82,20 @@ class LegacyEventManager
             $article = Shopware()->Events()->filter(
                 'Shopware_Modules_Articles_sGetArticlesByCategory_FilterLoopEnd',
                 $article,
-                array(
+                [
                     'subject' => $module,
-                    'id' => $categoryId
-                )
+                    'id' => $categoryId,
+                ]
             );
         }
 
         return $this->eventManager->filter(
             'Shopware_Modules_Articles_sGetArticlesByCategory_FilterResult',
             $result,
-            array(
+            [
                 'subject' => $module,
-                'id' => $categoryId
-            )
+                'id' => $categoryId,
+            ]
         );
     }
 
@@ -102,8 +103,9 @@ class LegacyEventManager
      * Following events are deprecated and only implemented for backward compatibility to shopware 4
      * Removed with shopware 5.1
      *
-     * @param array $product
+     * @param array      $product
      * @param \sArticles $module
+     *
      * @return array|mixed
      */
     public function fireArticleByIdEvents(array $product, \sArticles $module)
@@ -114,12 +116,12 @@ class LegacyEventManager
         return Shopware()->Events()->filter(
             'Shopware_Modules_Articles_GetArticleById_FilterResult',
             $getArticle,
-            array(
+            [
                 'subject' => $module,
-                'id' => $getArticle["articleID"],
+                'id' => $getArticle['articleID'],
                 'isBlog' => false,
-                'customergroup' => $context->getCurrentCustomerGroup()->getKey()
-            )
+                'customergroup' => $context->getCurrentCustomerGroup()->getKey(),
+            ]
         );
     }
 }

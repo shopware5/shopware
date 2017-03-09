@@ -22,8 +22,6 @@
  * our trademarks remain entirely with us.
  */
 
-/**
- */
 class Shopware_Plugins_Core_CronBirthday_Bootstrap extends Shopware_Components_Plugin_Bootstrap
 {
     public function install()
@@ -32,6 +30,7 @@ class Shopware_Plugins_Core_CronBirthday_Bootstrap extends Shopware_Components_P
             'Shopware_CronJob_Birthday',
             'onRun'
         );
+
         return true;
     }
 
@@ -80,9 +79,9 @@ class Shopware_Plugins_Core_CronBirthday_Bootstrap extends Shopware_Components_P
             AND user_id = u.id
             AND birthday LIKE ?
         ";
-        $users = Shopware()->Db()->fetchAll($sql, array(
-            '%-' . date('m-d')
-        ));
+        $users = Shopware()->Db()->fetchAll($sql, [
+            '%-' . date('m-d'),
+        ]);
         if (empty($users)) {
             return 'No birthday users found.';
         }
@@ -95,7 +94,7 @@ class Shopware_Plugins_Core_CronBirthday_Bootstrap extends Shopware_Components_P
             AND evc.cashed = 0
             AND ev.ordercode= ?
         ';
-        $voucherId = Shopware()->Db()->fetchOne($sql, array($birthdayVoucher));
+        $voucherId = Shopware()->Db()->fetchOne($sql, [$birthdayVoucher]);
         if (empty($voucherId)) {
             return 'No birthday voucher found.';
         }
@@ -109,7 +108,7 @@ class Shopware_Plugins_Core_CronBirthday_Bootstrap extends Shopware_Components_P
                 AND evc.userID IS NULL
                 AND evc.cashed = 0
             ';
-            $voucher = Shopware()->Db()->fetchRow($sql, array($voucherId));
+            $voucher = Shopware()->Db()->fetchRow($sql, [$voucherId]);
             if (empty($voucher)) {
                 return 'No new voucher code found.';
             }
@@ -119,9 +118,9 @@ class Shopware_Plugins_Core_CronBirthday_Bootstrap extends Shopware_Components_P
                 WHERE id=?
                 AND userID IS NULL
             ';
-            $result = Shopware()->Db()->query($sql, array(
-                $user['userID'], $voucher['vouchercodeID']
-            ));
+            $result = Shopware()->Db()->query($sql, [
+                $user['userID'], $voucher['vouchercodeID'],
+            ]);
             if (empty($result)) {
                 continue;
             }
@@ -130,18 +129,18 @@ class Shopware_Plugins_Core_CronBirthday_Bootstrap extends Shopware_Components_P
                 continue;
             }
 
-            /** @var Shopware\Models\Shop\Repository $repository  */
+            /** @var Shopware\Models\Shop\Repository $repository */
             $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
             $shopId = is_numeric($user['language']) ? $user['language'] : $user['subshopID'];
             $shop = $repository->getActiveById($shopId);
             $shop->registerResources();
 
             //language subshopID
-            $context = array(
+            $context = [
                 'sUser' => $user,
                 'sVoucher' => $voucher,
-                'sData' => $job['data']
-            );
+                'sData' => $job['data'],
+            ];
 
             $mail = Shopware()->TemplateMail()->createMail('sBIRTHDAY', $context);
             $mail->addTo($user['email']);

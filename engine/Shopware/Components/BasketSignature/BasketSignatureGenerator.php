@@ -27,7 +27,7 @@ namespace Shopware\Components\BasketSignature;
 class BasketSignatureGenerator implements BasketSignatureGeneratorInterface
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function generateSignature(array $basket, $customerId)
     {
@@ -37,7 +37,7 @@ class BasketSignatureGenerator implements BasketSignatureGeneratorInterface
                     'ordernumber' => $item['ordernumber'],
                     'quantity' => (float) $item['quantity'],
                     'tax_rate' => (float) $item['tax_rate'],
-                    'price' => (float) $item['price']
+                    'price' => (float) $item['price'],
                 ];
             },
             $basket['content']
@@ -48,7 +48,7 @@ class BasketSignatureGenerator implements BasketSignatureGeneratorInterface
         $data = [
             'amount' => (float) $basket['sAmount'],
             'taxAmount' => (float) $basket['sAmountTax'],
-            'items' => $items
+            'items' => $items,
         ];
 
         return hash('sha256', json_encode($data) . $customerId);
@@ -56,6 +56,7 @@ class BasketSignatureGenerator implements BasketSignatureGeneratorInterface
 
     /**
      * @param array $items
+     *
      * @return array
      */
     private function sortItems(array $items)
@@ -84,6 +85,7 @@ class BasketSignatureGenerator implements BasketSignatureGeneratorInterface
                 return strcmp($a['ordernumber'], $b['ordernumber']);
             }
         );
+
         return array_values($items);
     }
 }

@@ -25,27 +25,27 @@
 namespace Shopware\Bundle\SearchBundleDBAL\FacetHandler;
 
 use Shopware\Bundle\SearchBundle\Condition\PriceCondition;
+use Shopware\Bundle\SearchBundle\Criteria;
+use Shopware\Bundle\SearchBundle\Facet;
+use Shopware\Bundle\SearchBundle\FacetInterface;
 use Shopware\Bundle\SearchBundle\FacetResult\RangeFacetResult;
 use Shopware\Bundle\SearchBundle\FacetResultInterface;
 use Shopware\Bundle\SearchBundleDBAL\ConditionHandler\PriceConditionHandler;
 use Shopware\Bundle\SearchBundleDBAL\ListingPriceTable;
 use Shopware\Bundle\SearchBundleDBAL\PartialFacetHandlerInterface;
-use Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactory;
-use Shopware\Bundle\SearchBundle\FacetInterface;
-use Shopware\Bundle\SearchBundle\Criteria;
-use Shopware\Bundle\SearchBundle\Facet;
+use Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactoryInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\QueryAliasMapper;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\SearchBundleDBAL\FacetHandler
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class PriceFacetHandler implements PartialFacetHandlerInterface
 {
     /**
-     * @var QueryBuilderFactory
+     * @var QueryBuilderFactoryInterface
      */
     private $queryBuilderFactory;
 
@@ -70,15 +70,16 @@ class PriceFacetHandler implements PartialFacetHandlerInterface
     private $listingPriceTable;
 
     /**
-     * @param ListingPriceTable $listingPriceTable
-     * @param QueryBuilderFactory $queryBuilderFactory
+     * @param ListingPriceTable                    $listingPriceTable
+     * @param QueryBuilderFactoryInterface         $queryBuilderFactory
      * @param \Shopware_Components_Snippet_Manager $snippetManager
-     * @param QueryAliasMapper $queryAliasMapper
+     * @param QueryAliasMapper                     $queryAliasMapper
+     *
      * @internal param PriceHelperInterface $priceHelper
      */
     public function __construct(
         ListingPriceTable $listingPriceTable,
-        QueryBuilderFactory $queryBuilderFactory,
+        QueryBuilderFactoryInterface $queryBuilderFactory,
         \Shopware_Components_Snippet_Manager $snippetManager,
         QueryAliasMapper $queryAliasMapper
     ) {
@@ -100,14 +101,15 @@ class PriceFacetHandler implements PartialFacetHandlerInterface
      */
     public function supportsFacet(FacetInterface $facet)
     {
-        return ($facet instanceof Facet\PriceFacet);
+        return $facet instanceof Facet\PriceFacet;
     }
 
     /**
-     * @param FacetInterface $facet
-     * @param Criteria $reverted
-     * @param Criteria $criteria
+     * @param FacetInterface       $facet
+     * @param Criteria             $reverted
+     * @param Criteria             $criteria
      * @param ShopContextInterface $context
+     *
      * @return FacetResultInterface
      */
     public function generatePartialFacet(
@@ -131,7 +133,7 @@ class PriceFacetHandler implements PartialFacetHandlerInterface
 
         $query->select('MIN(listing_price.cheapest_price)');
 
-        /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
+        /** @var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
 
         $min = $statement->fetch(\PDO::FETCH_COLUMN);
@@ -141,7 +143,7 @@ class PriceFacetHandler implements PartialFacetHandlerInterface
             ->setFirstResult(0)
             ->setMaxResults(1);
 
-        /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
+        /** @var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
 
         $max = $statement->fetch(\PDO::FETCH_COLUMN);
@@ -149,7 +151,7 @@ class PriceFacetHandler implements PartialFacetHandlerInterface
         $activeMin = $min;
         $activeMax = $max;
 
-        /**@var $condition PriceCondition */
+        /** @var $condition PriceCondition */
         if ($condition = $criteria->getCondition($facet->getName())) {
             $activeMin = $condition->getMinPrice();
             $activeMax = $condition->getMaxPrice();

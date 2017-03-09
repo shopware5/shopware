@@ -27,18 +27,20 @@ namespace Shopware\Bundle\EmotionBundle\ComponentHandler;
 use Shopware\Bundle\EmotionBundle\Struct\Collection\PrepareDataCollection;
 use Shopware\Bundle\EmotionBundle\Struct\Collection\ResolvedDataCollection;
 use Shopware\Bundle\EmotionBundle\Struct\Element;
-use Shopware\Bundle\EmotionBundle\Struct\Library\Component;
 use Shopware\Bundle\SearchBundle\Sorting\PopularitySorting;
 use Shopware\Bundle\SearchBundle\Sorting\ReleaseDateSorting;
 use Shopware\Bundle\SearchBundle\SortingInterface;
 use Shopware\Bundle\SearchBundle\StoreFrontCriteriaFactoryInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
+use Shopware\Bundle\StoreFrontBundle\Service\Core\AdditionalTextService;
+use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware_Components_Config as ShopwareConfig;
 
 class ArticleComponentHandler implements ComponentHandlerInterface
 {
+    const TYPE_STATIC_PRODUCT = 'selected_article';
+    const TYPE_STATIC_VARIANT = 'selected_variant';
     const TYPE_RANDOM = 'random_article';
-    const TYPE_STATIC = 'selected_article';
     const TYPE_NEWCOMER = 'newcomer';
     const TYPE_TOPSELLER = 'topseller';
 
@@ -51,17 +53,33 @@ class ArticleComponentHandler implements ComponentHandlerInterface
     private $criteriaFactory;
 
     /**
-     * ArticleComponentHandler constructor.
-     * @param StoreFrontCriteriaFactoryInterface $criteriaFactory
+     * @var ShopwareConfig
      */
-    public function __construct(StoreFrontCriteriaFactoryInterface $criteriaFactory)
-    {
+    private $shopwareConfig;
+
+    /**
+     * @var AdditionalTextService
+     */
+    private $additionalTextService;
+
+    /**
+     * @param StoreFrontCriteriaFactoryInterface $criteriaFactory
+     * @param ShopwareConfig                     $shopwareConfig
+     * @param AdditionalTextService              $additionalTextService
+     */
+    public function __construct(
+        StoreFrontCriteriaFactoryInterface $criteriaFactory,
+        ShopwareConfig $shopwareConfig,
+        AdditionalTextService $additionalTextService
+    ) {
         $this->criteriaFactory = $criteriaFactory;
+
+        $this->shopwareConfig = $shopwareConfig;
+        $this->additionalTextService = $additionalTextService;
     }
 
     /**
-     * @param Element $element
-     * @return bool
+     * {@inheritdoc}
      */
     public function supports(Element $element)
     {
@@ -70,18 +88,20 @@ class ArticleComponentHandler implements ComponentHandlerInterface
     }
 
     /**
-     * @param PrepareDataCollection $collection
-     * @param Element $element
-     * @param ShopContext|ShopContextInterface $context
+     * {@inheritdoc}
      */
     public function prepare(PrepareDataCollection $collection, Element $element, ShopContextInterface $context)
     {
         $type = $element->getConfig()->get('article_type');
         $key = 'emotion-element--' . $element->getId();
 
-        if ($type === self::TYPE_STATIC) {
-            // request a single product
+        if ($type === self::TYPE_STATIC_PRODUCT) {
             $collection->getBatchRequest()->setProductNumbers($key, [$element->getConfig()->get('article')]);
+
+            return;
+        } elseif ($type === self::TYPE_STATIC_VARIANT) {
+            $collection->getBatchRequest()->setProductNumbers($key, [$element->getConfig()->get('variant')]);
+
             return;
         }
 
@@ -92,21 +112,43 @@ class ArticleComponentHandler implements ComponentHandlerInterface
     }
 
     /**
-     * @param ResolvedDataCollection $collection
-     * @param Element $element
-     * @param ShopContextInterface $context
+     * {@inheritdoc}
      */
     public function handle(ResolvedDataCollection $collection, Element $element, ShopContextInterface $context)
     {
         $key = 'emotion-element--' . $element->getId();
+        $type = $element->getConfig()->get('article_type');
 
+        /** @var ListProduct $product */
         $product = current($collection->getBatchResult()->get($key));
+        if ($type === self::TYPE_STATIC_VARIANT) {
+            $this->additionalTextService->buildAdditionalText($product, $context);
+            $this->switchPrice($product);
+        }
         $element->getData()->set('product', $product);
     }
 
     /**
-     * @param Element $element
+     * @param ListProduct $product
+     */
+    private function switchPrice(ListProduct $product)
+    {
+        $prices = array_values($product->getPrices());
+        $product->setListingPrice($prices[0]);
+
+        $product->setDisplayFromPrice(count($product->getPrices()) > 1);
+
+        if ($this->shopwareConfig->get('useLastGraduationForCheapestPrice')) {
+            $product->setListingPrice(
+                $prices[count($prices) - 1]
+            );
+        }
+    }
+
+    /**
+     * @param Element              $element
      * @param ShopContextInterface $context
+     *
      * @return \Shopware\Bundle\SearchBundle\Criteria
      */
     private function generateCriteria(Element $element, ShopContextInterface $context)

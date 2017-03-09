@@ -24,9 +24,8 @@
 
 namespace   Shopware\Models\Article;
 
-use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
+use Shopware\Components\Model\ModelEntity;
 
 /**
  * Shopware Vote Model
@@ -42,93 +41,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Vote extends ModelEntity
 {
     /**
-     * @var integer $id
-     *
-     * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
-    /**
-     * @var integer $articleId
-     *
-     * @ORM\Column(name="articleID", type="integer", nullable=false)
-     */
-    private $articleId;
-
-    /**
-     * @var integer
-     * @ORM\Column(name="shop_id", type="integer", nullable=true)
-     */
-    private $shopId;
-
-    /**
-     * @var string $name
-     *
-     * @ORM\Column(name="name", type="string", length=255, nullable=false)
-     */
-    private $name;
-
-    /**
-     * @var string $headline
-     *
-     * @ORM\Column(name="headline", type="string", length=255, nullable=false)
-     */
-    private $headline;
-
-    /**
-     * @var string $comment
-     *
-     * @ORM\Column(name="comment", type="text", nullable=false)
-     */
-    private $comment;
-
-    /**
-     * @var float $points
-     *
-     * @ORM\Column(name="points", type="float", nullable=false)
-     */
-    private $points;
-
-    /**
-     * @var \DateTime $datum
-     *
-     * @ORM\Column(name="datum", type="datetime", nullable=false)
-     */
-    private $datum;
-
-    /**
-     * @var integer $active
-     *
-     * @ORM\Column(name="active", type="boolean", nullable=false)
-     */
-    private $active;
-
-    /**
-     * @var string $email
-     *
-     * @ORM\Column(name="email", type="string", length=255, nullable=false)
-     */
-    private $email;
-
-    /**
-     * @var string $answer
-     *
-     * @ORM\Column(name="answer", type="text", nullable=false)
-     */
-    private $answer;
-
-    /**
-     * @var \DateTime $answer_date
-     *
-     * @ORM\Column(name="answer_date", type="datetime", nullable=true)
-     */
-    private $answer_date;
-
-    /**
      * OWNING SIDE
-     * @var \Shopware\Models\Article\Article $article
+     *
+     * @var \Shopware\Models\Article\Article
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Article", inversedBy="votes", cascade={"persist"})
      * @ORM\JoinColumn(name="articleID", referencedColumnName="id")
      */
@@ -140,11 +55,95 @@ class Vote extends ModelEntity
      * @ORM\JoinColumn(name="shop_id", referencedColumnName="id")
      */
     protected $shop;
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="articleID", type="integer", nullable=false)
+     */
+    private $articleId;
+
+    /**
+     * @var int
+     * @ORM\Column(name="shop_id", type="integer", nullable=true)
+     */
+    private $shopId;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="name", type="string", length=255, nullable=false)
+     */
+    private $name;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="headline", type="string", length=255, nullable=false)
+     */
+    private $headline;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="comment", type="text", nullable=false)
+     */
+    private $comment;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="points", type="float", nullable=false)
+     */
+    private $points;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="datum", type="datetime", nullable=false)
+     */
+    private $datum;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="active", type="boolean", nullable=false)
+     */
+    private $active;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="email", type="string", length=255, nullable=false)
+     */
+    private $email;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="answer", type="text", nullable=false)
+     */
+    private $answer;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="answer_date", type="datetime", nullable=true)
+     */
+    private $answer_date;
 
     /**
      * Gets the primaryKey id
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -156,11 +155,13 @@ class Vote extends ModelEntity
      * Example: John
      *
      * @param string $name
+     *
      * @return Vote
      */
     public function setName($name)
     {
         $this->name = $name;
+
         return $this;
     }
 
@@ -178,11 +179,13 @@ class Vote extends ModelEntity
      * Sets the headline from the vote
      *
      * @param string $headline
+     *
      * @return Vote
      */
     public function setHeadline($headline)
     {
         $this->headline = $headline;
+
         return $this;
     }
 
@@ -200,11 +203,13 @@ class Vote extends ModelEntity
      * Sets the comment - the vote itself
      *
      * @param string $comment
+     *
      * @return Vote
      */
     public function setComment($comment)
     {
         $this->comment = $comment;
+
         return $this;
     }
 
@@ -222,11 +227,13 @@ class Vote extends ModelEntity
      * Sets the given points for the vote
      *
      * @param float $points
+     *
      * @return Vote
      */
     public function setPoints($points)
     {
         $this->points = $points;
+
         return $this;
     }
 
@@ -244,11 +251,13 @@ class Vote extends ModelEntity
      * Sets the datum of the vote
      *
      * @param \DateTime $datum
+     *
      * @return Vote
      */
     public function setDatum($datum)
     {
         $this->datum = $datum;
+
         return $this;
     }
 
@@ -266,12 +275,14 @@ class Vote extends ModelEntity
      * Sets the vote activation-status
      * 1 = accepted, 0 = not accepted yet
      *
-     * @param integer $active
+     * @param int $active
+     *
      * @return Vote
      */
     public function setActive($active)
     {
         $this->active = $active;
+
         return $this;
     }
 
@@ -279,7 +290,7 @@ class Vote extends ModelEntity
      * Gets the activation-status of the vote
      * 1 = accepted, 0 = not accepted yet
      *
-     * @return integer
+     * @return int
      */
     public function getActive()
     {
@@ -290,11 +301,13 @@ class Vote extends ModelEntity
      * Sets the email of the writer
      *
      * @param string $email
+     *
      * @return Vote
      */
     public function setEmail($email)
     {
         $this->email = $email;
+
         return $this;
     }
 
@@ -312,11 +325,13 @@ class Vote extends ModelEntity
      * Sets the answer of the shop-owner to a vote
      *
      * @param string $answer
+     *
      * @return Vote
      */
     public function setAnswer($answer)
     {
         $this->answer = $answer;
+
         return $this;
     }
 
@@ -334,6 +349,7 @@ class Vote extends ModelEntity
      * Sets the datum of the answer
      *
      * @param \DateTime|string $answer_date
+     *
      * @return Vote
      */
     public function setAnswerDate($answer_date)
@@ -342,6 +358,7 @@ class Vote extends ModelEntity
             $answer_date = new \DateTime($answer_date);
         }
         $this->answer_date = $answer_date;
+
         return $this;
     }
 
@@ -358,6 +375,7 @@ class Vote extends ModelEntity
     /**
      * OWNING SIDE
      * of the association between votes and article
+     *
      * @return \Shopware\Models\Article\Article
      */
     public function getArticle()
@@ -367,11 +385,13 @@ class Vote extends ModelEntity
 
     /**
      * @param \Shopware\Models\Article\Article|array|null $article
+     *
      * @return \Shopware\Models\Article\Vote
      */
     public function setArticle($article)
     {
         $this->article = $article;
+
         return $this;
     }
 

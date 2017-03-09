@@ -24,7 +24,7 @@
 
 /**
  * @category  Shopware
- * @package   Shopware\Tests
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
 class ConfigTest extends Enlight_Components_Test_TestCase
@@ -36,12 +36,12 @@ class ConfigTest extends Enlight_Components_Test_TestCase
     {
         // Configure snippet database adapter
         $adapter = new Shopware\Components\Snippet\DbAdapter([
-            'sectionColumn' => ['shopID', 'localeID']
+            'sectionColumn' => ['shopID', 'localeID'],
         ]);
 
         // Simple default config object with section
         $config = new \Enlight_Config([], [
-            'section' => '1:1'
+            'section' => '1:1',
         ]);
 
         // Write multiple times

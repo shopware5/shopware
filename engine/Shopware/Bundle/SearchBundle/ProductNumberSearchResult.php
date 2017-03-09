@@ -31,7 +31,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
  * Defines the search result of the search gateway.
  *
  * @category  Shopware
- * @package   Shopware\Bundle\SearchBundle
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ProductNumberSearchResult extends Extendable
@@ -52,10 +52,10 @@ class ProductNumberSearchResult extends Extendable
     protected $facets;
 
     /**
-     * @param BaseProduct[] $products Indexed by the product order number
-     * @param int $totalCount
+     * @param BaseProduct[]          $products   Indexed by the product order number
+     * @param int                    $totalCount
      * @param FacetResultInterface[] $facets
-     * @param array $attributes
+     * @param array                  $attributes
      */
     public function __construct($products, $totalCount, $facets, $attributes = [])
     {
@@ -98,7 +98,7 @@ class ProductNumberSearchResult extends Extendable
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function jsonSerialize()
     {

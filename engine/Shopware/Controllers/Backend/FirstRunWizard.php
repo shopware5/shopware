@@ -1,6 +1,27 @@
 <?php
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
 
-use Shopware\Bundle\StoreFrontBundle;
 use Shopware\Bundle\PluginInstallerBundle\Service\AccountManagerService;
 use Shopware\Bundle\PluginInstallerBundle\Struct\AccessTokenStruct;
 use Shopware\Bundle\PluginInstallerBundle\Struct\LocaleStruct;
@@ -15,23 +36,23 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
         $value = (bool) $this->Request()->getParam('value');
         $element = Shopware()->Models()
             ->getRepository('Shopware\Models\Config\Element')
-            ->findOneBy(array('name' => 'firstRunWizardEnabled'));
+            ->findOneBy(['name' => 'firstRunWizardEnabled']);
 
         $defaultShop = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop')->getDefault();
 
-        $requestElements = array(
-            array(
+        $requestElements = [
+            [
                 'id' => $element->getId(),
                 'name' => $element->getName(),
-                'values' => array(
-                    array(
+                'values' => [
+                    [
                         'value' => $value,
-                        'shopId' => $defaultShop->getId()
-                    )
-                ),
-                'type' => 'number'
-            )
-        );
+                        'shopId' => $defaultShop->getId(),
+                    ],
+                ],
+                'type' => 'number',
+            ],
+        ];
 
         /** @var \Shopware\Bundle\PluginInstallerBundle\StoreClient $storeClient */
         $storeClient = $this->container->get('shopware_plugininstaller.store_client');
@@ -54,20 +75,20 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
          * Save theme config
          */
         $themeConfigKeys = [
-            'desktopLogo'
+            'desktopLogo',
         ];
 
         $themeConfigValues = array_map(function ($configKey) use ($defaultShop, $values) {
             return [
                 'elementName' => $configKey,
                 'shopId' => $defaultShop->getId(),
-                'value' => array_key_exists($configKey, $values) ? $values[$configKey] : ''
+                'value' => array_key_exists($configKey, $values) ? $values[$configKey] : '',
             ];
         }, $themeConfigKeys);
 
         $theme = $this->container->get('models')
             ->getRepository('Shopware\Models\Shop\Template')
-            ->findOneBy(array('template' => 'Responsive'));
+            ->findOneBy(['template' => 'Responsive']);
 
         $this->container->get('theme_service')->saveConfig(
             $theme,
@@ -81,30 +102,30 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
             'address',
             'bankAccount',
             'company',
-            'metaIsFamilyFriendly'
+            'metaIsFamilyFriendly',
         ];
 
         $shopConfigValues = array_intersect_key($values, array_flip($shopConfigKeys));
-        $shopConfigValues['metaIsFamilyFriendly'] = (bool) ($shopConfigValues['metaIsFamilyFriendly'] === "true");
+        $shopConfigValues['metaIsFamilyFriendly'] = (bool) ($shopConfigValues['metaIsFamilyFriendly'] === 'true');
 
-        $requestElements = array();
+        $requestElements = [];
 
         foreach ($shopConfigValues as $configName => $configValue) {
             $element = Shopware()->Models()
                 ->getRepository('Shopware\Models\Config\Element')
-                ->findOneBy(array('name' => $configName));
+                ->findOneBy(['name' => $configName]);
 
-            $requestElements[] = array(
+            $requestElements[] = [
                 'id' => $element->getId(),
                 'name' => $element->getName(),
-                'values' => array(
-                    array(
+                'values' => [
+                    [
                         'value' => $configValue,
-                        'shopId' => $defaultShop->getId()
-                    )
-                ),
-                'type' => 'number'
-            );
+                        'shopId' => $defaultShop->getId(),
+                    ],
+                ],
+                'type' => 'number',
+            ];
         }
 
         $this->Request()->setParam('elements', $requestElements);
@@ -122,13 +143,13 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
             ->getDefault();
         $theme = $this->container->get('models')
             ->getRepository('Shopware\Models\Shop\Template')
-            ->findOneBy(array('template' => 'Responsive'));
+            ->findOneBy(['template' => 'Responsive']);
 
         /**
          * Load theme config values
          */
         $themeConfigKeys = [
-            'desktopLogo'
+            'desktopLogo',
         ];
 
         $themeConfigData = $this->container->get('theme_service')->getConfig(
@@ -157,14 +178,14 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
             'address',
             'bankAccount',
             'company',
-            'metaIsFamilyFriendly'
+            'metaIsFamilyFriendly',
         ];
 
         $builder = $this->container->get('models')->createQueryBuilder();
-        $builder->select(array(
+        $builder->select([
             'elements',
-            'values'
-        ))
+            'values',
+        ])
             ->from('Shopware\Models\Config\Element', 'elements')
             ->leftJoin('elements.values', 'values', 'WITH', 'values.shopId = :shopId')
             ->where('elements.name IN (:optionNames)')
@@ -187,17 +208,18 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
             $shopConfigValues[$shopConfig['name']] = $value;
         }
 
-        $this->View()->assign(array(
+        $this->View()->assign([
             'success' => true,
-            'data' => array_merge($shopConfigValues, $themeConfigValues)
-        ));
+            'data' => array_merge($shopConfigValues, $themeConfigValues),
+        ]);
     }
 
     /**
      * Tests connectivity to SBP server
      *
-     * @return Enlight_View|Enlight_View_Default
      * @throws Exception
+     *
+     * @return Enlight_View|Enlight_View_Default
      */
     public function pingServerAction()
     {
@@ -207,17 +229,18 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
         try {
             $isConnected = $accountManagerService->pingServer();
         } catch (Exception $e) {
-            $this->View()->assign(array(
+            $this->View()->assign([
                 'success' => false,
-                'message' => $e->getMessage()
-            ));
+                'message' => $e->getMessage(),
+            ]);
+
             return;
         }
 
-        $this->View()->assign(array(
+        $this->View()->assign([
             'success' => true,
-            'message' => $isConnected
-        ));
+            'message' => $isConnected,
+        ]);
     }
 
     /**
@@ -241,22 +264,22 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
         $sql = 'SELECT id, locale FROM s_core_locales WHERE id IN (' . $locales . ')';
         $locales = Shopware()->Db()->fetchPairs($sql);
 
-        $data = array();
+        $data = [];
         foreach ($locales as $id => $locale) {
             list($l, $t) = explode('_', $locale);
             $l = $baseLocale->getTranslation($l, 'language', $targetLocale->getLocale());
             $t = $baseLocale->getTranslation($t, 'territory', $targetLocale->getLocale());
-            $data[] = array(
+            $data[] = [
                 'id' => $id,
-                'name' => "$l ($t)"
-            );
+                'name' => "$l ($t)",
+            ];
         }
 
-        $this->View()->assign(array(
+        $this->View()->assign([
             'success' => true,
             'data' => $data,
-            'total' => count($data)
-        ));
+            'total' => count($data),
+        ]);
     }
 
     /**
@@ -282,10 +305,11 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
             $locale = $this->getCurrentLocale();
             $accountManagerService->registerAccount($shopwareId, $email, $password, $locale->getId());
         } catch (Exception $e) {
-            $this->View()->assign(array(
+            $this->View()->assign([
                 'success' => false,
-                'message' => $e->getMessage()
-            ));
+                'message' => $e->getMessage(),
+            ]);
+
             return;
         }
 
@@ -309,10 +333,11 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
         try {
             $this->getToken($shopwareId, $password);
         } catch (Exception $e) {
-            $this->View()->assign(array(
+            $this->View()->assign([
                 'success' => false,
-                'message' => $e->getMessage()
-            ));
+                'message' => $e->getMessage(),
+            ]);
+
             return;
         }
 
@@ -342,22 +367,23 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
         try {
             $token = $this->getToken($shopwareId, $password);
         } catch (Exception $e) {
-            $this->View()->assign(array(
+            $this->View()->assign([
                 'success' => false,
-                'message' => $e->getMessage()
-            ));
+                'message' => $e->getMessage(),
+            ]);
+
             return;
         }
 
         $domains = $this->getDomains($token);
 
         if (in_array($domain, $domains)) {
-            $this->View()->assign(array(
+            $this->View()->assign([
                 'success' => true,
                 'message' => $this->get('snippets')
                     ->getNamespace('backend/first_run_wizard/main')
-                    ->get('alreadyRegisteredDomain')
-            ));
+                    ->get('alreadyRegisteredDomain'),
+            ]);
         }
 
         /** @var AccountManagerService $accountManagerService */
@@ -366,20 +392,22 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
         try {
             $domainHashData = $accountManagerService->getDomainHash($domain, $token);
         } catch (Exception $e) {
-            $this->View()->assign(array(
+            $this->View()->assign([
                 'success' => false,
-                'message' => $e->getMessage()
-            ));
+                'message' => $e->getMessage(),
+            ]);
+
             return;
         }
 
         $filename = $domainHashData['fileName'];
         $fileContent = $domainHashData['content'];
         if (empty($filename) || empty($fileContent)) {
-            $this->View()->assign(array(
+            $this->View()->assign([
                 'success' => false,
-                'message' => 'Could not perform domain validation due to SBP error'
-            ));
+                'message' => 'Could not perform domain validation due to SBP error',
+            ]);
+
             return;
         }
 
@@ -391,38 +419,41 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
         try {
             $fileSystem->dumpFile($filePath, $fileContent);
         } catch (Exception $e) {
-            $this->View()->assign(array(
+            $this->View()->assign([
                 'success' => false,
-                'message' => $e->getMessage()
-            ));
+                'message' => $e->getMessage(),
+            ]);
+
             return;
         }
 
         try {
             $accountManagerService->verifyDomain($domain, $this->getVersion(), $token);
         } catch (Exception $e) {
-            $this->View()->assign(array(
+            $this->View()->assign([
                 'success' => false,
-                'message' => $e->getMessage()
-            ));
+                'message' => $e->getMessage(),
+            ]);
             $fileSystem->remove($rootDir . DIRECTORY_SEPARATOR . $filename);
+
             return;
         }
 
         try {
             $fileSystem->remove($rootDir . DIRECTORY_SEPARATOR . $filename);
         } catch (Exception $e) {
-            $this->View()->assign(array(
+            $this->View()->assign([
                 'success' => false,
-                'message' => $e->getMessage()
-            ));
+                'message' => $e->getMessage(),
+            ]);
+
             return;
         }
 
-        $this->View()->assign(array(
+        $this->View()->assign([
             'success' => true,
-            'message' => 'domainRegistered'
-        ));
+            'message' => 'domainRegistered',
+        ]);
     }
 
     /**
@@ -437,8 +468,9 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
      * Fetches known server locales. Returns a struct in server format containing
      * info about the current user's locale.
      *
-     * @return LocaleStruct Information about the current locale
      * @throws Exception
+     *
+     * @return LocaleStruct Information about the current locale
      */
     private function getCurrentLocale()
     {
@@ -452,10 +484,11 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
                 /** @var LocaleStruct[] $serverLocales */
                 $serverLocales = $accountManagerService->getLocales();
             } catch (Exception $e) {
-                $this->View()->assign(array(
+                $this->View()->assign([
                     'success' => false,
-                    'message' => $e->getMessage()
-                ));
+                    'message' => $e->getMessage(),
+                ]);
+
                 return;
             }
 
@@ -476,7 +509,9 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
      * Fetches shop domains for the current id
      *
      * @param AccessTokenStruct $token
+     *
      * @throws Exception
+     *
      * @return string[] Information about the current user's shop domains
      */
     private function getDomains(AccessTokenStruct $token)
@@ -487,10 +522,11 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
         try {
             $shopsData = $accountManagerService->getShops($token);
         } catch (Exception $e) {
-            $this->View()->assign(array(
+            $this->View()->assign([
                 'success' => false,
-                'message' => $e->getMessage()
-            ));
+                'message' => $e->getMessage(),
+            ]);
+
             return;
         }
 
@@ -507,15 +543,17 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
      *
      * @param string $shopwareId
      * @param string $password
-     * @return AccessTokenStruct Token to access the API
+     *
      * @throws \RuntimeException
+     *
+     * @return AccessTokenStruct Token to access the API
      */
     private function getToken($shopwareId, $password)
     {
         /** @var AccessTokenStruct $token */
         $token = Shopware()->BackendSession()->accessToken;
 
-        if (empty($token) || $token->getExpire()->getTimestamp() <= strtotime("+30 seconds")) {
+        if (empty($token) || $token->getExpire()->getTimestamp() <= strtotime('+30 seconds')) {
             if (empty($shopwareId) || empty($password)) {
                 throw new \RuntimeException('Could not login - missing login data');
             }

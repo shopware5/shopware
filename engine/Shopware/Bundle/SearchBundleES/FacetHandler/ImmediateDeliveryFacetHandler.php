@@ -28,12 +28,12 @@ use ONGR\ElasticsearchDSL\Aggregation\FilterAggregation;
 use ONGR\ElasticsearchDSL\Aggregation\ValueCountAggregation;
 use ONGR\ElasticsearchDSL\Query\TermQuery;
 use ONGR\ElasticsearchDSL\Search;
-use Shopware\Bundle\SearchBundleES\HandlerInterface;
 use Shopware\Bundle\SearchBundle\Criteria;
-use Shopware\Bundle\SearchBundle\Facet\ImmediateDeliveryFacet;
 use Shopware\Bundle\SearchBundle\CriteriaPartInterface;
+use Shopware\Bundle\SearchBundle\Facet\ImmediateDeliveryFacet;
 use Shopware\Bundle\SearchBundle\FacetResult\BooleanFacetResult;
 use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
+use Shopware\Bundle\SearchBundleES\HandlerInterface;
 use Shopware\Bundle\SearchBundleES\ResultHydratorInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\QueryAliasMapper;
@@ -52,7 +52,7 @@ class ImmediateDeliveryFacetHandler implements HandlerInterface, ResultHydratorI
 
     /**
      * @param \Shopware_Components_Snippet_Manager $snippetManager
-     * @param QueryAliasMapper $queryAliasMapper
+     * @param QueryAliasMapper                     $queryAliasMapper
      */
     public function __construct(
         \Shopware_Components_Snippet_Manager $snippetManager,
@@ -67,7 +67,7 @@ class ImmediateDeliveryFacetHandler implements HandlerInterface, ResultHydratorI
      */
     public function supports(CriteriaPartInterface $criteriaPart)
     {
-        return ($criteriaPart instanceof ImmediateDeliveryFacet);
+        return $criteriaPart instanceof ImmediateDeliveryFacet;
     }
 
     /**
@@ -118,6 +118,7 @@ class ImmediateDeliveryFacetHandler implements HandlerInterface, ResultHydratorI
 
     /**
      * @param Criteria $criteria
+     *
      * @return BooleanFacetResult
      */
     private function createFacet(Criteria $criteria)
@@ -142,6 +143,7 @@ class ImmediateDeliveryFacetHandler implements HandlerInterface, ResultHydratorI
             $criteria->hasCondition('immediate_delivery'),
             $label
         );
+
         return $criteriaPart;
     }
 }

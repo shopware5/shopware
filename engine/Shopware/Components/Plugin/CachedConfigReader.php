@@ -28,7 +28,7 @@ use Shopware\Models\Shop\Shop;
 
 /**
  * @category  Shopware
- * @package   Shopware\Components\Plugin
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
 class CachedConfigReader implements ConfigReader
@@ -52,7 +52,7 @@ class CachedConfigReader implements ConfigReader
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getByPluginName($pluginName, Shop $shop = null)
     {

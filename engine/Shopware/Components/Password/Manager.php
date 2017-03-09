@@ -28,7 +28,7 @@ namespace Shopware\Components\Password;
  * Password Manager
  *
  * @category  Shopware
- * @package   Shopware\Components\Password
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Manager
@@ -36,7 +36,7 @@ class Manager
     /**
      * @var array
      */
-    protected $encoder = array();
+    protected $encoder = [];
 
     /**
      * @var \Shopware_Components_Config
@@ -53,6 +53,7 @@ class Manager
 
     /**
      * @param Encoder\PasswordEncoderInterface $encoder
+     *
      * @throws \Exception
      */
     public function addEncoder(Encoder\PasswordEncoderInterface $encoder)
@@ -67,8 +68,10 @@ class Manager
     }
 
     /**
-     * @param  string  $name
+     * @param string $name
+     *
      * @throws \Exception
+     *
      * @return Encoder\PasswordEncoderInterface
      */
     public function getEncoderByName($name)
@@ -120,21 +123,27 @@ class Manager
     }
 
     /**
-     * @param  string $password
-     * @param  string $hash
-     * @param  string $encoderName
+     * @param string $password
+     * @param string $hash
+     * @param string $encoderName
+     *
      * @return bool
      */
     public function isPasswordValid($password, $hash, $encoderName)
     {
         $encoder = $this->getEncoderByName($encoderName);
 
-        return $encoder->isPasswordValid($password, $hash);
+        if ($encoder->isPasswordValid($password, $hash)) {
+            return true;
+        }
+
+        return $encoder->isPasswordValid(strip_tags($password), $hash);
     }
 
     /**
-     * @param  string $password
-     * @param  string $encoderName
+     * @param string $password
+     * @param string $encoderName
+     *
      * @return string
      */
     public function encodePassword($password, $encoderName)
@@ -145,16 +154,18 @@ class Manager
     }
 
     /**
-     * @param  string $password
-     * @param  string $hash
-     * @param  string $encoderName
+     * @param string $password
+     * @param string $hash
+     * @param string $encoderName
+     *
      * @return string
      */
     public function reencodePassword($password, $hash, $encoderName)
     {
         $encoder = $this->getEncoderByName($encoderName);
 
-        if (!$encoder->isReencodeNeeded($hash)) {
+        $truncated = $password !== strip_tags($password);
+        if (!$truncated && !$encoder->isReencodeNeeded($hash)) {
             return $hash;
         }
 

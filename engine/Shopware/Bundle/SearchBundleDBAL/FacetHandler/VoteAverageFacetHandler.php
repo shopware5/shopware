@@ -26,26 +26,26 @@ namespace Shopware\Bundle\SearchBundleDBAL\FacetHandler;
 
 use Shopware\Bundle\SearchBundle\Condition\VoteAverageCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
+use Shopware\Bundle\SearchBundle\Facet\VoteAverageFacet;
+use Shopware\Bundle\SearchBundle\FacetInterface;
 use Shopware\Bundle\SearchBundle\FacetResult\RadioFacetResult;
 use Shopware\Bundle\SearchBundle\FacetResult\ValueListItem;
 use Shopware\Bundle\SearchBundle\FacetResultInterface;
 use Shopware\Bundle\SearchBundleDBAL\PartialFacetHandlerInterface;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
-use Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactory;
-use Shopware\Bundle\SearchBundle\Facet\VoteAverageFacet;
-use Shopware\Bundle\SearchBundle\FacetInterface;
+use Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactoryInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\QueryAliasMapper;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\SearchBundleDBAL\FacetHandler
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class VoteAverageFacetHandler implements PartialFacetHandlerInterface
 {
     /**
-     * @var QueryBuilderFactory
+     * @var QueryBuilderFactoryInterface
      */
     private $queryBuilderFactory;
 
@@ -65,13 +65,13 @@ class VoteAverageFacetHandler implements PartialFacetHandlerInterface
     private $config;
 
     /**
-     * @param QueryBuilderFactory $queryBuilderFactory
+     * @param QueryBuilderFactoryInterface         $queryBuilderFactory
      * @param \Shopware_Components_Snippet_Manager $snippetManager
-     * @param QueryAliasMapper $queryAliasMapper
-     * @param \Shopware_Components_Config $config
+     * @param QueryAliasMapper                     $queryAliasMapper
+     * @param \Shopware_Components_Config          $config
      */
     public function __construct(
-        QueryBuilderFactory $queryBuilderFactory,
+        QueryBuilderFactoryInterface $queryBuilderFactory,
         \Shopware_Components_Snippet_Manager $snippetManager,
         QueryAliasMapper $queryAliasMapper,
         \Shopware_Components_Config $config
@@ -86,10 +86,11 @@ class VoteAverageFacetHandler implements PartialFacetHandlerInterface
     }
 
     /**
-     * @param FacetInterface $facet
-     * @param Criteria $reverted
-     * @param Criteria $criteria
+     * @param FacetInterface       $facet
+     * @param Criteria             $reverted
+     * @param Criteria             $criteria
      * @param ShopContextInterface $context
+     *
      * @return FacetResultInterface|null
      */
     public function generatePartialFacet(
@@ -109,10 +110,10 @@ class VoteAverageFacetHandler implements PartialFacetHandlerInterface
         $query->groupBy('voteAverage.average');
         $query->select([
             'voteAverage.average',
-            'COUNT(voteAverage.average) as count'
+            'COUNT(voteAverage.average) as count',
         ]);
 
-        /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
+        /** @var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
         $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
 
@@ -122,7 +123,7 @@ class VoteAverageFacetHandler implements PartialFacetHandlerInterface
 
         $activeAverage = null;
         if ($criteria->hasCondition($facet->getName())) {
-            /**@var $condition VoteAverageCondition*/
+            /** @var $condition VoteAverageCondition */
             $condition = $criteria->getCondition($facet->getName());
             $activeAverage = $condition->getAverage();
         }
@@ -133,7 +134,7 @@ class VoteAverageFacetHandler implements PartialFacetHandlerInterface
         if (!empty($facet->getLabel())) {
             $label = $facet->getLabel();
         } else {
-            $label =  $this->snippetNamespace->get($facet->getName(), 'Shipping free');
+            $label = $this->snippetNamespace->get($facet->getName(), 'Shipping free');
         }
 
         return new RadioFacetResult(
@@ -149,17 +150,19 @@ class VoteAverageFacetHandler implements PartialFacetHandlerInterface
 
     /**
      * Checks if the passed facet can be handled by this class.
+     *
      * @param FacetInterface $facet
+     *
      * @return bool
      */
     public function supportsFacet(FacetInterface $facet)
     {
-        return ($facet instanceof VoteAverageFacet);
+        return $facet instanceof VoteAverageFacet;
     }
 
     /**
      * @param ShopContextInterface $context
-     * @param QueryBuilder $query
+     * @param QueryBuilder         $query
      */
     private function joinVoteAverage(ShopContextInterface $context, QueryBuilder $query)
     {
@@ -185,7 +188,8 @@ class VoteAverageFacetHandler implements PartialFacetHandlerInterface
 
     /**
      * @param array $data
-     * @param int $activeAverage
+     * @param int   $activeAverage
+     *
      * @return array
      */
     private function buildItems($data, $activeAverage)
@@ -195,7 +199,7 @@ class VoteAverageFacetHandler implements PartialFacetHandlerInterface
         });
 
         $values = [];
-        for ($i = 1; $i <= 4; $i++) {
+        for ($i = 1; $i <= 4; ++$i) {
             $affected = array_filter($data, function ($value) use ($i) {
                 return $value['average'] >= $i;
             });

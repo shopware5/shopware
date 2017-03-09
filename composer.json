@@ -43,6 +43,7 @@
         "symfony/finder": "2.8.6",
         "symfony/console": "2.8.6",
         "symfony/form": "2.8.6",
+        "symfony/process": "2.8.6",
         "monolog/monolog": "1.19.0",
         "doctrine/common": "2.6.1",
         "doctrine/dbal": "2.5.4",
@@ -65,8 +66,8 @@
         "ext-zend-opcache": "*"
     },
     "require-dev": {
-        "phpunit/phpunit": "~5.6",
-        "phpunit/dbunit": "~1.4",
+        "phpunit/phpunit": "~5.6||~6.0.5",
+        "phpunit/dbunit": "~2.0|| ~3.0",
         "behat/behat": "~3.1",
         "behat/mink": "~1.7",
         "behat/mink-extension": "~2.1",
@@ -104,7 +105,8 @@
             "Shopware\\Tests\\Mink\\": "tests/Mink/features/bootstrap",
             "Shopware\\Tests\\Unit\\": "tests/Unit",
             "Shopware\\Tests\\Functional\\": "tests/Functional"
-        }
+        },
+        "files": ["tests/dbunit_shims.php"]
     },
     "config": {
         "autoloader-suffix": "Shopware",

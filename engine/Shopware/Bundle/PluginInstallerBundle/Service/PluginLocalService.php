@@ -34,7 +34,6 @@ use Shopware\Bundle\PluginInstallerBundle\Struct\StructHydrator;
 
 /**
  * Class PluginLocalService
- * @package Shopware\Bundle\PluginInstallerBundle\Service
  */
 class PluginLocalService
 {
@@ -49,7 +48,7 @@ class PluginLocalService
     private $hydrator;
 
     /**
-     * @param Connection $connection
+     * @param Connection     $connection
      * @param StructHydrator $hydrator
      */
     public function __construct(Connection $connection, StructHydrator $hydrator)
@@ -60,6 +59,7 @@ class PluginLocalService
 
     /**
      * @param ListingRequest $context
+     *
      * @return ListingResultStruct
      */
     public function getListing(ListingRequest $context)
@@ -75,7 +75,7 @@ class PluginLocalService
         $query->setFirstResult($context->getOffset())
             ->setMaxResults($context->getLimit());
 
-        /**@var $statement \PDOStatement*/
+        /** @var $statement \PDOStatement */
         $statement = $query->execute();
 
         $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
@@ -89,8 +89,59 @@ class PluginLocalService
     }
 
     /**
+     * @param PluginsByTechnicalNameRequest $context
+     *
+     * @return PluginStruct
+     */
+    public function getPlugin(PluginsByTechnicalNameRequest $context)
+    {
+        $plugin = $this->getPlugins($context);
+
+        return array_shift($plugin);
+    }
+
+    /**
+     * @param PluginsByTechnicalNameRequest $context
+     *
+     * @return PluginStruct[]
+     */
+    public function getPlugins(PluginsByTechnicalNameRequest $context)
+    {
+        $query = $this->getQuery();
+        $query->andWhere('plugin.name IN (:names)')
+            ->setParameter(
+                ':names',
+                $context->getTechnicalNames(),
+                Connection::PARAM_STR_ARRAY
+            );
+
+        /** @var $statement \PDOStatement */
+        $statement = $query->execute();
+
+        $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
+
+        return $this->iteratePlugins($data);
+    }
+
+    /**
+     * @return array indexed by technical name, value contains the version
+     */
+    public function getPluginsForUpdateCheck()
+    {
+        $query = $this->connection->createQueryBuilder();
+        $query->select(['plugin.name', 'plugin.version'])
+            ->from('s_core_plugins', 'plugin')
+            ->where('plugin.capability_update = 1');
+
+        /** @var $statement \PDOStatement */
+        $statement = $query->execute();
+
+        return $statement->fetchAll(\PDO::FETCH_KEY_PAIR);
+    }
+
+    /**
      * @param ListingRequest $context
-     * @param QueryBuilder $builder
+     * @param QueryBuilder   $builder
      */
     private function addSortings(ListingRequest $context, QueryBuilder $builder)
     {
@@ -108,40 +159,8 @@ class PluginLocalService
     }
 
     /**
-     * @param PluginsByTechnicalNameRequest $context
-     * @return PluginStruct
-     */
-    public function getPlugin(PluginsByTechnicalNameRequest $context)
-    {
-        $plugin = $this->getPlugins($context);
-
-        return array_shift($plugin);
-    }
-
-    /**
-     * @param PluginsByTechnicalNameRequest $context
-     * @return PluginStruct[]
-     */
-    public function getPlugins(PluginsByTechnicalNameRequest $context)
-    {
-        $query = $this->getQuery();
-        $query->andWhere('plugin.name IN (:names)')
-            ->setParameter(
-                ':names',
-                $context->getTechnicalNames(),
-                Connection::PARAM_STR_ARRAY
-            );
-
-        /**@var $statement \PDOStatement*/
-        $statement = $query->execute();
-
-        $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
-
-        return $this->iteratePlugins($data);
-    }
-
-    /**
      * @param $plugins
+     *
      * @return \Shopware\Bundle\PluginInstallerBundle\Struct\PluginStruct[]
      */
     private function iteratePlugins($plugins)
@@ -156,23 +175,8 @@ class PluginLocalService
     }
 
     /**
-     * @return array indexed by technical name, value contains the version
-     */
-    public function getPluginsForUpdateCheck()
-    {
-        $query = $this->connection->createQueryBuilder();
-        $query->select(['plugin.name', 'plugin.version'])
-            ->from('s_core_plugins', 'plugin')
-            ->where('plugin.capability_update = 1');
-
-        /**@var $statement \PDOStatement*/
-        $statement = $query->execute();
-
-        return $statement->fetchAll(\PDO::FETCH_KEY_PAIR);
-    }
-
-    /**
      * @param string $name
+     *
      * @return bool|string
      */
     private function getIconOfPlugin($name)
@@ -187,9 +191,9 @@ class PluginLocalService
 
         if (file_exists($path) && $front && $front->Request()) {
             return $front->Request()->getBasePath() . $relativePath;
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     /**
@@ -225,7 +229,7 @@ class PluginLocalService
             'licence.type as __licence_type',
             'licence.creation as __licence_creation',
             'licence.expiration as __licence_expiration',
-            'licence.license as __licence_license'
+            'licence.license as __licence_license',
         ]);
 
         $query->from('s_core_plugins', 'plugin')

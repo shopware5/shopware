@@ -1,14 +1,37 @@
 <?php
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
+
 namespace Shopware\Components\Routing\Generators;
 
-use Shopware\Components\QueryAliasMapper;
-use Shopware\Components\Routing\GeneratorListInterface;
-use Shopware\Components\Routing\Context;
 use Doctrine\DBAL\Connection;
+use Shopware\Components\QueryAliasMapper;
+use Shopware\Components\Routing\Context;
+use Shopware\Components\Routing\GeneratorListInterface;
 
 /**
  * @category  Shopware
- * @package   Shopware\Components\Routing
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class RewriteGenerator implements GeneratorListInterface
@@ -23,13 +46,13 @@ class RewriteGenerator implements GeneratorListInterface
      */
     private $queryAliasMapper;
 
-    /**
-     * @var \Enlight_Event_EventManager $eventManager
-     */private $eventManager;
+/**
+ * @var \Enlight_Event_EventManager
+ */private $eventManager;
 
     /**
-     * @param Connection $connection
-     * @param QueryAliasMapper $queryAliasMapper
+     * @param Connection                  $connection
+     * @param QueryAliasMapper            $queryAliasMapper
      * @param \Enlight_Event_EventManager $eventManager
      */
     public function __construct(
@@ -43,20 +66,13 @@ class RewriteGenerator implements GeneratorListInterface
     }
 
     /**
-     * @return string
-     */
-    protected function getAssembleQuery()
-    {
-        $sql = 'SELECT org_path, path FROM s_core_rewrite_urls WHERE subshopID=:shopId AND org_path IN (:orgPath) AND main=1 ORDER BY id DESC';
-
-        return $sql;
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function generate(array $params, Context $context)
     {
+        if (array_key_exists('_seo', $params) && !$params['_seo']) {
+            return $params;
+        }
         $orgQuery = $this->preAssemble($params, $context);
 
         if (!is_array($orgQuery)) {
@@ -87,10 +103,10 @@ class RewriteGenerator implements GeneratorListInterface
         return $url;
     }
 
-
     /**
-     * @param array $list
+     * @param array   $list
      * @param Context $context
+     *
      * @return array
      */
     public function generateList(array $list, Context $context)
@@ -133,64 +149,18 @@ class RewriteGenerator implements GeneratorListInterface
     }
 
     /**
-     * @param array $params
-     * @param Context $context
-     * @return array|bool
+     * @return string
      */
-    private function preAssemble($params, Context $context)
+    protected function getAssembleQuery()
     {
-        if (isset($params['module']) && $params['module'] != 'frontend') {
-            return false;
-        }
+        $sql = 'SELECT org_path, path FROM s_core_rewrite_urls WHERE subshopID=:shopId AND org_path IN (:orgPath) AND main=1 ORDER BY id DESC';
 
-        if ($context->getShopId() === null) {
-            return false;
-        }
-
-        if (!isset($params['controller'])) {
-            return false;
-        }
-
-        return $this->getOrgQueryArray($params);
+        return $sql;
     }
-
-    /**
-     * @param array $list
-     * @param Context $context
-     * @return array
-     * @throws \Doctrine\DBAL\DBALException
-     */
-    private function rewriteList(array $list, Context $context)
-    {
-        $query = $this->getAssembleQuery();
-        $statement = $this->connection->executeQuery(
-            $query,
-            [
-                ':shopId' => $context->getShopId(),
-                ':orgPath' => $list
-            ],
-            [
-                ':shopId' => \PDO::PARAM_INT,
-                ':orgPath' => Connection::PARAM_STR_ARRAY
-            ]
-        );
-
-        $rows = $statement->fetchAll(\PDO::FETCH_KEY_PAIR);
-
-        foreach ($list as $key => $orgPath) {
-            if (isset($rows[$orgPath])) {
-                $list[$key] = $rows[$orgPath];
-            } else {
-                $list[$key] = false;
-            }
-        }
-
-        return $list;
-    }
-
 
     /**
      * @param $query
+     *
      * @return array
      */
     protected function getOrgQueryArray($query)
@@ -210,14 +180,14 @@ class RewriteGenerator implements GeneratorListInterface
                 }
                 break;
             case 'cat':
-                $orgQuery ['sCategory'] = $query['sCategory'];
+                $orgQuery['sCategory'] = $query['sCategory'];
                 break;
             case 'supplier':
-                $orgQuery ['sSupplier'] = $query['sSupplier'];
+                $orgQuery['sSupplier'] = $query['sSupplier'];
                 break;
             case 'campaign':
                 if (isset($query['sCategory'])) {
-                    $orgQuery ['sCategory'] = $query['sCategory'];
+                    $orgQuery['sCategory'] = $query['sCategory'];
                 }
                 $orgQuery['emotionId'] = $query['emotionId'];
                 break;
@@ -255,13 +225,73 @@ class RewriteGenerator implements GeneratorListInterface
             'Shopware_Components_RewriteGenerator_FilterQuery',
             $orgQuery,
             [
-                'query' => $query
+                'query' => $query,
             ]
         );
     }
 
     /**
+     * @param array   $params
+     * @param Context $context
+     *
+     * @return array|bool
+     */
+    private function preAssemble($params, Context $context)
+    {
+        if (isset($params['module']) && $params['module'] != 'frontend') {
+            return false;
+        }
+
+        if ($context->getShopId() === null) {
+            return false;
+        }
+
+        if (!isset($params['controller'])) {
+            return false;
+        }
+
+        return $this->getOrgQueryArray($params);
+    }
+
+    /**
+     * @param array   $list
+     * @param Context $context
+     *
+     * @throws \Doctrine\DBAL\DBALException
+     *
+     * @return array
+     */
+    private function rewriteList(array $list, Context $context)
+    {
+        $query = $this->getAssembleQuery();
+        $statement = $this->connection->executeQuery(
+            $query,
+            [
+                ':shopId' => $context->getShopId(),
+                ':orgPath' => $list,
+            ],
+            [
+                ':shopId' => \PDO::PARAM_INT,
+                ':orgPath' => Connection::PARAM_STR_ARRAY,
+            ]
+        );
+
+        $rows = $statement->fetchAll(\PDO::FETCH_KEY_PAIR);
+
+        foreach ($list as $key => $orgPath) {
+            if (isset($rows[$orgPath])) {
+                $list[$key] = $rows[$orgPath];
+            } else {
+                $list[$key] = false;
+            }
+        }
+
+        return $list;
+    }
+
+    /**
      * @param array $query
+     *
      * @return string
      */
     private function rewriteQuery($query)

@@ -74,7 +74,11 @@ td.head  {
 </head>
 
 <body>
-{foreach from=$Pages item=postions name="pagingLoop" key=page}
+{foreach from=$Pages item=positions name="pagingLoop" key=page}
+
+    {* @Deprecated: Wrong variable will be removed in next major release *}
+    {$postions = $positions}
+
     <div id="head_logo">
         {$Containers.Logo.value}
     </div>
@@ -85,31 +89,37 @@ td.head  {
                 {assign var="address" value="billing"}
             {/block}
             <div id="head_sender">
-                <p class="sender">{$Containers.Header_Sender.value}</p>
-                {$User.$address.company}<br />
-                {$User.$address.salutation|salutation}
-                {if {config name="displayprofiletitle"}}
-                    {$User.$address.title}<br/>
-                {/if}
-                {$User.$address.firstname} {$User.$address.lastname}<br />
-                {$User.$address.street}<br />
-                {block name="document_index_address_additionalAddressLines"}
-                    {if {config name=showAdditionAddressLine1}}
-                        {$User.$address.additional_address_line1}<br />
-                    {/if}
-                    {if {config name=showAdditionAddressLine2}}
-                        {$User.$address.additional_address_line2}<br />
-                    {/if}
-                {/block}
-                {block name="document_index_address_cityZip"}
-                    {if {config name=showZipBeforeCity}}
-                        {$User.$address.zipcode} {$User.$address.city}<br />
-                    {else}
-                        {$User.$address.city} {$User.$address.zipcode}<br />
-                    {/if}
-                {/block}
-                {block name="document_index_address_countryData"}
-                    {if $User.$address.state.shortcode}{$User.$address.state.shortcode} - {/if}{$User.$address.country.countryen}<br />
+                {block name="document_index_address"}
+                    {block name="document_index_address_sender"}
+                        <p class="sender">{$Containers.Header_Sender.value}</p>
+                    {/block}
+                    {block name="document_index_address_base"}
+                        {$User.$address.company}<br />
+                        {$User.$address.salutation|salutation}
+                        {if {config name="displayprofiletitle"}}
+                            {$User.$address.title}<br/>
+                        {/if}
+                        {$User.$address.firstname} {$User.$address.lastname}<br />
+                        {$User.$address.street}<br />
+                    {/block}
+                    {block name="document_index_address_additionalAddressLines"}
+                        {if {config name=showAdditionAddressLine1}}
+                            {$User.$address.additional_address_line1}<br />
+                        {/if}
+                        {if {config name=showAdditionAddressLine2}}
+                            {$User.$address.additional_address_line2}<br />
+                        {/if}
+                    {/block}
+                    {block name="document_index_address_cityZip"}
+                        {if {config name=showZipBeforeCity}}
+                            {$User.$address.zipcode} {$User.$address.city}<br />
+                        {else}
+                            {$User.$address.city} {$User.$address.zipcode}<br />
+                        {/if}
+                    {/block}
+                    {block name="document_index_address_countryData"}
+                        {if $User.$address.state.shortcode}{$User.$address.state.shortcode} - {/if}{$User.$address.country.countryen}<br />
+                    {/block}
                 {/block}
             </div>
         {/if}
@@ -129,7 +139,7 @@ td.head  {
                 </strong>
         </div>
     </div>
-    
+
     <div id="head_bottom" style="clear:both">
         {block name="document_index_head_bottom"}
             <h1>{s name="DocumentIndexInvoiceNumber"}Rechnung Nr. {$Document.id}{/s}</h1>
@@ -187,7 +197,7 @@ td.head  {
             {/if}
         {/block}
     </tr>
-    {foreach from=$postions item=position key=number}
+    {foreach from=$positions item=position key=number}
     {block name="document_index_table_each"}
     <tr>
         {block name="document_index_table_pos"}
@@ -205,7 +215,7 @@ td.head  {
             {if $position.name == 'Versandkosten'}
                 {s name="DocumentIndexPositionNameShippingCosts"}{$position.name}{/s}
             {else}
-                {s name="DocumentIndexPositionNameDefault"}{$position.name|nl2br}{/s}
+                {s name="DocumentIndexPositionNameDefault"}{$position.name|nl2br|wordwrap:65:"<br />\n"}{/s}
             {/if}
             </td>
         {/block}
@@ -244,7 +254,7 @@ td.head  {
     </tbody>
     </table>
     </div>
-    
+
     {if $smarty.foreach.pagingLoop.last}
         {block name="document_index_amount"}
             <div id="amount">
@@ -318,7 +328,7 @@ td.head  {
                     </div>
                 {/if}
             {/block}
-                
+
                 {$Containers.Content_Info.value}
             {block name="document_index_info_currency"}
                 {if $Order._currency.factor > 1}{s name="DocumentIndexCurrency"}
@@ -329,7 +339,7 @@ td.head  {
             </div>
         {/block}
     {/if}
-    
+
     <div id="footer">
     {$Containers.Footer.value}
     </div>

@@ -1,4 +1,26 @@
 <?php
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
 
 namespace Shopware\Tests\Functional\Bundle\SearchBundle\Condition;
 
@@ -12,18 +34,6 @@ use Shopware\Tests\Functional\Bundle\StoreFrontBundle\TestCase;
  */
 class ProductAttributeConditionTest extends TestCase
 {
-    protected function getProduct(
-        $number,
-        ShopContext $context,
-        Category $category = null,
-        $attribute = array('attr1' => 10)
-    ) {
-        $product = parent::getProduct($number, $context, $category);
-        $product['mainDetail']['attribute'] = $attribute;
-
-        return $product;
-    }
-
     public function testEquals()
     {
         $condition = new ProductAttributeCondition(
@@ -33,13 +43,13 @@ class ProductAttributeConditionTest extends TestCase
         );
 
         $this->search(
-            array(
-                'First-Match' => array('attr1' => 10),
-                'Not-Match'   => array('attr1' => 20),
-            ),
-            array('First-Match'),
+            [
+                'First-Match' => ['attr1' => 10],
+                'Not-Match' => ['attr1' => 20],
+            ],
+            ['First-Match'],
             null,
-            array($condition)
+            [$condition]
         );
     }
 
@@ -52,14 +62,14 @@ class ProductAttributeConditionTest extends TestCase
         );
 
         $this->search(
-            array(
-                'First-Match'  => array('attr1' => 'Dunkel-Rot'),
-                'Second-Match' => array('attr1' => 'Rot'),
-                'Not-Match'    => array('attr1' => 'Grün'),
-            ),
-            array('First-Match', 'Second-Match'),
+            [
+                'First-Match' => ['attr1' => 'Dunkel-Rot'],
+                'Second-Match' => ['attr1' => 'Rot'],
+                'Not-Match' => ['attr1' => 'Grün'],
+            ],
+            ['First-Match', 'Second-Match'],
             null,
-            array($condition)
+            [$condition]
         );
     }
 
@@ -72,15 +82,15 @@ class ProductAttributeConditionTest extends TestCase
         );
 
         $this->search(
-            array(
-                'First-Match'  => array('attr1' => 'Grün'),
-                'Second-Match' => array('attr1' => 'Rot-Grün'),
-                'Not-Match'    => array('attr1' => 'Grün-Rot'),
-                'Not-Match2'   => array('attr1' => 'Dunkel-Rot'),
-            ),
-            array('First-Match', 'Second-Match'),
+            [
+                'First-Match' => ['attr1' => 'Grün'],
+                'Second-Match' => ['attr1' => 'Rot-Grün'],
+                'Not-Match' => ['attr1' => 'Grün-Rot'],
+                'Not-Match2' => ['attr1' => 'Dunkel-Rot'],
+            ],
+            ['First-Match', 'Second-Match'],
             null,
-            array($condition)
+            [$condition]
         );
     }
 
@@ -93,15 +103,15 @@ class ProductAttributeConditionTest extends TestCase
         );
 
         $this->search(
-            array(
-                'First-Match'  => array('attr1' => 'Grün'),
-                'Second-Match' => array('attr1' => 'Grün-Rot'),
-                'Not-Match'    => array('attr1' => 'Rot-Grün'),
-                'Not-Match2'   => array('attr1' => 'Dunkel-Rot'),
-            ),
-            array('First-Match', 'Second-Match'),
+            [
+                'First-Match' => ['attr1' => 'Grün'],
+                'Second-Match' => ['attr1' => 'Grün-Rot'],
+                'Not-Match' => ['attr1' => 'Rot-Grün'],
+                'Not-Match2' => ['attr1' => 'Dunkel-Rot'],
+            ],
+            ['First-Match', 'Second-Match'],
             null,
-            array($condition)
+            [$condition]
         );
     }
 
@@ -110,19 +120,19 @@ class ProductAttributeConditionTest extends TestCase
         $condition = new ProductAttributeCondition(
             'attr1',
             ProductAttributeCondition::OPERATOR_IN,
-            array('Grün', 'Rot')
+            ['Grün', 'Rot']
         );
 
         $this->search(
-            array(
-                'First-Match'  => array('attr1' => 'Grün'),
-                'Second-Match' => array('attr1' => 'Rot'),
-                'Not-Match'    => array('attr1' => 'Rot-Grün'),
-                'Not-Match2'   => array('attr1' => 'Dunkel-Rot'),
-            ),
-            array('First-Match', 'Second-Match'),
+            [
+                'First-Match' => ['attr1' => 'Grün'],
+                'Second-Match' => ['attr1' => 'Rot'],
+                'Not-Match' => ['attr1' => 'Rot-Grün'],
+                'Not-Match2' => ['attr1' => 'Dunkel-Rot'],
+            ],
+            ['First-Match', 'Second-Match'],
             null,
-            array($condition)
+            [$condition]
         );
     }
 
@@ -135,15 +145,15 @@ class ProductAttributeConditionTest extends TestCase
         );
 
         $this->search(
-            array(
-                'First-Match'  => array('attr1' => null),
-                'Second-Match' => array('attr1' => null),
-                'Not-Match'    => array('attr1' => 'Rot-Grün'),
-                'Not-Match2'   => array('attr1' => 'Dunkel-Rot'),
-            ),
-            array('First-Match', 'Second-Match'),
+            [
+                'First-Match' => ['attr1' => null],
+                'Second-Match' => ['attr1' => null],
+                'Not-Match' => ['attr1' => 'Rot-Grün'],
+                'Not-Match2' => ['attr1' => 'Dunkel-Rot'],
+            ],
+            ['First-Match', 'Second-Match'],
             null,
-            array($condition)
+            [$condition]
         );
     }
 
@@ -156,15 +166,27 @@ class ProductAttributeConditionTest extends TestCase
         );
 
         $this->search(
-            array(
-                'First-Match'  => array('attr1' => 'Grün'),
-                'Second-Match' => array('attr1' => 'Rot'),
-                'Not-Match'    => array('attr1' => null),
-                'Not-Match2'   => array('attr1' => null),
-            ),
-            array('First-Match', 'Second-Match'),
+            [
+                'First-Match' => ['attr1' => 'Grün'],
+                'Second-Match' => ['attr1' => 'Rot'],
+                'Not-Match' => ['attr1' => null],
+                'Not-Match2' => ['attr1' => null],
+            ],
+            ['First-Match', 'Second-Match'],
             null,
-            array($condition)
+            [$condition]
         );
+    }
+
+    protected function getProduct(
+        $number,
+        ShopContext $context,
+        Category $category = null,
+        $attribute = ['attr1' => 10]
+    ) {
+        $product = parent::getProduct($number, $context, $category);
+        $product['mainDetail']['attribute'] = $attribute;
+
+        return $product;
     }
 }

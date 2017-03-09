@@ -22,17 +22,18 @@
  * our trademarks remain entirely with us.
  */
 
-use Shopware\Bundle\PluginInstallerBundle\Context\RangeDownloadRequest;
 use Shopware\Bundle\PluginInstallerBundle\Context\LicenceRequest;
 use Shopware\Bundle\PluginInstallerBundle\Context\ListingRequest;
 use Shopware\Bundle\PluginInstallerBundle\Context\MetaRequest;
 use Shopware\Bundle\PluginInstallerBundle\Context\OrderRequest;
 use Shopware\Bundle\PluginInstallerBundle\Context\PluginLicenceRequest;
 use Shopware\Bundle\PluginInstallerBundle\Context\PluginsByTechnicalNameRequest;
+use Shopware\Bundle\PluginInstallerBundle\Context\RangeDownloadRequest;
 use Shopware\Bundle\PluginInstallerBundle\Context\UpdateListingRequest;
 use Shopware\Bundle\PluginInstallerBundle\Exception\AuthenticationException;
 use Shopware\Bundle\PluginInstallerBundle\Exception\StoreException;
 use Shopware\Bundle\PluginInstallerBundle\Service\DownloadService;
+use Shopware\Bundle\PluginInstallerBundle\Service\InstallerService;
 use Shopware\Bundle\PluginInstallerBundle\Service\PluginLicenceService;
 use Shopware\Bundle\PluginInstallerBundle\Service\PluginLocalService;
 use Shopware\Bundle\PluginInstallerBundle\Service\PluginStoreService;
@@ -47,7 +48,6 @@ use Shopware\Bundle\PluginInstallerBundle\Struct\PluginInformationStruct;
 use Shopware\Models\Menu\Menu;
 use Shopware\Models\Plugin\Plugin;
 use ShopwarePlugins\SwagUpdate\Components\Steps\FinishResult;
-use Shopware\Bundle\PluginInstallerBundle\Service\InstallerService;
 
 class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Backend_ExtJs
 {
@@ -71,11 +71,12 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
                 $this->getAccessToken()
             );
 
-            /**@var $service DownloadService */
+            /** @var $service DownloadService */
             $service = $this->get('shopware_plugininstaller.plugin_download_service');
             $result = $service->getMetaInformation($request);
         } catch (Exception $e) {
             $this->handleException($e);
+
             return;
         }
 
@@ -84,11 +85,11 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
 
     public function rangeDownloadAction()
     {
-        $url    = $this->Request()->getParam('uri');
+        $url = $this->Request()->getParam('uri');
         $offset = $this->Request()->getParam('offset');
-        $size   = $this->Request()->getParam('size');
-        $sha1   = $this->Request()->getParam('sha1');
-        $name   = $this->Request()->getParam('fileName', 'download.zip');
+        $size = $this->Request()->getParam('size');
+        $sha1 = $this->Request()->getParam('sha1');
+        $name = $this->Request()->getParam('fileName', 'download.zip');
 
         $destination = Shopware()->Container()->getParameter('kernel.root_dir') . '/files/downloads/' . $name;
         if ($offset == 0) {
@@ -98,18 +99,19 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
         $request = new RangeDownloadRequest($url, $offset, $size, $sha1, $destination);
 
         try {
-            /**@var $service DownloadService */
+            /** @var $service DownloadService */
             $service = $this->get('shopware_plugininstaller.plugin_download_service');
             $result = $service->downloadRange($request);
         } catch (Exception $e) {
             $this->handleException($e);
+
             return;
         }
 
         if ($result instanceof FinishResult) {
             $this->View()->assign(['success' => true, 'finish' => true, 'destination' => $destination]);
         } else {
-            /**@var $result \Shopware\Recovery\Update\Steps\ValidResult*/
+            /* @var $result \Shopware\Recovery\Update\Steps\ValidResult */
             $this->View()->assign(['success' => true, 'finish' => false, 'offset' => $result->getOffset()]);
         }
     }
@@ -117,14 +119,14 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
     public function extractAction()
     {
         $technicalName = $this->Request()->getParam('technicalName');
-        $fileName      = $this->Request()->getParam('fileName');
-        $service       = Shopware()->Container()->get('shopware_plugininstaller.plugin_download_service');
+        $fileName = $this->Request()->getParam('fileName');
+        $service = Shopware()->Container()->get('shopware_plugininstaller.plugin_download_service');
 
         try {
             $service->extractPluginZip($fileName, $technicalName);
 
             /** @var InstallerService $pluginManager */
-            $pluginManager  = $this->get('shopware_plugininstaller.plugin_manager');
+            $pluginManager = $this->get('shopware_plugininstaller.plugin_manager');
             $pluginManager->refreshPluginList();
         } catch (Exception $e) {
             $this->View()->assign(['succees' => false, 'message' => $e->getMessage()]);
@@ -154,7 +156,7 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
 
         $this->View()->assign([
             'success' => true,
-            'data' => $categories
+            'data' => $categories,
         ]);
     }
 
@@ -193,6 +195,7 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
                 $pluginInformation = new PluginInformationResultStruct($pluginInformationStructs);
             } catch (\Exception $e) {
                 $this->View()->assign(['succes' => false, 'message' => $e->getMessage()]);
+
                 return;
             }
         }
@@ -203,6 +206,7 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
     {
         if (!$this->isApiAvailable()) {
             $this->View()->assign(['success' => false, 'data' => []]);
+
             return;
         }
 
@@ -245,13 +249,14 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
             $listingResult = $pluginViewService->getStoreListing($context);
         } catch (Exception $e) {
             $this->handleException($e);
+
             return;
         }
 
         $this->View()->assign([
             'success' => true,
             'data' => array_values($listingResult->getPlugins()),
-            'total' => $listingResult->getTotalCount()
+            'total' => $listingResult->getTotalCount(),
         ]);
     }
 
@@ -261,7 +266,7 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
         $pluginManager = $this->get('shopware_plugininstaller.plugin_manager');
         $pluginManager->refreshPluginList();
         $this->View()->assign([
-            'success' => true
+            'success' => true,
         ]);
     }
 
@@ -300,39 +305,8 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
         $this->View()->assign([
             'success' => true,
             'data' => array_values($plugins),
-            'error' => $error
+            'error' => $error,
         ]);
-    }
-
-    /**
-     * Returns the sorting criteria for the plugin listing
-     * Shows installed plugins, then inactive, then uninstalled.
-     * Afterwards applies the custom sorting from the request,
-     * and then 'installation_date DESC' as fallback.
-     *
-     * @return array
-     */
-    private function getListingSorting()
-    {
-        $prioritySorting = [
-            ['property' => 'active', 'direction' => 'DESC'],
-            ['property' => 'installation_date IS NULL', 'direction' => 'ASC']
-        ];
-
-        $fallbackSorting = [
-            ['property' => 'installation_date', 'direction' => 'DESC']
-        ];
-
-        $customSorting = [];
-        foreach ($this->Request()->getParam('sort', []) as $sortData) {
-            if ($sortData['property'] == 'groupingState') {
-                continue;
-            }
-            $sortData['property'] = strtolower(preg_replace('/([a-z])([A-Z])/', '$1_$2', $sortData['property']));
-            $customSorting[] = $sortData;
-        }
-
-        return array_merge($prioritySorting, $customSorting, $fallbackSorting);
     }
 
     public function detailAction()
@@ -367,12 +341,13 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
             $licences = $pluginStoreService->getLicences($context);
         } catch (Exception $e) {
             $this->handleException($e);
+
             return;
         }
 
         $this->View()->assign([
             'success' => true,
-            'data' => array_values($licences)
+            'data' => array_values($licences),
         ]);
     }
 
@@ -380,6 +355,7 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
     {
         if (!$this->isApiAvailable()) {
             $this->View()->assign('success', false);
+
             return;
         }
         $subscriptionService = $this->container->get('shopware_plugininstaller.subscription_service');
@@ -403,13 +379,14 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
             $updates = $pluginViewService->getUpdates($context);
         } catch (Exception $e) {
             $this->handleException($e);
+
             return;
         }
 
         $this->View()->assign([
             'success' => true,
             'data' => array_values($updates->getPlugins()),
-            'loginRecommended' => empty($secret) && $updates->isGtcAcceptanceRequired()
+            'loginRecommended' => empty($secret) && $updates->isGtcAcceptanceRequired(),
         ]);
     }
 
@@ -429,11 +406,15 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
             $expiredPlugins
         );
 
-        /** @var PluginStoreService $pluginStoreService */
-        $pluginStoreService = $this->get('shopware_plugininstaller.plugin_service_store_production');
-        $plugins = $pluginStoreService->getPlugins($context);
+        try {
+            /** @var PluginStoreService $pluginStoreService */
+            $pluginStoreService = $this->get('shopware_plugininstaller.plugin_service_store_production');
+            $plugins = $pluginStoreService->getPlugins($context);
 
-        $this->View()->assign(['success' => true, 'data' => array_values($plugins)]);
+            $this->View()->assign(['success' => true, 'data' => array_values($plugins)]);
+        } catch (\Exception $e) {
+            $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);
+        }
     }
 
     public function checkLicencePluginAction()
@@ -441,20 +422,21 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
         $plugin = $this->getPluginModel('SwagLicense');
 
         switch (true) {
-            case (!$plugin instanceof Shopware\Models\Plugin\Plugin):
+            case !$plugin instanceof Shopware\Models\Plugin\Plugin:
                 $state = 'download';
                 break;
 
-            case ($plugin->getInstalled() == null):
+            case $plugin->getInstalled() == null:
                 $state = 'install';
                 break;
 
-            case (!$plugin->getActive()):
+            case !$plugin->getActive():
                 $state = 'activate';
                 break;
 
             default:
                 $this->View()->assign('success', true);
+
                 return;
         }
 
@@ -470,13 +452,14 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
             $data = $pluginViewService->getPlugin($context);
         } catch (Exception $e) {
             $this->handleException($e);
+
             return;
         }
 
         $this->View()->assign([
             'success' => false,
             'data' => $data,
-            'state' => $state
+            'state' => $state,
         ]);
     }
 
@@ -506,9 +489,11 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
             $storeOrderService->orderPlugin($token, $context);
         } catch (StoreException $e) {
             $this->handleException($e);
+
             return;
         } catch (Exception $e) {
             $this->handleException($e);
+
             return;
         }
 
@@ -538,15 +523,17 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
             $this->loadBasketPlugins($basket, $positions);
         } catch (StoreException $e) {
             $this->handleException($e);
+
             return;
         } catch (Exception $e) {
             $this->handleException($e);
+
             return;
         }
 
         $this->View()->assign([
             'success' => true,
-            'data' => $basket
+            'data' => $basket,
         ]);
     }
 
@@ -555,11 +542,12 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
         $key = $this->Request()->getParam('licenceKey');
 
         try {
-            /**@var $service PluginLicenceService*/
+            /** @var $service PluginLicenceService */
             $service = $this->get('shopware_plugininstaller.plugin_licence_service');
             $service->importLicence($key);
         } catch (Exception $e) {
             $this->handleException($e);
+
             return;
         }
 
@@ -587,7 +575,7 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
         if (!$licence) {
             return $this->View()->assign([
                 'success' => false,
-                'message' => sprintf('Licence for plugin %s not found', $technicalName)
+                'message' => sprintf('Licence for plugin %s not found', $technicalName),
             ]);
         }
 
@@ -596,11 +584,12 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
         }
 
         try {
-            /**@var $service PluginLicenceService*/
+            /** @var $service PluginLicenceService */
             $service = $this->get('shopware_plugininstaller.plugin_licence_service');
             $service->importLicence($licence->getLicenseKey());
         } catch (Exception $e) {
             $this->handleException($e);
+
             return;
         }
 
@@ -622,6 +611,7 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
     {
         if (!$this->isApiAvailable()) {
             $this->View()->assign('success', false);
+
             return;
         }
 
@@ -634,6 +624,7 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
             $token = $storeClient->getAccessToken($shopwareId, $password);
         } catch (StoreException $e) {
             $this->handleException($e);
+
             return;
         }
 
@@ -649,7 +640,7 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
         $repo = $em->getRepository(Menu::class);
 
         /** @var Menu $menuEntry */
-        $menuEntry = $repo->findOneBy(array('label' => 'Connect'));
+        $menuEntry = $repo->findOneBy(['label' => 'Connect']);
         if ($menuEntry) {
             $menuEntry->setActive(false);
             $em->persist($menuEntry);
@@ -657,8 +648,39 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
         }
 
         $this->View()->assign([
-            'success' => true
+            'success' => true,
         ]);
+    }
+
+    /**
+     * Returns the sorting criteria for the plugin listing
+     * Shows installed plugins, then inactive, then uninstalled.
+     * Afterwards applies the custom sorting from the request,
+     * and then 'installation_date DESC' as fallback.
+     *
+     * @return array
+     */
+    private function getListingSorting()
+    {
+        $prioritySorting = [
+            ['property' => 'active', 'direction' => 'DESC'],
+            ['property' => 'installation_date IS NULL', 'direction' => 'ASC'],
+        ];
+
+        $fallbackSorting = [
+            ['property' => 'installation_date', 'direction' => 'DESC'],
+        ];
+
+        $customSorting = [];
+        foreach ($this->Request()->getParam('sort', []) as $sortData) {
+            if ($sortData['property'] == 'groupingState') {
+                continue;
+            }
+            $sortData['property'] = strtolower(preg_replace('/([a-z])([A-Z])/', '$1_$2', $sortData['property']));
+            $customSorting[] = $sortData;
+        }
+
+        return array_merge($prioritySorting, $customSorting, $fallbackSorting);
     }
 
     /**
@@ -674,7 +696,7 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
             return null;
         }
 
-        /**@var $token AccessTokenStruct*/
+        /** @var $token AccessTokenStruct */
         $token = $this->get('BackendSession')->offsetGet('store_token');
         $token = unserialize($token);
 
@@ -707,19 +729,23 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
 
     /**
      * @param string $technicalName
+     *
      * @return Plugin
      */
     private function getPluginModel($technicalName)
     {
         $repo = Shopware()->Models()->getRepository(Plugin::class);
         $plugin = $repo->findOneBy(['name' => $technicalName]);
+
         return $plugin;
     }
 
     /**
      * @param StoreException $exception
-     * @return mixed|string
+     *
      * @throws Exception
+     *
+     * @return mixed|string
      */
     private function getExceptionMessage(StoreException $exception)
     {
@@ -780,8 +806,9 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
     }
 
     /**
-     * @return PluginCategoryService
      * @throws Exception
+     *
+     * @return PluginCategoryService
      */
     private function getCategoryService()
     {
@@ -837,16 +864,16 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
     {
         if (!($e instanceof StoreException)) {
             $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);
+
             return;
         }
 
         $message = $this->getExceptionMessage($e);
 
-
         $this->View()->assign([
             'success' => false,
             'message' => $message,
-            'authentication' => ($e instanceof AuthenticationException)
+            'authentication' => ($e instanceof AuthenticationException),
         ]);
     }
 

@@ -33,7 +33,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
 
 /**
  * @category  Shopware
- * @package   Shopware\Controllers\Widgets
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
@@ -74,13 +74,128 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
             $this->View()->loadTemplate('widgets/emotion/' . $emotion->getTemplate()->getFile());
         }
 
-        $this->View()->assign('categoryId', (int)$this->Request()->getParam('categoryId'));
-        $this->View()->assign('Controller', (string)$this->Request()->getParam('controllerName'));
+        $this->View()->assign('categoryId', (int) $this->Request()->getParam('categoryId'));
+        $this->View()->assign('Controller', (string) $this->Request()->getParam('controllerName'));
         $this->View()->assign('sEmotions', $emotions, true);
     }
 
     /**
+     * Action that will be triggered by product slider type top seller
+     *
+     * @deprecated use emotionArticleSliderAction instead
+     */
+    public function emotionTopSellerAction()
+    {
+        $this->Request()->setParam('sort', 'topseller');
+        $this->emotionArticleSliderAction();
+    }
+
+    /**
+     * Action that will be triggered by product slider type newcomer
+     *
+     * @deprecated use emotionArticleSliderAction instead
+     */
+    public function emotionNewcomerAction()
+    {
+        $this->Request()->setParam('sort', 'newcomer');
+        $this->emotionArticleSliderAction();
+    }
+
+    /**
+     * Action that will be triggered by product slider type top seller
+     */
+    public function emotionArticleSliderAction()
+    {
+        $this->View()->loadTemplate('frontend/_includes/product_slider_items.tpl');
+
+        $category = (int) $this->Request()->getParam('category');
+        if (!$category) {
+            $this->Response()->setHttpResponseCode(404);
+
+            return;
+        }
+
+        $limit = (int) $this->Request()->getParam('limit', 5);
+        $sort = $this->Request()->getParam('sort', 'newcomer');
+        $pages = $this->Request()->getParam('pages');
+        $offset = (int) $this->Request()->getParam('start', $limit * ($pages - 1));
+        $max = $this->Request()->getParam('max');
+
+        if ($limit != 0) {
+            $maxPages = round($max / $limit);
+        } else {
+            $maxPages = 0;
+        }
+
+        $values = $this->getProductSliderData($category, $offset, $limit, $sort);
+
+        $this->View()->assign('articles', $values['values']);
+        $this->View()->assign('productBoxLayout', $this->Request()->getParam('productBoxLayout', 'emotion'));
+        $this->View()->assign('fixedImageSize', $this->Request()->getParam('fixedImageSize', true));
+        $this->View()->assign('pages', $values['pages'] > $maxPages ? $maxPages : $values['pages']);
+        $this->View()->assign('sPerPage', $limit);
+    }
+
+    /**
+     * preview action method
+     *
+     * generates the backend iframe emotion preview
+     */
+    public function previewAction()
+    {
+        $emotionId = $this->Request()->getParam('emotionId');
+
+        $emotion = $this->get('emotion_device_configuration')->getById($emotionId);
+
+        // The user can preview the emotion for every device.
+        $emotion['devices'] = '0,1,2,3,4';
+
+        $viewAssignments['emotion'] = $emotion;
+        $viewAssignments['previewSecret'] = $this->Request()->getParam('secret');
+        $viewAssignments['hasEmotion'] = (!empty($emotion));
+
+        $viewAssignments['showListing'] = (bool) max(array_column($emotion, 'showListing'));
+
+        $showListing = (empty($emotion) || !empty($emotion['show_listing']));
+        $viewAssignments['showListing'] = $showListing;
+
+        $this->View()->assign($viewAssignments);
+
+        //fake to prevent rendering the templates with the widgets module.
+        //otherwise the template engine don't accept to load templates of the `frontend` module
+        $this->Request()->setModuleName('frontend');
+    }
+
+    public function productStreamArticleSliderAction()
+    {
+        $this->View()->loadTemplate('frontend/_includes/product_slider_items.tpl');
+        $limit = (int) $this->Request()->getParam('limit', 5);
+
+        $streamId = $this->Request()->getParam('streamId');
+
+        $pages = $this->Request()->getParam('pages', 1);
+        $offset = (int) $this->Request()->getParam('start', $limit * ($pages - 1));
+
+        $maxPages = 0;
+        $max = $this->Request()->getParam('max');
+        if ($limit != 0) {
+            $maxPages = round($max / $limit);
+        } else {
+            $limit = 0;
+        }
+
+        $values = $this->getProductStream($streamId, $offset, $limit);
+
+        $this->View()->assign('articles', $values['values']);
+        $this->View()->assign('productBoxLayout', $this->Request()->getParam('productBoxLayout', 'emotion'));
+        $this->View()->assign('fixedImageSize', $this->Request()->getParam('fixedImageSize', true));
+        $this->View()->assign('pages', $values['pages'] > $maxPages ? $maxPages : $values['pages']);
+        $this->View()->assign('sPerPage', $limit);
+    }
+
+    /**
      * @param int $categoryId
+     *
      * @return int[]
      */
     private function getEmotionsByCategoryId($categoryId)
@@ -101,71 +216,17 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         return $builder->execute()->fetchAll(\PDO::FETCH_COLUMN);
     }
 
-
-    /**
-     * Action that will be triggered by product slider type top seller
-     * @deprecated use emotionArticleSliderAction instead
-     */
-    public function emotionTopSellerAction()
-    {
-        $this->Request()->setParam('sort', 'topseller');
-        $this->emotionArticleSliderAction();
-    }
-
-    /**
-     * Action that will be triggered by product slider type newcomer
-     * @deprecated use emotionArticleSliderAction instead
-     */
-    public function emotionNewcomerAction()
-    {
-        $this->Request()->setParam('sort', 'newcomer');
-        $this->emotionArticleSliderAction();
-    }
-
-    /**
-     * Action that will be triggered by product slider type top seller
-     */
-    public function emotionArticleSliderAction()
-    {
-        $this->View()->loadTemplate('frontend/_includes/product_slider_items.tpl');
-
-        $category = (int) $this->Request()->getParam("category");
-        if (!$category) {
-            $this->Response()->setHttpResponseCode(404);
-            return;
-        }
-
-        $limit = (int) $this->Request()->getParam("limit", 5);
-        $sort = $this->Request()->getParam('sort', 'newcomer');
-        $pages = $this->Request()->getParam("pages");
-        $offset = (int) $this->Request()->getParam("start", $limit * ($pages-1));
-        $max = $this->Request()->getParam("max");
-
-        if ($limit != 0) {
-            $maxPages = round($max / $limit);
-        } else {
-            $maxPages = 0;
-        }
-
-        $values = $this->getProductSliderData($category, $offset, $limit, $sort);
-
-        $this->View()->assign('articles', $values['values']);
-        $this->View()->assign('productBoxLayout', $this->Request()->getParam('productBoxLayout', 'emotion'));
-        $this->View()->assign('fixedImageSize', $this->Request()->getParam('fixedImageSize', true));
-        $this->View()->assign('pages', $values["pages"] > $maxPages ? $maxPages : $values["pages"]);
-        $this->View()->assign('sPerPage', $limit);
-    }
-
     /**
      * Returns a list of top sold products
      *
-     * @param int $category
-     * @param int $offset
-     * @param int $limit
+     * @param int    $category
+     * @param int    $offset
+     * @param int    $limit
      * @param string $sort
+     *
      * @return array
      */
-    private function getProductSliderData($category, $offset = 0, $limit, $sort = null)
+    private function getProductSliderData($category, $offset, $limit, $sort = null)
     {
         $context = Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext();
         $factory = Shopware()->Container()->get('shopware_search.store_front_criteria_factory');
@@ -200,43 +261,11 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
             $pages = 0;
         }
 
-
         if ($pages == 0 && $count > 0) {
             $pages = 1;
         }
 
-        return array("values" => $data, "pages" => $pages);
-    }
-
-    /**
-     * preview action method
-     *
-     * generates the backend iframe emotion preview
-     */
-    public function previewAction()
-    {
-        $emotionId = $this->Request()->getParam('emotionId');
-
-        $emotion = $this->get('emotion_device_configuration')->getById($emotionId);
-
-        // The user can preview the emotion for every device.
-        $emotion['devices'] = '0,1,2,3,4';
-
-        $viewAssignments['emotion'] = $emotion;
-        $viewAssignments['previewSecret'] = $this->Request()->getParam('secret');
-        $viewAssignments['hasEmotion'] = (!empty($emotion));
-
-        $viewAssignments['showListing'] = (bool) max(array_column($emotion, 'showListing'));
-
-
-        $showListing = (empty($emotion) || !empty($emotion['show_listing']));
-        $viewAssignments['showListing'] = $showListing;
-
-        $this->View()->assign($viewAssignments);
-
-        //fake to prevent rendering the templates with the widgets module.
-        //otherwise the template engine don't accept to load templates of the `frontend` module
-        $this->Request()->setModuleName('frontend');
+        return ['values' => $data, 'pages' => $pages];
     }
 
     private function getProductStream($productStreamId, $offset = 0, $limit = 100)
@@ -269,38 +298,12 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
             $pages = 1;
         }
 
-        return array("values" => $data, "pages" => $pages);
-    }
-
-    public function productStreamArticleSliderAction()
-    {
-        $this->View()->loadTemplate('frontend/_includes/product_slider_items.tpl');
-        $limit = (int) $this->Request()->getParam("limit", 5);
-
-        $streamId = $this->Request()->getParam('streamId');
-
-        $pages = $this->Request()->getParam("pages", 1);
-        $offset = (int) $this->Request()->getParam("start", $limit * ($pages-1));
-
-        $maxPages = 0;
-        $max = $this->Request()->getParam("max");
-        if ($limit != 0) {
-            $maxPages = round($max / $limit);
-        } else {
-            $limit = 0;
-        }
-
-        $values = $this->getProductStream($streamId, $offset, $limit);
-
-        $this->View()->assign('articles', $values['values']);
-        $this->View()->assign('productBoxLayout', $this->Request()->getParam('productBoxLayout', 'emotion'));
-        $this->View()->assign('fixedImageSize', $this->Request()->getParam('fixedImageSize', true));
-        $this->View()->assign('pages', $values["pages"] > $maxPages ? $maxPages : $values["pages"]);
-        $this->View()->assign('sPerPage', $limit);
+        return ['values' => $data, 'pages' => $pages];
     }
 
     /**
      * @param Emotion $emotion
+     *
      * @return array
      */
     private function getLegacyEmotion(Emotion $emotion)

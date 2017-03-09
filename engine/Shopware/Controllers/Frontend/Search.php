@@ -21,25 +21,24 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Shopware\Bundle\SearchBundle\ProductSearchResult;
 use Shopware\Bundle\SearchBundle\SearchTermPreProcessorInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 /**
  * @category  Shopware
- * @package   Shopware\Controllers\Frontend
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
 {
     /**
      * Index action method
-     *
-     * @return void
      */
     public function indexAction()
     {
-        return $this->forward("defaultSearch");
+        return $this->forward('defaultSearch');
     }
 
     /**
@@ -64,13 +63,13 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
             return;
         }
 
-        /**@var $context ShopContextInterface */
+        /** @var $context ShopContextInterface */
         $context = $this->get('shopware_storefront.context_service')->getShopContext();
 
         $criteria = Shopware()->Container()->get('shopware_search.store_front_criteria_factory')
             ->createSearchCriteria($this->Request(), $context);
 
-        /**@var $result ProductSearchResult */
+        /** @var $result ProductSearchResult */
         $result = $this->get('shopware_search.product_search')->search($criteria, $context);
         $articles = $this->convertProducts($result);
 
@@ -103,57 +102,25 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
             'sPage' => $this->Request()->getParam('sPage', 1),
             'sSort' => $this->Request()->getParam('sSort', 7),
             'sTemplate' => $this->Request()->getParam('sTemplate'),
-            'sPerPage' => array_values(explode("|", $pageCounts)),
+            'sPerPage' => array_values(explode('|', $pageCounts)),
             'sRequests' => $request,
             'shortParameters' => $mapper->getQueryAliases(),
-            'pageSizes' => array_values(explode("|", $pageCounts)),
+            'pageSizes' => array_values(explode('|', $pageCounts)),
             'ajaxCountUrlParams' => [],
             'sortings' => $sortings,
             'sSearchResults' => [
                 'sArticles' => $articles,
-                'sArticlesCount' => $result->getTotalCount()
+                'sArticlesCount' => $result->getTotalCount(),
             ],
-            'productBoxLayout' => $this->get('config')->get('searchProductBoxLayout')
+            'productBoxLayout' => $this->get('config')->get('searchProductBoxLayout'),
         ]);
-    }
-
-    /**
-     * @param ProductSearchResult $result
-     * @return array
-     */
-    private function convertProducts(ProductSearchResult $result)
-    {
-        $articles = [];
-        foreach ($result->getProducts() as $product) {
-            $article = $this->get('legacy_struct_converter')->convertListProductStruct($product);
-
-            $articles[] = $article;
-        }
-
-        if (empty($articles)) {
-            return null;
-        }
-
-        return $articles;
-    }
-
-    /**
-     * @return string
-     */
-    private function getSearchTerm()
-    {
-        $term = $this->Request()->getParam('sSearch', '');
-
-        /** @var SearchTermPreProcessorInterface $processor */
-        $processor = $this->get('shopware_search.search_term_pre_processor');
-
-        return $processor->process($term);
     }
 
     /**
      * Search product by order number
      *
      * @param string $search
+     *
      * @return string
      */
     protected function searchFuzzyCheck($search)
@@ -209,7 +176,7 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
 
             $articles = $this->get('db')->fetchCol($sql, [
                 $this->get('shop')->get('parentID'),
-                $articles[0]
+                $articles[0],
             ]);
         }
         if (!empty($articles) && count($articles) == 1) {
@@ -228,6 +195,40 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
 
             return $this->get('router')->assemble($assembleParams);
         }
+    }
+
+    /**
+     * @param ProductSearchResult $result
+     *
+     * @return array
+     */
+    private function convertProducts(ProductSearchResult $result)
+    {
+        $articles = [];
+        foreach ($result->getProducts() as $product) {
+            $article = $this->get('legacy_struct_converter')->convertListProductStruct($product);
+
+            $articles[] = $article;
+        }
+
+        if (empty($articles)) {
+            return null;
+        }
+
+        return $articles;
+    }
+
+    /**
+     * @return string
+     */
+    private function getSearchTerm()
+    {
+        $term = $this->Request()->getParam('sSearch', '');
+
+        /** @var SearchTermPreProcessorInterface $processor */
+        $processor = $this->get('shopware_search.search_term_pre_processor');
+
+        return $processor->process($term);
     }
 
     private function setDefaultSorting()

@@ -21,17 +21,18 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 namespace Shopware\Models\Emotion;
 
-use Shopware\Components\Model\ModelEntity;
-use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
 
 /**
  * Shopware Emotion Model - Template
  *
  * @category   Shopware
- * @package    Shopware\Models
+ *
  * @copyright  Copyright (c) shopware AG (http://www.shopware.de)
  *
  * @ORM\Entity
@@ -41,9 +42,14 @@ use Doctrine\Common\Collections\ArrayCollection;
 class Template extends ModelEntity
 {
     /**
+     * @var ArrayCollection
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Emotion\Emotion", mappedBy="template")
+     */
+    protected $emotions;
+    /**
      * Unique identifier field for the shopware emotion.
      *
-     * @var integer $id
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
@@ -54,7 +60,7 @@ class Template extends ModelEntity
     /**
      * Contains the name of the emotion.
      *
-     * @var string $name
+     * @var string
      *
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
@@ -66,11 +72,10 @@ class Template extends ModelEntity
      */
     private $file;
 
-    /**
-     * @var ArrayCollection
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Emotion\Emotion", mappedBy="template")
-     */
-    protected $emotions;
+    public function __construct()
+    {
+        $this->emotions = new ArrayCollection();
+    }
 
     /**
      * Clone function for this model.
@@ -78,11 +83,6 @@ class Template extends ModelEntity
     public function __clone()
     {
         $this->id = null;
-        $this->emotions = new ArrayCollection();
-    }
-
-    public function __construct()
-    {
         $this->emotions = new ArrayCollection();
     }
 

@@ -440,6 +440,12 @@ Ext.define('Shopware.apps.MediaManager.view.album.Tree', {
                 Ext.each(models, function(model) {
                     model.set('newAlbumID', node.get('id'));
                 });
+
+                if (models.length > 1) {
+                    view.fireEvent('startBatchMoveMedia', view, models);
+                    return;
+                }
+                
                 store.sync({
                     callback: function(){
                         mediaView.setLoading(false);

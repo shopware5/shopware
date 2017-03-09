@@ -29,21 +29,22 @@ use Shopware\Models\Analytics\Repository;
  * Statistics controller
  *
  * @category  Shopware
- * @package   Shopware\Controllers\Backend
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backend_ExtJs implements CSRFWhitelistAware
 {
-    protected $dateFields = array(
-        'date', 'displayDate',  'firstLogin', 'birthday', 'orderTime'
-    );
+    protected $dateFields = [
+        'date', 'displayDate',  'firstLogin', 'birthday', 'orderTime',
+    ];
 
-    protected $shopFields = array(
+    protected $shopFields = [
         'amount', 'count', 'totalImpressions', 'totalVisits', 'orderCount', 'visitors',
-    );
+    ];
 
     /**
      * Entity Manager
+     *
      * @var null
      */
     protected $manager = null;
@@ -76,18 +77,6 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         parent::preDispatch();
     }
 
-    protected function initAcl()
-    {
-        // read
-        $this->addAclPermission('shopList', 'read', 'Insufficient Permissions');
-        $this->addAclPermission('sourceList', 'read', 'Insufficient Permissions');
-        $this->addAclPermission('orderAnalytics', 'read', 'Insufficient Permissions');
-        $this->addAclPermission('visits', 'read', 'Insufficient Permissions');
-        $this->addAclPermission('orderDetailAnalytics', 'read', 'Insufficient Permissions');
-        $this->addAclPermission('searchAnalytics', 'read', 'Insufficient Permissions');
-        $this->addAclPermission('conversionRate', 'read', 'Insufficient Permissions');
-    }
-
     public function init()
     {
         parent::init();
@@ -101,7 +90,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getWhitelistedCSRFActions()
     {
@@ -128,21 +117,8 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             'getSearchTerms',
             'getVisitors',
             'getArticleImpressions',
-            'getReferrerSearchTerms'
+            'getReferrerSearchTerms',
         ];
-    }
-
-    /**
-     * Internal helper function to get access to the entity manager.
-     *
-     * @return null|\Shopware\Components\Model\ModelManager
-     */
-    private function getManager()
-    {
-        if ($this->manager === null) {
-            $this->manager = Shopware()->Models();
-        }
-        return $this->manager;
     }
 
     /**
@@ -155,6 +131,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         if ($this->shopRepository === null) {
             $this->shopRepository = $this->getManager()->getRepository('Shopware\Models\Shop\Shop');
         }
+
         return $this->shopRepository;
     }
 
@@ -174,53 +151,6 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
     }
 
     /**
-     * Returns the query builder to fetch all available stores
-     *
-     * @return \Doctrine\DBAL\Query\QueryBuilder
-     */
-    private function getShopsQueryBuilder()
-    {
-        $builder = $this->getManager()->getDBALQueryBuilder();
-        $builder->select(array(
-            's.id',
-            's.name',
-            'c.currency',
-            'c.name AS currencyName',
-            'c.templateChar AS currencyChar',
-            '(c.symbol_position = 16) currencyAtEnd'
-        ))
-            ->from('s_core_shops', 's')
-            ->leftJoin('s', 's_core_currencies', 'c', 's.currency_id = c.id')
-            ->orderBy('s.default', 'desc')
-            ->orderBy('s.name');
-
-        return $builder;
-    }
-
-    private function formatOrderAnalyticsData($data)
-    {
-        $shopIds = $this->getSelectedShopIds();
-
-        foreach ($data as &$row) {
-            $row['orderCount'] = (int) $row['orderCount'];
-            $row['turnover'] = (float) $row['turnover'];
-
-            if (!empty($row['date'])) {
-                $row['normal'] = $row['date'];
-                $row['date'] = strtotime($row['date']);
-            }
-
-            if (!empty($shopIds)) {
-                foreach ($shopIds as $shopId) {
-                    $row['turnover' . $shopId] = (float) $row['turnover' . $shopId];
-                }
-            }
-        }
-
-        return $data;
-    }
-
-    /**
      * Get a list of installed shops
      */
     public function shopListAction()
@@ -229,10 +159,10 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         $statement = $builder->execute();
         $data = $statement->fetchAll(PDO::FETCH_ASSOC);
 
-        $this->View()->assign(array(
+        $this->View()->assign([
             'data' => $data,
-            'success' => true
-        ));
+            'success' => true,
+        ]);
     }
 
     public function getOverviewAction()
@@ -355,7 +285,6 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         $this->send($splice, count($data));
     }
 
-
     public function getReferrerRevenueAction()
     {
         $shop = $this->getManager()->getRepository('Shopware\Models\Shop\Shop')->getActiveDefault();
@@ -367,14 +296,14 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             $this->getToDate()
         );
 
-        $referrer = array();
-        $customers = array();
+        $referrer = [];
+        $customers = [];
         foreach ($result->getData() as $row) {
             $url = parse_url($row['referrer']);
             $host = $url['host'];
 
             if (!array_key_exists($host, $referrer)) {
-                $referrer[$host] = array(
+                $referrer[$host] = [
                     'host' => $host,
                     'orderCount' => 0,
                     'turnover' => 0,
@@ -384,22 +313,22 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
                     'averageNewCustomer' => 0,
                     'regularCustomers' => 0,
                     'turnoverRegularCustomer' => 0,
-                    'averageRegularCustomer' => 0
-                );
+                    'averageRegularCustomer' => 0,
+                ];
             }
 
             if (!in_array($row['userID'], $customers)) {
                 if (strtotime($row['orderTime']) - strtotime($row['firstLogin']) < 60 * 60 * 24) {
                     $referrer[$host]['turnoverNewCustomer'] += $row['turnover'];
-                    $referrer[$host]['newCustomers']++;
+                    ++$referrer[$host]['newCustomers'];
                 } else {
                     $referrer[$host]['turnoverRegularCustomer'] += $row['turnover'];
-                    $referrer[$host]['regularCustomers']++;
+                    ++$referrer[$host]['regularCustomers'];
                 }
             }
 
             $referrer[$host]['turnover'] += $row['turnover'];
-            $referrer[$host]['orderCount']++;
+            ++$referrer[$host]['orderCount'];
         }
 
         foreach ($referrer as &$ref) {
@@ -481,19 +410,19 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
 
         $data = $result->getData();
 
-        $referrer = array();
+        $referrer = [];
         foreach ($data as &$row) {
             $host = parse_url($row['referrer']);
             $host = str_replace('www.', '', $host['host']);
 
             if (!array_key_exists($host, $referrer)) {
-                $referrer[$host] = array(
+                $referrer[$host] = [
                     'count' => 0,
-                    'referrer' => $host
-                );
+                    'referrer' => $host,
+                ];
             }
 
-            $referrer[$host]['count']++;
+            ++$referrer[$host]['count'];
         }
 
         $this->send(array_values($referrer), $result->getTotalCount());
@@ -518,20 +447,20 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             $this->getToDate()
         );
 
-        $customers = array();
-        $users = array();
+        $customers = [];
+        $users = [];
 
         foreach ($result->getData() as $row) {
             $week = $row['orderTime'];
-            $customers[$week]['orderCount']++;
+            ++$customers[$week]['orderCount'];
             $customers[$week]['week'] = $week;
-            $customers[$week]['female'] = (int)$customers[$week]['female'];
-            $customers[$week]['male'] = (int)$customers[$week]['male'];
+            $customers[$week]['female'] = (int) $customers[$week]['female'];
+            $customers[$week]['male'] = (int) $customers[$week]['male'];
             $customers[$week]['registration'] = (int) $customers[$week]['registration'];
             $users[$week] = (array) $users[$week];
 
             switch (strtolower($row['salutation'])) {
-                case "mr":
+                case 'mr':
                     $customers[$week]['male']++;
                     break;
                 default:
@@ -540,15 +469,15 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             }
 
             if ($row['isNewCustomerOrder'] && !in_array($row['userId'], $users[$week])) {
-                $customers[$week]['registration']++;
+                ++$customers[$week]['registration'];
             }
 
             $users[$week][] = $row['userId'];
 
             if ($row['isNewCustomerOrder']) {
-                $customers[$week]['newCustomersOrders']++;
+                ++$customers[$week]['newCustomersOrders'];
             } else {
-                $customers[$week]['oldCustomersOrders']++;
+                ++$customers[$week]['oldCustomersOrders'];
             }
         }
 
@@ -567,16 +496,16 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             $shopIds
         );
 
-        $subShopCounts = array();
-        $ages = array();
+        $subShopCounts = [];
+        $ages = [];
         foreach ($result->getData() as $row) {
             $age = floor((time() - strtotime($row['birthday'])) / (60 * 60 * 24 * 365));
 
             if (!array_key_exists("$age", $ages)) {
-                $ages["$age"] = array(
+                $ages["$age"] = [
                     'age' => $age,
-                    'count' => 0
-                );
+                    'count' => 0,
+                ];
             }
 
             if (!empty($shopIds)) {
@@ -590,13 +519,13 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
                     }
 
                     if (!empty($row['birthday' . $shopId])) {
-                        $ages["$age"]['count' . $shopId]++;
-                        $subShopCounts[$shopId]++;
+                        ++$ages["$age"]['count' . $shopId];
+                        ++$subShopCounts[$shopId];
                     }
                 }
             }
 
-            $ages["$age"]['count']++;
+            ++$ages["$age"]['count'];
         }
 
         foreach ($ages as &$age) {
@@ -777,12 +706,12 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             $this->Request()->getParam('limit', null),
             $this->getFromDate(),
             $this->getToDate(),
-            $this->Request()->getParam('sort', array(
-                array(
+            $this->Request()->getParam('sort', [
+                [
                     'property' => 'countRequests',
-                    'direction' => 'DESC'
-                )
-            )),
+                    'direction' => 'DESC',
+                ],
+            ]),
             $this->getSelectedShopIds()
         );
 
@@ -799,12 +728,12 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             $this->Request()->getParam('limit', null),
             $this->getFromDate(),
             $this->getToDate(),
-            $this->Request()->getParam('sort', array(
-                array(
+            $this->Request()->getParam('sort', [
+                [
                     'property' => 'datum',
-                    'direction' => 'DESC'
-                )
-            )),
+                    'direction' => 'DESC',
+                ],
+            ]),
             $this->getSelectedShopIds()
         );
 
@@ -821,12 +750,12 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             $this->Request()->getParam('limit', null),
             $this->getFromDate(),
             $this->getToDate(),
-            $this->Request()->getParam('sort', array(
-                array(
+            $this->Request()->getParam('sort', [
+                [
                     'property' => 'totalImpressions',
-                    'direction' => 'DESC'
-                )
-            )),
+                    'direction' => 'DESC',
+                ],
+            ]),
             $this->getSelectedShopIds()
         );
 
@@ -842,9 +771,9 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
 
         $result = $this->getRepository()->getReferrerSearchTerms($selectedReferrer);
 
-        $keywords = array();
+        $keywords = [];
         foreach ($result->getData() as $data) {
-            preg_match_all("#[?&]([qp]|query|highlight|encquery|url|field-keywords|as_q|sucheall|satitle|KW)=([^&\\$]+)#", utf8_encode($data['referrer']) . "&", $matches);
+            preg_match_all('#[?&]([qp]|query|highlight|encquery|url|field-keywords|as_q|sucheall|satitle|KW)=([^&\$]+)#', utf8_encode($data['referrer']) . '&', $matches);
             if (empty($matches[0])) {
                 continue;
             }
@@ -855,13 +784,13 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             $ref = trim(preg_replace('/\s\s+/', ' ', $ref));
 
             if (!array_key_exists($ref, $keywords)) {
-                $keywords[$ref] = array(
+                $keywords[$ref] = [
                     'keyword' => $ref,
-                    'count' => 0
-                );
+                    'count' => 0,
+                ];
             }
 
-            $keywords[$ref]['count']++;
+            ++$keywords[$ref]['count'];
         }
 
         $keywords = array_values($keywords);
@@ -879,11 +808,23 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             $this->Request()->getParam('limit', null)
         );
 
-        $this->View()->assign(array(
+        $this->View()->assign([
             'success' => true,
             'data' => $result->getData(),
-            'totalCount' => $result->getTotalCount()
-        ));
+            'totalCount' => $result->getTotalCount(),
+        ]);
+    }
+
+    protected function initAcl()
+    {
+        // read
+        $this->addAclPermission('shopList', 'read', 'Insufficient Permissions');
+        $this->addAclPermission('sourceList', 'read', 'Insufficient Permissions');
+        $this->addAclPermission('orderAnalytics', 'read', 'Insufficient Permissions');
+        $this->addAclPermission('visits', 'read', 'Insufficient Permissions');
+        $this->addAclPermission('orderDetailAnalytics', 'read', 'Insufficient Permissions');
+        $this->addAclPermission('searchAnalytics', 'read', 'Insufficient Permissions');
+        $this->addAclPermission('conversionRate', 'read', 'Insufficient Permissions');
     }
 
     protected function send($data, $totalCount)
@@ -892,12 +833,122 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             $data = $this->formatCsvData($data);
             $this->exportCSV($data);
         } else {
-            $this->View()->assign(array(
+            $this->View()->assign([
                 'success' => true,
                 'data' => $data,
-                'total' => $totalCount
-            ));
+                'total' => $totalCount,
+            ]);
         }
+    }
+
+    protected function getShopFields($data)
+    {
+        $ids = $this->getSelectedShopIds();
+        $fields = [];
+        foreach (array_keys($data) as $key) {
+            if (in_array($key, $this->shopFields)) {
+                foreach ($ids as $id) {
+                    if (array_key_exists($key . $id, $data)) {
+                        $fields[$key . $id] = $id;
+                    }
+                }
+            }
+        }
+
+        return $fields;
+    }
+
+    protected function getDateFields($data)
+    {
+        $fields = [];
+        foreach (array_keys($data) as $key) {
+            if (in_array($key, $this->dateFields)) {
+                $fields[] = $key;
+            }
+        }
+
+        return $fields;
+    }
+
+    protected function exportCSV($data)
+    {
+        $this->Front()->Plugins()->Json()->setRenderer(false);
+        $this->Response()->setHeader('Content-Type', 'text/csv; charset=utf-8');
+        $this->Response()->setHeader('Content-Disposition', 'attachment;filename=' . $this->getCsvFileName());
+
+        echo "\xEF\xBB\xBF";
+        $fp = fopen('php://output', 'w');
+
+        fputcsv($fp, array_keys($data[0]), ';');
+
+        foreach ($data as $value) {
+            if (empty($value)) {
+                continue;
+            }
+            fputcsv($fp, $value, ';');
+        }
+        fclose($fp);
+    }
+
+    /**
+     * Internal helper function to get access to the entity manager.
+     *
+     * @return null|\Shopware\Components\Model\ModelManager
+     */
+    private function getManager()
+    {
+        if ($this->manager === null) {
+            $this->manager = Shopware()->Models();
+        }
+
+        return $this->manager;
+    }
+
+    /**
+     * Returns the query builder to fetch all available stores
+     *
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
+    private function getShopsQueryBuilder()
+    {
+        $builder = $this->getManager()->getDBALQueryBuilder();
+        $builder->select([
+            's.id',
+            's.name',
+            'c.currency',
+            'c.name AS currencyName',
+            'c.templateChar AS currencyChar',
+            '(c.symbol_position = 16) currencyAtEnd',
+        ])
+            ->from('s_core_shops', 's')
+            ->leftJoin('s', 's_core_currencies', 'c', 's.currency_id = c.id')
+            ->orderBy('s.default', 'desc')
+            ->orderBy('s.name');
+
+        return $builder;
+    }
+
+    private function formatOrderAnalyticsData($data)
+    {
+        $shopIds = $this->getSelectedShopIds();
+
+        foreach ($data as &$row) {
+            $row['orderCount'] = (int) $row['orderCount'];
+            $row['turnover'] = (float) $row['turnover'];
+
+            if (!empty($row['date'])) {
+                $row['normal'] = $row['date'];
+                $row['date'] = strtotime($row['date']);
+            }
+
+            if (!empty($shopIds)) {
+                foreach ($shopIds as $shopId) {
+                    $row['turnover' . $shopId] = (float) $row['turnover' . $shopId];
+                }
+            }
+        }
+
+        return $data;
     }
 
     private function formatCsvData($data)
@@ -920,6 +971,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
                 $data = $this->switchArrayKeys($data, $shopNames[$shopId] . ' (' . $suffix . ')', $field);
             }
         }
+
         return $data;
     }
 
@@ -933,13 +985,14 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             }
         }
         unset($array[$oldKey]);
+
         return $array;
     }
 
     private function getShopNames()
     {
         $builder = $this->getManager()->getDBALQueryBuilder();
-        $builder->select(array('s.id', 's.name'))
+        $builder->select(['s.id', 's.name'])
             ->from('s_core_shops', 's')
             ->orderBy('s.default', 'DESC')
             ->addOrderBy('s.name');
@@ -947,33 +1000,6 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         $statement = $builder->execute();
 
         return $statement->fetchAll(PDO::FETCH_KEY_PAIR);
-    }
-
-    protected function getShopFields($data)
-    {
-        $ids = $this->getSelectedShopIds();
-        $fields = array();
-        foreach (array_keys($data) as $key) {
-            if (in_array($key, $this->shopFields)) {
-                foreach ($ids as $id) {
-                    if (array_key_exists($key . $id, $data)) {
-                        $fields[$key . $id] = $id;
-                    }
-                }
-            }
-        }
-        return $fields;
-    }
-
-    protected function getDateFields($data)
-    {
-        $fields = array();
-        foreach (array_keys($data) as $key) {
-            if (in_array($key, $this->dateFields)) {
-                $fields[] = $key;
-            }
-        }
-        return $fields;
     }
 
     private function isTimestamp($input)
@@ -991,27 +1017,6 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         }
 
         return false;
-    }
-
-
-    protected function exportCSV($data)
-    {
-        $this->Front()->Plugins()->Json()->setRenderer(false);
-        $this->Response()->setHeader('Content-Type', 'text/csv; charset=utf-8');
-        $this->Response()->setHeader('Content-Disposition', 'attachment;filename=' . $this->getCsvFileName());
-
-        echo "\xEF\xBB\xBF";
-        $fp = fopen('php://output', 'w');
-
-        fputcsv($fp, array_keys($data[0]), ";");
-
-        foreach ($data as $value) {
-            if (empty($value)) {
-                continue;
-            }
-            fputcsv($fp, $value, ";");
-        }
-        fclose($fp);
     }
 
     private function getCsvFileName()
@@ -1047,7 +1052,8 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         if (!empty($selectedShopIds)) {
             return explode(',', $selectedShopIds);
         }
-        return array();
+
+        return [];
     }
 
     /**
@@ -1092,29 +1098,30 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
     /**
      * fills empty array elements for the csv export
      *
-     * @param Array $data
-     * @return Array
+     * @param array $data
+     *
+     * @return array
      */
     private function prepareOverviewData($data)
     {
         foreach ($data as &$row) {
             if (!isset($row['orderCount'])) {
-                $row = $this->insertArrayAtPosition(array('orderCount' => 0), $row, 0);
+                $row = $this->insertArrayAtPosition(['orderCount' => 0], $row, 0);
             }
             if (!isset($row['turnover'])) {
-                $row = $this->insertArrayAtPosition(array('turnover' => 0), $row, 1);
+                $row = $this->insertArrayAtPosition(['turnover' => 0], $row, 1);
             }
             if (!isset($row['clicks'])) {
-                $row = $this->insertArrayAtPosition(array('clicks' => 0), $row, 2);
+                $row = $this->insertArrayAtPosition(['clicks' => 0], $row, 2);
             }
             if (!isset($row['visits'])) {
-                $row = $this->insertArrayAtPosition(array('visits' => 0), $row, 3);
+                $row = $this->insertArrayAtPosition(['visits' => 0], $row, 3);
             }
             if (!isset($row['registrations'])) {
-                $row = $this->insertArrayAtPosition(array('registrations' => 0), $row, 4);
+                $row = $this->insertArrayAtPosition(['registrations' => 0], $row, 4);
             }
             if (!isset($row['customers'])) {
-                $row = $this->insertArrayAtPosition(array('customers' => 0), $row, 5);
+                $row = $this->insertArrayAtPosition(['customers' => 0], $row, 5);
             }
         }
 
@@ -1124,9 +1131,10 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
     /**
      * helper method which allows to insert an array element with a key
      *
-     * @param Array $insertValue
-     * @param Array $array
-     * @param int $position
+     * @param array $insertValue
+     * @param array $array
+     * @param int   $position
+     *
      * @return array
      */
     private function insertArrayAtPosition($insertValue, $array, $position)

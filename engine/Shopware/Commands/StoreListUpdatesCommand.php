@@ -26,15 +26,12 @@ namespace Shopware\Commands;
 
 use Shopware\Bundle\PluginInstallerBundle\Context\UpdateListingRequest;
 use Shopware\Bundle\PluginInstallerBundle\Struct\UpdateResultStruct;
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * @category  Shopware
- * @package   Shopware\Components\Console\Command
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class StoreListUpdatesCommand extends StoreCommand
@@ -63,26 +60,26 @@ class StoreListUpdatesCommand extends StoreCommand
         }
 
         $plugins = $this->container->get('shopware_plugininstaller.plugin_service_local')->getPluginsForUpdateCheck();
-        $domain  = $this->container->get('shopware_plugininstaller.account_manager_service')->getDomain();
+        $domain = $this->container->get('shopware_plugininstaller.account_manager_service')->getDomain();
         $service = $this->container->get('shopware_plugininstaller.plugin_service_view');
         $request = new UpdateListingRequest(null, $version, $domain, $plugins);
         /** @var UpdateResultStruct $updates */
         $updates = $service->getUpdates($request);
         $plugins = $updates->getPlugins();
 
-        $result = array();
+        $result = [];
         foreach ($plugins as $plugin) {
             $result[] = [
                 $plugin->getId(),
                 $plugin->getTechnicalName(),
                 $plugin->getLabel(),
                 $plugin->getVersion(),
-                $plugin->getAvailableVersion()
+                $plugin->getAvailableVersion(),
             ];
         }
 
         $table = $this->getHelperSet()->get('table');
-        $table->setHeaders(array('Id', 'Technical name', 'Label',  'CurrentVersion', 'AvailableVersion'))
+        $table->setHeaders(['Id', 'Technical name', 'Label',  'CurrentVersion', 'AvailableVersion'])
               ->setRows($result);
 
         $table->render($output);

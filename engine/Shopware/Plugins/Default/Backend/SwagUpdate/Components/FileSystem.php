@@ -26,7 +26,7 @@ namespace ShopwarePlugins\SwagUpdate\Components;
 
 /**
  * @category  Shopware
- * @package   ShopwarePlugins\SwagUpdate\Components;
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class FileSystem
@@ -34,19 +34,20 @@ class FileSystem
     /**
      * @var string[]
      */
-    private $VCSDirs = array(
+    private $VCSDirs = [
         '.git',
         '.svn',
-    );
+    ];
 
     /**
-     * @param  string $directory
-     * @param  bool   $fixPermission
-     * @return array  of errors
+     * @param string $directory
+     * @param bool   $fixPermission
+     *
+     * @return array of errors
      */
-    public function checkDirectoryPermissions($directory, $fixPermission = false)
+    public function checkSingleDirectoryPermissions($directory, $fixPermission = false)
     {
-        $errors = array();
+        $errors = [];
 
         if (!is_dir($directory)) {
             $errors[] = $directory;
@@ -62,6 +63,23 @@ class FileSystem
         if (!is_writable($directory)) {
             $errors[] = $directory;
 
+            return $errors;
+        }
+
+        return $errors;
+    }
+
+    /**
+     * @param string $directory
+     * @param bool   $fixPermission
+     *
+     * @return array of errors
+     */
+    public function checkDirectoryPermissions($directory, $fixPermission = false)
+    {
+        $errors = $this->checkSingleDirectoryPermissions($directory, $fixPermission);
+
+        if (!empty($errors)) {
             return $errors;
         }
 

@@ -29,18 +29,19 @@ use Shopware\Models\Customer\Address;
 
 /**
  * Interface AddressValidatorInterface
- * @package Shopware\Bundle\AccountBundle\Service\Validator
  */
 interface AddressValidatorInterface
 {
     /**
      * @param Address $address
+     *
      * @throws ValidationException
      */
     public function validate(Address $address);
 
     /**
      * @param Address $address
+     *
      * @return bool
      */
     public function isValid(Address $address);

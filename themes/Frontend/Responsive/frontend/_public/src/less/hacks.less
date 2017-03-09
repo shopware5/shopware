@@ -47,32 +47,6 @@ More precise designations are commented inside the document.
     }
 }
 
-    // Changing the appearance of the scrollbar in filter panels.
-.filter-panel--content {
-
-    // IE styles
-    scrollbar-arrow-color: @text-color;
-    scrollbar-base-color: @body-bg;
-    scrollbar-track-color: @body-bg;
-    scrollbar-face-color: @border-color;
-    scrollbar-highlight-color: @body-bg;
-    scrollbar-3dlight-color: @body-bg;
-    scrollbar-darkshadow-color: @body-bg;
-    scrollbar-shadow-color: @body-bg;
-
-    // WebKit styles
-    &::-webkit-scrollbar {
-        width: 14px;
-        background: @body-bg;
-    }
-    &::-webkit-scrollbar-track {
-        background: @body-bg;
-    }
-    &::-webkit-scrollbar-thumb {
-        background: @border-color;
-    }
-}
-
     // inactive class for disabling scrolling on different parts of Shopware
 .is--inactive {
     overflow: hidden !important;

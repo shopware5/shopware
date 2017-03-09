@@ -56,6 +56,8 @@ Ext.define('Shopware.apps.Emotion.view.detail.elements.Article', {
 
             if (type === 'selected_article') {
                 content += Ext.String.format('<div class="article-ordernumber">[0]</div>', me.getConfigValue('article'));
+            } else if (type === 'selected_variant') {
+                content += Ext.String.format('<div class="article-ordernumber">[0]</div>', me.getConfigValue('variant'));
             } else {
                 content += Ext.String.format('<div class="article-type">[0]</div>', me.typeSnippets[type]);
             }

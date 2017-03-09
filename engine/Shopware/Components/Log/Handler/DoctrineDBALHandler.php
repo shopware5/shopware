@@ -29,7 +29,7 @@ use Monolog\Logger;
 
 /**
  * @category  Shopware
- * @package   Shopware\Components\Log\Handler
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class DoctrineDBALHandler extends AbstractProcessingHandler
@@ -42,7 +42,7 @@ class DoctrineDBALHandler extends AbstractProcessingHandler
     /**
      * @var array
      */
-    protected $columnMap = array();
+    protected $columnMap = [];
 
     /**
      * @var string
@@ -51,10 +51,10 @@ class DoctrineDBALHandler extends AbstractProcessingHandler
 
     /**
      * @param \Doctrine\DBAL\Connection $conn
-     * @param string $table
-     * @param array $columnMap
-     * @param int $level
-     * @param bool $bubble
+     * @param string                    $table
+     * @param array                     $columnMap
+     * @param int                       $level
+     * @param bool                      $bubble
      */
     public function __construct(\Doctrine\DBAL\Connection $conn, $table, array $columnMap, $level = Logger::DEBUG, $bubble = true)
     {
@@ -73,7 +73,7 @@ class DoctrineDBALHandler extends AbstractProcessingHandler
         if ($this->columnMap === null) {
             $dataToInsert = $record;
         } else {
-            $dataToInsert = array();
+            $dataToInsert = [];
             foreach ($this->columnMap as $columnName => $fieldKey) {
                 if (isset($record[$fieldKey])) {
                     $dataToInsert[$this->conn->quoteIdentifier($columnName)] = $record[$fieldKey];

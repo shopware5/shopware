@@ -36,7 +36,7 @@ class GuzzleFactory
     {
         $client = new Client();
 
-        $certPath = __DIR__.'/cacert.pem';
+        $certPath = __DIR__ . '/cacert.pem';
         if (is_file($certPath)) {
             $client->setDefaultOption('verify', $certPath);
         }

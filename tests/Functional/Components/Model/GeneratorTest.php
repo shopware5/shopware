@@ -28,10 +28,10 @@ use Shopware\Components\Model\Generator;
 
 /**
  * @category  Shopware
- * @package   Shopware\Tests\Components
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class GeneratorTest extends \PHPUnit_Framework_TestCase
+class GeneratorTest extends \PHPUnit\Framework\TestCase
 {
     const TEST_TABLE_NAME = 's_articles_attributes';
     const TEST_ATTRIBUTE_FIELD_PREFIX = 'test_';
@@ -71,7 +71,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
 
         $this->cs->delete(
             self::TEST_TABLE_NAME,
-            self::TEST_ATTRIBUTE_FIELD_PREFIX.self::TEST_ATTRIBUTE_FIELD_NAME
+            self::TEST_ATTRIBUTE_FIELD_PREFIX . self::TEST_ATTRIBUTE_FIELD_NAME
         );
     }
 
@@ -153,13 +153,13 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         // Add two attribute fields
         $this->cs->update(
             self::TEST_TABLE_NAME,
-            self::TEST_ATTRIBUTE_FIELD_PREFIX.self::TEST_ATTRIBUTE_FIELD_NAME,
+            self::TEST_ATTRIBUTE_FIELD_PREFIX . self::TEST_ATTRIBUTE_FIELD_NAME,
             'string'
         );
 
         $this->cs->update(
             self::TEST_TABLE_NAME,
-            self::TEST_ATTRIBUTE_FIELD_PREFIX.self::TEST_ATTRIBUTE_FIELD_NAME.'_two',
+            self::TEST_ATTRIBUTE_FIELD_PREFIX . self::TEST_ATTRIBUTE_FIELD_NAME . '_two',
             'integer',
             [],
             null,
@@ -170,24 +170,23 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         // Generate updated attribute source code
         $modelSourceCode = $this->generator->getSourceCodeForTable(self::TEST_TABLE_NAME);
 
-        $definitionInt ='/**
-     * @var integer $'.self::TEST_ATTRIBUTE_PROPERTY_NAME.'Two
+        $definitionInt = '/**
+     * @var integer $' . self::TEST_ATTRIBUTE_PROPERTY_NAME . 'Two
      *
-     * @ORM\Column(name="'.self::TEST_ATTRIBUTE_FIELD_PREFIX.self::TEST_ATTRIBUTE_FIELD_NAME.'_two", type="integer", nullable=true)
+     * @ORM\Column(name="' . self::TEST_ATTRIBUTE_FIELD_PREFIX . self::TEST_ATTRIBUTE_FIELD_NAME . '_two", type="integer", nullable=true)
      */
-     protected $'.self::TEST_ATTRIBUTE_PROPERTY_NAME.'Two;';
+     protected $' . self::TEST_ATTRIBUTE_PROPERTY_NAME . 'Two;';
 
-
-        $definitionString ='/**
-     * @var string $'.self::TEST_ATTRIBUTE_PROPERTY_NAME.'
+        $definitionString = '/**
+     * @var string $' . self::TEST_ATTRIBUTE_PROPERTY_NAME . '
      *
-     * @ORM\Column(name="'.self::TEST_ATTRIBUTE_FIELD_PREFIX.self::TEST_ATTRIBUTE_FIELD_NAME.'", type="text", nullable=true)
+     * @ORM\Column(name="' . self::TEST_ATTRIBUTE_FIELD_PREFIX . self::TEST_ATTRIBUTE_FIELD_NAME . '", type="text", nullable=true)
      */
-     protected $'.self::TEST_ATTRIBUTE_PROPERTY_NAME.';';
+     protected $' . self::TEST_ATTRIBUTE_PROPERTY_NAME . ';';
 
-        $initialization ='public function __construct()
+        $initialization = 'public function __construct()
     {
-        $this->'.self::TEST_ATTRIBUTE_PROPERTY_NAME.'Two = 123456;
+        $this->' . self::TEST_ATTRIBUTE_PROPERTY_NAME . 'Two = 123456;
     }';
 
         $this->assertTrue(strpos($modelSourceCode, $definitionInt) !== false);
@@ -197,14 +196,14 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         // Clean up second field
         $this->cs->delete(
             self::TEST_TABLE_NAME,
-            self::TEST_ATTRIBUTE_FIELD_PREFIX.self::TEST_ATTRIBUTE_FIELD_NAME.'_two'
+            self::TEST_ATTRIBUTE_FIELD_PREFIX . self::TEST_ATTRIBUTE_FIELD_NAME . '_two'
         );
     }
 
     /**
-     * @param string $type
-     * @param string $phpType
-     * @param string $ormType
+     * @param string         $type
+     * @param string         $phpType
+     * @param string         $ormType
      * @param null|float|int $default
      */
     private function addAndEvaluateInitialization($type, $phpType, $ormType, $default = null)
@@ -212,7 +211,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         // Add attribute field
         $this->cs->update(
             self::TEST_TABLE_NAME,
-            self::TEST_ATTRIBUTE_FIELD_PREFIX.self::TEST_ATTRIBUTE_FIELD_NAME,
+            self::TEST_ATTRIBUTE_FIELD_PREFIX . self::TEST_ATTRIBUTE_FIELD_NAME,
             $type,
             [],
             null,
@@ -224,21 +223,21 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         $modelSourceCode = $this->generator->getSourceCodeForTable(self::TEST_TABLE_NAME);
 
         $definition = '/**
-     * @var '.$phpType.' $'.self::TEST_ATTRIBUTE_PROPERTY_NAME.'
+     * @var ' . $phpType . ' $' . self::TEST_ATTRIBUTE_PROPERTY_NAME . '
      *
-     * @ORM\Column(name="'.self::TEST_ATTRIBUTE_FIELD_PREFIX.self::TEST_ATTRIBUTE_FIELD_NAME.'", type="'.$ormType.'", nullable=true)
+     * @ORM\Column(name="' . self::TEST_ATTRIBUTE_FIELD_PREFIX . self::TEST_ATTRIBUTE_FIELD_NAME . '", type="' . $ormType . '", nullable=true)
      */
-     protected $'.self::TEST_ATTRIBUTE_PROPERTY_NAME.';';
+     protected $' . self::TEST_ATTRIBUTE_PROPERTY_NAME . ';';
 
         $this->assertTrue(strpos($modelSourceCode, $definition) !== false);
-        if ($default ==! null) {
+        if ($default == !null) {
             switch ($type) {
                 case 'date':
                 case 'datetime':
-                    $default = 'new \DateTime("'.$default.'")';
+                    $default = 'new \DateTime("' . $default . '")';
                     break;
             }
-            $initialization = '$this->'.self::TEST_ATTRIBUTE_PROPERTY_NAME.' = '.$default.';';
+            $initialization = '$this->' . self::TEST_ATTRIBUTE_PROPERTY_NAME . ' = ' . $default . ';';
             $this->assertTrue(strpos($modelSourceCode, $initialization) !== false);
         }
     }

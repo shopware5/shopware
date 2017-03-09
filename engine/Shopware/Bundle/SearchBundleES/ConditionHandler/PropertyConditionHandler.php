@@ -27,8 +27,8 @@ namespace Shopware\Bundle\SearchBundleES\ConditionHandler;
 use ONGR\ElasticsearchDSL\Query\TermsQuery;
 use ONGR\ElasticsearchDSL\Search;
 use Shopware\Bundle\SearchBundle\Condition\PropertyCondition;
-use Shopware\Bundle\SearchBundle\CriteriaPartInterface;
 use Shopware\Bundle\SearchBundle\Criteria;
+use Shopware\Bundle\SearchBundle\CriteriaPartInterface;
 use Shopware\Bundle\SearchBundleES\PartialConditionHandlerInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
@@ -39,7 +39,7 @@ class PropertyConditionHandler implements PartialConditionHandlerInterface
      */
     public function supports(CriteriaPartInterface $criteriaPart)
     {
-        return ($criteriaPart instanceof PropertyCondition);
+        return $criteriaPart instanceof PropertyCondition;
     }
 
     /**
@@ -51,7 +51,7 @@ class PropertyConditionHandler implements PartialConditionHandlerInterface
         Search $search,
         ShopContextInterface $context
     ) {
-        /** @var PropertyCondition $criteriaPart */
+        /* @var PropertyCondition $criteriaPart */
         $search->addFilter(
             new TermsQuery('properties.id', $criteriaPart->getValueIds())
         );
@@ -66,7 +66,7 @@ class PropertyConditionHandler implements PartialConditionHandlerInterface
         Search $search,
         ShopContextInterface $context
     ) {
-        /** @var PropertyCondition $criteriaPart */
+        /* @var PropertyCondition $criteriaPart */
         $search->addPostFilter(
             new TermsQuery('properties.id', $criteriaPart->getValueIds())
         );

@@ -47,8 +47,8 @@ class CombinedConditionFacet implements FacetInterface
 
     /**
      * @param string|array $conditions
-     * @param string $label
-     * @param string $requestParameter
+     * @param string       $label
+     * @param string       $requestParameter
      */
     public function __construct($conditions, $label, $requestParameter)
     {
@@ -61,25 +61,6 @@ class CombinedConditionFacet implements FacetInterface
         $this->requestParameter = $requestParameter;
     }
 
-    /**
-     * @param array $serialized
-     * @return ConditionInterface[]
-     */
-    private function unserialize($serialized)
-    {
-        $reflector = new ReflectionHelper();
-        if (empty($serialized)) {
-            return [];
-        }
-        $sortings = [];
-        foreach ($serialized as $className => $arguments) {
-            $className = explode('|', $className);
-            $className = $className[0];
-            $sortings[] = $reflector->createInstanceFromNamedArguments($className, $arguments);
-        }
-
-        return $sortings;
-    }
     /**
      * @return string
      */
@@ -110,5 +91,26 @@ class CombinedConditionFacet implements FacetInterface
     public function getRequestParameter()
     {
         return $this->requestParameter;
+    }
+
+    /**
+     * @param array $serialized
+     *
+     * @return ConditionInterface[]
+     */
+    private function unserialize($serialized)
+    {
+        $reflector = new ReflectionHelper();
+        if (empty($serialized)) {
+            return [];
+        }
+        $sortings = [];
+        foreach ($serialized as $className => $arguments) {
+            $className = explode('|', $className);
+            $className = $className[0];
+            $sortings[] = $reflector->createInstanceFromNamedArguments($className, $arguments);
+        }
+
+        return $sortings;
     }
 }

@@ -27,8 +27,8 @@ namespace Shopware\Bundle\SearchBundleES\ConditionHandler;
 use ONGR\ElasticsearchDSL\Query\RangeQuery;
 use ONGR\ElasticsearchDSL\Search;
 use Shopware\Bundle\SearchBundle\Condition\VoteAverageCondition;
-use Shopware\Bundle\SearchBundle\CriteriaPartInterface;
 use Shopware\Bundle\SearchBundle\Criteria;
+use Shopware\Bundle\SearchBundle\CriteriaPartInterface;
 use Shopware\Bundle\SearchBundleES\PartialConditionHandlerInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
@@ -39,7 +39,7 @@ class VoteAverageConditionHandler implements PartialConditionHandlerInterface
      */
     public function supports(CriteriaPartInterface $criteriaPart)
     {
-        return ($criteriaPart instanceof VoteAverageCondition);
+        return $criteriaPart instanceof VoteAverageCondition;
     }
 
     /**
@@ -51,10 +51,10 @@ class VoteAverageConditionHandler implements PartialConditionHandlerInterface
         Search $search,
         ShopContextInterface $context
     ) {
-        /** @var VoteAverageCondition $criteriaPart */
+        /* @var VoteAverageCondition $criteriaPart */
         $search->addFilter(
             new RangeQuery('voteAverage.average', [
-                'gte' => $criteriaPart->getAverage() * 2
+                'gte' => $criteriaPart->getAverage() * 2,
             ])
         );
     }
@@ -68,10 +68,10 @@ class VoteAverageConditionHandler implements PartialConditionHandlerInterface
         Search $search,
         ShopContextInterface $context
     ) {
-        /** @var VoteAverageCondition $criteriaPart */
+        /* @var VoteAverageCondition $criteriaPart */
         $search->addPostFilter(
             new RangeQuery('voteAverage.average', [
-                'gte' => $criteriaPart->getAverage() * 2
+                'gte' => $criteriaPart->getAverage() * 2,
             ])
         );
     }

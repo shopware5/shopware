@@ -25,7 +25,6 @@
 namespace Shopware\Tests\Functional\Bundle\AccountBundle\Service;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Bundle\AccountBundle\Service\CustomerServiceInterface;
 use Shopware\Bundle\AccountBundle\Service\RegisterServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
@@ -37,7 +36,6 @@ use Shopware\Models\Customer\Customer;
 
 /**
  * Class AddressServiceTest
- * @package Shopware\Tests\Functional\Bundle\AccountBundle\Service
  */
 class RegisterServiceTest extends \Enlight_Components_Test_TestCase
 {
@@ -246,18 +244,19 @@ class RegisterServiceTest extends \Enlight_Components_Test_TestCase
      * Helper method for creating a valid customer
      *
      * @param bool $randomEmail
+     *
      * @return array
      */
     private function getCustomerDemoData($randomEmail = false)
     {
-        $emailPrefix = $randomEmail ? uniqid(rand()) : "";
+        $emailPrefix = $randomEmail ? uniqid(rand()) : '';
 
         $data = [
             'salutation' => 'mr',
             'firstname' => 'Albert',
             'lastname' => 'McTaggart',
             'email' => $emailPrefix . 'albert.mctaggart@shopware.test',
-            'password' => uniqid(rand())
+            'password' => uniqid(rand()),
         ];
 
         return $data;
@@ -275,7 +274,7 @@ class RegisterServiceTest extends \Enlight_Components_Test_TestCase
             'zipcode' => '78372',
             'city' => 'Orange Grove',
             'country' => $country,
-            'state' => $this->createState($country)
+            'state' => $this->createState($country),
         ];
 
         return $data;
@@ -290,7 +289,7 @@ class RegisterServiceTest extends \Enlight_Components_Test_TestCase
             'street' => '3844 Euclid Avenue',
             'zipcode' => '93101',
             'city' => 'Santa Barbara',
-            'country' => $this->createCountry()
+            'country' => $this->createCountry(),
         ];
 
         return $data;
@@ -303,7 +302,7 @@ class RegisterServiceTest extends \Enlight_Components_Test_TestCase
     {
         $country = new Country();
 
-        $country->setName('ShopwareLand '.uniqid(rand()));
+        $country->setName('ShopwareLand ' . uniqid(rand()));
         $country->setActive(true);
         $country->setDisplayStateInRegistration(1);
         $country->setForceStateInRegistration(0);
@@ -326,13 +325,14 @@ class RegisterServiceTest extends \Enlight_Components_Test_TestCase
 
     /**
      * @param Country $country
+     *
      * @return State
      */
     private function createState(Country $country)
     {
         $state = new State();
 
-        $state->setName('Shopware State '.uniqid(rand()));
+        $state->setName('Shopware State ' . uniqid(rand()));
         $state->setActive(1);
         $state->setCountry($country);
         $state->setShortCode(uniqid(rand()));
@@ -346,7 +346,7 @@ class RegisterServiceTest extends \Enlight_Components_Test_TestCase
     }
 
     /**
-     * @param array $demoData
+     * @param array    $demoData
      * @param Customer $customer
      */
     private function assertCustomer(array $demoData, Customer $customer)
@@ -363,9 +363,9 @@ class RegisterServiceTest extends \Enlight_Components_Test_TestCase
     }
 
     /**
-     * @param array $demoData
+     * @param array    $demoData
      * @param Customer $customer
-     * @param bool $shipping
+     * @param bool     $shipping
      */
     private function assertAddress(array $demoData, Customer $customer, $shipping = false)
     {

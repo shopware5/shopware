@@ -1,7 +1,29 @@
 <?php
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
 
-use Shopware\Components\CacheManager;
 use Doctrine\ORM\AbstractQuery;
+use Shopware\Components\CacheManager;
 
 /**
  * Shopware 5
@@ -28,7 +50,7 @@ use Doctrine\ORM\AbstractQuery;
 
 /**
  * @category  Shopware
- * @package   Shopware\Controllers\Backend
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_ExtJs
@@ -45,37 +67,26 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
         $this->cacheManager = $this->get('shopware.cache_manager');
     }
 
-    protected function initAcl()
-    {
-        // read
-        $this->addAclPermission('getInfo', 'read', 'Insufficient Permissions');
-        // update
-        $this->addAclPermission('config', 'update', 'Insufficient Permissions');
-        // clear
-        $this->addAclPermission('clearCache', 'clear', 'Insufficient Permissions');
-        $this->addAclPermission('clearDirect', 'clear', 'Insufficient Permissions');
-    }
-
     /**
      * Cache info action
      */
     public function getInfoAction()
     {
-        $data = array(
+        $data = [
             $this->cacheManager->getConfigCacheInfo(),
             $this->cacheManager->getHttpCacheInfo($this->Request()),
             $this->cacheManager->getTemplateCacheInfo(),
             $this->cacheManager->getThemeCacheInfo(),
             $this->cacheManager->getShopwareProxyCacheInfo(),
             $this->cacheManager->getDoctrineProxyCacheInfo(),
-            $this->cacheManager->getOpCacheCacheInfo()
-        );
+            $this->cacheManager->getOpCacheCacheInfo(),
+        ];
 
-        $this->View()->assign(array(
+        $this->View()->assign([
             'success' => true,
-            'data'    => $data,
-            'total'   => count($data)
-        ));
+            'data' => $data,
+            'total' => count($data),
+        ]);
     }
 
     /**
@@ -83,7 +94,7 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
      */
     public function clearCacheAction()
     {
-        $cache = $this->Request()->getPost('cache', array());
+        $cache = $this->Request()->getPost('cache', []);
 
         $cacheInstance = $this->cacheManager->getCoreCache();
 
@@ -94,7 +105,7 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
                 $cacheInstance->clean();
             }
         } else {
-            $tags = array();
+            $tags = [];
             if ($cache['config'] == 'on' || $cache['backend'] == 'on') {
                 $tags[] = 'Shopware_Config';
                 $tags[] = 'Shopware_Plugin';
@@ -137,9 +148,9 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
             $this->cacheManager->clearProxyCache();
         }
 
-        $this->View()->assign(array(
-            'success' => true
-        ));
+        $this->View()->assign([
+            'success' => true,
+        ]);
     }
 
     /**
@@ -151,17 +162,18 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
 
         $repository = $this->get('models')->getRepository('Shopware\Models\Shop\Shop');
 
-        $query = $repository->getShopsWithThemes(array('shop.id' => $shopId));
+        $query = $repository->getShopsWithThemes(['shop.id' => $shopId]);
 
-        /**@var $shop \Shopware\Models\Shop\Shop*/
+        /** @var $shop \Shopware\Models\Shop\Shop */
         $shop = $query->getResult(
             AbstractQuery::HYDRATE_OBJECT
         )[0];
 
         if (!$shop) {
-            $this->View()->assign(array(
-                'success' => false
-            ));
+            $this->View()->assign([
+                'success' => false,
+            ]);
+
             return;
         }
 
@@ -176,17 +188,18 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
             $compiler->compileLess('new', $shop->getTemplate(), $shop);
         } catch (Exception $e) {
             $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);
+
             return;
         }
 
-        $this->View()->assign(array(
-            'success' => true
-        ));
+        $this->View()->assign([
+            'success' => true,
+        ]);
     }
 
     public function moveThemeFilesAction()
     {
-        /**@var $repository \Shopware\Models\Shop\Repository*/
+        /** @var $repository \Shopware\Models\Shop\Repository */
         $repository = $this->get('models')->getRepository('Shopware\Models\Shop\Shop');
         $shops = $repository->getShopsWithThemes()->getResult();
         $compiler = $this->container->get('theme_compiler');
@@ -197,7 +210,7 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
         foreach ($shops as $shop) {
             $oldTimestamp = $compiler->getThemeTimestamp($shop);
             if ($oldTimestamp == $time) {
-                $time++;
+                ++$time;
             }
 
             $new = $pathResolver->getCssFilePath($shop, 'new');
@@ -237,5 +250,16 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
             default:
                 break;
         }
+    }
+
+    protected function initAcl()
+    {
+        // read
+        $this->addAclPermission('getInfo', 'read', 'Insufficient Permissions');
+        // update
+        $this->addAclPermission('config', 'update', 'Insufficient Permissions');
+        // clear
+        $this->addAclPermission('clearCache', 'clear', 'Insufficient Permissions');
+        $this->addAclPermission('clearDirect', 'clear', 'Insufficient Permissions');
     }
 }

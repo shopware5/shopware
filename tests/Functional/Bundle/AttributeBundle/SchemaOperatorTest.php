@@ -1,12 +1,34 @@
 <?php
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
 
 namespace Shopware\Tests\Functional\Bundle\AttributeBundle;
 
-class SchemaOperatorTest extends \PHPUnit_Framework_TestCase
+class SchemaOperatorTest extends \PHPUnit\Framework\TestCase
 {
     public function testDefaultValues()
     {
-        $types = array(
+        $types = [
             'string' => 'test123',
             'integer' => 123,
             'float' => 123,
@@ -18,14 +40,14 @@ class SchemaOperatorTest extends \PHPUnit_Framework_TestCase
             'combobox' => '1',
             'multi_selection' => '1',
             'single_selection' => 'SW10003',
-        );
+        ];
 
         $this->iterateTypeArray($types);
     }
 
     public function testNullDefaultValues()
     {
-        $types = array(
+        $types = [
             'string' => null,
             'integer' => null,
             'float' => null,
@@ -36,15 +58,15 @@ class SchemaOperatorTest extends \PHPUnit_Framework_TestCase
             'html' => null,
             'combobox' => null,
             'multi_selection' => null,
-            'single_selection' => null
-        );
+            'single_selection' => null,
+        ];
 
         $this->iterateTypeArray($types);
     }
 
     public function testNullStringDefaultValues()
     {
-        $types = array(
+        $types = [
             'string' => 'NULL',
             'integer' => 'NULL',
             'float' => 'NULL',
@@ -55,14 +77,15 @@ class SchemaOperatorTest extends \PHPUnit_Framework_TestCase
             'html' => 'NULL',
             'combobox' => 'NULL',
             'multi_selection' => 'NULL',
-            'single_selection' => 'NULL'
-        );
+            'single_selection' => 'NULL',
+        ];
 
         $this->iterateTypeArray($types);
     }
 
     /**
      * @param $types
+     *
      * @throws \Exception
      */
     private function iterateTypeArray($types)

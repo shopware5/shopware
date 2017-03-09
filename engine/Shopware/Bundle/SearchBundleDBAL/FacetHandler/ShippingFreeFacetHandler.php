@@ -25,23 +25,23 @@
 namespace Shopware\Bundle\SearchBundleDBAL\FacetHandler;
 
 use Shopware\Bundle\SearchBundle\Criteria;
-use Shopware\Bundle\SearchBundle\FacetResult\BooleanFacetResult;
-use Shopware\Bundle\SearchBundleDBAL\PartialFacetHandlerInterface;
-use Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactory;
 use Shopware\Bundle\SearchBundle\Facet;
 use Shopware\Bundle\SearchBundle\FacetInterface;
+use Shopware\Bundle\SearchBundle\FacetResult\BooleanFacetResult;
+use Shopware\Bundle\SearchBundleDBAL\PartialFacetHandlerInterface;
+use Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactoryInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\QueryAliasMapper;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\SearchBundleDBAL\FacetHandler
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ShippingFreeFacetHandler implements PartialFacetHandlerInterface
 {
     /**
-     * @var QueryBuilderFactory
+     * @var QueryBuilderFactoryInterface
      */
     private $queryBuilderFactory;
 
@@ -56,12 +56,12 @@ class ShippingFreeFacetHandler implements PartialFacetHandlerInterface
     private $fieldName;
 
     /**
-     * @param QueryBuilderFactory $queryBuilderFactory
+     * @param QueryBuilderFactoryInterface         $queryBuilderFactory
      * @param \Shopware_Components_Snippet_Manager $snippetManager
-     * @param QueryAliasMapper $queryAliasMapper
+     * @param QueryAliasMapper                     $queryAliasMapper
      */
     public function __construct(
-        QueryBuilderFactory $queryBuilderFactory,
+        QueryBuilderFactoryInterface $queryBuilderFactory,
         \Shopware_Components_Snippet_Manager $snippetManager,
         QueryAliasMapper $queryAliasMapper
     ) {
@@ -87,7 +87,7 @@ class ShippingFreeFacetHandler implements PartialFacetHandlerInterface
             ->andWhere('variant.shippingfree = 1')
             ->setMaxResults(1);
 
-        /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
+        /** @var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
 
         $total = $statement->fetch(\PDO::FETCH_COLUMN);
@@ -100,7 +100,7 @@ class ShippingFreeFacetHandler implements PartialFacetHandlerInterface
         if (!empty($facet->getLabel())) {
             $label = $facet->getLabel();
         } else {
-            $label =  $this->snippetNamespace->get($facet->getName(), 'Shipping free');
+            $label = $this->snippetNamespace->get($facet->getName(), 'Shipping free');
         }
 
         return new BooleanFacetResult(
@@ -116,6 +116,6 @@ class ShippingFreeFacetHandler implements PartialFacetHandlerInterface
      */
     public function supportsFacet(FacetInterface $facet)
     {
-        return ($facet instanceof Facet\ShippingFreeFacet);
+        return $facet instanceof Facet\ShippingFreeFacet;
     }
 }

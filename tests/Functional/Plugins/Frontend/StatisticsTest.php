@@ -24,7 +24,7 @@
 
 /**
  * @category  Shopware
- * @package   Shopware\Tests
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Tests_Plugins_Frontend_StatisticsTest extends Enlight_Components_Test_Plugin_TestCase
@@ -43,7 +43,7 @@ class Shopware_Tests_Plugins_Frontend_StatisticsTest extends Enlight_Components_
 
         $this->plugin = Shopware()->Plugins()->Frontend()->Statistics();
 
-        $sql= "INSERT IGNORE INTO `s_emarketing_partner` (`idcode`, `datum`, `company`, `contact`, `street`, `zipcode`, `city`, `phone`, `fax`, `country`, `email`, `web`, `profil`, `fix`, `percent`, `cookielifetime`, `active`, `userID`) VALUES
+        $sql = "INSERT IGNORE INTO `s_emarketing_partner` (`idcode`, `datum`, `company`, `contact`, `street`, `zipcode`, `city`, `phone`, `fax`, `country`, `email`, `web`, `profil`, `fix`, `percent`, `cookielifetime`, `active`, `userID`) VALUES
                   ('test123', '0000-00-00', 'Partner', '', '', '', '', '', '', '', '', '', '', 0, 10, 3600, 1, NULL)";
         Shopware()->Db()->query($sql);
     }
@@ -55,7 +55,7 @@ class Shopware_Tests_Plugins_Frontend_StatisticsTest extends Enlight_Components_
     {
         parent::tearDown();
 
-        $sql= "DELETE FROM s_emarketing_partner where idcode = 'test123'";
+        $sql = "DELETE FROM s_emarketing_partner where idcode = 'test123'";
         Shopware()->Db()->query($sql);
     }
 
@@ -81,7 +81,7 @@ class Shopware_Tests_Plugins_Frontend_StatisticsTest extends Enlight_Components_
             ->setRemoteAddress('192.168.33.10')
             ->setRequestUri('/foobar');
 
-        /** @var \Enlight_Controller_Request_RequestTestCase $request */
+        /* @var \Enlight_Controller_Request_RequestTestCase $request */
         $request->setDeviceType('mobile');
 
         $this->Plugin()->refreshCurrentUsers($request);
@@ -101,12 +101,12 @@ class Shopware_Tests_Plugins_Frontend_StatisticsTest extends Enlight_Components_
      */
     public function providerReferer()
     {
-        return array(
-          array('http://google.de/', '123', 'http://google.de/$123', true),
-          array('http://google.de/', null, 'http://google.de/', true),
-          array('http://google.de/', null, 'www.google.de/', false),
-          array('http://google.de/', null, 'http://'.Shopware()->Config()->Host.'/', false)
-        );
+        return [
+          ['http://google.de/', '123', 'http://google.de/$123', true],
+          ['http://google.de/', null, 'http://google.de/', true],
+          ['http://google.de/', null, 'www.google.de/', false],
+          ['http://google.de/', null, 'http://' . Shopware()->Config()->Host . '/', false],
+        ];
     }
 
     /**
@@ -116,14 +116,14 @@ class Shopware_Tests_Plugins_Frontend_StatisticsTest extends Enlight_Components_
      */
     public function testRefreshReferer($referer, $partner, $result, $assert)
     {
-        $request = $this->Request()->setQuery(array('sPartner'=> $partner, 'referer'=> $referer));
+        $request = $this->Request()->setQuery(['sPartner' => $partner, 'referer' => $referer]);
 
         $this->Plugin()->refreshReferer($request);
 
         $sql = 'SELECT `id` FROM `s_statistics_referer` WHERE `referer`=?';
-        $insertId = Shopware()->Db()->fetchOne($sql, array(
-            $result
-        ));
+        $insertId = Shopware()->Db()->fetchOne($sql, [
+            $result,
+        ]);
 
         $this->assertEquals($assert, !empty($insertId));
     }

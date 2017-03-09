@@ -1,5 +1,28 @@
 <?php
-class Shopware_Tests_Api_CategoryTest extends PHPUnit_Framework_TestCase
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
+
+class Shopware_Tests_Api_CategoryTest extends PHPUnit\Framework\TestCase
 {
     public $apiBaseUrl = '';
 
@@ -20,9 +43,9 @@ class Shopware_Tests_Api_CategoryTest extends PHPUnit_Framework_TestCase
             );
         }
 
-        $this->apiBaseUrl =  'http://' . $hostname . $helper->Shop()->getBasePath() . '/api';
+        $this->apiBaseUrl = 'http://' . $hostname . $helper->Shop()->getBasePath() . '/api';
 
-        Shopware()->Db()->query('UPDATE s_core_auth SET apiKey = ? WHERE username LIKE "demo"', array(sha1('demo')));
+        Shopware()->Db()->query('UPDATE s_core_auth SET apiKey = ? WHERE username LIKE "demo"', [sha1('demo')]);
     }
 
     /**
@@ -34,12 +57,12 @@ class Shopware_Tests_Api_CategoryTest extends PHPUnit_Framework_TestCase
         $password = sha1('demo');
 
         $adapter = new Zend_Http_Client_Adapter_Curl();
-        $adapter->setConfig(array(
-            'curloptions' => array(
-                CURLOPT_HTTPAUTH    => CURLAUTH_DIGEST,
-                CURLOPT_USERPWD     => "$username:$password"
-            )
-        ));
+        $adapter->setConfig([
+            'curloptions' => [
+                CURLOPT_HTTPAUTH => CURLAUTH_DIGEST,
+                CURLOPT_USERPWD => "$username:$password",
+            ],
+        ]);
 
         $client = new Zend_Http_Client();
         $client->setAdapter($adapter);
@@ -91,10 +114,10 @@ class Shopware_Tests_Api_CategoryTest extends PHPUnit_Framework_TestCase
     {
         $client = $this->getHttpClient()->setUri($this->apiBaseUrl . '/categories/');
 
-        $requestData = array(
-            "name" => "Test Category",
-            "parentId" => 3
-        );
+        $requestData = [
+            'name' => 'Test Category',
+            'parentId' => 3,
+        ];
 
         $requestData = Zend_Json::encode($requestData);
         $client->setRawData($requestData, 'application/json; charset=UTF-8');
@@ -112,7 +135,7 @@ class Shopware_Tests_Api_CategoryTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('success', $result);
         $this->assertTrue($result['success']);
 
-        $location   = $response->getHeader('Location');
+        $location = $response->getHeader('Location');
         $identifier = (int) array_pop(explode('/', $location));
 
         $this->assertGreaterThan(0, $identifier);
@@ -124,14 +147,14 @@ class Shopware_Tests_Api_CategoryTest extends PHPUnit_Framework_TestCase
     {
         $client = $this->getHttpClient()->setUri($this->apiBaseUrl . '/categories/');
 
-        $requestData = array(
-            'active'  => true,
-            'email'   => 'invalid',
-            'billing' => array(
+        $requestData = [
+            'active' => true,
+            'email' => 'invalid',
+            'billing' => [
                 'firstName' => 'Max',
-                'lastName'  => 'Mustermann',
-            ),
-        );
+                'lastName' => 'Mustermann',
+            ],
+        ];
         $requestData = Zend_Json::encode($requestData);
 
         $client->setRawData($requestData, 'application/json; charset=UTF-8');
@@ -176,7 +199,6 @@ class Shopware_Tests_Api_CategoryTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('parentId', $data);
     }
 
-
     /**
      * @depends testPostCategoriesShouldBeSuccessful
      */
@@ -184,10 +206,10 @@ class Shopware_Tests_Api_CategoryTest extends PHPUnit_Framework_TestCase
     {
         $client = $this->getHttpClient()->setUri($this->apiBaseUrl . '/categories/' . $id);
 
-        $requestData = array(
-            'active'  => true,
-            'email'  => 'invalid',
-        );
+        $requestData = [
+            'active' => true,
+            'email' => 'invalid',
+        ];
         $requestData = Zend_Json::encode($requestData);
 
         $client->setRawData($requestData, 'application/json; charset=UTF-8');
@@ -213,9 +235,9 @@ class Shopware_Tests_Api_CategoryTest extends PHPUnit_Framework_TestCase
     {
         $client = $this->getHttpClient()->setUri($this->apiBaseUrl . '/categories/' . $id);
 
-        $requestData = array(
-            'name'  => "Changed test category"
-        );
+        $requestData = [
+            'name' => 'Changed test category',
+        ];
         $requestData = Zend_Json::encode($requestData);
 
         $client->setRawData($requestData, 'application/json; charset=UTF-8');
@@ -259,7 +281,7 @@ class Shopware_Tests_Api_CategoryTest extends PHPUnit_Framework_TestCase
         $this->assertInternalType('array', $data);
         $this->assertArrayHasKey('id', $data);
         $this->assertArrayHasKey('name', $data);
-        $this->assertEquals("Changed test category", $data['name']);
+        $this->assertEquals('Changed test category', $data['name']);
 
         return $id;
     }
@@ -311,10 +333,10 @@ class Shopware_Tests_Api_CategoryTest extends PHPUnit_Framework_TestCase
         $id = 99999999;
         $client = $this->getHttpClient()->setUri($this->apiBaseUrl . '/categories/' . $id);
 
-        $requestData = array(
-            'active'  => true,
-            'email'   => 'test@foobar.com'
-        );
+        $requestData = [
+            'active' => true,
+            'email' => 'test@foobar.com',
+        ];
         $requestData = Zend_Json::encode($requestData);
 
         $client->setRawData($requestData, 'application/json; charset=UTF-8');

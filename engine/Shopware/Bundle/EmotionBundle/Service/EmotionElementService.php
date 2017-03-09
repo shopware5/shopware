@@ -54,12 +54,12 @@ class EmotionElementService implements EmotionElementServiceInterface
     private $dataCollectionResolver;
 
     /**
-     * @param array $componentHandler
-     * @param EmotionElementGateway $gateway
-     * @param EventComponentHandler $eventComponentHandler
+     * @param array                           $componentHandler
+     * @param EmotionElementGateway           $gateway
+     * @param EventComponentHandler           $eventComponentHandler
      * @param DataCollectionResolverInterface $dataCollectionResolver
      */
-    public function __construct(array $componentHandler = [], EmotionElementGateway $gateway, EventComponentHandler $eventComponentHandler, DataCollectionResolverInterface $dataCollectionResolver)
+    public function __construct(array $componentHandler, EmotionElementGateway $gateway, EventComponentHandler $eventComponentHandler, DataCollectionResolverInterface $dataCollectionResolver)
     {
         $this->gateway = $gateway;
         $this->eventComponentHandler = $eventComponentHandler;
@@ -68,8 +68,9 @@ class EmotionElementService implements EmotionElementServiceInterface
     }
 
     /**
-     * @param int[] $emotionIds
+     * @param int[]                $emotionIds
      * @param ShopContextInterface $context
+     *
      * @return \Shopware\Bundle\EmotionBundle\Struct\Emotion[]
      */
     public function getList(array $emotionIds, ShopContextInterface $context)
@@ -82,7 +83,7 @@ class EmotionElementService implements EmotionElementServiceInterface
     }
 
     /**
-     * @param array $elementList
+     * @param array                $elementList
      * @param ShopContextInterface $context
      */
     private function handleElements(array $elementList, ShopContextInterface $context)
@@ -90,7 +91,7 @@ class EmotionElementService implements EmotionElementServiceInterface
         $prepareCollection = new PrepareDataCollection();
 
         /**
-         * @var int $emotionId
+         * @var int
          * @var Element[] $elements
          */
         foreach ($elementList as $emotionId => $elements) {
@@ -102,7 +103,7 @@ class EmotionElementService implements EmotionElementServiceInterface
         $resolvedCollection = $this->dataCollectionResolver->resolve($prepareCollection, $context);
 
         /**
-         * @var int $emotionId
+         * @var int
          * @var Element[] $elements
          */
         foreach ($elementList as $emotionId => $elements) {
@@ -114,8 +115,8 @@ class EmotionElementService implements EmotionElementServiceInterface
 
     /**
      * @param PrepareDataCollection $collection
-     * @param Element $element
-     * @param ShopContextInterface $context
+     * @param Element               $element
+     * @param ShopContextInterface  $context
      */
     private function prepareElement(PrepareDataCollection $collection, Element $element, ShopContextInterface $context)
     {
@@ -125,8 +126,8 @@ class EmotionElementService implements EmotionElementServiceInterface
 
     /**
      * @param ResolvedDataCollection $collection
-     * @param Element $element
-     * @param ShopContextInterface $context
+     * @param Element                $element
+     * @param ShopContextInterface   $context
      */
     private function handleElement(ResolvedDataCollection $collection, Element $element, ShopContextInterface $context)
     {
@@ -136,6 +137,7 @@ class EmotionElementService implements EmotionElementServiceInterface
 
     /**
      * @param Element $element
+     *
      * @return mixed|null
      */
     private function findElementHandler(Element $element)

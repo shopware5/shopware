@@ -28,13 +28,14 @@ use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class UnitHydrator extends Hydrator
 {
     /**
      * @param array $data
+     *
      * @return \Shopware\Bundle\StoreFrontBundle\Struct\Product\Unit
      */
     public function hydrate(array $data)
@@ -50,7 +51,7 @@ class UnitHydrator extends Hydrator
      * Assigns the passed data array to the passed unit instance.
      *
      * @param Struct\Product\Unit $unit
-     * @param array $data
+     * @param array               $data
      */
     private function assignUnitData(Struct\Product\Unit $unit, array $data)
     {

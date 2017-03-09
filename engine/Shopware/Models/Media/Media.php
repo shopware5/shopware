@@ -25,10 +25,9 @@
 namespace   Shopware\Models\Media;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * In Shopware all media resources are represented in the media model.
@@ -87,1164 +86,10 @@ class Media extends ModelEntity
     const TYPE_UNKNOWN = 'UNKNOWN';
 
     /**
-     * Contains the default thumbnail sizes which used for backend modules.
-     * @var array
-     */
-    private $defaultThumbnails = array(
-        array(140,140)
-    );
-
-    /**
-     * All known file extensions and the mapped media type
-     * @var array
-     */
-    private $typeMapping = array(
-        '24b' => Media::TYPE_IMAGE,
-        'ai' => Media::TYPE_IMAGE,
-        'bmp' => Media::TYPE_IMAGE,
-        'cdr' => Media::TYPE_IMAGE,
-        'gif' => Media::TYPE_IMAGE,
-        'iff' => Media::TYPE_IMAGE,
-        'ilbm' => Media::TYPE_IMAGE,
-        'jpeg' => Media::TYPE_IMAGE,
-        'jpg' => Media::TYPE_IMAGE,
-        'pcx' => Media::TYPE_IMAGE,
-        'png' => Media::TYPE_IMAGE,
-        'tif' => Media::TYPE_IMAGE,
-        'tiff' => Media::TYPE_IMAGE,
-        'eps' => Media::TYPE_IMAGE,
-        'pbm' => Media::TYPE_IMAGE,
-        'psd' => Media::TYPE_IMAGE,
-        'wbm' => Media::TYPE_IMAGE,
-        '264' => Media::TYPE_VIDEO,
-        '3g2' => Media::TYPE_VIDEO,
-        '3gp' => Media::TYPE_VIDEO,
-        '3gp2' => Media::TYPE_VIDEO,
-        '3gpp' => Media::TYPE_VIDEO,
-        '3gpp2' => Media::TYPE_VIDEO,
-        '3mm' => Media::TYPE_VIDEO,
-        '3p2' => Media::TYPE_VIDEO,
-        '60d' => Media::TYPE_VIDEO,
-        '787' => Media::TYPE_VIDEO,
-        'aaf' => Media::TYPE_VIDEO,
-        'aep' => Media::TYPE_VIDEO,
-        'aepx' => Media::TYPE_VIDEO,
-        'aet' => Media::TYPE_VIDEO,
-        'aetx' => Media::TYPE_VIDEO,
-        'ajp' => Media::TYPE_VIDEO,
-        'ale' => Media::TYPE_VIDEO,
-        'amv' => Media::TYPE_VIDEO,
-        'amx' => Media::TYPE_VIDEO,
-        'anim' => Media::TYPE_VIDEO,
-        'arf' => Media::TYPE_VIDEO,
-        'asf' => Media::TYPE_VIDEO,
-        'asx' => Media::TYPE_VIDEO,
-        'avb' => Media::TYPE_VIDEO,
-        'avd' => Media::TYPE_VIDEO,
-        'avi' => Media::TYPE_VIDEO,
-        'avp' => Media::TYPE_VIDEO,
-        'avs' => Media::TYPE_VIDEO,
-        'axm' => Media::TYPE_VIDEO,
-        'bdm' => Media::TYPE_VIDEO,
-        'bdmv' => Media::TYPE_VIDEO,
-        'bik' => Media::TYPE_VIDEO,
-        'bin' => Media::TYPE_VIDEO,
-        'bix' => Media::TYPE_VIDEO,
-        'bmk' => Media::TYPE_VIDEO,
-        'bnp' => Media::TYPE_VIDEO,
-        'box' => Media::TYPE_VIDEO,
-        'bs4' => Media::TYPE_VIDEO,
-        'bsf' => Media::TYPE_VIDEO,
-        'byu' => Media::TYPE_VIDEO,
-        'camproj' => Media::TYPE_VIDEO,
-        'camrec' => Media::TYPE_VIDEO,
-        'clpi' => Media::TYPE_VIDEO,
-        'cmmp' => Media::TYPE_VIDEO,
-        'cmmtpl' => Media::TYPE_VIDEO,
-        'cmproj' => Media::TYPE_VIDEO,
-        'cmrec' => Media::TYPE_VIDEO,
-        'cpi' => Media::TYPE_VIDEO,
-        'cst' => Media::TYPE_VIDEO,
-        'cvc' => Media::TYPE_VIDEO,
-        'd2v' => Media::TYPE_VIDEO,
-        'd3v' => Media::TYPE_VIDEO,
-        'dat' => Media::TYPE_VIDEO,
-        'dav' => Media::TYPE_VIDEO,
-        'dce' => Media::TYPE_VIDEO,
-        'dck' => Media::TYPE_VIDEO,
-        'ddat' => Media::TYPE_VIDEO,
-        'dif' => Media::TYPE_VIDEO,
-        'dir' => Media::TYPE_VIDEO,
-        'divx' => Media::TYPE_VIDEO,
-        'dlx' => Media::TYPE_VIDEO,
-        'dmb' => Media::TYPE_VIDEO,
-        'dmsd' => Media::TYPE_VIDEO,
-        'dmsd3d' => Media::TYPE_VIDEO,
-        'dmsm' => Media::TYPE_VIDEO,
-        'dmsm3d' => Media::TYPE_VIDEO,
-        'dmss' => Media::TYPE_VIDEO,
-        'dnc' => Media::TYPE_VIDEO,
-        'dpa' => Media::TYPE_VIDEO,
-        'dpg' => Media::TYPE_VIDEO,
-        'dream' => Media::TYPE_VIDEO,
-        'dsy' => Media::TYPE_VIDEO,
-        'dv' => Media::TYPE_VIDEO,
-        'dv-avi' => Media::TYPE_VIDEO,
-        'dv4' => Media::TYPE_VIDEO,
-        'dvdmedia' => Media::TYPE_VIDEO,
-        'dvr' => Media::TYPE_VIDEO,
-        'dvr-ms' => Media::TYPE_VIDEO,
-        'dvx' => Media::TYPE_VIDEO,
-        'dxr' => Media::TYPE_VIDEO,
-        'dzm' => Media::TYPE_VIDEO,
-        'dzp' => Media::TYPE_VIDEO,
-        'dzt' => Media::TYPE_VIDEO,
-        'edl' => Media::TYPE_VIDEO,
-        'evo' => Media::TYPE_VIDEO,
-        'eye' => Media::TYPE_VIDEO,
-        'f4p' => Media::TYPE_VIDEO,
-        'f4v' => Media::TYPE_VIDEO,
-        'fbr' => Media::TYPE_VIDEO,
-        'fbz' => Media::TYPE_VIDEO,
-        'fcp' => Media::TYPE_VIDEO,
-        'fcproject' => Media::TYPE_VIDEO,
-        'flc' => Media::TYPE_VIDEO,
-        'flh' => Media::TYPE_VIDEO,
-        'fli' => Media::TYPE_VIDEO,
-        'flv' => Media::TYPE_VIDEO,
-        'flx' => Media::TYPE_VIDEO,
-        'gfp' => Media::TYPE_VIDEO,
-        'gl' => Media::TYPE_VIDEO,
-        'grasp' => Media::TYPE_VIDEO,
-        'gts' => Media::TYPE_VIDEO,
-        'gvi' => Media::TYPE_VIDEO,
-        'gvp' => Media::TYPE_VIDEO,
-        'h264' => Media::TYPE_VIDEO,
-        'hdmov' => Media::TYPE_VIDEO,
-        'hkm' => Media::TYPE_VIDEO,
-        'ifo' => Media::TYPE_VIDEO,
-        'imovieproj' => Media::TYPE_VIDEO,
-        'imovieproject' => Media::TYPE_VIDEO,
-        'irf' => Media::TYPE_VIDEO,
-        'ism' => Media::TYPE_VIDEO,
-        'ismc' => Media::TYPE_VIDEO,
-        'ismv' => Media::TYPE_VIDEO,
-        'iva' => Media::TYPE_VIDEO,
-        'ivf' => Media::TYPE_VIDEO,
-        'ivr' => Media::TYPE_VIDEO,
-        'ivs' => Media::TYPE_VIDEO,
-        'izz' => Media::TYPE_VIDEO,
-        'izzy' => Media::TYPE_VIDEO,
-        'jts' => Media::TYPE_VIDEO,
-        'jtv' => Media::TYPE_VIDEO,
-        'k3g' => Media::TYPE_VIDEO,
-        'lrec' => Media::TYPE_VIDEO,
-        'lsf' => Media::TYPE_VIDEO,
-        'lsx' => Media::TYPE_VIDEO,
-        'm15' => Media::TYPE_VIDEO,
-        'm1pg' => Media::TYPE_VIDEO,
-        'm1v' => Media::TYPE_VIDEO,
-        'm21' => Media::TYPE_VIDEO,
-        'm2a' => Media::TYPE_VIDEO,
-        'm2p' => Media::TYPE_VIDEO,
-        'm2t' => Media::TYPE_VIDEO,
-        'm2ts' => Media::TYPE_VIDEO,
-        'm2v' => Media::TYPE_VIDEO,
-        'm4e' => Media::TYPE_VIDEO,
-        'm4u' => Media::TYPE_VIDEO,
-        'm4v' => Media::TYPE_VIDEO,
-        'm75' => Media::TYPE_VIDEO,
-        'meta' => Media::TYPE_VIDEO,
-        'mgv' => Media::TYPE_VIDEO,
-        'mj2' => Media::TYPE_VIDEO,
-        'mjp' => Media::TYPE_VIDEO,
-        'mjpg' => Media::TYPE_VIDEO,
-        'mkv' => Media::TYPE_VIDEO,
-        'mmv' => Media::TYPE_VIDEO,
-        'mnv' => Media::TYPE_VIDEO,
-        'mob' => Media::TYPE_VIDEO,
-        'mod' => Media::TYPE_VIDEO,
-        'modd' => Media::TYPE_VIDEO,
-        'moff' => Media::TYPE_VIDEO,
-        'moi' => Media::TYPE_VIDEO,
-        'moov' => Media::TYPE_VIDEO,
-        'mov' => Media::TYPE_VIDEO,
-        'movie' => Media::TYPE_VIDEO,
-        'mp21' => Media::TYPE_VIDEO,
-        'mp2v' => Media::TYPE_VIDEO,
-        'mp4' => Media::TYPE_VIDEO,
-        'mp4v' => Media::TYPE_VIDEO,
-        'mpe' => Media::TYPE_VIDEO,
-        'mpeg' => Media::TYPE_VIDEO,
-        'mpeg4' => Media::TYPE_VIDEO,
-        'mpf' => Media::TYPE_VIDEO,
-        'mpg' => Media::TYPE_VIDEO,
-        'mpg2' => Media::TYPE_VIDEO,
-        'mpgindex' => Media::TYPE_VIDEO,
-        'mpl' => Media::TYPE_VIDEO,
-        'mpls' => Media::TYPE_VIDEO,
-        'mpsub' => Media::TYPE_VIDEO,
-        'mpv' => Media::TYPE_VIDEO,
-        'mpv2' => Media::TYPE_VIDEO,
-        'mqv' => Media::TYPE_VIDEO,
-        'msdvd' => Media::TYPE_VIDEO,
-        'msh' => Media::TYPE_VIDEO,
-        'mswmm' => Media::TYPE_VIDEO,
-        'mts' => Media::TYPE_VIDEO,
-        'mtv' => Media::TYPE_VIDEO,
-        'mvb' => Media::TYPE_VIDEO,
-        'mvc' => Media::TYPE_VIDEO,
-        'mvd' => Media::TYPE_VIDEO,
-        'mve' => Media::TYPE_VIDEO,
-        'mvp' => Media::TYPE_VIDEO,
-        'mvy' => Media::TYPE_VIDEO,
-        'mxf' => Media::TYPE_VIDEO,
-        'mys' => Media::TYPE_VIDEO,
-        'ncor' => Media::TYPE_VIDEO,
-        'nsv' => Media::TYPE_VIDEO,
-        'nuv' => Media::TYPE_VIDEO,
-        'nvc' => Media::TYPE_VIDEO,
-        'ogm' => Media::TYPE_VIDEO,
-        'ogv' => Media::TYPE_VIDEO,
-        'ogx' => Media::TYPE_VIDEO,
-        'osp' => Media::TYPE_VIDEO,
-        'par' => Media::TYPE_VIDEO,
-        'pds' => Media::TYPE_VIDEO,
-        'pgi' => Media::TYPE_VIDEO,
-        'photoshow' => Media::TYPE_VIDEO,
-        'piv' => Media::TYPE_VIDEO,
-        'playlist' => Media::TYPE_VIDEO,
-        'pmf' => Media::TYPE_VIDEO,
-        'pmv' => Media::TYPE_VIDEO,
-        'pns' => Media::TYPE_VIDEO,
-        'ppj' => Media::TYPE_VIDEO,
-        'prel' => Media::TYPE_VIDEO,
-        'pro' => Media::TYPE_VIDEO,
-        'prproj' => Media::TYPE_VIDEO,
-        'prtl' => Media::TYPE_VIDEO,
-        'psh' => Media::TYPE_VIDEO,
-        'pssd' => Media::TYPE_VIDEO,
-        'pva' => Media::TYPE_VIDEO,
-        'pvr' => Media::TYPE_VIDEO,
-        'pxv' => Media::TYPE_VIDEO,
-        'qt' => Media::TYPE_VIDEO,
-        'qtch' => Media::TYPE_VIDEO,
-        'qtl' => Media::TYPE_VIDEO,
-        'qtm' => Media::TYPE_VIDEO,
-        'qtz' => Media::TYPE_VIDEO,
-        'r3d' => Media::TYPE_VIDEO,
-        'rcproject' => Media::TYPE_VIDEO,
-        'rdb' => Media::TYPE_VIDEO,
-        'rec' => Media::TYPE_VIDEO,
-        'rm' => Media::TYPE_VIDEO,
-        'rmd' => Media::TYPE_VIDEO,
-        'rmp' => Media::TYPE_VIDEO,
-        'rms' => Media::TYPE_VIDEO,
-        'rmvb' => Media::TYPE_VIDEO,
-        'roq' => Media::TYPE_VIDEO,
-        'rp' => Media::TYPE_VIDEO,
-        'rsx' => Media::TYPE_VIDEO,
-        'rts' => Media::TYPE_VIDEO,
-        'rum' => Media::TYPE_VIDEO,
-        'rv' => Media::TYPE_VIDEO,
-        'sbk' => Media::TYPE_VIDEO,
-        'sbt' => Media::TYPE_VIDEO,
-        'scc' => Media::TYPE_VIDEO,
-        'scm' => Media::TYPE_VIDEO,
-        'scn' => Media::TYPE_VIDEO,
-        'screenflow' => Media::TYPE_VIDEO,
-        'sec' => Media::TYPE_VIDEO,
-        'seq' => Media::TYPE_VIDEO,
-        'sfd' => Media::TYPE_VIDEO,
-        'sfvidcap' => Media::TYPE_VIDEO,
-        'smi' => Media::TYPE_VIDEO,
-        'smil' => Media::TYPE_VIDEO,
-        'smk' => Media::TYPE_VIDEO,
-        'sml' => Media::TYPE_VIDEO,
-        'smv' => Media::TYPE_VIDEO,
-        'spl' => Media::TYPE_VIDEO,
-        'sqz' => Media::TYPE_VIDEO,
-        'srt' => Media::TYPE_VIDEO,
-        'ssm' => Media::TYPE_VIDEO,
-        'str' => Media::TYPE_VIDEO,
-        'stx' => Media::TYPE_VIDEO,
-        'svi' => Media::TYPE_VIDEO,
-        'swf' => Media::TYPE_VIDEO,
-        'swi' => Media::TYPE_VIDEO,
-        'swt' => Media::TYPE_VIDEO,
-        'tda3mt' => Media::TYPE_VIDEO,
-        'tdx' => Media::TYPE_VIDEO,
-        'tivo' => Media::TYPE_VIDEO,
-        'tix' => Media::TYPE_VIDEO,
-        'tod' => Media::TYPE_VIDEO,
-        'tp' => Media::TYPE_VIDEO,
-        'tp0' => Media::TYPE_VIDEO,
-        'tpd' => Media::TYPE_VIDEO,
-        'tpr' => Media::TYPE_VIDEO,
-        'trp' => Media::TYPE_VIDEO,
-        'ts' => Media::TYPE_VIDEO,
-        'tsp' => Media::TYPE_VIDEO,
-        'tvs' => Media::TYPE_VIDEO,
-        'vc1' => Media::TYPE_VIDEO,
-        'vcpf' => Media::TYPE_VIDEO,
-        'vcr' => Media::TYPE_VIDEO,
-        'vcv' => Media::TYPE_VIDEO,
-        'vdo' => Media::TYPE_VIDEO,
-        'vdr' => Media::TYPE_VIDEO,
-        'veg' => Media::TYPE_VIDEO,
-        'vem' => Media::TYPE_VIDEO,
-        'vep' => Media::TYPE_VIDEO,
-        'vf' => Media::TYPE_VIDEO,
-        'vft' => Media::TYPE_VIDEO,
-        'vfw' => Media::TYPE_VIDEO,
-        'vfz' => Media::TYPE_VIDEO,
-        'vgz' => Media::TYPE_VIDEO,
-        'vid' => Media::TYPE_VIDEO,
-        'video' => Media::TYPE_VIDEO,
-        'viewlet' => Media::TYPE_VIDEO,
-        'viv' => Media::TYPE_VIDEO,
-        'vivo' => Media::TYPE_VIDEO,
-        'vlab' => Media::TYPE_VIDEO,
-        'vob' => Media::TYPE_VIDEO,
-        'vp3' => Media::TYPE_VIDEO,
-        'vp6' => Media::TYPE_VIDEO,
-        'vp7' => Media::TYPE_VIDEO,
-        'vpj' => Media::TYPE_VIDEO,
-        'vro' => Media::TYPE_VIDEO,
-        'vs4' => Media::TYPE_VIDEO,
-        'vse' => Media::TYPE_VIDEO,
-        'vsp' => Media::TYPE_VIDEO,
-        'w32' => Media::TYPE_VIDEO,
-        'wcp' => Media::TYPE_VIDEO,
-        'webm' => Media::TYPE_VIDEO,
-        'wlmp' => Media::TYPE_VIDEO,
-        'wm' => Media::TYPE_VIDEO,
-        'wmd' => Media::TYPE_VIDEO,
-        'wmmp' => Media::TYPE_VIDEO,
-        'wmv' => Media::TYPE_VIDEO,
-        'wmx' => Media::TYPE_VIDEO,
-        'wot' => Media::TYPE_VIDEO,
-        'wp3' => Media::TYPE_VIDEO,
-        'wpl' => Media::TYPE_VIDEO,
-        'wtv' => Media::TYPE_VIDEO,
-        'wvx' => Media::TYPE_VIDEO,
-        'xej' => Media::TYPE_VIDEO,
-        'xel' => Media::TYPE_VIDEO,
-        'xesc' => Media::TYPE_VIDEO,
-        'xfl' => Media::TYPE_VIDEO,
-        'xlmv' => Media::TYPE_VIDEO,
-        'xvid' => Media::TYPE_VIDEO,
-        'yuv' => Media::TYPE_VIDEO,
-        'zm1' => Media::TYPE_VIDEO,
-        'zm2' => Media::TYPE_VIDEO,
-        'zm3' => Media::TYPE_VIDEO,
-        'zmv' => Media::TYPE_VIDEO,
-        '4mp' => Media::TYPE_MUSIC,
-        '669' => Media::TYPE_MUSIC,
-        '6cm' => Media::TYPE_MUSIC,
-        '8cm' => Media::TYPE_MUSIC,
-        '8med' => Media::TYPE_MUSIC,
-        '8svx' => Media::TYPE_MUSIC,
-        'a2m' => Media::TYPE_MUSIC,
-        'a52' => Media::TYPE_MUSIC,
-        'aa' => Media::TYPE_MUSIC,
-        'aa3' => Media::TYPE_MUSIC,
-        'aac' => Media::TYPE_MUSIC,
-        'aax' => Media::TYPE_MUSIC,
-        'ab' => Media::TYPE_MUSIC,
-        'abc' => Media::TYPE_MUSIC,
-        'abm' => Media::TYPE_MUSIC,
-        'ac3' => Media::TYPE_MUSIC,
-        'acd' => Media::TYPE_MUSIC,
-        'acd-bak' => Media::TYPE_MUSIC,
-        'acd-zip' => Media::TYPE_MUSIC,
-        'acm' => Media::TYPE_MUSIC,
-        'acp' => Media::TYPE_MUSIC,
-        'act' => Media::TYPE_MUSIC,
-        'adg' => Media::TYPE_MUSIC,
-        'adt' => Media::TYPE_MUSIC,
-        'adts' => Media::TYPE_MUSIC,
-        'adv' => Media::TYPE_MUSIC,
-        'afc' => Media::TYPE_MUSIC,
-        'agm' => Media::TYPE_MUSIC,
-        'ahx' => Media::TYPE_MUSIC,
-        'aif' => Media::TYPE_MUSIC,
-        'aifc' => Media::TYPE_MUSIC,
-        'aiff' => Media::TYPE_MUSIC,
-        'ais' => Media::TYPE_MUSIC,
-        'akp' => Media::TYPE_MUSIC,
-        'al' => Media::TYPE_MUSIC,
-        'alac' => Media::TYPE_MUSIC,
-        'alaw' => Media::TYPE_MUSIC,
-        'alc' => Media::TYPE_MUSIC,
-        'all' => Media::TYPE_MUSIC,
-        'als' => Media::TYPE_MUSIC,
-        'amf' => Media::TYPE_MUSIC,
-        'amr' => Media::TYPE_MUSIC,
-        'ams' => Media::TYPE_MUSIC,
-        'amxd' => Media::TYPE_MUSIC,
-        'aob' => Media::TYPE_MUSIC,
-        'ape' => Media::TYPE_MUSIC,
-        'apf' => Media::TYPE_MUSIC,
-        'apl' => Media::TYPE_MUSIC,
-        'aria' => Media::TYPE_MUSIC,
-        'ariax' => Media::TYPE_MUSIC,
-        'asd' => Media::TYPE_MUSIC,
-        'ase' => Media::TYPE_MUSIC,
-        'at3' => Media::TYPE_MUSIC,
-        'atrac' => Media::TYPE_MUSIC,
-        'au' => Media::TYPE_MUSIC,
-        'aud' => Media::TYPE_MUSIC,
-        'aup' => Media::TYPE_MUSIC,
-        'avr' => Media::TYPE_MUSIC,
-        'awb' => Media::TYPE_MUSIC,
-        'ay' => Media::TYPE_MUSIC,
-        'b4s' => Media::TYPE_MUSIC,
-        'band' => Media::TYPE_MUSIC,
-        'bap' => Media::TYPE_MUSIC,
-        'bdd' => Media::TYPE_MUSIC,
-        'bidule' => Media::TYPE_MUSIC,
-        'brstm' => Media::TYPE_MUSIC,
-        'bun' => Media::TYPE_MUSIC,
-        'bwf' => Media::TYPE_MUSIC,
-        'c01' => Media::TYPE_MUSIC,
-        'caf' => Media::TYPE_MUSIC,
-        'cda' => Media::TYPE_MUSIC,
-        'cdda' => Media::TYPE_MUSIC,
-        'cel' => Media::TYPE_MUSIC,
-        'cfa' => Media::TYPE_MUSIC,
-        'cfxr' => Media::TYPE_MUSIC,
-        'cidb' => Media::TYPE_MUSIC,
-        'cmf' => Media::TYPE_MUSIC,
-        'copy' => Media::TYPE_MUSIC,
-        'cpr' => Media::TYPE_MUSIC,
-        'cpt' => Media::TYPE_MUSIC,
-        'csh' => Media::TYPE_MUSIC,
-        'cwp' => Media::TYPE_MUSIC,
-        'd00' => Media::TYPE_MUSIC,
-        'd01' => Media::TYPE_MUSIC,
-        'dcf' => Media::TYPE_MUSIC,
-        'dcm' => Media::TYPE_MUSIC,
-        'dct' => Media::TYPE_MUSIC,
-        'ddt' => Media::TYPE_MUSIC,
-        'dewf' => Media::TYPE_MUSIC,
-        'df2' => Media::TYPE_MUSIC,
-        'dfc' => Media::TYPE_MUSIC,
-        'dig' => Media::TYPE_MUSIC,
-        'dls' => Media::TYPE_MUSIC,
-        'dm' => Media::TYPE_MUSIC,
-        'dmf' => Media::TYPE_MUSIC,
-        'dmsa' => Media::TYPE_MUSIC,
-        'dmse' => Media::TYPE_MUSIC,
-        'dra' => Media::TYPE_MUSIC,
-        'drg' => Media::TYPE_MUSIC,
-        'ds' => Media::TYPE_MUSIC,
-        'ds2' => Media::TYPE_MUSIC,
-        'dsf' => Media::TYPE_MUSIC,
-        'dsm' => Media::TYPE_MUSIC,
-        'dsp' => Media::TYPE_MUSIC,
-        'dss' => Media::TYPE_MUSIC,
-        'dtm' => Media::TYPE_MUSIC,
-        'dts' => Media::TYPE_MUSIC,
-        'dtshd' => Media::TYPE_MUSIC,
-        'dvf' => Media::TYPE_MUSIC,
-        'dwd' => Media::TYPE_MUSIC,
-        'ear' => Media::TYPE_MUSIC,
-        'efa' => Media::TYPE_MUSIC,
-        'efe' => Media::TYPE_MUSIC,
-        'efk' => Media::TYPE_MUSIC,
-        'efq' => Media::TYPE_MUSIC,
-        'efs' => Media::TYPE_MUSIC,
-        'efv' => Media::TYPE_MUSIC,
-        'emd' => Media::TYPE_MUSIC,
-        'emp' => Media::TYPE_MUSIC,
-        'emx' => Media::TYPE_MUSIC,
-        'esps' => Media::TYPE_MUSIC,
-        'expressionmap' => Media::TYPE_MUSIC,
-        'f2r' => Media::TYPE_MUSIC,
-        'f32' => Media::TYPE_MUSIC,
-        'f3r' => Media::TYPE_MUSIC,
-        'f4a' => Media::TYPE_MUSIC,
-        'f64' => Media::TYPE_MUSIC,
-        'far' => Media::TYPE_MUSIC,
-        'fda' => Media::TYPE_MUSIC,
-        'fff' => Media::TYPE_MUSIC,
-        'flac' => Media::TYPE_MUSIC,
-        'flp' => Media::TYPE_MUSIC,
-        'fls' => Media::TYPE_MUSIC,
-        'frg' => Media::TYPE_MUSIC,
-        'fsm' => Media::TYPE_MUSIC,
-        'ftm' => Media::TYPE_MUSIC,
-        'fzb' => Media::TYPE_MUSIC,
-        'fzf' => Media::TYPE_MUSIC,
-        'fzv' => Media::TYPE_MUSIC,
-        'g721' => Media::TYPE_MUSIC,
-        'g723' => Media::TYPE_MUSIC,
-        'g726' => Media::TYPE_MUSIC,
-        'gbproj' => Media::TYPE_MUSIC,
-        'gbs' => Media::TYPE_MUSIC,
-        'gig' => Media::TYPE_MUSIC,
-        'gm' => Media::TYPE_MUSIC,
-        'gp5' => Media::TYPE_MUSIC,
-        'gpbank' => Media::TYPE_MUSIC,
-        'gpk' => Media::TYPE_MUSIC,
-        'gpx' => Media::TYPE_MUSIC,
-        'gro' => Media::TYPE_MUSIC,
-        'groove' => Media::TYPE_MUSIC,
-        'gsm' => Media::TYPE_MUSIC,
-        'h0' => Media::TYPE_MUSIC,
-        'hdp' => Media::TYPE_MUSIC,
-        'hma' => Media::TYPE_MUSIC,
-        'hsb' => Media::TYPE_MUSIC,
-        'ics' => Media::TYPE_MUSIC,
-        'igp' => Media::TYPE_MUSIC,
-        'igr' => Media::TYPE_MUSIC,
-        'imf' => Media::TYPE_MUSIC,
-        'imp' => Media::TYPE_MUSIC,
-        'ins' => Media::TYPE_MUSIC,
-        'isma' => Media::TYPE_MUSIC,
-        'it' => Media::TYPE_MUSIC,
-        'iti' => Media::TYPE_MUSIC,
-        'its' => Media::TYPE_MUSIC,
-        'jam' => Media::TYPE_MUSIC,
-        'jo' => Media::TYPE_MUSIC,
-        'jo-7z' => Media::TYPE_MUSIC,
-        'k25' => Media::TYPE_MUSIC,
-        'k26' => Media::TYPE_MUSIC,
-        'kar' => Media::TYPE_MUSIC,
-        'kfn' => Media::TYPE_MUSIC,
-        'kin' => Media::TYPE_MUSIC,
-        'kit' => Media::TYPE_MUSIC,
-        'kmp' => Media::TYPE_MUSIC,
-        'koz' => Media::TYPE_MUSIC,
-        'kpl' => Media::TYPE_MUSIC,
-        'krz' => Media::TYPE_MUSIC,
-        'ksc' => Media::TYPE_MUSIC,
-        'ksf' => Media::TYPE_MUSIC,
-        'kt2' => Media::TYPE_MUSIC,
-        'kt3' => Media::TYPE_MUSIC,
-        'ktp' => Media::TYPE_MUSIC,
-        'l' => Media::TYPE_MUSIC,
-        'la' => Media::TYPE_MUSIC,
-        'lof' => Media::TYPE_MUSIC,
-        'lqt' => Media::TYPE_MUSIC,
-        'lso' => Media::TYPE_MUSIC,
-        'lvp' => Media::TYPE_MUSIC,
-        'lwv' => Media::TYPE_MUSIC,
-        'm1a' => Media::TYPE_MUSIC,
-        'm3u' => Media::TYPE_MUSIC,
-        'm3u8' => Media::TYPE_MUSIC,
-        'm4a' => Media::TYPE_MUSIC,
-        'm4b' => Media::TYPE_MUSIC,
-        'm4p' => Media::TYPE_MUSIC,
-        'm4r' => Media::TYPE_MUSIC,
-        'ma1' => Media::TYPE_MUSIC,
-        'mbr' => Media::TYPE_MUSIC,
-        'mdl' => Media::TYPE_MUSIC,
-        'med' => Media::TYPE_MUSIC,
-        'mgv' => Media::TYPE_MUSIC,
-        'mid' => Media::TYPE_MUSIC,
-        'midi' => Media::TYPE_MUSIC,
-        'miniusf' => Media::TYPE_MUSIC,
-        'mka' => Media::TYPE_MUSIC,
-        'mlp' => Media::TYPE_MUSIC,
-        'mmf' => Media::TYPE_MUSIC,
-        'mmm' => Media::TYPE_MUSIC,
-        'mmp' => Media::TYPE_MUSIC,
-        'mo3' => Media::TYPE_MUSIC,
-        'mod' => Media::TYPE_MUSIC,
-        'mp1' => Media::TYPE_MUSIC,
-        'mp2' => Media::TYPE_MUSIC,
-        'mp3' => Media::TYPE_MUSIC,
-        'mpa' => Media::TYPE_MUSIC,
-        'mpc' => Media::TYPE_MUSIC,
-        'mpga' => Media::TYPE_MUSIC,
-        'mpu' => Media::TYPE_MUSIC,
-        'mp_' => Media::TYPE_MUSIC,
-        'mscx' => Media::TYPE_MUSIC,
-        'mscz' => Media::TYPE_MUSIC,
-        'msv' => Media::TYPE_MUSIC,
-        'mt2' => Media::TYPE_MUSIC,
-        'mt9' => Media::TYPE_MUSIC,
-        'mte' => Media::TYPE_MUSIC,
-        'mtf' => Media::TYPE_MUSIC,
-        'mti' => Media::TYPE_MUSIC,
-        'mtm' => Media::TYPE_MUSIC,
-        'mtp' => Media::TYPE_MUSIC,
-        'mts' => Media::TYPE_MUSIC,
-        'mus' => Media::TYPE_MUSIC,
-        'mus' => Media::TYPE_MUSIC,
-        'musa' => Media::TYPE_MUSIC,
-        'mws' => Media::TYPE_MUSIC,
-        'mxl' => Media::TYPE_MUSIC,
-        'mxmf' => Media::TYPE_MUSIC,
-        'mzp' => Media::TYPE_MUSIC,
-        'nap' => Media::TYPE_MUSIC,
-        'ncw' => Media::TYPE_MUSIC,
-        'nkb' => Media::TYPE_MUSIC,
-        'nki' => Media::TYPE_MUSIC,
-        'nkm' => Media::TYPE_MUSIC,
-        'nks' => Media::TYPE_MUSIC,
-        'nkx' => Media::TYPE_MUSIC,
-        'npl' => Media::TYPE_MUSIC,
-        'nra' => Media::TYPE_MUSIC,
-        'nrt' => Media::TYPE_MUSIC,
-        'nsa' => Media::TYPE_MUSIC,
-        'nsf' => Media::TYPE_MUSIC,
-        'nst' => Media::TYPE_MUSIC,
-        'ntn' => Media::TYPE_MUSIC,
-        'nvf' => Media::TYPE_MUSIC,
-        'nwc' => Media::TYPE_MUSIC,
-        'odm' => Media::TYPE_MUSIC,
-        'ofr' => Media::TYPE_MUSIC,
-        'oga' => Media::TYPE_MUSIC,
-        'ogg' => Media::TYPE_MUSIC,
-        'okt' => Media::TYPE_MUSIC,
-        'oma' => Media::TYPE_MUSIC,
-        'omf' => Media::TYPE_MUSIC,
-        'omg' => Media::TYPE_MUSIC,
-        'omx' => Media::TYPE_MUSIC,
-        'orc' => Media::TYPE_MUSIC,
-        'ots' => Media::TYPE_MUSIC,
-        'ove' => Media::TYPE_MUSIC,
-        'ovw' => Media::TYPE_MUSIC,
-        'pac' => Media::TYPE_MUSIC,
-        'pat' => Media::TYPE_MUSIC,
-        'pbf' => Media::TYPE_MUSIC,
-        'pca' => Media::TYPE_MUSIC,
-        'pcast' => Media::TYPE_MUSIC,
-        'pcg' => Media::TYPE_MUSIC,
-        'pcm' => Media::TYPE_MUSIC,
-        'pd' => Media::TYPE_MUSIC,
-        'peak' => Media::TYPE_MUSIC,
-        'pek' => Media::TYPE_MUSIC,
-        'pho' => Media::TYPE_MUSIC,
-        'phy' => Media::TYPE_MUSIC,
-        'pk' => Media::TYPE_MUSIC,
-        'pkf' => Media::TYPE_MUSIC,
-        'pla' => Media::TYPE_MUSIC,
-        'pls' => Media::TYPE_MUSIC,
-        'pna' => Media::TYPE_MUSIC,
-        'ppc' => Media::TYPE_MUSIC,
-        'ppcx' => Media::TYPE_MUSIC,
-        'prg' => Media::TYPE_MUSIC,
-        'psf' => Media::TYPE_MUSIC,
-        'psm' => Media::TYPE_MUSIC,
-        'psy' => Media::TYPE_MUSIC,
-        'ptf' => Media::TYPE_MUSIC,
-        'ptm' => Media::TYPE_MUSIC,
-        'pts' => Media::TYPE_MUSIC,
-        'pvc' => Media::TYPE_MUSIC,
-        'qcp' => Media::TYPE_MUSIC,
-        'r' => Media::TYPE_MUSIC,
-        'r1m' => Media::TYPE_MUSIC,
-        'ra' => Media::TYPE_MUSIC,
-        'ram' => Media::TYPE_MUSIC,
-        'raw' => Media::TYPE_MUSIC,
-        'rax' => Media::TYPE_MUSIC,
-        'rbs' => Media::TYPE_MUSIC,
-        'rcy' => Media::TYPE_MUSIC,
-        'rex' => Media::TYPE_MUSIC,
-        'rfl' => Media::TYPE_MUSIC,
-        'rip' => Media::TYPE_MUSIC,
-        'rmf' => Media::TYPE_MUSIC,
-        'rmi' => Media::TYPE_MUSIC,
-        'rmj' => Media::TYPE_MUSIC,
-        'rmm' => Media::TYPE_MUSIC,
-        'rmx' => Media::TYPE_MUSIC,
-        'rng' => Media::TYPE_MUSIC,
-        'rns' => Media::TYPE_MUSIC,
-        'rol' => Media::TYPE_MUSIC,
-        'rsn' => Media::TYPE_MUSIC,
-        'rso' => Media::TYPE_MUSIC,
-        'rti' => Media::TYPE_MUSIC,
-        'rtm' => Media::TYPE_MUSIC,
-        'rts' => Media::TYPE_MUSIC,
-        'rvx' => Media::TYPE_MUSIC,
-        'rx2' => Media::TYPE_MUSIC,
-        's3i' => Media::TYPE_MUSIC,
-        's3m' => Media::TYPE_MUSIC,
-        's3z' => Media::TYPE_MUSIC,
-        'saf' => Media::TYPE_MUSIC,
-        'sam' => Media::TYPE_MUSIC,
-        'sap' => Media::TYPE_MUSIC,
-        'sb' => Media::TYPE_MUSIC,
-        'sbg' => Media::TYPE_MUSIC,
-        'sbi' => Media::TYPE_MUSIC,
-        'sbk' => Media::TYPE_MUSIC,
-        'sc2' => Media::TYPE_MUSIC,
-        'sd' => Media::TYPE_MUSIC,
-        'sd2' => Media::TYPE_MUSIC,
-        'sd2f' => Media::TYPE_MUSIC,
-        'sdat' => Media::TYPE_MUSIC,
-        'sdii' => Media::TYPE_MUSIC,
-        'sds' => Media::TYPE_MUSIC,
-        'sdt' => Media::TYPE_MUSIC,
-        'sdx' => Media::TYPE_MUSIC,
-        'seg' => Media::TYPE_MUSIC,
-        'ses' => Media::TYPE_MUSIC,
-        'sesx' => Media::TYPE_MUSIC,
-        'sf' => Media::TYPE_MUSIC,
-        'sf2' => Media::TYPE_MUSIC,
-        'sfap0' => Media::TYPE_MUSIC,
-        'sfk' => Media::TYPE_MUSIC,
-        'sfl' => Media::TYPE_MUSIC,
-        'sfs' => Media::TYPE_MUSIC,
-        'shn' => Media::TYPE_MUSIC,
-        'sib' => Media::TYPE_MUSIC,
-        'sid' => Media::TYPE_MUSIC,
-        'sid' => Media::TYPE_MUSIC,
-        'smf' => Media::TYPE_MUSIC,
-        'smp' => Media::TYPE_MUSIC,
-        'snd' => Media::TYPE_MUSIC,
-        'snd' => Media::TYPE_MUSIC,
-        'snd' => Media::TYPE_MUSIC,
-        'sng' => Media::TYPE_MUSIC,
-        'sng' => Media::TYPE_MUSIC,
-        'sou' => Media::TYPE_MUSIC,
-        'sppack' => Media::TYPE_MUSIC,
-        'sprg' => Media::TYPE_MUSIC,
-        'spx' => Media::TYPE_MUSIC,
-        'sseq' => Media::TYPE_MUSIC,
-        'sseq' => Media::TYPE_MUSIC,
-        'ssnd' => Media::TYPE_MUSIC,
-        'stap' => Media::TYPE_MUSIC,
-        'stm' => Media::TYPE_MUSIC,
-        'stx' => Media::TYPE_MUSIC,
-        'sty' => Media::TYPE_MUSIC,
-        'sty' => Media::TYPE_MUSIC,
-        'svd' => Media::TYPE_MUSIC,
-        'svx' => Media::TYPE_MUSIC,
-        'sw' => Media::TYPE_MUSIC,
-        'swa' => Media::TYPE_MUSIC,
-        'syh' => Media::TYPE_MUSIC,
-        'syn' => Media::TYPE_MUSIC,
-        'syn' => Media::TYPE_MUSIC,
-        'syw' => Media::TYPE_MUSIC,
-        'syx' => Media::TYPE_MUSIC,
-        'tak' => Media::TYPE_MUSIC,
-        'tak' => Media::TYPE_MUSIC,
-        'td0' => Media::TYPE_MUSIC,
-        'tfmx' => Media::TYPE_MUSIC,
-        'tg' => Media::TYPE_MUSIC,
-        'thx' => Media::TYPE_MUSIC,
-        'toc' => Media::TYPE_MUSIC,
-        'tsp' => Media::TYPE_MUSIC,
-        'tta' => Media::TYPE_MUSIC,
-        'tun' => Media::TYPE_MUSIC,
-        'txw' => Media::TYPE_MUSIC,
-        'u' => Media::TYPE_MUSIC,
-        'uax' => Media::TYPE_MUSIC,
-        'ub' => Media::TYPE_MUSIC,
-        'ulaw' => Media::TYPE_MUSIC,
-        'ult' => Media::TYPE_MUSIC,
-        'ulw' => Media::TYPE_MUSIC,
-        'uni' => Media::TYPE_MUSIC,
-        'usf' => Media::TYPE_MUSIC,
-        'usflib' => Media::TYPE_MUSIC,
-        'uw' => Media::TYPE_MUSIC,
-        'uwf' => Media::TYPE_MUSIC,
-        'vag' => Media::TYPE_MUSIC,
-        'val' => Media::TYPE_MUSIC,
-        'vap' => Media::TYPE_MUSIC,
-        'vb' => Media::TYPE_MUSIC,
-        'vc3' => Media::TYPE_MUSIC,
-        'vdj' => Media::TYPE_MUSIC,
-        'vgm' => Media::TYPE_MUSIC,
-        'vgz' => Media::TYPE_MUSIC,
-        'vmd' => Media::TYPE_MUSIC,
-        'vmf' => Media::TYPE_MUSIC,
-        'vmf' => Media::TYPE_MUSIC,
-        'voc' => Media::TYPE_MUSIC,
-        'voi' => Media::TYPE_MUSIC,
-        'vox' => Media::TYPE_MUSIC,
-        'vpm' => Media::TYPE_MUSIC,
-        'vqf' => Media::TYPE_MUSIC,
-        'vrf' => Media::TYPE_MUSIC,
-        'vtx' => Media::TYPE_MUSIC,
-        'vyf' => Media::TYPE_MUSIC,
-        'w01' => Media::TYPE_MUSIC,
-        'w64' => Media::TYPE_MUSIC,
-        'wav' => Media::TYPE_MUSIC,
-        'wav' => Media::TYPE_MUSIC,
-        'wave' => Media::TYPE_MUSIC,
-        'wax' => Media::TYPE_MUSIC,
-        'wfb' => Media::TYPE_MUSIC,
-        'wfd' => Media::TYPE_MUSIC,
-        'wfp' => Media::TYPE_MUSIC,
-        'wma' => Media::TYPE_MUSIC,
-        'wow' => Media::TYPE_MUSIC,
-        'wpk' => Media::TYPE_MUSIC,
-        'wpp' => Media::TYPE_MUSIC,
-        'wproj' => Media::TYPE_MUSIC,
-        'wrk' => Media::TYPE_MUSIC,
-        'wtpl' => Media::TYPE_MUSIC,
-        'wtpt' => Media::TYPE_MUSIC,
-        'wus' => Media::TYPE_MUSIC,
-        'wut' => Media::TYPE_MUSIC,
-        'wv' => Media::TYPE_MUSIC,
-        'wvc' => Media::TYPE_MUSIC,
-        'wve' => Media::TYPE_MUSIC,
-        'wwu' => Media::TYPE_MUSIC,
-        'wyz' => Media::TYPE_MUSIC,
-        'xa' => Media::TYPE_MUSIC,
-        'xa' => Media::TYPE_MUSIC,
-        'xfs' => Media::TYPE_MUSIC,
-        'xi' => Media::TYPE_MUSIC,
-        'xm' => Media::TYPE_MUSIC,
-        'xmf' => Media::TYPE_MUSIC,
-        'xmi' => Media::TYPE_MUSIC,
-        'xmz' => Media::TYPE_MUSIC,
-        'xp' => Media::TYPE_MUSIC,
-        'xrns' => Media::TYPE_MUSIC,
-        'xsb' => Media::TYPE_MUSIC,
-        'xspf' => Media::TYPE_MUSIC,
-        'xt' => Media::TYPE_MUSIC,
-        'xwb' => Media::TYPE_MUSIC,
-        'ym' => Media::TYPE_MUSIC,
-        'zpa' => Media::TYPE_MUSIC,
-        'zpl' => Media::TYPE_MUSIC,
-        'zvd' => Media::TYPE_MUSIC,
-        'zvr' => Media::TYPE_MUSIC,
-        '0' => Media::TYPE_ARCHIVE,
-        '000' => Media::TYPE_ARCHIVE,
-        '7z' => Media::TYPE_ARCHIVE,
-        'a00' => Media::TYPE_ARCHIVE,
-        'a01' => Media::TYPE_ARCHIVE,
-        'a02' => Media::TYPE_ARCHIVE,
-        'ace' => Media::TYPE_ARCHIVE,
-        'ain' => Media::TYPE_ARCHIVE,
-        'alz' => Media::TYPE_ARCHIVE,
-        'apz' => Media::TYPE_ARCHIVE,
-        'ar' => Media::TYPE_ARCHIVE,
-        'arc' => Media::TYPE_ARCHIVE,
-        'arh' => Media::TYPE_ARCHIVE,
-        'ari' => Media::TYPE_ARCHIVE,
-        'arj' => Media::TYPE_ARCHIVE,
-        'ark' => Media::TYPE_ARCHIVE,
-        'b1' => Media::TYPE_ARCHIVE,
-        'b64' => Media::TYPE_ARCHIVE,
-        'ba' => Media::TYPE_ARCHIVE,
-        'bh' => Media::TYPE_ARCHIVE,
-        'boo' => Media::TYPE_ARCHIVE,
-        'bz' => Media::TYPE_ARCHIVE,
-        'bz2' => Media::TYPE_ARCHIVE,
-        'bza' => Media::TYPE_ARCHIVE,
-        'bzip' => Media::TYPE_ARCHIVE,
-        'bzip2' => Media::TYPE_ARCHIVE,
-        'c00' => Media::TYPE_ARCHIVE,
-        'c01' => Media::TYPE_ARCHIVE,
-        'c02' => Media::TYPE_ARCHIVE,
-        'c10' => Media::TYPE_ARCHIVE,
-        'car' => Media::TYPE_ARCHIVE,
-        'cb7' => Media::TYPE_ARCHIVE,
-        'cba' => Media::TYPE_ARCHIVE,
-        'cbr' => Media::TYPE_ARCHIVE,
-        'cbt' => Media::TYPE_ARCHIVE,
-        'cbz' => Media::TYPE_ARCHIVE,
-        'cp9' => Media::TYPE_ARCHIVE,
-        'cpgz' => Media::TYPE_ARCHIVE,
-        'cpt' => Media::TYPE_ARCHIVE,
-        'czip' => Media::TYPE_ARCHIVE,
-        'dar' => Media::TYPE_ARCHIVE,
-        'dd' => Media::TYPE_ARCHIVE,
-        'deb' => Media::TYPE_ARCHIVE,
-        'dgc' => Media::TYPE_ARCHIVE,
-        'dist' => Media::TYPE_ARCHIVE,
-        'dl_' => Media::TYPE_ARCHIVE,
-        'dz' => Media::TYPE_ARCHIVE,
-        'ecs' => Media::TYPE_ARCHIVE,
-        'efw' => Media::TYPE_ARCHIVE,
-        'epi' => Media::TYPE_ARCHIVE,
-        'f' => Media::TYPE_ARCHIVE,
-        'fdp' => Media::TYPE_ARCHIVE,
-        'gca' => Media::TYPE_ARCHIVE,
-        'gz' => Media::TYPE_ARCHIVE,
-        'gz2' => Media::TYPE_ARCHIVE,
-        'gza' => Media::TYPE_ARCHIVE,
-        'gzi' => Media::TYPE_ARCHIVE,
-        'gzip' => Media::TYPE_ARCHIVE,
-        'ha' => Media::TYPE_ARCHIVE,
-        'hbc' => Media::TYPE_ARCHIVE,
-        'hbc2' => Media::TYPE_ARCHIVE,
-        'hbe' => Media::TYPE_ARCHIVE,
-        'hki' => Media::TYPE_ARCHIVE,
-        'hki1' => Media::TYPE_ARCHIVE,
-        'hki2' => Media::TYPE_ARCHIVE,
-        'hki3' => Media::TYPE_ARCHIVE,
-        'hpk' => Media::TYPE_ARCHIVE,
-        'hyp' => Media::TYPE_ARCHIVE,
-        'ice' => Media::TYPE_ARCHIVE,
-        'ipg' => Media::TYPE_ARCHIVE,
-        'ipk' => Media::TYPE_ARCHIVE,
-        'ish' => Media::TYPE_ARCHIVE,
-        'ita' => Media::TYPE_ARCHIVE,
-        'j' => Media::TYPE_ARCHIVE,
-        'jar.pack' => Media::TYPE_ARCHIVE,
-        'jgz' => Media::TYPE_ARCHIVE,
-        'jic' => Media::TYPE_ARCHIVE,
-        'kgb' => Media::TYPE_ARCHIVE,
-        'kz' => Media::TYPE_ARCHIVE,
-        'lbr' => Media::TYPE_ARCHIVE,
-        'lemon' => Media::TYPE_ARCHIVE,
-        'lha' => Media::TYPE_ARCHIVE,
-        'lnx' => Media::TYPE_ARCHIVE,
-        'lqr' => Media::TYPE_ARCHIVE,
-        'lz' => Media::TYPE_ARCHIVE,
-        'lzh' => Media::TYPE_ARCHIVE,
-        'lzm' => Media::TYPE_ARCHIVE,
-        'lzma' => Media::TYPE_ARCHIVE,
-        'lzo' => Media::TYPE_ARCHIVE,
-        'lzx' => Media::TYPE_ARCHIVE,
-        'md' => Media::TYPE_ARCHIVE,
-        'mint' => Media::TYPE_ARCHIVE,
-        'mou' => Media::TYPE_ARCHIVE,
-        'mpkg' => Media::TYPE_ARCHIVE,
-        'mzp' => Media::TYPE_ARCHIVE,
-        'mzp' => Media::TYPE_ARCHIVE,
-        'oar' => Media::TYPE_ARCHIVE,
-        'oz' => Media::TYPE_ARCHIVE,
-        'pack.gz' => Media::TYPE_ARCHIVE,
-        'package' => Media::TYPE_ARCHIVE,
-        'pae' => Media::TYPE_ARCHIVE,
-        'pak' => Media::TYPE_ARCHIVE,
-        'paq6' => Media::TYPE_ARCHIVE,
-        'paq7' => Media::TYPE_ARCHIVE,
-        'paq8' => Media::TYPE_ARCHIVE,
-        'paq8f' => Media::TYPE_ARCHIVE,
-        'par' => Media::TYPE_ARCHIVE,
-        'par2' => Media::TYPE_ARCHIVE,
-        'pax' => Media::TYPE_ARCHIVE,
-        'pbi' => Media::TYPE_ARCHIVE,
-        'pcv' => Media::TYPE_ARCHIVE,
-        'pea' => Media::TYPE_ARCHIVE,
-        'pet' => Media::TYPE_ARCHIVE,
-        'pf' => Media::TYPE_ARCHIVE,
-        'pim' => Media::TYPE_ARCHIVE,
-        'pit' => Media::TYPE_ARCHIVE,
-        'piz' => Media::TYPE_ARCHIVE,
-        'pkg' => Media::TYPE_ARCHIVE,
-        'pup' => Media::TYPE_ARCHIVE,
-        'pup' => Media::TYPE_ARCHIVE,
-        'puz' => Media::TYPE_ARCHIVE,
-        'pwa' => Media::TYPE_ARCHIVE,
-        'qda' => Media::TYPE_ARCHIVE,
-        'r0' => Media::TYPE_ARCHIVE,
-        'r00' => Media::TYPE_ARCHIVE,
-        'r01' => Media::TYPE_ARCHIVE,
-        'r02' => Media::TYPE_ARCHIVE,
-        'r03' => Media::TYPE_ARCHIVE,
-        'r1' => Media::TYPE_ARCHIVE,
-        'r2' => Media::TYPE_ARCHIVE,
-        'r21' => Media::TYPE_ARCHIVE,
-        'r30' => Media::TYPE_ARCHIVE,
-        'rar' => Media::TYPE_ARCHIVE,
-        'rev' => Media::TYPE_ARCHIVE,
-        'rk' => Media::TYPE_ARCHIVE,
-        'rnc' => Media::TYPE_ARCHIVE,
-        'rp9' => Media::TYPE_ARCHIVE,
-        'rpm' => Media::TYPE_ARCHIVE,
-        'rte' => Media::TYPE_ARCHIVE,
-        'rz' => Media::TYPE_ARCHIVE,
-        'rzs' => Media::TYPE_ARCHIVE,
-        's00' => Media::TYPE_ARCHIVE,
-        's01' => Media::TYPE_ARCHIVE,
-        's02' => Media::TYPE_ARCHIVE,
-        's7z' => Media::TYPE_ARCHIVE,
-        'sar' => Media::TYPE_ARCHIVE,
-        'sbx' => Media::TYPE_ARCHIVE,
-        'sdc' => Media::TYPE_ARCHIVE,
-        'sdn' => Media::TYPE_ARCHIVE,
-        'sea' => Media::TYPE_ARCHIVE,
-        'sen' => Media::TYPE_ARCHIVE,
-        'sfs' => Media::TYPE_ARCHIVE,
-        'sfx' => Media::TYPE_ARCHIVE,
-        'sh' => Media::TYPE_ARCHIVE,
-        'shar' => Media::TYPE_ARCHIVE,
-        'shk' => Media::TYPE_ARCHIVE,
-        'shr' => Media::TYPE_ARCHIVE,
-        'sit' => Media::TYPE_ARCHIVE,
-        'sitx' => Media::TYPE_ARCHIVE,
-        'spt' => Media::TYPE_ARCHIVE,
-        'sqx' => Media::TYPE_ARCHIVE,
-        'srep' => Media::TYPE_ARCHIVE,
-        'sy_' => Media::TYPE_ARCHIVE,
-        'tar.gz' => Media::TYPE_ARCHIVE,
-        'tar.gz2' => Media::TYPE_ARCHIVE,
-        'tar.lzma' => Media::TYPE_ARCHIVE,
-        'tar.xz' => Media::TYPE_ARCHIVE,
-        'taz' => Media::TYPE_ARCHIVE,
-        'tbz' => Media::TYPE_ARCHIVE,
-        'tbz2' => Media::TYPE_ARCHIVE,
-        'tg' => Media::TYPE_ARCHIVE,
-        'tgz' => Media::TYPE_ARCHIVE,
-        'tlz' => Media::TYPE_ARCHIVE,
-        'tlzma' => Media::TYPE_ARCHIVE,
-        'txz' => Media::TYPE_ARCHIVE,
-        'tz' => Media::TYPE_ARCHIVE,
-        'uc2' => Media::TYPE_ARCHIVE,
-        'ufs.uzip' => Media::TYPE_ARCHIVE,
-        'uha' => Media::TYPE_ARCHIVE,
-        'uzip' => Media::TYPE_ARCHIVE,
-        'vem' => Media::TYPE_ARCHIVE,
-        'vsi' => Media::TYPE_ARCHIVE,
-        'war' => Media::TYPE_ARCHIVE,
-        'wot' => Media::TYPE_ARCHIVE,
-        'xef' => Media::TYPE_ARCHIVE,
-        'xez' => Media::TYPE_ARCHIVE,
-        'xmcdz' => Media::TYPE_ARCHIVE,
-        'xx' => Media::TYPE_ARCHIVE,
-        'xz' => Media::TYPE_ARCHIVE,
-        'y' => Media::TYPE_ARCHIVE,
-        'yz' => Media::TYPE_ARCHIVE,
-        'yz1' => Media::TYPE_ARCHIVE,
-        'z' => Media::TYPE_ARCHIVE,
-        'z01' => Media::TYPE_ARCHIVE,
-        'z02' => Media::TYPE_ARCHIVE,
-        'z03' => Media::TYPE_ARCHIVE,
-        'z04' => Media::TYPE_ARCHIVE,
-        'zap' => Media::TYPE_ARCHIVE,
-        'zfsendtotarget' => Media::TYPE_ARCHIVE,
-        'zi' => Media::TYPE_ARCHIVE,
-        'zip' => Media::TYPE_ARCHIVE,
-        'zipx' => Media::TYPE_ARCHIVE,
-        'zix' => Media::TYPE_ARCHIVE,
-        'zl' => Media::TYPE_ARCHIVE,
-        'zoo' => Media::TYPE_ARCHIVE,
-        'zpi' => Media::TYPE_ARCHIVE,
-        'zz' => Media::TYPE_ARCHIVE,
-        'pdf' => Media::TYPE_PDF,
-        'dae' => Media::TYPE_MODEL,
-        'obj' => Media::TYPE_MODEL,
-        'fbx' => Media::TYPE_MODEL,
-        'spx' => Media::TYPE_MODEL,
-        '3ds' => Media::TYPE_MODEL,
-        '3mf' => Media::TYPE_MODEL,
-        'blend' => Media::TYPE_MODEL,
-        'awd' => Media::TYPE_MODEL,
-        'ply' => Media::TYPE_MODEL,
-        'pcd' => Media::TYPE_MODEL,
-        'stl' => Media::TYPE_MODEL,
-        'skp' => Media::TYPE_MODEL
-    );
-
-    /**
-     * Unique identifier
-     * @var integer $id
-     * @ORM\Id
-     * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
-    /**
-     * Id of the assigned album
-     * @var integer $albumId
-     * @ORM\Column(name="albumID", type="integer", nullable=false)
-     */
-    private $albumId;
-
-    /**
-     * Name of the media, also used as a file name
-     * @var string $name
-     * @ORM\Column(name="name", type="string", length=255, nullable=false)
-     */
-    private $name;
-
-    /**
-     * Description for the media.
-     * @var string $description
-     * @ORM\Column(name="description", type="text", nullable=false)
-     */
-    private $description;
-
-    /**
-     * Path of the uploaded file.
-     * @var string $path
-     * @ORM\Column(name="path", type="string", length=255, nullable=false)
-     */
-    private $path;
-
-    /**
-     * Flag for the media type.
-     * @var string $type
-     * @ORM\Column(name="type", type="string", length=50, nullable=false)
-     */
-    private $type;
-
-    /**
-     * Extension of the uploaded file
-     * @var string $extension
-     * @ORM\Column(name="extension", type="string", length=20, nullable=false)
-     */
-    private $extension;
-
-    /**
-     * Id of the user, who uploaded the file.
-     * @var integer $userId
-     * @ORM\Column(name="userID", type="integer", nullable=false)
-     */
-    private $userId;
-
-    /**
-     * Creation date of the media
-     * @var \DateTime $created
-     * @ORM\Column(name="created", type="date", nullable=false)
-     */
-    private $created;
-
-    /**
-     * Internal container for the uploaded file.
-     * @var UploadedFile
-     */
-    private $file;
-
-    /**
-    * Filesize of the file in bytes
-    * @var integer $filesize
-    * @ORM\Column(name="file_size", type="integer", nullable=false)
-    */
-    private $fileSize;
-
-    /**
-    * Width of the file in px if it's an image
-    * @var integer $width
-    * @ORM\Column(name="width", type="integer", nullable=true)
-    */
-    private $width;
-
-    /**
-    * Height of the file in px if it's an image
-    * @var integer $height
-    * @ORM\Column(name="height", type="integer", nullable=true)
-    */
-    private $height;
-
-    /**
-     * Assigned album association. Is automatically loaded when the standard functions "find" ... be used,
-     * or if the Query Builder is specified with the association.
-     * @var \Shopware\Models\Media\Album
-     * @ORM\ManyToOne(targetEntity="\Shopware\Models\Media\Album", inversedBy="media")
-     * @ORM\JoinColumn(name="albumID", referencedColumnName="id")
-     */
-    private $album;
-
-    /**
-     * Contains the thumbnails paths.
-     * Contains all created thumbnails
-     * @var array
-     */
-    private $thumbnails;
-
-    /**
-     * Contains the high dpi thumbnails paths.
-     * @var array
-     */
-    private $highDpiThumbnails;
-
-    /**
      * INVERSE SIDE
+     *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Media", mappedBy="media", orphanRemoval=true, cascade={"persist"})
+     *
      * @var \Shopware\Models\Attribute\Media
      */
     protected $attribute;
@@ -1257,6 +102,7 @@ class Media extends ModelEntity
 
     /**
      * INVERSE SIDE
+     *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Blog\Media", mappedBy="media", orphanRemoval=true, cascade={"persist"})
@@ -1269,6 +115,1180 @@ class Media extends ModelEntity
      */
     protected $properties;
 
+    /**
+     * Contains the default thumbnail sizes which used for backend modules.
+     *
+     * @var array
+     */
+    private $defaultThumbnails = [
+        [140, 140],
+    ];
+
+    /**
+     * All known file extensions and the mapped media type
+     *
+     * @var array
+     */
+    private $typeMapping = [
+        '24b' => self::TYPE_IMAGE,
+        'ai' => self::TYPE_IMAGE,
+        'bmp' => self::TYPE_IMAGE,
+        'cdr' => self::TYPE_IMAGE,
+        'gif' => self::TYPE_IMAGE,
+        'iff' => self::TYPE_IMAGE,
+        'ilbm' => self::TYPE_IMAGE,
+        'jpeg' => self::TYPE_IMAGE,
+        'jpg' => self::TYPE_IMAGE,
+        'pcx' => self::TYPE_IMAGE,
+        'png' => self::TYPE_IMAGE,
+        'tif' => self::TYPE_IMAGE,
+        'tiff' => self::TYPE_IMAGE,
+        'eps' => self::TYPE_IMAGE,
+        'pbm' => self::TYPE_IMAGE,
+        'psd' => self::TYPE_IMAGE,
+        'wbm' => self::TYPE_IMAGE,
+        '264' => self::TYPE_VIDEO,
+        '3g2' => self::TYPE_VIDEO,
+        '3gp' => self::TYPE_VIDEO,
+        '3gp2' => self::TYPE_VIDEO,
+        '3gpp' => self::TYPE_VIDEO,
+        '3gpp2' => self::TYPE_VIDEO,
+        '3mm' => self::TYPE_VIDEO,
+        '3p2' => self::TYPE_VIDEO,
+        '60d' => self::TYPE_VIDEO,
+        '787' => self::TYPE_VIDEO,
+        'aaf' => self::TYPE_VIDEO,
+        'aep' => self::TYPE_VIDEO,
+        'aepx' => self::TYPE_VIDEO,
+        'aet' => self::TYPE_VIDEO,
+        'aetx' => self::TYPE_VIDEO,
+        'ajp' => self::TYPE_VIDEO,
+        'ale' => self::TYPE_VIDEO,
+        'amv' => self::TYPE_VIDEO,
+        'amx' => self::TYPE_VIDEO,
+        'anim' => self::TYPE_VIDEO,
+        'arf' => self::TYPE_VIDEO,
+        'asf' => self::TYPE_VIDEO,
+        'asx' => self::TYPE_VIDEO,
+        'avb' => self::TYPE_VIDEO,
+        'avd' => self::TYPE_VIDEO,
+        'avi' => self::TYPE_VIDEO,
+        'avp' => self::TYPE_VIDEO,
+        'avs' => self::TYPE_VIDEO,
+        'axm' => self::TYPE_VIDEO,
+        'bdm' => self::TYPE_VIDEO,
+        'bdmv' => self::TYPE_VIDEO,
+        'bik' => self::TYPE_VIDEO,
+        'bin' => self::TYPE_VIDEO,
+        'bix' => self::TYPE_VIDEO,
+        'bmk' => self::TYPE_VIDEO,
+        'bnp' => self::TYPE_VIDEO,
+        'box' => self::TYPE_VIDEO,
+        'bs4' => self::TYPE_VIDEO,
+        'bsf' => self::TYPE_VIDEO,
+        'byu' => self::TYPE_VIDEO,
+        'camproj' => self::TYPE_VIDEO,
+        'camrec' => self::TYPE_VIDEO,
+        'clpi' => self::TYPE_VIDEO,
+        'cmmp' => self::TYPE_VIDEO,
+        'cmmtpl' => self::TYPE_VIDEO,
+        'cmproj' => self::TYPE_VIDEO,
+        'cmrec' => self::TYPE_VIDEO,
+        'cpi' => self::TYPE_VIDEO,
+        'cst' => self::TYPE_VIDEO,
+        'cvc' => self::TYPE_VIDEO,
+        'd2v' => self::TYPE_VIDEO,
+        'd3v' => self::TYPE_VIDEO,
+        'dat' => self::TYPE_VIDEO,
+        'dav' => self::TYPE_VIDEO,
+        'dce' => self::TYPE_VIDEO,
+        'dck' => self::TYPE_VIDEO,
+        'ddat' => self::TYPE_VIDEO,
+        'dif' => self::TYPE_VIDEO,
+        'dir' => self::TYPE_VIDEO,
+        'divx' => self::TYPE_VIDEO,
+        'dlx' => self::TYPE_VIDEO,
+        'dmb' => self::TYPE_VIDEO,
+        'dmsd' => self::TYPE_VIDEO,
+        'dmsd3d' => self::TYPE_VIDEO,
+        'dmsm' => self::TYPE_VIDEO,
+        'dmsm3d' => self::TYPE_VIDEO,
+        'dmss' => self::TYPE_VIDEO,
+        'dnc' => self::TYPE_VIDEO,
+        'dpa' => self::TYPE_VIDEO,
+        'dpg' => self::TYPE_VIDEO,
+        'dream' => self::TYPE_VIDEO,
+        'dsy' => self::TYPE_VIDEO,
+        'dv' => self::TYPE_VIDEO,
+        'dv-avi' => self::TYPE_VIDEO,
+        'dv4' => self::TYPE_VIDEO,
+        'dvdmedia' => self::TYPE_VIDEO,
+        'dvr' => self::TYPE_VIDEO,
+        'dvr-ms' => self::TYPE_VIDEO,
+        'dvx' => self::TYPE_VIDEO,
+        'dxr' => self::TYPE_VIDEO,
+        'dzm' => self::TYPE_VIDEO,
+        'dzp' => self::TYPE_VIDEO,
+        'dzt' => self::TYPE_VIDEO,
+        'edl' => self::TYPE_VIDEO,
+        'evo' => self::TYPE_VIDEO,
+        'eye' => self::TYPE_VIDEO,
+        'f4p' => self::TYPE_VIDEO,
+        'f4v' => self::TYPE_VIDEO,
+        'fbr' => self::TYPE_VIDEO,
+        'fbz' => self::TYPE_VIDEO,
+        'fcp' => self::TYPE_VIDEO,
+        'fcproject' => self::TYPE_VIDEO,
+        'flc' => self::TYPE_VIDEO,
+        'flh' => self::TYPE_VIDEO,
+        'fli' => self::TYPE_VIDEO,
+        'flv' => self::TYPE_VIDEO,
+        'flx' => self::TYPE_VIDEO,
+        'gfp' => self::TYPE_VIDEO,
+        'gl' => self::TYPE_VIDEO,
+        'grasp' => self::TYPE_VIDEO,
+        'gts' => self::TYPE_VIDEO,
+        'gvi' => self::TYPE_VIDEO,
+        'gvp' => self::TYPE_VIDEO,
+        'h264' => self::TYPE_VIDEO,
+        'hdmov' => self::TYPE_VIDEO,
+        'hkm' => self::TYPE_VIDEO,
+        'ifo' => self::TYPE_VIDEO,
+        'imovieproj' => self::TYPE_VIDEO,
+        'imovieproject' => self::TYPE_VIDEO,
+        'irf' => self::TYPE_VIDEO,
+        'ism' => self::TYPE_VIDEO,
+        'ismc' => self::TYPE_VIDEO,
+        'ismv' => self::TYPE_VIDEO,
+        'iva' => self::TYPE_VIDEO,
+        'ivf' => self::TYPE_VIDEO,
+        'ivr' => self::TYPE_VIDEO,
+        'ivs' => self::TYPE_VIDEO,
+        'izz' => self::TYPE_VIDEO,
+        'izzy' => self::TYPE_VIDEO,
+        'jts' => self::TYPE_VIDEO,
+        'jtv' => self::TYPE_VIDEO,
+        'k3g' => self::TYPE_VIDEO,
+        'lrec' => self::TYPE_VIDEO,
+        'lsf' => self::TYPE_VIDEO,
+        'lsx' => self::TYPE_VIDEO,
+        'm15' => self::TYPE_VIDEO,
+        'm1pg' => self::TYPE_VIDEO,
+        'm1v' => self::TYPE_VIDEO,
+        'm21' => self::TYPE_VIDEO,
+        'm2a' => self::TYPE_VIDEO,
+        'm2p' => self::TYPE_VIDEO,
+        'm2t' => self::TYPE_VIDEO,
+        'm2ts' => self::TYPE_VIDEO,
+        'm2v' => self::TYPE_VIDEO,
+        'm4e' => self::TYPE_VIDEO,
+        'm4u' => self::TYPE_VIDEO,
+        'm4v' => self::TYPE_VIDEO,
+        'm75' => self::TYPE_VIDEO,
+        'meta' => self::TYPE_VIDEO,
+        'mgv' => self::TYPE_VIDEO,
+        'mj2' => self::TYPE_VIDEO,
+        'mjp' => self::TYPE_VIDEO,
+        'mjpg' => self::TYPE_VIDEO,
+        'mkv' => self::TYPE_VIDEO,
+        'mmv' => self::TYPE_VIDEO,
+        'mnv' => self::TYPE_VIDEO,
+        'mob' => self::TYPE_VIDEO,
+        'mod' => self::TYPE_VIDEO,
+        'modd' => self::TYPE_VIDEO,
+        'moff' => self::TYPE_VIDEO,
+        'moi' => self::TYPE_VIDEO,
+        'moov' => self::TYPE_VIDEO,
+        'mov' => self::TYPE_VIDEO,
+        'movie' => self::TYPE_VIDEO,
+        'mp21' => self::TYPE_VIDEO,
+        'mp2v' => self::TYPE_VIDEO,
+        'mp4' => self::TYPE_VIDEO,
+        'mp4v' => self::TYPE_VIDEO,
+        'mpe' => self::TYPE_VIDEO,
+        'mpeg' => self::TYPE_VIDEO,
+        'mpeg4' => self::TYPE_VIDEO,
+        'mpf' => self::TYPE_VIDEO,
+        'mpg' => self::TYPE_VIDEO,
+        'mpg2' => self::TYPE_VIDEO,
+        'mpgindex' => self::TYPE_VIDEO,
+        'mpl' => self::TYPE_VIDEO,
+        'mpls' => self::TYPE_VIDEO,
+        'mpsub' => self::TYPE_VIDEO,
+        'mpv' => self::TYPE_VIDEO,
+        'mpv2' => self::TYPE_VIDEO,
+        'mqv' => self::TYPE_VIDEO,
+        'msdvd' => self::TYPE_VIDEO,
+        'msh' => self::TYPE_VIDEO,
+        'mswmm' => self::TYPE_VIDEO,
+        'mts' => self::TYPE_VIDEO,
+        'mtv' => self::TYPE_VIDEO,
+        'mvb' => self::TYPE_VIDEO,
+        'mvc' => self::TYPE_VIDEO,
+        'mvd' => self::TYPE_VIDEO,
+        'mve' => self::TYPE_VIDEO,
+        'mvp' => self::TYPE_VIDEO,
+        'mvy' => self::TYPE_VIDEO,
+        'mxf' => self::TYPE_VIDEO,
+        'mys' => self::TYPE_VIDEO,
+        'ncor' => self::TYPE_VIDEO,
+        'nsv' => self::TYPE_VIDEO,
+        'nuv' => self::TYPE_VIDEO,
+        'nvc' => self::TYPE_VIDEO,
+        'ogm' => self::TYPE_VIDEO,
+        'ogv' => self::TYPE_VIDEO,
+        'ogx' => self::TYPE_VIDEO,
+        'osp' => self::TYPE_VIDEO,
+        'par' => self::TYPE_VIDEO,
+        'pds' => self::TYPE_VIDEO,
+        'pgi' => self::TYPE_VIDEO,
+        'photoshow' => self::TYPE_VIDEO,
+        'piv' => self::TYPE_VIDEO,
+        'playlist' => self::TYPE_VIDEO,
+        'pmf' => self::TYPE_VIDEO,
+        'pmv' => self::TYPE_VIDEO,
+        'pns' => self::TYPE_VIDEO,
+        'ppj' => self::TYPE_VIDEO,
+        'prel' => self::TYPE_VIDEO,
+        'pro' => self::TYPE_VIDEO,
+        'prproj' => self::TYPE_VIDEO,
+        'prtl' => self::TYPE_VIDEO,
+        'psh' => self::TYPE_VIDEO,
+        'pssd' => self::TYPE_VIDEO,
+        'pva' => self::TYPE_VIDEO,
+        'pvr' => self::TYPE_VIDEO,
+        'pxv' => self::TYPE_VIDEO,
+        'qt' => self::TYPE_VIDEO,
+        'qtch' => self::TYPE_VIDEO,
+        'qtl' => self::TYPE_VIDEO,
+        'qtm' => self::TYPE_VIDEO,
+        'qtz' => self::TYPE_VIDEO,
+        'r3d' => self::TYPE_VIDEO,
+        'rcproject' => self::TYPE_VIDEO,
+        'rdb' => self::TYPE_VIDEO,
+        'rec' => self::TYPE_VIDEO,
+        'rm' => self::TYPE_VIDEO,
+        'rmd' => self::TYPE_VIDEO,
+        'rmp' => self::TYPE_VIDEO,
+        'rms' => self::TYPE_VIDEO,
+        'rmvb' => self::TYPE_VIDEO,
+        'roq' => self::TYPE_VIDEO,
+        'rp' => self::TYPE_VIDEO,
+        'rsx' => self::TYPE_VIDEO,
+        'rts' => self::TYPE_VIDEO,
+        'rum' => self::TYPE_VIDEO,
+        'rv' => self::TYPE_VIDEO,
+        'sbk' => self::TYPE_VIDEO,
+        'sbt' => self::TYPE_VIDEO,
+        'scc' => self::TYPE_VIDEO,
+        'scm' => self::TYPE_VIDEO,
+        'scn' => self::TYPE_VIDEO,
+        'screenflow' => self::TYPE_VIDEO,
+        'sec' => self::TYPE_VIDEO,
+        'seq' => self::TYPE_VIDEO,
+        'sfd' => self::TYPE_VIDEO,
+        'sfvidcap' => self::TYPE_VIDEO,
+        'smi' => self::TYPE_VIDEO,
+        'smil' => self::TYPE_VIDEO,
+        'smk' => self::TYPE_VIDEO,
+        'sml' => self::TYPE_VIDEO,
+        'smv' => self::TYPE_VIDEO,
+        'spl' => self::TYPE_VIDEO,
+        'sqz' => self::TYPE_VIDEO,
+        'srt' => self::TYPE_VIDEO,
+        'ssm' => self::TYPE_VIDEO,
+        'str' => self::TYPE_VIDEO,
+        'stx' => self::TYPE_VIDEO,
+        'svi' => self::TYPE_VIDEO,
+        'swf' => self::TYPE_VIDEO,
+        'swi' => self::TYPE_VIDEO,
+        'swt' => self::TYPE_VIDEO,
+        'tda3mt' => self::TYPE_VIDEO,
+        'tdx' => self::TYPE_VIDEO,
+        'tivo' => self::TYPE_VIDEO,
+        'tix' => self::TYPE_VIDEO,
+        'tod' => self::TYPE_VIDEO,
+        'tp' => self::TYPE_VIDEO,
+        'tp0' => self::TYPE_VIDEO,
+        'tpd' => self::TYPE_VIDEO,
+        'tpr' => self::TYPE_VIDEO,
+        'trp' => self::TYPE_VIDEO,
+        'ts' => self::TYPE_VIDEO,
+        'tsp' => self::TYPE_VIDEO,
+        'tvs' => self::TYPE_VIDEO,
+        'vc1' => self::TYPE_VIDEO,
+        'vcpf' => self::TYPE_VIDEO,
+        'vcr' => self::TYPE_VIDEO,
+        'vcv' => self::TYPE_VIDEO,
+        'vdo' => self::TYPE_VIDEO,
+        'vdr' => self::TYPE_VIDEO,
+        'veg' => self::TYPE_VIDEO,
+        'vem' => self::TYPE_VIDEO,
+        'vep' => self::TYPE_VIDEO,
+        'vf' => self::TYPE_VIDEO,
+        'vft' => self::TYPE_VIDEO,
+        'vfw' => self::TYPE_VIDEO,
+        'vfz' => self::TYPE_VIDEO,
+        'vgz' => self::TYPE_VIDEO,
+        'vid' => self::TYPE_VIDEO,
+        'video' => self::TYPE_VIDEO,
+        'viewlet' => self::TYPE_VIDEO,
+        'viv' => self::TYPE_VIDEO,
+        'vivo' => self::TYPE_VIDEO,
+        'vlab' => self::TYPE_VIDEO,
+        'vob' => self::TYPE_VIDEO,
+        'vp3' => self::TYPE_VIDEO,
+        'vp6' => self::TYPE_VIDEO,
+        'vp7' => self::TYPE_VIDEO,
+        'vpj' => self::TYPE_VIDEO,
+        'vro' => self::TYPE_VIDEO,
+        'vs4' => self::TYPE_VIDEO,
+        'vse' => self::TYPE_VIDEO,
+        'vsp' => self::TYPE_VIDEO,
+        'w32' => self::TYPE_VIDEO,
+        'wcp' => self::TYPE_VIDEO,
+        'webm' => self::TYPE_VIDEO,
+        'wlmp' => self::TYPE_VIDEO,
+        'wm' => self::TYPE_VIDEO,
+        'wmd' => self::TYPE_VIDEO,
+        'wmmp' => self::TYPE_VIDEO,
+        'wmv' => self::TYPE_VIDEO,
+        'wmx' => self::TYPE_VIDEO,
+        'wot' => self::TYPE_VIDEO,
+        'wp3' => self::TYPE_VIDEO,
+        'wpl' => self::TYPE_VIDEO,
+        'wtv' => self::TYPE_VIDEO,
+        'wvx' => self::TYPE_VIDEO,
+        'xej' => self::TYPE_VIDEO,
+        'xel' => self::TYPE_VIDEO,
+        'xesc' => self::TYPE_VIDEO,
+        'xfl' => self::TYPE_VIDEO,
+        'xlmv' => self::TYPE_VIDEO,
+        'xvid' => self::TYPE_VIDEO,
+        'yuv' => self::TYPE_VIDEO,
+        'zm1' => self::TYPE_VIDEO,
+        'zm2' => self::TYPE_VIDEO,
+        'zm3' => self::TYPE_VIDEO,
+        'zmv' => self::TYPE_VIDEO,
+        '4mp' => self::TYPE_MUSIC,
+        '669' => self::TYPE_MUSIC,
+        '6cm' => self::TYPE_MUSIC,
+        '8cm' => self::TYPE_MUSIC,
+        '8med' => self::TYPE_MUSIC,
+        '8svx' => self::TYPE_MUSIC,
+        'a2m' => self::TYPE_MUSIC,
+        'a52' => self::TYPE_MUSIC,
+        'aa' => self::TYPE_MUSIC,
+        'aa3' => self::TYPE_MUSIC,
+        'aac' => self::TYPE_MUSIC,
+        'aax' => self::TYPE_MUSIC,
+        'ab' => self::TYPE_MUSIC,
+        'abc' => self::TYPE_MUSIC,
+        'abm' => self::TYPE_MUSIC,
+        'ac3' => self::TYPE_MUSIC,
+        'acd' => self::TYPE_MUSIC,
+        'acd-bak' => self::TYPE_MUSIC,
+        'acd-zip' => self::TYPE_MUSIC,
+        'acm' => self::TYPE_MUSIC,
+        'acp' => self::TYPE_MUSIC,
+        'act' => self::TYPE_MUSIC,
+        'adg' => self::TYPE_MUSIC,
+        'adt' => self::TYPE_MUSIC,
+        'adts' => self::TYPE_MUSIC,
+        'adv' => self::TYPE_MUSIC,
+        'afc' => self::TYPE_MUSIC,
+        'agm' => self::TYPE_MUSIC,
+        'ahx' => self::TYPE_MUSIC,
+        'aif' => self::TYPE_MUSIC,
+        'aifc' => self::TYPE_MUSIC,
+        'aiff' => self::TYPE_MUSIC,
+        'ais' => self::TYPE_MUSIC,
+        'akp' => self::TYPE_MUSIC,
+        'al' => self::TYPE_MUSIC,
+        'alac' => self::TYPE_MUSIC,
+        'alaw' => self::TYPE_MUSIC,
+        'alc' => self::TYPE_MUSIC,
+        'all' => self::TYPE_MUSIC,
+        'als' => self::TYPE_MUSIC,
+        'amf' => self::TYPE_MUSIC,
+        'amr' => self::TYPE_MUSIC,
+        'ams' => self::TYPE_MUSIC,
+        'amxd' => self::TYPE_MUSIC,
+        'aob' => self::TYPE_MUSIC,
+        'ape' => self::TYPE_MUSIC,
+        'apf' => self::TYPE_MUSIC,
+        'apl' => self::TYPE_MUSIC,
+        'aria' => self::TYPE_MUSIC,
+        'ariax' => self::TYPE_MUSIC,
+        'asd' => self::TYPE_MUSIC,
+        'ase' => self::TYPE_MUSIC,
+        'at3' => self::TYPE_MUSIC,
+        'atrac' => self::TYPE_MUSIC,
+        'au' => self::TYPE_MUSIC,
+        'aud' => self::TYPE_MUSIC,
+        'aup' => self::TYPE_MUSIC,
+        'avr' => self::TYPE_MUSIC,
+        'awb' => self::TYPE_MUSIC,
+        'ay' => self::TYPE_MUSIC,
+        'b4s' => self::TYPE_MUSIC,
+        'band' => self::TYPE_MUSIC,
+        'bap' => self::TYPE_MUSIC,
+        'bdd' => self::TYPE_MUSIC,
+        'bidule' => self::TYPE_MUSIC,
+        'brstm' => self::TYPE_MUSIC,
+        'bun' => self::TYPE_MUSIC,
+        'bwf' => self::TYPE_MUSIC,
+        'c01' => self::TYPE_MUSIC,
+        'caf' => self::TYPE_MUSIC,
+        'cda' => self::TYPE_MUSIC,
+        'cdda' => self::TYPE_MUSIC,
+        'cel' => self::TYPE_MUSIC,
+        'cfa' => self::TYPE_MUSIC,
+        'cfxr' => self::TYPE_MUSIC,
+        'cidb' => self::TYPE_MUSIC,
+        'cmf' => self::TYPE_MUSIC,
+        'copy' => self::TYPE_MUSIC,
+        'cpr' => self::TYPE_MUSIC,
+        'cpt' => self::TYPE_MUSIC,
+        'csh' => self::TYPE_MUSIC,
+        'cwp' => self::TYPE_MUSIC,
+        'd00' => self::TYPE_MUSIC,
+        'd01' => self::TYPE_MUSIC,
+        'dcf' => self::TYPE_MUSIC,
+        'dcm' => self::TYPE_MUSIC,
+        'dct' => self::TYPE_MUSIC,
+        'ddt' => self::TYPE_MUSIC,
+        'dewf' => self::TYPE_MUSIC,
+        'df2' => self::TYPE_MUSIC,
+        'dfc' => self::TYPE_MUSIC,
+        'dig' => self::TYPE_MUSIC,
+        'dls' => self::TYPE_MUSIC,
+        'dm' => self::TYPE_MUSIC,
+        'dmf' => self::TYPE_MUSIC,
+        'dmsa' => self::TYPE_MUSIC,
+        'dmse' => self::TYPE_MUSIC,
+        'dra' => self::TYPE_MUSIC,
+        'drg' => self::TYPE_MUSIC,
+        'ds' => self::TYPE_MUSIC,
+        'ds2' => self::TYPE_MUSIC,
+        'dsf' => self::TYPE_MUSIC,
+        'dsm' => self::TYPE_MUSIC,
+        'dsp' => self::TYPE_MUSIC,
+        'dss' => self::TYPE_MUSIC,
+        'dtm' => self::TYPE_MUSIC,
+        'dts' => self::TYPE_MUSIC,
+        'dtshd' => self::TYPE_MUSIC,
+        'dvf' => self::TYPE_MUSIC,
+        'dwd' => self::TYPE_MUSIC,
+        'ear' => self::TYPE_MUSIC,
+        'efa' => self::TYPE_MUSIC,
+        'efe' => self::TYPE_MUSIC,
+        'efk' => self::TYPE_MUSIC,
+        'efq' => self::TYPE_MUSIC,
+        'efs' => self::TYPE_MUSIC,
+        'efv' => self::TYPE_MUSIC,
+        'emd' => self::TYPE_MUSIC,
+        'emp' => self::TYPE_MUSIC,
+        'emx' => self::TYPE_MUSIC,
+        'esps' => self::TYPE_MUSIC,
+        'expressionmap' => self::TYPE_MUSIC,
+        'f2r' => self::TYPE_MUSIC,
+        'f32' => self::TYPE_MUSIC,
+        'f3r' => self::TYPE_MUSIC,
+        'f4a' => self::TYPE_MUSIC,
+        'f64' => self::TYPE_MUSIC,
+        'far' => self::TYPE_MUSIC,
+        'fda' => self::TYPE_MUSIC,
+        'fff' => self::TYPE_MUSIC,
+        'flac' => self::TYPE_MUSIC,
+        'flp' => self::TYPE_MUSIC,
+        'fls' => self::TYPE_MUSIC,
+        'frg' => self::TYPE_MUSIC,
+        'fsm' => self::TYPE_MUSIC,
+        'ftm' => self::TYPE_MUSIC,
+        'fzb' => self::TYPE_MUSIC,
+        'fzf' => self::TYPE_MUSIC,
+        'fzv' => self::TYPE_MUSIC,
+        'g721' => self::TYPE_MUSIC,
+        'g723' => self::TYPE_MUSIC,
+        'g726' => self::TYPE_MUSIC,
+        'gbproj' => self::TYPE_MUSIC,
+        'gbs' => self::TYPE_MUSIC,
+        'gig' => self::TYPE_MUSIC,
+        'gm' => self::TYPE_MUSIC,
+        'gp5' => self::TYPE_MUSIC,
+        'gpbank' => self::TYPE_MUSIC,
+        'gpk' => self::TYPE_MUSIC,
+        'gpx' => self::TYPE_MUSIC,
+        'gro' => self::TYPE_MUSIC,
+        'groove' => self::TYPE_MUSIC,
+        'gsm' => self::TYPE_MUSIC,
+        'h0' => self::TYPE_MUSIC,
+        'hdp' => self::TYPE_MUSIC,
+        'hma' => self::TYPE_MUSIC,
+        'hsb' => self::TYPE_MUSIC,
+        'ics' => self::TYPE_MUSIC,
+        'igp' => self::TYPE_MUSIC,
+        'igr' => self::TYPE_MUSIC,
+        'imf' => self::TYPE_MUSIC,
+        'imp' => self::TYPE_MUSIC,
+        'ins' => self::TYPE_MUSIC,
+        'isma' => self::TYPE_MUSIC,
+        'it' => self::TYPE_MUSIC,
+        'iti' => self::TYPE_MUSIC,
+        'its' => self::TYPE_MUSIC,
+        'jam' => self::TYPE_MUSIC,
+        'jo' => self::TYPE_MUSIC,
+        'jo-7z' => self::TYPE_MUSIC,
+        'k25' => self::TYPE_MUSIC,
+        'k26' => self::TYPE_MUSIC,
+        'kar' => self::TYPE_MUSIC,
+        'kfn' => self::TYPE_MUSIC,
+        'kin' => self::TYPE_MUSIC,
+        'kit' => self::TYPE_MUSIC,
+        'kmp' => self::TYPE_MUSIC,
+        'koz' => self::TYPE_MUSIC,
+        'kpl' => self::TYPE_MUSIC,
+        'krz' => self::TYPE_MUSIC,
+        'ksc' => self::TYPE_MUSIC,
+        'ksf' => self::TYPE_MUSIC,
+        'kt2' => self::TYPE_MUSIC,
+        'kt3' => self::TYPE_MUSIC,
+        'ktp' => self::TYPE_MUSIC,
+        'l' => self::TYPE_MUSIC,
+        'la' => self::TYPE_MUSIC,
+        'lof' => self::TYPE_MUSIC,
+        'lqt' => self::TYPE_MUSIC,
+        'lso' => self::TYPE_MUSIC,
+        'lvp' => self::TYPE_MUSIC,
+        'lwv' => self::TYPE_MUSIC,
+        'm1a' => self::TYPE_MUSIC,
+        'm3u' => self::TYPE_MUSIC,
+        'm3u8' => self::TYPE_MUSIC,
+        'm4a' => self::TYPE_MUSIC,
+        'm4b' => self::TYPE_MUSIC,
+        'm4p' => self::TYPE_MUSIC,
+        'm4r' => self::TYPE_MUSIC,
+        'ma1' => self::TYPE_MUSIC,
+        'mbr' => self::TYPE_MUSIC,
+        'mdl' => self::TYPE_MUSIC,
+        'med' => self::TYPE_MUSIC,
+        'mgv' => self::TYPE_MUSIC,
+        'mid' => self::TYPE_MUSIC,
+        'midi' => self::TYPE_MUSIC,
+        'miniusf' => self::TYPE_MUSIC,
+        'mka' => self::TYPE_MUSIC,
+        'mlp' => self::TYPE_MUSIC,
+        'mmf' => self::TYPE_MUSIC,
+        'mmm' => self::TYPE_MUSIC,
+        'mmp' => self::TYPE_MUSIC,
+        'mo3' => self::TYPE_MUSIC,
+        'mod' => self::TYPE_MUSIC,
+        'mp1' => self::TYPE_MUSIC,
+        'mp2' => self::TYPE_MUSIC,
+        'mp3' => self::TYPE_MUSIC,
+        'mpa' => self::TYPE_MUSIC,
+        'mpc' => self::TYPE_MUSIC,
+        'mpga' => self::TYPE_MUSIC,
+        'mpu' => self::TYPE_MUSIC,
+        'mp_' => self::TYPE_MUSIC,
+        'mscx' => self::TYPE_MUSIC,
+        'mscz' => self::TYPE_MUSIC,
+        'msv' => self::TYPE_MUSIC,
+        'mt2' => self::TYPE_MUSIC,
+        'mt9' => self::TYPE_MUSIC,
+        'mte' => self::TYPE_MUSIC,
+        'mtf' => self::TYPE_MUSIC,
+        'mti' => self::TYPE_MUSIC,
+        'mtm' => self::TYPE_MUSIC,
+        'mtp' => self::TYPE_MUSIC,
+        'mts' => self::TYPE_MUSIC,
+        'mus' => self::TYPE_MUSIC,
+        'mus' => self::TYPE_MUSIC,
+        'musa' => self::TYPE_MUSIC,
+        'mws' => self::TYPE_MUSIC,
+        'mxl' => self::TYPE_MUSIC,
+        'mxmf' => self::TYPE_MUSIC,
+        'mzp' => self::TYPE_MUSIC,
+        'nap' => self::TYPE_MUSIC,
+        'ncw' => self::TYPE_MUSIC,
+        'nkb' => self::TYPE_MUSIC,
+        'nki' => self::TYPE_MUSIC,
+        'nkm' => self::TYPE_MUSIC,
+        'nks' => self::TYPE_MUSIC,
+        'nkx' => self::TYPE_MUSIC,
+        'npl' => self::TYPE_MUSIC,
+        'nra' => self::TYPE_MUSIC,
+        'nrt' => self::TYPE_MUSIC,
+        'nsa' => self::TYPE_MUSIC,
+        'nsf' => self::TYPE_MUSIC,
+        'nst' => self::TYPE_MUSIC,
+        'ntn' => self::TYPE_MUSIC,
+        'nvf' => self::TYPE_MUSIC,
+        'nwc' => self::TYPE_MUSIC,
+        'odm' => self::TYPE_MUSIC,
+        'ofr' => self::TYPE_MUSIC,
+        'oga' => self::TYPE_MUSIC,
+        'ogg' => self::TYPE_MUSIC,
+        'okt' => self::TYPE_MUSIC,
+        'oma' => self::TYPE_MUSIC,
+        'omf' => self::TYPE_MUSIC,
+        'omg' => self::TYPE_MUSIC,
+        'omx' => self::TYPE_MUSIC,
+        'orc' => self::TYPE_MUSIC,
+        'ots' => self::TYPE_MUSIC,
+        'ove' => self::TYPE_MUSIC,
+        'ovw' => self::TYPE_MUSIC,
+        'pac' => self::TYPE_MUSIC,
+        'pat' => self::TYPE_MUSIC,
+        'pbf' => self::TYPE_MUSIC,
+        'pca' => self::TYPE_MUSIC,
+        'pcast' => self::TYPE_MUSIC,
+        'pcg' => self::TYPE_MUSIC,
+        'pcm' => self::TYPE_MUSIC,
+        'pd' => self::TYPE_MUSIC,
+        'peak' => self::TYPE_MUSIC,
+        'pek' => self::TYPE_MUSIC,
+        'pho' => self::TYPE_MUSIC,
+        'phy' => self::TYPE_MUSIC,
+        'pk' => self::TYPE_MUSIC,
+        'pkf' => self::TYPE_MUSIC,
+        'pla' => self::TYPE_MUSIC,
+        'pls' => self::TYPE_MUSIC,
+        'pna' => self::TYPE_MUSIC,
+        'ppc' => self::TYPE_MUSIC,
+        'ppcx' => self::TYPE_MUSIC,
+        'prg' => self::TYPE_MUSIC,
+        'psf' => self::TYPE_MUSIC,
+        'psm' => self::TYPE_MUSIC,
+        'psy' => self::TYPE_MUSIC,
+        'ptf' => self::TYPE_MUSIC,
+        'ptm' => self::TYPE_MUSIC,
+        'pts' => self::TYPE_MUSIC,
+        'pvc' => self::TYPE_MUSIC,
+        'qcp' => self::TYPE_MUSIC,
+        'r' => self::TYPE_MUSIC,
+        'r1m' => self::TYPE_MUSIC,
+        'ra' => self::TYPE_MUSIC,
+        'ram' => self::TYPE_MUSIC,
+        'raw' => self::TYPE_MUSIC,
+        'rax' => self::TYPE_MUSIC,
+        'rbs' => self::TYPE_MUSIC,
+        'rcy' => self::TYPE_MUSIC,
+        'rex' => self::TYPE_MUSIC,
+        'rfl' => self::TYPE_MUSIC,
+        'rip' => self::TYPE_MUSIC,
+        'rmf' => self::TYPE_MUSIC,
+        'rmi' => self::TYPE_MUSIC,
+        'rmj' => self::TYPE_MUSIC,
+        'rmm' => self::TYPE_MUSIC,
+        'rmx' => self::TYPE_MUSIC,
+        'rng' => self::TYPE_MUSIC,
+        'rns' => self::TYPE_MUSIC,
+        'rol' => self::TYPE_MUSIC,
+        'rsn' => self::TYPE_MUSIC,
+        'rso' => self::TYPE_MUSIC,
+        'rti' => self::TYPE_MUSIC,
+        'rtm' => self::TYPE_MUSIC,
+        'rts' => self::TYPE_MUSIC,
+        'rvx' => self::TYPE_MUSIC,
+        'rx2' => self::TYPE_MUSIC,
+        's3i' => self::TYPE_MUSIC,
+        's3m' => self::TYPE_MUSIC,
+        's3z' => self::TYPE_MUSIC,
+        'saf' => self::TYPE_MUSIC,
+        'sam' => self::TYPE_MUSIC,
+        'sap' => self::TYPE_MUSIC,
+        'sb' => self::TYPE_MUSIC,
+        'sbg' => self::TYPE_MUSIC,
+        'sbi' => self::TYPE_MUSIC,
+        'sbk' => self::TYPE_MUSIC,
+        'sc2' => self::TYPE_MUSIC,
+        'sd' => self::TYPE_MUSIC,
+        'sd2' => self::TYPE_MUSIC,
+        'sd2f' => self::TYPE_MUSIC,
+        'sdat' => self::TYPE_MUSIC,
+        'sdii' => self::TYPE_MUSIC,
+        'sds' => self::TYPE_MUSIC,
+        'sdt' => self::TYPE_MUSIC,
+        'sdx' => self::TYPE_MUSIC,
+        'seg' => self::TYPE_MUSIC,
+        'ses' => self::TYPE_MUSIC,
+        'sesx' => self::TYPE_MUSIC,
+        'sf' => self::TYPE_MUSIC,
+        'sf2' => self::TYPE_MUSIC,
+        'sfap0' => self::TYPE_MUSIC,
+        'sfk' => self::TYPE_MUSIC,
+        'sfl' => self::TYPE_MUSIC,
+        'sfs' => self::TYPE_MUSIC,
+        'shn' => self::TYPE_MUSIC,
+        'sib' => self::TYPE_MUSIC,
+        'sid' => self::TYPE_MUSIC,
+        'sid' => self::TYPE_MUSIC,
+        'smf' => self::TYPE_MUSIC,
+        'smp' => self::TYPE_MUSIC,
+        'snd' => self::TYPE_MUSIC,
+        'snd' => self::TYPE_MUSIC,
+        'snd' => self::TYPE_MUSIC,
+        'sng' => self::TYPE_MUSIC,
+        'sng' => self::TYPE_MUSIC,
+        'sou' => self::TYPE_MUSIC,
+        'sppack' => self::TYPE_MUSIC,
+        'sprg' => self::TYPE_MUSIC,
+        'spx' => self::TYPE_MUSIC,
+        'sseq' => self::TYPE_MUSIC,
+        'sseq' => self::TYPE_MUSIC,
+        'ssnd' => self::TYPE_MUSIC,
+        'stap' => self::TYPE_MUSIC,
+        'stm' => self::TYPE_MUSIC,
+        'stx' => self::TYPE_MUSIC,
+        'sty' => self::TYPE_MUSIC,
+        'sty' => self::TYPE_MUSIC,
+        'svd' => self::TYPE_MUSIC,
+        'svx' => self::TYPE_MUSIC,
+        'sw' => self::TYPE_MUSIC,
+        'swa' => self::TYPE_MUSIC,
+        'syh' => self::TYPE_MUSIC,
+        'syn' => self::TYPE_MUSIC,
+        'syn' => self::TYPE_MUSIC,
+        'syw' => self::TYPE_MUSIC,
+        'syx' => self::TYPE_MUSIC,
+        'tak' => self::TYPE_MUSIC,
+        'tak' => self::TYPE_MUSIC,
+        'td0' => self::TYPE_MUSIC,
+        'tfmx' => self::TYPE_MUSIC,
+        'tg' => self::TYPE_MUSIC,
+        'thx' => self::TYPE_MUSIC,
+        'toc' => self::TYPE_MUSIC,
+        'tsp' => self::TYPE_MUSIC,
+        'tta' => self::TYPE_MUSIC,
+        'tun' => self::TYPE_MUSIC,
+        'txw' => self::TYPE_MUSIC,
+        'u' => self::TYPE_MUSIC,
+        'uax' => self::TYPE_MUSIC,
+        'ub' => self::TYPE_MUSIC,
+        'ulaw' => self::TYPE_MUSIC,
+        'ult' => self::TYPE_MUSIC,
+        'ulw' => self::TYPE_MUSIC,
+        'uni' => self::TYPE_MUSIC,
+        'usf' => self::TYPE_MUSIC,
+        'usflib' => self::TYPE_MUSIC,
+        'uw' => self::TYPE_MUSIC,
+        'uwf' => self::TYPE_MUSIC,
+        'vag' => self::TYPE_MUSIC,
+        'val' => self::TYPE_MUSIC,
+        'vap' => self::TYPE_MUSIC,
+        'vb' => self::TYPE_MUSIC,
+        'vc3' => self::TYPE_MUSIC,
+        'vdj' => self::TYPE_MUSIC,
+        'vgm' => self::TYPE_MUSIC,
+        'vgz' => self::TYPE_MUSIC,
+        'vmd' => self::TYPE_MUSIC,
+        'vmf' => self::TYPE_MUSIC,
+        'vmf' => self::TYPE_MUSIC,
+        'voc' => self::TYPE_MUSIC,
+        'voi' => self::TYPE_MUSIC,
+        'vox' => self::TYPE_MUSIC,
+        'vpm' => self::TYPE_MUSIC,
+        'vqf' => self::TYPE_MUSIC,
+        'vrf' => self::TYPE_MUSIC,
+        'vtx' => self::TYPE_MUSIC,
+        'vyf' => self::TYPE_MUSIC,
+        'w01' => self::TYPE_MUSIC,
+        'w64' => self::TYPE_MUSIC,
+        'wav' => self::TYPE_MUSIC,
+        'wav' => self::TYPE_MUSIC,
+        'wave' => self::TYPE_MUSIC,
+        'wax' => self::TYPE_MUSIC,
+        'wfb' => self::TYPE_MUSIC,
+        'wfd' => self::TYPE_MUSIC,
+        'wfp' => self::TYPE_MUSIC,
+        'wma' => self::TYPE_MUSIC,
+        'wow' => self::TYPE_MUSIC,
+        'wpk' => self::TYPE_MUSIC,
+        'wpp' => self::TYPE_MUSIC,
+        'wproj' => self::TYPE_MUSIC,
+        'wrk' => self::TYPE_MUSIC,
+        'wtpl' => self::TYPE_MUSIC,
+        'wtpt' => self::TYPE_MUSIC,
+        'wus' => self::TYPE_MUSIC,
+        'wut' => self::TYPE_MUSIC,
+        'wv' => self::TYPE_MUSIC,
+        'wvc' => self::TYPE_MUSIC,
+        'wve' => self::TYPE_MUSIC,
+        'wwu' => self::TYPE_MUSIC,
+        'wyz' => self::TYPE_MUSIC,
+        'xa' => self::TYPE_MUSIC,
+        'xa' => self::TYPE_MUSIC,
+        'xfs' => self::TYPE_MUSIC,
+        'xi' => self::TYPE_MUSIC,
+        'xm' => self::TYPE_MUSIC,
+        'xmf' => self::TYPE_MUSIC,
+        'xmi' => self::TYPE_MUSIC,
+        'xmz' => self::TYPE_MUSIC,
+        'xp' => self::TYPE_MUSIC,
+        'xrns' => self::TYPE_MUSIC,
+        'xsb' => self::TYPE_MUSIC,
+        'xspf' => self::TYPE_MUSIC,
+        'xt' => self::TYPE_MUSIC,
+        'xwb' => self::TYPE_MUSIC,
+        'ym' => self::TYPE_MUSIC,
+        'zpa' => self::TYPE_MUSIC,
+        'zpl' => self::TYPE_MUSIC,
+        'zvd' => self::TYPE_MUSIC,
+        'zvr' => self::TYPE_MUSIC,
+        '0' => self::TYPE_ARCHIVE,
+        '000' => self::TYPE_ARCHIVE,
+        '7z' => self::TYPE_ARCHIVE,
+        'a00' => self::TYPE_ARCHIVE,
+        'a01' => self::TYPE_ARCHIVE,
+        'a02' => self::TYPE_ARCHIVE,
+        'ace' => self::TYPE_ARCHIVE,
+        'ain' => self::TYPE_ARCHIVE,
+        'alz' => self::TYPE_ARCHIVE,
+        'apz' => self::TYPE_ARCHIVE,
+        'ar' => self::TYPE_ARCHIVE,
+        'arc' => self::TYPE_ARCHIVE,
+        'arh' => self::TYPE_ARCHIVE,
+        'ari' => self::TYPE_ARCHIVE,
+        'arj' => self::TYPE_ARCHIVE,
+        'ark' => self::TYPE_ARCHIVE,
+        'b1' => self::TYPE_ARCHIVE,
+        'b64' => self::TYPE_ARCHIVE,
+        'ba' => self::TYPE_ARCHIVE,
+        'bh' => self::TYPE_ARCHIVE,
+        'boo' => self::TYPE_ARCHIVE,
+        'bz' => self::TYPE_ARCHIVE,
+        'bz2' => self::TYPE_ARCHIVE,
+        'bza' => self::TYPE_ARCHIVE,
+        'bzip' => self::TYPE_ARCHIVE,
+        'bzip2' => self::TYPE_ARCHIVE,
+        'c00' => self::TYPE_ARCHIVE,
+        'c01' => self::TYPE_ARCHIVE,
+        'c02' => self::TYPE_ARCHIVE,
+        'c10' => self::TYPE_ARCHIVE,
+        'car' => self::TYPE_ARCHIVE,
+        'cb7' => self::TYPE_ARCHIVE,
+        'cba' => self::TYPE_ARCHIVE,
+        'cbr' => self::TYPE_ARCHIVE,
+        'cbt' => self::TYPE_ARCHIVE,
+        'cbz' => self::TYPE_ARCHIVE,
+        'cp9' => self::TYPE_ARCHIVE,
+        'cpgz' => self::TYPE_ARCHIVE,
+        'cpt' => self::TYPE_ARCHIVE,
+        'czip' => self::TYPE_ARCHIVE,
+        'dar' => self::TYPE_ARCHIVE,
+        'dd' => self::TYPE_ARCHIVE,
+        'deb' => self::TYPE_ARCHIVE,
+        'dgc' => self::TYPE_ARCHIVE,
+        'dist' => self::TYPE_ARCHIVE,
+        'dl_' => self::TYPE_ARCHIVE,
+        'dz' => self::TYPE_ARCHIVE,
+        'ecs' => self::TYPE_ARCHIVE,
+        'efw' => self::TYPE_ARCHIVE,
+        'epi' => self::TYPE_ARCHIVE,
+        'f' => self::TYPE_ARCHIVE,
+        'fdp' => self::TYPE_ARCHIVE,
+        'gca' => self::TYPE_ARCHIVE,
+        'gz' => self::TYPE_ARCHIVE,
+        'gz2' => self::TYPE_ARCHIVE,
+        'gza' => self::TYPE_ARCHIVE,
+        'gzi' => self::TYPE_ARCHIVE,
+        'gzip' => self::TYPE_ARCHIVE,
+        'ha' => self::TYPE_ARCHIVE,
+        'hbc' => self::TYPE_ARCHIVE,
+        'hbc2' => self::TYPE_ARCHIVE,
+        'hbe' => self::TYPE_ARCHIVE,
+        'hki' => self::TYPE_ARCHIVE,
+        'hki1' => self::TYPE_ARCHIVE,
+        'hki2' => self::TYPE_ARCHIVE,
+        'hki3' => self::TYPE_ARCHIVE,
+        'hpk' => self::TYPE_ARCHIVE,
+        'hyp' => self::TYPE_ARCHIVE,
+        'ice' => self::TYPE_ARCHIVE,
+        'ipg' => self::TYPE_ARCHIVE,
+        'ipk' => self::TYPE_ARCHIVE,
+        'ish' => self::TYPE_ARCHIVE,
+        'ita' => self::TYPE_ARCHIVE,
+        'j' => self::TYPE_ARCHIVE,
+        'jar.pack' => self::TYPE_ARCHIVE,
+        'jgz' => self::TYPE_ARCHIVE,
+        'jic' => self::TYPE_ARCHIVE,
+        'kgb' => self::TYPE_ARCHIVE,
+        'kz' => self::TYPE_ARCHIVE,
+        'lbr' => self::TYPE_ARCHIVE,
+        'lemon' => self::TYPE_ARCHIVE,
+        'lha' => self::TYPE_ARCHIVE,
+        'lnx' => self::TYPE_ARCHIVE,
+        'lqr' => self::TYPE_ARCHIVE,
+        'lz' => self::TYPE_ARCHIVE,
+        'lzh' => self::TYPE_ARCHIVE,
+        'lzm' => self::TYPE_ARCHIVE,
+        'lzma' => self::TYPE_ARCHIVE,
+        'lzo' => self::TYPE_ARCHIVE,
+        'lzx' => self::TYPE_ARCHIVE,
+        'md' => self::TYPE_ARCHIVE,
+        'mint' => self::TYPE_ARCHIVE,
+        'mou' => self::TYPE_ARCHIVE,
+        'mpkg' => self::TYPE_ARCHIVE,
+        'mzp' => self::TYPE_ARCHIVE,
+        'mzp' => self::TYPE_ARCHIVE,
+        'oar' => self::TYPE_ARCHIVE,
+        'oz' => self::TYPE_ARCHIVE,
+        'pack.gz' => self::TYPE_ARCHIVE,
+        'package' => self::TYPE_ARCHIVE,
+        'pae' => self::TYPE_ARCHIVE,
+        'pak' => self::TYPE_ARCHIVE,
+        'paq6' => self::TYPE_ARCHIVE,
+        'paq7' => self::TYPE_ARCHIVE,
+        'paq8' => self::TYPE_ARCHIVE,
+        'paq8f' => self::TYPE_ARCHIVE,
+        'par' => self::TYPE_ARCHIVE,
+        'par2' => self::TYPE_ARCHIVE,
+        'pax' => self::TYPE_ARCHIVE,
+        'pbi' => self::TYPE_ARCHIVE,
+        'pcv' => self::TYPE_ARCHIVE,
+        'pea' => self::TYPE_ARCHIVE,
+        'pet' => self::TYPE_ARCHIVE,
+        'pf' => self::TYPE_ARCHIVE,
+        'pim' => self::TYPE_ARCHIVE,
+        'pit' => self::TYPE_ARCHIVE,
+        'piz' => self::TYPE_ARCHIVE,
+        'pkg' => self::TYPE_ARCHIVE,
+        'pup' => self::TYPE_ARCHIVE,
+        'pup' => self::TYPE_ARCHIVE,
+        'puz' => self::TYPE_ARCHIVE,
+        'pwa' => self::TYPE_ARCHIVE,
+        'qda' => self::TYPE_ARCHIVE,
+        'r0' => self::TYPE_ARCHIVE,
+        'r00' => self::TYPE_ARCHIVE,
+        'r01' => self::TYPE_ARCHIVE,
+        'r02' => self::TYPE_ARCHIVE,
+        'r03' => self::TYPE_ARCHIVE,
+        'r1' => self::TYPE_ARCHIVE,
+        'r2' => self::TYPE_ARCHIVE,
+        'r21' => self::TYPE_ARCHIVE,
+        'r30' => self::TYPE_ARCHIVE,
+        'rar' => self::TYPE_ARCHIVE,
+        'rev' => self::TYPE_ARCHIVE,
+        'rk' => self::TYPE_ARCHIVE,
+        'rnc' => self::TYPE_ARCHIVE,
+        'rp9' => self::TYPE_ARCHIVE,
+        'rpm' => self::TYPE_ARCHIVE,
+        'rte' => self::TYPE_ARCHIVE,
+        'rz' => self::TYPE_ARCHIVE,
+        'rzs' => self::TYPE_ARCHIVE,
+        's00' => self::TYPE_ARCHIVE,
+        's01' => self::TYPE_ARCHIVE,
+        's02' => self::TYPE_ARCHIVE,
+        's7z' => self::TYPE_ARCHIVE,
+        'sar' => self::TYPE_ARCHIVE,
+        'sbx' => self::TYPE_ARCHIVE,
+        'sdc' => self::TYPE_ARCHIVE,
+        'sdn' => self::TYPE_ARCHIVE,
+        'sea' => self::TYPE_ARCHIVE,
+        'sen' => self::TYPE_ARCHIVE,
+        'sfs' => self::TYPE_ARCHIVE,
+        'sfx' => self::TYPE_ARCHIVE,
+        'sh' => self::TYPE_ARCHIVE,
+        'shar' => self::TYPE_ARCHIVE,
+        'shk' => self::TYPE_ARCHIVE,
+        'shr' => self::TYPE_ARCHIVE,
+        'sit' => self::TYPE_ARCHIVE,
+        'sitx' => self::TYPE_ARCHIVE,
+        'spt' => self::TYPE_ARCHIVE,
+        'sqx' => self::TYPE_ARCHIVE,
+        'srep' => self::TYPE_ARCHIVE,
+        'sy_' => self::TYPE_ARCHIVE,
+        'tar.gz' => self::TYPE_ARCHIVE,
+        'tar.gz2' => self::TYPE_ARCHIVE,
+        'tar.lzma' => self::TYPE_ARCHIVE,
+        'tar.xz' => self::TYPE_ARCHIVE,
+        'taz' => self::TYPE_ARCHIVE,
+        'tbz' => self::TYPE_ARCHIVE,
+        'tbz2' => self::TYPE_ARCHIVE,
+        'tg' => self::TYPE_ARCHIVE,
+        'tgz' => self::TYPE_ARCHIVE,
+        'tlz' => self::TYPE_ARCHIVE,
+        'tlzma' => self::TYPE_ARCHIVE,
+        'txz' => self::TYPE_ARCHIVE,
+        'tz' => self::TYPE_ARCHIVE,
+        'uc2' => self::TYPE_ARCHIVE,
+        'ufs.uzip' => self::TYPE_ARCHIVE,
+        'uha' => self::TYPE_ARCHIVE,
+        'uzip' => self::TYPE_ARCHIVE,
+        'vem' => self::TYPE_ARCHIVE,
+        'vsi' => self::TYPE_ARCHIVE,
+        'war' => self::TYPE_ARCHIVE,
+        'wot' => self::TYPE_ARCHIVE,
+        'xef' => self::TYPE_ARCHIVE,
+        'xez' => self::TYPE_ARCHIVE,
+        'xmcdz' => self::TYPE_ARCHIVE,
+        'xx' => self::TYPE_ARCHIVE,
+        'xz' => self::TYPE_ARCHIVE,
+        'y' => self::TYPE_ARCHIVE,
+        'yz' => self::TYPE_ARCHIVE,
+        'yz1' => self::TYPE_ARCHIVE,
+        'z' => self::TYPE_ARCHIVE,
+        'z01' => self::TYPE_ARCHIVE,
+        'z02' => self::TYPE_ARCHIVE,
+        'z03' => self::TYPE_ARCHIVE,
+        'z04' => self::TYPE_ARCHIVE,
+        'zap' => self::TYPE_ARCHIVE,
+        'zfsendtotarget' => self::TYPE_ARCHIVE,
+        'zi' => self::TYPE_ARCHIVE,
+        'zip' => self::TYPE_ARCHIVE,
+        'zipx' => self::TYPE_ARCHIVE,
+        'zix' => self::TYPE_ARCHIVE,
+        'zl' => self::TYPE_ARCHIVE,
+        'zoo' => self::TYPE_ARCHIVE,
+        'zpi' => self::TYPE_ARCHIVE,
+        'zz' => self::TYPE_ARCHIVE,
+        'pdf' => self::TYPE_PDF,
+        'dae' => self::TYPE_MODEL,
+        'obj' => self::TYPE_MODEL,
+        'fbx' => self::TYPE_MODEL,
+        'spx' => self::TYPE_MODEL,
+        '3ds' => self::TYPE_MODEL,
+        '3mf' => self::TYPE_MODEL,
+        'blend' => self::TYPE_MODEL,
+        'awd' => self::TYPE_MODEL,
+        'ply' => self::TYPE_MODEL,
+        'pcd' => self::TYPE_MODEL,
+        'stl' => self::TYPE_MODEL,
+        'skp' => self::TYPE_MODEL,
+    ];
+
+    /**
+     * Unique identifier
+     *
+     * @var int
+     * @ORM\Id
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * Id of the assigned album
+     *
+     * @var int
+     * @ORM\Column(name="albumID", type="integer", nullable=false)
+     */
+    private $albumId;
+
+    /**
+     * Name of the media, also used as a file name
+     *
+     * @var string
+     * @ORM\Column(name="name", type="string", length=255, nullable=false)
+     */
+    private $name;
+
+    /**
+     * Description for the media.
+     *
+     * @var string
+     * @ORM\Column(name="description", type="text", nullable=false)
+     */
+    private $description;
+
+    /**
+     * Path of the uploaded file.
+     *
+     * @var string
+     * @ORM\Column(name="path", type="string", length=255, nullable=false)
+     */
+    private $path;
+
+    /**
+     * Flag for the media type.
+     *
+     * @var string
+     * @ORM\Column(name="type", type="string", length=50, nullable=false)
+     */
+    private $type;
+
+    /**
+     * Extension of the uploaded file
+     *
+     * @var string
+     * @ORM\Column(name="extension", type="string", length=20, nullable=false)
+     */
+    private $extension;
+
+    /**
+     * Id of the user, who uploaded the file.
+     *
+     * @var int
+     * @ORM\Column(name="userID", type="integer", nullable=false)
+     */
+    private $userId;
+
+    /**
+     * Creation date of the media
+     *
+     * @var \DateTime
+     * @ORM\Column(name="created", type="date", nullable=false)
+     */
+    private $created;
+
+    /**
+     * Internal container for the uploaded file.
+     *
+     * @var UploadedFile
+     */
+    private $file;
+
+    /**
+     * Filesize of the file in bytes
+     *
+     * @var int
+     * @ORM\Column(name="file_size", type="integer", nullable=false)
+     */
+    private $fileSize;
+
+    /**
+     * Width of the file in px if it's an image
+     *
+     * @var int
+     * @ORM\Column(name="width", type="integer", nullable=true)
+     */
+    private $width;
+
+    /**
+     * Height of the file in px if it's an image
+     *
+     * @var int
+     * @ORM\Column(name="height", type="integer", nullable=true)
+     */
+    private $height;
+
+    /**
+     * Assigned album association. Is automatically loaded when the standard functions "find" ... be used,
+     * or if the Query Builder is specified with the association.
+     *
+     * @var \Shopware\Models\Media\Album
+     * @ORM\ManyToOne(targetEntity="\Shopware\Models\Media\Album", inversedBy="media")
+     * @ORM\JoinColumn(name="albumID", referencedColumnName="id")
+     */
+    private $album;
+
+    /**
+     * Contains the thumbnails paths.
+     * Contains all created thumbnails
+     *
+     * @var array
+     */
+    private $thumbnails;
+
+    /**
+     * Contains the high dpi thumbnails paths.
+     *
+     * @var array
+     */
+    private $highDpiThumbnails;
+
     /****************************************************************
      *                  Property Getter & Setter                    *
      ****************************************************************/
@@ -1280,10 +1300,11 @@ class Media extends ModelEntity
     {
         return $this->typeMapping;
     }
-    
+
     /**
      * Returns the identifier "id"
-     * @return integer
+     *
+     * @return int
      */
     public function getId()
     {
@@ -1292,19 +1313,22 @@ class Media extends ModelEntity
 
     /**
      * Sets the id of the assigned album.
-     * @param integer $albumId
+     *
+     * @param int $albumId
+     *
      * @return Media
      */
     public function setAlbumId($albumId)
     {
         $this->albumId = $albumId;
+
         return $this;
     }
 
     /**
      * Returns the id of the assigned album.
      *
-     * @return integer
+     * @return int
      */
     public function getAlbumId()
     {
@@ -1313,17 +1337,21 @@ class Media extends ModelEntity
 
     /**
      * Sets the name of the media, also used as file name
+     *
      * @param string $name
+     *
      * @return \Shopware\Models\Media\Media
      */
     public function setName($name)
     {
         $this->name = $this->removeSpecialCharacters($name);
+
         return $this;
     }
 
     /**
      * Returns the name of the media, also used as file name
+     *
      * @return string
      */
     public function getName()
@@ -1333,17 +1361,21 @@ class Media extends ModelEntity
 
     /**
      * Sets the description of the media.
+     *
      * @param string $description
+     *
      * @return \Shopware\Models\Media\Media
      */
     public function setDescription($description)
     {
         $this->description = $description;
+
         return $this;
     }
 
     /**
      * Returns the media description.
+     *
      * @return string
      */
     public function getDescription()
@@ -1353,17 +1385,21 @@ class Media extends ModelEntity
 
     /**
      * Sets the file path of the media.
+     *
      * @param string $path
+     *
      * @return \Shopware\Models\Media\Media
      */
     public function setPath($path)
     {
         $this->path = $path;
+
         return $this;
     }
 
     /**
      * Returns the file path of the media
+     *
      * @return string
      */
     public function getPath()
@@ -1373,17 +1409,21 @@ class Media extends ModelEntity
 
     /**
      * Sets the internal type of the media.
+     *
      * @param string $type
+     *
      * @return \Shopware\Models\Media\Media
      */
     public function setType($type)
     {
         $this->type = $type;
+
         return $this;
     }
 
     /**
      * Returns the media type.
+     *
      * @return string
      */
     public function getType()
@@ -1393,17 +1433,21 @@ class Media extends ModelEntity
 
     /**
      * Sets the file extension.
+     *
      * @param string $extension
+     *
      * @return \Shopware\Models\Media\Media
      */
     public function setExtension($extension)
     {
         $this->extension = $extension;
+
         return $this;
     }
 
     /**
      * Returns the file extension.
+     *
      * @return string
      */
     public function getExtension()
@@ -1413,18 +1457,22 @@ class Media extends ModelEntity
 
     /**
      * Sets the id of the user, who uploaded the file.
-     * @param integer $userId
+     *
+     * @param int $userId
+     *
      * @return \Shopware\Models\Media\Media
      */
     public function setUserId($userId)
     {
         $this->userId = $userId;
+
         return $this;
     }
 
     /**
      * Returns the id of the user, who uploaded the file.
-     * @return integer
+     *
+     * @return int
      */
     public function getUserId()
     {
@@ -1433,17 +1481,21 @@ class Media extends ModelEntity
 
     /**
      * Sets the creation date of the media.
+     *
      * @param \DateTime $created
+     *
      * @return \Shopware\Models\Media\Media
      */
     public function setCreated($created)
     {
         $this->created = $created;
+
         return $this;
     }
 
     /**
      * Returns the creation date of the media.
+     *
      * @return \DateTime
      */
     public function getCreated()
@@ -1453,18 +1505,22 @@ class Media extends ModelEntity
 
     /**
      * Sets the memory size of the file.
+     *
      * @param float $fileSize
+     *
      * @return \Shopware\Models\Media\Media
      */
     public function setFileSize($fileSize)
     {
         $this->fileSize = $fileSize;
+
         return $this;
     }
 
     /**
      * Returns the filesize of the file in bytes.
-     * @return integer
+     *
+     * @return int
      */
     public function getFileSize()
     {
@@ -1473,6 +1529,7 @@ class Media extends ModelEntity
 
     /**
      * Returns the filesize of the file in human readable format
+     *
      * @return string
      */
     public function getFormattedFileSize()
@@ -1492,6 +1549,7 @@ class Media extends ModelEntity
 
     /**
      * Returns the instance of the assigned album
+     *
      * @return \Shopware\Models\Media\Album
      */
     public function getAlbum()
@@ -1501,17 +1559,21 @@ class Media extends ModelEntity
 
     /**
      * Sets the assigned album.
+     *
      * @param  $album
+     *
      * @return \Shopware\Models\Media\Media
      */
     public function setAlbum(Album $album)
     {
         $this->album = $album;
+
         return $this;
     }
 
     /**
      * Returns the file
+     *
      * @return \Symfony\Component\HttpFoundation\File\File
      */
     public function getFile()
@@ -1522,18 +1584,22 @@ class Media extends ModelEntity
     /**
      * Setter method for the file property. If the file is set, the file information will be extracted
      * and set into the internal properties.
+     *
      * @param  $file \Symfony\Component\HttpFoundation\File\File
+     *
      * @return \Shopware\Models\Media\Media
      */
     public function setFile(\Symfony\Component\HttpFoundation\File\File $file)
     {
         $this->file = $file;
         $this->setFileInfo();
+
         return $this;
     }
 
     /**
      * Returns the thumbnail paths in an array
+     *
      * @return array
      */
     public function getThumbnails()
@@ -1541,11 +1607,13 @@ class Media extends ModelEntity
         if (empty($this->thumbnails)) {
             $this->thumbnails = $this->loadThumbnails();
         }
+
         return $this->thumbnails;
     }
 
     /**
      * Returns the high dpi thumbnail paths in an array
+     *
      * @return array
      */
     public function getHighDpiThumbnails()
@@ -1553,6 +1621,7 @@ class Media extends ModelEntity
         if (empty($this->highDpiThumbnails)) {
             $this->highDpiThumbnails = $this->loadThumbnails(true);
         }
+
         return $this->highDpiThumbnails;
     }
 
@@ -1575,6 +1644,7 @@ class Media extends ModelEntity
      * creates the default thumbnails for image media to display the
      * media in the media manager and creates the thumbnails for the
      * configured album thumbnail sizes.
+     *
      * @ORM\PrePersist
      */
     public function onSave()
@@ -1588,6 +1658,7 @@ class Media extends ModelEntity
      * has to be renamed.
      * Removes the thumbnail files if the album or the name changed.
      * Creates the default and album thumbnails if the name or the album changed.
+     *
      * @ORM\PostUpdate
      */
     public function onUpdate()
@@ -1595,12 +1666,11 @@ class Media extends ModelEntity
         //returns a change set for the model, which contains all changed properties with the old and new value.
         $changeSet = Shopware()->Models()->getUnitOfWork()->getEntityChangeSet($this);
 
-        $isNameChanged  = isset($changeSet['name']) && $changeSet['name'][0] !== $changeSet['name'][1];
+        $isNameChanged = isset($changeSet['name']) && $changeSet['name'][0] !== $changeSet['name'][1];
         $isAlbumChanged = isset($changeSet['albumId']) && $changeSet['albumId'][0] !== $changeSet['albumId'][1];
 
         //name changed || album changed?
         if ($isNameChanged || $isAlbumChanged) {
-
             //to remove the old thumbnails, use the old name.
             $name = (isset($changeSet['name'])) ? $changeSet['name'][0] : $this->name;
             $name = $this->removeSpecialCharacters($name);
@@ -1647,6 +1717,7 @@ class Media extends ModelEntity
 
     /**
      * Model event function, which called when the model is loaded.
+     *
      * @ORM\PostLoad
      */
     public function onLoad()
@@ -1655,22 +1726,8 @@ class Media extends ModelEntity
     }
 
     /**
-     * Internal helper function which updates all associated data which has the image path as own property.
-     * @return void
-     * @internal param $name
-     */
-    private function updateAssociations()
-    {
-        /** @var $article \Shopware\Models\Article\Image*/
-        foreach ($this->articles as $article) {
-            $article->setPath($this->getName());
-            Shopware()->Models()->persist($article);
-        }
-        Shopware()->Models()->flush();
-    }
-
-    /**
      * Removes the media files from the file system
+     *
      * @ORM\PostRemove
      */
     public function onRemove()
@@ -1694,11 +1751,11 @@ class Media extends ModelEntity
     /****************************************************************
      *                  Global functions                            *
      ****************************************************************/
+
     /**
      * Creates the thumbnail files in the different sizes which configured in the album settings.
      *
      * @param \Shopware\Models\Media\Album $album
-     * @return void
      */
     public function createAlbumThumbnails(Album $album)
     {
@@ -1712,18 +1769,16 @@ class Media extends ModelEntity
             return;
         }
 
+        $defaultSizes = $this->getDefaultThumbnails();
+        $defaultSize = implode('x', $defaultSizes[0]);
         //load the configured album thumbnail sizes
         $sizes = $album->getSettings()->getThumbnailSize();
+        $sizes[] = $defaultSize;
 
         //iterate the sizes and create the thumbnails
         foreach ($sizes as $size) {
             //split the width and height (example: $size = 70x70)
             $data = explode('x', $size);
-
-            //check if the album thumbnail is already configured over the default thumbnails, so we don't have to create the same thumbnail again.
-            if (in_array($data, $this->defaultThumbnails)) {
-                continue;
-            }
 
             // To avoid any confusing, we're mapping the index based to an association based array and remove the index based elements.
             $data['width'] = $data[0];
@@ -1748,8 +1803,8 @@ class Media extends ModelEntity
      * passed file name. The file name have to be passed, because on update the internal
      * file name property is already changed to the new name.
      *
-     * @param       $thumbnailSizes
-     * @param       $fileName
+     * @param   $thumbnailSizes
+     * @param   $fileName
      */
     public function removeAlbumThumbnails($thumbnailSizes, $fileName)
     {
@@ -1788,111 +1843,23 @@ class Media extends ModelEntity
 
     /**
      * Returns the converted file name.
+     *
      * @return bool|string
      */
     public function getFileName()
     {
         if ($this->name !== '') {
             return $this->removeSpecialCharacters($this->name) . '.' . $this->extension;
-        } else {
+        }
             // do whatever you want to generate a unique name
             return uniqid() . '.' . $this->extension;
-        }
     }
-
-    /****************************************************************
-     *                  Internal functions                          *
-     ****************************************************************/
-
-    /**
-     * Moves the uploaded file to the correctly directory.
-     * @return bool
-     */
-    private function uploadFile()
-    {
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
-
-        //move the file to the upload directory
-        if ($this->file !== null) {
-            //file already exists?
-            if ($mediaService->has($this->getPath())) {
-                $this->name = $this->name . uniqid();
-                // Path in setFileInfo is set, before the file gets a unique ID here
-                // Therefore the path is updated here SW-2889
-                $this->path = str_replace(Shopware()->DocPath(), '', $this->getUploadDir() . $this->getFileName());
-
-                /**
-                 * SW-3805 - Hotfix for windows path's
-                 */
-                $this->path = str_replace('\\', '/', $this->path);
-            }
-
-            $mediaService->write($this->path, file_get_contents($this->file->getRealPath()));
-            unlink($this->file->getPathname());
-        }
-        return true;
-    }
-
-    /**
-     * Creates the default thumbnails 70x70 and 153x153 to display the images
-     * in the media manager listing.
-     */
-    private function createDefaultThumbnails()
-    {
-        //create only thumbnails for image media
-        if ($this->type !== self::TYPE_IMAGE) {
-            return;
-        }
-
-        /** @var \Shopware\Components\Thumbnail\Manager $generator */
-        $generator = Shopware()->Container()->get('thumbnail_manager');
-
-        $generator->createMediaThumbnail($this, $this->defaultThumbnails, true);
-    }
-
-    /**
-     * Removes the default thumbnail files. The file name have to be passed, because on update the internal
-     * file name property is already changed to the new name.
-     * @param $fileName
-     */
-    private function removeDefaultThumbnails($fileName)
-    {
-        if ($this->type !== self::TYPE_IMAGE) {
-            return;
-        }
-
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
-
-        foreach ($this->defaultThumbnails as $size) {
-            if (count($size) === 1) {
-                $sizeString = $size . 'x' . $size;
-            } else {
-                $sizeString = $size[0] . 'x' . $size[1];
-            }
-            $names = $this->getThumbnailNames($sizeString, $fileName);
-
-            if ($mediaService->has($names['jpg'])) {
-                $mediaService->delete($names['jpg']);
-            }
-
-            if ($mediaService->has($names['jpgHD'])) {
-                $mediaService->delete($names['jpgHD']);
-            }
-
-            if ($mediaService->has($names['original'])) {
-                $mediaService->delete($names['original']);
-            }
-
-            if ($mediaService->has($names['originalHD'])) {
-                $mediaService->delete($names['originalHD']);
-            }
-        }
-    }
-
 
     /**
      * Loads the thumbnails paths via the configured thumbnail sizes.
+     *
      * @param bool $highDpi - If true, loads high dpi thumbnails instead
+     *
      * @return array
      */
     public function loadThumbnails($highDpi = false)
@@ -1925,14 +1892,15 @@ class Media extends ModelEntity
      * Returns an array of all thumbnail paths the media object can have
      *
      * @param bool $highDpi - If true, returns the file path for the high dpi thumbnails instead
+     *
      * @return array
      */
     public function getThumbnailFilePaths($highDpi = false)
     {
         if ($this->type !== self::TYPE_IMAGE) {
-            return array();
+            return [];
         }
-        $sizes = array();
+        $sizes = [];
 
         //concat default sizes
         foreach ($this->defaultThumbnails as $size) {
@@ -1948,7 +1916,7 @@ class Media extends ModelEntity
             $sizes = array_merge($this->album->getSettings()->getThumbnailSize(), $sizes);
             $sizes = array_unique($sizes);
         }
-        $thumbnails = array();
+        $thumbnails = [];
         $suffix = $highDpi ? '@2x' : '';
 
         //iterate thumbnail sizes
@@ -1972,75 +1940,6 @@ class Media extends ModelEntity
         }
 
         return $thumbnails;
-    }
-
-    /**
-     * Returns the directory to upload
-     * @return string
-     */
-    private function getUploadDir()
-    {
-        // the absolute directory path where uploaded documents should be saved
-        return Shopware()->DocPath('media_' . strtolower($this->type));
-    }
-
-    /**
-     * Returns the directory of the thumbnail files.
-     * @return string
-     */
-    private function getThumbnailDir()
-    {
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
-        $path = $this->getUploadDir() . 'thumbnail' . DIRECTORY_SEPARATOR;
-        $path = $mediaService->normalize($path);
-
-        return $path;
-    }
-
-    /**
-     * Create a thumbnail file for the internal file with the passed width and height.
-     * @param $width
-     * @param $height
-     * @return bool
-     */
-    private function createThumbnail($width, $height)
-    {
-        //create only thumbnails for image media
-        if ($this->type !== self::TYPE_IMAGE) {
-            return;
-        }
-
-        /** @var \Shopware\Components\Thumbnail\Manager $manager */
-        $manager = Shopware()->Container()->get('thumbnail_manager');
-
-        $newSize = array(
-            'width' => $width,
-            'height' => $height
-        );
-
-        $manager->createMediaThumbnail($this, array($newSize), true);
-    }
-
-    /**
-     * Create the new names for the jpg file and the file with the original extension
-     * Also returns high dpi paths
-     * @param $suffix
-     * @param $fileName
-     * @return array
-     */
-    private function getThumbnailNames($suffix, $fileName)
-    {
-        $jpgName = str_replace('.' . $this->extension, '_' . $suffix . '.jpg', $fileName);
-        $jpgHDName = str_replace('.' . $this->extension, '_' . $suffix . '@2x.jpg', $fileName);
-        $originalName = str_replace('.' . $this->extension, '_' . $suffix . '.' . $this->extension, $fileName);
-        $originalHDName = str_replace('.' . $this->extension, '_' . $suffix . '@2x.' . $this->extension, $fileName);
-
-        return array(
-            'jpg' => $this->getThumbnailDir() . $jpgName,
-            'jpgHD' => $this->getThumbnailDir() . $jpgHDName,
-            'original' => $this->getThumbnailDir() . $originalName,
-            'originalHD' => $this->getThumbnailDir() . $originalHDName
-        );
     }
 
     /**
@@ -2091,113 +1990,6 @@ class Media extends ModelEntity
         $this->height = $height;
     }
 
-    /**
-     * Calculate image proportion and set the new resolution
-     * @param $originalSize
-     * @param $width
-     * @param $height
-     * @return array
-     */
-    private function calculateThumbnailSize(array $originalSize, $width, $height)
-    {
-        // Source image size
-        $srcWidth = $originalSize[0];
-        $srcHeight = $originalSize[1];
-
-        // Calculate the scale factor
-        if ($width === 0) {
-            $factor = $height / $srcHeight;
-        } elseif ($height === 0) {
-            $factor = $width / $srcWidth;
-        } else {
-            $factor = min($width / $srcWidth, $height / $srcHeight);
-        }
-
-        // Get the destination size
-        $dstWidth = round($srcWidth * $factor);
-        $dstHeight = round($srcHeight * $factor);
-
-        return array(
-            'width' => $dstWidth,
-            'height' => $dstHeight,
-            'proportion' => $factor
-        );
-    }
-
-    /**
-     * Creates the image resource
-     * @return bool|resource
-     */
-    private function createFileImage()
-    {
-        switch (strtolower($this->extension)) {
-            case 'gif':
-                $image = imagecreatefromgif($this->path);
-                break;
-            case 'png':
-                $image = imagecreatefrompng($this->path);
-                break;
-            case 'jpg':
-                $image = imagecreatefromjpeg($this->path);
-                break;
-            default:
-                return false;
-        }
-        return $image;
-    }
-
-    /**
-     * Extract the file information from the uploaded file, into the internal properties
-     */
-    private function setFileInfo()
-    {
-        if ($this->file === null) {
-            return;
-        }
-
-        if ($this->file instanceof \Symfony\Component\HttpFoundation\File\UploadedFile) {
-            //load file information
-            $fileInfo  = pathinfo($this->file->getClientOriginalName());
-            $extension = $fileInfo['extension'];
-            $name      = $fileInfo['filename'];
-        } else {
-            $extension = $this->file->guessExtension();
-            $name      = $this->file->getBasename();
-        }
-
-        // make sure that the name don't contains the file extension.
-        $name = str_replace('.' . $extension, '', $name);
-        if ($extension === 'jpeg') {
-            $name = str_replace('.jpg', '', $name);
-        }
-
-        //set the file type using the type mapping
-        if (array_key_exists(strtolower($extension), $this->typeMapping)) {
-            $this->type = $this->typeMapping[strtolower($extension)];
-        } else {
-            $this->type = self::TYPE_UNKNOWN;
-        }
-
-        // The filesize in bytes.
-        $this->fileSize  = $this->file->getSize();
-        $this->name      = $this->removeSpecialCharacters($name);
-        $this->extension = str_replace('jpeg', 'jpg', $extension);
-        $this->path = str_replace(Shopware()->DocPath(), '', $this->getUploadDir() . $this->getFileName());
-
-        if (DIRECTORY_SEPARATOR !== '/') {
-            $this->path = str_replace(DIRECTORY_SEPARATOR, '/', $this->path);
-        }
-    }
-
-    private function removeSpecialCharacters($name)
-    {
-        $name = iconv('utf-8', 'ascii//translit', $name);
-        $name = preg_replace('#[^A-z0-9\-_]#', '-', $name);
-        $name = preg_replace('#-{2,}#', '-', $name);
-        $name = trim($name, '-');
-        return mb_substr($name, 0, 180);
-    }
-
     public function getDefaultThumbnails()
     {
         return $this->defaultThumbnails;
@@ -2218,6 +2010,7 @@ class Media extends ModelEntity
 
     /**
      * @param \Shopware\Models\Attribute\Media|array|null $attribute
+     *
      * @return \Shopware\Models\Attribute\Media
      */
     public function setAttribute($attribute)
@@ -2241,6 +2034,322 @@ class Media extends ModelEntity
         $this->articles = $articles;
     }
 
+    public function removeThumbnails()
+    {
+        $thumbnailSizes = $this->getAllThumbnailSizes();
+
+        $this->removeDefaultThumbnails($this->getFileName());
+        $this->removeAlbumThumbnails($thumbnailSizes, $this->getFileName());
+    }
+
+    /**
+     * @param int $newAlbumId
+     */
+    private function createThumbnailsForMovedMedia($newAlbumId)
+    {
+        $albumRepository = Shopware()->Container()->get('models')->getRepository(Album::class);
+
+        /** @var Album $album */
+        $album = $albumRepository->find($newAlbumId);
+        if ($album) {
+            $this->createAlbumThumbnails($album);
+        }
+    }
+
+    /**
+     * Internal helper function which updates all associated data which has the image path as own property.
+     *
+     * @internal param $name
+     */
+    private function updateAssociations()
+    {
+        /** @var $article \Shopware\Models\Article\Image */
+        foreach ($this->articles as $article) {
+            $article->setPath($this->getName());
+            Shopware()->Models()->persist($article);
+        }
+        Shopware()->Models()->flush();
+    }
+
+    /****************************************************************
+     *                  Internal functions                          *
+     ****************************************************************/
+
+    /**
+     * Moves the uploaded file to the correctly directory.
+     *
+     * @return bool
+     */
+    private function uploadFile()
+    {
+        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+
+        //move the file to the upload directory
+        if ($this->file !== null) {
+            //file already exists?
+            if ($mediaService->has($this->getPath())) {
+                $this->name = $this->name . uniqid();
+                // Path in setFileInfo is set, before the file gets a unique ID here
+                // Therefore the path is updated here SW-2889
+                $this->path = str_replace(Shopware()->DocPath(), '', $this->getUploadDir() . $this->getFileName());
+
+                /*
+                 * SW-3805 - Hotfix for windows path's
+                 */
+                $this->path = str_replace('\\', '/', $this->path);
+            }
+
+            $mediaService->write($this->path, file_get_contents($this->file->getRealPath()));
+            unlink($this->file->getPathname());
+        }
+
+        return true;
+    }
+
+    /**
+     * Creates the default thumbnails 70x70 and 153x153 to display the images
+     * in the media manager listing.
+     */
+    private function createDefaultThumbnails()
+    {
+        //create only thumbnails for image media
+        if ($this->type !== self::TYPE_IMAGE) {
+            return;
+        }
+
+        /** @var \Shopware\Components\Thumbnail\Manager $generator */
+        $generator = Shopware()->Container()->get('thumbnail_manager');
+
+        $generator->createMediaThumbnail($this, $this->defaultThumbnails, true);
+    }
+
+    /**
+     * Removes the default thumbnail files. The file name have to be passed, because on update the internal
+     * file name property is already changed to the new name.
+     *
+     * @param $fileName
+     */
+    private function removeDefaultThumbnails($fileName)
+    {
+        if ($this->type !== self::TYPE_IMAGE) {
+            return;
+        }
+
+        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+
+        foreach ($this->defaultThumbnails as $size) {
+            if (count($size) === 1) {
+                $sizeString = $size . 'x' . $size;
+            } else {
+                $sizeString = $size[0] . 'x' . $size[1];
+            }
+            $names = $this->getThumbnailNames($sizeString, $fileName);
+
+            if ($mediaService->has($names['jpg'])) {
+                $mediaService->delete($names['jpg']);
+            }
+
+            if ($mediaService->has($names['jpgHD'])) {
+                $mediaService->delete($names['jpgHD']);
+            }
+
+            if ($mediaService->has($names['original'])) {
+                $mediaService->delete($names['original']);
+            }
+
+            if ($mediaService->has($names['originalHD'])) {
+                $mediaService->delete($names['originalHD']);
+            }
+        }
+    }
+
+    /**
+     * Returns the directory to upload
+     *
+     * @return string
+     */
+    private function getUploadDir()
+    {
+        // the absolute directory path where uploaded documents should be saved
+        return Shopware()->DocPath('media_' . strtolower($this->type));
+    }
+
+    /**
+     * Returns the directory of the thumbnail files.
+     *
+     * @return string
+     */
+    private function getThumbnailDir()
+    {
+        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $path = $this->getUploadDir() . 'thumbnail' . DIRECTORY_SEPARATOR;
+        $path = $mediaService->normalize($path);
+
+        return $path;
+    }
+
+    /**
+     * Create a thumbnail file for the internal file with the passed width and height.
+     *
+     * @param $width
+     * @param $height
+     *
+     * @return bool
+     */
+    private function createThumbnail($width, $height)
+    {
+        //create only thumbnails for image media
+        if ($this->type !== self::TYPE_IMAGE) {
+            return;
+        }
+
+        /** @var \Shopware\Components\Thumbnail\Manager $manager */
+        $manager = Shopware()->Container()->get('thumbnail_manager');
+
+        $newSize = [
+            'width' => $width,
+            'height' => $height,
+        ];
+
+        $manager->createMediaThumbnail($this, [$newSize], true);
+    }
+
+    /**
+     * Create the new names for the jpg file and the file with the original extension
+     * Also returns high dpi paths
+     *
+     * @param $suffix
+     * @param $fileName
+     *
+     * @return array
+     */
+    private function getThumbnailNames($suffix, $fileName)
+    {
+        $jpgName = str_replace('.' . $this->extension, '_' . $suffix . '.jpg', $fileName);
+        $jpgHDName = str_replace('.' . $this->extension, '_' . $suffix . '@2x.jpg', $fileName);
+        $originalName = str_replace('.' . $this->extension, '_' . $suffix . '.' . $this->extension, $fileName);
+        $originalHDName = str_replace('.' . $this->extension, '_' . $suffix . '@2x.' . $this->extension, $fileName);
+
+        return [
+            'jpg' => $this->getThumbnailDir() . $jpgName,
+            'jpgHD' => $this->getThumbnailDir() . $jpgHDName,
+            'original' => $this->getThumbnailDir() . $originalName,
+            'originalHD' => $this->getThumbnailDir() . $originalHDName,
+        ];
+    }
+
+    /**
+     * Calculate image proportion and set the new resolution
+     *
+     * @param $originalSize
+     * @param $width
+     * @param $height
+     *
+     * @return array
+     */
+    private function calculateThumbnailSize(array $originalSize, $width, $height)
+    {
+        // Source image size
+        $srcWidth = $originalSize[0];
+        $srcHeight = $originalSize[1];
+
+        // Calculate the scale factor
+        if ($width === 0) {
+            $factor = $height / $srcHeight;
+        } elseif ($height === 0) {
+            $factor = $width / $srcWidth;
+        } else {
+            $factor = min($width / $srcWidth, $height / $srcHeight);
+        }
+
+        // Get the destination size
+        $dstWidth = round($srcWidth * $factor);
+        $dstHeight = round($srcHeight * $factor);
+
+        return [
+            'width' => $dstWidth,
+            'height' => $dstHeight,
+            'proportion' => $factor,
+        ];
+    }
+
+    /**
+     * Creates the image resource
+     *
+     * @return bool|resource
+     */
+    private function createFileImage()
+    {
+        switch (strtolower($this->extension)) {
+            case 'gif':
+                $image = imagecreatefromgif($this->path);
+                break;
+            case 'png':
+                $image = imagecreatefrompng($this->path);
+                break;
+            case 'jpg':
+                $image = imagecreatefromjpeg($this->path);
+                break;
+            default:
+                return false;
+        }
+
+        return $image;
+    }
+
+    /**
+     * Extract the file information from the uploaded file, into the internal properties
+     */
+    private function setFileInfo()
+    {
+        if ($this->file === null) {
+            return;
+        }
+
+        if ($this->file instanceof \Symfony\Component\HttpFoundation\File\UploadedFile) {
+            //load file information
+            $fileInfo = pathinfo($this->file->getClientOriginalName());
+            $extension = $fileInfo['extension'];
+            $name = $fileInfo['filename'];
+        } else {
+            $extension = $this->file->guessExtension();
+            $name = $this->file->getBasename();
+        }
+
+        // make sure that the name don't contains the file extension.
+        $name = str_replace('.' . $extension, '', $name);
+        if ($extension === 'jpeg') {
+            $name = str_replace('.jpg', '', $name);
+        }
+
+        //set the file type using the type mapping
+        if (array_key_exists(strtolower($extension), $this->typeMapping)) {
+            $this->type = $this->typeMapping[strtolower($extension)];
+        } else {
+            $this->type = self::TYPE_UNKNOWN;
+        }
+
+        // The filesize in bytes.
+        $this->fileSize = $this->file->getSize();
+        $this->name = $this->removeSpecialCharacters($name);
+        $this->extension = str_replace('jpeg', 'jpg', $extension);
+        $this->path = str_replace(Shopware()->DocPath(), '', $this->getUploadDir() . $this->getFileName());
+
+        if (DIRECTORY_SEPARATOR !== '/') {
+            $this->path = str_replace(DIRECTORY_SEPARATOR, '/', $this->path);
+        }
+    }
+
+    private function removeSpecialCharacters($name)
+    {
+        $name = iconv('utf-8', 'ascii//translit', $name);
+        $name = preg_replace('#[^A-z0-9\-_]#', '-', $name);
+        $name = preg_replace('#-{2,}#', '-', $name);
+        $name = trim($name, '-');
+
+        return mb_substr($name, 0, 180);
+    }
+
     /**
      * Searches all album settings for thumbnail sizes
      *
@@ -2254,7 +2363,7 @@ class Media extends ModelEntity
 
         $sizes = [];
         foreach ($joinedSizes as $sizeItem) {
-            $explodedSizes = explode(";", $sizeItem);
+            $explodedSizes = explode(';', $sizeItem);
             if (empty($explodedSizes)) {
                 continue;
             }
@@ -2263,13 +2372,5 @@ class Media extends ModelEntity
         }
 
         return array_keys($sizes);
-    }
-
-    public function removeThumbnails()
-    {
-        $thumbnailSizes = $this->getAllThumbnailSizes();
-
-        $this->removeDefaultThumbnails($this->getFileName());
-        $this->removeAlbumThumbnails($thumbnailSizes, $this->getFileName());
     }
 }

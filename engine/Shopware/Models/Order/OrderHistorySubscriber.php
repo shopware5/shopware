@@ -30,7 +30,7 @@ use Doctrine\ORM\Events;
 
 /**
  * @category  Shopware
- * @package   Shopware\Models\Order
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class OrderHistorySubscriber implements EventSubscriber
@@ -42,7 +42,7 @@ class OrderHistorySubscriber implements EventSubscriber
      */
     public function getSubscribedEvents()
     {
-        return array(Events::preUpdate);
+        return [Events::preUpdate];
     }
 
     /**
@@ -64,11 +64,11 @@ class OrderHistorySubscriber implements EventSubscriber
             return;
         }
 
-        $historyData = array(
-            'userID'      => null,
+        $historyData = [
+            'userID' => null,
             'change_date' => date('Y-m-d H:i:s'),
-            'orderID'     => $order->getId(),
-        );
+            'orderID' => $order->getId(),
+        ];
 
         if ($this->hasIdentity()) {
             $user = $eventArgs->getEntityManager()->find('Shopware\Models\User\User', Shopware()->Container()->get('Auth')->getIdentity()->id);

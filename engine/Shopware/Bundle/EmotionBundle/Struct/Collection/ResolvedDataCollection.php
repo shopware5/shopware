@@ -42,6 +42,7 @@ class ResolvedDataCollection extends Extendable
 
     /**
      * @param int $mediaId
+     *
      * @return Media|null
      */
     public function getMedia($mediaId)
@@ -55,6 +56,7 @@ class ResolvedDataCollection extends Extendable
 
     /**
      * @param int $mediaPath
+     *
      * @return Media|null
      */
     public function getMediaByPath($mediaPath)

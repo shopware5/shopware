@@ -28,7 +28,7 @@ use Doctrine\DBAL\Types\Type;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\AttributeBundle\Service
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
 class TypeMapping
@@ -49,83 +49,83 @@ class TypeMapping
      * @var array
      */
     private $types = [
-        self::TYPE_STRING   => [
+        self::TYPE_STRING => [
             'sql' => 'TEXT',
             'dbal' => 'string',
             'allowDefaultValue' => false,
             'quoteDefaultValue' => false,
-            'elastic' => ['type' => 'string']
+            'elastic' => ['type' => 'string'],
         ],
-        self::TYPE_TEXT     => [
+        self::TYPE_TEXT => [
             'sql' => 'TEXT',
             'dbal' => 'text',
             'allowDefaultValue' => false,
             'quoteDefaultValue' => false,
-            'elastic' => ['type' => 'string']
+            'elastic' => ['type' => 'string'],
         ],
-        self::TYPE_HTML     => [
+        self::TYPE_HTML => [
             'sql' => 'MEDIUMTEXT',
             'dbal' => 'text',
             'allowDefaultValue' => false,
             'quoteDefaultValue' => false,
-            'elastic' => ['type' => 'string']
+            'elastic' => ['type' => 'string'],
         ],
-        self::TYPE_INTEGER  => [
+        self::TYPE_INTEGER => [
             'sql' => 'INT(11)',
             'dbal' => 'integer',
             'allowDefaultValue' => true,
             'quoteDefaultValue' => false,
-            'elastic' => ['type' => 'long']
+            'elastic' => ['type' => 'long'],
         ],
-        self::TYPE_FLOAT    => [
+        self::TYPE_FLOAT => [
             'sql' => 'DOUBLE',
             'dbal' => 'float',
             'allowDefaultValue' => true,
             'quoteDefaultValue' => false,
-            'elastic' => ['type' => 'double']
+            'elastic' => ['type' => 'double'],
         ],
-        self::TYPE_BOOLEAN  => [
+        self::TYPE_BOOLEAN => [
             'sql' => 'INT(1)',
             'dbal' => 'boolean',
             'allowDefaultValue' => true,
             'quoteDefaultValue' => false,
-            'elastic' => ['type' => 'boolean']
+            'elastic' => ['type' => 'boolean'],
         ],
-        self::TYPE_DATE     => [
+        self::TYPE_DATE => [
             'sql' => 'DATE',
             'dbal' => 'date',
             'allowDefaultValue' => true,
             'quoteDefaultValue' => true,
-            'elastic' => ['type' => 'date', 'format' => 'yyyy-MM-dd']
+            'elastic' => ['type' => 'date', 'format' => 'yyyy-MM-dd'],
         ],
         self::TYPE_DATETIME => [
             'sql' => 'DATETIME',
             'dbal' => 'datetime',
             'allowDefaultValue' => true,
             'quoteDefaultValue' => true,
-            'elastic' => ['type' => 'date', 'format' => 'yyyy-MM-dd HH:mm:ss']
+            'elastic' => ['type' => 'date', 'format' => 'yyyy-MM-dd HH:mm:ss'],
         ],
         self::TYPE_COMBOBOX => [
             'sql' => 'MEDIUMTEXT',
             'dbal' => 'text',
             'allowDefaultValue' => false,
             'quoteDefaultValue' => false,
-            'elastic' => ['type' => 'string']
+            'elastic' => ['type' => 'string'],
         ],
         self::TYPE_SINGLE_SELECTION => [
             'sql' => 'TEXT',
             'dbal' => 'text',
             'allowDefaultValue' => false,
             'quoteDefaultValue' => false,
-            'elastic' => ['type' => 'string']
+            'elastic' => ['type' => 'string'],
         ],
         self::TYPE_MULTI_SELECTION => [
             'sql' => 'MEDIUMTEXT',
             'dbal' => 'text',
             'allowDefaultValue' => false,
             'quoteDefaultValue' => false,
-            'elastic' => ['type' => 'string']
-        ]
+            'elastic' => ['type' => 'string'],
+        ],
     ];
 
     /**
@@ -150,7 +150,7 @@ class TypeMapping
         'binary' => self::TYPE_TEXT,
         'blob' => self::TYPE_TEXT,
         'float' => self::TYPE_FLOAT,
-        'guid' => self::TYPE_TEXT
+        'guid' => self::TYPE_TEXT,
     ];
 
     /**
@@ -160,6 +160,7 @@ class TypeMapping
 
     /**
      * TypeMapping constructor.
+     *
      * @param \Shopware_Components_Snippet_Manager $snippets
      */
     public function __construct(\Shopware_Components_Snippet_Manager $snippets)
@@ -177,6 +178,7 @@ class TypeMapping
             $type['unified'] = $unified;
             $result[$unified] = $type;
         }
+
         return $result;
     }
 
@@ -208,18 +210,20 @@ class TypeMapping
             'Shopware\Models\ProductFeed\ProductFeed',
             'Shopware\Models\Newsletter\Newsletter',
             'Shopware\Models\Partner\Partner',
-            'Shopware\Models\Shop\Shop'
+            'Shopware\Models\Shop\Shop',
         ];
 
         $result = [];
         foreach ($entities as $entity) {
             $result[] = ['entity' => $entity, 'label' => $snippets->get($entity)];
         }
+
         return $result;
     }
 
     /**
      * @param Type $type
+     *
      * @return string
      */
     public function dbalToUnified(Type $type)
@@ -229,11 +233,13 @@ class TypeMapping
         if (!isset($this->dbalTypes)) {
             return 'string';
         }
+
         return $this->dbalTypes[$name];
     }
 
     /**
      * @param string $type
+     *
      * @return string
      */
     public function unifiedToSQL($type)
@@ -243,11 +249,13 @@ class TypeMapping
             return $this->types['string']['sql'];
         }
         $mapping = $this->types[$type];
+
         return $mapping['sql'];
     }
 
     /**
      * @param string $unified
+     *
      * @return array
      */
     public function unifiedToElasticSearch($unified)
@@ -256,6 +264,7 @@ class TypeMapping
         if (isset($this->types[$type])) {
             return $this->types[$type]['elastic'];
         }
+
         return ['type' => 'string'];
     }
 }

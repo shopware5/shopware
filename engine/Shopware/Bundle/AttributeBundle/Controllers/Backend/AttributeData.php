@@ -21,13 +21,14 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Shopware\Bundle\AttributeBundle\Service\ConfigurationStruct;
 use Shopware\Bundle\AttributeBundle\Service\CrudService;
 use Shopware\Bundle\AttributeBundle\Service\DataLoader;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\AttributeBundle\Controllers\Backend
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
 class Shopware_Controllers_Backend_AttributeData extends Shopware_Controllers_Backend_ExtJs
@@ -44,6 +45,7 @@ class Shopware_Controllers_Backend_AttributeData extends Shopware_Controllers_Ba
             );
         } catch (Exception $e) {
             $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);
+
             return;
         }
 
@@ -79,6 +81,7 @@ class Shopware_Controllers_Backend_AttributeData extends Shopware_Controllers_Ba
             );
         } catch (Exception $e) {
             $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);
+
             return;
         }
         $this->View()->assign('success', true);
@@ -98,7 +101,7 @@ class Shopware_Controllers_Backend_AttributeData extends Shopware_Controllers_Ba
 
         if ($this->Request()->has('columns')) {
             $whitelist = json_decode($this->Request()->getParam('columns', []), true);
-            $columns = array_filter($columns, function(ConfigurationStruct $column) use ($whitelist) {
+            $columns = array_filter($columns, function (ConfigurationStruct $column) use ($whitelist) {
                 return in_array($column->getColumnName(), $whitelist);
             });
         }
@@ -106,7 +109,7 @@ class Shopware_Controllers_Backend_AttributeData extends Shopware_Controllers_Ba
         $this->View()->assign([
             'success' => true,
             'data' => array_values($columns),
-            'total' => 1
+            'total' => 1,
         ]);
     }
 }

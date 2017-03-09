@@ -27,20 +27,22 @@ namespace Shopware\Bundle\EmotionBundle\ComponentHandler;
 use Shopware\Bundle\EmotionBundle\Struct\Collection\PrepareDataCollection;
 use Shopware\Bundle\EmotionBundle\Struct\Collection\ResolvedDataCollection;
 use Shopware\Bundle\EmotionBundle\Struct\Element;
-use Shopware\Bundle\EmotionBundle\Struct\Library\Component;
 use Shopware\Bundle\SearchBundle\Sorting\PopularitySorting;
 use Shopware\Bundle\SearchBundle\Sorting\PriceSorting;
 use Shopware\Bundle\SearchBundle\Sorting\ReleaseDateSorting;
 use Shopware\Bundle\SearchBundle\SortingInterface;
 use Shopware\Bundle\SearchBundle\StoreFrontCriteriaFactoryInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
+use Shopware\Bundle\StoreFrontBundle\Service\Core\AdditionalTextService;
+use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\ProductStream\RepositoryInterface;
+use Shopware_Components_Config as ShopwareConfig;
 
 class ArticleSliderComponentHandler implements ComponentHandlerInterface
 {
     const TYPE_PRODUCT_STREAM = 'product_stream';
-    const TYPE_STATIC = 'selected_article';
+    const TYPE_STATIC_PRODUCT = 'selected_article';
+    const TYPE_STATIC_VARIANT = 'selected_variant';
     const TYPE_NEWCOMER = 'newcomer';
     const TYPE_TOPSELLER = 'topseller';
     const TYPE_LOWEST_PRICE = 'price_asc';
@@ -60,18 +62,35 @@ class ArticleSliderComponentHandler implements ComponentHandlerInterface
     private $productStreamRepository;
 
     /**
-     * @param StoreFrontCriteriaFactoryInterface $criteriaFactory
-     * @param RepositoryInterface $productStreamRepository
+     * @var ShopwareConfig
      */
-    public function __construct(StoreFrontCriteriaFactoryInterface $criteriaFactory, RepositoryInterface $productStreamRepository)
-    {
+    private $shopwareConfig;
+
+    /**
+     * @var AdditionalTextService
+     */
+    private $additionalTextService;
+
+    /**
+     * @param StoreFrontCriteriaFactoryInterface $criteriaFactory
+     * @param RepositoryInterface                $productStreamRepository
+     * @param ShopwareConfig                     $shopwareConfig
+     * @param AdditionalTextService              $additionalTextService
+     */
+    public function __construct(
+        StoreFrontCriteriaFactoryInterface $criteriaFactory,
+        RepositoryInterface $productStreamRepository,
+        ShopwareConfig $shopwareConfig,
+        AdditionalTextService $additionalTextService
+    ) {
         $this->criteriaFactory = $criteriaFactory;
         $this->productStreamRepository = $productStreamRepository;
+        $this->shopwareConfig = $shopwareConfig;
+        $this->additionalTextService = $additionalTextService;
     }
 
     /**
-     * @param Element $element
-     * @return bool
+     * {@inheritdoc}
      */
     public function supports(Element $element)
     {
@@ -80,13 +99,11 @@ class ArticleSliderComponentHandler implements ComponentHandlerInterface
     }
 
     /**
-     * @param PrepareDataCollection $collection
-     * @param Element $element
-     * @param ShopContext|ShopContextInterface $context
+     * {@inheritdoc}
      */
     public function prepare(PrepareDataCollection $collection, Element $element, ShopContextInterface $context)
     {
-        $type = $element->getConfig()->get('article_slider_type', self::TYPE_STATIC);
+        $type = $element->getConfig()->get('article_slider_type', self::TYPE_STATIC_PRODUCT);
         $key = 'emotion-element--' . $element->getId();
 
         switch ($type) {
@@ -110,22 +127,25 @@ class ArticleSliderComponentHandler implements ComponentHandlerInterface
                 $collection->getBatchRequest()->setCriteria($key, $criteria);
                 break;
 
-            case self::TYPE_STATIC:
+            case self::TYPE_STATIC_PRODUCT:
                 $articles = $element->getConfig()->get('selected_articles', []);
-                $productNumbers = array_column($articles, 'ordernumber');
+                $productNumbers = array_filter(explode('|', $articles));
+                $collection->getBatchRequest()->setProductNumbers($key, $productNumbers);
+                break;
+            case self::TYPE_STATIC_VARIANT:
+                $articles = $element->getConfig()->get('selected_variants', []);
+                $productNumbers = array_filter(explode('|', $articles));
                 $collection->getBatchRequest()->setProductNumbers($key, $productNumbers);
                 break;
         }
     }
 
     /**
-     * @param ResolvedDataCollection $collection
-     * @param Element $element
-     * @param ShopContextInterface $context
+     * {@inheritdoc}
      */
     public function handle(ResolvedDataCollection $collection, Element $element, ShopContextInterface $context)
     {
-        $type = $element->getConfig()->get('article_slider_type', self::TYPE_STATIC);
+        $type = $element->getConfig()->get('article_slider_type', self::TYPE_STATIC_PRODUCT);
         $key = 'emotion-element--' . $element->getId();
 
         switch ($type) {
@@ -138,14 +158,30 @@ class ArticleSliderComponentHandler implements ComponentHandlerInterface
                 $element->getData()->set('products', $requestedProducts);
                 break;
 
-            case self::TYPE_STATIC:
-                $articles = $element->getConfig()->get('selected_articles', []);
-                $productNumbers = array_column($articles, 'ordernumber');
+            case self::TYPE_STATIC_PRODUCT:
+                $products = $element->getConfig()->get('selected_articles', []);
+                $productNumbers = array_filter(explode('|', $products));
                 $listProducts = $collection->getBatchResult()->get($key);
-                $products = [];
 
+                $products = [];
                 foreach ($productNumbers as $productNumber) {
                     $products[$productNumber] = $listProducts[$productNumber];
+                }
+
+                $element->getData()->set('products', $products);
+                break;
+            case self::TYPE_STATIC_VARIANT:
+                $products = $element->getConfig()->get('selected_variants', []);
+                $productNumbers = array_filter(explode('|', $products));
+                $listProducts = $collection->getBatchResult()->get($key);
+                $listProducts = $this->additionalTextService->buildAdditionalTextLists($listProducts, $context);
+
+                $products = [];
+                foreach ($productNumbers as $productNumber) {
+                    /** @var ListProduct $product */
+                    $product = $listProducts[$productNumber];
+                    $this->switchPrice($product);
+                    $products[$productNumber] = $product;
                 }
 
                 $element->getData()->set('products', $products);
@@ -154,8 +190,26 @@ class ArticleSliderComponentHandler implements ComponentHandlerInterface
     }
 
     /**
-     * @param Element $element
+     * @param ListProduct $product
+     */
+    private function switchPrice(ListProduct $product)
+    {
+        $prices = array_values($product->getPrices());
+        $product->setListingPrice($prices[0]);
+
+        $product->setDisplayFromPrice(count($product->getPrices()) > 1);
+
+        if ($this->shopwareConfig->get('useLastGraduationForCheapestPrice')) {
+            $product->setListingPrice(
+                $prices[count($prices) - 1]
+            );
+        }
+    }
+
+    /**
+     * @param Element              $element
      * @param ShopContextInterface $context
+     *
      * @return \Shopware\Bundle\SearchBundle\Criteria
      */
     private function generateCriteria(Element $element, ShopContextInterface $context)

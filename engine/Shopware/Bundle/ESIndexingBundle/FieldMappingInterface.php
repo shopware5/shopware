@@ -29,18 +29,19 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 /**
  * Class FieldMapping
- * @package Shopware\Bundle\ESIndexingBundle
  */
 interface FieldMappingInterface
 {
     /**
      * @param ShopContextInterface $context
+     *
      * @return string
      */
     public function getPriceField(ShopContextInterface $context);
 
     /**
      * @param Shop $shop
+     *
      * @return array
      */
     public function getLanguageField(Shop $shop);

@@ -22,7 +22,6 @@
  * our trademarks remain entirely with us.
  */
 
-
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Snippet\DbAdapter;
 use Shopware\Models\Plugin\Plugin;
@@ -31,7 +30,7 @@ use Shopware\Models\Shop\Shop;
 
 /**
  * @category  Shopware
- * @package   Shopware\Components\Snippet
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Manager
@@ -78,13 +77,13 @@ class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Man
 
     /**
      * @param ModelManager $modelManager
-     * @param array $pluginDirectories
-     * @param array $snippetConfig
+     * @param array        $pluginDirectories
+     * @param array        $snippetConfig
      */
     public function __construct(ModelManager $modelManager, array $pluginDirectories, array $snippetConfig)
     {
         $this->snippetConfig = $snippetConfig;
-        $this->modelManager  = $modelManager;
+        $this->modelManager = $modelManager;
         $this->pluginDirectories = $pluginDirectories;
 
         $repository = $this->modelManager->getRepository(Locale::class);
@@ -93,24 +92,26 @@ class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Man
         if ($this->snippetConfig['readFromIni']) {
             $configDir = $this->getConfigDirs();
             $this->fileAdapter = new Enlight_Config_Adapter_File([
-                'configDir'   => $configDir,
-                'allowWrites' => $snippetConfig['writeToIni']
+                'configDir' => $configDir,
+                'allowWrites' => $snippetConfig['writeToIni'],
             ]);
         }
 
         $this->adapter = new DbAdapter([
-            'table'           => 's_core_snippets',
+            'table' => 's_core_snippets',
             'namespaceColumn' => 'namespace',
-            'sectionColumn'   => ['shopID', 'localeID'],
-            'allowWrites'     => $snippetConfig['writeToDb']
+            'sectionColumn' => ['shopID', 'localeID'],
+            'allowWrites' => $snippetConfig['writeToDb'],
         ]);
     }
 
     /**
      * Returns a snippet model instance
      *
-     * @param       string $namespace
-     * @return      Enlight_Components_Snippet_Namespace
+     * @param string $namespace
+     *
+     * @return Enlight_Components_Snippet_Namespace
+     *
      * @deprecated  4.0 - 2012/04/01
      */
     public function getSnippet($namespace = null)
@@ -121,8 +122,9 @@ class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Man
     /**
      * Returns a snippet model instance
      *
-     * @param   string $namespace
-     * @return  Enlight_Components_Snippet_Namespace
+     * @param string $namespace
+     *
+     * @return Enlight_Components_Snippet_Namespace
      */
     public function getNamespace($namespace = null)
     {
@@ -160,21 +162,24 @@ class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Man
     /**
      * Set locale instance
      *
-     * @param   Locale $locale
-     * @return  Shopware_Components_Snippet_Manager
+     * @param Locale $locale
+     *
+     * @return Shopware_Components_Snippet_Manager
      */
     public function setLocale(Locale $locale)
     {
         $this->locale = $locale;
         $this->namespaces = [];
+
         return $this;
     }
 
     /**
      * Set shop instance
      *
-     * @param   Shop $shop
-     * @return  Shopware_Components_Snippet_Manager
+     * @param Shop $shop
+     *
+     * @return Shopware_Components_Snippet_Manager
      */
     public function setShop(Shop $shop)
     {
@@ -182,6 +187,23 @@ class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Man
         $this->locale = $shop->getLocale();
         $this->namespaces = [];
         $this->initExtends();
+
+        return $this;
+    }
+
+    /**
+     * @param   $dir
+     *
+     * @return Shopware_Components_Snippet_Manager
+     */
+    public function addConfigDir($dir)
+    {
+        if (!$this->fileAdapter) {
+            return $this;
+        }
+
+        $this->fileAdapter->addConfigDir($dir);
+
         return $this;
     }
 
@@ -200,7 +222,7 @@ class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Man
     protected function initExtends()
     {
         $extends = [];
-        $shop   = $this->shop;
+        $shop = $this->shop;
         $locale = $this->locale;
 
         $main = $shop->getMain();
@@ -212,7 +234,7 @@ class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Man
         if ($main !== null && $main->getId() !== 1) {
             $extends[] = [
                 $main->getId(),
-                $locale->getId()
+                $locale->getId(),
             ];
         }
 
@@ -220,12 +242,11 @@ class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Man
         if ($shop && $shop->getId() !== 1) {
             $extends[] = [
                 1,
-                $locale->getId()
+                $locale->getId(),
             ];
         }
 
-
-        /**
+        /*
          * Fallback to parent shop, parent locale
          * If parent locale is the same as current locale, skip this step
          * as it was already added previously ("fallback to parent shop, current locale")
@@ -247,21 +268,6 @@ class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Man
         }
 
         $this->extends = $extends;
-    }
-
-    /**
-     * @param   $dir
-     * @return  Shopware_Components_Snippet_Manager
-     */
-    public function addConfigDir($dir)
-    {
-        if (!$this->fileAdapter) {
-            return $this;
-        }
-
-        $this->fileAdapter->addConfigDir($dir);
-
-        return $this;
     }
 
     /**
@@ -310,7 +316,7 @@ class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Man
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     private function readFromDb()
     {
@@ -319,6 +325,7 @@ class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Man
 
     /**
      * @param string $key
+     *
      * @return bool
      */
     private function readFromIni($key)
@@ -329,13 +336,15 @@ class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Man
         if (!isset($this->fileAdapter)) {
             return false;
         }
-        return (!isset($this->namespaces[$key]) || count($this->namespaces[$key]) == 0);
+
+        return !isset($this->namespaces[$key]) || count($this->namespaces[$key]) == 0;
     }
 
     /**
      * @param string $namespace
-     * @param int $shopId
-     * @param int $localeId
+     * @param int    $shopId
+     * @param int    $localeId
+     *
      * @return Enlight_Components_Snippet_Namespace
      */
     private function createDbNamespace($namespace, $shopId, $localeId)
@@ -344,12 +353,13 @@ class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Man
             'adapter' => $this->adapter,
             'name' => $namespace,
             'section' => [$shopId, $localeId],
-            'extends' => $this->extends
+            'extends' => $this->extends,
         ]);
     }
 
     /**
      * @param string $namespace
+     *
      * @return Enlight_Components_Snippet_Namespace
      */
     private function createIniNamespace($namespace)
@@ -358,7 +368,7 @@ class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Man
         $fullNamespace = new $this->defaultNamespaceClass([
             'adapter' => $this->fileAdapter,
             'name' => $namespace,
-            'section' => null
+            'section' => null,
         ]);
 
         $locale = $this->locale ? $this->locale->getLocale() : $this->getDefaultLocale()->getLocale();
@@ -372,11 +382,13 @@ class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Man
 
         $fullNamespace->setSection($locale);
         $fullNamespace->setData($fullNamespace->get($locale));
+
         return $fullNamespace;
     }
 
     /**
      * @param Enlight_Components_Snippet_Namespace $instance
+     *
      * @return bool
      */
     private function requiresFallback($instance)
@@ -393,6 +405,7 @@ class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Man
         if (array_key_exists('showSnippetPlaceholder', $this->snippetConfig) && $this->snippetConfig['showSnippetPlaceholder']) {
             return false;
         }
+
         return $this->locale->getLocale() !== 'en_GB';
     }
 }

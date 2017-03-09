@@ -32,6 +32,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 /**
  * @category  Shopware
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
 class CriteriaFactory implements CriteriaFactoryInterface
@@ -50,8 +51,9 @@ class CriteriaFactory implements CriteriaFactoryInterface
     }
 
     /**
-     * @param Request $request
+     * @param Request              $request
      * @param ShopContextInterface $context
+     *
      * @return Criteria
      */
     public function createCriteria(Request $request, ShopContextInterface $context)

@@ -51,7 +51,7 @@ class CombinedConditionHandler implements ConditionHandlerInterface
      */
     public function supportsCondition(ConditionInterface $condition)
     {
-        return ($condition instanceof CombinedCondition);
+        return $condition instanceof CombinedCondition;
     }
 
     /**
@@ -73,7 +73,9 @@ class CombinedConditionHandler implements ConditionHandlerInterface
 
     /**
      * @param ConditionInterface $condition
+     *
      * @throws \Exception
+     *
      * @return ConditionHandlerInterface
      */
     private function getConditionHandler(ConditionInterface $condition)
@@ -89,6 +91,6 @@ class CombinedConditionHandler implements ConditionHandlerInterface
             }
         }
 
-        throw new \Exception(sprintf("Condition %s not supported", get_class($condition)));
+        throw new \Exception(sprintf('Condition %s not supported', get_class($condition)));
     }
 }

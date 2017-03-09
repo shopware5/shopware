@@ -28,14 +28,14 @@ use Shopware\Components\DependencyInjection\Container;
  * Shopware Application
  *
  * @category  Shopware
- * @package   Shopware
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware extends Enlight_Application
 {
-    const VERSION      = '___VERSION___';
+    const VERSION = '___VERSION___';
     const VERSION_TEXT = '___VERSION_TEXT___';
-    const REVISION     = '___REVISION___';
+    const REVISION = '___REVISION___';
 
     /**
      * @var string
@@ -61,16 +61,46 @@ class Shopware extends Enlight_Application
         Shopware($this);
 
         $this->container = $container;
-        $this->appPath   = __DIR__ . DIRECTORY_SEPARATOR;
-        $this->docPath   = dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR;
+        $this->appPath = __DIR__ . DIRECTORY_SEPARATOR;
+        $this->docPath = dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR;
 
         parent::__construct();
+    }
+
+    /**
+     * Returns called resource
+     *
+     * @param string $name
+     * @param array  $value
+     *
+     * @throws Enlight_Exception
+     *
+     * @return mixed
+     *
+     * @deprecated 4.2
+     */
+    public function __call($name, $value = null)
+    {
+        $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 1)[0];
+        $caller = $trace['file'] . ':' . $trace['line'];
+
+        trigger_error('Shopware()->' . $name . '() is deprecated since version 4.2 and will be removed in 6.0. Use the Container instead. Called by ' . $caller, E_USER_DEPRECATED);
+
+        if (!$this->container->has($name)) {
+            throw new Enlight_Exception(
+                'Method "' . get_class($this) . '::' . $name . '" not found failure',
+                Enlight_Exception::METHOD_NOT_FOUND
+            );
+        }
+
+        return $this->container->get($name);
     }
 
     /**
      * Returns the name of the application
      *
      * @deprecated since 5.2, to be removed in 6.0
+     *
      * @return string
      */
     public function App()
@@ -84,6 +114,7 @@ class Shopware extends Enlight_Application
      * Returns the application environment method
      *
      * @deprecated since 5.2, to be removed in 6.0
+     *
      * @return string
      */
     public function Environment()
@@ -95,7 +126,9 @@ class Shopware extends Enlight_Application
 
     /**
      * @deprecated since 5.2, to be removed in 6.0. Use Shopware()->DocPath() instead.
+     *
      * @param string $path
+     *
      * @return string
      */
     public function OldPath($path = null)
@@ -109,6 +142,7 @@ class Shopware extends Enlight_Application
      * Returns document path: <projectroot>/
      *
      * @param string $path
+     *
      * @return string
      */
     public function DocPath($path = null)
@@ -120,27 +154,12 @@ class Shopware extends Enlight_Application
      * Returns the application path: <projectroot>/engine/Shopware/
      *
      * @param string $path
+     *
      * @return string
      */
     public function AppPath($path = null)
     {
         return $this->normalizePath($this->appPath, $path);
-    }
-
-    /**
-     * @param string $basePath
-     * @param string|null $path
-     * @return string
-     */
-    private function normalizePath($basePath, $path = null)
-    {
-        if ($path === null) {
-            return $basePath;
-        }
-
-        $path = str_replace('_', DIRECTORY_SEPARATOR, $path);
-
-        return $basePath . $path . DIRECTORY_SEPARATOR;
     }
 
     /**
@@ -173,6 +192,7 @@ class Shopware extends Enlight_Application
      * Returns the system configuration
      *
      * @deprecated sSystem is deprecated
+     *
      * @return sSystem
      */
     public function System()
@@ -314,6 +334,7 @@ class Shopware extends Enlight_Application
      * otherwise the function throws an exception.
      *
      * @deprecated since 5.2, to be removed in 6.0
+     *
      * @param Enlight_Event_EventManager $manager
      */
     public function setEventManager(Enlight_Event_EventManager $manager)
@@ -325,7 +346,9 @@ class Shopware extends Enlight_Application
 
     /**
      * Returns the instance of the application bootstrap
+     *
      * @deprecated since 5.2, to be removed in 6.0
+     *
      * @return Shopware_Bootstrap
      */
     public function Bootstrap()
@@ -336,44 +359,37 @@ class Shopware extends Enlight_Application
     }
 
     /**
-     * Returns called resource
+     * @param string      $basePath
+     * @param string|null $path
      *
-     * @throws Enlight_Exception
-     * @param string $name
-     * @param array $value
-     * @return mixed
-     * @deprecated 4.2
+     * @return string
      */
-    public function __call($name, $value = null)
+    private function normalizePath($basePath, $path = null)
     {
-        $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 1)[0];
-        $caller = $trace['file'].':'.$trace['line'];
-
-        trigger_error('Shopware()->'. $name . '() is deprecated since version 4.2 and will be removed in 6.0. Use the Container instead. Called by '. $caller, E_USER_DEPRECATED);
-
-        if (!$this->container->has($name)) {
-            throw new Enlight_Exception(
-                'Method "' . get_class($this) . '::' . $name . '" not found failure',
-                Enlight_Exception::METHOD_NOT_FOUND
-            );
+        if ($path === null) {
+            return $basePath;
         }
 
-        return $this->container->get($name);
+        $path = str_replace('_', DIRECTORY_SEPARATOR, $path);
+
+        return $basePath . $path . DIRECTORY_SEPARATOR;
     }
 }
 
 /**
  * Returns application instance
  *
- * @param   Shopware $newInstance
- * @return  Shopware
+ * @param Shopware $newInstance
+ *
+ * @return Shopware
  */
 function Shopware($newInstance = null)
 {
     static $instance;
     if (isset($newInstance)) {
         $oldInstance = $instance;
-        $instance    = $newInstance;
+        $instance = $newInstance;
+
         return $oldInstance;
     } elseif (!isset($instance)) {
         throw new RuntimeException('Shopware Kernel not booted');

@@ -30,7 +30,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\SearchBundle\FacetResult
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class RangeFacetResult extends Extendable implements FacetResultInterface
@@ -86,15 +86,15 @@ class RangeFacetResult extends Extendable implements FacetResultInterface
     protected $template;
 
     /**
-     * @param string $facetName
-     * @param boolean $active
-     * @param string $label
-     * @param float $min
-     * @param float $max
-     * @param float $activeMin
-     * @param float $activeMax
-     * @param string $minFieldName
-     * @param string $maxFieldName
+     * @param string      $facetName
+     * @param bool        $active
+     * @param string      $label
+     * @param float       $min
+     * @param float       $max
+     * @param float       $activeMin
+     * @param float       $activeMax
+     * @param string      $minFieldName
+     * @param string      $maxFieldName
      * @param string|null $template
      * @param Attribute[] $attributes
      */
@@ -149,7 +149,7 @@ class RangeFacetResult extends Extendable implements FacetResultInterface
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isActive()
     {
@@ -197,7 +197,7 @@ class RangeFacetResult extends Extendable implements FacetResultInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getTemplate()
     {
@@ -245,7 +245,7 @@ class RangeFacetResult extends Extendable implements FacetResultInterface
     }
 
     /**
-     * @param boolean $active
+     * @param bool $active
      */
     public function setActive($active)
     {

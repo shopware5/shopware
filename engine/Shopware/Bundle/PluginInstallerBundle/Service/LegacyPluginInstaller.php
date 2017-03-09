@@ -24,8 +24,8 @@
 
 namespace Shopware\Bundle\PluginInstallerBundle\Service;
 
-use Shopware\Models\Plugin\Plugin;
 use Shopware\Components\Model\ModelManager;
+use Shopware\Models\Plugin\Plugin;
 
 class LegacyPluginInstaller
 {
@@ -45,9 +45,9 @@ class LegacyPluginInstaller
     private $pluginDirectories;
 
     /**
-     * @param ModelManager $em
+     * @param ModelManager                  $em
      * @param \Enlight_Plugin_PluginManager $plugins
-     * @param array $pluginDirectories
+     * @param array                         $pluginDirectories
      */
     public function __construct(ModelManager $em, $plugins, $pluginDirectories)
     {
@@ -60,6 +60,7 @@ class LegacyPluginInstaller
      * Returns a certain plugin by plugin id.
      *
      * @param Plugin $plugin
+     *
      * @return \Shopware_Components_Plugin_Bootstrap|null
      */
     public function getPluginBootstrap(Plugin $plugin)
@@ -73,11 +74,12 @@ class LegacyPluginInstaller
         return $plugin;
     }
 
-
     /**
      * @param Plugin $plugin
-     * @return array
+     *
      * @throws \Exception
+     *
+     * @return array
      */
     public function installPlugin(Plugin $plugin)
     {
@@ -97,9 +99,8 @@ class LegacyPluginInstaller
         if (!$result['success']) {
             if (isset($result['message'])) {
                 throw new \Exception(sprintf("Unable to install, got message:\n%s\n", $result['message']));
-            } else {
-                throw new \Exception(sprintf('Unable to install %s, an unknown error occured.', $plugin->getName()));
             }
+            throw new \Exception(sprintf('Unable to install %s, an unknown error occured.', $plugin->getName()));
         }
 
         return $result;
@@ -107,9 +108,11 @@ class LegacyPluginInstaller
 
     /**
      * @param Plugin $plugin
-     * @param bool $removeData
-     * @return array
+     * @param bool   $removeData
+     *
      * @throws \Exception
+     *
+     * @return array
      */
     public function uninstallPlugin(Plugin $plugin, $removeData = true)
     {
@@ -129,19 +132,19 @@ class LegacyPluginInstaller
         if (!$result['success']) {
             if (isset($result['message'])) {
                 throw new \Exception(sprintf("Unable to uninstall, got message:\n%s\n", $result['message']));
-            } else {
-                throw new \Exception(sprintf('Unable to uninstall %s, an unknown error occured.', $plugin->getName()));
             }
+            throw new \Exception(sprintf('Unable to uninstall %s, an unknown error occured.', $plugin->getName()));
         }
 
         return $result;
     }
 
-
     /**
      * @param Plugin $plugin
-     * @return array
+     *
      * @throws \Exception
+     *
+     * @return array
      */
     public function updatePlugin(Plugin $plugin)
     {
@@ -161,9 +164,8 @@ class LegacyPluginInstaller
         if (!$result['success']) {
             if (isset($result['message'])) {
                 throw new \Exception(sprintf("Unable to update, got message:\n%s\n", $result['message']));
-            } else {
-                throw new \Exception(sprintf('Unable to update %s, an unknown error occured.', $plugin->getName()));
             }
+            throw new \Exception(sprintf('Unable to update %s, an unknown error occured.', $plugin->getName()));
         }
 
         return $result;
@@ -171,8 +173,10 @@ class LegacyPluginInstaller
 
     /**
      * @param Plugin $plugin
-     * @return array
+     *
      * @throws \Exception
+     *
+     * @return array
      */
     public function activatePlugin(Plugin $plugin)
     {
@@ -191,7 +195,7 @@ class LegacyPluginInstaller
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function deactivatePlugin(Plugin $plugin)
     {
@@ -210,7 +214,7 @@ class LegacyPluginInstaller
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function refreshPluginList(\DateTimeInterface $refreshDate)
     {
@@ -249,7 +253,7 @@ class LegacyPluginInstaller
                     if ($plugin === null) {
                         $plugin = $collection->initPlugin($name, new \Enlight_Config([
                             'source' => $source,
-                            'path' => $dir->getPathname() . DIRECTORY_SEPARATOR
+                            'path' => $dir->getPathname() . DIRECTORY_SEPARATOR,
                         ]));
                     }
 
@@ -261,8 +265,10 @@ class LegacyPluginInstaller
 
     /**
      * @param Plugin $plugin
-     * @return string
+     *
      * @throws \Exception
+     *
+     * @return string
      */
     public function getPluginPath(Plugin $plugin)
     {
@@ -273,6 +279,7 @@ class LegacyPluginInstaller
 
     /**
      * @param string $file
+     *
      * @return bool
      */
     private function validateIonCube($file)
@@ -283,6 +290,7 @@ class LegacyPluginInstaller
 
         $content = file_get_contents($file);
         $pos = strpos($content, 'if(!extension_loaded(\'ionCube Loader\')){$__oc=strtolower(');
-        return ($pos > 0);
+
+        return $pos > 0;
     }
 }

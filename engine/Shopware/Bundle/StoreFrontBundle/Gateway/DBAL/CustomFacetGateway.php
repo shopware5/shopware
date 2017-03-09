@@ -49,8 +49,8 @@ class CustomFacetGateway implements CustomFacetGatewayInterface
     private $hydrator;
 
     /**
-     * @param Connection $connection
-     * @param FieldHelper $fieldHelper
+     * @param Connection            $connection
+     * @param FieldHelper           $fieldHelper
      * @param CustomListingHydrator $hydrator
      */
     public function __construct(
@@ -76,6 +76,7 @@ class CustomFacetGateway implements CustomFacetGatewayInterface
         $facets = $this->hydrate(
             $query->execute()->fetchAll(\PDO::FETCH_ASSOC)
         );
+
         return $this->getAndSortElementsByIds($ids, $facets);
     }
 
@@ -97,11 +98,13 @@ class CustomFacetGateway implements CustomFacetGatewayInterface
         foreach ($mapping as $categoryId => $facetIds) {
             $categoryFacets[$categoryId] = $this->getAndSortElementsByIds($facetIds, $facets);
         }
+
         return $categoryFacets;
     }
 
     /**
      * @param ShopContextInterface $context
+     *
      * @return CustomFacet[] indexed by id
      */
     public function getAllCategoryFacets(ShopContextInterface $context)
@@ -109,14 +112,15 @@ class CustomFacetGateway implements CustomFacetGatewayInterface
         $query = $this->createQuery($context);
         $query->andWhere('customFacet.display_in_categories = 1');
         $query->orderBy('customFacet.position');
+
         return $this->hydrate(
             $query->execute()->fetchAll(\PDO::FETCH_ASSOC)
         );
     }
 
-
     /**
      * Returns an array with all facet ids which enabled for category listings
+     *
      * @return int[]
      */
     private function getAllCategoryFacetIds()
@@ -126,6 +130,7 @@ class CustomFacetGateway implements CustomFacetGatewayInterface
         $query->from('s_search_custom_facet', 'customFacet');
         $query->andWhere('customFacet.display_in_categories = 1');
         $query->addOrderBy('customFacet.position', 'ASC');
+
         return $query->execute()->fetchAll(\PDO::FETCH_COLUMN);
     }
 
@@ -133,6 +138,7 @@ class CustomFacetGateway implements CustomFacetGatewayInterface
      * Returns the base query to select the custom facet data.
      *
      * @param ShopContextInterface $context
+     *
      * @return QueryBuilder
      */
     private function createQuery(ShopContextInterface $context)
@@ -142,11 +148,13 @@ class CustomFacetGateway implements CustomFacetGatewayInterface
         $query->from('s_search_custom_facet', 'customFacet');
         $query->andWhere('customFacet.active = 1');
         $this->fieldHelper->addCustomFacetTranslation($query, $context);
+
         return $query;
     }
 
     /**
      * @param array $data
+     *
      * @return CustomFacet[]
      */
     private function hydrate(array $data)
@@ -161,8 +169,9 @@ class CustomFacetGateway implements CustomFacetGatewayInterface
     }
 
     /**
-     * @param int[] $facetIds
+     * @param int[]         $facetIds
      * @param CustomFacet[] $facets
+     *
      * @return CustomFacet[] indexed by id
      */
     private function getAndSortElementsByIds(array $facetIds, array $facets)
@@ -173,11 +182,13 @@ class CustomFacetGateway implements CustomFacetGatewayInterface
                 $filtered[$facetId] = $facets[$facetId];
             }
         }
+
         return $filtered;
     }
 
     /**
      * @param int[] $categoryIds
+     *
      * @return string[] indexed by id
      */
     private function getCategoryMapping(array $categoryIds)
@@ -203,6 +214,7 @@ class CustomFacetGateway implements CustomFacetGatewayInterface
                 if (!empty($ids)) {
                     return $ids;
                 }
+
                 return $allFacetIds;
             },
             $mapping

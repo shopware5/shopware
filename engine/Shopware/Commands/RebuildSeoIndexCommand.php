@@ -90,7 +90,7 @@ class RebuildSeoIndexCommand extends ShopwareCommand
         $this->rewriteTable->sCreateRewriteTableCleanup();
 
         foreach ($shops as $shopId) {
-            $output->writeln("Rebuilding SEO index for shop " . $shopId);
+            $output->writeln('Rebuilding SEO index for shop ' . $shopId);
             /** @var $repository \Shopware\Models\Shop\Repository */
             $repository = $this->modelManager->getRepository('Shopware\Models\Shop\Shop');
             $shop = $repository->getActiveById($shopId);
@@ -107,15 +107,13 @@ class RebuildSeoIndexCommand extends ShopwareCommand
             $this->seoIndex->setCachedTime($currentTime->format('Y-m-d h:m:i'), $elementId, $shopId);
             $this->rewriteTable->baseSetup();
 
-            $offset = 0;
             $limit = 10000;
             $lastId = null;
             $lastUpdateVal = '0000-00-00 00:00:00';
 
             do {
-                $lastUpdateVal = $this->rewriteTable->sCreateRewriteTableArticles($lastUpdateVal, $limit, $offset);
+                $lastUpdateVal = $this->rewriteTable->sCreateRewriteTableArticles($lastUpdateVal, $limit);
                 $lastId = $this->rewriteTable->getRewriteArticleslastId();
-                $offset = $offset + $limit;
             } while ($lastId !== null);
 
             $this->seoIndex->setCachedTime($currentTime->format('Y-m-d h:m:i'), $elementId, $shopId);
@@ -130,6 +128,6 @@ class RebuildSeoIndexCommand extends ShopwareCommand
             $this->rewriteTable->sCreateRewriteTableStatic();
         }
 
-        $output->writeln("The SEO index was rebuild successfully.");
+        $output->writeln('The SEO index was rebuild successfully.');
     }
 }

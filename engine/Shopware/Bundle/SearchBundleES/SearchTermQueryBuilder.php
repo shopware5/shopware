@@ -39,11 +39,13 @@ class SearchTermQueryBuilder implements SearchTermQueryBuilderInterface
         $boolQuery->addParameter('minimum_should_match', 1);
         $boolQuery->add($this->getBestFieldQuery($term), BoolQuery::SHOULD);
         $boolQuery->add($this->getPhrasePrefixQuery($term), BoolQuery::SHOULD);
+
         return $boolQuery;
     }
 
     /**
      * @param string $term
+     *
      * @return MultiMatchQuery
      */
     private function getBestFieldQuery($term)
@@ -69,6 +71,7 @@ class SearchTermQueryBuilder implements SearchTermQueryBuilderInterface
 
     /**
      * @param string $term
+     *
      * @return MultiMatchQuery
      */
     private function getPhrasePrefixQuery($term)

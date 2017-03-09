@@ -1,4 +1,26 @@
 <?php
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
 
 namespace Shopware\Tests\Functional\Bundle\StoreFrontBundle;
 
@@ -39,23 +61,56 @@ abstract class TestCase extends \Enlight_Components_Test_TestCase
     }
 
     /**
-     * @param array $products
-     * @param array $expectedNumbers
-     * @param Category $category
+     * @param $products
+     * @param ShopContext $context
+     * @param Category    $category
+     *
+     * @return Article[]
+     */
+    public function createProducts($products, ShopContext $context, Category $category)
+    {
+        $articles = [];
+        foreach ($products as $number => $additionally) {
+            $articles[] = $this->createProduct(
+                $number,
+                $context,
+                $category,
+                $additionally
+            );
+        }
+
+        return $articles;
+    }
+
+    /**
+     * @return \Shopware\Bundle\StoreFrontBundle\Struct\Customer\Group
+     */
+    public function getEkCustomerGroup()
+    {
+        return $this->converter->convertCustomerGroup(
+            Shopware()->Container()->get('models')->find('Shopware\Models\Customer\Group', 1)
+        );
+    }
+
+    /**
+     * @param array                $products
+     * @param array                $expectedNumbers
+     * @param Category             $category
      * @param ConditionInterface[] $conditions
-     * @param FacetInterface[] $facets
-     * @param SortingInterface[] $sortings
-     * @param null $context
-     * @param array $configs
+     * @param FacetInterface[]     $facets
+     * @param SortingInterface[]   $sortings
+     * @param null                 $context
+     * @param array                $configs
+     *
      * @return ProductNumberSearchResult
      */
     protected function search(
         $products,
         $expectedNumbers,
         $category = null,
-        $conditions = array(),
-        $facets = array(),
-        $sortings = array(),
+        $conditions = [],
+        $facets = [],
+        $sortings = [],
         $context = null,
         array $configs = []
     ) {
@@ -99,6 +154,7 @@ abstract class TestCase extends \Enlight_Components_Test_TestCase
         }
 
         $this->assertSearchResult($result, $expectedNumbers);
+
         return $result;
     }
 
@@ -116,13 +172,13 @@ abstract class TestCase extends \Enlight_Components_Test_TestCase
     ) {
         if ($category) {
             $criteria->addBaseCondition(
-                new CategoryCondition(array($category->getId()))
+                new CategoryCondition([$category->getId()])
             );
         }
     }
 
     /**
-     * @param Criteria $criteria
+     * @param Criteria             $criteria
      * @param ConditionInterface[] $conditions
      */
     protected function addConditions(Criteria $criteria, $conditions)
@@ -133,7 +189,7 @@ abstract class TestCase extends \Enlight_Components_Test_TestCase
     }
 
     /**
-     * @param Criteria $criteria
+     * @param Criteria         $criteria
      * @param FacetInterface[] $facets
      */
     protected function addFacets(Criteria $criteria, $facets)
@@ -144,7 +200,7 @@ abstract class TestCase extends \Enlight_Components_Test_TestCase
     }
 
     /**
-     * @param Criteria $criteria
+     * @param Criteria           $criteria
      * @param SortingInterface[] $sortings
      */
     protected function addSortings(Criteria $criteria, $sortings)
@@ -155,30 +211,11 @@ abstract class TestCase extends \Enlight_Components_Test_TestCase
     }
 
     /**
-     * @param $products
-     * @param ShopContext $context
-     * @param Category $category
-     * @return Article[]
-     */
-    public function createProducts($products, ShopContext $context, Category $category)
-    {
-        $articles = array();
-        foreach ($products as $number => $additionally) {
-            $articles[] = $this->createProduct(
-                $number,
-                $context,
-                $category,
-                $additionally
-            );
-        }
-        return $articles;
-    }
-
-    /**
      * @param $number
      * @param ShopContext $context
-     * @param Category $category
+     * @param Category    $category
      * @param $additionally
+     *
      * @return Article
      */
     protected function createProduct(
@@ -193,6 +230,7 @@ abstract class TestCase extends \Enlight_Components_Test_TestCase
             $category,
             $additionally
         );
+
         return $this->helper->createArticle($data);
     }
 
@@ -209,10 +247,10 @@ abstract class TestCase extends \Enlight_Components_Test_TestCase
         }, $result->getProducts());
 
         foreach ($numbers as $number) {
-            $this->assertContains($number, $expectedNumbers, sprintf("Product with number: `%s` found but not expected", $number));
+            $this->assertContains($number, $expectedNumbers, sprintf('Product with number: `%s` found but not expected', $number));
         }
         foreach ($expectedNumbers as $number) {
-            $this->assertContains($number, $numbers, sprintf("Expected product number: `%s` not found", $number));
+            $this->assertContains($number, $numbers, sprintf('Expected product number: `%s` not found', $number));
         }
 
         $this->assertCount(count($expectedNumbers), $result->getProducts());
@@ -242,6 +280,7 @@ abstract class TestCase extends \Enlight_Components_Test_TestCase
 
     /**
      * @param int $shopId
+     *
      * @return TestContext
      */
     protected function getContext($shopId = 1)
@@ -254,15 +293,16 @@ abstract class TestCase extends \Enlight_Components_Test_TestCase
         return $this->helper->createContext(
             $customerGroup,
             $shop,
-            array($tax)
+            [$tax]
         );
     }
 
     /**
      * @param $number
      * @param ShopContext $context
-     * @param Category $category
-     * @param array $additionally
+     * @param Category    $category
+     * @param array       $additionally
+     *
      * @return array
      */
     protected function getProduct(
@@ -279,9 +319,9 @@ abstract class TestCase extends \Enlight_Components_Test_TestCase
         $product['categories'] = [['id' => $context->getShop()->getCategory()->getId()]];
 
         if ($category) {
-            $product['categories'] = array(
-                array('id' => $category->getId())
-            );
+            $product['categories'] = [
+                ['id' => $category->getId()],
+            ];
         }
 
         if (!is_array($additionally)) {
@@ -291,15 +331,5 @@ abstract class TestCase extends \Enlight_Components_Test_TestCase
         $product = array_merge($product, $additionally);
 
         return $product;
-    }
-
-    /**
-     * @return \Shopware\Bundle\StoreFrontBundle\Struct\Customer\Group
-     */
-    public function getEkCustomerGroup()
-    {
-        return $this->converter->convertCustomerGroup(
-            Shopware()->Container()->get('models')->find('Shopware\Models\Customer\Group', 1)
-        );
     }
 }

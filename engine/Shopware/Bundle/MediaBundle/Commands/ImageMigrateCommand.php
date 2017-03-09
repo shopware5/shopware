@@ -31,7 +31,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * @category  Shopware
- * @package   Shopware\Components\Console\Commands
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ImageMigrateCommand extends ShopwareCommand

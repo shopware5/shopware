@@ -26,14 +26,13 @@ namespace Shopware\Bundle\PluginInstallerBundle\Struct;
 
 /**
  * Class PriceStruct
- * @package Shopware\Bundle\PluginInstallerBundle\Struct
  */
 class PriceStruct implements \JsonSerializable
 {
-    const TYPE_RENT         = 'rent';
-    const TYPE_BUY          = 'buy';
-    const TYPE_TEST         = 'test';
-    const TYPE_UNLICENSED   = 'unlicensed';
+    const TYPE_RENT = 'rent';
+    const TYPE_BUY = 'buy';
+    const TYPE_TEST = 'test';
+    const TYPE_UNLICENSED = 'unlicensed';
 
     /**
      * @var int
@@ -60,12 +59,12 @@ class PriceStruct implements \JsonSerializable
     private $type;
 
     /**
-     * @var boolean
+     * @var bool
      */
     private $subscription;
 
     /**
-     * @param boolean $type
+     * @param bool $type
      */
     public function __construct($type)
     {
@@ -73,7 +72,7 @@ class PriceStruct implements \JsonSerializable
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function jsonSerialize()
     {
@@ -145,7 +144,7 @@ class PriceStruct implements \JsonSerializable
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isSubscription()
     {
@@ -153,7 +152,7 @@ class PriceStruct implements \JsonSerializable
     }
 
     /**
-     * @param boolean $subscription
+     * @param bool $subscription
      */
     public function setSubscription($subscription)
     {

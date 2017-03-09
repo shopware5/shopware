@@ -30,7 +30,7 @@ use Shopware\Components\Api\Exception as ApiException;
  * Country API Resource
  *
  * @category  Shopware
- * @package   Shopware\Components\Api\Resource
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Country extends Resource
@@ -47,9 +47,11 @@ class Country extends Resource
      * Returns the data of the Country with the given ID.
      *
      * @param int $id
-     * @return array|\Shopware\Models\Country\Country
+     *
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
      * @throws \Shopware\Components\Api\Exception\NotFoundException
+     *
+     * @return array|\Shopware\Models\Country\Country
      */
     public function getOne($id)
     {
@@ -63,8 +65,8 @@ class Country extends Resource
             [
                 'property' => 'countries.id',
                 'expression' => '=',
-                'value' => $id
-            ]
+                'value' => $id,
+            ],
         ];
         $builder = $this->getRepository()->getCountriesWithStatesQueryBuilder($filters);
         /** @var $country \Shopware\Models\Country\Country */
@@ -80,13 +82,14 @@ class Country extends Resource
      * Returns an array containing the total count of existing countries as well as the data of countries
      * that match the given criteria.
      *
-     * @param int $offset
-     * @param int $limit
+     * @param int   $offset
+     * @param int   $limit
      * @param array $criteria
      * @param array $orderBy
+     *
      * @return array
      */
-    public function getList($offset = 0, $limit = 25, array $criteria = array(), array $orderBy = array())
+    public function getList($offset = 0, $limit = 25, array $criteria = [], array $orderBy = [])
     {
         $this->checkPrivilege('read');
 
@@ -108,7 +111,7 @@ class Country extends Resource
 
         return [
             'data' => $countries,
-            'total' => $totalResult
+            'total' => $totalResult,
         ];
     }
 
@@ -116,8 +119,10 @@ class Country extends Resource
      * Creates a new Country entity using the passed params.
      *
      * @param array $params
-     * @return \Shopware\Models\Country\Country
+     *
      * @throws \Shopware\Components\Api\Exception\ValidationException
+     *
+     * @return \Shopware\Models\Country\Country
      */
     public function create(array $params)
     {
@@ -142,12 +147,14 @@ class Country extends Resource
     /**
      * Updates the Country entity with the given ID using the passed params.
      *
-     * @param int $id
+     * @param int   $id
      * @param array $params
-     * @return \Shopware\Models\Country\Country
+     *
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
      * @throws \Shopware\Components\Api\Exception\NotFoundException
      * @throws \Shopware\Components\Api\Exception\ValidationException
+     *
+     * @return \Shopware\Models\Country\Country
      */
     public function update($id, array $params)
     {
@@ -180,9 +187,11 @@ class Country extends Resource
      * Deletes the Country entity with the given ID.
      *
      * @param int $id
-     * @return \Shopware\Models\Country\Country
+     *
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
      * @throws \Shopware\Components\Api\Exception\NotFoundException
+     *
+     * @return \Shopware\Models\Country\Country
      */
     public function delete($id)
     {
@@ -205,12 +214,14 @@ class Country extends Resource
     }
 
     /**
-     * @param array $params
+     * @param array                            $params
      * @param \Shopware\Models\Country\Country $country
-     * @return array
+     *
      * @throws \Shopware\Components\Api\Exception\CustomValidationException
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
      * @throws \Shopware\Components\Api\Exception\NotFoundException
+     *
+     * @return array
      */
     private function prepareCountryData(array $params, \Shopware\Models\Country\Country $country = null)
     {
@@ -218,7 +229,7 @@ class Country extends Resource
             'name',
             'iso',
             'iso3',
-            'isoName'
+            'isoName',
         ];
         foreach ($requiredParams as $param) {
             if (!$country) {
@@ -253,10 +264,12 @@ class Country extends Resource
 
     /**
      * @param array $params
-     * @return array
+     *
      * @throws \Shopware\Components\Api\Exception\CustomValidationException
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
      * @throws \Shopware\Components\Api\Exception\NotFoundException
+     *
+     * @return array
      */
     private function prepareCountryStatesData(array $params)
     {

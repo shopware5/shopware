@@ -45,7 +45,8 @@ class AddressService implements AddressServiceInterface
 
     /**
      * AddressService constructor.
-     * @param ModelManager $modelManager
+     *
+     * @param ModelManager              $modelManager
      * @param AddressValidatorInterface $validator
      */
     public function __construct(ModelManager $modelManager, AddressValidatorInterface $validator)
@@ -55,7 +56,7 @@ class AddressService implements AddressServiceInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function create(Address $address, Customer $customer)
     {
@@ -79,7 +80,7 @@ class AddressService implements AddressServiceInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function update(Address $address)
     {
@@ -104,17 +105,17 @@ class AddressService implements AddressServiceInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function delete(Address $address)
     {
         $preventDeletionOf = [
             $address->getCustomer()->getDefaultShippingAddress()->getId(),
-            $address->getCustomer()->getDefaultBillingAddress()->getId()
+            $address->getCustomer()->getDefaultBillingAddress()->getId(),
         ];
 
         if (in_array($address->getId(), $preventDeletionOf)) {
-            throw new \RuntimeException("The address is defined as default billing or shipping address and cannot be removed.");
+            throw new \RuntimeException('The address is defined as default billing or shipping address and cannot be removed.');
         }
 
         $this->modelManager->remove($address);
@@ -122,7 +123,7 @@ class AddressService implements AddressServiceInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setDefaultBillingAddress(Address $address)
     {
@@ -144,7 +145,7 @@ class AddressService implements AddressServiceInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setDefaultShippingAddress(Address $address)
     {

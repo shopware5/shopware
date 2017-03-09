@@ -24,14 +24,14 @@
 
 namespace Shopware\Components\Routing\Matchers;
 
-use Shopware\Components\QueryAliasMapper;
-use Shopware\Components\Routing\MatcherInterface;
-use Shopware\Components\Routing\Context;
 use Doctrine\DBAL\Connection;
+use Shopware\Components\QueryAliasMapper;
+use Shopware\Components\Routing\Context;
+use Shopware\Components\Routing\MatcherInterface;
 
 /**
  * @category  Shopware
- * @package   Shopware\Components\Routing
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class RewriteMatcher implements MatcherInterface
@@ -47,7 +47,7 @@ class RewriteMatcher implements MatcherInterface
     protected $defaultRoute = [
         'module' => 'frontend',
         'controller' => 'index',
-        'action' => 'index'
+        'action' => 'index',
     ];
 
     /**
@@ -56,32 +56,13 @@ class RewriteMatcher implements MatcherInterface
     private $queryAliasMapper;
 
     /**
-     * @param Connection $connection
+     * @param Connection       $connection
      * @param QueryAliasMapper $queryAliasMapper
      */
     public function __construct(Connection $connection, QueryAliasMapper $queryAliasMapper)
     {
         $this->connection = $connection;
         $this->queryAliasMapper = $queryAliasMapper;
-    }
-
-    /**
-     * @return \Doctrine\DBAL\Driver\Statement
-     * @throws \Doctrine\DBAL\DBALException
-     */
-    private function getRouteStatement()
-    {
-        $sql = '
-          SELECT subshopID as shopId, path, org_path as orgPath, main
-          FROM s_core_rewrite_urls
-          WHERE path LIKE :pathInfo
-             OR path LIKE :pathInfoWithSlash
-          ORDER BY main DESC, subshopID = :shopId DESC
-          LIMIT 1
-        ';
-        $stmt = $this->connection->prepare($sql);
-
-        return $stmt;
     }
 
     /**
@@ -117,11 +98,9 @@ class RewriteMatcher implements MatcherInterface
         }
 
         $pathInfo = ltrim($pathInfo, '/');
-
         $statement = $this->getRouteStatement();
         $statement->bindValue(':shopId', $context->getShopId(), \PDO::PARAM_INT);
-        $statement->bindValue(':pathInfo', trim($pathInfo, '/'), \PDO::PARAM_STR);
-        $statement->bindValue(':pathInfoWithSlash', trim($pathInfo, '/') . '/', \PDO::PARAM_STR);
+        $statement->bindValue(':pathInfo', $pathInfo, \PDO::PARAM_STR);
 
         if ($statement->execute() && $statement->rowCount() > 0) {
             $route = $statement->fetch(\PDO::FETCH_ASSOC);
@@ -131,13 +110,35 @@ class RewriteMatcher implements MatcherInterface
             } else {
                 $query['rewriteUrl'] = true;
             }
+
             return $query;
         }
+
         return $pathInfo;
     }
 
     /**
+     * @throws \Doctrine\DBAL\DBALException
+     *
+     * @return \Doctrine\DBAL\Driver\Statement
+     */
+    private function getRouteStatement()
+    {
+        $sql = '
+          SELECT subshopID as shopId, path, org_path as orgPath, main
+          FROM s_core_rewrite_urls
+          WHERE path LIKE :pathInfo
+          ORDER BY main DESC, subshopID = :shopId DESC
+          LIMIT 1
+        ';
+        $stmt = $this->connection->prepare($sql);
+
+        return $stmt;
+    }
+
+    /**
      * @param string $orgPath
+     *
      * @return array
      */
     private function getQueryFormOrgPath($orgPath)
@@ -152,6 +153,7 @@ class RewriteMatcher implements MatcherInterface
                 unset($query['sAction']);
             }
         }
+
         return $query;
     }
 }

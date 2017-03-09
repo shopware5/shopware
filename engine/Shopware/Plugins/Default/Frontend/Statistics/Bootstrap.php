@@ -36,15 +36,15 @@ class Shopware_Plugins_Frontend_Statistics_Bootstrap extends Shopware_Components
     {
         $form = $this->Form();
 
-        $parent = $this->Forms()->findOneBy(array('name' => 'Core'));
+        $parent = $this->Forms()->findOneBy(['name' => 'Core']);
         $form->setParent($parent);
 
-        $form->setElement('text', 'blockIp', array(
+        $form->setElement('text', 'blockIp', [
             'label' => 'IP von Statistiken ausschließen', 'value' => null,
-            'scope' => \Shopware\Models\Config\Element::SCOPE_SHOP
-        ));
+            'scope' => \Shopware\Models\Config\Element::SCOPE_SHOP,
+        ]);
 
-        $form->setElement('textarea', 'botBlackList', array(
+        $form->setElement('textarea', 'botBlackList', [
                 'label' => 'Bot-Liste',
                 'value' => 'antibot;appie;architext;bjaaland;digout4u;echo;fast-webcrawler;ferret;googlebot;
 gulliver;harvest;htdig;ia_archiver;jeeves;jennybot;linkwalker;lycos;mercator;moget;muscatferret;
@@ -76,8 +76,8 @@ wz101;xget;awbot;bobby;boris;bumblebee;cscrawler;daviesbot;ezresult;gigabot;gnod
 justview;linkbot;linkchecker;nederland.zoek;perman;pompos;pooodle;redalert;shoutcast;slysearch;
 ultraseek;webcompass;yandex;robot;yahoo;bot;psbot;crawl;RSS;larbin;ichiro;Slurp;msnbot;bot;Googlebot;
 ShopWiki;Bot;WebAlta;;abachobot;architext;ask jeeves;frooglebot;googlebot;lycos;spider;HTTPClient',
-                'scope' => \Shopware\Models\Config\Element::SCOPE_SHOP
-            ));
+                'scope' => \Shopware\Models\Config\Element::SCOPE_SHOP,
+            ]);
 
         return true;
     }
@@ -87,15 +87,16 @@ ShopWiki;Bot;WebAlta;;abachobot;architext;ask jeeves;frooglebot;googlebot;lycos;
      */
     public function getInfo()
     {
-        return array(
-            'label' => 'Statistiken'
-        );
+        return [
+            'label' => 'Statistiken',
+        ];
     }
 
     /**
      * Check user is bot
      *
      * @param string $userAgent
+     *
      * @return bool
      */
     public function checkIsBot($userAgent)
@@ -110,6 +111,7 @@ ShopWiki;Bot;WebAlta;;abachobot;architext;ask jeeves;frooglebot;googlebot;lycos;
         if (!empty($userAgent) && str_replace($bots, '', $userAgent) != $userAgent) {
             $result = true;
         }
+
         return $result;
     }
 
@@ -140,23 +142,24 @@ ShopWiki;Bot;WebAlta;;abachobot;architext;ask jeeves;frooglebot;googlebot;lycos;
 
         if (!empty($currentController) && !empty($sessionId)) {
             $userId = (int) Shopware()->Session()->sUserId;
-            $userAgent = (string) $request->getServer("HTTP_USER_AGENT");
-            $sql = "
+            $userAgent = (string) $request->getServer('HTTP_USER_AGENT');
+            $sql = '
                 UPDATE s_order_basket
                 SET lastviewport = ?,
                     useragent = ?,
                     userID = ?
                 WHERE sessionID=?
-            ";
-            Shopware()->Db()->query($sql, array(
+            ';
+            Shopware()->Db()->query($sql, [
                 $currentController, $userAgent,
-                $userId, $sessionId
-            ));
+                $userId, $sessionId,
+            ]);
         }
     }
 
     /**
      * @param $request
+     *
      * @return bool
      */
     public function shouldRefreshLog(Enlight_Controller_Request_Request $request)
@@ -171,6 +174,7 @@ ShopWiki;Bot;WebAlta;;abachobot;architext;ask jeeves;frooglebot;googlebot;lycos;
         ) {
             return false;
         }
+
         return true;
     }
 
@@ -197,12 +201,12 @@ ShopWiki;Bot;WebAlta;;abachobot;architext;ask jeeves;frooglebot;googlebot;lycos;
         $sql = '
         INSERT INTO s_statistics_currentusers (remoteaddr, page, `time`, userID, deviceType)
         VALUES (?, ?, NOW(), ?, ?)';
-        Shopware()->Db()->query($sql, array(
+        Shopware()->Db()->query($sql, [
             $request->getClientIp(),
             $request->getParam('requestPage', $request->getRequestUri()),
             empty(Shopware()->Session()->sUserId) ? 0 : (int) Shopware()->Session()->sUserId,
-            $request->getDeviceType()
-        ));
+            $request->getDeviceType(),
+        ]);
     }
 
     /**
@@ -225,10 +229,10 @@ ShopWiki;Bot;WebAlta;;abachobot;architext;ask jeeves;frooglebot;googlebot;lycos;
             AND deviceType = :deviceType';
         $result = Shopware()->Db()->fetchOne(
             $sql,
-            array(
+            [
                 'shopId' => $shopId,
-                'deviceType' => $deviceType
-            )
+                'deviceType' => $deviceType,
+            ]
         );
         if (empty($result)) {
             $sql = '
@@ -238,34 +242,34 @@ ShopWiki;Bot;WebAlta;;abachobot;architext;ask jeeves;frooglebot;googlebot;lycos;
             ';
             Shopware()->Db()->query(
                 $sql,
-                array(
+                [
                     'shopId' => $shopId,
-                    'deviceType' => $deviceType
-                )
+                    'deviceType' => $deviceType,
+                ]
             );
             $isNewRecord = true;
         }
 
         $sql = 'SELECT 1 FROM s_statistics_pool WHERE datum = CURDATE() AND remoteaddr = ?';
-        $result = Shopware()->Db()->fetchOne($sql, array($ip));
+        $result = Shopware()->Db()->fetchOne($sql, [$ip]);
         if (empty($result)) {
             $sql = 'INSERT INTO s_statistics_pool (`remoteaddr`, `datum`) VALUES (?, NOW())';
-            Shopware()->Db()->query($sql, array($ip));
+            Shopware()->Db()->query($sql, [$ip]);
 
             if ($isNewRecord === false) {
                 $sql = 'UPDATE s_statistics_visitors SET pageimpressions=pageimpressions+1, uniquevisits=uniquevisits+1 WHERE datum=CURDATE() AND shopID = ? AND deviceType = ?';
-                Shopware()->Db()->query($sql, array($shopId, $deviceType));
+                Shopware()->Db()->query($sql, [$shopId, $deviceType]);
             }
         } else {
             $sql = 'UPDATE s_statistics_visitors SET pageimpressions=pageimpressions+1 WHERE datum=CURDATE() AND shopID = ? AND deviceType = ?';
-            Shopware()->Db()->query($sql, array($shopId, $deviceType));
+            Shopware()->Db()->query($sql, [$shopId, $deviceType]);
         }
     }
 
     /**
      * Refresh referrer log
      *
-     * @param   \Enlight_Controller_Request_Request $request
+     * @param \Enlight_Controller_Request_Request $request
      */
     public function refreshReferer($request)
     {
@@ -287,13 +291,14 @@ ShopWiki;Bot;WebAlta;;abachobot;architext;ask jeeves;frooglebot;googlebot;lycos;
         }
 
         $sql = 'INSERT INTO s_statistics_referer (datum, referer) VALUES (NOW(), ?)';
-        Shopware()->Db()->query($sql, array($referer));
+        Shopware()->Db()->query($sql, [$referer]);
     }
 
     /**
      * Refresh article impressions
      *
-     * @param   \Enlight_Controller_Request_Request $request
+     * @param \Enlight_Controller_Request_Request $request
+     *
      * @return null|object|\Shopware\Models\Tracking\Banner
      */
     public function refreshArticleImpression($request)
@@ -307,7 +312,7 @@ ShopWiki;Bot;WebAlta;;abachobot;architext;ask jeeves;frooglebot;googlebot;lycos;
         /** @var $repository \Shopware\Models\Tracking\Repository */
         $repository = Shopware()->Models()->getRepository('Shopware\Models\Tracking\ArticleImpression');
         $articleImpressionQuery = $repository->getArticleImpressionQuery($articleId, $shopId, null, $deviceType);
-        /** @var  $articleImpression \Shopware\Models\Tracking\ArticleImpression */
+        /** @var $articleImpression \Shopware\Models\Tracking\ArticleImpression */
         $articleImpression = $articleImpressionQuery->getOneOrNullResult();
 
         // If no Entry for this day exists - create a new one
@@ -323,8 +328,8 @@ ShopWiki;Bot;WebAlta;;abachobot;architext;ask jeeves;frooglebot;googlebot;lycos;
     /**
      * Refresh partner log
      *
-     * @param   \Enlight_Controller_Request_Request $request
-     * @param   \Enlight_Controller_Response_ResponseHttp $response
+     * @param \Enlight_Controller_Request_Request       $request
+     * @param \Enlight_Controller_Response_ResponseHttp $response
      */
     public function refreshPartner($request, $response)
     {
@@ -339,11 +344,11 @@ ShopWiki;Bot;WebAlta;;abachobot;architext;ask jeeves;frooglebot;googlebot;lycos;
                         SET clicked = clicked + 1
                         WHERE id = ?
                     ';
-                    Shopware()->Db()->query($sql, array($campaignID));
+                    Shopware()->Db()->query($sql, [$campaignID]);
                 }
             } else {
                 $sql = 'SELECT * FROM s_emarketing_partner WHERE active=1 AND idcode=?';
-                $row = Shopware()->Db()->fetchRow($sql, array($partner));
+                $row = Shopware()->Db()->fetchRow($sql, [$partner]);
                 if (!empty($row)) {
                     if ($row['cookielifetime']) {
                         $valid = time() + $row['cookielifetime'];
@@ -356,7 +361,7 @@ ShopWiki;Bot;WebAlta;;abachobot;architext;ask jeeves;frooglebot;googlebot;lycos;
             }
         } elseif ($request->getCookie('partner') !== null) {
             $sql = 'SELECT idcode FROM s_emarketing_partner WHERE active=1 AND idcode=?';
-            $partner = Shopware()->Db()->fetchOne($sql, array($request->getCookie('partner')));
+            $partner = Shopware()->Db()->fetchOne($sql, [$request->getCookie('partner')]);
             if (empty($partner)) {
                 unset(Shopware()->Session()->sPartner);
             } else {

@@ -24,7 +24,7 @@
 
 /**
  * @category  Shopware
- * @package   Shopware\Controllers\Frontend
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
@@ -75,21 +75,21 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
         }
 
         $this->View()->assign('sAction', isset($this->View()->sAction) ? $this->View()->sAction : 'index', true);
-        $this->View()->assign('sErrorFlag', isset($this->View()->sErrorFlag) ? $this->View()->sErrorFlag : array(), true);
-        $this->View()->assign('sFormData', isset($this->View()->sFormData) ? $this->View()->sFormData : array(), true);
+        $this->View()->assign('sErrorFlag', isset($this->View()->sErrorFlag) ? $this->View()->sErrorFlag : [], true);
+        $this->View()->assign('sFormData', isset($this->View()->sFormData) ? $this->View()->sFormData : [], true);
         $this->View()->assign('userLoggedIn', Shopware()->Modules()->Admin()->sCheckUser());
 
         if (!empty(Shopware()->Session()->sUserId) && empty($this->Request()->sVoteName)
           && $this->Request()->getParam('__cache') !== null) {
             $userData = Shopware()->Modules()->Admin()->sGetUserData();
-            $this->View()->sFormData = array(
+            $this->View()->sFormData = [
                 'sVoteMail' => $userData['additional']['user']['email'],
-                'sVoteName' => $userData['billingaddress']['firstname'] . ' ' . $userData['billingaddress']['lastname']
-            );
+                'sVoteName' => $userData['billingaddress']['firstname'] . ' ' . $userData['billingaddress']['lastname'],
+            ];
         }
 
         $number = $this->Request()->getParam('number', null);
-        $selection = $this->Request()->getParam('group', array());
+        $selection = $this->Request()->getParam('group', []);
 
         $categoryId = $this->Request()->get('sCategory');
         if (!$this->isValidCategory($categoryId)) {
@@ -109,7 +109,7 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
 
         $this->Request()->setQuery('sCategory', $article['categoryID']);
 
-        if (empty($article) || empty($article["articleName"])) {
+        if (empty($article) || empty($article['articleName'])) {
             return $this->forward('error');
         }
 
@@ -130,19 +130,19 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
         $article['sBundles'] = false;
 
         if (!empty(Shopware()->Config()->InquiryValue)) {
-            $this->View()->sInquiry = $this->Front()->Router()->assemble(array(
+            $this->View()->sInquiry = $this->Front()->Router()->assemble([
                 'sViewport' => 'support',
                 'sFid' => Shopware()->Config()->InquiryID,
                 'sInquiry' => 'detail',
-                'sOrdernumber' => $article['ordernumber']
-            ));
+                'sOrdernumber' => $article['ordernumber'],
+            ]);
         }
 
-        if (!empty($article["categoryID"])) {
-            $breadcrumb = array_reverse(Shopware()->Modules()->sCategories()->sGetCategoriesByParent($article["categoryID"]));
+        if (!empty($article['categoryID'])) {
+            $breadcrumb = array_reverse(Shopware()->Modules()->sCategories()->sGetCategoriesByParent($article['categoryID']));
             $categoryInfo = end($breadcrumb);
         } else {
-            $breadcrumb = array();
+            $breadcrumb = [];
             $categoryInfo = null;
         }
 
@@ -153,31 +153,6 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
         $this->View()->sCategoryInfo = $categoryInfo;
         $this->View()->sArticle = $article;
         $this->View()->rand = md5(uniqid(rand()));
-    }
-
-    /**
-     * Checks if the provided $categoryId is in the current shop's category tree
-     *
-     * @param int $categoryId
-     * @return bool
-     */
-    private function isValidCategory($categoryId)
-    {
-        $defaultShopCategoryId = Shopware()->Shop()->getCategory()->getId();
-
-        /**@var $repository \Shopware\Models\Category\Repository*/
-        $repository = Shopware()->Models()->getRepository('Shopware\Models\Category\Category');
-        $categoryPath = $repository->getPathById($categoryId);
-
-        if (!$categoryPath) {
-            return true;
-        }
-
-        if (!array_key_exists($defaultShopCategoryId, $categoryPath)) {
-            return false;
-        }
-
-        return true;
     }
 
     /**
@@ -221,11 +196,11 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
         if ($hash = $this->Request()->sConfirmation) {
             $getVote = Shopware()->Db()->fetchRow('
                 SELECT * FROM s_core_optin WHERE hash = ?
-            ', array($hash));
+            ', [$hash]);
             if (!empty($getVote['data'])) {
                 Shopware()->System()->_POST = unserialize($getVote['data']);
                 $voteConfirmed = true;
-                Shopware()->Db()->query('DELETE FROM s_core_optin WHERE hash = ?', array($hash));
+                Shopware()->Db()->query('DELETE FROM s_core_optin WHERE hash = ?', [$hash]);
             }
         }
 
@@ -262,21 +237,21 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
                     INSERT INTO s_core_optin (datum, hash, data)
                     VALUES (NOW(), ?, ?)
                 ';
-                Shopware()->Db()->query($sql, array(
-                    $hash, serialize(Shopware()->System()->_POST->toArray())
-                ));
+                Shopware()->Db()->query($sql, [
+                    $hash, serialize(Shopware()->System()->_POST->toArray()),
+                ]);
 
-                $link = $this->Front()->Router()->assemble(array(
+                $link = $this->Front()->Router()->assemble([
                     'sViewport' => 'detail',
                     'action' => 'rating',
                     'sArticle' => $id,
-                    'sConfirmation' => $hash
-                ));
+                    'sConfirmation' => $hash,
+                ]);
 
-                $context = array(
+                $context = [
                     'sConfirmLink' => $link,
-                    'sArticle' => array('articleName' => $article)
-                );
+                    'sArticle' => ['articleName' => $article],
+                ];
 
                 $mail = Shopware()->TemplateMail()->createMail('sOPTINVOTE', $context);
                 $mail->addTo($this->Request()->getParam('sVoteMail'));
@@ -293,5 +268,31 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
         $this->View()->sAction = 'ratingAction';
 
         $this->forward('index');
+    }
+
+    /**
+     * Checks if the provided $categoryId is in the current shop's category tree
+     *
+     * @param int $categoryId
+     *
+     * @return bool
+     */
+    private function isValidCategory($categoryId)
+    {
+        $defaultShopCategoryId = Shopware()->Shop()->getCategory()->getId();
+
+        /** @var $repository \Shopware\Models\Category\Repository */
+        $repository = Shopware()->Models()->getRepository('Shopware\Models\Category\Category');
+        $categoryPath = $repository->getPathById($categoryId);
+
+        if (!$categoryPath) {
+            return true;
+        }
+
+        if (!array_key_exists($defaultShopCategoryId, $categoryPath)) {
+            return false;
+        }
+
+        return true;
     }
 }

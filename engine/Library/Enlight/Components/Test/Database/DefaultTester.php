@@ -21,6 +21,9 @@
  * @author     $Author$
  */
 
+use PHPUnit\DbUnit\AbstractTester;
+use PHPUnit\DbUnit\Database\DefaultConnection;
+
 /**
  * Grants an automatically access on the database, in test cases.
  *
@@ -32,22 +35,22 @@
  * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
  * @license    http://enlight.de/license     New BSD License
  */
-class Enlight_Components_Test_Database_DefaultTester extends PHPUnit_Extensions_Database_AbstractTester
+class Enlight_Components_Test_Database_DefaultTester extends AbstractTester
 {
     /**
      * Instance of the database connection class. Can be set in the class constructor.
      * If no connection is set, the default connection is used.
      *
-     * @var PHPUnit_Extensions_Database_DB_IDatabaseConnection
+     * @var DefaultConnection
      */
     protected $connection;
 
     /**
      * Creates a new default database tester using the given connection.
      *
-     * @param PHPUnit_Extensions_Database_DB_IDatabaseConnection $connection
+     * @param DefaultConnection $connection
      */
-    public function __construct(PHPUnit_Extensions_Database_DB_IDatabaseConnection $connection = null)
+    public function __construct(DefaultConnection $connection = null)
     {
         $this->connection = $connection;
 
@@ -57,7 +60,7 @@ class Enlight_Components_Test_Database_DefaultTester extends PHPUnit_Extensions_
     /**
      * Returns the test database connection.
      *
-     * @return PHPUnit_Extensions_Database_DB_IDatabaseConnection
+     * @return DefaultConnection
      */
     public function getConnection()
     {
@@ -74,11 +77,11 @@ class Enlight_Components_Test_Database_DefaultTester extends PHPUnit_Extensions_
      *
      * @param PDO    $connection
      * @param string $schema
-     * @return PHPUnit_Extensions_Database_DB_DefaultDatabaseConnection
+     * @return DefaultConnection
      */
     protected function createDefaultDBConnection(PDO $connection, $schema = '')
     {
-        return new PHPUnit_Extensions_Database_DB_DefaultDatabaseConnection($connection, $schema);
+        return new DefaultConnection($connection, $schema);
     }
 
     /**

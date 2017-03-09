@@ -24,7 +24,7 @@
 
 /**
  * @category  Shopware
- * @package   Shopware\Tests
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Tests_Controllers_Frontend_DetailTest extends Enlight_Components_Test_Controller_TestCase
@@ -54,10 +54,10 @@ class Shopware_Tests_Controllers_Frontend_DetailTest extends Enlight_Components_
         // Request a variant that is not the default one
         $this->Request()
             ->setMethod('POST')
-            ->setPost('group', array(
+            ->setPost('group', [
                 6 => 15,
                 7 => 65,
-            ));
+            ]);
 
         $this->dispatch('/beispiele/konfiguratorartikel/202/artikel-mit-standardkonfigurator?c=22');
 

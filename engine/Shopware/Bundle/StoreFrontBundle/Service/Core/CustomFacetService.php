@@ -26,7 +26,6 @@ namespace Shopware\Bundle\StoreFrontBundle\Service\Core;
 
 use Shopware\Bundle\StoreFrontBundle\Gateway\CustomFacetGatewayInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\CustomFacetServiceInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\Search\CustomFacet;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class CustomFacetService implements CustomFacetServiceInterface

@@ -26,15 +26,13 @@ namespace Shopware\Commands;
 
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Plugin\Plugin;
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * @category  Shopware
- * @package   Shopware\Components\Console\Command
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class PluginListCommand extends ShopwareCommand
@@ -56,9 +54,9 @@ class PluginListCommand extends ShopwareCommand
             ->addOption(
                 'namespace',
                 null,
-                InputOption::VALUE_IS_ARRAY|InputOption::VALUE_OPTIONAL,
+                InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL,
                 'Filter Plugins by namespace (core, frontend, backend)',
-                array()
+                []
             )
         ;
     }
@@ -94,22 +92,22 @@ class PluginListCommand extends ShopwareCommand
 
         $plugins = $builder->getQuery()->execute();
 
-        $rows = array();
+        $rows = [];
 
         /** @var Plugin $plugin */
         foreach ($plugins as $plugin) {
-            $rows[] = array(
+            $rows[] = [
                 $plugin->getName(),
                 $plugin->getLabel(),
                 $plugin->getVersion(),
                 $plugin->getAuthor(),
                 $plugin->getActive() ? 'Yes' : 'No',
-                $plugin->getInstalled() ? 'Yes' : 'No'
-            );
+                $plugin->getInstalled() ? 'Yes' : 'No',
+            ];
         }
 
         $table = $this->getHelperSet()->get('table');
-        $table->setHeaders(array('Plugin', 'Label', 'Version', 'Author', 'Active', 'Installed'))
+        $table->setHeaders(['Plugin', 'Label', 'Version', 'Author', 'Active', 'Installed'])
               ->setRows($rows);
 
         $table->render($output);

@@ -24,11 +24,10 @@
 
 namespace Shopware\Tests\Functional\Components;
 
-use PHPUnit_Framework_TestCase;
 use Shopware\Components\Captcha\CaptchaRepository;
 use Shopware\Components\Captcha\Exception\CaptchaNotFoundException;
 
-class CaptchaRepositoryTest extends PHPUnit_Framework_TestCase
+class CaptchaRepositoryTest extends \PHPUnit\Framework\TestCase
 {
     public function testThrowCaptchaNotFoundException()
     {

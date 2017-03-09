@@ -30,7 +30,7 @@ use Shopware\Components\Model\ModelManager;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\AttributeBundle\Repository
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
 class GenericRepository implements RepositoryInterface
@@ -57,8 +57,8 @@ class GenericRepository implements RepositoryInterface
 
     /**
      * @param $entity
-     * @param ModelManager $entityManager
-     * @param ReaderInterface $reader
+     * @param ModelManager      $entityManager
+     * @param ReaderInterface   $reader
      * @param SearcherInterface $searcher
      */
     public function __construct(
@@ -75,31 +75,36 @@ class GenericRepository implements RepositoryInterface
 
     /**
      * @param string $entity
+     *
      * @return bool
      */
     public function supports($entity)
     {
-        return ($entity == $this->entity);
+        return $entity == $this->entity;
     }
 
     /**
      * @param SearchCriteria $criteria
+     *
      * @return SearchResult
      */
     public function search(SearchCriteria $criteria)
     {
         if ($criteria->ids) {
             $data = $this->getList($criteria->ids);
+
             return new SearchResult(count($data), $data);
         }
 
         $result = $this->searcher->search($criteria);
         $data = $this->getList($result->getIdentifiers());
+
         return new SearchResult($result->getCount(), $data);
     }
 
     /**
      * @param int[]|string[] $identifiers
+     *
      * @return array[]
      */
     public function getList($identifiers)
@@ -109,6 +114,7 @@ class GenericRepository implements RepositoryInterface
 
     /**
      * @param int|string $identifier
+     *
      * @return array
      */
     public function get($identifier)

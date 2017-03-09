@@ -79,7 +79,6 @@ Ext.define('Shopware.apps.Article.view.variant.ImageRelationProcess', {
                     return;
                 }
 
-                me.showMessage('{s name="image_relation_process/window/success/text"}{/s}');
                 me.destroy();
             },
             failure: function() {

@@ -1,4 +1,27 @@
 <?php
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
+
 use Shopware\Models\Customer\Customer;
 
 /**
@@ -23,8 +46,7 @@ use Shopware\Models\Customer\Customer;
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
-class Shopware_Tests_Api_CustomerTest extends PHPUnit_Framework_TestCase
+class Shopware_Tests_Api_CustomerTest extends PHPUnit\Framework\TestCase
 {
     public $apiBaseUrl = '';
 
@@ -45,9 +67,9 @@ class Shopware_Tests_Api_CustomerTest extends PHPUnit_Framework_TestCase
             );
         }
 
-        $this->apiBaseUrl =  'http://' . $hostname . $helper->Shop()->getBasePath() . '/api';
+        $this->apiBaseUrl = 'http://' . $hostname . $helper->Shop()->getBasePath() . '/api';
 
-        Shopware()->Db()->query('UPDATE s_core_auth SET apiKey = ? WHERE username LIKE "demo"', array(sha1('demo')));
+        Shopware()->Db()->query('UPDATE s_core_auth SET apiKey = ? WHERE username LIKE "demo"', [sha1('demo')]);
     }
 
     /**
@@ -59,12 +81,12 @@ class Shopware_Tests_Api_CustomerTest extends PHPUnit_Framework_TestCase
         $password = sha1('demo');
 
         $adapter = new Zend_Http_Client_Adapter_Curl();
-        $adapter->setConfig(array(
-            'curloptions' => array(
-                CURLOPT_HTTPAUTH    => CURLAUTH_DIGEST,
-                CURLOPT_USERPWD     => "$username:$password"
-            )
-        ));
+        $adapter->setConfig([
+            'curloptions' => [
+                CURLOPT_HTTPAUTH => CURLAUTH_DIGEST,
+                CURLOPT_USERPWD => "$username:$password",
+            ],
+        ]);
 
         $client = new Zend_Http_Client();
         $client->setAdapter($adapter);
@@ -123,48 +145,48 @@ class Shopware_Tests_Api_CustomerTest extends PHPUnit_Framework_TestCase
 
         $birthday = DateTime::createFromFormat('Y-m-d', '1986-12-20')->format(DateTime::ISO8601);
 
-        $requestData = array(
-            "password" => "fooobar",
-            "active"   => true,
-            "email"    => uniqid('', true).'test@foobar.com',
+        $requestData = [
+            'password' => 'fooobar',
+            'active' => true,
+            'email' => uniqid('', true) . 'test@foobar.com',
 
-            "firstlogin" => $firstlogin,
-            "lastlogin"  => $lastlogin,
-            "paymentId"  => 2,
+            'firstlogin' => $firstlogin,
+            'lastlogin' => $lastlogin,
+            'paymentId' => 2,
 
-            "salutation" => "mr",
-            "firstname" => "Max",
-            "lastname"  => "Mustermann",
-            "birthday"  => $birthday,
+            'salutation' => 'mr',
+            'firstname' => 'Max',
+            'lastname' => 'Mustermann',
+            'birthday' => $birthday,
 
-            "billing" => array(
-                "salutation" => "Mr",
-                "firstName"  => "Max",
-                "lastName"   => "Mustermann",
-                "country"    => 2,
-                "street"     => "Fakesreet 123",
-                "city"       => "City",
-                "zipcode"    => 55555,
-            ),
+            'billing' => [
+                'salutation' => 'Mr',
+                'firstName' => 'Max',
+                'lastName' => 'Mustermann',
+                'country' => 2,
+                'street' => 'Fakesreet 123',
+                'city' => 'City',
+                'zipcode' => 55555,
+            ],
 
-            "shipping" => array(
-                "salutation" => "Mr",
-                "company"    => "Widgets Inc.",
-                "firstName"  => "Max",
-                "lastName"   => "Mustermann",
-                "country"    => 2,
-                "street"     => "Fakesreet 123",
-                "city"       => "City",
-                "zipcode"    => 55555,
-            ),
+            'shipping' => [
+                'salutation' => 'Mr',
+                'company' => 'Widgets Inc.',
+                'firstName' => 'Max',
+                'lastName' => 'Mustermann',
+                'country' => 2,
+                'street' => 'Fakesreet 123',
+                'city' => 'City',
+                'zipcode' => 55555,
+            ],
 
-            "debit" => array(
-                "account"       => "Fake Account",
-                "bankCode"      => "55555555",
-                "bankName"      => "Fake Bank",
-                "accountHolder" => "Max Mustermann",
-            ),
-        );
+            'debit' => [
+                'account' => 'Fake Account',
+                'bankCode' => '55555555',
+                'bankName' => 'Fake Bank',
+                'accountHolder' => 'Max Mustermann',
+            ],
+        ];
 
         $requestData = Zend_Json::encode($requestData);
         $client->setRawData($requestData, 'application/json; charset=UTF-8');
@@ -181,7 +203,7 @@ class Shopware_Tests_Api_CustomerTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('success', $result);
         $this->assertTrue($result['success']);
 
-        $location   = $response->getHeader('Location');
+        $location = $response->getHeader('Location');
         $identifier = (int) array_pop(explode('/', $location));
 
         $this->assertGreaterThan(0, $identifier);
@@ -205,47 +227,47 @@ class Shopware_Tests_Api_CustomerTest extends PHPUnit_Framework_TestCase
 
         $birthday = DateTime::createFromFormat('Y-m-d', '1986-12-20')->format(DateTime::ISO8601);
 
-        $requestData = array(
-            "password" => "fooobar",
-            "active"   => true,
-            "email"    => uniqid('', true).'test@foobar.com',
+        $requestData = [
+            'password' => 'fooobar',
+            'active' => true,
+            'email' => uniqid('', true) . 'test@foobar.com',
 
-            "firstlogin" => $firstlogin,
-            "lastlogin"  => $lastlogin,
+            'firstlogin' => $firstlogin,
+            'lastlogin' => $lastlogin,
 
-            "salutation" => "mr",
-            "firstname" => "Max",
-            "lastname"  => "Mustermann",
-            "birthday"  => $birthday,
+            'salutation' => 'mr',
+            'firstname' => 'Max',
+            'lastname' => 'Mustermann',
+            'birthday' => $birthday,
 
-            "billing" => array(
-                "salutation" => "Mr",
-                "firstName"  => "Max",
-                "lastName"   => "Mustermann",
-                "country"    => 2,
-                "street"     => "Fakesreet 123",
-                "city"       => "City",
-                "zipcode"    => 55555,
-            ),
+            'billing' => [
+                'salutation' => 'Mr',
+                'firstName' => 'Max',
+                'lastName' => 'Mustermann',
+                'country' => 2,
+                'street' => 'Fakesreet 123',
+                'city' => 'City',
+                'zipcode' => 55555,
+            ],
 
-            "shipping" => array(
-                "salutation" => "Mr",
-                "company"    => "Widgets Inc.",
-                "firstName"  => "Max",
-                "lastName"   => "Mustermann",
-                "country"    => 2,
-                "street"     => "Fakesreet 123",
-                "city"       => "City",
-                "zipcode"    => 55555,
-            ),
+            'shipping' => [
+                'salutation' => 'Mr',
+                'company' => 'Widgets Inc.',
+                'firstName' => 'Max',
+                'lastName' => 'Mustermann',
+                'country' => 2,
+                'street' => 'Fakesreet 123',
+                'city' => 'City',
+                'zipcode' => 55555,
+            ],
 
-            "debit" => array(
-                "account"       => "Fake Account",
-                "bankCode"      => "55555555",
-                "bankName"      => "Fake Bank",
-                "accountHolder" => "Max Mustermann",
-            ),
-        );
+            'debit' => [
+                'account' => 'Fake Account',
+                'bankCode' => '55555555',
+                'bankName' => 'Fake Bank',
+                'accountHolder' => 'Max Mustermann',
+            ],
+        ];
 
         $requestData = Zend_Json::encode($requestData);
         $client->setRawData($requestData, 'application/json; charset=UTF-8');
@@ -262,7 +284,7 @@ class Shopware_Tests_Api_CustomerTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('success', $result);
         $this->assertTrue($result['success']);
 
-        $location   = $response->getHeader('Location');
+        $location = $response->getHeader('Location');
         $identifier = (int) array_pop(explode('/', $location));
 
         $this->assertGreaterThan(0, $identifier);
@@ -295,50 +317,50 @@ class Shopware_Tests_Api_CustomerTest extends PHPUnit_Framework_TestCase
 
         $birthday = DateTime::createFromFormat('Y-m-d', '1986-12-20')->format(DateTime::ISO8601);
 
-        $requestData = array(
-            "password" => "fooobar",
-            "active"   => true,
-            "email"    => uniqid('', true).'test@foobar.com',
+        $requestData = [
+            'password' => 'fooobar',
+            'active' => true,
+            'email' => uniqid('', true) . 'test@foobar.com',
 
-            "firstlogin" => $firstlogin,
-            "lastlogin"  => $lastlogin,
+            'firstlogin' => $firstlogin,
+            'lastlogin' => $lastlogin,
 
-            "salutation" => "mr",
-            "firstname" => "Max",
-            "lastname"  => "Mustermann",
-            "birthday"  => $birthday,
+            'salutation' => 'mr',
+            'firstname' => 'Max',
+            'lastname' => 'Mustermann',
+            'birthday' => $birthday,
 
-            "billing" => array(
-                "salutation" => "Mr",
-                "firstName"  => "Max",
-                "lastName"   => "Mustermann",
-                "country"    => 2,
-                "street"     => "Fakesreet 123",
-                "city"       => "City",
-                "zipcode"    => 55555,
-            ),
+            'billing' => [
+                'salutation' => 'Mr',
+                'firstName' => 'Max',
+                'lastName' => 'Mustermann',
+                'country' => 2,
+                'street' => 'Fakesreet 123',
+                'city' => 'City',
+                'zipcode' => 55555,
+            ],
 
-            "shipping" => array(
-                "salutation" => "Mr",
-                "company"    => "Widgets Inc.",
-                "firstName"  => "Max",
-                "lastName"   => "Mustermann",
-                "country"    => 2,
-                "street"     => "Fakesreet 123",
-                "city"       => "City",
-                "zipcode"    => 55555,
-            ),
+            'shipping' => [
+                'salutation' => 'Mr',
+                'company' => 'Widgets Inc.',
+                'firstName' => 'Max',
+                'lastName' => 'Mustermann',
+                'country' => 2,
+                'street' => 'Fakesreet 123',
+                'city' => 'City',
+                'zipcode' => 55555,
+            ],
 
-            "paymentData" => array(
-                array(
-                    "paymentMeanId"   => 2,
-                    "accountNumber" => "Fake Account",
-                    "bankCode"      => "55555555",
-                    "bankName"      => "Fake Bank",
-                    "accountHolder" => "Max Mustermann",
-                ),
-            ),
-        );
+            'paymentData' => [
+                [
+                    'paymentMeanId' => 2,
+                    'accountNumber' => 'Fake Account',
+                    'bankCode' => '55555555',
+                    'bankName' => 'Fake Bank',
+                    'accountHolder' => 'Max Mustermann',
+                ],
+            ],
+        ];
 
         $requestData = Zend_Json::encode($requestData);
         $client->setRawData($requestData, 'application/json; charset=UTF-8');
@@ -355,7 +377,7 @@ class Shopware_Tests_Api_CustomerTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('success', $result);
         $this->assertTrue($result['success']);
 
-        $location   = $response->getHeader('Location');
+        $location = $response->getHeader('Location');
         $identifier = (int) array_pop(explode('/', $location));
 
         $this->assertGreaterThan(0, $identifier);
@@ -376,14 +398,14 @@ class Shopware_Tests_Api_CustomerTest extends PHPUnit_Framework_TestCase
     {
         $client = $this->getHttpClient()->setUri($this->apiBaseUrl . '/customers/');
 
-        $requestData = array(
-            'active'  => true,
-            'email'   => 'invalid',
-            'billing' => array(
+        $requestData = [
+            'active' => true,
+            'email' => 'invalid',
+            'billing' => [
                 'firstName' => 'Max',
-                'lastName'  => 'Mustermann',
-            ),
-        );
+                'lastName' => 'Mustermann',
+            ],
+        ];
         $requestData = Zend_Json::encode($requestData);
 
         $client->setRawData($requestData, 'application/json; charset=UTF-8');
@@ -440,10 +462,10 @@ class Shopware_Tests_Api_CustomerTest extends PHPUnit_Framework_TestCase
     {
         $client = $this->getHttpClient()->setUri($this->apiBaseUrl . '/customers/');
 
-        $requestData = array(
-            'active'  => true,
-            'email'   => 'test@foobar.com'
-        );
+        $requestData = [
+            'active' => true,
+            'email' => 'test@foobar.com',
+        ];
         $requestData = Zend_Json::encode($requestData);
 
         $client->setRawData($requestData, 'application/json; charset=UTF-8');
@@ -467,10 +489,10 @@ class Shopware_Tests_Api_CustomerTest extends PHPUnit_Framework_TestCase
     {
         $client = $this->getHttpClient()->setUri($this->apiBaseUrl . '/customers/' . $id);
 
-        $requestData = array(
-            'active'  => true,
-            'email'  => 'invalid',
-        );
+        $requestData = [
+            'active' => true,
+            'email' => 'invalid',
+        ];
         $requestData = Zend_Json::encode($requestData);
 
         $client->setRawData($requestData, 'application/json; charset=UTF-8');
@@ -497,10 +519,10 @@ class Shopware_Tests_Api_CustomerTest extends PHPUnit_Framework_TestCase
 
         $customer = Shopware()->Models()->getRepository(Customer::class)->find($id);
 
-        $requestData = array(
-            'active'  => true,
-            'email'   => $customer->getEmail(),
-        );
+        $requestData = [
+            'active' => true,
+            'email' => $customer->getEmail(),
+        ];
         $requestData = Zend_Json::encode($requestData);
 
         $client->setRawData($requestData, 'application/json; charset=UTF-8');
@@ -567,10 +589,10 @@ class Shopware_Tests_Api_CustomerTest extends PHPUnit_Framework_TestCase
         $id = 99999999;
         $client = $this->getHttpClient()->setUri($this->apiBaseUrl . '/customers/' . $id);
 
-        $requestData = array(
-            'active'  => true,
-            'email'   => 'test@foobar.com'
-        );
+        $requestData = [
+            'active' => true,
+            'email' => 'test@foobar.com',
+        ];
         $requestData = Zend_Json::encode($requestData);
 
         $client->setRawData($requestData, 'application/json; charset=UTF-8');

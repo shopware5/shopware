@@ -6136,7 +6136,7 @@ TRUNCATE TABLE `s_core_units`;
 INSERT INTO `s_core_units` (`id`, `unit`, `description`) VALUES
 (1, 'l', 'Liter'),
 (2, 'g', 'Gramm'),
-(5, 'lfm', 'lfm'),
+(5, 'lfm', 'Laufende(r) Meter'),
 (6, 'kg', 'Kilogramm'),
 (8, 'Paket(e)', 'Paket(e)'),
 (9, 'Stck.', 'Stück'),
@@ -6857,7 +6857,7 @@ INSERT INTO `s_emotion_element_value` (`id`, `emotionID`, `elementID`, `componen
 (3606, 2, 1297, 5, 10, 'media/image/genuss_tees_banner.jpg'),
 (3607, 2, 1297, 5, 11, '11'),
 (3608, 2, 1298, 11, 36, 'selected_article'),
-(3609, 2, 1298, 11, 37, '[{"position":0,"name":"Special Finish Lagerkorn X.O. 32%","ordernumber":"SW10009","articleId":9,"path":""},{"position":1,"name":"M\\u00fcnsterl\\u00e4nder Lagerkorn 32%","ordernumber":"SW10002.3","articleId":2,"path":""},{"position":2,"name":"Cigar Special 40%","ordernumber":"SW10006","articleId":6,"path":""},{"position":3,"name":"Pai Mu Tan Tee weiss","ordernumber":"SW10013","articleId":13,"path":""},{"position":4,"name":"Silver Yin Zhen Tee weiss","ordernumber":"SW10014","articleId":14,"path":""},{"position":5,"name":"LUNG CHING gr\\u00fcner Tee","ordernumber":"SW10015","articleId":15,"path":""}]'),
+(3609, 2, 1298, 11, 37, '|SW10009|SW10002.3|SW10006|SW10013|SW10014|SW10015|'),
 (3610, 2, 1298, 11, 38, '25'),
 (3611, 2, 1298, 11, 39, 'Unsere Top-Artikel'),
 (3612, 2, 1298, 11, 41, ''),

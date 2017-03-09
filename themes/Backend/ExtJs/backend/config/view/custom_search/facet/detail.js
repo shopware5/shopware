@@ -69,6 +69,7 @@ Ext.define('Shopware.apps.Config.view.custom_search.facet.Detail', {
             name: 'active',
             fieldLabel: '{s name="active"}{/s}',
             labelWidth: 150,
+            helpText: '{s name="active_help_filter"}{/s}',
             inputValue: true,
             uncheckedValue: false
         });
@@ -78,11 +79,16 @@ Ext.define('Shopware.apps.Config.view.custom_search.facet.Detail', {
             fieldLabel: '{s name="display_in_categories"}{/s}',
             labelWidth: 150,
             inputValue: true,
+            helpText: '{s name="display_in_categories_help_filter"}{/s}',
             uncheckedValue: false
         });
 
         return [{
             xtype: 'fieldset',
+            layout: 'anchor',
+            defaults: {
+                anchor: '100%'
+            },
             title: '{s name="facet_settings"}{/s}',
             items: [me.nameField, me.activeField, me.displayInCategoriesField]
         }, {

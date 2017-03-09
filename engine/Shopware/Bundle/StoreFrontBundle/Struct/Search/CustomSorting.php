@@ -40,7 +40,7 @@ class CustomSorting extends Extendable
     protected $label;
 
     /**
-     * @var boolean
+     * @var bool
      */
     protected $displayInCategories;
 
@@ -87,7 +87,7 @@ class CustomSorting extends Extendable
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function displayInCategories()
     {
@@ -95,7 +95,7 @@ class CustomSorting extends Extendable
     }
 
     /**
-     * @param boolean $displayInCategories
+     * @param bool $displayInCategories
      */
     public function setDisplayInCategories($displayInCategories)
     {

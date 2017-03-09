@@ -53,7 +53,7 @@ class PathBuilder
      */
     public function __construct($basePath, $sourcePath, $backupPath)
     {
-        $baseDir   = rtrim($basePath, '/')   . '/';
+        $baseDir = rtrim($basePath, '/') . '/';
         $sourceDir = rtrim($sourcePath, '/') . '/';
         $backupDir = rtrim($backupPath, '/') . '/';
 
@@ -61,7 +61,7 @@ class PathBuilder
         $backupDirRelative = str_replace($baseDir, '', $backupDir);
 
         $this->sourceDir = $sourceDir;
-        $this->baseDir   = $basePath;
+        $this->baseDir = $basePath;
 
         $this->updateDirRelative = $updateDirRelative;
         $this->backupDirRelative = $backupDirRelative;
@@ -110,7 +110,7 @@ class PathBuilder
      */
     public function createBackupPath(\SplFileInfo $file)
     {
-        return $this-> backupDirRelative . $this->createTargetPath($file);
+        return $this->backupDirRelative . $this->createTargetPath($file);
     }
 
     /**

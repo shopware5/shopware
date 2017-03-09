@@ -25,10 +25,11 @@
 namespace Shopware\Components;
 
 use Doctrine\DBAL\Connection;
+use Shopware\Components\Routing\Router;
+use Shopware\Components\Routing\RouterInterface;
 
 /**
  * Class SitePageMenu
- * @package Shopware\Components
  */
 class SitePageMenu
 {
@@ -38,11 +39,18 @@ class SitePageMenu
     private $connection;
 
     /**
-     * @param Connection $connection
+     * @var RouterInterface
      */
-    public function __construct(Connection $connection)
+    private $router;
+
+    /**
+     * @param Connection      $connection
+     * @param RouterInterface $router
+     */
+    public function __construct(Connection $connection, RouterInterface $router)
     {
         $this->connection = $connection;
+        $this->router = $router;
     }
 
     /**
@@ -50,18 +58,20 @@ class SitePageMenu
      *
      * @param $shopId
      * @param $activeId
+     *
      * @return array
      */
     public function getTree($shopId, $activeId)
     {
         $query = $this->getQuery($shopId);
 
-        /**@var $statement \PDOStatement*/
+        /** @var $statement \PDOStatement */
         $statement = $query->execute();
 
         $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
 
         $menu = [];
+        $links = [];
         foreach ($data as $site) {
             $key = !empty($site['mapping']) ? $site['mapping'] : $site['group'];
 
@@ -69,8 +79,23 @@ class SitePageMenu
                 $menu[$key] = [];
             }
 
+            $id = (int) $site['id'];
+            if (!empty($site['link'])) {
+                $links[$id] = $site['link'];
+            } else {
+                $links[$id] = [
+                    'controller' => 'custom',
+                    'action' => 'index',
+                    'sCustom' => $id,
+                ];
+            }
+
             $menu[$key][] = $site;
         }
+
+        /** @var Router $router */
+        $seoUrls = $this->router->generateList($links);
+        $menu = $this->assignSeoUrls($menu, $seoUrls);
 
         $result = [];
         foreach ($menu as $key => $group) {
@@ -82,9 +107,25 @@ class SitePageMenu
     }
 
     /**
+     * Checks if the provided menu contains already an entry for the provided site.
+     * If the provided site contains a mapping but the existing not, override the existing.
+     *
+     * @param $menu
+     * @param $key
+     * @param $site
+     *
+     * @return bool
+     */
+    public function overrideExisting($menu, $key, $site)
+    {
+        return !empty($site['mapping']) && empty($menu[$key][0]['mapping']);
+    }
+
+    /**
      * @param $parentId
      * @param $sites
      * @param $activeId
+     *
      * @return array
      */
     private function buildSiteTree($parentId, $sites, $activeId)
@@ -96,7 +137,7 @@ class SitePageMenu
             if ($site['parentID'] != $parentId) {
                 continue;
             }
-            $id = $site['id'];
+            $id = (int) $site['id'];
 
             //call recursive for tree building
             $site['subPages'] = $this->buildSiteTree(
@@ -119,6 +160,7 @@ class SitePageMenu
 
     /**
      * @param $shopId
+     *
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
     private function getQuery($shopId)
@@ -132,7 +174,7 @@ class SitePageMenu
             'page.target',
             'page.parentID',
             'groups.key as `group`',
-            'mapping.key as mapping'
+            'mapping.key as mapping',
         ]);
 
         $query->from('s_cms_static', 'page');
@@ -173,20 +215,26 @@ class SitePageMenu
         $query->setParameter(':shopId', $shopId)
             ->setParameter(':staticShopId', '%|' . $shopId . '|%');
 
-
         return $query;
     }
 
     /**
-     * Checks if the provided menu contains already an entry for the provided site.
-     * If the provided site contains a mapping but the existing not, override the existing.
-     * @param $menu
-     * @param $key
-     * @param $site
-     * @return bool
+     * @param array[]  $menu
+     * @param string[] $seoUrls
+     *
+     * @return array
      */
-    public function overrideExisting($menu, $key, $site)
+    private function assignSeoUrls($menu, $seoUrls)
     {
-        return (!empty($site['mapping']) && empty($menu[$key][0]['mapping']));
+        foreach ($menu as &$group) {
+            foreach ($group as &$site) {
+                $key = (int) $site['id'];
+                if (array_key_exists($key, $seoUrls)) {
+                    $site['link'] = $seoUrls[$key];
+                }
+            }
+        }
+
+        return $menu;
     }
 }

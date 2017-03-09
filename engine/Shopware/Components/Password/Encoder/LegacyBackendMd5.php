@@ -26,7 +26,7 @@ namespace Shopware\Components\Password\Encoder;
 
 /**
  * @category  Shopware
- * @package   Shopware\Components\Password\Encoder
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class LegacyBackendMd5 implements PasswordEncoderInterface
@@ -40,30 +40,33 @@ class LegacyBackendMd5 implements PasswordEncoderInterface
     }
 
     /**
-     * @param  string $password
-     * @param  string $hash
+     * @param string $password
+     * @param string $hash
+     *
      * @return bool
      */
     public function isPasswordValid($password, $hash)
     {
-        $salt = "A9ASD:_AD!_=%a8nx0asssblPlasS$";
+        $salt = 'A9ASD:_AD!_=%a8nx0asssblPlasS$';
 
         return hash_equals($hash, md5($salt . md5($password)));
     }
 
     /**
-     * @param  string $password
+     * @param string $password
+     *
      * @return string
      */
     public function encodePassword($password)
     {
-        $salt = "A9ASD:_AD!_=%a8nx0asssblPlasS$";
+        $salt = 'A9ASD:_AD!_=%a8nx0asssblPlasS$';
 
         return md5($salt . md5($password));
     }
 
     /**
-     * @param  string $hash
+     * @param string $hash
+     *
      * @return bool
      */
     public function isReencodeNeeded($hash)

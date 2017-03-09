@@ -46,36 +46,37 @@ class EmotionHydrator extends Hydrator
 
     /**
      * @param array $data
+     *
      * @return Emotion
      */
     public function hydrate(array $data)
     {
         $emotion = new Emotion();
 
-        $emotion->setId((int)$data['__emotion_id']);
-        $emotion->setActive((bool)$data['__emotion_active']);
+        $emotion->setId((int) $data['__emotion_id']);
+        $emotion->setActive((bool) $data['__emotion_active']);
         $emotion->setName($data['__emotion_name']);
-        $emotion->setCols((int)$data['__emotion_cols']);
-        $emotion->setCellSpacing((int)$data['__emotion_cell_spacing']);
-        $emotion->setCellHeight((int)$data['__emotion_cell_height']);
-        $emotion->setArticleHeight((int)$data['__emotion_article_height']);
-        $emotion->setRows((int)$data['__emotion_rows']);
+        $emotion->setCols((int) $data['__emotion_cols']);
+        $emotion->setCellSpacing((int) $data['__emotion_cell_spacing']);
+        $emotion->setCellHeight((int) $data['__emotion_cell_height']);
+        $emotion->setArticleHeight((int) $data['__emotion_article_height']);
+        $emotion->setRows((int) $data['__emotion_rows']);
         $emotion->setValidFrom($data['__emotion_valid_from'] ? date_create($data['__emotion_valid_from']) : null);
         $emotion->setValidTo($data['__emotion_valid_to'] ? date_create($data['__emotion_valid_to']) : null);
-        $emotion->setUserId((int)$data['__emotion_user_id']);
-        $emotion->setShowListing((bool)$data['__emotion_show_listing']);
-        $emotion->setIsLandingPage((bool)$data['__emotion_is_landingpage']);
+        $emotion->setUserId((int) $data['__emotion_user_id']);
+        $emotion->setShowListing((bool) $data['__emotion_show_listing']);
+        $emotion->setIsLandingPage((bool) $data['__emotion_is_landingpage']);
         $emotion->setSeoTitle($data['__emotion_seo_title']);
         $emotion->setSeoKeywords($data['__emotion_seo_keywords']);
         $emotion->setSeoDescription($data['__emotion_seo_description']);
         $emotion->setCreateDate($data['__emotion_create_date'] ? date_create($data['__emotion_create_date']) : null);
         $emotion->setModifiedDate($data['__emotion_modified'] ? date_create($data['__emotion_modified']) : null);
-        $emotion->setTemplateId((int)$data['__emotion_template_id']);
+        $emotion->setTemplateId((int) $data['__emotion_template_id']);
         $emotion->setDevices(array_map('intval', explode(',', $data['__emotion_device'])));
-        $emotion->setFullscreen((bool)$data['__emotion_fullscreen']);
+        $emotion->setFullscreen((bool) $data['__emotion_fullscreen']);
         $emotion->setMode($data['__emotion_mode']);
-        $emotion->setPosition((int)$data['__emotion_position']);
-        $emotion->setParentId($data['__emotion_parent_id'] !== null ? (int)$data['__emotion_parent_id'] : null);
+        $emotion->setPosition((int) $data['__emotion_position']);
+        $emotion->setParentId($data['__emotion_parent_id'] !== null ? (int) $data['__emotion_parent_id'] : null);
         $emotion->setIsPreview((bool) $data['__emotion_preview_id']);
         $emotion->setPreviewSecret($data['__emotion_preview_secret']);
         $emotion->setCategoryIds(explode(',', $data['__emotion_category_ids']));
@@ -94,7 +95,7 @@ class EmotionHydrator extends Hydrator
 
     /**
      * @param Emotion $emotion
-     * @param array $data
+     * @param array   $data
      */
     private function assignTemplate(Emotion $emotion, array $data)
     {

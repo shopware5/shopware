@@ -32,8 +32,9 @@ interface MediaReplaceServiceInterface
     /**
      * replace the media by the given mediaId with the given file content
      *
-     * @param int $mediaId
+     * @param int          $mediaId
      * @param UploadedFile $file
+     *
      * @throws \Exception
      */
     public function replace($mediaId, UploadedFile $file);

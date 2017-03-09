@@ -24,11 +24,10 @@
 
 namespace Shopware\Models\User;
 
-use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
 
 /**
- *
  * Shopware resource model represents a single authentication resource.
  * <br>
  * The Shopware resource model represents a row of the s_user table.
@@ -48,7 +47,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Resource extends ModelEntity implements \Zend_Acl_Resource_Interface
 {
     /**
-     * @var integer $id
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
@@ -57,14 +56,14 @@ class Resource extends ModelEntity implements \Zend_Acl_Resource_Interface
     private $id;
 
     /**
-     * @var string $name
+     * @var string
      *
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
     private $name;
 
     /**
-     * @var integer $pluginId
+     * @var int
      *
      * @ORM\Column(name="pluginID", type="integer", nullable=true)
      */
@@ -75,7 +74,8 @@ class Resource extends ModelEntity implements \Zend_Acl_Resource_Interface
      * The association is joined over the s_core_acl_privileges.resourceID field and the s_core_acl_resources.id
      *
      * @ORM\OneToMany(targetEntity="Shopware\Models\User\Privilege", mappedBy="resource")
-     * @var $privileges \Doctrine\Common\Collections\ArrayCollection
+     *
+     * @var \Doctrine\Common\Collections\ArrayCollection
      */
     private $privileges;
 
@@ -90,7 +90,7 @@ class Resource extends ModelEntity implements \Zend_Acl_Resource_Interface
     /**
      * Get id
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -101,11 +101,13 @@ class Resource extends ModelEntity implements \Zend_Acl_Resource_Interface
      * Set name
      *
      * @param string $name
-     * @return Resource
+     *
+     * @return resource
      */
     public function setName($name)
     {
         $this->name = $name;
+
         return $this;
     }
 
@@ -121,6 +123,7 @@ class Resource extends ModelEntity implements \Zend_Acl_Resource_Interface
 
     /**
      * Getter function for the pluginId property
+     *
      * @return int
      */
     public function getPluginId()
@@ -130,6 +133,7 @@ class Resource extends ModelEntity implements \Zend_Acl_Resource_Interface
 
     /**
      * Setter function for the pluginId property
+     *
      * @param int $pluginId
      */
     public function setPluginId($pluginId)
@@ -168,12 +172,13 @@ class Resource extends ModelEntity implements \Zend_Acl_Resource_Interface
      * over Shopware()->Models()->persist() / ->flush().
      *
      * Removes the released resource.
+     *
      * @ORM\PreRemove
      */
     public function onRemove()
     {
-        $sql= "DELETE FROM s_core_acl_roles WHERE resourceID = ?";
-        Shopware()->Db()->query($sql, array($this->id));
+        $sql = 'DELETE FROM s_core_acl_roles WHERE resourceID = ?';
+        Shopware()->Db()->query($sql, [$this->id]);
     }
 
     /**

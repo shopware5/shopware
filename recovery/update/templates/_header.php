@@ -31,7 +31,7 @@
     </script>
 </head>
 
-<body class="<?= (!UPDATE_IS_MANUAL && $tab == "dbmigration" || !UPDATE_IS_MANUAL && $tab == "done") ? 'auto' : '' ?>">
+<body class="<?= (!UPDATE_IS_MANUAL && $tab == 'dbmigration' || !UPDATE_IS_MANUAL && $tab == 'done') ? 'auto' : '' ?>">
 <div class="page--wrap">
 
     <!-- Header -->
@@ -48,24 +48,24 @@
         <!-- Navigation list -->
         <nav class="navigation--main block">
             <ul class="navigation--list">
-                <li class="navigation--entry <?= ($tab == "start") ? "is--active" : "" ?>">
-                    <span class="navigation--link is--complete"><?= $language["tab_start"];?></span>
+                <li class="navigation--entry <?= ($tab == 'start') ? 'is--active' : '' ?>">
+                    <span class="navigation--link"><?= $language['tab_start']; ?></span>
                 </li>
 
-                <li class="navigation--entry  <?= ($tab == "system") ? "is--active" : "" ?>">
-                    <span class="navigation--link"><?= $language["tab_check"];?></span>
+                <li class="navigation--entry  <?= ($tab == 'system') ? 'is--active' : '' ?>">
+                    <span class="navigation--link"><?= $language['tab_check']; ?></span>
                 </li>
 
-                <li class="navigation--entry  <?= ($tab == "dbmigration") ? "is--active" : "" ?>">
-                    <span class="navigation--link"><?= $language["tab_migration"];?></span>
+                <li class="navigation--entry  <?= ($tab == 'dbmigration') ? 'is--active' : '' ?>">
+                    <span class="navigation--link"><?= $language['tab_migration']; ?></span>
                 </li>
 
-                <li class="navigation--entry <?= ($tab == "cleanup") ? "is--active" : "" ?>">
-                    <span class="navigation--link"><?= $language["tab_cleanup"];?></span>
+                <li class="navigation--entry <?= ($tab == 'cleanup') ? 'is--active' : '' ?>">
+                    <span class="navigation--link"><?= $language['tab_cleanup']; ?></span>
                 </li>
 
-                <li class="navigation--entry <?= ($tab == "done") ? "is--active" : "" ?>">
-                    <span class="navigation--link"><?= $language["tab_done"];?></span>
+                <li class="navigation--entry <?= ($tab == 'done') ? 'is--active' : '' ?>">
+                    <span class="navigation--link"><?= $language['tab_done']; ?></span>
                 </li>
             </ul>
         </nav>

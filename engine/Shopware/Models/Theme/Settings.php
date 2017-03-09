@@ -24,18 +24,17 @@
 
 namespace Shopware\Models\Theme;
 
-use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
 
 /**
- *
  * @ORM\Table(name="s_core_theme_settings")
  * @ORM\Entity
  */
 class Settings extends ModelEntity
 {
     /**
-     * @var integer $id
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
@@ -44,37 +43,37 @@ class Settings extends ModelEntity
     private $id;
 
     /**
-     * @var boolean $forceCompile
+     * @var bool
      * @ORM\Column(name="compiler_force", type="boolean", nullable=false)
      */
     private $forceCompile = false;
 
     /**
-     * @var boolean $createSourceMap
+     * @var bool
      * @ORM\Column(name="compiler_create_source_map", type="boolean", nullable=false)
      */
     private $createSourceMap = false;
 
     /**
-     * @var boolean $compressCss
+     * @var bool
      * @ORM\Column(name="compiler_compress_css", type="boolean", nullable=false)
      */
     private $compressCss = false;
 
     /**
-     * @var boolean $compressJs
+     * @var bool
      * @ORM\Column(name="compiler_compress_js", type="boolean", nullable=false)
      */
     private $compressJs = false;
 
     /**
-     * @var boolean $reloadSnippets
+     * @var bool
      * @ORM\Column(name="force_reload_snippets", type="boolean", nullable=false)
      */
     private $reloadSnippets = false;
 
     /**
-     * @param boolean $compressCss
+     * @param bool $compressCss
      */
     public function setCompressCss($compressCss)
     {
@@ -82,7 +81,7 @@ class Settings extends ModelEntity
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function getCompressCss()
     {
@@ -90,7 +89,7 @@ class Settings extends ModelEntity
     }
 
     /**
-     * @param boolean $compressJs
+     * @param bool $compressJs
      */
     public function setCompressJs($compressJs)
     {
@@ -98,7 +97,7 @@ class Settings extends ModelEntity
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function getCompressJs()
     {
@@ -106,7 +105,7 @@ class Settings extends ModelEntity
     }
 
     /**
-     * @param boolean $createSourceMap
+     * @param bool $createSourceMap
      */
     public function setCreateSourceMap($createSourceMap)
     {
@@ -114,7 +113,7 @@ class Settings extends ModelEntity
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function getCreateSourceMap()
     {
@@ -122,7 +121,7 @@ class Settings extends ModelEntity
     }
 
     /**
-     * @param boolean $forceCompile
+     * @param bool $forceCompile
      */
     public function setForceCompile($forceCompile)
     {
@@ -130,7 +129,7 @@ class Settings extends ModelEntity
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function getForceCompile()
     {
@@ -146,7 +145,7 @@ class Settings extends ModelEntity
     }
 
     /**
-     * @param boolean $reloadSnippets
+     * @param bool $reloadSnippets
      */
     public function setReloadSnippets($reloadSnippets)
     {
@@ -154,7 +153,7 @@ class Settings extends ModelEntity
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function getReloadSnippets()
     {

@@ -44,7 +44,7 @@ class Repository implements RepositoryInterface
     private $reflector;
 
     /**
-     * @param Connection $conn
+     * @param Connection               $conn
      * @param LogawareReflectionHelper $reflector
      */
     public function __construct(Connection $conn, LogawareReflectionHelper $reflector)
@@ -55,7 +55,7 @@ class Repository implements RepositoryInterface
 
     /**
      * @param Criteria $criteria
-     * @param int $productStreamId
+     * @param int      $productStreamId
      */
     public function prepareCriteria(Criteria $criteria, $productStreamId)
     {
@@ -63,17 +63,29 @@ class Repository implements RepositoryInterface
 
         if ($productStream['type'] == 1) {
             $this->prepareConditionStream($productStream, $criteria);
+
             return;
         }
 
         if ($productStream['type'] == 2) {
             $this->prepareSelectionStream($productStream, $criteria);
+
             return;
         }
     }
 
     /**
-     * @param array $productStream
+     * @param array $serializedConditions
+     *
+     * @return object[]
+     */
+    public function unserialize($serializedConditions)
+    {
+        return $this->reflector->unserialize($serializedConditions, 'Serialization error in Product stream');
+    }
+
+    /**
+     * @param array    $productStream
      * @param Criteria $criteria
      */
     private function prepareConditionStream(array $productStream, Criteria $criteria)
@@ -87,7 +99,7 @@ class Repository implements RepositoryInterface
     }
 
     /**
-     * @param array $productStream
+     * @param array    $productStream
      * @param Criteria $criteria
      */
     private function prepareSelectionStream(array $productStream, Criteria $criteria)
@@ -103,21 +115,13 @@ class Repository implements RepositoryInterface
     }
 
     /**
-     * @param array $serializedConditions
-     * @return object[]
-     */
-    public function unserialize($serializedConditions)
-    {
-        return $this->reflector->unserialize($serializedConditions, 'Serialization error in Product stream');
-    }
-
-    /**
      * @param int $productStreamId
+     *
      * @return string[]
      */
     private function getOrdernumbers($productStreamId)
     {
-        $query = <<<SQL
+        $query = <<<'SQL'
 SELECT
     s_articles_details.ordernumber
 FROM s_product_streams_selection
@@ -136,17 +140,18 @@ SQL;
 
     /**
      * @param int $productStreamId
+     *
      * @return array
      */
     private function getStreamById($productStreamId)
     {
         $row = $this->conn->fetchAssoc(
-            "SELECT streams.*, customSorting.sortings as customSortings
+            'SELECT streams.*, customSorting.sortings as customSortings
              FROM s_product_streams streams
              LEFT JOIN s_search_custom_sorting customSorting
                  ON customSorting.id = streams.sorting_id
              WHERE streams.id = :productStreamId
-             LIMIT 1",
+             LIMIT 1',
             ['productStreamId' => $productStreamId]
         );
 
@@ -154,7 +159,7 @@ SQL;
     }
 
     /**
-     * @param array $productStream
+     * @param array    $productStream
      * @param Criteria $criteria
      */
     private function assignSortings(array $productStream, Criteria $criteria)
@@ -174,7 +179,7 @@ SQL;
     }
 
     /**
-     * @param array $productStream
+     * @param array    $productStream
      * @param Criteria $criteria
      */
     private function assignConditions(array $productStream, Criteria $criteria)

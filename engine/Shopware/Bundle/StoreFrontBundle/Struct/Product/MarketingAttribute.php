@@ -28,7 +28,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Attribute;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\StoreFrontBundle\Struct\Product
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class MarketingAttribute extends Attribute implements \JsonSerializable
@@ -49,7 +49,7 @@ class MarketingAttribute extends Attribute implements \JsonSerializable
     protected $comingSoon = false;
 
     /**
-     * @param boolean $comingSoon
+     * @param bool $comingSoon
      */
     public function setComingSoon($comingSoon)
     {
@@ -57,7 +57,7 @@ class MarketingAttribute extends Attribute implements \JsonSerializable
     }
 
     /**
-     * @param boolean $isNew
+     * @param bool $isNew
      */
     public function setIsNew($isNew)
     {
@@ -65,7 +65,7 @@ class MarketingAttribute extends Attribute implements \JsonSerializable
     }
 
     /**
-     * @param boolean $isTopSeller
+     * @param bool $isTopSeller
      */
     public function setIsTopSeller($isTopSeller)
     {
@@ -73,7 +73,7 @@ class MarketingAttribute extends Attribute implements \JsonSerializable
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function comingSoon()
     {
@@ -81,7 +81,7 @@ class MarketingAttribute extends Attribute implements \JsonSerializable
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isNew()
     {
@@ -89,7 +89,7 @@ class MarketingAttribute extends Attribute implements \JsonSerializable
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isTopSeller()
     {
@@ -97,7 +97,7 @@ class MarketingAttribute extends Attribute implements \JsonSerializable
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function jsonSerialize()
     {
