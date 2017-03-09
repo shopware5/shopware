@@ -25,7 +25,6 @@
 namespace Shopware\Bundle\StoreFrontBundle\Gateway;
 
 use Doctrine\DBAL\Connection;
-
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
@@ -81,13 +80,13 @@ class GraduatedPricesGateway
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\GraduatedPricesGatewayInterface::get()
      *
-     * @param Struct\ListProduct[]        $products
-     * @param Struct\ShopContextInterface $context
-     * @param Struct\Customer\Group       $customerGroup
+     * @param Struct\ListProduct[]      $products
+     * @param Struct\TranslationContext $context
+     * @param Struct\Customer\Group     $customerGroup
      *
      * @return array indexed by the product order number, each array element contains a Struct\Product\PriceRule array
      */
-    public function getList($products, Struct\ShopContextInterface $context, Struct\Customer\Group $customerGroup)
+    public function getList($products, Struct\TranslationContext $context, Struct\Customer\Group $customerGroup)
     {
         $ids = [];
         foreach ($products as $product) {

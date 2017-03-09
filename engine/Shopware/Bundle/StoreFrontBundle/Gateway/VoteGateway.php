@@ -25,7 +25,6 @@
 namespace Shopware\Bundle\StoreFrontBundle\Gateway;
 
 use Doctrine\DBAL\Connection;
-
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
@@ -89,12 +88,12 @@ class VoteGateway
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\VoteGatewayInterface::get()
      *
-     * @param Struct\BaseProduct[]        $products
-     * @param Struct\ShopContextInterface $context
+     * @param Struct\BaseProduct[]      $products
+     * @param Struct\TranslationContext $context
      *
      * @return array Indexed by the product number. Each elements contains a Struct\Product\Vote array.
      */
-    public function getList($products, Struct\ShopContextInterface $context)
+    public function getList($products, Struct\TranslationContext $context)
     {
         $ids = [];
         foreach ($products as $product) {
@@ -115,7 +114,7 @@ class VoteGateway
 
         if ($this->config->get('displayOnlySubShopVotes')) {
             $query->andWhere('(vote.shop_id = :shopId OR vote.shop_id IS NULL)');
-            $query->setParameter(':shopId', $context->getShop()->getId());
+            $query->setParameter(':shopId', $context->getShopId());
         }
 
         /** @var $statement \Doctrine\DBAL\Driver\ResultStatement */

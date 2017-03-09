@@ -40,6 +40,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Customer\Group;
 use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Tax;
+use Shopware\Bundle\StoreFrontBundle\Struct\TranslationContext;
 
 class CartContext implements CartContextInterface, \JsonSerializable
 {
@@ -202,5 +203,10 @@ class CartContext implements CartContextInterface, \JsonSerializable
     public function getState(): ? State
     {
         return $this->shopContext->getState();
+    }
+
+    public function getTranslationContext(): TranslationContext
+    {
+        return $this->shopContext->getTranslationContext();
     }
 }

@@ -103,7 +103,7 @@ class StockDeliverySeparator
                 continue;
             }
 
-            $outOfStock = abs($item->getStock() - $quantity);
+            $outOfStock = (int) abs($item->getStock() - $quantity);
 
             $position = $this->recalculatePosition(
                 $item,
@@ -139,7 +139,7 @@ class StockDeliverySeparator
 
     /**
      * @param Stackable|CalculatedLineItemInterface|Deliverable $item
-     * @param float                                             $quantity
+     * @param int                                               $quantity
      * @param DeliveryDate                                      $deliveryDate
      * @param CartContextInterface                              $context
      *
@@ -147,7 +147,7 @@ class StockDeliverySeparator
      */
     private function recalculatePosition(
         Stackable $item,
-        $quantity,
+        int $quantity,
         DeliveryDate $deliveryDate,
         CartContextInterface $context
     ): DeliveryPosition {

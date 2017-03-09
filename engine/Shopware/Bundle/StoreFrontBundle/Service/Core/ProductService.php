@@ -131,7 +131,7 @@ class ProductService implements Service\ProductServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function getList(array $numbers, Struct\ProductContextInterface $context)
+    public function getList(array $numbers, Struct\ShopContextInterface $context)
     {
         $listProducts = $this->listProductService->getList($numbers, $context);
         $products = $this->createFromListProducts($listProducts, $context);
@@ -140,12 +140,12 @@ class ProductService implements Service\ProductServiceInterface
     }
 
     /**
-     * @param Struct\ListProduct[]           $listProducts
-     * @param Struct\ProductContextInterface $context
+     * @param Struct\ListProduct[]        $listProducts
+     * @param Struct\ShopContextInterface $context
      *
      * @return Struct\Product[] indexed by order number
      */
-    private function createFromListProducts(array $listProducts, Struct\ProductContextInterface $context)
+    private function createFromListProducts(array $listProducts, Struct\ShopContextInterface $context)
     {
         $votes = $this->voteService->getList($listProducts, $context);
 

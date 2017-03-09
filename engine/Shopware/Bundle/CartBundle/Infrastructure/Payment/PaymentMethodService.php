@@ -49,7 +49,7 @@ class PaymentMethodService
      */
     public function getAvailable(CalculatedCart $cart, CartContextInterface $context): array
     {
-        $payments = $this->gateway->getAll($context);
+        $payments = $this->gateway->getAll($context->getTranslationContext());
 
         return $payments;
     }

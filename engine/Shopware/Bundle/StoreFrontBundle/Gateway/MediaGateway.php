@@ -25,7 +25,6 @@
 namespace Shopware\Bundle\StoreFrontBundle\Gateway;
 
 use Doctrine\DBAL\Connection;
-
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
@@ -71,12 +70,12 @@ class MediaGateway
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\ProductMediaGatewayInterface::get()
      *
-     * @param array                       $ids
-     * @param Struct\ShopContextInterface $context
+     * @param array                     $ids
+     * @param Struct\TranslationContext $context
      *
      * @return Struct\Media[] Indexed by the media id
      */
-    public function getList($ids, Struct\ShopContextInterface $context)
+    public function getList($ids, Struct\TranslationContext $context)
     {
         $query = $this->getQuery($context);
 
@@ -97,11 +96,11 @@ class MediaGateway
     }
 
     /**
-     * @param Struct\ShopContextInterface $context
+     * @param Struct\TranslationContext $context
      *
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
-    private function getQuery(Struct\ShopContextInterface $context)
+    private function getQuery(Struct\TranslationContext $context)
     {
         $query = $this->connection->createQueryBuilder();
 

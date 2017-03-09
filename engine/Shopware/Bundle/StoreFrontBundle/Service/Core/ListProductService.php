@@ -116,7 +116,7 @@ class ListProductService implements Service\ListProductServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function getList(array $numbers, Struct\ProductContextInterface $context)
+    public function getList(array $numbers, Struct\ShopContextInterface $context)
     {
         // faster replacement for array_unique()
         // see http://stackoverflow.com/questions/8321620/array-unique-vs-array-flip
@@ -185,12 +185,12 @@ class ListProductService implements Service\ListProductServiceInterface
      * Checks if the provided product is allowed to display in the store front for
      * the provided context.
      *
-     * @param Struct\ListProduct             $product
-     * @param Struct\ProductContextInterface $context
+     * @param Struct\ListProduct          $product
+     * @param Struct\ShopContextInterface $context
      *
      * @return bool
      */
-    private function isProductValid(Struct\ListProduct $product, Struct\ProductContextInterface $context)
+    private function isProductValid(Struct\ListProduct $product, Struct\ShopContextInterface $context)
     {
         if (in_array($context->getCurrentCustomerGroup()->getId(), $product->getBlockedCustomerGroupIds())) {
             return false;

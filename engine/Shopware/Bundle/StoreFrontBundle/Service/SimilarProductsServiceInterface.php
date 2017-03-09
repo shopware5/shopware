@@ -46,10 +46,10 @@ interface SimilarProductsServiceInterface
      * To get detailed information about the selection conditions, structure and content of the returned object,
      * please refer to the linked classes.
      *
-     * @param Struct\ListProduct[]           $products
-     * @param Struct\ProductContextInterface $context
+     * @param Struct\ListProduct[]        $products
+     * @param Struct\ShopContextInterface $context
      *
      * @return array indexed with the product number, the values are a list of ListProduct structs
      */
-    public function getList($products, Struct\ProductContextInterface $context);
+    public function getList($products, Struct\ShopContextInterface $context);
 }

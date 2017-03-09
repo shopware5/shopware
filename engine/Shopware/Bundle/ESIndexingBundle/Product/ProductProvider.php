@@ -38,9 +38,9 @@ use Shopware\Bundle\StoreFrontBundle\Service\VoteServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceRule;
-use Shopware\Bundle\StoreFrontBundle\Struct\ProductContextInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\TranslationContext;
 
 class ProductProvider implements ProductProviderInterface
 {
@@ -138,7 +138,7 @@ class ProductProvider implements ProductProviderInterface
         $cheapest = $this->getCheapestPrices($products, $shop->getId());
         $calculated = $this->getCalculatedPrices($shop, $products, $cheapest);
         $categories = $this->getCategories($products);
-        $properties = $this->getProperties($products, $context);
+        $properties = $this->getProperties($products, $context->getTranslationContext());
 
         $result = [];
         foreach ($products as $listProduct) {
@@ -239,12 +239,12 @@ class ProductProvider implements ProductProviderInterface
     }
 
     /**
-     * @param ListProduct[]        $products
-     * @param ShopContextInterface $context
+     * @param ListProduct[]      $products
+     * @param TranslationContext $context
      *
      * @return \array[]
      */
-    private function getProperties($products, ShopContextInterface $context)
+    private function getProperties($products, TranslationContext $context)
     {
         $ids = array_map(function (ListProduct $product) {
             return $product->getId();
@@ -335,7 +335,7 @@ class ProductProvider implements ProductProviderInterface
             }
             $rules = $priceRules[$number];
 
-            /** @var $context ProductContextInterface */
+            /** @var $context ShopContextInterface */
             foreach ($contexts as $context) {
                 $customerGroup = $context->getCurrentCustomerGroup()->getKey();
                 $key = $customerGroup . '_' . $context->getCurrency()->getId();

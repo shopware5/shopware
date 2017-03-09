@@ -64,7 +64,7 @@ class VariantCoverService implements VariantCoverServiceInterface
     {
         $covers = $this->variantMediaGateway->getCovers(
             $products,
-            $context
+            $context->getTranslationContext()
         );
 
         $fallback = [];
@@ -78,7 +78,7 @@ class VariantCoverService implements VariantCoverServiceInterface
             return $covers;
         }
 
-        $fallback = $this->productMediaGateway->getCovers($fallback, $context);
+        $fallback = $this->productMediaGateway->getCovers($fallback, $context->getTranslationContext());
 
         return $covers + $fallback;
     }

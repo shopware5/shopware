@@ -25,7 +25,6 @@
 namespace Shopware\Bundle\StoreFrontBundle\Gateway;
 
 use Doctrine\DBAL\Connection;
-
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
@@ -81,12 +80,12 @@ class ProductConfigurationGateway
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\ProductConfigurationGatewayInterface::get()
      *
-     * @param Struct\BaseProduct[]        $products
-     * @param Struct\ShopContextInterface $context
+     * @param Struct\BaseProduct[]      $products
+     * @param Struct\TranslationContext $context
      *
      * @return array indexed by the product order number, each array element contains a Struct\Configurator\Group array
      */
-    public function getList($products, Struct\ShopContextInterface $context)
+    public function getList($products, Struct\TranslationContext $context)
     {
         if (empty($products)) {
             return [];
@@ -115,11 +114,11 @@ class ProductConfigurationGateway
 
     /**
      * @param $ids
-     * @param Struct\ShopContextInterface $context
+     * @param Struct\TranslationContext $context
      *
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
-    private function getQuery($ids, Struct\ShopContextInterface $context)
+    private function getQuery($ids, Struct\TranslationContext $context)
     {
         $query = $this->connection->createQueryBuilder();
 

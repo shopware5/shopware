@@ -29,7 +29,6 @@ use Shopware\Models\Country\Country;
 use Shopware\Models\Country\State;
 use Shopware\Models\Customer\Address;
 use Shopware\Models\Customer\Customer;
-use Shopware\Models\Shop\Shop;
 use Symfony\Component\DomCrawler\Crawler;
 
 /**

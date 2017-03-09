@@ -25,7 +25,6 @@
 namespace Shopware\Bundle\StoreFrontBundle\Gateway;
 
 use Doctrine\DBAL\Connection;
-
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
@@ -81,12 +80,12 @@ class ProductPropertyGateway
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\ProductPropertyGatewayInterface::get()
      *
-     * @param Struct\BaseProduct[]        $products
-     * @param Struct\ShopContextInterface $context
+     * @param Struct\BaseProduct[]      $products
+     * @param Struct\TranslationContext $context
      *
      * @return Struct\Property\Set[] Indexed by the product order number
      */
-    public function getList($products, Struct\ShopContextInterface $context)
+    public function getList($products, Struct\TranslationContext $context)
     {
         $ids = [];
         foreach ($products as $product) {

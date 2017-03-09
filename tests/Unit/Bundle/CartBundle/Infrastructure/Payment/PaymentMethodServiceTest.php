@@ -43,7 +43,7 @@ use Shopware\Bundle\StoreFrontBundle\Gateway\Hydrator\AttributeHydrator;
 use Shopware\Bundle\StoreFrontBundle\Service\CacheInterface;
 use Shopware\Tests\Unit\Bundle\CartBundle\Common\Generator;
 
-class PaymentHydratorTest extends TestCase
+class PaymentMethodServiceTest extends TestCase
 {
     /**
      * @dataProvider dataSets

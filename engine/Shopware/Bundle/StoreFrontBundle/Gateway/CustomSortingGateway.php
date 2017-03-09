@@ -26,10 +26,9 @@ namespace Shopware\Bundle\StoreFrontBundle\Gateway;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
-
 use Shopware\Bundle\StoreFrontBundle\Gateway\Hydrator\CustomListingHydrator;
 use Shopware\Bundle\StoreFrontBundle\Struct\Search\CustomSorting;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\TranslationContext;
 
 class CustomSortingGateway
 {
@@ -72,12 +71,12 @@ class CustomSortingGateway
     }
 
     /**
-     * @param int[]                $ids
-     * @param ShopContextInterface $context
+     * @param int[]              $ids
+     * @param TranslationContext $context
      *
      * @return CustomSorting[] indexed by id, sorted by provided id array
      */
-    public function getList(array $ids, ShopContextInterface $context)
+    public function getList(array $ids, TranslationContext $context)
     {
         $ids = array_keys(array_flip($ids));
         $query = $this->createQuery($context);
@@ -92,12 +91,12 @@ class CustomSortingGateway
     }
 
     /**
-     * @param int[]                $categoryIds
-     * @param ShopContextInterface $context
+     * @param int[]              $categoryIds
+     * @param TranslationContext $context
      *
      * @return array[] indexed by category id, sorted by category mapping or position
      */
-    public function getSortingsOfCategories(array $categoryIds, ShopContextInterface $context)
+    public function getSortingsOfCategories(array $categoryIds, TranslationContext $context)
     {
         $mapping = $this->getCategoryMapping($categoryIds);
 
@@ -118,11 +117,11 @@ class CustomSortingGateway
     }
 
     /**
-     * @param ShopContextInterface $context
+     * @param TranslationContext $context
      *
      * @return CustomSorting[]
      */
-    public function getAllCategorySortings(ShopContextInterface $context)
+    public function getAllCategorySortings(TranslationContext $context)
     {
         return $this->getList($this->getAllCategorySortingIds(), $context);
     }
@@ -149,11 +148,11 @@ class CustomSortingGateway
     /**
      * Returns the base query to select the custom sorting data.
      *
-     * @param ShopContextInterface $context
+     * @param TranslationContext $context
      *
      * @return QueryBuilder
      */
-    private function createQuery(ShopContextInterface $context)
+    private function createQuery(TranslationContext $context)
     {
         $query = $this->connection->createQueryBuilder();
         $query->select($this->fieldHelper->getCustomSortingFields());

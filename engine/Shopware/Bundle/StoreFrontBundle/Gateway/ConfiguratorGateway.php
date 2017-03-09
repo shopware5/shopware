@@ -67,9 +67,9 @@ class ConfiguratorGateway
     private $connection;
 
     /**
-     * @param Connection                                                      $connection
-     * @param FieldHelper                                                     $fieldHelper
-     * @param Hydrator\ConfiguratorHydrator                                   $configuratorHydrator
+     * @param Connection                                             $connection
+     * @param FieldHelper                                            $fieldHelper
+     * @param Hydrator\ConfiguratorHydrator                          $configuratorHydrator
      * @param \Shopware\Bundle\StoreFrontBundle\Gateway\MediaGateway $mediaGateway
      */
     public function __construct(
@@ -101,12 +101,12 @@ class ConfiguratorGateway
      * - Option position
      * - Option name
      *
-     * @param Struct\BaseProduct          $product
-     * @param Struct\ShopContextInterface $context
+     * @param Struct\BaseProduct        $product
+     * @param Struct\TranslationContext $context
      *
      * @return Struct\Configurator\Set
      */
-    public function get(Struct\BaseProduct $product, Struct\ShopContextInterface $context)
+    public function get(Struct\BaseProduct $product, Struct\TranslationContext $context)
     {
         $query = $this->getQuery();
         $query->addSelect($this->fieldHelper->getConfiguratorSetFields())
@@ -128,19 +128,18 @@ class ConfiguratorGateway
         return $this->configuratorHydrator->hydrate($data);
     }
 
-
     /**
      * Selects the first possible product image for the provided product configurator.
      * The product images are selected over the image mapping.
      * The image mapping defines which product image should be displayed for which configurator selection.
      * Returns for each configurator option the first possible image
      *
-     * @param \Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct          $product
-     * @param \Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface $context
+     * @param \Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct        $product
+     * @param \Shopware\Bundle\StoreFrontBundle\Struct\TranslationContext $context
      *
      * @return Struct\Media[] indexed by the configurator option id
      */
-    public function getConfiguratorMedia(Struct\BaseProduct $product, Struct\ShopContextInterface $context)
+    public function getConfiguratorMedia(Struct\BaseProduct $product, Struct\TranslationContext $context)
     {
         $subQuery = $this->connection->createQueryBuilder();
 

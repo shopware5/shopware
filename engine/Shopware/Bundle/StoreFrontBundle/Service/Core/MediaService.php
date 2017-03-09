@@ -89,7 +89,7 @@ class MediaService implements Service\MediaServiceInterface
      */
     public function getList($ids, Struct\ShopContextInterface $context)
     {
-        return $this->mediaGateway->getList($ids, $context);
+        return $this->mediaGateway->getList($ids, $context->getTranslationContext());
     }
 
     /**
@@ -100,7 +100,7 @@ class MediaService implements Service\MediaServiceInterface
         if ($this->shopwareConfig->get('forceArticleMainImageInListing')) {
             return $this->productMediaGateway->getCovers(
                 $products,
-                $context
+                $context->getTranslationContext()
             );
         }
 
@@ -112,9 +112,9 @@ class MediaService implements Service\MediaServiceInterface
      */
     public function getProductsMedia($products, Struct\ShopContextInterface $context)
     {
-        $specifyMedia = $this->variantMediaGateway->getList($products, $context);
+        $specifyMedia = $this->variantMediaGateway->getList($products, $context->getTranslationContext());
 
-        $globalMedia = $this->productMediaGateway->getList($products, $context);
+        $globalMedia = $this->productMediaGateway->getList($products, $context->getTranslationContext());
 
         $result = [];
 

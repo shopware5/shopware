@@ -37,10 +37,10 @@ interface ListProductServiceInterface
      * To get detailed information about the selection conditions, structure and content of the returned object,
      * please refer to the linked classes.
      *
-     * @param array                          $numbers
-     * @param Struct\ProductContextInterface $context
+     * @param array                       $numbers
+     * @param Struct\ShopContextInterface $context
      *
      * @return Struct\ListProduct[] indexed by the product order number
      */
-    public function getList(array $numbers, Struct\ProductContextInterface $context);
+    public function getList(array $numbers, Struct\ShopContextInterface $context);
 }

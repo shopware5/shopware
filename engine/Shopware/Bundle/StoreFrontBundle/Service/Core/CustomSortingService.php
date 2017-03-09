@@ -48,7 +48,7 @@ class CustomSortingService implements CustomSortingServiceInterface
      */
     public function getList(array $ids, ShopContextInterface $context)
     {
-        return $this->gateway->getList($ids, $context);
+        return $this->gateway->getList($ids, $context->getTranslationContext());
     }
 
     /**
@@ -56,7 +56,7 @@ class CustomSortingService implements CustomSortingServiceInterface
      */
     public function getSortingsOfCategories(array $categoryIds, ShopContextInterface $context)
     {
-        return $this->gateway->getSortingsOfCategories($categoryIds, $context);
+        return $this->gateway->getSortingsOfCategories($categoryIds, $context->getTranslationContext());
     }
 
     /**
@@ -64,6 +64,6 @@ class CustomSortingService implements CustomSortingServiceInterface
      */
     public function getAllCategorySortings(ShopContextInterface $context)
     {
-        return $this->gateway->getAllCategorySortings($context);
+        return $this->gateway->getAllCategorySortings($context->getTranslationContext());
     }
 }

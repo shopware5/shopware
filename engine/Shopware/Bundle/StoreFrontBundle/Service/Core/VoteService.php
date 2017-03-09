@@ -82,7 +82,7 @@ class VoteService implements Service\VoteServiceInterface
      */
     public function getList($products, Struct\ShopContextInterface $context)
     {
-        return $this->voteGateway->getList($products, $context);
+        return $this->voteGateway->getList($products, $context->getTranslationContext());
     }
 
     /**
@@ -90,6 +90,6 @@ class VoteService implements Service\VoteServiceInterface
      */
     public function getAverages($products, Struct\ShopContextInterface $context)
     {
-        return $this->voteAverageGateway->getList($products, $context);
+        return $this->voteAverageGateway->getList($products, $context->getTranslationContext());
     }
 }

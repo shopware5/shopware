@@ -48,7 +48,7 @@ class CustomFacetService implements CustomFacetServiceInterface
      */
     public function getList(array $ids, ShopContextInterface $context)
     {
-        return $this->gateway->getList($ids, $context);
+        return $this->gateway->getList($ids, $context->getTranslationContext());
     }
 
     /**
@@ -56,7 +56,7 @@ class CustomFacetService implements CustomFacetServiceInterface
      */
     public function getFacetsOfCategories(array $categoryIds, ShopContextInterface $context)
     {
-        return $this->gateway->getFacetsOfCategories($categoryIds, $context);
+        return $this->gateway->getFacetsOfCategories($categoryIds, $context->getTranslationContext());
     }
 
     /**
@@ -64,6 +64,6 @@ class CustomFacetService implements CustomFacetServiceInterface
      */
     public function getAllCategoryFacets(ShopContextInterface $context)
     {
-        return $this->gateway->getAllCategoryFacets($context);
+        return $this->gateway->getAllCategoryFacets($context->getTranslationContext());
     }
 }

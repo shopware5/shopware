@@ -22,47 +22,58 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\StoreFrontBundle\Service\Core;
+namespace Shopware\Bundle\StoreFrontBundle\Struct;
 
-use Shopware\Bundle\StoreFrontBundle\Gateway;
-use Shopware\Bundle\StoreFrontBundle\Service;
-use Shopware\Bundle\StoreFrontBundle\Struct;
-
-/**
- * @category  Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
-class ProductLinkService implements Service\ProductLinkServiceInterface
+class TranslationContext
 {
     /**
-     * @var Gateway\LinkGateway
+     * @var int
      */
-    private $gateway;
+    private $shopId;
 
     /**
-     * @param Gateway\LinkGateway $gateway
+     * @var int|null
      */
-    public function __construct(Gateway\LinkGateway $gateway)
+    private $fallbackId;
+
+    /**
+     * @var bool
+     */
+    private $isDefaultShop;
+
+    /**
+     * @param int      $shopId
+     * @param bool     $isDefaultShop
+     * @param int|null $fallbackId
+     */
+    public function __construct(int $shopId, bool $isDefaultShop, ?int $fallbackId)
     {
-        $this->gateway = $gateway;
+        $this->shopId = $shopId;
+        $this->fallbackId = $fallbackId;
+        $this->isDefaultShop = $isDefaultShop;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function get(Struct\BaseProduct $product, Struct\ShopContextInterface $context)
+    public function getShopId(): int
     {
-        $downloads = $this->getList([$product], $context);
-
-        return array_shift($downloads);
+        return $this->shopId;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getList($products, Struct\ShopContextInterface $context)
+    public function getFallbackId(): ? int
     {
-        return $this->gateway->getList($products, $context->getTranslationContext());
+        return $this->fallbackId;
+    }
+
+    public function isDefaultShop(): bool
+    {
+        return $this->isDefaultShop;
+    }
+
+    public static function createFromShop(Shop $shop): TranslationContext
+    {
+        return new self(
+            $shop->getId(),
+            $shop->isDefault(),
+            $shop->getParentId()
+        );
     }
 }

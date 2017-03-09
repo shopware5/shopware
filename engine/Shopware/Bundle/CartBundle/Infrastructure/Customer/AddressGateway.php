@@ -29,7 +29,7 @@ use Doctrine\DBAL\Connection;
 use Shopware\Bundle\CartBundle\Domain\Customer\Address;
 use Shopware\Bundle\CartBundle\Infrastructure\SortArrayByKeysTrait;
 use Shopware\Bundle\StoreFrontBundle\Gateway\FieldHelper;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\TranslationContext;
 
 class AddressGateway
 {
@@ -66,12 +66,12 @@ class AddressGateway
     }
 
     /**
-     * @param int[]                $ids
-     * @param ShopContextInterface $context
+     * @param int[]              $ids
+     * @param TranslationContext $context
      *
      * @return Address[] indexed by id
      */
-    public function getList(array $ids, ShopContextInterface $context): array
+    public function getList(array $ids, TranslationContext $context): array
     {
         if (0 === count($ids)) {
             return [];

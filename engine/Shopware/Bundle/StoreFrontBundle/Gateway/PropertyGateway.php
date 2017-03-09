@@ -25,7 +25,6 @@
 namespace Shopware\Bundle\StoreFrontBundle\Gateway;
 
 use Doctrine\DBAL\Connection;
-
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
@@ -117,12 +116,12 @@ class PropertyGateway
      *  - Sort mode equals to 3, the values are sorted by the position
      *  - In all other cases the values are sorted by their alphanumeric value
      *
-     * @param array                       $valueIds
-     * @param Struct\ShopContextInterface $context
+     * @param array                     $valueIds
+     * @param Struct\TranslationContext $context
      *
      * @return Struct\Property\Set[] Each array element (set, group, option) is indexed by his id
      */
-    public function getList(array $valueIds, Struct\ShopContextInterface $context)
+    public function getList(array $valueIds, Struct\TranslationContext $context)
     {
         $query = $this->connection->createQueryBuilder();
 

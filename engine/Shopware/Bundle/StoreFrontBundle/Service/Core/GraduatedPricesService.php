@@ -52,7 +52,7 @@ class GraduatedPricesService implements Service\GraduatedPricesServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function get(Struct\ListProduct $product, Struct\ProductContextInterface $context)
+    public function get(Struct\ListProduct $product, Struct\ShopContextInterface $context)
     {
         $prices = $this->getList([$product], $context);
 
@@ -62,12 +62,12 @@ class GraduatedPricesService implements Service\GraduatedPricesServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function getList($products, Struct\ProductContextInterface $context)
+    public function getList($products, Struct\ShopContextInterface $context)
     {
         $group = $context->getCurrentCustomerGroup();
         $specify = $this->graduatedPricesGateway->getList(
             $products,
-            $context,
+            $context->getTranslationContext(),
             $group
         );
 
@@ -90,7 +90,7 @@ class GraduatedPricesService implements Service\GraduatedPricesServiceInterface
             //if some product has no price, we have to load the fallback customer group prices for the fallbackProducts.
             $fallbackPrices = $this->graduatedPricesGateway->getList(
                 $fallbackProducts,
-                $context,
+                $context->getTranslationContext(),
                 $context->getFallbackCustomerGroup()
             );
 

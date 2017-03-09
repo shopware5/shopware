@@ -57,6 +57,7 @@ This changelog references changes done in Shopware Next patch versions.
 * Changed constructor of `shopware_media.strategy_factory` to require a collection of `Shopware\Bundle\MediaBundle\Strategy\StrategyInterface`
 * Changed default path of `media` to `web/media`
 * Changed `\Shopware\Bundle\StoreFrontBundle\Struct\Category::__construct` accessibility to private, use `\Shopware\Bundle\StoreFrontBundle\Struct\Category::create` instead
+* Changed context requirement to new `\Shopware\Bundle\StoreFrontBundle\Struct\TranslationContext` in all `Shopware\Bundle\StoreFrontBundle` gateways
 
 ## Removals
 
@@ -186,6 +187,8 @@ This changelog references changes done in Shopware Next patch versions.
     * `\Shopware\Bundle\StoreFrontBundle\Service\VoteServiceInterface::getAverage`
 
 * Removed unused `\Shopware\Bundle\StoreFrontBundle\Struct\LocationContext` class
+* Removed unused `\Shopware\Bundle\StoreFrontBundle\Gateway\SimilarProductsGateway::getListByCategory`
+* Removed unused `\Shopware\Bundle\StoreFrontBundle\Gateway\SimilarProductsGateway::getByCategory`
 
 ## Filesystem
 

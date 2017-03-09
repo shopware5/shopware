@@ -30,7 +30,7 @@ use Doctrine\DBAL\Query\QueryBuilder;
 use Shopware\Bundle\CartBundle\Domain\Payment\PaymentMethod;
 use Shopware\Bundle\CartBundle\Infrastructure\SortArrayByKeysTrait;
 use Shopware\Bundle\StoreFrontBundle\Gateway\FieldHelper;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\TranslationContext;
 
 class PaymentMethodGateway
 {
@@ -67,12 +67,12 @@ class PaymentMethodGateway
     }
 
     /**
-     * @param int[]                $ids
-     * @param ShopContextInterface $context
+     * @param int[]              $ids
+     * @param TranslationContext $context
      *
      * @return PaymentMethod[]
      */
-    public function getList(array $ids, ShopContextInterface $context): array
+    public function getList(array $ids, TranslationContext $context): array
     {
         if (0 === count($ids)) {
             return [];
@@ -92,11 +92,11 @@ class PaymentMethodGateway
     }
 
     /**
-     * @param ShopContextInterface $context
+     * @param TranslationContext $context
      *
      * @return PaymentMethod[]
      */
-    public function getAll(ShopContextInterface $context): array
+    public function getAll(TranslationContext $context): array
     {
         $query = $this->createQuery($context);
 
@@ -110,7 +110,7 @@ class PaymentMethodGateway
         return $services;
     }
 
-    private function createQuery(ShopContextInterface $context): QueryBuilder
+    private function createQuery(TranslationContext $context): QueryBuilder
     {
         $query = $this->connection->createQueryBuilder();
         $query->select('paymentMethod.id as arrayKey');

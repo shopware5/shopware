@@ -60,7 +60,7 @@ class RelatedProductsService implements Service\RelatedProductsServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function getList($products, Struct\ProductContextInterface $context)
+    public function getList($products, Struct\ShopContextInterface $context)
     {
         /**
          * returns an array which is associated with the different product numbers.

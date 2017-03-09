@@ -29,6 +29,7 @@ use Shopware\Bundle\CartBundle\Domain\Customer\Customer;
 use Shopware\Bundle\CartBundle\Infrastructure\Payment\PaymentMethodGateway;
 use Shopware\Bundle\StoreFrontBundle\Gateway\ShopGateway;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\TranslationContext;
 
 class CustomerService
 {
@@ -76,7 +77,7 @@ class CustomerService
      *
      * @return Customer[]
      */
-    public function getList($ids, ShopContextInterface $context): array
+    public function getList($ids, TranslationContext $context): array
     {
         if (0 === count($ids)) {
             return [];

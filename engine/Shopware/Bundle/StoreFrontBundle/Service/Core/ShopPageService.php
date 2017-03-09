@@ -60,7 +60,7 @@ class ShopPageService implements Service\ShopPageServiceInterface
      */
     public function getList(array $ids, Struct\ShopContextInterface $context)
     {
-        $shopPages = $this->shopPageGateway->getList($ids, $context);
+        $shopPages = $this->shopPageGateway->getList($ids, $context->getTranslationContext());
 
         $this->resolveShops($shopPages);
         $this->resolveParents($shopPages, $context);
@@ -103,7 +103,7 @@ class ShopPageService implements Service\ShopPageServiceInterface
         }, $shopPages);
 
         $parentIds = array_unique(array_filter($parentIds));
-        $parentPages = $this->shopPageGateway->getList($parentIds, $context);
+        $parentPages = $this->shopPageGateway->getList($parentIds, $context->getTranslationContext());
 
         foreach ($parentPages as $page) {
             $parentId = $page->getParentId();
@@ -128,7 +128,7 @@ class ShopPageService implements Service\ShopPageServiceInterface
             return $page->getParentId();
         }, $shopPages);
 
-        $parentPages = $this->shopPageGateway->getList($parentIds, $context);
+        $parentPages = $this->shopPageGateway->getList($parentIds, $context->getTranslationContext());
 
         foreach ($shopPages as $page) {
             if (array_key_exists($page->getParentId(), $parentPages)) {

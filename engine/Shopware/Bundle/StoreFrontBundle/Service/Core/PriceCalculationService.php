@@ -53,7 +53,7 @@ class PriceCalculationService implements Service\PriceCalculationServiceInterfac
      */
     public function calculateProduct(
         Struct\ListProduct $product,
-        Struct\ProductContextInterface $context
+        Struct\ShopContextInterface $context
     ) {
         $tax = $context->getTaxRule($product->getTax()->getId());
 
@@ -94,16 +94,16 @@ class PriceCalculationService implements Service\PriceCalculationServiceInterfac
     /**
      * Calculates the cheapest price considering the variant min purchase
      *
-     * @param Struct\ListProduct             $product
-     * @param Struct\Product\PriceRule       $priceRule
-     * @param Struct\ProductContextInterface $context
+     * @param Struct\ListProduct          $product
+     * @param Struct\Product\PriceRule    $priceRule
+     * @param Struct\ShopContextInterface $context
      *
      * @return Struct\Product\Price
      */
     private function calculateCheapestAvailablePrice(
         Struct\ListProduct $product,
         Struct\Product\PriceRule $priceRule,
-        Struct\ProductContextInterface $context
+        Struct\ShopContextInterface $context
     ) {
         $priceRule->setPrice(
             $priceRule->getUnit()->getMinPurchase() * $priceRule->getPrice()
@@ -125,16 +125,16 @@ class PriceCalculationService implements Service\PriceCalculationServiceInterfac
      * and the cheapest price struct.
      * All price structs will be calculated through this function.
      *
-     * @param Struct\Product\PriceRule       $rule
-     * @param Struct\Tax                     $tax
-     * @param Struct\ProductContextInterface $context
+     * @param Struct\Product\PriceRule    $rule
+     * @param Struct\Tax                  $tax
+     * @param Struct\ShopContextInterface $context
      *
      * @return Struct\Product\Price
      */
     private function calculatePriceStruct(
         Struct\Product\PriceRule $rule,
         Struct\Tax $tax,
-        Struct\ProductContextInterface $context
+        Struct\ShopContextInterface $context
     ) {
         $price = new Struct\Product\Price($rule);
 
@@ -167,12 +167,12 @@ class PriceCalculationService implements Service\PriceCalculationServiceInterfac
      * and the pseudo price of a price struct.
      *
      * @param $price
-     * @param Struct\Tax                     $tax
-     * @param Struct\ProductContextInterface $context
+     * @param Struct\Tax                  $tax
+     * @param Struct\ShopContextInterface $context
      *
      * @return float
      */
-    private function calculatePrice($price, Struct\Tax $tax, Struct\ProductContextInterface $context)
+    private function calculatePrice($price, Struct\Tax $tax, Struct\ShopContextInterface $context)
     {
         /**
          * Important:

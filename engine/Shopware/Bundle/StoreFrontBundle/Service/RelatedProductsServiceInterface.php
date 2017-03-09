@@ -43,10 +43,10 @@ interface RelatedProductsServiceInterface
      * To get detailed information about the selection conditions, structure and content of the returned object,
      * please refer to the linked classes.
      *
-     * @param Struct\BaseProduct[]           $products
-     * @param Struct\ProductContextInterface $context
+     * @param Struct\BaseProduct[]        $products
+     * @param Struct\ShopContextInterface $context
      *
      * @return array indexed with the product number, each array element contains a \Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct array
      */
-    public function getList($products, Struct\ProductContextInterface $context);
+    public function getList($products, Struct\ShopContextInterface $context);
 }

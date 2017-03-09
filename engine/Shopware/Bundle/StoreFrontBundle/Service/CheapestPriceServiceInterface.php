@@ -36,10 +36,10 @@ interface CheapestPriceServiceInterface
     /**
      * @see \Shopware\Bundle\StoreFrontBundle\Service\Core\CheapestPriceServiceInterface::get()
      *
-     * @param Struct\ListProduct[]           $products
-     * @param Struct\ProductContextInterface $context
+     * @param Struct\ListProduct[]        $products
+     * @param Struct\ShopContextInterface $context
      *
      * @return Struct\Product\PriceRule[] Indexed by product number
      */
-    public function getList($products, Struct\ProductContextInterface $context);
+    public function getList($products, Struct\ShopContextInterface $context);
 }

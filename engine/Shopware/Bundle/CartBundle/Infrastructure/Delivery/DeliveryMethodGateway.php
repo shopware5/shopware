@@ -30,7 +30,7 @@ use Doctrine\DBAL\Query\QueryBuilder;
 use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryMethod;
 use Shopware\Bundle\CartBundle\Infrastructure\SortArrayByKeysTrait;
 use Shopware\Bundle\StoreFrontBundle\Gateway\FieldHelper;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\TranslationContext;
 
 class DeliveryMethodGateway
 {
@@ -62,12 +62,12 @@ class DeliveryMethodGateway
     }
 
     /**
-     * @param int[]                $ids
-     * @param ShopContextInterface $context
+     * @param int[]              $ids
+     * @param TranslationContext $context
      *
      * @return DeliveryMethod[]
      */
-    public function getList(array $ids, ShopContextInterface $context): array
+    public function getList(array $ids, TranslationContext $context): array
     {
         if (0 === count($ids)) {
             return [];
@@ -87,11 +87,11 @@ class DeliveryMethodGateway
     }
 
     /**
-     * @param ShopContextInterface $context
+     * @param TranslationContext $context
      *
      * @return DeliveryMethod[]
      */
-    public function getAll(ShopContextInterface $context): array
+    public function getAll(TranslationContext $context): array
     {
         $query = $this->createQuery($context);
 
@@ -105,7 +105,7 @@ class DeliveryMethodGateway
         return $services;
     }
 
-    private function createQuery(ShopContextInterface $context): QueryBuilder
+    private function createQuery(TranslationContext $context): QueryBuilder
     {
         $query = $this->connection->createQueryBuilder();
         $query->select('deliveryMethod.id as arrayKey');

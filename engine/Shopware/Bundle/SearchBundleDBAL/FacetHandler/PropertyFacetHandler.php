@@ -136,7 +136,7 @@ class PropertyFacetHandler implements PartialFacetHandlerInterface
 
         $properties = $this->propertyGateway->getList(
             $valueIds,
-            $context
+            $context->getTranslationContext()
         );
 
         return $properties;

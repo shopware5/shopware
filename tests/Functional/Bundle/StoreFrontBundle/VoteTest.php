@@ -25,7 +25,6 @@
 namespace Shopware\Tests\Functional\Bundle\StoreFrontBundle;
 
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\Vote;
-use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
 
 class VoteTest extends TestCase
 {

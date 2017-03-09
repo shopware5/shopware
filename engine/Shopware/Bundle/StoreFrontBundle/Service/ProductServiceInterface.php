@@ -35,9 +35,9 @@ interface ProductServiceInterface
 {
     /**
      * @param $numbers
-     * @param Struct\ProductContextInterface $context
+     * @param Struct\ShopContextInterface $context
      *
      * @return Struct\Product[] Indexed by the product order number
      */
-    public function getList(array $numbers, Struct\ProductContextInterface $context);
+    public function getList(array $numbers, Struct\ShopContextInterface $context);
 }

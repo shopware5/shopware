@@ -25,7 +25,6 @@
 namespace Shopware\Bundle\StoreFrontBundle\Gateway;
 
 use Doctrine\DBAL\Connection;
-
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
@@ -76,12 +75,12 @@ class CategoryGateway
     }
 
     /**
-     * @param Struct\BaseProduct[]        $products
-     * @param Struct\ShopContextInterface $context
+     * @param Struct\BaseProduct[]      $products
+     * @param Struct\TranslationContext $context
      *
      * @return array Indexed by product number, contains all categories of a product
      */
-    public function getProductsCategories(array $products, Struct\ShopContextInterface $context)
+    public function getProductsCategories(array $products, Struct\TranslationContext $context)
     {
         $productIds = array_map(function (Struct\BaseProduct $product) {
             return $product->getId();
@@ -117,12 +116,12 @@ class CategoryGateway
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\CategoryGatewayInterface::get()
      *
-     * @param array                       $ids
-     * @param Struct\ShopContextInterface $context
+     * @param array                     $ids
+     * @param Struct\TranslationContext $context
      *
      * @return Struct\Category[] Indexed by the category id
      */
-    public function getList(array $ids, Struct\ShopContextInterface $context)
+    public function getList(array $ids, Struct\TranslationContext $context)
     {
         $query = $this->connection->createQueryBuilder();
 

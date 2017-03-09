@@ -76,7 +76,7 @@ class ConfiguratorService implements Service\ConfiguratorServiceInterface
      */
     public function getProductsConfigurations($products, Struct\ShopContextInterface $context)
     {
-        $configuration = $this->productConfigurationGateway->getList($products, $context);
+        $configuration = $this->productConfigurationGateway->getList($products, $context->getTranslationContext());
 
         return $configuration;
     }
@@ -89,14 +89,14 @@ class ConfiguratorService implements Service\ConfiguratorServiceInterface
         Struct\ShopContextInterface $context,
         array $selection
     ) {
-        $configurator = $this->configuratorGateway->get($product, $context);
+        $configurator = $this->configuratorGateway->get($product, $context->getTranslationContext());
         $combinations = $this->configuratorGateway->getProductCombinations($product);
 
         $media = [];
         if ($configurator->getType() === self::CONFIGURATOR_TYPE_PICTURE) {
             $media = $this->configuratorGateway->getConfiguratorMedia(
                 $product,
-                $context
+                $context->getTranslationContext()
             );
         }
 

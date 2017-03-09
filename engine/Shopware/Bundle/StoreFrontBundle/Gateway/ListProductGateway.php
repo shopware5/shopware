@@ -25,7 +25,7 @@
 namespace Shopware\Bundle\StoreFrontBundle\Gateway;
 
 use Doctrine\DBAL\Connection;
-
+use Doctrine\DBAL\Query\QueryBuilder;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
@@ -111,13 +111,7 @@ class ListProductGateway
         return $products;
     }
 
-    /**
-     * @param array                       $numbers
-     * @param Struct\ShopContextInterface $context
-     *
-     * @return \Doctrine\DBAL\Query\QueryBuilder
-     */
-    protected function getQuery(array $numbers, Struct\ShopContextInterface $context)
+    protected function getQuery(array $numbers, Struct\ShopContextInterface $context): QueryBuilder
     {
         $esdQuery = $this->getEsdQuery();
         $customerGroupQuery = $this->getCustomerGroupQuery();
@@ -162,11 +156,11 @@ class ListProductGateway
             ->andWhere('product.active = 1')
             ->setParameter(':numbers', $numbers, Connection::PARAM_STR_ARRAY);
 
-        $this->fieldHelper->addProductTranslation($query, $context);
-        $this->fieldHelper->addVariantTranslation($query, $context);
-        $this->fieldHelper->addManufacturerTranslation($query, $context);
-        $this->fieldHelper->addUnitTranslation($query, $context);
-        $this->fieldHelper->addEsdTranslation($query, $context);
+        $this->fieldHelper->addProductTranslation($query, $context->getTranslationContext());
+        $this->fieldHelper->addVariantTranslation($query, $context->getTranslationContext());
+        $this->fieldHelper->addManufacturerTranslation($query, $context->getTranslationContext());
+        $this->fieldHelper->addUnitTranslation($query, $context->getTranslationContext());
+        $this->fieldHelper->addEsdTranslation($query, $context->getTranslationContext());
 
         return $query;
     }

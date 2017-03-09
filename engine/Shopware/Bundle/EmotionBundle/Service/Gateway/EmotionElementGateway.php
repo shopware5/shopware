@@ -27,7 +27,7 @@ namespace Shopware\Bundle\EmotionBundle\Service\Gateway;
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\EmotionBundle\Service\Gateway\Hydrator\EmotionElementHydrator;
 use Shopware\Bundle\StoreFrontBundle\Gateway\FieldHelper;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\TranslationContext;
 
 class EmotionElementGateway
 {
@@ -59,12 +59,12 @@ class EmotionElementGateway
     }
 
     /**
-     * @param int[]                $emotionIds
-     * @param ShopContextInterface $context
+     * @param int[]              $emotionIds
+     * @param TranslationContext $context
      *
      * @return array
      */
-    public function getList(array $emotionIds, ShopContextInterface $context)
+    public function getList(array $emotionIds, TranslationContext $context)
     {
         $data = $this->getQuery($emotionIds)
             ->execute()
@@ -127,12 +127,12 @@ class EmotionElementGateway
     }
 
     /**
-     * @param int[]                $elementIds
-     * @param ShopContextInterface $context
+     * @param int[]              $elementIds
+     * @param TranslationContext $context
      *
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
-    private function getConfigQuery(array $elementIds, ShopContextInterface $context)
+    private function getConfigQuery(array $elementIds, TranslationContext $context)
     {
         $builder = $this->connection->createQueryBuilder();
 

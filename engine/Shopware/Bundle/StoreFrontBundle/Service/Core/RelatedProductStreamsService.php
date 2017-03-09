@@ -64,7 +64,7 @@ class RelatedProductStreamsService implements Service\RelatedProductStreamsServi
      */
     public function getList($products, Struct\ShopContextInterface $context)
     {
-        $productStreams = $this->gateway->getList($products, $context);
+        $productStreams = $this->gateway->getList($products, $context->getTranslationContext());
 
         $result = [];
         foreach ($products as $product) {

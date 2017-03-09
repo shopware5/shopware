@@ -53,7 +53,7 @@ class CategoryService implements Service\CategoryServiceInterface
      */
     public function getList($ids, Struct\ShopContextInterface $context)
     {
-        $categories = $this->categoryGateway->getList($ids, $context);
+        $categories = $this->categoryGateway->getList($ids, $context->getTranslationContext());
 
         return $this->filterValidCategories($categories, $context);
     }
@@ -63,7 +63,7 @@ class CategoryService implements Service\CategoryServiceInterface
      */
     public function getProductsCategories(array $products, Struct\ShopContextInterface $context)
     {
-        $categories = $this->categoryGateway->getProductsCategories($products, $context);
+        $categories = $this->categoryGateway->getProductsCategories($products, $context->getTranslationContext());
 
         $result = [];
         foreach ($categories as $key => $productCategories) {

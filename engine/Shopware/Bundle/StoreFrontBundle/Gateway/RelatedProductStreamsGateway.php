@@ -25,7 +25,6 @@
 namespace Shopware\Bundle\StoreFrontBundle\Gateway;
 
 use Doctrine\DBAL\Connection;
-
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
@@ -78,12 +77,12 @@ class RelatedProductStreamsGateway
      *    'SW200' => array({Struct\ProductStream}, {Struct\ProductStream})
      * )
      *
-     * @param Struct\BaseProduct[]        $products
-     * @param Struct\ShopContextInterface $context
+     * @param Struct\BaseProduct[]      $products
+     * @param Struct\TranslationContext $context
      *
      * @return array indexed by the product number
      */
-    public function getList($products, Struct\ShopContextInterface $context)
+    public function getList($products, Struct\TranslationContext $context)
     {
         $ids = [];
         foreach ($products as $product) {

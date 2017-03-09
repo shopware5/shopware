@@ -25,7 +25,6 @@
 namespace Shopware\Bundle\StoreFrontBundle\Gateway;
 
 use Doctrine\DBAL\Connection;
-
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
@@ -92,12 +91,12 @@ class ProductMediaGateway
      * )
      * </php>
      *
-     * @param Struct\BaseProduct[]        $products
-     * @param Struct\ShopContextInterface $context
+     * @param Struct\BaseProduct[]      $products
+     * @param Struct\TranslationContext $context
      *
      * @return array Indexed by the product order number. Each element contains a \Shopware\Bundle\StoreFrontBundle\Struct\Media array.
      */
-    public function getList($products, Struct\ShopContextInterface $context)
+    public function getList($products, Struct\TranslationContext $context)
     {
         $ids = [];
         foreach ($products as $product) {
@@ -150,12 +149,12 @@ class ProductMediaGateway
      * )
      * </php>
      *
-     * @param Struct\BaseProduct[]        $products
-     * @param Struct\ShopContextInterface $context
+     * @param Struct\BaseProduct[]      $products
+     * @param Struct\TranslationContext $context
      *
      * @return Struct\Media[] Indexed by the product number
      */
-    public function getCovers($products, Struct\ShopContextInterface $context)
+    public function getCovers($products, Struct\TranslationContext $context)
     {
         $ids = [];
         foreach ($products as $product) {
@@ -212,11 +211,11 @@ class ProductMediaGateway
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface $context
+     * @param \Shopware\Bundle\StoreFrontBundle\Struct\TranslationContext $context
      *
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
-    private function getQuery(Struct\ShopContextInterface $context)
+    private function getQuery(Struct\TranslationContext $context)
     {
         $query = $this->connection->createQueryBuilder();
 

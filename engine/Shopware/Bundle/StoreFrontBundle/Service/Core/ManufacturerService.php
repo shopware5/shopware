@@ -64,7 +64,7 @@ class ManufacturerService implements Service\ManufacturerServiceInterface
      */
     public function getList(array $ids, Struct\ShopContextInterface $context)
     {
-        $manufacturers = $this->manufacturerGateway->getList($ids, $context);
+        $manufacturers = $this->manufacturerGateway->getList($ids, $context->getTranslationContext());
 
         //fetch all manufacturer links instead of calling {url ...} smarty function which executes a query for each link
         $links = $this->collectLinks($manufacturers);

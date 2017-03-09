@@ -60,7 +60,7 @@ class CheapestPriceService implements Service\CheapestPriceServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function get(Struct\ListProduct $product, Struct\ProductContextInterface $context)
+    public function get(Struct\ListProduct $product, Struct\ShopContextInterface $context)
     {
         $cheapestPrices = $this->getList([$product], $context);
 
@@ -70,11 +70,11 @@ class CheapestPriceService implements Service\CheapestPriceServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function getList($products, Struct\ProductContextInterface $context)
+    public function getList($products, Struct\ShopContextInterface $context)
     {
         $group = $context->getCurrentCustomerGroup();
 
-        $rules = $this->cheapestPriceGateway->getList($products, $context, $group);
+        $rules = $this->cheapestPriceGateway->getList($products, $context->getTranslationContext(), $group);
 
         $prices = $this->buildPrices($products, $rules, $group);
 
@@ -93,7 +93,7 @@ class CheapestPriceService implements Service\CheapestPriceServiceInterface
         //if some product has no price, we have to load the fallback customer group prices for the fallbackProducts.
         $fallbackPrices = $this->cheapestPriceGateway->getList(
             $fallbackProducts,
-            $context,
+            $context->getTranslationContext(),
             $context->getFallbackCustomerGroup()
         );
 
@@ -109,9 +109,9 @@ class CheapestPriceService implements Service\CheapestPriceServiceInterface
     }
 
     /**
-     * @param Struct\ListProduct[]           $products
-     * @param Struct\Product\PriceRule[]     $prices
-     * @param Struct\ProductContextInterface $context
+     * @param Struct\ListProduct[]        $products
+     * @param Struct\Product\PriceRule[]  $prices
+     * @param Struct\ShopContextInterface $context
      *
      * @return Struct\Product\PriceRule[]
      */
@@ -182,13 +182,13 @@ class CheapestPriceService implements Service\CheapestPriceServiceInterface
      * If the product has no configured price group or the price group has no discount defined for the
      * current customer group, the function returns null.
      *
-     * @param Struct\ListProduct             $product
-     * @param Struct\ProductContextInterface $context
+     * @param Struct\ListProduct          $product
+     * @param Struct\ShopContextInterface $context
      * @param $quantity
      *
      * @return null|Struct\Product\PriceDiscount
      */
-    private function getHighestQuantityDiscount(Struct\ListProduct $product, Struct\ProductContextInterface $context, $quantity)
+    private function getHighestQuantityDiscount(Struct\ListProduct $product, Struct\ShopContextInterface $context, $quantity)
     {
         $priceGroups = $context->getPriceGroups();
         if (empty($priceGroups)) {

@@ -36,10 +36,10 @@ interface GraduatedPricesServiceInterface
     /**
      * @see \Shopware\Bundle\StoreFrontBundle\Service\Core\GraduatedPricesServiceInterface::get()
      *
-     * @param Struct\ListProduct[]           $products
-     * @param Struct\ProductContextInterface $context
+     * @param Struct\ListProduct[]        $products
+     * @param Struct\ShopContextInterface $context
      *
      * @return array indexed by the product number, each array element contains a Struct\Product\PriceRule array
      */
-    public function getList($products, Struct\ProductContextInterface $context);
+    public function getList($products, Struct\ShopContextInterface $context);
 }

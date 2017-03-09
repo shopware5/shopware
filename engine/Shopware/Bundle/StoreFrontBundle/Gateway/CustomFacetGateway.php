@@ -26,10 +26,9 @@ namespace Shopware\Bundle\StoreFrontBundle\Gateway;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
-
 use Shopware\Bundle\StoreFrontBundle\Gateway\Hydrator\CustomListingHydrator;
 use Shopware\Bundle\StoreFrontBundle\Struct\Search\CustomFacet;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\TranslationContext;
 
 class CustomFacetGateway
 {
@@ -64,12 +63,12 @@ class CustomFacetGateway
     }
 
     /**
-     * @param int[]                $ids
-     * @param ShopContextInterface $context
+     * @param int[]              $ids
+     * @param TranslationContext $context
      *
      * @return CustomFacet[] indexed by id
      */
-    public function getList(array $ids, ShopContextInterface $context)
+    public function getList(array $ids, TranslationContext $context)
     {
         $ids = array_keys(array_flip($ids));
         $query = $this->createQuery($context);
@@ -84,12 +83,12 @@ class CustomFacetGateway
     }
 
     /**
-     * @param array                $categoryIds
-     * @param ShopContextInterface $context
+     * @param array              $categoryIds
+     * @param TranslationContext $context
      *
      * @return array indexed by category id, each element contains a list of CustomFacet
      */
-    public function getFacetsOfCategories(array $categoryIds, ShopContextInterface $context)
+    public function getFacetsOfCategories(array $categoryIds, TranslationContext $context)
     {
         $mapping = $this->getCategoryMapping($categoryIds);
 
@@ -109,11 +108,11 @@ class CustomFacetGateway
     }
 
     /**
-     * @param ShopContextInterface $context
+     * @param TranslationContext $context
      *
      * @return CustomFacet[]
      */
-    public function getAllCategoryFacets(ShopContextInterface $context)
+    public function getAllCategoryFacets(TranslationContext $context)
     {
         $query = $this->createQuery($context);
         $query->andWhere('customFacet.display_in_categories = 1');
@@ -143,11 +142,11 @@ class CustomFacetGateway
     /**
      * Returns the base query to select the custom facet data.
      *
-     * @param ShopContextInterface $context
+     * @param TranslationContext $context
      *
      * @return QueryBuilder
      */
-    private function createQuery(ShopContextInterface $context)
+    private function createQuery(TranslationContext $context)
     {
         $query = $this->connection->createQueryBuilder();
         $query->select($this->fieldHelper->getCustomFacetFields());

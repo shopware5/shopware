@@ -36,6 +36,7 @@ use Shopware\Bundle\CartBundle\Infrastructure\Delivery\DeliveryMethodGateway;
 use Shopware\Bundle\CartBundle\Infrastructure\Payment\PaymentMethodGateway;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\TranslationContext;
 
 class CartContextService implements CartContextServiceInterface
 {
@@ -126,8 +127,9 @@ class CartContextService implements CartContextServiceInterface
     public function initializeContext(): void
     {
         $shopContext = $this->shopContextService->getShopContext();
+
         $customer = $this->getStoreFrontCustomer($shopContext);
-        $addresses = $this->getStoreFrontCheckoutAddresses($shopContext, $customer);
+        $addresses = $this->getStoreFrontCheckoutAddresses($shopContext->getTranslationContext(), $customer);
 
         $this->context = new CartContext(
             $shopContext,
@@ -150,7 +152,7 @@ class CartContextService implements CartContextServiceInterface
         return array_shift($customer);
     }
 
-    private function getStoreFrontCheckoutAddresses(ShopContextInterface $context, ?Customer $customer): array
+    private function getStoreFrontCheckoutAddresses(TranslationContext $context, ?Customer $customer): array
     {
         $ids = [];
 

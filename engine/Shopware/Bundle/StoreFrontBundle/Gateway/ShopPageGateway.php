@@ -25,7 +25,6 @@
 namespace Shopware\Bundle\StoreFrontBundle\Gateway;
 
 use Doctrine\DBAL\Connection;
-
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
@@ -83,12 +82,12 @@ class ShopPageGateway
      * Required translation in the provided context language:
      * - Shop page
      *
-     * @param int[]                       $ids
-     * @param Struct\ShopContextInterface $context
+     * @param int[]                     $ids
+     * @param Struct\TranslationContext $context
      *
      * @return Struct\ShopPage[] Indexed by the shop page id
      */
-    public function getList(array $ids, Struct\ShopContextInterface $context)
+    public function getList(array $ids, Struct\TranslationContext $context)
     {
         $query = $this->connection->createQueryBuilder();
 

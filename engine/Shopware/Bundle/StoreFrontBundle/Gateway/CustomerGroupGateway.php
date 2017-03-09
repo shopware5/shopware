@@ -25,8 +25,7 @@
 namespace Shopware\Bundle\StoreFrontBundle\Gateway;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Bundle\StoreFrontBundle\Struct\Configurator\Group;
-
+use Shopware\Bundle\StoreFrontBundle\Struct\Customer\Group;
 
 /**
  * @category  Shopware

@@ -32,8 +32,8 @@ use Shopware\Bundle\StoreFrontBundle\Gateway\PriceGroupDiscountGateway;
 use Shopware\Bundle\StoreFrontBundle\Gateway\ShopGateway;
 use Shopware\Bundle\StoreFrontBundle\Gateway\TaxGateway;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\ProductContextInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\DependencyInjection\Container;
 use Shopware\Models;
 
@@ -52,7 +52,7 @@ class ContextService implements ContextServiceInterface
     private $container;
 
     /**
-     * @var ProductContextInterface
+     * @var ShopContextInterface
      */
     private $context = null;
 
@@ -365,19 +365,19 @@ class ContextService implements ContextServiceInterface
 
         $area = null;
         if ($areaId !== null) {
-            $area = $this->countryGateway->getAreas([$areaId], $context);
+            $area = $this->countryGateway->getAreas([$areaId], $context->getTranslationContext());
             $area = array_shift($area);
         }
 
         $country = null;
         if ($countryId !== null) {
-            $country = $this->countryGateway->getCountries([$countryId], $context);
+            $country = $this->countryGateway->getCountries([$countryId], $context->getTranslationContext());
             $country = array_shift($country);
         }
 
         $state = null;
         if ($stateId !== null) {
-            $state = $this->countryGateway->getStates([$stateId], $context);
+            $state = $this->countryGateway->getStates([$stateId], $context->getTranslationContext());
             $state = array_shift($state);
         }
 

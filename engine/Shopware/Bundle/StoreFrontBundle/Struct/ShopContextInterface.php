@@ -105,4 +105,6 @@ interface ShopContextInterface extends ExtendableInterface
     public function getCountry(): ? Country;
 
     public function getState(): ? State;
+
+    public function getTranslationContext(): TranslationContext;
 }

@@ -25,7 +25,6 @@
 namespace Shopware\Bundle\StoreFrontBundle\Gateway;
 
 use Doctrine\DBAL\Connection;
-
 use Shopware\Bundle\CartBundle\Infrastructure\SortArrayByKeysTrait;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
@@ -84,12 +83,12 @@ class CountryGateway
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\CountryGatewayInterface::getArea()
      *
-     * @param array                       $ids
-     * @param Struct\ShopContextInterface $context
+     * @param array                     $ids
+     * @param Struct\TranslationContext $context
      *
      * @return Struct\Country\Area[]
      */
-    public function getAreas(array $ids, Struct\ShopContextInterface $context)
+    public function getAreas(array $ids, Struct\TranslationContext $context)
     {
         $query = $this->connection->createQueryBuilder();
 
@@ -119,12 +118,12 @@ class CountryGateway
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\CountryGatewayInterface::getCountry()
      *
-     * @param array                       $ids
-     * @param Struct\ShopContextInterface $context
+     * @param array                     $ids
+     * @param Struct\TranslationContext $context
      *
      * @return Struct\Country[]
      */
-    public function getCountries(array $ids, Struct\ShopContextInterface $context)
+    public function getCountries(array $ids, Struct\TranslationContext $context)
     {
         $query = $this->connection->createQueryBuilder();
 
@@ -146,6 +145,7 @@ class CountryGateway
             $country = $this->countryHydrator->hydrateCountry($row);
             $countries[$country->getId()] = $country;
         }
+
         return $this->sortIndexedArrayByKeys($ids, $countries);
     }
 
@@ -155,12 +155,12 @@ class CountryGateway
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\CountryGatewayInterface::getState()
      *
-     * @param array                       $ids
-     * @param Struct\ShopContextInterface $context
+     * @param array                     $ids
+     * @param Struct\TranslationContext $context
      *
      * @return Struct\Country\State[]
      */
-    public function getStates(array $ids, Struct\ShopContextInterface $context)
+    public function getStates(array $ids, Struct\TranslationContext $context)
     {
         $query = $this->createStateQuery($context);
 
@@ -182,12 +182,12 @@ class CountryGateway
     }
 
     /**
-     * @param int[]                       $countryIds
-     * @param Struct\ShopContextInterface $context
+     * @param int[]                     $countryIds
+     * @param Struct\TranslationContext $context
      *
      * @return array indexed by country id contains an array of Struct\Country\State
      */
-    public function getCountryStates($countryIds, Struct\ShopContextInterface $context)
+    public function getCountryStates($countryIds, Struct\TranslationContext $context)
     {
         $query = $this->createStateQuery($context);
 
@@ -207,11 +207,11 @@ class CountryGateway
     }
 
     /**
-     * @param Struct\ShopContextInterface $context
+     * @param Struct\TranslationContext $context
      *
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
-    private function createStateQuery(Struct\ShopContextInterface $context)
+    private function createStateQuery(Struct\TranslationContext $context)
     {
         $query = $this->connection->createQueryBuilder();
         $query->select($this->fieldHelper->getStateFields());

@@ -25,7 +25,6 @@
 namespace Shopware\Bundle\StoreFrontBundle\Gateway;
 
 use Doctrine\DBAL\Connection;
-
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
@@ -81,12 +80,12 @@ class ManufacturerGateway
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\ManufacturerGatewayInterface::get()
      *
-     * @param array                       $ids
-     * @param Struct\ShopContextInterface $context
+     * @param array                     $ids
+     * @param Struct\TranslationContext $context
      *
      * @return Struct\Product\Manufacturer[] Indexed by the manufacturer id
      */
-    public function getList(array $ids, Struct\ShopContextInterface $context)
+    public function getList(array $ids, Struct\TranslationContext $context)
     {
         $query = $this->connection->createQueryBuilder();
 

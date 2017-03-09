@@ -25,7 +25,6 @@
 namespace Shopware\Bundle\StoreFrontBundle\Gateway;
 
 use Doctrine\DBAL\Connection;
-
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
@@ -89,15 +88,15 @@ class CheapestPriceGateway
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\CheapestPriceGatewayInterface::get()
      *
-     * @param Struct\BaseProduct[]        $products
-     * @param Struct\ShopContextInterface $context
-     * @param Struct\Customer\Group       $customerGroup
+     * @param Struct\BaseProduct[]      $products
+     * @param Struct\TranslationContext $context
+     * @param Struct\Customer\Group     $customerGroup
      *
      * @return Struct\Product\PriceRule[] Indexed by the product id
      */
     public function getList(
         $products,
-        Struct\ShopContextInterface $context,
+        Struct\TranslationContext $context,
         Struct\Customer\Group $customerGroup
     ) {
         /**

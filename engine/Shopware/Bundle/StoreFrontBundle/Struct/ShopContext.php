@@ -34,7 +34,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceGroup;
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class ShopContext extends Extendable implements ProductContextInterface, \JsonSerializable
+class ShopContext extends Extendable implements ShopContextInterface, \JsonSerializable
 {
     /**
      * @var Group
@@ -87,6 +87,11 @@ class ShopContext extends Extendable implements ProductContextInterface, \JsonSe
     protected $state;
 
     /**
+     * @var TranslationContext
+     */
+    protected $translationContext;
+
+    /**
      * @param string       $baseUrl
      * @param Shop         $shop
      * @param Currency     $currency
@@ -120,6 +125,7 @@ class ShopContext extends Extendable implements ProductContextInterface, \JsonSe
         $this->area = $area;
         $this->country = $country;
         $this->state = $state;
+        $this->translationContext = TranslationContext::createFromShop($this->shop);
     }
 
     public function getShop(): Shop
@@ -180,5 +186,10 @@ class ShopContext extends Extendable implements ProductContextInterface, \JsonSe
         $key = 'tax_' . $taxId;
 
         return $this->taxRules[$key];
+    }
+
+    public function getTranslationContext(): TranslationContext
+    {
+        return $this->translationContext;
     }
 }

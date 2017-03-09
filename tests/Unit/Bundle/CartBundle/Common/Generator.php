@@ -76,7 +76,13 @@ class Generator extends \PHPUnit_Framework_TestCase
         $billing = null,
         $shipping = null
     ) {
-        $shop = $shop ?: new Shop();
+        if ($shop === null) {
+            $shop = new Shop();
+            $shop->setId(1);
+            $shop->setIsDefault(true);
+            $shop->setFallbackId(null);
+        }
+
         $currency = $currency ?: new Currency();
 
         if (!$currentCustomerGroup) {

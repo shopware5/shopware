@@ -87,13 +87,13 @@ class SimilarProductsService implements Service\SimilarProductsServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function getList($products, Struct\ProductContextInterface $context)
+    public function getList($products, Struct\ShopContextInterface $context)
     {
         /**
          * returns an array which is associated with the different product numbers.
          * Each array contains a list of product numbers which are related to the reference product.
          */
-        $numbers = $this->gateway->getList($products, $context);
+        $numbers = $this->gateway->getList($products, $context->getTranslationContext());
 
         //loads the list product data for the selected numbers.
         //all numbers are joined in the extractNumbers function to prevent that a product will be

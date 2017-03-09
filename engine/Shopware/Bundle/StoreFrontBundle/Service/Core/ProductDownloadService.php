@@ -53,6 +53,6 @@ class ProductDownloadService implements Service\ProductDownloadServiceInterface
      */
     public function getList($products, Struct\ShopContextInterface $context)
     {
-        return $this->gateway->getList($products, $context);
+        return $this->gateway->getList($products, $context->getTranslationContext());
     }
 }
