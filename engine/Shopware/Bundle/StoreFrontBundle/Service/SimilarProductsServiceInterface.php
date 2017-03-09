@@ -34,19 +34,9 @@ use Shopware\Bundle\StoreFrontBundle\Struct;
 interface SimilarProductsServiceInterface
 {
     /**
-     * @see Shopware\Bundle\StoreFrontBundle\Service\SimilarProductsServiceInterface::get()
-     *
-     * @param Struct\ListProduct[]           $products
-     * @param Struct\ProductContextInterface $context
-     *
-     * @return array indexed with the product number, the values are a list of ListProduct structs
-     */
-    public function getList($products, Struct\ProductContextInterface $context);
-
-    /**
      * Selects all similar products for the provided product.
      *
-     * The relation between the products are selected over the \Shopware\Bundle\StoreFrontBundle\Gateway\SimilarProductsGatewayInterface class.
+     * The relation between the products are selected over the \Shopware\Bundle\StoreFrontBundle\Gateway\SimilarProductsGateway class.
      * After the relation is selected, the \Shopware\Bundle\StoreFrontBundle\Service\ListProductServiceInterface is used to load
      * the whole product data for the relations.
      *
@@ -56,12 +46,10 @@ interface SimilarProductsServiceInterface
      * To get detailed information about the selection conditions, structure and content of the returned object,
      * please refer to the linked classes.
      *
-     * @see \Shopware\Bundle\StoreFrontBundle\Service\ListProductServiceInterface::get()
-     *
-     * @param Struct\ListProduct             $product
+     * @param Struct\ListProduct[]           $products
      * @param Struct\ProductContextInterface $context
      *
-     * @return Struct\ListProduct[] indexed by the product order number
+     * @return array indexed with the product number, the values are a list of ListProduct structs
      */
-    public function get(Struct\ListProduct $product, Struct\ProductContextInterface $context);
+    public function getList($products, Struct\ProductContextInterface $context);
 }

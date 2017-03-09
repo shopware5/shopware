@@ -36,14 +36,14 @@ use Shopware\Bundle\StoreFrontBundle\Struct;
 class PriceCalculationService implements Service\PriceCalculationServiceInterface
 {
     /**
-     * @var Gateway\PriceGroupDiscountGatewayInterface
+     * @var Gateway\PriceGroupDiscountGateway
      */
     private $priceGroupDiscountGateway;
 
     /**
-     * @param Gateway\PriceGroupDiscountGatewayInterface $priceGroupDiscountGateway
+     * @param Gateway\PriceGroupDiscountGateway $priceGroupDiscountGateway
      */
-    public function __construct(Gateway\PriceGroupDiscountGatewayInterface $priceGroupDiscountGateway)
+    public function __construct(Gateway\PriceGroupDiscountGateway $priceGroupDiscountGateway)
     {
         $this->priceGroupDiscountGateway = $priceGroupDiscountGateway;
     }

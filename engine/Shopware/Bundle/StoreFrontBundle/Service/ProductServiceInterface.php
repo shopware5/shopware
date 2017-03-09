@@ -34,23 +34,10 @@ use Shopware\Bundle\StoreFrontBundle\Struct;
 interface ProductServiceInterface
 {
     /**
-     * @see \Shopware\Bundle\StoreFrontBundle\Service\ProductServiceInterface::get()
-     *
      * @param $numbers
      * @param Struct\ProductContextInterface $context
      *
      * @return Struct\Product[] Indexed by the product order number
      */
     public function getList(array $numbers, Struct\ProductContextInterface $context);
-
-    /**
-     * Returns a full \Shopware\Bundle\StoreFrontBundle\Struct\Product object.
-     * A product struct contains all data about one single product.
-     *
-     * @param $number
-     * @param Struct\ProductContextInterface $context
-     *
-     * @return Struct\Product
-     */
-    public function get($number, Struct\ProductContextInterface $context);
 }

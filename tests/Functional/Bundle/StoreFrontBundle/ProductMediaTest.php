@@ -133,7 +133,9 @@ class ProductMediaTest extends TestCase
 
         $variantNumber = 'testProductImagesWithVariant-1';
         $product = Shopware()->Container()->get('shopware_storefront.product_service')
-            ->get($variantNumber, $context);
+            ->getList([$variantNumber], $context);
+
+        $product = array_shift($product);
 
         $this->assertCount(2, $product->getMedia());
     }

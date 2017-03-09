@@ -302,12 +302,16 @@ class sArticles
         }
 
         $productContext = $this->contextService->getShopContext();
-        $product = $this->listProductService->get($orderNumber, $productContext);
+        $products = $this->listProductService->getList([$orderNumber], $productContext);
+        $product = array_shift($products);
+
         if (!$product || !$product->hasProperties()) {
             return [];
         }
 
-        $set = $this->propertyService->get($product, $productContext);
+        $set = $this->propertyService->getList([$product], $productContext);
+        $set = array_shift($set);
+
         if (!$set) {
             return [];
         }
@@ -1100,7 +1104,9 @@ class sArticles
             return [];
         }
 
-        $product = $this->productService->get($productNumber, $context);
+        $product = $this->productService->getList([$productNumber], $context);
+        $product = array_shift($product);
+
         if (!$product) {
             return [];
         }
@@ -1553,7 +1559,7 @@ class sArticles
             $product->setAdditional($article['additionaltext']);
 
             $context = $this->contextService->getShopContext();
-            $product = $this->additionalTextService->buildAdditionalText($product, $context);
+            $this->additionalTextService->buildAdditionalTextLists([$product], $context);
 
             if (!$returnAll) {
                 return $article['articleName'] . ' ' . $product->getAdditional();
@@ -2294,10 +2300,11 @@ class sArticles
     {
         $context = $this->contextService->getShopContext();
 
-        $product = $this->listProductService->get(
-            $number,
+        $product = $this->listProductService->getList(
+            [$number],
             $context
         );
+        $product = array_shift($product);
 
         if (!$product) {
             return false;
@@ -2314,10 +2321,11 @@ class sArticles
             return $promotion;
         }
 
-        $propertySet = $this->propertyService->get(
-            $product,
+        $propertySet = $this->propertyService->getList(
+            [$product],
             $context
         );
+        $propertySet = array_shift($propertySet);
 
         if (!$propertySet) {
             return $promotion;
@@ -2416,7 +2424,7 @@ class sArticles
 
             // generate additional text
             if (!empty($selection)) {
-                $this->additionalTextService->buildAdditionalText($product, $this->contextService->getShopContext());
+                $this->additionalTextService->buildAdditionalTextLists([$product], $this->contextService->getShopContext());
                 $data['additionaltext'] = $product->getAdditional();
             }
 

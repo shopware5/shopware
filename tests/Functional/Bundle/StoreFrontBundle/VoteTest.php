@@ -39,7 +39,9 @@ class VoteTest extends TestCase
         $points = [1, 2, 2, 3, 3];
         $this->helper->createVotes($product->getId(), $points);
 
-        $listProduct = Shopware()->Container()->get('shopware_storefront.list_product_service')->get($number, $context);
+        $listProduct = Shopware()->Container()->get('shopware_storefront.list_product_service')->getList([$number], $context);
+        $listProduct = array_shift($listProduct);
+
         $votes = Shopware()->Container()->get('shopware_storefront.vote_service')->get($listProduct, $context);
 
         $this->assertCount(5, $votes);
@@ -60,7 +62,9 @@ class VoteTest extends TestCase
         $points = [1, 2, 2, 3, 3, 3, 3, 3];
         $this->helper->createVotes($product->getId(), $points);
 
-        $listProduct = Shopware()->Container()->get('shopware_storefront.list_product_service')->get($number, $context);
+        $listProduct = Shopware()->Container()->get('shopware_storefront.list_product_service')->getList([$number], $context);
+        $listProduct = array_shift($listProduct);
+
         $voteAverage = $listProduct->getVoteAverage();
 
         $this->assertEquals(5, $voteAverage->getAverage());
@@ -207,7 +211,9 @@ class VoteTest extends TestCase
 
         //load product struct
         $factory = Shopware()->Container()->get('shopware_storefront.base_product_factory');
-        $product = $factory->createBaseProduct($number);
+        $product = $factory->createBaseProducts([$number]);
+        $product = array_shift($product);
+
         $service = Shopware()->Container()->get('shopware_storefront.vote_service');
 
         //iterate all expected shop votes/averages
@@ -222,12 +228,15 @@ class VoteTest extends TestCase
 
             //validates provided average value of provided shop
             if (array_key_exists('average', $data)) {
-                $average = $service->getAverage($product, $context);
+                $average = $service->getAverages([$product], $context);
+                $average = array_shift($average);
+
                 $this->assertEquals($data['average'], $average->getAverage(), sprintf('Vote average %s for shop %s of product %s not match', $data['average'], $shopId, $product->getNumber()));
             }
 
             if (array_key_exists('points', $data)) {
-                $average = $service->getAverage($product, $context);
+                $average = $service->getAverages([$product], $context);
+                $average = array_shift($average);
 
                 $actual = [];
                 foreach ($average->getPointCount() as $row) {

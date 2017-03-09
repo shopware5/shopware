@@ -27,8 +27,8 @@ namespace Shopware\Tests\Functional\Bundle\StoreFrontBundle;
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\ESIndexingBundle\Console\ProgressHelperInterface;
 use Shopware\Bundle\StoreFrontBundle;
-use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\ConfiguratorGateway;
-use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\ProductConfigurationGateway;
+use Shopware\Bundle\StoreFrontBundle\Gateway\ConfiguratorGateway;
+use Shopware\Bundle\StoreFrontBundle\Gateway\ProductConfigurationGateway;
 use Shopware\Bundle\StoreFrontBundle\Struct\Customer\Group;
 use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
@@ -128,23 +128,25 @@ class Helper
     }
 
     /**
-     * @param StoreFrontBundle\Struct\ListProduct                                   $product
-     * @param StoreFrontBundle\Struct\ShopContext                                   $context
-     * @param \Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\ProductPropertyGateway $productPropertyGateway
+     * @param StoreFrontBundle\Struct\ListProduct                              $product
+     * @param StoreFrontBundle\Struct\ShopContext                              $context
+     * @param \Shopware\Bundle\StoreFrontBundle\Gateway\ProductPropertyGateway $productPropertyGateway
      *
      * @return StoreFrontBundle\Struct\Property\Set
      */
     public function getProductProperties(
         StoreFrontBundle\Struct\ListProduct $product,
         StoreFrontBundle\Struct\ShopContext $context,
-        StoreFrontBundle\Gateway\DBAL\ProductPropertyGateway $productPropertyGateway = null
+        StoreFrontBundle\Gateway\ProductPropertyGateway $productPropertyGateway = null
     ) {
         if ($productPropertyGateway === null) {
             $productPropertyGateway = Shopware()->Container()->get('shopware_storefront.product_property_gateway');
         }
         $service = new StoreFrontBundle\Service\Core\PropertyService($productPropertyGateway);
 
-        return $service->get($product, $context);
+        $properties = $service->getList([$product], $context);
+
+        return array_shift($properties);
     }
 
     /**

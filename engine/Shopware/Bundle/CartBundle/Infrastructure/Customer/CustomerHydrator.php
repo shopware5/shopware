@@ -26,9 +26,9 @@ declare(strict_types=1);
 namespace Shopware\Bundle\CartBundle\Infrastructure\Customer;
 
 use Shopware\Bundle\CartBundle\Domain\Customer\Customer;
-use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\AttributeHydrator;
-use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\CustomerGroupHydrator;
-use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\Hydrator;
+use Shopware\Bundle\StoreFrontBundle\Gateway\Hydrator\AttributeHydrator;
+use Shopware\Bundle\StoreFrontBundle\Gateway\Hydrator\CustomerGroupHydrator;
+use Shopware\Bundle\StoreFrontBundle\Gateway\Hydrator\Hydrator;
 
 class CustomerHydrator extends Hydrator
 {

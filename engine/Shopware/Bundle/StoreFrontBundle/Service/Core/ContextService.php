@@ -25,12 +25,12 @@
 namespace Shopware\Bundle\StoreFrontBundle\Service\Core;
 
 use Enlight_Components_Session_Namespace as Session;
-use Shopware\Bundle\StoreFrontBundle\Gateway\CountryGatewayInterface;
-use Shopware\Bundle\StoreFrontBundle\Gateway\CurrencyGatewayInterface;
-use Shopware\Bundle\StoreFrontBundle\Gateway\CustomerGroupGatewayInterface;
-use Shopware\Bundle\StoreFrontBundle\Gateway\PriceGroupDiscountGatewayInterface;
-use Shopware\Bundle\StoreFrontBundle\Gateway\ShopGatewayInterface;
-use Shopware\Bundle\StoreFrontBundle\Gateway\TaxGatewayInterface;
+use Shopware\Bundle\StoreFrontBundle\Gateway\CountryGateway;
+use Shopware\Bundle\StoreFrontBundle\Gateway\CurrencyGateway;
+use Shopware\Bundle\StoreFrontBundle\Gateway\CustomerGroupGateway;
+use Shopware\Bundle\StoreFrontBundle\Gateway\PriceGroupDiscountGateway;
+use Shopware\Bundle\StoreFrontBundle\Gateway\ShopGateway;
+use Shopware\Bundle\StoreFrontBundle\Gateway\TaxGateway;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ProductContextInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
@@ -57,52 +57,52 @@ class ContextService implements ContextServiceInterface
     private $context = null;
 
     /**
-     * @var CustomerGroupGatewayInterface
+     * @var CustomerGroupGateway
      */
     private $customerGroupGateway;
 
     /**
-     * @var TaxGatewayInterface
+     * @var TaxGateway
      */
     private $taxGateway;
 
     /**
-     * @var PriceGroupDiscountGatewayInterface
+     * @var PriceGroupDiscountGateway
      */
     private $priceGroupDiscountGateway;
 
     /**
-     * @var ShopGatewayInterface
+     * @var ShopGateway
      */
     private $shopGateway;
 
     /**
-     * @var CurrencyGatewayInterface
+     * @var CurrencyGateway
      */
     private $currencyGateway;
 
     /**
-     * @var CountryGatewayInterface
+     * @var CountryGateway
      */
     private $countryGateway;
 
     /**
-     * @param Container                          $container
-     * @param CustomerGroupGatewayInterface      $customerGroupGateway
-     * @param TaxGatewayInterface                $taxGateway
-     * @param CountryGatewayInterface            $countryGateway
-     * @param PriceGroupDiscountGatewayInterface $priceGroupDiscountGateway
-     * @param ShopGatewayInterface               $shopGateway
-     * @param CurrencyGatewayInterface           $currencyGateway
+     * @param Container                 $container
+     * @param CustomerGroupGateway      $customerGroupGateway
+     * @param TaxGateway                $taxGateway
+     * @param CountryGateway            $countryGateway
+     * @param PriceGroupDiscountGateway $priceGroupDiscountGateway
+     * @param ShopGateway               $shopGateway
+     * @param CurrencyGateway           $currencyGateway
      */
     public function __construct(
         Container $container,
-        CustomerGroupGatewayInterface $customerGroupGateway,
-        TaxGatewayInterface $taxGateway,
-        CountryGatewayInterface $countryGateway,
-        PriceGroupDiscountGatewayInterface $priceGroupDiscountGateway,
-        ShopGatewayInterface $shopGateway,
-        CurrencyGatewayInterface $currencyGateway
+        CustomerGroupGateway $customerGroupGateway,
+        TaxGateway $taxGateway,
+        CountryGateway $countryGateway,
+        PriceGroupDiscountGateway $priceGroupDiscountGateway,
+        ShopGateway $shopGateway,
+        CurrencyGateway $currencyGateway
     ) {
         $this->container = $container;
         $this->taxGateway = $taxGateway;
@@ -338,7 +338,9 @@ class ContextService implements ContextServiceInterface
         $countryId = null,
         $stateId = null
     ) {
-        $shop = $this->shopGateway->get($shopId);
+        $shop = $this->shopGateway->getList([$shopId]);
+        $shop = array_shift($shop);
+
         $fallbackCustomerGroupKey = self::FALLBACK_CUSTOMER_GROUP;
 
         if ($currentCustomerGroupKey == null) {
@@ -363,21 +365,24 @@ class ContextService implements ContextServiceInterface
 
         $area = null;
         if ($areaId !== null) {
-            $area = $this->countryGateway->getArea($areaId, $context);
+            $area = $this->countryGateway->getAreas([$areaId], $context);
+            $area = array_shift($area);
         }
 
         $country = null;
         if ($countryId !== null) {
-            $country = $this->countryGateway->getCountry($countryId, $context);
+            $country = $this->countryGateway->getCountries([$countryId], $context);
+            $country = array_shift($country);
         }
 
         $state = null;
         if ($stateId !== null) {
-            $state = $this->countryGateway->getState($stateId, $context);
+            $state = $this->countryGateway->getStates([$stateId], $context);
+            $state = array_shift($state);
         }
 
         $taxRules = $this->taxGateway->getRules($currentCustomerGroup, $area, $country, $state);
-        $priceGroups = $this->priceGroupDiscountGateway->getPriceGroups($currentCustomerGroup, $context);
+        $priceGroups = $this->priceGroupDiscountGateway->getPriceGroups($currentCustomerGroup);
 
         return new ShopContext(
             $baseUrl,

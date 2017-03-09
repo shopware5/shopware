@@ -1263,7 +1263,9 @@ class LegacyStructConverter
             return $category->getProductBoxLayout();
         }
 
-        $category = $this->categoryService->get($category->getParentId(), $this->contextService->getShopContext());
+        $category = $this->categoryService->getList([$category->getParentId()], $this->contextService->getShopContext());
+
+        $category = array_shift($category);
 
         return $this->getProductBoxLayout($category);
     }

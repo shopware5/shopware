@@ -66,11 +66,13 @@ class SimilarProductsTest extends TestCase
         }
         $this->linkSimilarProduct($article->getId(), $similarProducts);
 
-        $product = Shopware()->Container()->get('shopware_storefront.list_product_service')
-            ->get($number, $context);
+        $products = Shopware()->Container()->get('shopware_storefront.list_product_service')
+            ->getList([$number], $context);
 
         $similarProducts = Shopware()->Container()->get('shopware_storefront.similar_products_service')
-            ->get($product, $context);
+            ->getList($products, $context);
+
+        $similarProducts = array_shift($similarProducts);
 
         $this->assertCount(4, $similarProducts);
 
@@ -144,11 +146,13 @@ class SimilarProductsTest extends TestCase
             $converter->convertShop($helper->getShop(1))
         );
 
-        $product = Shopware()->Container()->get('shopware_storefront.list_product_service')
-            ->get($number, $context);
+        $products = Shopware()->Container()->get('shopware_storefront.list_product_service')
+            ->getList([$number], $context);
 
         $similar = Shopware()->Container()->get('shopware_storefront.similar_products_service')
-            ->get($product, $context);
+            ->getList($products, $context);
+
+        $similar = array_shift($similar);
 
         $this->assertCount(3, $similar);
 

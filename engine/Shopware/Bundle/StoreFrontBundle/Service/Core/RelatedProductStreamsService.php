@@ -36,15 +36,15 @@ use Shopware\Bundle\StoreFrontBundle\Struct;
 class RelatedProductStreamsService implements Service\RelatedProductStreamsServiceInterface
 {
     /**
-     * @var Gateway\RelatedProductStreamsGatewayInterface
+     * @var Gateway\RelatedProductStreamsGateway
      */
     private $gateway;
 
     /**
-     * @param Gateway\RelatedProductStreamsGatewayInterface $gateway
+     * @param Gateway\RelatedProductStreamsGateway $gateway
      */
     public function __construct(
-        Gateway\RelatedProductStreamsGatewayInterface $gateway
+        Gateway\RelatedProductStreamsGateway $gateway
     ) {
         $this->gateway = $gateway;
     }

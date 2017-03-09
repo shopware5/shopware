@@ -27,9 +27,9 @@ namespace Shopware\Bundle\ESIndexingBundle\Product;
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\ESIndexingBundle\IdentifierSelector;
 use Shopware\Bundle\ESIndexingBundle\Struct\Product;
-use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\FieldHelper;
-use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\PropertyHydrator;
-use Shopware\Bundle\StoreFrontBundle\Gateway\ListProductGatewayInterface;
+use Shopware\Bundle\StoreFrontBundle\Gateway\FieldHelper;
+use Shopware\Bundle\StoreFrontBundle\Gateway\Hydrator\PropertyHydrator;
+use Shopware\Bundle\StoreFrontBundle\Gateway\ListProductGateway;
 use Shopware\Bundle\StoreFrontBundle\Service\CheapestPriceServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\Core\ContextService;
@@ -55,7 +55,7 @@ class ProductProvider implements ProductProviderInterface
     private $connection;
 
     /**
-     * @var ListProductGatewayInterface
+     * @var ListProductGateway
      */
     private $productGateway;
 
@@ -90,7 +90,7 @@ class ProductProvider implements ProductProviderInterface
     private $propertyHydrator;
 
     /**
-     * @param ListProductGatewayInterface      $productGateway
+     * @param ListProductGateway               $productGateway
      * @param CheapestPriceServiceInterface    $cheapestPriceService
      * @param VoteServiceInterface             $voteService
      * @param ContextServiceInterface          $contextService
@@ -101,7 +101,7 @@ class ProductProvider implements ProductProviderInterface
      * @param PropertyHydrator                 $propertyHydrator
      */
     public function __construct(
-        ListProductGatewayInterface $productGateway,
+        ListProductGateway $productGateway,
         CheapestPriceServiceInterface $cheapestPriceService,
         VoteServiceInterface $voteService,
         ContextServiceInterface $contextService,

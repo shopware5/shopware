@@ -36,20 +36,20 @@ use Shopware\Bundle\StoreFrontBundle\Struct;
 class ShopPageService implements Service\ShopPageServiceInterface
 {
     /**
-     * @var Gateway\ShopPageGatewayInterface
+     * @var Gateway\ShopPageGateway
      */
     private $shopPageGateway;
 
     /**
-     * @var Gateway\ShopGatewayInterface
+     * @var Gateway\ShopGateway
      */
     private $shopGateway;
 
     /**
-     * @param Gateway\ShopPageGatewayInterface $shopPageGateway
-     * @param Gateway\ShopGatewayInterface     $shopGateway
+     * @param Gateway\ShopPageGateway $shopPageGateway
+     * @param Gateway\ShopGateway     $shopGateway
      */
-    public function __construct(Gateway\ShopPageGatewayInterface $shopPageGateway, Gateway\ShopGatewayInterface $shopGateway)
+    public function __construct(Gateway\ShopPageGateway $shopPageGateway, Gateway\ShopGateway $shopGateway)
     {
         $this->shopPageGateway = $shopPageGateway;
         $this->shopGateway = $shopGateway;
@@ -98,7 +98,7 @@ class ShopPageService implements Service\ShopPageServiceInterface
      */
     private function resolveChildren(array $shopPages, Struct\ShopContextInterface $context)
     {
-        $parentIds = array_map(function ($page) {
+        $parentIds = array_map(function (Struct\ShopPage $page) {
             return $page->getParentId() > 0 ? (int) $page->getId() : null;
         }, $shopPages);
 
@@ -124,7 +124,7 @@ class ShopPageService implements Service\ShopPageServiceInterface
      */
     private function resolveParents(array $shopPages, Struct\ShopContextInterface $context)
     {
-        $parentIds = array_map(function ($page) {
+        $parentIds = array_map(function (Struct\ShopPage $page) {
             return $page->getParentId();
         }, $shopPages);
 

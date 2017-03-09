@@ -131,16 +131,6 @@ class ProductService implements Service\ProductServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function get($number, Struct\ProductContextInterface $context)
-    {
-        $products = $this->getList([$number], $context);
-
-        return array_shift($products);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getList(array $numbers, Struct\ProductContextInterface $context)
     {
         $listProducts = $this->listProductService->getList($numbers, $context);

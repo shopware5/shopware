@@ -36,7 +36,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct;
 class RelatedProductsService implements Service\RelatedProductsServiceInterface
 {
     /**
-     * @var Gateway\RelatedProductsGatewayInterface
+     * @var Gateway\RelatedProductsGateway
      */
     private $gateway;
 
@@ -46,25 +46,15 @@ class RelatedProductsService implements Service\RelatedProductsServiceInterface
     private $listProductService;
 
     /**
-     * @param Gateway\RelatedProductsGatewayInterface $gateway
-     * @param Service\ListProductServiceInterface     $listProductService
+     * @param Gateway\RelatedProductsGateway      $gateway
+     * @param Service\ListProductServiceInterface $listProductService
      */
     public function __construct(
-        Gateway\RelatedProductsGatewayInterface $gateway,
+        Gateway\RelatedProductsGateway $gateway,
         Service\ListProductServiceInterface $listProductService
     ) {
         $this->gateway = $gateway;
         $this->listProductService = $listProductService;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function get(Struct\BaseProduct $product, Struct\ProductContextInterface $context)
-    {
-        $related = $this->getList([$product], $context);
-
-        return array_shift($related);
     }
 
     /**

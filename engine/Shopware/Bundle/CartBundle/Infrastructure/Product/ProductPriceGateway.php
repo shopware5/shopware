@@ -33,7 +33,7 @@ use Shopware\Bundle\CartBundle\Domain\Price\PriceDefinition;
 use Shopware\Bundle\CartBundle\Domain\Product\ProductPriceGatewayInterface;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxRule;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCollection;
-use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\FieldHelper;
+use Shopware\Bundle\StoreFrontBundle\Gateway\FieldHelper;
 
 class ProductPriceGateway implements ProductPriceGatewayInterface
 {

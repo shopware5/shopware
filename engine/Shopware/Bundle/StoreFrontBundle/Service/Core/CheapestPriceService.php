@@ -36,7 +36,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct;
 class CheapestPriceService implements Service\CheapestPriceServiceInterface
 {
     /**
-     * @var Gateway\CheapestPriceGatewayInterface
+     * @var Gateway\CheapestPriceGateway
      */
     private $cheapestPriceGateway;
 
@@ -46,11 +46,11 @@ class CheapestPriceService implements Service\CheapestPriceServiceInterface
     private $config;
 
     /**
-     * @param Gateway\CheapestPriceGatewayInterface $cheapestPriceGateway
-     * @param \Shopware_Components_Config           $config
+     * @param Gateway\CheapestPriceGateway $cheapestPriceGateway
+     * @param \Shopware_Components_Config  $config
      */
     public function __construct(
-        Gateway\CheapestPriceGatewayInterface $cheapestPriceGateway,
+        Gateway\CheapestPriceGateway $cheapestPriceGateway,
         \Shopware_Components_Config $config
     ) {
         $this->cheapestPriceGateway = $cheapestPriceGateway;

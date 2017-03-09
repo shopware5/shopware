@@ -37,7 +37,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Blog\Blog;
 class BlogService implements Service\BlogServiceInterface
 {
     /**
-     * @var Gateway\BlogGatewayInterface
+     * @var Gateway\BlogGateway
      */
     private $blogGateway;
 
@@ -47,10 +47,10 @@ class BlogService implements Service\BlogServiceInterface
     private $mediaService;
 
     /**
-     * @param Gateway\BlogGatewayInterface  $blogGateway
+     * @param Gateway\BlogGateway           $blogGateway
      * @param Service\MediaServiceInterface $mediaService
      */
-    public function __construct(Gateway\BlogGatewayInterface $blogGateway, Service\MediaServiceInterface $mediaService)
+    public function __construct(Gateway\BlogGateway $blogGateway, Service\MediaServiceInterface $mediaService)
     {
         $this->blogGateway = $blogGateway;
         $this->mediaService = $mediaService;
@@ -61,7 +61,7 @@ class BlogService implements Service\BlogServiceInterface
      */
     public function getList(array $ids, Struct\ShopContextInterface $context)
     {
-        $blogs = $this->blogGateway->getList($ids, $context);
+        $blogs = $this->blogGateway->getList($ids);
 
         $this->resolveMedias($blogs, $context);
 

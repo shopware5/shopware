@@ -38,8 +38,8 @@ use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCollection;
 use Shopware\Bundle\CartBundle\Infrastructure\Payment\PaymentMethodGateway;
 use Shopware\Bundle\CartBundle\Infrastructure\Payment\PaymentMethodHydrator;
 use Shopware\Bundle\CartBundle\Infrastructure\Payment\PaymentMethodService;
-use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\FieldHelper;
-use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\AttributeHydrator;
+use Shopware\Bundle\StoreFrontBundle\Gateway\FieldHelper;
+use Shopware\Bundle\StoreFrontBundle\Gateway\Hydrator\AttributeHydrator;
 use Shopware\Bundle\StoreFrontBundle\Service\CacheInterface;
 use Shopware\Tests\Unit\Bundle\CartBundle\Common\Generator;
 

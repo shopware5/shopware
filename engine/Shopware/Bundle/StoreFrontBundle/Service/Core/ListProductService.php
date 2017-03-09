@@ -36,7 +36,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct;
 class ListProductService implements Service\ListProductServiceInterface
 {
     /**
-     * @var Gateway\ListProductGatewayInterface
+     * @var Gateway\ListProductGateway
      */
     private $productGateway;
 
@@ -81,7 +81,7 @@ class ListProductService implements Service\ListProductServiceInterface
     private $config;
 
     /**
-     * @param Gateway\ListProductGatewayInterface      $productGateway
+     * @param Gateway\ListProductGateway               $productGateway
      * @param Service\GraduatedPricesServiceInterface  $graduatedPricesService
      * @param Service\CheapestPriceServiceInterface    $cheapestPriceService
      * @param Service\PriceCalculationServiceInterface $priceCalculationService
@@ -92,7 +92,7 @@ class ListProductService implements Service\ListProductServiceInterface
      * @param \Shopware_Components_Config              $config
      */
     public function __construct(
-        Gateway\ListProductGatewayInterface $productGateway,
+        Gateway\ListProductGateway $productGateway,
         Service\GraduatedPricesServiceInterface $graduatedPricesService,
         Service\CheapestPriceServiceInterface $cheapestPriceService,
         Service\PriceCalculationServiceInterface $priceCalculationService,
@@ -111,16 +111,6 @@ class ListProductService implements Service\ListProductServiceInterface
         $this->voteService = $voteService;
         $this->categoryService = $categoryService;
         $this->config = $config;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function get($number, Struct\ProductContextInterface $context)
-    {
-        $products = $this->getList([$number], $context);
-
-        return array_shift($products);
     }
 
     /**

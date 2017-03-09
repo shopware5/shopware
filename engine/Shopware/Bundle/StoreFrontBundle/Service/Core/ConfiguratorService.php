@@ -40,22 +40,22 @@ class ConfiguratorService implements Service\ConfiguratorServiceInterface
     const CONFIGURATOR_TYPE_PICTURE = 2;
 
     /**
-     * @var Gateway\ProductConfigurationGatewayInterface
+     * @var Gateway\ProductConfigurationGateway
      */
     private $productConfigurationGateway;
 
     /**
-     * @var Gateway\ConfiguratorGatewayInterface
+     * @var Gateway\ConfiguratorGateway
      */
     private $configuratorGateway;
 
     /**
-     * @param Gateway\ProductConfigurationGatewayInterface $productConfigurationGateway
-     * @param Gateway\ConfiguratorGatewayInterface         $configuratorGateway
+     * @param Gateway\ProductConfigurationGateway $productConfigurationGateway
+     * @param Gateway\ConfiguratorGateway         $configuratorGateway
      */
     public function __construct(
-        Gateway\ProductConfigurationGatewayInterface $productConfigurationGateway,
-        Gateway\ConfiguratorGatewayInterface $configuratorGateway
+        Gateway\ProductConfigurationGateway $productConfigurationGateway,
+        Gateway\ConfiguratorGateway $configuratorGateway
     ) {
         $this->configuratorGateway = $configuratorGateway;
         $this->productConfigurationGateway = $productConfigurationGateway;

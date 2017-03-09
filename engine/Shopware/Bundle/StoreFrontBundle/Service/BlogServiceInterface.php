@@ -37,12 +37,12 @@ interface BlogServiceInterface
      * To get detailed information about the selection conditions, structure and content of the returned object,
      * please refer to the linked classes.
      *
-     * @see \Shopware\Bundle\StoreFrontBundle\Gateway\BlogGatewayInterface::getList()
+     * @see \Shopware\Bundle\StoreFrontBundle\Gateway\BlogGateway::getList()
      *
      * @param int[]                       $ids
      * @param Struct\ShopContextInterface $context
      *
-     * @return Struct\Blog[] indexed by the blog id
+     * @return Struct\Blog\Blog[] indexed by the blog id
      */
     public function getList(array $ids, Struct\ShopContextInterface $context);
 }

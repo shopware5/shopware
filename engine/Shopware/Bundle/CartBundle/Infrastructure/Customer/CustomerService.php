@@ -27,7 +27,7 @@ namespace Shopware\Bundle\CartBundle\Infrastructure\Customer;
 
 use Shopware\Bundle\CartBundle\Domain\Customer\Customer;
 use Shopware\Bundle\CartBundle\Infrastructure\Payment\PaymentMethodGateway;
-use Shopware\Bundle\StoreFrontBundle\Gateway\ShopGatewayInterface;
+use Shopware\Bundle\StoreFrontBundle\Gateway\ShopGateway;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class CustomerService
@@ -43,7 +43,7 @@ class CustomerService
     private $addressGateway;
 
     /**
-     * @var ShopGatewayInterface
+     * @var ShopGateway
      */
     private $shopGateway;
 
@@ -55,18 +55,18 @@ class CustomerService
     /**
      * @param CustomerGateway      $customerGateway
      * @param AddressGateway       $addressGateway
-     * @param ShopGatewayInterface $shopGatewayInterface
+     * @param ShopGateway          $shopGateway
      * @param PaymentMethodGateway $paymentMethodGateway
      */
     public function __construct(
         CustomerGateway $customerGateway,
         AddressGateway $addressGateway,
-        ShopGatewayInterface $shopGatewayInterface,
+        ShopGateway $shopGateway,
         PaymentMethodGateway $paymentMethodGateway
     ) {
         $this->customerGateway = $customerGateway;
         $this->addressGateway = $addressGateway;
-        $this->shopGateway = $shopGatewayInterface;
+        $this->shopGateway = $shopGateway;
         $this->paymentMethodGateway = $paymentMethodGateway;
     }
 

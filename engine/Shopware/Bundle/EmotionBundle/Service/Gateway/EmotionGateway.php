@@ -27,7 +27,7 @@ namespace Shopware\Bundle\EmotionBundle\Service\Gateway;
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\EmotionBundle\Service\Gateway\Hydrator\EmotionHydrator;
 use Shopware\Bundle\EmotionBundle\Struct\Emotion;
-use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\FieldHelper;
+use Shopware\Bundle\StoreFrontBundle\Gateway\FieldHelper;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class EmotionGateway

@@ -38,7 +38,7 @@ use Shopware\Components\Routing\RouterInterface;
 class ManufacturerService implements Service\ManufacturerServiceInterface
 {
     /**
-     * @var Gateway\ManufacturerGatewayInterface
+     * @var Gateway\ManufacturerGateway
      */
     private $manufacturerGateway;
 
@@ -48,25 +48,15 @@ class ManufacturerService implements Service\ManufacturerServiceInterface
     private $router;
 
     /**
-     * @param Gateway\ManufacturerGatewayInterface $manufacturerGateway
-     * @param RouterInterface                      $router
+     * @param Gateway\ManufacturerGateway $manufacturerGateway
+     * @param RouterInterface             $router
      */
     public function __construct(
-        Gateway\ManufacturerGatewayInterface $manufacturerGateway,
+        Gateway\ManufacturerGateway $manufacturerGateway,
         RouterInterface $router
     ) {
         $this->manufacturerGateway = $manufacturerGateway;
         $this->router = $router;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function get($id, Struct\ShopContextInterface $context)
-    {
-        $manufacturers = $this->getList([$id], $context);
-
-        return array_shift($manufacturers);
     }
 
     /**

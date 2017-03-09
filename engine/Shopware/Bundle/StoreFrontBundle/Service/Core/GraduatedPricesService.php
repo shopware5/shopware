@@ -36,15 +36,15 @@ use Shopware\Bundle\StoreFrontBundle\Struct;
 class GraduatedPricesService implements Service\GraduatedPricesServiceInterface
 {
     /**
-     * @var Gateway\GraduatedPricesGatewayInterface
+     * @var Gateway\GraduatedPricesGateway
      */
     private $graduatedPricesGateway;
 
     /**
-     * @param Gateway\GraduatedPricesGatewayInterface $graduatedPricesGateway
+     * @param Gateway\GraduatedPricesGateway $graduatedPricesGateway
      */
     public function __construct(
-        Gateway\GraduatedPricesGatewayInterface $graduatedPricesGateway
+        Gateway\GraduatedPricesGateway $graduatedPricesGateway
     ) {
         $this->graduatedPricesGateway = $graduatedPricesGateway;
     }

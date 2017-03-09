@@ -36,26 +36,16 @@ use Shopware\Bundle\StoreFrontBundle\Struct;
 class CategoryService implements Service\CategoryServiceInterface
 {
     /**
-     * @var Gateway\CategoryGatewayInterface
+     * @var Gateway\CategoryGateway
      */
     private $categoryGateway;
 
     /**
-     * @param Gateway\CategoryGatewayInterface $categoryGateway
+     * @param Gateway\CategoryGateway $categoryGateway
      */
-    public function __construct(Gateway\CategoryGatewayInterface $categoryGateway)
+    public function __construct(Gateway\CategoryGateway $categoryGateway)
     {
         $this->categoryGateway = $categoryGateway;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function get($id, Struct\ShopContextInterface $context)
-    {
-        $categories = $this->getList([$id], $context);
-
-        return array_shift($categories);
     }
 
     /**

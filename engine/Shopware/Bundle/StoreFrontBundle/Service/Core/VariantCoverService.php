@@ -36,22 +36,22 @@ use Shopware\Bundle\StoreFrontBundle\Struct;
 class VariantCoverService implements VariantCoverServiceInterface
 {
     /**
-     * @var Gateway\ProductMediaGatewayInterface
+     * @var Gateway\ProductMediaGateway
      */
     private $productMediaGateway;
 
     /**
-     * @var Gateway\VariantMediaGatewayInterface
+     * @var Gateway\VariantMediaGateway
      */
     private $variantMediaGateway;
 
     /**
-     * @param Gateway\ProductMediaGatewayInterface $productMedia
-     * @param Gateway\VariantMediaGatewayInterface $variantMedia
+     * @param Gateway\ProductMediaGateway $productMedia
+     * @param Gateway\VariantMediaGateway $variantMedia
      */
     public function __construct(
-        Gateway\ProductMediaGatewayInterface $productMedia,
-        Gateway\VariantMediaGatewayInterface $variantMedia
+        Gateway\ProductMediaGateway $productMedia,
+        Gateway\VariantMediaGateway $variantMedia
     ) {
         $this->productMediaGateway = $productMedia;
         $this->variantMediaGateway = $variantMedia;

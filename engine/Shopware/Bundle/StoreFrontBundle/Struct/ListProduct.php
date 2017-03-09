@@ -24,12 +24,8 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Struct;
 
-use Shopware\Bundle\StoreFrontBundle\Struct\Product\Esd;
-use Shopware\Bundle\StoreFrontBundle\Struct\Product\Manufacturer;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\Price;
-use Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceGroup;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceRule;
-use Shopware\Bundle\StoreFrontBundle\Struct\Product\Unit;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\VoteAverage;
 
 /**

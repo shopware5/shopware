@@ -40,7 +40,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct;
 class SimilarProductsService implements Service\SimilarProductsServiceInterface
 {
     /**
-     * @var Gateway\SimilarProductsGatewayInterface
+     * @var Gateway\SimilarProductsGateway
      */
     private $gateway;
 
@@ -64,14 +64,14 @@ class SimilarProductsService implements Service\SimilarProductsServiceInterface
     private $factory;
 
     /**
-     * @param Gateway\SimilarProductsGatewayInterface $gateway
-     * @param Service\ListProductServiceInterface     $listProductService
-     * @param \Shopware_Components_Config             $config
-     * @param ProductSearchInterface                  $search
-     * @param StoreFrontCriteriaFactoryInterface      $factory
+     * @param Gateway\SimilarProductsGateway      $gateway
+     * @param Service\ListProductServiceInterface $listProductService
+     * @param \Shopware_Components_Config         $config
+     * @param ProductSearchInterface              $search
+     * @param StoreFrontCriteriaFactoryInterface  $factory
      */
     public function __construct(
-        Gateway\SimilarProductsGatewayInterface $gateway,
+        Gateway\SimilarProductsGateway $gateway,
         Service\ListProductServiceInterface $listProductService,
         ProductSearchInterface $search,
         StoreFrontCriteriaFactoryInterface $factory,
@@ -82,16 +82,6 @@ class SimilarProductsService implements Service\SimilarProductsServiceInterface
         $this->config = $config;
         $this->search = $search;
         $this->factory = $factory;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function get(Struct\ListProduct $product, Struct\ProductContextInterface $context)
-    {
-        $similar = $this->getList([$product], $context);
-
-        return array_shift($similar);
     }
 
     /**

@@ -26,7 +26,7 @@ namespace Shopware\Bundle\EmotionBundle\Service;
 
 use Shopware\Bundle\EmotionBundle\Service\Gateway\EmotionGateway;
 use Shopware\Bundle\EmotionBundle\Struct\Emotion;
-use Shopware\Bundle\StoreFrontBundle\Gateway\ShopGatewayInterface;
+use Shopware\Bundle\StoreFrontBundle\Gateway\ShopGateway;
 use Shopware\Bundle\StoreFrontBundle\Service\CategoryServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
@@ -43,7 +43,7 @@ class EmotionService implements EmotionServiceInterface
     private $elementService;
 
     /**
-     * @var ShopGatewayInterface
+     * @var ShopGateway
      */
     private $shopGateway;
 
@@ -55,13 +55,13 @@ class EmotionService implements EmotionServiceInterface
     /**
      * @param EmotionGateway                 $gateway
      * @param EmotionElementServiceInterface $elementService
-     * @param ShopGatewayInterface           $shopGateway
+     * @param ShopGateway                    $shopGateway
      * @param CategoryServiceInterface       $categoryService
      */
     public function __construct(
         EmotionGateway $gateway,
         EmotionElementServiceInterface $elementService,
-        ShopGatewayInterface $shopGateway,
+        ShopGateway $shopGateway,
         CategoryServiceInterface $categoryService
     ) {
         $this->gateway = $gateway;

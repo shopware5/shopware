@@ -29,7 +29,7 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Shopware\Bundle\CartBundle\Domain\Payment\PaymentMethod;
 use Shopware\Bundle\CartBundle\Infrastructure\SortArrayByKeysTrait;
-use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\FieldHelper;
+use Shopware\Bundle\StoreFrontBundle\Gateway\FieldHelper;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class PaymentMethodGateway

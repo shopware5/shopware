@@ -24,21 +24,21 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Service\Core;
 
-use Shopware\Bundle\StoreFrontBundle\Gateway\CustomSortingGatewayInterface;
+use Shopware\Bundle\StoreFrontBundle\Gateway\CustomSortingGateway;
 use Shopware\Bundle\StoreFrontBundle\Service\CustomSortingServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class CustomSortingService implements CustomSortingServiceInterface
 {
     /**
-     * @var CustomSortingGatewayInterface
+     * @var CustomSortingGateway
      */
     private $gateway;
 
     /**
-     * @param CustomSortingGatewayInterface $gateway
+     * @param CustomSortingGateway $gateway
      */
-    public function __construct(CustomSortingGatewayInterface $gateway)
+    public function __construct(CustomSortingGateway $gateway)
     {
         $this->gateway = $gateway;
     }

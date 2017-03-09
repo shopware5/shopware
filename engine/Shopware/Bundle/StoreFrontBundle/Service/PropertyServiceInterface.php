@@ -37,25 +37,10 @@ interface PropertyServiceInterface
      * To get detailed information about the selection conditions, structure and content of the returned object,
      * please refer to the linked classes.
      *
-     * @see \Shopware\Bundle\StoreFrontBundle\Service\PropertyServiceInterface::get()
-     *
      * @param Struct\BaseProduct[]        $products
      * @param Struct\ShopContextInterface $context
      *
      * @return Struct\Property\Set[]
      */
     public function getList($products, Struct\ShopContextInterface $context);
-
-    /**
-     * To get detailed information about the selection conditions, structure and content of the returned object,
-     * please refer to the linked classes.
-     *
-     * @see \Shopware\Bundle\StoreFrontBundle\Gateway\ProductPropertyGatewayInterface::get()
-     *
-     * @param Struct\BaseProduct          $product
-     * @param Struct\ShopContextInterface $context
-     *
-     * @return Struct\Property\Set
-     */
-    public function get(Struct\BaseProduct $product, Struct\ShopContextInterface $context);
 }

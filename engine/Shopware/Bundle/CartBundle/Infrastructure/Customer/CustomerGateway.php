@@ -28,7 +28,7 @@ namespace Shopware\Bundle\CartBundle\Infrastructure\Customer;
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\CartBundle\Domain\Customer\Customer;
 use Shopware\Bundle\CartBundle\Infrastructure\SortArrayByKeysTrait;
-use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\FieldHelper;
+use Shopware\Bundle\StoreFrontBundle\Gateway\FieldHelper;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class CustomerGateway

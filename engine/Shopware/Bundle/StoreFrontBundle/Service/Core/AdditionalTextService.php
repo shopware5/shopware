@@ -53,16 +53,6 @@ class AdditionalTextService implements AdditionalTextServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function buildAdditionalText(ListProduct $product, ShopContextInterface $context)
-    {
-        $products = $this->buildAdditionalTextLists([$product], $context);
-
-        return array_shift($products);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function buildAdditionalTextLists($products, ShopContextInterface $context)
     {
         $required = [];

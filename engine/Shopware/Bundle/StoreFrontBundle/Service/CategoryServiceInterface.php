@@ -37,7 +37,7 @@ interface CategoryServiceInterface
      * To get detailed information about the selection conditions, structure and content of the returned object,
      * please refer to the linked classes.
      *
-     * @see \Shopware\Bundle\StoreFrontBundle\Gateway\CategoryGatewayInterface::getList()
+     * @see \Shopware\Bundle\StoreFrontBundle\Gateway\CategoryGateway::getList()
      *
      * @param $ids
      * @param Struct\ShopContextInterface $context
@@ -45,19 +45,6 @@ interface CategoryServiceInterface
      * @return Struct\Category[] indexed by the category id
      */
     public function getList($ids, Struct\ShopContextInterface $context);
-
-    /**
-     * To get detailed information about the selection conditions, structure and content of the returned object,
-     * please refer to the linked classes.
-     *
-     * @see \Shopware\Bundle\StoreFrontBundle\Gateway\CategoryGatewayInterface::get()
-     *
-     * @param $id
-     * @param Struct\ShopContextInterface $context
-     *
-     * @return Struct\Category
-     */
-    public function get($id, Struct\ShopContextInterface $context);
 
     /**
      * @param Struct\BaseProduct[]        $products

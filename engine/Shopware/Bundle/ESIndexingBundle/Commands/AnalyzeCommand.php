@@ -60,7 +60,9 @@ class AnalyzeCommand extends ShopwareCommand
         $query = $input->getArgument('query');
         $analyzer = $input->getArgument('analyzer');
 
-        $shop = $this->container->get('shopware_storefront.shop_gateway_dbal')->get($shopId);
+        $shop = $this->container->get('shopware_storefront.shop_gateway_dbal')->getList([$shopId]);
+        $shop = array_shift($shop);
+
         $client = $this->container->get('shopware_elastic_search.client');
         $index = $this->container->get('shopware_elastic_search.index_factory')->createShopIndex($shop);
 

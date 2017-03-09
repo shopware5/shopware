@@ -27,14 +27,14 @@ namespace Shopware\Bundle\CartBundle\Infrastructure\View;
 
 use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
 use Shopware\Bundle\CartBundle\Domain\Product\CalculatedProduct;
-use Shopware\Bundle\StoreFrontBundle\Gateway\ListProductGatewayInterface;
+use Shopware\Bundle\StoreFrontBundle\Gateway\ListProductGateway;
 use Shopware\Bundle\StoreFrontBundle\Service\VariantCoverServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class ViewProductTransformer implements ViewLineItemTransformerInterface
 {
     /**
-     * @var ListProductGatewayInterface
+     * @var ListProductGateway
      */
     private $listProductGateway;
 
@@ -44,7 +44,7 @@ class ViewProductTransformer implements ViewLineItemTransformerInterface
     private $mediaService;
 
     public function __construct(
-        ListProductGatewayInterface $listProductGateway,
+        ListProductGateway $listProductGateway,
         VariantCoverServiceInterface $mediaService
     ) {
         $this->listProductGateway = $listProductGateway;

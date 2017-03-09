@@ -37,21 +37,6 @@ interface VoteServiceInterface
      * To get detailed information about the selection conditions, structure and content of the returned object,
      * please refer to the linked classes.
      *
-     * @see \Shopware\Bundle\StoreFrontBundle\Gateway\VoteAverageGatewayInterface::get()
-     *
-     * @param Struct\BaseProduct          $product
-     * @param Struct\ShopContextInterface $context
-     *
-     * @return Struct\Product\VoteAverage
-     */
-    public function getAverage(Struct\BaseProduct $product, Struct\ShopContextInterface $context);
-
-    /**
-     * To get detailed information about the selection conditions, structure and content of the returned object,
-     * please refer to the linked classes.
-     *
-     * @see \Shopware\Bundle\StoreFrontBundle\Gateway\VoteGatewayInterface::get()
-     *
      * @param Struct\BaseProduct[]        $products
      * @param Struct\ShopContextInterface $context
      *
@@ -62,21 +47,6 @@ interface VoteServiceInterface
     /**
      * To get detailed information about the selection conditions, structure and content of the returned object,
      * please refer to the linked classes.
-     *
-     * @see \Shopware\Bundle\StoreFrontBundle\Gateway\VoteGatewayInterface::get()
-     *
-     * @param Struct\BaseProduct          $product
-     * @param Struct\ShopContextInterface $context
-     *
-     * @return Struct\Product\Vote[]
-     */
-    public function get(Struct\BaseProduct $product, Struct\ShopContextInterface $context);
-
-    /**
-     * To get detailed information about the selection conditions, structure and content of the returned object,
-     * please refer to the linked classes.
-     *
-     * @see \Shopware\Bundle\StoreFrontBundle\Gateway\VoteAverageGatewayInterface::get()
      *
      * @param Struct\BaseProduct[]        $products
      * @param Struct\ShopContextInterface $context

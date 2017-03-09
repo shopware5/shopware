@@ -36,22 +36,22 @@ use Shopware\Bundle\StoreFrontBundle\Struct;
 class VoteService implements Service\VoteServiceInterface
 {
     /**
-     * @var Gateway\VoteGatewayInterface
+     * @var Gateway\VoteGateway
      */
     private $voteGateway;
 
     /**
-     * @var Gateway\VoteAverageGatewayInterface
+     * @var Gateway\VoteAverageGateway
      */
     private $voteAverageGateway;
 
     /**
-     * @param Gateway\VoteGatewayInterface        $voteGateway
-     * @param Gateway\VoteAverageGatewayInterface $voteAverageGateway
+     * @param Gateway\VoteGateway        $voteGateway
+     * @param Gateway\VoteAverageGateway $voteAverageGateway
      */
     public function __construct(
-        Gateway\VoteGatewayInterface $voteGateway,
-        Gateway\VoteAverageGatewayInterface $voteAverageGateway
+        Gateway\VoteGateway $voteGateway,
+        Gateway\VoteAverageGateway $voteAverageGateway
     ) {
         $this->voteGateway = $voteGateway;
         $this->voteAverageGateway = $voteAverageGateway;

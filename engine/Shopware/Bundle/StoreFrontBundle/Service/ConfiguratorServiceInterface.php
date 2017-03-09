@@ -37,20 +37,7 @@ interface ConfiguratorServiceInterface
      * To get detailed information about the selection conditions, structure and content of the returned object,
      * please refer to the linked classes.
      *
-     * @see \Shopware\Bundle\StoreFrontBundle\Gateway\ProductConfigurationGatewayInterface::get()
-     *
-     * @param Struct\BaseProduct          $product
-     * @param Struct\ShopContextInterface $context
-     *
-     * @return Struct\Configurator\Group[]
-     */
-    public function getProductConfiguration(Struct\BaseProduct $product, Struct\ShopContextInterface $context);
-
-    /**
-     * To get detailed information about the selection conditions, structure and content of the returned object,
-     * please refer to the linked classes.
-     *
-     * @see \Shopware\Bundle\StoreFrontBundle\Gateway\ProductConfigurationGatewayInterface::getList()
+     * @see \Shopware\Bundle\StoreFrontBundle\Gateway\ProductConfigurationGateway::getList()
      *
      * @param Struct\BaseProduct[]        $products
      * @param Struct\ShopContextInterface $context
@@ -63,7 +50,7 @@ interface ConfiguratorServiceInterface
      * To get detailed information about the selection conditions, structure and content of the returned object,
      * please refer to the linked classes.
      *
-     * @see \Shopware\Bundle\StoreFrontBundle\Gateway\ConfiguratorGatewayInterface::get()
+     * @see \Shopware\Bundle\StoreFrontBundle\Gateway\ConfiguratorGateway::get()
      *
      * @param Struct\BaseProduct          $product
      * @param Struct\ShopContextInterface $context

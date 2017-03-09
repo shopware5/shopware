@@ -26,8 +26,8 @@ declare(strict_types=1);
 namespace Shopware\Bundle\CartBundle\Infrastructure\Delivery;
 
 use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryMethod;
-use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\AttributeHydrator;
-use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\Hydrator;
+use Shopware\Bundle\StoreFrontBundle\Gateway\Hydrator\AttributeHydrator;
+use Shopware\Bundle\StoreFrontBundle\Gateway\Hydrator\Hydrator;
 
 class DeliveryMethodHydrator extends Hydrator
 {

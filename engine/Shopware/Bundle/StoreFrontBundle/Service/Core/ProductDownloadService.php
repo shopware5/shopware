@@ -36,26 +36,16 @@ use Shopware\Bundle\StoreFrontBundle\Struct;
 class ProductDownloadService implements Service\ProductDownloadServiceInterface
 {
     /**
-     * @var Gateway\DownloadGatewayInterface
+     * @var Gateway\DownloadGateway
      */
     private $gateway;
 
     /**
-     * @param Gateway\DownloadGatewayInterface $gateway
+     * @param Gateway\DownloadGateway $gateway
      */
-    public function __construct(Gateway\DownloadGatewayInterface $gateway)
+    public function __construct(Gateway\DownloadGateway $gateway)
     {
         $this->gateway = $gateway;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function get(Struct\BaseProduct $product, Struct\ShopContextInterface $context)
-    {
-        $downloads = $this->getList([$product], $context);
-
-        return array_shift($downloads);
     }
 
     /**

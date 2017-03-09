@@ -37,21 +37,6 @@ interface MediaServiceInterface
      * To get detailed information about the selection conditions, structure and content of the returned object,
      * please refer to the linked classes.
      *
-     * @see \Shopware\Bundle\StoreFrontBundle\Gateway\ProductMediaGatewayInterface::get()
-     *
-     * @param $id
-     * @param Struct\ShopContextInterface $context
-     *
-     * @return Struct\Media
-     */
-    public function get($id, Struct\ShopContextInterface $context);
-
-    /**
-     * To get detailed information about the selection conditions, structure and content of the returned object,
-     * please refer to the linked classes.
-     *
-     * @see \Shopware\Bundle\StoreFrontBundle\Gateway\ProductMediaGatewayInterface::get()
-     *
      * @param $ids
      * @param Struct\ShopContextInterface $context
      *
@@ -60,8 +45,6 @@ interface MediaServiceInterface
     public function getList($ids, Struct\ShopContextInterface $context);
 
     /**
-     * @see \Shopware\Bundle\StoreFrontBundle\Service\MediaServiceInterface::getProductMedia()
-     *
      * @param Struct\BaseProduct[]        $products
      * @param Struct\ShopContextInterface $context
      *
@@ -70,49 +53,10 @@ interface MediaServiceInterface
     public function getProductsMedia($products, Struct\ShopContextInterface $context);
 
     /**
-     * If the forceArticleMainImageInListing configuration is activated,
-     * the function try to selects the first product media which has a configurator configuration
-     * for the provided product.
-     *
-     * If no configurator image exist, the function returns the fallback main image of the product.
-     *
-     * To get detailed information about the selection conditions, structure and content of the returned object,
-     * please refer to the linked classes.
-     *
-     * @see \Shopware\Bundle\StoreFrontBundle\Gateway\VariantMediaGatewayInterface::getCover()
-     * @see \Shopware\Bundle\StoreFrontBundle\Gateway\ProductMediaGatewayInterface::getCover()
-     *
-     * @param Struct\BaseProduct          $product
-     * @param Struct\ShopContextInterface $context
-     *
-     * @return Struct\Media
-     */
-    public function getCover(Struct\BaseProduct $product, Struct\ShopContextInterface $context);
-
-    /**
-     * @see \Shopware\Bundle\StoreFrontBundle\Service\MediaServiceInterface::getCover()
-     *
      * @param Struct\BaseProduct[]                                          $products
      * @param \Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface $context
      *
      * @return Struct\Media[] Indexed by product number
      */
     public function getCovers($products, Struct\ShopContextInterface $context);
-
-    /**
-     * Selects first the media structs which have a configurator configuration for the provided product variant.
-     * The normal product media structs which has no configuration, are appended to the configurator media structs.
-     *
-     * To get detailed information about the selection conditions, structure and content of the returned object,
-     * please refer to the linked classes.
-     *
-     * @see \Shopware\Bundle\StoreFrontBundle\Gateway\ProductMediaGatewayInterface::get()
-     * @see \Shopware\Bundle\StoreFrontBundle\Gateway\VariantMediaGatewayInterface::get()
-     *
-     * @param Struct\BaseProduct          $product
-     * @param Struct\ShopContextInterface $context
-     *
-     * @return Struct\Media[]
-     */
-    public function getProductMedia(Struct\BaseProduct $product, Struct\ShopContextInterface $context);
 }

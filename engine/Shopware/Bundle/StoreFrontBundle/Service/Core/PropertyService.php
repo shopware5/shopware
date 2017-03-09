@@ -36,26 +36,16 @@ use Shopware\Bundle\StoreFrontBundle\Struct;
 class PropertyService implements Service\PropertyServiceInterface
 {
     /**
-     * @var Gateway\ProductPropertyGatewayInterface
+     * @var Gateway\ProductPropertyGateway
      */
     private $productPropertyGateway;
 
     /**
-     * @param Gateway\ProductPropertyGatewayInterface $productPropertyGateway
+     * @param Gateway\ProductPropertyGateway $productPropertyGateway
      */
-    public function __construct(Gateway\ProductPropertyGatewayInterface $productPropertyGateway)
+    public function __construct(Gateway\ProductPropertyGateway $productPropertyGateway)
     {
         $this->productPropertyGateway = $productPropertyGateway;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function get(Struct\BaseProduct $product, Struct\ShopContextInterface $context)
-    {
-        $properties = $this->getList([$product], $context);
-
-        return array_shift($properties);
     }
 
     /**

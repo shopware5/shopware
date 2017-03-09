@@ -36,14 +36,14 @@ use Shopware\Bundle\StoreFrontBundle\Struct;
 class ProductLinkService implements Service\ProductLinkServiceInterface
 {
     /**
-     * @var Gateway\LinkGatewayInterface
+     * @var Gateway\LinkGateway
      */
     private $gateway;
 
     /**
-     * @param Gateway\LinkGatewayInterface $gateway
+     * @param Gateway\LinkGateway $gateway
      */
-    public function __construct(Gateway\LinkGatewayInterface $gateway)
+    public function __construct(Gateway\LinkGateway $gateway)
     {
         $this->gateway = $gateway;
     }
