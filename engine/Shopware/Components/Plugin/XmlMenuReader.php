@@ -37,7 +37,7 @@ class XmlMenuReader
         try {
             $dom = XmlUtils::loadFile($file, __DIR__.'/schema/menu.xsd');
         } catch (\Exception $e) {
-            throw new \InvalidArgumentException(sprintf('Unable to parse file "%s".', $file), $e->getCode(), $e);
+            throw new \InvalidArgumentException(sprintf('Unable to parse file "%s". Message: ', $file, $e->getMessage()), $e->getCode(), $e);
         }
 
         return $this->parseMenu($dom);
