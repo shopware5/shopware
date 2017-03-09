@@ -436,7 +436,7 @@ class Repository extends ModelRepository
      * @param array[] $shops
      * @param string  $requestPath
      *
-     * @return array
+     * @return array|null
      */
     protected function findShopForRequest($shops, $requestPath)
     {
@@ -447,27 +447,16 @@ class Repository extends ModelRepository
                 if ($shop === null) {
                     $shop = $currentShop;
                 }
-            } elseif ($requestPath === $currentShop['base_url']
-                || (strpos($requestPath, $currentShop['base_url']) === 0
-                    && in_array($requestPath[strlen($currentShop['base_url'])], ['/', '?']))
+            } elseif (
+                $requestPath === $currentShop['base_url']
+                ||
+                (
+                    strpos($requestPath, $currentShop['base_url']) === 0
+                    &&
+                    in_array($requestPath[strlen($currentShop['base_url'])], ['/', '?'])
+                )
             ) {
                 /*
-                 * Check if the url is the same as the (sub)shop url
-                 * or if its the beginning of it, followed by / or ?
-                 *
-                 * f.e. this will match: localhost/en/blog/blogId=3 but this won't: localhost/entsorgung/
-                 */
-                if (!$shop || $currentShop['base_url'] > $shop['base_url']) {
-                    $shop = $currentShop;
-                }
-            } elseif ($currentShop['secure']
-                && ($requestPath == $currentShop['base_url']
-                    || (strpos($requestPath, $currentShop['base_url']) === 0
-                        && in_array($requestPath[strlen($currentShop['base_url'])], ['/', '?'])))
-            ) {
-                /*
-                 * Only if the shop is used in secure (ssl) mode
-                 *
                  * Check if the url is the same as the (sub)shop url
                  * or if its the beginning of it, followed by / or ?
                  *
@@ -490,10 +479,6 @@ class Repository extends ModelRepository
                  */
                 $shop = $currentShop;
             }
-        }
-
-        if ($shop === null) {
-            return null;
         }
 
         return $shop;
