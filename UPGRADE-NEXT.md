@@ -25,19 +25,36 @@ This changelog references changes done in Shopware Next patch versions.
 * Added service `shopware_media.filesystem` which is build on top of `shopware.filesystem.public`
 * Added `\Shopware\Bundle\StoreFrontBundle\Struct\Category::__construct` which requires id, parentId, path and name
 * Added `\Shopware\Bundle\StoreFrontBundle\Service\Core\AdvancedMenuService` to get advanced menu
-* Added `\Shopware\Bundle\StoreFrontBundle\Struct\Collection` 
-* Added `\Shopware\Bundle\StoreFrontBundle\Struct\CategoryCollection`
+* Added block `frontend_advanced_menu_outer` in `themes/Frontend/Bare/frontend/index/index.tpl` for advanced menu
+* Added `\Shopware\Bundle\StoreFrontBundle\Struct\KeyCollection` - used for associated arrays 
+* Added `\Shopware\Bundle\StoreFrontBundle\Struct\Collection` - used for none associated arrays
+* Added `\Shopware\Bundle\StoreFrontBundle\Struct\CategoryCollection` - Typed key collection for category structs
 
 ## Changes
 
 * Changed `BackendSession` service name to `backend_session`
+* Changed `Shopware/Plugins/Default/Frontend/AdvancedMenu`
+	* Implementation moved to `\Shopware\Bundle\StoreFrontBundle\Service\Core\AdvancedMenuService`
+	* Moved `Shopware/Plugins/Default/Frontend/AdvancedMenu/Snippets/frontend/plugins/advanced_menu/advanced_menu.ini` snippets to `snippets/frontend/advancedmenu/index.ini`
+	* Moved `Shopware/Plugins/Default/Frontend/AdvancedMenu/Views/frontend/advanced_menu/index.tpl` to `themes/Frontend/Bare/widgets/index/advanced_menu.tpl` with renamed blocks:
+		- `frontend_plugins_advanced_menu_list` to `frontend_advanced_menu_list`
+		- `frontend_plugins_advanced_menu_list_item` to `frontend_advanced_menu_list_item`
+		- `frontend_plugins_advanced_menu` to `frontend_advanced_menu`
+		- `frontend_plugins_advanced_menu_main_container` to `frontend_advanced_menu_main_container`
+		- `frontend_plugins_advanced_menu_button_category` to `frontend_advanced_menu_button_category`
+		- `frontend_plugins_advanced_menu_button_close` to `frontend_advanced_menu_button_close`
+		- `frontend_plugins_advanced_menu_sub_categories` to `frontend_advanced_menu_sub_categories`
+		- `frontend_plugins_advanced_menu_teaser` to `frontend_advanced_menu_teaser`
+	* Moved `Shopware/Plugins/Default/Frontend/AdvancedMenu/Views/frontend/_public/src/js/jquery.advanced-menu.js` to `themes/Frontend/Responsive/frontend/_public/src/js/jquery.advanced-menu.js`
+	* Moved `Shopware/Plugins/Default/Frontend/AdvancedMenu/Views/frontend/_public/src/less/advanced-menu.less` to `themes/Frontend/Responsive/frontend/_public/src/less/_components/advanced-menu.less`
+	* Changed `category.sub` variable to `category.children` in advanced menu template.
+	
 * Changed class `Shopware\Bundle\MediaBundle\Commands\ImageMigrateCommand` to `Shopware\Bundle\MediaBundle\Commands\MediaMigrateCommand`
 * Changed command `sw:media:migrate` to switch between strategies instead of moving files to different filesystems
 * Changed 3rd constructor parameter in `shopware_media.garbage_collector` from `Shopware\Bundle\MediaBundle\MediaServiceInterface` to `Shopware\Bundle\MediaBundle\Strategy\StrategyInterface`
 * Changed 3rd constructor parameter in `shopware_media.garbage_collector_factory` from `Shopware\Bundle\MediaBundle\MediaServiceInterface` to `Shopware\Bundle\MediaBundle\Strategy\StrategyInterface`
 * Changed constructor of `shopware_media.strategy_factory` to require a collection of `Shopware\Bundle\MediaBundle\Strategy\StrategyInterface`
 * Changed default path of `media` to `web/media`
-* Changed `category.sub` variable to `category.children` in advanced menu template.
 * Changed `\Shopware\Bundle\StoreFrontBundle\Struct\Category::__construct` accessibility to private, use `\Shopware\Bundle\StoreFrontBundle\Struct\Category::create` instead
 
 ## Removals
@@ -81,7 +98,8 @@ This changelog references changes done in Shopware Next patch versions.
 
 * Removed Shopware_Plugins_Backend_Auth_Bootstrap
     * Implementation moved to \Shopware\Components\Auth\BackendAuthSubscriber
-
+    
+* Removed `Shopware/Plugins/Default/Frontend/AdvancedMenu/Views/frontend/index/index.tpl` with block `frontend_plugins_advanced_menu_outer`
 * Removed `s_core_engine_elements` and `Shopware\Models\Article\Element`
 * Removed config parameter `shopware.cdn.adapters`
 * Removed config parameter `shopware.cdn.liveMigration`
