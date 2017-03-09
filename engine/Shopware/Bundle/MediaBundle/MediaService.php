@@ -26,8 +26,8 @@ namespace Shopware\Bundle\MediaBundle;
 
 use League\Flysystem\FilesystemInterface;
 use Shopware\Bundle\MediaBundle\Strategy\StrategyInterface;
-use Shopware\Components\DependencyInjection\Container;
 use Shopware\Models\Shop\Shop;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class MediaService implements MediaServiceInterface
 {
@@ -37,7 +37,7 @@ class MediaService implements MediaServiceInterface
     private $filesystem;
 
     /**
-     * @var Container
+     * @var ContainerInterface
      */
     private $container;
 
@@ -54,10 +54,10 @@ class MediaService implements MediaServiceInterface
     /**
      * @param FilesystemInterface $filesystem
      * @param StrategyInterface   $strategy
-     * @param Container           $container
+     * @param ContainerInterface  $container
      * @param string              $mediaUrl
      */
-    public function __construct(FilesystemInterface $filesystem, StrategyInterface $strategy, Container $container, string $mediaUrl)
+    public function __construct(FilesystemInterface $filesystem, StrategyInterface $strategy, ContainerInterface $container, string $mediaUrl)
     {
         $this->filesystem = $filesystem;
         $this->strategy = $strategy;

@@ -532,7 +532,7 @@ class VariantTest extends TestCase
 
             $this->assertCount(4, $media->getThumbnails());
             foreach ($media->getThumbnails() as $thumbnail) {
-                $this->assertTrue($mediaService->has(Shopware()->DocPath() . $thumbnail));
+                $this->assertTrue($mediaService->getFilesystem()->has(Shopware()->DocPath() . $thumbnail));
             }
 
             $this->assertCount(1, $image->getMappings(), 'No image mapping created!');

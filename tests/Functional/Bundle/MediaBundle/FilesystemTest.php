@@ -51,11 +51,6 @@ class FilesystemTest extends \Enlight_Components_Test_TestCase
         'media/unknown/5a/ef/21/_phpunit_tmp.json',
     ];
 
-    /**
-     * @var int
-     */
-    private $testFileSize;
-
     protected function setUp()
     {
         parent::setUp();

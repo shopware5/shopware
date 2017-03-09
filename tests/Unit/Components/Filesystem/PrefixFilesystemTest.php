@@ -509,6 +509,17 @@ class PrefixFilesystemTest extends TestCase
         $prefixFilesystem = new PrefixFilesystem($filesystem, $prefix);
         $prefixFilesystem->addPlugin(new DummyFilesystemPlugin());
     }
+
+    public function testGetAdapter()
+    {
+        $prefix = 'pluginData/SwagSimpleTest/';
+        $filesystem = $this->prophesize(FilesystemInterface::class)->reveal();
+
+        $prefixFilesystem = new PrefixFilesystem($filesystem, $prefix);
+        $adapter = $prefixFilesystem->getAdapter();
+
+        $this->assertSame($adapter, $filesystem);
+    }
 }
 
 class DummyFilesystemPlugin implements PluginInterface
