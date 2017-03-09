@@ -67,7 +67,6 @@ class PluginLocalService
         $query = $this->getQuery();
 
         $query
-            ->andWhere("plugin.name != 'PluginManager'")
             ->andWhere('plugin.capability_enable = 1')
         ;
 

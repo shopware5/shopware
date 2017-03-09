@@ -75,6 +75,8 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Removed template `frontend/forms/elements.tpl` to `frontend/forms/form-elements.tpl`
     * Renamed smarty block `frontend_forms_index_elements` to `frontend_forms_index_form_elements`
     * Renamed all smarty blocks `frontend_forms_elements*` to `frontend_forms_form_elements*`
+* Renamed class `ShopwarePlugins\PluginManager\Components\PluginCategoryService` to `Shopware\Bundle\PluginInstallerBundle\Service\PluginCategoryService`
+* Moved plugin PluginManager in core
 
 ### Removals
 

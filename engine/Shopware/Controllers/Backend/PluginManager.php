@@ -38,6 +38,7 @@ use Shopware\Bundle\PluginInstallerBundle\Service\PluginLocalService;
 use Shopware\Bundle\PluginInstallerBundle\Service\PluginStoreService;
 use Shopware\Bundle\PluginInstallerBundle\Service\PluginViewService;
 use Shopware\Bundle\PluginInstallerBundle\Service\StoreOrderService;
+use Shopware\Bundle\PluginInstallerBundle\Service\PluginCategoryService;
 use Shopware\Bundle\PluginInstallerBundle\StoreClient;
 use Shopware\Bundle\PluginInstallerBundle\Struct\AccessTokenStruct;
 use Shopware\Bundle\PluginInstallerBundle\Struct\BasketStruct;
@@ -45,7 +46,6 @@ use Shopware\Bundle\PluginInstallerBundle\Struct\PluginInformationResultStruct;
 use Shopware\Bundle\PluginInstallerBundle\Struct\PluginInformationStruct;
 use Shopware\Models\Menu\Menu;
 use Shopware\Models\Plugin\Plugin;
-use ShopwarePlugins\PluginManager\Components\PluginCategoryService;
 use ShopwarePlugins\SwagUpdate\Components\Steps\FinishResult;
 use Shopware\Bundle\PluginInstallerBundle\Service\InstallerService;
 
