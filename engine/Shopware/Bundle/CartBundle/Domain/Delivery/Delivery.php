@@ -43,24 +43,25 @@ class Delivery implements \JsonSerializable
     protected $address;
 
     /**
-     * @var DeliveryService
-     */
-    protected $deliveryService;
-
-    /**
      * @var DeliveryDate
      */
     protected $deliveryDate;
 
+    /**
+     * @var DeliveryMethod
+     */
+    private $deliveryMethod;
+
     public function __construct(
         DeliveryPositionCollection $positions,
         DeliveryDate $deliveryDate,
-        DeliveryService $deliveryService,
+        DeliveryMethod $deliveryMethod,
         Address $address
     ) {
         $this->address = $address;
         $this->positions = $positions;
         $this->deliveryDate = $deliveryDate;
+        $this->deliveryMethod = $deliveryMethod;
     }
 
     public function getPositions(): DeliveryPositionCollection
@@ -73,13 +74,13 @@ class Delivery implements \JsonSerializable
         return $this->address;
     }
 
-    public function getDeliveryService(): DeliveryService
-    {
-        return $this->deliveryService;
-    }
-
     public function getDeliveryDate(): DeliveryDate
     {
         return $this->deliveryDate;
+    }
+
+    public function getDeliveryMethod(): DeliveryMethod
+    {
+        return $this->deliveryMethod;
     }
 }

@@ -145,13 +145,13 @@
             <argument type="service" id="shopware_storefront.attribute_hydrator_dbal" />
         </service>
 
-        <service id="shopware_cart.delivery_service_gateway_dbal" class="Shopware\Bundle\CartBundle\Infrastructure\Delivery\DeliveryServiceGateway">
+        <service id="shopware_cart.delivery_service_gateway_dbal" class="Shopware\Bundle\CartBundle\Infrastructure\Delivery\DeliveryMethodGateway">
             <argument type="service" id="shopware_storefront.field_helper_dbal" />
-            <argument type="service" id="shopware_cart.delivery_service_hydrator_dbal" />
+            <argument type="service" id="shopware_cart.delivery_method_hydrator_dbal" />
             <argument type="service" id="dbal_connection" />
         </service>
 
-        <service id="shopware_cart.delivery_service_hydrator_dbal" class="Shopware\Bundle\CartBundle\Infrastructure\Delivery\DeliveryServiceHydrator">
+        <service id="shopware_cart.delivery_method_hydrator_dbal" class="Shopware\Bundle\CartBundle\Infrastructure\Delivery\DeliveryMethodHydrator">
             <argument type="service" id="shopware_storefront.attribute_hydrator_dbal" />
         </service>
 
@@ -168,6 +168,10 @@
             <argument type="collection">
                 <argument type="service" id="shopware_cart.view_product_transformer" />
             </argument>
+        </service>
+
+        <service id="shopware_cart.delivery_method_service" class="Shopware\Bundle\CartBundle\Infrastructure\Delivery\DeliveryMethodService">
+            <argument id="shopware_cart.delivery_service_gateway_dbal" type="service"/>
         </service>
     </services>
 </container>

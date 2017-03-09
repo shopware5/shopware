@@ -25,16 +25,25 @@ declare(strict_types=1);
 
 namespace Shopware\Bundle\CartBundle\Infrastructure\Delivery;
 
-use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryService;
+use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryMethod;
 use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\AttributeHydrator;
 use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\Hydrator;
 
-class DeliveryServiceHydrator extends Hydrator
+class DeliveryMethodHydrator extends Hydrator
 {
     /**
      * @var AttributeHydrator
      */
     private $attributeHydrator;
+
+    /**
+     * @var array
+     */
+    private $mapping = [
+        'dispatch_status_link' => 'status_link',
+        'dispatch_description' => 'description',
+        'dispatch_name' => 'name',
+    ];
 
     /**
      * @param AttributeHydrator $attributeHydrator
@@ -44,14 +53,23 @@ class DeliveryServiceHydrator extends Hydrator
         $this->attributeHydrator = $attributeHydrator;
     }
 
-    public function hydrate(array $data): DeliveryService
+    public function hydrate(array $data): DeliveryMethod
     {
-        $service = new DeliveryService();
-        $service->setId((int) $data['__deliveryService_id']);
-        $service->setName((string) $data['__deliveryService_name']);
+        $id = (int) $data['__deliveryMethod_id'];
+        $translation = $this->getTranslation($data, '__deliveryMethod', $this->mapping, $id);
+        $data = array_merge($data, $translation);
 
-        if (!empty($data['__deliveryServiceAttribute_id'])) {
-            $this->attributeHydrator->addAttribute($service, $data, 'deliveryServiceAttribute');
+        $service = new DeliveryMethod(
+            (int) $data['__deliveryMethod_id'],
+            (string) $data['__deliveryMethod_name'],
+            (string) $data['__deliveryMethod_description'],
+            (int) $data['__deliveryMethod_type'],
+            (bool) $data['__deliveryMethod_active'],
+            (int) $data['__deliveryMethod_position']
+        );
+
+        if (!empty($data['__deliveryMethodAttribute_id'])) {
+            $this->attributeHydrator->addAttribute($service, $data, 'deliveryMethodAttribute');
         }
 
         return $service;

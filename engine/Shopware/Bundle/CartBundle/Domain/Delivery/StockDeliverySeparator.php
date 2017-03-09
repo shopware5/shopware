@@ -79,7 +79,7 @@ class StockDeliverySeparator
                     $deliveries,
                     $position,
                     $context->getShippingAddress(),
-                    $context->getDeliveryService()
+                    $context->getDeliveryMethod()
                 );
                 continue;
             }
@@ -98,7 +98,7 @@ class StockDeliverySeparator
                     $deliveries,
                     $position,
                     $context->getShippingAddress(),
-                    $context->getDeliveryService()
+                    $context->getDeliveryMethod()
                 );
                 continue;
             }
@@ -116,7 +116,7 @@ class StockDeliverySeparator
                 $deliveries,
                 $position,
                 $context->getShippingAddress(),
-                $context->getDeliveryService()
+                $context->getDeliveryMethod()
             );
 
             $position = $this->recalculatePosition(
@@ -130,7 +130,7 @@ class StockDeliverySeparator
                 $deliveries,
                 $position,
                 $context->getShippingAddress(),
-                $context->getDeliveryService()
+                $context->getDeliveryMethod()
             );
         }
 
@@ -173,7 +173,7 @@ class StockDeliverySeparator
         DeliveryCollection $deliveries,
         DeliveryPosition $position,
         Address $address,
-        DeliveryService $deliveryService
+        DeliveryMethod $deliveryMethod
     ): void {
         $delivery = $deliveries->getDelivery(
             $position->getDeliveryDate(),
@@ -190,7 +190,7 @@ class StockDeliverySeparator
             new Delivery(
                 new DeliveryPositionCollection([$position]),
                 $position->getDeliveryDate(),
-                $deliveryService,
+                $deliveryMethod,
                 $address
             )
         );

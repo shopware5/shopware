@@ -26,12 +26,13 @@ declare(strict_types=1);
 namespace Shopware\Bundle\CartBundle\Infrastructure\Delivery;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryService;
+use Doctrine\DBAL\Query\QueryBuilder;
+use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryMethod;
 use Shopware\Bundle\CartBundle\Infrastructure\SortArrayByKeysTrait;
 use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\FieldHelper;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
-class DeliveryServiceGateway
+class DeliveryMethodGateway
 {
     use SortArrayByKeysTrait;
 
@@ -41,7 +42,7 @@ class DeliveryServiceGateway
     private $fieldHelper;
 
     /**
-     * @var DeliveryServiceHydrator
+     * @var DeliveryMethodHydrator
      */
     private $hydrator;
 
@@ -52,7 +53,7 @@ class DeliveryServiceGateway
 
     public function __construct(
         FieldHelper $fieldHelper,
-        DeliveryServiceHydrator $hydrator,
+        DeliveryMethodHydrator $hydrator,
         Connection $connection
     ) {
         $this->fieldHelper = $fieldHelper;
@@ -64,20 +65,16 @@ class DeliveryServiceGateway
      * @param int[]                $ids
      * @param ShopContextInterface $context
      *
-     * @return DeliveryService[]
+     * @return DeliveryMethod[]
      */
     public function getList(array $ids, ShopContextInterface $context): array
     {
         if (0 === count($ids)) {
             return [];
         }
-        $query = $this->connection->createQueryBuilder();
-        $query->select('deliveryService.id as arrayKey');
-        $query->addSelect($this->fieldHelper->getDeliveryServiceFields());
+        $query = $this->createQuery($context);
 
-        $query->from('s_premium_dispatch', 'deliveryService');
-        $query->leftJoin('deliveryService', 's_premium_dispatch_attributes', 'deliveryServiceAttribute', 'deliveryServiceAttribute.dispatchID = deliveryService.id');
-        $query->where('deliveryService.id IN (:ids)');
+        $query->where('deliveryMethod.id IN (:ids)');
         $query->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
 
         $data = $query->execute()->fetchAll(\PDO::FETCH_GROUP | \PDO::FETCH_UNIQUE);
@@ -87,5 +84,44 @@ class DeliveryServiceGateway
         }
 
         return $this->sortIndexedArrayByKeys($ids, $services);
+    }
+
+    /**
+     * @param ShopContextInterface $context
+     *
+     * @return DeliveryMethod[]
+     */
+    public function getAll(ShopContextInterface $context): array
+    {
+        $query = $this->createQuery($context);
+
+        $data = $query->execute()->fetchAll(\PDO::FETCH_GROUP | \PDO::FETCH_UNIQUE);
+
+        $services = [];
+        foreach ($data as $id => $row) {
+            $services[$id] = $this->hydrator->hydrate($row);
+        }
+
+        return $services;
+    }
+
+    private function createQuery(ShopContextInterface $context): QueryBuilder
+    {
+        $query = $this->connection->createQueryBuilder();
+        $query->select('deliveryMethod.id as arrayKey');
+        $query->addSelect($this->fieldHelper->getDeliveryMethodFields());
+
+        $query->from('s_premium_dispatch', 'deliveryMethod');
+
+        $query->leftJoin(
+            'deliveryMethod',
+            's_premium_dispatch_attributes',
+            'deliveryMethodAttribute',
+            'deliveryMethodAttribute.dispatchID = deliveryMethod.id'
+        );
+
+        $this->fieldHelper->addDeliveryTranslation($query, $context);
+
+        return $query;
     }
 }

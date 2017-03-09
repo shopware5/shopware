@@ -27,13 +27,12 @@ namespace Shopware\Bundle\CartBundle\Infrastructure\Cart;
 
 use Shopware\Bundle\CartBundle\Domain\Cart\CartContext;
 use Shopware\Bundle\CartBundle\Domain\Cart\CartContextInterface;
-use Shopware\Bundle\CartBundle\Domain\Customer\Address;
 use Shopware\Bundle\CartBundle\Domain\Customer\Customer;
-use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryService;
+use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryMethod;
 use Shopware\Bundle\CartBundle\Domain\Payment\PaymentMethod;
 use Shopware\Bundle\CartBundle\Infrastructure\Customer\AddressGateway;
 use Shopware\Bundle\CartBundle\Infrastructure\Customer\CustomerService;
-use Shopware\Bundle\CartBundle\Infrastructure\Delivery\DeliveryServiceGateway;
+use Shopware\Bundle\CartBundle\Infrastructure\Delivery\DeliveryMethodGateway;
 use Shopware\Bundle\CartBundle\Infrastructure\Payment\PaymentMethodGateway;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
@@ -51,9 +50,9 @@ class CartContextService implements CartContextServiceInterface
     private $session;
 
     /**
-     * @var DeliveryServiceGateway
+     * @var DeliveryMethodGateway
      */
-    private $deliveryServiceGateway;
+    private $deliveryMethodGateway;
 
     /**
      * @var PaymentMethodGateway
@@ -83,7 +82,7 @@ class CartContextService implements CartContextServiceInterface
     /**
      * @param ContextServiceInterface               $shopContextService
      * @param \Enlight_Components_Session_Namespace $session
-     * @param DeliveryServiceGateway                $deliveryServiceGateway
+     * @param DeliveryMethodGateway                 $deliveryMethodGateway
      * @param PaymentMethodGateway                  $paymentMethodGateway
      * @param AddressGateway                        $addressGateway
      * @param CustomerService                       $customerService
@@ -92,7 +91,7 @@ class CartContextService implements CartContextServiceInterface
     public function __construct(
         ContextServiceInterface $shopContextService,
         \Enlight_Components_Session_Namespace $session,
-        DeliveryServiceGateway $deliveryServiceGateway,
+        DeliveryMethodGateway $deliveryMethodGateway,
         PaymentMethodGateway $paymentMethodGateway,
         AddressGateway $addressGateway,
         CustomerService $customerService,
@@ -100,7 +99,7 @@ class CartContextService implements CartContextServiceInterface
     ) {
         $this->shopContextService = $shopContextService;
         $this->session = $session;
-        $this->deliveryServiceGateway = $deliveryServiceGateway;
+        $this->deliveryMethodGateway = $deliveryMethodGateway;
         $this->paymentMethodGateway = $paymentMethodGateway;
         $this->addressGateway = $addressGateway;
         $this->customerService = $customerService;
@@ -133,7 +132,7 @@ class CartContextService implements CartContextServiceInterface
         $this->context = new CartContext(
             $shopContext,
             $this->getStoreFrontPaymentMethod($shopContext, $customer),
-            $this->getStoreFrontDeliveryService($shopContext),
+            $this->getStoreFrontDeliveryMethod($shopContext),
             $customer,
             $addresses['billing'],
             $addresses['shipping']
@@ -185,13 +184,13 @@ class CartContextService implements CartContextServiceInterface
         return $result;
     }
 
-    private function getStoreFrontDeliveryService(ShopContextInterface $context): DeliveryService
+    private function getStoreFrontDeliveryMethod(ShopContextInterface $context): DeliveryMethod
     {
         if (!($id = $this->session->get('sDispatch'))) {
             $id = 9;
         }
 
-        $services = $this->deliveryServiceGateway->getList([$id], $context);
+        $services = $this->deliveryMethodGateway->getList([$id], $context);
 
         return array_shift($services);
     }
@@ -211,7 +210,7 @@ class CartContextService implements CartContextServiceInterface
 
         //customer not logged in
         if (!$id) {
-            $id = $this->config->offsetGet('paymentdefault');
+            $id = (int) $this->config->offsetGet('paymentdefault');
         }
 
         $services = $this->paymentMethodGateway->getList([$id], $context);

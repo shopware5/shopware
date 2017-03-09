@@ -34,5 +34,10 @@ abstract class KeyCollection extends Collection
         $this->elements[$key] = $element;
     }
 
-    abstract protected function getKey($element): string;
+    /**
+     * @param mixed $element
+     *
+     * @return string|int
+     */
+    abstract protected function getKey($element);
 }

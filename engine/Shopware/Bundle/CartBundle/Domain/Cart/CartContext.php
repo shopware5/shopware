@@ -28,7 +28,7 @@ namespace Shopware\Bundle\CartBundle\Domain\Cart;
 use Shopware\Bundle\CartBundle\Domain\CloneTrait;
 use Shopware\Bundle\CartBundle\Domain\Customer\Address;
 use Shopware\Bundle\CartBundle\Domain\Customer\Customer;
-use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryService;
+use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryMethod;
 use Shopware\Bundle\CartBundle\Domain\JsonSerializableTrait;
 use Shopware\Bundle\CartBundle\Domain\Payment\PaymentMethod;
 use Shopware\Bundle\StoreFrontBundle\Struct\Attribute;
@@ -66,9 +66,9 @@ class CartContext implements CartContextInterface, \JsonSerializable
     protected $paymentMethod;
 
     /**
-     * @var DeliveryService
+     * @var DeliveryMethod
      */
-    protected $deliveryService;
+    protected $deliveryMethod;
 
     /**
      * @var ShopContextInterface
@@ -78,7 +78,7 @@ class CartContext implements CartContextInterface, \JsonSerializable
     /**
      * @param ShopContextInterface $shopContext
      * @param PaymentMethod        $paymentMethod
-     * @param DeliveryService      $deliveryService
+     * @param DeliveryMethod       $deliveryMethod
      * @param Customer|null        $customer
      * @param Address|null         $billingAddress
      * @param Address|null         $shippingAddress
@@ -86,7 +86,7 @@ class CartContext implements CartContextInterface, \JsonSerializable
     public function __construct(
         ShopContextInterface $shopContext,
         PaymentMethod $paymentMethod,
-        DeliveryService $deliveryService,
+        DeliveryMethod $deliveryMethod,
         ?Customer $customer,
         ?Address $billingAddress,
         ?Address $shippingAddress
@@ -95,7 +95,7 @@ class CartContext implements CartContextInterface, \JsonSerializable
         $this->shippingAddress = $shippingAddress;
         $this->billingAddress = $billingAddress;
         $this->paymentMethod = $paymentMethod;
-        $this->deliveryService = $deliveryService;
+        $this->deliveryMethod = $deliveryMethod;
         $this->shopContext = $shopContext;
     }
 
@@ -119,9 +119,9 @@ class CartContext implements CartContextInterface, \JsonSerializable
         return $this->paymentMethod;
     }
 
-    public function getDeliveryService(): DeliveryService
+    public function getDeliveryMethod(): DeliveryMethod
     {
-        return $this->deliveryService;
+        return $this->deliveryMethod;
     }
 
     public function addAttribute(string $name, Attribute $attribute): void

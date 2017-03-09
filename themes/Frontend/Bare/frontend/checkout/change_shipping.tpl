@@ -6,29 +6,29 @@
 
     {block name='frontend_checkout_shipping_content'}
         <div class="panel--body is--wide block-group">
-            {foreach $sDispatches as $dispatch}
+            {foreach $deliveryMethods as $method}
                 {block name="frontend_checkout_dispatch_container"}
-                    <div class="dispatch--method{if $dispatch@last} method_last{else} method{/if} block">
+                    <div class="dispatch--method{if $method@last} method_last{else} method{/if} block">
 
                         {* Radio Button *}
                         {block name='frontend_checkout_dispatch_shipping_input_radio'}
                             <div class="method--input">
-                                <input type="radio" id="confirm_dispatch{$dispatch.id}" class="radio auto_submit" value="{$dispatch.id}" name="sDispatch"{if $dispatch.id eq $sDispatch.id} checked="checked"{/if} />
+                                <input type="radio" id="confirm_dispatch{$method.id}" class="radio auto_submit" value="{$method.id}" name="sDispatch"{if $method.id eq $currentDeliveryId} checked="checked"{/if} />
                             </div>
                         {/block}
 
                         {* Method Name *}
                         {block name='frontend_checkout_dispatch_shipping_input_label'}
                             <div class="method--label is--first">
-                                <label class="method--name is--strong" for="confirm_dispatch{$dispatch.id}">{$dispatch.name}</label>
+                                <label class="method--name is--strong" for="confirm_dispatch{$method.id}">{$method.name}</label>
                             </div>
                         {/block}
 
                         {* Method Description *}
                         {block name='frontend_checkout_shipping_fieldset_description'}
-                            {if $dispatch.description}
+                            {if $method.description}
                                 <div class="method--description">
-                                    {$dispatch.description}
+                                    {$method.description}
                                 </div>
                             {/if}
                         {/block}

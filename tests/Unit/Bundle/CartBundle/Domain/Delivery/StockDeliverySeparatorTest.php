@@ -29,9 +29,9 @@ use Shopware\Bundle\CartBundle\Domain\Delivery\Delivery;
 use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryCollection;
 use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryDate;
 use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryInformation;
+use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryMethod;
 use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryPosition;
 use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryPositionCollection;
-use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryService;
 use Shopware\Bundle\CartBundle\Domain\Delivery\StockDeliverySeparator;
 use Shopware\Bundle\CartBundle\Domain\LineItem\CalculatedLineItemCollection;
 use Shopware\Bundle\CartBundle\Domain\LineItem\LineItem;
@@ -105,7 +105,7 @@ class StockDeliverySeparatorTest extends \PHPUnit_Framework_TestCase
                         DeliveryPosition::createByLineItemForInStockDate($item),
                     ]),
                     new DeliveryDate(new \DateTime('2012-01-01'), new \DateTime('2012-01-02')),
-                    new DeliveryService(),
+                    new DeliveryMethod(1, '', '', 1, true, 1),
                     new Address()
                 ),
             ]),
@@ -145,7 +145,7 @@ class StockDeliverySeparatorTest extends \PHPUnit_Framework_TestCase
                         DeliveryPosition::createByLineItemForInStockDate($itemB),
                     ]),
                     $deliveryInformation->getInStockDeliveryDate(),
-                    new DeliveryService(),
+                    new DeliveryMethod(1, '', '', 1, true, 1),
                     new Address()
                 ),
             ]),
@@ -186,7 +186,7 @@ class StockDeliverySeparatorTest extends \PHPUnit_Framework_TestCase
                         DeliveryPosition::createByLineItemForOutOfStockDate($itemB),
                     ]),
                     new DeliveryDate(new \DateTime('2012-01-04'), new \DateTime('2012-01-05')),
-                    new DeliveryService(),
+                    new DeliveryMethod(1, '', '', 1, true, 1),
                     new Address()
                 ),
             ]),
@@ -221,7 +221,7 @@ class StockDeliverySeparatorTest extends \PHPUnit_Framework_TestCase
                         DeliveryPosition::createByLineItemForInStockDate($product),
                     ]),
                     $product->getInStockDeliveryDate(),
-                    new DeliveryService(),
+                    new DeliveryMethod(1, '', '', 1, true, 1),
                     new Address()
                 ),
             ]),
@@ -254,7 +254,7 @@ class StockDeliverySeparatorTest extends \PHPUnit_Framework_TestCase
                         ),
                     ]),
                     $product->getInStockDeliveryDate(),
-                    new DeliveryService(),
+                    new DeliveryMethod(1, '', '', 1, true, 1),
                     new Address()
                 ),
                 new Delivery(
@@ -265,7 +265,7 @@ class StockDeliverySeparatorTest extends \PHPUnit_Framework_TestCase
                         ),
                     ]),
                     $product->getOutOfStockDeliveryDate(),
-                    new DeliveryService(),
+                    new DeliveryMethod(1, '', '', 1, true, 1),
                     new Address()
                 ),
             ]),

@@ -70,10 +70,14 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         /** @var StoreFrontCartService $service */
         $service = $this->get('shopware_cart.store_front_cart_service');
 
-        $cart = json_decode(json_encode($service->getCart()), true);
+        /** @var CartContextInterface $context */
+        $context = $this->get('shopware_cart.cart_context_service')->getCartContext();
+
+        $cart = $service->getCart();
 
         $this->View()->assign([
-            'cart' => $cart,
+            'context' => json_decode(json_encode($context), true),
+            'cart' => json_decode(json_encode($cart), true),
             'sTargetAction' => self::ACTION_CART,
         ]);
     }
@@ -124,6 +128,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
             'cart' => json_decode(json_encode($cart), true),
             'payments' => $payments,
             'sTargetAction' => 'shippingPayment',
+            'currentDeliveryId' => $context->getDeliveryMethod()->getId(),
             'currentPaymentId' => $context->getPaymentMethod()->getId(),
         ]);
 
@@ -672,6 +677,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
             // Save payment and shipping method data.
             $this->admin->sUpdatePayment($payment);
             $this->setDispatch($dispatch, $payment);
+
             $this->get('shopware_cart.cart_context_service')->initializeContext();
 
             return $this->forward('shippingPayment');
@@ -1346,22 +1352,9 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
      */
     public function setDispatch($dispatchId, $paymentId = null)
     {
-        $supportedDispatches = $this->getDispatches($paymentId);
+        $this->session['sDispatch'] = $dispatchId;
 
-        // Iterate over supported dispatches, look for the provided one
-        foreach ($supportedDispatches as $dispatch) {
-            if ($dispatch['id'] == $dispatchId) {
-                $this->session['sDispatch'] = $dispatchId;
-
-                return $dispatchId;
-            }
-        }
-
-        // If it was not found, we fallback to the default (head of supported)
-        $defaultDispatch = array_shift($supportedDispatches);
-        $this->session['sDispatch'] = $defaultDispatch['id'];
-
-        return $this->session['sDispatch'];
+        return $dispatchId;
     }
 
     /**

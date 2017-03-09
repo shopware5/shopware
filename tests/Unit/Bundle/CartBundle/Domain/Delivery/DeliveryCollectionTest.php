@@ -28,8 +28,8 @@ use Shopware\Bundle\CartBundle\Domain\Customer\Address;
 use Shopware\Bundle\CartBundle\Domain\Delivery\Delivery;
 use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryCollection;
 use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryDate;
+use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryMethod;
 use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryPositionCollection;
-use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryService;
 
 class DeliveryCollectionTest extends \PHPUnit_Framework_TestCase
 {
@@ -50,7 +50,7 @@ class DeliveryCollectionTest extends \PHPUnit_Framework_TestCase
                     new \DateTime(),
                     new \DateTime()
                 ),
-                new DeliveryService(),
+                new DeliveryMethod(1, '', '', 1, true, 1),
                 new Address()
             )
         );
@@ -66,7 +66,7 @@ class DeliveryCollectionTest extends \PHPUnit_Framework_TestCase
                     new \DateTime(),
                     new \DateTime()
                 ),
-                new DeliveryService(),
+                new DeliveryMethod(1, '', '', 1, true, 1),
                 new Address()
             ),
             new Delivery(
@@ -75,7 +75,7 @@ class DeliveryCollectionTest extends \PHPUnit_Framework_TestCase
                     new \DateTime(),
                     new \DateTime()
                 ),
-                new DeliveryService(),
+                new DeliveryMethod(1, '', '', 1, true, 1),
                 new Address()
             ),
         ]);
@@ -91,7 +91,7 @@ class DeliveryCollectionTest extends \PHPUnit_Framework_TestCase
                     new \DateTime(),
                     new \DateTime()
                 ),
-                new DeliveryService(),
+                new DeliveryMethod(1, '', '', 1, true, 1),
                 new Address()
             ),
             new Delivery(
@@ -100,7 +100,7 @@ class DeliveryCollectionTest extends \PHPUnit_Framework_TestCase
                     new \DateTime(),
                     new \DateTime()
                 ),
-                new DeliveryService(),
+                new DeliveryMethod(1, '', '', 1, true, 1),
                 new Address()
             ),
         ]);

@@ -27,7 +27,7 @@ namespace Shopware\Tests\Unit\Bundle\CartBundle\Common;
 use Shopware\Bundle\CartBundle\Domain\Cart\CartContext;
 use Shopware\Bundle\CartBundle\Domain\Customer\Address;
 use Shopware\Bundle\CartBundle\Domain\Customer\Customer;
-use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryService;
+use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryMethod;
 use Shopware\Bundle\CartBundle\Domain\Payment\PaymentMethod;
 use Shopware\Bundle\CartBundle\Domain\Price\PriceDefinition;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxDetector;
@@ -43,20 +43,20 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Tax;
 class Generator extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @param null|Shop            $shop
-     * @param null|Currency        $currency
-     * @param null|Group           $currentCustomerGroup
-     * @param null|Group           $fallbackCustomerGroup
-     * @param null|PriceGroup[]    $priceGroups
-     * @param null|Tax[]           $taxes
-     * @param null|Country\Area    $area
-     * @param null|Country         $country
-     * @param null|Country\State   $state
-     * @param null|PaymentMethod   $paymentService
-     * @param null|DeliveryService $deliveryService
-     * @param null|Customer        $customer
-     * @param null|Address         $billing
-     * @param null|Address         $shipping
+     * @param null|Shop           $shop
+     * @param null|Currency       $currency
+     * @param null|Group          $currentCustomerGroup
+     * @param null|Group          $fallbackCustomerGroup
+     * @param null|PriceGroup[]   $priceGroups
+     * @param null|Tax[]          $taxes
+     * @param null|Country\Area   $area
+     * @param null|Country        $country
+     * @param null|Country\State  $state
+     * @param null|PaymentMethod  $paymentService
+     * @param null|DeliveryMethod $deliveryService
+     * @param null|Customer       $customer
+     * @param null|Address        $billing
+     * @param null|Address        $shipping
      *
      * @return CartContext
      */
@@ -95,7 +95,7 @@ class Generator extends \PHPUnit_Framework_TestCase
         $country = $country ?: new Country();
         $state = $state ?: new Country\State();
         $paymentService = $paymentService ?: new PaymentMethod(1, 'cash', 'Cash', 'CashPayment');
-        $deliveryService = $deliveryService ?: new DeliveryService();
+        $deliveryService = $deliveryService ?: new DeliveryMethod(1, '', '', 1, true, 1);
         $customer = $customer ?: new Customer();
         $billing = $billing ?: new Address();
         $shipping = $shipping ?: new Address();

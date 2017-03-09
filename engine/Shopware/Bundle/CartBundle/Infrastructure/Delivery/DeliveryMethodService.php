@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -23,43 +22,44 @@ declare(strict_types=1);
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\CartBundle\Domain\Delivery;
+namespace Shopware\Bundle\CartBundle\Infrastructure\Delivery;
 
-use Shopware\Bundle\CartBundle\Domain\CloneTrait;
-use Shopware\Bundle\CartBundle\Domain\JsonSerializableTrait;
-use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
+use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
+use Shopware\Bundle\CartBundle\Domain\Cart\CartContextInterface;
+use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryMethod;
 
-class DeliveryService extends Extendable
+class DeliveryMethodService
 {
-    use CloneTrait, JsonSerializableTrait;
+    /**
+     * @var DeliveryMethodGateway
+     */
+    private $gateway;
 
     /**
-     * @var int
+     * @param DeliveryMethodGateway $gateway
      */
-    protected $id;
+    public function __construct(DeliveryMethodGateway $gateway)
+    {
+        $this->gateway = $gateway;
+    }
 
     /**
-     * @var string
+     * @param CalculatedCart       $cart
+     * @param CartContextInterface $context
+     *
+     * @return DeliveryMethod[]
      */
-    protected $name;
-
-    public function getId(): int
+    public function getAvailable(CalculatedCart $cart, CartContextInterface $context): array
     {
-        return $this->id;
-    }
+        $deliveries = $this->gateway->getAll($context);
 
-    public function setId(int $id): void
-    {
-        $this->id = $id;
-    }
+        $deliveries = array_filter(
+            $deliveries,
+            function (DeliveryMethod $method) {
+                return $method->getType() === 0;
+            }
+        );
 
-    public function getName(): string
-    {
-        return $this->name;
-    }
-
-    public function setName(string $name): void
-    {
-        $this->name = $name;
+        return $deliveries;
     }
 }

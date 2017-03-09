@@ -23,8 +23,7 @@
                 {/block}
             </div>
 
-            {* Shipping method *}
-            {if $sDispatches}
+            {if $deliveryMethods}
                 <div class="confirm--inner-container block">
                     {block name='frontend_checkout_shipping_payment_core_shipping_fields'}
                         {include file="frontend/checkout/change_shipping.tpl"}

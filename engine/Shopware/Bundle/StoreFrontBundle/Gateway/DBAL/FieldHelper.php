@@ -854,37 +854,37 @@ class FieldHelper
         return $fields;
     }
 
-    public function getDeliveryServiceFields()
+    public function getDeliveryMethodFields()
     {
         $fields = [
-            'deliveryService.id as __deliveryService_id',
-            'deliveryService.name as __deliveryService_name',
-            'deliveryService.type as __deliveryService_type',
-            'deliveryService.description as __deliveryService_description',
-            'deliveryService.comment as __deliveryService_comment',
-            'deliveryService.active as __deliveryService_active',
-            'deliveryService.position as __deliveryService_position',
-            'deliveryService.calculation as __deliveryService_calculation',
-            'deliveryService.surcharge_calculation as __deliveryService_surcharge_calculation',
-            'deliveryService.tax_calculation as __deliveryService_tax_calculation',
-            'deliveryService.shippingfree as __deliveryService_shippingfree',
-            'deliveryService.multishopID as __deliveryService_multishopID',
-            'deliveryService.customergroupID as __deliveryService_customergroupID',
-            'deliveryService.bind_shippingfree as __deliveryService_bind_shippingfree',
-            'deliveryService.bind_time_from as __deliveryService_bind_time_from',
-            'deliveryService.bind_time_to as __deliveryService_bind_time_to',
-            'deliveryService.bind_instock as __deliveryService_bind_instock',
-            'deliveryService.bind_laststock as __deliveryService_bind_laststock',
-            'deliveryService.bind_weekday_from as __deliveryService_bind_weekday_from',
-            'deliveryService.bind_weekday_to as __deliveryService_bind_weekday_to',
-            'deliveryService.bind_weight_from as __deliveryService_bind_weight_from',
-            'deliveryService.bind_weight_to as __deliveryService_bind_weight_to',
-            'deliveryService.bind_price_from as __deliveryService_bind_price_from',
-            'deliveryService.bind_price_to as __deliveryService_bind_price_to',
-            'deliveryService.status_link as __deliveryService_status_link',
+            'deliveryMethod.id as __deliveryMethod_id',
+            'deliveryMethod.name as __deliveryMethod_name',
+            'deliveryMethod.type as __deliveryMethod_type',
+            'deliveryMethod.description as __deliveryMethod_description',
+            'deliveryMethod.comment as __deliveryMethod_comment',
+            'deliveryMethod.active as __deliveryMethod_active',
+            'deliveryMethod.position as __deliveryMethod_position',
+            'deliveryMethod.calculation as __deliveryMethod_calculation',
+            'deliveryMethod.surcharge_calculation as __deliveryMethod_surcharge_calculation',
+            'deliveryMethod.tax_calculation as __deliveryMethod_tax_calculation',
+            'deliveryMethod.shippingfree as __deliveryMethod_shippingfree',
+            'deliveryMethod.multishopID as __deliveryMethod_multishopID',
+            'deliveryMethod.customergroupID as __deliveryMethod_customergroupID',
+            'deliveryMethod.bind_shippingfree as __deliveryMethod_bind_shippingfree',
+            'deliveryMethod.bind_time_from as __deliveryMethod_bind_time_from',
+            'deliveryMethod.bind_time_to as __deliveryMethod_bind_time_to',
+            'deliveryMethod.bind_instock as __deliveryMethod_bind_instock',
+            'deliveryMethod.bind_laststock as __deliveryMethod_bind_laststock',
+            'deliveryMethod.bind_weekday_from as __deliveryMethod_bind_weekday_from',
+            'deliveryMethod.bind_weekday_to as __deliveryMethod_bind_weekday_to',
+            'deliveryMethod.bind_weight_from as __deliveryMethod_bind_weight_from',
+            'deliveryMethod.bind_weight_to as __deliveryMethod_bind_weight_to',
+            'deliveryMethod.bind_price_from as __deliveryMethod_bind_price_from',
+            'deliveryMethod.bind_price_to as __deliveryMethod_bind_price_to',
+            'deliveryMethod.status_link as __deliveryMethod_status_link',
         ];
 
-        return array_merge($fields, $this->getTableFields('s_premium_dispatch_attributes', 'deliveryServiceAttribute'));
+        return array_merge($fields, $this->getTableFields('s_premium_dispatch_attributes', 'deliveryMethodAttribute'));
     }
 
     public function getPaymentMethodFields()
@@ -1443,6 +1443,12 @@ class FieldHelper
     public function addCustomFacetTranslation($query, $context)
     {
         $this->addTranslation('customFacet', 'custom_facet', $query, $context, 1);
+    }
+
+    public function addDeliveryTranslation(QueryBuilder $query, ShopContextInterface $context)
+    {
+        $this->addTranslation('deliveryMethod', 'config_dispatch', $query, $context, 1);
+        $this->addTranslation('deliveryMethodAttribute', 's_premium_dispatch_attributes', $query, $context, 'deliveryMethod.id');
     }
 
     public function addPaymentTranslation(QueryBuilder $query, ShopContextInterface $context): void
