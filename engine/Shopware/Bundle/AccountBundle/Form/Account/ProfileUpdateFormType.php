@@ -84,7 +84,7 @@ class ProfileUpdateFormType extends AbstractType
     {
         $builder->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event) {
             $data = $event->getData();
-            array_walk_recursive($data, function(&$item, $key) {
+            array_walk_recursive($data, function (&$item, $key) {
                 $item = strip_tags($item);
             });
             $event->setData($data);
@@ -106,6 +106,10 @@ class ProfileUpdateFormType extends AbstractType
 
         $builder->add('birthday', BirthdayType::class, [
             'constraints' => $this->getBirthdayConstraints()
+        ]);
+
+        $builder->add('attribute', AttributeFormType::class, [
+            'data_class' => \Shopware\Models\Attribute\Customer::class
         ]);
     }
 
