@@ -142,4 +142,26 @@ class PresetLoaderTest extends TestCase
         $this->assertEquals($fieldId, $decodedData['elements'][0]['data'][1]['fieldId']);
         $this->assertRegExp('/http/', $decodedData['elements'][0]['data'][1]['value']);
     }
+
+    public function testShouldBeSuccessfulWithJsonEncodedDataValue()
+    {
+        $data = '{"elements":[{"componentId":7,"component":{"id":7,"name":"Banner-Slider","convertFunction":"getBannerSlider","description":"","template":"component_banner_slider","cls":"banner-slider-element","xType":"emotion-components-banner-slider","pluginId":null,"fields":[{"id":20,"componentId":7,"name":"banner_slider","fieldLabel":"","xType":"hidden","valueType":"json","supportText":"","store":"","displayField":"","valueField":"","defaultValue":"","allowBlank":0,"helpTitle":"","helpText":"","translatable":0,"position":20}]},"data":[{"componentId":7,"fieldId":20,"value":"[{\"position\":0,\"path\":\"media\\/image\\/sommerwelten_top_banner.jpg\",\"mediaId\":779,\"link\":\"\",\"altText\":\"\",\"title\":\"\"}]"}]}]}';
+
+        $preset = $this->presetResource->create(['name' => 'test', 'presetData' => $data, 'assetsImported' => true]);
+
+        $presetData = $this->presetLoader->load($preset->getId());
+
+        $this->assertInternalType('string', $presetData);
+        $this->assertJson($presetData);
+
+        $decodedData = json_decode($presetData, true);
+
+        $componentId = $this->connection->fetchColumn('SELECT id FROM s_library_component WHERE name = "Banner-Slider"');
+
+        $this->assertEquals($componentId, $decodedData['elements'][0]['componentId']);
+        $this->assertEquals($componentId, $decodedData['elements'][0]['component']['id']);
+
+        $this->assertInternalType('array', $decodedData['elements'][0]['data'][0]['value']);
+        $this->assertRegExp('/http/', $decodedData['elements'][0]['data'][0]['value'][0]['path']);
+    }
 }
