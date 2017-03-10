@@ -24,7 +24,9 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Service;
 
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
+use Shopware\Bundle\StoreFrontBundle\Struct\Media;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 /**
  * @category  Shopware
@@ -34,29 +36,29 @@ use Shopware\Bundle\StoreFrontBundle\Struct;
 interface MediaServiceInterface
 {
     /**
-     * To get detailed information about the selection conditions, structure and content of the returned object,
-     * please refer to the linked classes.
+     * @param int[]                $ids
+     * @param ShopContextInterface $context
      *
-     * @param $ids
-     * @param Struct\ShopContextInterface $context
-     *
-     * @return Struct\Media[] Indexed by the media id
+     * @return Media[] Indexed by the media id
      */
-    public function getList($ids, Struct\ShopContextInterface $context);
+    public function getList($ids, ShopContextInterface $context);
 
     /**
-     * @param Struct\BaseProduct[]        $products
-     * @param Struct\ShopContextInterface $context
+     * Selects first the media structs which have a configurator configuration for the provided product variant.
+     * The normal product media structs which has no configuration, are appended to the configurator media structs.
      *
-     * @return array indexed by the product order number, each array element contains a \Shopware\Bundle\StoreFrontBundle\Struct\Media array
+     * @param BaseProduct[]        $products
+     * @param ShopContextInterface $context
+     *
+     * @return array indexed by the product order number, each array element contains a \Shopware\Bundle\StoreFrontBundle\Media array
      */
-    public function getProductsMedia($products, Struct\ShopContextInterface $context);
+    public function getProductsMedia($products, ShopContextInterface $context);
 
     /**
-     * @param Struct\BaseProduct[]                                          $products
-     * @param \Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface $context
+     * @param BaseProduct[]        $products
+     * @param ShopContextInterface $context
      *
-     * @return Struct\Media[] Indexed by product number
+     * @return Media[] Indexed by product number
      */
-    public function getCovers($products, Struct\ShopContextInterface $context);
+    public function getCovers($products, ShopContextInterface $context);
 }

@@ -24,7 +24,8 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Service;
 
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 /**
  * @category  Shopware
@@ -34,13 +35,10 @@ use Shopware\Bundle\StoreFrontBundle\Struct;
 interface ListProductServiceInterface
 {
     /**
-     * To get detailed information about the selection conditions, structure and content of the returned object,
-     * please refer to the linked classes.
+     * @param string[]             $numbers
+     * @param ShopContextInterface $context
      *
-     * @param array                       $numbers
-     * @param Struct\ShopContextInterface $context
-     *
-     * @return Struct\ListProduct[] indexed by the product order number
+     * @return ListProduct[] indexed by the product order number
      */
-    public function getList(array $numbers, Struct\ShopContextInterface $context);
+    public function getList(array $numbers, ShopContextInterface $context);
 }

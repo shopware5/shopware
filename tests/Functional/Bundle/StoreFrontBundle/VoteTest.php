@@ -24,6 +24,7 @@
 
 namespace Shopware\Tests\Functional\Bundle\StoreFrontBundle;
 
+use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\Vote;
 
 class VoteTest extends TestCase
@@ -38,10 +39,10 @@ class VoteTest extends TestCase
         $points = [1, 2, 2, 3, 3];
         $this->helper->createVotes($product->getId(), $points);
 
-        $listProduct = Shopware()->Container()->get('shopware_storefront.list_product_service')->getList([$number], $context);
-        $listProduct = array_shift($listProduct);
+        $listProducts = Shopware()->Container()->get('shopware_storefront.list_product_service')->getList([$number], $context);
 
-        $votes = Shopware()->Container()->get('shopware_storefront.vote_service')->get($listProduct, $context);
+        $votes = Shopware()->Container()->get('shopware_storefront.vote_service')->getList($listProducts, $context);
+        $votes = array_shift($votes);
 
         $this->assertCount(5, $votes);
 
@@ -64,6 +65,7 @@ class VoteTest extends TestCase
         $listProduct = Shopware()->Container()->get('shopware_storefront.list_product_service')->getList([$number], $context);
         $listProduct = array_shift($listProduct);
 
+        /** @var ListProduct $listProduct */
         $voteAverage = $listProduct->getVoteAverage();
 
         $this->assertEquals(5, $voteAverage->getAverage());
@@ -221,7 +223,9 @@ class VoteTest extends TestCase
 
             //validate vote count of provided shop
             if (array_key_exists('count', $data)) {
-                $votes = $service->get($product, $context);
+                $votes = $service->getList([$product], $context);
+                $votes = array_shift($votes);
+
                 $this->assertEquals($data['count'], count($votes), sprintf('Vote count %s for shop %s of product %s not match', $data['count'], $shopId, $product->getNumber()));
             }
 

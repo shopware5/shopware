@@ -24,24 +24,27 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Service\Core;
 
-use Shopware\Bundle\StoreFrontBundle\Gateway;
-use Shopware\Bundle\StoreFrontBundle\Service;
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Gateway\MediaGateway;
+use Shopware\Bundle\StoreFrontBundle\Gateway\ProductMediaGateway;
+use Shopware\Bundle\StoreFrontBundle\Gateway\VariantMediaGateway;
+use Shopware\Bundle\StoreFrontBundle\Service\MediaServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Service\VariantCoverServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 /**
  * @category  Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class MediaService implements Service\MediaServiceInterface
+class MediaService implements MediaServiceInterface
 {
     /**
-     * @var Gateway\ProductMediaGateway
+     * @var ProductMediaGateway
      */
     private $productMediaGateway;
 
     /**
-     * @var Gateway\VariantMediaGateway
+     * @var VariantMediaGateway
      */
     private $variantMediaGateway;
 
@@ -51,28 +54,28 @@ class MediaService implements Service\MediaServiceInterface
     private $shopwareConfig;
 
     /**
-     * @var \Shopware\Bundle\StoreFrontBundle\Gateway\MediaGateway
+     * @var MediaGateway
      */
     private $mediaGateway;
 
     /**
-     * @var Service\VariantCoverServiceInterface
+     * @var VariantCoverServiceInterface
      */
     private $variantCoverService;
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Gateway\MediaGateway $mediaGateway
-     * @param Gateway\ProductMediaGateway                            $productMedia
-     * @param Gateway\VariantMediaGateway                            $variantMedia
-     * @param \Shopware_Components_Config                            $shopwareConfig
-     * @param Service\VariantCoverServiceInterface                   $variantCoverService
+     * @param MediaGateway                 $mediaGateway
+     * @param ProductMediaGateway          $productMedia
+     * @param VariantMediaGateway          $variantMedia
+     * @param \Shopware_Components_Config  $shopwareConfig
+     * @param VariantCoverServiceInterface $variantCoverService
      */
     public function __construct(
-        Gateway\MediaGateway $mediaGateway,
-        Gateway\ProductMediaGateway $productMedia,
-        Gateway\VariantMediaGateway $variantMedia,
+        MediaGateway $mediaGateway,
+        ProductMediaGateway $productMedia,
+        VariantMediaGateway $variantMedia,
         \Shopware_Components_Config $shopwareConfig,
-        Service\VariantCoverServiceInterface $variantCoverService
+        VariantCoverServiceInterface $variantCoverService
     ) {
         $this->productMediaGateway = $productMedia;
         $this->variantMediaGateway = $variantMedia;
@@ -82,12 +85,9 @@ class MediaService implements Service\MediaServiceInterface
     }
 
     /**
-     * @param $ids
-     * @param Struct\ShopContextInterface $context
-     *
-     * @return Struct\Media[] Indexed by the media id
+     * {@inheritdoc}
      */
-    public function getList($ids, Struct\ShopContextInterface $context)
+    public function getList($ids, ShopContextInterface $context)
     {
         return $this->mediaGateway->getList($ids, $context->getTranslationContext());
     }
@@ -95,7 +95,7 @@ class MediaService implements Service\MediaServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function getCovers($products, Struct\ShopContextInterface $context)
+    public function getCovers($products, ShopContextInterface $context)
     {
         if ($this->shopwareConfig->get('forceArticleMainImageInListing')) {
             return $this->productMediaGateway->getCovers(
@@ -110,7 +110,7 @@ class MediaService implements Service\MediaServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function getProductsMedia($products, Struct\ShopContextInterface $context)
+    public function getProductsMedia($products, ShopContextInterface $context)
     {
         $specifyMedia = $this->variantMediaGateway->getList($products, $context->getTranslationContext());
 

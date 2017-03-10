@@ -186,9 +186,17 @@ This changelog references changes done in Shopware Next patch versions.
     * `\Shopware\Bundle\StoreFrontBundle\Service\VoteServiceInterface::get`
     * `\Shopware\Bundle\StoreFrontBundle\Service\VoteServiceInterface::getAverage`
 
-* Removed unused `\Shopware\Bundle\StoreFrontBundle\Struct\LocationContext` class
-* Removed unused `\Shopware\Bundle\StoreFrontBundle\Gateway\SimilarProductsGateway::getListByCategory`
-* Removed unused `\Shopware\Bundle\StoreFrontBundle\Gateway\SimilarProductsGateway::getByCategory`
+* Removed `\Shopware\Bundle\StoreFrontBundle\Struct\LocationContext`
+* Removed `\Shopware\Bundle\StoreFrontBundle\Gateway\SimilarProductsGateway::getListByCategory`
+* Removed `\Shopware\Bundle\StoreFrontBundle\Gateway\SimilarProductsGateway::getByCategory`
+* Removed `\Shopware\Bundle\StoreFrontBundle\Service\Core\ContextService::getContext`
+* Removed `\Shopware\Bundle\StoreFrontBundle\Service\Core\ContextService::getProductContext`
+* Removed `\Shopware\Bundle\StoreFrontBundle\Service\Core\ContextService::getLocationContext`
+* Removed `\Shopware\Bundle\StoreFrontBundle\Service\Core\ContextService::initializeContext`
+* Removed `\Shopware\Bundle\StoreFrontBundle\Service\Core\ContextService::initializeLocationContext`
+* Removed `\Shopware\Bundle\StoreFrontBundle\Service\Core\ContextService::initializeProductContext`
+* Removed `\Shopware\Bundle\StoreFrontBundle\Service\Core\ContextService::createProductContext`
+
 
 ## Filesystem
 

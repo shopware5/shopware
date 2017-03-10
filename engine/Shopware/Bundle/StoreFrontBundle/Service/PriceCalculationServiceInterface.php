@@ -24,7 +24,8 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Service;
 
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 /**
  * @category  Shopware
@@ -37,16 +38,16 @@ interface PriceCalculationServiceInterface
      * Calculates all prices of the product.
      *
      * The product contains two different prices, the graduated prices and the cheapest price.
-     * Each price type contains a single or multiple \Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceRule elements.
+     * Each price type contains a single or multiple \Shopware\Bundle\StoreFrontBundle\Product\PriceRule elements.
      *
      * Each price rule contains a price, pseudo price and a reference price which calculates over
      * the assigned price unit based on the original price.
      *
-     * The calculated \Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceRule structs are wrapped into a \Shopware\Bundle\StoreFrontBundle\Struct\Product\Price
+     * The calculated \Shopware\Bundle\StoreFrontBundle\Product\PriceRule structs are wrapped into a \Shopware\Bundle\StoreFrontBundle\Product\Price
      * struct which contains only the calculated price values and the reference to his rule.
      *
-     * @param Struct\ListProduct          $product
-     * @param Struct\ShopContextInterface $context
+     * @param ListProduct          $product
+     * @param ShopContextInterface $context
      */
-    public function calculateProduct(Struct\ListProduct $product, Struct\ShopContextInterface $context);
+    public function calculateProduct(ListProduct $product, ShopContextInterface $context);
 }

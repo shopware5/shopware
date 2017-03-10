@@ -24,7 +24,8 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Service;
 
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 /**
  * @category  Shopware
@@ -34,12 +35,18 @@ use Shopware\Bundle\StoreFrontBundle\Struct;
 interface AdditionalTextServiceInterface
 {
     /**
-     * Determines the 'additional text' value for multiple ListProduct.
+     * Determines the 'additional text' value for a single ListProduct.
      *
-     * @param Struct\ListProduct[]        $products
-     * @param Struct\ShopContextInterface $context
+     * If the ListProduct's 'additional' field is not empty, its value is returned.
+     * For products with configurator groups and empty 'additional' field, the new value is calculated
+     * based on the associated group options
      *
-     * @return Struct\ListProduct[] $products
+     * This behaviour can be optionally disabled using the backend settings
+     *
+     * @param ListProduct[]        $products
+     * @param ShopContextInterface $context
+     *
+     * @return ListProduct[] $products
      */
-    public function buildAdditionalTextLists($products, Struct\ShopContextInterface $context);
+    public function buildAdditionalTextLists($products, ShopContextInterface $context);
 }

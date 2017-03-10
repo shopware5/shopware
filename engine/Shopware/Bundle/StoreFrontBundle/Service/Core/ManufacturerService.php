@@ -24,10 +24,10 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Service\Core;
 
-use Shopware\Bundle\StoreFrontBundle\Gateway;
-use Shopware\Bundle\StoreFrontBundle\Service;
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Gateway\ManufacturerGateway;
+use Shopware\Bundle\StoreFrontBundle\Service\ManufacturerServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\Manufacturer;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\Routing\RouterInterface;
 
 /**
@@ -35,10 +35,10 @@ use Shopware\Components\Routing\RouterInterface;
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class ManufacturerService implements Service\ManufacturerServiceInterface
+class ManufacturerService implements ManufacturerServiceInterface
 {
     /**
-     * @var Gateway\ManufacturerGateway
+     * @var ManufacturerGateway
      */
     private $manufacturerGateway;
 
@@ -48,11 +48,11 @@ class ManufacturerService implements Service\ManufacturerServiceInterface
     private $router;
 
     /**
-     * @param Gateway\ManufacturerGateway $manufacturerGateway
-     * @param RouterInterface             $router
+     * @param ManufacturerGateway $manufacturerGateway
+     * @param RouterInterface     $router
      */
     public function __construct(
-        Gateway\ManufacturerGateway $manufacturerGateway,
+        ManufacturerGateway $manufacturerGateway,
         RouterInterface $router
     ) {
         $this->manufacturerGateway = $manufacturerGateway;
@@ -62,7 +62,7 @@ class ManufacturerService implements Service\ManufacturerServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function getList(array $ids, Struct\ShopContextInterface $context)
+    public function getList(array $ids, ShopContextInterface $context)
     {
         $manufacturers = $this->manufacturerGateway->getList($ids, $context->getTranslationContext());
 

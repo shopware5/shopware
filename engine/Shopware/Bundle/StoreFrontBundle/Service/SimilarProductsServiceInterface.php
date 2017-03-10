@@ -24,7 +24,8 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Service;
 
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 /**
  * @category  Shopware
@@ -43,13 +44,10 @@ interface SimilarProductsServiceInterface
      * If the product has no manually assigned similar products, the function selects the fallback similar products
      * over the same category.
      *
-     * To get detailed information about the selection conditions, structure and content of the returned object,
-     * please refer to the linked classes.
-     *
-     * @param Struct\ListProduct[]        $products
-     * @param Struct\ShopContextInterface $context
+     * @param ListProduct[]        $products
+     * @param ShopContextInterface $context
      *
      * @return array indexed with the product number, the values are a list of ListProduct structs
      */
-    public function getList($products, Struct\ShopContextInterface $context);
+    public function getList($products, ShopContextInterface $context);
 }

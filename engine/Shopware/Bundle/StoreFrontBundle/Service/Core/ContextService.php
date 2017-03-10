@@ -144,67 +144,6 @@ class ContextService implements ContextServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function getContext()
-    {
-        return $this->getShopContext();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getProductContext()
-    {
-        return $this->getShopContext();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getLocationContext()
-    {
-        return $this->getShopContext();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function initializeContext()
-    {
-        $this->initializeShopContext();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function initializeLocationContext()
-    {
-        $this->initializeShopContext();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function initializeProductContext()
-    {
-        $this->initializeShopContext();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function createProductContext($shopId, $currencyId = null, $customerGroupKey = null)
-    {
-        return $this->create(
-            $this->getStoreFrontBaseUrl(),
-            $shopId,
-            $currencyId,
-            $customerGroupKey
-        );
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function createShopContext($shopId, $currencyId = null, $customerGroupKey = null)
     {
         return $this->create(

@@ -24,7 +24,8 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Service;
 
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Struct\Product\Manufacturer;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 /**
  * @category  Shopware
@@ -34,13 +35,10 @@ use Shopware\Bundle\StoreFrontBundle\Struct;
 interface ManufacturerServiceInterface
 {
     /**
-     * To get detailed information about the selection conditions, structure and content of the returned object,
-     * please refer to the linked classes.
+     * @param int[]                $ids
+     * @param ShopContextInterface $context
      *
-     * @param array                       $ids
-     * @param Struct\ShopContextInterface $context
-     *
-     * @return Struct\Product\Manufacturer[] Indexed by the manufacturer id
+     * @return Manufacturer[] Indexed by the manufacturer id
      */
-    public function getList(array $ids, Struct\ShopContextInterface $context);
+    public function getList(array $ids, ShopContextInterface $context);
 }

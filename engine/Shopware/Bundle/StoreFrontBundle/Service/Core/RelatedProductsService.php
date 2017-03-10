@@ -24,34 +24,36 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Service\Core;
 
-use Shopware\Bundle\StoreFrontBundle\Gateway;
-use Shopware\Bundle\StoreFrontBundle\Service;
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Gateway\RelatedProductsGateway;
+use Shopware\Bundle\StoreFrontBundle\Service\ListProductServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Service\RelatedProductsServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 /**
  * @category  Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class RelatedProductsService implements Service\RelatedProductsServiceInterface
+class RelatedProductsService implements RelatedProductsServiceInterface
 {
     /**
-     * @var Gateway\RelatedProductsGateway
+     * @var RelatedProductsGateway
      */
     private $gateway;
 
     /**
-     * @var Service\ListProductServiceInterface
+     * @var ListProductServiceInterface
      */
     private $listProductService;
 
     /**
-     * @param Gateway\RelatedProductsGateway      $gateway
-     * @param Service\ListProductServiceInterface $listProductService
+     * @param RelatedProductsGateway      $gateway
+     * @param ListProductServiceInterface $listProductService
      */
     public function __construct(
-        Gateway\RelatedProductsGateway $gateway,
-        Service\ListProductServiceInterface $listProductService
+        RelatedProductsGateway $gateway,
+        ListProductServiceInterface $listProductService
     ) {
         $this->gateway = $gateway;
         $this->listProductService = $listProductService;
@@ -60,7 +62,7 @@ class RelatedProductsService implements Service\RelatedProductsServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function getList($products, Struct\ShopContextInterface $context)
+    public function getList($products, ShopContextInterface $context)
     {
         /**
          * returns an array which is associated with the different product numbers.
@@ -92,10 +94,10 @@ class RelatedProductsService implements Service\RelatedProductsServiceInterface
     }
 
     /**
-     * @param Struct\BaseProduct[] $products
-     * @param string[]             $numbers
+     * @param BaseProduct[] $products
+     * @param string[]      $numbers
      *
-     * @return Struct\BaseProduct[]
+     * @return BaseProduct[]
      */
     private function getProductsByNumbers($products, array $numbers)
     {

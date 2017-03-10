@@ -150,7 +150,7 @@ class Helper
     }
 
     /**
-     * @param string               $numbers
+     * @param array                $numbers
      * @param ShopContextInterface $context
      * @param array                $configs
      *

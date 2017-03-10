@@ -24,26 +24,30 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Service\Core;
 
-use Shopware\Bundle\StoreFrontBundle\Gateway;
-use Shopware\Bundle\StoreFrontBundle\Service;
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Gateway\PriceGroupDiscountGateway;
+use Shopware\Bundle\StoreFrontBundle\Service\PriceCalculationServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
+use Shopware\Bundle\StoreFrontBundle\Struct\Product\Price;
+use Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceRule;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\Tax;
 
 /**
  * @category  Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class PriceCalculationService implements Service\PriceCalculationServiceInterface
+class PriceCalculationService implements PriceCalculationServiceInterface
 {
     /**
-     * @var Gateway\PriceGroupDiscountGateway
+     * @var PriceGroupDiscountGateway
      */
     private $priceGroupDiscountGateway;
 
     /**
-     * @param Gateway\PriceGroupDiscountGateway $priceGroupDiscountGateway
+     * @param PriceGroupDiscountGateway $priceGroupDiscountGateway
      */
-    public function __construct(Gateway\PriceGroupDiscountGateway $priceGroupDiscountGateway)
+    public function __construct(PriceGroupDiscountGateway $priceGroupDiscountGateway)
     {
         $this->priceGroupDiscountGateway = $priceGroupDiscountGateway;
     }
@@ -52,8 +56,8 @@ class PriceCalculationService implements Service\PriceCalculationServiceInterfac
      * {@inheritdoc}
      */
     public function calculateProduct(
-        Struct\ListProduct $product,
-        Struct\ShopContextInterface $context
+        ListProduct $product,
+        ShopContextInterface $context
     ) {
         $tax = $context->getTaxRule($product->getTax()->getId());
 
@@ -88,22 +92,22 @@ class PriceCalculationService implements Service\PriceCalculationServiceInterfac
         }
 
         //add state to the product which can be used to check if the prices are already calculated.
-        $product->addState(Struct\ListProduct::STATE_PRICE_CALCULATED);
+        $product->addState(ListProduct::STATE_PRICE_CALCULATED);
     }
 
     /**
      * Calculates the cheapest price considering the variant min purchase
      *
-     * @param Struct\ListProduct          $product
-     * @param Struct\Product\PriceRule    $priceRule
-     * @param Struct\ShopContextInterface $context
+     * @param ListProduct          $product
+     * @param PriceRule            $priceRule
+     * @param ShopContextInterface $context
      *
-     * @return Struct\Product\Price
+     * @return Price
      */
     private function calculateCheapestAvailablePrice(
-        Struct\ListProduct $product,
-        Struct\Product\PriceRule $priceRule,
-        Struct\ShopContextInterface $context
+        ListProduct $product,
+        PriceRule $priceRule,
+        ShopContextInterface $context
     ) {
         $priceRule->setPrice(
             $priceRule->getUnit()->getMinPurchase() * $priceRule->getPrice()
@@ -125,18 +129,18 @@ class PriceCalculationService implements Service\PriceCalculationServiceInterfac
      * and the cheapest price struct.
      * All price structs will be calculated through this function.
      *
-     * @param Struct\Product\PriceRule    $rule
-     * @param Struct\Tax                  $tax
-     * @param Struct\ShopContextInterface $context
+     * @param PriceRule            $rule
+     * @param Tax                  $tax
+     * @param ShopContextInterface $context
      *
-     * @return Struct\Product\Price
+     * @return Price
      */
     private function calculatePriceStruct(
-        Struct\Product\PriceRule $rule,
-        Struct\Tax $tax,
-        Struct\ShopContextInterface $context
+        PriceRule $rule,
+        Tax $tax,
+        ShopContextInterface $context
     ) {
-        $price = new Struct\Product\Price($rule);
+        $price = new Price($rule);
 
         //calculates the normal price of the struct.
         $price->setCalculatedPrice(
@@ -167,12 +171,12 @@ class PriceCalculationService implements Service\PriceCalculationServiceInterfac
      * and the pseudo price of a price struct.
      *
      * @param $price
-     * @param Struct\Tax                  $tax
-     * @param Struct\ShopContextInterface $context
+     * @param Tax                  $tax
+     * @param ShopContextInterface $context
      *
      * @return float
      */
-    private function calculatePrice($price, Struct\Tax $tax, Struct\ShopContextInterface $context)
+    private function calculatePrice($price, Tax $tax, ShopContextInterface $context)
     {
         /**
          * Important:
@@ -214,7 +218,7 @@ class PriceCalculationService implements Service\PriceCalculationServiceInterfac
          *
          * This line contains the gross price calculation within the store front.
          *
-         * The passed $context object contains a calculated Struct\Tax object which
+         * The passed $context object contains a calculated Tax object which
          * defines which tax rules should be used for the tax calculation.
          *
          * The tax rules can be defined individual for each customer group and
@@ -235,11 +239,11 @@ class PriceCalculationService implements Service\PriceCalculationServiceInterfac
      * Calculates the product unit reference price for the passed
      * product price.
      *
-     * @param Struct\Product\Price $price
+     * @param Price $price
      *
      * @return float
      */
-    private function calculateReferencePrice(Struct\Product\Price $price)
+    private function calculateReferencePrice(Price $price)
     {
         $value = $price->getCalculatedPrice() / $price->getUnit()->getPurchaseUnit() * $price->getUnit()->getReferenceUnit();
 

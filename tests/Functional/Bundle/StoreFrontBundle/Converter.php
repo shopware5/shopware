@@ -166,7 +166,7 @@ class Converter
     {
         $struct = new Struct\Locale();
         if (!$locale) {
-            return $locale;
+            return new Struct\Locale();
         }
 
         $struct->setId($locale->getId());

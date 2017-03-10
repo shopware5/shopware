@@ -24,32 +24,35 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Service\Core;
 
-use Shopware\Bundle\StoreFrontBundle\Gateway;
-use Shopware\Bundle\StoreFrontBundle\Service;
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Gateway\ShopGateway;
+use Shopware\Bundle\StoreFrontBundle\Gateway\ShopPageGateway;
+use Shopware\Bundle\StoreFrontBundle\Service\ShopPageServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopPage;
 
 /**
  * @category  Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class ShopPageService implements Service\ShopPageServiceInterface
+class ShopPageService implements ShopPageServiceInterface
 {
     /**
-     * @var Gateway\ShopPageGateway
+     * @var ShopPageGateway
      */
     private $shopPageGateway;
 
     /**
-     * @var Gateway\ShopGateway
+     * @var ShopGateway
      */
     private $shopGateway;
 
     /**
-     * @param Gateway\ShopPageGateway $shopPageGateway
-     * @param Gateway\ShopGateway     $shopGateway
+     * @param ShopPageGateway $shopPageGateway
+     * @param ShopGateway     $shopGateway
      */
-    public function __construct(Gateway\ShopPageGateway $shopPageGateway, Gateway\ShopGateway $shopGateway)
+    public function __construct(ShopPageGateway $shopPageGateway, ShopGateway $shopGateway)
     {
         $this->shopPageGateway = $shopPageGateway;
         $this->shopGateway = $shopGateway;
@@ -58,7 +61,7 @@ class ShopPageService implements Service\ShopPageServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function getList(array $ids, Struct\ShopContextInterface $context)
+    public function getList(array $ids, ShopContextInterface $context)
     {
         $shopPages = $this->shopPageGateway->getList($ids, $context->getTranslationContext());
 
@@ -70,9 +73,7 @@ class ShopPageService implements Service\ShopPageServiceInterface
     }
 
     /**
-     * @param Struct\ShopPage[] $shopPages
-     *
-     * @return Struct\ShopPage[]
+     * @param ShopPage[] $shopPages
      */
     private function resolveShops(array $shopPages)
     {
@@ -84,7 +85,7 @@ class ShopPageService implements Service\ShopPageServiceInterface
         $shops = $this->shopGateway->getList(array_keys(array_flip($shopIds)));
 
         foreach ($shopPages as $page) {
-            $pageShops = array_filter($shops, function (Struct\Shop $shop) use ($page) {
+            $pageShops = array_filter($shops, function (Shop $shop) use ($page) {
                 return array_key_exists($shop->getId(), $page->getShopIds());
             });
 
@@ -93,12 +94,12 @@ class ShopPageService implements Service\ShopPageServiceInterface
     }
 
     /**
-     * @param Struct\ShopPage[]           $shopPages
-     * @param Struct\ShopContextInterface $context
+     * @param ShopPage[]           $shopPages
+     * @param ShopContextInterface $context
      */
-    private function resolveChildren(array $shopPages, Struct\ShopContextInterface $context)
+    private function resolveChildren(array $shopPages, ShopContextInterface $context)
     {
-        $parentIds = array_map(function (Struct\ShopPage $page) {
+        $parentIds = array_map(function (ShopPage $page) {
             return $page->getParentId() > 0 ? (int) $page->getId() : null;
         }, $shopPages);
 
@@ -119,12 +120,12 @@ class ShopPageService implements Service\ShopPageServiceInterface
     }
 
     /**
-     * @param Struct\ShopPage[]           $shopPages
-     * @param Struct\ShopContextInterface $context
+     * @param ShopPage[]           $shopPages
+     * @param ShopContextInterface $context
      */
-    private function resolveParents(array $shopPages, Struct\ShopContextInterface $context)
+    private function resolveParents(array $shopPages, ShopContextInterface $context)
     {
-        $parentIds = array_map(function (Struct\ShopPage $page) {
+        $parentIds = array_map(function (ShopPage $page) {
             return $page->getParentId();
         }, $shopPages);
 

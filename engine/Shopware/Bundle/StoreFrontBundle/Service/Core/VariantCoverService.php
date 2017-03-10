@@ -24,9 +24,10 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Service\Core;
 
-use Shopware\Bundle\StoreFrontBundle\Gateway;
+use Shopware\Bundle\StoreFrontBundle\Gateway\ProductMediaGateway;
+use Shopware\Bundle\StoreFrontBundle\Gateway\VariantMediaGateway;
 use Shopware\Bundle\StoreFrontBundle\Service\VariantCoverServiceInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 /**
  * @category  Shopware
@@ -36,22 +37,22 @@ use Shopware\Bundle\StoreFrontBundle\Struct;
 class VariantCoverService implements VariantCoverServiceInterface
 {
     /**
-     * @var Gateway\ProductMediaGateway
+     * @var ProductMediaGateway
      */
     private $productMediaGateway;
 
     /**
-     * @var Gateway\VariantMediaGateway
+     * @var VariantMediaGateway
      */
     private $variantMediaGateway;
 
     /**
-     * @param Gateway\ProductMediaGateway $productMedia
-     * @param Gateway\VariantMediaGateway $variantMedia
+     * @param ProductMediaGateway $productMedia
+     * @param VariantMediaGateway $variantMedia
      */
     public function __construct(
-        Gateway\ProductMediaGateway $productMedia,
-        Gateway\VariantMediaGateway $variantMedia
+        ProductMediaGateway $productMedia,
+        VariantMediaGateway $variantMedia
     ) {
         $this->productMediaGateway = $productMedia;
         $this->variantMediaGateway = $variantMedia;
@@ -60,7 +61,7 @@ class VariantCoverService implements VariantCoverServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function getList($products, Struct\ShopContextInterface $context)
+    public function getList($products, ShopContextInterface $context)
     {
         $covers = $this->variantMediaGateway->getCovers(
             $products,

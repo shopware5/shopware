@@ -35,9 +35,9 @@ interface BaseProductFactoryServiceInterface
      * Creates a list of base product structs with all required identifier fields
      * for other store front services
      *
-     * @param $numbers
+     * @param string[] $numbers
      *
      * @return BaseProduct[]
      */
-    public function createBaseProducts($numbers);
+    public function createBaseProducts($numbers): array;
 }

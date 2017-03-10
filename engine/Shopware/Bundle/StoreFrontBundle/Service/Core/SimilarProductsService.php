@@ -28,24 +28,27 @@ use Shopware\Bundle\SearchBundle\Condition\SimilarProductCondition;
 use Shopware\Bundle\SearchBundle\ProductSearchInterface;
 use Shopware\Bundle\SearchBundle\Sorting\PopularitySorting;
 use Shopware\Bundle\SearchBundle\StoreFrontCriteriaFactoryInterface;
-use Shopware\Bundle\StoreFrontBundle\Gateway;
-use Shopware\Bundle\StoreFrontBundle\Service;
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Gateway\SimilarProductsGateway;
+use Shopware\Bundle\StoreFrontBundle\Service\ListProductServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Service\SimilarProductsServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
+use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 /**
  * @category  Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class SimilarProductsService implements Service\SimilarProductsServiceInterface
+class SimilarProductsService implements SimilarProductsServiceInterface
 {
     /**
-     * @var Gateway\SimilarProductsGateway
+     * @var SimilarProductsGateway
      */
     private $gateway;
 
     /**
-     * @var Service\ListProductServiceInterface
+     * @var ListProductServiceInterface
      */
     private $listProductService;
     /**
@@ -64,15 +67,15 @@ class SimilarProductsService implements Service\SimilarProductsServiceInterface
     private $factory;
 
     /**
-     * @param Gateway\SimilarProductsGateway      $gateway
-     * @param Service\ListProductServiceInterface $listProductService
-     * @param \Shopware_Components_Config         $config
-     * @param ProductSearchInterface              $search
-     * @param StoreFrontCriteriaFactoryInterface  $factory
+     * @param SimilarProductsGateway             $gateway
+     * @param ListProductServiceInterface        $listProductService
+     * @param \Shopware_Components_Config        $config
+     * @param ProductSearchInterface             $search
+     * @param StoreFrontCriteriaFactoryInterface $factory
      */
     public function __construct(
-        Gateway\SimilarProductsGateway $gateway,
-        Service\ListProductServiceInterface $listProductService,
+        SimilarProductsGateway $gateway,
+        ListProductServiceInterface $listProductService,
         ProductSearchInterface $search,
         StoreFrontCriteriaFactoryInterface $factory,
         \Shopware_Components_Config $config
@@ -87,7 +90,7 @@ class SimilarProductsService implements Service\SimilarProductsServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function getList($products, Struct\ShopContextInterface $context)
+    public function getList($products, ShopContextInterface $context)
     {
         /**
          * returns an array which is associated with the different product numbers.
@@ -128,7 +131,7 @@ class SimilarProductsService implements Service\SimilarProductsServiceInterface
         }
 
         $fallbackResult = [];
-        /** @var \Shopware\Bundle\StoreFrontBundle\Struct\ListProduct $product */
+        /** @var ListProduct $product */
         foreach ($fallback as $product) {
             $criteria = $this->factory->createBaseCriteria([$context->getShop()->getCategory()->getId()], $context);
             $criteria->limit($limit);
@@ -149,10 +152,10 @@ class SimilarProductsService implements Service\SimilarProductsServiceInterface
     }
 
     /**
-     * @param Struct\BaseProduct[] $products
-     * @param array                $numbers
+     * @param BaseProduct[] $products
+     * @param array         $numbers
      *
-     * @return Struct\BaseProduct[]
+     * @return BaseProduct[]
      */
     private function getProductsByNumbers($products, array $numbers)
     {

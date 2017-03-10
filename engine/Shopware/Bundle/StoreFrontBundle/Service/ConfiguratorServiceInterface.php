@@ -24,7 +24,9 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Service;
 
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
+use Shopware\Bundle\StoreFrontBundle\Struct\Configurator\Set;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 /**
  * @category  Shopware
@@ -34,29 +36,19 @@ use Shopware\Bundle\StoreFrontBundle\Struct;
 interface ConfiguratorServiceInterface
 {
     /**
-     * To get detailed information about the selection conditions, structure and content of the returned object,
-     * please refer to the linked classes.
+     * @param BaseProduct[]        $products
+     * @param ShopContextInterface $context
      *
-     * @see \Shopware\Bundle\StoreFrontBundle\Gateway\ProductConfigurationGateway::getList()
-     *
-     * @param Struct\BaseProduct[]        $products
-     * @param Struct\ShopContextInterface $context
-     *
-     * @return array Each array element contains a Struct\Configurator\Group[] array. The first level is indexed with the product number
+     * @return array Each array element contains a Configurator\Group[] array. The first level is indexed with the product number
      */
-    public function getProductsConfigurations($products, Struct\ShopContextInterface $context);
+    public function getProductsConfigurations($products, ShopContextInterface $context);
 
     /**
-     * To get detailed information about the selection conditions, structure and content of the returned object,
-     * please refer to the linked classes.
+     * @param BaseProduct          $product
+     * @param ShopContextInterface $context
+     * @param array                $selection
      *
-     * @see \Shopware\Bundle\StoreFrontBundle\Gateway\ConfiguratorGateway::get()
-     *
-     * @param Struct\BaseProduct          $product
-     * @param Struct\ShopContextInterface $context
-     * @param array                       $selection
-     *
-     * @return Struct\Configurator\Set
+     * @return Set
      */
-    public function getProductConfigurator(Struct\BaseProduct $product, Struct\ShopContextInterface $context, array $selection);
+    public function getProductConfigurator(BaseProduct $product, ShopContextInterface $context, array $selection);
 }

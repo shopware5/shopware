@@ -2060,7 +2060,7 @@ class sArticles
      * @param SearchBundle\ProductNumberSearchResult $searchResult
      * @param $orderNumber
      * @param $categoryId
-     * @param StoreFrontBundle\Struct\ProductContextInterface $context
+     * @param StoreFrontBundle\Struct\ShopContextInterface $context
      *
      * @return array
      */
@@ -2068,7 +2068,7 @@ class sArticles
         SearchBundle\ProductNumberSearchResult $searchResult,
         $orderNumber,
         $categoryId,
-        StoreFrontBundle\Struct\ProductContextInterface $context
+        StoreFrontBundle\Struct\ShopContextInterface $context
     ) {
         $products = $searchResult->getProducts();
         $products = array_values($products);
@@ -2342,15 +2342,15 @@ class sArticles
      * This function calls the new shopware core and converts the result to the old listing structure.
      *
      * @param $categoryId
-     * @param StoreFrontBundle\Struct\ProductContextInterface $context
-     * @param Enlight_Controller_Request_Request              $request
-     * @param SearchBundle\Criteria                           $criteria
+     * @param StoreFrontBundle\Struct\ShopContextInterface $context
+     * @param Enlight_Controller_Request_Request           $request
+     * @param SearchBundle\Criteria                        $criteria
      *
      * @return array
      */
     private function getListing(
         $categoryId,
-        StoreFrontBundle\Struct\ProductContextInterface $context,
+        StoreFrontBundle\Struct\ShopContextInterface $context,
         Enlight_Controller_Request_Request $request,
         SearchBundle\Criteria $criteria
     ) {

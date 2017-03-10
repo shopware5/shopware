@@ -24,26 +24,27 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Service\Core;
 
-use Shopware\Bundle\StoreFrontBundle\Gateway;
-use Shopware\Bundle\StoreFrontBundle\Service;
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Gateway\CategoryGateway;
+use Shopware\Bundle\StoreFrontBundle\Service\CategoryServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\Category;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 /**
  * @category  Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class CategoryService implements Service\CategoryServiceInterface
+class CategoryService implements CategoryServiceInterface
 {
     /**
-     * @var Gateway\CategoryGateway
+     * @var CategoryGateway
      */
     private $categoryGateway;
 
     /**
-     * @param Gateway\CategoryGateway $categoryGateway
+     * @param CategoryGateway $categoryGateway
      */
-    public function __construct(Gateway\CategoryGateway $categoryGateway)
+    public function __construct(CategoryGateway $categoryGateway)
     {
         $this->categoryGateway = $categoryGateway;
     }
@@ -51,7 +52,7 @@ class CategoryService implements Service\CategoryServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function getList($ids, Struct\ShopContextInterface $context)
+    public function getList($ids, ShopContextInterface $context)
     {
         $categories = $this->categoryGateway->getList($ids, $context->getTranslationContext());
 
@@ -61,7 +62,7 @@ class CategoryService implements Service\CategoryServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function getProductsCategories(array $products, Struct\ShopContextInterface $context)
+    public function getProductsCategories(array $products, ShopContextInterface $context)
     {
         $categories = $this->categoryGateway->getProductsCategories($products, $context->getTranslationContext());
 
@@ -74,16 +75,16 @@ class CategoryService implements Service\CategoryServiceInterface
     }
 
     /**
-     * @param Struct\Category[]           $categories
-     * @param Struct\ShopContextInterface $context
+     * @param Category[]           $categories
+     * @param ShopContextInterface $context
      *
-     * @return Struct\Category[] $categories Indexed by the category id
+     * @return Category[] $categories Indexed by the category id
      */
-    private function filterValidCategories($categories, Struct\ShopContextInterface $context)
+    private function filterValidCategories($categories, ShopContextInterface $context)
     {
         $customerGroup = $context->getCurrentCustomerGroup();
 
-        return array_filter($categories, function (Struct\Category $category) use ($customerGroup) {
+        return array_filter($categories, function (Category $category) use ($customerGroup) {
             return !(in_array($customerGroup->getId(), $category->getBlockedCustomerGroupIds()));
         });
     }

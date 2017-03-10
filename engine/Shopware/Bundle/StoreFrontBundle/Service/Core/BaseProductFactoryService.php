@@ -49,7 +49,7 @@ class BaseProductFactoryService implements BaseProductFactoryServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function createBaseProducts($numbers)
+    public function createBaseProducts($numbers): array
     {
         if (!count($numbers)) {
             return [];

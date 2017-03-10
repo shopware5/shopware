@@ -133,8 +133,8 @@ class CartContextService implements CartContextServiceInterface
 
         $this->context = new CartContext(
             $shopContext,
-            $this->getStoreFrontPaymentMethod($shopContext, $customer),
-            $this->getStoreFrontDeliveryMethod($shopContext),
+            $this->getStoreFrontPaymentMethod($shopContext->getTranslationContext(), $customer),
+            $this->getStoreFrontDeliveryMethod($shopContext->getTranslationContext()),
             $customer,
             $addresses['billing'],
             $addresses['shipping']
@@ -186,7 +186,7 @@ class CartContextService implements CartContextServiceInterface
         return $result;
     }
 
-    private function getStoreFrontDeliveryMethod(ShopContextInterface $context): DeliveryMethod
+    private function getStoreFrontDeliveryMethod(TranslationContext $context): DeliveryMethod
     {
         if (!($id = $this->session->get('sDispatch'))) {
             $id = 9;
@@ -197,7 +197,7 @@ class CartContextService implements CartContextServiceInterface
         return array_shift($services);
     }
 
-    private function getStoreFrontPaymentMethod(ShopContextInterface $context, ?Customer $customer): PaymentMethod
+    private function getStoreFrontPaymentMethod(TranslationContext $context, ?Customer $customer): PaymentMethod
     {
         $id = $this->session->get('sPaymentID');
 
