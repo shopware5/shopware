@@ -60,6 +60,11 @@ class PresetLoader implements PresetLoaderInterface
         }
 
         $presetData = json_decode($preset->getPresetData(), true);
+
+        if (!$presetData['elements']) {
+            return $preset->getPresetData();
+        }
+
         $presetData['elements'] = $this->refreshElementData($presetData['elements']);
 
         $preset->setPresetData(json_encode($presetData));
@@ -153,10 +158,10 @@ class PresetLoader implements PresetLoaderInterface
     private function processRefresh(array $elements, array $componentMapping, array $fieldMapping)
     {
         foreach ($elements as &$element) {
-            $component = $element['component'];
+            $element['component']['id'] = $componentMapping[$element['componentId']];
             $element['componentId'] = $componentMapping[$element['componentId']];
 
-            foreach ($component['fields'] as &$field) {
+            foreach ($element['component']['fields'] as &$field) {
                 $field['id'] = $fieldMapping[$field['id']];
                 $field['componentId'] = $componentMapping[$field['componentId']];
             }
