@@ -659,11 +659,12 @@ class LegacyStructConverter
     }
 
     /**
-     * @param StoreFrontBundle\Struct\Media $media
+     * @param $media
      * @return array
      */
-    public function convertMediaStruct(StoreFrontBundle\Struct\Media $media)
+    public function convertMediaStruct($media)
     {
+        /** @var \Shopware\Bundle\StoreFrontBundle\Struct\Media $media */
         if (!$media instanceof StoreFrontBundle\Struct\Media) {
             return [];
         }
