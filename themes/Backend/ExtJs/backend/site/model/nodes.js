@@ -54,7 +54,8 @@ Ext.define('Shopware.apps.Site.model.Nodes', {
         { name: 'target', type: 'string' },
         { name: 'pageTitle', type: 'string' },
         { name: 'metaKeywords', type: 'string' },
-        { name: 'metaDescription', type: 'string' }
+        { name: 'metaDescription', type: 'string' },
+        { name: 'metaRobots', type: 'string' }
     ],
 
     proxy: {

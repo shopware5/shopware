@@ -250,6 +250,12 @@ Ext.define('Shopware.apps.Site.view.site.Form', {
                 xtype: 'textfield',
                 name: 'metaDescription',
                 anchor:'100%'
+            },
+            {
+                fieldLabel: '{s name=formSettingsFieldMetaRobots}Meta-Robots{/s}',
+                xtype: 'textfield',
+                name: 'metaRobots',
+                anchor:'100%'
             }
         ]
     },

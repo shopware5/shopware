@@ -117,6 +117,13 @@ class Site extends ModelEntity
     private $metaDescription;
 
     /**
+     * @var string $metaRobots
+     *
+     * @ORM\Column(name="meta_robots", type="string", nullable=true)
+     */
+    private $metaRobots;
+
+    /**
      * @var string $html
      *
      * @ORM\Column(name="html", type="string", nullable=false)
@@ -520,6 +527,22 @@ class Site extends ModelEntity
     public function getMetaKeywords()
     {
         return $this->metaKeywords;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMetaRobots()
+    {
+        return $this->metaRobots;
+    }
+
+    /**
+     * @param string $metaRobots
+     */
+    public function setMetaRobots($metaRobots)
+    {
+        $this->metaRobots = $metaRobots;
     }
 
     /**
