@@ -289,8 +289,6 @@ class Order extends ModelEntity
     private $currencyFactor;
 
     /**
-     * @Assert\NotBlank
-     *
      * @var string $remoteAddress
      *
      * @ORM\Column(name="remote_addr", type="string", length=255, nullable=true)
