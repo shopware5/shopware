@@ -127,7 +127,8 @@ class EmotionToPresetDataTransformer implements EmotionToPresetDataTransformerIn
             );
             $element['syncKey'] = uniqid('preset-element-', false);
 
-            $element['data'] = $this->cleanupElementData($element['data']);
+            $fieldMapping = $this->createFieldMapping($element['component']['fields']);
+            $element['data'] = $this->cleanupElementData($element['data'], $fieldMapping);
             $element['viewports'] = $this->cleanupElementViewports($element['viewports']);
         }
 
@@ -135,11 +136,28 @@ class EmotionToPresetDataTransformer implements EmotionToPresetDataTransformerIn
     }
 
     /**
-     * @param array $elementData
+     * @param array $fields
      *
      * @return array
      */
-    private function cleanupElementData(array $elementData)
+    private function createFieldMapping(array $fields)
+    {
+        $fieldMapping = [];
+
+        foreach ($fields as $field) {
+            $fieldMapping[$field['id']] = $field;
+        }
+
+        return $fieldMapping;
+    }
+
+    /**
+     * @param array $elementData
+     * @param array $fieldMapping
+     *
+     * @return array
+     */
+    private function cleanupElementData(array $elementData, array $fieldMapping)
     {
         foreach ($elementData as &$data) {
             unset(
@@ -147,6 +165,12 @@ class EmotionToPresetDataTransformer implements EmotionToPresetDataTransformerIn
                 $data['emotionId'],
                 $data['elementId']
             );
+            $field = $fieldMapping[$data['fieldId']];
+
+            if ($field) {
+                $data['key'] = $field['name'];
+                $data['valueType'] = $field['valueType'];
+            }
         }
 
         return $elementData;

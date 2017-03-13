@@ -573,7 +573,9 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
 
                 if (result.success && result.data) {
                     me.getPresetWindow().close();
-                    me.progressbarWindow.close();
+                    if (me.progressbarWindow) {
+                        me.progressbarWindow.close();
+                    }
                     me.getMainWindow().setLoading(true);
                     me.openDetailWindow(
                         me.decodeEmotionPresetData(result.data)

@@ -93,7 +93,7 @@ class BannerComponentHandler implements ComponentHandlerInterface
 
                 $media = $this->doAssetImport($assetPath);
 
-                $elementData['value'] = $this->mediaService->getUrl($media->getPath());
+                $elementData['value'] = $media->getPath();
 
                 break;
             }
