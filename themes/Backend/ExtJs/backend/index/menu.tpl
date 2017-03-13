@@ -3,7 +3,7 @@
         [{foreach $menu as $category}
             {if ($category['onclick'] || ($category['action']|lower !== 'detail' || ($category['action']|lower == 'detail' && {acl_is_allowed privilege=create resource=$category['controller']|lower})) || $category['children']) && {acl_is_allowed privilege=read resource=$category['controller']|lower}}
                 {
-                {if $level === 0}{if $category['children']}xtype: 'hoverbutton',{else}xtype: 'button',{/if}{/if}
+                {if $level === 0}{if $category['children']}xtype: '{if {config name="useBackendMenuHoverButton"}}hoverbutton{else}button{/if}',{else}xtype: 'button',{/if}{/if}
                 {$name = null}
                 {if $category['controller']}{$name = $category['controller']}{/if}
                 {if $category['action'] && $category['action'] != 'Index'}{$name = "{$category['controller']}/{$category['action']}"}{/if}
