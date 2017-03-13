@@ -15,10 +15,24 @@ This changelog references changes done in Shopware Next patch versions.
 * Added automatic prefixed filesystem service registration for plugins
 	* `plugin_name.filesystem.public`
 	* `plugin_name.filesystem.private`
+* Added method `Shopware\Bundle\MediaBundle\Strategy\StrategyInterface::getName()` to identify the strategy
+* Added interface `Shopware\Bundle\MediaBundle\MediaMigrationInterface`
+* Added method `Shopware\Bundle\MediaBundle\MediaServiceInterface::getFilesystem()`
+* Added config parameter `shopware.cdn.url` which replaces the `mediaUrl` that was previously defined in `shopware.cdn.adapters`
+* Added service `shopware_media.strategy_factory`
+* Added container tag `shopware_media.strategy` for strategy registration
+* Added abstract class `Shopware\Components\Filesystem\AbstractFilesystem`
+* Added service `shopware_media.filesystem` which is build on top of `shopware.filesystem.public`
 
 ## Changes
 
 * Changed `BackendSession` service name to `backend_session`
+* Changed class `Shopware\Bundle\MediaBundle\Commands\ImageMigrateCommand` to `Shopware\Bundle\MediaBundle\Commands\MediaMigrateCommand`
+* Changed command `sw:media:migrate` to switch between strategies instead of moving files to different filesystems
+* Changed 3rd constructor parameter in `shopware_media.garbage_collector` from `Shopware\Bundle\MediaBundle\MediaServiceInterface` to `Shopware\Bundle\MediaBundle\Strategy\StrategyInterface`
+* Changed 3rd constructor parameter in `shopware_media.garbage_collector_factory` from `Shopware\Bundle\MediaBundle\MediaServiceInterface` to `Shopware\Bundle\MediaBundle\Strategy\StrategyInterface`
+* Changed constructor of `shopware_media.strategy_factory` to require a collection of `Shopware\Bundle\MediaBundle\Strategy\StrategyInterface`
+* Changed default path of `media` to `web/media`
 
 ## Removals
 
@@ -63,6 +77,31 @@ This changelog references changes done in Shopware Next patch versions.
     * Implementation moved to \Shopware\Components\Auth\BackendAuthSubscriber
 
 * Removed `s_core_engine_elements` and `Shopware\Models\Article\Element`
+* Removed config parameter `shopware.cdn.adapters`
+* Removed config parameter `shopware.cdn.liveMigration`
+* Removed config parameter `shopware.cdn.backend`
+* Removed compiler pass `MediaAdapterCompilerPass` including the container tag `shopware_media.adapter`
+* Removed interface `Shopware\Bundle\MediaBundle\Adapters\AdapterFactoryInterface`
+* Removed class `Shopware\Bundle\MediaBundle\Adapters\FtpAdapterFactory.php` and service `shopware_media.adapter.ftp`
+* Removed class `Shopware\Bundle\MediaBundle\Adapters\LocalAdapterFactory.php` and service `shopware_media.adapter.local`
+* Removed parameters `$fromFilesystem`, `$toFilesystem` and `$output` from `Shopware\Bundle\MediaBundle\MediaMigration::migrate()`, they are now constructor parameters
+* Removed class `Shopware\Bundle\MediaBundle\MediaServiceFactory` since the adapter configuration has been removed from the MediaBundle
+* Removed method `Shopware\Bundle\MediaBundle\MediaServiceInterface::read()`, use `getFilesystem()->read()`
+* Removed method `Shopware\Bundle\MediaBundle\MediaServiceInterface::readStream()`, use `getFilesystem()->readStream()`
+* Removed method `Shopware\Bundle\MediaBundle\MediaServiceInterface::write()`, use `getFilesystem()->write()`
+* Removed method `Shopware\Bundle\MediaBundle\MediaServiceInterface::writeStream()`, use `getFilesystem()->writeStream()`
+* Removed method `Shopware\Bundle\MediaBundle\MediaServiceInterface::listFiles()`, use `getFilesystem()->listContents()`
+* Removed method `Shopware\Bundle\MediaBundle\MediaServiceInterface::has()`, use `getFilesystem()->has()`
+* Removed method `Shopware\Bundle\MediaBundle\MediaServiceInterface::delete()`, use `getFilesystem()->delete()`
+* Removed method `Shopware\Bundle\MediaBundle\MediaServiceInterface::rename()`, use `getFilesystem()->rename()`
+* Removed method `Shopware\Bundle\MediaBundle\MediaServiceInterface::normalize()`, use `normalize()` in `shopware_media.strategy` instead
+* Removed method `Shopware\Bundle\MediaBundle\MediaServiceInterface::encode()`, use `encode()` in `shopware_media.strategy` instead
+* Removed method `Shopware\Bundle\MediaBundle\MediaServiceInterface::isEncoded()`, use `isEncoded()` in `shopware_media.strategy` instead
+* Removed method `Shopware\Bundle\MediaBundle\MediaServiceInterface::getAdapterType()`
+* Removed method `Shopware\Bundle\MediaBundle\MediaServiceInterface::createDir()`, use `getFilesystem()->createDir()`
+* Removed method `Shopware\Bundle\MediaBundle\MediaServiceInterface::migrateFile()`
+* Removed method `Shopware\Bundle\MediaBundle\MediaServiceInterface::getAdapter()`, use `getFilesystem()` instead
+
 
 ## Filesystem
 

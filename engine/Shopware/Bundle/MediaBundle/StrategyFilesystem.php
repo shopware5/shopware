@@ -22,21 +22,37 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\MediaBundle\Adapters;
+namespace Shopware\Bundle\MediaBundle;
 
-use League\Flysystem\AdapterInterface;
+use League\Flysystem\FilesystemInterface;
+use Shopware\Bundle\MediaBundle\Strategy\StrategyInterface;
+use Shopware\Components\Filesystem\AbstractFilesystem;
 
-interface AdapterFactoryInterface
+class StrategyFilesystem extends AbstractFilesystem
 {
     /**
-     * @return string
+     * @var StrategyInterface
      */
-    public function getType();
+    private $strategy;
 
     /**
-     * @param array $config
-     *
-     * @return AdapterInterface
+     * @param FilesystemInterface $filesystem
+     * @param StrategyInterface   $strategy
      */
-    public function create(array $config);
+    public function __construct(FilesystemInterface $filesystem, StrategyInterface $strategy)
+    {
+        parent::__construct($filesystem);
+
+        $this->strategy = $strategy;
+    }
+
+    public function preparePath(string $path): string
+    {
+        return $this->strategy->encode($path);
+    }
+
+    public function stripPath(string $path): string
+    {
+        return $this->strategy->normalize($path);
+    }
 }

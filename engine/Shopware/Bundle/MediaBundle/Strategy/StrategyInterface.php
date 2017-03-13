@@ -30,32 +30,25 @@ namespace Shopware\Bundle\MediaBundle\Strategy;
 interface StrategyInterface
 {
     /**
+     * Name of the strategy
+     */
+    public function getName(): string;
+
+    /**
      * Cleans the shopware media path
      *
      * Eg. 'http//asdfsadf/asdf/media/image/foobar.png' -> '/media/image/foobar.png'
      *     '/var/www/web1/media/image/foobar.png' -> '/media/image/foobar.png'
-     *
-     * @param string $path
-     *
-     * @return string
      */
-    public function normalize($path);
+    public function normalize(string $path): string;
 
     /**
      * Builds the path on the filesystem
-     *
-     * @param string $path
-     *
-     * @return string
      */
-    public function encode($path);
+    public function encode(string $path): string;
 
     /**
      * Checks if the provided path matches the algorithm format
-     *
-     * @param string $path
-     *
-     * @return bool
      */
-    public function isEncoded($path);
+    public function isEncoded(string $path): bool;
 }

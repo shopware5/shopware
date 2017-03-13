@@ -22,51 +22,21 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\MediaBundle\Subscriber;
+namespace Shopware\Bundle\MediaBundle\DependencyInjection\Compiler;
 
-use Enlight\Event\SubscriberInterface;
-use Shopware\Components\DependencyInjection\Container;
+use Shopware\Components\DependencyInjection\Compiler\TagReplaceTrait;
+use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-/**
- * Class ServiceSubscriber
- */
-class ServiceSubscriber implements SubscriberInterface
+class MediaStrategyCompilerPass implements CompilerPassInterface
 {
-    /**
-     * @var Container
-     */
-    private $container;
-
-    /**
-     * @param Container $container
-     */
-    public function __construct(Container $container)
-    {
-        $this->container = $container;
-    }
+    use TagReplaceTrait;
 
     /**
      * {@inheritdoc}
      */
-    public static function getSubscribedEvents()
+    public function process(ContainerBuilder $container)
     {
-        return [
-            'Shopware_CronJob_MediaCrawler' => 'runCronjob',
-        ];
-    }
-
-    /**
-     * Runs the garbage collector
-     *
-     * @throws \Exception
-     *
-     * @return bool
-     */
-    public function runCronjob()
-    {
-        $garbageCollector = $this->container->get('shopware_media.garbage_collector');
-        $garbageCollector->run();
-
-        return true;
+        $this->replaceArgumentWithTaggedServices($container, 'shopware_media.strategy_factory', 'shopware_media.strategy', 0);
     }
 }

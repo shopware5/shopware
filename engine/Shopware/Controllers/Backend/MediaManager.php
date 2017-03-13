@@ -151,8 +151,8 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
         $response->setHeader('Content-Description', 'File Transfer');
         $response->setHeader('Content-disposition', 'attachment; filename=' . $tmpFileName);
         $response->setHeader('Content-Transfer-Encoding', 'binary');
-        $response->setHeader('Content-Length', $mediaService->getSize($file));
-        echo $mediaService->read($file);
+        $response->setHeader('Content-Length', $mediaService->getFilesystem()->getSize($file));
+        echo $mediaService->getFilesystem()->read($file);
     }
 
     /**
@@ -193,11 +193,12 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
 
         $mediaList = $query->getResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
         $mediaService = $this->get('shopware_media.media_service');
+        $strategy = $this->get('shopware_media.strategy');
 
         /** @var $media Media */
         foreach ($mediaList as &$media) {
             $media['path'] = $mediaService->getUrl($media['path']);
-            $media['virtualPath'] = $mediaService->normalize($media['path']);
+            $media['virtualPath'] = $strategy->normalize($media['path']);
 
             if ($media['type'] !== Media::TYPE_IMAGE) {
                 continue;
@@ -209,7 +210,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
                 $thumbnails[$index] = $thumbnail;
             }
 
-            if (!empty($thumbnails) && $mediaService->has($thumbnails['140x140'])) {
+            if (!empty($thumbnails) && $mediaService->getFilesystem()->has($thumbnails['140x140'])) {
                 $media['thumbnail'] = $mediaService->getUrl($thumbnails['140x140']);
             }
             $media['timestamp'] = time();
@@ -960,7 +961,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
             $path = 'media/' . strtolower($media->getType()) . '/' . $name . '.' . $media->getExtension();
             $path = Shopware()->DocPath() . $path;
 
-            if ($mediaService->has($path) && $name !== $oldName) {
+            if ($mediaService->getFilesystem()->has($path) && $name !== $oldName) {
                 $this->View()->assign(['success' => false, 'message' => 'Name already exist']);
 
                 return;

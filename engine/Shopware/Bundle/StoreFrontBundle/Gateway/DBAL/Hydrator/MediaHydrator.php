@@ -187,7 +187,7 @@ class MediaHydrator extends Hydrator
             return false;
         }
 
-        return $this->mediaService->has($data['__media_path']);
+        return $this->mediaService->getFilesystem()->has($data['__media_path']);
     }
 
     /**
@@ -234,7 +234,7 @@ class MediaHydrator extends Hydrator
      */
     private function updateMedia(array $data)
     {
-        list($width, $height) = getimagesizefromstring($this->mediaService->read($data['__media_path']));
+        list($width, $height) = getimagesizefromstring($this->mediaService->getFilesystem()->read($data['__media_path']));
         $this->database->executeUpdate(
             'UPDATE s_media SET width = :width, height = :height WHERE id = :id',
             [

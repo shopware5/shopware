@@ -24,15 +24,9 @@
 
 namespace Shopware\Bundle\MediaBundle\Strategy;
 
-/**
- * Class PlainStrategy
- */
 class PlainStrategy implements StrategyInterface
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function normalize($path)
+    public function normalize(string $path): string
     {
         // remove filesystem directories
         $path = str_replace('//', '/', $path);
@@ -50,7 +44,7 @@ class PlainStrategy implements StrategyInterface
     /**
      * {@inheritdoc}
      */
-    public function encode($path)
+    public function encode(string $path): string
     {
         $path = $this->normalize($path);
         $path = ltrim($path, '/');
@@ -77,8 +71,16 @@ class PlainStrategy implements StrategyInterface
     /**
      * {@inheritdoc}
      */
-    public function isEncoded($path)
+    public function isEncoded(string $path): bool
     {
         return (bool) preg_match('/.*((media\/(?:archive|image|music|pdf|temp|unknown|video)(?:\/thumbnail)?).*\/((.+)\.(.+)))/', $path);
+    }
+
+    /**
+     * Name of the strategy
+     */
+    public function getName(): string
+    {
+        return 'plain';
     }
 }

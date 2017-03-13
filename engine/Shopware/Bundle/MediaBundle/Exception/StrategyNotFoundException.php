@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -22,36 +24,12 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\MediaBundle\Adapters;
+namespace Shopware\Bundle\MediaBundle\Exception;
 
-use League\Flysystem\Adapter\Ftp;
-
-class FtpAdapterFactory implements AdapterFactoryInterface
+class StrategyNotFoundException extends \Exception
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function create(array $config)
+    public static function fromName(string $strategyName): StrategyNotFoundException
     {
-        return new Ftp([
-            'host' => $config['host'],
-            'username' => $config['username'],
-            'password' => $config['password'],
-
-            /* optional config settings */
-            'port' => $config['port'],
-            'root' => $config['root'],
-            'passive' => $config['passive'],
-            'ssl' => $config['ssl'],
-            'timeout' => $config['timeout'],
-        ]);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getType()
-    {
-        return 'ftp';
+        return new self(sprintf('Media strategy by name "%s" not found.', $strategyName));
     }
 }

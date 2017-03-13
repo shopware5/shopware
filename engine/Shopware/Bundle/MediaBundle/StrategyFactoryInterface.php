@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -22,21 +24,14 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\MediaBundle\DependencyInjection\Compiler;
+namespace Shopware\Bundle\MediaBundle;
 
-use Shopware\Components\DependencyInjection\Compiler\TagReplaceTrait;
-use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Shopware\Bundle\MediaBundle\Strategy\StrategyInterface;
 
-class MediaAdapterCompilerPass implements CompilerPassInterface
+interface StrategyFactoryInterface
 {
-    use TagReplaceTrait;
-
     /**
-     * {@inheritdoc}
+     * Return a new storage strategy instance based on the configured strategy type
      */
-    public function process(ContainerBuilder $container)
-    {
-        $this->replaceArgumentWithTaggedServices($container, 'shopware_media.media_service_factory', 'shopware_media.adapter', 1);
-    }
+    public function factory(string $strategyName): StrategyInterface;
 }

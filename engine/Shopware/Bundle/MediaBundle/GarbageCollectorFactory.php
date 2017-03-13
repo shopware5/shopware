@@ -26,6 +26,7 @@ namespace Shopware\Bundle\MediaBundle;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\Connection;
+use Shopware\Bundle\MediaBundle\Strategy\StrategyInterface;
 use Shopware\Bundle\MediaBundle\Struct\MediaPosition;
 
 /**
@@ -44,20 +45,20 @@ class GarbageCollectorFactory
     private $connection;
 
     /**
-     * @var MediaServiceInterface
+     * @var StrategyInterface
      */
-    private $mediaService;
+    private $strategy;
 
     /**
      * @param \Enlight_Event_EventManager $events
      * @param Connection                  $connection
-     * @param MediaServiceInterface       $mediaService
+     * @param StrategyInterface           $strategy
      */
-    public function __construct(\Enlight_Event_EventManager $events, Connection $connection, MediaServiceInterface $mediaService)
+    public function __construct(\Enlight_Event_EventManager $events, Connection $connection, StrategyInterface $strategy)
     {
         $this->connection = $connection;
         $this->events = $events;
-        $this->mediaService = $mediaService;
+        $this->strategy = $strategy;
     }
 
     /**
@@ -67,7 +68,7 @@ class GarbageCollectorFactory
     {
         $mediaPositions = $this->getMediaPositions();
 
-        return new GarbageCollector($mediaPositions, $this->connection, $this->mediaService);
+        return new GarbageCollector($mediaPositions, $this->connection, $this->strategy);
     }
 
     /**

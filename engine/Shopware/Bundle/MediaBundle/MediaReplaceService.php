@@ -41,8 +41,6 @@ class MediaReplaceService implements MediaReplaceServiceInterface
     private $thumbnailManager;
 
     /**
-     * MediaReplaceService constructor.
-     *
      * @param MediaServiceInterface $mediaService
      * @param Manager               $thumbnailManager
      * @param ModelManager          $modelManager
@@ -61,20 +59,20 @@ class MediaReplaceService implements MediaReplaceServiceInterface
      */
     public function replace($mediaId, UploadedFile $file)
     {
-        $media = $this->modelManager->find('Shopware\Models\Media\Media', $mediaId);
+        $media = $this->modelManager->find(Media::class, $mediaId);
 
         if (!$this->validateMediaType($media, $file)) {
             throw new \Exception(sprintf('To replace the media file, an %s file is required', $media->getType()));
         }
 
-        $fileContent = file_get_contents($file->getRealPath());
-
-        $this->mediaService->write($media->getPath(), $fileContent);
+        $stream = fopen($file->getRealPath(), 'rb+');
+        $this->mediaService->getFilesystem()->putStream($media->getPath(), $stream);
+        fclose($stream);
 
         $media->setExtension($file->getClientOriginalExtension());
         $media->setFileSize($file->getClientSize());
 
-        if ($media->getType() == $media::TYPE_IMAGE) {
+        if ($media->getType() === $media::TYPE_IMAGE) {
             $imageSize = getimagesize($file->getRealPath());
 
             if ($imageSize) {
@@ -106,6 +104,6 @@ class MediaReplaceService implements MediaReplaceServiceInterface
             $types[$uploadedFileExtension] = Media::TYPE_UNKNOWN;
         }
 
-        return $media->getType() == $types[$uploadedFileExtension];
+        return $media->getType() === $types[$uploadedFileExtension];
     }
 }

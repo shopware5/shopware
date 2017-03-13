@@ -75,11 +75,11 @@ class Basic implements GeneratorInterface
      */
     public function createThumbnail($imagePath, $destination, $maxWidth, $maxHeight, $keepProportions = false, $quality = 90)
     {
-        if (!$this->mediaService->has($imagePath)) {
+        if (!$this->mediaService->getFilesystem()->has($imagePath)) {
             throw new \Exception('File not found: ' . $imagePath);
         }
 
-        $content = $this->mediaService->read($imagePath);
+        $content = $this->mediaService->getFilesystem()->read($imagePath);
         $image = $this->createImageResource($content, $imagePath);
 
         // Determines the width and height of the original image
@@ -290,7 +290,7 @@ class Basic implements GeneratorInterface
         $content = ob_get_contents();
         ob_end_clean();
 
-        $this->mediaService->write($destination, $content);
+        $this->mediaService->getFilesystem()->put($destination, $content);
     }
 
     /**
@@ -298,16 +298,42 @@ class Basic implements GeneratorInterface
      */
     private function optimizeImage($destination)
     {
-        if ($this->mediaService->getAdapterType() !== 'local') {
-            return;
-        }
-
-        $destination = $this->mediaService->encode($destination);
+        $tmpFilename = $this->downloadImage($destination);
 
         try {
-            $this->optimizerService->optimize($destination);
+            $this->optimizerService->optimize($tmpFilename);
+            $this->uploadImage($destination, $tmpFilename);
         } catch (OptimizerNotFoundException $exception) {
             // empty catch intended since no optimizer is available
         }
+    }
+
+    /**
+     * @param string $destination
+     *
+     * @return string
+     */
+    private function downloadImage(string $destination): string
+    {
+        $tmpFilename = tempnam(sys_get_temp_dir(), 'optimize_image');
+        $handle = fopen($tmpFilename, 'wb');
+
+        stream_copy_to_stream(
+            $this->mediaService->getFilesystem()->readStream($destination),
+            $handle
+        );
+
+        return $tmpFilename;
+    }
+
+    /**
+     * @param string $destination
+     * @param string $tmpFilename
+     */
+    private function uploadImage(string $destination, string $tmpFilename): void
+    {
+        $fileHandle = fopen($tmpFilename, 'rb');
+        $this->mediaService->getFilesystem()->updateStream($destination, $fileHandle);
+        fclose($fileHandle);
     }
 }

@@ -228,7 +228,7 @@ class ThumbnailGenerateCommand extends ShopwareCommand
     {
         $mediaService = Shopware()->Container()->get('shopware_media.media_service');
 
-        return $mediaService->has(Shopware()->DocPath() . $thumbnailPath);
+        return $mediaService->getFilesystem()->has($thumbnailPath);
     }
 
     /**
@@ -242,6 +242,6 @@ class ThumbnailGenerateCommand extends ShopwareCommand
     {
         $mediaService = Shopware()->Container()->get('shopware_media.media_service');
 
-        return $mediaService->has(Shopware()->DocPath() . DIRECTORY_SEPARATOR . $media->getPath());
+        return $mediaService->getFilesystem()->has($media->getPath());
     }
 }

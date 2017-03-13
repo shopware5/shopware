@@ -26,28 +26,20 @@ namespace Shopware\Bundle\MediaBundle;
 
 use League\Flysystem\FilesystemInterface;
 use Shopware\Bundle\MediaBundle\Strategy\StrategyInterface;
-use Shopware\Components\DependencyInjection\Container;
 use Shopware\Models\Shop\Shop;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
-/**
- * Class MediaService
- */
 class MediaService implements MediaServiceInterface
 {
     /**
-     * @var FilesystemInterface
+     * @var StrategyFilesystem
      */
     private $filesystem;
 
     /**
-     * @var Container
+     * @var ContainerInterface
      */
     private $container;
-
-    /**
-     * @var StrategyInterface
-     */
-    private $strategy;
 
     /**
      * @var string
@@ -55,229 +47,61 @@ class MediaService implements MediaServiceInterface
     private $mediaUrl;
 
     /**
-     * @var array
+     * @var StrategyInterface
      */
-    private $config;
+    private $strategy;
 
     /**
      * @param FilesystemInterface $filesystem
      * @param StrategyInterface   $strategy
-     * @param Container           $container
-     * @param array               $config
-     *
-     * @throws \Exception
+     * @param ContainerInterface  $container
+     * @param string              $mediaUrl
      */
-    public function __construct(FilesystemInterface $filesystem, StrategyInterface $strategy, Container $container, array $config)
+    public function __construct(FilesystemInterface $filesystem, StrategyInterface $strategy, ContainerInterface $container, string $mediaUrl)
     {
         $this->filesystem = $filesystem;
-        $this->container = $container;
         $this->strategy = $strategy;
-        $this->config = $config;
-
-        if (!isset($config['mediaUrl'])) {
-            throw new \Exception(sprintf("Please provide a 'mediaUrl' in your %s adapter.", $config['type']));
-        }
-
-        $mediaUrl = $config['mediaUrl'] ?: $this->createFallbackMediaUrl();
-        $this->mediaUrl = rtrim($mediaUrl, '/');
+        $this->container = $container;
+        $this->mediaUrl = $this->normalizeMediaUrl($mediaUrl);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function read($path)
+    public function getFilesystem(): FilesystemInterface
     {
-        $this->migrateFileLive($path);
-        $path = $this->strategy->encode($path);
-
-        return $this->filesystem->read($path);
+        return $this->filesystem;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function readStream($path)
-    {
-        $this->migrateFileLive($path);
-        $path = $this->strategy->encode($path);
-
-        return $this->filesystem->readStream($path);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getUrl($path)
+    public function getUrl(string $path): string
     {
         if (empty($path)) {
-            return null;
+            return '';
         }
 
         if ($this->strategy->isEncoded($path)) {
             return $this->mediaUrl . '/' . ltrim($path, '/');
         }
 
-        $this->migrateFileLive($path);
         $path = $this->strategy->encode($path);
 
         return $this->mediaUrl . '/' . ltrim($path, '/');
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function write($path, $contents, $append = false)
-    {
-        $path = $this->strategy->encode($path);
-
-        if ($append === false && $this->filesystem->has($path)) {
-            $this->filesystem->delete($path);
-        }
-
-        $this->filesystem->put($path, $contents);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function writeStream($path, $resource, $append = false)
-    {
-        $path = $this->strategy->encode($path);
-
-        if ($append === false && $this->filesystem->has($path)) {
-            $this->filesystem->delete($path);
-        }
-
-        $this->filesystem->putStream($path, $resource);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function has($path)
-    {
-        $this->migrateFileLive($path);
-        $path = $this->strategy->encode($path);
-
-        return $this->filesystem->has($path);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function delete($path)
-    {
-        $path = $this->strategy->encode($path);
-
-        return $this->filesystem->delete($path);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getSize($path)
-    {
-        $this->migrateFileLive($path);
-        $path = $this->strategy->encode($path);
-
-        return $this->filesystem->getSize($path);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function rename($path, $newPath)
-    {
-        $this->migrateFileLive($path);
-        $path = $this->strategy->encode($path);
-        $newPath = $this->strategy->encode($newPath);
-
-        return $this->filesystem->rename($path, $newPath);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function normalize($path)
-    {
-        return $this->strategy->normalize($path);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getAdapterType()
-    {
-        return $this->config['type'];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function listFiles($directory = '')
-    {
-        $files = [];
-        foreach ($this->filesystem->listContents($directory, true) as $file) {
-            if ($file['type'] == 'dir' || strstr($file['path'], '/.') !== false) {
-                continue;
-            }
-
-            $files[] = $file['path'];
-        }
-
-        return $files;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function createDir($dirname)
-    {
-        return $this->filesystem->createDir($dirname);
-    }
-
-    /**
-     * Migrates a file to the new strategy if it's not present
+     * @param string $mediaUrl
      *
-     * @internal
-     *
-     * @param $path
+     * @return string
      */
-    public function migrateFile($path)
+    private function normalizeMediaUrl(string $mediaUrl): string
     {
-        if ($this->getAdapterType() !== 'local' || $this->isEncoded($path)) {
-            return;
+        if (empty($mediaUrl)) {
+            $mediaUrl = $this->createFallbackMediaUrl();
         }
 
-        $encodedPath = $this->strategy->encode($path);
+        $mediaUrl = rtrim($mediaUrl, '/');
 
-        if ($this->filesystem->has($path) && !$this->filesystem->has($encodedPath)) {
-            $this->filesystem->rename($path, $encodedPath);
-        }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function encode($path)
-    {
-        return $this->strategy->encode($path);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function isEncoded($path)
-    {
-        return $this->strategy->isEncoded($path);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getAdapter()
-    {
-        return $this->filesystem;
+        return $mediaUrl;
     }
 
     /**
@@ -292,7 +116,7 @@ class MediaService implements MediaServiceInterface
         $request = $this->container->get('front')->Request();
 
         if ($request && $request->getHttpHost()) {
-            return ($request->isSecure() ? 'https' : 'http') . '://' . $request->getHttpHost() . $request->getBasePath() . '/';
+            return ($request->isSecure() ? 'https' : 'http') . '://' . $request->getHttpHost() . $request->getBasePath() . '/web/';
         }
 
         if ($this->container->has('Shop')) {
@@ -308,23 +132,9 @@ class MediaService implements MediaServiceInterface
         }
 
         if ($shop->getSecure()) {
-            return 'https://' . $shop->getHost() . $shop->getBasePath() . '/';
+            return 'https://' . $shop->getHost() . $shop->getBasePath() . '/web/';
         }
 
-        return 'http://' . $shop->getHost() . $shop->getBasePath() . '/';
-    }
-
-    /**
-     * Used as internal check for the liveMigration config flag.
-     *
-     * @param string $path
-     */
-    private function migrateFileLive($path)
-    {
-        if (!$this->container->getParameter('shopware.cdn.liveMigration')) {
-            return;
-        }
-
-        $this->migrateFile($path);
+        return 'http://' . $shop->getHost() . $shop->getBasePath() . '/web/';
     }
 }

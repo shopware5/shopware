@@ -22,31 +22,49 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\MediaBundle\Strategy;
+namespace Shopware\Bundle\MediaBundle;
 
-/**
- * Class StrategyFactory
- */
-class StrategyFactory
+use Shopware\Bundle\MediaBundle\Exception\StrategyNotFoundException;
+use Shopware\Bundle\MediaBundle\Strategy\StrategyInterface;
+
+class StrategyFactory implements StrategyFactoryInterface
 {
     /**
-     * Return a new storage strategy instance based on the configured strategy type
+     * @var StrategyInterface[]
+     */
+    private $strategies;
+
+    /**
+     * @param StrategyInterface[] $strategies
+     */
+    public function __construct(array $strategies)
+    {
+        $this->strategies = $strategies;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function factory(string $strategyName): StrategyInterface
+    {
+        return $this->findStrategyByName($strategyName);
+    }
+
+    /**
+     * @param string $strategyName
      *
-     * @param string $strategy
-     *
-     * @throws \Exception
+     * @throws StrategyNotFoundException
      *
      * @return StrategyInterface
      */
-    public function factory($strategy)
+    private function findStrategyByName(string $strategyName): StrategyInterface
     {
-        switch ($strategy) {
-            case 'md5':
-                return new Md5Strategy();
-            case 'plain':
-                return new PlainStrategy();
-            default:
-                throw new \Exception(sprintf("Unsupported strategy '%s'.", $strategy));
+        foreach ($this->strategies as $strategy) {
+            if ($strategy->getName() === $strategyName) {
+                return $strategy;
+            }
         }
+
+        throw StrategyNotFoundException::fromName($strategyName);
     }
 }

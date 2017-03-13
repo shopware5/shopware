@@ -26,6 +26,7 @@ namespace Shopware\Bundle\MediaBundle\Commands;
 
 use Shopware\Bundle\MediaBundle\Exception\OptimizerNotFoundException;
 use Shopware\Bundle\MediaBundle\Optimizer\OptimizerInterface;
+use Shopware\Bundle\MediaBundle\OptimizerServiceInterface;
 use Shopware\Commands\ShopwareCommand;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Helper\Table;
@@ -35,13 +36,20 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Finder\Finder;
 
-/**
- * @category  Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 class MediaOptimizeCommand extends ShopwareCommand
 {
+    /**
+     * @var OptimizerServiceInterface
+     */
+    private $optimizerService;
+
+    public function __construct(OptimizerServiceInterface $optimizerService)
+    {
+        parent::__construct();
+
+        $this->optimizerService = $optimizerService;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -63,10 +71,8 @@ class MediaOptimizeCommand extends ShopwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $optimizerService = $this->getContainer()->get('shopware_media.optimizer_service');
-
         if ($input->getOption('info')) {
-            $this->displayCapabilities($output, $optimizerService->getOptimizers());
+            $this->displayCapabilities($output, $this->optimizerService->getOptimizers());
 
             return;
         }
@@ -88,7 +94,7 @@ class MediaOptimizeCommand extends ShopwareCommand
             }
 
             try {
-                $optimizerService->optimize($file->getRealPath());
+                $this->optimizerService->optimize($file->getRealPath());
             } catch (OptimizerNotFoundException $exception) {
                 // empty catch intended since no optimizer is available
             }
@@ -101,7 +107,7 @@ class MediaOptimizeCommand extends ShopwareCommand
      * @param OutputInterface      $output
      * @param OptimizerInterface[] $capabilities
      */
-    private function displayCapabilities(OutputInterface $output, array $capabilities)
+    private function displayCapabilities(OutputInterface $output, array $capabilities): void
     {
         $table = new Table($output);
         $table->setHeaders(['Optimizer', 'Runnable', 'Supported mime-types']);
@@ -115,15 +121,9 @@ class MediaOptimizeCommand extends ShopwareCommand
         $table->render();
     }
 
-    /**
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     *
-     * @return Finder
-     */
-    private function createMediaFinder(InputInterface $input, OutputInterface $output)
+    private function createMediaFinder(InputInterface $input, OutputInterface $output): Finder
     {
-        $mediaPath = $input->getArgument('path') ?: $this->getContainer()->get('kernel')->getRootDir() . '/media';
+        $mediaPath = $input->getArgument('path') ?: $this->getContainer()->get('kernel')->getRootDir() . '/web/media';
         $realPath = realpath($mediaPath);
 
         if (!is_dir($realPath)) {

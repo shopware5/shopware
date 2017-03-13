@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -22,30 +23,17 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\MediaBundle\Adapters;
+namespace Shopware\Bundle\MediaBundle;
 
-use League\Flysystem\Adapter\Local;
-
-class LocalAdapterFactory implements AdapterFactoryInterface
+class MediaMigrationResult
 {
     /**
-     * {@inheritdoc}
+     * @var int
      */
-    public function create(array $config)
-    {
-        return new Local(
-            $config['path'],
-            LOCK_EX,
-            Local::DISALLOW_LINKS,
-            $config['permissions']
-        );
-    }
+    public $migrated = 0;
 
     /**
-     * {@inheritdoc}
+     * @var int
      */
-    public function getType()
-    {
-        return 'local';
-    }
+    public $skipped = 0;
 }

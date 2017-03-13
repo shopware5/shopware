@@ -1103,23 +1103,21 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
         $valueType = strtolower($field->getValueType());
         $xType = $field->getXType();
 
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $strategy = Shopware()->Container()->get('shopware_media.strategy');
         $mediaFields = $this->getMediaXTypes();
 
         if ($valueType === 'json') {
             if (is_array($value)) {
                 foreach ($value as &$val) {
-                    $val['path'] = $mediaService->normalize($val['path']);
+                    $val['path'] = $strategy->normalize($val['path']);
                 }
             }
 
             $value = Zend_Json::encode($value);
         }
 
-        if (in_array($xType, $mediaFields)) {
-            if ($mediaService->isEncoded($value)) {
-                $value = $mediaService->normalize($value);
-            }
+        if (in_array($xType, $mediaFields) && $strategy->isEncoded($value)) {
+            $value = $strategy->normalize($value);
         }
 
         return $value;

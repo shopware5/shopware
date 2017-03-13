@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -22,51 +23,13 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\MediaBundle\Subscriber;
+namespace Shopware\Bundle\MediaBundle;
 
-use Enlight\Event\SubscriberInterface;
-use Shopware\Components\DependencyInjection\Container;
-
-/**
- * Class ServiceSubscriber
- */
-class ServiceSubscriber implements SubscriberInterface
+interface MediaMigrationInterface
 {
-    /**
-     * @var Container
-     */
-    private $container;
+    public function run(bool $skipScan = false): MediaMigrationResult;
 
-    /**
-     * @param Container $container
-     */
-    public function __construct(Container $container)
-    {
-        $this->container = $container;
-    }
+    public function migrateFile(string $path): void;
 
-    /**
-     * {@inheritdoc}
-     */
-    public static function getSubscribedEvents()
-    {
-        return [
-            'Shopware_CronJob_MediaCrawler' => 'runCronjob',
-        ];
-    }
-
-    /**
-     * Runs the garbage collector
-     *
-     * @throws \Exception
-     *
-     * @return bool
-     */
-    public function runCronjob()
-    {
-        $garbageCollector = $this->container->get('shopware_media.garbage_collector');
-        $garbageCollector->run();
-
-        return true;
-    }
+    public function countFiles(string $directory): int;
 }

@@ -419,7 +419,7 @@ class ArticleTest extends TestCase
         foreach ($article->getImages() as $image) {
             $this->assertCount(4, $image->getMedia()->getThumbnails());
             foreach ($image->getMedia()->getThumbnails() as $thumbnail) {
-                $this->assertTrue($mediaService->has($thumbnail));
+                $this->assertTrue($mediaService->getFilesystem()->has($thumbnail));
             }
         }
         foreach ($article->getMainDetail()->getPrices() as $price) {
@@ -532,7 +532,7 @@ class ArticleTest extends TestCase
         foreach ($article->getImages() as $image) {
             $this->assertCount(4, $image->getMedia()->getThumbnails());
             foreach ($image->getMedia()->getThumbnails() as $thumbnail) {
-                $this->assertTrue($mediaService->has($thumbnail));
+                $this->assertTrue($mediaService->getFilesystem()->has($thumbnail));
             }
         }
 
@@ -686,9 +686,9 @@ class ArticleTest extends TestCase
             $thumbnails = array_values($thumbnails);
 
             foreach ($thumbnails as $key => $thumbnail) {
-                $this->assertTrue($mediaService->has($thumbnail));
+                $this->assertTrue($mediaService->getFilesystem()->has($thumbnail));
 
-                $image = imagecreatefromstring($mediaService->read($thumbnail));
+                $image = imagecreatefromstring($mediaService->getFilesystem()->read($thumbnail));
                 $width = imagesx($image);
                 $height = imagesy($image);
 
@@ -1875,9 +1875,9 @@ class ArticleTest extends TestCase
         $this->assertCount(count($data['images']), $article['images']);
         foreach ($article['images'] as $image) {
             $key = 'media/image/' . $image['path'] . '.' . $image['extension'];
-            $this->assertTrue($mediaService->has($key));
+            $this->assertTrue($mediaService->getFilesystem()->has($key));
 
-            $imageContent = $mediaService->read($key);
+            $imageContent = $mediaService->getFilesystem()->read($key);
 
             $mimeType = finfo_buffer(finfo_open(FILEINFO_MIME_TYPE), $imageContent);
             $this->assertEquals('image/png', $mimeType);

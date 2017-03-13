@@ -103,7 +103,6 @@
         </service>
 
         <service id="shopware_emotion.component_handler.banner_slider" class="Shopware\Bundle\EmotionBundle\ComponentHandler\BannerSliderComponentHandler">
-            <argument type="service" id="shopware_media.media_service" />
             <tag name="shopware_emotion.component_handler"/>
         </service>
 

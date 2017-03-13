@@ -222,8 +222,8 @@ class Manager
         foreach ($thumbnails as $thumbnail) {
             $thumbnailPath = $this->rootDir . '/' . $thumbnail;
 
-            if ($this->mediaService->has($thumbnailPath)) {
-                $this->mediaService->delete($thumbnailPath);
+            if ($this->mediaService->getFilesystem()->has($thumbnailPath)) {
+                $this->mediaService->getFilesystem()->delete($thumbnailPath);
             }
         }
     }

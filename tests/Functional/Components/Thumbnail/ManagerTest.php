@@ -22,18 +22,72 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Components\Thumbnail\Manager;
+use Shopware\Models\Media\Album;
+
 class Shopware_Tests_Components_Thumbnail_ManagerTest extends \PHPUnit\Framework\TestCase
 {
+    /**
+     * @var \Shopware\Bundle\MediaBundle\MediaServiceInterface
+     */
+    private $mediaService;
+
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->mediaService = Shopware()->Container()->get('shopware_media.media_service');
+    }
+
+    public function tearDown()
+    {
+        parent::tearDown();
+
+        $filesToDelete = [
+            'media/unknown/sw_icon.jpg',
+            'media/image/sw_icon.jpg',
+            'media/image/thumbnail/sw_icon_100x110.jpg',
+            'media/image/thumbnail/sw_icon_120x130.jpg',
+            'media/image/thumbnail/sw_icon_140x140.jpg',
+            'media/image/thumbnail/sw_icon_150x160.jpg',
+            'media/image/thumbnail/sw_icon_200x210.jpg',
+            'media/image/thumbnail/sw_icon_220x230.jpg',
+            'media/image/thumbnail/sw_icon_240x250.jpg',
+            'media/image/thumbnail/sw_icon_300x310.jpg',
+            'media/image/thumbnail/sw_icon_320x330.jpg',
+            'media/image/thumbnail/sw_icon_340x350.jpg',
+
+            'media/unknown/sw_icon.png',
+            'media/image/sw_icon.png',
+            'media/image/sw_icon_copy.png',
+            'media/image/thumbnail/sw_icon_100x110.png',
+            'media/image/thumbnail/sw_icon_120x130.png',
+            'media/image/thumbnail/sw_icon_140x140.png',
+            'media/image/thumbnail/sw_icon_150x160.png',
+            'media/image/thumbnail/sw_icon_200x210.png',
+            'media/image/thumbnail/sw_icon_220x230.png',
+            'media/image/thumbnail/sw_icon_240x250.png',
+            'media/image/thumbnail/sw_icon_300x310.png',
+            'media/image/thumbnail/sw_icon_320x330.png',
+            'media/image/thumbnail/sw_icon_340x350.png',
+        ];
+
+        foreach ($filesToDelete as $file) {
+            if ($this->mediaService->getFilesystem()->has($file)) {
+                $this->mediaService->getFilesystem()->delete($file);
+            }
+        }
+    }
+
     public function testManagerInstance()
     {
         $manager = Shopware()->Container()->get('thumbnail_manager');
-        $this->assertInstanceOf('\Shopware\Components\Thumbnail\Manager', $manager);
+        $this->assertInstanceOf(Manager::class, $manager);
     }
 
     public function testThumbnailGeneration()
     {
         $manager = Shopware()->Container()->get('thumbnail_manager');
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
 
         $media = $this->getMediaModel();
 
@@ -49,21 +103,16 @@ class Shopware_Tests_Components_Thumbnail_ManagerTest extends \PHPUnit\Framework
 
         $manager->createMediaThumbnail($media, $sizes);
 
-        $thumbnailDir = Shopware()->DocPath('media_' . strtolower($media->getType()) . '_thumbnail');
-
-        $path = $thumbnailDir . $media->getName();
-        $this->assertTrue($mediaService->has($path . '_100x110.jpg'));
-        $this->assertTrue($mediaService->has($path . '_120x130.jpg'));
-        $this->assertTrue($mediaService->has($path . '_140x140.jpg'));
-        $this->assertTrue($mediaService->has($path . '_150x160.jpg'));
-
-        $mediaService->delete($media->getPath());
+        $path = sprintf('media/%s/thumbnail/%s', strtolower($media->getType()), $media->getName());
+        $this->assertTrue($this->mediaService->getFilesystem()->has($path . '_100x110.jpg'));
+        $this->assertTrue($this->mediaService->getFilesystem()->has($path . '_120x130.jpg'));
+        $this->assertTrue($this->mediaService->getFilesystem()->has($path . '_140x140.jpg'));
+        $this->assertTrue($this->mediaService->getFilesystem()->has($path . '_150x160.jpg'));
     }
 
     public function testGenerationWithoutPassedSizes()
     {
         $manager = Shopware()->Container()->get('thumbnail_manager');
-
         $media = $this->getMediaModel();
 
         $sizes = [
@@ -73,24 +122,19 @@ class Shopware_Tests_Components_Thumbnail_ManagerTest extends \PHPUnit\Framework
         ];
 
         $media->getAlbum()->getSettings()->setThumbnailSize($sizes);
-
         $manager->createMediaThumbnail($media);
 
-        $thumbnailDir = Shopware()->DocPath('media_' . strtolower($media->getType()) . '_thumbnail');
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
-
-        $path = $thumbnailDir . $media->getName();
+        $path = sprintf('media/%s/thumbnail/%s', strtolower($media->getType()), $media->getName());
 
         foreach ($sizes as $size) {
-            $this->assertTrue($mediaService->has($path . '_' . $size . '.jpg'));
-            $this->assertTrue($mediaService->has($path . '_' . $size . '.png'));
+            $this->assertTrue($this->mediaService->getFilesystem()->has($path . '_' . $size . '.jpg'));
+            $this->assertTrue($this->mediaService->getFilesystem()->has($path . '_' . $size . '.png'));
         }
     }
 
     public function testGenerationWithoutPassedSizesButProportion()
     {
         $manager = Shopware()->Container()->get('thumbnail_manager');
-
         $media = $this->getMediaModel();
 
         $sizes = [
@@ -106,19 +150,15 @@ class Shopware_Tests_Components_Thumbnail_ManagerTest extends \PHPUnit\Framework
         ];
 
         $media->getAlbum()->getSettings()->setThumbnailSize($sizes);
-
         $manager->createMediaThumbnail($media, [], true);
 
-        $thumbnailDir = Shopware()->DocPath('media_' . strtolower($media->getType()) . '_thumbnail');
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
-
-        $path = $thumbnailDir . $media->getName();
+        $path = sprintf('media/%s/thumbnail/%s', strtolower($media->getType()), $media->getName());
 
         foreach ($sizes as $key => $size) {
-            $this->assertTrue($mediaService->has($path . '_' . $size . '.jpg'));
-            $this->assertTrue($mediaService->has($path . '_' . $size . '.png'));
+            $this->assertTrue($this->mediaService->getFilesystem()->has($path . '_' . $size . '.jpg'));
+            $this->assertTrue($this->mediaService->getFilesystem()->has($path . '_' . $size . '.png'));
 
-            $image = imagecreatefromstring($mediaService->read($path . '_' . $size . '.jpg'));
+            $image = imagecreatefromstring($this->mediaService->getFilesystem()->read($path . '_' . $size . '.jpg'));
             $width = imagesx($image);
             $height = imagesy($image);
 
@@ -172,35 +212,33 @@ class Shopware_Tests_Components_Thumbnail_ManagerTest extends \PHPUnit\Framework
         $manager = Shopware()->Container()->get('thumbnail_manager');
         $manager->createMediaThumbnail($media, [$defaultSize]);
 
-        $thumbnailDir = Shopware()->DocPath('media_' . strtolower($media->getType()) . '_thumbnail');
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
-        $path = $thumbnailDir . $media->getName();
+        $path = sprintf('media/%s/thumbnail/%s', strtolower($media->getType()), $media->getName());
 
-        $this->assertTrue($mediaService->has($path . '_' . $defaultSize . '.' . $media->getExtension()));
+        $this->assertTrue($this->mediaService->getFilesystem()->has($path . '_' . $defaultSize . '.' . $media->getExtension()));
 
         $manager->removeMediaThumbnails($media);
+        $this->assertFalse($this->mediaService->getFilesystem()->has($path . '_' . $defaultSize . '.' . $media->getExtension()));
 
-        $this->assertFalse($mediaService->has($path . '_' . $defaultSize . '.' . $media->getExtension()));
-
-        $mediaService->delete($media->getPath());
-
-        $this->assertFalse($mediaService->has($media->getPath()));
+        $this->mediaService->getFilesystem()->delete($media->getPath());
+        $this->assertFalse($this->mediaService->getFilesystem()->has($media->getPath()));
     }
 
     private function getMediaModel()
     {
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
         $media = new \Shopware\Models\Media\Media();
 
         $sourcePath = __DIR__ . DIRECTORY_SEPARATOR . 'fixtures' . DIRECTORY_SEPARATOR . 'sw_icon.png';
         $imagePath = 'media/unknown/sw_icon.png';
-        $mediaService->write($imagePath, file_get_contents($sourcePath));
+
+        $stream = fopen($sourcePath, 'rb+');
+        $this->mediaService->getFilesystem()->putStream($imagePath, $stream);
+        fclose($stream);
 
         $file = new \Symfony\Component\HttpFoundation\File\File($sourcePath);
 
         $media->setFile($file);
         $media->setAlbumId(-10);
-        $media->setAlbum(Shopware()->Models()->find('Shopware\Models\Media\Album', -10));
+        $media->setAlbum(Shopware()->Models()->find(Album::class, -10));
         $media->setPath(str_replace(Shopware()->DocPath(), '', $imagePath));
         $media->setDescription('');
         $media->setUserId(0);

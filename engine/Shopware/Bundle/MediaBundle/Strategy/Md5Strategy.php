@@ -24,9 +24,6 @@
 
 namespace Shopware\Bundle\MediaBundle\Strategy;
 
-/**
- * Class Md5Strategy
- */
 class Md5Strategy implements StrategyInterface
 {
     /**
@@ -39,7 +36,7 @@ class Md5Strategy implements StrategyInterface
     /**
      * {@inheritdoc}
      */
-    public function normalize($path)
+    public function normalize(string $path): string
     {
         // remove filesystem directories
         $path = str_replace('//', '/', $path);
@@ -57,7 +54,7 @@ class Md5Strategy implements StrategyInterface
     /**
      * {@inheritdoc}
      */
-    public function encode($path)
+    public function encode(string $path): string
     {
         if (!$path || $this->isEncoded($path)) {
             return $this->substringPath($path);
@@ -91,7 +88,7 @@ class Md5Strategy implements StrategyInterface
     /**
      * {@inheritdoc}
      */
-    public function isEncoded($path)
+    public function isEncoded(string $path): bool
     {
         if ($this->hasBlacklistParts($path)) {
             return false;
@@ -101,11 +98,19 @@ class Md5Strategy implements StrategyInterface
     }
 
     /**
+     * Name of the strategy
+     */
+    public function getName(): string
+    {
+        return 'md5';
+    }
+
+    /**
      * @param string $path
      *
      * @return bool
      */
-    private function hasBlacklistParts($path)
+    private function hasBlacklistParts(string $path): bool
     {
         foreach ($this->blacklist as $key => $value) {
             if (strpos($path, $key) !== false) {
@@ -121,10 +126,10 @@ class Md5Strategy implements StrategyInterface
      *
      * @return null|string
      */
-    private function substringPath($path)
+    private function substringPath(string $path): string
     {
         preg_match("/(media\/(?:archive|image|music|pdf|temp|unknown|video)(?:\/thumbnail)?\/.*)/", $path, $matches);
 
-        return empty($matches) ? null : $matches[0];
+        return $matches[0] ?? '';
     }
 }

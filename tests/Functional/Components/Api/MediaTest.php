@@ -59,16 +59,16 @@ class MediaTest extends TestCase
         $data['file'] = $dest;
         $path = Shopware()->DocPath('media_image') . 'test-bild-used.jpg';
         $mediaService = Shopware()->Container()->get('shopware_media.media_service');
-        if ($mediaService->has($path)) {
-            $mediaService->delete($path);
+        if ($mediaService->getFilesystem()->has($path)) {
+            $mediaService->getFilesystem()->delete($path);
         }
 
         $this->resource->create($data);
-        $this->assertTrue($mediaService->has($path));
+        $this->assertTrue($mediaService->getFilesystem()->has($path));
 
         //check if the thumbnails are generated
         $path = Shopware()->DocPath('media_image_thumbnail') . 'test-bild-used_140x140.jpg';
-        $this->assertTrue($mediaService->has($path));
+        $this->assertTrue($mediaService->getFilesystem()->has($path));
     }
 
     public function testUploadNameWithOver50Characters()
@@ -86,14 +86,14 @@ class MediaTest extends TestCase
 
         $pathPicture = Shopware()->DocPath('media_image') . $media->getFileName();
         $mediaService = Shopware()->Container()->get('shopware_media.media_service');
-        $this->assertTrue($mediaService->has($pathPicture));
+        $this->assertTrue($mediaService->getFilesystem()->has($pathPicture));
 
         //check if the thumbnails are generated
         $path = Shopware()->DocPath('media_image_thumbnail') . $media->getName() . '_140x140.jpg';
-        $this->assertTrue($mediaService->has($path));
+        $this->assertTrue($mediaService->getFilesystem()->has($path));
 
-        $mediaService->delete(Shopware()->DocPath('media_image') . $media->getFileName());
-        $mediaService->delete($path);
+        $mediaService->getFilesystem()->delete(Shopware()->DocPath('media_image') . $media->getFileName());
+        $mediaService->getFilesystem()->delete($path);
     }
 
     protected function getSimpleTestData()

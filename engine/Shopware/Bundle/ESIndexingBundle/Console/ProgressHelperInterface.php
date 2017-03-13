@@ -29,21 +29,31 @@ interface ProgressHelperInterface
     /**
      * Initials the progress with the provided count.
      * Allows to provide a label to display a message before the progress starts
-     *
-     * @param int    $count
-     * @param string $label
      */
-    public function start($count, $label = '');
+    public function start(int $count, string $label = ''): void;
 
     /**
      * Advance the progress with the provided value
-     *
-     * @param int $step
      */
-    public function advance($step = 1);
+    public function advance(int $step = 1): void;
 
     /**
      * Finish the progress bar
      */
-    public function finish();
+    public function finish(): void;
+
+    /**
+     * Set a message on a specific variable name
+     */
+    public function setMessage(string $message, string $name = 'message'): void;
+
+    /**
+     * Output a message
+     */
+    public function writeln(string $messages, int $options = 0): void;
+
+    /**
+     * Set output format
+     */
+    public function setFormat(string $format): void;
 }
