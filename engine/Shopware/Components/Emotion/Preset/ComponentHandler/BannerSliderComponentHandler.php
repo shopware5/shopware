@@ -90,12 +90,19 @@ class BannerSliderComponentHandler implements ComponentHandlerInterface
         /** @var array $elementData */
         foreach ($data as &$elementData) {
             if ($elementData['key'] === self::ELEMENT_DATA_KEY) {
-                foreach ($elementData['value'] as $key => $slide) {
+                $sliders = json_decode($elementData['value'], true);
+                if (!is_array($sliders)) {
+                    break;
+                }
+
+                foreach ($sliders as $key => &$slide) {
                     $media = $this->doAssetImport($slide['path']);
 
-                    $elementData['value'][$key]['path'] = $this->mediaService->getUrl($media->getPath());
-                    $elementData['value'][$key]['mediaId'] = $media->getId();
+                    $slide['path'] = $media->getPath();
+                    $slide['mediaId'] = $media->getId();
                 }
+                unset($slide);
+                $elementData['value'] = json_encode($sliders);
 
                 break;
             }

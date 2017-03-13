@@ -573,6 +573,7 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
 
                 if (result.success && result.data) {
                     me.getPresetWindow().close();
+                    me.progressbarWindow.close();
                     me.getMainWindow().setLoading(true);
                     me.openDetailWindow(
                         me.decodeEmotionPresetData(result.data)
@@ -659,6 +660,7 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
         if (index < elements.length) {
             me.processAssetImport(presetId, index, elements, callback, me.assetImportCallback, me);
         } else {
+            me.progressbarWindow.down('progressbar').updateProgress(index, Ext.String.format('{s name=preset/assets_import_progress}{/s}', index, elements.length));
             me.progressbarWindow.down('progressbar').updateText('{s name=preset/assets_import_success}{/s}');
 
             return Ext.callback(callback, me, [true]);

@@ -68,6 +68,11 @@ class PresetLoader implements PresetLoaderInterface
         $presetData['elements'] = $this->refreshElementData($presetData['elements']);
 
         $preset->setPresetData(json_encode($presetData));
+
+        if (!$preset->getAssetsImported()) {
+            $preset->setAssetsImported(true);
+        }
+
         $this->modelManager->flush($preset);
 
         return $this->preparePresetData($presetData);
