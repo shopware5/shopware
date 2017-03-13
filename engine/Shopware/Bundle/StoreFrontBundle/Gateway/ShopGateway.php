@@ -26,7 +26,6 @@ namespace Shopware\Bundle\StoreFrontBundle\Gateway;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\StoreFrontBundle\Gateway\Hydrator\ShopHydrator;
-
 use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
 
 class ShopGateway
@@ -62,7 +61,7 @@ class ShopGateway
     }
 
     /**
-     * @param $ids
+     * @param int[] $ids
      *
      * @return Shop[] indexed by id
      */

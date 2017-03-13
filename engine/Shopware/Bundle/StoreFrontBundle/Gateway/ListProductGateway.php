@@ -84,12 +84,7 @@ class ListProductGateway
     }
 
     /**
-     * To get detailed information about the selection conditions, structure and content of the returned object,
-     * please refer to the linked classes.
-     *
-     * @see \Shopware\Bundle\StoreFrontBundle\Gateway\ListProductGatewayInterface::get()
-     *
-     * @param array                       $numbers
+     * @param string[]                    $numbers
      * @param Struct\ShopContextInterface $context
      *
      * @return Struct\ListProduct[] Indexed by the product order number
@@ -111,7 +106,7 @@ class ListProductGateway
         return $products;
     }
 
-    protected function getQuery(array $numbers, Struct\ShopContextInterface $context): QueryBuilder
+    private function getQuery(array $numbers, Struct\ShopContextInterface $context): QueryBuilder
     {
         $esdQuery = $this->getEsdQuery();
         $customerGroupQuery = $this->getCustomerGroupQuery();

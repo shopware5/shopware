@@ -78,12 +78,7 @@ class CountryGateway
     }
 
     /**
-     * To get detailed information about the selection conditions, structure and content of the returned object,
-     * please refer to the linked classes.
-     *
-     * @see \Shopware\Bundle\StoreFrontBundle\Gateway\CountryGatewayInterface::getArea()
-     *
-     * @param array                     $ids
+     * @param int[]                     $ids
      * @param Struct\TranslationContext $context
      *
      * @return Struct\Country\Area[]
@@ -113,12 +108,7 @@ class CountryGateway
     }
 
     /**
-     * To get detailed information about the selection conditions, structure and content of the returned object,
-     * please refer to the linked classes.
-     *
-     * @see \Shopware\Bundle\StoreFrontBundle\Gateway\CountryGatewayInterface::getCountry()
-     *
-     * @param array                     $ids
+     * @param int[]                     $ids
      * @param Struct\TranslationContext $context
      *
      * @return Struct\Country[]
@@ -150,12 +140,7 @@ class CountryGateway
     }
 
     /**
-     * To get detailed information about the selection conditions, structure and content of the returned object,
-     * please refer to the linked classes.
-     *
-     * @see \Shopware\Bundle\StoreFrontBundle\Gateway\CountryGatewayInterface::getState()
-     *
-     * @param array                     $ids
+     * @param int[]                     $ids
      * @param Struct\TranslationContext $context
      *
      * @return Struct\Country\State[]

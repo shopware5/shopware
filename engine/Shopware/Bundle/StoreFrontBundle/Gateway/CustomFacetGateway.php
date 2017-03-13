@@ -83,7 +83,7 @@ class CustomFacetGateway
     }
 
     /**
-     * @param array              $categoryIds
+     * @param int[]              $categoryIds
      * @param TranslationContext $context
      *
      * @return array indexed by category id, each element contains a list of CustomFacet

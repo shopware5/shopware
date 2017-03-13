@@ -75,11 +75,6 @@ class ProductPropertyGateway
     }
 
     /**
-     * To get detailed information about the selection conditions, structure and content of the returned object,
-     * please refer to the linked classes.
-     *
-     * @see \Shopware\Bundle\StoreFrontBundle\Gateway\ProductPropertyGatewayInterface::get()
-     *
      * @param Struct\BaseProduct[]      $products
      * @param Struct\TranslationContext $context
      *

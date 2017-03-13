@@ -26,7 +26,7 @@ use Shopware\Bundle\SearchBundle\Condition\CategoryCondition;
 use Shopware\Bundle\SearchBundle\Condition\CustomerGroupCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\StoreFrontBundle\Service\Core\ContextService;
-use Shopware\Bundle\StoreFrontBundle\Struct\ProductContext;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\ProductStream\RepositoryInterface;
 
 class Shopware_Controllers_Backend_ProductStream extends Shopware_Controllers_Backend_Application
@@ -217,7 +217,7 @@ class Shopware_Controllers_Backend_ProductStream extends Shopware_Controllers_Ba
      * @param int $currencyId
      * @param int $customerGroupKey
      *
-     * @return ProductContext
+     * @return ShopContextInterface
      */
     private function createContext($shopId, $currencyId = null, $customerGroupKey = null)
     {

@@ -75,11 +75,6 @@ class GraduatedPricesGateway
     }
 
     /**
-     * To get detailed information about the selection conditions, structure and content of the returned object,
-     * please refer to the linked classes.
-     *
-     * @see \Shopware\Bundle\StoreFrontBundle\Gateway\GraduatedPricesGatewayInterface::get()
-     *
      * @param Struct\ListProduct[]      $products
      * @param Struct\TranslationContext $context
      * @param Struct\Customer\Group     $customerGroup

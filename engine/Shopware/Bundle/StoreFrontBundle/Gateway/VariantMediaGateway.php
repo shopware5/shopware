@@ -65,11 +65,6 @@ class VariantMediaGateway
     }
 
     /**
-     * To get detailed information about the selection conditions, structure and content of the returned object,
-     * please refer to the linked classes.
-     *
-     * @see \Shopware\Bundle\StoreFrontBundle\Gateway\VariantMediaGatewayInterface::get()
-     *
      * The passed $products array contains in some case two variations of the same product.
      * For example:
      *  - Product.1  (white / XL)

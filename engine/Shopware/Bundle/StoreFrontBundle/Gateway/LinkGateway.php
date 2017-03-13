@@ -75,11 +75,6 @@ class LinkGateway
     }
 
     /**
-     * To get detailed information about the selection conditions, structure and content of the returned object,
-     * please refer to the linked classes.
-     *
-     * @see \Shopware\Bundle\StoreFrontBundle\Gateway\LinkGatewayInterface::get()
-     *
      * @param Struct\BaseProduct[]                                        $products
      * @param \Shopware\Bundle\StoreFrontBundle\Struct\TranslationContext $context
      *

@@ -116,7 +116,7 @@ class PropertyGateway
      *  - Sort mode equals to 3, the values are sorted by the position
      *  - In all other cases the values are sorted by their alphanumeric value
      *
-     * @param array                     $valueIds
+     * @param int[]                     $valueIds
      * @param Struct\TranslationContext $context
      *
      * @return Struct\Property\Set[] Each array element (set, group, option) is indexed by his id

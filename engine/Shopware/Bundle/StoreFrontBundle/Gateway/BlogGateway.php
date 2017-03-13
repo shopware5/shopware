@@ -84,7 +84,8 @@ class BlogGateway
      * - Assigned media objects
      * - Core attribute of the media object
      *
-     * @param array $blogIds
+     * @param int[] $blogIds
+     *
      * @return Blog[]
      */
     public function getList(array $blogIds)

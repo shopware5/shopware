@@ -83,11 +83,6 @@ class CheapestPriceGateway
     }
 
     /**
-     * To get detailed information about the selection conditions, structure and content of the returned object,
-     * please refer to the linked classes.
-     *
-     * @see \Shopware\Bundle\StoreFrontBundle\Gateway\CheapestPriceGatewayInterface::get()
-     *
      * @param Struct\BaseProduct[]      $products
      * @param Struct\TranslationContext $context
      * @param Struct\Customer\Group     $customerGroup

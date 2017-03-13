@@ -58,7 +58,6 @@ class IndexPopulateCommand extends ShopwareCommand
     {
         if ($shopId = $input->getOption('shopId')) {
             $shops = $this->container->get('shopware_storefront.shop_gateway_dbal')->getList([$shopId]);
-            $shops = array_shift($shops);
         } else {
             $shops = $this->container->get('shopware_elastic_search.identifier_selector')->getShops();
         }

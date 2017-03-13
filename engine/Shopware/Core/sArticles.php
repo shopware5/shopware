@@ -301,15 +301,15 @@ class sArticles
             return [];
         }
 
-        $productContext = $this->contextService->getShopContext();
-        $products = $this->listProductService->getList([$orderNumber], $productContext);
+        $context = $this->contextService->getShopContext();
+        $products = $this->listProductService->getList([$orderNumber], $context);
         $product = array_shift($products);
 
         if (!$product || !$product->hasProperties()) {
             return [];
         }
 
-        $set = $this->propertyService->getList([$product], $productContext);
+        $set = $this->propertyService->getList([$product], $context);
         $set = array_shift($set);
 
         if (!$set) {

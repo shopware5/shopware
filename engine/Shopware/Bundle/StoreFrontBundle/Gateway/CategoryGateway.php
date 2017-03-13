@@ -116,7 +116,7 @@ class CategoryGateway
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\CategoryGatewayInterface::get()
      *
-     * @param array                     $ids
+     * @param int[]                     $ids
      * @param Struct\TranslationContext $context
      *
      * @return Struct\Category[] Indexed by the category id
