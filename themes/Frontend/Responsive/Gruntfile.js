@@ -9,52 +9,6 @@ module.exports = function (grunt) {
             vendors: [ vendorDir ]
         },
         copy: {
-            'jquery.event.move': {
-                files: [{
-                    expand: true,
-                    src: [
-                        nodeDir + '/jquery.event.move/js/jquery.event.move.js',
-                        nodeDir + '/jquery.event.move/README.md'
-                    ],
-                    dest: vendorDir + '/js/jquery.event.move',
-                    flatten: true
-                }]
-            },
-            'jquery.event.swipe': {
-                files: [{
-                    expand: true,
-                    src: [
-                        nodeDir + '/jquery.event.swipe/js/jquery.event.swipe.js',
-                        nodeDir + '/jquery.event.swipe/README.md'
-                    ],
-                    dest: vendorDir + '/js/jquery.event.swipe',
-                    flatten: true
-                }]
-            },
-            'jquery.transit': {
-                files: [{
-                    expand: true,
-                    src: [
-                        nodeDir + '/jquery.transit/jquery.transit.js',
-                        nodeDir + '/jquery.transit/README.md'
-                    ],
-                    dest: vendorDir + '/js/jquery.transit',
-                    flatten: true
-                }]
-            },
-            'jquery': {
-                files: [{
-                    expand: true,
-                    src: [
-                        nodeDir + '/jquery/dist/jquery.min.js',
-                        nodeDir + '/jquery/dist/jquery.min.map',
-                        nodeDir + '/jquery/README.md',
-                        nodeDir + '/jquery/MIT-LICENSE.txt'
-                    ],
-                    dest: vendorDir + '/js/jquery',
-                    flatten: true
-                }]
-            },
             'normalize-less': {
                 files: [{
                     expand: true,
@@ -76,18 +30,6 @@ module.exports = function (grunt) {
                         nodeDir + '/pocketgrid-less/LICENSE'
                     ],
                     dest: vendorDir + '/less/pocketgrid',
-                    flatten: true
-                }]
-            },
-            'picturefill': {
-                files: [{
-                    expand: true,
-                    src: [
-                        nodeDir + '/picturefill/dist/picturefill.min.js',
-                        nodeDir + '/picturefill/LICENSE',
-                        nodeDir + '/picturefill/README.md'
-                    ],
-                    dest: vendorDir + '/js/picturefill',
                     flatten: true
                 }]
             },
