@@ -82,7 +82,7 @@ class CategoryHydrator extends Hydrator
                 'metaKeywords' => (string) $data['__category_metakeywords'],
                 'metaDescription' => (string) $data['__category_metadescription'],
                 'cmsHeadline' => (string) $data['__category_cmsheadline'],
-                'cmsText' => (int) $data['__category_cmstext'],
+                'cmsText' => (string) $data['__category_cmstext'],
                 'productBoxLayout' => (string) $data['__category_product_box_layout'],
                 'template' => (int) $data['__category_template'],
                 'blog' => (int) $data['__category_blog'],
