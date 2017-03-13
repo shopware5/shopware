@@ -37,7 +37,7 @@ class StrategyFactoryTest extends TestCase
     public function testFactoryWithoutStrategies()
     {
         $this->expectException(StrategyNotFoundException::class);
-        $this->expectExceptionMessage('Strategy by name "md5" not found.');
+        $this->expectExceptionMessage('Media strategy by name "md5" not found.');
 
         $factory = new StrategyFactory([]);
         $factory->factory('md5');
@@ -46,7 +46,7 @@ class StrategyFactoryTest extends TestCase
     public function testFactoryWithSingleStrategyThatDoesNotMatch()
     {
         $this->expectException(StrategyNotFoundException::class);
-        $this->expectExceptionMessage('Strategy by name "md5" not found.');
+        $this->expectExceptionMessage('Media strategy by name "md5" not found.');
 
         $factory = new StrategyFactory([
             new PlainStrategy(),

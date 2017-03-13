@@ -60,7 +60,7 @@ class ConsoleProgressHelper implements ProgressHelperInterface
     /**
      * {@inheritdoc}
      */
-    public function start($count, $label = '')
+    public function start(int $count, string $label = ''): void
     {
         $this->count = $count;
         $this->current = 0;
@@ -74,7 +74,7 @@ class ConsoleProgressHelper implements ProgressHelperInterface
     /**
      * {@inheritdoc}
      */
-    public function advance($step = 1)
+    public function advance(int $step = 1): void
     {
         if ($this->current + $step > $this->count) {
             $step = $this->count - $this->current;
@@ -86,9 +86,33 @@ class ConsoleProgressHelper implements ProgressHelperInterface
     /**
      * {@inheritdoc}
      */
-    public function finish()
+    public function finish(): void
     {
         $this->progress->finish();
         $this->output->writeln('');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setMessage(string $message, string $name = 'message'): void
+    {
+        $this->progress->setMessage($message, $name);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function writeln(string $messages, int $options = 0): void
+    {
+        $this->output->writeln($messages, $options);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setFormat(string $format): void
+    {
+        $this->progress->setFormat($format);
     }
 }

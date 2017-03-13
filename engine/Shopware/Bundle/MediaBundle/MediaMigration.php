@@ -27,10 +27,8 @@ declare(strict_types=1);
 namespace Shopware\Bundle\MediaBundle;
 
 use League\Flysystem\FilesystemInterface;
+use Shopware\Bundle\ESIndexingBundle\Console\ProgressHelperInterface;
 use Shopware\Bundle\MediaBundle\Strategy\StrategyInterface;
-use Symfony\Component\Console\Helper\ProgressBar;
-use Symfony\Component\Console\Helper\Table;
-use Symfony\Component\Console\Output\OutputInterface;
 
 class MediaMigration implements MediaMigrationInterface
 {
@@ -50,24 +48,16 @@ class MediaMigration implements MediaMigrationInterface
     private $toStrategy;
 
     /**
-     * @var OutputInterface
+     * @var ProgressHelperInterface
      */
-    private $output;
+    private $progressHelper;
 
     /**
-     * @var int
+     * @var MediaMigrationResult
      */
-    private $filesCount = 0;
+    private $migrationResult;
 
-    /**
-     * @var array
-     */
-    private $counter = [
-        'skipped' => 0,
-        'moved' => 0,
-    ];
-
-    public function __construct(FilesystemInterface $filesystem, StrategyInterface $fromStrategy, StrategyInterface $toStrategy, OutputInterface $output)
+    public function __construct(FilesystemInterface $filesystem, StrategyInterface $fromStrategy, StrategyInterface $toStrategy, ProgressHelperInterface $progressHelper)
     {
         if ($fromStrategy === $toStrategy) {
             throw new \InvalidArgumentException('The strategies must not be the same.');
@@ -76,23 +66,25 @@ class MediaMigration implements MediaMigrationInterface
         $this->filesystem = $filesystem;
         $this->fromStrategy = $fromStrategy;
         $this->toStrategy = $toStrategy;
-        $this->output = $output;
+        $this->progressHelper = $progressHelper;
+        $this->migrationResult = new MediaMigrationResult();
     }
 
-    public function run(bool $skipScan = false): void
+    public function run(bool $skipScan = false): MediaMigrationResult
     {
-        $this->output->writeln(' // Migrating all media files in your filesystem. This might take some time, depending on the number of media files you have.');
-        $this->output->writeln('');
+        $this->progressHelper->writeln(' // Migrating all media files in your filesystem. This might take some time, depending on the number of media files you have.');
+        $this->progressHelper->writeln('');
 
+        $fileCount = 0;
         if (!$skipScan) {
-            $this->filesCount = $this->countFiles('media');
+            $fileCount = $this->countFiles('media');
         }
 
-        $progressBar = $this->createProgressBar();
-        $this->migrateFiles('media', $progressBar);
-        $progressBar->finish();
+        $this->setupProgressBar($fileCount);
+        $this->migrateFiles('media');
+        $this->progressHelper->finish();
 
-        $this->displaySummary();
+        return $this->migrationResult;
     }
 
     public function migrateFile(string $path): void
@@ -102,7 +94,7 @@ class MediaMigration implements MediaMigrationInterface
 
         // file already exists
         if ($this->filesystem->has($toPath)) {
-            ++$this->counter['skipped'];
+            ++$this->migrationResult->skipped;
 
             return;
         }
@@ -110,7 +102,7 @@ class MediaMigration implements MediaMigrationInterface
         // move file to new filesystem and remove the old one
         $this->filesystem->rename($path, $toPath);
 
-        ++$this->counter['moved'];
+        ++$this->migrationResult->migrated;
     }
 
     public function countFiles(string $directory): int
@@ -136,18 +128,14 @@ class MediaMigration implements MediaMigrationInterface
         return $cnt;
     }
 
-    /**
-     * @param string      $directory
-     * @param ProgressBar $progressBar
-     */
-    private function migrateFiles($directory, ProgressBar $progressBar)
+    private function migrateFiles(string $directory)
     {
         /** @var array $contents */
         $contents = $this->filesystem->listContents($directory);
 
         foreach ($contents as $item) {
             if ($item['type'] === 'dir') {
-                $this->migrateFiles($item['path'], $progressBar);
+                $this->migrateFiles($item['path']);
                 continue;
             }
 
@@ -156,36 +144,17 @@ class MediaMigration implements MediaMigrationInterface
                     continue;
                 }
 
-                $progressBar->setMessage($item['path'], 'filename');
+                $this->progressHelper->setMessage($item['path'], 'filename');
                 $this->migrateFile($item['path']);
-                $progressBar->advance();
+                $this->progressHelper->advance();
             }
         }
     }
 
-    private function createProgressBar(): ProgressBar
+    private function setupProgressBar(int $fileCount = 0): void
     {
-        $progressBar = new ProgressBar($this->output, $this->filesCount);
-        $progressBar->setFormat(' %current%/%max% [%bar%] %percent%% Elapsed: %elapsed%' . "\n" . ' Current file: %filename%');
-        $progressBar->setMessage('', 'filename');
-
-        return $progressBar;
-    }
-
-    private function displaySummary(): void
-    {
-        $rows = [];
-        foreach ($this->counter as $key => $value) {
-            $rows[] = [$key, $value];
-        }
-
-        $this->output->writeln('');
-        $this->output->writeln('');
-
-        $table = new Table($this->output);
-        $table->setStyle('borderless');
-        $table->setHeaders(['Action', 'Number of items']);
-        $table->setRows($rows);
-        $table->render();
+        $this->progressHelper->start($fileCount);
+        $this->progressHelper->setFormat(' %current%/%max% [%bar%] %percent%% Elapsed: %elapsed%' . "\n" . ' Current file: %filename%');
+        $this->progressHelper->setMessage('', 'filename');
     }
 }

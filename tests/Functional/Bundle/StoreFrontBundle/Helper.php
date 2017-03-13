@@ -1291,15 +1291,27 @@ class Helper
 
 class ProgressHelper implements ProgressHelperInterface
 {
-    public function start($count, $label = '')
+    public function start(int $count, string $label = ''): void
     {
     }
 
-    public function advance($step = 1)
+    public function advance(int $step = 1): void
     {
     }
 
-    public function finish()
+    public function finish(): void
+    {
+    }
+
+    public function setMessage(string $message, string $name = 'message'): void
+    {
+    }
+
+    public function writeln(string $messages, int $options = 0): void
+    {
+    }
+
+    public function setFormat(string $format): void
     {
     }
 }

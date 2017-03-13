@@ -24,11 +24,14 @@
 
 namespace Shopware\Bundle\MediaBundle\Commands;
 
+use Shopware\Bundle\ESIndexingBundle\Console\ConsoleProgressHelper;
 use Shopware\Bundle\MediaBundle\MediaMigration;
+use Shopware\Bundle\MediaBundle\MediaMigrationResult;
 use Shopware\Bundle\MediaBundle\Strategy\StrategyInterface;
 use Shopware\Bundle\MediaBundle\StrategyFactory;
 use Shopware\Bundle\MediaBundle\StrategyFilesystem;
 use Shopware\Commands\ShopwareCommand;
+use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -91,9 +94,24 @@ class MediaMigrateCommand extends ShopwareCommand
             $this->filesystem->getAdapter(),
             $this->strategyFactory->factory($from),
             $this->strategyFactory->factory($to),
-            $output
+            new ConsoleProgressHelper($output)
         );
 
-        $mediaMigration->run($skipScan);
+        $result = $mediaMigration->run($skipScan);
+
+        $this->displaySummary($output, $result);
+    }
+
+    private function displaySummary(OutputInterface $output, MediaMigrationResult $result): void
+    {
+        $output->writeln('');
+        $output->writeln('');
+
+        $table = new Table($output);
+        $table->setStyle('borderless');
+        $table->setHeaders(['Action', 'Number of items']);
+        $table->addRow(['Migrated', $result->migrated]);
+        $table->addRow(['Skipped', $result->skipped]);
+        $table->render();
     }
 }

@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 /**
  * Shopware 5
@@ -24,12 +23,17 @@ declare(strict_types=1);
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\MediaBundle\Exception;
+namespace Shopware\Bundle\MediaBundle;
 
-class StrategyNotFoundException extends \Exception
+class MediaMigrationResult
 {
-    public static function fromName(string $strategyName): StrategyNotFoundException
-    {
-        return new self(sprintf('Media strategy by name "%s" not found.', $strategyName));
-    }
+    /**
+     * @var int
+     */
+    public $migrated = 0;
+
+    /**
+     * @var int
+     */
+    public $skipped = 0;
 }
