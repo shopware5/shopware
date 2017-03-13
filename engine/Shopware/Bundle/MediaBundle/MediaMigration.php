@@ -79,7 +79,7 @@ class MediaMigration implements MediaMigrationInterface
         $this->output = $output;
     }
 
-    public function start(bool $skipScan = false): void
+    public function run(bool $skipScan = false): void
     {
         $this->output->writeln(' // Migrating all media files in your filesystem. This might take some time, depending on the number of media files you have.');
         $this->output->writeln('');

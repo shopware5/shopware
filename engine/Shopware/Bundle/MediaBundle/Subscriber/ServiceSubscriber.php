@@ -24,11 +24,7 @@
 
 namespace Shopware\Bundle\MediaBundle\Subscriber;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Enlight\Event\SubscriberInterface;
-use Shopware\Bundle\MediaBundle\Commands\MediaCleanupCommand;
-use Shopware\Bundle\MediaBundle\Commands\MediaMigrateCommand;
-use Shopware\Bundle\MediaBundle\Commands\MediaOptimizeCommand;
 use Shopware\Components\DependencyInjection\Container;
 
 /**
@@ -55,21 +51,8 @@ class ServiceSubscriber implements SubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            'Shopware_Console_Add_Command' => 'addCommands',
             'Shopware_CronJob_MediaCrawler' => 'runCronjob',
         ];
-    }
-
-    /**
-     * @return ArrayCollection
-     */
-    public function addCommands()
-    {
-        return new ArrayCollection([
-            new MediaCleanupCommand(),
-            new MediaMigrateCommand(),
-            new MediaOptimizeCommand(),
-        ]);
     }
 
     /**

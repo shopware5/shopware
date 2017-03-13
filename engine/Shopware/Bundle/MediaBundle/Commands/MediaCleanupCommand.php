@@ -27,17 +27,13 @@ namespace Shopware\Bundle\MediaBundle\Commands;
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\ORMException;
 use Shopware\Commands\ShopwareCommand;
+use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Media\Media;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-/**
- * @category  Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
 class MediaCleanupCommand extends ShopwareCommand
 {
     /**
@@ -83,23 +79,19 @@ class MediaCleanupCommand extends ShopwareCommand
 
     /**
      * Handles cleaning process and returns the number of deleted media objects
-     *
-     * @param SymfonyStyle $io
-     *
-     * @return int
      */
-    private function handleCleanup(SymfonyStyle $io)
+    private function handleCleanup(SymfonyStyle $io): int
     {
-        /** @var \Shopware\Components\Model\ModelManager $em */
-        $em = $this->getContainer()->get('models');
+        /** @var ModelManager $modelManager */
+        $modelManager = $this->getContainer()->get('models');
 
         /** @var \Shopware\Models\Media\Repository $repository */
-        $repository = $em->getRepository(Media::class);
+        $repository = $modelManager->getRepository(Media::class);
 
         $query = $repository->getAlbumMediaQuery(-13);
         $query->setHydrationMode(AbstractQuery::HYDRATE_OBJECT);
 
-        $count = $em->getQueryCount($query);
+        $count = $modelManager->getQueryCount($query);
         $iterableResult = $query->iterate();
 
         $progressBar = $io->createProgressBar($count);
@@ -107,15 +99,15 @@ class MediaCleanupCommand extends ShopwareCommand
         try {
             foreach ($iterableResult as $key => $row) {
                 $media = $row[0];
-                $em->remove($media);
+                $modelManager->remove($media);
                 if ($key % 100 === 0) {
-                    $em->flush();
-                    $em->clear();
+                    $modelManager->flush();
+                    $modelManager->clear();
                 }
                 $progressBar->advance();
             }
-            $em->flush();
-            $em->clear();
+            $modelManager->flush();
+            $modelManager->clear();
         } catch (ORMException $e) {
             $count = 0;
         }
@@ -126,10 +118,7 @@ class MediaCleanupCommand extends ShopwareCommand
         return $count;
     }
 
-    /**
-     * @return int
-     */
-    private function handleMove()
+    private function handleMove(): int
     {
         $gc = $this->getContainer()->get('shopware_media.garbage_collector');
         $gc->run();

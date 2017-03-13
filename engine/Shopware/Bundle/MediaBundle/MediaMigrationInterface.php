@@ -27,7 +27,7 @@ namespace Shopware\Bundle\MediaBundle;
 
 interface MediaMigrationInterface
 {
-    public function start(bool $skipScan = false): void;
+    public function run(bool $skipScan = false): void;
 
     public function migrateFile(string $path): void;
 

@@ -25,6 +25,9 @@
 namespace Shopware\Bundle\MediaBundle\Commands;
 
 use Shopware\Bundle\MediaBundle\MediaMigration;
+use Shopware\Bundle\MediaBundle\Strategy\StrategyInterface;
+use Shopware\Bundle\MediaBundle\StrategyFactory;
+use Shopware\Bundle\MediaBundle\StrategyFilesystem;
 use Shopware\Commands\ShopwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -33,6 +36,30 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class MediaMigrateCommand extends ShopwareCommand
 {
+    /**
+     * @var StrategyFilesystem
+     */
+    private $filesystem;
+
+    /**
+     * @var StrategyFactory
+     */
+    private $strategyFactory;
+
+    /**
+     * @var StrategyInterface
+     */
+    private $currentStrategy;
+
+    public function __construct(StrategyFilesystem $filesystem, StrategyFactory $strategyFactory, StrategyInterface $currentStrategy)
+    {
+        parent::__construct();
+
+        $this->filesystem = $filesystem;
+        $this->strategyFactory = $strategyFactory;
+        $this->currentStrategy = $currentStrategy;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -56,20 +83,17 @@ class MediaMigrateCommand extends ShopwareCommand
         $from = $input->getOption('from');
         $skipScan = $input->getOption('skip-scan');
 
-        $strategyFactory = $this->getContainer()->get('shopware_media.strategy_factory');
-        $currentStrategy = $this->getContainer()->get('shopware_media.strategy');
-
         if (empty($from)) {
-            $from = $currentStrategy->getName();
+            $from = $this->currentStrategy->getName();
         }
 
         $mediaMigration = new MediaMigration(
-            $this->getContainer()->get('shopware_media.filesystem')->getAdapter(),
-            $strategyFactory->factory($from),
-            $strategyFactory->factory($to),
+            $this->filesystem->getAdapter(),
+            $this->strategyFactory->factory($from),
+            $this->strategyFactory->factory($to),
             $output
         );
 
-        $mediaMigration->start($skipScan);
+        $mediaMigration->run($skipScan);
     }
 }

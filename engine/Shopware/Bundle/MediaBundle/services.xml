@@ -15,7 +15,7 @@
         <service id="shopware_media.garbage_collector_factory" class="Shopware\Bundle\MediaBundle\GarbageCollectorFactory">
             <argument type="service" id="events"/>
             <argument type="service" id="dbal_connection" />
-            <argument type="service" id="shopware_media.media_service" />
+            <argument type="service" id="shopware_media.strategy" />
         </service>
 
         <service id="shopware_media.garbage_collector" class="Shopware\Bundle\MediaBundle\GarbageCollector">
@@ -48,6 +48,23 @@
         <service id="shopware_media.strategy" class="Shopware\Bundle\MediaBundle\Strategy\StrategyInterface">
             <factory service="shopware_media.strategy_factory" method="factory" />
             <argument>%shopware.cdn.strategy%</argument>
+        </service>
+
+        <!-- Commands -->
+        <service id="shopware_media.command.media_migrate" class="Shopware\Bundle\MediaBundle\Commands\MediaMigrateCommand">
+            <argument type="service" id="shopware_media.filesystem" />
+            <argument type="service" id="shopware_media.strategy_factory" />
+            <argument type="service" id="shopware_media.strategy" />
+            <tag name="console.command" />
+        </service>
+
+        <service id="shopware_media.command.media_cleanup" class="Shopware\Bundle\MediaBundle\Commands\MediaCleanupCommand">
+            <tag name="console.command" />
+        </service>
+
+        <service id="shopware_media.command.media_optimize" class="Shopware\Bundle\MediaBundle\Commands\MediaOptimizeCommand">
+            <argument type="service" id="shopware_media.cache_optimizer_service" />
+            <tag name="console.command" />
         </service>
 
         <!-- Strategies -->
