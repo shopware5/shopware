@@ -30,6 +30,8 @@ return [
 
     'api.endpoint' => 'https://api.shopware.com',
 
+    'languages' => ['de', 'en', 'nl'],
+
     'slim' => [
         'log.level' => \Slim\Log::DEBUG,
         'log.enabled' => true,

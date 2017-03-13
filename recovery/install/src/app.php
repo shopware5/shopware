@@ -77,10 +77,12 @@ if (isset($_SESSION['databaseConnectionInfo'])) {
         throw $e;
     }
 }
+
 /**
+ * @param array $allowedLanguages
  * @return array|string
  */
-function selectLanguage()
+function selectLanguage(array $allowedLanguages)
 {
     /**
      * Load language file
@@ -89,7 +91,7 @@ function selectLanguage()
     $selectedLanguage = 'de';
     if (isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
         $selectedLanguage = explode(',', $_SERVER['HTTP_ACCEPT_LANGUAGE']);
-        $selectedLanguage = substr($selectedLanguage[0], 0, 2);
+        $selectedLanguage = strtolower(substr($selectedLanguage[0], 0, 2));
     }
     if (empty($selectedLanguage) || !in_array($selectedLanguage, $allowedLanguages)) {
         $selectedLanguage = 'de';
@@ -118,7 +120,7 @@ function selectLanguage()
  */
 function prefixSessionVars(\Slim\Slim $app)
 {
-    // Save post parameters starting with "c_" to session
+    // Save post parameters starting with 'c_' to session
     $params = $app->request()->params();
     foreach ($params as $key => $value) {
         if (strpos($key, 'c_') !== false) {
@@ -128,7 +130,7 @@ function prefixSessionVars(\Slim\Slim $app)
 }
 
 prefixSessionVars($app);
-$selectedLanguage = selectLanguage();
+$selectedLanguage = selectLanguage($container->offsetGet('config')['languages']);
 $translations = require __DIR__ . "/../data/lang/$selectedLanguage.php";
 
 $container->offsetSet('translations', $translations);
@@ -174,7 +176,7 @@ $app->map('/', function () use ($app, $container, $menuHelper) {
 
     $container['shopware.notify']->doTrackEvent('Installer started');
 
-    $app->view()->set('languages', ['de', 'en', 'nl']);
+    $app->view()->set('languages', $container->offsetGet('config')['languages']);
 
     $app->render('/language-selection.php');
 })->via('GET', 'POST')->name('language-selection');

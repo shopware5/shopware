@@ -41,15 +41,18 @@ return [
     'select_language_en' => 'English',
     'select_language_nl' => 'Nederlands',
 
-    'language-selection_select_language' => 'Sprache wählen',
-    'language-selection_header' => 'Installation starten',
-    'language-selection_info_message' => 'Diese Sprachauswahl bezieht sich lediglich auf den Installationsassistenten. Im Anschluss an die Installation können Sie Ihren Shop natürlich wahlweise in vielen anderen Sprachen betreiben.',
+    'language-selection_select_language' => 'Sprache Installationsassistent',
+    'language-selection_header' => 'Deine Shopware-Installation',
+    'language-selection_info_message' => 'Die hier zu wählende Sprache bezieht sich nur auf den Installationsassistenten, die Sprache Deines Shops kannst Du später definieren.',
     'language-selection_welcome_message' => <<<EOT
 <p>
-    Sie sind nur noch wenige Klicks davon entfernt, Teil der großen Shopware Community zu werden, welche aktuell aus über 54.000 Onlinehändlern weltweit besteht!
+    Wir freuen uns, dass Du Teil unserer unserer großartigen, weltweiten Shopware Community werden möchtest.
 </p>
 <p>
-    Darüber hinaus steht Ihnen unser Support-Team selbstverständlich jederzeit für Fragen zur Verfügung. Kontaktieren Sie uns einfach unter Tel. <a href="tel:+492555928850">(+49) 2555 92 8850</a> oder E-Mail <a href="mailto:info@shopware.com">info@shopware.com</a> .
+    Schritt für Schritt begleiten wir Dich jetzt durch Deinen Installationsprozess. Solltest Du Fragen haben, schaue einfach in unser <a href="https://forum.shopware.com" target="_blank">Forum</a> oder kontaktiere uns telefonisch unter <a href="tel:+492555928850">(+49) 2555 928850</a> oder per <a href="mailto:info@shopware.com">Mail</a>.
+</p>
+<p>
+    <strong>Los geht's</strong>
 </p>
 EOT
     ,

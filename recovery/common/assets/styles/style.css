@@ -133,7 +133,9 @@ label {
     padding-left: 5px;
     display: block;
 }
-
+p label {
+    padding-left: 0;
+}
 ::-webkit-input-placeholder {
     color: #93a6b3;
     font-weight: 400;
