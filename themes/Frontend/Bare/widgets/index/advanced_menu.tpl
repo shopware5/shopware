@@ -7,13 +7,16 @@
 	<ul class="menu--list menu--level-{$level} columns--{$columnCount}"{if $level === 0} style="width: {$menuSizePercentage}%;"{/if}>
 		{block name="frontend_advanced_menu_list"}
 			{foreach $categories as $category}
-				{if $category.hideTop}
+				{if !$category.displayInNavigation}
 					{continue}
 				{/if}
 
-				{$categoryLink = $category.link}
-				{if $category.external}
-					{$categoryLink = $category.external}
+				{if $category.externalLink}
+					{$categoryLink = $category.externalLink}
+				{elseif $category.blog}
+					{$categoryLink = "{config name="baseFile"}?sViewport=blog&sCategory={$category.id}"}
+				{else}
+					{$categoryLink = "{config name="baseFile"}?sViewport=cat&sCategory={$category.id}"}
 				{/if}
 
 				<li class="menu--list-item item--level-{$level}"{if $level === 0} style="width: 100%"{/if}>
@@ -33,13 +36,16 @@
 <div class="advanced-menu" data-advanced-menu="true" data-hoverDelay="{$hoverDelay}">
 	{block name="frontend_advanced_menu"}
 		{foreach $advancedMenu as $mainCategory}
-			{if $mainCategory.hideTop}
+			{if !$mainCategory.displayInNavigation}
 				{continue}
 			{/if}
 
-			{$link = $mainCategory.link}
-			{if $mainCategory.external}
-				{$link = $mainCategory.external}
+			{if $mainCategory.externalLink}
+				{$link = $mainCategory.externalLink}
+			{elseif $mainCategory.blog}
+				{$link = "{config name="baseFile"}?sViewport=blog&sCategory={$mainCategory.id}"}
+			{else}
+				{$link = "{config name="baseFile"}?sViewport=cat&sCategory={$mainCategory.id}"}
 			{/if}
 
 			{$hasCategories = $mainCategory.children|count > 0  && $columnAmount < 4}
