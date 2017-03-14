@@ -26,6 +26,7 @@ This changelog references changes done in Shopware Next patch versions.
 * Added `\Shopware\Bundle\StoreFrontBundle\Struct\Category::__construct` which requires id, parentId, path and name
 * Added `\Shopware\Bundle\StoreFrontBundle\Service\Core\AdvancedMenuService` to get advanced menu
 * Added block `frontend_advanced_menu_outer` in `themes/Frontend/Bare/frontend/index/index.tpl` for advanced menu
+* Added `\Shopware\Controllers\Widgets\AdvancedMenu` controller
 * Added `\Shopware\Bundle\StoreFrontBundle\Struct\KeyCollection` - used for associated arrays 
 * Added `\Shopware\Bundle\StoreFrontBundle\Struct\Collection` - used for none associated arrays
 * Added `\Shopware\Bundle\StoreFrontBundle\Struct\CategoryCollection` - Typed key collection for category structs
@@ -36,7 +37,7 @@ This changelog references changes done in Shopware Next patch versions.
 * Changed `Shopware/Plugins/Default/Frontend/AdvancedMenu`
 	* Implementation moved to `\Shopware\Bundle\StoreFrontBundle\Service\Core\AdvancedMenuService`
 	* Moved `Shopware/Plugins/Default/Frontend/AdvancedMenu/Snippets/frontend/plugins/advanced_menu/advanced_menu.ini` snippets to `snippets/frontend/advancedmenu/index.ini`
-	* Moved `Shopware/Plugins/Default/Frontend/AdvancedMenu/Views/frontend/advanced_menu/index.tpl` to `themes/Frontend/Bare/widgets/index/advanced_menu.tpl` with renamed blocks:
+	* Moved `Shopware/Plugins/Default/Frontend/AdvancedMenu/Views/frontend/advanced_menu/index.tpl` to `themes/Frontend/Bare/widgets/advanced_menu/index.tpl` with renamed blocks:
 		- `frontend_plugins_advanced_menu_list` to `frontend_advanced_menu_list`
 		- `frontend_plugins_advanced_menu_list_item` to `frontend_advanced_menu_list_item`
 		- `frontend_plugins_advanced_menu` to `frontend_advanced_menu`

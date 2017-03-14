@@ -22,9 +22,6 @@
  * our trademarks remain entirely with us.
  */
 
-use Shopware\Bundle\StoreFrontBundle\Service\AdvancedMenuServiceInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
-
 /**
  * Shopware Application
  */
@@ -85,27 +82,5 @@ class Shopware_Controllers_Widgets_Index extends Enlight_Controller_Action
         }
         array_unshift($languages, $main);
         $this->View()->languages = $languages;
-    }
-
-    public function advancedMenuAction()
-    {
-        /** @var ShopContextInterface $context */
-        $context = $this->get('shopware_storefront.context_service')->getShopContext();
-
-        /** @var AdvancedMenuServiceInterface $reader */
-        $reader = $this->get('shopware_storefront.advanced_menu_service');
-
-        $categories = $reader->get(
-            $context,
-            (int) $this->get('config')->getByNamespace('advancedMenu', 'levels')
-        );
-
-        $tree = $categories->getTree($context->getShop()->getCategory()->getId());
-
-        $this->View()->assign([
-            'advancedMenu' => json_decode(json_encode($tree), true),
-            'columnAmount' => $this->get('config')->getByNamespace('advancedMenu', 'columnAmount'),
-            'hoverDelay' => $this->get('config')->getByNamespace('advancedMenu', 'hoverDelay'),
-        ]);
     }
 }

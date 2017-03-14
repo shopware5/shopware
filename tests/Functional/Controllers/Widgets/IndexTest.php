@@ -22,8 +22,6 @@
  * our trademarks remain entirely with us.
  */
 
-use Shopware\Tests\Functional\DataGenerator\CategoryDataGenerator;
-
 class Shopware_Tests_Controllers_Widgets_IndexTest extends Enlight_Components_Test_Controller_TestCase
 {
     /**
@@ -35,75 +33,5 @@ class Shopware_Tests_Controllers_Widgets_IndexTest extends Enlight_Components_Te
         $this->assertEquals(200, $this->Response()->getHttpResponseCode());
 
         Shopware()->Models()->flush();
-    }
-
-    /**
-     * @group AdvancedMenu
-     */
-    public function testAdvancedMenu()
-    {
-        $connection = Shopware()->Container()->get('dbal_connection');
-        $connection->beginTransaction();
-
-        $this->initializeAdvancedMenuContext();
-
-        $controller = $this->createWidgetsIndexController();
-
-        $controller->advancedMenuAction();
-
-        $assigns = $controller->View()->getAssign();
-
-        //assert view assignments for advanced menu template
-        $this->assertArrayHasKey('advancedMenu', $assigns);
-        $this->assertNotEmpty($assigns['advancedMenu']);
-        $this->assertArrayHasKey('columnAmount', $assigns);
-        $this->assertArrayHasKey('hoverDelay', $assigns);
-
-        //reset database and current context instance
-        $connection->rollBack();
-        Shopware()->Container()->get('shopware_storefront.context_service')->initializeShopContext();
-    }
-
-    /**
-     * @return Shopware_Controllers_Widgets_Index
-     */
-    private function createWidgetsIndexController(): Shopware_Controllers_Widgets_Index
-    {
-        $view = new Enlight_View_Default(Shopware()->Container()->get('template'));
-
-        /** @var $controller */
-        $proxy = Shopware()->Hooks()->getProxy('Shopware_Controllers_Widgets_Index');
-
-        /** @var $controller Shopware_Controllers_Widgets_Index */
-        $controller = new $proxy(
-            new Enlight_Controller_Request_RequestHttp(),
-            new Enlight_Controller_Response_ResponseHttp()
-        );
-        $controller->setContainer(Shopware()->Container());
-        $controller->setView($view);
-
-        return $controller;
-    }
-
-    private function initializeAdvancedMenuContext(): void
-    {
-        $connection = Shopware()->Container()->get('dbal_connection');
-        $connection->insert('s_categories', [
-            'parent' => 1,
-            'description' => 'MainCategory',
-            'active' => 1,
-        ]);
-        $mainCategoryId = $connection->lastInsertId('s_categories');
-
-        $generator = new CategoryDataGenerator();
-
-        $generator->saveTree([
-            ['name' => 'first level'],
-            ['name' => 'first level 02'],
-        ], [$mainCategoryId]);
-
-        $context = Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext();
-        $category = Shopware()->Container()->get('shopware_storefront.category_service')->get($mainCategoryId, $context);
-        $context->getShop()->setCategory($category);
     }
 }

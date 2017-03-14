@@ -31,6 +31,7 @@ class Migrations_Migration1004 extends AbstractMigration
      */
     public function up($modus)
     {
+        $this->addAdvancedMenuToCache();
         if (!empty($this->getPluginInstalledStatus())) {
             $this->updateAdvancedMenuForm();
         } else {
@@ -150,5 +151,44 @@ EOD;
 DELETE FROM `s_core_config_values` WHERE `element_id` = @cachingElementId OR `element_id` = @cachetimeElementId;
 EOD;
         $this->addSql($sql);
+    }
+
+    private function addAdvancedMenuToCache()
+    {
+        $statement = $this->connection->prepare("SELECT * FROM s_core_config_elements WHERE name = 'cacheControllers'");
+        $statement->execute();
+        $config = $statement->fetch(PDO::FETCH_ASSOC);
+
+        if (empty($config)) {
+            return;
+        }
+
+        $value = unserialize($config['value']);
+        $value .= '
+widgets/advancedMenu 14400';
+
+        $statement = $this->connection->prepare('UPDATE s_core_config_elements SET value = ? WHERE id = ?');
+        $statement->execute([serialize($value), $config['id']]);
+
+        $statement = $this->connection->prepare('SELECT * FROM s_core_config_values WHERE element_id = ?');
+        $statement->execute([$config['id']]);
+        $values = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        if (empty($values)) {
+            return;
+        }
+
+        foreach ($values as $shopValue) {
+            if (empty($shopValue) || empty($shopValue['value'])) {
+                continue;
+            }
+
+            $value = unserialize($shopValue['value']);
+            $value .= '
+widgets/advancedMenu 14400';
+
+            $statement = $this->connection->prepare('UPDATE s_core_config_values SET value = ? WHERE id = ?');
+            $statement->execute([serialize($value), $shopValue['id']]);
+        }
     }
 }

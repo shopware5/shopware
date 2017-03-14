@@ -70,7 +70,7 @@
 
                                 {if {config namespace="AdvancedMenu" name="show"}}
                                     {block name="frontend_advanced_menu_outer"}
-										{action module=widgets controller=index action=advancedMenu}
+										{action module=widgets controller=advancedMenu action=index}
                                     {/block}
                                 {/if}
                             {/block}
