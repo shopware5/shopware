@@ -89,7 +89,7 @@ class CustomerService
             $context
         );
 
-        $shops = $this->shopGateway->getList($this->collectShopIds($customers));
+        $shops = $this->shopGateway->getList($this->collectShopIds($customers), $context);
 
         $payments = $this->paymentMethodGateway->getList(
             $this->collectPaymentIds($customers),

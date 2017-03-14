@@ -25,7 +25,6 @@
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\Hydrator;
 
 use Shopware\Bundle\StoreFrontBundle\Struct;
-use Shopware\Models\Country\Area;
 
 /**
  * @category  Shopware
@@ -50,7 +49,7 @@ class CountryHydrator extends Hydrator
     /**
      * @param array $data
      *
-     * @return Area
+     * @return Struct\Country\Area
      */
     public function hydrateArea(array $data)
     {
@@ -76,6 +75,7 @@ class CountryHydrator extends Hydrator
 
         $country->setId($id);
         $country->setName($data['__country_countryname']);
+        $country->setArea($this->hydrateArea($data));
 
         if (isset($data['__country_countryiso'])) {
             $country->setIso($data['__country_countryiso']);

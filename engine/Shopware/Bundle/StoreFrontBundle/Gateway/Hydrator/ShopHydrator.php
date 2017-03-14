@@ -24,6 +24,8 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\Hydrator;
 
+use Shopware\Bundle\CartBundle\Infrastructure\Delivery\DeliveryMethodHydrator;
+use Shopware\Bundle\CartBundle\Infrastructure\Payment\PaymentMethodHydrator;
 use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
 
 class ShopHydrator extends Hydrator
@@ -54,24 +56,48 @@ class ShopHydrator extends Hydrator
     private $customerGroupHydrator;
 
     /**
-     * @param TemplateHydrator      $templateHydrator
-     * @param CategoryHydrator      $categoryHydrator
-     * @param LocaleHydrator        $localeHydrator
-     * @param CurrencyHydrator      $currencyHydrator
-     * @param CustomerGroupHydrator $customerGroupHydrator
+     * @var CountryHydrator
+     */
+    private $countryHydrator;
+
+    /**
+     * @var PaymentMethodHydrator
+     */
+    private $paymentMethodHydrator;
+
+    /**
+     * @var DeliveryMethodHydrator
+     */
+    private $deliveryMethodHydrator;
+
+    /**
+     * @param TemplateHydrator       $templateHydrator
+     * @param CategoryHydrator       $categoryHydrator
+     * @param LocaleHydrator         $localeHydrator
+     * @param CurrencyHydrator       $currencyHydrator
+     * @param CustomerGroupHydrator  $customerGroupHydrator
+     * @param CountryHydrator        $countryHydrator
+     * @param PaymentMethodHydrator  $paymentMethodHydrator
+     * @param DeliveryMethodHydrator $deliveryMethodHydrator
      */
     public function __construct(
         TemplateHydrator $templateHydrator,
         CategoryHydrator $categoryHydrator,
         LocaleHydrator $localeHydrator,
         CurrencyHydrator $currencyHydrator,
-        CustomerGroupHydrator $customerGroupHydrator
+        CustomerGroupHydrator $customerGroupHydrator,
+        CountryHydrator $countryHydrator,
+        PaymentMethodHydrator $paymentMethodHydrator,
+        DeliveryMethodHydrator $deliveryMethodHydrator
     ) {
         $this->templateHydrator = $templateHydrator;
         $this->categoryHydrator = $categoryHydrator;
         $this->localeHydrator = $localeHydrator;
         $this->currencyHydrator = $currencyHydrator;
         $this->customerGroupHydrator = $customerGroupHydrator;
+        $this->countryHydrator = $countryHydrator;
+        $this->paymentMethodHydrator = $paymentMethodHydrator;
+        $this->deliveryMethodHydrator = $deliveryMethodHydrator;
     }
 
     /**
@@ -111,6 +137,10 @@ class ShopHydrator extends Hydrator
             $hosts = array_unique(array_values(array_filter($hosts)));
         }
         $shop->setHosts($hosts);
+
+        $shop->setPaymentMethod($this->paymentMethodHydrator->hydrate($data));
+        $shop->setDeliveryMethod($this->deliveryMethodHydrator->hydrate($data));
+        $shop->setCountry($this->countryHydrator->hydrateCountry($data));
 
         return $shop;
     }

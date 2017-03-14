@@ -119,6 +119,7 @@ class CountryGateway
 
         $query->select($this->fieldHelper->getCountryFields());
         $query->from('s_core_countries', 'country')
+            ->innerJoin('country', 's_core_countries_areas', 'countryArea', 'countryArea.id = country.areaID')
             ->leftJoin('country', 's_core_countries_attributes', 'countryAttribute', 'countryAttribute.countryID = country.id')
             ->where('country.id IN (:ids)')
             ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);

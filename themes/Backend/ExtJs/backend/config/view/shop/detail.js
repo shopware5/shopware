@@ -170,6 +170,8 @@ Ext.define('Shopware.apps.Config.view.shop.Detail', {
             labelWidth: 120
         });
 
+        var factory = Ext.create('Shopware.attribute.SelectionFactory');
+
         return [
         me.getIdField(),
         me.getTypeSwitchField(),
@@ -270,7 +272,25 @@ Ext.define('Shopware.apps.Config.view.shop.Detail', {
             fieldLabel: '{s name=shop/detail/fallback_label}Translation fallback{/s}',
             helpText: '{s name=shop/detail/fallback_help}Fallback for translations.{/s}',
             store: 'base.Translation'
-        },{
+        }, {
+            xtype: 'shopware-form-field-payment-single-selection',
+            fieldLabel: '{s name="default_payment"}{/s}',
+            name: 'paymentId',
+            allowBlank: false,
+            store: factory.createEntitySearchStore("Shopware\\Models\\Payment\\Payment")
+        }, {
+            xtype: 'shopware-form-field-single-selection',
+            fieldLabel: '{s name="default_dispatch"}{/s}',
+            name: 'dispatchId',
+            allowBlank: false,
+            store: factory.createEntitySearchStore("Shopware\\Models\\Dispatch\\Dispatch")
+        }, {
+            xtype: 'shopware-form-field-single-selection',
+            fieldLabel: '{s name="default_dispatch_country"}{/s}',
+            name: 'countryId',
+            allowBlank: false,
+            store: factory.createEntitySearchStore("Shopware\\Models\\Country\\Country")
+        }, {
             xtype: 'config-element-boolean',
             name: 'customerScope',
             fieldLabel: '{s name=shop/detail/customer_scope_label}Customer scope{/s}',

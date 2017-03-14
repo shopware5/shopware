@@ -24,6 +24,8 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Struct;
 
+use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryMethod;
+use Shopware\Bundle\CartBundle\Domain\Payment\PaymentMethod;
 use Shopware\Bundle\StoreFrontBundle\Struct\Customer\Group as CustomerGroup;
 use Shopware\Models\Shop\Shop as ShopEntity;
 
@@ -121,6 +123,21 @@ class Shop extends Extendable implements \JsonSerializable
      * @var bool
      */
     protected $customerScope;
+
+    /**
+     * @var DeliveryMethod
+     */
+    protected $deliveryMethod;
+
+    /**
+     * @var PaymentMethod
+     */
+    protected $paymentMethod;
+
+    /**
+     * @var Country
+     */
+    protected $country;
 
     /**
      * @param ShopEntity $shop
@@ -441,5 +458,35 @@ class Shop extends Extendable implements \JsonSerializable
     public function setCustomerScope($customerScope)
     {
         $this->customerScope = $customerScope;
+    }
+
+    public function getDeliveryMethod(): DeliveryMethod
+    {
+        return $this->deliveryMethod;
+    }
+
+    public function setDeliveryMethod(DeliveryMethod $deliveryMethod): void
+    {
+        $this->deliveryMethod = $deliveryMethod;
+    }
+
+    public function getPaymentMethod(): PaymentMethod
+    {
+        return $this->paymentMethod;
+    }
+
+    public function setPaymentMethod(PaymentMethod $paymentMethod): void
+    {
+        $this->paymentMethod = $paymentMethod;
+    }
+
+    public function getCountry(): Country
+    {
+        return $this->country;
+    }
+
+    public function setCountry(Country $country): void
+    {
+        $this->country = $country;
     }
 }

@@ -69,10 +69,7 @@ class AddressHydrator extends Hydrator
         $address->setVatId($data['__address_ustid']);
         $address->setAdditionalAddressLine1($data['__address_additional_address_line1']);
         $address->setAdditionalAddressLine2($data['__address_additional_address_line2']);
-
-        if ($data['__country_id'] !== null) {
-            $address->setCountry($this->countryHydrator->hydrateCountry($data));
-        }
+        $address->setCountry($this->countryHydrator->hydrateCountry($data));
 
         if ($data['__countryState_id'] !== null) {
             $address->setState($this->countryHydrator->hydrateState($data));

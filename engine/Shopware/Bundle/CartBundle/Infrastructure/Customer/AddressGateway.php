@@ -79,12 +79,14 @@ class AddressGateway
         $query = $this->connection->createQueryBuilder();
         $query->select('address.id as arrayKey');
         $query->addSelect($this->fieldHelper->getAddressFields());
+        $query->addSelect($this->fieldHelper->getAreaFields());
         $query->addSelect($this->fieldHelper->getCountryFields());
         $query->addSelect($this->fieldHelper->getStateFields());
 
         $query->from('s_user_addresses', 'address');
+        $query->innerJoin('address', 's_core_countries', 'country', 'country.id = address.country_id');
+        $query->innerJoin('country', 's_core_countries_areas', 'countryArea', 'countryArea.id = country.areaID');
         $query->leftJoin('address', 's_user_addresses_attributes', 'addressAttribute', 'address.id = addressAttribute.address_id');
-        $query->leftJoin('address', 's_core_countries', 'country', 'country.id = address.country_id');
         $query->leftJoin('address', 's_core_countries_states', 'countryState', 'countryState.id = address.state_id');
         $query->leftJoin('country', 's_core_countries_attributes', 'countryAttribute', 'countryAttribute.countryID = country.id');
         $query->leftJoin('countryState', 's_core_countries_states_attributes', 'countryStateAttribute', 'countryStateAttribute.stateID = countryState.id');
