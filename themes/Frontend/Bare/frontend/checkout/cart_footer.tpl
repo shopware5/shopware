@@ -1,9 +1,9 @@
 {* Add product using the sku *}
 {block name='frontend_checkout_cart_footer_add_product'}
-    <form method="post" action="{url action='addArticle' sTargetAction=$sTargetAction}" class="table--add-product add-product--form block-group">
+    <form method="post" action="{url action='addProduct' sTargetAction=$sTargetAction}" class="table--add-product add-product--form block-group">
 
         {block name='frontend_checkout_cart_footer_add_product_field'}
-            <input name="sAdd" class="add-product--field block" type="text" placeholder="{s name='CheckoutFooterAddProductPlaceholder' namespace='frontend/checkout/cart_footer_left'}{/s}" />
+            <input name="number" class="add-product--field block" type="text" placeholder="{s name='CheckoutFooterAddProductPlaceholder' namespace='frontend/checkout/cart_footer_left'}{/s}" />
         {/block}
 
         {block name='frontend_checkout_cart_footer_add_product_button'}
