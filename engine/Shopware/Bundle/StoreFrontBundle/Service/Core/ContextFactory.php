@@ -157,6 +157,10 @@ class ContextFactory implements ContextFactoryInterface
         $shop = $this->shopGateway->getList([$shopDefinition->getShopId()], $translationContext);
         $shop = array_shift($shop);
 
+        if (!$shop) {
+            throw new \Exception(sprintf('Shop with id %s not found or not valid!', $shopDefinition->getShopId()));
+        }
+
         //load active currency, fallback to shop currency
         $currency = $this->getCurrency($shop, $shopDefinition->getCurrencyId());
 
