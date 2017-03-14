@@ -24,12 +24,13 @@
 
 namespace Shopware\Tests\Unit\Bundle\CartBundle\Domain\Delivery;
 
-use Shopware\Bundle\CartBundle\Domain\Customer\Address;
 use Shopware\Bundle\CartBundle\Domain\Delivery\Delivery;
 use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryCollection;
 use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryDate;
 use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryMethod;
 use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryPositionCollection;
+use Shopware\Bundle\CartBundle\Domain\Delivery\ShippingLocation;
+use Shopware\Bundle\StoreFrontBundle\Struct\Country;
 
 class DeliveryCollectionTest extends \PHPUnit_Framework_TestCase
 {
@@ -51,7 +52,7 @@ class DeliveryCollectionTest extends \PHPUnit_Framework_TestCase
                     new \DateTime()
                 ),
                 new DeliveryMethod(1, '', '', 1, true, 1),
-                new Address()
+                self::createShippingLocation()
             )
         );
         static::assertCount(1, $collection);
@@ -67,7 +68,7 @@ class DeliveryCollectionTest extends \PHPUnit_Framework_TestCase
                     new \DateTime()
                 ),
                 new DeliveryMethod(1, '', '', 1, true, 1),
-                new Address()
+                self::createShippingLocation()
             ),
             new Delivery(
                 new DeliveryPositionCollection(),
@@ -76,7 +77,7 @@ class DeliveryCollectionTest extends \PHPUnit_Framework_TestCase
                     new \DateTime()
                 ),
                 new DeliveryMethod(1, '', '', 1, true, 1),
-                new Address()
+                self::createShippingLocation()
             ),
         ]);
         static::assertCount(2, $collection);
@@ -92,7 +93,7 @@ class DeliveryCollectionTest extends \PHPUnit_Framework_TestCase
                     new \DateTime()
                 ),
                 new DeliveryMethod(1, '', '', 1, true, 1),
-                new Address()
+                self::createShippingLocation()
             ),
             new Delivery(
                 new DeliveryPositionCollection(),
@@ -101,10 +102,18 @@ class DeliveryCollectionTest extends \PHPUnit_Framework_TestCase
                     new \DateTime()
                 ),
                 new DeliveryMethod(1, '', '', 1, true, 1),
-                new Address()
+                self::createShippingLocation()
             ),
         ]);
         $collection->clear();
         static::assertCount(0, $collection);
+    }
+
+    private static function createShippingLocation()
+    {
+        $country = new Country();
+        $country->setArea(new Country\Area());
+
+        return ShippingLocation::createFromCountry($country);
     }
 }

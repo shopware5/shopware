@@ -26,7 +26,6 @@ declare(strict_types=1);
 namespace Shopware\Bundle\CartBundle\Domain\Delivery;
 
 use Shopware\Bundle\CartBundle\Domain\Collection;
-use Shopware\Bundle\CartBundle\Domain\Customer\Address;
 use Shopware\Bundle\CartBundle\Domain\LineItem\CalculatedLineItemInterface;
 use Shopware\Bundle\CartBundle\Domain\LineItem\Deliverable;
 
@@ -55,7 +54,7 @@ class DeliveryCollection extends Collection
         usort(
             $this->elements,
             function (Delivery $a, Delivery $b) {
-                if ($a->getAddress() != $b->getAddress()) {
+                if ($a->getLocation() != $b->getLocation()) {
                     return -1;
                 }
 
@@ -64,13 +63,13 @@ class DeliveryCollection extends Collection
         );
     }
 
-    public function getDelivery(DeliveryDate $deliveryDate, Address $address): ? Delivery
+    public function getDelivery(DeliveryDate $deliveryDate, ShippingLocation $location): ? Delivery
     {
         foreach ($this->elements as $delivery) {
             if ($delivery->getDeliveryDate() != $deliveryDate) {
                 continue;
             }
-            if ($delivery->getAddress() != $address) {
+            if ($delivery->getLocation() != $location) {
                 continue;
             }
 

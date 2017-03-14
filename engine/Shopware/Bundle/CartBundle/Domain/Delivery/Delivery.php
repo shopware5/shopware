@@ -25,7 +25,6 @@ declare(strict_types=1);
 
 namespace Shopware\Bundle\CartBundle\Domain\Delivery;
 
-use Shopware\Bundle\CartBundle\Domain\Customer\Address;
 use Shopware\Bundle\CartBundle\Domain\JsonSerializableTrait;
 
 class Delivery implements \JsonSerializable
@@ -38,9 +37,9 @@ class Delivery implements \JsonSerializable
     protected $positions;
 
     /**
-     * @var Address
+     * @var ShippingLocation
      */
-    protected $address;
+    protected $location;
 
     /**
      * @var DeliveryDate
@@ -56,9 +55,9 @@ class Delivery implements \JsonSerializable
         DeliveryPositionCollection $positions,
         DeliveryDate $deliveryDate,
         DeliveryMethod $deliveryMethod,
-        Address $address
+        ShippingLocation $location
     ) {
-        $this->address = $address;
+        $this->location = $location;
         $this->positions = $positions;
         $this->deliveryDate = $deliveryDate;
         $this->deliveryMethod = $deliveryMethod;
@@ -69,9 +68,9 @@ class Delivery implements \JsonSerializable
         return $this->positions;
     }
 
-    public function getAddress(): Address
+    public function getLocation(): ShippingLocation
     {
-        return $this->address;
+        return $this->location;
     }
 
     public function getDeliveryDate(): DeliveryDate

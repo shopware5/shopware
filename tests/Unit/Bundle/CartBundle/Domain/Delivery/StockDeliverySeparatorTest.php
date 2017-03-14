@@ -24,7 +24,6 @@
 
 namespace Shopware\Tests\Unit\Bundle\CartBundle\Domain\Delivery;
 
-use Shopware\Bundle\CartBundle\Domain\Customer\Address;
 use Shopware\Bundle\CartBundle\Domain\Delivery\Delivery;
 use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryCollection;
 use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryDate;
@@ -32,6 +31,7 @@ use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryInformation;
 use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryMethod;
 use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryPosition;
 use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryPositionCollection;
+use Shopware\Bundle\CartBundle\Domain\Delivery\ShippingLocation;
 use Shopware\Bundle\CartBundle\Domain\Delivery\StockDeliverySeparator;
 use Shopware\Bundle\CartBundle\Domain\LineItem\CalculatedLineItemCollection;
 use Shopware\Bundle\CartBundle\Domain\LineItem\LineItem;
@@ -47,6 +47,7 @@ use Shopware\Bundle\CartBundle\Domain\Tax\TaxRule;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCalculator;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCollection;
 use Shopware\Bundle\CartBundle\Domain\Voucher\CalculatedVoucher;
+use Shopware\Bundle\StoreFrontBundle\Struct\Country;
 use Shopware\Tests\Unit\Bundle\CartBundle\Common\Generator;
 
 class StockDeliverySeparatorTest extends \PHPUnit_Framework_TestCase
@@ -106,7 +107,7 @@ class StockDeliverySeparatorTest extends \PHPUnit_Framework_TestCase
                     ]),
                     new DeliveryDate(new \DateTime('2012-01-01'), new \DateTime('2012-01-02')),
                     new DeliveryMethod(1, '', '', 1, true, 1),
-                    new Address()
+                    self::createShippingLocation()
                 ),
             ]),
             $this->separator->addItemsToDeliveries(
@@ -146,7 +147,7 @@ class StockDeliverySeparatorTest extends \PHPUnit_Framework_TestCase
                     ]),
                     $deliveryInformation->getInStockDeliveryDate(),
                     new DeliveryMethod(1, '', '', 1, true, 1),
-                    new Address()
+                    self::createShippingLocation()
                 ),
             ]),
             $this->separator->addItemsToDeliveries(
@@ -187,7 +188,7 @@ class StockDeliverySeparatorTest extends \PHPUnit_Framework_TestCase
                     ]),
                     new DeliveryDate(new \DateTime('2012-01-04'), new \DateTime('2012-01-05')),
                     new DeliveryMethod(1, '', '', 1, true, 1),
-                    new Address()
+                    self::createShippingLocation()
                 ),
             ]),
             $this->separator->addItemsToDeliveries(
@@ -222,7 +223,7 @@ class StockDeliverySeparatorTest extends \PHPUnit_Framework_TestCase
                     ]),
                     $product->getInStockDeliveryDate(),
                     new DeliveryMethod(1, '', '', 1, true, 1),
-                    new Address()
+                    self::createShippingLocation()
                 ),
             ]),
             $this->separator->addItemsToDeliveries(
@@ -255,7 +256,7 @@ class StockDeliverySeparatorTest extends \PHPUnit_Framework_TestCase
                     ]),
                     $product->getInStockDeliveryDate(),
                     new DeliveryMethod(1, '', '', 1, true, 1),
-                    new Address()
+                    self::createShippingLocation()
                 ),
                 new Delivery(
                     new DeliveryPositionCollection([
@@ -266,7 +267,7 @@ class StockDeliverySeparatorTest extends \PHPUnit_Framework_TestCase
                     ]),
                     $product->getOutOfStockDeliveryDate(),
                     new DeliveryMethod(1, '', '', 1, true, 1),
-                    new Address()
+                    self::createShippingLocation()
                 ),
             ]),
             $this->separator->addItemsToDeliveries(
@@ -275,5 +276,13 @@ class StockDeliverySeparatorTest extends \PHPUnit_Framework_TestCase
                 Generator::createContext()
             )
         );
+    }
+
+    private static function createShippingLocation()
+    {
+        $country = new Country();
+        $country->setArea(new Country\Area());
+
+        return ShippingLocation::createFromCountry($country);
     }
 }

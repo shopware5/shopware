@@ -26,10 +26,10 @@ declare(strict_types=1);
 namespace Shopware\Bundle\CartBundle\Domain\Delivery;
 
 use Shopware\Bundle\CartBundle\Domain\Cart\Cart;
-use Shopware\Bundle\CartBundle\Domain\Cart\CartContextInterface;
 use Shopware\Bundle\CartBundle\Domain\Cart\CartProcessorInterface;
 use Shopware\Bundle\CartBundle\Domain\Cart\ProcessorCart;
 use Shopware\Bundle\CartBundle\Domain\LineItem\Deliverable;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class DeliverySeparatorProcessor implements CartProcessorInterface
 {
@@ -46,12 +46,8 @@ class DeliverySeparatorProcessor implements CartProcessorInterface
     public function process(
         Cart $cart,
         ProcessorCart $processorCart,
-        CartContextInterface $context
+        ShopContextInterface $context
     ): void {
-        if (!$context->getShippingAddress()) {
-            return;
-        }
-
         $items = $processorCart
             ->getLineItems()
             ->filterInstance(Deliverable::class);

@@ -25,7 +25,7 @@
 namespace Shopware\Bundle\StoreFrontBundle\Gateway;
 
 use Doctrine\DBAL\Connection;
-
+use Shopware\Bundle\CartBundle\Domain\Delivery\ShippingLocation;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
@@ -87,18 +87,14 @@ class TaxGateway
      *  - State
      * - The above rules are prioritized, from first to last.
      *
-     * @param Struct\Customer\Group     $customerGroup
-     * @param Struct\Country\Area|null  $area
-     * @param Struct\Country|null       $country
-     * @param Struct\Country\State|null $state
+     * @param Struct\Customer\Group $customerGroup
+     * @param ShippingLocation      $location
      *
      * @return Struct\Tax[] Indexed by 'tax_' + id
      */
     public function getRules(
         Struct\Customer\Group $customerGroup,
-        Struct\Country\Area $area = null,
-        Struct\Country $country = null,
-        Struct\Country\State $state = null
+        ShippingLocation $location
     ) {
         $query = $this->connection->createQueryBuilder();
         $query->select($this->fieldHelper->getTaxFields())
@@ -112,9 +108,9 @@ class TaxGateway
 
         $query = $this->getAreaQuery(
             $customerGroup,
-            $area,
-            $country,
-            $state
+            $location->getCountry()->getArea(),
+            $location->getCountry(),
+            $location->getState()
         );
 
         foreach ($data as $tax) {

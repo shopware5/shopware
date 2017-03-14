@@ -25,14 +25,13 @@ declare(strict_types=1);
 
 namespace Shopware\Bundle\CartBundle\Domain\Delivery;
 
-use Shopware\Bundle\CartBundle\Domain\Cart\CartContextInterface;
-use Shopware\Bundle\CartBundle\Domain\Customer\Address;
 use Shopware\Bundle\CartBundle\Domain\LineItem\CalculatedLineItemCollection;
 use Shopware\Bundle\CartBundle\Domain\LineItem\CalculatedLineItemInterface;
 use Shopware\Bundle\CartBundle\Domain\LineItem\Deliverable;
 use Shopware\Bundle\CartBundle\Domain\LineItem\Stackable;
 use Shopware\Bundle\CartBundle\Domain\Price\PriceCalculator;
 use Shopware\Bundle\CartBundle\Domain\Price\PriceDefinition;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class StockDeliverySeparator
 {
@@ -49,7 +48,7 @@ class StockDeliverySeparator
     public function addItemsToDeliveries(
         DeliveryCollection $deliveries,
         CalculatedLineItemCollection $items,
-        CartContextInterface $context
+        ShopContextInterface $context
     ): DeliveryCollection {
         foreach ($items as $item) {
             if (!$item instanceof Deliverable) {
@@ -78,7 +77,7 @@ class StockDeliverySeparator
                 $this->addGoodsToDelivery(
                     $deliveries,
                     $position,
-                    $context->getShippingAddress(),
+                    $context->getShippingLocation(),
                     $context->getDeliveryMethod()
                 );
                 continue;
@@ -97,7 +96,7 @@ class StockDeliverySeparator
                 $this->addGoodsToDelivery(
                     $deliveries,
                     $position,
-                    $context->getShippingAddress(),
+                    $context->getShippingLocation(),
                     $context->getDeliveryMethod()
                 );
                 continue;
@@ -115,7 +114,7 @@ class StockDeliverySeparator
             $this->addGoodsToDelivery(
                 $deliveries,
                 $position,
-                $context->getShippingAddress(),
+                $context->getShippingLocation(),
                 $context->getDeliveryMethod()
             );
 
@@ -129,7 +128,7 @@ class StockDeliverySeparator
             $this->addGoodsToDelivery(
                 $deliveries,
                 $position,
-                $context->getShippingAddress(),
+                $context->getShippingLocation(),
                 $context->getDeliveryMethod()
             );
         }
@@ -141,7 +140,7 @@ class StockDeliverySeparator
      * @param Stackable|CalculatedLineItemInterface|Deliverable $item
      * @param int                                               $quantity
      * @param DeliveryDate                                      $deliveryDate
-     * @param CartContextInterface                              $context
+     * @param ShopContextInterface                              $context
      *
      * @return DeliveryPosition
      */
@@ -149,7 +148,7 @@ class StockDeliverySeparator
         Stackable $item,
         int $quantity,
         DeliveryDate $deliveryDate,
-        CartContextInterface $context
+        ShopContextInterface $context
     ): DeliveryPosition {
         $definition = new PriceDefinition(
             $item->getPrice()->getUnitPrice(),
@@ -172,12 +171,12 @@ class StockDeliverySeparator
     private function addGoodsToDelivery(
         DeliveryCollection $deliveries,
         DeliveryPosition $position,
-        Address $address,
+        ShippingLocation $location,
         DeliveryMethod $deliveryMethod
     ): void {
         $delivery = $deliveries->getDelivery(
             $position->getDeliveryDate(),
-            $address
+            $location
         );
 
         if ($delivery) {
@@ -191,7 +190,7 @@ class StockDeliverySeparator
                 new DeliveryPositionCollection([$position]),
                 $position->getDeliveryDate(),
                 $deliveryMethod,
-                $address
+                $location
             )
         );
     }
