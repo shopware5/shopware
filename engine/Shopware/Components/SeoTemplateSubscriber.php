@@ -25,6 +25,7 @@
 namespace Shopware\Components;
 
 use Enlight\Event\SubscriberInterface;
+use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 
 class SeoTemplateSubscriber implements SubscriberInterface
 {
@@ -38,17 +39,26 @@ class SeoTemplateSubscriber implements SubscriberInterface
      */
     private $queryAliasMapper;
 
-    public function __construct(\Shopware_Components_Config $config, QueryAliasMapper $queryAliasMapper)
-    {
+    /**
+     * @var ContextServiceInterface
+     */
+    private $contextService;
+
+    public function __construct(
+        \Shopware_Components_Config $config,
+        QueryAliasMapper $queryAliasMapper,
+        ContextServiceInterface $contextService
+    ) {
         $this->config = $config;
         $this->queryAliasMapper = $queryAliasMapper;
+        $this->contextService = $contextService;
     }
 
     public static function getSubscribedEvents()
     {
         return [
             'Enlight_Plugins_ViewRenderer_FilterRender' => 'onFilterRender',
-            'Enlight_Controller_Action_PostDispatchSecure_Frontend' => 'onPostDispatch'
+            'Enlight_Controller_Action_PostDispatchSecure_Frontend' => 'onPostDispatch',
         ];
     }
 
@@ -94,7 +104,7 @@ class SeoTemplateSubscriber implements SubscriberInterface
 
         $controller = $request->getControllerName();
 
-        if ($request->get('action') === 'manufacturer' && $request->get('controller') === 'listing') {
+        if (strtolower($request->getActionName()) === 'manufacturer' && strtolower($controller) === 'listing') {
             $alias = $this->queryAliasMapper->getQueryAliases();
 
             if (array_key_exists('sSupplier', $alias) && ($index = array_search($alias['sSupplier'], $queryBlacklist, true))) {
@@ -105,7 +115,9 @@ class SeoTemplateSubscriber implements SubscriberInterface
                 unset($queryBlacklist[$index]);
             }
 
-            if ($request->getQuery('sCategory') !== Shopware()->Shop()->getCategory()->getId()) {
+            $context = $this->contextService->getShopContext();
+
+            if ($request->getQuery('sCategory') !== $context->getShop()->getCategory()->getId()) {
                 $queryBlacklist[] = 'sCategory';
                 if (array_key_exists('sCategory', $alias)) {
                     $queryBlacklist[] = $alias['sCategory'];
@@ -127,10 +139,10 @@ class SeoTemplateSubscriber implements SubscriberInterface
         $view->extendsTemplate('frontend/plugins/seo/index.tpl');
 
         if (!empty($metaRobots)) {
-            $view->SeoMetaRobots = $metaRobots;
+            $view->assign('SeoMetaRobots', $metaRobots);
         }
         if (!empty($metaDescription)) {
-            $view->SeoMetaDescription = $metaDescription;
+            $view->assign('SeoMetaDescription', $metaDescription);
         }
     }
 
