@@ -82,7 +82,11 @@ Ext.define('Shopware.apps.Log.view.system.List', {
             header: '{s name=model/field/message}Message{/s}',
             dataIndex: 'message',
             flex: 1,
-            sortable: false
+            sortable: false,
+            allowHtml: true,
+            renderer: function (value) {
+                return Ext.String.htmlEncode(value);
+            }
         }, {
             header: '{s name=model/field/code}Code{/s}',
             dataIndex: 'code',
