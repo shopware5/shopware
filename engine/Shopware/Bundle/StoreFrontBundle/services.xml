@@ -7,15 +7,24 @@
     <services>
         <!-- Shopware services definition. This classes contains the business logic-->
         <service id="shopware_storefront.context_service" class="Shopware\Bundle\StoreFrontBundle\Service\Core\ContextService">
-            <argument type="service" id="service_container"/>
-            <argument type="service" id="shopware_storefront.customer_group_gateway"/>
-            <argument type="service" id="shopware_storefront.tax_gateway"/>
-            <argument type="service" id="shopware_storefront.country_gateway"/>
-            <argument type="service" id="shopware_storefront.price_group_discount_gateway" />
-            <argument type="service" id="shopware_storefront.shop_gateway_dbal" />
-            <argument type="service" id="shopware_storefront.currency_gateway_dbal" />
+            <argument id="service_container" type="service"/>
+            <argument id="shopware_storefront.context_factory" type="service"/>
+            <argument id="shopware_storefront.storefront_cache" type="service"/>
         </service>
 
+        <service id="shopware_storefront.context_factory" class="Shopware\Bundle\StoreFrontBundle\Service\Core\ContextFactory">
+            <argument id="shopware_storefront.shop_gateway_dbal" type="service"/>
+            <argument id="shopware_storefront.currency_gateway_dbal" type="service"/>
+            <argument id="shopware_cart.customer_service" type="service"/>
+            <argument id="shopware_storefront.customer_group_gateway" type="service"/>
+            <argument id="shopware_storefront.country_gateway" type="service"/>
+            <argument id="shopware_storefront.tax_gateway" type="service"/>
+            <argument id="shopware_storefront.price_group_discount_gateway" type="service"/>
+            <argument id="shopware_cart.address_gateway_dbal" type="service"/>
+            <argument id="shopware_cart.payment_method_gateway_dbal" type="service"/>
+            <argument id="shopware_cart.delivery_service_gateway_dbal" type="service"/>
+            <argument id="dbal_connection" type="service"/>
+        </service>
 
         <service id="shopware_storefront.custom_facet_service" class="Shopware\Bundle\StoreFrontBundle\Service\Core\CustomFacetService">
             <argument type="service" id="shopware_storefront.custom_facet_gateway" />
@@ -438,11 +447,14 @@
         </service>
 
         <service id="shopware_storefront.shop_hydrator_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\Hydrator\ShopHydrator">
-            <argument type="service" id="shopware_storefront.template_hydrator_dbal" />
-            <argument type="service" id="shopware_storefront.category_hydrator_dbal" />
-            <argument type="service" id="shopware_storefront.locale_hydrator_dbal" />
-            <argument type="service" id="shopware_storefront.currency_hydrator_dbal" />
-            <argument type="service" id="shopware_storefront.customer_group_hydrator_dbal" />
+            <argument id="shopware_storefront.template_hydrator_dbal" type="service"/>
+            <argument id="shopware_storefront.category_hydrator_dbal" type="service"/>
+            <argument id="shopware_storefront.locale_hydrator_dbal" type="service"/>
+            <argument id="shopware_storefront.currency_hydrator_dbal" type="service"/>
+            <argument id="shopware_storefront.customer_group_hydrator_dbal" type="service"/>
+            <argument id="shopware_storefront.country_hydrator_dbal" type="service"/>
+            <argument id="shopware_cart.payment_method_hydrator_dbal" type="service"/>
+            <argument id="shopware_cart.delivery_method_hydrator_dbal" type="service"/>
         </service>
 
         <service id="shopware_storefront.template_hydrator_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\Hydrator\TemplateHydrator" />

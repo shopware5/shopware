@@ -25,17 +25,16 @@
 namespace Shopware\Bundle\StoreFrontBundle\Service\Core;
 
 use Enlight_Components_Session_Namespace as Session;
-use Shopware\Bundle\StoreFrontBundle\Gateway\CountryGateway;
-use Shopware\Bundle\StoreFrontBundle\Gateway\CurrencyGateway;
-use Shopware\Bundle\StoreFrontBundle\Gateway\CustomerGroupGateway;
-use Shopware\Bundle\StoreFrontBundle\Gateway\PriceGroupDiscountGateway;
-use Shopware\Bundle\StoreFrontBundle\Gateway\ShopGateway;
-use Shopware\Bundle\StoreFrontBundle\Gateway\TaxGateway;
+use Shopware\Bundle\StoreFrontBundle\Service\CacheInterface;
+use Shopware\Bundle\StoreFrontBundle\Service\ContextFactoryInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
+use Shopware\Bundle\StoreFrontBundle\Struct\CheckoutDefinition;
+use Shopware\Bundle\StoreFrontBundle\Struct\CustomerDefinition;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopDefinition;
 use Shopware\Components\DependencyInjection\Container;
 use Shopware\Models;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * @category  Shopware
@@ -52,65 +51,25 @@ class ContextService implements ContextServiceInterface
     private $container;
 
     /**
+     * @var ContextFactoryInterface
+     */
+    private $factory;
+
+    /**
+     * @var CacheInterface
+     */
+    private $cache;
+
+    /**
      * @var ShopContextInterface
      */
     private $context = null;
 
-    /**
-     * @var CustomerGroupGateway
-     */
-    private $customerGroupGateway;
-
-    /**
-     * @var TaxGateway
-     */
-    private $taxGateway;
-
-    /**
-     * @var PriceGroupDiscountGateway
-     */
-    private $priceGroupDiscountGateway;
-
-    /**
-     * @var ShopGateway
-     */
-    private $shopGateway;
-
-    /**
-     * @var CurrencyGateway
-     */
-    private $currencyGateway;
-
-    /**
-     * @var CountryGateway
-     */
-    private $countryGateway;
-
-    /**
-     * @param Container                 $container
-     * @param CustomerGroupGateway      $customerGroupGateway
-     * @param TaxGateway                $taxGateway
-     * @param CountryGateway            $countryGateway
-     * @param PriceGroupDiscountGateway $priceGroupDiscountGateway
-     * @param ShopGateway               $shopGateway
-     * @param CurrencyGateway           $currencyGateway
-     */
-    public function __construct(
-        Container $container,
-        CustomerGroupGateway $customerGroupGateway,
-        TaxGateway $taxGateway,
-        CountryGateway $countryGateway,
-        PriceGroupDiscountGateway $priceGroupDiscountGateway,
-        ShopGateway $shopGateway,
-        CurrencyGateway $currencyGateway
-    ) {
+    public function __construct(ContainerInterface $container, ContextFactoryInterface $factory, CacheInterface $cache)
+    {
         $this->container = $container;
-        $this->taxGateway = $taxGateway;
-        $this->countryGateway = $countryGateway;
-        $this->customerGroupGateway = $customerGroupGateway;
-        $this->priceGroupDiscountGateway = $priceGroupDiscountGateway;
-        $this->shopGateway = $shopGateway;
-        $this->currencyGateway = $currencyGateway;
+        $this->factory = $factory;
+        $this->cache = $cache;
     }
 
     /**
@@ -119,7 +78,7 @@ class ContextService implements ContextServiceInterface
     public function getShopContext()
     {
         if ($this->context === null) {
-            $this->initializeShopContext();
+            $this->context = $this->load();
         }
 
         return $this->context;
@@ -130,15 +89,7 @@ class ContextService implements ContextServiceInterface
      */
     public function initializeShopContext()
     {
-        $this->context = $this->create(
-            $this->getStoreFrontBaseUrl(),
-            $this->getStoreFrontShopId(),
-            $this->getStoreFrontCurrencyId(),
-            $this->getStoreFrontCurrentCustomerGroupKey(),
-            $this->getStoreFrontAreaId(),
-            $this->getStoreFrontCountryId(),
-            $this->getStoreFrontStateId()
-        );
+        $this->context = $this->load(false);
     }
 
     /**
@@ -146,84 +97,101 @@ class ContextService implements ContextServiceInterface
      */
     public function createShopContext($shopId, $currencyId = null, $customerGroupKey = null)
     {
-        return $this->create(
-            $this->getStoreFrontBaseUrl(),
-            $shopId,
-            $currencyId,
-            $customerGroupKey
+        return $this->factory->create(
+            new ShopDefinition($shopId, $currencyId),
+            new CustomerDefinition(null, $customerGroupKey),
+            new CheckoutDefinition()
         );
     }
 
-    /**
-     * @return string
-     */
-    private function getStoreFrontBaseUrl()
+    private function load($cached = true): ShopContextInterface
     {
-        /** @var $config \Shopware_Components_Config */
-        $config = $this->container->get('config');
+        $shopDefinition = new ShopDefinition(
+            $this->getStoreFrontShopId(),
+            $this->getStoreFrontCurrencyId()
+        );
 
-        $request = null;
-        if ($this->container->initialized('front')) {
-            /** @var $front \Enlight_Controller_Front */
-            $front = $this->container->get('front');
-            $request = $front->Request();
+        $customerDefinition = new CustomerDefinition(
+            $this->getStoreCustomerId(),
+            $this->getStoreFrontBillingAddressId(),
+            $this->getStoreFrontShippingAddressId()
+        );
+
+        $checkoutDefinition = new CheckoutDefinition(
+            $this->getStoreFrontPaymentId(),
+            $this->getStoreFrontDispatchId(),
+            $this->getStoreFrontCountryId(),
+            $this->getStoreFrontStateId()
+        );
+
+        $key = $this->getCacheKey($shopDefinition, $customerDefinition, $checkoutDefinition);
+
+        if ($cached && $context = $this->cache->fetch($key)) {
+            return unserialize($context);
         }
 
-        if ($request !== null) {
-            return $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath();
-        }
+        $context = $this->factory->create($shopDefinition, $customerDefinition, $checkoutDefinition);
 
-        return 'http://' . $config->get('basePath');
+        $this->write($context);
+
+        $this->cache->save($key, serialize($context), 3600);
+
+        return $context;
+    }
+
+    private function write(ShopContextInterface $context)
+    {
+        $key = $this->getCacheKey(
+            ShopDefinition::createFromContext($context),
+            CustomerDefinition::createFromContext($context),
+            CheckoutDefinition::createFromContext($context)
+        );
+        $this->cache->save($key, serialize($context), 3600);
+    }
+
+    private function getCacheKey(
+        ShopDefinition $shopDefinition,
+        CustomerDefinition $customerDefinition,
+        CheckoutDefinition $checkoutDefinition
+    ): string {
+        return md5(
+            json_encode($shopDefinition) .
+            json_encode($customerDefinition) .
+            json_encode($checkoutDefinition)
+        );
     }
 
     /**
      * @return int
      */
-    private function getStoreFrontShopId()
+    private function getStoreFrontShopId(): int
     {
         /** @var $shop Models\Shop\Shop */
         $shop = $this->container->get('shop');
 
-        return $shop->getId();
+        return (int) $shop->getId();
     }
 
     /**
      * @return int
      */
-    private function getStoreFrontCurrencyId()
+    private function getStoreFrontCurrencyId(): int
     {
         /** @var $shop Models\Shop\Shop */
         $shop = $this->container->get('shop');
 
-        return $shop->getCurrency()->getId();
-    }
-
-    /**
-     * @return string
-     */
-    private function getStoreFrontCurrentCustomerGroupKey()
-    {
-        /** @var $session Session */
-        $session = $this->container->get('session');
-        if ($session->offsetExists('sUserGroup') && $session->offsetGet('sUserGroup')) {
-            return $session->offsetGet('sUserGroup');
-        }
-
-        /** @var $shop Models\Shop\Shop */
-        $shop = $this->container->get('shop');
-
-        return $shop->getCustomerGroup()->getKey();
+        return (int) $shop->getCurrency()->getId();
     }
 
     /**
      * @return int|null
      */
-    private function getStoreFrontAreaId()
+    private function getStoreFrontCountryId(): ?int
     {
         /** @var $session Session */
         $session = $this->container->get('session');
-        if ($session->offsetGet('sArea')) {
-            return $session->offsetGet('sArea');
+        if ($countryId = $session->offsetGet('sCountry')) {
+            return (int) $countryId;
         }
 
         return null;
@@ -232,108 +200,69 @@ class ContextService implements ContextServiceInterface
     /**
      * @return int|null
      */
-    private function getStoreFrontCountryId()
+    private function getStoreFrontStateId(): ?int
     {
         /** @var $session Session */
         $session = $this->container->get('session');
-        if ($session->offsetGet('sCountry')) {
-            return $session->offsetGet('sCountry');
+        if ($stateId = $session->offsetGet('sState')) {
+            return (int) $stateId;
         }
 
         return null;
     }
 
-    /**
-     * @return int|null
-     */
-    private function getStoreFrontStateId()
+    private function getStoreCustomerId(): ?int
     {
         /** @var $session Session */
         $session = $this->container->get('session');
-        if ($session->offsetGet('sState')) {
-            return $session->offsetGet('sState');
+        if ($customerId = $session->offsetGet('sUserId')) {
+            return (int) $customerId;
         }
 
         return null;
     }
 
-    /**
-     * @param string      $baseUrl
-     * @param int         $shopId
-     * @param null|int    $currencyId
-     * @param null|string $currentCustomerGroupKey
-     * @param null|int    $areaId
-     * @param null|int    $countryId
-     * @param null|int    $stateId
-     *
-     * @return ShopContext
-     */
-    private function create(
-        $baseUrl,
-        $shopId,
-        $currencyId = null,
-        $currentCustomerGroupKey = null,
-        $areaId = null,
-        $countryId = null,
-        $stateId = null
-    ) {
-        $shop = $this->shopGateway->getList([$shopId]);
-        $shop = array_shift($shop);
-
-        $fallbackCustomerGroupKey = self::FALLBACK_CUSTOMER_GROUP;
-
-        if ($currentCustomerGroupKey == null) {
-            $currentCustomerGroupKey = $fallbackCustomerGroupKey;
+    private function getStoreFrontBillingAddressId(): ?int
+    {
+        /** @var $session Session */
+        $session = $this->container->get('session');
+        if ($addressId = $session->offsetGet('checkoutBillingAddressId')) {
+            return (int) $addressId;
         }
 
-        $groups = $this->customerGroupGateway->getList([$currentCustomerGroupKey, $fallbackCustomerGroupKey]);
+        return null;
+    }
 
-        $currentCustomerGroup = $groups[$currentCustomerGroupKey];
-        $fallbackCustomerGroup = $groups[$fallbackCustomerGroupKey];
-
-        $currency = null;
-        if ($currencyId != null) {
-            $currency = $this->currencyGateway->getList([$currencyId]);
-            $currency = array_shift($currency);
-        }
-        if (!$currency) {
-            $currency = $shop->getCurrency();
+    private function getStoreFrontShippingAddressId(): ?int
+    {
+        /** @var $session Session */
+        $session = $this->container->get('session');
+        if ($addressId = $session->offsetGet('checkoutShippingAddressId')) {
+            return (int) $addressId;
         }
 
-        $context = new ShopContext($baseUrl, $shop, $currency, $currentCustomerGroup, $fallbackCustomerGroup, [], [], null, null, null);
+        return null;
+    }
 
-        $area = null;
-        if ($areaId !== null) {
-            $area = $this->countryGateway->getAreas([$areaId], $context->getTranslationContext());
-            $area = array_shift($area);
+    private function getStoreFrontPaymentId(): ?int
+    {
+        /** @var $session Session */
+        $session = $this->container->get('session');
+        if ($paymentId = $session->offsetGet('sPayment')) {
+            return (int) $paymentId;
         }
 
-        $country = null;
-        if ($countryId !== null) {
-            $country = $this->countryGateway->getCountries([$countryId], $context->getTranslationContext());
-            $country = array_shift($country);
+        return null;
+    }
+
+    private function getStoreFrontDispatchId(): ?int
+    {
+        /** @var $session Session */
+        $session = $this->container->get('session');
+        if ($dispatchId = $session->offsetGet('sDispatch')) {
+            return (int) $dispatchId;
         }
 
-        $state = null;
-        if ($stateId !== null) {
-            $state = $this->countryGateway->getStates([$stateId], $context->getTranslationContext());
-            $state = array_shift($state);
-        }
-
-        $taxRules = $this->taxGateway->getRules($currentCustomerGroup, $area, $country, $state);
-        $priceGroups = $this->priceGroupDiscountGateway->getPriceGroups($currentCustomerGroup);
-
-        return new ShopContext(
-            $baseUrl,
-            $shop,
-            $currency,
-            $currentCustomerGroup,
-            $fallbackCustomerGroup,
-            $taxRules,
-            $priceGroups,
-            $area,
-            $country,
-            $state
-        );
+        return null;
     }
 }

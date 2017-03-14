@@ -24,8 +24,10 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Struct;
 
-use Shopware\Bundle\StoreFrontBundle\Struct\Country\Area;
-use Shopware\Bundle\StoreFrontBundle\Struct\Country\State;
+use Shopware\Bundle\CartBundle\Domain\Customer\Customer;
+use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryMethod;
+use Shopware\Bundle\CartBundle\Domain\Delivery\ShippingLocation;
+use Shopware\Bundle\CartBundle\Domain\Payment\PaymentMethod;
 use Shopware\Bundle\StoreFrontBundle\Struct\Customer\Group;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceGroup;
 
@@ -67,24 +69,14 @@ class ShopContext extends Extendable implements ShopContextInterface, \JsonSeria
     protected $priceGroups;
 
     /**
-     * @var string
+     * @var Customer|null
      */
-    protected $baseUrl;
+    protected $customer;
 
     /**
-     * @var Area|null
+     * @var PaymentMethod
      */
-    protected $area;
-
-    /**
-     * @var Country|null
-     */
-    protected $country;
-
-    /**
-     * @var State|null
-     */
-    protected $state;
+    protected $paymentMethod;
 
     /**
      * @var TranslationContext
@@ -92,40 +84,50 @@ class ShopContext extends Extendable implements ShopContextInterface, \JsonSeria
     protected $translationContext;
 
     /**
-     * @param string       $baseUrl
-     * @param Shop         $shop
-     * @param Currency     $currency
-     * @param Group        $currentCustomerGroup
-     * @param Group        $fallbackCustomerGroup
-     * @param Tax[]        $taxRules
-     * @param PriceGroup[] $priceGroups
-     * @param Area|null    $area
-     * @param Country|null $country
-     * @param State|null   $state
+     * @var DeliveryMethod
+     */
+    protected $deliveryMethod;
+
+    /**
+     * @var ShippingLocation
+     */
+    protected $shippingLocation;
+
+    /**
+     * @param Shop             $shop
+     * @param Currency         $currency
+     * @param Group            $currentCustomerGroup
+     * @param Group            $fallbackCustomerGroup
+     * @param Tax[]            $taxRules
+     * @param PriceGroup[]     $priceGroups
+     * @param PaymentMethod    $paymentMethod
+     * @param DeliveryMethod   $deliveryMethod
+     * @param ShippingLocation $shippingLocation
+     * @param Customer         $customer
      */
     public function __construct(
-        $baseUrl,
         Shop $shop,
         Currency $currency,
         Group $currentCustomerGroup,
         Group $fallbackCustomerGroup,
         array $taxRules,
         array $priceGroups,
-        ?Area $area,
-        ?Country $country,
-        ?State $state
+        PaymentMethod $paymentMethod,
+        DeliveryMethod $deliveryMethod,
+        ShippingLocation $shippingLocation,
+        ?Customer $customer
     ) {
-        $this->baseUrl = $baseUrl;
-        $this->shop = $shop;
-        $this->currency = $currency;
         $this->currentCustomerGroup = $currentCustomerGroup;
         $this->fallbackCustomerGroup = $fallbackCustomerGroup;
+        $this->currency = $currency;
+        $this->shop = $shop;
         $this->taxRules = $taxRules;
         $this->priceGroups = $priceGroups;
-        $this->area = $area;
-        $this->country = $country;
-        $this->state = $state;
+        $this->customer = $customer;
+        $this->paymentMethod = $paymentMethod;
+        $this->deliveryMethod = $deliveryMethod;
         $this->translationContext = TranslationContext::createFromShop($this->shop);
+        $this->shippingLocation = $shippingLocation;
     }
 
     public function getShop(): Shop
@@ -150,7 +152,9 @@ class ShopContext extends Extendable implements ShopContextInterface, \JsonSeria
 
     public function getBaseUrl(): string
     {
-        return $this->baseUrl;
+        return sprintf('http%s://', $this->shop->getSecure() ? 's' : '') .
+            $this->shop->getHost() .
+            $this->shop->getUrl();
     }
 
     public function getTaxRules(): array
@@ -163,21 +167,6 @@ class ShopContext extends Extendable implements ShopContextInterface, \JsonSeria
         return $this->priceGroups;
     }
 
-    public function getArea(): ? Area
-    {
-        return $this->area;
-    }
-
-    public function getCountry(): ? Country
-    {
-        return $this->country;
-    }
-
-    public function getState(): ? State
-    {
-        return $this->state;
-    }
-
     /**
      * {@inheritdoc}
      */
@@ -188,8 +177,28 @@ class ShopContext extends Extendable implements ShopContextInterface, \JsonSeria
         return $this->taxRules[$key];
     }
 
+    public function getCustomer(): ? Customer
+    {
+        return $this->customer;
+    }
+
+    public function getPaymentMethod(): PaymentMethod
+    {
+        return $this->paymentMethod;
+    }
+
+    public function getDeliveryMethod(): DeliveryMethod
+    {
+        return $this->deliveryMethod;
+    }
+
     public function getTranslationContext(): TranslationContext
     {
         return $this->translationContext;
+    }
+
+    public function getShippingLocation(): ShippingLocation
+    {
+        return $this->shippingLocation;
     }
 }

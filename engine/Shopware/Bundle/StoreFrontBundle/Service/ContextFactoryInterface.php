@@ -22,35 +22,18 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Unit\Bundle\CartBundle\Common;
+namespace Shopware\Bundle\StoreFrontBundle\Service;
 
-use Shopware\Bundle\CartBundle\Domain\Cart\CartContextInterface;
-use Shopware\Bundle\CartBundle\Infrastructure\Cart\CartContextServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\CheckoutDefinition;
+use Shopware\Bundle\StoreFrontBundle\Struct\CustomerDefinition;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopDefinition;
 
-class PresetContextService implements CartContextServiceInterface
+interface ContextFactoryInterface
 {
-    /**
-     * @var CartContextInterface
-     */
-    public $context;
-
-    /**
-     * @param CartContextInterface $context
-     */
-    public function __construct(CartContextInterface $context)
-    {
-        $this->context = $context;
-    }
-
-    /**
-     * @return CartContextInterface
-     */
-    public function getCartContext(): CartContextInterface
-    {
-        return $this->context;
-    }
-
-    public function initializeContext(): void
-    {
-    }
+    public function create(
+        ShopDefinition $shopDefinition,
+        CustomerDefinition $customerDefinition,
+        CheckoutDefinition $checkoutDefinition
+    ): ShopContextInterface;
 }

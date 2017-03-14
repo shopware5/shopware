@@ -618,6 +618,8 @@ class sAdmin
             );
         }
 
+        $this->session['sPayment'] = $paymentId;
+
         return true;
     }
 

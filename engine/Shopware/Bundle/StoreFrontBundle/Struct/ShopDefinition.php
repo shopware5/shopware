@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -23,13 +22,46 @@ declare(strict_types=1);
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\CartBundle\Infrastructure\Cart;
+namespace Shopware\Bundle\StoreFrontBundle\Struct;
 
-use Shopware\Bundle\CartBundle\Domain\Cart\CartContextInterface;
-
-interface CartContextServiceInterface
+class ShopDefinition implements \JsonSerializable
 {
-    public function getCartContext(): CartContextInterface;
+    /**
+     * @var int
+     */
+    protected $shopId;
 
-    public function initializeContext(): void;
+    /**
+     * @var int|null
+     */
+    protected $currencyId;
+
+    public function __construct(int $shopId, ?int $currencyId = null)
+    {
+        $this->shopId = $shopId;
+        $this->currencyId = $currencyId;
+    }
+
+    public function getShopId(): int
+    {
+        return $this->shopId;
+    }
+
+    public function getCurrencyId(): ?int
+    {
+        return $this->currencyId;
+    }
+
+    public static function createFromContext(ShopContextInterface $context): ShopDefinition
+    {
+        return new self(
+            $context->getShop()->getId(),
+            $context->getCurrency()->getId()
+        );
+    }
+
+    public function jsonSerialize()
+    {
+        return get_object_vars($this);
+    }
 }

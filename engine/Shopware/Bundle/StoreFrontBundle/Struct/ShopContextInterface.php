@@ -24,8 +24,10 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Struct;
 
-use Shopware\Bundle\StoreFrontBundle\Struct\Country\Area;
-use Shopware\Bundle\StoreFrontBundle\Struct\Country\State;
+use Shopware\Bundle\CartBundle\Domain\Customer\Customer;
+use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryMethod;
+use Shopware\Bundle\CartBundle\Domain\Delivery\ShippingLocation;
+use Shopware\Bundle\CartBundle\Domain\Payment\PaymentMethod;
 use Shopware\Bundle\StoreFrontBundle\Struct\Customer\Group;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceGroup;
 
@@ -100,11 +102,13 @@ interface ShopContextInterface extends ExtendableInterface
      */
     public function getPriceGroups(): array;
 
-    public function getArea(): ? Area;
+    public function getShippingLocation(): ShippingLocation;
 
-    public function getCountry(): ? Country;
-
-    public function getState(): ? State;
+    public function getCustomer(): ? Customer;
 
     public function getTranslationContext(): TranslationContext;
+
+    public function getPaymentMethod(): PaymentMethod;
+
+    public function getDeliveryMethod(): DeliveryMethod;
 }
