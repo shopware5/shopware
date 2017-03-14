@@ -26,8 +26,8 @@ declare(strict_types=1);
 namespace Shopware\Bundle\CartBundle\Infrastructure\Payment;
 
 use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
-use Shopware\Bundle\CartBundle\Domain\Cart\CartContextInterface;
 use Shopware\Bundle\CartBundle\Domain\Payment\PaymentMethod;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class PaymentMethodService
 {
@@ -43,11 +43,11 @@ class PaymentMethodService
 
     /**
      * @param CalculatedCart       $cart
-     * @param CartContextInterface $context
+     * @param ShopContextInterface $context
      *
      * @return PaymentMethod[]
      */
-    public function getAvailable(CalculatedCart $cart, CartContextInterface $context): array
+    public function getAvailable(CalculatedCart $cart, ShopContextInterface $context): array
     {
         $payments = $this->gateway->getAll($context->getTranslationContext());
 

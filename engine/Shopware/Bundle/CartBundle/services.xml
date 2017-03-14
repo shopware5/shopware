@@ -8,7 +8,7 @@
         <service id="shopware_cart.store_front_cart_service" class="Shopware\Bundle\CartBundle\Infrastructure\StoreFrontCartService">
             <argument type="service" id="shopware_cart.cart_calculator" />
             <argument type="service" id="shopware_cart.cart_persister" />
-            <argument type="service" id="shopware_cart.cart_context_service" />
+            <argument type="service" id="shopware_storefront.context_service" />
             <argument type="service" id="session" />
             <argument type="service" id="shopware_cart.view_cart_transformer" />
         </service>
@@ -55,21 +55,10 @@
             <tag name="shopware_cart.tax_rule_calculator" />
         </service>
 
-
         <service id="shopware_cart.price_calculator" class="Shopware\Bundle\CartBundle\Domain\Price\PriceCalculator">
             <argument type="service" id="shopware_cart.tax_calculator" />
             <argument type="service" id="shopware_cart.price_rounding" />
             <argument type="service" id="shopware_cart.tax_detector" />
-        </service>
-
-        <service id="shopware_cart.cart_context_service" class="Shopware\Bundle\CartBundle\Infrastructure\Cart\CartContextService">
-            <argument type="service" id="shopware_storefront.context_service" />
-            <argument type="service" id="session" />
-            <argument type="service" id="shopware_cart.delivery_service_gateway_dbal" />
-            <argument type="service" id="shopware_cart.payment_method_gateway_dbal" />
-            <argument type="service" id="shopware_cart.address_gateway_dbal" />
-            <argument type="service" id="shopware_cart.customer_service" />
-            <argument type="service" id="config" />
         </service>
 
         <service id="shopware_cart.product_processor" class="Shopware\Bundle\CartBundle\Domain\Product\ProductProcessor">

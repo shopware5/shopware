@@ -23,12 +23,12 @@
  */
 
 use Enlight_Controller_Request_Request as Request;
-use Shopware\Bundle\CartBundle\Domain\Cart\CartContextInterface;
 use Shopware\Bundle\CartBundle\Domain\LineItem\LineItem;
 use Shopware\Bundle\CartBundle\Domain\Payment\PaymentMethod;
 use Shopware\Bundle\CartBundle\Domain\Product\ProductProcessor;
 use Shopware\Bundle\CartBundle\Infrastructure\StoreFrontCartService;
 use Shopware\Bundle\CartBundle\Infrastructure\View\ViewCart;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\BasketSignature\BasketPersister;
 use Shopware\Components\BasketSignature\BasketSignatureGeneratorInterface;
 use Shopware\Models\Customer\Address;
@@ -70,8 +70,8 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         /** @var StoreFrontCartService $service */
         $service = $this->get('shopware_cart.store_front_cart_service');
 
-        /** @var CartContextInterface $context */
-        $context = $this->get('shopware_cart.cart_context_service')->getCartContext();
+        /** @var ShopContextInterface $context */
+        $context = $this->get('shopware_storefront.context_service')->getShopContext();
 
         $cart = $service->getCart();
 
@@ -84,8 +84,8 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
 
     public function confirmAction(): void
     {
-        /** @var CartContextInterface $context */
-        $context = $this->get('shopware_cart.cart_context_service')->getCartContext();
+        /** @var ShopContextInterface $context */
+        $context = $this->get('shopware_storefront.context_service')->getShopContext();
 
         if ($context->getCustomer() === null) {
             $this->forwardToLogin();
@@ -113,8 +113,8 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         /** @var ViewCart $cart */
         $cart = $this->get('shopware_cart.store_front_cart_service')->getCart();
 
-        /** @var CartContextInterface $context */
-        $context = $this->get('shopware_cart.cart_context_service')->getCartContext();
+        /** @var ShopContextInterface $context */
+        $context = $this->get('shopware_storefront.context_service')->getShopContext();
 
         /** @var PaymentMethod[] $payments */
         $payments = $this->get('shopware_cart.payment_method_service')->getAvailable(
@@ -678,7 +678,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
             $this->admin->sUpdatePayment($payment);
             $this->setDispatch($dispatch, $payment);
 
-            $this->get('shopware_cart.cart_context_service')->initializeContext();
+            $this->get('shopware_storefront.context_service')->initializeShopContext();
 
             return $this->forward('shippingPayment');
         }

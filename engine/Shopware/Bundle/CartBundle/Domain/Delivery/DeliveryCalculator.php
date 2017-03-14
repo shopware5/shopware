@@ -25,11 +25,11 @@ declare(strict_types=1);
 
 namespace Shopware\Bundle\CartBundle\Domain\Delivery;
 
-use Shopware\Bundle\CartBundle\Domain\Cart\CartContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class DeliveryCalculator
 {
-    public function calculate(Delivery $delivery, CartContextInterface $context)
+    public function calculate(Delivery $delivery, ShopContextInterface $context)
     {
     }
 }

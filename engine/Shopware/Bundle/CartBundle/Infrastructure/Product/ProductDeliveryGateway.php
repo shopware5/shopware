@@ -26,11 +26,11 @@ declare(strict_types=1);
 namespace Shopware\Bundle\CartBundle\Infrastructure\Product;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Bundle\CartBundle\Domain\Cart\CartContextInterface;
 use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryDate;
 use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryInformation;
 use Shopware\Bundle\CartBundle\Domain\LineItem\LineItemCollection;
 use Shopware\Bundle\CartBundle\Domain\Product\ProductDeliveryGatewayInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class ProductDeliveryGateway implements ProductDeliveryGatewayInterface
 {
@@ -50,7 +50,7 @@ class ProductDeliveryGateway implements ProductDeliveryGatewayInterface
     /**
      * {@inheritdoc}
      */
-    public function get(LineItemCollection $collection, CartContextInterface $context): array
+    public function get(LineItemCollection $collection, ShopContextInterface $context): array
     {
         $query = $this->connection->createQueryBuilder();
         $query->select([

@@ -26,7 +26,6 @@ declare(strict_types=1);
 namespace Shopware\Bundle\CartBundle\Infrastructure\Product;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Bundle\CartBundle\Domain\Cart\CartContextInterface;
 use Shopware\Bundle\CartBundle\Domain\LineItem\LineItemCollection;
 use Shopware\Bundle\CartBundle\Domain\LineItem\LineItemInterface;
 use Shopware\Bundle\CartBundle\Domain\Price\PriceDefinition;
@@ -34,6 +33,7 @@ use Shopware\Bundle\CartBundle\Domain\Product\ProductPriceGatewayInterface;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxRule;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCollection;
 use Shopware\Bundle\StoreFrontBundle\Gateway\FieldHelper;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class ProductPriceGateway implements ProductPriceGatewayInterface
 {
@@ -62,7 +62,7 @@ class ProductPriceGateway implements ProductPriceGatewayInterface
     /**
      * {@inheritdoc}
      */
-    public function get(LineItemCollection $collection, CartContextInterface $context): array
+    public function get(LineItemCollection $collection, ShopContextInterface $context): array
     {
         $query = $this->buildQuery($collection->getIdentifiers(), $context);
         $statement = $query->execute();
@@ -154,11 +154,11 @@ class ProductPriceGateway implements ProductPriceGatewayInterface
 
     /**
      * @param string[]             $numbers
-     * @param CartContextInterface $context
+     * @param ShopContextInterface $context
      *
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
-    private function buildQuery($numbers, CartContextInterface $context)
+    private function buildQuery($numbers, ShopContextInterface $context)
     {
         $query = $this->connection->createQueryBuilder();
 

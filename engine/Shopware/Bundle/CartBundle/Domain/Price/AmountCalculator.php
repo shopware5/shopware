@@ -25,10 +25,10 @@ declare(strict_types=1);
 
 namespace Shopware\Bundle\CartBundle\Domain\Price;
 
-use Shopware\Bundle\CartBundle\Domain\Cart\CartContextInterface;
 use Shopware\Bundle\CartBundle\Domain\Tax\CalculatedTaxCollection;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxDetector;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCollection;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class AmountCalculator
 {
@@ -48,7 +48,7 @@ class AmountCalculator
         $this->rounding = $rounding;
     }
 
-    public function calculateAmount(PriceCollection $prices, CartContextInterface $context): CartPrice
+    public function calculateAmount(PriceCollection $prices, ShopContextInterface $context): CartPrice
     {
         if ($this->taxDetector->isNetDelivery($context)) {
             return $this->calculateNetDeliveryAmount($prices);

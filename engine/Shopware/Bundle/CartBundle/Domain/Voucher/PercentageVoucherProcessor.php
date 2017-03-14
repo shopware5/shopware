@@ -26,11 +26,11 @@ declare(strict_types=1);
 namespace Shopware\Bundle\CartBundle\Domain\Voucher;
 
 use Shopware\Bundle\CartBundle\Domain\Cart\Cart;
-use Shopware\Bundle\CartBundle\Domain\Cart\CartContextInterface;
 use Shopware\Bundle\CartBundle\Domain\Cart\CartProcessorInterface;
 use Shopware\Bundle\CartBundle\Domain\Cart\ProcessorCart;
 use Shopware\Bundle\CartBundle\Domain\LineItem\LineItemInterface;
 use Shopware\Bundle\CartBundle\Domain\Price\PercentagePriceCalculator;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class PercentageVoucherProcessor implements CartProcessorInterface
 {
@@ -49,7 +49,7 @@ class PercentageVoucherProcessor implements CartProcessorInterface
     public function process(
         Cart $cart,
         ProcessorCart $processorCart,
-        CartContextInterface $context
+        ShopContextInterface $context
     ): void {
         $vouchers = $cart->getLineItems()->filterType(
             self::TYPE_PERCENTAGE_VOUCHER

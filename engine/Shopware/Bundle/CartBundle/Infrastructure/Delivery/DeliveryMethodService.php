@@ -25,8 +25,8 @@
 namespace Shopware\Bundle\CartBundle\Infrastructure\Delivery;
 
 use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
-use Shopware\Bundle\CartBundle\Domain\Cart\CartContextInterface;
 use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryMethod;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class DeliveryMethodService
 {
@@ -45,13 +45,13 @@ class DeliveryMethodService
 
     /**
      * @param CalculatedCart       $cart
-     * @param CartContextInterface $context
+     * @param ShopContextInterface $context
      *
      * @return DeliveryMethod[]
      */
-    public function getAvailable(CalculatedCart $cart, CartContextInterface $context): array
+    public function getAvailable(CalculatedCart $cart, ShopContextInterface $context): array
     {
-        $deliveries = $this->gateway->getAll($context);
+        $deliveries = $this->gateway->getAll($context->getTranslationContext());
 
         $deliveries = array_filter(
             $deliveries,

@@ -25,11 +25,13 @@ declare(strict_types=1);
 
 namespace Shopware\Bundle\CartBundle\Domain\Cart;
 
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+
 interface CartProcessorInterface
 {
     public function process(
         Cart $cart,
         ProcessorCart $processorCart,
-        CartContextInterface $context
+        ShopContextInterface $context
     ): void;
 }

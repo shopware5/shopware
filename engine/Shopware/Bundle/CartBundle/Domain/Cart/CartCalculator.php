@@ -28,6 +28,7 @@ namespace Shopware\Bundle\CartBundle\Domain\Cart;
 use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryCollection;
 use Shopware\Bundle\CartBundle\Domain\LineItem\CalculatedLineItemCollection;
 use Shopware\Bundle\CartBundle\Domain\Price\AmountCalculator;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class CartCalculator
 {
@@ -53,7 +54,7 @@ class CartCalculator
         $this->amountCalculator = $amountCalculator;
     }
 
-    public function calculate(Cart $cart, CartContextInterface $context): CalculatedCart
+    public function calculate(Cart $cart, ShopContextInterface $context): CalculatedCart
     {
         $processorCart = new ProcessorCart(
             new CalculatedLineItemCollection(),

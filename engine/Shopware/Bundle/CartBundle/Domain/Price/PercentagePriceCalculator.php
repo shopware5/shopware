@@ -25,10 +25,10 @@ declare(strict_types=1);
 
 namespace Shopware\Bundle\CartBundle\Domain\Price;
 
-use Shopware\Bundle\CartBundle\Domain\Cart\CartContextInterface;
 use Shopware\Bundle\CartBundle\Domain\Tax\CalculatedTax;
 use Shopware\Bundle\CartBundle\Domain\Tax\PercentageTaxRule;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCollection;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class PercentagePriceCalculator
 {
@@ -55,14 +55,14 @@ class PercentagePriceCalculator
      *
      * @param float                $percentage 10.00 for 10%, -10.0 for -10%
      * @param PriceCollection      $prices
-     * @param CartContextInterface $context
+     * @param ShopContextInterface $context
      *
      * @return Price
      */
     public function calculatePrice(
         $percentage,
         PriceCollection $prices,
-        CartContextInterface $context
+        ShopContextInterface $context
     ): Price {
         $price = $prices->getTotalPrice();
 

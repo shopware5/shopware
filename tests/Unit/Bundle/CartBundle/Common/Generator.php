@@ -24,7 +24,6 @@
 
 namespace Shopware\Tests\Unit\Bundle\CartBundle\Common;
 
-use Shopware\Bundle\CartBundle\Domain\Cart\CartContext;
 use Shopware\Bundle\CartBundle\Domain\Customer\Address;
 use Shopware\Bundle\CartBundle\Domain\Customer\Customer;
 use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryMethod;
@@ -58,7 +57,7 @@ class Generator extends \PHPUnit_Framework_TestCase
      * @param null|Address        $billing
      * @param null|Address        $shipping
      *
-     * @return CartContext
+     * @return ShopContext
      */
     public static function createContext(
         $currentCustomerGroup = null,
@@ -106,26 +105,16 @@ class Generator extends \PHPUnit_Framework_TestCase
         $billing = $billing ?: new Address();
         $shipping = $shipping ?: new Address();
 
-        $shopContext = new ShopContext(
-            '',
+        return new ShopContext(
             $shop,
             $currency,
             $currentCustomerGroup,
             $fallbackCustomerGroup,
             $taxes,
             $priceGroups,
-            $area,
-            $country,
-            $state
-        );
-
-        return new CartContext(
-            $shopContext,
-            $paymentService,
-            $deliveryService,
-            $customer,
-            $billing,
-            $shipping
+            new PaymentMethod(1, '', '', ''),
+            new DeliveryMethod(1, '', '', 1, true, 1),
+            new Customer()
         );
     }
 

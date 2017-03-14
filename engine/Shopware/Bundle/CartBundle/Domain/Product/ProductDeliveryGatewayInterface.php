@@ -25,17 +25,17 @@ declare(strict_types=1);
 
 namespace Shopware\Bundle\CartBundle\Domain\Product;
 
-use Shopware\Bundle\CartBundle\Domain\Cart\CartContextInterface;
 use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryInformation;
 use Shopware\Bundle\CartBundle\Domain\LineItem\LineItemCollection;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 interface ProductDeliveryGatewayInterface
 {
     /**
      * @param LineItemCollection   $collection
-     * @param CartContextInterface $context
+     * @param ShopContextInterface $context
      *
      * @return DeliveryInformation[] indexed by number
      */
-    public function get(LineItemCollection $collection, CartContextInterface $context): array;
+    public function get(LineItemCollection $collection, ShopContextInterface $context): array;
 }

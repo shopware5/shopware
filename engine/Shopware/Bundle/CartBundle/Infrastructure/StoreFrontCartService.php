@@ -31,9 +31,9 @@ use Shopware\Bundle\CartBundle\Domain\Cart\CartCalculator;
 use Shopware\Bundle\CartBundle\Domain\Cart\CartPersisterInterface;
 use Shopware\Bundle\CartBundle\Domain\LineItem\LineItemInterface;
 use Shopware\Bundle\CartBundle\Domain\LineItem\Stackable;
-use Shopware\Bundle\CartBundle\Infrastructure\Cart\CartContextServiceInterface;
 use Shopware\Bundle\CartBundle\Infrastructure\View\ViewCart;
 use Shopware\Bundle\CartBundle\Infrastructure\View\ViewCartTransformer;
+use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 
 class StoreFrontCartService
 {
@@ -52,7 +52,7 @@ class StoreFrontCartService
     private $persister;
 
     /**
-     * @var CartContextServiceInterface
+     * @var ContextServiceInterface
      */
     private $contextService;
 
@@ -69,14 +69,14 @@ class StoreFrontCartService
     /**
      * @param CartCalculator                        $calculation
      * @param CartPersisterInterface                $persister
-     * @param CartContextServiceInterface           $contextService
+     * @param ContextServiceInterface               $contextService
      * @param \Enlight_Components_Session_Namespace $session
      * @param ViewCartTransformer                   $viewCartTransformer
      */
     public function __construct(
         CartCalculator $calculation,
         CartPersisterInterface $persister,
-        CartContextServiceInterface $contextService,
+        ContextServiceInterface $contextService,
         \Enlight_Components_Session_Namespace $session,
         ViewCartTransformer $viewCartTransformer
     ) {
@@ -112,7 +112,7 @@ class StoreFrontCartService
 
         $calculated = $this->calculate($cart);
 
-        $context = $this->contextService->getCartContext();
+        $context = $this->contextService->getShopContext();
         $viewCart = $this->viewCartTransformer->transform($calculated, $context);
 
         return $viewCart;
@@ -120,7 +120,7 @@ class StoreFrontCartService
 
     public function calculate(Cart $cart): CalculatedCart
     {
-        $context = $this->contextService->getCartContext();
+        $context = $this->contextService->getShopContext();
         $calculated = $this->calculation->calculate($cart, $context);
         $this->save($calculated->getCart());
 

@@ -30,6 +30,7 @@ use Shopware\Bundle\StoreFrontBundle\Service\ShopPageServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopPage;
+use Shopware\Bundle\StoreFrontBundle\Struct\TranslationContext;
 
 /**
  * @category  Shopware
@@ -65,7 +66,7 @@ class ShopPageService implements ShopPageServiceInterface
     {
         $shopPages = $this->shopPageGateway->getList($ids, $context->getTranslationContext());
 
-        $this->resolveShops($shopPages);
+        $this->resolveShops($shopPages, $context->getTranslationContext());
         $this->resolveParents($shopPages, $context);
         $this->resolveChildren($shopPages, $context);
 
@@ -75,14 +76,14 @@ class ShopPageService implements ShopPageServiceInterface
     /**
      * @param ShopPage[] $shopPages
      */
-    private function resolveShops(array $shopPages)
+    private function resolveShops(array $shopPages, TranslationContext $context)
     {
         $shopIds = [];
         foreach ($shopPages as $page) {
             $shopIds += (array) $page->getShopIds();
         }
 
-        $shops = $this->shopGateway->getList(array_keys(array_flip($shopIds)));
+        $shops = $this->shopGateway->getList(array_keys(array_flip($shopIds)), $context);
 
         foreach ($shopPages as $page) {
             $pageShops = array_filter($shops, function (Shop $shop) use ($page) {

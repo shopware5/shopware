@@ -26,9 +26,9 @@ declare(strict_types=1);
 namespace Shopware\Bundle\CartBundle\Domain\Delivery;
 
 use Shopware\Bundle\CartBundle\Domain\Cart\Cart;
-use Shopware\Bundle\CartBundle\Domain\Cart\CartContextInterface;
 use Shopware\Bundle\CartBundle\Domain\Cart\CartProcessorInterface;
 use Shopware\Bundle\CartBundle\Domain\Cart\ProcessorCart;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class DeliveryCalculatorProcessor implements CartProcessorInterface
 {
@@ -40,7 +40,7 @@ class DeliveryCalculatorProcessor implements CartProcessorInterface
     public function process(
         Cart $cart,
         ProcessorCart $processorCart,
-        CartContextInterface $context
+        ShopContextInterface $context
     ): void {
         foreach ($processorCart->getDeliveries() as $delivery) {
             $this->calculator->calculate($delivery, $context);

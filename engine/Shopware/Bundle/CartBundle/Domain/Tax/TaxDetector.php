@@ -25,16 +25,16 @@ declare(strict_types=1);
 
 namespace Shopware\Bundle\CartBundle\Domain\Tax;
 
-use Shopware\Bundle\CartBundle\Domain\Cart\CartContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class TaxDetector
 {
-    public function useGross(CartContextInterface $context): bool
+    public function useGross(ShopContextInterface $context): bool
     {
         return $context->getCurrentCustomerGroup()->displayGrossPrices();
     }
 
-    public function isNetDelivery(CartContextInterface $context): bool
+    public function isNetDelivery(ShopContextInterface $context): bool
     {
         return false;
     }

@@ -217,6 +217,16 @@ class Customer extends Extendable
      */
     protected $lastPaymentMethod;
 
+    /**
+     * @var Address|null
+     */
+    protected $activeBillingAddress;
+
+    /**
+     * @var Address|null
+     */
+    protected $activeShippingAddress;
+
     public function getId(): int
     {
         return $this->id;
@@ -565,5 +575,33 @@ class Customer extends Extendable
     public function setLastPaymentMethod(PaymentMethod $lastPaymentMethod): void
     {
         $this->lastPaymentMethod = $lastPaymentMethod;
+    }
+
+    public function getActiveBillingAddress(): Address
+    {
+        if (!$this->activeBillingAddress) {
+            return $this->defaultBillingAddress;
+        }
+
+        return $this->activeBillingAddress;
+    }
+
+    public function setActiveBillingAddress(Address $activeBillingAddress): void
+    {
+        $this->activeBillingAddress = $activeBillingAddress;
+    }
+
+    public function getActiveShippingAddress(): Address
+    {
+        if (!$this->activeShippingAddress) {
+            return $this->defaultShippingAddress;
+        }
+
+        return $this->activeShippingAddress;
+    }
+
+    public function setActiveShippingAddress(Address $activeShippingAddress): void
+    {
+        $this->activeShippingAddress = $activeShippingAddress;
     }
 }

@@ -25,11 +25,11 @@ declare(strict_types=1);
 
 namespace Shopware\Bundle\CartBundle\Domain\Price;
 
-use Shopware\Bundle\CartBundle\Domain\Cart\CartContextInterface;
 use Shopware\Bundle\CartBundle\Domain\Tax\CalculatedTaxCollection;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxCalculator;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxDetector;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCollection;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class PriceCalculator
 {
@@ -60,7 +60,7 @@ class PriceCalculator
 
     public function calculate(
         PriceDefinition $definition,
-        CartContextInterface $context
+        ShopContextInterface $context
     ): Price {
         $unitPrice = $this->getUnitPrice($definition, $context);
 
@@ -94,7 +94,7 @@ class PriceCalculator
         return new Price($unitPrice, $price, $calculatedTaxes, $taxRules, $definition->getQuantity());
     }
 
-    private function getUnitPrice(PriceDefinition $definition, CartContextInterface $context): float
+    private function getUnitPrice(PriceDefinition $definition, ShopContextInterface $context): float
     {
         //unit price already calculated?
         if ($definition->isCalculated()) {
