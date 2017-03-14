@@ -26,8 +26,12 @@ namespace Shopware\Tests\Functional\Bundle\AccountBundle\Service;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\AccountBundle\Service\RegisterServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Service\ContextFactoryInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\CheckoutDefinition;
+use Shopware\Bundle\StoreFrontBundle\Struct\CustomerDefinition;
 use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopDefinition;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Country\Country;
 use Shopware\Models\Country\State;
@@ -65,6 +69,11 @@ class RegisterServiceTest extends \Enlight_Components_Test_TestCase
     protected static $_cleanup = [];
 
     /**
+     * @var ContextFactoryInterface
+     */
+    private static $contextFactory;
+
+    /**
      * Set up fixtures
      */
     public static function setUpBeforeClass()
@@ -73,6 +82,7 @@ class RegisterServiceTest extends \Enlight_Components_Test_TestCase
         self::$modelManager = Shopware()->Container()->get('models');
         self::$connection = Shopware()->Container()->get('dbal_connection');
         self::$contextService = Shopware()->Container()->get('shopware_storefront.context_service');
+        self::$contextFactory = Shopware()->Container()->get('shopware_storefront.context_factory');
 
         self::$modelManager->clear();
     }
@@ -320,7 +330,11 @@ class RegisterServiceTest extends \Enlight_Components_Test_TestCase
      */
     private function getShop()
     {
-        return self::$contextService->createShopContext(1)->getShop();
+        return self::$contextFactory->create(
+            new ShopDefinition(1),
+            new CustomerDefinition(null),
+            new CheckoutDefinition()
+        )->getShop();
     }
 
     /**

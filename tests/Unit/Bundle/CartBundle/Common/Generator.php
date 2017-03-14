@@ -27,6 +27,7 @@ namespace Shopware\Tests\Unit\Bundle\CartBundle\Common;
 use Shopware\Bundle\CartBundle\Domain\Customer\Address;
 use Shopware\Bundle\CartBundle\Domain\Customer\Customer;
 use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryMethod;
+use Shopware\Bundle\CartBundle\Domain\Delivery\ShippingLocation;
 use Shopware\Bundle\CartBundle\Domain\Payment\PaymentMethod;
 use Shopware\Bundle\CartBundle\Domain\Price\PriceDefinition;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxDetector;
@@ -69,10 +70,6 @@ class Generator extends \PHPUnit_Framework_TestCase
         $area = null,
         $country = null,
         $state = null,
-        $paymentService = null,
-        $deliveryService = null,
-        $customer = null,
-        $billing = null,
         $shipping = null
     ) {
         if ($shop === null) {
@@ -96,14 +93,23 @@ class Generator extends \PHPUnit_Framework_TestCase
 
         $priceGroups = $priceGroups ?: [new PriceGroup()];
         $taxes = $taxes ?: [new Tax(1, 'test', 19.0)];
+
         $area = $area ?: new Country\Area();
-        $country = $country ?: new Country();
-        $state = $state ?: new Country\State();
-        $paymentService = $paymentService ?: new PaymentMethod(1, 'cash', 'Cash', 'CashPayment');
-        $deliveryService = $deliveryService ?: new DeliveryMethod(1, '', '', 1, true, 1);
-        $customer = $customer ?: new Customer();
-        $billing = $billing ?: new Address();
-        $shipping = $shipping ?: new Address();
+
+        if (!$country) {
+            $country = new Country();
+            $country->setArea($area);
+        }
+        if (!$state) {
+            $state = new Country\State();
+            $state->setCountry($country);
+        }
+
+        if (!$shipping) {
+            $shipping = new Address();
+            $shipping->setCountry($country);
+            $shipping->setState($state);
+        }
 
         return new ShopContext(
             $shop,
@@ -114,6 +120,7 @@ class Generator extends \PHPUnit_Framework_TestCase
             $priceGroups,
             new PaymentMethod(1, '', '', ''),
             new DeliveryMethod(1, '', '', 1, true, 1),
+            ShippingLocation::createFromAddress($shipping),
             new Customer()
         );
     }

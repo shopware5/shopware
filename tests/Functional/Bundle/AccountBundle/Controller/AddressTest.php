@@ -24,6 +24,9 @@
 
 namespace Shopware\Tests\Functional\Bundle\AccountBundle\Controller;
 
+use Shopware\Bundle\StoreFrontBundle\Struct\CheckoutDefinition;
+use Shopware\Bundle\StoreFrontBundle\Struct\CustomerDefinition;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopDefinition;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Country\Country;
 use Shopware\Models\Country\State;
@@ -78,7 +81,11 @@ class AddressTest extends \Enlight_Components_Test_Controller_TestCase
         $billingDemoData = self::getBillingDemoData();
         $shippingDemoData = self::getShippingDemoData();
 
-        $shop = Shopware()->Container()->get('shopware_storefront.context_service')->createShopContext(1)->getShop();
+        $shop = Shopware()->Container()->get('shopware_storefront.context_factory')->create(
+            new ShopDefinition(1),
+            new CustomerDefinition(null),
+            new CheckoutDefinition()
+        )->getShop();
 
         $customer = new Customer();
         $customer->fromArray($demoData);

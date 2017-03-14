@@ -41,5 +41,9 @@ EOD
         $this->addSql('ALTER TABLE `s_core_shops` ADD `payment_id` int(11) NOT NULL');
         $this->addSql('ALTER TABLE `s_core_shops` ADD `dispatch_id` int(11) NOT NULL');
         $this->addSql('ALTER TABLE `s_core_shops` ADD `country_id` int(11) NOT NULL');
+
+        $this->addSql('UPDATE s_core_shops SET payment_id = (SELECT id FROM s_core_paymentmeans LIMIT 1)');
+        $this->addSql('UPDATE s_core_shops SET dispatch_id = (SELECT id FROM s_premium_dispatch LIMIT 1)');
+        $this->addSql('UPDATE s_core_shops SET country_id = (SELECT id FROM s_core_countries LIMIT 1)');
     }
 }

@@ -24,6 +24,9 @@
 
 namespace Shopware\Tests\Functional\Components\Api;
 
+use Shopware\Bundle\StoreFrontBundle\Struct\CheckoutDefinition;
+use Shopware\Bundle\StoreFrontBundle\Struct\CustomerDefinition;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopDefinition;
 use Shopware\Components\Api\Resource\Customer;
 use Shopware\Components\Api\Resource\Resource;
 
@@ -549,7 +552,12 @@ class CustomerTest extends TestCase
 
     public function testCreateCustomerWithDefaultShopCustomerGroup()
     {
-        $context = Shopware()->Container()->get('shopware_storefront.context_service')->createShopContext(1);
+        $context = Shopware()->Container()->get('shopware_storefront.context_factory')->create(
+            new ShopDefinition(1),
+            new CustomerDefinition(null),
+            new CheckoutDefinition()
+        );
+
         $data = [
             'shopId' => 1,
             'password' => 'fooobar',

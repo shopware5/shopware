@@ -25,9 +25,12 @@
 namespace Shopware\Bundle\AttributeBundle\Repository\Reader;
 
 use Shopware\Bundle\StoreFrontBundle\Service\AdditionalTextServiceInterface;
-use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Service\ContextFactoryInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\Core\ContextService;
+use Shopware\Bundle\StoreFrontBundle\Struct\CheckoutDefinition;
+use Shopware\Bundle\StoreFrontBundle\Struct\CustomerDefinition;
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopDefinition;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Article\Detail;
 use Shopware\Models\Shop\Repository;
@@ -41,32 +44,32 @@ use Shopware\Models\Shop\Shop;
 class ProductReader extends GenericReader
 {
     /**
-     * @var ContextServiceInterface
-     */
-    private $contextService;
-
-    /**
      * @var AdditionalTextServiceInterface
      */
     private $additionalTextService;
+
+    /**
+     * @var ContextFactoryInterface
+     */
+    private $contextFactory;
 
     /**
      * ProductReader constructor.
      *
      * @param string                         $entity
      * @param ModelManager                   $entityManager
-     * @param ContextServiceInterface        $contextService
+     * @param ContextFactoryInterface        $contextFactory
      * @param AdditionalTextServiceInterface $additionalTextService
      */
     public function __construct(
         $entity,
         ModelManager $entityManager,
-        ContextServiceInterface $contextService,
+        ContextFactoryInterface $contextFactory,
         AdditionalTextServiceInterface $additionalTextService
     ) {
         parent::__construct($entity, $entityManager);
-        $this->contextService = $contextService;
         $this->additionalTextService = $additionalTextService;
+        $this->contextFactory = $contextFactory;
     }
 
     /**
@@ -125,10 +128,10 @@ class ProductReader extends GenericReader
         /** @var Shop $shop */
         $shop = $shopRepo->getActiveDefault();
 
-        $context = $this->contextService->createShopContext(
-            $shop->getId(),
-            $shop->getCurrency()->getId(),
-            ContextService::FALLBACK_CUSTOMER_GROUP
+        $context = $this->contextFactory->create(
+            new ShopDefinition($shop->getId(), $shop->getCurrency()->getId()),
+            new CustomerDefinition(null, ContextService::FALLBACK_CUSTOMER_GROUP),
+            new CheckoutDefinition()
         );
 
         $products = $this->buildListProducts($articles);

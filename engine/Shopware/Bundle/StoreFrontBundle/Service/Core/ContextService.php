@@ -92,18 +92,6 @@ class ContextService implements ContextServiceInterface
         $this->context = $this->load(false);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function createShopContext($shopId, $currencyId = null, $customerGroupKey = null)
-    {
-        return $this->factory->create(
-            new ShopDefinition($shopId, $currencyId),
-            new CustomerDefinition(null, $customerGroupKey),
-            new CheckoutDefinition()
-        );
-    }
-
     private function load($cached = true): ShopContextInterface
     {
         $shopDefinition = new ShopDefinition(

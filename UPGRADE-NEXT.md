@@ -196,7 +196,7 @@ This changelog references changes done in Shopware Next patch versions.
 * Removed `\Shopware\Bundle\StoreFrontBundle\Service\Core\ContextService::initializeLocationContext`
 * Removed `\Shopware\Bundle\StoreFrontBundle\Service\Core\ContextService::initializeProductContext`
 * Removed `\Shopware\Bundle\StoreFrontBundle\Service\Core\ContextService::createProductContext`
-
+* Removed `Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::createShopContext` use `Shopware\Bundle\StoreFrontBundle\Service\ContextFactoryInterface::create` instead
 
 ## Filesystem
 

@@ -31,24 +31,22 @@ use Shopware\Bundle\StoreFrontBundle\Gateway\FieldHelper;
 use Shopware\Bundle\StoreFrontBundle\Gateway\Hydrator\PropertyHydrator;
 use Shopware\Bundle\StoreFrontBundle\Gateway\ListProductGateway;
 use Shopware\Bundle\StoreFrontBundle\Service\CheapestPriceServiceInterface;
-use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Service\ContextFactoryInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\Core\ContextService;
 use Shopware\Bundle\StoreFrontBundle\Service\PriceCalculationServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\VoteServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
+use Shopware\Bundle\StoreFrontBundle\Struct\CheckoutDefinition;
+use Shopware\Bundle\StoreFrontBundle\Struct\CustomerDefinition;
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceRule;
 use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopDefinition;
 use Shopware\Bundle\StoreFrontBundle\Struct\TranslationContext;
 
 class ProductProvider implements ProductProviderInterface
 {
-    /**
-     * @var ContextServiceInterface
-     */
-    private $contextService;
-
     /**
      * @var Connection
      */
@@ -90,10 +88,15 @@ class ProductProvider implements ProductProviderInterface
     private $propertyHydrator;
 
     /**
+     * @var ContextFactoryInterface
+     */
+    private $contextFactory;
+
+    /**
      * @param ListProductGateway               $productGateway
      * @param CheapestPriceServiceInterface    $cheapestPriceService
      * @param VoteServiceInterface             $voteService
-     * @param ContextServiceInterface          $contextService
+     * @param ContextFactoryInterface          $contextFactory
      * @param Connection                       $connection
      * @param IdentifierSelector               $identifierSelector
      * @param PriceCalculationServiceInterface $priceCalculationService
@@ -104,7 +107,7 @@ class ProductProvider implements ProductProviderInterface
         ListProductGateway $productGateway,
         CheapestPriceServiceInterface $cheapestPriceService,
         VoteServiceInterface $voteService,
-        ContextServiceInterface $contextService,
+        ContextFactoryInterface $contextFactory,
         Connection $connection,
         IdentifierSelector $identifierSelector,
         PriceCalculationServiceInterface $priceCalculationService,
@@ -114,12 +117,12 @@ class ProductProvider implements ProductProviderInterface
         $this->productGateway = $productGateway;
         $this->cheapestPriceService = $cheapestPriceService;
         $this->voteService = $voteService;
-        $this->contextService = $contextService;
         $this->connection = $connection;
         $this->identifierSelector = $identifierSelector;
         $this->priceCalculationService = $priceCalculationService;
         $this->fieldHelper = $fieldHelper;
         $this->propertyHydrator = $propertyHydrator;
+        $this->contextFactory = $contextFactory;
     }
 
     /**
@@ -127,10 +130,10 @@ class ProductProvider implements ProductProviderInterface
      */
     public function get(Shop $shop, $numbers)
     {
-        $context = $this->contextService->createShopContext(
-            $shop->getId(),
-            null,
-            ContextService::FALLBACK_CUSTOMER_GROUP
+        $context = $this->contextFactory->create(
+            new ShopDefinition($shop->getId()),
+            new CustomerDefinition(null, ContextService::FALLBACK_CUSTOMER_GROUP),
+            new CheckoutDefinition()
         );
 
         $products = $this->productGateway->getList($numbers, $context);
@@ -300,7 +303,11 @@ class ProductProvider implements ProductProviderInterface
         $keys = $this->identifierSelector->getCustomerGroupKeys();
         $prices = [];
         foreach ($keys as $key) {
-            $context = $this->contextService->createShopContext($shopId, null, $key);
+            $context = $this->contextFactory->create(
+                new ShopDefinition($shopId),
+                new CustomerDefinition(null, $key),
+                new CheckoutDefinition()
+            );
             $customerPrices = $this->cheapestPriceService->getList($products, $context);
             foreach ($customerPrices as $number => $price) {
                 $prices[$number][$key] = $price;
@@ -370,7 +377,11 @@ class ProductProvider implements ProductProviderInterface
         $contexts = [];
         foreach ($customerGroups as $customerGroup) {
             foreach ($currencies as $currency) {
-                $contexts[] = $this->contextService->createShopContext($shopId, $currency, $customerGroup);
+                $contexts[] = $this->contextFactory->create(
+                    new ShopDefinition($shopId, $currency),
+                    new CustomerDefinition(null, $customerGroup),
+                    new CheckoutDefinition()
+                );
             }
         }
 

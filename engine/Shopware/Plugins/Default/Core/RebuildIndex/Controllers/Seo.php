@@ -22,6 +22,10 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Bundle\StoreFrontBundle\Struct\CheckoutDefinition;
+use Shopware\Bundle\StoreFrontBundle\Struct\CustomerDefinition;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopDefinition;
+
 /**
  * @category  Shopware
  *
@@ -250,7 +254,11 @@ class Shopware_Controllers_Backend_Seo extends Shopware_Controllers_Backend_ExtJ
 
         // Create shop
         $this->SeoIndex()->registerShop($shopId);
-        $context = $this->get('shopware_storefront.context_service')->createShopContext($shopId);
+        $context = $this->get('shopware_storefront.context_factory')->create(
+            new ShopDefinition($shopId),
+            new CustomerDefinition(null),
+            new CheckoutDefinition()
+        );
 
         // Make sure a template is available
         $this->RewriteTable()->baseSetup();

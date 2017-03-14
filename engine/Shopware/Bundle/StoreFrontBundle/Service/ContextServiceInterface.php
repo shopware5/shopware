@@ -49,13 +49,4 @@ interface ContextServiceInterface
      * the information about the shop state
      */
     public function initializeShopContext();
-
-    /**
-     * @param int         $shopId
-     * @param null|int    $currencyId
-     * @param string|null $customerGroupKey
-     *
-     * @return ShopContextInterface
-     */
-    public function createShopContext($shopId, $currencyId = null, $customerGroupKey = null);
 }

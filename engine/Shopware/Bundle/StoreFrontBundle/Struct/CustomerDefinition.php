@@ -46,7 +46,7 @@ class CustomerDefinition implements \JsonSerializable
      */
     private $customerGroupKey;
 
-    public function __construct(?int $customerId, ?string $customerGroupKey, ?int $billingId = null, ?int $shippingId = null)
+    public function __construct(?int $customerId, ?string $customerGroupKey = null, ?int $billingId = null, ?int $shippingId = null)
     {
         $this->customerId = $customerId;
         $this->billingId = $billingId;
