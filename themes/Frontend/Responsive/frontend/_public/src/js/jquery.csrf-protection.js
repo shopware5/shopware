@@ -135,10 +135,13 @@
          *
          * @param event
          * @param request
+         * @param settings
          * @private
          */
-        _ajaxBeforeSend: function(event, request) {
-            request.setRequestHeader('X-CSRF-Token', this.getToken());
+        _ajaxBeforeSend: function(event, request, settings) {
+            if (!settings.hasOwnProperty('ignoreCSRFHeader') || settings.ignoreCSRFHeader === false) {
+                request.setRequestHeader('X-CSRF-Token', this.getToken());
+            }
         },
 
         /**
