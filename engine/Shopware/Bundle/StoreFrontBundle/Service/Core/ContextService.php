@@ -101,6 +101,7 @@ class ContextService implements ContextServiceInterface
 
         $customerDefinition = new CustomerDefinition(
             $this->getStoreCustomerId(),
+            null,
             $this->getStoreFrontBillingAddressId(),
             $this->getStoreFrontShippingAddressId()
         );

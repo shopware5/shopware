@@ -103,6 +103,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         }
 
         $this->View()->assign([
+            'context' => json_decode(json_encode($context), true),
             'cart' => json_decode(json_encode($cart), true),
             'sTargetAction' => self::ACTION_CONFIRM,
         ]);
@@ -122,11 +123,17 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
             $context
         );
 
+        $deliveryMethods = $this->get('shopware_cart.delivery_method_service')
+            ->getAvailable($cart->getCalculatedCart(), $context);
+
         $payments = json_decode(json_encode($payments), true);
+        $deliveryMethods = json_decode(json_encode($deliveryMethods), true);
 
         $this->View()->assign([
+            'context' => json_decode(json_encode($context), true),
             'cart' => json_decode(json_encode($cart), true),
             'payments' => $payments,
+            'deliveryMethods' => $deliveryMethods,
             'sTargetAction' => 'shippingPayment',
             'currentDeliveryId' => $context->getDeliveryMethod()->getId(),
             'currentPaymentId' => $context->getPaymentMethod()->getId(),
@@ -144,10 +151,13 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         /** @var StoreFrontCartService $service */
         $service = $this->get('shopware_cart.store_front_cart_service');
 
-        $cart = json_decode(json_encode($service->getCart()), true);
+        $context = $this->get('shopware_storefront.context_service')->getShopContext();
+
+        $cart = $service->getCart();
 
         $this->View()->assign([
-            'cart' => $cart,
+            'context' => json_decode(json_encode($context), true),
+            'cart' => json_decode(json_encode($cart), true),
             'sTargetAction' => self::ACTION_AJAX_CART,
         ]);
     }

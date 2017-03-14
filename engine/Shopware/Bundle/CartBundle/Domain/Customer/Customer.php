@@ -604,4 +604,14 @@ class Customer extends Extendable
     {
         $this->activeShippingAddress = $activeShippingAddress;
     }
+
+    public function jsonSerialize(): array
+    {
+        $data = get_object_vars($this);
+
+        $data['activeShippingAddress'] = $this->getActiveShippingAddress();
+        $data['activeBillingAddress'] = $this->getActiveBillingAddress();
+
+        return $data;
+    }
 }
