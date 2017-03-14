@@ -522,6 +522,9 @@
                         {/if}
                     {/block}
 
+                    {$payment = $context.paymentMethod}
+                    {$delivery = $context.deliveryMethod}
+
                     {* Payment method *}
                     {block name='frontend_checkout_confirm_information_payment'}
                         <div class="information--panel-item">
@@ -539,10 +542,10 @@
                                             {block name='frontend_checkout_confirm_left_payment_method'}
                                                 <p class="payment--method-info">
                                                     <strong class="payment--title">{s name="ConfirmInfoPaymentMethod" namespace="frontend/checkout/confirm"}{/s}</strong>
-                                                    <span class="payment--description">{$sUserData.additional.payment.description}</span>
+                                                    <span class="payment--description">{$payment.label}</span>
                                                 </p>
 
-                                                {if !$sUserData.additional.payment.esdactive && {config name="showEsd"}}
+                                                {if !$payment.esdActive && {config name="showEsd"}}
                                                     <p class="payment--confirm-esd">{s name="ConfirmInfoInstantDownload" namespace="frontend/checkout/confirm"}{/s}</p>
                                                 {/if}
                                             {/block}
@@ -550,7 +553,7 @@
                                             {block name='frontend_checkout_confirm_left_shipping_method'}
                                                 <p class="shipping--method-info">
                                                     <strong class="shipping--title">{s name="ConfirmHeadDispatch"}{/s}</strong>
-                                                    <span class="shipping--description" title="{$sDispatch.name}">{$sDispatch.name|truncate:25:"...":true}</span>
+                                                    <span class="shipping--description" title="{$delivery.name}">{$delivery.name|truncate:25:"...":true}</span>
                                                 </p>
                                             {/block}
                                         </div>
