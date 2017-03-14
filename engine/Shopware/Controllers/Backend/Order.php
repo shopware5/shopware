@@ -1250,7 +1250,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         $response->setHeader('Content-Length', filesize($file));
         $response->sendHeaders();
 
-        echo readfile($file);
+        readfile($file);
         exit;
     }
 
