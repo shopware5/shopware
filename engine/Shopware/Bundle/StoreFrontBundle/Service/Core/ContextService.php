@@ -61,9 +61,9 @@ class ContextService implements ContextServiceInterface
     private $cache;
 
     /**
-     * @var ShopContextInterface
+     * @var bool
      */
-    private $context = null;
+    private $fetchCached = true;
 
     public function __construct(ContainerInterface $container, ContextFactoryInterface $factory, CacheInterface $cache)
     {
@@ -77,11 +77,10 @@ class ContextService implements ContextServiceInterface
      */
     public function getShopContext()
     {
-        if ($this->context === null) {
-            $this->context = $this->load();
-        }
+        $context = $this->load();
+        $this->fetchCached = true;
 
-        return $this->context;
+        return $context;
     }
 
     /**
@@ -89,10 +88,10 @@ class ContextService implements ContextServiceInterface
      */
     public function initializeShopContext()
     {
-        $this->context = $this->load(false);
+        $this->fetchCached = false;
     }
 
-    private function load($cached = true): ShopContextInterface
+    private function load(): ShopContextInterface
     {
         $shopDefinition = new ShopDefinition(
             $this->getStoreFrontShopId(),
@@ -115,7 +114,7 @@ class ContextService implements ContextServiceInterface
 
         $key = $this->getCacheKey($shopDefinition, $customerDefinition, $checkoutDefinition);
 
-        if ($cached && $context = $this->cache->fetch($key)) {
+        if ($this->fetchCached && $context = $this->cache->fetch($key)) {
             return unserialize($context);
         }
 
