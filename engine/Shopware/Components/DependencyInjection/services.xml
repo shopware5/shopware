@@ -645,6 +645,12 @@
             <tag name="shopware.statistics.tracer" />
         </service>
 
+        <service id="shopware.statistics.tracer.visitor_tracer" class="Shopware\Components\Statistics\Tracer\VisitorTracer" >
+            <argument id="dbal_connection" type="service"/>
+            <tag name="shopware.statistics.tracer"/>
+        </service>
+
+
         <service id="shopware.components.seo_template_subscriber" class="Shopware\Components\SeoTemplateSubscriber">
             <argument id="config" type="service"/>
             <argument id="query_alias_mapper" type="service"/>

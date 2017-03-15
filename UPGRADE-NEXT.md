@@ -129,6 +129,7 @@ This changelog references changes done in Shopware Next patch versions.
 * Removed config option `esdDownloadStrategy` without replacement
 * Removed method `Shopware_Plugins_Frontend_Statistics_Bootstrap::checkIsBot`, use `Shopware\Components\Statistics\BotDetectorInterface` instead
 * Removed method `Shopware_Plugins_Frontend_Statistics_Bootstrap::refreshBasket`, use `Shopware\Components\Statistics\Tracer\CartTracer` instead
+* Removed method `Shopware_Plugins_Frontend_Statistics_Bootstrap::refreshLog`, use `Shopware\Components\Statistics\Tracer\VisitorTracer` instead
 
 ## Filesystem
 
