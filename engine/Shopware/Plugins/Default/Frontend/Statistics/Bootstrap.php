@@ -93,29 +93,6 @@ ShopWiki;Bot;WebAlta;;abachobot;architext;ask jeeves;frooglebot;googlebot;lycos;
     }
 
     /**
-     * Check user is bot
-     *
-     * @param string $userAgent
-     *
-     * @return bool
-     */
-    public function checkIsBot($userAgent)
-    {
-        $userAgent = preg_replace('/[^a-z]/', '', strtolower($userAgent));
-        if (empty($userAgent)) {
-            return false;
-        }
-        $result = false;
-        $bots = preg_replace('/[^a-z;]/', '', strtolower(Shopware()->Config()->botBlackList));
-        $bots = explode(';', $bots);
-        if (!empty($userAgent) && str_replace($bots, '', $userAgent) != $userAgent) {
-            $result = true;
-        }
-
-        return $result;
-    }
-
-    /**
      * @param Enlight_Controller_Request_Request $request
      * @param $response
      */

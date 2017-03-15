@@ -126,6 +126,7 @@ This changelog references changes done in Shopware Next patch versions.
 * Removed method `Shopware\Bundle\MediaBundle\MediaServiceInterface::createDir()`, use `getFilesystem()->createDir()`
 * Removed method `Shopware\Bundle\MediaBundle\MediaServiceInterface::migrateFile()`
 * Removed method `Shopware\Bundle\MediaBundle\MediaServiceInterface::getAdapter()`, use `getFilesystem()` instead
+* Removed method `Shopware_Plugins_Frontend_Statistics_Bootstrap::checkIsBot`, use `Shopware\Components\Statistics\BotDetectorInterface` instead
 * Removed config option `esdDownloadStrategy` without replacement
 
 ## Filesystem

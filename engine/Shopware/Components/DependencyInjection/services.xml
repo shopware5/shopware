@@ -628,6 +628,11 @@
             <tag name="shopware.filesystem.factory" />
         </service>
 
+        <service id="shopware.statistics.bot_detector" class="Shopware\Components\Statistics\BotDetector" >
+            <argument id="config" type="service"/>
+        </service>
+
+
         <service id="shopware.components.seo_template_subscriber" class="Shopware\Components\SeoTemplateSubscriber">
             <argument id="config" type="service"/>
             <argument id="query_alias_mapper" type="service"/>
