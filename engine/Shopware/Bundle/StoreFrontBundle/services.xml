@@ -87,6 +87,7 @@
         <service id="shopware_storefront.manufacturer_service" class="Shopware\Bundle\StoreFrontBundle\Service\Core\ManufacturerService">
             <argument type="service" id="shopware_storefront.manufacturer_gateway"/>
             <argument type="service" id="router" />
+            <argument type="service" id="shopware_media.media_service" />
         </service>
 
         <service id="shopware_storefront.shop_page_service" class="Shopware\Bundle\StoreFrontBundle\Service\Core\ShopPageService">

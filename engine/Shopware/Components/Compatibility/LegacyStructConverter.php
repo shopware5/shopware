@@ -874,11 +874,6 @@ class LegacyStructConverter
             'image' => $manufacturer->getCoverFile(),
             'attributes' => $manufacturer->getAttributes()
         ];
-		
-		if (!empty($data['image'])) {
-			$data['image'] = $this->mediaService->getUrl($data['image']);
-		}
-
         return $this->eventManager->filter('Legacy_Struct_Converter_Convert_Manufacturer', $data, [
             'manufacturer' => $manufacturer
         ]);
