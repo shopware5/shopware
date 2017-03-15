@@ -147,11 +147,22 @@ Ext.define('Shopware.apps.Voucher.controller.Voucher', {
      */
     onEditVoucher:function (view, rowIndex) {
         var me = this,
-            store = me.getStore('Detail'),
             record = me.getStore('List').getAt(rowIndex);
 
+        me.openVoucher(record.data.id);
+    },
+
+    /**
+     * Opens voucher detail with voucherId
+     * @param [integer] voucherId
+     * @return void
+     */
+    openVoucher: function (voucherId) {
+        var me = this,
+            store = me.getStore('Detail');
+
         store.getProxy().extraParams = {
-            voucherID:record.data.id
+            voucherID: voucherId
         };
 
         store.load({
@@ -174,6 +185,7 @@ Ext.define('Shopware.apps.Voucher.controller.Voucher', {
             }
         });
     },
+
     /**
      * Opens the Ext.window.window which displays
      * the Ext.form.Panel to duplicate an existing voucher
