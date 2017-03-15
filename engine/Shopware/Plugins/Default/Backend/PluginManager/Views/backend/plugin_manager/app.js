@@ -208,17 +208,19 @@ Ext.define('Shopware.apps.PluginManager', {
         var me = this, activeWindows = [], subAppId = me.$subAppId;
         cbArgs = cbArgs || [];
 
-        Ext.each(Shopware.app.Application.subApplications.items, function (subApp) {
+        if (typeof Shopware.app.Application.subApplications !== 'undefined') {
+            Ext.each(Shopware.app.Application.subApplications.items, function (subApp) {
 
-            if (!subApp || !subApp.windowManager || subApp.$subAppId === subAppId || !subApp.windowManager.hasOwnProperty('zIndexStack')) {
-                return;
-            }
-            Ext.each(subApp.windowManager.zIndexStack, function (item) {
-                if (typeof(item) !== 'undefined' && me.windowClasses.indexOf(item.$className) > -1) {
-                    activeWindows.push(item);
+                if (!subApp || !subApp.windowManager || subApp.$subAppId === subAppId || !subApp.windowManager.hasOwnProperty('zIndexStack')) {
+                    return;
                 }
+                Ext.each(subApp.windowManager.zIndexStack, function (item) {
+                    if (typeof(item) !== 'undefined' && me.windowClasses.indexOf(item.$className) > -1) {
+                        activeWindows.push(item);
+                    }
+                });
             });
-        });
+        }
 
         if (activeWindows && activeWindows.length) {
             Ext.each(activeWindows, function (win) {
