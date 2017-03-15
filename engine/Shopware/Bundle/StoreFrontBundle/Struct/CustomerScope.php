@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Struct;
 
-class CustomerDefinition implements \JsonSerializable
+class CustomerScope implements \JsonSerializable
 {
     /**
      * @var int|null
@@ -74,7 +74,7 @@ class CustomerDefinition implements \JsonSerializable
         return $this->customerGroupKey;
     }
 
-    public static function createFromContext(ShopContextInterface $context): CustomerDefinition
+    public static function createFromContext(ShopContextInterface $context): CustomerScope
     {
         if (!$context->getCustomer()) {
             return new self(null, $context->getCurrentCustomerGroup()->getKey(), null, null);

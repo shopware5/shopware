@@ -54,6 +54,10 @@ class ShippingLocation
     private function __construct(Country $country, ?State $state, ?Address $address)
     {
         $this->country = $country;
+        if ($state) {
+            $this->country = $state->getCountry();
+        }
+
         $this->state = $state;
         $this->address = $address;
     }

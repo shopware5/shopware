@@ -36,13 +36,13 @@ use Shopware\Bundle\StoreFrontBundle\Service\Core\ContextService;
 use Shopware\Bundle\StoreFrontBundle\Service\PriceCalculationServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\VoteServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
-use Shopware\Bundle\StoreFrontBundle\Struct\CheckoutDefinition;
-use Shopware\Bundle\StoreFrontBundle\Struct\CustomerDefinition;
+use Shopware\Bundle\StoreFrontBundle\Struct\CheckoutScope;
+use Shopware\Bundle\StoreFrontBundle\Struct\CustomerScope;
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceRule;
 use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopDefinition;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopScope;
 use Shopware\Bundle\StoreFrontBundle\Struct\TranslationContext;
 
 class ProductProvider implements ProductProviderInterface
@@ -131,9 +131,9 @@ class ProductProvider implements ProductProviderInterface
     public function get(Shop $shop, $numbers)
     {
         $context = $this->contextFactory->create(
-            new ShopDefinition($shop->getId()),
-            new CustomerDefinition(null, ContextService::FALLBACK_CUSTOMER_GROUP),
-            new CheckoutDefinition()
+            new ShopScope($shop->getId()),
+            new CustomerScope(null, ContextService::FALLBACK_CUSTOMER_GROUP),
+            new CheckoutScope()
         );
 
         $products = $this->productGateway->getList($numbers, $context);
@@ -304,9 +304,9 @@ class ProductProvider implements ProductProviderInterface
         $prices = [];
         foreach ($keys as $key) {
             $context = $this->contextFactory->create(
-                new ShopDefinition($shopId),
-                new CustomerDefinition(null, $key),
-                new CheckoutDefinition()
+                new ShopScope($shopId),
+                new CustomerScope(null, $key),
+                new CheckoutScope()
             );
             $customerPrices = $this->cheapestPriceService->getList($products, $context);
             foreach ($customerPrices as $number => $price) {
@@ -378,9 +378,9 @@ class ProductProvider implements ProductProviderInterface
         foreach ($customerGroups as $customerGroup) {
             foreach ($currencies as $currency) {
                 $contexts[] = $this->contextFactory->create(
-                    new ShopDefinition($shopId, $currency),
-                    new CustomerDefinition(null, $customerGroup),
-                    new CheckoutDefinition()
+                    new ShopScope($shopId, $currency),
+                    new CustomerScope(null, $customerGroup),
+                    new CheckoutScope()
                 );
             }
         }

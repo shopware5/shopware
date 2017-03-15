@@ -25,10 +25,10 @@
 use Shopware\Bundle\AttributeBundle\Repository\SearchCriteria;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextFactoryInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ShopPageServiceInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\CheckoutDefinition;
-use Shopware\Bundle\StoreFrontBundle\Struct\CustomerDefinition;
+use Shopware\Bundle\StoreFrontBundle\Struct\CheckoutScope;
+use Shopware\Bundle\StoreFrontBundle\Struct\CustomerScope;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopDefinition;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopScope;
 use Shopware\Components\MemoryLimit;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Slug\SlugInterface;
@@ -227,9 +227,9 @@ class sRewriteTable
         $this->baseSetup();
 
         $context = $this->contextFactory->create(
-            new ShopDefinition(Shopware()->Shop()->getId()),
-            new CustomerDefinition(null),
-            new CheckoutDefinition()
+            new ShopScope(Shopware()->Shop()->getId()),
+            new CustomerScope(null),
+            new CheckoutScope()
         );
 
         $this->sCreateRewriteTableCleanup();
@@ -1030,16 +1030,16 @@ class sRewriteTable
             $shop = Shopware()->Container()->get('shop');
 
             return $this->contextFactory->create(
-                new ShopDefinition($shop->getId()),
-                new CustomerDefinition(null),
-                new CheckoutDefinition()
+                new ShopScope($shop->getId()),
+                new CustomerScope(null),
+                new CheckoutScope()
             );
         }
 
         return $this->contextFactory->create(
-            new ShopDefinition(1),
-            new CustomerDefinition(null),
-            new CheckoutDefinition()
+            new ShopScope(1),
+            new CustomerScope(null),
+            new CheckoutScope()
         );
     }
 }

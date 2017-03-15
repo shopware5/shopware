@@ -82,11 +82,6 @@ interface ShopContextInterface extends ExtendableInterface
     public function getFallbackCustomerGroup(): Group;
 
     /**
-     * @return string
-     */
-    public function getBaseUrl(): string;
-
-    /**
      * Returns all tax rules
      *
      * @return Tax[]

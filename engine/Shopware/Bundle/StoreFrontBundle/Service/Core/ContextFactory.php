@@ -40,14 +40,13 @@ use Shopware\Bundle\StoreFrontBundle\Gateway\PriceGroupDiscountGateway;
 use Shopware\Bundle\StoreFrontBundle\Gateway\ShopGateway;
 use Shopware\Bundle\StoreFrontBundle\Gateway\TaxGateway;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextFactoryInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\CheckoutDefinition;
-use Shopware\Bundle\StoreFrontBundle\Struct\Country;
+use Shopware\Bundle\StoreFrontBundle\Struct\CheckoutScope;
 use Shopware\Bundle\StoreFrontBundle\Struct\Currency;
-use Shopware\Bundle\StoreFrontBundle\Struct\CustomerDefinition;
+use Shopware\Bundle\StoreFrontBundle\Struct\CustomerScope;
 use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopDefinition;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopScope;
 use Shopware\Bundle\StoreFrontBundle\Struct\TranslationContext;
 
 class ContextFactory implements ContextFactoryInterface
@@ -147,22 +146,22 @@ class ContextFactory implements ContextFactoryInterface
     }
 
     public function create(
-        ShopDefinition $shopDefinition,
-        CustomerDefinition $customerDefinition,
-        CheckoutDefinition $checkoutDefinition
+        ShopScope $shopScope,
+        CustomerScope $customerScope,
+        CheckoutScope $checkoutScope
     ): ShopContextInterface {
-        $translationContext = $this->getTranslationContext($shopDefinition->getShopId());
+        $translationContext = $this->getTranslationContext($shopScope->getShopId());
 
         //select shop with all fallbacks
-        $shop = $this->shopGateway->getList([$shopDefinition->getShopId()], $translationContext);
+        $shop = $this->shopGateway->getList([$shopScope->getShopId()], $translationContext);
         $shop = array_shift($shop);
 
         if (!$shop) {
-            throw new \Exception(sprintf('Shop with id %s not found or not valid!', $shopDefinition->getShopId()));
+            throw new \Exception(sprintf('Shop with id %s not found or not valid!', $shopScope->getShopId()));
         }
 
         //load active currency, fallback to shop currency
-        $currency = $this->getCurrency($shop, $shopDefinition->getCurrencyId());
+        $currency = $this->getCurrency($shop, $shopScope->getCurrencyId());
 
         //fallback customer group is hard coded to 'EK'
         $fallbackGroup = $this->customerGroupGateway->getList([ContextService::FALLBACK_CUSTOMER_GROUP]);
@@ -170,20 +169,23 @@ class ContextFactory implements ContextFactoryInterface
 
         $customer = null;
 
-        if ($customerDefinition->getCustomerId() !== null) {
-            //load logged in customer and set active addresses
-            $customer = $this->loadCustomer($customerDefinition, $translationContext);
-
-            $shippingLocation = ShippingLocation::createFromAddress($customer->getActiveShippingAddress());
-        } else {
-            //load not logged in customer with default shop configuration or with provided checkout definitions
-            $shippingLocation = $this->loadShippingLocation($shop, $translationContext, $checkoutDefinition);
-        }
-
         //customer group switched?
         $customerGroup = $shop->getCustomerGroup();
-        if ($customerDefinition->getCustomerGroupKey()) {
-            $customerGroup = $this->customerGroupGateway->getList([$customerDefinition->getCustomerGroupKey()]);
+
+        if ($customerScope->getCustomerId() !== null) {
+            //load logged in customer and set active addresses
+            $customer = $this->loadCustomer($customerScope, $translationContext);
+
+            $shippingLocation = ShippingLocation::createFromAddress($customer->getActiveShippingAddress());
+
+            $customerGroup = $customer->getCustomerGroup();
+        } else {
+            //load not logged in customer with default shop configuration or with provided checkout scopes
+            $shippingLocation = $this->loadShippingLocation($shop, $translationContext, $checkoutScope);
+        }
+
+        if ($customerScope->getCustomerGroupKey()) {
+            $customerGroup = $this->customerGroupGateway->getList([$customerScope->getCustomerGroupKey()]);
             $customerGroup = array_shift($customerGroup);
         }
 
@@ -194,10 +196,10 @@ class ContextFactory implements ContextFactoryInterface
         $priceGroups = $this->priceGroupDiscountGateway->getPriceGroups($customerGroup);
 
         //detect active payment method, first check if checkout defined other payment method, otherwise validate if customer logged in, at least use shop default
-        $payment = $this->getPayment($customer, $shop, $translationContext, $checkoutDefinition);
+        $payment = $this->getPayment($customer, $shop, $translationContext, $checkoutScope);
 
-        //detect active delivery method, at first checkout definition, at least shop default method
-        $delivery = $this->getDelivery($shop, $translationContext, $checkoutDefinition);
+        //detect active delivery method, at first checkout scope, at least shop default method
+        $delivery = $this->getDelivery($shop, $translationContext, $checkoutScope);
 
         return new ShopContext(
             $shop,
@@ -233,12 +235,12 @@ class ContextFactory implements ContextFactoryInterface
         ?Customer $customer,
         Shop $shop,
         TranslationContext $context,
-        CheckoutDefinition $checkoutDefinition
+        CheckoutScope $checkoutScope
     ): PaymentMethod {
         //payment switched in checkout?
-        if ($checkoutDefinition->getPaymentId()) {
+        if ($checkoutScope->getPaymentId()) {
             $services = $this->paymentMethodGateway->getList(
-                [$checkoutDefinition->getPaymentId()],
+                [$checkoutScope->getPaymentId()],
                 $context
             );
 
@@ -262,11 +264,11 @@ class ContextFactory implements ContextFactoryInterface
     private function getDelivery(
         Shop $shop,
         TranslationContext $context,
-        CheckoutDefinition $checkoutDefinition
+        CheckoutScope $checkoutScope
     ): DeliveryMethod {
-        if ($checkoutDefinition->getDispatchId()) {
+        if ($checkoutScope->getDispatchId()) {
             $delivery = $this->deliveryMethodGateway->getList(
-                [$checkoutDefinition->getDispatchId()],
+                [$checkoutScope->getDispatchId()],
                 $context
             );
 
@@ -293,19 +295,19 @@ class ContextFactory implements ContextFactoryInterface
         );
     }
 
-    private function loadCustomer(CustomerDefinition $customerDefinition, TranslationContext $translationContext): Customer
+    private function loadCustomer(CustomerScope $customerScope, TranslationContext $translationContext): Customer
     {
         $customers = $this->customerService->getList(
-            [$customerDefinition->getCustomerId()],
+            [$customerScope->getCustomerId()],
             $translationContext
         );
 
         $customer = array_shift($customers);
 
         //billing address changed within checkout?
-        if ($customerDefinition->getBillingId()) {
+        if ($customerScope->getBillingId()) {
             $addresses = $this->addressGateway->getList(
-                [$customerDefinition->getBillingId()],
+                [$customerScope->getBillingId()],
                 $translationContext
             );
 
@@ -313,9 +315,9 @@ class ContextFactory implements ContextFactoryInterface
         }
 
         //shipping address changed within checkout?
-        if ($customerDefinition->getShippingId()) {
+        if ($customerScope->getShippingId()) {
             $addresses = $this->addressGateway->getList(
-                [$customerDefinition->getShippingId()],
+                [$customerScope->getShippingId()],
                 $translationContext
             );
 
@@ -328,21 +330,21 @@ class ContextFactory implements ContextFactoryInterface
     private function loadShippingLocation(
         Shop $shop,
         TranslationContext $translationContext,
-        CheckoutDefinition $checkoutDefinition
+        CheckoutScope $checkoutScope
     ): ShippingLocation {
         //allows to preview cart calculation for a specify state for not logged in customers
-        if ($checkoutDefinition->getStateId()) {
+        if ($checkoutScope->getStateId()) {
             $state = $this->countryGateway->getStates(
-                [$checkoutDefinition->getStateId()],
+                [$checkoutScope->getStateId()],
                 $translationContext
             );
 
             return ShippingLocation::createFromState(array_shift($state));
 
         //allows to preview cart calculation for a specify country for not logged in customers
-        } elseif ($checkoutDefinition->getCountryId()) {
+        } elseif ($checkoutScope->getCountryId()) {
             $country = $this->countryGateway->getCountries(
-                [$checkoutDefinition->getCountryId()],
+                [$checkoutScope->getCountryId()],
                 $translationContext
             );
 

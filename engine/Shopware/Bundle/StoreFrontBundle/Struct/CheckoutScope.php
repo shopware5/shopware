@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Struct;
 
-class CheckoutDefinition implements \JsonSerializable
+class CheckoutScope implements \JsonSerializable
 {
     /**
      * @var int|null
@@ -84,7 +84,7 @@ class CheckoutDefinition implements \JsonSerializable
         return $this->stateId;
     }
 
-    public static function createFromContext(ShopContextInterface $context): CheckoutDefinition
+    public static function createFromContext(ShopContextInterface $context): CheckoutScope
     {
         $location = $context->getShippingLocation();
 

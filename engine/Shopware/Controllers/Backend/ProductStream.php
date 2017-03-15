@@ -26,10 +26,10 @@ use Shopware\Bundle\SearchBundle\Condition\CategoryCondition;
 use Shopware\Bundle\SearchBundle\Condition\CustomerGroupCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\StoreFrontBundle\Service\Core\ContextService;
-use Shopware\Bundle\StoreFrontBundle\Struct\CheckoutDefinition;
-use Shopware\Bundle\StoreFrontBundle\Struct\CustomerDefinition;
+use Shopware\Bundle\StoreFrontBundle\Struct\CheckoutScope;
+use Shopware\Bundle\StoreFrontBundle\Struct\CustomerScope;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopDefinition;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopScope;
 use Shopware\Components\ProductStream\RepositoryInterface;
 
 class Shopware_Controllers_Backend_ProductStream extends Shopware_Controllers_Backend_Application
@@ -239,9 +239,9 @@ class Shopware_Controllers_Backend_ProductStream extends Shopware_Controllers_Ba
         }
 
         return $this->get('shopware_storefront.context_factory')->create(
-            new ShopDefinition($shopId, $currencyId),
-            new CustomerDefinition(null, $customerGroupKey),
-            new CheckoutDefinition()
+            new ShopScope($shopId, $currencyId),
+            new CustomerScope(null, $customerGroupKey),
+            new CheckoutScope()
         );
     }
 }

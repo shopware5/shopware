@@ -58,6 +58,7 @@ This changelog references changes done in Shopware Next patch versions.
 * Changed default path of `media` to `web/media`
 * Changed `\Shopware\Bundle\StoreFrontBundle\Struct\Category::__construct` accessibility to private, use `\Shopware\Bundle\StoreFrontBundle\Struct\Category::create` instead
 * Changed context requirement to new `\Shopware\Bundle\StoreFrontBundle\Struct\TranslationContext` in all `Shopware\Bundle\StoreFrontBundle` gateways
+* Changed `Shopware\Bundle\StoreFrontBundle\Gateway\TaxGateway::getRules` parameters. Removed area, country, state and use new `ShippingLocation` 
 
 ## Removals
 
@@ -197,6 +198,7 @@ This changelog references changes done in Shopware Next patch versions.
 * Removed `\Shopware\Bundle\StoreFrontBundle\Service\Core\ContextService::initializeProductContext`
 * Removed `\Shopware\Bundle\StoreFrontBundle\Service\Core\ContextService::createProductContext`
 * Removed `Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::createShopContext` use `Shopware\Bundle\StoreFrontBundle\Service\ContextFactoryInterface::create` instead
+* Removed `Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface::getBaseUrl`
 
 ## Filesystem
 

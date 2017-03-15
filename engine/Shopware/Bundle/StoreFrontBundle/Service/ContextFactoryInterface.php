@@ -24,16 +24,16 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Service;
 
-use Shopware\Bundle\StoreFrontBundle\Struct\CheckoutDefinition;
-use Shopware\Bundle\StoreFrontBundle\Struct\CustomerDefinition;
+use Shopware\Bundle\StoreFrontBundle\Struct\CheckoutScope;
+use Shopware\Bundle\StoreFrontBundle\Struct\CustomerScope;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopDefinition;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopScope;
 
 interface ContextFactoryInterface
 {
     public function create(
-        ShopDefinition $shopDefinition,
-        CustomerDefinition $customerDefinition,
-        CheckoutDefinition $checkoutDefinition
+        ShopScope $shopScope,
+        CustomerScope $customerScope,
+        CheckoutScope $checkoutScope
     ): ShopContextInterface;
 }

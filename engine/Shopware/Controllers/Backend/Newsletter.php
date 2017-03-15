@@ -378,7 +378,7 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
 
         Shopware()->Container()->get('router')->setGlobalParam('module', 'frontend');
         Shopware()->Config()->DontAttachSession = true;
-        Shopware()->Container()->get('shopware_storefront.context_service')->initializeShopContext();
+        Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext();
 
         return $mailing;
     }

@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Struct;
 
-class ShopDefinition implements \JsonSerializable
+class ShopScope implements \JsonSerializable
 {
     /**
      * @var int
@@ -52,7 +52,7 @@ class ShopDefinition implements \JsonSerializable
         return $this->currencyId;
     }
 
-    public static function createFromContext(ShopContextInterface $context): ShopDefinition
+    public static function createFromContext(ShopContextInterface $context): ShopScope
     {
         return new self(
             $context->getShop()->getId(),

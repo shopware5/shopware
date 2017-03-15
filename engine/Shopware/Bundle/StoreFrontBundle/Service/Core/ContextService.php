@@ -28,10 +28,10 @@ use Enlight_Components_Session_Namespace as Session;
 use Shopware\Bundle\StoreFrontBundle\Service\CacheInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextFactoryInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\CheckoutDefinition;
-use Shopware\Bundle\StoreFrontBundle\Struct\CustomerDefinition;
+use Shopware\Bundle\StoreFrontBundle\Struct\CheckoutScope;
+use Shopware\Bundle\StoreFrontBundle\Struct\CustomerScope;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopDefinition;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopScope;
 use Shopware\Components\DependencyInjection\Container;
 use Shopware\Models;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -60,11 +60,6 @@ class ContextService implements ContextServiceInterface
      */
     private $cache;
 
-    /**
-     * @var bool
-     */
-    private $fetchCached = true;
-
     public function __construct(ContainerInterface $container, ContextFactoryInterface $factory, CacheInterface $cache)
     {
         $this->container = $container;
@@ -75,77 +70,56 @@ class ContextService implements ContextServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function getShopContext()
+    public function getShopContext($useCache = true): ShopContextInterface
     {
-        $context = $this->load();
-        $this->fetchCached = true;
-
-        return $context;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function initializeShopContext()
-    {
-        $this->fetchCached = false;
-    }
-
-    private function load(): ShopContextInterface
-    {
-        $shopDefinition = new ShopDefinition(
+        $shopScope = new ShopScope(
             $this->getStoreFrontShopId(),
             $this->getStoreFrontCurrencyId()
         );
 
-        $customerDefinition = new CustomerDefinition(
+        $customerScope = new CustomerScope(
             $this->getStoreCustomerId(),
             null,
             $this->getStoreFrontBillingAddressId(),
             $this->getStoreFrontShippingAddressId()
         );
 
-        $checkoutDefinition = new CheckoutDefinition(
+        $checkoutScope = new CheckoutScope(
             $this->getStoreFrontPaymentId(),
             $this->getStoreFrontDispatchId(),
             $this->getStoreFrontCountryId(),
             $this->getStoreFrontStateId()
         );
 
-        $key = $this->getCacheKey($shopDefinition, $customerDefinition, $checkoutDefinition);
+        $key = $this->getCacheKey($shopScope, $customerScope, $checkoutScope);
 
-        if ($this->fetchCached && $context = $this->cache->fetch($key)) {
+        if ($useCache && $context = $this->cache->fetch($key)) {
             return unserialize($context);
         }
 
-        $context = $this->factory->create($shopDefinition, $customerDefinition, $checkoutDefinition);
+        $context = $this->factory->create($shopScope, $customerScope, $checkoutScope);
 
-        $this->write($context);
+        $resolvedKey = $this->getCacheKey(
+            ShopScope::createFromContext($context),
+            CustomerScope::createFromContext($context),
+            CheckoutScope::createFromContext($context)
+        );
 
         $this->cache->save($key, serialize($context), 3600);
+        $this->cache->save($resolvedKey, serialize($context), 3600);
 
         return $context;
     }
 
-    private function write(ShopContextInterface $context)
-    {
-        $key = $this->getCacheKey(
-            ShopDefinition::createFromContext($context),
-            CustomerDefinition::createFromContext($context),
-            CheckoutDefinition::createFromContext($context)
-        );
-        $this->cache->save($key, serialize($context), 3600);
-    }
-
     private function getCacheKey(
-        ShopDefinition $shopDefinition,
-        CustomerDefinition $customerDefinition,
-        CheckoutDefinition $checkoutDefinition
+        ShopScope $shopScope,
+        CustomerScope $customerScope,
+        CheckoutScope $checkoutScope
     ): string {
         return md5(
-            json_encode($shopDefinition) .
-            json_encode($customerDefinition) .
-            json_encode($checkoutDefinition)
+            json_encode($shopScope) .
+            json_encode($customerScope) .
+            json_encode($checkoutScope)
         );
     }
 

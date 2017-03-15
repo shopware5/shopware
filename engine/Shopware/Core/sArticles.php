@@ -2089,7 +2089,9 @@ class sArticles
             $navigation = [];
 
             if ($previousProduct) {
-                $previousProduct = $this->listProductService->get($previousProduct->getNumber(), $context);
+                $previousProduct = $this->listProductService->getList([$previousProduct->getNumber()], $context);
+                $previousProduct = array_shift($previousProduct);
+
                 $navigation['previousProduct']['orderNumber'] = $previousProduct->getNumber();
                 $navigation['previousProduct']['link'] = $this->config->get('sBASEFILE') . '?sViewport=detail&sDetails=' . $previousProduct->getId() . '&sCategory=' . $categoryId;
                 $navigation['previousProduct']['name'] = $previousProduct->getName();
@@ -2103,7 +2105,8 @@ class sArticles
             }
 
             if ($nextProduct) {
-                $nextProduct = $this->listProductService->get($nextProduct->getNumber(), $context);
+                $nextProduct = $this->listProductService->getList([$nextProduct->getNumber()], $context);
+                $nextProduct = array_shift($nextProduct);
 
                 $navigation['nextProduct']['orderNumber'] = $nextProduct->getNumber();
                 $navigation['nextProduct']['link'] = $this->config->get('sBASEFILE') . '?sViewport=detail&sDetails=' . $nextProduct->getId() . '&sCategory=' . $categoryId;

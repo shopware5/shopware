@@ -40,13 +40,9 @@ interface ContextServiceInterface
      * - Fallback customer group of the current shop
      * - The currency of the shop
      *
+     * @param bool $useCache - Allows to force update of context
+     *
      * @return ShopContextInterface
      */
-    public function getShopContext();
-
-    /**
-     * Initials a shop context class which contains
-     * the information about the shop state
-     */
-    public function initializeShopContext();
+    public function getShopContext($useCache = true);
 }

@@ -23,9 +23,9 @@
  */
 
 use Shopware\Bundle\StoreFrontBundle\Service\Core\ContextService;
-use Shopware\Bundle\StoreFrontBundle\Struct\CheckoutDefinition;
-use Shopware\Bundle\StoreFrontBundle\Struct\CustomerDefinition;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopDefinition;
+use Shopware\Bundle\StoreFrontBundle\Struct\CheckoutScope;
+use Shopware\Bundle\StoreFrontBundle\Struct\CustomerScope;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopScope;
 
 /**
  * Shopware SwagMultiEdit Plugin - MultiEdit Backend Controller
@@ -640,9 +640,9 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
         $shop = $shopRepo->getActiveDefault();
 
         $context = $this->get('shopware_storefront.context_factory')->create(
-            new ShopDefinition($shop->getId(), $shop->getCurrency()->getId()),
-            new CustomerDefinition(null, ContextService::FALLBACK_CUSTOMER_GROUP),
-            new CheckoutDefinition()
+            new ShopScope($shop->getId(), $shop->getCurrency()->getId()),
+            new CustomerScope(null, ContextService::FALLBACK_CUSTOMER_GROUP),
+            new CheckoutScope()
         );
 
         return $service->buildAdditionalTextLists($products, $context);

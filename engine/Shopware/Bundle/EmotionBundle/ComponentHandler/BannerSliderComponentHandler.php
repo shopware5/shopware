@@ -57,9 +57,13 @@ class BannerSliderComponentHandler implements ComponentHandlerInterface
 
         $collection->addMediaIds(array_column($sliderList, 'mediaId'));
 
+        $url = sprintf('http%s://', $context->getShop()->getSecure() ? 's' : '') .
+            $context->getShop()->getHost() .
+            $context->getShop()->getUrl();
+
         foreach ($sliderList as &$slider) {
             if (!empty($slider['link']) && !preg_match('/^(http|https):\/\//', $slider['link'])) {
-                $slider['link'] = $context->getBaseUrl() . $slider['link'];
+                $slider['link'] = $url . $slider['link'];
             }
         }
 

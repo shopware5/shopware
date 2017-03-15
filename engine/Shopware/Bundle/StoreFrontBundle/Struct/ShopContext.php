@@ -126,8 +126,8 @@ class ShopContext extends Extendable implements ShopContextInterface, \JsonSeria
         $this->customer = $customer;
         $this->paymentMethod = $paymentMethod;
         $this->deliveryMethod = $deliveryMethod;
-        $this->translationContext = TranslationContext::createFromShop($this->shop);
         $this->shippingLocation = $shippingLocation;
+        $this->translationContext = TranslationContext::createFromShop($this->shop);
     }
 
     public function getShop(): Shop
@@ -148,13 +148,6 @@ class ShopContext extends Extendable implements ShopContextInterface, \JsonSeria
     public function getFallbackCustomerGroup(): Group
     {
         return $this->fallbackCustomerGroup;
-    }
-
-    public function getBaseUrl(): string
-    {
-        return sprintf('http%s://', $this->shop->getSecure() ? 's' : '') .
-            $this->shop->getHost() .
-            $this->shop->getUrl();
     }
 
     public function getTaxRules(): array

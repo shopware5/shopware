@@ -28,10 +28,10 @@ use Doctrine\DBAL\Connection;
 use Shopware\Bundle\AccountBundle\Service\RegisterServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextFactoryInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\CheckoutDefinition;
-use Shopware\Bundle\StoreFrontBundle\Struct\CustomerDefinition;
+use Shopware\Bundle\StoreFrontBundle\Struct\CheckoutScope;
+use Shopware\Bundle\StoreFrontBundle\Struct\CustomerScope;
 use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopDefinition;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopScope;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Country\Country;
 use Shopware\Models\Country\State;
@@ -331,9 +331,9 @@ class RegisterServiceTest extends \Enlight_Components_Test_TestCase
     private function getShop()
     {
         return self::$contextFactory->create(
-            new ShopDefinition(1),
-            new CustomerDefinition(null),
-            new CheckoutDefinition()
+            new ShopScope(1),
+            new CustomerScope(null),
+            new CheckoutScope()
         )->getShop();
     }
 
