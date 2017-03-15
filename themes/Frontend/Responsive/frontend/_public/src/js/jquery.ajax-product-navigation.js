@@ -203,7 +203,7 @@
             var me = this,
                 state = JSON.parse(me.storage.getItem('lastProductState')) || {};
 
-            $.publish('plugin/swAjaxProductNavigation/onSetProductState', [ me, state ]);
+            $.publish('plugin/swAjaxProductNavigation/onGetProductState', [ me, state ]);
 
             return state;
         },
