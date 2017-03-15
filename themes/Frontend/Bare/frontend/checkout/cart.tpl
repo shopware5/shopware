@@ -125,7 +125,7 @@
                             {block name="frontend_checkout_actions_confirm_bottom"}
                                 <div class="main--actions">
 
-                                    {* Contiune shopping *}
+                                    {* Continue shopping *}
                                     {if $sBasket.sLastActiveArticle.link}
                                         {block name="frontend_checkout_actions_link_last_bottom"}
                                             <a href="{$sBasket.sLastActiveArticle.link}"
