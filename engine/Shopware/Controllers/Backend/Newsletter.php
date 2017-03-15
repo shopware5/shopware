@@ -82,7 +82,7 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
     {
         if ($this->Request()->getParam('id')) {
             $mailingID = (int) $this->Request()->getParam('id');
-            if (!Shopware()->Container()->get('Auth')->hasIdentity()) {
+            if (!$this->container->get('Auth')->hasIdentity()) {
                 $hash = $this->createHash($mailingID);
                 if ($hash!==$this->Request()->getParam('hash')) {
                     return;
@@ -144,7 +144,7 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
     {
         $mailingID = (int) $this->Request()->getParam('id');
 
-        if (!empty($mailingID) && !Shopware()->Container()->get('Auth')->hasIdentity()) {
+        if (!empty($mailingID) && !$this->container->get('Auth')->hasIdentity()) {
             return;
         }
 
@@ -214,7 +214,7 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
         $fromName = $template->fetch('string:' . $mailing['sendername'], $template);
 
         /** @var \Enlight_Components_Mail $mail */
-        $mail = clone Shopware()->Container()->get('mail');
+        $mail = clone $this->container->get('mail');
         $mail->setFrom($from, $fromName);
 
         $counter = 0;
@@ -407,9 +407,9 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
         $sql = 'SELECT * FROM s_core_customergroups WHERE groupkey=?';
         Shopware()->Session()->sUserGroupData =  Shopware()->Db()->fetchRow($sql, array($mailing['customergroup']));
 
-        Shopware()->Container()->get('router')->setGlobalParam('module', 'frontend');
+        $this->container->get('router')->setGlobalParam('module', 'frontend');
         Shopware()->Config()->DontAttachSession = true;
-        Shopware()->Container()->get('shopware_storefront.context_service')->initializeShopContext();
+        $this->container->get('shopware_storefront.context_service')->initializeShopContext();
 
         return $mailing;
     }

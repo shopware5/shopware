@@ -199,7 +199,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
 
         $file = $media['path'];
         $tmpFileName = $media['name'] . '.' . $media['extension'];
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $mediaService = $this->container->get('shopware_media.media_service');
 
         @set_time_limit(0);
         $response = $this->Response();
@@ -404,7 +404,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
         $data = $builder->getQuery()->getArrayResult();
         $data = $data[0];
 
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $mediaService = $this->container->get('shopware_media.media_service');
         if ($data['path']) {
             $data['path'] = $mediaService->getUrl($data['path']);
         }
@@ -582,7 +582,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
         $media->setDescription('');
         $media->setCreated(new DateTime());
 
-        $identity = Shopware()->Container()->get('Auth')->getIdentity();
+        $identity = $this->container->get('Auth')->getIdentity();
         if ($identity !== null) {
             $media->setUserId($identity->id);
         } else {
@@ -598,11 +598,11 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
             $data = $this->getMedia($media->getId())->getQuery()->getArrayResult();
 
             if ($media->getType() === Media::TYPE_IMAGE) {
-                $manager = Shopware()->Container()->get('thumbnail_manager');
+                $manager = $this->container->get('thumbnail_manager');
                 $manager->createMediaThumbnail($media, array(), true);
             }
 
-            $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+            $mediaService = $this->container->get('shopware_media.media_service');
             $data[0]['path'] = $mediaService->getUrl($data[0]['path']);
 
             $this->Response()->setHeader('Content-Type', 'text/plain');
@@ -795,7 +795,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
         $oldName = $media->getName();
         $media->setName($params['name']);
         $name = $media->getName();
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $mediaService = $this->container->get('shopware_media.media_service');
 
         //check if the name passed and is valid
         if (!empty($name)) {

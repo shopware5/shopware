@@ -301,7 +301,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
         $mediaIds = array_column($blogArticleData["media"], 'mediaId');
         $context = $this->get('shopware_storefront.context_service')->getShopContext();
         $mediaStructs = $this->get('shopware_storefront.media_service')->getList($mediaIds, $context);
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $mediaService = $this->container->get('shopware_media.media_service');
 
         //adding thumbnails to the blog article
         foreach ($blogArticleData["media"] as &$media) {

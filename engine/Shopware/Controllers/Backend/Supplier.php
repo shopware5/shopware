@@ -105,7 +105,7 @@ class Shopware_Controllers_Backend_Supplier extends Shopware_Controllers_Backend
         $total = Shopware()->Models()->getQueryCount($query);
 
         $suppliers = $query->getArrayResult();
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $mediaService = $this->container->get('shopware_media.media_service');
 
         foreach ($suppliers as &$supplier) {
             $supplier["description"] = strip_tags($supplier["description"]);
@@ -213,7 +213,7 @@ class Shopware_Controllers_Backend_Supplier extends Shopware_Controllers_Backend
      */
     protected function getSingleSupplier($id)
     {
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $mediaService = $this->container->get('shopware_media.media_service');
         $data = $this->getRepository()->getSupplierQuery($id)->getArrayResult();
         $data[0]['image'] = $data[0]['image'] ? $mediaService->getUrl($data[0]['image']) : null;
 

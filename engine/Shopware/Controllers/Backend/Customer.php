@@ -522,7 +522,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
 
         if (!$customer->getNumber() && Shopware()->Config()->get('shopwareManagedCustomerNumbers')) {
             /** @var NumberRangeIncrementerInterface $incrementer */
-            $incrementer = Shopware()->Container()->get('shopware.number_range_incrementer');
+            $incrementer = $this->container->get('shopware.number_range_incrementer');
             $customer->setNumber($incrementer->increment('user'));
         }
 
@@ -564,7 +564,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
             $data['birthday'] = $birthday->format('d.m.Y');
         }
 
-        $namespace = Shopware()->Container()->get('snippets')->getNamespace('frontend/salutation');
+        $namespace = $this->container->get('snippets')->getNamespace('frontend/salutation');
         $data['billing']['salutationSnippet'] = $namespace->get($data['billing']['salutation']);
         $data['shipping']['salutationSnippet'] = $namespace->get($data['shipping']['salutation']);
 

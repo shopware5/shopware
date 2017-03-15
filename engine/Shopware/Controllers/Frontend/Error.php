@@ -53,7 +53,7 @@ class Shopware_Controllers_Frontend_Error extends Enlight_Controller_Action impl
         if (strpos($this->Request()->getHeader('Content-Type'), 'application/json') === 0) {
             $this->Front()->Plugins()->Json()->setRenderer();
             $this->View()->assign('success', false);
-        } elseif ($this->Request()->isXmlHttpRequest() || !Shopware()->Container()->initialized('Db')) {
+        } elseif ($this->Request()->isXmlHttpRequest() || !$this->container->initialized('Db')) {
             $this->View()->loadTemplate($templateModule . '/error/exception.tpl');
         } elseif (isset($_ENV['SHELL']) || php_sapi_name() === 'cli') {
             $this->View()->loadTemplate($templateModule . '/error/cli.tpl');
@@ -155,7 +155,7 @@ class Shopware_Controllers_Frontend_Error extends Enlight_Controller_Action impl
          * to pass it to the template
         */
         if ($this->Front()->getParam('showException') || $this->Request()->getModuleName() === 'backend') {
-            $path = Shopware()->Container()->getParameter('kernel.root_dir').'/';
+            $path = $this->container->getParameter('kernel.root_dir').'/';
 
             /** @var \Exception $exception */
             $exception = $error->exception;
@@ -191,8 +191,8 @@ class Shopware_Controllers_Frontend_Error extends Enlight_Controller_Action impl
      */
     private function enableBackendTheme()
     {
-        $directory = Shopware()->Container()->get('theme_path_resolver')->getExtJsThemeDirectory();
-        Shopware()->Container()->get('template')->setTemplateDir([
+        $directory = $this->container->get('theme_path_resolver')->getExtJsThemeDirectory();
+        $this->container->get('template')->setTemplateDir([
             'backend' => $directory,
             'include_dir' => '.'
         ]);

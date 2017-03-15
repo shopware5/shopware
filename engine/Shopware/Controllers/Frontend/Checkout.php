@@ -70,7 +70,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
      */
     public function preDispatch()
     {
-        $events = Shopware()->Container()->get('events');
+        $events = $this->container->get('events');
         $events->addListener('Shopware_Modules_Admin_Payment_Fallback', [$this, 'flagPaymentBlocked']);
 
         $this->View()->setScope(Enlight_Template_Manager::SCOPE_PARENT);

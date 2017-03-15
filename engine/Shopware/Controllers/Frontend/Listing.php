@@ -76,7 +76,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         );
 
         if ($manufacturer->getCoverFile()) {
-            $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+            $mediaService = $this->container->get('shopware_media.media_service');
             $manufacturer->setCoverFile($mediaService->getUrl($manufacturer->getCoverFile()));
         }
 

@@ -1518,7 +1518,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             return $this->View()->assign(['success' => false, 'message' => 'No property value provided!']);
         }
 
-        $entityManager = Shopware()->Container()->get('models');
+        $entityManager = $this->container->get('models');
         $group = $entityManager->find('Shopware\Models\Property\Option', $groupId);
 
         if (!$group) {
@@ -1780,7 +1780,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      */
     public function getArticleImages($articleId)
     {
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $mediaService = $this->container->get('shopware_media.media_service');
         $builder = Shopware()->Models()->createQueryBuilder();
         $builder->select(array( 'images', 'imageMapping', 'mappingRule', 'ruleOption'))
                 ->from('Shopware\Models\Article\Image', 'images')
@@ -3132,7 +3132,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      */
     protected function prepareDownloadAssociatedData($data)
     {
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $mediaService = $this->container->get('shopware_media.media_service');
         foreach ($data['downloads'] as &$downloadData) {
             $downloadData['file'] = $mediaService->normalize($downloadData['file']);
         }

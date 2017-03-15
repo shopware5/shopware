@@ -394,7 +394,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         //returns the customer data
         $orders = $paginator->getIterator()->getArrayCopy();
 
-        $namespace = Shopware()->Container()->get('snippets')->getNamespace('frontend/salutation');
+        $namespace = $this->container->get('snippets')->getNamespace('frontend/salutation');
 
         foreach ($orders as $key => $order) {
             $additionalOrderDataQuery = $this->getRepository()->getBackendAdditionalOrderDataQuery($order['number']);
@@ -1117,7 +1117,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
             return;
         }
 
-        $mail = clone Shopware()->Container()->get('mail');
+        $mail = clone $this->container->get('mail');
         $mail->clearRecipients();
         $mail->setSubject($this->Request()->getParam('subject', ''));
 

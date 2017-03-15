@@ -48,7 +48,6 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
     public function init()
     {
         $this->admin = Shopware()->Modules()->Admin();
-        $this->customerService = Shopware()->Container()->get('shopware_account.customer_service');
     }
 
     /**
@@ -56,6 +55,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
      */
     public function preDispatch()
     {
+        $this->customerService = $this->container->get('shopware_account.customer_service');
         $this->View()->setScope(Enlight_Template_Manager::SCOPE_PARENT);
         if (!in_array($this->Request()->getActionName(), array('login', 'logout', 'password', 'resetPassword'))
             && !$this->admin->sCheckUser()) {
