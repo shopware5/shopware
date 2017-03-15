@@ -105,7 +105,6 @@ ShopWiki;Bot;WebAlta;;abachobot;architext;ask jeeves;frooglebot;googlebot;lycos;
         $container->get('shopware.statistics.tracer')
             ->trace($request, $context);
 
-        $this->refreshArticleImpression($request);
         $this->refreshCurrentUsers($request);
         $this->refreshPartner($request, $response);
     }
@@ -126,37 +125,6 @@ ShopWiki;Bot;WebAlta;;abachobot;architext;ask jeeves;frooglebot;googlebot;lycos;
             empty(Shopware()->Session()->sUserId) ? 0 : (int) Shopware()->Session()->sUserId,
             $request->getDeviceType(),
         ]);
-    }
-
-    /**
-     * Refresh article impressions
-     *
-     * @param \Enlight_Controller_Request_Request $request
-     *
-     * @return null|object|\Shopware\Models\Tracking\Banner
-     */
-    public function refreshArticleImpression($request)
-    {
-        $articleId = $request->getParam('articleId');
-        $deviceType = $request->getDeviceType();
-        if (empty($articleId)) {
-            return;
-        }
-        $shopId = Shopware()->Shop()->getId();
-        /** @var $repository \Shopware\Models\Tracking\Repository */
-        $repository = Shopware()->Models()->getRepository('Shopware\Models\Tracking\ArticleImpression');
-        $articleImpressionQuery = $repository->getArticleImpressionQuery($articleId, $shopId, null, $deviceType);
-        /** @var $articleImpression \Shopware\Models\Tracking\ArticleImpression */
-        $articleImpression = $articleImpressionQuery->getOneOrNullResult();
-
-        // If no Entry for this day exists - create a new one
-        if ($articleImpression === null) {
-            $articleImpression = new \Shopware\Models\Tracking\ArticleImpression($articleId, $shopId, null, 1, $deviceType);
-            Shopware()->Models()->persist($articleImpression);
-        } else {
-            $articleImpression->increaseImpressions();
-        }
-        Shopware()->Models()->flush();
     }
 
     /**

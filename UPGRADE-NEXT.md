@@ -131,6 +131,9 @@ This changelog references changes done in Shopware Next patch versions.
 * Removed method `Shopware_Plugins_Frontend_Statistics_Bootstrap::refreshBasket`, use `Shopware\Components\Statistics\Tracer\CartTracer` instead
 * Removed method `Shopware_Plugins_Frontend_Statistics_Bootstrap::refreshLog`, use `Shopware\Components\Statistics\Tracer\VisitorTracer` instead
 * Removed method `Shopware_Plugins_Frontend_Statistics_Bootstrap::refreshReferer`, use `\Shopware\Components\Statistics\Tracer\RefererTracer` instead
+* Removed method `Shopware\Models\Tracking\Repository::getArticleImpressionQuery`
+* Removed method `Shopware\Models\Tracking\Repository::getArticleImpressionQueryBuilder`
+* Removed method `Shopware_Plugins_Frontend_Statistics_Bootstrap::refreshArticleImpression`, use `Shopware\Components\Statistics\Tracer\ProductImpressionTracer` instead
 
 ## Filesystem
 

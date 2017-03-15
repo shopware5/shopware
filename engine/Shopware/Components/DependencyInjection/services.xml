@@ -656,6 +656,11 @@
             <tag name="shopware.statistics.tracer"/>
         </service>
 
+        <service id="shopware.statistics.tracer.product_impression_tracer" class="Shopware\Components\Statistics\Tracer\ProductImpressionTracer" >
+            <argument id="dbal_connection" type="service"/>
+            <tag name="shopware.statistics.tracer"/>
+        </service>
+
 
         <service id="shopware.components.seo_template_subscriber" class="Shopware\Components\SeoTemplateSubscriber">
             <argument id="config" type="service"/>
