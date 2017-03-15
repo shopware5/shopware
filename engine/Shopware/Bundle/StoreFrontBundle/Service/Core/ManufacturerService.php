@@ -28,6 +28,7 @@ use Shopware\Bundle\StoreFrontBundle\Service;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\Manufacturer;
 use Shopware\Components\Routing\RouterInterface;
+use Shopware\Bundle\MediaBundle\MediaServiceInterface;
 
 /**
  * @category  Shopware
@@ -47,15 +48,23 @@ class ManufacturerService implements Service\ManufacturerServiceInterface
     private $router;
 
     /**
+     * @var MediaServiceInterface
+     */
+    private $mediaService;
+
+    /**
      * @param Gateway\ManufacturerGatewayInterface $manufacturerGateway
      * @param RouterInterface $router
+     * @param MediaServiceInterface $mediaService
      */
     public function __construct(
         Gateway\ManufacturerGatewayInterface $manufacturerGateway,
-        RouterInterface $router
+        RouterInterface $router,
+        MediaServiceInterface $mediaService
     ) {
         $this->manufacturerGateway = $manufacturerGateway;
         $this->router = $router;
+        $this->mediaService = $mediaService;
     }
 
     /**
@@ -75,12 +84,16 @@ class ManufacturerService implements Service\ManufacturerServiceInterface
     {
         $manufacturers = $this->manufacturerGateway->getList($ids, $context);
 
-        //fetch all manufacturer links instead of calling {url ...} smarty function which executes a query for each link
+        // fetch all manufacturer links instead of calling {url ...} smarty function which executes a query for each link
         $links = $this->collectLinks($manufacturers);
         $urls = $this->router->generateList($links);
         foreach ($manufacturers as $manufacturer) {
             if (array_key_exists($manufacturer->getId(), $urls)) {
                 $manufacturer->setLink($urls[$manufacturer->getId()]);
+            }
+
+            if ($manufacturer->getCoverFile()) {
+                $manufacturer->setCoverFile($this->mediaService->getUrl($manufacturer->getCoverFile()));
             }
         }
 
