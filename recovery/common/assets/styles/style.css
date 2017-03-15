@@ -399,7 +399,7 @@ p label {
     overflow: auto;
 }
 .alert-success {
-    color: #15591c;
+    color: #379838;
     border-color: rgba(55, 208, 70, 0.4);
     background: rgba(55, 208, 70, 0.2);
 }
@@ -452,6 +452,18 @@ p label {
 }
 .alert pre {
     overflow: visible;
+}
+h3.alert-heading {
+    margin-top: 5px;
+    color: inherit;
+}
+.icon-checkmark.huge {
+    float: left;
+    font-size: 50px;
+    padding: 0 20px 0 0;
+}
+.success {
+    color: #379838;
 }
 
 /** Table */

@@ -254,7 +254,6 @@
             }
         });
 
-
         var changeLogo = function() {
             var win = $(window),
                 winWidth = win.width(),
@@ -272,3 +271,19 @@
     });
 })(jQuery, window);
 
+(function ($, undefined) {
+    "use strict";
+
+    $('a[data-shown][data-hidden]').on('click.toggle', function () {
+        var $element = $(this.hash),
+            $this = $(this);
+
+        if ($element.hasClass('is--hidden')) {
+            $element.removeClass('is--hidden');
+            $this.html($this.attr('data-shown'));
+        } else {
+            $element.addClass('is--hidden');
+            $this.html($this.attr('data-hidden'));
+        }
+    });
+})(jQuery);

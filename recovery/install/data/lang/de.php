@@ -63,11 +63,15 @@ EOT
     'requirements_tablefiles_colcheck' => 'Datei/Verzeichnis',
     'requirements_tablefiles_colstatus' => 'Status',
     'requirements_error' => 'Einige Voraussetzungen werden nicht erfüllt',
+    'requirements_success'              => '<h3 class="alert-heading">Glückwunsch!</h3>Alle Voraussetzungen für eine erfolgreiche Installation erfüllt',
+    'requirements_ioncube'              => '<small><strong>Hinweis:</strong> Auf Deinem System ist die Codierungs-Software ionCube nicht installiert. Diese wird nur benötigt, wenn Du Dir später über unseren <a href="https://store.shopware.com" target="_blank">Shopware Community Store</a> Erweiterungen installieren möchtest, die mit ionCube verschlüsselt sind. Du kannst die Installation von ionCube auch jederzeit nachholen.</small>',
     'requirements_php_info' => 'Ihr Server muss die folgenden Systemvoraussetzungen erfüllen, damit Shopware lauffähig ist', // Your server must meet the following requirements in order to run shopware
     'requirements_system_colcheck' => 'Voraussetzung',
     'requirements_system_colrequired' => 'Erforderlich',
     'requirements_system_colfound' => 'Ihr System',
     'requirements_system_colstatus' => 'Status',
+    'requirements_show_all'             => '(alles anzeigen)',
+    'requirements_hide_all'             => '(alles ausblenden)',
 
     'license_agreement_header' => 'Endnutzer-Lizenzbestimmungen („EULA“)',
     'license_agreement_info' => 'Hier finden Sie eine Aufstellung unserer Lizenzbestimmungen, welche Sie bitte zur erfolgreichen Installation lesen und akzeptieren. Die Shopware Community Edition ist unter AGPL lizensiert, während Teile der Plugins und das Template unter der New BSD Lizenz stehen.',
