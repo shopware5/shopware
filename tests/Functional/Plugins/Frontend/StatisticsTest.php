@@ -118,7 +118,11 @@ class Shopware_Tests_Plugins_Frontend_StatisticsTest extends Enlight_Components_
     {
         $request = $this->Request()->setQuery(['sPartner' => $partner, 'referer' => $referer]);
 
-        $this->Plugin()->refreshReferer($request);
+        $tracer = Shopware()->Container()->get('shopware.statistics.tracer.referer_tracer');
+
+        $context = Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext();
+
+        $tracer->trace($request, $context);
 
         $sql = 'SELECT `id` FROM `s_statistics_referer` WHERE `referer`=?';
         $insertId = Shopware()->Db()->fetchOne($sql, [

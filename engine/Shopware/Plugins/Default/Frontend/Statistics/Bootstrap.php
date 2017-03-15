@@ -105,7 +105,6 @@ ShopWiki;Bot;WebAlta;;abachobot;architext;ask jeeves;frooglebot;googlebot;lycos;
         $container->get('shopware.statistics.tracer')
             ->trace($request, $context);
 
-        $this->refreshReferer($request);
         $this->refreshArticleImpression($request);
         $this->refreshCurrentUsers($request);
         $this->refreshPartner($request, $response);
@@ -127,34 +126,6 @@ ShopWiki;Bot;WebAlta;;abachobot;architext;ask jeeves;frooglebot;googlebot;lycos;
             empty(Shopware()->Session()->sUserId) ? 0 : (int) Shopware()->Session()->sUserId,
             $request->getDeviceType(),
         ]);
-    }
-
-    /**
-     * Refresh referrer log
-     *
-     * @param \Enlight_Controller_Request_Request $request
-     */
-    public function refreshReferer($request)
-    {
-        $referer = $request->getParam('referer');
-        $partner = $request->getParam('partner', $request->getParam('sPartner'));
-
-        if (empty($referer)
-            || strpos($referer, 'http') !== 0
-            || strpos($referer, $request->getHttpHost()) !== false
-            || !empty(Shopware()->Session()->Admin)
-        ) {
-            return;
-        }
-
-        Shopware()->Session()->sReferer = $referer;
-
-        if ($partner !== null) {
-            $referer .= '$' . $partner;
-        }
-
-        $sql = 'INSERT INTO s_statistics_referer (datum, referer) VALUES (NOW(), ?)';
-        Shopware()->Db()->query($sql, [$referer]);
     }
 
     /**
