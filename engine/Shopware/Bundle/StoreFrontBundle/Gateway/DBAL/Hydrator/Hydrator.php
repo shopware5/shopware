@@ -94,7 +94,7 @@ class Hydrator
     protected function convertArrayKeys($data, $keys)
     {
         foreach ($keys as $old => $new) {
-            if (!isset($data[$old])) {
+            if (!array_key_exists($old, $data)) {
                 continue;
             }
 
@@ -138,6 +138,22 @@ class Hydrator
         }
 
         return $this->addArrayPrefix($prefix, $translation);
+    }
+
+    /**
+     * @param mixed  $value
+     * @param string $type
+     *
+     * @return mixed
+     */
+    protected function cast($value, string $type)
+    {
+        if ($value === null) {
+            return $value;
+        }
+        settype($value, $type);
+
+        return $value;
     }
 
     /**

@@ -63,10 +63,16 @@
 
                 {* Maincategories navigation top *}
                 {block name='frontend_index_navigation_categories_top'}
-                    <nav class="navigation-main">
+                    <nav class="navigation-main{if {config namespace="AdvancedMenu" name="show"}} is--advanced-menu{/if}">
                         <div class="container" data-menu-scroller="true" data-listSelector=".navigation--list.container" data-viewPortSelector=".navigation--list-wrapper">
                             {block name="frontend_index_navigation_categories_top_include"}
                                 {include file='frontend/index/main-navigation.tpl'}
+
+                                {if {config namespace="AdvancedMenu" name="show"}}
+                                    {block name="frontend_advanced_menu_outer"}
+										{action module=widgets controller=advancedMenu action=index}
+                                    {/block}
+                                {/if}
                             {/block}
                         </div>
                     </nav>

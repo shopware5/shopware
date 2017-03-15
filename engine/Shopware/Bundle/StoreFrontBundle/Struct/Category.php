@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -134,30 +136,53 @@ class Category extends Extendable implements \JsonSerializable
     protected $hideSortings;
 
     /**
+     * @var Category[]
+     */
+    protected $children = [];
+
+    private function __construct()
+    {
+    }
+
+    /**
+     * @param int      $id
+     * @param int|null $parentId
+     * @param array    $path
+     * @param string   $name
+     * @param array    $options
+     *
+     * @return Category
+     */
+    public static function create(int $id, ?int $parentId, array $path, string $name, array $options = [])
+    {
+        $self = new self();
+        $self->id = $id;
+        $self->parentId = $parentId;
+        $self->path = $path;
+        $self->name = $name;
+
+        unset($options['id'], $options['parentId'], $options['path'], $options['name']);
+        $self->resolveOptions($options);
+
+        return $self;
+    }
+
+    /**
      * @param CategoryEntity $category
      *
      * @return Category
      */
     public static function createFromCategoryEntity(CategoryEntity $category)
     {
-        $struct = new self();
-
-        $struct->setId($category->getId());
-        $struct->setName($category->getName());
-        $struct->setPosition($category->getPosition());
-        $struct->setParentId($category->getParentId());
-
-        $path = $category->getPath();
-        if ($path) {
-            $path = ltrim($path, '|');
-            $path = rtrim($path, '|');
-
-            $path = explode('|', $path);
-
-            $struct->setPath(array_reverse($path));
-        }
-
-        return $struct;
+        return self::create(
+            $category->getId(),
+            $category->getParentId(),
+            array_filter(explode('|', (string) $category->getPath())),
+            $category->getName(),
+            [
+                'position' => (int) $category->getPosition(),
+            ]
+        );
     }
 
     /**
@@ -486,5 +511,29 @@ class Category extends Extendable implements \JsonSerializable
     public function setHideSortings($hideSortings)
     {
         $this->hideSortings = $hideSortings;
+    }
+
+    /**
+     * @return Category[]
+     */
+    public function getChildren(): array
+    {
+        return $this->children;
+    }
+
+    /**
+     * @param Category[] $children
+     */
+    public function setChildren(array $children)
+    {
+        $this->children = $children;
+    }
+
+    /**
+     * @param Category $category
+     */
+    public function addChildren(Category $category)
+    {
+        $this->children[] = $category;
     }
 }

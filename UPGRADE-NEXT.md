@@ -23,16 +23,40 @@ This changelog references changes done in Shopware Next patch versions.
 * Added container tag `shopware_media.strategy` for strategy registration
 * Added abstract class `Shopware\Components\Filesystem\AbstractFilesystem`
 * Added service `shopware_media.filesystem` which is build on top of `shopware.filesystem.public`
+* Added `\Shopware\Bundle\StoreFrontBundle\Struct\Category::__construct` which requires id, parentId, path and name
+* Added `\Shopware\Bundle\StoreFrontBundle\Service\Core\AdvancedMenuService` to get advanced menu
+* Added block `frontend_advanced_menu_outer` in `themes/Frontend/Bare/frontend/index/index.tpl` for advanced menu
+* Added `\Shopware\Controllers\Widgets\AdvancedMenu` controller
+* Added `\Shopware\Bundle\StoreFrontBundle\Struct\KeyCollection` - used for associated arrays 
+* Added `\Shopware\Bundle\StoreFrontBundle\Struct\Collection` - used for none associated arrays
+* Added `\Shopware\Bundle\StoreFrontBundle\Struct\CategoryCollection` - Typed key collection for category structs
 
 ## Changes
 
 * Changed `BackendSession` service name to `backend_session`
+* Changed `Shopware/Plugins/Default/Frontend/AdvancedMenu`
+	* Implementation moved to `\Shopware\Bundle\StoreFrontBundle\Service\Core\AdvancedMenuService`
+	* Moved `Shopware/Plugins/Default/Frontend/AdvancedMenu/Snippets/frontend/plugins/advanced_menu/advanced_menu.ini` snippets to `snippets/frontend/advancedmenu/index.ini`
+	* Moved `Shopware/Plugins/Default/Frontend/AdvancedMenu/Views/frontend/advanced_menu/index.tpl` to `themes/Frontend/Bare/widgets/advanced_menu/index.tpl` with renamed blocks:
+		- `frontend_plugins_advanced_menu_list` to `frontend_advanced_menu_list`
+		- `frontend_plugins_advanced_menu_list_item` to `frontend_advanced_menu_list_item`
+		- `frontend_plugins_advanced_menu` to `frontend_advanced_menu`
+		- `frontend_plugins_advanced_menu_main_container` to `frontend_advanced_menu_main_container`
+		- `frontend_plugins_advanced_menu_button_category` to `frontend_advanced_menu_button_category`
+		- `frontend_plugins_advanced_menu_button_close` to `frontend_advanced_menu_button_close`
+		- `frontend_plugins_advanced_menu_sub_categories` to `frontend_advanced_menu_sub_categories`
+		- `frontend_plugins_advanced_menu_teaser` to `frontend_advanced_menu_teaser`
+	* Moved `Shopware/Plugins/Default/Frontend/AdvancedMenu/Views/frontend/_public/src/js/jquery.advanced-menu.js` to `themes/Frontend/Responsive/frontend/_public/src/js/jquery.advanced-menu.js`
+	* Moved `Shopware/Plugins/Default/Frontend/AdvancedMenu/Views/frontend/_public/src/less/advanced-menu.less` to `themes/Frontend/Responsive/frontend/_public/src/less/_components/advanced-menu.less`
+	* Changed `category.sub` variable to `category.children` in advanced menu template.
+	
 * Changed class `Shopware\Bundle\MediaBundle\Commands\ImageMigrateCommand` to `Shopware\Bundle\MediaBundle\Commands\MediaMigrateCommand`
 * Changed command `sw:media:migrate` to switch between strategies instead of moving files to different filesystems
 * Changed 3rd constructor parameter in `shopware_media.garbage_collector` from `Shopware\Bundle\MediaBundle\MediaServiceInterface` to `Shopware\Bundle\MediaBundle\Strategy\StrategyInterface`
 * Changed 3rd constructor parameter in `shopware_media.garbage_collector_factory` from `Shopware\Bundle\MediaBundle\MediaServiceInterface` to `Shopware\Bundle\MediaBundle\Strategy\StrategyInterface`
 * Changed constructor of `shopware_media.strategy_factory` to require a collection of `Shopware\Bundle\MediaBundle\Strategy\StrategyInterface`
 * Changed default path of `media` to `web/media`
+* Changed `\Shopware\Bundle\StoreFrontBundle\Struct\Category::__construct` accessibility to private, use `\Shopware\Bundle\StoreFrontBundle\Struct\Category::create` instead
 
 ## Removals
 
@@ -41,7 +65,7 @@ This changelog references changes done in Shopware Next patch versions.
         - `s_core_shops.secure_host`
         - `s_core_shops.secure_base_path`
         - `s_core_shops.always_secure`
-        
+
     * Removed methods
         - `\Shopware\Bundle\StoreFrontBundle\Struct\Shop::setSecureHost`
         - `\Shopware\Bundle\StoreFrontBundle\Struct\Shop::getSecureHost`
@@ -66,7 +90,7 @@ This changelog references changes done in Shopware Next patch versions.
 
     * Removed plugins
         - `TagCloud`
-        
+
     * Removed blocks
         - `frontend_listing_index_tagcloud` in file `themes/Frontend/Bare/frontend/listing/index.tpl`
         - `frontend_home_index_tagcloud` in file `themes/Frontend/Bare/frontend/home/index.tpl`
@@ -75,7 +99,8 @@ This changelog references changes done in Shopware Next patch versions.
 
 * Removed Shopware_Plugins_Backend_Auth_Bootstrap
     * Implementation moved to \Shopware\Components\Auth\BackendAuthSubscriber
-
+    
+* Removed `Shopware/Plugins/Default/Frontend/AdvancedMenu/Views/frontend/index/index.tpl` with block `frontend_plugins_advanced_menu_outer`
 * Removed `s_core_engine_elements` and `Shopware\Models\Article\Element`
 * Removed config parameter `shopware.cdn.adapters`
 * Removed config parameter `shopware.cdn.liveMigration`
@@ -223,3 +248,67 @@ The following example will store all `public` files on Google Cloud Platform.
     ],
 ],
 ```
+
+## `\Shopware\Bundle\StoreFrontBundle\Struct\CategoryCollection`
+The category collection provides different helper function to work with categories:
+
+* `getIds` - returns all ids of contained categories
+    ```
+    $collection = new CategoryCollection([
+        new Category(1, null, [], 'First level 01'),
+        new Category(2, 1, [1], 'Second level 01'),
+    ]);
+
+    $this->assertSame([1,2], $collection->getIds());
+    ```
+
+* `getPaths` - returns all path variables of the contained categories
+    ```
+    $collection = new CategoryCollection([
+        new Category(1, null, [1], 'First level 01'),
+        new Category(2, 1, [1, 2], 'Second level 01'),
+    ]);
+    $this->assertSame(
+        [ [1], [2, 1] ],
+        $collection->getPaths()
+    );
+    ```
+
+* `getIdsIncludingPaths` - returns all ids, including ids of the categories path
+    ```
+    $collection = new CategoryCollection([
+        new Category(2, 1, [1], 'Second level 01'),
+        new Category(5, 50, [50, 1], 'Third level 02'),
+    ]);
+
+    $this->assertSame(
+        [1,2,5,50],
+        $collection->getIdsIncludingPaths()
+    );
+    ```
+
+
+* `getTree` - Allows to build a category tree, started with the provided parent
+    ```
+    $collection = new CategoryCollection([
+        new Category(1, null, [], 'First level 01'),
+        new Category(2, 1, [1], 'Second level 01'),
+        new Category(3, 2, [2, 1], 'Third level 01'),
+        new Category(4, 1, [1], 'Second level 02'),
+        new Category(5, 4, [4, 1], 'Third level 02'),
+    ]);
+
+    $this->assertEquals(
+        [
+            new Category(1, null, [], 'First level 01', [
+                new Category(2, 1, [1], 'Second level 01', [
+                    new Category(3, 2, [2, 1], 'Third level 01'),
+                ]),
+                new Category(4, 1, [1], 'Second level 02', [
+                    new Category(5, 4, [4, 1], 'Third level 02'),
+                ]),
+            ]),
+        ],
+        $collection->getTree(null)
+    );
+    ```
