@@ -234,7 +234,7 @@ class Shopware_Controllers_Frontend_Error extends Enlight_Controller_Action impl
             return false;
         }
         foreach ($exceptions as $exception) {
-            if (get_class($exception) === \Shopware\Components\CSRFTokenValidationException::class) {
+            if ($exception instanceof \Shopware\Components\CSRFTokenValidationException) {
                 return true;
             }
         }
