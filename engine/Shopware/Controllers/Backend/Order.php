@@ -755,10 +755,16 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         $models = $query->getResult();
         foreach ($models as $model) {
             foreach ($model->getDocuments() as $document) {
-                $files[] = Shopware()->DocPath('files/documents') . $document->getHash() . '.pdf';
+                $files[] = $this->downloadFileFromFilesystem(sprintf('documents/%s.pdf', $document->getHash()));
             }
         }
+
         $this->mergeDocuments($files);
+
+        // remove temporary files
+        foreach ($files as $file) {
+            unlink($file);
+        }
     }
 
     /**
@@ -813,8 +819,8 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
      */
     public function deleteDocumentAction()
     {
+        $filesystem = $this->container->get('shopware.filesystem.private');
         $documentId = $this->request->getParam('documentId');
-        $documentPath = $this->container->getParameter('kernel.root_dir') . '/files/documents/';
         $connection = $this->container->get('dbal_connection');
         $queryBuilder = $connection->createQueryBuilder();
 
@@ -832,14 +838,10 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
                 ->setParameter('documentId', $documentId)
                 ->execute();
 
-            $file = $documentPath . $documentHash . '.pdf';
-            if (!is_file($file)) {
-                $this->View()->assign('success', true);
-
-                return;
+            $file = sprintf('documents/%s.pdf', $documentHash);
+            if ($filesystem->has($file)) {
+                $filesystem->delete($file);
             }
-
-            unlink($file);
         } catch (\Exception $exception) {
             $this->View()->assign([
                 'success' => false,
@@ -906,9 +908,10 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
      */
     public function openPdfAction()
     {
-        $name = basename($this->Request()->getParam('id', null)) . '.pdf';
-        $file = Shopware()->DocPath('files/documents') . $name;
-        if (!file_exists($file)) {
+        $filesystem = $this->container->get('shopware.filesystem.private');
+        $file = sprintf('documents/%s.pdf', basename($this->Request()->getParam('id', null)));
+
+        if ($filesystem->has($file) === false) {
             $this->View()->assign([
                 'success' => false,
                 'data' => $this->Request()->getParams(),
@@ -932,11 +935,16 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         $response->setHeader('Content-disposition', 'attachment; filename=' . $orderId . '.pdf');
         $response->setHeader('Content-Type', 'application/pdf');
         $response->setHeader('Content-Transfer-Encoding', 'binary');
-        $response->setHeader('Content-Length', filesize($file));
+        $response->setHeader('Content-Length', $filesystem->getSize($file));
         $response->sendHeaders();
+        $response->sendResponse();
 
-        echo readfile($file);
-        exit;
+        $upstream = $filesystem->readStream($file);
+        $downstream = fopen('php://output', 'wb');
+
+        while (!feof($upstream)) {
+            fwrite($downstream, fread($upstream, 4096));
+        }
     }
 
     /**
@@ -1413,14 +1421,13 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
      */
     private function addAttachments(Enlight_Components_Mail $mail, $orderId, array $attachments = [])
     {
-        $rootDirectory = $this->container->getParameter('kernel.root_dir');
-        $documentDirectory = $rootDirectory . '/files/documents';
+        $filesystem = $this->container->get('shopware.filesystem.private');
 
         foreach ($attachments as $attachment) {
-            $filePath = $documentDirectory . '/' . $attachment['hash'] . '.pdf';
+            $filePath = sprintf('documents/%s.pdf', $attachment['hash']);
             $fileName = $this->getFileName($orderId, $attachment['type'][0]['id']);
 
-            if (!is_file($filePath)) {
+            if ($filesystem->has($filePath) === false) {
                 continue;
             }
 
@@ -1440,7 +1447,9 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
      */
     private function createAttachment($filePath, $fileName)
     {
-        $content = file_get_contents($filePath);
+        $filesystem = $this->container->get('shopware.filesystem.private');
+
+        $content = $filesystem->read($filePath);
         $zendAttachment = new Zend_Mime_Part($content);
         $zendAttachment->type = 'application/pdf';
         $zendAttachment->disposition = Zend_Mime::DISPOSITION_ATTACHMENT;
@@ -1784,5 +1793,16 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         $query->setParameter(':numbers', $numbers, Connection::PARAM_STR_ARRAY);
 
         return $query->execute()->fetchAll(PDO::FETCH_KEY_PAIR);
+    }
+
+    private function downloadFileFromFilesystem(string $path): string
+    {
+        $filesystem = $this->container->get('shopware.filesystem.private');
+        $tmpFile = tempnam(sys_get_temp_dir(), 'merge_document');
+
+        $downstream = fopen($tmpFile, 'wb');
+        stream_copy_to_stream($filesystem->readStream($path), $downstream);
+
+        return $tmpFile;
     }
 }

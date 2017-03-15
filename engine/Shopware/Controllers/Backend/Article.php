@@ -132,7 +132,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      */
     public function preDispatch()
     {
-        if (!in_array($this->Request()->getActionName(), ['index', 'load', 'validateNumber'])) {
+        if (!in_array($this->Request()->getActionName(), ['index', 'load', 'validateNumber', 'getEsdDownload'])) {
             $this->Front()->Plugins()->Json()->setRenderer();
         }
     }
@@ -1750,24 +1750,16 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      */
     public function getEsdFilesAction()
     {
-        $filePath = Shopware()->DocPath('files_' . Shopware()->Config()->get('sESDKEY'));
+        $filesystem = $this->container->get('shopware.filesystem.private');
+        $contents = $filesystem->listContents($this->container->get('config')->offsetGet('esdKey'));
 
-        if (!file_exists($filePath)) {
-            $this->View()->assign([
-                'message' => 'noFolder',
-                'success' => false,
-            ]);
-
-            return;
-        }
         $result = [];
-        foreach (new DirectoryIterator($filePath) as $file) {
-            if ($file->isDot() || strpos($file->getFilename(), '.') === 0) {
+        foreach ($contents as $file) {
+            if ($file['type'] !== 'file') {
                 continue;
             }
-            $result[] = [
-                'filename' => $file->getFilename(),
-            ];
+
+            $result[] = ['filename' => $file['basename']];
         }
 
         $this->View()->assign([
@@ -1783,8 +1775,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      */
     public function uploadEsdFileAction()
     {
-        $destinationDir = Shopware()->DocPath('files_' . Shopware()->Config()->get('sESDKEY'));
-
         $fileBag = new \Symfony\Component\HttpFoundation\FileBag($_FILES);
         /** @var $file Symfony\Component\HttpFoundation\File\UploadedFile */
         $file = $fileBag->get('fileId');
@@ -1794,7 +1784,14 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
 
             return;
         }
-        $file->move($destinationDir, $file->getClientOriginalName());
+
+        $filesystem = $this->container->get('shopware.filesystem.private');
+        $destinationPath = $this->container->get('config')->offsetGet('esdKey') . '/' . $file->getClientOriginalName();
+
+        $upstream = fopen($file->getRealPath(), 'rb');
+        $filesystem->writeStream($destinationPath, $upstream);
+        fclose($upstream);
+
         $this->View()->assign(['success' => true]);
     }
 
@@ -1804,18 +1801,37 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      */
     public function getEsdDownloadAction()
     {
-        $filename = $this->Request()->getParam('filename');
-        $file = 'files/' . Shopware()->Config()->get('sESDKEY') . '/' . $filename;
+        $filesystem = $this->container->get('shopware.filesystem.private');
+        $path = $this->container->get('config')->offsetGet('esdKey') . '/' . $this->Request()->getParam('filename');
 
-        if (!file_exists(Shopware()->DocPath() . $file)) {
-            $this->View()->assign([
-                'message' => 'File not found',
-                'success' => false,
-            ]);
+        if ($filesystem->has($path) === false) {
+            $this->Front()->Plugins()->Json()->setRenderer();
+            $this->View()->assign(['message' => 'File not found', 'success' => false]);
 
             return;
         }
-        $this->redirect($file);
+
+        $meta = $filesystem->getMetadata($path);
+        $mimeType = $filesystem->getMimetype($path) ?: 'application/octet-stream';
+
+        @set_time_limit(0);
+
+        $this->Front()->Plugins()->ViewRenderer()->setNoRender();
+
+        $response = $this->Response();
+        $response->setHeader('Content-Type', $mimeType);
+        $response->setHeader('Content-Disposition', sprintf('attachment; filename="%s"', basename($path)));
+        $response->setHeader('Content-Length', $meta['size']);
+        $response->setHeader('Content-Transfer-Encoding', 'binary');
+        $response->sendHeaders();
+        $response->sendResponse();
+
+        $upstream = $filesystem->readStream($path);
+        $downstream = fopen('php://output', 'wb');
+
+        while (!feof($upstream)) {
+            fwrite($downstream, fread($upstream, 4096));
+        }
     }
 
     /**

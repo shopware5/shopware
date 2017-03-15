@@ -215,8 +215,8 @@ class Shopware_Controllers_Backend_PluginInstaller extends Shopware_Controllers_
             return;
         }
 
-        $tempDirectory = Shopware()->Container()->getParameter('kernel.root_dir') . '/files/downloads/';
-        $tempFileName = tempnam($tempDirectory, $file->getClientOriginalName());
+        $tempFileName = tempnam(sys_get_temp_dir(), $file->getClientOriginalName());
+        $tempDirectory = dirname(realpath($tempFileName));
 
         try {
             $file = $file->move($tempDirectory, $tempFileName);

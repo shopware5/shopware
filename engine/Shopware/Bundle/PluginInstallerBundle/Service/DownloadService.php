@@ -185,6 +185,7 @@ class DownloadService
         $file = $this->createDownloadZip($response->getBody());
 
         $this->extractPluginZip($file, $request->getTechnicalName());
+        unlink($file);
 
         return true;
     }
@@ -196,10 +197,7 @@ class DownloadService
      */
     private function createDownloadZip($content)
     {
-        $name = 'plugin_' . md5(uniqid()) . '.zip';
-
-        $file = $this->rootDir . '/files/downloads/' . $name;
-
+        $file = tempnam(sys_get_temp_dir(), 'plugin_') . '.zip';
         file_put_contents($file, $content);
 
         return $file;
