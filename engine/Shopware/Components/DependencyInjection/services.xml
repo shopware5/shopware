@@ -632,6 +632,13 @@
             <argument id="config" type="service"/>
         </service>
 
+        <service id="shopware.statistics.tracer" class="Shopware\Components\Statistics\StatisticsCompositeTracer">
+            <argument type="collection" />
+            <argument id="config" type="service"/>
+            <argument id="shopware.statistics.bot_detector" type="service"/>
+            <argument id="dbal_connection" type="service"/>
+        </service>
+
 
         <service id="shopware.components.seo_template_subscriber" class="Shopware\Components\SeoTemplateSubscriber">
             <argument id="config" type="service"/>

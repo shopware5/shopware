@@ -98,15 +98,19 @@ ShopWiki;Bot;WebAlta;;abachobot;architext;ask jeeves;frooglebot;googlebot;lycos;
      */
     public function updateLog($request, $response)
     {
-        if ($this->shouldRefreshLog($request)) {
-            $this->cleanupStatistic();
-            $this->refreshBasket($request);
-            $this->refreshLog($request);
-            $this->refreshReferer($request);
-            $this->refreshArticleImpression($request);
-            $this->refreshCurrentUsers($request);
-            $this->refreshPartner($request, $response);
-        }
+        $container = Shopware()->Container();
+
+        $context = $container->get('shopware_storefront.context_service')->getShopContext();
+
+        $container->get('shopware.statistics.tracer')
+            ->trace($request, $context);
+
+        $this->refreshBasket($request);
+        $this->refreshLog($request);
+        $this->refreshReferer($request);
+        $this->refreshArticleImpression($request);
+        $this->refreshCurrentUsers($request);
+        $this->refreshPartner($request, $response);
     }
 
     /**
@@ -131,40 +135,6 @@ ShopWiki;Bot;WebAlta;;abachobot;architext;ask jeeves;frooglebot;googlebot;lycos;
                 $currentController, $userAgent,
                 $userId, $sessionId,
             ]);
-        }
-    }
-
-    /**
-     * @param $request
-     *
-     * @return bool
-     */
-    public function shouldRefreshLog(Enlight_Controller_Request_Request $request)
-    {
-        if ($request->getClientIp() === null
-            || !empty(Shopware()->Session()->Bot)
-        ) {
-            return false;
-        }
-        if (!empty(Shopware()->Config()->blockIp)
-            && strpos(Shopware()->Config()->blockIp, $request->getClientIp()) !== false
-        ) {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * Cleanup statistic
-     */
-    public function cleanupStatistic()
-    {
-        if ((rand() % 10) == 0) {
-            $sql = 'DELETE FROM s_statistics_currentusers WHERE time < DATE_SUB(NOW(), INTERVAL 3 MINUTE)';
-            Shopware()->Db()->query($sql);
-            $sql = 'DELETE FROM s_statistics_pool WHERE datum != CURDATE()';
-            Shopware()->Db()->query($sql);
         }
     }
 
