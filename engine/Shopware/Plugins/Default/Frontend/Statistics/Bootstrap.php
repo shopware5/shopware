@@ -105,37 +105,11 @@ ShopWiki;Bot;WebAlta;;abachobot;architext;ask jeeves;frooglebot;googlebot;lycos;
         $container->get('shopware.statistics.tracer')
             ->trace($request, $context);
 
-        $this->refreshBasket($request);
         $this->refreshLog($request);
         $this->refreshReferer($request);
         $this->refreshArticleImpression($request);
         $this->refreshCurrentUsers($request);
         $this->refreshPartner($request, $response);
-    }
-
-    /**
-     * @param Enlight_Controller_Request_Request $request
-     */
-    public function refreshBasket($request)
-    {
-        $currentController = $request->getParam('requestController', $request->getControllerName());
-        $sessionId = (string) Enlight_Components_Session::getId();
-
-        if (!empty($currentController) && !empty($sessionId)) {
-            $userId = (int) Shopware()->Session()->sUserId;
-            $userAgent = (string) $request->getServer('HTTP_USER_AGENT');
-            $sql = '
-                UPDATE s_order_basket
-                SET lastviewport = ?,
-                    useragent = ?,
-                    userID = ?
-                WHERE sessionID=?
-            ';
-            Shopware()->Db()->query($sql, [
-                $currentController, $userAgent,
-                $userId, $sessionId,
-            ]);
-        }
     }
 
     /**
