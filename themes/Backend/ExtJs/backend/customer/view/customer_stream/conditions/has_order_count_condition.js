@@ -23,7 +23,7 @@
 
 //{namespace name="backend/customer_stream/translation"}
 
-Ext.define('Shopware.apps.CustomerStream.view.conditions.HasOrderCountCondition', {
+Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.HasOrderCountCondition', {
 
     getLabel: function() {
         return '{s name="order_count_condition"}{/s}';

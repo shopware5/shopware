@@ -22,18 +22,38 @@
  */
 
 //{namespace name="backend/customer_stream/translation"}
+Ext.define('Shopware.apps.Customer.view.customer_stream.ConditionField', {
+    extend: 'Ext.form.FieldContainer',
+    layout: { type: 'vbox', align: 'stretch' },
+    mixins: {
+        formField: 'Ext.form.field.Base'
+    },
 
+    getValue: function() {
+        var me = this,
+            values = { };
 
-Ext.define('Shopware.apps.CustomerStream.store.Preview', {
-    extend: 'Ext.data.Store',
-    model: 'Shopware.model.Dynamic',
-    pageSize: 20,
+        Ext.each(me.items.items, function(item) {
+            if (Ext.isFunction(item.getValue)) {
+                values[item.name] = item.getValue();
+            }
+        });
+        return values;
+    },
 
-    proxy: {
-        type: 'ajax',
-        api: {
-            read: '{url controller="CustomerStream" action="loadStream"}'
-        },
-        reader: Ext.create('Shopware.model.DynamicReader')
+    setValue: function(values) {
+        var me = this;
+
+        Ext.each(me.items.items, function(field) {
+            if (values.hasOwnProperty(field.name)) {
+                field.setValue(values[field.name]);
+            }
+        });
+    },
+
+    getSubmitData: function() {
+        var value = { };
+        value[this.name] = this.getValue();
+        return value;
     }
 });

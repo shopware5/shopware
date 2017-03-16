@@ -22,14 +22,14 @@
  */
 
 //{namespace name="backend/customer_stream/translation"}
-Ext.define('Shopware.apps.CustomerStream.view.conditions.IsInCustomerGroupCondition', {
+Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.OrderedAtWeekdayCondition', {
 
     getLabel: function() {
-        return '{s name="is_in_customer_group_condition"}{/s}';
+        return '{s name="ordered_at_weekday_condition"}{/s}';
     },
 
     supports: function(conditionClass) {
-        return (conditionClass == 'Shopware\\Bundle\\CustomerSearchBundle\\Condition\\IsInCustomerGroupCondition');
+        return (conditionClass == 'Shopware\\Bundle\\CustomerSearchBundle\\Condition\\OrderedAtWeekdayCondition');
     },
 
     create: function(callback) {
@@ -41,20 +41,31 @@ Ext.define('Shopware.apps.CustomerStream.view.conditions.IsInCustomerGroupCondit
     },
 
     _create: function() {
-        var factory = Ext.create('Shopware.attribute.SelectionFactory');
+        var store = Ext.create('Ext.data.Store', {
+            fields: ['id', 'label'],
+            data: [
+                { id: 'monday', label: '{s name="monday"}{/s}' },
+                { id: 'tuesday', label: '{s name="tuesday"}{/s}' },
+                { id: 'wednesday', label: '{s name="wednesday"}{/s}' },
+                { id: 'thursday', label: '{s name="thursday"}{/s}' },
+                { id: 'friday', label: '{s name="friday"}{/s}' },
+                { id: 'saturday', label: '{s name="saturday"}{/s}' },
+                { id: 'sunday', label: '{s name="sunday"}{/s}' }
+            ]
+        });
 
         return {
-            title: '{s name="is_in_customer_group_condition_selection"}{/s}',
-            conditionClass: 'Shopware\\Bundle\\CustomerSearchBundle\\Condition\\IsInCustomerGroupCondition',
+            title: '{s name="ordered_at_weekday_condition_selection"}{/s}',
+            conditionClass: 'Shopware\\Bundle\\CustomerSearchBundle\\Condition\\OrderedAtWeekdayCondition',
             items: [{
                 xtype: 'shopware-form-field-grid',
-                name: 'ids',
+                name: 'weekdays',
                 flex: 1,
                 allowSorting: false,
                 useSeparator: false,
                 allowBlank: false,
-                store: factory.createEntitySearchStore("Shopware\\Models\\Customer\\Group"),
-                searchStore: factory.createEntitySearchStore("Shopware\\Models\\Customer\\Group")
+                store: store,
+                searchStore: store
             }]
         };
     }

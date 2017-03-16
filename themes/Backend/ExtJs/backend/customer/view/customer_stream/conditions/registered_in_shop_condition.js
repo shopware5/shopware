@@ -22,20 +22,14 @@
  */
 
 //{namespace name="backend/customer_stream/translation"}
-
-
-Ext.define('Shopware.apps.CustomerStream.view.conditions.CustomerAttributeCondition', {
-
-    mixins: {
-        factory: 'Shopware.attribute.SelectionFactory'
-    },
+Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.RegisteredInShopCondition', {
 
     getLabel: function() {
-        return '{s name="customer_attribute_condition"}{/s}';
+        return '{s name="registered_in_shop_condition"}{/s}';
     },
 
     supports: function(conditionClass) {
-        return (conditionClass == 'Shopware\\Bundle\\CustomerSearchBundle\\Condition\\CustomerAttributeCondition');
+        return (conditionClass == 'Shopware\\Bundle\\CustomerSearchBundle\\Condition\\RegisteredInShopCondition');
     },
 
     create: function(callback) {
@@ -50,9 +44,18 @@ Ext.define('Shopware.apps.CustomerStream.view.conditions.CustomerAttributeCondit
         var factory = Ext.create('Shopware.attribute.SelectionFactory');
 
         return {
-            title: this.getLabel(),
-            conditionClass: 'Shopware\\Bundle\\CustomerSearchBundle\\Condition\\CustomerAttributeCondition',
-            items: []
+            title: '{s name="registered_in_shop_condition_selection"}{/s}',
+            conditionClass: 'Shopware\\Bundle\\CustomerSearchBundle\\Condition\\RegisteredInShopCondition',
+            items: [{
+                xtype: 'shopware-form-field-shop-grid',
+                name: 'shopIds',
+                flex: 1,
+                allowSorting: false,
+                useSeparator: false,
+                allowBlank: false,
+                store: factory.createEntitySearchStore("Shopware\\Models\\Shop\\Shop"),
+                searchStore: factory.createEntitySearchStore("Shopware\\Models\\Shop\\Shop")
+            }]
         };
     }
 });

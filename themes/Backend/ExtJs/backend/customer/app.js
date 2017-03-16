@@ -84,7 +84,29 @@ Ext.define('Shopware.apps.Customer', {
         'order.Chart',
         'address.List',
         'address.detail.Window',
-        'address.detail.Address'
+        'address.detail.Address',
+
+        'customer_stream.Detail',
+        'customer_stream.Listing',
+        'customer_stream.ConditionPanel',
+        'customer_stream.ConditionField',
+        'customer_stream.conditions.HasAddressWithCountryCondition',
+        'customer_stream.conditions.HasCanceledOrdersCondition',
+        'customer_stream.conditions.IsCustomerSinceCondition',
+        'customer_stream.conditions.IsInCustomerGroupCondition',
+        'customer_stream.conditions.HasOrderCountCondition',
+        'customer_stream.conditions.OrderedAtWeekdayCondition',
+        'customer_stream.conditions.OrderedInLastDaysCondition',
+        'customer_stream.conditions.OrderedInShopCondition',
+        'customer_stream.conditions.RegisteredInShopCondition',
+        'customer_stream.conditions.OrderedOnDeviceCondition',
+        'customer_stream.conditions.OrderedProductCondition',
+        'customer_stream.conditions.OrderedProductOfCategoryCondition',
+        'customer_stream.conditions.OrderedProductOfManufacturerCondition',
+        'customer_stream.conditions.OrderedWithDeliveryCondition',
+        'customer_stream.conditions.OrderedWithPaymentCondition',
+        'customer_stream.conditions.HasTotalOrderAmountCondition',
+        'customer_stream.conditions.CustomerAttributeCondition'
     ],
 
     /**

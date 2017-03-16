@@ -24,8 +24,8 @@
 
 namespace Shopware\Models\Customer;
 
-use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
 
 /**
  * @ORM\Table(name="s_customer_streams")
@@ -34,7 +34,7 @@ use Doctrine\ORM\Mapping as ORM;
 class CustomerStream extends ModelEntity
 {
     /**
-     * @var integer $id
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
@@ -43,18 +43,24 @@ class CustomerStream extends ModelEntity
     private $id;
 
     /**
-     * @var string $name
+     * @var string
      *
      * @ORM\Column(name="name", type="string", nullable=false)
      */
     private $name;
 
     /**
-     * @var string $name
+     * @var string
      *
      * @ORM\Column(name="description", type="string", nullable=false)
      */
     private $description;
+
+    /**
+     * @var array
+     * @ORM\Column(name="product_stream_ids", type="string", nullable=true)
+     */
+    private $productStreamIds;
 
     /**
      * @var array
@@ -116,5 +122,15 @@ class CustomerStream extends ModelEntity
     public function setConditions($conditions)
     {
         $this->conditions = $conditions;
+    }
+
+    public function getProductStreamIds()
+    {
+        return $this->productStreamIds;
+    }
+
+    public function setProductStreamIds($productStreamIds): void
+    {
+        $this->productStreamIds = $productStreamIds;
     }
 }

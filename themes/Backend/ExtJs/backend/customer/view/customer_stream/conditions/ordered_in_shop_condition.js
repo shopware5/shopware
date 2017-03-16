@@ -22,15 +22,14 @@
  */
 
 //{namespace name="backend/customer_stream/translation"}
-
-Ext.define('Shopware.apps.CustomerStream.view.conditions.HasCanceledOrdersCondition', {
+Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.OrderedInShopCondition', {
 
     getLabel: function() {
-        return '{s name="has_canceled_orders_condition"}{/s}';
+        return '{s name="ordered_in_shop_condition"}{/s}';
     },
 
     supports: function(conditionClass) {
-        return (conditionClass == 'Shopware\\Bundle\\CustomerSearchBundle\\Condition\\HasCanceledOrdersCondition');
+        return (conditionClass == 'Shopware\\Bundle\\CustomerSearchBundle\\Condition\\OrderedInShopCondition');
     },
 
     create: function(callback) {
@@ -42,13 +41,20 @@ Ext.define('Shopware.apps.CustomerStream.view.conditions.HasCanceledOrdersCondit
     },
 
     _create: function() {
+        var factory = Ext.create('Shopware.attribute.SelectionFactory');
+
         return {
-            title: this.getLabel(),
-            conditionClass: 'Shopware\\Bundle\\CustomerSearchBundle\\Condition\\HasCanceledOrdersCondition',
+            title: '{s name="ordered_in_shop_condition_selection"}{/s}',
+            conditionClass: 'Shopware\\Bundle\\CustomerSearchBundle\\Condition\\OrderedInShopCondition',
             items: [{
-                xtype: 'component',
-                padding: 10,
-                html: '{s name="has_canceled_orders_condition_text"}{/s}'
+                xtype: 'shopware-form-field-shop-grid',
+                name: 'shopIds',
+                flex: 1,
+                allowSorting: false,
+                useSeparator: false,
+                allowBlank: false,
+                store: factory.createEntitySearchStore("Shopware\\Models\\Shop\\Shop"),
+                searchStore: factory.createEntitySearchStore("Shopware\\Models\\Shop\\Shop")
             }]
         };
     }

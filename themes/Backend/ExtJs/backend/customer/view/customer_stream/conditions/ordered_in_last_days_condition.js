@@ -22,14 +22,14 @@
  */
 
 //{namespace name="backend/customer_stream/translation"}
-Ext.define('Shopware.apps.CustomerStream.view.conditions.OrderedProductOfManufacturerCondition', {
+Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.OrderedInLastDaysCondition', {
 
     getLabel: function() {
-        return '{s name="ordered_product_of_manufacturer_condition"}{/s}';
+        return '{s name="ordered_in_last_days_condition"}{/s}';
     },
 
     supports: function(conditionClass) {
-        return (conditionClass == 'Shopware\\Bundle\\CustomerSearchBundle\\Condition\\OrderedProductOfManufacturerCondition');
+        return (conditionClass == 'Shopware\\Bundle\\CustomerSearchBundle\\Condition\\OrderedInLastDaysCondition');
     },
 
     create: function(callback) {
@@ -41,20 +41,13 @@ Ext.define('Shopware.apps.CustomerStream.view.conditions.OrderedProductOfManufac
     },
 
     _create: function() {
-        var factory = Ext.create('Shopware.attribute.SelectionFactory');
-
         return {
-            title: '{s name="ordered_product_of_manufacturer_condition_selection"}{/s}',
-            conditionClass: 'Shopware\\Bundle\\CustomerSearchBundle\\Condition\\OrderedProductOfManufacturerCondition',
+            title:  '{s name="ordered_in_last_days_condition_input"}{/s}',
+            conditionClass: 'Shopware\\Bundle\\CustomerSearchBundle\\Condition\\OrderedInLastDaysCondition',
             items: [{
-                xtype: 'shopware-form-field-grid',
-                name: 'manufacturerIds',
-                flex: 1,
-                allowSorting: false,
-                useSeparator: false,
-                allowBlank: false,
-                store: factory.createEntitySearchStore("Shopware\\Models\\Article\\Supplier"),
-                searchStore: factory.createEntitySearchStore("Shopware\\Models\\Article\\Supplier")
+                xtype: 'numberfield',
+                minValue: 1,
+                name: 'lastDays'
             }]
         };
     }

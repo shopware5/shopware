@@ -22,14 +22,14 @@
  */
 
 //{namespace name="backend/customer_stream/translation"}
-Ext.define('Shopware.apps.CustomerStream.view.conditions.OrderedAtWeekdayCondition', {
+Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.OrderedOnDeviceCondition', {
 
     getLabel: function() {
-        return '{s name="ordered_at_weekday_condition"}{/s}';
+        return '{s name="ordered_on_device_condition"}{/s}';
     },
 
     supports: function(conditionClass) {
-        return (conditionClass == 'Shopware\\Bundle\\CustomerSearchBundle\\Condition\\OrderedAtWeekdayCondition');
+        return (conditionClass == 'Shopware\\Bundle\\CustomerSearchBundle\\Condition\\OrderedOnDeviceCondition');
     },
 
     create: function(callback) {
@@ -44,22 +44,18 @@ Ext.define('Shopware.apps.CustomerStream.view.conditions.OrderedAtWeekdayConditi
         var store = Ext.create('Ext.data.Store', {
             fields: ['id', 'label'],
             data: [
-                { id: 'monday', label: '{s name="monday"}{/s}' },
-                { id: 'tuesday', label: '{s name="tuesday"}{/s}' },
-                { id: 'wednesday', label: '{s name="wednesday"}{/s}' },
-                { id: 'thursday', label: '{s name="thursday"}{/s}' },
-                { id: 'friday', label: '{s name="friday"}{/s}' },
-                { id: 'saturday', label: '{s name="saturday"}{/s}' },
-                { id: 'sunday', label: '{s name="sunday"}{/s}' }
+                { id: 'desktop', label: '<div class="sprite-imac" style="width: 16px; height: 16px; display: inline-block; margin-right:5px">&nbsp;</div> {s name="desktop"}{/s}' },
+                { id: 'tablet',  label: '<div class="sprite-ipad--portrait" style="width: 16px; height: 16px; display: inline-block; margin-right:5px">&nbsp;</div> {s name="tablet"}{/s}' },
+                { id: 'mobile',  label: '<div class="sprite-iphone--portrait" style="width: 16px; height: 16px; display: inline-block; margin-right:5px">&nbsp;</div> {s name="mobile"}{/s}' }
             ]
         });
 
         return {
-            title: '{s name="ordered_at_weekday_condition_selection"}{/s}',
-            conditionClass: 'Shopware\\Bundle\\CustomerSearchBundle\\Condition\\OrderedAtWeekdayCondition',
+            title: '{s name="ordered_on_device_condition_selection"}{/s}',
+            conditionClass: 'Shopware\\Bundle\\CustomerSearchBundle\\Condition\\OrderedOnDeviceCondition',
             items: [{
                 xtype: 'shopware-form-field-grid',
-                name: 'weekdays',
+                name: 'devices',
                 flex: 1,
                 allowSorting: false,
                 useSeparator: false,

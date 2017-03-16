@@ -22,14 +22,14 @@
  */
 
 //{namespace name="backend/customer_stream/translation"}
-Ext.define('Shopware.apps.CustomerStream.view.conditions.OrderedInLastDaysCondition', {
+Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.HasTotalOrderAmountCondition', {
 
     getLabel: function() {
-        return '{s name="ordered_in_last_days_condition"}{/s}';
+        return '{s name="total_order_amount_condition"}{/s}';
     },
 
     supports: function(conditionClass) {
-        return (conditionClass == 'Shopware\\Bundle\\CustomerSearchBundle\\Condition\\OrderedInLastDaysCondition');
+        return (conditionClass == 'Shopware\\Bundle\\CustomerSearchBundle\\Condition\\HasTotalOrderAmountCondition');
     },
 
     create: function(callback) {
@@ -42,12 +42,12 @@ Ext.define('Shopware.apps.CustomerStream.view.conditions.OrderedInLastDaysCondit
 
     _create: function() {
         return {
-            title:  '{s name="ordered_in_last_days_condition_input"}{/s}',
-            conditionClass: 'Shopware\\Bundle\\CustomerSearchBundle\\Condition\\OrderedInLastDaysCondition',
+            title: '{s name="total_order_amount_condition_input"}{/s}',
+            conditionClass: 'Shopware\\Bundle\\CustomerSearchBundle\\Condition\\HasTotalOrderAmountCondition',
             items: [{
                 xtype: 'numberfield',
                 minValue: 1,
-                name: 'lastDays'
+                name: 'minimumOrderAmount'
             }]
         };
     }

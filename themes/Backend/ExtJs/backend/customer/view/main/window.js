@@ -37,8 +37,8 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
     border:false,
     autoShow:true,
     layout:'border',
-    width:'90%',
-    height:'90%',
+    width:'95%',
+    height:'95%',
     title:'{s name=window_title}Customer list{/s}',
 
     snippets:{
@@ -64,15 +64,15 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
         var me = this;
 
         Ext.suspendLayouts();
-        me.listStore = Ext.create('Shopware.apps.CustomerStream.store.Preview', { pageSize: 10}).load({ conditions: null });
+        me.listStore = Ext.create('Shopware.apps.Customer.store.Preview', { pageSize: 15 }).load({ conditions: null });
 
         me.gridPanel = Ext.create('Shopware.apps.Customer.view.list.List', {
             store: me.listStore
         });
         me.gridPanel.on('selection-changed', Ext.bind(me.customerSelected, me));
 
-        me.streamListing = Ext.create('Shopware.apps.CustomerStream.view.list.CustomerStream', {
-            store: Ext.create('Shopware.apps.CustomerStream.store.CustomerStream').load(),
+        me.streamListing = Ext.create('Shopware.apps.Customer.view.customer_stream.Listing', {
+            store: Ext.create('Shopware.apps.Customer.store.CustomerStream').load(),
             subApp: me.subApp,
             collapsible: true,
             hideHeaders: true,
@@ -82,7 +82,10 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
             selectionChanged: Ext.bind(me.streamSelected, me)
         });
 
-        me.filterPanel = Ext.create('Shopware.apps.CustomerStream.view.detail.ConditionPanel', { flex: 4 });
+        me.streamListing.cellEditor.on('edit', Ext.bind(me.streamEdited, me));
+        me.streamListing.on('customerStream-edit-item', Ext.bind(me.editStream, me));
+
+        me.filterPanel = Ext.create('Shopware.apps.Customer.view.customer_stream.ConditionPanel', { flex: 4 });
 
         me.metaChart = me.createChart(
             [
@@ -102,8 +105,17 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
             layout: 'border'
         });
 
+        me.streamDetailForm = Ext.create('Ext.form.Panel', {
+            bodyPadding: 20,
+            dockedItems: [{
+                xtype: 'toolbar',
+                dock: 'bottom',
+                items: ['->', me.createSaveStreamDetailButton()]
+            }]
+        });
+
         me.cardContainer = Ext.create('Ext.container.Container', {
-            items: [me.gridPanel, me.metaChart, me.streamChartContainer] ,
+            items: [me.gridPanel, me.metaChart, me.streamChartContainer, me.streamDetailForm] ,
             region: 'center',
             layout: 'card'
         });
@@ -111,12 +123,12 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
         me.formPanel = Ext.create('Ext.form.Panel', {
             region: 'west',
             collapsible: true,
-            cls: 'shopware-form',
+            cls: 'shopware-form customer-filter-panel',
             layout: {
                 type: 'vbox',
                 align: 'stretch'
             },
-            width: 300,
+            width: 400,
             title: 'Filter & Customer Streams',
             items: [
                 me.filterPanel,
@@ -134,6 +146,8 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
         me.callParent(arguments);
 
         me.resetProgressbar();
+
+        me.startPartialIndexing();
     },
 
     resetProgressbar: function () {
@@ -365,7 +379,6 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
     },
 
 
-
     customerSelected: function (selection) {
         var me = this;
         me.deleteCustomerButton.setDisabled(selection.length == 0);
@@ -400,7 +413,7 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
 
     resetFilterPanel: function() {
         var me = this;
-        var newStream = Ext.create('Shopware.apps.CustomerStream.model.CustomerStream', {
+        var newStream = Ext.create('Shopware.apps.Customer.model.CustomerStream', {
             id: null,
             name: 'New stream'
         });
@@ -456,6 +469,7 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
         }
 
         if (selection.length <= 0) {
+            me.resetTitles();
             me.resetConditions();
             me.loadChart();
             return;
@@ -470,8 +484,6 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
 
         me.streamListing.setLoading(true);
 
-        me.setTitle('Kundenliste: ' + record.get('name'));
-
         me.resetFilterPanel();
         me.formPanel.loadRecord(record);
 
@@ -480,7 +492,29 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
             conditions: record.get('conditions')
         };
 
+        me.updateTitles(record);
+
         me.listStore.load();
+    },
+
+    updateTitles: function (stream) {
+        var me = this,
+            title = stream.get('name').substr(0, 20);
+
+        if (stream.get('name').length > 20) {
+            title += '...';
+        }
+
+        me.formPanel.setTitle(stream.get('name'));
+        me.saveStreamButton.setText('Save: ' + title);
+        me.setTitle('Kundenliste für ' + stream.get('name'));
+    },
+
+    resetTitles: function() {
+        var me = this;
+
+        me.formPanel.setTitle('Stream filter');
+        me.setTitle('Kundenliste');
     },
 
     loadChart: function() {
@@ -537,6 +571,51 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
     },
 
 
+    createSaveStreamDetailButton: function() {
+        var me = this;
+
+        return Ext.create('Ext.button.Button', {
+            text: 'Save',
+            cls: 'primary',
+            handler: function () {
+                me.saveStreamDetails();
+            }
+        });
+    },
+
+    saveStreamDetails: function() {
+        var me = this;
+
+        if (!me.streamDetailForm.getForm().isValid()) {
+            return;
+        }
+        var record = me.streamDetailForm.getRecord();
+        me.streamDetailForm.getForm().updateRecord(record);
+
+        record.save({
+            callback: function() {
+                me.switchLayout('table');
+                me.updateTitles(record);
+            }
+        });
+    },
+
+    editStream: function(grid, record) {
+        var me = this;
+
+        var detail = Ext.create('Shopware.apps.Customer.view.customer_stream.Detail', {
+            record: record
+        });
+
+        me.streamDetailForm.removeAll();
+        me.streamDetailForm.add(detail);
+        me.streamDetailForm.loadRecord(record);
+        me.cardContainer.getLayout().setActiveItem(3);
+    },
+
+    streamEdited: function (editor, event) {
+        this.updateTitles(event.record);
+    },
 
     saveStream: function (record, callback) {
         var me = this;
@@ -567,6 +646,8 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
         var me = this;
         var record = me.formPanel.getForm().getRecord();
 
+        console.log("record", record);
+
         if (record) {
             me.saveStream(me.formPanel.getForm().getRecord(), callback);
             return;
@@ -576,7 +657,7 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
 
     createStream: function(callback) {
         var me = this;
-        var record = Ext.create('Shopware.apps.CustomerStream.model.CustomerStream', {
+        var record = Ext.create('Shopware.apps.Customer.model.CustomerStream', {
             id: null,
             name: 'New stream'
         });
@@ -585,9 +666,31 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
 
 
 
+    startPartialIndexing: function() {
+        var me = this;
 
+        me.indexingBar.value = 0;
+        me.formPanel.setDisabled(true);
 
+        Ext.Ajax.request({
+            url: '{url controller=CustomerStream action=getPartialCount}',
+            success: function(operation) {
+                var response = Ext.decode(operation.responseText);
 
+                var params = { total: response.total };
+
+                if (response.lastIndexTime) {
+                    params.lastIndexTime = response.lastIndexTime;
+                }
+
+                me.start([{
+                    text: 'Analyzing new customers',
+                    url: '{url controller=CustomerStream action=buildSearchIndex}',
+                    params: params
+                }]);
+            }
+        });
+    },
 
 
     startPopulate: function(record) {

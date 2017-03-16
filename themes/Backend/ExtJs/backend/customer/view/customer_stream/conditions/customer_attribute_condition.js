@@ -22,14 +22,20 @@
  */
 
 //{namespace name="backend/customer_stream/translation"}
-Ext.define('Shopware.apps.CustomerStream.view.conditions.OrderedProductOfCategoryCondition', {
+
+
+Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.CustomerAttributeCondition', {
+
+    mixins: {
+        factory: 'Shopware.attribute.SelectionFactory'
+    },
 
     getLabel: function() {
-        return '{s name="ordered_product_of_category_condition"}{/s}';
+        return '{s name="customer_attribute_condition"}{/s}';
     },
 
     supports: function(conditionClass) {
-        return (conditionClass == 'Shopware\\Bundle\\CustomerSearchBundle\\Condition\\OrderedProductOfCategoryCondition');
+        return (conditionClass == 'Shopware\\Bundle\\CustomerSearchBundle\\Condition\\CustomerAttributeCondition');
     },
 
     create: function(callback) {
@@ -44,18 +50,9 @@ Ext.define('Shopware.apps.CustomerStream.view.conditions.OrderedProductOfCategor
         var factory = Ext.create('Shopware.attribute.SelectionFactory');
 
         return {
-            title: '{s name="ordered_product_of_category_condition_selection"}{/s}',
-            conditionClass: 'Shopware\\Bundle\\CustomerSearchBundle\\Condition\\OrderedProductOfCategoryCondition',
-            items: [{
-                xtype: 'shopware-form-field-category-grid',
-                name: 'categoryIds',
-                flex: 1,
-                allowSorting: false,
-                useSeparator: false,
-                allowBlank: false,
-                store: factory.createEntitySearchStore("Shopware\\Models\\Category\\Category"),
-                searchStore: factory.createEntitySearchStore("Shopware\\Models\\Category\\Category")
-            }]
+            title: this.getLabel(),
+            conditionClass: 'Shopware\\Bundle\\CustomerSearchBundle\\Condition\\CustomerAttributeCondition',
+            items: []
         };
     }
 });

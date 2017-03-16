@@ -22,14 +22,14 @@
  */
 
 //{namespace name="backend/customer_stream/translation"}
-Ext.define('Shopware.apps.CustomerStream.view.conditions.HasTotalOrderAmountCondition', {
+Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.OrderedProductCondition', {
 
     getLabel: function() {
-        return '{s name="total_order_amount_condition"}{/s}';
+        return '{s name="ordered_product_condition"}{/s}';
     },
 
     supports: function(conditionClass) {
-        return (conditionClass == 'Shopware\\Bundle\\CustomerSearchBundle\\Condition\\HasTotalOrderAmountCondition');
+        return (conditionClass == 'Shopware\\Bundle\\CustomerSearchBundle\\Condition\\OrderedProductCondition');
     },
 
     create: function(callback) {
@@ -41,13 +41,20 @@ Ext.define('Shopware.apps.CustomerStream.view.conditions.HasTotalOrderAmountCond
     },
 
     _create: function() {
+        var factory = Ext.create('Shopware.attribute.SelectionFactory');
+
         return {
-            title: '{s name="total_order_amount_condition_input"}{/s}',
-            conditionClass: 'Shopware\\Bundle\\CustomerSearchBundle\\Condition\\HasTotalOrderAmountCondition',
+            title: '{s name="ordered_product_condition_selection"}{/s}',
+            conditionClass: 'Shopware\\Bundle\\CustomerSearchBundle\\Condition\\OrderedProductCondition',
             items: [{
-                xtype: 'numberfield',
-                minValue: 1,
-                name: 'minimumOrderAmount'
+                xtype: 'shopware-form-field-product-grid',
+                name: 'numbers',
+                flex: 1,
+                allowSorting: false,
+                useSeparator: false,
+                allowBlank: false,
+                store: factory.createEntitySearchStore("Shopware\\Models\\Article\\Article"),
+                searchStore: factory.createEntitySearchStore("Shopware\\Models\\Article\\Article")
             }]
         };
     }

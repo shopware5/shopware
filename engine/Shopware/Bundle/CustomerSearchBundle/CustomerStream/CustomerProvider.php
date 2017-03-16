@@ -66,7 +66,7 @@ class CustomerProvider
 
         $orders = $this->customerOrderGateway->getList($customerIds);
 
-        $interests = $this->customerInterestsGateway->getInterests($customerIds, 180);
+        $interests = $this->customerInterestsGateway->getInterests($customerIds, 360);
 
         $analyzedCustomers = [];
         foreach ($customers as $id => $customer) {
