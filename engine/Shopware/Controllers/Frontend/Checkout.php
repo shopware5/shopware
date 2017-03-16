@@ -24,13 +24,14 @@
 
 use Enlight_Controller_Request_Request as Request;
 use Shopware\Models\Customer\Address;
+use Shopware\Components\CSRFGetProtectionAware;
 
 /**
  * @category  Shopware
  * @package   Shopware\Controllers\Frontend
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
+class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action implements CSRFGetProtectionAware
 {
     /**
      * Reference to sAdmin object (core/class/sAdmin.php)
@@ -421,7 +422,6 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
     {
         if ($this->View()->sUserData['additional']['user']['accountmode'] == 1) {
             Shopware()->Session()->unsetAll();
-            $this->get('shopware.csrftoken_validator')->invalidateToken($this->Response());
             Shopware()->Modules()->Basket()->sRefreshBasket();
         }
         return $this->redirect(array('controller'=> 'index'));
@@ -1823,5 +1823,10 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         foreach ($articles as $id => $quantity) {
             $this->basket->sUpdateArticle($id, $quantity);
         }
+    }
+
+    public function getCSRFProtectedActions()
+    {
+        return ['ajaxAddArticleCart', 'ajaxCart', 'ajaxDeleteArticle', 'ajaxAmount', 'addArticle', 'ajaxDeleteArticleCart'];
     }
 }

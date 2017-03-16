@@ -22,10 +22,12 @@
  * our trademarks remain entirely with us.
  */
 
+use \Shopware\Components\CSRFGetProtectionAware;
+
 /**
  * Compare controller
  */
-class Shopware_Controllers_Frontend_Compare extends Enlight_Controller_Action
+class Shopware_Controllers_Frontend_Compare extends Enlight_Controller_Action implements CSRFGetProtectionAware
 {
     protected $articles;
 
@@ -71,5 +73,10 @@ class Shopware_Controllers_Frontend_Compare extends Enlight_Controller_Action
     public function overlayAction()
     {
         $this->View()->sComparisonsList = $this->articles->sGetComparisonList();
+    }
+
+    public function getCSRFProtectedActions()
+    {
+        return ['overlay', 'addArticle', 'deleteArticle', 'deleteAll'];
     }
 }

@@ -13,6 +13,10 @@ This changelog references changes done in Shopware 5.2 patch versions.
 * Added optional `Guzzle` client config parameter to `Shopware\Components\HttpClient\GuzzleFactory::createClient` method
 * Added events `sendRequestSuccess` and `sendRequestFailure` to `_sendRequest` in `themes/Backend/ExtJs/backend/category/controller/article_mapping.js`
 * Deprecated duplicate block `frontend_blog_detail_comments` in `frontend/blog/detail.tpl`, use `frontend_blog_detail_comments_count` and `frontend_blog_detail_comments_list` instead. 
+* Changed CSRF validation method in `engine/Shopware/Components/CSRFTokenValidator` from session validation to cookie validation.
+* Removed `invalidateToken` from `engine/Shopware/Components/CSRFTokenValidator`
+* Added opt-in for CSRF GET protection. Implement `engine/Shopware/Components/CSRFTGetProtectionAware` and return the controller actons which should be protected via `getCSRFProtectedActions`.
+* Added CSRF specific error message.
 
 ## 5.2.20
 

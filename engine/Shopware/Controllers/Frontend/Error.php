@@ -62,6 +62,14 @@ class Shopware_Controllers_Frontend_Error extends Enlight_Controller_Action impl
         } else {
             $this->View()->loadTemplate($templateModule . '/error/index.tpl');
         }
+
+        if ($this->isCsrfValidationException()) {
+            $backUrl = htmlspecialchars($_SERVER['HTTP_REFERER']);
+            if (!empty($backUrl)) {
+                $this->View()->assign('backUrl', $backUrl);
+            }
+            $this->View()->assign('isCsrfException', 'true');
+        }
     }
 
     public function cliAction()
@@ -212,5 +220,24 @@ class Shopware_Controllers_Frontend_Error extends Enlight_Controller_Action impl
             'genericError',
             'service'
         ];
+    }
+
+    /**
+     * Checks if the Response contains a CSRF Token validation exception
+     *
+     * @return bool
+     */
+    private function isCsrfValidationException()
+    {
+        $exceptions = $this->Response()->getException();
+        if (empty($exceptions)) {
+            return false;
+        }
+        foreach ($exceptions as $exception) {
+            if ($exception instanceof \Shopware\Components\CSRFTokenValidationException) {
+                return true;
+            }
+        }
+        return false;
     }
 }

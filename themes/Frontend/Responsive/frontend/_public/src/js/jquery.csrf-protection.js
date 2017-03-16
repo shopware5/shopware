@@ -50,7 +50,7 @@
          * @returns {boolean}
          */
         checkToken: function() {
-            return $.getCookie('invalidate-xcsrf-token') === undefined && this.getToken() !== undefined;
+            return this.getToken() !== undefined;
         },
 
         /**
@@ -114,6 +114,7 @@
             var me = this;
 
             $(document).ajaxSend($.proxy(me._ajaxBeforeSend, me));
+            $(document).ajaxSend($.proxy(me._jsonpBeforeSend, me));
             $(document).ajaxComplete($.proxy(me._ajaxAfterSend, me));
 
             $.publish('plugin/swCsrfProtection/setupAjax', [ me, me.getToken() ]);
@@ -131,7 +132,7 @@
         },
 
         /**
-         * Append X-CSRF-Token header to every request
+         * Append X-CSRF-Token header to every request which is not a jsonp-request
          *
          * @param event
          * @param request
@@ -139,9 +140,32 @@
          * @private
          */
         _ajaxBeforeSend: function(event, request, settings) {
-            if (!settings.hasOwnProperty('ignoreCSRFHeader') || settings.ignoreCSRFHeader === false) {
-                request.setRequestHeader('X-CSRF-Token', this.getToken());
+            if (settings.hasOwnProperty('ignoreCSRFHeader') || settings.ignoreCSRFHeader === true) {
+                return;
             }
+
+            if (!settings.dataType || settings.dataType.toLowerCase() === 'jsonp') {
+                return;
+            }
+            request.setRequestHeader('X-CSRF-Token', this.getToken());
+        },
+
+        /**
+         * Append __csrf_token parameter to the URL if it's missing
+         * @param event
+         * @param request
+         * @param settings
+         * @private
+         */
+        _jsonpBeforeSend: function(event, request, settings) {
+            if (!settings.type || settings.type.toLowerCase() !== 'get') {
+                return;
+            }
+
+            if (settings.url.indexOf('__csrf_token=') !== -1) {
+                return;
+            }
+            settings.url = settings.url + '&__csrf_token=' + this.getToken();
         },
 
         /**
@@ -154,7 +178,6 @@
                 url: window.csrfConfig.generateUrl,
                 success: function(response, status, xhr) {
                     me.saveToken(xhr.getResponseHeader('x-csrf-token'));
-                    $.removeCookie('invalidate-xcsrf-token');
                     $.publish('plugin/swCsrfProtection/requestToken', [ me, me.getToken() ]);
                     me.afterInit();
                 }

@@ -22,23 +22,18 @@
  * our trademarks remain entirely with us.
  */
 
-class Shopware_Controllers_Frontend_Csrftoken extends Enlight_Controller_Action
+namespace Shopware\Components;
+
+/**
+ * Interface CSRFGetProtectionAware
+ * @package Shopware\Components
+ */
+interface CSRFGetProtectionAware
 {
     /**
-     * Loads auth and script renderer resource
+     * Returns a list with actions which will be checked for CSRF protection
+     *
+     * @return string[]
      */
-    public function preDispatch()
-    {
-        $this->Front()->Plugins()->ViewRenderer()->setNoRender(true);
-    }
-
-    /**
-     * Generates a token and fills the cookie and session
-     */
-    public function indexAction()
-    {
-        $token = \Shopware\Components\Random::getAlphanumericString(30);
-
-        $this->Response()->setHeader('X-CSRF-Token', $token);
-    }
+    public function getCSRFProtectedActions();
 }
