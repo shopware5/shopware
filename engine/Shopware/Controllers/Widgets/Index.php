@@ -22,6 +22,8 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+
 /**
  * Shopware Application
  */
@@ -42,12 +44,10 @@ class Shopware_Controllers_Widgets_Index extends Enlight_Controller_Action
      */
     public function refreshStatisticAction()
     {
-        $request = $this->Request();
-        $response = $this->Response();
+        /** @var ShopContextInterface $context */
+        $context = $this->get('shopware_storefront.context_service')->getShopContext();
 
-        /** @var $plugin Shopware_Plugins_Frontend_Statistics_Bootstrap */
-        $plugin = Shopware()->Plugins()->Frontend()->Statistics();
-        $plugin->updateLog($request, $response);
+        $this->get('shopware.statistics.tracer')->trace($this->Request(), $context);
     }
 
     /**
