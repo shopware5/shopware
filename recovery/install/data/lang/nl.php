@@ -61,7 +61,7 @@ EOT
     'requirements_tablefiles_colstatus' => 'Status',
     'requirements_error' => 'Sommige vereisten worden niet vervuld.',
     'requirements_success'              => '<h3>Gefeliciteerd!</h3>Er is aan alle eisen voor een succesvolle installatie voldaan!',
-    'requirements_ioncube'              => '<strong>Hint:</strong> Het encryption tool ionCube is niet geïnstalleerd. Deze is alleen nodig indien je later via ons Shopware Community Store plugins wilt installeren, die met ionCube versleuteld zijn. ionCube kan ook achteraf nog worden geïnstalleerd.',
+    'requirements_ioncube'              => '<strong>* Hint:</strong> Het encryption tool ionCube is niet geïnstalleerd. Deze is alleen nodig indien je later via ons Shopware Community Store plugins wilt installeren, die met ionCube versleuteld zijn. ionCube kan ook achteraf nog worden geïnstalleerd.',
     'requirements_php_info' => 'Uw server moet de volgende systeemvereisten vervullen, waarmee Shopware uit te voeren is.',
     'requirements_system_colcheck' => 'Vereisten',
     'requirements_system_colrequired' => 'Vereisten',

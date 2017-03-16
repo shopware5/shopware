@@ -63,7 +63,7 @@ EOT
     'requirements_tablefiles_colstatus' => 'Status',
     'requirements_error' => 'Some system requirements have not been met.',
     'requirements_success'              => '<h3>Congratulations!</h3>All requirements for a successfull installation are met',
-    'requirements_ioncube'              => '<strong>Hinweis:</strong> Auf Deinem System ist die Codierungs-Software ionCube nicht installiert. Diese wird nur benötigt, wenn Du Dir später über unseren <a href="https://store.shopware.com" target="_blank">Shopware Community Store</a> Erweiterungen installieren möchtest, die mit ionCube verschlüsselt sind. Du kannst die Installation von ionCube auch jederzeit nachholen.',
+    'requirements_ioncube'              => '<strong>* Note:</strong> Auf Deinem System ist die Codierungs-Software ionCube nicht installiert. Diese wird nur benötigt, wenn Du Dir später über unseren <a href="https://store.shopware.com" target="_blank">Shopware Community Store</a> Erweiterungen installieren möchtest, die mit ionCube verschlüsselt sind. Du kannst die Installation von ionCube auch jederzeit nachholen.',
     'requirements_php_info' => 'Your server must meet the following requirements in order to run Shopware.',
     'requirements_system_colcheck' => 'Check',
     'requirements_system_colrequired' => 'Required',

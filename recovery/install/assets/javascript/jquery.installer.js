@@ -285,5 +285,9 @@
             $element.addClass('is--hidden');
             $this.html($this.attr('data-hidden'));
         }
+
+        $('html, body').animate({
+            scrollTop: $element.offset().top - 50 // Offset to show headline
+        }, 750);
     });
 })(jQuery);
