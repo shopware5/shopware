@@ -302,4 +302,8 @@
             scrollTop: $element.offset().top - 50 // Offset to show headline
         }, 750);
     });
+
+    $('input[type=checkbox].toggle').on('change.toggle', function () {
+        $($(this).attr('data-href')).toggleClass('is--hidden');
+    });
 })(jQuery);

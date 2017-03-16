@@ -80,12 +80,13 @@ EOT
 
     'database-configuration_header' => 'Datenbank konfigurieren',
     'database-configuration_field_host' => 'Datenbank Server:',
+    'database-configuration_advanced_settings'   => 'Erweiterte Einstellungen anzeigen',
     'database-configuration_field_port' => 'Datenbank Port:',
     'database-configuration_field_socket' => 'Datenbank Socket (optional):',
     'database-configuration_field_user' => 'Datenbank Benutzer:',
     'database-configuration_field_password' => 'Datenbank Passwort:',
     'database-configuration_field_database' => 'Datenbank Name:',
-    'database-configuration_info' => 'Geben Sie hier Ihre Datenbank-Zugangsdaten ein. Wenn Sie sich nicht sicher sind, welche Daten Sie eintragen müssen, kontaktieren Sie Ihren Provider.', // Enter your database connection - if you are not sure what data must be entered here, please contact your provider.
+    'database-configuration_info' => 'Um Shopware auf Deinem System zu installieren, werden die Zugangsdaten zur Datenbank benötigt. Wenn Du Dir nicht sicher bist, was du eintragen musst, kontaktiere Deinen Administrator / Hoster.', // Enter your database connection - if you are not sure what data must be entered here, please contact your provider.
     'database-configuration-create_new_database' => 'Neue Datenbank anlegen',
 
     'database-import_header' => 'Datenbank importieren',

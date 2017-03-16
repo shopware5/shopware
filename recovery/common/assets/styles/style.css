@@ -140,6 +140,11 @@ label {
 p label {
     padding-left: 0;
 }
+label.width-auto {
+    width: auto;
+    display: inline;
+    padding-left: 3px;
+}
 ::-webkit-input-placeholder {
     color: #93a6b3;
     font-weight: 400;
@@ -406,7 +411,7 @@ p label {
     color: #379838;
     border-color: rgba(55, 208, 70, 0.4);
     background: rgba(55, 208, 70, 0.2);
-}
+}z
 .alert-info {
     color: #02567f;
     border-color: rgba(31, 179, 251, 0.4);
