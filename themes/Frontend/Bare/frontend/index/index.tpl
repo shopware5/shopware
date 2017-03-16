@@ -153,6 +153,8 @@
         {block name="frontend_index_header_javascript_inline"}
             var timeNow = {time() nocache};
 
+            var cacheCreated = '{themeTimestamp}';
+
             var controller = controller || {ldelim}
                 'vat_check_enabled': '{config name='vatcheckendabled'}',
                 'vat_check_required': '{config name='vatcheckrequired'}',
