@@ -103,12 +103,13 @@ class Shopware_RegressionTests_Ticket4788 extends Enlight_Components_Test_Plugin
      */
     public function testArticleLongDescriptionOnDetailPage()
     {
-        // Check
+        $e = Shopware()->Container()->get('events');
+        $e->addSubscriber(Shopware()->Container()->get('shopware.components.seo_template_subscriber'));
+
         foreach ($this->articlesToTest as $articleId => $categoryId) {
             $this->dispatch("/detail/index/sArticle/{$articleId}");
             $this->assertContains($this->longDescription, $this->Response()->getBody());
             $this->assertContains($this->longDescriptionStripped, $this->Response()->getBody());
-            $this->reset();
         }
     }
 }

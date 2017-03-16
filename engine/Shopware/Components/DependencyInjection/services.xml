@@ -627,5 +627,12 @@
         <service id="shopware.filesystem.factory.microsoft_azure" class="Shopware\Components\Filesystem\Adapter\AzureFactory">
             <tag name="shopware.filesystem.factory" />
         </service>
+
+        <service id="shopware.components.seo_template_subscriber" class="Shopware\Components\SeoTemplateSubscriber">
+            <argument id="config" type="service"/>
+            <argument id="query_alias_mapper" type="service"/>
+            <argument id="shopware_storefront.context_service" type="service"/>
+            <tag name="shopware.event_subscriber"/>
+        </service>
     </services>
 </container>

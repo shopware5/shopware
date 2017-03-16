@@ -22,41 +22,43 @@
  * our trademarks remain entirely with us.
  */
 
-use Shopware\Components\QueryAliasMapper;
+namespace Shopware\Components;
 
-/**
- * Shopware SEO Plugin
- */
-class Shopware_Plugins_Frontend_Seo_Bootstrap extends Shopware_Components_Plugin_Bootstrap
+use Enlight\Event\SubscriberInterface;
+use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
+
+class SeoTemplateSubscriber implements SubscriberInterface
 {
     /**
-     * Install SEO-Plugin
-     *
-     * @return bool
+     * @var \Shopware_Components_Config
      */
-    public function install()
-    {
-        $this->subscribeEvent(
-            'Enlight_Plugins_ViewRenderer_FilterRender',
-            'onFilterRender'
-        );
-        $this->subscribeEvent(
-            'Enlight_Controller_Action_PostDispatch',
-            'onPostDispatch'
-        );
-
-        return true;
-    }
+    private $config;
 
     /**
-     * Returns capabilities so the plugin is default not installable and hidden in the plugin manager
+     * @var QueryAliasMapper
      */
-    public function getCapabilities()
+    private $queryAliasMapper;
+
+    /**
+     * @var ContextServiceInterface
+     */
+    private $contextService;
+
+    public function __construct(
+        \Shopware_Components_Config $config,
+        QueryAliasMapper $queryAliasMapper,
+        ContextServiceInterface $contextService
+    ) {
+        $this->config = $config;
+        $this->queryAliasMapper = $queryAliasMapper;
+        $this->contextService = $contextService;
+    }
+
+    public static function getSubscribedEvents()
     {
         return [
-            'install' => false,
-            'enable' => false,
-            'update' => true,
+            'Enlight_Plugins_ViewRenderer_FilterRender' => 'onFilterRender',
+            'Enlight_Controller_Action_PostDispatchSecure_Frontend' => 'onPostDispatch',
         ];
     }
 
@@ -65,31 +67,23 @@ class Shopware_Plugins_Frontend_Seo_Bootstrap extends Shopware_Components_Plugin
      *
      * @param Enlight_Event_EventArgs $args
      */
-    public function onPostDispatch(Enlight_Event_EventArgs $args)
+    public function onPostDispatch(\Enlight_Event_EventArgs $args)
     {
-        $request = $args->getSubject()->Request();
-        $response = $args->getSubject()->Response();
-        $view = $args->getSubject()->View();
+        /** @var \Enlight_Controller_Action $controller */
+        $controller = $args->getSubject();
 
-        if (!$request->isDispatched() || $response->isException()
-            || $request->getModuleName() != 'frontend'
-            || !$view->hasTemplate()
-        ) {
-            return;
-        }
+        /** @var \Enlight_Controller_Request_Request $request */
+        $request = $controller->Request();
 
-        $config = Shopware()->Config();
+        $view = $controller->View();
 
-        /** @var $mapper QueryAliasMapper */
-        $mapper = $this->get('query_alias_mapper');
-
-        $controllerBlacklist = preg_replace('#\s#', '', $config['sSEOVIEWPORTBLACKLIST']);
+        $controllerBlacklist = preg_replace('#\s#', '', $this->config->get('sSEOVIEWPORTBLACKLIST'));
         $controllerBlacklist = explode(',', $controllerBlacklist);
 
-        $queryBlacklist = preg_replace('#\s#', '', $config['sSEOQUERYBLACKLIST']);
+        $queryBlacklist = preg_replace('#\s#', '', $this->config->get('sSEOQUERYBLACKLIST'));
         $queryBlacklist = explode(',', $queryBlacklist);
 
-        if (!empty($config['sSEOMETADESCRIPTION'])) {
+        if (!empty($this->config->get('sSEOMETADESCRIPTION'))) {
             if (!empty($view->sArticle['metaDescription'])) {
                 $metaDescription = $view->sArticle['metaDescription'];
             } elseif (!empty($view->sArticle['description'])) {
@@ -110,8 +104,8 @@ class Shopware_Plugins_Frontend_Seo_Bootstrap extends Shopware_Components_Plugin
 
         $controller = $request->getControllerName();
 
-        if ($request->get('action') === 'manufacturer' && $request->get('controller') === 'listing') {
-            $alias = $mapper->getQueryAliases();
+        if (strtolower($request->getActionName()) === 'manufacturer' && strtolower($controller) === 'listing') {
+            $alias = $this->queryAliasMapper->getQueryAliases();
 
             if (array_key_exists('sSupplier', $alias) && ($index = array_search($alias['sSupplier'], $queryBlacklist, true))) {
                 unset($queryBlacklist[$index]);
@@ -121,7 +115,9 @@ class Shopware_Plugins_Frontend_Seo_Bootstrap extends Shopware_Components_Plugin
                 unset($queryBlacklist[$index]);
             }
 
-            if ($request->getQuery('sCategory') !== Shopware()->Shop()->getCategory()->getId()) {
+            $context = $this->contextService->getShopContext();
+
+            if ($request->getQuery('sCategory') !== $context->getShop()->getCategory()->getId()) {
                 $queryBlacklist[] = 'sCategory';
                 if (array_key_exists('sCategory', $alias)) {
                     $queryBlacklist[] = $alias['sCategory'];
@@ -143,10 +139,10 @@ class Shopware_Plugins_Frontend_Seo_Bootstrap extends Shopware_Components_Plugin
         $view->extendsTemplate('frontend/plugins/seo/index.tpl');
 
         if (!empty($metaRobots)) {
-            $view->SeoMetaRobots = $metaRobots;
+            $view->assign('SeoMetaRobots', $metaRobots);
         }
         if (!empty($metaDescription)) {
-            $view->SeoMetaDescription = $metaDescription;
+            $view->assign('SeoMetaDescription', $metaDescription);
         }
     }
 
@@ -157,7 +153,7 @@ class Shopware_Plugins_Frontend_Seo_Bootstrap extends Shopware_Components_Plugin
      *
      * @return mixed|string
      */
-    public function onFilterRender(Enlight_Event_EventArgs $args)
+    public function onFilterRender(\Enlight_Event_EventArgs $args)
     {
         $source = $args->getReturn();
 
@@ -165,10 +161,8 @@ class Shopware_Plugins_Frontend_Seo_Bootstrap extends Shopware_Components_Plugin
             return $source;
         }
 
-        $config = Shopware()->Config();
-
         // Remove comments
-        if (!empty($config['sSEOREMOVECOMMENTS'])) {
+        if (!empty($this->config->get('sSEOREMOVECOMMENTS'))) {
             $source = str_replace(["\r\n", "\r"], "\n", $source);
             $expressions = [
                 // Remove comments

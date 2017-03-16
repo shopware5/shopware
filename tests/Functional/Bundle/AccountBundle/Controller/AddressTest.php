@@ -297,6 +297,8 @@ Nordrhein-WestfalenDeutschland';
     private function doRequest($method, $url, $data = [])
     {
         $this->reset();
+        $e = Shopware()->Container()->get('events');
+        $e->addSubscriber(Shopware()->Container()->get('shopware.components.seo_template_subscriber'));
 
         $this->Request()->setMethod($method);
 
