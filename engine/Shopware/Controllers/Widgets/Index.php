@@ -22,32 +22,17 @@
  * our trademarks remain entirely with us.
  */
 
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
-
-/**
- * Shopware Application
- */
 class Shopware_Controllers_Widgets_Index extends Enlight_Controller_Action
 {
-    /**
-     * Pre dispatch method
-     */
-    public function preDispatch()
-    {
-        if ($this->Request()->getActionName() == 'refreshStatistic') {
-            $this->Front()->Plugins()->ViewRenderer()->setNoRender();
-        }
-    }
-
-    /**
-     * Refresh shop statistic
-     */
     public function refreshStatisticAction()
     {
-        /** @var ShopContextInterface $context */
-        $context = $this->get('shopware_storefront.context_service')->getShopContext();
+        $this->Front()->Plugins()->ViewRenderer()->setNoRender();
 
-        $this->get('shopware.statistics.tracer')->trace($this->Request(), $context);
+        $context = $this->container->get('shopware_storefront.context_service')
+            ->getShopContext();
+
+        $this->container->get('shopware.statistic.registry')
+            ->traceRequest($this->Request(), $context);
     }
 
     /**

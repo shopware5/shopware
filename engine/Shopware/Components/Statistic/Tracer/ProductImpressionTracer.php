@@ -22,12 +22,12 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Components\Statistics\Tracer;
+namespace Shopware\Components\Statistic\Tracer;
 
 use Doctrine\DBAL\Connection;
 use Enlight_Controller_Request_Request as Request;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
-use Shopware\Components\Statistics\StatisticTracerInterface;
+use Shopware\Components\Statistic\StatisticTracerInterface;
 
 class ProductImpressionTracer implements StatisticTracerInterface
 {
@@ -44,7 +44,7 @@ class ProductImpressionTracer implements StatisticTracerInterface
         $this->connection = $connection;
     }
 
-    public function trace(Request $request, ShopContextInterface $context)
+    public function traceRequest(Request $request, ShopContextInterface $context): void
     {
         $articleId = (int) $request->getParam('articleId');
 
@@ -58,39 +58,27 @@ class ProductImpressionTracer implements StatisticTracerInterface
 
         $shopId = $context->getShop()->getId();
 
-        $id = $this->fetchExisting($articleId, $shopId, $date, $deviceType);
+        $id = $this->fetchExistingArticleImpression($articleId, $shopId, $date, $deviceType);
 
         if ($id) {
             $this->connection->executeUpdate(
                 'UPDATE s_statistics_article_impression SET impressions = impressions + 1
                  WHERE id = :id',
-                [':id', $id]
+                [':id' => $id]
             );
-        } else {
-            $data = [
-                'articleId' => $articleId,
-                'shopId' => $shopId,
-                'date' => $date->format('Y-m-d'),
-                'impressions' => 1,
-            ];
-
-            if ($deviceType) {
-                $data['deviceType'] = $deviceType;
-            }
-
-            $this->connection->insert('s_statistics_article_impression', $data);
+            return;
         }
+
+        $this->connection->insert('s_statistics_article_impression', [
+            'articleId' => $articleId,
+            'shopId' => $shopId,
+            'date' => $date->format('Y-m-d'),
+            'impressions' => 1,
+            'deviceType' => $deviceType
+        ]);
     }
 
-    /**
-     * @param int         $articleId
-     * @param int         $shopId
-     * @param \DateTime   $date
-     * @param string|null $deviceType
-     *
-     * @return string|false
-     */
-    private function fetchExisting(int $articleId, int $shopId, \DateTime $date, ?string $deviceType)
+    private function fetchExistingArticleImpression(int $articleId, int $shopId, \DateTime $date, string $deviceType): ?int
     {
         $query = $this->connection->createQueryBuilder();
         $query->select('id');
@@ -98,15 +86,16 @@ class ProductImpressionTracer implements StatisticTracerInterface
         $query->andWhere('impressions.date = :fromDate');
         $query->andWhere('impressions.articleId = :productId');
         $query->andWhere('impressions.shopId = :shopId');
+        $query->andWhere('impressions.deviceType = :deviceType');
         $query->setParameter(':productId', (int) $articleId);
         $query->setParameter(':shopId', (int) $shopId);
         $query->setParameter(':fromDate', $date->format('Y-m-d'));
+        $query->setParameter(':deviceType', $deviceType);
 
-        if ($deviceType) {
-            $query->andWhere('impressions.deviceType = :deviceType');
-            $query->setParameter(':deviceType', $deviceType);
+        $id = $query->execute()->fetch(\PDO::FETCH_COLUMN);
+        if ($id) {
+            return (int) $id;
         }
-
-        return $query->execute()->fetch(\PDO::FETCH_COLUMN);
+        return null;
     }
 }

@@ -22,13 +22,13 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Components\Statistics\Tracer;
+namespace Shopware\Components\Statistic\Tracer;
 
 use Doctrine\DBAL\Connection;
 use Enlight_Controller_Request_Request as Request;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\DependencyInjection\Container;
-use Shopware\Components\Statistics\StatisticTracerInterface;
+use Shopware\Components\Statistic\StatisticTracerInterface;
 
 class CartTracer implements StatisticTracerInterface
 {
@@ -52,7 +52,7 @@ class CartTracer implements StatisticTracerInterface
         $this->connection = $connection;
     }
 
-    public function trace(Request $request, ShopContextInterface $context)
+    public function traceRequest(Request $request, ShopContextInterface $context): void
     {
         $currentController = $request->getParam(
             'requestController',
@@ -72,13 +72,18 @@ class CartTracer implements StatisticTracerInterface
             return;
         }
 
-        $customerId = (int) Shopware()->Session()->sUserId;
+        $customerId = (int) $this->container->get('session')->get('sUserId');
 
         $userAgent = (string) $request->getServer('HTTP_USER_AGENT');
 
         $this->connection->executeUpdate(
-            'UPDATE s_order_basket SET lastviewport = ?, useragent = ?, userID = ? WHERE sessionID = ?',
-            [$currentController, $userAgent, $customerId, $sessionId]
+            'UPDATE s_order_basket SET lastviewport = :viewport, useragent = :agent, userID = :customerId WHERE sessionID = :sessionId',
+            [
+                ':viewport' => $currentController,
+                ':agent' => $userAgent,
+                ':customerId' => $customerId,
+                ':sessionId' => $sessionId
+            ]
         );
     }
 }

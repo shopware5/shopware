@@ -22,13 +22,13 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Components\Statistics\Tracer;
+namespace Shopware\Components\Statistic\Tracer;
 
 use Doctrine\DBAL\Connection;
 use Enlight_Controller_Request_Request as Request;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\DependencyInjection\Container;
-use Shopware\Components\Statistics\StatisticTracerInterface;
+use Shopware\Components\Statistic\StatisticTracerInterface;
 
 class PartnerTracer implements StatisticTracerInterface
 {
@@ -52,15 +52,15 @@ class PartnerTracer implements StatisticTracerInterface
         $this->container = $container;
     }
 
-    public function trace(Request $request, ShopContextInterface $context)
+    public function traceRequest(Request $request, ShopContextInterface $context): void
     {
         $partner = $request->getParam('partner', $request->getParam('sPartner'));
 
         if ($campaignID = $this->getCampaign($partner)) {
             $this->setSession('sCampaign' . $campaignID);
             $this->connection->executeUpdate(
-                'UPDATE s_campaigns_mailings SET clicked = clicked + 1 WHERE id = ?',
-                [$campaignID]
+                'UPDATE s_campaigns_mailings SET clicked = clicked + 1 WHERE id = :id',
+                [':id' => $campaignID]
             );
 
             return;
@@ -68,14 +68,14 @@ class PartnerTracer implements StatisticTracerInterface
 
         if ($partner !== null && strpos($partner, 'sCampaign') !== 0) {
             $row = $this->connection->fetchAssoc(
-                'SELECT * FROM s_emarketing_partner WHERE active = 1 AND idcode = ?',
-                [$partner]
+                'SELECT * FROM s_emarketing_partner WHERE active = 1 AND idcode = :code',
+                [':code' => $partner]
             );
 
             if (!empty($row)) {
                 $this->setPartnerCookie(
-                    $row['idcode'],
-                    $row['cookielifetime']
+                    (string) $row['idcode'],
+                    (int) $row['cookielifetime']
                 );
             }
             $this->setSession($partner);
@@ -85,15 +85,15 @@ class PartnerTracer implements StatisticTracerInterface
 
         if ($request->getCookie('partner') !== null) {
             $partner = $this->connection->fetchColumn(
-                'SELECT idcode FROM s_emarketing_partner WHERE active = 1 AND idcode = ?',
-                [$request->getCookie('partner')]
+                'SELECT idcode FROM s_emarketing_partner WHERE active = 1 AND idcode = :code',
+                [':code' => $request->getCookie('partner')]
             );
 
             $this->setSession($partner);
         }
     }
 
-    private function setSession($partner)
+    private function setSession(?string $partner): void
     {
         if (!$this->container->initialized('session')) {
             return;
@@ -110,11 +110,6 @@ class PartnerTracer implements StatisticTracerInterface
         $session->offsetSet('sPartner', $partner);
     }
 
-    /**
-     * @param string|null $partner
-     *
-     * @return string|null
-     */
     private function getCampaign(?string $partner): ?string
     {
         if ($partner === null) {
@@ -128,11 +123,7 @@ class PartnerTracer implements StatisticTracerInterface
         return (int) str_replace('sCampaign', '', $partner);
     }
 
-    /**
-     * @param string   $idCode
-     * @param int|null $lifeTime
-     */
-    private function setPartnerCookie($idCode, $lifeTime): void
+    private function setPartnerCookie(string $idCode, int $lifeTime): void
     {
         if (!$this->container->initialized('front')) {
             return;

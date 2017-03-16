@@ -22,39 +22,11 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Components\Statistics;
+namespace Shopware\Components\Statistic;
 
 use Enlight_Controller_Request_Request as Request;
 
-class BotDetector implements BotDetectorInterface
+interface BotDetectorInterface
 {
-    /**
-     * @var \Shopware_Components_Config
-     */
-    private $config;
-
-    /**
-     * @param \Shopware_Components_Config $config
-     */
-    public function __construct(\Shopware_Components_Config $config)
-    {
-        $this->config = $config;
-    }
-
-    public function isBot(Request $request): bool
-    {
-        $blacklist = $this->config->get('botBlackList');
-
-        $userAgent = $request->getHeader('USER_AGENT');
-
-        $userAgent = preg_replace('/[^a-z]/', '', strtolower($userAgent));
-        if (empty($userAgent)) {
-            return false;
-        }
-
-        $bots = preg_replace('/[^a-z;]/', '', strtolower($blacklist));
-        $bots = explode(';', $bots);
-
-        return !empty($userAgent) && str_replace($bots, '', $userAgent) != $userAgent;
-    }
+    public function isBotRequest(Request $request): bool;
 }

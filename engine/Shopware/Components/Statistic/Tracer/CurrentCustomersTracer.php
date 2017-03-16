@@ -22,13 +22,13 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Components\Statistics\Tracer;
+namespace Shopware\Components\Statistic\Tracer;
 
 use Doctrine\DBAL\Connection;
 use Enlight_Controller_Request_Request as Request;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\DependencyInjection\Container;
-use Shopware\Components\Statistics\StatisticTracerInterface;
+use Shopware\Components\Statistic\StatisticTracerInterface;
 
 class CurrentCustomersTracer implements StatisticTracerInterface
 {
@@ -52,22 +52,30 @@ class CurrentCustomersTracer implements StatisticTracerInterface
         $this->connection = $connection;
     }
 
-    public function trace(Request $request, ShopContextInterface $context)
+    public function traceRequest(Request $request, ShopContextInterface $context): void
     {
+        $this->cleanup();
+
         $customerId = 0;
         if ($this->container->initialized('session')) {
-            $session = $this->container->get('session');
-            $customerId = $session->get('sUserId');
+            $customerId = $this->container->get('session')->get('sUserId');
         }
 
         $this->connection->executeUpdate(
-            'INSERT INTO s_statistics_currentusers (remoteaddr, page, `time`, userID, deviceType) VALUES (?, ?, NOW(), ?, ?)',
+            'INSERT INTO s_statistics_currentusers (remoteaddr, page, `time`, userID, deviceType) VALUES (:ip, :page, NOW(), :customerId, :device)',
             [
-                $request->getClientIp(),
-                $request->getParam('requestPage', $request->getRequestUri()),
-                !empty($customerId) ? (int) $customerId : 0,
-                $request->getDeviceType(),
+                ':ip' => $request->getClientIp(),
+                ':page' => $request->getParam('requestPage', $request->getRequestUri()),
+                ':customerId' => !empty($customerId) ? (int) $customerId : 0,
+                ':device' => $request->getDeviceType(),
             ]
+        );
+    }
+
+    private function cleanup(): void
+    {
+        $this->connection->executeUpdate(
+            'DELETE FROM s_statistics_currentusers WHERE time < DATE_SUB(NOW(), INTERVAL 3 MINUTE)'
         );
     }
 }

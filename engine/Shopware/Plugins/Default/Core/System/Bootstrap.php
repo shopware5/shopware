@@ -71,10 +71,10 @@ class Shopware_Plugins_Core_System_Bootstrap extends Shopware_Components_Plugin_
             return;
         }
 
-        /** @var \Shopware\Components\Statistics\BotDetectorInterface $detector */
-        $detector = Shopware()->Container()->get('shopware.statistics.bot_detector');
+        /** @var \Shopware\Components\Statistic\BotDetectorInterface $detector */
+        $detector = Shopware()->Container()->get('shopware.statistic.bot_detector');
 
-        if ($detector->isBot($args->getRequest())) {
+        if ($detector->isBotRequest($args->getRequest())) {
             Enlight_Components_Session::destroy(true, false);
         }
     }
@@ -104,9 +104,9 @@ class Shopware_Plugins_Core_System_Bootstrap extends Shopware_Components_Plugin_
             $system->_SESSION = Shopware()->Session();
             $system->sSESSION_ID = Shopware()->Session()->get('sessionId');
             if ($request !== null && Shopware()->Session()->Bot === null) {
-                /** @var \Shopware\Components\Statistics\BotDetectorInterface $detector */
-                $detector = Shopware()->Container()->get('shopware.statistics.bot_detector');
-                Shopware()->Session()->Bot = $detector->isBot($request);
+                /** @var \Shopware\Components\Statistic\BotDetectorInterface $detector */
+                $detector = Shopware()->Container()->get('shopware.statistic.bot_detector');
+                Shopware()->Session()->Bot = $detector->isBotRequest($request);
             }
             $system->sBotSession = Shopware()->Session()->Bot;
         }

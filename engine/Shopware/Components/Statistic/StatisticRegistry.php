@@ -22,14 +22,13 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Components\Statistics;
+namespace Shopware\Components\Statistic;
 
-use Doctrine\DBAL\Connection;
 use Enlight_Controller_Request_Request as Request;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware_Components_Config as Config;
 
-class StatisticsCompositeTracer implements StatisticTracerInterface
+class StatisticRegistry implements StatisticRegistryInterface
 {
     /**
      * @var StatisticTracerInterface[]
@@ -46,65 +45,42 @@ class StatisticsCompositeTracer implements StatisticTracerInterface
      */
     private $botDetector;
 
-    /**
-     * @var Connection
-     */
-    private $connection;
-
-    /**
-     * @param StatisticTracerInterface[] $tracers
-     * @param Config                     $config
-     * @param BotDetectorInterface       $botDetector
-     * @param Connection                 $connection
-     */
     public function __construct(
         array $tracers,
         Config $config,
-        BotDetectorInterface $botDetector,
-        Connection $connection
+        BotDetectorInterface $botDetector
     ) {
         $this->tracers = $tracers;
         $this->config = $config;
         $this->botDetector = $botDetector;
-        $this->connection = $connection;
     }
 
-    /**
-     * @param Request              $request
-     * @param ShopContextInterface $context
-     */
-    public function trace(Request $request, ShopContextInterface $context)
+    public function traceRequest(Request $request, ShopContextInterface $context): void
     {
         if (!$this->shouldTrace($request)) {
             return;
         }
 
-        if ((rand() % 10) == 0) {
-            $this->connection->executeUpdate(
-                'DELETE FROM s_statistics_currentusers WHERE time < DATE_SUB(NOW(), INTERVAL 3 MINUTE)'
-            );
-            $this->connection->executeUpdate(
-                'DELETE FROM s_statistics_pool WHERE datum != CURDATE()'
-            );
-        }
-
         foreach ($this->tracers as $tracer) {
-            $tracer->trace($request, $context);
+            $tracer->traceRequest($request, $context);
         }
     }
 
     private function shouldTrace(Request $request): bool
     {
-        if ($this->botDetector->isBot($request)) {
+        if ($this->botDetector->isBotRequest($request)) {
             return false;
         }
         if ($request->getClientIp() === null) {
             return false;
         }
 
-        $blockedIp = $this->config->get('blockIp');
+        $blockedIps = $this->config->get('blockIp');
+        $blockedIps = explode(',', $blockedIps);
+        $blockedIps = array_filter(array_map('trim', $blockedIps));
+        $blockedIps = array_flip($blockedIps);
 
-        if (!empty($blockedIp) && strpos($blockedIp, $request->getClientIp()) !== false) {
+        if (!empty($blockedIps) && array_key_exists($request->getClientIp(), $blockedIps)) {
             return false;
         }
 

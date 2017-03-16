@@ -22,16 +22,12 @@
  * our trademarks remain entirely with us.
  */
 
-class Migrations_Migration1006 extends Shopware\Components\Migrations\AbstractMigration
+namespace Shopware\Components\Statistic;
+
+use Enlight_Controller_Request_Request as Request;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+
+interface StatisticTracerInterface
 {
-    public function up($modus)
-    {
-        $this->addSql("SET @pluginId = (SELECT id FROM s_core_plugins WHERE name = 'Statistics' AND source = 'Default' LIMIT 1)");
-
-        $this->addSql('UPDATE s_core_config_forms SET plugin_id = NULL WHERE plugin_id = @pluginId');
-
-        $this->addSql('DELETE FROM s_core_subscribes WHERE pluginID = @pluginId');
-
-        $this->addSql('DELETE FROM s_core_plugins WHERE id = @pluginId');
-    }
+    public function traceRequest(Request $request, ShopContextInterface $context): void;
 }

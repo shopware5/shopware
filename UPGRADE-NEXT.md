@@ -136,7 +136,7 @@ This changelog references changes done in Shopware Next patch versions.
 * Removed method `Shopware_Plugins_Frontend_Statistics_Bootstrap::refreshArticleImpression`, use `Shopware\Components\Statistics\Tracer\ProductImpressionTracer` instead
 * Removed method `Shopware_Plugins_Frontend_Statistics_Bootstrap::refreshCurrentUsers`, use `Shopware\Components\Statistics\Tracer\CurrentCustomersTracer` instead
 * Removed method `Shopware_Plugins_Frontend_Statistics_Bootstrap::refreshPartner`, use `Shopware\Components\Statistics\Tracer\PartnerTracer` instead
-* Removed class `Shopware_Plugins_Frontend_Statistics_Bootstrap`, use ``\Shopware\Components\Statistics\StatisticsCompositeTracer` instead
+* Removed class `Shopware_Plugins_Frontend_Statistics_Bootstrap`, use ``\Shopware\Components\Statistics\StatisticRegistry` instead
 
 ## Filesystem
 
