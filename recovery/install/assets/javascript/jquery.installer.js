@@ -278,12 +278,24 @@
         var $element = $(this.hash),
             $this = $(this);
 
-        if ($element.hasClass('is--hidden')) {
-            $element.removeClass('is--hidden');
-            $this.html($this.attr('data-shown'));
-        } else {
-            $element.addClass('is--hidden');
-            $this.html($this.attr('data-hidden'));
+        switch (true) {
+            case $element.hasClass('is--hidden'):
+                $element.removeClass('is--hidden');
+                $this.html($this.attr('data-shown'));
+                break;
+
+            case $element.hasClass('hide-successful'):
+                $element.removeClass('hide-successful');
+                $this.html($this.attr('data-shown'));
+                break;
+
+            case $element.attr('data-hide-successful'):
+                $element.addClass('hide-successful');
+                break;
+
+            default:
+                $element.addClass('is--hidden');
+                $this.html($this.attr('data-hidden'));
         }
 
         $('html, body').animate({

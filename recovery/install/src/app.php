@@ -215,14 +215,18 @@ $app->map('/requirements/', function () use ($app, $container, $menuHelper) {
     $app->view()->setData('ioncube', (bool) $systemCheckResults['hasIoncube']);
     $app->view()->setData('warning', (bool) $systemCheckResults['hasWarnings']);
     $app->view()->setData('error', (bool) $systemCheckResults['hasErrors']);
+    $app->view()->setData('systemError', (bool) $systemCheckResults['hasErrors']);
 
     // Check file & directory permissions
     /** @var $shopwareSystemCheckPath RequirementsPath */
     $shopwareSystemCheckPath = $container->offsetGet('install.requirementsPath');
     $shopwareSystemCheckPathResult = $shopwareSystemCheckPath->check();
 
+    $app->view()->setData('pathError', false);
+
     if ($shopwareSystemCheckPathResult->hasError()) {
         $app->view()->setData('error', true);
+        $app->view()->setData('pathError', true);
     }
 
     if ($app->request()->isPost() && $app->view()->getData('error') == false) {

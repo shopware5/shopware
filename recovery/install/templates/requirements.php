@@ -4,6 +4,7 @@
 
 <?php if ($error): ?>
     <div class="alert alert-error">
+        <span class="icon-cross huge"></span>
         <?= $t->t('requirements_error') ?>
     </div>
 <?php endif ?>
@@ -14,13 +15,13 @@
         <?= $t->t("requirements_success") ?><?php if (!$ioncube): ?>*<?php endif ?>
     </div>
 <?php endif ?>
-<?php if (!$ioncube): ?>
+<?php if (!$ioncube && !$error): ?>
     <?= $t->t("requirements_ioncube") ?>
 <?php endif ?>
 
-<h4 <?php if (!$error): ?>class="success"<?php endif ?>><?= $t->t('requirements_header_files') ?> <small><a href="#permissions" data-shown="<?= $t->t("requirements_hide_all") ?>" data-hidden="<?= $t->t("requirements_show_all") ?>"><?= $t->t("requirements_show_all") ?></a></small></h4>
+<h4 class="<?php if (!$pathError): ?>success<?php endif ?><?php if ($pathError): ?>error<?php endif ?>"><?= $t->t('requirements_header_files') ?> <small><a href="#permissions" data-shown="<?= $t->t("requirements_hide_all") ?>" data-hidden="<?= $t->t("requirements_show_all") ?>"><?= $t->t("requirements_show_all") ?></a></small></h4>
 
-<div class="is--hidden" id="permissions">
+<div id="permissions" class="<?php if (!$pathError): ?>is--hidden<?php endif ?> <?php if ($pathError): ?> hide-successful<?php endif ?>" <?php if ($pathError): ?>data-hide-successful="true"<?php endif ?>>
     <p>
         <?= $t->t('requirements_files_info') ?>
     </p>
@@ -36,9 +37,9 @@
     </table>
 </div>
 
-<h4 <?php if (!$error): ?>class="success"<?php endif ?>><?= $t->t('requirements_header_system') ?> <small><a href="#systemchecks" data-shown="<?= $t->t("requirements_hide_all") ?>" data-hidden="<?= $t->t("requirements_show_all") ?>"><?= $t->t("requirements_show_all") ?></a></small></h4>
+<h4 class="<?php if (!$systemError): ?>success<?php endif ?><?php if ($systemError): ?>error<?php endif ?>"><?= $t->t('requirements_header_system') ?> <small><a href="#systemchecks" data-shown="<?= $t->t("requirements_hide_all") ?>" data-hidden="<?= $t->t("requirements_show_all") ?>"><?= $t->t("requirements_show_all") ?></a></small></h4>
 
-<div class="is--hidden" id="systemchecks">
+<div id="systemchecks" class="<?php if (!$systemError): ?>is--hidden<?php endif ?> <?php if ($systemError): ?>hide-successful<?php endif ?>" <?php if ($systemError): ?>data-hide-successful="true"<?php endif ?>>
     <p>
         <?= $t->t('requirements_php_info') ?>
     </p>
@@ -85,7 +86,7 @@
 <form action="<?= $menuHelper->getCurrentUrl() ?>" method="post">
     <div class="actions clearfix">
         <a href="<?= $menuHelper->getPreviousUrl() ?>" class="btn btn-default btn-arrow-left"><?= $t->t('back') ?></a>
-        <button type="submit" class="btn btn-primary btn-arrow-right is--right"><?= $t->t('forward') ?></button>
+        <button type="submit" class="btn btn-primary btn-arrow-right is--right" <?php if ($error): ?>disabled="disabled"<?php endif ?>><?= $t->t('forward') ?></button>
     </div>
 </form>
 

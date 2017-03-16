@@ -121,6 +121,10 @@ textarea:disabled {
     cursor: not-allowed;
     background: #fafafa;
 }
+button:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
 .license--agreement {
     font-size: 12px;
     font-family: Consolas, "Andale Mono WT", "Andale Mono", "Lucida Console", "Lucida Sans Typewriter", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Liberation Mono", "Nimbus Mono L", Monaco, "Courier New", Courier, monospace;
@@ -457,7 +461,7 @@ h3.alert-heading {
     margin-top: 5px;
     color: inherit;
 }
-.icon-checkmark.huge {
+.alert .huge {
     float: left;
     font-size: 50px;
     padding: 0 20px 0 0;
@@ -465,7 +469,9 @@ h3.alert-heading {
 .success {
     color: #379838;
 }
-
+.error {
+    color: #9D3145;
+}
 /** Table */
 table {
     width: 100%;
@@ -497,6 +503,11 @@ table .warning {
 
 table .error {
     background: rgba(197, 66, 91, 0.2);
+}
+.hide-successful table .success,
+.hide-successful table .warning,
+.hide-successful table .notice-text {
+    display: none;
 }
 
 /** Header */
