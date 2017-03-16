@@ -134,6 +134,7 @@ This changelog references changes done in Shopware Next patch versions.
 * Removed method `Shopware\Models\Tracking\Repository::getArticleImpressionQuery`
 * Removed method `Shopware\Models\Tracking\Repository::getArticleImpressionQueryBuilder`
 * Removed method `Shopware_Plugins_Frontend_Statistics_Bootstrap::refreshArticleImpression`, use `Shopware\Components\Statistics\Tracer\ProductImpressionTracer` instead
+* Removed method `Shopware_Plugins_Frontend_Statistics_Bootstrap::refreshCurrentUsers`, use `Shopware\Components\Statistics\Tracer\CurrentCustomersTracer` instead
 
 ## Filesystem
 

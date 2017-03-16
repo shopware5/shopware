@@ -661,6 +661,13 @@
             <tag name="shopware.statistics.tracer"/>
         </service>
 
+        <service id="shopware.statistics.tracer.current_customers_tracer" class="Shopware\Components\Statistics\Tracer\CurrentCustomersTracer">
+            <argument id="service_container" type="service"/>
+            <argument id="dbal_connection" type="service"/>
+            <tag name="shopware.statistics.tracer"/>
+        </service>
+
+
 
         <service id="shopware.components.seo_template_subscriber" class="Shopware\Components\SeoTemplateSubscriber">
             <argument id="config" type="service"/>

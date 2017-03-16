@@ -105,26 +105,7 @@ ShopWiki;Bot;WebAlta;;abachobot;architext;ask jeeves;frooglebot;googlebot;lycos;
         $container->get('shopware.statistics.tracer')
             ->trace($request, $context);
 
-        $this->refreshCurrentUsers($request);
         $this->refreshPartner($request, $response);
-    }
-
-    /**
-     * Refresh current users
-     *
-     * @param \Enlight_Controller_Request_Request $request
-     */
-    public function refreshCurrentUsers(Enlight_Controller_Request_Request $request)
-    {
-        $sql = '
-        INSERT INTO s_statistics_currentusers (remoteaddr, page, `time`, userID, deviceType)
-        VALUES (?, ?, NOW(), ?, ?)';
-        Shopware()->Db()->query($sql, [
-            $request->getClientIp(),
-            $request->getParam('requestPage', $request->getRequestUri()),
-            empty(Shopware()->Session()->sUserId) ? 0 : (int) Shopware()->Session()->sUserId,
-            $request->getDeviceType(),
-        ]);
     }
 
     /**
