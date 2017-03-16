@@ -294,29 +294,15 @@ class Media extends Resource
      */
     public function load($url, $baseFilename = null)
     {
-        $destPath = Shopware()->DocPath('media_' . 'temp');
-        if (!is_dir($destPath)) {
-            mkdir($destPath, 0777, true);
-        }
+        $destPath = tempnam(sys_get_temp_dir(), '');
+        unlink($destPath);
 
-        $destPath = realpath($destPath);
-
-        if (!file_exists($destPath)) {
-            throw new \InvalidArgumentException(
-                sprintf("Destination directory '%s' does not exist.", $destPath)
-            );
-        } elseif (!is_writable($destPath)) {
-            throw new \InvalidArgumentException(
-                sprintf("Destination directory '%s' does not have write permissions.", $destPath)
-            );
+        if (!@mkdir($destPath) && !is_dir($destPath)) {
+            throw new \RuntimeException(sprintf('Could not create temp directory "%s"', $destPath));
         }
 
         if (strpos($url, 'data:image') !== false) {
-            return $this->uploadBase64File(
-                $url,
-                $destPath,
-                $baseFilename
-            );
+            return $this->uploadBase64File($url, $destPath, $baseFilename);
         }
 
         $urlArray = parse_url($url);
@@ -328,11 +314,11 @@ class Media extends Resource
             case 'file':
                 $filename = $this->getUniqueFileName($destPath, $baseFilename);
 
-                if (!$put_handle = fopen("$destPath/$filename", 'w+')) {
+                if (!$put_handle = fopen("$destPath/$filename", 'wb+')) {
                     throw new \Exception("Could not open $destPath/$filename for writing");
                 }
 
-                if (!$get_handle = fopen($url, 'r')) {
+                if (!$get_handle = fopen($url, 'rb')) {
                     throw new \Exception("Could not open $url for reading");
                 }
                 while (!feof($get_handle)) {
@@ -415,7 +401,7 @@ class Media extends Resource
         $filename = $this->getUniqueFileName($destinationPath, $baseFilename);
         $filename .= '.' . $extension;
 
-        if (!$put_handle = fopen("$destinationPath/$filename", 'w+')) {
+        if (!$put_handle = fopen("$destinationPath/$filename", 'wb+')) {
             throw new \Exception("Could not open $destinationPath/$filename for writing");
         }
         while (!feof($get_handle)) {
