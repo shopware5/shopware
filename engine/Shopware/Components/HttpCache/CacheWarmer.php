@@ -210,9 +210,8 @@ class CacheWarmer
         }
 
         foreach ($urls as $url) {
-            $request = $this->guzzleClient->createRequest('GET', $url, $guzzleConfig);
             try {
-                $this->guzzleClient->send($request);
+                $this->guzzleClient->request('GET', $url, $guzzleConfig);
             } catch (\Exception $e) {
                 $this->logger->error(
                     'Warm up http-cache error with shopId ' . $shopId . ' ' . $e->getMessage()

@@ -31,6 +31,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\Question;
 
 /**
  * @category  Shopware
@@ -176,9 +177,9 @@ EOF
         $optionValue = $input->getOption($optionKey);
 
         if (empty($optionValue)) {
-            $helper = $this->getHelper('dialog');
-            $question = sprintf('Please enter the %s: ', $optionKey);
-            $optionValue = $helper->ask($output, $question);
+            $helper = $this->getHelper('question');
+            $question = new Question(sprintf('Please enter the %s: ', $optionKey));
+            $optionValue = $helper->ask($input, $output, $question);
         }
 
         return $optionValue;

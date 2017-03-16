@@ -26,6 +26,7 @@ namespace Shopware\Commands;
 
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Plugin\Plugin;
+use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -106,10 +107,9 @@ class PluginListCommand extends ShopwareCommand
             ];
         }
 
-        $table = $this->getHelperSet()->get('table');
+        $table = new Table($output);
         $table->setHeaders(['Plugin', 'Label', 'Version', 'Author', 'Active', 'Installed'])
-              ->setRows($rows);
-
-        $table->render($output);
+            ->setRows($rows)
+            ->render();
     }
 }

@@ -24,6 +24,7 @@
 
 namespace Shopware\Commands;
 
+use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -66,10 +67,9 @@ class StoreListDomainsCommand extends StoreCommand
             ];
         }
 
-        $table = $this->getHelperSet()->get('table');
+        $table = new Table($output);
         $table->setHeaders(['Domain', 'Balance'])
-              ->setRows($domains);
-
-        $table->render($output);
+            ->setRows($domains)
+            ->render();
     }
 }

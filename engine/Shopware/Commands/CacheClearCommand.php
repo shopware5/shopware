@@ -53,7 +53,7 @@ class CacheClearCommand extends ShopwareCommand
         // the old cache dir name must not be longer than the real one to avoid exceeding
         // the maximum length of a directory or file path within it (esp. Windows MAX_PATH)
         $oldCacheDir = substr($realCacheDir, 0, -1) . ('~' === substr($realCacheDir, -1) ? '+' : '~');
-        $filesystem = $this->getContainer()->get('filesystem');
+        $filesystem = $this->getContainer()->get('file_system');
 
         if (!is_writable($realCacheDir)) {
             throw new \RuntimeException(sprintf('Unable to write in the "%s" directory', $realCacheDir));

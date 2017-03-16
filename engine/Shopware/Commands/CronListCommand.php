@@ -24,6 +24,7 @@
 
 namespace Shopware\Commands;
 
+use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -70,10 +71,9 @@ EOF
             ];
         }
 
-        $table = $this->getHelperSet()->get('table');
+        $table = new Table($output);
         $table->setHeaders(['Name', 'Action', 'Active', 'Interval', 'Next run', 'Last run'])
-              ->setRows($rows);
-
-        $table->render($output);
+            ->setRows($rows)
+            ->render();
     }
 }

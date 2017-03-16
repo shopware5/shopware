@@ -25,7 +25,7 @@
 namespace Shopware\Commands;
 
 use Shopware\Components\Model\CategoryDenormalization;
-use Symfony\Component\Console\Helper\ProgressHelper;
+use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -77,10 +77,8 @@ EOF
         $count = $component->rebuildAllAssignmentsCount();
         $output->writeln("\rCounted {$count} items");
 
-        /** @var ProgressHelper $progressHelper */
-        $progressHelper = $this->getHelper('progress');
-        $progressHelper->setFormat(ProgressHelper::FORMAT_VERBOSE);
-        $progressHelper->start($output, $count);
+        $progressHelper = new ProgressBar($output, $count);
+        $progressHelper->setFormat('verbose');
         $progressHelper->advance($progress);
 
         // create the assignments
@@ -90,7 +88,5 @@ EOF
             $progressHelper->advance($limit);
         }
         $progressHelper->finish();
-
-        $output->writeln("\rDone");
     }
 }

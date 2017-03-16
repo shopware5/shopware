@@ -407,7 +407,7 @@ class StoreClient
             throw $requestException;
         }
 
-        $httpCode = $data['error'];
+        $httpCode = $requestException->getCode();
         $sbpCode = $data['code'];
 
         switch ($sbpCode) {

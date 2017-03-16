@@ -26,7 +26,6 @@ namespace Shopware\Bundle\PluginInstallerBundle\Service;
 
 use PDO;
 use Shopware\Components\Plugin;
-use Symfony\Component\ClassLoader\Psr4ClassLoader;
 
 class PluginInitializer
 {
@@ -59,9 +58,6 @@ class PluginInitializer
     {
         $plugins = [];
 
-        $classLoader = new Psr4ClassLoader();
-        $classLoader->register(true);
-
         $stmt = $this->connection->query('SELECT name FROM s_core_plugins WHERE namespace LIKE "ShopwarePlugins" AND active = 1 AND installation_date IS NOT NULL;');
         $activePlugins = $stmt->fetchAll(PDO::FETCH_COLUMN);
 
@@ -78,7 +74,6 @@ class PluginInitializer
 
             $namespace = $pluginName;
             $className = '\\' . $namespace . '\\' . $pluginName;
-            $classLoader->addPrefix($namespace, $pluginDir->getPathname());
 
             if (!class_exists($className)) {
                 throw new \RuntimeException(sprintf('Unable to load class %s for plugin %s in file %s', $className, $pluginName, $pluginFile));

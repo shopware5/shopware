@@ -69,8 +69,6 @@ class Application extends BaseApplication
 
         parent::__construct('Shopware', Kernel::VERSION . ' - ' . '/' . $kernel->getEnvironment() . ($kernel->isDebug() ? '/debug' : ''));
 
-        $this->getDefinition()->addOption(new InputOption('--shell', '-s', InputOption::VALUE_NONE, 'Launch the shell.'));
-        $this->getDefinition()->addOption(new InputOption('--process-isolation', null, InputOption::VALUE_NONE, 'Launch commands from shell as a separate process.'));
         $this->getDefinition()->addOption(new InputOption('--env', '-e', InputOption::VALUE_REQUIRED, 'The Environment name.', $kernel->getEnvironment()));
     }
 
@@ -114,14 +112,6 @@ class Application extends BaseApplication
             if ($command instanceof ContainerAwareInterface) {
                 $command->setContainer($container);
             }
-        }
-
-        if (true === $input->hasParameterOption(['--shell', '-s'])) {
-            $shell = new Shell($this);
-            $shell->setProcessIsolation($input->hasParameterOption(['--process-isolation']));
-            $shell->run();
-
-            return 0;
         }
 
         return parent::doRun($input, $output);

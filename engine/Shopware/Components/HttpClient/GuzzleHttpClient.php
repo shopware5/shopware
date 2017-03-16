@@ -53,7 +53,7 @@ class GuzzleHttpClient implements HttpClientInterface
     public function get($url = null, $headers = [])
     {
         try {
-            $response = $this->guzzleClient->get($url, ['headers' => $headers]);
+            $response = $this->guzzleClient->request('GET', $url, ['headers' => $headers]);
         } catch (\Exception $e) {
             /** @var $e GuzzleClientException */
             $body = '';
@@ -82,7 +82,7 @@ class GuzzleHttpClient implements HttpClientInterface
     public function head($url = null, array $headers = [])
     {
         try {
-            $response = $this->guzzleClient->head($url, ['headers' => $headers]);
+            $response = $this->guzzleClient->request('HEAD', $url, ['headers' => $headers]);
         } catch (\Exception $e) {
             throw new RequestException($e->getMessage(), $e->getCode(), $e);
         }
@@ -100,7 +100,7 @@ class GuzzleHttpClient implements HttpClientInterface
     public function delete($url = null, array $headers = [])
     {
         try {
-            $response = $this->guzzleClient->delete($url, ['headers' => $headers]);
+            $response = $this->guzzleClient->request('DELETE', $url, ['headers' => $headers]);
         } catch (\Exception $e) {
             throw new RequestException($e->getMessage(), $e->getCode(), $e);
         }
@@ -124,7 +124,7 @@ class GuzzleHttpClient implements HttpClientInterface
                 'body' => $content,
             ];
 
-            $response = $this->guzzleClient->put($url, $options);
+            $response = $this->guzzleClient->request('PUT', $url, $options);
         } catch (\Exception $e) {
             throw new RequestException($e->getMessage(), $e->getCode(), $e);
         }
@@ -148,7 +148,7 @@ class GuzzleHttpClient implements HttpClientInterface
                 'body' => $content,
             ];
 
-            $response = $this->guzzleClient->patch($url, $options);
+            $response = $this->guzzleClient->request('PATCH', $url, $options);
         } catch (\Exception $e) {
             throw new RequestException($e->getMessage(), $e->getCode(), $e);
         }
@@ -172,7 +172,7 @@ class GuzzleHttpClient implements HttpClientInterface
                 'body' => $content,
             ];
 
-            $response = $this->guzzleClient->post($url, $options);
+            $response = $this->guzzleClient->request('POST', $url, $options);
         } catch (\Exception $e) {
             /** @var $e GuzzleClientException */
             $body = '';
