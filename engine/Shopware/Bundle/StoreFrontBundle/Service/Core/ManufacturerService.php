@@ -28,7 +28,6 @@ use Shopware\Bundle\StoreFrontBundle\Service;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\Manufacturer;
 use Shopware\Components\Routing\RouterInterface;
-use Shopware\Bundle\MediaBundle\MediaServiceInterface;
 
 /**
  * @category  Shopware
@@ -48,23 +47,15 @@ class ManufacturerService implements Service\ManufacturerServiceInterface
     private $router;
 
     /**
-     * @var MediaServiceInterface
-     */
-    private $mediaService;
-
-    /**
      * @param Gateway\ManufacturerGatewayInterface $manufacturerGateway
      * @param RouterInterface $router
-     * @param MediaServiceInterface $mediaService
      */
     public function __construct(
         Gateway\ManufacturerGatewayInterface $manufacturerGateway,
-        RouterInterface $router,
-        MediaServiceInterface $mediaService
+        RouterInterface $router
     ) {
         $this->manufacturerGateway = $manufacturerGateway;
         $this->router = $router;
-        $this->mediaService = $mediaService;
     }
 
     /**
@@ -90,10 +81,6 @@ class ManufacturerService implements Service\ManufacturerServiceInterface
         foreach ($manufacturers as $manufacturer) {
             if (array_key_exists($manufacturer->getId(), $urls)) {
                 $manufacturer->setLink($urls[$manufacturer->getId()]);
-            }
-
-            if ($manufacturer->getCoverFile()) {
-                $manufacturer->setCoverFile($this->mediaService->getUrl($manufacturer->getCoverFile()));
             }
         }
 
