@@ -73,6 +73,7 @@ class AddressHydrator extends Hydrator
 
         if ($data['__countryState_id'] !== null) {
             $address->setState($this->countryHydrator->hydrateState($data));
+            $address->getState()->setCountry($address->getCountry());
         }
 
         if ($data['__addressAttribute.id']) {
