@@ -64,7 +64,6 @@ Ext.define('Shopware.component.Preloader', {
         /*{if {acl_is_allowed resource=order privilege=read}}*/
         'Shopware.apps.Order': false,
         /*{/if}*/
-        'Shopware.apps.CustomerStream': false,
         /*{if {acl_is_allowed resource=customer privilege=read}}*/
         'Shopware.apps.Customer': false,
         /*{/if}*/

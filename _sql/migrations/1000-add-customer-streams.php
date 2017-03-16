@@ -36,6 +36,7 @@ CREATE TABLE `s_customer_streams` (
     `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
     `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
     `conditions` text COLLATE utf8_unicode_ci,
+    `product_stream_ids` text COLLATE utf8_unicode_ci,
     `description` text COLLATE utf8_unicode_ci,
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -99,13 +100,6 @@ CREATE TABLE `s_customer_search_index` (
 SQL;
 
         $this->addSql($sql);
-
-        $this->addSql("SET @menuId = (SELECT id FROM s_core_menu WHERE name = 'Kunden' LIMIT 1)");
-
-        $this->addSql("
-INSERT INTO `s_core_menu` (`id`, `parent`, `name`, `onclick`, `class`, `position`, `active`, `pluginID`, `controller`, `shortcut`, `action`)
-VALUES (NULL, @menuId, 'Customer Stream', NULL, 'sprite-product-streams', '0', '1', NULL, 'CustomerStream', '', 'Index');
-        ");
 
         $this->addSql('
             ALTER TABLE `s_emotion` ADD `customer_stream_id` int(11) unsigned NULL DEFAULT NULL;

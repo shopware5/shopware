@@ -47,15 +47,31 @@
     <style>
         .x-customer-grid .x-grid-cell-inner {
             line-height: 16px !important;
-            /*padding-top: 10px;*/
-            /*padding-bottom: 10px;*/
-
         }
         .stream-name-column {
             line-height: 20px !important;
             font-size: 12px;
             color: #35404B;
         }
+
+        .customer-filter-panel .x-panel-header {
+            border-right: none;
+            border-left: none;
+        }
+
+        .customer-filter-panel .x-panel-body {
+            border-right: none;
+            border-left: none;
+            border-bottom: 1px solid #a4b5c0;
+            padding: 0;
+        }
+        .stream-listing .x-grid-body {
+            border: none;
+        }
+        .stream-listing {
+            border: none;
+        }
+
     </style>
 {/block}
 </head>

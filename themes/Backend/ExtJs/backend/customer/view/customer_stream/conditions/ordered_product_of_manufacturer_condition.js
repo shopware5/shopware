@@ -22,14 +22,14 @@
  */
 
 //{namespace name="backend/customer_stream/translation"}
-Ext.define('Shopware.apps.CustomerStream.view.conditions.OrderedInShopCondition', {
+Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.OrderedProductOfManufacturerCondition', {
 
     getLabel: function() {
-        return '{s name="ordered_in_shop_condition"}{/s}';
+        return '{s name="ordered_product_of_manufacturer_condition"}{/s}';
     },
 
     supports: function(conditionClass) {
-        return (conditionClass == 'Shopware\\Bundle\\CustomerSearchBundle\\Condition\\OrderedInShopCondition');
+        return (conditionClass == 'Shopware\\Bundle\\CustomerSearchBundle\\Condition\\OrderedProductOfManufacturerCondition');
     },
 
     create: function(callback) {
@@ -44,17 +44,17 @@ Ext.define('Shopware.apps.CustomerStream.view.conditions.OrderedInShopCondition'
         var factory = Ext.create('Shopware.attribute.SelectionFactory');
 
         return {
-            title: '{s name="ordered_in_shop_condition_selection"}{/s}',
-            conditionClass: 'Shopware\\Bundle\\CustomerSearchBundle\\Condition\\OrderedInShopCondition',
+            title: '{s name="ordered_product_of_manufacturer_condition_selection"}{/s}',
+            conditionClass: 'Shopware\\Bundle\\CustomerSearchBundle\\Condition\\OrderedProductOfManufacturerCondition',
             items: [{
-                xtype: 'shopware-form-field-shop-grid',
-                name: 'shopIds',
+                xtype: 'shopware-form-field-grid',
+                name: 'manufacturerIds',
                 flex: 1,
                 allowSorting: false,
                 useSeparator: false,
                 allowBlank: false,
-                store: factory.createEntitySearchStore("Shopware\\Models\\Shop\\Shop"),
-                searchStore: factory.createEntitySearchStore("Shopware\\Models\\Shop\\Shop")
+                store: factory.createEntitySearchStore("Shopware\\Models\\Article\\Supplier"),
+                searchStore: factory.createEntitySearchStore("Shopware\\Models\\Article\\Supplier")
             }]
         };
     }

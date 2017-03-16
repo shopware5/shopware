@@ -24,6 +24,16 @@
 //{namespace name="backend/customer_stream/translation"}
 
 
-Ext.define('Shopware.apps.CustomerStream.view.conditions.field.Attribute', {
-    extend: ''
+Ext.define('Shopware.apps.Customer.store.Preview', {
+    extend: 'Ext.data.Store',
+    model: 'Shopware.model.Dynamic',
+    pageSize: 20,
+
+    proxy: {
+        type: 'ajax',
+        api: {
+            read: '{url controller="CustomerStream" action="loadStream"}'
+        },
+        reader: Ext.create('Shopware.model.DynamicReader')
+    }
 });

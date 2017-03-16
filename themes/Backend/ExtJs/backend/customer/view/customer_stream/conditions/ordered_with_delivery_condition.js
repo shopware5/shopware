@@ -22,14 +22,14 @@
  */
 
 //{namespace name="backend/customer_stream/translation"}
-Ext.define('Shopware.apps.CustomerStream.view.conditions.OrderedWithPaymentCondition', {
+Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.OrderedWithDeliveryCondition', {
 
     getLabel: function() {
-        return '{s name="ordered_with_payment_condition"}{/s}';
+        return '{s name="ordered_with_delivery_condition"}{/s}';
     },
 
     supports: function(conditionClass) {
-        return (conditionClass == 'Shopware\\Bundle\\CustomerSearchBundle\\Condition\\OrderedWithPaymentCondition');
+        return (conditionClass == 'Shopware\\Bundle\\CustomerSearchBundle\\Condition\\OrderedWithDeliveryCondition');
     },
 
     create: function(callback) {
@@ -44,17 +44,17 @@ Ext.define('Shopware.apps.CustomerStream.view.conditions.OrderedWithPaymentCondi
         var factory = Ext.create('Shopware.attribute.SelectionFactory');
 
         return {
-            title: '{s name="ordered_with_payment_condition_selection"}{/s}',
-            conditionClass: 'Shopware\\Bundle\\CustomerSearchBundle\\Condition\\OrderedWithPaymentCondition',
+            title: '{s name="ordered_with_delivery_condition_selection"}{/s}',
+            conditionClass: 'Shopware\\Bundle\\CustomerSearchBundle\\Condition\\OrderedWithDeliveryCondition',
             items: [{
-                xtype: 'shopware-form-field-payment-grid',
-                name: 'paymentIds',
+                xtype: 'shopware-form-field-dispatch-grid',
+                name: 'dispatchIds',
                 flex: 1,
                 allowSorting: false,
                 useSeparator: false,
                 allowBlank: false,
-                store: factory.createEntitySearchStore("Shopware\\Models\\Payment\\Payment"),
-                searchStore: factory.createEntitySearchStore("Shopware\\Models\\Payment\\Payment")
+                store: factory.createEntitySearchStore("Shopware\\Models\\Dispatch\\Dispatch"),
+                searchStore: factory.createEntitySearchStore("Shopware\\Models\\Dispatch\\Dispatch")
             }]
         };
     }

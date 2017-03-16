@@ -23,9 +23,10 @@
 
 //{namespace name="backend/customer_stream/translation"}
 
-Ext.define('Shopware.apps.CustomerStream.view.list.CustomerStream', {
+Ext.define('Shopware.apps.Customer.view.customer_stream.Listing', {
     extend: 'Shopware.grid.Panel',
     alias:  'widget.customer-stream-listing',
+    cls: 'stream-listing',
 
     configure: function() {
         var me = this;

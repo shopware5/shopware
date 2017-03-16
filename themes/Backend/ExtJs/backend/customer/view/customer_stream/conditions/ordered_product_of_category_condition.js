@@ -22,14 +22,14 @@
  */
 
 //{namespace name="backend/customer_stream/translation"}
-Ext.define('Shopware.apps.CustomerStream.view.conditions.RegisteredInShopCondition', {
+Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.OrderedProductOfCategoryCondition', {
 
     getLabel: function() {
-        return '{s name="registered_in_shop_condition"}{/s}';
+        return '{s name="ordered_product_of_category_condition"}{/s}';
     },
 
     supports: function(conditionClass) {
-        return (conditionClass == 'Shopware\\Bundle\\CustomerSearchBundle\\Condition\\RegisteredInShopCondition');
+        return (conditionClass == 'Shopware\\Bundle\\CustomerSearchBundle\\Condition\\OrderedProductOfCategoryCondition');
     },
 
     create: function(callback) {
@@ -44,17 +44,17 @@ Ext.define('Shopware.apps.CustomerStream.view.conditions.RegisteredInShopConditi
         var factory = Ext.create('Shopware.attribute.SelectionFactory');
 
         return {
-            title: '{s name="registered_in_shop_condition_selection"}{/s}',
-            conditionClass: 'Shopware\\Bundle\\CustomerSearchBundle\\Condition\\RegisteredInShopCondition',
+            title: '{s name="ordered_product_of_category_condition_selection"}{/s}',
+            conditionClass: 'Shopware\\Bundle\\CustomerSearchBundle\\Condition\\OrderedProductOfCategoryCondition',
             items: [{
-                xtype: 'shopware-form-field-shop-grid',
-                name: 'shopIds',
+                xtype: 'shopware-form-field-category-grid',
+                name: 'categoryIds',
                 flex: 1,
                 allowSorting: false,
                 useSeparator: false,
                 allowBlank: false,
-                store: factory.createEntitySearchStore("Shopware\\Models\\Shop\\Shop"),
-                searchStore: factory.createEntitySearchStore("Shopware\\Models\\Shop\\Shop")
+                store: factory.createEntitySearchStore("Shopware\\Models\\Category\\Category"),
+                searchStore: factory.createEntitySearchStore("Shopware\\Models\\Category\\Category")
             }]
         };
     }

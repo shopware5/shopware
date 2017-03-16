@@ -94,12 +94,28 @@ class Shopware_Controllers_Backend_CustomerStream extends Shopware_Controllers_B
         ]);
     }
 
+    public function getPartialCountAction()
+    {
+        $lastIndex = $this->getLastIndexTime();
+
+        $query = $this->container->get('dbal_connection')->createQueryBuilder();
+        $query->select(['COUNT(id)']);
+        $query->from('s_user', 'customer');
+
+        if ($lastIndex) {
+            $query->where('customer.firstlogin >= :lastIndexTime');
+            $query->setParameter(':lastIndexTime', $lastIndex);
+        }
+
+        $this->View()->assign([
+            'total' => $query->execute()->fetch(PDO::FETCH_COLUMN),
+            'lastIndexTime' => $lastIndex,
+        ]);
+    }
+
     public function getLastFullIndexTimeAction()
     {
-        $query = $this->container->get('dbal_connection')->createQueryBuilder();
-        $query->select('MIN(index_time)');
-        $query->from('s_customer_search_index', 'search_index');
-        $time = $query->execute()->fetch(PDO::FETCH_COLUMN);
+        $time = $this->getLastIndexTime();
         $this->View()->assign('last_index_time', $time);
     }
 
@@ -114,11 +130,19 @@ class Shopware_Controllers_Backend_CustomerStream extends Shopware_Controllers_B
         $query = $this->get('dbal_connection')->createQueryBuilder();
         $query->select('id');
         $query->from('s_user', 'user');
-        $query->where('user.id > :lastId');
-        $query->andWhere('user.id <= :maxId');
-        $query->setParameter(':lastId', $offset);
-        $query->setParameter(':maxId', $handled);
         $query->orderBy('id');
+
+        $lastIndex = $this->Request()->getParam('lastIndexTime');
+        if ($lastIndex) {
+            $query->where('user.firstlogin >= :lastIndex');
+            $query->setParameter(':lastIndex', $lastIndex);
+        } else {
+            $query->where('user.id > :lastId');
+            $query->andWhere('user.id <= :maxId');
+            $query->setParameter(':lastId', $offset);
+            $query->setParameter(':maxId', $handled);
+        }
+
         $query->setMaxResults(self::INDEXING_LIMIT);
 
         $ids = $query->execute()->fetchAll(PDO::FETCH_COLUMN);
@@ -154,6 +178,7 @@ class Shopware_Controllers_Backend_CustomerStream extends Shopware_Controllers_B
         $query = $this->get('dbal_connection')->createQueryBuilder();
         $query->select('COUNT(id)');
         $query->from('s_user', 'user');
+
         $this->View()->assign([
             'total' => $query->execute()->fetch(PDO::FETCH_COLUMN),
         ]);
@@ -194,6 +219,7 @@ class Shopware_Controllers_Backend_CustomerStream extends Shopware_Controllers_B
             $data = $row->getAttribute('search')->toArray();
             $data['interests'] = json_decode($data['interests'], true);
             $data['newest_interests'] = json_decode($data['newest_interests'], true);
+
             return $data;
         }, $result->getRows());
 
@@ -280,7 +306,7 @@ class Shopware_Controllers_Backend_CustomerStream extends Shopware_Controllers_B
         $query->select([
             "DATE_FORMAT(orders.ordertime, '%Y/%m')",
             'ROUND(SUM(orders.invoice_amount), 2) as invoice_amount_sum',
-            'stream.name as stream'
+            'stream.name as stream',
         ]);
 
         $date = (new \DateTime())->sub(new \DateInterval('P' . (int) 12 . 'M'));
@@ -317,7 +343,7 @@ class Shopware_Controllers_Backend_CustomerStream extends Shopware_Controllers_B
             if (!array_key_exists($format, $data)) {
                 continue;
             }
-            foreach($data[$format] as $row) {
+            foreach ($data[$format] as $row) {
                 if ($row['stream']) {
                     $chart[$format][$row['stream']] += $row['invoice_amount_sum'];
                 } else {
@@ -348,5 +374,19 @@ class Shopware_Controllers_Backend_CustomerStream extends Shopware_Controllers_B
         }
 
         return $criteria;
+    }
+
+    /**
+     * @return false|string
+     */
+    private function getLastIndexTime()
+    {
+        /** @var \Doctrine\DBAL\Query\QueryBuilder $query */
+        $query = $this->container->get('dbal_connection')->createQueryBuilder();
+        $query->select('MIN(index_time)');
+        $query->from('s_customer_search_index', 'search_index');
+        $time = $query->execute()->fetch(PDO::FETCH_COLUMN);
+
+        return $time;
     }
 }

@@ -22,14 +22,15 @@
  */
 
 //{namespace name="backend/customer_stream/translation"}
-Ext.define('Shopware.apps.CustomerStream.view.conditions.OrderedWithDeliveryCondition', {
+
+Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.HasCanceledOrdersCondition', {
 
     getLabel: function() {
-        return '{s name="ordered_with_delivery_condition"}{/s}';
+        return '{s name="has_canceled_orders_condition"}{/s}';
     },
 
     supports: function(conditionClass) {
-        return (conditionClass == 'Shopware\\Bundle\\CustomerSearchBundle\\Condition\\OrderedWithDeliveryCondition');
+        return (conditionClass == 'Shopware\\Bundle\\CustomerSearchBundle\\Condition\\HasCanceledOrdersCondition');
     },
 
     create: function(callback) {
@@ -41,20 +42,13 @@ Ext.define('Shopware.apps.CustomerStream.view.conditions.OrderedWithDeliveryCond
     },
 
     _create: function() {
-        var factory = Ext.create('Shopware.attribute.SelectionFactory');
-
         return {
-            title: '{s name="ordered_with_delivery_condition_selection"}{/s}',
-            conditionClass: 'Shopware\\Bundle\\CustomerSearchBundle\\Condition\\OrderedWithDeliveryCondition',
+            title: this.getLabel(),
+            conditionClass: 'Shopware\\Bundle\\CustomerSearchBundle\\Condition\\HasCanceledOrdersCondition',
             items: [{
-                xtype: 'shopware-form-field-dispatch-grid',
-                name: 'dispatchIds',
-                flex: 1,
-                allowSorting: false,
-                useSeparator: false,
-                allowBlank: false,
-                store: factory.createEntitySearchStore("Shopware\\Models\\Dispatch\\Dispatch"),
-                searchStore: factory.createEntitySearchStore("Shopware\\Models\\Dispatch\\Dispatch")
+                xtype: 'component',
+                padding: 10,
+                html: '{s name="has_canceled_orders_condition_text"}{/s}'
             }]
         };
     }

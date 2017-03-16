@@ -22,12 +22,12 @@
  */
 
 //{namespace name="backend/customer_stream/translation"}
-Ext.define('Shopware.apps.CustomerStream.view.detail.ConditionPanel', {
+Ext.define('Shopware.apps.Customer.view.customer_stream.ConditionPanel', {
     extend: 'Ext.form.Panel',
     alias: 'widget.customer-stream-condition-panel',
     name: 'conditions',
     autoScroll: true,
-    cls: 'shopware-form',
+    cls: 'shopware-form customer-stream-condition-panel',
 
     mixins: {
         formField: 'Ext.form.field.Base',
@@ -38,7 +38,6 @@ Ext.define('Shopware.apps.CustomerStream.view.detail.ConditionPanel', {
         type: 'vbox',
         align: 'stretch'
     },
-    bodyPadding: 10,
 
     initComponent: function() {
         var me = this;
@@ -55,23 +54,23 @@ Ext.define('Shopware.apps.CustomerStream.view.detail.ConditionPanel', {
 
     registerHandlers: function() {
         return [
-            Ext.create('Shopware.apps.CustomerStream.view.conditions.HasAddressWithCountryCondition'),
-            Ext.create('Shopware.apps.CustomerStream.view.conditions.HasCanceledOrdersCondition'),
-            Ext.create('Shopware.apps.CustomerStream.view.conditions.IsCustomerSinceCondition'),
-            Ext.create('Shopware.apps.CustomerStream.view.conditions.IsInCustomerGroupCondition'),
-            Ext.create('Shopware.apps.CustomerStream.view.conditions.HasOrderCountCondition'),
-            Ext.create('Shopware.apps.CustomerStream.view.conditions.OrderedAtWeekdayCondition'),
-            Ext.create('Shopware.apps.CustomerStream.view.conditions.OrderedInLastDaysCondition'),
-            Ext.create('Shopware.apps.CustomerStream.view.conditions.OrderedInShopCondition'),
-            Ext.create('Shopware.apps.CustomerStream.view.conditions.RegisteredInShopCondition'),
-            Ext.create('Shopware.apps.CustomerStream.view.conditions.OrderedOnDeviceCondition'),
-            Ext.create('Shopware.apps.CustomerStream.view.conditions.OrderedProductCondition'),
-            Ext.create('Shopware.apps.CustomerStream.view.conditions.OrderedProductOfCategoryCondition'),
-            Ext.create('Shopware.apps.CustomerStream.view.conditions.OrderedProductOfManufacturerCondition'),
-            Ext.create('Shopware.apps.CustomerStream.view.conditions.OrderedWithDeliveryCondition'),
-            Ext.create('Shopware.apps.CustomerStream.view.conditions.OrderedWithPaymentCondition'),
-            Ext.create('Shopware.apps.CustomerStream.view.conditions.HasTotalOrderAmountCondition'),
-            Ext.create('Shopware.apps.CustomerStream.view.conditions.CustomerAttributeCondition')
+            Ext.create('Shopware.apps.Customer.view.customer_stream.conditions.HasAddressWithCountryCondition'),
+            Ext.create('Shopware.apps.Customer.view.customer_stream.conditions.HasCanceledOrdersCondition'),
+            Ext.create('Shopware.apps.Customer.view.customer_stream.conditions.IsCustomerSinceCondition'),
+            Ext.create('Shopware.apps.Customer.view.customer_stream.conditions.IsInCustomerGroupCondition'),
+            Ext.create('Shopware.apps.Customer.view.customer_stream.conditions.HasOrderCountCondition'),
+            Ext.create('Shopware.apps.Customer.view.customer_stream.conditions.OrderedAtWeekdayCondition'),
+            Ext.create('Shopware.apps.Customer.view.customer_stream.conditions.OrderedInLastDaysCondition'),
+            Ext.create('Shopware.apps.Customer.view.customer_stream.conditions.OrderedInShopCondition'),
+            Ext.create('Shopware.apps.Customer.view.customer_stream.conditions.RegisteredInShopCondition'),
+            Ext.create('Shopware.apps.Customer.view.customer_stream.conditions.OrderedOnDeviceCondition'),
+            Ext.create('Shopware.apps.Customer.view.customer_stream.conditions.OrderedProductCondition'),
+            Ext.create('Shopware.apps.Customer.view.customer_stream.conditions.OrderedProductOfCategoryCondition'),
+            Ext.create('Shopware.apps.Customer.view.customer_stream.conditions.OrderedProductOfManufacturerCondition'),
+            Ext.create('Shopware.apps.Customer.view.customer_stream.conditions.OrderedWithDeliveryCondition'),
+            Ext.create('Shopware.apps.Customer.view.customer_stream.conditions.OrderedWithPaymentCondition'),
+            Ext.create('Shopware.apps.Customer.view.customer_stream.conditions.HasTotalOrderAmountCondition'),
+            Ext.create('Shopware.apps.Customer.view.customer_stream.conditions.CustomerAttributeCondition')
         ];
     },
 
@@ -87,7 +86,7 @@ Ext.define('Shopware.apps.CustomerStream.view.detail.ConditionPanel', {
     createConditionContainer: function(configuration) {
         var me = this;
 
-        var panel = Ext.create('Shopware.apps.CustomerStream.view.detail.ConditionField', {
+        var panel = Ext.create('Shopware.apps.Customer.view.customer_stream.ConditionField', {
             flex: 1,
             name: configuration.conditionClass,
             items: configuration.items

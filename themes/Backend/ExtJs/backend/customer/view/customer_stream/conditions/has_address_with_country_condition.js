@@ -23,7 +23,7 @@
 
 //{namespace name="backend/customer_stream/translation"}
 
-Ext.define('Shopware.apps.CustomerStream.view.conditions.HasAddressWithCountryCondition', {
+Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.HasAddressWithCountryCondition', {
 
     mixins: {
         factory: 'Shopware.attribute.SelectionFactory'

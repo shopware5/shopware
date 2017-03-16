@@ -22,14 +22,14 @@
  */
 
 //{namespace name="backend/customer_stream/translation"}
-Ext.define('Shopware.apps.CustomerStream.view.conditions.OrderedProductCondition', {
+Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.IsCustomerSinceCondition', {
 
     getLabel: function() {
-        return '{s name="ordered_product_condition"}{/s}';
+        return '{s name="is_customer_since_condition"}{/s}';
     },
 
     supports: function(conditionClass) {
-        return (conditionClass == 'Shopware\\Bundle\\CustomerSearchBundle\\Condition\\OrderedProductCondition');
+        return (conditionClass == 'Shopware\\Bundle\\CustomerSearchBundle\\Condition\\IsCustomerSinceCondition');
     },
 
     create: function(callback) {
@@ -41,20 +41,13 @@ Ext.define('Shopware.apps.CustomerStream.view.conditions.OrderedProductCondition
     },
 
     _create: function() {
-        var factory = Ext.create('Shopware.attribute.SelectionFactory');
-
         return {
-            title: '{s name="ordered_product_condition_selection"}{/s}',
-            conditionClass: 'Shopware\\Bundle\\CustomerSearchBundle\\Condition\\OrderedProductCondition',
+            title: '{s name="is_customer_since_condition_label"}{/s}',
+            conditionClass: 'Shopware\\Bundle\\CustomerSearchBundle\\Condition\\IsCustomerSinceCondition',
             items: [{
-                xtype: 'shopware-form-field-product-grid',
-                name: 'numbers',
-                flex: 1,
-                allowSorting: false,
-                useSeparator: false,
-                allowBlank: false,
-                store: factory.createEntitySearchStore("Shopware\\Models\\Article\\Article"),
-                searchStore: factory.createEntitySearchStore("Shopware\\Models\\Article\\Article")
+                xtype: 'datefield',
+                name: 'customerSince',
+                allowBlank: false
             }]
         };
     }

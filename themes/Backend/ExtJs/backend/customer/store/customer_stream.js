@@ -24,12 +24,12 @@
 //{namespace name="backend/customer_stream/translation"}
 
 
-Ext.define('Shopware.apps.CustomerStream.store.CustomerStream', {
+Ext.define('Shopware.apps.Customer.store.CustomerStream', {
     extend:'Shopware.store.Listing',
     configure: function() {
         return {
             controller: 'CustomerStream'
         };
     },
-    model: 'Shopware.apps.CustomerStream.model.CustomerStream'
+    model: 'Shopware.apps.Customer.model.CustomerStream'
 });

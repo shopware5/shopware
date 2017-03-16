@@ -23,13 +23,12 @@
 
 //{namespace name="backend/customer_stream/translation"}
 
-Ext.define('Shopware.apps.CustomerStream.model.CustomerStream', {
+Ext.define('Shopware.apps.Customer.model.CustomerStream', {
     extend: 'Shopware.data.Model',
 
     configure: function() {
         return {
-            controller: 'CustomerStream',
-            detail: 'Shopware.apps.CustomerStream.view.detail.CustomerStream'
+            controller: 'CustomerStream'
         };
     },
 
@@ -37,6 +36,7 @@ Ext.define('Shopware.apps.CustomerStream.model.CustomerStream', {
         { name : 'id', type: 'int', useNull: true },
         { name : 'name', type: 'string' },
         { name : 'description', type: 'string', useNull: true },
-        { name : 'conditions', type: 'string' }
+        { name : 'conditions', type: 'string' },
+        { name : 'productStreamIds', type: 'string' }
     ]
 });

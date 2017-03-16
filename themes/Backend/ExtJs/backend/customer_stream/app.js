@@ -35,14 +35,14 @@ Ext.define('Shopware.apps.CustomerStream', {
 
     views: [
         'list.Window',
-        'list.CustomerStream',
 
         'detail.PreviewGrid',
-        'detail.ConditionPanel',
         'detail.CustomerStream',
         'detail.Window',
         'detail.IndexingWindow',
 
+        'list.CustomerStream',
+        'detail.ConditionPanel',
         'detail.ConditionField',
 
         'conditions.HasAddressWithCountryCondition',

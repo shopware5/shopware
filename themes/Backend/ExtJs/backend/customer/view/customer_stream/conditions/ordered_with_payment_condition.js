@@ -22,14 +22,14 @@
  */
 
 //{namespace name="backend/customer_stream/translation"}
-Ext.define('Shopware.apps.CustomerStream.view.conditions.OrderedOnDeviceCondition', {
+Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.OrderedWithPaymentCondition', {
 
     getLabel: function() {
-        return '{s name="ordered_on_device_condition"}{/s}';
+        return '{s name="ordered_with_payment_condition"}{/s}';
     },
 
     supports: function(conditionClass) {
-        return (conditionClass == 'Shopware\\Bundle\\CustomerSearchBundle\\Condition\\OrderedOnDeviceCondition');
+        return (conditionClass == 'Shopware\\Bundle\\CustomerSearchBundle\\Condition\\OrderedWithPaymentCondition');
     },
 
     create: function(callback) {
@@ -41,27 +41,20 @@ Ext.define('Shopware.apps.CustomerStream.view.conditions.OrderedOnDeviceConditio
     },
 
     _create: function() {
-        var store = Ext.create('Ext.data.Store', {
-            fields: ['id', 'label'],
-            data: [
-                { id: 'desktop', label: '<div class="sprite-imac" style="width: 16px; height: 16px; display: inline-block; margin-right:5px">&nbsp;</div> {s name="desktop"}{/s}' },
-                { id: 'tablet',  label: '<div class="sprite-ipad--portrait" style="width: 16px; height: 16px; display: inline-block; margin-right:5px">&nbsp;</div> {s name="tablet"}{/s}' },
-                { id: 'mobile',  label: '<div class="sprite-iphone--portrait" style="width: 16px; height: 16px; display: inline-block; margin-right:5px">&nbsp;</div> {s name="mobile"}{/s}' }
-            ]
-        });
+        var factory = Ext.create('Shopware.attribute.SelectionFactory');
 
         return {
-            title: '{s name="ordered_on_device_condition_selection"}{/s}',
-            conditionClass: 'Shopware\\Bundle\\CustomerSearchBundle\\Condition\\OrderedOnDeviceCondition',
+            title: '{s name="ordered_with_payment_condition_selection"}{/s}',
+            conditionClass: 'Shopware\\Bundle\\CustomerSearchBundle\\Condition\\OrderedWithPaymentCondition',
             items: [{
-                xtype: 'shopware-form-field-grid',
-                name: 'devices',
+                xtype: 'shopware-form-field-payment-grid',
+                name: 'paymentIds',
                 flex: 1,
                 allowSorting: false,
                 useSeparator: false,
                 allowBlank: false,
-                store: store,
-                searchStore: store
+                store: factory.createEntitySearchStore("Shopware\\Models\\Payment\\Payment"),
+                searchStore: factory.createEntitySearchStore("Shopware\\Models\\Payment\\Payment")
             }]
         };
     }
