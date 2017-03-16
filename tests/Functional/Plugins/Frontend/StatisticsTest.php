@@ -30,18 +30,11 @@
 class Shopware_Tests_Plugins_Frontend_StatisticsTest extends Enlight_Components_Test_Plugin_TestCase
 {
     /**
-     * @var Shopware_Plugins_Frontend_Paypal_Bootstrap
-     */
-    protected $plugin;
-
-    /**
      * Test set up method
      */
     public function setUp()
     {
         parent::setUp();
-
-        $this->plugin = Shopware()->Plugins()->Frontend()->Statistics();
 
         $sql = "INSERT IGNORE INTO `s_emarketing_partner` (`idcode`, `datum`, `company`, `contact`, `street`, `zipcode`, `city`, `phone`, `fax`, `country`, `email`, `web`, `profil`, `fix`, `percent`, `cookielifetime`, `active`, `userID`) VALUES
                   ('test123', '0000-00-00', 'Partner', '', '', '', '', '', '', '', '', '', '', 0, 10, 3600, 1, NULL)";
@@ -60,16 +53,6 @@ class Shopware_Tests_Plugins_Frontend_StatisticsTest extends Enlight_Components_
     }
 
     /**
-     * Retrieve plugin instance
-     *
-     * @return Shopware_Plugins_Frontend_Statistics_Bootstrap
-     */
-    public function Plugin()
-    {
-        return $this->plugin;
-    }
-
-    /**
      * Test case method
      */
     public function testRefreshCurrentUsers()
@@ -84,7 +67,9 @@ class Shopware_Tests_Plugins_Frontend_StatisticsTest extends Enlight_Components_
         /* @var \Enlight_Controller_Request_RequestTestCase $request */
         $request->setDeviceType('mobile');
 
-        $this->Plugin()->refreshCurrentUsers($request);
+        $tracer = Shopware()->Container()->get('shopware.statistics.tracer.current_customers_tracer');
+        $context = Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext();
+        $tracer->trace($request, $context);
 
         $sql = 'SELECT * FROM `s_statistics_currentusers` ORDER BY `id` DESC LIMIT 1';
         $result = Shopware()->Container()->get('dbal_connection')->fetchAssoc($sql);
@@ -140,12 +125,22 @@ class Shopware_Tests_Plugins_Frontend_StatisticsTest extends Enlight_Components_
         $request = $this->Request()
             ->setParam('sPartner', 'test123');
 
-        $response = $this->Response();
+        //init session
+        Shopware()->Container()->load('session');
+        Shopware()->Container()->load('front');
 
-        $this->Plugin()->refreshPartner($request, $response);
+        $tracer = Shopware()->Container()->get('shopware.statistics.tracer.partner_tracer');
+        $context = Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext();
+
+        $tracer->trace($request, $context);
+
+        $response = Shopware()->Container()->get('front')->Response();
+
+        $cookies = $response->getCookies();
 
         $this->assertEquals('test123', Shopware()->Session()->sPartner);
-        $this->assertEquals('test123', $response->getCookie('partner'));
+        $this->assertArrayHasKey('partner', $cookies);
+        $this->assertEquals('test123', $cookies['partner']['value']);
     }
 
     /**
@@ -156,9 +151,13 @@ class Shopware_Tests_Plugins_Frontend_StatisticsTest extends Enlight_Components_
         $request = $this->Request()
             ->setQuery('sPartner', 'sCampaign1');
 
-        $response = $this->Response();
+        //init session
+        Shopware()->Container()->load('session');
 
-        $this->Plugin()->refreshPartner($request, $response);
+        $tracer = Shopware()->Container()->get('shopware.statistics.tracer.partner_tracer');
+        $context = Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext();
+
+        $tracer->trace($request, $context);
 
         $this->assertEquals('sCampaign1', Shopware()->Session()->sPartner);
     }
