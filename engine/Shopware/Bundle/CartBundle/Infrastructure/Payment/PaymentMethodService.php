@@ -47,9 +47,18 @@ class PaymentMethodService
      *
      * @return PaymentMethod[]
      */
-    public function getAvailable(CalculatedCart $cart, ShopContextInterface $context): array
-    {
+    public function getAvailable(
+        CalculatedCart $cart,
+        ShopContextInterface $context
+    ): array {
         $payments = $this->gateway->getAll($context->getTranslationContext());
+
+        $payments = array_filter(
+            $payments,
+            function (PaymentMethod $paymentMethod) {
+                return $paymentMethod->isActive();
+            }
+        );
 
         return $payments;
     }

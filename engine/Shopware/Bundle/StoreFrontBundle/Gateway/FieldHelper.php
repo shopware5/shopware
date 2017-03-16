@@ -907,7 +907,7 @@ class FieldHelper
             'paymentMethod.embediframe as __paymentMethod_embediframe',
             'paymentMethod.hideprospect as __paymentMethod_hideprospect',
             'paymentMethod.action as __paymentMethod_action',
-            'paymentMethod.pluginID as __paymentMethod_pluginID',
+            'paymentMethod.pluginID as __paymentMethod_pluginId',
             'paymentMethod.source as __paymentMethod_source',
             'paymentMethod.mobile_inactive as __paymentMethod_mobile_inactive',
         ];

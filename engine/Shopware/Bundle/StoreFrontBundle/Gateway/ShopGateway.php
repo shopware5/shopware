@@ -111,6 +111,7 @@ class ShopGateway
         $query
             ->addSelect($this->fieldHelper->getShopFields())
             ->addSelect($this->fieldHelper->getCountryFields())
+            ->addSelect($this->fieldHelper->getAreaFields())
             ->addSelect($this->fieldHelper->getPaymentMethodFields())
             ->addSelect($this->fieldHelper->getDeliveryMethodFields())
             ->addSelect($this->fieldHelper->getCurrencyFields())
