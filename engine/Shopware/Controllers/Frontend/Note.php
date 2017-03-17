@@ -22,11 +22,10 @@
  * our trademarks remain entirely with us.
  */
 
-use \Shopware\Components\CSRFGetProtectionAware;
 
 /**
  */
-class Shopware_Controllers_Frontend_Note extends Enlight_Controller_Action implements CSRFGetProtectionAware
+class Shopware_Controllers_Frontend_Note extends Enlight_Controller_Action
 {
     /**
      * Pre dispatch method
@@ -97,10 +96,5 @@ class Shopware_Controllers_Frontend_Note extends Enlight_Controller_Action imple
                 'notesCount' => (int) Shopware()->Modules()->Basket()->sCountNotes()
             ]
         ));
-    }
-
-    public function getCSRFProtectedActions()
-    {
-        return ['ajaxAdd'];
     }
 }
