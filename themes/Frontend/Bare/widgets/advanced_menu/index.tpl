@@ -83,7 +83,7 @@
 									{/if}
 									<div class="menu--teaser"{if $hasCategories} style="width: {$columnAmount * 25}%;"{else} style="width: 100%;"{/if}>
 										{if !empty($mainCategory.media)}
-											<a href="{$link|escapeHtml}" title="{s name="toCategoryBtn" namespace="frontend/advancedmenu/index"}{/s}{$mainCategory.name|escape:'html'}" class="teaser--image" style="background-image: url({link file={$mainCategory.media.path}});"></a>
+											<a href="{$link|escapeHtml}" title="{s name="toCategoryBtn" namespace="frontend/advancedmenu/index"}{/s}{$mainCategory.name|escape:'html'}" class="teaser--image" style="background-image: url({media path={$mainCategory.media.path}});"></a>
 										{/if}
 
 										{if !empty($mainCategory.cmsHeadline)}
