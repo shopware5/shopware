@@ -628,6 +628,51 @@
             <tag name="shopware.filesystem.factory" />
         </service>
 
+        <service id="shopware.statistic.bot_detector" class="Shopware\Components\Statistic\BotDetector" >
+            <argument id="config" type="service"/>
+        </service>
+
+        <service id="shopware.statistic.registry" class="Shopware\Components\Statistic\StatisticRegistry">
+            <argument type="collection" />
+            <argument id="config" type="service"/>
+            <argument id="shopware.statistic.bot_detector" type="service"/>
+        </service>
+
+        <service id="shopware.statistic.tracer.cart_tracer" class="Shopware\Components\Statistic\Tracer\CartTracer">
+            <argument id="service_container" type="service"/>
+            <argument id="dbal_connection" type="service"/>
+            <tag name="shopware.statistic.tracer" />
+        </service>
+
+        <service id="shopware.statistic.tracer.visitor_tracer" class="Shopware\Components\Statistic\Tracer\VisitorTracer" >
+            <argument id="dbal_connection" type="service"/>
+            <tag name="shopware.statistic.tracer"/>
+        </service>
+
+        <service id="shopware.statistic.tracer.referer_tracer" class="Shopware\Components\Statistic\Tracer\RefererTracer" >
+            <argument id="service_container" type="service"/>
+            <argument id="dbal_connection" type="service"/>
+            <tag name="shopware.statistic.tracer"/>
+        </service>
+
+        <service id="shopware.statistic.tracer.product_impression_tracer" class="Shopware\Components\Statistic\Tracer\ProductImpressionTracer" >
+            <argument id="dbal_connection" type="service"/>
+            <tag name="shopware.statistic.tracer"/>
+        </service>
+
+        <service id="shopware.statistic.tracer.current_customers_tracer" class="Shopware\Components\Statistic\Tracer\CurrentCustomersTracer">
+            <argument id="service_container" type="service"/>
+            <argument id="dbal_connection" type="service"/>
+            <tag name="shopware.statistic.tracer"/>
+        </service>
+
+        <service id="shopware.statistic.tracer.partner_tracer" class="Shopware\Components\Statistic\Tracer\PartnerTracer">
+            <argument id="dbal_connection" type="service"/>
+            <argument id="service_container" type="service"/>
+            <tag name="shopware.statistic.tracer"/>
+        </service>
+
+
         <service id="shopware.components.seo_template_subscriber" class="Shopware\Components\SeoTemplateSubscriber">
             <argument id="config" type="service"/>
             <argument id="query_alias_mapper" type="service"/>

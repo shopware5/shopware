@@ -127,6 +127,16 @@ This changelog references changes done in Shopware Next patch versions.
 * Removed method `Shopware\Bundle\MediaBundle\MediaServiceInterface::migrateFile()`
 * Removed method `Shopware\Bundle\MediaBundle\MediaServiceInterface::getAdapter()`, use `getFilesystem()` instead
 * Removed config option `esdDownloadStrategy` without replacement
+* Removed method `Shopware_Plugins_Frontend_Statistics_Bootstrap::checkIsBot`, use `Shopware\Components\Statistics\BotDetectorInterface` instead
+* Removed method `Shopware_Plugins_Frontend_Statistics_Bootstrap::refreshBasket`, use `Shopware\Components\Statistics\Tracer\CartTracer` instead
+* Removed method `Shopware_Plugins_Frontend_Statistics_Bootstrap::refreshLog`, use `Shopware\Components\Statistics\Tracer\VisitorTracer` instead
+* Removed method `Shopware_Plugins_Frontend_Statistics_Bootstrap::refreshReferer`, use `\Shopware\Components\Statistics\Tracer\RefererTracer` instead
+* Removed method `Shopware\Models\Tracking\Repository::getArticleImpressionQuery`
+* Removed method `Shopware\Models\Tracking\Repository::getArticleImpressionQueryBuilder`
+* Removed method `Shopware_Plugins_Frontend_Statistics_Bootstrap::refreshArticleImpression`, use `Shopware\Components\Statistics\Tracer\ProductImpressionTracer` instead
+* Removed method `Shopware_Plugins_Frontend_Statistics_Bootstrap::refreshCurrentUsers`, use `Shopware\Components\Statistics\Tracer\CurrentCustomersTracer` instead
+* Removed method `Shopware_Plugins_Frontend_Statistics_Bootstrap::refreshPartner`, use `Shopware\Components\Statistics\Tracer\PartnerTracer` instead
+* Removed class `Shopware_Plugins_Frontend_Statistics_Bootstrap`, use ``\Shopware\Components\Statistics\StatisticRegistry` instead
 
 ## Filesystem
 

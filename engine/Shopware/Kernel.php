@@ -48,6 +48,7 @@ use Shopware\Components\DependencyInjection\Compiler\AddFilesystemCompilerPass;
 use Shopware\Components\DependencyInjection\Compiler\DoctrineEventSubscriberCompilerPass;
 use Shopware\Components\DependencyInjection\Compiler\EventListenerCompilerPass;
 use Shopware\Components\DependencyInjection\Compiler\EventSubscriberCompilerPass;
+use Shopware\Components\DependencyInjection\Compiler\StatisticsTracerCompilerPass;
 use Shopware\Components\DependencyInjection\Container;
 use Shopware\Components\Plugin;
 use Symfony\Component\Config\ConfigCache;
@@ -638,6 +639,7 @@ class Kernel implements HttpKernelInterface
         $container->addCompilerPass(new MediaOptimizerCompilerPass());
         $container->addCompilerPass(new AddFilesystemCompilerPass());
         $container->addCompilerPass(new MediaStrategyCompilerPass());
+        $container->addCompilerPass(new StatisticsTracerCompilerPass());
 
         if ($this->isElasticSearchEnabled()) {
             $container->addCompilerPass(new SearchHandlerCompilerPass());

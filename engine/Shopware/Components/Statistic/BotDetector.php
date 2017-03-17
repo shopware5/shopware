@@ -22,39 +22,39 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Models\Tracking;
+namespace Shopware\Components\Statistic;
 
-use Shopware\Components\Model\ModelRepository;
+use Enlight_Controller_Request_Request as Request;
 
-/**
- * Shopware Tracking Model
- */
-class Repository extends ModelRepository
+class BotDetector implements BotDetectorInterface
 {
     /**
-     * Returns an Banner Statistic Model.Either a new one or an existing one. If no date given
-     * the current date will be used.
-     *
-     * @param $bannerId
-     * @param \DateTime $date
-     *
-     * @return Banner
+     * @var \Shopware_Components_Config
      */
-    public function getOrCreateBannerStatsModel($bannerId, \DateTime $date = null)
+    private $config;
+
+    /**
+     * @param \Shopware_Components_Config $config
+     */
+    public function __construct(\Shopware_Components_Config $config)
     {
-        if (is_null($date)) {
-            $date = new \DateTime();
+        $this->config = $config;
+    }
+
+    public function isBotRequest(Request $request): bool
+    {
+        $blacklist = $this->config->get('botBlackList');
+
+        $userAgent = $request->getHeader('USER_AGENT');
+
+        $userAgent = preg_replace('/[^a-z]/', '', strtolower($userAgent));
+        if (empty($userAgent)) {
+            return false;
         }
-        $bannerStatistics = $this->findOneBy(['bannerId' => $bannerId, 'displayDate' => $date]);
 
-        // If no Entry for this day exists - create a new one
-        if (!$bannerStatistics) {
-            $bannerStatistics = new \Shopware\Models\Tracking\Banner($bannerId, $date);
+        $bots = preg_replace('/[^a-z;]/', '', strtolower($blacklist));
+        $bots = explode(';', $bots);
 
-            $bannerStatistics->setClicks(0);
-            $bannerStatistics->setViews(0);
-        }
-
-        return $bannerStatistics;
+        return !empty($userAgent) && str_replace($bots, '', $userAgent) != $userAgent;
     }
 }

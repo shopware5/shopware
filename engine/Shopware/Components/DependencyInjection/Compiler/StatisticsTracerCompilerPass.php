@@ -22,39 +22,25 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Models\Tracking;
+namespace Shopware\Components\DependencyInjection\Compiler;
 
-use Shopware\Components\Model\ModelRepository;
+use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
- * Shopware Tracking Model
+ * @category  Shopware
+ *
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Repository extends ModelRepository
+class StatisticsTracerCompilerPass implements CompilerPassInterface
 {
+    use TagReplaceTrait;
+
     /**
-     * Returns an Banner Statistic Model.Either a new one or an existing one. If no date given
-     * the current date will be used.
-     *
-     * @param $bannerId
-     * @param \DateTime $date
-     *
-     * @return Banner
+     * @param ContainerBuilder $container
      */
-    public function getOrCreateBannerStatsModel($bannerId, \DateTime $date = null)
+    public function process(ContainerBuilder $container)
     {
-        if (is_null($date)) {
-            $date = new \DateTime();
-        }
-        $bannerStatistics = $this->findOneBy(['bannerId' => $bannerId, 'displayDate' => $date]);
-
-        // If no Entry for this day exists - create a new one
-        if (!$bannerStatistics) {
-            $bannerStatistics = new \Shopware\Models\Tracking\Banner($bannerId, $date);
-
-            $bannerStatistics->setClicks(0);
-            $bannerStatistics->setViews(0);
-        }
-
-        return $bannerStatistics;
+        $this->replaceArgumentWithTaggedServices($container, 'shopware.statistic.tracer', 'shopware.statistic.tracer', 0);
     }
 }
