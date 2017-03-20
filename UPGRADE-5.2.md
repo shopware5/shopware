@@ -17,6 +17,7 @@ This changelog references changes done in Shopware 5.2 patch versions.
 * Removed `invalidateToken` from `engine/Shopware/Components/CSRFTokenValidator`
 * Added opt-in for CSRF GET protection. Implement `engine/Shopware/Components/CSRFTGetProtectionAware` and return the controller actons which should be protected via `getCSRFProtectedActions`.
 * Added CSRF specific error message.
+* Changed behaviour of plugin installer to show the correct translated label and description in plugin manager and basic settings (new 5.2 plugin system only, see [DevDocs](https://developers.shopware.com/developers-guide/plugin-system/#plugin-metadata))
 
 ## 5.2.20
 
