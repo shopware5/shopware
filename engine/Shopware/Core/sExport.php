@@ -1784,6 +1784,12 @@ class sExport
             return $url;
         }
 
-        return str_replace(parse_url($url, PHP_URL_HOST), $this->shopData['host'], $url);
+        $url = str_replace(parse_url($url, PHP_URL_HOST), $this->shopData['host'], $url);
+
+        if ($this->shopData['always_secure']) {
+            return str_replace('http:', 'https:', $url);
+        }
+
+        return $url;
     }
 }
