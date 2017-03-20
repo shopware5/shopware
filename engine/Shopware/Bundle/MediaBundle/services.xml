@@ -10,8 +10,6 @@
             <tag name="shopware.event_subscriber" />
         </service>
 
-        <service id="shopware_media.media_migration" class="Shopware\Bundle\MediaBundle\MediaMigration" />
-
         <service id="shopware_media.garbage_collector_factory" class="Shopware\Bundle\MediaBundle\GarbageCollectorFactory">
             <argument type="service" id="events"/>
             <argument type="service" id="dbal_connection" />

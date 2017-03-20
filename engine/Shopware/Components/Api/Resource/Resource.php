@@ -272,7 +272,7 @@ abstract class Resource
                 }
                 $message = $e->getMessage();
                 if ($e instanceof ApiException\ValidationException) {
-                    $message = implode("\n", $e->getViolations()->getIterator()->getArrayCopy());
+                    $message = implode("\n", $e->getViolations());
                 }
 
                 $results[$key] = [
@@ -331,7 +331,7 @@ abstract class Resource
                 }
                 $message = $e->getMessage();
                 if ($e instanceof ApiException\ValidationException) {
-                    $message = implode("\n", $e->getViolations()->getIterator()->getArrayCopy());
+                    $message = implode("\n", $e->getViolations());
                 }
 
                 $results[$key] = [

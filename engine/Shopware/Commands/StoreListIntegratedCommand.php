@@ -25,6 +25,7 @@
 namespace Shopware\Commands;
 
 use Shopware\Bundle\PluginInstallerBundle\Context\ListingRequest;
+use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -66,10 +67,9 @@ class StoreListIntegratedCommand extends StoreCommand
             ];
         }
 
-        $table = $this->getHelperSet()->get('table');
+        $table = new Table($output);
         $table->setHeaders(['Id', 'Technical name', 'Label', 'Installed', 'Version', 'Update available'])
-            ->setRows($result);
-
-        $table->render($output);
+            ->setRows($result)
+            ->render();
     }
 }

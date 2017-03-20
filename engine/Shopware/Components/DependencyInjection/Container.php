@@ -57,11 +57,10 @@ class Container extends BaseContainer
      *
      * @param string $name
      * @param mixed  $resource
-     * @param string $scope
      *
      * @return Container
      */
-    public function set($name, $resource, $scope = 'container')
+    public function set($name, $resource)
     {
         $name = $this->getNormalizedId($name);
 

@@ -34,6 +34,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\Question;
 
 /**
  * @category  Shopware
@@ -319,20 +320,18 @@ class StoreDownloadCommand extends StoreCommand
         $password = $this->input->getOption('password');
 
         if ($this->input->isInteractive()) {
-            $dialog = $this->getHelper('dialog');
+            $questionHelper = $this->getHelper('question');
 
             if (empty($username)) {
-                $username = $dialog->ask(
-                    $this->output,
-                    'Please enter the username: '
-                );
+                $username = $questionHelper->ask($this->input, $this->output, new Question('Please enter the username: '));
             }
 
             if (empty($password)) {
-                $password = $dialog->askHiddenResponse(
-                    $this->output,
-                    'Please enter the password: '
-                );
+                $question = new Question('Please enter the password: ');
+                $question->setHidden(true);
+                $question->setHiddenFallback(false);
+
+                $password = $questionHelper->ask($this->input, $this->output, $question);
             }
         }
 

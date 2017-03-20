@@ -25,9 +25,11 @@
 namespace Shopware\Commands;
 
 use Shopware\Bundle\PluginInstallerBundle\Struct\AccessTokenStruct;
+use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\Question;
 
 /**
  * @category  Shopware
@@ -131,20 +133,19 @@ abstract class StoreCommand extends ShopwareCommand
         $password = $input->getOption('password');
 
         if ($input->isInteractive()) {
-            $dialog = $this->getHelper('dialog');
+            /** @var QuestionHelper $questionHelper */
+            $questionHelper = $this->getHelper('question');
 
             if (empty($username)) {
-                $username = $dialog->ask(
-                    $output,
-                    'Please enter the username'
-                );
+                $username = $questionHelper->ask($input, $output, new Question('Please enter the username: '));
             }
 
             if (empty($password)) {
-                $password = $dialog->askHiddenResponse(
-                    $output,
-                    'Please enter the password'
-                );
+                $question = new Question('Please enter the password: ');
+                $question->setHidden(true);
+                $question->setHiddenFallback(false);
+
+                $password = $questionHelper->ask($input, $output, $question);
             }
         }
 
