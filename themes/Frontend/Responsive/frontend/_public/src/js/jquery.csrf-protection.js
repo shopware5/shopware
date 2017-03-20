@@ -165,7 +165,7 @@
             if (settings.url.indexOf('__csrf_token=') !== -1) {
                 return;
             }
-            settings.url = settings.url + '&__csrf_token=' + this.getToken();
+            settings.url += ( settings.url.indexOf('?') >= 0 ? '&' : '?' ) + '__csrf_token=' + this.getToken();
         },
 
         /**
