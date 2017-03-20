@@ -29,7 +29,7 @@
         </service>
 
         <service id="shopware_account.constraint.current_password_validator" class="Shopware\Bundle\AccountBundle\Constraint\CurrentPasswordValidator">
-            <argument type="service" id="session" />
+            <argument type="service" id="shopware.session" />
             <argument type="service" id="snippets" />
             <argument type="service" id="PasswordEncoder" />
             <argument type="service" id="models" />

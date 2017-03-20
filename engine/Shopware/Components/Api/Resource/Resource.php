@@ -28,7 +28,7 @@ use Doctrine\Common\Collections\Collection;
 use Shopware\Components\Api\BatchInterface;
 use Shopware\Components\Api\Exception as ApiException;
 use Shopware\Components\Api\Exception\BatchInterfaceNotImplementedException;
-use Shopware\Components\DependencyInjection\Container;
+use Symfony\Component\DependencyInjection\ContainerInterface as Container;
 use Shopware\Components\Model\ModelEntity;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Model\ModelRepository;

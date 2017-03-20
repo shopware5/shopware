@@ -114,7 +114,7 @@ class SnippetsToSqlCommand extends ShopwareCommand
      */
     protected function exportDefaultPlugins(InputInterface $input, OutputInterface $output, QueryHandler $queryLoader)
     {
-        $pluginDirectories = $this->container->getParameter('shopware.plugin_directories');
+        $pluginDirectories = $this->container->getParameter('shopware.plugin_directory');
         $pluginBasePath = $pluginDirectories['Default'];
 
         foreach (['Backend', 'Core', 'Frontend'] as $namespace) {
@@ -146,7 +146,7 @@ class SnippetsToSqlCommand extends ShopwareCommand
         /** @var Plugin[] $plugins */
         $plugins = $pluginRepository->findBy(['active' => true]);
 
-        $pluginDirectories = $this->container->getParameter('shopware.plugin_directories');
+        $pluginDirectories = $this->container->getParameter('shopware.plugin_directory');
 
         foreach ($plugins as $plugin) {
             $pluginPath = $pluginDirectories[$plugin->getSource()] . $plugin->getNamespace() . DIRECTORY_SEPARATOR . $plugin->getName();

@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\AttributeBundle\DependencyInjection\EventListener;
 
-use Enlight\Event\SubscriberInterface;
+use Shopware\Components\Plugin\SubscriberInterface;
 
 /**
  * @category  Shopware

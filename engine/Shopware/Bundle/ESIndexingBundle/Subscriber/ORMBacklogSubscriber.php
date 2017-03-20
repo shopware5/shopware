@@ -29,7 +29,7 @@ use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Event\PostFlushEventArgs;
 use Doctrine\ORM\Events;
 use Shopware\Bundle\ESIndexingBundle\Struct\Backlog;
-use Shopware\Components\DependencyInjection\Container;
+use Symfony\Component\DependencyInjection\ContainerInterface as Container;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Article\Article as ArticleModel;
 use Shopware\Models\Article\Detail as VariantModel;
@@ -99,10 +99,10 @@ class ORMBacklogSubscriber implements EventSubscriber
      */
     public function getSubscribedEvents()
     {
-        if (!$this->container->getParameter('shopware.es.enabled')) {
+        if (!$this->container->getParameter('shopware.elasticsearch.enabled')) {
             return [];
         }
-        if (!$this->container->getParameter('shopware.es.write_backlog')) {
+        if (!$this->container->getParameter('shopware.elasticsearch.write_backlog')) {
             return [];
         }
 

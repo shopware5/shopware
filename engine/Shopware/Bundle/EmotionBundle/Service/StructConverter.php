@@ -35,7 +35,7 @@ use Shopware\Bundle\EmotionBundle\Struct\Element;
 use Shopware\Bundle\EmotionBundle\Struct\Emotion;
 use Shopware\Bundle\MediaBundle\MediaServiceInterface;
 use Shopware\Components\Compatibility\LegacyStructConverter;
-use Shopware\Components\DependencyInjection\Container;
+use Symfony\Component\DependencyInjection\ContainerInterface as Container;
 
 class StructConverter
 {

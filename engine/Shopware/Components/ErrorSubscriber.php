@@ -24,7 +24,7 @@
 
 namespace Shopware\Components;
 
-use Enlight\Event\SubscriberInterface;
+use Shopware\Components\Plugin\SubscriberInterface;
 
 /**
  * Subscriber to catch possibly occurring exceptions in the controller.

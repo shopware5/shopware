@@ -24,9 +24,9 @@ declare(strict_types=1);
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Components\DependencyInjection\Bridge;
+namespace Shopware\DependencyInjection\Bridge;
 
-use Shopware\Components\DependencyInjection\Container;
+use Symfony\Component\DependencyInjection\ContainerInterface as Container;
 use Shopware\Components\Session\PdoSessionHandler;
 
 /**
@@ -52,7 +52,7 @@ class Session
             return null;
         }
 
-        $dbOptions = $container->getParameter('shopware.db');
+        $dbOptions = $container->getParameter('shopware.database');
         $conn = Db::createPDO($dbOptions);
 
         return new PdoSessionHandler(

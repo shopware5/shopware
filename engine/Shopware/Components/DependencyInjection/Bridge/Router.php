@@ -22,10 +22,10 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Components\DependencyInjection\Bridge;
+namespace Shopware\DependencyInjection\Bridge;
 
 use Enlight_Event_EventManager as EnlightEventManager;
-use Shopware\Components\DependencyInjection\Container;
+use Symfony\Component\DependencyInjection\ContainerInterface as Container;
 use Shopware\Components\Routing\Context;
 use Shopware\Components\Routing\GeneratorFilters;
 use Shopware\Components\Routing\Generators;

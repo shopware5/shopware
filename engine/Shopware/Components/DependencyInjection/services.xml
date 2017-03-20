@@ -9,9 +9,32 @@
             <parameter key="regexp">/([^A-Za-z0-9\.]|-)+/</parameter>
             <parameter key="lowercase">false</parameter>
         </parameter>
+
+        <parameter key="monolog.logger.constant.critical" type="constant">Monolog\Logger::CRITICAL</parameter>
+        <parameter key="monolog.logger.constant.error" type="constant">Monolog\Logger::ERROR</parameter>
+        <parameter key="monolog.logger.constant.info" type="constant">Monolog\Logger::INFO</parameter>
     </parameters>
 
     <services>
+        <service id="router" alias="shopware.router.router" />
+
+        <service id="shopware.twig.template_finder" class="Shopware\Twig\TemplateFinder" >
+            <argument type="collection" />
+            <argument id="twig.loader" type="service"/>
+        </service>
+
+        <service id="shopware.twig.twig_extension" class="Shopware\Twig\TwigExtension" public="false">
+            <argument type="service" id="shopware.twig.template_finder" />
+            <tag name="twig.extension" />
+        </service>
+
+        <service id="shopware.router.router" class="Shopware\Router\Router">
+            <argument type="service" id="routing.loader" />
+            <argument>%router.resource%</argument>
+            <argument type="service" id="router.request_context" on-invalid="ignore" />
+            <argument type="service" id="logger" on-invalid="ignore" />
+        </service>
+
         <service id="application"     synthetic="true" />
         <service id="db_connection"   synthetic="true" />
 
@@ -48,14 +71,14 @@
             <deprecated>The "%service_id%" service is deprecated since 5.2 and will be removed in 6.0.</deprecated>
         </service>
 
-        <service id="locale_factory" class="Shopware\Components\DependencyInjection\Bridge\Locale" />
+        <service id="locale_factory" class="Shopware\DependencyInjection\Bridge\Locale" />
         <service id="shopware.locale" alias="locale" />
         <service id="locale" class="Zend_Locale">
             <factory service="locale_factory" method="factory" />
             <argument type="service" id="service_container"/>
         </service>
 
-        <service id="currency_factory" class="Shopware\Components\DependencyInjection\Bridge\Currency"/>
+        <service id="currency_factory" class="Shopware\DependencyInjection\Bridge\Currency"/>
         <service id="currency" class="Zend_Currency">
             <factory service="currency_factory" method="factory" />
             <argument type="service" id="service_container"/>
@@ -67,7 +90,7 @@
             <argument>%shopware.snippet.showSnippetPlaceholder%</argument>
         </service>
 
-        <service id="template_factory" class="Shopware\Components\DependencyInjection\Bridge\Template" />
+        <service id="template_factory" class="Shopware\DependencyInjection\Bridge\Template" />
         <service id="template" class="Enlight_Template_Manager">
             <factory service="template_factory" method="factory" />
             <argument type="service" id="events"/>
@@ -76,7 +99,7 @@
             <argument>%shopware.template%</argument>
         </service>
 
-        <service id="session_factory" class="Shopware\Components\DependencyInjection\Bridge\Session" />
+        <service id="session_factory" class="Shopware\DependencyInjection\Bridge\Session" />
 
         <service id="session.save_handler" class="SessionHandlerInterface">
             <factory service="session_factory" method="createSaveHandler" />
@@ -92,7 +115,7 @@
             <argument>%shopware.backendsession%</argument>
         </service>
 
-        <service id="session" class="Enlight_Components_Session_Namespace">
+        <service id="shopware.session" class="Enlight_Components_Session_Namespace">
             <factory service="session_factory" method="createSession" />
             <argument type="service" id="service_container"/>
             <argument type="service" id="session.save_handler"/>
@@ -106,7 +129,7 @@
             <argument type="service" id="front" />
         </service>
 
-        <service id="mailtransport_factory" class="Shopware\Components\DependencyInjection\Bridge\MailTransport" />
+        <service id="mailtransport_factory" class="Shopware\DependencyInjection\Bridge\MailTransport" />
         <service id="shopware.mail_transport" alias="MailTransport" />
         <service id="MailTransport" class="Zend_Mail_Transport_Abstract">
             <factory service="mailtransport_factory" method="factory" />
@@ -115,7 +138,7 @@
             <argument>%shopware.mail%</argument>
         </service>
 
-        <service id="mail_factory" class="Shopware\Components\DependencyInjection\Bridge\Mail" />
+        <service id="mail_factory" class="Shopware\DependencyInjection\Bridge\Mail" />
         <service id="mail" class="Enlight_Components_Mail">
             <factory service="mail_factory" method="factory" />
             <argument type="service" id="service_container"/>
@@ -123,13 +146,13 @@
             <argument>%shopware.mail%</argument>
         </service>
 
-        <service id="templatemail_factory" class="Shopware\Components\DependencyInjection\Bridge\TemplateMail" />
+        <service id="templatemail_factory" class="Shopware\DependencyInjection\Bridge\TemplateMail" />
         <service id="templatemail" class="Shopware_Components_TemplateMail">
             <factory service="templatemail_factory" method="factory" />
             <argument type="service" id="service_container"/>
         </service>
 
-        <service id="plugins_factory" class="Shopware\Components\DependencyInjection\Bridge\Plugins" />
+        <service id="plugins_factory" class="Shopware\DependencyInjection\Bridge\Plugins" />
         <service id="plugin_manager" alias="plugins" />
         <service id="plugins" class="Enlight_Plugin_PluginManager">
             <factory service="plugins_factory" method="factory" />
@@ -137,19 +160,19 @@
             <argument type="service" id="Loader"/>
             <argument type="service" id="events"/>
             <argument type="service" id="application"/>
-            <argument>%shopware.plugin_directories%</argument>
+            <argument>%shopware.plugin_directory%</argument>
         </service>
 
-        <service id="router_factory" class="Shopware\Components\DependencyInjection\Bridge\Router" />
-        <service id="router" class="Shopware\Components\Routing\Router">
-            <factory service="router_factory" method="factory" />
+        <service id="shopware.router_factory" class="Shopware\DependencyInjection\Bridge\Router" />
+        <service id="shopware.router" class="Shopware\Components\Routing\Router">
+            <factory service="shopware.router_factory" method="factory" />
             <argument type="service" id="service_container"/>
             <argument type="service" id="events"/>
         </service>
 
         <service id="dispatcher" class="Enlight_Controller_Dispatcher_Default" />
 
-        <service id="front_factory" class="Shopware\Components\DependencyInjection\Bridge\Front" />
+        <service id="front_factory" class="Shopware\DependencyInjection\Bridge\Front" />
         <service id="front" class="Enlight_Controller_Front">
             <factory service="front_factory" method="factory" />
             <argument type="service" id="service_container"/>
@@ -165,7 +188,7 @@
         <service id="Loader"     class="Enlight_Loader" />
         <service id="snippets"   class="Shopware_Components_Snippet_Manager">
             <argument type="service" id="shopware.model_manager"/>
-            <argument>%shopware.plugin_directories%</argument>
+            <argument>%shopware.plugin_directory%</argument>
             <argument>%shopware.snippet%</argument>
         </service>
 
@@ -185,9 +208,9 @@
 
         <service id="shopware.db" alias="db"/>
         <service id="db" class="Enlight_Components_Db_Adapter_Pdo_Mysql">
-            <factory class="Shopware\Components\DependencyInjection\Bridge\Db" method="createEnlightDbAdapter" />
+            <factory class="Shopware\DependencyInjection\Bridge\Db" method="createEnlightDbAdapter" />
             <argument type="service" id="dbal_connection"/>
-            <argument>%shopware.db%</argument>
+            <argument>%shopware.database%</argument>
         </service>
 
         <service id="guzzle_http_client_factory" class="Shopware\Components\HttpClient\GuzzleFactory" />
@@ -196,7 +219,7 @@
             <argument type="service" id="guzzle_http_client_factory"/>
         </service>
 
-        <service id="cache_factory" class="Shopware\Components\DependencyInjection\Bridge\Cache"/>
+        <service id="cache_factory" class="Shopware\DependencyInjection\Bridge\Cache"/>
         <service id="cache" class="Zend_Cache_Core">
             <factory service="cache_factory" method="factory" />
             <argument>%shopware.cache.backend%</argument>
@@ -204,13 +227,13 @@
             <argument>%shopware.cache.backendOptions%</argument>
         </service>
 
-        <service id="config_factory" class="Shopware\Components\DependencyInjection\Bridge\Config" />
+        <service id="config_factory" class="Shopware\DependencyInjection\Bridge\Config" />
         <service id="config" class="Shopware_Components_Config">
             <factory service="config_factory" method="factory" />
             <argument type="service" id="cache" />
             <argument type="service" id="db" on-invalid="ignore"/>
             <argument>%shopware.config%</argument>
-         </service>
+        </service>
 
         <service id="shopware.event_manager" alias="events" />
         <service id="events" class="Shopware\Components\ContainerAwareEventManager">
@@ -231,7 +254,7 @@
             <argument type="service" id="model_repository_factory" />
         </service>
 
-        <service id="model_factory" class="Shopware\Components\DependencyInjection\Bridge\Models" />
+        <service id="model_factory" class="Shopware\DependencyInjection\Bridge\Models" />
         <service id="shopware.model_manager" alias="models" />
 
         <service id="models" class="Shopware\Components\Model\ModelManager">
@@ -241,21 +264,21 @@
             <argument type="service" id="shopware.loader" />
             <argument type="service" id="dbal_connection" />
             <argument type="service" id="shopware.model_annotations" />
-         </service>
+        </service>
 
         <service id="models_metadata_cache" class="Doctrine\Common\Cache\Cache">
             <factory service="ModelConfig" method="getMetadataCacheImpl" />
         </service>
 
         <service id="dbal_connection" class="Doctrine\DBAL\Connection">
-            <factory class="Shopware\Components\DependencyInjection\Bridge\Db" method="createDbalConnection" />
-            <argument>%shopware.db%</argument>
+            <factory class="Shopware\DependencyInjection\Bridge\Db" method="createDbalConnection" />
+            <argument>%shopware.database%</argument>
             <argument type="service" id="ModelConfig"/>
             <argument type="service" id="model_event_manager"/>
             <argument type="service" id="db_connection"/>
         </service>
 
-        <service id="model_annotations_factory" class="Shopware\Components\DependencyInjection\Bridge\ModelAnnotation" />
+        <service id="model_annotations_factory" class="Shopware\DependencyInjection\Bridge\ModelAnnotation" />
         <service id="shopware.model_annotations" alias="ModelAnnotations" />
         <service id="ModelAnnotations" class="Doctrine\ORM\Mapping\Driver\AnnotationDriver">
             <factory service="model_annotations_factory" method="factory" />
@@ -308,7 +331,7 @@
         <service id="shopware.snippet_database_handler" class="Shopware\Components\Snippet\DatabaseHandler">
             <argument type="service" id="shopware.model_manager" />
             <argument type="service" id="db" />
-            <argument>%kernel.root_dir%</argument>
+            <argument>%kernel.root_dir%/src/Shopware/Resoures</argument>
         </service>
 
         <service id="shopware.snippet_validator" class="Shopware\Components\Snippet\SnippetValidator">
@@ -316,7 +339,7 @@
         </service>
 
         <service id="shopware.snippet_query_handler" class="Shopware\Components\Snippet\QueryHandler">
-            <argument>%kernel.root_dir%/snippets/</argument>
+            <argument>%kernel.root_dir%/src/Shopware/Resources/snippets/</argument>
         </service>
         <service id="shopware.cache_manager" class="Shopware\Components\CacheManager">
             <argument type="service" id="service_container" />
@@ -425,7 +448,7 @@
 
         <service id="shop_page_menu" class="Shopware\Components\SitePageMenu">
             <argument type="service" id="dbal_connection" />
-            <argument type="service" id="router" />
+            <argument type="service" id="shopware.router" />
         </service>
 
         <service id="emotion_device_configuration" class="Shopware\Components\Emotion\DeviceConfiguration">
@@ -438,7 +461,7 @@
         </service>
 
         <service id="validator" class="Symfony\Component\Validator\Validator\ValidatorInterface" >
-            <factory class="Shopware\Components\DependencyInjection\Bridge\Validator" method="create" />
+            <factory class="Shopware\DependencyInjection\Bridge\Validator" method="create" />
             <argument type="service" id="ModelConfig" />
             <argument type="service" id="validator.validator_factory" />
         </service>
@@ -618,7 +641,7 @@
         </service>
 
         <service id="auth" class="Zend_Auth">
-            <factory class="Shopware\Components\DependencyInjection\Bridge\Auth" method="createAuth" />
+            <factory class="Shopware\DependencyInjection\Bridge\Auth" method="createAuth" />
             <argument type="service" id="service_container" />
             <argument type="service" id="shopware.subscriber.auth" />
             <argument type="service" id="template" />
@@ -706,5 +729,161 @@
             <argument id="storefront.context.service" type="service"/>
             <tag name="shopware.event_subscriber"/>
         </service>
+
+        <service id="shopware.command.snippets_to_db" class="Shopware\Commands\SnippetsToDbCommand">
+            <argument type="service" id="service_container" />
+            <tag name="console.command" />
+        </service>
+
+        <service id="less_compiler" alias="oyejorge_compiler" />
+
+        <service id="oyejorge_compiler" class="Shopware\Components\Theme\LessCompiler\Oyejorge">
+            <argument type="service" id="oyejorge_compiler_lib" />
+        </service>
+        <service id="oyejorge_compiler_lib" class="Less_Parser" />
+
+        <service id="js_compressor" class="Shopware\Components\Theme\Compressor\Js" />
+
+        <service id="theme_service" class="Shopware\Components\Theme\Service">
+            <argument type="service" id="models" />
+            <argument type="service" id="snippets" />
+            <argument type="service" id="theme_util" />
+            <argument type="service" id="shopware_media.media_service" />
+        </service>
+
+        <service id="theme_config_loader" class="Shopware\Components\Theme\EventListener\ConfigLoader">
+            <argument type="service" id="service_container" />
+            <tag name="shopware.event_subscriber" />
+        </service>
+
+        <service id="theme_path_resolver" class="Shopware\Components\Theme\PathResolver">
+            <argument>%kernel.root_dir%</argument>
+            <argument>%shopware.plugin_directory%</argument>
+            <argument type="service" id="template" />
+        </service>
+
+        <service id="theme_generator" class="Shopware\Components\Theme\Generator">
+            <argument type="service" id="theme_path_resolver" />
+            <argument type="service" id="file_system" />
+            <argument type="service" id="events" />
+        </service>
+
+        <service id="theme_config_persister" class="Shopware\Components\Form\Persister\Theme">
+            <argument type="service" id="models" />
+        </service>
+
+        <service id="theme_configurator" class="Shopware\Components\Theme\Configurator">
+            <argument type="service" id="models" />
+            <argument type="service" id="theme_util" />
+            <argument type="service" id="theme_config_persister" />
+            <argument type="service" id="events" />
+        </service>
+
+        <service id="theme_inheritance" class="Shopware\Components\Theme\Inheritance">
+            <argument type="service" id="models" />
+            <argument type="service" id="theme_util" />
+            <argument type="service" id="theme_path_resolver" />
+            <argument type="service" id="events" />
+            <argument type="service" id="shopware_media.media_service" />
+        </service>
+
+        <service id="theme_util" class="Shopware\Components\Theme\Util">
+            <argument type="service" id="models" />
+            <argument type="service" id="theme_path_resolver" />
+        </service>
+
+        <service id="theme_installer" class="Shopware\Components\Theme\Installer">
+            <argument type="service" id="models" />
+            <argument type="service" id="theme_configurator" />
+            <argument type="service" id="theme_path_resolver" />
+            <argument type="service" id="theme_util" />
+            <argument type="service" id="shopware.snippet_database_handler" />
+            <argument type="service" id="theme_service" />
+            <argument>%shopware.snippet%</argument>
+        </service>
+
+        <service id="theme_compiler" class="Shopware\Components\Theme\Compiler">
+            <argument>%kernel.root_dir%</argument>
+            <argument type="service" id="less_compiler" />
+            <argument type="service" id="theme_path_resolver" />
+            <argument type="service" id="theme_inheritance" />
+            <argument type="service" id="theme_service" />
+            <argument type="service" id="js_compressor" />
+            <argument type="service" id="events" />
+            <argument type="service" id="theme_timestamp_persistor" />
+
+        </service>
+
+        <service id="theme_timestamp_persistor" class="Shopware\Components\Theme\DBALTimestampPersistor">
+            <argument type="service" id="dbal_connection"/>
+        </service>
+
+        <service id="theme_backend_registration" class="Shopware\Components\Theme\EventListener\BackendTheme">
+            <argument type="service" id="service_container" />
+            <tag name="shopware.event_listener" method="registerBackendTheme" event="Enlight_Controller_Front_RouteShutdown" />
+        </service>
+
+        <!-- RotatingFileHandler handler-->
+        <service id="monolog.processor.uid" class="Monolog\Processor\UidProcessor" public="false" />
+
+        <service id="monolog.handler.rotating_file" class="Monolog\Handler\RotatingFileHandler" public="false">
+            <argument>%kernel.logs_dir%/core_%kernel.environment%.log</argument>
+            <argument>14</argument>
+            <call method="pushProcessor">
+                <argument type="service" id="monolog.processor.uid" />
+            </call>
+        </service>
+
+        <service id="monolog.handler.rotating_file.plugin" class="Monolog\Handler\RotatingFileHandler" public="false">
+            <argument>%kernel.logs_dir%/plugin_%kernel.environment%.log</argument>
+            <argument>14</argument>
+            <call method="pushProcessor">
+                <argument type="service" id="monolog.processor.uid" />
+            </call>
+        </service>
+
+        <!-- FingersCrossed handler-->
+        <service id="monolog.handler.fingers_crossed" class="Monolog\Handler\FingersCrossedHandler" public="false">
+            <argument type="service" id="monolog.handler.rotating_file" />
+            <argument>%monolog.logger.constant.info%</argument>
+        </service>
+
+        <!-- Core logger -->
+        <service id="monolog.handler.main" alias="monolog.handler.fingers_crossed" />
+        <service id="corelogger" class="Shopware\Components\Logger">
+            <argument>core</argument>
+            <call method="pushHandler">
+                <argument type="service" id="monolog.handler.main" />
+            </call>
+        </service>
+
+        <!--Plugin logger -->
+        <service id="pluginlogger" class="Shopware\Components\Logger">
+            <argument>plugin</argument>
+            <call method="pushHandler">
+                <argument type="service" id="monolog.handler.rotating_file.plugin" />
+            </call>
+        </service>
+
+        <!-- ChromePHP handler-->
+        <service id="monolog.handler.chromephp" class="Shopware\Components\Log\Handler\ChromePhpHandler">
+            <tag name="shopware.event_listener" method="onRouteStartUp" event="Enlight_Controller_Front_RouteStartup" />
+        </service>
+
+        <!-- FirePHP handler-->
+        <service id="monolog.formatter.wildfire" class="Shopware\Components\Log\Formatter\WildfireFormatter" />
+        <service id="monolog.handler.firephp" class="Shopware\Components\Log\Handler\FirePHPHandler">
+            <call method="setFormatter">
+                <argument type="service" id="monolog.formatter.wildfire" />
+            </call>
+            <tag name="shopware.event_listener" method="onRouteStartUp" event="Enlight_Controller_Front_RouteStartup" />
+        </service>
+
+        <!--Debug logger used for chrome/firefox logging -->
+        <service id="debuglogger" class="Shopware\Components\Logger">
+            <argument>debug</argument>
+        </service>
+
+        <service id="shopware.log.fileparser" class="Shopware\Components\Log\Parser\LogfileParser"/>
     </services>
 </container>

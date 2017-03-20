@@ -24,7 +24,7 @@
 
 namespace Shopware\Tests\Unit\Components\Event;
 
-use Enlight\Event\SubscriberInterface;
+use Shopware\Components\Plugin\SubscriberInterface;
 use PHPUnit\Framework\TestCase;
 use Shopware\Components\ContainerAwareEventManager;
 use Symfony\Component\DependencyInjection\Container;

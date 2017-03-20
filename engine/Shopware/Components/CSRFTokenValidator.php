@@ -24,9 +24,9 @@
 
 namespace Shopware\Components;
 
-use Enlight\Event\SubscriberInterface;
+use Shopware\Components\Plugin\SubscriberInterface;
 use Enlight_Controller_ActionEventArgs as ActionEventArgs;
-use Shopware\Components\DependencyInjection\Container;
+use Symfony\Component\DependencyInjection\ContainerInterface as Container;
 
 /**
  * Class CSRFTokenValidator

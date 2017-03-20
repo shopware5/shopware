@@ -1,0 +1,78 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="doctrine.dbal.connection_factory.class">Shopware\Framework\Doctrine\ConnectionFactory</parameter>
+    </parameters>
+
+    <services>
+        <!-- database / doctrine -->
+        <service id="dbal_connection" alias="doctrine.dbal.default_connection" />
+
+        <service id="db_connection" class="PDO" public="false">
+            <factory class="AppKernel" method="getConnection" />
+        </service>
+
+        <!-- Cache -->
+        <service id="shopware.cache" alias="cache.app" />
+
+        <!-- Routing -->
+        <service id="router" alias="shopware.router" />
+
+        <service id="shopware.router" class="Shopware\Framework\Component\Router">
+            <argument>%router.resource%</argument>
+            <argument type="service" id="kernel" />
+            <argument type="service" id="service_container" />
+            <argument type="service" id="router.request_context" on-invalid="ignore" />
+            <argument type="service" id="logger" on-invalid="ignore" />
+        </service>
+
+        <!-- Session -->
+        <service id="shopware.session" alias="session" />
+
+        <service id="shopware.session.save_handler_factory" class="Shopware\Framework\Component\Session\SaveHandlerFactory">
+            <argument type="service" id="dbal_connection" />
+            <argument>s_core_sessions</argument>
+        </service>
+
+        <service id="shopware.session.save_handler" class="SessionHandlerInterface">
+            <factory service="shopware.session.save_handler_factory" method="createSaveHandler" />
+            <argument>%shopware.session%</argument>
+        </service>
+
+        <service id="shopware.session.shop_subscriber" class="Shopware\Framework\Component\Session\ShopSubscriber">
+            <tag name="kernel.event_subscriber" />
+        </service>
+
+        <!-- Translation / Snippet -->
+        <service id="shopware.translator.database_loader" class="Shopware\Framework\Translator\DatabaseLoader">
+            <tag name="translation.loader" alias="database" />
+
+            <argument type="service" id="dbal_connection" />
+        </service>
+
+        <!-- Config -->
+        <service id="shopware.config.cache_warmer" class="Shopware\Framework\Component\Config\CacheWarmer">
+            <tag name="kernel.cache_warmer" />
+
+            <argument type="service" id="dbal_connection" />
+            <argument type="service" id="shopware.config.config_service" />
+        </service>
+
+        <service id="shopware.config.config_service" class="Shopware\Framework\Component\Config\ConfigService">
+            <argument type="service" id="dbal_connection" />
+        </service>
+
+        <service id="shopware.config.cached_config_service" class="Shopware\Framework\Component\Config\CachedConfigService" decorates="shopware.config.config_service">
+            <argument type="service" id="shopware.config.cached_config_service.inner" />
+            <argument type="service" id="shopware.cache" />
+        </service>
+
+        <service id="shopware.config" alias="shopware.config.config" />
+        <service synthetic="true" id="shopware.config.config" class="Shopware\Framework\Component\Config\Config" />
+
+    </services>
+</container>

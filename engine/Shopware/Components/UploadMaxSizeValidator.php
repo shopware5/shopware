@@ -24,7 +24,7 @@
 
 namespace Shopware\Components;
 
-use Enlight\Event\SubscriberInterface;
+use Shopware\Components\Plugin\SubscriberInterface;
 use Enlight_Controller_EventArgs;
 use Enlight_Controller_Request_Request;
 use Enlight_Controller_Response_Response;

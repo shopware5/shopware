@@ -25,7 +25,7 @@
 namespace Shopware\Components\Plugin;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Enlight\Event\SubscriberInterface;
+use Shopware\Components\Plugin\SubscriberInterface;
 use Shopware\Components\Theme\LessDefinition;
 use Symfony\Component\Finder\Finder;
 

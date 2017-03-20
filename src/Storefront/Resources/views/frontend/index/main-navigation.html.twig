@@ -1,0 +1,34 @@
+{% block frontend_index_navigation_categories %}
+    <div class="navigation--list-wrapper">
+        {% block frontend_index_navigation_categories_navigation_list %}
+            <ul class="navigation--list container" role="menubar" itemscope="itemscope" itemtype="http://schema.org/SiteNavigationElement">
+                {% block frontend_index_navigation_categories_top_home %}
+                    <li class="navigation--entry{% if sCategoryCurrent == sCategoryStart and Controller == 'index' or true %} is--active{% endif %} is--home" role="menuitem">
+                        {% block frontend_index_navigation_categories_top_link_home %}
+                            <a class="navigation--link is--first{% if sCategoryCurrent == sCategoryStart and Controller == 'index' %} active{% endif %}" href="{{ url('homepage') }}" title="{{ snippet('IndexLinkHome', 'frontend/index/categories_top')|escape }}" itemprop="url">
+                                <span itemprop="name">{% trans from 'frontend/index/categories_top' %}IndexLinkHome{% endtrans %}</span>
+                            </a>
+                        {% endblock %}
+                    </li>
+                {% endblock %}
+
+                {% block frontend_index_navigation_categories_top_before %}{% endblock %}
+
+                {% for category in shopware.mainCategories %}
+                    {% block frontend_index_navigation_categories_top_entry %}
+                        {% if not category.hideTop %}
+                            <li class="navigation--entry{% if category.flag %} is--active{% endif %}" role="menuitem">
+                                {% block frontend_index_navigation_categories_top_link %}
+                                    <a class="navigation--link{% if category.flag %} is--active{% endif %}" href="{{ category.link }}" title="{{ category.description }}" itemprop="url">
+                                        <span itemprop="name">{{ category.description }}</span>
+                                    </a>
+                                {% endblock %}
+                            </li>
+                        {% endif %}
+                    {% endblock %}
+                {% endfor %}
+                {% block frontend_index_navigation_categories_top_after %}{% endblock %}
+            </ul>
+        {% endblock %}
+    </div>
+{% endblock %}

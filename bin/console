@@ -1,38 +1,28 @@
 #!/usr/bin/env php
 <?php
-/**
- * Shopware 5
- * Copyright (c) shopware AG
- *
- * According to our dual licensing model, this program can be used either
- * under the terms of the GNU Affero General Public License, version 3,
- * or under a proprietary license.
- *
- * The texts of the GNU Affero General Public License with an additional
- * permission and of our proprietary license can be found at and
- * in the LICENSE file you have received along with this program.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * "Shopware" is a registered trademark of shopware AG.
- * The licensing of the program under the AGPLv3 does not imply a
- * trademark license. Therefore any rights, title and interest in
- * our trademarks remain entirely with us.
- */
+
+use Symfony\Bundle\FrameworkBundle\Console\Application;
+use Symfony\Component\Console\Input\ArgvInput;
+use Symfony\Component\Debug\Debug;
+
+// if you don't want to setup permissions the proper way, just uncomment the following PHP line
+// read http://symfony.com/doc/current/setup.html#checking-symfony-application-configuration-and-setup
+// for more information
+//umask(0000);
 
 set_time_limit(0);
 
-require __DIR__ . '/../autoload.php';
-
-use Symfony\Component\Console\Input\ArgvInput;
+/** @var Composer\Autoload\ClassLoader $loader */
+$loader = require __DIR__.'/../app/autoload.php';
 
 $input = new ArgvInput();
+$env = $input->getParameterOption(['--env', '-e'], getenv('SYMFONY_ENV') ?: 'dev');
+$debug = getenv('SYMFONY_DEBUG') !== '0' && !$input->hasParameterOption(['--no-debug', '']) && $env !== 'prod';
 
-$env = $input->getParameterOption(array('--env', '-e'), getenv('SHOPWARE_ENV') ?: 'production');
+if ($debug) {
+    Debug::enable();
+}
 
-$kernel = new Shopware\Kernel($env, false);
-$application = new Shopware\Components\Console\Application($kernel);
+$kernel = new AppKernel($env, $debug);
+$application = new Application($kernel);
 $application->run($input);

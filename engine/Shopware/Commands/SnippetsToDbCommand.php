@@ -30,6 +30,7 @@ use Shopware\Models\Plugin\Plugin;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * @category  Shopware
@@ -38,6 +39,24 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class SnippetsToDbCommand extends ShopwareCommand
 {
+    /**
+     * @var ContainerInterface
+     */
+    protected $container;
+
+    /**
+     * SnippetsToDbCommand constructor.
+     *
+     * @param ContainerInterface $container
+     */
+    public function __construct(ContainerInterface $container)
+    {
+        parent::__construct();
+        
+        $this->container = $container;
+    }
+
+
     /**
      * {@inheritdoc}
      */
@@ -63,7 +82,7 @@ class SnippetsToDbCommand extends ShopwareCommand
                 null,
                 InputOption::VALUE_REQUIRED,
                 'The folder from where the snippets should be imported, relative to Shopware\'s root folder',
-                'snippets'
+                'src/Shopware/Resources/snippets'
             )
         ;
     }
@@ -89,7 +108,7 @@ class SnippetsToDbCommand extends ShopwareCommand
             /** @var Plugin[] $plugins */
             $plugins = $pluginRepository->findBy(['active' => true]);
 
-            $pluginDirectories = $this->container->getParameter('shopware.plugin_directories');
+            $pluginDirectories = $this->container->getParameter('shopware.plugin_directory');
 
             foreach ($plugins as $plugin) {
                 if (array_key_exists($plugin->getSource(), $pluginDirectories)) {

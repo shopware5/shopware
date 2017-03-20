@@ -30,7 +30,7 @@ use Shopware\Bundle\ESIndexingBundle\MappingInterface;
 use Shopware\Bundle\ESIndexingBundle\SettingsInterface;
 use Shopware\Bundle\ESIndexingBundle\ShopIndexer;
 use Shopware\Bundle\ESIndexingBundle\ShopIndexerInterface;
-use Shopware\Components\DependencyInjection\Container;
+use Symfony\Component\DependencyInjection\ContainerInterface as Container;
 
 class ShopIndexerFactory
 {

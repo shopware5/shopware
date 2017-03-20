@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Components\DependencyInjection\Bridge;
+namespace Shopware\DependencyInjection\Bridge;
 
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 use Shopware\Components\Model\Configuration;

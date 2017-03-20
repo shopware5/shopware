@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Components\DependencyInjection;
+namespace Shopware\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\Container as BaseContainer;
 use Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceException;

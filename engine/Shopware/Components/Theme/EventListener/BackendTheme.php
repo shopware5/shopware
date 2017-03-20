@@ -24,7 +24,7 @@
 
 namespace Shopware\Components\Theme\EventListener;
 
-use Shopware\Components\DependencyInjection\Container;
+use Symfony\Component\DependencyInjection\ContainerInterface as Container;
 
 /**
  * Registers the current backend theme for the backend requests.
@@ -36,7 +36,7 @@ use Shopware\Components\DependencyInjection\Container;
 class BackendTheme
 {
     /**
-     * @var \Shopware\Components\DependencyInjection\Container
+     * @var \Shopware\DependencyInjection\Container
      */
     private $container;
 

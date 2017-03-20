@@ -25,7 +25,7 @@
 namespace Shopware\Tests\Unit\Components\Event;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Enlight\Event\SubscriberInterface;
+use Shopware\Components\Plugin\SubscriberInterface;
 use PHPUnit\Framework\TestCase;
 
 /**

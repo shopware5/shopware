@@ -22,7 +22,7 @@
  */
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Enlight\Event\SubscriberInterface;
+use Shopware\Components\Plugin\SubscriberInterface;
 
 /**
  * The Enlight_Event_EventManager stores all event listeners.

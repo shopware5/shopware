@@ -24,7 +24,7 @@
 
 namespace Shopware\Components;
 
-use Shopware\Components\DependencyInjection\Container;
+use Symfony\Component\DependencyInjection\ContainerInterface as Container;
 use Shopware\Components\Theme\PathResolver;
 
 /**

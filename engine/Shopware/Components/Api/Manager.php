@@ -24,7 +24,7 @@
 
 namespace Shopware\Components\Api;
 
-use Shopware\Components\DependencyInjection\ContainerAwareInterface;
+use Shopware\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 
 /**

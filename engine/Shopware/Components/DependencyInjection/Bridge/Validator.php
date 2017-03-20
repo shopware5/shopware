@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Components\DependencyInjection\Bridge;
+namespace Shopware\DependencyInjection\Bridge;
 
 use Shopware\Bundle\FormBundle\DependencyInjection\Factory\ConstraintValidatorFactory;
 use Shopware\Components\Model\Configuration;

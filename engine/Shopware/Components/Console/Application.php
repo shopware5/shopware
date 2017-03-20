@@ -28,7 +28,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\Tools\Console\Helper\ConnectionHelper;
 use Doctrine\ORM\Tools\Console\ConsoleRunner as DoctrineConsoleRunner;
 use Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper;
-use Shopware\Components\DependencyInjection\ContainerAwareInterface;
+use Shopware\DependencyInjection\ContainerAwareInterface;
 use Shopware\Kernel;
 use Symfony\Component\Console\Application as BaseApplication;
 use Symfony\Component\Console\Command\Command;
@@ -217,7 +217,7 @@ class Application extends BaseApplication
     /**
      * Register tagged commands in Symfony style
      *
-     * @see Shopware\Components\DependencyInjection\Compiler\AddConsoleCommandPass
+     * @see Shopware\DependencyInjection\Compiler\AddConsoleCommandPass
      */
     protected function registerTaggedServiceIds()
     {

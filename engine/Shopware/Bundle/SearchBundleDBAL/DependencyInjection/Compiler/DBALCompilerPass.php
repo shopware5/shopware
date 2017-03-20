@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\SearchBundleDBAL\DependencyInjection\Compiler;
 
-use Shopware\Components\DependencyInjection\Compiler\TagReplaceTrait;
+use Shopware\DependencyInjection\Compiler\TagReplaceTrait;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 

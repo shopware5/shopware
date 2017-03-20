@@ -24,8 +24,8 @@
 
 namespace Shopware\Components\Theme\EventListener;
 
-use Enlight\Event\SubscriberInterface;
-use Shopware\Components\DependencyInjection\Container;
+use Shopware\Components\Plugin\SubscriberInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface as Container;
 use Shopware\Models\Shop\Shop;
 
 /**

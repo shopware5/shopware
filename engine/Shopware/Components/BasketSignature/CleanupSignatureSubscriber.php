@@ -25,7 +25,7 @@
 namespace Shopware\Components\BasketSignature;
 
 use Doctrine\DBAL\Connection;
-use Enlight\Event\SubscriberInterface;
+use Shopware\Components\Plugin\SubscriberInterface;
 
 class CleanupSignatureSubscriber implements SubscriberInterface
 {

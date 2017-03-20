@@ -25,7 +25,7 @@
 namespace Shopware\Bundle\SearchBundleDBAL;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Enlight\Event\SubscriberInterface;
+use Shopware\Components\Plugin\SubscriberInterface;
 use Shopware\Bundle\SearchBundle\CriteriaRequestHandlerInterface;
 
 /**

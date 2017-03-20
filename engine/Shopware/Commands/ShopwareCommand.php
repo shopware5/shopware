@@ -24,8 +24,8 @@
 
 namespace Shopware\Commands;
 
-use Shopware\Components\DependencyInjection\Container;
-use Shopware\Components\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface as Container;
+use Shopware\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Output\OutputInterface;
 

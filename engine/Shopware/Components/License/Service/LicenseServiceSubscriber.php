@@ -24,10 +24,10 @@
 
 namespace Shopware\Components\License\Service;
 
-use Enlight\Event\SubscriberInterface;
+use Shopware\Components\Plugin\SubscriberInterface;
 use Enlight_Event_EventArgs;
 use Enlight_View_Default;
-use Shopware\Components\DependencyInjection\Container;
+use Symfony\Component\DependencyInjection\ContainerInterface as Container;
 use Shopware\Components\License\Struct\LicenseInformation;
 use Shopware\Components\License\Struct\LicenseUnpackRequest;
 use Shopware\Components\License\Struct\ShopwareEdition;

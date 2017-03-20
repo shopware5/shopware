@@ -24,7 +24,7 @@
 
 namespace Shopware\Components\Emotion;
 
-use Enlight\Event\SubscriberInterface;
+use Shopware\Components\Plugin\SubscriberInterface;
 
 class EmotionComponentViewSubscriber implements SubscriberInterface
 {

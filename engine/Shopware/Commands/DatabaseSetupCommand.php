@@ -96,7 +96,7 @@ class DatabaseSetupCommand extends ShopwareCommand
             return 1;
         }
 
-        $dbConfig = $this->getContainer()->getParameter('shopware.db');
+        $dbConfig = $this->getContainer()->getParameter('shopware.database');
         $rootDir = $this->getContainer()->getParameter('kernel.root_dir');
 
         $connection = $this->createConnection($dbConfig);

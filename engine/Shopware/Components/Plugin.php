@@ -24,8 +24,7 @@
 
 namespace Shopware\Components;
 
-use Enlight\Event\SubscriberInterface;
-use Shopware\Components\Console\Application;
+use Shopware\Components\Plugin\SubscriberInterface;
 use Shopware\Components\Filesystem\PrefixFilesystem;
 use Shopware\Components\Plugin\Context\ActivateContext;
 use Shopware\Components\Plugin\Context\DeactivateContext;
@@ -33,41 +32,43 @@ use Shopware\Components\Plugin\Context\InstallContext;
 use Shopware\Components\Plugin\Context\UninstallContext;
 use Shopware\Components\Plugin\Context\UpdateContext;
 use Symfony\Component\Config\FileLocator;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\Reference;
+use Symfony\Component\HttpKernel\Bundle\Bundle;
 
-abstract class Plugin implements ContainerAwareInterface, SubscriberInterface
+abstract class Plugin extends Bundle implements SubscriberInterface
 {
-    /**
-     * @var ContainerInterface
-     */
-    protected $container;
-
-    /**
-     * @var string
-     */
-    private $name;
-
-    /**
-     * @var string
-     */
-    private $path;
-
     /**
      * @var bool
      */
     private $isActive;
 
-    /**
-     * @param bool $isActive
-     */
-    final public function __construct($isActive)
+    final public function __construct(bool $isActive)
     {
-        $this->isActive = (bool) $isActive;
+        $this->isActive = $isActive;
+    }
+
+    public function build(ContainerBuilder $container)
+    {
+        $container->setParameter($this->getContainerPrefix() . '.plugin_dir', $this->getPath());
+        $container->setParameter($this->getContainerPrefix() . '.plugin_name', $this->getName());
+
+        $container->addObjectResource($this);
+
+        $this->registerFilesystem($container, 'private');
+        $this->registerFilesystem($container, 'public');
+
+        if (is_file($this->getPath() . '/Resources/services.xml')) {
+            $loader = new XmlFileLoader($container, new FileLocator());
+            $loader->load($this->getPath() . '/Resources/services.xml');
+        }
+    }
+
+    final public function getPath(): string
+    {
+        return parent::getPath();
     }
 
     /**
@@ -78,174 +79,43 @@ abstract class Plugin implements ContainerAwareInterface, SubscriberInterface
         return [];
     }
 
-    /**
-     * @return bool
-     */
-    final public function isActive()
+    final public function isActive(): bool
     {
         return $this->isActive;
     }
 
-    /**
-     * Registers Commands.
-     *
-     * @param Application $application An Application instance
-     */
-    public function registerCommands(Application $application)
+    public function install(InstallContext $context): void
     {
     }
 
-    /**
-     * This method can be overridden
-     *
-     * @param InstallContext $context
-     */
-    public function install(InstallContext $context)
-    {
-    }
-
-    /**
-     * This method can be overridden
-     *
-     * @param UpdateContext $context
-     */
-    public function update(UpdateContext $context)
+    public function update(UpdateContext $context): void
     {
         $context->scheduleClearCache(InstallContext::CACHE_LIST_DEFAULT);
     }
 
-    /**
-     * This method can be overridden
-     *
-     * @param ActivateContext $context
-     */
     public function activate(ActivateContext $context)
     {
         $context->scheduleClearCache(InstallContext::CACHE_LIST_DEFAULT);
     }
 
-    /**
-     * This method can be overridden
-     *
-     * @param DeactivateContext $context
-     */
-    public function deactivate(DeactivateContext $context)
+    public function deactivate(DeactivateContext $context): void
     {
         $context->scheduleClearCache(InstallContext::CACHE_LIST_DEFAULT);
     }
 
-    /**
-     * This method can be overridden
-     *
-     * @param UninstallContext $context
-     */
-    public function uninstall(UninstallContext $context)
+    public function uninstall(UninstallContext $context): void
     {
         $context->scheduleClearCache(InstallContext::CACHE_LIST_DEFAULT);
     }
 
-    /**
-     * Builds the Plugin.
-     *
-     * It is only ever called once when the cache is empty.
-     *
-     * This method can be overridden to register compilation passes,
-     * other extensions, ...
-     *
-     * @param ContainerBuilder $container A ContainerBuilder instance
-     */
-    public function build(ContainerBuilder $container)
-    {
-        $container->setParameter($this->getContainerPrefix() . '.plugin_dir', $this->getPath());
-        $container->setParameter($this->getContainerPrefix() . '.plugin_name', $this->getName());
-        $this->registerFilesystems($container);
-        $this->loadFiles($container);
-    }
-
-    /**
-     * Sets the container.
-     *
-     * @param ContainerInterface|null $container A ContainerInterface instance or null
-     */
-    final public function setContainer(ContainerInterface $container = null)
-    {
-        $this->container = $container;
-    }
-
-    /**
-     * Returns the Plugin name (the class short name).
-     *
-     * @return string The Plugin name
-     */
-    final public function getName()
-    {
-        if (null !== $this->name) {
-            return $this->name;
-        }
-
-        $name = get_class($this);
-        $pos = strrpos($name, '\\');
-
-        return $this->name = false === $pos ? $name : substr($name, $pos + 1);
-    }
-
-    /**
-     * @return string
-     */
-    public function getContainerPrefix()
+    public function getContainerPrefix(): string
     {
         return $this->camelCaseToUnderscore($this->getName());
     }
 
-    /**
-     * Gets the Plugin directory path.
-     *
-     * @return string The Plugin absolute path
-     */
-    final public function getPath()
-    {
-        if (null === $this->path) {
-            $reflected = new \ReflectionObject($this);
-            $this->path = dirname($reflected->getFileName());
-        }
-
-        return $this->path;
-    }
-
-    /**
-     * @param ContainerBuilder $container
-     */
-    final protected function loadFiles(ContainerBuilder $container)
-    {
-        if (!is_file($this->getPath() . '/Resources/services.xml')) {
-            return;
-        }
-
-        $loader = new XmlFileLoader(
-            $container,
-            new FileLocator()
-        );
-
-        $loader->load($this->getPath() . '/Resources/services.xml');
-    }
-
-    /**
-     * @param string $string
-     *
-     * @return string
-     */
-    private function camelCaseToUnderscore($string)
+    private function camelCaseToUnderscore(string $string): string
     {
         return ltrim(strtolower(preg_replace('/[A-Z]/', '_$0', $string)), '_');
-    }
-
-    /**
-     * @param ContainerBuilder $container
-     */
-    private function registerFilesystems(ContainerBuilder $container)
-    {
-        $this->registerFilesystem($container, 'private');
-        $this->registerFilesystem($container, 'public');
     }
 
     /**

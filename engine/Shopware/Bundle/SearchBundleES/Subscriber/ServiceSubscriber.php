@@ -24,8 +24,8 @@
 
 namespace Shopware\Bundle\SearchBundleES\Subscriber;
 
-use Enlight\Event\SubscriberInterface;
-use Shopware\Components\DependencyInjection\Container;
+use Shopware\Components\Plugin\SubscriberInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface as Container;
 
 class ServiceSubscriber implements SubscriberInterface
 {

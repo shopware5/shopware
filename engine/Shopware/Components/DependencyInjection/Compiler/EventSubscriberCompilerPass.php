@@ -22,10 +22,11 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Components\DependencyInjection\Compiler;
+namespace Shopware\DependencyInjection\Compiler;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Shopware\Components\Plugin\SubscriberInterface;
 
 /**
  * @category  Shopware
@@ -62,7 +63,7 @@ class EventSubscriberCompilerPass implements CompilerPassInterface
             $class = $container->getParameterBag()->resolveValue($def->getClass());
 
             $refClass = new \ReflectionClass($class);
-            $interface = 'Enlight\Event\SubscriberInterface';
+            $interface = SubscriberInterface::class;
             if (!$refClass->implementsInterface($interface)) {
                 throw new \InvalidArgumentException(sprintf('Service "%s" must implement interface "%s".', $id, $interface));
             }

@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Components\DependencyInjection\Bridge;
+namespace Shopware\DependencyInjection\Bridge;
 
 use Zend_Cache_Core;
 

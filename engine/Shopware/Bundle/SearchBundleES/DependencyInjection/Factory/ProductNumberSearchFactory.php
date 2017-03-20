@@ -27,7 +27,7 @@ namespace Shopware\Bundle\SearchBundleES\DependencyInjection\Factory;
 use Doctrine\Common\Collections\ArrayCollection;
 use Shopware\Bundle\SearchBundleES\HandlerInterface;
 use Shopware\Bundle\SearchBundleES\ProductNumberSearch;
-use Shopware\Components\DependencyInjection\Container;
+use Symfony\Component\DependencyInjection\ContainerInterface as Container;
 
 class ProductNumberSearchFactory
 {

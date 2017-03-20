@@ -26,7 +26,7 @@ declare(strict_types=1);
 
 namespace Shopware\Components\Auth;
 
-use Enlight\Event\SubscriberInterface;
+use Shopware\Components\Plugin\SubscriberInterface;
 use Enlight_Event_EventArgs;
 use Shopware\Models\Shop\Locale;
 

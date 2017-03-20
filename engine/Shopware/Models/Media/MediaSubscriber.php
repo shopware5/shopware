@@ -27,7 +27,7 @@ namespace Shopware\Models\Media;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Events;
-use Shopware\Components\DependencyInjection\Container;
+use Shopware\DependencyInjection\Container;
 
 /**
  * @category  Shopware

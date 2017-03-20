@@ -22,7 +22,9 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Components\DependencyInjection;
+namespace Shopware\DependencyInjection;
+
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * ContainerAwareInterface should be implemented by classes that depends on a Container.
@@ -36,7 +38,7 @@ interface ContainerAwareInterface
     /**
      * Sets the Container.
      *
-     * @param Container|null $Container A ContainerInterface instance or null
+     * @param ContainerInterface|null $Container A ContainerInterface instance or null
      */
-    public function setContainer(Container $Container = null);
+    public function setContainer(ContainerInterface $Container = null);
 }

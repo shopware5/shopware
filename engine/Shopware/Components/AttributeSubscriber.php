@@ -24,7 +24,7 @@
 
 namespace Shopware\Components;
 
-use Enlight\Event\SubscriberInterface;
+use Shopware\Components\Plugin\SubscriberInterface;
 use Enlight_Event_EventArgs as EventArgs;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 

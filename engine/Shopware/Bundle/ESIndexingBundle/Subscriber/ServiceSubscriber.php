@@ -25,7 +25,7 @@
 namespace Shopware\Bundle\ESIndexingBundle\Subscriber;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Enlight\Event\SubscriberInterface;
+use Shopware\Components\Plugin\SubscriberInterface;
 use Shopware\Bundle\ESIndexingBundle\Commands\AnalyzeCommand;
 use Shopware\Bundle\ESIndexingBundle\Commands\BacklogClearCommand;
 use Shopware\Bundle\ESIndexingBundle\Commands\BacklogSyncCommand;

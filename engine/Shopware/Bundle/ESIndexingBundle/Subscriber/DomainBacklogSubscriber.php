@@ -24,10 +24,10 @@
 
 namespace Shopware\Bundle\ESIndexingBundle\Subscriber;
 
-use Enlight\Event\SubscriberInterface;
+use Shopware\Components\Plugin\SubscriberInterface;
 use Enlight_Event_EventArgs as EventArgs;
 use Shopware\Bundle\ESIndexingBundle\Struct\Backlog;
-use Shopware\Components\DependencyInjection\Container;
+use Symfony\Component\DependencyInjection\ContainerInterface as Container;
 
 class DomainBacklogSubscriber implements SubscriberInterface
 {
@@ -59,10 +59,10 @@ class DomainBacklogSubscriber implements SubscriberInterface
      */
     public function onProductStockWasChanged(EventArgs $eventArgs)
     {
-        if (!$this->container->getParameter('shopware.es.enabled')) {
+        if (!$this->container->getParameter('shopware.elasticsearch.enabled')) {
             return;
         }
-        if (!$this->container->getParameter('shopware.es.write_backlog')) {
+        if (!$this->container->getParameter('shopware.elasticsearch.write_backlog')) {
             return;
         }
         $backlog = new Backlog(ORMBacklogSubscriber::EVENT_VARIANT_UPDATED, ['number' => $eventArgs->get('number')]);

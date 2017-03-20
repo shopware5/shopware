@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Components\DependencyInjection\Bridge;
+namespace Shopware\DependencyInjection\Bridge;
 
 use Doctrine\Common\EventManager;
 use Doctrine\DBAL\Configuration;
@@ -49,7 +49,7 @@ class Db
         try {
             $conn = new \PDO(
                 'mysql:' . $connectionString,
-                $dbConfig['username'],
+                $dbConfig['user'],
                 $password
             );
 
@@ -62,7 +62,7 @@ class Db
             $message = $e->getMessage();
             $message = str_replace(
                 [
-                    $dbConfig['username'],
+                    $dbConfig['user'],
                     $dbConfig['password'],
                 ],
                 '******',
@@ -92,11 +92,9 @@ class Db
         $pdo
     ) {
         $options['pdo'] = $pdo;
-
         $options['driver'] = $options['adapter'];
-        $options['user'] = $options['username'];
 
-        unset($options['username'], $options['adapter']);
+        unset($options['adapter']);
 
         return DriverManager::getConnection($options, $config, $eventManager);
     }
@@ -145,8 +143,8 @@ class Db
             $connectionSettings[] = 'charset=' . $dbConfig['charset'];
         }
 
-        if (!empty($dbConfig['dbname'])) {
-            $connectionSettings[] = 'dbname=' . $dbConfig['dbname'];
+        if (!empty($dbConfig['name'])) {
+            $connectionSettings[] = 'dbname=' . $dbConfig['name'];
         }
 
         return implode(';', $connectionSettings);

@@ -27,8 +27,8 @@ namespace Shopware\Components\Api\Resource;
 use Shopware\Components\Api\BatchInterface;
 use Shopware\Components\Api\Exception as ApiException;
 use Shopware\Components\CacheManager;
-use Shopware\Components\DependencyInjection\Container;
-use Shopware\Components\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface as Container;
+use Shopware\DependencyInjection\ContainerAwareInterface;
 
 /**
  * Cache API Resource

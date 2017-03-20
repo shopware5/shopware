@@ -1,0 +1,58 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="assetic.filter.lessphp.class">Shopware\Storefront\Component\Theme\LessphpFilter</parameter>
+    </parameters>
+
+    <services>
+
+        <service id="shopware.storefront.twig.template_data_extension" class="Shopware\Storefront\Twig\TemplateDataExtension">
+            <tag name="twig.extension" />
+
+            <argument type="service" id="translator" />
+            <argument type="service" id="request_stack" />
+            <argument type="service" id="shopware.config.config_service" />
+            <argument type="service" id="shopware.storefront.component.site_page_menu" />
+            <argument type="service" id="dbal_connection" />
+            <argument type="service" id="shopware.storefront.component.theme.config_reader" />
+        </service>
+
+        <service id="shopware.storefront.component.site_page_menu" class="Shopware\Storefront\Component\SitePageMenu">
+            <argument type="service" id="dbal_connection" />
+            <argument type="service" id="shopware.router" />
+        </service>
+
+        <!-- Twig / Theme -->
+        <service id="shopware.storefront.component.theme.theme_cache_warmer" class="Shopware\Storefront\Component\Theme\ThemeCacheWarmer" public="false">
+            <tag name="kernel.cache_warmer" priority="15" />
+
+            <argument type="service" id="service_container" />
+            <argument type="service" id="assetic.asset_manager" />
+            <argument>%assetic.write_to%</argument>
+        </service>
+
+        <service id="shopware.storefront.twig.template_finder" class="Shopware\Storefront\Twig\TemplateFinder" >
+            <argument id="kernel" type="service"/>
+            <argument id="twig.loader" type="service"/>
+        </service>
+
+        <service id="shopware.storefront.twig.inheritance_extension" class="Shopware\Storefront\Twig\InheritanceExtension" public="false">
+            <tag name="twig.extension" />
+
+            <argument type="service" id="shopware.storefront.twig.template_finder" />
+        </service>
+
+        <service id="twig.extension.intl" class="Twig_Extensions_Extension_Intl">
+            <tag name="twig.extension" />
+        </service>
+
+        <service id="shopware.storefront.component.theme.config_reader" class="Shopware\Storefront\Component\Theme\ThemeConfigReader">
+            <argument type="service" id="dbal_connection" />
+        </service>
+
+    </services>
+</container>
