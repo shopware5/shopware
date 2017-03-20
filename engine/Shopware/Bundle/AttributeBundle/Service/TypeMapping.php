@@ -208,7 +208,8 @@ class TypeMapping
             'Shopware\Models\ProductFeed\ProductFeed',
             'Shopware\Models\Newsletter\Newsletter',
             'Shopware\Models\Partner\Partner',
-            'Shopware\Models\Shop\Shop'
+            'Shopware\Models\Shop\Shop',
+            'Shopware\Models\Site\Site',
         ];
 
         $result = [];
