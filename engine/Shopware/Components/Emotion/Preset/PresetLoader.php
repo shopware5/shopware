@@ -131,9 +131,15 @@ class PresetLoader implements PresetLoaderInterface
     {
         $collectedComponents = [];
         $collectedFields = [];
+        $pluginNames = [];
 
         foreach ($elements as $element) {
             $component = $element['component'];
+
+            if (array_key_exists('plugin', $component)) {
+                $pluginNames[] = $component['plugin'];
+            }
+
             $collectedComponents[$component['name']] = $component['id'];
 
             foreach ($component['fields'] as $field) {
@@ -149,21 +155,28 @@ class PresetLoader implements PresetLoaderInterface
         $fields = $this->getFieldData($fieldNames);
         $fieldMapping = array_combine($collectedFields, array_merge($collectedFields, $fields));
 
-        return $this->processRefresh($elements, $componentMapping, $fieldMapping);
+        $pluginIds = $this->getPluginIds($pluginNames);
+
+        return $this->processRefresh($elements, $componentMapping, $fieldMapping, $pluginIds);
     }
 
     /**
      * @param array $elements
      * @param array $componentMapping
      * @param array $fieldMapping
+     * @param array $pluginIds
      *
      * @return array
      */
-    private function processRefresh(array $elements, array $componentMapping, array $fieldMapping)
+    private function processRefresh(array $elements, array $componentMapping, array $fieldMapping, array $pluginIds)
     {
         foreach ($elements as &$element) {
             $element['component']['id'] = $componentMapping[$element['componentId']];
             $element['componentId'] = $componentMapping[$element['componentId']];
+
+            if (array_key_exists('plugin', $element['component'])) {
+                $element['component']['pluginId'] = $pluginIds[$element['component']['plugin']];
+            }
 
             foreach ($element['component']['fields'] as &$field) {
                 $field['id'] = $fieldMapping[$field['id']];
@@ -210,6 +223,24 @@ class PresetLoader implements PresetLoaderInterface
             ->from('s_library_component_field', 'field')
             ->where('name IN (:names)')
             ->setParameter('names', $fieldNames, Connection::PARAM_STR_ARRAY)
+            ->execute()
+            ->fetchAll(\PDO::FETCH_KEY_PAIR);
+
+        return array_flip($queryResult);
+    }
+
+    /**
+     * @param array $technicalNames
+     *
+     * @return array
+     */
+    private function getPluginIds(array $technicalNames)
+    {
+        $queryResult = $this->modelManager->getConnection()->createQueryBuilder()
+            ->select('id, name')
+            ->from('s_core_plugins', 'plugin')
+            ->where('name IN (:names)')
+            ->setParameter('names', $technicalNames, Connection::PARAM_STR_ARRAY)
             ->execute()
             ->fetchAll(\PDO::FETCH_KEY_PAIR);
 

@@ -120,7 +120,7 @@ class Shopware_Controllers_Backend_EmotionPreset extends Shopware_Controllers_Ba
         /** @var Preset $preset */
         $preset = $this->container->get('models')->getRepository(Preset::class)->find($id);
 
-        if (!$preset || !$syncKey || $preset->getAssetsImported()) {
+        if (!$preset || $preset->getAssetsImported()) {
             $this->View()->assign(['success' => false]);
 
             return;
