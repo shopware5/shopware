@@ -196,7 +196,7 @@ class sExport
     }
 
     /**
-     * @param $id
+     * @param int $id
      * @return mixed
      */
     private function getShopData($id)
@@ -208,11 +208,11 @@ class sExport
         }
 
         if (empty($id)) {
-            $sql = "s.`default`=1";
+            $sql = 's.`default`=1';
         } elseif (is_numeric($id)) {
-            $sql = "s.id=".$id;
+            $sql = 's.id=' . $id;
         } elseif (is_string($id)) {
-            $sql = "s.name=".$this->db->quote(trim($id));
+            $sql = 's.name=' . $this->db->quote(trim($id));
         }
 
         $cache[$id] = $this->db->fetchRow("
@@ -225,7 +225,8 @@ class sExport
               COALESCE (s.base_path, m.base_path) AS base_path,
               COALESCE (s.base_url, m.base_url) AS base_url,
               COALESCE (s.hosts, m.hosts) AS hosts,
-              COALESCE (s.secure, m.secure) AS secure,
+              GREATEST (COALESCE (s.secure, 0), COALESCE (m.secure, 0)) AS secure,
+              GREATEST (COALESCE (s.always_secure, 0), COALESCE (m.always_secure, 0)) AS always_secure,
               COALESCE (s.secure_host, m.secure_host) AS secure_host,
               COALESCE (s.secure_base_path, m.secure_base_path) AS secure_base_path,
               COALESCE (s.template_id, m.template_id) AS template_id,
@@ -236,8 +237,7 @@ class sExport
               s.fallback_id,
               s.customer_scope,
               s.`default`,
-              s.active,
-              s.always_secure
+              s.active
             FROM s_core_shops s
             LEFT JOIN s_core_shops m
               ON m.id=s.main_id
