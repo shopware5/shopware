@@ -218,15 +218,13 @@ class PresetLoader implements PresetLoaderInterface
      */
     private function getFieldData(array $fieldNames)
     {
-        $queryResult = $this->modelManager->getConnection()->createQueryBuilder()
-            ->select('id, name')
+        return $this->modelManager->getConnection()->createQueryBuilder()
+            ->select('name, id')
             ->from('s_library_component_field', 'field')
             ->where('name IN (:names)')
             ->setParameter('names', $fieldNames, Connection::PARAM_STR_ARRAY)
             ->execute()
             ->fetchAll(\PDO::FETCH_KEY_PAIR);
-
-        return array_flip($queryResult);
     }
 
     /**
@@ -236,14 +234,12 @@ class PresetLoader implements PresetLoaderInterface
      */
     private function getPluginIds(array $technicalNames)
     {
-        $queryResult = $this->modelManager->getConnection()->createQueryBuilder()
-            ->select('id, name')
+        return $this->modelManager->getConnection()->createQueryBuilder()
+            ->select('name, id')
             ->from('s_core_plugins', 'plugin')
             ->where('name IN (:names)')
             ->setParameter('names', $technicalNames, Connection::PARAM_STR_ARRAY)
             ->execute()
             ->fetchAll(\PDO::FETCH_KEY_PAIR);
-
-        return array_flip($queryResult);
     }
 }

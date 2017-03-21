@@ -573,9 +573,6 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
 
                 if (result.success && result.data) {
                     me.getPresetWindow().close();
-                    if (me.progressbarWindow) {
-                        me.progressbarWindow.close();
-                    }
                     me.getMainWindow().setLoading(true);
                     me.openDetailWindow(
                         me.decodeEmotionPresetData(result.data)
@@ -599,6 +596,9 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
                 me.getMainWindow().setLoading(true);
                 me.importAssets(preset, function(success) {
                     me.getMainWindow().setLoading(false);
+                    if (me.progressbarWindow) {
+                        me.progressbarWindow.close();
+                    }
                     if (!success) {
                         return Shopware.Notification.createGrowlMessage(
                             '{s name=preset/assets_import_failure}{/s}',

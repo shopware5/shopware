@@ -22,8 +22,10 @@
  * our trademarks remain entirely with us.
  */
 
+use Doctrine\ORM\NoResultException;
 use Shopware\Bundle\MediaBundle\MediaService;
 use Shopware\Bundle\PluginInstallerBundle\Context\PluginsByTechnicalNameRequest;
+use Shopware\Components\Emotion\Preset\Exception\PresetAssetImportException;
 use Shopware\Models\Emotion\Preset;
 
 class Shopware_Controllers_Backend_EmotionPreset extends Shopware_Controllers_Backend_ExtJs
@@ -56,7 +58,17 @@ class Shopware_Controllers_Backend_EmotionPreset extends Shopware_Controllers_Ba
         }
 
         $loader = $this->container->get('shopware.emotion.preset_loader');
-        $presetData = $loader->load($id);
+
+        try {
+            $presetData = $loader->load($id);
+        } catch (NoResultException $e) {
+            $this->View()->assign([
+                'success' => false,
+                'message' => $e->getMessage(),
+            ]);
+
+            return;
+        }
 
         $this->View()->assign([
             'success' => true,
@@ -127,7 +139,17 @@ class Shopware_Controllers_Backend_EmotionPreset extends Shopware_Controllers_Ba
         }
 
         $synchronizerService = $this->container->get('shopware.emotion.preset_data_synchronizer');
-        $synchronizerService->importElementAssets($preset, $syncKey);
+
+        try {
+            $synchronizerService->importElementAssets($preset, $syncKey);
+        } catch (PresetAssetImportException $e) {
+            $this->View()->assign([
+                'success' => false,
+                'message' => $e->getMessage(),
+            ]);
+
+            return;
+        }
 
         $this->View()->assign(['success' => true]);
     }
