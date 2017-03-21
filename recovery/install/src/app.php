@@ -404,11 +404,11 @@ $app->map('/configuration/', function () use ($app, $translationService, $contai
 
     if ($app->request()->isPost()) {
         $adminUser = new \Shopware\Recovery\Install\Struct\AdminUser([
-            'email' => $_SESSION['parameters']['c_config_admin_email'],
+            'email'    => $_SESSION['parameters']['c_config_admin_email'],
             'username' => $_SESSION['parameters']['c_config_admin_username'],
-            'locale' => $_SESSION['parameters']['c_config_admin_language'],
-            'name' => $_SESSION['parameters']['c_config_admin_name'],
+            'name'     => $_SESSION['parameters']['c_config_admin_name'],
             'password' => $_SESSION['parameters']['c_config_admin_password'],
+            'locale'   => $_SESSION['parameters']['c_config_shop_language'], // This is intentional
         ]);
 
         $shop = new \Shopware\Recovery\Install\Struct\Shop([

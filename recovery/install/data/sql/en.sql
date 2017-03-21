@@ -461,6 +461,69 @@ Kind Regards,<br/><br/>
 
 Your {config name=shopName} team</div>";' WHERE id = 997;
 
+-- s_campaigns_templates --
+UPDATE s_campaigns_templates SET description = 'Default template' WHERE id = 1;
+UPDATE s_campaigns_templates SET description = 'Reseller' WHERE id = 2;
+
+-- s_core_engine_groups --
+UPDATE s_core_engine_groups SET label = 'Basic data' WHERE id = 1;
+UPDATE s_core_engine_groups SET label = 'Description' WHERE id = 2;
+UPDATE s_core_engine_groups SET label = 'Settings' WHERE id = 3;
+UPDATE s_core_engine_groups SET label = 'Additional fields' WHERE id = 7;
+UPDATE s_core_engine_groups SET label = 'Reference price' WHERE id = 8;
+UPDATE s_core_engine_groups SET label = 'Prices and customer groups' WHERE id = 10;
+UPDATE s_core_engine_groups SET label = 'Property' WHERE id = 11;
+
+-- s_attribute_configuration --
+UPDATE s_attribute_configuration SET label = 'Comment', help_text = 'Optional comment' WHERE id = 1;
+UPDATE s_attribute_configuration SET label = 'Free-text-1', help_text = 'Free text for display on detail page' WHERE id = 2;
+UPDATE s_attribute_configuration SET label = 'Free-text-2', help_text = 'Free text for display on detail page' WHERE id = 3;
+
+-- s_billing_template --
+UPDATE s_billing_template SET `desc` = 'Margin top' WHERE id = 1;
+UPDATE s_billing_template SET `desc` = 'Margin right' WHERE id = 2;
+UPDATE s_billing_template SET `desc` = 'Margin bottom' WHERE id = 3;
+UPDATE s_billing_template SET `desc` = 'Margin left' WHERE id = 4;
+UPDATE s_billing_template SET `desc` = 'Logo height' WHERE id = 5;
+UPDATE s_billing_template SET `desc` = 'Margin heading to address' WHERE id = 7;
+UPDATE s_billing_template SET `desc` = 'Margin left (negative value possible)' WHERE id = 8;
+UPDATE s_billing_template SET `desc` = 'Footer' WHERE id = 9;
+UPDATE s_billing_template SET `desc` = 'Letterhead right', value = '<p><strong>Demo Ltd. </strong><br /> John Doe<br /> Street 3<br /> 00000 Somecity<br /> Phone: 01234 / 56789<br /> Fax: 01234 / 56780<br />info@demo.de<br />www.demo.com</p>' WHERE id = 13;
+UPDATE s_billing_template SET `desc` = 'Sender', value = 'Demo Ltd. - Street 3 - 00000 Somecity' WHERE id = 14;
+UPDATE s_billing_template SET `desc` = 'Margin left' WHERE id = 15;
+UPDATE s_billing_template SET `desc` = 'Margin bottom' WHERE id = 16;
+UPDATE s_billing_template SET `desc` = 'Number of positions shown' WHERE id = 17;
+UPDATE s_billing_template SET `desc` = 'Content' WHERE id = 18;
+UPDATE s_billing_template SET `desc` = 'Margin content to upper border' WHERE id = 19;
+UPDATE s_billing_template SET `desc` = 'Logo top' WHERE id = 20;
+UPDATE s_billing_template SET `desc` = 'Margin bottom to logo (negative value possible)' WHERE id = 21;
+UPDATE s_billing_template SET `desc` = 'Margin right (negative value possible)' WHERE id = 22;
+UPDATE s_billing_template SET `desc` = 'Margin right (negative value possible)' WHERE id = 22;
+
+-- s_core_documents_box --
+UPDATE s_core_documents_box SET `value` = '<p>Demo Ltd. - Street 3 - 00000 Somecity</p>' WHERE name = 'Header_Sender';
+UPDATE s_core_documents_box SET `value` = '<p>The goods remain our property till the bill is payed in full.</p>' WHERE name = 'Content_Info';
+UPDATE s_core_documents_box SET `value` = '<p><strong>Demo Ltd. </strong><br /> John Doe<br /> Street 3<br /> 00000 Somecity<br /> Phone: 01234 / 56789<br /> Fax: 01234 / 6780<br />info@demo.com<br />www.demo.com</p>' WHERE name = 'Header_Box_Right';
+
+-- s_core_widgets --
+UPDATE s_core_widgets SET label = 'Sales yesterday and today' WHERE id = 1;
+UPDATE s_core_widgets SET label = 'Drag and drop upload' WHERE id = 2;
+UPDATE s_core_widgets SET label = 'Visitors online' WHERE id = 3;
+UPDATE s_core_widgets SET label = 'Latest orders' WHERE id = 4;
+UPDATE s_core_widgets SET label = 'Notes' WHERE id = 5;
+UPDATE s_core_widgets SET label = 'Reseller activation' WHERE id = 6;
+
+-- s_search_fields --
+UPDATE s_search_fields SET `name` = 'Category keywords' WHERE id = 1;
+UPDATE s_search_fields SET `name` = 'Category headline' WHERE id = 2;
+UPDATE s_search_fields SET `name` = 'Product name' WHERE id = 3;
+UPDATE s_search_fields SET `name` = 'Product keywords' WHERE id = 4;
+UPDATE s_search_fields SET `name` = 'Product order number' WHERE id = 5;
+UPDATE s_search_fields SET `name` = 'Manufacturer name' WHERE id = 6;
+UPDATE s_search_fields SET `name` = 'Product name translation' WHERE id = 7;
+UPDATE s_search_fields SET `name` = 'Product keywords translation' WHERE id = 8;
+
+-- s_search_custom_sorting --
 UPDATE s_search_custom_sorting SET label = 'Release date' WHERE id = 1;
 UPDATE s_search_custom_sorting SET label = 'Popularity' WHERE id = 2;
 UPDATE s_search_custom_sorting SET label = 'Cheapest price' WHERE id = 3;
