@@ -264,7 +264,7 @@ Ext.define('Shopware.apps.SwagUpdate.view.Window', {
             header: '{s name="requirements/columns/status"}Compatible{/s}',
             dataIndex: 'errorLevel',
             flex: 0.6,
-            renderer: Ext.bind(me.tickRenderer, me, [])
+            renderer: Ext.bind(me.tickRenderer, me)
         }, {
             header: '{s name="columns/is_latest_version"}Latest version{/s}',
             dataIndex: 'updatable',
