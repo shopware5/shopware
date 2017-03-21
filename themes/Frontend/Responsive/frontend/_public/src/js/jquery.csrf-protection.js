@@ -140,6 +140,9 @@
          * @private
          */
         _ajaxBeforeSend: function(event, request, settings) {
+
+            settings = settings || {};
+
             if (settings.hasOwnProperty('ignoreCSRFHeader') || settings.ignoreCSRFHeader === true) {
                 return;
             }
@@ -147,6 +150,7 @@
             if (!settings.dataType || settings.dataType.toLowerCase() === 'jsonp') {
                 return;
             }
+
             request.setRequestHeader('X-CSRF-Token', this.getToken());
         },
 
