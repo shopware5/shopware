@@ -28,6 +28,7 @@
 
         <service id="shopware_attribute.table_mapping" class="Shopware\Bundle\AttributeBundle\Service\TableMapping">
             <argument type="service" id="dbal_connection" />
+            <argument>%shopware_attribute.table_entity_mapping%</argument>
         </service>
 
         <service id="shopware_attribute.type_mapping" class="Shopware\Bundle\AttributeBundle\Service\TypeMapping">
