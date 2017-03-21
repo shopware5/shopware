@@ -47,11 +47,12 @@ class TableMapping
     /**
      * TableMapping constructor.
      * @param Connection $connection
+     * @param array      $tableMapping
      */
-    public function __construct(Connection $connection)
+    public function __construct(Connection $connection, array $tableMapping)
     {
         $this->connection = $connection;
-        $this->tables = include __DIR__ . '/../DependencyInjection/Resources/table_entity_mapping.php';
+        $this->tables = $tableMapping;
     }
 
     /**
