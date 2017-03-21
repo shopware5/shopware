@@ -86,7 +86,7 @@ class PluginCheck
                 $name           = $plugin['label'];
                 $inStore        = array_key_exists($key, $storePlugins);
                 $available      = array_key_exists($key, $updatesAvailable);
-                $updatable      = version_compare($plugin['version'], $updatesAvailable[$key]->getVersion(), '<');
+                $updatable      = $available && version_compare($plugin['version'], $updatesAvailable[$key]->getVersion(), '<');
                 $technicalName  = $plugin['name'];
                 $description    = $this->getPluginStateDescription($inStore, $available);
 
