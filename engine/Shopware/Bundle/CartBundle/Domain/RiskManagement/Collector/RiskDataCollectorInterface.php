@@ -1,6 +1,4 @@
 <?php
-
-declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -24,28 +22,19 @@ declare(strict_types=1);
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\CartBundle\Domain\RiskManagement\Container;
+namespace Shopware\Bundle\CartBundle\Domain\RiskManagement\Collector;
 
 use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
 use Shopware\Bundle\CartBundle\Domain\RiskManagement\Data\RiskDataCollection;
+use Shopware\Bundle\CartBundle\Domain\RiskManagement\Rule\RuleCollection;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
-/**
- * OrRule returns true, if at least one child rule is true
- */
-class OrRule extends Container
+interface RiskDataCollectorInterface
 {
-    public function validate(
+    public function collect(
+        RuleCollection $rules,
         CalculatedCart $cart,
         ShopContextInterface $context,
         RiskDataCollection $collection
-    ): bool {
-        foreach ($this->rules as $rule) {
-            if ($rule->validate($cart, $context, $collection)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
+    );
 }

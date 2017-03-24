@@ -1,6 +1,4 @@
 <?php
-
-declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -24,28 +22,53 @@ declare(strict_types=1);
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\CartBundle\Domain\RiskManagement\Container;
+namespace Shopware\Bundle\CartBundle\Infrastructure\RiskManagement\Rule;
 
 use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
 use Shopware\Bundle\CartBundle\Domain\RiskManagement\Data\RiskDataCollection;
+use Shopware\Bundle\CartBundle\Domain\RiskManagement\Rule\Rule;
+use Shopware\Bundle\CartBundle\Infrastructure\RiskManagement\Data\ProductOfCategoriesRiskData;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
-/**
- * OrRule returns true, if at least one child rule is true
- */
-class OrRule extends Container
+class ProductOfCategoriesRule extends Rule
 {
+    /**
+     * @var int[]
+     */
+    protected $categoryIds = [];
+
+    /**
+     * @param int[] $categoryIds
+     */
+    public function __construct(array $categoryIds)
+    {
+        $this->categoryIds = $categoryIds;
+    }
+
     public function validate(
         CalculatedCart $cart,
         ShopContextInterface $context,
         RiskDataCollection $collection
     ): bool {
-        foreach ($this->rules as $rule) {
-            if ($rule->validate($cart, $context, $collection)) {
-                return true;
+        /** @var ProductOfCategoriesRiskData $data */
+        $data = $collection->get(ProductOfCategoriesRiskData::class);
+
+        //no products found for categories? invalid
+        if (!$data) {
+            return false;
+        }
+
+        foreach ($this->categoryIds as $categoryId) {
+            if ($data->hasCategory($categoryId)) {
+                return false;
             }
         }
 
-        return false;
+        return true;
+    }
+
+    public function getCategoryIds(): array
+    {
+        return $this->categoryIds;
     }
 }

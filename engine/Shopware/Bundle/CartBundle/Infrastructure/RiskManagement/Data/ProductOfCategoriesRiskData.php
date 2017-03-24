@@ -1,6 +1,4 @@
 <?php
-
-declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -24,28 +22,41 @@ declare(strict_types=1);
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\CartBundle\Domain\RiskManagement\Container;
+namespace Shopware\Bundle\CartBundle\Infrastructure\RiskManagement\Data;
 
-use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
-use Shopware\Bundle\CartBundle\Domain\RiskManagement\Data\RiskDataCollection;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Bundle\CartBundle\Domain\JsonSerializableTrait;
+use Shopware\Bundle\CartBundle\Domain\RiskManagement\Data\RiskDataInterface;
 
-/**
- * OrRule returns true, if at least one child rule is true
- */
-class OrRule extends Container
+class ProductOfCategoriesRiskData implements RiskDataInterface
 {
-    public function validate(
-        CalculatedCart $cart,
-        ShopContextInterface $context,
-        RiskDataCollection $collection
-    ): bool {
-        foreach ($this->rules as $rule) {
-            if ($rule->validate($cart, $context, $collection)) {
-                return true;
-            }
+    use JsonSerializableTrait;
+
+    /**
+     * @var int[] indexed by category id
+     */
+    private $mapping;
+
+    public function __construct(array $mapping)
+    {
+        $this->mapping = $mapping;
+    }
+
+    public function hasCategory(int $categoryId): bool
+    {
+        return array_key_exists($categoryId, $this->mapping);
+    }
+
+    public function getProductIdsOfCategory(int $categoryId): array
+    {
+        if (array_key_exists($categoryId, $this->mapping)) {
+            return $this->mapping[$categoryId];
         }
 
-        return false;
+        return [];
+    }
+
+    public function getCategoryIds(): array
+    {
+        return array_keys($this->mapping);
     }
 }

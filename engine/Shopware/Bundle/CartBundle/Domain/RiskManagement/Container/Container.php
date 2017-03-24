@@ -39,7 +39,7 @@ abstract class Container extends Rule
     /**
      * @var Rule[]
      */
-    protected $rules;
+    protected $rules = [];
 
     /**
      * Constructor params will be used for internal rules
@@ -64,5 +64,10 @@ abstract class Container extends Rule
     public function addRule(Rule $rule): void
     {
         $this->rules[] = $rule;
+    }
+
+    public function getRules(): array
+    {
+        return $this->rules;
     }
 }

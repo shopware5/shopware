@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 /**
  * Shopware 5
@@ -24,28 +23,28 @@ declare(strict_types=1);
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\CartBundle\Domain\RiskManagement\Container;
+namespace Shopware\Bundle\CartBundle\DependencyInjection\CompilerPass;
 
-use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
-use Shopware\Bundle\CartBundle\Domain\RiskManagement\Data\RiskDataCollection;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Components\DependencyInjection\Compiler\TagReplaceTrait;
+use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
- * OrRule returns true, if at least one child rule is true
+ * @category  Shopware
+ *
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class OrRule extends Container
+class RiskDataCollectorCompilerPass implements CompilerPassInterface
 {
-    public function validate(
-        CalculatedCart $cart,
-        ShopContextInterface $context,
-        RiskDataCollection $collection
-    ): bool {
-        foreach ($this->rules as $rule) {
-            if ($rule->validate($cart, $context, $collection)) {
-                return true;
-            }
-        }
+    use TagReplaceTrait;
 
-        return false;
+    public function process(ContainerBuilder $container): void
+    {
+        $this->replaceArgumentWithTaggedServices(
+            $container,
+            'shopware.cart.risk_management.data_collector_registry',
+            'risk_management.data_collector',
+            0
+        );
     }
 }

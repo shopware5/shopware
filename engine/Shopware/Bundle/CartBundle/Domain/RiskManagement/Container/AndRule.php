@@ -26,6 +26,7 @@ declare(strict_types=1);
 namespace Shopware\Bundle\CartBundle\Domain\RiskManagement\Container;
 
 use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
+use Shopware\Bundle\CartBundle\Domain\RiskManagement\Data\RiskDataCollection;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 /**
@@ -33,10 +34,13 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
  */
 class AndRule extends Container
 {
-    public function validate(CalculatedCart $cart, ShopContextInterface $context): bool
-    {
+    public function validate(
+        CalculatedCart $cart,
+        ShopContextInterface $context,
+        RiskDataCollection $collection
+    ): bool {
         foreach ($this->rules as $rule) {
-            if (!$rule->validate($cart, $context)) {
+            if (!$rule->validate($cart, $context, $collection)) {
                 return false;
             }
         }

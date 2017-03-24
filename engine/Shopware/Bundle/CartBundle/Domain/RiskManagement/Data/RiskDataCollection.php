@@ -22,48 +22,48 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\CartBundle\Domain\RiskManagement;
+namespace Shopware\Bundle\CartBundle\Domain\RiskManagement\Data;
 
-use Shopware\Components\ReflectionHelper;
+use Shopware\Bundle\CartBundle\Domain\KeyCollection;
 
-class RuleBuilder
+class RiskDataCollection extends KeyCollection
 {
     /**
-     * @var ReflectionHelper
+     * @var RiskDataInterface[]
      */
-    private $reflector;
+    protected $elements = [];
 
-    public function __construct()
+    public function add(RiskDataInterface $riskData): void
     {
-        $this->reflector = new ReflectionHelper();
+        parent::doAdd($riskData);
     }
 
-    /**
-     * @param array $rule
-     *
-     * @return mixed
-     */
-    public function build($rule)
+    public function remove(string $class): void
     {
-        if (!is_array($rule)) {
-            return $rule;
+        parent::doRemoveByKey($class);
+    }
+
+    public function removeElement(RiskDataInterface $lineItem): void
+    {
+        parent::doRemoveByKey($this->getKey($lineItem));
+    }
+
+    public function exists(RiskDataInterface $lineItem): bool
+    {
+        return parent::has($this->getKey($lineItem));
+    }
+
+    public function get(string $class): ? RiskDataInterface
+    {
+        if ($this->has($class)) {
+            return $this->elements[$class];
         }
 
-        if (!array_key_exists('_class', $rule)) {
-            return $rule;
-        }
+        return null;
+    }
 
-        $class = $rule['_class'];
-        unset($rule['_class']);
-
-        $params = array_map(function ($param) {
-            if (is_array($param)) {
-                return array_map([$this, 'build'], $param);
-            }
-
-            return $this->build($param);
-        }, $rule);
-
-        return $this->reflector->createInstanceFromNamedArguments($class, $params);
+    protected function getKey($element)
+    {
+        return get_class($element);
     }
 }

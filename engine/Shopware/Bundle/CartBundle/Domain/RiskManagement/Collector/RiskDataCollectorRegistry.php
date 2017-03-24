@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -23,39 +22,38 @@ declare(strict_types=1);
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\CartBundle\Domain\RiskManagement\Rule;
+namespace Shopware\Bundle\CartBundle\Domain\RiskManagement\Collector;
 
 use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
+use Shopware\Bundle\CartBundle\Domain\RiskManagement\Data\RiskDataCollection;
+use Shopware\Bundle\CartBundle\Domain\RiskManagement\Rule\RuleCollection;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
-class AmountRule extends Rule
+class RiskDataCollectorRegistry
 {
     /**
-     * @var float
+     * @var RiskDataCollectorInterface[]
      */
-    protected $amount;
+    private $collectors;
 
     /**
-     * @var string
+     * @param RiskDataCollectorInterface[] $collectors
      */
-    protected $operator;
-
-    public function __construct(float $amount, string $operator)
+    public function __construct(array $collectors)
     {
-        $this->amount = $amount;
-        $this->operator = $operator;
+        $this->collectors = $collectors;
     }
 
-    public function validate(CalculatedCart $cart, ShopContextInterface $context): bool
-    {
-        switch ($this->operator) {
-            case Rule::OPERATOR_GTE:
-                return $cart->getPrice()->getTotalPrice() >= $this->amount;
-
-            case Rule::OPERATOR_LTE:
-                return $cart->getPrice()->getTotalPrice() <= $this->amount;
+    public function collect(
+        CalculatedCart $cart,
+        ShopContextInterface $context,
+        RuleCollection $rules
+    ): RiskDataCollection {
+        $collection = new RiskDataCollection([]);
+        foreach ($this->collectors as $collector) {
+            $collector->collect($rules, $cart, $context, $collection);
         }
 
-        throw new \Exception(sprintf('Unknown operator %s in ' . __CLASS__, $this->operator));
+        return $collection;
     }
 }

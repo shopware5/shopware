@@ -26,6 +26,7 @@ declare(strict_types=1);
 namespace Shopware\Bundle\CartBundle\Domain\RiskManagement\Container;
 
 use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
+use Shopware\Bundle\CartBundle\Domain\RiskManagement\Data\RiskDataCollection;
 use Shopware\Bundle\CartBundle\Domain\RiskManagement\Rule\Rule;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
@@ -46,9 +47,12 @@ class NotRule extends Container
         $this->checkRules();
     }
 
-    public function validate(CalculatedCart $cart, ShopContextInterface $context): bool
-    {
-        return !$this->rules[0]->validate($cart, $context);
+    public function validate(
+        CalculatedCart $cart,
+        ShopContextInterface $context,
+        RiskDataCollection $collection
+    ): bool {
+        return !$this->rules[0]->validate($cart, $context, $collection);
     }
 
     /**

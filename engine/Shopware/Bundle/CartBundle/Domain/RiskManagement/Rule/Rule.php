@@ -26,11 +26,13 @@ namespace Shopware\Bundle\CartBundle\Domain\RiskManagement\Rule;
 
 use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
 use Shopware\Bundle\CartBundle\Domain\JsonSerializableTrait;
+use Shopware\Bundle\CartBundle\Domain\RiskManagement\Data\RiskDataCollection;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 abstract class Rule implements \JsonSerializable
 {
     use JsonSerializableTrait;
+
     const OPERATOR_GTE = '=>';
 
     const OPERATOR_LTE = '<=';
@@ -38,10 +40,15 @@ abstract class Rule implements \JsonSerializable
     /**
      * Validate the current rule and return boolean to indicate if the current rule applied (true) or not (false)
      *
-     * @param CalculatedCart       $cart
-     * @param ShopContextInterface $context
+     * @param CalculatedCart                                                            $cart
+     * @param ShopContextInterface                                                      $context
+     * @param \Shopware\Bundle\CartBundle\Domain\RiskManagement\Data\RiskDataCollection $collection
      *
      * @return bool
      */
-    abstract public function validate(CalculatedCart $cart, ShopContextInterface $context): bool;
+    abstract public function validate(
+        CalculatedCart $cart,
+        ShopContextInterface $context,
+        RiskDataCollection $collection
+    ): bool;
 }

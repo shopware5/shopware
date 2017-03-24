@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -23,25 +22,8 @@ declare(strict_types=1);
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\CartBundle\Domain\RiskManagement\Rule;
+namespace Shopware\Bundle\CartBundle\Domain\RiskManagement\Data;
 
-use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
-
-class CountryRule extends Rule
+interface RiskDataInterface extends \JsonSerializable
 {
-    /**
-     * @var int
-     */
-    protected $countryId;
-
-    public function __construct(int $countryId)
-    {
-        $this->countryId = $countryId;
-    }
-
-    public function validate(CalculatedCart $cart, ShopContextInterface $context): bool
-    {
-        return $context->getShippingLocation()->getCountry()->getId() === $this->countryId;
-    }
 }
