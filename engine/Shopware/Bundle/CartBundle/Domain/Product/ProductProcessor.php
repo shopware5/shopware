@@ -29,6 +29,8 @@ use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
 use Shopware\Bundle\CartBundle\Domain\Cart\Cart;
 use Shopware\Bundle\CartBundle\Domain\Cart\CartProcessorInterface;
 use Shopware\Bundle\CartBundle\Domain\Cart\ProcessorCart;
+use Shopware\Bundle\CartBundle\Domain\Error\ProductDeliveryInformationNotFoundError;
+use Shopware\Bundle\CartBundle\Domain\Error\ProductPriceNotFoundError;
 use Shopware\Bundle\CartBundle\Domain\LineItem\LineItem;
 use Shopware\Bundle\CartBundle\Domain\Price\PriceCalculator;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
@@ -80,17 +82,27 @@ class ProductProcessor implements CartProcessorInterface
         /** @var LineItem $lineItem */
         foreach ($collection as $lineItem) {
             if (!array_key_exists($lineItem->getIdentifier(), $priceDefinitions)) {
-                throw new \RuntimeException(sprintf(
-                    'No price found for product %s',
+                $processorCart->getErrors()->add(
+                    new ProductPriceNotFoundError($lineItem->getIdentifier())
+                );
+
+                $cart->getLineItems()->remove(
                     $lineItem->getIdentifier()
-                ));
+                );
+
+                continue;
             }
 
             if (!array_key_exists($lineItem->getIdentifier(), $deliveryInformation)) {
-                throw new \RuntimeException(sprintf(
-                    'No delivery information found for product %s',
+                $processorCart->getErrors()->add(
+                    new ProductDeliveryInformationNotFoundError($lineItem->getIdentifier())
+                );
+
+                $cart->getLineItems()->remove(
                     $lineItem->getIdentifier()
-                ));
+                );
+
+                continue;
             }
 
             $price = $this->priceCalculator->calculate(

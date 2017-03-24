@@ -81,7 +81,7 @@ class PaymentMethodService
                     return true;
                 }
 
-                return $rule->validate($cart, $context, $dataCollection);
+                return !$rule->match($cart, $context, $dataCollection);
             }
         );
     }

@@ -46,7 +46,7 @@ abstract class Rule implements \JsonSerializable
      *
      * @return bool
      */
-    abstract public function validate(
+    abstract public function match(
         CalculatedCart $cart,
         ShopContextInterface $context,
         RiskDataCollection $collection

@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -23,31 +22,41 @@ declare(strict_types=1);
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\CartBundle\Domain\RiskManagement\Container;
+namespace Shopware\Bundle\CartBundle\Domain\Error;
 
-use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
-use Shopware\Bundle\CartBundle\Domain\RiskManagement\Data\RiskDataCollection;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Bundle\CartBundle\Domain\Collection;
 
-/**
- * XorRule returns true, if exactly one child rule is true
- */
-class XorRule extends Container
+class ErrorCollection extends Collection
 {
-    public function match(
-        CalculatedCart $cart,
-        ShopContextInterface $context,
-        RiskDataCollection $collection
-    ): bool {
-        $true = 0;
-        foreach ($this->rules as $rule) {
-            if ($rule->match($cart, $context, $collection)) {
-                if (++$true > 1) {
-                    return false;
-                }
+    /**
+     * @var Error[]
+     */
+    protected $elements;
+
+    public function add(Error $error): void
+    {
+        parent::doAdd($error);
+    }
+
+    public function has($errorClass): bool
+    {
+        foreach ($this->elements as $element) {
+            if ($element instanceof $errorClass) {
+                return true;
             }
         }
 
-        return $true === 1;
+        return false;
+    }
+
+    public function hasLevel(int $errorLevel)
+    {
+        foreach ($this->elements as $element) {
+            if ($element->getLevel() === $errorLevel) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

@@ -26,6 +26,8 @@ declare(strict_types=1);
 namespace Shopware\Bundle\CartBundle\Infrastructure\View;
 
 use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
+use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryCollection;
+use Shopware\Bundle\CartBundle\Domain\Error\ErrorCollection;
 use Shopware\Bundle\CartBundle\Domain\JsonSerializableTrait;
 use Shopware\Bundle\CartBundle\Domain\Price\CartPrice;
 
@@ -67,5 +69,15 @@ class ViewCart implements \JsonSerializable
     public function getCalculatedCart(): CalculatedCart
     {
         return $this->calculatedCart;
+    }
+
+    public function getErrors(): ErrorCollection
+    {
+        return $this->calculatedCart->getErrors();
+    }
+
+    public function getDeliveries(): DeliveryCollection
+    {
+        return $this->calculatedCart->getDeliveries();
     }
 }

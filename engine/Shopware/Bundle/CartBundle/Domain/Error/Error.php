@@ -30,7 +30,7 @@ abstract class Error implements \JsonSerializable
 {
     use JsonSerializableTrait;
 
-    const LEVEL_NOTICE = 0;
+    const LEVEL_WARNING = 0;
 
     const LEVEL_ERROR = 1;
 
@@ -39,4 +39,15 @@ abstract class Error implements \JsonSerializable
     abstract public function getMessage(): string;
 
     abstract public function getLevel(): int;
+
+    public function jsonSerialize(): array
+    {
+        $data = get_object_vars($this);
+        $data['_class'] = get_class($this);
+        $data['level'] = $this->getLevel();
+        $data['message'] = $this->getMessage();
+        $data['messageKey'] = $this->getMessageKey();
+
+        return $data;
+    }
 }

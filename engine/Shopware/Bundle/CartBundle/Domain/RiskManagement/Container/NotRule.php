@@ -47,12 +47,12 @@ class NotRule extends Container
         $this->checkRules();
     }
 
-    public function validate(
+    public function match(
         CalculatedCart $cart,
         ShopContextInterface $context,
         RiskDataCollection $collection
     ): bool {
-        return !$this->rules[0]->validate($cart, $context, $collection);
+        return !$this->rules[0]->match($cart, $context, $collection);
     }
 
     /**

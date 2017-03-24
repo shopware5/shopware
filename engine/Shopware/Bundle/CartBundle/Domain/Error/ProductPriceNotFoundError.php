@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -23,31 +22,37 @@ declare(strict_types=1);
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\CartBundle\Domain\RiskManagement\Container;
+namespace Shopware\Bundle\CartBundle\Domain\Error;
 
-use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
-use Shopware\Bundle\CartBundle\Domain\RiskManagement\Data\RiskDataCollection;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
-
-/**
- * XorRule returns true, if exactly one child rule is true
- */
-class XorRule extends Container
+class ProductPriceNotFoundError extends Error
 {
-    public function match(
-        CalculatedCart $cart,
-        ShopContextInterface $context,
-        RiskDataCollection $collection
-    ): bool {
-        $true = 0;
-        foreach ($this->rules as $rule) {
-            if ($rule->match($cart, $context, $collection)) {
-                if (++$true > 1) {
-                    return false;
-                }
-            }
-        }
+    /**
+     * @var string
+     */
+    protected $number;
 
-        return $true === 1;
+    public function __construct(string $number)
+    {
+        $this->number = $number;
+    }
+
+    public function getMessageKey(): string
+    {
+        return self::class;
+    }
+
+    public function getMessage(): string
+    {
+        return sprintf('No product price found for sku %s', $this->number);
+    }
+
+    public function getLevel(): int
+    {
+        return self::LEVEL_ERROR;
+    }
+
+    public function getNumber(): string
+    {
+        return $this->number;
     }
 }

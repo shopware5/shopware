@@ -45,7 +45,7 @@ class ProductOfCategoriesRule extends Rule
         $this->categoryIds = $categoryIds;
     }
 
-    public function validate(
+    public function match(
         CalculatedCart $cart,
         ShopContextInterface $context,
         RiskDataCollection $collection
@@ -60,11 +60,11 @@ class ProductOfCategoriesRule extends Rule
 
         foreach ($this->categoryIds as $categoryId) {
             if ($data->hasCategory($categoryId)) {
-                return false;
+                return true;
             }
         }
 
-        return true;
+        return false;
     }
 
     public function getCategoryIds(): array

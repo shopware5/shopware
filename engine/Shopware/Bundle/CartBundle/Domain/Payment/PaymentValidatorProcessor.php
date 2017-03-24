@@ -63,11 +63,11 @@ class PaymentValidatorProcessor implements CartProcessorInterface
 
         $data = $this->riskDataRegistry->collect($calculatedCart, $context, new RuleCollection([$rule]));
 
-        if ($rule->validate($calculatedCart, $context, $data)) {
+        if (!$rule->match($calculatedCart, $context, $data)) {
             return;
         }
 
-        $processorCart->addError(
+        $processorCart->getErrors()->add(
             new PaymentBlockedError($payment->getId(), $payment->getLabel())
         );
     }

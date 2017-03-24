@@ -35,13 +35,13 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
  */
 class OrRule extends Container
 {
-    public function validate(
+    public function match(
         CalculatedCart $cart,
         ShopContextInterface $context,
         RiskDataCollection $collection
     ): bool {
         foreach ($this->rules as $rule) {
-            if ($rule->validate($cart, $context, $collection)) {
+            if ($rule->match($cart, $context, $collection)) {
                 return true;
             }
         }
