@@ -27,6 +27,7 @@ namespace Shopware\Bundle\CartBundle\Domain\Payment;
 
 use Shopware\Bundle\CartBundle\Domain\CloneTrait;
 use Shopware\Bundle\CartBundle\Domain\JsonSerializableTrait;
+use Shopware\Bundle\CartBundle\Domain\RiskManagement\Rule\Rule;
 use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
 
 class PaymentMethod extends Extendable
@@ -122,6 +123,11 @@ class PaymentMethod extends Extendable
      * @var bool
      */
     protected $mobileInactive;
+
+    /**
+     * @var Rule|null
+     */
+    protected $riskManagementRule;
 
     public function __construct(int $id, string $name, string $label, string $class)
     {
@@ -312,5 +318,15 @@ class PaymentMethod extends Extendable
     public function setMobileInactive(bool $mobileInactive): void
     {
         $this->mobileInactive = $mobileInactive;
+    }
+
+    public function getRiskManagementRule(): ?Rule
+    {
+        return $this->riskManagementRule;
+    }
+
+    public function setRiskManagementRule(?Rule $riskManagementRule): void
+    {
+        $this->riskManagementRule = $riskManagementRule;
     }
 }

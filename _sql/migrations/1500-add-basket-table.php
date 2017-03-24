@@ -38,6 +38,8 @@ CREATE TABLE `s_cart` (
 EOD
 );
 
+        $this->addSql('ALTER TABLE `s_core_paymentmeans` ADD `risk_rules` longtext COLLATE utf8_unicode_ci NULL DEFAULT NULL');
+
         $this->addSql('ALTER TABLE `s_core_shops` ADD `payment_id` int(11) NOT NULL');
         $this->addSql('ALTER TABLE `s_core_shops` ADD `dispatch_id` int(11) NOT NULL');
         $this->addSql('ALTER TABLE `s_core_shops` ADD `country_id` int(11) NOT NULL');

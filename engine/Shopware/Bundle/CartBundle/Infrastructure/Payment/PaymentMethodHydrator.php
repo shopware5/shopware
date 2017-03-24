@@ -26,6 +26,7 @@ declare(strict_types=1);
 namespace Shopware\Bundle\CartBundle\Infrastructure\Payment;
 
 use Shopware\Bundle\CartBundle\Domain\Payment\PaymentMethod;
+use Shopware\Bundle\CartBundle\Domain\RiskManagement\RuleBuilder;
 use Shopware\Bundle\StoreFrontBundle\Gateway\Hydrator\AttributeHydrator;
 use Shopware\Bundle\StoreFrontBundle\Gateway\Hydrator\Hydrator;
 
@@ -42,6 +43,7 @@ class PaymentMethodHydrator extends Hydrator
     public function __construct(AttributeHydrator $attributeHydrator)
     {
         $this->attributeHydrator = $attributeHydrator;
+        $this->ruleBuilder = new RuleBuilder();
     }
 
     public function hydrate(array $data): PaymentMethod
@@ -69,6 +71,13 @@ class PaymentMethodHydrator extends Hydrator
         $paymentMethod->setIFrameUrl((string) $data['__paymentMethod_embediframe']);
         $paymentMethod->setAction($data['__paymentMethod_action']);
         $paymentMethod->setMobileInactive((bool) $data['__paymentMethod_mobile_inactive']);
+
+        if ($data['__paymentMethod_rules']) {
+            $rule = json_decode($data['__paymentMethod_rules'], true);
+            $paymentMethod->setRiskManagementRule(
+                $this->ruleBuilder->build($rule)
+            );
+        }
 
         if ($data['__paymentMethod_pluginId']) {
             $paymentMethod->setPluginId((int) $data['__paymentMethod_pluginId']);

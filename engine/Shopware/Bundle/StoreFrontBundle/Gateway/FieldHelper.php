@@ -910,6 +910,7 @@ class FieldHelper
             'paymentMethod.pluginID as __paymentMethod_pluginId',
             'paymentMethod.source as __paymentMethod_source',
             'paymentMethod.mobile_inactive as __paymentMethod_mobile_inactive',
+            'paymentMethod.risk_rules as __paymentMethod_rules',
         ];
 
         return array_merge($fields, $this->getTableFields('s_core_paymentmeans_attributes', 'paymentMethodAttribute'));

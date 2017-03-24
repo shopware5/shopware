@@ -27,6 +27,8 @@ namespace Shopware\Bundle\CartBundle\Infrastructure\Payment;
 
 use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
 use Shopware\Bundle\CartBundle\Domain\Payment\PaymentMethod;
+use Shopware\Bundle\CartBundle\Domain\RiskManagement\Collector\RiskDataCollectorRegistry;
+use Shopware\Bundle\CartBundle\Domain\RiskManagement\Rule\RuleCollection;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class PaymentMethodService
@@ -36,9 +38,17 @@ class PaymentMethodService
      */
     private $gateway;
 
-    public function __construct(PaymentMethodGateway $gateway)
-    {
+    /**
+     * @var RiskDataCollectorRegistry
+     */
+    private $riskDataCollectorRegistry;
+
+    public function __construct(
+        PaymentMethodGateway $gateway,
+        RiskDataCollectorRegistry $riskDataCollectorRegistry
+    ) {
         $this->gateway = $gateway;
+        $this->riskDataCollectorRegistry = $riskDataCollectorRegistry;
     }
 
     /**
@@ -53,13 +63,26 @@ class PaymentMethodService
     ): array {
         $payments = $this->gateway->getAll($context->getTranslationContext());
 
-        $payments = array_filter(
-            $payments,
-            function (PaymentMethod $paymentMethod) {
-                return $paymentMethod->isActive();
+        $actives = array_filter($payments, function (PaymentMethod $paymentMethod) {
+            return $paymentMethod->isActive();
+        });
+
+        $rules = array_map(function (PaymentMethod $paymentMethod) {
+            return $paymentMethod->getRiskManagementRule();
+        }, $actives);
+
+        $dataCollection = $this->riskDataCollectorRegistry->collect($cart, $context, new RuleCollection(array_filter($rules)));
+
+        return array_filter(
+            $actives,
+            function (PaymentMethod $method) use ($cart, $context, $dataCollection) {
+                $rule = $method->getRiskManagementRule();
+                if (!$rule) {
+                    return true;
+                }
+
+                return $rule->validate($cart, $context, $dataCollection);
             }
         );
-
-        return $payments;
     }
 }

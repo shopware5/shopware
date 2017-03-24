@@ -128,6 +128,7 @@
 
         <service id="shopware_cart.payment_method_service" class="Shopware\Bundle\CartBundle\Infrastructure\Payment\PaymentMethodService">
             <argument id="shopware_cart.payment_method_gateway_dbal" type="service"/>
+            <argument id="shopware.cart.risk_management.data_collector_registry" type="service"/>
         </service>
 
         <service id="shopware_cart.payment_method_hydrator_dbal" class="Shopware\Bundle\CartBundle\Infrastructure\Payment\PaymentMethodHydrator">
@@ -162,5 +163,20 @@
         <service id="shopware_cart.delivery_method_service" class="Shopware\Bundle\CartBundle\Infrastructure\Delivery\DeliveryMethodService">
             <argument id="shopware_cart.delivery_service_gateway_dbal" type="service"/>
         </service>
+
+        <service id="shopware.cart.risk_management.data_collector_registry" class="Shopware\Bundle\CartBundle\Domain\RiskManagement\Collector\RiskDataCollectorRegistry">
+            <argument type="collection" />
+        </service>
+
+        <service id="shopware.cart.risk_management.product_of_categories_collector" class="Shopware\Bundle\CartBundle\Infrastructure\RiskManagement\Collector\ProductOfCategoriesCollector">
+            <argument id="dbal_connection" type="service"/>
+            <tag name="risk_management.data_collector" />
+        </service>
+
+        <service class="Shopware\Bundle\CartBundle\Domain\Payment\PaymentValidatorProcessor" id="shopware_bundle_cart.domain_payment.payment_validator_processor">
+            <argument id="shopware.cart.risk_management.data_collector_registry" type="service"/>
+            <tag name="cart_processor" priority="100" />
+        </service>
+
     </services>
 </container>
