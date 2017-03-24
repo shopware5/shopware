@@ -62,9 +62,22 @@ class CartCalculator
         );
 
         foreach ($this->processors as $processor) {
-            $processor->process($cart, $processorCart, $context);
+            $processor->process(
+                $cart,
+                $this->createCalculatedCart($cart, $context, $processorCart),
+                $processorCart,
+                $context
+            );
         }
 
+        return $this->createCalculatedCart($cart, $context, $processorCart);
+    }
+
+    private function createCalculatedCart(
+        Cart $cart,
+        ShopContextInterface $context,
+        ProcessorCart $processorCart
+    ): CalculatedCart {
         return new CalculatedCart(
             $cart,
             $processorCart->getLineItems(),
@@ -72,7 +85,8 @@ class CartCalculator
                 $processorCart->getLineItems()->getPrices(),
                 $context
             ),
-            $processorCart->getDeliveries()
+            $processorCart->getDeliveries(),
+            $processorCart->getErrors()
         );
     }
 }

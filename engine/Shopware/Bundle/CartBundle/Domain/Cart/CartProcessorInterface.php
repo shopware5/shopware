@@ -31,6 +31,7 @@ interface CartProcessorInterface
 {
     public function process(
         Cart $cart,
+        CalculatedCart $calculatedCart,
         ProcessorCart $processorCart,
         ShopContextInterface $context
     ): void;

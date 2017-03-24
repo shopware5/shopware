@@ -72,7 +72,7 @@ abstract class Collection implements \IteratorAggregate, \JsonSerializable
         return array_map($closure, $this->elements);
     }
 
-    public function filterInstance($class): Collection
+    public function filterInstance(string $class): Collection
     {
         return $this->filter(function ($item) use ($class) {
             return $item instanceof $class;

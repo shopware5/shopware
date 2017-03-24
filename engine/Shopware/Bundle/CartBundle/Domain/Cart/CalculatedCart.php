@@ -26,6 +26,7 @@ declare(strict_types=1);
 namespace Shopware\Bundle\CartBundle\Domain\Cart;
 
 use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryCollection;
+use Shopware\Bundle\CartBundle\Domain\Error\Error;
 use Shopware\Bundle\CartBundle\Domain\JsonSerializableTrait;
 use Shopware\Bundle\CartBundle\Domain\LineItem\CalculatedLineItemCollection;
 use Shopware\Bundle\CartBundle\Domain\Price\CartPrice;
@@ -54,16 +55,23 @@ class CalculatedCart implements \JsonSerializable
      */
     protected $deliveries;
 
+    /**
+     * @var Error[]
+     */
+    protected $errors;
+
     public function __construct(
         Cart $cart,
         CalculatedLineItemCollection $lineItems,
         CartPrice $price,
-        DeliveryCollection $deliveries
+        DeliveryCollection $deliveries,
+        array $errors
     ) {
         $this->cart = $cart;
         $this->lineItems = $lineItems;
         $this->price = $price;
         $this->deliveries = $deliveries;
+        $this->errors = $errors;
     }
 
     public function getName(): string
@@ -71,28 +79,33 @@ class CalculatedCart implements \JsonSerializable
         return $this->cart->getName();
     }
 
-    public function getPrice(): CartPrice
-    {
-        return $this->price;
-    }
-
     public function getToken(): string
     {
         return $this->cart->getToken();
     }
 
+    public function getPrice(): CartPrice
+    {
+        return clone $this->price;
+    }
+
     public function getCart(): Cart
     {
-        return $this->cart;
+        return clone $this->cart;
     }
 
     public function getLineItems(): CalculatedLineItemCollection
     {
-        return $this->lineItems;
+        return clone $this->lineItems;
     }
 
     public function getDeliveries(): DeliveryCollection
     {
-        return $this->deliveries;
+        return clone $this->deliveries;
+    }
+
+    public function getErrors(): array
+    {
+        return $this->errors;
     }
 }

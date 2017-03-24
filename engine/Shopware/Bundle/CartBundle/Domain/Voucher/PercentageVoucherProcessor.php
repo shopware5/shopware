@@ -25,6 +25,7 @@ declare(strict_types=1);
 
 namespace Shopware\Bundle\CartBundle\Domain\Voucher;
 
+use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
 use Shopware\Bundle\CartBundle\Domain\Cart\Cart;
 use Shopware\Bundle\CartBundle\Domain\Cart\CartProcessorInterface;
 use Shopware\Bundle\CartBundle\Domain\Cart\ProcessorCart;
@@ -48,6 +49,7 @@ class PercentageVoucherProcessor implements CartProcessorInterface
 
     public function process(
         Cart $cart,
+        CalculatedCart $calculatedCart,
         ProcessorCart $processorCart,
         ShopContextInterface $context
     ): void {

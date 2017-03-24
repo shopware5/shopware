@@ -24,6 +24,7 @@
 
 namespace Shopware\Tests\Unit\Bundle\CartBundle\Domain\Product;
 
+use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
 use Shopware\Bundle\CartBundle\Domain\Cart\Cart;
 use Shopware\Bundle\CartBundle\Domain\Cart\ProcessorCart;
 use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryCollection;
@@ -31,6 +32,7 @@ use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryDate;
 use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryInformation;
 use Shopware\Bundle\CartBundle\Domain\LineItem\CalculatedLineItemCollection;
 use Shopware\Bundle\CartBundle\Domain\LineItem\LineItem;
+use Shopware\Bundle\CartBundle\Domain\Price\CartPrice;
 use Shopware\Bundle\CartBundle\Domain\Price\Price;
 use Shopware\Bundle\CartBundle\Domain\Price\PriceCalculator;
 use Shopware\Bundle\CartBundle\Domain\Price\PriceDefinition;
@@ -65,18 +67,32 @@ class ProductProcessorTest extends \PHPUnit_Framework_TestCase
 
         $processor = new ProductProcessor($priceGateway, $calculator, $deliveryGateway);
 
-        $cart = new ProcessorCart(
+        $processorCart = new ProcessorCart(
             new CalculatedLineItemCollection(),
             new DeliveryCollection()
         );
 
+        $cart = Cart::createExisting('test', 'test', []);
+
         $processor->process(
             Cart::createExisting('test', 'test', []),
-            $cart,
+            new CalculatedCart(
+                $cart,
+                new CalculatedLineItemCollection([]),
+                new CartPrice(
+                    0,
+                    0,
+                    new CalculatedTaxCollection([]),
+                    new TaxRuleCollection([])
+                ),
+                new DeliveryCollection([]),
+                []
+            ),
+            $processorCart,
             Generator::createContext()
         );
 
-        static::assertCount(0, $cart->getLineItems());
+        static::assertCount(0, $processorCart->getLineItems());
     }
 
     public function testConvertOneProduct()

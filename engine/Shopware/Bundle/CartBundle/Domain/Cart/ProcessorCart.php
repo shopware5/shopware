@@ -26,6 +26,7 @@ declare(strict_types=1);
 namespace Shopware\Bundle\CartBundle\Domain\Cart;
 
 use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryCollection;
+use Shopware\Bundle\CartBundle\Domain\Error\Error;
 use Shopware\Bundle\CartBundle\Domain\JsonSerializableTrait;
 use Shopware\Bundle\CartBundle\Domain\LineItem\CalculatedLineItemCollection;
 
@@ -43,6 +44,11 @@ class ProcessorCart implements \JsonSerializable
      */
     protected $deliveries;
 
+    /**
+     * @var Error[]
+     */
+    protected $errors = [];
+
     public function __construct(
         CalculatedLineItemCollection $lineItems,
         DeliveryCollection $deliveries
@@ -59,5 +65,15 @@ class ProcessorCart implements \JsonSerializable
     public function getDeliveries(): DeliveryCollection
     {
         return $this->deliveries;
+    }
+
+    public function getErrors(): array
+    {
+        return $this->errors;
+    }
+
+    public function addError(Error $error)
+    {
+        $this->errors[] = $error;
     }
 }

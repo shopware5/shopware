@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -23,25 +22,27 @@ declare(strict_types=1);
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\CartBundle\Domain\Delivery;
+namespace Shopware\Bundle\CartBundle\Domain\Payment;
 
 use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
 use Shopware\Bundle\CartBundle\Domain\Cart\Cart;
 use Shopware\Bundle\CartBundle\Domain\Cart\CartProcessorInterface;
 use Shopware\Bundle\CartBundle\Domain\Cart\ProcessorCart;
-use Shopware\Bundle\CartBundle\Domain\LineItem\Deliverable;
+use Shopware\Bundle\CartBundle\Domain\Error\PaymentBlockedError;
+use Shopware\Bundle\CartBundle\Domain\RiskManagement\Collector\RiskDataCollectorRegistry;
+use Shopware\Bundle\CartBundle\Domain\RiskManagement\Rule\RuleCollection;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
-class DeliverySeparatorProcessor implements CartProcessorInterface
+class PaymentValidatorProcessor implements CartProcessorInterface
 {
     /**
-     * @var StockDeliverySeparator
+     * @var RiskDataCollectorRegistry
      */
-    private $stockDeliverySeparator;
+    private $riskDataRegistry;
 
-    public function __construct(StockDeliverySeparator $stockDeliverySeparator)
+    public function __construct(RiskDataCollectorRegistry $riskDataRegistry)
     {
-        $this->stockDeliverySeparator = $stockDeliverySeparator;
+        $this->riskDataRegistry = $riskDataRegistry;
     }
 
     public function process(
@@ -50,23 +51,24 @@ class DeliverySeparatorProcessor implements CartProcessorInterface
         ProcessorCart $processorCart,
         ShopContextInterface $context
     ): void {
-        $items = $processorCart
-            ->getLineItems()
-            ->filterInstance(Deliverable::class);
-
-        if (0 === count($items)) {
+        if (!$context->getCustomer()) {
             return;
         }
 
-        $deliveries = $this->stockDeliverySeparator->addItemsToDeliveries(
-            $processorCart->getDeliveries(),
-            $items,
-            $context
+        $payment = $context->getPaymentMethod();
+
+        if (!$rule = $payment->getRiskManagementRule()) {
+            return;
+        }
+
+        $data = $this->riskDataRegistry->collect($calculatedCart, $context, new RuleCollection([$rule]));
+
+        if ($rule->validate($calculatedCart, $context, $data)) {
+            return;
+        }
+
+        $processorCart->addError(
+            new PaymentBlockedError($payment->getId(), $payment->getLabel())
         );
-
-        $deliveries->sort();
-
-        $processorCart->getDeliveries()->clear();
-        $processorCart->getDeliveries()->fill($deliveries->getIterator()->getArrayCopy());
     }
 }

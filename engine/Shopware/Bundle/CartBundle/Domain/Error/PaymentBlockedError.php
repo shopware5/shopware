@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -23,29 +22,48 @@ declare(strict_types=1);
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\CartBundle\Domain\Delivery;
+namespace Shopware\Bundle\CartBundle\Domain\Error;
 
-use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
-use Shopware\Bundle\CartBundle\Domain\Cart\Cart;
-use Shopware\Bundle\CartBundle\Domain\Cart\CartProcessorInterface;
-use Shopware\Bundle\CartBundle\Domain\Cart\ProcessorCart;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
-
-class DeliveryCalculatorProcessor implements CartProcessorInterface
+class PaymentBlockedError extends Error
 {
     /**
-     * @var DeliveryCalculator
+     * @var int
      */
-    private $calculator;
+    private $paymentId;
 
-    public function process(
-        Cart $cart,
-        CalculatedCart $calculatedCart,
-        ProcessorCart $processorCart,
-        ShopContextInterface $context
-    ): void {
-        foreach ($processorCart->getDeliveries() as $delivery) {
-            $this->calculator->calculate($delivery, $context);
-        }
+    /**
+     * @var string
+     */
+    private $paymentName;
+
+    public function __construct(int $paymentId, string $paymentName)
+    {
+        $this->paymentId = $paymentId;
+        $this->paymentName = $paymentName;
+    }
+
+    public function getPaymentId(): int
+    {
+        return $this->paymentId;
+    }
+
+    public function getPaymentName(): string
+    {
+        return $this->paymentName;
+    }
+
+    public function getMessageKey(): string
+    {
+        return 'payment_blocked';
+    }
+
+    public function getMessage(): string
+    {
+        return sprintf('Current payment method %s (id: %s) blocked', $this->paymentName, $this->paymentId);
+    }
+
+    public function getLevel(): int
+    {
+        return Error::LEVEL_ERROR;
     }
 }

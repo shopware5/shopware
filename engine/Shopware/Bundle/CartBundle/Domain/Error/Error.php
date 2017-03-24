@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -23,29 +22,21 @@ declare(strict_types=1);
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\CartBundle\Domain\Delivery;
+namespace Shopware\Bundle\CartBundle\Domain\Error;
 
-use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
-use Shopware\Bundle\CartBundle\Domain\Cart\Cart;
-use Shopware\Bundle\CartBundle\Domain\Cart\CartProcessorInterface;
-use Shopware\Bundle\CartBundle\Domain\Cart\ProcessorCart;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Bundle\CartBundle\Domain\JsonSerializableTrait;
 
-class DeliveryCalculatorProcessor implements CartProcessorInterface
+abstract class Error implements \JsonSerializable
 {
-    /**
-     * @var DeliveryCalculator
-     */
-    private $calculator;
+    use JsonSerializableTrait;
 
-    public function process(
-        Cart $cart,
-        CalculatedCart $calculatedCart,
-        ProcessorCart $processorCart,
-        ShopContextInterface $context
-    ): void {
-        foreach ($processorCart->getDeliveries() as $delivery) {
-            $this->calculator->calculate($delivery, $context);
-        }
-    }
+    const LEVEL_NOTICE = 0;
+
+    const LEVEL_ERROR = 1;
+
+    abstract public function getMessageKey(): string;
+
+    abstract public function getMessage(): string;
+
+    abstract public function getLevel(): int;
 }

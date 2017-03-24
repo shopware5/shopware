@@ -28,6 +28,7 @@ use Enlight_Controller_Request_RequestHttp as EnlightRequest;
 use Enlight_Controller_Response_ResponseHttp as EnlightResponse;
 use Shopware\Bundle\AttributeBundle\DependencyInjection\Compiler\SearchRepositoryCompilerPass;
 use Shopware\Bundle\CartBundle\DependencyInjection\CompilerPass\CartProcessorCompilerPass;
+use Shopware\Bundle\CartBundle\DependencyInjection\CompilerPass\RiskDataCollectorCompilerPass;
 use Shopware\Bundle\CartBundle\DependencyInjection\CompilerPass\TaxRuleCalculatorCompilerPass;
 use Shopware\Bundle\ControllerBundle\DependencyInjection\Compiler\RegisterControllerCompilerPass;
 use Shopware\Bundle\EmotionBundle\DependencyInjection\Compiler\EmotionComponentHandlerCompilerPass;
@@ -644,6 +645,7 @@ class Kernel implements HttpKernelInterface
         $container->addCompilerPass(new MediaStrategyCompilerPass());
         $container->addCompilerPass(new StatisticsTracerCompilerPass());
         $container->addCompilerPass(new CartProcessorCompilerPass());
+        $container->addCompilerPass(new RiskDataCollectorCompilerPass());
         $container->addCompilerPass(new TaxRuleCalculatorCompilerPass());
 
         if ($this->isElasticSearchEnabled()) {
