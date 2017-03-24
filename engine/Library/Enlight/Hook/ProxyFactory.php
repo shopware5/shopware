@@ -282,6 +282,7 @@ class <namespace>_<proxyClassName> extends <className> implements Enlight_Hook_P
                     $proxy_params .= '$';
                     $array_param .= '&';
                 }
+                $params .= $rp->isArray() ? 'array ' : '';
                 $params .= '$' . $rp->getName();
                 $proxy_params .= '$' . $rp->getName();
                 $array_param .= '$' . $rp->getName();
