@@ -33,16 +33,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
  */
 interface ContextServiceInterface
 {
-    /**
-     * Requires the following data:
-     * - Current shop
-     * - Current customer group
-     * - Fallback customer group of the current shop
-     * - The currency of the shop
-     *
-     * @param bool $useCache - Allows to force update of context
-     *
-     * @return ShopContextInterface
-     */
-    public function getShopContext($useCache = true);
+    public function getShopContext(): ShopContextInterface;
+
+    public function refresh(): void;
 }

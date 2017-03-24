@@ -67,10 +67,17 @@ class ContextService implements ContextServiceInterface
         $this->cache = $cache;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getShopContext($useCache = true): ShopContextInterface
+    public function getShopContext(): ShopContextInterface
+    {
+        return $this->load(true);
+    }
+
+    public function refresh(): void
+    {
+        $this->load(false);
+    }
+
+    private function load(bool $useCache): ShopContextInterface
     {
         $shopScope = new ShopScope(
             $this->getStoreFrontShopId(),

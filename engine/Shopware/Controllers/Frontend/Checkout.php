@@ -661,7 +661,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         }
 
         // We might change the shop context here so we need to initialize it again
-        $this->get('shopware_storefront.context_service')->initializeShopContext();
+        $this->get('shopware_storefront.context_service')->refresh();
 
         // We need an indicator in the view to expand the shipping costs pre-calculation on page load
         $this->View()->assign('calculateShippingCosts', true);
@@ -688,7 +688,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
             $this->admin->sUpdatePayment($payment);
             $this->setDispatch($dispatch, $payment);
 
-            $this->get('shopware_storefront.context_service')->initializeShopContext();
+            $this->get('shopware_storefront.context_service')->refresh();
 
             return $this->forward('shippingPayment');
         }

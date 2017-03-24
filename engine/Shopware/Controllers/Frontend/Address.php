@@ -435,7 +435,7 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
     {
         /** @var \Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface $service */
         $service = $this->get('shopware_storefront.context_service');
-        $service->getShopContext(false);
+        $service->refresh();
     }
 
     /**
