@@ -107,20 +107,6 @@ Ext.define('Shopware.apps.Emotion.view.presets.Window', {
         var me = this;
 
         return [{
-            text: 'Plugin Manager',
-            cls: 'secondary',
-            handler: function() {
-                Shopware.app.Application.addSubApplication({
-                    name: 'Shopware.apps.PluginManager',
-                    action: 'Listing',
-                    params: {
-                        filter: [
-                            { property: 'emotionPreset', value: 1 }
-                        ]
-                    }
-                });
-            }
-        },{
             text: '{s name=use_preset}{/s}',
             cls: 'primary',
             handler: function () {

@@ -44,6 +44,27 @@ Ext.define('Shopware.apps.Emotion.view.presets.List', {
         var me = this;
 
         me.items = [
+            {
+                xtype: 'image',
+                width: 793,
+                style: 'cursor: pointer;',
+                src: '{link file="themes/Backend/ExtJs/backend/_resources/resources/themes/images/shopware-ui/emotion_preset_teaser.png"}',
+                listeners: {
+                    boxready: function(cmp) {
+                        cmp.el.on('click', function() {
+                            Shopware.app.Application.addSubApplication({
+                                name: 'Shopware.apps.PluginManager',
+                                action: 'Listing',
+                                params: {
+                                    filter: [
+                                        { property: 'emotionPreset', value: 1 }
+                                    ]
+                                }
+                            });
+                        });
+                    }
+                }
+            },
             me.createInfoView()
         ];
 
