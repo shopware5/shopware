@@ -26,7 +26,7 @@ declare(strict_types=1);
 namespace Shopware\Bundle\CartBundle\Domain\Product;
 
 use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
-use Shopware\Bundle\CartBundle\Domain\Cart\Cart;
+use Shopware\Bundle\CartBundle\Domain\Cart\CartContainer;
 use Shopware\Bundle\CartBundle\Domain\Cart\CartProcessorInterface;
 use Shopware\Bundle\CartBundle\Domain\Cart\ProcessorCart;
 use Shopware\Bundle\CartBundle\Domain\Error\ProductDeliveryInformationNotFoundError;
@@ -65,12 +65,12 @@ class ProductProcessor implements CartProcessorInterface
     }
 
     public function process(
-        Cart $cart,
+        CartContainer $cartContainer,
         CalculatedCart $calculatedCart,
         ProcessorCart $processorCart,
         ShopContextInterface $context
     ): void {
-        $collection = $cart->getLineItems()->filterType(self::TYPE_PRODUCT);
+        $collection = $cartContainer->getLineItems()->filterType(self::TYPE_PRODUCT);
         if ($collection->count() === 0) {
             return;
         }
@@ -86,7 +86,7 @@ class ProductProcessor implements CartProcessorInterface
                     new ProductPriceNotFoundError($lineItem->getIdentifier())
                 );
 
-                $cart->getLineItems()->remove(
+                $cartContainer->getLineItems()->remove(
                     $lineItem->getIdentifier()
                 );
 
@@ -98,7 +98,7 @@ class ProductProcessor implements CartProcessorInterface
                     new ProductDeliveryInformationNotFoundError($lineItem->getIdentifier())
                 );
 
-                $cart->getLineItems()->remove(
+                $cartContainer->getLineItems()->remove(
                     $lineItem->getIdentifier()
                 );
 

@@ -29,7 +29,7 @@ use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\DBAL\Statement;
 use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
-use Shopware\Bundle\CartBundle\Domain\Cart\Cart;
+use Shopware\Bundle\CartBundle\Domain\Cart\CartContainer;
 use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryCollection;
 use Shopware\Bundle\CartBundle\Domain\LineItem\CalculatedLineItemCollection;
 use Shopware\Bundle\CartBundle\Domain\Price\CartPrice;
@@ -94,7 +94,7 @@ class PaymentMethodServiceTest extends TestCase
                 [],
                 [],
                 new CalculatedCart(
-                    Cart::createNew('test'),
+                    CartContainer::createNew('test'),
                     new CalculatedLineItemCollection(),
                     new CartPrice(0, 0, new CalculatedTaxCollection(), new TaxRuleCollection()),
                     new DeliveryCollection()
@@ -117,7 +117,7 @@ class PaymentMethodServiceTest extends TestCase
 
                 //cart state
                 new CalculatedCart(
-                    Cart::createNew('test'),
+                    CartContainer::createNew('test'),
                     new CalculatedLineItemCollection(),
                     new CartPrice(0, 0, new CalculatedTaxCollection(), new TaxRuleCollection()),
                     new DeliveryCollection()

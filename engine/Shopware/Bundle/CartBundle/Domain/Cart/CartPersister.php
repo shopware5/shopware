@@ -45,7 +45,7 @@ class CartPersister implements CartPersisterInterface
     /**
      * {@inheritdoc}
      */
-    public function load(string $token): Cart
+    public function load(string $token): CartContainer
     {
         $content = $this->connection->fetchColumn(
             'SELECT content FROM s_cart WHERE `token` = :token',
@@ -53,25 +53,25 @@ class CartPersister implements CartPersisterInterface
         );
 
         if ($content === false) {
-            throw new \RuntimeException('Cart token not found');
+            throw new \RuntimeException('CartContainer token not found');
         }
 
-        return Cart::unserialize($content);
+        return CartContainer::unserialize($content);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function save(Cart $cart): void
+    public function save(CartContainer $cartContainer): void
     {
         $this->connection->executeQuery(
             'INSERT INTO `s_cart` (`token`, `name`, `content`) 
              VALUES (:token, :name, :content)
              ON DUPLICATE KEY UPDATE `name` = :name, `content` = :content',
             [
-                ':token' => $cart->getToken(),
-                ':name' => $cart->getName(),
-                ':content' => $cart->serialize(),
+                ':token' => $cartContainer->getToken(),
+                ':name' => $cartContainer->getName(),
+                ':content' => $cartContainer->serialize(),
             ]
         );
     }

@@ -40,14 +40,14 @@ abstract class Rule implements \JsonSerializable
     /**
      * Validate the current rule and return boolean to indicate if the current rule applied (true) or not (false)
      *
-     * @param CalculatedCart                                                            $cart
+     * @param CalculatedCart                                                            $calculatedCart
      * @param ShopContextInterface                                                      $context
      * @param \Shopware\Bundle\CartBundle\Domain\RiskManagement\Data\RiskDataCollection $collection
      *
      * @return bool
      */
     abstract public function match(
-        CalculatedCart $cart,
+        CalculatedCart $calculatedCart,
         ShopContextInterface $context,
         RiskDataCollection $collection
     ): bool;

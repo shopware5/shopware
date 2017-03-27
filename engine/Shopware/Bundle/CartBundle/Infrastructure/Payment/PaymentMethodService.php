@@ -52,13 +52,13 @@ class PaymentMethodService
     }
 
     /**
-     * @param CalculatedCart       $cart
+     * @param CalculatedCart       $calculatedCart
      * @param ShopContextInterface $context
      *
      * @return PaymentMethod[]
      */
     public function getAvailable(
-        CalculatedCart $cart,
+        CalculatedCart $calculatedCart,
         ShopContextInterface $context
     ): array {
         $payments = $this->gateway->getAll($context->getTranslationContext());
@@ -71,17 +71,17 @@ class PaymentMethodService
             return $paymentMethod->getRiskManagementRule();
         }, $actives);
 
-        $dataCollection = $this->riskDataCollectorRegistry->collect($cart, $context, new RuleCollection(array_filter($rules)));
+        $dataCollection = $this->riskDataCollectorRegistry->collect($calculatedCart, $context, new RuleCollection(array_filter($rules)));
 
         return array_filter(
             $actives,
-            function (PaymentMethod $method) use ($cart, $context, $dataCollection) {
+            function (PaymentMethod $method) use ($calculatedCart, $context, $dataCollection) {
                 $rule = $method->getRiskManagementRule();
                 if (!$rule) {
                     return true;
                 }
 
-                return !$rule->match($cart, $context, $dataCollection);
+                return !$rule->match($calculatedCart, $context, $dataCollection);
             }
         );
     }

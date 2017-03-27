@@ -46,7 +46,7 @@ class ProductOfCategoriesRule extends Rule
     }
 
     public function match(
-        CalculatedCart $cart,
+        CalculatedCart $calculatedCart,
         ShopContextInterface $context,
         RiskDataCollection $collection
     ): bool {

@@ -30,7 +30,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 interface CartProcessorInterface
 {
     public function process(
-        Cart $cart,
+        CartContainer $cartContainer,
         CalculatedCart $calculatedCart,
         ProcessorCart $processorCart,
         ShopContextInterface $context

@@ -45,13 +45,13 @@ class RiskDataCollectorRegistry
     }
 
     public function collect(
-        CalculatedCart $cart,
+        CalculatedCart $calculatedCart,
         ShopContextInterface $context,
         RuleCollection $rules
     ): RiskDataCollection {
         $collection = new RiskDataCollection([]);
         foreach ($this->collectors as $collector) {
-            $collector->collect($rules, $cart, $context, $collection);
+            $collector->collect($rules, $calculatedCart, $context, $collection);
         }
 
         return $collection;

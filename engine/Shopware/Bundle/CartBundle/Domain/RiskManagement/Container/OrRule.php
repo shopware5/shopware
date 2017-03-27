@@ -36,12 +36,12 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 class OrRule extends Container
 {
     public function match(
-        CalculatedCart $cart,
+        CalculatedCart $calculatedCart,
         ShopContextInterface $context,
         RiskDataCollection $collection
     ): bool {
         foreach ($this->rules as $rule) {
-            if ($rule->match($cart, $context, $collection)) {
+            if ($rule->match($calculatedCart, $context, $collection)) {
                 return true;
             }
         }

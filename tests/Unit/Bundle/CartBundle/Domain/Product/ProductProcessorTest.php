@@ -25,7 +25,7 @@
 namespace Shopware\Tests\Unit\Bundle\CartBundle\Domain\Product;
 
 use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
-use Shopware\Bundle\CartBundle\Domain\Cart\Cart;
+use Shopware\Bundle\CartBundle\Domain\Cart\CartContainer;
 use Shopware\Bundle\CartBundle\Domain\Cart\ProcessorCart;
 use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryCollection;
 use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryDate;
@@ -72,10 +72,10 @@ class ProductProcessorTest extends \PHPUnit_Framework_TestCase
             new DeliveryCollection()
         );
 
-        $cart = Cart::createExisting('test', 'test', []);
+        $cart = CartContainer::createExisting('test', 'test', []);
 
         $processor->process(
-            Cart::createExisting('test', 'test', []),
+            CartContainer::createExisting('test', 'test', []),
             new CalculatedCart(
                 $cart,
                 new CalculatedLineItemCollection([]),
@@ -133,7 +133,7 @@ class ProductProcessorTest extends \PHPUnit_Framework_TestCase
         );
 
         $processor->process(
-            Cart::createExisting('test', 'test', [
+            CartContainer::createExisting('test', 'test', [
                 new LineItem('SW1', ProductProcessor::TYPE_PRODUCT, 1),
             ]),
             $cart,
@@ -184,7 +184,7 @@ class ProductProcessorTest extends \PHPUnit_Framework_TestCase
         );
 
         $processor->process(
-            Cart::createExisting('test', 'test', [
+            CartContainer::createExisting('test', 'test', [
                 new LineItem('SW1', ProductProcessor::TYPE_PRODUCT, 1),
                 new LineItem('SW2', ProductProcessor::TYPE_PRODUCT, 1),
                 new LineItem('SW3', ProductProcessor::TYPE_PRODUCT, 1),
@@ -257,7 +257,7 @@ class ProductProcessorTest extends \PHPUnit_Framework_TestCase
         $processor = new ProductProcessor($priceGateway, $calculator, $deliveryGateway);
 
         $processor->process(
-            Cart::createExisting('test', 'test', [
+            CartContainer::createExisting('test', 'test', [
                 new LineItem('SW1', ProductProcessor::TYPE_PRODUCT, 1),
                 new LineItem('SW2', ProductProcessor::TYPE_PRODUCT, 1),
                 new LineItem('SW3', ProductProcessor::TYPE_PRODUCT, 1),

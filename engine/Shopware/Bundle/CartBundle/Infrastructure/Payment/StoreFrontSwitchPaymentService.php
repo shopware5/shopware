@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -23,29 +22,36 @@ declare(strict_types=1);
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\CartBundle\Domain\Delivery;
+namespace Shopware\Bundle\CartBundle\Infrastructure\Payment;
 
-use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
-use Shopware\Bundle\CartBundle\Domain\Cart\CartContainer;
-use Shopware\Bundle\CartBundle\Domain\Cart\CartProcessorInterface;
-use Shopware\Bundle\CartBundle\Domain\Cart\ProcessorCart;
+use Enlight_Components_Session_Namespace as Session;
+use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
-class DeliveryCalculatorProcessor implements CartProcessorInterface
+class StoreFrontSwitchPaymentService
 {
     /**
-     * @var DeliveryCalculator
+     * @var Session
      */
-    private $calculator;
+    private $session;
 
-    public function process(
-        CartContainer $cartContainer,
-        CalculatedCart $calculatedCart,
-        ProcessorCart $processorCart,
-        ShopContextInterface $context
-    ): void {
-        foreach ($processorCart->getDeliveries() as $delivery) {
-            $this->calculator->calculate($delivery, $context);
-        }
+    /**
+     * @var ContextServiceInterface
+     */
+    private $contextService;
+
+    public function __construct(Session $session, ContextServiceInterface $contextService)
+    {
+        $this->session = $session;
+        $this->contextService = $contextService;
+    }
+
+    public function switchPayment(int $paymentId): ShopContextInterface
+    {
+        $this->session->offsetSet('sPayment', $paymentId);
+
+        $this->contextService->refresh();
+
+        return $this->contextService->getShopContext();
     }
 }

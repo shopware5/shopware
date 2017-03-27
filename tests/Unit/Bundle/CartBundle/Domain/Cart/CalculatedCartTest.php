@@ -25,7 +25,7 @@
 namespace Shopware\Tests\Unit\Bundle\CartBundle\Domain\Cart;
 
 use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
-use Shopware\Bundle\CartBundle\Domain\Cart\Cart;
+use Shopware\Bundle\CartBundle\Domain\Cart\CartContainer;
 use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryCollection;
 use Shopware\Bundle\CartBundle\Domain\LineItem\CalculatedLineItemCollection;
 use Shopware\Bundle\CartBundle\Domain\Price\CartPrice;
@@ -39,7 +39,7 @@ class CalculatedCartTest extends \PHPUnit_Framework_TestCase
     public function testEmptyCartHasNoGoods()
     {
         $cart = new CalculatedCart(
-            Cart::createNew('test'),
+            CartContainer::createNew('test'),
             new CalculatedLineItemCollection(),
             new CartPrice(0, 0, new CalculatedTaxCollection(), new TaxRuleCollection()),
             new DeliveryCollection()
@@ -51,7 +51,7 @@ class CalculatedCartTest extends \PHPUnit_Framework_TestCase
     public function testCartWithLineItemsHasGoods()
     {
         $cart = new CalculatedCart(
-            Cart::createNew('test'),
+            CartContainer::createNew('test'),
             new CalculatedLineItemCollection([
                 new ConfiguredGoodsItem('A', 1),
                 new ConfiguredLineItem('B', 1),
@@ -66,7 +66,7 @@ class CalculatedCartTest extends \PHPUnit_Framework_TestCase
     public function testCartHasNoGoodsIfNoLineItemDefinedAsGoods()
     {
         $cart = new CalculatedCart(
-            Cart::createNew('test'),
+            CartContainer::createNew('test'),
             new CalculatedLineItemCollection([
                 new ConfiguredLineItem('A', 1),
                 new ConfiguredLineItem('B', 1),

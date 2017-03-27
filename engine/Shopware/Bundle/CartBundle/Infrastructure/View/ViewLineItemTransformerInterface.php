@@ -31,7 +31,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 interface ViewLineItemTransformerInterface
 {
     public function transform(
-        CalculatedCart $cart,
+        CalculatedCart $calculatedCart,
         ViewCart $templateCart,
         ShopContextInterface $context
     ): void;

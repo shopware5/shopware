@@ -31,7 +31,7 @@ class ErrorCollection extends Collection
     /**
      * @var Error[]
      */
-    protected $elements;
+    protected $elements = [];
 
     public function add(Error $error): void
     {

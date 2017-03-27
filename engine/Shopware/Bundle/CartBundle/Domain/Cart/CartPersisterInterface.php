@@ -27,7 +27,7 @@ namespace Shopware\Bundle\CartBundle\Domain\Cart;
 
 interface CartPersisterInterface
 {
-    public function load(string $token): Cart;
+    public function load(string $token): CartContainer;
 
-    public function save(Cart $cart): void;
+    public function save(CartContainer $cartContainer): void;
 }

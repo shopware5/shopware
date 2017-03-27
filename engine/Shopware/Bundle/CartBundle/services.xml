@@ -173,9 +173,14 @@
             <tag name="risk_management.data_collector" />
         </service>
 
-        <service class="Shopware\Bundle\CartBundle\Domain\Payment\PaymentValidatorProcessor" id="shopware_bundle_cart.domain_payment.payment_validator_processor">
+        <service id="shopware_cart.payment_validator_processor" class="Shopware\Bundle\CartBundle\Domain\Payment\PaymentValidatorProcessor">
             <argument id="shopware.cart.risk_management.data_collector_registry" type="service"/>
             <tag name="cart_processor" priority="100" />
+        </service>
+
+        <service id="shopware_cart.payment.store_front_switch_payment_service" class="Shopware\Bundle\CartBundle\Infrastructure\Payment\StoreFrontSwitchPaymentService">
+            <argument id="session" type="service"/>
+            <argument id="shopware_storefront.context_service" type="service"/>
         </service>
 
     </services>

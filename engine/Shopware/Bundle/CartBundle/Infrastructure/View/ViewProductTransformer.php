@@ -55,11 +55,11 @@ class ViewProductTransformer implements ViewLineItemTransformerInterface
      * {@inheritdoc}
      */
     public function transform(
-        CalculatedCart $cart,
+        CalculatedCart $calculatedCart,
         ViewCart $templateCart,
         ShopContextInterface $context
     ): void {
-        $collection = $cart->getLineItems()->filterInstance(CalculatedProduct::class);
+        $collection = $calculatedCart->getLineItems()->filterInstance(CalculatedProduct::class);
 
         if ($collection->count() === 0) {
             return;

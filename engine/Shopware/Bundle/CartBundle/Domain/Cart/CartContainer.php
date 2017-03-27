@@ -31,7 +31,7 @@ use Shopware\Bundle\CartBundle\Domain\LineItem\LineItem;
 use Shopware\Bundle\CartBundle\Domain\LineItem\LineItemCollection;
 use Shopware\Bundle\CartBundle\Domain\LineItem\LineItemInterface;
 
-class Cart implements \JsonSerializable
+class CartContainer implements \JsonSerializable
 {
     use JsonSerializableTrait;
 
@@ -57,12 +57,12 @@ class Cart implements \JsonSerializable
         $this->items = $items;
     }
 
-    public static function createNew(string $name): Cart
+    public static function createNew(string $name): CartContainer
     {
         return new self($name, Uuid::uuid4()->toString(), new LineItemCollection());
     }
 
-    public static function createExisting(string $name, string $token, array $items): Cart
+    public static function createExisting(string $name, string $token, array $items): CartContainer
     {
         return new self($name, $token, new LineItemCollection($items));
     }
@@ -95,7 +95,7 @@ class Cart implements \JsonSerializable
         ]);
     }
 
-    public static function unserialize(string $json): Cart
+    public static function unserialize(string $json): CartContainer
     {
         $data = json_decode($json, true);
 

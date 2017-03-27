@@ -24,7 +24,7 @@
 
 namespace Shopware\Tests\Unit\Bundle\CartBundle\Common;
 
-use Shopware\Bundle\CartBundle\Domain\Cart\Cart;
+use Shopware\Bundle\CartBundle\Domain\Cart\CartContainer;
 use Shopware\Bundle\CartBundle\Domain\Cart\CartPersisterInterface;
 
 class ArrayCartPersister implements CartPersisterInterface
@@ -43,7 +43,7 @@ class ArrayCartPersister implements CartPersisterInterface
         return $this->signatures[$signature];
     }
 
-    public function load(string $token): Cart
+    public function load(string $token): CartContainer
     {
         if (array_key_exists($token, $this->carts)) {
             return $this->carts[$token];
@@ -52,8 +52,8 @@ class ArrayCartPersister implements CartPersisterInterface
         return null;
     }
 
-    public function save(Cart $cart): void
+    public function save(CartContainer $cartContainer): void
     {
-        $this->carts[$cart->getToken()] = $cart;
+        $this->carts[$cartContainer->getToken()] = $cartContainer;
     }
 }

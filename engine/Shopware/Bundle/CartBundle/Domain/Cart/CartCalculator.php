@@ -54,7 +54,7 @@ class CartCalculator
         $this->amountCalculator = $amountCalculator;
     }
 
-    public function calculate(Cart $cart, ShopContextInterface $context): CalculatedCart
+    public function calculate(CartContainer $cartContainer, ShopContextInterface $context): CalculatedCart
     {
         $processorCart = new ProcessorCart(
             new CalculatedLineItemCollection(),
@@ -63,23 +63,23 @@ class CartCalculator
 
         foreach ($this->processors as $processor) {
             $processor->process(
-                $cart,
-                $this->createCalculatedCart($cart, $context, $processorCart),
+                $cartContainer,
+                $this->createCalculatedCart($cartContainer, $context, $processorCart),
                 $processorCart,
                 $context
             );
         }
 
-        return $this->createCalculatedCart($cart, $context, $processorCart);
+        return $this->createCalculatedCart($cartContainer, $context, $processorCart);
     }
 
     private function createCalculatedCart(
-        Cart $cart,
+        CartContainer $cartContainer,
         ShopContextInterface $context,
         ProcessorCart $processorCart
     ): CalculatedCart {
         return new CalculatedCart(
-            $cart,
+            $cartContainer,
             $processorCart->getLineItems(),
             $this->amountCalculator->calculateAmount(
                 $processorCart->getLineItems()->getPrices(),

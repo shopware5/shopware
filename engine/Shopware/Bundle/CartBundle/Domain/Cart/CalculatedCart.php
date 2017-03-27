@@ -41,9 +41,9 @@ class CalculatedCart implements \JsonSerializable
     protected $price;
 
     /**
-     * @var Cart
+     * @var CartContainer
      */
-    protected $cart;
+    protected $cartContainer;
 
     /**
      * @var CalculatedLineItemCollection
@@ -61,13 +61,13 @@ class CalculatedCart implements \JsonSerializable
     protected $errors;
 
     public function __construct(
-        Cart $cart,
+        CartContainer $cartContainer,
         CalculatedLineItemCollection $lineItems,
         CartPrice $price,
         DeliveryCollection $deliveries,
         ErrorCollection $errors
     ) {
-        $this->cart = $cart;
+        $this->cartContainer = $cartContainer;
         $this->lineItems = $lineItems;
         $this->price = $price;
         $this->deliveries = $deliveries;
@@ -76,12 +76,12 @@ class CalculatedCart implements \JsonSerializable
 
     public function getName(): string
     {
-        return $this->cart->getName();
+        return $this->cartContainer->getName();
     }
 
     public function getToken(): string
     {
-        return $this->cart->getToken();
+        return $this->cartContainer->getToken();
     }
 
     public function getPrice(): CartPrice
@@ -89,9 +89,9 @@ class CalculatedCart implements \JsonSerializable
         return clone $this->price;
     }
 
-    public function getCart(): Cart
+    public function getCartContainer(): CartContainer
     {
-        return clone $this->cart;
+        return clone $this->cartContainer;
     }
 
     public function getLineItems(): CalculatedLineItemCollection

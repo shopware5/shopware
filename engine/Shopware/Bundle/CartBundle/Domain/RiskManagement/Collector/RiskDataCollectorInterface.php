@@ -33,7 +33,7 @@ interface RiskDataCollectorInterface
 {
     public function collect(
         RuleCollection $rules,
-        CalculatedCart $cart,
+        CalculatedCart $calculatedCart,
         ShopContextInterface $context,
         RiskDataCollection $collection
     );

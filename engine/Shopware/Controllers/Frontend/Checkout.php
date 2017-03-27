@@ -23,6 +23,7 @@
  */
 
 use Enlight_Controller_Request_Request as Request;
+use Shopware\Bundle\CartBundle\Domain\Error\PaymentBlockedError;
 use Shopware\Bundle\CartBundle\Domain\LineItem\LineItem;
 use Shopware\Bundle\CartBundle\Domain\Payment\PaymentMethod;
 use Shopware\Bundle\CartBundle\Domain\Product\ProductProcessor;
@@ -85,7 +86,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
     public function confirmAction(): void
     {
         /** @var ShopContextInterface $context */
-        $context = $this->get('shopware_storefront.context_service')->getShopContext();
+        $context = $this->container->get('shopware_storefront.context_service')->getShopContext();
 
         if ($context->getCustomer() === null) {
             $this->forwardToLogin();
@@ -100,6 +101,11 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
             $this->redirect(['action' => self::ACTION_CART]);
 
             return;
+        }
+
+        if ($cart->getErrors()->has(PaymentBlockedError::class)) {
+            $context = $this->container->get('shopware_cart.payment.store_front_switch_payment_service')
+                ->switchPayment($context->getShop()->getPaymentMethod()->getId());
         }
 
         $this->View()->assign([

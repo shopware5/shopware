@@ -44,12 +44,12 @@ class DeliveryMethodService
     }
 
     /**
-     * @param CalculatedCart       $cart
+     * @param CalculatedCart       $calculatedCart
      * @param ShopContextInterface $context
      *
      * @return DeliveryMethod[]
      */
-    public function getAvailable(CalculatedCart $cart, ShopContextInterface $context): array
+    public function getAvailable(CalculatedCart $calculatedCart, ShopContextInterface $context): array
     {
         $deliveries = $this->gateway->getAll($context->getTranslationContext());
 

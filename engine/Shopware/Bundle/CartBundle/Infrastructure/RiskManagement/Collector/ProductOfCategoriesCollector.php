@@ -51,7 +51,7 @@ class ProductOfCategoriesCollector implements RiskDataCollectorInterface
 
     public function collect(
         RuleCollection $rules,
-        CalculatedCart $cart,
+        CalculatedCart $calculatedCart,
         ShopContextInterface $context,
         RiskDataCollection $collection
     ) {
@@ -67,7 +67,7 @@ class ProductOfCategoriesCollector implements RiskDataCollectorInterface
             $categoryIds = array_merge($categoryIds, $rule->getCategoryIds());
         }
 
-        $numbers = $cart->getLineItems()->filterInstance(CalculatedProduct::class)->getKeys();
+        $numbers = $calculatedCart->getLineItems()->filterInstance(CalculatedProduct::class)->getKeys();
 
         if (empty($numbers)) {
             return;

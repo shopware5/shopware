@@ -48,11 +48,11 @@ class NotRule extends Container
     }
 
     public function match(
-        CalculatedCart $cart,
+        CalculatedCart $calculatedCart,
         ShopContextInterface $context,
         RiskDataCollection $collection
     ): bool {
-        return !$this->rules[0]->match($cart, $context, $collection);
+        return !$this->rules[0]->match($calculatedCart, $context, $collection);
     }
 
     /**

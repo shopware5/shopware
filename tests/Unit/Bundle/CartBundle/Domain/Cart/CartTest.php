@@ -24,7 +24,7 @@
 
 namespace Shopware\Tests\Unit\Bundle\CartBundle\Domain\Cart;
 
-use Shopware\Bundle\CartBundle\Domain\Cart\Cart;
+use Shopware\Bundle\CartBundle\Domain\Cart\CartContainer;
 use Shopware\Bundle\CartBundle\Domain\LineItem\LineItem;
 use Shopware\Bundle\CartBundle\Domain\Product\ProductProcessor;
 
@@ -33,12 +33,12 @@ class CartTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider carts
      *
-     * @param Cart $cart
+     * @param CartContainer $cart
      */
-    public function testCartSerializeWithDifferentCarts(Cart $cart)
+    public function testCartSerializeWithDifferentCarts(CartContainer $cart)
     {
         static::assertNotEmpty($cart->serialize());
-        static::assertEquals($cart, Cart::unserialize($cart->serialize()));
+        static::assertEquals($cart, CartContainer::unserialize($cart->serialize()));
     }
 
     /**
@@ -56,30 +56,30 @@ class CartTest extends \PHPUnit_Framework_TestCase
 
     private function getEmptyCart()
     {
-        return Cart::createExisting('test', 'test', []);
+        return CartContainer::createExisting('test', 'test', []);
     }
 
     private function getCartWithProduct()
     {
-        return Cart::createExisting('test', 'test', [
+        return CartContainer::createExisting('test', 'test', [
             new LineItem('A', ProductProcessor::TYPE_PRODUCT, 1.5, ['id' => 1]),
         ]);
     }
 
     private function getCartWithProducts()
     {
-        return Cart::createExisting('test', 'test', [
+        return CartContainer::createExisting('test', 'test', [
             new LineItem('A', ProductProcessor::TYPE_PRODUCT, 1.5, ['id' => 1]),
             new LineItem('B', ProductProcessor::TYPE_PRODUCT, 3.4, ['id' => 2]),
         ]);
     }
 
     /**
-     * @return Cart
+     * @return CartContainer
      */
     private function getCartWithProductAndNestedData()
     {
-        return Cart::createExisting('test', 'test', [
+        return CartContainer::createExisting('test', 'test', [
             new LineItem('A', ProductProcessor::TYPE_PRODUCT, 1.5, [
                 'id' => 1,
                 'nested' => [

@@ -25,7 +25,7 @@
 namespace Shopware\Bundle\CartBundle\Domain\Payment;
 
 use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
-use Shopware\Bundle\CartBundle\Domain\Cart\Cart;
+use Shopware\Bundle\CartBundle\Domain\Cart\CartContainer;
 use Shopware\Bundle\CartBundle\Domain\Cart\CartProcessorInterface;
 use Shopware\Bundle\CartBundle\Domain\Cart\ProcessorCart;
 use Shopware\Bundle\CartBundle\Domain\Error\PaymentBlockedError;
@@ -46,7 +46,7 @@ class PaymentValidatorProcessor implements CartProcessorInterface
     }
 
     public function process(
-        Cart $cart,
+        CartContainer $cartContainer,
         CalculatedCart $calculatedCart,
         ProcessorCart $processorCart,
         ShopContextInterface $context
