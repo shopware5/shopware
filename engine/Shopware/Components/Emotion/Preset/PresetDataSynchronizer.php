@@ -93,6 +93,30 @@ class PresetDataSynchronizer implements PresetDataSynchronizerInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function prepareAssetExport(Preset $preset)
+    {
+        $presetData = json_decode($preset->getPresetData(), true);
+
+        foreach ($presetData['elements'] as &$element) {
+            $handler = $this->findComponentHandler($element);
+
+            if (!$handler) {
+                continue;
+            }
+
+            $element = $handler->export($element);
+        }
+        unset($element);
+
+        $preset->setPresetData(json_encode($presetData));
+        $this->modelManager->flush($preset);
+
+        return $preset;
+    }
+
+    /**
      * @param Preset $preset
      * @param array  $element
      *

@@ -125,6 +125,14 @@ class Preset extends ModelEntity
     private $assetsImported = true;
 
     /**
+     * Contains the info if preset is hidden for internal im/export use.
+     *
+     * @var string
+     * @ORM\Column(name="hidden", type="boolean", nullable=false)
+     */
+    private $hidden = false;
+
+    /**
      * Preset constructor.
      */
     public function __construct()
@@ -150,6 +158,7 @@ class Preset extends ModelEntity
         }
         $this->translations = $translations;
         $this->custom = true;
+        $this->hidden = false;
     }
 
     /**
@@ -270,6 +279,22 @@ class Preset extends ModelEntity
     public function setAssetsImported($assetsImported)
     {
         $this->assetsImported = $assetsImported;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getHidden()
+    {
+        return $this->hidden;
+    }
+
+    /**
+     * @param bool $hidden
+     */
+    public function setHidden($hidden)
+    {
+        $this->hidden = $hidden;
     }
 
     /**

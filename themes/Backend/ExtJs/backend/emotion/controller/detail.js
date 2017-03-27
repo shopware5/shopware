@@ -129,7 +129,8 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
                 'deleteemotion': me.removeEmotions,
                 'selectionChange': me.onSelectionChange,
                 'duplicateemotion': me.onDuplicateEmotion,
-                'preview': me.onPreviewEmotion
+                'preview': me.onPreviewEmotion,
+                'export': me.onExportEmotion
             },
             'emotion-main-window emotion-list-toolbar': {
                 'searchEmotions': me.onSearch,
@@ -957,6 +958,20 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
 
         previewPanel.hidePreview();
         gridPanel.show();
+    },
+
+    onExportEmotion: function(emotionId) {
+        var me = this;
+
+        Ext.Msg.confirm(
+            '{s name="emotion/export_confirm_title"}{/s}',
+            '{s name="emotion/export_confirm_msg"}{/s}',
+            function(button) {
+                if (button === 'yes') {
+                    window.open('{url controller="emotion" action="export"}?emotionId=' + emotionId, '_blank');
+                }
+            }
+        );
     },
 
     onModeChange: function(record, mode) {

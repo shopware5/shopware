@@ -234,6 +234,7 @@ class EmotionPreset extends Resource
         $builder->select(['preset', 'translation']);
         $builder->from(Preset::class, 'preset', 'preset.id');
         $builder->leftJoin('preset.translations', 'translation');
+        $builder->where('preset.hidden = 0');
 
         return $builder->getQuery()->getArrayResult();
     }

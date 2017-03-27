@@ -80,6 +80,17 @@ class BannerComponentHandler implements ComponentHandlerInterface
         return $element;
     }
 
+    public function export(array $element)
+    {
+        if (!array_key_exists('data', $element)) {
+            return $element;
+        }
+
+        $element = $this->prepareElementExport($element);
+
+        return $element;
+    }
+
     /**
      * @param array $data
      *
@@ -113,5 +124,33 @@ class BannerComponentHandler implements ComponentHandlerInterface
         $this->mediaResource->getManager()->flush($media);
 
         return $media;
+    }
+
+    /**
+     * @param array $element
+     *
+     * @return array
+     */
+    private function prepareElementExport(array $element)
+    {
+        $element['assets'] = [];
+        $data = $element['data'];
+
+        foreach ($data as &$elementData) {
+            if ($elementData['key'] === self::ELEMENT_DATA_KEY) {
+                $assetPath = $elementData['value'];
+                $assetHash = uniqid('asset-', false);
+
+                $element['assets'][$assetHash] = $this->mediaService->getUrl($assetPath);
+                $elementData['value'] = $assetHash;
+
+                break;
+            }
+        }
+        unset($elementData);
+
+        $element['data'] = $data;
+
+        return $element;
     }
 }

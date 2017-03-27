@@ -27,9 +27,10 @@ namespace Shopware\Components\Emotion\Preset;
 interface EmotionToPresetDataTransformerInterface
 {
     /**
-     * @param int $emotionId
+     * @param int  $emotionId
+     * @param bool $keepName
      *
      * @return array
      */
-    public function transform($emotionId);
+    public function transform($emotionId, $keepName = false);
 }

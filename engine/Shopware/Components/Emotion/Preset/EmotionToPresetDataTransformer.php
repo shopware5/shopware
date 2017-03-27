@@ -46,11 +46,11 @@ class EmotionToPresetDataTransformer implements EmotionToPresetDataTransformerIn
     /**
      * {@inheritdoc}
      */
-    public function transform($emotionId)
+    public function transform($emotionId, $keepName = false)
     {
         $emotionData = $this->getEmotionData($emotionId);
 
-        return $this->cleanupEmotionData($emotionData);
+        return $this->cleanupEmotionData($emotionData, $keepName);
     }
 
     /**
@@ -89,12 +89,11 @@ class EmotionToPresetDataTransformer implements EmotionToPresetDataTransformerIn
      *
      * @return array
      */
-    private function cleanupEmotionData(array $emotionData)
+    private function cleanupEmotionData(array $emotionData, $keepName = false)
     {
         unset(
             $emotionData['id'],
             $emotionData['parentId'],
-            $emotionData['name'],
             $emotionData['userId'],
             $emotionData['validFrom'],
             $emotionData['validTo'],
@@ -103,6 +102,10 @@ class EmotionToPresetDataTransformer implements EmotionToPresetDataTransformerIn
             $emotionData['previewId'],
             $emotionData['previewSecret']
         );
+
+        if (!$keepName) {
+            unset($emotionData['name']);
+        }
 
         $emotionData['active'] = false;
 

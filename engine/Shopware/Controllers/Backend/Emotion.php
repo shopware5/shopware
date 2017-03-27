@@ -24,12 +24,14 @@
 
 use \Shopware\Models\Emotion\Element;
 use Doctrine\Common\Collections\ArrayCollection;
+use Shopware\Components\CSRFWhitelistAware;
+use Shopware\Components\Emotion\EmotionExporter;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Emotion\Emotion;
 use Shopware\Models\Emotion\Library\Field;
 use Shopware\Models\Shop\Shop;
 
-class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_ExtJs
+class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_ExtJs implements CSRFWhitelistAware
 {
     /**
      * Emotion repository. Declared for an fast access to the emotion repository.
@@ -44,6 +46,16 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
      * @var null
      */
     protected $manager = null;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getWhitelistedCSRFActions()
+    {
+        return [
+            'export',
+        ];
+    }
 
     /**
      * Event listener function of the listing store of the emotion backend module.
@@ -120,8 +132,6 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
      * Event listener function of the emotion detail store of the backend module.
      * Fired when the user clicks the edit button in the listing. The function returns
      * all data for a single emotion.
-     *
-     * @return array
      */
     public function detailAction()
     {
@@ -222,6 +232,44 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
             'data' => $emotion,
             'total' => 1,
         ]);
+    }
+
+    public function exportAction()
+    {
+        $this->Front()->Plugins()->ViewRenderer()->setNoRender();
+        $this->Front()->Plugins()->Json()->setRenderer(false);
+
+        $emotionId = $this->Request()->get('emotionId');
+
+        if (!$emotionId) {
+            echo 'Parameter emotionId not found!';
+
+            return;
+        }
+
+        /** @var EmotionExporter $exporter */
+        $exporter = $this->container->get('shopware.emotion.emotion_exporter');
+
+        try {
+            /** @var string $exportFilePath */
+            $exportFilePath = $exporter->export($emotionId);
+        } catch (\Exception $e) {
+            echo $e->getMessage();
+
+            return;
+        }
+
+        @set_time_limit(0);
+        $this->Response()
+            ->setHeader('Content-type', 'application/zip')
+            ->setHeader('Content-Transfer-Encoding', 'binary')
+            ->setHeader('Content-disposition', 'attachment; filename="' . basename($exportFilePath) . '"')
+            ->sendHeaders();
+
+        readfile($exportFilePath);
+        unlink($exportFilePath);
+
+        exit;
     }
 
     /**

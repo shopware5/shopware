@@ -240,7 +240,7 @@ Ext.define('Shopware.apps.Emotion.view.list.Grid', {
         }, {
             xtype: 'actioncolumn',
             header: '{s name=grid/column/action}Actions{/s}',
-            width: 80,
+            width: 100,
             border: 0,
             menuDisabled: true,
             draggable: false,
@@ -273,6 +273,16 @@ Ext.define('Shopware.apps.Emotion.view.list.Grid', {
                             emotionId = listStore.getAt(rowIndex).get('id');
 
                         me.fireEvent('preview', emotionId);
+                    }
+                },
+                {
+                    iconCls: 'sprite-document-export',
+                    tooltip:'{s name=list/action_column/export}Export shopping world{/s}',
+                    handler: function(view, rowIndex) {
+                        var listStore = view.getStore(),
+                            emotionId = listStore.getAt(rowIndex).get('id');
+
+                        me.fireEvent('export', emotionId);
                     }
                 }
             ]

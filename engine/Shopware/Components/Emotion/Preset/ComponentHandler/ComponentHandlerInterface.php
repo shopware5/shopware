@@ -39,4 +39,11 @@ interface ComponentHandlerInterface
      * @return array
      */
     public function import(array $element);
+
+    /**
+     * @param array $element
+     *
+     * @return array
+     */
+    public function export(array $element);
 }

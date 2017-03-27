@@ -80,6 +80,17 @@ class BannerSliderComponentHandler implements ComponentHandlerInterface
         return $element;
     }
 
+    public function export(array $element)
+    {
+        if (!array_key_exists('data', $element)) {
+            return $element;
+        }
+
+        $element = $this->prepareElementExport($element);
+
+        return $element;
+    }
+
     /**
      * @param array $data
      *
@@ -122,5 +133,41 @@ class BannerSliderComponentHandler implements ComponentHandlerInterface
         $this->mediaResource->getManager()->flush($media);
 
         return $media;
+    }
+
+    /**
+     * @param array $element
+     *
+     * @return array
+     */
+    private function prepareElementExport(array $element)
+    {
+        $element['assets'] = [];
+        $data = $element['data'];
+
+        /** @var array $elementData */
+        foreach ($data as &$elementData) {
+            if ($elementData['key'] === self::ELEMENT_DATA_KEY) {
+                $sliders = json_decode($elementData['value'], true);
+                if (!is_array($sliders)) {
+                    break;
+                }
+
+                foreach ($sliders as $key => &$slide) {
+                    $assetHash = uniqid('asset-', false);
+                    $element['assets'][$assetHash] = $this->mediaService->getUrl($slide['path']);
+                    $slide['path'] = $assetHash;
+                }
+                unset($slide);
+                $elementData['value'] = json_encode($sliders);
+
+                break;
+            }
+        }
+        unset($elementData);
+
+        $element['data'] = $data;
+
+        return $element;
     }
 }

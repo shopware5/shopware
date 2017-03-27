@@ -22,25 +22,14 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Components\Emotion\Preset;
+namespace Shopware\Components\Emotion;
 
-use Shopware\Components\Emotion\Preset\Exception\PresetAssetImportException;
-use Shopware\Models\Emotion\Preset;
-
-interface PresetDataSynchronizerInterface
+interface EmotionExporterInterface
 {
     /**
-     * @param Preset $preset
-     * @param string $elementSyncKey
+     * @param int $emotionId
      *
-     * @throws PresetAssetImportException
+     * @return \ZipArchive
      */
-    public function importElementAssets(Preset $preset, $elementSyncKey);
-
-    /**
-     * @param Preset $preset
-     *
-     * @return Preset
-     */
-    public function prepareAssetExport(Preset $preset);
+    public function export($emotionId);
 }
