@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\CartBundle\Domain\Payment;
 
-use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
+use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCartGenerator;
 use Shopware\Bundle\CartBundle\Domain\Cart\CartContainer;
 use Shopware\Bundle\CartBundle\Domain\Cart\CartProcessorInterface;
 use Shopware\Bundle\CartBundle\Domain\Cart\ProcessorCart;
@@ -40,17 +40,30 @@ class PaymentValidatorProcessor implements CartProcessorInterface
      */
     private $riskDataRegistry;
 
-    public function __construct(RiskDataCollectorRegistry $riskDataRegistry)
-    {
+    /**
+     * @var CalculatedCartGenerator
+     */
+    private $calculatedCartGenerator;
+
+    public function __construct(
+        RiskDataCollectorRegistry $riskDataRegistry,
+        CalculatedCartGenerator $calculatedCartGenerator
+    ) {
         $this->riskDataRegistry = $riskDataRegistry;
+        $this->calculatedCartGenerator = $calculatedCartGenerator;
     }
 
     public function process(
         CartContainer $cartContainer,
-        CalculatedCart $calculatedCart,
         ProcessorCart $processorCart,
         ShopContextInterface $context
     ): void {
+        $calculatedCart = $this->calculatedCartGenerator->create(
+            $cartContainer,
+            $context,
+            $processorCart
+        );
+
         if (!$context->getCustomer()) {
             return;
         }

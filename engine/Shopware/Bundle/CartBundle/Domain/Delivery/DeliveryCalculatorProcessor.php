@@ -25,7 +25,6 @@ declare(strict_types=1);
 
 namespace Shopware\Bundle\CartBundle\Domain\Delivery;
 
-use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
 use Shopware\Bundle\CartBundle\Domain\Cart\CartContainer;
 use Shopware\Bundle\CartBundle\Domain\Cart\CartProcessorInterface;
 use Shopware\Bundle\CartBundle\Domain\Cart\ProcessorCart;
@@ -40,7 +39,6 @@ class DeliveryCalculatorProcessor implements CartProcessorInterface
 
     public function process(
         CartContainer $cartContainer,
-        CalculatedCart $calculatedCart,
         ProcessorCart $processorCart,
         ShopContextInterface $context
     ): void {

@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -25,44 +24,35 @@ declare(strict_types=1);
 
 namespace Shopware\Bundle\CartBundle\Domain\Cart;
 
-use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryCollection;
-use Shopware\Bundle\CartBundle\Domain\LineItem\CalculatedLineItemCollection;
+use Shopware\Bundle\CartBundle\Domain\Price\AmountCalculator;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
-class CartCalculator
+class CalculatedCartGenerator
 {
     /**
-     * @var CartProcessorInterface[]
+     * @var AmountCalculator
      */
-    private $processors = [];
-    /**
-     * @var CalculatedCartGenerator
-     */
-    private $calculatedCartGenerator;
+    private $amountCalculator;
 
-    public function __construct(
-        array $processors,
-        CalculatedCartGenerator $calculatedCartGenerator
-    ) {
-        $this->processors = $processors;
-        $this->calculatedCartGenerator = $calculatedCartGenerator;
+    public function __construct(AmountCalculator $amountCalculator)
+    {
+        $this->amountCalculator = $amountCalculator;
     }
 
-    public function calculate(CartContainer $cartContainer, ShopContextInterface $context): CalculatedCart
-    {
-        $processorCart = new ProcessorCart(
-            new CalculatedLineItemCollection(),
-            new DeliveryCollection()
-        );
-
-        foreach ($this->processors as $processor) {
-            $processor->process(
-                $cartContainer,
-                $processorCart,
+    public function create(
+        CartContainer $cartContainer,
+        ShopContextInterface $context,
+        ProcessorCart $processorCart
+    ): CalculatedCart {
+        return new CalculatedCart(
+            $cartContainer,
+            $processorCart->getLineItems(),
+            $this->amountCalculator->calculateAmount(
+                $processorCart->getLineItems()->getPrices(),
                 $context
-            );
-        }
-
-        return $this->calculatedCartGenerator->create($cartContainer, $context, $processorCart);
+            ),
+            $processorCart->getDeliveries(),
+            $processorCart->getErrors()
+        );
     }
 }

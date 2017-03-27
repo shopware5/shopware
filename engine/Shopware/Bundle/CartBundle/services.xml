@@ -24,6 +24,10 @@
             <!--cart processors-->
             <argument type="collection" />
 
+            <argument type="service" id="shopware_cart.calculated_cart_generator" />
+        </service>
+
+        <service id="shopware_cart.calculated_cart_generator" class="Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCartGenerator">
             <argument type="service" id="shopware_cart.amount_calculator" />
         </service>
 
@@ -175,6 +179,7 @@
 
         <service id="shopware_cart.payment_validator_processor" class="Shopware\Bundle\CartBundle\Domain\Payment\PaymentValidatorProcessor">
             <argument id="shopware.cart.risk_management.data_collector_registry" type="service"/>
+            <argument id="shopware_cart.calculated_cart_generator" type="service"/>
             <tag name="cart_processor" priority="100" />
         </service>
 
