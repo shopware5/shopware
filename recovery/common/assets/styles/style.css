@@ -4,6 +4,11 @@
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
 }
+
+html {
+    overflow-y: scroll;
+}
+
 body {
     font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
     font-weight: 300;
@@ -370,6 +375,20 @@ label.width-auto {
     top: 1px;
 }
 
+.btn.disabled {
+    opacity: 0.4;
+    pointer-events: none;
+    cursor: default;
+}
+
+.database-hint {
+    margin: 18px 0 18px 0;
+}
+
+.install-buttons {
+    display: inline-block;
+}
+
 .is--inline {
     display: inline;
 }
@@ -702,27 +721,43 @@ table .error {
 .navigation--list {
     display: none;
 }
-.progress-container .progress-text, .counter-text {
-    text-align: center;
+.progress-container .progress-text, .counter-container {
     font-size: 12px;
     color: #7e8b9b;
     text-shadow: 0 1px 0 #fff;
 }
+
+.progress-container .progress-text {
+    text-align: center;
+}
+
+.counter-container {
+    text-align: left;
+    margin-bottom: 8px;
+}
+
+.counter-text {
+    font-weight: bold;
+}
+
+.counter-numbers, .counter-text, .counter-content:not(.is--hidden) {
+    display: inline;
+    font-size: 14px;
+}
+
+.counter-content {
+    color: #379838;
+    font-weight: bold;
+}
+
 .progress-actions {
     margin: 20px 0 0;
 }
-.progress-container {
-    border: 1px solid #CAD9E0;
-    background: #fff;
-    padding: 20px;
-    -webkit-border-radius: 6px;
-    -moz-border-radius: 6px;
-    border-radius: 6px;
-}
+
 .progress-container .progress {
     /*border-color: #afcae0;*/
     background: #ebf0f3;
-    height: 30px;
+    height: 22px;
 
     margin-bottom: 20px;
     overflow: hidden;

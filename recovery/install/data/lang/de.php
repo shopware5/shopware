@@ -26,16 +26,16 @@ return [
     'menuitem_language-selection' => 'Start',
     'menuitem_requirements' => 'Systemvoraussetzungen',
     'menuitem_database-configuration' => 'Datenbank Konfiguration',
-    'menuitem_database-import' => 'Datenbank Import',
+    'menuitem_database-import' => 'Installation',
     'menuitem_edition' => 'Shopware-Lizenz',
     'menuitem_configuration' => 'Konfiguration',
     'menuitem_finish' => 'Fertig',
     'menuitem_license' => 'Endnutzer-Lizenz',
 
     'version_text' => '<strong>Version:</strong>',
-    'back' => 'Zurück',
-    'forward' => 'Weiter',
-    'start' => 'Starten',
+    'back'         => 'Zurück',
+    'forward'      => 'Weiter',
+    'start'        => 'Starten','start_installation' => 'Installation starten',
 
     'select_language_de' => 'Deutsch',
     'select_language_en' => 'English',
@@ -89,13 +89,13 @@ EOT
     'database-configuration_info' => 'Um Shopware auf Deinem System zu installieren, werden die Zugangsdaten zur Datenbank benötigt. Wenn Du Dir nicht sicher bist, was du eintragen musst, kontaktiere Deinen Administrator / Hoster.', // Enter your database connection - if you are not sure what data must be entered here, please contact your provider.
     'database-configuration-create_new_database' => 'Neue Datenbank anlegen',
 
-    'database-import_header' => 'Datenbank importieren',
-    'database-import_skip_import' => 'Überspringen',
-    'database-import_progress_text' => 'Bitte starten Sie das Datenbank-Update mit einen Klick auf den Button "Starten".<br> <strong>Bestehende Shopware Tabellen werden entfernt.</strong>',
-
+    'database-import_header'            => 'Installation',
+    'database-import_skip_import'       => 'Überspringen',
+    'database-import_progress'          => 'Fortschritt: ',
+    'database-import-hint'              => '<strong>Hinweis: </strong> Falls in der konfigurierten Datenbank bereits Shopware Tabellen bestehen,werden diese durch die Installation / Updateentfernt!',
     'migration_counter_text_migrations' => 'Datenbank-Update wird durchgeführt',
     'migration_counter_text_snippets' => 'Textbausteine werden aktualisiert',
-    'migration_update_success' => 'Datenbank Update wurde erfolgreich durchgeführt',
+    'migration_update_success' => 'Datenbank erfolgreich importiert!',
 
     'edition_header' => 'Wählen Sie die Lizenz unter der Sie Shopware verwenden möchten',
     'edition_info' => 'Wenn Sie eine kommerzielle Shopware Lizenz erworben haben, so wählen Sie bitte die zutreffene Edition aus der Liste und geben Sie Ihren Lizenzschlüssel ein.',

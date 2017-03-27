@@ -12,35 +12,43 @@
     &nbsp;
 </div>
 
-<div class="progress-container">
-    <div class="progress">
-        <div class="progress-bar" style="width: 0%"></div>
-    </div>
+<div class="database-hint">
+    <?= $t->t("database-import-hint"); ?>
+</div>
 
-    <div class="counter-text is--hidden">
-        <strong class="counter-numbers">&nbsp;</strong>
-        <p class="counter-content">
+<div class="progress-container">
+
+    <div class="counter-container is--hidden">
+        <p class="counter-text"><?= $t->t('database-import_progress'); ?></p><p class="counter-numbers">&nbsp;</p>
+
+        <p class="counter-content is--hidden">
             &nbsp;
         </p>
     </div>
 
-    <div class="progress-text">
-        <?= $t->t('database-import_progress_text') ?>
+    <div class="progress">
+        <div class="progress-bar" style="width: 0%"></div>
     </div>
 
-    <div class="progress-actions actions clearfix">
-        <button id="start-ajax" class="btn btn-primary btn-database-right is--right"><?= $t->t('start') ?></button>
+    <div>
+        <div class="install-buttons">
+            <form action="<?= $menuHelper->getNextUrl() ?>">
+                <div class="actions clearfix">
+                    <a href="<?= $menuHelper->getPreviousUrl() ?>" id="back" class="btn btn-default btn-arrow-left"><?= $t->t("back") ?></a>
+                    <?php if ($hasSchema): ?>
+                        <a href="<?= $menuHelper->getNextUrl() ?>" id="skip-import" class="btn btn-default btn-arrow-right"><?= $t->t("database-import_skip_import") ?></a>
+                    <?php endif; ?>
+                    <button type="submit" class="btn btn-primary btn-arrow-right is--right is--hidden"><?= $t->t("forward") ?></button>
+                </div>
+            </form>
+        </div>
+
+        <div class="progress-actions actions clearfix install-buttons is--right">
+            <button id="start-ajax" class="btn btn-primary btn-database-right is--right"><?= $t->t("start_installation") ?></button>
+        </div>
     </div>
 </div>
 
-<form action="<?= $menuHelper->getNextUrl() ?>">
-    <div class="actions clearfix">
-        <a href="<?= $menuHelper->getPreviousUrl() ?>" class="btn btn-default btn-arrow-left"><?= $t->t('back') ?></a>
-        <?php if ($hasSchema): ?>
-        <a href="<?= $menuHelper->getNextUrl() ?>" class="btn btn-default btn-arrow-right"><?= $t->t('database-import_skip_import') ?></a>
-        <?php endif; ?>
-        <button type="submit" class="btn btn-primary btn-arrow-right is--right is--hidden"><?= $t->t('forward') ?></button>
-    </div>
-</form>
+
 
 <?php $app->render('_footer.php') ?>
