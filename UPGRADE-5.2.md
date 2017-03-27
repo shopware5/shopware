@@ -4,6 +4,7 @@ This changelog references changes done in Shopware 5.2 patch versions.
 
 ## 5.2.22
 * Fixed the picture implementation of the `box-emotion.tpl` to load the correct image sizes
+* Added new event `plugin/swAutoSubmit/onChangeSelection` in `themes/Frontend/Responsive/frontend/_public/src/js/jquery.auto-submit.js`
 
 ## 5.2.21
 
