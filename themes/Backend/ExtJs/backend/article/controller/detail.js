@@ -327,7 +327,7 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
         var firstCustomerGroup = me.subApplication.firstCustomerGroup;
 
         priceStore.each(function(price) {
-            if (price.get('customerGroupKey') == firstCustomerGroup.get('key') && price.get('price') > 0) {
+            if (price.get('customerGroupKey') == firstCustomerGroup.get('key') && (price.get('price') > 0 || '{config name="allowFreeArticles"}')) {
                 priceExist = true;
                 return true;
             }

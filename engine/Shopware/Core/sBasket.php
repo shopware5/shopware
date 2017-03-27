@@ -1432,8 +1432,7 @@ class sBasket
         list($queryAdditionalInfo, $quantity) = $this->getAdditionalInfoForUpdateArticle($id, $quantity);
         $queryNewPrice = $this->getPriceForUpdateArticle($id, $quantity, $queryAdditionalInfo);
 
-
-        if (empty($queryNewPrice["price"]) && empty($queryNewPrice["config"])) {
+        if ($queryNewPrice["price"] === null && empty($queryNewPrice["config"])) {
             // If no price is set for default customer group, delete article from basket
             $this->sDeleteArticle($id);
             return false;
@@ -2509,7 +2508,7 @@ class sBasket
         ) ? : array();
 
         // Load prices from default group if article prices are not defined
-        if (!$queryNewPrice["price"]) {
+        if ($queryNewPrice["price"] === null) {
             // In the case no price is available for this customer group, use price of default customer group
             $sql = 'SELECT s_articles_prices.price AS price, taxID, s_core_tax.tax AS tax,
               s_articles_details.id AS articleDetailsID, s_articles_details.articleID,
@@ -2657,10 +2656,6 @@ class sBasket
             ) ? : array();
         }
 
-        if (!$price["price"] && !$article["free"]) {
-            // No price could acquired
-            throw new Enlight_Exception("BASKET-INSERT #01 No price acquired");
-        }
 
         // If configuration article
         if (
