@@ -66,10 +66,20 @@ Ext.define('Shopware.apps.Voucher.controller.Main', {
      */
     init: function() {
         var me = this;
-        me.mainWindow = me.getView('main.Window').create({
-            listStore: me.getStore('List')
-        });
-        me.getStore('List').load();
+
+        if (me.subApplication && me.subApplication.params && Ext.isNumeric(me.subApplication.params.voucherId)) {
+            var voucherController = me.subApplication.getController('Voucher');
+            voucherController.openVoucher(me.subApplication.params.voucherId)
+
+            // me.subApplication.getController creates the same controller multiple time, so the controller listen multiple
+            me.subApplication.removeController(voucherController);
+        } else {
+            me.mainWindow = me.getView('main.Window').create({
+                listStore: me.getStore('List')
+            });
+            me.getStore('List').load();
+        }
+
         me.callParent(arguments);
     }
 });
