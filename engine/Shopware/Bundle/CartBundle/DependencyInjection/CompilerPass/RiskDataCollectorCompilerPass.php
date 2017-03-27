@@ -42,7 +42,7 @@ class RiskDataCollectorCompilerPass implements CompilerPassInterface
     {
         $this->replaceArgumentWithTaggedServices(
             $container,
-            'shopware.cart.risk_management.data_collector_registry',
+            'shopware_cart.risk_management.data_collector_registry',
             'risk_management.data_collector',
             0
         );

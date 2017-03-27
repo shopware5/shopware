@@ -27,8 +27,6 @@ namespace Shopware\Bundle\CartBundle\Infrastructure\Payment;
 
 use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
 use Shopware\Bundle\CartBundle\Domain\Payment\PaymentMethod;
-use Shopware\Bundle\CartBundle\Domain\RiskManagement\Collector\RiskDataCollectorRegistry;
-use Shopware\Bundle\CartBundle\Domain\RiskManagement\Rule\RuleCollection;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class PaymentMethodService
@@ -39,16 +37,16 @@ class PaymentMethodService
     private $gateway;
 
     /**
-     * @var RiskDataCollectorRegistry
+     * @var PaymentRiskManagementFilter
      */
-    private $riskDataCollectorRegistry;
+    private $paymentRiskManagementFilter;
 
     public function __construct(
         PaymentMethodGateway $gateway,
-        RiskDataCollectorRegistry $riskDataCollectorRegistry
+        PaymentRiskManagementFilter $paymentRiskManagementFilter
     ) {
         $this->gateway = $gateway;
-        $this->riskDataCollectorRegistry = $riskDataCollectorRegistry;
+        $this->paymentRiskManagementFilter = $paymentRiskManagementFilter;
     }
 
     /**
@@ -67,22 +65,6 @@ class PaymentMethodService
             return $paymentMethod->isActive();
         });
 
-        $rules = array_map(function (PaymentMethod $paymentMethod) {
-            return $paymentMethod->getRiskManagementRule();
-        }, $actives);
-
-        $dataCollection = $this->riskDataCollectorRegistry->collect($calculatedCart, $context, new RuleCollection(array_filter($rules)));
-
-        return array_filter(
-            $actives,
-            function (PaymentMethod $method) use ($calculatedCart, $context, $dataCollection) {
-                $rule = $method->getRiskManagementRule();
-                if (!$rule) {
-                    return true;
-                }
-
-                return !$rule->match($calculatedCart, $context, $dataCollection);
-            }
-        );
+        return $this->paymentRiskManagementFilter->filter($actives, $calculatedCart, $context);
     }
 }

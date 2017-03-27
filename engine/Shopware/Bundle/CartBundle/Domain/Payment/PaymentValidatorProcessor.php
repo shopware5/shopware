@@ -29,28 +29,27 @@ use Shopware\Bundle\CartBundle\Domain\Cart\CartContainer;
 use Shopware\Bundle\CartBundle\Domain\Cart\CartProcessorInterface;
 use Shopware\Bundle\CartBundle\Domain\Cart\ProcessorCart;
 use Shopware\Bundle\CartBundle\Domain\Error\PaymentBlockedError;
-use Shopware\Bundle\CartBundle\Domain\RiskManagement\Collector\RiskDataCollectorRegistry;
-use Shopware\Bundle\CartBundle\Domain\RiskManagement\Rule\RuleCollection;
+use Shopware\Bundle\CartBundle\Infrastructure\Payment\PaymentRiskManagementFilter;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class PaymentValidatorProcessor implements CartProcessorInterface
 {
     /**
-     * @var RiskDataCollectorRegistry
-     */
-    private $riskDataRegistry;
-
-    /**
      * @var CalculatedCartGenerator
      */
     private $calculatedCartGenerator;
 
+    /**
+     * @var PaymentRiskManagementFilter
+     */
+    private $paymentRiskManagementFilter;
+
     public function __construct(
-        RiskDataCollectorRegistry $riskDataRegistry,
+        PaymentRiskManagementFilter $paymentRiskManagementFilter,
         CalculatedCartGenerator $calculatedCartGenerator
     ) {
-        $this->riskDataRegistry = $riskDataRegistry;
         $this->calculatedCartGenerator = $calculatedCartGenerator;
+        $this->paymentRiskManagementFilter = $paymentRiskManagementFilter;
     }
 
     public function process(
@@ -74,9 +73,9 @@ class PaymentValidatorProcessor implements CartProcessorInterface
             return;
         }
 
-        $data = $this->riskDataRegistry->collect($calculatedCart, $context, new RuleCollection([$rule]));
+        $valid = $this->paymentRiskManagementFilter->filter([$payment], $calculatedCart, $context);
 
-        if (!$rule->match($calculatedCart, $context, $data)) {
+        if (!empty($valid)) {
             return;
         }
 
