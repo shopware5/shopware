@@ -105,6 +105,7 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Changed the integration of `modernizr.js` and added it to the compressed main JavaScript files
 * Changed the script tag for the generated JavaScript file for asynchronous loading, can be changed in theme configuration
 * Changed the inline script for the statistics update to vanilla JavaScript
+* Changed event name in `jquery.ajax-product-navigation.js::getProductState()` from `plugin/swAjaxProductNavigation/onSetProductState` to `plugin/swAjaxProductNavigation/onGetProductState`
 * Change behavior of the smarty rendering in forms fields comment.
     * Only variables that were previously assign to the view are rendered.
     * smarty function calls are no longer executed.
