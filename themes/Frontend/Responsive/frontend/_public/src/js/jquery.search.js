@@ -384,7 +384,7 @@
 
             $.publish('plugin/swSearch/onSearchRequest', [ me, searchTerm ]);
 
-            if (me.lastSearchAjax){
+            if (me.lastSearchAjax) {
                 me.lastSearchAjax.abort();
             }
 

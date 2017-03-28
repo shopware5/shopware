@@ -140,7 +140,6 @@
          * @private
          */
         _ajaxBeforeSend: function(event, request, settings) {
-
             settings = settings || {};
 
             if (settings.hasOwnProperty('ignoreCSRFHeader') || settings.ignoreCSRFHeader === true) {
@@ -169,7 +168,7 @@
             if (settings.url.indexOf('__csrf_token=') !== -1) {
                 return;
             }
-            settings.url += ( settings.url.indexOf('?') >= 0 ? '&' : '?' ) + '__csrf_token=' + this.getToken();
+            settings.url += (settings.url.indexOf('?') >= 0 ? '&' : '?') + '__csrf_token=' + this.getToken();
         },
 
         /**
