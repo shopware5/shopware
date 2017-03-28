@@ -81,6 +81,7 @@
                             {foreach $sPages.numbers as $page}
                                 {if $page.markup}
                                     <a class="paging--link is--active">{$page.value}</a>
+                                    {$sPage=$page.value}
                                 {else}
                                     <a href="{$page.link}" class="paging--link">{$page.value}</a>
                                 {/if}
