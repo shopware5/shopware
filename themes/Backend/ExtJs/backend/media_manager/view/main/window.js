@@ -59,7 +59,8 @@ Ext.define('Shopware.apps.MediaManager.view.main.Window', {
             store: me.albumStore
         }, {
             xtype: 'mediamanager-media-view',
-            mediaStore: me.mediaStore
+            mediaStore: me.mediaStore,
+            settingRecord: this.settingRecord
         }];
 
         me.callParent(arguments);
