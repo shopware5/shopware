@@ -74,95 +74,10 @@ Ext.define('Shopware.apps.MediaManager.controller.Media', {
      * @return void
      */
     init: function() {
-
         var me = this;
 
-        var view            = me.getMediaView();
-        var mediaGrid       = me.getMediaGrid();
-
-        var settingStore    = me.subApplication.getStore('Setting');
-        var settingRecord   = null;
-
-        settingStore.load(function() {
-
-            if(!settingStore.getAt(0)) {
-
-                settingRecord = Ext.create('Shopware.apps.MediaManager.model.Setting');
-
-                /**
-                 * Initialize the record with default values provided by the view and the mediaGrid.
-                 */
-
-                settingRecord.data = {
-                    DisplayType: view.selectedLayout,
-                    ItemsPerPage: view.mediaStore.pageSize,
-                    ThumbnailSize:  mediaGrid.selectedPreviewSize
-                };
-
-                settingStore.add(settingRecord);
-
-            }
-
-            settingRecord = settingStore.getAt(0);
-
-        });
-
-        me.settingRecord = settingRecord;
-
-        var displayTypeValue = me.settingRecord.get('DisplayType');
-
-        /**
-         * Find the item which matches the settingRecord value
-         */
-
-        view.displayTypeBtn.menu.items.each(function(item){
-
-            if(item.layout == displayTypeValue){
-
-                view.displayTypeBtn.setActiveItem(item);
-                return false;
-
-            }
-
-        });
-
-        /**
-         * Fire the onChangeLayout event
-         */
-
-        me.onChangeLayout(null, {
-
-            layout: displayTypeValue
-
-        });
-
-        var thumbnailSize = settingRecord.get('ThumbnailSize');
-
-        mediaGrid.columns[1].setWidth(thumbnailSize);
-        mediaGrid.selectedPreviewSize = thumbnailSize;
-
-        view.imageSize.reset();
-        view.imageSize.setValue(mediaGrid.selectedPreviewSize);
-
-        //ItemsPerPage
-
-        var itemsPerPage = settingRecord.get('ItemsPerPage');
-
-        view.mediaStore.pageSize = itemsPerPage;
-
-        var pageSizeCombo = view.pageSize;
-
-        pageSizeCombo.store.each(function(item){
-
-            if(item.raw.value == itemsPerPage){
-
-                pageSizeCombo.reset();
-                pageSizeCombo.setValue(item.raw.name);
-                return false;
-
-            }
-
-        });
+        me.settingRecord = me.getSettings();
+        me.restoreSettings();
 
         me.control({
             'mediamanager-album-tree': {
@@ -209,17 +124,87 @@ Ext.define('Shopware.apps.MediaManager.controller.Media', {
         me.callParent(arguments);
     },
 
-    onSelectPerPage: function(combo) {
+    getSettings:function() {
+        var me = this,
+            settingStore = me.subApplication.getStore('Setting'),
+            settingRecord = null,
+            grid = me.getMediaGrid(),
+            view = me.getMediaView();
 
+        settingStore.load(function() {
+            if(!settingStore.getAt(0)) {
+                /**
+                 * Initialize the record with default values provided by the view and the mediaGrid.
+                 */
+                settingRecord = Ext.create('Shopware.apps.MediaManager.model.Setting', {
+                    DisplayType: view.selectedLayout,
+                    ItemsPerPage: view.mediaStore.pageSize,
+                    ThumbnailSize:  grid.selectedPreviewSize
+                });
+                settingStore.add(settingRecord);
+            }
+        });
+
+        return settingStore.getAt(0);
+    },
+
+    restoreSettings: function() {
+        var me = this,
+            view = me.getMediaView(),
+            grid = me.getMediaGrid(),
+            displayTypeValue = me.settingRecord.get('DisplayType'),
+            pageSizeCombo = view.pageSize,
+            thumbnailSize = me.settingRecord.get('ThumbnailSize'),
+            itemsPerPage = me.settingRecord.get('ItemsPerPage');
+
+        view.mediaStore.pageSize = itemsPerPage;
+
+        /**
+         * Find the item which matches the settingRecord value
+         */
+        view.displayTypeBtn.menu.items.each(function(item) {
+            if(item.layout == displayTypeValue) {
+                view.displayTypeBtn.setActiveItem(item);
+
+                return false;
+            }
+        });
+
+        /**
+         * Fire the onChangeLayout event
+         */
+
+        me.onChangeLayout(null, {
+            layout: displayTypeValue
+        });
+
+        grid.columns[1].setWidth(thumbnailSize+10);
+        grid.selectedPreviewSize = thumbnailSize;
+
+        view.imageSize.reset();
+        view.imageSize.setValue(grid.selectedPreviewSize);
+
+        // ItemsPerPage
+        pageSizeCombo.store.each(function(item) {
+            if(item.raw.value == itemsPerPage) {
+                pageSizeCombo.reset();
+                pageSizeCombo.setValue(item.raw.name);
+
+                return false;
+            }
+        });
+    },
+
+    onSelectPerPage: function(combo) {
         var me = this,
             settingRecord = me.settingRecord;
 
         settingRecord.set({
             'ItemsPerPage': parseInt(combo.getValue())
         });
-
         settingRecord.save();
     },
+
     moveMedias: function(view, medias) {
         var me = this;
 
@@ -233,7 +218,6 @@ Ext.define('Shopware.apps.MediaManager.controller.Media', {
      * Reloads the store to refresh the data view.
      */
     onReload: function() {
-
         var me = this, validTypes = me.subApplication.validTypes,
         store = me.getStore('Media');
 
@@ -529,7 +513,6 @@ Ext.define('Shopware.apps.MediaManager.controller.Media', {
      * @returns { Void }
      */
     onChangeLayout: function(button, item) {
-
         var me = this, view = me.getMediaView();
 
         view.selectedLayout = item.layout;
@@ -541,7 +524,6 @@ Ext.define('Shopware.apps.MediaManager.controller.Media', {
         });
 
         me.settingRecord.save();
-
     },
 
     /**
