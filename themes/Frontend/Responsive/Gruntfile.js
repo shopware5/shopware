@@ -91,6 +91,18 @@ module.exports = function (grunt) {
                     flatten: true
                 }]
             },
+            'flatpickr': {
+                files: [{
+                    expand: true,
+                    src: [
+                        nodeDir + '/flatpickr/dist/flatpickr.min.js',
+                        nodeDir + '/flatpickr/LICENSE.md',
+                        nodeDir + '/flatpickr/README.md'
+                    ],
+                    dest: vendorDir + '/js/flatpickr',
+                    flatten: true
+                }]
+            },
             'open-sans-fontface': {
                 files: [{
                     expand: true,

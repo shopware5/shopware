@@ -56,6 +56,7 @@ class Theme extends \Shopware\Components\Theme
         'vendors/js/jquery.transit/jquery.transit.js',
         'vendors/js/jquery.event.move/jquery.event.move.js',
         'vendors/js/jquery.event.swipe/jquery.event.swipe.js',
+        'vendors/js/flatpickr/flatpickr.min.js',
 
         // Shopware specific plugins
         'src/js/jquery.ie-fixes.js',
@@ -107,6 +108,7 @@ class Theme extends \Shopware\Components\Theme
         'src/js/jquery.panel-auto-resizer.js',
         'src/js/jquery.address-selection.js',
         'src/js/jquery.address-editor.js',
+        'src/js/jquery.datepicker.js',
         'src/js/jquery.cookie-permission.js',
         'src/js/jquery.shopware-responsive.js'
     ];
