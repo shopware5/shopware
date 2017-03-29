@@ -47,15 +47,18 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
     createInfoPanel: true,
     createDeleteButton: true,
     createMediaQuantitySelection: true,
+    /**
+     * Button section
+     */
     deleteBtn: null,
+    displayTypeBtn: null,
     selectedLayout: 'grid',
-    width: 1120,
-
     snippets: {
         noMediaFound: '{s name=noMediaFound}No Media found{/s}',
         uploadDataDragDrop: '{s name=uploadDataDragDrop}Upload your Data via <strong>Drag & Drop</strong> here{/s}',
         noAdditionalInfo: '{s name=noAdditionalInfo}No additional informations found{/s}',
         moreInfoTitle:'{s name=moreInfoTitle}More information{/s}',
+        previewSize: '{s name=previewSizeFieldLabel}Preview size{/s}',
         mediaInfo: {
             name: '{s name=mediaInfo/name}Name:{/s}',
             uploadedon: '{s name=mediaInfo/uploadedOn}Uploaded on:{/s}',
@@ -169,7 +172,7 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
                 // If the type is image, then show the image
                 '<tpl if="type == &quot;IMAGE&quot;">',
                 '<div class="thumb">',
-                    '<div class="inner-thumb"><img src="{thumbnail}?{timestamp}" title="{name}" /></div>',
+                    '<div class="inner-thumb"><img src="{thumbnail}" title="{name}" /></div>',
                 '</div>',
                 '</tpl>',
 
@@ -230,25 +233,12 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
                 scope: me
             },
             'deselect': {
-                fn: Ext.bind(me.lockButtons, me),
+                fn: me.onLockDeleteButton,
                 scope: me
             }
         });
 
         return me.dataView;
-    },
-
-    /**
-     * Locks the delete and replace button
-     *
-     * @param { Ext.selection.DataViewModel } rowModel
-     * @return void
-     */
-    lockButtons: function(rowModel) {
-        var me = this;
-
-        me.onLockDeleteButton(rowModel);
-        me.lockReplaceMediaButton(rowModel);
     },
 
     /**
@@ -291,7 +281,7 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
                     // If the type is image, then show the image
                     '<tpl if="type == &quot;IMAGE&quot;">',
                     '<div class="thumb">',
-                        '<div class="inner-thumb"><img src="{thumbnail}?{timestamp}" title="{name}" /></div>',
+                        '<div class="inner-thumb"><img src="{thumbnail}" title="{name}" /></div>',
                     '</div>',
                     '</tpl>',
 
@@ -436,6 +426,7 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
                 padding: '6 0 0',
                 fileInputConfig: {
                     buttonOnly: true,
+                    width: 190,
                     buttonText : me.snippets.fieldsText.addButton,
                     buttonConfig : {
                         iconCls:'sprite-plus-circle'
@@ -445,6 +436,7 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
         } else {
             me.addBtn = Ext.create('Ext.form.field.File', {
                 buttonOnly: true,
+                width: 190,
                 buttonText : me.snippets.fieldsText.addButton,
                 listeners: {
                     scope: this,
@@ -466,15 +458,6 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
         }
         /* {/if} */
 
-        /*{if {acl_is_allowed privilege=update}}*/
-            me.replaceButton = Ext.create('Ext.button.Button', {
-                text: '{s name="replace/media/button/text"}{/s}',
-                iconCls:'sprite-blue-document-convert',
-                disabled: true,
-                handler: Ext.bind(me.onClickReplaceButton, me)
-            });
-        /* {/if} */
-
         var searchField = Ext.create('Ext.form.field.Text', {
             emptyText: me.snippets.fieldsText.searchField,
             cls: 'searchfield',
@@ -488,10 +471,7 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
             ui: 'shopware-ui',
             items: [
         /* {if {acl_is_allowed privilege=create}} */
-                this.addBtn,
-        /* {/if} */
-        /*{if {acl_is_allowed privilege=update}}*/
-                me.replaceButton
+                this.addBtn
         /* {/if} */
             ]
         });
@@ -511,9 +491,13 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
         }
         /* {/if} */
 
-        toolbar.add({
+        /**
+         * Initialize the display type button
+         */
+
+        me.displayTypeBtn = Ext.create('Ext.button.Cycle',{
+
             showText: true,
-            xtype: 'cycle',
             prependText: '{s name=toolbar/view}Display as{/s} ',
             action: 'mediamanager-media-view-layout',
             menu: {
@@ -530,6 +514,8 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
             }
         });
 
+        toolbar.add(me.displayTypeBtn);
+
         toolbar.add(
             '->',
             searchField,
@@ -537,27 +523,6 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
         );
 
         return toolbar;
-    },
-
-    /**
-     * Event handler for the replace button. Open a new replace media window.
-     */
-    onClickReplaceButton: function() {
-        var me = this,
-            selection = me.dataView.getSelectionModel().getSelection(),
-            replaceWindow, grid;
-
-        if (me.selectedLayout == 'table') {
-            grid = me.down('mediamanager-media-grid');
-            selection = grid.selModel.getSelection();
-        }
-
-        replaceWindow = Ext.create('Shopware.apps.MediaManager.view.replace.Window', {
-            selectedMedias: selection,
-            mediaManager: me
-        });
-
-        replaceWindow.show();
     },
 
     /**
@@ -573,6 +538,7 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
             labelWidth: 110,
             cls: Ext.baseCSSPrefix + 'page-size',
             queryMode: 'local',
+            action: 'perPageComboBox',
             width: 210,
             listeners: {
                 scope: me,
@@ -594,6 +560,7 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
             displayField: 'name',
             valueField: 'value'
         });
+
         pageSize.setValue(me.mediaStore.pageSize + '');
 
         var toolbar = Ext.create('Ext.toolbar.Paging', {
@@ -604,6 +571,8 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
             toolbar.add('->', pageSize, { xtype: 'tbspacer', width: 6 });
         }
 
+        me.pageSize = pageSize;
+
         // Create the data for the preview image size
         var imageSizeData = [], i = 1;
         for( ; i < 9; i++) {
@@ -613,7 +582,7 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
 
         // Preview image size selection, especially for the list view
         me.imageSize = Ext.create('Ext.form.field.ComboBox', {
-            fieldLabel: 'Preview-Größe',
+            fieldLabel: me.snippets.previewSize,
             queryMode: 'local',
             labelWidth: 90,
             width: 190,
@@ -653,37 +622,9 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
             record = rowModel.getLastSelected();
 
         me.onUnlockDeleteButton();
-        me.unlockReplaceMediaButton();
-
-        if (me.infoView) {
+        if(me.infoView) {
             me.infoView.update(record.data);
             me.attributeButton.setRecord(record);
-        }
-    },
-
-    /**
-     * Unlocks the replace media button
-     *
-     * @return void
-     */
-    unlockReplaceMediaButton: function() {
-        var me = this;
-
-        if (me.replaceButton) {
-            me.replaceButton.setDisabled(false);
-        }
-    },
-
-    /**
-     * Locks the replace medie button
-     *
-     * @param rowModel
-     */
-    lockReplaceMediaButton: function(rowModel) {
-        var me = this;
-
-        if (me.replaceButton) {
-            me.replaceButton.setDisabled(!rowModel.getSelection().length);
         }
     },
 
@@ -723,6 +664,7 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
      * @return void
      */
     onChangeMediaQuantity: function(combo, records) {
+
         var record = records[0],
             me = this;
 
