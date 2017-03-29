@@ -890,7 +890,7 @@ class sArticles
     }
 
     /**
-     * @param $categoryId
+     * @param int $categoryId
      * @param Enlight_Controller_Request_RequestHttp $request
      * @return string
      */
@@ -898,11 +898,14 @@ class sArticles
     {
         $params = $this->queryAliasMapper->replaceLongParams($request->getParams());
 
-        unset($params['ordernumber']);
-        unset($params['categoryId']);
-        unset($params['module']);
-        unset($params['controller']);
-        unset($params['action']);
+        unset(
+            $params['__csrf_token'],
+            $params['ordernumber'],
+            $params['categoryId'],
+            $params['module'],
+            $params['controller'],
+            $params['action']
+        );
 
         $params = array_merge(
             $params,
@@ -913,7 +916,7 @@ class sArticles
         );
 
         $queryPrams = http_build_query($params, null, '&');
-        $listingLink = $this->config->get('sBASEFILE') . "?" . $queryPrams;
+        $listingLink = $this->config->get('sBASEFILE') . '?' . $queryPrams;
 
         return $listingLink;
     }
