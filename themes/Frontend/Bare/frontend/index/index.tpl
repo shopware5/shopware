@@ -217,6 +217,8 @@
         //]]>
     </script>
 
+    {include file="frontend/index/datepicker-config.tpl"}
+
     {if $theme.additionalJsLibraries}
         {$theme.additionalJsLibraries}
     {/if}
