@@ -71,36 +71,35 @@ class BannerComponentHandler implements ComponentHandlerInterface
      */
     public function import(array $element)
     {
-        if (!array_key_exists('data', $element)) {
+        if (!isset($element['data'], $element['assets'])) {
             return $element;
         }
 
-        $element['data'] = $this->processElementData($element['data']);
-
-        return $element;
+        return $this->processElementData($element);
     }
 
     public function export(array $element)
     {
-        if (!array_key_exists('data', $element)) {
+        if (!isset($element['data'])) {
             return $element;
         }
 
-        $element = $this->prepareElementExport($element);
-
-        return $element;
+        return $this->prepareElementExport($element);
     }
 
     /**
-     * @param array $data
+     * @param array $element
      *
      * @return array
      */
-    private function processElementData(array $data)
+    private function processElementData(array $element)
     {
+        $data = $element['data'];
+        $assets = $element['assets'];
+
         foreach ($data as &$elementData) {
             if ($elementData['key'] === self::ELEMENT_DATA_KEY) {
-                $assetPath = $elementData['value'];
+                $assetPath = $assets[$elementData['value']];
 
                 $media = $this->doAssetImport($assetPath);
 
@@ -109,8 +108,12 @@ class BannerComponentHandler implements ComponentHandlerInterface
                 break;
             }
         }
+        unset($elementData);
 
-        return $data;
+        $element['data'] = $data;
+        unset($element['assets']);
+
+        return $element;
     }
 
     /**

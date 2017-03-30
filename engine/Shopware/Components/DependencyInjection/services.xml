@@ -608,6 +608,12 @@
             <argument>%kernel.root_dir%</argument>
         </service>
 
+        <service id="shopware.emotion.emotion_importer" class="Shopware\Components\Emotion\EmotionImporter">
+            <argument type="service" id="shopware.api.emotionpreset" />
+            <argument type="service" id="file_system" />
+            <argument type="service" id="dbal_connection" />
+        </service>
+
         <service id="shopware.emotion.preset_loader" class="Shopware\Components\Emotion\Preset\PresetLoader">
             <argument type="service" id="models" />
             <argument type="service" id="shopware_media.media_service" />

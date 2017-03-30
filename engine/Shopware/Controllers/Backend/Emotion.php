@@ -30,6 +30,7 @@ use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Emotion\Emotion;
 use Shopware\Models\Emotion\Library\Field;
 use Shopware\Models\Shop\Shop;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_ExtJs implements CSRFWhitelistAware
 {
@@ -84,8 +85,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
             ->resetQueryPart('groupBy')
             ->resetQueryPart('orderBy')
             ->setFirstResult(0)
-            ->setMaxResults(1)
-        ;
+            ->setMaxResults(1);
 
         $statement = $query->execute();
         $count = $statement->fetch(PDO::FETCH_COLUMN);
@@ -188,7 +188,8 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
 
                 if ($entry['name'] === 'file' ||
                     $entry['name'] === 'image' ||
-                    $entry['name'] === 'fallback_picture') {
+                    $entry['name'] === 'fallback_picture'
+                ) {
                     $value = $mediaService->getUrl($value);
                 }
 
@@ -234,6 +235,9 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
         ]);
     }
 
+    /**
+     * Exports emotion data and assets to zip archive
+     */
     public function exportAction()
     {
         $this->Front()->Plugins()->ViewRenderer()->setNoRender();
@@ -267,9 +271,91 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
             ->sendHeaders();
 
         readfile($exportFilePath);
-        unlink($exportFilePath);
+        $this->container->get('file_system')->remove($exportFilePath);
 
         exit;
+    }
+
+    /**
+     * Uploads emotion zip archive to shopware file system
+     *
+     * @throws Exception
+     */
+    public function uploadAction()
+    {
+        /** @var $file UploadedFile */
+        $file = Symfony\Component\HttpFoundation\Request::createFromGlobals()->files->get('emotionfile');
+        $fileSystem = $this->container->get('file_system');
+
+        if ($file->getClientMimeType() !== 'application/zip' && strtolower($file->getClientOriginalExtension()) !== 'zip') {
+            $name = $file->getClientOriginalName();
+
+            $fileSystem->remove($file->getPathname());
+
+            throw new Exception(sprintf(
+                'Uploaded file %s is no zip file',
+                $name
+            ));
+        }
+        $downloadPath = $this->container->getParameter('kernel.root_dir') . '/files/downloads/';
+
+        if (!is_writable($downloadPath)) {
+            $this->View()->assign([
+                'success' => false,
+                'error' => sprintf("Target Directory %s isn't writable", $downloadPath),
+            ]);
+
+            return;
+        }
+
+        $fileSystem->copy($file, $downloadPath . $file->getClientOriginalName());
+        $fileSystem->remove($file->getPathname());
+
+        $this->View()->assign([
+            'success' => true,
+            'filePath' => $downloadPath . $file->getClientOriginalName(),
+        ]);
+    }
+
+    /**
+     * Execute emotion import on uploaded zip archive.
+     */
+    public function importAction()
+    {
+        $filePath = $this->Request()->get('filePath');
+
+        $emotionImporter = $this->container->get('shopware.emotion.emotion_importer');
+        $preset = $emotionImporter->import($filePath);
+
+        $this->View()->assign([
+            'success' => true,
+            'presetId' => $preset->getId(),
+            'presetData' => $preset->getPresetData(),
+        ]);
+    }
+
+    /**
+     * Execute cleanup on imported emotion files.
+     */
+    public function afterImportAction()
+    {
+        $filePath = $this->Request()->get('filePath');
+        $presetId = $this->Request()->get('presetId');
+
+        if (!$filePath) {
+            $this->View()->assign([
+                'success' => false,
+            ]);
+
+            return;
+        }
+
+        $emotionImporter = $this->container->get('shopware.emotion.emotion_importer');
+        $emotionImporter->cleanupImport($filePath, $presetId);
+
+        $this->View()->assign([
+            'success' => true,
+        ]);
     }
 
     /**

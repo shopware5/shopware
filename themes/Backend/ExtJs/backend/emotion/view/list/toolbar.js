@@ -50,7 +50,7 @@ Ext.define('Shopware.apps.Emotion.view.list.Toolbar', {
         var me = this;
 
         me.searchField = Ext.create('Ext.form.field.Text', {
-            emptyText: '{s name=toolbar/search_emotion}Search emotion...{/s}',
+            emptyText: '{s name=toolbar/search_emotion}{/s}',
             cls: 'searchfield',
             width: 200,
             enableKeyEvents:true,
@@ -62,8 +62,22 @@ Ext.define('Shopware.apps.Emotion.view.list.Toolbar', {
             }
         });
 
+        me.filefield = Ext.create('Ext.form.field.File', {
+            name: 'emotionfile',
+            buttonOnly: true,
+            buttonConfig : {
+                iconCls: 'sprite-document-import'
+            },
+            buttonText: '{s name=toolbar/import_emotion}{/s}',
+            listeners: {
+                change: function(field, newValue) {
+                    me.fireEvent('uploadEmotion', me, field, newValue);
+                }
+            }
+        });
+
         me.items = [{
-            text: '{s name=toolbar/add_emotion}Add emotion{/s}',
+            text: '{s name=toolbar/add_emotion}{/s}',
             iconCls: 'sprite-plus-circle',
             action: 'emotion-list-toolbar-add'
         }, {
@@ -71,7 +85,14 @@ Ext.define('Shopware.apps.Emotion.view.list.Toolbar', {
             iconCls: 'sprite-pin marketing--shopping-worlds',
             action: 'emotion-list-toolbar-add-preset'
         }, {
-            text: '{s name=toolbar/delete_selected_emotion}Delete selected shopping worlds{/s}',
+            xtype: 'form',
+            bodyStyle: 'background-color: #ebedef; padding: 5px 0 0 0;',
+            border: false,
+            items: [
+                me.filefield
+            ]
+        }, {
+            text: '{s name=toolbar/delete_selected_emotion}{/s}',
             iconCls: 'sprite-minus-circle',
             action: 'emotion-list-toolbar-delete',
             disabled: true,
@@ -103,7 +124,14 @@ Ext.define('Shopware.apps.Emotion.view.list.Toolbar', {
              *
              * @event
              */
-             'removeEmotions'
+             'removeEmotions',
+            /**
+             * Event will be fired when user clicks the "import" button
+             *
+             * @event
+             */
+            'uploadEmotion'
+
         );
     }
 

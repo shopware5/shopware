@@ -71,15 +71,16 @@ class BannerSliderComponentHandler implements ComponentHandlerInterface
      */
     public function import(array $element)
     {
-        if (!array_key_exists('data', $element)) {
+        if (!isset($element['data'], $element['assets'])) {
             return $element;
         }
 
-        $element['data'] = $this->processElementData($element['data']);
-
-        return $element;
+        return $this->processElementData($element);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function export(array $element)
     {
         if (!array_key_exists('data', $element)) {
@@ -92,12 +93,15 @@ class BannerSliderComponentHandler implements ComponentHandlerInterface
     }
 
     /**
-     * @param array $data
+     * @param array $element
      *
      * @return array
      */
-    private function processElementData(array $data)
+    private function processElementData(array $element)
     {
+        $data = $element['data'];
+        $assets = $element['assets'];
+
         /** @var array $elementData */
         foreach ($data as &$elementData) {
             if ($elementData['key'] === self::ELEMENT_DATA_KEY) {
@@ -107,7 +111,7 @@ class BannerSliderComponentHandler implements ComponentHandlerInterface
                 }
 
                 foreach ($sliders as $key => &$slide) {
-                    $media = $this->doAssetImport($slide['path']);
+                    $media = $this->doAssetImport($assets[$slide['path']]);
 
                     $slide['path'] = $media->getPath();
                     $slide['mediaId'] = $media->getId();
@@ -118,8 +122,12 @@ class BannerSliderComponentHandler implements ComponentHandlerInterface
                 break;
             }
         }
+        unset($elementData);
 
-        return $data;
+        $element['data'] = $data;
+        unset($element['assets']);
+
+        return $element;
     }
 
     /**
