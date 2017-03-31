@@ -139,7 +139,8 @@ Ext.define('Shopware.apps.MediaManager.controller.Media', {
                 settingRecord = Ext.create('Shopware.apps.MediaManager.model.Setting', {
                     displayType: view.selectedLayout,
                     itemsPerPage: view.mediaStore.pageSize,
-                    thumbnailSize:  grid.selectedPreviewSize
+                    tableThumbnailSize: 16,
+                    gridThumbnailSize: 64
                 });
                 settingStore.add(settingRecord);
             }
@@ -154,10 +155,13 @@ Ext.define('Shopware.apps.MediaManager.controller.Media', {
             grid = me.getMediaGrid(),
             displayTypeValue = me.settingRecord.get('displayType'),
             pageSizeCombo = view.pageSize,
-            thumbnailSize = me.settingRecord.get('thumbnailSize'),
-            itemsPerPage = me.settingRecord.get('itemsPerPage');
+            thumbnailSize = me.settingRecord.get(displayTypeValue + 'ThumbnailSize'),
+            itemsPerPage = me.settingRecord.get('itemsPerPage'),
+            storeData;
 
         view.mediaStore.pageSize = itemsPerPage;
+        view.thumbnailSize = thumbnailSize;
+        view.mediaViewContainer.add(view.createMediaView());
 
         /**
          * Find the item which matches the settingRecord value
@@ -173,12 +177,20 @@ Ext.define('Shopware.apps.MediaManager.controller.Media', {
         /**
          * Fire the onChangeLayout event
          */
-        me.onChangeLayout(null, { layout: displayTypeValue });
+        me.onChangeLayout(null, {
+            layout: displayTypeValue
+        });
 
-        grid.columns[1].setWidth(thumbnailSize+10);
+        grid.columns[1].setWidth(thumbnailSize + 10);
         grid.selectedPreviewSize = thumbnailSize;
 
-        view.imageSize.reset();
+        if (view.hasOwnProperty(displayTypeValue + 'ImageSizes')) {
+            storeData = view[displayTypeValue + 'ImageSizes'];
+
+            view.imageSize.reset();
+            view.imageSize.getStore().loadData(storeData);
+        }
+
         view.imageSize.setValue(grid.selectedPreviewSize);
 
         // ItemsPerPage
@@ -503,23 +515,36 @@ Ext.define('Shopware.apps.MediaManager.controller.Media', {
      * Event listener method which will be fired when the user clicks
      * on the `change layout` button.
      *
-     * The method sets the correct active item and shows / hides the
-     * preview size combobox.
+     * The method sets the correct active item.
      *
      * @param { Ext.button.Button } button - The clicked button
      * @param { Object } item - The configuration of the active layout
      * @returns { Void }
      */
     onChangeLayout: function(button, item) {
-        var me = this, view = me.getMediaView();
+        var me = this,
+            view = me.getMediaView(),
+            grid = me.getMediaGrid(),
+            storeData;
 
         view.selectedLayout = item.layout;
-        view.cardContainer.getLayout().setActiveItem((item.layout === 'grid') ? 0 : 1);
-        view.imageSize[(item.layout === 'grid') ? 'hide' : 'show']();
+        view.thumbnailSize = me.settingRecord.get(view.selectedLayout + 'ThumbnailSize');
 
         me.settingRecord.set({
-            'displayType':item.layout
+            'displayType': item.layout
         });
+
+        if (view.hasOwnProperty(view.selectedLayout + 'ImageSizes')) {
+            storeData = view[view.selectedLayout + 'ImageSizes'];
+
+            view.imageSize.getStore().on('datachanged', function() {
+                view.imageSize.setValue(view.thumbnailSize, false);
+            }, null, { single: true });
+
+            view.imageSize.getStore().loadData(storeData);
+        }
+
+        view.cardContainer.getLayout().setActiveItem((item.layout === 'grid') ? 0 : 1);
 
         me.settingRecord.save();
     },
@@ -553,30 +578,43 @@ Ext.define('Shopware.apps.MediaManager.controller.Media', {
      *          the selected item. Otherwise `void`
      */
     onChangePreviewSize: function(field, newValue, value) {
-
-        var me = this, view = me.getMediaGrid();
+        var me = this,
+            grid = me.getMediaGrid(),
+            view = me.getMediaView(),
+            displayType = me.settingRecord.get('displayType'),
+            iconSize;
 
         // Prevents the first event to re-render the list view
-        if(!value || newValue === value) {
+        if (!value || newValue === value) {
             return false;
         }
 
         // Cast the passed value to a number
-        view.selectedPreviewSize = ~~(1 * newValue);
+        iconSize = ~~(1 * newValue);
 
         me.settingRecord.set({
-            thumbnailSize: view.selectedPreviewSize
+            [displayType + 'ThumbnailSize']: iconSize
         });
 
         me.settingRecord.save();
 
-        // Reload the store and resize the preview column
-        view.getStore().load({
-            callback: function() {
-                // We need to hard-code the preview column
-                view.columns[1].setWidth((view.selectedPreviewSize < 50) ? 50 : view.selectedPreviewSize + 10);
-            }
-        });
+        //Change the thumbnail size for the table view, sadly we need to recreate the view.
+        view.thumbnailSize = iconSize;
+        view.mediaViewContainer.removeAll();
+
+        /* {if {acl_is_allowed privilege=upload}} */
+        view.mediaViewContainer.add(view.createDropZone());
+        /* {/if} */
+
+        view.mediaViewContainer.add(view.createMediaView());
+
+        // 1) Set the icon preview size on the grid
+        // 2) Refresh the view
+        // 3) Resize the first column to fit the new icon size
+        grid.selectedPreviewSize = iconSize;
+        grid.getView().refresh();
+        grid.columns[1].setWidth((iconSize < 50) ? 50 : iconSize + 10);
+
     }
 });
 //{/block}
