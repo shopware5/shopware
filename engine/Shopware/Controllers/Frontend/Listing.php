@@ -235,9 +235,10 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
 
     /**
      * @param array $categoryContent
-     * @param bool  $hasEmotion
+     * @param bool $hasEmotion
      *
      * @return array|bool
+     * @throws \Enlight_Controller_Exception
      */
     private function getRedirectLocation($categoryContent, $hasEmotion)
     {
@@ -252,7 +253,10 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         if (!empty($categoryContent['external'])) {
             $location = $categoryContent['external'];
         } elseif (empty($categoryContent)) {
-            $location = ['controller' => 'index'];
+            throw new \Enlight_Controller_Exception(
+                'Category not found',
+                Enlight_Controller_Exception::Controller_Dispatcher_Controller_Not_Found
+            );
         } elseif ($this->isShopsBaseCategoryPage($categoryContent['id'])) {
             $location = ['controller' => 'index'];
         } elseif ($checkRedirect && $this->get('config')->get('categoryDetailLink')) {
