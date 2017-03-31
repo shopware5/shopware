@@ -98,6 +98,11 @@ class sBasket
      * @var StoreFrontBundle\Service\AdditionalTextServiceInterface
      */
     private $additionalTextService;
+    
+    /**
+     * @var Shopware\Bundle\AttributeBundle\Service\DataPersister
+     */
+    private $attributePersister;
 
     /**
      * Pointer to sSystem object
@@ -119,7 +124,8 @@ class sBasket
         sSystem                                 $systemModule       = null,
 
         StoreFrontBundle\Service\ContextServiceInterface $contextService = null,
-        StoreFrontBundle\Service\AdditionalTextServiceInterface $additionalTextService = null
+        StoreFrontBundle\Service\AdditionalTextServiceInterface $additionalTextService = null,
+        Shopware\Bundle\AttributeBundle\Service\DataPersister $attributePersister = null
     ) {
         $this->db = $db ? : Shopware()->Db();
         $this->eventManager = $eventManager ? : Shopware()->Events();
@@ -132,6 +138,7 @@ class sBasket
 
         $this->contextService = $contextService;
         $this->additionalTextService = $additionalTextService;
+        $this->attributePersister = $attributePersister;
 
         if ($this->contextService == null) {
             $this->contextService = Shopware()->Container()->get('shopware_storefront.context_service');
@@ -139,6 +146,10 @@ class sBasket
 
         if ($this->additionalTextService == null) {
             $this->additionalTextService = Shopware()->Container()->get('shopware_storefront.additional_text_service');
+        }
+
+        if ($this->attributePersister == null) {
+            $this->attributePersister = Shopware()->Container()->get('shopware_attribute.data_persister');
         }
     }
     /**
@@ -1671,13 +1682,17 @@ class sBasket
         }
         $insertId = $this->db->lastInsertId();
 
-        $this->db->insert(
-            's_order_basket_attributes',
-            array(
-                'basketID' => $insertId,
-                'attribute1' => ''
-            )
+        // Create order basket attributes
+        $attributeData = $this->front->Request()->getParam('attributes', []);
+        $attributeData = $this->eventManager->filter(
+            'Shopware_Modules_Basket_AddArticle_FilterOrderBasketAttributes',
+            $attributeData,
+            [
+                'subject'  => $this,
+                'basketId' => $insertId,
+            ]
         );
+        $this->attributePersister->persist($attributeData, 's_order_basket_attributes', $insertId);
 
         $this->sUpdateArticle($insertId, $quantity);
 
