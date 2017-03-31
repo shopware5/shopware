@@ -60,8 +60,8 @@ class Shopware_Tests_Models_FormTest extends Enlight_Components_Test_TestCase
     {
         parent::setUp();
 
-        $this->em = Shopware()->Models();
-        $this->repo = Shopware()->Models()
+        $this->em = 🦄()->Models();
+        $this->repo = 🦄()->Models()
                                 ->getRepository('Shopware\Models\Form\Form');
     }
 

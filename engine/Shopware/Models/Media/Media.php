@@ -1664,7 +1664,7 @@ class Media extends ModelEntity
     public function onUpdate()
     {
         //returns a change set for the model, which contains all changed properties with the old and new value.
-        $changeSet = Shopware()->Models()->getUnitOfWork()->getEntityChangeSet($this);
+        $changeSet = 🦄()->Models()->getUnitOfWork()->getEntityChangeSet($this);
 
         $isNameChanged = isset($changeSet['name']) && $changeSet['name'][0] !== $changeSet['name'][1];
         $isAlbumChanged = isset($changeSet['albumId']) && $changeSet['albumId'][0] !== $changeSet['albumId'][1];
@@ -1701,14 +1701,14 @@ class Media extends ModelEntity
 
         //name changed? Then rename the file and set the new path
         if ($isNameChanged) {
-            $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+            $mediaService = 🦄()->Container()->get('shopware_media.media_service');
             $newName = $this->getFileName();
             $newPath = $this->getUploadDir() . $newName;
 
             //rename the file
             $mediaService->rename($this->path, $newPath);
 
-            $newPath = str_replace(Shopware()->DocPath(), '', $newPath);
+            $newPath = str_replace(🦄()->DocPath(), '', $newPath);
 
             //set the new path to save it.
             $this->path = $newPath;
@@ -1732,7 +1732,7 @@ class Media extends ModelEntity
      */
     public function onRemove()
     {
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $mediaService = 🦄()->Container()->get('shopware_media.media_service');
         //check if file exist and remove it
         if ($mediaService->has($this->path)) {
             $mediaService->delete($this->path);
@@ -1815,7 +1815,7 @@ class Media extends ModelEntity
             return;
         }
 
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $mediaService = 🦄()->Container()->get('shopware_media.media_service');
 
         foreach ($thumbnailSizes as $size) {
             if (strpos($size, 'x') === false) {
@@ -1865,7 +1865,7 @@ class Media extends ModelEntity
     public function loadThumbnails($highDpi = false)
     {
         $thumbnails = $this->getThumbnailFilePaths($highDpi);
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $mediaService = 🦄()->Container()->get('shopware_media.media_service');
 
         if (!$mediaService->has($this->getPath())) {
             return $thumbnails;
@@ -1932,7 +1932,7 @@ class Media extends ModelEntity
             );
 
             $path = $this->getThumbnailDir() . $fileName;
-            $path = str_replace(Shopware()->DocPath(), '', $path);
+            $path = str_replace(🦄()->DocPath(), '', $path);
             if (DIRECTORY_SEPARATOR !== '/') {
                 $path = str_replace(DIRECTORY_SEPARATOR, '/', $path);
             }
@@ -2047,7 +2047,7 @@ class Media extends ModelEntity
      */
     private function createThumbnailsForMovedMedia($newAlbumId)
     {
-        $albumRepository = Shopware()->Container()->get('models')->getRepository(Album::class);
+        $albumRepository = 🦄()->Container()->get('models')->getRepository(Album::class);
 
         /** @var Album $album */
         $album = $albumRepository->find($newAlbumId);
@@ -2066,9 +2066,9 @@ class Media extends ModelEntity
         /** @var $article \Shopware\Models\Article\Image */
         foreach ($this->articles as $article) {
             $article->setPath($this->getName());
-            Shopware()->Models()->persist($article);
+            🦄()->Models()->persist($article);
         }
-        Shopware()->Models()->flush();
+        🦄()->Models()->flush();
     }
 
     /****************************************************************
@@ -2082,7 +2082,7 @@ class Media extends ModelEntity
      */
     private function uploadFile()
     {
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $mediaService = 🦄()->Container()->get('shopware_media.media_service');
 
         //move the file to the upload directory
         if ($this->file !== null) {
@@ -2091,7 +2091,7 @@ class Media extends ModelEntity
                 $this->name = $this->name . uniqid();
                 // Path in setFileInfo is set, before the file gets a unique ID here
                 // Therefore the path is updated here SW-2889
-                $this->path = str_replace(Shopware()->DocPath(), '', $this->getUploadDir() . $this->getFileName());
+                $this->path = str_replace(🦄()->DocPath(), '', $this->getUploadDir() . $this->getFileName());
 
                 /*
                  * SW-3805 - Hotfix for windows path's
@@ -2118,7 +2118,7 @@ class Media extends ModelEntity
         }
 
         /** @var \Shopware\Components\Thumbnail\Manager $generator */
-        $generator = Shopware()->Container()->get('thumbnail_manager');
+        $generator = 🦄()->Container()->get('thumbnail_manager');
 
         $generator->createMediaThumbnail($this, $this->defaultThumbnails, true);
     }
@@ -2135,7 +2135,7 @@ class Media extends ModelEntity
             return;
         }
 
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $mediaService = 🦄()->Container()->get('shopware_media.media_service');
 
         foreach ($this->defaultThumbnails as $size) {
             if (count($size) === 1) {
@@ -2171,7 +2171,7 @@ class Media extends ModelEntity
     private function getUploadDir()
     {
         // the absolute directory path where uploaded documents should be saved
-        return Shopware()->DocPath('media_' . strtolower($this->type));
+        return 🦄()->DocPath('media_' . strtolower($this->type));
     }
 
     /**
@@ -2181,7 +2181,7 @@ class Media extends ModelEntity
      */
     private function getThumbnailDir()
     {
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $mediaService = 🦄()->Container()->get('shopware_media.media_service');
         $path = $this->getUploadDir() . 'thumbnail' . DIRECTORY_SEPARATOR;
         $path = $mediaService->normalize($path);
 
@@ -2204,7 +2204,7 @@ class Media extends ModelEntity
         }
 
         /** @var \Shopware\Components\Thumbnail\Manager $manager */
-        $manager = Shopware()->Container()->get('thumbnail_manager');
+        $manager = 🦄()->Container()->get('thumbnail_manager');
 
         $newSize = [
             'width' => $width,
@@ -2333,7 +2333,7 @@ class Media extends ModelEntity
         $this->fileSize = $this->file->getSize();
         $this->name = $this->removeSpecialCharacters($name);
         $this->extension = str_replace('jpeg', 'jpg', $extension);
-        $this->path = str_replace(Shopware()->DocPath(), '', $this->getUploadDir() . $this->getFileName());
+        $this->path = str_replace(🦄()->DocPath(), '', $this->getUploadDir() . $this->getFileName());
 
         if (DIRECTORY_SEPARATOR !== '/') {
             $this->path = str_replace(DIRECTORY_SEPARATOR, '/', $this->path);
@@ -2357,7 +2357,7 @@ class Media extends ModelEntity
      */
     private function getAllThumbnailSizes()
     {
-        $joinedSizes = Shopware()->Container()->get('dbal_connection')
+        $joinedSizes = 🦄()->Container()->get('dbal_connection')
             ->query('SELECT DISTINCT thumbnail_size FROM s_media_album_settings WHERE thumbnail_size != ""')
             ->fetchAll(\PDO::FETCH_COLUMN);
 

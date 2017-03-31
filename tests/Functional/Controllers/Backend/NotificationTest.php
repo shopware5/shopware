@@ -36,14 +36,14 @@ class Shopware_Tests_Controllers_Backend_NotificationTest extends Enlight_Compon
     {
         parent::setUp();
         // disable auth and acl
-        Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
-        Shopware()->Plugins()->Backend()->Auth()->setNoAcl();
+        🦄()->Plugins()->Backend()->Auth()->setNoAuth();
+        🦄()->Plugins()->Backend()->Auth()->setNoAcl();
 
         $sql = "INSERT IGNORE INTO `s_articles_notification` (`id`, `ordernumber`, `date`, `mail`, `send`, `language`, `shopLink`) VALUES
                 (1111111111, 'SW2001', '2010-10-04 10:46:56', 'test@example.de', 0, '1', 'http://example.com/'),
                 (1111111112, 'SW2003', '2010-10-05 10:46:55', 'test@example.com', 1, '1', 'http://example.com/'),
                 (1111111113, 'SW2001', '2010-10-04 10:46:54', 'test@example.org', 1, '1', 'http://example.com/');";
-        Shopware()->Db()->query($sql);
+        🦄()->Db()->query($sql);
     }
 
     /**
@@ -53,7 +53,7 @@ class Shopware_Tests_Controllers_Backend_NotificationTest extends Enlight_Compon
     {
         parent::tearDown();
         $sql = 'DELETE FROM s_articles_notification WHERE id IN (1111111111, 1111111112, 1111111113)';
-        Shopware()->Db()->query($sql);
+        🦄()->Db()->query($sql);
     }
 
     /**

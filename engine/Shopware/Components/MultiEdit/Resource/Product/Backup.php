@@ -95,7 +95,7 @@ class Backup
      */
     public function setupBackupDir()
     {
-        $this->backupPath = Shopware()->DocPath() . 'files/backup/multi_edit';
+        $this->backupPath = 🦄()->DocPath() . 'files/backup/multi_edit';
 
         $this->backupPath = rtrim($this->backupPath, '/\\') . '/';
 
@@ -129,7 +129,7 @@ class Backup
         $query = $this->getDqlHelper()->getEntityManager()->getRepository('\Shopware\Models\MultiEdit\Backup')->getBackupListQuery($offset, $limit);
         $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
         /** @var \Doctrine\ORM\Tools\Pagination\Paginator $paginator */
-        $paginator = Shopware()->Models()->createPaginator($query);
+        $paginator = 🦄()->Models()->createPaginator($query);
         $totalCount = $paginator->count();
 
         $backups = $paginator->getIterator()->getArrayCopy();

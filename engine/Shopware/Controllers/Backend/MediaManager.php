@@ -96,7 +96,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
      */
     public function getAlbumsAction()
     {
-        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder = 🦄()->Models()->createQueryBuilder();
         $albumId = $this->Request()->getParam('albumId', null);
 
         $builder->select(['album'])
@@ -130,7 +130,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
      */
     public function downloadAction()
     {
-        Shopware()->Plugins()->Controller()->ViewRenderer()->setNoRender();
+        🦄()->Plugins()->Controller()->ViewRenderer()->setNoRender();
         $this->Front()->Plugins()->Json()->setRenderer(false);
 
         $mediaId = $this->Request()->getParam('mediaId');
@@ -144,7 +144,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
 
         $file = $media['path'];
         $tmpFileName = $media['name'] . '.' . $media['extension'];
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $mediaService = 🦄()->Container()->get('shopware_media.media_service');
 
         @set_time_limit(0);
         $response = $this->Response();
@@ -184,7 +184,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
         }
 
         /** @var $repository \Shopware\Models\Media\Repository */
-        $repository = Shopware()->Models()->getRepository(Media::class);
+        $repository = 🦄()->Models()->getRepository(Media::class);
         $query = $repository->getAlbumMediaQuery($albumID, $filter, $order, $offset, $limit, $validTypes);
 
         $paginator = $this->getModelManager()->createPaginator($query);
@@ -277,7 +277,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
             return;
         }
 
-        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder = 🦄()->Models()->createQueryBuilder();
         $builder->select(['media'])
                ->from('Shopware\Models\Media\Media', 'media')
                ->setMaxResults(1);
@@ -293,7 +293,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
         $data = $builder->getQuery()->getArrayResult();
         $data = $data[0];
 
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $mediaService = 🦄()->Container()->get('shopware_media.media_service');
         if ($data['path']) {
             $data['path'] = $mediaService->getUrl($data['path']);
         }
@@ -317,7 +317,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
         $id = $params['id'];
 
         //load the media model
-        $media = Shopware()->Models()->find('Shopware\Models\Media\Media', $id);
+        $media = 🦄()->Models()->find('Shopware\Models\Media\Media', $id);
 
         //check if the media is loaded.
         if ($media === null || empty($media)) {
@@ -328,8 +328,8 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
 
         //try to remove the media and the uploaded files.
         try {
-            Shopware()->Models()->remove($media);
-            Shopware()->Models()->flush();
+            🦄()->Models()->remove($media);
+            🦄()->Models()->flush();
             $this->View()->assign(['success' => true]);
         } catch (\Doctrine\ORM\ORMException $e) {
             $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);
@@ -404,7 +404,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
         $media = new Media();
 
         $albumId = !empty($params['albumID']) ? $params['albumID'] : -10;
-        $album = Shopware()->Models()->find('Shopware\Models\Media\Album', $albumId);
+        $album = 🦄()->Models()->find('Shopware\Models\Media\Album', $albumId);
 
         if (!$album) {
             $this->View()->assign(['success' => false, 'message' => 'Invalid album id passed']);
@@ -416,7 +416,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
         $media->setDescription('');
         $media->setCreated(new DateTime());
 
-        $identity = Shopware()->Container()->get('Auth')->getIdentity();
+        $identity = 🦄()->Container()->get('Auth')->getIdentity();
         if ($identity !== null) {
             $media->setUserId($identity->id);
         } else {
@@ -427,16 +427,16 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
         $media->setFile($file);
 
         try { //persist the model into the model manager
-            Shopware()->Models()->persist($media);
-            Shopware()->Models()->flush();
+            🦄()->Models()->persist($media);
+            🦄()->Models()->flush();
             $data = $this->getMedia($media->getId())->getQuery()->getArrayResult();
 
             if ($media->getType() === Media::TYPE_IMAGE) {
-                $manager = Shopware()->Container()->get('thumbnail_manager');
+                $manager = 🦄()->Container()->get('thumbnail_manager');
                 $manager->createMediaThumbnail($media, [], true);
             }
 
-            $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+            $mediaService = 🦄()->Container()->get('shopware_media.media_service');
             $data[0]['path'] = $mediaService->getUrl($data[0]['path']);
 
             $this->Response()->setHeader('Content-Type', 'text/plain');
@@ -768,7 +768,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
     private function getManager()
     {
         if ($this->manager === null) {
-            $this->manager = Shopware()->Models();
+            $this->manager = 🦄()->Models();
         }
 
         return $this->manager;
@@ -830,10 +830,10 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
                 $size = $size . 'x' . $size;
             }
 
-            $thumbnailDir = Shopware()->DocPath('media_' . strtolower($media['type'])) . 'thumbnail' . DIRECTORY_SEPARATOR;
+            $thumbnailDir = 🦄()->DocPath('media_' . strtolower($media['type'])) . 'thumbnail' . DIRECTORY_SEPARATOR;
             $path = $thumbnailDir . $this->removeSpecialCharacters($media['name']) . '_' . $size . '.' . $media['extension'];
 
-            $path = str_replace(Shopware()->DocPath(), '', $path);
+            $path = str_replace(🦄()->DocPath(), '', $path);
             if (DIRECTORY_SEPARATOR !== '/') {
                 $path = str_replace(DIRECTORY_SEPARATOR, '/', $path);
             }
@@ -869,7 +869,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
      */
     private function getMedia($id)
     {
-        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder = 🦄()->Models()->createQueryBuilder();
 
         return $builder->select(['media'])
                 ->from('Shopware\Models\Media\Media', 'media')
@@ -902,8 +902,8 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
         }
 
         /** @var $album \Shopware\Models\Media\Album */
-        $album = Shopware()->Models()->find('Shopware\Models\Media\Album', $albumId);
-        $repo = Shopware()->Models()->getRepository('Shopware\Models\Media\Settings');
+        $album = 🦄()->Models()->find('Shopware\Models\Media\Album', $albumId);
+        $repo = 🦄()->Models()->getRepository('Shopware\Models\Media\Settings');
         $settings = $repo->findOneBy(['albumId' => $albumId]);
 
         //album can't be founded
@@ -916,9 +916,9 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
         //try to delete the album
         try {
             //save the album id temporary
-            Shopware()->Models()->remove($album);
-            Shopware()->Models()->remove($settings);
-            Shopware()->Models()->flush();
+            🦄()->Models()->remove($album);
+            🦄()->Models()->remove($settings);
+            🦄()->Models()->flush();
 
             $this->View()->assign(['success' => true]);
         } catch (\Doctrine\ORM\ORMException $e) {
@@ -938,7 +938,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
     {
         /* @var $media Shopware\Models\Media\Media */
         if (isset($params['id']) && !empty($params['id']) && $params['id'] > 0) {
-            $media = Shopware()->Models()->find('Shopware\Models\Media\Media', $params['id']);
+            $media = 🦄()->Models()->find('Shopware\Models\Media\Media', $params['id']);
         } else {
             $this->View()->assign(['success' => false, 'message' => 'No valid media Id']);
 
@@ -954,12 +954,12 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
         $oldName = $media->getName();
         $media->setName($params['name']);
         $name = $media->getName();
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $mediaService = 🦄()->Container()->get('shopware_media.media_service');
 
         //check if the name passed and is valid
         if (!empty($name)) {
             $path = 'media/' . strtolower($media->getType()) . '/' . $name . '.' . $media->getExtension();
-            $path = Shopware()->DocPath() . $path;
+            $path = 🦄()->DocPath() . $path;
 
             if ($mediaService->has($path) && $name !== $oldName) {
                 $this->View()->assign(['success' => false, 'message' => 'Name already exist']);
@@ -972,7 +972,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
 
         //check if a new album id is passed and is valid
         if (isset($params['newAlbumID']) && !empty($params['newAlbumID'])) {
-            $album = Shopware()->Container()->get('models')->getRepository(Album::class)->find($params['newAlbumID']);
+            $album = 🦄()->Container()->get('models')->getRepository(Album::class)->find($params['newAlbumID']);
             if ($album) {
                 $media->setAlbum($album);
                 $media->setAlbumId($params['newAlbumID']);
@@ -987,11 +987,11 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
         }
 
         try {
-            Shopware()->Models()->persist($media);
-            Shopware()->Models()->flush();
+            🦄()->Models()->persist($media);
+            🦄()->Models()->flush();
 
             // Additional flush to save changes in postUpdate-Event
-            Shopware()->Models()->flush();
+            🦄()->Models()->flush();
 
             $data = $this->getMedia($media->getId())->getQuery()->getArrayResult();
             $this->View()->assign(['success' => true, 'data' => $data, 'total' => 1]);
@@ -1005,7 +1005,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
      */
     private function createThumbnailsForMovedMedia(Media $media)
     {
-        $albumRepository = Shopware()->Container()->get('models')->getRepository(Album::class);
+        $albumRepository = 🦄()->Container()->get('models')->getRepository(Album::class);
 
         /** @var Album $album */
         $album = $albumRepository->find($media->getAlbumId());
@@ -1052,7 +1052,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
     private function getAlbumNodeProperties(\Shopware\Models\Media\Album $album)
     {
         /** @var $repository \Shopware\Models\Media\Repository */
-        $repository = Shopware()->Models()->getRepository(Media::class);
+        $repository = 🦄()->Models()->getRepository(Media::class);
         $query = $repository->getAlbumMediaQuery($album->getId());
 
         $paginator = $this->getModelManager()->createPaginator($query);

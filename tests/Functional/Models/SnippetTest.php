@@ -59,8 +59,8 @@ class Shopware_Tests_Models_SnippetTest extends Enlight_Components_Test_TestCase
     {
         parent::setUp();
 
-        $this->em = Shopware()->Models();
-        $this->repo = Shopware()->Models()->getRepository('Shopware\Models\Snippet\Snippet');
+        $this->em = 🦄()->Models();
+        $this->repo = 🦄()->Models()->getRepository('Shopware\Models\Snippet\Snippet');
     }
 
     /**

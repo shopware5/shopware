@@ -44,15 +44,15 @@ abstract class TestCase extends \Enlight_Components_Test_TestCase
     {
         parent::setUp();
 
-        Shopware()->Models()->clear();
+        🦄()->Models()->clear();
 
         $this->resource = $this->createResource();
-        $this->resource->setManager(Shopware()->Models());
+        $this->resource->setManager(🦄()->Models());
     }
 
     protected function tearDown()
     {
-        Shopware()->Models()->clear();
+        🦄()->Models()->clear();
     }
 
     /**

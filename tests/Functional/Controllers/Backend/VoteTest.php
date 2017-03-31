@@ -37,8 +37,8 @@ class Shopware_Tests_Controllers_Backend_VoteTest extends Enlight_Components_Tes
         parent::setUp();
 
         // disable auth and acl
-        Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
-        Shopware()->Plugins()->Backend()->Auth()->setNoAcl();
+        🦄()->Plugins()->Backend()->Auth()->setNoAuth();
+        🦄()->Plugins()->Backend()->Auth()->setNoAcl();
     }
 
     /**
@@ -49,13 +49,13 @@ class Shopware_Tests_Controllers_Backend_VoteTest extends Enlight_Components_Tes
     public function testGetVotes()
     {
         $sql = 'DELETE FROM s_articles_vote';
-        Shopware()->Db()->query($sql, []);
+        🦄()->Db()->query($sql, []);
         $sql = "INSERT INTO s_articles_vote (`articleID`, `name`, `headline`, `comment`, `points`, `datum`, `active`, `email`, `answer`, `answer_date`)
                 VALUES ('3', 'Patrick', 'Super!', 'Gutes Produkt!', '4', '2012-03-04 16:30:43', '1', 'test@example.com', '', '')";
-        Shopware()->Db()->query($sql, []);
+        🦄()->Db()->query($sql, []);
 
         $sql = "SELECT * FROM s_articles_vote WHERE articleID = 3 AND name='Patrick'";
-        $data = Shopware()->Db()->fetchRow($sql, []);
+        $data = 🦄()->Db()->fetchRow($sql, []);
 
         /* @var Enlight_Controller_Response_ResponseTestCase */
         $this->dispatch('backend/vote/list');
@@ -106,7 +106,7 @@ class Shopware_Tests_Controllers_Backend_VoteTest extends Enlight_Components_Tes
     public function testAcceptVote($data)
     {
         $sql = 'UPDATE s_articles_vote SET active=0 WHERE id=?';
-        Shopware()->Db()->query($sql, [$data['id']]);
+        🦄()->Db()->query($sql, [$data['id']]);
 
         $data['active'] = 1;
 

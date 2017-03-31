@@ -32,7 +32,7 @@ class sCmsTest extends Enlight_Components_Test_Controller_TestCase
     public function setUp()
     {
         $this->Front()->setRequest($this->Request());
-        $this->module = Shopware()->Modules()->Cms();
+        $this->module = 🦄()->Modules()->Cms();
     }
 
     /**
@@ -46,7 +46,7 @@ class sCmsTest extends Enlight_Components_Test_Controller_TestCase
         // Non-existent id returns false
         $this->assertFalse($this->module->sGetStaticPage(0));
 
-        $pageIds = Shopware()->Db()->fetchCol('SELECT id FROM s_cms_static  LIMIT 10');
+        $pageIds = 🦄()->Db()->fetchCol('SELECT id FROM s_cms_static  LIMIT 10');
 
         foreach ($pageIds as $pageId) {
             $page = $this->module->sGetStaticPage($pageId);

@@ -38,9 +38,9 @@ class Shopware_Controllers_Widgets_Recommendation extends Enlight_Controller_Act
 
     public function init()
     {
-        $this->config = Shopware()->Config();
-        $this->articleModule = Shopware()->Modules()->Articles();
-        $this->marketingModule = Shopware()->Modules()->Marketing();
+        $this->config = 🦄()->Config();
+        $this->articleModule = 🦄()->Modules()->Articles();
+        $this->marketingModule = 🦄()->Modules()->Marketing();
     }
 
     /**

@@ -82,7 +82,7 @@ class Shopware_Controllers_Backend_Overview extends Shopware_Controllers_Backend
             ORDER BY visitors.datum DESC
         ';
 
-        $stmt = Shopware()->Db()->query($sql, [
+        $stmt = 🦄()->Db()->query($sql, [
             'endDate' => $endDate,
             'startDate' => $startDate,
         ]);

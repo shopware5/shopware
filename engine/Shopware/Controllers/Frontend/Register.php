@@ -61,7 +61,7 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
         $this->View()->assign([
             'sTarget' => $sTarget,
             'sTargetAction' => $sTargetAction,
-            'sEsd' => Shopware()->Modules()->Basket()->sCheckForESD(),
+            'sEsd' => 🦄()->Modules()->Basket()->sCheckForESD(),
             'showNoAccount' => $this->Request()->getParam('showNoAccount', false),
             'accountMode' => $this->Request()->getParam('skipLogin'),
         ]);
@@ -190,7 +190,7 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
 
     public function ajaxValidateEmailAction()
     {
-        Shopware()->Plugins()->Controller()->ViewRenderer()->setNoRender();
+        🦄()->Plugins()->Controller()->ViewRenderer()->setNoRender();
 
         $data = $this->getPostData();
         $customerForm = $this->createCustomerForm($data['register']['personal']);
@@ -207,7 +207,7 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
 
     public function ajaxValidatePasswordAction()
     {
-        Shopware()->Plugins()->Controller()->ViewRenderer()->setNoRender();
+        🦄()->Plugins()->Controller()->ViewRenderer()->setNoRender();
 
         $data = $this->getPostData();
         $customerForm = $this->createCustomerForm($data['register']['personal']);
@@ -269,7 +269,7 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
             return false;
         }
 
-        return $this->Request()->getParam('sValidation') || !Shopware()->Modules()->Basket()->sCountBasket();
+        return $this->Request()->getParam('sValidation') || !🦄()->Modules()->Basket()->sCountBasket();
     }
 
     /**
@@ -360,7 +360,7 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
             throw new Enlight_Exception('Invalid customergroup');
         }
 
-        $event = Shopware()->Events()->notifyUntil(
+        $event = 🦄()->Events()->notifyUntil(
             'Shopware_Controllers_Frontend_Register_CustomerGroupRegister',
             ['subject' => $this, 'sValidation' => $customerGroupId]
         );
@@ -424,7 +424,7 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
     {
         $this->front->Request()->setPost('email', $customer->getEmail());
         $this->front->Request()->setPost('passwordMD5', $customer->getPassword());
-        Shopware()->Modules()->Admin()->sLogin(true);
+        🦄()->Modules()->Admin()->sLogin(true);
     }
 
     /**
@@ -504,10 +504,10 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
     private function sendRegistrationMail(Customer $customer)
     {
         try {
-            Shopware()->Modules()->Admin()->sSaveRegisterSendConfirmation($customer->getEmail());
+            🦄()->Modules()->Admin()->sSaveRegisterSendConfirmation($customer->getEmail());
         } catch (\Exception $e) {
             $message = sprintf('Could not send user registration email to address %s', $customer->getEmail());
-            Shopware()->Container()->get('corelogger')->error($message, ['exception' => $e]);
+            🦄()->Container()->get('corelogger')->error($message, ['exception' => $e]);
         }
     }
 }

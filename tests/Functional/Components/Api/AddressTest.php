@@ -120,7 +120,7 @@ class AddressTest extends TestCase
     {
         $newAddressId = $this->testCreateShouldBeSuccessful();
         $address = $this->resource->getOne($newAddressId);
-        $customer = Shopware()->Models()->find('Shopware\Models\Customer\Customer', $address['customer']['id']);
+        $customer = 🦄()->Models()->find('Shopware\Models\Customer\Customer', $address['customer']['id']);
 
         $this->assertNotEquals($newAddressId, $customer->getDefaultBillingAddress()->getId());
 

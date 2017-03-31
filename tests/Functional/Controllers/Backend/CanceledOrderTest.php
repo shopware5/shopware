@@ -51,7 +51,7 @@ class Shopware_Tests_Controllers_Backend_CanceledOrderTest extends Enlight_Compo
                 (:firstSession, 0, 'Warenkorbrabatt', 0, 'SHIPPINGDISCOUNT', 0, 1, -2, -1.68, 19, '2101-09-10 11:50:22', 4, 0, '', 'index', 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:22.0) Gecko/20100101 Firefox/22.0 FirePHP/0.7.2', '', 1);
         ";
 
-        Shopware()->Db()->query($sql, ['firstSession' => self::FIRST_DUMMY_SESSION_ID, 'secondSession' => self::SECOND_DUMMY_SESSION_ID]);
+        🦄()->Db()->query($sql, ['firstSession' => self::FIRST_DUMMY_SESSION_ID, 'secondSession' => self::SECOND_DUMMY_SESSION_ID]);
     }
 
     /**
@@ -66,7 +66,7 @@ class Shopware_Tests_Controllers_Backend_CanceledOrderTest extends Enlight_Compo
             DELETE FROM `s_order_basket` WHERE `sessionID` = :secondSession;
         ';
 
-        Shopware()->Db()->query($sql, ['firstSession' => self::FIRST_DUMMY_SESSION_ID, 'secondSession' => self::SECOND_DUMMY_SESSION_ID]);
+        🦄()->Db()->query($sql, ['firstSession' => self::FIRST_DUMMY_SESSION_ID, 'secondSession' => self::SECOND_DUMMY_SESSION_ID]);
     }
 
     /**
@@ -76,7 +76,7 @@ class Shopware_Tests_Controllers_Backend_CanceledOrderTest extends Enlight_Compo
      */
     public function testCanceledOrderSummary()
     {
-        Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
+        🦄()->Plugins()->Backend()->Auth()->setNoAuth();
 
         $this->dispatch('backend/CanceledOrder/getBasket?fromDate=2101-09-10T00%3A00%3A00&toDate=2101-09-11T00%3A00%3A00');
         $data = $this->View()->getAssign('data');

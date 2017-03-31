@@ -919,8 +919,8 @@ class Customer extends LazyFetchModelEntity
         if (!empty($this->rawPassword)) {
             $this->hashPassword = $this->rawPassword;
         } elseif (!empty($this->password)) {
-            $this->encoderName = Shopware()->PasswordEncoder()->getDefaultPasswordEncoderName();
-            $this->hashPassword = Shopware()->PasswordEncoder()->encodePassword($this->password, $this->encoderName);
+            $this->encoderName = 🦄()->PasswordEncoder()->getDefaultPasswordEncoderName();
+            $this->hashPassword = 🦄()->PasswordEncoder()->encodePassword($this->password, $this->encoderName);
         }
     }
 
@@ -934,8 +934,8 @@ class Customer extends LazyFetchModelEntity
         if (!empty($this->rawPassword)) {
             $this->hashPassword = $this->rawPassword;
         } elseif (!empty($this->password)) {
-            $this->encoderName = Shopware()->PasswordEncoder()->getDefaultPasswordEncoderName();
-            $this->hashPassword = Shopware()->PasswordEncoder()->encodePassword($this->password, $this->encoderName);
+            $this->encoderName = 🦄()->PasswordEncoder()->getDefaultPasswordEncoderName();
+            $this->hashPassword = 🦄()->PasswordEncoder()->encodePassword($this->password, $this->encoderName);
         }
     }
 

@@ -183,12 +183,12 @@ class sArticles
         $translationId = null,
         $customerGroupId = null
     ) {
-        $container = Shopware()->Container();
+        $container = 🦄()->Container();
 
-        $this->category = $category ?: Shopware()->Shop()->getCategory();
+        $this->category = $category ?: 🦄()->Shop()->getCategory();
         $this->categoryId = $this->category->getId();
-        $this->translationId = $translationId ?: (!Shopware()->Shop()->getDefault() ? Shopware()->Shop()->getId() : null);
-        $this->customerGroupId = $customerGroupId ?: ((int) Shopware()->Modules()->System()->sUSERGROUPDATA['id']);
+        $this->translationId = $translationId ?: (!🦄()->Shop()->getDefault() ? 🦄()->Shop()->getId() : null);
+        $this->customerGroupId = $customerGroupId ?: ((int) 🦄()->Modules()->System()->sUSERGROUPDATA['id']);
 
         $this->config = $container->get('config');
         $this->db = $container->get('db');
@@ -420,7 +420,7 @@ class sArticles
      */
     public function sGetArticlesByCategory($categoryId = null, SearchBundle\Criteria $criteria = null)
     {
-        if (Shopware()->Events()->notifyUntil('Shopware_Modules_Articles_sGetArticlesByCategory_Start', [
+        if (🦄()->Events()->notifyUntil('Shopware_Modules_Articles_sGetArticlesByCategory_Start', [
             'subject' => $this,
             'id' => $categoryId,
         ])) {
@@ -429,7 +429,7 @@ class sArticles
 
         $context = $this->contextService->getShopContext();
 
-        $request = Shopware()->Container()->get('front')->Request();
+        $request = 🦄()->Container()->get('front')->Request();
 
         if (!$criteria) {
             $criteria = $this->storeFrontCriteriaFactory->createListingCriteria($request, $context);
@@ -458,15 +458,15 @@ class sArticles
         $id = (int) $id;
         $categoryId = (int) $this->frontController->Request()->getQuery('sCategory');
 
-        $supplierRepository = Shopware()->Models()->getRepository(
+        $supplierRepository = 🦄()->Models()->getRepository(
             'Shopware\Models\Article\Supplier'
         );
         $supplier = $supplierRepository->find($id);
         if (!is_object($supplier)) {
             return [];
         }
-        $supplier = Shopware()->Models()->toArray($supplier);
-        if (!Shopware()->Shop()->getDefault()) {
+        $supplier = 🦄()->Models()->toArray($supplier);
+        if (!🦄()->Shop()->getDefault()) {
             $supplier = $this->sGetTranslation($supplier, $supplier['id'], 'supplier');
         }
         $supplier['link'] = $this->config['sBASEFILE'];
@@ -522,16 +522,16 @@ class sArticles
         $links = [];
 
         foreach ($getSupplier as $supplierKey => $supplierValue) {
-            if (!Shopware()->Shop()->getDefault()) {
+            if (!🦄()->Shop()->getDefault()) {
                 $getSupplier[$supplierKey] = $this->sGetTranslation($supplierValue, $supplierValue['id'], 'supplier');
             }
             if ($supplierValue['image']) {
-                $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+                $mediaService = 🦄()->Container()->get('shopware_media.media_service');
                 $getSupplier[$supplierKey]['image'] = $mediaService->getUrl($supplierValue['image']);
             }
 
             $supplierId = $supplierValue['id'];
-            if ($id !== Shopware()->Shop()->getCategory()->getId()) {
+            if ($id !== 🦄()->Shop()->getCategory()->getId()) {
                 $links[$supplierId] = [
                     'sViewport' => 'cat',
                     'sCategory' => $id,
@@ -547,7 +547,7 @@ class sArticles
             }
         }
 
-        $seoUrls = Shopware()->Container()->get('router')->generateList($links);
+        $seoUrls = 🦄()->Container()->get('router')->generateList($links);
         foreach ($getSupplier as &$supplier) {
             $id = $supplier['id'];
             if (array_key_exists($supplier, $seoUrls)) {
@@ -716,7 +716,7 @@ class sArticles
         $result = $this->searchService->search($criteria, $context);
         $articles = $this->legacyStructConverter->convertListProductStructList($result->getProducts());
 
-        Shopware()->Events()->notify(
+        🦄()->Events()->notify(
             'Shopware_Modules_Articles_GetArticleCharts',
             ['subject' => $this, 'category' => $category, 'articles' => $articles]
         );
@@ -802,8 +802,8 @@ class sArticles
           SELECT unit, description FROM s_core_units WHERE id=?
         ', [$id]);
 
-        if (!empty($unit) && !Shopware()->Shop()->get('skipbackend')) {
-            $sql = "SELECT objectdata FROM s_core_translations WHERE objecttype='config_units' AND objectlanguage=" . Shopware()->Shop()->getId();
+        if (!empty($unit) && !🦄()->Shop()->get('skipbackend')) {
+            $sql = "SELECT objectdata FROM s_core_translations WHERE objecttype='config_units' AND objectlanguage=" . 🦄()->Shop()->getId();
             $translation = $this->db->fetchOne($sql);
             if (!empty($translation)) {
                 $translation = unserialize($translation);
@@ -1127,8 +1127,8 @@ class sArticles
         }
 
         $categoryId = (int) $sCategoryID;
-        if (empty($categoryId) || $categoryId == Shopware()->Shop()->getId()) {
-            $categoryId = Shopware()->Modules()->Categories()->sGetCategoryIdByArticleId($id);
+        if (empty($categoryId) || $categoryId == 🦄()->Shop()->getId()) {
+            $categoryId = 🦄()->Modules()->Categories()->sGetCategoryIdByArticleId($id);
         }
 
         $product = $this->getLegacyProduct(
@@ -1225,13 +1225,13 @@ class sArticles
      */
     public function sGetProductByOrdernumber($ordernumber)
     {
-        if (Shopware()->Events()->notifyUntil('Shopware_Modules_Articles_sGetProductByOrdernumber_Start', ['subject' => $this, 'value' => $ordernumber])) {
+        if (🦄()->Events()->notifyUntil('Shopware_Modules_Articles_sGetProductByOrdernumber_Start', ['subject' => $this, 'value' => $ordernumber])) {
             return false;
         }
 
         $getPromotionResult = $this->getPromotion(null, $ordernumber);
 
-        $getPromotionResult = Shopware()->Events()->filter(
+        $getPromotionResult = 🦄()->Events()->filter(
             'Shopware_Modules_Articles_sGetProductByOrdernumber_FilterResult',
             $getPromotionResult,
             ['subject' => $this, 'value' => $ordernumber]
@@ -1402,7 +1402,7 @@ class sArticles
         //first we convert the passed article id into an integer to prevent sql injections
         $articleId = (int) $sArticleID;
 
-        Shopware()->Events()->notify(
+        🦄()->Events()->notify(
             'Shopware_Modules_Articles_GetArticlePictures_Start',
             ['subject' => $this, 'id' => $articleId]
         );
@@ -1415,7 +1415,7 @@ class sArticles
         }
 
         if ($onlyCover) {
-            $cover = Shopware()->Events()->filter(
+            $cover = 🦄()->Events()->filter(
                 'Shopware_Modules_Articles_GetArticlePictures_FilterResult',
                 $cover,
                 ['subject' => $this, 'id' => $articleId]
@@ -1468,7 +1468,7 @@ class sArticles
             }
         }
 
-        $images = Shopware()->Events()->filter(
+        $images = 🦄()->Events()->filter(
             'Shopware_Modules_Articles_GetArticlePictures_FilterResult',
             $images,
             ['subject' => $this, 'id' => $articleId]
@@ -1617,11 +1617,11 @@ class sArticles
      */
     public function sGetTranslations($data, $object)
     {
-        if (Shopware()->Shop()->get('skipbackend') || empty($data)) {
+        if (🦄()->Shop()->get('skipbackend') || empty($data)) {
             return $data;
         }
-        $language = Shopware()->Shop()->getId();
-        $fallback = Shopware()->Shop()->get('fallback');
+        $language = 🦄()->Shop()->getId();
+        $fallback = 🦄()->Shop()->get('fallback');
         $ids = $this->db->quote(array_keys($data));
 
         switch ($object) {
@@ -1708,12 +1708,12 @@ class sArticles
      */
     public function sGetTranslation($data, $id, $object, $language = null)
     {
-        if (Shopware()->Shop()->get('skipbackend')) {
+        if (🦄()->Shop()->get('skipbackend')) {
             return $data;
         }
         $id = (int) $id;
-        $language = $language ?: Shopware()->Shop()->getId();
-        $fallback = Shopware()->Shop()->get('fallback');
+        $language = $language ?: 🦄()->Shop()->getId();
+        $fallback = 🦄()->Shop()->get('fallback');
 
         switch ($object) {
             case 'article':
@@ -1991,7 +1991,7 @@ class sArticles
     private function getMediaRepository()
     {
         if ($this->mediaRepository === null) {
-            $this->mediaRepository = Shopware()->Models()->getRepository('Shopware\Models\Media\Media');
+            $this->mediaRepository = 🦄()->Models()->getRepository('Shopware\Models\Media\Media');
         }
 
         return $this->mediaRepository;
@@ -2005,7 +2005,7 @@ class sArticles
     private function getArticleRepository()
     {
         if ($this->articleRepository === null) {
-            $this->articleRepository = Shopware()->Models()->getRepository('Shopware\Models\Article\Article');
+            $this->articleRepository = 🦄()->Models()->getRepository('Shopware\Models\Article\Article');
         }
 
         return $this->articleRepository;
@@ -2033,12 +2033,12 @@ class sArticles
         }
 
         /** @var \Shopware\Components\ProductStream\CriteriaFactoryInterface $factory */
-        $factory = Shopware()->Container()->get('shopware_product_stream.criteria_factory');
+        $factory = 🦄()->Container()->get('shopware_product_stream.criteria_factory');
         $criteria = $factory->createCriteria($request, $context);
         $criteria->limit(null);
 
         /** @var \Shopware\Components\ProductStream\RepositoryInterface $streamRepository */
-        $streamRepository = Shopware()->Container()->get('shopware_product_stream.repository');
+        $streamRepository = 🦄()->Container()->get('shopware_product_stream.repository');
         $streamRepository->prepareCriteria($criteria, $streamId);
 
         return $criteria;
@@ -2216,7 +2216,7 @@ class sArticles
     {
         //initial the data array
         $imageData = [];
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $mediaService = 🦄()->Container()->get('shopware_media.media_service');
 
         if (empty($image['path'])) {
             return $imageData;
@@ -2477,7 +2477,7 @@ class sArticles
             $detail .= '&sCategory=' . $categoryId;
         }
 
-        $rewrite = Shopware()->Modules()->Core()->sRewriteLink($detail, $product->getName());
+        $rewrite = 🦄()->Modules()->Core()->sRewriteLink($detail, $product->getName());
 
         if ($addNumber) {
             $rewrite .= strpos($rewrite, '?') !== false ? '&' : '?';

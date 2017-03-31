@@ -42,8 +42,8 @@ class CacheTest extends TestCase
     {
         parent::setUp();
 
-        $httpCacheDir = Shopware()->Container()->getParameter('shopware.httpCache.cache_dir');
-        $templateCacheDir = Shopware()->Container()->getParameter('shopware.template.cacheDir');
+        $httpCacheDir = 🦄()->Container()->getParameter('shopware.httpCache.cache_dir');
+        $templateCacheDir = 🦄()->Container()->getParameter('shopware.template.cacheDir');
 
         @mkdir($httpCacheDir, 0777, true);
         @mkdir($templateCacheDir, 0777, true);
@@ -63,7 +63,7 @@ class CacheTest extends TestCase
     public function createResource()
     {
         $resource = new Cache();
-        $resource->setContainer(Shopware()->Container());
+        $resource->setContainer(🦄()->Container());
 
         return $resource;
     }

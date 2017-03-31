@@ -41,13 +41,13 @@ class Shopware_Components_SimilarShown extends Enlight_Class
     {
         if ($validationTime) {
             $sql = 'DELETE FROM s_articles_similar_shown_ro WHERE init_date <= :validationTime';
-            Shopware()->Db()->query(
+            🦄()->Db()->query(
                 $sql,
                 ['validationTime' => $validationTime->format('Y-m-d 00:00:00')]
             );
         } else {
             $sql = 'DELETE FROM s_articles_similar_shown_ro ';
-            Shopware()->Db()->query($sql);
+            🦄()->Db()->query($sql);
         }
     }
 
@@ -63,11 +63,11 @@ class Shopware_Components_SimilarShown extends Enlight_Class
         $sql = 'SELECT id FROM s_articles ';
 
         if ($limit !== null) {
-            $sql = Shopware()->Db()->limit($sql, $limit, $offset);
+            $sql = 🦄()->Db()->limit($sql, $limit, $offset);
         }
-        $articles = Shopware()->Db()->fetchCol($sql);
+        $articles = 🦄()->Db()->fetchCol($sql);
 
-        $preparedSelect = Shopware()->Db()->prepare('
+        $preparedSelect = 🦄()->Db()->prepare('
             SELECT
                 article1.articleID as article_id,
                 article2.articleID as related_article_id,
@@ -81,7 +81,7 @@ class Shopware_Components_SimilarShown extends Enlight_Class
             GROUP BY article2.articleID
         ');
 
-        $preparedInsert = Shopware()->Db()->prepare('
+        $preparedInsert = 🦄()->Db()->prepare('
             INSERT IGNORE INTO s_articles_similar_shown_ro (article_id, related_article_id, viewed, init_date)
             VALUES (:article_id, :related_article_id, :viewed, :init_date)
         ');
@@ -126,10 +126,10 @@ class Shopware_Components_SimilarShown extends Enlight_Class
             ';
 
         if ($limit !== null) {
-            $sql = Shopware()->Db()->limit($sql, $limit);
+            $sql = 🦄()->Db()->limit($sql, $limit);
         }
 
-        Shopware()->Db()->query($sql, ['validationTime' => $validationTime->format('Y-m-d 00:00:00')]);
+        🦄()->Db()->query($sql, ['validationTime' => $validationTime->format('Y-m-d 00:00:00')]);
     }
 
     /**
@@ -142,7 +142,7 @@ class Shopware_Components_SimilarShown extends Enlight_Class
     public function getSimilarShownValidationTime()
     {
         //get similar shown validation time
-        $interval = Shopware()->Config()->get('similarValidationTime', 10);
+        $interval = 🦄()->Config()->get('similarValidationTime', 10);
 
         //create a new date time object to create the current date subtract the configured date interval.
         $orderTime = new DateTime();
@@ -166,7 +166,7 @@ class Shopware_Components_SimilarShown extends Enlight_Class
             ON DUPLICATE KEY UPDATE viewed = viewed + 1;
         ';
 
-        Shopware()->Db()->query($sql, [
+        🦄()->Db()->query($sql, [
             'articleId' => $articleId,
             'relatedArticleId' => $relatedArticleId,
         ]);

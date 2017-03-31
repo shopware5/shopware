@@ -98,14 +98,14 @@ class ShopwareTests_ShopwareTestsUnitComponentsMyBasicTestClassProxy extends Sho
     
     public function myPublic($bar, $foo = 'bar')
     {
-        return Shopware()->Hooks()->executeHooks(
+        return 🦄()->Hooks()->executeHooks(
             $this, 'myPublic', array('bar'=>$bar, 'foo'=>$foo)
         );
     }
 
     protected function myProtected($bar)
     {
-        return Shopware()->Hooks()->executeHooks(
+        return 🦄()->Hooks()->executeHooks(
             $this, 'myProtected', array('bar'=>$bar)
         );
     }
@@ -135,7 +135,7 @@ class ShopwareTests_ShopwareTestsUnitComponentsMyReferenceTestClassProxy extends
     
     public function myPublic(&$bar, $foo)
     {
-        return Shopware()->Hooks()->executeHooks(
+        return 🦄()->Hooks()->executeHooks(
             $this, 'myPublic', array('bar'=>&$bar, 'foo'=>$foo)
         );
     }

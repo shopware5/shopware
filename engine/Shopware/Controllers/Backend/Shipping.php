@@ -173,7 +173,7 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
             $this->View()->assign(['success' => false, 'errorMsg' => 'No ID given to delete']);
         }
         try {
-            $costsModel = Shopware()->Models()->find('Shopware\Models\Dispatch\ShippingCost', $costsId);
+            $costsModel = 🦄()->Models()->find('Shopware\Models\Dispatch\ShippingCost', $costsId);
             $this->getManager()->remove($costsModel);
             $this->getManager()->flush();
             $this->View()->assign(['success' => true]);
@@ -276,7 +276,7 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
             return;
         }
 
-        $dispatch = Shopware()->Models()->find("Shopware\Models\Dispatch\Dispatch", $dispatchId);
+        $dispatch = 🦄()->Models()->find("Shopware\Models\Dispatch\Dispatch", $dispatchId);
         if (!($dispatch instanceof \Shopware\Models\Dispatch\Dispatch)) {
             $this->View()->assign(['success' => false, 'errorMsg' => 'No valid dispatch ID.']);
 
@@ -379,7 +379,7 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
      */
     protected function getManager()
     {
-        return Shopware()->Models();
+        return 🦄()->Models();
     }
 
     /**
@@ -389,7 +389,7 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
      */
     protected function getRepository()
     {
-        return Shopware()->Models()->getRepository('Shopware\Models\Dispatch\Dispatch');
+        return 🦄()->Models()->getRepository('Shopware\Models\Dispatch\Dispatch');
     }
 
     /**
@@ -401,7 +401,7 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
      */
     protected function initAcl()
     {
-        $namespace = Shopware()->Snippets()->getNamespace('backend/shipping/controller');
+        $namespace = 🦄()->Snippets()->getNamespace('backend/shipping/controller');
         // read
         $this->addAclPermission('getCostsMatrixAction', 'read', $namespace->get('no_list_rights', 'Read access denied.'));
         $this->addAclPermission('getCountriesAction', 'read', $namespace->get('no_list_rights', 'Read access denied.'));
@@ -574,7 +574,7 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
         /** @var Shopware\Models\Dispatch\Dispatch[] $result */
         $result = $builder->getResult();
 
-        $modelManager = Shopware()->Container()->get('models');
+        $modelManager = 🦄()->Container()->get('models');
 
         /** @var Shopware\Models\Dispatch\Dispatch $dispatch */
         foreach ($result as $dispatch) {

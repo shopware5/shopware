@@ -46,10 +46,10 @@ class Shopware_Controllers_Backend_Export extends Enlight_Controller_Action impl
      */
     public function init()
     {
-        Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
-        Shopware()->Plugins()->Controller()->ViewRenderer()->setNoRender();
+        🦄()->Plugins()->Backend()->Auth()->setNoAuth();
+        🦄()->Plugins()->Controller()->ViewRenderer()->setNoRender();
         $this->Front()->setParam('disableOutputBuffering', true);
-        $this->export = Shopware()->Modules()->Export();
+        $this->export = 🦄()->Modules()->Export();
     }
 
     /**
@@ -62,7 +62,7 @@ class Shopware_Controllers_Backend_Export extends Enlight_Controller_Action impl
         $this->prepareExport();
         $this->sendHeaders();
 
-        $productFeed = Shopware()->Models()->getRepository('\Shopware\Models\ProductFeed\ProductFeed')->find((int) $this->Request()->feedID);
+        $productFeed = 🦄()->Models()->getRepository('\Shopware\Models\ProductFeed\ProductFeed')->find((int) $this->Request()->feedID);
 
         // Live generation
         if ($productFeed->getInterval() === 0) {
@@ -91,8 +91,8 @@ class Shopware_Controllers_Backend_Export extends Enlight_Controller_Action impl
 
             // update last refresh
             $productFeed->setCacheRefreshed('now');
-            Shopware()->Models()->persist($productFeed);
-            Shopware()->Models()->flush($productFeed);
+            🦄()->Models()->persist($productFeed);
+            🦄()->Models()->flush($productFeed);
         }
 
         if (!file_exists($filePath)) {
@@ -138,7 +138,7 @@ class Shopware_Controllers_Backend_Export extends Enlight_Controller_Action impl
      */
     private function prepareExport()
     {
-        $this->export->sSYSTEM = Shopware()->System();
+        $this->export->sSYSTEM = 🦄()->System();
         $this->export->sFeedID = (int) $this->Request()->feedID;
         $this->export->sHash = $this->Request()->hash;
 

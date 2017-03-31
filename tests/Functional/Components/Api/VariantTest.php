@@ -54,11 +54,11 @@ class VariantTest extends TestCase
     {
         parent::setUp();
 
-        Shopware()->Models()->clear();
+        🦄()->Models()->clear();
 
         $this->resourceArticle = new Article();
-        $this->resourceArticle->setAcl(Shopware()->Acl());
-        $this->resourceArticle->setManager(Shopware()->Models());
+        $this->resourceArticle->setAcl(🦄()->Acl());
+        $this->resourceArticle->setManager(🦄()->Models());
     }
 
     /**
@@ -498,7 +498,7 @@ class VariantTest extends TestCase
         $configuratorSet = $this->getSimpleConfiguratorSet();
         $data['configuratorSet'] = $configuratorSet;
         $article = $this->resourceArticle->create($data);
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $mediaService = 🦄()->Container()->get('shopware_media.media_service');
 
         $create = $this->getSimpleVariantData();
         $create['articleId'] = $article->getId();
@@ -532,7 +532,7 @@ class VariantTest extends TestCase
 
             $this->assertCount(4, $media->getThumbnails());
             foreach ($media->getThumbnails() as $thumbnail) {
-                $this->assertTrue($mediaService->has(Shopware()->DocPath() . $thumbnail));
+                $this->assertTrue($mediaService->has(🦄()->DocPath() . $thumbnail));
             }
 
             $this->assertCount(1, $image->getMappings(), 'No image mapping created!');
@@ -767,7 +767,7 @@ class VariantTest extends TestCase
 
     private function getSimpleMedia($limit = 5, $offset = 0)
     {
-        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder = 🦄()->Models()->createQueryBuilder();
         $builder->select('media.id  as mediaId')
             ->from('Shopware\Models\Media\Media', 'media')
             ->where('media.albumId = -1')
@@ -779,7 +779,7 @@ class VariantTest extends TestCase
 
     private function getRandomId($table)
     {
-        return Shopware()->Db()->fetchOne('SELECT id FROM ' . $table . ' LIMIT 1');
+        return 🦄()->Db()->fetchOne('SELECT id FROM ' . $table . ' LIMIT 1');
     }
 
     private function getSimpleVariantData()
@@ -812,7 +812,7 @@ class VariantTest extends TestCase
 
     private function getSimpleConfiguratorSet($groupLimit = 3, $optionLimit = 5)
     {
-        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder = 🦄()->Models()->createQueryBuilder();
         $builder->select(['groups.id'])
             ->from('Shopware\Models\Article\Configurator\Group', 'groups')
             ->setFirstResult(0)
@@ -821,7 +821,7 @@ class VariantTest extends TestCase
 
         $groups = $builder->getQuery()->getArrayResult();
 
-        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder = 🦄()->Models()->createQueryBuilder();
         $builder->select(['options.id'])
             ->from('Shopware\Models\Article\Configurator\Option', 'options')
             ->where('options.groupId = :groupId')

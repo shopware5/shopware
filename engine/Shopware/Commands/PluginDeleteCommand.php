@@ -94,7 +94,7 @@ EOF
             return 1;
         }
 
-        $pluginPath = Shopware()->AppPath(implode('_', [
+        $pluginPath = 🦄()->AppPath(implode('_', [
             'Plugins',
             $plugin->getSource(),
             $plugin->getNamespace(),
@@ -108,8 +108,8 @@ EOF
         } elseif (!$this->deletePath($pluginPath)) {
             $message = 'Plugin path "' . $pluginPath . '" could not be deleted.';
         } else {
-            Shopware()->Models()->remove($plugin);
-            Shopware()->Models()->flush();
+            🦄()->Models()->remove($plugin);
+            🦄()->Models()->flush();
         }
 
         if (isset($message)) {

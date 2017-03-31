@@ -63,17 +63,17 @@ class sAdminTest extends PHPUnit\Framework\TestCase
     {
         parent::setUp();
 
-        Shopware()->Container()->get('models')->clear();
-        Shopware()->Front()->setRequest(new Enlight_Controller_Request_RequestHttp());
+        🦄()->Container()->get('models')->clear();
+        🦄()->Front()->setRequest(new Enlight_Controller_Request_RequestHttp());
 
-        $this->module = Shopware()->Modules()->Admin();
-        $this->config = Shopware()->Config();
-        $this->session = Shopware()->Session();
-        $this->front = Shopware()->Front();
-        $this->snippetManager = Shopware()->Snippets();
-        $this->basketModule = Shopware()->Modules()->Basket();
-        $this->systemModule = Shopware()->System();
-        $this->systemModule->sCurrency = Shopware()->Db()->fetchRow('SELECT * FROM s_core_currencies WHERE currency LIKE "EUR"');
+        $this->module = 🦄()->Modules()->Admin();
+        $this->config = 🦄()->Config();
+        $this->session = 🦄()->Session();
+        $this->front = 🦄()->Front();
+        $this->snippetManager = 🦄()->Snippets();
+        $this->basketModule = 🦄()->Modules()->Basket();
+        $this->systemModule = 🦄()->System();
+        $this->systemModule->sCurrency = 🦄()->Db()->fetchRow('SELECT * FROM s_core_currencies WHERE currency LIKE "EUR"');
         $this->systemModule->sSESSION_ID = null;
         $this->session->offsetSet('sessionId', null);
     }
@@ -81,7 +81,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
     protected function tearDown()
     {
         parent::tearDown();
-        Shopware()->Container()->get('models')->clear();
+        🦄()->Container()->get('models')->clear();
     }
 
     /**
@@ -147,7 +147,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
      */
     public function testsInitiatePaymentClass()
     {
-        $payments = Shopware()->Models()->getRepository('Shopware\Models\Payment\Payment')->findAll();
+        $payments = 🦄()->Models()->getRepository('Shopware\Models\Payment\Payment')->findAll();
 
         foreach ($payments as $payment) {
             $paymentClass = $this->module->sInitiatePaymentClass($this->module->sGetPaymentMeanById($payment->getId()));
@@ -155,9 +155,9 @@ class sAdminTest extends PHPUnit\Framework\TestCase
                 $this->assertFalse($paymentClass);
             } else {
                 $this->assertInstanceOf('ShopwarePlugin\PaymentMethods\Components\BasePaymentMethod', $paymentClass);
-                Shopware()->Front()->setRequest(new Enlight_Controller_Request_RequestHttp());
+                🦄()->Front()->setRequest(new Enlight_Controller_Request_RequestHttp());
 
-                $requestData = Shopware()->Front()->Request()->getParams();
+                $requestData = 🦄()->Front()->Request()->getParams();
                 $validationResult = $paymentClass->validate($requestData);
                 $this->assertTrue(is_array($validationResult));
                 if (count($validationResult)) {
@@ -210,7 +210,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
 
         // Test insertion
         $this->assertTrue($this->module->sUpdateNewsletter(true, $email));
-        $newsletterSubscription = Shopware()->Db()->fetchRow(
+        $newsletterSubscription = 🦄()->Db()->fetchRow(
             'SELECT * FROM s_campaigns_mailaddresses WHERE email = ?',
             [$email]
         );
@@ -220,7 +220,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
 
         // Test removal
         $this->assertTrue($this->module->sUpdateNewsletter(false, $email));
-        $newsletterSubscription = Shopware()->Db()->fetchRow(
+        $newsletterSubscription = 🦄()->Db()->fetchRow(
             'SELECT * FROM s_campaigns_mailaddresses WHERE email = ?',
             [$email]
         );
@@ -228,7 +228,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
 
         // Retest insertion for customers
         $this->assertTrue($this->module->sUpdateNewsletter(true, $email, true));
-        $newsletterSubscription = Shopware()->Db()->fetchRow(
+        $newsletterSubscription = 🦄()->Db()->fetchRow(
             'SELECT * FROM s_campaigns_mailaddresses WHERE email = ?',
             [$email]
         );
@@ -238,7 +238,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
 
         // Test removal
         $this->assertTrue($this->module->sUpdateNewsletter(false, $email));
-        $newsletterSubscription = Shopware()->Db()->fetchRow(
+        $newsletterSubscription = 🦄()->Db()->fetchRow(
             'SELECT * FROM s_campaigns_mailaddresses WHERE email = ?',
             [$email]
         );
@@ -260,7 +260,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
         $this->assertTrue($this->module->sUpdatePayment());
         $this->assertEquals(
             0,
-            Shopware()->Db()->fetchOne('SELECT paymentID FROM s_user WHERE id = ?', [$customer->getId()])
+            🦄()->Db()->fetchOne('SELECT paymentID FROM s_user WHERE id = ?', [$customer->getId()])
         );
 
         // Setup dummy test data and test with it
@@ -270,7 +270,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
         $this->assertTrue($this->module->sUpdatePayment());
         $this->assertEquals(
             2,
-            Shopware()->Db()->fetchOne('SELECT paymentID FROM s_user WHERE id = ?', [$customer->getId()])
+            🦄()->Db()->fetchOne('SELECT paymentID FROM s_user WHERE id = ?', [$customer->getId()])
         );
 
         $this->deleteDummyCustomer($customer);
@@ -328,7 +328,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
         $this->assertNull($result['sErrorMessages']);
 
         // Test wrong pre-hashed password. Need a user with md5 encoded password
-        Shopware()->Db()->update(
+        🦄()->Db()->update(
             's_user',
             [
                 'password' => md5('fooobar'),
@@ -365,7 +365,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
         $this->assertNull($result['sErrorFlag']);
         $this->assertNull($result['sErrorMessages']);
 
-        $modifiedMd5User = Shopware()->Db()->fetchRow(
+        $modifiedMd5User = 🦄()->Db()->fetchRow(
             'SELECT * FROM s_user WHERE id = ?',
             [$customer->getId()]
         );
@@ -376,7 +376,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
         $this->assertNotEquals($modifiedMd5User['lastlogin'], $customer->getLastLogin()->format('Y-m-d H:i:s'));
 
         // Test inactive account
-        Shopware()->Db()->update('s_user', ['active' => 0], 'id = ' . $customer->getId());
+        🦄()->Db()->update('s_user', ['active' => 0], 'id = ' . $customer->getId());
         $result = $this->module->sLogin(true);
         $this->assertInternalType('array', $result);
         $this->assertArrayHasKey('sErrorFlag', $result);
@@ -393,7 +393,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
         );
 
         // Test brute force lockout
-        Shopware()->Db()->update('s_user', ['active' => 1], 'id = ' . $customer->getId());
+        🦄()->Db()->update('s_user', ['active' => 1], 'id = ' . $customer->getId());
         $this->front->Request()->setPost([
             'email' => $customer->getEmail(),
             'password' => 'asasasasas',
@@ -451,7 +451,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
         $this->assertTrue($this->module->sCheckUser());
 
         // Force timeout
-        Shopware()->Db()->update('s_user', ['lastlogin' => '2000-01-01 00:00:00'], 'id = ' . $customer->getId());
+        🦄()->Db()->update('s_user', ['lastlogin' => '2000-01-01 00:00:00'], 'id = ' . $customer->getId());
         $this->assertFalse($this->module->sCheckUser());
 
         $this->assertEquals($customer->getGroup()->getKey(), $this->session->offsetGet('sUserGroup'));
@@ -474,7 +474,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
     public function testsGetCountryTranslation()
     {
         // Backup existing data and inject demo data
-        $existingData = Shopware()->Db()->fetchRow("
+        $existingData = 🦄()->Db()->fetchRow("
             SELECT * FROM s_core_translations
             WHERE objecttype = 'config_countries' AND objectlanguage = 2
         ");
@@ -498,14 +498,14 @@ class sAdminTest extends PHPUnit\Framework\TestCase
         ];
 
         if ($existingData) {
-            Shopware()->Db()->update('s_core_translations', $demoData, 'id = ' . $existingData['id']);
+            🦄()->Db()->update('s_core_translations', $demoData, 'id = ' . $existingData['id']);
         } else {
-            Shopware()->Db()->insert('s_core_translations', $demoData);
+            🦄()->Db()->insert('s_core_translations', $demoData);
         }
 
         // Test loading all data, should return the test data
-        $shopId = Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext()->getShop()->getId();
-        Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext()->getShop()->setId(2);
+        $shopId = 🦄()->Container()->get('shopware_storefront.context_service')->getShopContext()->getShop()->getId();
+        🦄()->Container()->get('shopware_storefront.context_service')->getShopContext()->getShop()->setId(2);
 
         $result = $this->module->sGetCountryTranslation();
         $this->assertCount(2, $result);
@@ -536,10 +536,10 @@ class sAdminTest extends PHPUnit\Framework\TestCase
         if ($existingData) {
             $existingDataId = $existingData['id'];
             unset($existingData['id']);
-            Shopware()->Db()->update('s_core_translations', $existingData, 'id = ' . $existingDataId);
+            🦄()->Db()->update('s_core_translations', $existingData, 'id = ' . $existingDataId);
         }
 
-        Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext()->getShop()->setId($shopId);
+        🦄()->Container()->get('shopware_storefront.context_service')->getShopContext()->getShop()->setId($shopId);
     }
 
     /**
@@ -548,7 +548,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
     public function testsGetDispatchTranslation()
     {
         // Backup existing data and inject demo data
-        $existingData = Shopware()->Db()->fetchRow("
+        $existingData = 🦄()->Db()->fetchRow("
             SELECT * FROM s_core_translations
             WHERE objecttype = 'config_dispatch' AND objectlanguage = 2
         ");
@@ -574,14 +574,14 @@ class sAdminTest extends PHPUnit\Framework\TestCase
         ];
 
         if ($existingData) {
-            Shopware()->Db()->update('s_core_translations', $demoData, 'id = ' . $existingData['id']);
+            🦄()->Db()->update('s_core_translations', $demoData, 'id = ' . $existingData['id']);
         } else {
-            Shopware()->Db()->insert('s_core_translations', $demoData);
+            🦄()->Db()->insert('s_core_translations', $demoData);
         }
 
         // Test loading all data, should return the test data
-        $shopId = Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext()->getShop()->getId();
-        Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext()->getShop()->setId(2);
+        $shopId = 🦄()->Container()->get('shopware_storefront.context_service')->getShopContext()->getShop()->getId();
+        🦄()->Container()->get('shopware_storefront.context_service')->getShopContext()->getShop()->setId(2);
 
         $result = $this->module->sGetDispatchTranslation();
         $this->assertCount(2, $result);
@@ -618,10 +618,10 @@ class sAdminTest extends PHPUnit\Framework\TestCase
         if ($existingData) {
             $existingDataId = $existingData['id'];
             unset($existingData['id']);
-            Shopware()->Db()->update('s_core_translations', $existingData, 'id = ' . $existingDataId);
+            🦄()->Db()->update('s_core_translations', $existingData, 'id = ' . $existingDataId);
         }
 
-        Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext()->getShop()->setId($shopId);
+        🦄()->Container()->get('shopware_storefront.context_service')->getShopContext()->getShop()->setId($shopId);
     }
 
     /**
@@ -630,7 +630,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
     public function testsGetPaymentTranslation()
     {
         // Backup existing data and inject demo data
-        $existingData = Shopware()->Db()->fetchRow("
+        $existingData = 🦄()->Db()->fetchRow("
             SELECT * FROM s_core_translations
             WHERE objecttype = 'config_payment' AND objectlanguage = 2
         ");
@@ -665,14 +665,14 @@ class sAdminTest extends PHPUnit\Framework\TestCase
         ];
 
         if ($existingData) {
-            Shopware()->Db()->update('s_core_translations', $demoData, 'id = ' . $existingData['id']);
+            🦄()->Db()->update('s_core_translations', $demoData, 'id = ' . $existingData['id']);
         } else {
-            Shopware()->Db()->insert('s_core_translations', $demoData);
+            🦄()->Db()->insert('s_core_translations', $demoData);
         }
 
         // Test loading all data, should return the test data
-        $shopId = Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext()->getShop()->getId();
-        Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext()->getShop()->setId(2);
+        $shopId = 🦄()->Container()->get('shopware_storefront.context_service')->getShopContext()->getShop()->getId();
+        🦄()->Container()->get('shopware_storefront.context_service')->getShopContext()->getShop()->setId(2);
 
         $result = $this->module->sGetPaymentTranslation();
         $this->assertCount(5, $result);
@@ -710,10 +710,10 @@ class sAdminTest extends PHPUnit\Framework\TestCase
         if ($existingData) {
             $existingDataId = $existingData['id'];
             unset($existingData['id']);
-            Shopware()->Db()->update('s_core_translations', $existingData, 'id = ' . $existingDataId);
+            🦄()->Db()->update('s_core_translations', $existingData, 'id = ' . $existingDataId);
         }
 
-        Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext()->getShop()->setId($shopId);
+        🦄()->Container()->get('shopware_storefront.context_service')->getShopContext()->getShop()->setId($shopId);
     }
 
     /**
@@ -722,7 +722,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
     public function testsGetCountryStateTranslation()
     {
         // Backup existing data and inject demo data
-        $existingData = Shopware()->Db()->fetchRow("
+        $existingData = 🦄()->Db()->fetchRow("
             SELECT * FROM s_core_translations
             WHERE objecttype = 'config_country_states' AND objectlanguage = 1
         ");
@@ -744,16 +744,16 @@ class sAdminTest extends PHPUnit\Framework\TestCase
         ];
 
         if ($existingData) {
-            Shopware()->Db()->update('s_core_translations', $demoData, 'id = ' . $existingData['id']);
+            🦄()->Db()->update('s_core_translations', $demoData, 'id = ' . $existingData['id']);
         } else {
-            Shopware()->Db()->insert('s_core_translations', $demoData);
+            🦄()->Db()->insert('s_core_translations', $demoData);
         }
 
         // Test with default shop, return empty array
         $this->assertCount(0, $this->module->sGetCountryStateTranslation());
 
         // Hack the current system shop, so we can properly test this
-        Shopware()->Shop()->setDefault(false);
+        🦄()->Shop()->setDefault(false);
 
         $result = $this->module->sGetCountryStateTranslation();
         $this->assertCount(2, $result);
@@ -765,10 +765,10 @@ class sAdminTest extends PHPUnit\Framework\TestCase
         $this->assertEquals('California', $result[24]['name']);
 
         // Create a stub of a Shop for fallback.
-        $shopFallbackId = Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext()->getShop()->getFallbackId();
-        Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext()->getShop()->setFallbackId(10000);
+        $shopFallbackId = 🦄()->Container()->get('shopware_storefront.context_service')->getShopContext()->getShop()->getFallbackId();
+        🦄()->Container()->get('shopware_storefront.context_service')->getShopContext()->getShop()->setFallbackId(10000);
 
-        Shopware()->Db()->insert('s_core_translations', [
+        🦄()->Db()->insert('s_core_translations', [
             'objectkey' => 1,
             'objectlanguage' => 10000,
             'objecttype' => 'config_country_states',
@@ -798,11 +798,11 @@ class sAdminTest extends PHPUnit\Framework\TestCase
         if ($existingData) {
             $existingDataId = $existingData['id'];
             unset($existingData['id']);
-            Shopware()->Db()->update('s_core_translations', $existingData, 'id = ' . $existingDataId);
+            🦄()->Db()->update('s_core_translations', $existingData, 'id = ' . $existingDataId);
         }
-        Shopware()->Db()->delete('s_core_translations', 'objectlanguage = 10000');
+        🦄()->Db()->delete('s_core_translations', 'objectlanguage = 10000');
 
-        Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext()->getShop()->setFallbackId($shopFallbackId);
+        🦄()->Container()->get('shopware_storefront.context_service')->getShopContext()->getShop()->setFallbackId($shopFallbackId);
     }
 
     /**
@@ -827,11 +827,11 @@ class sAdminTest extends PHPUnit\Framework\TestCase
         }
 
         // Add translations
-        $existingCountryData = Shopware()->Db()->fetchRow("
+        $existingCountryData = 🦄()->Db()->fetchRow("
             SELECT * FROM s_core_translations
             WHERE objecttype = 'config_countries' AND objectlanguage = 1
         ");
-        $existingStateData = Shopware()->Db()->fetchRow("
+        $existingStateData = 🦄()->Db()->fetchRow("
             SELECT * FROM s_core_translations
             WHERE objecttype = 'config_country_states' AND objectlanguage = 1
         ");
@@ -866,14 +866,14 @@ class sAdminTest extends PHPUnit\Framework\TestCase
         ];
 
         if ($existingCountryData) {
-            Shopware()->Db()->update('s_core_translations', $demoCountryData, 'id = ' . $existingCountryData['id']);
+            🦄()->Db()->update('s_core_translations', $demoCountryData, 'id = ' . $existingCountryData['id']);
         } else {
-            Shopware()->Db()->insert('s_core_translations', $demoCountryData);
+            🦄()->Db()->insert('s_core_translations', $demoCountryData);
         }
         if ($existingStateData) {
-            Shopware()->Db()->update('s_core_translations', $demoStateData, 'id = ' . $existingStateData['id']);
+            🦄()->Db()->update('s_core_translations', $demoStateData, 'id = ' . $existingStateData['id']);
         } else {
-            Shopware()->Db()->insert('s_core_translations', $demoStateData);
+            🦄()->Db()->insert('s_core_translations', $demoStateData);
         }
 
         // Test with translations but display_states = false
@@ -894,14 +894,14 @@ class sAdminTest extends PHPUnit\Framework\TestCase
         $this->assertEquals('Germany', $country['countryname']);
 
         // Hack the current system shop, so we can properly test this
-        Shopware()->Shop()->setDefault(false);
+        🦄()->Shop()->setDefault(false);
 
         // Make Germany display states, so we can test it
-        $existingGermanyData = Shopware()->Db()->fetchRow("
+        $existingGermanyData = 🦄()->Db()->fetchRow("
             SELECT * FROM s_core_countries
             WHERE countryiso = 'DE'
         ");
-        Shopware()->Db()->update(
+        🦄()->Db()->update(
             's_core_countries',
             ['display_state_in_registration' => 1],
             'id = ' . $existingGermanyData['id']
@@ -936,21 +936,21 @@ class sAdminTest extends PHPUnit\Framework\TestCase
         if ($existingCountryData) {
             $existingCountryDataId = $existingCountryData['id'];
             unset($existingCountryData['id']);
-            Shopware()->Db()->update('s_core_translations', $existingCountryData, 'id = ' . $existingCountryDataId);
+            🦄()->Db()->update('s_core_translations', $existingCountryData, 'id = ' . $existingCountryDataId);
         }
         if ($existingStateData) {
             $existingStateDataId = $existingStateData['id'];
             unset($existingStateData['id']);
-            Shopware()->Db()->update('s_core_translations', $existingStateData, 'id = ' . $existingStateDataId);
+            🦄()->Db()->update('s_core_translations', $existingStateData, 'id = ' . $existingStateDataId);
         }
         if ($existingGermanyData) {
             $existingGermanyDataId = $existingGermanyData['id'];
             unset($existingGermanyData['id']);
-            Shopware()->Db()->update('s_core_countries', $existingGermanyData, 'id = ' . $existingGermanyDataId);
+            🦄()->Db()->update('s_core_countries', $existingGermanyData, 'id = ' . $existingGermanyDataId);
         }
 
         // Remove shop hack
-        Shopware()->Shop()->setDefault(true);
+        🦄()->Shop()->setDefault(true);
     }
 
     /**
@@ -996,8 +996,8 @@ class sAdminTest extends PHPUnit\Framework\TestCase
             'remote_addr' => '127.0.0.1',
         ];
 
-        Shopware()->Db()->insert('s_order', $orderData);
-        $orderId = Shopware()->Db()->lastInsertId();
+        🦄()->Db()->insert('s_order', $orderData);
+        $orderId = 🦄()->Db()->lastInsertId();
 
         $orderDetailsData = [
             'orderID' => $orderId,
@@ -1018,8 +1018,8 @@ class sAdminTest extends PHPUnit\Framework\TestCase
             'config' => '',
         ];
 
-        Shopware()->Db()->insert('s_order_details', $orderDetailsData);
-        $orderDetailId = Shopware()->Db()->lastInsertId();
+        🦄()->Db()->insert('s_order_details', $orderDetailsData);
+        $orderDetailId = 🦄()->Db()->lastInsertId();
 
         $orderEsdData = [
             'serialID' => '8',
@@ -1030,10 +1030,10 @@ class sAdminTest extends PHPUnit\Framework\TestCase
             'datum' => '2014-03-14 10:26:20',
         ];
 
-        Shopware()->Db()->insert('s_order_esd', $orderEsdData);
+        🦄()->Db()->insert('s_order_esd', $orderEsdData);
 
         // Mock a login
-        $orderEsdId = Shopware()->Db()->lastInsertId();
+        $orderEsdId = 🦄()->Db()->lastInsertId();
 
         // Calling the method should now return the expected data
         $downloads = $this->module->sGetDownloads();
@@ -1126,10 +1126,10 @@ class sAdminTest extends PHPUnit\Framework\TestCase
             'remote_addr' => '172.16.10.71',
         ];
 
-        Shopware()->Db()->insert('s_order', $orderData);
-        $orderId = Shopware()->Db()->lastInsertId();
+        🦄()->Db()->insert('s_order', $orderData);
+        $orderId = 🦄()->Db()->lastInsertId();
 
-        Shopware()->Db()->query("
+        🦄()->Db()->query("
             INSERT IGNORE INTO `s_order_details` (`orderID`, `ordernumber`, `articleID`, `articleordernumber`, `price`, `quantity`, `name`, `status`, `shipped`, `shippedgroup`, `releasedate`, `modus`, `esdarticle`, `taxID`, `tax_rate`, `config`) VALUES
             (?, ?, 12, 'SW10012', 9.99, 1, 'Kobra Vodka 37,5%', 0, 0, 0, '0000-00-00', 0, 0, 1, 19, ''),
             (?, ?, 0, 'SHIPPINGDISCOUNT', -2, 1, 'Warenkorbrabatt', 0, 0, 0, '0000-00-00', 4, 0, 0, 19, ''),
@@ -1181,11 +1181,11 @@ class sAdminTest extends PHPUnit\Framework\TestCase
             }
         }
 
-        Shopware()->Db()->delete('s_order_esd', 'id = ' . $orderEsdId);
-        Shopware()->Db()->delete('s_order_details', 'orderID = ' . $orderId);
-        Shopware()->Db()->delete('s_order_details', 'orderID = ' . $oldOrderId);
-        Shopware()->Db()->delete('s_order', 'id = ' . $orderId);
-        Shopware()->Db()->delete('s_order', 'id = ' . $oldOrderId);
+        🦄()->Db()->delete('s_order_esd', 'id = ' . $orderEsdId);
+        🦄()->Db()->delete('s_order_details', 'orderID = ' . $orderId);
+        🦄()->Db()->delete('s_order_details', 'orderID = ' . $oldOrderId);
+        🦄()->Db()->delete('s_order', 'id = ' . $orderId);
+        🦄()->Db()->delete('s_order', 'id = ' . $oldOrderId);
         $this->deleteDummyCustomer($customer);
     }
 
@@ -1518,8 +1518,8 @@ class sAdminTest extends PHPUnit\Framework\TestCase
             'remote_addr' => '127.0.0.1',
         ];
 
-        Shopware()->Db()->insert('s_order', $orderData);
-        $orderId = Shopware()->Db()->lastInsertId();
+        🦄()->Db()->insert('s_order', $orderData);
+        $orderId = 🦄()->Db()->lastInsertId();
 
         // No rules, returns false
         $this->assertFalse($this->module->sManageRisks(2, $basket, $user));
@@ -1527,7 +1527,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
         // Test all rules
 
         // sRiskORDERVALUELESS
-        Shopware()->Db()->insert(
+        🦄()->Db()->insert(
             's_core_rulesets',
             [
                 'paymentID' => 2,
@@ -1535,11 +1535,11 @@ class sAdminTest extends PHPUnit\Framework\TestCase
                 'value1' => 20,
             ]
         );
-        $firstTestRuleId = Shopware()->Db()->lastInsertId();
+        $firstTestRuleId = 🦄()->Db()->lastInsertId();
         $this->assertTrue($this->module->sManageRisks(2, $basket, $user));
 
         // sRiskORDERVALUEMORE
-        Shopware()->Db()->insert(
+        🦄()->Db()->insert(
             's_core_rulesets',
             [
                 'paymentID' => 2,
@@ -1551,13 +1551,13 @@ class sAdminTest extends PHPUnit\Framework\TestCase
         $this->assertTrue($this->module->sManageRisks(2, $basket, $user));
 
         // Deleting the first rule, only a false one is left
-        Shopware()->Db()->delete('s_core_rulesets', 'id = ' . $firstTestRuleId);
+        🦄()->Db()->delete('s_core_rulesets', 'id = ' . $firstTestRuleId);
         $this->assertFalse($this->module->sManageRisks(2, $basket, $user));
-        Shopware()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
+        🦄()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
 
         // sRiskCUSTOMERGROUPIS
         // sRiskCUSTOMERGROUPISNOT
-        Shopware()->Db()->insert(
+        🦄()->Db()->insert(
             's_core_rulesets',
             [
                 'paymentID' => 2,
@@ -1570,10 +1570,10 @@ class sAdminTest extends PHPUnit\Framework\TestCase
 
         // Test 'AND' logic between the two parts of the same rule (both need to be true)
         $this->assertFalse($this->module->sManageRisks(2, $basket, $user));
-        Shopware()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
+        🦄()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
 
         // sRiskZIPCODE
-        Shopware()->Db()->insert(
+        🦄()->Db()->insert(
             's_core_rulesets',
             [
                 'paymentID' => 2,
@@ -1582,10 +1582,10 @@ class sAdminTest extends PHPUnit\Framework\TestCase
             ]
         );
         $this->assertTrue($this->module->sManageRisks(2, $basket, $user));
-        Shopware()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
+        🦄()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
 
         // sRiskBILLINGZIPCODE
-        Shopware()->Db()->insert(
+        🦄()->Db()->insert(
             's_core_rulesets',
             [
                 'paymentID' => 2,
@@ -1595,10 +1595,10 @@ class sAdminTest extends PHPUnit\Framework\TestCase
         );
 
         $this->assertTrue($this->module->sManageRisks(2, $basket, $user));
-        Shopware()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
+        🦄()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
 
         // sRiskZONEIS
-        Shopware()->Db()->insert(
+        🦄()->Db()->insert(
             's_core_rulesets',
             [
                 'paymentID' => 2,
@@ -1607,10 +1607,10 @@ class sAdminTest extends PHPUnit\Framework\TestCase
             ]
         );
         $this->assertFalse($this->module->sManageRisks(2, $basket, $user));
-        Shopware()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
+        🦄()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
 
         // sRiskZONEISNOT
-        Shopware()->Db()->insert(
+        🦄()->Db()->insert(
             's_core_rulesets',
             [
                 'paymentID' => 2,
@@ -1619,11 +1619,11 @@ class sAdminTest extends PHPUnit\Framework\TestCase
             ]
         );
         $this->assertTrue($this->module->sManageRisks(2, $basket, $user));
-        Shopware()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
+        🦄()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
 
         // sRiskLANDIS
         // sRiskLANDISNOT
-        Shopware()->Db()->insert(
+        🦄()->Db()->insert(
             's_core_rulesets',
             [
                 'paymentID' => 2,
@@ -1634,11 +1634,11 @@ class sAdminTest extends PHPUnit\Framework\TestCase
             ]
         );
         $this->assertTrue($this->module->sManageRisks(2, $basket, $user));
-        Shopware()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
+        🦄()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
 
         // sRiskBILLINGLANDIS
         // sRiskBILLINGLANDISNOT
-        Shopware()->Db()->insert(
+        🦄()->Db()->insert(
             's_core_rulesets',
             [
                 'paymentID' => 2,
@@ -1649,10 +1649,10 @@ class sAdminTest extends PHPUnit\Framework\TestCase
             ]
         );
         $this->assertTrue($this->module->sManageRisks(2, $basket, $user));
-        Shopware()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
+        🦄()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
 
         // sRiskNEWCUSTOMER
-        Shopware()->Db()->insert(
+        🦄()->Db()->insert(
             's_core_rulesets',
             [
                 'paymentID' => 2,
@@ -1660,10 +1660,10 @@ class sAdminTest extends PHPUnit\Framework\TestCase
             ]
         );
         $this->assertTrue($this->module->sManageRisks(2, $basket, $user));
-        Shopware()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
+        🦄()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
 
         // sRiskORDERPOSITIONSMORE
-        Shopware()->Db()->insert(
+        🦄()->Db()->insert(
             's_core_rulesets',
             [
                 'paymentID' => 2,
@@ -1672,14 +1672,14 @@ class sAdminTest extends PHPUnit\Framework\TestCase
             ]
         );
         $this->assertFalse($this->module->sManageRisks(2, $basket, $user));
-        Shopware()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
+        🦄()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
 
         $this->module->sSYSTEM->sSESSION_ID = uniqid(rand());
         $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
         $this->basketModule->sAddArticle('SW10118.8');
 
         // sRiskATTRIS
-        Shopware()->Db()->insert(
+        🦄()->Db()->insert(
             's_core_rulesets',
             [
                 'paymentID' => 2,
@@ -1690,11 +1690,11 @@ class sAdminTest extends PHPUnit\Framework\TestCase
 
         $fullBasket = $this->basketModule->sGetBasket();
         $this->assertTrue($this->module->sManageRisks(2, $fullBasket, $user));
-        Shopware()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
+        🦄()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
 
         $this->basketModule->sAddArticle('SW10118.8');
         // sRiskATTRISNOT
-        Shopware()->Db()->insert(
+        🦄()->Db()->insert(
             's_core_rulesets',
             [
                 'paymentID' => 2,
@@ -1703,10 +1703,10 @@ class sAdminTest extends PHPUnit\Framework\TestCase
             ]
         );
         $this->assertFalse($this->module->sManageRisks(2, $fullBasket, $user));
-        Shopware()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
+        🦄()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
 
         // sRiskDUNNINGLEVELONE
-        Shopware()->Db()->insert(
+        🦄()->Db()->insert(
             's_core_rulesets',
             [
                 'paymentID' => 2,
@@ -1714,10 +1714,10 @@ class sAdminTest extends PHPUnit\Framework\TestCase
             ]
         );
         $this->assertFalse($this->module->sManageRisks(2, $fullBasket, $user));
-        Shopware()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
+        🦄()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
 
         // sRiskDUNNINGLEVELTWO
-        Shopware()->Db()->insert(
+        🦄()->Db()->insert(
             's_core_rulesets',
             [
                 'paymentID' => 2,
@@ -1725,10 +1725,10 @@ class sAdminTest extends PHPUnit\Framework\TestCase
             ]
         );
         $this->assertFalse($this->module->sManageRisks(2, $fullBasket, $user));
-        Shopware()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
+        🦄()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
 
         // sRiskDUNNINGLEVELTHREE
-        Shopware()->Db()->insert(
+        🦄()->Db()->insert(
             's_core_rulesets',
             [
                 'paymentID' => 2,
@@ -1736,10 +1736,10 @@ class sAdminTest extends PHPUnit\Framework\TestCase
             ]
         );
         $this->assertFalse($this->module->sManageRisks(2, $fullBasket, $user));
-        Shopware()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
+        🦄()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
 
         // sRiskINKASSO
-        Shopware()->Db()->insert(
+        🦄()->Db()->insert(
             's_core_rulesets',
             [
                 'paymentID' => 2,
@@ -1747,10 +1747,10 @@ class sAdminTest extends PHPUnit\Framework\TestCase
             ]
         );
         $this->assertTrue($this->module->sManageRisks(2, $fullBasket, $user));
-        Shopware()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
+        🦄()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
 
         // sRiskLASTORDERLESS
-        Shopware()->Db()->insert(
+        🦄()->Db()->insert(
             's_core_rulesets',
             [
                 'paymentID' => 2,
@@ -1759,10 +1759,10 @@ class sAdminTest extends PHPUnit\Framework\TestCase
             ]
         );
         $this->assertTrue($this->module->sManageRisks(2, $fullBasket, $user));
-        Shopware()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
+        🦄()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
 
         // sRiskARTICLESFROM
-        Shopware()->Db()->insert(
+        🦄()->Db()->insert(
             's_core_rulesets',
             [
                 'paymentID' => 2,
@@ -1771,10 +1771,10 @@ class sAdminTest extends PHPUnit\Framework\TestCase
             ]
         );
         $this->assertFalse($this->module->sManageRisks(2, $fullBasket, $user));
-        Shopware()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
+        🦄()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
 
         // sRiskARTICLESFROM
-        Shopware()->Db()->insert(
+        🦄()->Db()->insert(
             's_core_rulesets',
             [
                 'paymentID' => 2,
@@ -1783,10 +1783,10 @@ class sAdminTest extends PHPUnit\Framework\TestCase
             ]
         );
         $this->assertTrue($this->module->sManageRisks(2, $fullBasket, $user));
-        Shopware()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
+        🦄()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
 
         // sRiskLASTORDERSLESS
-        Shopware()->Db()->insert(
+        🦄()->Db()->insert(
             's_core_rulesets',
             [
                 'paymentID' => 2,
@@ -1795,10 +1795,10 @@ class sAdminTest extends PHPUnit\Framework\TestCase
             ]
         );
         $this->assertTrue($this->module->sManageRisks(2, $fullBasket, $user));
-        Shopware()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
+        🦄()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
 
         // sRiskLASTORDERSLESS
-        Shopware()->Db()->insert(
+        🦄()->Db()->insert(
             's_core_rulesets',
             [
                 'paymentID' => 2,
@@ -1807,10 +1807,10 @@ class sAdminTest extends PHPUnit\Framework\TestCase
             ]
         );
         $this->assertFalse($this->module->sManageRisks(2, $fullBasket, $user));
-        Shopware()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
+        🦄()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
 
         // sRiskPREGSTREET
-        Shopware()->Db()->insert(
+        🦄()->Db()->insert(
             's_core_rulesets',
             [
                 'paymentID' => 2,
@@ -1819,10 +1819,10 @@ class sAdminTest extends PHPUnit\Framework\TestCase
             ]
         );
         $this->assertTrue($this->module->sManageRisks(2, $fullBasket, $user));
-        Shopware()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
+        🦄()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
 
         // sRiskPREGSTREET
-        Shopware()->Db()->insert(
+        🦄()->Db()->insert(
             's_core_rulesets',
             [
                 'paymentID' => 2,
@@ -1831,10 +1831,10 @@ class sAdminTest extends PHPUnit\Framework\TestCase
             ]
         );
         $this->assertFalse($this->module->sManageRisks(2, $fullBasket, $user));
-        Shopware()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
+        🦄()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
 
         // sRiskPREGBILLINGSTREET
-        Shopware()->Db()->insert(
+        🦄()->Db()->insert(
             's_core_rulesets',
             [
                 'paymentID' => 2,
@@ -1843,10 +1843,10 @@ class sAdminTest extends PHPUnit\Framework\TestCase
             ]
         );
         $this->assertFalse($this->module->sManageRisks(2, $fullBasket, $user));
-        Shopware()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
+        🦄()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
 
         // sRiskDIFFER
-        Shopware()->Db()->insert(
+        🦄()->Db()->insert(
             's_core_rulesets',
             [
                 'paymentID' => 2,
@@ -1854,10 +1854,10 @@ class sAdminTest extends PHPUnit\Framework\TestCase
             ]
         );
         $this->assertTrue($this->module->sManageRisks(2, $fullBasket, $user));
-        Shopware()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
+        🦄()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
 
         // sRiskCUSTOMERNR
-        Shopware()->Db()->insert(
+        🦄()->Db()->insert(
             's_core_rulesets',
             [
                 'paymentID' => 2,
@@ -1866,10 +1866,10 @@ class sAdminTest extends PHPUnit\Framework\TestCase
             ]
         );
         $this->assertTrue($this->module->sManageRisks(2, $fullBasket, $user));
-        Shopware()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
+        🦄()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
 
         // sRiskCUSTOMERNR
-        Shopware()->Db()->insert(
+        🦄()->Db()->insert(
             's_core_rulesets',
             [
                 'paymentID' => 2,
@@ -1878,10 +1878,10 @@ class sAdminTest extends PHPUnit\Framework\TestCase
             ]
         );
         $this->assertFalse($this->module->sManageRisks(2, $fullBasket, $user));
-        Shopware()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
+        🦄()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
 
         // sRiskLASTNAME
-        Shopware()->Db()->insert(
+        🦄()->Db()->insert(
             's_core_rulesets',
             [
                 'paymentID' => 2,
@@ -1890,10 +1890,10 @@ class sAdminTest extends PHPUnit\Framework\TestCase
             ]
         );
         $this->assertTrue($this->module->sManageRisks(2, $fullBasket, $user));
-        Shopware()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
+        🦄()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
 
         // sRiskLASTNAME
-        Shopware()->Db()->insert(
+        🦄()->Db()->insert(
             's_core_rulesets',
             [
                 'paymentID' => 2,
@@ -1902,10 +1902,10 @@ class sAdminTest extends PHPUnit\Framework\TestCase
             ]
         );
         $this->assertFalse($this->module->sManageRisks(2, $fullBasket, $user));
-        Shopware()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
+        🦄()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
 
         // sRiskSUBSHOP
-        Shopware()->Db()->insert(
+        🦄()->Db()->insert(
             's_core_rulesets',
             [
                 'paymentID' => 2,
@@ -1914,10 +1914,10 @@ class sAdminTest extends PHPUnit\Framework\TestCase
             ]
         );
         $this->assertTrue($this->module->sManageRisks(2, $fullBasket, $user));
-        Shopware()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
+        🦄()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
 
         // sRiskSUBSHOP
-        Shopware()->Db()->insert(
+        🦄()->Db()->insert(
             's_core_rulesets',
             [
                 'paymentID' => 2,
@@ -1926,10 +1926,10 @@ class sAdminTest extends PHPUnit\Framework\TestCase
             ]
         );
         $this->assertFalse($this->module->sManageRisks(2, $fullBasket, $user));
-        Shopware()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
+        🦄()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
 
         // sRiskSUBSHOPNOT
-        Shopware()->Db()->insert(
+        🦄()->Db()->insert(
             's_core_rulesets',
             [
                 'paymentID' => 2,
@@ -1938,10 +1938,10 @@ class sAdminTest extends PHPUnit\Framework\TestCase
             ]
         );
         $this->assertTrue($this->module->sManageRisks(2, $fullBasket, $user));
-        Shopware()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
+        🦄()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
 
         // sRiskSUBSHOPNOT
-        Shopware()->Db()->insert(
+        🦄()->Db()->insert(
             's_core_rulesets',
             [
                 'paymentID' => 2,
@@ -1950,10 +1950,10 @@ class sAdminTest extends PHPUnit\Framework\TestCase
             ]
         );
         $this->assertFalse($this->module->sManageRisks(2, $fullBasket, $user));
-        Shopware()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
+        🦄()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
 
         // sRiskCURRENCIESISOIS
-        Shopware()->Db()->insert(
+        🦄()->Db()->insert(
             's_core_rulesets',
             [
                 'paymentID' => 2,
@@ -1962,10 +1962,10 @@ class sAdminTest extends PHPUnit\Framework\TestCase
             ]
         );
         $this->assertTrue($this->module->sManageRisks(2, $fullBasket, $user));
-        Shopware()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
+        🦄()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
 
         // sRiskCURRENCIESISOIS
-        Shopware()->Db()->insert(
+        🦄()->Db()->insert(
             's_core_rulesets',
             [
                 'paymentID' => 2,
@@ -1974,10 +1974,10 @@ class sAdminTest extends PHPUnit\Framework\TestCase
             ]
         );
         $this->assertFalse($this->module->sManageRisks(2, $fullBasket, $user));
-        Shopware()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
+        🦄()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
 
         // sRiskCURRENCIESISOISNOT
-        Shopware()->Db()->insert(
+        🦄()->Db()->insert(
             's_core_rulesets',
             [
                 'paymentID' => 2,
@@ -1986,10 +1986,10 @@ class sAdminTest extends PHPUnit\Framework\TestCase
             ]
         );
         $this->assertFalse($this->module->sManageRisks(2, $fullBasket, $user));
-        Shopware()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
+        🦄()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
 
         // sRiskCURRENCIESISOISNOT
-        Shopware()->Db()->insert(
+        🦄()->Db()->insert(
             's_core_rulesets',
             [
                 'paymentID' => 2,
@@ -1998,9 +1998,9 @@ class sAdminTest extends PHPUnit\Framework\TestCase
             ]
         );
         $this->assertTrue($this->module->sManageRisks(2, $fullBasket, $user));
-        Shopware()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
+        🦄()->Db()->delete('s_core_rulesets', 'id >= ' . $firstTestRuleId);
 
-        Shopware()->Db()->delete('s_order', 'id = ' . $orderId);
+        🦄()->Db()->delete('s_order', 'id = ' . $orderId);
         $this->deleteDummyCustomer($customer);
     }
 
@@ -2076,7 +2076,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
 
         // Check that test email does not exist
         $this->assertFalse(
-            Shopware()->Db()->fetchRow(
+            🦄()->Db()->fetchRow(
                 'SELECT email, groupID FROM s_campaigns_mailaddresses WHERE email LIKE ?',
                 [$validAddress]
             )
@@ -2099,7 +2099,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
                 'email' => $validAddress,
                 'groupID' => $this->config->get('sNEWSLETTERDEFAULTGROUP'),
             ],
-            Shopware()->Db()->fetchRow(
+            🦄()->Db()->fetchRow(
                 'SELECT email, groupID FROM s_campaigns_mailaddresses WHERE email LIKE ?',
                 [$validAddress]
             )
@@ -2111,7 +2111,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
                     'groupID' => $this->config->get('sNEWSLETTERDEFAULTGROUP'),
                 ],
             ],
-            Shopware()->Db()->fetchAll(
+            🦄()->Db()->fetchAll(
                 'SELECT email, groupID FROM s_campaigns_maildata WHERE email LIKE ?',
                 [$validAddress]
             )
@@ -2148,7 +2148,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
                     'groupID' => $this->config->get('sNEWSLETTERDEFAULTGROUP'),
                 ],
             ],
-            Shopware()->Db()->fetchAll(
+            🦄()->Db()->fetchAll(
                 'SELECT email, groupID FROM s_campaigns_mailaddresses WHERE email LIKE ?',
                 [$validAddress]
             )
@@ -2164,7 +2164,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
                     'groupID' => $groupId,
                 ],
             ],
-            Shopware()->Db()->fetchAll(
+            🦄()->Db()->fetchAll(
                 'SELECT email, groupID FROM s_campaigns_maildata WHERE email LIKE ?',
                 [$validAddress]
             )
@@ -2183,7 +2183,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
 
         // Check that test email address was removed
         $this->assertFalse(
-            Shopware()->Db()->fetchRow(
+            🦄()->Db()->fetchRow(
                 'SELECT email, groupID FROM s_campaigns_mailaddresses WHERE email LIKE ?',
                 [$validAddress]
             )
@@ -2197,13 +2197,13 @@ class sAdminTest extends PHPUnit\Framework\TestCase
                     'groupID' => $groupId,
                 ],
             ],
-            Shopware()->Db()->fetchAll(
+            🦄()->Db()->fetchAll(
                 'SELECT email, groupID FROM s_campaigns_maildata WHERE email LIKE ?',
                 [$validAddress]
             )
         );
 
-        Shopware()->Db()->delete(
+        🦄()->Db()->delete(
             's_campaigns_maildata',
             'email LIKE "' . $validAddress . '"'
         );
@@ -2257,7 +2257,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
 
         // Valid country returns valid data
         $result = $this->module->sGetPaymentMean(
-            Shopware()->Db()->fetchOne('SELECT id FROM s_core_paymentmeans WHERE name = "prepayment"')
+            🦄()->Db()->fetchOne('SELECT id FROM s_core_paymentmeans WHERE name = "prepayment"')
         );
 
         $this->assertEquals(
@@ -2497,7 +2497,7 @@ class sAdminTest extends PHPUnit\Framework\TestCase
         ];
 
         $customerResource = new \Shopware\Components\Api\Resource\Customer();
-        $customerResource->setManager(Shopware()->Models());
+        $customerResource->setManager(🦄()->Models());
 
         return $customerResource->create($testData);
     }
@@ -2507,19 +2507,19 @@ class sAdminTest extends PHPUnit\Framework\TestCase
      */
     private function deleteDummyCustomer(\Shopware\Models\Customer\Customer $customer)
     {
-        $billingId = Shopware()->Db()->fetchOne('SELECT id FROM s_user_billingaddress WHERE userID = ?', [$customer->getId()]);
-        $shippingId = Shopware()->Db()->fetchOne('SELECT id FROM s_user_shippingaddress WHERE userID = ?', [$customer->getId()]);
+        $billingId = 🦄()->Db()->fetchOne('SELECT id FROM s_user_billingaddress WHERE userID = ?', [$customer->getId()]);
+        $shippingId = 🦄()->Db()->fetchOne('SELECT id FROM s_user_shippingaddress WHERE userID = ?', [$customer->getId()]);
 
         if ($billingId) {
-            Shopware()->Db()->delete('s_user_billingaddress_attributes', 'billingID = ' . $billingId);
-            Shopware()->Db()->delete('s_user_billingaddress', 'id = ' . $billingId);
+            🦄()->Db()->delete('s_user_billingaddress_attributes', 'billingID = ' . $billingId);
+            🦄()->Db()->delete('s_user_billingaddress', 'id = ' . $billingId);
         }
         if ($shippingId) {
-            Shopware()->Db()->delete('s_user_shippingaddress_attributes', 'shippingID = ' . $shippingId);
-            Shopware()->Db()->delete('s_user_shippingaddress', 'id = ' . $shippingId);
+            🦄()->Db()->delete('s_user_shippingaddress_attributes', 'shippingID = ' . $shippingId);
+            🦄()->Db()->delete('s_user_shippingaddress', 'id = ' . $shippingId);
         }
-        Shopware()->Db()->delete('s_core_payment_data', 'user_id = ' . $customer->getId());
-        Shopware()->Db()->delete('s_user_attributes', 'userID = ' . $customer->getId());
-        Shopware()->Db()->delete('s_user', 'id = ' . $customer->getId());
+        🦄()->Db()->delete('s_core_payment_data', 'user_id = ' . $customer->getId());
+        🦄()->Db()->delete('s_user_attributes', 'userID = ' . $customer->getId());
+        🦄()->Db()->delete('s_user', 'id = ' . $customer->getId());
     }
 }

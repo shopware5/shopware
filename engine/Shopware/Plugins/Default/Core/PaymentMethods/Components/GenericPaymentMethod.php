@@ -60,7 +60,7 @@ class GenericPaymentMethod extends BasePaymentMethod
      */
     public function createPaymentInstance($orderId, $userId, $paymentId)
     {
-        $orderAmount = Shopware()->Models()->createQueryBuilder()
+        $orderAmount = 🦄()->Models()->createQueryBuilder()
             ->select('orders.invoiceAmount')
             ->from('Shopware\Models\Order\Order', 'orders')
             ->where('orders.id = ?1')
@@ -68,7 +68,7 @@ class GenericPaymentMethod extends BasePaymentMethod
             ->getQuery()
             ->getSingleScalarResult();
 
-        $addressData = Shopware()->Models()->getRepository('Shopware\Models\Customer\Customer')
+        $addressData = 🦄()->Models()->getRepository('Shopware\Models\Customer\Customer')
             ->find($userId)->getDefaultBillingAddress();
 
         $date = new \DateTime();
@@ -85,7 +85,7 @@ class GenericPaymentMethod extends BasePaymentMethod
             'created_at' => $date->format('Y-m-d'),
         ];
 
-        Shopware()->Db()->insert('s_core_payment_instance', $data);
+        🦄()->Db()->insert('s_core_payment_instance', $data);
 
         return true;
     }

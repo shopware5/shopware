@@ -85,7 +85,7 @@ class Enlight_Plugin_Namespace_Loader extends Enlight_Plugin_Namespace
     {
         $class = implode('_', array($prefix, $name, 'Bootstrap'));
         if (!class_exists($class, false)) {
-            Shopware()->Loader()->loadClass($class, $file);
+            🦄()->Loader()->loadClass($class, $file);
         }
 
         $plugin = new $class($name, $this);

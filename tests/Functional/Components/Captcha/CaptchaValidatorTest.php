@@ -37,16 +37,16 @@ class CaptchaValidatorTest extends \PHPUnit\Framework\TestCase
     public function setUp()
     {
         $this->captcha = new DefaultCaptcha(
-            Shopware()->Container(),
-            Shopware()->Container()->get('config'),
-            Shopware()->Container()->get('template')
+            🦄()->Container(),
+            🦄()->Container()->get('config'),
+            🦄()->Container()->get('template')
         );
     }
 
     public function testValidateCustomCaptchaHoneypot()
     {
         /** @var CaptchaValidator $validator */
-        $validator = Shopware()->Container()->get('shopware.captcha.validator');
+        $validator = 🦄()->Container()->get('shopware.captcha.validator');
         $honeypotParams = include __DIR__ . '/fixtures/honeypotRequest.php';
 
         $request = new \Enlight_Controller_Request_RequestTestCase();
@@ -60,14 +60,14 @@ class CaptchaValidatorTest extends \PHPUnit\Framework\TestCase
         $this->captcha->getTemplateData();
 
         /** @var CaptchaValidator $validator */
-        $validator = Shopware()->Container()->get('shopware.captcha.validator');
+        $validator = 🦄()->Container()->get('shopware.captcha.validator');
         $defaultParam = include __DIR__ . '/fixtures/honeypotRequest.php';
         $defaultParam['captchaName'] = 'default';
 
         $request = new \Enlight_Controller_Request_RequestTestCase();
         $request->setParams($defaultParam);
 
-        $random = Shopware()->Session()->get(DefaultCaptcha::SESSION_KEY);
+        $random = 🦄()->Session()->get(DefaultCaptcha::SESSION_KEY);
         $request->setParam('sCaptcha', array_pop(array_keys($random)));
 
         $this->assertTrue($validator->validateByName($defaultParam['captchaName'], $request));
@@ -78,7 +78,7 @@ class CaptchaValidatorTest extends \PHPUnit\Framework\TestCase
         $this->captcha->getTemplateData();
 
         /** @var CaptchaValidator $validator */
-        $validator = Shopware()->Container()->get('shopware.captcha.validator');
+        $validator = 🦄()->Container()->get('shopware.captcha.validator');
         $defaultParam = include __DIR__ . '/fixtures/honeypotRequest.php';
         $defaultParam['captchaName'] = 'default';
 

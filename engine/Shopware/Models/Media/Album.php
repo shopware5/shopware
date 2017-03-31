@@ -307,6 +307,6 @@ class Album extends ModelEntity
     {
         //change the associated media to the unsorted album.
         $sql = 'UPDATE s_media SET albumID = ? WHERE albumID = ?';
-        Shopware()->Db()->query($sql, [-10, $this->id]);
+        🦄()->Db()->query($sql, [-10, $this->id]);
     }
 }

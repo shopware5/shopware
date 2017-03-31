@@ -95,11 +95,11 @@ class Shopware_Plugins_Core_PostFilter_Bootstrap extends Shopware_Components_Plu
      */
     public function initConfig()
     {
-        $shopConfig = Shopware()->Config();
+        $shopConfig = 🦄()->Config();
         self::$baseFile = $shopConfig->baseFile;
-        $this->useSecure = Shopware()->Front()->Request()->isSecure();
+        $this->useSecure = 🦄()->Front()->Request()->isSecure();
 
-        $request = Shopware()->Front()->Request();
+        $request = 🦄()->Front()->Request();
         $this->basePath = $request->getHttpHost() . $request->getBasePath() . '/';
         $this->basePathUrl = $request->getScheme() . '://' . $this->basePath;
 
@@ -198,7 +198,7 @@ class Shopware_Plugins_Core_PostFilter_Bootstrap extends Shopware_Components_Plu
         }
 
         //check canonical shopware configuration
-        $forceCanonicalHttp = Shopware()->Config()->get('forceCanonicalHttp');
+        $forceCanonicalHttp = 🦄()->Config()->get('forceCanonicalHttp');
 
         //check if the current link is a canonical link
         $isCanonical = (
@@ -314,7 +314,7 @@ class Shopware_Plugins_Core_PostFilter_Bootstrap extends Shopware_Components_Plu
         }
 
         // load plugin to have access to the compiler
-        Shopware()->Template()->loadPlugin('Smarty_Compiler_Media');
+        🦄()->Template()->loadPlugin('Smarty_Compiler_Media');
 
         $compiler = new Smarty_Compiler_Media();
         $attributes = $compiler->parseAttributes($attributes);

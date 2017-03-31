@@ -129,7 +129,7 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
         $request = $args->getRequest();
         $response = $args->getResponse();
 
-        if (Shopware()->Container()->initialized('Shop')) {
+        if (🦄()->Container()->initialized('Shop')) {
             /** @var DetachedShop $shop */
             $shop = $this->get('Shop');
 
@@ -283,7 +283,7 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
 
         // Refresh basket on currency change
         if (isset($session->sBasketCurrency) && $shop->getCurrency()->getId() != $session->sBasketCurrency) {
-            Shopware()->Modules()->Basket()->sRefreshBasket();
+            🦄()->Modules()->Basket()->sRefreshBasket();
         }
 
         // Upgrade template

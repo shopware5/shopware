@@ -94,7 +94,7 @@ class Shopware_Plugins_Core_CronStock_Bootstrap extends Shopware_Components_Plug
         AND d.id = at.articledetailsID
         AND stockmin > instock
         ';
-        $articles = Shopware()->Db()->fetchAssoc($sql);
+        $articles = 🦄()->Db()->fetchAssoc($sql);
         $data = [
             'count' => count($articles),
             'numbers' => array_keys($articles),
@@ -113,13 +113,13 @@ class Shopware_Plugins_Core_CronStock_Bootstrap extends Shopware_Components_Plug
             ],
         ];
 
-        $mail = Shopware()->TemplateMail()->createMail(
+        $mail = 🦄()->TemplateMail()->createMail(
             $job->get('inform_template'), $context
         );
 
         $informMail = $job->get('inform_mail');
         if ($job->get('inform_mail') === trim('{$sConfig.sMAIL}')) {
-            $informMail = Shopware()->Config()->get('mail');
+            $informMail = 🦄()->Config()->get('mail');
         }
 
         $mail->addTo($informMail);

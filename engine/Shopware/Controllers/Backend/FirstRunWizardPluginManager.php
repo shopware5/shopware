@@ -246,7 +246,7 @@ class Shopware_Controllers_Backend_FirstRunWizardPluginManager extends Shopware_
             }
         }
 
-        $user = Shopware()->Container()->get('Auth')->getIdentity();
+        $user = 🦄()->Container()->get('Auth')->getIdentity();
         /** @var $locale \Shopware\Models\Shop\Locale */
         $locale = $user->locale;
         $localeCode = $locale->getLocale();

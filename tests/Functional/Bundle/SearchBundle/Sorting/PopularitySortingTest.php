@@ -103,7 +103,7 @@ class PopularitySortingTest extends TestCase
             $sales
         );
 
-        Shopware()->Db()->query(
+        🦄()->Db()->query(
             'UPDATE s_articles_top_seller_ro SET sales = ?
              WHERE article_id = ?',
             [$sales, $article->getId()]

@@ -66,7 +66,7 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
         /** @var $context ShopContextInterface */
         $context = $this->get('shopware_storefront.context_service')->getShopContext();
 
-        $criteria = Shopware()->Container()->get('shopware_search.store_front_criteria_factory')
+        $criteria = 🦄()->Container()->get('shopware_search.store_front_criteria_factory')
             ->createSearchCriteria($this->Request(), $context);
 
         /** @var $result ProductSearchResult */
@@ -89,7 +89,7 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
         /** @var $mapper \Shopware\Components\QueryAliasMapper */
         $mapper = $this->get('query_alias_mapper');
 
-        $service = Shopware()->Container()->get('shopware_storefront.custom_sorting_service');
+        $service = 🦄()->Container()->get('shopware_storefront.custom_sorting_service');
 
         $sortingIds = $this->container->get('config')->get('searchSortings');
         $sortingIds = array_filter(explode('|', $sortingIds));

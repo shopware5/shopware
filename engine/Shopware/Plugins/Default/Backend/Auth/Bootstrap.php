@@ -223,7 +223,7 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
     public function checkAuth()
     {
         /** @var $auth Shopware_Components_Auth */
-        $auth = Shopware()->Container()->get('Auth');
+        $auth = 🦄()->Container()->get('Auth');
         if ($auth->hasIdentity()) {
             $auth->refresh();
         }
@@ -233,7 +233,7 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
         if ($auth->hasIdentity()) {
             $identity = $auth->getIdentity();
 
-            $this->acl = Shopware()->Acl();
+            $this->acl = 🦄()->Acl();
             $this->aclRole = $identity->role;
 
             if (!$this->acl->has($this->aclResource)) {
@@ -301,11 +301,11 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
         $browserLocales = array_keys(Zend_Locale::getBrowser());
 
         if (!empty($browserLocales)) {
-            $quotedBackendLocale = Shopware()->Db()->quote($backendLocales);
+            $quotedBackendLocale = 🦄()->Db()->quote($backendLocales);
             $orderIndex = 1;
             $orderCriteria = '';
             foreach ($browserLocales as $browserLocale) {
-                $orderCriteria .= 'WHEN ' . Shopware()->Db()->quote($browserLocale) . ' THEN ' . $orderIndex . ' ';
+                $orderCriteria .= 'WHEN ' . 🦄()->Db()->quote($browserLocale) . ' THEN ' . $orderIndex . ' ';
                 ++$orderIndex;
             }
             $orderCriteria .= 'ELSE ' . $orderIndex . ' END ';
@@ -318,7 +318,7 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
                 ORDER BY CASE locale ' . $orderCriteria . ' LIMIT 1';
 
             foreach ($browserLocales as $key => $locale) {
-                $fetchResult = Shopware()->Db()->fetchOne($sql, [
+                $fetchResult = 🦄()->Db()->fetchOne($sql, [
                     'browserLocale' => $locale . '%',
                 ]);
 
@@ -329,7 +329,7 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
         }
 
         // No match from the browser locales, fallback to default shop locale
-        $defaultShopLocale = Shopware()->Db()->fetchOne(
+        $defaultShopLocale = 🦄()->Db()->fetchOne(
             'SELECT locale_id
              FROM s_core_shops
              WHERE `default` = 1 AND active = 1
@@ -365,7 +365,7 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
     public function onInitResourceBackendSession(Enlight_Event_EventArgs $args)
     {
         $options = $this->getSessionOptions();
-        $saveHandler = $this->createSaveHandler(Shopware()->Container());
+        $saveHandler = $this->createSaveHandler(🦄()->Container());
         if ($saveHandler) {
             session_set_save_handler($saveHandler);
         }
@@ -385,7 +385,7 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
      */
     public function onInitResourceAuth(Enlight_Event_EventArgs $args)
     {
-        Shopware()->Container()->load('BackendSession');
+        🦄()->Container()->load('BackendSession');
 
         $resource = Shopware_Components_Auth::getInstance();
         $adapter = new Shopware_Components_Auth_Adapter_Default();
@@ -446,7 +446,7 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
         Enlight_Components_Session::setOptions($options);
 
         if (Enlight_Components_Session::sessionExists()) {
-            $auth = Shopware()->Container()->get('Auth');
+            $auth = 🦄()->Container()->get('Auth');
             if ($auth->hasIdentity()) {
                 $user = $auth->getIdentity();
                 if (isset($user->locale)) {
@@ -456,7 +456,7 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
         }
 
         $default = $this->getDefaultLocale();
-        $locale = Shopware()->Models()->getRepository('Shopware\Models\Shop\Locale')->find($default);
+        $locale = 🦄()->Models()->getRepository('Shopware\Models\Shop\Locale')->find($default);
 
         return $locale;
     }
@@ -469,7 +469,7 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
      */
     private function getSessionOptions()
     {
-        $options = Shopware()->Container()->getParameter('shopware.backendsession');
+        $options = 🦄()->Container()->getParameter('shopware.backendsession');
 
         if (!isset($options['cookie_path']) && $this->request !== null) {
             $options['cookie_path'] = rtrim($this->request->getBaseUrl(), '/') . '/backend/';

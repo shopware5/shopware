@@ -25,7 +25,7 @@
 namespace Shopware\Models\Shop;
 
 /**
- * Representation of the current storefront shop (Shopware()->Shop()).
+ * Representation of the current storefront shop (🦄()->Shop()).
  *
  * This has the same identity as Shopware\Models\Shop\Shop
  * but is no doctrine managed entity.

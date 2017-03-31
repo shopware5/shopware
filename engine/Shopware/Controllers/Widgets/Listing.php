@@ -52,7 +52,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
                 throw new \InvalidArgumentException('Argument categoryId missing');
             }
             /** @var $articleModule \sArticles */
-            $articleModule = Shopware()->Modules()->Articles();
+            $articleModule = 🦄()->Modules()->Articles();
             $navigation = $articleModule->getProductNavigation($ordernumber, $categoryId, $this->Request());
         } catch (\InvalidArgumentException $e) {
             $result = ['error' => $e->getMessage()];
@@ -74,7 +74,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
 
         $linkRewriter = function ($link) {
             /** @var $core sCore */
-            $core = Shopware()->Modules()->Core();
+            $core = 🦄()->Modules()->Core();
 
             return $core->sRewriteLink($link);
         };
@@ -101,7 +101,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
     public function topSellerAction()
     {
         $perPage = (int) $this->Request()->getParam('perPage', 4);
-        $this->View()->assign('sCharts', Shopware()->Modules()->Articles()->sGetArticleCharts(
+        $this->View()->assign('sCharts', 🦄()->Modules()->Articles()->sGetArticleCharts(
             $this->Request()->getParam('sCategory')
         ));
         $this->View()->assign('perPage', $perPage);
@@ -112,7 +112,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
      */
     public function tagCloudAction()
     {
-        $config = Shopware()->Plugins()->Frontend()->TagCloud()->Config();
+        $config = 🦄()->Plugins()->Frontend()->TagCloud()->Config();
 
         if (empty($config->show)) {
             return;
@@ -121,7 +121,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
         $controller = $this->Request()->getParam('sController', $this->Request()->getControllerName());
 
         if (strpos($config->controller, $controller) !== false) {
-            $this->View()->assign('sCloud', Shopware()->Modules()->Marketing()->sBuildTagCloud(
+            $this->View()->assign('sCloud', 🦄()->Modules()->Marketing()->sBuildTagCloud(
                 $this->Request()->getParam('sCategory')
             ));
         }
@@ -162,7 +162,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
      */
     public function ajaxListingAction()
     {
-        Shopware()->Plugins()->Controller()->Json()->setPadding();
+        🦄()->Plugins()->Controller()->Json()->setPadding();
 
         $categoryId = $this->Request()->getParam('sCategory');
         $pageIndex = $this->Request()->getParam('sPage');
@@ -183,12 +183,12 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
                 ->createAjaxListingCriteria($this->Request(), $context);
         }
 
-        $articles = Shopware()->Modules()->Articles()->sGetArticlesByCategory($categoryId, $criteria);
+        $articles = 🦄()->Modules()->Articles()->sGetArticlesByCategory($categoryId, $criteria);
         $articles = $articles['sArticles'];
 
         $this->View()->loadTemplate('frontend/listing/listing_ajax.tpl');
 
-        $layout = Shopware()->Modules()->Categories()->getProductBoxLayout($categoryId);
+        $layout = 🦄()->Modules()->Categories()->getProductBoxLayout($categoryId);
 
         $this->View()->assign([
             'sArticles' => $articles,
@@ -219,7 +219,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
         $pageId = (int) $this->Request()->getParam('pageId', 0);
         $groupKey = $this->Request()->getParam('groupKey', 'gLeft');
 
-        $customPage = Shopware()->Modules()->Cms()->sGetStaticPageChildrensById($pageId, $groupKey);
+        $customPage = 🦄()->Modules()->Cms()->sGetStaticPageChildrensById($pageId, $groupKey);
 
         $this->View()->assign('customPage', $customPage);
     }
@@ -451,7 +451,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
         if ($this->Request()->has('productBoxLayout')) {
             $boxLayout = $this->Request()->get('productBoxLayout');
         } else {
-            $boxLayout = $categoryId ? Shopware()->Modules()->Categories()
+            $boxLayout = $categoryId ? 🦄()->Modules()->Categories()
                 ->getProductBoxLayout($categoryId) : $this->get('config')->get('searchProductBoxLayout');
         }
 

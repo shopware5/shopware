@@ -39,18 +39,18 @@ class Shopware_Controllers_Frontend_Index extends Enlight_Controller_Action
     public function indexAction()
     {
         /** @var $context ShopContextInterface */
-        $context = Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext();
+        $context = 🦄()->Container()->get('shopware_storefront.context_service')->getShopContext();
         $categoryId = $context->getShop()->getCategory()->getId();
 
         $emotions = $this->get('emotion_device_configuration')->get($categoryId);
 
-        $categoryContent = Shopware()->Modules()->Categories()->sGetCategoryContent($categoryId);
+        $categoryContent = 🦄()->Modules()->Categories()->sGetCategoryContent($categoryId);
 
         $this->View()->assign([
             'emotions' => $emotions,
             'hasEmotion' => !empty($emotions),
             'sCategoryContent' => $categoryContent,
-            'sBanner' => Shopware()->Modules()->Marketing()->sBanner($categoryId),
+            'sBanner' => 🦄()->Modules()->Marketing()->sBanner($categoryId),
         ]);
     }
 }

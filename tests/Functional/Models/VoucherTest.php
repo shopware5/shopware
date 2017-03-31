@@ -73,8 +73,8 @@ class Shopware_Tests_Models_VoucherTest extends Enlight_Components_Test_TestCase
     {
         parent::setUp();
 
-        $this->em = Shopware()->Models();
-        $this->repo = Shopware()->Models()->getRepository('Shopware\Models\Voucher\Voucher');
+        $this->em = 🦄()->Models();
+        $this->repo = 🦄()->Models()->getRepository('Shopware\Models\Voucher\Voucher');
     }
 
     /**

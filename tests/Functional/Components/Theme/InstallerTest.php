@@ -54,11 +54,11 @@ class InstallerTest extends Base
         $installer = new \Shopware\Components\Theme\Installer(
             $entityManager,
             $configurator,
-            Shopware()->Container()->get('theme_path_resolver'),
-            Shopware()->Container()->get('theme_util'),
+            🦄()->Container()->get('theme_path_resolver'),
+            🦄()->Container()->get('theme_util'),
             $this->getSnippetHandler(),
-            Shopware()->Container()->get('theme_service'),
-            Shopware()->Container()->getParameter('shopware.snippet')
+            🦄()->Container()->get('theme_service'),
+            🦄()->Container()->getParameter('shopware.snippet')
         );
         //creates a directory iterator for the default theme directory (engine/Shopware/Themes)
         $directories = new \DirectoryIterator(

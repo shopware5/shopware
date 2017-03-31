@@ -62,19 +62,19 @@ class Shopware_Tests_Models_ShopRepositoryTest extends Enlight_Components_Test_C
     {
         parent::setUp();
 
-        $this->shopRepository = Shopware()->Models()->getRepository(Shop::class);
-        $this->mainShop = Shopware()->Db()->fetchRow('SELECT * FROM s_core_shops WHERE id = 1');
+        $this->shopRepository = 🦄()->Models()->getRepository(Shop::class);
+        $this->mainShop = 🦄()->Db()->fetchRow('SELECT * FROM s_core_shops WHERE id = 1');
 
         // Backup and change existing main shop
-        $this->mainShopBackup = Shopware()->Db()->fetchRow('SELECT * FROM s_core_shops WHERE id = 1');
+        $this->mainShopBackup = 🦄()->Db()->fetchRow('SELECT * FROM s_core_shops WHERE id = 1');
 
-        Shopware()->Db()->update('s_core_shops', [
+        🦄()->Db()->update('s_core_shops', [
             'host' => 'fallbackhost',
             'secure' => 1,
             'secure_base_path' => '/secure',
         ], 'id = 1');
 
-        $this->mainShop = Shopware()->Db()->fetchRow('SELECT * FROM s_core_shops WHERE id = 1');
+        $this->mainShop = 🦄()->Db()->fetchRow('SELECT * FROM s_core_shops WHERE id = 1');
 
         // Create test shops
         $sql = "
@@ -86,7 +86,7 @@ class Shopware_Tests_Models_ShopRepositoryTest extends Enlight_Components_Test_C
             (104, 1, 'testShop5', 'Testshop', 0, NULL, NULL, ?, '', 0, NULL, ?, 11, 11, 11, 2, 1, 1, 2, 0, 0, 1, 0);
 
         ";
-        Shopware()->Db()->query($sql, [
+        🦄()->Db()->query($sql, [
             $this->mainShop['base_path'] . '/english', $this->mainShop['secure_base_path'] . '/english',
             $this->mainShop['base_path'] . '/en/uk', $this->mainShop['secure_base_path'] . '/en/uk',
             $this->mainShop['base_path'] . '/en', $this->mainShop['secure_base_path'] . '/en',
@@ -100,9 +100,9 @@ class Shopware_Tests_Models_ShopRepositoryTest extends Enlight_Components_Test_C
         parent::tearDown();
 
         // Remove test data and restore previous status
-        Shopware()->Db()->exec('DELETE FROM s_core_shops WHERE id IN (100, 101, 102, 103, 104);');
+        🦄()->Db()->exec('DELETE FROM s_core_shops WHERE id IN (100, 101, 102, 103, 104);');
         unset($this->mainShopBackup['id']);
-        Shopware()->Db()->update('s_core_shops', $this->mainShopBackup, 'id = 1');
+        🦄()->Db()->update('s_core_shops', $this->mainShopBackup, 'id = 1');
     }
 
     /**
@@ -204,7 +204,7 @@ class Shopware_Tests_Models_ShopRepositoryTest extends Enlight_Components_Test_C
      */
     public function testMultiShopLocation($host, $alias)
     {
-        Shopware()->Container()->reset('Template');
+        🦄()->Container()->reset('Template');
 
         // Create test shops
         $sql = "
@@ -227,7 +227,7 @@ class Shopware_Tests_Models_ShopRepositoryTest extends Enlight_Components_Test_C
               11, 11, 11, 2, 1, 1, 2, 0, 0, 1
             );
         ";
-        Shopware()->Db()->exec($sql);
+        🦄()->Db()->exec($sql);
 
         $request = $this->Request();
         $this->Request()->setHttpHost($alias);
@@ -238,7 +238,7 @@ class Shopware_Tests_Models_ShopRepositoryTest extends Enlight_Components_Test_C
 
         // Delete test shops
         $sql = 'DELETE FROM s_core_shops WHERE id IN (10, 11);';
-        Shopware()->Db()->exec($sql);
+        🦄()->Db()->exec($sql);
     }
 
     /**
@@ -248,29 +248,29 @@ class Shopware_Tests_Models_ShopRepositoryTest extends Enlight_Components_Test_C
     public function testShopDuplication()
     {
         // Get inital number of shops
-        $numberOfShopsBefore = Shopware()->Db()->fetchOne('SELECT count(*) FROM s_core_shops');
+        $numberOfShopsBefore = 🦄()->Db()->fetchOne('SELECT count(*) FROM s_core_shops');
 
         // Load arbitrary order
-        $order = Shopware()->Models()->getRepository(Order::class)->find(57);
+        $order = 🦄()->Models()->getRepository(Order::class)->find(57);
 
         // Modify order entitiy to trigger an update action, when the entity is flushed to the database
         $order->setComment('Dummy');
 
         // Send order status mail to customer, this will invoke the fixActive()-method
-        $mail = Shopware()->Modules()->Order()->createStatusMail($order->getId(), 7);
-        Shopware()->Modules()->Order()->sendStatusMail($mail);
+        $mail = 🦄()->Modules()->Order()->createStatusMail($order->getId(), 7);
+        🦄()->Modules()->Order()->sendStatusMail($mail);
 
         // Flush changes changed order to the database
-        Shopware()->Models()->flush($order);
+        🦄()->Models()->flush($order);
 
         // Get current number of shops
-        $numberOfShopsAfter = Shopware()->Db()->fetchOne('SELECT count(*) FROM s_core_shops');
+        $numberOfShopsAfter = 🦄()->Db()->fetchOne('SELECT count(*) FROM s_core_shops');
 
         // Check that the number of shops has not changed
         $this->assertSame($numberOfShopsBefore, $numberOfShopsAfter);
 
         // Clean up comment
         $order->setComment('');
-        Shopware()->Models()->flush($order);
+        🦄()->Models()->flush($order);
     }
 }

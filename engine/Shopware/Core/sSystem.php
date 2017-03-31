@@ -36,7 +36,7 @@ class sSystem
      *
      * @var Shopware_Components_Config
      *
-     * @deprecated Use Shopware()->Config()
+     * @deprecated Use 🦄()->Config()
      */
     public $sCONFIG;
 
@@ -45,7 +45,7 @@ class sSystem
      *
      * @var string
      *
-     * @deprecated Use Shopware()->Session()->get('sessionId')
+     * @deprecated Use 🦄()->Session()->get('sessionId')
      */
     public $sSESSION_ID;
 
@@ -54,7 +54,7 @@ class sSystem
      *
      * @var Enlight_Template_Manager
      *
-     * @deprecated Use Shopware()->Template()
+     * @deprecated Use 🦄()->Template()
      */
     public $sSMARTY;
 
@@ -63,7 +63,7 @@ class sSystem
      *
      * @var Shopware_Components_Modules
      *
-     * @deprecated Use Shopware()->Modules()
+     * @deprecated Use 🦄()->Modules()
      */
     public $sMODULES;
 
@@ -86,7 +86,7 @@ class sSystem
      *
      * @var Enlight_Components_Session_Namespace Session
      *
-     * @deprecated Use Shopware()->Session()
+     * @deprecated Use 🦄()->Session()
      */
     public $_SESSION;
 
@@ -116,7 +116,7 @@ class sSystem
      *
      * @var array
      *
-     * @deprecated Use Shopware()->Shop()->getCurrency() or Shopware()->Shop()->getCurrency()->toArray()
+     * @deprecated Use 🦄()->Shop()->getCurrency() or 🦄()->Shop()->getCurrency()->toArray()
      */
     public $sCurrency;
 
@@ -125,7 +125,7 @@ class sSystem
      *
      * @var
      *
-     * @deprecated Use Shopware()->Mail()
+     * @deprecated Use 🦄()->Mail()
      */
     public $sMailer;
 
@@ -134,7 +134,7 @@ class sSystem
      *
      * @var bool
      *
-     * @deprecated Use Shopware()->Session()->Bot
+     * @deprecated Use 🦄()->Session()->Bot
      */
     public $sBotSession;
 
@@ -204,7 +204,7 @@ class sSystem
     }
 
     /**
-     * @deprecated Use Shopware()->Modules()->Core()->(method name)
+     * @deprecated Use 🦄()->Modules()->Core()->(method name)
      *
      * @param $name
      * @param null $params
@@ -213,6 +213,6 @@ class sSystem
      */
     public function __call($name, $params = null)
     {
-        return call_user_func_array([Shopware()->Modules()->Core(), $name], $params);
+        return call_user_func_array([🦄()->Modules()->Core(), $name], $params);
     }
 }

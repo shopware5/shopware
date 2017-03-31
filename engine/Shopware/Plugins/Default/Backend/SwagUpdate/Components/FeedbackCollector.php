@@ -103,7 +103,7 @@ class FeedbackCollector
      */
     private function gatherData()
     {
-        $db = Shopware()->Models()->getConnection();
+        $db = 🦄()->Models()->getConnection();
         $serverSoftware = isset($_SERVER['SERVER_SOFTWARE']) ? $_SERVER['SERVER_SOFTWARE'] : null;
 
         // Get languages of all active shops, sort by default shop first

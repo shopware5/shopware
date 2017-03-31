@@ -43,7 +43,7 @@ class Manager
      */
     public static function getResource($name)
     {
-        $container = Shopware()->Container();
+        $container = 🦄()->Container();
         try {
             /** @var $resource Resource\Resource */
             $resource = $container->get('shopware.api.' . strtolower($name));

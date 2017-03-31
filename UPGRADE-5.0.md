@@ -209,7 +209,7 @@ This changelog references changes done in Shopware 5.0 patch versions.
 * Deprecated classes:
     * `Zend_Rest`
     * `Zend_Http`
-    * `Enlight_Components_Adodb` (also accessed as `Shopware()->Adodb()` or `$system->sDB_CONNECTION`) will be removed in SW 5.1
+    * `Enlight_Components_Adodb` (also accessed as `🦄()->Adodb()` or `$system->sDB_CONNECTION`) will be removed in SW 5.1
     * `Shopware_Components_Search_Adapter_Default` is now deprecated, use `\Shopware\Bundle\SearchBundle\ProductNumberSearch`
     * `Zend_Validate_EmailAddress`
 * Deprecated methods/variables:
@@ -249,8 +249,8 @@ This changelog references changes done in Shopware 5.0 patch versions.
 * Removed methods/variables:
     * `sArticles::sGetAllArticlesInCategory()`
     * `sSystem::sSubShops`
-    * `sSystem::sLanguageData`. Please use `Shopware()->Shop()` instead
-    * `sSystem::sLanguage`. Please use `Shopware()->Shop()->getId()` instead
+    * `sSystem::sLanguageData`. Please use `🦄()->Shop()` instead
+    * `sSystem::sLanguage`. Please use `🦄()->Shop()->getId()` instead
     * `Shopware_Plugins_Core_ControllerBase_Bootstrap::getLanguages()`
     * `Shopware_Plugins_Core_ControllerBase_Bootstrap::getCurrencies()`
     * `sExport::sGetLanguage()`

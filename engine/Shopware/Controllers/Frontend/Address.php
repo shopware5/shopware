@@ -54,7 +54,7 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
      */
     public function preDispatch()
     {
-        $this->admin = Shopware()->Modules()->Admin();
+        $this->admin = 🦄()->Modules()->Admin();
         $this->addressRepository = $this->get('models')->getRepository(Address::class);
         $this->addressService = $this->get('shopware_account.address_service');
 
@@ -239,7 +239,7 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
      */
     public function ajaxSelectionAction()
     {
-        $addressRepository = Shopware()->Models()->getRepository(Address::class);
+        $addressRepository = 🦄()->Models()->getRepository(Address::class);
         $addresses = $addressRepository->getListArray($this->get('session')->get('sUserId'));
         $activeAddressId = $this->Request()->getParam('id', null);
         $extraData = $this->Request()->getParam('extraData', []);

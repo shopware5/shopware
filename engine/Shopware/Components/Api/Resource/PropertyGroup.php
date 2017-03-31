@@ -203,7 +203,7 @@ class PropertyGroup extends Resource
             }
             if (!isset($params['position']) || empty($params['position'])) {
                 // Set position to end
-                // $params['position'] = Shopware()->Db()->fetchOne("SELECT MAX(position)+1 FROM s_filter");
+                // $params['position'] = 🦄()->Db()->fetchOne("SELECT MAX(position)+1 FROM s_filter");
                 // Set position to zero
                 $params['position'] = 0;
             }

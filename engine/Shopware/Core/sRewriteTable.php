@@ -139,15 +139,15 @@ class sRewriteTable
         ContextServiceInterface $contextService = null,
         ShopPageServiceInterface $shopPageService = null
     ) {
-        $this->db = $db ?: Shopware()->Db();
-        $this->config = $config ?: Shopware()->Config();
-        $this->modelManager = $modelManager ?: Shopware()->Models();
-        $this->sSYSTEM = $systemModule ?: Shopware()->System();
-        $this->template = $template ?: Shopware()->Template();
-        $this->moduleManager = $moduleManager ?: Shopware()->Modules();
-        $this->slug = $slug ?: Shopware()->Container()->get('shopware.slug');
-        $this->contextService = $contextService ?: Shopware()->Container()->get('shopware_storefront.context_service');
-        $this->shopPageService = $shopPageService ?: Shopware()->Container()->get('shopware_storefront.shop_page_service');
+        $this->db = $db ?: 🦄()->Db();
+        $this->config = $config ?: 🦄()->Config();
+        $this->modelManager = $modelManager ?: 🦄()->Models();
+        $this->sSYSTEM = $systemModule ?: 🦄()->System();
+        $this->template = $template ?: 🦄()->Template();
+        $this->moduleManager = $moduleManager ?: 🦄()->Modules();
+        $this->slug = $slug ?: 🦄()->Container()->get('shopware.slug');
+        $this->contextService = $contextService ?: 🦄()->Container()->get('shopware_storefront.context_service');
+        $this->shopPageService = $shopPageService ?: 🦄()->Container()->get('shopware_storefront.shop_page_service');
     }
 
     /**
@@ -207,7 +207,7 @@ class sRewriteTable
 
         $this->data->assign('sConfig', $this->config);
         $this->data->assign('sRouter', $this);
-        $this->data->assign('sCategoryStart', Shopware()->Shop()->getCategory()->getId());
+        $this->data->assign('sCategoryStart', 🦄()->Shop()->getCategory()->getId());
     }
 
     /**
@@ -221,7 +221,7 @@ class sRewriteTable
     {
         $this->baseSetup();
 
-        $context = $this->contextService->createShopContext(Shopware()->Shop()->getId());
+        $context = $this->contextService->createShopContext(🦄()->Shop()->getId());
 
         $this->sCreateRewriteTableCleanup();
         $this->sCreateRewriteTableStatic();
@@ -339,7 +339,7 @@ class sRewriteTable
             return;
         }
 
-        $parentId = Shopware()->Shop()->getCategory()->getId();
+        $parentId = 🦄()->Shop()->getCategory()->getId();
         $categories = $this->modelManager->getRepository('Shopware\Models\Category\Category')
             ->getActiveChildrenList($parentId);
 
@@ -395,13 +395,13 @@ class sRewriteTable
         $sql = $this->getSeoArticleQuery();
         $sql = $this->db->limit($sql, $limit, $offset);
 
-        $shopFallbackId = (Shopware()->Shop()->getFallback() instanceof \Shopware\Models\Shop\Shop) ? Shopware()->Shop()->getFallback()->getId() : null;
+        $shopFallbackId = (🦄()->Shop()->getFallback() instanceof \Shopware\Models\Shop\Shop) ? 🦄()->Shop()->getFallback()->getId() : null;
 
         $result = $this->db->fetchAll(
             $sql,
             [
-                Shopware()->Shop()->get('parentID'),
-                Shopware()->Shop()->getId(),
+                🦄()->Shop()->get('parentID'),
+                🦄()->Shop()->getId(),
                 $shopFallbackId,
                 $lastUpdate,
             ]
@@ -409,11 +409,11 @@ class sRewriteTable
 
         $result = $this->mapArticleTranslationObjectData($result);
 
-        $result = Shopware()->Events()->filter(
+        $result = 🦄()->Events()->filter(
             'Shopware_Modules_RewriteTable_sCreateRewriteTableArticles_filterArticles',
             $result,
             [
-                'shop' => Shopware()->Shop()->getId(),
+                'shop' => 🦄()->Shop()->getId(),
             ]
         );
 
@@ -502,7 +502,7 @@ class sRewriteTable
     public function sCreateRewriteTableBlog($offset = null, $limit = null)
     {
         $query = $this->modelManager->getRepository('Shopware\Models\Category\Category')
-            ->getBlogCategoriesByParentQuery(Shopware()->Shop()->get('parentID'));
+            ->getBlogCategoriesByParentQuery(🦄()->Shop()->get('parentID'));
         $blogCategories = $query->getArrayResult();
 
         //get all blog category ids
@@ -557,7 +557,7 @@ class sRewriteTable
         }
 
         $ids = $this->getManufacturerIds($offset, $limit);
-        $manufacturers = Shopware()->Container()->get('shopware_storefront.manufacturer_service')->getList($ids, $context);
+        $manufacturers = 🦄()->Container()->get('shopware_storefront.manufacturer_service')->getList($ids, $context);
 
         $seoSupplierRouteTemplate = $this->config->get('seoSupplierRouteTemplate');
         foreach ($manufacturers as $manufacturer) {
@@ -583,10 +583,10 @@ class sRewriteTable
         $repo = $this->modelManager->getRepository('Shopware\Models\Emotion\Emotion');
         $queryBuilder = $repo->getListQueryBuilder();
 
-        $languageId = Shopware()->Shop()->getId();
+        $languageId = 🦄()->Shop()->getId();
         $fallbackId = null;
 
-        $fallbackShop = Shopware()->Shop()->getFallback();
+        $fallbackShop = 🦄()->Shop()->getFallback();
 
         if (!empty($fallbackShop)) {
             $fallbackId = $fallbackShop->getId();
@@ -677,14 +677,14 @@ class sRewriteTable
         $update->execute([
             $org_path,
             $path,
-            Shopware()->Shop()->getId(),
+            🦄()->Shop()->getId(),
         ]);
 
         $insert = $this->getPreparedInsert();
         $insert->execute([
             $org_path,
             $path,
-            Shopware()->Shop()->getId(),
+            🦄()->Shop()->getId(),
         ]);
     }
 
@@ -756,7 +756,7 @@ class sRewriteTable
     {
         $parts = $this->modelManager->getRepository('Shopware\Models\Category\Category')
             ->getPathById($categoryId, 'name');
-        $level = Shopware()->Shop()->getCategory()->getLevel() ?: 1;
+        $level = 🦄()->Shop()->getCategory()->getLevel() ?: 1;
         $parts = array_slice($parts, $level);
 
         return $parts;
@@ -988,7 +988,7 @@ class sRewriteTable
     private function getManufacturerIds($offset = null, $limit = null)
     {
         $criteria = new SearchCriteria(Supplier::class);
-        $registry = Shopware()->Container()->get('shopware_attribute.repository_registry');
+        $registry = 🦄()->Container()->get('shopware_attribute.repository_registry');
         $repo = $registry->getRepository($criteria);
 
         if ($offset !== null) {
@@ -1017,8 +1017,8 @@ class sRewriteTable
         }
 
         /* @var \Shopware\Models\Shop\Shop $shop */
-        if (Shopware()->Container()->has('shop')) {
-            $shop = Shopware()->Container()->get('shop');
+        if (🦄()->Container()->has('shop')) {
+            $shop = 🦄()->Container()->get('shop');
 
             return $this->contextService->createShopContext($shop->getId());
         }

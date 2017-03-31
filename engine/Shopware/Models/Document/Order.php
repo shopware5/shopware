@@ -232,7 +232,7 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
      */
     public function getOrder()
     {
-        $this->_order = new ArrayObject(Shopware()->Db()->fetchRow('
+        $this->_order = new ArrayObject(🦄()->Db()->fetchRow('
             SELECT s_order.*,s_core_currencies.factor,s_core_currencies.id AS currencyID,s_core_currencies.templatechar,s_core_currencies.name AS currencyName
             FROM s_order
              LEFT JOIN s_core_currencies ON s_core_currencies.currency = s_order.currency
@@ -244,7 +244,7 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
         }
 
         // Load order attributes
-        $this->_order['attributes'] = Shopware()->Db()->fetchRow('
+        $this->_order['attributes'] = 🦄()->Db()->fetchRow('
         SELECT * FROM s_order_attributes WHERE orderID = ?
         ', [$this->_order['id']]);
 
@@ -278,7 +278,7 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
         );
 
         if (empty($taxShipping)) {
-            $taxShipping = Shopware()->Config()->sTAXSHIPPING;
+            $taxShipping = 🦄()->Config()->sTAXSHIPPING;
         }
 
         $taxShipping = (float) $taxShipping;
@@ -322,7 +322,7 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
      */
     public function getPositions()
     {
-        $this->_positions = new ArrayObject(Shopware()->Db()->fetchAll('
+        $this->_positions = new ArrayObject(🦄()->Db()->fetchAll('
         SELECT
             od.*, a.taxID as articleTaxID,
             at.attr1, at.attr2, at.attr3, at.attr4, at.attr5, at.attr6, at.attr7, at.attr8, at.attr9, at.attr10,
@@ -347,7 +347,7 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
         foreach ($this->_positions as $key => $dummy) {
             $position = $this->_positions->offsetGet($key);
 
-            $position['attributes'] = Shopware()->Db()->fetchRow('
+            $position['attributes'] = 🦄()->Db()->fetchRow('
             SELECT * FROM s_order_details_attributes WHERE detailID = ?
             ', [$position['id']]);
 
@@ -413,10 +413,10 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
                 if ($position['modus'] == 4 || $position['modus'] == 3) {
                     if (empty($position['tax_rate'])) {
                         // Discounts get tax from configuration
-                        if (!empty(Shopware()->Config()->sTAXAUTOMODE)) {
+                        if (!empty(🦄()->Config()->sTAXAUTOMODE)) {
                             $tax = $this->getMaxTaxRate();
                         } else {
-                            $tax = Shopware()->Config()->sDISCOUNTTAX;
+                            $tax = 🦄()->Config()->sDISCOUNTTAX;
                         }
                         $position['tax'] = $tax;
                     } else {
@@ -457,13 +457,13 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
                     $position['netto'] = $position['price'] / (100 + $position['tax']) * 100;
                 }
             } elseif ($position['modus'] == 2) {
-                $ticketResult = Shopware()->Db()->fetchRow('
+                $ticketResult = 🦄()->Db()->fetchRow('
                 SELECT * FROM s_emarketing_vouchers WHERE ordercode=?
                 ', [$position['articleordernumber']]);
 
                 if (empty($position['tax_rate'])) {
                     if ($ticketResult['taxconfig'] == 'default' || empty($ticketResult['taxconfig'])) {
-                        $position['tax'] = Shopware()->Config()->sVOUCHERTAX;
+                        $position['tax'] = 🦄()->Config()->sVOUCHERTAX;
                         // Pre 3.5.4 behaviour
                     } elseif ($ticketResult['taxconfig'] == 'auto') {
                         // Check max. used tax-rate from basket
@@ -471,7 +471,7 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
                     } elseif (intval($ticketResult['taxconfig'])) {
                         // Fix defined tax
                         $temporaryTax = $ticketResult['taxconfig'];
-                        $getTaxRate = Shopware()->Db()->fetchOne("
+                        $getTaxRate = 🦄()->Db()->fetchOne("
                         SELECT tax FROM s_core_tax WHERE id = $temporaryTax
                         ");
                         $position['tax'] = $getTaxRate['tax'];
@@ -521,7 +521,7 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
         LEFT JOIN s_core_customergroups g ON u.customergroup = g.groupkey
         WHERE u.id = ?';
 
-        $user = Shopware()->Db()->fetchRow($sql, [$this->_userID]);
+        $user = 🦄()->Db()->fetchRow($sql, [$this->_userID]);
 
         if ($user) {
             $this->_user = new ArrayObject($user, ArrayObject::ARRAY_AS_PROPS);
@@ -533,7 +533,7 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
      */
     public function getBilling()
     {
-        $this->_billing = new ArrayObject(Shopware()->Db()->fetchRow('
+        $this->_billing = new ArrayObject(🦄()->Db()->fetchRow('
         SELECT sob.*,sub.ustid,u.customernumber FROM s_order_billingaddress AS sob
         LEFT JOIN s_user_addresses AS sub ON sub.id = ?
         LEFT JOIN s_user u ON u.id = sub.user_id
@@ -541,13 +541,13 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
         sob.orderID = ?
         ', [$this->_user['default_billing_address_id'], $this->_userID, $this->_id]), ArrayObject::ARRAY_AS_PROPS);
 
-        $this->_billing['country'] = new ArrayObject(Shopware()->Db()->fetchRow('
+        $this->_billing['country'] = new ArrayObject(🦄()->Db()->fetchRow('
         SELECT * FROM s_core_countries
         WHERE id=?
         ', [$this->_billing['countryID']]), ArrayObject::ARRAY_AS_PROPS);
 
         if (!empty($this->_billing['stateID'])) {
-            $this->_billing['state'] = new ArrayObject(Shopware()->Db()->fetchRow('
+            $this->_billing['state'] = new ArrayObject(🦄()->Db()->fetchRow('
             SELECT * FROM s_core_countries_states
             WHERE id=?
             ', [$this->_billing['stateID']]), ArrayObject::ARRAY_AS_PROPS);
@@ -555,7 +555,7 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
             $this->_billing['state'] = [];
         }
 
-        $this->_billing['attributes'] = Shopware()->Db()->fetchRow('
+        $this->_billing['attributes'] = 🦄()->Db()->fetchRow('
         SELECT * FROM s_order_billingaddress_attributes WHERE billingID = ?
         ', [$this->_billing['id']]);
     }
@@ -573,7 +573,7 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
             return;
         }
 
-        $shipping = Shopware()->Db()->fetchRow('
+        $shipping = 🦄()->Db()->fetchRow('
             SELECT * FROM s_order_shippingaddress WHERE userID = ? AND
             orderID = ?
         ', [$this->_userID, $this->_id]);
@@ -582,7 +582,7 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
             $this->_shipping = new ArrayObject($shipping, ArrayObject::ARRAY_AS_PROPS);
         }
 
-        $this->_shipping['attributes'] = Shopware()->Db()->fetchRow('
+        $this->_shipping['attributes'] = 🦄()->Db()->fetchRow('
         SELECT * FROM s_order_shippingaddress_attributes WHERE shippingID = ?
         ', [$this->_shipping['id']]);
 
@@ -592,13 +592,13 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
             if (empty($this->_shipping['countryID'])) {
                 $this->_shipping['countryID'] = $this->_billing['countryID'];
             }
-            $this->_shipping['country'] = new ArrayObject(Shopware()->Db()->fetchRow('
+            $this->_shipping['country'] = new ArrayObject(🦄()->Db()->fetchRow('
             SELECT * FROM s_core_countries
             WHERE id=?
             ', [$this->_shipping['countryID']]), ArrayObject::ARRAY_AS_PROPS);
 
             if (!empty($this->_shipping['stateID'])) {
-                $this->_shipping['state'] = new ArrayObject(Shopware()->Db()->fetchRow('
+                $this->_shipping['state'] = new ArrayObject(🦄()->Db()->fetchRow('
                 SELECT * FROM s_core_countries_states
                 WHERE id=?
                 ', [$this->_shipping['stateID']]), ArrayObject::ARRAY_AS_PROPS);
@@ -615,7 +615,7 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
     {
         $dispatch_table = 's_premium_dispatch';
 
-        $this->_dispatch = Shopware()->Db()->fetchRow("
+        $this->_dispatch = 🦄()->Db()->fetchRow("
             SELECT name, description FROM $dispatch_table
             WHERE id = ?
         ", [$this->_order['dispatchID']]);
@@ -631,7 +631,7 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
      */
     public function getPayment()
     {
-        $paymentData = Shopware()->Db()->fetchRow(
+        $paymentData = 🦄()->Db()->fetchRow(
             'SELECT * FROM s_core_paymentmeans WHERE id = ?',
             [$this->_order['paymentID']]
         );
@@ -641,7 +641,7 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
             ArrayObject::ARRAY_AS_PROPS
         );
         if (!empty($this->_payment['table'])) {
-            $specificPaymentData = Shopware()->Db()->fetchRow(
+            $specificPaymentData = 🦄()->Db()->fetchRow(
                 'SELECT * FROM ' . $this->_payment['table'] . ' WHERE userID=?',
                 $this->_userID
             );
@@ -659,7 +659,7 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
     public function getPaymentInstances()
     {
         $this->_paymentInstances = new ArrayObject(
-            Shopware()->Db()->fetchAll('
+            🦄()->Db()->fetchAll('
                 SELECT * FROM s_core_payment_instance
                 WHERE order_id=?',
                 [$this->_id]
@@ -676,7 +676,7 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
     private function getTaxRepository()
     {
         if ($this->_taxRepository === null) {
-            $this->_taxRepository = Shopware()->Models()->getRepository('Shopware\Models\Tax\Tax');
+            $this->_taxRepository = 🦄()->Models()->getRepository('Shopware\Models\Tax\Tax');
         }
 
         return $this->_taxRepository;
@@ -746,7 +746,7 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
                 LIMIT 1
                 ';
 
-        $taxRate = Shopware()->Db()->fetchOne($sql, [
+        $taxRate = 🦄()->Db()->fetchOne($sql, [
                 $approximateTaxRate, // p.e. 19.971195391 (approx. 20% VAT)
                 $approximateTaxRate,
                 $maxDiff, //default: 0.1

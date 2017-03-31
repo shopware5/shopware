@@ -65,9 +65,9 @@ class Shopware_Plugins_Core_ControllerBase_Bootstrap extends Shopware_Components
 
         $view->baseUrl = $request->getBaseUrl() . $request->getPathInfo();
 
-        $shop = Shopware()->Shop();
+        $shop = 🦄()->Shop();
         $view->Controller = $args->getSubject()->Request()->getControllerName();
-        $view->Shopware = Shopware();
+        $view->Shopware = 🦄();
 
         $view->sBasketQuantity = $view->sBasketQuantity ?: 0;
         $view->sBasketAmount = $view->sBasketAmount ?: 0;
@@ -81,12 +81,12 @@ class Shopware_Plugins_Core_ControllerBase_Bootstrap extends Shopware_Components
         $view->sCategoryCurrent = $this->getCategoryCurrent($view->sCategoryStart);
         $view->sCategories = $this->getCategories($view->sCategoryCurrent);
         $view->sMainCategories = $view->sCategories;
-        $view->sOutputNet = Shopware()->Session()->sOutputNet;
+        $view->sOutputNet = 🦄()->Session()->sOutputNet;
 
         $activePage = isset($view->sCustomPage['id']) ? $view->sCustomPage['id'] : null;
         $view->sMenu = $this->getMenu($shop->getId(), $activePage);
 
-        $view->sShopname = Shopware()->Config()->shopName;
+        $view->sShopname = 🦄()->Config()->shopName;
     }
 
     /**
@@ -96,7 +96,7 @@ class Shopware_Plugins_Core_ControllerBase_Bootstrap extends Shopware_Components
      */
     public function getBasketAmount()
     {
-        $amount = Shopware()->Modules()->Basket()->sGetAmount();
+        $amount = 🦄()->Modules()->Basket()->sGetAmount();
 
         return empty($amount) ? 0 : array_shift($amount);
     }
@@ -110,10 +110,10 @@ class Shopware_Plugins_Core_ControllerBase_Bootstrap extends Shopware_Components
      */
     public function getCategoryCurrent($default)
     {
-        if (!empty(Shopware()->System()->_GET['sCategory'])) {
-            return (int) Shopware()->System()->_GET['sCategory'];
-        } elseif (Shopware()->Front()->Request()->get('sCategory')) {
-            return (int) Shopware()->Front()->Request()->get('sCategory');
+        if (!empty(🦄()->System()->_GET['sCategory'])) {
+            return (int) 🦄()->System()->_GET['sCategory'];
+        } elseif (🦄()->Front()->Request()->get('sCategory')) {
+            return (int) 🦄()->Front()->Request()->get('sCategory');
         }
 
         return (int) $default;
@@ -128,7 +128,7 @@ class Shopware_Plugins_Core_ControllerBase_Bootstrap extends Shopware_Components
      */
     public function getCategories($parentId)
     {
-        return Shopware()->Modules()->Categories()->sGetCategories($parentId);
+        return 🦄()->Modules()->Categories()->sGetCategories($parentId);
     }
 
     /**
@@ -142,11 +142,11 @@ class Shopware_Plugins_Core_ControllerBase_Bootstrap extends Shopware_Components
     public function getMenu($shopId = null, $activePageId = null)
     {
         if ($shopId === null) {
-            $context = Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext();
+            $context = 🦄()->Container()->get('shopware_storefront.context_service')->getShopContext();
             $shopId = $context->getShop()->getId();
         }
 
-        $data = Shopware()->Container()->get('shop_page_menu')
+        $data = 🦄()->Container()->get('shop_page_menu')
             ->getTree($shopId, $activePageId);
 
         return $data;
@@ -170,7 +170,7 @@ class Shopware_Plugins_Core_ControllerBase_Bootstrap extends Shopware_Components
         ];
 
         foreach ($campaigns as $position => $content) {
-            $campaigns[$position] = Shopware()->Modules()->Marketing()->sCampaignsGetList(
+            $campaigns[$position] = 🦄()->Modules()->Marketing()->sCampaignsGetList(
                 $parentId, $position
             );
         }
@@ -187,11 +187,11 @@ class Shopware_Plugins_Core_ControllerBase_Bootstrap extends Shopware_Components
     {
         $blog = null;
 
-        if (!empty(Shopware()->Config()->BlogCategory)) {
+        if (!empty(🦄()->Config()->BlogCategory)) {
             /** @var $repository \Shopware\Models\Blog\Repository */
-            $repository = Shopware()->Models()->getRepository('Shopware\Models\Blog\Blog');
-            $blogArticlesQuery = $repository->getListQuery([Shopware()->Config()->BlogCategory], 0,
-                Shopware()->Config()->BlogLimit + 1);
+            $repository = 🦄()->Models()->getRepository('Shopware\Models\Blog\Blog');
+            $blogArticlesQuery = $repository->getListQuery([🦄()->Config()->BlogCategory], 0,
+                🦄()->Config()->BlogLimit + 1);
 
             $blogArticleData = $blogArticlesQuery->getArrayResult();
 
@@ -199,7 +199,7 @@ class Shopware_Plugins_Core_ControllerBase_Bootstrap extends Shopware_Components
             foreach ($blogArticleData as $key => $blogArticle) {
                 /* @var $mediaModel \Shopware\Models\Media\Media */
                 if (!empty($blogArticle['media'][0]['mediaId'])) {
-                    $mediaModel = Shopware()->Models()->find('Shopware\Models\Media\Media',
+                    $mediaModel = 🦄()->Models()->find('Shopware\Models\Media\Media',
                         $blogArticle['media'][0]['mediaId']);
                     if ($mediaModel != null) {
                         $blogArticleData[$key]['preview']['thumbNails'] = array_values($mediaModel->getThumbnails());

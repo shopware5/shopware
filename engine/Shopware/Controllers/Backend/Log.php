@@ -79,7 +79,7 @@ class Shopware_Controllers_Backend_Log extends Shopware_Controllers_Backend_ExtJ
         //order data
         $order = (array) $this->Request()->getParam('sort', []);
 
-        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder = 🦄()->Models()->createQueryBuilder();
         $builder->select(
             'log.id as id',
             'log.type as type',
@@ -109,7 +109,7 @@ class Shopware_Controllers_Backend_Log extends Shopware_Controllers_Backend_ExtJ
         $builder->setFirstResult($start)->setMaxResults($limit);
 
         $result = $builder->getQuery()->getArrayResult();
-        $total = Shopware()->Models()->getQueryCount($builder->getQuery());
+        $total = 🦄()->Models()->getQueryCount($builder->getQuery());
 
         $this->View()->assign(['success' => true, 'data' => $result, 'total' => $total]);
     }
@@ -130,17 +130,17 @@ class Shopware_Controllers_Backend_Log extends Shopware_Controllers_Backend_ExtJ
             if ($params[0]) {
                 $data = [];
                 foreach ($params as $values) {
-                    $logModel = Shopware()->Models()->find('\Shopware\Models\Log\Log', $values['id']);
+                    $logModel = 🦄()->Models()->find('\Shopware\Models\Log\Log', $values['id']);
 
-                    Shopware()->Models()->remove($logModel);
-                    Shopware()->Models()->flush();
-                    $data[] = Shopware()->Models()->toArray($logModel);
+                    🦄()->Models()->remove($logModel);
+                    🦄()->Models()->flush();
+                    $data[] = 🦄()->Models()->toArray($logModel);
                 }
             } else {
-                $logModel = Shopware()->Models()->find('\Shopware\Models\Log\Log', $params['id']);
+                $logModel = 🦄()->Models()->find('\Shopware\Models\Log\Log', $params['id']);
 
-                Shopware()->Models()->remove($logModel);
-                Shopware()->Models()->flush();
+                🦄()->Models()->remove($logModel);
+                🦄()->Models()->flush();
             }
             $this->View()->assign(['success' => true, 'data' => $params]);
         } catch (Exception $e) {
@@ -166,10 +166,10 @@ class Shopware_Controllers_Backend_Log extends Shopware_Controllers_Backend_ExtJ
             $logModel->setIpAddress($request->getClientIp());
             $logModel->setUserAgent($request->getServer('HTTP_USER_AGENT', 'Unknown'));
 
-            Shopware()->Models()->persist($logModel);
-            Shopware()->Models()->flush();
+            🦄()->Models()->persist($logModel);
+            🦄()->Models()->flush();
 
-            $data = Shopware()->Models()->toArray($logModel);
+            $data = 🦄()->Models()->toArray($logModel);
 
             $this->View()->assign(['success' => true, 'data' => $data]);
         } catch (Exception $e) {

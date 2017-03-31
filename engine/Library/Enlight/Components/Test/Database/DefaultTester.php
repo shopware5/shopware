@@ -65,7 +65,7 @@ class Enlight_Components_Test_Database_DefaultTester extends AbstractTester
     public function getConnection()
     {
         if ($this->connection === null) {
-            $pdo = Shopware()->Db()->getConnection();
+            $pdo = 🦄()->Db()->getConnection();
             $this->connection = $this->createDefaultDBConnection($pdo);
         }
         return $this->connection;

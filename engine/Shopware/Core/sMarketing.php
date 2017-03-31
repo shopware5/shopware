@@ -80,22 +80,22 @@ class sMarketing
         StoreFrontBundle\Service\ContextServiceInterface $contextService = null,
         StoreFrontBundle\Service\AdditionalTextServiceInterface $additionalTextService = null
     ) {
-        $this->category = Shopware()->Shop()->getCategory();
+        $this->category = 🦄()->Shop()->getCategory();
         $this->categoryId = $this->category->getId();
-        $this->customerGroupId = (int) Shopware()->Modules()->System()->sUSERGROUPDATA['id'];
+        $this->customerGroupId = (int) 🦄()->Modules()->System()->sUSERGROUPDATA['id'];
 
         $this->contextService = $contextService;
         $this->additionalTextService = $additionalTextService;
 
         if ($this->contextService == null) {
-            $this->contextService = Shopware()->Container()->get('shopware_storefront.context_service');
+            $this->contextService = 🦄()->Container()->get('shopware_storefront.context_service');
         }
 
         if ($this->additionalTextService == null) {
-            $this->additionalTextService = Shopware()->Container()->get('shopware_storefront.additional_text_service');
+            $this->additionalTextService = 🦄()->Container()->get('shopware_storefront.additional_text_service');
         }
 
-        $this->db = Shopware()->Db();
+        $this->db = 🦄()->Db();
     }
 
     public function sGetSimilaryShownArticles($articleId, $limit = 0)
@@ -107,7 +107,7 @@ class sMarketing
 
         $where = '';
         if (!empty($this->sBlacklist)) {
-            $where = Shopware()->Db()->quote($this->sBlacklist);
+            $where = 🦄()->Db()->quote($this->sBlacklist);
             $where = 'AND similarShown.related_article_id NOT IN (' . $where . ')';
         }
 
@@ -147,13 +147,13 @@ class sMarketing
             ORDER BY similarShown.viewed DESC, similarShown.related_article_id DESC
             LIMIT $limit";
 
-        $similarShownArticles = Shopware()->Db()->fetchAll($sql, [
+        $similarShownArticles = 🦄()->Db()->fetchAll($sql, [
             'articleId' => (int) $articleId,
             'categoryId' => (int) $this->categoryId,
             'customerGroupId' => (int) $this->customerGroupId,
         ]);
 
-        Shopware()->Events()->notify('Shopware_Modules_Marketing_GetSimilarShownArticles', [
+        🦄()->Events()->notify('Shopware_Modules_Marketing_GetSimilarShownArticles', [
             'subject' => $this,
             'articles' => $similarShownArticles,
         ]);
@@ -170,7 +170,7 @@ class sMarketing
         $where = '';
 
         if (!empty($this->sBlacklist)) {
-            $where = Shopware()->Db()->quote($this->sBlacklist);
+            $where = 🦄()->Db()->quote($this->sBlacklist);
             $where = ' AND alsoBought.related_article_id NOT IN (' . $where . ')';
         }
 
@@ -209,13 +209,13 @@ class sMarketing
             LIMIT $limit
         ";
 
-        $alsoBought = Shopware()->Db()->fetchAll($sql, [
+        $alsoBought = 🦄()->Db()->fetchAll($sql, [
             'articleId' => (int) $articleID,
             'categoryId' => (int) $this->categoryId,
             'customerGroupId' => (int) $this->customerGroupId,
         ]);
 
-        Shopware()->Events()->notify('Shopware_Modules_Marketing_AlsoBoughtArticles', [
+        🦄()->Events()->notify('Shopware_Modules_Marketing_AlsoBoughtArticles', [
             'subject' => $this,
             'articles' => $alsoBought,
         ]);
@@ -235,7 +235,7 @@ class sMarketing
     {
         $limit = (int) $limit;
         try {
-            $bannerRepository = Shopware()->Models()->getRepository(Banner::class);
+            $bannerRepository = 🦄()->Models()->getRepository(Banner::class);
             $bannerQuery = $bannerRepository->getAllActiveBanners($sCategory, $limit);
             if ($bannerQuery) {
                 $getBanners = $bannerQuery->getArrayResult();
@@ -247,15 +247,15 @@ class sMarketing
         }
 
         $images = array_column($getBanners, 'image');
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $mediaService = 🦄()->Container()->get('shopware_media.media_service');
 
         array_walk($images, function (&$image) use ($mediaService) {
             $image = $mediaService->normalize($image);
         });
 
         $mediaIds = $this->getMediaIdsOfPath($images);
-        $context = Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext();
-        $medias = Shopware()->Container()->get('shopware_storefront.media_service')->getList($mediaIds, $context);
+        $context = 🦄()->Container()->get('shopware_storefront.context_service')->getShopContext();
+        $medias = 🦄()->Container()->get('shopware_storefront.media_service')->getList($mediaIds, $context);
 
         foreach ($getBanners as &$getAffectedBanners) {
             // converting to old format
@@ -268,17 +268,17 @@ class sMarketing
 
             $media = $this->getMediaByPath($medias, $getAffectedBanners['image']);
             if ($media !== null) {
-                $media = Shopware()->Container()->get('legacy_struct_converter')->convertMediaStruct($media);
+                $media = 🦄()->Container()->get('legacy_struct_converter')->convertMediaStruct($media);
                 $getAffectedBanners['media'] = $media;
             }
 
             // count views.
             /** @var $statRepository \Shopware\Models\Tracking\Repository */
-            $statRepository = Shopware()->Models()->getRepository('\Shopware\Models\Tracking\Banner');
+            $statRepository = 🦄()->Models()->getRepository('\Shopware\Models\Tracking\Banner');
             $bannerStatistics = $statRepository->getOrCreateBannerStatsModel($getAffectedBanners['id']);
             $bannerStatistics->increaseViews();
-            Shopware()->Models()->persist($bannerStatistics);
-            Shopware()->Models()->flush($bannerStatistics);
+            🦄()->Models()->persist($bannerStatistics);
+            🦄()->Models()->flush($bannerStatistics);
 
             if (!empty($getAffectedBanners['link'])) {
                 $query = [
@@ -287,7 +287,7 @@ class sMarketing
                     'action' => 'countBannerClick',
                     'bannerId' => $getAffectedBanners['id'],
                 ];
-                $getAffectedBanners['link'] = Shopware()->Front()->Router()->assemble($query);
+                $getAffectedBanners['link'] = 🦄()->Front()->Router()->assemble($query);
             }
         }
         if ($limit == 1) {
@@ -357,7 +357,7 @@ class sMarketing
                   ON s_core_shops.currency_id = s_core_currencies.id
                 WHERE s_core_shops.`default` = 1 LIMIT 1
                 ';
-                $premiumFactor = Shopware()->Db()->fetchOne($sql, []);
+                $premiumFactor = 🦄()->Db()->fetchOne($sql, []);
             } else {
                 $sql = '
                 SELECT factor FROM s_core_currencies
@@ -365,7 +365,7 @@ class sMarketing
                   ON s_core_shops.currency_id = s_core_currencies.id
                 WHERE s_core_shops.id = ? LIMIT 1
                 ';
-                $premiumFactor = Shopware()->Db()->fetchOne($sql, [$activeShopId]);
+                $premiumFactor = 🦄()->Db()->fetchOne($sql, [$activeShopId]);
             }
 
             if ($premiumFactor != 0) {
@@ -569,7 +569,7 @@ class sMarketing
             WHERE promotionID=$id
             ORDER BY position
             ";
-        $sql = Shopware()->Events()->filter('Shopware_Modules_Marketing_MailCampaignsGetDetail_FilterSQL', $sql,
+        $sql = 🦄()->Events()->filter('Shopware_Modules_Marketing_MailCampaignsGetDetail_FilterSQL', $sql,
                 [
                     'subject' => $this,
                     'id' => $id,
@@ -577,7 +577,7 @@ class sMarketing
             );
 
         $getCampaignContainers = $this->db->fetchAll($sql);
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $mediaService = 🦄()->Container()->get('shopware_media.media_service');
 
         foreach ($getCampaignContainers as $campaignKey => $campaignValue) {
             switch ($campaignValue['type']) {
@@ -648,7 +648,7 @@ class sMarketing
      */
     private function getMediaByPath($media, $path)
     {
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $mediaService = 🦄()->Container()->get('shopware_media.media_service');
         foreach ($media as $single) {
             if ($mediaService->normalize($single->getFile()) == $path) {
                 return $single;
@@ -674,7 +674,7 @@ class sMarketing
             FROM s_articles_details
             WHERE articleID = :articleId AND kind != 3';
 
-        $variantsData = Shopware()->Db()->fetchAll(
+        $variantsData = 🦄()->Db()->fetchAll(
             $sql,
             ['articleId' => $articleId]
         );
@@ -687,13 +687,13 @@ class sMarketing
             );
 
             if ($variantData['id'] == $mainDetailId) {
-                $variantData = Shopware()->Modules()->Articles()->sGetTranslation(
+                $variantData = 🦄()->Modules()->Articles()->sGetTranslation(
                     $variantData,
                     $articleId,
                     'article'
                 );
             } else {
-                $variantData = Shopware()->Modules()->Articles()->sGetTranslation(
+                $variantData = 🦄()->Modules()->Articles()->sGetTranslation(
                     $variantData,
                     $variantData['id'],
                     'variant'
@@ -727,12 +727,12 @@ class sMarketing
     private function sGetMailCampaignsArticles($articles)
     {
         /** @var \Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface $contextService */
-        $contextService = Shopware()->Container()->get('shopware_storefront.context_service');
+        $contextService = 🦄()->Container()->get('shopware_storefront.context_service');
         $categoryId = $contextService->getShopContext()->getShop()->getCategory()->getId();
 
         $articleData = [];
         foreach ($articles as $article) {
-            $articleData[] = Shopware()->Modules()->Articles()->sGetPromotionById($article['type'], $categoryId, $article['articleordernumber']);
+            $articleData[] = 🦄()->Modules()->Articles()->sGetPromotionById($article['type'], $categoryId, $article['articleordernumber']);
         }
 
         return $articleData;
@@ -748,7 +748,7 @@ class sMarketing
     private function getMediaIdsOfPath($images)
     {
         /** @var $query \Doctrine\DBAL\Query\QueryBuilder */
-        $query = Shopware()->Container()->get('dbal_connection')->createQueryBuilder();
+        $query = 🦄()->Container()->get('dbal_connection')->createQueryBuilder();
         $query->select(['media.id'])
             ->from('s_media', 'media')
             ->where('media.path IN (:path)')

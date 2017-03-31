@@ -75,7 +75,7 @@ class Media extends Resource
             throw new ApiException\NotFoundException("Media by id $id not found");
         }
 
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $mediaService = 🦄()->Container()->get('shopware_media.media_service');
         $media['path'] = $mediaService->getUrl($media['path']);
 
         return $media;
@@ -104,7 +104,7 @@ class Media extends Resource
         //returns the category data
         $media = $paginator->getIterator()->getArrayCopy();
 
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $mediaService = 🦄()->Container()->get('shopware_media.media_service');
         array_walk($media, function (&$item) use ($mediaService) {
             $item['path'] = $mediaService->getUrl($item['path']);
         });
@@ -275,7 +275,7 @@ class Media extends Resource
 
         if ($media->getType() === MediaModel::TYPE_IMAGE) {
             /** @var $manager Manager */
-            $manager = Shopware()->Container()->get('thumbnail_manager');
+            $manager = 🦄()->Container()->get('thumbnail_manager');
 
             $manager->createMediaThumbnail($media, [], true);
         }
@@ -294,7 +294,7 @@ class Media extends Resource
      */
     public function load($url, $baseFilename = null)
     {
-        $destPath = Shopware()->DocPath('media_' . 'temp');
+        $destPath = 🦄()->DocPath('media_' . 'temp');
         if (!is_dir($destPath)) {
             mkdir($destPath, 0777, true);
         }
@@ -358,7 +358,7 @@ class Media extends Resource
      */
     public function getUniqueFileName($destPath, $baseFileName = null)
     {
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $mediaService = 🦄()->Container()->get('shopware_media.media_service');
         if ($baseFileName !== null && !$mediaService->has("$destPath/$baseFileName")) {
             return substr($baseFileName, 0, self::FILENAME_LENGTH);
         }
@@ -462,7 +462,7 @@ class Media extends Resource
 
         // Check / set album
         if (isset($params['album'])) {
-            $album = Shopware()->Models()->find('\Shopware\Models\Media\Album', $params['album']);
+            $album = 🦄()->Models()->find('\Shopware\Models\Media\Album', $params['album']);
             if (!$album) {
                 throw new ApiException\CustomValidationException(sprintf('Album by id %s not found', $params['album']));
             }

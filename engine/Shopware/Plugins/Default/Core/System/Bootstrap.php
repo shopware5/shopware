@@ -66,13 +66,13 @@ class Shopware_Plugins_Core_System_Bootstrap extends Shopware_Components_Plugin_
             return;
         }
 
-        $container = Shopware()->Container();
+        $container = 🦄()->Container();
         if (!$container->initialized('session')) {
             return;
         }
 
         /** @var $plugin Shopware_Plugins_Frontend_Statistics_Bootstrap */
-        $plugin = Shopware()->Plugins()->Frontend()->Statistics();
+        $plugin = 🦄()->Plugins()->Frontend()->Statistics();
         if ($plugin->checkIsBot($args->getRequest()->getHeader('USER_AGENT'))) {
             Enlight_Components_Session::destroy(true, false);
         }
@@ -87,31 +87,31 @@ class Shopware_Plugins_Core_System_Bootstrap extends Shopware_Components_Plugin_
      */
     public function onInitResourceSystem(Enlight_Event_EventArgs $args)
     {
-        $config = Shopware()->Config();
+        $config = 🦄()->Config();
 
-        $request = Shopware()->Front()->Request();
+        $request = 🦄()->Front()->Request();
         $system = new sSystem($request);
 
-        Shopware()->Container()->set('System', $system);
+        🦄()->Container()->set('System', $system);
 
-        $system->sMODULES = Shopware()->Modules();
-        $system->sSMARTY = Shopware()->Template();
+        $system->sMODULES = 🦄()->Modules();
+        $system->sSMARTY = 🦄()->Template();
         $system->sCONFIG = $config;
-        $system->sMailer = Shopware()->Container()->get('mail');
+        $system->sMailer = 🦄()->Container()->get('mail');
 
-        if (Shopware()->Container()->initialized('Session')) {
-            $system->_SESSION = Shopware()->Session();
-            $system->sSESSION_ID = Shopware()->Session()->get('sessionId');
-            if ($request !== null && Shopware()->Session()->Bot === null) {
+        if (🦄()->Container()->initialized('Session')) {
+            $system->_SESSION = 🦄()->Session();
+            $system->sSESSION_ID = 🦄()->Session()->get('sessionId');
+            if ($request !== null && 🦄()->Session()->Bot === null) {
                 /** @var $plugin Shopware_Plugins_Frontend_Statistics_Bootstrap */
-                $plugin = Shopware()->Plugins()->Frontend()->Statistics();
-                Shopware()->Session()->Bot = $plugin->checkIsBot($request->getHeader('USER_AGENT'));
+                $plugin = 🦄()->Plugins()->Frontend()->Statistics();
+                🦄()->Session()->Bot = $plugin->checkIsBot($request->getHeader('USER_AGENT'));
             }
-            $system->sBotSession = Shopware()->Session()->Bot;
+            $system->sBotSession = 🦄()->Session()->Bot;
         }
 
-        if (Shopware()->Container()->initialized('Shop')) {
-            $shop = Shopware()->Shop();
+        if (🦄()->Container()->initialized('Shop')) {
+            $shop = 🦄()->Shop();
             $system->sCurrency = $shop->getCurrency()->toArray();
 
             $system->sUSERGROUP = $shop->getCustomerGroup()->getKey();
@@ -119,20 +119,20 @@ class Shopware_Plugins_Core_System_Bootstrap extends Shopware_Components_Plugin_
             $config->defaultCustomerGroup = $system->sUSERGROUP;
         }
 
-        if (Shopware()->Container()->initialized('Session')) {
-            if (!empty(Shopware()->Session()->sUserGroup)
-                    && Shopware()->Session()->sUserGroup != $system->sUSERGROUP) {
-                $system->sUSERGROUP = Shopware()->Session()->sUserGroup;
-                $system->sUSERGROUPDATA = Shopware()->Db()->fetchRow('
+        if (🦄()->Container()->initialized('Session')) {
+            if (!empty(🦄()->Session()->sUserGroup)
+                    && 🦄()->Session()->sUserGroup != $system->sUSERGROUP) {
+                $system->sUSERGROUP = 🦄()->Session()->sUserGroup;
+                $system->sUSERGROUPDATA = 🦄()->Db()->fetchRow('
                     SELECT * FROM s_core_customergroups
                     WHERE groupkey = ?
                 ', [$system->sUSERGROUP]);
             }
             if (empty($system->sUSERGROUPDATA['tax']) && !empty($system->sUSERGROUPDATA['id'])) {
                 $config['sARTICLESOUTPUTNETTO'] = 1; //Old template
-                Shopware()->Session()->sOutputNet = true;
+                🦄()->Session()->sOutputNet = true;
             } else {
-                Shopware()->Session()->sOutputNet = false;
+                🦄()->Session()->sOutputNet = false;
             }
         }
 
@@ -161,8 +161,8 @@ class Shopware_Plugins_Core_System_Bootstrap extends Shopware_Components_Plugin_
     public static function onInitResourceModules(Enlight_Event_EventArgs $args)
     {
         $modules = new Shopware_Components_Modules();
-        Shopware()->Container()->set('Modules', $modules);
-        $modules->setSystem(Shopware()->System());
+        🦄()->Container()->set('Modules', $modules);
+        $modules->setSystem(🦄()->System());
 
         return $modules;
     }

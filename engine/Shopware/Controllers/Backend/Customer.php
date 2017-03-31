@@ -88,7 +88,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
     public function init()
     {
         if (in_array($this->Request()->getActionName(), ['performOrderRedirect'])) {
-            Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
+            🦄()->Plugins()->Backend()->Auth()->setNoAuth();
         }
         parent::init();
     }
@@ -201,7 +201,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
     {
         if (!$this->_isAllowed('read', 'order')) {
             /** @var $namespace Enlight_Components_Snippet_Namespace */
-            $namespace = Shopware()->Snippets()->getNamespace('backend/customer');
+            $namespace = 🦄()->Snippets()->getNamespace('backend/customer');
 
             $this->View()->assign([
                 'success' => false,
@@ -249,7 +249,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
     {
         if (!$this->_isAllowed('read', 'order')) {
             /** @var $namespace Enlight_Components_Snippet_Namespace */
-            $namespace = Shopware()->Snippets()->getNamespace('backend/customer');
+            $namespace = 🦄()->Snippets()->getNamespace('backend/customer');
 
             $this->View()->assign([
                 'success' => false,
@@ -285,7 +285,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
         $paymentId = $this->Request()->getParam('paymentId', null);
 
         /** @var $namespace Enlight_Components_Snippet_Namespace */
-        $namespace = Shopware()->Snippets()->getNamespace('backend/customer');
+        $namespace = 🦄()->Snippets()->getNamespace('backend/customer');
 
         //customer id passed? If this is the case the customer was edited
         if (!empty($id)) {
@@ -340,9 +340,9 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
             $customer->setPassword($password);
         }
 
-        if (!$customer->getNumber() && Shopware()->Config()->get('shopwareManagedCustomerNumbers')) {
+        if (!$customer->getNumber() && 🦄()->Config()->get('shopwareManagedCustomerNumbers')) {
             /** @var NumberRangeIncrementerInterface $incrementer */
-            $incrementer = Shopware()->Container()->get('shopware.number_range_incrementer');
+            $incrementer = 🦄()->Container()->get('shopware.number_range_incrementer');
             $customer->setNumber($incrementer->increment('user'));
         }
 
@@ -383,7 +383,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
      */
     public function validateEmailAction()
     {
-        Shopware()->Plugins()->Controller()->ViewRenderer()->setNoRender();
+        🦄()->Plugins()->Controller()->ViewRenderer()->setNoRender();
 
         $mail = $this->Request()->get('value');
 
@@ -428,18 +428,18 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
 
         $shop->registerResources();
 
-        Shopware()->Session()->Admin = true;
-        Shopware()->System()->_POST = [
+        🦄()->Session()->Admin = true;
+        🦄()->System()->_POST = [
             'email' => $user['email'],
             'passwordMD5' => $user['password'],
         ];
-        Shopware()->Modules()->Admin()->sLogin(true);
+        🦄()->Modules()->Admin()->sLogin(true);
 
         $url = $this->Front()->Router()->assemble([
             'action' => 'performOrderRedirect',
             'shopId' => $shop->getId(),
             'hash' => $this->createPerformOrderRedirectHash($user['password']),
-            'sessionId' => Shopware()->Session()->get('sessionId'),
+            'sessionId' => 🦄()->Session()->get('sessionId'),
             'userId' => $user['id'],
             'fullPath' => true,
         ]);
@@ -498,7 +498,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
     protected function getManager()
     {
         if (self::$manager === null) {
-            self::$manager = Shopware()->Models();
+            self::$manager = 🦄()->Models();
         }
 
         return self::$manager;
@@ -512,7 +512,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
     protected function getRepository()
     {
         if (self::$repository === null) {
-            self::$repository = Shopware()->Models()->getRepository('Shopware\Models\Customer\Customer');
+            self::$repository = 🦄()->Models()->getRepository('Shopware\Models\Customer\Customer');
         }
 
         return self::$repository;
@@ -538,7 +538,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
     private function getShopRepository()
     {
         if ($this->shopRepository === null) {
-            $this->shopRepository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
+            $this->shopRepository = 🦄()->Models()->getRepository('Shopware\Models\Shop\Shop');
         }
 
         return $this->shopRepository;
@@ -552,7 +552,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
     private function getGroupRepository()
     {
         if ($this->groupRepository === null) {
-            $this->groupRepository = Shopware()->Models()->getRepository('Shopware\Models\Customer\Group');
+            $this->groupRepository = 🦄()->Models()->getRepository('Shopware\Models\Customer\Group');
         }
 
         return $this->groupRepository;
@@ -566,7 +566,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
     private function getCountryRepository()
     {
         if ($this->countryRepository === null) {
-            $this->countryRepository = Shopware()->Models()->getRepository('Shopware\Models\Country\Country');
+            $this->countryRepository = 🦄()->Models()->getRepository('Shopware\Models\Country\Country');
         }
 
         return $this->countryRepository;
@@ -580,7 +580,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
     private function getOrderRepository()
     {
         if ($this->orderRepository === null) {
-            $this->orderRepository = Shopware()->Models()->getRepository('Shopware\Models\Order\Order');
+            $this->orderRepository = 🦄()->Models()->getRepository('Shopware\Models\Order\Order');
         }
 
         return $this->orderRepository;
@@ -594,7 +594,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
     private function getPaymentRepository()
     {
         if ($this->paymentRepository === null) {
-            $this->paymentRepository = Shopware()->Models()->getRepository('Shopware\Models\Payment\Payment');
+            $this->paymentRepository = 🦄()->Models()->getRepository('Shopware\Models\Payment\Payment');
         }
 
         return $this->paymentRepository;
@@ -608,7 +608,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
     private function getDispatchRepository()
     {
         if ($this->dispatchRepository === null) {
-            $this->dispatchRepository = Shopware()->Models()->getRepository('Shopware\Models\Dispatch\Dispatch');
+            $this->dispatchRepository = 🦄()->Models()->getRepository('Shopware\Models\Dispatch\Dispatch');
         }
 
         return $this->dispatchRepository;
@@ -657,7 +657,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
         ";
 
         //select the orders from the database
-        $orders = Shopware()->Db()->fetchAll($sql, [$customerId, $fromDateFilter, $toDateFilter]);
+        $orders = 🦄()->Db()->fetchAll($sql, [$customerId, $fromDateFilter, $toDateFilter]);
 
         if (!empty($orders)) {
             $first = new \DateTime($orders[0]['date']);
@@ -716,7 +716,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
             $data['billing'] = $this->fetchAddress($data['default_billing_address_id']);
         }
 
-        $namespace = Shopware()->Container()->get('snippets')->getNamespace('frontend/salutation');
+        $namespace = 🦄()->Container()->get('snippets')->getNamespace('frontend/salutation');
         $data['billing']['salutationSnippet'] = $namespace->get($data['billing']['salutation']);
         $data['shipping']['salutationSnippet'] = $namespace->get($data['shipping']['salutation']);
 
@@ -750,7 +750,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
         }
 
         if (!empty($params['priceGroupId'])) {
-            $params['priceGroup'] = Shopware()->Models()->find('Shopware\Models\Customer\PriceGroup', $params['priceGroupId']);
+            $params['priceGroup'] = 🦄()->Models()->find('Shopware\Models\Customer\PriceGroup', $params['priceGroupId']);
         } else {
             $params['priceGroup'] = null;
         }

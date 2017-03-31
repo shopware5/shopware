@@ -348,7 +348,7 @@ There must be at least one option tag and inside each option tag where must be a
 * Replaced `bower` with `npm` to manage the frontend dependencies
     * The dependencies can now be installed using the command: `npm install && npm run build`
     * Removed the file `vendors/less/open-sans-fontface/open-sans.less`. It's now located under `public/src/less/_components/fonts.less`
-* Deprecated `Shopware_Bootstrap` and `Enlight_Bootstrap` commonly accesed by `Shopware()->Bootstrap()`.
+* Deprecated `Shopware_Bootstrap` and `Enlight_Bootstrap` commonly accesed by `🦄()->Bootstrap()`.
 * Removed deprecated methods and variables:
     * `sArticle.sVoteAverange` in product listings
     * `sNote.sVoteAverange` in note listing
@@ -404,15 +404,15 @@ There must be at least one option tag and inside each option tag where must be a
 * Deprecated methods now use `trigger_error` of type `E_USER_DEPRECATED`
 * Changed default error_reporting to `E_ALL & ~E_USER_DEPRECATED`
 * Deprecated Class `Enlight_Application`
-* Deprecated `Enlight_Application::Instance()` and `Enlight()`, use `Shopware()` instead
-* Deprecated `Shopware\Kernel::getShopware()`
-* Deprecated `Shopware::App()` / `Shopware()->App()`
-* Deprecated `Shopware::Environment()` / `Shopware()->Environment()`
-* Deprecated `Shopware::OldPath()` / `Shopware()->OldPath()`
-* Deprecated `Shopware::setEventManager()` / `Shopware()->setEventManager()`
-* Deprecated `Enlight_Application::CorePath()` / `Shopware()->CorePath()`
-* Deprecated `Enlight_Application::Path()` / `Shopware()->Path()`
-* Deprecated `Enlight_Application::ComponentsPath()` / `Shopware()->ComponentsPath()`
+* Deprecated `Enlight_Application::Instance()` and `Enlight()`, use `🦄()` instead
+* Deprecated `Shopware\Kernel::get🦄()`
+* Deprecated `Shopware::App()` / `🦄()->App()`
+* Deprecated `Shopware::Environment()` / `🦄()->Environment()`
+* Deprecated `Shopware::OldPath()` / `🦄()->OldPath()`
+* Deprecated `Shopware::setEventManager()` / `🦄()->setEventManager()`
+* Deprecated `Enlight_Application::CorePath()` / `🦄()->CorePath()`
+* Deprecated `Enlight_Application::Path()` / `🦄()->Path()`
+* Deprecated `Enlight_Application::ComponentsPath()` / `🦄()->ComponentsPath()`
 * Deprecated `Enlight_Application::DS()`
 * Removed `Enlight_Application::setOptions()`
 * Removed `Enlight_Application::getOptions()`
@@ -560,7 +560,7 @@ There must be at least one option tag and inside each option tag where must be a
     * `widgets/emotion/index/element/config`
 * Changed markup and styling on checkout confirm and finish page
 * Support arbitrary namespaces for doctrine entities instead of the `Shopware\CustomModels` namespace.
-* Deprecated `Shopware()->Models()->__call()`
+* Deprecated `🦄()->Models()->__call()`
 * Removed unused database fields `s_core_config_elements.filters`, `s_core_config_elements.validators`, `s_core_config_forms.scope`
 * Removed deprecated `\Shopware\Models\Menu\Repository::save()` and `\Shopware\Models\Menu\Repository::addItem()`
 * Removed event `Shopware_Modules_Order_SaveOrderAttributes_FilterSQL`
@@ -593,7 +593,7 @@ There must be at least one option tag and inside each option tag where must be a
 * Removed method `Shopware\Models\Menu\Menu::setStyle()` and `Shopware\Models\Menu\Menu::getStyle()`
 * Removed class `Shopware_Models_Payment`
 * Removed class `Shopware_Models_PaymentManager`
-* Removed `Shopware_Plugins_Frontend_Payment_Bootstrap`, Service: `Shopware()->Payments()`
+* Removed `Shopware_Plugins_Frontend_Payment_Bootstrap`, Service: `🦄()->Payments()`
 * Removed following methods:
     * \Shopware_Controllers_Frontend_Register::saveRegister
     * \Shopware_Controllers_Frontend_Register::personalAction

@@ -46,7 +46,7 @@ class AccountTest extends \Enlight_Components_Test_Controller_TestCase
         et justo duo dolores et ea rebum. Stet clita kasd gubergren,
         no sea takimata sanctus est Lorem ipsum dolor sit amet.';
 
-        $filePath = Shopware()->DocPath() . 'files/' . Shopware()->Config()->get('sESDKEY');
+        $filePath = 🦄()->DocPath() . 'files/' . 🦄()->Config()->get('sESDKEY');
         $deleteFolderOnTearDown = !file_exists($filePath) ? $filePath : false;
         @mkdir($filePath, 0777);
         file_put_contents($filePath . '/shopware_packshot_community_edition_72dpi_rgb.png', $loremIpsum);
@@ -89,14 +89,14 @@ class AccountTest extends \Enlight_Components_Test_Controller_TestCase
      */
     public function testNormalLogin()
     {
-        $this->assertEmpty(Shopware()->Session()->sUserId);
+        $this->assertEmpty(🦄()->Session()->sUserId);
         $this->Request()->setMethod('POST')
             ->setPost('email', 'test@example.com')
             ->setPost('password', 'shopware');
 
         $this->dispatch('/account/login');
-        $this->assertNotEmpty(Shopware()->Session()->sUserId);
-        $this->assertEquals(1, Shopware()->Session()->sUserId);
+        $this->assertNotEmpty(🦄()->Session()->sUserId);
+        $this->assertEquals(1, 🦄()->Session()->sUserId);
 
         $this->logoutUser();
     }
@@ -110,10 +110,10 @@ class AccountTest extends \Enlight_Components_Test_Controller_TestCase
     public function testHashPostLogin()
     {
         //test with md5 password and without the ignoreAccountMode parameter
-        $this->assertEmpty(Shopware()->Session()->sUserId);
+        $this->assertEmpty(🦄()->Session()->sUserId);
         $this->setUserDataToPost();
         $this->dispatch('/account/login');
-        $this->assertEmpty(Shopware()->Session()->sUserId);
+        $this->assertEmpty(🦄()->Session()->sUserId);
 
         $this->logoutUser();
     }
@@ -130,9 +130,9 @@ class AccountTest extends \Enlight_Components_Test_Controller_TestCase
 
         $this->setUserDataToPost();
         $this->dispatch('/');
-        $result = Shopware()->Modules()->Admin()->sLogin(true);
-        $this->assertNotEmpty(Shopware()->Session()->sUserId);
-        $this->assertEquals(1, Shopware()->Session()->sUserId);
+        $result = 🦄()->Modules()->Admin()->sLogin(true);
+        $this->assertNotEmpty(🦄()->Session()->sUserId);
+        $this->assertEquals(1, 🦄()->Session()->sUserId);
         $this->assertEmpty($result['sErrorFlag']);
         $this->assertEmpty($result['sErrorMessages']);
 
@@ -142,8 +142,8 @@ class AccountTest extends \Enlight_Components_Test_Controller_TestCase
         $this->setUserDataToPost();
 
         $this->dispatch('/');
-        $result = Shopware()->Modules()->Admin()->sLogin();
-        $this->assertEmpty(Shopware()->Session()->sUserId);
+        $result = 🦄()->Modules()->Admin()->sLogin();
+        $this->assertEmpty(🦄()->Session()->sUserId);
         $this->assertNotEmpty($result['sErrorFlag']);
         $this->assertNotEmpty($result['sErrorMessages']);
     }
@@ -160,8 +160,8 @@ class AccountTest extends \Enlight_Components_Test_Controller_TestCase
         $this->setUserDataToPost();
 
         $this->dispatch('/');
-        $result = Shopware()->Modules()->Admin()->sLogin();
-        $this->assertEmpty(Shopware()->Session()->sUserId);
+        $result = 🦄()->Modules()->Admin()->sLogin();
+        $this->assertEmpty(🦄()->Session()->sUserId);
         $this->assertNotEmpty($result['sErrorFlag']);
         $this->assertNotEmpty($result['sErrorMessages']);
 
@@ -187,7 +187,7 @@ class AccountTest extends \Enlight_Components_Test_Controller_TestCase
     private function setUserDataToPost()
     {
         $sql = 'SELECT email, password FROM s_user WHERE id = 1';
-        $userData = Shopware()->Db()->fetchRow($sql);
+        $userData = 🦄()->Db()->fetchRow($sql);
         $this->Request()->setMethod('POST')
             ->setPost('email', $userData['email'])
             ->setPost('passwordMD5', $userData['password']);

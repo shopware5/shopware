@@ -56,18 +56,18 @@ class sBasketTest extends PHPUnit\Framework\TestCase
     {
         parent::setUp();
 
-        Shopware()->Front()->setRequest(new Enlight_Controller_Request_RequestHttp());
+        🦄()->Front()->setRequest(new Enlight_Controller_Request_RequestHttp());
 
-        $this->snippetManager = Shopware()->Snippets();
-        $this->db = Shopware()->Db();
-        $this->module = Shopware()->Modules()->Basket();
-        $this->session = Shopware()->Session();
+        $this->snippetManager = 🦄()->Snippets();
+        $this->db = 🦄()->Db();
+        $this->module = 🦄()->Modules()->Basket();
+        $this->session = 🦄()->Session();
         $this->session->offsetSet('sessionId', null);
         $this->module->sSYSTEM->_POST = [];
         $this->module->sSYSTEM->_GET = [];
-        $this->config = Shopware()->Config();
+        $this->config = 🦄()->Config();
         $this->module->sSYSTEM->sCONFIG = &$this->config;
-        $this->module->sSYSTEM->sCurrency = Shopware()->Db()->fetchRow('SELECT * FROM s_core_currencies WHERE currency LIKE "EUR"');
+        $this->module->sSYSTEM->sCurrency = 🦄()->Db()->fetchRow('SELECT * FROM s_core_currencies WHERE currency LIKE "EUR"');
         $this->module->sSYSTEM->sSESSION_ID = null;
     }
 
@@ -942,7 +942,7 @@ class sBasketTest extends PHPUnit\Framework\TestCase
         );
 
         // Change current subshop id, test and expect success
-        Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext()->getShop()->setId(3);
+        🦄()->Container()->get('shopware_storefront.context_service')->getShopContext()->getShop()->setId(3);
 
         $previousAmount = $this->module->sGetAmount();
         // Test with one-time code, success
@@ -1046,7 +1046,7 @@ class sBasketTest extends PHPUnit\Framework\TestCase
         );
 
         // Change current subshop, test and expect success
-        Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext()->getShop()->setId(3);
+        🦄()->Container()->get('shopware_storefront.context_service')->getShopContext()->getShop()->setId(3);
 
         $previousAmount = $this->module->sGetAmount();
         // Test with one-time code, success
@@ -2298,7 +2298,7 @@ class sBasketTest extends PHPUnit\Framework\TestCase
         ];
 
         $customerResource = new \Shopware\Components\Api\Resource\Customer();
-        $customerResource->setManager(Shopware()->Models());
+        $customerResource->setManager(🦄()->Models());
 
         return $customerResource->create($testData);
     }

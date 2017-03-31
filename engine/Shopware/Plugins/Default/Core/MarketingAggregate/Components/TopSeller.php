@@ -49,7 +49,7 @@ class Shopware_Components_TopSeller extends Enlight_Class
             ON DUPLICATE KEY UPDATE sales = sales + :quantity, last_cleared=now();
             ';
 
-        Shopware()->Db()->query($sql, [
+        🦄()->Db()->query($sql, [
             'article_id' => $articleId,
             'quantity' => $quantity,
         ]);
@@ -67,7 +67,7 @@ class Shopware_Components_TopSeller extends Enlight_Class
         if (empty($articleId)) {
             return;
         }
-        Shopware()->Db()->query(
+        🦄()->Db()->query(
             'DELETE FROM s_articles_top_seller_ro WHERE article_id = :articleId',
             [
                 'articleId' => (int) $articleId,
@@ -93,7 +93,7 @@ class Shopware_Components_TopSeller extends Enlight_Class
             WHERE articles.id = :articleId
         ';
 
-        Shopware()->Db()->query($sql, [
+        🦄()->Db()->query($sql, [
             'orderTime' => $orderTime->format('Y-m-d 00:00:00'),
             'articleId' => (int) $articleId,
         ]);
@@ -127,14 +127,14 @@ class Shopware_Components_TopSeller extends Enlight_Class
             GROUP BY articles.id ';
 
         if ($limit !== null) {
-            $sql = Shopware()->Db()->limit($sql, $limit);
+            $sql = 🦄()->Db()->limit($sql, $limit);
         }
 
-        $articles = Shopware()->Db()->fetchAll($sql, [
+        $articles = 🦄()->Db()->fetchAll($sql, [
             'orderTime' => $orderTime->format('Y-m-d 00:00:00'),
         ]);
 
-        $prepared = Shopware()->Db()->prepare(
+        $prepared = 🦄()->Db()->prepare(
             'INSERT IGNORE INTO s_articles_top_seller_ro (article_id, last_cleared, sales)
             VALUES (:article_id, :last_cleared, :sales)'
         );
@@ -176,10 +176,10 @@ class Shopware_Components_TopSeller extends Enlight_Class
         ';
 
         if ($limit !== null) {
-            $sql = Shopware()->Db()->limit($sql, $limit);
+            $sql = 🦄()->Db()->limit($sql, $limit);
         }
 
-        Shopware()->Db()->query($sql, [
+        🦄()->Db()->query($sql, [
             'orderTime' => $orderTime->format('Y-m-d 00:00:00'),
             'validationTime' => $validationTime->format('Y-m-d 00:00:00'),
         ]);
@@ -195,7 +195,7 @@ class Shopware_Components_TopSeller extends Enlight_Class
     protected function getTopSellerOrderTime()
     {
         //get top seller order time interval
-        $interval = Shopware()->Config()->get('chartInterval', 10);
+        $interval = 🦄()->Config()->get('chartInterval', 10);
 
         //create a new date time object to create the current date subtract the configured date interval.
         $orderTime = new DateTime();
@@ -214,7 +214,7 @@ class Shopware_Components_TopSeller extends Enlight_Class
     protected function getTopSellerValidationTime()
     {
         //get top seller order time interval
-        $interval = Shopware()->Config()->get('topSellerValidationTime', 10);
+        $interval = 🦄()->Config()->get('topSellerValidationTime', 10);
 
         //create a new date time object to create the current date subtract the configured date interval.
         $orderTime = new DateTime();
@@ -234,7 +234,7 @@ class Shopware_Components_TopSeller extends Enlight_Class
     protected function getTopSellerSelect()
     {
         //check the pseudo sales configuration value
-        $usePseudoSales = Shopware()->Config()->get('topSellerPseudoSales', true);
+        $usePseudoSales = 🦄()->Config()->get('topSellerPseudoSales', true);
         $sumSelect = ' SUM(IF(s_order.id, IFNULL(details.quantity, 0), 0))  ';
         if ($usePseudoSales) {
             //if this value is set to true, the articles.pseudosales column has to be added to the sales value.

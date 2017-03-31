@@ -74,7 +74,7 @@ abstract class Enlight_Components_Test_TestCase extends PHPUnit\Framework\TestCa
         parent::setUp();
 
         // Clear entitymanager to prevent weird 'model shop not persisted' errors.
-        Shopware()->Models()->clear();
+        🦄()->Models()->clear();
 
         $this->databaseTester = null;
         if (method_exists($this, 'getSetUpOperation')) {

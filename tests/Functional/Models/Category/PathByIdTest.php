@@ -157,7 +157,7 @@ class Shopware_Tests_Models_Category_PathByIdTest extends Enlight_Components_Tes
     protected function getRepo()
     {
         if ($this->repo === null) {
-            $this->repo = Shopware()->Models()->getRepository(\Shopware\Models\Category\Category::class);
+            $this->repo = 🦄()->Models()->getRepository(\Shopware\Models\Category\Category::class);
         }
 
         return $this->repo;

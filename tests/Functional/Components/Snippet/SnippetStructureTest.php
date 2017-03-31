@@ -34,13 +34,13 @@ class Shopware_Tests_Components_Snippet_SnippetStructureTest extends Enlight_Com
      */
     public function testSnippetsShouldBeValid()
     {
-        $source = Shopware()->Container()->getParameter('kernel.root_dir') . '/snippets';
+        $source = 🦄()->Container()->getParameter('kernel.root_dir') . '/snippets';
 
-        $validator = Shopware()->Container()->get('shopware.snippet_validator');
+        $validator = 🦄()->Container()->get('shopware.snippet_validator');
 
         $validationResult = $validator->validate($source);
 
-        $pluginBasePath = Shopware()->Container()->get('application')->AppPath('Plugins_Default');
+        $pluginBasePath = 🦄()->Container()->get('application')->AppPath('Plugins_Default');
         foreach (['Backend', 'Core', 'Frontend'] as $namespace) {
             foreach (new \DirectoryIterator($pluginBasePath . $namespace) as $pluginDir) {
                 if ($pluginDir->isDot() || !$pluginDir->isDir()) {

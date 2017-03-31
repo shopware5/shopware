@@ -67,10 +67,10 @@ class sCms
         Enlight_Controller_Front $front = null,
         Shopware_Components_Modules $moduleManager = null
     ) {
-        $this->db = $db ?: Shopware()->Db();
-        $this->config = $config ?: Shopware()->Config();
-        $this->front = $front ?: Shopware()->Front();
-        $this->moduleManager = $moduleManager ?: Shopware()->Modules();
+        $this->db = $db ?: 🦄()->Db();
+        $this->config = $config ?: 🦄()->Config();
+        $this->front = $front ?: 🦄()->Front();
+        $this->moduleManager = $moduleManager ?: 🦄()->Modules();
     }
 
     /**
@@ -108,7 +108,7 @@ class sCms
         }
 
         // load attributes
-        $staticPage['attribute'] = Shopware()->Container()->get('shopware_attribute.data_loader')->load('s_cms_static_attributes', $staticId);
+        $staticPage['attribute'] = 🦄()->Container()->get('shopware_attribute.data_loader')->load('s_cms_static_attributes', $staticId);
 
         /*
          * Add support for sub pages
@@ -144,7 +144,7 @@ class sCms
                 WHERE p.id = :parentId
             ';
 
-            $menu['parent'] = Shopware()->Db()->fetchRow($sql, ['parentId' => $pageId]);
+            $menu['parent'] = 🦄()->Db()->fetchRow($sql, ['parentId' => $pageId]);
         }
 
         // fetch childrens
@@ -157,7 +157,7 @@ class sCms
             AND CONCAT('|', p.grouping, '|') LIKE CONCAT('%|', :groupKey, '|%')
         ";
 
-        $menu['children'] = Shopware()->Db()->fetchAll($sql, ['parentId' => $pageId, 'groupKey' => $groupKey]);
+        $menu['children'] = 🦄()->Db()->fetchAll($sql, ['parentId' => $pageId, 'groupKey' => $groupKey]);
 
         return $menu;
     }

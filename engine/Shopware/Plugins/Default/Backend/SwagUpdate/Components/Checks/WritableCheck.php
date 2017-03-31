@@ -78,7 +78,7 @@ class WritableCheck implements CheckInterface
         $failMessage = $this->namespace->get('controller/check_writable_failure', 'The following directories are not writable: <br> %s');
 
         foreach ($requirement['value'] as $path) {
-            $fullPath = rtrim(Shopware()->DocPath($path), '/');
+            $fullPath = rtrim(🦄()->DocPath($path), '/');
             $checkedDirectories[] = $fullPath;
 
             $fixPermissions = true;

@@ -67,12 +67,12 @@ class Shopware_Tests_Controllers_Backend_VoucherTest extends Enlight_Components_
     {
         parent::setUp();
 
-        $this->manager = Shopware()->Models();
-        $this->repository = Shopware()->Models()->getRepository(\Shopware\Models\Voucher\Voucher::class);
+        $this->manager = 🦄()->Models();
+        $this->repository = 🦄()->Models()->getRepository(\Shopware\Models\Voucher\Voucher::class);
 
         // disable auth and acl
-        Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
-        Shopware()->Plugins()->Backend()->Auth()->setNoAcl();
+        🦄()->Plugins()->Backend()->Auth()->setNoAuth();
+        🦄()->Plugins()->Backend()->Auth()->setNoAcl();
     }
 
     /**
@@ -155,7 +155,7 @@ class Shopware_Tests_Controllers_Backend_VoucherTest extends Enlight_Components_
     {
         $params = [];
         $voucherModel = $this->createDummy(false);
-        $voucherData = Shopware()->Models()->toArray($voucherModel);
+        $voucherData = 🦄()->Models()->toArray($voucherModel);
         $params['value'] = $voucherData['voucherCode'];
         $params['param'] = $voucherData['id'];
         $this->Request()->setParams($params);

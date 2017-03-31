@@ -34,7 +34,7 @@ class Shopware_Controllers_Backend_Login extends Shopware_Controllers_Backend_Ex
      */
     public function init()
     {
-        Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
+        🦄()->Plugins()->Backend()->Auth()->setNoAuth();
         parent::init();
     }
 
@@ -67,28 +67,28 @@ class Shopware_Controllers_Backend_Login extends Shopware_Controllers_Backend_Ex
         }
 
         /** @var $auth Shopware_Components_Auth */
-        $auth = Shopware()->Container()->get('Auth');
+        $auth = 🦄()->Container()->get('Auth');
         $result = $auth->login($username, $password);
         $user = $auth->getIdentity();
         if (!empty($user->roleID)) {
-            $user->role = Shopware()->Models()->find(
+            $user->role = 🦄()->Models()->find(
                 'Shopware\Models\User\Role',
                 $user->roleID
             );
         }
         if ($user && ($locale = $this->Request()->get('locale')) !== null) {
-            $user->locale = Shopware()->Models()->getRepository(
+            $user->locale = 🦄()->Models()->getRepository(
                 'Shopware\Models\Shop\Locale'
             )->find($locale);
         }
         if (!isset($user->locale) && !empty($user->localeID)) {
-            $user->locale = Shopware()->Models()->find(
+            $user->locale = 🦄()->Models()->find(
                 'Shopware\Models\Shop\Locale',
                 $user->localeID
             );
         }
         if ($user && !isset($user->locale)) {
-            $user->locale = Shopware()->Models()->getRepository(
+            $user->locale = 🦄()->Models()->getRepository(
                 'Shopware\Models\Shop\Locale'
             )->find($this->getPlugin()->getDefaultLocale());
         }
@@ -113,7 +113,7 @@ class Shopware_Controllers_Backend_Login extends Shopware_Controllers_Backend_Ex
      */
     public function logoutAction()
     {
-        Shopware()->Container()->get('Auth')->clearIdentity();
+        🦄()->Container()->get('Auth')->clearIdentity();
         $this->redirect('backend');
     }
 
@@ -122,7 +122,7 @@ class Shopware_Controllers_Backend_Login extends Shopware_Controllers_Backend_Ex
      */
     public function getPlugin()
     {
-        return Shopware()->Plugins()->Backend()->Auth();
+        return 🦄()->Plugins()->Backend()->Auth();
     }
 
     /**
@@ -133,11 +133,11 @@ class Shopware_Controllers_Backend_Login extends Shopware_Controllers_Backend_Ex
      */
     public function getLocalesAction()
     {
-        $current = Shopware()->Container()->get('locale');
+        $current = 🦄()->Container()->get('locale');
         $locales = $this->getPlugin()->getLocales();
-        $locales = Shopware()->Db()->quote($locales);
+        $locales = 🦄()->Db()->quote($locales);
         $sql = 'SELECT id, locale FROM s_core_locales WHERE id IN (' . $locales . ')';
-        $locales = Shopware()->Db()->fetchPairs($sql);
+        $locales = 🦄()->Db()->fetchPairs($sql);
 
         $data = [];
         foreach ($locales as $id => $locale) {
@@ -162,7 +162,7 @@ class Shopware_Controllers_Backend_Login extends Shopware_Controllers_Backend_Ex
      */
     public function getLoginStatusAction()
     {
-        $auth = Shopware()->Container()->get('Auth');
+        $auth = 🦄()->Container()->get('Auth');
         if ($auth->hasIdentity()) {
             $refresh = $auth->refresh();
         }
@@ -183,7 +183,7 @@ class Shopware_Controllers_Backend_Login extends Shopware_Controllers_Backend_Ex
     public function validatePasswordAction()
     {
         /** @var $auth Shopware_Components_Auth */
-        $auth = Shopware()->Container()->get('Auth');
+        $auth = 🦄()->Container()->get('Auth');
         $username = $auth->getIdentity()->username;
         $password = $this->Request()->get('password');
 

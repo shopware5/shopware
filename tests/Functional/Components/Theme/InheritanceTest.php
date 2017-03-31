@@ -36,14 +36,14 @@ class InheritanceTest extends Base
     protected function setUp()
     {
         /** @var Connection $connection */
-        $connection = Shopware()->Container()->get('dbal_connection');
+        $connection = 🦄()->Container()->get('dbal_connection');
         $connection->beginTransaction();
     }
 
     protected function tearDown()
     {
         /** @var Connection $connection */
-        $connection = Shopware()->Container()->get('dbal_connection');
+        $connection = 🦄()->Container()->get('dbal_connection');
         $connection->rollBack();
     }
 
@@ -70,11 +70,11 @@ class InheritanceTest extends Base
             ->will($this->returnCallback([$this, 'getTheme']));
 
         $inheritance = new \Shopware\Components\Theme\Inheritance(
-            Shopware()->Container()->get('models'),
+            🦄()->Container()->get('models'),
             $util,
-            Shopware()->Container()->get('theme_path_resolver'),
-            Shopware()->Container()->get('events'),
-            Shopware()->Container()->get('shopware_media.media_service')
+            🦄()->Container()->get('theme_path_resolver'),
+            🦄()->Container()->get('events'),
+            🦄()->Container()->get('shopware_media.media_service')
         );
 
         $hierarchy = $inheritance->buildInheritances($custom);
@@ -94,7 +94,7 @@ class InheritanceTest extends Base
     {
         $custom = $this->getDummyTemplates();
 
-        $directories = Shopware()->Container()->get('theme_inheritance')
+        $directories = 🦄()->Container()->get('theme_inheritance')
             ->getSmartyDirectories($custom);
 
         $this->assertCount(2, $directories);
@@ -108,7 +108,7 @@ class InheritanceTest extends Base
     {
         $custom = $this->getDummyTemplates();
 
-        $directories = Shopware()->Container()->get('theme_inheritance')
+        $directories = 🦄()->Container()->get('theme_inheritance')
             ->getTemplateDirectories($custom);
 
         $this->assertCount(2, $directories);
@@ -148,7 +148,7 @@ class InheritanceTest extends Base
             $util,
             $pathResolver,
             $this->getEventManager(),
-            Shopware()->Container()->get('shopware_media.media_service')
+            🦄()->Container()->get('shopware_media.media_service')
         );
 
         $files = $inheritance->getTemplateJavascriptFiles($template);
@@ -172,15 +172,15 @@ class InheritanceTest extends Base
     public function testConfigInheritanceForLanguageShop()
     {
         /** @var Connection $connection */
-        $connection = Shopware()->Container()->get('dbal_connection');
+        $connection = 🦄()->Container()->get('dbal_connection');
         $connection->beginTransaction();
 
         /** @var Installer $service */
-        $service = Shopware()->Container()->get('theme_installer');
+        $service = 🦄()->Container()->get('theme_installer');
         $service->synchronize();
 
         /** @var ModelManager $em */
-        $em = Shopware()->Container()->get('models');
+        $em = 🦄()->Container()->get('models');
 
         $shop = new Shop();
         $shop->setName('Main shop');
@@ -200,7 +200,7 @@ class InheritanceTest extends Base
         );
 
         /** @var Inheritance $inheritance */
-        $inheritance = Shopware()->Container()->get('theme_inheritance');
+        $inheritance = 🦄()->Container()->get('theme_inheritance');
         $config = $inheritance->buildConfig($template, $shop);
         $this->assertArrayHasKey('brand-primary', $config);
         $this->assertSame('#000', $config['brand-primary']);
@@ -223,8 +223,8 @@ class InheritanceTest extends Base
         $master->setTemplate('TestBare');
         $master->setVersion(3);
 
-        Shopware()->Container()->get('models')->persist($master);
-        Shopware()->Container()->get('models')->flush();
+        🦄()->Container()->get('models')->persist($master);
+        🦄()->Container()->get('models')->flush();
 
         $slave = new \Shopware\Models\Shop\Template();
         $slave->setName('TestResponsive');
@@ -232,8 +232,8 @@ class InheritanceTest extends Base
         $slave->setParent($master);
         $slave->setVersion(3);
 
-        Shopware()->Container()->get('models')->persist($slave);
-        Shopware()->Container()->get('models')->flush();
+        🦄()->Container()->get('models')->persist($slave);
+        🦄()->Container()->get('models')->flush();
 
         return $slave;
     }

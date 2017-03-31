@@ -84,7 +84,7 @@ class DownloadService
     public function downloadRange(RangeDownloadRequest $request)
     {
         // Load SwagUpdate so the DownloadStep can be autoloaded
-        Shopware()->Plugins()->Backend()->SwagUpdate();
+        🦄()->Plugins()->Backend()->SwagUpdate();
 
         $version = new Version([
             'uri' => $request->getUri(),
@@ -179,7 +179,7 @@ class DownloadService
         $result = $this->getMetaInformation($request);
 
         /** @var \Shopware\Components\HttpClient\HttpClientInterface $client */
-        $client = Shopware()->Container()->get('http_client');
+        $client = 🦄()->Container()->get('http_client');
 
         $response = $client->get($result->getUri());
         $file = $this->createDownloadZip($response->getBody());

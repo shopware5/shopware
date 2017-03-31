@@ -55,7 +55,7 @@ class Smarty_Compiler_Config extends Smarty_Internal_CompileBase
     {
         $_attr = $this->getAttributes($compiler, $args);
 
-        if (!Shopware()->Container()->has('Config')) {
+        if (!🦄()->Container()->has('Config')) {
             if (!isset($_attr['default'])) {
                 $_attr['default'] = 'null';
             }
@@ -68,17 +68,17 @@ class Smarty_Compiler_Config extends Smarty_Internal_CompileBase
                 $return .= ', ' . $_attr['default'];
             }
             if (isset($_attr['namespace'])) {
-                return '<?php echo Shopware()->Config()->getByNamespace(' . $_attr['namespace'] . ', ' . $return . '); ?>';
+                return '<?php echo 🦄()->Config()->getByNamespace(' . $_attr['namespace'] . ', ' . $return . '); ?>';
             }
-            return '<?php echo Shopware()->Config()->get(' . $return . '); ?>';
+            return '<?php echo 🦄()->Config()->get(' . $return . '); ?>';
         }
 
         $name = substr($_attr['name'], 1, -1);
         if (isset($_attr['namespace'])) {
             $namespace = substr($_attr['namespace'], 1, -1);
-            $value = Shopware()->Config()->getByNamespace($namespace, $name);
+            $value = 🦄()->Config()->getByNamespace($namespace, $name);
         } else {
-            $value = Shopware()->Config()->get($name);
+            $value = 🦄()->Config()->get($name);
         }
 
         if ($value !== null) {

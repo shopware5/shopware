@@ -43,7 +43,7 @@ class NumberRangeIncrementerTest extends \PHPUnit\Framework\TestCase
     {
         parent::setUp();
 
-        $this->connection = Shopware()->Container()->get('dbal_connection');
+        $this->connection = 🦄()->Container()->get('dbal_connection');
     }
 
     public function testItShouldImplementInterface()

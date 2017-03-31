@@ -33,11 +33,11 @@
  */
 function smarty_modifier_translate($value = null, $path = null, $locale = null)
 {
-    if (!Shopware()->Container()->has('Locale')) {
+    if (!🦄()->Container()->has('Locale')) {
         return $value;
     }
     if ($locale === null) {
-        $locale = Shopware()->Container()->get('Locale');
+        $locale = 🦄()->Container()->get('Locale');
     }
     if ($path == 'currency') {
         $path = 'nametocurrency';

@@ -228,14 +228,14 @@ class sOrder
     public function __construct(
         ContextServiceInterface $contextService = null
     ) {
-        $this->db = Shopware()->Db();
-        $this->eventManager = Shopware()->Events();
-        $this->config = Shopware()->Config();
-        $this->numberRangeIncrementer = Shopware()->Container()->get('shopware.number_range_incrementer');
+        $this->db = 🦄()->Db();
+        $this->eventManager = 🦄()->Events();
+        $this->config = 🦄()->Config();
+        $this->numberRangeIncrementer = 🦄()->Container()->get('shopware.number_range_incrementer');
 
-        $this->contextService = $contextService ?: Shopware()->Container()->get('shopware_storefront.context_service');
-        $this->attributeLoader = Shopware()->Container()->get('shopware_attribute.data_loader');
-        $this->attributePersister = Shopware()->Container()->get('shopware_attribute.data_persister');
+        $this->contextService = $contextService ?: 🦄()->Container()->get('shopware_storefront.context_service');
+        $this->attributeLoader = 🦄()->Container()->get('shopware_attribute.data_loader');
+        $this->attributePersister = 🦄()->Container()->get('shopware_attribute.data_persister');
     }
 
     /**
@@ -299,7 +299,7 @@ class sOrder
                 'sMail' => $this->sUserData['additional']['user']['email'],
             ];
 
-            $mail = Shopware()->TemplateMail()->createMail('sNOSERIALS', $context);
+            $mail = 🦄()->TemplateMail()->createMail('sNOSERIALS', $context);
 
             if ($this->config->get('sESDMAIL')) {
                 $mail->addTo($this->config->get('sESDMAIL'));
@@ -400,7 +400,7 @@ class sOrder
             $this->sSYSTEM->sCurrency['factor'] = '1';
         }
 
-        $shop = Shopware()->Shop();
+        $shop = 🦄()->Shop();
         $mainShop = $shop->getMain() !== null ? $shop->getMain() : $shop;
 
         $taxfree = '0';
@@ -566,7 +566,7 @@ class sOrder
             $this->sSYSTEM->sCurrency['factor'] = '1';
         }
 
-        $shop = Shopware()->Shop();
+        $shop = 🦄()->Shop();
         $mainShop = $shop->getMain() !== null ? $shop->getMain() : $shop;
 
         $taxfree = '0';
@@ -626,8 +626,8 @@ class sOrder
         }
 
         try {
-            $paymentData = Shopware()->Modules()->Admin()->sGetPaymentMeanById($this->getPaymentId(), Shopware()->Modules()->Admin()->sGetUserData());
-            $paymentClass = Shopware()->Modules()->Admin()->sInitiatePaymentClass($paymentData);
+            $paymentData = 🦄()->Modules()->Admin()->sGetPaymentMeanById($this->getPaymentId(), 🦄()->Modules()->Admin()->sGetUserData());
+            $paymentClass = 🦄()->Modules()->Admin()->sInitiatePaymentClass($paymentData);
             if ($paymentClass instanceof \ShopwarePlugin\PaymentMethods\Components\BasePaymentMethod) {
                 $paymentClass->createPaymentInstance($orderID, $this->sUserData['additional']['user']['id'], $this->getPaymentId());
             }
@@ -906,7 +906,7 @@ class sOrder
         }
 
         if (!($mail instanceof \Zend_Mail)) {
-            $mail = Shopware()->TemplateMail()->createMail('sORDER', $context);
+            $mail = 🦄()->TemplateMail()->createMail('sORDER', $context);
         }
 
         $mail->addTo($this->sUserData['additional']['user']['email']);
@@ -963,7 +963,7 @@ class sOrder
     public function sSaveBillingAddress($address, $id)
     {
         /** @var Customer $customer */
-        $customer = Shopware()->Container()->get('models')->find(Customer::class, $address['userID']);
+        $customer = 🦄()->Container()->get('models')->find(Customer::class, $address['userID']);
 
         $sql = '
         INSERT INTO s_order_billingaddress
@@ -1135,7 +1135,7 @@ class sOrder
 
         if ($shippingAddressId === null) {
             /** @var Customer $customer */
-            $customer = Shopware()->Models()->getRepository('Shopware\Models\Customer\Customer')->find($address['userID']);
+            $customer = 🦄()->Models()->getRepository('Shopware\Models\Customer\Customer')->find($address['userID']);
             $shippingAddressId = $customer->getDefaultShippingAddress()->getId();
         }
 
@@ -1178,7 +1178,7 @@ class sOrder
                 'voucherCode' => $this->config->get('sVOUCHERTELLFRIENDCODE'),
             ];
 
-            $mail = Shopware()->TemplateMail()->createMail('sVOUCHER', $context);
+            $mail = 🦄()->TemplateMail()->createMail('sVOUCHER', $context);
             $mail->addTo($advertiser['email']);
             $mail->send();
         } // - if user found
@@ -1196,7 +1196,7 @@ class sOrder
     public function sendStatusMail(Enlight_Components_Mail $mail)
     {
         $this->eventManager->notify('Shopware_Controllers_Backend_OrderState_Send_BeforeSend', [
-            'subject' => Shopware()->Front(), 'mail' => $mail,
+            'subject' => 🦄()->Front(), 'mail' => $mail,
         ]);
 
         if (!empty($this->config->OrderStateMailAck)) {
@@ -1244,22 +1244,22 @@ class sOrder
             return;
         }
 
-        $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
+        $repository = 🦄()->Models()->getRepository('Shopware\Models\Shop\Shop');
         $shopId = is_numeric($order['language']) ? $order['language'] : $order['subshopID'];
         $shop = $repository->getActiveById($shopId);
         $shop->registerResources();
 
-        $order['status_description'] = Shopware()->Snippets()->getNamespace('backend/static/order_status')->get(
+        $order['status_description'] = 🦄()->Snippets()->getNamespace('backend/static/order_status')->get(
             $order['status_name'],
             $order['status_description']
         );
-        $order['cleared_description'] = Shopware()->Snippets()->getNamespace('backend/static/payment_status')->get(
+        $order['cleared_description'] = 🦄()->Snippets()->getNamespace('backend/static/payment_status')->get(
             $order['cleared_name'],
             $order['cleared_description']
         );
 
         /* @var $mailModel \Shopware\Models\Mail\Mail */
-        $mailModel = Shopware()->Models()->getRepository('Shopware\Models\Mail\Mail')->findOneBy(
+        $mailModel = 🦄()->Models()->getRepository('Shopware\Models\Mail\Mail')->findOneBy(
             ['name' => $templateName]
         );
 
@@ -1278,7 +1278,7 @@ class sOrder
         }
 
         $result = $this->eventManager->notify('Shopware_Controllers_Backend_OrderState_Notify', [
-            'subject' => Shopware()->Front(),
+            'subject' => 🦄()->Front(),
             'id' => $orderId,
             'status' => $statusId,
             'mailname' => $templateName,
@@ -1288,7 +1288,7 @@ class sOrder
             $context['EventResult'] = $result->getValues();
         }
 
-        $mail = Shopware()->TemplateMail()->createMail($templateName, $context, $shop);
+        $mail = 🦄()->TemplateMail()->createMail($templateName, $context, $shop);
 
         $return = [
             'content' => $mail->getPlainBodyText(),
@@ -1299,12 +1299,12 @@ class sOrder
         ];
 
         $return = $this->eventManager->filter('Shopware_Controllers_Backend_OrderState_Filter', $return, [
-            'subject' => Shopware()->Front(),
+            'subject' => 🦄()->Front(),
             'id' => $orderId,
             'status' => $statusId,
             'mailname' => $templateName,
             'mail' => $mail,
-            'engine' => Shopware()->Template(),
+            'engine' => 🦄()->Template(),
         ]);
 
         $mail->clearSubject();
@@ -1429,7 +1429,7 @@ class sOrder
     }
 
     /**
-     * Replacement for: Shopware()->Api()->Export()->sGetOrders(array('orderID' => $orderId));
+     * Replacement for: 🦄()->Api()->Export()->sGetOrders(array('orderID' => $orderId));
      *
      * @param int $orderId
      *
@@ -1500,7 +1500,7 @@ EOT;
     }
 
     /**
-     * Replacement for: Shopware()->Api()->Export()->sOrderDetails(array('orderID' => $orderId));
+     * Replacement for: 🦄()->Api()->Export()->sOrderDetails(array('orderID' => $orderId));
      *
      * Returns order details for a given orderId
      *
@@ -1549,7 +1549,7 @@ EOT;
     }
 
     /**
-     * Replacement for: Shopware()->Api()->Export()->sOrderCustomers(array('orderID' => $orderId));
+     * Replacement for: 🦄()->Api()->Export()->sOrderCustomers(array('orderID' => $orderId));
      *
      * @param $orderId
      *
@@ -1649,7 +1649,7 @@ EOT;
     private function getSession()
     {
         if ($this->session == null) {
-            $this->session = Shopware()->Session();
+            $this->session = 🦄()->Session();
         }
 
         return $this->session;
@@ -1935,7 +1935,7 @@ EOT;
         $basketRow['articlename'] = str_replace('<br />', "\n", $basketRow['articlename']);
         $basketRow['articlename'] = html_entity_decode($basketRow['articlename']);
         $basketRow['articlename'] = strip_tags($basketRow['articlename']);
-        $basketRow['articlename'] = Shopware()->Modules()->Articles()->sOptimizeText(
+        $basketRow['articlename'] = 🦄()->Modules()->Articles()->sOptimizeText(
             $basketRow['articlename']
         );
 
@@ -2010,6 +2010,6 @@ EOT;
         );
 
         $context = ['exception' => $e];
-        Shopware()->Container()->get('corelogger')->error($message, $context);
+        🦄()->Container()->get('corelogger')->error($message, $context);
     }
 }

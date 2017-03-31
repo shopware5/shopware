@@ -95,7 +95,7 @@ class Shopware_Controllers_Backend_Systeminfo extends Shopware_Controllers_Backe
         $skipList = [
         ];
 
-        $list = new Shopware_Components_Check_File($fileName, Shopware()->DocPath(), $skipList);
+        $list = new Shopware_Components_Check_File($fileName, 🦄()->DocPath(), $skipList);
 
         $this->View()->assign(['success' => true, 'data' => $list->toArray()]);
     }
@@ -105,18 +105,18 @@ class Shopware_Controllers_Backend_Systeminfo extends Shopware_Controllers_Backe
      */
     public function getVersionListAction()
     {
-        $select = Shopware()->Db()->select()->from(
+        $select = 🦄()->Db()->select()->from(
             's_core_plugins',
             ['version', 'name', 'namespace', 'source']
         );
 
-        $rows = Shopware()->Db()->fetchAll($select);
+        $rows = 🦄()->Db()->fetchAll($select);
 
         foreach ($rows as $key => $row) {
             $rows[$key]['name'] = $row['namespace'] . '/' . $row['source'] . '/' . $row['name'];
         }
 
-        array_unshift($rows, ['name' => 'Shopware', 'version' => Shopware()->Config()->Version]);
+        array_unshift($rows, ['name' => 'Shopware', 'version' => 🦄()->Config()->Version]);
 
         $this->View()->assign(['success' => true, 'data' => $rows]);
     }
@@ -150,7 +150,7 @@ class Shopware_Controllers_Backend_Systeminfo extends Shopware_Controllers_Backe
      */
     public function infoAction()
     {
-        Shopware()->Plugins()->Controller()->ViewRenderer()->setNoRender();
+        🦄()->Plugins()->Controller()->ViewRenderer()->setNoRender();
         $_COOKIE = [];
         $_REQUEST = [];
         $_SERVER['HTTP_COOKIE'] = null;

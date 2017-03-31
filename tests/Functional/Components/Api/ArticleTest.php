@@ -414,7 +414,7 @@ class ArticleTest extends TestCase
         $this->assertGreaterThan(0, $article->getId());
         $this->assertCount(4, $article->getImages());
 
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $mediaService = 🦄()->Container()->get('shopware_media.media_service');
 
         foreach ($article->getImages() as $image) {
             $this->assertCount(4, $image->getMedia()->getThumbnails());
@@ -523,7 +523,7 @@ class ArticleTest extends TestCase
         ];
 
         $article = $this->resource->update($id, $testData);
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $mediaService = 🦄()->Container()->get('shopware_media.media_service');
 
         $this->assertInstanceOf('\Shopware\Models\Article\Article', $article);
         $this->assertGreaterThan(0, $article->getId());
@@ -678,7 +678,7 @@ class ArticleTest extends TestCase
             '140x140',
         ];
 
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $mediaService = 🦄()->Container()->get('shopware_media.media_service');
 
         foreach ($article->getImages() as $image) {
             $thumbnails = $image->getMedia()->getThumbnails();
@@ -909,12 +909,12 @@ class ArticleTest extends TestCase
         $this->assertEquals(2, count($article->getLinks()));
         $this->assertEquals(2, count($article->getMainDetail()->getPrices()));
 
-        $groups = Shopware()->Models()->getRepository('Shopware\Models\Article\Configurator\Group')->findBy(
+        $groups = 🦄()->Models()->getRepository('Shopware\Models\Article\Configurator\Group')->findBy(
                 ['name' => ['Group1', 'Group2']]
             );
 
         foreach ($groups as $group) {
-            Shopware()->Models()->remove($group);
+            🦄()->Models()->remove($group);
         }
 
         $this->resource->delete($article->getId());
@@ -1659,7 +1659,7 @@ class ArticleTest extends TestCase
         $configurator = $this->getSimpleConfiguratorSet(2, 5);
         $variantOptions = $this->getVariantOptionsOfSet($configurator);
 
-        $id = Shopware()->Db()->fetchOne(
+        $id = 🦄()->Db()->fetchOne(
             'SELECT articleID FROM s_articles_details WHERE ordernumber = ?',
             [$variantNumber]
         );
@@ -1685,7 +1685,7 @@ class ArticleTest extends TestCase
             Resource::HYDRATE_OBJECT
         );
 
-        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder = 🦄()->Models()->createQueryBuilder();
         $builder->select(
             [
                 'media.id as mediaId',
@@ -1870,7 +1870,7 @@ class ArticleTest extends TestCase
         );
         $article = $this->resource->getOne($model->getId());
 
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $mediaService = 🦄()->Container()->get('shopware_media.media_service');
 
         $this->assertCount(count($data['images']), $article['images']);
         foreach ($article['images'] as $image) {
@@ -1890,7 +1890,7 @@ class ArticleTest extends TestCase
         $data['images'] = $this->getImagesForNewArticle();
         $article = $this->resource->create($data);
 
-        $createdIds = Shopware()->Db()->fetchCol(
+        $createdIds = 🦄()->Db()->fetchCol(
             'SELECT id FROM s_articles_img WHERE articleID = :articleId',
             [
                 ':articleId' => $article->getId(),
@@ -1904,7 +1904,7 @@ class ArticleTest extends TestCase
 
         $this->resource->update($article->getId(), $data);
 
-        $updateIds = Shopware()->Db()->fetchCol(
+        $updateIds = 🦄()->Db()->fetchCol(
             'SELECT id FROM s_articles_img WHERE articleID = :articleId',
             [
                 ':articleId' => $article->getId(),
@@ -1930,7 +1930,7 @@ class ArticleTest extends TestCase
 
         $this->resource->update($article->getId(), $data);
 
-        $updateIds = Shopware()->Db()->fetchCol(
+        $updateIds = 🦄()->Db()->fetchCol(
             'SELECT id FROM s_articles_img WHERE articleID = :articleId',
             [
                 ':articleId' => $article->getId(),
@@ -1952,7 +1952,7 @@ class ArticleTest extends TestCase
 
         $this->resource->update($article->getId(), $data);
 
-        $updateIds = Shopware()->Db()->fetchCol(
+        $updateIds = 🦄()->Db()->fetchCol(
             'SELECT id FROM s_articles_img WHERE articleID = :articleId',
             [
                 ':articleId' => $article->getId(),
@@ -1985,7 +1985,7 @@ class ArticleTest extends TestCase
 
     public function testCreateWithDuplicateProperties()
     {
-        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder = 🦄()->Models()->createQueryBuilder();
         $builder->select(['values', 'option'])->from('Shopware\Models\Property\Value', 'values')->innerJoin(
                 'values.option',
                 'option'
@@ -2041,7 +2041,7 @@ class ArticleTest extends TestCase
         $articleId = $article->getId();
         $article = $this->resource->getOne($articleId);
 
-        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder = 🦄()->Models()->createQueryBuilder();
         $builder->select(['option'])->from('Shopware\Models\Property\Option', 'option')->where(
                 'option.name = :optionName'
             )->setParameter('optionName', $optionName)->setFirstResult(0)->setMaxResults(20);
@@ -2054,11 +2054,11 @@ class ArticleTest extends TestCase
 
         //delete test values in s_filter_values
         $sql = 'DELETE FROM `s_filter_values` WHERE `optionId` = ?';
-        Shopware()->Db()->query($sql, [$databaseValuesOptions[0]['id']]);
+        🦄()->Db()->query($sql, [$databaseValuesOptions[0]['id']]);
 
         //delete test values in s_filter_relations
         $sql = 'DELETE FROM `s_filter_relations` WHERE `optionId` = ?';
-        Shopware()->Db()->query($sql, [$databaseValuesOptions[0]['id']]);
+        🦄()->Db()->query($sql, [$databaseValuesOptions[0]['id']]);
 
         //delete test values in s_filter_options
         $builder->delete('Shopware\Models\Property\Option', 'option')->andWhere(
@@ -2068,7 +2068,7 @@ class ArticleTest extends TestCase
 
     public function testUpdateWithDuplicateProperties()
     {
-        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder = 🦄()->Models()->createQueryBuilder();
         $builder->select(['values', 'option'])->from('Shopware\Models\Property\Value', 'values')->innerJoin(
                 'values.option',
                 'option'
@@ -2165,7 +2165,7 @@ class ArticleTest extends TestCase
         );
         $article = $this->resource->getOne($article->getId());
 
-        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder = 🦄()->Models()->createQueryBuilder();
         $builder->select(['option'])->from('Shopware\Models\Property\Option', 'option')->where(
                 'option.name = :optionName'
             )->setParameter('optionName', $optionName)->setFirstResult(0)->setMaxResults(20);
@@ -2178,11 +2178,11 @@ class ArticleTest extends TestCase
 
         //delete test values in s_filter_values
         $sql = 'DELETE FROM `s_filter_values` WHERE `optionId` = ?';
-        Shopware()->Db()->query($sql, [$databaseValuesOptions[0]['id']]);
+        🦄()->Db()->query($sql, [$databaseValuesOptions[0]['id']]);
 
         //delete test values in s_filter_relations
         $sql = 'DELETE FROM `s_filter_relations` WHERE `optionId` = ?';
-        Shopware()->Db()->query($sql, [$databaseValuesOptions[0]['id']]);
+        🦄()->Db()->query($sql, [$databaseValuesOptions[0]['id']]);
 
         //delete test values in s_filter_options
         $builder->delete('Shopware\Models\Property\Option', 'option')->andWhere(
@@ -2331,7 +2331,7 @@ class ArticleTest extends TestCase
         $data = $this->getSimpleTestData();
         $similar = [];
         foreach ($articles as $article) {
-            $model = Shopware()->Models()->find(
+            $model = 🦄()->Models()->find(
                 'Shopware\Models\Article\Article',
                 $article['id']
             );
@@ -2353,7 +2353,7 @@ class ArticleTest extends TestCase
         $data = $this->getSimpleTestData();
         $similar = [];
         foreach ($articles as $article) {
-            $model = Shopware()->Models()->find(
+            $model = 🦄()->Models()->find(
                 'Shopware\Models\Article\Article',
                 $article['id']
             );
@@ -2400,7 +2400,7 @@ class ArticleTest extends TestCase
     {
         $data = $this->getSimpleTestData();
 
-        $data['categories'] = Shopware()->Db()->fetchAll('SELECT DISTINCT id FROM s_categories LIMIT 5, 10');
+        $data['categories'] = 🦄()->Db()->fetchAll('SELECT DISTINCT id FROM s_categories LIMIT 5, 10');
 
         $first = $data['categories'][3];
         $second = $data['categories'][4];
@@ -2561,17 +2561,17 @@ class ArticleTest extends TestCase
         $data = $this->getSimpleTestData();
         $data['mainDetail']['number'] = $number;
 
-        $categories = Shopware()->Db()->fetchAll('SELECT id FROM s_categories WHERE parent = 3 ORDER BY id LIMIT 2');
+        $categories = 🦄()->Db()->fetchAll('SELECT id FROM s_categories WHERE parent = 3 ORDER BY id LIMIT 2');
         $data['categories'] = $categories;
 
         $article = $this->resource->create($data);
 
-        $normal = Shopware()->Db()->fetchCol(
+        $normal = 🦄()->Db()->fetchCol(
             'SELECT categoryID FROM s_articles_categories WHERE articleID = ?',
             [$article->getId()]
         );
 
-        $denormalized = Shopware()->Db()->fetchCol(
+        $denormalized = 🦄()->Db()->fetchCol(
             'SELECT categoryID FROM s_articles_categories_ro WHERE articleID = ?',
             [$article->getId()]
         );
@@ -2584,7 +2584,7 @@ class ArticleTest extends TestCase
             $this->assertContains($category['id'], $denormalized);
         }
 
-        $rewriteCategories = Shopware()->Db()->fetchAll(
+        $rewriteCategories = 🦄()->Db()->fetchAll(
             'SELECT id FROM s_categories WHERE parent = 3 ORDER BY id LIMIT 2, 2'
         );
         $data = [
@@ -2593,12 +2593,12 @@ class ArticleTest extends TestCase
 
         $this->resource->update($article->getId(), $data);
 
-        $normal = Shopware()->Db()->fetchCol(
+        $normal = 🦄()->Db()->fetchCol(
             'SELECT categoryID FROM s_articles_categories WHERE articleID = ?',
             [$article->getId()]
         );
 
-        $denormalized = Shopware()->Db()->fetchCol(
+        $denormalized = 🦄()->Db()->fetchCol(
             'SELECT categoryID FROM s_articles_categories_ro WHERE articleID = ?',
             [$article->getId()]
         );
@@ -2615,19 +2615,19 @@ class ArticleTest extends TestCase
             );
         }
 
-        $additionally = Shopware()->Db()->fetchAll('SELECT id FROM s_categories WHERE parent = 3 ORDER BY id LIMIT 2');
+        $additionally = 🦄()->Db()->fetchAll('SELECT id FROM s_categories WHERE parent = 3 ORDER BY id LIMIT 2');
         $data = [
             '__options_categories' => ['replace' => false],
             'categories' => $additionally,
         ];
         $this->resource->update($article->getId(), $data);
 
-        $normal = Shopware()->Db()->fetchCol(
+        $normal = 🦄()->Db()->fetchCol(
             'SELECT categoryID FROM s_articles_categories WHERE articleID = ?',
             [$article->getId()]
         );
 
-        $denormalized = Shopware()->Db()->fetchCol(
+        $denormalized = 🦄()->Db()->fetchCol(
             'SELECT categoryID FROM s_articles_categories_ro WHERE articleID = ?',
             [$article->getId()]
         );
@@ -2928,7 +2928,7 @@ class ArticleTest extends TestCase
 
     private function getImagesForNewArticle($offset = 10, $limit = 5)
     {
-        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder = 🦄()->Models()->createQueryBuilder();
         $builder->select(
             [
                 'media.id as mediaId',
@@ -2984,7 +2984,7 @@ class ArticleTest extends TestCase
             $selectFields = ['alias'];
         }
 
-        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder = 🦄()->Models()->createQueryBuilder();
         $builder->select($selectFields)->from($entity, 'alias')->setFirstResult($offset)->setMaxResults($limit);
 
         return $builder->getQuery()->getArrayResult();
@@ -2992,7 +2992,7 @@ class ArticleTest extends TestCase
 
     private function getSimpleConfiguratorSet($groupLimit = 3, $optionLimit = 5)
     {
-        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder = 🦄()->Models()->createQueryBuilder();
         $builder->select(['groups.id', 'groups.name'])->from(
                 'Shopware\Models\Article\Configurator\Group',
                 'groups'
@@ -3000,7 +3000,7 @@ class ArticleTest extends TestCase
 
         $groups = $builder->getQuery()->getArrayResult();
 
-        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder = 🦄()->Models()->createQueryBuilder();
         $builder->select(['options.id', 'options.name'])->from(
                 'Shopware\Models\Article\Configurator\Option',
                 'options'

@@ -150,7 +150,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
      */
     public function getOrderDocumentsQuery($orderIds, $docType)
     {
-        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder = 🦄()->Models()->createQueryBuilder();
         $builder->select([
             'orders',
             'documents',
@@ -177,7 +177,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
      */
     public function getOrderStatusQuery($filter = null, $order = null, $offset = null, $limit = null)
     {
-        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder = 🦄()->Models()->createQueryBuilder();
         $builder->select(['status'])
             ->from('Shopware\Models\Order\Status', 'status')
             ->andWhere("status.group = 'state'");
@@ -266,7 +266,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
      */
     public function getTaxAction()
     {
-        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder = 🦄()->Models()->createQueryBuilder();
         $tax = $builder->select(['tax'])
             ->from('Shopware\Models\Tax\Tax', 'tax')
             ->getQuery()
@@ -312,7 +312,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         $sort = $this->Request()->getParam('sort', [['property' => 'history.changeDate', 'direction' => 'DESC']]);
 
         /** @var $namespace Enlight_Components_Snippet_Namespace */
-        $namespace = Shopware()->Snippets()->getNamespace('backend/order');
+        $namespace = 🦄()->Snippets()->getNamespace('backend/order');
 
         //the backend order module have no function to create a new order so an order id must be passed.
         if (empty($orderId)) {
@@ -346,7 +346,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         $id = $this->Request()->getParam('id', null);
 
         /** @var $namespace Enlight_Components_Snippet_Namespace */
-        $namespace = Shopware()->Snippets()->getNamespace('backend/order');
+        $namespace = 🦄()->Snippets()->getNamespace('backend/order');
 
         //the backend order module have no function to create a new order so an order id must be passed.
         if (empty($id)) {
@@ -415,8 +415,8 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
             $order->calculateInvoiceAmount();
         }
 
-        Shopware()->Models()->flush();
-        Shopware()->Models()->clear();
+        🦄()->Models()->flush();
+        🦄()->Models()->clear();
         $order = $this->getRepository()->find($id);
 
         //if the status has been changed an status mail is created.
@@ -449,7 +449,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
     public function deleteAction()
     {
         /** @var $namespace Enlight_Components_Snippet_Namespace */
-        $namespace = Shopware()->Snippets()->getNamespace('backend/order');
+        $namespace = 🦄()->Snippets()->getNamespace('backend/order');
 
         //get posted customers
         $orderId = $this->Request()->getParam('id');
@@ -488,7 +488,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         $orderId = $this->Request()->getParam('orderId', null);
 
         /** @var $namespace Enlight_Components_Snippet_Namespace */
-        $namespace = Shopware()->Snippets()->getNamespace('backend/order');
+        $namespace = 🦄()->Snippets()->getNamespace('backend/order');
 
         //check if an order id is passed. If no order id passed, return success false
         if (empty($orderId)) {
@@ -518,9 +518,9 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
             $position = new Detail();
             $attribute = new Shopware\Models\Attribute\OrderDetail();
             $position->setAttribute($attribute);
-            Shopware()->Models()->persist($position);
+            🦄()->Models()->persist($position);
         } else {
-            $detailRepository = Shopware()->Models()->getRepository('Shopware\Models\Order\Detail');
+            $detailRepository = 🦄()->Models()->getRepository('Shopware\Models\Order\Detail');
             $position = $detailRepository->find($id);
         }
 
@@ -542,22 +542,22 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         $position->fromArray($data);
         $position->setOrder($order);
 
-        Shopware()->Models()->flush();
+        🦄()->Models()->flush();
 
         //If the passed data is a new position, the flush function will add the new id to the position model
         $data['id'] = $position->getId();
 
         //The position model will refresh the article stock, so the article stock
         //will be assigned to the view to refresh the grid or form panel.
-        $articleRepository = Shopware()->Models()->getRepository('Shopware\Models\Article\Detail');
+        $articleRepository = 🦄()->Models()->getRepository('Shopware\Models\Article\Detail');
         $article = $articleRepository->findOneBy(['number' => $position->getArticleNumber()]);
         if ($article instanceof \Shopware\Models\Article\Detail) {
             $data['inStock'] = $article->getInStock();
         }
         $order = $this->getRepository()->find($order->getId());
 
-        Shopware()->Models()->persist($order);
-        Shopware()->Models()->flush();
+        🦄()->Models()->persist($order);
+        🦄()->Models()->flush();
 
         $invoiceAmount = $order->getInvoiceAmount();
 
@@ -583,7 +583,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
     public function deletePositionAction()
     {
         /** @var $namespace Enlight_Components_Snippet_Namespace */
-        $namespace = Shopware()->Snippets()->getNamespace('backend/order');
+        $namespace = 🦄()->Snippets()->getNamespace('backend/order');
 
         $positions = $this->Request()->getParam('positions', [['id' => $this->Request()->getParam('id')]]);
 
@@ -615,21 +615,21 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
             if (empty($position['id'])) {
                 continue;
             }
-            $model = Shopware()->Models()->find('Shopware\Models\Order\Detail', $position['id']);
+            $model = 🦄()->Models()->find('Shopware\Models\Order\Detail', $position['id']);
 
             //check if the model was founded.
             if ($model instanceof \Shopware\Models\Order\Detail) {
-                Shopware()->Models()->remove($model);
+                🦄()->Models()->remove($model);
             }
         }
         //after each model has been removed to executes the doctrine flush.
-        Shopware()->Models()->flush();
+        🦄()->Models()->flush();
 
         /** @var $order \Shopware\Models\Order\Order */
         $order = $this->getRepository()->find($orderId);
         $order->calculateInvoiceAmount();
 
-        Shopware()->Models()->flush();
+        🦄()->Models()->flush();
 
         $data = $this->getOrder($order->getId());
         $this->View()->assign([
@@ -656,7 +656,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         $addAttachments = $this->request->getParam('addAttachments') == 'true' ? true : false;
 
         /** @var $namespace Enlight_Components_Snippet_Namespace */
-        $namespace = Shopware()->Snippets()->getNamespace('backend/order');
+        $namespace = 🦄()->Snippets()->getNamespace('backend/order');
 
         if (empty($orders)) {
             $this->View()->assign([
@@ -677,7 +677,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
             }
 
             /** @var $order \Shopware\Models\Order\Order */
-            $order = Shopware()->Models()->find('Shopware\Models\Order\Order', $data['id']);
+            $order = 🦄()->Models()->find('Shopware\Models\Order\Order', $data['id']);
             if (!$order) {
                 continue;
             }
@@ -690,14 +690,14 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
 
             //refresh the status models to return the new status data which will be displayed in the batch list
             if (!empty($data['status']) || $data['status'] === 0) {
-                $order->setOrderStatus(Shopware()->Models()->find('Shopware\Models\Order\Status', $data['status']));
+                $order->setOrderStatus(🦄()->Models()->find('Shopware\Models\Order\Status', $data['status']));
             }
             if (!empty($data['cleared'])) {
-                $order->setPaymentStatus(Shopware()->Models()->find('Shopware\Models\Order\Status', $data['cleared']));
+                $order->setPaymentStatus(🦄()->Models()->find('Shopware\Models\Order\Status', $data['cleared']));
             }
 
             try {
-                Shopware()->Models()->flush($order);
+                🦄()->Models()->flush($order);
             } catch (Exception $e) {
                 continue;
             }
@@ -706,8 +706,8 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
             // this would create a new Shop if we execute an flush();
             $this->createOrderDocuments($documentType, $documentMode, $order);
 
-            $data['paymentStatus'] = Shopware()->Models()->toArray($order->getPaymentStatus());
-            $data['orderStatus'] = Shopware()->Models()->toArray($order->getOrderStatus());
+            $data['paymentStatus'] = 🦄()->Models()->toArray($order->getPaymentStatus());
+            $data['orderStatus'] = 🦄()->Models()->toArray($order->getOrderStatus());
 
             $data['mail'] = $this->checkOrderStatus($order, $statusBefore, $clearedBefore, $autoSend, $documentType, $addAttachments);
             //return the modified data array.
@@ -756,7 +756,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         $models = $query->getResult();
         foreach ($models as $model) {
             foreach ($model->getDocuments() as $document) {
-                $files[] = Shopware()->DocPath('files/documents') . $document->getHash() . '.pdf';
+                $files[] = 🦄()->DocPath('files/documents') . $document->getHash() . '.pdf';
             }
         }
         $this->mergeDocuments($files);
@@ -775,7 +775,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         $attachments = $this->request->getParam('attachment');
 
         /** @var $namespace Enlight_Components_Snippet_Namespace */
-        $namespace = Shopware()->Snippets()->getNamespace('backend/order');
+        $namespace = 🦄()->Snippets()->getNamespace('backend/order');
 
         if (empty($data)) {
             $this->View()->assign([
@@ -801,7 +801,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         $mail->setFrom($this->Request()->getParam('fromMail', ''), $this->Request()->getParam('fromName', ''));
         $mail->addTo($this->Request()->getParam('to', ''));
 
-        Shopware()->Modules()->Order()->sendStatusMail($mail);
+        🦄()->Modules()->Order()->sendStatusMail($mail);
 
         $this->View()->assign([
             'success' => true,
@@ -859,7 +859,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         $orderId = $this->request->getParam('orderId');
 
         /** @var $mail Enlight_Components_Mail */
-        $mail = Shopware()->Modules()->Order()->createStatusMail($orderId, 0, 'sORDERDOCUMENTS');
+        $mail = 🦄()->Modules()->Order()->createStatusMail($orderId, 0, 'sORDERDOCUMENTS');
 
         $this->view->assign([
             'mail' => [
@@ -908,7 +908,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
     public function openPdfAction()
     {
         $name = basename($this->Request()->getParam('id', null)) . '.pdf';
-        $file = Shopware()->DocPath('files/documents') . $name;
+        $file = 🦄()->DocPath('files/documents') . $name;
         if (!file_exists($file)) {
             $this->View()->assign([
                 'success' => false,
@@ -923,8 +923,8 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         $this->Front()->Plugins()->ViewRenderer()->setNoRender();
         $this->Front()->Plugins()->Json()->setRenderer(false);
 
-        $orderModel = Shopware()->Models()->getRepository('Shopware\Models\Order\Document\Document')->findBy(['hash' => $this->Request()->getParam('id')]);
-        $orderModel = Shopware()->Models()->toArray($orderModel);
+        $orderModel = 🦄()->Models()->getRepository('Shopware\Models\Order\Document\Document')->findBy(['hash' => $this->Request()->getParam('id')]);
+        $orderModel = 🦄()->Models()->toArray($orderModel);
         $orderId = $orderModel[0]['documentId'];
 
         $response = $this->Response();
@@ -976,7 +976,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
     protected function getManager()
     {
         if (self::$manager === null) {
-            self::$manager = Shopware()->Models();
+            self::$manager = 🦄()->Models();
         }
 
         return self::$manager;
@@ -990,7 +990,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
     protected function getRepository()
     {
         if (self::$repository === null) {
-            self::$repository = Shopware()->Models()->getRepository('Shopware\Models\Order\Order');
+            self::$repository = 🦄()->Models()->getRepository('Shopware\Models\Order\Order');
         }
 
         return self::$repository;
@@ -1004,7 +1004,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
     protected function getShopRepository()
     {
         if (self::$shopRepository === null) {
-            self::$shopRepository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
+            self::$shopRepository = 🦄()->Models()->getRepository('Shopware\Models\Shop\Shop');
         }
 
         return self::$shopRepository;
@@ -1018,7 +1018,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
     protected function getCountryRepository()
     {
         if (self::$countryRepository === null) {
-            self::$countryRepository = Shopware()->Models()->getRepository('Shopware\Models\Country\Country');
+            self::$countryRepository = 🦄()->Models()->getRepository('Shopware\Models\Country\Country');
         }
 
         return self::$countryRepository;
@@ -1032,7 +1032,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
     protected function getPaymentRepository()
     {
         if (self::$paymentRepository === null) {
-            self::$paymentRepository = Shopware()->Models()->getRepository('Shopware\Models\Payment\Payment');
+            self::$paymentRepository = 🦄()->Models()->getRepository('Shopware\Models\Payment\Payment');
         }
 
         return self::$paymentRepository;
@@ -1046,7 +1046,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
     protected function getDispatchRepository()
     {
         if (self::$dispatchRepository === null) {
-            self::$dispatchRepository = Shopware()->Models()->getRepository('Shopware\Models\Dispatch\Dispatch');
+            self::$dispatchRepository = 🦄()->Models()->getRepository('Shopware\Models\Dispatch\Dispatch');
         }
 
         return self::$dispatchRepository;
@@ -1060,7 +1060,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
     protected function getDocumentRepository()
     {
         if (self::$documentRepository === null) {
-            self::$documentRepository = Shopware()->Models()->getRepository('Shopware\Models\Order\Document\Document');
+            self::$documentRepository = 🦄()->Models()->getRepository('Shopware\Models\Order\Document\Document');
         }
 
         return self::$documentRepository;
@@ -1154,7 +1154,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         }
 
         if (isset($data['stateId']) && !empty($data['stateId'])) {
-            $stateModel = Shopware()->Models()->find('Shopware\Models\Country\State', $data['stateId']);
+            $stateModel = 🦄()->Models()->find('Shopware\Models\Country\State', $data['stateId']);
             if ($stateModel) {
                 $data['state'] = $stateModel;
             }
@@ -1332,7 +1332,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
                     $document = $this->getDocument($documentType, $order);
                     $mail['mail'] = $this->addAttachments($mail['mail'], $order->getId(), [$document]);
                 }
-                $result = Shopware()->Modules()->Order()->sendStatusMail($mail['mail']);
+                $result = 🦄()->Modules()->Order()->sendStatusMail($mail['mail']);
 
                 //check if send mail was successfully.
                 $mail['data']['sent'] = is_object($result);
@@ -1575,14 +1575,14 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
     {
         //checks if the status id for the position is passed and search for the assigned status model
         if ($data['statusId'] >= 0) {
-            $data['status'] = Shopware()->Models()->find('Shopware\Models\Order\DetailStatus', $data['statusId']);
+            $data['status'] = 🦄()->Models()->find('Shopware\Models\Order\DetailStatus', $data['statusId']);
         } else {
             unset($data['status']);
         }
 
         //checks if the tax id for the position is passed and search for the assigned tax model
         if (!empty($data['taxId'])) {
-            $tax = Shopware()->Models()->find('Shopware\Models\Tax\Tax', $data['taxId']);
+            $tax = 🦄()->Models()->find('Shopware\Models\Tax\Tax', $data['taxId']);
             if ($tax instanceof \Shopware\Models\Tax\Tax) {
                 $data['tax'] = $tax;
                 $data['taxRate'] = $tax->getTax();
@@ -1592,7 +1592,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         }
 
         /** @var \Shopware\Models\Article\Detail $articleDetails */
-        $articleDetails = Shopware()->Models()->getRepository('Shopware\Models\Article\Detail')
+        $articleDetails = 🦄()->Models()->getRepository('Shopware\Models\Article\Detail')
             ->findOneBy(['number' => $data['articleNumber']]);
 
         //Load ean, unit and pack unit (translate if needed)
@@ -1602,7 +1602,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
             $data['unit'] = $unit ? $unit->getName() : null;
             $data['packunit'] = $articleDetails->getPackUnit() ?: $articleDetails->getArticle()->getMainDetail()->getPackUnit();
 
-            $languageData = Shopware()->Db()->fetchRow(
+            $languageData = 🦄()->Db()->fetchRow(
                 'SELECT s_core_shops.default, s_order.language AS languageId
                 FROM s_core_shops
                 INNER JOIN s_order ON s_order.language = s_core_shops.id
@@ -1676,7 +1676,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
     {
         //check if a customer id has passed and fill the customer element with the associated customer model
         if (!empty($data['customerId'])) {
-            $data['customer'] = Shopware()->Models()->find('Shopware\Models\Customer\Customer', $data['customerId']);
+            $data['customer'] = 🦄()->Models()->find('Shopware\Models\Customer\Customer', $data['customerId']);
         } else {
             //if no customer id passed, we have to unset the array element, otherwise the existing customer model would be overwritten
             unset($data['customer']);
@@ -1684,35 +1684,35 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
 
         //if a payment id passed, load the associated payment model
         if (!empty($data['paymentId'])) {
-            $data['payment'] = Shopware()->Models()->find('Shopware\Models\Payment\Payment', $data['paymentId']);
+            $data['payment'] = 🦄()->Models()->find('Shopware\Models\Payment\Payment', $data['paymentId']);
         } else {
             unset($data['payment']);
         }
 
         //if a dispatch id is passed, load the associated dispatch model
         if (!empty($data['dispatchId'])) {
-            $data['dispatch'] = Shopware()->Models()->find('Shopware\Models\Dispatch\Dispatch', $data['dispatchId']);
+            $data['dispatch'] = 🦄()->Models()->find('Shopware\Models\Dispatch\Dispatch', $data['dispatchId']);
         } else {
             unset($data['dispatch']);
         }
 
         //if a shop id is passed, load the associated shop model
         if (!empty($data['shopId'])) {
-            $data['shop'] = Shopware()->Models()->find('Shopware\Models\Shop\Shop', $data['shopId']);
+            $data['shop'] = 🦄()->Models()->find('Shopware\Models\Shop\Shop', $data['shopId']);
         } else {
             unset($data['shop']);
         }
 
         //if a status id is passed, load the associated order status model
         if (isset($data['status']) && $data['status'] !== null) {
-            $data['orderStatus'] = Shopware()->Models()->find('Shopware\Models\Order\Status', $data['status']);
+            $data['orderStatus'] = 🦄()->Models()->find('Shopware\Models\Order\Status', $data['status']);
         } else {
             unset($data['orderStatus']);
         }
 
         //if a payment status id is passed, load the associated payment status model
         if (isset($data['cleared']) && $data['cleared'] !== null) {
-            $data['paymentStatus'] = Shopware()->Models()->find('Shopware\Models\Order\Status', $data['cleared']);
+            $data['paymentStatus'] = 🦄()->Models()->find('Shopware\Models\Order\Status', $data['cleared']);
         } else {
             unset($data['paymentStatus']);
         }
@@ -1748,7 +1748,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
     private function getMailForOrder($orderId, $statusId)
     {
         /** @var $mail Enlight_Components_Mail */
-        $mail = Shopware()->Modules()->Order()->createStatusMail($orderId, $statusId);
+        $mail = 🦄()->Modules()->Order()->createStatusMail($orderId, $statusId);
 
         if ($mail instanceof Enlight_Components_Mail) {
             return [
@@ -1778,7 +1778,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
      */
     private function getVariantsStock(array $numbers)
     {
-        $query = Shopware()->Container()->get('dbal_connection')->createQueryBuilder();
+        $query = 🦄()->Container()->get('dbal_connection')->createQueryBuilder();
         $query->select(['variant.ordernumber', 'variant.instock']);
         $query->from('s_articles_details', 'variant');
         $query->where('variant.ordernumber IN (:numbers)');

@@ -56,11 +56,11 @@ class CountryTest extends TestCase
     {
         parent::setUpBeforeClass();
 
-        static::$existingCountryIds = Shopware()->Db()->fetchCol(
+        static::$existingCountryIds = 🦄()->Db()->fetchCol(
            'SELECT id
             FROM s_core_countries'
         );
-        static::$existingStatesIds = Shopware()->Db()->fetchCol(
+        static::$existingStatesIds = 🦄()->Db()->fetchCol(
            'SELECT id
             FROM s_core_countries_states'
         );
@@ -74,11 +74,11 @@ class CountryTest extends TestCase
     {
         parent::setUpBeforeClass();
 
-        Shopware()->Db()->query(
+        🦄()->Db()->query(
            'DELETE FROM s_core_countries
             WHERE id NOT IN (' . implode(',', static::$existingCountryIds) . ')'
         );
-        Shopware()->Db()->query(
+        🦄()->Db()->query(
            'DELETE FROM s_core_countries_states
             WHERE id NOT IN (' . implode(',', static::$existingStatesIds) . ')'
         );
@@ -129,8 +129,8 @@ class CountryTest extends TestCase
             'name' => 'Test State',
             'shortCode' => 'TS',
         ]);
-        Shopware()->Models()->persist($state);
-        Shopware()->Models()->flush($state);
+        🦄()->Models()->persist($state);
+        🦄()->Models()->flush($state);
 
         $area = $this->getArea();
         $data = [
@@ -211,8 +211,8 @@ class CountryTest extends TestCase
             'name' => 'Test State 2',
             'shortCode' => 'TS2',
         ]);
-        Shopware()->Models()->persist($state);
-        Shopware()->Models()->flush($state);
+        🦄()->Models()->persist($state);
+        🦄()->Models()->flush($state);
 
         $area = $this->getArea(1);
         $data = [
@@ -295,7 +295,7 @@ class CountryTest extends TestCase
      */
     private function getArea($index = 0)
     {
-        $areas = Shopware()->Models()->getRepository('Shopware\Models\Country\Area')->findAll();
+        $areas = 🦄()->Models()->getRepository('Shopware\Models\Country\Area')->findAll();
 
         return $areas[$index];
     }

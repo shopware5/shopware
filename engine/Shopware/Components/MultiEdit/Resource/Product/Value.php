@@ -88,7 +88,7 @@ class Value
 
         $query = $builder->getQuery();
 
-        $paginator = Shopware()->Models()->createPaginator($query);
+        $paginator = 🦄()->Models()->createPaginator($query);
         $totalCount = $paginator->count();
         $results = [];
 

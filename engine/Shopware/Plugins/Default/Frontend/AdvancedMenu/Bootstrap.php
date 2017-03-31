@@ -115,7 +115,7 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
         }
 
         $view = $args->getSubject()->View();
-        $parent = Shopware()->Shop()->get('parentID');
+        $parent = 🦄()->Shop()->get('parentID');
         $categoryId = $args->getRequest()->getParam('sCategory', $parent);
 
         $menu = $this->getAdvancedMenu($parent, $categoryId, (int) $config->levels);
@@ -139,15 +139,15 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
      */
     public function getAdvancedMenu($category, $activeCategoryId, $depth = null)
     {
-        $context = Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext();
-        $cacheKey = 'Shopware_AdvancedMenu_Tree_' . $context->getShop()->getId() . '_' . $category . '_' . Shopware()->System()->sUSERGROUPDATA['id'];
-        $cache = Shopware()->Container()->get('cache');
+        $context = 🦄()->Container()->get('shopware_storefront.context_service')->getShopContext();
+        $cacheKey = 'Shopware_AdvancedMenu_Tree_' . $context->getShop()->getId() . '_' . $category . '_' . 🦄()->System()->sUSERGROUPDATA['id'];
+        $cache = 🦄()->Container()->get('cache');
 
         if ($this->Config()->get('caching') && $cache->test($cacheKey)) {
             $menu = $cache->load($cacheKey);
         } else {
             $ids = $this->getCategoryIdsOfDepth($category, $depth);
-            $categories = Shopware()->Container()->get('shopware_storefront.category_service')->getList($ids, $context);
+            $categories = 🦄()->Container()->get('shopware_storefront.category_service')->getList($ids, $context);
             $categoriesArray = $this->convertCategories($categories);
             $categoryTree = $this->getCategoriesOfParent($category, $categoriesArray);
             if ($this->Config()->get('caching')) {
@@ -279,7 +279,7 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
      */
     private function getCategoryPath($categoryId)
     {
-        $query = Shopware()->Container()->get('dbal_connection')->createQueryBuilder();
+        $query = 🦄()->Container()->get('dbal_connection')->createQueryBuilder();
 
         $query->select('category.path')
             ->from('s_categories', 'category')
@@ -304,7 +304,7 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
      */
     private function getCategoryIdsOfDepth($parentId, $depth)
     {
-        $query = Shopware()->Container()->get('dbal_connection')->createQueryBuilder();
+        $query = 🦄()->Container()->get('dbal_connection')->createQueryBuilder();
         $query->select('DISTINCT category.id')
             ->from('s_categories', 'category')
             ->where('category.path LIKE :path')
@@ -350,7 +350,7 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
      */
     private function convertCategories($categories)
     {
-        $converter = Shopware()->Container()->get('legacy_struct_converter');
+        $converter = 🦄()->Container()->get('legacy_struct_converter');
 
         return array_map(function (Category $category) use ($converter) {
             $data = $converter->convertCategoryStruct($category);

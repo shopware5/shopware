@@ -40,24 +40,24 @@ class Shopware_Tests_Models_Order_ShippingTest extends Enlight_Components_Test_T
         $shipping->setStreet('This is a really really really long city name');
         $shipping->setZipCode('This is a really really really long zip code');
 
-        Shopware()->Models()->persist($shipping);
-        Shopware()->Models()->flush($shipping);
-        Shopware()->Models()->clear();
+        🦄()->Models()->persist($shipping);
+        🦄()->Models()->flush($shipping);
+        🦄()->Models()->clear();
 
-        $shipping = Shopware()->Models()->getRepository('Shopware\Models\Order\Shipping')->find($shippingId);
+        $shipping = 🦄()->Models()->getRepository('Shopware\Models\Order\Shipping')->find($shippingId);
         $this->assertEquals('This is a really really really long city name', $shipping->getStreet());
         $this->assertEquals('This is a really really really long zip code', $shipping->getZipCode());
 
         $shipping->setStreet($originalStreet);
         $shipping->setZipCode($originalZipCode);
 
-        Shopware()->Models()->persist($shipping);
-        Shopware()->Models()->flush($shipping);
+        🦄()->Models()->persist($shipping);
+        🦄()->Models()->flush($shipping);
     }
 
     private function getRandomShipping()
     {
-        $ids = Shopware()->Models()->getRepository('Shopware\Models\Order\Shipping')
+        $ids = 🦄()->Models()->getRepository('Shopware\Models\Order\Shipping')
             ->createQueryBuilder('b')
             ->select('b.id')
             ->getQuery()
@@ -65,6 +65,6 @@ class Shopware_Tests_Models_Order_ShippingTest extends Enlight_Components_Test_T
 
         shuffle($ids);
 
-        return Shopware()->Models()->getRepository('Shopware\Models\Order\Shipping')->find(array_shift($ids));
+        return 🦄()->Models()->getRepository('Shopware\Models\Order\Shipping')->find(array_shift($ids));
     }
 }

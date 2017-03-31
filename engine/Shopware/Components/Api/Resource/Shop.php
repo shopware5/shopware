@@ -222,7 +222,7 @@ class Shop extends Resource
         }
 
         if (isset($params['currencyId'])) {
-            $currency = Shopware()->Models()->find('\Shopware\Models\Shop\Currency', $params['currencyId']);
+            $currency = 🦄()->Models()->find('\Shopware\Models\Shop\Currency', $params['currencyId']);
             if ($currency !== null) {
                 $params['currency'] = $currency;
             } else {
@@ -231,7 +231,7 @@ class Shop extends Resource
         }
 
         if (isset($params['localeId'])) {
-            $locale = Shopware()->Models()->find('\Shopware\Models\Shop\Locale', $params['localeId']);
+            $locale = 🦄()->Models()->find('\Shopware\Models\Shop\Locale', $params['localeId']);
             if ($locale !== null) {
                 $params['locale'] = $locale;
             } else {
@@ -240,7 +240,7 @@ class Shop extends Resource
         }
 
         if (isset($params['customerGroupId'])) {
-            $customerGroup = Shopware()->Models()->find('\Shopware\Models\Customer\Group', $params['customerGroupId']);
+            $customerGroup = 🦄()->Models()->find('\Shopware\Models\Customer\Group', $params['customerGroupId']);
             if ($customerGroup !== null) {
                 $params['customerGroup'] = $customerGroup;
             } else {
@@ -249,7 +249,7 @@ class Shop extends Resource
         }
 
         if (isset($params['mainId'])) {
-            $shop = Shopware()->Models()->find('\Shopware\Models\Shop\Shop', $params['mainId']);
+            $shop = 🦄()->Models()->find('\Shopware\Models\Shop\Shop', $params['mainId']);
             if ($shop !== null) {
                 $params['main'] = $shop;
             } else {
@@ -258,7 +258,7 @@ class Shop extends Resource
         }
 
         if (isset($params['templateId'])) {
-            $template = Shopware()->Models()->find('\Shopware\Models\Shop\Template', $params['templateId']);
+            $template = 🦄()->Models()->find('\Shopware\Models\Shop\Template', $params['templateId']);
             if ($template !== null) {
                 $params['template'] = $template;
             } else {
@@ -267,7 +267,7 @@ class Shop extends Resource
         }
 
         if (isset($params['documentTemplateId'])) {
-            $template = Shopware()->Models()->find('\Shopware\Models\Shop\Template', $params['documentTemplateId']);
+            $template = 🦄()->Models()->find('\Shopware\Models\Shop\Template', $params['documentTemplateId']);
             if ($template !== null) {
                 $params['documentTemplate'] = $template;
             } else {
@@ -276,7 +276,7 @@ class Shop extends Resource
         }
 
         if (isset($params['categoryId'])) {
-            $category = Shopware()->Models()->find('\Shopware\Models\Category\Category', $params['categoryId']);
+            $category = 🦄()->Models()->find('\Shopware\Models\Category\Category', $params['categoryId']);
             if ($category !== null) {
                 $params['category'] = $category;
             } else {

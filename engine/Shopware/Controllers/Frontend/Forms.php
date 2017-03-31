@@ -112,13 +112,13 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
         $mailBody = $this->replaceVariables($content['email_template']);
         $mailSubject = $this->replaceVariables($content['email_subject']);
 
-        $mail->setFrom(Shopware()->Config()->Mail);
+        $mail->setFrom(🦄()->Config()->Mail);
         $mail->clearRecipients();
         $mail->addTo($content['email']);
         $mail->setBodyText($mailBody);
         $mail->setSubject($mailSubject);
 
-        $mail = Shopware()->Events()->filter('Shopware_Controllers_Frontend_Forms_commitForm_Mail', $mail, ['subject' => $this]);
+        $mail = 🦄()->Events()->filter('Shopware_Controllers_Frontend_Forms_commitForm_Mail', $mail, ['subject' => $this]);
 
         if (!$mail->send()) {
             throw new Enlight_Exception('Could not send mail');
@@ -142,7 +142,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
         $shopId = $this->container->get('shopware_storefront.context_service')->getShopContext()->getShop()->getId();
 
         /* @var $query \Doctrine\ORM\Query */
-        $query = Shopware()->Models()->getRepository('Shopware\Models\Form\Form')->getFormQuery($formId, $shopId);
+        $query = 🦄()->Models()->getRepository('Shopware\Models\Form\Form')->getFormQuery($formId, $shopId);
 
         /* @var $form Form */
         $form = $query->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_OBJECT);
@@ -177,12 +177,12 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
                 if ($element['name'] == 'inquiry' && !empty($this->Request()->sInquiry)) {
                     switch ($this->Request()->sInquiry) {
                         case 'basket':
-                            $text = Shopware()->Snippets()->getNamespace('frontend/detail/comment')->get('InquiryTextBasket');
-                            $getBasket = Shopware()->Modules()->Basket()->sGetBasket();
+                            $text = 🦄()->Snippets()->getNamespace('frontend/detail/comment')->get('InquiryTextBasket');
+                            $getBasket = 🦄()->Modules()->Basket()->sGetBasket();
                             //$text = ''; Fix 100363 / 5416 Thanks to H. Ronecker
                             foreach ($getBasket['content'] as $basketRow) {
                                 if (empty($basketRow['modus'])) {
-                                    $text .= "\n{$basketRow['quantity']} x {$basketRow['articlename']} ({$basketRow['ordernumber']}) - {$basketRow['price']} " . Shopware()->System()->sCurrency['currency'];
+                                    $text .= "\n{$basketRow['quantity']} x {$basketRow['articlename']} ({$basketRow['ordernumber']}) - {$basketRow['price']} " . 🦄()->System()->sCurrency['currency'];
                                 }
                             }
                             if (!empty($text)) {
@@ -192,8 +192,8 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
                             break;
                         case 'detail':
                             if ($this->Request()->getParam('sOrdernumber', null) !== null) {
-                                $getName = Shopware()->Modules()->Articles()->sGetArticleNameByOrderNumber($this->Request()->getParam('sOrdernumber'));
-                                $text = Shopware()->Snippets()->getNamespace('frontend/detail/comment')->get('InquiryTextArticle');
+                                $getName = 🦄()->Modules()->Articles()->sGetArticleNameByOrderNumber($this->Request()->getParam('sOrdernumber'));
+                                $text = 🦄()->Snippets()->getNamespace('frontend/detail/comment')->get('InquiryTextArticle');
                                 $text .= ' ' . $getName;
                                 $this->_elements[$id]['value'] = $text;
                                 $element['value'] = $text;
@@ -561,7 +561,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
     {
         $this->_errors = $this->_validateInput($this->Request()->getPost(), $this->_elements);
 
-        if (!empty(Shopware()->Config()->CaptchaColor)) {
+        if (!empty(🦄()->Config()->CaptchaColor)) {
             /** @var \Shopware\Components\Captcha\CaptchaValidator $captchaValidator */
             $captchaValidator = $this->container->get('shopware.captcha.validator');
 
@@ -609,7 +609,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
 
         $content = str_replace('{sIP}', $_SERVER['REMOTE_ADDR'], $content);
         $content = str_replace('{sDateTime}', date('d.m.Y h:i:s'), $content);
-        $content = str_replace('{sShopname}', Shopware()->Config()->shopName, $content);
+        $content = str_replace('{sShopname}', 🦄()->Config()->shopName, $content);
 
         return strip_tags($content);
     }

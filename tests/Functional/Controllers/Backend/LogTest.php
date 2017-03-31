@@ -36,8 +36,8 @@ class Shopware_Tests_Controllers_Backend_LogTest extends Enlight_Components_Test
     {
         parent::setUp();
         // disable auth and acl
-        Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
-        Shopware()->Plugins()->Backend()->Auth()->setNoAcl();
+        🦄()->Plugins()->Backend()->Auth()->setNoAuth();
+        🦄()->Plugins()->Backend()->Auth()->setNoAcl();
     }
 
     /**

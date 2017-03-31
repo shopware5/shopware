@@ -62,7 +62,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 
     public static function setUpBeforeClass()
     {
-        self::$pluginManager = Shopware()->Container()->get('shopware_plugininstaller.plugin_manager');
+        self::$pluginManager = 🦄()->Container()->get('shopware_plugininstaller.plugin_manager');
         $loadedPlugins = static::$ensureLoadedPlugins;
 
         foreach ($loadedPlugins as $key => $value) {
@@ -82,7 +82,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     {
         self::restorePluginStates();
         self::$pluginManager = null;
-        Shopware()->Models()->clear();
+        🦄()->Models()->clear();
     }
 
     /**
@@ -113,7 +113,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
      */
     private static function restorePluginStates()
     {
-        Shopware()->Models()->clear();
+        🦄()->Models()->clear();
         foreach (self::$pluginStates as $pluginName => $status) {
             self::restorePluginState($pluginName, $status);
         }

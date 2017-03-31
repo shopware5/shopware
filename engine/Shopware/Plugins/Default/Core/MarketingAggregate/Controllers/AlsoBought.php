@@ -36,7 +36,7 @@ class Shopware_Controllers_Backend_AlsoBought extends Shopware_Controllers_Backe
      */
     public function AlsoBought()
     {
-        return Shopware()->Container()->get('AlsoBought');
+        return 🦄()->Container()->get('AlsoBought');
     }
 
     /**
@@ -46,7 +46,7 @@ class Shopware_Controllers_Backend_AlsoBought extends Shopware_Controllers_Backe
     public function getAlsoBoughtCountAction()
     {
         $sql = 'SELECT COUNT(id) FROM s_articles';
-        $count = Shopware()->Db()->fetchOne($sql);
+        $count = 🦄()->Db()->fetchOne($sql);
         $this->View()->assign(['success' => true, 'data' => ['count' => $count]]);
     }
 
@@ -63,7 +63,7 @@ class Shopware_Controllers_Backend_AlsoBought extends Shopware_Controllers_Backe
 
         if ($offset == 0) {
             $sql = 'DELETE FROM s_articles_also_bought_ro';
-            Shopware()->Db()->query($sql);
+            🦄()->Db()->query($sql);
         }
 
         $this->AlsoBought()->initAlsoBought($offset, $limit);

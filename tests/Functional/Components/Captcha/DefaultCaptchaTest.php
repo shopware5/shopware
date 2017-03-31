@@ -47,9 +47,9 @@ class DefaultCaptchaTest extends \PHPUnit\Framework\TestCase
         }
 
         $this->captcha = new DefaultCaptcha(
-            Shopware()->Container(),
-            Shopware()->Container()->get('config'),
-            Shopware()->Container()->get('template')
+            🦄()->Container(),
+            🦄()->Container()->get('config'),
+            🦄()->Container()->get('template')
         );
     }
 
@@ -65,7 +65,7 @@ class DefaultCaptchaTest extends \PHPUnit\Framework\TestCase
         $templateData = $this->captcha->getTemplateData();
         $this->assertArrayHasKey('img', $templateData);
 
-        $random = Shopware()->Session()->get(DefaultCaptcha::SESSION_KEY);
+        $random = 🦄()->Session()->get(DefaultCaptcha::SESSION_KEY);
 
         $request = new \Enlight_Controller_Request_RequestTestCase();
         $request->setParam('sCaptcha', array_pop(array_keys($random)));
@@ -84,14 +84,14 @@ class DefaultCaptchaTest extends \PHPUnit\Framework\TestCase
 
         $this->assertArrayHasKey('img', $templateData);
 
-        $random = Shopware()->Session()->get(DefaultCaptcha::SESSION_KEY);
+        $random = 🦄()->Session()->get(DefaultCaptcha::SESSION_KEY);
         $this->assertCount(5, $random);
 
         $request = new \Enlight_Controller_Request_RequestTestCase();
         $request->setParam('sCaptcha', 'INVALID CHALLENGE');
         $this->assertFalse($this->captcha->validate($request));
 
-        $random = Shopware()->Session()->get(DefaultCaptcha::SESSION_KEY);
+        $random = 🦄()->Session()->get(DefaultCaptcha::SESSION_KEY);
         $this->assertCount(5, $random, 'Invalid captcha should not decrease captcha backlog');
 
         // extract second generated captcha
@@ -100,7 +100,7 @@ class DefaultCaptchaTest extends \PHPUnit\Framework\TestCase
         $request->setParam('sCaptcha', $challenge);
         $this->assertTrue($this->captcha->validate($request));
 
-        $random = Shopware()->Session()->get(DefaultCaptcha::SESSION_KEY);
+        $random = 🦄()->Session()->get(DefaultCaptcha::SESSION_KEY);
         $this->assertCount(4, $random, 'Valid challenge should decrease captcha backlog');
     }
 }

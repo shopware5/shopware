@@ -84,8 +84,8 @@ class Helper
 
     public function __construct()
     {
-        $this->db = Shopware()->Db();
-        $this->entityManager = Shopware()->Models();
+        $this->db = 🦄()->Db();
+        $this->entityManager = 🦄()->Models();
         $this->converter = new Converter();
 
         $api = new Resource\Article();
@@ -113,10 +113,10 @@ class Helper
         ConfiguratorGateway $configuratorGateway = null
     ) {
         if ($productConfigurationGateway == null) {
-            $productConfigurationGateway = Shopware()->Container()->get('shopware_storefront.product_configuration_gateway');
+            $productConfigurationGateway = 🦄()->Container()->get('shopware_storefront.product_configuration_gateway');
         }
         if ($configuratorGateway == null) {
-            $configuratorGateway = Shopware()->Container()->get('shopware_storefront.configurator_gateway');
+            $configuratorGateway = 🦄()->Container()->get('shopware_storefront.configurator_gateway');
         }
 
         $service = new StoreFrontBundle\Service\Core\ConfiguratorService(
@@ -140,7 +140,7 @@ class Helper
         StoreFrontBundle\Gateway\DBAL\ProductPropertyGateway $productPropertyGateway = null
     ) {
         if ($productPropertyGateway === null) {
-            $productPropertyGateway = Shopware()->Container()->get('shopware_storefront.product_property_gateway');
+            $productPropertyGateway = 🦄()->Container()->get('shopware_storefront.product_property_gateway');
         }
         $service = new StoreFrontBundle\Service\Core\PropertyService($productPropertyGateway);
 
@@ -156,14 +156,14 @@ class Helper
      */
     public function getListProducts($numbers, ShopContextInterface $context, array $configs = [])
     {
-        $config = Shopware()->Container()->get('config');
+        $config = 🦄()->Container()->get('config');
         $originals = [];
         foreach ($configs as $key => $value) {
             $originals[$key] = $config->get($key);
             $config->offsetSet($key, $value);
         }
 
-        $service = Shopware()->Container()->get('shopware_storefront.list_product_service');
+        $service = 🦄()->Container()->get('shopware_storefront.list_product_service');
         $result = $service->getList($numbers, $context);
         foreach ($originals as $key => $value) {
             $config->offsetSet($key, $value);
@@ -602,7 +602,7 @@ class Helper
 
         foreach ($points as $point) {
             $data['points'] = $point;
-            Shopware()->Db()->insert('s_articles_vote', $data);
+            🦄()->Db()->insert('s_articles_vote', $data);
         }
     }
 
@@ -893,7 +893,7 @@ class Helper
     public function isElasticSearchEnabled()
     {
         /** @var Kernel $kernel */
-        $kernel = Shopware()->Container()->get('kernel');
+        $kernel = 🦄()->Container()->get('kernel');
 
         return $kernel->isElasticSearchEnabled();
     }
@@ -907,16 +907,16 @@ class Helper
             return;
         }
 
-        $factory = Shopware()->Container()->get('shopware_elastic_search.index_factory');
+        $factory = 🦄()->Container()->get('shopware_elastic_search.index_factory');
         $index = $factory->createShopIndex($shop);
 
         try {
-            $client = Shopware()->Container()->get('shopware_elastic_search.client');
+            $client = 🦄()->Container()->get('shopware_elastic_search.client');
             $client->indices()->delete(['index' => $index->getName()]);
         } catch (\Exception $e) {
         }
 
-        $indexer = Shopware()->Container()->get('shopware_elastic_search.shop_indexer');
+        $indexer = 🦄()->Container()->get('shopware_elastic_search.shop_indexer');
         $indexer->index($shop, new ProgressHelper());
     }
 
@@ -971,7 +971,7 @@ class Helper
 
     private function deleteCategory($name)
     {
-        $ids = Shopware()->Db()->fetchCol('SELECT id FROM s_categories WHERE description = ?', [$name]);
+        $ids = 🦄()->Db()->fetchCol('SELECT id FROM s_categories WHERE description = ?', [$name]);
 
         foreach ($ids as $id) {
             $this->categoryApi->delete($id);

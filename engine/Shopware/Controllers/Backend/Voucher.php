@@ -103,7 +103,7 @@ class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_
         $sort = '';
         if (!empty($sortField) && $dir === 'ASC' || $dir === 'DESC') {
             //to prevent sql-injections
-            $sortField = Shopware()->Db()->quoteIdentifier($sortField);
+            $sortField = 🦄()->Db()->quoteIdentifier($sortField);
             $sort = 'ORDER BY ' . $sortField . ' ' . $dir;
         }
 
@@ -128,9 +128,9 @@ class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_
                 LIMIT {$offset}, {$limit}
             ";
 
-        $vouchers = Shopware()->Db()->fetchAll($sql, $sqlBindings);
+        $vouchers = 🦄()->Db()->fetchAll($sql, $sqlBindings);
         $sql = 'SELECT FOUND_ROWS()';
-        $totalCount = Shopware()->Db()->fetchOne($sql, []);
+        $totalCount = 🦄()->Db()->fetchOne($sql, []);
         $this->View()->assign(['success' => true, 'data' => $vouchers, 'totalCount' => $totalCount]);
     }
 
@@ -442,10 +442,10 @@ class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_
         $sql = 'INSERT IGNORE INTO s_emarketing_voucher_codes (voucherID, code) VALUES';
         for ($i = 1; $i <= $numberOfUnits; ++$i) {
             $code = $this->generateCode($codePattern);
-            $values[] = Shopware()->Db()->quoteInto('(?)', [$voucherId, $code]);
+            $values[] = 🦄()->Db()->quoteInto('(?)', [$voucherId, $code]);
             // send the query every each 10000 times
             if ($i % 10000 == 0 || $numberOfUnits == $i) {
-                Shopware()->Db()->query($sql . implode(',', $values));
+                🦄()->Db()->query($sql . implode(',', $values));
                 $values = [];
             }
         }
@@ -459,7 +459,7 @@ class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_
     private function getVoucherRepository()
     {
         if ($this->voucherRepository === null) {
-            $this->voucherRepository = Shopware()->Models()->getRepository(Voucher::class);
+            $this->voucherRepository = 🦄()->Models()->getRepository(Voucher::class);
         }
 
         return $this->voucherRepository;
@@ -473,7 +473,7 @@ class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_
     private function getManager()
     {
         if ($this->manager === null) {
-            $this->manager = Shopware()->Models();
+            $this->manager = 🦄()->Models();
         }
 
         return $this->manager;
@@ -551,7 +551,7 @@ class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_
             $deleteQuery = $this->getVoucherRepository()->getVoucherCodeDeleteByVoucherIdQuery($voucherId);
             $deleteQuery->execute();
             $sql = 'SELECT count(id) FROM  s_emarketing_voucher_codes WHERE voucherId = ?';
-            $vouchersToDelete = Shopware()->Db()->fetchOne($sql, [$voucherId]);
+            $vouchersToDelete = 🦄()->Db()->fetchOne($sql, [$voucherId]);
             $allVouchersDeleted = empty($vouchersToDelete);
         }
     }

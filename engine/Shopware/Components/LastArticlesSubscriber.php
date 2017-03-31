@@ -149,7 +149,7 @@ class LastArticlesSubscriber implements SubscriberInterface
             [
                 'articleId' => $articleId,
                 'sessionId' => $sessionId,
-                'userId' => (int) Shopware()->Session()->get('sUserId'),
+                'userId' => (int) 🦄()->Session()->get('sUserId'),
                 'shopId' => $this->container->get('shop')->getId(),
             ]
         );

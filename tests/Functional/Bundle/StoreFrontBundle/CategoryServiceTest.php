@@ -33,7 +33,7 @@ class CategoryServiceTest extends TestCase
         $third = $this->helper->createCategory(['name' => 'third', 'parent' => $first->getId(), 'position' => 2]);
         $fourth = $this->helper->createCategory(['name' => 'fourth', 'parent' => $first->getId(), 'position' => 2]);
 
-        $categories = Shopware()->Container()->get('shopware_storefront.category_service')->getList(
+        $categories = 🦄()->Container()->get('shopware_storefront.category_service')->getList(
             [
                 $second->getId(),
                 $third->getId(),
@@ -60,16 +60,16 @@ class CategoryServiceTest extends TestCase
 
         $context = $this->getContext();
 
-        Shopware()->Db()->query(
+        🦄()->Db()->query(
             'INSERT INTO s_categories_avoid_customergroups (categoryID, customerGroupID) VALUES (?, ?)',
             [$second->getId(), $context->getCurrentCustomerGroup()->getId()]
         );
-        Shopware()->Db()->query(
+        🦄()->Db()->query(
             'INSERT INTO s_categories_avoid_customergroups (categoryID, customerGroupID) VALUES (?, ?)',
             [$third->getId(), $context->getCurrentCustomerGroup()->getId()]
         );
 
-        $categories = Shopware()->Container()->get('shopware_storefront.category_service')->getList(
+        $categories = 🦄()->Container()->get('shopware_storefront.category_service')->getList(
             [
                 $first->getId(),
                 $second->getId(),
@@ -89,7 +89,7 @@ class CategoryServiceTest extends TestCase
         $second = $this->helper->createCategory(['name' => 'second', 'parent' => $first->getId(), 'active' => false]);
         $third = $this->helper->createCategory(['name' => 'third',   'parent' => $second->getId()]);
 
-        $categories = Shopware()->Container()->get('shopware_storefront.category_service')->getList(
+        $categories = 🦄()->Container()->get('shopware_storefront.category_service')->getList(
             [
                 $first->getId(),
                 $second->getId(),

@@ -45,8 +45,8 @@ class Shopware_Tests_Controllers_Backend_UserManagerTest extends Enlight_Compone
     {
         parent::setUp();
 
-        Shopware()->Plugins()->Backend()->Auth()->setNoAcl();
-        Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
+        🦄()->Plugins()->Backend()->Auth()->setNoAcl();
+        🦄()->Plugins()->Backend()->Auth()->setNoAuth();
     }
 
     /**
@@ -65,7 +65,7 @@ class Shopware_Tests_Controllers_Backend_UserManagerTest extends Enlight_Compone
      */
     public function testUserDetails()
     {
-        $getRandomUserId = Shopware()->Db()->fetchOne('
+        $getRandomUserId = 🦄()->Db()->fetchOne('
         SELECT id FROM s_core_auth
         ');
 
@@ -114,7 +114,7 @@ class Shopware_Tests_Controllers_Backend_UserManagerTest extends Enlight_Compone
     public function testUserEdit($username)
     {
         $this->assertTrue(true);
-        $getRandomUserId = Shopware()->Db()->fetchOne('
+        $getRandomUserId = 🦄()->Db()->fetchOne('
         SELECT id FROM s_core_auth WHERE username = ?
         ', $username);
 
@@ -123,7 +123,7 @@ class Shopware_Tests_Controllers_Backend_UserManagerTest extends Enlight_Compone
         $this->Request()->setParam('name', 'Random');
         $this->dispatch('backend/UserManager/updateUser');
         $this->assertTrue($this->View()->success);
-        $this->assertEquals('Random', Shopware()->Db()->fetchOne('SELECT name FROM s_core_auth WHERE id = ?', [$getRandomUserId]));
+        $this->assertEquals('Random', 🦄()->Db()->fetchOne('SELECT name FROM s_core_auth WHERE id = ?', [$getRandomUserId]));
 
         return $username;
     }
@@ -135,7 +135,7 @@ class Shopware_Tests_Controllers_Backend_UserManagerTest extends Enlight_Compone
      */
     public function testUserDelete($username)
     {
-        $getRandomUserId = Shopware()->Db()->fetchOne('
+        $getRandomUserId = 🦄()->Db()->fetchOne('
        SELECT id FROM s_core_auth WHERE username = ?
        ', $username);
 
@@ -183,7 +183,7 @@ class Shopware_Tests_Controllers_Backend_UserManagerTest extends Enlight_Compone
      */
     public function testEditRole($randomRoleName)
     {
-        $getRandomRoleId = Shopware()->Db()->fetchOne('
+        $getRandomRoleId = 🦄()->Db()->fetchOne('
         SELECT id FROM s_core_auth_roles WHERE name = ?
         ', $randomRoleName);
         $this->assertGreaterThan(0, $getRandomRoleId);

@@ -63,7 +63,7 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
     public function getMultiEditRepository()
     {
         if (!isset($this->multiEditRepository)) {
-            $this->multiEditRepository = Shopware()->Models()->getRepository('Shopware\Models\MultiEdit\Filter');
+            $this->multiEditRepository = 🦄()->Models()->getRepository('Shopware\Models\MultiEdit\Filter');
         }
 
         return $this->multiEditRepository;
@@ -408,8 +408,8 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
 
         $filter->fromArray($data);
 
-        Shopware()->Models()->persist($filter);
-        Shopware()->Models()->flush();
+        🦄()->Models()->persist($filter);
+        🦄()->Models()->flush();
 
         $this->View()->assign(
             [
@@ -425,11 +425,11 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
     {
         $id = $this->Request()->get('id');
 
-        $filter = Shopware()->Models()->find('Shopware\Models\MultiEdit\Filter', $id);
+        $filter = 🦄()->Models()->find('Shopware\Models\MultiEdit\Filter', $id);
 
         if ($filter) {
-            Shopware()->Models()->remove($filter);
-            Shopware()->Models()->flush();
+            🦄()->Models()->remove($filter);
+            🦄()->Models()->flush();
         }
 
         $this->View()->assign(
@@ -500,10 +500,10 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
             if ($articleDetail->getKind() == 1) {
                 $articleResource->delete($articleDetail->getArticle()->getId());
             } else {
-                Shopware()->Models()->remove($articleDetail);
+                🦄()->Models()->remove($articleDetail);
             }
 
-            Shopware()->Models()->flush();
+            🦄()->Models()->flush();
 
             $this->View()->assign([
                 'success' => true,
@@ -535,7 +535,7 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
         $name = 'filterName-' . $this->normalizeFilter($filter['name']);
         $description = 'filterDescription-' . $this->normalizeFilter($filter['description']);
 
-        $namespace = Shopware()->Snippets()->getNamespace('backend/article_list/main');
+        $namespace = 🦄()->Snippets()->getNamespace('backend/article_list/main');
         $filter['name'] = $namespace->get($name, $filter['name']);
         $filter['description'] = $namespace->get($description, $filter['description']);
 
@@ -549,7 +549,7 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
      */
     private function getDetailRepository()
     {
-        return Shopware()->Models()->getRepository('Shopware\Models\Article\Detail');
+        return 🦄()->Models()->getRepository('Shopware\Models\Article\Detail');
     }
 
     /**

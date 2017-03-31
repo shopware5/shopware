@@ -56,8 +56,8 @@ class Shopware_Tests_Controllers_Backend_PaymentTest extends Enlight_Components_
         parent::setUp();
 
         // disable auth and acl
-        Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
-        Shopware()->Plugins()->Backend()->Auth()->setNoAcl();
+        🦄()->Plugins()->Backend()->Auth()->setNoAuth();
+        🦄()->Plugins()->Backend()->Auth()->setNoAcl();
     }
 
     /**
@@ -99,7 +99,7 @@ class Shopware_Tests_Controllers_Backend_PaymentTest extends Enlight_Components_
      */
     public function testCreatePayments()
     {
-        Shopware()->Db()->exec('DELETE FROM s_core_paymentmeans WHERE name = "New payment"');
+        🦄()->Db()->exec('DELETE FROM s_core_paymentmeans WHERE name = "New payment"');
 
         $this->Request()->setMethod('POST')->setPost($this->testDataCreate);
         $this->dispatch('backend/payment/createPayments');

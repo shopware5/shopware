@@ -181,7 +181,7 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
     public function getManager()
     {
         if ($this->manager === null) {
-            $this->manager = Shopware()->Models();
+            $this->manager = 🦄()->Models();
         }
 
         return $this->manager;
@@ -1217,7 +1217,7 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
      */
     private function getReferencedColumnName($association)
     {
-        $metaData = Shopware()->Models()->getClassMetadata($this->model);
+        $metaData = 🦄()->Models()->getClassMetadata($this->model);
         $mappings = $metaData->getAssociationMappings();
 
         if (!isset($mappings[$association])) {

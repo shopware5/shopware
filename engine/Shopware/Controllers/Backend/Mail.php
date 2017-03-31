@@ -41,7 +41,7 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
     public function getMailsAction()
     {
         /** @var $namespace Enlight_Components_Snippet_Namespace */
-        $snippet = Shopware()->Snippets()->getNamespace('backend/mail/view/navigation');
+        $snippet = 🦄()->Snippets()->getNamespace('backend/mail/view/navigation');
 
         // if id is provided return a single mail instead of a collection
         $id = $this->Request()->getParam('id');
@@ -136,8 +136,8 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
         $mail->fromArray($params);
 
         try {
-            Shopware()->Models()->persist($mail);
-            Shopware()->Models()->flush();
+            🦄()->Models()->persist($mail);
+            🦄()->Models()->flush();
         } catch (Exception $e) {
             $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);
 
@@ -164,7 +164,7 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
         }
 
         /* @var $mail Mail */
-        $mail = Shopware()->Models()->getRepository('Shopware\Models\Mail\Mail')->find($id);
+        $mail = 🦄()->Models()->getRepository('Shopware\Models\Mail\Mail')->find($id);
         if (!$mail) {
             $this->View()->assign(['success' => false, 'message' => 'Mail not found']);
 
@@ -177,8 +177,8 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
         $mail->fromArray($params);
 
         try {
-            Shopware()->Models()->persist($mail);
-            Shopware()->Models()->flush();
+            🦄()->Models()->persist($mail);
+            🦄()->Models()->flush();
         } catch (Exception $e) {
             $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);
 
@@ -216,8 +216,8 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
             return;
         }
 
-        Shopware()->Models()->remove($mail);
-        Shopware()->Models()->flush();
+        🦄()->Models()->remove($mail);
+        🦄()->Models()->flush();
 
         $this->View()->assign(['success' => true]);
     }
@@ -250,8 +250,8 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
         $clonedMail = clone $mail;
         $clonedMail->setName('Copy of ' . $mail->getName());
 
-        Shopware()->Models()->persist($clonedMail);
-        Shopware()->Models()->flush();
+        🦄()->Models()->persist($clonedMail);
+        🦄()->Models()->flush();
 
         $this->View()->assign(['success' => true]);
     }
@@ -311,19 +311,19 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
             $this->View()->assign(['success' => false, 'message' => 'Value not found']);
         }
 
-        $recipient = Shopware()->Config()->get('mail');
+        $recipient = 🦄()->Config()->get('mail');
 
-        $shop = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop')->getActiveDefault();
+        $shop = 🦄()->Models()->getRepository('Shopware\Models\Shop\Shop')->getActiveDefault();
         $shop->registerResources();
 
         $defaultContext = [
-            'sShop' => Shopware()->Config()->get('ShopName'),
+            'sShop' => 🦄()->Config()->get('ShopName'),
             'sShopURL' => 'http://' . $shop->getHost() . $shop->getBasePath(),
-            'sConfig' => Shopware()->Config(),
+            'sConfig' => 🦄()->Config(),
         ];
 
         try {
-            $templateMail = Shopware()->TemplateMail()->createMail($mail, array_merge($defaultContext, $mail->getContext()), $shop);
+            $templateMail = 🦄()->TemplateMail()->createMail($mail, array_merge($defaultContext, $mail->getContext()), $shop);
             $templateMail->addTo($recipient);
             $templateMail->send();
         } catch (\Exception $e) {
@@ -362,13 +362,13 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
 
         $compiler = new Shopware_Components_StringCompiler($this->View()->Engine());
 
-        $shop = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop')->getActiveDefault();
+        $shop = 🦄()->Models()->getRepository('Shopware\Models\Shop\Shop')->getActiveDefault();
         $shop->registerResources();
 
         $defaultContext = [
-            'sShop' => Shopware()->Config()->get('ShopName'),
+            'sShop' => 🦄()->Config()->get('ShopName'),
             'sShopURL' => 'http://' . $shop->getHost() . $shop->getBasePath(),
-            'sConfig' => Shopware()->Config(),
+            'sConfig' => 🦄()->Config(),
         ];
 
         $compiler->setContext(array_merge($defaultContext, $mail->getContext()));
@@ -410,7 +410,7 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
         }
 
         /* @var $media \Shopware\Models\Media\Media */
-        $media = Shopware()->Models()->getRepository('\Shopware\Models\Media\Media')->find($mediaId);
+        $media = 🦄()->Models()->getRepository('\Shopware\Models\Media\Media')->find($mediaId);
         if (!$media) {
             $this->View()->assign(['success' => false, 'message' => 'Media not found']);
 
@@ -420,15 +420,15 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
         $attachment = new Attachment($mail, $media);
 
         try {
-            Shopware()->Models()->persist($attachment);
-            Shopware()->Models()->flush();
+            🦄()->Models()->persist($attachment);
+            🦄()->Models()->flush();
         } catch (Exception $e) {
             $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);
 
             return;
         }
 
-        $data = Shopware()->Models()->toArray($attachment);
+        $data = 🦄()->Models()->toArray($attachment);
 
         $this->View()->assign(['success' => true, 'data' => $data]);
     }
@@ -443,7 +443,7 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
         }
 
         /* @var $attachment Attachment */
-        $attachment = Shopware()->Models()->getRepository('\Shopware\Models\Mail\Attachment')->find($attachmentId);
+        $attachment = 🦄()->Models()->getRepository('\Shopware\Models\Mail\Attachment')->find($attachmentId);
         if (!$attachment) {
             $this->View()->assign(['success' => false, 'message' => 'Attachment not found']);
 
@@ -451,8 +451,8 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
         }
 
         try {
-            Shopware()->Models()->remove($attachment);
-            Shopware()->Models()->flush();
+            🦄()->Models()->remove($attachment);
+            🦄()->Models()->flush();
         } catch (Exception $e) {
             $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);
 
@@ -483,7 +483,7 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
             $shop = null;
         } else {
             /* @var $shop \Shopware\Models\Shop\Shop */
-            $shop = Shopware()->Models()->getRepository('\Shopware\Models\Shop\Shop')->find($shopId);
+            $shop = 🦄()->Models()->getRepository('\Shopware\Models\Shop\Shop')->find($shopId);
             if (!$shop) {
                 $this->View()->assign(['success' => false, 'message' => 'Shop not found']);
 
@@ -492,7 +492,7 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
         }
 
         /* @var $attachment Attachment */
-        $attachment = Shopware()->Models()->getRepository('\Shopware\Models\Mail\Attachment')->find($attachmentId);
+        $attachment = 🦄()->Models()->getRepository('\Shopware\Models\Mail\Attachment')->find($attachmentId);
         if (!$attachment) {
             $this->View()->assign(['success' => false, 'message' => 'Attachment not found']);
 
@@ -502,7 +502,7 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
         $attachment->setShop($shop);
 
         try {
-            Shopware()->Models()->flush();
+            🦄()->Models()->flush();
         } catch (Exception $e) {
             $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);
 
@@ -531,7 +531,7 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
         $nodes = [];
 
         /** @var $shop \Shopware\Models\Shop\Shop */
-        $shops = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop')->findAll();
+        $shops = 🦄()->Models()->getRepository('Shopware\Models\Shop\Shop')->findAll();
         foreach ($shops as $shop) {
             $shopNode = [
                 'allowDrag' => false,
@@ -630,13 +630,13 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
         }
 
         /** @var $shop \Shopware\Models\Shop\Shop * */
-        $shop = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop')->getActiveDefault();
+        $shop = 🦄()->Models()->getRepository('Shopware\Models\Shop\Shop')->getActiveDefault();
         $shop->registerResources();
 
         $defaultContext = [
-            'sShop' => Shopware()->Config()->get('ShopName'),
+            'sShop' => 🦄()->Config()->get('ShopName'),
             'sShopURL' => 'http://' . $shop->getHost() . $shop->getBasePath(),
-            'sConfig' => Shopware()->Config(),
+            'sConfig' => 🦄()->Config(),
         ];
 
         $context = $mail->getContext();
@@ -656,7 +656,7 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
     private function getRepository()
     {
         if ($this->repository === null) {
-            $this->repository = Shopware()->Models()->getRepository('Shopware\Models\Mail\Mail');
+            $this->repository = 🦄()->Models()->getRepository('Shopware\Models\Mail\Mail');
         }
 
         return $this->repository;

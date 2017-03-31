@@ -53,7 +53,7 @@ class Shopware_Controllers_Frontend_Error extends Enlight_Controller_Action impl
         if (strpos($this->Request()->getHeader('Content-Type'), 'application/json') === 0) {
             $this->Front()->Plugins()->Json()->setRenderer();
             $this->View()->assign('success', false);
-        } elseif ($this->Request()->isXmlHttpRequest() || !Shopware()->Container()->initialized('Db')) {
+        } elseif ($this->Request()->isXmlHttpRequest() || !🦄()->Container()->initialized('Db')) {
             $this->View()->loadTemplate($templateModule . '/error/exception.tpl');
         } elseif (isset($_ENV['SHELL']) || php_sapi_name() === 'cli') {
             $this->View()->loadTemplate($templateModule . '/error/cli.tpl');
@@ -101,8 +101,8 @@ class Shopware_Controllers_Frontend_Error extends Enlight_Controller_Action impl
     {
         $response = $this->Response();
 
-        $targetEmotionId = Shopware()->Config()->get('PageNotFoundDestination');
-        $targetErrorCode = Shopware()->Config()->get('PageNotFoundCode', 404);
+        $targetEmotionId = 🦄()->Config()->get('PageNotFoundDestination');
+        $targetErrorCode = 🦄()->Config()->get('PageNotFoundCode', 404);
 
         $response->setHttpResponseCode($targetErrorCode);
 
@@ -113,8 +113,8 @@ class Shopware_Controllers_Frontend_Error extends Enlight_Controller_Action impl
             case -2:
             case null:
                 $this->forward(
-                    Shopware()->Front()->Dispatcher()->getDefaultAction(),
-                    Shopware()->Front()->Dispatcher()->getDefaultControllerName()
+                    🦄()->Front()->Dispatcher()->getDefaultAction(),
+                    🦄()->Front()->Dispatcher()->getDefaultControllerName()
                 );
                 break;
             case -1:
@@ -135,7 +135,7 @@ class Shopware_Controllers_Frontend_Error extends Enlight_Controller_Action impl
         $response->setHttpResponseCode($errorCode);
 
         if ($this->Request()->getModuleName() === 'frontend') {
-            $this->View()->assign('Shop', Shopware()->Shop());
+            $this->View()->assign('Shop', 🦄()->Shop());
         }
 
         $error = $this->Request()->getParam('error_handler');
@@ -145,7 +145,7 @@ class Shopware_Controllers_Frontend_Error extends Enlight_Controller_Action impl
          * to pass it to the template
         */
         if ($this->Front()->getParam('showException') || $this->Request()->getModuleName() === 'backend') {
-            $path = Shopware()->Container()->getParameter('kernel.root_dir') . '/';
+            $path = 🦄()->Container()->getParameter('kernel.root_dir') . '/';
 
             /** @var \Exception $exception */
             $exception = $error->exception;
@@ -196,8 +196,8 @@ class Shopware_Controllers_Frontend_Error extends Enlight_Controller_Action impl
      */
     private function enableBackendTheme()
     {
-        $directory = Shopware()->Container()->get('theme_path_resolver')->getExtJsThemeDirectory();
-        Shopware()->Container()->get('template')->setTemplateDir([
+        $directory = 🦄()->Container()->get('theme_path_resolver')->getExtJsThemeDirectory();
+        🦄()->Container()->get('template')->setTemplateDir([
             'backend' => $directory,
             'include_dir' => '.',
         ]);

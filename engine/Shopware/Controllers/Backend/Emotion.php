@@ -129,7 +129,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
         $repository = $this->getRepository();
 
         $query = $repository->getEmotionDetailQuery($id);
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $mediaService = 🦄()->Container()->get('shopware_media.media_service');
 
         $emotion = $query->getArrayResult();
         $emotion = $emotion[0];
@@ -231,7 +231,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
      */
     public function libraryAction()
     {
-        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder = 🦄()->Models()->createQueryBuilder();
         $builder->select(['components', 'fields'])
             ->from('Shopware\Models\Emotion\Library\Component', 'components')
             ->leftJoin('components.fields', 'fields')
@@ -429,13 +429,13 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
                 // delete created previews
                 $this->removePreview($entity->getId());
 
-                Shopware()->Models()->remove($entity);
+                🦄()->Models()->remove($entity);
             }
 
             // delete corresponding translations
             $this->deleteTranslations($emotions);
 
-            Shopware()->Models()->flush();
+            🦄()->Models()->flush();
 
             $this->View()->assign([
                 'data' => $this->Request()->getParams(),
@@ -462,7 +462,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
         }
 
         /** @var Emotion $emotion */
-        $emotion = Shopware()->Models()->find('Shopware\Models\Emotion\Emotion', $emotionId);
+        $emotion = 🦄()->Models()->find('Shopware\Models\Emotion\Emotion', $emotionId);
 
         if (!$emotion) {
             $this->View()->assign(['success' => false]);
@@ -488,13 +488,13 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
         $new->setCreateDate(new \DateTime());
         $new->setModified(new \DateTime());
 
-        Shopware()->Models()->persist($new);
-        Shopware()->Models()->flush();
+        🦄()->Models()->persist($new);
+        🦄()->Models()->flush();
 
         if (!empty($new->getId())) {
             $this->copyEmotionTranslations($emotion->getId(), $new->getId());
             $this->copyElementTranslations($emotion, $new);
-            $persister = Shopware()->Container()->get('shopware_attribute.data_persister');
+            $persister = 🦄()->Container()->get('shopware_attribute.data_persister');
             $persister->cloneAttribute('s_emotion_attributes', $emotion->getId(), $new->getId());
         }
 
@@ -606,7 +606,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
     protected function getRepository()
     {
         if (self::$repository === null) {
-            self::$repository = Shopware()->Models()->getRepository('Shopware\Models\Emotion\Emotion');
+            self::$repository = 🦄()->Models()->getRepository('Shopware\Models\Emotion\Emotion');
         }
 
         return self::$repository;
@@ -705,7 +705,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
      */
     protected function getTemplatesQuery($offset = null, $limit = null)
     {
-        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder = 🦄()->Models()->createQueryBuilder();
         $builder->select(['templates'])
             ->from('Shopware\Models\Emotion\Template', 'templates');
 
@@ -740,12 +740,12 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
         }
 
         try {
-            $template = Shopware()->Models()->find('Shopware\Models\Emotion\Template', $id);
+            $template = 🦄()->Models()->find('Shopware\Models\Emotion\Template', $id);
             if (!$template instanceof \Shopware\Models\Emotion\Template) {
                 return ['success' => false, 'error' => 'The passed template id exist no more!'];
             }
-            Shopware()->Models()->remove($template);
-            Shopware()->Models()->flush();
+            🦄()->Models()->remove($template);
+            🦄()->Models()->flush();
         } catch (Exception $e) {
             return ['success' => false, 'error' => $e->getMessage()];
         }
@@ -778,14 +778,14 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
         $data = [];
 
         try {
-            $template = Shopware()->Models()->find('Shopware\Models\Emotion\Template', $id);
+            $template = 🦄()->Models()->find('Shopware\Models\Emotion\Template', $id);
             if (!$template instanceof \Shopware\Models\Emotion\Template) {
                 return ['success' => false, 'error' => 'The passed template id exist no more!'];
             }
 
             $new = clone $template;
-            Shopware()->Models()->persist($new);
-            Shopware()->Models()->flush();
+            🦄()->Models()->persist($new);
+            🦄()->Models()->flush();
 
             $data = $this->getTemplate($new->getId());
         } catch (Exception $e) {
@@ -818,7 +818,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
             //we have to remove the emotions to prevent an assignment from this side!
             unset($data['emotions']);
             if (!empty($data['id'])) {
-                $template = Shopware()->Models()->find('Shopware\Models\Emotion\Template', $data['id']);
+                $template = 🦄()->Models()->find('Shopware\Models\Emotion\Template', $data['id']);
             } else {
                 $template = new \Shopware\Models\Emotion\Template();
             }
@@ -828,8 +828,8 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
             }
 
             $template->fromArray($data);
-            Shopware()->Models()->persist($template);
-            Shopware()->Models()->flush();
+            🦄()->Models()->persist($template);
+            🦄()->Models()->flush();
 
             $result = $this->getTemplate($template->getId());
         } catch (Exception $e) {
@@ -855,7 +855,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
      */
     protected function getTemplate($id)
     {
-        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder = 🦄()->Models()->createQueryBuilder();
         $builder->select(['template'])
             ->from('Shopware\Models\Emotion\Template', 'template')
             ->where('template.id = :id')
@@ -872,7 +872,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
     private function getManager()
     {
         if ($this->manager === null) {
-            $this->manager = Shopware()->Models();
+            $this->manager = 🦄()->Models();
         }
 
         return $this->manager;
@@ -907,11 +907,11 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
     private function saveEmotion(array $data)
     {
         /** @var $namespace Enlight_Components_Snippet_Namespace */
-        $namespace = Shopware()->Snippets()->getNamespace('backend/emotion');
+        $namespace = 🦄()->Snippets()->getNamespace('backend/emotion');
 
         if (!empty($data['id'])) {
             /** @var $emotion Emotion */
-            $emotion = Shopware()->Models()->find('Shopware\Models\Emotion\Emotion', $data['id']);
+            $emotion = 🦄()->Models()->find('Shopware\Models\Emotion\Emotion', $data['id']);
 
             if (!$emotion) {
                 $this->View()->assign([
@@ -931,7 +931,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
         $template = null;
         if (!empty($data['templateId'])) {
             /** @var $template \Shopware\Models\Emotion\Template */
-            $template = Shopware()->Models()->find('Shopware\Models\Emotion\Template', $data['templateId']);
+            $template = 🦄()->Models()->find('Shopware\Models\Emotion\Template', $data['templateId']);
         }
 
         $validFrom = null;
@@ -955,7 +955,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
         $categories = new \Doctrine\Common\Collections\ArrayCollection();
         if (!empty($data['categories'])) {
             foreach ($data['categories'] as $category) {
-                $cat = Shopware()->Models()->find('Shopware\Models\Category\Category', $category);
+                $cat = 🦄()->Models()->find('Shopware\Models\Category\Category', $category);
 
                 if ($cat !== null) {
                     $categories->add($cat);
@@ -966,7 +966,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
         $shops = new \Doctrine\Common\Collections\ArrayCollection();
         if (!empty($data['shops'])) {
             foreach ($data['shops'] as $shop) {
-                $subShop = Shopware()->Models()->find('Shopware\Models\Shop\Shop', $shop['id']);
+                $subShop = 🦄()->Models()->find('Shopware\Models\Shop\Shop', $shop['id']);
 
                 if ($shop !== null) {
                     $shops->add($subShop);
@@ -979,9 +979,9 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
             $elements = $this->createElements($emotion, $data['elements']);
         }
 
-        if (Shopware()->Container()->get('Auth')->getIdentity()->id) {
+        if (🦄()->Container()->get('Auth')->getIdentity()->id) {
             /** @var $user \Shopware\Models\User\User */
-            $user = Shopware()->Models()->find('Shopware\Models\User\User', Shopware()->Container()->get('Auth')->getIdentity()->id);
+            $user = 🦄()->Models()->find('Shopware\Models\User\User', 🦄()->Container()->get('Auth')->getIdentity()->id);
             $emotion->setUser($user);
         }
 
@@ -1012,8 +1012,8 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
         $emotion->setPreviewId(array_key_exists('previewId', $data) ? $data['previewId'] : null);
         $emotion->setPreviewSecret(array_key_exists('previewSecret', $data) ? $data['previewSecret'] : null);
 
-        Shopware()->Models()->persist($emotion);
-        Shopware()->Models()->flush();
+        🦄()->Models()->persist($emotion);
+        🦄()->Models()->flush();
 
         return $emotion;
     }
@@ -1031,7 +1031,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
         foreach ($emotionElements as &$item) {
             if (!empty($item['componentId'])) {
                 /** @var $component \Shopware\Models\Emotion\Library\Component */
-                $component = Shopware()->Models()->find('Shopware\Models\Emotion\Library\Component', $item['componentId']);
+                $component = 🦄()->Models()->find('Shopware\Models\Emotion\Library\Component', $item['componentId']);
 
                 if ($component !== null) {
                     $item['component'] = $component;
@@ -1081,7 +1081,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
     {
         foreach ($elementData as &$item) {
             /** @var $field Field */
-            $field = Shopware()->Models()->find('Shopware\Models\Emotion\Library\Field', $item['fieldId']);
+            $field = 🦄()->Models()->find('Shopware\Models\Emotion\Library\Field', $item['fieldId']);
             $item['field'] = $field;
 
             $item['component'] = $element['component'];
@@ -1106,7 +1106,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
         $valueType = strtolower($field->getValueType());
         $xType = $field->getXType();
 
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $mediaService = 🦄()->Container()->get('shopware_media.media_service');
         $mediaFields = $this->getMediaXTypes();
 
         if ($valueType === 'json') {
@@ -1138,7 +1138,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
      */
     private function hasEmotionForSameDeviceType($categoryId)
     {
-        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder = 🦄()->Models()->createQueryBuilder();
         $builder
             ->select(['emotions', 'categories'])
             ->from('Shopware\Models\Emotion\Emotion', 'emotions')
@@ -1178,7 +1178,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
         $translation = new Shopware_Components_Translation();
 
         /** @var \Doctrine\DBAL\Query\QueryBuilder $query */
-        $query = Shopware()->Container()->get('dbal_connection')->createQueryBuilder();
+        $query = 🦄()->Container()->get('dbal_connection')->createQueryBuilder();
 
         $languageIds = $query->select('id')
             ->from('s_core_shops', 'shops')
@@ -1211,7 +1211,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
         $translation = new Shopware_Components_Translation();
 
         /** @var \Doctrine\DBAL\Query\QueryBuilder $query */
-        $query = Shopware()->Container()->get('dbal_connection')->createQueryBuilder();
+        $query = 🦄()->Container()->get('dbal_connection')->createQueryBuilder();
 
         $languageIds = $query->select('id')
             ->from('s_core_shops', 'shops')
@@ -1287,7 +1287,7 @@ EOD;
         foreach ($clonedEmotion->getElements() as $el) {
             $key = $this->getElementIdentifier($el);
 
-            Shopware()->Db()->executeQuery($sql, [
+            🦄()->Db()->executeQuery($sql, [
                 ':objectKey' => $el->getId(),
                 ':oldObjectKey' => $oldObjectKeys[$key],
             ]);
@@ -1312,8 +1312,8 @@ EOD;
     private function generateEmotionSeoUrls(Emotion $emotion)
     {
         /** @var Shopware_Components_SeoIndex $seoIndexer */
-        $seoIndexer = Shopware()->Container()->get('SeoIndex');
-        $module = Shopware()->Modules()->RewriteTable();
+        $seoIndexer = 🦄()->Container()->get('SeoIndex');
+        $module = 🦄()->Modules()->RewriteTable();
         $shops = $emotion->getShops();
         $emotionData = [
             'id' => $emotion->getId(),
@@ -1321,7 +1321,7 @@ EOD;
         ];
 
         $translator = new Shopware_Components_Translation();
-        $routerCampaignTemplate = Shopware()->Config()->get('routerCampaignTemplate');
+        $routerCampaignTemplate = 🦄()->Config()->get('routerCampaignTemplate');
 
         /** @var Shop $shop */
         foreach ($shops as $shop) {
@@ -1345,7 +1345,7 @@ EOD;
      */
     private function getSeoUrlFromRouter($emotionId, $shopId)
     {
-        $repository = Shopware()->Container()->get('models')->getRepository(Shop::class);
+        $repository = 🦄()->Container()->get('models')->getRepository(Shop::class);
         /** @var Shop $shop */
         $shop = $repository->getActiveById($shopId);
         if (empty($shop)) {

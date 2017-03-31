@@ -39,21 +39,21 @@ class RegisterTest extends \Enlight_Components_Test_Controller_TestCase
     public static function tearDownAfterClass()
     {
         parent::tearDownAfterClass();
-        Shopware()->Container()->reset('router');
+        🦄()->Container()->reset('router');
     }
 
     public function setUp()
     {
         parent::setUp();
         $this->deleteCustomer(self::TEST_MAIL);
-        Shopware()->Container()->get('models')->clear();
+        🦄()->Container()->get('models')->clear();
     }
 
     protected function tearDown()
     {
         parent::tearDown();
         $this->deleteCustomer(self::TEST_MAIL);
-        Shopware()->Container()->get('models')->clear();
+        🦄()->Container()->get('models')->clear();
     }
 
     public function testSimpleRegistration()
@@ -183,7 +183,7 @@ class RegisterTest extends \Enlight_Components_Test_Controller_TestCase
 
     public function testDefaultPayment()
     {
-        Shopware()->Session()->offsetSet('sPaymentID', 6);
+        🦄()->Session()->offsetSet('sPaymentID', 6);
 
         $this->Request()->setMethod('POST');
         $this->Request()->setPost([
@@ -222,10 +222,10 @@ class RegisterTest extends \Enlight_Components_Test_Controller_TestCase
             $this->getHeaderLocation($response)
         );
 
-        $session = Shopware()->Container()->get('session');
+        $session = 🦄()->Container()->get('session');
         $this->assertNotEmpty($session->offsetGet('sUserId'));
 
-        $customer = Shopware()->Container()->get('dbal_connection')->fetchAssoc(
+        $customer = 🦄()->Container()->get('dbal_connection')->fetchAssoc(
             'SELECT * FROM s_user WHERE email = :mail LIMIT 1',
             [':mail' => $email]
         );
@@ -249,7 +249,7 @@ class RegisterTest extends \Enlight_Components_Test_Controller_TestCase
 
     private function deleteCustomer($email)
     {
-        Shopware()->Container()->get('dbal_connection')->executeQuery(
+        🦄()->Container()->get('dbal_connection')->executeQuery(
             'DELETE FROM s_user WHERE email = :mail',
             [':mail' => $email]
         );
@@ -313,11 +313,11 @@ class RegisterTest extends \Enlight_Components_Test_Controller_TestCase
             $column = 'default_shipping_address_id';
         }
 
-        $legacy = Shopware()->Container()->get('dbal_connection')->fetchAssoc(
+        $legacy = 🦄()->Container()->get('dbal_connection')->fetchAssoc(
             'SELECT address.id FROM ' . $table . ' address, s_user user WHERE user.email = :mail AND address.userID = user.id LIMIT 1',
             [':mail' => $email]
         );
-        $address = Shopware()->Container()->get('dbal_connection')->fetchAssoc(
+        $address = 🦄()->Container()->get('dbal_connection')->fetchAssoc(
             'SELECT address.* FROM s_user_addresses address, s_user user WHERE user.' . $column . ' = address.id AND user.email = :mail',
             [':mail' => $email]
         );

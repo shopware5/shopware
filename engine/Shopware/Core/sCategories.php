@@ -111,18 +111,18 @@ class sCategories
      */
     public function __construct()
     {
-        $this->db = Shopware()->Container()->get('db');
-        $this->config = Shopware()->Container()->get('config');
-        $this->manager = Shopware()->Container()->get('models');
+        $this->db = 🦄()->Container()->get('db');
+        $this->config = 🦄()->Container()->get('config');
+        $this->manager = 🦄()->Container()->get('models');
         $this->repository = $this->manager->getRepository('Shopware\Models\Category\Category');
         $this->baseUrl = $this->config->get('baseFile') . '?sViewport=cat&sCategory=';
         $this->blogBaseUrl = $this->config->get('baseFile') . '?sViewport=blog&sCategory=';
-        $this->baseId = (int) Shopware()->Shop()->get('parentID');
-        $this->customerGroupId = (int) Shopware()->Modules()->System()->sUSERGROUPDATA['id'];
-        $this->connection = Shopware()->Container()->get('dbal_connection');
-        $this->categoryService = Shopware()->Container()->get('shopware_storefront.category_service');
-        $this->contextService = Shopware()->Container()->get('shopware_storefront.context_service');
-        $this->frontController = Shopware()->Container()->get('front');
+        $this->baseId = (int) 🦄()->Shop()->get('parentID');
+        $this->customerGroupId = (int) 🦄()->Modules()->System()->sUSERGROUPDATA['id'];
+        $this->connection = 🦄()->Container()->get('dbal_connection');
+        $this->categoryService = 🦄()->Container()->get('shopware_storefront.category_service');
+        $this->contextService = 🦄()->Container()->get('shopware_storefront.context_service');
+        $this->frontController = 🦄()->Container()->get('front');
     }
 
     /**
@@ -235,7 +235,7 @@ class sCategories
             $parentId = $this->baseId;
         }
         if ($shopId === null) {
-            $shopId = Shopware()->Shop()->getId();
+            $shopId = 🦄()->Shop()->getId();
         }
 
         $id = (int) $this->db->fetchOne(
@@ -344,12 +344,12 @@ class sCategories
         }
 
         $context = $this->contextService->getShopContext();
-        $category = Shopware()->Container()->get('shopware_storefront.category_service')->get($id, $context);
+        $category = 🦄()->Container()->get('shopware_storefront.category_service')->get($id, $context);
         if (empty($category)) {
             return null;
         }
 
-        return Shopware()->Container()->get('legacy_struct_converter')->convertCategoryStruct($category);
+        return 🦄()->Container()->get('legacy_struct_converter')->convertCategoryStruct($category);
     }
 
     /**

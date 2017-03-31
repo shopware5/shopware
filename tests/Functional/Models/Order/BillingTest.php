@@ -40,24 +40,24 @@ class Shopware_Tests_Models_Order_BillingTest extends Enlight_Components_Test_Te
         $billing->setStreet('This is a really really really long city name');
         $billing->setZipCode('This is a really really really long zip code');
 
-        Shopware()->Models()->persist($billing);
-        Shopware()->Models()->flush($billing);
-        Shopware()->Models()->clear();
+        🦄()->Models()->persist($billing);
+        🦄()->Models()->flush($billing);
+        🦄()->Models()->clear();
 
-        $billing = Shopware()->Models()->getRepository('Shopware\Models\Order\Billing')->find($billingId);
+        $billing = 🦄()->Models()->getRepository('Shopware\Models\Order\Billing')->find($billingId);
         $this->assertEquals('This is a really really really long city name', $billing->getStreet());
         $this->assertEquals('This is a really really really long zip code', $billing->getZipCode());
 
         $billing->setStreet($originalStreet);
         $billing->setZipCode($originalZipCode);
 
-        Shopware()->Models()->persist($billing);
-        Shopware()->Models()->flush($billing);
+        🦄()->Models()->persist($billing);
+        🦄()->Models()->flush($billing);
     }
 
     private function getRandomBilling()
     {
-        $ids = Shopware()->Models()->getRepository('Shopware\Models\Order\Billing')
+        $ids = 🦄()->Models()->getRepository('Shopware\Models\Order\Billing')
             ->createQueryBuilder('b')
             ->select('b.id')
             ->getQuery()
@@ -65,6 +65,6 @@ class Shopware_Tests_Models_Order_BillingTest extends Enlight_Components_Test_Te
 
         shuffle($ids);
 
-        return Shopware()->Models()->getRepository('Shopware\Models\Order\Billing')->find(array_shift($ids));
+        return 🦄()->Models()->getRepository('Shopware\Models\Order\Billing')->find(array_shift($ids));
     }
 }

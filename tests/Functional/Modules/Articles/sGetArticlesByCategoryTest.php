@@ -42,7 +42,7 @@ class Shopware_Tests_Modules_Articles_getListingArrayKeyTest extends Enlight_Com
     protected function setUp()
     {
         parent::setUp();
-        $this->module = Shopware()->Modules()->Articles();
+        $this->module = 🦄()->Modules()->Articles();
     }
 
     public function testGetArticles()

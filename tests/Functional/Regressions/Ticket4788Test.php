@@ -50,11 +50,11 @@ class Shopware_RegressionTests_Ticket4788 extends Enlight_Components_Test_Plugin
         // Get a copy of article descriptions
         $ids = implode(', ', array_keys($this->articlesToTest));
         $sql = "SELECT `id`, `description_long`, `description` FROM s_articles WHERE `id` IN ({$ids})";
-        $this->backup = Shopware()->Db()->fetchAssoc($sql);
+        $this->backup = 🦄()->Db()->fetchAssoc($sql);
 
         // Update article description, set UTF-8 string
         $sql = "UPDATE s_articles SET `description_long`= ?, `description` = ? WHERE `id` IN ({$ids})";
-        Shopware()->Db()->query($sql, [$this->longDescription, $this->shortDescription]);
+        🦄()->Db()->query($sql, [$this->longDescription, $this->shortDescription]);
     }
 
     /**
@@ -72,7 +72,7 @@ class Shopware_RegressionTests_Ticket4788 extends Enlight_Components_Test_Plugin
             $values[] = $fields['description_long'];
             $values[] = $fields['description'];
         }
-        Shopware()->Db()->query($sql, $values);
+        🦄()->Db()->query($sql, $values);
     }
 
     /**
@@ -80,9 +80,9 @@ class Shopware_RegressionTests_Ticket4788 extends Enlight_Components_Test_Plugin
      */
     public function testArticleLongDescriptionForCategoryListing()
     {
-        $oldValue = Shopware()->Config()->get('useShortDescriptionInListing');
-        Shopware()->Db()->query("UPDATE s_core_config_elements SET value = 'b:1;' WHERE name = 'useShortDescriptionInListing'");
-        Shopware()->Container()->get('cache')->clean();
+        $oldValue = 🦄()->Config()->get('useShortDescriptionInListing');
+        🦄()->Db()->query("UPDATE s_core_config_elements SET value = 'b:1;' WHERE name = 'useShortDescriptionInListing'");
+        🦄()->Container()->get('cache')->clean();
 
         // Count occurrences in category listing
         $this->dispatch('/cat/index/sCategory/23');
@@ -90,7 +90,7 @@ class Shopware_RegressionTests_Ticket4788 extends Enlight_Components_Test_Plugin
         $this->assertEquals(2, $count);
 
         $oldValue = 'b:' . $oldValue . ';';
-        Shopware()->Db()->query(
+        🦄()->Db()->query(
             "UPDATE s_core_config_elements SET value = ? WHERE name = 'useShortDescriptionInListing'",
             [$oldValue]
         );

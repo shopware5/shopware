@@ -41,11 +41,11 @@ class Shopware_Tests_Plugins_Frontend_StatisticsTest extends Enlight_Components_
     {
         parent::setUp();
 
-        $this->plugin = Shopware()->Plugins()->Frontend()->Statistics();
+        $this->plugin = 🦄()->Plugins()->Frontend()->Statistics();
 
         $sql = "INSERT IGNORE INTO `s_emarketing_partner` (`idcode`, `datum`, `company`, `contact`, `street`, `zipcode`, `city`, `phone`, `fax`, `country`, `email`, `web`, `profil`, `fix`, `percent`, `cookielifetime`, `active`, `userID`) VALUES
                   ('test123', '0000-00-00', 'Partner', '', '', '', '', '', '', '', '', '', '', 0, 10, 3600, 1, NULL)";
-        Shopware()->Db()->query($sql);
+        🦄()->Db()->query($sql);
     }
 
     /**
@@ -56,7 +56,7 @@ class Shopware_Tests_Plugins_Frontend_StatisticsTest extends Enlight_Components_
         parent::tearDown();
 
         $sql = "DELETE FROM s_emarketing_partner where idcode = 'test123'";
-        Shopware()->Db()->query($sql);
+        🦄()->Db()->query($sql);
     }
 
     /**
@@ -87,7 +87,7 @@ class Shopware_Tests_Plugins_Frontend_StatisticsTest extends Enlight_Components_
         $this->Plugin()->refreshCurrentUsers($request);
 
         $sql = 'SELECT * FROM `s_statistics_currentusers` ORDER BY `id` DESC LIMIT 1';
-        $result = Shopware()->Container()->get('dbal_connection')->fetchAssoc($sql);
+        $result = 🦄()->Container()->get('dbal_connection')->fetchAssoc($sql);
 
         $this->assertSame('192.168.33.10', $result['remoteaddr']);
         $this->assertSame('/foobar', $result['page']);
@@ -105,7 +105,7 @@ class Shopware_Tests_Plugins_Frontend_StatisticsTest extends Enlight_Components_
           ['http://google.de/', '123', 'http://google.de/$123', true],
           ['http://google.de/', null, 'http://google.de/', true],
           ['http://google.de/', null, 'www.google.de/', false],
-          ['http://google.de/', null, 'http://' . Shopware()->Config()->Host . '/', false],
+          ['http://google.de/', null, 'http://' . 🦄()->Config()->Host . '/', false],
         ];
     }
 
@@ -121,7 +121,7 @@ class Shopware_Tests_Plugins_Frontend_StatisticsTest extends Enlight_Components_
         $this->Plugin()->refreshReferer($request);
 
         $sql = 'SELECT `id` FROM `s_statistics_referer` WHERE `referer`=?';
-        $insertId = Shopware()->Db()->fetchOne($sql, [
+        $insertId = 🦄()->Db()->fetchOne($sql, [
             $result,
         ]);
 
@@ -140,7 +140,7 @@ class Shopware_Tests_Plugins_Frontend_StatisticsTest extends Enlight_Components_
 
         $this->Plugin()->refreshPartner($request, $response);
 
-        $this->assertEquals('test123', Shopware()->Session()->sPartner);
+        $this->assertEquals('test123', 🦄()->Session()->sPartner);
         $this->assertEquals('test123', $response->getCookie('partner'));
     }
 
@@ -156,6 +156,6 @@ class Shopware_Tests_Plugins_Frontend_StatisticsTest extends Enlight_Components_
 
         $this->Plugin()->refreshPartner($request, $response);
 
-        $this->assertEquals('sCampaign1', Shopware()->Session()->sPartner);
+        $this->assertEquals('sCampaign1', 🦄()->Session()->sPartner);
     }
 }

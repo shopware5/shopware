@@ -258,7 +258,7 @@ This changelog references changes done in Shopware 5.1 patch versions.
 * Added configuration option 'errorHandler.throwOnRecoverableError'. When set to true errors of type `E_RECOVERABLE_ERROR` will result in an exception. This is useful to test PHP 7 compatiblity.
 * Fixed duplicated jQuery event in `jquery.listing-actions.js` from `plugin/listingActions/onApplyUrlParams` to `plugin/swListingActions/onGetListingUrl`
 * Removed previously deprecated `Enlight_Components_Adodb`
-    * Container Key `AdoDb` / Shopware()->Adodb()
+    * Container Key `AdoDb` / 🦄()->Adodb()
     * `sSystem::$sDB_CONNECTION`
     * `Shopware_Plugins_Core_System_Bootstrap::onInitResourceAdodb()`
     * `Enlight_Components_Adodb`
@@ -270,7 +270,7 @@ This changelog references changes done in Shopware 5.1 patch versions.
     * `Shopware_Components_Search_Result_Default`
     * `Shopware_Components_Search_Result_Abstract`
     * `Shopware_Components_Search_Result_Interface`
-* Removed previously deprecated API `Shopware()->Api()`
+* Removed previously deprecated API `🦄()->Api()`
     * `Shopware_Plugins_Core_Api_Bootstrap`
     * `sCsvConvert`
     * `sShopwareExport`

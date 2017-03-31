@@ -71,8 +71,8 @@ abstract class Enlight_Components_Test_Controller_TestCase extends Enlight_Compo
     {
         parent::setUp();
 
-        Shopware()->Container()->reset('Session');
-        Shopware()->Container()->reset('Auth');
+        🦄()->Container()->reset('Session');
+        🦄()->Container()->reset('Auth');
 
         $this->reset();
     }
@@ -111,7 +111,7 @@ abstract class Enlight_Components_Test_Controller_TestCase extends Enlight_Compo
      */
     public function reset()
     {
-        $app = Shopware();
+        $app = 🦄();
 
         $this->resetRequest();
         $this->resetResponse();
@@ -130,7 +130,7 @@ abstract class Enlight_Components_Test_Controller_TestCase extends Enlight_Compo
         $app->Events()->reset();
         //$app->Db()->getProfiler()->clear();
 
-        $container = Shopware()->Container();
+        $container = 🦄()->Container();
 
         $container->get('models')->clear();
 
@@ -188,7 +188,7 @@ abstract class Enlight_Components_Test_Controller_TestCase extends Enlight_Compo
     public function Front()
     {
         if (null === $this->_front) {
-            $this->_front = Shopware()->Container()->get('Front');
+            $this->_front = 🦄()->Container()->get('Front');
         }
         return $this->_front;
     }
@@ -201,7 +201,7 @@ abstract class Enlight_Components_Test_Controller_TestCase extends Enlight_Compo
     public function Template()
     {
         if (null === $this->_template) {
-            $this->_template = Shopware()->Container()->get('Template');
+            $this->_template = 🦄()->Container()->get('Template');
         }
         return $this->_template;
     }

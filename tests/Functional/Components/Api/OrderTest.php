@@ -51,7 +51,7 @@ class OrderTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->order = Shopware()->Db()->fetchRow('SELECT * FROM  `s_order` LIMIT 1');
+        $this->order = 🦄()->Db()->fetchRow('SELECT * FROM  `s_order` LIMIT 1');
     }
 
     /**

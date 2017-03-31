@@ -84,7 +84,7 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
             ->getUsersQuery($filter, $limit, $offset);
 
         //returns the total count of the query
-        $totalResult = Shopware()->Models()->getQueryCount($query);
+        $totalResult = 🦄()->Models()->getQueryCount($query);
 
         //returns the customer data
         $customers = $query->getArrayResult();
@@ -111,12 +111,12 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
      */
     public function deleteRoleAction()
     {
-        $rolesRepository = Shopware()->Models()->getRepository('Shopware\Models\User\Role');
-        $manager = Shopware()->Models();
+        $rolesRepository = 🦄()->Models()->getRepository('Shopware\Models\User\Role');
+        $manager = 🦄()->Models();
         $roleId = $this->Request()->getParam('id');
 
         // Check if any user is assigned to this role
-        if (Shopware()->Db()->fetchOne('
+        if (🦄()->Db()->fetchOne('
             SELECT id FROM s_core_auth WHERE roleID = ?
             ', [$roleId])
         ) {
@@ -156,7 +156,7 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
     public function updateRoleAction()
     {
         $id = $this->Request()->getParam('id', null);
-        $rolesRepository = Shopware()->Models()->getRepository('Shopware\Models\User\Role');
+        $rolesRepository = 🦄()->Models()->getRepository('Shopware\Models\User\Role');
 
         if (!empty($id)) {
             $role = $rolesRepository->find($id);
@@ -178,12 +178,12 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
         }
 
         $role->fromArray($params);
-        Shopware()->Models()->persist($role);
-        Shopware()->Models()->flush();
+        🦄()->Models()->persist($role);
+        🦄()->Models()->flush();
 
         // Check if admin flag is set or unset
         if ($params['admin'] == true) {
-            Shopware()->Db()->query('
+            🦄()->Db()->query('
                 INSERT IGNORE INTO s_core_acl_roles (roleID,resourceID,privilegeID) VALUES (?,?,?)
                 ', [$role->getId(), null, null]);
         } else {
@@ -193,7 +193,7 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
 
         $this->View()->assign([
                 'success' => true,
-                'data' => Shopware()->Models()->toArray($role), ]
+                'data' => 🦄()->Models()->toArray($role), ]
         );
     }
 
@@ -214,7 +214,7 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
         $query = $this->getUserRepository()
             ->getRolesQuery($offset, $limit);
 
-        $count = Shopware()->Models()->getQueryCount($query);
+        $count = 🦄()->Models()->getQueryCount($query);
         $roles = $query->getArrayResult();
 
         // Strip roles with parent id set
@@ -251,8 +251,8 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
 
         $params = $this->Request()->getParams();
         if (!empty($params['password'])) {
-            $params['encoder'] = Shopware()->PasswordEncoder()->getDefaultPasswordEncoderName();
-            $params['password'] = Shopware()->PasswordEncoder()->encodePassword($params['password'], $params['encoder']);
+            $params['encoder'] = 🦄()->PasswordEncoder()->getDefaultPasswordEncoderName();
+            $params['password'] = 🦄()->PasswordEncoder()->encodePassword($params['password'], $params['encoder']);
         } else {
             unset($params['password']);
         }
@@ -262,12 +262,12 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
         // Do logout
         // $user->setSessionId('');
 
-        Shopware()->Models()->persist($user);
-        Shopware()->Models()->flush();
+        🦄()->Models()->persist($user);
+        🦄()->Models()->flush();
 
         if ($isNewUser) {
             $sql = 'INSERT INTO `s_core_widget_views` (`widget_id`, `auth_id`) VALUES ((SELECT id FROM `s_core_widgets` WHERE `name` = :widgetName LIMIT 1), :userId);';
-            Shopware()->Db()->executeQuery(
+            🦄()->Db()->executeQuery(
                 $sql,
                 [
                     ':widgetName' => 'swag-shopware-news-widget',
@@ -278,7 +278,7 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
 
         $this->View()->assign([
                 'success' => true,
-                'data' => Shopware()->Models()->toArray($user), ]
+                'data' => 🦄()->Models()->toArray($user), ]
         );
     }
 
@@ -290,11 +290,11 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
     public function deleteUserAction()
     {
         //get doctrine entity manager
-        $manager = Shopware()->Models();
+        $manager = 🦄()->Models();
 
         //get posted user
         $userID = $this->Request()->getParam('id');
-        $getCurrentIdentity = Shopware()->Container()->get('Auth')->getIdentity();
+        $getCurrentIdentity = 🦄()->Container()->get('Auth')->getIdentity();
 
         // Backend users shall not delete their current login
         if ($userID == $getCurrentIdentity->id) {
@@ -332,9 +332,9 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
 
         /** @var $role \Shopware\Models\User\Role */
         if ($role !== null && is_numeric($role)) {
-            $role = Shopware()->Models()->find('Shopware\Models\User\Role', $role);
+            $role = 🦄()->Models()->find('Shopware\Models\User\Role', $role);
 
-            $repository = Shopware()->Models()->getRepository('Shopware\Models\User\Rule');
+            $repository = 🦄()->Models()->getRepository('Shopware\Models\User\Rule');
             $adminRole = $repository->findOneBy([
                 'roleId' => $role->getId(),
                 'resourceId' => null,
@@ -371,7 +371,7 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
     {
         $id = $this->Request()->getParam('id', null);
         /** @var $namespace Enlight_Components_Snippet_Namespace */
-        $namespace = Shopware()->Snippets()->getNamespace('backend/user_manager');
+        $namespace = 🦄()->Snippets()->getNamespace('backend/user_manager');
 
         if (empty($id)) {
             $this->View()->assign([
@@ -411,7 +411,7 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
     {
         $id = $this->Request()->getParam('id', null);
         /** @var $namespace Enlight_Components_Snippet_Namespace */
-        $namespace = Shopware()->Snippets()->getNamespace('backend/user_manager');
+        $namespace = 🦄()->Snippets()->getNamespace('backend/user_manager');
 
         if (empty($id)) {
             $this->View()->assign([
@@ -478,10 +478,10 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
         $data = $this->Request()->getParams();
         $resource->fromArray($data);
 
-        Shopware()->Models()->persist($resource);
-        Shopware()->Models()->flush();
+        🦄()->Models()->persist($resource);
+        🦄()->Models()->flush();
 
-        $data = Shopware()->Models()->toArray($resource);
+        $data = 🦄()->Models()->toArray($resource);
 
         $this->View()->assign([
             'success' => true,
@@ -501,10 +501,10 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
         $data = $this->Request()->getParams();
         $privilege->fromArray($data);
 
-        Shopware()->Models()->persist($privilege);
-        Shopware()->Models()->flush();
+        🦄()->Models()->persist($privilege);
+        🦄()->Models()->flush();
 
-        $data = Shopware()->Models()->toArray($privilege);
+        $data = 🦄()->Models()->toArray($privilege);
 
         $this->View()->assign([
             'success' => true,
@@ -520,7 +520,7 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
     public function updateRolePrivilegesAction()
     {
         /** @var $namespace Enlight_Components_Snippet_Namespace */
-        $namespace = Shopware()->Snippets()->getNamespace('backend/user_manager');
+        $namespace = 🦄()->Snippets()->getNamespace('backend/user_manager');
 
         $id = $this->Request()->getParam('id', null);
         if (empty($id)) {
@@ -535,7 +535,7 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
 
         //check if role exist
         /** @var $role \Shopware\Models\User\Role */
-        $role = Shopware()->Models()->find('Shopware\Models\User\Role', $id);
+        $role = 🦄()->Models()->find('Shopware\Models\User\Role', $id);
         if (empty($role)) {
             $this->View()->assign([
                 'success' => false,
@@ -554,23 +554,23 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
             $rule->setRole($role);
 
             if (isset($newRule['resourceId'])) {
-                $rule->setResource(Shopware()->Models()->find('Shopware\Models\User\Resource', $newRule['resourceId']));
+                $rule->setResource(🦄()->Models()->find('Shopware\Models\User\Resource', $newRule['resourceId']));
             }
             if (isset($newRule['privilegeId'])) {
-                $rule->setPrivilege(Shopware()->Models()->find('Shopware\Models\User\Privilege', $newRule['privilegeId']));
+                $rule->setPrivilege(🦄()->Models()->find('Shopware\Models\User\Privilege', $newRule['privilegeId']));
             } else {
                 $rule->setPrivilege(null);
             }
-            Shopware()->Models()->persist($rule);
+            🦄()->Models()->persist($rule);
         }
 
         //clear mapping table s_core_acl_roles
         $query = $this->getUserRepository()->getRuleDeleteByRoleIdQuery($role->getId());
         $query->execute();
 
-        Shopware()->Models()->flush();
+        🦄()->Models()->flush();
 
-        $data = Shopware()->Models()->toArray($role);
+        $data = 🦄()->Models()->toArray($role);
 
         $this->View()->assign([
             'success' => true,
@@ -608,7 +608,7 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
     private function getUserRepository()
     {
         if ($this->userRepository === null) {
-            $this->userRepository = Shopware()->Models()->getRepository('Shopware\Models\User\User');
+            $this->userRepository = 🦄()->Models()->getRepository('Shopware\Models\User\User');
         }
 
         return $this->userRepository;
@@ -620,7 +620,7 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
     private function getManager()
     {
         if ($this->manager === null) {
-            $this->manager = Shopware()->Models();
+            $this->manager = 🦄()->Models();
         }
 
         return $this->manager;

@@ -37,7 +37,7 @@ class Shopware_Tests_Controllers_Frontend_ListingTest extends Enlight_Components
      */
     public function testHomeRedirect()
     {
-        $mainCategory = Shopware()->Shop()->getCategory()->getId();
+        $mainCategory = 🦄()->Shop()->getCategory()->getId();
 
         $this->dispatch('/cat/index/sCategory/' . $mainCategory);
 

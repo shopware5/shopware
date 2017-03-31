@@ -282,7 +282,7 @@ class Category extends Resource
         }
 
         if (!empty($params['parent'])) {
-            $params['parent'] = Shopware()->Models()->getRepository('Shopware\Models\Category\Category')->find($params['parent']);
+            $params['parent'] = 🦄()->Models()->getRepository('Shopware\Models\Category\Category')->find($params['parent']);
             if (!$params['parent']) {
                 throw new ApiException\CustomValidationException(sprintf('Parent by id %s not found', $params['parent']));
             }

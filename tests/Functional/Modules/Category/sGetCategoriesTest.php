@@ -47,7 +47,7 @@ class sGetCategoriesTest extends \Enlight_Components_Test_TestCase
     {
         $this->helper = new Helper();
 
-        Shopware()->Db()->query(
+        🦄()->Db()->query(
             "DELETE FROM s_categories WHERE description LIKE 'Foo%' AND parent = 3"
         );
 
@@ -168,7 +168,7 @@ class sGetCategoriesTest extends \Enlight_Components_Test_TestCase
 
         $result = $this->module->sGetCategories($third1->getId());
 
-        Shopware()->Db()->delete('s_categories', 'description = "ListingTest"');
+        🦄()->Db()->delete('s_categories', 'description = "ListingTest"');
 
         $this->assertCount(8, $result);
         $this->assertArrayHasKey($first1->getId(), $result);
@@ -209,10 +209,10 @@ class sGetCategoriesTest extends \Enlight_Components_Test_TestCase
         $first1 = $this->helper->createCategory(['name' => 'first1', 'parent' => 3]);
         $second1 = $this->helper->createCategory(['name' => 'second1',  'parent' => $first1->getId()]);
 
-        Shopware()->Db()->executeUpdate('UPDATE s_categories SET mediaID = 564 WHERE id = ?', [$first1->getId()]);
+        🦄()->Db()->executeUpdate('UPDATE s_categories SET mediaID = 564 WHERE id = ?', [$first1->getId()]);
 
         $result = $this->module->sGetCategories($second1->getId());
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $mediaService = 🦄()->Container()->get('shopware_media.media_service');
 
         $result = array_values($result);
         $category = $result[1];
@@ -302,7 +302,7 @@ class sGetCategoriesTest extends \Enlight_Components_Test_TestCase
         $first = $this->helper->createCategory(['name' => 'first',  'parent' => 3]);
         $second = $this->helper->createCategory(['name' => 'second', 'parent' => $first->getId()]);
         $third = $this->helper->createCategory(['name' => 'third',   'parent' => $second->getId()]);
-        Shopware()->Db()->query(
+        🦄()->Db()->query(
             'INSERT INTO s_categories_avoid_customergroups (categoryID, customerGroupID) VALUES (?, ?)',
             [$third->getId(), 1]
         );

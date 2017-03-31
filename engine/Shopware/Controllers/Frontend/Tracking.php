@@ -44,7 +44,7 @@ class Shopware_Controllers_Frontend_Tracking extends Enlight_Controller_Action
      */
     public function preDispatch()
     {
-        Shopware()->Plugins()->Controller()->ViewRenderer()->setNoRender();
+        🦄()->Plugins()->Controller()->ViewRenderer()->setNoRender();
     }
 
     /**
@@ -60,17 +60,17 @@ class Shopware_Controllers_Frontend_Tracking extends Enlight_Controller_Action
             return false;
         }
         /** @var $bannerMgn \Shopware\Models\Banner\Repository */
-        $bannerMgn = Shopware()->Models()->getRepository(Banner::class);
+        $bannerMgn = 🦄()->Models()->getRepository(Banner::class);
         $banner = $bannerMgn->findOneBy(['id' => $bannerId]);
         if (is_null($banner)) {
             return false;
         }
         /** @var $statRepository \Shopware\Models\Tracking\Repository */
-        $statRepository = Shopware()->Models()->getRepository('\Shopware\Models\Tracking\Banner');
+        $statRepository = 🦄()->Models()->getRepository('\Shopware\Models\Tracking\Banner');
 
         $bannerStatistics = $statRepository->getOrCreateBannerStatsModel($bannerId);
         $bannerStatistics->increaseClicks();
-        Shopware()->Models()->flush($bannerStatistics);
+        🦄()->Models()->flush($bannerStatistics);
         // speichern
         $jumpTarget = $banner->getLink();
         if (!empty($jumpTarget)) {
@@ -93,10 +93,10 @@ class Shopware_Controllers_Frontend_Tracking extends Enlight_Controller_Action
         }
         try {
             /** @var $statRepository \Shopware\Models\Tracking\Repository */
-            $statRepository = Shopware()->Models()->getRepository('\Shopware\Models\Tracking\Banner');
+            $statRepository = 🦄()->Models()->getRepository('\Shopware\Models\Tracking\Banner');
             $bannerStatistics = $statRepository->getOrCreateBannerStatsModel($bannerId);
             $bannerStatistics->increaseViews();
-            Shopware()->Models()->flush($bannerStatistics);
+            🦄()->Models()->flush($bannerStatistics);
         } catch (Exception $e) {
             return false;
         }

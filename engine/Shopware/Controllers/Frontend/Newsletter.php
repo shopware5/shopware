@@ -54,15 +54,15 @@ class Shopware_Controllers_Frontend_Newsletter extends Enlight_Controller_Action
             $this->View()->sUnsubscribe = false;
         }
 
-        $this->View()->_POST = Shopware()->System()->_POST->toArray();
+        $this->View()->_POST = 🦄()->System()->_POST->toArray();
 
-        if (!isset(Shopware()->System()->_POST['newsletter'])) {
+        if (!isset(🦄()->System()->_POST['newsletter'])) {
             return;
         }
 
-        if (Shopware()->System()->_POST['subscribeToNewsletter'] != 1) {
+        if (🦄()->System()->_POST['subscribeToNewsletter'] != 1) {
             // Unsubscribe user
-            $this->View()->sStatus = Shopware()->Modules()->Admin()->sNewsletterSubscription(Shopware()->System()->_POST['newsletter'], true);
+            $this->View()->sStatus = 🦄()->Modules()->Admin()->sNewsletterSubscription(🦄()->System()->_POST['newsletter'], true);
 
             $session = $this->container->get('session');
             if ($session->offsetExists('sNewsletter')) {
@@ -72,27 +72,27 @@ class Shopware_Controllers_Frontend_Newsletter extends Enlight_Controller_Action
             return;
         }
 
-        if (empty(Shopware()->Config()->sOPTINNEWSLETTER) || $this->View()->voteConfirmed) {
-            $this->View()->sStatus = Shopware()->Modules()->Admin()->sNewsletterSubscription(Shopware()->System()->_POST['newsletter'], false);
+        if (empty(🦄()->Config()->sOPTINNEWSLETTER) || $this->View()->voteConfirmed) {
+            $this->View()->sStatus = 🦄()->Modules()->Admin()->sNewsletterSubscription(🦄()->System()->_POST['newsletter'], false);
             if ($this->View()->sStatus['code'] == 3) {
                 // Send mail to subscriber
-                $this->sendMail(Shopware()->System()->_POST['newsletter'], 'sNEWSLETTERCONFIRMATION');
+                $this->sendMail(🦄()->System()->_POST['newsletter'], 'sNEWSLETTERCONFIRMATION');
             }
         } else {
-            $this->View()->sStatus = Shopware()->Modules()->Admin()->sNewsletterSubscription(Shopware()->System()->_POST['newsletter'], false);
+            $this->View()->sStatus = 🦄()->Modules()->Admin()->sNewsletterSubscription(🦄()->System()->_POST['newsletter'], false);
             if ($this->View()->sStatus['code'] == 3) {
-                Shopware()->Modules()->Admin()->sNewsletterSubscription(Shopware()->System()->_POST['newsletter'], true);
+                🦄()->Modules()->Admin()->sNewsletterSubscription(🦄()->System()->_POST['newsletter'], true);
                 $hash = \Shopware\Components\Random::getAlphanumericString(32);
-                $data = serialize(Shopware()->System()->_POST->toArray());
+                $data = serialize(🦄()->System()->_POST->toArray());
 
                 $link = $this->Front()->Router()->assemble(['sViewport' => 'newsletter', 'action' => 'confirm', 'sConfirmation' => $hash]);
 
-                $this->sendMail(Shopware()->System()->_POST['newsletter'], 'sOPTINNEWSLETTER', $link);
+                $this->sendMail(🦄()->System()->_POST['newsletter'], 'sOPTINNEWSLETTER', $link);
 
                 // Setting status-code
-                $this->View()->sStatus = ['code' => 3, 'message' => Shopware()->Snippets()->getNamespace('frontend')->get('sMailConfirmation')];
+                $this->View()->sStatus = ['code' => 3, 'message' => 🦄()->Snippets()->getNamespace('frontend')->get('sMailConfirmation')];
 
-                Shopware()->Db()->query('
+                🦄()->Db()->query('
                 INSERT INTO s_core_optin (datum,hash,data)
                 VALUES (
                 now(),?,?
@@ -108,11 +108,11 @@ class Shopware_Controllers_Frontend_Newsletter extends Enlight_Controller_Action
     public function listingAction()
     {
         $customergroups = $this->getCustomerGroups();
-        $customergroups = Shopware()->Db()->quote($customergroups);
+        $customergroups = 🦄()->Db()->quote($customergroups);
         $context = $this->container->get('shopware_storefront.context_service')->getShopContext();
 
         $page = (int) $this->Request()->getQuery('sPage', 1);
-        $perPage = (int) Shopware()->Config()->get('contentPerPage', 12);
+        $perPage = (int) 🦄()->Config()->get('contentPerPage', 12);
 
         $sql = "
             SELECT SQL_CALC_FOUND_ROWS id, IF(datum IS NULL,'',datum) as `date`, subject as description, sendermail, sendername
@@ -124,12 +124,12 @@ class Shopware_Controllers_Frontend_Newsletter extends Enlight_Controller_Action
             AND customergroup IN ($customergroups)
             ORDER BY `id` DESC
         ";
-        $sql = Shopware()->Db()->limit($sql, $perPage, $perPage * ($page - 1));
-        $result = Shopware()->Db()->query($sql, [$context->getShop()->getId()]);
+        $sql = 🦄()->Db()->limit($sql, $perPage, $perPage * ($page - 1));
+        $result = 🦄()->Db()->query($sql, [$context->getShop()->getId()]);
 
         //$count has to be set before calling Router::assemble() because it removes the FOUND_ROWS()
         $sql = 'SELECT FOUND_ROWS() as count_' . md5($sql);
-        $count = Shopware()->Db()->fetchOne($sql);
+        $count = 🦄()->Db()->fetchOne($sql);
         if ($perPage != 0) {
             $count = ceil($count / $perPage);
         } else {
@@ -165,7 +165,7 @@ class Shopware_Controllers_Frontend_Newsletter extends Enlight_Controller_Action
     public function detailAction()
     {
         $customergroups = $this->getCustomerGroups();
-        $customergroups = Shopware()->Db()->quote($customergroups);
+        $customergroups = 🦄()->Db()->quote($customergroups);
         $context = $this->container->get('shopware_storefront.context_service')->getShopContext();
 
         $sql = "
@@ -178,7 +178,7 @@ class Shopware_Controllers_Frontend_Newsletter extends Enlight_Controller_Action
             AND id=?
             AND customergroup IN ($customergroups)
         ";
-        $content = Shopware()->Db()->fetchRow($sql, [$context->getShop()->getId(), $this->Request()->sID]);
+        $content = 🦄()->Db()->fetchRow($sql, [$context->getShop()->getId(), $this->Request()->sID]);
         if (!empty($content)) {
             // todo@all Hash-Building in rework phase berücksichtigen
             $license = '';
@@ -211,7 +211,7 @@ class Shopware_Controllers_Frontend_Newsletter extends Enlight_Controller_Action
             $context['sUser'][$key] = $value;
         }
 
-        $mail = Shopware()->TemplateMail()->createMail($template, $context);
+        $mail = 🦄()->TemplateMail()->createMail($template, $context);
         $mail->addTo($recipient);
         $mail->send();
     }
@@ -228,7 +228,7 @@ class Shopware_Controllers_Frontend_Newsletter extends Enlight_Controller_Action
             return false;
         }
 
-        $getVote = Shopware()->Db()->fetchRow(
+        $getVote = 🦄()->Db()->fetchRow(
             'SELECT * FROM s_core_optin WHERE hash = ?',
             [$this->Request()->sConfirmation]
         );
@@ -237,9 +237,9 @@ class Shopware_Controllers_Frontend_Newsletter extends Enlight_Controller_Action
             return false;
         }
 
-        Shopware()->System()->_POST = unserialize($getVote['data']);
+        🦄()->System()->_POST = unserialize($getVote['data']);
 
-        Shopware()->Db()->query(
+        🦄()->Db()->query(
             'DELETE FROM s_core_optin WHERE hash = ?',
             [$this->Request()->sConfirmation]
         );
@@ -256,12 +256,12 @@ class Shopware_Controllers_Frontend_Newsletter extends Enlight_Controller_Action
     {
         $customergroups = ['EK'];
 
-        $defaultCustomerGroupKey = Shopware()->Shop()->getCustomerGroup()->getKey();
+        $defaultCustomerGroupKey = 🦄()->Shop()->getCustomerGroup()->getKey();
         if (!empty($defaultCustomerGroupKey)) {
             $customergroups[] = $defaultCustomerGroupKey;
         }
-        if (!empty(Shopware()->System()->sUSERGROUPDATA['groupkey'])) {
-            $customergroups[] = Shopware()->System()->sUSERGROUPDATA['groupkey'];
+        if (!empty(🦄()->System()->sUSERGROUPDATA['groupkey'])) {
+            $customergroups[] = 🦄()->System()->sUSERGROUPDATA['groupkey'];
         }
         $customergroups = array_unique($customergroups);
 

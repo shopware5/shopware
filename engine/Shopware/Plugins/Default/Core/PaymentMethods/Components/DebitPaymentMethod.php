@@ -57,7 +57,7 @@ class DebitPaymentMethod extends GenericPaymentMethod
         }
 
         if (count($sErrorFlag)) {
-            $sErrorMessages[] = Shopware()->Snippets()->getNamespace('frontend/account/internalMessages')
+            $sErrorMessages[] = 🦄()->Snippets()->getNamespace('frontend/account/internalMessages')
                 ->get('ErrorFillIn', 'Please fill in all red fields');
 
             return [
@@ -76,7 +76,7 @@ class DebitPaymentMethod extends GenericPaymentMethod
     {
         $lastPayment = $this->getCurrentPaymentDataAsArray($userId);
 
-        $paymentMean = Shopware()->Models()->getRepository('\Shopware\Models\Payment\Payment')->
+        $paymentMean = 🦄()->Models()->getRepository('\Shopware\Models\Payment\Payment')->
             getPaymentsQuery(['name' => 'debit'])->getOneOrNullResult(AbstractQuery::HYDRATE_ARRAY);
 
         $data = [
@@ -91,14 +91,14 @@ class DebitPaymentMethod extends GenericPaymentMethod
             $data['created_at'] = $date->format('Y-m-d');
             $data['payment_mean_id'] = $paymentMean['id'];
             $data['user_id'] = $userId;
-            Shopware()->Db()->insert('s_core_payment_data', $data);
+            🦄()->Db()->insert('s_core_payment_data', $data);
         } else {
             $where = [
                 'payment_mean_id = ?' => $paymentMean['id'],
                 'user_id = ?' => $userId,
             ];
 
-            Shopware()->Db()->update('s_core_payment_data', $data, $where);
+            🦄()->Db()->update('s_core_payment_data', $data, $where);
         }
     }
 
@@ -107,7 +107,7 @@ class DebitPaymentMethod extends GenericPaymentMethod
      */
     public function getCurrentPaymentDataAsArray($userId)
     {
-        $paymentData = Shopware()->Models()->getRepository('\Shopware\Models\Customer\PaymentData')
+        $paymentData = 🦄()->Models()->getRepository('\Shopware\Models\Customer\PaymentData')
             ->getCurrentPaymentDataQueryBuilder($userId, 'debit')->getQuery()->getOneOrNullResult(AbstractQuery::HYDRATE_ARRAY);
 
         if (isset($paymentData)) {
@@ -127,7 +127,7 @@ class DebitPaymentMethod extends GenericPaymentMethod
      */
     public function createPaymentInstance($orderId, $userId, $paymentId)
     {
-        $orderAmount = Shopware()->Models()->createQueryBuilder()
+        $orderAmount = 🦄()->Models()->createQueryBuilder()
             ->select('orders.invoiceAmount')
             ->from('Shopware\Models\Order\Order', 'orders')
             ->where('orders.id = ?1')
@@ -135,7 +135,7 @@ class DebitPaymentMethod extends GenericPaymentMethod
             ->getQuery()
             ->getSingleScalarResult();
 
-        $addressData = Shopware()->Models()->getRepository('Shopware\Models\Customer\Customer')
+        $addressData = 🦄()->Models()->getRepository('Shopware\Models\Customer\Customer')
             ->find($userId)->getDefaultBillingAddress();
 
         $debitData = $this->getCurrentPaymentDataAsArray($userId);
@@ -158,7 +158,7 @@ class DebitPaymentMethod extends GenericPaymentMethod
             'created_at' => $date->format('Y-m-d'),
         ];
 
-        Shopware()->Db()->insert('s_core_payment_instance', $data);
+        🦄()->Db()->insert('s_core_payment_instance', $data);
 
         return true;
     }

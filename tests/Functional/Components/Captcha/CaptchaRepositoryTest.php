@@ -32,7 +32,7 @@ class CaptchaRepositoryTest extends \PHPUnit\Framework\TestCase
     public function testThrowCaptchaNotFoundException()
     {
         /** @var CaptchaRepository $captchaRepository */
-        $captchaRepository = Shopware()->Container()->get('shopware.captcha.repository');
+        $captchaRepository = 🦄()->Container()->get('shopware.captcha.repository');
         $this->expectException(CaptchaNotFoundException::class);
         $captchaRepository->getCaptchaByName('nameIsNotInCaptchaRepository');
     }

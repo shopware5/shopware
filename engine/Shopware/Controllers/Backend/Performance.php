@@ -98,7 +98,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
      */
     public function getShopsAction()
     {
-        $shops = Shopware()->Db()->fetchAll('SELECT id, name FROM s_core_shops');
+        $shops = 🦄()->Db()->fetchAll('SELECT id, name FROM s_core_shops');
         $this->View()->assign([
             'success' => true,
             'data' => $shops,
@@ -107,7 +107,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
 
     public function getConfigAction()
     {
-        Shopware()->Container()->get('cache')->remove('Shopware_Config');
+        🦄()->Container()->get('cache')->remove('Shopware_Config');
         $this->View()->assign([
             'success' => true,
             'data' => $this->prepareConfigData(),
@@ -141,7 +141,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
         $data = $this->prepareDataForSaving($data);
         $this->saveConfigData($data);
 
-        Shopware()->Container()->get('cache')->remove('Shopware_Config');
+        🦄()->Container()->get('cache')->remove('Shopware_Config');
 
         // Reload config, so that the actual config from the
         // db is returned
@@ -344,9 +344,9 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
      */
     public function readConfig($configName, $defaultValue = '')
     {
-        // If we have a simple config item, we can return it by using Shopware()->Config()
+        // If we have a simple config item, we can return it by using 🦄()->Config()
         if (strpos($configName, ':') === false) {
-            return Shopware()->Config()->get($configName);
+            return 🦄()->Config()->get($configName);
         }
 
         // The colon separates formName and elementName
@@ -390,7 +390,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
         $offset = $this->Request()->getParam('offset', 0);
         $limit = $this->Request()->getParam('limit', null);
 
-        $component = Shopware()->Container()->get('CategoryDenormalization');
+        $component = 🦄()->Container()->get('CategoryDenormalization');
 
         if ($offset == 0) {
             $component->rebuildCategoryPath();
@@ -407,7 +407,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
 
     public function prepareTreeAction()
     {
-        $component = Shopware()->Container()->get('CategoryDenormalization');
+        $component = 🦄()->Container()->get('CategoryDenormalization');
 
         $component->removeOrphanedAssignments();
 
@@ -545,7 +545,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
             $validPHPVersion = self::PERFORMANCE_VALID;
         } elseif (version_compare(phpversion(), self::PHP_MINIMUM_VERSION, '>=')) {
             $validPHPVersion = self::PERFORMANCE_WARNING;
-            $descriptionPHPVersion = Shopware()->Snippets()->getNamespace('backend/performance/main')
+            $descriptionPHPVersion = 🦄()->Snippets()->getNamespace('backend/performance/main')
                 ->get('cache/php_version/description_eol');
         } else {
             $validPHPVersion = self::PERFORMANCE_INVALID;
@@ -554,19 +554,19 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
         return [
             [
                 'id' => 1,
-                'name' => Shopware()->Snippets()->getNamespace('backend/performance/main')->get('cache/apc'),
+                'name' => 🦄()->Snippets()->getNamespace('backend/performance/main')->get('cache/apc'),
                 'value' => extension_loaded('apcu'),
                 'valid' => extension_loaded('apcu') === true ? self::PERFORMANCE_VALID : self::PERFORMANCE_INVALID,
             ],
             [
                 'id' => 3,
-                'name' => Shopware()->Snippets()->getNamespace('backend/performance/main')->get('cache/zend'),
+                'name' => 🦄()->Snippets()->getNamespace('backend/performance/main')->get('cache/zend'),
                 'value' => extension_loaded('Zend OPcache'),
                 'valid' => extension_loaded('Zend OPcache') === true ? self::PERFORMANCE_VALID : self::PERFORMANCE_INVALID,
             ],
             [
                 'id' => 4,
-                'name' => Shopware()->Snippets()->getNamespace('backend/performance/main')->get('cache/php_version'),
+                'name' => 🦄()->Snippets()->getNamespace('backend/performance/main')->get('cache/php_version'),
                 'value' => phpversion(),
                 'valid' => $validPHPVersion,
                 'description' => $descriptionPHPVersion,
@@ -599,7 +599,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
      */
     protected function prepareSeoConfig()
     {
-        $formatted = trim(str_replace('T', ' ', Shopware()->Config()->get('routerlastupdate')));
+        $formatted = trim(str_replace('T', ' ', 🦄()->Config()->get('routerlastupdate')));
         $datetime = date_create_from_format('Y-m-d H:i:s', $formatted);
 
         if ($datetime) {
@@ -611,10 +611,10 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
         }
 
         return [
-            'routercache' => (int) Shopware()->Config()->get('routercache'),
+            'routercache' => (int) 🦄()->Config()->get('routercache'),
             'routerlastupdateDate' => $date,
             'routerlastupdateTime' => $time,
-            'seoRefreshStrategy' => Shopware()->Config()->get('seoRefreshStrategy'),
+            'seoRefreshStrategy' => 🦄()->Config()->get('seoRefreshStrategy'),
         ];
     }
 
@@ -625,7 +625,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
      */
     protected function prepareHttpCacheConfig()
     {
-        $controllers = Shopware()->Config()->get('cacheControllers');
+        $controllers = 🦄()->Config()->get('cacheControllers');
         $cacheControllers = [];
         if (!empty($controllers)) {
             $controllers = str_replace(["\r\n", "\r"], "\n", $controllers);
@@ -636,7 +636,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
             }
         }
 
-        $controllers = Shopware()->Config()->get('noCacheControllers');
+        $controllers = 🦄()->Config()->get('noCacheControllers');
         $noCacheControllers = [];
         if (!empty($controllers)) {
             $controllers = str_replace(["\r\n", "\r"], "\n", $controllers);
@@ -670,7 +670,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
     private function activeHttpCache($httpCache)
     {
         /** @var $service InstallerService */
-        $service = Shopware()->Container()->get('shopware.plugin_manager');
+        $service = 🦄()->Container()->get('shopware.plugin_manager');
 
         if (!$httpCache->getInstalled()) {
             $service->installPlugin($httpCache);
@@ -692,7 +692,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
         }
 
         /** @var $service InstallerService */
-        $service = Shopware()->Container()->get('shopware.plugin_manager');
+        $service = 🦄()->Container()->get('shopware.plugin_manager');
         $service->deactivatePlugin($httpCache);
     }
 

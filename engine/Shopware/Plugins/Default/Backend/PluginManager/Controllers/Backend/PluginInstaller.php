@@ -187,7 +187,7 @@ class Shopware_Controllers_Backend_PluginInstaller extends Shopware_Controllers_
     public function uploadAction()
     {
         /** @var DownloadService $service */
-        $pluginDownloadService = Shopware()->Container()->get('shopware_plugininstaller.plugin_download_service');
+        $pluginDownloadService = 🦄()->Container()->get('shopware_plugininstaller.plugin_download_service');
 
         try {
             $fileBag = new FileBag($_FILES);
@@ -215,7 +215,7 @@ class Shopware_Controllers_Backend_PluginInstaller extends Shopware_Controllers_
             return;
         }
 
-        $tempDirectory = Shopware()->Container()->getParameter('kernel.root_dir') . '/files/downloads/';
+        $tempDirectory = 🦄()->Container()->getParameter('kernel.root_dir') . '/files/downloads/';
         $tempFileName = tempnam($tempDirectory, $file->getClientOriginalName());
 
         try {

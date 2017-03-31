@@ -327,7 +327,7 @@ class Enlight_Components_Mail extends Zend_Mail
      */
     public function send($transport = null)
     {
-        Shopware()->Events()->notify(
+        🦄()->Events()->notify(
             'Enlight_Components_Mail_Send',
             array(
                 'mail'      => $this,

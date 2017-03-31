@@ -45,7 +45,7 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action imple
      */
     public function init()
     {
-        $this->auth = Shopware()->Plugins()->Backend()->Auth();
+        $this->auth = 🦄()->Plugins()->Backend()->Auth();
         $this->auth->setNoAuth();
         $this->Front()->Plugins()->ScriptRenderer()->setRender();
     }
@@ -130,7 +130,7 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action imple
         $sbpLogin = 0;
         if ($firstRunWizardEnabled) {
             /** @var \Shopware\Bundle\PluginInstallerBundle\Struct\AccessTokenStruct $tokenData */
-            $tokenData = Shopware()->BackendSession()->accessToken;
+            $tokenData = 🦄()->BackendSession()->accessToken;
 
             $sbpLogin = (int) (!empty($tokenData) && $tokenData->getExpire() >= new DateTime('+30 seconds'));
         }
@@ -212,7 +212,7 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action imple
         }
 
         /** @var $menu \Shopware\Models\Menu\Repository */
-        $menu = Shopware()->Models()->getRepository('Shopware\Models\Menu\Menu');
+        $menu = 🦄()->Models()->getRepository('Shopware\Models\Menu\Menu');
         $nodes = $menu->createQueryBuilder('m')
             ->select('m')
             ->leftJoin('m.plugin', 'p')

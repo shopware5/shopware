@@ -59,7 +59,7 @@ class FilesystemTest extends \Enlight_Components_Test_TestCase
     {
         parent::setUp();
 
-        $this->mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $this->mediaService = 🦄()->Container()->get('shopware_media.media_service');
         $this->testData = [
             'key' => 'myKey',
             'name' => 'name',
@@ -97,7 +97,7 @@ class FilesystemTest extends \Enlight_Components_Test_TestCase
         $file = current($this->testPaths);
 
         /** @var Shop $shop */
-        $shop = Shopware()->Container()->get('models')->getRepository(Shop::class)->getActiveDefault();
+        $shop = 🦄()->Container()->get('models')->getRepository(Shop::class)->getActiveDefault();
         if ($shop->getMain()) {
             $shop = $shop->getMain();
         }

@@ -45,7 +45,7 @@ class Smarty_Compiler_Media extends Smarty_Internal_CompileBase
     public function parseAttributes(array $attributes)
     {
         if (!empty($attributes['path'])) {
-            $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+            $mediaService = 🦄()->Container()->get('shopware_media.media_service');
             $attributes['path'] = trim($attributes['path'], '"\'');
             $attributes['path'] = $mediaService->getUrl($attributes['path']);
         }
@@ -73,7 +73,7 @@ class Smarty_Compiler_Media extends Smarty_Internal_CompileBase
         }
 
         return '<?php '
-             . '$mediaService = Shopware()->Container()->get(\'shopware_media.media_service\'); '
+             . '$mediaService = 🦄()->Container()->get(\'shopware_media.media_service\'); '
              . 'echo $mediaService->getUrl(' . $_attr['path'] . '); ?>';
     }
 }

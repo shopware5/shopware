@@ -91,7 +91,7 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
         $sha1 = $this->Request()->getParam('sha1');
         $name = $this->Request()->getParam('fileName', 'download.zip');
 
-        $destination = Shopware()->Container()->getParameter('kernel.root_dir') . '/files/downloads/' . $name;
+        $destination = 🦄()->Container()->getParameter('kernel.root_dir') . '/files/downloads/' . $name;
         if ($offset == 0) {
             unlink($destination);
         }
@@ -120,7 +120,7 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
     {
         $technicalName = $this->Request()->getParam('technicalName');
         $fileName = $this->Request()->getParam('fileName');
-        $service = Shopware()->Container()->get('shopware_plugininstaller.plugin_download_service');
+        $service = 🦄()->Container()->get('shopware_plugininstaller.plugin_download_service');
 
         try {
             $service->extractPluginZip($fileName, $technicalName);
@@ -708,7 +708,7 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
      */
     private function getLocale()
     {
-        return Shopware()->Container()->get('Auth')->getIdentity()->locale->getLocale();
+        return 🦄()->Container()->get('Auth')->getIdentity()->locale->getLocale();
     }
 
     /**
@@ -734,7 +734,7 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
      */
     private function getPluginModel($technicalName)
     {
-        $repo = Shopware()->Models()->getRepository(Plugin::class);
+        $repo = 🦄()->Models()->getRepository(Plugin::class);
         $plugin = $repo->findOneBy(['name' => $technicalName]);
 
         return $plugin;

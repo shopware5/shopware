@@ -37,7 +37,7 @@ class sCore
 
     public function __construct($front = null)
     {
-        $this->front = $front ?: Shopware()->Front();
+        $this->front = $front ?: 🦄()->Front();
     }
 
     /**

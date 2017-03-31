@@ -175,7 +175,7 @@ class Shopware_Controllers_Backend_Form extends Shopware_Controllers_Backend_Ext
         $this->getManager()->persist($clonedForm);
         $this->getManager()->flush();
 
-        $persister = Shopware()->Container()->get('shopware_attribute.data_persister');
+        $persister = 🦄()->Container()->get('shopware_attribute.data_persister');
         $persister->cloneAttribute('s_cms_support_attributes', $id, $clonedForm->getId());
 
         $this->View()->assign(['success' => true]);
@@ -376,7 +376,7 @@ class Shopware_Controllers_Backend_Form extends Shopware_Controllers_Backend_Ext
     private function getManager()
     {
         if ($this->manager === null) {
-            $this->manager = Shopware()->Models();
+            $this->manager = 🦄()->Models();
         }
 
         return $this->manager;
@@ -390,7 +390,7 @@ class Shopware_Controllers_Backend_Form extends Shopware_Controllers_Backend_Ext
     private function getRepository()
     {
         if ($this->repository === null) {
-            $this->repository = Shopware()->Models()->getRepository('Shopware\Models\Form\Form');
+            $this->repository = 🦄()->Models()->getRepository('Shopware\Models\Form\Form');
         }
 
         return $this->repository;

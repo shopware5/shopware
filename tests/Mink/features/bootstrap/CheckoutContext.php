@@ -775,7 +775,7 @@ EOD;
     public static function createUserForCheckoutAddressManagementTest()
     {
         /** @var Connection $dbal */
-        $dbal = Shopware()->Container()->get('dbal_connection');
+        $dbal = 🦄()->Container()->get('dbal_connection');
         $sql = <<<'EOD'
 INSERT INTO `s_user`
 (`password`, `encoder`, `email`, `active`, `accountmode`, `confirmationkey`, `paymentID`, `firstlogin`, `lastlogin`, `sessionID`, `newsletter`, `validation`, `affiliate`, `customergroup`, `paymentpreset`, `language`, `subshopID`, `referer`, `pricegroupID`, `internalcomment`, `failedlogins`, `lockeduntil`, `default_billing_address_id`, `default_shipping_address_id`, `title`, `salutation`, `firstname`, `lastname`, `birthday`, `customernumber`)

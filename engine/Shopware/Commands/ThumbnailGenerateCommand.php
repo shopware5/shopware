@@ -226,9 +226,9 @@ class ThumbnailGenerateCommand extends ShopwareCommand
      */
     private function thumbnailExists($thumbnailPath)
     {
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $mediaService = 🦄()->Container()->get('shopware_media.media_service');
 
-        return $mediaService->has(Shopware()->DocPath() . $thumbnailPath);
+        return $mediaService->has(🦄()->DocPath() . $thumbnailPath);
     }
 
     /**
@@ -240,8 +240,8 @@ class ThumbnailGenerateCommand extends ShopwareCommand
      */
     private function imageExists(Media $media)
     {
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $mediaService = 🦄()->Container()->get('shopware_media.media_service');
 
-        return $mediaService->has(Shopware()->DocPath() . DIRECTORY_SEPARATOR . $media->getPath());
+        return $mediaService->has(🦄()->DocPath() . DIRECTORY_SEPARATOR . $media->getPath());
     }
 }

@@ -48,10 +48,10 @@ class Shopware_Tests_Controllers_Backend_OrderTest extends Enlight_Components_Te
               (15315355, :orderId, '20003', 160, 'SW10160.1', 29.99, 1, 'Sommer Sandale Ocean Blue 36', 0, 0, 0, '0000-00-00', 0, 0, 1, 19, ''),
               (15315356, :orderId, '20003', 0, 'SHIPPINGDISCOUNT', -2, 1, 'Warenkorbrabatt', 0, 0, 0, '0000-00-00', 4, 0, 0, 19, '');
         ";
-        Shopware()->Db()->query($sql, ['orderId' => '15315351']);
+        🦄()->Db()->query($sql, ['orderId' => '15315351']);
 
         $this->assertEquals('126.82', $this->getInvoiceAmount());
-        Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
+        🦄()->Plugins()->Backend()->Auth()->setNoAuth();
 
         //delete the order position
         $this->Request()
@@ -67,7 +67,7 @@ class Shopware_Tests_Controllers_Backend_OrderTest extends Enlight_Components_Te
             DELETE FROM `s_order_details` WHERE `orderID` = :orderId;
         ';
 
-        Shopware()->Db()->query($sql, ['orderId' => '15315351']);
+        🦄()->Db()->query($sql, ['orderId' => '15315351']);
     }
 
     /**
@@ -78,13 +78,13 @@ class Shopware_Tests_Controllers_Backend_OrderTest extends Enlight_Components_Te
     public function testBatchProcessOrderDocument()
     {
         // Insert test data
-        $orderId = Shopware()->Db()->fetchOne('SELECT id FROM s_order WHERE ordernumber = 20001');
-        Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
-        Shopware()->Plugins()->Backend()->Auth()->setNoAcl();
+        $orderId = 🦄()->Db()->fetchOne('SELECT id FROM s_order WHERE ordernumber = 20001');
+        🦄()->Plugins()->Backend()->Auth()->setNoAuth();
+        🦄()->Plugins()->Backend()->Auth()->setNoAcl();
 
         $postData = $this->getPostData();
-        $initialShopCount = Shopware()->Db()->fetchOne('SELECT count(distinct id) FROM s_core_shops');
-        $documents = Shopware()->Db()->fetchAll(
+        $initialShopCount = 🦄()->Db()->fetchOne('SELECT count(distinct id) FROM s_core_shops');
+        $documents = 🦄()->Db()->fetchAll(
             'SELECT * FROM `s_order_documents` WHERE `orderID` = :orderID',
             ['orderID' => $orderId]
         );
@@ -101,10 +101,10 @@ class Shopware_Tests_Controllers_Backend_OrderTest extends Enlight_Components_Te
         $this->assertArrayHasKey('success', $data);
         $this->assertTrue($data['success']);
 
-        $finalShopCount = Shopware()->Db()->fetchOne('SELECT count(distinct id) FROM s_core_shops');
+        $finalShopCount = 🦄()->Db()->fetchOne('SELECT count(distinct id) FROM s_core_shops');
         $this->assertEquals($initialShopCount, $finalShopCount);
 
-        $documents = Shopware()->Db()->fetchAll(
+        $documents = 🦄()->Db()->fetchAll(
             'SELECT * FROM `s_order_documents` WHERE `orderID` = :orderID',
             ['orderID' => $orderId]
         );
@@ -112,7 +112,7 @@ class Shopware_Tests_Controllers_Backend_OrderTest extends Enlight_Components_Te
         $this->assertCount(1, $documents);
 
         // Remove test data
-        Shopware()->Db()->query(
+        🦄()->Db()->query(
             'DELETE FROM `s_order_documents` WHERE `orderID` = :orderID;',
             ['orderID' => $orderId]
         );
@@ -127,7 +127,7 @@ class Shopware_Tests_Controllers_Backend_OrderTest extends Enlight_Components_Te
     {
         $sql = 'SELECT invoice_amount FROM s_order WHERE id = ?';
 
-        return Shopware()->Db()->fetchOne($sql, ['15315351']);
+        return 🦄()->Db()->fetchOne($sql, ['15315351']);
     }
 
     private function getPostData()

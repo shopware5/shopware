@@ -228,8 +228,8 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
      */
     private function getProductSliderData($category, $offset, $limit, $sort = null)
     {
-        $context = Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext();
-        $factory = Shopware()->Container()->get('shopware_search.store_front_criteria_factory');
+        $context = 🦄()->Container()->get('shopware_storefront.context_service')->getShopContext();
+        $factory = 🦄()->Container()->get('shopware_search.store_front_criteria_factory');
         $criteria = $factory->createBaseCriteria([$category], $context);
 
         $criteria->offset($offset)
@@ -251,8 +251,8 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         }
 
         /** @var $result ProductSearchResult */
-        $result = Shopware()->Container()->get('shopware_search.product_search')->search($criteria, $context);
-        $data = Shopware()->Container()->get('legacy_struct_converter')->convertListProductStructList($result->getProducts());
+        $result = 🦄()->Container()->get('shopware_search.product_search')->search($criteria, $context);
+        $data = 🦄()->Container()->get('legacy_struct_converter')->convertListProductStructList($result->getProducts());
 
         $count = $result->getTotalCount();
         if ($limit != 0) {
@@ -270,8 +270,8 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
 
     private function getProductStream($productStreamId, $offset = 0, $limit = 100)
     {
-        $context = Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext();
-        $factory = Shopware()->Container()->get('shopware_search.store_front_criteria_factory');
+        $context = 🦄()->Container()->get('shopware_storefront.context_service')->getShopContext();
+        $factory = 🦄()->Container()->get('shopware_search.store_front_criteria_factory');
 
         $category = $context->getShop()->getCategory()->getId();
         $criteria = $factory->createBaseCriteria([$category], $context);
@@ -283,8 +283,8 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         $streamRepository->prepareCriteria($criteria, $productStreamId);
 
         /** @var $result ProductSearchResult */
-        $result = Shopware()->Container()->get('shopware_search.product_search')->search($criteria, $context);
-        $data = Shopware()->Container()->get('legacy_struct_converter')->convertListProductStructList($result->getProducts());
+        $result = 🦄()->Container()->get('shopware_search.product_search')->search($criteria, $context);
+        $data = 🦄()->Container()->get('legacy_struct_converter')->convertListProductStructList($result->getProducts());
 
         $count = $result->getTotalCount();
 

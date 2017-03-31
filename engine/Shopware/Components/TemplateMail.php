@@ -159,7 +159,7 @@ class Shopware_Components_TemplateMail
         }
 
         //todo@all Add setter and getter like the shop
-        $config = Shopware()->Config();
+        $config = 🦄()->Config();
 
         if ($this->getShop() !== null) {
             $defaultContext = [
@@ -185,7 +185,7 @@ class Shopware_Components_TemplateMail
 
         $this->getStringCompiler()->setContext(array_merge($defaultContext, $context));
 
-        $mail = clone Shopware()->Container()->get('mail');
+        $mail = clone 🦄()->Container()->get('mail');
 
         return $this->loadValues($mail, $mailModel, $overrideConfig);
     }
@@ -242,9 +242,9 @@ class Shopware_Components_TemplateMail
                 continue;
             }
 
-            $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+            $mediaService = 🦄()->Container()->get('shopware_media.media_service');
             if (!$mediaService->has($attachment->getPath())) {
-                Shopware()->Container()->get('corelogger')->error('Could not load file: ' . $attachment->getPath());
+                🦄()->Container()->get('corelogger')->error('Could not load file: ' . $attachment->getPath());
             } else {
                 $fileAttachment = $mail->createAttachment($mediaService->read($attachment->getPath()));
                 $fileAttachment->filename = $attachment->getFileName();

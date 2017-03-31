@@ -78,7 +78,7 @@ class Shopware_Plugins_Frontend_Seo_Bootstrap extends Shopware_Components_Plugin
             return;
         }
 
-        $config = Shopware()->Config();
+        $config = 🦄()->Config();
 
         /** @var $mapper QueryAliasMapper */
         $mapper = $this->get('query_alias_mapper');
@@ -121,7 +121,7 @@ class Shopware_Plugins_Frontend_Seo_Bootstrap extends Shopware_Components_Plugin
                 unset($queryBlacklist[$index]);
             }
 
-            if ($request->getQuery('sCategory') !== Shopware()->Shop()->getCategory()->getId()) {
+            if ($request->getQuery('sCategory') !== 🦄()->Shop()->getCategory()->getId()) {
                 $queryBlacklist[] = 'sCategory';
                 if (array_key_exists('sCategory', $alias)) {
                     $queryBlacklist[] = $alias['sCategory'];
@@ -165,7 +165,7 @@ class Shopware_Plugins_Frontend_Seo_Bootstrap extends Shopware_Components_Plugin
             return $source;
         }
 
-        $config = Shopware()->Config();
+        $config = 🦄()->Config();
 
         // Remove comments
         if (!empty($config['sSEOREMOVECOMMENTS'])) {

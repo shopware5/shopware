@@ -168,7 +168,7 @@ class Shopware_Controllers_Backend_Site extends Shopware_Controllers_Backend_Ext
 
         try {
             //first, get an array containing all sites id and grouping
-            $sites = Shopware()->Db()->fetchAssoc('SELECT id,grouping FROM s_cms_static');
+            $sites = 🦄()->Db()->fetchAssoc('SELECT id,grouping FROM s_cms_static');
 
             //check is associated with the requested group
             //if so, either just delete it or, if the site would become an orphan, move it to the group gDisabled
@@ -182,7 +182,7 @@ class Shopware_Controllers_Backend_Site extends Shopware_Controllers_Backend_Ext
                 //if the current site is associated with the requested group and has no other groups
                 if (in_array($key, $groups) && count($groups) == 1) {
                     //set group to gDisabled to prevent orphanage
-                    Shopware()->Db()->query('UPDATE s_cms_static SET grouping = ? WHERE id = ?',
+                    🦄()->Db()->query('UPDATE s_cms_static SET grouping = ? WHERE id = ?',
                         ['gDisabled', $site['id']]);
                 } //if the current site is associated with the requested group and does have other associations
                 else {
@@ -193,7 +193,7 @@ class Shopware_Controllers_Backend_Site extends Shopware_Controllers_Backend_Ext
 
                         //update the table
                         $sql = 'UPDATE s_cms_static SET grouping = ? WHERE id = ?';
-                        Shopware()->Db()->query($sql, [$site['grouping'], $site['id']]);
+                        🦄()->Db()->query($sql, [$site['grouping'], $site['id']]);
                     }
                 }
             }
@@ -227,7 +227,7 @@ class Shopware_Controllers_Backend_Site extends Shopware_Controllers_Backend_Ext
                 //set the parentID of all children to 0
                 //we don't want orphans
                 $sql = 'UPDATE s_cms_static SET parentID = 0 WHERE parentID = ?';
-                Shopware()->Db()->query($sql, [$siteId]);
+                🦄()->Db()->query($sql, [$siteId]);
 
                 //hand siteId to view
                 $this->View()->assign(['success' => true, 'data' => $siteId]);
@@ -383,7 +383,7 @@ class Shopware_Controllers_Backend_Site extends Shopware_Controllers_Backend_Ext
     private function getSiteRepository()
     {
         if ($this->siteRepository === null) {
-            $this->siteRepository = Shopware()->Models()->getRepository('Shopware\Models\Site\Site');
+            $this->siteRepository = 🦄()->Models()->getRepository('Shopware\Models\Site\Site');
         }
 
         return $this->siteRepository;
@@ -397,7 +397,7 @@ class Shopware_Controllers_Backend_Site extends Shopware_Controllers_Backend_Ext
     private function getManager()
     {
         if ($this->manager === null) {
-            $this->manager = Shopware()->Models();
+            $this->manager = 🦄()->Models();
         }
 
         return $this->manager;
