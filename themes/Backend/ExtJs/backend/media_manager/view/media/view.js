@@ -47,14 +47,19 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
     createInfoPanel: true,
     createDeleteButton: true,
     createMediaQuantitySelection: true,
+    thumbnailSize: 70,
+    /**
+     * Button section
+     */
     deleteBtn: null,
+    displayTypeBtn: null,
     selectedLayout: 'grid',
-
     snippets: {
         noMediaFound: '{s name=noMediaFound}No Media found{/s}',
         uploadDataDragDrop: '{s name=uploadDataDragDrop}Upload your Data via <strong>Drag & Drop</strong> here{/s}',
         noAdditionalInfo: '{s name=noAdditionalInfo}No additional informations found{/s}',
         moreInfoTitle:'{s name=moreInfoTitle}More information{/s}',
+        previewSize: '{s name=previewSizeFieldLabel}Preview size{/s}',
         mediaInfo: {
             name: '{s name=mediaInfo/name}Name:{/s}',
             uploadedon: '{s name=mediaInfo/uploadedOn}Uploaded on:{/s}',
@@ -99,25 +104,28 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
             proxy.extraParams.validTypes = me.setValidTypes();
         }
 
+        me.mediaViewContainer = Ext.create('Ext.container.Container', {
+            style: 'overflow-y: scroll',
+            items: [
+                /* {if {acl_is_allowed privilege=upload}} */
+                me.createDropZone(),
+                /* {/if} */
+            ]
+        });
+
         me.cardContainer = Ext.create('Ext.panel.Panel', {
             layout: 'card',
             activeItem: 0,
             region: 'center',
             unstyled: true,
             style: 'background: #fff',
-            items: [{
-                xtype: 'container',
-                style: 'overflow-y: scroll',
-                items: [
-                /* {if {acl_is_allowed privilege=upload}} */
-                    me.createDropZone(),
-                /* {/if} */
-                    me.createMediaView()
-                ]
-            }, {
-                xtype: 'mediamanager-media-grid',
-                mediaStore: me.mediaStore
-            }]
+            items: [
+                me.mediaViewContainer,
+                {
+                    xtype: 'mediamanager-media-grid',
+                    mediaStore: me.mediaStore
+                }
+            ]
         });
 
         // Create the items of the container
@@ -161,21 +169,25 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
      * @return [object] generated Ext.XTemplate
      */
     createMediaViewTemplate: function() {
+        var me = this,
+            tSize = me.thumbnailSize,
+            tStyle = Ext.String.format('style="width:[0]px;height:[0]px;"',tSize),
+            imgStyle = Ext.String.format('style="max-width:[0]px;max-height:[0]px"',tSize-2);
+
         return new Ext.XTemplate(
             '{literal}<tpl for=".">',
-                '<div class="thumb-wrap" id="{name}">',
-
+                Ext.String.format('<div class="thumb-wrap" id="{name}" [0]>',tStyle),
                 // If the type is image, then show the image
                 '<tpl if="type == &quot;IMAGE&quot;">',
-                '<div class="thumb">',
-                    '<div class="inner-thumb"><img src="{thumbnail}" title="{name}" /></div>',
+                Ext.String.format('<div class="thumb" [0]>',tStyle),
+                Ext.String.format('<div class="inner-thumb" [0]>',tStyle),
+                Ext.String.format('<img src="{thumbnail}" title="{name}" [0] /></div>',imgStyle),
                 '</div>',
                 '</tpl>',
-
                 // All other types should render an icon
                 '<tpl if="type != &quot;IMAGE&quot;">',
-                    '<div class="thumb icon">',
-                        '<div class="icon-{[values.type.toLowerCase()]}">&nbsp;</div>',
+                Ext.String.format('<div class="thumb icon" [0]>',tStyle),
+                '<div class="icon-{[values.type.toLowerCase()]}">&nbsp;</div>',
                     '</div>',
                 '</tpl>',
                 '<span class="x-editable">{[Ext.util.Format.ellipsis(values.name, 9)]}.{extension}</span></div>',
@@ -487,9 +499,13 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
         }
         /* {/if} */
 
-        toolbar.add({
+        /**
+         * Initialize the display type button
+         */
+
+        me.displayTypeBtn = Ext.create('Ext.button.Cycle',{
+
             showText: true,
-            xtype: 'cycle',
             prependText: '{s name=toolbar/view}Display as{/s} ',
             action: 'mediamanager-media-view-layout',
             menu: {
@@ -505,6 +521,8 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
                 }]
             }
         });
+
+        toolbar.add(me.displayTypeBtn);
 
         toolbar.add(
             '->',
@@ -528,6 +546,7 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
             labelWidth: 110,
             cls: Ext.baseCSSPrefix + 'page-size',
             queryMode: 'local',
+            action: 'perPageComboBox',
             width: 210,
             listeners: {
                 scope: me,
@@ -549,6 +568,7 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
             displayField: 'name',
             valueField: 'value'
         });
+
         pageSize.setValue(me.mediaStore.pageSize + '');
 
         var toolbar = Ext.create('Ext.toolbar.Paging', {
@@ -559,6 +579,8 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
             toolbar.add('->', pageSize, { xtype: 'tbspacer', width: 6 });
         }
 
+        me.pageSize = pageSize;
+
         // Create the data for the preview image size
         var imageSizeData = [], i = 1;
         for( ; i < 9; i++) {
@@ -568,11 +590,11 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
 
         // Preview image size selection, especially for the list view
         me.imageSize = Ext.create('Ext.form.field.ComboBox', {
-            fieldLabel: 'Preview-Größe',
+            fieldLabel: me.snippets.previewSize,
             queryMode: 'local',
             labelWidth: 90,
             width: 190,
-            hidden: true,
+            hidden: false,
             displayField: 'name',
             valueField: 'value',
             store: Ext.create('Ext.data.Store', {
@@ -650,6 +672,7 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
      * @return void
      */
     onChangeMediaQuantity: function(combo, records) {
+
         var record = records[0],
             me = this;
 
