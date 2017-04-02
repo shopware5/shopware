@@ -25,8 +25,7 @@
 namespace Shopware\Components;
 
 use Enlight\Event\SubscriberInterface;
-use Enlight_Components_Session_Namespace as Session;
-use Enlight_Controller_ActionEventArgs as ActionEventArgs;
+use Enlight_Event_EventArgs as EventArgs;
 use Shopware\Components\DependencyInjection\Container;
 
 /**
@@ -93,11 +92,11 @@ class CSRFTokenValidator implements SubscriberInterface
     }
 
     /**
-     * @param ActionEventArgs $args
+     * @param EventArgs $args
      *
      * @throws CSRFTokenValidationException
      */
-    public function checkBackendTokenValidation(ActionEventArgs $args)
+    public function checkBackendTokenValidation(EventArgs $args)
     {
         if (!$this->isEnabledBackend) {
             return;

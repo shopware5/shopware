@@ -298,6 +298,7 @@ did not work anymore because the smarty rendering is off. The string {$offerPosi
 * Deprecated `\Shopware_Controllers_Widgets_Listing::ajaxListingAction`, use `\Shopware_Controllers_Widgets_Listing::listingCountAction` instead
 * Deprecated method `sArticles::sGetAffectedSuppliers()` without replacement, to be removed with 5.5
 * Deprecated `Shopware\Models\Article\Element`, to be removed with 6.0
+* Deprecated `Enlight_Controller_ActionEventArgs` use `Enlight_Event_EventArgs` instead, to be removed with 5.4
 
 ### Backend Components
 

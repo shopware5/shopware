@@ -66,9 +66,9 @@ class LastArticlesSubscriber implements SubscriberInterface
     }
 
     /**
-     * @param \Enlight_Controller_ActionEventArgs $args
+     * @param \Enlight_Event_EventArgs $args
      */
-    public function onRefreshStatistics(\Enlight_Controller_ActionEventArgs $args)
+    public function onRefreshStatistics(\Enlight_Event_EventArgs $args)
     {
         $request = $args->getRequest();
 
@@ -86,9 +86,9 @@ class LastArticlesSubscriber implements SubscriberInterface
     }
 
     /**
-     * @param \Enlight_Controller_ActionEventArgs $args
+     * @param \Enlight_Event_EventArgs $args
      */
-    public function onPostDispatch(\Enlight_Controller_ActionEventArgs $args)
+    public function onPostDispatch(\Enlight_Event_EventArgs $args)
     {
         $this->cleanupLastArticles();
         $config = $this->container->get('config');

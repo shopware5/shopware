@@ -124,7 +124,7 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
      */
     public function dispatch($action)
     {
-        $args = new Enlight_Controller_ActionEventArgs(array(
+        $args = new Enlight_Event_EventArgs(array(
             'subject'  => $this,
             'request'  => $this->Request(),
             'response' => $this->Response()

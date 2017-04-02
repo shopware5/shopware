@@ -18,6 +18,7 @@
  * @package    Enlight_Controller
  * @copyright  Copyright (c) 2013, shopware AG (http://www.shopware.de)
  * @license    http://enlight.de/license     New BSD License
+ * @deprecated since 5.3, to be removed with 5.4, use \Enlight_Event_EventArgs instead
  */
 class Enlight_Controller_ActionEventArgs extends Enlight_Event_EventArgs
 {
