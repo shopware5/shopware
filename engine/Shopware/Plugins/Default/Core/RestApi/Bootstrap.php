@@ -21,6 +21,8 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+use ShopwarePlugins\RestApi\Components\BasicAuthResolver;
+use ShopwarePlugins\RestApi\Components\StaticResolver;
 
 /**
  * @category  Shopware
@@ -177,14 +179,18 @@ class Shopware_Plugins_Core_RestApi_Bootstrap extends Shopware_Components_Plugin
         }
 
         $adapter = new Zend_Auth_Adapter_Http([
-            'accept_schemes' => 'digest',
+            'accept_schemes' => 'basic digest',
             'realm' => 'Shopware REST-API',
             'digest_domains' => '/',
             'nonce_timeout' => 3600,
         ]);
 
+        $adapter->setBasicResolver(new BasicAuthResolver(
+            $this->get('models')
+        ));
+
         $adapter->setDigestResolver(
-            new \ShopwarePlugins\RestApi\Components\StaticResolver(
+            new StaticResolver(
                 $this->get('models')
             )
         );

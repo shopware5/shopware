@@ -106,6 +106,7 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Added new route `Shopware_Controllers_Frontend_Listing::listingAction` which loads the category product listing.This route is called over {action ..} in case that the category contains an emotion with customer streams
 * Added new entity `Shopware\Models\Customer\CustomerStream` for attribute single and multi selection.
 * Added new components for customer stream handling in `Shopware\Components\CustomerStream`
+* Added basic auth support for rest api
 
 ### Changes
 
