@@ -26,6 +26,7 @@ namespace Shopware\Bundle\MediaBundle\Commands;
 
 use Shopware\Bundle\MediaBundle\Exception\OptimizerNotFoundException;
 use Shopware\Bundle\MediaBundle\Optimizer\OptimizerInterface;
+use Shopware\Bundle\MediaBundle\OptimizerServiceInterface;
 use Shopware\Commands\ShopwareCommand;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Helper\Table;
@@ -64,6 +65,12 @@ class MediaOptimizeCommand extends ShopwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $optimizerService = $this->getContainer()->get('shopware_media.optimizer_service');
+
+        if ($this->hasRunnableOptimizer() === false) {
+            $output->writeln('<error>No runnable optimizer found. Consider installing one of the following optimizers.</error>');
+            $this->displayCapabilities($output, $optimizerService->getOptimizers());
+            return;
+        }
 
         if ($input->getOption('info')) {
             $this->displayCapabilities($output, $optimizerService->getOptimizers());
@@ -140,5 +147,21 @@ class MediaOptimizeCommand extends ShopwareCommand
         }
 
         return $finder;
+    }
+
+    /**
+     * @return bool
+     */
+    private function hasRunnableOptimizer()
+    {
+        $optimizerService = $this->getContainer()->get('shopware_media.optimizer_service');
+        
+        foreach ($optimizerService->getOptimizers() as $optimizer) {
+            if ($optimizer->isRunnable()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
