@@ -445,7 +445,7 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
             return true;
         }
         $path = $this->getControllerPath($request);
-        return Enlight_Loader::isReadable($path) || class_exists($path);
+        return class_exists($path) || Enlight_Loader::isReadable($path);
     }
 
     /**
