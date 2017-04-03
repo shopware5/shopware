@@ -48,7 +48,7 @@ Ext.define('Shopware.apps.Emotion.view.presets.List', {
                 xtype: 'image',
                 width: 793,
                 style: 'cursor: pointer;',
-                src: '{link file="themes/Backend/ExtJs/backend/_resources/resources/themes/images/shopware-ui/emotion_preset_teaser.png"}',
+                src: Ext.String.format('{link file="themes/Backend/ExtJs/backend/_resources/resources/themes/images/shopware-ui/emotion_preset_teaser_[0].png"}', Ext.userLanguage !== 'de' ? 'en' : Ext.userLanguage),
                 listeners: {
                     boxready: function(cmp) {
                         cmp.el.on('click', function() {
