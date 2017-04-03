@@ -231,7 +231,6 @@ class Article extends ModelEntity
      * @Assert\Valid
      *
      * @var \Shopware\Models\Tax\Tax $tax
-
      * @ORM\OneToOne(targetEntity="Shopware\Models\Tax\Tax")
      * @ORM\JoinColumn(name="taxID", referencedColumnName="id")
      */

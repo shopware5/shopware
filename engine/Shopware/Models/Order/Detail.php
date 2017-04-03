@@ -84,8 +84,7 @@ class Detail extends ModelEntity
      * @Assert\NotBlank
      *
      * @var float $taxRate
-     *
-      @ORM\Column(name="tax_rate", type="float", nullable=false)
+     * @ORM\Column(name="tax_rate", type="float", nullable=false)
      */
     private $taxRate;
 
