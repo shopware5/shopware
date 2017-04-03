@@ -41,6 +41,6 @@ class StatisticsTracerCompilerPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        $this->replaceArgumentWithTaggedServices($container, 'shopware.statistic.tracer', 'shopware.statistic.tracer', 0);
+        $this->replaceArgumentWithTaggedServices($container, 'shopware.statistic.registry', 'shopware.statistic.tracer', 0);
     }
 }
