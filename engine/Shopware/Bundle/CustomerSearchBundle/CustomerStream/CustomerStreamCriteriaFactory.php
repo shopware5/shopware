@@ -25,8 +25,8 @@
 namespace Shopware\Bundle\CustomerSearchBundle\CustomerStream;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Bundle\CustomerSearchBundle\Criteria;
-use Shopware\Bundle\SearchBundle\ConditionInterface;
+use Shopware\Bundle\SearchBundle\Criteria;
+use Shopware\Components\LogawareReflectionHelper;
 use Shopware\Components\ReflectionHelper;
 
 class CustomerStreamCriteriaFactory
@@ -37,11 +37,18 @@ class CustomerStreamCriteriaFactory
     private $connection;
 
     /**
-     * @param Connection $connection
+     * @var LogawareReflectionHelper
      */
-    public function __construct(Connection $connection)
+    private $reflectionHelper;
+
+    /**
+     * @param Connection               $connection
+     * @param LogawareReflectionHelper $reflectionHelper
+     */
+    public function __construct(Connection $connection, LogawareReflectionHelper $reflectionHelper)
     {
         $this->connection = $connection;
+        $this->reflectionHelper = $reflectionHelper;
     }
 
     /**
@@ -60,8 +67,9 @@ class CustomerStreamCriteriaFactory
             throw new \RuntimeException(sprintf('Stream %s has no conditions', $stream['name']));
         }
 
-        $conditions = $this->unserialize(
-            json_decode($stream['conditions'], true)
+        $conditions = $this->reflectionHelper->unserialize(
+            json_decode($stream['conditions'], true),
+            sprintf('Error while unserialize stream conditions')
         );
 
         $criteria = new Criteria();
@@ -87,24 +95,5 @@ class CustomerStreamCriteriaFactory
         $query->setParameter(':id', $streamId);
 
         return $query->execute()->fetch(\PDO::FETCH_ASSOC);
-    }
-
-    /**
-     * @param array $conditions
-     *
-     * @return ConditionInterface[]
-     */
-    private function unserialize(array $conditions)
-    {
-        $reflector = new ReflectionHelper();
-
-        $classes = [];
-        foreach ($conditions as $className => $arguments) {
-            $className = explode('|', $className);
-            $className = $className[0];
-            $classes[] = $reflector->createInstanceFromNamedArguments($className, $arguments);
-        }
-
-        return $classes;
     }
 }

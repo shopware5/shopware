@@ -1,3 +1,4 @@
+<?php
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -21,27 +22,23 @@
  * our trademarks remain entirely with us.
  */
 
-//{namespace name="backend/customer_stream/translation"}
+namespace Shopware\Bundle\CustomerSearchBundle;
 
-Ext.define('Shopware.apps.CustomerStream.view.detail.CustomerStream', {
-    extend: 'Shopware.model.Container',
-    alias: 'widget.custom-stream-details',
+use Shopware\Bundle\SearchBundle\FacetInterface;
+use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 
-    configure: function() {
-        return {
-            controller: 'CustomerStream',
-            fieldSets: [{
-                title: null,
-                fields: {
-                    name: {
-                        allowBlank: false,
-                        fieldLabel: '{s name="name"}{/s}'
-                    },
-                    description: {
-                        fieldLabel: '{s name="description"}{/s}'
-                    }
-                }
-            }]
-        };
-    }
-});
+interface FacetHandlerInterface
+{
+    /**
+     * @param FacetInterface $facet
+     *
+     * @return bool
+     */
+    public function supports(FacetInterface $facet);
+
+    /**
+     * @param FacetInterface $facet
+     * @param QueryBuilder       $query
+     */
+    public function handle(FacetInterface $facet, QueryBuilder $query);
+}

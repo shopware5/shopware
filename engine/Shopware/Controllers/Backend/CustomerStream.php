@@ -22,11 +22,12 @@
  * our trademarks remain entirely with us.
  */
 
-use Shopware\Bundle\CustomerSearchBundle\Criteria;
+use Doctrine\DBAL\Connection;
 use Shopware\Bundle\CustomerSearchBundle\CustomerNumberRow;
 use Shopware\Bundle\CustomerSearchBundle\CustomerStream\CustomerStreamCriteriaFactory;
 use Shopware\Bundle\CustomerSearchBundle\CustomerStream\StreamIndexer;
-use Shopware\Components\ReflectionHelper;
+use Shopware\Bundle\SearchBundle\Criteria;
+use Shopware\Bundle\SearchBundle\Sorting\SimpleSorting;
 use Shopware\Models\Customer\CustomerStream;
 
 class Shopware_Controllers_Backend_CustomerStream extends Shopware_Controllers_Backend_Application
@@ -38,7 +39,6 @@ class Shopware_Controllers_Backend_CustomerStream extends Shopware_Controllers_B
     public function delete($id)
     {
         $success = parent::delete($id);
-
         $this->get('dbal_connection')->executeQuery(
             'DELETE FROM s_customer_streams_mapping WHERE stream_id = :id',
             [':id' => $id]
@@ -65,7 +65,7 @@ class Shopware_Controllers_Backend_CustomerStream extends Shopware_Controllers_B
 
         $criteria->offset($offset)
             ->limit(self::INDEXING_LIMIT)
-            ->setFetchTotal(false);
+            ->setFetchCount(false);
 
         if ($criteria->getOffset() === 0) {
             $indexer->clearStreamIndex($streamId);
@@ -113,18 +113,14 @@ class Shopware_Controllers_Backend_CustomerStream extends Shopware_Controllers_B
         ]);
     }
 
-    public function getLastFullIndexTimeAction()
-    {
-        $time = $this->getLastIndexTime();
-        $this->View()->assign('last_index_time', $time);
-    }
-
     public function buildSearchIndexAction()
     {
         $total = (int) $this->Request()->getParam('total');
         $iteration = (int) $this->Request()->getParam('iteration', 1);
         $offset = ($iteration - 1) * self::INDEXING_LIMIT;
         $handled = $offset + self::INDEXING_LIMIT;
+
+        $indexer = Shopware()->Container()->get('shopware_bundle_customer_search.customer_stream.search_indexer');
 
         /** @var \Doctrine\DBAL\Query\QueryBuilder $query */
         $query = $this->get('dbal_connection')->createQueryBuilder();
@@ -133,6 +129,8 @@ class Shopware_Controllers_Backend_CustomerStream extends Shopware_Controllers_B
         $query->orderBy('id');
 
         $lastIndex = $this->Request()->getParam('lastIndexTime');
+
+        //partial update for last x days
         if ($lastIndex) {
             $query->where('user.firstlogin >= :lastIndex');
             $query->setParameter(':lastIndex', $lastIndex);
@@ -141,16 +139,16 @@ class Shopware_Controllers_Backend_CustomerStream extends Shopware_Controllers_B
             $query->andWhere('user.id <= :maxId');
             $query->setParameter(':lastId', $offset);
             $query->setParameter(':maxId', $handled);
+
+            if ($offset === 0) {
+                $indexer->clearIndex();
+            }
         }
 
         $query->setMaxResults(self::INDEXING_LIMIT);
 
         $ids = $query->execute()->fetchAll(PDO::FETCH_COLUMN);
 
-        $indexer = Shopware()->Container()->get('shopware_bundle_customer_search.customer_stream.search_indexer');
-        if ($offset === 0) {
-            $indexer->clearIndex();
-        }
         $indexer->populate($ids);
 
         if ($handled >= $total) {
@@ -170,6 +168,12 @@ class Shopware_Controllers_Backend_CustomerStream extends Shopware_Controllers_B
             'text' => sprintf('Analysiere %s von %s Kunden', $handled, $total),
             'progress' => $handled / $total,
         ]);
+    }
+
+    public function getLastFullIndexTimeAction()
+    {
+        $time = $this->getLastIndexTime();
+        $this->View()->assign('last_index_time', $time);
     }
 
     public function getCustomerCountAction()
@@ -195,33 +199,43 @@ class Shopware_Controllers_Backend_CustomerStream extends Shopware_Controllers_B
             $conditions = $stream['data']['conditions'];
         }
 
-        if ($conditions !== null) {
-            $conditions = json_decode($conditions, true);
-        } else {
-            $conditions = [];
-        }
+        $conditions = $conditions === null ? [] : json_decode($conditions, true);
 
         $criteria = $this->createCriteria($conditions);
+        $criteria->offset((int) $request->getParam('start', 0));
+        $criteria->limit((int) $request->getParam('limit', 50));
 
-        $criteria->offset(
-            (int) $request->getParam('start', 0)
-        );
-        $criteria->limit(
-            (int) $request->getParam('limit', 50)
-        );
+        $sortings = $request->getParam('sort', []);
+        foreach ($sortings as $sorting) {
+            $criteria->addSorting(
+                new SimpleSorting(
+                    $sorting['property'],
+                    $sorting['direction']
+                )
+            );
+        }
 
         /** @var \Shopware\Bundle\CustomerSearchBundle\CustomerNumberSearch $numberSearch */
         $numberSearch = $this->get('shopware_customer_search.customer_number_search');
 
         $result = $numberSearch->search($criteria);
 
-        $data = array_map(function (CustomerNumberRow $row) {
-            $data = $row->getAttribute('search')->toArray();
-            $data['interests'] = json_decode($data['interests'], true);
-            $data['newest_interests'] = json_decode($data['newest_interests'], true);
+        $streams = $this->fetchStreamsForCustomers($result->getIds());
 
-            return $data;
-        }, $result->getRows());
+        $data = [];
+        /** @var CustomerNumberRow $row */
+        foreach ($result->getRows() as $row) {
+            $dataRow = $row->getAttribute('search')->toArray();
+
+            $dataRow['interests'] = json_decode($dataRow['interests'], true);
+
+            $dataRow['streams'] = [];
+            if (array_key_exists($row->getId(), $streams)) {
+                $dataRow['streams'] = $streams[$row->getId()];
+            }
+
+            $data[] = $dataRow;
+        }
 
         $this->View()->assign([
             'success' => true,
@@ -232,38 +246,12 @@ class Shopware_Controllers_Backend_CustomerStream extends Shopware_Controllers_B
 
     public function loadChartAction()
     {
-        /** @var \Doctrine\DBAL\Query\QueryBuilder $query */
-        $query = $this->get('dbal_connection')->createQueryBuilder();
-        $query->select([
-            "DATE_FORMAT(orders.ordertime, '%Y/%m')",
-            "DATE_FORMAT(orders.ordertime, '%Y/%m') as yearMonth",
-            'COUNT(DISTINCT orders.id) count_orders',
-            'ROUND(SUM(orders.invoice_amount), 2) as invoice_amount_sum',
-            'ROUND(AVG(orders.invoice_amount), 2) as invoice_amount_avg',
-            'MIN(orders.invoice_amount) as invoice_amount_min',
-            'MAX(orders.invoice_amount) as invoice_amount_max',
-            'MIN(orders.ordertime) as first_order_time',
-            'MAX(orders.ordertime) as last_order_time',
-            'ROUND(AVG(details.price), 2) as product_avg',
-        ]);
-
         $date = (new \DateTime())->sub(new \DateInterval('P' . (int) 12 . 'M'));
         $now = new DateTime();
 
-        $query->from('s_order', 'orders');
-        $query->innerJoin('orders', 's_order_details', 'details', 'details.orderID = orders.id AND details.modus = 0');
-        $query->andWhere('orders.status != :cancelStatus');
-        $query->andWhere('orders.ordernumber IS NOT NULL');
-        $query->andWhere('orders.ordertime >= :orderTime');
-        $query->andWhere('orders.ordernumber != 0');
-        $query->setParameter(':cancelStatus', -1);
-        $query->setParameter(':orderTime', $date->format('Y-m'));
-        $query->groupBy("DATE_FORMAT(orders.ordertime,'%Y-%m')");
+        $streamId = $this->Request()->getParam('streamId');
 
-        if ($streamId = $this->Request()->getParam('streamId')) {
-            $query->innerJoin('orders', 's_customer_streams_mapping', 'stream', 'stream.customer_id = orders.userID AND stream.stream_id = :streamId');
-            $query->setParameter(':streamId', $streamId);
-        }
+        $query = $this->createStreamAmountQuery($date, $streamId);
 
         $data = $query->execute()->fetchAll(PDO::FETCH_GROUP | PDO::FETCH_UNIQUE);
         $diff = $now->diff($date);
@@ -298,59 +286,50 @@ class Shopware_Controllers_Backend_CustomerStream extends Shopware_Controllers_B
 
     public function loadAmountPerStreamChartAction()
     {
-        $streams = $this->getList(0, 50000);
-        $streams = array_column($streams['data'], 'name');
-
-        /** @var \Doctrine\DBAL\Query\QueryBuilder $query */
-        $query = $this->get('dbal_connection')->createQueryBuilder();
-        $query->select([
-            "DATE_FORMAT(orders.ordertime, '%Y/%m')",
-            'ROUND(SUM(orders.invoice_amount), 2) as invoice_amount_sum',
-            'stream.name as stream',
-        ]);
+        $streams = $this->container->get('dbal_connection')
+            ->createQueryBuilder()
+            ->select(['id', 'name'])
+            ->from('s_customer_streams')
+            ->execute()->fetchAll(PDO::FETCH_KEY_PAIR);
 
         $date = (new \DateTime())->sub(new \DateInterval('P' . (int) 12 . 'M'));
-        $now = new DateTime();
 
-        $query->from('s_order', 'orders');
-        $query->leftJoin('orders', 's_customer_streams_mapping', 'stream_mapping', 'stream_mapping.customer_id = orders.userID');
-        $query->leftJoin('stream_mapping', 's_customer_streams', 'stream', 'stream.id = stream_mapping.stream_id');
-        $query->andWhere('orders.status != :cancelStatus');
-        $query->andWhere('orders.ordernumber IS NOT NULL');
-        $query->andWhere('orders.ordertime >= :orderTime');
-        $query->andWhere('orders.ordernumber != 0');
-        $query->setParameter(':cancelStatus', -1);
-        $query->setParameter(':orderTime', $date->format('Y-m'));
-        $query->groupBy('stream.id');
-        $query->addGroupBy("DATE_FORMAT(orders.ordertime,'%Y-%m')");
-        $data = $query->execute()->fetchAll(PDO::FETCH_GROUP);
+        $query = $this->createAmountPerMonthQuery($date);
+        $query->addSelect('stream_mapping.stream_id as stream');
+        $query->innerJoin('orders', 's_customer_streams_mapping', 'stream_mapping', 'stream_mapping.customer_id = orders.userID');
+        $query->addGroupBy('stream_mapping.stream_id');
+        $streamAmount = $query->execute()->fetchAll(PDO::FETCH_GROUP);
+
+        $query = $this->createAmountPerMonthQuery($date);
+        $query->andWhere('orders.userID NOT IN (SELECT DISTINCT customer_id FROM s_customer_streams_mapping)');
+        $amount = $query->execute()->fetchAll(PDO::FETCH_KEY_PAIR);
 
         $default = ['unassigned' => 0];
-        foreach ($streams as $id) {
-            $default[$id] = 0;
+        foreach ($streams as $name) {
+            $default[$name] = 0;
         }
 
+        $now = new DateTime();
         $diff = $now->diff($date);
         $total = $diff->m + ($diff->y * 12);
 
         $chart = [];
         for ($i = 0; $i < $total; ++$i) {
             $month = $date->add(new DateInterval('P' . 1 . 'M'));
-            $format = $month->format('Y/m');
+            $format = $month->format('Y-m');
 
             $chart[$format] = array_merge(['yearMonth' => $format], $default);
 
-            if (!array_key_exists($format, $data)) {
-                continue;
+            foreach ($streamAmount[$format] as $row) {
+                $stream = $streams[$row['stream']];
+                $chart[$format][$stream] += (float) $row['invoice_amount_sum'];
             }
-            foreach ($data[$format] as $row) {
-                if ($row['stream']) {
-                    $chart[$format][$row['stream']] += $row['invoice_amount_sum'];
-                } else {
-                    $chart[$format]['unassigned'] += $row['invoice_amount_sum'];
-                }
+
+            if (array_key_exists($format, $amount)) {
+                $chart[$format]['unassigned'] = (float) $amount[$format];
             }
         }
+
         $this->View()->assign('data', array_values($chart));
     }
 
@@ -363,13 +342,12 @@ class Shopware_Controllers_Backend_CustomerStream extends Shopware_Controllers_B
     {
         $criteria = new Criteria();
 
-        $reflector = new ReflectionHelper();
+        $conditions = $this->container->get('shopware.logaware_reflection_helper')->unserialize(
+            $conditions,
+            sprintf('Serialization error in customer stream')
+        );
 
-        foreach ($conditions as $className => $arguments) {
-            $className = explode('|', $className);
-            $className = $className[0];
-            /** @var \Shopware\Bundle\SearchBundle\ConditionInterface $condition */
-            $condition = $reflector->createInstanceFromNamedArguments($className, $arguments);
+        foreach ($conditions as $condition) {
             $criteria->addCondition($condition);
         }
 
@@ -385,8 +363,119 @@ class Shopware_Controllers_Backend_CustomerStream extends Shopware_Controllers_B
         $query = $this->container->get('dbal_connection')->createQueryBuilder();
         $query->select('MIN(index_time)');
         $query->from('s_customer_search_index', 'search_index');
-        $time = $query->execute()->fetch(PDO::FETCH_COLUMN);
 
-        return $time;
+        return $query->execute()->fetch(PDO::FETCH_COLUMN);
+    }
+
+    private function fetchStreamsForCustomers($ids)
+    {
+        $query = $this->container->get('dbal_connection')->createQueryBuilder();
+        $query->select(['customer_id', 'stream_id']);
+        $query->from('s_customer_streams_mapping');
+        $query->where('customer_id IN (:ids)');
+        $query->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
+
+        $mapping = $query->execute()->fetchAll(PDO::FETCH_GROUP | PDO::FETCH_COLUMN);
+
+        if (empty($mapping)) {
+            return [];
+        }
+
+        $streamIds = [];
+        foreach ($mapping as $row) {
+            $streamIds = array_merge($streamIds, $row);
+        }
+        $streamIds = array_keys(array_flip($streamIds));
+
+        $query = $this->container->get('dbal_connection')->createQueryBuilder();
+        $query->select(['streams.id as array_key', 'streams.id', 'streams.name']);
+        $query->from('s_customer_streams', 'streams');
+        $query->where('streams.id IN (:ids)');
+        $query->setParameter(':ids', $streamIds, Connection::PARAM_INT_ARRAY);
+        $streams = $query->execute()->fetchAll(PDO::FETCH_GROUP | PDO::FETCH_UNIQUE);
+
+        $result = [];
+        foreach ($mapping as $customerId => $row) {
+            $result[$customerId] = array_values(array_intersect_key($streams, array_flip($row)));
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param DateTime $date
+     *
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
+    private function createAmountPerMonthQuery(DateTime $date)
+    {
+        $format = "DATE_FORMAT(orders.ordertime,'%Y-%m')";
+
+        /** @var \Doctrine\DBAL\Query\QueryBuilder $query */
+        $query = $this->get('dbal_connection')->createQueryBuilder();
+        $query->select([
+            $format,
+            'ROUND(SUM(orders.invoice_amount), 2) as invoice_amount_sum',
+        ]);
+
+        $query->from('s_order', 'orders');
+        $query->andWhere('orders.status != :cancelStatus');
+        $query->andWhere('orders.ordernumber IS NOT NULL');
+        $query->andWhere('orders.ordertime >= :orderTime');
+        $query->andWhere('orders.ordernumber != 0');
+        $query->setParameter(':cancelStatus', -1);
+        $query->setParameter(':orderTime', $date->format('Y-m'));
+        $query->addGroupBy($format);
+
+        return $query;
+    }
+
+    /**
+     * @param $date
+     * @param $streamId
+     *
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
+    private function createStreamAmountQuery($date, $streamId)
+    {
+        /** @var \Doctrine\DBAL\Query\QueryBuilder $query */
+        $query = $this->get('dbal_connection')->createQueryBuilder();
+        $query->select(
+            [
+                "DATE_FORMAT(orders.ordertime, '%Y/%m')",
+                "DATE_FORMAT(orders.ordertime, '%Y/%m') as yearMonth",
+                'COUNT(DISTINCT orders.id) count_orders',
+                'ROUND(SUM(orders.invoice_amount), 2) as invoice_amount_sum',
+                'ROUND(AVG(orders.invoice_amount), 2) as invoice_amount_avg',
+                'MIN(orders.invoice_amount) as invoice_amount_min',
+                'MAX(orders.invoice_amount) as invoice_amount_max',
+                'MIN(orders.ordertime) as first_order_time',
+                'MAX(orders.ordertime) as last_order_time',
+                'ROUND(AVG(details.price), 2) as product_avg',
+            ]
+        );
+        $query->from('s_order', 'orders');
+        $query->innerJoin('orders', 's_order_details', 'details', 'details.orderID = orders.id AND details.modus = 0');
+        $query->andWhere('orders.status != :cancelStatus');
+        $query->andWhere('orders.ordernumber IS NOT NULL');
+        $query->andWhere('orders.ordertime >= :orderTime');
+        $query->andWhere('orders.ordernumber != 0');
+        $query->setParameter(':cancelStatus', -1);
+        $query->setParameter(':orderTime', $date->format('Y-m'));
+        $query->groupBy("DATE_FORMAT(orders.ordertime,'%Y-%m')");
+
+        if ($streamId) {
+            $query->innerJoin(
+                'orders',
+                's_customer_streams_mapping',
+                'stream',
+                'stream.customer_id = orders.userID AND stream.stream_id = :streamId'
+            );
+            $query->setParameter(':streamId', $streamId);
+
+            return $query;
+        }
+
+        return $query;
     }
 }

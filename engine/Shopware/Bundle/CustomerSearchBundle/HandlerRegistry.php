@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\CustomerSearchBundle;
 
 use Shopware\Bundle\SearchBundle\ConditionInterface;
+use Shopware\Bundle\SearchBundle\SortingInterface;
 
 class HandlerRegistry
 {
@@ -34,11 +35,20 @@ class HandlerRegistry
     private $conditionHandlers = [];
 
     /**
-     * @param ConditionHandlerInterface[] $conditionHandlers
+     * @var SortingHandlerInterface[]
      */
-    public function __construct(array $conditionHandlers)
-    {
+    private $sortingHandlers;
+
+    /**
+     * @param ConditionHandlerInterface[] $conditionHandlers
+     * @param array                       $sortingHandlers
+     */
+    public function __construct(
+        array $conditionHandlers,
+        array $sortingHandlers
+    ) {
         $this->conditionHandlers = $conditionHandlers;
+        $this->sortingHandlers = $sortingHandlers;
     }
 
     /**
@@ -62,5 +72,28 @@ class HandlerRegistry
     public function getConditionHandlers()
     {
         return $this->conditionHandlers;
+    }
+
+    /**
+     * @param SortingInterface $sorting
+     *
+     * @return SortingHandlerInterface
+     */
+    public function getSortingHandler(SortingInterface $sorting)
+    {
+        foreach ($this->sortingHandlers as $handler) {
+            if ($handler->supports($sorting)) {
+                return $handler;
+            }
+        }
+        throw new \RuntimeException(sprintf('Sorting class %s not supported', get_class($sorting)));
+    }
+
+    /**
+     * @return SortingHandlerInterface[]
+     */
+    public function getSortingHandlers()
+    {
+        return $this->sortingHandlers;
     }
 }

@@ -28,6 +28,8 @@ Ext.define('Shopware.apps.Customer.store.Preview', {
     extend: 'Ext.data.Store',
     model: 'Shopware.model.Dynamic',
     pageSize: 20,
+    remoteSort: true,
+    remoteFilter: true,
 
     proxy: {
         type: 'ajax',

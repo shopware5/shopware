@@ -25,8 +25,8 @@
 namespace Shopware\Bundle\CustomerSearchBundle;
 
 use Doctrine\DBAL\Connection;
+use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
-use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\FieldHelper;
 use Shopware\Bundle\StoreFrontBundle\Struct\Attribute;
 
 class CustomerNumberSearch
@@ -42,23 +42,15 @@ class CustomerNumberSearch
     private $connection;
 
     /**
-     * @var FieldHelper
-     */
-    private $fieldHelper;
-
-    /**
      * @param HandlerRegistry $handlerRegistry
      * @param Connection      $connection
-     * @param FieldHelper     $fieldHelper
      */
     public function __construct(
         HandlerRegistry $handlerRegistry,
-        Connection $connection,
-        FieldHelper $fieldHelper
+        Connection $connection
     ) {
         $this->handlerRegistry = $handlerRegistry;
         $this->connection = $connection;
-        $this->fieldHelper = $fieldHelper;
     }
 
     /**
@@ -73,7 +65,7 @@ class CustomerNumberSearch
         $customers = $this->fetchCustomers($criteria, $query);
 
         $total = count($customers);
-        if ($criteria->fetchTotal()) {
+        if ($criteria->fetchCount()) {
             $total = $this->fetchTotal($query);
         }
 
@@ -136,6 +128,11 @@ class CustomerNumberSearch
         }
         if ($criteria->getLimit() !== null) {
             $query->setMaxResults($criteria->getLimit());
+        }
+
+        foreach ($criteria->getSortings() as $sorting) {
+            $handler = $this->handlerRegistry->getSortingHandler($sorting);
+            $handler->handle($sorting, $query);
         }
 
         $query->addSelect('customer.*');

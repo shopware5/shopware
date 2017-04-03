@@ -54,9 +54,16 @@
             color: #35404B;
         }
 
+        .customer-filter-panel  {
+            border-right: 1px solid #a4b5c0;
+        }
         .customer-filter-panel .x-panel-header {
             border-right: none;
             border-left: none;
+        }
+
+        .x-customer-grid {
+            border: none;
         }
 
         .customer-filter-panel .x-panel-body {
@@ -70,6 +77,10 @@
         }
         .stream-listing {
             border: none;
+        }
+
+        .stream-inline {
+
         }
 
     </style>
