@@ -28,7 +28,7 @@ use Shopware\Components\Logger;
 
 /**
  * @category  Shopware
- * @package   Shopware\Plugin\Debug\Components
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ErrorCollector implements CollectorInterface
@@ -44,7 +44,7 @@ class ErrorCollector implements CollectorInterface
 
     /**
      * @param \Shopware_Plugins_Core_ErrorHandler_Bootstrap $handler
-     * @param Utils $utils
+     * @param Utils                                         $utils
      */
     public function __construct(\Shopware_Plugins_Core_ErrorHandler_Bootstrap $handler, Utils $utils)
     {
@@ -52,9 +52,6 @@ class ErrorCollector implements CollectorInterface
         $this->utils = $utils;
     }
 
-    /**
-     * @return void
-     */
     public function start()
     {
         $this->errorHandler->setEnabledLog(true);
@@ -63,6 +60,7 @@ class ErrorCollector implements CollectorInterface
 
     /**
      * @param Logger $log
+     *
      * @return mixed
      */
     public function logResults(Logger $log)
@@ -72,20 +70,20 @@ class ErrorCollector implements CollectorInterface
             return;
         }
 
-        $counts = array();
+        $counts = [];
         foreach ($errors as $errorKey => $error) {
             $counts[$errorKey] = $error['count'];
         }
         array_multisort($counts, SORT_NUMERIC, SORT_DESC, $errors);
 
-        $rows = array();
+        $rows = [];
         foreach ($errors as $error) {
             if (!$rows) {
                 $rows[] = array_keys($error);
             }
             $rows[] = $this->utils->encode(array_values($error));
         }
-        $table = array('Error Log (' . count($errors) . ')', $rows);
+        $table = ['Error Log (' . count($errors) . ')', $rows];
 
         $log->table($table);
     }

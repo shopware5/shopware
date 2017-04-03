@@ -43,10 +43,24 @@ class Shopware_Components_StringCompiler
     /**
      * @var array
      */
-    protected $context = array();
+    protected $context = [];
+
+    /**
+     * @param \Enlight_Template_Manager $view
+     * @param array                     $context
+     */
+    public function __construct(\Enlight_Template_Manager $view, $context = null)
+    {
+        $this->setView($view);
+
+        if ($context !== null) {
+            $this->setContext($context);
+        }
+    }
 
     /**
      * @param array $context
+     *
      * @return \Shopware_Components_TemplateMail
      */
     public function setContext($context)
@@ -76,6 +90,7 @@ class Shopware_Components_StringCompiler
 
     /**
      * @param Enlight_Template_Manager $view
+     *
      * @return \Shopware_Components_TemplateMail
      */
     public function setView(\Enlight_Template_Manager $view)
@@ -86,7 +101,8 @@ class Shopware_Components_StringCompiler
     }
 
     /**
-     * @param boolean $isCompatibilityMode
+     * @param bool $isCompatibilityMode
+     *
      * @return \Shopware_Components_TemplateMail
      */
     public function setIsCompatibilityMode($isCompatibilityMode = true)
@@ -97,24 +113,11 @@ class Shopware_Components_StringCompiler
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function getIsCompatibilityMode()
     {
         return $this->isCompatibilityMode;
-    }
-
-    /**
-     * @param \Enlight_Template_Manager $view
-     * @param array $context
-     */
-    public function __construct(\Enlight_Template_Manager $view, $context = null)
-    {
-        $this->setView($view);
-
-        if ($context !== null) {
-            $this->setContext($context);
-        }
     }
 
     /**
@@ -124,6 +127,7 @@ class Shopware_Components_StringCompiler
      *
      * @param $value string
      * @param null|array $context
+     *
      * @return string
      */
     public function compileString($value, $context = null)
@@ -149,8 +153,10 @@ class Shopware_Components_StringCompiler
     /**
      * @param $value string
      * @param $context array
-     * @return string
+     *
      * @throws Enlight_Exception
+     *
+     * @return string
      */
     public function compileSmartyString($value, $context)
     {
@@ -177,6 +183,7 @@ class Shopware_Components_StringCompiler
     /**
      * @param $value string
      * @param $context array
+     *
      * @return string
      */
     public function compileCompatibilityMode($value, $context)

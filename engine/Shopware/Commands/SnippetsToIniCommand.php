@@ -28,11 +28,10 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Finder\Finder;
 
 /**
  * @category  Shopware
- * @package   Shopware\Command
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class SnippetsToIniCommand extends ShopwareCommand
@@ -73,7 +72,8 @@ class SnippetsToIniCommand extends ShopwareCommand
             umask($old);
         }
         if (!is_writeable($dir)) {
-            $output->writeln('<error>Output dir '.$input->getOption('file').' is not writable, aborting</error>');
+            $output->writeln('<error>Output dir ' . $input->getOption('file') . ' is not writable, aborting</error>');
+
             return 1;
         }
 

@@ -26,7 +26,7 @@ namespace Shopware\Components\HttpClient;
 
 /**
  * @category  Shopware
- * @package   Shopware\Components\HttpClient
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Response
@@ -95,7 +95,7 @@ class Response
      *         echo $name . ": " . implode(", ", $values);
      *     }
      *
-     * @return array Returns an associative array of the message's headers.
+     * @return array returns an associative array of the message's headers
      */
     public function getHeaders()
     {
@@ -111,9 +111,9 @@ class Response
      * comma, this method provides a Boolean argument that can be used to
      * retrieve the associated header values as an array of strings.
      *
-     * @param string $header  Case-insensitive header name.
-     * @param bool   $asArray Set to true to retrieve the header value as an
-     *                        array of strings.
+     * @param string $header  case-insensitive header name
+     * @param bool   $asArray set to true to retrieve the header value as an
+     *                        array of strings
      *
      * @return array|string
      */
@@ -133,7 +133,7 @@ class Response
     /**
      * Checks if a header exists by the given case-insensitive name.
      *
-     * @param string $header Case-insensitive header name.
+     * @param string $header case-insensitive header name
      *
      * @return bool Returns true if any header names match the given header
      *              name using a case-insensitive string comparison. Returns false if

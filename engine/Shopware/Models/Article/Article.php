@@ -24,9 +24,9 @@
 
 namespace Shopware\Models\Article;
 
-use Shopware\Components\Model\ModelEntity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
 use Shopware\Models\Category\Category as ArticleCategory;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -34,7 +34,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Shopware Article Model
  *
  * @category  Shopware
- * @package   Shopware\Models
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  *
  * @ORM\Entity(repositoryClass="Repository")
@@ -43,194 +43,12 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Article extends ModelEntity
 {
     /**
-     * @var integer $id
-     *
-     * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="main_detail_id", type="integer", nullable=true)
-     */
-    private $mainDetailId = null;
-
-    /**
-     * @var integer $supplierId
-     *
-     * @ORM\Column(name="supplierID", type="integer", nullable=true)
-     */
-    private $supplierId = null;
-
-    /**
-     * @var integer $taxId
-     *
-     * @ORM\Column(name="taxID", type="integer", nullable=true)
-     */
-    private $taxId = null;
-
-    /**
-     * @var integer $priceGroupId
-     *
-     * @ORM\Column(name="pricegroupID", type="integer", nullable=true)
-     */
-    private $priceGroupId = null;
-
-    /**
-     * @var integer $filterGroupId
-     *
-     * @ORM\Column(name="filtergroupID", type="integer", nullable=true)
-     */
-    private $filterGroupId = null;
-
-    /**
-     * @var integer $filterGroupId
-     *
-     * @ORM\Column(name="configurator_set_id", type="integer", nullable=true)
-     */
-    private $configuratorSetId = null;
-
-    /**
-     * @var string $name
-     *
-     * @Assert\NotBlank
-     *
-     * @ORM\Column(name="name", type="string", length=100, nullable=false)
-     */
-    private $name;
-
-    /**
-     * @var string $description
-     *
-     * @ORM\Column(name="description", type="text", nullable=true)
-     */
-    private $description = null;
-
-    /**
-     * @var string $descriptionLong
-     *
-     * @ORM\Column(name="description_long", type="text", nullable=true)
-     */
-    private $descriptionLong = null;
-
-    /**
-     * @var \DateTime $added
-     *
-     * @Assert\DateTime()
-     *
-     * @ORM\Column(name="datum", type="date", nullable=true)
-     */
-    private $added = null;
-
-    /**
-     * @var integer $active
-     *
-     * @ORM\Column(name="active", type="boolean", nullable=false)
-     */
-    private $active = false;
-
-
-    /**
-     * @var integer $pseudoSales
-     *
-     * @ORM\Column(name="pseudosales", type="integer", nullable=false)
-     */
-    private $pseudoSales = 0;
-
-    /**
-     * @var integer $highlight
-     *
-     * @ORM\Column(name="topseller", type="boolean", nullable=false)
-     */
-    private $highlight = false;
-
-    /**
-     * @var string $keywords
-     *
-     * @ORM\Column(name="keywords", type="string", length=255, nullable=true)
-     */
-    private $keywords = null;
-
-    /**
-     * @var string $metaTitle
-     *
-     * @ORM\Column(name="metaTitle", type="string", length=255, nullable=true)
-     */
-    private $metaTitle = null;
-
-    /**
-     * @var \DateTime $changed
-     *
-     * @ORM\Column(name="changetime", type="datetime", nullable=false)
-     */
-    private $changed = 'now';
-
-    /**
-     * @var integer $priceGroupActive
-     *
-     * @ORM\Column(name="pricegroupActive", type="boolean", nullable=false)
-     */
-    private $priceGroupActive = false;
-
-    /**
-     * @var integer $lastStock
-     *
-     * @ORM\Column(name="laststock", type="boolean", nullable=false)
-     */
-    private $lastStock = false;
-
-    /**
-     * @var integer $crossBundleLook
-     *
-     * @ORM\Column(name="crossbundlelook", type="integer", nullable=false)
-     */
-    private $crossBundleLook = false;
-
-    /**
-     * @var integer $notification
-     *
-     * @ORM\Column(name="notification", type="boolean", nullable=false)
-     */
-    private $notification = false;
-
-    /**
-     * @var string $template
-     *
-     * @ORM\Column(name="template", type="string", length=255, nullable=true)
-     */
-    private $template = '';
-
-    /**
-     * @var integer $mode
-     *
-     * @ORM\Column(name="mode", type="integer", nullable=false)
-     */
-    private $mode = 0;
-
-    /**
-     * @var \DateTime $availableFrom
-     *
-     * @ORM\Column(name="available_from", type="datetime", nullable=true)
-     */
-    private $availableFrom = null;
-
-    /**
-     * @var \DateTime $availableTo
-     *
-     * @ORM\Column(name="available_to", type="datetime", nullable=true)
-     */
-    private $availableTo = null;
-
-    /**
      * OWNING SIDE
      *
      * @Assert\NotBlank
      * @Assert\Valid
      *
-     * @var \Shopware\Models\Tax\Tax $tax
+     * @var \Shopware\Models\Tax\Tax
      * @ORM\OneToOne(targetEntity="Shopware\Models\Tax\Tax")
      * @ORM\JoinColumn(name="taxID", referencedColumnName="id")
      */
@@ -350,7 +168,7 @@ class Article extends ModelEntity
     /**
      * OWNING SIDE
      *
-     * @var \Shopware\Models\Article\Supplier $supplier
+     * @var \Shopware\Models\Article\Supplier
      *
      * @Assert\Valid
      *
@@ -421,7 +239,7 @@ class Article extends ModelEntity
     /**
      * OWNING SIDE
      *
-     * @var \Shopware\Models\Price\Group $priceGroup
+     * @var \Shopware\Models\Price\Group
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Price\Group")
      * @ORM\JoinColumn(name="pricegroupID", referencedColumnName="id")
@@ -490,6 +308,186 @@ class Article extends ModelEntity
      * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Esd", mappedBy="article", orphanRemoval=true, cascade={"persist"})
      */
     protected $esds;
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="main_detail_id", type="integer", nullable=true)
+     */
+    private $mainDetailId = null;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="supplierID", type="integer", nullable=true)
+     */
+    private $supplierId = null;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="taxID", type="integer", nullable=true)
+     */
+    private $taxId = null;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="pricegroupID", type="integer", nullable=true)
+     */
+    private $priceGroupId = null;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="filtergroupID", type="integer", nullable=true)
+     */
+    private $filterGroupId = null;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="configurator_set_id", type="integer", nullable=true)
+     */
+    private $configuratorSetId = null;
+
+    /**
+     * @var string
+     *
+     * @Assert\NotBlank
+     *
+     * @ORM\Column(name="name", type="string", length=100, nullable=false)
+     */
+    private $name;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="description", type="text", nullable=true)
+     */
+    private $description = null;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="description_long", type="text", nullable=true)
+     */
+    private $descriptionLong = null;
+
+    /**
+     * @var \DateTime
+     *
+     * @Assert\DateTime()
+     *
+     * @ORM\Column(name="datum", type="date", nullable=true)
+     */
+    private $added = null;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="active", type="boolean", nullable=false)
+     */
+    private $active = false;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="pseudosales", type="integer", nullable=false)
+     */
+    private $pseudoSales = 0;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="topseller", type="boolean", nullable=false)
+     */
+    private $highlight = false;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="keywords", type="string", length=255, nullable=true)
+     */
+    private $keywords = null;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="metaTitle", type="string", length=255, nullable=true)
+     */
+    private $metaTitle = null;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="changetime", type="datetime", nullable=false)
+     */
+    private $changed = 'now';
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="pricegroupActive", type="boolean", nullable=false)
+     */
+    private $priceGroupActive = false;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="laststock", type="boolean", nullable=false)
+     */
+    private $lastStock = false;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="crossbundlelook", type="integer", nullable=false)
+     */
+    private $crossBundleLook = false;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="notification", type="boolean", nullable=false)
+     */
+    private $notification = false;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="template", type="string", length=255, nullable=true)
+     */
+    private $template = '';
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="mode", type="integer", nullable=false)
+     */
+    private $mode = 0;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="available_from", type="datetime", nullable=true)
+     */
+    private $availableFrom = null;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="available_to", type="datetime", nullable=true)
+     */
+    private $availableTo = null;
 
     /**
      * Class constructor.
@@ -516,7 +514,7 @@ class Article extends ModelEntity
     /**
      * Get id
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -527,11 +525,13 @@ class Article extends ModelEntity
      * Set name
      *
      * @param string $name
+     *
      * @return Article
      */
     public function setName($name)
     {
         $this->name = trim($name);
+
         return $this;
     }
 
@@ -549,11 +549,13 @@ class Article extends ModelEntity
      * Set description
      *
      * @param string $description
+     *
      * @return Article
      */
     public function setDescription($description)
     {
         $this->description = $description;
+
         return $this;
     }
 
@@ -571,11 +573,13 @@ class Article extends ModelEntity
      * Set descriptionLong
      *
      * @param string $descriptionLong
+     *
      * @return Article
      */
     public function setDescriptionLong($descriptionLong)
     {
         $this->descriptionLong = $descriptionLong;
+
         return $this;
     }
 
@@ -593,6 +597,7 @@ class Article extends ModelEntity
      * Set date
      *
      * @param \DateTime|string $added
+     *
      * @return Article
      */
     public function setAdded($added = 'now')
@@ -602,6 +607,7 @@ class Article extends ModelEntity
         } else {
             $this->added = $added;
         }
+
         return $this;
     }
 
@@ -619,11 +625,13 @@ class Article extends ModelEntity
      * Set active
      *
      * @param bool $active
+     *
      * @return Article
      */
     public function setActive($active)
     {
         $this->active = $active;
+
         return $this;
     }
 
@@ -640,19 +648,21 @@ class Article extends ModelEntity
     /**
      * Set pseudoSales
      *
-     * @param integer $pseudoSales
+     * @param int $pseudoSales
+     *
      * @return Article
      */
     public function setPseudoSales($pseudoSales)
     {
         $this->pseudoSales = $pseudoSales;
+
         return $this;
     }
 
     /**
      * Get pseudoSales
      *
-     * @return integer
+     * @return int
      */
     public function getPseudoSales()
     {
@@ -662,19 +672,21 @@ class Article extends ModelEntity
     /**
      * Set highlight
      *
-     * @param integer $highlight
+     * @param int $highlight
+     *
      * @return Article
      */
     public function setHighlight($highlight)
     {
         $this->highlight = $highlight;
+
         return $this;
     }
 
     /**
      * Get highlight
      *
-     * @return integer
+     * @return int
      */
     public function getHighlight()
     {
@@ -685,11 +697,13 @@ class Article extends ModelEntity
      * Set keywords
      *
      * @param string $keywords
+     *
      * @return Article
      */
     public function setKeywords($keywords)
     {
         $this->keywords = $keywords;
+
         return $this;
     }
 
@@ -707,11 +721,13 @@ class Article extends ModelEntity
      * Set metaTitle
      *
      * @param string $metaTitle
+     *
      * @return Article
      */
     public function setMetaTitle($metaTitle)
     {
         $this->metaTitle = $metaTitle;
+
         return $this;
     }
 
@@ -729,6 +745,7 @@ class Article extends ModelEntity
      * Set changed
      *
      * @param \DateTime|string $changed
+     *
      * @return Article
      */
     public function setChanged($changed = 'now')
@@ -738,6 +755,7 @@ class Article extends ModelEntity
         } else {
             $this->changed = $changed;
         }
+
         return $this;
     }
 
@@ -754,19 +772,21 @@ class Article extends ModelEntity
     /**
      * Set priceGroupActive
      *
-     * @param integer $priceGroupActive
+     * @param int $priceGroupActive
+     *
      * @return Article
      */
     public function setPriceGroupActive($priceGroupActive)
     {
         $this->priceGroupActive = $priceGroupActive;
+
         return $this;
     }
 
     /**
      * Get priceGroupActive
      *
-     * @return integer
+     * @return int
      */
     public function getPriceGroupActive()
     {
@@ -776,19 +796,21 @@ class Article extends ModelEntity
     /**
      * Set lastStock
      *
-     * @param integer $lastStock
+     * @param int $lastStock
+     *
      * @return Article
      */
     public function setLastStock($lastStock)
     {
         $this->lastStock = $lastStock;
+
         return $this;
     }
 
     /**
      * Get lastStock
      *
-     * @return integer
+     * @return int
      */
     public function getLastStock()
     {
@@ -798,19 +820,21 @@ class Article extends ModelEntity
     /**
      * Set notification
      *
-     * @param integer $notification
+     * @param int $notification
+     *
      * @return Article
      */
     public function setNotification($notification)
     {
         $this->notification = $notification;
+
         return $this;
     }
 
     /**
      * Get notification
      *
-     * @return integer
+     * @return int
      */
     public function getNotification()
     {
@@ -821,11 +845,13 @@ class Article extends ModelEntity
      * Set template
      *
      * @param string $template
+     *
      * @return Article
      */
     public function setTemplate($template)
     {
         $this->template = $template;
+
         return $this;
     }
 
@@ -842,19 +868,21 @@ class Article extends ModelEntity
     /**
      * Set mode
      *
-     * @param integer $mode
+     * @param int $mode
+     *
      * @return Article
      */
     public function setMode($mode)
     {
         $this->mode = $mode;
+
         return $this;
     }
 
     /**
      * Get mode
      *
-     * @return integer
+     * @return int
      */
     public function getMode()
     {
@@ -879,6 +907,7 @@ class Article extends ModelEntity
 
     /**
      * @param ArrayCollection $categories
+     *
      * @return Article
      */
     public function setCategories($categories)
@@ -890,6 +919,7 @@ class Article extends ModelEntity
 
     /**
      * @param ArticleCategory $category
+     *
      * @return Article
      */
     public function addCategory(ArticleCategory $category)
@@ -903,6 +933,7 @@ class Article extends ModelEntity
 
     /**
      * @param ArticleCategory $category
+     *
      * @return Article
      */
     public function removeCategory(ArticleCategory $category)
@@ -922,11 +953,13 @@ class Article extends ModelEntity
 
     /**
      * @param ArrayCollection $customerGroups
+     *
      * @return Article
      */
     public function setCustomerGroups($customerGroups)
     {
         $this->customerGroups = $customerGroups;
+
         return $this;
     }
 
@@ -940,15 +973,15 @@ class Article extends ModelEntity
 
     /**
      * @param \Shopware\Models\Property\Group $propertyGroup
+     *
      * @return Article
      */
     public function setPropertyGroup($propertyGroup)
     {
         $this->propertyGroup = $propertyGroup;
+
         return $this;
     }
-
-
 
     /**
      * @return ArrayCollection
@@ -968,23 +1001,28 @@ class Article extends ModelEntity
 
     /**
      * @param $related ArrayCollection
+     *
      * @return Article
      */
     public function setRelated($related)
     {
         $this->related = $related;
+
         return $this;
     }
 
     /**
      * @param $similar ArrayCollection
+     *
      * @return Article
      */
     public function setSimilar($similar)
     {
         $this->similar = $similar;
+
         return $this;
     }
+
     /**
      * @return \Shopware\Models\Tax\Tax
      */
@@ -1011,6 +1049,7 @@ class Article extends ModelEntity
 
     /**
      * @param ArrayCollection|array|null $images
+     *
      * @return Article
      */
     public function setImages($images)
@@ -1028,6 +1067,7 @@ class Article extends ModelEntity
 
     /**
      * @param ArrayCollection|array|null $downloads
+     *
      * @return Article
      */
     public function setDownloads($downloads)
@@ -1045,6 +1085,7 @@ class Article extends ModelEntity
 
     /**
      * @param ArrayCollection|array|null $links
+     *
      * @return Article
      */
     public function setLinks($links)
@@ -1055,6 +1096,7 @@ class Article extends ModelEntity
     /**
      * OWNING SIDE
      * of the association between articles and supplier
+     *
      * @return \Shopware\Models\Article\Supplier
      */
     public function getSupplier()
@@ -1064,6 +1106,7 @@ class Article extends ModelEntity
 
     /**
      * @param \Shopware\Models\Article\Supplier|array|null $supplier
+     *
      * @return \Shopware\Components\Model\ModelEntity
      */
     public function setSupplier($supplier)
@@ -1081,6 +1124,7 @@ class Article extends ModelEntity
 
     /**
      * @param ArrayCollection|array|null $details
+     *
      * @return Article
      */
     public function setDetails($details)
@@ -1098,6 +1142,7 @@ class Article extends ModelEntity
 
     /**
      * @param \Shopware\Models\Article\Detail|array|null $mainDetail
+     *
      * @return \Shopware\Models\Article\Detail
      */
     public function setMainDetail($mainDetail)
@@ -1106,6 +1151,7 @@ class Article extends ModelEntity
         if ($this->mainDetail instanceof \Shopware\Models\Article\Detail) {
             $this->mainDetail->setKind(1);
         }
+
         return $return;
     }
 
@@ -1119,6 +1165,7 @@ class Article extends ModelEntity
 
     /**
      * @param \Shopware\Models\Price\Group|null $priceGroup
+     *
      * @return Article
      */
     public function setPriceGroup($priceGroup)
@@ -1138,6 +1185,7 @@ class Article extends ModelEntity
 
     /**
      * @param ArrayCollection|array|null $votes
+     *
      * @return Article
      */
     public function setVotes($votes)
@@ -1155,6 +1203,7 @@ class Article extends ModelEntity
 
     /**
      * @param \Shopware\Models\Attribute\Article|array|null $attribute
+     *
      * @return Article
      */
     public function setAttribute($attribute)
@@ -1172,6 +1221,7 @@ class Article extends ModelEntity
 
     /**
      * @param int $crossBundleLook
+     *
      * @return Article
      */
     public function setCrossBundleLook($crossBundleLook)
@@ -1191,6 +1241,7 @@ class Article extends ModelEntity
 
     /**
      * @param \DateTime $availableFrom
+     *
      * @return Article
      */
     public function setAvailableFrom($availableFrom)
@@ -1210,6 +1261,7 @@ class Article extends ModelEntity
 
     /**
      * @param \DateTime $availableTo
+     *
      * @return Article
      */
     public function setAvailableTo($availableTo)
@@ -1229,6 +1281,7 @@ class Article extends ModelEntity
 
     /**
      * @param \Shopware\Models\Article\Configurator\Set $configuratorSet
+     *
      * @return Article
      */
     public function setConfiguratorSet($configuratorSet)
@@ -1248,6 +1301,7 @@ class Article extends ModelEntity
 
     /**
      * @param ArrayCollection $propertyValues
+     *
      * @return Article
      */
     public function setPropertyValues($propertyValues)
@@ -1267,6 +1321,7 @@ class Article extends ModelEntity
 
     /**
      * @param \Shopware\Models\Article\Configurator\Template\Template $configuratorTemplate
+     *
      * @return Article
      */
     public function setConfiguratorTemplate($configuratorTemplate)
@@ -1286,6 +1341,7 @@ class Article extends ModelEntity
 
     /**
      * @param ArrayCollection $seoCategories
+     *
      * @return \Shopware\Components\Model\ModelEntity
      */
     public function setSeoCategories($seoCategories)

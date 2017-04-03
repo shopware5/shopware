@@ -26,7 +26,7 @@ namespace Shopware\Components\Migrations;
 
 /**
  * @category  Shopware
- * @package   Shopware\Components\Migrations
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 abstract class AbstractMigration
@@ -42,8 +42,7 @@ abstract class AbstractMigration
     /**
      * @var array
      */
-    protected $sql = array();
-
+    protected $sql = [];
 
     /**
      * @param \PDO $connection
@@ -54,7 +53,8 @@ abstract class AbstractMigration
     }
 
     /**
-     * @param  \PDO $connection
+     * @param \PDO $connection
+     *
      * @return AbstractMigration
      */
     public function setConnection($connection)
@@ -77,7 +77,7 @@ abstract class AbstractMigration
      */
     public function getLabel()
     {
-        $result = array();
+        $result = [];
 
         $regexPattern = '/[0-9]*-(.+)\.php$/i';
 
@@ -94,7 +94,7 @@ abstract class AbstractMigration
      */
     public function getVersion()
     {
-        $result = array();
+        $result = [];
         $regexPattern = '/[0-9]*$/i';
 
         preg_match($regexPattern, get_class($this), $result);
@@ -104,12 +104,12 @@ abstract class AbstractMigration
 
     /**
      * @param string $modus
-     * @return void
      */
     abstract public function up($modus);
 
     /**
      * @param string $sql
+     *
      * @return AbstractMigration
      */
     public function addSql($sql)

@@ -30,7 +30,7 @@ use Shopware\Components\Random;
  * Provides a salted + streched sha256
  *
  * @category  Shopware
- * @package   Shopware\Components\Password\Encoder
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Sha256 implements PasswordEncoderInterface
@@ -38,18 +38,10 @@ class Sha256 implements PasswordEncoderInterface
     /**
      * @var array
      */
-    protected $options = array(
+    protected $options = [
         'iterations' => 1000,
-        'salt_len' => 22
-    );
-
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return 'Sha256';
-    }
+        'salt_len' => 22,
+    ];
 
     /**
      * @param array $options
@@ -62,8 +54,17 @@ class Sha256 implements PasswordEncoderInterface
     }
 
     /**
-     * @param  string $password
-     * @param  string $hash
+     * @return string
+     */
+    public function getName()
+    {
+        return 'Sha256';
+    }
+
+    /**
+     * @param string $password
+     * @param string $hash
+     *
      * @return bool
      */
     public function isPasswordValid($password, $hash)
@@ -76,35 +77,21 @@ class Sha256 implements PasswordEncoderInterface
     }
 
     /**
-     * @param  string $password
+     * @param string $password
+     *
      * @return string
      */
     public function encodePassword($password)
     {
         $iterations = $this->options['iterations'];
-        $salt       = $this->getSalt();
+        $salt = $this->getSalt();
 
         return $this->generateInternal($password, $salt, $iterations);
     }
 
     /**
-     * @param  string  $password
-     * @param  string  $salt
-     * @param  integer $iterations
-     * @return string
-     */
-    protected function generateInternal($password, $salt, $iterations)
-    {
-        $hash = '';
-        for ($i = 0; $i <= $iterations; $i++) {
-            $hash = hash('sha256', $hash . $password . $salt);
-        }
-
-        return $iterations . ':' . $salt . ':' . $hash;
-    }
-
-    /**
-     * @param  string $hash
+     * @param string $hash
+     *
      * @return bool
      */
     public function isReencodeNeeded($hash)
@@ -124,10 +111,28 @@ class Sha256 implements PasswordEncoderInterface
 
     /**
      * Generate a salt using the number generator
+     *
      * @return string
      */
     public function getSalt()
     {
         return Random::getAlphanumericString($this->options['salt_len']);
+    }
+
+    /**
+     * @param string $password
+     * @param string $salt
+     * @param int    $iterations
+     *
+     * @return string
+     */
+    protected function generateInternal($password, $salt, $iterations)
+    {
+        $hash = '';
+        for ($i = 0; $i <= $iterations; ++$i) {
+            $hash = hash('sha256', $hash . $password . $salt);
+        }
+
+        return $iterations . ':' . $salt . ':' . $hash;
     }
 }

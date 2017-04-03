@@ -22,9 +22,6 @@
  * our trademarks remain entirely with us.
  */
 
-
-/**
- */
 class Shopware_Controllers_Frontend_Note extends Enlight_Controller_Action
 {
     /**
@@ -55,24 +52,6 @@ class Shopware_Controllers_Frontend_Note extends Enlight_Controller_Action
         $this->forward('index');
     }
 
-    private function addNote($orderNumber)
-    {
-        if (empty($orderNumber)) {
-            return false;
-        }
-
-        $articleID = Shopware()->Modules()->Articles()->sGetArticleIdByOrderNumber($orderNumber);
-        $articleName = Shopware()->Modules()->Articles()->sGetArticleNameByOrderNumber($orderNumber);
-
-        if (empty($articleID)) {
-            return false;
-        }
-
-        Shopware()->Modules()->Basket()->sAddNote($articleID, $articleName, $orderNumber);
-
-        return true;
-    }
-
     public function addAction()
     {
         $orderNumber = $this->Request()->getParam('ordernumber');
@@ -93,8 +72,26 @@ class Shopware_Controllers_Frontend_Note extends Enlight_Controller_Action
         $this->Response()->setBody(json_encode(
             [
                 'success' => $this->addNote($this->Request()->getParam('ordernumber')),
-                'notesCount' => (int) Shopware()->Modules()->Basket()->sCountNotes()
+                'notesCount' => (int) Shopware()->Modules()->Basket()->sCountNotes(),
             ]
         ));
+    }
+
+    private function addNote($orderNumber)
+    {
+        if (empty($orderNumber)) {
+            return false;
+        }
+
+        $articleID = Shopware()->Modules()->Articles()->sGetArticleIdByOrderNumber($orderNumber);
+        $articleName = Shopware()->Modules()->Articles()->sGetArticleNameByOrderNumber($orderNumber);
+
+        if (empty($articleID)) {
+            return false;
+        }
+
+        Shopware()->Modules()->Basket()->sAddNote($articleID, $articleName, $orderNumber);
+
+        return true;
     }
 }

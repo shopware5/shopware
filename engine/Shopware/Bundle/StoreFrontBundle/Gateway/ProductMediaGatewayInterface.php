@@ -21,13 +21,14 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 namespace Shopware\Bundle\StoreFrontBundle\Gateway;
 
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\StoreFrontBundle\Gateway
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 interface ProductMediaGatewayInterface
@@ -59,8 +60,9 @@ interface ProductMediaGatewayInterface
      * )
      * </php>
      *
-     * @param Struct\BaseProduct[] $products
+     * @param Struct\BaseProduct[]        $products
      * @param Struct\ShopContextInterface $context
+     *
      * @return array Indexed by the product order number. Each element contains a \Shopware\Bundle\StoreFrontBundle\Struct\Media array.
      */
     public function getList($products, Struct\ShopContextInterface $context);
@@ -79,8 +81,9 @@ interface ProductMediaGatewayInterface
      * - Selects only product media which has no configurator configuration and the main flag equals 1
      * - Sorted ascending by the image position
      *
-     * @param Struct\BaseProduct $product
+     * @param Struct\BaseProduct          $product
      * @param Struct\ShopContextInterface $context
+     *
      * @return Struct\Media
      */
     public function getCover(Struct\BaseProduct $product, Struct\ShopContextInterface $context);
@@ -100,8 +103,9 @@ interface ProductMediaGatewayInterface
      * - Sorted ascending by the image main flag and image position
      *
      *
-     * @param Struct\BaseProduct $product
+     * @param Struct\BaseProduct          $product
      * @param Struct\ShopContextInterface $context
+     *
      * @return Struct\Media[]
      */
     public function get(Struct\BaseProduct $product, Struct\ShopContextInterface $context);
@@ -127,8 +131,9 @@ interface ProductMediaGatewayInterface
      * )
      * </php>
      *
-     * @param Struct\BaseProduct[] $products
+     * @param Struct\BaseProduct[]        $products
      * @param Struct\ShopContextInterface $context
+     *
      * @return Struct\Media[] Indexed by the product number
      */
     public function getCovers($products, Struct\ShopContextInterface $context);

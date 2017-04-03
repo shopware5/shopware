@@ -21,13 +21,14 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 namespace Shopware\Bundle\StoreFrontBundle\Gateway;
 
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\StoreFrontBundle\Gateway
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 interface GraduatedPricesGatewayInterface
@@ -38,10 +39,11 @@ interface GraduatedPricesGatewayInterface
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\GraduatedPricesGatewayInterface::get()
      *
-     * @param Struct\ListProduct[] $products
+     * @param Struct\ListProduct[]        $products
      * @param Struct\ShopContextInterface $context
-     * @param Struct\Customer\Group $customerGroup
-     * @return array Indexed by the product order number, each array element contains a Struct\Product\PriceRule array.
+     * @param Struct\Customer\Group       $customerGroup
+     *
+     * @return array indexed by the product order number, each array element contains a Struct\Product\PriceRule array
      */
     public function getList($products, Struct\ShopContextInterface $context, Struct\Customer\Group $customerGroup);
 
@@ -53,9 +55,10 @@ interface GraduatedPricesGatewayInterface
      * Required conditions for the selection:
      * - Sorted ascending with the \Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceRule::from property.
      *
-     * @param Struct\ListProduct $product
+     * @param Struct\ListProduct          $product
      * @param Struct\ShopContextInterface $context
-     * @param Struct\Customer\Group $customerGroup
+     * @param Struct\Customer\Group       $customerGroup
+     *
      * @return Struct\Product\PriceRule[]
      */
     public function get(Struct\ListProduct $product, Struct\ShopContextInterface $context, Struct\Customer\Group $customerGroup);

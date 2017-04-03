@@ -24,9 +24,6 @@
 
 namespace Shopware\Bundle\PluginInstallerBundle\Context;
 
-/**
- * @package Shopware\Bundle\PluginInstallerBundle\Context
- */
 class RangeDownloadRequest
 {
     /**
@@ -56,8 +53,8 @@ class RangeDownloadRequest
 
     /**
      * @param string $uri
-     * @param int $offset
-     * @param int $size
+     * @param int    $offset
+     * @param int    $size
      * @param string $sha1
      * @param string $destination
      */

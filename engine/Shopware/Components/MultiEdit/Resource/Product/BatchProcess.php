@@ -53,6 +53,20 @@ class BatchProcess
     protected $configResource;
 
     /**
+     * @param $dqlHelper DqlHelper
+     * @param $filter Filter
+     * @param $queue Queue
+     * @param $config \Shopware_Components_Config
+     */
+    public function __construct($dqlHelper, $filter, $queue, $config)
+    {
+        $this->dqlHelper = $dqlHelper;
+        $this->filterResource = $filter;
+        $this->queueResource = $queue;
+        $this->configResource = $config;
+    }
+
+    /**
      * @return DqlHelper
      */
     public function getDqlHelper()
@@ -85,24 +99,11 @@ class BatchProcess
     }
 
     /**
-     * @param $dqlHelper DqlHelper
-     * @param $filter Filter
-     * @param $queue Queue
-     * @param $config \Shopware_Components_Config
-     */
-    public function __construct($dqlHelper, $filter, $queue, $config)
-    {
-        $this->dqlHelper = $dqlHelper;
-        $this->filterResource = $filter;
-        $this->queueResource = $queue;
-        $this->configResource = $config;
-    }
-
-    /**
      * Generates a list of editable columns and the known operators
      *
-     * @return array
      * @throws \RuntimeException When the column was not defined
+     *
+     * @return array
      */
     public function getEditableColumns()
     {
@@ -122,7 +123,7 @@ class BatchProcess
             unset($columns[$key]);
         }
 
-        $attributes = array();
+        $attributes = [];
         foreach ($columns as $attribute => $config) {
             $type = $config['type'];
 
@@ -136,24 +137,23 @@ class BatchProcess
                 case 'bigint':
                 case 'decimal':
                 case 'float':
-                    $attributes[$attribute] = array('set', 'add', 'subtract', 'devide', 'multiply');
+                    $attributes[$attribute] = ['set', 'add', 'subtract', 'devide', 'multiply'];
                     break;
                 case 'text':
                 case 'string':
-                    $attributes[$attribute] = array('set', 'prepend', 'append', 'removeString');
+                    $attributes[$attribute] = ['set', 'prepend', 'append', 'removeString'];
                     break;
                 case 'boolean':
-                    $attributes[$attribute] = array('set');
+                    $attributes[$attribute] = ['set'];
                     break;
                 case 'date':
-                    $attributes[$attribute] = array('set');
+                    $attributes[$attribute] = ['set'];
                     break;
                 case 'datetime':
-                    $attributes[$attribute] = array('set');
+                    $attributes[$attribute] = ['set'];
                     break;
                 default:
                     throw new \RuntimeException("Column with type {$type} was not configured, yet");
-
             }
             // Technically we're able to process DQL here. This should not be enabled by default and is quite limited
             if (false) {
@@ -184,23 +184,22 @@ class BatchProcess
         $columnInfo = $this->getDqlHelper()->getColumnsForProductListing();
 
         $ids = $this->getDqlHelper()->getIdForForeignEntity($prefix, $detailIds);
-        $builder->where($builder->expr()->in($prefix.'.id', $ids));
+        $builder->where($builder->expr()->in($prefix . '.id', $ids));
 
         foreach ($operations as $operation) {
             list($prefix, $column) = explode('.', $operation['column']);
 
-            $type = $columnInfo[ucfirst($prefix).ucfirst($column)]['type'];
-            if ($operation['value'] &&  $type == 'decimal' || $type == 'integer' || $type == 'float') {
+            $type = $columnInfo[ucfirst($prefix) . ucfirst($column)]['type'];
+            if ($operation['value'] && $type == 'decimal' || $type == 'integer' || $type == 'float') {
                 $operation['value'] = str_replace(',', '.', $operation['value']);
             }
 
             // In set mode: If column is nullable and value is "" - set it to null
-            if ($operation['operator'] == 'set' && $columnInfo[ucfirst($prefix).ucfirst($column)]['nullable'] && $operation['value'] == '') {
+            if ($operation['operator'] == 'set' && $columnInfo[ucfirst($prefix) . ucfirst($column)]['nullable'] && $operation['value'] == '') {
                 $operationValue = 'NULL';
             } else {
                 $operationValue = $builder->expr()->literal($operation['value']);
             }
-
 
             switch (strtolower($operation['operator'])) {
                 case 'removestring':
@@ -244,6 +243,7 @@ class BatchProcess
      *
      * @param $detailIds
      * @param $nestedOperations
+     *
      * @throws Exception
      */
     public function updateDetails($detailIds, $nestedOperations)
@@ -273,7 +273,7 @@ class BatchProcess
         foreach ($this->getDqlHelper()->getIdForForeignEntity('article', $detailIds) as $articleId) {
             $this->getDqlHelper()->getEventManager()->notify(
                 'Shopware_Plugins_HttpCache_InvalidateCacheId',
-                array('subject' => $this, 'cacheId' => 'a'.$articleId)
+                ['subject' => $this, 'cacheId' => 'a' . $articleId]
             );
         }
     }
@@ -282,8 +282,10 @@ class BatchProcess
      * Batch processes a given queue
      *
      * @param $queueId
-     * @return Array
+     *
      * @throws \RuntimeException
+     *
+     * @return array
      */
     public function batchProcess($queueId)
     {
@@ -321,11 +323,11 @@ class BatchProcess
             $entityManager->flush();
         }
 
-        return array(
+        return [
             'totalCount' => $queue->getInitialSize(),
             'remaining' => $remaining,
             'done' => $remaining == 0,
-            'processed' => $queue->getInitialSize() - $remaining
-        );
+            'processed' => $queue->getInitialSize() - $remaining,
+        ];
     }
 }

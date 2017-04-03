@@ -24,8 +24,8 @@
 
 namespace   Shopware\Models\Newsletter;
 
-use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
 
 /**
  * Shopware Data model represents a non-customer shop visior contact data.
@@ -36,20 +36,9 @@ use Doctrine\ORM\Mapping as ORM;
 class ContactData extends ModelEntity
 {
     /**
-     * Autoincrement ID
-     *
-     * @var integer $id
-     *
-     * @ORM\Id
-     * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
-    /**
      * The actual email address
      *
-     * @var string $email
+     * @var string
      * @ORM\Column(name="email", type="string", nullable=false)
      */
     protected $email;
@@ -57,14 +46,14 @@ class ContactData extends ModelEntity
     /**
      * ID of the newsletter-group this data belongs to
      *
-     * @var integer $groupId
+     * @var int
      *
      * @ORM\Column(name="groupID", type="integer", nullable=false)
      */
     protected $groupId;
 
     /**
-     * @var string $salutation
+     * @var string
      *
      * @ORM\Column(name="salutation", type="string", nullable=true)
      */
@@ -78,53 +67,63 @@ class ContactData extends ModelEntity
     protected $title;
 
     /**
-     * @var string $firstName
+     * @var string
      *
      * @ORM\Column(name="firstname", type="string", nullable=true)
      */
     protected $firstName;
 
     /**
-     * @var string $lastName
+     * @var string
      *
      * @ORM\Column(name="lastname", type="string", nullable=true)
      */
     protected $lastName;
 
     /**
-     * @var string $street
+     * @var string
      *
      * @ORM\Column(name="street", type="string", length=255, nullable=true)
      */
     protected $street;
 
     /**
-     * @var string $zipCode
+     * @var string
      *
      * @ORM\Column(name="zipcode", type="string", nullable=true)
      */
     protected $zipCode;
 
     /**
-     * @var string $city
+     * @var string
      *
      * @ORM\Column(name="city", type="string", nullable=true)
      */
     protected $city;
 
     /**
-     * @var \DateTime $added
+     * @var \DateTime
      *
      * @ORM\Column(name="added", type="datetime", nullable=false)
      */
     protected $added;
 
     /**
-     * @var \DateTime $deleted
+     * @var \DateTime
      *
      * @ORM\Column(name="deleted", type="datetime", nullable=true)
      */
     protected $deleted;
+    /**
+     * Autoincrement ID
+     *
+     * @var int
+     *
+     * @ORM\Id
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
 
     /**
      * @param \DateTime $added

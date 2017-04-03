@@ -28,11 +28,10 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Shopware\Bundle\StoreFrontBundle\Service\CacheInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
-use Shopware\Bundle\StoreFrontBundle\Gateway;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\StoreFrontBundle\Gateway\DBAL
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class FieldHelper
@@ -56,7 +55,7 @@ class FieldHelper
     private $cache;
 
     /**
-     * @param Connection $connection
+     * @param Connection     $connection
      * @param CacheInterface $cache
      */
     public function __construct(Connection $connection, CacheInterface $cache)
@@ -71,6 +70,7 @@ class FieldHelper
      *
      * @param string $table
      * @param string $alias
+     *
      * @return array
      */
     public function getTableFields($table, $alias)
@@ -85,7 +85,7 @@ class FieldHelper
             return $columns;
         }
 
-        $tableColumns = $this->connection->fetchAll("SHOW COLUMNS FROM " . $table);
+        $tableColumns = $this->connection->fetchAll('SHOW COLUMNS FROM ' . $table);
         $tableColumns = array_column($tableColumns, 'Field');
 
         $columns = [];
@@ -95,11 +95,13 @@ class FieldHelper
 
         $this->cache->save($key, $columns);
         $this->attributeFields[$key] = $columns;
+
         return $columns;
     }
 
     /**
      * Defines which s_articles fields should be selected.
+     *
      * @return array
      */
     public function getArticleFields()
@@ -147,12 +149,13 @@ class FieldHelper
     public function getTopSellerFields()
     {
         return [
-            'topSeller.sales as __topSeller_sales'
+            'topSeller.sales as __topSeller_sales',
         ];
     }
 
     /**
      * Defines which s_articles_details fields should be selected.
+     *
      * @return array
      */
     public function getVariantFields()
@@ -206,6 +209,7 @@ class FieldHelper
 
     /**
      * Defines which s_core_tax fields should be selected
+     *
      * @return array
      */
     public function getTaxFields()
@@ -213,24 +217,26 @@ class FieldHelper
         return [
             'tax.id as __tax_id',
             'tax.tax as __tax_tax',
-            'tax.description as __tax_description'
+            'tax.description as __tax_description',
         ];
     }
 
     /**
      * Defines which s_core_pricegroups fields should be selected
+     *
      * @return array
      */
     public function getPriceGroupFields()
     {
         return [
             'priceGroup.id as __priceGroup_id',
-            'priceGroup.description as __priceGroup_description'
+            'priceGroup.description as __priceGroup_description',
         ];
     }
 
     /**
      * Defines which s_articles_suppliers fields should be selected
+     *
      * @return array
      */
     public function getManufacturerFields()
@@ -243,7 +249,7 @@ class FieldHelper
             'manufacturer.description as __manufacturer_description',
             'manufacturer.meta_title as __manufacturer_meta_title',
             'manufacturer.meta_description as __manufacturer_meta_description',
-            'manufacturer.meta_keywords as __manufacturer_meta_keywords'
+            'manufacturer.meta_keywords as __manufacturer_meta_keywords',
         ];
 
         $fields = array_merge(
@@ -326,7 +332,7 @@ class FieldHelper
             'variant.referenceunit as __unit_referenceunit',
             'variant.purchasesteps as __unit_purchasesteps',
             'variant.minpurchase as __unit_minpurchase',
-            'variant.maxpurchase as __unit_maxpurchase'
+            'variant.maxpurchase as __unit_maxpurchase',
         ];
     }
 
@@ -338,7 +344,7 @@ class FieldHelper
         return [
             'configuratorSet.id as __configuratorSet_id',
             'configuratorSet.name as __configuratorSet_name',
-            'configuratorSet.type as __configuratorSet_type'
+            'configuratorSet.type as __configuratorSet_type',
         ];
     }
 
@@ -347,11 +353,11 @@ class FieldHelper
      */
     public function getConfiguratorGroupFields()
     {
-        $fields =  [
+        $fields = [
             'configuratorGroup.id as __configuratorGroup_id',
             'configuratorGroup.name as __configuratorGroup_name',
             'configuratorGroup.description as __configuratorGroup_description',
-            'configuratorGroup.position as __configuratorGroup_position'
+            'configuratorGroup.position as __configuratorGroup_position',
         ];
 
         $fields = array_merge(
@@ -370,7 +376,7 @@ class FieldHelper
         $fields = [
             'configuratorOption.id as __configuratorOption_id',
             'configuratorOption.name as __configuratorOption_name',
-            'configuratorOption.position as __configuratorOption_position'
+            'configuratorOption.position as __configuratorOption_position',
         ];
 
         $fields = array_merge(
@@ -529,7 +535,7 @@ class FieldHelper
             'image.height as __image_height',
             'image.extension as __image_extension',
             'image.parent_id as __image_parent_id',
-            'image.media_id as __image_media_id'
+            'image.media_id as __image_media_id',
         ];
 
         $fields = array_merge(
@@ -565,7 +571,7 @@ class FieldHelper
             'mediaSettings.create_thumbnails as __mediaSettings_create_thumbnails',
             'mediaSettings.thumbnail_size as __mediaSettings_thumbnail_size',
             'mediaSettings.icon as __mediaSettings_icon',
-            'mediaSettings.thumbnail_high_dpi as __mediaSettings_thumbnail_high_dpi'
+            'mediaSettings.thumbnail_high_dpi as __mediaSettings_thumbnail_high_dpi',
         ];
 
         $fields = array_merge(
@@ -585,7 +591,7 @@ class FieldHelper
             'priceGroupDiscount.id as __priceGroupDiscount_id',
             'priceGroupDiscount.groupID as __priceGroupDiscount_groupID',
             'priceGroupDiscount.discount as __priceGroupDiscount_discount',
-            'priceGroupDiscount.discountstart as __priceGroupDiscount_discountstart'
+            'priceGroupDiscount.discountstart as __priceGroupDiscount_discountstart',
         ];
     }
 
@@ -624,6 +630,7 @@ class FieldHelper
             $fields,
             $this->getTableFields('s_filter_options_attributes', 'propertyGroupAttribute')
         );
+
         return $fields;
     }
 
@@ -642,6 +649,7 @@ class FieldHelper
             $fields,
             $this->getTableFields('s_filter_values_attributes', 'propertyOptionAttribute')
         );
+
         return $fields;
     }
 
@@ -716,7 +724,7 @@ class FieldHelper
             'currency.factor as __currency_factor',
             'currency.templatechar as __currency_templatechar',
             'currency.symbol_position as __currency_symbol_position',
-            'currency.position as __currency_position'
+            'currency.position as __currency_position',
         ];
     }
 
@@ -734,7 +742,7 @@ class FieldHelper
             'template.emotion as __template_emotion',
             'template.version as __template_version',
             'template.plugin_id as __template_plugin_id',
-            'template.parent_id as __template_parent_id'
+            'template.parent_id as __template_parent_id',
         ];
     }
 
@@ -744,7 +752,7 @@ class FieldHelper
             'locale.id as __locale_id',
             'locale.locale as __locale_locale',
             'locale.language as __locale_language',
-            'locale.territory as __locale_territory'
+            'locale.territory as __locale_territory',
         ];
     }
 
@@ -767,6 +775,7 @@ class FieldHelper
             $fields,
             $this->getTableFields('s_product_streams_attributes', 'productStreamAttribute')
         );
+
         return $fields;
     }
 
@@ -811,11 +820,11 @@ class FieldHelper
     /**
      * Joins the translation table and selects the objectdata for the provided join conditions
      *
-     * @param string $fromPart Table which uses as from part
-     * @param string $joinCondition Join condition for the objectkey column
-     * @param string $translationType Type of the translation
-     * @param string $selectName Name of the additional selection
-     * @param QueryBuilder $query
+     * @param string               $fromPart        Table which uses as from part
+     * @param string               $joinCondition   Join condition for the objectkey column
+     * @param string               $translationType Type of the translation
+     * @param string               $selectName      Name of the additional selection
+     * @param QueryBuilder         $query
      * @param ShopContextInterface $context
      */
     public function addTranslation(
@@ -860,13 +869,177 @@ class FieldHelper
     }
 
     /**
-     * @param string $fromPart Table which uses as from part
-     * @param string $joinCondition Join condition for the objectkey column
-     * @param string $translationType Type of the translation
-     * @param string $selectName Name of the additional selection
+     * @param QueryBuilder         $query
+     * @param ShopContextInterface $context
+     */
+    public function addCountryTranslation(QueryBuilder $query, ShopContextInterface $context)
+    {
+        $this->addTranslation('country', 'config_countries', $query, $context, 1);
+        $this->addTranslation('countryAttribute', 's_core_countries_attributes', $query, $context, 'country.id');
+    }
+
+    /**
+     * @param QueryBuilder         $query
+     * @param ShopContextInterface $context
+     */
+    public function addCountryStateTranslation(QueryBuilder $query, ShopContextInterface $context)
+    {
+        $this->addTranslation('countryState', 'config_country_states', $query, $context, 1);
+        $this->addTranslation('countryStateAttribute', 's_core_countries_states_attributes', $query, $context, 'countryStateAttribute.stateID');
+    }
+
+    /**
+     * @param QueryBuilder         $query
+     * @param ShopContextInterface $context
+     */
+    public function addMediaTranslation(QueryBuilder $query, ShopContextInterface $context)
+    {
+        $this->addTranslation('mediaAttribute', 's_media_attributes', $query, $context, 'mediaAttribute.mediaID');
+    }
+
+    /**
+     * @param QueryBuilder         $query
+     * @param ShopContextInterface $context
+     */
+    public function addUnitTranslation(QueryBuilder $query, ShopContextInterface $context)
+    {
+        $this->addTranslation('unit', 'config_units', $query, $context, 1);
+    }
+
+    /**
+     * @param QueryBuilder         $queryBuilder
+     * @param ShopContextInterface $context
+     */
+    public function addEsdTranslation(QueryBuilder $queryBuilder, ShopContextInterface $context)
+    {
+        $this->addTranslation('esdAttribute', 's_articles_esd_attributes', $queryBuilder, $context, 'esd.id');
+    }
+
+    /**
+     * @param QueryBuilder         $query
+     * @param ShopContextInterface $context
+     */
+    public function addConfiguratorGroupTranslation(QueryBuilder $query, ShopContextInterface $context)
+    {
+        $this->addTranslation('configuratorGroup', 'configuratorgroup', $query, $context);
+    }
+
+    /**
+     * @param QueryBuilder         $query
+     * @param ShopContextInterface $context
+     */
+    public function addConfiguratorOptionTranslation(QueryBuilder $query, ShopContextInterface $context)
+    {
+        $this->addTranslation('configuratorOption', 'configuratoroption', $query, $context);
+    }
+
+    /**
+     * @param QueryBuilder         $query
+     * @param ShopContextInterface $context
+     */
+    public function addDownloadTranslation(QueryBuilder $query, ShopContextInterface $context)
+    {
+        $this->addTranslation('downloadAttribute', 's_articles_downloads_attributes', $query, $context, 'download.id');
+    }
+
+    /**
+     * @param QueryBuilder         $query
+     * @param ShopContextInterface $context
+     */
+    public function addLinkTranslation(QueryBuilder $query, ShopContextInterface $context)
+    {
+        $this->addTranslation('linkAttribute', 's_articles_information_attributes', $query, $context, 'link.id');
+    }
+
+    /**
+     * @param QueryBuilder         $query
+     * @param ShopContextInterface $context
+     */
+    public function addProductTranslation(QueryBuilder $query, ShopContextInterface $context)
+    {
+        $this->addTranslation('product', 'article', $query, $context);
+    }
+
+    /**
+     * @param QueryBuilder         $query
+     * @param ShopContextInterface $context
+     */
+    public function addVariantTranslation(QueryBuilder $query, ShopContextInterface $context)
+    {
+        $this->addTranslation('variant', 'variant', $query, $context);
+    }
+
+    /**
+     * @param QueryBuilder         $query
+     * @param ShopContextInterface $context
+     */
+    public function addPriceTranslation(QueryBuilder $query, ShopContextInterface $context)
+    {
+        $this->addTranslation('priceAttribute', 's_articles_prices_attributes', $query, $context, 'price.id');
+    }
+
+    /**
+     * @param QueryBuilder         $query
+     * @param ShopContextInterface $context
+     */
+    public function addManufacturerTranslation(QueryBuilder $query, ShopContextInterface $context)
+    {
+        $this->addTranslation('manufacturer', 'supplier', $query, $context);
+    }
+
+    /**
+     * @param QueryBuilder         $query
+     * @param ShopContextInterface $context
+     */
+    public function addImageTranslation(QueryBuilder $query, ShopContextInterface $context)
+    {
+        $this->addTranslation('image', 'articleimage', $query, $context);
+    }
+
+    /**
+     * @param QueryBuilder         $query
+     * @param ShopContextInterface $context
+     */
+    public function addPropertySetTranslation(QueryBuilder $query, ShopContextInterface $context)
+    {
+        $this->addTranslation('propertySet', 'propertygroup', $query, $context);
+    }
+
+    /**
+     * @param QueryBuilder         $query
+     * @param ShopContextInterface $context
+     */
+    public function addPropertyGroupTranslation(QueryBuilder $query, ShopContextInterface $context)
+    {
+        $this->addTranslation('propertyGroup', 'propertyoption', $query, $context);
+    }
+
+    /**
+     * @param QueryBuilder         $query
+     * @param ShopContextInterface $context
+     */
+    public function addPropertyOptionTranslation(QueryBuilder $query, ShopContextInterface $context)
+    {
+        $this->addTranslation('propertyOption', 'propertyvalue', $query, $context);
+    }
+
+    /**
+     * @param QueryBuilder         $query
+     * @param ShopContextInterface $context
+     */
+    public function addProductStreamTranslation(QueryBuilder $query, ShopContextInterface $context)
+    {
+        $this->addTranslation('stream', 'productStream', $query, $context);
+    }
+
+    /**
+     * @param string       $fromPart        Table which uses as from part
+     * @param string       $joinCondition   Join condition for the objectkey column
+     * @param string       $translationType Type of the translation
+     * @param string       $selectName      Name of the additional selection
      * @param QueryBuilder $query
-     * @param int $shopId
-     * @param string $suffix
+     * @param int          $shopId
+     * @param string       $suffix
      */
     private function addTranslationWithSuffix(
         $fromPart,
@@ -887,176 +1060,12 @@ class FieldHelper
             $fromPart,
             's_core_translations',
             $translationTable,
-            $translationTable . '.objecttype = :'.$translationTable.' AND ' .
+            $translationTable . '.objecttype = :' . $translationTable . ' AND ' .
             $translationTable . '.objectkey = ' . $joinCondition . ' AND ' .
             $translationTable . '.objectlanguage = :language' . $suffix
         );
         $query->setParameter(':language' . $suffix, $shopId);
         $query->setParameter(':' . $translationTable, $translationType);
         $query->addSelect($translationTable . '.objectdata as ' . $selectName);
-    }
-
-    /**
-     * @param QueryBuilder $query
-     * @param ShopContextInterface $context
-     */
-    public function addCountryTranslation(QueryBuilder $query, ShopContextInterface $context)
-    {
-        $this->addTranslation('country', 'config_countries', $query, $context, 1);
-        $this->addTranslation('countryAttribute', 's_core_countries_attributes', $query, $context, 'country.id');
-    }
-
-    /**
-     * @param QueryBuilder $query
-     * @param ShopContextInterface $context
-     */
-    public function addCountryStateTranslation(QueryBuilder $query, ShopContextInterface $context)
-    {
-        $this->addTranslation('countryState', 'config_country_states', $query, $context, 1);
-        $this->addTranslation('countryStateAttribute', 's_core_countries_states_attributes', $query, $context, 'countryStateAttribute.stateID');
-    }
-
-    /**
-     * @param QueryBuilder $query
-     * @param ShopContextInterface $context
-     */
-    public function addMediaTranslation(QueryBuilder $query, ShopContextInterface $context)
-    {
-        $this->addTranslation('mediaAttribute', 's_media_attributes', $query, $context, 'mediaAttribute.mediaID');
-    }
-
-    /**
-     * @param QueryBuilder $query
-     * @param ShopContextInterface $context
-     */
-    public function addUnitTranslation(QueryBuilder $query, ShopContextInterface $context)
-    {
-        $this->addTranslation('unit', 'config_units', $query, $context, 1);
-    }
-
-    /**
-     * @param QueryBuilder $queryBuilder
-     * @param ShopContextInterface $context
-     */
-    public function addEsdTranslation(QueryBuilder $queryBuilder, ShopContextInterface $context)
-    {
-        $this->addTranslation('esdAttribute', 's_articles_esd_attributes', $queryBuilder, $context, 'esd.id');
-    }
-
-    /**
-     * @param QueryBuilder $query
-     * @param ShopContextInterface $context
-     */
-    public function addConfiguratorGroupTranslation(QueryBuilder $query, ShopContextInterface $context)
-    {
-        $this->addTranslation('configuratorGroup', 'configuratorgroup', $query, $context);
-    }
-
-    /**
-     * @param QueryBuilder $query
-     * @param ShopContextInterface $context
-     */
-    public function addConfiguratorOptionTranslation(QueryBuilder $query, ShopContextInterface $context)
-    {
-        $this->addTranslation('configuratorOption', 'configuratoroption', $query, $context);
-    }
-
-    /**
-     * @param QueryBuilder $query
-     * @param ShopContextInterface $context
-     */
-    public function addDownloadTranslation(QueryBuilder $query, ShopContextInterface $context)
-    {
-        $this->addTranslation('downloadAttribute', 's_articles_downloads_attributes', $query, $context, 'download.id');
-    }
-
-    /**
-     * @param QueryBuilder $query
-     * @param ShopContextInterface $context
-     */
-    public function addLinkTranslation(QueryBuilder $query, ShopContextInterface $context)
-    {
-        $this->addTranslation('linkAttribute', 's_articles_information_attributes', $query, $context, 'link.id');
-    }
-
-    /**
-     * @param QueryBuilder $query
-     * @param ShopContextInterface $context
-     */
-    public function addProductTranslation(QueryBuilder $query, ShopContextInterface $context)
-    {
-        $this->addTranslation('product', 'article', $query, $context);
-    }
-
-    /**
-     * @param QueryBuilder $query
-     * @param ShopContextInterface $context
-     */
-    public function addVariantTranslation(QueryBuilder $query, ShopContextInterface $context)
-    {
-        $this->addTranslation('variant', 'variant', $query, $context);
-    }
-
-    /**
-     * @param QueryBuilder $query
-     * @param ShopContextInterface $context
-     */
-    public function addPriceTranslation(QueryBuilder $query, ShopContextInterface $context)
-    {
-        $this->addTranslation('priceAttribute', 's_articles_prices_attributes', $query, $context, 'price.id');
-    }
-
-    /**
-     * @param QueryBuilder $query
-     * @param ShopContextInterface $context
-     */
-    public function addManufacturerTranslation(QueryBuilder $query, ShopContextInterface $context)
-    {
-        $this->addTranslation('manufacturer', 'supplier', $query, $context);
-    }
-
-    /**
-     * @param QueryBuilder $query
-     * @param ShopContextInterface $context
-     */
-    public function addImageTranslation(QueryBuilder $query, ShopContextInterface $context)
-    {
-        $this->addTranslation('image', 'articleimage', $query, $context);
-    }
-
-    /**
-     * @param QueryBuilder $query
-     * @param ShopContextInterface $context
-     */
-    public function addPropertySetTranslation(QueryBuilder $query, ShopContextInterface $context)
-    {
-        $this->addTranslation('propertySet', 'propertygroup', $query, $context);
-    }
-
-    /**
-     * @param QueryBuilder $query
-     * @param ShopContextInterface $context
-     */
-    public function addPropertyGroupTranslation(QueryBuilder $query, ShopContextInterface $context)
-    {
-        $this->addTranslation('propertyGroup', 'propertyoption', $query, $context);
-    }
-
-    /**
-     * @param QueryBuilder $query
-     * @param ShopContextInterface $context
-     */
-    public function addPropertyOptionTranslation(QueryBuilder $query, ShopContextInterface $context)
-    {
-        $this->addTranslation('propertyOption', 'propertyvalue', $query, $context);
-    }
-
-    /**
-     * @param QueryBuilder $query
-     * @param ShopContextInterface $context
-     */
-    public function addProductStreamTranslation(QueryBuilder $query, ShopContextInterface $context)
-    {
-        $this->addTranslation('stream', 'productStream', $query, $context);
     }
 }

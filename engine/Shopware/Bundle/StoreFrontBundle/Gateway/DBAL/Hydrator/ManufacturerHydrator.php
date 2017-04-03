@@ -24,12 +24,12 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator;
 
-use Shopware\Bundle\StoreFrontBundle\Struct;
 use Shopware\Bundle\MediaBundle\MediaServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ManufacturerHydrator extends Hydrator
@@ -54,7 +54,7 @@ class ManufacturerHydrator extends Hydrator
     ];
 
     /**
-     * @param AttributeHydrator $attributeHydrator
+     * @param AttributeHydrator     $attributeHydrator
      * @param MediaServiceInterface $mediaService
      */
     public function __construct(AttributeHydrator $attributeHydrator, MediaServiceInterface $mediaService)
@@ -65,18 +65,20 @@ class ManufacturerHydrator extends Hydrator
 
     /**
      * @param array $data
+     *
      * @return Struct\Product\Manufacturer
      */
     public function hydrate(array $data)
     {
         $manufacturer = new Struct\Product\Manufacturer();
         $this->assignData($manufacturer, $data);
+
         return $manufacturer;
     }
 
     /**
      * @param Struct\Product\Manufacturer $manufacturer
-     * @param array $data
+     * @param array                       $data
      */
     private function assignData(Struct\Product\Manufacturer $manufacturer, array $data)
     {

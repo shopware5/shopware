@@ -24,7 +24,7 @@
 
 /**
  * @category  Shopware
- * @package   Shopware\Tests
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Tests_Controllers_Backend_OrderTest extends Enlight_Components_Test_Controller_TestCase
@@ -48,7 +48,7 @@ class Shopware_Tests_Controllers_Backend_OrderTest extends Enlight_Components_Te
               (15315355, :orderId, '20003', 160, 'SW10160.1', 29.99, 1, 'Sommer Sandale Ocean Blue 36', 0, 0, 0, '0000-00-00', 0, 0, 1, 19, ''),
               (15315356, :orderId, '20003', 0, 'SHIPPINGDISCOUNT', -2, 1, 'Warenkorbrabatt', 0, 0, 0, '0000-00-00', 4, 0, 0, 19, '');
         ";
-        Shopware()->Db()->query($sql, array("orderId" => '15315351'));
+        Shopware()->Db()->query($sql, ['orderId' => '15315351']);
 
         $this->assertEquals('126.82', $this->getInvoiceAmount());
         Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
@@ -62,23 +62,12 @@ class Shopware_Tests_Controllers_Backend_OrderTest extends Enlight_Components_Te
         $this->assertEquals('106.87', $this->getInvoiceAmount());
 
         // Remove test data
-        $sql = "
+        $sql = '
             DELETE FROM `s_order` WHERE `id` = :orderId;
             DELETE FROM `s_order_details` WHERE `orderID` = :orderId;
-        ";
+        ';
 
-        Shopware()->Db()->query($sql, array("orderId" => '15315351'));
-    }
-
-    /**
-     * Helper method to return the order amount
-     *
-     * @return string
-     */
-    private function getInvoiceAmount()
-    {
-        $sql= "SELECT invoice_amount FROM s_order WHERE id = ?";
-        return Shopware()->Db()->fetchOne($sql, array('15315351'));
+        Shopware()->Db()->query($sql, ['orderId' => '15315351']);
     }
 
     /**
@@ -97,7 +86,7 @@ class Shopware_Tests_Controllers_Backend_OrderTest extends Enlight_Components_Te
         $initialShopCount = Shopware()->Db()->fetchOne('SELECT count(distinct id) FROM s_core_shops');
         $documents = Shopware()->Db()->fetchAll(
             'SELECT * FROM `s_order_documents` WHERE `orderID` = :orderID',
-            array('orderID' => $orderId)
+            ['orderID' => $orderId]
         );
 
         $this->assertCount(0, $documents);
@@ -117,7 +106,7 @@ class Shopware_Tests_Controllers_Backend_OrderTest extends Enlight_Components_Te
 
         $documents = Shopware()->Db()->fetchAll(
             'SELECT * FROM `s_order_documents` WHERE `orderID` = :orderID',
-            array('orderID' => $orderId)
+            ['orderID' => $orderId]
         );
 
         $this->assertCount(1, $documents);
@@ -125,12 +114,25 @@ class Shopware_Tests_Controllers_Backend_OrderTest extends Enlight_Components_Te
         // Remove test data
         Shopware()->Db()->query(
             'DELETE FROM `s_order_documents` WHERE `orderID` = :orderID;',
-            array('orderID' => $orderId)
+            ['orderID' => $orderId]
         );
     }
+
+    /**
+     * Helper method to return the order amount
+     *
+     * @return string
+     */
+    private function getInvoiceAmount()
+    {
+        $sql = 'SELECT invoice_amount FROM s_order WHERE id = ?';
+
+        return Shopware()->Db()->fetchOne($sql, ['15315351']);
+    }
+
     private function getPostData()
     {
-        return array(
+        return [
             'module' => 'backend',
             'controller' => 'Order',
             'action' => 'batchProcess',
@@ -173,8 +175,8 @@ class Shopware_Tests_Controllers_Backend_OrderTest extends Enlight_Components_Te
             'invoiceShippingEuro' => 0,
             'invoiceAmountEuro' => 998.56,
             'remoteAddressConverted' => '217.86.205.xxx',
-            'customer' => array(
-                0 => array(
+            'customer' => [
+                0 => [
                     'id' => 2,
                     'groupKey' => 'H',
                     'email' => 'mustermann@b2b.de',
@@ -192,50 +194,50 @@ class Shopware_Tests_Controllers_Backend_OrderTest extends Enlight_Components_Te
                     'internalComment' => '',
                     'failedLogins' => 0,
                     'referer' => '',
-                ),
-            ),
-            'shop' => array(
-                0 => array(
+                ],
+            ],
+            'shop' => [
+                0 => [
                     'id' => 1,
                     'default' => true,
                     'localeId' => 0,
                     'categoryId' => 3,
                     'name' => 'Deutsch',
-                ),
-            ),
-            'dispatch' => array(
-                0 => array(
+                ],
+            ],
+            'dispatch' => [
+                0 => [
                     'id' => 9,
                     'name' => 'Standard Versand',
                     'type' => 0,
                     'comment' => '',
                     'active' => null,
                     'position' => 1,
-                ),
-            ),
-            'paymentStatus' => array(
-                0 => array(
+                ],
+            ],
+            'paymentStatus' => [
+                0 => [
                     'id' => 17,
                     'description' => 'Open',
-                ),
-            ),
-            'orderStatus' => array(
-                0 => array(
+                ],
+            ],
+            'orderStatus' => [
+                0 => [
                     'id' => 0,
                     'description' => 'Open',
-                ),
-            ),
-            'locale' => array(
-                0 => array(
+                ],
+            ],
+            'locale' => [
+                0 => [
                     'id' => 1,
                     'language' => 'Deutsch',
                     'territory' => 'Deutschland',
                     'locale' => 'de_DE',
                     'name' => 'Deutsch (Deutschland)',
-                ),
-            ),
-            'attribute' => array(
-                0 => array(
+                ],
+            ],
+            'attribute' => [
+                0 => [
                     'id' => 1,
                     'orderId' => 15,
                     'attribute1' => '',
@@ -244,10 +246,10 @@ class Shopware_Tests_Controllers_Backend_OrderTest extends Enlight_Components_Te
                     'attribute4' => '',
                     'attribute5' => '',
                     'attribute6' => '',
-                ),
-            ),
-            'billing' => array(
-                0 => array(
+                ],
+            ],
+            'billing' => [
+                0 => [
                     'id' => 1,
                     'salutation' => 'company',
                     'company' => 'B2B',
@@ -262,11 +264,11 @@ class Shopware_Tests_Controllers_Backend_OrderTest extends Enlight_Components_Te
                     'phone' => '012345 / 6789',
                     'vatId' => '',
                     'orderId' => 15,
-                    'shopware.apps.order.model.order' => array( ),
-                ),
-            ),
-            'shipping' => array(
-                0 => array(
+                    'shopware.apps.order.model.order' => [],
+                ],
+            ],
+            'shipping' => [
+                0 => [
                     'id' => 1,
                     'salutation' => 'company',
                     'company' => 'B2B',
@@ -278,32 +280,32 @@ class Shopware_Tests_Controllers_Backend_OrderTest extends Enlight_Components_Te
                     'city' => 'Musterstadt',
                     'countryId' => 2,
                     'orderId' => 15,
-                    'shopware.apps.order.model.order' => array( ),
-                ),
-            ),
-            'debit' => array(
-                0 => array(
+                    'shopware.apps.order.model.order' => [],
+                ],
+            ],
+            'debit' => [
+                0 => [
                     'id' => 3,
                     'customerId' => 2,
                     'account' => '',
                     'bankCode' => '',
                     'bankName' => '',
                     'accountHolder' => '',
-                ),
-            ),
-            'payment' => array(
-                0 => array(
+                ],
+            ],
+            'payment' => [
+                0 => [
                     'id' => 4,
                     'name' => 'invoice',
                     'position' => 3,
                     'active' => null,
                     'description' => 'Invoice',
-                    'shopware.apps.order.model.order' => array( ),
-                ),
-            ),
-            'paymentInstances' => array( ),
-            'documents' => array(
-                0 => array(
+                    'shopware.apps.order.model.order' => [],
+                ],
+            ],
+            'paymentInstances' => [],
+            'documents' => [
+                0 => [
                     'id' => 1,
                     'date' => '2014-01-31T00:00:00',
                     'typeId' => 1,
@@ -313,8 +315,8 @@ class Shopware_Tests_Controllers_Backend_OrderTest extends Enlight_Components_Te
                     'documentId' => 20001,
                     'hash' => '02e8b8abfca501b3f9df6791750d04bd',
                     'typeName' => '',
-                    'type' => array(
-                        0 => array(
+                    'type' => [
+                        0 => [
                             'id' => 1,
                             'template' => 'index.tpl',
                             'numbers' => 'doc_0',
@@ -324,13 +326,13 @@ class Shopware_Tests_Controllers_Backend_OrderTest extends Enlight_Components_Te
                             'bottom' => 20,
                             'pageBreak' => 10,
                             'name' => 'Invoice',
-                        ),
-                    ),
-                    'attributes' => array( ),
-                ),
-            ),
-            'details' => array(
-                0 => array(
+                        ],
+                    ],
+                    'attributes' => [],
+                ],
+            ],
+            'details' => [
+                0 => [
                     'id' => 42,
                     'orderId' => 15,
                     'mode' => 0,
@@ -346,8 +348,8 @@ class Shopware_Tests_Controllers_Backend_OrderTest extends Enlight_Components_Te
                     'taxDescription' => '',
                     'inStock' => 1,
                     'total' => 836.134,
-                    'attribute' => array(
-                        0 => array(
+                    'attribute' => [
+                        0 => [
                             'id' => 1,
                             'orderDetailId' => 42,
                             'attribute1' => '',
@@ -356,10 +358,10 @@ class Shopware_Tests_Controllers_Backend_OrderTest extends Enlight_Components_Te
                             'attribute4' => '',
                             'attribute5' => '',
                             'attribute6' => '',
-                        ),
-                    ),
-                ),
-                1 => array(
+                        ],
+                    ],
+                ],
+                1 => [
                     'id' => 43,
                     'orderId' => 15,
                     'mode' => 4,
@@ -375,8 +377,8 @@ class Shopware_Tests_Controllers_Backend_OrderTest extends Enlight_Components_Te
                     'taxDescription' => '',
                     'inStock' => 0,
                     'total' => -2,
-                    'attribute' => array(
-                        0 => array(
+                    'attribute' => [
+                        0 => [
                             'id' => 2,
                             'orderDetailId' => 43,
                             'attribute1' => '',
@@ -385,10 +387,10 @@ class Shopware_Tests_Controllers_Backend_OrderTest extends Enlight_Components_Te
                             'attribute4' => '',
                             'attribute5' => '',
                             'attribute6' => '',
-                        ),
-                    ),
-                ),
-                2 => array(
+                        ],
+                    ],
+                ],
+                2 => [
                     'id' => 44,
                     'orderId' => 15,
                     'mode' => 4,
@@ -404,8 +406,8 @@ class Shopware_Tests_Controllers_Backend_OrderTest extends Enlight_Components_Te
                     'taxDescription' => '',
                     'inStock' => 0,
                     'total' => 5,
-                    'attribute' => array(
-                        0 => array(
+                    'attribute' => [
+                        0 => [
                             'id' => 3,
                             'orderDetailId' => 44,
                             'attribute1' => '',
@@ -414,13 +416,13 @@ class Shopware_Tests_Controllers_Backend_OrderTest extends Enlight_Components_Te
                             'attribute4' => '',
                             'attribute5' => '',
                             'attribute6' => '',
-                        ),
-                    ),
-                ),
-            ),
-            'mail' => array( ),
-            'billingAttribute' => array(
-                0 => array(
+                        ],
+                    ],
+                ],
+            ],
+            'mail' => [],
+            'billingAttribute' => [
+                0 => [
                     'id' => 1,
                     'orderBillingId' => 1,
                     'text1' => null,
@@ -429,10 +431,10 @@ class Shopware_Tests_Controllers_Backend_OrderTest extends Enlight_Components_Te
                     'text4' => null,
                     'text5' => null,
                     'text6' => null,
-                ),
-            ),
-            'shippingAttribute' => array(
-                0 => array(
+                ],
+            ],
+            'shippingAttribute' => [
+                0 => [
                     'id' => 1,
                     'orderShippingId' => 1,
                     'text1' => null,
@@ -441,8 +443,8 @@ class Shopware_Tests_Controllers_Backend_OrderTest extends Enlight_Components_Te
                     'text4' => null,
                     'text5' => null,
                     'text6' => null,
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
     }
 }

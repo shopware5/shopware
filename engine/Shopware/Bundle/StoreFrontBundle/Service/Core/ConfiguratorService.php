@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 namespace Shopware\Bundle\StoreFrontBundle\Service\Core;
 
 use Shopware\Bundle\StoreFrontBundle\Gateway;
@@ -29,7 +30,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\StoreFrontBundle\Service\Core
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ConfiguratorService implements Service\ConfiguratorServiceInterface
@@ -50,7 +51,7 @@ class ConfiguratorService implements Service\ConfiguratorServiceInterface
 
     /**
      * @param Gateway\ProductConfigurationGatewayInterface $productConfigurationGateway
-     * @param Gateway\ConfiguratorGatewayInterface $configuratorGateway
+     * @param Gateway\ConfiguratorGatewayInterface         $configuratorGateway
      */
     public function __construct(
         Gateway\ProductConfigurationGatewayInterface $productConfigurationGateway,
@@ -61,7 +62,7 @@ class ConfiguratorService implements Service\ConfiguratorServiceInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getProductConfiguration(Struct\BaseProduct $product, Struct\ShopContextInterface $context)
     {
@@ -71,7 +72,7 @@ class ConfiguratorService implements Service\ConfiguratorServiceInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getProductsConfigurations($products, Struct\ShopContextInterface $context)
     {
@@ -81,7 +82,7 @@ class ConfiguratorService implements Service\ConfiguratorServiceInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getProductConfigurator(
         Struct\BaseProduct $product,
@@ -139,8 +140,9 @@ class ConfiguratorService implements Service\ConfiguratorServiceInterface
      * selection.
      *
      * @param \Shopware\Bundle\StoreFrontBundle\Struct\Configurator\Group $group
-     * @param array $combinations
+     * @param array                                                       $combinations
      * @param $selection
+     *
      * @return bool
      */
     private function isCombinationValid(Struct\Configurator\Group $group, $combinations, $selection)

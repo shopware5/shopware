@@ -35,7 +35,6 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
  * Class AddressValidator
- * @package Shopware\Bundle\AccountBundle\Service\Validator
  */
 class AddressValidator implements AddressValidatorInterface
 {
@@ -61,8 +60,9 @@ class AddressValidator implements AddressValidatorInterface
 
     /**
      * AddressValidator constructor.
-     * @param ValidatorInterface $validator
-     * @param ContextServiceInterface $context
+     *
+     * @param ValidatorInterface          $validator
+     * @param ContextServiceInterface     $context
      * @param \Shopware_Components_Config $config
      */
     public function __construct(
@@ -77,6 +77,7 @@ class AddressValidator implements AddressValidatorInterface
 
     /**
      * @param Address $address
+     *
      * @throws ValidationException
      */
     public function validate(Address $address)
@@ -115,17 +116,7 @@ class AddressValidator implements AddressValidatorInterface
     }
 
     /**
-     * @param string $property
-     * @param string $value
-     * @param Constraint[] $constraints
-     */
-    private function validateField($property, $value, $constraints)
-    {
-        $this->validationContext->atPath($property)->validate($value, $constraints);
-    }
-
-    /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function isValid(Address $address)
     {
@@ -136,6 +127,16 @@ class AddressValidator implements AddressValidatorInterface
         }
 
         return true;
+    }
+
+    /**
+     * @param string       $property
+     * @param string       $value
+     * @param Constraint[] $constraints
+     */
+    private function validateField($property, $value, $constraints)
+    {
+        $this->validationContext->atPath($property)->validate($value, $constraints);
     }
 
     /**

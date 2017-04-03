@@ -26,30 +26,28 @@ use Shopware\Models\Category\Category;
 
 /**
  * @category  Shopware
- * @package   Shopware\Tests
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Tests_Controllers_Backend_CategoryTest extends Enlight_Components_Test_Controller_TestCase
 {
+    /** @var $model Category */
+    protected $repository = null;
     /**
      * dummy data
      *
      * @var array
      */
-    private $dummyData = array(
+    private $dummyData = [
          'parentId' => 1,
          'name' => 'unitTestCategory',
          'active' => 1,
-    );
+    ];
 
-    private $updateMetaDescription = "testMetaDescription";
+    private $updateMetaDescription = 'testMetaDescription';
 
     /** @var Shopware\Components\Model\ModelManager */
     private $manager = null;
-
-    /**@var $model Category*/
-    protected $repository = null;
-
 
     /**
      * Standard set up for every test - just disable auth
@@ -58,12 +56,166 @@ class Shopware_Tests_Controllers_Backend_CategoryTest extends Enlight_Components
     {
         parent::setUp();
 
-        $this->manager    = Shopware()->Models();
+        $this->manager = Shopware()->Models();
         $this->repository = $repository = Shopware()->Models()->getRepository(Category::class);
 
         // disable auth and acl
         Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
         Shopware()->Plugins()->Backend()->Auth()->setNoAcl();
+    }
+
+    /**
+     * test getList controller action
+     */
+    public function testGetList()
+    {
+        //delete old data
+        $repositoryData = $this->repository->findBy(['name' => $this->dummyData['name']]);
+        foreach ($repositoryData as $testDummy) {
+            $this->manager->remove($testDummy);
+        }
+        $this->manager->flush();
+
+        $dummy = $this->createDummy();
+
+        /* @var Enlight_Controller_Response_ResponseTestCase */
+        $params['node'] = 1;
+        $this->Request()->setParams($params);
+        $this->dispatch('backend/Category/getList');
+        $this->assertTrue($this->View()->success);
+        $returnData = $this->View()->data;
+
+        $this->assertNotEmpty($returnData);
+        $this->assertGreaterThan(0, $this->View()->total);
+        $foundDummy = [];
+        foreach ($returnData as $dummyData) {
+            if ($dummyData['name'] == $dummy->getName()) {
+                $foundDummy = $dummyData;
+            }
+        }
+        $this->assertTrue(!empty($foundDummy));
+        $this->manager->remove($dummy);
+        $this->manager->flush();
+    }
+
+    /**
+     * test saveDetail controller action
+     *
+     * @return the id of the new category
+     */
+    public function testSaveDetail()
+    {
+        $params = $this->dummyData;
+        unset($params['parentId']);
+        $params['articles'] = [];
+        $params['customerGroups'] = [];
+
+        //test new category
+        $this->Request()->setParams($params);
+        $this->dispatch('backend/Category/createDetail');
+        $this->assertTrue($this->View()->success);
+        $this->assertEquals($this->dummyData['name'], $this->View()->data['name']);
+
+        //test update category
+        $params['id'] = $this->View()->data['id'];
+        $params['metaDescription'] = $this->updateMetaDescription;
+        $this->Request()->setParams($params);
+        $this->dispatch('backend/Category/updateDetail');
+        $this->assertTrue($this->View()->success);
+        $this->assertEquals($this->updateMetaDescription, $this->View()->data['metaDescription']);
+
+        return $this->View()->data['id'];
+    }
+
+    /**
+     * test getDetail controller action
+     *
+     * @depends testSaveDetail
+     *
+     * @param $id
+     *
+     * @return the id to for the testGetDetail Method
+     */
+    public function testGetDetail($id)
+    {
+        $params['node'] = $id;
+        $this->Request()->setParams($params);
+        $this->dispatch('backend/Category/getDetail');
+        $this->assertTrue($this->View()->success);
+        $returningData = $this->View()->data;
+        $dummyData = $this->dummyData;
+
+        $this->assertEquals($dummyData['parentId'], $returningData['parentId']);
+        $this->assertEquals($dummyData['name'], $returningData['name']);
+        $this->assertTrue($returningData['changed'] instanceof \DateTime);
+        $this->assertTrue($returningData['added'] instanceof \DateTime);
+
+        return $id;
+    }
+
+    /**
+     * test getIdPath controller method f.e. used by product feed module
+     *
+     * @depends testGetDetail
+     */
+    public function testGetIdPath($id)
+    {
+        $params['categoryIds'] = $id;
+        $this->Request()->setParams($params);
+        $this->dispatch('backend/Category/getIdPath');
+        $this->assertTrue($this->View()->success);
+        $categoryPath = $this->View()->data;
+        $this->assertTrue(!empty($categoryPath));
+        $this->assertEquals(2, count(explode('/', $categoryPath[0])));
+    }
+
+    /**
+     * test moveTreeItem controller method
+     *
+     * @depends testGetDetail
+     */
+    public function testMoveTreeItem($id)
+    {
+        //test move to another position
+        $params['id'] = $id;
+        $params['position'] = 2;
+        $this->Request()->setParams($params);
+        $this->dispatch('backend/Category/moveTreeItem');
+        $this->assertTrue($this->View()->success);
+
+        $params['id'] = $id;
+        $params['position'] = 2;
+        $params['parentId'] = 3;
+        $this->Request()->setParams($params);
+        $this->dispatch('backend/Category/moveTreeItem');
+        $this->assertTrue($this->View()->success);
+
+        $movedCategoryModel = $this->repository->find($id);
+        $parentModel = $movedCategoryModel->getParent();
+
+        //parentCategory should be Deutsch Id = 3
+        $this->assertEquals(3, $parentModel->getId());
+    }
+
+    /**
+     * test delete controller action
+     *
+     * @depends testGetDetail
+     *
+     * @param $id
+     */
+    public function testDelete($id)
+    {
+        $params['id'] = $id;
+        $categoryModel = $this->repository->find($id);
+        $categoryName = $categoryModel->getName();
+        $this->assertTrue(!empty($categoryName));
+
+        $this->Request()->setParams($params);
+        $this->dispatch('backend/Category/delete');
+        $this->assertTrue($this->View()->success);
+        $categoryModel = $this->repository->find($id);
+        $this->assertEquals(null, $categoryModel);
     }
 
     /**
@@ -96,155 +248,5 @@ class Shopware_Tests_Controllers_Backend_CategoryTest extends Enlight_Components
         $this->manager->flush();
 
         return $dummyData;
-    }
-
-    /**
-     * test getList controller action
-     */
-    public function testGetList()
-    {
-        //delete old data
-        $repositoryData = $this->repository->findBy(array('name' => $this->dummyData["name"]));
-        foreach ($repositoryData as $testDummy) {
-            $this->manager->remove($testDummy);
-        }
-        $this->manager->flush();
-
-        $dummy = $this->createDummy();
-
-        /** @var Enlight_Controller_Response_ResponseTestCase */
-        $params["node"] = 1;
-        $this->Request()->setParams($params);
-        $this->dispatch('backend/Category/getList');
-        $this->assertTrue($this->View()->success);
-        $returnData = $this->View()->data;
-
-        $this->assertNotEmpty($returnData);
-        $this->assertGreaterThan(0, $this->View()->total);
-        $foundDummy = array();
-        foreach ($returnData as $dummyData) {
-            if ($dummyData["name"] == $dummy->getName()) {
-                $foundDummy = $dummyData;
-            }
-        }
-        $this->assertTrue(!empty($foundDummy));
-        $this->manager->remove($dummy);
-        $this->manager->flush();
-    }
-
-    /**
-     * test saveDetail controller action
-     *
-     * @return the id of the new category
-     */
-    public function testSaveDetail()
-    {
-        $params = $this->dummyData;
-        unset($params["parentId"]);
-        $params["articles"] = array();
-        $params["customerGroups"] = array();
-
-        //test new category
-        $this->Request()->setParams($params);
-        $this->dispatch('backend/Category/createDetail');
-        $this->assertTrue($this->View()->success);
-        $this->assertEquals($this->dummyData["name"], $this->View()->data["name"]);
-
-        //test update category
-        $params["id"] = $this->View()->data["id"];
-        $params["metaDescription"] = $this->updateMetaDescription;
-        $this->Request()->setParams($params);
-        $this->dispatch('backend/Category/updateDetail');
-        $this->assertTrue($this->View()->success);
-        $this->assertEquals($this->updateMetaDescription, $this->View()->data["metaDescription"]);
-        return $this->View()->data["id"];
-    }
-
-    /**
-     * test getDetail controller action
-     *
-     * @depends testSaveDetail
-     * @param $id
-     * @return the id to for the testGetDetail Method
-     */
-    public function testGetDetail($id)
-    {
-        $params["node"] = $id;
-        $this->Request()->setParams($params);
-        $this->dispatch('backend/Category/getDetail');
-        $this->assertTrue($this->View()->success);
-        $returningData = $this->View()->data;
-        $dummyData = $this->dummyData;
-
-        $this->assertEquals($dummyData["parentId"], $returningData["parentId"]);
-        $this->assertEquals($dummyData["name"], $returningData["name"]);
-        $this->assertTrue($returningData["changed"] instanceof \DateTime);
-        $this->assertTrue($returningData["added"] instanceof \DateTime);
-
-        return $id;
-    }
-
-    /**
-     * test getIdPath controller method f.e. used by product feed module
-     *
-     * @depends testGetDetail
-     */
-    public function testGetIdPath($id)
-    {
-        $params["categoryIds"] = $id;
-        $this->Request()->setParams($params);
-        $this->dispatch('backend/Category/getIdPath');
-        $this->assertTrue($this->View()->success);
-        $categoryPath = $this->View()->data;
-        $this->assertTrue(!empty($categoryPath));
-        $this->assertEquals(2, count(explode("/", $categoryPath[0])));
-    }
-
-    /**
-     * test moveTreeItem controller method
-     *
-     * @depends testGetDetail
-     */
-    public function testMoveTreeItem($id)
-    {
-        //test move to another position
-        $params["id"] = $id;
-        $params["position"] = 2;
-        $this->Request()->setParams($params);
-        $this->dispatch('backend/Category/moveTreeItem');
-        $this->assertTrue($this->View()->success);
-
-        $params["id"] = $id;
-        $params["position"] = 2;
-        $params["parentId"] = 3;
-        $this->Request()->setParams($params);
-        $this->dispatch('backend/Category/moveTreeItem');
-        $this->assertTrue($this->View()->success);
-
-        $movedCategoryModel = $this->repository->find($id);
-        $parentModel = $movedCategoryModel->getParent();
-
-        //parentCategory should be Deutsch Id = 3
-        $this->assertEquals(3, $parentModel->getId());
-    }
-
-    /**
-     * test delete controller action
-     *
-     * @depends testGetDetail
-     * @param $id
-     */
-    public function testDelete($id)
-    {
-        $params["id"] = $id;
-        $categoryModel = $this->repository->find($id);
-        $categoryName = $categoryModel->getName();
-        $this->assertTrue(!empty($categoryName));
-
-        $this->Request()->setParams($params);
-        $this->dispatch('backend/Category/delete');
-        $this->assertTrue($this->View()->success);
-        $categoryModel = $this->repository->find($id);
-        $this->assertEquals(null, $categoryModel);
     }
 }

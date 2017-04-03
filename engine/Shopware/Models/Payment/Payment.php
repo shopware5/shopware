@@ -24,11 +24,10 @@
 
 namespace   Shopware\Models\Payment;
 
-use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
 
 /**
- *
  * Shopware payment model represents a single payment type.
  * <br>
  * The Shopware payment model represents a row of the s_core_paymentmeans.
@@ -49,148 +48,6 @@ use Doctrine\ORM\Mapping as ORM;
 class Payment extends ModelEntity
 {
     /**
-     * @var integer $id
-     *
-     * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
-    /**
-     * @var string $name
-     *
-     * @ORM\Column(name="name", type="string", length=255, nullable=false)
-     */
-    private $name;
-
-    /**
-     * @var string $description
-     *
-     * @ORM\Column(name="description", type="string", length=255, nullable=false)
-     */
-    private $description;
-
-    /**
-     * @var string $template
-     *
-     * @ORM\Column(name="template", type="string", length=255, nullable=false)
-     */
-    private $template = '';
-
-    /**
-     * @var string $class
-     *
-     * @ORM\Column(name="class", type="string", length=255, nullable=false)
-     */
-    private $class = '';
-
-    /**
-     * @var string $table
-     *
-     * @ORM\Column(name="`table`", type="string", length=70, nullable=false)
-     */
-    private $table = '';
-
-    /**
-     * @var boolean $hide
-     *
-     * @ORM\Column(name="hide", type="boolean", nullable=false)
-     */
-    private $hide = false;
-
-    /**
-     * @var string $additionalDescription
-     *
-     * @ORM\Column(name="additionaldescription", type="text", nullable=false)
-     */
-    private $additionalDescription;
-
-    /**
-     * @var float $debitPercent
-     *
-     * @ORM\Column(name="debit_percent", type="float", nullable=false)
-     */
-    private $debitPercent = 0;
-
-    /**
-     * @var float $surcharge
-     *
-     * @ORM\Column(name="surcharge", type="float", nullable=false)
-     */
-    private $surcharge = 0;
-
-    /**
-     * @var string $surchargeString
-     *
-     * @ORM\Column(name="surchargestring", type="string", length=255, nullable=false)
-     */
-    private $surchargeString = '';
-
-    /**
-     * @var integer $position
-     *
-     * @ORM\Column(name="position", type="integer", nullable=false)
-     */
-    private $position = 0;
-
-    /**
-     * @var integer $active
-     *
-     * @ORM\Column(name="active", type="boolean", nullable=false)
-     */
-    private $active = false;
-
-    /**
-     * @var integer $esdActive
-     *
-     * @ORM\Column(name="esdactive", type="boolean", nullable=false)
-     */
-    private $esdActive = false;
-
-    /**
-     * @var integer $mobileInactive
-     *
-     * @ORM\Column(name="mobile_inactive", type="boolean", nullable=false)
-     */
-    private $mobileInactive = false;
-
-    /**
-     * @var string $embedIFrame
-     *
-     * @ORM\Column(name="embediframe", type="string", length=255, nullable=false)
-     */
-    private $embedIFrame = '';
-
-    /**
-     * @var integer $hideProspect
-     *
-     * @ORM\Column(name="hideprospect", type="integer", nullable=false)
-     */
-    private $hideProspect = 0;
-
-    /**
-     * @var string $action
-     *
-     * @ORM\Column(name="action", type="string", length=255, nullable=true)
-     */
-    private $action = null;
-
-    /**
-     * @var integer $pluginId
-     *
-     * @ORM\Column(name="pluginID", type="integer", nullable=true)
-     */
-    private $pluginId = null;
-
-    /**
-     * @var integer $souce
-     *
-     * @ORM\Column(name="source", type="integer", nullable=true)
-     */
-    private $source = null;
-
-    /**
      * @var \Doctrine\Common\Collections\ArrayCollection
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Country\Country", inversedBy="payments")
      * @ORM\JoinTable(name="s_core_paymentmeans_countries",
@@ -203,6 +60,176 @@ class Payment extends ModelEntity
      * )
      */
     protected $countries;
+
+    /**
+     * INVERSE SIDE
+     *
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Payment", mappedBy="payment", orphanRemoval=true, cascade={"persist"})
+     *
+     * @var \Shopware\Models\Attribute\Payment
+     */
+    protected $attribute;
+
+    /**
+     * @var \Shopware\Models\Plugin\Plugin
+     * @ORM\ManyToOne(targetEntity="Shopware\Models\Plugin\Plugin", inversedBy="payments")
+     * @ORM\JoinColumn(name="pluginID", referencedColumnName="id")
+     */
+    protected $plugin;
+
+    /**
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Payment\PaymentInstance", mappedBy="paymentMean")
+     */
+    protected $paymentInstances;
+    /**
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Customer\PaymentData", mappedBy="paymentMean")
+     */
+    protected $paymentData;
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="name", type="string", length=255, nullable=false)
+     */
+    private $name;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="description", type="string", length=255, nullable=false)
+     */
+    private $description;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="template", type="string", length=255, nullable=false)
+     */
+    private $template = '';
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="class", type="string", length=255, nullable=false)
+     */
+    private $class = '';
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="`table`", type="string", length=70, nullable=false)
+     */
+    private $table = '';
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="hide", type="boolean", nullable=false)
+     */
+    private $hide = false;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="additionaldescription", type="text", nullable=false)
+     */
+    private $additionalDescription;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="debit_percent", type="float", nullable=false)
+     */
+    private $debitPercent = 0;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="surcharge", type="float", nullable=false)
+     */
+    private $surcharge = 0;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="surchargestring", type="string", length=255, nullable=false)
+     */
+    private $surchargeString = '';
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="position", type="integer", nullable=false)
+     */
+    private $position = 0;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="active", type="boolean", nullable=false)
+     */
+    private $active = false;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="esdactive", type="boolean", nullable=false)
+     */
+    private $esdActive = false;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="mobile_inactive", type="boolean", nullable=false)
+     */
+    private $mobileInactive = false;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="embediframe", type="string", length=255, nullable=false)
+     */
+    private $embedIFrame = '';
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="hideprospect", type="integer", nullable=false)
+     */
+    private $hideProspect = 0;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="action", type="string", length=255, nullable=true)
+     */
+    private $action = null;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="pluginID", type="integer", nullable=true)
+     */
+    private $pluginId = null;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="source", type="integer", nullable=true)
+     */
+    private $source = null;
 
     /**
      * @var \Doctrine\Common\Collections\ArrayCollection
@@ -219,7 +246,7 @@ class Payment extends ModelEntity
     private $shops;
 
     /**
-     * @var $ruleSets
+     * @var
      *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Payment\RuleSet", mappedBy="payment")
      * @ORM\JoinColumn(name="id", referencedColumnName="paymentID")
@@ -227,36 +254,9 @@ class Payment extends ModelEntity
     private $ruleSets;
 
     /**
-     * INVERSE SIDE
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Payment", mappedBy="payment", orphanRemoval=true, cascade={"persist"})
-     * @var \Shopware\Models\Attribute\Payment
-     */
-    protected $attribute;
-
-    /**
-     * @var \Shopware\Models\Plugin\Plugin
-     * @ORM\ManyToOne(targetEntity="Shopware\Models\Plugin\Plugin", inversedBy="payments")
-     * @ORM\JoinColumn(name="pluginID", referencedColumnName="id")
-     */
-    protected $plugin;
-
-    /**
-     * @var \Doctrine\Common\Collections\ArrayCollection $paymentInstances
-     *
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Payment\PaymentInstance", mappedBy="paymentMean")
-     */
-    protected $paymentInstances;
-    /**
-     * @var \Doctrine\Common\Collections\ArrayCollection $paymentData
-     *
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Customer\PaymentData", mappedBy="paymentMean")
-     */
-    protected $paymentData;
-
-    /**
      * Gets the id of the payment
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -267,11 +267,13 @@ class Payment extends ModelEntity
      * Sets the name of a payment
      *
      * @param string $name
+     *
      * @return Payment
      */
     public function setName($name)
     {
         $this->name = $name;
+
         return $this;
     }
 
@@ -289,11 +291,13 @@ class Payment extends ModelEntity
      * Sets the description of a payment
      *
      * @param string $description
+     *
      * @return Payment
      */
     public function setDescription($description)
     {
         $this->description = $description;
+
         return $this;
     }
 
@@ -311,11 +315,13 @@ class Payment extends ModelEntity
      * Sets the template of a payment
      *
      * @param string $template
+     *
      * @return Payment
      */
     public function setTemplate($template)
     {
         $this->template = $template;
+
         return $this;
     }
 
@@ -333,12 +339,15 @@ class Payment extends ModelEntity
      * Sets the class of a payment
      *
      * @deprecated
+     *
      * @param string $class
+     *
      * @return Payment
      */
     public function setClass($class)
     {
         $this->class = $class;
+
         return $this;
     }
 
@@ -346,6 +355,7 @@ class Payment extends ModelEntity
      * Gets the class of a payment
      *
      * @deprecated
+     *
      * @return string
      */
     public function getClass()
@@ -357,12 +367,15 @@ class Payment extends ModelEntity
      * Set the special table of a payment
      *
      * @deprecated
+     *
      * @param string $table
+     *
      * @return Payment
      */
     public function setTable($table)
     {
         $this->table = $table;
+
         return $this;
     }
 
@@ -370,6 +383,7 @@ class Payment extends ModelEntity
      * Gets the table of a payment
      *
      * @deprecated
+     *
      * @return string
      */
     public function getTable()
@@ -380,19 +394,21 @@ class Payment extends ModelEntity
     /**
      * Sets the hide-mode of a payment
      *
-     * @param boolean $hide
+     * @param bool $hide
+     *
      * @return Payment
      */
     public function setHide($hide)
     {
         $this->hide = (bool) $hide;
+
         return $this;
     }
 
     /**
      * Gets the hide-mode of a payment
      *
-     * @return boolean
+     * @return bool
      */
     public function getHide()
     {
@@ -403,11 +419,13 @@ class Payment extends ModelEntity
      * Sets the additional-description of a payment
      *
      * @param string $additionalDescription
+     *
      * @return Payment
      */
     public function setAdditionalDescription($additionalDescription)
     {
         $this->additionalDescription = $additionalDescription;
+
         return $this;
     }
 
@@ -425,11 +443,13 @@ class Payment extends ModelEntity
      * Sets the debit in percent of a payment
      *
      * @param float $debitPercent
+     *
      * @return Payment
      */
     public function setDebitPercent($debitPercent)
     {
         $this->debitPercent = $debitPercent;
+
         return $this;
     }
 
@@ -447,11 +467,13 @@ class Payment extends ModelEntity
      * Sets the surcharge of a payment
      *
      * @param float $surcharge
+     *
      * @return Payment
      */
     public function setSurcharge($surcharge)
     {
         $this->surcharge = $surcharge;
+
         return $this;
     }
 
@@ -469,11 +491,13 @@ class Payment extends ModelEntity
      * Sets the country-surcharge as a string of a payment
      *
      * @param string $surchargeString
+     *
      * @return Payment
      */
     public function setSurchargeString($surchargeString)
     {
         $this->surchargeString = $surchargeString;
+
         return $this;
     }
 
@@ -481,6 +505,7 @@ class Payment extends ModelEntity
      * Gets the country-surcharge-string of a payment
      *
      * @deprecated
+     *
      * @return string
      */
     public function getSurchargeString()
@@ -491,19 +516,21 @@ class Payment extends ModelEntity
     /**
      * Sets the position of a payment
      *
-     * @param integer $position
+     * @param int $position
+     *
      * @return Payment
      */
     public function setPosition($position)
     {
         $this->position = (int) $position;
+
         return $this;
     }
 
     /**
      * Gets the position of a payment
      *
-     * @return integer
+     * @return int
      */
     public function getPosition()
     {
@@ -513,19 +540,21 @@ class Payment extends ModelEntity
     /**
      * Sets the active-state of a payment
      *
-     * @param boolean $active
+     * @param bool $active
+     *
      * @return Payment
      */
     public function setActive($active)
     {
         $this->active = (bool) $active;
+
         return $this;
     }
 
     /**
      * Gets the active-state of a payment
      *
-     * @return boolean
+     * @return bool
      */
     public function getActive()
     {
@@ -535,19 +564,21 @@ class Payment extends ModelEntity
     /**
      * Sets the esd-active-state of a payment
      *
-     * @param boolean $esdActive
+     * @param bool $esdActive
+     *
      * @return Payment
      */
     public function setEsdActive($esdActive)
     {
         $this->esdActive = (bool) $esdActive;
+
         return $this;
     }
 
     /**
      * Gets the esd-active-state of a payment
      *
-     * @return boolean
+     * @return bool
      */
     public function getEsdActive()
     {
@@ -557,19 +588,21 @@ class Payment extends ModelEntity
     /**
      * Sets the mobile inactive state of a payment
      *
-     * @param boolean $mobileInactive
+     * @param bool $mobileInactive
+     *
      * @return Payment
      */
     public function setMobileInactive($mobileInactive)
     {
         $this->mobileInactive = (bool) $mobileInactive;
+
         return $this;
     }
 
     /**
      * Gets the mobile inactive state of a payment
      *
-     * @return boolean
+     * @return bool
      */
     public function getMobileInactive()
     {
@@ -580,12 +613,15 @@ class Payment extends ModelEntity
      * Sets the embed-IFrame of a payment
      *
      * @deprecated
+     *
      * @param string $embedIFrame
+     *
      * @return Payment
      */
     public function setEmbedIFrame($embedIFrame)
     {
         $this->embedIFrame = $embedIFrame;
+
         return $this;
     }
 
@@ -593,6 +629,7 @@ class Payment extends ModelEntity
      * Gets the embed-IFrame of a payment
      *
      * @deprecated
+     *
      * @return string
      */
     public function getEmbedIFrame()
@@ -603,19 +640,21 @@ class Payment extends ModelEntity
     /**
      * Sets hide-prospect-state of a payment
      *
-     * @param integer $hideProspect
+     * @param int $hideProspect
+     *
      * @return Payment
      */
     public function setHideProspect($hideProspect)
     {
         $this->hideProspect = $hideProspect;
+
         return $this;
     }
 
     /**
      * Gets the hide-prospect of a payment
      *
-     * @return integer
+     * @return int
      */
     public function getHideProspect()
     {
@@ -626,11 +665,13 @@ class Payment extends ModelEntity
      * Sets the action of a payment
      *
      * @param string $action
+     *
      * @return Payment
      */
     public function setAction($action)
     {
         $this->action = $action;
+
         return $this;
     }
 
@@ -647,19 +688,21 @@ class Payment extends ModelEntity
     /**
      * Sets the pluginId of a payment
      *
-     * @param integer $pluginId
+     * @param int $pluginId
+     *
      * @return Payment
      */
     public function setPluginId($pluginId)
     {
         $this->pluginId = $pluginId;
+
         return $this;
     }
 
     /**
      * Gets the pluginId of a payment
      *
-     * @return integer
+     * @return int
      */
     public function getPluginId()
     {
@@ -668,6 +711,7 @@ class Payment extends ModelEntity
 
     /**
      * Gets the countries related to the payment
+     *
      * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getCountries()
@@ -677,17 +721,21 @@ class Payment extends ModelEntity
 
     /**
      * Sets the countries related to the payment
+     *
      * @param \Doctrine\Common\Collections\ArrayCollection $countries
+     *
      * @return Payment
      */
     public function setCountries($countries)
     {
         $this->countries = $countries;
+
         return $this;
     }
 
     /**
      * Gets the shops related to the payment
+     *
      * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getShops()
@@ -697,31 +745,38 @@ class Payment extends ModelEntity
 
     /**
      * Sets the shops related to the payment
+     *
      * @param \Doctrine\Common\Collections\ArrayCollection $shops
+     *
      * @return Payment
      */
     public function setShops($shops)
     {
         $this->shops = $shops;
+
         return $this;
     }
 
     /**
      * Sets the source of a payment.
      * NULL = default payment, 1 = self-created
+     *
      * @param int $source
+     *
      * @return Payment
      */
     public function setSource($source)
     {
         $this->source = $source;
+
         return $this;
     }
 
     /**
      * Gets the source of a payment
      * NULL = default payment, 1 = self-created
-     * @return integer
+     *
+     * @return int
      */
     public function getSource()
     {
@@ -738,11 +793,13 @@ class Payment extends ModelEntity
 
     /**
      * @param  $ruleSets
+     *
      * @return \Shopware\Models\Payment\Payment
      */
     public function setRuleSets($ruleSets)
     {
         $this->ruleSets = $ruleSets;
+
         return $this;
     }
 
@@ -756,6 +813,7 @@ class Payment extends ModelEntity
 
     /**
      * @param \Shopware\Models\Attribute\Payment|array|null $attribute
+     *
      * @return \Shopware\Models\Attribute\Payment
      */
     public function setAttribute($attribute)

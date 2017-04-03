@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 namespace Shopware\Bundle\ESIndexingBundle\Product;
 
 use Shopware\Bundle\ESIndexingBundle\Struct\Product;
@@ -29,8 +30,9 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
 interface ProductProviderInterface
 {
     /**
-     * @param Shop $shop
+     * @param Shop     $shop
      * @param string[] $numbers
+     *
      * @return Product[]
      */
     public function get(Shop $shop, $numbers);

@@ -21,13 +21,14 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 namespace Shopware\Bundle\StoreFrontBundle\Gateway;
 
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\StoreFrontBundle\Gateway
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 interface PropertyGatewayInterface
@@ -51,8 +52,9 @@ interface PropertyGatewayInterface
      *  - Sort mode equals to 3, the values are sorted by the position
      *  - In all other cases the values are sorted by their alphanumeric value
      *
-     * @param array $valueIds
+     * @param array                       $valueIds
      * @param Struct\ShopContextInterface $context
+     *
      * @return Struct\Property\Set[] Each array element (set, group, option) is indexed by his id
      */
     public function getList(array $valueIds, Struct\ShopContextInterface $context);

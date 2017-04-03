@@ -24,18 +24,18 @@
 
 namespace Shopware\Bundle\MediaBundle\Commands;
 
-use Doctrine\ORM\ORMException;
 use Doctrine\ORM\AbstractQuery;
+use Doctrine\ORM\ORMException;
 use Shopware\Commands\ShopwareCommand;
+use Shopware\Models\Media\Media;
+use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Helper\ProgressBar;
-use Shopware\Models\Media\Media;
 
 /**
  * @category  Shopware
- * @package   Shopware\Components\Console\Commands
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class MediaCleanupCommand extends ShopwareCommand
@@ -47,9 +47,9 @@ class MediaCleanupCommand extends ShopwareCommand
     {
         $this
             ->setName('sw:media:cleanup')
-            ->setHelp("The <info>%command.name%</info> collects unused media and deletes them.")
-            ->setDescription("Collect unused media and move them to trash.")
-            ->addOption('delete', false, InputOption::VALUE_NONE, "Delete unused media.");
+            ->setHelp('The <info>%command.name%</info> collects unused media and deletes them.')
+            ->setDescription('Collect unused media and move them to trash.')
+            ->addOption('delete', false, InputOption::VALUE_NONE, 'Delete unused media.');
     }
 
     /**
@@ -57,7 +57,7 @@ class MediaCleanupCommand extends ShopwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $verb = "Moved";
+        $verb = 'Moved';
         $total = $this->handleMove();
 
         if ($input->getOption('delete')) {
@@ -68,18 +68,18 @@ class MediaCleanupCommand extends ShopwareCommand
                 }
             }
 
-            $verb = "Deleted";
+            $verb = 'Deleted';
             $total = $this->handleCleanup($output);
         }
 
-        $output->writeln("Cleanup: ".$verb." $total items.");
+        $output->writeln('Cleanup: ' . $verb . " $total items.");
     }
-
 
     /**
      * Handles cleaning process and returns the number of deleted media objects
      *
      * @param OutputInterface $output
+     *
      * @return int
      */
     private function handleCleanup(OutputInterface $output)
@@ -127,7 +127,7 @@ class MediaCleanupCommand extends ShopwareCommand
         $gc = $this->getContainer()->get('shopware_media.garbage_collector');
         $gc->run();
 
-        $total = (int)$gc->getCount();
+        $total = (int) $gc->getCount();
 
         return $total;
     }

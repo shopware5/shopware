@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 class sCoreTest extends Enlight_Components_Test_Controller_TestCase
 {
     /**
@@ -34,28 +35,27 @@ class sCoreTest extends Enlight_Components_Test_Controller_TestCase
     }
 
     /**
-     * @covers sCore::sBuildLink
+     * @covers \sCore::sBuildLink
      */
     public function testsBuildLink()
     {
         // Empty data will return empty string
-        $request = $this->Request()->setParams(array());
+        $request = $this->Request()->setParams([]);
         $this->Front()->setRequest($request);
-        $this->assertEquals('', $this->module->sBuildLink(array()));
-
+        $this->assertEquals('', $this->module->sBuildLink([]));
 
         // Provided sVariables are passed into the url, except 'coreID' and 'sPartner'
-        $sVariablesTestResult = $this->module->sBuildLink(array(
+        $sVariablesTestResult = $this->module->sBuildLink([
             'coreID' => 'foo',
             'sPartner' => 'bar',
             'some' => 'with',
             'other' => 'test',
-            'variables' => 'values'
-        ));
+            'variables' => 'values',
+        ]);
         $this->assertInternalType('string', $sVariablesTestResult);
         $this->assertGreaterThan(0, strlen($sVariablesTestResult));
 
-        $resultArray = array();
+        $resultArray = [];
         parse_str(trim($sVariablesTestResult, '?'), $resultArray);
         $this->assertArrayHasKey('some', $resultArray);
         $this->assertArrayHasKey('other', $resultArray);
@@ -68,22 +68,22 @@ class sCoreTest extends Enlight_Components_Test_Controller_TestCase
 
         // Provided sVariables override _GET, not overlapping get included from both
         // Also test that null values don't get passed on
-        $request = $this->Request()->setParams(array(
+        $request = $this->Request()->setParams([
             'just' => 'used',
             'some' => 'for',
             'variables' => 'testing',
-            'nullGet' => null
-        ));
+            'nullGet' => null,
+        ]);
         $this->Front()->setRequest($request);
-        $sVariablesTestResult = $this->module->sBuildLink(array(
+        $sVariablesTestResult = $this->module->sBuildLink([
             'other' => 'with',
             'variables' => 'values',
-            'nullVariables' => null
-        ));
+            'nullVariables' => null,
+        ]);
         $this->assertInternalType('string', $sVariablesTestResult);
         $this->assertGreaterThan(0, strlen($sVariablesTestResult));
 
-        $resultArray = array();
+        $resultArray = [];
         parse_str(trim($sVariablesTestResult, '?'), $resultArray);
         $this->assertArrayHasKey('just', $resultArray);
         $this->assertArrayHasKey('some', $resultArray);
@@ -98,22 +98,22 @@ class sCoreTest extends Enlight_Components_Test_Controller_TestCase
 
         // Test that sViewport=cat only keeps sCategory and sPage from GET
         // Test that they can still be overwriten by sVariables
-        $request = $this->Request()->setParams(array(
+        $request = $this->Request()->setParams([
             'sViewport' => 'cat',
             'sCategory' => 'getCategory',
             'sPage' => 'getPage',
-            'foo' => 'bar'
-        ));
+            'foo' => 'bar',
+        ]);
         $this->Front()->setRequest($request);
-        $sVariablesTestResult = $this->module->sBuildLink(array(
+        $sVariablesTestResult = $this->module->sBuildLink([
             'sCategory' => 'sVariablesCategory',
             'other' => 'with',
-            'variables' => 'values'
-        ));
+            'variables' => 'values',
+        ]);
         $this->assertInternalType('string', $sVariablesTestResult);
         $this->assertGreaterThan(0, strlen($sVariablesTestResult));
 
-        $resultArray = array();
+        $resultArray = [];
         parse_str(trim($sVariablesTestResult, '?'), $resultArray);
         $this->assertArrayHasKey('sViewport', $resultArray);
         $this->assertArrayHasKey('sCategory', $resultArray);
@@ -127,25 +127,24 @@ class sCoreTest extends Enlight_Components_Test_Controller_TestCase
         $this->assertEquals('with', $resultArray['other']);
         $this->assertEquals('values', $resultArray['variables']);
 
-
         // Test that overriding sViewport doesn't override the special behavior
-        $request = $this->Request()->setParams(array(
+        $request = $this->Request()->setParams([
             'sViewport' => 'cat',
             'sCategory' => 'getCategory',
             'sPage' => 'getPage',
-            'foo' => 'boo'
-        ));
+            'foo' => 'boo',
+        ]);
         $this->Front()->setRequest($request);
-        $sVariablesTestResult = $this->module->sBuildLink(array(
+        $sVariablesTestResult = $this->module->sBuildLink([
             'sViewport' => 'test',
             'sCategory' => 'sVariablesCategory',
             'other' => 'with',
-            'variables' => 'values'
-        ));
+            'variables' => 'values',
+        ]);
         $this->assertInternalType('string', $sVariablesTestResult);
         $this->assertGreaterThan(0, strlen($sVariablesTestResult));
 
-        $resultArray = array();
+        $resultArray = [];
         parse_str(trim($sVariablesTestResult, '?'), $resultArray);
         $this->assertArrayHasKey('sViewport', $resultArray);
         $this->assertArrayHasKey('sCategory', $resultArray);
@@ -161,7 +160,7 @@ class sCoreTest extends Enlight_Components_Test_Controller_TestCase
     }
 
     /**
-     * @covers sCore::sRewriteLink
+     * @covers \sCore::sRewriteLink
      */
     public function testsRewriteLink()
     {
@@ -176,17 +175,17 @@ class sCoreTest extends Enlight_Components_Test_Controller_TestCase
 
         // Fetch all rows and test them
         $paths = Shopware()->Db()->fetchCol(
-            "SELECT org_path FROM s_core_rewrite_urls WHERE subshopID = ?",
-            array(Shopware()->Shop()->getId())
+            'SELECT org_path FROM s_core_rewrite_urls WHERE subshopID = ?',
+            [Shopware()->Shop()->getId()]
         );
         foreach ($paths as $path) {
             $expectedPath = Shopware()->Db()->fetchOne(
-                "SELECT path FROM s_core_rewrite_urls WHERE subshopID = ? AND org_path = ? ORDER BY main DESC LIMIT 1",
-                array(Shopware()->Shop()->getId(), $path)
+                'SELECT path FROM s_core_rewrite_urls WHERE subshopID = ? AND org_path = ? ORDER BY main DESC LIMIT 1',
+                [Shopware()->Shop()->getId(), $path]
             );
 
-            $this->assertEquals(strtolower($baseUrl.$expectedPath), $this->module->sRewriteLink('?'.$path));
-            $this->assertEquals(strtolower($baseUrl.$expectedPath), $this->module->sRewriteLink('?'.$path, 'testTitle'));
+            $this->assertEquals(strtolower($baseUrl . $expectedPath), $this->module->sRewriteLink('?' . $path));
+            $this->assertEquals(strtolower($baseUrl . $expectedPath), $this->module->sRewriteLink('?' . $path, 'testTitle'));
         }
     }
 }

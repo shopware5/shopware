@@ -24,7 +24,7 @@
 
 /**
  * @category  Shopware
- * @package   Shopware\Controllers\Frontend
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Controllers_Frontend_Tellafriend extends Enlight_Controller_Action
@@ -38,7 +38,7 @@ class Shopware_Controllers_Frontend_Tellafriend extends Enlight_Controller_Actio
 
     public function successAction()
     {
-        $this->View()->loadTemplate("frontend/tellafriend/index.tpl");
+        $this->View()->loadTemplate('frontend/tellafriend/index.tpl');
         $this->View()->sSuccess = true;
     }
 
@@ -51,77 +51,77 @@ class Shopware_Controllers_Frontend_Tellafriend extends Enlight_Controller_Actio
         }
 
         if (empty($id)) {
-            return $this->forward("index", "index");
+            return $this->forward('index', 'index');
         }
 
         // Get Article-Information
         $sArticle = Shopware()->Modules()->Articles()->sGetPromotionById('fix', 0, intval($id));
-        if (empty($sArticle["articleName"])) {
-            return $this->forward("index", "index");
+        if (empty($sArticle['articleName'])) {
+            return $this->forward('index', 'index');
         }
 
-        if ($this->Request()->getPost("sMailTo")) {
-            $variables["sError"] = false;
-            if (!$this->Request()->getPost("sName")) {
-                $variables["sError"] = true;
+        if ($this->Request()->getPost('sMailTo')) {
+            $variables['sError'] = false;
+            if (!$this->Request()->getPost('sName')) {
+                $variables['sError'] = true;
             }
-            if (!$this->Request()->getPost("sMail")) {
-                $variables["sError"] = true;
+            if (!$this->Request()->getPost('sMail')) {
+                $variables['sError'] = true;
             }
-            if (!$this->Request()->getPost("sRecipient")) {
-                $variables["sError"] = true;
+            if (!$this->Request()->getPost('sRecipient')) {
+                $variables['sError'] = true;
             }
 
-            if (preg_match("/;/", $this->Request()->getPost("sRecipient")) || strlen($this->Request()->getPost("sRecipient") >= 50)) {
-                $variables["sError"] = true;
+            if (preg_match('/;/', $this->Request()->getPost('sRecipient')) || strlen($this->Request()->getPost('sRecipient') >= 50)) {
+                $variables['sError'] = true;
             }
 
             $validator = $this->container->get('validator.email');
-            if (!$validator->isValid($this->Request()->getPost("sRecipient"))) {
-                $variables["sError"] = true;
+            if (!$validator->isValid($this->Request()->getPost('sRecipient'))) {
+                $variables['sError'] = true;
             }
 
             if (!empty(Shopware()->Config()->CaptchaColor)) {
                 $captcha = str_replace(' ', '', strtolower($this->Request()->sCaptcha));
                 $rand = $this->Request()->getPost('sRand');
                 if (empty($rand) || $captcha != substr(md5($rand), 0, 5)) {
-                    $variables["sError"] = true;
+                    $variables['sError'] = true;
                 }
             }
 
-            if ($variables["sError"] == false) {
+            if ($variables['sError'] == false) {
                 // Prepare eMail
-                $sArticle["linkDetails"] = $this->Front()->Router()->assemble(array('sViewport' => 'detail', 'sArticle' => $sArticle["articleID"]));
+                $sArticle['linkDetails'] = $this->Front()->Router()->assemble(['sViewport' => 'detail', 'sArticle' => $sArticle['articleID']]);
 
-                $context = array(
-                    'sName'    => $this->sSYSTEM->_POST["sName"],
-                    'sArticle' => html_entity_decode($sArticle["articleName"]),
-                    'sLink'    => $sArticle["linkDetails"],
-                );
+                $context = [
+                    'sName' => $this->sSYSTEM->_POST['sName'],
+                    'sArticle' => html_entity_decode($sArticle['articleName']),
+                    'sLink' => $sArticle['linkDetails'],
+                ];
 
-                if ($this->sSYSTEM->_POST["sComment"]) {
-                    $context['sComment'] = strip_tags(html_entity_decode($this->sSYSTEM->_POST["sComment"]));
+                if ($this->sSYSTEM->_POST['sComment']) {
+                    $context['sComment'] = strip_tags(html_entity_decode($this->sSYSTEM->_POST['sComment']));
                 } else {
                     $context['sComment'] = '';
                 }
 
-                $mail = Shopware()->TemplateMail()->createMail('sTELLAFRIEND', $context, null, array(
-                    "fromMail" => $this->sSYSTEM->_POST["sMail"],
-                    "fromName" => $this->sSYSTEM->_POST["sName"]
-                ));
+                $mail = Shopware()->TemplateMail()->createMail('sTELLAFRIEND', $context, null, [
+                    'fromMail' => $this->sSYSTEM->_POST['sMail'],
+                    'fromName' => $this->sSYSTEM->_POST['sName'],
+                ]);
 
-                $mail->addTo($this->sSYSTEM->_POST["sRecipient"]);
+                $mail->addTo($this->sSYSTEM->_POST['sRecipient']);
                 $mail->send();
 
                 $this->View()->sSuccess = true;
-                $url = $this->Front()->Router()->assemble(array('controller' => 'tellafriend', 'action' => 'success'));
+                $url = $this->Front()->Router()->assemble(['controller' => 'tellafriend', 'action' => 'success']);
                 $this->redirect($url);
             } else {
                 $this->View()->sError = true;
-                $this->View()->sName = $this->Request()->getPost("sName");
-                $this->View()->sMail = $this->Request()->getPost("sMail");
-                $this->View()->sRecipient = $this->Request()->getPost("sRecipient");
-                $this->View()->sComment = $this->Request()->getPost("sComment");
+                $this->View()->sName = $this->Request()->getPost('sName');
+                $this->View()->sMail = $this->Request()->getPost('sMail');
+                $this->View()->sRecipient = $this->Request()->getPost('sRecipient');
+                $this->View()->sComment = $this->Request()->getPost('sComment');
             }
         }
         $this->View()->rand = md5(uniqid(rand()));

@@ -1,14 +1,36 @@
 <?php
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
 
 namespace Shopware\Tests\Mink;
 
 use Behat\Behat\Context\SnippetAcceptingContext;
 use Behat\Behat\Hook\Scope\AfterStepScope;
-use Behat\Mink\Driver\BrowserKitDriver;
-use Behat\Mink\Exception\Exception as MinkException;
 use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use Behat\Behat\Hook\Scope\ScenarioScope;
+use Behat\Mink\Driver\BrowserKitDriver;
 use Behat\Mink\Driver\Selenium2Driver;
+use Behat\Mink\Exception\Exception as MinkException;
 use Behat\Mink\Session;
 use Behat\Testwork\Hook\Scope\BeforeSuiteScope;
 use Behat\Testwork\Suite\Suite;
@@ -37,12 +59,12 @@ class FeatureContext extends SubContext implements SnippetAcceptingContext
     public function __construct()
     {
         if (!self::$suite->hasSetting('template')) {
-            throw new \RuntimeException("Template not set. Please start testsuite using the --profile argument.");
+            throw new \RuntimeException('Template not set. Please start testsuite using the --profile argument.');
         }
 
         $this->registerErrorHandler();
 
-        $this->dirtyConfigElements = array();
+        $this->dirtyConfigElements = [];
     }
 
     /**
@@ -69,67 +91,6 @@ class FeatureContext extends SubContext implements SnippetAcceptingContext
         }
 
         self::$lastScenarioLine = $scope->getScenario()->getLine();
-        return;
-    }
-
-    private function prepare()
-    {
-        $em = $this->getService('models');
-        $em->generateAttributeModels();
-
-        //refresh s_core_templates
-        $this->registerErrorHandler();
-        $this->getService('theme_installer')->synchronize();
-        restore_error_handler();
-
-        //get the template id
-        $sql = sprintf(
-            'SELECT id FROM `s_core_templates` WHERE template = "%s"',
-            self::$suite->getSetting('template')
-        );
-
-        $templateId = $this->getService('db')->fetchOne($sql);
-        if (!$templateId) {
-            throw new \RuntimeException(
-                sprintf("Unable to find template by name %s", self::$suite->getSetting('template'))
-            );
-        }
-
-        //set the template for shop "Deutsch" and activate SEPA payment method
-        $sql = <<<"EOD"
-            UPDATE `s_core_shops` SET `template_id`= $templateId WHERE `id` = 1;
-            UPDATE `s_core_paymentmeans` SET `active`= 1;
-EOD;
-        $this->getService('db')->exec($sql);
-
-        Helper::setCurrentLanguage('de');
-
-        /** @var \Shopware\Bundle\PluginInstallerBundle\Service\InstallerService $pluginManager */
-        $pluginManager = $this->getService('shopware_plugininstaller.plugin_manager');
-
-        // hack to prevent behat error handler kicking in.
-        $this->registerErrorHandler();
-        $pluginManager->refreshPluginList();
-        restore_error_handler();
-
-        $plugin = $pluginManager->getPluginByName('Notification');
-        $pluginManager->installPlugin($plugin);
-        $pluginManager->activatePlugin($plugin);
-    }
-
-    private function reset()
-    {
-        $password = md5('shopware');
-
-        $sql = <<<"EOD"
-            UPDATE s_user SET password = "$password", encoder = "md5", paymentID = 5, failedlogins = 0, lockeduntil = NULL;
-            TRUNCATE s_order_basket;
-            TRUNCATE s_order_basket_attributes;
-            TRUNCATE s_order_notes;
-            TRUNCATE s_order_comparisons;
-            DELETE FROM s_user WHERE id > 2;
-EOD;
-        $this->getService('db')->exec($sql);
     }
 
     /**
@@ -159,6 +120,7 @@ EOD;
      * Take screenshot when step fails. Works only with Selenium2Driver.
      *
      * @AfterStep
+     *
      * @param AfterStepScope $scope
      */
     public function takeScreenshotAfterFailedStep(AfterStepScope $scope)
@@ -167,100 +129,6 @@ EOD;
             $this->takeScreenshot();
             $this->logRequest();
         }
-    }
-
-    private function logRequest()
-    {
-        $session = $this->getSession();
-        $log = sprintf('Current page: %d %s', $this->getStatusCode(), $session->getCurrentUrl()) . "\n";
-        $log .= $this->getRequestDataLogMessage($session);
-        $log .= $this->getResponseHeadersLogMessage($session);
-        $log .= $this->getRequestContentLogMessage($session);
-        $this->saveLog($log, 'log');
-    }
-
-    /**
-     * @param string $content
-     * @param string $type
-     */
-    private function saveLog($content, $type)
-    {
-        $logDir = $this->getService('kernel')->getRootdir() . '/build/logs/mink';
-
-        $currentDateAsString = date('YmdHis');
-
-        $path = sprintf("%s/behat-%s.%s", $logDir, $currentDateAsString, $type);
-        if (!file_put_contents($path, $content)) {
-            throw new \RuntimeException(sprintf('Failed while trying to write log in "%s".', $path));
-        }
-    }
-
-
-    /**
-     * @return int|null
-     */
-    private function getStatusCode()
-    {
-        try {
-            return $this->getSession()->getStatusCode();
-        } catch (MinkException $exception) {
-            return null;
-        }
-    }
-    /**
-     * @param Session $session
-     *
-     * @return string|null
-     */
-    private function getRequestDataLogMessage(Session $session)
-    {
-        $driver = $session->getDriver();
-        if (!$driver instanceof BrowserKitDriver) {
-            return null;
-        }
-        try {
-            return 'Request:' . "\n" . print_r($driver->getClient()->getRequest(), true) . "\n";
-        } catch (MinkException $exception) {
-            return null;
-        }
-    }
-    /**
-     * @param Session $session
-     *
-     * @return string|null
-     */
-    private function getResponseHeadersLogMessage(Session $session)
-    {
-        try {
-            return 'Response headers:' . "\n" . print_r($session->getResponseHeaders(), true) . "\n";
-        } catch (MinkException $exception) {
-            return null;
-        }
-    }
-    /**
-     * @param Session $session
-     *
-     * @return string|null
-     */
-    private function getRequestContentLogMessage(Session $session)
-    {
-        try {
-            return 'Response content:' . "\n" . $session->getPage()->getContent() . "\n";
-        } catch (MinkException $exception) {
-            return null;
-        }
-    }
-
-    private function takeScreenshot()
-    {
-        $driver = $this->getSession()->getDriver();
-        if (!$driver instanceof Selenium2Driver) {
-            return;
-        }
-
-        $filePath = $this->getService('kernel')->getRootdir() . '/build/logs/mink';
-
-        $this->saveScreenshot(null, $filePath);
     }
 
     /**
@@ -280,10 +148,9 @@ EOD;
         file_put_contents($filepath . '/' . $filename, $this->getSession()->getScreenshot());
     }
 
-
     /**
      * @param string $configName
-     * @param mixed $value
+     * @param mixed  $value
      */
     public function changeConfigValue($configName, $value)
     {
@@ -344,34 +211,190 @@ EOD;
     public function registerErrorHandler()
     {
         error_reporting(-1);
-        $errorNameMap = array(
-            E_ERROR             => 'E_ERROR',
-            E_WARNING           => 'E_WARNING',
-            E_PARSE             => 'E_PARSE',
-            E_NOTICE            => 'E_NOTICE',
-            E_CORE_ERROR        => 'E_CORE_ERROR',
-            E_CORE_WARNING      => 'E_CORE_WARNING',
-            E_COMPILE_ERROR     => 'E_COMPILE_ERROR',
-            E_COMPILE_WARNING   => 'E_COMPILE_WARNING',
-            E_USER_ERROR        => 'E_USER_ERROR',
-            E_USER_WARNING      => 'E_USER_WARNING',
-            E_USER_NOTICE       => 'E_USER_NOTICE',
-            E_STRICT            => 'E_STRICT',
+        $errorNameMap = [
+            E_ERROR => 'E_ERROR',
+            E_WARNING => 'E_WARNING',
+            E_PARSE => 'E_PARSE',
+            E_NOTICE => 'E_NOTICE',
+            E_CORE_ERROR => 'E_CORE_ERROR',
+            E_CORE_WARNING => 'E_CORE_WARNING',
+            E_COMPILE_ERROR => 'E_COMPILE_ERROR',
+            E_COMPILE_WARNING => 'E_COMPILE_WARNING',
+            E_USER_ERROR => 'E_USER_ERROR',
+            E_USER_WARNING => 'E_USER_WARNING',
+            E_USER_NOTICE => 'E_USER_NOTICE',
+            E_STRICT => 'E_STRICT',
             E_RECOVERABLE_ERROR => 'E_RECOVERABLE_ERROR',
-            E_DEPRECATED        => 'E_DEPRECATED',
-            E_USER_DEPRECATED   => 'E_USER_DEPRECATED',
-            E_ALL               => 'E_ALL',
-        );
+            E_DEPRECATED => 'E_DEPRECATED',
+            E_USER_DEPRECATED => 'E_USER_DEPRECATED',
+            E_ALL => 'E_ALL',
+        ];
 
         set_error_handler(function ($errno, $errstr, $errfile, $errline) use ($errorNameMap) {
             $filepath = $this->getService('kernel')->getRootdir() . '/build/logs/mink';
 
             // No effect in other environments.
             $filename = sprintf('errors_%s_%s.%s', date('c'), uniqid('', true), 'log');
-            $filepath = $filepath .'/'.$filename;
-            file_put_contents($filepath, $errorNameMap[$errno].': '.$errstr, FILE_APPEND);
+            $filepath = $filepath . '/' . $filename;
+            file_put_contents($filepath, $errorNameMap[$errno] . ': ' . $errstr, FILE_APPEND);
 
             return true;
         });
+    }
+
+    private function prepare()
+    {
+        $em = $this->getService('models');
+        $em->generateAttributeModels();
+
+        //refresh s_core_templates
+        $this->registerErrorHandler();
+        $this->getService('theme_installer')->synchronize();
+        restore_error_handler();
+
+        //get the template id
+        $sql = sprintf(
+            'SELECT id FROM `s_core_templates` WHERE template = "%s"',
+            self::$suite->getSetting('template')
+        );
+
+        $templateId = $this->getService('db')->fetchOne($sql);
+        if (!$templateId) {
+            throw new \RuntimeException(
+                sprintf('Unable to find template by name %s', self::$suite->getSetting('template'))
+            );
+        }
+
+        //set the template for shop "Deutsch" and activate SEPA payment method
+        $sql = <<<"EOD"
+            UPDATE `s_core_shops` SET `template_id`= $templateId WHERE `id` = 1;
+            UPDATE `s_core_paymentmeans` SET `active`= 1;
+EOD;
+        $this->getService('db')->exec($sql);
+
+        Helper::setCurrentLanguage('de');
+
+        /** @var \Shopware\Bundle\PluginInstallerBundle\Service\InstallerService $pluginManager */
+        $pluginManager = $this->getService('shopware_plugininstaller.plugin_manager');
+
+        // hack to prevent behat error handler kicking in.
+        $this->registerErrorHandler();
+        $pluginManager->refreshPluginList();
+        restore_error_handler();
+
+        $plugin = $pluginManager->getPluginByName('Notification');
+        $pluginManager->installPlugin($plugin);
+        $pluginManager->activatePlugin($plugin);
+    }
+
+    private function reset()
+    {
+        $password = md5('shopware');
+
+        $sql = <<<"EOD"
+            UPDATE s_user SET password = "$password", encoder = "md5", paymentID = 5, failedlogins = 0, lockeduntil = NULL;
+            TRUNCATE s_order_basket;
+            TRUNCATE s_order_basket_attributes;
+            TRUNCATE s_order_notes;
+            TRUNCATE s_order_comparisons;
+            DELETE FROM s_user WHERE id > 2;
+EOD;
+        $this->getService('db')->exec($sql);
+    }
+
+    private function logRequest()
+    {
+        $session = $this->getSession();
+        $log = sprintf('Current page: %d %s', $this->getStatusCode(), $session->getCurrentUrl()) . "\n";
+        $log .= $this->getRequestDataLogMessage($session);
+        $log .= $this->getResponseHeadersLogMessage($session);
+        $log .= $this->getRequestContentLogMessage($session);
+        $this->saveLog($log, 'log');
+    }
+
+    /**
+     * @param string $content
+     * @param string $type
+     */
+    private function saveLog($content, $type)
+    {
+        $logDir = $this->getService('kernel')->getRootdir() . '/build/logs/mink';
+
+        $currentDateAsString = date('YmdHis');
+
+        $path = sprintf('%s/behat-%s.%s', $logDir, $currentDateAsString, $type);
+        if (!file_put_contents($path, $content)) {
+            throw new \RuntimeException(sprintf('Failed while trying to write log in "%s".', $path));
+        }
+    }
+
+    /**
+     * @return int|null
+     */
+    private function getStatusCode()
+    {
+        try {
+            return $this->getSession()->getStatusCode();
+        } catch (MinkException $exception) {
+            return null;
+        }
+    }
+
+    /**
+     * @param Session $session
+     *
+     * @return string|null
+     */
+    private function getRequestDataLogMessage(Session $session)
+    {
+        $driver = $session->getDriver();
+        if (!$driver instanceof BrowserKitDriver) {
+            return null;
+        }
+        try {
+            return 'Request:' . "\n" . print_r($driver->getClient()->getRequest(), true) . "\n";
+        } catch (MinkException $exception) {
+            return null;
+        }
+    }
+
+    /**
+     * @param Session $session
+     *
+     * @return string|null
+     */
+    private function getResponseHeadersLogMessage(Session $session)
+    {
+        try {
+            return 'Response headers:' . "\n" . print_r($session->getResponseHeaders(), true) . "\n";
+        } catch (MinkException $exception) {
+            return null;
+        }
+    }
+
+    /**
+     * @param Session $session
+     *
+     * @return string|null
+     */
+    private function getRequestContentLogMessage(Session $session)
+    {
+        try {
+            return 'Response content:' . "\n" . $session->getPage()->getContent() . "\n";
+        } catch (MinkException $exception) {
+            return null;
+        }
+    }
+
+    private function takeScreenshot()
+    {
+        $driver = $this->getSession()->getDriver();
+        if (!$driver instanceof Selenium2Driver) {
+            return;
+        }
+
+        $filePath = $this->getService('kernel')->getRootdir() . '/build/logs/mink';
+
+        $this->saveScreenshot(null, $filePath);
     }
 }

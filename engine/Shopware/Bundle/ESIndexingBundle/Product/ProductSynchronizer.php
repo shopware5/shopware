@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 namespace Shopware\Bundle\ESIndexingBundle\Product;
 
 use Shopware\Bundle\ESIndexingBundle\LastIdQuery;
@@ -45,7 +46,7 @@ class ProductSynchronizer implements SynchronizerInterface
 
     /**
      * @param ProductQueryFactoryInterface $queryFactory
-     * @param ProductIndexer $productIndexer
+     * @param ProductIndexer               $productIndexer
      */
     public function __construct(
         ProductQueryFactoryInterface $queryFactory,
@@ -73,6 +74,7 @@ class ProductSynchronizer implements SynchronizerInterface
 
     /**
      * @param Backlog[] $backlogs
+     *
      * @return string[]
      */
     private function getBacklogNumbers($backlogs)
@@ -108,11 +110,13 @@ class ProductSynchronizer implements SynchronizerInterface
                     break;
             }
         }
+
         return array_unique(array_filter($numbers));
     }
 
     /**
      * @param Backlog[] $backlogs
+     *
      * @return LastIdQuery[]
      */
     private function getBacklogQueries($backlogs)
@@ -148,6 +152,7 @@ class ProductSynchronizer implements SynchronizerInterface
                     break;
             }
         }
+
         return $queries;
     }
 }

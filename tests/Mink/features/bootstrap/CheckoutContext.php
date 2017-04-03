@@ -1,4 +1,26 @@
 <?php
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
 
 namespace Shopware\Tests\Mink;
 
@@ -120,8 +142,8 @@ class CheckoutContext extends SubContext
         $data = [
             [
                 'field' => 'sDispatch',
-                'value' => $shipping
-            ]
+                'value' => $shipping,
+            ],
         ];
 
         $this->getPage('CheckoutConfirm')->changeShippingMethod($data);
@@ -165,7 +187,7 @@ class CheckoutContext extends SubContext
         $articleDetail = $modelManager->getRepository('Shopware\Models\Article\Detail')->findOneBy(['number' => $articleNumber]);
 
         if (!$articleDetail) {
-            Helper::throwException('Article with number "'.$articleNumber.'" was not found.');
+            Helper::throwException('Article with number "' . $articleNumber . '" was not found.');
         }
 
         $article = $articleDetail->getArticle();
@@ -195,7 +217,7 @@ class CheckoutContext extends SubContext
             ->findOneBy([
                 'customerGroupId' => 1,
                 'start' => 1,
-                'discount' => $grantedDiscount
+                'discount' => $grantedDiscount,
             ]);
 
         if (!$discount) {
@@ -232,7 +254,7 @@ class CheckoutContext extends SubContext
 
             $data = [
                 'name' => $row['name'],
-                'parentId' => $parentCategory['total'] ? $parentCategory['data'][0]['id'] : null
+                'parentId' => $parentCategory['total'] ? $parentCategory['data'][0]['id'] : null,
             ];
 
             $categoryResource->create($data);
@@ -271,15 +293,15 @@ class CheckoutContext extends SubContext
                         [
                             'customerGroupKey' => $row['customergroup'],
                             'from' => 1,
-                            'price' => $row['price']
-                        ]
-                    ]
+                            'price' => $row['price'],
+                        ],
+                    ],
                 ],
                 'supplierId' => $manufacturer['id'],
                 'categories' => [$category],
                 'images' => [
-                    ['link' => 'http://assets.shopware.com/sw_logo_white.png']
-                ]
+                    ['link' => 'http://assets.shopware.com/sw_logo_white.png'],
+                ],
             ];
 
             try {
@@ -308,7 +330,7 @@ class CheckoutContext extends SubContext
             }
 
             $manufacturerResource->create([
-                'name' => $row['name']
+                'name' => $row['name'],
             ]);
         }
     }
@@ -332,7 +354,7 @@ class CheckoutContext extends SubContext
                 $groupResource->create([
                     'key' => $row['key'],
                     'name' => $row['key'],
-                    'taxInput' => $row['taxInput']
+                    'taxInput' => $row['taxInput'],
                 ]);
             }
         }
@@ -349,7 +371,7 @@ class CheckoutContext extends SubContext
         $articleDetail = $modelManager->getRepository('Shopware\Models\Article\Detail')->findOneBy(['number' => $articleNumber]);
 
         if (!$articleDetail) {
-            Helper::throwException('Article with number "'.$articleNumber.'" was not found.');
+            Helper::throwException('Article with number "' . $articleNumber . '" was not found.');
         }
 
         $article = $articleDetail->getArticle();
@@ -374,6 +396,7 @@ class CheckoutContext extends SubContext
         foreach ($checkoutAddressBoxes as $box) {
             if ($box->hasTitle($title)) {
                 Helper::clickNamedLink($box, $linkName);
+
                 return;
             }
         }
@@ -415,19 +438,24 @@ class CheckoutContext extends SubContext
         $this->spin(function ($context) use ($text) {
             try {
                 $this->getMink()->assertSession($this->getSession())->pageTextContains(str_replace('\\"', '"', $text));
+
                 return true;
             } catch (ResponseTextException $e) {
                 // NOOP
             }
+
             return false;
         });
     }
 
     /**
      * Based on Behat's own example
+     *
      * @see http://docs.behat.org/en/v2.5/cookbook/using_spin_functions.html#adding-a-timeout
+     *
      * @param $lambda
      * @param int $wait
+     *
      * @throws \Exception
      */
     public function spin($lambda, $wait = 60)
@@ -457,7 +485,7 @@ class CheckoutContext extends SubContext
         $wait = 0;
         while ($wait < $seconds) {
             sleep(1);
-            $wait++;
+            ++$wait;
         }
     }
 
@@ -502,6 +530,7 @@ class CheckoutContext extends SubContext
         foreach ($checkoutAddressBoxes as $box) {
             if ($box->containsAdress($testAddress)) {
                 Helper::pressNamedButton($box, $buttonName);
+
                 return;
             }
         }
@@ -526,10 +555,12 @@ class CheckoutContext extends SubContext
         $this->spin(function ($context) use ($titleToDisappear) {
             try {
                 $this->getMink()->assertSession($this->getSession())->pageTextNotContains(str_replace('\\"', '"', $titleToDisappear));
+
                 return true;
             } catch (ResponseTextException $e) {
                 // NOOP
             }
+
             return false;
         });
 
@@ -572,10 +603,12 @@ class CheckoutContext extends SubContext
         $this->spin(function ($context) use ($titleToDisappear) {
             try {
                 $this->getMink()->assertSession($this->getSession())->pageTextNotContains(str_replace('\\"', '"', $titleToDisappear));
+
                 return true;
             } catch (ResponseTextException $e) {
                 // NOOP
             }
+
             return false;
         });
 
@@ -586,6 +619,7 @@ class CheckoutContext extends SubContext
         foreach ($checkoutAddressBoxes as $box) {
             if ($box->hasTitle('Zahlung und Versand') === false && $box->containsAdress($testAddress)) {
                 $box->checkField('set_as_default_billing');
+
                 return;
             }
         }
@@ -734,7 +768,6 @@ EOD;
 EOD;
         $dbal->query($sql);
     }
-
 
     /**
      * @BeforeFeature @checkoutadressmanagement

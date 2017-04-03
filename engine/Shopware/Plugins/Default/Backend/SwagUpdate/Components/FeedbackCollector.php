@@ -28,7 +28,7 @@ use Shopware\Components\Random;
 
 /**
  * @category  Shopware
- * @package   ShopwarePlugins\SwagUpdate\Components;
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class FeedbackCollector
@@ -56,7 +56,7 @@ class FeedbackCollector
     public function __construct($apiEndpoint, $publicKey, $uniqueId)
     {
         $this->apiEndpoint = rtrim($apiEndpoint, '/');
-        $this->publicKey   = $publicKey;
+        $this->publicKey = $publicKey;
         $this->uniqueId = $uniqueId;
     }
 
@@ -65,14 +65,15 @@ class FeedbackCollector
      */
     public function sendData()
     {
-        $data   = $this->gatherData();
+        $data = $this->gatherData();
         $result = $this->submitData($data);
 
         return $result;
     }
 
     /**
-     * @param  array               $data
+     * @param array $data
+     *
      * @return \Zend_Http_Response
      */
     private function submitData(array $data)
@@ -87,10 +88,10 @@ class FeedbackCollector
 
         $apiUrl = $this->apiEndpoint . '/submission';
 
-        $client = new \Zend_Http_Client($apiUrl, array(
+        $client = new \Zend_Http_Client($apiUrl, [
             'timeout' => 1,
-            'useragent' => 'Shopware/' . \Shopware::VERSION
-        ));
+            'useragent' => 'Shopware/' . \Shopware::VERSION,
+        ]);
 
         $response = $client->setRawData($dataString)->setEncType('application/json')->request('POST');
 
@@ -118,33 +119,34 @@ class FeedbackCollector
             $item = $item['locale'];
         });
 
-        $data = array(
+        $data = [
             'unique' => $this->uniqueId,
-            'data' => array(
-                'phpversion'                => phpversion(),
-                'phpversion_id'             => PHP_VERSION_ID,
-                'os'                        => php_uname('s'),
-                'arch'                      => php_uname('m'),
-                'dist'                      => php_uname('r'),
-                'sapi'                      => PHP_SAPI,
-                'shopware_version'          => \Shopware::VERSION,
-                'shopware_version_text'     => \Shopware::VERSION_TEXT,
+            'data' => [
+                'phpversion' => phpversion(),
+                'phpversion_id' => PHP_VERSION_ID,
+                'os' => php_uname('s'),
+                'arch' => php_uname('m'),
+                'dist' => php_uname('r'),
+                'sapi' => PHP_SAPI,
+                'shopware_version' => \Shopware::VERSION,
+                'shopware_version_text' => \Shopware::VERSION_TEXT,
                 'shopware_version_revision' => \Shopware::REVISION,
-                'max_execution_time'        => ini_get('max_execution_time'),
-                'memory_limit'              => ini_get('memory_limit'),
-                'serverSoftware'            => $serverSoftware,
-                'mysql_version'             => $db->fetchColumn("SELECT VERSION()"),
-                'extension'                 => get_loaded_extensions(),
-                'main_language'             => $mainLanguage['locale'],
-                'sub_languages'             => $shopLanguages
-            ),
-        );
+                'max_execution_time' => ini_get('max_execution_time'),
+                'memory_limit' => ini_get('memory_limit'),
+                'serverSoftware' => $serverSoftware,
+                'mysql_version' => $db->fetchColumn('SELECT VERSION()'),
+                'extension' => get_loaded_extensions(),
+                'main_language' => $mainLanguage['locale'],
+                'sub_languages' => $shopLanguages,
+            ],
+        ];
 
         return $data;
     }
 
     /**
-     * @param  string $encryptionMethod
+     * @param string $encryptionMethod
+     *
      * @return bool
      */
     private function isEncryptionSupported($encryptionMethod)
@@ -163,7 +165,9 @@ class FeedbackCollector
     /**
      * @param $data
      * @param $encryptionMethod
+     *
      * @throws \Exception
+     *
      * @return array
      */
     private function encryptData($data, $encryptionMethod)
@@ -175,24 +179,24 @@ class FeedbackCollector
         $key = Random::getAlphanumericString(32);
 
         $ivLength = openssl_cipher_iv_length($encryptionMethod);
-        $iv  = Random::getBytes($ivLength);
+        $iv = Random::getBytes($ivLength);
 
         $encryptedMessage = openssl_encrypt($data, $encryptionMethod, $key, false, $iv);
 
         $encryptedKey = '';
         if (!true === openssl_public_encrypt($key, $encryptedKey, $publicKey)) {
-            $errors = array();
+            $errors = [];
             while ($errors[] = openssl_error_string());
             $errorString = implode("\n", $errors);
-            throw new \Exception("Got openssl error". $errorString);
+            throw new \Exception('Got openssl error' . $errorString);
         }
 
-        $result = array(
-            'encryptedKey'     => base64_encode($encryptedKey),
-            'iv'               => base64_encode($iv),
+        $result = [
+            'encryptedKey' => base64_encode($encryptedKey),
+            'iv' => base64_encode($iv),
             'encryptionMethod' => $encryptionMethod,
             'encryptedMessage' => $encryptedMessage,
-        );
+        ];
 
         return $result;
     }

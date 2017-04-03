@@ -32,11 +32,6 @@ use Shopware\Components\DependencyInjection\ContainerAwareInterface;
 use Shopware\Kernel;
 use Symfony\Component\Console\Application as BaseApplication;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Helper\DialogHelper;
-use Symfony\Component\Console\Helper\FormatterHelper;
-use Symfony\Component\Console\Helper\HelperSet;
-use Symfony\Component\Console\Helper\ProgressHelper;
-use Symfony\Component\Console\Helper\TableHelper;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -45,7 +40,7 @@ use Symfony\Component\HttpKernel\KernelInterface;
 
 /**
  * @category  Shopware
- * @package   Shopware\Components\Console
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Application extends BaseApplication
@@ -72,7 +67,7 @@ class Application extends BaseApplication
     {
         $this->kernel = $kernel;
 
-        parent::__construct('Shopware', Kernel::VERSION.' - '.'/'.$kernel->getEnvironment().($kernel->isDebug() ? '/debug' : ''));
+        parent::__construct('Shopware', Kernel::VERSION . ' - ' . '/' . $kernel->getEnvironment() . ($kernel->isDebug() ? '/debug' : ''));
 
         $this->getDefinition()->addOption(new InputOption('--shell', '-s', InputOption::VALUE_NONE, 'Launch the shell.'));
         $this->getDefinition()->addOption(new InputOption('--process-isolation', null, InputOption::VALUE_NONE, 'Launch commands from shell as a separate process.'));
@@ -95,7 +90,7 @@ class Application extends BaseApplication
      * @param InputInterface  $input  An Input instance
      * @param OutputInterface $output An Output instance
      *
-     * @return integer 0 if everything went fine, or an error code
+     * @return int 0 if everything went fine, or an error code
      */
     public function doRun(InputInterface $input, OutputInterface $output)
     {
@@ -104,7 +99,7 @@ class Application extends BaseApplication
         } catch (\Exception $e) {
             $this->kernel->boot(true);
             $formatter = $this->getHelperSet()->get('formatter');
-            $output->writeln($formatter->formatBlock('WARNING! ' . $e->getMessage() . " in ". $e->getFile(), 'error'));
+            $output->writeln($formatter->formatBlock('WARNING! ' . $e->getMessage() . ' in ' . $e->getFile(), 'error'));
             $this->skipDatabase = true;
         }
 
@@ -121,9 +116,9 @@ class Application extends BaseApplication
             }
         }
 
-        if (true === $input->hasParameterOption(array('--shell', '-s'))) {
+        if (true === $input->hasParameterOption(['--shell', '-s'])) {
             $shell = new Shell($this);
-            $shell->setProcessIsolation($input->hasParameterOption(array('--process-isolation')));
+            $shell->setProcessIsolation($input->hasParameterOption(['--process-isolation']));
             $shell->run();
 
             return 0;
@@ -144,9 +139,9 @@ class Application extends BaseApplication
 
         $eventManager->notify('Shopware_Command_After_Run', [
            'exitCode' => $exitCode,
-           'command'  => $command,
-           'input'    => $input,
-           'output'   => $output,
+           'command' => $command,
+           'input' => $input,
+           'output' => $output,
        ]);
 
         return $exitCode;
@@ -182,7 +177,7 @@ class Application extends BaseApplication
                 }
             } catch (\Exception $e) {
                 $formatter = $this->getHelperSet()->get('formatter');
-                $output->writeln($formatter->formatBlock('WARNING! ' . $e->getMessage() . " in ". $e->getFile(), 'error'));
+                $output->writeln($formatter->formatBlock('WARNING! ' . $e->getMessage() . ' in ' . $e->getFile(), 'error'));
             }
         }
     }
@@ -200,9 +195,9 @@ class Application extends BaseApplication
         foreach ($finder as $file) {
             $ns = $prefix;
             if ($relativePath = $file->getRelativePath()) {
-                $ns .= '\\'.strtr($relativePath, '/', '\\');
+                $ns .= '\\' . strtr($relativePath, '/', '\\');
             }
-            $class = $ns.'\\'.$file->getBasename('.php');
+            $class = $ns . '\\' . $file->getBasename('.php');
 
             $r = new \ReflectionClass($class);
             if ($r->isSubclassOf('Symfony\\Component\\Console\\Command\\Command') && !$r->isAbstract() && !$r->getConstructor()->getNumberOfRequiredParameters()) {
@@ -219,7 +214,7 @@ class Application extends BaseApplication
         $eventManager = $this->kernel->getContainer()->get('events');
 
         $collection = new ArrayCollection();
-        $collection = $eventManager->collect('Shopware_Console_Add_Command', $collection, array('subject' => $this));
+        $collection = $eventManager->collect('Shopware_Console_Add_Command', $collection, ['subject' => $this]);
 
         /** @var $command Command */
         foreach ($collection as $command) {

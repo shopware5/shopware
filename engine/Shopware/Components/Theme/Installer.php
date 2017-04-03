@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 namespace Shopware\Components\Theme;
 
 use Doctrine\ORM\AbstractQuery;
@@ -40,11 +41,15 @@ use Shopware\Models\Shop as Shop;
  * theme configuration with the database.
  *
  * @category  Shopware
- * @package   Shopware\Components\Theme
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Installer
 {
+    /**
+     * @var array The config options provided in the global config.php file
+     */
+    protected $snippetConfig;
     /**
      * @var ModelManager
      */
@@ -80,11 +85,6 @@ class Installer
      */
     private $service;
 
-    /**
-     * @var array The config options provided in the global config.php file
-     */
-    protected $snippetConfig;
-
     public function __construct(
         ModelManager $entityManager,
         Configurator $configurator,
@@ -92,7 +92,7 @@ class Installer
         Util $util,
         DatabaseHandler $snippetWriter,
         Service $service,
-        $snippetConfig = array()
+        $snippetConfig = []
     ) {
         $this->configurator = $configurator;
         $this->entityManager = $entityManager;
@@ -126,7 +126,6 @@ class Installer
      *
      * After the inheritance is build, the installer uses
      * the Theme\Configurator to synchronize the theme configurations.
-     *
      */
     private function synchronizeThemes()
     {
@@ -149,7 +148,7 @@ class Installer
         //builds the theme inheritance
         $this->setParents($themes);
 
-        /**@var $theme Theme */
+        /** @var $theme Theme */
         foreach ($themes as $theme) {
             $this->configurator->synchronize($theme);
         }
@@ -159,19 +158,20 @@ class Installer
      * Helper function which iterates the engine\Shopware\Themes directory
      * and registers all stored themes within the directory as \Shopware\Models\Shop\Template.
      *
-     * @param \DirectoryIterator $directories
+     * @param \DirectoryIterator             $directories
      * @param \Shopware\Models\Plugin\Plugin $plugin
+     *
      * @return Theme[]
      */
     private function synchronizeThemeDirectories(\DirectoryIterator $directories, Plugin $plugin = null)
     {
-        $themes = array();
+        $themes = [];
 
         $settings = $this->service->getSystemConfiguration(
             AbstractQuery::HYDRATE_OBJECT
         );
 
-        /**@var $directory \DirectoryIterator */
+        /** @var $directory \DirectoryIterator */
         foreach ($directories as $directory) {
             //check valid directory
 
@@ -185,12 +185,11 @@ class Installer
                 continue;
             }
 
-
             $data = $this->getThemeDefinition($theme);
 
-            $template = $this->repository->findOneBy(array(
-                'template' => $theme->getTemplate()
-            ));
+            $template = $this->repository->findOneBy([
+                'template' => $theme->getTemplate(),
+            ]);
 
             if (!$template instanceof Shop\Template) {
                 $template = new Shop\Template();
@@ -230,9 +229,9 @@ class Installer
     {
         $plugins = $this->util->getActivePlugins();
 
-        $themes = array();
+        $themes = [];
 
-        /**@var $plugin Plugin */
+        /** @var $plugin Plugin */
         foreach ($plugins as $plugin) {
             $path = $this->pathResolver->getPluginPath($plugin);
 
@@ -296,11 +295,12 @@ class Installer
      * the theme data.
      *
      * @param Theme $theme
+     *
      * @return array
      */
     private function getThemeDefinition(Theme $theme)
     {
-        return array(
+        return [
             'template' => $theme->getTemplate(),
             'name' => $theme->getName(),
             'author' => $theme->getAuthor(),
@@ -309,8 +309,8 @@ class Installer
             'version' => 3,
             'esi' => true,
             'style' => true,
-            'emotion' => true
-        );
+            'emotion' => true,
+        ];
     }
 
     /**
@@ -324,7 +324,7 @@ class Installer
 
         $themes = $themes->getQuery()->getResult(AbstractQuery::HYDRATE_OBJECT);
 
-        /**@var $theme Shop\Template */
+        /** @var $theme Shop\Template */
         foreach ($themes as $theme) {
             $directory = $this->pathResolver->getDirectory($theme);
             if (!file_exists($directory)) {
@@ -339,27 +339,28 @@ class Installer
      * passed theme
      *
      * @param array $themes
+     *
      * @throws \Exception
      */
     private function setParents(array $themes)
     {
-        /**@var $theme Theme */
+        /** @var $theme Theme */
         foreach ($themes as $theme) {
             if ($theme->getExtend() === null) {
                 continue;
             }
 
-            $template = $this->repository->findOneBy(array(
-                'template' => $theme->getTemplate()
-            ));
+            $template = $this->repository->findOneBy([
+                'template' => $theme->getTemplate(),
+            ]);
 
-            $parent = $this->repository->findOneBy(array(
-                'template' => $theme->getExtend()
-            ));
+            $parent = $this->repository->findOneBy([
+                'template' => $theme->getExtend(),
+            ]);
 
             if (!$parent instanceof Shop\Template) {
                 throw new \Exception(sprintf(
-                    "Parent %s of theme %s not found",
+                    'Parent %s of theme %s not found',
                     $theme->getExtend(),
                     $theme->getTemplate()
                 ));

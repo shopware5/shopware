@@ -24,19 +24,35 @@
 
 namespace Shopware\Models\Article;
 
-use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- *
  * @ORM\Table(name="s_articles_information")
  * @ORM\Entity
  */
 class Link extends ModelEntity
 {
     /**
-     * @var integer $id
+     * OWNING SIDE
+     *
+     * @var \Shopware\Models\Article\Article
+     * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Article", inversedBy="links")
+     * @ORM\JoinColumn(name="articleID", referencedColumnName="id")
+     */
+    protected $article;
+
+    /**
+     * INVERSE SIDE
+     *
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\ArticleLink", mappedBy="articleLink", cascade={"persist"})
+     *
+     * @var \Shopware\Models\Attribute\ArticleLink
+     */
+    protected $attribute;
+    /**
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
@@ -46,6 +62,7 @@ class Link extends ModelEntity
 
     /**
      * @ORM\Column(name="articleID", type="integer", nullable=false)
+     *
      * @var
      */
     private $articleId;
@@ -53,7 +70,7 @@ class Link extends ModelEntity
     /**
      * @Assert\NotBlank
      *
-     * @var string $description
+     * @var string
      *
      * @ORM\Column(name="description", type="string", nullable=false)
      */
@@ -63,38 +80,23 @@ class Link extends ModelEntity
      * @Assert\NotBlank
      * @Assert\Url
      *
-     * @var string $link
+     * @var string
      *
      * @ORM\Column(name="link", type="string", nullable=false)
      */
     private $link;
 
     /**
-     * @var string $target
+     * @var string
      *
      * @ORM\Column(name="target", type="string", nullable=false)
      */
     private $target = '_blank';
 
     /**
-     * OWNING SIDE
-     * @var \Shopware\Models\Article\Article
-     * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Article", inversedBy="links")
-     * @ORM\JoinColumn(name="articleID", referencedColumnName="id")
-     */
-    protected $article;
-
-    /**
-     * INVERSE SIDE
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\ArticleLink", mappedBy="articleLink", cascade={"persist"})
-     * @var \Shopware\Models\Attribute\ArticleLink
-     */
-    protected $attribute;
-
-    /**
      * Get id
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -105,11 +107,13 @@ class Link extends ModelEntity
      * Set article
      *
      * @param Article $article
+     *
      * @return Link
      */
     public function setArticle($article)
     {
         $this->article = $article;
+
         return $this;
     }
 
@@ -127,11 +131,13 @@ class Link extends ModelEntity
      * Set name
      *
      * @param string $name
+     *
      * @return Link
      */
     public function setName($name)
     {
         $this->name = $name;
+
         return $this;
     }
 
@@ -149,11 +155,13 @@ class Link extends ModelEntity
      * Set link
      *
      * @param string $link
+     *
      * @return Link
      */
     public function setLink($link)
     {
         $this->link = $link;
+
         return $this;
     }
 
@@ -171,11 +179,13 @@ class Link extends ModelEntity
      * Set target
      *
      * @param string $target
+     *
      * @return Link
      */
     public function setTarget($target)
     {
         $this->target = $target;
+
         return $this;
     }
 
@@ -199,6 +209,7 @@ class Link extends ModelEntity
 
     /**
      * @param \Shopware\Models\Attribute\ArticleLink|array|null $attribute
+     *
      * @return \Shopware\Models\Attribute\ArticleLink
      */
     public function setAttribute($attribute)

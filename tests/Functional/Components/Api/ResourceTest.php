@@ -28,13 +28,13 @@ use Shopware\Components\Api\Resource\Resource;
 
 /**
  * @category  Shopware
- * @package   Shopware\Tests
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ResourceTest extends \Enlight_Components_Test_TestCase
 {
     /**
-     * @var Resource
+     * @var resource
      */
     private $resource;
 

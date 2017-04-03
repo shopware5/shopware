@@ -45,9 +45,9 @@ class CategoryDuplicator
     private $attributePersister;
 
     /**
-     * @param \PDO $connection
+     * @param \PDO                    $connection
      * @param CategoryDenormalization $categoryDenormalization
-     * @param DataPersister $attributePersister
+     * @param DataPersister           $attributePersister
      */
     public function __construct(
         \PDO $connection,
@@ -62,11 +62,13 @@ class CategoryDuplicator
     /**
      * Duplicates the provided category into the provided parent category
      *
-     * @param int $originalCategoryId
-     * @param int $parentId
+     * @param int  $originalCategoryId
+     * @param int  $parentId
      * @param bool $copyArticleAssociations
-     * @return int
+     *
      * @throws \RuntimeException
+     *
+     * @return int
      */
     public function duplicateCategory($originalCategoryId, $parentId, $copyArticleAssociations)
     {
@@ -92,8 +94,8 @@ class CategoryDuplicator
 
         $valuePlaceholders = array_fill(0, count($originalCategory), '?');
         $insertStmt = $this->connection->prepare(
-            "INSERT INTO s_categories (`".implode(array_keys($originalCategory), "`, `")."`)
-            VALUES (".implode($valuePlaceholders, ", ").")"
+            'INSERT INTO s_categories (`' . implode(array_keys($originalCategory), '`, `') . '`)
+            VALUES (' . implode($valuePlaceholders, ', ') . ')'
         );
         $insertStmt->execute(array_values($originalCategory));
         $newCategoryId = $this->connection->lastInsertId();
@@ -126,7 +128,7 @@ class CategoryDuplicator
         $stmt->execute(
             [
                 ':newCategoryID' => $newCategoryId,
-                ':categoryID' => $originalCategoryId
+                ':categoryID' => $originalCategoryId,
             ]
         );
     }
@@ -162,8 +164,8 @@ class CategoryDuplicator
 
         if ($articles) {
             $insertStmt = $this->connection->prepare(
-                "INSERT INTO s_articles_categories (categoryID, articleID)
-            VALUES (".$newCategoryId.", ".implode($articles, "), (".$newCategoryId.", ").")"
+                'INSERT INTO s_articles_categories (categoryID, articleID)
+            VALUES (' . $newCategoryId . ', ' . implode($articles, '), (' . $newCategoryId . ', ') . ')'
             );
             $insertStmt->execute();
 
@@ -176,8 +178,9 @@ class CategoryDuplicator
     /**
      * Rebuilds the path for a single category
      *
-     * @param int $categoryId
-     * @param String $categoryPath
+     * @param int    $categoryId
+     * @param string $categoryPath
+     *
      * @return int
      */
     public function rebuildPath($categoryId, $categoryPath = null)
@@ -191,11 +194,11 @@ class CategoryDuplicator
             $path = null;
         } else {
             $path = implode('|', $parents);
-            $path = '|'.$path.'|';
+            $path = '|' . $path . '|';
         }
 
         if ($categoryPath != $path) {
-            $updateStmt->execute(array(':path' => $path, ':categoryId' => $categoryId));
+            $updateStmt->execute([':path' => $path, ':categoryId' => $categoryId]);
 
             return 1;
         }

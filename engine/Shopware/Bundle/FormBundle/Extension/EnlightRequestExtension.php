@@ -26,8 +26,8 @@ namespace Shopware\Bundle\FormBundle\Extension;
 
 use Shopware\Bundle\FormBundle\EnlightRequestHandler;
 use Symfony\Component\Form\AbstractTypeExtension;
-use Symfony\Component\Form\RequestHandlerInterface;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\RequestHandlerInterface;
 
 class EnlightRequestExtension extends AbstractTypeExtension
 {

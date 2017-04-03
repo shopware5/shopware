@@ -24,7 +24,7 @@
 
 /**
  * @category  Shopware
- * @package   Shopware\Tests
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Tests_Modules_Articles_CompareTest extends Enlight_Components_Test_TestCase
@@ -65,16 +65,6 @@ class Shopware_Tests_Modules_Articles_CompareTest extends Enlight_Components_Tes
     {
         parent::tearDown();
         $this->module->sDeleteComparisons();
-    }
-
-    /**
-     * Returns a test article id
-     *
-     * @return int
-     */
-    protected function getTestArticleId()
-    {
-        return array_shift($this->testArticleIds);
     }
 
     /**
@@ -138,5 +128,15 @@ class Shopware_Tests_Modules_Articles_CompareTest extends Enlight_Components_Tes
         $this->assertTrue($this->Module()->sAddComparison($this->getTestArticleId()));
         $this->assertTrue($this->Module()->sAddComparison($this->getTestArticleId()));
         $this->assertEquals(count($this->Module()->sGetComparisonList()), 2);
+    }
+
+    /**
+     * Returns a test article id
+     *
+     * @return int
+     */
+    protected function getTestArticleId()
+    {
+        return array_shift($this->testArticleIds);
     }
 }

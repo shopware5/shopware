@@ -28,7 +28,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\StoreFrontBundle\Struct\Property
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Group extends Extendable implements \JsonSerializable
@@ -44,7 +44,7 @@ class Group extends Extendable implements \JsonSerializable
     protected $name;
 
     /**
-     * @var boolean
+     * @var bool
      */
     protected $filterable;
 
@@ -55,6 +55,7 @@ class Group extends Extendable implements \JsonSerializable
 
     /**
      * @param int $id
+     *
      * @return $this
      */
     public function setId($id)
@@ -74,6 +75,7 @@ class Group extends Extendable implements \JsonSerializable
 
     /**
      * @param string $name
+     *
      * @return $this
      */
     public function setName($name)
@@ -93,6 +95,7 @@ class Group extends Extendable implements \JsonSerializable
 
     /**
      * @param \Shopware\Bundle\StoreFrontBundle\Struct\Property\Option[] $options
+     *
      * @return $this
      */
     public function setOptions($options)
@@ -111,7 +114,7 @@ class Group extends Extendable implements \JsonSerializable
     }
 
     /**
-     * @param boolean $filterable
+     * @param bool $filterable
      */
     public function setFilterable($filterable)
     {
@@ -119,7 +122,7 @@ class Group extends Extendable implements \JsonSerializable
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isFilterable()
     {
@@ -127,7 +130,7 @@ class Group extends Extendable implements \JsonSerializable
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function jsonSerialize()
     {

@@ -24,9 +24,6 @@
 
 namespace Shopware\Bundle\PluginInstallerBundle\Struct;
 
-/**
- * @package Shopware\Bundle\PluginInstallerBundle\Struct
- */
 class BasketPositionStruct implements \JsonSerializable
 {
     /**
@@ -36,6 +33,7 @@ class BasketPositionStruct implements \JsonSerializable
 
     /**
      * Technical name of the plugin
+     *
      * @var string
      */
     private $orderNumber;
@@ -52,7 +50,7 @@ class BasketPositionStruct implements \JsonSerializable
 
     /**
      * @param string $orderNumber
-     * @param float $price
+     * @param float  $price
      * @param string $priceType
      */
     public function __construct($orderNumber, $price, $priceType)
@@ -95,7 +93,7 @@ class BasketPositionStruct implements \JsonSerializable
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function jsonSerialize()
     {

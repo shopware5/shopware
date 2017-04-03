@@ -26,7 +26,6 @@ namespace Shopware\Bundle\MediaBundle\Commands;
 
 use Shopware\Bundle\MediaBundle\Exception\OptimizerNotFoundException;
 use Shopware\Bundle\MediaBundle\Optimizer\OptimizerInterface;
-use Shopware\Bundle\MediaBundle\OptimizerServiceInterface;
 use Shopware\Commands\ShopwareCommand;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Helper\Table;
@@ -38,7 +37,7 @@ use Symfony\Component\Finder\Finder;
 
 /**
  * @category  Shopware
- * @package   Shopware\Components\Console\Commands
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class MediaOptimizeCommand extends ShopwareCommand
@@ -69,11 +68,13 @@ class MediaOptimizeCommand extends ShopwareCommand
         if ($this->hasRunnableOptimizer() === false) {
             $output->writeln('<error>No runnable optimizer found. Consider installing one of the following optimizers.</error>');
             $this->displayCapabilities($output, $optimizerService->getOptimizers());
+
             return;
         }
 
         if ($input->getOption('info')) {
             $this->displayCapabilities($output, $optimizerService->getOptimizers());
+
             return;
         }
 
@@ -104,7 +105,7 @@ class MediaOptimizeCommand extends ShopwareCommand
     }
 
     /**
-     * @param OutputInterface $output
+     * @param OutputInterface      $output
      * @param OptimizerInterface[] $capabilities
      */
     private function displayCapabilities(OutputInterface $output, array $capabilities)
@@ -115,15 +116,16 @@ class MediaOptimizeCommand extends ShopwareCommand
             $table->addRow([
                 $optimizer->getName(),
                 $optimizer->isRunnable() ? 'Yes' : 'No',
-                implode(', ', $optimizer->getSupportedMimeTypes())
+                implode(', ', $optimizer->getSupportedMimeTypes()),
             ]);
         }
         $table->render();
     }
 
     /**
-     * @param InputInterface $input
+     * @param InputInterface  $input
      * @param OutputInterface $output
+     *
      * @return Finder
      */
     private function createMediaFinder(InputInterface $input, OutputInterface $output)
@@ -155,7 +157,7 @@ class MediaOptimizeCommand extends ShopwareCommand
     private function hasRunnableOptimizer()
     {
         $optimizerService = $this->getContainer()->get('shopware_media.optimizer_service');
-        
+
         foreach ($optimizerService->getOptimizers() as $optimizer) {
             if ($optimizer->isRunnable()) {
                 return true;

@@ -24,9 +24,8 @@
 
 namespace Shopware\Models\Article\Configurator;
 
-use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
+use Shopware\Components\Model\ModelEntity;
 
 /**
  * @ORM\Entity
@@ -35,7 +34,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Dependency extends ModelEntity
 {
     /**
-     * @var integer $id
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
@@ -44,19 +43,19 @@ class Dependency extends ModelEntity
     private $id;
 
     /**
-     * @var integer
+     * @var int
      * @ORM\Column(name="configurator_set_id", type="integer", nullable=true)
      */
     private $configuratorSetId = null;
 
     /**
-     * @var integer
+     * @var int
      * @ORM\Column(name="parent_id", type="integer", nullable=true)
      */
     private $parentId = null;
 
     /**
-     * @var integer
+     * @var int
      * @ORM\Column(name="child_id", type="integer", nullable=true)
      */
     private $childId = null;
@@ -64,6 +63,7 @@ class Dependency extends ModelEntity
     /**
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Configurator\Option", inversedBy="dependencyParents")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
+     *
      * @var \Shopware\Models\Article\Configurator\Option
      */
     private $parentOption;
@@ -71,6 +71,7 @@ class Dependency extends ModelEntity
     /**
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Configurator\Option", inversedBy="dependencyChildren")
      * @ORM\JoinColumn(name="child_id", referencedColumnName="id")
+     *
      * @var \Shopware\Models\Article\Configurator\Option
      */
     private $childOption;
@@ -100,7 +101,7 @@ class Dependency extends ModelEntity
 
     /**
      * @param $parentOption
-     * @return void
+     *
      * @internal param \Shopware\Models\Article\Configurator\Option $parent
      */
     public function setParentOption($parentOption)
@@ -118,7 +119,7 @@ class Dependency extends ModelEntity
 
     /**
      * @param $childOption
-     * @return void
+     *
      * @internal param \Shopware\Models\Article\Configurator\Option $child
      */
     public function setChildOption($childOption)

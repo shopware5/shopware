@@ -29,7 +29,7 @@ use Shopware\Bundle\StoreFrontBundle\Service\CacheInterface;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\SearchBundleDBAL\SearchTerm
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class CacheKeywordFinder implements KeywordFinderInterface
@@ -50,9 +50,10 @@ class CacheKeywordFinder implements KeywordFinderInterface
     private $config;
 
     /**
-     * @param CacheInterface $cache
+     * @param CacheInterface              $cache
      * @param \Shopware_Components_Config $config
-     * @param KeywordFinderInterface $keywordFinder
+     * @param KeywordFinderInterface      $keywordFinder
+     *
      * @internal param $CacheInterface
      */
     public function __construct(
@@ -67,6 +68,7 @@ class CacheKeywordFinder implements KeywordFinderInterface
 
     /**
      * @param $term
+     *
      * @return Keyword[]
      */
     public function getKeywordsOfTerm($term)

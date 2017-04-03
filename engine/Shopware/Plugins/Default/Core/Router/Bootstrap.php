@@ -32,8 +32,7 @@ use Shopware\Models\Shop\Template;
  * Shopware Router Plugin
  *
  * @category   Shopware
- * @package    Shopware_Plugins
- * @subpackage Core
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  * @license    http://shopware.de/license
  */
@@ -121,93 +120,6 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
     }
 
     /**
-     * @param Request $request
-     * @param Shop $shop
-     * @return null|string
-     */
-    private function createPathInfo(Request $request, Shop $shop)
-    {
-        $requestUri = $request->getRequestUri();
-        if ($requestUri === null) {
-            return null;
-        }
-
-        // Remove the query string from REQUEST_URI
-        if ($pos = strpos($requestUri, '?')) {
-            $requestUri = substr($requestUri, 0, $pos);
-        }
-
-        /** @var $repository Shopware\Models\Shop\Repository */
-        $repository = $this->get('models')->getRepository(Shop::class);
-        $requestShop = $repository->getActiveShopByRequestAsArray($request);
-
-        if ($requestShop && $requestShop['id'] !== $shop->getId()) {
-            $url = $requestShop['base_url'];
-            $path = $requestShop['base_path'];
-            if ($request->isSecure()) {
-                $url = $requestShop['secure_base_url'];
-                $path = $requestShop['secure_base_path'];
-            }
-            $requestUri = $this->removePartOfUrl($requestUri, $url);
-            $requestUri = $this->removePartOfUrl($requestUri, $path);
-        }
-
-        $requestUri = $this->removeShopBaseUrl(
-            $requestUri,
-            $request,
-            $shop
-        );
-
-        if (!$shop->getMain()) {
-            return $requestUri;
-        }
-
-        return $this->removeShopBaseUrl(
-            $requestUri,
-            $request,
-            $shop->getMain()
-        );
-    }
-
-    /**
-     * @param string $requestUri
-     * @param Request $request
-     * @param Shop $shop
-     * @return string
-     */
-    private function removeShopBaseUrl($requestUri, Request $request, Shop $shop)
-    {
-        $url = $shop->getBaseUrl();
-        $path = $shop->getBasePath();
-        if ($request->isSecure()) {
-            $url = $shop->getSecureBaseUrl();
-            $path = $shop->getSecureBasePath();
-        }
-        $requestUri = $this->removePartOfUrl($requestUri, $url);
-        $requestUri = $this->removePartOfUrl($requestUri, $path);
-
-        return $requestUri;
-    }
-
-    /**
-     * @param string $requestUri
-     * @param string $url
-     * @return string
-     */
-    private function removePartOfUrl($requestUri, $url)
-    {
-        $temp = rtrim($url, '/') . '/';
-        switch (true) {
-            case (strpos($requestUri, $temp) === 0):
-                return substr($requestUri, strlen($url));
-            case ($requestUri == $url):
-                return substr($requestUri, strlen($url));
-            default:
-                return $requestUri;
-        }
-    }
-
-    /**
      * Event listener method
      *
      * @param Enlight_Controller_EventArgs $args
@@ -236,7 +148,7 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
 
             if (isset($newPath)) {
                 // reset the cookie so only one valid cookie will be set IE11 fix
-                $response->setCookie("session-" . $shop->getId(), '', 1);
+                $response->setCookie('session-' . $shop->getId(), '', 1);
                 $response->setRedirect($newPath, 301);
             } else {
                 $this->upgradeShop($request, $response);
@@ -245,6 +157,20 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
 
             $this->get('shopware_storefront.context_service')->initializeShopContext();
         }
+    }
+
+    /**
+     * Returns capabilities
+     *
+     * @return array
+     */
+    public function getCapabilities()
+    {
+        return [
+            'install' => false,
+            'enable' => false,
+            'update' => true,
+        ];
     }
 
     /**
@@ -261,7 +187,7 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
     }
 
     /**
-     * @param Request $request
+     * @param Request                                  $request
      * @param Enlight_Controller_Response_ResponseHttp $response
      */
     protected function upgradeShop($request, $response)
@@ -332,6 +258,7 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
                 $request->getRequestUri()
             );
             $response->setRedirect($url);
+
             return;
         }
 
@@ -386,20 +313,8 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
     }
 
     /**
-     * Returns capabilities
-     * @return array
-     */
-    public function getCapabilities()
-    {
-        return [
-            'install' => false,
-            'enable' => false,
-            'update' => true
-        ];
-    }
-
-    /**
      * @param Request $request
+     *
      * @return DetachedShop
      */
     protected function getShopByRequest(Request $request)
@@ -436,7 +351,8 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
 
     /**
      * @param Request $request
-     * @param Shop $newShop
+     * @param Shop    $newShop
+     *
      * @return string
      */
     protected function getNewShopUrl(
@@ -454,7 +370,7 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
         }
 
         $baseUrl = $request->getBaseUrl();
-        if (strpos($url, $baseUrl.'/') === 0) {
+        if (strpos($url, $baseUrl . '/') === 0) {
             $url = substr($url, strlen($baseUrl));
         }
 
@@ -501,12 +417,13 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
 
     /**
      * @param Request $request
-     * @param Shop $shop
+     * @param Shop    $shop
+     *
      * @return bool
      */
     protected function shouldRedirect(Request $request, Shop $shop)
     {
-        return (
+        return
             //for example: template preview, direct shop selection via url
             (
                 $request->isGet()
@@ -520,11 +437,102 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
                 && $request->getPost('__shop') !== null
                 && $request->getPost('__redirect') !== null
             )
+        ;
+    }
+
+    /**
+     * @param Request $request
+     * @param Shop    $shop
+     *
+     * @return null|string
+     */
+    private function createPathInfo(Request $request, Shop $shop)
+    {
+        $requestUri = $request->getRequestUri();
+        if ($requestUri === null) {
+            return null;
+        }
+
+        // Remove the query string from REQUEST_URI
+        if ($pos = strpos($requestUri, '?')) {
+            $requestUri = substr($requestUri, 0, $pos);
+        }
+
+        /** @var $repository Shopware\Models\Shop\Repository */
+        $repository = $this->get('models')->getRepository(Shop::class);
+        $requestShop = $repository->getActiveShopByRequestAsArray($request);
+
+        if ($requestShop && $requestShop['id'] !== $shop->getId()) {
+            $url = $requestShop['base_url'];
+            $path = $requestShop['base_path'];
+            if ($request->isSecure()) {
+                $url = $requestShop['secure_base_url'];
+                $path = $requestShop['secure_base_path'];
+            }
+            $requestUri = $this->removePartOfUrl($requestUri, $url);
+            $requestUri = $this->removePartOfUrl($requestUri, $path);
+        }
+
+        $requestUri = $this->removeShopBaseUrl(
+            $requestUri,
+            $request,
+            $shop
+        );
+
+        if (!$shop->getMain()) {
+            return $requestUri;
+        }
+
+        return $this->removeShopBaseUrl(
+            $requestUri,
+            $request,
+            $shop->getMain()
         );
     }
 
     /**
+     * @param string  $requestUri
+     * @param Request $request
+     * @param Shop    $shop
+     *
+     * @return string
+     */
+    private function removeShopBaseUrl($requestUri, Request $request, Shop $shop)
+    {
+        $url = $shop->getBaseUrl();
+        $path = $shop->getBasePath();
+        if ($request->isSecure()) {
+            $url = $shop->getSecureBaseUrl();
+            $path = $shop->getSecureBasePath();
+        }
+        $requestUri = $this->removePartOfUrl($requestUri, $url);
+        $requestUri = $this->removePartOfUrl($requestUri, $path);
+
+        return $requestUri;
+    }
+
+    /**
+     * @param string $requestUri
+     * @param string $url
+     *
+     * @return string
+     */
+    private function removePartOfUrl($requestUri, $url)
+    {
+        $temp = rtrim($url, '/') . '/';
+        switch (true) {
+            case strpos($requestUri, $temp) === 0:
+                return substr($requestUri, strlen($url));
+            case $requestUri == $url:
+                return substr($requestUri, strlen($url));
+            default:
+                return $requestUri;
+        }
+    }
+
+    /**
      * @param Shop $shop
+     *
      * @throws \RuntimeException
      */
     private function validateShop(Shop $shop)

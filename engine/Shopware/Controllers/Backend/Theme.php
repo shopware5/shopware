@@ -33,56 +33,32 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  * Backend controller for the theme manager 2.0
  *
  * @category  Shopware
- * @package   Shopware\Controllers\Backend
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Application implements CSRFWhitelistAware
 {
     /**
      * Model which handled through this controller
+     *
      * @var string
      */
     protected $model = 'Shopware\Models\Shop\Template';
 
     /**
      * SQL alias for the internal query builder
+     *
      * @var string
      */
     protected $alias = 'template';
 
-    protected function initAcl()
-    {
-        // read
-        $this->addAclPermission('assign', 'read', 'Insufficient Permissions');
-        $this->addAclPermission('list', 'read', 'Insufficient Permissions');
-
-        // preview
-        $this->addAclPermission('preview', 'preview', 'Insufficient Permissions');
-
-        // changeTheme
-        $this->addAclPermission('assign', 'changeTheme', 'Insufficient Permissions');
-
-        // createTheme
-        $this->addAclPermission('create', 'createTheme', 'Insufficient Permissions');
-
-        // uploadTheme
-        $this->addAclPermission('upload', 'uploadTheme', 'Insufficient Permissions');
-
-        // configureTheme
-        $this->addAclPermission('getConfigSets', 'configureTheme', 'Insufficient Permissions');
-
-        // configureSystem
-        $this->addAclPermission('loadSettings', 'configureSystem', 'Insufficient Permissions');
-        $this->addAclPermission('saveSettings', 'configureSystem', 'Insufficient Permissions');
-    }
-
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getWhitelistedCSRFActions()
     {
         return [
-            'preview'
+            'preview',
         ];
     }
 
@@ -112,7 +88,7 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
 
         $shopId = $this->Request()->getParam('shopId');
 
-        /**@var $theme Template */
+        /** @var $theme Template */
         $theme = $this->getRepository()->find($themeId);
 
         /** @var $shop \Shopware\Models\Shop\Shop */
@@ -123,17 +99,17 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
         Shopware()->Session()->Admin = true;
 
         if (!$this->Request()->isXmlHttpRequest()) {
-            $this->get('events')->notify('Shopware_Theme_Preview_Starts', array(
+            $this->get('events')->notify('Shopware_Theme_Preview_Starts', [
                 'session' => Shopware()->Session(),
-                'shop'    => $shop,
-                'theme'   => $theme
-            ));
+                'shop' => $shop,
+                'theme' => $theme,
+            ]);
 
-            $url = $this->Front()->Router()->assemble(array(
+            $url = $this->Front()->Router()->assemble([
                 'module' => 'frontend',
                 'controller' => 'index',
                 'appendSession' => true,
-            ));
+            ]);
 
             $this->redirect($url);
         }
@@ -231,16 +207,17 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
         $template = $this->Request()->getParam('templateId');
         $template = $this->getRepository()->find($template);
 
-        $this->View()->assign(array(
+        $this->View()->assign([
             'success' => true,
-            'data' => $this->get('theme_service')->getConfigSets($template)
-        ));
+            'data' => $this->get('theme_service')->getConfigSets($template),
+        ]);
     }
 
     /**
      * Saves the passed theme configuration.
      *
      * @param $data
+     *
      * @return array
      */
     public function save($data)
@@ -252,7 +229,7 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
             $data['values']
         );
 
-        return array('success' => true);
+        return ['success' => true];
     }
 
     /**
@@ -263,7 +240,7 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
      */
     public function uploadAction()
     {
-        /**@var $file UploadedFile */
+        /** @var $file UploadedFile */
         $file = Symfony\Component\HttpFoundation\Request::createFromGlobals()->files->get('fileId');
         $system = new Filesystem();
 
@@ -280,10 +257,10 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
         $targetDirectory = $this->container->get('theme_path_resolver')->getFrontendThemeDirectory();
 
         if (!is_writable($targetDirectory)) {
-            return $this->View()->assign(array(
+            return $this->View()->assign([
                 'success' => false,
-                'error' => sprintf("Target Directory %s isn't writable", $targetDirectory)
-            ));
+                'error' => sprintf("Target Directory %s isn't writable", $targetDirectory),
+            ]);
         }
 
         $this->unzip($file, $targetDirectory);
@@ -293,36 +270,63 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
         $this->View()->assign('success', true);
     }
 
-    /**
-     * Helper function to decompress zip files.
-     * @param UploadedFile $file
-     * @param $targetDirectory
-     * @throws Exception
-     */
-    private function unzip(UploadedFile $file, $targetDirectory)
+    public function loadSettingsAction()
     {
-        $filter = new \Zend_Filter_Decompress(array(
-            'adapter' => $file->getClientOriginalExtension(),
-            'options' => array('target' => $targetDirectory)
-        ));
+        $this->View()->assign([
+            'success' => true,
+            'data' => $this->container->get('theme_service')->getSystemConfiguration(),
+        ]);
+    }
 
-        $filter->filter(
-            $file->getPath() . DIRECTORY_SEPARATOR . $file->getFilename()
-        );
+    public function saveSettingsAction()
+    {
+        $this->View()->assign([
+            'success' => true,
+            'data' => $this->container->get('theme_service')->saveSystemConfiguration(
+                $this->Request()->getParams()
+            ),
+        ]);
+    }
+
+    protected function initAcl()
+    {
+        // read
+        $this->addAclPermission('assign', 'read', 'Insufficient Permissions');
+        $this->addAclPermission('list', 'read', 'Insufficient Permissions');
+
+        // preview
+        $this->addAclPermission('preview', 'preview', 'Insufficient Permissions');
+
+        // changeTheme
+        $this->addAclPermission('assign', 'changeTheme', 'Insufficient Permissions');
+
+        // createTheme
+        $this->addAclPermission('create', 'createTheme', 'Insufficient Permissions');
+
+        // uploadTheme
+        $this->addAclPermission('upload', 'uploadTheme', 'Insufficient Permissions');
+
+        // configureTheme
+        $this->addAclPermission('getConfigSets', 'configureTheme', 'Insufficient Permissions');
+
+        // configureSystem
+        $this->addAclPermission('loadSettings', 'configureSystem', 'Insufficient Permissions');
+        $this->addAclPermission('saveSettings', 'configureSystem', 'Insufficient Permissions');
     }
 
     /**
      * Override to get all snippet definitions for the loaded theme configuration.
      *
      * @param array $data
+     *
      * @return array
      */
     protected function getAdditionalDetailData(array $data)
     {
-        /**@var $template Template */
+        /** @var $template Template */
         $template = $this->getRepository()->find($data['id']);
 
-        /**@var $shop Shop */
+        /** @var $shop Shop */
         $shop = $this->getManager()->find(
             'Shopware\Models\Shop\Shop',
             $this->Request()->getParam('shopId')
@@ -337,31 +341,10 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
 
         $data['themeInfo'] = $this->getThemeInfo($template);
 
-        return $this->get('events')->filter('Shopware_Theme_Detail_Loaded', $data, array(
+        return $this->get('events')->filter('Shopware_Theme_Detail_Loaded', $data, [
             'shop' => $shop,
-            'template' => $template
-        ));
-    }
-
-    /**
-     * Helper function which checks if the passed template
-     * or the inheritance templates has configuration sets.
-     *
-     * @param Template $template
-     * @return bool
-     */
-    private function hasTemplateConfigSet(Template $template)
-    {
-        /**@var $theme \Shopware\Components\Theme */
-        $theme = $this->get('theme_util')->getThemeByTemplate($template);
-
-        if ($template->getConfigSets()->count() > 0) {
-            return true;
-        } elseif ($theme->useInheritanceConfig() && $template->getParent() instanceof Template) {
-            return $this->hasTemplateConfigSet($template->getParent());
-        } else {
-            return false;
-        }
+            'template' => $template,
+        ]);
     }
 
     /**
@@ -369,14 +352,15 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
      * The listing query created in the getListQuery function.
      * The pagination of the listing is handled inside this function.
      *
-     * @param int $offset
-     * @param int $limit
-     * @param array $sort Contains an array of Ext JS sort conditions
-     * @param array $filter Contains an array of Ext JS filters
+     * @param int   $offset
+     * @param int   $limit
+     * @param array $sort        Contains an array of Ext JS sort conditions
+     * @param array $filter      Contains an array of Ext JS filters
      * @param array $wholeParams Contains all passed request parameters
+     *
      * @return array
      */
-    protected function getList($offset, $limit, $sort = array(), $filter = array(), array $wholeParams = array())
+    protected function getList($offset, $limit, $sort = [], $filter = [], array $wholeParams = [])
     {
         if (!isset($wholeParams['shopId'])) {
             $wholeParams['shopId'] = $this->getDefaultShopId();
@@ -384,11 +368,11 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
 
         $data = parent::getList(null, null, $sort, $filter, $wholeParams);
 
-        /**@var $shop Shop */
+        /** @var $shop Shop */
         $shop = $this->getManager()->find('Shopware\Models\Shop\Shop', $wholeParams['shopId']);
 
         foreach ($data['data'] as &$theme) {
-            /**@var $instance Template */
+            /** @var $instance Template */
             $instance = $this->getRepository()->find($theme['id']);
 
             $theme['screen'] = $this->container->get('theme_util')->getPreviewImage(
@@ -409,9 +393,9 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
             }
         }
 
-        $data = $this->get('events')->filter('Shopware_Theme_Listing_Loaded', $data, array(
-            'shop' => $shop
-        ));
+        $data = $this->get('events')->filter('Shopware_Theme_Listing_Loaded', $data, [
+            'shop' => $shop,
+        ]);
 
         return $data;
     }
@@ -438,25 +422,46 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
         return $this->get('events')->filter('Shopware_Theme_Listing_Query_Created', $builder);
     }
 
-    public function loadSettingsAction()
+    /**
+     * Helper function to decompress zip files.
+     *
+     * @param UploadedFile $file
+     * @param $targetDirectory
+     *
+     * @throws Exception
+     */
+    private function unzip(UploadedFile $file, $targetDirectory)
     {
-        $this->View()->assign(array(
-            'success' => true,
-            'data' => $this->container->get('theme_service')->getSystemConfiguration()
-        ));
+        $filter = new \Zend_Filter_Decompress([
+            'adapter' => $file->getClientOriginalExtension(),
+            'options' => ['target' => $targetDirectory],
+        ]);
+
+        $filter->filter(
+            $file->getPath() . DIRECTORY_SEPARATOR . $file->getFilename()
+        );
     }
 
     /**
+     * Helper function which checks if the passed template
+     * or the inheritance templates has configuration sets.
      *
+     * @param Template $template
+     *
+     * @return bool
      */
-    public function saveSettingsAction()
+    private function hasTemplateConfigSet(Template $template)
     {
-        $this->View()->assign(array(
-            'success' => true,
-            'data' => $this->container->get('theme_service')->saveSystemConfiguration(
-                $this->Request()->getParams()
-            )
-        ));
+        /** @var $theme \Shopware\Components\Theme */
+        $theme = $this->get('theme_util')->getThemeByTemplate($template);
+
+        if ($template->getConfigSets()->count() > 0) {
+            return true;
+        } elseif ($theme->useInheritanceConfig() && $template->getParent() instanceof Template) {
+            return $this->hasTemplateConfigSet($template->getParent());
+        }
+
+        return false;
     }
 
     /**
@@ -473,6 +478,7 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
 
     /**
      * @param Template $template
+     *
      * @return string|null
      */
     private function getThemeInfo(Template $template)

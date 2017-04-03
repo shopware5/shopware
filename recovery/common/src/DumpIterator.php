@@ -26,7 +26,7 @@ namespace Shopware\Recovery\Common;
 
 /**
  * @category  Shopware
- * @package   Shopware\Recovery\Common
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class DumpIterator implements \SeekableIterator, \Countable
@@ -52,7 +52,8 @@ class DumpIterator implements \SeekableIterator, \Countable
     protected $current;
 
     /**
-     * @param  string     $filename
+     * @param string $filename
+     *
      * @throws \Exception
      */
     public function __construct($filename)
@@ -63,18 +64,26 @@ class DumpIterator implements \SeekableIterator, \Countable
         }
 
         $this->position = 0;
-        $this->count    = 0;
+        $this->count = 0;
 
         while (!feof($this->stream)) {
             stream_get_line($this->stream, 1000000, ";\n");
-            $this->count++;
+            ++$this->count;
         }
 
         $this->rewind();
     }
 
+    public function __destruct()
+    {
+        if ($this->stream !== null) {
+            fclose($this->stream);
+        }
+    }
+
     /**
-     * @param  int                   $position
+     * @param int $position
+     *
      * @throws \OutOfBoundsException
      */
     public function seek($position)
@@ -98,9 +107,6 @@ class DumpIterator implements \SeekableIterator, \Countable
         return $this->count;
     }
 
-    /**
-     *
-     */
     public function rewind()
     {
         rewind($this->stream);
@@ -125,9 +131,6 @@ class DumpIterator implements \SeekableIterator, \Countable
         return $this->position;
     }
 
-    /**
-     *
-     */
     public function next()
     {
         ++$this->position;
@@ -142,15 +145,5 @@ class DumpIterator implements \SeekableIterator, \Countable
     public function valid()
     {
         return !feof($this->stream);
-    }
-
-    /**
-     *
-     */
-    public function __destruct()
-    {
-        if ($this->stream !== null) {
-            fclose($this->stream);
-        }
     }
 }

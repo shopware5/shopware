@@ -33,10 +33,9 @@ class Shopware_Plugins_Frontend_RouterRewrite_Bootstrap extends Shopware_Compone
             'install' => false,
             'update' => false,
             'enable' => false,
-            'secureUninstall' => false
+            'secureUninstall' => false,
         ];
     }
-
 
     /**
      * Install plugin method
@@ -51,6 +50,7 @@ class Shopware_Plugins_Frontend_RouterRewrite_Bootstrap extends Shopware_Compone
             'Enlight_Controller_Front_StartDispatch',
             'onStartDispatch'
         );
+
         return true;
     }
 
@@ -63,7 +63,7 @@ class Shopware_Plugins_Frontend_RouterRewrite_Bootstrap extends Shopware_Compone
     {
         $event = new Enlight_Event_EventHandler(
             'Enlight_Controller_Front_PreDispatch',
-            array($this, 'onPreDispatch')
+            [$this, 'onPreDispatch']
         );
         Shopware()->Events()->registerListener($event);
     }
@@ -97,7 +97,7 @@ class Shopware_Plugins_Frontend_RouterRewrite_Bootstrap extends Shopware_Compone
             $location = $request->getBaseUrl() . '/';
         }
 
-        $current =  $request->getScheme() . '://' . $request->getHttpHost() . $request->getRequestUri();
+        $current = $request->getScheme() . '://' . $request->getHttpHost() . $request->getRequestUri();
         if ($location !== $current) {
             $response->setRedirect($location, 301);
         }

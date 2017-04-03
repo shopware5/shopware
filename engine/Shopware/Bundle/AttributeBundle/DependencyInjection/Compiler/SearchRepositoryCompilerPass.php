@@ -25,12 +25,12 @@
 namespace Shopware\Bundle\AttributeBundle\DependencyInjection\Compiler;
 
 use Shopware\Components\DependencyInjection\Compiler\TagReplaceTrait;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\AttributeBundle\DependencyInjection\Compiler
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
 class SearchRepositoryCompilerPass implements CompilerPassInterface

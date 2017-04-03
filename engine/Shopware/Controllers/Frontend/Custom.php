@@ -45,19 +45,21 @@ class Shopware_Controllers_Frontend_Custom extends Enlight_Controller_Action
 
         if (!$staticPage) {
             $this->Response()->setHttpResponseCode(404);
+
             return $this->forward('index', 'index');
         }
 
         if (!empty($staticPage['link'])) {
             $link = Shopware()->Modules()->Core()->sRewriteLink($staticPage['link'], $staticPage['description']);
-            return $this->redirect($link, array('code' => 301));
+
+            return $this->redirect($link, ['code' => 301]);
         }
 
         if (!empty($staticPage['html'])) {
             $this->View()->sContent = $staticPage['html'];
         }
 
-        for ($i = 1; $i <= 3; $i++) {
+        for ($i = 1; $i <= 3; ++$i) {
             if (empty($staticPage['tpl' . $i . 'variable']) || empty($staticPage['tpl' . $i . 'path'])) {
                 continue;
             }

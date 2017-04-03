@@ -26,7 +26,7 @@
  * Shopware SwagAboCommerce Plugin - Bootstrap
  *
  * @category  Shopware
- * @package   Shopware\Plugins\SwagAboCommerce
+ *
  * @copyright Copyright (c) 2014, shopware AG (http://www.shopware.de)
  */
 
@@ -54,7 +54,8 @@ class DatabaseInteractor
     }
 
     /**
-     * @param  DatabaseConnectionInformation $connectionInformation
+     * @param DatabaseConnectionInformation $connectionInformation
+     *
      * @return DatabaseConnectionInformation
      */
     public function askDatabaseConnectionInformation(
@@ -63,23 +64,78 @@ class DatabaseInteractor
         $databaseHost = $this->askForDatabaseHostname($connectionInformation->hostname);
         $databasePort = $this->askForDatabasePort($connectionInformation->port);
         $question = new Question('Please enter database socket: ', $connectionInformation->socket);
-        $databaseSocket   = $this->askQuestion($question);
-        $databaseUser     = $this->askForDatabaseUsername($connectionInformation->username);
+        $databaseSocket = $this->askQuestion($question);
+        $databaseUser = $this->askForDatabaseUsername($connectionInformation->username);
         $databasePassword = $this->askForDatabasePassword($connectionInformation->password);
 
         $connectionInformation = new DatabaseConnectionInformation([
             'hostname' => $databaseHost,
-            'port'     => $databasePort,
-            'socket'   => $databaseSocket,
+            'port' => $databasePort,
+            'socket' => $databaseSocket,
             'username' => $databaseUser,
-            'password' => $databasePassword
+            'password' => $databasePassword,
         ]);
 
         return $connectionInformation;
     }
 
     /**
-     * @param  string $defaultHostname
+     * @param \PDO $connection
+     *
+     * @return string
+     */
+    public function createDatabase(\PDO $connection)
+    {
+        $question = new Question('Please enter the name database to be created: ');
+        $databaseName = $this->askQuestion($question);
+
+        $service = new DatabaseService($connection);
+        $service->createDatabase($databaseName);
+
+        return $databaseName;
+    }
+
+    /**
+     * @param $databaseName
+     * @param \PDO $pdo
+     *
+     * @return bool
+     */
+    public function continueWithExistingTables($databaseName, \PDO $pdo)
+    {
+        $service = new DatabaseService($pdo);
+        $tableCount = $service->getTableCount();
+        if ($tableCount == 0) {
+            return true;
+        }
+
+        $question = new ConfirmationQuestion(
+            sprintf(
+                'The database %s already contains %s tables. Continue? (yes/no) [no]',
+                $databaseName,
+                $tableCount
+            ),
+            false
+        );
+
+        return $this->askQuestion($question);
+    }
+
+    /**
+     * Facade for asking questions
+     *
+     * @param Question $question
+     *
+     * @return string
+     */
+    public function askQuestion(Question $question)
+    {
+        return $this->IOHelper->ask($question);
+    }
+
+    /**
+     * @param string $defaultHostname
+     *
      * @return string
      */
     protected function askForDatabaseHostname(
@@ -102,33 +158,8 @@ class DatabaseInteractor
     }
 
     /**
-     * @param  string $defaultPort
-     * @return string
-     */
-    private function askForDatabasePort(
-        $defaultPort
-    ) {
-        $question = new Question(sprintf('Please enter database port (%s): ', $defaultPort), $defaultPort);
-        $question->setValidator(
-            function ($answer) {
-                if ('' === trim($answer)) {
-                    throw new \Exception('The database port can not be empty');
-                }
-
-                if (!is_numeric($answer)) {
-                    throw new \Exception('The database port must be a number');
-                }
-
-                return $answer;
-            }
-        );
-        $databasePort = $this->askQuestion($question);
-
-        return $databasePort;
-    }
-
-    /**
-     * @param  string $defaultUsername
+     * @param string $defaultUsername
+     *
      * @return string
      */
     protected function askForDatabaseUsername(
@@ -155,7 +186,8 @@ class DatabaseInteractor
     }
 
     /**
-     * @param  string $defaultPassword
+     * @param string $defaultPassword
+     *
      * @return string
      */
     protected function askForDatabasePassword(
@@ -173,53 +205,29 @@ class DatabaseInteractor
     }
 
     /**
-     * @param  \PDO   $connection
-     * @return string
-     */
-    public function createDatabase(\PDO $connection)
-    {
-        $question = new Question('Please enter the name database to be created: ');
-        $databaseName = $this->askQuestion($question);
-
-        $service = new DatabaseService($connection);
-        $service->createDatabase($databaseName);
-
-        return $databaseName;
-    }
-
-    /**
-     * @param $databaseName
-     * @param  \PDO $pdo
-     * @return bool
-     */
-    public function continueWithExistingTables($databaseName, \PDO $pdo)
-    {
-        $service = new DatabaseService($pdo);
-        $tableCount = $service->getTableCount();
-        if ($tableCount == 0) {
-            return true;
-        }
-
-        $question = new ConfirmationQuestion(
-            sprintf(
-                'The database %s already contains %s tables. Continue? (yes/no) [no]',
-                $databaseName,
-                $tableCount
-            ),
-            false
-        );
-
-        return $this->askQuestion($question);
-    }
-
-    /**
-     * Facade for asking questions
+     * @param string $defaultPort
      *
-     * @param  Question $question
      * @return string
      */
-    public function askQuestion(Question $question)
-    {
-        return $this->IOHelper->ask($question);
+    private function askForDatabasePort(
+        $defaultPort
+    ) {
+        $question = new Question(sprintf('Please enter database port (%s): ', $defaultPort), $defaultPort);
+        $question->setValidator(
+            function ($answer) {
+                if ('' === trim($answer)) {
+                    throw new \Exception('The database port can not be empty');
+                }
+
+                if (!is_numeric($answer)) {
+                    throw new \Exception('The database port must be a number');
+                }
+
+                return $answer;
+            }
+        );
+        $databasePort = $this->askQuestion($question);
+
+        return $databasePort;
     }
 }

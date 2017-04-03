@@ -1,4 +1,26 @@
 <?php
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
 
 namespace Shopware\Tests\Functional\Bundle\SearchBundle\Sorting;
 
@@ -9,51 +31,6 @@ use Shopware\Tests\Functional\Bundle\StoreFrontBundle\TestCase;
 
 class PriceSortingTest extends TestCase
 {
-    protected function getPriceContext($displayGross, $discount = null)
-    {
-        $context = parent::getContext();
-
-        $data = array('key' => 'BAK', 'tax' => $displayGross);
-
-        $context->setFallbackCustomerGroup(
-            $this->converter->convertCustomerGroup($this->helper->createCustomerGroup($data))
-        );
-
-        $context->getCurrentCustomerGroup()->setDisplayGrossPrices($displayGross);
-        $context->getCurrentCustomerGroup()->setUseDiscount(($discount !== null));
-        $context->getCurrentCustomerGroup()->setPercentageDiscount($discount);
-
-        return $context;
-    }
-
-    /**
-     * @param $number
-     * @param ShopContext $context
-     * @param \Shopware\Models\Category\Category $category
-     * @param array $prices
-     * @return array
-     */
-    protected function getProduct(
-        $number,
-        ShopContext $context,
-        Category $category = null,
-        $prices = array()
-    ) {
-        $product = parent::getProduct($number, $context, $category);
-
-        if (!empty($prices)) {
-            $product['mainDetail']['prices'] = array();
-
-            foreach ($prices as $key => $price) {
-                $product['mainDetail']['prices'] = array_merge(
-                    $product['mainDetail']['prices'],
-                    $this->helper->getGraduatedPrices($key, $price)
-                );
-            }
-        }
-        return $product;
-    }
-
     public function testCurrentCustomerGroupPriceSorting()
     {
         $sorting = new PriceSorting();
@@ -63,17 +40,17 @@ class PriceSortingTest extends TestCase
         $fallback = $context->getFallbackCustomerGroup();
 
         $this->search(
-            array(
-                'first'  => array($customerGroup->getKey() => 20, $fallback->getKey() => 1),
-                'second' => array($customerGroup->getKey() => 10, $fallback->getKey() => 1),
-                'third'  => array($customerGroup->getKey() => 12, $fallback->getKey() => 1),
-                'fourth' => array($customerGroup->getKey() => 14, $fallback->getKey() => 1)
-            ),
-            array('second', 'third', 'fourth', 'first'),
+            [
+                'first' => [$customerGroup->getKey() => 20, $fallback->getKey() => 1],
+                'second' => [$customerGroup->getKey() => 10, $fallback->getKey() => 1],
+                'third' => [$customerGroup->getKey() => 12, $fallback->getKey() => 1],
+                'fourth' => [$customerGroup->getKey() => 14, $fallback->getKey() => 1],
+            ],
+            ['second', 'third', 'fourth', 'first'],
             null,
-            array(),
-            array(),
-            array($sorting),
+            [],
+            [],
+            [$sorting],
             $context
         );
     }
@@ -86,17 +63,17 @@ class PriceSortingTest extends TestCase
         $fallback = $context->getFallbackCustomerGroup();
 
         $this->search(
-            array(
-                'first'  => array($fallback->getKey()  => 20),
-                'second' => array($fallback->getKey()  => 10),
-                'third'  => array($fallback->getKey()  => 12),
-                'fourth' => array($fallback->getKey()  => 14)
-            ),
-            array('second', 'third', 'fourth', 'first'),
+            [
+                'first' => [$fallback->getKey() => 20],
+                'second' => [$fallback->getKey() => 10],
+                'third' => [$fallback->getKey() => 12],
+                'fourth' => [$fallback->getKey() => 14],
+            ],
+            ['second', 'third', 'fourth', 'first'],
             null,
-            array(),
-            array(),
-            array($sorting),
+            [],
+            [],
+            [$sorting],
             $context
         );
     }
@@ -113,17 +90,17 @@ class PriceSortingTest extends TestCase
         $fallback = $context->getFallbackCustomerGroup();
 
         $this->search(
-            array(
-                'first'  => array($customerGroup->getKey() => 20, $fallback->getKey() => 1),
-                'second' => array($fallback->getKey() => 10),
-                'third'  => array($fallback->getKey() => 12),
-                'fourth' => array($customerGroup->getKey() => 14, $fallback->getKey() => 1)
-            ),
-            array('second', 'third', 'fourth', 'first'),
+            [
+                'first' => [$customerGroup->getKey() => 20, $fallback->getKey() => 1],
+                'second' => [$fallback->getKey() => 10],
+                'third' => [$fallback->getKey() => 12],
+                'fourth' => [$customerGroup->getKey() => 14, $fallback->getKey() => 1],
+            ],
+            ['second', 'third', 'fourth', 'first'],
             null,
-            array(),
-            array(),
-            array($sorting),
+            [],
+            [],
+            [$sorting],
             $context
         );
     }
@@ -140,17 +117,17 @@ class PriceSortingTest extends TestCase
         $fallback = $context->getFallbackCustomerGroup();
 
         $result = $this->search(
-            array(
-                'first'  => array($customerGroup->getKey() => 40, $fallback->getKey() => 1),
-                'second' => array($fallback->getKey() => 10),
-                'third'  => array($fallback->getKey() => 20),
-                'fourth' => array($customerGroup->getKey() => 30, $fallback->getKey() => 1)
-            ),
-            array('second', 'third', 'fourth', 'first'),
+            [
+                'first' => [$customerGroup->getKey() => 40, $fallback->getKey() => 1],
+                'second' => [$fallback->getKey() => 10],
+                'third' => [$fallback->getKey() => 20],
+                'fourth' => [$customerGroup->getKey() => 30, $fallback->getKey() => 1],
+            ],
+            ['second', 'third', 'fourth', 'first'],
             null,
-            array(),
-            array(),
-            array($sorting),
+            [],
+            [],
+            [$sorting],
             $context
         );
 
@@ -173,13 +150,60 @@ class PriceSortingTest extends TestCase
         $this->assertEquals(126.00, $product->getAttribute('search')->get('cheapest_price'));
     }
 
+    protected function getPriceContext($displayGross, $discount = null)
+    {
+        $context = parent::getContext();
+
+        $data = ['key' => 'BAK', 'tax' => $displayGross];
+
+        $context->setFallbackCustomerGroup(
+            $this->converter->convertCustomerGroup($this->helper->createCustomerGroup($data))
+        );
+
+        $context->getCurrentCustomerGroup()->setDisplayGrossPrices($displayGross);
+        $context->getCurrentCustomerGroup()->setUseDiscount(($discount !== null));
+        $context->getCurrentCustomerGroup()->setPercentageDiscount($discount);
+
+        return $context;
+    }
+
+    /**
+     * @param $number
+     * @param ShopContext                        $context
+     * @param \Shopware\Models\Category\Category $category
+     * @param array                              $prices
+     *
+     * @return array
+     */
+    protected function getProduct(
+        $number,
+        ShopContext $context,
+        Category $category = null,
+        $prices = []
+    ) {
+        $product = parent::getProduct($number, $context, $category);
+
+        if (!empty($prices)) {
+            $product['mainDetail']['prices'] = [];
+
+            foreach ($prices as $key => $price) {
+                $product['mainDetail']['prices'] = array_merge(
+                    $product['mainDetail']['prices'],
+                    $this->helper->getGraduatedPrices($key, $price)
+                );
+            }
+        }
+
+        return $product;
+    }
+
     protected function search(
         $products,
         $expectedNumbers,
         $category = null,
-        $conditions = array(),
-        $facets = array(),
-        $sortings = array(),
+        $conditions = [],
+        $facets = [],
+        $sortings = [],
         $context = null,
         array $configs = []
     ) {
