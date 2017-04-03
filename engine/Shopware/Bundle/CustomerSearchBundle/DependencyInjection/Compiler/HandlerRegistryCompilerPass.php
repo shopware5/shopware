@@ -38,5 +38,6 @@ class HandlerRegistryCompilerPass implements CompilerPassInterface
     public function process(ContainerBuilder $container)
     {
         $this->replaceArgumentWithTaggedServices($container, 'shopware_customer_search.handler_registry', 'customer_search_condition_handler', 0);
+        $this->replaceArgumentWithTaggedServices($container, 'shopware_customer_search.handler_registry', 'customer_search_sorting_handler', 1);
     }
 }

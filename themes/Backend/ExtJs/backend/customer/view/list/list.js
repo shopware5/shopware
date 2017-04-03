@@ -108,27 +108,57 @@ Ext.define('Shopware.apps.Customer.view.list.List', {
         me.callParent(arguments);
 
         var header = me.headerCt ;
-        header.on('menucreate', function (ct, menu, eOpts) {
-            menu.add({
-                itemId: 'sort_name',
-                text: 'Sort name'
-            });
-        });
 
-        header.on('headertriggerclick', function (ct, column, e, t, eOpts) {
-            me.showColumnMenu(header.getMenu(), column);
+        header.on('menucreate', function (ct, menu, eOpts) {
+
+            menu.remove(menu.items.items[2]);
+            menu.remove(menu.items.items[1]);
+            menu.remove(menu.items.items[0]);
+
+            menu.add([
+                me.createSortingItem('Kundennummber', 'customernumber'),
+                me.createSortingItem('Kunde seit', 'firstlogin'),
+                me.createSortingItem('Kundengruppe', 'customerGroup'),
+                me.createSortingItem('Kundenname', 'lastname'),
+                me.createSortingItem('Stadt', 'city'),
+                me.createSortingItem('Postleitzahl', 'zipcode'),
+                me.createSortingItem('Straße', 'street'),
+                me.createSortingItem('Gesamtumsatz', 'invoice_amount_sum'),
+                me.createSortingItem('Ø Warenkorb', 'invoice_amount_avg'),
+                me.createSortingItem('Ø Warenwert', 'product_avg'),
+                me.createSortingItem('Anzahl Bestellungen', 'count_orders'),
+                me.createSortingItem('Letzte Bestellung', 'last_order_time'),
+                me.createSortingItem('Interessen', 'interests'),
+            ]);
         });
     },
 
-    showColumnMenu: function(menu, column) {
+    createSortingItem: function(text, field) {
         var me = this;
 
-        var mapping = {
-            'meta': ['customernumber', 'firstlogin'],
-            'customer': ['firstname', 'lastname', 'company', 'age']
+        return {
+            text: text,
+            field: field,
+            menu: {
+                items: [
+                    { text: 'Aufsteigend', handler: function () {
+                        me.sortingHandler(field, 'asc');
+                    } },
+                    { text: 'Absteigend', handler: function () {
+                        me.sortingHandler(field, 'desc');
+                    } }
+                ]
+            }
         };
+    },
 
-        // menu.items.getByKey('sort_name').setVisible(false);
+    sortingHandler: function(field, direction) {
+        var me = this;
+
+        me.getStore().sort({
+            property: field,
+            direction: direction
+        });
     },
 
     /**
@@ -173,19 +203,17 @@ Ext.define('Shopware.apps.Customer.view.list.List', {
     getColumns:function () {
         var me = this;
 
-        return [
-            {
-                header: 'Information',
-                dataIndex: 'meta',
-                flex: 2,
-                renderer: function (value, meta, record) {
-                    return '<b>'+ record.get('customernumber') +'</b> - '+ record.get('customerGroup') +
-                        '<br><i>Kunde seit: ' + Ext.util.Format.date(record.get('firstlogin'))  +'</i></span>';
-                }
-            },
-        {
+        return [{
+            header: 'Information',
+            dataIndex: 'customernumber',
+            flex: 2,
+            renderer: function (value, meta, record) {
+                return '<b>'+ record.get('customernumber') +'</b> - '+ record.get('customerGroup') +
+                    '<br><i>Kunde seit: ' + Ext.util.Format.date(record.get('firstlogin'))  +'</i></span>';
+            }
+        }, {
             header: 'Kunde',
-            dataIndex: 'customer',
+            dataIndex: 'lastname',
             flex: 3,
             renderer: function (v, meta, record) {
                 var names = [
@@ -207,9 +235,8 @@ Ext.define('Shopware.apps.Customer.view.list.List', {
             }
         } ,{
             header: 'Anschrift',
-            dataIndex: 'address',
+            dataIndex: 'city',
             flex: 3,
-
             renderer: function(v, meta, record) {
                 var lines = [
                     record.get('street'),
@@ -219,10 +246,9 @@ Ext.define('Shopware.apps.Customer.view.list.List', {
                 ];
                 return lines.join('<br>');
             }
-        }
-        , {
+        } , {
             header: 'Umsatz',
-            dataIndex: 'aggregation',
+            dataIndex: 'invoice_amount_sum',
             flex: 2,
             renderer: function(v, meta, record) {
                 return '' +
@@ -231,16 +257,13 @@ Ext.define('Shopware.apps.Customer.view.list.List', {
                     '<br>Ø Warenwert: <b>'+ record.get('product_avg') +'</b>';
             }
         }, {
-                header: 'Bestellungen',
-                dataIndex: 'aggregation',
-                flex: 2,
-                renderer: function(v, meta, record) {
-                    return '<b>Bestellungen: ' + record.get('count_orders') + '</b>' +
-                        '<br>Letzte: ' + Ext.util.Format.date(record.get('last_order_time'));
-
-                }
+            header: 'Bestellungen',
+            dataIndex: 'count_orders',
+            renderer: function(v, meta, record) {
+                return '<b>Bestellungen: ' + record.get('count_orders') + '</b>' +
+                    '<br>Letzte: ' + Ext.util.Format.date(record.get('last_order_time'));
             }
-        , {
+        } , {
             header: 'Top Interessen',
             dataIndex: 'interests',
             flex: 4,
@@ -256,14 +279,22 @@ Ext.define('Shopware.apps.Customer.view.list.List', {
                 interests = interests.slice(0, 3);
                 return interests.join('<br>');
             }
-        }
-        , {
+        } , {
             header: 'Kategoriesierung',
-            dataIndex: 'categories',
+            dataIndex: 'streams',
             flex: 2,
-            renderer: function() {
-                return '<i>Stammkunde</i>' +
-                    '<br><i>Herrenmode</i>';
+            sortable: false,
+            renderer: function(streams) {
+                if (streams.length <= 0) {
+                    return;
+                }
+
+                var names = [];
+                Ext.each(streams, function(item) {
+                    names.push('<a href="#" class="stream-inline" data-id="' + item.id + '">' + item.name + '</a>');
+                });
+
+                return names.join('<br>');
             }
         }, {
                 xtype:'actioncolumn',

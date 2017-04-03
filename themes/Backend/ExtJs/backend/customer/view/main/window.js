@@ -71,6 +71,21 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
         });
         me.gridPanel.on('selection-changed', Ext.bind(me.customerSelected, me));
 
+        me.gridPanel.on('afterrender', function() {
+            me.gridPanel.getEl().on('click', function(event, element) {
+                element = Ext.get(element);
+                event.preventDefault();
+
+                me.streamListing.getSelectionModel().select([
+                    me.streamListing.getStore().getById(
+                        window.parseInt(element.getAttribute('data-id'))
+                    )
+                ]);
+            }, me, {
+                delegate: ".stream-inline"
+            });
+        });
+
         me.streamListing = Ext.create('Shopware.apps.Customer.view.customer_stream.Listing', {
             store: Ext.create('Shopware.apps.Customer.store.CustomerStream').load(),
             subApp: me.subApp,
@@ -163,7 +178,6 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
             }
         });
     },
-
 
     createChart: function(fields, store) {
         var me = this;
@@ -645,8 +659,6 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
     createOrUpdateStream: function(callback) {
         var me = this;
         var record = me.formPanel.getForm().getRecord();
-
-        console.log("record", record);
 
         if (record) {
             me.saveStream(me.formPanel.getForm().getRecord(), callback);

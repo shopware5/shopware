@@ -70,6 +70,11 @@
 
         <service id="shopware_customer_search.handler_registry" class="Shopware\Bundle\CustomerSearchBundle\HandlerRegistry">
             <argument type="collection"/>
+            <argument type="collection"/>
+        </service>
+
+        <service class="Shopware\Bundle\CustomerSearchBundle\SortingHandler\FieldSortingHandler" id="shopware_bundle_customer_search.sorting_handler.field_sorting_handler">
+            <tag name="customer_search_sorting_handler"/>
         </service>
 
         <service id="shopware_customer_search.has_address_with_country_condition_handler" class="Shopware\Bundle\CustomerSearchBundle\ConditionHandler\HasAddressWithCountryConditionHandler">
@@ -144,6 +149,7 @@
 
         <service id="shopware_customer_search.stream_criteria_factory" class="Shopware\Bundle\CustomerSearchBundle\CustomerStream\CustomerStreamCriteriaFactory">
             <argument type="service" id="dbal_connection" />
+            <argument type="service" id="shopware.logaware_reflection_helper" />
         </service>
 
         <service id="shopware_customer_search.index_populate_command" class="Shopware\Bundle\CustomerSearchBundle\Commands\StreamIndexPopulateCommand">

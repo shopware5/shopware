@@ -25,10 +25,10 @@
 namespace Shopware\Bundle\CustomerSearchBundle\CustomerStream;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Bundle\CustomerSearchBundle\Criteria;
 use Shopware\Bundle\CustomerSearchBundle\CustomerNumberSearch;
 use Shopware\Bundle\CustomerSearchBundle\CustomerNumberSearchResult;
 use Shopware\Bundle\ESIndexingBundle\Console\ProgressHelperInterface;
+use Shopware\Bundle\SearchBundle\Criteria;
 
 class StreamIndexer
 {
@@ -78,11 +78,15 @@ class StreamIndexer
 
             $this->clearStreamIndex($streamId);
 
+            $insert = $this->connection->prepare(
+                'INSERT INTO s_customer_streams_mapping (stream_id, customer_id) VALUES (:streamId, :customerId)'
+            );
+
             while ($customers->getRows()) {
                 foreach ($customers->getIds() as $customerId) {
-                    $this->connection->insert('s_customer_streams_mapping', [
-                        'stream_id' => $streamId,
-                        'customer_id' => $customerId,
+                    $insert->execute([
+                        ':streamId' => $streamId,
+                        ':customerId' => $customerId,
                     ]);
                 }
 
@@ -105,10 +109,14 @@ class StreamIndexer
     {
         $result = $this->numberSearch->search($criteria);
 
+        $insert = $this->connection->prepare(
+            'INSERT INTO s_customer_streams_mapping (stream_id, customer_id) VALUES (:streamId, :customerId)'
+        );
+
         foreach ($result->getIds() as $customerId) {
-            $this->connection->insert('s_customer_streams_mapping', [
-                'stream_id' => $streamId,
-                'customer_id' => $customerId,
+            $insert->execute([
+                ':streamId' => $streamId,
+                ':customerId' => $customerId,
             ]);
         }
 

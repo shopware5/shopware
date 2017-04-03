@@ -1,3 +1,4 @@
+<?php
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -21,17 +22,25 @@
  * our trademarks remain entirely with us.
  */
 
-//{namespace name="backend/customer_stream/translation"}
-Ext.define('Shopware.apps.CustomerStream.view.list.Window', {
-    extend: 'Shopware.window.Listing',
-    alias: 'widget.customer-stream-list-window',
-    height: 450,
-    title : '{s name=window_title}{/s}',
+namespace Shopware\Bundle\CustomerSearchBundle\SortingHandler;
 
-    configure: function() {
-        return {
-            listingGrid: 'Shopware.apps.CustomerStream.view.list.CustomerStream',
-            listingStore: 'Shopware.apps.CustomerStream.store.CustomerStream'
-        };
+use Shopware\Bundle\CustomerSearchBundle\SortingHandlerInterface;
+use Shopware\Bundle\SearchBundle\Sorting\SimpleSorting;
+use Shopware\Bundle\SearchBundle\SortingInterface;
+use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
+
+class FieldSortingHandler implements SortingHandlerInterface
+{
+    public function supports(SortingInterface $sorting)
+    {
+        return $sorting instanceof SimpleSorting;
     }
-});
+
+    public function handle(
+        SortingInterface $sorting,
+        QueryBuilder $query
+    ) {
+        /* @var SimpleSorting $sorting */
+        $query->addOrderBy($sorting->getName(), $sorting->getDirection());
+    }
+}

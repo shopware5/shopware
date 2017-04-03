@@ -34,7 +34,6 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.HasOrderCount
     },
 
     create: function(callback, loadPreviewFn) {
-        console.log(loadPreviewFn);
         callback(this._create(loadPreviewFn));
     },
 

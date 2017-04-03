@@ -24,41 +24,21 @@
 
 namespace Shopware\Bundle\CustomerSearchBundle;
 
-class CustomerSearchResult
+use Shopware\Bundle\SearchBundle\SortingInterface;
+use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
+
+interface SortingHandlerInterface
 {
     /**
-     * @var int
+     * @param SortingInterface $sorting
+     *
+     * @return bool
      */
-    protected $total;
+    public function supports(SortingInterface $sorting);
 
     /**
-     * @var array[]
+     * @param SortingInterface $sorting
+     * @param QueryBuilder       $query
      */
-    protected $customers;
-
-    /**
-     * @param int      $total
-     * @param \array[] $customers
-     */
-    public function __construct($total, array $customers)
-    {
-        $this->total = $total;
-        $this->customers = $customers;
-    }
-
-    /**
-     * @return int
-     */
-    public function getTotal()
-    {
-        return $this->total;
-    }
-
-    /**
-     * @return array[]
-     */
-    public function getCustomers()
-    {
-        return $this->customers;
-    }
+    public function handle(SortingInterface $sorting, QueryBuilder $query);
 }

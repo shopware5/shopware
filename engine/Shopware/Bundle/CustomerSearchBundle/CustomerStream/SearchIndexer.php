@@ -57,14 +57,11 @@ class SearchIndexer
         $this->connection->transactional(function () use ($ids) {
             $insert = $this->createInsertQuery();
 
-            error_log(print_r('', true) . "\n", 3, '/var/log/test.log');
             $customers = $this->provider->get($ids);
 
-            $time = microtime(true);
             foreach ($customers as $customer) {
                 $insert->execute($this->buildData($customer));
             }
-            error_log('insert : ' . (microtime(true) - $time) . "\n", 3, '/var/log/test.log');
         });
     }
 
