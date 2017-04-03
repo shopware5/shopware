@@ -29,8 +29,8 @@
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 
-//{namespace name=backend/first_run_wizard/main}
-//{block name="backend/first_run_wizard/view/main/localization"}
+// {namespace name=backend/first_run_wizard/main}
+// {block name="backend/first_run_wizard/view/main/localization"}
 
 Ext.define('Shopware.apps.FirstRunWizard.view.main.Localization', {
     extend: 'Ext.container.Container',
@@ -39,22 +39,31 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Localization', {
      * List of short aliases for class names. Most useful for defining xtypes for widgets.
      * @string
      */
-    alias:'widget.first-run-wizard-localization',
+    alias: 'widget.first-run-wizard-localization',
 
     /**
      * Name attribute used to generate event names
      */
-    name:'localization',
+    name: 'localization',
 
     overflowY: 'auto',
 
     snippets: {
         content: {
+            welcomeTitle: '{s name=home/content/title}Welcome to Shopware{/s}',
+            welcomeMessage: '{s name=home/content/message}Welcome to your Shopware shop. The First Run Wizard will accompany you in your first steps with Shopware and give you valuable tips about the configuration options.{/s}',
             title: '{s name=localization/content/title}Localization{/s}',
             message: '{s name=localization/content/message}Take your business abroad using localizations plugins. Start by selecting the language you want to add to your shop. You will receive a list of recommended plugins for your shop, that will add translations and other useful features to your Shopware installation.{/s}',
             noPlugins: '{s name=localization/content/noPlugins}No plugins found{/s}'
         },
-        languagePicker: '{s name=localization/languagePicker}Select a language to filter{/s}'
+        languagePicker: '{s name=localization/languagePicker}Select a language to filter{/s}',
+        buttons: {
+            retry: '{s name=home/buttons/retry}Retry{/s}'
+        },
+        isNotConnected: {
+            text: '{s name=home/is_not_connected/text}Could not connect to the Shopware Community Store{/s}',
+            icon: 'cross-circle'
+        }
     },
 
     initComponent: function() {
@@ -62,32 +71,59 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Localization', {
 
         me.localizationStore = Ext.create('Shopware.apps.FirstRunWizard.store.Localization').load(
             function(records) {
-                Ext.each(records, function(record) {
-                    if (record.get('locale') == '{s namespace="backend/base/index" name=script/ext/locale}{/s}') {
-                        me.languageFilter.setValue(record.get('locale'));
-                    }
-                });
+                me.setDefaultLocalization(records);
             }
         );
 
+        me.welcomeTitleContainer = Ext.create('Ext.container.Container', {
+            border: false,
+            bodyPadding: 20,
+            style: 'font-weight: 700; line-height: 20px;',
+            html: '<h1>' + me.snippets.content.welcomeTitle + '</h1>'
+        });
+
+        me.welcomeMessageContainer = Ext.create('Ext.container.Container', {
+            border: false,
+            bodyPadding: 20,
+            style: 'margin-bottom: 40px;',
+            html: '<p>' + me.snippets.content.welcomeMessage + '</p>',
+            width: '100%'
+        });
+
+        me.localizationTitleContainer = Ext.create('Ext.container.Container', {
+            border: false,
+            hidden: true,
+            bodyPadding: 20,
+            style: 'font-weight: 700; line-height: 20px;',
+            html: '<h1>' + me.snippets.content.title + '</h1>'
+        });
+
+        me.localizationMessageContainer = Ext.create('Ext.container.Container', {
+            border: false,
+            hidden: true,
+            bodyPadding: 20,
+            style: 'margin-bottom: 10px;',
+            html: '<p>' + me.snippets.content.message + '</p>'
+        });
+
+        me.loadingIndicatorContainer = me.createLoadingIndicator();
+        me.loadingResultContainer = me.createLoadingResultContainer();
+        me.languagePicker = me.createLanguagePicker();
+        me.storeListingContainer = me.createStoreListing();
+        me.noResultMessage = me.createNoResultMessage();
+
+        me.refreshLoadingResultContainer();
+
         me.items = [
-            {
-                xtype: 'container',
-                border: false,
-                bodyPadding: 20,
-                style: 'font-weight: 700; line-height: 20px;',
-                html: '<h1>' + me.snippets.content.title + '</h1>'
-            },
-            {
-                xtype: 'container',
-                border: false,
-                bodyPadding: 20,
-                style: 'margin-bottom: 10px;',
-                html: '<p>' + me.snippets.content.message + '</p>'
-            },
-            me.createLanguagePicker(),
-            me.createStoreListing(),
-            me.createNoResultMessage()
+            me.welcomeTitleContainer,
+            me.welcomeMessageContainer,
+            me.localizationTitleContainer,
+            me.localizationMessageContainer,
+            me.loadingIndicatorContainer,
+            me.loadingResultContainer,
+            me.languagePicker,
+            me.storeListingContainer,
+            me.noResultMessage
         ];
 
         me.callParent(arguments);
@@ -106,11 +142,12 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Localization', {
             queryMode: 'local',
             valueField: 'locale',
             displayField: 'text',
+            hidden: true,
             emptyText: me.snippets.languagePicker,
             editable: false,
             listeners: {
                 change: {
-                    fn: function(view, newValue, oldValue) {
+                    fn: function(view, newValue) {
                         me.fireEvent('changeLanguageFilter', newValue);
                     }
                 }
@@ -120,8 +157,9 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Localization', {
         return Ext.create('Ext.form.FieldSet', {
             cls: Ext.baseCSSPrefix + 'base-field-set',
             width: 632,
+            hidden: true,
             defaults: {
-                anchor:'100%'
+                anchor: '100%'
             },
             items: [
                 me.languageFilter
@@ -136,7 +174,8 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Localization', {
         me.storeListing = Ext.create('Shopware.apps.PluginManager.view.components.Listing', {
             store: me.communityStore,
             scrollContainer: me,
-            width: 632
+            width: 632,
+            hidden: true
         });
 
         me.communityStore.on('load', function(store, records) {
@@ -159,20 +198,17 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Localization', {
     createNoResultMessage: function() {
         var me = this;
 
-        me.noResultMessage = Ext.create('Ext.Component', {
+        return Ext.create('Ext.Component', {
             style: 'margin-top: 30px; font-size: 20px; text-align: center;',
             html: '<h2>' + me.snippets.content.noPlugins + '</h2>',
             hidden: true
         });
-
-        return me.noResultMessage;
     },
 
     refreshData: function() {
         var me = this;
 
         me.fireEvent('localizationResetData');
-
         me.content.setVisible(true);
         me.noResultMessage.setVisible(false);
 
@@ -181,7 +217,107 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Localization', {
             me.storeListing.resetListing();
             me.communityStore.load();
         }
+    },
+
+    getButtons: function() {
+        var me = this,
+            buttons = {
+                previous: {
+                    visible: false
+                },
+                next: {
+                }
+            };
+
+        if (me.firstRunWizardIsConnected === null && me.connectionResult !== true) {
+            buttons.next.text = me.snippets.buttons.skip;
+        }
+
+        if (me.firstRunWizardIsConnected === false) {
+            buttons.extraButtonSettings = {
+                text: me.snippets.buttons.retry,
+                cls: 'primary',
+                name: 'retry-button',
+                width: 180,
+                handler: function() {
+                    me.fireEvent('retryConnectivityTest');
+                }
+            };
+        }
+
+        return buttons;
+    },
+
+    displayLocalizationElements: function () {
+        var me = this;
+        me.localizationTitleContainer.show();
+        me.localizationMessageContainer.show();
+        me.languageFilter.show();
+        me.storeListing.show();
+        me.languagePicker.show();
+    },
+
+    createLoadingIndicator: function() {
+        var me = this;
+        me.loadingIndicator = Ext.create('Ext.ProgressBar', {
+            animate: true,
+            hidden: me.firstRunWizardIsConnected !== null,
+            style: {
+                marginLeft: '135px',
+                width: '365px'
+            }
+        });
+
+        me.loadingIndicator.wait({
+            text: '{s name=home/content/checking_connection}Checking Shopware server connection{/s}',
+            scope: this
+        });
+
+        return me.loadingIndicator;
+    },
+
+    createLoadingResultContainer: function() {
+        return Ext.create('Ext.container.Container', {
+            html: ''
+        });
+    },
+
+    setDefaultLocalization: function(records) {
+        var me = this;
+        Ext.each(records, function(record) {
+            if (record.get('locale') === '{s namespace="backend/base/index" name=script/ext/locale}{/s}') {
+                me.languageFilter.setValue(record.get('locale'));
+            }
+        });
+    },
+
+    refreshLoadingResultContainer: function() {
+        var me = this;
+
+        if (me.firstRunWizardIsConnected === true) {
+            me.loadingResultContainer.hide();
+            me.languageFilter.getStore().load(function(records) {
+                me.setDefaultLocalization(records);
+            });
+            me.displayLocalizationElements();
+        } else if (me.firstRunWizardIsConnected === false) {
+            me.loadingResultContainer.update(
+                Ext.String.format(
+                    '<div style="display: flex; justify-content: center; margin-top: -10px; border: 1px solid red; border-radius: 5px; padding: 6px;">' +
+                    '   <div style="width: 16px; height: 16px; float: none; display: inline-block;' +
+                    '        align-self: center; margin-right: 8px;" class="sprite-[0]"></div>' +
+                    '   <div style="display: inline-block; width: calc(100% - 21px);">[1]</div>' +
+                    '</div>',
+                    me.snippets.isNotConnected.icon, me.snippets.isNotConnected.text
+                )
+            );
+            me.loadingResultContainer.show();
+        } else {
+            me.loadingResultContainer.hide();
+        }
+
+        return me.loadingResultContainer;
     }
 });
 
-//{/block}
+// {/block}

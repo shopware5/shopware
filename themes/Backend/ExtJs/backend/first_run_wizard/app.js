@@ -1,12 +1,11 @@
-//{block name="backend/first_run_wizard/app"}
+// {block name="backend/first_run_wizard/app"}
 Ext.define('Shopware.apps.FirstRunWizard', {
-    name:'Shopware.apps.FirstRunWizard',
-    extend:'Enlight.app.SubApplication',
-    bulkLoad:true,
-    loadPath:'{url action=load}',
-    views:[
+    name: 'Shopware.apps.FirstRunWizard',
+    extend: 'Enlight.app.SubApplication',
+    bulkLoad: true,
+    loadPath: '{url action=load}',
+    views: [
         'main.Window',
-        'main.Home',
         'main.Localization',
         'main.LocalizationSwitcher',
         'main.Config',
@@ -16,7 +15,7 @@ Ext.define('Shopware.apps.FirstRunWizard', {
         'main.PremiumListing'
     ],
 
-    stores:[
+    stores: [
         'RecommendedPlugin',
         'LicensePlugin',
         'IntegratedPlugin',
@@ -38,12 +37,11 @@ Ext.define('Shopware.apps.FirstRunWizard', {
         'Config',
         'ShopwareId',
         'Localization',
-        'Recommendation',
-        'Home'
+        'Recommendation'
     ],
 
     launch: function() {
         return this.getController('Main').mainWindow;
     }
 });
-//{/block}
+// {/block}

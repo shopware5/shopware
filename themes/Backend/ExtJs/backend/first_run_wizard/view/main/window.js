@@ -29,13 +29,13 @@
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 
-//{namespace name=backend/first_run_wizard/main}
+// {namespace name=backend/first_run_wizard/main}
 
-//{block name="backend/first_run_wizard/view/main/window"}
+// {block name="backend/first_run_wizard/view/main/window"}
 
 Ext.define('Shopware.apps.FirstRunWizard.view.main.Window', {
 
-    extend:'Enlight.app.Window',
+    extend: 'Enlight.app.Window',
     cls: 'first-run-wizard',
     alias: 'widget.first-run-wizard',
     layout: 'border',
@@ -64,7 +64,7 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Window', {
     /**
      * Current step of the wizard
      */
-    currentStep: 1,
+    currentStep: 0,
 
     snippets: {
         title: '{s name=window/title}Shopware First Run Wizard{/s}',
@@ -82,14 +82,13 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Window', {
     basePath: '{link file=""}',
 
     navigationIndex: {
-        welcome: 0,
-        localization: 1,
-        demo_data: 2,
-        recommendation: 3,
-        config: 4,
-        shopware_id: 5,
-        premium: 6,
-        finish: 7
+        localization: 0,
+        demo_data: 1,
+        recommendation: 2,
+        config: 3,
+        shopware_id: 4,
+        premium: 5,
+        finish: 6
     },
 
     initComponent: function() {
@@ -97,7 +96,7 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Window', {
 
         me.title = me.snippets.title;
 
-        if (me.basePath.substr(-1) == '/') {
+        if (me.basePath.substr(-1) === '/') {
             me.basePath = me.basePath.substr(0, me.basePath.length - 1);
         }
 
@@ -114,7 +113,7 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Window', {
         var me = this;
 
         if (me.confirmedClose === false) {
-            Ext.MessageBox.confirm(me.snippets.close.title, me.snippets.close.message, function(btn){
+            Ext.MessageBox.confirm(me.snippets.close.title, me.snippets.close.message, function(btn) {
                 if (btn === 'yes') {
                     me.confirmedClose = true;
                     me.close();
@@ -172,12 +171,9 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Window', {
         var me = this, items = [];
 
         items.push(
-            Ext.create('Shopware.apps.FirstRunWizard.view.main.Home', {
+            Ext.create('Shopware.apps.FirstRunWizard.view.main.Localization', {
                 connectionResult: me.isConnected
             })
-        );
-        items.push(
-            Ext.create('Shopware.apps.FirstRunWizard.view.main.Localization')
         );
         items.push(
             Ext.create('Shopware.apps.FirstRunWizard.view.main.DemoData')
@@ -205,18 +201,19 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Window', {
         var me = this;
 
         me.navigationStore = Ext.create('Ext.data.Store', {
-            fields: ['name', 'disabled'],
+            fields: ['name', 'disabled', 'needsConnection'],
             data: [
-                { id: me.navigationIndex.welcome, name: '{s name=home/content/title}Welcome to Shopware{/s}',       disabled: false },
-                { id: me.navigationIndex.localization, name: '{s name=localization/content/title}Localization{/s}',      disabled: !(me.isConnected === true) },
-                { id: me.navigationIndex.demo_data, name: '{s name=demo_data/content/title}Demo Data{/s}',            disabled: !(me.isConnected === true) },
-                { id: me.navigationIndex.recommendation, name: '{s name=recommendation/content/title}Recommendations{/s}', disabled: !(me.isConnected === true) },
-                { id: me.navigationIndex.config, name: '{s name=config/content/title}Configuration{/s}',           disabled: false },
-                { id: me.navigationIndex.shopware_id, name: '{s name=shopware_id/content/title}Shopware ID{/s}',        disabled: !(me.isConnected === true) },
-                { id: me.navigationIndex.premium, name: '{s name=premium/content/title}Additional features{/s}',    disabled: false },
-                { id: me.navigationIndex.finish, name: '{s name=finish/content/title}Finished{/s}',                disabled: false }
+                { id: me.navigationIndex.localization, name: '{s name=localization/content/title}Localization{/s}', disabled: false, needsConnection: false },
+                { id: me.navigationIndex.demo_data, name: '{s name=demo_data/content/title}Demo Data{/s}', disabled: true, needsConnection: true },
+                { id: me.navigationIndex.recommendation, name: '{s name=recommendation/content/title}Recommendations{/s}', disabled: true, needsConnection: true },
+                { id: me.navigationIndex.config, name: '{s name=config/content/title}Configuration{/s}', disabled: false, needsConnection: false },
+                { id: me.navigationIndex.shopware_id, name: '{s name=shopware_id/content/title}Shopware ID{/s}', disabled: false, needsConnection: true },
+                { id: me.navigationIndex.premium, name: '{s name=premium/content/title}Additional features{/s}', disabled: false, needsConnection: false },
+                { id: me.navigationIndex.finish, name: '{s name=finish/content/title}Finished{/s}', disabled: false, needsConnection: false }
             ]
         });
+
+        me.updateNavigation();
 
         me.navigation = Ext.create('Ext.view.View', {
             tpl: me.createNavigationTemplate(),
@@ -229,6 +226,16 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Window', {
         });
 
         return me.navigation;
+    },
+
+    updateNavigation: function() {
+        var me = this;
+        me.navigationStore.each(
+            function(elem) {
+                elem.set('disabled', (elem.get('needsConnection') === true && me.isConnected !== true));
+                return true;
+            }
+        );
     },
 
     createNavigationTemplate: function() {
@@ -275,7 +282,6 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Window', {
                 } else {
                     me.fireEvent('navigate-back', me);
                 }
-
             }
         });
 
@@ -313,4 +319,4 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Window', {
 
 });
 
-//{/block}
+// {/block}
