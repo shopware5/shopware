@@ -31,6 +31,7 @@ use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
 use Shopware\Bundle\CartBundle\Domain\Cart\CartContainer;
 use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryCollection;
+use Shopware\Bundle\CartBundle\Domain\Error\ErrorCollection;
 use Shopware\Bundle\CartBundle\Domain\LineItem\CalculatedLineItemCollection;
 use Shopware\Bundle\CartBundle\Domain\Price\CartPrice;
 use Shopware\Bundle\CartBundle\Domain\Tax\CalculatedTaxCollection;
@@ -38,6 +39,7 @@ use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCollection;
 use Shopware\Bundle\CartBundle\Infrastructure\Payment\PaymentMethodGateway;
 use Shopware\Bundle\CartBundle\Infrastructure\Payment\PaymentMethodHydrator;
 use Shopware\Bundle\CartBundle\Infrastructure\Payment\PaymentMethodService;
+use Shopware\Bundle\CartBundle\Infrastructure\Payment\RiskManagementPaymentFilter;
 use Shopware\Bundle\StoreFrontBundle\Gateway\FieldHelper;
 use Shopware\Bundle\StoreFrontBundle\Gateway\Hydrator\AttributeHydrator;
 use Shopware\Bundle\StoreFrontBundle\Service\CacheInterface;
@@ -68,16 +70,27 @@ class PaymentMethodServiceTest extends TestCase
             new AttributeHydrator($fieldHelper)
         );
 
+        $filter = $this->createMock(RiskManagementPaymentFilter::class);
+        $filter->expects($this->any())
+            ->method('filter')
+            ->will($this->returnCallback([$this, 'riskFilter']));
+
         $service = new PaymentMethodService(
             new PaymentMethodGateway(
                 $fieldHelper,
                 $hydrator,
                 $this->createDatabaseMock($database)
-            )
+            ),
+            $filter
         );
 
         $payments = $service->getAvailable($cart, Generator::createContext());
         $this->assertEquals($expected, $payments);
+    }
+
+    public function riskFilter($actives)
+    {
+        return $actives;
     }
 
     public function dataSets()
@@ -97,7 +110,8 @@ class PaymentMethodServiceTest extends TestCase
                     CartContainer::createNew('test'),
                     new CalculatedLineItemCollection(),
                     new CartPrice(0, 0, new CalculatedTaxCollection(), new TaxRuleCollection()),
-                    new DeliveryCollection()
+                    new DeliveryCollection(),
+                    new ErrorCollection()
                 ),
             ],
 
@@ -120,7 +134,8 @@ class PaymentMethodServiceTest extends TestCase
                     CartContainer::createNew('test'),
                     new CalculatedLineItemCollection(),
                     new CartPrice(0, 0, new CalculatedTaxCollection(), new TaxRuleCollection()),
-                    new DeliveryCollection()
+                    new DeliveryCollection(),
+                    new ErrorCollection()
                 ),
             ],
         ];

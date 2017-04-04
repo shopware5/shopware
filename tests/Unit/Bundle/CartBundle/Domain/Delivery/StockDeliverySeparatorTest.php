@@ -292,9 +292,12 @@ class StockDeliverySeparatorTest extends \PHPUnit_Framework_TestCase
     {
         $address = new Address();
         $address->setState(new Country\State());
+
         $country = new Country();
         $country->setArea(new Country\Area());
+
         $address->setCountry($country);
+        $address->getState()->setCountry($country);
 
         return ShippingLocation::createFromAddress($address);
     }

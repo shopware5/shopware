@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -23,48 +22,47 @@ declare(strict_types=1);
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\CartBundle\Infrastructure\Payment;
+namespace Shopware\Bundle\CartBundle\Infrastructure\Validator\Rule;
 
 use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
-use Shopware\Bundle\CartBundle\Domain\Payment\PaymentMethod;
+use Shopware\Bundle\CartBundle\Domain\Validator\Data\RuleDataCollection;
+use Shopware\Bundle\CartBundle\Domain\Validator\Rule\Rule;
+use Shopware\Bundle\CartBundle\Infrastructure\Validator\Data\ProductOfCategoriesRuleData;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
-class PaymentMethodService
+class ProductOfCategoriesRule extends Rule
 {
     /**
-     * @var PaymentMethodGateway
+     * @var int[]
      */
-    private $gateway;
+    protected $categoryIds = [];
 
     /**
-     * @var RiskManagementPaymentFilter
+     * @param int[] $categoryIds
      */
-    private $riskManagementFilter;
-
-    public function __construct(
-        PaymentMethodGateway $gateway,
-        RiskManagementPaymentFilter $paymentRiskManagementFilter
-    ) {
-        $this->gateway = $gateway;
-        $this->riskManagementFilter = $paymentRiskManagementFilter;
+    public function __construct(array $categoryIds)
+    {
+        $this->categoryIds = $categoryIds;
     }
 
-    /**
-     * @param CalculatedCart       $calculatedCart
-     * @param ShopContextInterface $context
-     *
-     * @return PaymentMethod[]
-     */
-    public function getAvailable(
+    public function match(
         CalculatedCart $calculatedCart,
-        ShopContextInterface $context
-    ): array {
-        $payments = $this->gateway->getAll($context->getTranslationContext());
+        ShopContextInterface $context,
+        RuleDataCollection $collection
+    ): bool {
+        /** @var ProductOfCategoriesRuleData $data */
+        $data = $collection->get(ProductOfCategoriesRuleData::class);
 
-        $actives = array_filter($payments, function (PaymentMethod $paymentMethod) {
-            return $paymentMethod->isActive();
-        });
+        //no products found for categories? invalid
+        if (!$data) {
+            return false;
+        }
 
-        return $this->riskManagementFilter->filter($actives, $calculatedCart, $context);
+        return $data->hasOneCategory($this->categoryIds);
+    }
+
+    public function getCategoryIds(): array
+    {
+        return $this->categoryIds;
     }
 }

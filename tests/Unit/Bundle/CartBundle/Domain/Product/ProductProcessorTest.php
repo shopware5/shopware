@@ -29,6 +29,8 @@ use Shopware\Bundle\CartBundle\Domain\Cart\ProcessorCart;
 use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryCollection;
 use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryDate;
 use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryInformation;
+use Shopware\Bundle\CartBundle\Domain\Error\ErrorCollection;
+use Shopware\Bundle\CartBundle\Domain\Error\ProductPriceNotFoundError;
 use Shopware\Bundle\CartBundle\Domain\LineItem\CalculatedLineItemCollection;
 use Shopware\Bundle\CartBundle\Domain\LineItem\LineItem;
 use Shopware\Bundle\CartBundle\Domain\Price\Price;
@@ -69,8 +71,6 @@ class ProductProcessorTest extends \PHPUnit_Framework_TestCase
             new CalculatedLineItemCollection(),
             new DeliveryCollection()
         );
-
-        $cart = CartContainer::createExisting('test', 'test', []);
 
         $processor->process(
             CartContainer::createExisting('test', 'test', []),
@@ -207,9 +207,6 @@ class ProductProcessorTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @expectedException \RuntimeException
-     */
     public function testConvertProductWhenPricesAreMissing()
     {
         $priceGateway = $this->createMock(ProductPriceGateway::class);
@@ -242,17 +239,27 @@ class ProductProcessorTest extends \PHPUnit_Framework_TestCase
 
         $processor = new ProductProcessor($priceGateway, $calculator, $deliveryGateway);
 
+        $processorCart = new ProcessorCart(
+            new CalculatedLineItemCollection(),
+            new DeliveryCollection()
+        );
+
         $processor->process(
             CartContainer::createExisting('test', 'test', [
                 new LineItem('SW1', ProductProcessor::TYPE_PRODUCT, 1),
                 new LineItem('SW2', ProductProcessor::TYPE_PRODUCT, 1),
                 new LineItem('SW3', ProductProcessor::TYPE_PRODUCT, 1),
             ]),
-            new ProcessorCart(
-                new CalculatedLineItemCollection(),
-                new DeliveryCollection()
-            ),
+            $processorCart,
             Generator::createContext()
+        );
+
+        $this->assertEquals(
+            $processorCart->getErrors(),
+            new ErrorCollection([
+                new ProductPriceNotFoundError('SW2'),
+                new ProductPriceNotFoundError('SW3'),
+            ])
         );
     }
 }

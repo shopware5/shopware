@@ -29,7 +29,7 @@ use Shopware\Bundle\CartBundle\Domain\Cart\CartContainer;
 use Shopware\Bundle\CartBundle\Domain\Cart\CartProcessorInterface;
 use Shopware\Bundle\CartBundle\Domain\Cart\ProcessorCart;
 use Shopware\Bundle\CartBundle\Domain\Error\PaymentBlockedError;
-use Shopware\Bundle\CartBundle\Infrastructure\Payment\PaymentRiskManagementFilter;
+use Shopware\Bundle\CartBundle\Infrastructure\Payment\RiskManagementPaymentFilter;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class PaymentValidatorProcessor implements CartProcessorInterface
@@ -40,12 +40,12 @@ class PaymentValidatorProcessor implements CartProcessorInterface
     private $calculatedCartGenerator;
 
     /**
-     * @var PaymentRiskManagementFilter
+     * @var RiskManagementPaymentFilter
      */
     private $paymentRiskManagementFilter;
 
     public function __construct(
-        PaymentRiskManagementFilter $paymentRiskManagementFilter,
+        RiskManagementPaymentFilter $paymentRiskManagementFilter,
         CalculatedCartGenerator $calculatedCartGenerator
     ) {
         $this->calculatedCartGenerator = $calculatedCartGenerator;

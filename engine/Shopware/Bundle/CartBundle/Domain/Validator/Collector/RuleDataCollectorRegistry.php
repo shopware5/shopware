@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -23,48 +22,38 @@ declare(strict_types=1);
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\CartBundle\Infrastructure\Payment;
+namespace Shopware\Bundle\CartBundle\Domain\Validator\Collector;
 
 use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
-use Shopware\Bundle\CartBundle\Domain\Payment\PaymentMethod;
+use Shopware\Bundle\CartBundle\Domain\Validator\Data\RuleDataCollection;
+use Shopware\Bundle\CartBundle\Domain\Validator\Rule\RuleCollection;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
-class PaymentMethodService
+class RuleDataCollectorRegistry
 {
     /**
-     * @var PaymentMethodGateway
+     * @var RuleDataCollectorInterface[]
      */
-    private $gateway;
+    private $collectors;
 
     /**
-     * @var RiskManagementPaymentFilter
+     * @param RuleDataCollectorInterface[] $collectors
      */
-    private $riskManagementFilter;
-
-    public function __construct(
-        PaymentMethodGateway $gateway,
-        RiskManagementPaymentFilter $paymentRiskManagementFilter
-    ) {
-        $this->gateway = $gateway;
-        $this->riskManagementFilter = $paymentRiskManagementFilter;
+    public function __construct(array $collectors)
+    {
+        $this->collectors = $collectors;
     }
 
-    /**
-     * @param CalculatedCart       $calculatedCart
-     * @param ShopContextInterface $context
-     *
-     * @return PaymentMethod[]
-     */
-    public function getAvailable(
+    public function collect(
         CalculatedCart $calculatedCart,
-        ShopContextInterface $context
-    ): array {
-        $payments = $this->gateway->getAll($context->getTranslationContext());
+        ShopContextInterface $context,
+        RuleCollection $rules
+    ): RuleDataCollection {
+        $collection = new RuleDataCollection([]);
+        foreach ($this->collectors as $collector) {
+            $collector->collect($rules, $calculatedCart, $context, $collection);
+        }
 
-        $actives = array_filter($payments, function (PaymentMethod $paymentMethod) {
-            return $paymentMethod->isActive();
-        });
-
-        return $this->riskManagementFilter->filter($actives, $calculatedCart, $context);
+        return $collection;
     }
 }

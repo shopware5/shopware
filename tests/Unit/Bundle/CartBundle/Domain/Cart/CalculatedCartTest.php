@@ -27,6 +27,7 @@ namespace Shopware\Tests\Unit\Bundle\CartBundle\Domain\Cart;
 use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
 use Shopware\Bundle\CartBundle\Domain\Cart\CartContainer;
 use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryCollection;
+use Shopware\Bundle\CartBundle\Domain\Error\ErrorCollection;
 use Shopware\Bundle\CartBundle\Domain\LineItem\CalculatedLineItemCollection;
 use Shopware\Bundle\CartBundle\Domain\Price\CartPrice;
 use Shopware\Bundle\CartBundle\Domain\Tax\CalculatedTaxCollection;
@@ -42,7 +43,8 @@ class CalculatedCartTest extends \PHPUnit_Framework_TestCase
             CartContainer::createNew('test'),
             new CalculatedLineItemCollection(),
             new CartPrice(0, 0, new CalculatedTaxCollection(), new TaxRuleCollection()),
-            new DeliveryCollection()
+            new DeliveryCollection(),
+            new ErrorCollection()
         );
 
         static::assertCount(0, $cart->getLineItems()->filterGoods());
@@ -57,7 +59,8 @@ class CalculatedCartTest extends \PHPUnit_Framework_TestCase
                 new ConfiguredLineItem('B', 1),
             ]),
             new CartPrice(0, 0, new CalculatedTaxCollection(), new TaxRuleCollection()),
-            new DeliveryCollection()
+            new DeliveryCollection(),
+            new ErrorCollection()
         );
 
         static::assertCount(1, $cart->getLineItems()->filterGoods());
@@ -72,7 +75,8 @@ class CalculatedCartTest extends \PHPUnit_Framework_TestCase
                 new ConfiguredLineItem('B', 1),
             ]),
             new CartPrice(0, 0, new CalculatedTaxCollection(), new TaxRuleCollection()),
-            new DeliveryCollection()
+            new DeliveryCollection(),
+            new ErrorCollection()
         );
 
         static::assertCount(0, $cart->getLineItems()->filterGoods());

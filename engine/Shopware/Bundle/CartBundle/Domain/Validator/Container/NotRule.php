@@ -23,48 +23,47 @@ declare(strict_types=1);
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\CartBundle\Infrastructure\Payment;
+namespace Shopware\Bundle\CartBundle\Domain\Validator\Container;
 
 use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
-use Shopware\Bundle\CartBundle\Domain\Payment\PaymentMethod;
+use Shopware\Bundle\CartBundle\Domain\Validator\Data\RuleDataCollection;
+use Shopware\Bundle\CartBundle\Domain\Validator\Rule\Rule;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
-class PaymentMethodService
+/**
+ * NotRule inverses the return value of the child rule. Only one child is possible
+ */
+class NotRule extends Container
 {
-    /**
-     * @var PaymentMethodGateway
-     */
-    private $gateway;
+    public function addRule(Rule $rule): void
+    {
+        parent::addRule($rule);
+        $this->checkRules();
+    }
 
-    /**
-     * @var RiskManagementPaymentFilter
-     */
-    private $riskManagementFilter;
+    public function setRules(array $rules): void
+    {
+        parent::setRules(array_values($rules));
+        $this->checkRules();
+    }
 
-    public function __construct(
-        PaymentMethodGateway $gateway,
-        RiskManagementPaymentFilter $paymentRiskManagementFilter
-    ) {
-        $this->gateway = $gateway;
-        $this->riskManagementFilter = $paymentRiskManagementFilter;
+    public function match(
+        CalculatedCart $calculatedCart,
+        ShopContextInterface $context,
+        RuleDataCollection $collection
+    ): bool {
+        return !$this->rules[0]->match($calculatedCart, $context, $collection);
     }
 
     /**
-     * @param CalculatedCart       $calculatedCart
-     * @param ShopContextInterface $context
+     * Enforce that NOT only handles ONE child rule
      *
-     * @return PaymentMethod[]
+     * @throws \RuntimeException
      */
-    public function getAvailable(
-        CalculatedCart $calculatedCart,
-        ShopContextInterface $context
-    ): array {
-        $payments = $this->gateway->getAll($context->getTranslationContext());
-
-        $actives = array_filter($payments, function (PaymentMethod $paymentMethod) {
-            return $paymentMethod->isActive();
-        });
-
-        return $this->riskManagementFilter->filter($actives, $calculatedCart, $context);
+    protected function checkRules()
+    {
+        if (count($this->rules) > 1) {
+            throw new \RuntimeException('NOT rule can only hold one rule');
+        }
     }
 }

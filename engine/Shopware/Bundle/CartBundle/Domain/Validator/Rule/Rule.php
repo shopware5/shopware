@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -23,48 +22,37 @@ declare(strict_types=1);
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\CartBundle\Infrastructure\Payment;
+namespace Shopware\Bundle\CartBundle\Domain\Validator\Rule;
 
 use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
-use Shopware\Bundle\CartBundle\Domain\Payment\PaymentMethod;
+use Shopware\Bundle\CartBundle\Domain\JsonSerializableTrait;
+use Shopware\Bundle\CartBundle\Domain\Validator\Data\RuleDataCollection;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
-class PaymentMethodService
+abstract class Rule implements \JsonSerializable
 {
-    /**
-     * @var PaymentMethodGateway
-     */
-    private $gateway;
+    use JsonSerializableTrait;
+
+    const OPERATOR_GTE = '=>';
+
+    const OPERATOR_LTE = '<=';
+
+    const OPERATOR_EQ = "=";
+
+    const OPERATOR_NEQ = "!=";
 
     /**
-     * @var RiskManagementPaymentFilter
-     */
-    private $riskManagementFilter;
-
-    public function __construct(
-        PaymentMethodGateway $gateway,
-        RiskManagementPaymentFilter $paymentRiskManagementFilter
-    ) {
-        $this->gateway = $gateway;
-        $this->riskManagementFilter = $paymentRiskManagementFilter;
-    }
-
-    /**
-     * @param CalculatedCart       $calculatedCart
-     * @param ShopContextInterface $context
+     * Validate the current rule and return boolean to indicate if the current rule applied (true) or not (false)
      *
-     * @return PaymentMethod[]
+     * @param CalculatedCart                                                            $calculatedCart
+     * @param ShopContextInterface                                                      $context
+     * @param \Shopware\Bundle\CartBundle\Domain\Validator\Data\RuleDataCollection $collection
+     *
+     * @return bool
      */
-    public function getAvailable(
+    abstract public function match(
         CalculatedCart $calculatedCart,
-        ShopContextInterface $context
-    ): array {
-        $payments = $this->gateway->getAll($context->getTranslationContext());
-
-        $actives = array_filter($payments, function (PaymentMethod $paymentMethod) {
-            return $paymentMethod->isActive();
-        });
-
-        return $this->riskManagementFilter->filter($actives, $calculatedCart, $context);
-    }
+        ShopContextInterface $context,
+        RuleDataCollection $collection
+    ): bool;
 }

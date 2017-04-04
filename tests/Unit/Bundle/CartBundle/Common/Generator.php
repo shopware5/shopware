@@ -42,24 +42,6 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Tax;
 
 class Generator extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @param null|Shop           $shop
-     * @param null|Currency       $currency
-     * @param null|Group          $currentCustomerGroup
-     * @param null|Group          $fallbackCustomerGroup
-     * @param null|PriceGroup[]   $priceGroups
-     * @param null|Tax[]          $taxes
-     * @param null|Country\Area   $area
-     * @param null|Country        $country
-     * @param null|Country\State  $state
-     * @param null|PaymentMethod  $paymentService
-     * @param null|DeliveryMethod $deliveryService
-     * @param null|Customer       $customer
-     * @param null|Address        $billing
-     * @param null|Address        $shipping
-     *
-     * @return ShopContext
-     */
     public static function createContext(
         $currentCustomerGroup = null,
         $fallbackCustomerGroup = null,

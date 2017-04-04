@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 /**
  * Shopware 5
@@ -23,48 +24,28 @@ declare(strict_types=1);
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\CartBundle\Infrastructure\Payment;
+namespace Shopware\Bundle\CartBundle\Domain\Validator\Container;
 
 use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
-use Shopware\Bundle\CartBundle\Domain\Payment\PaymentMethod;
+use Shopware\Bundle\CartBundle\Domain\Validator\Data\RuleDataCollection;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
-class PaymentMethodService
+/**
+ * OrRule returns true, if at least one child rule is true
+ */
+class OrRule extends Container
 {
-    /**
-     * @var PaymentMethodGateway
-     */
-    private $gateway;
-
-    /**
-     * @var RiskManagementPaymentFilter
-     */
-    private $riskManagementFilter;
-
-    public function __construct(
-        PaymentMethodGateway $gateway,
-        RiskManagementPaymentFilter $paymentRiskManagementFilter
-    ) {
-        $this->gateway = $gateway;
-        $this->riskManagementFilter = $paymentRiskManagementFilter;
-    }
-
-    /**
-     * @param CalculatedCart       $calculatedCart
-     * @param ShopContextInterface $context
-     *
-     * @return PaymentMethod[]
-     */
-    public function getAvailable(
+    public function match(
         CalculatedCart $calculatedCart,
-        ShopContextInterface $context
-    ): array {
-        $payments = $this->gateway->getAll($context->getTranslationContext());
+        ShopContextInterface $context,
+        RuleDataCollection $collection
+    ): bool {
+        foreach ($this->rules as $rule) {
+            if ($rule->match($calculatedCart, $context, $collection)) {
+                return true;
+            }
+        }
 
-        $actives = array_filter($payments, function (PaymentMethod $paymentMethod) {
-            return $paymentMethod->isActive();
-        });
-
-        return $this->riskManagementFilter->filter($actives, $calculatedCart, $context);
+        return false;
     }
 }

@@ -27,7 +27,7 @@ namespace Shopware\Bundle\CartBundle\Domain\Payment;
 
 use Shopware\Bundle\CartBundle\Domain\CloneTrait;
 use Shopware\Bundle\CartBundle\Domain\JsonSerializableTrait;
-use Shopware\Bundle\CartBundle\Domain\RiskManagement\Rule\Rule;
+use Shopware\Bundle\CartBundle\Domain\Validator\Rule\Rule;
 use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
 
 class PaymentMethod extends Extendable
