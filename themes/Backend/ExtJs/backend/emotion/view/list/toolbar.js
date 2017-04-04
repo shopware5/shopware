@@ -66,7 +66,7 @@ Ext.define('Shopware.apps.Emotion.view.list.Toolbar', {
             name: 'emotionfile',
             buttonOnly: true,
             buttonConfig : {
-                iconCls: 'sprite-document-import'
+                iconCls: 'sprite-inbox-download'
             },
             buttonText: '{s name=toolbar/import_emotion}{/s}',
             listeners: {

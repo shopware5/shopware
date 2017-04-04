@@ -276,7 +276,7 @@ Ext.define('Shopware.apps.Emotion.view.list.Grid', {
                     }
                 },
                 {
-                    iconCls: 'sprite-document-export',
+                    iconCls: 'sprite-export',
                     tooltip:'{s name=list/action_column/export}Export shopping world{/s}',
                     handler: function(view, rowIndex) {
                         var listStore = view.getStore(),

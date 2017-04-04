@@ -130,7 +130,6 @@ class PresetLoader implements PresetLoaderInterface
     private function refreshElementData(array $elements)
     {
         $collectedComponents = [];
-        $collectedFields = [];
         $pluginNames = [];
 
         foreach ($elements as $element) {
@@ -140,55 +139,54 @@ class PresetLoader implements PresetLoaderInterface
                 $pluginNames[] = $component['plugin'];
             }
 
-            $collectedComponents[$component['name']] = $component['id'];
+            $collectedComponents[$component['name']] = [];
+            $collectedComponents[$component['name']]['id'] = $component['id'];
+            $collectedComponents[$component['name']]['fields'] = [];
 
             foreach ($component['fields'] as $field) {
-                $collectedFields[$field['name']] = $field['id'];
+                $collectedComponents[$component['name']]['fields'][$field['name']] = $field['id'];
             }
         }
 
-        $componentNames = array_keys($collectedComponents);
-        $components = $this->getComponentData($componentNames);
-        $componentMapping = array_combine($collectedComponents, array_merge($collectedComponents, $components));
-
-        $fieldNames = array_keys($collectedFields);
-        $fields = $this->getFieldData($fieldNames);
-        $fieldMapping = array_combine($collectedFields, array_merge($collectedFields, $fields));
+        $componentMapping = $this->createComponentMapping($collectedComponents);
 
         $pluginIds = $this->getPluginIds($pluginNames);
 
-        return $this->processRefresh($elements, $componentMapping, $fieldMapping, $pluginIds);
+        return $this->processRefresh($elements, $componentMapping, $pluginIds);
     }
 
     /**
      * @param array $elements
      * @param array $componentMapping
-     * @param array $fieldMapping
      * @param array $pluginIds
      *
      * @return array
      */
-    private function processRefresh(array $elements, array $componentMapping, array $fieldMapping, array $pluginIds)
+    private function processRefresh(array $elements, array $componentMapping, array $pluginIds)
     {
         foreach ($elements as &$element) {
-            $element['component']['id'] = $componentMapping[$element['componentId']];
-            $element['componentId'] = $componentMapping[$element['componentId']];
+            $componentId = $componentMapping[$element['componentId']]['componentId'];
 
             if (array_key_exists('plugin', $element['component'])) {
                 $element['component']['pluginId'] = $pluginIds[$element['component']['plugin']];
             }
 
             foreach ($element['component']['fields'] as &$field) {
-                $field['id'] = $fieldMapping[$field['id']];
-                $field['componentId'] = $componentMapping[$field['componentId']];
+                $field['id'] = $componentMapping[$element['componentId']][$field['id']];
+                $field['componentId'] = $componentId;
             }
             unset($field);
 
             foreach ($element['data'] as &$data) {
-                $data['componentId'] = $componentMapping[$data['componentId']];
-                $data['fieldId'] = $fieldMapping[$data['fieldId']];
+                $data['componentId'] = $componentId;
+                $data['fieldId'] = $componentMapping[$element['componentId']][$data['fieldId']];
             }
+            unset($data);
+
+            $element['component']['id'] = $componentId;
+            $element['componentId'] = $componentId;
         }
+        unset($element);
 
         return $elements;
     }
@@ -200,31 +198,14 @@ class PresetLoader implements PresetLoaderInterface
      */
     private function getComponentData(array $componentNames)
     {
-        $queryResult = $this->modelManager->getConnection()->createQueryBuilder()
-            ->select('id, name')
+        return $this->modelManager->getConnection()->createQueryBuilder()
+            ->select('component.name, component.id as componentId, field.id as fieldId, field.name as fieldName')
             ->from('s_library_component', 'component')
+            ->leftJoin('component', 's_library_component_field', 'field', 'field.componentID = component.id')
             ->where('component.name IN (:names)')
             ->setParameter('names', $componentNames, Connection::PARAM_STR_ARRAY)
             ->execute()
-            ->fetchAll(\PDO::FETCH_KEY_PAIR);
-
-        return array_flip($queryResult);
-    }
-
-    /**
-     * @param array $fieldNames
-     *
-     * @return array
-     */
-    private function getFieldData(array $fieldNames)
-    {
-        return $this->modelManager->getConnection()->createQueryBuilder()
-            ->select('name, id')
-            ->from('s_library_component_field', 'field')
-            ->where('name IN (:names)')
-            ->setParameter('names', $fieldNames, Connection::PARAM_STR_ARRAY)
-            ->execute()
-            ->fetchAll(\PDO::FETCH_KEY_PAIR);
+            ->fetchAll(\PDO::FETCH_GROUP);
     }
 
     /**
@@ -241,5 +222,40 @@ class PresetLoader implements PresetLoaderInterface
             ->setParameter('names', $technicalNames, Connection::PARAM_STR_ARRAY)
             ->execute()
             ->fetchAll(\PDO::FETCH_KEY_PAIR);
+    }
+
+    /**
+     * @param array $collectedComponents
+     *
+     * @return array
+     */
+    private function createComponentMapping(array $collectedComponents)
+    {
+        $componentNames = array_keys($collectedComponents);
+        $componentData = $this->getComponentData($componentNames);
+
+        $componentMapping = [];
+
+        foreach ($collectedComponents as $componentName => $componentDetail) {
+            $componentFields = $componentData[$componentName];
+            $fields = $componentDetail['fields'];
+
+            $componentMapping[$componentDetail['id']] = [];
+
+            foreach ($componentFields as $field) {
+                if (!isset($componentMapping[$componentDetail['id']]['componentId'])) {
+                    $componentMapping[$componentDetail['id']]['componentId'] = $field['componentId'];
+                }
+                $fields[$field['fieldName']] = $field['fieldId'];
+            }
+
+            $fieldMapping = array_combine($componentDetail['fields'], $fields);
+
+            $componentMapping[$componentDetail['id']] = array_merge(
+                $componentMapping[$componentDetail['id']], $fieldMapping
+            );
+        }
+
+        return $componentMapping;
     }
 }
