@@ -126,22 +126,18 @@ class PriceFacetHandler implements FacetHandlerInterface
         $selection = $this->priceHelper->getSelection($context);
         $this->priceHelper->joinPrices($query, $context);
 
-        $query->select('MIN('. $selection .') as cheapest_price');
-
-        /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
-        $statement = $query->execute();
-
-        $min = $statement->fetch(\PDO::FETCH_COLUMN);
+        $query->select('MIN(' . $selection . ') as cheapest_price');
 
         $query->groupBy('product.id')
-            ->orderBy('cheapest_price', 'DESC')
-            ->setFirstResult(0)
-            ->setMaxResults(1);
+            ->orderBy('cheapest_price', 'DESC');
 
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
 
-        $max = $statement->fetch(\PDO::FETCH_COLUMN);
+        $result = $statement->fetchAll(\PDO::FETCH_COLUMN);
+
+        $min = end($result);
+        $max = reset($result);
 
         $activeMin = $min;
         $activeMax = $max;
