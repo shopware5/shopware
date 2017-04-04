@@ -63,9 +63,11 @@ class MenuSynchronizer
 
         $items = [];
         foreach ($menu as $menuItem) {
-            $childMenuNames = array_column($menuItem['children'], 'name');
-            if ($childMenuNames) {
-                $menuNames = array_merge($menuNames, $childMenuNames);
+            if (isset($menuItem['children'])) {
+                $childMenuNames = array_column($menuItem['children'], 'name');
+                if ($childMenuNames) {
+                    $menuNames = array_merge($menuNames, $childMenuNames);
+                }
             }
             if ($menuItem['isRootMenu']) {
                 $parent = null;
@@ -151,7 +153,9 @@ class MenuSynchronizer
             isset($menuItem['onclick']) ? $menuItem['onclick'] : null
         );
 
-        $item->setClass($menuItem['class']);
+        $item->setClass(
+            isset($menuItem['class']) ? $menuItem['class'] : null
+        );
 
         if (isset($menuItem['active'])) {
             $item->setActive((bool) $menuItem['active']);
@@ -164,7 +168,14 @@ class MenuSynchronizer
         );
 
         if (isset($menuItem['controller'])) {
-            $this->saveMenuTranslation($menuItem['label'], $menuItem['controller'] . '/' . $menuItem['action']);
+            $name = $menuItem['controller'];
+
+            // Index actions aren't appended to the name of the snippet, they are an exemption from the rule
+            if ($menuItem['action'] !== 'Index') {
+                $name .= '/' . $menuItem['action'];
+            }
+
+            $this->saveMenuTranslation($menuItem['label'], $name);
         }
 
         if (isset($menuItem['children'])) {
