@@ -26,7 +26,7 @@ namespace Shopware\Recovery\Install\Struct;
 
 /**
  * @category  Shopware
- * @package   Shopware\Recovery\Install\Struct
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ShopwareEdition
@@ -49,8 +49,9 @@ class ShopwareEdition
     public $licence;
 
     /**
-     * @param  string            $edition
-     * @param  string            $licence
+     * @param string $edition
+     * @param string $licence
+     *
      * @throws \RuntimeException
      */
     private function __construct($edition, $licence = null)
@@ -70,6 +71,7 @@ class ShopwareEdition
 
     /**
      * Returns a list of valid commercial product keys
+     *
      * @return array
      */
     public static function getValidEditions()
@@ -79,13 +81,14 @@ class ShopwareEdition
             self::PP,
             self::EE,
             self::EB,
-            self::EC
+            self::EC,
         ];
     }
 
     /**
      * @param $edition
      * @param $licence
+     *
      * @return ShopwareEdition
      */
     public static function createFromEditionAndLicence($edition, $licence)

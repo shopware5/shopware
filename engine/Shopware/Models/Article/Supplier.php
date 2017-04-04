@@ -24,10 +24,9 @@
 
 namespace Shopware\Models\Article;
 
-use Shopware\Components\Model\ModelEntity;
-use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
 
 /**
  * Supplier Model
@@ -52,9 +51,53 @@ use Doctrine\Common\Collections\ArrayCollection;
 class Supplier extends ModelEntity
 {
     /**
+     * Title for the page - SEO metadata
+     *
+     * @var string
+     *
+     * @ORM\Column(name="meta_title", type="string", nullable=true)
+     */
+    protected $metaTitle;
+
+    /**
+     * Description for the page - SEO metadata
+     *
+     * @var string
+     *
+     * @ORM\Column(name="meta_description", type="string", nullable=true)
+     */
+    protected $metaDescription;
+
+    /**
+     * Meta keywords for the page - SEO metadata
+     *
+     * @var string
+     *
+     * @ORM\Column(name="meta_keywords", type="string", nullable=true)
+     */
+    protected $metaKeywords;
+
+    /**
+     * INVERSE SIDE
+     * Articles can be bound to a specific supplier
+     *
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Article", mappedBy="supplier", fetch="EXTRA_LAZY")
+     * @ORM\JoinColumn(name="id", referencedColumnName="supplierID")
+     */
+    protected $articles;
+
+    /**
+     * INVERSE SIDE
+     *
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\ArticleSupplier", mappedBy="articleSupplier", cascade={"persist"})
+     *
+     * @var \Shopware\Models\Attribute\ArticleSupplier
+     */
+    protected $attribute;
+    /**
      * Autoincrement ID
      *
-     * @var integer $id
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
@@ -65,7 +108,7 @@ class Supplier extends ModelEntity
     /**
      * Name of the supplier
      *
-     * @var string $name
+     * @var string
      *
      * @ORM\Column(name="name", type="string", nullable=false)
      */
@@ -74,7 +117,7 @@ class Supplier extends ModelEntity
     /**
      * Logo for that supplier. Utilize the media manager
      *
-     * @var string $image
+     * @var string
      *
      * @ORM\Column(name="img", type="string", nullable=true)
      */
@@ -83,7 +126,7 @@ class Supplier extends ModelEntity
     /**
      * Link to the suppliers homepage
      *
-     * @var string $link
+     * @var string
      *
      * @ORM\Column(name="link", type="string", nullable=true)
      */
@@ -92,61 +135,18 @@ class Supplier extends ModelEntity
     /**
      * Description text which can be used e.g. for a special supplier page
      *
-     * @var string $link
+     * @var string
      *
      * @ORM\Column(name="description", type="text", nullable=true)
      */
     private $description;
 
     /**
-     * Title for the page - SEO metadata
-     *
-     * @var string $metaTitle
-     *
-     * @ORM\Column(name="meta_title", type="string", nullable=true)
-     */
-    protected $metaTitle;
-
-    /**
-     * Description for the page - SEO metadata
-     *
-     * @var string $metaDescription
-     *
-     * @ORM\Column(name="meta_description", type="string", nullable=true)
-     */
-    protected $metaDescription;
-
-    /**
-     * Meta keywords for the page - SEO metadata
-     *
-     * @var string $metaKeywords
-     *
-     * @ORM\Column(name="meta_keywords", type="string", nullable=true)
-     */
-    protected $metaKeywords;
-
-    /**
-     * @var \DateTime $changed
+     * @var \DateTime
      *
      * @ORM\Column(name="changed", type="datetime", nullable=false)
      */
     private $changed;
-
-   /**
-    * INVERSE SIDE
-    * Articles can be bound to a specific supplier
-    *
-    * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Article", mappedBy="supplier", fetch="EXTRA_LAZY")
-    * @ORM\JoinColumn(name="id", referencedColumnName="supplierID")
-    */
-    protected $articles;
-
-    /**
-     * INVERSE SIDE
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\ArticleSupplier", mappedBy="articleSupplier", cascade={"persist"})
-     * @var \Shopware\Models\Attribute\ArticleSupplier
-     */
-    protected $attribute;
 
     public function __construct()
     {
@@ -167,7 +167,7 @@ class Supplier extends ModelEntity
     /**
      * Get id
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -178,11 +178,13 @@ class Supplier extends ModelEntity
      * Set the supplier name
      *
      * @param string $name
+     *
      * @return Supplier
      */
     public function setName($name)
     {
         $this->name = $name;
+
         return $this;
     }
 
@@ -200,11 +202,13 @@ class Supplier extends ModelEntity
      * Set the path to the suppliers logo
      *
      * @param string $image
+     *
      * @return Supplier
      */
     public function setImage($image)
     {
         $this->image = $image;
+
         return $this;
     }
 
@@ -223,11 +227,13 @@ class Supplier extends ModelEntity
      * URL will be prefixed with 'http://' if it not already provided.
      *
      * @param string $link
+     *
      * @return Supplier
      */
     public function setLink($link)
     {
         $this->link = $link;
+
         return $this;
     }
 
@@ -256,11 +262,13 @@ class Supplier extends ModelEntity
      * Sets the description of the supplier. This description may contains HTML codes.
      *
      * @param string $description
+     *
      * @return Supplier
      */
     public function setDescription($description)
     {
         $this->description = $description;
+
         return $this;
     }
 
@@ -278,11 +286,13 @@ class Supplier extends ModelEntity
      * Takes an array of articles, in most cases doctrine will take care of this.
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $articles $articles
+     *
      * @return Supplier
      */
     public function setArticles($articles)
     {
         $this->articles = $articles;
+
         return $this;
     }
 
@@ -296,6 +306,7 @@ class Supplier extends ModelEntity
 
     /**
      * @param \Shopware\Models\Attribute\ArticleSupplier|array|null $attribute
+     *
      * @return \Shopware\Models\Attribute\ArticleSupplier
      */
     public function setAttribute($attribute)
@@ -355,6 +366,7 @@ class Supplier extends ModelEntity
      * Set changed
      *
      * @param \DateTime|string $changed
+     *
      * @return Supplier
      */
     public function setChanged($changed = 'now')
@@ -364,6 +376,7 @@ class Supplier extends ModelEntity
         } else {
             $this->changed = $changed;
         }
+
         return $this;
     }
 

@@ -24,8 +24,8 @@
 
 namespace   Shopware\Models\Newsletter;
 
-use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
 
 /**
  * Shopware group model represents a newsletter group.
@@ -38,7 +38,7 @@ class Group extends ModelEntity
     /**
      * Autoincrement ID
      *
-     * @var integer $id
+     * @var int
      *
      * @ORM\Id
      * @ORM\Column(name="id", type="integer", nullable=false)
@@ -49,7 +49,7 @@ class Group extends ModelEntity
     /**
      * name of the group
      *
-     * @var string $name
+     * @var string
      *
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */

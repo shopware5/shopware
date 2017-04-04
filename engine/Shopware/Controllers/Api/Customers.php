@@ -41,10 +41,10 @@ class Shopware_Controllers_Api_Customers extends Shopware_Controllers_Api_Rest
      */
     public function indexAction()
     {
-        $limit  = $this->Request()->getParam('limit', 1000);
+        $limit = $this->Request()->getParam('limit', 1000);
         $offset = $this->Request()->getParam('start', 0);
-        $sort   = $this->Request()->getParam('sort', array());
-        $filter = $this->Request()->getParam('filter', array());
+        $sort = $this->Request()->getParam('sort', []);
+        $filter = $this->Request()->getParam('filter', []);
 
         $result = $this->resource->getList($offset, $limit, $filter, $sort);
 
@@ -60,7 +60,7 @@ class Shopware_Controllers_Api_Customers extends Shopware_Controllers_Api_Rest
     public function getAction()
     {
         $id = $this->Request()->getParam('id');
-        $useNumberAsId = (boolean) $this->Request()->getParam('useNumberAsId', 0);
+        $useNumberAsId = (bool) $this->Request()->getParam('useNumberAsId', 0);
 
         if ($useNumberAsId) {
             $customer = $this->resource->getOneByNumber($id);
@@ -82,12 +82,12 @@ class Shopware_Controllers_Api_Customers extends Shopware_Controllers_Api_Rest
         $customer = $this->resource->create($this->Request()->getPost());
 
         $location = $this->apiBaseUrl . 'customers/' . $customer->getId();
-        $data = array(
-            'id'       => $customer->getId(),
-            'location' => $location
-        );
+        $data = [
+            'id' => $customer->getId(),
+            'location' => $location,
+        ];
 
-        $this->View()->assign(array('success' => true, 'data' => $data));
+        $this->View()->assign(['success' => true, 'data' => $data]);
         $this->Response()->setHeader('Location', $location);
     }
 
@@ -99,7 +99,7 @@ class Shopware_Controllers_Api_Customers extends Shopware_Controllers_Api_Rest
     public function putAction()
     {
         $id = $this->Request()->getParam('id');
-        $useNumberAsId = (boolean) $this->Request()->getParam('useNumberAsId', 0);
+        $useNumberAsId = (bool) $this->Request()->getParam('useNumberAsId', 0);
         $params = $this->Request()->getPost();
 
         if ($useNumberAsId) {
@@ -108,14 +108,13 @@ class Shopware_Controllers_Api_Customers extends Shopware_Controllers_Api_Rest
             $customer = $this->resource->update($id, $params);
         }
 
-
         $location = $this->apiBaseUrl . 'customers/' . $customer->getId();
-        $data = array(
-            'id'       => $customer->getId(),
-            'location' => $location
-        );
+        $data = [
+            'id' => $customer->getId(),
+            'location' => $location,
+        ];
 
-        $this->View()->assign(array('success' => true, 'data' => $data));
+        $this->View()->assign(['success' => true, 'data' => $data]);
     }
 
     /**
@@ -126,7 +125,7 @@ class Shopware_Controllers_Api_Customers extends Shopware_Controllers_Api_Rest
     public function deleteAction()
     {
         $id = $this->Request()->getParam('id');
-        $useNumberAsId = (boolean) $this->Request()->getParam('useNumberAsId', 0);
+        $useNumberAsId = (bool) $this->Request()->getParam('useNumberAsId', 0);
 
         if ($useNumberAsId) {
             $this->resource->deleteByNumber($id);
@@ -134,6 +133,6 @@ class Shopware_Controllers_Api_Customers extends Shopware_Controllers_Api_Rest
             $this->resource->delete($id);
         }
 
-        $this->View()->assign(array('success' => true));
+        $this->View()->assign(['success' => true]);
     }
 }

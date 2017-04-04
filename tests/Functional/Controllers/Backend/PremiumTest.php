@@ -24,17 +24,17 @@
 
 /**
  * @category  Shopware
- * @package   Shopware\Tests
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Tests_Controllers_Backend_PremiumTest extends Enlight_Components_Test_Controller_TestCase
 {
-    private $premiumData = array(
-        'orderNumber'=>'SW2001_test',
-        'pseudoOrderNumber'=>'SW123',
-        'startPrice'=>123,
-        'shopId'=>1
-    );
+    private $premiumData = [
+        'orderNumber' => 'SW2001_test',
+        'pseudoOrderNumber' => 'SW123',
+        'startPrice' => 123,
+        'shopId' => 1,
+    ];
 
     /**
      * Standard set up for every test - just disable auth
@@ -55,7 +55,7 @@ class Shopware_Tests_Controllers_Backend_PremiumTest extends Enlight_Components_
      */
     public function testGetPremiumArticles()
     {
-        /** @var Enlight_Controller_Response_ResponseTestCase */
+        /* @var Enlight_Controller_Response_ResponseTestCase */
         $this->dispatch('backend/premium/getPremiumArticles');
         $this->assertTrue($this->View()->success);
 
@@ -66,11 +66,11 @@ class Shopware_Tests_Controllers_Backend_PremiumTest extends Enlight_Components_
         $this->assertArrayHasKey('success', $jsonBody);
 
         //Testing the search-function
-        $filter = array(
-            'filter'=>Zend_Json::encode(array(array(
-                'value'=>'test'
-            )))
-        );
+        $filter = [
+            'filter' => Zend_Json::encode([[
+                'value' => 'test',
+            ]]),
+        ];
         $this->Request()->setMethod('POST')->setPost($filter);
         $this->dispatch('backend/premium/getPremiumArticles');
         $jsonBody = $this->View()->getAssign();
@@ -83,6 +83,7 @@ class Shopware_Tests_Controllers_Backend_PremiumTest extends Enlight_Components_
      * This test tests the creating of a new premium-article.
      * The response has to contain the id of the created article.
      * This function is called before testEditPremiumArticle and testDeletePremiumArticle
+     *
      * @return mixed
      */
     public function testCreatePremiumArticle()
@@ -132,11 +133,12 @@ class Shopware_Tests_Controllers_Backend_PremiumTest extends Enlight_Components_
      * This test-method tests the deleting of a premium-article.
      *
      * @depends testCreatePremiumArticle
+     *
      * @param $lastId
      */
     public function testDeletePremiumArticle($lastId)
     {
-        $this->Request()->setMethod('POST')->setPost(array('id'=>$lastId));
+        $this->Request()->setMethod('POST')->setPost(['id' => $lastId]);
 
         $this->dispatch('backend/premium/deletePremiumArticle');
 

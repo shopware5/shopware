@@ -33,18 +33,18 @@ use ONGR\ElasticsearchDSL\Search;
 use ONGR\ElasticsearchDSL\Sort\FieldSort;
 use Shopware\Bundle\ESIndexingBundle\IndexFactoryInterface;
 use Shopware\Bundle\ESIndexingBundle\Property\PropertyMapping;
-use Shopware\Bundle\SearchBundleES\ResultHydratorInterface;
-use Shopware\Bundle\SearchBundleES\StructHydrator;
-use Shopware\Bundle\SearchBundleES\HandlerInterface;
 use Shopware\Bundle\SearchBundle\Condition\PropertyCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
-use Shopware\Bundle\SearchBundle\Facet\PropertyFacet;
 use Shopware\Bundle\SearchBundle\CriteriaPartInterface;
+use Shopware\Bundle\SearchBundle\Facet\PropertyFacet;
 use Shopware\Bundle\SearchBundle\FacetResult\FacetResultGroup;
 use Shopware\Bundle\SearchBundle\FacetResult\MediaListFacetResult;
 use Shopware\Bundle\SearchBundle\FacetResult\MediaListItem;
 use Shopware\Bundle\SearchBundle\FacetResult\ValueListFacetResult;
 use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
+use Shopware\Bundle\SearchBundleES\HandlerInterface;
+use Shopware\Bundle\SearchBundleES\ResultHydratorInterface;
+use Shopware\Bundle\SearchBundleES\StructHydrator;
 use Shopware\Bundle\StoreFrontBundle\Struct\Property\Group;
 use Shopware\Bundle\StoreFrontBundle\Struct\Property\Option;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
@@ -53,7 +53,7 @@ use Shopware\Components\QueryAliasMapper;
 class PropertyFacetHandler implements HandlerInterface, ResultHydratorInterface
 {
     const AGGREGATION_SIZE = 5000;
-    
+
     /**
      * @var QueryAliasMapper
      */
@@ -80,10 +80,10 @@ class PropertyFacetHandler implements HandlerInterface, ResultHydratorInterface
     private $indexFactory;
 
     /**
-     * @param QueryAliasMapper $queryAliasMapper
-     * @param Client $client
-     * @param Connection $connection
-     * @param StructHydrator $hydrator
+     * @param QueryAliasMapper      $queryAliasMapper
+     * @param Client                $client
+     * @param Connection            $connection
+     * @param StructHydrator        $hydrator
      * @param IndexFactoryInterface $indexFactory
      */
     public function __construct(
@@ -105,7 +105,7 @@ class PropertyFacetHandler implements HandlerInterface, ResultHydratorInterface
      */
     public function supports(CriteriaPartInterface $criteriaPart)
     {
-        return ($criteriaPart instanceof PropertyFacet);
+        return $criteriaPart instanceof PropertyFacet;
     }
 
     /**
@@ -140,7 +140,7 @@ class PropertyFacetHandler implements HandlerInterface, ResultHydratorInterface
         }
 
         $data = $elasticResult['aggregations']['properties']['buckets'];
-        $ids  = array_column($data, 'key');
+        $ids = array_column($data, 'key');
 
         if (empty($ids)) {
             return;
@@ -158,8 +158,8 @@ class PropertyFacetHandler implements HandlerInterface, ResultHydratorInterface
         $index = $this->indexFactory->createShopIndex($context->getShop());
         $data = $this->client->search([
             'index' => $index->getName(),
-            'type'  => PropertyMapping::TYPE,
-            'body'  => $search->toArray()
+            'type' => PropertyMapping::TYPE,
+            'body' => $search->toArray(),
         ]);
         $data = $data['hits']['hits'];
 
@@ -171,7 +171,8 @@ class PropertyFacetHandler implements HandlerInterface, ResultHydratorInterface
 
     /**
      * @param array[] $data
-     * @param int[] $optionIds
+     * @param int[]   $optionIds
+     *
      * @return Group[]
      */
     private function hydrateProperties($data, $optionIds)
@@ -187,9 +188,9 @@ class PropertyFacetHandler implements HandlerInterface, ResultHydratorInterface
             usort($options, function (Option $a, Option $b) {
                 if ($a->getPosition() !== $b->getPosition()) {
                     return $a->getPosition() > $b->getPosition();
-                } else {
-                    return $a->getName() > $b->getName();
                 }
+
+                return $a->getName() > $b->getName();
             });
 
             $group->setOptions($options);
@@ -201,6 +202,7 @@ class PropertyFacetHandler implements HandlerInterface, ResultHydratorInterface
 
     /**
      * @param int[] $optionIds
+     *
      * @return int[]
      */
     private function getGroupIds($optionIds)
@@ -216,7 +218,8 @@ class PropertyFacetHandler implements HandlerInterface, ResultHydratorInterface
 
     /**
      * @param Group[] $groups
-     * @param int[] $actives
+     * @param int[]   $actives
+     *
      * @return FacetResultGroup
      */
     private function createCollectionResult(array $groups, $actives)
@@ -266,11 +269,13 @@ class PropertyFacetHandler implements HandlerInterface, ResultHydratorInterface
                 );
             }
         }
+
         return new FacetResultGroup($results, null, 'property');
     }
 
     /**
      * @param Criteria $criteria
+     *
      * @return array
      */
     private function getFilteredValues(Criteria $criteria)
@@ -281,6 +286,7 @@ class PropertyFacetHandler implements HandlerInterface, ResultHydratorInterface
                 $values = array_merge($values, $condition->getValueIds());
             }
         }
+
         return $values;
     }
 }

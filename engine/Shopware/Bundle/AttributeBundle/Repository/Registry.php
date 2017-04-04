@@ -30,7 +30,7 @@ use Shopware\Components\Model\ModelManager;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\SearchBundleDBAL\DependencyInjection\Compiler
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Registry implements RegistryInterface
@@ -47,7 +47,7 @@ class Registry implements RegistryInterface
 
     /**
      * @param RepositoryInterface[] $repositories
-     * @param ModelManager $entityManager
+     * @param ModelManager          $entityManager
      */
     public function __construct(array $repositories, ModelManager $entityManager)
     {
@@ -56,7 +56,7 @@ class Registry implements RegistryInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getRepository(SearchCriteria $criteria)
     {

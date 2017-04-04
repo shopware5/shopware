@@ -24,17 +24,19 @@
 
 /**
  * @category  Shopware
- * @package   Shopware\Tests
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Tests_Controllers_Backend_PartnerTest extends Enlight_Components_Test_Controller_TestCase
 {
+    /** @var $model \Shopware\Models\Partner\Partner */
+    protected $repository = null;
     /**
      * dummy data
      *
      * @var array
      */
-    private $dummyData = array(
+    private $dummyData = [
         'idCode' => '31337',
         'date' => '02.07.2013',
         'company' => 'phpUnitTestCompany',
@@ -51,16 +53,22 @@ class Shopware_Tests_Controllers_Backend_PartnerTest extends Enlight_Components_
         'fix' => '0',
         'percent' => '12',
         'cookieLifeTime' => '12334',
-        'active' => '1'
-    );
+        'active' => '1',
+    ];
 
-    private $updateStreet = "Abbey Road";
+    private $updateStreet = 'Abbey Road';
 
     /** @var Shopware\Components\Model\ModelManager */
     private $manager = null;
 
-    /**@var $model \Shopware\Models\Partner\Partner*/
-    protected $repository = null;
+    /**
+     * Cleaning up testData
+     */
+    public static function tearDownAfterClass()
+    {
+        $sql = 'DELETE FROM s_emarketing_partner WHERE idcode = ?';
+        Shopware()->Db()->query($sql, ['31337']);
+    }
 
     /**
      * Standard set up for every test - just disable auth
@@ -69,48 +77,12 @@ class Shopware_Tests_Controllers_Backend_PartnerTest extends Enlight_Components_
     {
         parent::setUp();
 
-        $this->manager    = Shopware()->Models();
+        $this->manager = Shopware()->Models();
         $this->repository = Shopware()->Models()->getRepository(\Shopware\Models\Partner\Partner::class);
 
         // disable auth and acl
         Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
         Shopware()->Plugins()->Backend()->Auth()->setNoAcl();
-    }
-
-
-    /**
-     * Cleaning up testData
-     */
-    public static function tearDownAfterClass()
-    {
-        $sql= "DELETE FROM s_emarketing_partner WHERE idcode = ?";
-        Shopware()->Db()->query($sql, array('31337'));
-    }
-    /**
-     * Creates the dummy data
-     *
-     * @return \Shopware\Models\Partner\Partner
-     */
-    private function getDummyData()
-    {
-        $dummyModel = new \Shopware\Models\Partner\Partner();
-        $dummyData = $this->dummyData;
-        $dummyModel->fromArray($dummyData);
-        return $dummyModel;
-    }
-
-    /**
-     * helper method to create the dummy object
-     *
-     * @return \Shopware\Models\Partner\Partner
-     */
-    private function createDummy()
-    {
-        $dummyData = $this->getDummyData();
-        $this->manager->persist($dummyData);
-        $this->manager->flush();
-
-        return $dummyData;
     }
 
     /**
@@ -119,27 +91,27 @@ class Shopware_Tests_Controllers_Backend_PartnerTest extends Enlight_Components_
     public function testGetList()
     {
         //delete old data
-        $repositoryData = $this->repository->findBy(array('company' => $this->dummyData["company"]));
+        $repositoryData = $this->repository->findBy(['company' => $this->dummyData['company']]);
         foreach ($repositoryData as $testDummy) {
             $this->manager->remove($testDummy);
         }
         $this->manager->flush();
 
         $dummy = $this->createDummy();
-        /** @var Enlight_Controller_Response_ResponseTestCase */
+        /* @var Enlight_Controller_Response_ResponseTestCase */
         $this->dispatch('backend/Partner/getList?page=1&start=0&limit=30');
         $this->assertTrue($this->View()->success);
         $returnData = $this->View()->data;
         $this->assertNotEmpty($returnData);
         $this->assertGreaterThan(0, $this->View()->totalCount);
-        $foundDummy = array();
+        $foundDummy = [];
         foreach ($returnData as $dummyData) {
-            if ($dummyData["company"] == $dummy->getCompany()) {
+            if ($dummyData['company'] == $dummy->getCompany()) {
                 $foundDummy = $dummyData;
             }
         }
 
-        $this->assertEquals($dummy->getIdCode(), $foundDummy["idCode"]);
+        $this->assertEquals($dummy->getIdCode(), $foundDummy['idCode']);
         $this->manager->remove($dummy);
         $this->manager->flush();
     }
@@ -157,30 +129,32 @@ class Shopware_Tests_Controllers_Backend_PartnerTest extends Enlight_Components_
         $this->dispatch('backend/Partner/savePartner');
         $this->assertTrue($this->View()->success);
         $this->assertCount(19, $this->View()->data);
-        $this->assertEquals("streetDummy", $this->View()->data["street"]);
+        $this->assertEquals('streetDummy', $this->View()->data['street']);
 
         //test update partner
-        $params["id"] = $this->View()->data["id"];
-        $params["street"] = $this->updateStreet;
+        $params['id'] = $this->View()->data['id'];
+        $params['street'] = $this->updateStreet;
         $this->Request()->setParams($params);
         $this->dispatch('backend/Partner/savePartner');
         $this->assertTrue($this->View()->success);
-        $this->assertEquals($this->updateStreet, $this->View()->data["street"]);
+        $this->assertEquals($this->updateStreet, $this->View()->data['street']);
 
-        return $this->View()->data["id"];
+        return $this->View()->data['id'];
     }
 
     /**
      * test getDetail controller action
      *
      * @depends testSavePartner
+     *
      * @param $id
+     *
      * @return the id to for the testGetDetail Method
      */
     public function testGetDetail($id)
     {
-        $filter = array(array('property' => 'id', 'value' => $id));
-        $params["filter"] = Zend_Json::encode($filter);
+        $filter = [['property' => 'id', 'value' => $id]];
+        $params['filter'] = Zend_Json::encode($filter);
         $this->Request()->setParams($params);
 
         $this->dispatch('backend/Partner/getDetail');
@@ -188,22 +162,22 @@ class Shopware_Tests_Controllers_Backend_PartnerTest extends Enlight_Components_
         $returningData = $this->View()->data;
         $dummyData = $this->dummyData;
 
-        $this->assertEquals($dummyData["idCode"], $returningData["idCode"]);
-        $this->assertEquals($dummyData["company"], $returningData["company"]);
-        $this->assertEquals($dummyData["contact"], $returningData["contact"]);
-        $this->assertEquals($this->updateStreet, $returningData["street"]);
-        $this->assertEquals($dummyData["zipCode"], $returningData["zipCode"]);
-        $this->assertEquals($dummyData["city"], $returningData["city"]);
-        $this->assertEquals($dummyData["phone"], $returningData["phone"]);
-        $this->assertEquals($dummyData["fax"], $returningData["fax"]);
-        $this->assertEquals($dummyData["countryName"], $returningData["countryName"]);
-        $this->assertEquals($dummyData["email"], $returningData["email"]);
-        $this->assertEquals($dummyData["web"], $returningData["web"]);
-        $this->assertEquals($dummyData["profile"], $returningData["profile"]);
-        $this->assertEquals($dummyData["fix"], $returningData["fix"]);
-        $this->assertEquals($dummyData["percent"], $returningData["percent"]);
-        $this->assertEquals($dummyData["cookieLifeTime"], $returningData["cookieLifeTime"]);
-        $this->assertEquals($dummyData["active"], $returningData["active"]);
+        $this->assertEquals($dummyData['idCode'], $returningData['idCode']);
+        $this->assertEquals($dummyData['company'], $returningData['company']);
+        $this->assertEquals($dummyData['contact'], $returningData['contact']);
+        $this->assertEquals($this->updateStreet, $returningData['street']);
+        $this->assertEquals($dummyData['zipCode'], $returningData['zipCode']);
+        $this->assertEquals($dummyData['city'], $returningData['city']);
+        $this->assertEquals($dummyData['phone'], $returningData['phone']);
+        $this->assertEquals($dummyData['fax'], $returningData['fax']);
+        $this->assertEquals($dummyData['countryName'], $returningData['countryName']);
+        $this->assertEquals($dummyData['email'], $returningData['email']);
+        $this->assertEquals($dummyData['web'], $returningData['web']);
+        $this->assertEquals($dummyData['profile'], $returningData['profile']);
+        $this->assertEquals($dummyData['fix'], $returningData['fix']);
+        $this->assertEquals($dummyData['percent'], $returningData['percent']);
+        $this->assertEquals($dummyData['cookieLifeTime'], $returningData['cookieLifeTime']);
+        $this->assertEquals($dummyData['active'], $returningData['active']);
 
         return $id;
     }
@@ -212,23 +186,25 @@ class Shopware_Tests_Controllers_Backend_PartnerTest extends Enlight_Components_
      * test validateTrackingCode controller action
      *
      * @depends testSavePartner
+     *
      * @param $id
+     *
      * @return $id | dummy id
      */
     public function testValidateTrackingCode($id)
     {
-        $params["value"] = "31337";
-        $params["param"] = $id;
+        $params['value'] = '31337';
+        $params['param'] = $id;
         $this->Request()->setParams($params);
         $this->Response()->clearBody();
         $this->dispatch('backend/Partner/validateTrackingCode');
         $body = $this->Response()->getBody();
-        $this->assertEquals("1", $body);
+        $this->assertEquals('1', $body);
 
         $newDummy = $this->createDummy();
         $this->Response()->clearBody();
-        $params["value"] = "31337";
-        $params["param"] = $newDummy->getId();
+        $params['value'] = '31337';
+        $params['param'] = $newDummy->getId();
         $this->Request()->setParams($params);
         $this->dispatch('backend/Partner/validateTrackingCode');
         $body = $this->Response()->getBody();
@@ -243,27 +219,25 @@ class Shopware_Tests_Controllers_Backend_PartnerTest extends Enlight_Components_
 
     /**
      * test getCustomer controller action
-     *
-     * @return void
      */
     public function testMapCustomerAccount()
     {
         $this->Response()->clearBody();
-        $params["mapCustomerAccountValue"] = "20001";
+        $params['mapCustomerAccountValue'] = '20001';
         $this->Request()->setParams($params);
         $this->dispatch('backend/Partner/mapCustomerAccount');
         $body = $this->Response()->getBody();
         $this->assertTrue(!empty($body));
 
         $this->Response()->clearBody();
-        $params["mapCustomerAccountValue"] = "test@example.com";
+        $params['mapCustomerAccountValue'] = 'test@example.com';
         $this->Request()->setParams($params);
         $this->dispatch('backend/Partner/mapCustomerAccount');
         $body = $this->Response()->getBody();
         $this->assertTrue(!empty($body));
 
         $this->Response()->clearBody();
-        $params["mapCustomerAccountValue"] = "542350";
+        $params['mapCustomerAccountValue'] = '542350';
         $this->Request()->setParams($params);
         $this->dispatch('backend/Partner/mapCustomerAccount');
         $body = $this->Response()->getBody();
@@ -274,14 +248,43 @@ class Shopware_Tests_Controllers_Backend_PartnerTest extends Enlight_Components_
      * test deletePartner controller action
      *
      * @depends testSavePartner
+     *
      * @param $id
      */
     public function testDeletePartner($id)
     {
-        $params["id"] = $id;
+        $params['id'] = $id;
         $this->Request()->setParams($params);
         $this->dispatch('backend/Partner/deletePartner');
         $this->assertTrue($this->View()->success);
         $this->assertCount(4, $this->View()->data);
+    }
+
+    /**
+     * Creates the dummy data
+     *
+     * @return \Shopware\Models\Partner\Partner
+     */
+    private function getDummyData()
+    {
+        $dummyModel = new \Shopware\Models\Partner\Partner();
+        $dummyData = $this->dummyData;
+        $dummyModel->fromArray($dummyData);
+
+        return $dummyModel;
+    }
+
+    /**
+     * helper method to create the dummy object
+     *
+     * @return \Shopware\Models\Partner\Partner
+     */
+    private function createDummy()
+    {
+        $dummyData = $this->getDummyData();
+        $this->manager->persist($dummyData);
+        $this->manager->flush();
+
+        return $dummyData;
     }
 }

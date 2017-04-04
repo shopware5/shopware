@@ -25,16 +25,14 @@
 namespace Shopware\Recovery\Update\Controller;
 
 use Gaufrette\Filesystem;
-
 use Shopware\Components\Migrations\Manager;
-
 use Shopware\Recovery\Common\Utils;
-use Shopware\Recovery\Update\Steps\ResultMapper;
 use Shopware\Recovery\Update\DependencyInjection\Container;
-use Shopware\Recovery\Update\PathBuilder;
 use Shopware\Recovery\Update\FilesystemFactory;
+use Shopware\Recovery\Update\PathBuilder;
 use Shopware\Recovery\Update\Steps\FinishResult;
 use Shopware\Recovery\Update\Steps\MigrationStep;
+use Shopware\Recovery\Update\Steps\ResultMapper;
 use Shopware\Recovery\Update\Steps\SnippetStep;
 use Shopware\Recovery\Update\Steps\UnpackStep;
 use Shopware\Recovery\Update\Steps\ValidResult;
@@ -70,8 +68,8 @@ class BatchController
      */
     public function __construct(Request $request, Response $response, Container $container)
     {
-        $this->request   = $request;
-        $this->response  = $response;
+        $this->request = $request;
+        $this->response = $response;
         $this->container = $container;
 
         $this->resultMapper = new ResultMapper();
@@ -103,7 +101,7 @@ class BatchController
         $migrationStep = new MigrationStep($migrationManger);
 
         $offset = $this->request->get('offset');
-        $total  = $this->request->get('total');
+        $total = $this->request->get('total');
         $result = $migrationStep->run($offset, $total);
 
         $this->toJson(200, $this->resultMapper->toExtJs($result));
@@ -118,16 +116,17 @@ class BatchController
         if (UPDATE_IS_MANUAL) {
             Utils::clearOpcodeCache();
             $this->toJson(200, $this->resultMapper->toExtJs(new FinishResult(0, 0)));
+
             return;
         }
 
         $offset = $this->request->get('offset');
-        $total  = $this->request->get('total');
+        $total = $this->request->get('total');
 
         /** @var FilesystemFactory $factory */
         $factory = $this->container->get('filesystem.factory');
 
-        $localFilesystem   = $factory->createLocalFilesystem();
+        $localFilesystem = $factory->createLocalFilesystem();
         $remoteFilesystem = $factory->createRemoteFilesystem();
 
         if ($offset == 0) {
@@ -158,15 +157,15 @@ class BatchController
     private function validateFilesytems(Filesystem $localFilesyste, Filesystem $remoteFilesyste)
     {
         if (!$remoteFilesyste->has('shopware.php')) {
-            throw new \RuntimeException("shopware.php not found in remote filesystem");
+            throw new \RuntimeException('shopware.php not found in remote filesystem');
         }
 
         if (!$localFilesyste->has('shopware.php')) {
-            throw new \RuntimeException("shopware.php not found in local filesystem");
+            throw new \RuntimeException('shopware.php not found in local filesystem');
         }
 
         if ($localFilesyste->checksum('shopware.php') != $remoteFilesyste->checksum('shopware.php')) {
-            throw new \RuntimeException("Filesytems does not seem to match");
+            throw new \RuntimeException('Filesytems does not seem to match');
         }
     }
 

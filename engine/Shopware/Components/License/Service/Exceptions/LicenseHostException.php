@@ -21,13 +21,14 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 namespace Shopware\Components\License\Service\Exceptions;
 
 use Shopware\Components\License\Struct\LicenseInformation;
 
 class LicenseHostException extends \RuntimeException
 {
-    /** @var  LicenseInformation $licenseInformation */
+    /** @var LicenseInformation $licenseInformation */
     private $licenseInformation;
 
     public function __construct(LicenseInformation $licenseInformation, $message = '')

@@ -33,7 +33,7 @@ use Symfony\Component\Validator\ConstraintViolationListInterface;
  * API Exception
  *
  * @category  Shopware
- * @package   Shopware\Components\Api\Exception
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ValidationException extends \Enlight_Exception
@@ -54,6 +54,20 @@ class ValidationException extends \Enlight_Exception
     }
 
     /**
+     * @return string
+     */
+    public function __toString()
+    {
+        $output = '';
+
+        foreach ($this->violations as $violation) {
+            $output .= $violation->getMessage() . PHP_EOL;
+        }
+
+        return $output;
+    }
+
+    /**
      * @param ConstraintViolationListInterface $violations
      */
     public function setViolations($violations)
@@ -71,6 +85,7 @@ class ValidationException extends \Enlight_Exception
 
     /**
      * @param FormErrorIterator $errors
+     *
      * @return ValidationException
      */
     public static function createFromFormError(FormErrorIterator $errors)
@@ -95,19 +110,5 @@ class ValidationException extends \Enlight_Exception
         }
 
         return new self(new ConstraintViolationList($violations));
-    }
-
-    /**
-     * @return string
-     */
-    public function __toString()
-    {
-        $output = "";
-
-        foreach ($this->violations as $violation) {
-            $output .= $violation->getMessage().PHP_EOL;
-        }
-
-        return $output;
     }
 }

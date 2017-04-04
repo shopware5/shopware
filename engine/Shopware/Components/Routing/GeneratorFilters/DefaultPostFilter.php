@@ -24,12 +24,12 @@
 
 namespace Shopware\Components\Routing\GeneratorFilters;
 
-use Shopware\Components\Routing\PostFilterInterface;
 use Shopware\Components\Routing\Context;
+use Shopware\Components\Routing\PostFilterInterface;
 
 /**
  * @category  Shopware
- * @package   Shopware\Components\Routing
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class DefaultPostFilter implements PostFilterInterface
@@ -39,7 +39,7 @@ class DefaultPostFilter implements PostFilterInterface
      */
     public function postFilter($url, Context $context)
     {
-        if (!preg_match('|^[a-z]+://|', $url) && $url{0} !== '/') {
+        if (!preg_match('|^[a-z]+://|', $url) && $url[0] !== '/') {
             $url = rtrim($context->getBaseUrl(), '/') . '/' . $url;
         }
 

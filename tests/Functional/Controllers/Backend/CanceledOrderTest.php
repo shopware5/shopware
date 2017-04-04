@@ -24,13 +24,14 @@
 
 /**
  * @category  Shopware
- * @package   Shopware\Tests
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Tests_Controllers_Backend_CanceledOrderTest extends Enlight_Components_Test_Plugin_TestCase
 {
     const FIRST_DUMMY_SESSION_ID = '1231231231231231231231231231231231231320';
     const SECOND_DUMMY_SESSION_ID = '1231231231231231231231231231231231231321';
+
     /**
      * Set up test case, fix demo data where needed
      */
@@ -50,7 +51,7 @@ class Shopware_Tests_Controllers_Backend_CanceledOrderTest extends Enlight_Compo
                 (:firstSession, 0, 'Warenkorbrabatt', 0, 'SHIPPINGDISCOUNT', 0, 1, -2, -1.68, 19, '2101-09-10 11:50:22', 4, 0, '', 'index', 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:22.0) Gecko/20100101 Firefox/22.0 FirePHP/0.7.2', '', 1);
         ";
 
-        Shopware()->Db()->query($sql, array("firstSession" => self::FIRST_DUMMY_SESSION_ID, "secondSession" => self::SECOND_DUMMY_SESSION_ID));
+        Shopware()->Db()->query($sql, ['firstSession' => self::FIRST_DUMMY_SESSION_ID, 'secondSession' => self::SECOND_DUMMY_SESSION_ID]);
     }
 
     /**
@@ -60,12 +61,12 @@ class Shopware_Tests_Controllers_Backend_CanceledOrderTest extends Enlight_Compo
     {
         parent::tearDown();
 
-        $sql = "
+        $sql = '
             DELETE FROM `s_order_basket` WHERE `sessionID` = :firstSession;
             DELETE FROM `s_order_basket` WHERE `sessionID` = :secondSession;
-        ";
+        ';
 
-        Shopware()->Db()->query($sql, array("firstSession" => self::FIRST_DUMMY_SESSION_ID, "secondSession" => self::SECOND_DUMMY_SESSION_ID));
+        Shopware()->Db()->query($sql, ['firstSession' => self::FIRST_DUMMY_SESSION_ID, 'secondSession' => self::SECOND_DUMMY_SESSION_ID]);
     }
 
     /**
@@ -81,19 +82,19 @@ class Shopware_Tests_Controllers_Backend_CanceledOrderTest extends Enlight_Compo
         $data = $this->View()->getAssign('data');
 
         $firstRow = $data[0];
-        $this->assertEquals('2101-09-10', $firstRow["date"]);
-        $this->assertEquals('2499', $firstRow["price"]);
-        $this->assertEquals('2499', $firstRow["average"]);
-        $this->assertEquals('1', $firstRow["number"]);
-        $this->assertEquals('2101', $firstRow["year"]);
-        $this->assertEquals('9', $firstRow["month"]);
+        $this->assertEquals('2101-09-10', $firstRow['date']);
+        $this->assertEquals('2499', $firstRow['price']);
+        $this->assertEquals('2499', $firstRow['average']);
+        $this->assertEquals('1', $firstRow['number']);
+        $this->assertEquals('2101', $firstRow['year']);
+        $this->assertEquals('9', $firstRow['month']);
 
         $secondRow = $data[1];
-        $this->assertEquals('2101-09-11', $secondRow["date"]);
-        $this->assertEquals('125.72', $secondRow["price"]);
-        $this->assertEquals('25.144', $secondRow["average"]);
-        $this->assertEquals('2', $secondRow["number"]);
-        $this->assertEquals('2101', $secondRow["year"]);
-        $this->assertEquals('9', $secondRow["month"]);
+        $this->assertEquals('2101-09-11', $secondRow['date']);
+        $this->assertEquals('125.72', $secondRow['price']);
+        $this->assertEquals('25.144', $secondRow['average']);
+        $this->assertEquals('2', $secondRow['number']);
+        $this->assertEquals('2101', $secondRow['year']);
+        $this->assertEquals('9', $secondRow['month']);
     }
 }

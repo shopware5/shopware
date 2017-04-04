@@ -26,15 +26,16 @@ namespace Shopware\Components\DependencyInjection\Bridge;
 
 /**
  * @category  Shopware
- * @package   Shopware\Components\DependencyInjection\Bridge
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class MailTransport
 {
     /**
-     * @param \Enlight_Loader               $loader
-     * @param \Shopware_Components_Config   $config
-     * @param array                         $options
+     * @param \Enlight_Loader             $loader
+     * @param \Shopware_Components_Config $config
+     * @param array                       $options
+     *
      * @return \Enlight_Class|\Zend_Mail_Transport_Abstract
      */
     public function factory(\Enlight_Loader $loader, \Shopware_Components_Config $config, array $options)
@@ -79,17 +80,17 @@ class MailTransport
         unset($options['type'], $options['charset']);
 
         if ($transportName == 'Zend_Mail_Transport_Smtp') {
-            $transport = \Enlight_Class::Instance($transportName, array($options['host'], $options));
+            $transport = \Enlight_Class::Instance($transportName, [$options['host'], $options]);
         } elseif (!empty($options)) {
-            $transport = \Enlight_Class::Instance($transportName, array($options));
+            $transport = \Enlight_Class::Instance($transportName, [$options]);
         } else {
             $transport = \Enlight_Class::Instance($transportName);
         }
-        /** @var $transport \Zend_Mail_Transport_Abstract */
+        /* @var $transport \Zend_Mail_Transport_Abstract */
         \Enlight_Components_Mail::setDefaultTransport($transport);
 
         if (!isset($options['from']) && !empty($config->Mail)) {
-            $options['from'] = array('email' => $config->Mail, 'name' => $config->Shopname);
+            $options['from'] = ['email' => $config->Mail, 'name' => $config->Shopname];
         }
 
         if (!empty($options['from']['email'])) {

@@ -26,7 +26,6 @@ namespace Shopware\Commands;
 
 use Shopware\Bundle\PluginInstallerBundle\Service\InstallerService;
 use Shopware\Components\Model\ModelManager;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -34,7 +33,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * @category  Shopware
- * @package   Shopware\Components\Console\Command
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class PluginConfigSetCommand extends ShopwareCommand
@@ -77,27 +76,29 @@ class PluginConfigSetCommand extends ShopwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         /** @var InstallerService $pluginManager */
-        $pluginManager  = $this->container->get('shopware_plugininstaller.plugin_manager');
+        $pluginManager = $this->container->get('shopware_plugininstaller.plugin_manager');
         $pluginName = $input->getArgument('plugin');
 
         try {
             $plugin = $pluginManager->getPluginByName($pluginName);
         } catch (\Exception $e) {
             $output->writeln(sprintf('Plugin by name "%s" was not found.', $pluginName));
+
             return 1;
         }
 
-        /**@var ModelManager $em */
+        /** @var ModelManager $em */
         $em = $this->container->get('models');
 
         if ($input->getOption('shop')) {
             $shop = $em->getRepository('Shopware\Models\Shop\Shop')->find($input->getOption('shop'));
             if (!$shop) {
                 $output->writeln(sprintf('Could not find shop with id %s.', $input->getOption('shop')));
+
                 return 1;
             }
         } else {
-            $shop = $em->getRepository('Shopware\Models\Shop\Shop')->findOneBy(array('default' => true));
+            $shop = $em->getRepository('Shopware\Models\Shop\Shop')->findOneBy(['default' => true]);
         }
 
         $rawValue = $input->getArgument('value');
@@ -111,7 +112,7 @@ class PluginConfigSetCommand extends ShopwareCommand
         }
 
         $pluginManager->saveConfigElement($plugin, $input->getArgument('key'), $value, $shop);
-        $output->writeln(sprintf("Plugin configuration for Plugin %s saved.", $pluginName));
+        $output->writeln(sprintf('Plugin configuration for Plugin %s saved.', $pluginName));
     }
 
     /**
@@ -119,22 +120,24 @@ class PluginConfigSetCommand extends ShopwareCommand
      * Works only for some types, see return.
      *
      * @param $value
+     *
      * @return bool|int|null|string
      */
     private function castValue($value)
     {
-        if ($value === "null") {
+        if ($value === 'null') {
             return null;
         }
-        if ($value === "false") {
+        if ($value === 'false') {
             return false;
         }
-        if ($value === "true") {
+        if ($value === 'true') {
             return true;
         }
         if (preg_match('/^\d+$/', $value)) {
             return intval($value);
         }
+
         return $value;
     }
 }

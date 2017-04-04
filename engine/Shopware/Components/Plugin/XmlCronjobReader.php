@@ -28,18 +28,18 @@ use Symfony\Component\Config\Util\XmlUtils;
 
 /**
  * Class XmlCronjobReader
- * @package Shopware\Components\Plugin
  */
 class XmlCronjobReader
 {
     /**
      * @param string $file
+     *
      * @return array
      */
     public function read($file)
     {
         try {
-            $dom = XmlUtils::loadFile($file, __DIR__.'/schema/cronjob.xsd');
+            $dom = XmlUtils::loadFile($file, __DIR__ . '/schema/cronjob.xsd');
         } catch (\Exception $e) {
             throw new \InvalidArgumentException(sprintf('Unable to parse file "%s". Message: %s', $file, $e->getMessage()), $e->getCode(), $e);
         }
@@ -49,6 +49,7 @@ class XmlCronjobReader
 
     /**
      * @param \DOMDocument $xml
+     *
      * @return array
      */
     private function parseInfo(\DOMDocument $xml)
@@ -69,6 +70,7 @@ class XmlCronjobReader
 
     /**
      * @param \DOMElement $entry
+     *
      * @return array
      */
     private function parseEntry(\DOMElement $entry)
@@ -87,6 +89,7 @@ class XmlCronjobReader
     /**
      * @param \DOMNode $node
      * @param $name
+     *
      * @return null|string
      */
     private function getFirstChild(\DOMNode $node, $name)
@@ -108,7 +111,7 @@ class XmlCronjobReader
      */
     private function getChildren(\DOMNode $node, $name)
     {
-        $children = array();
+        $children = [];
         foreach ($node->childNodes as $child) {
             if ($child instanceof \DOMElement && $child->localName === $name) {
                 $children[] = $child;
@@ -120,6 +123,7 @@ class XmlCronjobReader
 
     /**
      * @param string $string
+     *
      * @return bool
      */
     private function toBool($string)

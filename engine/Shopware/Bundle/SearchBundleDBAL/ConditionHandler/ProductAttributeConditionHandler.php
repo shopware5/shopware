@@ -28,12 +28,12 @@ use Doctrine\DBAL\Connection;
 use Shopware\Bundle\SearchBundle\Condition\ProductAttributeCondition;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
 use Shopware\Bundle\SearchBundleDBAL\ConditionHandlerInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\SearchBundleDBAL\ConditionHandler
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ProductAttributeConditionHandler implements ConditionHandlerInterface
@@ -43,7 +43,7 @@ class ProductAttributeConditionHandler implements ConditionHandlerInterface
      */
     public function supportsCondition(ConditionInterface $condition)
     {
-        return ($condition instanceof ProductAttributeCondition);
+        return $condition instanceof ProductAttributeCondition;
     }
 
     /**
@@ -67,7 +67,7 @@ class ProductAttributeConditionHandler implements ConditionHandlerInterface
         $field = 'productAttribute.' . $condition->getField();
 
         switch (true) {
-            case ($condition->getValue() === null):
+            case $condition->getValue() === null:
                 if ($condition->getOperator() === ProductAttributeCondition::OPERATOR_EQ) {
                     $query->andWhere($field . ' IS NULL');
                 } else {
@@ -75,17 +75,17 @@ class ProductAttributeConditionHandler implements ConditionHandlerInterface
                 }
                 break;
 
-            case ($condition->getOperator() === ProductAttributeCondition::OPERATOR_IN):
-                $query->andWhere($field . ' IN ('. $placeholder . ')');
+            case $condition->getOperator() === ProductAttributeCondition::OPERATOR_IN:
+                $query->andWhere($field . ' IN (' . $placeholder . ')');
                 $query->setParameter($placeholder, $condition->getValue(), Connection::PARAM_STR_ARRAY);
                 break;
 
-            case ($condition->getOperator() === ProductAttributeCondition::OPERATOR_CONTAINS):
+            case $condition->getOperator() === ProductAttributeCondition::OPERATOR_CONTAINS:
                 $query->andWhere($field . ' LIKE ' . $placeholder);
                 $query->setParameter($placeholder, '%' . $condition->getValue() . '%');
                 break;
 
-            case ($condition->getOperator() === ProductAttributeCondition::OPERATOR_BETWEEN):
+            case $condition->getOperator() === ProductAttributeCondition::OPERATOR_BETWEEN:
                 $value = $condition->getValue();
 
                 if (isset($value['min'])) {
@@ -99,12 +99,12 @@ class ProductAttributeConditionHandler implements ConditionHandlerInterface
                 }
 
                 break;
-            case ($condition->getOperator() === ProductAttributeCondition::OPERATOR_STARTS_WITH):
+            case $condition->getOperator() === ProductAttributeCondition::OPERATOR_STARTS_WITH:
                 $query->andWhere($field . ' LIKE ' . $placeholder);
                 $query->setParameter($placeholder, $condition->getValue() . '%');
                 break;
 
-            case ($condition->getOperator() === ProductAttributeCondition::OPERATOR_ENDS_WITH):
+            case $condition->getOperator() === ProductAttributeCondition::OPERATOR_ENDS_WITH:
                 $query->andWhere($field . ' LIKE ' . $placeholder);
                 $query->setParameter($placeholder, '%' . $condition->getValue());
                 break;

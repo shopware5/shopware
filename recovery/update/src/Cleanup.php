@@ -31,12 +31,12 @@ use RecursiveIteratorIterator;
 class Cleanup
 {
     /**
-     * @var boolean
+     * @var bool
      */
     private $useTimer;
 
     /**
-     * @var integer
+     * @var int
      */
     private $timeTarget;
 
@@ -65,8 +65,10 @@ class Cleanup
      * return the deleteResult to prevent reach the maxExecution time.
      *
      * @param bool $useTimer
-     * @return string
+     *
      * @throws \Exception
+     *
+     * @return string
      */
     public function cleanup($useTimer = true)
     {
@@ -82,7 +84,7 @@ class Cleanup
                 return json_encode([
                     'deletedFiles' => $result->getFileCount(),
                     'ready' => $result->getIsReady(),
-                    'error' => false
+                    'error' => false,
                 ]);
             }
 
@@ -91,7 +93,7 @@ class Cleanup
                 return json_encode([
                     'deletedFiles' => $result->getFileCount(),
                     'ready' => $result->getIsReady(),
-                    'error' => false
+                    'error' => false,
                 ]);
             }
         } catch (\Exception $exception) {
@@ -99,7 +101,7 @@ class Cleanup
                 return json_encode([
                     'deletedFiles' => 0,
                     'ready' => false,
-                    'error' => true
+                    'error' => true,
                 ]);
             }
         }
@@ -109,6 +111,7 @@ class Cleanup
      * Deletes the old cache directories
      *
      * @param $deletedFileCount
+     *
      * @return DeleteResult
      */
     private function deleteCacheDirectories($deletedFileCount)
@@ -144,6 +147,7 @@ class Cleanup
         }
 
         $deleteResult->setReady();
+
         return $deleteResult;
     }
 
@@ -151,6 +155,7 @@ class Cleanup
      * Deletes the temporary backup files of this update
      *
      * @param $deletedFileCount
+     *
      * @return DeleteResult
      */
     private function deleteTemporaryBackupDirectory($deletedFileCount)
@@ -206,6 +211,7 @@ class Cleanup
 
     /**
      * @param $path
+     *
      * @return array|DirectoryIterator
      */
     private function getDirectoryIterator($path)

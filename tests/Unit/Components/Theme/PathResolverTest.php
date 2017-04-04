@@ -54,7 +54,7 @@ class PathResolverTest extends TestCase
         $templateMock = $this->createTemplateMock($templateId);
         $shopMock = $this->createShopMock($shopId, $templateMock);
 
-        $filenameHash = $timestamp.'_'.md5($timestamp.$templateId.$shopId.\Shopware::REVISION);
+        $filenameHash = $timestamp . '_' . md5($timestamp . $templateId . $shopId . \Shopware::REVISION);
 
         $expected = '/my/root/dir/web/cache/' . $filenameHash . '.css';
         $this->assertEquals($expected, $this->pathResolver->getCssFilePath($shopMock, $timestamp));
@@ -73,6 +73,7 @@ class PathResolverTest extends TestCase
 
     /**
      * @param int $templateId
+     *
      * @return Template
      */
     private function createTemplateMock($templateId)
@@ -81,15 +82,16 @@ class PathResolverTest extends TestCase
     }
 
     /**
-     * @param int $shopId
+     * @param int      $shopId
      * @param Template $templateStub
+     *
      * @return Shop
      */
     private function createShopMock($shopId, $templateStub)
     {
         return $this->createConfiguredMock(Shop::class, [
-            'getMain'     => null,
-            'getid'       => $shopId,
+            'getMain' => null,
+            'getid' => $shopId,
             'getTemplate' => $templateStub,
         ]);
     }

@@ -24,8 +24,8 @@
 
 namespace   Shopware\Models\Dispatch;
 
-use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
 
 /**
  * The Shopware Model represents the shipping costs matrix.
@@ -48,9 +48,18 @@ use Doctrine\ORM\Mapping as ORM;
 class ShippingCost extends ModelEntity
 {
     /**
+     * OWNING SIDE
+     *
+     * @var \Shopware\Models\Dispatch\Dispatch
+     *
+     * @ORM\ManyToOne(targetEntity="Shopware\Models\Dispatch\Dispatch", inversedBy="costsMatrix", cascade={"persist"})
+     * @ORM\JoinColumn(name="dispatchID", referencedColumnName="id")
+     */
+    protected $dispatch;
+    /**
      * Autoincrement ID
      *
-     * @var integer $id
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
@@ -61,7 +70,7 @@ class ShippingCost extends ModelEntity
     /**
      * Start price.
      *
-     * @var float $from
+     * @var float
      *
      * @ORM\Column(name="`from`", type="decimal", nullable=false)
      */
@@ -70,7 +79,7 @@ class ShippingCost extends ModelEntity
     /**
      * Price for this entry
      *
-     * @var float $value
+     * @var float
      *
      * @ORM\Column(name="value", type="decimal", nullable=false)
      */
@@ -79,7 +88,7 @@ class ShippingCost extends ModelEntity
     /**
      * Multiplicator for this entry
      *
-     * @var float $factor
+     * @var float
      *
      * @ORM\Column(name="factor", type="decimal", nullable=false)
      */
@@ -88,25 +97,16 @@ class ShippingCost extends ModelEntity
     /**
      * Connected dispatch
      *
-     * @var integer $dispatchId
+     * @var int
      *
      * @ORM\Column(name="dispatchID", type="integer", nullable=false)
      */
     private $dispatchId;
 
     /**
-     * OWNING SIDE
-     * @var \Shopware\Models\Dispatch\Dispatch $dispatch
-     *
-     * @ORM\ManyToOne(targetEntity="Shopware\Models\Dispatch\Dispatch", inversedBy="costsMatrix", cascade={"persist"})
-     * @ORM\JoinColumn(name="dispatchID", referencedColumnName="id")
-     */
-    protected $dispatch;
-
-    /**
      * Get id
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -117,11 +117,13 @@ class ShippingCost extends ModelEntity
      * Set from
      *
      * @param float $from
+     *
      * @return ShippingCost
      */
     public function setFrom($from)
     {
         $this->from = $from;
+
         return $this;
     }
 
@@ -139,11 +141,13 @@ class ShippingCost extends ModelEntity
      * Set value
      *
      * @param float $value
+     *
      * @return ShippingCost
      */
     public function setValue($value)
     {
         $this->value = $value;
+
         return $this;
     }
 
@@ -161,11 +165,13 @@ class ShippingCost extends ModelEntity
      * Set factor
      *
      * @param float $factor
+     *
      * @return ShippingCost
      */
     public function setFactor($factor)
     {
         $this->factor = $factor;
+
         return $this;
     }
 
@@ -182,6 +188,7 @@ class ShippingCost extends ModelEntity
     /**
      * OWNING SIDE
      * of the association between costsMatrix and dispatch
+     *
      * @return \Shopware\Models\Dispatch\Dispatch
      */
     public function getDispatch()
@@ -191,6 +198,7 @@ class ShippingCost extends ModelEntity
 
     /**
      * @param \Shopware\Models\Dispatch\Dispatch|array|null $dispatch
+     *
      * @return \Shopware\Components\Model\ModelEntity
      */
     public function setDispatch($dispatch)

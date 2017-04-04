@@ -1,4 +1,26 @@
 <?php
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
 
 namespace Shopware\Tests\Mink\Element;
 
@@ -18,12 +40,12 @@ use Shopware\Tests\Mink\Helper;
 class CartPosition extends MultipleElement
 {
     /**
-     * @var array $selector
+     * @var array
      */
     protected $selector = ['css' => 'div.row--product'];
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getCssSelectors()
     {
@@ -34,22 +56,23 @@ class CartPosition extends MultipleElement
             'thumbnailImage' => 'div.table--media a.table--media-link > img',
             'quantity' => 'div.column--quantity option[selected]',
             'itemPrice' => 'div.column--unit-price',
-            'sum' => 'div.column--total-price'
+            'sum' => 'div.column--total-price',
         ];
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getNamedSelectors()
     {
         return [
-            'remove'  => ['de' => 'Löschen',   'en' => 'Delete']
+            'remove' => ['de' => 'Löschen',   'en' => 'Delete'],
         ];
     }
 
     /**
      * Returns the product name
+     *
      * @return string
      */
     public function getNameProperty()
@@ -59,16 +82,48 @@ class CartPosition extends MultipleElement
         $names = [
             'articleTitle' => $elements['name']->getAttribute('title'),
             'articleThumbnailLinkTitle' => $elements['thumbnailLink']->getAttribute('title'),
-            'articleName' => rtrim($elements['name']->getText(), '.')
+            'articleName' => rtrim($elements['name']->getText(), '.'),
         ];
 
         return $this->getUniqueName($names);
     }
 
     /**
+     * Returns the quantity
+     *
+     * @return float
+     */
+    public function getQuantityProperty()
+    {
+        return $this->getFloatProperty('quantity');
+    }
+
+    /**
+     * Returns the item price
+     *
+     * @return float
+     */
+    public function getItemPriceProperty()
+    {
+        return $this->getFloatProperty('itemPrice');
+    }
+
+    /**
+     * Returns the sum
+     *
+     * @return float
+     */
+    public function getSumProperty()
+    {
+        return $this->getFloatProperty('sum');
+    }
+
+    /**
      * @param array $names
-     * @return string
+     *
      * @throws \Exception
+     *
+     * @return string
      */
     protected function getUniqueName(array $names)
     {
@@ -81,7 +136,7 @@ class CartPosition extends MultipleElement
 
             //if articleName is too long, it will be cut. So it's different from the other and has to be checked separately
             case 2:
-                $check = array($name);
+                $check = [$name];
                 $result = Helper::checkArray($check);
                 break;
 
@@ -103,40 +158,16 @@ class CartPosition extends MultipleElement
     }
 
     /**
-     * Returns the quantity
-     * @return float
-     */
-    public function getQuantityProperty()
-    {
-        return $this->getFloatProperty('quantity');
-    }
-
-    /**
-     * Returns the item price
-     * @return float
-     */
-    public function getItemPriceProperty()
-    {
-        return $this->getFloatProperty('itemPrice');
-    }
-
-    /**
-     * Returns the sum
-     * @return float
-     */
-    public function getSumProperty()
-    {
-        return $this->getFloatProperty('sum');
-    }
-
-    /**
      * Helper method to read a float property
+     *
      * @param string $propertyName
+     *
      * @return float
      */
     protected function getFloatProperty($propertyName)
     {
         $element = Helper::findElements($this, [$propertyName]);
+
         return Helper::floatValue($element[$propertyName]->getText());
     }
 }

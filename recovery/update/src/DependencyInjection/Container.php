@@ -35,9 +35,9 @@ use Shopware\Recovery\Update\Controller\BatchController;
 use Shopware\Recovery\Update\Controller\CleanupController;
 use Shopware\Recovery\Update\Controller\RequirementsController;
 use Shopware\Recovery\Update\DummyPluginFinder;
+use Shopware\Recovery\Update\FilePermissionChanger;
 use Shopware\Recovery\Update\FilesystemFactory;
 use Shopware\Recovery\Update\PathBuilder;
-use Shopware\Recovery\Update\FilePermissionChanger;
 use Shopware\Recovery\Update\PluginCheck;
 use Shopware\Recovery\Update\StoreApi;
 use Shopware\Recovery\Update\Utils;
@@ -73,7 +73,7 @@ class Container extends BaseContainer
         };
 
         $container['path.builder'] = function () use ($me, $backupDir) {
-            $baseDir   = SW_PATH;
+            $baseDir = SW_PATH;
             $updateDir = UPDATE_FILES_PATH;
 
             return new PathBuilder($baseDir, $updateDir, $backupDir);
@@ -90,7 +90,7 @@ class Container extends BaseContainer
 
         $container['dump'] = function () use ($me) {
             $snippetsSql = UPDATE_ASSET_PATH . '/snippets.sql';
-            $snippetsSql = file_exists($snippetsSql) ? $snippetsSql :null;
+            $snippetsSql = file_exists($snippetsSql) ? $snippetsSql : null;
 
             if (!$snippetsSql) {
                 return null;

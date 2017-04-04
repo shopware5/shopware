@@ -28,7 +28,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\StoreFrontBundle\Service
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 interface GraduatedPricesServiceInterface
@@ -36,9 +36,10 @@ interface GraduatedPricesServiceInterface
     /**
      * @see \Shopware\Bundle\StoreFrontBundle\Service\Core\GraduatedPricesServiceInterface::get()
      *
-     * @param Struct\ListProduct[] $products
+     * @param Struct\ListProduct[]           $products
      * @param Struct\ProductContextInterface $context
-     * @return array Indexed by the product number, each array element contains a Struct\Product\PriceRule array.
+     *
+     * @return array indexed by the product number, each array element contains a Struct\Product\PriceRule array
      */
     public function getList($products, Struct\ProductContextInterface $context);
 
@@ -56,8 +57,9 @@ interface GraduatedPricesServiceInterface
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\GraduatedPricesGatewayInterface::get()
      *
-     * @param Struct\ListProduct $product
+     * @param Struct\ListProduct             $product
      * @param Struct\ProductContextInterface $context
+     *
      * @return Struct\Product\PriceRule[]
      */
     public function get(Struct\ListProduct $product, Struct\ProductContextInterface $context);

@@ -32,13 +32,14 @@ use Shopware\Components\Session\PdoSessionHandler;
  * Starts and handles the session
  *
  * @category  Shopware
- * @package   Shopware\Components\DependencyInjection\Bridge
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Session
 {
     /**
      * @param Container $container
+     *
      * @return \SessionHandlerInterface|null
      */
     public function createSaveHandler(Container $container)
@@ -54,19 +55,20 @@ class Session
         return new PdoSessionHandler(
             $conn,
             [
-                'db_table'        => 's_core_sessions',
-                'db_id_col'       => 'id',
-                'db_data_col'     => 'data',
-                'db_expiry_col'   => 'expiry',
-                'db_time_col'     => 'modified',
-                'lock_mode'       => $sessionOptions['locking'] ? PdoSessionHandler::LOCK_TRANSACTIONAL : PdoSessionHandler::LOCK_NONE,
+                'db_table' => 's_core_sessions',
+                'db_id_col' => 'id',
+                'db_data_col' => 'data',
+                'db_expiry_col' => 'expiry',
+                'db_time_col' => 'modified',
+                'lock_mode' => $sessionOptions['locking'] ? PdoSessionHandler::LOCK_TRANSACTIONAL : PdoSessionHandler::LOCK_NONE,
             ]
         );
     }
 
     /**
-     * @param Container $container
+     * @param Container                $container
      * @param \SessionHandlerInterface $saveHandler
+     *
      * @return \Enlight_Components_Session_Namespace
      */
     public function createSession(Container $container, \SessionHandlerInterface $saveHandler = null)

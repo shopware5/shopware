@@ -30,7 +30,7 @@ use Shopware\Components\DependencyInjection\Container;
  * Registers the current backend theme for the backend requests.
  *
  * @category  Shopware
- * @package   Shopware\Components\Theme
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class BackendTheme
@@ -61,9 +61,9 @@ class BackendTheme
 
         $directory = $this->container->get('theme_path_resolver')->getExtJsThemeDirectory();
 
-        $this->container->get('template')->setTemplateDir(array(
+        $this->container->get('template')->setTemplateDir([
             'backend' => $directory,
-            'include_dir' => '.'
-        ));
+            'include_dir' => '.',
+        ]);
     }
 }

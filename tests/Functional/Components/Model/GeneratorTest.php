@@ -28,7 +28,7 @@ use Shopware\Components\Model\Generator;
 
 /**
  * @category  Shopware
- * @package   Shopware\Tests\Components
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class GeneratorTest extends \PHPUnit\Framework\TestCase
@@ -77,7 +77,7 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
         $this->addAndEvaluateInitialization(
             'VARCHAR(255)',
             $default,
-            '"'.$default.'"'
+            '"' . $default . '"'
         );
     }
 
@@ -152,7 +152,7 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
         $this->addAndEvaluateInitialization(
             'DATE',
             $default,
-            'new \DateTime("'.$default.'")'
+            'new \DateTime("' . $default . '")'
         );
     }
 
@@ -162,7 +162,7 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
         $this->addAndEvaluateInitialization(
             'DATETIME',
             $default,
-            'new \DateTime("'.$default.'")'
+            'new \DateTime("' . $default . '")'
         );
     }
 
@@ -172,7 +172,7 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
         $this->addAndEvaluateInitialization(
             'VARCHAR(255)',
             $default,
-            '"'.$default.'"',
+            '"' . $default . '"',
             false
         );
     }
@@ -193,7 +193,7 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
         $this->em->addAttribute(
             self::TEST_TABLE_NAME,
             self::TEST_ATTRIBUTE_FIELD_PREFIX,
-            self::TEST_ATTRIBUTE_FIELD_NAME.'_two',
+            self::TEST_ATTRIBUTE_FIELD_NAME . '_two',
             'INT(11)',
             false,
             $secondDefault
@@ -205,8 +205,8 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
         $initialization = '
     public function __construct()
     {
-        $this->'.self::TEST_ATTRIBUTE_PROPERTY_NAME.' = "'.$firstDefault.'";
-        $this->'.self::TEST_ATTRIBUTE_PROPERTY_NAME.'Two = '.$secondDefault.';
+        $this->' . self::TEST_ATTRIBUTE_PROPERTY_NAME . ' = "' . $firstDefault . '";
+        $this->' . self::TEST_ATTRIBUTE_PROPERTY_NAME . 'Two = ' . $secondDefault . ';
     }';
         $this->assertTrue(strpos($modelSourceCode, $initialization) !== false);
 
@@ -214,15 +214,15 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
         $this->em->removeAttribute(
             self::TEST_TABLE_NAME,
             self::TEST_ATTRIBUTE_FIELD_PREFIX,
-            self::TEST_ATTRIBUTE_FIELD_NAME.'_two'
+            self::TEST_ATTRIBUTE_FIELD_NAME . '_two'
         );
     }
 
     /**
-     * @param string $type
-     * @param string|int|float|boolean $default
-     * @param string $initializedValue
-     * @param boolean $allowNull (optional)
+     * @param string                $type
+     * @param string|int|float|bool $default
+     * @param string                $initializedValue
+     * @param bool                  $allowNull        (optional)
      */
     private function addAndEvaluateInitialization($type, $default, $initializedValue, $allowNull = true)
     {
@@ -242,7 +242,7 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
         $initialization = '
     public function __construct()
     {
-        $this->'.self::TEST_ATTRIBUTE_PROPERTY_NAME.' = '.$initializedValue.';
+        $this->' . self::TEST_ATTRIBUTE_PROPERTY_NAME . ' = ' . $initializedValue . ';
     }';
         $this->assertTrue(strpos($modelSourceCode, $initialization) !== false);
     }

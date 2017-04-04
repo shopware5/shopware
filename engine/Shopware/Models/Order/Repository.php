@@ -42,6 +42,7 @@ class Repository extends ModelRepository
      * @param null $order
      * @param null $offset
      * @param null $limit
+     *
      * @return \Doctrine\ORM\Query
      */
     public function getPaymentStatusQuery($filter = null, $order = null, $offset = null, $limit = null)
@@ -51,6 +52,7 @@ class Repository extends ModelRepository
             $builder->setFirstResult($offset)
                     ->setMaxResults($limit);
         }
+
         return $builder->getQuery();
     }
 
@@ -60,16 +62,17 @@ class Repository extends ModelRepository
      *
      * @param null $filter
      * @param null $order
+     *
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getPaymentStatusQueryBuilder($filter = null, $order = null)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
-        $builder->select(array(
+        $builder->select([
             'status.id as id',
             'status.name as name',
-            'status.description as description'
-        ));
+            'status.description as description',
+        ]);
         $builder->from('Shopware\Models\Order\Status', 'status')
                 ->where('status.group = ?1')
                 ->setParameter(1, 'payment');
@@ -93,6 +96,7 @@ class Repository extends ModelRepository
      * @param null $order
      * @param null $offset
      * @param null $limit
+     *
      * @return \Doctrine\ORM\Query
      */
     public function getOrderStatusQuery($filter = null, $order = null, $offset = null, $limit = null)
@@ -102,6 +106,7 @@ class Repository extends ModelRepository
             $builder->setFirstResult($offset)
                     ->setMaxResults($limit);
         }
+
         return $builder->getQuery();
     }
 
@@ -111,20 +116,20 @@ class Repository extends ModelRepository
      *
      * @param null $filter
      * @param null $order
+     *
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getOrderStatusQueryBuilder($filter = null, $order = null)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
-        $builder->select(array(
+        $builder->select([
             'status.id as id',
             'status.name as name',
-            'status.description as description'
-        ));
+            'status.description as description',
+        ]);
         $builder->from('Shopware\Models\Order\Status', 'status');
         $builder->where('status.group = ?1')
                 ->setParameter(1, 'state');
-
 
         if ($filter !== null) {
             $builder->addFilter($filter);
@@ -140,11 +145,14 @@ class Repository extends ModelRepository
 
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which .....
+     *
      * @param null $filters
      * @param null $orderBy
      * @param null $offset
      * @param null $limit
+     *
      * @internal param $ids
+     *
      * @return \Doctrine\ORM\Query
      */
     public function getOrdersQuery($filters = null, $orderBy = null, $offset = null, $limit = null)
@@ -154,20 +162,23 @@ class Repository extends ModelRepository
             $builder->setFirstResult($offset)
                     ->setMaxResults($limit);
         }
+
         return $builder->getQuery();
     }
 
     /**
      * Helper function to create the query builder for the "getOrdersQuery" function.
      * This function can be hooked to modify the query builder of the query object.
+     *
      * @param null $filters
      * @param      $orderBy
+     *
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getOrdersQueryBuilder($filters = null, $orderBy = null)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
-        $builder->select(array(
+        $builder->select([
             'orders',
             'details',
             'documents',
@@ -194,7 +205,7 @@ class Repository extends ModelRepository
             'dispatchAttribute',
             'subShop',
             'locale',
-        ));
+        ]);
 
         $builder->from('Shopware\Models\Order\Order', 'orders');
         $builder->leftJoin('orders.details', 'details')
@@ -226,23 +237,25 @@ class Repository extends ModelRepository
         if (!empty($filters)) {
             $builder = $this->filterListQuery($builder, $filters);
         }
-        $builder->andWhere($builder->expr()->notIn('orders.status', array('-1')));
+        $builder->andWhere($builder->expr()->notIn('orders.status', ['-1']));
         $builder->andWhere('orders.number IS NOT NULL');
 
         if (!empty($orderBy)) {
             //add order by path
             $builder->addOrderBy($orderBy);
         }
+
         return $builder;
     }
 
-
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which .....
+     *
      * @param null $filters
      * @param null $orderBy
      * @param null $offset
      * @param null $limit
+     *
      * @return \Doctrine\ORM\Query
      */
     public function getBackendOrdersQuery($filters = null, $orderBy = null, $offset = null, $limit = null)
@@ -252,20 +265,23 @@ class Repository extends ModelRepository
             $builder->setFirstResult($offset)
                     ->setMaxResults($limit);
         }
+
         return $builder->getQuery();
     }
 
     /**
      * Helper function to create the query builder for the "getOrdersQuery" function.
      * This function can be hooked to modify the query builder of the query object.
+     *
      * @param null $filters
      * @param      $orderBy
+     *
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getBackendOrdersQueryBuilder($filters = null, $orderBy = null)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
-        $builder->select(array(
+        $builder->select([
                 'orders',
                 'customer',
                 'payment',
@@ -275,8 +291,8 @@ class Repository extends ModelRepository
                 'shop',
                 'dispatch',
                 'paymentStatus',
-                'orderStatus'
-            ));
+                'orderStatus',
+            ]);
 
         $builder->from('Shopware\Models\Order\Order', 'orders');
         $builder->leftJoin('orders.payment', 'payment')
@@ -293,13 +309,14 @@ class Repository extends ModelRepository
         if (!empty($filters)) {
             $builder = $this->filterListQuery($builder, $filters);
         }
-        $builder->andWhere($builder->expr()->notIn('orders.status', array('-1')));
+        $builder->andWhere($builder->expr()->notIn('orders.status', ['-1']));
         $builder->andWhere('orders.number IS NOT NULL');
 
         if (!empty($orderBy)) {
             //add order by path
             $builder->addOrderBy($orderBy);
         }
+
         return $builder;
     }
 
@@ -307,12 +324,13 @@ class Repository extends ModelRepository
      * This method returns the additional order data for the backend list
      *
      * @param $orderNumber
+     *
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getBackendAdditionalOrderDataQuery($orderNumber)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
-        $builder->select(array(
+        $builder->select([
                 'orders',
                 'details',
                 'documents',
@@ -323,8 +341,8 @@ class Repository extends ModelRepository
                 'shippingCountry',
                 'shippingState',
                 'subShop',
-                'locale'
-            ));
+                'locale',
+            ]);
         $builder->from('Shopware\Models\Order\Order', 'orders');
         $builder->leftJoin('orders.documents', 'documents')
                 ->leftJoin('documents.type', 'documentType')
@@ -339,22 +357,26 @@ class Repository extends ModelRepository
 
         $builder->where('orders.number = :orderNumber');
         $builder->setParameter('orderNumber', $orderNumber);
+
         return $builder->getQuery();
     }
 
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which .....
+     *
      * @return \Doctrine\ORM\Query
      */
     public function getDetailStatusQuery()
     {
         $builder = $this->getDetailStatusQueryBuilder();
+
         return $builder->getQuery();
     }
 
     /**
      * Helper function to create the query builder for the "getDetailStatusQuery" function.
      * This function can be hooked to modify the query builder of the query object.
+     *
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getDetailStatusQueryBuilder()
@@ -363,45 +385,51 @@ class Repository extends ModelRepository
         $builder->select('detailStatus')
                 ->from('Shopware\Models\Order\DetailStatus', 'detailStatus')
                 ->orderBy('detailStatus.position', 'ASC');
+
         return $builder;
     }
 
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which .....
+     *
      * @param      $orderId
      * @param null $orderBy
      * @param null $offset
      * @param null $limit
+     *
      * @return \Doctrine\ORM\Query
      */
-    public function getOrderStatusHistoryListQuery($orderId, $orderBy = null, $offset=null, $limit=null)
+    public function getOrderStatusHistoryListQuery($orderId, $orderBy = null, $offset = null, $limit = null)
     {
         $builder = $this->getOrderStatusHistoryListQueryBuilder($orderId, $orderBy);
         if ($limit !== null) {
             $builder->setFirstResult($offset)
                     ->setMaxResults($limit);
         }
+
         return $builder->getQuery();
     }
 
     /**
      * Helper function to create the query builder for the "getStatusHistoryListQuery" function.
      * This function can be hooked to modify the query builder of the query object.
+     *
      * @param      $orderId
      * @param null $orderBy
+     *
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getOrderStatusHistoryListQueryBuilder($orderId, $orderBy = null)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
-        $builder->select(array(
+        $builder->select([
             'history.changeDate',
             'user.name as userName',
             'history.previousOrderStatusId as prevOrderStatusId',
             'history.orderStatusId as currentOrderStatusId',
             'history.previousPaymentStatusId as prevPaymentStatusId',
-            'history.paymentStatusId as currentPaymentStatusId'
-        ));
+            'history.paymentStatusId as currentPaymentStatusId',
+        ]);
         $builder->from('Shopware\Models\Order\History', 'history')
                 ->leftJoin('history.user', 'user')
                 ->where($builder->expr()->eq('history.orderId', '?1'))
@@ -410,90 +438,33 @@ class Repository extends ModelRepository
         if (!empty($orderBy)) {
             $builder->addOrderBy($orderBy);
         }
+
         return $builder;
     }
 
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which .....
+     *
      * @return \Doctrine\ORM\Query
      */
     public function getDocumentTypesQuery()
     {
         $builder = $this->getDocumentTypesQueryBuilder();
+
         return $builder->getQuery();
     }
 
     /**
      * Helper function to create the query builder for the "getDocumentTypesQuery" function.
      * This function can be hooked to modify the query builder of the query object.
+     *
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getDocumentTypesQueryBuilder()
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
-        $builder->select(array('types'))
+        $builder->select(['types'])
                 ->from('Shopware\Models\Order\Document\Type', 'types');
-        return $builder;
-    }
-
-    /**
-     * Filters the displayed fields by the passed filter value.
-     *
-     * @param \Doctrine\ORM\QueryBuilder $builder
-     * @param array|null $filters
-     * @return \Doctrine\ORM\QueryBuilder
-     */
-    protected function filterListQuery(\Doctrine\ORM\QueryBuilder $builder, $filters=null)
-    {
-        $expr = Shopware()->Models()->getExpressionBuilder();
-
-        if (!empty($filters)) {
-            foreach ($filters as $filter) {
-                if (empty($filter['property']) || $filter['value'] === null || $filter['value'] === '') {
-                    continue;
-                }
-                switch ($filter['property']) {
-                    case "free":
-                        $builder->andWhere(
-                            $expr->orX(
-                                $expr->like('orders.number', '?1'),
-                                $expr->like('orders.invoiceAmount', '?1'),
-                                $expr->like('orders.transactionId', '?1'),
-                                $expr->like('billing.company', '?3'),
-                                $expr->like('customer.email', '?3'),
-                                $expr->like('billing.lastName', '?3'),
-                                $expr->like('billing.firstName', '?3'),
-                                $expr->like('orders.comment', '?3'),
-                                $expr->like('orders.customerComment', '?3'),
-                                $expr->like('orders.internalComment', '?3')
-                            )
-                        );
-                        $builder->setParameter(1, $filter['value'] . '%');
-                        $builder->setParameter(3, '%' . $filter['value'] . '%');
-                        break;
-                    case "from":
-                        $tmp = new \DateTime($filter['value']);
-                        $builder->andWhere('orders.orderTime >= :orderTimeFrom');
-                        $builder->setParameter('orderTimeFrom', $tmp->format('Ymd'));
-                        break;
-                    case "to":
-                        $tmp = new \Zend_Date($filter['value']);
-                        $tmp->setHour('23');
-                        $tmp->setMinute('59');
-                        $tmp->setSecond('59');
-                        $builder->andWhere('orders.orderTime <= :orderTimeTo');
-                        $builder->setParameter('orderTimeTo', $tmp->get('yyyy-MM-dd HH:mm:ss'));
-                        break;
-                    case 'details.articleNumber':
-                        $builder->leftJoin('orders.details', 'details');
-                        $builder->andWhere('details.articleNumber LIKE :articleNumber');
-                        $builder->setParameter('articleNumber', $filter['value']);
-                        break;
-                    default:
-                        $builder->addFilter(array($filter));
-                }
-            }
-        }
 
         return $builder;
     }
@@ -516,7 +487,8 @@ class Repository extends ModelRepository
         $today = "'" . $today->format('Y-m-d') . "'";
 
         $builder = Shopware()->Models()->createQueryBuilder();
-        return $builder->select(array('voucher.id', 'voucher.description', 'voucher.voucherCode', 'voucher.value', 'voucher.minimumCharge'))
+
+        return $builder->select(['voucher.id', 'voucher.description', 'voucher.voucherCode', 'voucher.value', 'voucher.minimumCharge'])
                        ->from('Shopware\Models\Voucher\Voucher', 'voucher')
                        ->join('voucher.codes', 'codes')
                        ->where(
@@ -529,5 +501,68 @@ class Repository extends ModelRepository
                        ->andWhere($builder->expr()->eq('codes.cashed', 0))
                        ->andWhere($builder->expr()->eq('voucher.modus', 1))
                        ->getQuery();
+    }
+
+    /**
+     * Filters the displayed fields by the passed filter value.
+     *
+     * @param \Doctrine\ORM\QueryBuilder $builder
+     * @param array|null                 $filters
+     *
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    protected function filterListQuery(\Doctrine\ORM\QueryBuilder $builder, $filters = null)
+    {
+        $expr = Shopware()->Models()->getExpressionBuilder();
+
+        if (!empty($filters)) {
+            foreach ($filters as $filter) {
+                if (empty($filter['property']) || $filter['value'] === null || $filter['value'] === '') {
+                    continue;
+                }
+                switch ($filter['property']) {
+                    case 'free':
+                        $builder->andWhere(
+                            $expr->orX(
+                                $expr->like('orders.number', '?1'),
+                                $expr->like('orders.invoiceAmount', '?1'),
+                                $expr->like('orders.transactionId', '?1'),
+                                $expr->like('billing.company', '?3'),
+                                $expr->like('customer.email', '?3'),
+                                $expr->like('billing.lastName', '?3'),
+                                $expr->like('billing.firstName', '?3'),
+                                $expr->like('orders.comment', '?3'),
+                                $expr->like('orders.customerComment', '?3'),
+                                $expr->like('orders.internalComment', '?3')
+                            )
+                        );
+                        $builder->setParameter(1, $filter['value'] . '%');
+                        $builder->setParameter(3, '%' . $filter['value'] . '%');
+                        break;
+                    case 'from':
+                        $tmp = new \DateTime($filter['value']);
+                        $builder->andWhere('orders.orderTime >= :orderTimeFrom');
+                        $builder->setParameter('orderTimeFrom', $tmp->format('Ymd'));
+                        break;
+                    case 'to':
+                        $tmp = new \Zend_Date($filter['value']);
+                        $tmp->setHour('23');
+                        $tmp->setMinute('59');
+                        $tmp->setSecond('59');
+                        $builder->andWhere('orders.orderTime <= :orderTimeTo');
+                        $builder->setParameter('orderTimeTo', $tmp->get('yyyy-MM-dd HH:mm:ss'));
+                        break;
+                    case 'details.articleNumber':
+                        $builder->leftJoin('orders.details', 'details');
+                        $builder->andWhere('details.articleNumber LIKE :articleNumber');
+                        $builder->setParameter('articleNumber', $filter['value']);
+                        break;
+                    default:
+                        $builder->addFilter([$filter]);
+                }
+            }
+        }
+
+        return $builder;
     }
 }

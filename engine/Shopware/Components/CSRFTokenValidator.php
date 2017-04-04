@@ -30,7 +30,6 @@ use Shopware\Components\DependencyInjection\Container;
 
 /**
  * Class CSRFTokenValidator
- * @package Shopware\Components
  */
 class CSRFTokenValidator implements SubscriberInterface
 {
@@ -56,9 +55,10 @@ class CSRFTokenValidator implements SubscriberInterface
 
     /**
      * CSRFTokenValidator constructor.
+     *
      * @param Container $container
-     * @param bool $isEnabledFrontend
-     * @param bool $isEnabledBackend
+     * @param bool      $isEnabledFrontend
+     * @param bool      $isEnabledBackend
      */
     public function __construct(Container $container, $isEnabledFrontend = true, $isEnabledBackend = true)
     {
@@ -68,7 +68,7 @@ class CSRFTokenValidator implements SubscriberInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public static function getSubscribedEvents()
     {
@@ -76,13 +76,15 @@ class CSRFTokenValidator implements SubscriberInterface
             'Enlight_Controller_Action_PreDispatch_Backend' => 'checkBackendTokenValidation',
 
             'Enlight_Controller_Action_PreDispatch_Frontend' => 'checkFrontendTokenValidation',
-            'Enlight_Controller_Action_PreDispatch_Widgets' => 'checkFrontendTokenValidation'
+            'Enlight_Controller_Action_PreDispatch_Widgets' => 'checkFrontendTokenValidation',
         ];
     }
 
     /**
      * CSRF protection for backend actions
+     *
      * @param ActionEventArgs $args
+     *
      * @throws CSRFTokenValidationException
      */
     public function checkBackendTokenValidation(ActionEventArgs $args)
@@ -111,7 +113,9 @@ class CSRFTokenValidator implements SubscriberInterface
 
     /**
      * CSRF protection for frontend actions
+     *
      * @param \Enlight_Event_EventArgs $args
+     *
      * @throws CSRFTokenValidationException
      */
     public function checkFrontendTokenValidation(\Enlight_Event_EventArgs $args)
@@ -156,14 +160,16 @@ class CSRFTokenValidator implements SubscriberInterface
 
     /**
      * Check if the submitted CSRF token matches with the token stored in the cookie or header
+     *
      * @param \Enlight_Controller_Request_Request $request
+     *
      * @return bool
      */
     private function checkRequest(\Enlight_Controller_Request_Request $request)
     {
         $context = $this->container->get('shopware_storefront.context_service')->getShopContext();
         $token = $request->getCookie('__csrf_token-' . $context->getShop()->getId());
-        $requestToken = $request->getParam('__csrf_token') ? : $request->getHeader('X-CSRF-Token');
+        $requestToken = $request->getParam('__csrf_token') ?: $request->getHeader('X-CSRF-Token');
 
         return hash_equals($token, $requestToken);
     }
@@ -171,7 +177,9 @@ class CSRFTokenValidator implements SubscriberInterface
     /**
      * Check if the controller has opted in for CSRF whitelisting and if the
      * called action is on the whitelist
+     *
      * @param \Enlight_Controller_Action $controller
+     *
      * @return bool
      */
     private function isWhitelisted(\Enlight_Controller_Action $controller)
@@ -191,7 +199,9 @@ class CSRFTokenValidator implements SubscriberInterface
     /**
      * Check if a controller has opted in for CSRF protection and if the called action
      * should be protected
+     *
      * @param \Enlight_Controller_Action $controller
+     *
      * @return bool
      */
     private function isProtected(\Enlight_Controller_Action $controller)

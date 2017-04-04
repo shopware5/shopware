@@ -33,7 +33,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
  * @category  Shopware
- * @package   Shopware\Command
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class DatabaseSetupCommand extends ShopwareCommand
@@ -92,6 +92,7 @@ class DatabaseSetupCommand extends ShopwareCommand
 
         if (!$input->getOption('steps')) {
             $io->error('Parameter --steps not given');
+
             return 1;
         }
 
@@ -110,6 +111,7 @@ class DatabaseSetupCommand extends ShopwareCommand
                 $io->error(
                     sprintf("Unknown install step (%s). Valid steps: %s\n", $step, implode(', ', $this->validSteps))
                 );
+
                 return 1;
             }
         }
@@ -155,6 +157,7 @@ class DatabaseSetupCommand extends ShopwareCommand
 
                 default:
                     $io->error(sprintf("Unknown install step (%s). Valid steps: %s\n", $step, implode(', ', $this->validSteps)));
+
                     return 1;
             }
         }
@@ -164,6 +167,7 @@ class DatabaseSetupCommand extends ShopwareCommand
 
     /**
      * @param array $dbConfig
+     *
      * @return string
      */
     private function buildConnectionString(array $dbConfig)
@@ -193,6 +197,7 @@ class DatabaseSetupCommand extends ShopwareCommand
 
     /**
      * @param array $dbConfig
+     *
      * @return \PDO
      */
     private function createConnection(array $dbConfig)
@@ -222,6 +227,7 @@ class DatabaseSetupCommand extends ShopwareCommand
 
     /**
      * @param InputInterface $input
+     *
      * @return string
      */
     private function parseUrl(InputInterface $input)

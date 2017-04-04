@@ -29,7 +29,7 @@ namespace Shopware\Components\Log\Processor;
  * ShopwareEnvironmentProcessor.
  *
  * @category  Shopware
- * @package   Shopware\Components\Log\Processor
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ShopwareEnvironmentProcessor
@@ -37,25 +37,26 @@ class ShopwareEnvironmentProcessor
     /**
      * Adds request, shop and session info
      *
-     * @param  array $record
+     * @param array $record
+     *
      * @return array
      */
     public function __invoke(array $record)
     {
         if (Shopware()->Front() && $request = Shopware()->Front()->Request()) {
-            $record['extra']['request'] = array(
+            $record['extra']['request'] = [
                 'uri' => $request->getRequestUri(),
                 'method' => $request->getMethod(),
                 'query' => $this->filterRequestUserData($request->getQuery()),
-                'post' => $this->filterRequestUserData($request->getPost())
-            );
+                'post' => $this->filterRequestUserData($request->getPost()),
+            ];
         } elseif ($_SERVER['REQUEST_URI']) {
-            $record['extra']['request'] = array(
+            $record['extra']['request'] = [
                 'uri' => $_SERVER['REQUEST_URI'],
                 'method' => $_SERVER['REQUEST_METHOD'],
                 'query' => $this->filterRequestUserData($_GET),
-                'post' => $this->filterRequestUserData($_POST)
-            );
+                'post' => $this->filterRequestUserData($_POST),
+            ];
         } else {
             $record['extra']['request'] = 'Could not process request data';
         }
@@ -65,18 +66,18 @@ class ShopwareEnvironmentProcessor
                 $record['extra']['session'] = $session;
             }
             if ($shop = Shopware()->Shop()) {
-                $record['extra']['shopId'] = Shopware()->Shop()->getId() ? : null;
-                $record['extra']['shopName'] = Shopware()->Shop()->getName() ? : null;
+                $record['extra']['shopId'] = Shopware()->Shop()->getId() ?: null;
+                $record['extra']['shopName'] = Shopware()->Shop()->getName() ?: null;
             }
         } else {
             $record['extra']['shop'] = 'No shop data available';
         }
 
         if (is_object($_SESSION['Shopware']['Auth'])) {
-            $record['extra']['session'] = array(
+            $record['extra']['session'] = [
                 'userId' => $_SESSION['Shopware']['Auth']->id,
-                'roleId' => $_SESSION['Shopware']['Auth']->roleID
-            );
+                'roleId' => $_SESSION['Shopware']['Auth']->roleID,
+            ];
         } else {
             $record['extra']['session'] = 'No session data available';
         }
@@ -88,15 +89,16 @@ class ShopwareEnvironmentProcessor
      * Filters sensitive data from GET and POST
      *
      * @param $data
+     *
      * @return mixed
      */
     private function filterRequestUserData($data)
     {
-        $blacklist = array(
+        $blacklist = [
             'password',
             'passwordConfirmation',
-            'currentPassword'
-        );
+            'currentPassword',
+        ];
 
         foreach ($blacklist as $elem) {
             $this->recursiveUnset($data, $elem);

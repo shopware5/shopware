@@ -36,9 +36,6 @@ class Shopware_Controllers_Widgets_Recommendation extends Enlight_Controller_Act
     /** @var sMarketing */
     protected $marketingModule;
 
-    /**
-     *
-     */
     public function init()
     {
         $this->config = Shopware()->Config();
@@ -88,6 +85,7 @@ class Shopware_Controllers_Widgets_Recommendation extends Enlight_Controller_Act
 
     /**
      * @param string[] $numbers
+     *
      * @return array[]
      */
     private function getPromotions($numbers)

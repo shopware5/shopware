@@ -24,7 +24,7 @@
 
 /**
  * @category  Shopware
- * @package   Shopware\Controllers\Frontend
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Controllers_Frontend_Sitemap extends Enlight_Controller_Action
@@ -40,7 +40,7 @@ class Shopware_Controllers_Frontend_Sitemap extends Enlight_Controller_Action
         $additionalTrees = Shopware()->Events()->filter(
             'Shopware_Modules_Sitemap_indexAction',
             $additionalTrees,
-            array('subject' => $this)
+            ['subject' => $this]
         );
 
         $categoryTree = array_merge($categoryTree, $additionalTrees);
@@ -49,19 +49,21 @@ class Shopware_Controllers_Frontend_Sitemap extends Enlight_Controller_Action
 
     /**
      * Helper function to get additional page trees
+     *
      * @return array
      */
     private function getAdditionalTrees()
     {
-        return array(
+        return [
             $this->getCustomPages(),
             $this->getSupplierPages(),
-            $this->getLandingPages()
-        );
+            $this->getLandingPages(),
+        ];
     }
 
     /**
      * Helper function to get all custom pages of the shop
+     *
      * @return array
      */
     private function getCustomPages()
@@ -72,37 +74,38 @@ class Shopware_Controllers_Frontend_Sitemap extends Enlight_Controller_Action
             $site = $this->convertSite($site);
         }
 
-        $staticPages = array(
+        $staticPages = [
             'name' => 'SitemapStaticPages',
             'link' => '',
-            'sub' => $sites
-        );
+            'sub' => $sites,
+        ];
 
         return $staticPages;
     }
 
     /**
      * Helper function to read all static pages of a shop from the database
+     *
      * @return array
      */
     private function getSitesByShopId($shopId)
     {
-        $sql = "
+        $sql = '
             SELECT groups.key
             FROM s_core_shop_pages shopPages
               INNER JOIN s_cms_static_groups groups
                 ON groups.id = shopPages.group_id
             WHERE shopPages.shop_id = ?
-        ";
+        ';
 
-        $statement = Shopware()->Db()->executeQuery($sql, array($shopId));
+        $statement = Shopware()->Db()->executeQuery($sql, [$shopId]);
 
         $keys = $statement->fetchAll(PDO::FETCH_COLUMN);
 
         /** @var Shopware\Models\Site\Repository $siteRepository */
         $siteRepository = $this->get('models')->getRepository('Shopware\Models\Site\Site');
 
-        $sites = array();
+        $sites = [];
         foreach ($keys as $key) {
             $current = $siteRepository->getSitesByNodeNameQueryBuilder($key, $shopId)
                 ->resetDQLPart('from')
@@ -118,7 +121,9 @@ class Shopware_Controllers_Frontend_Sitemap extends Enlight_Controller_Action
 
     /**
      * Recursive helper function to convert a site to correct sitemap format
+     *
      * @param $site
+     *
      * @return mixed
      */
     private function convertSite($site)
@@ -149,7 +154,9 @@ class Shopware_Controllers_Frontend_Sitemap extends Enlight_Controller_Action
     /**
      * Helper function to filter predefined links, which should not be in the sitemap (external links, sitemap links itself)
      * Returns false, if the link is not allowed
+     *
      * @param string $link
+     *
      * @return bool
      */
     private function filterLink($link)
@@ -161,7 +168,7 @@ class Shopware_Controllers_Frontend_Sitemap extends Enlight_Controller_Action
         $userParams = parse_url($link, PHP_URL_QUERY);
         parse_str($userParams, $userParams);
 
-        $blacklist = array('', 'sitemap', 'sitemapXml');
+        $blacklist = ['', 'sitemap', 'sitemapXml'];
 
         if (in_array($userParams['sViewport'], $blacklist)) {
             return false;
@@ -172,6 +179,7 @@ class Shopware_Controllers_Frontend_Sitemap extends Enlight_Controller_Action
 
     /**
      * Helper function to get all supplier pages
+     *
      * @return array
      */
     private function getSupplierPages()
@@ -186,22 +194,23 @@ class Shopware_Controllers_Frontend_Sitemap extends Enlight_Controller_Action
                     $supplier['name'],
                     'listing',
                     'sSupplier',
-                    array('sAction' => 'manufacturer')
+                    ['sAction' => 'manufacturer']
                 )
             );
         }
 
-        $supplierPages = array(
+        $supplierPages = [
             'name' => 'SitemapSupplierPages',
             'link' => '',
-            'sub' => $suppliers
-        );
+            'sub' => $suppliers,
+        ];
 
         return $supplierPages;
     }
 
     /**
      * Helper function to get all landing pages
+     *
      * @return array
      */
     private function getLandingPages()
@@ -248,11 +257,11 @@ class Shopware_Controllers_Frontend_Sitemap extends Enlight_Controller_Action
             );
         }
 
-        $landingPages = array(
+        $landingPages = [
             'name' => 'SitemapLandingPages',
             'link' => '',
-            'sub' => $campaigns
-        );
+            'sub' => $campaigns,
+        ];
 
         return $landingPages;
     }
@@ -260,8 +269,10 @@ class Shopware_Controllers_Frontend_Sitemap extends Enlight_Controller_Action
     /**
      * Helper function to filter emotion campaigns
      * Returns false, if the campaign starts later or is outdated
+     *
      * @param null $from
      * @param null $to
+     *
      * @return bool
      */
     private function filterCampaign($from = null, $to = null)
@@ -282,16 +293,18 @@ class Shopware_Controllers_Frontend_Sitemap extends Enlight_Controller_Action
     /**
      * Helper function to create a sitemap readable array
      * If $link is an array, it will be used as additional params for link assembling
-     * @param integer $id
-     * @param string $name
-     * @param string $viewport
-     * @param string $idParam
+     *
+     * @param int               $id
+     * @param string            $name
+     * @param string            $viewport
+     * @param string            $idParam
      * @param string|array|null $link
+     *
      * @return array
      */
     private function getSitemapArray($id, $name, $viewport, $idParam, $link = null)
     {
-        $userParams = array();
+        $userParams = [];
 
         if (is_string($link)) {
             $userParams = parse_url($link, PHP_URL_QUERY);
@@ -299,10 +312,10 @@ class Shopware_Controllers_Frontend_Sitemap extends Enlight_Controller_Action
         }
 
         if (empty($userParams)) {
-            $userParams = array(
+            $userParams = [
                 'sViewport' => $viewport,
-                $idParam => $id
-            );
+                $idParam => $id,
+            ];
         }
 
         if (is_array($link)) {
@@ -311,25 +324,26 @@ class Shopware_Controllers_Frontend_Sitemap extends Enlight_Controller_Action
 
         $link = $this->Front()->Router()->assemble($userParams);
 
-        return array(
+        return [
             'id' => $id,
             'name' => $name,
-            'link' => $link
-        );
+            'link' => $link,
+        ];
     }
 
     /**
      * Gets all suppliers that have products for the current shop
      *
-     * @return array
      * @throws Exception
+     *
+     * @return array
      */
     private function getSupplierForSitemap()
     {
         $context = $this->get('shopware_storefront.context_service')->getShopContext();
         $categoryId = $context->getShop()->getCategory()->getId();
 
-        /**@var $query QueryBuilder */
+        /** @var $query QueryBuilder */
         $query = $this->get('dbal_connection')->createQueryBuilder();
         $query->select(['manufacturer.id', 'manufacturer.name']);
 
@@ -340,7 +354,7 @@ class Shopware_Controllers_Frontend_Sitemap extends Enlight_Controller_Action
 
         $query->groupBy('manufacturer.id');
 
-        /**@var $statement PDOStatement */
+        /** @var $statement PDOStatement */
         $statement = $query->execute();
 
         return $statement->fetchAll(PDO::FETCH_ASSOC);

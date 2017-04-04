@@ -28,7 +28,7 @@ use Shopware\Components\Logger;
 
 /**
  * @category  Shopware
- * @package   Shopware\Plugin\Debug\Components
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class TemplateVarCollector implements CollectorInterface
@@ -38,7 +38,7 @@ class TemplateVarCollector implements CollectorInterface
      */
     protected $eventManager;
 
-    protected $results = array();
+    protected $results = [];
 
     /**
      * @param \Enlight_Event_EventManager $eventManager
@@ -48,20 +48,18 @@ class TemplateVarCollector implements CollectorInterface
         $this->eventManager = $eventManager;
     }
 
-    /**
-     * @return void
-     */
     public function start()
     {
         $event = new \Enlight_Event_EventHandler(
             'Enlight_Plugins_ViewRenderer_PreRender',
-            array($this, 'onAfterRenderView')
+            [$this, 'onAfterRenderView']
         );
         $this->eventManager->registerListener($event);
     }
 
     /**
      * @param Logger $log
+     *
      * @return mixed
      */
     public function logResults(Logger $log)
@@ -75,7 +73,7 @@ class TemplateVarCollector implements CollectorInterface
      * Listener method of the Enlight_Plugins_ViewRenderer_PostRender event.
      * Logs the template of the given Enlight_Event_EventArgs.
      *
-     * @param   \Enlight_Event_EventArgs $args
+     * @param \Enlight_Event_EventArgs $args
      */
     public function onAfterRenderView(\Enlight_Event_EventArgs $args)
     {
@@ -98,12 +96,12 @@ class TemplateVarCollector implements CollectorInterface
         $template_vars = (array) $template->getTemplateVars();
         unset($template_vars['smarty']);
         if (!empty($template_vars)) {
-            $rows = array(array('spec', 'value'));
+            $rows = [['spec', 'value']];
             foreach ($template_vars as $template_spec => $template_var) {
                 $template_var = $this->encode($template_var);
-                $rows[] = array($template_spec, $template_var);
+                $rows[] = [$template_spec, $template_var];
             }
-            $table = array('Template Vars > ' . $template_name . ' (' . (count($template_vars)) . ')', $rows);
+            $table = ['Template Vars > ' . $template_name . ' (' . (count($template_vars)) . ')', $rows];
             try {
                 $this->results[] = $table;
             } catch (Exception $e) {
@@ -113,11 +111,11 @@ class TemplateVarCollector implements CollectorInterface
 
         $config_vars = (array) $template->getConfigVars();
         if (!empty($config_vars)) {
-            $rows = array(array('spec', 'value'));
+            $rows = [['spec', 'value']];
             foreach ($config_vars as $config_spec => $config_var) {
-                $rows[] = array($config_spec, $config_var);
+                $rows[] = [$config_spec, $config_var];
             }
-            $table = array('Config Vars > ' . $template_name . ' (' . (count($config_vars)) . ')', $rows);
+            $table = ['Config Vars > ' . $template_name . ' (' . (count($config_vars)) . ')', $rows];
             $this->results[] = $table;
         }
     }
@@ -125,9 +123,10 @@ class TemplateVarCollector implements CollectorInterface
     /**
      * Encode data method
      *
-     * @param   $data
-     * @param   int $length
-     * @return  array|string
+     * @param     $data
+     * @param int $length
+     *
+     * @return array|string
      */
     public function encode($data, $length = 250)
     {

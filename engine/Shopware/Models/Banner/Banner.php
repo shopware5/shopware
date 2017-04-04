@@ -24,8 +24,8 @@
 
 namespace   Shopware\Models\Banner;
 
-use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
 
 /**
  * Banner Model
@@ -57,9 +57,17 @@ use Doctrine\ORM\Mapping as ORM;
 class Banner extends ModelEntity
 {
     /**
+     * INVERSE SIDE
+     *
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Banner", mappedBy="banner", cascade={"persist"})
+     *
+     * @var \Shopware\Models\Attribute\Banner
+     */
+    protected $attribute;
+    /**
      * Primary Key - autoincrement value
      *
-     * @var integer $id
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
@@ -70,7 +78,7 @@ class Banner extends ModelEntity
     /**
      * Description for that banner. This description will be used as alt and title attribute
      *
-     * @var string $description
+     * @var string
      *
      * @ORM\Column(name="description", type="string", length=60, nullable=false)
      */
@@ -79,7 +87,7 @@ class Banner extends ModelEntity
     /**
      * Defines the date and time when this banner should be displayed
      *
-     * @var \DateTime $validFrom
+     * @var \DateTime
      *
      * @ORM\Column(name="valid_from", type="datetime", nullable=false)
      */
@@ -88,7 +96,7 @@ class Banner extends ModelEntity
     /**
      * Defines the date and time when this banner should not more displayed
      *
-     * @var \DateTime $validTo
+     * @var \DateTime
      *
      * @ORM\Column(name="valid_to", type="datetime", nullable=false)
      */
@@ -97,7 +105,7 @@ class Banner extends ModelEntity
     /**
      * Relative path to the real banner image.
      *
-     * @var string $image
+     * @var string
      *
      * @ORM\Column(name="img", type="string", length=100, nullable=false)
      */
@@ -106,7 +114,7 @@ class Banner extends ModelEntity
     /**
      * An optional link which will be fired when the banner is been clicked.
      *
-     * @var string $link
+     * @var string
      *
      * @ORM\Column(name="link", type="string", length=255, nullable=false)
      */
@@ -116,7 +124,7 @@ class Banner extends ModelEntity
      * Determines if the click at the banner should be opened in a new browser
      * window or if the current window is used.
      *
-     * @var string $linkTarget
+     * @var string
      *
      * @ORM\Column(name="link_target", type="string", length=255, nullable=false)
      */
@@ -125,7 +133,7 @@ class Banner extends ModelEntity
     /**
      * The id of the category for which this banner is for.
      *
-     * @var integer $categoryId
+     * @var int
      *
      * @ORM\Column(name="categoryID", type="integer", nullable=false)
      */
@@ -134,23 +142,16 @@ class Banner extends ModelEntity
     /**
      * The extension of the banner image file will be stored here
      *
-     * @var string $extension
+     * @var string
      *
      * @ORM\Column(name="extension", type="string", length=25, nullable=false)
      */
     private $extension;
 
     /**
-     * INVERSE SIDE
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Banner", mappedBy="banner", cascade={"persist"})
-     * @var \Shopware\Models\Attribute\Banner
-     */
-    protected $attribute;
-
-    /**
      * Returns the numeric id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -164,11 +165,13 @@ class Banner extends ModelEntity
      * This filed must not be left empty
      *
      * @param string $description
+     *
      * @return Banner
      */
     public function setDescription($description)
     {
         $this->description = $description;
+
         return $this;
     }
 
@@ -188,19 +191,21 @@ class Banner extends ModelEntity
      * This field may be null or empty
      *
      * @param \DateTime|string $validFrom
+     *
      * @return Banner
      */
     public function setValidFrom($validFrom)
     {
         if (empty($validFrom)) {
             $validFrom = null;
-        };
+        }
         // if the date isn't null try to transform it to a DateTime Object.
         if (!$validFrom instanceof \DateTime && !is_null($validFrom)) {
             $validFrom = new \DateTime($validFrom);
         }
 
         $this->validFrom = $validFrom;
+
         return $this;
     }
 
@@ -218,6 +223,7 @@ class Banner extends ModelEntity
      * Sets the date and time this banner should stopped to been displayed
      *
      * @param \DateTime|string $validTo
+     *
      * @return Banner
      */
     public function setValidTo($validTo)
@@ -230,6 +236,7 @@ class Banner extends ModelEntity
             $validTo = new \DateTime($validTo);
         }
         $this->validTo = $validTo;
+
         return $this;
     }
 
@@ -251,6 +258,7 @@ class Banner extends ModelEntity
      * This field must be filled
      *
      * @param string $image
+     *
      * @return Banner
      */
     public function setImage($image)
@@ -263,6 +271,7 @@ class Banner extends ModelEntity
             $this->extension = '';
             $this->image = $image;
         }
+
         return $this;
     }
 
@@ -283,11 +292,13 @@ class Banner extends ModelEntity
      * This field can be null
      *
      * @param string $link
+     *
      * @return Banner
      */
     public function setLink($link)
     {
         $this->link = $link;
+
         return $this;
     }
 
@@ -309,11 +320,13 @@ class Banner extends ModelEntity
      * -_new
      *
      * @param string $linkTarget
+     *
      * @return Banner
      */
     public function setLinkTarget($linkTarget)
     {
         $this->linkTarget = $linkTarget;
+
         return $this;
     }
 
@@ -330,19 +343,21 @@ class Banner extends ModelEntity
     /**
      * Set the category id on which this banner should be displayed
      *
-     * @param integer $categoryId
+     * @param int $categoryId
+     *
      * @return Banner
      */
     public function setCategoryId($categoryId)
     {
         $this->categoryId = $categoryId;
+
         return $this;
     }
 
     /**
      * Returns the ID on which this banner should be displayed.
      *
-     * @return integer
+     * @return int
      */
     public function getCategoryId()
     {
@@ -356,11 +371,13 @@ class Banner extends ModelEntity
      * This Field is optional
      *
      * @param string $extension
+     *
      * @return Banner
      */
     public function setExtension($extension)
     {
         $this->extension = $extension;
+
         return $this;
     }
 
@@ -384,6 +401,7 @@ class Banner extends ModelEntity
 
     /**
      * @param \Shopware\Models\Attribute\Banner|array|null $attribute
+     *
      * @return \Shopware\Models\Attribute\Banner
      */
     public function setAttribute($attribute)

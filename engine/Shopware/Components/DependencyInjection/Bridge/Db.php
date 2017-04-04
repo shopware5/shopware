@@ -31,19 +31,21 @@ use Doctrine\DBAL\DriverManager;
 
 /**
  * @category  Shopware
- * @package   Shopware\Components\DependencyInjection\Bridge
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Db
 {
     /**
      * @param array $dbConfig
+     *
      * @return \PDO
      */
     public static function createPDO(array $dbConfig)
     {
         if (isset($dbConfig['factory']) && class_exists($dbConfig['factory'])) {
             $factory = $dbConfig['factory'];
+
             return $factory::createPDO($dbConfig);
         }
 
@@ -67,7 +69,7 @@ class Db
             $message = str_replace(
                 [
                     $dbConfig['username'],
-                    $dbConfig['password']
+                    $dbConfig['password'],
                 ],
                 '******',
                 $message
@@ -80,12 +82,14 @@ class Db
     }
 
     /**
-     * @param array $options
+     * @param array         $options
      * @param Configuration $config
-     * @param EventManager $eventManager
-     * @param \PDO $pdo
-     * @return Connection
+     * @param EventManager  $eventManager
+     * @param \PDO          $pdo
+     *
      * @throws \Doctrine\DBAL\DBALException
+     *
+     * @return Connection
      */
     public static function createDbalConnection(
         array $options,
@@ -105,7 +109,8 @@ class Db
 
     /**
      * @param Connection $connection
-     * @param array $options
+     * @param array      $options
+     *
      * @return \Enlight_Components_Db_Adapter_Pdo_Mysql
      */
     public static function createEnlightDbAdapter(Connection $connection, array $options)
@@ -121,6 +126,7 @@ class Db
 
     /**
      * @param array $dbConfig
+     *
      * @return string
      */
     private static function buildConnectionString(array $dbConfig)
@@ -129,14 +135,13 @@ class Db
             $dbConfig['host'] = 'localhost';
         }
 
-        $connectionSettings = array(
+        $connectionSettings = [
             'host=' . $dbConfig['host'],
-        );
+        ];
 
         if (!empty($dbConfig['socket'])) {
             $connectionSettings[] = 'unix_socket=' . $dbConfig['socket'];
         }
-
 
         if (!empty($dbConfig['port'])) {
             $connectionSettings[] = 'port=' . $dbConfig['port'];

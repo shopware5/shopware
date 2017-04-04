@@ -28,7 +28,7 @@ use Shopware\Recovery\Install\Service\TranslationService;
 
 /**
  * @category  Shopware
- * @package   Shopware\Recovery\Install
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class MenuHelper
@@ -60,9 +60,6 @@ class MenuHelper
         $this->translations = $translations;
     }
 
-    /**
-     *
-     */
     public function printMenu()
     {
         $result = [];
@@ -78,9 +75,9 @@ class MenuHelper
             $label = $this->translations->translate($key);
 
             $result[] = [
-                'label'    => $label,
+                'label' => $label,
                 'complete' => $complete,
-                'active'   => $active,
+                'active' => $active,
             ];
         }
 
@@ -88,13 +85,14 @@ class MenuHelper
     }
 
     /**
-     * @param  string     $name
+     * @param string $name
+     *
      * @throws \Exception
      */
     public function setCurrent($name)
     {
         if (false === array_search($name, $this->entries)) {
-            throw new \Exception("could not find entrie");
+            throw new \Exception('could not find entrie');
         }
 
         reset($this->entries);
@@ -104,7 +102,8 @@ class MenuHelper
     }
 
     /**
-     * @param  array  $params
+     * @param array $params
+     *
      * @return string
      */
     public function getNextUrl($params = [])
@@ -116,7 +115,8 @@ class MenuHelper
     }
 
     /**
-     * @param  array  $params
+     * @param array $params
+     *
      * @return string
      */
     public function getPreviousUrl($params = [])
@@ -128,7 +128,8 @@ class MenuHelper
     }
 
     /**
-     * @param  array  $params
+     * @param array $params
+     *
      * @return string
      */
     public function getCurrentUrl($params = [])

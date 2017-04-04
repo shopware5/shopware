@@ -29,7 +29,7 @@ use Shopware\Components\Api\Resource\Resource;
 
 /**
  * @category  Shopware
- * @package   Shopware\Tests
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class CustomerTest extends TestCase
@@ -52,11 +52,11 @@ class CustomerTest extends TestCase
      */
     public function testCreateWithNonUniqueEmailShouldThrowException()
     {
-        $testData = array(
-            "password" => "fooobar",
-            "active"   => true,
-            "email"    => 'test@example.com',
-        );
+        $testData = [
+            'password' => 'fooobar',
+            'active' => true,
+            'email' => 'test@example.com',
+        ];
 
         $this->resource->create($testData);
     }
@@ -72,58 +72,58 @@ class CustomerTest extends TestCase
 
         $birthday = \DateTime::createFromFormat('Y-m-d', '1986-12-20')->format(\DateTime::ISO8601);
 
-        $testData = array(
-            "password" => "fooobar",
-            "email"    => uniqid(rand()) . 'test@foobar.com',
-            "number"   => 'testnumber' . uniqid(),
-            "firstlogin" => $firstlogin,
-            "lastlogin"  => $lastlogin,
+        $testData = [
+            'password' => 'fooobar',
+            'email' => uniqid(rand()) . 'test@foobar.com',
+            'number' => 'testnumber' . uniqid(),
+            'firstlogin' => $firstlogin,
+            'lastlogin' => $lastlogin,
 
-            "salutation" => "mr",
-            "firstname" => "Max",
-            "lastname"  => "Mustermann",
-            "birthday"  => $birthday,
+            'salutation' => 'mr',
+            'firstname' => 'Max',
+            'lastname' => 'Mustermann',
+            'birthday' => $birthday,
 
-            "billing" => array(
+            'billing' => [
                 'salutation' => 'mr',
                 'zipcode' => '12345',
                 'city' => 'Musterhausen',
-                "firstname" => "Max",
-                "lastname"  => "Mustermann",
+                'firstname' => 'Max',
+                'lastname' => 'Mustermann',
                 'street' => 'Musterstr. 123',
-                "additionalAddressLine1"  => "Address Billing Addition 1",
-                "additionalAddressLine2"  => "Address Billing Addition 2",
-                "country" => "2",
-                "attribute" => array(
+                'additionalAddressLine1' => 'Address Billing Addition 1',
+                'additionalAddressLine2' => 'Address Billing Addition 2',
+                'country' => '2',
+                'attribute' => [
                     'text1' => 'Freitext1',
                     'text2' => 'Freitext2',
-                ),
-            ),
+                ],
+            ],
 
-            "shipping" => array(
-                "salutation" => "Mr",
-                "company"    => "Widgets Inc.",
-                "firstname"  => "Max",
-                "lastname"   => "Mustermann",
-                "additionalAddressLine1"  => "Address Shipping Addition 1",
-                "additionalAddressLine2"  => "Address Shipping Addition 2",
-                "country" => "2",
+            'shipping' => [
+                'salutation' => 'Mr',
+                'company' => 'Widgets Inc.',
+                'firstname' => 'Max',
+                'lastname' => 'Mustermann',
+                'additionalAddressLine1' => 'Address Shipping Addition 1',
+                'additionalAddressLine2' => 'Address Shipping Addition 2',
+                'country' => '2',
                 'street' => 'Musterstr. 123',
                 'zipcode' => '12345',
                 'city' => 'Mustercity',
-                "attribute" => array(
+                'attribute' => [
                     'text1' => 'Freitext1',
                     'text2' => 'Freitext2',
-                ),
-            ),
+                ],
+            ],
 
-            "debit" => array(
-                "account"       => "Fake Account",
-                "bankCode"      => "55555555",
-                "bankName"      => "Fake Bank",
-                "accountHolder" => "Max Mustermann",
-            ),
-        );
+            'debit' => [
+                'account' => 'Fake Account',
+                'bankCode' => '55555555',
+                'bankName' => 'Fake Bank',
+                'accountHolder' => 'Max Mustermann',
+            ],
+        ];
 
         /** @var \Shopware\Models\Customer\Customer $customer */
         $customer = $this->resource->create($testData);
@@ -134,7 +134,7 @@ class CustomerTest extends TestCase
         // Test default values
         $this->assertEquals($customer->getShop()->getId(), 1);
         $this->assertEquals($customer->getAccountMode(), 0);
-        $this->assertEquals($customer->getGroup()->getKey(), "EK");
+        $this->assertEquals($customer->getGroup()->getKey(), 'EK');
         $this->assertEquals($customer->getActive(), true);
 
         $this->assertEquals($customer->getEmail(), $testData['email']);
@@ -230,15 +230,15 @@ class CustomerTest extends TestCase
      */
     public function testCreateWithInvalidDataShouldThrowValidationException()
     {
-        $testData = array(
-            'active'  => true,
-            'email'   => 'invalid',
-            'billing' => array(
+        $testData = [
+            'active' => true,
+            'email' => 'invalid',
+            'billing' => [
                 'firstname' => 'Max',
-                'lastname'  => 'Mustermann',
-                'country' => 2
-            ),
-        );
+                'lastname' => 'Mustermann',
+                'country' => 2,
+            ],
+        ];
 
         $this->resource->create($testData);
     }
@@ -248,20 +248,20 @@ class CustomerTest extends TestCase
      */
     public function testUpdateShouldBeSuccessful($id)
     {
-        $testData = array(
-            'active'  => true,
-            'email'   => uniqid(rand()) . 'update@foobar.com',
-            'billing' => array(
+        $testData = [
+            'active' => true,
+            'email' => uniqid(rand()) . 'update@foobar.com',
+            'billing' => [
                 'firstname' => 'Max Update',
-                'lastname'  => 'Mustermann Update',
-                'additionalAddressLine1'  => 'additional billing address Line 1',
-                'additionalAddressLine2'  => 'additional billing address Line 2',
-            ),
-            'shipping' => array(
-                'additionalAddressLine1'  => 'additional shipping address Line 1',
-                'additionalAddressLine2'  => 'additional shipping address Line 2',
-            ),
-        );
+                'lastname' => 'Mustermann Update',
+                'additionalAddressLine1' => 'additional billing address Line 1',
+                'additionalAddressLine2' => 'additional billing address Line 2',
+            ],
+            'shipping' => [
+                'additionalAddressLine1' => 'additional shipping address Line 1',
+                'additionalAddressLine2' => 'additional shipping address Line 2',
+            ],
+        ];
 
         $customer = $this->resource->update($id, $testData);
 
@@ -290,14 +290,14 @@ class CustomerTest extends TestCase
         $customer = $this->resource->getOne($id);
         $number = $customer->getNumber();
 
-        $testData = array(
-            'active'  => true,
-            'email'   => uniqid(rand()) . 'update@foobar.com',
-            'billing' => array(
+        $testData = [
+            'active' => true,
+            'email' => uniqid(rand()) . 'update@foobar.com',
+            'billing' => [
                 'firstname' => 'Max Update',
-                'lastname'  => 'Mustermann Update',
-            ),
-        );
+                'lastname' => 'Mustermann Update',
+            ],
+        ];
 
         $customer = $this->resource->updateByNumber($number, $testData);
 
@@ -316,14 +316,14 @@ class CustomerTest extends TestCase
      */
     public function testUpdateWithInvalidDataShouldThrowValidationException($id)
     {
-        $testData = array(
-            'active'  => true,
-            'email'   => 'invalid',
-            'billing' => array(
+        $testData = [
+            'active' => true,
+            'email' => 'invalid',
+            'billing' => [
                 'firstname' => 'Max',
-                'lastname'  => 'Mustermann',
-            ),
-        );
+                'lastname' => 'Mustermann',
+            ],
+        ];
 
         $this->resource->update($id, $testData);
     }
@@ -333,7 +333,7 @@ class CustomerTest extends TestCase
      */
     public function testUpdateWithInvalidIdShouldThrowNotFoundException()
     {
-        $this->resource->update(9999999, array());
+        $this->resource->update(9999999, []);
     }
 
     /**
@@ -341,7 +341,7 @@ class CustomerTest extends TestCase
      */
     public function testUpdateWithMissingIdShouldThrowParameterMissingException()
     {
-        $this->resource->update('', array());
+        $this->resource->update('', []);
     }
 
     /**
@@ -373,7 +373,6 @@ class CustomerTest extends TestCase
         $this->resource->delete('');
     }
 
-
     /**
      * @return int
      */
@@ -388,48 +387,47 @@ class CustomerTest extends TestCase
 
         $birthday = \DateTime::createFromFormat('Y-m-d', '1986-12-20')->format(\DateTime::ISO8601);
 
-        $requestData = array(
-            "password" => "fooobar",
-            "active"   => true,
-            "email"    => uniqid(rand()) . 'test1@foobar.com',
+        $requestData = [
+            'password' => 'fooobar',
+            'active' => true,
+            'email' => uniqid(rand()) . 'test1@foobar.com',
 
-            "firstlogin" => $firstlogin,
-            "lastlogin"  => $lastlogin,
+            'firstlogin' => $firstlogin,
+            'lastlogin' => $lastlogin,
 
-            "salutation" => "mr",
-            "firstname" => "Max",
-            "lastname"  => "Mustermann",
-            "birthday"  => $birthday,
+            'salutation' => 'mr',
+            'firstname' => 'Max',
+            'lastname' => 'Mustermann',
+            'birthday' => $birthday,
 
-            "billing" => array(
+            'billing' => [
                 'salutation' => 'mr',
-                "firstname"  => "Max",
-                "lastname"   => "Mustermann",
-                'street'     => 'Musterstraße 123',
-                'zipcode'    => 12345,
-                'city'       => 'Musterhausen',
-                "country"    => "2"
-            ),
+                'firstname' => 'Max',
+                'lastname' => 'Mustermann',
+                'street' => 'Musterstraße 123',
+                'zipcode' => 12345,
+                'city' => 'Musterhausen',
+                'country' => '2',
+            ],
 
-            "shipping" => array(
-                "salutation" => "Mr",
-                "company"    => "Widgets Inc.",
-                "firstname"  => "Max",
-                "lastname"   => "Mustermann",
-                'street'     => 'Musterstraße 123',
-                'zipcode'    => 12345,
-                'city'       => 'Musterhausen',
-                "country"    => "2"
-            ),
+            'shipping' => [
+                'salutation' => 'Mr',
+                'company' => 'Widgets Inc.',
+                'firstname' => 'Max',
+                'lastname' => 'Mustermann',
+                'street' => 'Musterstraße 123',
+                'zipcode' => 12345,
+                'city' => 'Musterhausen',
+                'country' => '2',
+            ],
 
-            "debit" => array(
-                "account"       => "Fake Account",
-                "bankCode"      => "55555555",
-                "bankName"      => "Fake Bank",
-                "accountHolder" => "Max Mustermann",
-            ),
-        );
-
+            'debit' => [
+                'account' => 'Fake Account',
+                'bankCode' => '55555555',
+                'bankName' => 'Fake Bank',
+                'accountHolder' => 'Max Mustermann',
+            ],
+        ];
 
         $customer = $this->resource->create($requestData);
         $identifier = $customer->getId();
@@ -462,50 +460,50 @@ class CustomerTest extends TestCase
 
         $birthday = \DateTime::createFromFormat('Y-m-d', '1986-12-20')->format(\DateTime::ISO8601);
 
-        $requestData = array(
-            "password" => "fooobar",
-            "active"   => true,
-            "email"    => uniqid(rand()) . 'test2@foobar.com',
+        $requestData = [
+            'password' => 'fooobar',
+            'active' => true,
+            'email' => uniqid(rand()) . 'test2@foobar.com',
 
-            "firstlogin" => $firstlogin,
-            "lastlogin"  => $lastlogin,
+            'firstlogin' => $firstlogin,
+            'lastlogin' => $lastlogin,
 
-            "salutation" => "mr",
-            "firstname" => "Max",
-            "lastname"  => "Mustermann",
-            "birthday"  => $birthday,
+            'salutation' => 'mr',
+            'firstname' => 'Max',
+            'lastname' => 'Mustermann',
+            'birthday' => $birthday,
 
-            "billing" => array(
+            'billing' => [
                 'salutation' => 'mr',
-                "firstname"  => "Max",
-                "lastname"   => "Mustermann",
-                'street'     => 'Musterstraße 123',
-                'zipcode'    => 12345,
-                'city'       => 'Musterhausen',
-                "country"    => "2"
-            ),
+                'firstname' => 'Max',
+                'lastname' => 'Mustermann',
+                'street' => 'Musterstraße 123',
+                'zipcode' => 12345,
+                'city' => 'Musterhausen',
+                'country' => '2',
+            ],
 
-            "shipping" => array(
-                "salutation" => "Mr",
-                "company"    => "Widgets Inc.",
-                "firstname"  => "Max",
-                "lastname"   => "Mustermann",
-                'street'     => 'Musterstraße 123',
-                'zipcode'    => 12345,
-                'city'       => 'Musterhausen',
-                "country"    => "2"
-            ),
+            'shipping' => [
+                'salutation' => 'Mr',
+                'company' => 'Widgets Inc.',
+                'firstname' => 'Max',
+                'lastname' => 'Mustermann',
+                'street' => 'Musterstraße 123',
+                'zipcode' => 12345,
+                'city' => 'Musterhausen',
+                'country' => '2',
+            ],
 
-            "paymentData" => array(
-                array(
-                    "paymentMeanId"   => 2,
-                    "accountNumber" => "Fake Account",
-                    "bankCode"      => "55555555",
-                    "bankName"      => "Fake Bank",
-                    "accountHolder" => "Max Mustermann",
-                ),
-            ),
-        );
+            'paymentData' => [
+                [
+                    'paymentMeanId' => 2,
+                    'accountNumber' => 'Fake Account',
+                    'bankCode' => '55555555',
+                    'bankName' => 'Fake Bank',
+                    'accountHolder' => 'Max Mustermann',
+                ],
+            ],
+        ];
 
         $customer = $this->resource->create($requestData);
         $identifier = $customer->getId();
@@ -528,27 +526,26 @@ class CustomerTest extends TestCase
     {
         $data = [
             'password' => 'fooobar',
-            'email'    => __FUNCTION__ . uniqid(rand()) . '@foobar.com',
-            'number'   => __FUNCTION__,
+            'email' => __FUNCTION__ . uniqid(rand()) . '@foobar.com',
+            'number' => __FUNCTION__,
             'salutation' => 'mr',
             'firstname' => 'Max',
-            'lastname'  => 'Mustermann',
+            'lastname' => 'Mustermann',
             'groupKey' => 'H',
-            'billing' => array(
+            'billing' => [
                 'salutation' => 'mr',
                 'zipcode' => '12345',
                 'city' => 'Musterhausen',
                 'firstname' => 'Max',
-                'lastname'  => 'Mustermann',
+                'lastname' => 'Mustermann',
                 'street' => 'Musterstr. 123',
-                'country' => '2'
-            )
+                'country' => '2',
+            ],
         ];
 
         $customer = $this->resource->create($data);
         $this->assertEquals('H', $customer->getGroup()->getKey());
     }
-
 
     public function testCreateCustomerWithDefaultShopCustomerGroup()
     {
@@ -556,20 +553,20 @@ class CustomerTest extends TestCase
         $data = [
             'shopId' => 1,
             'password' => 'fooobar',
-            'email'    => __FUNCTION__ . uniqid(rand()) . '@foobar.com',
-            'number'   => __FUNCTION__,
+            'email' => __FUNCTION__ . uniqid(rand()) . '@foobar.com',
+            'number' => __FUNCTION__,
             'salutation' => 'mr',
             'firstname' => 'Max',
-            'lastname'  => 'Mustermann',
-            'billing' => array(
+            'lastname' => 'Mustermann',
+            'billing' => [
                 'salutation' => 'mr',
                 'zipcode' => '12345',
                 'city' => 'Musterhausen',
                 'firstname' => 'Max',
-                'lastname'  => 'Mustermann',
+                'lastname' => 'Mustermann',
                 'street' => 'Musterstr. 123',
-                'country' => '2'
-            )
+                'country' => '2',
+            ],
         ];
 
         $customer = $this->resource->create($data);

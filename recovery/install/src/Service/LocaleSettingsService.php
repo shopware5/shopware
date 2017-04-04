@@ -28,7 +28,7 @@ use Pimple\Container;
 
 /**
  * @category  Shopware
- * @package   Shopware\Recovery\Install\Service
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class LocaleSettingsService
@@ -44,7 +44,7 @@ class LocaleSettingsService
     private $container;
 
     /**
-     * @param \PDO $connection
+     * @param \PDO      $connection
      * @param Container $container
      */
     public function __construct(\PDO $connection, Container $container)
@@ -54,12 +54,13 @@ class LocaleSettingsService
     }
 
     /**
-     * @param  String $locale
+     * @param string $locale
+     *
      * @throws \RuntimeException
      */
     public function updateLocaleSettings($locale)
     {
-        $serviceName = 'database.dump_iterator_'.strtolower($locale);
+        $serviceName = 'database.dump_iterator_' . strtolower($locale);
         if ($this->container->offsetExists($serviceName)) {
             $dump = $this->container->offsetGet($serviceName);
             foreach ($dump as $row) {

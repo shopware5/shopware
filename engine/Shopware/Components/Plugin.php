@@ -24,18 +24,18 @@
 
 namespace Shopware\Components;
 
+use Enlight\Event\SubscriberInterface;
 use Shopware\Components\Console\Application;
 use Shopware\Components\Plugin\Context\ActivateContext;
 use Shopware\Components\Plugin\Context\DeactivateContext;
 use Shopware\Components\Plugin\Context\InstallContext;
 use Shopware\Components\Plugin\Context\UninstallContext;
 use Shopware\Components\Plugin\Context\UpdateContext;
+use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
-use Enlight\Event\SubscriberInterface;
 
 abstract class Plugin implements ContainerAwareInterface, SubscriberInterface
 {
@@ -60,19 +60,19 @@ abstract class Plugin implements ContainerAwareInterface, SubscriberInterface
     private $isActive;
 
     /**
-     * @inheritdoc
-     */
-    public static function getSubscribedEvents()
-    {
-        return [];
-    }
-
-    /**
      * @param bool $isActive
      */
     final public function __construct($isActive)
     {
-        $this->isActive = (bool)$isActive;
+        $this->isActive = (bool) $isActive;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getSubscribedEvents()
+    {
+        return [];
     }
 
     /**
@@ -94,6 +94,7 @@ abstract class Plugin implements ContainerAwareInterface, SubscriberInterface
 
     /**
      * This method can be overridden
+     *
      * @param InstallContext $context
      */
     public function install(InstallContext $context)
@@ -102,6 +103,7 @@ abstract class Plugin implements ContainerAwareInterface, SubscriberInterface
 
     /**
      * This method can be overridden
+     *
      * @param UpdateContext $context
      */
     public function update(UpdateContext $context)
@@ -111,6 +113,7 @@ abstract class Plugin implements ContainerAwareInterface, SubscriberInterface
 
     /**
      * This method can be overridden
+     *
      * @param ActivateContext $context
      */
     public function activate(ActivateContext $context)
@@ -120,6 +123,7 @@ abstract class Plugin implements ContainerAwareInterface, SubscriberInterface
 
     /**
      * This method can be overridden
+     *
      * @param DeactivateContext $context
      */
     public function deactivate(DeactivateContext $context)
@@ -129,6 +133,7 @@ abstract class Plugin implements ContainerAwareInterface, SubscriberInterface
 
     /**
      * This method can be overridden
+     *
      * @param UninstallContext $context
      */
     public function uninstall(UninstallContext $context)
@@ -151,23 +156,6 @@ abstract class Plugin implements ContainerAwareInterface, SubscriberInterface
         $container->setParameter($this->getContainerPrefix() . '.plugin_dir', $this->getPath());
         $container->setParameter($this->getContainerPrefix() . '.plugin_name', $this->getName());
         $this->loadFiles($container);
-    }
-
-    /**
-     * @param ContainerBuilder $container
-     */
-    final protected function loadFiles(ContainerBuilder $container)
-    {
-        if (!is_file($this->getPath().'/Resources/services.xml')) {
-            return;
-        }
-
-        $loader = new XmlFileLoader(
-            $container,
-            new FileLocator()
-        );
-
-        $loader->load($this->getPath().'/Resources/services.xml');
     }
 
     /**
@@ -205,7 +193,7 @@ abstract class Plugin implements ContainerAwareInterface, SubscriberInterface
         return $this->camelCaseToUnderscore($this->getName());
     }
 
-     /**
+    /**
      * Gets the Plugin directory path.
      *
      * @return string The Plugin absolute path
@@ -221,7 +209,25 @@ abstract class Plugin implements ContainerAwareInterface, SubscriberInterface
     }
 
     /**
+     * @param ContainerBuilder $container
+     */
+    final protected function loadFiles(ContainerBuilder $container)
+    {
+        if (!is_file($this->getPath() . '/Resources/services.xml')) {
+            return;
+        }
+
+        $loader = new XmlFileLoader(
+            $container,
+            new FileLocator()
+        );
+
+        $loader->load($this->getPath() . '/Resources/services.xml');
+    }
+
+    /**
      * @param string $string
+     *
      * @return string
      */
     private function camelCaseToUnderscore($string)

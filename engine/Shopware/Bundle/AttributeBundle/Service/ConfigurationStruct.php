@@ -26,7 +26,7 @@ namespace Shopware\Bundle\AttributeBundle\Service;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\AttributeBundle\Service
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
 class ConfigurationStruct implements \JsonSerializable
@@ -92,12 +92,12 @@ class ConfigurationStruct implements \JsonSerializable
     private $defaultValue;
 
     /**
-     * @var boolean
+     * @var bool
      */
     private $identifier;
 
     /**
-     * @var boolean
+     * @var bool
      */
     private $core;
 
@@ -195,7 +195,6 @@ class ConfigurationStruct implements \JsonSerializable
         $this->supportText = $supportText;
     }
 
-
     /**
      * @return int
      */
@@ -213,7 +212,7 @@ class ConfigurationStruct implements \JsonSerializable
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function displayInBackend()
     {
@@ -221,7 +220,7 @@ class ConfigurationStruct implements \JsonSerializable
     }
 
     /**
-     * @param boolean $displayInBackend
+     * @param bool $displayInBackend
      */
     public function setDisplayInBackend($displayInBackend)
     {
@@ -229,7 +228,7 @@ class ConfigurationStruct implements \JsonSerializable
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isConfigured()
     {
@@ -237,7 +236,7 @@ class ConfigurationStruct implements \JsonSerializable
     }
 
     /**
-     * @param boolean $configured
+     * @param bool $configured
      */
     public function setConfigured($configured)
     {
@@ -245,7 +244,7 @@ class ConfigurationStruct implements \JsonSerializable
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isTranslatable()
     {
@@ -253,7 +252,7 @@ class ConfigurationStruct implements \JsonSerializable
     }
 
     /**
-     * @param boolean $translatable
+     * @param bool $translatable
      */
     public function setTranslatable($translatable)
     {
@@ -293,7 +292,7 @@ class ConfigurationStruct implements \JsonSerializable
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isIdentifier()
     {
@@ -301,7 +300,7 @@ class ConfigurationStruct implements \JsonSerializable
     }
 
     /**
-     * @param boolean $identifier
+     * @param bool $identifier
      */
     public function setIdentifier($identifier)
     {
@@ -309,7 +308,7 @@ class ConfigurationStruct implements \JsonSerializable
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isCore()
     {
@@ -317,7 +316,7 @@ class ConfigurationStruct implements \JsonSerializable
     }
 
     /**
-     * @param boolean $core
+     * @param bool $core
      */
     public function setCore($core)
     {
@@ -378,7 +377,7 @@ class ConfigurationStruct implements \JsonSerializable
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isCustom()
     {
@@ -386,7 +385,7 @@ class ConfigurationStruct implements \JsonSerializable
     }
 
     /**
-     * @param boolean $custom
+     * @param bool $custom
      */
     public function setCustom($custom)
     {

@@ -29,13 +29,13 @@ use Shopware\Bundle\SearchBundle\FacetResultInterface;
 
 /**
  * Class FacetFilter
- * @package Shopware\Components\ProductStream
  */
 interface FacetFilterInterface
 {
     /**
      * Adds \Shopware\Bundle\SearchBundle\FacetInterface to the provided criteria,
      * which not already filtered by the stream
+     *
      * @param Criteria $criteria
      */
     public function add(Criteria $criteria);
@@ -45,7 +45,8 @@ interface FacetFilterInterface
      * with the already filtered stream conditions.
      *
      * @param FacetResultInterface[] $facets
-     * @param Criteria $criteria
+     * @param Criteria               $criteria
+     *
      * @return FacetResultInterface[]
      */
     public function filter(array $facets, Criteria $criteria);

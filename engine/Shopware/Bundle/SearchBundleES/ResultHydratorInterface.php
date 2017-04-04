@@ -34,10 +34,10 @@ interface ResultHydratorInterface
      * Hydrates the Elasticsearch result to extend the product number search result
      * with facets or attributes.
      *
-     * @param array $elasticResult
+     * @param array                     $elasticResult
      * @param ProductNumberSearchResult $result
-     * @param Criteria $criteria
-     * @param ShopContextInterface $context
+     * @param Criteria                  $criteria
+     * @param ShopContextInterface      $context
      */
     public function hydrate(
         array $elasticResult,

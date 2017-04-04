@@ -26,7 +26,7 @@ namespace Shopware\Bundle\SearchBundleDBAL;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\SearchBundleDBAL
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class QueryBuilder extends \Doctrine\DBAL\Query\QueryBuilder
@@ -54,6 +54,7 @@ class QueryBuilder extends \Doctrine\DBAL\Query\QueryBuilder
 
     /**
      * @param string $state
+     *
      * @return bool
      */
     public function hasState($state)

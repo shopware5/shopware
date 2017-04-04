@@ -39,12 +39,12 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
         try {
             $ordernumber = $this->Request()->get('ordernumber');
             if (!$ordernumber) {
-                throw new \InvalidArgumentException("Argument ordernumber missing");
+                throw new \InvalidArgumentException('Argument ordernumber missing');
             }
 
             $categoryId = $this->Request()->get('categoryId');
             if (!$categoryId) {
-                throw new \InvalidArgumentException("Argument categoryId missing");
+                throw new \InvalidArgumentException('Argument categoryId missing');
             }
             /** @var $articleModule \sArticles */
             $articleModule = Shopware()->Modules()->Articles();
@@ -55,6 +55,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
             $this->Response()->setBody($body);
             $this->Response()->setHeader('Content-type', 'application/json', true);
             $this->Response()->setHttpResponseCode(500);
+
             return;
         } catch (\Exception $e) {
             $result = ['exception' => $e];
@@ -62,6 +63,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
             $this->Response()->setBody($body);
             $this->Response()->setHeader('Content-type', 'application/json', true);
             $this->Response()->setHttpResponseCode(500);
+
             return;
         }
 
@@ -144,13 +146,13 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
                 ->createAjaxCountCriteria($this->Request(), $context);
         }
 
-        /**@var $result ProductNumberSearchResult*/
+        /** @var $result ProductNumberSearchResult */
         $result = $this->get('shopware_search.product_number_search')->search(
             $criteria,
             $context
         );
 
-        $body = json_encode(array('totalCount' => $result->getTotalCount()));
+        $body = json_encode(['totalCount' => $result->getTotalCount()]);
         $this->Response()->setBody($body);
         $this->Response()->setHeader('Content-type', 'application/json', true);
     }
@@ -189,11 +191,11 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
 
         $layout = Shopware()->Modules()->Categories()->getProductBoxLayout($categoryId);
 
-        $this->View()->assign(array(
+        $this->View()->assign([
             'sArticles' => $articles,
             'pageIndex' => $pageIndex,
-            'productBoxLayout' => $layout
-        ));
+            'productBoxLayout' => $layout,
+        ]);
     }
 
     /**
@@ -224,7 +226,9 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
 
     /**
      * Helper function to return the category information by category id
-     * @param integer $categoryId
+     *
+     * @param int $categoryId
+     *
      * @return array
      */
     private function getCategoryById($categoryId)
@@ -254,8 +258,10 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
 
     /**
      * @param $categoryId
-     * @return array
+     *
      * @throws Exception
+     *
+     * @return array
      */
     private function getCategoryChildrenIds($categoryId)
     {
@@ -267,11 +273,13 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
             ->setParameter(':parentId', $categoryId);
 
         $childrenIds = $query->execute()->fetchAll(PDO::FETCH_COLUMN);
+
         return $childrenIds;
     }
 
     /**
      * @param int $categoryId
+     *
      * @return int|null
      */
     private function findStreamIdByCategoryId($categoryId)
@@ -282,7 +290,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
         );
 
         if ($streamId) {
-            return (int)$streamId;
+            return (int) $streamId;
         }
 
         return null;

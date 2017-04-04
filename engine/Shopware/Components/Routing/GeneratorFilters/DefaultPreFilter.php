@@ -24,12 +24,12 @@
 
 namespace Shopware\Components\Routing\GeneratorFilters;
 
-use Shopware\Components\Routing\PreFilterInterface;
 use Shopware\Components\Routing\Context;
+use Shopware\Components\Routing\PreFilterInterface;
 
 /**
  * @category  Shopware
- * @package   Shopware\Components\Routing
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class DefaultPreFilter implements PreFilterInterface
@@ -63,17 +63,17 @@ class DefaultPreFilter implements PreFilterInterface
             unset($globalParams['controller'], $globalParams['action']);
         }
 
-        /** @see \sArticles::buildNavigation */
+        /* @see \sArticles::buildNavigation */
         if (isset($params['sDetails'])) {
             $params['sArticle'] = $params['sDetails'];
             unset($params['sDetails']);
         }
-        /** @see \Shopware_Controllers_Backend_Customer::performOrderAction */
+        /* @see \Shopware_Controllers_Backend_Customer::performOrderAction */
         if (!isset($params['controller']) && isset($params['action']) && $params['action'] == 'performOrderRedirect') {
             $params['module'] = 'backend';
             $params['controller'] = 'customer';
         }
-        /** @see \Shopware_Controllers_Widgets_Emotion */
+        /* @see \Shopware_Controllers_Widgets_Emotion */
         if (!isset($params['module']) && isset($globalParams['module']) && $globalParams['module'] == 'widgets') {
             $params['module'] = 'frontend';
         }

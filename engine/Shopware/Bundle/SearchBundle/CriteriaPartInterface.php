@@ -21,16 +21,17 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 namespace Shopware\Bundle\SearchBundle;
 
 /**
  * Interface CriteriaPartInterface
- * @package Shopware\Bundle\SearchBundle
  */
 interface CriteriaPartInterface
 {
     /**
      * Defines the unique name for the facet for re identification.
+     *
      * @return string
      */
     public function getName();

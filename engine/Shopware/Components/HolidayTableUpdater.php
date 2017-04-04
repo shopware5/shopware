@@ -28,7 +28,7 @@ use Doctrine\DBAL\Connection as Connection;
 
 /**
  * @category  Shopware
- * @package   Shopware\Components\HolidayUpdater
+ *
  * @copyright Copyright © shopware AG (http://www.shopware.de)
  */
 class HolidayTableUpdater
@@ -59,7 +59,7 @@ class HolidayTableUpdater
             return;
         }
 
-        $currentYear = (int)$date->format('Y');
+        $currentYear = (int) $date->format('Y');
         $this->updateHolidaysForYear($holidays, $currentYear);
 
         // Update past holidays to next years date
@@ -78,11 +78,11 @@ class HolidayTableUpdater
     private function getPastHolidays()
     {
         $holidays = $this->db->fetchAll(
-            "
+            '
             SELECT id, calculation, `date`
             FROM `s_premium_holidays`
             WHERE `date` < CURDATE()
-            "
+            '
         );
 
         return $holidays;
@@ -105,20 +105,21 @@ class HolidayTableUpdater
                 "DATE(CONCAT(YEAR(),'-','\$1-\$2'))",
                 $calculation
             );
-            $calculation = str_replace("EASTERDATE()", "'$easterDate'", $calculation);
-            $calculation = str_replace("YEAR()", "'$year'", $calculation);
+            $calculation = str_replace('EASTERDATE()', "'$easterDate'", $calculation);
+            $calculation = str_replace('YEAR()', "'$year'", $calculation);
 
             $sql = <<<SQL
 UPDATE s_premium_holidays
 set `date` = $calculation
 WHERE id = ?
 SQL;
-            $this->db->executeUpdate($sql, array($id));
+            $this->db->executeUpdate($sql, [$id]);
         }
     }
 
     /**
      * @param int $year
+     *
      * @return string
      */
     private function getEasterDateForYear($year)
@@ -131,7 +132,8 @@ SQL;
     /**
      * Wrapper for easter_days function
      *
-     * @param  int $year
+     * @param int $year
+     *
      * @return int
      */
     private function getEasterDays($year)
@@ -146,21 +148,22 @@ SQL;
     /**
      * Fallback implementation of easter_days
      *
-     * @param  int $year
+     * @param int $year
+     *
      * @return int
      */
     private function easterDaysFallback($year)
     {
         $G = $year % 19;
         $C = (int) ($year / 100);
-        $H = (int) ($C - (int) ($C / 4) - (int) ((8*$C+13) / 25) + 19*$G + 15) % 30;
-        $I = (int) $H - (int) ($H / 28)*(1 - (int) ($H / 28)*(int) (29 / ($H + 1))*((int) (21 - $G) / 11));
-        $J = ($year + (int) ($year/4) + $I + 2 - $C + (int) ($C/4)) % 7;
+        $H = (int) ($C - (int) ($C / 4) - (int) ((8 * $C + 13) / 25) + 19 * $G + 15) % 30;
+        $I = (int) $H - (int) ($H / 28) * (1 - (int) ($H / 28) * (int) (29 / ($H + 1)) * ((int) (21 - $G) / 11));
+        $J = ($year + (int) ($year / 4) + $I + 2 - $C + (int) ($C / 4)) % 7;
         $L = $I - $J;
         $m = 3 + (int) (($L + 40) / 44);
         $d = $L + 28 - 31 * ((int) ($m / 4));
-        $E = mktime(0, 0, 0, $m, $d, $year)-mktime(0, 0, 0, 3, 21, $year);
+        $E = mktime(0, 0, 0, $m, $d, $year) - mktime(0, 0, 0, 3, 21, $year);
 
-        return intval(round($E/(60*60*24), 0));
+        return intval(round($E / (60 * 60 * 24), 0));
     }
 }

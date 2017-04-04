@@ -24,16 +24,17 @@
 
 namespace Shopware\Components\Model\DBAL\Types;
 
+use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\ConversionException;
 use Doctrine\DBAL\Types\Type;
-use Doctrine\DBAL\Platforms\AbstractPlatform;
 
 /**
  * Type that maps an SQL DATETIME/TIMESTAMP to a PHP DateTime object.
  *
  * @licence   This code was originally released under the MIT license
+ *
  * @category  Shopware
- * @package   Shopware\Components\Model\DBAL\Types
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class DateTimeStringType extends Type
@@ -70,6 +71,7 @@ class DateTimeStringType extends Type
         if (!$val) {
             throw ConversionException::conversionFailedFormat($value, $this->getName(), $platform->getDateTimeFormatString());
         }
+
         return $val;
     }
 }

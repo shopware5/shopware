@@ -41,10 +41,10 @@ class Shopware_Controllers_Api_Shops extends Shopware_Controllers_Api_Rest
      */
     public function indexAction()
     {
-        $limit  = $this->Request()->getParam('limit', 1000);
+        $limit = $this->Request()->getParam('limit', 1000);
         $offset = $this->Request()->getParam('start', 0);
-        $sort   = $this->Request()->getParam('sort', array());
-        $filter = $this->Request()->getParam('filter', array());
+        $sort = $this->Request()->getParam('sort', []);
+        $filter = $this->Request()->getParam('filter', []);
 
         $result = $this->resource->getList($offset, $limit, $filter, $sort);
 
@@ -77,12 +77,12 @@ class Shopware_Controllers_Api_Shops extends Shopware_Controllers_Api_Rest
         $shop = $this->resource->create($this->Request()->getPost());
 
         $location = $this->apiBaseUrl . 'shops/' . $shop->getId();
-        $data = array(
-            'id'       => $shop->getId(),
-            'location' => $location
-        );
+        $data = [
+            'id' => $shop->getId(),
+            'location' => $location,
+        ];
 
-        $this->View()->assign(array('success' => true, 'data' => $data));
+        $this->View()->assign(['success' => true, 'data' => $data]);
         $this->Response()->setHeader('Location', $location);
     }
 
@@ -99,12 +99,12 @@ class Shopware_Controllers_Api_Shops extends Shopware_Controllers_Api_Rest
         $shop = $this->resource->update($id, $params);
 
         $location = $this->apiBaseUrl . 'shops/' . $shop->getId();
-        $data = array(
-            'id'       => $shop->getId(),
-            'location' => $location
-        );
+        $data = [
+            'id' => $shop->getId(),
+            'location' => $location,
+        ];
 
-        $this->View()->assign(array('success' => true, 'data' => $data));
+        $this->View()->assign(['success' => true, 'data' => $data]);
     }
 
     /**
@@ -118,6 +118,6 @@ class Shopware_Controllers_Api_Shops extends Shopware_Controllers_Api_Rest
 
         $this->resource->delete($id);
 
-        $this->View()->assign(array('success' => true));
+        $this->View()->assign(['success' => true]);
     }
 }

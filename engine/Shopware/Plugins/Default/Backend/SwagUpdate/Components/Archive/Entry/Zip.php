@@ -28,7 +28,7 @@ use ZipArchive;
 
 /**
  * @category  Shopware
- * @package   ShopwarePlugins\SwagUpdate\Components\Entry;
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Zip

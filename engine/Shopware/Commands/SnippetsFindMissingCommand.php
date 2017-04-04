@@ -28,11 +28,10 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Finder\Finder;
 
 /**
  * @category  Shopware
- * @package   Shopware\Command
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class SnippetsFindMissingCommand extends ShopwareCommand
@@ -75,6 +74,7 @@ class SnippetsFindMissingCommand extends ShopwareCommand
         $locale = $this->container->get('models')->getRepository('Shopware\Models\Shop\Locale')->findOneByLocale($input->getArgument('locale'));
         if (!$locale) {
             $output->writeln('<error>Provided locale not found</error>');
+
             return;
         }
 
@@ -98,7 +98,7 @@ class SnippetsFindMissingCommand extends ShopwareCommand
                 $filteredQueryBuilder->expr()->notIn(
                     'CONCAT(s.namespace, s.name)',
                     array_map(function ($item) {
-                        return "'".$item['hash']."'";
+                        return "'" . $item['hash'] . "'";
                     }, $localeSnippets)
                 )
             )
@@ -106,14 +106,15 @@ class SnippetsFindMissingCommand extends ShopwareCommand
                 return $item['hash'];
             }, $localeSnippets))
         ;
-        
+
         if ($input->getOption('fallback')) {
             $targetLocale = $this->container->get('models')->getRepository('Shopware\Models\Shop\Locale')->findOneByLocale($input->getOption('fallback'));
             if (!$targetLocale) {
                 $output->writeln('<error>Provided fallback locale not found</error>');
+
                 return;
             }
-            
+
             $statement
                 ->addSelect('fallback_values.value AS value')
                 ->leftJoin(
@@ -129,28 +130,28 @@ class SnippetsFindMissingCommand extends ShopwareCommand
         $snippets = $statement->execute()->fetchAll();
 
         $output->writeln('<info></info>');
-        $output->writeln('<info>'.count($snippets).' missing snippets detected</info>');
+        $output->writeln('<info>' . count($snippets) . ' missing snippets detected</info>');
 
-        $outputAdapter = new \Enlight_Config_Adapter_File(array(
+        $outputAdapter = new \Enlight_Config_Adapter_File([
             'configDir' => $input->getOption('target') . '/',
-        ));
+        ]);
 
-        $data = array();
+        $data = [];
 
         foreach ($snippets as $snippet) {
             if (!array_key_exists($snippet['namespace'], $data)) {
-                $data[$snippet['namespace']] = new \Enlight_Components_Snippet_Namespace(array(
+                $data[$snippet['namespace']] = new \Enlight_Components_Snippet_Namespace([
                     'name' => $snippet['namespace'],
-                    'section' => array(
-                        $locale->getLocale()
-                    )
-                ));
+                    'section' => [
+                        $locale->getLocale(),
+                    ],
+                ]);
             }
             $content = $data[$snippet['namespace']];
 
             $content->set($snippet['name'], isset($snippet['value']) ? $snippet['value'] : '');
         }
-        $output->writeln('<info>'.count($data).' namespaces written</info>');
+        $output->writeln('<info>' . count($data) . ' namespaces written</info>');
 
         foreach ($data as $namespace) {
             $outputAdapter->write($namespace, true);

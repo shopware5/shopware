@@ -24,9 +24,6 @@
 
 namespace Shopware\Bundle\PluginInstallerBundle\Exception;
 
-/**
- * @package Shopware\Bundle\PluginInstallerBundle\Exception
- */
 class SbpServerException extends StoreException
 {
 }

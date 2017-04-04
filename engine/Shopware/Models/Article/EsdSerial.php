@@ -24,38 +24,21 @@
 
 namespace Shopware\Models\Article;
 
-use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
+use Shopware\Components\Model\ModelEntity;
 
 /**
- *
  * @ORM\Entity
  * @ORM\Table(name="s_articles_esd_serials")
  */
 class EsdSerial extends ModelEntity
 {
     /**
-     * @var integer $id
-     *
-     * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
-    /**
-     * @var string $serialnumber
-     *
-     * @ORM\Column(name="serialnumber", type="string", length=255, nullable=true)
-     */
-    private $serialnumber = '';
-
-    /**
      * OWNING SIDE
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Esd", inversedBy="serials")
      * @ORM\JoinColumn(name="esdID", referencedColumnName="id")
+     *
      * @var \Shopware\Models\Article\Esd
      */
     protected $esd;
@@ -64,9 +47,25 @@ class EsdSerial extends ModelEntity
      * INVERSE SIDE
      *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Order\Esd", mappedBy="serial")
+     *
      * @var \Shopware\Models\Order\Esd
      */
     protected $esdOrder;
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="serialnumber", type="string", length=255, nullable=true)
+     */
+    private $serialnumber = '';
 
     /**
      * @return int
@@ -78,6 +77,7 @@ class EsdSerial extends ModelEntity
 
     /**
      * @param esd $esd
+     *
      * @return \Shopware\Models\Article\EsdSerial
      */
     public function setEsd(\Shopware\Models\Article\Esd $esd)
