@@ -33,7 +33,7 @@ trait SortArrayByKeysTrait
      *
      * @return array
      */
-    private function sortIndexedArrayByKeys(array $sortedKeys, array $indexedArray): array
+    protected function sortIndexedArrayByKeys(array $sortedKeys, array $indexedArray): array
     {
         $sorted = [];
         foreach ($sortedKeys as $index) {

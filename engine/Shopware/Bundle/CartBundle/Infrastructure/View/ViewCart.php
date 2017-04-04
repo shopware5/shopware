@@ -48,7 +48,9 @@ class ViewCart implements \JsonSerializable
     final private function __construct(CalculatedCart $calculatedCart)
     {
         $this->calculatedCart = $calculatedCart;
-        $this->lineItems = new ViewLineItemCollection([]);
+        $this->lineItems = new ViewLineItemCollection(
+            $calculatedCart->getLineItems()->filterInstance(ViewLineItemInterface::class)->getIterator()->getArrayCopy()
+        );
     }
 
     public static function createFromCalculatedCart(CalculatedCart $calculatedCart): ViewCart

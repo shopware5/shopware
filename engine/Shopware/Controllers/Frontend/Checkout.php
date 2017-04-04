@@ -26,6 +26,7 @@ use Enlight_Controller_Request_Request as Request;
 use Shopware\Bundle\CartBundle\Domain\Error\PaymentBlockedError;
 use Shopware\Bundle\CartBundle\Domain\LineItem\LineItem;
 use Shopware\Bundle\CartBundle\Domain\Product\ProductProcessor;
+use Shopware\Bundle\CartBundle\Domain\Voucher\VoucherProcessor;
 use Shopware\Components\BasketSignature\BasketPersister;
 use Shopware\Components\BasketSignature\BasketSignatureGeneratorInterface;
 use Shopware\Models\Customer\Address;
@@ -107,7 +108,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
             'deliveryMethods' => $this->serialize($deliveryMethods),
             'currentDeliveryId' => $context->getDeliveryMethod()->getId(),
             'currentPaymentId' => $context->getPaymentMethod()->getId(),
-            self::TARGET_ACTION_KEY => 'shippingPayment'
+            self::TARGET_ACTION_KEY => 'shippingPayment',
         ]);
 
         if ($this->Request()->getParam('isXHR')) {
@@ -177,6 +178,22 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         $this->forward(
             $this->Request()->getParam(self::TARGET_ACTION_KEY, self::ACTION_AJAX_CART)
         );
+    }
+
+    public function addVoucherAction()
+    {
+        $code = $this->Request()->getParam('code');
+        if (!$code) {
+            throw new Exception('No voucher code provided');
+        }
+
+        $this->container->get('shopware_cart.store_front_cart_service')->add(
+            new LineItem('voucher', VoucherProcessor::TYPE_VOUCHER, 1, ['code' => $code])
+        );
+
+        $this->redirect([
+            'action' => $this->Request()->getParam(self::TARGET_ACTION_KEY, self::ACTION_CART),
+        ]);
     }
 
     public function changeQuantityAction()

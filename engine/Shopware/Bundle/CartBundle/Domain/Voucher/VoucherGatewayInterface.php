@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -23,35 +22,14 @@ declare(strict_types=1);
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\CartBundle\Infrastructure\View;
+namespace Shopware\Bundle\CartBundle\Domain\Voucher;
 
-use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
-class ViewCartTransformer
+interface VoucherGatewayInterface
 {
-    /**
-     * @var ViewLineItemTransformerInterface[]
-     */
-    private $transformers = [];
-
-    public function __construct(array $transformers)
-    {
-        $this->transformers = $transformers;
-    }
-
-    public function transform(CalculatedCart $calculatedCart, ShopContextInterface $context): ViewCart
-    {
-        $viewCart = ViewCart::createFromCalculatedCart($calculatedCart);
-
-        foreach ($this->transformers as $transformer) {
-            $transformer->transform($calculatedCart, $viewCart, $context);
-        }
-
-        $viewCart->getLineItems()->sortByIdentifiers(
-            $calculatedCart->getLineItems()->getIdentifiers()
-        );
-
-        return $viewCart;
-    }
+    public function get(
+        array $codes,
+        ShopContextInterface $context
+    ): VoucherCollection;
 }

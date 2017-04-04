@@ -50,6 +50,7 @@ class RuleDataCollectorRegistry
         RuleCollection $rules
     ): RuleDataCollection {
         $collection = new RuleDataCollection([]);
+
         foreach ($this->collectors as $collector) {
             $collector->collect($rules, $calculatedCart, $context, $collection);
         }

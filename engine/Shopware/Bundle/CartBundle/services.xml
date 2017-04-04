@@ -72,9 +72,12 @@
             <tag name="cart_processor" priority="30000" />
         </service>
 
-        <service id="shopware_cart.percentage_voucher_processor" class="Shopware\Bundle\CartBundle\Domain\Voucher\PercentageVoucherProcessor">
-            <argument type="service" id="shopware_cart.percentage_price_calculator" />
-            <tag name="cart_processor" priority="20000" />
+        <service class="Shopware\Bundle\CartBundle\Domain\Voucher\VoucherProcessor" id="shopware_cart.voucher_processor">
+            <argument id="shopware_cart.percentage_price_calculator" type="service"/>
+            <argument id="shopware_cart.calculated_cart_generator" type="service"/>
+            <argument id="shopware_cart.voucher_gateway" type="service"/>
+            <argument id="shopware_cart.rule_data_collector_registry" type="service"/>
+            <tag name="cart_processor" priority="20000"/>
         </service>
 
         <service id="shopware_cart.delivery_separator" class="Shopware\Bundle\CartBundle\Domain\Delivery\DeliverySeparatorProcessor">
@@ -136,7 +139,7 @@
         </service>
 
         <service id="shopware_cart.risk_management.payment_filter" class="Shopware\Bundle\CartBundle\Infrastructure\Payment\RiskManagementPaymentFilter">
-            <argument id="shopware_cart.risk_management.data_collector_registry" type="service"/>
+            <argument id="shopware_cart.rule_data_collector_registry" type="service"/>
         </service>
 
         <service id="shopware_cart.payment_method_hydrator_dbal" class="Shopware\Bundle\CartBundle\Infrastructure\Payment\PaymentMethodHydrator">
@@ -172,13 +175,33 @@
             <argument id="shopware_cart.delivery_service_gateway_dbal" type="service"/>
         </service>
 
-        <service id="shopware_cart.risk_management.data_collector_registry" class="Shopware\Bundle\CartBundle\Domain\Validator\Collector\RuleDataCollectorRegistry">
+        <service id="shopware_cart.rule_data_collector_registry" class="Shopware\Bundle\CartBundle\Domain\Validator\Collector\RuleDataCollectorRegistry">
             <argument type="collection" />
         </service>
 
-        <service id="shopware.cart.risk_management.product_of_categories_collector" class="Shopware\Bundle\CartBundle\Infrastructure\Validator\Collector\ProductOfCategoriesRuleCollector">
+        <service id="shopware.cart.product_of_categories_rule_collector" class="Shopware\Bundle\CartBundle\Infrastructure\Validator\Collector\ProductOfCategoriesRuleCollector">
             <argument id="dbal_connection" type="service"/>
-            <tag name="risk_management.data_collector" />
+            <tag name="shopware_cart.rule_data_collector" />
+        </service>
+
+        <service id="shopware_cart.last_order_rule_collector" class="Shopware\Bundle\CartBundle\Infrastructure\Validator\Collector\LastOrderRuleCollector">
+            <argument type="service" id="dbal_connection" />
+            <tag name="shopware_cart.rule_data_collector" />
+        </service>
+
+        <service id="shopware_cart.order_cleared_state_rule_collector" class="Shopware\Bundle\CartBundle\Infrastructure\Validator\Collector\OrderClearedStateRuleCollector">
+            <argument type="service" id="dbal_connection" />
+            <tag name="shopware_cart.rule_data_collector" />
+        </service>
+
+        <service id="shopware_cart.order_count_rule_collector" class="Shopware\Bundle\CartBundle\Infrastructure\Validator\Collector\OrderCountRuleCollector">
+            <argument type="service" id="dbal_connection" />
+            <tag name="shopware_cart.rule_data_collector" />
+        </service>
+
+        <service id="shopware_cart.product_attribute_rule_collector" class="Shopware\Bundle\CartBundle\Infrastructure\Validator\Collector\ProductAttributeRuleCollector">
+            <argument type="service" id="dbal_connection" />
+            <tag name="shopware_cart.rule_data_collector" />
         </service>
 
         <service id="shopware_cart.payment_validator_processor" class="Shopware\Bundle\CartBundle\Domain\Payment\PaymentValidatorProcessor">
@@ -193,6 +216,10 @@
         </service>
 
         <service class="Shopware\Bundle\CartBundle\Infrastructure\Serializer" id="serializer"/>
+
+        <service id="shopware_cart.voucher_gateway" class="Shopware\Bundle\CartBundle\Infrastructure\Voucher\VoucherGateway" >
+            <argument type="service" id="dbal_connection" />
+        </service>
 
     </services>
 </container>

@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -23,35 +22,38 @@ declare(strict_types=1);
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\CartBundle\Infrastructure\View;
+namespace Shopware\Bundle\CartBundle\Domain\Error;
 
-use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
-
-class ViewCartTransformer
+class VoucherModeNotFoundError extends Error
 {
     /**
-     * @var ViewLineItemTransformerInterface[]
+     * @var string
      */
-    private $transformers = [];
+    private $code;
 
-    public function __construct(array $transformers)
+    /**
+     * @var int
+     */
+    private $mode;
+
+    public function __construct(string $code, int $mode)
     {
-        $this->transformers = $transformers;
+        $this->code = $code;
+        $this->mode = $mode;
     }
 
-    public function transform(CalculatedCart $calculatedCart, ShopContextInterface $context): ViewCart
+    public function getMessageKey(): string
     {
-        $viewCart = ViewCart::createFromCalculatedCart($calculatedCart);
+        return self::class;
+    }
 
-        foreach ($this->transformers as $transformer) {
-            $transformer->transform($calculatedCart, $viewCart, $context);
-        }
+    public function getMessage(): string
+    {
+        return sprintf('', $this->code, $this->mode);
+    }
 
-        $viewCart->getLineItems()->sortByIdentifiers(
-            $calculatedCart->getLineItems()->getIdentifiers()
-        );
-
-        return $viewCart;
+    public function getLevel(): int
+    {
+        return self::LEVEL_ERROR;
     }
 }

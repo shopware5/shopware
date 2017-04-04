@@ -34,7 +34,7 @@ use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCollection;
 use Shopware\Bundle\CartBundle\Domain\Validator\Data\RuleDataCollection;
 use Shopware\Bundle\CartBundle\Domain\Validator\Rule\Rule;
 use Shopware\Bundle\CartBundle\Domain\Voucher\CalculatedVoucher;
-use Shopware\Bundle\CartBundle\Domain\Voucher\PercentageVoucherProcessor;
+use Shopware\Bundle\CartBundle\Domain\Voucher\VoucherProcessor;
 use Shopware\Bundle\CartBundle\Infrastructure\Validator\Rule\GoodsCountRule;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
 
@@ -75,7 +75,8 @@ class GoodsCountRuleTest extends TestCase
                     new DummyProduct('SW1'),
                     new DummyProduct('SW2'),
                     new CalculatedVoucher(
-                        new LineItem(1, PercentageVoucherProcessor::TYPE_PERCENTAGE_VOUCHER, 1),
+                        'Code1',
+                        new LineItem(1, VoucherProcessor::TYPE_VOUCHER, 1),
                         new Price(-1, -1, new CalculatedTaxCollection(), new TaxRuleCollection())
                     ),
                 ])
@@ -144,7 +145,8 @@ class GoodsCountRuleTest extends TestCase
                     new DummyProduct('SW1'),
                     new DummyProduct('SW2'),
                     new CalculatedVoucher(
-                        new LineItem(1, PercentageVoucherProcessor::TYPE_PERCENTAGE_VOUCHER, 1),
+                        'Code1',
+                        new LineItem(1, VoucherProcessor::TYPE_VOUCHER, 1),
                         new Price(-1, -1, new CalculatedTaxCollection(), new TaxRuleCollection())
                     ),
                 ])

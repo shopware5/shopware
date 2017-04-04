@@ -34,7 +34,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class RiskDataCollectorCompilerPass implements CompilerPassInterface
+class CartRuleDataCollectorCompilerPass implements CompilerPassInterface
 {
     use TagReplaceTrait;
 
@@ -42,8 +42,8 @@ class RiskDataCollectorCompilerPass implements CompilerPassInterface
     {
         $this->replaceArgumentWithTaggedServices(
             $container,
-            'shopware_cart.risk_management.data_collector_registry',
-            'risk_management.data_collector',
+            'shopware_cart.rule_data_collector_registry',
+            'shopware_cart.rule_data_collector',
             0
         );
     }
