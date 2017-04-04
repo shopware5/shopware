@@ -34,6 +34,7 @@ use Shopware\Bundle\CartBundle\Domain\Error\VoucherNotFoundError;
 use Shopware\Bundle\CartBundle\Domain\Error\VoucherRuleError;
 use Shopware\Bundle\CartBundle\Domain\LineItem\LineItemInterface;
 use Shopware\Bundle\CartBundle\Domain\Price\PercentagePriceCalculator;
+use Shopware\Bundle\CartBundle\Domain\Price\PriceCalculator;
 use Shopware\Bundle\CartBundle\Domain\Validator\Collector\RuleDataCollectorRegistry;
 use Shopware\Bundle\CartBundle\Domain\Validator\Rule\RuleCollection;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
@@ -67,21 +68,22 @@ class VoucherProcessor implements CartProcessorInterface
     private $voucherDataCollectorRegistry;
 
     /**
-     * @param PercentagePriceCalculator $percentagePriceCalculator
-     * @param CalculatedCartGenerator   $calculatedCartGenerator
-     * @param VoucherGatewayInterface   $voucherGateway
-     * @param RuleDataCollectorRegistry $voucherDataCollectorRegistry
+     * @var PriceCalculator
      */
+    private $priceCalculator;
+
     public function __construct(
         PercentagePriceCalculator $percentagePriceCalculator,
         CalculatedCartGenerator $calculatedCartGenerator,
         VoucherGatewayInterface $voucherGateway,
-        RuleDataCollectorRegistry $voucherDataCollectorRegistry
+        RuleDataCollectorRegistry $voucherDataCollectorRegistry,
+        PriceCalculator $priceCalculator
     ) {
         $this->percentagePriceCalculator = $percentagePriceCalculator;
         $this->calculatedCartGenerator = $calculatedCartGenerator;
         $this->voucherGateway = $voucherGateway;
         $this->voucherDataCollectorRegistry = $voucherDataCollectorRegistry;
+        $this->priceCalculator = $priceCalculator;
     }
 
     public function process(
@@ -97,7 +99,9 @@ class VoucherProcessor implements CartProcessorInterface
 
         $code = $lineItem->getExtraData()['code'];
 
-        $vouchers = $this->voucherGateway->get([$code], $context);
+        $calculatedCart = $this->calculatedCartGenerator->create($cartContainer, $context, $processorCart);
+
+        $vouchers = $this->voucherGateway->get([$code], $calculatedCart, $context);
 
         if (!$vouchers->has($code)) {
             $processorCart->getErrors()->add(new VoucherNotFoundError($code));
@@ -113,8 +117,6 @@ class VoucherProcessor implements CartProcessorInterface
 
             return;
         }
-
-        $calculatedCart = $this->calculatedCartGenerator->create($cartContainer, $context, $processorCart);
 
         $dataCollection = $this->voucherDataCollectorRegistry->collect(
             $calculatedCart,
@@ -140,14 +142,14 @@ class VoucherProcessor implements CartProcessorInterface
         Voucher $voucher,
         LineItemInterface $lineItem
     ): void {
+        $prices = $processorCart->getLineItems()->filterGoods()->getPrices();
+
+        if (0 === $prices->count()) {
+            return;
+        }
+
         switch ($voucher->getMode()) {
             case self::TYPE_PERCENTAGE:
-                $prices = $processorCart->getLineItems()->filterGoods()->getPrices();
-
-                if (0 === $prices->count()) {
-                    return;
-                }
-
                 $percentage = abs($voucher->getPercentageDiscount()) * -1;
 
                 $discount = $this->percentagePriceCalculator->calculatePrice($percentage, $prices, $context);
@@ -159,7 +161,13 @@ class VoucherProcessor implements CartProcessorInterface
                 return;
 
             case self::TYPE_ABSOLUTE:
+                $discount = $this->priceCalculator->calculate($voucher->getPrice(), $context);
 
+                $processorCart->getLineItems()->add(
+                    new CalculatedVoucher($voucher->getCode(), $lineItem, $discount)
+                );
+
+                return;
             default:
                 $processorCart->getErrors()->add(
                     new VoucherModeNotFoundError($voucher->getCode(), $voucher->getMode())

@@ -73,7 +73,7 @@
 
                         {block name='frontend_checkout_cart_footer_field_labels_sum_value'}
                             <div class="entry--value block">
-                                {$sBasket.Amount|currency}{s name="Star" namespace="frontend/listing/box_article"}{/s}
+                                {$cart.calculatedCart.price.totalPrice|currency}{s name="Star" namespace="frontend/listing/box_article"}{/s}
                             </div>
                         {/block}
                     </li>
@@ -109,7 +109,7 @@
 
                         {block name='frontend_checkout_cart_footer_field_labels_total_value'}
                             <div class="entry--value block is--no-star">
-                                {if $sAmountWithTax && $sUserData.additional.charge_vat}{$sAmountWithTax|currency}{else}{$sAmount|currency}{/if}
+                                {$cart.calculatedCart.price.totalPrice|currency}
                             </div>
                         {/block}
                     </li>
@@ -117,7 +117,7 @@
 
                 {* Total net *}
                 {block name='frontend_checkout_cart_footer_field_labels_totalnet'}
-                    {if $sUserData.additional.charge_vat}
+                    {*{if $sUserData.additional.charge_vat}*}
                         <li class="list--entry block-group entry--totalnet">
 
                             {block name='frontend_checkout_cart_footer_field_labels_totalnet_label'}
@@ -128,35 +128,37 @@
 
                             {block name='frontend_checkout_cart_footer_field_labels_totalnet_value'}
                                 <div class="entry--value block is--no-star">
-                                    {$sAmountNet|currency}
+                                    {$cart.calculatedCart.price.netPrice|currency}
                                 </div>
                             {/block}
                         </li>
-                    {/if}
+                    {*{/if}*}
                 {/block}
 
                 {* Taxes *}
                 {block name='frontend_checkout_cart_footer_field_labels_taxes'}
-                    {if $sUserData.additional.charge_vat}
-                        {foreach $sBasket.sTaxRates as $rate => $value}
-                            {block name='frontend_checkout_cart_footer_field_labels_taxes_entry'}
-                                <li class="list--entry block-group entry--taxes">
 
-                                    {block name='frontend_checkout_cart_footer_field_labels_taxes_label'}
-                                        <div class="entry--label block">
-                                            {s name="CartFooterTotalTax"}{/s}
-                                        </div>
-                                    {/block}
+                    {foreach $cart.calculatedCart.price.calculatedTaxes as $rule}
+                        {$value = $rule.tax}
+                        {$rate = $rule.taxRate}
 
-                                    {block name='frontend_checkout_cart_footer_field_labels_taxes_value'}
-                                        <div class="entry--value block is--no-star">
-                                            {$value|currency}
-                                        </div>
-                                    {/block}
-                                </li>
-                            {/block}
-                        {/foreach}
-                    {/if}
+                        {block name='frontend_checkout_cart_footer_field_labels_taxes_entry'}
+                            <li class="list--entry block-group entry--taxes">
+
+                                {block name='frontend_checkout_cart_footer_field_labels_taxes_label'}
+                                    <div class="entry--label block">
+                                        {s name="CartFooterTotalTax"}{/s}
+                                    </div>
+                                {/block}
+
+                                {block name='frontend_checkout_cart_footer_field_labels_taxes_value'}
+                                    <div class="entry--value block is--no-star">
+                                        {$value|currency}
+                                    </div>
+                                {/block}
+                            </li>
+                        {/block}
+                    {/foreach}
                 {/block}
             </ul>
         {/block}

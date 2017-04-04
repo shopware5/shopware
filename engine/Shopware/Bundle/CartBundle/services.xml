@@ -77,6 +77,7 @@
             <argument id="shopware_cart.calculated_cart_generator" type="service"/>
             <argument id="shopware_cart.voucher_gateway" type="service"/>
             <argument id="shopware_cart.rule_data_collector_registry" type="service"/>
+            <argument id="shopware_cart.price_calculator" type="service"/>
             <tag name="cart_processor" priority="20000"/>
         </service>
 

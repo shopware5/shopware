@@ -25,7 +25,11 @@
 namespace Shopware\Bundle\CartBundle\Infrastructure\Voucher;
 
 use Doctrine\DBAL\Connection;
+use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
+use Shopware\Bundle\CartBundle\Domain\Price\Price;
 use Shopware\Bundle\CartBundle\Domain\Price\PriceDefinition;
+use Shopware\Bundle\CartBundle\Domain\Tax\CalculatedTax;
+use Shopware\Bundle\CartBundle\Domain\Tax\PercentageTaxRule;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCollection;
 use Shopware\Bundle\CartBundle\Domain\Validator\Container\OrRule;
 use Shopware\Bundle\CartBundle\Domain\Voucher\Voucher;
@@ -49,7 +53,7 @@ class VoucherGateway implements VoucherGatewayInterface
         $this->connection = $connection;
     }
 
-    public function get(array $codes, ShopContextInterface $context): VoucherCollection
+    public function get(array $codes, CalculatedCart $calculatedCart, ShopContextInterface $context): VoucherCollection
     {
         $query = $this->fetchSimpleVouchers($codes);
 
@@ -57,7 +61,7 @@ class VoucherGateway implements VoucherGatewayInterface
 
         $vouchers = new VoucherCollection();
         foreach ($rows as $row) {
-            $vouchers->add($this->hydrate($row));
+            $vouchers->add($this->hydrate($row, $calculatedCart));
         }
 
         if (count($codes) === count($rows)) {
@@ -69,11 +73,18 @@ class VoucherGateway implements VoucherGatewayInterface
         return $vouchers;
     }
 
-    private function hydrate(array $row): Voucher
+    private function hydrate(array $row, CalculatedCart $calculatedCart): Voucher
     {
         $percentage = (float) $row['value'];
 
-        $price = new PriceDefinition($percentage, new TaxRuleCollection(), 1);
+        $price = new PriceDefinition(
+            $percentage,
+            $this->buildPercentageTaxRule(
+                $calculatedCart->getLineItems()->getPrices()->getTotalPrice()
+            ),
+            1,
+            true
+        );
 
         $rule = new OrRule();
 
@@ -89,6 +100,23 @@ class VoucherGateway implements VoucherGatewayInterface
         return new Voucher($row['vouchercode'], $mode, $percentage, $price, $rule);
     }
 
+    private function buildPercentageTaxRule(Price $price): TaxRuleCollection
+    {
+        $rules = new TaxRuleCollection([]);
+
+        /** @var CalculatedTax $tax */
+        foreach ($price->getCalculatedTaxes() as $tax) {
+            $rules->add(
+                new PercentageTaxRule(
+                    $tax->getTaxRate(),
+                    $tax->getPrice() / $price->getTotalPrice() * 100
+                )
+            );
+        }
+
+        return $rules;
+    }
+
     /**
      * @param array $codes
      *
@@ -102,7 +130,6 @@ class VoucherGateway implements VoucherGatewayInterface
             'modus',
             'percental',
             'value',
-            'taxconfig',
 
             //validations
             'customergroup',

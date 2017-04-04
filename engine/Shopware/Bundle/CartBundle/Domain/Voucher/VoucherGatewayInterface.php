@@ -24,12 +24,14 @@
 
 namespace Shopware\Bundle\CartBundle\Domain\Voucher;
 
+use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 interface VoucherGatewayInterface
 {
     public function get(
         array $codes,
+        CalculatedCart $calculatedCart,
         ShopContextInterface $context
     ): VoucherCollection;
 }
