@@ -252,6 +252,7 @@ There must be at least one option tag and inside each option tag where must be a
 * Added creation of `Shopware\Models\Attribute\OrderDetail` upon adding a new order position in the backend
 * Added missing creation of `Shopware\Models\Attribute\Order` and `Shopware\Models\Attribute\OrderDetail` instances in `sOrder::sCreateTemporaryOrder()`
 
+
 ## 5.2.7
 
 [View all changes from v5.2.6...v5.2.7](https://github.com/shopware/shopware/compare/v5.2.6...v5.2.7)

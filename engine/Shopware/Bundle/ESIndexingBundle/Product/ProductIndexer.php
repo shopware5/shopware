@@ -26,10 +26,10 @@ namespace Shopware\Bundle\ESIndexingBundle\Product;
 
 use Elasticsearch\Client;
 use Shopware\Bundle\ESIndexingBundle\Console\ProgressHelperInterface;
-use Shopware\Bundle\ESIndexingBundle\DataIndexerInterface;
+use Shopware\Bundle\ESIndexingBundle\ProductIndexerInterface;
 use Shopware\Bundle\ESIndexingBundle\Struct\ShopIndex;
 
-class ProductIndexer implements DataIndexerInterface
+class ProductIndexer implements ProductIndexerInterface
 {
     /**
      * @var Client
