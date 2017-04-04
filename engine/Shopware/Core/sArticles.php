@@ -1354,6 +1354,9 @@ class sArticles
      */
     public function sRound($moneyfloat = null)
     {
+        if (is_numeric($moneyfloat)) {
+            $moneyfloat = sprintf('%F', $moneyfloat);
+        }
         $money_str = explode(".", $moneyfloat);
         if (empty($money_str[1])) {
             $money_str[1] = 0;
