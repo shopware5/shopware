@@ -85,6 +85,7 @@ Ext.define('Shopware.apps.Order.view.detail.Shipping', {
             label:'{s name=address/salutation}Salutation{/s}',
         },
         country:'{s name=address/country}Country{/s}',
+        phone:'{s name=address/phone}Phone{/s}',
         state:'{s name=address/state}State{/s}',
         company:'{s name=address/company}Company{/s}',
         department:'{s name=address/department}Department{/s}',
@@ -214,6 +215,9 @@ Ext.define('Shopware.apps.Order.view.detail.Shipping', {
         }, {
             name:'shipping[department]',
             fieldLabel:me.snippets.department
+        }, {
+            name:'shipping[phone]',
+            fieldLabel:me.snippets.phone
         }];
     },
 
