@@ -69,7 +69,7 @@ class PaymentValidatorProcessor implements CartProcessorInterface
 
         $payment = $context->getPaymentMethod();
 
-        if (!$rule = $payment->getRiskManagementRule()) {
+        if (!$payment->getRiskManagementRule()) {
             return;
         }
 
