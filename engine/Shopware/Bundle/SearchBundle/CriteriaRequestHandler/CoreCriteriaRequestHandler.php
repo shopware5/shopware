@@ -340,12 +340,18 @@ class CoreCriteriaRequestHandler implements CriteriaRequestHandlerInterface
      */
     private function addLimit(Request $request, Criteria $criteria)
     {
+        $pageSizes = explode("|", $this->config->get('numberArticlesToShow'));
         $limit = (int) $request->getParam('sPerPage', $this->config->get('articlesPerPage'));
         $max = $this->config->get('maxStoreFrontLimit', null);
         if ($max) {
             $limit = min($limit, $max);
         }
         $limit = $limit >= 1 ? $limit: 1;
+
+        if (!in_array($limit, $pageSizes) && in_array($request->getControllerName(), ['listing', 'search']) && $request->getModuleName() == 'frontend') {
+            $limit = (int)$this->config->get('articlesPerPage');
+        }
+
         $criteria->limit($limit);
     }
 
