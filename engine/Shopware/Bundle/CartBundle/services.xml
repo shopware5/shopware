@@ -192,5 +192,7 @@
             <argument id="shopware_storefront.context_service" type="service"/>
         </service>
 
+        <service class="Shopware\Bundle\CartBundle\Infrastructure\Serializer" id="serializer"/>
+
     </services>
 </container>
