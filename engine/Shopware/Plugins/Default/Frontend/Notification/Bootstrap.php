@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+use Shopware\Models\Shop\Shop;
 
 /**
  * Shopware Notification Plugin
@@ -257,11 +258,14 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
      * @param Shopware_Components_Cron_CronJob $job
      * @return void
      */
-    public static function onRunCronJob(Shopware_Components_Cron_CronJob $job)
+    public function onRunCronJob(Shopware_Components_Cron_CronJob $job)
     {
         $sql = "SELECT * FROM `s_articles_notification` WHERE send = 0";
 
         $getNotifications = Shopware()->Db()->fetchAll($sql);
+
+        Shopware()->Models()->getRepository(Shop::class)->getActiveDefault()->registerResources();
+        $context = $this->get('shopware_storefront.context_service')->getShopContext();
 
         foreach ($getNotifications as $data) {
             $ordernumber = $data["ordernumber"];
@@ -276,15 +280,21 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
             $instock = $sArticle["instock"];
 
             $sql = "SELECT notification from s_articles WHERE ID = ?";
-
             $notificationActive = Shopware()->Db()->fetchOne($sql, array($sArticleID));
 
             if (intval($instock) > 0 && $notificationActive == true && !empty($sArticle["active"])) {
-                $context = array(
+                $article = $this->get('shopware_storefront.product_service')->get($ordernumber, $context);
+
+                if ($article) {
+                    $article = $this->get('legacy_struct_converter')->convertProductStruct($article);
+                }
+
+                $context = [
                     'sArticleLink' => $data["shopLink"] . "?sViewport=detail&sArticle=$sArticleID",
                     'sOrdernumber' => $ordernumber,
                     'sData' => $job["data"],
-                );
+                    'sArticle' => $article
+                ];
 
                 $mail = Shopware()->TemplateMail()->createMail('sARTICLEAVAILABLE', $context);
                 $mail->addTo($data["mail"]);
