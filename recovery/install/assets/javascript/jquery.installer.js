@@ -115,7 +115,8 @@
 ;(function ($, window, undefined) {
     "use strict";
 
-    var progressConfig = [
+    var backButtonBlocked = false,
+        progressConfig = [
         {
             requestUrl: 'importDatabase',
             counterText: shopwareTranslations.counterTextMigrations
@@ -131,6 +132,7 @@
                 $('#start-ajax, .counter-numbers').hide();
                 $(window).unbind('beforeunload');
                 refreshCounterText(2, shopwareTranslations.updateSuccess, false);
+                backButtonBlocked = false;
             }
         }
     ], counter = 1, configLen = progressConfig.length;
@@ -225,6 +227,13 @@
             startProgress(progressConfig);
             $('#start-ajax').prop('disabled', true);
             $('#back').addClass('disabled');
+            $('#back').on('click', function (event) {
+                if (backButtonBlocked) {
+                    event.preventDefault();
+                }
+            });
+            backButtonBlocked = true;
+
             $('#skip-import').hide();
 
             $('.counter-container').removeClass('is--hidden').next('.progress-text').addClass('is--hidden');
@@ -311,7 +320,11 @@
         }, 750);
     });
 
-    $('input[type=checkbox].toggle').on('change.toggle', function () {
+    $('input[type=checkbox].toggle, input[type=radio].toggle').on('change.toggle', function () {
         $($(this).attr('data-href')).toggleClass('is--hidden');
+    });
+
+    $('input[type=checkbox].removeElem, input[type=radio].removeElem').on('change.removeElem', function () {
+        $($(this).attr('data-href-remove')).remove();
     });
 })(jQuery);

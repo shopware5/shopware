@@ -99,9 +99,9 @@ function selectLanguage(array $allowedLanguages)
 
     if (isset($_REQUEST['language']) && in_array($_REQUEST['language'], $allowedLanguages)) {
         $selectedLanguage = $_REQUEST['language'];
-        unset($_SESSION['parameters']['c_config_shop_language']);
-        unset($_SESSION['parameters']['c_config_shop_currency']);
-        unset($_SESSION['parameters']['c_config_admin_language']);
+        unset($_SESSION['parameters']['c_config_shop_language'],
+            $_SESSION['parameters']['c_config_shop_currency'],
+            $_SESSION['parameters']['c_config_admin_language']);
         $_SESSION['language'] = $selectedLanguage;
 
         return $selectedLanguage;
@@ -332,7 +332,7 @@ $app->map('/database-import/', function () use ($app, $container, $menuHelper) {
     $app->render('database-import.php');
 })->name('database-import')->via('GET', 'POST');
 
-$app->map('/edition/', function () use ($app, $translations, $container, $menuHelper) {
+$app->map('/edition/', function () use ($app, $translations, $container, $menuHelper, $translationService) {
     $menuHelper->setCurrent('edition');
 
     try {
@@ -363,7 +363,7 @@ $app->map('/edition/', function () use ($app, $translations, $container, $menuHe
             );
 
             try {
-                $licenseInformation = $licenseUnpackService->evaluateLicense($unpackRequest);
+                $licenseInformation = $licenseUnpackService->evaluateLicense($unpackRequest, $translationService);
             } catch (\Exception $e) {
                 $app->view()->setData('error', $e->getMessage());
                 $app->render('/edition.php');
@@ -634,6 +634,7 @@ $app->map('/database-import/importSnippets', function () use ($app, $container) 
     ];
 
     $response->body(json_encode($data));
+
 })->via('GET', 'POST')->name('applySnippets');
 
 $app->post('/check-database-connection', function () use ($container, $app) {

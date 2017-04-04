@@ -46,6 +46,7 @@ return [
             'license',
             'database-configuration',
             'database-import',
+            'edition',
             'configuration',
             'finish',
         ],

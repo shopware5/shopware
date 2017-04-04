@@ -39,15 +39,15 @@ use Shopware\Recovery\Install\Struct\ShopwareEdition;
 class LocalLicenseUnpackService implements LicenseUnpackService
 {
     /**
-     * @param LicenseUnpackRequest $request
-     *
+     * @param  LicenseUnpackRequest $request
+     * @param  TranslationService $translation
      * @throws LicenseHostException
      * @throws LicenseProductKeyException
      * @throws LicenseInvalidException
      *
      * @return LicenseInformation
      */
-    public function evaluateLicense(LicenseUnpackRequest $request)
+    public function evaluateLicense(LicenseUnpackRequest $request, TranslationService $translation)
     {
         $license = $request->licenseKey;
         $host = $request->host;
@@ -59,15 +59,15 @@ class LocalLicenseUnpackService implements LicenseUnpackService
 
         $info = base64_decode($license);
         if ($info === false) {
-            throw new LicenseInvalidException('License key seems to be incorrect');
+            throw new LicenseInvalidException($translation->translate('license_incorrect'));
         }
         $info = @gzinflate($info);
         if ($info === false) {
-            throw new LicenseInvalidException('License key seems to be incorrect');
+            throw new LicenseInvalidException($translation->translate('license_incorrect'));
         }
 
         if (strlen($info) > (512 + 60) || strlen($info) < 100) {
-            throw new LicenseInvalidException('License key seems to be incorrect');
+            throw new LicenseInvalidException($translation->translate('license_incorrect'));
         }
 
         $hash = substr($info, 0, 20);
@@ -76,22 +76,22 @@ class LocalLicenseUnpackService implements LicenseUnpackService
         $info = substr($info, 60);
 
         if ($hash !== sha1($coreLicense . $info . $moduleLicense, true)) {
-            throw new LicenseInvalidException('License key seems to be incorrect');
+            throw new LicenseInvalidException($translation->translate('license_incorrect'));
         }
 
         $info = unserialize($info);
         if ($info === false) {
-            throw new LicenseInvalidException('License key seems to be incorrect');
+            throw new LicenseInvalidException($translation->translate('license_incorrect'));
         }
 
         $info['license'] = $license;
 
         if (!$this->isValidProductKey($info['product'])) {
-            throw new LicenseProductKeyException('License key does not match a commercial Shopware edition');
+            throw new LicenseProductKeyException($translation->translate('license_does_not_match'));
         }
 
-        if ($info['host'] != $host) {
-            throw new LicenseHostException(new LicenseInformation($info), 'License key is not valid for domain ' . $request->host);
+        if ($info['host'] !== $host) {
+            throw new LicenseHostException(new LicenseInformation($info), $translation->translate('license_domain_error') . $request->host);
         }
 
         $info += ['edition' => $info['product']];

@@ -32,6 +32,10 @@ return [
     'menuitem_finish' => 'Finish',
     'menuitem_license' => 'License agreement',
 
+    'license_incorrect'                => 'License key seems to be incorrect',
+    'license_does_not_match'           => 'License key does not match a commercial Shopware edition',
+    'license_domain_error'             => 'License key is not valid for domain: ',
+
     'version_text' => '<strong>Version:</strong>',
     'back' => 'Back',
     'forward' => 'Forward',
