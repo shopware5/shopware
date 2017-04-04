@@ -45,27 +45,6 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
     const ACTION_CART = 'cart';
     const ACTION_CONFIRM = 'confirm';
 
-    /**
-     * Reference to sAdmin object (core/class/sAdmin.php)
-     *
-     * @var sAdmin
-     */
-    protected $admin;
-
-    /**
-     * Reference to sBasket object (core/class/sBasket.php)
-     *
-     * @var sBasket
-     */
-    protected $basket;
-
-    /**
-     * Reference to Shopware session object (Shopware()->Session)
-     *
-     * @var Enlight_Components_Session_Namespace
-     */
-    protected $session;
-
     public function cartAction()
     {
         /** @var StoreFrontCartService $service */
@@ -274,63 +253,6 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
     }
 
     /**
-     * Init method that get called automatically
-     *
-     * Set class properties
-     */
-    public function init()
-    {
-        $this->admin = Shopware()->Modules()->Admin();
-        $this->basket = Shopware()->Modules()->Basket();
-        $this->session = Shopware()->Session();
-    }
-
-    /**
-     * Pre dispatch method
-     */
-    public function preDispatch()
-    {
-        $events = Shopware()->Container()->get('events');
-        $events->addListener('Shopware_Modules_Admin_Payment_Fallback', [$this, 'flagPaymentBlocked']);
-
-        $this->View()->setScope(Enlight_Template_Manager::SCOPE_PARENT);
-
-        $this->View()->sUserLoggedIn = $this->admin->sCheckUser();
-        $this->View()->sUserData = $this->getUserData();
-    }
-
-    /**
-     * Called if the sAdmin resets the selected customer payment to the shop preset
-     */
-    public function flagPaymentBlocked()
-    {
-        $this->View()->assign('paymentBlocked', true);
-    }
-
-    /**
-     * Save basket to session
-     */
-    public function postDispatch()
-    {
-        $this->session->sBasketCurrency = Shopware()->Shop()->getCurrency()->getId();
-        $this->session->sBasketQuantity = $this->basket->sCountBasket();
-        $amount = $this->basket->sGetAmount();
-        $this->session->sBasketAmount = empty($amount) ? 0 : array_shift($amount);
-    }
-
-    /**
-     * Forward to cart or confirm action depending on user state
-     */
-    public function indexAction()
-    {
-        if ($this->basket->sCountBasket() < 1 || empty($this->View()->sUserLoggedIn)) {
-            $this->forward('cart');
-        } else {
-            $this->forward('confirm');
-        }
-    }
-
-    /**
      * Called from confirmAction View
      * Customers requests to finish current order
      * Check if all conditions match and save order
@@ -524,53 +446,6 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
     }
 
     /**
-     * Add an article to cart directly from cart / confirm view
-     *
-     * @param sAdd = ordernumber
-     * @param sQuantity = quantity
-     */
-    public function addArticleAction()
-    {
-        $ordernumber = $this->Request()->getParam('sAdd');
-        $quantity = $this->Request()->getParam('sQuantity');
-        $articleID = Shopware()->Modules()->Articles()->sGetArticleIdByOrderNumber($ordernumber);
-
-        $this->View()->sBasketInfo = $this->getInstockInfo($ordernumber, $quantity);
-
-        if (!empty($articleID)) {
-            $insertID = $this->basket->sAddArticle($ordernumber, $quantity);
-            $this->View()->sArticleName = Shopware()->Modules()->Articles()->sGetArticleNameByOrderNumber($ordernumber);
-            if (!empty($insertID)) {
-                $basket = $this->getBasket();
-                foreach ($basket['content'] as $item) {
-                    if ($item['id'] == $insertID) {
-                        $this->View()->sArticle = $item;
-                        break;
-                    }
-                }
-            }
-
-            if (Shopware()->Config()->get('similarViewedShow', true)) {
-                $this->View()->sCrossSimilarShown = $this->getSimilarShown($articleID);
-            }
-
-            if (Shopware()->Config()->get('alsoBoughtShow', true)) {
-                $this->View()->sCrossBoughtToo = $this->getBoughtToo($articleID);
-            }
-        }
-
-        if ($this->Request()->getParam('isXHR') || !empty($this->Request()->callback)) {
-            $this->Request()->setParam('sTargetAction', 'ajax_add_article');
-        }
-
-        if ($this->Request()->getParam('sAddAccessories')) {
-            $this->forward('addAccessories');
-        } else {
-            $this->forward($this->Request()->getParam('sTargetAction', 'cart'));
-        }
-    }
-
-    /**
      * Add more then one article directly from cart / confirm view
      *
      * @param sAddAccessories = List of article order numbers separated by ;
@@ -584,37 +459,6 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         );
 
         $this->forward($this->Request()->getParam('sTargetAction', 'cart'));
-    }
-
-    /**
-     * Delete an article from cart -
-     *
-     * @param sDelete = id from s_basket identifying the product to delete
-     * Forward to cart / confirmation page after success
-     */
-    public function deleteArticleAction()
-    {
-        if ($this->Request()->getParam('sDelete')) {
-            $this->basket->sDeleteArticle($this->Request()->getParam('sDelete'));
-        }
-        $this->forward($this->Request()->getParam('sTargetAction', 'index'));
-    }
-
-    /**
-     * Add voucher to cart
-     *
-     * At failure view variable sVoucherError will give further information
-     * At success return to cart / confirm view
-     */
-    public function addVoucherAction()
-    {
-        if ($this->Request()->isPost()) {
-            $voucher = $this->basket->sAddVoucher($this->Request()->getParam('sVoucher'));
-            if (!empty($voucher['sErrorMessages'])) {
-                $this->View()->sVoucherError = $voucher['sErrorMessages'];
-            }
-        }
-        $this->forward($this->Request()->getParam('sTargetAction', 'index'));
     }
 
     /**
