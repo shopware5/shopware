@@ -50,7 +50,7 @@ class Shopware_Tests_Controllers_Widgets_AdvancedMenuTest extends Enlight_Compon
 
         //reset database and current context instance
         $connection->rollBack();
-        Shopware()->Container()->get('shopware_storefront.context_service')->initializeShopContext();
+        Shopware()->Container()->get('shopware_storefront.context_service')->refresh();
     }
 
     /**
@@ -90,8 +90,7 @@ class Shopware_Tests_Controllers_Widgets_AdvancedMenuTest extends Enlight_Compon
         ], [$mainCategoryId]);
 
         $context = Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext();
-        $category = Shopware()->Container()->get('shopware_storefront.category_service')->get($mainCategoryId,
-            $context);
-        $context->getShop()->setCategory($category);
+        $category = Shopware()->Container()->get('shopware_storefront.category_service')->getList([$mainCategoryId], $context);
+        $context->getShop()->setCategory(array_shift($category));
     }
 }

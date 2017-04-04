@@ -110,7 +110,7 @@ class Country extends Extendable implements \JsonSerializable
     protected $states;
 
     /**
-     * @var Area
+     * @var Area|null
      */
     protected $area;
 
@@ -362,12 +362,12 @@ class Country extends Extendable implements \JsonSerializable
         $this->active = $active;
     }
 
-    public function getArea(): Area
+    public function getArea(): ?Area
     {
         return $this->area;
     }
 
-    public function setArea(Area $area): void
+    public function setArea(?Area $area): void
     {
         $this->area = $area;
     }
