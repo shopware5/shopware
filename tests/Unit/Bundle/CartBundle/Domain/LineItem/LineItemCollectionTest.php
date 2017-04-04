@@ -24,10 +24,11 @@
 
 namespace Shopware\Tests\Unit\Bundle\CartBundle\Domain\LineItem;
 
+use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\CartBundle\Domain\LineItem\LineItem;
 use Shopware\Bundle\CartBundle\Domain\LineItem\LineItemCollection;
 
-class LineItemCollectionTest extends \PHPUnit_Framework_TestCase
+class LineItemCollectionTest extends TestCase
 {
     public function testCollectionIsCountable()
     {

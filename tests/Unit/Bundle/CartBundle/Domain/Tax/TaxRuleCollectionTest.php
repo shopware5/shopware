@@ -27,7 +27,7 @@ namespace Shopware\Tests\Unit\Bundle\CartBundle\Domain\Tax;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxRule;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCollection;
 
-class TaxRuleCollectionTest extends \PHPUnit_Framework_TestCase
+class TaxRuleCollectionTest extends \PHPUnit\Framework\TestCase
 {
     public function testCollectionIsCountable()
     {

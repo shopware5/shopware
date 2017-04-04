@@ -39,7 +39,7 @@ use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCalculator;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCollection;
 use Shopware\Tests\Unit\Bundle\CartBundle\Common\Generator;
 
-class PercentagePriceCalculatorTest extends \PHPUnit_Framework_TestCase
+class PercentagePriceCalculatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @dataProvider calculatePercentagePriceOfGrossPricesProvider

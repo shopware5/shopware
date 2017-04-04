@@ -39,7 +39,7 @@ use Shopware\Bundle\StoreFrontBundle\Gateway\Hydrator\TaxHydrator;
 use Shopware\Bundle\StoreFrontBundle\Struct\Customer\Group;
 use Shopware\Tests\Unit\Bundle\CartBundle\Common\Generator;
 
-class ProductPriceGatewayTest extends \PHPUnit_Framework_TestCase
+class ProductPriceGatewayTest extends \PHPUnit\Framework\TestCase
 {
     const QUERY_TO_UNLIMITED = 'beliebig';
 

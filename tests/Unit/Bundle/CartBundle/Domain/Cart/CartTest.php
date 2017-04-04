@@ -24,11 +24,12 @@
 
 namespace Shopware\Tests\Unit\Bundle\CartBundle\Domain\Cart;
 
+use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\CartBundle\Domain\Cart\CartContainer;
 use Shopware\Bundle\CartBundle\Domain\LineItem\LineItem;
 use Shopware\Bundle\CartBundle\Domain\Product\ProductProcessor;
 
-class CartTest extends \PHPUnit_Framework_TestCase
+class CartTest extends TestCase
 {
     /**
      * @dataProvider carts
