@@ -2017,14 +2017,14 @@ class sBasket
             }
         } else {
             if ($voucherDetails["taxconfig"] == "default" || empty($voucherDetails["taxconfig"])) {
-                $tax = round($voucherDetails["value"] / (100 + $this->config->get('sVOUCHERTAX')) * 100, 3) * -1;
+                $tax = $voucherDetails["value"] / (100 + $this->config->get('sVOUCHERTAX')) * 100 * -1;
                 $taxRate = $this->config->get('sVOUCHERTAX');
                 // Pre 3.5.4 behaviour
             } elseif ($voucherDetails["taxconfig"] == "auto") {
                 // Check max. used tax-rate from basket
                 $tax = $this->getMaxTax();
                 $taxRate = $tax;
-                $tax = round($voucherDetails["value"] / (100 + $tax) * 100, 3) * -1;
+                $tax = $voucherDetails["value"] / (100 + $tax) * 100 * -1;
             } elseif (intval($voucherDetails["taxconfig"])) {
                 // Fix defined tax
                 $temporaryTax = $voucherDetails["taxconfig"];
@@ -2033,7 +2033,7 @@ class sBasket
                     array($temporaryTax)
                 );
                 $taxRate = $getTaxRate;
-                $tax = round($voucherDetails["value"] / (100 + (intval($getTaxRate))) * 100, 3) * -1;
+                $tax = $voucherDetails["value"] / (100 + (intval($getTaxRate))) * 100 * -1;
             } else {
                 // No tax
                 $tax = $voucherDetails["value"] * -1;

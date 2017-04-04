@@ -782,6 +782,74 @@ class sBasketTest extends PHPUnit\Framework\TestCase
     }
 
     /**
+     * @covers sBasket::calculateVoucherValues
+     */
+    public function testsAddVoucherWithPercentageVoucher()
+    {
+        // Create percentage voucher
+        $voucherData = array(
+            'vouchercode' => 'testOne',
+            'description' => 'testOne description',
+            'numberofunits' => 1,
+            'value' => 10,
+            'minimumcharge' => 10,
+            'ordercode' => uniqid(rand()),
+            'modus' => 0,
+            'percental' => 1
+        );
+        $this->db->insert(
+            's_emarketing_vouchers',
+            $voucherData
+        );
+
+        // Setup session
+        $this->module->sSYSTEM->sSESSION_ID = uniqid(rand());
+        $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
+
+        // Add one article to the basket with specified value
+        $randomArticle = $this->db->fetchRow(
+            'SELECT * FROM s_articles_details detail
+            INNER JOIN s_articles article
+              ON article.id = detail.articleID
+            WHERE detail.active = 1
+            ORDER BY RAND() LIMIT 1'
+        );
+        $this->db->insert(
+            's_order_basket',
+            array(
+                'price' => 99.99,
+                'quantity' => 1,
+                'sessionID' => $this->session->get('sessionId'),
+                'ordernumber' => $randomArticle['ordernumber'],
+                'articleID' => $randomArticle['articleID'],
+            )
+        );
+
+        // Add voucher to basket
+        $this->assertTrue($this->module->sAddVoucher('testOne'));
+
+        // Retrieve voucher values from basket
+        $discount = $this->db->fetchRow(
+            'SELECT * FROM s_order_basket WHERE modus = 2 and sessionID = ?',
+            array($this->module->sSYSTEM->sSESSION_ID)
+        );
+
+        $this->assertEquals(-9.999, $discount['price'], '', 0.00001);
+        // Test that more than 3 decimal places are present for net prices
+        $this->assertEquals(-8.4025210084034, $discount['netprice'], '', 0.00001);
+
+        // Housekeeping
+        $this->db->delete(
+            's_order_basket',
+            array('sessionID = ?' => $this->session->get('sessionId'))
+        );
+        $this->db->delete(
+            's_emarketing_vouchers',
+            array('vouchercode = ?' => 'testOne')
+        );
+    }
+
+    /**
      * @covers sBasket::sAddVoucher
      */
     public function testsAddVoucherWithLimitedVoucher()
