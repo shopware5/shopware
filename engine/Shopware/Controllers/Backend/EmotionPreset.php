@@ -226,9 +226,15 @@ class Shopware_Controllers_Backend_EmotionPreset extends Shopware_Controllers_Ba
             return $presets;
         }
 
-        $plugins = $pluginManager->getPlugins(
-            new PluginsByTechnicalNameRequest($this->getLocale(), Shopware::VERSION, $names)
-        );
+        try {
+            $plugins = $pluginManager->getPlugins(
+                new PluginsByTechnicalNameRequest($this->getLocale(), Shopware::VERSION, $names)
+            );
+        } catch (\Exception $e) {
+            // catch store exception and continue.
+            // Plugin store information is only used to display required plugins in plugin manager
+            $plugins = [];
+        }
 
         foreach ($presets as &$preset) {
             foreach ($preset['requiredPlugins'] as &$plugin) {
