@@ -874,4 +874,6 @@
             return exists;
         }
     });
+    
+    PluginsCollection.swFilterComponent.specialComponents = specialComponents;
 })(jQuery, window, document, undefined);
