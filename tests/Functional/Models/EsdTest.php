@@ -26,11 +26,20 @@ use Shopware\Models\Article\Esd;
 
 /**
  * @category  Shopware
- * @package   Shopware\Tests
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Tests_Models_EsdTest extends Enlight_Components_Test_TestCase
 {
+    /**
+     * @var array
+     */
+    public $testData = [
+        'file' => '../foobar.pdf',
+        'hasSerials' => true,
+        'notification' => true,
+        'maxdownloads' => 55,
+    ];
     /**
      * @var Shopware\Components\Model\ModelManager
      */
@@ -40,16 +49,6 @@ class Shopware_Tests_Models_EsdTest extends Enlight_Components_Test_TestCase
      * @var Shopware\Models\User\Repository
      */
     protected $repo;
-
-    /**
-     * @var array
-     */
-    public $testData = array(
-        'file'          => '../foobar.pdf',
-        'hasSerials'       => true,
-        'notification'  => true,
-        'maxdownloads'  => 55,
-    );
 
     /**
      * Sets up the fixture, for example, opens a network connection.
@@ -68,7 +67,7 @@ class Shopware_Tests_Models_EsdTest extends Enlight_Components_Test_TestCase
      */
     protected function tearDown()
     {
-        $esd = $this->repo->findOneBy(array('file' => '../foobar.pdf'));
+        $esd = $this->repo->findOneBy(['file' => '../foobar.pdf']);
 
         if (!empty($esd)) {
             $this->em->remove($esd);
@@ -115,7 +114,7 @@ class Shopware_Tests_Models_EsdTest extends Enlight_Components_Test_TestCase
     {
         $esd = new Esd();
 
-        $articleDetail = Shopware()->Models()->getRepository('Shopware\Models\Article\Detail')->findOneBy(array('active' => true));
+        $articleDetail = Shopware()->Models()->getRepository('Shopware\Models\Article\Detail')->findOneBy(['active' => true]);
         $esd->setArticleDetail($articleDetail);
 
         $esd->fromArray($this->testData);

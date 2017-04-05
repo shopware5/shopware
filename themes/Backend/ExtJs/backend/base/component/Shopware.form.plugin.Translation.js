@@ -34,6 +34,9 @@
  * for multiple form elements such as a textfield, a combo box or
  * a fancy TinyMCE form field.
  */
+
+//{block name="backend/base/component/form_plugin_translation"}
+
 Ext.define('Shopware.form.plugin.Translation',
 /** @lends Ext.AbstractPlugin# */
 {
@@ -282,7 +285,9 @@ Ext.define('Shopware.form.plugin.Translation',
                 config.xtype = field.xtype;
             }
             if (field.getValue()) {
-                config.emptyText = field.getValue();
+                if (config.xtype != 'tinymce') {
+                    config.emptyText = field.getValue();
+                }
             }
             result.push(config)
         });
@@ -330,3 +335,4 @@ Ext.define('Shopware.form.plugin.Translation',
         return type;
     }
 });
+//{/block}

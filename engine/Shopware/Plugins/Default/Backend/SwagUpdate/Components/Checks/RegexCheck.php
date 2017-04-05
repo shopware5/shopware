@@ -24,11 +24,12 @@
 
 namespace ShopwarePlugins\SwagUpdate\Components\Checks;
 
-use ShopwarePlugins\SwagUpdate\Components\CheckInterface;
 use Enlight_Components_Snippet_Namespace as SnippetNamespace;
+use ShopwarePlugins\SwagUpdate\Components\CheckInterface;
 
 /**
  * @category  Shopware
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
 class RegexCheck implements CheckInterface
@@ -68,7 +69,7 @@ class RegexCheck implements CheckInterface
      */
     public function check($requirement)
     {
-        $results = array();
+        $results = [];
         foreach ($requirement['value']['directories'] as $dir) {
             $result = $this->scanDirectoryForRegex(
                 Shopware()->DocPath($dir),
@@ -83,24 +84,24 @@ class RegexCheck implements CheckInterface
 
         if (empty($results)) {
             return null;
-        } else {
-            $files = array_keys($results);
+        }
+        $files = array_keys($results);
 
-            return array(
+        return [
                 'type' => self::CHECK_TYPE,
                 'errorLevel' => $requirement['level'],
                 'description' => $requirement['description'],
-                'message' => sprintf($message, implode('<br>', $files))
-            );
-        }
+                'message' => sprintf($message, implode('<br>', $files)),
+            ];
     }
 
     /**
      * Search for a given string
      *
-     * @param  string $path
-     * @param  string $regex
-     * @param  string $regexFile
+     * @param string $path
+     * @param string $regex
+     * @param string $regexFile
+     *
      * @return array
      */
     private function scanDirectoryForRegex($path, $regex, $regexFile = null)
@@ -110,7 +111,7 @@ class RegexCheck implements CheckInterface
         // get a flat iterator
         $iterator = new \RecursiveIteratorIterator($directoryIterator);
 
-        $results = array();
+        $results = [];
 
         // Allow files to be filtered out by name
         if (isset($regexFile) && !empty($regexFile)) {
@@ -142,6 +143,7 @@ class RegexCheck implements CheckInterface
      *
      * @param $file
      * @param $regex
+     *
      * @return bool
      */
     private function searchFileForRegex($file, $regex)
@@ -156,15 +158,16 @@ class RegexCheck implements CheckInterface
 
     /**
      * @param $messages
+     *
      * @return string
      */
     private function extractLocalizedMessage($messages)
     {
-        $languages = array(
+        $languages = [
             $this->userLang,
             'en',
             'de',
-        );
+        ];
 
         while ($language = array_shift($languages)) {
             if (isset($messages[$language])) {

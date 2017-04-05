@@ -32,7 +32,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * @category  Shopware
- * @package   Shopware\Components\Console\Commands
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class AnalyzeCommand extends ShopwareCommand
@@ -60,14 +60,14 @@ class AnalyzeCommand extends ShopwareCommand
         $query = $input->getArgument('query');
         $analyzer = $input->getArgument('analyzer');
 
-        $shop   = $this->container->get('shopware_storefront.shop_gateway_dbal')->get($shopId);
+        $shop = $this->container->get('shopware_storefront.shop_gateway_dbal')->get($shopId);
         $client = $this->container->get('shopware_elastic_search.client');
-        $index  = $this->container->get('shopware_elastic_search.index_factory')->createShopIndex($shop);
+        $index = $this->container->get('shopware_elastic_search.index_factory')->createShopIndex($shop);
 
         $analyzed = $client->indices()->analyze([
-            'index'    => $index->getName(),
+            'index' => $index->getName(),
             'analyzer' => $analyzer,
-            'text'     => $query,
+            'text' => $query,
         ]);
 
         $tokens = $analyzed['tokens'];

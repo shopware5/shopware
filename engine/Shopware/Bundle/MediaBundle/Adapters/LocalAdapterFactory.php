@@ -29,7 +29,7 @@ use League\Flysystem\Adapter\Local;
 class LocalAdapterFactory implements AdapterFactoryInterface
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function create(array $config)
     {
@@ -42,7 +42,7 @@ class LocalAdapterFactory implements AdapterFactoryInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getType()
     {

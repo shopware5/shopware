@@ -26,13 +26,16 @@ namespace Shopware\Commands;
 
 use Doctrine\ORM\AbstractQuery;
 use Shopware\Components\CacheManager;
-use Symfony\Component\Console\Command\Command;
+use Shopware\Components\Theme\Compiler;
+use Shopware\Models\Shop\Repository;
+use Shopware\Models\Shop\Shop;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * @category  Shopware
- * @package   Shopware\Components\Console\Command
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ThemeCacheGenerateCommand extends ShopwareCommand
@@ -44,6 +47,7 @@ class ThemeCacheGenerateCommand extends ShopwareCommand
     {
         $this
             ->setName('sw:theme:cache:generate')
+            ->addOption('shopId', null, InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY, 'The Id of the shop')
             ->setDescription('Generates theme caches.')
         ;
     }
@@ -53,23 +57,30 @@ class ThemeCacheGenerateCommand extends ShopwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $repository = $this->container->get('models')->getRepository('Shopware\Models\Shop\Shop');
+        /** @var Repository $repository */
+        $repository = $this->container->get('models')->getRepository(Shop::class);
 
-        $query = $repository->getShopsWithThemes();
+        $shopIds = $input->getOption('shopId');
 
-        $shops = $query->getResult(
-            AbstractQuery::HYDRATE_OBJECT
-        );
+        /** @var Shop[] $shopsWithThemes */
+        $shopsWithThemes = $repository->getShopsWithThemes()->getResult(AbstractQuery::HYDRATE_OBJECT);
 
-        if (empty($shops)) {
+        if (!empty($shopIds)) {
+            $shopsWithThemes = array_filter($shopsWithThemes, function (Shop $shop) use ($shopIds) {
+                return in_array($shop->getId(), $shopIds);
+            });
+        }
+
+        if (empty($shopsWithThemes)) {
             $output->writeln('No theme shops found');
+
             return;
         }
 
-        /** @var $compiler \Shopware\Components\Theme\Compiler */
+        /** @var $compiler Compiler */
         $compiler = $this->container->get('theme_compiler');
 
-        foreach ($shops as $shop) {
+        foreach ($shopsWithThemes as $shop) {
             $output->writeln(sprintf('Generating theme cache for shop "%s" ...', $shop->getName()));
             $compiler->compile($shop);
         }

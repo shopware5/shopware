@@ -54,7 +54,8 @@ class MenuSynchronizer
 
     /**
      * @param Plugin $plugin
-     * @param array $menu
+     * @param array  $menu
+     *
      * @throws \InvalidArgumentException
      */
     public function synchronize(Plugin $plugin, array $menu)
@@ -87,8 +88,9 @@ class MenuSynchronizer
     }
 
     /**
-     * @param array $labels
+     * @param array  $labels
      * @param string $name
+     *
      * @throws \Exception
      */
     private function saveMenuTranslation(array $labels, $name)
@@ -110,11 +112,13 @@ class MenuSynchronizer
     }
 
     /**
-     * @param Plugin $plugin
+     * @param Plugin    $plugin
      * @param Menu|null $parent
-     * @param array $menuItem
-     * @return Menu
+     * @param array     $menuItem
+     *
      * @throws \RuntimeException
+     *
+     * @return Menu
      */
     private function createMenuItem(Plugin $plugin, Menu $parent = null, array $menuItem)
     {
@@ -179,7 +183,7 @@ class MenuSynchronizer
     }
 
     /**
-     * @param int $pluginId
+     * @param int   $pluginId
      * @param array $menuNames
      */
     private function removeNotExistingEntries($pluginId, array $menuNames)

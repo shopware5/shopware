@@ -41,35 +41,36 @@ class EmailValidatorTest extends TestCase
 
     public function getValidEmails()
     {
-        return array(
+        return [
             // old domains
-            array('test@example.de'),
-            array('test@example.com'),
-            array('test@example.org'),
+            ['test@example.de'],
+            ['test@example.com'],
+            ['test@example.org'],
 
             // new released domains
-            array('test@example.berlin'),
-            array('test@example.email'),
-            array('test@example.systems'),
+            ['test@example.berlin'],
+            ['test@example.email'],
+            ['test@example.systems'],
 
             // new non released domains
-            array('test@example.active'),
-            array('test@example.love'),
-            array('test@example.video'),
-            array('test@example.app'),
-            array('test@example.shop'),
+            ['test@example.active'],
+            ['test@example.love'],
+            ['test@example.video'],
+            ['test@example.app'],
+            ['test@example.shop'],
 
-            array('disposable.style.email.with+symbol@example.com'),
-            array('other.email-with-dash@example.com'),
+            ['disposable.style.email.with+symbol@example.com'],
+            ['other.email-with-dash@example.com'],
 
             // We will ignore quoted string local parts
             // this would blow up the simple regex method
             // array('"much.more unusual"@example.com'),
-        );
+        ];
     }
 
     /**
      * @dataProvider getValidEmails
+     *
      * @param string $email
      */
     public function testValidEmails($email)
@@ -79,21 +80,22 @@ class EmailValidatorTest extends TestCase
 
     public function getinvalidEmails()
     {
-        return array(
-            array('test'),
-            array('test@.de'),
-            array('@example'),
-            array('@example.de'),
-            array('@.'),
-            array(' @foo.de'),
-            array('@foo.'),
-            array('foo@ .de'),
-            array('foo@bar. '),
-        );
+        return [
+            ['test'],
+            ['test@.de'],
+            ['@example'],
+            ['@example.de'],
+            ['@.'],
+            [' @foo.de'],
+            ['@foo.'],
+            ['foo@ .de'],
+            ['foo@bar. '],
+        ];
     }
 
     /**
      * @dataProvider getInvalidEmails
+     *
      * @param string $email
      */
     public function testInvalidEmails($email)

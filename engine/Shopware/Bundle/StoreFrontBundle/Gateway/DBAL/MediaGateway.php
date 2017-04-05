@@ -25,12 +25,12 @@
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Bundle\StoreFrontBundle\Struct;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
+use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\StoreFrontBundle\Gateway\DBAL
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class MediaGateway implements Gateway\MediaGatewayInterface
@@ -51,8 +51,8 @@ class MediaGateway implements Gateway\MediaGatewayInterface
     private $hydrator;
 
     /**
-     * @param Connection $connection
-     * @param FieldHelper $fieldHelper
+     * @param Connection             $connection
+     * @param FieldHelper            $fieldHelper
      * @param Hydrator\MediaHydrator $hydrator
      */
     public function __construct(
@@ -66,7 +66,7 @@ class MediaGateway implements Gateway\MediaGatewayInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function get($id, Struct\ShopContextInterface $context)
     {
@@ -76,7 +76,7 @@ class MediaGateway implements Gateway\MediaGatewayInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getList($ids, Struct\ShopContextInterface $context)
     {
@@ -84,7 +84,7 @@ class MediaGateway implements Gateway\MediaGatewayInterface
 
         $query->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
 
-        /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
+        /** @var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
 
         $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
@@ -100,6 +100,7 @@ class MediaGateway implements Gateway\MediaGatewayInterface
 
     /**
      * @param Struct\ShopContextInterface $context
+     *
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
     private function getQuery(Struct\ShopContextInterface $context)

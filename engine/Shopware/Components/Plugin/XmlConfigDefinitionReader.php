@@ -30,15 +30,17 @@ class XmlConfigDefinitionReader
 {
     /**
      * @param $file string
-     * @return array
+     *
      * @throws \Exception
+     *
+     * @return array
      */
     public function read($file)
     {
         try {
-            $dom = XmlUtils::loadFile($file, __DIR__.'/schema/config.xsd');
+            $dom = XmlUtils::loadFile($file, __DIR__ . '/schema/config.xsd');
         } catch (\Exception $e) {
-            throw new \InvalidArgumentException(sprintf('Unable to parse file "%s".', $file), $e->getCode(), $e);
+            throw new \InvalidArgumentException(sprintf('Unable to parse file "%s". Message: %s', $file, $e->getMessage()), $e->getCode(), $e);
         }
 
         return $this->parseForm($dom);
@@ -46,6 +48,7 @@ class XmlConfigDefinitionReader
 
     /**
      * @param \DOMDocument $xml
+     *
      * @return array
      */
     private function parseForm(\DOMDocument $xml)
@@ -70,7 +73,7 @@ class XmlConfigDefinitionReader
 
         $elements = [];
 
-        /** @var \DOMElement $entry */
+        /* @var \DOMElement $entry */
         foreach ($elemements as $elemement) {
             $elements[] = $this->parseElement($elemement);
         }
@@ -90,7 +93,7 @@ class XmlConfigDefinitionReader
      */
     private function getChildren(\DOMNode $node, $name)
     {
-        $children = array();
+        $children = [];
         foreach ($node->childNodes as $child) {
             if ($child instanceof \DOMElement && $child->localName === $name) {
                 $children[] = $child;
@@ -102,6 +105,7 @@ class XmlConfigDefinitionReader
 
     /**
      * @param \DOMElement $entry
+     *
      * @return array
      */
     private function parseElement(\DOMElement $entry)
@@ -167,7 +171,9 @@ class XmlConfigDefinitionReader
 
     /**
      * Reformats the xml store option nodes to a translatable array
+     *
      * @param \DOMElement[] $options
+     *
      * @return array[]
      */
     private function extractStoreData($options)
@@ -185,6 +191,7 @@ class XmlConfigDefinitionReader
                 }
                 $labels[$lang] = $label->nodeValue;
             }
+
             return [$value, $labels];
         }, $options);
     }

@@ -26,7 +26,7 @@ namespace Shopware\Recovery\Install\Service;
 
 /**
  * @category  Shopware
- * @package   Shopware\Recovery\Install\Service
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class DatabaseService
@@ -51,7 +51,7 @@ class DatabaseService
     {
         $this->connection->exec(
             sprintf(
-                "CREATE DATABASE IF NOT EXISTS `%s` CHARACTER SET utf8 COLLATE utf8_unicode_ci;",
+                'CREATE DATABASE IF NOT EXISTS `%s` CHARACTER SET utf8 COLLATE utf8_unicode_ci;',
                 $databaseName
             )
         );
@@ -70,7 +70,7 @@ class DatabaseService
      */
     public function getTableCount()
     {
-        $tables = $this->connection->query("SHOW TABLES")->fetchAll();
+        $tables = $this->connection->query('SHOW TABLES')->fetchAll();
 
         return count($tables);
     }
@@ -80,7 +80,7 @@ class DatabaseService
      */
     public function getAvailableDatabaseNames()
     {
-        $stmt = $this->connection->query("SHOW DATABASES");
+        $stmt = $this->connection->query('SHOW DATABASES');
         $ignore = ['information_schema', 'performance_schema'];
         $names = [];
         while ($name = $stmt->fetchColumn(0)) {

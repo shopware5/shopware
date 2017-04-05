@@ -57,7 +57,7 @@ class PostWrapperTest extends TestCase
         $this->system->_POST->offsetSet('foo', null);
         $this->assertNull($this->request->getPost('bar'));
 
-        $this->system->_POST->offsetSet('foo', array());
+        $this->system->_POST->offsetSet('foo', []);
         $this->assertEmpty($this->request->getPost('bar'));
         $this->assertInternalType('array', $this->request->getPost('foo'));
     }
@@ -70,7 +70,7 @@ class PostWrapperTest extends TestCase
         $this->request->setPost('foo', null);
         $this->assertNull($this->system->_POST->offsetGet('bar'));
 
-        $this->request->setPost('foo', array());
+        $this->request->setPost('foo', []);
         $this->assertEmpty($this->system->_POST->offsetGet('bar'));
         $this->assertInternalType('array', $this->system->_POST->offsetGet('foo'));
     }
@@ -88,7 +88,7 @@ class PostWrapperTest extends TestCase
         $this->system->_POST->offsetSet('foo', 'bar');
         $this->assertEquals('bar', $this->request->getPost('foo'));
 
-        $this->system->_POST = array('foo' => 'too');
+        $this->system->_POST = ['foo' => 'too'];
         $this->assertNull($this->request->getPost('bar'));
         $this->assertEquals('too', $this->request->getPost('foo'));
     }
@@ -96,6 +96,6 @@ class PostWrapperTest extends TestCase
     public function testToArray()
     {
         $this->request->setPost('foo', 'bar');
-        $this->assertEquals(array('foo' => 'bar'), $this->system->_POST->toArray());
+        $this->assertEquals(['foo' => 'bar'], $this->system->_POST->toArray());
     }
 }

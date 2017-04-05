@@ -26,7 +26,6 @@ namespace Shopware\Bundle\PluginInstallerBundle\Struct;
 
 /**
  * Class ProducerStruct
- * @package Shopware\Bundle\PluginInstallerBundle\Struct
  */
 class ProducerStruct implements \JsonSerializable
 {
@@ -157,7 +156,7 @@ class ProducerStruct implements \JsonSerializable
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function jsonSerialize()
     {

@@ -32,17 +32,17 @@ use Shopware\Components\Plugin\Context\DeactivateContext;
 use Shopware\Components\Plugin\Context\InstallContext;
 use Shopware\Components\Plugin\Context\UninstallContext;
 use Shopware\Components\Plugin\Context\UpdateContext;
+use Shopware\Components\Plugin\CronjobSynchronizer;
+use Shopware\Components\Plugin\FormSynchronizer;
+use Shopware\Components\Plugin\MenuSynchronizer;
 use Shopware\Components\Plugin\RequirementValidator;
+use Shopware\Components\Plugin\XmlConfigDefinitionReader;
+use Shopware\Components\Plugin\XmlCronjobReader;
+use Shopware\Components\Plugin\XmlMenuReader;
+use Shopware\Components\Plugin\XmlPluginInfoReader;
 use Shopware\Components\Snippet\DatabaseHandler;
 use Shopware\Kernel;
 use Shopware\Models\Plugin\Plugin;
-use Shopware\Components\Plugin\FormSynchronizer;
-use Shopware\Components\Plugin\MenuSynchronizer;
-use Shopware\Components\Plugin\CronjobSynchronizer;
-use Shopware\Components\Plugin\XmlMenuReader;
-use Shopware\Components\Plugin\XmlConfigDefinitionReader;
-use Shopware\Components\Plugin\XmlPluginInfoReader;
-use Shopware\Components\Plugin\XmlCronjobReader;
 
 class PluginInstaller
 {
@@ -74,34 +74,36 @@ class PluginInstaller
     /**
      * @var string
      */
-    private $rootDirectory;
+    private $pluginDirectory;
 
     /**
-     * @param ModelManager $em
-     * @param DatabaseHandler $snippetHandler
+     * @param ModelManager         $em
+     * @param DatabaseHandler      $snippetHandler
      * @param RequirementValidator $requirementValidator
-     * @param \PDO $pdo
-     * @param $rootDirectory
+     * @param \PDO                 $pdo
+     * @param $pluginDirectory
      */
     public function __construct(
         ModelManager $em,
         DatabaseHandler $snippetHandler,
         RequirementValidator $requirementValidator,
         \PDO $pdo,
-        $rootDirectory
+        $pluginDirectory
     ) {
         $this->em = $em;
         $this->connection = $this->em->getConnection();
         $this->snippetHandler = $snippetHandler;
         $this->requirementValidator = $requirementValidator;
         $this->pdo = $pdo;
-        $this->rootDirectory = $rootDirectory;
+        $this->pluginDirectory = $pluginDirectory;
     }
 
     /**
      * @param Plugin $plugin
-     * @return InstallContext
+     *
      * @throws \Exception
+     *
+     * @return InstallContext
      */
     public function installPlugin(Plugin $plugin)
     {
@@ -110,7 +112,7 @@ class PluginInstaller
 
         $context = new InstallContext($plugin, \Shopware::VERSION, $plugin->getVersion());
 
-        $this->requirementValidator->validate($pluginBootstrap->getPath().'/plugin.xml', \Shopware::VERSION);
+        $this->requirementValidator->validate($pluginBootstrap->getPath() . '/plugin.xml', \Shopware::VERSION);
 
         $this->em->transactional(function ($em) use ($pluginBootstrap, $plugin, $context) {
             $this->installResources($pluginBootstrap, $plugin);
@@ -130,7 +132,8 @@ class PluginInstaller
 
     /**
      * @param Plugin $plugin
-     * @param bool $removeData
+     * @param bool   $removeData
+     *
      * @return UninstallContext
      */
     public function uninstallPlugin(Plugin $plugin, $removeData = true)
@@ -162,23 +165,16 @@ class PluginInstaller
     }
 
     /**
-     * @param PluginBootstrap $bootstrap
-     * @param boolean $removeDirty
-     */
-    private function removeSnippets(PluginBootstrap $bootstrap, $removeDirty)
-    {
-        $this->snippetHandler->removeFromDatabase($bootstrap->getPath() . '/Resources/snippets/', $removeDirty);
-    }
-
-    /**
      * @param Plugin $plugin
-     * @return UpdateContext
+     *
      * @throws \Exception
+     *
+     * @return UpdateContext
      */
     public function updatePlugin(Plugin $plugin)
     {
         $pluginBootstrap = $this->getPluginByName($plugin->getName());
-        $this->requirementValidator->validate($pluginBootstrap->getPath().'/plugin.xml', \Shopware::VERSION);
+        $this->requirementValidator->validate($pluginBootstrap->getPath() . '/plugin.xml', \Shopware::VERSION);
 
         $context = new UpdateContext(
             $plugin,
@@ -204,38 +200,8 @@ class PluginInstaller
     }
 
     /**
-     * @param PluginBootstrap $bootstrap
      * @param Plugin $plugin
-     */
-    private function installResources(PluginBootstrap $bootstrap, Plugin $plugin)
-    {
-        if (is_file($bootstrap->getPath().'/Resources/config.xml')) {
-            $this->installForm($plugin, $bootstrap->getPath().'/Resources/config.xml');
-        }
-
-        if (is_file($bootstrap->getPath().'/Resources/menu.xml')) {
-            $this->installMenu($plugin, $bootstrap->getPath().'/Resources/menu.xml');
-        }
-
-        if (is_file($bootstrap->getPath().'/Resources/cronjob.xml')) {
-            $this->installCronjob($plugin, $bootstrap->getPath().'/Resources/cronjob.xml');
-        }
-
-        if (file_exists($bootstrap->getPath() . '/Resources/snippets')) {
-            $this->installSnippets($bootstrap);
-        }
-    }
-
-    /**
-     * @param PluginBootstrap $bootstrap
-     */
-    private function installSnippets(PluginBootstrap $bootstrap)
-    {
-        $this->snippetHandler->loadToDatabase($bootstrap->getPath() . '/Resources/snippets/');
-    }
-
-    /**
-     * @param Plugin $plugin
+     *
      * @return ActivateContext
      */
     public function activatePlugin(Plugin $plugin)
@@ -253,6 +219,7 @@ class PluginInstaller
 
     /**
      * @param Plugin $plugin
+     *
      * @return DeactivateContext
      */
     public function deactivatePlugin(Plugin $plugin)
@@ -274,12 +241,12 @@ class PluginInstaller
     {
         $initializer = new PluginInitializer(
             $this->pdo,
-            $this->rootDirectory . '/custom/plugins'
+            $this->pluginDirectory
         );
         $plugins = $initializer->initializePlugins();
 
         foreach ($plugins as $plugin) {
-            $pluginInfoPath = $plugin->getPath().'/plugin.xml';
+            $pluginInfoPath = $plugin->getPath() . '/plugin.xml';
             if (is_file($pluginInfoPath)) {
                 $xmlConfigReader = new XmlPluginInfoReader();
                 $info = $xmlConfigReader->read($pluginInfoPath);
@@ -292,18 +259,23 @@ class PluginInstaller
                 [$plugin->getName()]
             );
 
-            $description = '';
-            if (isset($info['description'])) {
-                foreach ($info['description'] as $locale => $string) {
-                    $description .= sprintf('<div lang="%s">%s</div>', $locale, $string);
+            $translations = [];
+            $translatableInfoKeys = ['label', 'description'];
+            foreach ($info as $key => $value) {
+                if (!in_array($key, $translatableInfoKeys, true)) {
+                    continue;
+                }
+
+                foreach ($value as $lang => $translation) {
+                    $translations[$lang][$key] = $translation;
                 }
             }
 
-            $info['description'] = $description;
+            $info['label'] = isset($info['label']['en']) ? $info['label']['en'] : $plugin->getName();
+            $info['description'] = isset($info['description']['en']) ? $info['description']['en'] : null;
             $info['version'] = isset($info['version']) ? $info['version'] : '0.0.1';
             $info['author'] = isset($info['author']) ? $info['author'] : null;
             $info['link'] = isset($info['link']) ? $info['link'] : null;
-            $info['label'] = isset($info['label']) && isset($info['label']['en']) ? $info['label']['en'] : $plugin->getName();
 
             $data = [
                 'namespace' => 'ShopwarePlugins',
@@ -317,12 +289,13 @@ class PluginInstaller
                 'capability_install' => true,
                 'capability_enable' => true,
                 'capability_secure_uninstall' => true,
-                'refresh_date' => $refreshDate
+                'refresh_date' => $refreshDate,
+                'translations' => $translations ? json_encode($translations) : null,
             ];
 
             if ($currentPluginInfo) {
                 if ($this->hasInfoNewerVersion($info['version'], $currentPluginInfo['version'])) {
-                    $data['version']        = $currentPluginInfo['version'];
+                    $data['version'] = $currentPluginInfo['version'];
                     $data['update_version'] = $info['version'];
                 }
 
@@ -338,12 +311,65 @@ class PluginInstaller
                     's_core_plugins',
                     $data,
                     [
-                        'added'        => 'datetime',
+                        'added' => 'datetime',
                         'refresh_date' => 'datetime',
                     ]
                 );
             }
         }
+    }
+
+    /**
+     * @param Plugin $plugin
+     *
+     * @return string
+     */
+    public function getPluginPath(Plugin $plugin)
+    {
+        /** @var Kernel $kernel */
+        $pluginBootstrap = $this->getPluginByName($plugin->getName());
+
+        return $pluginBootstrap->getPath();
+    }
+
+    /**
+     * @param PluginBootstrap $bootstrap
+     * @param bool            $removeDirty
+     */
+    private function removeSnippets(PluginBootstrap $bootstrap, $removeDirty)
+    {
+        $this->snippetHandler->removeFromDatabase($bootstrap->getPath() . '/Resources/snippets/', $removeDirty);
+    }
+
+    /**
+     * @param PluginBootstrap $bootstrap
+     * @param Plugin          $plugin
+     */
+    private function installResources(PluginBootstrap $bootstrap, Plugin $plugin)
+    {
+        if (is_file($bootstrap->getPath() . '/Resources/config.xml')) {
+            $this->installForm($plugin, $bootstrap->getPath() . '/Resources/config.xml');
+        }
+
+        if (is_file($bootstrap->getPath() . '/Resources/menu.xml')) {
+            $this->installMenu($plugin, $bootstrap->getPath() . '/Resources/menu.xml');
+        }
+
+        if (is_file($bootstrap->getPath() . '/Resources/cronjob.xml')) {
+            $this->installCronjob($plugin, $bootstrap->getPath() . '/Resources/cronjob.xml');
+        }
+
+        if (file_exists($bootstrap->getPath() . '/Resources/snippets')) {
+            $this->installSnippets($bootstrap);
+        }
+    }
+
+    /**
+     * @param PluginBootstrap $bootstrap
+     */
+    private function installSnippets(PluginBootstrap $bootstrap)
+    {
+        $this->snippetHandler->loadToDatabase($bootstrap->getPath() . '/Resources/snippets/');
     }
 
     /**
@@ -388,7 +414,8 @@ class PluginInstaller
     /**
      * @param string $updateVersion
      * @param string $currentVersion
-     * @return boolean
+     *
+     * @return bool
      */
     private function hasInfoNewerVersion($updateVersion, $currentVersion)
     {
@@ -396,19 +423,8 @@ class PluginInstaller
     }
 
     /**
-     * @param Plugin $plugin
-     * @return string
-     */
-    public function getPluginPath(Plugin $plugin)
-    {
-        /** @var Kernel $kernel */
-        $pluginBootstrap = $this->getPluginByName($plugin->getName());
-
-        return $pluginBootstrap->getPath();
-    }
-
-    /**
      * @param string $pluginName
+     *
      * @return PluginBootstrap
      */
     private function getPluginByName($pluginName)
@@ -430,21 +446,21 @@ class PluginInstaller
     private function removeEmotionComponents($pluginId)
     {
         // Remove emotion-components
-        $sql = "DELETE s_emotion_element_value, s_emotion_element
+        $sql = 'DELETE s_emotion_element_value, s_emotion_element
                 FROM s_emotion_element_value
                 RIGHT JOIN s_emotion_element
                     ON s_emotion_element.id = s_emotion_element_value.elementID
                 INNER JOIN s_library_component
                     ON s_library_component.id = s_emotion_element.componentID
-                    AND s_library_component.pluginID = :pluginId";
+                    AND s_library_component.pluginID = :pluginId';
 
         $this->connection->executeUpdate($sql, [':pluginId' => $pluginId]);
 
-        $sql = "DELETE s_library_component_field, s_library_component
+        $sql = 'DELETE s_library_component_field, s_library_component
                 FROM s_library_component_field
                 INNER JOIN s_library_component
                     ON s_library_component.id = s_library_component_field.componentID
-                    AND s_library_component.pluginID = :pluginId";
+                    AND s_library_component.pluginID = :pluginId';
 
         $this->connection->executeUpdate($sql, [':pluginId' => $pluginId]);
     }
@@ -468,6 +484,7 @@ SQL;
 
     /**
      * @param int $pluginId
+     *
      * @throws \Doctrine\DBAL\DBALException
      */
     private function removeTemplates($pluginId)
@@ -478,6 +495,7 @@ SQL;
 
     /**
      * @param int $pluginId
+     *
      * @throws \Doctrine\DBAL\DBALException
      */
     private function removeMenuEntries($pluginId)
@@ -488,6 +506,7 @@ SQL;
 
     /**
      * @param int $pluginId
+     *
      * @throws \Doctrine\DBAL\DBALException
      */
     private function removeCrontabEntries($pluginId)
@@ -498,6 +517,7 @@ SQL;
 
     /**
      * @param int $pluginId
+     *
      * @throws \Doctrine\DBAL\DBALException
      */
     private function removeEventSubscribers($pluginId)

@@ -24,9 +24,9 @@
 
 namespace Shopware\Bundle\AccountBundle\Form\Account;
 
+use Shopware\Bundle\AccountBundle\Constraint\CurrentPassword;
 use Shopware\Bundle\AccountBundle\Constraint\Password;
 use Shopware\Models\Attribute\Customer as CustomerAttribute;
-use Shopware\Bundle\AccountBundle\Constraint\CurrentPassword;
 use Shopware\Models\Customer\Customer;
 use Shopware_Components_Config;
 use Symfony\Component\Form\AbstractType;
@@ -59,38 +59,38 @@ class PasswordUpdateFormType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Customer::class,
-            'allow_extra_fields' => true
+            'allow_extra_fields' => true,
         ]);
     }
 
     /**
      * @param FormBuilderInterface $builder
-     * @param array $options
+     * @param array                $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         if ($this->config->get('accountPasswordCheck')) {
             $builder->add('currentPassword', PasswordType::class, [
                 'mapped' => false,
-                'constraints' => [new CurrentPassword()]
+                'constraints' => [new CurrentPassword()],
             ]);
         }
 
         $builder->add('password', PasswordType::class, [
-            'constraints' => [new Password()]
+            'constraints' => [new Password()],
         ]);
 
         $builder->add('passwordConfirmation', PasswordType::class, [
-            'mapped' => false
+            'mapped' => false,
         ]);
 
         $builder->add('attribute', AttributeFormType::class, [
-            'data_class' => CustomerAttribute::class
+            'data_class' => CustomerAttribute::class,
         ]);
 
         $builder->add('additional', null, [
             'compound' => true,
-            'allow_extra_fields' => true
+            'allow_extra_fields' => true,
         ]);
     }
 

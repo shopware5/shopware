@@ -25,9 +25,6 @@
 namespace Shopware\Models\Tax;
 
 use Shopware\Components\Model\ModelRepository;
-use Doctrine\ORM\Query\Expr;
-use Doctrine\ORM\Query;
-use Shopware\Components\Model\Query\SqlWalker;
 
 /**
  * This class gathers all categories with there id, description, position, parent category id and the number
@@ -44,23 +41,25 @@ use Shopware\Components\Model\Query\SqlWalker;
  *  - s_core_tax_rules
  *
  * @category  Shopware
- * @package   Shopware\Models\Tax
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Repository extends ModelRepository
 {
     /**
      * Get the correct tax-rate
-     * @param integer $taxId
-     * @param integer $areaId
-     * @param integer $countryId
-     * @param integer $stateId
-     * @param integer $customerGroupId
+     *
+     * @param int $taxId
+     * @param int $areaId
+     * @param int $countryId
+     * @param int $stateId
+     * @param int $customerGroupId
+     *
      * @return mixed|string
      */
     public function getTaxRateByConditions($taxId, $areaId, $countryId, $stateId, $customerGroupId)
     {
-        $sql = "
+        $sql = '
         SELECT id, tax FROM s_core_tax_rules WHERE
             active = 1 AND groupID = :taxId
         AND
@@ -73,21 +72,21 @@ class Repository extends ModelRepository
             (customer_groupID = :customerGroupId OR customer_groupID = 0 OR customer_groupID IS NULL)
         ORDER BY customer_groupID DESC, areaID DESC, countryID DESC, stateID DESC
         LIMIT 1
-        ";
+        ';
 
-        $parameters = array(
+        $parameters = [
             'taxId' => $taxId,
             'areaId' => $areaId,
             'countryId' => $countryId,
             'stateId' => $stateId,
-            'customerGroupId' => $customerGroupId
-        );
+            'customerGroupId' => $customerGroupId,
+        ];
 
         $dbalConnection = $this->getEntityManager()->getConnection();
         $taxRate = $dbalConnection->fetchAssoc($sql, $parameters);
 
         if (empty($taxRate['id'])) {
-            $taxRate = $dbalConnection->fetchAssoc("SELECT tax FROM s_core_tax WHERE id = ?", array($taxId));
+            $taxRate = $dbalConnection->fetchAssoc('SELECT tax FROM s_core_tax WHERE id = ?', [$taxId]);
         }
 
         return $taxRate['tax'];

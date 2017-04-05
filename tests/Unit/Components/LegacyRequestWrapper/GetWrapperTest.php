@@ -57,7 +57,7 @@ class GetWrapperTest extends TestCase
         $this->system->_GET->offsetSet('foo', null);
         $this->assertNull($this->request->getQuery('bar'));
 
-        $this->system->_GET->offsetSet('foo', array());
+        $this->system->_GET->offsetSet('foo', []);
         $this->assertEmpty($this->request->getQuery('bar'));
         $this->assertInternalType('array', $this->request->getQuery('foo'));
     }
@@ -70,7 +70,7 @@ class GetWrapperTest extends TestCase
         $this->request->setQuery('foo', null);
         $this->assertNull($this->system->_GET->offsetGet('bar'));
 
-        $this->request->setQuery('foo', array());
+        $this->request->setQuery('foo', []);
         $this->assertEmpty($this->system->_GET->offsetGet('bar'));
         $this->assertInternalType('array', $this->system->_GET->offsetGet('foo'));
     }
@@ -88,7 +88,7 @@ class GetWrapperTest extends TestCase
         $this->system->_GET->offsetSet('foo', 'bar');
         $this->assertEquals('bar', $this->request->getQuery('foo'));
 
-        $this->system->_GET = array('foo' => 'too');
+        $this->system->_GET = ['foo' => 'too'];
         $this->assertNull($this->request->getQuery('bar'));
         $this->assertEquals('too', $this->request->getQuery('foo'));
     }
@@ -96,6 +96,6 @@ class GetWrapperTest extends TestCase
     public function testToArray()
     {
         $this->request->setQuery('foo', 'bar');
-        $this->assertEquals(array('foo' => 'bar'), $this->system->_GET->toArray());
+        $this->assertEquals(['foo' => 'bar'], $this->system->_GET->toArray());
     }
 }

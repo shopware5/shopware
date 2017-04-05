@@ -37,13 +37,13 @@ class CustomerEmailValidator extends ConstraintValidator
     const SNIPPET_MAIL_FAILURE = [
         'namespace' => 'frontend/account/internalMessages',
         'name' => 'MailFailure',
-        'default' => 'Please enter a valid mail address'
+        'default' => 'Please enter a valid mail address',
     ];
 
     const SNIPPET_MAIL_DUPLICATE = [
         'namespace' => 'frontend/account/internalMessages',
         'name' => 'MailFailureAlreadyRegistered',
-        'default' => 'This mail address is already registered'
+        'default' => 'This mail address is already registered',
     ];
 
     /**
@@ -63,8 +63,8 @@ class CustomerEmailValidator extends ConstraintValidator
 
     /**
      * @param Shopware_Components_Snippet_Manager $snippets
-     * @param Connection $connection
-     * @param EmailValidatorInterface $emailValidator
+     * @param Connection                          $connection
+     * @param EmailValidatorInterface             $emailValidator
      */
     public function __construct(
         Shopware_Components_Snippet_Manager $snippets,
@@ -77,7 +77,7 @@ class CustomerEmailValidator extends ConstraintValidator
     }
 
     /**
-     * @param string $email
+     * @param string     $email
      * @param Constraint $constraint
      */
     public function validate($email, Constraint $constraint)
@@ -116,6 +116,7 @@ class CustomerEmailValidator extends ConstraintValidator
 
     /**
      * @param CustomerEmail $constraint
+     *
      * @return bool
      */
     private function isFastLogin(CustomerEmail $constraint)
@@ -125,9 +126,10 @@ class CustomerEmailValidator extends ConstraintValidator
 
     /**
      * @param string $value
-     * @param Shop $shop
-     * @param int $customerId
-     * @return boolean
+     * @param Shop   $shop
+     * @param int    $customerId
+     *
+     * @return bool
      */
     private function isExistingEmail($value, Shop $shop, $customerId = null)
     {
@@ -149,11 +151,13 @@ class CustomerEmailValidator extends ConstraintValidator
         }
 
         $id = $builder->execute()->fetch(\PDO::FETCH_COLUMN);
-        return ($id == 1);
+
+        return $id == 1;
     }
 
     /**
      * @param array $snippet with namespace, name and default value
+     *
      * @return string
      */
     private function getSnippet(array $snippet)

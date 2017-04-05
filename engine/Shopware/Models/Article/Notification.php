@@ -24,9 +24,8 @@
 
 namespace Shopware\Models\Article;
 
-use Shopware\Components\Model\LazyFetchModelEntity;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
+use Shopware\Components\Model\LazyFetchModelEntity;
 
 /**
  * Shopware Notification Model
@@ -41,61 +40,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Notification extends LazyFetchModelEntity
 {
     /**
-     * @var integer $id
-     *
-     * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
-
-    /**
-     * @var string $articleNumber
-     *
-     * @ORM\Column(name="ordernumber", type="string", length=255, nullable=false)
-     */
-    private $articleNumber;
-
-    /**
-     * @var \DateTime $date
-     *
-     * @ORM\Column(name="date", type="datetime", nullable=false)
-     */
-    private $date;
-
-    /**
-     * @var string $mail
-     *
-     * @ORM\Column(name="mail", type="string", length=255, nullable=false)
-     */
-    private $mail;
-
-    /**
-     * @var integer $send
-     *
-     * @ORM\Column(name="send", type="integer", nullable=false)
-     */
-    private $send;
-
-    /**
-     * @var string $language
-     *
-     * @ORM\Column(name="language", type="string", length=255, nullable=false)
-     */
-    private $language;
-
-    /**
-     * @var string $shopLink
-     *
-     * @ORM\Column(name="shoplink", type="string", length=255, nullable=false)
-     */
-    private $shopLink;
-
-    /**
      * OWNING SIDE
      *
-     * @var \Shopware\Models\Article\Detail $articleDetail
+     * @var \Shopware\Models\Article\Detail
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Detail", inversedBy="notifications")
      * @ORM\JoinColumn(name="ordernumber", referencedColumnName="ordernumber")
@@ -105,17 +52,67 @@ class Notification extends LazyFetchModelEntity
     /**
      * OWNING SIDE
      *
-     * @var \Shopware\Models\Customer\Customer $customer
+     * @var \Shopware\Models\Customer\Customer
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Customer\Customer", inversedBy="notifications")
      * @ORM\JoinColumn(name="mail", referencedColumnName="email")
      */
     protected $customer;
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="ordernumber", type="string", length=255, nullable=false)
+     */
+    private $articleNumber;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="date", type="datetime", nullable=false)
+     */
+    private $date;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="mail", type="string", length=255, nullable=false)
+     */
+    private $mail;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="send", type="integer", nullable=false)
+     */
+    private $send;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="language", type="string", length=255, nullable=false)
+     */
+    private $language;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="shoplink", type="string", length=255, nullable=false)
+     */
+    private $shopLink;
 
     /**
      * Get id
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -126,11 +123,13 @@ class Notification extends LazyFetchModelEntity
      * Set date
      *
      * @param \DateTime $date
+     *
      * @return Notification
      */
     public function setDate($date)
     {
         $this->date = $date;
+
         return $this;
     }
 
@@ -147,19 +146,21 @@ class Notification extends LazyFetchModelEntity
     /**
      * Set send
      *
-     * @param integer $send
+     * @param int $send
+     *
      * @return Notification
      */
     public function setSend($send)
     {
         $this->send = $send;
+
         return $this;
     }
 
     /**
      * Get send
      *
-     * @return integer
+     * @return int
      */
     public function getSend()
     {
@@ -170,11 +171,13 @@ class Notification extends LazyFetchModelEntity
      * Set language
      *
      * @param string $language
+     *
      * @return Notification
      */
     public function setLanguage($language)
     {
         $this->language = $language;
+
         return $this;
     }
 
@@ -192,11 +195,13 @@ class Notification extends LazyFetchModelEntity
      * Set shopLink
      *
      * @param string $shopLink
+     *
      * @return Notification
      */
     public function setShopLink($shopLink)
     {
         $this->shopLink = $shopLink;
+
         return $this;
     }
 
@@ -215,7 +220,7 @@ class Notification extends LazyFetchModelEntity
      */
     public function getArticleDetail()
     {
-        return $this->fetchLazy($this->articleDetail, array('number' => $this->articleNumber));
+        return $this->fetchLazy($this->articleDetail, ['number' => $this->articleNumber]);
     }
 
     /**
@@ -223,6 +228,6 @@ class Notification extends LazyFetchModelEntity
      */
     public function getCustomer()
     {
-        return $this->fetchLazy($this->customer, array('email' => $this->mail));
+        return $this->fetchLazy($this->customer, ['email' => $this->mail]);
     }
 }

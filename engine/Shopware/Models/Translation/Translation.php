@@ -22,19 +22,18 @@
  * our trademarks remain entirely with us.
  */
 
-
 namespace Shopware\Models\Translation;
 
-use Shopware\Models\Shop\Shop;
-use Shopware\Components\Model\ModelEntity;
-use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
+use Shopware\Models\Shop\Shop;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Class Translation
  *
  * @category  Shopware
- * @package   Shopware\Models
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  *
  * @ORM\Entity
@@ -43,7 +42,13 @@ use Doctrine\ORM\Mapping as ORM;
 class Translation extends ModelEntity
 {
     /**
-     * @var integer $id
+     * @var Shop
+     * @ORM\ManyToOne(targetEntity="Shopware\Models\Shop\Shop")
+     * @ORM\JoinColumn(name="objectlanguage", referencedColumnName="id")
+     */
+    protected $shop;
+    /**
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
@@ -52,7 +57,7 @@ class Translation extends ModelEntity
     private $id;
 
     /**
-     * @var string $name
+     * @var string
      *
      * @Assert\NotBlank()
      * @ORM\Column(name="objecttype", type="string", nullable=false)
@@ -60,7 +65,7 @@ class Translation extends ModelEntity
     private $type;
 
     /**
-     * @var string $name
+     * @var string
      *
      * @Assert\NotBlank()
      * @ORM\Column(name="objectdata", type="string", nullable=false)
@@ -68,7 +73,7 @@ class Translation extends ModelEntity
     private $data;
 
     /**
-     * @var int $key
+     * @var int
      *
      * @Assert\NotBlank()
      * @ORM\Column(name="objectkey", type="integer", nullable=false)
@@ -78,19 +83,13 @@ class Translation extends ModelEntity
     /**
      * Foreign-Key for the local Association.
      * Has no getter and setter function to prevent inconsistent data
-     * @var integer $shopId
+     *
+     * @var int
      *
      * @Assert\NotBlank()
      * @ORM\Column(name="objectlanguage", type="integer", nullable=false)
      */
     private $shopId;
-
-    /**
-     * @var Shop
-     * @ORM\ManyToOne(targetEntity="Shopware\Models\Shop\Shop")
-     * @ORM\JoinColumn(name="objectlanguage", referencedColumnName="id")
-     */
-    protected $shop;
 
     /**
      * @param string $data

@@ -21,13 +21,14 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 namespace Shopware\Bundle\StoreFrontBundle\Gateway;
 
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\StoreFrontBundle\Gateway
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 interface ShopPageGatewayInterface
@@ -40,8 +41,9 @@ interface ShopPageGatewayInterface
      * Required translation in the provided context language:
      * - Shop page
      *
-     * @param int[] $ids
+     * @param int[]                       $ids
      * @param Struct\ShopContextInterface $context
+     *
      * @return Struct\ShopPage[] Indexed by the shop page id
      */
     public function getList(array $ids, Struct\ShopContextInterface $context);

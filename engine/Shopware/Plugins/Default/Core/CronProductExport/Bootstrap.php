@@ -36,6 +36,7 @@ class Shopware_Plugins_Core_CronProductExport_Bootstrap extends Shopware_Compone
 
     /**
      * Bootstrap Installation method
+     *
      * @return bool
      */
     public function install()
@@ -44,7 +45,7 @@ class Shopware_Plugins_Core_CronProductExport_Bootstrap extends Shopware_Compone
             'Shopware_CronJob_ProductExport',
             'onRun'
         );
-        $this->createCronJob("Product Export", "ProductExport", 86400);
+        $this->createCronJob('Product Export', 'ProductExport', 86400);
 
         return true;
     }
@@ -61,6 +62,7 @@ class Shopware_Plugins_Core_CronProductExport_Bootstrap extends Shopware_Compone
      * starts all product export for all active product feeds
      *
      * @throws RuntimeException
+     *
      * @return string
      */
     public function exportProductFiles()
@@ -69,10 +71,10 @@ class Shopware_Plugins_Core_CronProductExport_Bootstrap extends Shopware_Compone
         $cacheDir .= '/productexport/';
         if (!is_dir($cacheDir)) {
             if (false === @mkdir($cacheDir, 0777, true)) {
-                throw new \RuntimeException(sprintf("Unable to create the %s directory (%s)\n", "Productexport", $cacheDir));
+                throw new \RuntimeException(sprintf("Unable to create the %s directory (%s)\n", 'Productexport', $cacheDir));
             }
         } elseif (!is_writable($cacheDir)) {
-            throw new \RuntimeException(sprintf("Unable to write in the %s directory (%s)\n", "Productexport", $cacheDir));
+            throw new \RuntimeException(sprintf("Unable to write in the %s directory (%s)\n", 'Productexport', $cacheDir));
         }
 
         $export = Shopware()->Modules()->Export();

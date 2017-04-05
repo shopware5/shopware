@@ -26,7 +26,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 /**
  * @category  Shopware
- * @package   Shopware\Controllers\Frontend
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Controllers_Frontend_Index extends Enlight_Controller_Action
@@ -38,7 +38,7 @@ class Shopware_Controllers_Frontend_Index extends Enlight_Controller_Action
 
     public function indexAction()
     {
-        /**@var $context ShopContextInterface*/
+        /** @var $context ShopContextInterface */
         $context = Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext();
         $categoryId = $context->getShop()->getCategory()->getId();
 
@@ -51,7 +51,7 @@ class Shopware_Controllers_Frontend_Index extends Enlight_Controller_Action
             'hasEmotion' => !empty($emotions),
             'sCategoryContent' => $categoryContent,
             'sBanner' => Shopware()->Modules()->Marketing()->sBanner($categoryId),
-            'hasEscapedFragment' => $this->Request()->has('_escaped_fragment_')
+            'hasEscapedFragment' => $this->Request()->has('_escaped_fragment_'),
         ]);
     }
 }

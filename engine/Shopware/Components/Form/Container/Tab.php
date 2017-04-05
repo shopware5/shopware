@@ -21,18 +21,18 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 namespace Shopware\Components\Form\Container;
 
 use Shopware\Components\Form\Container as BaseContainer;
 
 /**
  * Class Tab
- * @package Shopware\Components\Form\Container
  */
 class Tab extends BaseContainer
 {
     /**
-     * @var string $title
+     * @var string
      */
     protected $title;
 

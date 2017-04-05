@@ -24,15 +24,15 @@
 
 class Shopware_Components_Convert_Csv
 {
-    public $sSettings = array(
-        "fieldmark"         => "\"",
-        "separator" => ";",
-        "encoding"=> "ISO-8859-1", //UTF-8
-        "escaped_separator" => "",
-        "escaped_fieldmark" => "\"\"", "newline" => "\n", "escaped_newline" => "",
-    );
+    public $sSettings = [
+        'fieldmark' => '"',
+        'separator' => ';',
+        'encoding' => 'ISO-8859-1', //UTF-8
+        'escaped_separator' => '',
+        'escaped_fieldmark' => '""', 'newline' => "\n", 'escaped_newline' => '',
+    ];
 
-    public function encode($array, $keys = array())
+    public function encode($array, $keys = [])
     {
         if (!is_array($keys) || !count($keys)) {
             $keys = array_keys(current($array));
@@ -45,10 +45,10 @@ class Shopware_Components_Convert_Csv
         return $csv;
     }
 
-    public function encode_stream($array, $keys = array(), &$stream = null)
+    public function encode_stream($array, $keys = [], &$stream = null)
     {
         if (empty($stream)) {
-            $stream = fopen("php://output", "w");
+            $stream = fopen('php://output', 'w');
         }
         if (!is_array($keys) || !count($keys)) {
             $keys = array_keys(current($array));
@@ -56,17 +56,19 @@ class Shopware_Components_Convert_Csv
         foreach ($array as $line) {
             fwrite($stream, $this->_encode_line($line, $keys) . $this->sSettings['newline']);
         }
+
         return true;
     }
 
     public function get_all_keys($array)
     {
-        $keys = array();
+        $keys = [];
         if (!empty($array) && is_array($array)) {
             foreach ($array as $line) {
                 $keys = array_merge($keys, array_diff(array_keys($line), $keys));
             }
         }
+
         return $keys;
     }
 
@@ -77,7 +79,7 @@ class Shopware_Components_Convert_Csv
         if (isset($this->sSettings['fieldmark'])) {
             $fieldmark = $this->sSettings['fieldmark'];
         } else {
-            $fieldmark = "";
+            $fieldmark = '';
         }
         $lastkey = end($keys);
         foreach ($keys as $key) {
@@ -87,7 +89,7 @@ class Shopware_Components_Convert_Csv
                 ) !== false || strpos($line[$key], $this->sSettings['separator']) !== false
                 ) {
                     $csv .= $fieldmark;
-                    if ($this->sSettings['encoding'] == "UTF-8") {
+                    if ($this->sSettings['encoding'] == 'UTF-8') {
                         $line[$key] = utf8_decode($line[$key]);
                     }
                     if (!empty($fieldmark)) {
@@ -108,14 +110,15 @@ class Shopware_Components_Convert_Csv
                 $csv .= $this->sSettings['separator'];
             }
         }
+
         return $csv;
     }
 
-    public function decode($csv, $keys = array())
+    public function decode($csv, $keys = [])
     {
         $csv = file_get_contents($csv);
 
-        if ($this->sSettings['encoding'] == "UTF-8") {
+        if ($this->sSettings['encoding'] == 'UTF-8') {
             $csv = utf8_decode($csv);
         }
 
@@ -131,35 +134,36 @@ class Shopware_Components_Convert_Csv
             } else {
                 $keys = $this->_decode_line($lines[0]);
             }
-            foreach ($keys as $i=> $key) {
+            foreach ($keys as $i => $key) {
                 $keys[$i] = trim($key, "? \n\t\r");
             }
             unset($lines[0]);
         }
 
         foreach ($lines as $line) {
-            $tmp = array();
+            $tmp = [];
             if (empty($this->sSettings['fieldmark'])) {
                 $line = explode($this->sSettings['separator'], $line);
             } else {
                 $line = $this->_decode_line($line);
             }
-            foreach ($keys as $pos=> $key) {
+            foreach ($keys as $pos => $key) {
                 if (isset($line[$pos])) {
                     $tmp[$key] = $line[$pos];
                 }
             }
             $array[] = $tmp;
         }
+
         return $array;
     }
 
     public function _decode_line($line)
     {
-        $fieldmark    = $this->sSettings['fieldmark'];
-        $elements     = explode($this->sSettings['separator'], $line);
-        $tmp_elements = array();
-        for ($i = 0; $i < count($elements); $i++) {
+        $fieldmark = $this->sSettings['fieldmark'];
+        $elements = explode($this->sSettings['separator'], $line);
+        $tmp_elements = [];
+        for ($i = 0; $i < count($elements); ++$i) {
             $nquotes = substr_count($elements[$i], $this->sSettings['fieldmark']);
             if ($nquotes % 2 == 1) {
                 if (isset($elements[$i + 1])) {
@@ -180,14 +184,15 @@ class Shopware_Components_Convert_Csv
                 $tmp_elements[] = $elements[$i];
             }
         }
+
         return $tmp_elements;
     }
 
     public function _split_line($csv)
     {
-        $lines    = array();
+        $lines = [];
         $elements = explode($this->sSettings['newline'], $csv);
-        for ($i = 0; $i < count($elements); $i++) {
+        for ($i = 0; $i < count($elements); ++$i) {
             $nquotes = substr_count($elements[$i], $this->sSettings['fieldmark']);
             if ($nquotes % 2 == 1) {
                 $elements[$i + 1] = $elements[$i] . $this->sSettings['newline'] . $elements[$i + 1];
@@ -195,6 +200,7 @@ class Shopware_Components_Convert_Csv
                 $lines[] = $elements[$i];
             }
         }
+
         return $lines;
     }
 }

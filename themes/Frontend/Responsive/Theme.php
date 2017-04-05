@@ -1,4 +1,26 @@
 <?php
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
 
 namespace Shopware\Themes\Responsive;
 
@@ -8,6 +30,10 @@ use Shopware\Components\Theme\ConfigSet;
 
 class Theme extends \Shopware\Components\Theme
 {
+    /**
+     * Defines the extended Theme
+     * @var string
+     */
     protected $extend = 'Bare';
 
     /**
@@ -20,20 +46,20 @@ class Theme extends \Shopware\Components\Theme
     /**
      * Allows to define a description text
      * for the theme
-     * @var null
+     * @var string
      */
     protected $description = '__theme_description__';
 
     /**
      * Name of the theme author.
-     * @var null
+     * @var string
      */
     protected $author = '__author__';
 
     /**
      * License of the theme source code.
      *
-     * @var null
+     * @var string
      */
     protected $license = '__license__';
 
@@ -109,6 +135,11 @@ class Theme extends \Shopware\Components\Theme
         'src/js/jquery.shopware-responsive.js'
     ];
 
+    /**
+     * Holds default fieldSet configuration
+     *
+     * @var array
+     */
     private $fieldSetDefaults = [
         'layout' => 'column',
         'height' => 170,
@@ -116,6 +147,11 @@ class Theme extends \Shopware\Components\Theme
         'defaults' => ['columnWidth' => 0.5, 'labelWidth' => 180, 'margin' => '3 16 3 0']
     ];
 
+    /**
+     * Holds default theme colors
+     *
+     * @var array
+     */
     private $themeColorDefaults = [
         "brand-primary" => "#D9400B",
         "brand-primary-light" => "saturate(lighten(@brand-primary,12%), 5%)",
@@ -189,6 +225,11 @@ class Theme extends \Shopware\Components\Theme
         "badge-download-color" => "#FFFFFF"
     ];
 
+    /**
+     * Holds default font configuration
+     *
+     * @var array
+     */
     private $themeFontDefaults = [
         'font-base-stack' => '"Open Sans", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;',
         'font-headline-stack' => '@font-base-stack',

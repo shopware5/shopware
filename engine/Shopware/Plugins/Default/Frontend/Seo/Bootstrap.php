@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Shopware\Components\QueryAliasMapper;
 
 /**
@@ -30,6 +31,7 @@ class Shopware_Plugins_Frontend_Seo_Bootstrap extends Shopware_Components_Plugin
 {
     /**
      * Install SEO-Plugin
+     *
      * @return bool
      */
     public function install()
@@ -42,6 +44,7 @@ class Shopware_Plugins_Frontend_Seo_Bootstrap extends Shopware_Components_Plugin
             'Enlight_Controller_Action_PostDispatch',
             'onPostDispatch'
         );
+
         return true;
     }
 
@@ -50,18 +53,17 @@ class Shopware_Plugins_Frontend_Seo_Bootstrap extends Shopware_Components_Plugin
      */
     public function getCapabilities()
     {
-        return array(
+        return [
             'install' => false,
             'enable' => false,
-            'update' => true
-        );
+            'update' => true,
+        ];
     }
 
     /**
      * Optimize Sourcecode / Apply seo rules
      *
      * @param Enlight_Event_EventArgs $args
-     * @return void
      */
     public function onPostDispatch(Enlight_Event_EventArgs $args)
     {
@@ -152,6 +154,7 @@ class Shopware_Plugins_Frontend_Seo_Bootstrap extends Shopware_Components_Plugin
      * Remove html-comments / whitespaces
      *
      * @param Enlight_Event_EventArgs $args
+     *
      * @return mixed|string
      */
     public function onFilterRender(Enlight_Event_EventArgs $args)
@@ -166,8 +169,8 @@ class Shopware_Plugins_Frontend_Seo_Bootstrap extends Shopware_Components_Plugin
 
         // Remove comments
         if (!empty($config['sSEOREMOVECOMMENTS'])) {
-            $source = str_replace(array("\r\n", "\r"), "\n", $source);
-            $expressions = array(
+            $source = str_replace(["\r\n", "\r"], "\n", $source);
+            $expressions = [
                 // Remove comments
                 '#(<(?:script|pre|textarea)[^>]*?>.*?</(?:script|pre|textarea)>)|(<style[^>]*?>.*?</style>)|(<!--\[.*?\]-->)|(<!--\s*\#\s*include virtual.*?-->)|<!--.*?-->#msiS' => '$1$2$3$4',
                 // remove spaces between attributes (but not in attribute values!)
@@ -176,7 +179,7 @@ class Shopware_Plugins_Frontend_Seo_Bootstrap extends Shopware_Components_Plugin
                 // maybe a \0 byte or something is interfering?
                 '#^\s+#ms' => '',
                 '#\s+$#ms' => '',
-            );
+            ];
             $source = preg_replace(array_keys($expressions), array_values($expressions), $source);
         }
 

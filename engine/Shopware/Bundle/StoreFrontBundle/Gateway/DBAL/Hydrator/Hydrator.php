@@ -26,7 +26,7 @@ namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Hydrator
@@ -34,6 +34,7 @@ class Hydrator
     /**
      * @param string $prefix
      * @param array  $data
+     *
      * @return array
      */
     public function extractFields($prefix, $data)
@@ -52,6 +53,7 @@ class Hydrator
     /**
      * @param string $prefix
      * @param array  $data
+     *
      * @return array
      */
     protected function getFields($prefix, $data)
@@ -68,7 +70,8 @@ class Hydrator
 
     /**
      * @param string $prefix
-     * @param array $data
+     * @param array  $data
+     *
      * @return array
      */
     protected function addArrayPrefix($prefix, array $data)
@@ -78,12 +81,14 @@ class Hydrator
             $key = $prefix . '_' . $key;
             $result[$key] = $value;
         }
+
         return $result;
     }
 
     /**
      * @param array $data
      * @param array $keys
+     *
      * @return array
      */
     protected function convertArrayKeys($data, $keys)
@@ -101,11 +106,12 @@ class Hydrator
     }
 
     /**
-     * @param array $data
+     * @param array  $data
      * @param string $prefix
-     * @param array $mapping
-     * @param null $id used for `merged` translations
-     * @param bool $addPrefix
+     * @param array  $mapping
+     * @param null   $id        used for `merged` translations
+     * @param bool   $addPrefix
+     *
      * @return array
      */
     protected function getTranslation(array $data, $prefix, array $mapping = [], $id = null, $addPrefix = true)
@@ -135,9 +141,10 @@ class Hydrator
     }
 
     /**
-     * @param array $data
-     * @param string $key
+     * @param array    $data
+     * @param string   $key
      * @param null|int $id
+     *
      * @return array
      */
     private function extractTranslation(array $data, $key, $id = null)

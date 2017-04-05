@@ -28,13 +28,14 @@ use Shopware\Components\DependencyInjection\Container;
 
 /**
  * @category  Shopware
- * @package   Shopware\Components\DependencyInjection\Bridge
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class TemplateMail
 {
     /**
      * @param Container $container
+     *
      * @return \Shopware_Components_TemplateMail
      */
     public function factory(Container $container)

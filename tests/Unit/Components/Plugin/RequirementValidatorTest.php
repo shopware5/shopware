@@ -1,4 +1,27 @@
 <?php
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
+
 namespace Shopware\Tests\Unit\Components\Plugin;
 
 use PHPUnit\Framework\TestCase;
@@ -102,7 +125,7 @@ class RequirementValidatorTest extends TestCase
     public function testSecondRequiredPluginNotExists()
     {
         $validator = $this->getValidator([
-            ['name' => 'SwagBundle', 'version' => '2.5', 'active' => true, 'installed' => '2016-01-01 11:00:00']
+            ['name' => 'SwagBundle', 'version' => '2.5', 'active' => true, 'installed' => '2016-01-01 11:00:00'],
         ]);
         $validator->validate(__DIR__ . '/examples/shopware_required_plugin.xml', '5.2');
     }
@@ -114,7 +137,7 @@ class RequirementValidatorTest extends TestCase
     public function testRequiredPluginInstalledShouldFail()
     {
         $validator = $this->getValidator([
-            ['name' => 'SwagBundle', 'version' => '1.0', 'active' => false, 'installed' => null]
+            ['name' => 'SwagBundle', 'version' => '1.0', 'active' => false, 'installed' => null],
         ]);
         $validator->validate(__DIR__ . '/examples/shopware_required_plugin.xml', '5.2');
     }
@@ -126,7 +149,7 @@ class RequirementValidatorTest extends TestCase
     public function testRequiredPluginActiveShouldFail()
     {
         $validator = $this->getValidator([
-            ['name' => 'SwagBundle', 'active' => false, 'version' => '1.0', 'installed' => '2016-01-01 11:00:00']
+            ['name' => 'SwagBundle', 'active' => false, 'version' => '1.0', 'installed' => '2016-01-01 11:00:00'],
         ]);
         $validator->validate(__DIR__ . '/examples/shopware_required_plugin.xml', '5.2');
     }
@@ -138,7 +161,7 @@ class RequirementValidatorTest extends TestCase
     public function testRequiredPluginMinimumVersionShouldFail()
     {
         $validator = $this->getValidator([
-            ['name' => 'SwagBundle', 'version' => '1.0', 'active' => true, 'installed' => '2016-01-01 11:00:00']
+            ['name' => 'SwagBundle', 'version' => '1.0', 'active' => true, 'installed' => '2016-01-01 11:00:00'],
         ]);
         $validator->validate(__DIR__ . '/examples/shopware_required_plugin.xml', '5.2');
     }
@@ -150,7 +173,7 @@ class RequirementValidatorTest extends TestCase
     public function testRequiredPluginMaximumVersionShouldFail()
     {
         $validator = $this->getValidator([
-            ['name' => 'SwagBundle', 'version' => '10.0', 'active' => true, 'installed' => '2016-01-01 11:00:00']
+            ['name' => 'SwagBundle', 'version' => '10.0', 'active' => true, 'installed' => '2016-01-01 11:00:00'],
         ]);
         $validator->validate(__DIR__ . '/examples/shopware_required_plugin.xml', '5.2');
     }
@@ -162,7 +185,7 @@ class RequirementValidatorTest extends TestCase
     public function testRequiredPluginVersionIsBlackListed()
     {
         $validator = $this->getValidator([
-            ['name' => 'SwagBundle', 'version' => '2.1', 'active' => true, 'installed' => '2016-01-01 11:00:00']
+            ['name' => 'SwagBundle', 'version' => '2.1', 'active' => true, 'installed' => '2016-01-01 11:00:00'],
         ]);
         $validator->validate(__DIR__ . '/examples/shopware_required_plugin.xml', '5.2');
     }
@@ -171,7 +194,7 @@ class RequirementValidatorTest extends TestCase
     {
         $validator = $this->getValidator([
             ['name' => 'SwagBundle', 'version' => '2.1.1', 'active' => true, 'installed' => '2016-01-01 11:00:00'],
-            ['name' => 'SwagLiveShopping', 'version' => '2.1.1', 'active' => true, 'installed' => '2016-01-01 11:00:00']
+            ['name' => 'SwagLiveShopping', 'version' => '2.1.1', 'active' => true, 'installed' => '2016-01-01 11:00:00'],
         ]);
 
         $e = null;
@@ -180,6 +203,21 @@ class RequirementValidatorTest extends TestCase
         } catch (\Exception $e) {
         }
         $this->assertNull($e);
+    }
+
+    /**
+     * @param $args
+     *
+     * @return null|Plugin
+     */
+    public function findPluginByName($args)
+    {
+        $name = $args['name'];
+        if (isset($this->plugins[$name])) {
+            return $this->plugins[$name];
+        }
+
+        return null;
     }
 
     private function getValidator(array $plugins)
@@ -208,19 +246,5 @@ class RequirementValidatorTest extends TestCase
         $em = $this->createConfiguredMock(ModelManager::class, ['getRepository' => $repo]);
 
         return new RequirementValidator($em, new XmlPluginInfoReader());
-    }
-
-    /**
-     * @param $args
-     * @return null|Plugin
-     */
-    public function findPluginByName($args)
-    {
-        $name = $args['name'];
-        if (isset($this->plugins[$name])) {
-            return $this->plugins[$name];
-        }
-
-        return null;
     }
 }

@@ -273,6 +273,7 @@ Ext.define('Shopware.apps.Category.controller.ArticleMapping', {
                     }
                 });
                 mapping.fromGrid.getStore().load();
+                mapping.fireEvent('sendRequestSuccess', result);
             },
             failure: function(response) {
                 mapping.setLoading(false);
@@ -280,6 +281,7 @@ Ext.define('Shopware.apps.Category.controller.ArticleMapping', {
                 var result = Ext.decode(response.responseText);
                 failure = failure + '<br>' + result.error;
                 Shopware.Notification.createGrowlMessage('',message);
+                mapping.fireEvent('sendRequestFailure', result);
             }
         });
     }

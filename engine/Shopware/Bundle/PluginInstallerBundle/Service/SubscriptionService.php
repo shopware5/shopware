@@ -35,7 +35,6 @@ use Shopware\Components\Model\ModelManager;
 
 /**
  * Class SubscriptionService
- * @package Shopware\Bundle\PluginInstallerBundle\Service
  */
 class SubscriptionService
 {
@@ -60,9 +59,9 @@ class SubscriptionService
     private $pluginLicenceService;
 
     /**
-     * @param Connection $connection
-     * @param StoreClient $storeClient
-     * @param ModelManager $models
+     * @param Connection           $connection
+     * @param StoreClient          $storeClient
+     * @param ModelManager         $models
      * @param PluginLicenceService $pluginLicenceService
      */
     public function __construct(Connection $connection, StoreClient $storeClient, ModelManager $models, PluginLicenceService $pluginLicenceService)
@@ -87,6 +86,7 @@ class SubscriptionService
 
     /**
      * get current secret from the database
+     *
      * @return string
      */
     public function getShopSecret()
@@ -124,7 +124,8 @@ class SubscriptionService
      * Returns information about shop upgrade state and installed plugins.
      *
      * @param Response $response
-     * @param Request $request
+     * @param Request  $request
+     *
      * @return PluginInformationResultStruct|bool
      */
     public function getPluginInformation(Response $response, Request $request)
@@ -145,6 +146,7 @@ class SubscriptionService
             return $pluginInformation;
         } catch (ShopSecretException $e) {
             $this->resetShopSecret();
+
             return false;
         } catch (\Exception $e) {
             return false;
@@ -153,19 +155,20 @@ class SubscriptionService
 
     /**
      * @param $secret
+     *
      * @return PluginInformationResultStruct
      */
     private function getPluginInformationFromApi($secret)
     {
         $domain = $this->getDomain();
         $params = [
-            'domain'            => $domain,
-            'shopwareVersion'   => \Shopware::VERSION,
-            'plugins'           => $this->getPluginsNameAndVersion()
+            'domain' => $domain,
+            'shopwareVersion' => \Shopware::VERSION,
+            'plugins' => $this->getPluginsNameAndVersion(),
         ];
 
         $header = [
-            'X-Shopware-Shop-Secret' => $secret
+            'X-Shopware-Shop-Secret' => $secret,
         ];
 
         $data = $this->storeClient->doPostRequest(
@@ -181,9 +184,9 @@ class SubscriptionService
             },
             $data['plugins']
         );
-        
+
         $this->pluginLicenceService->updateLocalLicenseInformation($pluginInformationStructs, $domain);
-        
+
         $informationResult = new PluginInformationResultStruct($pluginInformationStructs, $isShopUpgraded);
 
         return $informationResult;
@@ -191,6 +194,7 @@ class SubscriptionService
 
     /**
      * generate new Secret by API Call
+     *
      * @return string
      */
     private function generateApiShopSecret()
@@ -203,7 +207,7 @@ class SubscriptionService
         }
 
         $params = [
-            'domain'    => $this->getDomain()
+            'domain' => $this->getDomain(),
         ];
 
         $data = $this->storeClient->doAuthGetRequest(
@@ -211,11 +215,13 @@ class SubscriptionService
             '/shopsecret',
             $params
         );
+
         return $data['secret'];
     }
 
     /**
      * returns the domain of the shop
+     *
      * @return string
      */
     private function getDomain()
@@ -229,7 +235,9 @@ class SubscriptionService
 
     /**
      * Check the date of the last subscription-check var
+     *
      * @param Request $request
+     *
      * @return bool
      */
     private function isPluginsSubscriptionCookieValid(Request $request)
@@ -241,6 +249,7 @@ class SubscriptionService
 
     /**
      * Get all plugins with name and version
+     *
      * @return array
      */
     private function getPluginsNameAndVersion()

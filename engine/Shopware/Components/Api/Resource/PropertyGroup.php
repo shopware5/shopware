@@ -30,7 +30,7 @@ use Shopware\Components\Api\Exception as ApiException;
  * Property API Resource
  *
  * @category  Shopware
- * @package   Shopware\Components\Api\Resource
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class PropertyGroup extends Resource
@@ -43,12 +43,13 @@ class PropertyGroup extends Resource
         return $this->getManager()->getRepository('Shopware\Models\Property\Group');
     }
 
-
     /**
      * @param int $id
-     * @return array|\Shopware\Models\Property\Group
+     *
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
      * @throws \Shopware\Components\Api\Exception\NotFoundException
+     *
+     * @return array|\Shopware\Models\Property\Group
      */
     public function getOne($id)
     {
@@ -58,12 +59,11 @@ class PropertyGroup extends Resource
             throw new ApiException\ParameterMissingException();
         }
 
-        $filters = array(array('property' => 'groups.id','expression' => '=','value' => $id));
+        $filters = [['property' => 'groups.id', 'expression' => '=', 'value' => $id]];
         $query = $this->getRepository()->getListGroupsQuery($filters);
 
-        /** @var $category \Shopware\Models\Property\Group */
+        /** @var \Shopware\Models\Property\Group $property */
         $property = $query->getOneOrNullResult($this->getResultMode());
-
 
         if (!$property) {
             throw new ApiException\NotFoundException("Property group by id $id not found");
@@ -73,13 +73,14 @@ class PropertyGroup extends Resource
     }
 
     /**
-     * @param int $offset
-     * @param int $limit
+     * @param int   $offset
+     * @param int   $limit
      * @param array $criteria
      * @param array $orderBy
+     *
      * @return array
      */
-    public function getList($offset = 0, $limit = 25, array $criteria = array(), array $orderBy = array())
+    public function getList($offset = 0, $limit = 25, array $criteria = [], array $orderBy = [])
     {
         $this->checkPrivilege('read');
 
@@ -91,17 +92,19 @@ class PropertyGroup extends Resource
         //returns the total count of the query
         $totalResult = $paginator->count();
 
-        //returns the category data
-        $categories = $paginator->getIterator()->getArrayCopy();
+        //returns the property groups data
+        $propertyGroups = $paginator->getIterator()->getArrayCopy();
 
-        return array('data' => $categories, 'total' => $totalResult);
+        return ['data' => $propertyGroups, 'total' => $totalResult];
     }
 
     /**
      * @param array $params
-     * @return \Shopware\Models\Property\Group
+     *
      * @throws \Shopware\Components\Api\Exception\ValidationException
      * @throws \Exception
+     *
+     * @return \Shopware\Models\Property\Group
      */
     public function create(array $params)
     {
@@ -124,13 +127,15 @@ class PropertyGroup extends Resource
     }
 
     /**
-     * @param int $id
+     * @param int   $id
      * @param array $params
-     * @return \Shopware\Models\Property\Group
+     *
      * @throws \Shopware\Components\Api\Exception\ValidationException
      * @throws \Shopware\Components\Api\Exception\NotFoundException
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
      * @throws \Shopware\Components\Api\Exception\CustomValidationException
+     *
+     * @return \Shopware\Models\Property\Group
      */
     public function update($id, array $params)
     {
@@ -140,7 +145,7 @@ class PropertyGroup extends Resource
             throw new ApiException\ParameterMissingException();
         }
 
-        /** @var $propertyGroup \Shopware\Models\Property\Group*/
+        /** @var $propertyGroup \Shopware\Models\Property\Group */
         $propertyGroup = $this->getRepository()->find($id);
 
         if (!$propertyGroup) {
@@ -162,9 +167,11 @@ class PropertyGroup extends Resource
 
     /**
      * @param int $id
-     * @return \Shopware\Models\Property\Group
+     *
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
      * @throws \Shopware\Components\Api\Exception\NotFoundException
+     *
+     * @return \Shopware\Models\Property\Group
      */
     public function delete($id)
     {
@@ -174,17 +181,17 @@ class PropertyGroup extends Resource
             throw new ApiException\ParameterMissingException();
         }
 
-        /** @var $category \Shopware\Models\Category\Category */
-        $category = $this->getRepository()->find($id);
+        /** @var \Shopware\Models\Property\Group $propertyGroup */
+        $propertyGroup = $this->getRepository()->find($id);
 
-        if (!$category) {
-            throw new ApiException\NotFoundException("Category by id $id not found");
+        if (!$propertyGroup) {
+            throw new ApiException\NotFoundException("PropertyGroup by id $id not found");
         }
 
-        $this->getManager()->remove($category);
+        $this->getManager()->remove($propertyGroup);
         $this->flush();
 
-        return $category;
+        return $propertyGroup;
     }
 
     private function preparePropertyData($params, $propertyGroup = null)
@@ -192,7 +199,7 @@ class PropertyGroup extends Resource
         // if property group is created, we need to set some default values
         if (!$propertyGroup) {
             if (!isset($params['name']) || empty($params['name'])) {
-                throw new ApiException\CustomValidationException("A name is required");
+                throw new ApiException\CustomValidationException('A name is required');
             }
             if (!isset($params['position']) || empty($params['position'])) {
                 // Set position to end
@@ -217,7 +224,7 @@ class PropertyGroup extends Resource
             }
         } else {
             if (isset($params['name']) && empty($params['name'])) {
-                throw new ApiException\CustomValidationException("Name must not be empty");
+                throw new ApiException\CustomValidationException('Name must not be empty');
             }
         }
 

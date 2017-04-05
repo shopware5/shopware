@@ -27,13 +27,13 @@ namespace Shopware\Bundle\SearchBundleDBAL\ConditionHandler;
 use Shopware\Bundle\SearchBundle\Condition\SearchTermCondition;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
 use Shopware\Bundle\SearchBundleDBAL\ConditionHandlerInterface;
-use Shopware\Bundle\SearchBundleDBAL\SearchTermQueryBuilderInterface;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
+use Shopware\Bundle\SearchBundleDBAL\SearchTermQueryBuilderInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\SearchBundleDBAL\ConditionHandler
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class SearchTermConditionHandler implements ConditionHandlerInterface
@@ -58,7 +58,7 @@ class SearchTermConditionHandler implements ConditionHandlerInterface
      */
     public function supportsCondition(ConditionInterface $condition)
     {
-        return ($condition instanceof SearchTermCondition);
+        return $condition instanceof SearchTermCondition;
     }
 
     /**
@@ -78,6 +78,7 @@ class SearchTermConditionHandler implements ConditionHandlerInterface
         //add condition that the result contains no product.
         if ($searchQuery == null) {
             $query->andWhere('0 = 1');
+
             return;
         }
 

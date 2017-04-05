@@ -31,7 +31,7 @@ namespace Shopware\Components\Api;
  * If an entity needs an update or a creation, will be determined automatically
  *
  * @category  Shopware
- * @package   Shopware\Components\Api
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 interface BatchInterface
@@ -43,8 +43,9 @@ interface BatchInterface
      * your entity by these IDs and return the primary ID of that entity.
      *
      * @param $data
-     * @return int|boolean      Return the primary ID of the entity, if it exists
-     *                          Return false, if no existing entity matches $data
+     *
+     * @return int|bool Return the primary ID of the entity, if it exists
+     *                  Return false, if no existing entity matches $data
      */
     public function getIdByData($data);
 }

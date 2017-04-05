@@ -29,39 +29,36 @@ use Doctrine\ORM\AbstractQuery;
 /**
  * Class GenericPaymentMethod
  * Used for all payment methods that require no specific logic
- *
- * @package ShopwarePlugin\PaymentMethods\Components
  */
 class GenericPaymentMethod extends BasePaymentMethod
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function validate($paymentData)
     {
-        return array();
+        return [];
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function savePaymentData($userId, \Enlight_Controller_Request_Request $request)
     {
         //nothing to do, no return expected
-        return;
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getCurrentPaymentDataAsArray($userId)
     {
         //nothing to do, array expected
-        return array();
+        return [];
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function createPaymentInstance($orderId, $userId, $paymentId)
     {
@@ -77,7 +74,7 @@ class GenericPaymentMethod extends BasePaymentMethod
             ->getUserBillingQuery($userId)->getOneOrNullResult(AbstractQuery::HYDRATE_ARRAY);
 
         $date = new \DateTime();
-        $data = array(
+        $data = [
             'payment_mean_id' => $paymentId,
             'order_id' => $orderId,
             'user_id' => $userId,
@@ -87,10 +84,10 @@ class GenericPaymentMethod extends BasePaymentMethod
             'zipcode' => $addressData['zipCode'],
             'city' => $addressData['city'],
             'amount' => $orderAmount,
-            'created_at' => $date->format('Y-m-d')
-        );
+            'created_at' => $date->format('Y-m-d'),
+        ];
 
-        Shopware()->Db()->insert("s_core_payment_instance", $data);
+        Shopware()->Db()->insert('s_core_payment_instance', $data);
 
         return true;
     }

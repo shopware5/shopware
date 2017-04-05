@@ -24,8 +24,8 @@
 
 namespace Shopware\Models\ProductFeed;
 
-use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
 
 /**
  * Shopware product feed model represents a single feed.
@@ -39,7 +39,22 @@ use Doctrine\ORM\Mapping as ORM;
 class ProductFeed extends ModelEntity
 {
     /**
-     * @var integer $id
+     * @var int
+     *
+     * @ORM\Column(name="dirty", type="boolean")
+     */
+    protected $dirty = false;
+
+    /**
+     * INVERSE SIDE
+     *
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\ProductFeed", mappedBy="productFeed", orphanRemoval=true, cascade={"persist"})
+     *
+     * @var \Shopware\Models\Attribute\ProductFeed
+     */
+    protected $attribute;
+    /**
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
@@ -48,221 +63,214 @@ class ProductFeed extends ModelEntity
     private $id;
 
     /**
-     * @var string $name
+     * @var string
      *
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
     private $name;
 
     /**
-     * @var \DateTime $lastExport
+     * @var \DateTime
      *
      * @ORM\Column(name="last_export", type="datetime", nullable=false)
      */
     private $lastExport;
 
     /**
-     * @var integer $active
+     * @var int
      *
      * @ORM\Column(name="active", type="integer", nullable=false)
      */
     private $active = 0;
 
     /**
-     * @var string $hash
+     * @var string
      *
      * @ORM\Column(name="hash", type="string", length=255, nullable=false)
      */
     private $hash;
 
     /**
-     * @var integer $show
+     * @var int
      *
      * @ORM\Column(name="`show`", type="integer", nullable=false)
      */
     private $show = 1;
 
     /**
-     * @var integer $countArticles
+     * @var int
      *
      * @ORM\Column(name="count_articles", type="integer", nullable=false)
      */
     private $countArticles;
 
     /**
-     * @var \DateTime $expiry
+     * @var \DateTime
      *
      * @ORM\Column(name="expiry", type="datetime", nullable=false)
      */
     private $expiry;
 
     /**
-     * @var integer $interval
+     * @var int
      *
      * @ORM\Column(name="`interval`", type="integer", nullable=false)
      */
     private $interval;
 
     /**
-     * @var integer $formatId
+     * @var int
      *
      * @ORM\Column(name="formatID", type="integer", nullable=false)
      */
     private $formatId = 1;
 
     /**
-     * @var \DateTime $lastChange
+     * @var \DateTime
      *
      * @ORM\Column(name="last_change", type="datetime", nullable=false)
      */
     private $lastChange;
 
     /**
-     * @var string $fileName
+     * @var string
      *
      * @ORM\Column(name="filename", type="string", length=255, nullable=false)
      */
     private $fileName;
 
     /**
-     * @var integer $encodingId
+     * @var int
      *
      * @ORM\Column(name="encodingID", type="integer", nullable=false)
      */
     private $encodingId = 1;
 
     /**
-     * @var integer $categoryId
+     * @var int
      *
      * @ORM\Column(name="categoryID", type="integer", nullable=true)
      */
     private $categoryId;
 
     /**
-     * @var integer $currencyId
+     * @var int
      *
      * @ORM\Column(name="currencyID", type="integer", nullable=true)
      */
     private $currencyId;
 
     /**
-     * @var integer $customerGroupId
+     * @var int
      *
      * @ORM\Column(name="customergroupID", type="integer", nullable=true)
      */
     private $customerGroupId;
 
     /**
-     * @var string $partnerId
+     * @var string
      *
      * @ORM\Column(name="partnerID", type="string", length=255, nullable=true)
      */
     private $partnerId;
 
     /**
-     * @var integer $languageId
+     * @var int
      *
      * @ORM\Column(name="languageID", type="integer", nullable=true)
      */
     private $languageId;
 
     /**
-     * @var integer $activeFilter
+     * @var int
      *
      * @ORM\Column(name="active_filter", type="integer", nullable=false)
      */
     private $activeFilter = 1;
 
     /**
-     * @var integer $imageFilter
+     * @var int
      *
      * @ORM\Column(name="image_filter", type="integer", nullable=false)
      */
     private $imageFilter = 0;
 
     /**
-     * @var integer $stockMinFilter
+     * @var int
      *
      * @ORM\Column(name="stockmin_filter", type="integer", nullable=false)
      */
     private $stockMinFilter = 0;
 
     /**
-     * @var integer $instockFilter
+     * @var int
      *
      * @ORM\Column(name="instock_filter", type="integer", nullable=false)
      */
     private $instockFilter;
 
     /**
-     * @var float $priceFilter
+     * @var float
      *
      * @ORM\Column(name="price_filter", type="float", nullable=false)
      */
     private $priceFilter;
 
     /**
-     * @var string $ownFilter
+     * @var string
      *
      * @ORM\Column(name="own_filter", type="text", nullable=false)
      */
     private $ownFilter;
 
     /**
-     * @var string $header
+     * @var string
      *
      * @ORM\Column(name="header", type="text", nullable=false)
      */
     private $header;
 
     /**
-     * @var string $body
+     * @var string
      *
      * @ORM\Column(name="body", type="text", nullable=false)
      */
     private $body;
 
     /**
-     * @var string $footer
+     * @var string
      *
      * @ORM\Column(name="footer", type="text", nullable=false)
      */
     private $footer;
 
     /**
-     * @var integer $countFilter
+     * @var int
      *
      * @ORM\Column(name="count_filter", type="integer", nullable=false)
      */
     private $countFilter;
 
     /**
-     * @var integer $shopId
+     * @var int
      *
      * @ORM\Column(name="multishopID", type="integer", nullable=true)
      */
     private $shopId;
 
     /**
-     * @var string $cacheRefreshed
+     * @var string
      *
      * @ORM\Column(name="cache_refreshed", type="datetime", nullable=true)
      */
     private $cacheRefreshed;
 
     /**
-     * @var integer $variantExport
+     * @var int
      *
      * @ORM\Column(name="variant_export", type="integer", nullable=false)
      */
     private $variantExport = 1;
-
-    /**
-     * @var integer $dirty
-     *
-     * @ORM\Column(name="dirty", type="boolean")
-     */
-    protected $dirty = false;
 
     /**
      * @var \Doctrine\Common\Collections\ArrayCollection
@@ -297,16 +305,9 @@ class ProductFeed extends ModelEntity
     private $categories;
 
     /**
-     * INVERSE SIDE
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\ProductFeed", mappedBy="productFeed", orphanRemoval=true, cascade={"persist"})
-     * @var \Shopware\Models\Attribute\ProductFeed
-     */
-    protected $attribute;
-
-    /**
      * Get id
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -317,11 +318,13 @@ class ProductFeed extends ModelEntity
      * Set name
      *
      * @param string $name
+     *
      * @return ProductFeed
      */
     public function setName($name)
     {
         $this->name = $name;
+
         return $this;
     }
 
@@ -339,6 +342,7 @@ class ProductFeed extends ModelEntity
      * Set lastExport
      *
      * @param \DateTime|string $lastExport
+     *
      * @return ProductFeed
      */
     public function setLastExport($lastExport)
@@ -347,6 +351,7 @@ class ProductFeed extends ModelEntity
             $lastExport = new \DateTime($lastExport);
         }
         $this->lastExport = $lastExport;
+
         return $this;
     }
 
@@ -363,19 +368,21 @@ class ProductFeed extends ModelEntity
     /**
      * Set active
      *
-     * @param integer $active
+     * @param int $active
+     *
      * @return ProductFeed
      */
     public function setActive($active)
     {
         $this->active = $active;
+
         return $this;
     }
 
     /**
      * Get active
      *
-     * @return integer
+     * @return int
      */
     public function getActive()
     {
@@ -386,11 +393,13 @@ class ProductFeed extends ModelEntity
      * Set hash
      *
      * @param string $hash
+     *
      * @return ProductFeed
      */
     public function setHash($hash)
     {
         $this->hash = $hash;
+
         return $this;
     }
 
@@ -407,19 +416,21 @@ class ProductFeed extends ModelEntity
     /**
      * Set show
      *
-     * @param integer $show
+     * @param int $show
+     *
      * @return ProductFeed
      */
     public function setShow($show)
     {
         $this->show = $show;
+
         return $this;
     }
 
     /**
      * Get show
      *
-     * @return integer
+     * @return int
      */
     public function getShow()
     {
@@ -429,19 +440,21 @@ class ProductFeed extends ModelEntity
     /**
      * Set countArticles
      *
-     * @param integer $countArticles
+     * @param int $countArticles
+     *
      * @return ProductFeed
      */
     public function setCountArticles($countArticles)
     {
         $this->countArticles = $countArticles;
+
         return $this;
     }
 
     /**
      * Get countArticles
      *
-     * @return integer
+     * @return int
      */
     public function getCountArticles()
     {
@@ -452,6 +465,7 @@ class ProductFeed extends ModelEntity
      * Set expiry
      *
      * @param \DateTime|string $expiry
+     *
      * @return ProductFeed
      */
     public function setExpiry($expiry)
@@ -460,6 +474,7 @@ class ProductFeed extends ModelEntity
             $expiry = new \DateTime($expiry);
         }
         $this->expiry = $expiry;
+
         return $this;
     }
 
@@ -476,19 +491,21 @@ class ProductFeed extends ModelEntity
     /**
      * Set interval
      *
-     * @param integer $interval
+     * @param int $interval
+     *
      * @return ProductFeed
      */
     public function setInterval($interval)
     {
         $this->interval = $interval;
+
         return $this;
     }
 
     /**
      * Get interval
      *
-     * @return integer
+     * @return int
      */
     public function getInterval()
     {
@@ -498,19 +515,21 @@ class ProductFeed extends ModelEntity
     /**
      * Set formatId
      *
-     * @param integer $formatId
+     * @param int $formatId
+     *
      * @return ProductFeed
      */
     public function setFormatId($formatId)
     {
         $this->formatId = $formatId;
+
         return $this;
     }
 
     /**
      * Get formatId
      *
-     * @return integer
+     * @return int
      */
     public function getFormatId()
     {
@@ -521,6 +540,7 @@ class ProductFeed extends ModelEntity
      * Set lastChange
      *
      * @param \DateTime|string $lastChange
+     *
      * @return ProductFeed
      */
     public function setLastChange($lastChange)
@@ -529,6 +549,7 @@ class ProductFeed extends ModelEntity
             $lastChange = new \DateTime($lastChange);
         }
         $this->lastChange = $lastChange;
+
         return $this;
     }
 
@@ -546,11 +567,13 @@ class ProductFeed extends ModelEntity
      * Set filename
      *
      * @param string $fileName
+     *
      * @return ProductFeed
      */
     public function setFileName($fileName)
     {
         $this->fileName = $fileName;
+
         return $this;
     }
 
@@ -567,19 +590,21 @@ class ProductFeed extends ModelEntity
     /**
      * Set encodingId
      *
-     * @param integer $encodingId
+     * @param int $encodingId
+     *
      * @return ProductFeed
      */
     public function setEncodingId($encodingId)
     {
         $this->encodingId = $encodingId;
+
         return $this;
     }
 
     /**
      * Get encodingId
      *
-     * @return integer
+     * @return int
      */
     public function getEncodingId()
     {
@@ -589,19 +614,21 @@ class ProductFeed extends ModelEntity
     /**
      * Set categoryId
      *
-     * @param integer $categoryId
+     * @param int $categoryId
+     *
      * @return ProductFeed
      */
     public function setCategoryId($categoryId)
     {
         $this->categoryId = $categoryId;
+
         return $this;
     }
 
     /**
      * Get categoryId
      *
-     * @return integer
+     * @return int
      */
     public function getCategoryId()
     {
@@ -611,19 +638,21 @@ class ProductFeed extends ModelEntity
     /**
      * Set currencyId
      *
-     * @param integer $currencyId
+     * @param int $currencyId
+     *
      * @return ProductFeed
      */
     public function setCurrencyId($currencyId)
     {
         $this->currencyId = $currencyId;
+
         return $this;
     }
 
     /**
      * Get currencyId
      *
-     * @return integer
+     * @return int
      */
     public function getCurrencyId()
     {
@@ -633,19 +662,21 @@ class ProductFeed extends ModelEntity
     /**
      * Set customerGroupId
      *
-     * @param integer $customerGroupId
+     * @param int $customerGroupId
+     *
      * @return ProductFeed
      */
     public function setCustomerGroupId($customerGroupId)
     {
         $this->customerGroupId = $customerGroupId;
+
         return $this;
     }
 
     /**
      * Get customerGroupId
      *
-     * @return integer
+     * @return int
      */
     public function getCustomerGroupId()
     {
@@ -656,11 +687,13 @@ class ProductFeed extends ModelEntity
      * Set partnerId
      *
      * @param string $partnerId
+     *
      * @return ProductFeed
      */
     public function setPartnerId($partnerId)
     {
         $this->partnerId = $partnerId;
+
         return $this;
     }
 
@@ -677,19 +710,21 @@ class ProductFeed extends ModelEntity
     /**
      * Set languageId
      *
-     * @param integer $languageId
+     * @param int $languageId
+     *
      * @return ProductFeed
      */
     public function setLanguageId($languageId)
     {
         $this->languageId = $languageId;
+
         return $this;
     }
 
     /**
      * Get languageId
      *
-     * @return integer
+     * @return int
      */
     public function getLanguageId()
     {
@@ -699,19 +734,21 @@ class ProductFeed extends ModelEntity
     /**
      * Set activeFilter
      *
-     * @param integer $activeFilter
+     * @param int $activeFilter
+     *
      * @return ProductFeed
      */
     public function setActiveFilter($activeFilter)
     {
         $this->activeFilter = $activeFilter;
+
         return $this;
     }
 
     /**
      * Get activeFilter
      *
-     * @return integer
+     * @return int
      */
     public function getActiveFilter()
     {
@@ -721,19 +758,21 @@ class ProductFeed extends ModelEntity
     /**
      * Set imageFilter
      *
-     * @param integer $imageFilter
+     * @param int $imageFilter
+     *
      * @return ProductFeed
      */
     public function setImageFilter($imageFilter)
     {
         $this->imageFilter = $imageFilter;
+
         return $this;
     }
 
     /**
      * Get imageFilter
      *
-     * @return integer
+     * @return int
      */
     public function getImageFilter()
     {
@@ -743,19 +782,21 @@ class ProductFeed extends ModelEntity
     /**
      * Set stockMinFilter
      *
-     * @param integer $stockMinFilter
+     * @param int $stockMinFilter
+     *
      * @return ProductFeed
      */
     public function setStockMinFilter($stockMinFilter)
     {
         $this->stockMinFilter = $stockMinFilter;
+
         return $this;
     }
 
     /**
      * Get stockMinFilter
      *
-     * @return integer
+     * @return int
      */
     public function getStockMinFilter()
     {
@@ -765,19 +806,21 @@ class ProductFeed extends ModelEntity
     /**
      * Set instockFilter
      *
-     * @param integer $instockFilter
+     * @param int $instockFilter
+     *
      * @return ProductFeed
      */
     public function setInstockFilter($instockFilter)
     {
         $this->instockFilter = $instockFilter;
+
         return $this;
     }
 
     /**
      * Get instockFilter
      *
-     * @return integer
+     * @return int
      */
     public function getInstockFilter()
     {
@@ -788,11 +831,13 @@ class ProductFeed extends ModelEntity
      * Set priceFilter
      *
      * @param float $priceFilter
+     *
      * @return ProductFeed
      */
     public function setPriceFilter($priceFilter)
     {
         $this->priceFilter = $priceFilter;
+
         return $this;
     }
 
@@ -810,11 +855,13 @@ class ProductFeed extends ModelEntity
      * Set ownFilter
      *
      * @param string $ownFilter
+     *
      * @return ProductFeed
      */
     public function setOwnFilter($ownFilter)
     {
         $this->ownFilter = $ownFilter;
+
         return $this;
     }
 
@@ -832,11 +879,13 @@ class ProductFeed extends ModelEntity
      * Set header
      *
      * @param string $header
+     *
      * @return ProductFeed
      */
     public function setHeader($header)
     {
         $this->header = $header;
+
         return $this;
     }
 
@@ -854,11 +903,13 @@ class ProductFeed extends ModelEntity
      * Set body
      *
      * @param string $body
+     *
      * @return ProductFeed
      */
     public function setBody($body)
     {
         $this->body = $body;
+
         return $this;
     }
 
@@ -876,11 +927,13 @@ class ProductFeed extends ModelEntity
      * Set footer
      *
      * @param string $footer
+     *
      * @return ProductFeed
      */
     public function setFooter($footer)
     {
         $this->footer = $footer;
+
         return $this;
     }
 
@@ -897,19 +950,21 @@ class ProductFeed extends ModelEntity
     /**
      * Set countFilter
      *
-     * @param integer $countFilter
+     * @param int $countFilter
+     *
      * @return ProductFeed
      */
     public function setCountFilter($countFilter)
     {
         $this->countFilter = $countFilter;
+
         return $this;
     }
 
     /**
      * Get countFilter
      *
-     * @return integer
+     * @return int
      */
     public function getCountFilter()
     {
@@ -919,19 +974,21 @@ class ProductFeed extends ModelEntity
     /**
      * Set shopId
      *
-     * @param integer $shopId
+     * @param int $shopId
+     *
      * @return ProductFeed
      */
     public function setShopId($shopId)
     {
         $this->shopId = $shopId;
+
         return $this;
     }
 
     /**
      * Get shopId
      *
-     * @return integer
+     * @return int
      */
     public function getShopId()
     {
@@ -941,19 +998,21 @@ class ProductFeed extends ModelEntity
     /**
      * Set variantExport
      *
-     * @param integer $variantExport
+     * @param int $variantExport
+     *
      * @return ProductFeed
      */
     public function setVariantExport($variantExport)
     {
         $this->variantExport = $variantExport;
+
         return $this;
     }
 
     /**
      * Get variantExport
      *
-     * @return integer
+     * @return int
      */
     public function getVariantExport()
     {
@@ -970,11 +1029,13 @@ class ProductFeed extends ModelEntity
 
     /**
      * @param \Doctrine\Common\Collections\ArrayCollection $categories
+     *
      * @return ProductFeed
      */
     public function setCategories($categories)
     {
         $this->categories = $categories;
+
         return $this;
     }
 
@@ -1020,6 +1081,7 @@ class ProductFeed extends ModelEntity
 
     /**
      * @param \Shopware\Models\Attribute\ProductFeed|array|null $attribute
+     *
      * @return \Shopware\Models\Attribute\ProductFeed
      */
     public function setAttribute($attribute)
@@ -1031,6 +1093,7 @@ class ProductFeed extends ModelEntity
      * Set cache refreshed datetime
      *
      * @param \DateTime|string $cacheRefreshed
+     *
      * @return ProductFeed
      */
     public function setCacheRefreshed($cacheRefreshed)
@@ -1039,6 +1102,7 @@ class ProductFeed extends ModelEntity
             $cacheRefreshed = new \DateTime($cacheRefreshed);
         }
         $this->cacheRefreshed = $cacheRefreshed;
+
         return $this;
     }
 

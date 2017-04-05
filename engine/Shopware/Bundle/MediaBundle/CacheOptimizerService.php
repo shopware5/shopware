@@ -49,7 +49,7 @@ class CacheOptimizerService implements OptimizerServiceInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function optimize($filepath)
     {
@@ -57,7 +57,7 @@ class CacheOptimizerService implements OptimizerServiceInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getOptimizers()
     {
@@ -65,7 +65,7 @@ class CacheOptimizerService implements OptimizerServiceInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getOptimizerByMimeType($mime)
     {

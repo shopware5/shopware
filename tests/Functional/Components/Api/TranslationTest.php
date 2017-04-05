@@ -55,12 +55,12 @@ class TranslationTest extends TestCase
 
     public function testArticleTranslationList()
     {
-        $list = $this->resource->getList(0, 5, array(
-            array(
+        $list = $this->resource->getList(0, 5, [
+            [
                 'property' => 'translation.type',
-                'value' => Translation::TYPE_PRODUCT
-            )
-        ));
+                'value' => Translation::TYPE_PRODUCT,
+            ],
+        ]);
 
         foreach ($list['data'] as $item) {
             $article = Shopware()->Models()->find('Shopware\Models\Article\Article', $item['key']);
@@ -76,22 +76,22 @@ class TranslationTest extends TestCase
 
     public function testSingleArticleTranslation()
     {
-        $list = $this->resource->getList(0, 1, array(
-            array(
+        $list = $this->resource->getList(0, 1, [
+            [
                 'property' => 'translation.type',
-                'value' => Translation::TYPE_PRODUCT
-            ),
-            array(
+                'value' => Translation::TYPE_PRODUCT,
+            ],
+            [
                 'property' => 'translation.key',
-                'value' => Shopware()->Db()->fetchOne("SELECT objectkey FROM s_core_translations WHERE objecttype='article' LIMIT 1")
-            ),
-            array(
-                array(
+                'value' => Shopware()->Db()->fetchOne("SELECT objectkey FROM s_core_translations WHERE objecttype='article' LIMIT 1"),
+            ],
+            [
+                [
                     'property' => 'translation.shopId',
-                    'value' => 2
-                )
-            )
-        ));
+                    'value' => 2,
+                ],
+            ],
+        ]);
 
         $this->assertCount(1, $list['data']);
         $data = $list['data'][0];
@@ -109,7 +109,7 @@ class TranslationTest extends TestCase
     {
         $data = $this->getDummyData('article');
 
-        /**@var $translation \Shopware\Models\Translation\Translation */
+        /** @var $translation \Shopware\Models\Translation\Translation */
         $translation = $this->resource->create($data);
 
         $this->assertInstanceOf('Shopware\Models\Translation\Translation', $translation);
@@ -137,10 +137,10 @@ class TranslationTest extends TestCase
     public function testCreateArticleByNumber()
     {
         $data = $this->getDummyData('article');
-        $article = Shopware()->Db()->fetchRow("SELECT ordernumber, articleID FROM s_articles_details LIMIT 1");
+        $article = Shopware()->Db()->fetchRow('SELECT ordernumber, articleID FROM s_articles_details LIMIT 1');
         $data['key'] = $article['ordernumber'];
 
-        /**@var $translation \Shopware\Models\Translation\Translation */
+        /** @var $translation \Shopware\Models\Translation\Translation */
         $translation = $this->resource->createByNumber($data);
 
         $this->assertInstanceOf('Shopware\Models\Translation\Translation', $translation);
@@ -179,7 +179,7 @@ class TranslationTest extends TestCase
         $article = Shopware()->Db()->fetchRow("SELECT id, ordernumber, articleID FROM s_articles_details WHERE ordernumber = 'SW10201.11'");
         $data['key'] = $article['ordernumber'];
 
-        /**@var $translation \Shopware\Models\Translation\Translation */
+        /** @var $translation \Shopware\Models\Translation\Translation */
         $translation = $this->resource->createByNumber($data);
 
         $this->assertInstanceOf('Shopware\Models\Translation\Translation', $translation);
@@ -210,11 +210,11 @@ class TranslationTest extends TestCase
     public function testArticleUpdateOverride($key)
     {
         $this->resource->setResultMode(2);
-        $translation = $this->resource->getList(0, 1, array(
-            array('property' => 'translation.type', 'value' => 'article'),
-            array('property' => 'translation.key', 'value' => $key),
-            array('property' => 'translation.shopId', 'value' => 2)
-        ));
+        $translation = $this->resource->getList(0, 1, [
+            ['property' => 'translation.type', 'value' => 'article'],
+            ['property' => 'translation.key', 'value' => $key],
+            ['property' => 'translation.shopId', 'value' => 2],
+        ]);
 
         $translation = $translation['data'][0];
 
@@ -252,16 +252,16 @@ class TranslationTest extends TestCase
     public function testArticleUpdateMerge($key)
     {
         $this->resource->setResultMode(2);
-        $translation = $this->resource->getList(0, 1, array(
-            array('property' => 'translation.type', 'value' => 'article'),
-            array('property' => 'translation.key', 'value' => $key),
-            array('property' => 'translation.shopId', 'value' => 2)
-        ));
+        $translation = $this->resource->getList(0, 1, [
+            ['property' => 'translation.type', 'value' => 'article'],
+            ['property' => 'translation.key', 'value' => $key],
+            ['property' => 'translation.shopId', 'value' => 2],
+        ]);
 
         $translation = $translation['data'][0];
-        $translation['data'] = array(
-            'txtArtikel' => 'Update-2'
-        );
+        $translation['data'] = [
+            'txtArtikel' => 'Update-2',
+        ];
 
         $updated = $this->resource->update($key, $translation);
 
@@ -275,7 +275,6 @@ class TranslationTest extends TestCase
             $updated->getType(),
             'Translation type do not match'
         );
-
 
         $dataTranslation = unserialize($updated->getData());
         $this->assertEquals(
@@ -294,31 +293,31 @@ class TranslationTest extends TestCase
         $create = $this->getDummyData('article');
 
         $create['type'] = 'recursive';
-        $create['data'] = array(
+        $create['data'] = [
             'a1' => 'create',
-            'b1' => array(
+            'b1' => [
                 'a2' => 'create',
-                'b2' => array(
+                'b2' => [
                     'a3' => 'create',
-                    'b3' => array(
-                        'a4' => 'create'
-                    )
-                )
-            )
-        );
+                    'b3' => [
+                        'a4' => 'create',
+                    ],
+                ],
+            ],
+        ];
 
         $created = $this->resource->create($create);
 
         $update = $create;
-        $update['data'] = array(
+        $update['data'] = [
             'a1' => 'update',
-            'b1' => array(
+            'b1' => [
                 'a2' => 'update',
-                'b2' => array(
+                'b2' => [
                     'a3' => 'update',
-                )
-            )
-        );
+                ],
+            ],
+        ];
 
         $updated = $this->resource->update($created->getKey(), $update);
 
@@ -352,15 +351,15 @@ class TranslationTest extends TestCase
 
     public function testBatch()
     {
-        $translations = array();
-        for ($i=0; $i<4; $i++) {
+        $translations = [];
+        for ($i = 0; $i < 4; ++$i) {
             $translations[] = $this->getDummyData('article');
         }
 
         $article = Shopware()->Db()->fetchRow(
-            "SELECT ordernumber, articleID
+            'SELECT ordernumber, articleID
             FROM s_articles_details
-            LIMIT 1"
+            LIMIT 1'
         );
         $translations[0]['key'] = $article['ordernumber'];
         $translations[0]['useNumberAsId'] = true;
@@ -382,19 +381,19 @@ class TranslationTest extends TestCase
     {
         $translation = $this->getDummyData('article');
         $article = Shopware()->Db()->fetchRow(
-            "SELECT ordernumber, articleID
+            'SELECT ordernumber, articleID
             FROM s_articles_details
             WHERE articleID = :articleId
-            LIMIT 1",
-            array(':articleId' => $articleId)
+            LIMIT 1',
+            [':articleId' => $articleId]
         );
         $translation['key'] = $article['ordernumber'];
 
         foreach ($translation['data'] as &$data) {
-            $data .= "-UpdateByNumber";
+            $data .= '-UpdateByNumber';
         }
 
-        /**@var $result \Shopware\Models\Translation\Translation*/
+        /** @var $result \Shopware\Models\Translation\Translation */
         $result = $this->resource->updateByNumber($article['ordernumber'], $translation);
 
         $this->assertInstanceOf('Shopware\Models\Translation\Translation', $result);
@@ -404,65 +403,6 @@ class TranslationTest extends TestCase
         foreach ($data as $item) {
             $isInString = (strpos($item, '-UpdateByNumber') !== false);
             $this->assertTrue($isInString);
-        }
-    }
-
-    protected function getDummyData($type, $shopId = 2)
-    {
-        return array(
-            'type' => $type,
-            'key' => rand(2000, 10000),
-            'data' => $this->getTypeFields($type),
-            'shopId' => $shopId
-        );
-    }
-
-    protected function getTypeFields($type)
-    {
-        switch (strtolower($type)) {
-            case 'article':
-                return array(
-                    'name' => 'Dummy Translation',
-                    'description' => 'Dummy Translation',
-                    'descriptionLong' => 'Dummy Translation',
-                    'additionalText' => 'Dummy Translation',
-                    'keywords' => 'Dummy Translation',
-                    'packUnit' => 'Dummy Translation',
-                );
-            case 'variant':
-                return array(
-                    'additionalText' => 'Dummy Translation',
-                    'packUnit' => 'Dummy Translation',
-                );
-            case 'link':
-                return array(
-                    'description' => 'Dummy Translation'
-                );
-            case 'download':
-                return array(
-                    'description' => 'Dummy Translation'
-                );
-            case 'config_countries':
-                return array(
-                    'name' => 'Dummy Translation',
-                    'description' => 'Dummy Translation',
-                );
-            case 'config_units':
-                return array(
-                    'name' => 'Dummy Translation',
-                );
-            case 'config_dispatch':
-                return array(
-                    'name' => 'Dummy Translation',
-                    'description' => 'Dummy Translation',
-                    'statusLink' => 'Dummy Translation',
-                );
-            default:
-                return array(
-                    'name' => 'Dummy Translation',
-                    'description' => 'Dummy Translation',
-                    'link' => 'Dummy Translation',
-                );
         }
     }
 
@@ -485,9 +425,9 @@ class TranslationTest extends TestCase
         $data = $this->getDummyData('article');
 
         $article = Shopware()->Db()->fetchRow(
-            "SELECT ordernumber, articleID
+            'SELECT ordernumber, articleID
             FROM s_articles_details
-            LIMIT 1"
+            LIMIT 1'
         );
         $data['key'] = $article['articleID'];
 
@@ -522,7 +462,7 @@ class TranslationTest extends TestCase
 
     public function testManufacturerNumber()
     {
-        $entity = Shopware()->Db()->fetchRow("SELECT * FROM s_articles_supplier LIMIT 1");
+        $entity = Shopware()->Db()->fetchRow('SELECT * FROM s_articles_supplier LIMIT 1');
         $this->numberCreate('supplier', $entity['id'], $entity['name']);
         $this->numberUpdate('supplier', $entity['id'], $entity['name']);
         $this->numberDelete('supplier', $entity['name']);
@@ -530,7 +470,7 @@ class TranslationTest extends TestCase
 
     public function testCountryName()
     {
-        $entity = Shopware()->Db()->fetchRow("SELECT * FROM s_core_countries LIMIT 1");
+        $entity = Shopware()->Db()->fetchRow('SELECT * FROM s_core_countries LIMIT 1');
         $this->numberCreate('config_countries', $entity['id'], $entity['countryname']);
         $this->numberUpdate('config_countries', $entity['id'], $entity['countryname']);
         $this->numberDelete('config_countries', $entity['countryname']);
@@ -538,7 +478,7 @@ class TranslationTest extends TestCase
 
     public function testCountryIso()
     {
-        $entity = Shopware()->Db()->fetchRow("SELECT * FROM s_core_countries LIMIT 1");
+        $entity = Shopware()->Db()->fetchRow('SELECT * FROM s_core_countries LIMIT 1');
         $this->numberCreate('config_countries', $entity['id'], $entity['countryiso']);
         $this->numberUpdate('config_countries', $entity['id'], $entity['countryiso']);
         $this->numberDelete('config_countries', $entity['countryiso']);
@@ -546,7 +486,7 @@ class TranslationTest extends TestCase
 
     public function testCountryStateName()
     {
-        $entity = Shopware()->Db()->fetchRow("SELECT * FROM s_core_countries_states LIMIT 1");
+        $entity = Shopware()->Db()->fetchRow('SELECT * FROM s_core_countries_states LIMIT 1');
         $this->numberCreate('config_country_states', $entity['id'], $entity['name']);
         $this->numberUpdate('config_country_states', $entity['id'], $entity['name']);
         $this->numberDelete('config_country_states', $entity['name']);
@@ -554,7 +494,7 @@ class TranslationTest extends TestCase
 
     public function testCountryStateCode()
     {
-        $entity = Shopware()->Db()->fetchRow("SELECT * FROM s_core_countries_states LIMIT 1");
+        $entity = Shopware()->Db()->fetchRow('SELECT * FROM s_core_countries_states LIMIT 1');
         $this->numberCreate('config_country_states', $entity['id'], $entity['shortcode']);
         $this->numberUpdate('config_country_states', $entity['id'], $entity['shortcode']);
         $this->numberDelete('config_country_states', $entity['shortcode']);
@@ -562,7 +502,7 @@ class TranslationTest extends TestCase
 
     public function testDispatchName()
     {
-        $entity = Shopware()->Db()->fetchRow("SELECT * FROM s_premium_dispatch LIMIT 1");
+        $entity = Shopware()->Db()->fetchRow('SELECT * FROM s_premium_dispatch LIMIT 1');
         $this->numberCreate('config_dispatch', $entity['id'], $entity['name']);
         $this->numberUpdate('config_dispatch', $entity['id'], $entity['name']);
         $this->numberDelete('config_dispatch', $entity['name']);
@@ -570,7 +510,7 @@ class TranslationTest extends TestCase
 
     public function testPaymentName()
     {
-        $entity = Shopware()->Db()->fetchRow("SELECT * FROM s_core_paymentmeans LIMIT 1");
+        $entity = Shopware()->Db()->fetchRow('SELECT * FROM s_core_paymentmeans LIMIT 1');
         $this->numberCreate('config_payment', $entity['id'], $entity['name']);
         $this->numberUpdate('config_payment', $entity['id'], $entity['name']);
         $this->numberDelete('config_payment', $entity['name']);
@@ -578,7 +518,7 @@ class TranslationTest extends TestCase
 
     public function testPaymentDescription()
     {
-        $entity = Shopware()->Db()->fetchRow("SELECT * FROM s_core_paymentmeans LIMIT 1");
+        $entity = Shopware()->Db()->fetchRow('SELECT * FROM s_core_paymentmeans LIMIT 1');
         $this->numberCreate('config_payment', $entity['id'], $entity['description']);
         $this->numberUpdate('config_payment', $entity['id'], $entity['description']);
         $this->numberDelete('config_payment', $entity['description']);
@@ -586,7 +526,7 @@ class TranslationTest extends TestCase
 
     public function testFilterSetNumber()
     {
-        $entity = Shopware()->Db()->fetchRow("SELECT * FROM s_filter LIMIT 1");
+        $entity = Shopware()->Db()->fetchRow('SELECT * FROM s_filter LIMIT 1');
 
         $this->numberCreate('propertygroup', $entity['id'], $entity['name']);
         $this->numberUpdate('propertygroup', $entity['id'], $entity['name']);
@@ -613,9 +553,9 @@ class TranslationTest extends TestCase
 
     public function testConfiguratorGroupNumber()
     {
-        $entity = Shopware()->Db()->fetchRow("
+        $entity = Shopware()->Db()->fetchRow('
             SELECT * FROM s_article_configurator_groups
-        ");
+        ');
 
         $this->numberCreate('configuratorgroup', $entity['id'], $entity['name']);
         $this->numberUpdate('configuratorgroup', $entity['id'], $entity['name']);
@@ -754,7 +694,7 @@ class TranslationTest extends TestCase
     {
         $data = $this->getDummyData('article');
 
-        $article = Shopware()->Db()->fetchRow("SELECT ordernumber, articleID FROM s_articles_details LIMIT 1");
+        $article = Shopware()->Db()->fetchRow('SELECT ordernumber, articleID FROM s_articles_details LIMIT 1');
         $data['key'] = $article['articleID'];
 
         $this->resource->create($data);
@@ -945,7 +885,6 @@ class TranslationTest extends TestCase
         $this->resource->createByNumber($data);
     }
 
-
     /**
      * @expectedException \Shopware\Components\Api\Exception\NotFoundException
      */
@@ -970,7 +909,6 @@ class TranslationTest extends TestCase
         $this->resource->createByNumber($data);
     }
 
-
     /**
      * @expectedException \Shopware\Components\Api\Exception\NotFoundException
      */
@@ -986,7 +924,6 @@ class TranslationTest extends TestCase
 
         $this->resource->createByNumber($data);
     }
-
 
     /**
      * @expectedException \Shopware\Components\Api\Exception\NotFoundException
@@ -1044,6 +981,88 @@ class TranslationTest extends TestCase
         $this->resource->create($data);
     }
 
+    /**
+     * @group disable
+     */
+    public function testGetOneWithMissingPrivilegeShouldThrowPrivilegeException()
+    {
+        $this->assertTrue(true);
+    }
+
+    /**
+     * @group disable
+     */
+    public function testGetOneWithInvalidIdShouldThrowNotFoundException()
+    {
+        $this->assertTrue(true);
+    }
+
+    /**
+     * @group disable
+     */
+    public function testGetOneWithMissingIdShouldThrowParameterMissingException()
+    {
+        $this->assertTrue(true);
+    }
+
+    protected function getDummyData($type, $shopId = 2)
+    {
+        return [
+            'type' => $type,
+            'key' => rand(2000, 10000),
+            'data' => $this->getTypeFields($type),
+            'shopId' => $shopId,
+        ];
+    }
+
+    protected function getTypeFields($type)
+    {
+        switch (strtolower($type)) {
+            case 'article':
+                return [
+                    'name' => 'Dummy Translation',
+                    'description' => 'Dummy Translation',
+                    'descriptionLong' => 'Dummy Translation',
+                    'additionalText' => 'Dummy Translation',
+                    'keywords' => 'Dummy Translation',
+                    'packUnit' => 'Dummy Translation',
+                ];
+            case 'variant':
+                return [
+                    'additionalText' => 'Dummy Translation',
+                    'packUnit' => 'Dummy Translation',
+                ];
+            case 'link':
+                return [
+                    'description' => 'Dummy Translation',
+                ];
+            case 'download':
+                return [
+                    'description' => 'Dummy Translation',
+                ];
+            case 'config_countries':
+                return [
+                    'name' => 'Dummy Translation',
+                    'description' => 'Dummy Translation',
+                ];
+            case 'config_units':
+                return [
+                    'name' => 'Dummy Translation',
+                ];
+            case 'config_dispatch':
+                return [
+                    'name' => 'Dummy Translation',
+                    'description' => 'Dummy Translation',
+                    'statusLink' => 'Dummy Translation',
+                ];
+            default:
+                return [
+                    'name' => 'Dummy Translation',
+                    'description' => 'Dummy Translation',
+                    'link' => 'Dummy Translation',
+                ];
+        }
+    }
 
     protected function getFilterGroupName()
     {
@@ -1086,29 +1105,5 @@ class TranslationTest extends TestCase
                     ON co.group_id = cg.id
             LIMIT 1
         ");
-    }
-
-    /**
-     * @group disable
-     */
-    public function testGetOneWithMissingPrivilegeShouldThrowPrivilegeException()
-    {
-        $this->assertTrue(true);
-    }
-
-    /**
-     * @group disable
-     */
-    public function testGetOneWithInvalidIdShouldThrowNotFoundException()
-    {
-        $this->assertTrue(true);
-    }
-
-    /**
-     * @group disable
-     */
-    public function testGetOneWithMissingIdShouldThrowParameterMissingException()
-    {
-        $this->assertTrue(true);
     }
 }

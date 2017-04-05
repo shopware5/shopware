@@ -42,7 +42,7 @@ class EmotionComponentViewSubscriber implements SubscriberInterface
     {
         return [
             'Enlight_Controller_Action_PostDispatchSecure_Widgets_Emotion' => 'registerWidgetTemplates',
-            'Enlight_Controller_Action_PostDispatchSecure_Backend_Emotion' => 'registerBackendTemplates'
+            'Enlight_Controller_Action_PostDispatchSecure_Backend_Emotion' => 'registerBackendTemplates',
         ];
     }
 
@@ -51,7 +51,7 @@ class EmotionComponentViewSubscriber implements SubscriberInterface
      */
     public function registerBackendTemplates(\Enlight_Event_EventArgs $args)
     {
-        /**@var $view \Enlight_View_Default*/
+        /** @var $view \Enlight_View_Default */
         $view = $args->get('subject')->View();
 
         $templateDir = $this->path . '/Resources/views/emotion_components/';
@@ -72,19 +72,18 @@ class EmotionComponentViewSubscriber implements SubscriberInterface
             $path = 'backend/' . $file[0];
             $view->extendsBlock(
                 'backend/Emotion/app',
-                PHP_EOL . '{include file="'. $path .'"}',
+                PHP_EOL . '{include file="' . $path . '"}',
                 'append'
             );
         }
     }
-
 
     /**
      * @param \Enlight_Event_EventArgs $args
      */
     public function registerWidgetTemplates(\Enlight_Event_EventArgs $args)
     {
-        /**@var $view \Enlight_View_Default*/
+        /** @var $view \Enlight_View_Default */
         $view = $args->get('subject')->View();
 
         if (file_exists($this->path . '/Resources/views/emotion_components/')) {

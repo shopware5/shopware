@@ -26,7 +26,7 @@ namespace Shopware\Recovery\Install\Struct;
 
 /**
  * @category  Shopware
- * @package   Shopware\Recovery\Install\Struct
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Locale
@@ -37,7 +37,24 @@ class Locale
     private $locale;
 
     /**
+     * @param string $locale
+     */
+    private function __construct($locale)
+    {
+        $this->locale = $locale;
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->locale;
+    }
+
+    /**
      * Returns a list of valid locales
+     *
      * @return array
      */
     public static function getValidLocales()
@@ -50,26 +67,11 @@ class Locale
 
     /**
      * @param string $locale
-     */
-    private function __construct($locale)
-    {
-        $this->locale = $locale;
-    }
-
-    /**
-     * @param string $locale
+     *
      * @return Locale
      */
     public static function createFromString($locale)
     {
         return new self($locale);
-    }
-
-    /**
-     * @return string
-     */
-    public function __toString()
-    {
-        return $this->locale;
     }
 }

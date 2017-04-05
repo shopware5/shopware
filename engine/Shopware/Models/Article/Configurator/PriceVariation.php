@@ -24,9 +24,8 @@
 
 namespace Shopware\Models\Article\Configurator;
 
-use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
+use Shopware\Components\Model\ModelEntity;
 
 /**
  * @ORM\Entity
@@ -35,7 +34,19 @@ use Symfony\Component\Validator\Constraints as Assert;
 class PriceVariation extends ModelEntity
 {
     /**
-     * @var integer $id
+     * @var \Shopware\Models\Article\Configurator\Set
+     * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Configurator\Set", inversedBy="priceVariations")
+     * @ORM\JoinColumn(name="configurator_set_id", referencedColumnName="id")
+     */
+    protected $configuratorSet;
+
+    /**
+     * @var int
+     * @ORM\Column(name="is_gross", type="integer", nullable=false)
+     */
+    protected $isGross;
+    /**
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
@@ -50,27 +61,14 @@ class PriceVariation extends ModelEntity
     private $options;
 
     /**
-     * @var float $variation
+     * @var float
      *
      * @ORM\Column(name="variation", type="float", nullable=false, precision=3)
      */
     private $variation;
 
     /**
-     * @var \Shopware\Models\Article\Configurator\Set
-     * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Configurator\Set", inversedBy="priceVariations")
-     * @ORM\JoinColumn(name="configurator_set_id", referencedColumnName="id")
-     */
-    protected $configuratorSet;
-
-    /**
-     * @var integer
-     * @ORM\Column(name="is_gross", type="integer", nullable=false)
-     */
-    protected $isGross;
-
-    /**
-     * @var integer
+     * @var int
      * @ORM\Column(name="configurator_set_id", type="integer", nullable=true)
      */
     private $configuratorSetId = null;

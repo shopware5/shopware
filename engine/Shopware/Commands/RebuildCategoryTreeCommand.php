@@ -26,14 +26,12 @@ namespace Shopware\Commands;
 
 use Shopware\Components\Model\CategoryDenormalization;
 use Symfony\Component\Console\Helper\ProgressHelper;
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * RebuildCategoryTreeCommand builds up the ro category tree of shopware
- * @package Shopware\Commands
  */
 class RebuildCategoryTreeCommand extends ShopwareCommand
 {
@@ -51,7 +49,6 @@ class RebuildCategoryTreeCommand extends ShopwareCommand
 The <info>%command.name%</info> command will rebuild your category tree.
 EOF
             );
-        ;
     }
 
     /**
@@ -67,16 +64,16 @@ EOF
 
         // Cleanup before the first call
         if ($progress == 0) {
-            $output->writeln("Removing orphans");
+            $output->writeln('Removing orphans');
             $component->removeOrphanedAssignments();
-            $output->writeln("Rebuild path info");
+            $output->writeln('Rebuild path info');
             $component->rebuildCategoryPath();
-            $output->writeln("Removing assignments");
+            $output->writeln('Removing assignments');
             $component->removeAllAssignments();
         }
 
         // Get total number of assignments to build
-        $output->write("Counting…");
+        $output->write('Counting…');
         $count = $component->rebuildAllAssignmentsCount();
         $output->writeln("\rCounted {$count} items");
 

@@ -28,18 +28,19 @@ use Shopware\Components\Form\Field;
 
 /**
  * Class Date
- * @package Shopware\Components\Form\Field
  */
 class Date extends Field
 {
     /**
      * Format of the date value.
+     *
      * @var string
      */
     private $format;
 
     /**
      * Requires to set a name for the field
+     *
      * @param $name
      */
     public function __construct($name)

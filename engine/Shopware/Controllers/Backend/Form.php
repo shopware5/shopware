@@ -22,8 +22,8 @@
  * our trademarks remain entirely with us.
  */
 
-use Shopware\Models\Form\Form;
 use Shopware\Models\Form\Field;
+use Shopware\Models\Form\Form;
 
 /**
  * Shopware Backend Controller for the form module
@@ -32,7 +32,6 @@ class Shopware_Controllers_Backend_Form extends Shopware_Controllers_Backend_Ext
 {
     /**
      * @var \Shopware\Models\Form\Repository
-     * @access private
      */
     public $repository = null;
 
@@ -42,51 +41,6 @@ class Shopware_Controllers_Backend_Form extends Shopware_Controllers_Backend_Ext
      * @var \Shopware\Components\Model\ModelManager
      */
     public $manager = null;
-
-    /**
-     * Method to define acl dependencies in backend controllers
-     */
-    protected function initAcl()
-    {
-        $this->addAclPermission('index', 'read');
-        $this->addAclPermission('getForms', 'read');
-        $this->addAclPermission('createForm', 'createupdate');
-        $this->addAclPermission('updateForm', 'createupdate');
-        $this->addAclPermission('removeForm', 'delete');
-        $this->addAclPermission('copyForm', 'createupdate');
-
-        $this->addAclPermission('removeField', 'createupdate');
-        $this->addAclPermission('getFields', 'read');
-        $this->addAclPermission('createField', 'createupdate');
-        $this->addAclPermission('updateField', 'createupdate');
-        $this->addAclPermission('changeFieldPosition', 'createupdate');
-    }
-
-
-    /**
-     * Internal helper function to get access to the entity manager.
-     * @return null
-     */
-    private function getManager()
-    {
-        if ($this->manager === null) {
-            $this->manager = Shopware()->Models();
-        }
-        return $this->manager;
-    }
-
-    /**
-     * Internal helper function to get access to the form repository.
-     *
-     * @return Shopware\Models\Form\Repository
-     */
-    private function getRepository()
-    {
-        if ($this->repository === null) {
-            $this->repository = Shopware()->Models()->getRepository('Shopware\Models\Form\Form');
-        }
-        return $this->repository;
-    }
 
     /**
      * Returns available forms
@@ -100,8 +54,8 @@ class Shopware_Controllers_Backend_Form extends Shopware_Controllers_Backend_Ext
 
         $offset = $this->Request()->getParam('start');
         $limit = $this->Request()->getParam('limit', 20);
-        $filter = $this->prefixProperties($this->Request()->getParam('filter', array()), 'form');
-        $order = $this->prefixProperties($this->Request()->getParam('sort', array()), 'form');
+        $filter = $this->prefixProperties($this->Request()->getParam('filter', []), 'form');
+        $order = $this->prefixProperties($this->Request()->getParam('sort', []), 'form');
 
         $query = $this->getRepository()->getListQuery($filter, $order, $offset, $limit);
 
@@ -114,51 +68,7 @@ class Shopware_Controllers_Backend_Form extends Shopware_Controllers_Backend_Ext
             $form['shopIds'] = $this->explodeShopIds($form['shopIds']);
         }
 
-        $this->View()->assign(array('success' => true, 'data' => $forms, 'total' => $totalResult));
-    }
-
-    /**
-     * Gets a single form incl. it's fields
-     *
-     * @param $id
-     */
-    protected function getSingleForm($id)
-    {
-        $data = $this->getRepository()->getFormQuery($id)->getArrayResult();
-
-        foreach ($data as &$form) {
-            $form['shopIds'] = $this->explodeShopIds($form['shopIds']);
-        }
-
-        if (empty($data)) {
-            $this->View()->assign(array('success' => false, 'message' => 'Form not found'));
-            return;
-        }
-
-        $this->View()->assign(array('success' => true, 'data' => $data, 'total' => 1));
-        return;
-    }
-
-    /**
-     * Gets a | delimited and separated shop id list
-     * and converts it into an array of ints
-     *
-     * @param string $shopIds
-     * @return array The list of shop ids
-     */
-    private function explodeShopIds($shopIds)
-    {
-        if (empty($shopIds)) {
-            return array();
-        }
-
-        $explodedShopIds = explode('|', trim($shopIds, '|'));
-
-        $explodedShopIds = array_map(function ($elem) {
-            return (int)$elem;
-        }, $explodedShopIds);
-
-        return $explodedShopIds;
+        $this->View()->assign(['success' => true, 'data' => $forms, 'total' => $totalResult]);
     }
 
     /**
@@ -179,7 +89,7 @@ class Shopware_Controllers_Backend_Form extends Shopware_Controllers_Backend_Ext
         $data = $this->getManager()->toArray($formModel);
         $data['shopIds'] = $this->explodeShopIds($data['shopIds']);
 
-        $this->View()->assign(array('success' => true, 'data' => $data));
+        $this->View()->assign(['success' => true, 'data' => $data]);
     }
 
     /**
@@ -188,14 +98,16 @@ class Shopware_Controllers_Backend_Form extends Shopware_Controllers_Backend_Ext
     public function updateFormAction()
     {
         if (!($id = $this->Request()->getParam('id'))) {
-            $this->View()->assign(array('success' => false, 'message' => 'No valid form Id'));
+            $this->View()->assign(['success' => false, 'message' => 'No valid form Id']);
+
             return;
         }
 
         /* @var $result Form */
         $result = $this->getRepository()->find($id);
         if (!$result) {
-            $this->View()->assign(array('success' => false, 'message' => 'Form not found'));
+            $this->View()->assign(['success' => false, 'message' => 'Form not found']);
+
             return;
         }
 
@@ -213,28 +125,29 @@ class Shopware_Controllers_Backend_Form extends Shopware_Controllers_Backend_Ext
         $this->getSingleForm($id);
     }
 
-
     /**
      * Removes form
      */
     public function removeFormAction()
     {
         if (!($id = $this->Request()->getParam('id'))) {
-            $this->View()->assign(array('success' => false, 'message' => 'No valid form Id'));
+            $this->View()->assign(['success' => false, 'message' => 'No valid form Id']);
+
             return;
         }
 
         /* @var $result Form */
         $result = $this->getRepository()->find($id);
         if (!$result) {
-            $this->View()->assign(array('success' => false, 'message' => 'Form not found'));
+            $this->View()->assign(['success' => false, 'message' => 'Form not found']);
+
             return;
         }
 
         $this->getManager()->remove($result);
         $this->getManager()->flush();
 
-        $this->View()->assign(array('success' => true));
+        $this->View()->assign(['success' => true]);
     }
 
     /**
@@ -243,14 +156,16 @@ class Shopware_Controllers_Backend_Form extends Shopware_Controllers_Backend_Ext
     public function copyFormAction()
     {
         if (!($id = $this->Request()->getParam('id'))) {
-            $this->View()->assign(array('success' => false, 'message' => 'No valid field Id'));
+            $this->View()->assign(['success' => false, 'message' => 'No valid field Id']);
+
             return;
         }
 
         /* @var $result Form */
         $result = $this->getRepository()->find($id);
         if (!$result) {
-            $this->View()->assign(array('success' => false, 'message' => 'Form not found'));
+            $this->View()->assign(['success' => false, 'message' => 'Form not found']);
+
             return;
         }
 
@@ -263,7 +178,7 @@ class Shopware_Controllers_Backend_Form extends Shopware_Controllers_Backend_Ext
         $persister = Shopware()->Container()->get('shopware_attribute.data_persister');
         $persister->cloneAttribute('s_cms_support_attributes', $id, $clonedForm->getId());
 
-        $this->View()->assign(array('success' => true));
+        $this->View()->assign(['success' => true]);
     }
 
     /**
@@ -272,18 +187,19 @@ class Shopware_Controllers_Backend_Form extends Shopware_Controllers_Backend_Ext
     public function getFieldsAction()
     {
         if (!($id = $this->Request()->getParam('formId'))) {
-            $this->View()->assign(array('success' => false, 'message' => 'No valid field Id'));
+            $this->View()->assign(['success' => false, 'message' => 'No valid field Id']);
+
             return;
         }
 
         $result = $this->getManager()->getRepository('Shopware\Models\Form\Field')->findBy(
-            array('formId' => $id),
-            array('position' => 'ASC')
+            ['formId' => $id],
+            ['position' => 'ASC']
         );
 
         $resultArray = $this->getManager()->toArray($result);
 
-        $this->View()->assign(array('success' => true, 'data' => $resultArray, 'total' => count($resultArray)));
+        $this->View()->assign(['success' => true, 'data' => $resultArray, 'total' => count($resultArray)]);
     }
 
     /**
@@ -292,14 +208,16 @@ class Shopware_Controllers_Backend_Form extends Shopware_Controllers_Backend_Ext
     public function updateFieldAction()
     {
         if (!($id = $this->Request()->getParam('id'))) {
-            $this->View()->assign(array('success' => false, 'message' => 'No valid field Id'));
+            $this->View()->assign(['success' => false, 'message' => 'No valid field Id']);
+
             return;
         }
 
         /* @var $result Field */
         $result = $this->getManager()->getRepository('Shopware\Models\Form\Field')->find($id);
         if (!$result) {
-            $this->View()->assign(array('success' => false, 'message' => 'Field not found'));
+            $this->View()->assign(['success' => false, 'message' => 'Field not found']);
+
             return;
         }
 
@@ -310,7 +228,7 @@ class Shopware_Controllers_Backend_Form extends Shopware_Controllers_Backend_Ext
         $this->getManager()->flush();
 
         $data = $this->getManager()->toArray($result);
-        $this->View()->assign(array('success' => true, 'data' => $data));
+        $this->View()->assign(['success' => true, 'data' => $data]);
     }
 
     /**
@@ -319,14 +237,16 @@ class Shopware_Controllers_Backend_Form extends Shopware_Controllers_Backend_Ext
     public function createFieldAction()
     {
         if (!($id = $this->Request()->getParam('formId'))) {
-            $this->View()->assign(array('success' => false, 'message' => 'No valid field Id'));
+            $this->View()->assign(['success' => false, 'message' => 'No valid field Id']);
+
             return;
         }
 
         /* @var $form Form */
         $form = $this->getRepository()->find($id);
         if (!$form) {
-            $this->View()->assign(array('success' => false, 'message' => 'Form not found'));
+            $this->View()->assign(['success' => false, 'message' => 'Form not found']);
+
             return;
         }
 
@@ -340,7 +260,7 @@ class Shopware_Controllers_Backend_Form extends Shopware_Controllers_Backend_Ext
         $this->getManager()->flush();
 
         $data = $this->getManager()->toArray($fieldModel);
-        $this->View()->assign(array('success' => true, 'data' => $data));
+        $this->View()->assign(['success' => true, 'data' => $data]);
     }
 
     /**
@@ -349,21 +269,23 @@ class Shopware_Controllers_Backend_Form extends Shopware_Controllers_Backend_Ext
     public function removeFieldAction()
     {
         if (!($id = $this->Request()->getParam('id'))) {
-            $this->View()->assign(array('success' => false, 'message' => 'No valid field Id'));
+            $this->View()->assign(['success' => false, 'message' => 'No valid field Id']);
+
             return;
         }
 
         /* @var $result Field */
         $result = $this->getManager()->find('Shopware\Models\Form\Field', $id);
         if (!$result) {
-            $this->View()->assign(array('success' => false, 'message' => 'Field not found'));
+            $this->View()->assign(['success' => false, 'message' => 'Field not found']);
+
             return;
         }
 
         $this->getManager()->remove($result);
         $this->getManager()->flush();
 
-        $this->View()->assign(array('success' => true));
+        $this->View()->assign(['success' => true]);
     }
 
     /**
@@ -385,17 +307,59 @@ class Shopware_Controllers_Backend_Form extends Shopware_Controllers_Backend_Ext
                 ->execute();
         }
 
-        $this->View()->assign(array('success' => true));
+        $this->View()->assign(['success' => true]);
+    }
+
+    /**
+     * Method to define acl dependencies in backend controllers
+     */
+    protected function initAcl()
+    {
+        $this->addAclPermission('index', 'read');
+        $this->addAclPermission('getForms', 'read');
+        $this->addAclPermission('createForm', 'createupdate');
+        $this->addAclPermission('updateForm', 'createupdate');
+        $this->addAclPermission('removeForm', 'delete');
+        $this->addAclPermission('copyForm', 'createupdate');
+
+        $this->addAclPermission('removeField', 'createupdate');
+        $this->addAclPermission('getFields', 'read');
+        $this->addAclPermission('createField', 'createupdate');
+        $this->addAclPermission('updateField', 'createupdate');
+        $this->addAclPermission('changeFieldPosition', 'createupdate');
+    }
+
+    /**
+     * Gets a single form incl. it's fields
+     *
+     * @param $id
+     */
+    protected function getSingleForm($id)
+    {
+        $data = $this->getRepository()->getFormQuery($id)->getArrayResult();
+
+        foreach ($data as &$form) {
+            $form['shopIds'] = $this->explodeShopIds($form['shopIds']);
+        }
+
+        if (empty($data)) {
+            $this->View()->assign(['success' => false, 'message' => 'Form not found']);
+
+            return;
+        }
+
+        $this->View()->assign(['success' => true, 'data' => $data, 'total' => 1]);
     }
 
     /**
      * Helper method to prefix properties
      *
-     * @param array $properties
+     * @param array  $properties
      * @param string $prefix
+     *
      * @return array
      */
-    protected function prefixProperties($properties = array(), $prefix = '')
+    protected function prefixProperties($properties = [], $prefix = '')
     {
         foreach ($properties as $key => $property) {
             if (isset($property['property'])) {
@@ -404,5 +368,54 @@ class Shopware_Controllers_Backend_Form extends Shopware_Controllers_Backend_Ext
         }
 
         return $properties;
+    }
+
+    /**
+     * Internal helper function to get access to the entity manager.
+     */
+    private function getManager()
+    {
+        if ($this->manager === null) {
+            $this->manager = Shopware()->Models();
+        }
+
+        return $this->manager;
+    }
+
+    /**
+     * Internal helper function to get access to the form repository.
+     *
+     * @return Shopware\Models\Form\Repository
+     */
+    private function getRepository()
+    {
+        if ($this->repository === null) {
+            $this->repository = Shopware()->Models()->getRepository('Shopware\Models\Form\Form');
+        }
+
+        return $this->repository;
+    }
+
+    /**
+     * Gets a | delimited and separated shop id list
+     * and converts it into an array of ints
+     *
+     * @param string $shopIds
+     *
+     * @return array The list of shop ids
+     */
+    private function explodeShopIds($shopIds)
+    {
+        if (empty($shopIds)) {
+            return [];
+        }
+
+        $explodedShopIds = explode('|', trim($shopIds, '|'));
+
+        $explodedShopIds = array_map(function ($elem) {
+            return (int) $elem;
+        }, $explodedShopIds);
+
+        return $explodedShopIds;
     }
 }

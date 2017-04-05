@@ -28,7 +28,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\StoreFrontBundle\Service
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 interface MarketingServiceInterface
@@ -38,6 +38,7 @@ interface MarketingServiceInterface
      * which contains additionally marketing data about the product.
      *
      * @param Struct\ListProduct $product
+     *
      * @return Struct\Product\MarketingAttribute
      */
     public function getProductAttribute(Struct\ListProduct $product);

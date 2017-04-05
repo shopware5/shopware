@@ -27,12 +27,12 @@ namespace Shopware\Bundle\SearchBundleDBAL\ConditionHandler;
 use Shopware\Bundle\SearchBundle\Condition\SimilarProductCondition;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
 use Shopware\Bundle\SearchBundleDBAL\ConditionHandlerInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\SearchBundleDBAL\ConditionHandler
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class SimilarProductConditionHandler implements ConditionHandlerInterface
@@ -42,7 +42,7 @@ class SimilarProductConditionHandler implements ConditionHandlerInterface
      */
     public function supportsCondition(ConditionInterface $condition)
     {
-        return ($condition instanceof SimilarProductCondition);
+        return $condition instanceof SimilarProductCondition;
     }
 
     /**
@@ -53,7 +53,6 @@ class SimilarProductConditionHandler implements ConditionHandlerInterface
         QueryBuilder $query,
         ShopContextInterface $context
     ) {
-
         /** @var SimilarProductCondition $condition */
         $productId = $condition->getProductId();
 
@@ -61,17 +60,17 @@ class SimilarProductConditionHandler implements ConditionHandlerInterface
             'product',
             's_articles_categories',
             'similarMain',
-            "similarMain.articleID = product.id
-            AND similarMain.articleID != :productId"
+            'similarMain.articleID = product.id
+            AND similarMain.articleID != :productId'
         );
 
         $query->innerJoin(
             'product',
             's_articles_categories',
             'similarSub',
-            "similarSub.categoryID = similarMain.categoryID
+            'similarSub.categoryID = similarMain.categoryID
             AND similarMain.articleID != similarSub.articleID
-            AND similarSub.articleID = :productId"
+            AND similarSub.articleID = :productId'
         );
 
         $query->setParameter(':productId', $productId);

@@ -26,6 +26,8 @@ namespace Shopware\Bundle\SearchBundleDBAL\FacetHandler;
 
 use Shopware\Bundle\SearchBundle\Condition\ProductAttributeCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
+use Shopware\Bundle\SearchBundle\Facet\ProductAttributeFacet;
+use Shopware\Bundle\SearchBundle\FacetInterface;
 use Shopware\Bundle\SearchBundle\FacetResult\BooleanFacetResult;
 use Shopware\Bundle\SearchBundle\FacetResult\RadioFacetResult;
 use Shopware\Bundle\SearchBundle\FacetResult\RangeFacetResult;
@@ -33,14 +35,12 @@ use Shopware\Bundle\SearchBundle\FacetResult\ValueListFacetResult;
 use Shopware\Bundle\SearchBundle\FacetResult\ValueListItem;
 use Shopware\Bundle\SearchBundleDBAL\FacetHandlerInterface;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
-use Shopware\Bundle\SearchBundle\Facet\ProductAttributeFacet;
-use Shopware\Bundle\SearchBundle\FacetInterface;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactoryInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\SearchBundleDBAL\FacetHandler
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ProductAttributeFacetHandler implements FacetHandlerInterface
@@ -56,7 +56,7 @@ class ProductAttributeFacetHandler implements FacetHandlerInterface
     private $snippetNamespace;
 
     /**
-     * @param QueryBuilderFactoryInterface $queryBuilderFactory
+     * @param QueryBuilderFactoryInterface         $queryBuilderFactory
      * @param \Shopware_Components_Snippet_Manager $snippetManager
      */
     public function __construct(
@@ -72,15 +72,16 @@ class ProductAttributeFacetHandler implements FacetHandlerInterface
      */
     public function supportsFacet(FacetInterface $facet)
     {
-        return ($facet instanceof ProductAttributeFacet);
+        return $facet instanceof ProductAttributeFacet;
     }
 
     /**
      * Generates the facet data for the passed query, criteria and context object.
      *
      * @param FacetInterface|ProductAttributeFacet $facet
-     * @param Criteria $criteria
-     * @param Struct\ShopContextInterface $context
+     * @param Criteria                             $criteria
+     * @param Struct\ShopContextInterface          $context
+     *
      * @return BooleanFacetResult|ValueListFacetResult
      */
     public function generateFacet(
@@ -102,16 +103,16 @@ class ProductAttributeFacetHandler implements FacetHandlerInterface
             ->andWhere($sqlField . " != ''");
 
         switch ($facet->getMode()) {
-            case (ProductAttributeFacet::MODE_VALUE_LIST_RESULT):
-            case (ProductAttributeFacet::MODE_RADIO_LIST_RESULT):
+            case ProductAttributeFacet::MODE_VALUE_LIST_RESULT:
+            case ProductAttributeFacet::MODE_RADIO_LIST_RESULT:
                 $result = $this->createValueListFacetResult($query, $facet, $criteria, $context);
                 break;
 
-            case (ProductAttributeFacet::MODE_BOOLEAN_RESULT):
+            case ProductAttributeFacet::MODE_BOOLEAN_RESULT:
                 $result = $this->createBooleanFacetResult($query, $facet, $criteria);
                 break;
 
-            case (ProductAttributeFacet::MODE_RANGE_RESULT):
+            case ProductAttributeFacet::MODE_RANGE_RESULT:
                 $result = $this->createRangeFacetResult($query, $facet, $criteria);
                 break;
 
@@ -128,10 +129,11 @@ class ProductAttributeFacetHandler implements FacetHandlerInterface
     }
 
     /**
-     * @param QueryBuilder $query
-     * @param ProductAttributeFacet $facet
-     * @param Criteria $criteria
+     * @param QueryBuilder                $query
+     * @param ProductAttributeFacet       $facet
+     * @param Criteria                    $criteria
      * @param Struct\ShopContextInterface $context
+     *
      * @return null|RadioFacetResult|ValueListFacetResult
      */
     private function createValueListFacetResult(
@@ -148,7 +150,7 @@ class ProductAttributeFacetHandler implements FacetHandlerInterface
 
         $this->addTranslations($query, $context);
 
-        /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
+        /** @var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
         $result = $statement->fetchAll();
         if (empty($result)) {
@@ -156,7 +158,7 @@ class ProductAttributeFacetHandler implements FacetHandlerInterface
         }
 
         $actives = [];
-        /**@var $condition ProductAttributeCondition*/
+        /** @var $condition ProductAttributeCondition */
         if ($condition = $criteria->getCondition($facet->getName())) {
             $actives = $condition->getValue();
         }
@@ -179,21 +181,22 @@ class ProductAttributeFacetHandler implements FacetHandlerInterface
                 $items,
                 $facet->getFormFieldName()
             );
-        } else {
-            return new ValueListFacetResult(
+        }
+
+        return new ValueListFacetResult(
                 $facet->getName(),
                 $criteria->hasCondition($facet->getName()),
                 $facet->getLabel(),
                 $items,
                 $facet->getFormFieldName()
             );
-        }
     }
 
     /**
-     * @param QueryBuilder $query
+     * @param QueryBuilder          $query
      * @param ProductAttributeFacet $facet
-     * @param Criteria $criteria
+     * @param Criteria              $criteria
+     *
      * @return null|RangeFacetResult
      */
     private function createRangeFacetResult(
@@ -204,11 +207,11 @@ class ProductAttributeFacetHandler implements FacetHandlerInterface
         $sqlField = 'productAttribute.' . $facet->getField();
 
         $query->select([
-            'MIN('.$sqlField.') as minValues',
-            'MAX('.$sqlField.') as maxValues'
+            'MIN(' . $sqlField . ') as minValues',
+            'MAX(' . $sqlField . ') as maxValues',
         ]);
 
-        /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
+        /** @var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
         $result = $statement->fetch(\PDO::FETCH_ASSOC);
 
@@ -219,7 +222,7 @@ class ProductAttributeFacetHandler implements FacetHandlerInterface
         $activeMin = $result['minValues'];
         $activeMax = $result['maxValues'];
 
-        /**@var $condition ProductAttributeCondition*/
+        /** @var $condition ProductAttributeCondition */
         if ($condition = $criteria->getCondition($facet->getName())) {
             $data = $condition->getValue();
             $activeMin = $data['min'];
@@ -240,9 +243,10 @@ class ProductAttributeFacetHandler implements FacetHandlerInterface
     }
 
     /**
-     * @param QueryBuilder $query
+     * @param QueryBuilder          $query
      * @param ProductAttributeFacet $facet
-     * @param Criteria $criteria
+     * @param Criteria              $criteria
+     *
      * @return null|BooleanFacetResult
      */
     private function createBooleanFacetResult(
@@ -252,9 +256,9 @@ class ProductAttributeFacetHandler implements FacetHandlerInterface
     ) {
         $sqlField = 'productAttribute.' . $facet->getField();
 
-        $query->select('COUNT('.$sqlField.')');
+        $query->select('COUNT(' . $sqlField . ')');
 
-        /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
+        /** @var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
         $result = $statement->fetch(\PDO::FETCH_COLUMN);
 
@@ -271,7 +275,7 @@ class ProductAttributeFacetHandler implements FacetHandlerInterface
     }
 
     /**
-     * @param QueryBuilder $query
+     * @param QueryBuilder                $query
      * @param Struct\ShopContextInterface $context
      */
     private function addTranslations($query, $context)
@@ -308,8 +312,9 @@ class ProductAttributeFacetHandler implements FacetHandlerInterface
     }
 
     /**
-     * @param array $row
+     * @param array  $row
      * @param string $fieldName
+     *
      * @return null|string
      */
     private function extractTranslations($row, $fieldName)
@@ -328,9 +333,10 @@ class ProductAttributeFacetHandler implements FacetHandlerInterface
     }
 
     /**
-     * @param array $row
+     * @param array  $row
      * @param string $key
      * @param string $fieldName
+     *
      * @return string|null
      */
     private function unserializeTranslation($row, $key, $fieldName)

@@ -1,4 +1,26 @@
 <?php
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
 
 namespace Shopware\Tests\Functional\Bundle\StoreFrontBundle;
 
@@ -8,36 +30,6 @@ use Shopware\Models\Category\Category;
 
 class GraduatedPricesTest extends TestCase
 {
-    protected function getContext()
-    {
-        $context = parent::getContext();
-
-        $context->setFallbackCustomerGroup(
-            $this->converter->convertCustomerGroup($this->helper->createCustomerGroup(array('key'=> 'BACK')))
-        );
-
-        return $context;
-    }
-
-    protected function getProduct(
-        $number,
-        ShopContext $context,
-        Category $category = null,
-        $additionally = null
-    ) {
-        $data = parent::getProduct($number, $context, $category);
-
-        $data['mainDetail']['prices'] = array_merge(
-            $data['mainDetail']['prices'],
-            $this->helper->getGraduatedPrices(
-                $context->getFallbackCustomerGroup()->getKey(),
-                -20
-            )
-        );
-
-        return $data;
-    }
-
     public function testSimpleGraduation()
     {
         $number = __FUNCTION__;
@@ -99,14 +91,13 @@ class GraduatedPricesTest extends TestCase
 
         $this->helper->createArticle($data);
 
-        /**@var $first Price*/
+        /** @var $first Price */
         $listProduct = $this->helper->getListProduct($number, $context);
         $this->assertCount(3, $listProduct->getPrices());
         $first = array_shift($listProduct->getPrices());
         $this->assertEquals(100, $first->getCalculatedPrice());
 
-
-        /**@var $first Price*/
+        /** @var $first Price */
         $listProduct = $this->helper->getListProduct($variantNumber, $context);
 
         $this->assertCount(3, $listProduct->getPrices());
@@ -120,20 +111,19 @@ class GraduatedPricesTest extends TestCase
         $context = $this->getContext();
 
         $data = $this->getProduct($number, $context);
-        $data['mainDetail']['prices'] = array(array(
+        $data['mainDetail']['prices'] = [[
             'from' => 1,
             'to' => null,
             'price' => 40,
             'customerGroupKey' => $context->getCurrentCustomerGroup()->getKey(),
-            'pseudoPrice' => 110
-        ));
+            'pseudoPrice' => 110,
+        ]];
 
         $priceGroup = $this->helper->createPriceGroup();
         $priceGroupStruct = $this->converter->convertPriceGroup($priceGroup);
-        $context->setPriceGroups(array(
-            $priceGroupStruct->getId() => $priceGroupStruct
-        ));
-
+        $context->setPriceGroups([
+            $priceGroupStruct->getId() => $priceGroupStruct,
+        ]);
 
         $data['priceGroupId'] = $priceGroup->getId();
         $data['priceGroupActive'] = true;
@@ -156,5 +146,35 @@ class GraduatedPricesTest extends TestCase
         $this->assertEquals(28, $graduations[2]->getCalculatedPrice());
         $this->assertEquals(10, $graduations[2]->getFrom());
         $this->assertEquals(null, $graduations[2]->getTo());
+    }
+
+    protected function getContext()
+    {
+        $context = parent::getContext();
+
+        $context->setFallbackCustomerGroup(
+            $this->converter->convertCustomerGroup($this->helper->createCustomerGroup(['key' => 'BACK']))
+        );
+
+        return $context;
+    }
+
+    protected function getProduct(
+        $number,
+        ShopContext $context,
+        Category $category = null,
+        $additionally = null
+    ) {
+        $data = parent::getProduct($number, $context, $category);
+
+        $data['mainDetail']['prices'] = array_merge(
+            $data['mainDetail']['prices'],
+            $this->helper->getGraduatedPrices(
+                $context->getFallbackCustomerGroup()->getKey(),
+                -20
+            )
+        );
+
+        return $data;
     }
 }

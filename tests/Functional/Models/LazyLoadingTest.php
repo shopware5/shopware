@@ -24,8 +24,8 @@
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\ClassMetadata;
-use Shopware\Models\Customer\Group;
 use Shopware\Models\Customer\Customer;
+use Shopware\Models\Customer\Group;
 
 class LazyLoadingTest extends PHPUnit\Framework\TestCase
 {
@@ -44,16 +44,6 @@ class LazyLoadingTest extends PHPUnit\Framework\TestCase
     public function setUp()
     {
         $this->em = Shopware()->Models();
-    }
-
-    private function generateRandomString($length = 10)
-    {
-        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        $randomString = '';
-        for ($i = 0; $i < $length; $i++) {
-            $randomString .= $characters[rand(0, strlen($characters) - 1)];
-        }
-        return $randomString;
     }
 
     public function testCanCreateEntity()
@@ -96,10 +86,10 @@ class LazyLoadingTest extends PHPUnit\Framework\TestCase
      */
     public function testLoadExplicit(Shopware\Models\Customer\Customer $customer)
     {
-        $customerId  = $customer->getId();
-        $groupId  = $customer->getGroup()->getId();
+        $customerId = $customer->getId();
+        $groupId = $customer->getGroup()->getId();
         $groupKey = $customer->getGroup()->getKey();
-        $customer    = null;
+        $customer = null;
         $this->em->clear();
 
         /** @var Customer $customer */
@@ -119,7 +109,7 @@ class LazyLoadingTest extends PHPUnit\Framework\TestCase
      */
     public function testDqlJoinQuery(Shopware\Models\Customer\Customer $customer)
     {
-        $customerId  = $customer->getId();
+        $customerId = $customer->getId();
         $groupKey = $customer->getGroup()->getKey();
         $customer = null;
         $this->em->clear();
@@ -142,9 +132,9 @@ class LazyLoadingTest extends PHPUnit\Framework\TestCase
      */
     public function testDqlFetchEagerQuery(Shopware\Models\Customer\Customer $customer)
     {
-        $customerId  = $customer->getId();
+        $customerId = $customer->getId();
         $groupKey = $customer->getGroup()->getKey();
-        $customer    = null;
+        $customer = null;
         $this->em->clear();
 
         $query = $this->em->createQuery("SELECT p FROM Shopware\Models\Customer\Customer p WHERE p.id = :customerId");
@@ -166,9 +156,9 @@ class LazyLoadingTest extends PHPUnit\Framework\TestCase
      */
     public function testDqlLazyQuery(Shopware\Models\Customer\Customer $customer)
     {
-        $customerId  = $customer->getId();
+        $customerId = $customer->getId();
         $groupKey = $customer->getGroup()->getKey();
-        $customer    = null;
+        $customer = null;
         $this->em->clear();
 
         $query = $this->em->createQuery("SELECT p FROM Shopware\Models\Customer\Customer p WHERE p.id = :customerId");
@@ -189,9 +179,9 @@ class LazyLoadingTest extends PHPUnit\Framework\TestCase
      */
     public function testLazyLoad(Shopware\Models\Customer\Customer $customer)
     {
-        $customerId  = $customer->getId();
+        $customerId = $customer->getId();
         $groupKey = $customer->getGroup()->getKey();
-        $customer    = null;
+        $customer = null;
         $this->em->clear();
 
         /** @var Customer $customer */
@@ -211,7 +201,7 @@ class LazyLoadingTest extends PHPUnit\Framework\TestCase
     {
         $groupId = $customer->getGroup()->getId();
         $groupKey = $customer->getGroup()->getKey();
-        $customer    = null;
+        $customer = null;
         $this->em->clear();
 
         $customer = new Customer();
@@ -290,10 +280,10 @@ class LazyLoadingTest extends PHPUnit\Framework\TestCase
         $ordernumber = $conn->fetchColumn('SELECT ordernumber FROM s_articles_details');
         $email = $conn->fetchColumn('SELECT email FROM s_user');
 
-        $conn->insert('s_articles_notification', array(
+        $conn->insert('s_articles_notification', [
             'ordernumber' => $ordernumber,
-            'mail'        => $email,
-        ));
+            'mail' => $email,
+        ]);
 
         $id = $conn->lastInsertId();
 
@@ -302,7 +292,7 @@ class LazyLoadingTest extends PHPUnit\Framework\TestCase
         $this->assertEquals($ordernumber, $notification->getArticleDetail()->getNumber());
         $this->assertEquals($email, $notification->getCustomer()->getEmail());
 
-        $conn->delete('s_articles_notification', array('id' => $id));
+        $conn->delete('s_articles_notification', ['id' => $id]);
     }
 
     /**
@@ -312,7 +302,7 @@ class LazyLoadingTest extends PHPUnit\Framework\TestCase
     public function testArticlePrice()
     {
         /** @var \Shopware\Models\Article\Price $price */
-        $price = $this->em->getRepository('Shopware\Models\Article\Price')->findOneBy(array('customerGroupKey' => 'ek'));
+        $price = $this->em->getRepository('Shopware\Models\Article\Price')->findOneBy(['customerGroupKey' => 'ek']);
         $group = $price->getCustomerGroup();
         $this->assertEquals('EK', $group->getKey());
     }
@@ -324,16 +314,16 @@ class LazyLoadingTest extends PHPUnit\Framework\TestCase
     public function testTemplatePrice()
     {
         $conn = $this->em->getConnection();
-        $conn->insert('s_article_configurator_template_prices', array(
+        $conn->insert('s_article_configurator_template_prices', [
             'customer_group_key' => 'ek',
-        ));
+        ]);
         $id = $conn->lastInsertId();
 
         /** @var \Shopware\Models\Article\Configurator\Template\Price $templatePrice */
         $templatePrice = $this->em->getRepository('\Shopware\Models\Article\Configurator\Template\Price')->find($id);
         $this->assertEquals('EK', $templatePrice->getCustomerGroup()->getKey());
 
-        $conn->delete('s_articles_notification', array('id' => $id));
+        $conn->delete('s_articles_notification', ['id' => $id]);
     }
 
     /**
@@ -342,18 +332,18 @@ class LazyLoadingTest extends PHPUnit\Framework\TestCase
      */
     public function testNewsletterAddress()
     {
-        $conn  = $this->em->getConnection();
+        $conn = $this->em->getConnection();
         $email = $conn->fetchColumn('SELECT email FROM s_user');
-        $conn->insert('s_campaigns_mailaddresses', array(
+        $conn->insert('s_campaigns_mailaddresses', [
             'email' => $email,
-        ));
+        ]);
         $id = $conn->lastInsertId();
 
         /** @var \Shopware\Models\Newsletter\Address $address */
         $address = $this->em->getRepository('Shopware\Models\Newsletter\Address')->find($id);
         $this->assertEquals($email, $address->getCustomer()->getEmail());
 
-        $conn->delete('s_campaigns_mailaddresses', array('id' => $id));
+        $conn->delete('s_campaigns_mailaddresses', ['id' => $id]);
     }
 
     /**
@@ -375,9 +365,9 @@ class LazyLoadingTest extends PHPUnit\Framework\TestCase
     {
         $conn = $this->em->getConnection();
         $ordernumber = $conn->fetchColumn('SELECT ordernumber FROM s_articles_details ORDER by id');
-        $conn->insert('s_campaigns_articles', array(
+        $conn->insert('s_campaigns_articles', [
             'articleordernumber' => $ordernumber,
-        ));
+        ]);
 
         $id = $conn->lastInsertId();
 
@@ -385,6 +375,17 @@ class LazyLoadingTest extends PHPUnit\Framework\TestCase
         $articleContainerType = $this->em->getRepository('Shopware\Models\Newsletter\ContainerType\Article')->find($id);
         $this->assertEquals($ordernumber, $articleContainerType->getArticleDetail()->getNumber());
 
-        $conn->delete('s_campaigns_articles', array('id' => $id));
+        $conn->delete('s_campaigns_articles', ['id' => $id]);
+    }
+
+    private function generateRandomString($length = 10)
+    {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $randomString = '';
+        for ($i = 0; $i < $length; ++$i) {
+            $randomString .= $characters[rand(0, strlen($characters) - 1)];
+        }
+
+        return $randomString;
     }
 }

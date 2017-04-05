@@ -24,19 +24,18 @@
 
 namespace Shopware\Models\Config;
 
-use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Model\ModelEntity;
 use Shopware\Models\Shop\Shop;
 
 /**
- *
  * @ORM\Table(name="s_core_config_values")
  * @ORM\Entity
  */
 class Value extends ModelEntity
 {
     /**
-     * @var integer $id
+     * @var int
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -44,27 +43,27 @@ class Value extends ModelEntity
     private $id;
 
     /**
-     * @var string $element
+     * @var string
      * @ORM\ManyToOne(targetEntity="Element", inversedBy="values")
      * @ORM\JoinColumn(name="element_id", referencedColumnName="id")
      */
     private $element;
 
     /**
-     * @var Shop $shop
+     * @var Shop
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Shop\Shop")
      * @ORM\JoinColumn(name="shop_id", referencedColumnName="id")
      */
     private $shop;
 
     /**
-     * @var integer $shop
+     * @var int
      * @ORM\Column(name="shop_id", type="integer", nullable=false)
      */
     private $shopId;
 
     /**
-     * @var string $description
+     * @var string
      * @ORM\Column(name="value", type="object", nullable=true)
      */
     private $value;
@@ -72,7 +71,7 @@ class Value extends ModelEntity
     /**
      * Get id
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -83,11 +82,13 @@ class Value extends ModelEntity
      * Set element
      *
      * @param Element $element
+     *
      * @return Value
      */
     public function setElement($element)
     {
         $this->element = $element;
+
         return $this;
     }
 
@@ -105,11 +106,13 @@ class Value extends ModelEntity
      * Set shop
      *
      * @param Shop $shop
+     *
      * @return Element
      */
     public function setShop($shop)
     {
         $this->shop = $shop;
+
         return $this;
     }
 
@@ -127,11 +130,13 @@ class Value extends ModelEntity
      * Set value
      *
      * @param mixed $value
+     *
      * @return Value
      */
     public function setValue($value)
     {
         $this->value = $value;
+
         return $this;
     }
 

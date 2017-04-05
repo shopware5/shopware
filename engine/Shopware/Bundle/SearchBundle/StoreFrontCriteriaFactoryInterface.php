@@ -24,62 +24,69 @@
 
 namespace Shopware\Bundle\SearchBundle;
 
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Enlight_Controller_Request_Request as Request;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 /**
  * @category  Shopware
- * @package   Shopware\Bundle\SearchBundle
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 interface StoreFrontCriteriaFactoryInterface
 {
     /**
-     * @param int[] $categoryIds
+     * @param int[]                $categoryIds
      * @param ShopContextInterface $context
+     *
      * @return Criteria
      */
     public function createBaseCriteria($categoryIds, ShopContextInterface $context);
 
     /**
-     * @param Request $request
+     * @param Request              $request
      * @param ShopContextInterface $context
+     *
      * @return Criteria
      */
     public function createSearchCriteria(Request $request, ShopContextInterface $context);
 
     /**
-     * @param Request $request
+     * @param Request              $request
      * @param ShopContextInterface $context
+     *
      * @return Criteria
      */
     public function createListingCriteria(Request $request, ShopContextInterface $context);
 
     /**
-     * @param Request $request
+     * @param Request              $request
      * @param ShopContextInterface $context
+     *
      * @return Criteria
      */
     public function createAjaxSearchCriteria(Request $request, ShopContextInterface $context);
 
     /**
-     * @param Request $request
+     * @param Request              $request
      * @param ShopContextInterface $context
+     *
      * @return Criteria
      */
     public function createAjaxListingCriteria(Request $request, ShopContextInterface $context);
 
     /**
-     * @param Request $request
+     * @param Request              $request
      * @param ShopContextInterface $context
+     *
      * @return Criteria
      */
     public function createAjaxCountCriteria(Request $request, ShopContextInterface $context);
 
     /**
-     * @param Request $request
+     * @param Request              $request
      * @param ShopContextInterface $context
-     * @param int $categoryId
+     * @param int                  $categoryId
+     *
      * @return \Shopware\Bundle\SearchBundle\Criteria
      */
     public function createProductNavigationCriteria(Request $request, ShopContextInterface $context, $categoryId);

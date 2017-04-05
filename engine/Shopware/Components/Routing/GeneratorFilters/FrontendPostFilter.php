@@ -24,18 +24,19 @@
 
 namespace Shopware\Components\Routing\GeneratorFilters;
 
-use Shopware\Components\Routing\PostFilterInterface;
 use Shopware\Components\Routing\Context;
+use Shopware\Components\Routing\PostFilterInterface;
 
 /**
  * @category  Shopware
- * @package   Shopware\Components\Routing
+ *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class FrontendPostFilter implements PostFilterInterface
 {
     /**
      * legacy default secure controllers
+     *
      * @var string[]
      */
     private $secureControllers = ['account', 'checkout', 'register', 'ticket', 'note', 'compare'];
@@ -79,6 +80,7 @@ class FrontendPostFilter implements PostFilterInterface
         } else {
             $secure = false;
         }
+
         return $secure;
     }
 
@@ -93,6 +95,7 @@ class FrontendPostFilter implements PostFilterInterface
         } else {
             $fullPath = true;
         }
+
         return $fullPath;
     }
 }

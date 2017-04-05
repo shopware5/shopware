@@ -28,6 +28,7 @@ interface SearchTermPreProcessorInterface
 {
     /**
      * @param string $term
+     *
      * @return string
      */
     public function process($term);
