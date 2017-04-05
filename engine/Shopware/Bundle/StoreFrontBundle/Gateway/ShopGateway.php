@@ -123,15 +123,15 @@ class ShopGateway
 
         $query->from('s_core_shops', 'shop')
             ->innerJoin('shop', 's_core_currencies', 'currency', 'currency.id = shop.currency_id')
-            ->innerJoin('shop', 's_core_templates', 'template', 'shop.template_id = template.id')
             ->innerJoin('shop', 's_core_locales', 'locale', 'locale.id = shop.locale_id')
             ->innerJoin('shop', 's_core_customergroups', 'customerGroup', 'customerGroup.id = shop.customer_group_id')
             ->innerJoin('shop', 's_categories', 'category', 'category.id = shop.category_id')
             ->innerJoin('shop', 's_core_countries', 'country', 'country.id = shop.country_id')
             ->innerJoin('shop', 's_core_paymentmeans', 'paymentMethod', 'paymentMethod.id = shop.payment_id')
             ->innerJoin('shop', 's_premium_dispatch', 'deliveryMethod', 'deliveryMethod.id = shop.dispatch_id')
-            ->innerJoin('country', 's_core_countries_areas', 'countryArea', 'countryArea.id = country.areaID')
 
+            ->leftJoin('country', 's_core_countries_areas', 'countryArea', 'countryArea.id = country.areaID')
+            ->leftJoin('shop', 's_core_templates', 'template', 'shop.template_id = template.id')
             ->leftJoin('deliveryMethod', 's_premium_dispatch_attributes', 'deliveryMethodAttribute', 'deliveryMethodAttribute.dispatchID = deliveryMethod.id')
             ->leftJoin('paymentMethod', 's_core_paymentmeans_attributes', 'paymentMethodAttribute', 'paymentMethodAttribute.paymentmeanID = paymentMethod.id')
             ->leftJoin('country', 's_core_countries_attributes', 'countryAttribute', 'countryAttribute.countryID = country.id')
