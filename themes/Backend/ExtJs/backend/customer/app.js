@@ -65,7 +65,7 @@ Ext.define('Shopware.apps.Customer', {
      * Requires controllers for sub-application
      * @array
      */
-    controllers:[ 'Main', 'List', 'Detail', 'Order' ],
+    controllers:[ 'Main', 'List', 'Detail', 'Order', 'Stream' ],
 
     /**
      * The detail controller knows all form field sets and the detail window component
@@ -80,6 +80,7 @@ Ext.define('Shopware.apps.Customer', {
         'list.List',
         'list.Filter',
         'main.Window',
+        'main.Toolbar',
         'order.List',
         'order.Chart',
         'address.List',
