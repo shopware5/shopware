@@ -117,7 +117,7 @@ class Detail extends Page implements HelperSelectorInterface
      */
     public function toBasket($quantity = 1)
     {
-        $this->fillField('sQuantity', $quantity);
+        $this->fillField('quantity', $quantity);
         $this->pressButton('In den Warenkorb');
 
         if ($this->getDriver() instanceof Selenium2Driver) {

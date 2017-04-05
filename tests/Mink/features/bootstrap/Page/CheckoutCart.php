@@ -185,7 +185,7 @@ class CheckoutCart extends Page implements \Shopware\Tests\Mink\HelperSelectorIn
         $originalPath = $this->path;
 
         foreach ($items as $item) {
-            $this->path = sprintf('/checkout/addArticle/sAdd/%s/sQuantity/%d', $item['number'], $item['quantity']);
+            $this->path = sprintf('/checkout/addProduct/number/%s/quantity/%d/sTargetAction/cart', $item['number'], $item['quantity']);
             $this->open();
         }
 
