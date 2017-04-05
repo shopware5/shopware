@@ -155,7 +155,7 @@ class DataPersister
             $query->setValue($key, ':' . $key);
             $query->setParameter(':' . $key, $value);
         }
-        
+
         $query->execute();
     }
 
@@ -220,7 +220,7 @@ class DataPersister
             $value = $data[$column->getName()];
 
             if ($this->isDateColumn($column) && empty($value)) {
-                $result[$column->getName()] = 'NULL';
+                $result[$column->getName()] = null;
             } else {
                 $result[$column->getName()] = $value;
             }
