@@ -26,7 +26,6 @@ namespace Shopware\Components\Theme;
 
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\AbstractQuery;
-use Shopware\Bundle\MediaBundle\MediaServiceInterface;
 use Shopware\Bundle\MediaBundle\Strategy\StrategyInterface;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Shop as Shop;
@@ -80,7 +79,7 @@ class Service
         ModelManager $entityManager,
         \Shopware_Components_Snippet_Manager $snippets,
         Util $util,
-        MediaServiceInterface $strategy
+        StrategyInterface $strategy
     ) {
         $this->entityManager = $entityManager;
         $this->snippets = $snippets;

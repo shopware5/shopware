@@ -18,7 +18,7 @@
             <argument type="service" id="models" />
             <argument type="service" id="snippets" />
             <argument type="service" id="theme_util" />
-            <argument type="service" id="shopware_media.media_service" />
+            <argument type="service" id="shopware_media.strategy" />
         </service>
 
         <service id="theme_config_loader" class="Shopware\Components\Theme\EventListener\ConfigLoader">
