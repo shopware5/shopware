@@ -251,9 +251,7 @@ class PresetLoader implements PresetLoaderInterface
 
             $fieldMapping = array_combine($componentDetail['fields'], $fields);
 
-            $componentMapping[$componentDetail['id']] = array_merge(
-                $componentMapping[$componentDetail['id']], $fieldMapping
-            );
+            $componentMapping[$componentDetail['id']] = $componentMapping[$componentDetail['id']] + $fieldMapping;
         }
 
         return $componentMapping;
