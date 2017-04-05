@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -23,35 +22,25 @@ declare(strict_types=1);
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\CartBundle\Infrastructure\View;
+namespace Shopware\Bundle\CartBundle\Infrastructure;
 
-use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
-
-class ViewCartTransformer
+class Serializer
 {
-    /**
-     * @var ViewLineItemTransformerInterface[]
-     */
-    private $transformers = [];
+    const FORMAT_JSON = 'json';
 
-    public function __construct(array $transformers)
+    const FORMAT_ARRAY = 'array';
+
+    public function serialize($data, string $format)
     {
-        $this->transformers = $transformers;
-    }
+        switch ($format) {
+            case self::FORMAT_ARRAY:
+                return json_decode(json_encode($data), true);
 
-    public function transform(CalculatedCart $calculatedCart, ShopContextInterface $context): ViewCart
-    {
-        $viewCart = ViewCart::createFromCalculatedCart($calculatedCart);
+            case self::FORMAT_JSON:
+                return json_encode($data);
 
-        foreach ($this->transformers as $transformer) {
-            $transformer->transform($calculatedCart, $viewCart, $context);
+            default:
+                throw new \Exception(sprintf('Unsupported serializer format %s', $format));
         }
-
-        $viewCart->getLineItems()->sortByIdentifiers(
-            $calculatedCart->getLineItems()->getIdentifiers()
-        );
-
-        return $viewCart;
     }
 }

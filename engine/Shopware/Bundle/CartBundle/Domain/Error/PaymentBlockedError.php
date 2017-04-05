@@ -54,7 +54,7 @@ class PaymentBlockedError extends Error
 
     public function getMessageKey(): string
     {
-        return 'payment_blocked';
+        return self::class;
     }
 
     public function getMessage(): string

@@ -29,8 +29,10 @@ use Shopware\Bundle\CartBundle\Domain\JsonSerializableTrait;
 use Shopware\Bundle\CartBundle\Domain\LineItem\CalculatedLineItemInterface;
 use Shopware\Bundle\CartBundle\Domain\LineItem\LineItemInterface;
 use Shopware\Bundle\CartBundle\Domain\Price\Price;
+use Shopware\Bundle\CartBundle\Infrastructure\View\ViewLineItemInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\Media;
 
-class CalculatedVoucher implements CalculatedLineItemInterface
+class CalculatedVoucher implements CalculatedLineItemInterface, ViewLineItemInterface
 {
     use JsonSerializableTrait;
 
@@ -44,12 +46,19 @@ class CalculatedVoucher implements CalculatedLineItemInterface
      */
     protected $price;
 
+    /**
+     * @var string
+     */
+    protected $code;
+
     public function __construct(
+        string $code,
         LineItemInterface $lineItem,
         Price $price
     ) {
         $this->price = $price;
         $this->lineItem = $lineItem;
+        $this->code = $code;
     }
 
     public function getIdentifier(): string
@@ -60,5 +69,25 @@ class CalculatedVoucher implements CalculatedLineItemInterface
     public function getPrice(): Price
     {
         return $this->price;
+    }
+
+    public function getLineItem(): CalculatedLineItemInterface
+    {
+        return $this;
+    }
+
+    public function getLabel(): string
+    {
+        return $this->code;
+    }
+
+    public function getCover(): ? Media
+    {
+        return null;
+    }
+
+    public function getCode(): string
+    {
+        return $this->code;
     }
 }

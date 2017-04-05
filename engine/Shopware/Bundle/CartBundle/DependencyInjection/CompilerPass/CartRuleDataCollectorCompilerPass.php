@@ -23,35 +23,28 @@ declare(strict_types=1);
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\CartBundle\Infrastructure\View;
+namespace Shopware\Bundle\CartBundle\DependencyInjection\CompilerPass;
 
-use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Components\DependencyInjection\Compiler\TagReplaceTrait;
+use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-class ViewCartTransformer
+/**
+ * @category  Shopware
+ *
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
+ */
+class CartRuleDataCollectorCompilerPass implements CompilerPassInterface
 {
-    /**
-     * @var ViewLineItemTransformerInterface[]
-     */
-    private $transformers = [];
+    use TagReplaceTrait;
 
-    public function __construct(array $transformers)
+    public function process(ContainerBuilder $container): void
     {
-        $this->transformers = $transformers;
-    }
-
-    public function transform(CalculatedCart $calculatedCart, ShopContextInterface $context): ViewCart
-    {
-        $viewCart = ViewCart::createFromCalculatedCart($calculatedCart);
-
-        foreach ($this->transformers as $transformer) {
-            $transformer->transform($calculatedCart, $viewCart, $context);
-        }
-
-        $viewCart->getLineItems()->sortByIdentifiers(
-            $calculatedCart->getLineItems()->getIdentifiers()
+        $this->replaceArgumentWithTaggedServices(
+            $container,
+            'shopware_cart.rule_data_collector_registry',
+            'shopware_cart.rule_data_collector',
+            0
         );
-
-        return $viewCart;
     }
 }

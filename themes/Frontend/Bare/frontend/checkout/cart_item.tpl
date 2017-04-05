@@ -5,24 +5,25 @@
 {$IS_REBATE = 3}
 {$IS_SURCHARGE_DISCOUNT = 4}
 
+{* Product *}
 {if $lineItem._class === "Shopware\Bundle\CartBundle\Infrastructure\View\ViewProduct"}
-
-    {* Product *}
     {block name='frontend_checkout_cart_item_product'}
         {include file="frontend/checkout/items/product.tpl" isLast=$isLast}
     {/block}
+
+{* Voucher *}
+{elseif $lineItem._class === "Shopware\Bundle\CartBundle\Domain\Voucher\CalculatedVoucher"}
+    {block name='frontend_checkout_cart_item_voucher'}
+        {include file="frontend/checkout/items/voucher.tpl" isLast=$isLast}
+    {/block}
+
 {elseif $sBasketItem.modus == $IS_PREMIUM_PRODUCT}
 
     {* Chosen premium products *}
     {block name='frontend_checkout_cart_item_premium_product'}
         {include file="frontend/checkout/items/premium-product.tpl" isLast=$isLast}
     {/block}
-{elseif $sBasketItem.modus == $IS_VOUCHER}
 
-    {* Voucher *}
-    {block name='frontend_checkout_cart_item_voucher'}
-        {include file="frontend/checkout/items/voucher.tpl" isLast=$isLast}
-    {/block}
 {elseif $sBasketItem.modus == $IS_REBATE}
 
     {* Basket rebate *}

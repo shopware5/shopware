@@ -23,35 +23,53 @@ declare(strict_types=1);
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\CartBundle\Infrastructure\View;
+namespace Shopware\Bundle\CartBundle\Domain\Voucher;
 
-use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Bundle\CartBundle\Domain\KeyCollection;
 
-class ViewCartTransformer
+class VoucherCollection extends KeyCollection
 {
     /**
-     * @var ViewLineItemTransformerInterface[]
+     * @var Voucher[]
      */
-    private $transformers = [];
+    protected $elements = [];
 
-    public function __construct(array $transformers)
+    public function add(Voucher $voucher): void
     {
-        $this->transformers = $transformers;
+        parent::doAdd($voucher);
     }
 
-    public function transform(CalculatedCart $calculatedCart, ShopContextInterface $context): ViewCart
+    public function remove(string $code): void
     {
-        $viewCart = ViewCart::createFromCalculatedCart($calculatedCart);
+        parent::doRemoveByKey($code);
+    }
 
-        foreach ($this->transformers as $transformer) {
-            $transformer->transform($calculatedCart, $viewCart, $context);
+    public function removeElement(Voucher $voucher): void
+    {
+        parent::doRemoveByKey($this->getKey($voucher));
+    }
+
+    public function exists(Voucher $voucher): bool
+    {
+        return parent::has($this->getKey($voucher));
+    }
+
+    public function get(string $code): ? Voucher
+    {
+        if ($this->has($code)) {
+            return $this->elements[$code];
         }
 
-        $viewCart->getLineItems()->sortByIdentifiers(
-            $calculatedCart->getLineItems()->getIdentifiers()
-        );
+        return null;
+    }
 
-        return $viewCart;
+    /**
+     * @param Voucher $element
+     *
+     * @return string
+     */
+    protected function getKey($element): string
+    {
+        return $element->getCode();
     }
 }

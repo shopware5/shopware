@@ -25,11 +25,8 @@
 use Enlight_Controller_Request_Request as Request;
 use Shopware\Bundle\CartBundle\Domain\Error\PaymentBlockedError;
 use Shopware\Bundle\CartBundle\Domain\LineItem\LineItem;
-use Shopware\Bundle\CartBundle\Domain\Payment\PaymentMethod;
 use Shopware\Bundle\CartBundle\Domain\Product\ProductProcessor;
-use Shopware\Bundle\CartBundle\Infrastructure\StoreFrontCartService;
-use Shopware\Bundle\CartBundle\Infrastructure\View\ViewCart;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Bundle\CartBundle\Domain\Voucher\VoucherProcessor;
 use Shopware\Components\BasketSignature\BasketPersister;
 use Shopware\Components\BasketSignature\BasketSignatureGeneratorInterface;
 use Shopware\Models\Customer\Address;
@@ -45,26 +42,23 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
     const ACTION_CART = 'cart';
     const ACTION_CONFIRM = 'confirm';
 
-    public function cartAction()
+    const TARGET_ACTION_KEY = 'sTargetAction';
+
+    public function cartAction(): void
     {
-        /** @var StoreFrontCartService $service */
-        $service = $this->get('shopware_cart.store_front_cart_service');
+        $context = $this->container->get('shopware_storefront.context_service')->getShopContext();
 
-        /** @var ShopContextInterface $context */
-        $context = $this->get('shopware_storefront.context_service')->getShopContext();
-
-        $cart = $service->getCart();
+        $cart = $this->container->get('shopware_cart.store_front_cart_service')->getCart();
 
         $this->View()->assign([
-            'context' => json_decode(json_encode($context), true),
-            'cart' => json_decode(json_encode($cart), true),
-            'sTargetAction' => self::ACTION_CART,
+            'context' => $this->serialize($context),
+            'cart' => $this->serialize($cart),
+            self::TARGET_ACTION_KEY => self::ACTION_CART,
         ]);
     }
 
     public function confirmAction(): void
     {
-        /** @var ShopContextInterface $context */
         $context = $this->container->get('shopware_storefront.context_service')->getShopContext();
 
         if ($context->getCustomer() === null) {
@@ -73,8 +67,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
             return;
         }
 
-        /** @var ViewCart $cart */
-        $cart = $this->get('shopware_cart.store_front_cart_service')->getCart();
+        $cart = $this->container->get('shopware_cart.store_front_cart_service')->getCart();
 
         if ($cart->getLineItems()->count() === 0) {
             $this->redirect(['action' => self::ACTION_CART]);
@@ -88,40 +81,34 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         }
 
         $this->View()->assign([
-            'context' => json_decode(json_encode($context), true),
-            'cart' => json_decode(json_encode($cart), true),
-            'sTargetAction' => self::ACTION_CONFIRM,
+            'context' => $this->serialize($context),
+            'cart' => $this->serialize($cart),
+            self::TARGET_ACTION_KEY => self::ACTION_CONFIRM,
         ]);
     }
 
     public function shippingPaymentAction()
     {
-        /** @var ViewCart $cart */
-        $cart = $this->get('shopware_cart.store_front_cart_service')->getCart();
+        $cart = $this->container->get('shopware_cart.store_front_cart_service')->getCart();
 
-        /** @var ShopContextInterface $context */
-        $context = $this->get('shopware_storefront.context_service')->getShopContext();
+        $context = $this->container->get('shopware_storefront.context_service')->getShopContext();
 
-        /** @var PaymentMethod[] $payments */
-        $payments = $this->get('shopware_cart.payment_method_service')->getAvailable(
+        $payments = $this->container->get('shopware_cart.payment_method_service')->getAvailable(
             $cart->getCalculatedCart(),
             $context
         );
 
-        $deliveryMethods = $this->get('shopware_cart.delivery_method_service')
+        $deliveryMethods = $this->container->get('shopware_cart.delivery_method_service')
             ->getAvailable($cart->getCalculatedCart(), $context);
 
-        $payments = json_decode(json_encode($payments), true);
-        $deliveryMethods = json_decode(json_encode($deliveryMethods), true);
-
         $this->View()->assign([
-            'context' => json_decode(json_encode($context), true),
-            'cart' => json_decode(json_encode($cart), true),
-            'payments' => $payments,
-            'deliveryMethods' => $deliveryMethods,
-            'sTargetAction' => 'shippingPayment',
+            'context' => $this->serialize($context),
+            'cart' => $this->serialize($cart),
+            'payments' => $this->serialize($payments),
+            'deliveryMethods' => $this->serialize($deliveryMethods),
             'currentDeliveryId' => $context->getDeliveryMethod()->getId(),
             'currentPaymentId' => $context->getPaymentMethod()->getId(),
+            self::TARGET_ACTION_KEY => 'shippingPayment',
         ]);
 
         if ($this->Request()->getParam('isXHR')) {
@@ -133,17 +120,14 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
     {
         Shopware()->Plugins()->Controller()->Json()->setPadding();
 
-        /** @var StoreFrontCartService $service */
-        $service = $this->get('shopware_cart.store_front_cart_service');
+        $context = $this->container->get('shopware_storefront.context_service')->getShopContext();
 
-        $context = $this->get('shopware_storefront.context_service')->getShopContext();
-
-        $cart = $service->getCart();
+        $cart = $this->container->get('shopware_cart.store_front_cart_service')->getCart();
 
         $this->View()->assign([
-            'context' => json_decode(json_encode($context), true),
-            'cart' => json_decode(json_encode($cart), true),
-            'sTargetAction' => self::ACTION_AJAX_CART,
+            'context' => $this->serialize($context),
+            'cart' => $this->serialize($cart),
+            self::TARGET_ACTION_KEY => self::ACTION_AJAX_CART,
         ]);
     }
 
@@ -151,10 +135,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
     {
         Shopware()->Plugins()->Controller()->Json()->setPadding();
 
-        /** @var StoreFrontCartService $service */
-        $service = $this->get('shopware_cart.store_front_cart_service');
-
-        $cart = $service->getCart();
+        $cart = $this->container->get('shopware_cart.store_front_cart_service')->getCart();
 
         $quantity = $cart->getCalculatedCart()->getLineItems()->filterGoods()->count();
 
@@ -179,14 +160,12 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
 
         $quantity = (int) $this->Request()->getParam('quantity', 1);
 
-        /** @var StoreFrontCartService $service */
-        $service = $this->get('shopware_cart.store_front_cart_service');
-        $service->add(
+        $this->container->get('shopware_cart.store_front_cart_service')->add(
             new LineItem($number, ProductProcessor::TYPE_PRODUCT, $quantity)
         );
 
         $this->forward(
-            $this->Request()->getParam('sTargetAction', self::ACTION_AJAX_CART)
+            $this->Request()->getParam(self::TARGET_ACTION_KEY, self::ACTION_AJAX_CART)
         );
     }
 
@@ -194,13 +173,27 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
     {
         $identifier = $this->Request()->getParam('identifier');
 
-        /** @var StoreFrontCartService $service */
-        $service = $this->get('shopware_cart.store_front_cart_service');
-        $service->remove($identifier);
+        $this->container->get('shopware_cart.store_front_cart_service')->remove($identifier);
 
         $this->forward(
-            $this->Request()->getParam('sTargetAction', self::ACTION_AJAX_CART)
+            $this->Request()->getParam(self::TARGET_ACTION_KEY, self::ACTION_AJAX_CART)
         );
+    }
+
+    public function addVoucherAction()
+    {
+        $code = $this->Request()->getParam('code');
+        if (!$code) {
+            throw new Exception('No voucher code provided');
+        }
+
+        $this->container->get('shopware_cart.store_front_cart_service')->add(
+            new LineItem('voucher', VoucherProcessor::TYPE_VOUCHER, 1, ['code' => $code])
+        );
+
+        $this->redirect([
+            'action' => $this->Request()->getParam(self::TARGET_ACTION_KEY, self::ACTION_CART),
+        ]);
     }
 
     public function changeQuantityAction()
@@ -209,8 +202,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
             throw new Exception('Only post request allowed');
         }
 
-        /** @var StoreFrontCartService $service */
-        $service = $this->get('shopware_cart.store_front_cart_service');
+        $service = $this->container->get('shopware_cart.store_front_cart_service');
 
         $identifier = $this->Request()->getPost('identifier');
         if (!$identifier) {
@@ -225,7 +217,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         $service->changeQuantity($identifier, $quantity);
 
         $this->forward(
-            $this->Request()->getParam('sTargetAction', self::ACTION_CART)
+            $this->Request()->getParam(self::TARGET_ACTION_KEY, self::ACTION_CART)
         );
     }
 
@@ -242,14 +234,13 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
     {
         Shopware()->Plugins()->Controller()->Json()->setPadding();
 
-        /** @var StoreFrontCartService $service */
-        $service = $this->get('shopware_cart.store_front_cart_service');
+        $service = $this->container->get('shopware_cart.store_front_cart_service');
 
         $number = $this->Request()->getParam('number');
 
         $product = $service->getCart()->getLineItems()->get($number);
 
-        $this->View()->assign(['lineItem' => json_decode(json_encode($product), true)]);
+        $this->View()->assign(['lineItem' => $this->serialize($product)]);
     }
 
     /**
@@ -458,7 +449,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
             $this->Request()->getParam('sAddAccessoriesQuantity')
         );
 
-        $this->forward($this->Request()->getParam('sTargetAction', 'cart'));
+        $this->forward($this->Request()->getParam(self::TARGET_ACTION_KEY, 'cart'));
     }
 
     /**
@@ -481,7 +472,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
                 $this->basket->sInsertPremium();
             }
         }
-        $this->forward($this->Request()->getParam('sTargetAction', 'index'));
+        $this->forward($this->Request()->getParam(self::TARGET_ACTION_KEY, 'index'));
     }
 
     /**
@@ -516,7 +507,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         // We need an indicator in the view to expand the shipping costs pre-calculation on page load
         $this->View()->assign('calculateShippingCosts', true);
 
-        $this->forward($this->Request()->getParam('sTargetAction', 'index'));
+        $this->forward($this->Request()->getParam(self::TARGET_ACTION_KEY, 'index'));
     }
 
     /**
@@ -600,7 +591,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
 
         $this->redirect([
             'controller' => $this->Request()->getParam('sTarget', 'checkout'),
-            'action' => $this->Request()->getParam('sTargetAction', 'confirm'),
+            'action' => $this->Request()->getParam(self::TARGET_ACTION_KEY, 'confirm'),
         ]);
     }
 
@@ -1310,7 +1301,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
 
     private function forwardToLogin()
     {
-        $this->forward('login', 'account', null, ['sTarget' => 'checkout', 'sTargetAction' => self::ACTION_CONFIRM, 'showNoAccount' => true]);
+        $this->forward('login', 'account', null, ['sTarget' => 'checkout', self::TARGET_ACTION_KEY => self::ACTION_CONFIRM, 'showNoAccount' => true]);
     }
 
     /**

@@ -23,13 +23,13 @@
 
                     {* Product name *}
                     {block name='frontend_checkout_cart_item_voucher_details_title'}
-                        <span class="content--title">{$sBasketItem.articlename|strip_tags|truncate:60}</span>
+                        <span class="content--title">{$lineItem.label|strip_tags|truncate:60}</span>
                     {/block}
 
                     {* Product SKU number *}
                     {block name='frontend_checkout_cart_item_voucher_details_sku'}
                         <p class="content--sku content">
-                            {s name="CartItemInfoId"}{/s} {$sBasketItem.ordernumber}
+                            {s name="CartItemInfoId"}{/s} {$lineItem.code}
                         </p>
                     {/block}
 
@@ -53,11 +53,7 @@
             {/block}
 
             {block name='frontend_checkout_cart_item_voucher_total_sum_display'}
-                {if $sBasketItem.itemInfo}
-                    {$sBasketItem.itemInfo}
-                {else}
-                    {$sBasketItem.price|currency}{block name='frontend_checkout_cart_tax_symbol'}{s name="Star" namespace="frontend/listing/box_article"}{/s}{/block}
-                {/if}
+                {$lineItem.price.unitPrice|currency}{block name='frontend_checkout_cart_tax_symbol'}{s name="Star" namespace="frontend/listing/box_article"}{/s}{/block}
             {/block}
         </div>
     {/block}
@@ -65,7 +61,7 @@
     {* Remove voucher from basket *}
     {block name='frontend_checkout_cart_item_voucher_delete_article'}
         <div class="panel--td column--actions block">
-            <form action="{url action='deleteArticle' sDelete=voucher sTargetAction=$sTargetAction}" method="post">
+            <form action="{url action='removeLineItem' identifier=voucher sTargetAction=$sTargetAction}" method="post">
                 <button type="submit" class="btn is--small column--actions-link"
                         title="{"{s name='CartItemLinkDelete'}{/s}"|escape}">
                     <i class="icon--cross"></i>

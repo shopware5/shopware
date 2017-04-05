@@ -72,6 +72,13 @@ class LineItemCollection extends KeyCollection
         );
     }
 
+    public function getExtraData(): array
+    {
+        return $this->map(function (LineItem $lineItem) {
+            return $lineItem->getExtraData();
+        });
+    }
+
     public function getIdentifiers(): array
     {
         return $this->getKeys();

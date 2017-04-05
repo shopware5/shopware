@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -23,35 +22,50 @@ declare(strict_types=1);
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\CartBundle\Infrastructure\View;
+namespace Shopware\Bundle\CartBundle\Domain\Error;
 
-use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Bundle\CartBundle\Domain\Validator\Rule\Rule;
 
-class ViewCartTransformer
+class VoucherRuleError extends Error
 {
     /**
-     * @var ViewLineItemTransformerInterface[]
+     * @var string
      */
-    private $transformers = [];
+    protected $code;
 
-    public function __construct(array $transformers)
+    /**
+     * @var Rule
+     */
+    protected $rule;
+
+    public function __construct(string $code, Rule $rule)
     {
-        $this->transformers = $transformers;
+        $this->code = $code;
+        $this->rule = $rule;
     }
 
-    public function transform(CalculatedCart $calculatedCart, ShopContextInterface $context): ViewCart
+    public function getMessageKey(): string
     {
-        $viewCart = ViewCart::createFromCalculatedCart($calculatedCart);
+        return self::class;
+    }
 
-        foreach ($this->transformers as $transformer) {
-            $transformer->transform($calculatedCart, $viewCart, $context);
-        }
+    public function getMessage(): string
+    {
+        return sprintf('Voucher with code %s not found', $this->code);
+    }
 
-        $viewCart->getLineItems()->sortByIdentifiers(
-            $calculatedCart->getLineItems()->getIdentifiers()
-        );
+    public function getLevel(): int
+    {
+        return self::LEVEL_ERROR;
+    }
 
-        return $viewCart;
+    public function getCode(): string
+    {
+        return $this->code;
+    }
+
+    public function getRule(): Rule
+    {
+        return $this->rule;
     }
 }

@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -23,28 +22,16 @@ declare(strict_types=1);
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\CartBundle\DependencyInjection\CompilerPass;
+namespace Shopware\Bundle\CartBundle\Domain\Voucher;
 
-use Shopware\Components\DependencyInjection\Compiler\TagReplaceTrait;
-use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
-/**
- * @category  Shopware
- *
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- */
-class RiskDataCollectorCompilerPass implements CompilerPassInterface
+interface VoucherGatewayInterface
 {
-    use TagReplaceTrait;
-
-    public function process(ContainerBuilder $container): void
-    {
-        $this->replaceArgumentWithTaggedServices(
-            $container,
-            'shopware_cart.risk_management.data_collector_registry',
-            'risk_management.data_collector',
-            0
-        );
-    }
+    public function get(
+        array $codes,
+        CalculatedCart $calculatedCart,
+        ShopContextInterface $context
+    ): VoucherCollection;
 }

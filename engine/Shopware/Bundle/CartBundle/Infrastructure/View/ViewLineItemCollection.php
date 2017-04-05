@@ -26,9 +26,11 @@ declare(strict_types=1);
 namespace Shopware\Bundle\CartBundle\Infrastructure\View;
 
 use Shopware\Bundle\CartBundle\Domain\KeyCollection;
+use Shopware\Bundle\CartBundle\Infrastructure\SortArrayByKeysTrait;
 
 class ViewLineItemCollection extends KeyCollection
 {
+    use SortArrayByKeysTrait;
     /**
      * @var ViewLineItemInterface[]
      */
@@ -66,6 +68,11 @@ class ViewLineItemCollection extends KeyCollection
     public function getIdentifiers(): array
     {
         return $this->getKeys();
+    }
+
+    public function sortByIdentifiers(array $identifiers): void
+    {
+        $this->elements = $this->sortIndexedArrayByKeys($identifiers, $this->elements);
     }
 
     /**

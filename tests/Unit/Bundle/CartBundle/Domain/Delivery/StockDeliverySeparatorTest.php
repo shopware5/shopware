@@ -220,6 +220,7 @@ class StockDeliverySeparatorTest extends TestCase
             )
         );
         $voucher = new CalculatedVoucher(
+            'Code1',
             new LineItem('B', 'discount', 1),
             new Price(0, 0, new CalculatedTaxCollection(), new TaxRuleCollection())
         );
