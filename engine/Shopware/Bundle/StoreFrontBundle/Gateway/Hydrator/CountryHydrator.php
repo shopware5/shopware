@@ -75,7 +75,10 @@ class CountryHydrator extends Hydrator
 
         $country->setId($id);
         $country->setName($data['__country_countryname']);
-        $country->setArea($this->hydrateArea($data));
+
+        if ($data['__countryArea_id']) {
+            $country->setArea($this->hydrateArea($data));
+        }
 
         if (isset($data['__country_countryiso'])) {
             $country->setIso($data['__country_countryiso']);

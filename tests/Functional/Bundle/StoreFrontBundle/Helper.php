@@ -25,6 +25,9 @@
 namespace Shopware\Tests\Functional\Bundle\StoreFrontBundle;
 
 use Doctrine\DBAL\Connection;
+use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryMethod;
+use Shopware\Bundle\CartBundle\Domain\Delivery\ShippingLocation;
+use Shopware\Bundle\CartBundle\Domain\Payment\PaymentMethod;
 use Shopware\Bundle\ESIndexingBundle\Console\ProgressHelperInterface;
 use Shopware\Bundle\StoreFrontBundle;
 use Shopware\Bundle\StoreFrontBundle\Gateway\ConfiguratorGateway;
@@ -850,16 +853,18 @@ class Helper
             $fallbackCustomerGroup = $currentCustomerGroup;
         }
 
+        $shop = $this->converter->convertShop($shop);
+
         return new TestContext(
-            '',
-            $this->converter->convertShop($shop),
+            $shop,
             $currency,
             $this->converter->convertCustomerGroup($currentCustomerGroup),
             $this->converter->convertCustomerGroup($fallbackCustomerGroup),
             $this->buildTaxRules($taxes),
             [],
-            null,
-            null,
+            new PaymentMethod(1, 'cash', 'Cash', 'Cash'),
+            new DeliveryMethod(1, 'prime', 'Fast', 1, true, 1),
+            ShippingLocation::createFromCountry($shop->getCountry()),
             null
         );
     }

@@ -30,7 +30,7 @@ use Shopware\Bundle\CartBundle\Domain\Tax\CalculatedTax;
 use Shopware\Bundle\CartBundle\Domain\Tax\CalculatedTaxCollection;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCollection;
 
-class PriceCollectionTest extends \PHPUnit_Framework_TestCase
+class PriceCollectionTest extends \PHPUnit\Framework\TestCase
 {
     public function testCollectionIsCountable()
     {

@@ -91,7 +91,6 @@ class CheckoutScope implements \JsonSerializable
         return new self(
             $context->getPaymentMethod()->getId(),
             $context->getDeliveryMethod()->getId(),
-            $location->getCountry()->getArea()->getId(),
             $location->getCountry()->getId(),
             $location->getState() ? $location->getState()->getId() : null
         );

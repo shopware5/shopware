@@ -38,7 +38,7 @@ use Shopware\Tests\Unit\Bundle\CartBundle\Common\Generator;
 /**
  * Class PriceCalculatorTest
  */
-class AmountCalculatorTest extends \PHPUnit_Framework_TestCase
+class AmountCalculatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @dataProvider calculateAmountWithGrossPricesProvider

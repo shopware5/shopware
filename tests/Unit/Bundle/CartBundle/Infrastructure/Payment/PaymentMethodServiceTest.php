@@ -180,6 +180,7 @@ class PaymentMethodServiceTest extends TestCase
               '__paymentMethod_mobile_inactive' => $mobileInactive,
               '__paymentMethod_source' => $source,
               '__paymentMethod_pluginId' => $pluginId,
+              '__paymentMethod_rules' => null,
           ];
     }
 

@@ -24,6 +24,7 @@
 
 namespace Shopware\Tests\Unit\Bundle\CartBundle\Domain\Delivery;
 
+use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\CartBundle\Domain\Delivery\Delivery;
 use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryCollection;
 use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryDate;
@@ -32,7 +33,7 @@ use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryPositionCollection;
 use Shopware\Bundle\CartBundle\Domain\Delivery\ShippingLocation;
 use Shopware\Bundle\StoreFrontBundle\Struct\Country;
 
-class DeliveryCollectionTest extends \PHPUnit_Framework_TestCase
+class DeliveryCollectionTest extends TestCase
 {
     public function testCollectionIsCountable()
     {

@@ -40,7 +40,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
 use Shopware\Bundle\StoreFrontBundle\Struct\Tax;
 
-class Generator extends \PHPUnit_Framework_TestCase
+class Generator extends \PHPUnit\Framework\TestCase
 {
     public static function createContext(
         $currentCustomerGroup = null,

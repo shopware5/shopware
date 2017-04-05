@@ -44,7 +44,7 @@ use Shopware\Bundle\CartBundle\Infrastructure\Product\ProductDeliveryGateway;
 use Shopware\Bundle\CartBundle\Infrastructure\Product\ProductPriceGateway;
 use Shopware\Tests\Unit\Bundle\CartBundle\Common\Generator;
 
-class ProductProcessorTest extends \PHPUnit_Framework_TestCase
+class ProductProcessorTest extends \PHPUnit\Framework\TestCase
 {
     const DUMMY_TAX_NAME = 'test-tax';
 

@@ -24,6 +24,7 @@
 
 namespace Shopware\Tests\Unit\Bundle\CartBundle\Domain\LineItem;
 
+use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\CartBundle\Domain\LineItem\CalculatedLineItemCollection;
 use Shopware\Bundle\CartBundle\Domain\LineItem\LineItem;
 use Shopware\Bundle\CartBundle\Domain\Price\Price;
@@ -36,7 +37,7 @@ use Shopware\Bundle\CartBundle\Domain\Voucher\PercentageVoucherProcessor;
 use Shopware\Tests\Unit\Bundle\CartBundle\Common\ConfiguredGoodsItem;
 use Shopware\Tests\Unit\Bundle\CartBundle\Common\ConfiguredLineItem;
 
-class CalculatedLineItemCollectionTest extends \PHPUnit_Framework_TestCase
+class CalculatedLineItemCollectionTest extends TestCase
 {
     const DUMMY_TAX_NAME = 'dummy-tax';
 

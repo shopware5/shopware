@@ -35,6 +35,8 @@ use Shopware\Models\Customer\Customer;
 use Symfony\Component\DomCrawler\Crawler;
 
 /**
+ * @group disable
+ *
  * @category  Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)

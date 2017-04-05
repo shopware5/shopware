@@ -134,6 +134,11 @@ class Converter
             );
         }
 
+        $country = new Struct\Country();
+        $country->setId($shop->getCountry()->getId());
+        $country->setName($shop->getCountry()->getName());
+        $struct->setCountry($country);
+
         return $struct;
     }
 

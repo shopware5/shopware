@@ -32,7 +32,7 @@ use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCollection;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Tax;
 
-class TaxCalculatorTest extends \PHPUnit_Framework_TestCase
+class TaxCalculatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @dataProvider netPricesToGross

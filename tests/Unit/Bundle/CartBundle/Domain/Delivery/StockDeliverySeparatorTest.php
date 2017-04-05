@@ -24,6 +24,7 @@
 
 namespace Shopware\Tests\Unit\Bundle\CartBundle\Domain\Delivery;
 
+use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\CartBundle\Domain\Customer\Address;
 use Shopware\Bundle\CartBundle\Domain\Delivery\Delivery;
 use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryCollection;
@@ -51,7 +52,7 @@ use Shopware\Bundle\CartBundle\Domain\Voucher\CalculatedVoucher;
 use Shopware\Bundle\StoreFrontBundle\Struct\Country;
 use Shopware\Tests\Unit\Bundle\CartBundle\Common\Generator;
 
-class StockDeliverySeparatorTest extends \PHPUnit_Framework_TestCase
+class StockDeliverySeparatorTest extends TestCase
 {
     /**
      * @var StockDeliverySeparator

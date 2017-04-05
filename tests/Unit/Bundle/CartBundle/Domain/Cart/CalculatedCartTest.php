@@ -24,6 +24,7 @@
 
 namespace Shopware\Tests\Unit\Bundle\CartBundle\Domain\Cart;
 
+use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
 use Shopware\Bundle\CartBundle\Domain\Cart\CartContainer;
 use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryCollection;
@@ -35,7 +36,7 @@ use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCollection;
 use Shopware\Tests\Unit\Bundle\CartBundle\Common\ConfiguredGoodsItem;
 use Shopware\Tests\Unit\Bundle\CartBundle\Common\ConfiguredLineItem;
 
-class CalculatedCartTest extends \PHPUnit_Framework_TestCase
+class CalculatedCartTest extends TestCase
 {
     public function testEmptyCartHasNoGoods()
     {
