@@ -265,15 +265,6 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
         me.formPanel.loadRecord(null);
     },
 
-    resetConditions: function() {
-        var me = this;
-
-        me.resetFilterPanel();
-        me.loadListing();
-    },
-
-
-
     loadListing: function() {
         var me = this;
 
@@ -294,7 +285,7 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
 
         if (selection.length <= 0) {
             me.resetTitles();
-            me.resetConditions();
+            me.fireEvent('reset-condition');
             me.loadChart();
             return;
         }
