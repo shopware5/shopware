@@ -30,13 +30,17 @@ Ext.define('Shopware.apps.Customer.view.main.Toolbar', {
                     iconCls: 'sprite-plus-circle-frame',
                     text: '{s name=toolbar/save_as_new_stream}Save as a new stream{/s}',
                     action: 'create',
-                    handler: Ext.bind(me.createStream, me)
+                    handler: function () {
+                        me.fireEvent('create-stream');
+                    }
                 }, {
                     xtype: 'menuitem',
                     iconCls: 'sprite',
                     text: '{s name=toolbar/analyse_customer}Analyse customer{/s}',
                     action: 'index',
-                    handler: Ext.bind(me.indexSearch, me)
+                    handler: function () {
+                        me.fireEvent('index-search');
+                    }
                 }]
             }
         });

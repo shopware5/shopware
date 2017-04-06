@@ -541,28 +541,28 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
     //     });
     // },
 
-    indexSearch: function() {
-        var me = this;
-
-        me.indexingBar.value = 0;
-        me.formPanel.setDisabled(true);
-
-        Ext.Ajax.request({
-            url: '{url controller=CustomerStream action=getCustomerCount}',
-            params: { },
-            success: function(operation) {
-                var response = Ext.decode(operation.responseText);
-
-                me.start([{
-                    text: 'Analyzing customers',
-                    url: '{url controller=CustomerStream action=buildSearchIndex}',
-                    params: {
-                        total: response.total
-                    }
-                }]);
-            }
-        });
-    },
+    // indexSearch: function() {
+    //     var me = this;
+    //
+    //     me.indexingBar.value = 0;
+    //     me.formPanel.setDisabled(true);
+    //
+    //     Ext.Ajax.request({
+    //         url: '{url controller=CustomerStream action=getCustomerCount}',
+    //         params: { },
+    //         success: function(operation) {
+    //             var response = Ext.decode(operation.responseText);
+    //
+    //             me.start([{
+    //                 text: 'Analyzing customers',
+    //                 url: '{url controller=CustomerStream action=buildSearchIndex}',
+    //                 params: {
+    //                     total: response.total
+    //                 }
+    //             }]);
+    //         }
+    //     });
+    // },
 
     updateProgressBar: function(request, response) {
         var me = this;
