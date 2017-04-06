@@ -32,6 +32,7 @@ use Shopware\Bundle\CartBundle\Domain\Price\PriceRounding;
 use Shopware\Bundle\CartBundle\Domain\Tax\CalculatedTax;
 use Shopware\Bundle\CartBundle\Domain\Tax\CalculatedTaxCollection;
 use Shopware\Bundle\CartBundle\Domain\Tax\PercentageTaxRule;
+use Shopware\Bundle\CartBundle\Domain\Tax\PercentageTaxRuleBuilder;
 use Shopware\Bundle\CartBundle\Domain\Tax\PercentageTaxRuleCalculator;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxCalculator;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxRule;
@@ -67,7 +68,8 @@ class PercentagePriceCalculatorTest extends \PHPUnit\Framework\TestCase
                 ),
                 $rounding,
                 Generator::createGrossPriceDetector()
-            )
+            ),
+            new PercentageTaxRuleBuilder()
         );
 
         $price = $calculator->calculatePrice(
@@ -83,14 +85,6 @@ class PercentagePriceCalculatorTest extends \PHPUnit\Framework\TestCase
         $highTax = new TaxRuleCollection([new TaxRule(19)]);
 
         return [
-//            [
-//                -10,
-//                new Price(-6.0, new CalculatedTaxCollection([new CalculatedTax(-0.96, 19, -6.0)]), $highTax),
-//                new PriceCollection([
-//                    new Price(30.00, new CalculatedTaxCollection([new CalculatedTax(4.79, 19, 30.00)]), $highTax),
-//                    new Price(30.00, new CalculatedTaxCollection([new CalculatedTax(4.79, 19, 30.00)]), $highTax),
-//                ])
-//            ],
             [
                 //10% discount
                 -10,
@@ -113,46 +107,6 @@ class PercentagePriceCalculatorTest extends \PHPUnit\Framework\TestCase
                     new Price(30.00, 30.00, new CalculatedTaxCollection([new CalculatedTax(1.96, 7, 30.00)]), $highTax),
                 ]),
             ],
-//[
-//                -99,
-//                new Price(-36.61, new CalculatedTaxCollection([new CalculatedTax(-5.85, 19, -36.61)]), $highTax),
-//                new PriceCollection([
-//                    new Price(20.99, new CalculatedTaxCollection([new CalculatedTax(3.35, 19, 20.99)]), $highTax),
-//                    new Price(15.99, new CalculatedTaxCollection([new CalculatedTax(2.55, 19, 15.99)]), $highTax)
-//                ])
-//            ], [
-//                -12.12,
-//                new Price(-4.48, new CalculatedTaxCollection([new CalculatedTax(-0.72, 19, -4.48)]), $highTax),
-//                new PriceCollection([
-//                    new Price(20.99, new CalculatedTaxCollection([new CalculatedTax(3.35, 19, 20.99)]), $highTax),
-//                    new Price(15.99, new CalculatedTaxCollection([new CalculatedTax(2.55, 19, 15.99)]), $highTax)
-//                ])
-//            ], [
-//                0.5,
-//                new Price(0.18, new CalculatedTaxCollection([new CalculatedTax(0.03, 19, 0.18)]), $highTax),
-//                new PriceCollection([
-//                    new Price(20.99, new CalculatedTaxCollection([new CalculatedTax(3.35, 19, 20.99)]), $highTax),
-//                    new Price(15.99, new CalculatedTaxCollection([new CalculatedTax(2.55, 19, 15.99)]), $highTax)
-//                ])
-//            ], [
-//                99,
-//                new Price(36.61, new CalculatedTaxCollection([new CalculatedTax(5.85, 19, 36.61)]), $highTax),
-//                new PriceCollection([
-//                    new Price(20.99, new CalculatedTaxCollection([new CalculatedTax(3.35, 19, 20.99)]), $highTax),
-//                    new Price(15.99, new CalculatedTaxCollection([new CalculatedTax(2.55, 19, 15.99)]), $highTax)
-//                ])
-//            ], [
-//                -100,
-//                new Price(
-//                    -96,
-//                    new CalculatedTaxCollection([new CalculatedTax(-15.33, 19, -96)]),
-//                    new TaxRuleCollection([new TaxRule(19)])
-//                ),
-//                new PriceCollection([
-//                    new Price(55, new CalculatedTaxCollection([new CalculatedTax(8.78, 19, 55)]), new TaxRuleCollection([new TaxRule(19)])),
-//                    new Price(41, new CalculatedTaxCollection([new CalculatedTax(6.55, 19, 41)]), new TaxRuleCollection([new TaxRule(19)]))
-//                ])
-//            ]
         ];
     }
 }

@@ -26,6 +26,7 @@ declare(strict_types=1);
 namespace Shopware\Bundle\CartBundle\Domain\Price;
 
 use Shopware\Bundle\CartBundle\Domain\Tax\CalculatedTaxCollection;
+use Shopware\Bundle\CartBundle\Domain\Tax\TaxAmountCalculatorInterface;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxDetector;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCollection;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
@@ -42,10 +43,19 @@ class AmountCalculator
      */
     private $rounding;
 
-    public function __construct(TaxDetector $taxDetector, PriceRounding $rounding)
-    {
+    /**
+     * @var TaxAmountCalculatorInterface
+     */
+    private $taxAmountCalculator;
+
+    public function __construct(
+        TaxDetector $taxDetector,
+        PriceRounding $rounding,
+        TaxAmountCalculatorInterface $taxAmountCalculator
+    ) {
         $this->taxDetector = $taxDetector;
         $this->rounding = $rounding;
+        $this->taxAmountCalculator = $taxAmountCalculator;
     }
 
     public function calculateAmount(PriceCollection $prices, ShopContextInterface $context): CartPrice
@@ -54,10 +64,10 @@ class AmountCalculator
             return $this->calculateNetDeliveryAmount($prices);
         }
         if ($this->taxDetector->useGross($context)) {
-            return $this->calculateGrossAmount($prices);
+            return $this->calculateGrossAmount($prices, $context);
         }
 
-        return $this->calculateNetAmount($prices);
+        return $this->calculateNetAmount($prices, $context);
     }
 
     /**
@@ -90,13 +100,16 @@ class AmountCalculator
      *
      * @return CartPrice
      */
-    private function calculateGrossAmount(PriceCollection $prices): CartPrice
+    private function calculateGrossAmount(PriceCollection $prices, ShopContextInterface $context): CartPrice
     {
         $total = $prices->getTotalPrice();
-        $net = $total->getTotalPrice() - $prices->getCalculatedTaxes()->getAmount();
+
+        $taxes = $this->taxAmountCalculator->calculate($prices, $context);
+
+        $net = $total->getTotalPrice() - $taxes->getAmount();
         $net = $this->rounding->round($net);
 
-        return new CartPrice($net, $total->getTotalPrice(), $total->getCalculatedTaxes(), $total->getTaxRules());
+        return new CartPrice($net, $total->getTotalPrice(), $taxes, $total->getTaxRules());
     }
 
     /**
@@ -109,12 +122,15 @@ class AmountCalculator
      *
      * @return CartPrice
      */
-    private function calculateNetAmount(PriceCollection $prices): CartPrice
+    private function calculateNetAmount(PriceCollection $prices, ShopContextInterface $context): CartPrice
     {
         $total = $prices->getTotalPrice();
-        $gross = $total->getTotalPrice() + $prices->getCalculatedTaxes()->getAmount();
+
+        $taxes = $this->taxAmountCalculator->calculate($prices, $context);
+
+        $gross = $total->getTotalPrice() + $taxes->getAmount();
         $gross = $this->rounding->round($gross);
 
-        return new CartPrice($total->getTotalPrice(), $gross, $total->getCalculatedTaxes(), $total->getTaxRules());
+        return new CartPrice($total->getTotalPrice(), $gross, $taxes, $total->getTaxRules());
     }
 }

@@ -33,6 +33,7 @@ use Shopware\Bundle\CartBundle\Domain\Tax\CalculatedTax;
 use Shopware\Bundle\CartBundle\Domain\Tax\CalculatedTaxCollection;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxRule;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCollection;
+use Shopware\Bundle\CartBundle\Domain\Tax\VerticalTaxAmountCalculator;
 use Shopware\Tests\Unit\Bundle\CartBundle\Common\Generator;
 
 /**
@@ -48,7 +49,11 @@ class AmountCalculatorTest extends \PHPUnit\Framework\TestCase
      */
     public function testCalculateAmountWithGrossPrices(CartPrice $expected, PriceCollection $prices)
     {
-        $calculator = new AmountCalculator(Generator::createGrossPriceDetector(), new PriceRounding(2));
+        $calculator = new AmountCalculator(
+            Generator::createGrossPriceDetector(),
+            new PriceRounding(2),
+            new VerticalTaxAmountCalculator()
+        );
         $cartPrice = $calculator->calculateAmount($prices, Generator::createContext());
         static::assertEquals($expected, $cartPrice);
     }
@@ -61,7 +66,8 @@ class AmountCalculatorTest extends \PHPUnit\Framework\TestCase
      */
     public function testCalculateAmountWithNetPrices(CartPrice $expected, PriceCollection $prices)
     {
-        $calculator = new AmountCalculator(Generator::createNetPriceDetector(), new PriceRounding(2));
+        $calculator = new AmountCalculator(Generator::createNetPriceDetector(), new PriceRounding(2),
+            new VerticalTaxAmountCalculator());
         $cartPrice = $calculator->calculateAmount($prices, Generator::createContext());
         static::assertEquals($expected, $cartPrice);
     }
@@ -74,7 +80,8 @@ class AmountCalculatorTest extends \PHPUnit\Framework\TestCase
      */
     public function testCalculateAmountForNetDeliveries(CartPrice $expected, PriceCollection $prices)
     {
-        $calculator = new AmountCalculator(Generator::createNetDeliveryDetector(), new PriceRounding(2));
+        $calculator = new AmountCalculator(Generator::createNetDeliveryDetector(), new PriceRounding(2),
+            new VerticalTaxAmountCalculator());
         $cartPrice = $calculator->calculateAmount($prices, Generator::createContext());
         static::assertEquals($expected, $cartPrice);
     }

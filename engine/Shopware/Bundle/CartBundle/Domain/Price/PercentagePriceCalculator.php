@@ -25,9 +25,7 @@ declare(strict_types=1);
 
 namespace Shopware\Bundle\CartBundle\Domain\Price;
 
-use Shopware\Bundle\CartBundle\Domain\Tax\CalculatedTax;
-use Shopware\Bundle\CartBundle\Domain\Tax\PercentageTaxRule;
-use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCollection;
+use Shopware\Bundle\CartBundle\Domain\Tax\PercentageTaxRuleBuilder;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class PercentagePriceCalculator
@@ -42,12 +40,19 @@ class PercentagePriceCalculator
      */
     private $priceCalculator;
 
+    /**
+     * @var PercentageTaxRuleBuilder
+     */
+    private $percentageTaxRuleBuilder;
+
     public function __construct(
         PriceRounding $rounding,
-        PriceCalculator $priceCalculator
+        PriceCalculator $priceCalculator,
+        PercentageTaxRuleBuilder $percentageTaxRuleBuilder
     ) {
         $this->rounding = $rounding;
         $this->priceCalculator = $priceCalculator;
+        $this->percentageTaxRuleBuilder = $percentageTaxRuleBuilder;
     }
 
     /**
@@ -68,27 +73,10 @@ class PercentagePriceCalculator
 
         $discount = $this->rounding->round($price->getTotalPrice() / 100 * $percentage);
 
-        $rules = $this->buildPercentageTaxRule($price);
+        $rules = $this->percentageTaxRuleBuilder->buildRules($price);
 
         $definition = new PriceDefinition($discount, $rules, 1, true);
 
         return $this->priceCalculator->calculate($definition, $context);
-    }
-
-    private function buildPercentageTaxRule(Price $price): TaxRuleCollection
-    {
-        $rules = new TaxRuleCollection([]);
-
-        /** @var CalculatedTax $tax */
-        foreach ($price->getCalculatedTaxes() as $tax) {
-            $rules->add(
-                new PercentageTaxRule(
-                    $tax->getTaxRate(),
-                    $tax->getPrice() / $price->getTotalPrice() * 100
-                )
-            );
-        }
-
-        return $rules;
     }
 }

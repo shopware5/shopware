@@ -31,6 +31,7 @@ use Shopware\Bundle\CartBundle\Domain\Price\Price;
 use Shopware\Bundle\CartBundle\Domain\Price\PriceDefinition;
 use Shopware\Bundle\CartBundle\Domain\Tax\CalculatedTax;
 use Shopware\Bundle\CartBundle\Domain\Tax\PercentageTaxRule;
+use Shopware\Bundle\CartBundle\Domain\Tax\PercentageTaxRuleBuilder;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCollection;
 use Shopware\Bundle\CartBundle\Domain\Validator\Container\AndRule;
 use Shopware\Bundle\CartBundle\Domain\Voucher\Voucher;
@@ -47,11 +48,16 @@ class VoucherGateway implements VoucherGatewayInterface
     private $connection;
 
     /**
-     * @param Connection $connection
+     * @var PercentageTaxRuleBuilder
      */
-    public function __construct(Connection $connection)
-    {
+    private $percentageTaxRuleBuilder;
+
+    public function __construct(
+        Connection $connection,
+        PercentageTaxRuleBuilder $percentageTaxRuleBuilder
+    ) {
         $this->connection = $connection;
+        $this->percentageTaxRuleBuilder = $percentageTaxRuleBuilder;
     }
 
     public function get(array $codes, CalculatedCart $calculatedCart, ShopContextInterface $context): VoucherCollection
@@ -78,11 +84,11 @@ class VoucherGateway implements VoucherGatewayInterface
     {
         $percentage = (float) $row['value'];
 
-        $price = new PriceDefinition(
+        $price = $calculatedCart->getCalculatedLineItems()->getPrices()->getTotalPrice();
+
+        $priceDefinition = new PriceDefinition(
             $percentage,
-            $this->buildPercentageTaxRule(
-                $calculatedCart->getCalculatedLineItems()->getPrices()->getTotalPrice()
-            ),
+            $this->percentageTaxRuleBuilder->buildRules($price),
             1,
             true
         );
@@ -95,7 +101,7 @@ class VoucherGateway implements VoucherGatewayInterface
             $rule = null;
         }
 
-        return new Voucher($row['vouchercode'], $mode, $percentage, $price, $rule);
+        return new Voucher($row['vouchercode'], $mode, $percentage, $priceDefinition, $rule);
     }
 
     private function buildPercentageTaxRule(Price $price): TaxRuleCollection

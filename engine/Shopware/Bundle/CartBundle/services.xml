@@ -18,7 +18,10 @@
         <service id="cart.price.amount_calculator" class="Shopware\Bundle\CartBundle\Domain\Price\AmountCalculator" >
             <argument type="service" id="cart.tax.detector" />
             <argument type="service" id="cart.price.rounding" />
+            <argument type="service" id="cart.tax.amount_calculator" />
         </service>
+
+        <service id="cart.tax.percentage_rule_builder" class="Shopware\Bundle\CartBundle\Domain\Tax\PercentageTaxRuleBuilder" />
 
         <service id="cart.tax.detector" class="Shopware\Bundle\CartBundle\Domain\Tax\TaxDetector" />
 
@@ -103,6 +106,7 @@
         <service id="cart.price.percentage_calculator" class="Shopware\Bundle\CartBundle\Domain\Price\PercentagePriceCalculator">
             <argument type="service" id="cart.price.rounding"/>
             <argument type="service" id="cart.price.calculator"/>
+            <argument type="service" id="cart.tax.percentage_rule_builder"/>
         </service>
 
         <service id="shopware_cart.percentage_tax_calculator" class="Shopware\Bundle\CartBundle\Domain\Tax\PercentageTaxRuleCalculator">
@@ -161,6 +165,17 @@
             <argument type="service" id="shopware_storefront.field_helper_dbal" />
             <argument type="service" id="shopware.cart.delivery.hydrator" />
             <argument type="service" id="dbal_connection" />
+        </service>
+
+        <!--<service id="cart.tax.amount_calculator" alias="cart.tax.horizontal_amount_calculator" />-->
+        <service id="cart.tax.amount_calculator" alias="cart.tax.vertical_amount_calculator" />
+
+        <service id="cart.tax.vertical_amount_calculator" class="Shopware\Bundle\CartBundle\Domain\Tax\VerticalTaxAmountCalculator"/>
+
+        <service id="cart.tax.horizontal_amount_calculator" class="Shopware\Bundle\CartBundle\Domain\Tax\HorizontalTaxAmountCalculator" >
+            <argument type="service" id="cart.tax.percentage_rule_builder" />
+            <argument type="service" id="cart.tax.calculator" />
+            <argument type="service" id="cart.tax.detector" />
         </service>
 
         <service id="shopware.cart.delivery.hydrator" class="Shopware\Bundle\CartBundle\Infrastructure\Delivery\DeliveryMethodHydrator">
@@ -230,6 +245,7 @@
 
         <service id="shopware.cart.voucher.gateway" class="Shopware\Bundle\CartBundle\Infrastructure\Voucher\VoucherGateway" >
             <argument type="service" id="dbal_connection" />
+            <argument type="service" id="cart.tax.percentage_rule_builder" />
         </service>
 
     </services>
