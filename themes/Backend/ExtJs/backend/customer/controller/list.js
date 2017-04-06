@@ -153,20 +153,24 @@ Ext.define('Shopware.apps.Customer.controller.List', {
             }
 
             Ext.each(customers, function (customer) {
-                customer.destroy({
-                    callback:function (data, operation) {
-                        var records = operation.getRecords(),
-                            record = records[0],
-                            rawData = record.getProxy().getReader().rawData;
 
-                        if ( operation.success === true ) {
-                            Shopware.Notification.createGrowlMessage(me.snippets.deleteSuccessTitle, me.snippets.deleteSuccessMessage, me.snippets.growlMessage);
-                        } else {
-                            Shopware.Notification.createGrowlMessage(me.snippets.deleteErrorTitle, me.snippets.deleteErrorMessage + ' ' + rawData.message, me.snippets.growlMessage);
-                        }
+                Ext.Ajax.request({
+                    url: '{url controller="CustomerStream" action="deleteCustomer"}',
+                    params: { id: customer.get('id') },
+                    callback: function(data, operation) {
+                        // todo verify success and reload store
+                        // var records = operation.getRecords(),
+                        //     record = records[0],
+                        //     rawData = record.getProxy().getReader().rawData;
+                        //
+                        // if ( operation.success === true ) {
+                        //     Shopware.Notification.createGrowlMessage(me.snippets.deleteSuccessTitle, me.snippets.deleteSuccessMessage, me.snippets.growlMessage);
+                        // } else {
+                        //     Shopware.Notification.createGrowlMessage(me.snippets.deleteErrorTitle, me.snippets.deleteErrorMessage + ' ' + rawData.message, me.snippets.growlMessage);
+                        // }
                         counter++;
                         if (counter >= customers.length) {
-                            me.getStore().load();
+                            // me.getStore().load();
                         }
                     }
                 });

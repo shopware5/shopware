@@ -35,7 +35,8 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
     extend:'Ext.app.Controller',
 
     refs:[
-        { ref:'mainWindow', selector:'customer-list-main-window' }
+        { ref:'mainWindow', selector:'customer-list-main-window' },
+        { ref: 'mainToolbar', selector: 'customer-main-toolbar' }
     ],
 
     init:function () {
@@ -44,13 +45,25 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
         me.control({
             'customer-main-toolbar': {
                 'switch-layout': me.switchLayout,
-                'reload-view': me.reloadView
+                'reload-view': me.reloadView,
+                'create-or-update-stream': me.createOrUpdateStream
             },
-            'customer-list-main-window': {
+            'customer-list-main-window ': {
                 'switch-layout': me.switchLayout
+            },
+            'customer-list': {
+                'selection-changed': me.onCustomerSelectionChange
             }
         });
         me.callParent(arguments);
+    },
+
+    onCustomerSelectionChange: function(selection) {
+        var me = this,
+            toolbar = me.getMainToolbar(),
+            deleteBtn = toolbar.deleteCustomerButton;
+
+        deleteBtn.setDisabled(selection.length < 1);
     },
 
     switchLayout: function (layout) {
@@ -87,6 +100,82 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
         window.metaChartStore.load();
         // todo move to this file
         window.loadStreamChart();
+    },
+
+    createOrUpdateStream: function(callback) {
+        console.log('entered createOrUpdateStream');
+        var me = this,
+        window = me.getMainWindow();
+        var record = window.formPanel.getForm().getRecord();
+
+        if (record) {
+            me.saveStream(window.formPanel.getForm().getRecord(), callback);
+            return;
+        }
+        me.createStream(callback);
+    },
+
+    createStream: function(callback) {
+        var me = this;
+        var record = Ext.create('Shopware.apps.Customer.model.CustomerStream', {
+            id: null,
+            name: 'New stream'
+        });
+        me.saveStream(record, callback);
+    },
+
+    saveStream: function (record, callback) {
+        var me = this,
+        window = me.getMainWindow();
+
+        if (!window.filterPanel.getForm().isValid()) {
+            return;
+        }
+
+        var isNew = (record.get('id') === null);
+
+        window.formPanel.getForm().updateRecord(record);
+
+        record.save({
+            callback: function() {
+                if (isNew) {
+                    window.streamListing.getStore().insert(0, record);
+                }
+                window.preventStreamChanged = true;
+                window.streamListing.selModel.deselectAll(true);
+                window.preventStreamChanged = false;
+                window.streamListing.selModel.select([record], false, true);
+                me.startPopulate(record);
+            }
+        });
+    },
+
+    startPopulate: function(record) {
+        var me = this,
+            window = me.getMainWindow();
+
+        window.indexingBar.value = 0;
+        window.formPanel.setDisabled(true);
+
+        Ext.Ajax.request({
+            url: '{url controller=CustomerStream action=loadStream}',
+            params: {
+                streamId: record.get('id')
+            },
+            success: function(operation) {
+                var response = Ext.decode(operation.responseText);
+                // todo oli fragen was die start function genau tut :-)
+                window.start([{
+                    text: 'Indexing customers',
+                    url: '{url controller=CustomerStream action=indexStream}',
+                    params: {
+                        total: response.total,
+                        streamId: record.get('id')
+                    }
+                }]);
+
+            }
+        });
     }
 
 });

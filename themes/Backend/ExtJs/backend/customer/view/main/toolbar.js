@@ -20,7 +20,9 @@ Ext.define('Shopware.apps.Customer.view.main.Toolbar', {
             iconCls: 'sprite-product-streams',
             text: '{s name=toolbar/save_stream}Save stream{/s}',
             name: 'save-stream',
-            handler: Ext.bind(me.createOrUpdateStream, me),
+            handler: function () {
+                me.fireEvent('create-or-update-stream');
+            },
             menu: {
                 xtype: 'menu',
                 items: [{

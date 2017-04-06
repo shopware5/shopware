@@ -28,6 +28,7 @@ use Shopware\Bundle\CustomerSearchBundle\CustomerStream\CustomerStreamCriteriaFa
 use Shopware\Bundle\CustomerSearchBundle\CustomerStream\StreamIndexer;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\Sorting\SimpleSorting;
+use Shopware\Models\Customer\Customer;
 use Shopware\Models\Customer\CustomerStream;
 
 class Shopware_Controllers_Backend_CustomerStream extends Shopware_Controllers_Backend_Application
@@ -45,6 +46,18 @@ class Shopware_Controllers_Backend_CustomerStream extends Shopware_Controllers_B
         );
 
         return $success;
+    }
+
+    public function deleteCustomerAction()
+    {
+        $id = $this->Request()->get('id');
+
+        if (!$id) {
+            $this->View()->assign('success', false);
+        } else {
+            $this->deleteCustomer($id);
+            $this->View()->assign('success', true);
+        }
     }
 
     public function indexStreamAction()
@@ -477,5 +490,26 @@ class Shopware_Controllers_Backend_CustomerStream extends Shopware_Controllers_B
         }
 
         return $query;
+    }
+
+    /**
+     * @param int $id
+     */
+    private function deleteCustomer($id)
+    {
+        $customer = $this->container->get('models')->find(Customer::class, $id);
+
+        $this->container->get('models')->remove($customer);
+        $this->container->get('models')->flush();
+
+        $this->get('dbal_connection')->executeQuery(
+            'DELETE FROM s_customer_streams_mapping WHERE customer_id = :id',
+            [':id' => $id]
+        );
+
+        $this->get('dbal_connection')->executeQuery(
+            'DELETE FROM s_customer_search_index WHERE id = :id',
+            [':id' => $id]
+        );
     }
 }
