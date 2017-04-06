@@ -49,10 +49,12 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
                 'create-or-update-stream': me.createOrUpdateStream,
                 'create-stream': me.createStream,
                 'index-search': me.indexSearch,
-                'create-filter-condition': me.createFilterCondition
+                'create-filter-condition': me.createFilterCondition,
+                'reset-conditions': me.resetConditions
             },
             'customer-list-main-window ': {
-                'switch-layout': me.switchLayout
+                'switch-layout': me.switchLayout,
+                'reset-conditions': me.resetConditions
             },
             'customer-list': {
                 'selection-changed': me.onCustomerSelectionChange
@@ -210,6 +212,14 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
             window = me.getMainWindow();
 
         window.filterPanel.createCondition(handler);
+    },
+
+    resetConditions: function() {
+        var me = this,
+            window = me.getMainWindow();
+
+        window.resetFilterPanel();
+        window.loadListing();
     }
 
 });

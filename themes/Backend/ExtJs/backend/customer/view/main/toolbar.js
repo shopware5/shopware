@@ -159,14 +159,15 @@ Ext.define('Shopware.apps.Customer.view.main.Toolbar', {
                 handler: function () {
                     me.fireEvent('create-filter-condition', handler);
                 }
-                // handler: Ext.bind(me.filterPanel.createCondition, me.filterPanel)
             });
         });
 
         items.push({ xtype: 'menuseparator' });
         items.push({
             text: '{s name=toolbar/reset}Reset{/s}',
-            handler: Ext.bind(me.resetConditions, me)
+            handler: function() {
+                me.fireEvent('reset-conditions');
+            }
         });
         return new Ext.menu.Menu({ items: items });
     }
