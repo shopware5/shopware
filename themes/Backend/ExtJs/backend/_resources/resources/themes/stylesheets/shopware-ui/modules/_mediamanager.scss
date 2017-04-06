@@ -214,11 +214,13 @@
 	    display: block;
 	    float: left;
 	    margin: 10px;
+        position: relative;
 
 	    .thumb {
 	        border: 1px solid #acbbc6;
-	        background: theme-image($theme, 'media_manager_image_bg_small.png') no-repeat;
-	        height: 72px;
+	        background: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJubyI/Pgo8IURPQ1RZUEUgc3ZnIFBVQkxJQyAiLS8vVzNDLy9EVEQgU1ZHIDEuMS8vRU4iICJodHRwOi8vd3d3LnczLm9yZy9HcmFwaGljcy9TVkcvMS4xL0RURC9zdmcxMS5kdGQiPgo8c3ZnIHZpZXdCb3g9IjAgMCAxMDAgMTAwIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgogICAgPGxpbmUgeDE9IjAiIHgyPSIxMDAlIiB5MT0iMTAwJSIgeTI9IjAiIHN0cm9rZT0iI2FjYmJjNiIgc3Ryb2tlLXdpZHRoPSIxIiAvPgogICAgPGxpbmUgeDE9IjAiIHgyPSIxMDAlIiB5MT0iMCIgeTI9IjEwMCUiIHN0cm9rZT0iI2FjYmJjNiIgc3Ryb2tlLXdpZHRoPSIxIiAvPgo8L3N2Zz4=') no-repeat;
+            background-size: cover;
+            height: 72px;
 	        width: 72px;
 	        margin: 0 auto 4px;
 	        -webkit-transition: border linear 0.18s, box-shadow linear 0.18s;
@@ -239,6 +241,13 @@
                 }
 	        }
 	    }
+
+        .thumb.icon .icon-unknown {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
 
 	    .x-editable {
 	        color: #6c818f;
@@ -302,9 +311,10 @@
 	        width: 155px;
 	        height: 155px;
 	        margin: 0 0 0 16px;
-	        background: theme-image($theme, 'media_manager_image_bg_big.png') no-repeat;
+            background: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJubyI/Pgo8IURPQ1RZUEUgc3ZnIFBVQkxJQyAiLS8vVzNDLy9EVEQgU1ZHIDEuMS8vRU4iICJodHRwOi8vd3d3LnczLm9yZy9HcmFwaGljcy9TVkcvMS4xL0RURC9zdmcxMS5kdGQiPgo8c3ZnIHZpZXdCb3g9IjAgMCAxMDAgMTAwIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgogICAgPGxpbmUgeDE9IjAiIHgyPSIxMDAlIiB5MT0iMTAwJSIgeTI9IjAiIHN0cm9rZT0iI2FjYmJjNiIgc3Ryb2tlLXdpZHRoPSIxIiAvPgogICAgPGxpbmUgeDE9IjAiIHgyPSIxMDAlIiB5MT0iMCIgeTI9IjEwMCUiIHN0cm9rZT0iI2FjYmJjNiIgc3Ryb2tlLXdpZHRoPSIxIiAvPgo8L3N2Zz4=') no-repeat;
+            background-size: cover;
 
-	        .inner-thumb {
+            .inner-thumb {
 	            width: 155px;
 	            height: 155px;
 	            display: table-cell;

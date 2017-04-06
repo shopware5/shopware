@@ -39,7 +39,10 @@ Ext.define('Shopware.apps.MediaManager.model.Setting', {
             name: 'itemsPerPage',
             type: 'number',
         }, {
-            name: 'thumbnailSize',
+            name: 'tableThumbnailSize',
+            type: 'number'
+        }, {
+            name: 'gridThumbnailSize',
             type: 'number'
         }
     ],
