@@ -43,7 +43,8 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
 
         me.control({
             'customer-main-toolbar': {
-                'switch-layout': me.switchLayout
+                'switch-layout': me.switchLayout,
+                'reload-view': me.reloadView
             },
             'customer-list-main-window': {
                 'switch-layout': me.switchLayout
@@ -73,6 +74,20 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
                 break;
         }
     },
+
+    reloadView: function() {
+        var me = this,
+            window = me.getMainWindow();
+
+        if (window.filterPanel.getForm().isValid()) {
+            window.listStore.getProxy().extraParams = window.filterPanel.getSubmitData();
+            window.listStore.load();
+        }
+
+        window.metaChartStore.load();
+        // todo move to this file
+        window.loadStreamChart();
+    }
 
 });
 //{/block}

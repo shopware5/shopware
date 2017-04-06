@@ -52,7 +52,9 @@ Ext.define('Shopware.apps.Customer.view.main.Toolbar', {
 
         items.push({
             iconCls: 'sprite-arrow-circle-225-left',
-            handler: Ext.bind(me.reloadView, me)
+            handler: function () {
+                me.fireEvent('reload-view')
+            }
         });
 
         me.indexingBar = Ext.create('Ext.ProgressBar', {

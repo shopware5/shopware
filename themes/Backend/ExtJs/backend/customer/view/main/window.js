@@ -274,24 +274,6 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
 
 
 
-
-
-
-
-
-
-    reloadView: function() {
-        var me = this;
-
-        if (me.filterPanel.getForm().isValid()) {
-            me.listStore.getProxy().extraParams = me.filterPanel.getSubmitData();
-            me.listStore.load();
-        }
-
-        me.metaChartStore.load();
-        me.loadStreamChart();
-    },
-
     loadListing: function() {
         var me = this;
 
