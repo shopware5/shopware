@@ -97,7 +97,7 @@ Ext.define('Shopware.apps.Customer.controller.Detail', {
                 editColumn:me.onEditCustomer,
                 itemdblclick:me.onGridDblClick
             },
-            'customer-list button[action=addCustomer]':{
+            'customer-list-main-window button[action=addCustomer]':{
                 click:me.onCreateCustomer
             },
             'customer-detail-window button[action=save-customer]':{

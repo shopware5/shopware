@@ -85,13 +85,13 @@ Ext.define('Shopware.apps.Customer.controller.List', {
         //controls the event for the customer list (delete single/multiple customers)
         me.control({
             'customer-list-main-window button[action=deleteCustomer]':{
-                click:me.onDeleteMultipleCustomers
+                click: me.onDeleteMultipleCustomers
             },
             'customer-list':{
-                deleteColumn:me.onDeleteSingleCustomer
+                deleteColumn: me.onDeleteSingleCustomer
             },
-            'customer-list textfield[name=searchfield]':{
-                change:me.onSearchField
+            'customer-list-main-window textfield[name=searchfield]':{
+                change: me.onSearchField
             }
         });
 
@@ -123,14 +123,14 @@ Ext.define('Shopware.apps.Customer.controller.List', {
      */
     onDeleteMultipleCustomers:function () {
         var me = this,
-            grid = this.getGrid(),
+            grid = me.getGrid(),
             sm = grid.getSelectionModel(),
             customers = sm.getSelection(),
             noOfElements = customers.length,
             message = Ext.String.format(me.snippets.multipleDeleteMessage, noOfElements),
             title = me.snippets.multipleDeleteTitle;
 
-        this.deleteCustomers(customers, title, message);
+        me.deleteCustomers(customers, title, message);
     },
 
     /**
@@ -157,20 +157,21 @@ Ext.define('Shopware.apps.Customer.controller.List', {
                 Ext.Ajax.request({
                     url: '{url controller="CustomerStream" action="deleteCustomer"}',
                     params: { id: customer.get('id') },
-                    callback: function(data, operation) {
-                        // todo verify success and reload store
+                    callback: function(data, operation, response) {
+                        response = Ext.JSON.decode(response.responseText);
+                        // todo talk to oli what to to witch this stuff. REMOVE RAW DATA
                         // var records = operation.getRecords(),
                         //     record = records[0],
                         //     rawData = record.getProxy().getReader().rawData;
                         //
-                        // if ( operation.success === true ) {
-                        //     Shopware.Notification.createGrowlMessage(me.snippets.deleteSuccessTitle, me.snippets.deleteSuccessMessage, me.snippets.growlMessage);
-                        // } else {
-                        //     Shopware.Notification.createGrowlMessage(me.snippets.deleteErrorTitle, me.snippets.deleteErrorMessage + ' ' + rawData.message, me.snippets.growlMessage);
-                        // }
+                        if ( response.success === true ) {
+                            Shopware.Notification.createGrowlMessage(me.snippets.deleteSuccessTitle, me.snippets.deleteSuccessMessage, me.snippets.growlMessage);
+                        } else {
+                            Shopware.Notification.createGrowlMessage(me.snippets.deleteErrorTitle, me.snippets.deleteErrorMessage + ' ' + rawData.message, me.snippets.growlMessage);
+                        }
                         counter++;
                         if (counter >= customers.length) {
-                            // me.getStore().load();
+                            me.getGrid().getStore().load();
                         }
                     }
                 });
@@ -192,7 +193,6 @@ Ext.define('Shopware.apps.Customer.controller.List', {
 
         //scroll the store to first page
         store.currentPage = 1;
-
         //If the search-value is empty, reset the filter
         if ( searchString.length === 0 ) {
             store.clearFilter();
