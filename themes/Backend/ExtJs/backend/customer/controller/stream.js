@@ -46,7 +46,9 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
             'customer-main-toolbar': {
                 'switch-layout': me.switchLayout,
                 'reload-view': me.reloadView,
-                'create-or-update-stream': me.createOrUpdateStream
+                'create-or-update-stream': me.createOrUpdateStream,
+                'create-stream': me.createStream,
+                'index-search': me.indexSearch
             },
             'customer-list-main-window ': {
                 'switch-layout': me.switchLayout
@@ -174,6 +176,30 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
                     }
                 }]);
 
+            }
+        });
+    },
+
+    indexSearch: function() {
+        var me = this,
+            window = me.getMainWindow();
+
+        window.indexingBar.value = 0;
+        window.formPanel.setDisabled(true);
+
+        Ext.Ajax.request({
+            url: '{url controller=CustomerStream action=getCustomerCount}',
+            params: { },
+            success: function(operation) {
+                var response = Ext.decode(operation.responseText);
+
+                window.start([{
+                    text: 'Analyzing customers',
+                    url: '{url controller=CustomerStream action=buildSearchIndex}',
+                    params: {
+                        total: response.total
+                    }
+                }]);
             }
         });
     }
