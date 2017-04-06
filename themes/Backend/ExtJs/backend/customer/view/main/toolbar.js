@@ -1,3 +1,5 @@
+//{namespace name=backend/customer/view/toolbar}
+
 Ext.define('Shopware.apps.Customer.view.main.Toolbar', {
 
     extend: 'Ext.toolbar.Toolbar',
@@ -8,16 +10,6 @@ Ext.define('Shopware.apps.Customer.view.main.Toolbar', {
 
     ui: 'shopware-ui',
 
-    snippets:{
-        toolbar:{
-            add:'{s name=toolbar/button_add}Add{/s}',
-            remove:'{s name=toolbar/button_delete}Delete all selected{/s}',
-            customerGroup:'{s name=toolbar/customer_group}Customer group{/s}',
-            groupEmpty:'{s name=toolbar/customer_group_empty}Select...{/s}',
-            search:'{s name=toolbar/search_empty_text}Search...{/s}'
-        }
-    },
-
 
     initComponent: function () {
         var me = this, items = [];
@@ -26,7 +18,7 @@ Ext.define('Shopware.apps.Customer.view.main.Toolbar', {
             showText: true,
             textAlign: 'left',
             iconCls: 'sprite-product-streams',
-            text: 'Stream speichern',
+            text: '{s name=toolbar/save_stream}Save stream{/s}',
             name: 'save-stream',
             handler: Ext.bind(me.createOrUpdateStream, me),
             menu: {
@@ -34,13 +26,13 @@ Ext.define('Shopware.apps.Customer.view.main.Toolbar', {
                 items: [{
                     xtype: 'menuitem',
                     iconCls: 'sprite-plus-circle-frame',
-                    text: 'Als neuen stream speichern',
+                    text: '{s name=toolbar/save_as_new_stream}Save as a new stream{/s}',
                     action: 'create',
                     handler: Ext.bind(me.createStream, me)
                 }, {
                     xtype: 'menuitem',
                     iconCls: 'sprite',
-                    text: 'Kunden analyzieren',
+                    text: '{s name=toolbar/analyse_customer}Analyse customer{/s}',
                     action: 'index',
                     handler: Ext.bind(me.indexSearch, me)
                 }]
@@ -64,7 +56,7 @@ Ext.define('Shopware.apps.Customer.view.main.Toolbar', {
         });
 
         me.indexingBar = Ext.create('Ext.ProgressBar', {
-            text: 'Indexierung',
+            text: '{s name=toolbar/indexing}Indexing{/s}',
             value: 0,
             height: 20,
             width: 300
@@ -81,17 +73,17 @@ Ext.define('Shopware.apps.Customer.view.main.Toolbar', {
         items.push({ xtype: 'tbspacer', width: 5 });
 
         me.deleteCustomerButton = Ext.create('Ext.button.Button', {
-            iconCls:'sprite-minus-circle-frame',
-            text: 'Markierte löschen',
-            disabled:true,
-            action:'deleteCustomer'
+            iconCls: 'sprite-minus-circle-frame',
+            text: '{s name=toolbar/button_delete}Delete all selected{/s}',
+            disabled: true,
+            action: 'deleteCustomer'
         });
 
         /*{if {acl_is_allowed privilege=create}}*/
         items.push({
-            iconCls:'sprite-plus-circle-frame',
-            text:me.snippets.toolbar.add,
-            action:'addCustomer'
+            iconCls: 'sprite-plus-circle-frame',
+            text: '{s name=toolbar/button_add}Add{/s}',
+            action: 'addCustomer'
         });
         /*{/if}*/
 
@@ -112,17 +104,17 @@ Ext.define('Shopware.apps.Customer.view.main.Toolbar', {
             menu: {
                 items: [
                     {
-                        text: '{s name=view_chart}Umsatz{/s}',
+                        text: '{s name=toolbar/view_chart}Revenue{/s}',
                         layout: 'amount_chart',
                         iconCls: 'sprite-chart'
                     },
                     {
-                        text: '{s name=view_chart_stream}Stream Umsatz{/s}',
+                        text: '{s name=toolbar/view_chart_stream}Stream revenue{/s}',
                         layout: 'stream_chart',
                         iconCls: 'sprite-chart'
                     },
                     {
-                        text: '{s name=view_table}Kundenliste{/s}',
+                        text: '{s name=toolbar/view_table}List of customers{/s}',
                         layout: 'table',
                         iconCls: 'sprite-table',
                         checked: true
@@ -134,16 +126,16 @@ Ext.define('Shopware.apps.Customer.view.main.Toolbar', {
         items.push('->');
 
         items.push({
-            xtype:'textfield',
-            name:'searchfield',
-            cls:'searchfield',
-            width:170,
-            emptyText:me.snippets.toolbar.search,
-            enableKeyEvents:true,
-            checkChangeBuffer:500
+            xtype: 'textfield',
+            name: 'searchfield',
+            cls: 'searchfield',
+            width: 170,
+            emptyText: '{s name=toolbar/search_empty_text}Search...{/s}',
+            enableKeyEvents: true,
+            checkChangeBuffer: 500
         });
 
-        items.push({ xtype:'tbspacer', width:6 });
+        items.push({ xtype: 'tbspacer', width: 6 });
         me.items = items;
 
         me.callParent(arguments);
@@ -155,14 +147,14 @@ Ext.define('Shopware.apps.Customer.view.main.Toolbar', {
         Ext.each(me.handlers, function(handler) {
             items.push({
                 text: handler.getLabel(),
-                conditionHandler: handler,
+                conditionHandler: handler
                 // handler: Ext.bind(me.filterPanel.createCondition, me.filterPanel)
             });
         });
 
         items.push({ xtype: 'menuseparator' });
         items.push({
-            text: 'Reset',
+            text: '{s name=toolbar/reset}Reset{/s}',
             handler: Ext.bind(me.resetConditions, me)
         });
         return new Ext.menu.Menu({ items: items });
