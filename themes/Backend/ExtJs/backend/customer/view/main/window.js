@@ -59,7 +59,7 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
         me.gridPanel = Ext.create('Shopware.apps.Customer.view.list.List', {
             store: me.listStore
         });
-        me.gridPanel.on('selection-changed', Ext.bind(me.customerSelected, me));
+        //me.gridPanel.on('selection-changed', Ext.bind(me.customerSelected, me));
 
         me.gridPanel.on('afterrender', function() {
             me.gridPanel.getEl().on('click', function(event, element) {
@@ -441,41 +441,41 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
         this.updateTitles(event.record);
     },
 
-    saveStream: function (record, callback) {
-        var me = this;
+    // saveStream: function (record, callback) {
+    //     var me = this;
+    //
+    //     if (!me.filterPanel.getForm().isValid()) {
+    //         return;
+    //     }
+    //
+    //     var isNew = (record.get('id') === null);
+    //
+    //     me.formPanel.getForm().updateRecord(record);
+    //
+    //     record.save({
+    //         callback: function() {
+    //             if (isNew) {
+    //                 me.streamListing.getStore().insert(0, record);
+    //             }
+    //             me.preventStreamChanged = true;
+    //             me.streamListing.selModel.deselectAll(true);
+    //             me.preventStreamChanged = false;
+    //             me.streamListing.selModel.select([record], false, true);
+    //             me.startPopulate(record);
+    //         }
+    //     });
+    // },
 
-        if (!me.filterPanel.getForm().isValid()) {
-            return;
-        }
-
-        var isNew = (record.get('id') === null);
-
-        me.formPanel.getForm().updateRecord(record);
-
-        record.save({
-            callback: function() {
-                if (isNew) {
-                    me.streamListing.getStore().insert(0, record);
-                }
-                me.preventStreamChanged = true;
-                me.streamListing.selModel.deselectAll(true);
-                me.preventStreamChanged = false;
-                me.streamListing.selModel.select([record], false, true);
-                me.startPopulate(record);
-            }
-        });
-    },
-
-    createOrUpdateStream: function(callback) {
-        var me = this;
-        var record = me.formPanel.getForm().getRecord();
-
-        if (record) {
-            me.saveStream(me.formPanel.getForm().getRecord(), callback);
-            return;
-        }
-        me.createStream(callback);
-    },
+    // createOrUpdateStream: function(callback) {
+    //     var me = this;
+    //     var record = me.formPanel.getForm().getRecord();
+    //
+    //     if (record) {
+    //         me.saveStream(me.formPanel.getForm().getRecord(), callback);
+    //         return;
+    //     }
+    //     me.createStream(callback);
+    // },
 
     createStream: function(callback) {
         var me = this;
@@ -515,31 +515,31 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
     },
 
 
-    startPopulate: function(record) {
-        var me = this;
-
-        me.indexingBar.value = 0;
-        me.formPanel.setDisabled(true);
-
-        Ext.Ajax.request({
-            url: '{url controller=CustomerStream action=loadStream}',
-            params: {
-                streamId: record.get('id')
-            },
-            success: function(operation) {
-                var response = Ext.decode(operation.responseText);
-                me.start([{
-                    text: 'Indexing customers',
-                    url: '{url controller=CustomerStream action=indexStream}',
-                    params: {
-                        total: response.total,
-                        streamId: record.get('id')
-                    }
-                }]);
-
-            }
-        });
-    },
+    // startPopulate: function(record) {
+    //     var me = this;
+    //
+    //     me.indexingBar.value = 0;
+    //     me.formPanel.setDisabled(true);
+    //
+    //     Ext.Ajax.request({
+    //         url: '{url controller=CustomerStream action=loadStream}',
+    //         params: {
+    //             streamId: record.get('id')
+    //         },
+    //         success: function(operation) {
+    //             var response = Ext.decode(operation.responseText);
+    //             me.start([{
+    //                 text: 'Indexing customers',
+    //                 url: '{url controller=CustomerStream action=indexStream}',
+    //                 params: {
+    //                     total: response.total,
+    //                     streamId: record.get('id')
+    //                 }
+    //             }]);
+    //
+    //         }
+    //     });
+    // },
 
     indexSearch: function() {
         var me = this;
