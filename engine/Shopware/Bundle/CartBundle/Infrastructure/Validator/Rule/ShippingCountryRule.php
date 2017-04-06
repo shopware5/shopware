@@ -55,11 +55,11 @@ class ShippingCountryRule extends Rule
     ): bool {
         switch ($this->operator) {
             case self::OPERATOR_EQ:
-                return in_array($context->getShippingLocation()->getCountry()->getId(), $this->countryIds);
+                return in_array($context->getShippingLocation()->getCountry()->getId(), $this->countryIds, true);
 
             case self::OPERATOR_NEQ:
 
-                return !in_array($context->getShippingLocation()->getCountry()->getId(), $this->countryIds);
+                return !in_array($context->getShippingLocation()->getCountry()->getId(), $this->countryIds, true);
 
             default:
                 throw new UnsupportedOperatorException($this->operator, __CLASS__);

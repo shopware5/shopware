@@ -42,8 +42,8 @@ class CartRuleDataCollectorCompilerPass implements CompilerPassInterface
     {
         $this->replaceArgumentWithTaggedServices(
             $container,
-            'shopware_cart.rule_data_collector_registry',
-            'shopware_cart.rule_data_collector',
+            'cart.validator.rule_data_collector_registry',
+            'cart.validator_collector',
             0
         );
     }

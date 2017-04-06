@@ -25,18 +25,18 @@ declare(strict_types=1);
 
 namespace Shopware\Bundle\CartBundle\Domain\Tax;
 
-use Shopware\Bundle\CartBundle\Domain\KeyCollection;
+use Shopware\Bundle\CartBundle\Domain\Collection;
 
-class TaxRuleCollection extends KeyCollection
+class TaxRuleCollection extends Collection
 {
     /**
      * @var TaxRuleInterface[]
      */
     protected $elements = [];
 
-    public function add(TaxRuleInterface $calculatedTax): void
+    public function add(TaxRuleInterface $taxRule): void
     {
-        parent::doAdd($calculatedTax);
+        $this->elements[$this->getKey($taxRule)] = $taxRule;
     }
 
     public function remove(float $taxRate): void
@@ -44,14 +44,14 @@ class TaxRuleCollection extends KeyCollection
         parent::doRemoveByKey((string) $taxRate);
     }
 
-    public function removeElement(TaxRuleInterface $calculatedTax): void
+    public function removeElement(TaxRuleInterface $taxRule): void
     {
-        parent::doRemoveByKey($this->getKey($calculatedTax));
+        parent::doRemoveByKey($this->getKey($taxRule));
     }
 
-    public function exists(TaxRuleInterface $calculatedTax): bool
+    public function exists(TaxRuleInterface $taxRule): bool
     {
-        return parent::has($this->getKey($calculatedTax));
+        return parent::has($this->getKey($taxRule));
     }
 
     public function get(float $taxRate): ? TaxRuleInterface
@@ -80,12 +80,7 @@ class TaxRuleCollection extends KeyCollection
         return $new;
     }
 
-    /**
-     * @param TaxRuleInterface $element
-     *
-     * @return string
-     */
-    protected function getKey($element): string
+    protected function getKey(TaxRuleInterface $element): string
     {
         return (string) $element->getRate();
     }

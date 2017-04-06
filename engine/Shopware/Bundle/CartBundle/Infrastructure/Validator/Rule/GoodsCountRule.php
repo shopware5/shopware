@@ -54,7 +54,7 @@ class GoodsCountRule extends Rule
         ShopContextInterface $context,
         RuleDataCollection $collection
     ): bool {
-        $goods = $calculatedCart->getLineItems()->filterInstance(Goods::class);
+        $goods = $calculatedCart->getCalculatedLineItems()->filterInstance(Goods::class);
 
         switch ($this->operator) {
             case self::OPERATOR_GTE:

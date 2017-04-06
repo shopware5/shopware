@@ -40,6 +40,6 @@ class TaxRuleCalculatorCompilerPass implements CompilerPassInterface
 
     public function process(ContainerBuilder $container): void
     {
-        $this->replaceArgumentWithTaggedServices($container, 'shopware_cart.tax_calculator', 'shopware_cart.tax_rule_calculator', 1);
+        $this->replaceArgumentWithTaggedServices($container, 'cart.tax.calculator', 'cart.tax.rule_calculator', 1);
     }
 }

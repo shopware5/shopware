@@ -1,10 +1,17 @@
 {namespace name="frontend/checkout/ajax_cart"}
 
+{* Product *}
 {if $lineItem._class === "Shopware\Bundle\CartBundle\Infrastructure\View\ViewProduct"}
-    {* Product *}
     {block name='frontend_checkout_cart_item_product'}
         {include file="frontend/checkout/ajax_items/product.tpl"}
     {/block}
+
+{* Voucher *}
+{elseif $lineItem._class === "Shopware\Bundle\CartBundle\Domain\Voucher\CalculatedVoucher"}
+    {block name='frontend_checkout_cart_item_voucher'}
+        {include file="frontend/checkout/ajax_items/voucher.tpl"}
+    {/block}
+
 {else}
 
     {* Constants for the different basket item types *}

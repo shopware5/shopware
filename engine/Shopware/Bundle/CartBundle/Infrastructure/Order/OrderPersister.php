@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -23,11 +22,14 @@ declare(strict_types=1);
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\CartBundle\Domain\Cart;
+namespace Shopware\Bundle\CartBundle\Infrastructure\Order;
 
 use Doctrine\DBAL\Connection;
+use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
+use Shopware\Bundle\CartBundle\Domain\Order\OrderPersisterInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
-class CartPersister implements CartPersisterInterface
+class OrderPersister implements OrderPersisterInterface
 {
     /**
      * @var Connection
@@ -42,36 +44,16 @@ class CartPersister implements CartPersisterInterface
         $this->connection = $connection;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function load(string $token): CartContainer
-    {
-        $content = $this->connection->fetchColumn(
-            'SELECT content FROM s_cart WHERE `token` = :token',
-            [':token' => $token]
-        );
-
-        if ($content === false) {
-            throw new \RuntimeException('CartContainer token not found');
-        }
-
-        return CartContainer::unserialize($content);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function save(CartContainer $cartContainer): void
+    public function persist(CalculatedCart $calculatedCart, ShopContextInterface $context): void
     {
         $this->connection->executeQuery(
-            'INSERT INTO `s_cart` (`token`, `name`, `content`) 
-             VALUES (:token, :name, :content)
-             ON DUPLICATE KEY UPDATE `name` = :name, `content` = :content',
+            'INSERT INTO `s_cart_order` (`token`, `name`, `content`, `order_time`) 
+             VALUES (:token, :name, :content, :order_time)',
             [
-                ':token' => $cartContainer->getToken(),
-                ':name' => $cartContainer->getName(),
-                ':content' => $cartContainer->serialize(),
+                ':token' => $calculatedCart->getToken(),
+                ':name' => $calculatedCart->getName(),
+                ':content' => json_encode($calculatedCart),
+                ':order_time' => (new \DateTime())->format('Y-m-d H:i:s'),
             ]
         );
     }

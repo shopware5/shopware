@@ -28,7 +28,6 @@ namespace Shopware\Bundle\CartBundle\Domain\Delivery;
 use Shopware\Bundle\CartBundle\Domain\JsonSerializableTrait;
 use Shopware\Bundle\CartBundle\Domain\LineItem\CalculatedLineItemInterface;
 use Shopware\Bundle\CartBundle\Domain\LineItem\Deliverable;
-use Shopware\Bundle\CartBundle\Domain\LineItem\Stackable;
 use Shopware\Bundle\CartBundle\Domain\Price\Price;
 
 class DeliveryPosition implements \JsonSerializable
@@ -82,7 +81,7 @@ class DeliveryPosition implements \JsonSerializable
     }
 
     /**
-     * @param Deliverable|CalculatedLineItemInterface|Stackable $lineItem
+     * @param Deliverable|CalculatedLineItemInterface $lineItem
      *
      * @return DeliveryPosition
      */
@@ -98,7 +97,7 @@ class DeliveryPosition implements \JsonSerializable
     }
 
     /**
-     * @param Deliverable|CalculatedLineItemInterface|Stackable $lineItem
+     * @param Deliverable|CalculatedLineItemInterface $lineItem
      *
      * @return DeliveryPosition
      */

@@ -30,7 +30,7 @@ class PriceRounding
     /**
      * @var int
      */
-    private $precisions = 2;
+    private $precisions;
 
     public function __construct(int $precisions)
     {

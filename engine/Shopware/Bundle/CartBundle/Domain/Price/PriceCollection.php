@@ -67,11 +67,9 @@ class PriceCollection extends Collection
 
     public function getTotalPrice(): Price
     {
-        $amount = $this->getAmount();
-
         return new Price(
-            $amount,
-            $amount,
+            $this->getUnitPriceAmount(),
+            $this->getAmount(),
             $this->getCalculatedTaxes(),
             $this->getTaxRules()
         );
@@ -85,6 +83,15 @@ class PriceCollection extends Collection
         }
 
         return $taxes;
+    }
+
+    private function getUnitPriceAmount(): float
+    {
+        $prices = $this->map(function (Price $price) {
+            return $price->getUnitPrice();
+        });
+
+        return array_sum($prices);
     }
 
     private function getAmount(): float

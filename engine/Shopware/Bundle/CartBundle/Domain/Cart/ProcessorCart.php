@@ -38,7 +38,7 @@ class ProcessorCart implements \JsonSerializable
     /**
      * @var CalculatedLineItemCollection
      */
-    protected $lineItems;
+    protected $calculatedLineItems;
 
     /**
      * @var DeliveryCollection
@@ -51,17 +51,17 @@ class ProcessorCart implements \JsonSerializable
     protected $errors;
 
     public function __construct(
-        CalculatedLineItemCollection $lineItems,
+        CalculatedLineItemCollection $calculatedLineItems,
         DeliveryCollection $deliveries
     ) {
-        $this->lineItems = $lineItems;
+        $this->calculatedLineItems = $calculatedLineItems;
         $this->deliveries = $deliveries;
         $this->errors = new ErrorCollection();
     }
 
-    public function getLineItems(): CalculatedLineItemCollection
+    public function getCalculatedLineItems(): CalculatedLineItemCollection
     {
-        return $this->lineItems;
+        return $this->calculatedLineItems;
     }
 
     public function getDeliveries(): DeliveryCollection

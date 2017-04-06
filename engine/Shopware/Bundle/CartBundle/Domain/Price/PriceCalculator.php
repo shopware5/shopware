@@ -72,10 +72,7 @@ class PriceCalculator
 
         switch (true) {
             case $this->taxDetector->useGross($context):
-                $calculatedTaxes = $this->taxCalculator->calculateGrossTaxes(
-                    $price,
-                    $definition->getTaxRules()
-                );
+                $calculatedTaxes = $this->taxCalculator->calculateGrossTaxes($price, $definition->getTaxRules());
                 break;
 
             case $this->taxDetector->isNetDelivery($context):
@@ -84,10 +81,7 @@ class PriceCalculator
                 break;
 
             default:
-                $calculatedTaxes = $this->taxCalculator->calculateNetTaxes(
-                    $price,
-                    $definition->getTaxRules()
-                );
+                $calculatedTaxes = $this->taxCalculator->calculateNetTaxes($price, $definition->getTaxRules());
                 break;
         }
 

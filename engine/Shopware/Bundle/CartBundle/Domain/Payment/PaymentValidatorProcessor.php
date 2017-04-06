@@ -57,12 +57,6 @@ class PaymentValidatorProcessor implements CartProcessorInterface
         ProcessorCart $processorCart,
         ShopContextInterface $context
     ): void {
-        $calculatedCart = $this->calculatedCartGenerator->create(
-            $cartContainer,
-            $context,
-            $processorCart
-        );
-
         if (!$context->getCustomer()) {
             return;
         }
@@ -72,6 +66,8 @@ class PaymentValidatorProcessor implements CartProcessorInterface
         if (!$payment->getRiskManagementRule()) {
             return;
         }
+
+        $calculatedCart = $this->calculatedCartGenerator->create($cartContainer, $context, $processorCart);
 
         $valid = $this->paymentRiskManagementFilter->filter([$payment], $calculatedCart, $context);
 

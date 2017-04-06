@@ -24,18 +24,18 @@
 
 namespace Shopware\Bundle\CartBundle\Domain\Validator\Data;
 
-use Shopware\Bundle\CartBundle\Domain\KeyCollection;
+use Shopware\Bundle\CartBundle\Domain\Collection;
 
-class RuleDataCollection extends KeyCollection
+class RuleDataCollection extends Collection
 {
     /**
      * @var RuleData[]
      */
     protected $elements = [];
 
-    public function add(RuleData $riskData): void
+    public function add(RuleData $ruleData): void
     {
-        parent::doAdd($riskData);
+        $this->elements[$this->getKey($ruleData)] = $ruleData;
     }
 
     public function remove(string $class): void
@@ -43,14 +43,14 @@ class RuleDataCollection extends KeyCollection
         parent::doRemoveByKey($class);
     }
 
-    public function removeElement(RuleData $data): void
+    public function removeElement(RuleData $ruleData): void
     {
-        parent::doRemoveByKey($this->getKey($data));
+        parent::doRemoveByKey($this->getKey($ruleData));
     }
 
-    public function exists(RuleData $data): bool
+    public function exists(RuleData $ruleData): bool
     {
-        return parent::has($this->getKey($data));
+        return parent::has($this->getKey($ruleData));
     }
 
     public function get(string $class): ? RuleData
@@ -62,7 +62,7 @@ class RuleDataCollection extends KeyCollection
         return null;
     }
 
-    protected function getKey($element)
+    protected function getKey(RuleData $element)
     {
         return get_class($element);
     }

@@ -53,6 +53,6 @@ class BillingZipCodeRule extends Rule
             return false;
         }
 
-        return in_array(strtolower($customer->getActiveBillingAddress()->getZipcode()), $this->zipCodes);
+        return in_array(strtolower($customer->getActiveBillingAddress()->getZipcode()), $this->zipCodes, true);
     }
 }

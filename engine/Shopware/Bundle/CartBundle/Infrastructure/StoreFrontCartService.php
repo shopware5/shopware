@@ -25,12 +25,14 @@ declare(strict_types=1);
 
 namespace Shopware\Bundle\CartBundle\Infrastructure;
 
+use Psr\Log\LoggerInterface;
 use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
 use Shopware\Bundle\CartBundle\Domain\Cart\CartCalculator;
 use Shopware\Bundle\CartBundle\Domain\Cart\CartContainer;
 use Shopware\Bundle\CartBundle\Domain\Cart\CartPersisterInterface;
+use Shopware\Bundle\CartBundle\Domain\Exception\LineItemNotFoundException;
 use Shopware\Bundle\CartBundle\Domain\LineItem\LineItemInterface;
-use Shopware\Bundle\CartBundle\Domain\LineItem\Stackable;
+use Shopware\Bundle\CartBundle\Domain\Order\OrderPersisterInterface;
 use Shopware\Bundle\CartBundle\Infrastructure\View\ViewCart;
 use Shopware\Bundle\CartBundle\Infrastructure\View\ViewCartTransformer;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
@@ -67,93 +69,61 @@ class StoreFrontCartService
     private $viewCartTransformer;
 
     /**
-     * @param CartCalculator                        $calculation
-     * @param CartPersisterInterface                $persister
-     * @param ContextServiceInterface               $contextService
-     * @param \Enlight_Components_Session_Namespace $session
-     * @param ViewCartTransformer                   $viewCartTransformer
+     * @var LoggerInterface
      */
+    private $logger;
+
+    /**
+     * @var OrderPersisterInterface
+     */
+    private $orderPersister;
+
     public function __construct(
         CartCalculator $calculation,
         CartPersisterInterface $persister,
         ContextServiceInterface $contextService,
         \Enlight_Components_Session_Namespace $session,
-        ViewCartTransformer $viewCartTransformer
+        ViewCartTransformer $viewCartTransformer,
+        LoggerInterface $logger,
+        OrderPersisterInterface $orderPersister
     ) {
         $this->calculation = $calculation;
         $this->persister = $persister;
         $this->contextService = $contextService;
         $this->session = $session;
         $this->viewCartTransformer = $viewCartTransformer;
-    }
-
-    public function createNew(): ViewCart
-    {
-        $cartContainer = $this->createNewCart();
-        $this->calculate($cartContainer);
-
-        return $this->getCart();
+        $this->logger = $logger;
+        $this->orderPersister = $orderPersister;
     }
 
     public function getCart(): ViewCart
     {
-        if ($this->getCartToken() === null) {
-            //first access for frontend session
-            $cartContainer = $this->createNewCart();
-        } else {
-            try {
-                //try to access existing cartContainer, identified by session token
-                $cartContainer = $this->persister->load($this->getCartToken());
-            } catch (\Exception $e) {
-                //token not found, create new cartContainer
-                $cartContainer = $this->createNewCart();
-            }
-        }
-
         return $this->viewCartTransformer->transform(
-            $this->calculate($cartContainer),
+            $this->getCalculatedCart(),
             $this->contextService->getShopContext()
         );
     }
 
-    public function calculate(CartContainer $cartContainer): CalculatedCart
-    {
-        $context = $this->contextService->getShopContext();
-        $calculated = $this->calculation->calculate($cartContainer, $context);
-        $this->save($calculated->getCartContainer());
-
-        return $calculated;
-    }
-
     public function add(LineItemInterface $item): void
     {
-        $calculated = $this->getCart()->getCalculatedCart();
+        $cart = $this->getCart()->getCalculatedCart()->getCartContainer();
 
-        $exists = $calculated->getLineItems()->get($item->getIdentifier());
-        if ($exists instanceof Stackable) {
-            $exists->getLineItem()->setQuantity($item->getQuantity() + $exists->getQuantity());
-        } else {
-            $calculated->getCartContainer()->getLineItems()->add($item);
-        }
+        $cart->getLineItems()->add($item);
 
-        $this->calculate($calculated->getCartContainer());
+        $this->calculate($cart);
     }
 
     public function changeQuantity(string $identifier, int $quantity): void
     {
-        $calculated = $this->getCart()->getCalculatedCart();
+        $cart = $this->getCart()->getCalculatedCart()->getCartContainer();
 
-        $lineItem = $calculated->getLineItems()->get($identifier);
-        if (!$lineItem) {
-            throw new \Exception(sprintf('Item with identifier %s not found', $identifier));
-        }
-        if (!$lineItem instanceof Stackable) {
-            throw new \Exception(sprintf('Quantity of line item %s can not be changed', $identifier));
+        if (!$cart->getLineItems()->has($identifier)) {
+            throw new LineItemNotFoundException($identifier);
         }
 
-        $lineItem->getLineItem()->setQuantity($quantity);
+        $cart->getLineItems()->get($identifier)->setQuantity($quantity);
 
-        $this->calculate($calculated->getCartContainer());
+        $this->calculate($cart);
     }
 
     public function remove(string $identifier): void
@@ -161,6 +131,52 @@ class StoreFrontCartService
         $cartContainer = $this->getCart()->getCalculatedCart()->getCartContainer();
         $cartContainer->getLineItems()->remove($identifier);
         $this->calculate($cartContainer);
+    }
+
+    public function order()
+    {
+        $this->orderPersister->persist(
+            $this->getCart()->getCalculatedCart(),
+            $context = $this->contextService->getShopContext()
+        );
+
+        $this->createNewCart();
+    }
+
+    private function getCartContainer(): CartContainer
+    {
+        if ($this->getCartToken() === null) {
+            //first access for frontend session
+            return $this->createNewCart();
+        }
+
+        try {
+            //try to access existing cartContainer, identified by session token
+            return $this->persister->load($this->getCartToken());
+        } catch (\Exception $e) {
+            $this->logger->error(
+                sprintf('Cart with token %s can not be loaded with message: %s', $this->getCartToken(), $e->getMessage())
+            );
+
+            //token not found, create new cartContainer
+            return $this->createNewCart();
+        }
+    }
+
+    private function getCalculatedCart(): CalculatedCart
+    {
+        return $this->calculate(
+            $this->getCartContainer()
+        );
+    }
+
+    private function calculate(CartContainer $cartContainer): CalculatedCart
+    {
+        $context = $this->contextService->getShopContext();
+        $calculated = $this->calculation->calculate($cartContainer, $context);
+        $this->save($calculated->getCartContainer());
+
+        return $calculated;
     }
 
     private function save(CartContainer $cartContainer): void

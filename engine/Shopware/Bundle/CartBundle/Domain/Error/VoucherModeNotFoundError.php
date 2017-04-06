@@ -32,11 +32,11 @@ class VoucherModeNotFoundError extends Error
     private $code;
 
     /**
-     * @var int
+     * @var string
      */
     private $mode;
 
-    public function __construct(string $code, int $mode)
+    public function __construct(string $code, string $mode)
     {
         $this->code = $code;
         $this->mode = $mode;

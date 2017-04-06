@@ -32,10 +32,9 @@ use Shopware\Bundle\CartBundle\Domain\LineItem\CalculatedLineItemInterface;
 use Shopware\Bundle\CartBundle\Domain\LineItem\Deliverable;
 use Shopware\Bundle\CartBundle\Domain\LineItem\Goods;
 use Shopware\Bundle\CartBundle\Domain\LineItem\LineItemInterface;
-use Shopware\Bundle\CartBundle\Domain\LineItem\Stackable;
 use Shopware\Bundle\CartBundle\Domain\Price\Price;
 
-class CalculatedProduct implements CalculatedLineItemInterface, Stackable, Deliverable, Goods
+class CalculatedProduct implements CalculatedLineItemInterface, Deliverable, Goods
 {
     use JsonSerializableTrait;
 

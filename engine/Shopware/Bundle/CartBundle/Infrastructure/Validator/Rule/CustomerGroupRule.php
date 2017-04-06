@@ -49,6 +49,6 @@ class CustomerGroupRule extends Rule
         ShopContextInterface $context,
         RuleDataCollection $collection
     ): bool {
-        return in_array($context->getCurrentCustomerGroup()->getId(), $this->customerGroupIds);
+        return in_array($context->getCurrentCustomerGroup()->getId(), $this->customerGroupIds, true);
     }
 }

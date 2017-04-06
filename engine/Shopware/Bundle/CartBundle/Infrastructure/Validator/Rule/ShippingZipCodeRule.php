@@ -53,6 +53,6 @@ class ShippingZipCodeRule extends Rule
             return false;
         }
 
-        return in_array($location->getZipcode(), $this->zipCodes);
+        return in_array($location->getZipcode(), $this->zipCodes, true);
     }
 }

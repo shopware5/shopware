@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Shopware\Bundle\CartBundle\Infrastructure\StoreFrontCartService;
 
 /**
@@ -31,7 +32,7 @@ class Shopware_Controllers_Widgets_Checkout extends Enlight_Controller_Action
     public function infoAction()
     {
         /** @var StoreFrontCartService $service */
-        $service = $this->get('shopware_cart.store_front_cart_service');
+        $service = $this->get('shopware.cart.storefront_service');
 
         /** @var Enlight_Components_Session_Namespace $session */
         $session = $this->get('session');
@@ -39,10 +40,10 @@ class Shopware_Controllers_Widgets_Checkout extends Enlight_Controller_Action
         $cart = $service->getCart();
 
         $this->View()->assign([
-            'sBasketQuantity' => $cart->getCalculatedCart()->getLineItems()->filterGoods()->count(),
+            'sBasketQuantity' => $cart->getCalculatedCart()->getCalculatedLineItems()->filterGoods()->count(),
             'sBasketAmount' => $cart->getPrice()->getTotalPrice(),
             'sUserLoggedIn' => !empty($session->get('sUserId')),
-            'sNotesQuantity' => $session->get('sNotesQuantity') ?: Shopware()->Modules()->Basket()->sCountNotes()
+            'sNotesQuantity' => $session->get('sNotesQuantity') ?: Shopware()->Modules()->Basket()->sCountNotes(),
         ]);
     }
 }

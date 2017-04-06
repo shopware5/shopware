@@ -26,9 +26,11 @@ declare(strict_types=1);
 namespace Shopware\Bundle\CartBundle\Infrastructure\Product;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Query\QueryBuilder;
 use Shopware\Bundle\CartBundle\Domain\LineItem\LineItemCollection;
 use Shopware\Bundle\CartBundle\Domain\LineItem\LineItemInterface;
 use Shopware\Bundle\CartBundle\Domain\Price\PriceDefinition;
+use Shopware\Bundle\CartBundle\Domain\Price\PriceDefinitionCollection;
 use Shopware\Bundle\CartBundle\Domain\Product\ProductPriceGatewayInterface;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxRule;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCollection;
@@ -59,15 +61,12 @@ class ProductPriceGateway implements ProductPriceGatewayInterface
         $this->fieldHelper = $fieldHelper;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function get(LineItemCollection $collection, ShopContextInterface $context): array
+    public function get(LineItemCollection $collection, ShopContextInterface $context): PriceDefinitionCollection
     {
         $query = $this->buildQuery($collection->getIdentifiers(), $context);
-        $statement = $query->execute();
-        $data = $statement->fetchAll(\PDO::FETCH_GROUP);
-        $prices = [];
+
+        $data = $query->execute()->fetchAll(\PDO::FETCH_GROUP);
+        $prices = new PriceDefinitionCollection();
 
         /** @var LineItemInterface $lineItem */
         foreach ($collection as $lineItem) {
@@ -84,27 +83,26 @@ class ProductPriceGateway implements ProductPriceGatewayInterface
                 $context->getFallbackCustomerGroup()->getKey()
             );
 
+            if (!$price) {
+                continue;
+            }
+
             $taxRule = new TaxRule((float) $price['__tax_tax']);
 
-            $prices[$number] = new PriceDefinition(
-                (float) $price['price_net'],
-                new TaxRuleCollection([$taxRule]),
-                $lineItem->getQuantity()
+            $prices->add(
+                $number,
+                new PriceDefinition(
+                    (float) $price['price_net'],
+                    new TaxRuleCollection([$taxRule]),
+                    $lineItem->getQuantity()
+                )
             );
         }
 
         return $prices;
     }
 
-    /**
-     * @param int    $quantity
-     * @param array  $prices
-     * @param string $currentKey
-     * @param string $fallbackKey
-     *
-     * @return array
-     */
-    private function findCustomerGroupPrice($quantity, $prices, $currentKey, $fallbackKey)
+    private function findCustomerGroupPrice(int $quantity, array $prices, string $currentKey, string $fallbackKey): array
     {
         $filtered = $this->filterCustomerGroupPrices($prices, $currentKey);
         if (0 === count($filtered)) {
@@ -114,28 +112,14 @@ class ProductPriceGateway implements ProductPriceGatewayInterface
         return $this->getQuantityPrice($filtered, $quantity);
     }
 
-    /**
-     * @param array  $prices
-     * @param string $key
-     *
-     * @return array
-     */
-    private function filterCustomerGroupPrices($prices, $key)
+    private function filterCustomerGroupPrices(array $prices, string $key): array
     {
         return array_filter($prices, function ($price) use ($key) {
-            return $price['price_customer_group_key'] == $key;
+            return $price['price_customer_group_key'] === $key;
         });
     }
 
-    /**
-     * @param array[] $prices
-     * @param float   $quantity
-     *
-     * @throws \Exception
-     *
-     * @return array|null
-     */
-    private function getQuantityPrice($prices, $quantity)
+    private function getQuantityPrice(array $prices, int $quantity): ? array
     {
         foreach ($prices as $price) {
             $to = (float) $price['price_to_quantity'];
@@ -149,16 +133,11 @@ class ProductPriceGateway implements ProductPriceGatewayInterface
                 return $price;
             }
         }
-        throw new \Exception('No price found');
+
+        return null;
     }
 
-    /**
-     * @param string[]             $numbers
-     * @param ShopContextInterface $context
-     *
-     * @return \Doctrine\DBAL\Query\QueryBuilder
-     */
-    private function buildQuery($numbers, ShopContextInterface $context)
+    private function buildQuery(array $numbers, ShopContextInterface $context): QueryBuilder
     {
         $query = $this->connection->createQueryBuilder();
 

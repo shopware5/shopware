@@ -78,7 +78,7 @@ class ProductProcessorTest extends \PHPUnit\Framework\TestCase
             Generator::createContext()
         );
 
-        static::assertCount(0, $processorCart->getLineItems());
+        static::assertCount(0, $processorCart->getCalculatedLineItems());
     }
 
     public function testConvertOneProduct()
@@ -125,7 +125,7 @@ class ProductProcessorTest extends \PHPUnit\Framework\TestCase
             $cart,
             Generator::createContext()
         );
-        static::assertCount(1, $cart->getLineItems());
+        static::assertCount(1, $cart->getCalculatedLineItems());
     }
 
     public function testConvertMultipleProducts()
@@ -203,7 +203,7 @@ class ProductProcessorTest extends \PHPUnit\Framework\TestCase
                     new DefaultDeliveryInformation()
                 ),
             ]),
-            $cart->getLineItems()
+            $cart->getCalculatedLineItems()
         );
     }
 

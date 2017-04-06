@@ -48,7 +48,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
     {
         $context = $this->container->get('shopware_storefront.context_service')->getShopContext();
 
-        $cart = $this->container->get('shopware_cart.store_front_cart_service')->getCart();
+        $cart = $this->container->get('shopware.cart.storefront_service')->getCart();
 
         $this->View()->assign([
             'context' => $this->serialize($context),
@@ -67,16 +67,16 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
             return;
         }
 
-        $cart = $this->container->get('shopware_cart.store_front_cart_service')->getCart();
+        $cart = $this->container->get('shopware.cart.storefront_service')->getCart();
 
-        if ($cart->getLineItems()->count() === 0) {
+        if ($cart->getViewLineItems()->count() === 0) {
             $this->redirect(['action' => self::ACTION_CART]);
 
             return;
         }
 
         if ($cart->getErrors()->has(PaymentBlockedError::class)) {
-            $context = $this->container->get('shopware_cart.payment.store_front_switch_payment_service')
+            $context = $this->container->get('shopware.cart.payment.storefront_switcher')
                 ->switchPayment($context->getShop()->getPaymentMethod()->getId());
         }
 
@@ -89,16 +89,16 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
 
     public function shippingPaymentAction()
     {
-        $cart = $this->container->get('shopware_cart.store_front_cart_service')->getCart();
+        $cart = $this->container->get('shopware.cart.storefront_service')->getCart();
 
         $context = $this->container->get('shopware_storefront.context_service')->getShopContext();
 
-        $payments = $this->container->get('shopware_cart.payment_method_service')->getAvailable(
+        $payments = $this->container->get('shopware.cart.payment.service')->getAvailable(
             $cart->getCalculatedCart(),
             $context
         );
 
-        $deliveryMethods = $this->container->get('shopware_cart.delivery_method_service')
+        $deliveryMethods = $this->container->get('cart.delivery.service')
             ->getAvailable($cart->getCalculatedCart(), $context);
 
         $this->View()->assign([
@@ -122,7 +122,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
 
         $context = $this->container->get('shopware_storefront.context_service')->getShopContext();
 
-        $cart = $this->container->get('shopware_cart.store_front_cart_service')->getCart();
+        $cart = $this->container->get('shopware.cart.storefront_service')->getCart();
 
         $this->View()->assign([
             'context' => $this->serialize($context),
@@ -133,9 +133,9 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
 
     public function ajaxAmountAction()
     {
-        $cart = $this->container->get('shopware_cart.store_front_cart_service')->getCart();
+        $cart = $this->container->get('shopware.cart.storefront_service')->getCart();
 
-        $quantity = $cart->getCalculatedCart()->getLineItems()->filterGoods()->count();
+        $quantity = $cart->getCalculatedCart()->getCalculatedLineItems()->filterGoods()->count();
 
         $this->View()->assign(['amount' => $cart->getPrice()->getTotalPrice()]);
 
@@ -157,7 +157,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
 
         $quantity = (int) $this->Request()->getParam('quantity', 1);
 
-        $this->container->get('shopware_cart.store_front_cart_service')->add(
+        $this->container->get('shopware.cart.storefront_service')->add(
             new LineItem($number, ProductProcessor::TYPE_PRODUCT, $quantity)
         );
 
@@ -170,7 +170,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
     {
         $identifier = $this->Request()->getParam('identifier');
 
-        $this->container->get('shopware_cart.store_front_cart_service')->remove($identifier);
+        $this->container->get('shopware.cart.storefront_service')->remove($identifier);
 
         $this->forward(
             $this->Request()->getParam(self::TARGET_ACTION_KEY, self::ACTION_AJAX_CART)
@@ -184,7 +184,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
             throw new Exception('No voucher code provided');
         }
 
-        $this->container->get('shopware_cart.store_front_cart_service')->add(
+        $this->container->get('shopware.cart.storefront_service')->add(
             new LineItem('voucher', VoucherProcessor::TYPE_VOUCHER, 1, ['code' => $code])
         );
 
@@ -199,7 +199,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
             throw new Exception('Only post request allowed');
         }
 
-        $service = $this->container->get('shopware_cart.store_front_cart_service');
+        $service = $this->container->get('shopware.cart.storefront_service');
 
         $identifier = $this->Request()->getPost('identifier');
         if (!$identifier) {
@@ -231,11 +231,11 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
     {
         Shopware()->Plugins()->Controller()->Json()->setPadding();
 
-        $service = $this->container->get('shopware_cart.store_front_cart_service');
+        $service = $this->container->get('shopware.cart.storefront_service');
 
         $number = $this->Request()->getParam('number');
 
-        $product = $service->getCart()->getLineItems()->get($number);
+        $product = $service->getCart()->getViewLineItems()->get($number);
 
         $this->View()->assign(['lineItem' => $this->serialize($product)]);
     }
@@ -247,120 +247,16 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
      */
     public function finishAction()
     {
-        if ($this->Request()->getParam('sUniqueID') && !empty($this->session['sOrderVariables'])) {
-            $sql = '
-                SELECT transactionID as sTransactionumber, ordernumber as sOrderNumber
-                FROM s_order
-                WHERE temporaryID=? AND userID=?
-            ';
+        $cart = $this->container->get('shopware.cart.storefront_service')->getCart();
 
-            $order = Shopware()->Db()->fetchRow($sql, [$this->Request()->getParam('sUniqueID'), Shopware()->Session()->sUserId]);
-            if (!empty($order)) {
-                $this->View()->assign($order);
-                $orderVariables = $this->session['sOrderVariables']->getArrayCopy();
+        $context = $this->container->get('shopware_storefront.context_service')->getShopContext();
 
-                if (!empty($orderVariables['sOrderNumber'])) {
-                    $orderVariables['sAddresses']['billing'] = $this->getOrderAddress($orderVariables['sOrderNumber'], 'billing');
-                    $orderVariables['sAddresses']['shipping'] = $this->getOrderAddress($orderVariables['sOrderNumber'], 'shipping');
-                    $orderVariables['sAddresses']['equal'] = $this->areAddressesEqual($orderVariables['sAddresses']['billing'], $orderVariables['sAddresses']['shipping']);
-                }
+        $this->container->get('shopware.cart.storefront_service')->order();
 
-                $this->View()->assign($orderVariables);
-
-                return;
-            }
-        }
-
-        if (empty($this->session['sOrderVariables']) || $this->getMinimumCharge() || $this->getEsdNote() || $this->getDispatchNoOrder()) {
-            return $this->forward('confirm');
-        }
-
-        $checkQuantities = $this->basket->sCheckBasketQuantities();
-        if (!empty($checkQuantities['hideBasket'])) {
-            return $this->forward('confirm');
-        }
-
-        $orderVariables = $this->session['sOrderVariables']->getArrayCopy();
-
-        if (!empty($orderVariables['sOrderNumber'])) {
-            $orderVariables['sAddresses']['billing'] = $this->getOrderAddress($orderVariables['sOrderNumber'], 'billing');
-            $orderVariables['sAddresses']['shipping'] = $this->getOrderAddress($orderVariables['sOrderNumber'], 'shipping');
-            $orderVariables['sAddresses']['equal'] = $this->areAddressesEqual($orderVariables['sAddresses']['billing'], $orderVariables['sAddresses']['shipping']);
-        }
-
-        $this->View()->assign($orderVariables);
-
-        if ($this->basket->sCountBasket() <= 0) {
-            return;
-        }
-
-        if (!empty($this->View()->sUserData['additional']['payment']['embediframe'])) {
-            return;
-        }
-
-        if ($this->Request()->getParam('sNewsletter') !== null) {
-            $this->session['sNewsletter'] = $this->Request()->getParam('sNewsletter') ? true : false;
-        }
-        if ($this->Request()->getParam('sComment') !== null) {
-            $this->session['sComment'] = trim(strip_tags($this->Request()->getParam('sComment')));
-        }
-
-        $basket = $this->View()->sBasket;
-        $agreements = $this->getInvalidAgreements($basket, $this->Request());
-
-        if (!empty($agreements)) {
-            $this->View()->sAGBError = array_key_exists('agbError', $agreements);
-
-            return $this->forward(
-                'confirm',
-                null,
-                null,
-                ['agreementErrors' => $agreements]
-            );
-        }
-
-        if (!$this->basket->validateVoucher($this->session['sessionId'], $this->session['sUserId'])) {
-            $namespace = $this->container->get('snippets')->getNamespace('frontend/basket/internalMessages');
-
-            return $this->forward(
-                'confirm',
-                null,
-                null,
-                ['voucherErrors' => [
-                    $namespace->get('VoucherFailureAlreadyUsed', 'This voucher was used in an previous order'),
-                ]]
-            );
-        }
-
-        if (empty($activeBillingAddressId = $this->session->offsetGet('checkoutBillingAddressId', null))) {
-            $activeBillingAddressId = $this->View()->sUserData['additional']['user']['default_billing_address_id'];
-        }
-
-        if (empty($activeShippingAddressId = $this->session->offsetGet('checkoutShippingAddressId', null))) {
-            $activeShippingAddressId = $this->View()->sUserData['additional']['user']['default_shipping_address_id'];
-        }
-
-        if (!$this->isValidAddress($activeBillingAddressId) || !$this->isValidAddress($activeShippingAddressId)) {
-            $this->forward('confirm');
-
-            return;
-        }
-
-        if (!empty($this->session['sNewsletter'])) {
-            $this->admin->sUpdateNewsletter(true, $this->admin->sGetUserMailById(), true);
-        }
-
-        $this->saveOrder();
-        $this->saveDefaultAddresses();
-        $this->resetTemporaryAddresses();
-
-        $orderVariables = $this->session['sOrderVariables']->getArrayCopy();
-
-        $orderVariables['sAddresses']['billing'] = $this->getOrderAddress($orderVariables['sOrderNumber'], 'billing');
-        $orderVariables['sAddresses']['shipping'] = $this->getOrderAddress($orderVariables['sOrderNumber'], 'shipping');
-        $orderVariables['sAddresses']['equal'] = $this->areAddressesEqual($orderVariables['sAddresses']['billing'], $orderVariables['sAddresses']['shipping']);
-
-        $this->View()->assign($orderVariables);
+        $this->View()->assign([
+            'cart' => $this->serialize($cart),
+            'context' => $this->serialize($context),
+        ]);
     }
 
     /**

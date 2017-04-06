@@ -36,6 +36,6 @@ class TaxDetector
 
     public function isNetDelivery(ShopContextInterface $context): bool
     {
-        return false;
+        return $context->getShippingLocation()->getCountry()->isTaxFree();
     }
 }

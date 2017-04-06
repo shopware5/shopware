@@ -67,7 +67,7 @@ class ProductOfCategoriesRuleCollector implements RuleDataCollectorInterface
             $categoryIds = array_merge($categoryIds, $rule->getCategoryIds());
         }
 
-        $numbers = $calculatedCart->getLineItems()->filterInstance(CalculatedProduct::class)->getKeys();
+        $numbers = $calculatedCart->getCalculatedLineItems()->filterInstance(CalculatedProduct::class)->getKeys();
 
         if (empty($numbers)) {
             return;

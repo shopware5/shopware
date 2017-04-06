@@ -54,7 +54,7 @@ class DeliveryCollection extends Collection
         usort(
             $this->elements,
             function (Delivery $a, Delivery $b) {
-                if ($a->getLocation() != $b->getLocation()) {
+                if ($a->getLocation() !== $b->getLocation()) {
                     return -1;
                 }
 
@@ -66,10 +66,10 @@ class DeliveryCollection extends Collection
     public function getDelivery(DeliveryDate $deliveryDate, ShippingLocation $location): ? Delivery
     {
         foreach ($this->elements as $delivery) {
-            if ($delivery->getDeliveryDate() != $deliveryDate) {
+            if ($delivery->getDeliveryDate() !== $deliveryDate) {
                 continue;
             }
-            if ($delivery->getLocation() != $location) {
+            if ($delivery->getLocation() !== $location) {
                 continue;
             }
 

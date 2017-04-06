@@ -38,6 +38,19 @@ CREATE TABLE `s_cart` (
 EOD
 );
 
+        $this->addSql(<<<EOD
+CREATE TABLE `s_cart_order` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `token` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+  `name` varchar(500) COLLATE utf8_unicode_ci NOT NULL,
+  `content` longtext COLLATE utf8_unicode_ci NOT NULL,
+  `order_time` datetime NOT NULL ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `token` (`token`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+EOD
+        );
+
         $this->addSql('ALTER TABLE `s_core_paymentmeans` ADD `risk_rules` longtext COLLATE utf8_unicode_ci NULL DEFAULT NULL');
 
         $this->addSql('ALTER TABLE `s_core_shops` ADD `payment_id` int(11) NOT NULL');

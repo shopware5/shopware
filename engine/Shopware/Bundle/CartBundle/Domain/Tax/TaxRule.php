@@ -45,9 +45,4 @@ class TaxRule implements TaxRuleInterface
     {
         return $this->rate;
     }
-
-    public function getKey(): string
-    {
-        return $this->rate . '';
-    }
 }

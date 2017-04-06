@@ -24,6 +24,8 @@
 
 namespace Shopware\Bundle\CartBundle\Infrastructure;
 
+use Shopware\Bundle\CartBundle\Infrastructure\Exception\NotSupportedSerializerFormatException;
+
 class Serializer
 {
     const FORMAT_JSON = 'json';
@@ -40,7 +42,7 @@ class Serializer
                 return json_encode($data);
 
             default:
-                throw new \Exception(sprintf('Unsupported serializer format %s', $format));
+                throw new NotSupportedSerializerFormatException($data, $format);
         }
     }
 }

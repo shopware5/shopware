@@ -169,7 +169,6 @@ class ContextFactory implements ContextFactoryInterface
 
         $customer = null;
 
-        //customer group switched?
         $customerGroup = $shop->getCustomerGroup();
 
         if ($customerScope->getCustomerId() !== null) {
@@ -184,6 +183,7 @@ class ContextFactory implements ContextFactoryInterface
             $shippingLocation = $this->loadShippingLocation($shop, $translationContext, $checkoutScope);
         }
 
+        //customer group switched?
         if ($customerScope->getCustomerGroupKey()) {
             $customerGroup = $this->customerGroupGateway->getList([$customerScope->getCustomerGroupKey()]);
             $customerGroup = array_shift($customerGroup);

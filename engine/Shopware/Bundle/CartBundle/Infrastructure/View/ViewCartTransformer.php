@@ -33,7 +33,7 @@ class ViewCartTransformer
     /**
      * @var ViewLineItemTransformerInterface[]
      */
-    private $transformers = [];
+    private $transformers;
 
     public function __construct(array $transformers)
     {
@@ -48,8 +48,8 @@ class ViewCartTransformer
             $transformer->transform($calculatedCart, $viewCart, $context);
         }
 
-        $viewCart->getLineItems()->sortByIdentifiers(
-            $calculatedCart->getLineItems()->getIdentifiers()
+        $viewCart->getViewLineItems()->sortByIdentifiers(
+            $calculatedCart->getCalculatedLineItems()->getIdentifiers()
         );
 
         return $viewCart;

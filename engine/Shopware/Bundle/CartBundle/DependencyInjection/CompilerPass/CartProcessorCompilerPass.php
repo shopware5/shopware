@@ -40,6 +40,6 @@ class CartProcessorCompilerPass implements CompilerPassInterface
 
     public function process(ContainerBuilder $container): void
     {
-        $this->replaceArgumentWithTaggedServices($container, 'shopware_cart.cart_calculator', 'cart_processor', 0);
+        $this->replaceArgumentWithTaggedServices($container, 'cart.calculator', 'cart.processor', 0);
     }
 }

@@ -59,7 +59,7 @@ class ViewProductTransformer implements ViewLineItemTransformerInterface
         ViewCart $templateCart,
         ShopContextInterface $context
     ): void {
-        $collection = $calculatedCart->getLineItems()->filterInstance(CalculatedProduct::class);
+        $collection = $calculatedCart->getCalculatedLineItems()->filterInstance(CalculatedProduct::class);
 
         if ($collection->count() === 0) {
             return;
@@ -82,7 +82,7 @@ class ViewProductTransformer implements ViewLineItemTransformerInterface
 
             $template = ViewProduct::createFromProducts($listProduct, $calculated);
 
-            $templateCart->getLineItems()->add($template);
+            $templateCart->getViewLineItems()->add($template);
         }
     }
 }

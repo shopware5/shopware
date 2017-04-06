@@ -25,9 +25,9 @@ declare(strict_types=1);
 
 namespace Shopware\Bundle\CartBundle\Domain\Voucher;
 
-use Shopware\Bundle\CartBundle\Domain\KeyCollection;
+use Shopware\Bundle\CartBundle\Domain\Collection;
 
-class VoucherCollection extends KeyCollection
+class VoucherCollection extends Collection
 {
     /**
      * @var Voucher[]
@@ -36,7 +36,7 @@ class VoucherCollection extends KeyCollection
 
     public function add(Voucher $voucher): void
     {
-        parent::doAdd($voucher);
+        $this->elements[$this->getKey($voucher)] = $voucher;
     }
 
     public function remove(string $code): void
@@ -63,12 +63,7 @@ class VoucherCollection extends KeyCollection
         return null;
     }
 
-    /**
-     * @param Voucher $element
-     *
-     * @return string
-     */
-    protected function getKey($element): string
+    protected function getKey(Voucher $element): string
     {
         return $element->getCode();
     }

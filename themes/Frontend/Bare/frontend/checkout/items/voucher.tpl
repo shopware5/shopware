@@ -21,12 +21,12 @@
             {block name='frontend_checkout_cart_item_voucher_details'}
                 <div class="panel--td table--content">
 
-                    {* Product name *}
+                    {* label *}
                     {block name='frontend_checkout_cart_item_voucher_details_title'}
-                        <span class="content--title">{$lineItem.label|strip_tags|truncate:60}</span>
+                        <span class="content--title">{$lineItem.code|strip_tags|truncate:60}</span>
                     {/block}
 
-                    {* Product SKU number *}
+                    {* SKU number *}
                     {block name='frontend_checkout_cart_item_voucher_details_sku'}
                         <p class="content--sku content">
                             {s name="CartItemInfoId"}{/s} {$lineItem.code}
@@ -61,9 +61,8 @@
     {* Remove voucher from basket *}
     {block name='frontend_checkout_cart_item_voucher_delete_article'}
         <div class="panel--td column--actions block">
-            <form action="{url action='removeLineItem' identifier=voucher sTargetAction=$sTargetAction}" method="post">
-                <button type="submit" class="btn is--small column--actions-link"
-                        title="{"{s name='CartItemLinkDelete'}{/s}"|escape}">
+            <form action="{url action='removeLineItem' identifier=$lineItem.identifier sTargetAction=$sTargetAction}" method="post">
+                <button type="submit" class="btn is--small column--actions-link" title="{"{s name='CartItemLinkDelete'}{/s}"|escape}">
                     <i class="icon--cross"></i>
                 </button>
             </form>

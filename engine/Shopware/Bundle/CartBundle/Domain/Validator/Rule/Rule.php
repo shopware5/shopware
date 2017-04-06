@@ -37,15 +37,15 @@ abstract class Rule implements \JsonSerializable
 
     const OPERATOR_LTE = '<=';
 
-    const OPERATOR_EQ = "=";
+    const OPERATOR_EQ = '=';
 
-    const OPERATOR_NEQ = "!=";
+    const OPERATOR_NEQ = '!=';
 
     /**
      * Validate the current rule and return boolean to indicate if the current rule applied (true) or not (false)
      *
-     * @param CalculatedCart                                                            $calculatedCart
-     * @param ShopContextInterface                                                      $context
+     * @param CalculatedCart                                                       $calculatedCart
+     * @param ShopContextInterface                                                 $context
      * @param \Shopware\Bundle\CartBundle\Domain\Validator\Data\RuleDataCollection $collection
      *
      * @return bool

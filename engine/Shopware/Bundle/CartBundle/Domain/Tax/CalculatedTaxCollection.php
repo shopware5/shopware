@@ -25,9 +25,9 @@ declare(strict_types=1);
 
 namespace Shopware\Bundle\CartBundle\Domain\Tax;
 
-use Shopware\Bundle\CartBundle\Domain\KeyCollection;
+use Shopware\Bundle\CartBundle\Domain\Collection;
 
-class CalculatedTaxCollection extends KeyCollection
+class CalculatedTaxCollection extends Collection
 {
     /**
      * @var CalculatedTax[]
@@ -36,7 +36,7 @@ class CalculatedTaxCollection extends KeyCollection
 
     public function add(CalculatedTax $calculatedTax): void
     {
-        parent::doAdd($calculatedTax);
+        $this->elements[$this->getKey($calculatedTax)] = $calculatedTax;
     }
 
     public function remove(float $taxRate): void
@@ -99,12 +99,7 @@ class CalculatedTaxCollection extends KeyCollection
         return $new;
     }
 
-    /**
-     * @param CalculatedTax $element
-     *
-     * @return string
-     */
-    protected function getKey($element): string
+    protected function getKey(CalculatedTax $element): string
     {
         return (string) $element->getTaxRate();
     }

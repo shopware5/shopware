@@ -48,7 +48,7 @@ class CalculatedCartTest extends TestCase
             new ErrorCollection()
         );
 
-        static::assertCount(0, $cart->getLineItems()->filterGoods());
+        static::assertCount(0, $cart->getCalculatedLineItems()->filterGoods());
     }
 
     public function testCartWithLineItemsHasGoods()
@@ -64,7 +64,7 @@ class CalculatedCartTest extends TestCase
             new ErrorCollection()
         );
 
-        static::assertCount(1, $cart->getLineItems()->filterGoods());
+        static::assertCount(1, $cart->getCalculatedLineItems()->filterGoods());
     }
 
     public function testCartHasNoGoodsIfNoLineItemDefinedAsGoods()
@@ -80,6 +80,6 @@ class CalculatedCartTest extends TestCase
             new ErrorCollection()
         );
 
-        static::assertCount(0, $cart->getLineItems()->filterGoods());
+        static::assertCount(0, $cart->getCalculatedLineItems()->filterGoods());
     }
 }

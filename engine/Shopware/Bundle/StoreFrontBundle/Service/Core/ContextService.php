@@ -45,6 +45,8 @@ class ContextService implements ContextServiceInterface
 {
     const FALLBACK_CUSTOMER_GROUP = 'EK';
 
+    const CACHE_LIFETIME = 3600;
+
     /**
      * @var Container
      */
@@ -112,8 +114,8 @@ class ContextService implements ContextServiceInterface
             CheckoutScope::createFromContext($context)
         );
 
-        $this->cache->save($key, serialize($context), 3600);
-        $this->cache->save($resolvedKey, serialize($context), 3600);
+        $this->cache->save($key, serialize($context), self::CACHE_LIFETIME);
+        $this->cache->save($resolvedKey, serialize($context), self::CACHE_LIFETIME);
 
         return $context;
     }

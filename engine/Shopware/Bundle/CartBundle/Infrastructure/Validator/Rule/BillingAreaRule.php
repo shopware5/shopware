@@ -53,6 +53,6 @@ class BillingAreaRule extends Rule
             return false;
         }
 
-        return in_array($customer->getActiveBillingAddress()->getCountry()->getArea()->getId(), $this->areaIds);
+        return in_array($customer->getActiveBillingAddress()->getCountry()->getArea()->getId(), $this->areaIds, true);
     }
 }

@@ -49,7 +49,7 @@ class DeliverySeparatorProcessor implements CartProcessorInterface
         ShopContextInterface $context
     ): void {
         $items = $processorCart
-            ->getLineItems()
+            ->getCalculatedLineItems()
             ->filterInstance(Deliverable::class);
 
         if (0 === count($items)) {

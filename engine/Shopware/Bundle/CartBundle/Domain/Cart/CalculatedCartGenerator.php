@@ -46,9 +46,9 @@ class CalculatedCartGenerator
     ): CalculatedCart {
         return new CalculatedCart(
             $cartContainer,
-            $processorCart->getLineItems(),
+            $processorCart->getCalculatedLineItems(),
             $this->amountCalculator->calculateAmount(
-                $processorCart->getLineItems()->getPrices(),
+                $processorCart->getCalculatedLineItems()->getPrices(),
                 $context
             ),
             $processorCart->getDeliveries(),

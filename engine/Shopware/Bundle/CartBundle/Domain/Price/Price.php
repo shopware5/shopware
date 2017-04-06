@@ -96,4 +96,28 @@ class Price implements \JsonSerializable
     {
         return $this->quantity;
     }
+
+    public function add(Price $price): void
+    {
+        $this->unitPrice += $price->getUnitPrice();
+        $this->totalPrice += $price->getTotalPrice();
+        $this->calculatedTaxes = $this->calculatedTaxes->merge(
+            $price->getCalculatedTaxes()
+        );
+        $this->taxRules = $this->taxRules->merge(
+            $price->getTaxRules()
+        );
+    }
+
+    public function sub(Price $price): void
+    {
+        $this->unitPrice -= $price->getUnitPrice();
+        $this->totalPrice -= $price->getTotalPrice();
+        $this->calculatedTaxes = $this->calculatedTaxes->merge(
+            $price->getCalculatedTaxes()
+        );
+        $this->taxRules = $this->taxRules->merge(
+            $price->getTaxRules()
+        );
+    }
 }

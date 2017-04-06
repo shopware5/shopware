@@ -66,15 +66,6 @@ class DeliveryInformation implements \JsonSerializable
      */
     protected $outOfStockDeliveryDate;
 
-    /**
-     * @param float        $stock
-     * @param float        $height
-     * @param float        $width
-     * @param float        $length
-     * @param float        $weight
-     * @param DeliveryDate $inStockDeliveryDate
-     * @param DeliveryDate $outOfStockDeliveryDate
-     */
     public function __construct(
         int $stock,
         float $height,

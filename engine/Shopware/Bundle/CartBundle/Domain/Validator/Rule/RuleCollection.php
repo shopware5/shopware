@@ -60,6 +60,11 @@ class RuleCollection extends Collection
         $this->classes = [];
     }
 
+    /**
+     * @param string $class
+     *
+     * @return Collection|RuleCollection
+     */
     public function filterInstance(string $class): Collection
     {
         return new self(

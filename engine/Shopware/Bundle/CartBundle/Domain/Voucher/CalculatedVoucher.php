@@ -51,6 +51,16 @@ class CalculatedVoucher implements CalculatedLineItemInterface, ViewLineItemInte
      */
     protected $code;
 
+    /**
+     * @var string
+     */
+    protected $label;
+
+    /**
+     * @var string
+     */
+    protected $identifier;
+
     public function __construct(
         string $code,
         LineItemInterface $lineItem,
@@ -59,11 +69,13 @@ class CalculatedVoucher implements CalculatedLineItemInterface, ViewLineItemInte
         $this->price = $price;
         $this->lineItem = $lineItem;
         $this->code = $code;
+        $this->identifier = $this->lineItem->getIdentifier();
+        $this->label = $code;
     }
 
     public function getIdentifier(): string
     {
-        return $this->lineItem->getIdentifier();
+        return $this->identifier;
     }
 
     public function getPrice(): Price
@@ -78,7 +90,7 @@ class CalculatedVoucher implements CalculatedLineItemInterface, ViewLineItemInte
 
     public function getLabel(): string
     {
-        return $this->code;
+        return $this->label;
     }
 
     public function getCover(): ? Media
@@ -89,5 +101,10 @@ class CalculatedVoucher implements CalculatedLineItemInterface, ViewLineItemInte
     public function getCode(): string
     {
         return $this->code;
+    }
+
+    public function getQuantity(): int
+    {
+        return $this->lineItem->getQuantity();
     }
 }

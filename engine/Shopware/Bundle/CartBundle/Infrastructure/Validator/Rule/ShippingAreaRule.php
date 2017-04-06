@@ -56,11 +56,11 @@ class ShippingAreaRule extends Rule
         switch ($this->operator) {
             case self::OPERATOR_EQ:
 
-                return in_array($context->getShippingLocation()->getArea()->getId(), $this->areaIds);
+                return in_array($context->getShippingLocation()->getArea()->getId(), $this->areaIds, true);
 
             case self::OPERATOR_NEQ:
 
-                return !in_array($context->getShippingLocation()->getArea()->getId(), $this->areaIds);
+                return !in_array($context->getShippingLocation()->getArea()->getId(), $this->areaIds, true);
 
             default:
                 throw new UnsupportedOperatorException($this->operator, __CLASS__);

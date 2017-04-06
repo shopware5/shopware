@@ -49,6 +49,6 @@ class ProductAttributeRuleData extends RuleData
             return false;
         }
 
-        return in_array($value, $this->data[$attribute]);
+        return in_array($value, $this->data[$attribute], true);
     }
 }

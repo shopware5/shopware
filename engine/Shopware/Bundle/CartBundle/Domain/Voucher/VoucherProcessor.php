@@ -65,7 +65,7 @@ class VoucherProcessor implements CartProcessorInterface
     /**
      * @var RuleDataCollectorRegistry
      */
-    private $voucherDataCollectorRegistry;
+    private $ruleDataCollectorRegistry;
 
     /**
      * @var PriceCalculator
@@ -82,7 +82,7 @@ class VoucherProcessor implements CartProcessorInterface
         $this->percentagePriceCalculator = $percentagePriceCalculator;
         $this->calculatedCartGenerator = $calculatedCartGenerator;
         $this->voucherGateway = $voucherGateway;
-        $this->voucherDataCollectorRegistry = $voucherDataCollectorRegistry;
+        $this->ruleDataCollectorRegistry = $voucherDataCollectorRegistry;
         $this->priceCalculator = $priceCalculator;
     }
 
@@ -91,49 +91,45 @@ class VoucherProcessor implements CartProcessorInterface
         ProcessorCart $processorCart,
         ShopContextInterface $context
     ): void {
-        if (!$cartContainer->getLineItems()->has(self::TYPE_VOUCHER)) {
+        $lineItems = $cartContainer->getLineItems()->filterType(self::TYPE_VOUCHER);
+
+        if (0 === $lineItems->count()) {
             return;
         }
-
-        $lineItem = $cartContainer->getLineItems()->get(self::TYPE_VOUCHER);
-
-        $code = $lineItem->getExtraData()['code'];
 
         $calculatedCart = $this->calculatedCartGenerator->create($cartContainer, $context, $processorCart);
 
-        $vouchers = $this->voucherGateway->get([$code], $calculatedCart, $context);
+        $codes = array_column($lineItems->getExtraData(), 'code');
+        $vouchers = $this->voucherGateway->get($codes, $calculatedCart, $context);
 
-        if (!$vouchers->has($code)) {
-            $processorCart->getErrors()->add(new VoucherNotFoundError($code));
-            $cartContainer->getLineItems()->remove($code);
+        $rules = array_filter($vouchers->map(function (Voucher $voucher) {
+            return $voucher->getRule();
+        }));
 
-            return;
-        }
-
-        $voucher = $vouchers->get($code);
-
-        if (!$voucher->getRule()) {
-            $this->calculate($processorCart, $context, $voucher, $lineItem);
-
-            return;
-        }
-
-        $dataCollection = $this->voucherDataCollectorRegistry->collect(
+        $dataCollection = $this->ruleDataCollectorRegistry->collect(
             $calculatedCart,
             $context,
-            new RuleCollection([$voucher->getRule()])
+            new RuleCollection($rules)
         );
 
-        if ($voucher->getRule()->match($calculatedCart, $context, $dataCollection)) {
-            $cartContainer->getLineItems()->remove(self::TYPE_VOUCHER);
-            $processorCart->getErrors()->add(
-                new VoucherRuleError($code, $voucher->getRule())
-            );
+        /** @var LineItemInterface $lineItem */
+        foreach ($lineItems as $lineItem) {
+            $code = $lineItem->getExtraData()['code'];
 
-            return;
+            if (!$voucher = $vouchers->get($code)) {
+                $processorCart->getErrors()->add(new VoucherNotFoundError($code));
+                $cartContainer->getLineItems()->remove($code);
+                continue;
+            }
+
+            if ($voucher->getRule() && !$voucher->getRule()->match($calculatedCart, $context, $dataCollection)) {
+                $cartContainer->getLineItems()->remove(self::TYPE_VOUCHER);
+                $processorCart->getErrors()->add(new VoucherRuleError($code, $voucher->getRule()));
+                continue;
+            }
+
+            $this->calculate($processorCart, $context, $voucher, $lineItem);
         }
-
-        $this->calculate($processorCart, $context, $voucher, $lineItem);
     }
 
     private function calculate(
@@ -142,7 +138,7 @@ class VoucherProcessor implements CartProcessorInterface
         Voucher $voucher,
         LineItemInterface $lineItem
     ): void {
-        $prices = $processorCart->getLineItems()->filterGoods()->getPrices();
+        $prices = $processorCart->getCalculatedLineItems()->filterGoods()->getPrices();
 
         if (0 === $prices->count()) {
             return;
@@ -154,8 +150,8 @@ class VoucherProcessor implements CartProcessorInterface
 
                 $discount = $this->percentagePriceCalculator->calculatePrice($percentage, $prices, $context);
 
-                $processorCart->getLineItems()->add(
-                    new CalculatedVoucher($voucher->getCode(), $lineItem, $discount)
+                $processorCart->getCalculatedLineItems()->add(
+                    new CalculatedVoucher($lineItem->getIdentifier(), $lineItem, $discount)
                 );
 
                 return;
@@ -163,8 +159,8 @@ class VoucherProcessor implements CartProcessorInterface
             case self::TYPE_ABSOLUTE:
                 $discount = $this->priceCalculator->calculate($voucher->getPrice(), $context);
 
-                $processorCart->getLineItems()->add(
-                    new CalculatedVoucher($voucher->getCode(), $lineItem, $discount)
+                $processorCart->getCalculatedLineItems()->add(
+                    new CalculatedVoucher($lineItem->getIdentifier(), $lineItem, $discount)
                 );
 
                 return;

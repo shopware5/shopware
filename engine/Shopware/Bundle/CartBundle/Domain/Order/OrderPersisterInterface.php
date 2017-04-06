@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -23,38 +22,12 @@ declare(strict_types=1);
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\CartBundle\Domain\LineItem;
+namespace Shopware\Bundle\CartBundle\Domain\Order;
 
-use Shopware\Bundle\CartBundle\Domain\JsonSerializableTrait;
-use Shopware\Bundle\CartBundle\Domain\Price\Price;
+use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
-class CalculatedLineItem implements CalculatedLineItemInterface
+interface OrderPersisterInterface
 {
-    use JsonSerializableTrait;
-
-    /**
-     * @var string
-     */
-    private $identifier;
-
-    /**
-     * @var Price
-     */
-    private $price;
-
-    public function __construct(string $identifier, Price $price)
-    {
-        $this->identifier = $identifier;
-        $this->price = $price;
-    }
-
-    public function getIdentifier(): string
-    {
-        return $this->identifier;
-    }
-
-    public function getPrice(): Price
-    {
-        return $this->price;
-    }
+    public function persist(CalculatedCart $calculatedCart, ShopContextInterface $context): void;
 }

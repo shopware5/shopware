@@ -49,6 +49,6 @@ class CurrencyRule extends Rule
         ShopContextInterface $context,
         RuleDataCollection $collection
     ): bool {
-        return in_array($context->getCurrency()->getId(), $this->currencyIds);
+        return in_array($context->getCurrency()->getId(), $this->currencyIds, true);
     }
 }

@@ -1,6 +1,4 @@
 <?php
-declare(strict_types=1);
-
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -24,20 +22,36 @@ declare(strict_types=1);
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\CartBundle\Domain;
+namespace Shopware\Bundle\CartBundle\Infrastructure\Exception;
 
-abstract class KeyCollection extends Collection
+class NotSupportedSerializerFormatException extends \Exception
 {
-    protected function doAdd($element): void
-    {
-        $key = $this->getKey($element);
-        $this->elements[$key] = $element;
-    }
+    /**
+     * @var mixed
+     */
+    private $data;
 
     /**
-     * @param mixed $element
-     *
-     * @return string|int
+     * @var string
      */
-    abstract protected function getKey($element);
+    private $format;
+
+    public function __construct($data, string $format)
+    {
+        parent::__construct(
+            sprintf('Not supported serializer format %s', $format)
+        );
+        $this->data = $data;
+        $this->format = $format;
+    }
+
+    public function getData()
+    {
+        return $this->data;
+    }
+
+    public function getFormat(): string
+    {
+        return $this->format;
+    }
 }

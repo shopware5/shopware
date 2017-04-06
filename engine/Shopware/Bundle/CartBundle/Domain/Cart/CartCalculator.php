@@ -34,7 +34,8 @@ class CartCalculator
     /**
      * @var CartProcessorInterface[]
      */
-    private $processors = [];
+    private $processors;
+
     /**
      * @var CalculatedCartGenerator
      */

@@ -25,12 +25,13 @@ declare(strict_types=1);
 
 namespace Shopware\Bundle\CartBundle\Infrastructure\View;
 
-use Shopware\Bundle\CartBundle\Domain\KeyCollection;
+use Shopware\Bundle\CartBundle\Domain\Collection;
 use Shopware\Bundle\CartBundle\Infrastructure\SortArrayByKeysTrait;
 
-class ViewLineItemCollection extends KeyCollection
+class ViewLineItemCollection extends Collection
 {
     use SortArrayByKeysTrait;
+
     /**
      * @var ViewLineItemInterface[]
      */
@@ -38,7 +39,7 @@ class ViewLineItemCollection extends KeyCollection
 
     public function add(ViewLineItemInterface $lineItem): void
     {
-        parent::doAdd($lineItem);
+        $this->elements[$this->getKey($lineItem)] = $lineItem;
     }
 
     public function remove(string $identifier): void
@@ -75,12 +76,7 @@ class ViewLineItemCollection extends KeyCollection
         $this->elements = $this->sortIndexedArrayByKeys($identifiers, $this->elements);
     }
 
-    /**
-     * @param ViewLineItemInterface $element
-     *
-     * @return string
-     */
-    protected function getKey($element): string
+    protected function getKey(ViewLineItemInterface $element): string
     {
         return $element->getLineItem()->getIdentifier();
     }

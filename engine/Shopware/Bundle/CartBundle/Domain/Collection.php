@@ -72,6 +72,11 @@ abstract class Collection implements \IteratorAggregate, \JsonSerializable
         return array_map($closure, $this->elements);
     }
 
+    /**
+     * @param string $class
+     *
+     * @return static
+     */
     public function filterInstance(string $class): Collection
     {
         return $this->filter(function ($item) use ($class) {
@@ -113,5 +118,10 @@ abstract class Collection implements \IteratorAggregate, \JsonSerializable
     protected function doRemoveByKey($key): void
     {
         unset($this->elements[$key]);
+    }
+
+    protected function doMerge(Collection $collection): Collection
+    {
+        return new static(array_merge($this->elements, $collection->getIterator()->getArrayCopy()));
     }
 }

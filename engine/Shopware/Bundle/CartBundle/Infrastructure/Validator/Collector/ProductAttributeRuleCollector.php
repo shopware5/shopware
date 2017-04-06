@@ -56,7 +56,7 @@ class ProductAttributeRuleCollector implements RuleDataCollectorInterface
             return;
         }
 
-        $numbers = $calculatedCart->getLineItems()->filterInstance(CalculatedProduct::class)->getKeys();
+        $numbers = $calculatedCart->getCalculatedLineItems()->filterInstance(CalculatedProduct::class)->getKeys();
 
         if (empty($numbers)) {
             return;

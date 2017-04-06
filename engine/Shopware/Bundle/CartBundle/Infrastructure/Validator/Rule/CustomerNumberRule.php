@@ -53,6 +53,6 @@ class CustomerNumberRule extends Rule
             return false;
         }
 
-        return in_array(strtolower($context->getCustomer()->getNumber()), $this->numbers);
+        return in_array(strtolower($context->getCustomer()->getNumber()), $this->numbers, true);
     }
 }

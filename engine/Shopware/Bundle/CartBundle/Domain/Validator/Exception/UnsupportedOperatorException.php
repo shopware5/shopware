@@ -48,4 +48,14 @@ class UnsupportedOperatorException extends \Exception
             sprintf('Unsupported operator %s in %s', $this->operator, $this->class)
         );
     }
+
+    public function getOperator(): string
+    {
+        return $this->operator;
+    }
+
+    public function getClass(): string
+    {
+        return $this->class;
+    }
 }

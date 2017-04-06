@@ -25,9 +25,9 @@ declare(strict_types=1);
 
 namespace Shopware\Bundle\CartBundle\Domain\LineItem;
 
-use Shopware\Bundle\CartBundle\Domain\KeyCollection;
+use Shopware\Bundle\CartBundle\Domain\Collection;
 
-class LineItemCollection extends KeyCollection
+class LineItemCollection extends Collection
 {
     /**
      * @var LineItemInterface[]
@@ -36,7 +36,13 @@ class LineItemCollection extends KeyCollection
 
     public function add(LineItemInterface $lineItem): void
     {
-        parent::doAdd($lineItem);
+        if ($exists = $this->get($lineItem->getIdentifier())) {
+            $exists->setQuantity($lineItem->getQuantity() + $exists->getQuantity());
+
+            return;
+        }
+
+        $this->elements[$this->getKey($lineItem)] = $lineItem;
     }
 
     public function remove(string $identifier): void
@@ -84,12 +90,7 @@ class LineItemCollection extends KeyCollection
         return $this->getKeys();
     }
 
-    /**
-     * @param LineItemInterface $element
-     *
-     * @return string
-     */
-    protected function getKey($element): string
+    protected function getKey(LineItemInterface $element): string
     {
         return $element->getIdentifier();
     }

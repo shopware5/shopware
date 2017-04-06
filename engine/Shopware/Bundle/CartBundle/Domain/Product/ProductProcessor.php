@@ -28,10 +28,6 @@ namespace Shopware\Bundle\CartBundle\Domain\Product;
 use Shopware\Bundle\CartBundle\Domain\Cart\CartContainer;
 use Shopware\Bundle\CartBundle\Domain\Cart\CartProcessorInterface;
 use Shopware\Bundle\CartBundle\Domain\Cart\ProcessorCart;
-use Shopware\Bundle\CartBundle\Domain\Error\ProductDeliveryInformationNotFoundError;
-use Shopware\Bundle\CartBundle\Domain\Error\ProductPriceNotFoundError;
-use Shopware\Bundle\CartBundle\Domain\LineItem\LineItem;
-use Shopware\Bundle\CartBundle\Domain\Price\PriceCalculator;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class ProductProcessor implements CartProcessorInterface
@@ -39,28 +35,16 @@ class ProductProcessor implements CartProcessorInterface
     const TYPE_PRODUCT = 'product';
 
     /**
-     * @var ProductPriceGatewayInterface
+     * @var ProductCalculator
      */
-    private $priceGateway;
+    private $calculator;
 
     /**
-     * @var PriceCalculator
+     * @param ProductCalculator $calculator
      */
-    private $priceCalculator;
-
-    /**
-     * @var ProductDeliveryGatewayInterface
-     */
-    private $deliveryGateway;
-
-    public function __construct(
-        ProductPriceGatewayInterface $priceGateway,
-        PriceCalculator $priceCalculator,
-        ProductDeliveryGatewayInterface $deliveryGateway
-    ) {
-        $this->priceGateway = $priceGateway;
-        $this->priceCalculator = $priceCalculator;
-        $this->deliveryGateway = $deliveryGateway;
+    public function __construct(ProductCalculator $calculator)
+    {
+        $this->calculator = $calculator;
     }
 
     public function process(
@@ -73,50 +57,12 @@ class ProductProcessor implements CartProcessorInterface
             return;
         }
 
-        $priceDefinitions = $this->priceGateway->get($collection, $context);
+        $products = $this->calculator->calculate($collection, $context);
 
-        $deliveryInformation = $this->deliveryGateway->get($collection, $context);
+        $processorCart->getErrors()->fill($products->getErrors());
 
-        /** @var LineItem $lineItem */
-        foreach ($collection as $lineItem) {
-            if (!array_key_exists($lineItem->getIdentifier(), $priceDefinitions)) {
-                $processorCart->getErrors()->add(
-                    new ProductPriceNotFoundError($lineItem->getIdentifier())
-                );
-
-                $cartContainer->getLineItems()->remove(
-                    $lineItem->getIdentifier()
-                );
-
-                continue;
-            }
-
-            if (!array_key_exists($lineItem->getIdentifier(), $deliveryInformation)) {
-                $processorCart->getErrors()->add(
-                    new ProductDeliveryInformationNotFoundError($lineItem->getIdentifier())
-                );
-
-                $cartContainer->getLineItems()->remove(
-                    $lineItem->getIdentifier()
-                );
-
-                continue;
-            }
-
-            $price = $this->priceCalculator->calculate(
-                $priceDefinitions[$lineItem->getIdentifier()],
-                $context
-            );
-
-            $product = new CalculatedProduct(
-                $lineItem->getIdentifier(),
-                $lineItem->getQuantity(),
-                $lineItem,
-                $price,
-                $deliveryInformation[$lineItem->getIdentifier()]
-            );
-
-            $processorCart->getLineItems()->add($product);
-        }
+        $processorCart->getCalculatedLineItems()->fill(
+            $products->getIterator()->getArrayCopy()
+        );
     }
 }

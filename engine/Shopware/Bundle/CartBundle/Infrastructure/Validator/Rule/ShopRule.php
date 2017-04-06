@@ -55,11 +55,11 @@ class ShopRule extends Rule
     ): bool {
         switch ($this->operator) {
             case self::OPERATOR_EQ:
-                return in_array($context->getShop()->getId(), $this->shopIds);
+                return in_array($context->getShop()->getId(), $this->shopIds, true);
 
             case self::OPERATOR_NEQ:
 
-                return !in_array($context->getShop()->getId(), $this->shopIds);
+                return !in_array($context->getShop()->getId(), $this->shopIds, true);
 
             default:
                 throw new UnsupportedOperatorException($this->operator, __CLASS__);

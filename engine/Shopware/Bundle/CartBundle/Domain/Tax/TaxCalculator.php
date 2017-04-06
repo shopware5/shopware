@@ -25,6 +25,7 @@ declare(strict_types=1);
 
 namespace Shopware\Bundle\CartBundle\Domain\Tax;
 
+use Shopware\Bundle\CartBundle\Domain\Exception\TaxRuleNotSupportedException;
 use Shopware\Bundle\CartBundle\Domain\Price\PriceRounding;
 
 class TaxCalculator
@@ -90,6 +91,6 @@ class TaxCalculator
                 return $calculator;
             }
         }
-        throw new \RuntimeException(sprintf('Tax rule %s not supported', get_class($rule)));
+        throw new TaxRuleNotSupportedException($rule);
     }
 }

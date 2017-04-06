@@ -25,11 +25,11 @@ declare(strict_types=1);
 
 namespace Shopware\Bundle\CartBundle\Domain\Delivery;
 
-use Shopware\Bundle\CartBundle\Domain\KeyCollection;
+use Shopware\Bundle\CartBundle\Domain\Collection;
 use Shopware\Bundle\CartBundle\Domain\LineItem\CalculatedLineItemCollection;
 use Shopware\Bundle\CartBundle\Domain\Price\PriceCollection;
 
-class DeliveryPositionCollection extends KeyCollection
+class DeliveryPositionCollection extends Collection
 {
     /**
      * @var DeliveryPosition[]
@@ -38,7 +38,8 @@ class DeliveryPositionCollection extends KeyCollection
 
     public function add(DeliveryPosition $deliveryPosition): void
     {
-        parent::doAdd($deliveryPosition);
+        $key = $this->getKey($deliveryPosition);
+        $this->elements[$key] = $deliveryPosition;
     }
 
     public function remove(string $identifier): void
@@ -94,7 +95,7 @@ class DeliveryPositionCollection extends KeyCollection
      *
      * @return string
      */
-    protected function getKey($element): string
+    protected function getKey(DeliveryPosition $element): string
     {
         return $element->getIdentifier();
     }

@@ -667,7 +667,7 @@
 
                     {* Basket items *}
                     {block name='frontend_checkout_confirm_item_outer'}
-                        {foreach $cart.lineItems as $lineItem}
+                        {foreach $cart.viewLineItems as $lineItem}
                             {block name='frontend_checkout_confirm_item'}
                                 {include file='frontend/checkout/confirm_item.tpl' isLast=$lineItem@last}
                             {/block}

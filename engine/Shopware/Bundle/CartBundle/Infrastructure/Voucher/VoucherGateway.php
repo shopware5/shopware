@@ -25,13 +25,14 @@
 namespace Shopware\Bundle\CartBundle\Infrastructure\Voucher;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Query\QueryBuilder;
 use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
 use Shopware\Bundle\CartBundle\Domain\Price\Price;
 use Shopware\Bundle\CartBundle\Domain\Price\PriceDefinition;
 use Shopware\Bundle\CartBundle\Domain\Tax\CalculatedTax;
 use Shopware\Bundle\CartBundle\Domain\Tax\PercentageTaxRule;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCollection;
-use Shopware\Bundle\CartBundle\Domain\Validator\Container\OrRule;
+use Shopware\Bundle\CartBundle\Domain\Validator\Container\AndRule;
 use Shopware\Bundle\CartBundle\Domain\Voucher\Voucher;
 use Shopware\Bundle\CartBundle\Domain\Voucher\VoucherCollection;
 use Shopware\Bundle\CartBundle\Domain\Voucher\VoucherGatewayInterface;
@@ -80,21 +81,18 @@ class VoucherGateway implements VoucherGatewayInterface
         $price = new PriceDefinition(
             $percentage,
             $this->buildPercentageTaxRule(
-                $calculatedCart->getLineItems()->getPrices()->getTotalPrice()
+                $calculatedCart->getCalculatedLineItems()->getPrices()->getTotalPrice()
             ),
             1,
             true
         );
 
-        $rule = new OrRule();
+        $rule = new AndRule();
 
         $mode = $row['percental'] ? VoucherProcessor::TYPE_PERCENTAGE : VoucherProcessor::TYPE_ABSOLUTE;
 
-        if ($row['customergroup'] !== null) {
-        }
-        if ($row['valid_from']) {
-        }
-        if ($row['valid_to']) {
+        if (count($rule->getRules()) === 0) {
+            $rule = null;
         }
 
         return new Voucher($row['vouchercode'], $mode, $percentage, $price, $rule);
@@ -117,12 +115,7 @@ class VoucherGateway implements VoucherGatewayInterface
         return $rules;
     }
 
-    /**
-     * @param array $codes
-     *
-     * @return \Doctrine\DBAL\Query\QueryBuilder
-     */
-    private function fetchSimpleVouchers(array $codes): \Doctrine\DBAL\Query\QueryBuilder
+    private function fetchSimpleVouchers(array $codes): QueryBuilder
     {
         $query = $this->connection->createQueryBuilder();
         $query->select([

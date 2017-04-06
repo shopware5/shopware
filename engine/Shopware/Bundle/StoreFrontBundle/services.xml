@@ -15,14 +15,14 @@
         <service id="shopware_storefront.context_factory" class="Shopware\Bundle\StoreFrontBundle\Service\Core\ContextFactory">
             <argument id="shopware_storefront.shop_gateway_dbal" type="service"/>
             <argument id="shopware_storefront.currency_gateway_dbal" type="service"/>
-            <argument id="shopware_cart.customer_service" type="service"/>
+            <argument id="shopware.cart.customer.service" type="service"/>
             <argument id="shopware_storefront.customer_group_gateway" type="service"/>
             <argument id="shopware_storefront.country_gateway" type="service"/>
             <argument id="shopware_storefront.tax_gateway" type="service"/>
             <argument id="shopware_storefront.price_group_discount_gateway" type="service"/>
-            <argument id="shopware_cart.address_gateway_dbal" type="service"/>
-            <argument id="shopware_cart.payment_method_gateway_dbal" type="service"/>
-            <argument id="shopware_cart.delivery_service_gateway_dbal" type="service"/>
+            <argument id="shopware.cart.address.gateway" type="service"/>
+            <argument id="shopware.cart.payment.gateway" type="service"/>
+            <argument id="shopware.cart.delivery.gateway" type="service"/>
             <argument id="dbal_connection" type="service"/>
         </service>
 
@@ -453,8 +453,8 @@
             <argument id="shopware_storefront.currency_hydrator_dbal" type="service"/>
             <argument id="shopware_storefront.customer_group_hydrator_dbal" type="service"/>
             <argument id="shopware_storefront.country_hydrator_dbal" type="service"/>
-            <argument id="shopware_cart.payment_method_hydrator_dbal" type="service"/>
-            <argument id="shopware_cart.delivery_method_hydrator_dbal" type="service"/>
+            <argument id="shopware.cart.payment.hydrator" type="service"/>
+            <argument id="shopware.cart.delivery.hydrator" type="service"/>
         </service>
 
         <service id="shopware_storefront.template_hydrator_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\Hydrator\TemplateHydrator" />

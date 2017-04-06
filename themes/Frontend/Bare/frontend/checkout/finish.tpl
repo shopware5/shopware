@@ -110,11 +110,15 @@
         {/block}
 
         {block name='frontend_checkout_finish_information_wrapper'}
+            {$billing = $context.customer.activeBillingAddress}
+            {$shipping = $context.customer.activeShippingAddress}
+            {$customer = $context.customer}
+
             <div class="panel--group block-group information--panel-wrapper finish--info" data-panel-auto-resizer="true">
 
                 {block name='frontend_checkout_finish_information_addresses'}
 
-                    {if $sAddresses.equal}
+                    {if $billing.id == $shipping.id}
 
                         {* Equal Billing & Shipping *}
                         {block name='frontend_checkout_finish_information_addresses_equal'}
@@ -134,26 +138,26 @@
 
                                                 {block name='frontend_checkout_finish_information_addresses_equal_panel_billing'}
                                                     <div class="billing--panel">
-                                                        {if $sAddresses.billing.company}
-                                                            <span class="address--company is--bold">{$sAddresses.billing.company|escapeHtml}</span>{if $sAddresses.billing.department}<br /><span class="address--department is--bold">{$sAddresses.billing.department|escapeHtml}</span>{/if}
+                                                        {if $billing.company}
+                                                            <span class="address--company is--bold">{$billing.company|escapeHtml}</span>{if $billing.department}<br /><span class="address--department is--bold">{$billing.department|escapeHtml}</span>{/if}
                                                             <br />
                                                         {/if}
 
-                                                        <span class="address--salutation">{$sAddresses.billing.salutation|salutation}</span>
+                                                        <span class="address--salutation">{$billing.salutation|salutation}</span>
                                                         {if {config name="displayprofiletitle"}}
-                                                            <span class="address--title">{$sAddresses.billing.title|escapeHtml}</span><br/>
+                                                            <span class="address--title">{$billing.title|escapeHtml}</span><br/>
                                                         {/if}
-                                                        <span class="address--firstname">{$sAddresses.billing.firstname|escapeHtml}</span> <span class="address--lastname">{$sAddresses.billing.lastname|escapeHtml}</span><br />
-                                                        <span class="address--street">{$sAddresses.billing.street|escapeHtml}</span><br />
-                                                        {if $sAddresses.billing.additional_address_line1}<span class="address--additional-one">{$sAddresses.billing.additional_address_line1|escapeHtml}</span><br />{/if}
-                                                        {if $sAddresses.billing.additional_address_line2}<span class="address--additional-two">{$sAddresses.billing.additional_address_line2|escapeHtml}</span><br />{/if}
+                                                        <span class="address--firstname">{$billing.firstname|escapeHtml}</span> <span class="address--lastname">{$billing.lastname|escapeHtml}</span><br />
+                                                        <span class="address--street">{$billing.street|escapeHtml}</span><br />
+                                                        {if $billing.additionalAddressLine1}<span class="address--additional-one">{$billing.additionalAddressLine1|escapeHtml}</span><br />{/if}
+                                                        {if $billing.additionalAddressLine2}<span class="address--additional-two">{$billing.additionalAddressLine2|escapeHtml}</span><br />{/if}
                                                         {if {config name=showZipBeforeCity}}
-                                                            <span class="address--zipcode">{$sAddresses.billing.zipcode|escapeHtml}</span> <span class="address--city">{$sAddresses.billing.city|escapeHtml}</span>
+                                                            <span class="address--zipcode">{$billing.zipcode|escapeHtml}</span> <span class="address--city">{$billing.city|escapeHtml}</span>
                                                         {else}
-                                                            <span class="address--city">{$sAddresses.billing.city|escapeHtml}</span> <span class="address--zipcode">{$sAddresses.billing.zipcode|escapeHtml}</span>
+                                                            <span class="address--city">{$billing.city|escapeHtml}</span> <span class="address--zipcode">{$billing.zipcode|escapeHtml}</span>
                                                         {/if}<br />
-                                                        {if $sAddresses.billing.state.name}<span class="address--statename">{$sAddresses.billing.state.name|escapeHtml}</span><br />{/if}
-                                                        <span class="address--countryname">{$sAddresses.billing.country.name|escapeHtml}</span>
+                                                        {if $billing.state.name}<span class="address--statename">{$billing.state.name|escapeHtml}</span><br />{/if}
+                                                        <span class="address--countryname">{$billing.country.name|escapeHtml}</span>
                                                     </div>
                                                 {/block}
                                             </div>
@@ -182,26 +186,26 @@
                                         {* Content *}
                                         {block name='frontend_checkout_finish_information_addresses_billing_panel_body'}
                                             <div class="panel--body is--wide">
-                                                {if $sAddresses.billing.company}
-                                                    <span class="address--company is--bold">{$sAddresses.billing.company|escapeHtml}</span>{if $sAddresses.billing.department}<br /><span class="address--department is--bold">{$sAddresses.billing.department|escapeHtml}</span>{/if}
+                                                {if $billing.company}
+                                                    <span class="address--company is--bold">{$billing.company|escapeHtml}</span>{if $billing.department}<br /><span class="address--department is--bold">{$billing.department|escapeHtml}</span>{/if}
                                                     <br />
                                                 {/if}
 
-                                                <span class="address--salutation">{$sAddresses.billing.salutation|salutation}</span>
+                                                <span class="address--salutation">{$billing.salutation|salutation}</span>
                                                 {if {config name="displayprofiletitle"}}
-                                                    <span class="address--title">{$sAddresses.billing.title|escapeHtml}</span><br/>
+                                                    <span class="address--title">{$billing.title|escapeHtml}</span><br/>
                                                 {/if}
-                                                <span class="address--firstname">{$sAddresses.billing.firstname|escapeHtml}</span> <span class="address--lastname">{$sAddresses.billing.lastname|escapeHtml}</span><br />
-                                                <span class="address--street">{$sAddresses.billing.street|escapeHtml}</span><br />
-                                                {if $sAddresses.billing.additional_address_line1}<span class="address--additional-one">{$sAddresses.billing.additional_address_line1|escapeHtml}</span><br />{/if}
-                                                {if $sAddresses.billing.additional_address_line2}<span class="address--additional-two">{$sAddresses.billing.additional_address_line2|escapeHtml}</span><br />{/if}
+                                                <span class="address--firstname">{$billing.firstname|escapeHtml}</span> <span class="address--lastname">{$billing.lastname|escapeHtml}</span><br />
+                                                <span class="address--street">{$billing.street|escapeHtml}</span><br />
+                                                {if $billing.additionalAddressLine1}<span class="address--additional-one">{$billing.additionalAddressLine1|escapeHtml}</span><br />{/if}
+                                                {if $billing.additionalAddressLine2}<span class="address--additional-two">{$billing.additionalAddressLine2|escapeHtml}</span><br />{/if}
                                                 {if {config name=showZipBeforeCity}}
-                                                    <span class="address--zipcode">{$sAddresses.billing.zipcode|escapeHtml}</span> <span class="address--city">{$sAddresses.billing.city|escapeHtml}</span>
+                                                    <span class="address--zipcode">{$billing.zipcode|escapeHtml}</span> <span class="address--city">{$billing.city|escapeHtml}</span>
                                                 {else}
-                                                    <span class="address--city">{$sAddresses.billing.city|escapeHtml}</span> <span class="address--zipcode">{$sAddresses.billing.zipcode|escapeHtml}</span>
+                                                    <span class="address--city">{$billing.city|escapeHtml}</span> <span class="address--zipcode">{$billing.zipcode|escapeHtml}</span>
                                                 {/if}<br />
-                                                {if $sAddresses.billing.state.name|escapeHtml}<span class="address--statename">{$sAddresses.billing.state.name|escapeHtml}</span><br />{/if}
-                                                <span class="address--countryname">{$sAddresses.billing.country.name|escapeHtml}</span>
+                                                {if $billing.state.name|escapeHtml}<span class="address--statename">{$billing.state.name|escapeHtml}</span><br />{/if}
+                                                <span class="address--countryname">{$billing.country.name|escapeHtml}</span>
                                             </div>
                                         {/block}
                                     </div>
@@ -224,26 +228,26 @@
                                         {* Content *}
                                         {block name='frontend_checkout_finish_information_addresses_shipping_panel_body'}
                                             <div class="panel--body is--wide">
-                                                {if $sAddresses.shipping.company}
-                                                    <span class="address--company is--bold">{$sAddresses.shipping.company|escapeHtml}</span>{if $sAddresses.shipping.department}<br /><span class="address--department is--bold">{$sAddresses.shipping.department|escapeHtml}</span>{/if}
+                                                {if $shipping.company}
+                                                    <span class="address--company is--bold">{$shipping.company|escapeHtml}</span>{if $shipping.department}<br /><span class="address--department is--bold">{$shipping.department|escapeHtml}</span>{/if}
                                                     <br />
                                                 {/if}
 
-                                                <span class="address--salutation">{$sAddresses.shipping.salutation|salutation}</span>
+                                                <span class="address--salutation">{$shipping.salutation|salutation}</span>
                                                 {if {config name="displayprofiletitle"}}
-                                                    <span class="address--title">{$sAddresses.shipping.title|escapeHtml}</span><br/>
+                                                    <span class="address--title">{$shipping.title|escapeHtml}</span><br/>
                                                 {/if}
-                                                <span class="address--firstname">{$sAddresses.shipping.firstname|escapeHtml}</span> <span class="address--lastname">{$sAddresses.shipping.lastname|escapeHtml}</span><br />
-                                                <span class="address--street">{$sAddresses.shipping.street|escapeHtml}</span><br />
-                                                {if $sAddresses.shipping.additional_address_line1}<span class="address--additional-one">{$sAddresses.shipping.additional_address_line1|escapeHtml}</span><br />{/if}
-                                                {if $sAddresses.shipping.additional_address_line2}<span class="address--additional-two">{$sAddresses.shipping.additional_address_line2|escapeHtml}</span><br />{/if}
+                                                <span class="address--firstname">{$shipping.firstname|escapeHtml}</span> <span class="address--lastname">{$shipping.lastname|escapeHtml}</span><br />
+                                                <span class="address--street">{$shipping.street|escapeHtml}</span><br />
+                                                {if $shipping.additionalAddressLine1}<span class="address--additional-one">{$shipping.additionalAddressLine1|escapeHtml}</span><br />{/if}
+                                                {if $shipping.additionalAddressLine2}<span class="address--additional-two">{$shipping.additionalAddressLine2|escapeHtml}</span><br />{/if}
                                                 {if {config name=showZipBeforeCity}}
-                                                    <span class="address--zipcode">{$sAddresses.shipping.zipcod|escapeHtml}</span> <span class="address--city">{$sAddresses.shipping.city|escapeHtml}</span>
+                                                    <span class="address--zipcode">{$shipping.zipcod|escapeHtml}</span> <span class="address--city">{$shipping.city|escapeHtml}</span>
                                                 {else}
-                                                    <span class="address--city">{$sAddresses.shipping.city|escapeHtml}</span> <span class="address--zipcode">{$sAddresses.shipping.zipcode|escapeHtml}</span>
+                                                    <span class="address--city">{$shipping.city|escapeHtml}</span> <span class="address--zipcode">{$shipping.zipcode|escapeHtml}</span>
                                                 {/if}<br />
-                                                {if $sAddresses.shipping.state.name}<span class="address--statename">{$sAddresses.shipping.state.name|escapeHtml}</span><br />{/if}
-                                                <span class="address--countryname">{$sAddresses.shipping.country.name|escapeHtml}</span>
+                                                {if $shipping.state.name}<span class="address--statename">{$shipping.state.name|escapeHtml}</span><br />{/if}
+                                                <span class="address--countryname">{$shipping.country.name|escapeHtml}</span>
                                             </div>
                                         {/block}
                                     </div>
@@ -282,17 +286,20 @@
                                             {/if}
                                         {/block}
 
+                                        {$payment = $context.paymentMethod}
+                                        {$delivery = $context.deliveryMethod}
+
                                         {* Payment method *}
                                         {block name='frontend_checkout_finish_payment_method'}
-                                            {if $sPayment.description}
-                                                <strong>{s name="ConfirmHeaderPayment" namespace="frontend/checkout/confirm"}{/s}:</strong> {$sPayment.description}<br />
+                                            {if $payment.label}
+                                                <strong>{s name="ConfirmHeaderPayment" namespace="frontend/checkout/confirm"}{/s}:</strong> {$payment.label}<br />
                                             {/if}
                                         {/block}
 
                                         {* Dispatch method *}
                                         {block name='frontend_checkout_finish_dispatch_method'}
-                                            {if $sDispatch.name}
-                                                <strong>{s name="CheckoutDispatchHeadline" namespace="frontend/checkout/confirm_dispatch"}{/s}:</strong> {$sDispatch.name}
+                                            {if $delivery.name}
+                                                <strong>{s name="CheckoutDispatchHeadline" namespace="frontend/checkout/confirm_dispatch"}{/s}:</strong> {$delivery.name}
                                             {/if}
                                         {/block}
 
@@ -317,9 +324,9 @@
                         {/block}
 
                         {* Article items *}
-                        {foreach $sBasket.content as $key => $sBasketItem}
+                        {foreach $cart.viewLineItems as $lineItem}
                             {block name='frontend_checkout_finish_item'}
-                                {include file='frontend/checkout/finish_item.tpl' isLast=$sBasketItem@last}
+                                {include file='frontend/checkout/finish_item.tpl' isLast=$lineItem@last}
                             {/block}
                         {/foreach}
 

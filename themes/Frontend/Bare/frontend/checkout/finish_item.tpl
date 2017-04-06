@@ -16,7 +16,7 @@
             </div>
         {/block}
 
-        {$sBasketItem.quantity}
+        {$calculated.quantity}
     </div>
 {/block}
 

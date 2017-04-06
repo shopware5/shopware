@@ -48,13 +48,13 @@ class OrderClearedStateRuleData extends RuleData
 
     public function hasState(int $state)
     {
-        return in_array($state, $this->states);
+        return in_array($state, $this->states, true);
     }
 
     public function hasOneState(array $states)
     {
         foreach ($states as $state) {
-            if (in_array($state, $this->states)) {
+            if (in_array($state, $this->states, true)) {
                 return true;
             }
         }

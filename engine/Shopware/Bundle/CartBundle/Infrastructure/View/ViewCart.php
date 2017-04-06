@@ -38,7 +38,7 @@ class ViewCart implements \JsonSerializable
     /**
      * @var ViewLineItemCollection
      */
-    protected $lineItems;
+    protected $viewLineItems;
 
     /**
      * @var CalculatedCart
@@ -48,8 +48,8 @@ class ViewCart implements \JsonSerializable
     final private function __construct(CalculatedCart $calculatedCart)
     {
         $this->calculatedCart = $calculatedCart;
-        $this->lineItems = new ViewLineItemCollection(
-            $calculatedCart->getLineItems()->filterInstance(ViewLineItemInterface::class)->getIterator()->getArrayCopy()
+        $this->viewLineItems = new ViewLineItemCollection(
+            $calculatedCart->getCalculatedLineItems()->filterInstance(ViewLineItemInterface::class)->getIterator()->getArrayCopy()
         );
     }
 
@@ -63,9 +63,9 @@ class ViewCart implements \JsonSerializable
         return $this->calculatedCart->getPrice();
     }
 
-    public function getLineItems(): ViewLineItemCollection
+    public function getViewLineItems(): ViewLineItemCollection
     {
-        return $this->lineItems;
+        return $this->viewLineItems;
     }
 
     public function getCalculatedCart(): CalculatedCart

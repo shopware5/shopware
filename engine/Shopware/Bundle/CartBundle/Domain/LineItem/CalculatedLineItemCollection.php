@@ -25,10 +25,10 @@ declare(strict_types=1);
 
 namespace Shopware\Bundle\CartBundle\Domain\LineItem;
 
-use Shopware\Bundle\CartBundle\Domain\KeyCollection;
+use Shopware\Bundle\CartBundle\Domain\Collection;
 use Shopware\Bundle\CartBundle\Domain\Price\PriceCollection;
 
-class CalculatedLineItemCollection extends KeyCollection
+class CalculatedLineItemCollection extends Collection
 {
     /**
      * @var CalculatedLineItemInterface[]
@@ -37,7 +37,8 @@ class CalculatedLineItemCollection extends KeyCollection
 
     public function add(CalculatedLineItemInterface $lineItem): void
     {
-        parent::doAdd($lineItem);
+        $key = $this->getKey($lineItem);
+        $this->elements[$key] = $lineItem;
     }
 
     public function remove(string $identifier): void
@@ -64,6 +65,15 @@ class CalculatedLineItemCollection extends KeyCollection
         return null;
     }
 
+    public function hasStackable(string $identifier): bool
+    {
+        if ($item = $this->get($identifier)) {
+            return $item instanceof Stackable;
+        }
+
+        return false;
+    }
+
     public function getIdentifiers(): array
     {
         return $this->getKeys();
@@ -86,12 +96,7 @@ class CalculatedLineItemCollection extends KeyCollection
         return $this->filterInstance(Goods::class);
     }
 
-    /**
-     * @param CalculatedLineItemInterface $element
-     *
-     * @return string
-     */
-    protected function getKey($element): string
+    protected function getKey(CalculatedLineItemInterface $element): string
     {
         return $element->getIdentifier();
     }

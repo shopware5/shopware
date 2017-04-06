@@ -26,16 +26,10 @@ declare(strict_types=1);
 namespace Shopware\Bundle\CartBundle\Domain\Product;
 
 use Shopware\Bundle\CartBundle\Domain\LineItem\LineItemCollection;
-use Shopware\Bundle\CartBundle\Domain\Price\PriceDefinition;
+use Shopware\Bundle\CartBundle\Domain\Price\PriceDefinitionCollection;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 interface ProductPriceGatewayInterface
 {
-    /**
-     * @param LineItemCollection   $collection
-     * @param ShopContextInterface $context
-     *
-     * @return PriceDefinition[] indexed by number
-     */
-    public function get(LineItemCollection $collection, ShopContextInterface $context): array;
+    public function get(LineItemCollection $collection, ShopContextInterface $context): PriceDefinitionCollection;
 }

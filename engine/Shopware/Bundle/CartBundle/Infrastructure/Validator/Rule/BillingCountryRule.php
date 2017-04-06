@@ -53,6 +53,6 @@ class BillingCountryRule extends Rule
             return false;
         }
 
-        return in_array($customer->getActiveBillingAddress()->getCountry()->getId(), $this->countryIds);
+        return in_array($customer->getActiveBillingAddress()->getCountry()->getId(), $this->countryIds, true);
     }
 }
