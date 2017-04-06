@@ -48,7 +48,8 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
                 'reload-view': me.reloadView,
                 'create-or-update-stream': me.createOrUpdateStream,
                 'create-stream': me.createStream,
-                'index-search': me.indexSearch
+                'index-search': me.indexSearch,
+                'create-filter-condition': me.createFilterCondition
             },
             'customer-list-main-window ': {
                 'switch-layout': me.switchLayout
@@ -202,6 +203,13 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
                 }]);
             }
         });
+    },
+
+    createFilterCondition: function (handler) {
+        var me = this,
+            window = me.getMainWindow();
+
+        window.filterPanel.createCondition(handler);
     }
 
 });
