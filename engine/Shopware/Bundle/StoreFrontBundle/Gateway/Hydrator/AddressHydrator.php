@@ -23,9 +23,9 @@ declare(strict_types=1);
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\CartBundle\Infrastructure\Customer;
+namespace Shopware\Bundle\StoreFrontBundle\Gateway\Hydrator;
 
-use Shopware\Bundle\CartBundle\Domain\Customer\Address;
+use Shopware\Bundle\StoreFrontBundle\Struct\Address;
 use Shopware\Bundle\StoreFrontBundle\Gateway\Hydrator\AttributeHydrator;
 use Shopware\Bundle\StoreFrontBundle\Gateway\Hydrator\CountryHydrator;
 use Shopware\Bundle\StoreFrontBundle\Gateway\Hydrator\Hydrator;
@@ -52,7 +52,7 @@ class AddressHydrator extends Hydrator
         $this->countryHydrator = $countryHydrator;
     }
 
-    public function hydrate(array $data): Address
+    public function hydrate(array $data): \Shopware\Bundle\StoreFrontBundle\Struct\Address
     {
         $address = new Address();
         $address->setId((int) $data['__address_id']);

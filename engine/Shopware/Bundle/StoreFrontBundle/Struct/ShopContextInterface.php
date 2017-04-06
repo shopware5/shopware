@@ -24,7 +24,6 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Struct;
 
-use Shopware\Bundle\CartBundle\Domain\Customer\Customer;
 use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryMethod;
 use Shopware\Bundle\CartBundle\Domain\Delivery\ShippingLocation;
 use Shopware\Bundle\CartBundle\Domain\Payment\PaymentMethod;

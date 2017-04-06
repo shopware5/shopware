@@ -66,10 +66,10 @@ class DeliveryCollection extends Collection
     public function getDelivery(DeliveryDate $deliveryDate, ShippingLocation $location): ? Delivery
     {
         foreach ($this->elements as $delivery) {
-            if ($delivery->getDeliveryDate() !== $deliveryDate) {
+            if ($delivery->getDeliveryDate() != $deliveryDate) {
                 continue;
             }
-            if ($delivery->getLocation() !== $location) {
+            if ($delivery->getLocation() != $location) {
                 continue;
             }
 

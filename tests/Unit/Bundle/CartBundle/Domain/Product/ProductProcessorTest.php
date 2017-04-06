@@ -29,6 +29,7 @@ use Shopware\Bundle\CartBundle\Domain\Cart\ProcessorCart;
 use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryCollection;
 use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryDate;
 use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryInformation;
+use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryInformationCollection;
 use Shopware\Bundle\CartBundle\Domain\Error\ErrorCollection;
 use Shopware\Bundle\CartBundle\Domain\Error\ProductPriceNotFoundError;
 use Shopware\Bundle\CartBundle\Domain\LineItem\CalculatedLineItemCollection;
@@ -36,7 +37,9 @@ use Shopware\Bundle\CartBundle\Domain\LineItem\LineItem;
 use Shopware\Bundle\CartBundle\Domain\Price\Price;
 use Shopware\Bundle\CartBundle\Domain\Price\PriceCalculator;
 use Shopware\Bundle\CartBundle\Domain\Price\PriceDefinition;
+use Shopware\Bundle\CartBundle\Domain\Price\PriceDefinitionCollection;
 use Shopware\Bundle\CartBundle\Domain\Product\CalculatedProduct;
+use Shopware\Bundle\CartBundle\Domain\Product\ProductCalculator;
 use Shopware\Bundle\CartBundle\Domain\Product\ProductProcessor;
 use Shopware\Bundle\CartBundle\Domain\Tax\CalculatedTaxCollection;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCollection;
@@ -65,7 +68,8 @@ class ProductProcessorTest extends \PHPUnit\Framework\TestCase
             ->expects(static::never())
             ->method('get');
 
-        $processor = new ProductProcessor($priceGateway, $calculator, $deliveryGateway);
+        $productCalculator = new ProductCalculator($priceGateway, $calculator, $deliveryGateway);
+        $processor = new ProductProcessor($productCalculator);
 
         $processorCart = new ProcessorCart(
             new CalculatedLineItemCollection(),
@@ -88,9 +92,9 @@ class ProductProcessorTest extends \PHPUnit\Framework\TestCase
             ->expects(static::once())
             ->method('get')
             ->will(
-                static::returnValue([
+                static::returnValue(new PriceDefinitionCollection([
                     'SW1' => new PriceDefinition(0, new TaxRuleCollection()),
-                ])
+                ]))
             );
 
         $calculator = $this->createMock(PriceCalculator::class);
@@ -106,12 +110,13 @@ class ProductProcessorTest extends \PHPUnit\Framework\TestCase
             ->expects(static::once())
             ->method('get')
             ->will(
-                static::returnValue([
+                static::returnValue(new DeliveryInformationCollection([
                     'SW1' => new DefaultDeliveryInformation(),
-                ])
+                ]))
             );
 
-        $processor = new ProductProcessor($priceGateway, $calculator, $deliveryGateway);
+        $productCalculator = new ProductCalculator($priceGateway, $calculator, $deliveryGateway);
+        $processor = new ProductProcessor($productCalculator);
 
         $cart = new ProcessorCart(
             new CalculatedLineItemCollection(),
@@ -135,11 +140,11 @@ class ProductProcessorTest extends \PHPUnit\Framework\TestCase
             ->expects(static::any())
             ->method('get')
             ->will(
-                static::returnValue([
+                static::returnValue(new PriceDefinitionCollection([
                     'SW1' => new PriceDefinition(0, new TaxRuleCollection()),
                     'SW2' => new PriceDefinition(0, new TaxRuleCollection()),
                     'SW3' => new PriceDefinition(0, new TaxRuleCollection()),
-                ])
+                ]))
             );
 
         $calculator = $this->createMock(PriceCalculator::class);
@@ -155,14 +160,15 @@ class ProductProcessorTest extends \PHPUnit\Framework\TestCase
             ->expects(static::once())
             ->method('get')
             ->will(
-                static::returnValue([
+                static::returnValue(new DeliveryInformationCollection([
                     'SW1' => new DefaultDeliveryInformation(),
                     'SW2' => new DefaultDeliveryInformation(),
                     'SW3' => new DefaultDeliveryInformation(),
-                ])
+                ]))
             );
 
-        $processor = new ProductProcessor($priceGateway, $calculator, $deliveryGateway);
+        $productCalculator = new ProductCalculator($priceGateway, $calculator, $deliveryGateway);
+        $processor = new ProductProcessor($productCalculator);
 
         $cart = new ProcessorCart(
             new CalculatedLineItemCollection(),
@@ -214,9 +220,9 @@ class ProductProcessorTest extends \PHPUnit\Framework\TestCase
             ->expects(static::once())
             ->method('get')
             ->will(
-                static::returnValue([
+                static::returnValue(new PriceDefinitionCollection([
                     'SW1' => new PriceDefinition(0, new TaxRuleCollection()),
-                ])
+                ]))
             );
 
         $calculator = $this->createMock(PriceCalculator::class);
@@ -232,12 +238,13 @@ class ProductProcessorTest extends \PHPUnit\Framework\TestCase
             ->expects(static::once())
             ->method('get')
             ->will(
-                static::returnValue([
+                static::returnValue(new DeliveryInformationCollection([
                     'SW1' => new DefaultDeliveryInformation(),
-                ])
+                ]))
             );
 
-        $processor = new ProductProcessor($priceGateway, $calculator, $deliveryGateway);
+        $productCalculator = new ProductCalculator($priceGateway, $calculator, $deliveryGateway);
+        $processor = new ProductProcessor($productCalculator);
 
         $processorCart = new ProcessorCart(
             new CalculatedLineItemCollection(),

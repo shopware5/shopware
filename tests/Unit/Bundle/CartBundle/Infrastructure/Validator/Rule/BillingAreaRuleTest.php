@@ -26,11 +26,11 @@ namespace Shopware\Tests\Unit\Bundle\CartBundle\Infrastructure\Validator\Rule;
 
 use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
-use Shopware\Bundle\CartBundle\Domain\Customer\Address;
-use Shopware\Bundle\CartBundle\Domain\Customer\Customer;
 use Shopware\Bundle\CartBundle\Domain\Validator\Data\RuleDataCollection;
 use Shopware\Bundle\CartBundle\Infrastructure\Validator\Rule\BillingAreaRule;
+use Shopware\Bundle\StoreFrontBundle\Struct\Address;
 use Shopware\Bundle\StoreFrontBundle\Struct\Country;
+use Shopware\Bundle\StoreFrontBundle\Struct\Customer;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
 
 class BillingAreaRuleTest extends TestCase

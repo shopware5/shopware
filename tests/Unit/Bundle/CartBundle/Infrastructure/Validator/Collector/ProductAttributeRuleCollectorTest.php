@@ -62,7 +62,7 @@ class ProductAttributeRuleCollectorTest extends TestCase
     public function testWithAttributeData()
     {
         $cart = $this->createMock(CalculatedCart::class);
-        $cart->method('getLineItems')
+        $cart->method('getCalculatedLineItems')
             ->will($this->returnValue(
                 new CalculatedLineItemCollection([
                     new DummyProduct('SW1'),
@@ -103,7 +103,7 @@ class ProductAttributeRuleCollectorTest extends TestCase
     public function testWithoutAttributeData()
     {
         $cart = $this->createMock(CalculatedCart::class);
-        $cart->method('getLineItems')
+        $cart->method('getCalculatedLineItems')
             ->will($this->returnValue(
                 new CalculatedLineItemCollection([
                     new DummyProduct('SW1'),
@@ -131,7 +131,7 @@ class ProductAttributeRuleCollectorTest extends TestCase
     public function testWithEmptyCart()
     {
         $cart = $this->createMock(CalculatedCart::class);
-        $cart->method('getLineItems')
+        $cart->method('getCalculatedLineItems')
             ->will($this->returnValue(
                 new CalculatedLineItemCollection([])
             ));

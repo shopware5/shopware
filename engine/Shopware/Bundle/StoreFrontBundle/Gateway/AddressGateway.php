@@ -23,10 +23,11 @@ declare(strict_types=1);
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\CartBundle\Infrastructure\Customer;
+namespace Shopware\Bundle\StoreFrontBundle\Gateway;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Bundle\CartBundle\Domain\Customer\Address;
+use Shopware\Bundle\StoreFrontBundle\Gateway\Hydrator\AddressHydrator;
+use Shopware\Bundle\StoreFrontBundle\Struct\Address;
 use Shopware\Bundle\CartBundle\Infrastructure\SortArrayByKeysTrait;
 use Shopware\Bundle\StoreFrontBundle\Gateway\FieldHelper;
 use Shopware\Bundle\StoreFrontBundle\Struct\TranslationContext;

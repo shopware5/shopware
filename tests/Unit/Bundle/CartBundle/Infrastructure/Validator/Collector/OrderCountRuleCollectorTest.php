@@ -27,12 +27,12 @@ namespace Shopware\Tests\Unit\Bundle\CartBundle\Infrastructure\Validator\Collect
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
-use Shopware\Bundle\CartBundle\Domain\Customer\Customer;
 use Shopware\Bundle\CartBundle\Domain\Validator\Data\RuleDataCollection;
 use Shopware\Bundle\CartBundle\Domain\Validator\Rule\RuleCollection;
 use Shopware\Bundle\CartBundle\Infrastructure\Validator\Collector\OrderCountRuleCollector;
 use Shopware\Bundle\CartBundle\Infrastructure\Validator\Data\OrderCountRuleData;
 use Shopware\Bundle\CartBundle\Infrastructure\Validator\Rule\OrderCountRule;
+use Shopware\Bundle\StoreFrontBundle\Struct\Customer;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
 
 class OrderCountRuleCollectorTest extends TestCase

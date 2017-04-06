@@ -33,6 +33,16 @@ class PriceDefinitionCollection extends Collection
      */
     protected $elements = [];
 
+    /**
+     * @param PriceDefinition[] $elements
+     */
+    public function __construct(array $elements = [])
+    {
+        foreach ($elements as $key => $element) {
+            $this->add($key, $element);
+        }
+    }
+
     public function add(string $key, PriceDefinition $priceDefinition): void
     {
         $this->elements[$key] = $priceDefinition;

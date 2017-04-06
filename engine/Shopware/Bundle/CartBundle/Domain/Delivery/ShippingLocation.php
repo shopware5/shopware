@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\CartBundle\Domain\Delivery;
 
-use Shopware\Bundle\CartBundle\Domain\Customer\Address;
+use Shopware\Bundle\StoreFrontBundle\Struct\Address;
 use Shopware\Bundle\StoreFrontBundle\Struct\Country;
 use Shopware\Bundle\StoreFrontBundle\Struct\Country\Area;
 use Shopware\Bundle\StoreFrontBundle\Struct\Country\State;

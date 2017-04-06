@@ -62,7 +62,7 @@ class ProductOfCategoriesRuleCollectorTest extends TestCase
     public function testWithEmptyCart()
     {
         $cart = $this->createMock(CalculatedCart::class);
-        $cart->method('getLineItems')
+        $cart->method('getCalculatedLineItems')
             ->will($this->returnValue(
                 new CalculatedLineItemCollection([])
             ));
@@ -87,7 +87,7 @@ class ProductOfCategoriesRuleCollectorTest extends TestCase
     public function testWithSingleRule()
     {
         $cart = $this->createMock(CalculatedCart::class);
-        $cart->method('getLineItems')
+        $cart->method('getCalculatedLineItems')
             ->will($this->returnValue(
                 new CalculatedLineItemCollection([
                     new DummyProduct('SW1'),
@@ -122,7 +122,7 @@ class ProductOfCategoriesRuleCollectorTest extends TestCase
     public function testWithMultipleRules()
     {
         $cart = $this->createMock(CalculatedCart::class);
-        $cart->method('getLineItems')
+        $cart->method('getCalculatedLineItems')
             ->will($this->returnValue(
                 new CalculatedLineItemCollection([
                     new DummyProduct('SW1'),

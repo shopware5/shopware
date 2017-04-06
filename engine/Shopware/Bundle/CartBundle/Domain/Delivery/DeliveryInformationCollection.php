@@ -33,6 +33,16 @@ class DeliveryInformationCollection extends Collection
      */
     protected $elements = [];
 
+    /**
+     * @param DeliveryInformation[] $elements
+     */
+    public function __construct(array $elements = [])
+    {
+        foreach ($elements as $key => $element) {
+            $this->add($key, $element);
+        }
+    }
+
     public function add(string $key, DeliveryInformation $deliveryInformation): void
     {
         $this->elements[$key] = $deliveryInformation;

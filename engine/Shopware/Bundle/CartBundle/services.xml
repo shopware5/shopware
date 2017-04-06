@@ -109,29 +109,29 @@
             <argument type="service" id="cart.tax.rule_calculator" />
         </service>
 
-        <service id="shopware.cart.customer.address_hydrator" class="Shopware\Bundle\CartBundle\Infrastructure\Customer\AddressHydrator">
+        <service id="shopware.cart.customer.address_hydrator" class="Shopware\Bundle\StoreFrontBundle\Gateway\Hydrator\AddressHydrator">
             <argument type="service" id="shopware_storefront.attribute_hydrator_dbal" />
             <argument type="service" id="shopware_storefront.country_hydrator_dbal" />
         </service>
 
-        <service id="shopware.cart.customer.hydrator" class="Shopware\Bundle\CartBundle\Infrastructure\Customer\CustomerHydrator">
+        <service id="shopware.cart.customer.hydrator" class="Shopware\Bundle\StoreFrontBundle\Gateway\Hydrator\CustomerHydrator">
             <argument type="service" id="shopware_storefront.attribute_hydrator_dbal" />
             <argument type="service" id="shopware_storefront.customer_group_hydrator_dbal" />
         </service>
 
-        <service id="shopware.cart.customer.gateway" class="Shopware\Bundle\CartBundle\Infrastructure\Customer\CustomerGateway">
+        <service id="shopware.cart.customer.gateway" class="Shopware\Bundle\StoreFrontBundle\Gateway\CustomerGateway">
             <argument type="service" id="shopware_storefront.field_helper_dbal" />
             <argument type="service" id="shopware.cart.customer.hydrator" />
             <argument type="service" id="dbal_connection" />
         </service>
 
-        <service id="shopware.cart.address.gateway" class="Shopware\Bundle\CartBundle\Infrastructure\Customer\AddressGateway">
+        <service id="shopware.cart.address.gateway" class="Shopware\Bundle\StoreFrontBundle\Gateway\AddressGateway">
             <argument type="service" id="shopware_storefront.field_helper_dbal" />
             <argument type="service" id="shopware.cart.customer.address_hydrator" />
             <argument type="service" id="dbal_connection" />
         </service>
 
-        <service id="shopware.cart.customer.service" class="Shopware\Bundle\CartBundle\Infrastructure\Customer\CustomerService">
+        <service id="shopware.cart.customer.service" class="Shopware\Bundle\StoreFrontBundle\Service\Core\CustomerService">
             <argument type="service" id="shopware.cart.customer.gateway" />
             <argument type="service" id="shopware.cart.address.gateway" />
             <argument type="service" id="shopware_storefront.shop_gateway_dbal" />

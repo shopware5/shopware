@@ -30,6 +30,7 @@ use Doctrine\DBAL\Query\QueryBuilder;
 use Shopware\Bundle\CartBundle\Domain\LineItem\LineItem;
 use Shopware\Bundle\CartBundle\Domain\LineItem\LineItemCollection;
 use Shopware\Bundle\CartBundle\Domain\Price\PriceDefinition;
+use Shopware\Bundle\CartBundle\Domain\Price\PriceDefinitionCollection;
 use Shopware\Bundle\CartBundle\Domain\Product\ProductProcessor;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxRule;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCollection;
@@ -61,7 +62,7 @@ class ProductPriceGatewayTest extends \PHPUnit\Framework\TestCase
         );
 
         $prices = $gateway->get($collection, $context);
-        static::assertEquals([], $prices);
+        static::assertEquals(new PriceDefinitionCollection(), $prices);
     }
 
     public function testReturnsPriceDefinitionIndexedByNumber()
@@ -88,7 +89,9 @@ class ProductPriceGatewayTest extends \PHPUnit\Framework\TestCase
         $prices = $gateway->get($collection, $context);
 
         static::assertEquals(
-            ['SW1' => new PriceDefinition(20.10, new TaxRuleCollection([new TaxRule(19)]))],
+            new PriceDefinitionCollection([
+                'SW1' => new PriceDefinition(20.10, new TaxRuleCollection([new TaxRule(19)])),
+            ]),
             $prices
         );
     }
@@ -118,7 +121,9 @@ class ProductPriceGatewayTest extends \PHPUnit\Framework\TestCase
         $prices = $gateway->get($collection, $context);
 
         static::assertEquals(
-            ['SW1' => new PriceDefinition(20.10, new TaxRuleCollection([new TaxRule(19)]))],
+            new PriceDefinitionCollection([
+                'SW1' => new PriceDefinition(20.10, new TaxRuleCollection([new TaxRule(19)])),
+            ]),
             $prices
         );
     }
@@ -152,10 +157,10 @@ class ProductPriceGatewayTest extends \PHPUnit\Framework\TestCase
         $prices = $gateway->get($collection, $context);
 
         static::assertEquals(
-            [
+            new PriceDefinitionCollection([
                 'SW1' => new PriceDefinition(20.10, new TaxRuleCollection([new TaxRule(19)])),
                 'SW2' => new PriceDefinition(5.10, new TaxRuleCollection([new TaxRule(19)])),
-            ],
+            ]),
             $prices
         );
     }
@@ -190,10 +195,10 @@ class ProductPriceGatewayTest extends \PHPUnit\Framework\TestCase
         $prices = $gateway->get($collection, $context);
 
         static::assertEquals(
-            [
+            new PriceDefinitionCollection([
                 'SW1' => new PriceDefinition(15.10, new TaxRuleCollection([new TaxRule(19)]), 4),
                 'SW2' => new PriceDefinition(5.10, new TaxRuleCollection([new TaxRule(19)]), 2),
-            ],
+            ]),
             $prices
         );
     }
@@ -230,11 +235,11 @@ class ProductPriceGatewayTest extends \PHPUnit\Framework\TestCase
         $prices = $gateway->get($collection, $context);
 
         static::assertEquals(
-            [
+            new PriceDefinitionCollection([
                 'SW1' => new PriceDefinition(1.10, new TaxRuleCollection([new TaxRule(19)]), 2),
                 'SW2' => new PriceDefinition(5.10, new TaxRuleCollection([new TaxRule(19)]), 3),
                 'SW3' => new PriceDefinition(10.10, new TaxRuleCollection([new TaxRule(19)]), 4),
-            ],
+            ]),
             $prices
         );
     }
@@ -270,10 +275,10 @@ class ProductPriceGatewayTest extends \PHPUnit\Framework\TestCase
         $prices = $gateway->get($collection, $context);
 
         static::assertEquals(
-            [
+            new PriceDefinitionCollection([
                 'SW1' => new PriceDefinition(2.10, new TaxRuleCollection([new TaxRule(19)]), 3),
                 'SW2' => new PriceDefinition(5.10, new TaxRuleCollection([new TaxRule(19)]), 2),
-            ],
+            ]),
             $prices
         );
     }

@@ -29,12 +29,12 @@ use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\DBAL\Statement;
 use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
-use Shopware\Bundle\CartBundle\Domain\Customer\Customer;
 use Shopware\Bundle\CartBundle\Domain\Validator\Data\RuleDataCollection;
 use Shopware\Bundle\CartBundle\Domain\Validator\Rule\RuleCollection;
 use Shopware\Bundle\CartBundle\Infrastructure\Validator\Collector\OrderClearedStateRuleCollector;
 use Shopware\Bundle\CartBundle\Infrastructure\Validator\Data\OrderClearedStateRuleData;
 use Shopware\Bundle\CartBundle\Infrastructure\Validator\Rule\OrderClearedStateRule;
+use Shopware\Bundle\StoreFrontBundle\Struct\Customer;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
 
 class OrderClearedStateRuleCollectorTest extends TestCase

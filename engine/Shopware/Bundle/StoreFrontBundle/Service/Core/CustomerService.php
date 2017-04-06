@@ -23,9 +23,11 @@ declare(strict_types=1);
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\CartBundle\Infrastructure\Customer;
+namespace Shopware\Bundle\StoreFrontBundle\Service\Core;
 
-use Shopware\Bundle\CartBundle\Domain\Customer\Customer;
+use Shopware\Bundle\StoreFrontBundle\Gateway\AddressGateway;
+use Shopware\Bundle\StoreFrontBundle\Gateway\CustomerGateway;
+use Shopware\Bundle\StoreFrontBundle\Struct\Customer;
 use Shopware\Bundle\CartBundle\Infrastructure\Payment\PaymentMethodGateway;
 use Shopware\Bundle\StoreFrontBundle\Gateway\ShopGateway;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
@@ -75,7 +77,7 @@ class CustomerService
      * @param int[]                $ids
      * @param ShopContextInterface $context
      *
-     * @return Customer[]
+     * @return \Shopware\Bundle\StoreFrontBundle\Struct\Customer[]
      */
     public function getList($ids, TranslationContext $context): array
     {
@@ -133,7 +135,7 @@ class CustomerService
     }
 
     /**
-     * @param Customer[] $customers
+     * @param \Shopware\Bundle\StoreFrontBundle\Struct\Customer[] $customers
      *
      * @return int[]
      */
@@ -165,7 +167,7 @@ class CustomerService
     }
 
     /**
-     * @param Customer[] $customers
+     * @param \Shopware\Bundle\StoreFrontBundle\Struct\Customer[] $customers
      *
      * @return int[]
      */

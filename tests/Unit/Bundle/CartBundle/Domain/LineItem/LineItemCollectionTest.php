@@ -46,7 +46,7 @@ class LineItemCollectionTest extends TestCase
         static::assertCount(3, $collection);
     }
 
-    public function testCollectionOverwriteExistingIdentifierWithLastItem()
+    public function testCollectionStacksSameIdentifier()
     {
         $collection = new LineItemCollection([
             new LineItem('A', 'a', 1),
@@ -56,7 +56,7 @@ class LineItemCollectionTest extends TestCase
 
         static::assertEquals(
             new LineItemCollection([
-                new LineItem('A', 'a', 3),
+                new LineItem('A', 'a', 6),
             ]),
             $collection
         );

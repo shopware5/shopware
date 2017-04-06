@@ -24,7 +24,6 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Struct;
 
-use Shopware\Bundle\CartBundle\Domain\Customer\Customer;
 use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryMethod;
 use Shopware\Bundle\CartBundle\Domain\Delivery\ShippingLocation;
 use Shopware\Bundle\CartBundle\Domain\Payment\PaymentMethod;
@@ -69,7 +68,7 @@ class ShopContext extends Extendable implements ShopContextInterface, \JsonSeria
     protected $priceGroups;
 
     /**
-     * @var Customer|null
+     * @var \Shopware\Bundle\StoreFrontBundle\Struct\Customer|null
      */
     protected $customer;
 

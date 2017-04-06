@@ -23,9 +23,9 @@ declare(strict_types=1);
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\CartBundle\Infrastructure\Customer;
+namespace Shopware\Bundle\StoreFrontBundle\Gateway\Hydrator;
 
-use Shopware\Bundle\CartBundle\Domain\Customer\Customer;
+use Shopware\Bundle\StoreFrontBundle\Struct\Customer;
 use Shopware\Bundle\StoreFrontBundle\Gateway\Hydrator\AttributeHydrator;
 use Shopware\Bundle\StoreFrontBundle\Gateway\Hydrator\CustomerGroupHydrator;
 use Shopware\Bundle\StoreFrontBundle\Gateway\Hydrator\Hydrator;
@@ -54,7 +54,7 @@ class CustomerHydrator extends Hydrator
         $this->customerGroupHydrator = $customerGroupHydrator;
     }
 
-    public function hydrate(array $data): Customer
+    public function hydrate(array $data): \Shopware\Bundle\StoreFrontBundle\Struct\Customer
     {
         $customer = new Customer();
 

@@ -25,7 +25,6 @@
 namespace Shopware\Tests\Unit\Bundle\CartBundle\Domain\Delivery;
 
 use PHPUnit\Framework\TestCase;
-use Shopware\Bundle\CartBundle\Domain\Customer\Address;
 use Shopware\Bundle\CartBundle\Domain\Delivery\Delivery;
 use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryCollection;
 use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryDate;
@@ -49,6 +48,7 @@ use Shopware\Bundle\CartBundle\Domain\Tax\TaxRule;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCalculator;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCollection;
 use Shopware\Bundle\CartBundle\Domain\Voucher\CalculatedVoucher;
+use Shopware\Bundle\StoreFrontBundle\Struct\Address;
 use Shopware\Bundle\StoreFrontBundle\Struct\Country;
 use Shopware\Tests\Unit\Bundle\CartBundle\Common\Generator;
 
@@ -144,6 +144,12 @@ class StockDeliverySeparatorTest extends TestCase
             $deliveryInformation
         );
 
+        $result = $this->separator->addItemsToDeliveries(
+            new DeliveryCollection(),
+            new CalculatedLineItemCollection([$itemA, $itemB]),
+            Generator::createContext(null, null, null, null, null, null, $location->getArea(), $location->getCountry(), $location->getState())
+        );
+
         static::assertEquals(
             new DeliveryCollection([
                 new Delivery(
@@ -156,11 +162,7 @@ class StockDeliverySeparatorTest extends TestCase
                     $location
                 ),
             ]),
-            $this->separator->addItemsToDeliveries(
-                new DeliveryCollection(),
-                new CalculatedLineItemCollection([$itemA, $itemB]),
-                Generator::createContext(null, null, null, null, null, null, $location->getArea(), $location->getCountry(), $location->getState())
-            )
+            $result
         );
     }
 

@@ -47,7 +47,7 @@ class GoodsCountRuleTest extends TestCase
         $cart = $this->createMock(CalculatedCart::class);
 
         $cart->expects($this->any())
-            ->method('getLineItems')
+            ->method('getCalculatedLineItems')
             ->will($this->returnValue(
                 new CalculatedLineItemCollection([
                     new DummyProduct('SW1'),
@@ -69,7 +69,7 @@ class GoodsCountRuleTest extends TestCase
         $cart = $this->createMock(CalculatedCart::class);
 
         $cart->expects($this->any())
-            ->method('getLineItems')
+            ->method('getCalculatedLineItems')
             ->will($this->returnValue(
                 new CalculatedLineItemCollection([
                     new DummyProduct('SW1'),
@@ -96,7 +96,7 @@ class GoodsCountRuleTest extends TestCase
         $cart = $this->createMock(CalculatedCart::class);
 
         $cart->expects($this->any())
-            ->method('getLineItems')
+            ->method('getCalculatedLineItems')
             ->will($this->returnValue(
                 new CalculatedLineItemCollection([
                     new DummyProduct('SW1'),
@@ -117,7 +117,7 @@ class GoodsCountRuleTest extends TestCase
         $cart = $this->createMock(CalculatedCart::class);
 
         $cart->expects($this->any())
-            ->method('getLineItems')
+            ->method('getCalculatedLineItems')
             ->will($this->returnValue(
                 new CalculatedLineItemCollection([
                     new DummyProduct('SW1'),
@@ -139,7 +139,7 @@ class GoodsCountRuleTest extends TestCase
         $cart = $this->createMock(CalculatedCart::class);
 
         $cart->expects($this->any())
-            ->method('getLineItems')
+            ->method('getCalculatedLineItems')
             ->will($this->returnValue(
                 new CalculatedLineItemCollection([
                     new DummyProduct('SW1'),
@@ -166,7 +166,7 @@ class GoodsCountRuleTest extends TestCase
         $cart = $this->createMock(CalculatedCart::class);
 
         $cart->expects($this->any())
-            ->method('getLineItems')
+            ->method('getCalculatedLineItems')
             ->will($this->returnValue(
                 new CalculatedLineItemCollection([
                     new DummyProduct('SW1'),

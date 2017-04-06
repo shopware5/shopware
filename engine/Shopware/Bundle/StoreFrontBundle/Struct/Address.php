@@ -23,7 +23,7 @@ declare(strict_types=1);
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\CartBundle\Domain\Customer;
+namespace Shopware\Bundle\StoreFrontBundle\Struct;
 
 use Shopware\Bundle\CartBundle\Domain\CloneTrait;
 use Shopware\Bundle\CartBundle\Domain\JsonSerializableTrait;

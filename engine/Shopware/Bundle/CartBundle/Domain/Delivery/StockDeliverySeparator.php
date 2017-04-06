@@ -28,7 +28,6 @@ namespace Shopware\Bundle\CartBundle\Domain\Delivery;
 use Shopware\Bundle\CartBundle\Domain\LineItem\CalculatedLineItemCollection;
 use Shopware\Bundle\CartBundle\Domain\LineItem\CalculatedLineItemInterface;
 use Shopware\Bundle\CartBundle\Domain\LineItem\Deliverable;
-use Shopware\Bundle\CartBundle\Domain\LineItem\Stackable;
 use Shopware\Bundle\CartBundle\Domain\Price\PriceCalculator;
 use Shopware\Bundle\CartBundle\Domain\Price\PriceDefinition;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
@@ -59,10 +58,7 @@ class StockDeliverySeparator
                 continue;
             }
 
-            $quantity = 1;
-            if ($item instanceof Stackable) {
-                $quantity = $item->getQuantity();
-            }
+            $quantity = $item->getQuantity();
 
             $position = new DeliveryPosition(
                 $item->getIdentifier(),
@@ -137,15 +133,15 @@ class StockDeliverySeparator
     }
 
     /**
-     * @param Stackable|CalculatedLineItemInterface|Deliverable $item
-     * @param int                                               $quantity
-     * @param DeliveryDate                                      $deliveryDate
-     * @param ShopContextInterface                              $context
+     * @param CalculatedLineItemInterface $item
+     * @param int                         $quantity
+     * @param DeliveryDate                $deliveryDate
+     * @param ShopContextInterface        $context
      *
      * @return DeliveryPosition
      */
     private function recalculatePosition(
-        Stackable $item,
+        CalculatedLineItemInterface $item,
         int $quantity,
         DeliveryDate $deliveryDate,
         ShopContextInterface $context

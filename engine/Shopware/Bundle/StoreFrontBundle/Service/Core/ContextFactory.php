@@ -25,14 +25,12 @@
 namespace Shopware\Bundle\StoreFrontBundle\Service\Core;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Bundle\CartBundle\Domain\Customer\Customer;
 use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryMethod;
 use Shopware\Bundle\CartBundle\Domain\Delivery\ShippingLocation;
 use Shopware\Bundle\CartBundle\Domain\Payment\PaymentMethod;
-use Shopware\Bundle\CartBundle\Infrastructure\Customer\AddressGateway;
-use Shopware\Bundle\CartBundle\Infrastructure\Customer\CustomerService;
 use Shopware\Bundle\CartBundle\Infrastructure\Delivery\DeliveryMethodGateway;
 use Shopware\Bundle\CartBundle\Infrastructure\Payment\PaymentMethodGateway;
+use Shopware\Bundle\StoreFrontBundle\Gateway\AddressGateway;
 use Shopware\Bundle\StoreFrontBundle\Gateway\CountryGateway;
 use Shopware\Bundle\StoreFrontBundle\Gateway\CurrencyGateway;
 use Shopware\Bundle\StoreFrontBundle\Gateway\CustomerGroupGateway;
@@ -42,6 +40,7 @@ use Shopware\Bundle\StoreFrontBundle\Gateway\TaxGateway;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextFactoryInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\CheckoutScope;
 use Shopware\Bundle\StoreFrontBundle\Struct\Currency;
+use Shopware\Bundle\StoreFrontBundle\Struct\Customer;
 use Shopware\Bundle\StoreFrontBundle\Struct\CustomerScope;
 use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
@@ -107,17 +106,17 @@ class ContextFactory implements ContextFactoryInterface
     private $connection;
 
     /**
-     * @param ShopGateway               $shopGateway
-     * @param CurrencyGateway           $currencyGateway
-     * @param CustomerService           $customerService
-     * @param CustomerGroupGateway      $customerGroupGateway
-     * @param CountryGateway            $countryGateway
-     * @param TaxGateway                $taxGateway
-     * @param PriceGroupDiscountGateway $priceGroupDiscountGateway
-     * @param AddressGateway            $addressGateway
-     * @param PaymentMethodGateway      $paymentMethodGateway
-     * @param DeliveryMethodGateway     $deliveryMethodGateway
-     * @param Connection                $connection
+     * @param ShopGateway                                              $shopGateway
+     * @param CurrencyGateway                                          $currencyGateway
+     * @param CustomerService                                          $customerService
+     * @param CustomerGroupGateway                                     $customerGroupGateway
+     * @param CountryGateway                                           $countryGateway
+     * @param TaxGateway                                               $taxGateway
+     * @param PriceGroupDiscountGateway                                $priceGroupDiscountGateway
+     * @param \Shopware\Bundle\StoreFrontBundle\Gateway\AddressGateway $addressGateway
+     * @param PaymentMethodGateway                                     $paymentMethodGateway
+     * @param DeliveryMethodGateway                                    $deliveryMethodGateway
+     * @param Connection                                               $connection
      */
     public function __construct(
         ShopGateway $shopGateway,

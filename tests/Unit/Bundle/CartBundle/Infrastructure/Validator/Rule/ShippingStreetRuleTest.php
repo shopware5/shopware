@@ -26,10 +26,10 @@ namespace Shopware\Tests\Unit\Bundle\CartBundle\Infrastructure\Validator\Rule;
 
 use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
-use Shopware\Bundle\CartBundle\Domain\Customer\Address;
 use Shopware\Bundle\CartBundle\Domain\Delivery\ShippingLocation;
 use Shopware\Bundle\CartBundle\Domain\Validator\Data\RuleDataCollection;
 use Shopware\Bundle\CartBundle\Infrastructure\Validator\Rule\ShippingStreetRule;
+use Shopware\Bundle\StoreFrontBundle\Struct\Address;
 use Shopware\Bundle\StoreFrontBundle\Struct\Country;
 use Shopware\Bundle\StoreFrontBundle\Struct\Country\State;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;

@@ -24,16 +24,16 @@
 
 namespace Shopware\Tests\Unit\Bundle\CartBundle\Common;
 
-use Shopware\Bundle\CartBundle\Domain\Customer\Address;
-use Shopware\Bundle\CartBundle\Domain\Customer\Customer;
 use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryMethod;
 use Shopware\Bundle\CartBundle\Domain\Delivery\ShippingLocation;
 use Shopware\Bundle\CartBundle\Domain\Payment\PaymentMethod;
 use Shopware\Bundle\CartBundle\Domain\Price\PriceDefinition;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxDetector;
 use Shopware\Bundle\CartBundle\Infrastructure\Product\ProductPriceGateway;
+use Shopware\Bundle\StoreFrontBundle\Struct\Address;
 use Shopware\Bundle\StoreFrontBundle\Struct\Country;
 use Shopware\Bundle\StoreFrontBundle\Struct\Currency;
+use Shopware\Bundle\StoreFrontBundle\Struct\Customer;
 use Shopware\Bundle\StoreFrontBundle\Struct\Customer\Group;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceGroup;
 use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
