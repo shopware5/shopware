@@ -99,7 +99,7 @@ Ext.define('Shopware.apps.Article.view.image.NewRule', {
         title: '{s name=image/rule/title}Create new image mapping{/s}',
         cancel: '{s name=cancel_button}Cancel{/s}',
         save: '{s name=general/save_button}Save{/s}',
-        notice: '{s name=general/notice}Hier haben Sie die Möglichkeit ein weiteres Image Mapping zu hinterlegen. <br>Bitte selektieren sie pro Gruppe nur eine Option. <br>Das Bild wird alle Artikel Varianten zugeordnet, die mit den ausgewählten Optionen erzeugt wurden.{/s}'
+        notice: '{s name=general/notice}Hier haben Sie die Möglichkeit ein weiteres Image Mapping zu hinterlegen. <br>Bitte selektieren Sie pro Gruppe nur eine Option. <br>Das Bild wird alle Artikel Varianten zugeordnet, die mit den ausgewählten Optionen erzeugt wurden.{/s}'
     },
 
     /**

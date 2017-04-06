@@ -394,7 +394,6 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
     {
         if ($this->View()->sUserData['additional']['user']['accountmode'] == 1) {
             Shopware()->Session()->unsetAll();
-            $this->get('shopware.csrftoken_validator')->invalidateToken($this->Response());
             Shopware()->Modules()->Basket()->sRefreshBasket();
         }
 

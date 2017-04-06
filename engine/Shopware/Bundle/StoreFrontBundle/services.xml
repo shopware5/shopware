@@ -309,6 +309,7 @@
 
         <service id="shopware_storefront.manufacturer_hydrator_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\ManufacturerHydrator">
             <argument type="service" id="shopware_storefront.attribute_hydrator_dbal"/>
+            <argument type="service" id="shopware_media.media_service" />
         </service>
 
         <service id="shopware_storefront.shop_page_hydrator_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\ShopPageHydrator">

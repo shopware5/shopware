@@ -259,18 +259,23 @@ class PluginInstaller
                 [$plugin->getName()]
             );
 
-            $description = '';
-            if (isset($info['description'])) {
-                foreach ($info['description'] as $locale => $string) {
-                    $description .= sprintf('<div lang="%s">%s</div>', $locale, $string);
+            $translations = [];
+            $translatableInfoKeys = ['label', 'description'];
+            foreach ($info as $key => $value) {
+                if (!in_array($key, $translatableInfoKeys, true)) {
+                    continue;
+                }
+
+                foreach ($value as $lang => $translation) {
+                    $translations[$lang][$key] = $translation;
                 }
             }
 
-            $info['description'] = $description;
+            $info['label'] = isset($info['label']['en']) ? $info['label']['en'] : $plugin->getName();
+            $info['description'] = isset($info['description']['en']) ? $info['description']['en'] : null;
             $info['version'] = isset($info['version']) ? $info['version'] : '0.0.1';
             $info['author'] = isset($info['author']) ? $info['author'] : null;
             $info['link'] = isset($info['link']) ? $info['link'] : null;
-            $info['label'] = isset($info['label']) && isset($info['label']['en']) ? $info['label']['en'] : $plugin->getName();
 
             $data = [
                 'namespace' => 'ShopwarePlugins',
@@ -285,6 +290,7 @@ class PluginInstaller
                 'capability_enable' => true,
                 'capability_secure_uninstall' => true,
                 'refresh_date' => $refreshDate,
+                'translations' => $translations ? json_encode($translations) : null,
             ];
 
             if ($currentPluginInfo) {

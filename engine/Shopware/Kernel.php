@@ -608,11 +608,8 @@ class Kernel implements HttpKernelInterface
         $loader->load('AccountBundle/services.xml');
         $loader->load('AttributeBundle/services.xml');
         $loader->load('EmotionBundle/services.xml');
+        $loader->load('SearchBundleES/services.xml');
         $loader->load('CustomerSearchBundle/services.xml');
-
-        if ($this->isElasticSearchEnabled()) {
-            $loader->load('SearchBundleES/services.xml');
-        }
 
         if (is_file($file = __DIR__ . '/Components/DependencyInjection/services_local.xml')) {
             $loader->load($file);
@@ -638,11 +635,8 @@ class Kernel implements HttpKernelInterface
         $container->addCompilerPass(new EmotionComponentHandlerCompilerPass());
         $container->addCompilerPass(new MediaAdapterCompilerPass());
         $container->addCompilerPass(new MediaOptimizerCompilerPass());
+        $container->addCompilerPass(new SearchHandlerCompilerPass());
         $container->addCompilerPass(new HandlerRegistryCompilerPass());
-
-        if ($this->isElasticSearchEnabled()) {
-            $container->addCompilerPass(new SearchHandlerCompilerPass());
-        }
 
         $this->loadPlugins($container);
     }

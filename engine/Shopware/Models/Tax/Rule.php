@@ -111,7 +111,7 @@ class Rule extends ModelEntity
     private $customerGroupId;
 
     /**
-     * The area property is the owning side of the association between tax rul and area.
+     * The area property is the owning side of the association between tax rule and area.
      * The association is joined over the tax rule areaID field and the id field of the area.
      *
      * @var \Shopware\Models\Country\Area
@@ -121,7 +121,7 @@ class Rule extends ModelEntity
     private $area;
 
     /**
-     * The country property is the owning side of the association between tax rul and country.
+     * The country property is the owning side of the association between tax rule and country.
      * The association is joined over the tax rule countryID field and the id field of the country.
      *
      * @var \Shopware\Models\Country\Country
@@ -131,7 +131,7 @@ class Rule extends ModelEntity
     private $country;
 
     /**
-     * The state property is the owning side of the association between tax rul and state.
+     * The state property is the owning side of the association between tax rule and state.
      * The association is joined over the tax rule stateID field and the id field of the state.
      *
      * @var \Shopware\Models\Country\State
@@ -141,7 +141,7 @@ class Rule extends ModelEntity
     private $state;
 
     /**
-     * The group property is the owning side of the association between tax rul and group.
+     * The group property is the owning side of the association between tax rule and group.
      * The association is joined over the tax rule groupID field and the id field of the group.
      *
      * @var \Shopware\Models\Tax\Tax

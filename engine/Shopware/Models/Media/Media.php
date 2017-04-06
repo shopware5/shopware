@@ -2034,28 +2034,6 @@ class Media extends ModelEntity
         $this->articles = $articles;
     }
 
-    public function removeThumbnails()
-    {
-        $thumbnailSizes = $this->getAllThumbnailSizes();
-
-        $this->removeDefaultThumbnails($this->getFileName());
-        $this->removeAlbumThumbnails($thumbnailSizes, $this->getFileName());
-    }
-
-    /**
-     * @param int $newAlbumId
-     */
-    private function createThumbnailsForMovedMedia($newAlbumId)
-    {
-        $albumRepository = Shopware()->Container()->get('models')->getRepository(Album::class);
-
-        /** @var Album $album */
-        $album = $albumRepository->find($newAlbumId);
-        if ($album) {
-            $this->createAlbumThumbnails($album);
-        }
-    }
-
     /**
      * Internal helper function which updates all associated data which has the image path as own property.
      *

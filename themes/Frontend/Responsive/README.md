@@ -38,9 +38,9 @@ We'd implemented a basic javascript in Shopware 5 which concatenates all javascr
 Using it is as easy as adding your files to the ```$javascript``` array in your ```Theme.php```.
 
 ```
-protected $javascript = array(
+protected $javascript = [
 	'src/js/jquery.your-plugin.js'
-);
+];
 ```
 
 ### Using LESS for your stylesheets
@@ -50,9 +50,9 @@ The LESS pre-processor in Shopware 5 is very easy to use. When the storefront wi
 We provide the ability adding additional CSS files to your theme. Using it is as easy as adding your files to the ```$css``` array in your ```Theme.php```.
 
 ```
-protected $css = array(
+protected $css = [
 	'src/css/my-style.css'
-);
+];
 ```
 
 

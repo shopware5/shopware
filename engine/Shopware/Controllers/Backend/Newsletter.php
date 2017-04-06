@@ -407,9 +407,13 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
         $template->assign('sConfig', Shopware()->Config());
         $template->assign('sBasefile', Shopware()->Config()->BaseFile);
 
+        $shop = Shopware()->Shop();
+
         if (!$template->isCached($mailing['template'])) {
             $template->assign('sMailing', $mailing);
-            $template->assign('sStart', 'http://' . Shopware()->Config()->BasePath . '/' . Shopware()->Config()->BaseFile);
+            $template->assign('sStart', ($shop->getAlwaysSecure() ?
+                'https://' . $shop->getSecureHost() . $shop->getSecureBasePath() :
+                'http://' . $shop->getHost() . $shop->getBasePath()));
             $template->assign('sUserGroup', Shopware()->System()->sUSERGROUP);
             $template->assign('sUserGroupData', Shopware()->System()->sUSERGROUPDATA);
             $template->assign('sMainCategories', Shopware()->Modules()->Categories()->sGetMainCategories());

@@ -165,7 +165,7 @@ class WildfireFormatter extends BaseWildfireFormatter
             return $trace;
         }
 
-        for ($i = 0; $i < count($trace); ++$i) {
+        for ($i = 0; $i < sizeof($trace); ++$i) {
             if (isset($trace[$i]['args'])) {
                 $trace[$i]['args'] = $this->encodeObject($trace[$i]['args']);
             }

@@ -49,14 +49,6 @@ Ext.define('Shopware.form.field.ColorField', {
 
     editable: true,
 
-    /**
-     * List of classes to mix into this class.
-     * @type { Object }
-     */
-    mixins: [
-        'Ext.form.Field'
-    ],
-
     initComponent: function () {
         var me = this;
 
@@ -176,9 +168,91 @@ Ext.define('Shopware.form.field.ColorField', {
 
     getName: function() {
         return this.inputField.getName();
-    }
+    },
 
+    /**
+     * Creates the help text element. The method creates an new
+     * image which displays a tool tip with the help text on hover.
+     *
+     * @public
+     * @return [object] helpIcon - DOM element
+     */
+    createHelp:function () {
+        var me = this,
+            helpIcon = new Ext.Element(document.createElement('span')),
+            row = new Ext.Element(document.createElement('td'));
+
+        row.set({ width: 24, valign: 'top' });
+        helpIcon.set({ cls: Ext.baseCSSPrefix + 'form-help-icon' });
+        helpIcon.appendTo(row);
+
+        Ext.tip.QuickTipManager.register({
+            target:helpIcon,
+            cls: Ext.baseCSSPrefix + 'form-tooltip',
+            title:(me.helpTitle) ? me.helpTitle : '',
+            text:me.helpText,
+            width:(me.helpWidth) ? me.helpWidth : 225,
+            anchorToTarget: true,
+            anchor: 'right',
+            anchorSize: {
+                width: 24,
+                height: 24
+            },
+            defaultAlign: 'tr',
+            showDelay: me.helpTooltipDelay,
+            dismissDelay: me.helpTooltipDismissDelay
+        });
+
+        row.appendTo(this.inputRow);
+
+        this.helpIconEl = helpIcon;
+        return helpIcon;
+    },
+
+    /**
+     * Creates the support text and inject it into the form element.
+     *
+     * @public
+     * @return [object] supportText - DOM element
+     */
+    createSupport:function () {
+        var me = this,
+            row = new Ext.Element(document.createElement('tr')),
+            fillCell = new Ext.Element(document.createElement('td')),
+            cell = new Ext.Element(document.createElement('td')),
+            supportText = new Ext.Element(document.createElement('div'));
+
+        supportText.set({
+            cls: Ext.baseCSSPrefix +'form-support-text'
+        });
+
+        if(me.supportText) {
+            supportText.update(me.supportText);
+        }
+
+        supportText.appendTo(cell);
+
+        // If we're finding more than one item, just use the first one :)
+        var element = me.getEl().select('tbody');
+        if(element.elements.length > 1) {
+            element = element.elements[0];
+        }
+
+        if(me.fieldLabel || !me.hideEmptyLabel) {
+            fillCell.appendTo(row);
+        }
+
+        cell.appendTo(row);
+
+        if(me.helpText) {
+            var tmpCell = new Ext.Element(document.createElement('td'));
+            tmpCell.appendTo(row);
+        }
+
+        row.appendTo(element);
+        me.supportTextEl = supportText;
+        return supportText;
+    }
 });
 
 //{/block}
-

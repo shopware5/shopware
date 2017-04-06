@@ -38,9 +38,9 @@ class Shopware_Plugins_Core_CronBirthday_Bootstrap extends Shopware_Components_P
     {
         $birthdayVoucher = Shopware()->Config()->get('birthdayVoucher', 'birthday');
 
-        $sql = "
+        $sql = '
             SELECT
-                user_id as 'userID',
+                user_id as userID,
                 company,
                 department,
                 u.salutation,
@@ -51,7 +51,7 @@ class Shopware_Plugins_Core_CronBirthday_Bootstrap extends Shopware_Components_P
                 zipcode,
                 city,
                 phone,
-                country_id AS 'countryID',
+                country_id AS countryID,
                 ustid,
                 at.text1,
                 at.text2,
@@ -78,7 +78,7 @@ class Shopware_Plugins_Core_CronBirthday_Bootstrap extends Shopware_Components_P
             AND active = 1
             AND user_id = u.id
             AND birthday LIKE ?
-        ";
+        ';
         $users = Shopware()->Db()->fetchAll($sql, [
             '%-' . date('m-d'),
         ]);

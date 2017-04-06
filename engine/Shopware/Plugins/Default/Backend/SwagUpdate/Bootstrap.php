@@ -200,6 +200,12 @@ class Shopware_Plugins_Backend_SwagUpdate_Bootstrap extends Shopware_Components_
             'hidden' => true,
         ]);
 
+        $form->setElement('text', 'trackingUniqueId', [
+            'label' => 'Unique identifier of shop installation',
+            'value' => '', // value will be populated on first access
+            'hidden' => true,
+        ]);
+
         $this->addFormTranslations(
             ['de_DE' => [
                 'update-code' => [

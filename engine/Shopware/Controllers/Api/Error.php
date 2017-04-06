@@ -150,7 +150,7 @@ class Shopware_Controllers_Api_Error extends Shopware_Controllers_Api_Rest
         $this->Response()->setHttpResponseCode(500);
         $debug = true;
         if ($debug) {
-            $this->View()->assign(['success' => false, 'message' => 'Errormesage: ' . $exception->getMessage()]);
+            $this->View()->assign(['success' => false, 'message' => 'Error mesage: ' . $exception->getMessage()]);
         } else {
             $this->View()->assign(['success' => false, 'message' => 'Unknown Error']);
         }

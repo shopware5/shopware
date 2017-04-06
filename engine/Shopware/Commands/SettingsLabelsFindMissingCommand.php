@@ -71,7 +71,7 @@ class SettingsLabelsFindMissingCommand extends ShopwareCommand
             chmod($dir, 0777);
             umask($old);
         }
-        if (!is_writable($dir)) {
+        if (!is_writeable($dir)) {
             $output->writeln('<error>Output dir ' . $input->getOption('file') . ' is not writable, aborting</error>');
 
             return 1;

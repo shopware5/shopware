@@ -632,7 +632,6 @@ class sAdmin
 
         Shopware()->Session()->unsetAll();
         $this->regenerateSessionId();
-        Shopware()->Container()->get('shopware.csrftoken_validator')->invalidateToken($this->front->Response());
     }
 
     /**
@@ -1086,10 +1085,22 @@ class sAdmin
             return false;
         }
 
+        /** @var Shopware\Bundle\StoreFrontBundle\Struct\Shop $shop */
+        $shop = $this->contextService->getShopContext()->getShop();
+        $shopUrl = 'http://' . $shop->getHost() . $shop->getPath();
+        // The -Secure variables don't fall back to the normal values, so we need to do some checks
+        if ($shop->getSecure()) {
+            if ($shop->getSecureHost() && $shop->getSecurePath()) {
+                $shopUrl = 'https://' . $shop->getSecureHost() . $shop->getSecurePath();
+            } else {
+                $shopUrl = 'https://' . $shop->getHost() . $shop->getPath();
+            }
+        }
+
         $context = [
             'sMAIL' => $email,
             'sShop' => $this->config->get('ShopName'),
-            'sShopURL' => 'http://' . $this->config->get('BasePath'),
+            'sShopURL' => $shopUrl,
             'sConfig' => $this->config,
         ];
 
@@ -1507,14 +1518,14 @@ class sAdmin
         foreach ($queryRules as $rule) {
             if ($rule['rule1'] && !$rule['rule2']) {
                 $rule['rule1'] = 'sRisk' . $rule['rule1'];
-                if ($this->executeRiskRule($rule['rule1'], $user, $basket, $rule['value1'])) {
+                if ($this->executeRiskRule($rule['rule1'], $user, $basket, $rule['value1'], $paymentID)) {
                     return true;
                 }
             } elseif ($rule['rule1'] && $rule['rule2']) {
                 $rule['rule1'] = 'sRisk' . $rule['rule1'];
                 $rule['rule2'] = 'sRisk' . $rule['rule2'];
-                if ($this->executeRiskRule($rule['rule1'], $user, $basket, $rule['value1'])
-                    && $this->executeRiskRule($rule['rule2'], $user, $basket, $rule['value2'])
+                if ($this->executeRiskRule($rule['rule1'], $user, $basket, $rule['value1'], $paymentID)
+                    && $this->executeRiskRule($rule['rule2'], $user, $basket, $rule['value2'], $paymentID)
                 ) {
                     return true;
                 }
@@ -1531,10 +1542,11 @@ class sAdmin
      * @param array  $user
      * @param array  $basket
      * @param string $value
+     * @param int    $paymentID
      *
      * @return bool
      */
-    public function executeRiskRule($rule, $user, $basket, $value)
+    public function executeRiskRule($rule, $user, $basket, $value, $paymentID = null)
     {
         if ($event = $this->eventManager->notifyUntil(
             'Shopware_Modules_Admin_Execute_Risk_Rule_' . $rule,
@@ -1543,6 +1555,7 @@ class sAdmin
                 'user' => $user,
                 'basket' => $basket,
                 'value' => $value,
+                'paymentID' => $paymentID,
             ]
         )) {
             return $event->getReturn();

@@ -26,7 +26,6 @@ use Doctrine\DBAL\Connection;
 use Shopware\Components\CSRFWhitelistAware;
 use Shopware\Models\Order\Billing as Billing;
 use Shopware\Models\Order\Detail as Detail;
-use Shopware\Models\Order\Document\Document as Document;
 use Shopware\Models\Order\Order as Order;
 use Shopware\Models\Order\Shipping as Shipping;
 
@@ -86,6 +85,20 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
      * @var \Shopware\Components\Model\ModelRepository
      */
     public static $documentRepository = null;
+
+    /**
+     * Registers the different acl permission for the different controller actions.
+     */
+    public function initAcl()
+    {
+        $this->addAclPermission('loadStores', 'read', 'Insufficient Permissions');
+        $this->addAclPermission('save', 'update', 'Insufficient Permissions');
+        $this->addAclPermission('deletePosition', 'update', 'Insufficient Permissions');
+        $this->addAclPermission('savePosition', 'update', 'Insufficient Permissions');
+        $this->addAclPermission('createDocument', 'update', 'Insufficient Permissions');
+        $this->addAclPermission('batchProcess', 'update', 'Insufficient Permissions');
+        $this->addAclPermission('delete', 'delete', 'Insufficient Permissions');
+    }
 
     /**
      * Get a list of available payment status
@@ -1139,7 +1152,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
     /**
      * Prepare address data - loads countryModel from a given countryId
      *
-     * @param $data Array
+     * @param $data array
      *
      * @return array
      */

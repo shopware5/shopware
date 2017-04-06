@@ -105,6 +105,10 @@ class ProfileUpdateFormType extends AbstractType
         $builder->add('birthday', BirthdayType::class, [
             'constraints' => $this->getBirthdayConstraints(),
         ]);
+
+        $builder->add('attribute', AttributeFormType::class, [
+            'data_class' => \Shopware\Models\Attribute\Customer::class,
+        ]);
     }
 
     /**

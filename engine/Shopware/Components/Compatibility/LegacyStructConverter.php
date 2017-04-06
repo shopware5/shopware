@@ -1208,10 +1208,6 @@ class LegacyStructConverter
                 'supplierDescription' => $product->getManufacturer()->getDescription(),
             ];
 
-            if (!empty($manufacturer['supplierImg'])) {
-                $manufacturer['supplierImg'] = $this->mediaService->getUrl($manufacturer['supplierImg']);
-            }
-
             $data = array_merge($data, $manufacturer);
             $data['supplier_attributes'] = $product->getManufacturer()->getAttributes();
         }

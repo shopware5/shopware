@@ -128,7 +128,7 @@ class Shopware_Components_Check_Path implements IteratorAggregate, Countable
     {
         $name = $this->basePath . $name;
 
-        return file_exists($name) && is_readable($name) && is_writable($name);
+        return file_exists($name) && is_readable($name) && is_writeable($name);
     }
 
     /**
