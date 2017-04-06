@@ -155,7 +155,10 @@ Ext.define('Shopware.apps.Customer.view.main.Toolbar', {
         Ext.each(me.handlers, function(handler) {
             items.push({
                 text: handler.getLabel(),
-                conditionHandler: handler
+                conditionHandler: handler,
+                handler: function () {
+                    me.fireEvent('create-filter-condition', handler);
+                }
                 // handler: Ext.bind(me.filterPanel.createCondition, me.filterPanel)
             });
         });

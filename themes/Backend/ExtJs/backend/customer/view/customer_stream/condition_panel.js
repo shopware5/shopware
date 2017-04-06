@@ -74,9 +74,8 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.ConditionPanel', {
         ];
     },
 
-    createCondition: function(button) {
-        var me = this,
-            handler = button.conditionHandler;
+    createCondition: function(handler) {
+        var me = this;
 
         handler.create(function(configuration) {
             me.addCondition(configuration);
