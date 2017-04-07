@@ -278,6 +278,7 @@
 
                 me.$datePickerEl = me.$el.find(me.opts.datePickerSelector);
                 me.datePicker = me.$datePickerEl.data('plugin_swDatePicker');
+                me.isRangeSlider = me.$datePickerEl.attr('data-mode') == 'range';
 
                 me.registerComponentEvents();
             },
@@ -291,6 +292,8 @@
             onChange: function(event) {
                 var me = this,
                     $el = $(event.currentTarget);
+
+                me.disableComponent(false);
 
                 /**
                  * Don't trigger the change when the date picker is suspended.
@@ -320,7 +323,6 @@
                  * The component is a range facet.
                  */
                 if (data.min && data.max) {
-
                     /**
                      * The min and max value for the range is the same, so no range can be selected.
                      */
@@ -332,22 +334,14 @@
                     /**
                      * The component is not filtered but restricted by other filter properties.
                      */
-                    if (!isFiltered) {
-                        me.datePicker.suspendEvents();
-                        me.datePicker.flatpickr.set('minDate', data.min);
-                        me.datePicker.flatpickr.set('maxDate', data.max);
-                        me.datePicker.resumeEvents();
+                    if (isFiltered) {
                         me.disableComponent(false);
                         return;
                     }
 
-                    /**
-                     * The component is filtered, so it is not restricted.
-                     * Prevents that the component gets restricted by its own selection.
-                     */
                     me.datePicker.suspendEvents();
-                    me.datePicker.flatpickr.set('minDate', me.datePicker.opts.minDate);
-                    me.datePicker.flatpickr.set('maxDate', me.datePicker.opts.maxDate);
+                    me.datePicker.flatpickr.set('minDate', data.min);
+                    me.datePicker.flatpickr.set('maxDate', data.max);
                     me.datePicker.resumeEvents();
                     me.disableComponent(false);
                     return;
@@ -384,6 +378,29 @@
                 me.datePicker.flatpickr.set('enable', enabledDates);
 
                 me.disableComponent(enabledDates.length <= 0);
+            },
+
+            disableComponent: function(disable) {
+                var me = this;
+
+                if (disable && this.$el.hasClass(this.opts.collapseCls)) {
+                    this.close();
+                }
+                this.setDisabledClass(this.$el, disable);
+
+                if (me.isRangeSlider) {
+                    me.datePicker.$rangeEndInput.removeAttr('disabled');
+                    me.datePicker.$rangeStartInput.removeAttr('disabled');
+                    if (disable) {
+                        me.datePicker.$rangeEndInput.prop('disabled', 'disabled');
+                        me.datePicker.$rangeStartInput.prop('disabled', 'disabled');
+                    }
+                } else {
+                    me.$datePickerEl.removeAttr('disabled');
+                    if (disable) {
+                        me.$datePickerEl.prop('disabled', 'disabled');
+                    }
+                }
             }
         },
 

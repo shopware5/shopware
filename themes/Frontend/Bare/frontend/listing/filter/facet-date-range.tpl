@@ -20,7 +20,7 @@
             <input type="text"
                    class="filter-panel--input"
                    id="{$facet->getFacetName()|escape:'htmlall'}"
-                   placeholder="Select a date"
+                   placeholder="{s name="datePickerInputPlaceholder" namespace="frontend/index/datepicker"}{/s}"
                    data-datepicker="true"
                    data-mode="range"
                    data-enableTime="{$enableTime}"
@@ -42,7 +42,8 @@
                    data-date-range-input="min"
                    id="{$facet->getMinFieldName()|escape:'htmlall'}"
                    name="{$facet->getMinFieldName()|escape:'htmlall'}"
-                   value="{if $facet->isActive()}{$startMin}{/if}" />
+                   value="{if $facet->isActive()}{$startMin}{/if}"
+                   {if !$facet->isActive() || $startMin == null}disabled="disabled" {/if}/>
         {/block}
 
         {block name="frontend_listing_filter_facet_date_range_max_label"}
@@ -56,7 +57,8 @@
                    data-date-range-input="max"
                    id="{$facet->getMaxFieldName()|escape:'htmlall'}"
                    name="{$facet->getMaxFieldName()|escape:'htmlall'}"
-                   value="{if $facet->isActive()}{$startMax}{/if}" />
+                   value="{if $facet->isActive()}{$startMax}{/if}"
+                   {if !$facet->isActive() || $startMax == null}disabled="disabled" {/if}/>
         {/block}
     </div>
 {/block}

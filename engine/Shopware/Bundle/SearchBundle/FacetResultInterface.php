@@ -53,4 +53,9 @@ interface FacetResultInterface
      * @return string|null
      */
     public function getTemplate();
+
+    /**
+     * @param null|string $template
+     */
+    public function setTemplate($template);
 }

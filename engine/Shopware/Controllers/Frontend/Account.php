@@ -197,7 +197,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
         $fromDate = $this->Request()->fromDate;
 
         //if a to date passed, format it over the \DateTime object. Otherwise create a new date with today
-        if (empty($fromDate) || !Zend_Date::isDate($fromDate)) {
+        if (empty($fromDate) || !Zend_Date::isDate($fromDate, 'Y-m-d')) {
             $fromDate = new \DateTime();
             $fromDate = $fromDate->sub(new DateInterval('P1M'));
         } else {
@@ -205,14 +205,14 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
         }
 
         //if a to date passed, format it over the \DateTime object. Otherwise create a new date with today
-        if (empty($toDate) || !Zend_Date::isDate($toDate)) {
+        if (empty($toDate) || !Zend_Date::isDate($toDate, 'Y-m-d')) {
             $toDate = new \DateTime();
         } else {
             $toDate = new \DateTime($toDate);
         }
 
-        $this->View()->partnerStatisticToDate = $toDate->format('d.m.Y');
-        $this->View()->partnerStatisticFromDate = $fromDate->format('d.m.Y');
+        $this->View()->partnerStatisticToDate = $toDate->format('Y-m-d');
+        $this->View()->partnerStatisticFromDate = $fromDate->format('Y-m-d');
 
         //to get the right value cause 2012-02-02 is smaller than 2012-02-02 15:33:12
         $toDate = $toDate->add(new DateInterval('P1D'));

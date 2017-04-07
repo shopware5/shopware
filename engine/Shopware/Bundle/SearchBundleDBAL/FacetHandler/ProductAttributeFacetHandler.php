@@ -135,7 +135,7 @@ class ProductAttributeFacetHandler implements PartialFacetHandlerInterface
         }
 
         $result->setTemplate(
-            $this->getTypeTemplate($type, $facet->getMode(), $facet->getTemplate())
+            $this->getTypeTemplate($type, $facet->getMode(), $result->getTemplate())
         );
 
         return $result;
@@ -389,7 +389,7 @@ class ProductAttributeFacetHandler implements PartialFacetHandlerInterface
             case ($type === TypeMapping::TYPE_DATE && $mode === ProductAttributeFacet::MODE_VALUE_LIST_RESULT):
 
                 return 'frontend/listing/filter/facet-date-multi.tpl';
-            case ($type === TypeMapping::TYPE_DATE):
+            case ($type === TypeMapping::TYPE_DATE && $mode !== ProductAttributeFacet::MODE_BOOLEAN_RESULT):
 
                 return 'frontend/listing/filter/facet-date.tpl';
             case ($type === TypeMapping::TYPE_DATETIME && $mode === ProductAttributeFacet::MODE_RANGE_RESULT):
@@ -398,11 +398,10 @@ class ProductAttributeFacetHandler implements PartialFacetHandlerInterface
             case ($type === TypeMapping::TYPE_DATETIME && $mode === ProductAttributeFacet::MODE_VALUE_LIST_RESULT):
 
                 return 'frontend/listing/filter/facet-datetime-multi.tpl';
-            case ($type === TypeMapping::TYPE_DATETIME):
+            case ($type === TypeMapping::TYPE_DATETIME && $mode !== ProductAttributeFacet::MODE_BOOLEAN_RESULT):
 
                 return 'frontend/listing/filter/facet-datetime.tpl';
             default:
-
                 return $defaultTemplate;
         }
     }
