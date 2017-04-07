@@ -144,6 +144,7 @@ Ext.define('Shopware.apps.Customer', {
         var me = this,
             mainController = me.getController('Main');
 
+        me.getController('Stream').startPartialIndexing();
         return mainController.mainWindow;
     }
 });
