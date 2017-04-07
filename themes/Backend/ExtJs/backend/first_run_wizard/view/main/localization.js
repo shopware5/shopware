@@ -69,6 +69,11 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Localization', {
     initComponent: function() {
         var me = this;
 
+        // A list of available localizations. Can be moved to a store after SBP has a call to load those.
+        me.technicalLocalizationPluginNames = [
+            'SwagBulgaria', 'SwagCzech', 'SwagFrance', 'SwagItaly', 'SwagNetherlands', 'SwagPoland', 'SwagPortuguese', 'SwagSpain'
+        ];
+
         me.localizationStore = Ext.create('Shopware.apps.FirstRunWizard.store.Localization').load(
             function(records) {
                 me.setDefaultLocalization(records);
@@ -182,6 +187,12 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Localization', {
             if (!records || records.length <= 0) {
                 me.content.setVisible(false);
                 me.noResultMessage.setVisible(true);
+            } else {
+                Ext.each(records, function (record) {
+                    if (Ext.Array.contains(me.technicalLocalizationPluginNames, record.data.technicalName)) {
+                        me.fireEvent('promptInstallLocalization', record.data.technicalName);
+                    }
+                });
             }
             me.storeListing.setLoading(false);
         });
@@ -283,9 +294,12 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Localization', {
     },
 
     setDefaultLocalization: function(records) {
-        var me = this;
+        var me = this,
+            installedLocale = Ext.util.Cookies.get('installed-locale');
+
         Ext.each(records, function(record) {
-            if (record.get('locale') === '{s namespace="backend/base/index" name=script/ext/locale}{/s}') {
+            if (record.get('locale') === '{s namespace="backend/base/index" name=script/ext/locale}{/s}' ||
+                record.get('locale') === installedLocale) {
                 me.languageFilter.setValue(record.get('locale'));
             }
         });

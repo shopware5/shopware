@@ -80,6 +80,7 @@ if (isset($_SESSION['databaseConnectionInfo'])) {
 
 /**
  * @param array $allowedLanguages
+ *
  * @return array|string
  */
 function selectLanguage(array $allowedLanguages)
@@ -113,6 +114,21 @@ function selectLanguage(array $allowedLanguages)
     $_SESSION['language'] = $selectedLanguage;
 
     return $selectedLanguage;
+}
+
+/**
+ * @param string $language
+ *
+ * @return string
+ */
+function localeForLanguage($language)
+{
+    switch (strtolower($language)) {
+        case 'en':
+            return 'en_GB';
+    }
+
+    return strtolower($language) . '_' . strtoupper($language);
 }
 
 /**
@@ -153,6 +169,8 @@ $app->view()->setData('baseUrl', Utils::getBaseUrl($app));
 $app->view()->setData('app', $app);
 $app->view()->setData('error', false);
 $app->view()->setData('parameters', $_SESSION['parameters']);
+
+$app->setCookie('installed-locale', localeForLanguage($selectedLanguage), time() + 7200, str_replace('/recovery/install/index.php', '', $_SERVER['SCRIPT_NAME']));
 
 $app->error(function (\Exception $e) use ($app) {
     if (!$app->request()->isAjax()) {
@@ -404,11 +422,11 @@ $app->map('/configuration/', function () use ($app, $translationService, $contai
 
     if ($app->request()->isPost()) {
         $adminUser = new \Shopware\Recovery\Install\Struct\AdminUser([
-            'email'    => $_SESSION['parameters']['c_config_admin_email'],
+            'email' => $_SESSION['parameters']['c_config_admin_email'],
             'username' => $_SESSION['parameters']['c_config_admin_username'],
-            'name'     => $_SESSION['parameters']['c_config_admin_name'],
+            'name' => $_SESSION['parameters']['c_config_admin_name'],
             'password' => $_SESSION['parameters']['c_config_admin_password'],
-            'locale'   => $_SESSION['parameters']['c_config_shop_language'], // This is intentional
+            'locale' => $_SESSION['parameters']['c_config_shop_language'], // This is intentional
         ]);
 
         $shop = new \Shopware\Recovery\Install\Struct\Shop([
@@ -634,7 +652,6 @@ $app->map('/database-import/importSnippets', function () use ($app, $container) 
     ];
 
     $response->body(json_encode($data));
-
 })->via('GET', 'POST')->name('applySnippets');
 
 $app->post('/check-database-connection', function () use ($container, $app) {

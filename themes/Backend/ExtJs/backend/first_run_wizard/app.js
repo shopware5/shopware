@@ -8,6 +8,7 @@ Ext.define('Shopware.apps.FirstRunWizard', {
         'main.Window',
         'main.Localization',
         'main.LocalizationSwitcher',
+        'main.LocalizationInstaller',
         'main.Config',
         'main.DemoData',
         'main.Recommendation',

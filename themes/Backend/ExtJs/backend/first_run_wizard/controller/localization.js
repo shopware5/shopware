@@ -70,11 +70,15 @@ Ext.define('Shopware.apps.FirstRunWizard.controller.Localization', {
             'first-run-wizard-localization': {
                 changeLanguageFilter: me.onChangeLanguageFilter,
                 localizationResetData: me.onLocalizationResetData,
-                retryConnectivityTest: me.onRetryConnectivityTest
+                retryConnectivityTest: me.onRetryConnectivityTest,
+                promptInstallLocalization: me.promptInstallLocalization
             },
             'first-run-wizard-localization-switcher': {
                 switchLanguage: me.onSwitchLanguage,
                 closeWindow: me.onCloseWindow
+            },
+            'first-run-wizard-localization-installer': {
+                switchLanguage: me.switchLanguage
             },
             'first-run-wizard': {
                 'navigate-next-localization': me.promptLanguageChange,
@@ -82,17 +86,41 @@ Ext.define('Shopware.apps.FirstRunWizard.controller.Localization', {
             }
         });
 
-        me.on('setConnectivityMode', me.onSetConnectivityMode, me);
+        me.firstRunWizardIsConnected = me.getController('Main').firstRunWizardIsConnected;
 
-        me.firstRunWizardIsConnected = (Ext.util.Cookies.get('firstRunWizardIsConnected') === 'true');
-
-        if (me.firstRunWizardIsConnected !== true) {
+        if (me.firstRunWizardIsConnected === true) {
+            me.onSetConnectivityMode(me.firstRunWizardIsConnected);
+        } else {
             me.checkConnectivityStatus();
         }
 
         me.callParent(arguments);
     },
 
+    /**
+     * Installs and switches to the language given.
+     *
+     * @param { string } pluginName
+     * @param { string } locale
+     */
+    switchLanguage: function(pluginName, locale) {
+        var me = this,
+            plugin = Ext.create('Shopware.apps.PluginManager.model.Plugin', {
+            technicalName: pluginName
+        });
+
+        Shopware.app.Application.fireEvent(
+            'install-plugin',
+            plugin,
+            function() {
+                me.onSwitchLanguage(locale)
+            }
+        );
+    },
+
+    /**
+     * @param { string } localeId
+     */
     onSwitchLanguage: function(localeId) {
         var me = this;
 
@@ -157,6 +185,28 @@ Ext.define('Shopware.apps.FirstRunWizard.controller.Localization', {
         me.dirty = false;
     },
 
+    /**
+     * Checks if the plugin with the given name should be installed
+     *
+     * @param { string } pluginName
+     */
+    promptInstallLocalization: function(pluginName) {
+        var me = this,
+            installerLocale = Ext.util.Cookies.get('installed-locale');
+
+        if (installerLocale && installerLocale !== '{s namespace="backend/base/index" name=script/ext/locale}{/s}') {
+            try {
+                me.localizationInstallerWindow = me.getView('main.LocalizationInstaller').create({
+                    installerLocale: installerLocale,
+                    pluginName: pluginName,
+                    store: me.localeStore
+                }).show();
+            } catch(e) {
+                // Locale not supported
+            }
+        }
+    },
+
     promptLanguageChange: function(context, callback) {
         var me = this;
 
@@ -217,10 +267,10 @@ Ext.define('Shopware.apps.FirstRunWizard.controller.Localization', {
             success: function(response) {
                 var result = Ext.JSON.decode(response.responseText);
 
-                me.fireEvent('setConnectivityMode', (result && result.success === true && result.message === true));
+                me.onSetConnectivityMode((result && result.success === true && result.message === true));
             },
             failure: function (response, request) {
-                me.fireEvent('setConnectivityMode', false);
+                me.onSetConnectivityMode(false);
             }
         });
     }
