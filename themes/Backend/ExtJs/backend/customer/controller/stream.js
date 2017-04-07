@@ -27,9 +27,10 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/customer/view/main}
+//{namespace name=backend/customer_stream/translation}
 
 //{block name="backend/customer/controller/stream"}
+
 Ext.define('Shopware.apps.Customer.controller.Stream', {
 
     extend:'Ext.app.Controller',
@@ -124,7 +125,7 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
         var me = this;
         var record = Ext.create('Shopware.apps.Customer.model.CustomerStream', {
             id: null,
-            name: 'New stream'
+            name: '{s name=stream/new_stream}New stream{/s}'
         });
         me.saveStream(record, callback);
     },
@@ -171,7 +172,7 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
                 var response = Ext.decode(operation.responseText);
                 // todo oli fragen was die start function genau tut :-)
                 window.start([{
-                    text: 'Indexing customers',
+                    text: '{s name=stream/indexing_customers}Indexing customers{/s}',
                     url: '{url controller=CustomerStream action=indexStream}',
                     params: {
                         total: response.total,
@@ -197,7 +198,7 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
                 var response = Ext.decode(operation.responseText);
 
                 window.start([{
-                    text: 'Analyzing customers',
+                    text: '{s name=stream/analysing_customers}Analysing customers{/s}',
                     url: '{url controller=CustomerStream action=buildSearchIndex}',
                     params: {
                         total: response.total
