@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/customer/view/main}
+//{namespace name=backend/customer_stream/translation}
 
 //{block name="backend/customer/view/main/window"}
 Ext.define('Shopware.apps.Customer.view.main.Window', {
@@ -80,7 +80,7 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
             subApp: me.subApp,
             collapsible: true,
             hideHeaders: true,
-            title: 'Definierte Streams',
+            title: '{s name=window/defined_streams}Definied streams{/s}',
             height: 200,
             iconCls: 'sprite-product-streams',
             selectionChanged: Ext.bind(me.streamSelected, me)
@@ -92,12 +92,12 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
 
         me.metaChart = me.createChart(
             [
-                { name: 'count_orders', title: 'Anzahl Bestellungen' },
-                { name: 'invoice_amount_avg', title: 'Ø Warenkorb' },
-                { name: 'invoice_amount_max', title: 'Größte Bestellung' },
-                { name: 'invoice_amount_min', title: 'Kleinste Bestellung' },
-                { name: 'invoice_amount_sum', title: 'Gesamt Umsatz' },
-                { name: 'product_avg', title: 'Ø Warenwert' }
+                { name: 'count_orders', title: '{s name=window/number_of_orders}Numer of orders{/s}' },
+                { name: 'invoice_amount_avg', title: '{s name=window/order_avg}Ø Cart{/s}' },
+                { name: 'invoice_amount_max', title: '{s name=window/max_order}Most expensive order{/s}' },
+                { name: 'invoice_amount_min', title: '{s name=window/min_order}Least expensive order{/s}' },
+                { name: 'invoice_amount_sum', title: '{s name=window/total_revenue}Total revenue{/s}' },
+                { name: 'product_avg', title: '{s name=window/merchandise_value}Ø Merchandise value{/s}' }
             ],
             me.metaChartStore = Ext.create('Shopware.apps.Customer.store.MetaChart')
         );
@@ -161,7 +161,7 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
             success: function(operation) {
                 var response = Ext.decode(operation.responseText);
                 Ext.defer(function () {
-                    me.indexingBar.updateProgress(0, 'Letzte Analyze am: ' + Ext.util.Format.date(response.last_index_time), true);
+                    me.indexingBar.updateProgress(0, '{s name=window/last_analyse}Last analyse at: {/s}' + Ext.util.Format.date(response.last_index_time), true);
                 }, 1000);
             }
         });
@@ -195,7 +195,7 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
                 label: {
                     renderer: Ext.util.Format.numberRenderer('0,0')
                 },
-                title: '{s name="amount"}Amout{/s}',
+                title: '{s name="window/amount"}Amout{/s}',
                 grid: true,
                 minimum: 0
             }, {
