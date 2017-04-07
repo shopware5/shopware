@@ -36,13 +36,13 @@ use Shopware\Bundle\CartBundle\Domain\LineItem\CalculatedLineItemCollection;
 use Shopware\Bundle\CartBundle\Domain\Price\CartPrice;
 use Shopware\Bundle\CartBundle\Domain\Tax\CalculatedTaxCollection;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCollection;
-use Shopware\Bundle\CartBundle\Infrastructure\Payment\PaymentMethodGateway;
-use Shopware\Bundle\CartBundle\Infrastructure\Payment\PaymentMethodHydrator;
-use Shopware\Bundle\CartBundle\Infrastructure\Payment\PaymentMethodService;
-use Shopware\Bundle\CartBundle\Infrastructure\Payment\RiskManagementPaymentFilter;
+use Shopware\Bundle\CartBundle\Domain\Validator\ValidatableFilter;
 use Shopware\Bundle\StoreFrontBundle\Gateway\FieldHelper;
 use Shopware\Bundle\StoreFrontBundle\Gateway\Hydrator\AttributeHydrator;
+use Shopware\Bundle\StoreFrontBundle\Gateway\Hydrator\PaymentMethodHydrator;
+use Shopware\Bundle\StoreFrontBundle\Gateway\PaymentMethodGateway;
 use Shopware\Bundle\StoreFrontBundle\Service\CacheInterface;
+use Shopware\Bundle\StoreFrontBundle\Service\PaymentMethodService;
 use Shopware\Tests\Unit\Bundle\CartBundle\Common\Generator;
 
 class PaymentMethodServiceTest extends TestCase
@@ -70,7 +70,7 @@ class PaymentMethodServiceTest extends TestCase
             new AttributeHydrator($fieldHelper)
         );
 
-        $filter = $this->createMock(RiskManagementPaymentFilter::class);
+        $filter = $this->createMock(ValidatableFilter::class);
         $filter->expects($this->any())
             ->method('filter')
             ->will($this->returnCallback([$this, 'riskFilter']));

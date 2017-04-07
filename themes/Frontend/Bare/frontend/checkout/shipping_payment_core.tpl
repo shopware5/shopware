@@ -19,11 +19,11 @@
             {* Payment method *}
             <div class="confirm--inner-container block">
                 {block name='frontend_checkout_shipping_payment_core_payment_fields'}
-                    {include file='frontend/checkout/change_payment.tpl' payments=$payments}
+                    {include file='frontend/checkout/change_payment.tpl'}
                 {/block}
             </div>
 
-            {if $deliveryMethods}
+            {if $shippingMethods}
                 <div class="confirm--inner-container block">
                     {block name='frontend_checkout_shipping_payment_core_shipping_fields'}
                         {include file="frontend/checkout/change_shipping.tpl"}

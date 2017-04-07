@@ -25,14 +25,14 @@
 namespace Shopware\Tests\Functional\Bundle\StoreFrontBundle;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryMethod;
 use Shopware\Bundle\CartBundle\Domain\Delivery\ShippingLocation;
-use Shopware\Bundle\CartBundle\Domain\Payment\PaymentMethod;
 use Shopware\Bundle\ESIndexingBundle\Console\ProgressHelperInterface;
 use Shopware\Bundle\StoreFrontBundle;
 use Shopware\Bundle\StoreFrontBundle\Gateway\ConfiguratorGateway;
 use Shopware\Bundle\StoreFrontBundle\Gateway\ProductConfigurationGateway;
 use Shopware\Bundle\StoreFrontBundle\Struct\Customer\Group;
+use Shopware\Bundle\StoreFrontBundle\Struct\PaymentMethod;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShippingMethod;
 use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\Api\Resource;
@@ -863,7 +863,7 @@ class Helper
             $this->buildTaxRules($taxes),
             [],
             new PaymentMethod(1, 'cash', 'Cash', 'Cash'),
-            new DeliveryMethod(1, 'prime', 'Fast', 1, true, 1),
+            new ShippingMethod(1, 'prime', 'Fast', 1, true, 1),
             ShippingLocation::createFromCountry($shop->getCountry()),
             null
         );

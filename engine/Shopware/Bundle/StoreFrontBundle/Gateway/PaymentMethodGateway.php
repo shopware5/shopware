@@ -23,13 +23,13 @@ declare(strict_types=1);
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\CartBundle\Infrastructure\Payment;
+namespace Shopware\Bundle\StoreFrontBundle\Gateway;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
-use Shopware\Bundle\CartBundle\Domain\Payment\PaymentMethod;
+use Shopware\Bundle\StoreFrontBundle\Struct\PaymentMethod;
 use Shopware\Bundle\CartBundle\Infrastructure\SortArrayByKeysTrait;
-use Shopware\Bundle\StoreFrontBundle\Gateway\FieldHelper;
+use Shopware\Bundle\StoreFrontBundle\Gateway\Hydrator\PaymentMethodHydrator;
 use Shopware\Bundle\StoreFrontBundle\Struct\TranslationContext;
 
 class PaymentMethodGateway

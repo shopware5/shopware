@@ -23,12 +23,10 @@ declare(strict_types=1);
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\CartBundle\Infrastructure\Payment;
+namespace Shopware\Bundle\StoreFrontBundle\Gateway\Hydrator;
 
-use Shopware\Bundle\CartBundle\Domain\Payment\PaymentMethod;
+use Shopware\Bundle\StoreFrontBundle\Struct\PaymentMethod;
 use Shopware\Bundle\CartBundle\Domain\Validator\RuleBuilder;
-use Shopware\Bundle\StoreFrontBundle\Gateway\Hydrator\AttributeHydrator;
-use Shopware\Bundle\StoreFrontBundle\Gateway\Hydrator\Hydrator;
 
 class PaymentMethodHydrator extends Hydrator
 {
@@ -79,7 +77,7 @@ class PaymentMethodHydrator extends Hydrator
 
         if ($data['__paymentMethod_rules']) {
             $rule = json_decode($data['__paymentMethod_rules'], true);
-            $paymentMethod->setRiskManagementRule(
+            $paymentMethod->setRule(
                 $this->ruleBuilder->build($rule)
             );
         }

@@ -6,14 +6,14 @@
 
     {block name='frontend_checkout_shipping_content'}
         <div class="panel--body is--wide block-group">
-            {foreach $deliveryMethods as $method}
+            {foreach $shippingMethods as $method}
                 {block name="frontend_checkout_dispatch_container"}
                     <div class="dispatch--method{if $method@last} method_last{else} method{/if} block">
 
                         {* Radio Button *}
                         {block name='frontend_checkout_dispatch_shipping_input_radio'}
                             <div class="method--input">
-                                <input type="radio" id="confirm_dispatch{$method.id}" class="radio auto_submit" value="{$method.id}" name="sDispatch"{if $method.id eq $currentDeliveryId} checked="checked"{/if} />
+                                <input type="radio" id="confirm_dispatch{$method.id}" class="radio auto_submit" value="{$method.id}" name="shippingMethodId"{if $method.id eq $currentShippingMethodId} checked="checked"{/if} />
                             </div>
                         {/block}
 

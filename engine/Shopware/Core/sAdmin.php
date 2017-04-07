@@ -2940,7 +2940,7 @@ class sAdmin
             $discount_tax
         );
 
-        $dispatch = $this->sGetPremiumDispatch((int) $this->session->offsetGet('sDispatch'));
+        $dispatch = $this->sGetPremiumDispatch((int) $this->session->offsetGet('shippingMethodId'));
 
         $payment = $this->handlePaymentMeanSurcharge(
             $country,

@@ -23,14 +23,14 @@ declare(strict_types=1);
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\CartBundle\Domain\Payment;
+namespace Shopware\Bundle\StoreFrontBundle\Struct;
 
 use Shopware\Bundle\CartBundle\Domain\CloneTrait;
 use Shopware\Bundle\CartBundle\Domain\JsonSerializableTrait;
 use Shopware\Bundle\CartBundle\Domain\Validator\Rule\Rule;
-use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
+use Shopware\Bundle\CartBundle\Domain\Validator\Validatable;
 
-class PaymentMethod extends Extendable
+class PaymentMethod extends Extendable implements Validatable
 {
     use CloneTrait, JsonSerializableTrait;
 
@@ -127,7 +127,7 @@ class PaymentMethod extends Extendable
     /**
      * @var Rule|null
      */
-    protected $riskManagementRule;
+    protected $rule;
 
     public function __construct(int $id, string $name, string $label, string $class)
     {
@@ -320,13 +320,13 @@ class PaymentMethod extends Extendable
         $this->mobileInactive = $mobileInactive;
     }
 
-    public function getRiskManagementRule(): ?Rule
+    public function getRule(): ?Rule
     {
-        return $this->riskManagementRule;
+        return $this->rule;
     }
 
-    public function setRiskManagementRule(?Rule $riskManagementRule): void
+    public function setRule(?Rule $rule): void
     {
-        $this->riskManagementRule = $riskManagementRule;
+        $this->rule = $rule;
     }
 }

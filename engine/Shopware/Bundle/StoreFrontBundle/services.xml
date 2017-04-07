@@ -15,15 +15,80 @@
         <service id="shopware_storefront.context_factory" class="Shopware\Bundle\StoreFrontBundle\Service\Core\ContextFactory">
             <argument id="shopware_storefront.shop_gateway_dbal" type="service"/>
             <argument id="shopware_storefront.currency_gateway_dbal" type="service"/>
-            <argument id="shopware.cart.customer.service" type="service"/>
+            <argument id="storefront.customer.service" type="service"/>
             <argument id="shopware_storefront.customer_group_gateway" type="service"/>
             <argument id="shopware_storefront.country_gateway" type="service"/>
             <argument id="shopware_storefront.tax_gateway" type="service"/>
             <argument id="shopware_storefront.price_group_discount_gateway" type="service"/>
-            <argument id="shopware.cart.address.gateway" type="service"/>
-            <argument id="shopware.cart.payment.gateway" type="service"/>
-            <argument id="shopware.cart.delivery.gateway" type="service"/>
+            <argument id="storefront.address.gateway" type="service"/>
+            <argument id="storefront.payment.gateway" type="service"/>
+            <argument id="storefront.delivery.gateway" type="service"/>
             <argument id="dbal_connection" type="service"/>
+        </service>
+
+        <service id="storefront.context.switcher" class="Shopware\Bundle\StoreFrontBundle\Service\Core\ContextSwitcher" >
+            <argument id="session" type="service"/>
+            <argument id="shopware_storefront.context_service" type="service"/>
+        </service>
+
+
+
+        <service id="storefront.address.hydrator" class="Shopware\Bundle\StoreFrontBundle\Gateway\Hydrator\AddressHydrator">
+            <argument type="service" id="shopware_storefront.attribute_hydrator_dbal" />
+            <argument type="service" id="shopware_storefront.country_hydrator_dbal" />
+        </service>
+
+        <service id="storefront.customer.hydrator" class="Shopware\Bundle\StoreFrontBundle\Gateway\Hydrator\CustomerHydrator">
+            <argument type="service" id="shopware_storefront.attribute_hydrator_dbal" />
+            <argument type="service" id="shopware_storefront.customer_group_hydrator_dbal" />
+        </service>
+
+        <service id="storefront.customer.gateway" class="Shopware\Bundle\StoreFrontBundle\Gateway\CustomerGateway">
+            <argument type="service" id="shopware_storefront.field_helper_dbal" />
+            <argument type="service" id="storefront.customer.hydrator" />
+            <argument type="service" id="dbal_connection" />
+        </service>
+
+        <service id="storefront.address.gateway" class="Shopware\Bundle\StoreFrontBundle\Gateway\AddressGateway">
+            <argument type="service" id="shopware_storefront.field_helper_dbal" />
+            <argument type="service" id="storefront.address.hydrator" />
+            <argument type="service" id="dbal_connection" />
+        </service>
+
+        <service id="storefront.customer.service" class="Shopware\Bundle\StoreFrontBundle\Service\Core\CustomerService">
+            <argument type="service" id="storefront.customer.gateway" />
+            <argument type="service" id="storefront.address.gateway" />
+            <argument type="service" id="shopware_storefront.shop_gateway_dbal" />
+            <argument type="service" id="storefront.payment.gateway" />
+        </service>
+
+        <service id="storefront.payment.gateway" class="Shopware\Bundle\StoreFrontBundle\Gateway\PaymentMethodGateway">
+            <argument type="service" id="shopware_storefront.field_helper_dbal" />
+            <argument type="service" id="storefront.payment.hydrator" />
+            <argument type="service" id="dbal_connection" />
+        </service>
+
+        <service id="storefront.payment.service" class="Shopware\Bundle\StoreFrontBundle\Service\PaymentMethodService">
+            <argument id="storefront.payment.gateway" type="service"/>
+            <argument id="cart.validator.filter" type="service"/>
+        </service>
+
+        <service id="storefront.payment.hydrator" class="Shopware\Bundle\StoreFrontBundle\Gateway\Hydrator\PaymentMethodHydrator">
+            <argument type="service" id="shopware_storefront.attribute_hydrator_dbal" />
+        </service>
+
+        <service id="storefront.delivery.service" class="Shopware\Bundle\StoreFrontBundle\Service\ShippingMethodService">
+            <argument id="storefront.delivery.gateway" type="service"/>
+        </service>
+
+        <service id="storefront.delivery.gateway" class="Shopware\Bundle\StoreFrontBundle\Gateway\ShippingMethodGateway">
+            <argument type="service" id="shopware_storefront.field_helper_dbal" />
+            <argument type="service" id="storefront.delivery.hydrator" />
+            <argument type="service" id="dbal_connection" />
+        </service>
+
+        <service id="storefront.delivery.hydrator" class="Shopware\Bundle\StoreFrontBundle\Gateway\Hydrator\ShippingMethodHydrator">
+            <argument type="service" id="shopware_storefront.attribute_hydrator_dbal" />
         </service>
 
         <service id="shopware_storefront.custom_facet_service" class="Shopware\Bundle\StoreFrontBundle\Service\Core\CustomFacetService">
@@ -453,8 +518,8 @@
             <argument id="shopware_storefront.currency_hydrator_dbal" type="service"/>
             <argument id="shopware_storefront.customer_group_hydrator_dbal" type="service"/>
             <argument id="shopware_storefront.country_hydrator_dbal" type="service"/>
-            <argument id="shopware.cart.payment.hydrator" type="service"/>
-            <argument id="shopware.cart.delivery.hydrator" type="service"/>
+            <argument id="storefront.payment.hydrator" type="service"/>
+            <argument id="storefront.delivery.hydrator" type="service"/>
         </service>
 
         <service id="shopware_storefront.template_hydrator_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\Hydrator\TemplateHydrator" />

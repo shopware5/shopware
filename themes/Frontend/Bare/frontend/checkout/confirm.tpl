@@ -523,7 +523,7 @@
                     {/block}
 
                     {$payment = $context.paymentMethod}
-                    {$delivery = $context.deliveryMethod}
+                    {$shippingMethod = $context.shippingMethod}
 
                     {* Payment method *}
                     {block name='frontend_checkout_confirm_information_payment'}
@@ -553,7 +553,7 @@
                                             {block name='frontend_checkout_confirm_left_shipping_method'}
                                                 <p class="shipping--method-info">
                                                     <strong class="shipping--title">{s name="ConfirmHeadDispatch"}{/s}</strong>
-                                                    <span class="shipping--description" title="{$delivery.name}">{$delivery.name|truncate:25:"...":true}</span>
+                                                    <span class="shipping--description" title="{$shippingMethod.name}">{$shippingMethod.name|truncate:25:"...":true}</span>
                                                 </p>
                                             {/block}
                                         </div>

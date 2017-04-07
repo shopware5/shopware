@@ -22,17 +22,26 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\CartBundle\Domain\Voucher;
+namespace Shopware\Bundle\CartBundle\Domain\Exception;
 
-use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
-use Shopware\Bundle\CartBundle\Domain\LineItem\LineItemCollection;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
-
-interface VoucherGatewayInterface
+class NotImplementedException extends \Exception
 {
-    public function get(
-        LineItemCollection $lineItemCollection,
-        CalculatedCart $calculatedCart,
-        ShopContextInterface $context
-    ): VoucherCollection;
+    /**
+     * @var string
+     */
+    protected $class;
+
+    public function __construct(string $class)
+    {
+        parent::__construct(
+            sprintf('Cart bundle requires an implementation for class %s', $class)
+        );
+
+        $this->class = $class;
+    }
+
+    public function getClass(): string
+    {
+        return $this->class;
+    }
 }

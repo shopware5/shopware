@@ -27,6 +27,7 @@ namespace Shopware\Bundle\CartBundle\Infrastructure\Voucher;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
+use Shopware\Bundle\CartBundle\Domain\LineItem\LineItemCollection;
 use Shopware\Bundle\CartBundle\Domain\Price\Price;
 use Shopware\Bundle\CartBundle\Domain\Price\PriceDefinition;
 use Shopware\Bundle\CartBundle\Domain\Tax\CalculatedTax;
@@ -60,8 +61,9 @@ class VoucherGateway implements VoucherGatewayInterface
         $this->percentageTaxRuleBuilder = $percentageTaxRuleBuilder;
     }
 
-    public function get(array $codes, CalculatedCart $calculatedCart, ShopContextInterface $context): VoucherCollection
+    public function get(LineItemCollection $lineItemCollection, CalculatedCart $calculatedCart, ShopContextInterface $context): VoucherCollection
     {
+        $codes = array_column($lineItemCollection->getExtraData(), 'code');
         $query = $this->fetchSimpleVouchers($codes);
 
         $rows = $query->execute()->fetchAll(\PDO::FETCH_ASSOC);

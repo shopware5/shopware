@@ -22,44 +22,41 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\CartBundle\Infrastructure\Delivery;
+namespace Shopware\Bundle\StoreFrontBundle\Service\Core;
 
-use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
-use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryMethod;
+use Enlight_Components_Session_Namespace as Session;
+use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
-class DeliveryMethodService
+class ContextSwitcher
 {
     /**
-     * @var DeliveryMethodGateway
+     * @var Session
      */
-    private $gateway;
+    private $session;
 
     /**
-     * @param DeliveryMethodGateway $gateway
+     * @var ContextServiceInterface
      */
-    public function __construct(DeliveryMethodGateway $gateway)
+    private $contextService;
+
+    public function __construct(Session $session, ContextServiceInterface $contextService)
     {
-        $this->gateway = $gateway;
+        $this->session = $session;
+        $this->contextService = $contextService;
     }
 
-    /**
-     * @param CalculatedCart       $calculatedCart
-     * @param ShopContextInterface $context
-     *
-     * @return DeliveryMethod[]
-     */
-    public function getAvailable(CalculatedCart $calculatedCart, ShopContextInterface $context): array
+    public function switchContext(?int $shippingMethodId, ?int $paymentMethodId): ShopContextInterface
     {
-        $deliveries = $this->gateway->getAll($context->getTranslationContext());
+        if ($shippingMethodId !== null) {
+            $this->session->offsetSet('shippingMethodId', $shippingMethodId);
+        }
+        if ($paymentMethodId !== null) {
+            $this->session->offsetSet('paymentMethodId', $paymentMethodId);
+        }
 
-        $deliveries = array_filter(
-            $deliveries,
-            function (DeliveryMethod $method) {
-                return $method->getType() === 0;
-            }
-        );
+        $this->contextService->refresh();
 
-        return $deliveries;
+        return $this->contextService->getShopContext();
     }
 }

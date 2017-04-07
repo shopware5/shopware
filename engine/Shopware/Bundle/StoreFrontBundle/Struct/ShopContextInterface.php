@@ -24,9 +24,7 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Struct;
 
-use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryMethod;
 use Shopware\Bundle\CartBundle\Domain\Delivery\ShippingLocation;
-use Shopware\Bundle\CartBundle\Domain\Payment\PaymentMethod;
 use Shopware\Bundle\StoreFrontBundle\Struct\Customer\Group;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceGroup;
 
@@ -104,5 +102,5 @@ interface ShopContextInterface extends ExtendableInterface
 
     public function getPaymentMethod(): PaymentMethod;
 
-    public function getDeliveryMethod(): DeliveryMethod;
+    public function getShippingMethod(): ShippingMethod;
 }

@@ -24,9 +24,7 @@
 
 namespace Shopware\Tests\Unit\Bundle\CartBundle\Common;
 
-use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryMethod;
 use Shopware\Bundle\CartBundle\Domain\Delivery\ShippingLocation;
-use Shopware\Bundle\CartBundle\Domain\Payment\PaymentMethod;
 use Shopware\Bundle\CartBundle\Domain\Price\PriceDefinition;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxDetector;
 use Shopware\Bundle\CartBundle\Infrastructure\Product\ProductPriceGateway;
@@ -35,7 +33,9 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Country;
 use Shopware\Bundle\StoreFrontBundle\Struct\Currency;
 use Shopware\Bundle\StoreFrontBundle\Struct\Customer;
 use Shopware\Bundle\StoreFrontBundle\Struct\Customer\Group;
+use Shopware\Bundle\StoreFrontBundle\Struct\PaymentMethod;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceGroup;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShippingMethod;
 use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
 use Shopware\Bundle\StoreFrontBundle\Struct\Tax;
@@ -101,7 +101,7 @@ class Generator extends \PHPUnit\Framework\TestCase
             $taxes,
             $priceGroups,
             new PaymentMethod(1, '', '', ''),
-            new DeliveryMethod(1, '', '', 1, true, 1),
+            new ShippingMethod(1, '', '', 1, true, 1),
             ShippingLocation::createFromAddress($shipping),
             new Customer()
         );

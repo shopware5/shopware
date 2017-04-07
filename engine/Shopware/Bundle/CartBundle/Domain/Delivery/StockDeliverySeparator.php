@@ -30,6 +30,7 @@ use Shopware\Bundle\CartBundle\Domain\LineItem\CalculatedLineItemInterface;
 use Shopware\Bundle\CartBundle\Domain\LineItem\Deliverable;
 use Shopware\Bundle\CartBundle\Domain\Price\PriceCalculator;
 use Shopware\Bundle\CartBundle\Domain\Price\PriceDefinition;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShippingMethod;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class StockDeliverySeparator
@@ -74,7 +75,7 @@ class StockDeliverySeparator
                     $deliveries,
                     $position,
                     $context->getShippingLocation(),
-                    $context->getDeliveryMethod()
+                    $context->getShippingMethod()
                 );
                 continue;
             }
@@ -93,7 +94,7 @@ class StockDeliverySeparator
                     $deliveries,
                     $position,
                     $context->getShippingLocation(),
-                    $context->getDeliveryMethod()
+                    $context->getShippingMethod()
                 );
                 continue;
             }
@@ -111,7 +112,7 @@ class StockDeliverySeparator
                 $deliveries,
                 $position,
                 $context->getShippingLocation(),
-                $context->getDeliveryMethod()
+                $context->getShippingMethod()
             );
 
             $position = $this->recalculatePosition(
@@ -125,7 +126,7 @@ class StockDeliverySeparator
                 $deliveries,
                 $position,
                 $context->getShippingLocation(),
-                $context->getDeliveryMethod()
+                $context->getShippingMethod()
             );
         }
 
@@ -168,7 +169,7 @@ class StockDeliverySeparator
         DeliveryCollection $deliveries,
         DeliveryPosition $position,
         ShippingLocation $location,
-        DeliveryMethod $deliveryMethod
+        ShippingMethod $shippingMethod
     ): void {
         $delivery = $deliveries->getDelivery(
             $position->getDeliveryDate(),
@@ -185,7 +186,7 @@ class StockDeliverySeparator
             new Delivery(
                 new DeliveryPositionCollection([$position]),
                 $position->getDeliveryDate(),
-                $deliveryMethod,
+                $shippingMethod,
                 $location
             )
         );

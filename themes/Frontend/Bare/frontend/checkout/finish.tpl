@@ -287,7 +287,7 @@
                                         {/block}
 
                                         {$payment = $context.paymentMethod}
-                                        {$delivery = $context.deliveryMethod}
+                                        {$shippingMethod = $context.shippingMethod}
 
                                         {* Payment method *}
                                         {block name='frontend_checkout_finish_payment_method'}
@@ -298,8 +298,8 @@
 
                                         {* Dispatch method *}
                                         {block name='frontend_checkout_finish_dispatch_method'}
-                                            {if $delivery.name}
-                                                <strong>{s name="CheckoutDispatchHeadline" namespace="frontend/checkout/confirm_dispatch"}{/s}:</strong> {$delivery.name}
+                                            {if $shippingMethod.name}
+                                                <strong>{s name="CheckoutDispatchHeadline" namespace="frontend/checkout/confirm_dispatch"}{/s}:</strong> {$shippingMethod.name}
                                             {/if}
                                         {/block}
 

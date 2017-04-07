@@ -23,16 +23,16 @@ declare(strict_types=1);
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\CartBundle\Infrastructure\Delivery;
+namespace Shopware\Bundle\StoreFrontBundle\Gateway;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
-use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryMethod;
+use Shopware\Bundle\StoreFrontBundle\Gateway\Hydrator\ShippingMethodHydrator;
 use Shopware\Bundle\CartBundle\Infrastructure\SortArrayByKeysTrait;
-use Shopware\Bundle\StoreFrontBundle\Gateway\FieldHelper;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShippingMethod;
 use Shopware\Bundle\StoreFrontBundle\Struct\TranslationContext;
 
-class DeliveryMethodGateway
+class ShippingMethodGateway
 {
     use SortArrayByKeysTrait;
 
@@ -42,7 +42,7 @@ class DeliveryMethodGateway
     private $fieldHelper;
 
     /**
-     * @var DeliveryMethodHydrator
+     * @var ShippingMethodHydrator
      */
     private $hydrator;
 
@@ -53,7 +53,7 @@ class DeliveryMethodGateway
 
     public function __construct(
         FieldHelper $fieldHelper,
-        DeliveryMethodHydrator $hydrator,
+        ShippingMethodHydrator $hydrator,
         Connection $connection
     ) {
         $this->fieldHelper = $fieldHelper;
@@ -65,7 +65,7 @@ class DeliveryMethodGateway
      * @param int[]              $ids
      * @param TranslationContext $context
      *
-     * @return DeliveryMethod[]
+     * @return ShippingMethod[]
      */
     public function getList(array $ids, TranslationContext $context): array
     {
@@ -74,7 +74,7 @@ class DeliveryMethodGateway
         }
         $query = $this->createQuery($context);
 
-        $query->where('deliveryMethod.id IN (:ids)');
+        $query->where('shippingMethod.id IN (:ids)');
         $query->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
 
         $data = $query->execute()->fetchAll(\PDO::FETCH_GROUP | \PDO::FETCH_UNIQUE);
@@ -89,7 +89,7 @@ class DeliveryMethodGateway
     /**
      * @param TranslationContext $context
      *
-     * @return DeliveryMethod[]
+     * @return ShippingMethod[]
      */
     public function getAll(TranslationContext $context): array
     {
@@ -108,16 +108,16 @@ class DeliveryMethodGateway
     private function createQuery(TranslationContext $context): QueryBuilder
     {
         $query = $this->connection->createQueryBuilder();
-        $query->select('deliveryMethod.id as arrayKey');
-        $query->addSelect($this->fieldHelper->getDeliveryMethodFields());
+        $query->select('shippingMethod.id as arrayKey');
+        $query->addSelect($this->fieldHelper->getShippingMethodFields());
 
-        $query->from('s_premium_dispatch', 'deliveryMethod');
+        $query->from('s_premium_dispatch', 'shippingMethod');
 
         $query->leftJoin(
-            'deliveryMethod',
+            'shippingMethod',
             's_premium_dispatch_attributes',
-            'deliveryMethodAttribute',
-            'deliveryMethodAttribute.dispatchID = deliveryMethod.id'
+            'shippingMethodAttribute',
+            'shippingMethodAttribute.dispatchID = shippingMethod.id'
         );
 
         $this->fieldHelper->addDeliveryTranslation($query, $context);

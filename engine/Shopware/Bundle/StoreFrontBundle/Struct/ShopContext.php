@@ -24,9 +24,7 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Struct;
 
-use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryMethod;
 use Shopware\Bundle\CartBundle\Domain\Delivery\ShippingLocation;
-use Shopware\Bundle\CartBundle\Domain\Payment\PaymentMethod;
 use Shopware\Bundle\StoreFrontBundle\Struct\Customer\Group;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceGroup;
 
@@ -83,9 +81,9 @@ class ShopContext extends Extendable implements ShopContextInterface, \JsonSeria
     protected $translationContext;
 
     /**
-     * @var DeliveryMethod
+     * @var ShippingMethod
      */
-    protected $deliveryMethod;
+    protected $shippingMethod;
 
     /**
      * @var ShippingLocation
@@ -100,7 +98,7 @@ class ShopContext extends Extendable implements ShopContextInterface, \JsonSeria
      * @param Tax[]            $taxRules
      * @param PriceGroup[]     $priceGroups
      * @param PaymentMethod    $paymentMethod
-     * @param DeliveryMethod   $deliveryMethod
+     * @param ShippingMethod   $shippingMethod
      * @param ShippingLocation $shippingLocation
      * @param Customer         $customer
      */
@@ -112,7 +110,7 @@ class ShopContext extends Extendable implements ShopContextInterface, \JsonSeria
         array $taxRules,
         array $priceGroups,
         PaymentMethod $paymentMethod,
-        DeliveryMethod $deliveryMethod,
+        ShippingMethod $shippingMethod,
         ShippingLocation $shippingLocation,
         ?Customer $customer
     ) {
@@ -124,7 +122,7 @@ class ShopContext extends Extendable implements ShopContextInterface, \JsonSeria
         $this->priceGroups = $priceGroups;
         $this->customer = $customer;
         $this->paymentMethod = $paymentMethod;
-        $this->deliveryMethod = $deliveryMethod;
+        $this->shippingMethod = $shippingMethod;
         $this->shippingLocation = $shippingLocation;
         $this->translationContext = TranslationContext::createFromShop($this->shop);
     }
@@ -179,9 +177,9 @@ class ShopContext extends Extendable implements ShopContextInterface, \JsonSeria
         return $this->paymentMethod;
     }
 
-    public function getDeliveryMethod(): DeliveryMethod
+    public function getShippingMethod(): ShippingMethod
     {
-        return $this->deliveryMethod;
+        return $this->shippingMethod;
     }
 
     public function getTranslationContext(): TranslationContext

@@ -26,11 +26,11 @@ namespace Shopware\Tests\Unit\Bundle\CartBundle\Infrastructure\Payment;
 
 use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
-use Shopware\Bundle\CartBundle\Domain\Payment\PaymentMethod;
 use Shopware\Bundle\CartBundle\Domain\Validator\Collector\RuleDataCollectorRegistry;
 use Shopware\Bundle\CartBundle\Domain\Validator\Data\RuleDataCollection;
 use Shopware\Bundle\CartBundle\Domain\Validator\Rule\Rule;
-use Shopware\Bundle\CartBundle\Infrastructure\Payment\RiskManagementPaymentFilter;
+use Shopware\Bundle\CartBundle\Domain\Validator\ValidatableFilter;
+use Shopware\Bundle\StoreFrontBundle\Struct\PaymentMethod;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
@@ -42,7 +42,7 @@ class RiskManagementPaymentFilterTest extends TestCase
             new PaymentMethod(1, 'cash', 'Cash', 'payment/cash'),
         ];
 
-        $filter = new RiskManagementPaymentFilter(
+        $filter = new ValidatableFilter(
             new RuleDataCollectorRegistry([])
         );
 
@@ -57,14 +57,14 @@ class RiskManagementPaymentFilterTest extends TestCase
     {
         $withRule = new PaymentMethod(2, 'debit', 'Debit', 'debit');
 
-        $withRule->setRiskManagementRule(new TrueRule());
+        $withRule->setRule(new TrueRule());
 
         $payments = [
             new PaymentMethod(1, 'cash', 'Cash', 'payment/cash'),
             $withRule,
         ];
 
-        $filter = new RiskManagementPaymentFilter(
+        $filter = new ValidatableFilter(
             new RuleDataCollectorRegistry([])
         );
 

@@ -2040,43 +2040,6 @@ class sAdminTest extends PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers \sAdmin::sGetPremiumShippingcosts
-     */
-    public function testsGetPremiumShippingcosts()
-    {
-        // No basket, return false,
-        $this->assertFalse($this->module->sGetPremiumShippingcosts());
-
-        $countries = $this->module->sGetCountryList();
-        foreach ($countries as $country) {
-            if ($country['countryiso']) {
-                $germany = $country;
-                break;
-            }
-        }
-
-        $this->module->sSYSTEM->sSESSION_ID = uniqid(rand());
-        $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
-        $this->basketModule->sAddArticle('SW10010');
-
-        // With country data, no dispatch method
-        $this->assertEquals(
-            ['brutto' => 0, 'netto' => 0],
-            $this->module->sGetPremiumShippingcosts($germany)
-        );
-
-        // With dispatch method
-        $this->session->offsetSet('sDispatch', 9);
-        $result = $this->module->sGetPremiumShippingcosts($germany);
-        $this->assertArrayHasKey('brutto', $result);
-        $this->assertArrayHasKey('netto', $result);
-        $this->assertArrayHasKey('value', $result);
-        $this->assertArrayHasKey('factor', $result);
-        $this->assertArrayHasKey('surcharge', $result);
-        $this->assertArrayHasKey('tax', $result);
-    }
-
-    /**
      * @param array $expected
      * @param array $actual
      */

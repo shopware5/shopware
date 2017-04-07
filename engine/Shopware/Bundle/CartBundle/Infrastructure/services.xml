@@ -1,0 +1,85 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <!--interface implementations of cart bundle-->
+        <service id="cart.product.delivery_information_gateway" alias="shopware.cart.product.delivery_information_gateway" />
+        <service id="cart.product.price_gateway" alias="shopware.cart.product.price_gateway" />
+        <service id="cart.voucher.gateway" alias="shopware.cart.voucher.gateway" />
+
+        <service id="serializer" class="Shopware\Bundle\CartBundle\Infrastructure\Serializer" />
+
+        <service id="shopware.cart.product.delivery_information_gateway" class="Shopware\Bundle\CartBundle\Infrastructure\Product\ProductDeliveryGateway">
+            <argument type="service" id="dbal_connection" />
+        </service>
+
+        <service id="shopware.cart.product.price_gateway" class="Shopware\Bundle\CartBundle\Infrastructure\Product\ProductPriceGateway">
+            <argument type="service" id="dbal_connection" />
+            <argument type="service" id="shopware_storefront.field_helper_dbal" />
+        </service>
+
+        <service id="shopware.cart.storefront_service" class="Shopware\Bundle\CartBundle\Infrastructure\StoreFrontCartService">
+            <argument type="service" id="cart.calculator" />
+            <argument type="service" id="shopware.cart.persister" />
+            <argument type="service" id="shopware_storefront.context_service" />
+            <argument type="service" id="session" />
+            <argument type="service" id="shopware.cart.view.cart_transformer" />
+            <argument type="service" id="corelogger" />
+            <argument type="service" id="shopware.cart.order.persister" />
+        </service>
+
+        <service id="shopware.cart.order.persister" class="Shopware\Bundle\CartBundle\Infrastructure\Order\OrderPersister">
+            <argument id="dbal_connection" type="service"/>
+        </service>
+
+        <service id="shopware.cart.persister" class="Shopware\Bundle\CartBundle\Infrastructure\Cart\CartPersister">
+            <argument type="service" id="dbal_connection" />
+        </service>
+
+
+
+        <service id="shopware.cart.view.product_transformer" class="Shopware\Bundle\CartBundle\Infrastructure\View\ViewProductTransformer">
+            <argument type="service" id="shopware_storefront.list_product_gateway" />
+            <argument type="service" id="shopware_storefront.variant_cover_service" />
+        </service>
+
+        <service id="shopware.cart.view.cart_transformer" class="Shopware\Bundle\CartBundle\Infrastructure\View\ViewCartTransformer">
+            <argument type="collection">
+                <argument type="service" id="shopware.cart.view.product_transformer" />
+            </argument>
+        </service>
+
+        <service id="shopware.cart.validator.product_of_categories_collector" class="Shopware\Bundle\CartBundle\Infrastructure\Validator\Collector\ProductOfCategoriesRuleCollector">
+            <argument id="dbal_connection" type="service"/>
+            <tag name="cart.validator_collector" />
+        </service>
+
+        <service id="shopware.cart.validator.last_order_collector" class="Shopware\Bundle\CartBundle\Infrastructure\Validator\Collector\LastOrderRuleCollector">
+            <argument type="service" id="dbal_connection" />
+            <tag name="cart.validator_collector" />
+        </service>
+
+        <service id="shopware.cart.validator.order_cleared_state_collector" class="Shopware\Bundle\CartBundle\Infrastructure\Validator\Collector\OrderClearedStateRuleCollector">
+            <argument type="service" id="dbal_connection" />
+            <tag name="cart.validator_collector" />
+        </service>
+
+        <service id="shopware.cart.validator.order_count_collector" class="Shopware\Bundle\CartBundle\Infrastructure\Validator\Collector\OrderCountRuleCollector">
+            <argument type="service" id="dbal_connection" />
+            <tag name="cart.validator_collector" />
+        </service>
+
+        <service id="shopware.cart.validator.product_attribute_collector" class="Shopware\Bundle\CartBundle\Infrastructure\Validator\Collector\ProductAttributeRuleCollector">
+            <argument type="service" id="dbal_connection" />
+            <tag name="cart.validator_collector" />
+        </service>
+
+        <service id="shopware.cart.voucher.gateway" class="Shopware\Bundle\CartBundle\Infrastructure\Voucher\VoucherGateway" >
+            <argument type="service" id="dbal_connection" />
+            <argument type="service" id="cart.tax.percentage_rule_builder" />
+        </service>
+    </services>
+</container>

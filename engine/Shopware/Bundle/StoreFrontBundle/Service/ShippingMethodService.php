@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -23,48 +22,45 @@ declare(strict_types=1);
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\CartBundle\Infrastructure\Payment;
+namespace Shopware\Bundle\StoreFrontBundle\Service;
 
 use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
-use Shopware\Bundle\CartBundle\Domain\Payment\PaymentMethod;
+use Shopware\Bundle\StoreFrontBundle\Gateway\ShippingMethodGateway;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShippingMethod;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
-class PaymentMethodService
+class ShippingMethodService
 {
     /**
-     * @var PaymentMethodGateway
+     * @var ShippingMethodGateway
      */
     private $gateway;
 
     /**
-     * @var RiskManagementPaymentFilter
+     * @param ShippingMethodGateway $gateway
      */
-    private $riskManagementFilter;
-
-    public function __construct(
-        PaymentMethodGateway $gateway,
-        RiskManagementPaymentFilter $paymentRiskManagementFilter
-    ) {
+    public function __construct(ShippingMethodGateway $gateway)
+    {
         $this->gateway = $gateway;
-        $this->riskManagementFilter = $paymentRiskManagementFilter;
     }
 
     /**
      * @param CalculatedCart       $calculatedCart
      * @param ShopContextInterface $context
      *
-     * @return PaymentMethod[]
+     * @return ShippingMethod[]
      */
-    public function getAvailable(
-        CalculatedCart $calculatedCart,
-        ShopContextInterface $context
-    ): array {
-        $payments = $this->gateway->getAll($context->getTranslationContext());
+    public function getAvailable(CalculatedCart $calculatedCart, ShopContextInterface $context): array
+    {
+        $deliveries = $this->gateway->getAll($context->getTranslationContext());
 
-        $actives = array_filter($payments, function (PaymentMethod $paymentMethod) {
-            return $paymentMethod->isActive();
-        });
+        $deliveries = array_filter(
+            $deliveries,
+            function (ShippingMethod $method) {
+                return $method->getType() === 0;
+            }
+        );
 
-        return $this->riskManagementFilter->filter($actives, $calculatedCart, $context);
+        return $deliveries;
     }
 }

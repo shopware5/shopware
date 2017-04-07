@@ -6,13 +6,13 @@
 
     {block name='frontend_checkout_payment_content'}
         <div class="panel--body is--wide block-group">
-            {foreach $payments as $payment}
+            {foreach $paymentMethods as $payment}
                 <div class="payment--method block{if $payment@last} method_last{else} method{/if}">
 
                     {* Radio Button *}
                     {block name='frontend_checkout_payment_fieldset_input_radio'}
                         <div class="method--input">
-                            <input type="radio" name="payment" class="radio auto_submit" value="{$payment.id}" id="payment{$payment.id}"{if $payment.id eq $currentPaymentId} checked="checked"{/if} />
+                            <input type="radio" name="paymentMethodId" class="radio auto_submit" value="{$payment.id}" id="payment{$payment.id}"{if $payment.id eq $currentPaymentId} checked="checked"{/if} />
                         </div>
                     {/block}
 

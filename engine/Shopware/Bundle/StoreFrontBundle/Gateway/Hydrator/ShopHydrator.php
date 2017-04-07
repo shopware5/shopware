@@ -24,8 +24,6 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\Hydrator;
 
-use Shopware\Bundle\CartBundle\Infrastructure\Delivery\DeliveryMethodHydrator;
-use Shopware\Bundle\CartBundle\Infrastructure\Payment\PaymentMethodHydrator;
 use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
 
 class ShopHydrator extends Hydrator
@@ -66,9 +64,9 @@ class ShopHydrator extends Hydrator
     private $paymentMethodHydrator;
 
     /**
-     * @var DeliveryMethodHydrator
+     * @var ShippingMethodHydrator
      */
-    private $deliveryMethodHydrator;
+    private $shippingMethodHydrator;
 
     /**
      * @param TemplateHydrator       $templateHydrator
@@ -78,7 +76,7 @@ class ShopHydrator extends Hydrator
      * @param CustomerGroupHydrator  $customerGroupHydrator
      * @param CountryHydrator        $countryHydrator
      * @param PaymentMethodHydrator  $paymentMethodHydrator
-     * @param DeliveryMethodHydrator $deliveryMethodHydrator
+     * @param ShippingMethodHydrator $shippingMethodHydrator
      */
     public function __construct(
         TemplateHydrator $templateHydrator,
@@ -88,7 +86,7 @@ class ShopHydrator extends Hydrator
         CustomerGroupHydrator $customerGroupHydrator,
         CountryHydrator $countryHydrator,
         PaymentMethodHydrator $paymentMethodHydrator,
-        DeliveryMethodHydrator $deliveryMethodHydrator
+        ShippingMethodHydrator $shippingMethodHydrator
     ) {
         $this->templateHydrator = $templateHydrator;
         $this->categoryHydrator = $categoryHydrator;
@@ -97,7 +95,7 @@ class ShopHydrator extends Hydrator
         $this->customerGroupHydrator = $customerGroupHydrator;
         $this->countryHydrator = $countryHydrator;
         $this->paymentMethodHydrator = $paymentMethodHydrator;
-        $this->deliveryMethodHydrator = $deliveryMethodHydrator;
+        $this->shippingMethodHydrator = $shippingMethodHydrator;
     }
 
     /**
@@ -139,7 +137,7 @@ class ShopHydrator extends Hydrator
         $shop->setHosts($hosts);
 
         $shop->setPaymentMethod($this->paymentMethodHydrator->hydrate($data));
-        $shop->setDeliveryMethod($this->deliveryMethodHydrator->hydrate($data));
+        $shop->setShippingMethod($this->shippingMethodHydrator->hydrate($data));
         $shop->setCountry($this->countryHydrator->hydrateCountry($data));
 
         return $shop;

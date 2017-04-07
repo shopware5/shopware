@@ -22,36 +22,11 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\CartBundle\Infrastructure\Payment;
+namespace Shopware\Bundle\CartBundle\Domain\Validator;
 
-use Enlight_Components_Session_Namespace as Session;
-use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Bundle\CartBundle\Domain\Validator\Rule\Rule;
 
-class StoreFrontSwitchPaymentService
+interface Validatable
 {
-    /**
-     * @var Session
-     */
-    private $session;
-
-    /**
-     * @var ContextServiceInterface
-     */
-    private $contextService;
-
-    public function __construct(Session $session, ContextServiceInterface $contextService)
-    {
-        $this->session = $session;
-        $this->contextService = $contextService;
-    }
-
-    public function switchPayment(int $paymentId): ShopContextInterface
-    {
-        $this->session->offsetSet('sPayment', $paymentId);
-
-        $this->contextService->refresh();
-
-        return $this->contextService->getShopContext();
-    }
+    public function getRule(): ? Rule;
 }

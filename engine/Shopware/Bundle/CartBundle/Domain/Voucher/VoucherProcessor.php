@@ -99,8 +99,7 @@ class VoucherProcessor implements CartProcessorInterface
 
         $calculatedCart = $this->calculatedCartGenerator->create($cartContainer, $context, $processorCart);
 
-        $codes = array_column($lineItems->getExtraData(), 'code');
-        $vouchers = $this->voucherGateway->get($codes, $calculatedCart, $context);
+        $vouchers = $this->voucherGateway->get($lineItems, $calculatedCart, $context);
 
         $rules = array_filter($vouchers->map(function (Voucher $voucher) {
             return $voucher->getRule();

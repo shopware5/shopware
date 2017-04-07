@@ -22,17 +22,17 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\CartBundle\Domain\Voucher;
+namespace Shopware\Bundle\CartBundle\Domain\Product;
 
-use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
+use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryInformationCollection;
+use Shopware\Bundle\CartBundle\Domain\Exception\NotImplementedException;
 use Shopware\Bundle\CartBundle\Domain\LineItem\LineItemCollection;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
-interface VoucherGatewayInterface
+class ProductDeliveryGateway implements ProductDeliveryGatewayInterface
 {
-    public function get(
-        LineItemCollection $lineItemCollection,
-        CalculatedCart $calculatedCart,
-        ShopContextInterface $context
-    ): VoucherCollection;
+    public function get(LineItemCollection $collection, ShopContextInterface $context): DeliveryInformationCollection
+    {
+        throw new NotImplementedException(ProductDeliveryGatewayInterface::class);
+    }
 }

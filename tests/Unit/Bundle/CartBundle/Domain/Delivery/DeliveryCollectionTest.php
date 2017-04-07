@@ -28,10 +28,10 @@ use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\CartBundle\Domain\Delivery\Delivery;
 use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryCollection;
 use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryDate;
-use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryMethod;
 use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryPositionCollection;
 use Shopware\Bundle\CartBundle\Domain\Delivery\ShippingLocation;
 use Shopware\Bundle\StoreFrontBundle\Struct\Country;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShippingMethod;
 
 class DeliveryCollectionTest extends TestCase
 {
@@ -52,7 +52,7 @@ class DeliveryCollectionTest extends TestCase
                     new \DateTime(),
                     new \DateTime()
                 ),
-                new DeliveryMethod(1, '', '', 1, true, 1),
+                new ShippingMethod(1, '', '', 1, true, 1),
                 self::createShippingLocation()
             )
         );
@@ -68,7 +68,7 @@ class DeliveryCollectionTest extends TestCase
                     new \DateTime(),
                     new \DateTime()
                 ),
-                new DeliveryMethod(1, '', '', 1, true, 1),
+                new ShippingMethod(1, '', '', 1, true, 1),
                 self::createShippingLocation()
             ),
             new Delivery(
@@ -77,7 +77,7 @@ class DeliveryCollectionTest extends TestCase
                     new \DateTime(),
                     new \DateTime()
                 ),
-                new DeliveryMethod(1, '', '', 1, true, 1),
+                new ShippingMethod(1, '', '', 1, true, 1),
                 self::createShippingLocation()
             ),
         ]);
@@ -93,7 +93,7 @@ class DeliveryCollectionTest extends TestCase
                     new \DateTime(),
                     new \DateTime()
                 ),
-                new DeliveryMethod(1, '', '', 1, true, 1),
+                new ShippingMethod(1, '', '', 1, true, 1),
                 self::createShippingLocation()
             ),
             new Delivery(
@@ -102,7 +102,7 @@ class DeliveryCollectionTest extends TestCase
                     new \DateTime(),
                     new \DateTime()
                 ),
-                new DeliveryMethod(1, '', '', 1, true, 1),
+                new ShippingMethod(1, '', '', 1, true, 1),
                 self::createShippingLocation()
             ),
         ]);

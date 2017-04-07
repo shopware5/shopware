@@ -22,48 +22,66 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\CartBundle\Infrastructure\Payment;
+namespace Shopware\Bundle\CartBundle\Domain\Validator;
 
 use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
-use Shopware\Bundle\CartBundle\Domain\Payment\PaymentMethod;
 use Shopware\Bundle\CartBundle\Domain\Validator\Collector\RuleDataCollectorRegistry;
 use Shopware\Bundle\CartBundle\Domain\Validator\Rule\RuleCollection;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
-class RiskManagementPaymentFilter
+class ValidatableFilter
 {
     /**
      * @var RuleDataCollectorRegistry
      */
-    private $riskDataCollectorRegistry;
+    private $dataCollectorRegistry;
 
-    public function __construct(RuleDataCollectorRegistry $riskDataCollectorRegistry)
+    public function __construct(RuleDataCollectorRegistry $dataCollectorRegistry)
     {
-        $this->riskDataCollectorRegistry = $riskDataCollectorRegistry;
+        $this->dataCollectorRegistry = $dataCollectorRegistry;
     }
 
-    public function filter(array $payments, CalculatedCart $calculatedCart, ShopContextInterface $context): array
+    /**
+     * @param Validatable[] $items
+     * @param CalculatedCart $calculatedCart
+     * @param ShopContextInterface $context
+     * @return array
+     */
+    public function filter(
+        array $items,
+        CalculatedCart $calculatedCart,
+        ShopContextInterface $context,
+        $filterOnMatch = true
+    ): array
     {
-        $rules = array_map(function (PaymentMethod $paymentMethod) {
-            return $paymentMethod->getRiskManagementRule();
-        }, $payments);
+        $rules = array_map(function (Validatable $item) {
+            return $item->getRule();
+        }, $items);
 
-        $dataCollection = $this->riskDataCollectorRegistry->collect(
+        $dataCollection = $this->dataCollectorRegistry->collect(
             $calculatedCart,
             $context,
             new RuleCollection(array_filter($rules))
         );
 
-        return array_filter(
-            $payments,
-            function (PaymentMethod $method) use ($calculatedCart, $context, $dataCollection) {
-                $rule = $method->getRiskManagementRule();
-                if (!$rule) {
-                    return true;
-                }
-
-                return !$rule->match($calculatedCart, $context, $dataCollection);
+        $filtered = [];
+        foreach ($items as $key => $item) {
+            if (!$item->getRule()) {
+                $filtered[$key] = $item;
+                continue;
             }
-        );
+
+            $match = $item->getRule()->match($calculatedCart, $context, $dataCollection);
+
+            //rule match, and "filterOnMatch" also validates to true, filter class and continue
+            //rule not match, and "filterOnMatch" also validates to false, filter class and continue
+            if ($match === $filterOnMatch) {
+                continue;
+            }
+
+            $filtered[$key] = $item;
+        }
+
+        return $filtered;
     }
 }

@@ -25,14 +25,15 @@
 namespace Shopware\Bundle\CartBundle\Domain\Voucher;
 
 use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
+use Shopware\Bundle\CartBundle\Domain\Exception\NotImplementedException;
 use Shopware\Bundle\CartBundle\Domain\LineItem\LineItemCollection;
+use Shopware\Bundle\CartBundle\Domain\Product\ProductDeliveryGatewayInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
-interface VoucherGatewayInterface
+class VoucherGateway implements VoucherGatewayInterface
 {
-    public function get(
-        LineItemCollection $lineItemCollection,
-        CalculatedCart $calculatedCart,
-        ShopContextInterface $context
-    ): VoucherCollection;
+    public function get(LineItemCollection $lineItemCollection, CalculatedCart $calculatedCart, ShopContextInterface $context): VoucherCollection
+    {
+        throw new NotImplementedException(ProductDeliveryGatewayInterface::class);
+    }
 }

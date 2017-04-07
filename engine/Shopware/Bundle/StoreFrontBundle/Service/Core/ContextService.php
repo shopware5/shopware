@@ -219,7 +219,7 @@ class ContextService implements ContextServiceInterface
     {
         /** @var $session Session */
         $session = $this->container->get('session');
-        if ($paymentId = $session->offsetGet('sPayment')) {
+        if ($paymentId = $session->offsetGet('paymentMethodId')) {
             return (int) $paymentId;
         }
 
@@ -230,7 +230,7 @@ class ContextService implements ContextServiceInterface
     {
         /** @var $session Session */
         $session = $this->container->get('session');
-        if ($dispatchId = $session->offsetGet('sDispatch')) {
+        if ($dispatchId = $session->offsetGet('shippingMethodId')) {
             return (int) $dispatchId;
         }
 

@@ -24,8 +24,6 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Struct;
 
-use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryMethod;
-use Shopware\Bundle\CartBundle\Domain\Payment\PaymentMethod;
 use Shopware\Bundle\StoreFrontBundle\Struct\Customer\Group as CustomerGroup;
 use Shopware\Models\Shop\Shop as ShopEntity;
 
@@ -125,9 +123,9 @@ class Shop extends Extendable implements \JsonSerializable
     protected $customerScope;
 
     /**
-     * @var DeliveryMethod
+     * @var ShippingMethod
      */
-    protected $deliveryMethod;
+    protected $shippingMethod;
 
     /**
      * @var PaymentMethod
@@ -460,14 +458,14 @@ class Shop extends Extendable implements \JsonSerializable
         $this->customerScope = $customerScope;
     }
 
-    public function getDeliveryMethod(): DeliveryMethod
+    public function getShippingMethod(): ShippingMethod
     {
-        return $this->deliveryMethod;
+        return $this->shippingMethod;
     }
 
-    public function setDeliveryMethod(DeliveryMethod $deliveryMethod): void
+    public function setShippingMethod(ShippingMethod $shippingMethod): void
     {
-        $this->deliveryMethod = $deliveryMethod;
+        $this->shippingMethod = $shippingMethod;
     }
 
     public function getPaymentMethod(): PaymentMethod

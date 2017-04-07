@@ -854,37 +854,37 @@ class FieldHelper
         return $fields;
     }
 
-    public function getDeliveryMethodFields()
+    public function getShippingMethodFields()
     {
         $fields = [
-            'deliveryMethod.id as __deliveryMethod_id',
-            'deliveryMethod.name as __deliveryMethod_name',
-            'deliveryMethod.type as __deliveryMethod_type',
-            'deliveryMethod.description as __deliveryMethod_description',
-            'deliveryMethod.comment as __deliveryMethod_comment',
-            'deliveryMethod.active as __deliveryMethod_active',
-            'deliveryMethod.position as __deliveryMethod_position',
-            'deliveryMethod.calculation as __deliveryMethod_calculation',
-            'deliveryMethod.surcharge_calculation as __deliveryMethod_surcharge_calculation',
-            'deliveryMethod.tax_calculation as __deliveryMethod_tax_calculation',
-            'deliveryMethod.shippingfree as __deliveryMethod_shippingfree',
-            'deliveryMethod.multishopID as __deliveryMethod_multishopID',
-            'deliveryMethod.customergroupID as __deliveryMethod_customergroupID',
-            'deliveryMethod.bind_shippingfree as __deliveryMethod_bind_shippingfree',
-            'deliveryMethod.bind_time_from as __deliveryMethod_bind_time_from',
-            'deliveryMethod.bind_time_to as __deliveryMethod_bind_time_to',
-            'deliveryMethod.bind_instock as __deliveryMethod_bind_instock',
-            'deliveryMethod.bind_laststock as __deliveryMethod_bind_laststock',
-            'deliveryMethod.bind_weekday_from as __deliveryMethod_bind_weekday_from',
-            'deliveryMethod.bind_weekday_to as __deliveryMethod_bind_weekday_to',
-            'deliveryMethod.bind_weight_from as __deliveryMethod_bind_weight_from',
-            'deliveryMethod.bind_weight_to as __deliveryMethod_bind_weight_to',
-            'deliveryMethod.bind_price_from as __deliveryMethod_bind_price_from',
-            'deliveryMethod.bind_price_to as __deliveryMethod_bind_price_to',
-            'deliveryMethod.status_link as __deliveryMethod_status_link',
+            'shippingMethod.id as __shippingMethod_id',
+            'shippingMethod.name as __shippingMethod_name',
+            'shippingMethod.type as __shippingMethod_type',
+            'shippingMethod.description as __shippingMethod_description',
+            'shippingMethod.comment as __shippingMethod_comment',
+            'shippingMethod.active as __shippingMethod_active',
+            'shippingMethod.position as __shippingMethod_position',
+            'shippingMethod.calculation as __shippingMethod_calculation',
+            'shippingMethod.surcharge_calculation as __shippingMethod_surcharge_calculation',
+            'shippingMethod.tax_calculation as __shippingMethod_tax_calculation',
+            'shippingMethod.shippingfree as __shippingMethod_shippingfree',
+            'shippingMethod.multishopID as __shippingMethod_multishopID',
+            'shippingMethod.customergroupID as __shippingMethod_customergroupID',
+            'shippingMethod.bind_shippingfree as __shippingMethod_bind_shippingfree',
+            'shippingMethod.bind_time_from as __shippingMethod_bind_time_from',
+            'shippingMethod.bind_time_to as __shippingMethod_bind_time_to',
+            'shippingMethod.bind_instock as __shippingMethod_bind_instock',
+            'shippingMethod.bind_laststock as __shippingMethod_bind_laststock',
+            'shippingMethod.bind_weekday_from as __shippingMethod_bind_weekday_from',
+            'shippingMethod.bind_weekday_to as __shippingMethod_bind_weekday_to',
+            'shippingMethod.bind_weight_from as __shippingMethod_bind_weight_from',
+            'shippingMethod.bind_weight_to as __shippingMethod_bind_weight_to',
+            'shippingMethod.bind_price_from as __shippingMethod_bind_price_from',
+            'shippingMethod.bind_price_to as __shippingMethod_bind_price_to',
+            'shippingMethod.status_link as __shippingMethod_status_link',
         ];
 
-        return array_merge($fields, $this->getTableFields('s_premium_dispatch_attributes', 'deliveryMethodAttribute'));
+        return array_merge($fields, $this->getTableFields('s_premium_dispatch_attributes', 'shippingMethodAttribute'));
     }
 
     public function getPaymentMethodFields()
@@ -1448,8 +1448,8 @@ class FieldHelper
 
     public function addDeliveryTranslation(QueryBuilder $query, TranslationContext $context)
     {
-        $this->addTranslation('deliveryMethod', 'config_dispatch', $query, $context, 1);
-        $this->addTranslation('deliveryMethodAttribute', 's_premium_dispatch_attributes', $query, $context, 'deliveryMethod.id');
+        $this->addTranslation('shippingMethod', 'config_dispatch', $query, $context, 1);
+        $this->addTranslation('shippingMethodAttribute', 's_premium_dispatch_attributes', $query, $context, 'shippingMethod.id');
     }
 
     public function addPaymentTranslation(QueryBuilder $query, TranslationContext $context): void

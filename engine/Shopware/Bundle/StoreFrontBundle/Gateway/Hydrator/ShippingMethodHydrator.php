@@ -23,13 +23,11 @@ declare(strict_types=1);
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\CartBundle\Infrastructure\Delivery;
+namespace Shopware\Bundle\StoreFrontBundle\Gateway\Hydrator;
 
-use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryMethod;
-use Shopware\Bundle\StoreFrontBundle\Gateway\Hydrator\AttributeHydrator;
-use Shopware\Bundle\StoreFrontBundle\Gateway\Hydrator\Hydrator;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShippingMethod;
 
-class DeliveryMethodHydrator extends Hydrator
+class ShippingMethodHydrator extends Hydrator
 {
     /**
      * @var AttributeHydrator
@@ -53,23 +51,23 @@ class DeliveryMethodHydrator extends Hydrator
         $this->attributeHydrator = $attributeHydrator;
     }
 
-    public function hydrate(array $data): DeliveryMethod
+    public function hydrate(array $data): \Shopware\Bundle\StoreFrontBundle\Struct\ShippingMethod
     {
-        $id = (int) $data['__deliveryMethod_id'];
-        $translation = $this->getTranslation($data, '__deliveryMethod', $this->mapping, $id);
+        $id = (int) $data['__shippingMethod_id'];
+        $translation = $this->getTranslation($data, '__shippingMethod', $this->mapping, $id);
         $data = array_merge($data, $translation);
 
-        $service = new DeliveryMethod(
-            (int) $data['__deliveryMethod_id'],
-            (string) $data['__deliveryMethod_name'],
-            (string) $data['__deliveryMethod_description'],
-            (int) $data['__deliveryMethod_type'],
-            (bool) $data['__deliveryMethod_active'],
-            (int) $data['__deliveryMethod_position']
+        $service = new ShippingMethod(
+            (int) $data['__shippingMethod_id'],
+            (string) $data['__shippingMethod_name'],
+            (string) $data['__shippingMethod_description'],
+            (int) $data['__shippingMethod_type'],
+            (bool) $data['__shippingMethod_active'],
+            (int) $data['__shippingMethod_position']
         );
 
-        if (!empty($data['__deliveryMethodAttribute_id'])) {
-            $this->attributeHydrator->addAttribute($service, $data, 'deliveryMethodAttribute');
+        if (!empty($data['__shippingMethodAttribute_id'])) {
+            $this->attributeHydrator->addAttribute($service, $data, 'shippingMethodAttribute');
         }
 
         return $service;

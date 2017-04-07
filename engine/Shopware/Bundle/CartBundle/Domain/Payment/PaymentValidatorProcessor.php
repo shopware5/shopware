@@ -29,7 +29,7 @@ use Shopware\Bundle\CartBundle\Domain\Cart\CartContainer;
 use Shopware\Bundle\CartBundle\Domain\Cart\CartProcessorInterface;
 use Shopware\Bundle\CartBundle\Domain\Cart\ProcessorCart;
 use Shopware\Bundle\CartBundle\Domain\Error\PaymentBlockedError;
-use Shopware\Bundle\CartBundle\Infrastructure\Payment\RiskManagementPaymentFilter;
+use Shopware\Bundle\CartBundle\Domain\Validator\ValidatableFilter;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class PaymentValidatorProcessor implements CartProcessorInterface
@@ -40,16 +40,16 @@ class PaymentValidatorProcessor implements CartProcessorInterface
     private $calculatedCartGenerator;
 
     /**
-     * @var RiskManagementPaymentFilter
+     * @var ValidatableFilter
      */
-    private $paymentRiskManagementFilter;
+    private $validatableFilter;
 
     public function __construct(
-        RiskManagementPaymentFilter $paymentRiskManagementFilter,
+        ValidatableFilter $validatableFilter,
         CalculatedCartGenerator $calculatedCartGenerator
     ) {
         $this->calculatedCartGenerator = $calculatedCartGenerator;
-        $this->paymentRiskManagementFilter = $paymentRiskManagementFilter;
+        $this->validatableFilter = $validatableFilter;
     }
 
     public function process(
@@ -63,13 +63,13 @@ class PaymentValidatorProcessor implements CartProcessorInterface
 
         $payment = $context->getPaymentMethod();
 
-        if (!$payment->getRiskManagementRule()) {
+        if (!$payment->getRule()) {
             return;
         }
 
         $calculatedCart = $this->calculatedCartGenerator->create($cartContainer, $context, $processorCart);
 
-        $valid = $this->paymentRiskManagementFilter->filter([$payment], $calculatedCart, $context);
+        $valid = $this->validatableFilter->filter([$payment], $calculatedCart, $context);
 
         if (!empty($valid)) {
             return;

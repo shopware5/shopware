@@ -29,7 +29,6 @@ use Shopware\Bundle\CartBundle\Domain\Delivery\Delivery;
 use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryCollection;
 use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryDate;
 use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryInformation;
-use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryMethod;
 use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryPosition;
 use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryPositionCollection;
 use Shopware\Bundle\CartBundle\Domain\Delivery\ShippingLocation;
@@ -50,6 +49,7 @@ use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCollection;
 use Shopware\Bundle\CartBundle\Domain\Voucher\CalculatedVoucher;
 use Shopware\Bundle\StoreFrontBundle\Struct\Address;
 use Shopware\Bundle\StoreFrontBundle\Struct\Country;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShippingMethod;
 use Shopware\Tests\Unit\Bundle\CartBundle\Common\Generator;
 
 class StockDeliverySeparatorTest extends TestCase
@@ -110,7 +110,7 @@ class StockDeliverySeparatorTest extends TestCase
                         DeliveryPosition::createByLineItemForInStockDate($item),
                     ]),
                     new DeliveryDate(new \DateTime('2012-01-01'), new \DateTime('2012-01-02')),
-                    new DeliveryMethod(1, '', '', 1, true, 1),
+                    new ShippingMethod(1, '', '', 1, true, 1),
                     $location
                 ),
             ]),
@@ -158,7 +158,7 @@ class StockDeliverySeparatorTest extends TestCase
                         DeliveryPosition::createByLineItemForInStockDate($itemB),
                     ]),
                     $deliveryInformation->getInStockDeliveryDate(),
-                    new DeliveryMethod(1, '', '', 1, true, 1),
+                    new ShippingMethod(1, '', '', 1, true, 1),
                     $location
                 ),
             ]),
@@ -197,7 +197,7 @@ class StockDeliverySeparatorTest extends TestCase
                         DeliveryPosition::createByLineItemForOutOfStockDate($itemB),
                     ]),
                     new DeliveryDate(new \DateTime('2012-01-04'), new \DateTime('2012-01-05')),
-                    new DeliveryMethod(1, '', '', 1, true, 1),
+                    new ShippingMethod(1, '', '', 1, true, 1),
                     $location
                 ),
             ]),
@@ -234,7 +234,7 @@ class StockDeliverySeparatorTest extends TestCase
                         DeliveryPosition::createByLineItemForInStockDate($product),
                     ]),
                     $product->getInStockDeliveryDate(),
-                    new DeliveryMethod(1, '', '', 1, true, 1),
+                    new ShippingMethod(1, '', '', 1, true, 1),
                     $location
                 ),
             ]),
@@ -269,7 +269,7 @@ class StockDeliverySeparatorTest extends TestCase
                         ),
                     ]),
                     $product->getInStockDeliveryDate(),
-                    new DeliveryMethod(1, '', '', 1, true, 1),
+                    new ShippingMethod(1, '', '', 1, true, 1),
                     $location
                 ),
                 new Delivery(
@@ -280,7 +280,7 @@ class StockDeliverySeparatorTest extends TestCase
                         ),
                     ]),
                     $product->getOutOfStockDeliveryDate(),
-                    new DeliveryMethod(1, '', '', 1, true, 1),
+                    new ShippingMethod(1, '', '', 1, true, 1),
                     $location
                 ),
             ]),

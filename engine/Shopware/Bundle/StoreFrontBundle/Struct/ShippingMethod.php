@@ -23,13 +23,12 @@ declare(strict_types=1);
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\CartBundle\Domain\Delivery;
+namespace Shopware\Bundle\StoreFrontBundle\Struct;
 
 use Shopware\Bundle\CartBundle\Domain\CloneTrait;
 use Shopware\Bundle\CartBundle\Domain\JsonSerializableTrait;
-use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
 
-class DeliveryMethod extends Extendable
+class ShippingMethod extends Extendable
 {
     use CloneTrait, JsonSerializableTrait;
 
