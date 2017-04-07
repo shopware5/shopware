@@ -215,8 +215,8 @@ Ext.define('Shopware.apps.Customer.controller.List', {
      */
     onSearchComboBox:function (field) {
         var me = this,
-                searchString = field.value,
-                store = me.subApplication.getStore('List');
+            searchString = field.value,
+            store = me.subApplication.getStore('List');
 
         //scroll the store to the first page
         store.currentPage = 1;

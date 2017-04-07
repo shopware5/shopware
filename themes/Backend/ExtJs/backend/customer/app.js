@@ -40,38 +40,38 @@ Ext.define('Shopware.apps.Customer', {
      * The name of the module. Used for internal purpose
      * @string
      */
-    name:'Shopware.apps.Customer',
+    name: 'Shopware.apps.Customer',
 
     /**
      * Extends from our special controller, which handles the sub-application behavior and the event bus
      * @string
      */
-    extend:'Enlight.app.SubApplication',
+    extend: 'Enlight.app.SubApplication',
 
     /**
      * Enable bulk loading
      * @boolean
      */
-    bulkLoad:true,
+    bulkLoad: true,
 
     /**
      * Sets the loading path for the sub-application.
      *
      * @string
      */
-    loadPath:'{url controller="customer" action=load}',
+    loadPath: '{url controller="customer" action=load}',
 
     /**
      * Requires controllers for sub-application
      * @array
      */
-    controllers:[ 'Main', 'List', 'Detail', 'Order', 'Stream' ],
+    controllers: [ 'Main', 'List', 'Detail', 'Order', 'Stream' ],
 
     /**
      * The detail controller knows all form field sets and the detail window component
      * @array
      */
-    views:[
+    views: [
         'detail.Window',
         'detail.Base',
         'detail.Debit',
@@ -115,13 +115,13 @@ Ext.define('Shopware.apps.Customer', {
      * The other shops are global stores which used for combo boxes.
      * @array
      */
-    stores:[ 'Detail', 'MetaChart', 'List', 'Orders', 'Chart', 'Batch', 'Address' ],
+    stores: [ 'Detail', 'MetaChart', 'List', 'Orders', 'Chart', 'Batch', 'Address' ],
 
     /**
      * All store's required models. The detail store handles the base, billing, shipping and debit model.
      * @array
      */
-    models:[ 'Customer', 'Billing', 'Shipping', 'Debit', 'PaymentData', 'List', 'Order', 'Chart', 'Batch', 'Address'  ],
+    models: [ 'Customer', 'Billing', 'Shipping', 'Debit', 'PaymentData', 'List', 'Order', 'Chart', 'Batch', 'Address' ],
 
     /**
      * Returns the main application window for this is expected

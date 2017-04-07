@@ -31,15 +31,15 @@
 
 //{block name="backend/customer/view/main/window"}
 Ext.define('Shopware.apps.Customer.view.main.Window', {
-    extend:'Enlight.app.Window',
+    extend: 'Enlight.app.Window',
     cls:Ext.baseCSSPrefix + 'customer-list-window',
-    alias:'widget.customer-list-main-window',
-    border:false,
-    autoShow:true,
-    layout:'border',
-    width:'95%',
-    height:'95%',
-    title:'{s name=window_title}Customer list{/s}',
+    alias: 'widget.customer-list-main-window',
+    border: false,
+    autoShow: true,
+    layout: 'border',
+    width: '95%',
+    height: '95%',
+    title: '{s name=window_title}Customer list{/s}',
 
     mixins: {
         batch: 'Shopware.helper.BatchRequests'
@@ -50,7 +50,7 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
      *
      * @return void
      */
-    initComponent:function () {
+    initComponent: function () {
         var me = this;
 
         Ext.suspendLayouts();
@@ -59,7 +59,6 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
         me.gridPanel = Ext.create('Shopware.apps.Customer.view.list.List', {
             store: me.listStore
         });
-        //me.gridPanel.on('selection-changed', Ext.bind(me.customerSelected, me));
 
         me.gridPanel.on('afterrender', function() {
             me.gridPanel.getEl().on('click', function(event, element) {
@@ -119,7 +118,7 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
         });
 
         me.cardContainer = Ext.create('Ext.container.Container', {
-            items: [me.gridPanel, me.metaChart, me.streamChartContainer, me.streamDetailForm] ,
+            items: [me.gridPanel, me.metaChart, me.streamChartContainer, me.streamDetailForm],
             region: 'center',
             layout: 'card'
         });
@@ -184,10 +183,10 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
         });
 
         return Ext.create('Ext.chart.Chart', {
-            shadow:true,
-            margin:30,
+            shadow: true,
+            margin: 30,
             legend: true,
-            animate:true,
+            animate: true,
             store: store,
             axes: [{
                 type: 'Numeric',
@@ -367,12 +366,12 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
 
         var store = Ext.create('Ext.data.Store', {
             fields: modelFields,
-            proxy:{
-                type:'ajax',
+            proxy: {
+                type: 'ajax',
                 url: '{url controller="CustomerStream" action="loadAmountPerStreamChart"}',
-                reader:{
-                    type:'json',
-                    root:'data'
+                reader: {
+                    type: 'json',
+                    root: 'data'
                 }
             }
         }).load({
@@ -462,10 +461,6 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
         this.formPanel.setDisabled(false);
         this.loadListing();
         this.resetProgressbar();
-    },
-
-
-
-
+    }
 });
 //{/block}
