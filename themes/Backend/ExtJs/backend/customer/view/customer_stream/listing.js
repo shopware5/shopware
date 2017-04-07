@@ -56,19 +56,6 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.Listing', {
         return me.selModel;
     },
 
-    createPlugins: function () {
-        var me = this;
-        me.cellEditor = Ext.create('Ext.grid.plugin.CellEditing', {
-            clicksToEdit: 2,
-            listeners: {
-                edit: function(editor, e) {
-                    e.record.save();
-                }
-            }
-        });
-        return [me.cellEditor];
-    },
-
     nameRenderer: function (value) {
         return '<span class="stream-name-column"><i>'+value+'</i></span>'
     }
