@@ -41,13 +41,14 @@
                                    class="filter-panel--input"
                                    name="{$facet->getFieldName()|escape:'htmlall'}"
                                    id="{$facet->getFieldName()|escape:'htmlall'}"
-                                   placeholder="Select a date"
+                                   placeholder="{s name="datePickerInputPlaceholder" namespace="frontend/index/datepicker"}{/s}"
                                    data-datepicker="true"
                                    data-mode="single"
                                    data-enableTime="{$enableTime}"
                                    data-enabledDates="{$enabledDates}"
                                    readonly="readonly"
-                                   value="{$value}" />
+                                   value="{$value}"
+                                   {if !$facet->isActive()}disabled="disabled" {/if}/>
                         {/block}
                     </div>
                 {/block}

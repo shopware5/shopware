@@ -1,5 +1,4 @@
 (function ($, window) {
-
     /**
      * Global date picker component.
      * Renders a calender dialog to select a single date, multiple dates or a date range.
@@ -211,7 +210,6 @@
              * You can also pass a coma separated list via data attribute.
              */
             if (me.opts.enabledDates !== null) {
-
                 if (typeof me.opts.enabledDates === 'string') {
                     me.opts.enabledDates = me.opts.enabledDates.split(',');
                 }
@@ -536,5 +534,4 @@
         }
 
     });
-
 })(jQuery, window);

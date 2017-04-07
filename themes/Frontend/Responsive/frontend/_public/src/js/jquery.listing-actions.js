@@ -1376,10 +1376,8 @@
                 if ($input.is('[data-range-input]')) {
                     rangeSlider = $input.parents('[data-range-slider="true"]').data('plugin_swRangeSlider');
                     rangeSlider.reset($input.attr('data-range-input'));
-
                 } else if ($input.is('[data-datepicker="true"]') || $input.is('[data-date-range-input]')) {
                     $input.trigger('clear');
-
                 } else {
                     $input.removeAttr('checked').trigger('change');
                 }
@@ -1410,7 +1408,7 @@
                 if ($label.is('[data-range-label]')) {
                     labelText = $label.prev('span').html() + $label.html();
                 } else if ($label.is('[data-date-range-label]')) {
-                    labelText =  $label.html() + ' ' + $label.next('[data-date-range-input]').attr('data-display-value');
+                    labelText = $label.html() + ' ' + $label.next('[data-date-range-input]').attr('data-display-value');
                 } else if ($label.find('img').length) {
                     labelText = $label.find('img').attr('alt');
                 } else if (value > 0 || valueString.length > 0) {
