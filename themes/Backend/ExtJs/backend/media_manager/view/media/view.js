@@ -541,7 +541,6 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
          */
 
         me.displayTypeBtn = Ext.create('Ext.button.Cycle',{
-
             showText: true,
             prependText: '{s name=toolbar/view}Display as{/s} ',
             action: 'mediamanager-media-view-layout',
@@ -584,6 +583,7 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
             cls: Ext.baseCSSPrefix + 'page-size',
             queryMode: 'local',
             action: 'perPageComboBox',
+            editable: false,
             width: 210,
             listeners: {
                 scope: me,
@@ -609,7 +609,8 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
         pageSize.setValue(me.mediaStore.pageSize + '');
 
         var toolbar = Ext.create('Ext.toolbar.Paging', {
-            store: me.mediaStore
+            store: me.mediaStore,
+            height: 35
         });
 
         if(me.createMediaQuantitySelection) {
@@ -632,9 +633,10 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
         me.imageSize = Ext.create('Ext.form.field.ComboBox', {
             fieldLabel: me.snippets.previewSize,
             queryMode: 'local',
-            labelWidth: 90,
-            width: 190,
+            labelWidth: 120,
+            width: 220,
             hidden: false,
+            editable: false,
             displayField: 'name',
             valueField: 'value',
             store: Ext.create('Ext.data.Store', {
