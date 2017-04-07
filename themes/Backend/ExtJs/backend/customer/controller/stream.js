@@ -53,7 +53,7 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
                 'create-filter-condition': me.createFilterCondition,
                 'reset-conditions': me.resetConditions
             },
-            'customer-list-main-window ': {
+            'customer-list-main-window': {
                 'switch-layout': me.switchLayout,
                 'reset-conditions': me.resetConditions
             },
@@ -64,6 +64,7 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
                 'customerStream-edit-item': me.editStream
             }
         });
+
         me.callParent(arguments);
     },
 
@@ -196,6 +197,34 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
                     }
                 }]);
 
+            }
+        });
+    },
+
+    startPartialIndexing: function() {
+        console.log('entered');
+        var me = this,
+            window = me.getMainWindow();
+
+        window.indexingBar.value = 0;
+        window.formPanel.setDisabled(true);
+
+        Ext.Ajax.request({
+            url: '{url controller=CustomerStream action=getPartialCount}',
+            success: function(operation) {
+                var response = Ext.decode(operation.responseText);
+
+                var params = { total: response.total };
+
+                if (response.lastIndexTime) {
+                    params.lastIndexTime = response.lastIndexTime;
+                }
+
+                window.start([{
+                    text: '{s name=window/analysing_new_customer}Analyse new customer{/s}',
+                    url: '{url controller=CustomerStream action=buildSearchIndex}',
+                    params: params
+                }]);
             }
         });
     },

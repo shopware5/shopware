@@ -32,7 +32,7 @@
 //{block name="backend/customer/view/main/window"}
 Ext.define('Shopware.apps.Customer.view.main.Window', {
     extend: 'Enlight.app.Window',
-    cls:Ext.baseCSSPrefix + 'customer-list-window',
+    cls: Ext.baseCSSPrefix + 'customer-list-window',
     alias: 'widget.customer-list-main-window',
     border: false,
     autoShow: true,
@@ -134,15 +134,13 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
             me.formPanel,
             me.cardContainer
         ];
-        me.dockedItems = [ me.getToolbar()];
+        me.dockedItems = [ me.getToolbar() ];
 
         Ext.resumeLayouts(true);
 
         me.callParent(arguments);
 
         me.resetProgressbar();
-
-        me.startPartialIndexing();
     },
 
     resetProgressbar: function () {
@@ -256,15 +254,15 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
         }
 
         me.formPanel.setTitle(stream.get('name'));
-        me.saveStreamButton.setText('Save: ' + title);
-        me.setTitle('Kundenliste für ' + stream.get('name'));
+        me.saveStreamButton.setText('{s name=save}Save{/s}: ' + title);
+        me.setTitle('{s name=window/customer_list_for}Customer list for{/s} ' + stream.get('name'));
     },
 
     resetTitles: function() {
         var me = this;
 
-        me.formPanel.setTitle('Stream filter');
-        me.setTitle('Kundenliste');
+        me.formPanel.setTitle('{s name=window/stream_filter}Stream filter{/s}');
+        me.setTitle('{s name=window/customer_list }Customer list{/s}');
     },
 
     loadChart: function() {
@@ -323,32 +321,6 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
             callback: function() {
                 me.fireEvent('switch-layout', 'table');
                 me.updateTitles(record);
-            }
-        });
-    },
-
-    startPartialIndexing: function() {
-        var me = this;
-
-        me.indexingBar.value = 0;
-        me.formPanel.setDisabled(true);
-
-        Ext.Ajax.request({
-            url: '{url controller=CustomerStream action=getPartialCount}',
-            success: function(operation) {
-                var response = Ext.decode(operation.responseText);
-
-                var params = { total: response.total };
-
-                if (response.lastIndexTime) {
-                    params.lastIndexTime = response.lastIndexTime;
-                }
-
-                me.start([{
-                    text: '{s name=window/analysing_new_customer}Analyse new customer{/s}',
-                    url: '{url controller=CustomerStream action=buildSearchIndex}',
-                    params: params
-                }]);
             }
         });
     },
