@@ -1,4 +1,4 @@
-//{namespace name=backend/customer/view/toolbar}
+//{namespace name=backend/customer_stream/translation}
 
 Ext.define('Shopware.apps.Customer.view.main.Toolbar', {
 
