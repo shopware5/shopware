@@ -87,7 +87,6 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
             selectionChanged: Ext.bind(me.streamSelected, me)
         });
 
-        me.streamListing.cellEditor.on('edit', Ext.bind(me.streamEdited, me));
         me.streamListing.on('customerStream-edit-item', Ext.bind(me.editStream, me));
 
         me.filterPanel = Ext.create('Shopware.apps.Customer.view.customer_stream.ConditionPanel', { flex: 4 });
@@ -426,10 +425,6 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
         me.streamDetailForm.add(detail);
         me.streamDetailForm.loadRecord(record);
         me.cardContainer.getLayout().setActiveItem(3);
-    },
-
-    streamEdited: function (editor, event) {
-        this.updateTitles(event.record);
     },
 
     startPartialIndexing: function() {
