@@ -62,6 +62,9 @@
                                                             {$itemSize = "200px"}
                                                         {/if}
 
+                                                        {$srcSet = ''}
+                                                        {$srcSetRetina = ''}
+
                                                         {foreach $sArticle.image.thumbnails as $image}
                                                             {$srcSet = "{if $srcSet}{$srcSet}, {/if}{$image.source} {$image.maxWidth}w"}
 
