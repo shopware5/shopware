@@ -33,10 +33,10 @@
 
 Ext.define('Shopware.apps.Customer.controller.Stream', {
 
-    extend:'Ext.app.Controller',
+    extend: 'Ext.app.Controller',
 
-    refs:[
-        { ref:'mainWindow', selector:'customer-list-main-window' },
+    refs: [
+        { ref: 'mainWindow', selector: 'customer-list-main-window' },
         { ref: 'mainToolbar', selector: 'customer-main-toolbar' }
     ],
 
@@ -109,7 +109,6 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
     },
 
     createOrUpdateStream: function(callback) {
-        console.log('entered createOrUpdateStream');
         var me = this,
         window = me.getMainWindow();
         var record = window.formPanel.getForm().getRecord();
