@@ -1,3 +1,4 @@
+//{namespace name=backend/customer_stream/translation}
 
 Ext.define('Shopware.apps.Customer.view.customer_stream.Detail', {
     extend: 'Shopware.model.Container',
@@ -9,7 +10,7 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.Detail', {
         return {
             splitFields: false,
             fieldSets: [{
-                title: 'Stream details',
+                title: '{s name=detail/stream_details}Stream details{/s}',
                 fields: {
                     name: null,
                     description: null,

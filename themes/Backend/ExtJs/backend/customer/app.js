@@ -87,6 +87,10 @@ Ext.define('Shopware.apps.Customer', {
         'address.detail.Window',
         'address.detail.Address',
 
+        'chart.AmountChartFactory',
+        'chart.Chart',
+        'chart.MetaChart',
+
         'customer_stream.Detail',
         'customer_stream.Listing',
         'customer_stream.ConditionPanel',

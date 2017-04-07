@@ -59,6 +59,9 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
             },
             'customer-list': {
                 'selection-changed': me.onCustomerSelectionChange
+            },
+            'customer-stream-listing': {
+                'customerStream-edit-item': me.editStream
             }
         });
         me.callParent(arguments);
@@ -153,6 +156,20 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
                 me.startPopulate(record);
             }
         });
+    },
+
+    editStream: function(grid, record) {
+        var me = this,
+            window = me.getMainWindow();
+
+        var detail = Ext.create('Shopware.apps.Customer.view.customer_stream.Detail', {
+            record: record
+        });
+
+        window.streamDetailForm.removeAll();
+        window.streamDetailForm.add(detail);
+        window.streamDetailForm.loadRecord(record);
+        window.cardContainer.getLayout().setActiveItem(3);
     },
 
     startPopulate: function(record) {
