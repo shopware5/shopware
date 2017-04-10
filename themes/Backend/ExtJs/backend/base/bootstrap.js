@@ -79,7 +79,6 @@
 {include file='backend/base/application/Shopware.window.Detail.js'}
 {include file='backend/base/application/Shopware.window.Listing.js'}
 {include file='backend/base/application/Shopware.window.Progress.js'}
-{include file='backend/base/application/Shopware.window.BatchRequests.js'}
 {include file='backend/base/application/Shopware.model.DataOperation.js'}
 {include file='backend/base/application/Shopware.grid.Association.js'}
 {include file='backend/base/application/Shopware.model.Container.js'}

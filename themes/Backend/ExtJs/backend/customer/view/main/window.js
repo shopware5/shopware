@@ -124,7 +124,7 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
                 align: 'stretch'
             },
             width: 400,
-            title: 'Filter & Customer Streams',
+            title: '{s name=window/filter_and_customer_streams}Filter & Customer streams{/s}',
             items: [
                 me.filterPanel,
                 me.streamListing
