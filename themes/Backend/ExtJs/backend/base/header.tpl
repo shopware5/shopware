@@ -42,47 +42,5 @@
     {else}
         <script type="text/javascript" src="{url controller=base action=index}?file=bootstrap&{Shopware::REVISION}"></script>
     {/if}
-
-
-    <style>
-        .x-customer-grid .x-grid-cell-inner {
-            line-height: 16px !important;
-        }
-        .stream-name-column {
-            line-height: 20px !important;
-            font-size: 12px;
-            color: #35404B;
-        }
-
-        .customer-filter-panel  {
-            border-right: 1px solid #a4b5c0;
-        }
-        .customer-filter-panel .x-panel-header {
-            border-right: none;
-            border-left: none;
-        }
-
-        .x-customer-grid {
-            border: none;
-        }
-
-        .customer-filter-panel .x-panel-body {
-            border-right: none;
-            border-left: none;
-            border-bottom: 1px solid #a4b5c0;
-            padding: 0;
-        }
-        .stream-listing .x-grid-body {
-            border: none;
-        }
-        .stream-listing {
-            border: none;
-        }
-
-        .stream-inline {
-
-        }
-
-    </style>
 {/block}
 </head>
