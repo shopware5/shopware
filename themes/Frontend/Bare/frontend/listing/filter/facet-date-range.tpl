@@ -20,7 +20,7 @@
             <input type="text"
                    class="filter-panel--input"
                    id="{$facet->getFacetName()|escape:'htmlall'}"
-                   placeholder="{s name="datePickerInputPlaceholder" namespace="frontend/index/datepicker"}{/s}"
+                   placeholder="{"{s name="datePickerInputPlaceholder" namespace="frontend/index/datepicker"}{/s}"|escape:'htmlall'}"
                    data-datepicker="true"
                    data-mode="range"
                    data-enableTime="{$enableTime}"
