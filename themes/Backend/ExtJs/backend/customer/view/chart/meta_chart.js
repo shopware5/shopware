@@ -19,6 +19,5 @@ Ext.define('Shopware.apps.Customer.view.chart.MetaChart', {
             { name: 'invoice_amount_sum', title: '{s name=window/total_revenue}Total revenue{/s}' },
             { name: 'product_avg', title: '{s name=window/merchandise_value}Ø Merchandise value{/s}' }
         ];
-
     }
 });

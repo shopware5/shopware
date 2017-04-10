@@ -169,7 +169,7 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
         var me = this;
         var newStream = Ext.create('Shopware.apps.Customer.model.CustomerStream', {
             id: null,
-            name: 'New stream'
+            name: '{s name=window/new_stream}New stream{/s}'
         });
 
         me.filterPanel.removeAll();
@@ -193,21 +193,6 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
 
         me.formPanel.setTitle('{s name=window/stream_filter}Stream filter{/s}');
         me.setTitle('{s name=window/customer_list }Customer list{/s}');
-    },
-
-    loadChart: function() {
-        var me = this;
-        var record = me.formPanel.getForm().getRecord();
-
-        me.metaChartStore.getProxy().extraParams = { };
-
-        if (record && record.get('id')) {
-            me.metaChartStore.getProxy().extraParams = {
-                streamId: record.get('id')
-            };
-        }
-
-        me.metaChartStore.load();
     },
 
     loadStreamChart: function() {

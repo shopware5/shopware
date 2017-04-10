@@ -188,12 +188,11 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
         if (selection.length <= 0) {
             window.resetTitles();
             me.resetConditions();
-            window.loadChart();
-            return;
+        } else {
+            me.loadStream(selection[0]);
         }
 
-        me.loadStream(selection[0]);
-        window.loadChart();
+        me.loadChart();
     },
 
     loadStream: function(record) {
@@ -213,6 +212,23 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
         me.updateTitles(record);
 
         window.listStore.load();
+    },
+
+    loadChart: function() {
+        var me = this,
+            window = me.getMainWindow(),
+            metaChartStore = window.metaChartStore,
+            record = window.formPanel.getForm().getRecord();
+
+        metaChartStore.getProxy().extraParams = { };
+
+        if (record && record.get('id')) {
+            metaChartStore.getProxy().extraParams = {
+                streamId: record.get('id')
+            };
+        }
+
+        metaChartStore.load();
     },
 
     updateTitles: function (stream) {
