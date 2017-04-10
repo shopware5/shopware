@@ -22,24 +22,25 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Unit\Bundle\CartBundle\Infrastructure\Payment;
+namespace Shopware\Tests\Unit\Bundle\CartBundle\Domain\Validatori;
 
 use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
 use Shopware\Bundle\CartBundle\Domain\Validator\Collector\RuleDataCollectorRegistry;
 use Shopware\Bundle\CartBundle\Domain\Validator\Data\RuleDataCollection;
 use Shopware\Bundle\CartBundle\Domain\Validator\Rule\Rule;
+use Shopware\Bundle\CartBundle\Domain\Validator\Validatable;
 use Shopware\Bundle\CartBundle\Domain\Validator\ValidatableFilter;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 use Shopware\Bundle\StoreFrontBundle\PaymentMethod\PaymentMethod;
 
-class RiskManagementPaymentFilterTest extends TestCase
+class ValidatableFilterTest extends TestCase
 {
-    public function testPaymentsWithoutRules()
+    public function testClassWithoutRules()
     {
-        $payments = [
-            new PaymentMethod(1, 'cash', 'Cash', 'payment/cash'),
+        $classes = [
+            new ValidatableClass(1, null),
         ];
 
         $filter = new ValidatableFilter(
@@ -50,18 +51,14 @@ class RiskManagementPaymentFilterTest extends TestCase
 
         $cart = $this->createMock(CalculatedCart::class);
 
-        $this->assertSame($payments, $filter->filter($payments, $cart, $context));
+        $this->assertSame($classes, $filter->filter($classes, $cart, $context));
     }
 
-    public function testPaymentsWithRule()
+    public function testClassWithRule()
     {
-        $withRule = new PaymentMethod(2, 'debit', 'Debit', 'debit');
-
-        $withRule->setRule(new TrueRule());
-
-        $payments = [
-            new PaymentMethod(1, 'cash', 'Cash', 'payment/cash'),
-            $withRule,
+        $classes = [
+            new ValidatableClass(2, null),
+            new ValidatableClass(1, new TrueRule()),
         ];
 
         $filter = new ValidatableFilter(
@@ -73,9 +70,33 @@ class RiskManagementPaymentFilterTest extends TestCase
         $cart = $this->createMock(CalculatedCart::class);
 
         $this->assertEquals(
-            [new PaymentMethod(1, 'cash', 'Cash', 'payment/cash')],
-            $filter->filter($payments, $cart, $context)
+            [new ValidatableClass(2, null)],
+            $filter->filter($classes, $cart, $context)
         );
+    }
+}
+
+class ValidatableClass implements Validatable
+{
+    /**
+     * @var Rule|null
+     */
+    private $rule;
+
+    /**
+     * @var int
+     */
+    private $id;
+
+    public function __construct(int $id, ?Rule $rule)
+    {
+        $this->rule = $rule;
+        $this->id = $id;
+    }
+
+    public function getRule(): ? Rule
+    {
+        return $this->rule;
     }
 }
 

@@ -246,6 +246,13 @@ class Shop extends ModelEntity
     protected $country;
 
     /**
+     * @ORM\Column(name="tax_calculation_type", type="text", nullable=false)
+     *
+     * @var string
+     */
+    protected $taxCalculationType;
+
+    /**
      * Class constructor.
      */
     public function __construct()
@@ -751,6 +758,16 @@ class Shop extends ModelEntity
         $templateMail->setShop($this);
 
         return $this;
+    }
+
+    public function getTaxCalculationType(): string
+    {
+        return $this->taxCalculationType;
+    }
+
+    public function setTaxCalculationType(string $taxCalculationType): void
+    {
+        $this->taxCalculationType = $taxCalculationType;
     }
 
     /**

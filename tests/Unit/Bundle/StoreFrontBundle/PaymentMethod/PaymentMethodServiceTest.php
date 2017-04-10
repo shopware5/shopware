@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Unit\Bundle\CartBundle\Infrastructure\Payment;
+namespace Shopware\Tests\Unit\Bundle\StoreFrontBundle\PaymentMethod;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;

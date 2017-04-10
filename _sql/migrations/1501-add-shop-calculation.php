@@ -22,15 +22,11 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\CartBundle\Domain\Tax;
-
-use Shopware\Bundle\CartBundle\Domain\Price\PriceCollection;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
-
-class VerticalTaxAmountCalculator implements TaxAmountCalculatorInterface
+class Migrations_Migration1501 extends Shopware\Components\Migrations\AbstractMigration
 {
-    public function calculate(PriceCollection $priceCollection, ShopContextInterface $context): CalculatedTaxCollection
+    public function up($modus)
     {
-        return $priceCollection->getCalculatedTaxes();
+        $this->addSql('ALTER TABLE `s_core_shops` ADD `tax_calculation_type` VARCHAR(50) NOT NULL');
+        $this->addSql("UPDATE `s_core_shops` SET `tax_calculation_type` = 'vertical'");
     }
 }

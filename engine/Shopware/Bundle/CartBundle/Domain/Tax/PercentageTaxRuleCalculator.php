@@ -54,7 +54,7 @@ class PercentageTaxRuleCalculator implements TaxRuleCalculatorInterface
     public function calculateTaxFromNetPrice(float $net, TaxRuleInterface $rule): CalculatedTax
     {
         /* @var PercentageTaxRule $rule */
-        return $this->taxRuleCalculator->calculateTaxFromGrossPrice(
+        return $this->taxRuleCalculator->calculateTaxFromNetPrice(
             $net / 100 * $rule->getPercentage(),
             new TaxRule($rule->getRate())
         );

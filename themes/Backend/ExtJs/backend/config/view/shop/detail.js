@@ -236,7 +236,9 @@ Ext.define('Shopware.apps.Config.view.shop.Detail', {
             allowBlank: false,
             fieldLabel: '{s name=shop/detail/currency_label}Currency{/s}',
             store: 'base.Currency'
-        },{
+        },
+        me.getTaxCalculationTypeField(),
+        {
             xtype: 'config-element-select',
             name: 'localeId',
             allowBlank: false,
@@ -310,6 +312,32 @@ Ext.define('Shopware.apps.Config.view.shop.Detail', {
         },{
             xtype: 'config-shop-page'
         }]
+    },
+
+    getTaxCalculationTypeField: function() {
+        var me = this;
+
+        return Ext.create('Ext.form.field.ComboBox', {
+            fieldLabel: '{s name="tax_calculation_type"}{/s}',
+            name: 'taxCalculationType',
+            valueField: 'key',
+            displayField: 'label',
+            allowBlank: false,
+            forceSelection: true,
+            store: Ext.create('Ext.data.Store', {
+                fields: ['key', 'label'],
+                data: me.getTaxCalculations()
+            }),
+            anchor: '100%',
+            labelWidth: 120
+        })
+    },
+
+    getTaxCalculations: function() {
+        return [
+            { key: 'vertical', label: '{s name="tax_calculation_vertical"}{/s}' },
+            { key: 'horizontal', label: '{s name="tax_calculation_horizontal"}{/s}' }
+        ];
     },
 
     loadRecord: function() {

@@ -144,6 +144,11 @@ class Shop extends Extendable
     protected $country;
 
     /**
+     * @var string
+     */
+    protected $taxCalculation;
+
+    /**
      * @param ShopEntity $shop
      *
      * @return Shop
@@ -484,5 +489,15 @@ class Shop extends Extendable
     public function setCountry(Country $country): void
     {
         $this->country = $country;
+    }
+
+    public function getTaxCalculation(): string
+    {
+        return $this->taxCalculation;
+    }
+
+    public function setTaxCalculation(string $taxCalculation): void
+    {
+        $this->taxCalculation = $taxCalculation;
     }
 }

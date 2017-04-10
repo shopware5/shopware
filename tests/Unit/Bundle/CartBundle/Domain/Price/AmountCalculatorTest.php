@@ -31,10 +31,16 @@ use Shopware\Bundle\CartBundle\Domain\Price\PriceCollection;
 use Shopware\Bundle\CartBundle\Domain\Price\PriceRounding;
 use Shopware\Bundle\CartBundle\Domain\Tax\CalculatedTax;
 use Shopware\Bundle\CartBundle\Domain\Tax\CalculatedTaxCollection;
+use Shopware\Bundle\CartBundle\Domain\Tax\PercentageTaxRuleBuilder;
+use Shopware\Bundle\CartBundle\Domain\Tax\PercentageTaxRuleCalculator;
+use Shopware\Bundle\CartBundle\Domain\Tax\TaxAmountCalculator;
+use Shopware\Bundle\CartBundle\Domain\Tax\TaxCalculator;
+use Shopware\Bundle\CartBundle\Domain\Tax\TaxDetector;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxRule;
+use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCalculator;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCollection;
-use Shopware\Bundle\CartBundle\Domain\Tax\VerticalTaxAmountCalculator;
-use Shopware\Tests\Unit\Bundle\CartBundle\Common\Generator;
+use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
 
 /**
  * Class PriceCalculatorTest
@@ -49,12 +55,32 @@ class AmountCalculatorTest extends \PHPUnit\Framework\TestCase
      */
     public function testCalculateAmountWithGrossPrices(CartPrice $expected, PriceCollection $prices)
     {
+        $detector = $this->createMock(TaxDetector::class);
+        $detector->method('useGross')->will($this->returnValue(true));
+
+        $shop = $this->createMock(Shop::class);
+        $shop->method('getTaxCalculation')->will($this->returnValue(TaxAmountCalculator::CALCULATION_VERTICAL));
+
+        $context = $this->createMock(ShopContext::class);
+        $context->method('getShop')->will($this->returnValue($shop));
+
         $calculator = new AmountCalculator(
-            Generator::createGrossPriceDetector(),
+            $detector,
             new PriceRounding(2),
-            new VerticalTaxAmountCalculator()
+            new TaxAmountCalculator(
+                new PercentageTaxRuleBuilder(),
+                new TaxCalculator(
+                    new PriceRounding(2),
+                    [
+                        new PercentageTaxRuleCalculator(new TaxRuleCalculator(new PriceRounding(2))),
+                        new TaxRuleCalculator(new PriceRounding(2)),
+                    ]
+                ),
+                $detector
+            )
         );
-        $cartPrice = $calculator->calculateAmount($prices, Generator::createContext());
+
+        $cartPrice = $calculator->calculateAmount($prices, $context);
         static::assertEquals($expected, $cartPrice);
     }
 
@@ -66,9 +92,33 @@ class AmountCalculatorTest extends \PHPUnit\Framework\TestCase
      */
     public function testCalculateAmountWithNetPrices(CartPrice $expected, PriceCollection $prices)
     {
-        $calculator = new AmountCalculator(Generator::createNetPriceDetector(), new PriceRounding(2),
-            new VerticalTaxAmountCalculator());
-        $cartPrice = $calculator->calculateAmount($prices, Generator::createContext());
+        $detector = $this->createMock(TaxDetector::class);
+        $detector->method('useGross')->will($this->returnValue(false));
+        $detector->method('isNetDelivery')->will($this->returnValue(false));
+
+        $shop = $this->createMock(Shop::class);
+        $shop->method('getTaxCalculation')->will($this->returnValue(TaxAmountCalculator::CALCULATION_VERTICAL));
+
+        $context = $this->createMock(ShopContext::class);
+        $context->method('getShop')->will($this->returnValue($shop));
+
+        $calculator = new AmountCalculator(
+            $detector,
+            new PriceRounding(2),
+            new TaxAmountCalculator(
+                new PercentageTaxRuleBuilder(),
+                new TaxCalculator(
+                    new PriceRounding(2),
+                    [
+                        new PercentageTaxRuleCalculator(new TaxRuleCalculator(new PriceRounding(2))),
+                        new TaxRuleCalculator(new PriceRounding(2)),
+                    ]
+                ),
+                $detector
+            )
+        );
+
+        $cartPrice = $calculator->calculateAmount($prices, $context);
         static::assertEquals($expected, $cartPrice);
     }
 
@@ -80,9 +130,33 @@ class AmountCalculatorTest extends \PHPUnit\Framework\TestCase
      */
     public function testCalculateAmountForNetDeliveries(CartPrice $expected, PriceCollection $prices)
     {
-        $calculator = new AmountCalculator(Generator::createNetDeliveryDetector(), new PriceRounding(2),
-            new VerticalTaxAmountCalculator());
-        $cartPrice = $calculator->calculateAmount($prices, Generator::createContext());
+        $detector = $this->createMock(TaxDetector::class);
+        $detector->method('useGross')->will($this->returnValue(false));
+        $detector->method('isNetDelivery')->will($this->returnValue(true));
+
+        $shop = $this->createMock(Shop::class);
+        $shop->method('getTaxCalculation')->will($this->returnValue(TaxAmountCalculator::CALCULATION_VERTICAL));
+
+        $context = $this->createMock(ShopContext::class);
+        $context->method('getShop')->will($this->returnValue($shop));
+
+        $calculator = new AmountCalculator(
+            $detector,
+            new PriceRounding(2),
+            new TaxAmountCalculator(
+                new PercentageTaxRuleBuilder(),
+                new TaxCalculator(
+                    new PriceRounding(2),
+                    [
+                        new PercentageTaxRuleCalculator(new TaxRuleCalculator(new PriceRounding(2))),
+                        new TaxRuleCalculator(new PriceRounding(2)),
+                    ]
+                ),
+                $detector
+            )
+        );
+
+        $cartPrice = $calculator->calculateAmount($prices, $context);
         static::assertEquals($expected, $cartPrice);
     }
 
