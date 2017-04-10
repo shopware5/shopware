@@ -19,7 +19,7 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.Detail', {
                         height: 300,
                         store: factory.createEntitySearchStore('Shopware\\Models\\ProductStream\\ProductStream'),
                         searchStore: factory.createEntitySearchStore('Shopware\\Models\\ProductStream\\ProductStream'),
-                        fieldLabel: '{s name=detail/product_stream}Product stream:{/s}'
+                        fieldLabel: '{s name=detail/product_stream}Product stream{/s}'
                     }
                 }
             }]
