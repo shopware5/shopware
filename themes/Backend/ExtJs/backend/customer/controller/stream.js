@@ -263,9 +263,10 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
 
     startPopulate: function(record) {
         var me = this,
-            window = me.getMainWindow();
+            window = me.getMainWindow(),
+            toolbar = me.getMainToolbar();
 
-        window.indexingBar.value = 0;
+        toolbar.indexingBar.value = 0;
         window.formPanel.setDisabled(true);
 
         Ext.Ajax.request({
@@ -310,9 +311,10 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
 
     startPartialIndexing: function() {
         var me = this,
-            window = me.getMainWindow();
+            window = me.getMainWindow(),
+            toolbar = me.getMainToolbar();
 
-        window.indexingBar.value = 0;
+        toolbar.indexingBar.value = 0;
         window.formPanel.setDisabled(true);
 
         Ext.Ajax.request({
@@ -338,9 +340,10 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
 
     indexSearch: function() {
         var me = this,
-            window = me.getMainWindow();
+            window = me.getMainWindow(),
+            toolbar = me.getMainToolbar();
 
-        window.indexingBar.value = 0;
+        toolbar.indexingBar.value = 0;
         window.formPanel.setDisabled(true);
 
         Ext.Ajax.request({
@@ -375,17 +378,16 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
         window.loadListing();
     },
 
-    // todo move progress bar to toolbar.js!
     resetProgressbar: function () {
         var me = this,
-            window = me.getMainWindow();
+            toolbar = me.getMainToolbar();
 
         Ext.Ajax.request({
             url: '{url controller=CustomerStream action=getLastFullIndexTime}',
             success: function(operation) {
                 var response = Ext.decode(operation.responseText);
                 Ext.defer(function () {
-                    window.indexingBar.updateProgress(0, '{s name=window/last_analyse}Last analyse at: {/s}' + Ext.util.Format.date(response.last_index_time), true);
+                    toolbar.indexingBar.updateProgress(0, '{s name=window/last_analyse}Last analyse at: {/s}' + Ext.util.Format.date(response.last_index_time), true);
                 }, 1000);
             }
         });

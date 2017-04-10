@@ -154,9 +154,6 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
         me.toolbar = Ext.create('Shopware.apps.Customer.view.main.Toolbar', {
             handlers: me.filterPanel.handlers
         });
-
-        me.indexingBar = me.toolbar.indexingBar;
-
         return me.toolbar;
     },
 
@@ -207,15 +204,10 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
         });
     },
 
-    updateProgressBar: function(request, response) {
-        var me = this;
-        me.indexingBar.updateProgress(response.progress, response.text, true);
-    },
-
     finish: function() {
         var me = this;
-        this.formPanel.setDisabled(false);
-        this.loadListing();
+        me.formPanel.setDisabled(false);
+        me.loadListing();
         me.fireEvent('reset-progressbar');
     }
 });
