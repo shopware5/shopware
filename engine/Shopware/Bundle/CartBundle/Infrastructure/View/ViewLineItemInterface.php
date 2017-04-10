@@ -30,7 +30,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Media;
 
 interface ViewLineItemInterface extends \JsonSerializable
 {
-    public function getLineItem(): CalculatedLineItemInterface;
+    public function getCalculatedLineItem(): CalculatedLineItemInterface;
 
     public function getLabel(): string;
 

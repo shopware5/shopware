@@ -55,7 +55,7 @@ class ViewProduct extends SimpleProduct implements ViewLineItemInterface
     /**
      * {@inheritdoc}
      */
-    public function getLineItem(): CalculatedLineItemInterface
+    public function getCalculatedLineItem(): CalculatedLineItemInterface
     {
         return $this->product;
     }

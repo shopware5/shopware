@@ -61,11 +61,8 @@ class CalculatedVoucher implements CalculatedLineItemInterface, ViewLineItemInte
      */
     protected $identifier;
 
-    public function __construct(
-        string $code,
-        LineItemInterface $lineItem,
-        Price $price
-    ) {
+    public function __construct(string $code, LineItemInterface $lineItem, Price $price)
+    {
         $this->price = $price;
         $this->lineItem = $lineItem;
         $this->code = $code;
@@ -83,7 +80,12 @@ class CalculatedVoucher implements CalculatedLineItemInterface, ViewLineItemInte
         return $this->price;
     }
 
-    public function getLineItem(): CalculatedLineItemInterface
+    public function getLineItem(): ? LineItemInterface
+    {
+        return $this->lineItem;
+    }
+
+    public function getCalculatedLineItem(): CalculatedLineItemInterface
     {
         return $this;
     }

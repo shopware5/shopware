@@ -78,6 +78,6 @@ class ViewLineItemCollection extends Collection
 
     protected function getKey(ViewLineItemInterface $element): string
     {
-        return $element->getLineItem()->getIdentifier();
+        return $element->getCalculatedLineItem()->getIdentifier();
     }
 }
