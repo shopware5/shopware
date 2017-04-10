@@ -107,11 +107,6 @@ class CalculatedProduct implements CalculatedLineItemInterface, Deliverable, Goo
         return $this->quantity;
     }
 
-    public function setQuantity(int $quantity): void
-    {
-        $this->quantity = $quantity;
-    }
-
     public function getLineItem(): LineItemInterface
     {
         return $this->lineItem;

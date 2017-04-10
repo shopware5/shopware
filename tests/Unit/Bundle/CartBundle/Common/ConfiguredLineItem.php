@@ -30,10 +30,9 @@ use Shopware\Bundle\CartBundle\Domain\JsonSerializableTrait;
 use Shopware\Bundle\CartBundle\Domain\LineItem\CalculatedLineItemInterface;
 use Shopware\Bundle\CartBundle\Domain\LineItem\Deliverable;
 use Shopware\Bundle\CartBundle\Domain\LineItem\LineItemInterface;
-use Shopware\Bundle\CartBundle\Domain\LineItem\Stackable;
 use Shopware\Bundle\CartBundle\Domain\Price\Price;
 
-class ConfiguredLineItem implements Deliverable, CalculatedLineItemInterface, Stackable
+class ConfiguredLineItem implements Deliverable, CalculatedLineItemInterface
 {
     use JsonSerializableTrait;
 
@@ -122,11 +121,6 @@ class ConfiguredLineItem implements Deliverable, CalculatedLineItemInterface, St
     public function getQuantity(): int
     {
         return $this->quantity;
-    }
-
-    public function setQuantity(int $quantity): void
-    {
-        $this->quantity = $quantity;
     }
 
     public function getLineItem(): LineItemInterface

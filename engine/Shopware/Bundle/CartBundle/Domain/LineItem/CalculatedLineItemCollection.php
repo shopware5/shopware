@@ -65,15 +65,6 @@ class CalculatedLineItemCollection extends Collection
         return null;
     }
 
-    public function hasStackable(string $identifier): bool
-    {
-        if ($item = $this->get($identifier)) {
-            return $item instanceof Stackable;
-        }
-
-        return false;
-    }
-
     public function getIdentifiers(): array
     {
         return $this->getKeys();
