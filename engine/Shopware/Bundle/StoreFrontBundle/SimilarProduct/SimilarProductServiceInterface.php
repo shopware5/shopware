@@ -24,7 +24,6 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\SimilarProduct;
 
-use Shopware\Bundle\StoreFrontBundle\Product\ListProduct;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 
 /**

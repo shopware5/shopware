@@ -28,7 +28,6 @@ use Doctrine\DBAL\Connection;
 use Shopware\Bundle\EmotionBundle\Struct\Collection\PrepareDataCollection;
 use Shopware\Bundle\EmotionBundle\Struct\Collection\ResolvedDataCollection;
 use Shopware\Bundle\EmotionBundle\Struct\Element;
-use Shopware\Bundle\StoreFrontBundle\Blog\Blog;
 use Shopware\Bundle\StoreFrontBundle\Blog\BlogServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 

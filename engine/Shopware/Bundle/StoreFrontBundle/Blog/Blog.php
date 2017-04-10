@@ -26,7 +26,6 @@ namespace Shopware\Bundle\StoreFrontBundle\Blog;
 
 use Shopware\Bundle\StoreFrontBundle\Common\Extendable;
 use Shopware\Bundle\StoreFrontBundle\Product\ListProduct;
-use Shopware\Bundle\StoreFrontBundle\Media\Media;
 
 class Blog extends Extendable
 {

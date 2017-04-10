@@ -28,12 +28,9 @@ use Shopware\Bundle\SearchBundle\Condition\SimilarProductCondition;
 use Shopware\Bundle\SearchBundle\ProductSearchInterface;
 use Shopware\Bundle\SearchBundle\Sorting\PopularitySorting;
 use Shopware\Bundle\SearchBundle\StoreFrontCriteriaFactoryInterface;
-
-use Shopware\Bundle\StoreFrontBundle\Product\ListProductServiceInterface;
-
-use Shopware\Bundle\StoreFrontBundle\Product\BaseProduct;
-use Shopware\Bundle\StoreFrontBundle\Product\ListProduct;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Product\BaseProduct;
+use Shopware\Bundle\StoreFrontBundle\Product\ListProductServiceInterface;
 
 /**
  * @category  Shopware
@@ -67,11 +64,11 @@ class SimilarProductService implements SimilarProductServiceInterface
     private $factory;
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\SimilarProduct\SimilarProductGateway             $gateway
-     * @param ListProductServiceInterface        $listProductService
-     * @param \Shopware_Components_Config        $config
-     * @param ProductSearchInterface             $search
-     * @param StoreFrontCriteriaFactoryInterface $factory
+     * @param \Shopware\Bundle\StoreFrontBundle\SimilarProduct\SimilarProductGateway $gateway
+     * @param ListProductServiceInterface                                            $listProductService
+     * @param \Shopware_Components_Config                                            $config
+     * @param ProductSearchInterface                                                 $search
+     * @param StoreFrontCriteriaFactoryInterface                                     $factory
      */
     public function __construct(
         SimilarProductGateway $gateway,
@@ -153,7 +150,7 @@ class SimilarProductService implements SimilarProductServiceInterface
 
     /**
      * @param \Shopware\Bundle\StoreFrontBundle\Product\BaseProduct[] $products
-     * @param array         $numbers
+     * @param array                                                   $numbers
      *
      * @return BaseProduct[]
      */

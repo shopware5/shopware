@@ -36,7 +36,6 @@ use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
 use Shopware\Bundle\SearchBundleES\HandlerInterface;
 use Shopware\Bundle\SearchBundleES\ResultHydratorInterface;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
-use Shopware\Bundle\StoreFrontBundle\Manufacturer\Manufacturer;
 use Shopware\Bundle\StoreFrontBundle\Manufacturer\ManufacturerServiceInterface;
 use Shopware\Components\QueryAliasMapper;
 

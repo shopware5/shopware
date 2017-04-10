@@ -24,11 +24,7 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\RelatedProduct;
 
-
-
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
-use Shopware\Bundle\StoreFrontBundle\RelatedProduct\RelatedProductStreamServiceInterface;
-use Shopware\Bundle\StoreFrontBundle\RelatedProduct\RelatedProductStreamGateway;
 
 /**
  * @category  Shopware

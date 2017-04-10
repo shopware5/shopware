@@ -27,7 +27,6 @@ namespace Shopware\Bundle\StoreFrontBundle\Product;
 use Shopware\Bundle\StoreFrontBundle\Common\Attribute;
 use Shopware\Bundle\StoreFrontBundle\Common\AttributeHydrator;
 use Shopware\Bundle\StoreFrontBundle\Common\Hydrator;
-use Shopware\Bundle\StoreFrontBundle\Common\Struct;
 use Shopware\Bundle\StoreFrontBundle\Esd\EsdHydrator;
 use Shopware\Bundle\StoreFrontBundle\Manufacturer\ManufacturerHydrator;
 use Shopware\Bundle\StoreFrontBundle\PriceGroup\PriceGroup;

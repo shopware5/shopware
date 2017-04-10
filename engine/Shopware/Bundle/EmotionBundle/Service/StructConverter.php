@@ -34,7 +34,6 @@ use Shopware\Bundle\EmotionBundle\ComponentHandler\ManufacturerSliderComponentHa
 use Shopware\Bundle\EmotionBundle\Struct\Element;
 use Shopware\Bundle\EmotionBundle\Struct\Emotion;
 use Shopware\Bundle\MediaBundle\MediaServiceInterface;
-use Shopware\Bundle\StoreFrontBundle\Manufacturer\Manufacturer;
 use Shopware\Components\Compatibility\LegacyStructConverter;
 use Shopware\Components\DependencyInjection\Container;
 

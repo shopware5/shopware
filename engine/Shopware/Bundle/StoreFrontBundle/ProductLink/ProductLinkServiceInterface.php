@@ -24,7 +24,6 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\ProductLink;
 
-use Shopware\Bundle\StoreFrontBundle\Product\BaseProduct;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 
 /**
@@ -35,8 +34,8 @@ use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 interface ProductLinkServiceInterface
 {
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Product\BaseProduct[]        $products
-     * @param ShopContextInterface $context
+     * @param \Shopware\Bundle\StoreFrontBundle\Product\BaseProduct[] $products
+     * @param ShopContextInterface                                    $context
      *
      * @return array indexed by the product order number, each array element contains a list of \Shopware\Bundle\StoreFrontBundle\ProductLink\Link classes
      */

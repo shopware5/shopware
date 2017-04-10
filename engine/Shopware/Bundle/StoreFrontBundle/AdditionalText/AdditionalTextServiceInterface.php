@@ -24,7 +24,6 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\AdditionalText;
 
-use Shopware\Bundle\StoreFrontBundle\Product\ListProduct;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 
 /**
@@ -43,8 +42,8 @@ interface AdditionalTextServiceInterface
      *
      * This behaviour can be optionally disabled using the backend settings
      *
-     * @param \Shopware\Bundle\StoreFrontBundle\Product\ListProduct[]        $products
-     * @param ShopContextInterface $context
+     * @param \Shopware\Bundle\StoreFrontBundle\Product\ListProduct[] $products
+     * @param ShopContextInterface                                    $context
      *
      * @return \Shopware\Bundle\StoreFrontBundle\Product\ListProduct[] $products
      */

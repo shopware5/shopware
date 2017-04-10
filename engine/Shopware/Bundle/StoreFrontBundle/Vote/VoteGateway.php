@@ -26,7 +26,6 @@ namespace Shopware\Bundle\StoreFrontBundle\Vote;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\StoreFrontBundle\Common\FieldHelper;
-use Shopware\Bundle\StoreFrontBundle\Common\Struct;
 use Shopware\Bundle\StoreFrontBundle\Context\TranslationContext;
 
 /**
