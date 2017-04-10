@@ -97,7 +97,7 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
 
             case 'stream_chart':
                 window.cardContainer.getLayout().setActiveItem(2);
-                window.loadStreamChart();
+                me.loadStreamChart();
                 break;
         }
     },
@@ -112,17 +112,16 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
         }
 
         window.metaChartStore.load();
-        // todo move to this file
-        window.loadStreamChart();
+        me.loadStreamChart();
     },
 
     createOrUpdateStream: function(callback) {
         var me = this,
-        window = me.getMainWindow();
-        var record = window.formPanel.getForm().getRecord();
+            window = me.getMainWindow(),
+            record = window.formPanel.getForm().getRecord();
 
         if (record) {
-            me.saveStream(window.formPanel.getForm().getRecord(), callback);
+            me.saveStream(record, callback);
             return;
         }
         me.createStream(callback);
@@ -229,6 +228,22 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
         }
 
         metaChartStore.load();
+    },
+
+    loadStreamChart: function() {
+        var me = this,
+            window = me.getMainWindow(),
+            streamChartContainer = window.streamChartContainer;
+
+        streamChartContainer.removeAll();
+        streamChartContainer.setLoading(true);
+
+        var store = window.streamListing.getStore();
+
+        Ext.create('Shopware.apps.Customer.view.chart.AmountChartFactory').createChart(store, function (chart) {
+            streamChartContainer.add(chart);
+            streamChartContainer.setLoading(false);
+        });
     },
 
     updateTitles: function (stream) {
