@@ -195,20 +195,6 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
         me.setTitle('{s name=window/customer_list }Customer list{/s}');
     },
 
-    loadStreamChart: function() {
-        var me = this;
-
-        me.streamChartContainer.removeAll();
-        me.streamChartContainer.setLoading(true);
-
-        var store = me.streamListing.getStore();
-
-        Ext.create('Shopware.apps.Customer.view.chart.AmountChartFactory').createChart(store, function (chart) {
-            me.streamChartContainer.add(chart);
-            me.streamChartContainer.setLoading(false);
-        });
-    },
-
     createSaveStreamDetailButton: function() {
         var me = this;
 
