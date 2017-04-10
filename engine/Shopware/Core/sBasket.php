@@ -518,7 +518,7 @@ class sBasket
             $product->setAdditional($premium['additionaltext']);
 
             $context = $this->contextService->getShopContext();
-            $product = $this->additionalTextService->buildAdditionalText($product, $context);
+            $this->additionalTextService->buildAdditionalTextLists([$product], $context);
             $premium['additionaltext'] = $product->getAdditional();
         }
 
@@ -2785,11 +2785,13 @@ class sBasket
 
         if ($article['configurator_set_id'] > 0) {
             $context = $this->contextService->getShopContext();
-            $product = Shopware()->Container()->get('shopware_storefront.list_product_service')->get($article['ordernumber'], $context);
+            $product = Shopware()->Container()->get('shopware_storefront.list_product_service')->getList([$article['ordernumber']], $context);
+            $product = array_shift($product);
+
             if (null === $product) {
                 return false;
             }
-            $product = $this->additionalTextService->buildAdditionalText($product, $context);
+            $this->additionalTextService->buildAdditionalTextLists([$product], $context);
             $article['additionaltext'] = $product->getAdditional();
         }
 

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -29,7 +30,7 @@ namespace Shopware\Bundle\StoreFrontBundle\Struct;
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-abstract class Extendable extends Struct implements \JsonSerializable
+abstract class Extendable extends Struct implements \JsonSerializable, ExtendableInterface
 {
     /**
      * Contains an array of attribute structs.
@@ -45,7 +46,7 @@ abstract class Extendable extends Struct implements \JsonSerializable
      * @param string    $name
      * @param Attribute $attribute
      */
-    public function addAttribute($name, Attribute $attribute)
+    public function addAttribute(string $name, Attribute $attribute): void
     {
         $this->attributes[$name] = $attribute;
     }
@@ -53,7 +54,7 @@ abstract class Extendable extends Struct implements \JsonSerializable
     /**
      * @param Attribute[] $attributes
      */
-    public function addAttributes(array $attributes)
+    public function addAttributes(array $attributes): void
     {
         foreach ($attributes as $key => $attribute) {
             $this->addAttribute($key, $attribute);
@@ -68,7 +69,7 @@ abstract class Extendable extends Struct implements \JsonSerializable
      *
      * @return Attribute
      */
-    public function getAttribute($name)
+    public function getAttribute(string $name): Attribute
     {
         return $this->attributes[$name];
     }
@@ -81,7 +82,7 @@ abstract class Extendable extends Struct implements \JsonSerializable
      *
      * @return bool
      */
-    public function hasAttribute($name)
+    public function hasAttribute(string $name): bool
     {
         return array_key_exists($name, $this->attributes);
     }
@@ -92,7 +93,7 @@ abstract class Extendable extends Struct implements \JsonSerializable
      *
      * @return Attribute[]
      */
-    public function getAttributes()
+    public function getAttributes(): array
     {
         return $this->attributes;
     }

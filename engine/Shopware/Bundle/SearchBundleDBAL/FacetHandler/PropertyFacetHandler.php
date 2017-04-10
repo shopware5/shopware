@@ -36,7 +36,7 @@ use Shopware\Bundle\SearchBundle\FacetResultInterface;
 use Shopware\Bundle\SearchBundleDBAL\PartialFacetHandlerInterface;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactoryInterface;
-use Shopware\Bundle\StoreFrontBundle\Gateway\PropertyGatewayInterface;
+use Shopware\Bundle\StoreFrontBundle\Gateway\PropertyGateway;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\QueryAliasMapper;
@@ -49,7 +49,7 @@ use Shopware\Components\QueryAliasMapper;
 class PropertyFacetHandler implements PartialFacetHandlerInterface
 {
     /**
-     * @var PropertyGatewayInterface
+     * @var PropertyGateway
      */
     private $propertyGateway;
 
@@ -64,12 +64,12 @@ class PropertyFacetHandler implements PartialFacetHandlerInterface
     private $fieldName;
 
     /**
-     * @param PropertyGatewayInterface     $propertyGateway
+     * @param PropertyGateway              $propertyGateway
      * @param QueryBuilderFactoryInterface $queryBuilderFactory
      * @param QueryAliasMapper             $queryAliasMapper
      */
     public function __construct(
-        PropertyGatewayInterface $propertyGateway,
+        PropertyGateway $propertyGateway,
         QueryBuilderFactoryInterface $queryBuilderFactory,
         QueryAliasMapper $queryAliasMapper
     ) {
@@ -136,7 +136,7 @@ class PropertyFacetHandler implements PartialFacetHandlerInterface
 
         $properties = $this->propertyGateway->getList(
             $valueIds,
-            $context
+            $context->getTranslationContext()
         );
 
         return $properties;

@@ -1,25 +1,28 @@
 <?php
 /**
- * Enlight
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
- * LICENSE
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
  *
- * This source file is subject to the new BSD license that is bundled
- * with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://enlight.de/license
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@shopware.de so we can send you a copy immediately.
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
  *
- * @category   Enlight
- * @package    Enlight_Controller
- * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
- * @license    http://enlight.de/license     New BSD License
- * @version    $Id$
- * @author     $Author$
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
  */
 
+use Shopware\Bundle\CartBundle\Infrastructure\Serializer;
 use Shopware\Components\DependencyInjection\Container;
 use Shopware\Components\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\Form\Form;
@@ -32,7 +35,7 @@ use Symfony\Component\Form\Form;
  * takes care, that the right action is executed.
  *
  * @category   Enlight
- * @package    Enlight_Controller
+ *
  * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
  * @license    http://enlight.de/license     New BSD License
  */
@@ -70,7 +73,7 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
     protected $container;
 
     /**
-     * @var string Contains the name of the controller.
+     * @var string contains the name of the controller
      */
     protected $controller_name;
 
@@ -79,7 +82,7 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
      * Enlight_Controller_Request_Request and an instance of the Enlight_Controller_Response_Response.
      * The response and request instance will be passed to the init events of the class and the controller.
      *
-     * @param Enlight_Controller_Request_Request $request
+     * @param Enlight_Controller_Request_Request   $request
      * @param Enlight_Controller_Response_Response $response
      */
     public function __construct(Enlight_Controller_Request_Request $request,
@@ -91,14 +94,36 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
 
         Shopware()->Events()->notify(
             __CLASS__ . '_Init',
-            array('subject' => $this, 'request' => $this->Request(), 'response' => $this->Response())
+            ['subject' => $this, 'request' => $this->Request(), 'response' => $this->Response()]
         );
         Shopware()->Events()->notify(
             __CLASS__ . '_Init_' . $this->controller_name,
-            array('subject' => $this, 'request' => $this->Request(), 'response' => $this->Response())
+            ['subject' => $this, 'request' => $this->Request(), 'response' => $this->Response()]
         );
 
         parent::__construct();
+    }
+
+    /**
+     * Magic caller method
+     *
+     * @param string $name
+     * @param array  $value
+     *
+     * @throws Enlight_Controller_Exception
+     *
+     * @return mixed
+     */
+    public function __call($name, $value = null)
+    {
+        if ('Action' == substr($name, -6)) {
+            throw new Enlight_Controller_Exception(
+                'Action "' . $this->controller_name . '_' . $name . '" not found failure',
+                Enlight_Controller_Exception::ActionNotFound
+            );
+        }
+
+        return parent::__call($name, $value);
     }
 
     /**
@@ -124,11 +149,11 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
      */
     public function dispatch($action)
     {
-        $args = new Enlight_Controller_ActionEventArgs(array(
-            'subject'  => $this,
-            'request'  => $this->Request(),
-            'response' => $this->Response()
-        ));
+        $args = new Enlight_Controller_ActionEventArgs([
+            'subject' => $this,
+            'request' => $this->Request(),
+            'response' => $this->Response(),
+        ]);
 
         $moduleName = ucfirst($this->Request()->getModuleName());
 
@@ -153,7 +178,7 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
             $action_name = $this->Front()->Dispatcher()->getFullActionName($this->Request());
             if (!$event = Shopware()->Events()->notifyUntil(
                 __CLASS__ . '_' . $action_name,
-                array('subject' => $this)
+                ['subject' => $this]
             )
             ) {
                 $this->$action();
@@ -208,7 +233,7 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
      * @param string $action
      * @param string $controller
      * @param string $module
-     * @param array $params
+     * @param array  $params
      */
     public function forward($action, $controller = null, $module = null, array $params = null)
     {
@@ -231,9 +256,9 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
      * Redirect the request. The frontend router will assemble the url.
      *
      * @param string|array $url
-     * @param array $options
+     * @param array        $options
      */
-    public function redirect($url, array $options = array())
+    public function redirect($url, array $options = [])
     {
         if (is_array($url)) {
             $url = $this->Front()->Router()->assemble($url);
@@ -251,7 +276,8 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
     /**
      * Set view instance
      *
-     * @param  Enlight_View $view
+     * @param Enlight_View $view
+     *
      * @return Enlight_Controller_Action
      */
     public function setView(Enlight_View $view)
@@ -272,7 +298,8 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
     /**
      * Set front instance
      *
-     * @param  Enlight_Controller_Front $front
+     * @param Enlight_Controller_Front $front
+     *
      * @return Enlight_Controller_Action
      */
     public function setFront(Enlight_Controller_Front $front = null)
@@ -288,7 +315,8 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
     /**
      * Set request instance
      *
-     * @param  Enlight_Controller_Request_Request $request
+     * @param Enlight_Controller_Request_Request $request
+     *
      * @return Enlight_Controller_Action
      */
     public function setRequest(Enlight_Controller_Request_Request $request)
@@ -301,7 +329,8 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
     /**
      * Set response instance
      *
-     * @param  Enlight_Controller_Response_Response $response
+     * @param Enlight_Controller_Response_Response $response
+     *
      * @return Enlight_Controller_Action
      */
     public function setResponse(Enlight_Controller_Response_Response $response)
@@ -359,6 +388,7 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
      * Get service from resource loader
      *
      * @param string $name
+     *
      * @return mixed
      */
     public function get($name)
@@ -374,6 +404,11 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
         return $this->container->get('Models');
     }
 
+    public function serialize($data, string $format = Serializer::FORMAT_ARRAY)
+    {
+        return $this->container->get('serializer')->serialize($data, $format);
+    }
+
     /**
      * Creates and returns a Form instance from the type of the form.
      *
@@ -383,28 +418,8 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
      *
      * @return Form
      */
-    protected function createForm($type, $data = null, array $options = array())
+    protected function createForm($type, $data = null, array $options = [])
     {
         return $this->container->get('shopware.form.factory')->create($type, $data, $options);
-    }
-
-    /**
-     * Magic caller method
-     *
-     * @param  string $name
-     * @param  array $value
-     * @throws Enlight_Controller_Exception
-     * @return mixed
-     */
-    public function __call($name, $value = null)
-    {
-        if ('Action' == substr($name, -6)) {
-            throw new Enlight_Controller_Exception(
-                'Action "' . $this->controller_name . '_' . $name . '" not found failure',
-                Enlight_Controller_Exception::ActionNotFound
-            );
-        }
-
-        return parent::__call($name, $value);
     }
 }

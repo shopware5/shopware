@@ -52,6 +52,11 @@ class Thumbnail extends Extendable implements \JsonSerializable
     protected $maxHeight;
 
     /**
+     * @var string
+     */
+    protected $sourceSet;
+
+    /**
      * @param string      $source
      * @param string|null $retinaSource
      * @param $maxWidth
@@ -63,6 +68,12 @@ class Thumbnail extends Extendable implements \JsonSerializable
         $this->retinaSource = $retinaSource;
         $this->maxWidth = $maxWidth;
         $this->maxHeight = $maxHeight;
+
+        if ($this->hasRetinaSource()) {
+            $this->sourceSet = sprintf('%s, %s 2x', $this->getSource(), $this->getRetinaSource());
+        } else {
+            $this->sourceSet = $this->getSource();
+        }
     }
 
     /**
@@ -90,19 +101,11 @@ class Thumbnail extends Extendable implements \JsonSerializable
     }
 
     /**
-     * @deprecated deprecated since version 5.1, please build the sourceSet in a hydrator or view
-     *
-     * @param string $imageDir
-     *
      * @return string
      */
-    public function getSourceSet($imageDir)
+    public function getSourceSet()
     {
-        if ($this->retinaSource !== null) {
-            return sprintf('%s%s, %s%s 2x', $imageDir, $this->source, $imageDir, $this->retinaSource);
-        }
-
-        return $imageDir . $this->source;
+        return $this->sourceSet;
     }
 
     /**

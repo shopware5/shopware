@@ -23,9 +23,11 @@
  */
 
 use Shopware\Bundle\StoreFrontBundle\Service\AdditionalTextServiceInterface;
-use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\Core\ContextService;
+use Shopware\Bundle\StoreFrontBundle\Struct\CheckoutScope;
+use Shopware\Bundle\StoreFrontBundle\Struct\CustomerScope;
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopScope;
 use Shopware\Components\CSRFWhitelistAware;
 use Shopware\Models\Article\Article;
 use Shopware\Models\Article\Detail;
@@ -4363,13 +4365,10 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         /** @var Shop $shop */
         $shop = $shopRepo->getActiveDefault();
 
-        /** @var ContextServiceInterface $contextService */
-        $contextService = $this->get('shopware_storefront.context_service');
-
-        $context = $contextService->createShopContext(
-            $shop->getId(),
-            $shop->getCurrency()->getId(),
-            ContextService::FALLBACK_CUSTOMER_GROUP
+        $context = $this->get('shopware_storefront.context_factory')->create(
+            new ShopScope($shop->getId(), $shop->getCurrency()->getId()),
+            new CustomerScope(null, ContextService::FALLBACK_CUSTOMER_GROUP),
+            new CheckoutScope()
         );
 
         /** @var AdditionalTextServiceInterface $service */

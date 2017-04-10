@@ -24,8 +24,7 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Struct;
 
-use Shopware\Bundle\StoreFrontBundle\Struct\Country\Area;
-use Shopware\Bundle\StoreFrontBundle\Struct\Country\State;
+use Shopware\Bundle\CartBundle\Domain\Delivery\ShippingLocation;
 use Shopware\Bundle\StoreFrontBundle\Struct\Customer\Group;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceGroup;
 
@@ -34,7 +33,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceGroup;
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class ShopContext extends Extendable implements ProductContextInterface, \JsonSerializable
+class ShopContext extends Extendable implements ShopContextInterface, \JsonSerializable
 {
     /**
      * @var Group
@@ -67,123 +66,93 @@ class ShopContext extends Extendable implements ProductContextInterface, \JsonSe
     protected $priceGroups;
 
     /**
-     * @var string
+     * @var \Shopware\Bundle\StoreFrontBundle\Struct\Customer|null
      */
-    protected $baseUrl;
+    protected $customer;
 
     /**
-     * @var Area|null
+     * @var PaymentMethod
      */
-    protected $area;
+    protected $paymentMethod;
 
     /**
-     * @var Country|null
+     * @var TranslationContext
      */
-    protected $country;
+    protected $translationContext;
 
     /**
-     * @var State|null
+     * @var ShippingMethod
      */
-    protected $state;
+    protected $shippingMethod;
 
     /**
-     * @param string       $baseUrl
-     * @param Shop         $shop
-     * @param Currency     $currency
-     * @param Group        $currentCustomerGroup
-     * @param Group        $fallbackCustomerGroup
-     * @param Tax[]        $taxRules
-     * @param PriceGroup[] $priceGroups
-     * @param Area|null    $area
-     * @param Country|null $country
-     * @param State|null   $state
+     * @var ShippingLocation
+     */
+    protected $shippingLocation;
+
+    /**
+     * @param Shop             $shop
+     * @param Currency         $currency
+     * @param Group            $currentCustomerGroup
+     * @param Group            $fallbackCustomerGroup
+     * @param Tax[]            $taxRules
+     * @param PriceGroup[]     $priceGroups
+     * @param PaymentMethod    $paymentMethod
+     * @param ShippingMethod   $shippingMethod
+     * @param ShippingLocation $shippingLocation
+     * @param Customer         $customer
      */
     public function __construct(
-        $baseUrl,
         Shop $shop,
         Currency $currency,
         Group $currentCustomerGroup,
         Group $fallbackCustomerGroup,
         array $taxRules,
         array $priceGroups,
-        Area $area = null,
-        Country $country = null,
-        State $state = null
+        PaymentMethod $paymentMethod,
+        ShippingMethod $shippingMethod,
+        ShippingLocation $shippingLocation,
+        ?Customer $customer
     ) {
-        $this->baseUrl = $baseUrl;
-        $this->shop = $shop;
-        $this->currency = $currency;
         $this->currentCustomerGroup = $currentCustomerGroup;
         $this->fallbackCustomerGroup = $fallbackCustomerGroup;
+        $this->currency = $currency;
+        $this->shop = $shop;
         $this->taxRules = $taxRules;
         $this->priceGroups = $priceGroups;
-        $this->area = $area;
-        $this->country = $country;
-        $this->state = $state;
+        $this->customer = $customer;
+        $this->paymentMethod = $paymentMethod;
+        $this->shippingMethod = $shippingMethod;
+        $this->shippingLocation = $shippingLocation;
+        $this->translationContext = TranslationContext::createFromShop($this->shop);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getShop()
+    public function getShop(): Shop
     {
         return $this->shop;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getCurrency()
+    public function getCurrency(): Currency
     {
         return $this->currency;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getCurrentCustomerGroup()
+    public function getCurrentCustomerGroup(): Group
     {
         return $this->currentCustomerGroup;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getFallbackCustomerGroup()
+    public function getFallbackCustomerGroup(): Group
     {
         return $this->fallbackCustomerGroup;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getBaseUrl()
-    {
-        return $this->baseUrl;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getTaxRules()
+    public function getTaxRules(): array
     {
         return $this->taxRules;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getTaxRule($taxId)
-    {
-        $key = 'tax_' . $taxId;
-
-        return $this->taxRules[$key];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getPriceGroups()
+    public function getPriceGroups(): array
     {
         return $this->priceGroups;
     }
@@ -191,32 +160,35 @@ class ShopContext extends Extendable implements ProductContextInterface, \JsonSe
     /**
      * {@inheritdoc}
      */
-    public function getArea()
+    public function getTaxRule(int $taxId): Tax
     {
-        return $this->area;
+        $key = 'tax_' . $taxId;
+
+        return $this->taxRules[$key];
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getCountry()
+    public function getCustomer(): ? Customer
     {
-        return $this->country;
+        return $this->customer;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getState()
+    public function getPaymentMethod(): PaymentMethod
     {
-        return $this->state;
+        return $this->paymentMethod;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function jsonSerialize()
+    public function getShippingMethod(): ShippingMethod
     {
-        return get_object_vars($this);
+        return $this->shippingMethod;
+    }
+
+    public function getTranslationContext(): TranslationContext
+    {
+        return $this->translationContext;
+    }
+
+    public function getShippingLocation(): ShippingLocation
+    {
+        return $this->shippingLocation;
     }
 }

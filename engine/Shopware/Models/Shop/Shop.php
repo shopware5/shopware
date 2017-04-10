@@ -28,6 +28,9 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
 use Shopware\Components\Theme\Inheritance;
+use Shopware\Models\Country\Country;
+use Shopware\Models\Dispatch\Dispatch;
+use Shopware\Models\Payment\Payment;
 use Symfony\Component\DependencyInjection\Container;
 
 /**
@@ -202,6 +205,45 @@ class Shop extends ModelEntity
      * @ORM\OrderBy({"position" = "ASC", "id" = "ASC"})
      */
     protected $children;
+
+    /**
+     * @var int
+     * @ORM\Column(name="payment_id", type="integer", nullable=false)
+     */
+    protected $paymentId;
+
+    /**
+     * @var int
+     * @ORM\Column(name="dispatch_id", type="integer", nullable=false)
+     */
+    protected $dispatchId;
+
+    /**
+     * @var int
+     * @ORM\Column(name="country_id", type="integer", nullable=false)
+     */
+    protected $countryId;
+
+    /**
+     * @var Payment
+     * @ORM\ManyToOne(targetEntity="\Shopware\Models\Payment\Payment")
+     * @ORM\JoinColumn(name="payment_id", referencedColumnName="id")
+     */
+    protected $payment;
+
+    /**
+     * @var Dispatch
+     * @ORM\ManyToOne(targetEntity="\Shopware\Models\Dispatch\Dispatch")
+     * @ORM\JoinColumn(name="dispatch_id", referencedColumnName="id")
+     */
+    protected $dispatch;
+
+    /**
+     * @var Country
+     * @ORM\ManyToOne(targetEntity="\Shopware\Models\Country\Country")
+     * @ORM\JoinColumn(name="country_id", referencedColumnName="id")
+     */
+    protected $country;
 
     /**
      * Class constructor.
@@ -570,6 +612,36 @@ class Shop extends ModelEntity
     public function setPages($pages)
     {
         $this->pages = $pages;
+    }
+
+    public function getPayment(): Payment
+    {
+        return $this->payment;
+    }
+
+    public function setPayment(Payment $payment)
+    {
+        $this->payment = $payment;
+    }
+
+    public function getDispatch(): Dispatch
+    {
+        return $this->dispatch;
+    }
+
+    public function setDispatch(Dispatch $dispatch)
+    {
+        $this->dispatch = $dispatch;
+    }
+
+    public function getCountry(): Country
+    {
+        return $this->country;
+    }
+
+    public function setCountry(Country $country)
+    {
+        $this->country = $country;
     }
 
     /**

@@ -84,7 +84,6 @@
 
         <service id="shopware_elastic_search.property_provider" class="Shopware\Bundle\ESIndexingBundle\Property\PropertyProvider">
             <argument type="service" id="dbal_connection" />
-            <argument type="service" id="shopware_storefront.context_service" />
             <argument type="service" id="shopware_storefront.field_helper_dbal" />
             <argument type="service" id="shopware_storefront.property_hydrator_dbal" />
         </service>
@@ -112,7 +111,7 @@
             <argument type="service" id="shopware_storefront.list_product_gateway" />
             <argument type="service" id="shopware_storefront.cheapest_price_service" />
             <argument type="service" id="shopware_storefront.vote_service" />
-            <argument type="service" id="shopware_storefront.context_service" />
+            <argument type="service" id="shopware_storefront.context_factory" />
             <argument type="service" id="dbal_connection" />
             <argument type="service" id="shopware_elastic_search.identifier_selector" />
             <argument type="service" id="shopware_storefront.price_calculation_service" />

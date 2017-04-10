@@ -24,26 +24,26 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Service\Core;
 
-use Shopware\Bundle\StoreFrontBundle\Gateway;
-use Shopware\Bundle\StoreFrontBundle\Service;
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Gateway\LinkGateway;
+use Shopware\Bundle\StoreFrontBundle\Service\ProductLinkServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 /**
  * @category  Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class ProductLinkService implements Service\ProductLinkServiceInterface
+class ProductLinkService implements ProductLinkServiceInterface
 {
     /**
-     * @var Gateway\LinkGatewayInterface
+     * @var LinkGateway
      */
     private $gateway;
 
     /**
-     * @param Gateway\LinkGatewayInterface $gateway
+     * @param LinkGateway $gateway
      */
-    public function __construct(Gateway\LinkGatewayInterface $gateway)
+    public function __construct(LinkGateway $gateway)
     {
         $this->gateway = $gateway;
     }
@@ -51,18 +51,8 @@ class ProductLinkService implements Service\ProductLinkServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function get(Struct\BaseProduct $product, Struct\ShopContextInterface $context)
+    public function getList($products, ShopContextInterface $context)
     {
-        $downloads = $this->getList([$product], $context);
-
-        return array_shift($downloads);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getList($products, Struct\ShopContextInterface $context)
-    {
-        return $this->gateway->getList($products, $context);
+        return $this->gateway->getList($products, $context->getTranslationContext());
     }
 }

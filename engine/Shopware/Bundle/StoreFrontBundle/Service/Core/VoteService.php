@@ -24,34 +24,35 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Service\Core;
 
-use Shopware\Bundle\StoreFrontBundle\Gateway;
-use Shopware\Bundle\StoreFrontBundle\Service;
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Gateway\VoteAverageGateway;
+use Shopware\Bundle\StoreFrontBundle\Gateway\VoteGateway;
+use Shopware\Bundle\StoreFrontBundle\Service\VoteServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 /**
  * @category  Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class VoteService implements Service\VoteServiceInterface
+class VoteService implements VoteServiceInterface
 {
     /**
-     * @var Gateway\VoteGatewayInterface
+     * @var VoteGateway
      */
     private $voteGateway;
 
     /**
-     * @var Gateway\VoteAverageGatewayInterface
+     * @var VoteAverageGateway
      */
     private $voteAverageGateway;
 
     /**
-     * @param Gateway\VoteGatewayInterface        $voteGateway
-     * @param Gateway\VoteAverageGatewayInterface $voteAverageGateway
+     * @param VoteGateway        $voteGateway
+     * @param VoteAverageGateway $voteAverageGateway
      */
     public function __construct(
-        Gateway\VoteGatewayInterface $voteGateway,
-        Gateway\VoteAverageGatewayInterface $voteAverageGateway
+        VoteGateway $voteGateway,
+        VoteAverageGateway $voteAverageGateway
     ) {
         $this->voteGateway = $voteGateway;
         $this->voteAverageGateway = $voteAverageGateway;
@@ -60,36 +61,16 @@ class VoteService implements Service\VoteServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function get(Struct\BaseProduct $product, Struct\ShopContextInterface $context)
+    public function getList($products, ShopContextInterface $context)
     {
-        $votes = $this->getList([$product], $context);
-
-        return array_shift($votes);
+        return $this->voteGateway->getList($products, $context->getTranslationContext());
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getAverage(Struct\BaseProduct $product, Struct\ShopContextInterface $context)
+    public function getAverages($products, ShopContextInterface $context)
     {
-        $average = $this->getAverages([$product], $context);
-
-        return array_shift($average);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getList($products, Struct\ShopContextInterface $context)
-    {
-        return $this->voteGateway->getList($products, $context);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getAverages($products, Struct\ShopContextInterface $context)
-    {
-        return $this->voteAverageGateway->getList($products, $context);
+        return $this->voteAverageGateway->getList($products, $context->getTranslationContext());
     }
 }

@@ -23,9 +23,12 @@
  */
 
 use Shopware\Bundle\AttributeBundle\Repository\SearchCriteria;
-use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Service\ContextFactoryInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ShopPageServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\CheckoutScope;
+use Shopware\Bundle\StoreFrontBundle\Struct\CustomerScope;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopScope;
 use Shopware\Components\MemoryLimit;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Slug\SlugInterface;
@@ -108,14 +111,14 @@ class sRewriteTable
     private $slug;
 
     /**
-     * @var ContextServiceInterface
-     */
-    private $contextService;
-
-    /**
      * @var ShopPageServiceInterface
      */
     private $shopPageService;
+
+    /**
+     * @var ContextFactoryInterface
+     */
+    private $contextFactory;
 
     /**
      * @param Enlight_Components_Db_Adapter_Pdo_Mysql $db
@@ -125,8 +128,10 @@ class sRewriteTable
      * @param Enlight_Template_Manager                $template
      * @param Shopware_Components_Modules             $moduleManager
      * @param SlugInterface                           $slug
-     * @param ContextServiceInterface                 $contextService
+     * @param ContextFactoryInterface                 $contextFactory
      * @param ShopPageServiceInterface                $shopPageService
+     *
+     * @internal param ContextServiceInterface $contextService
      */
     public function __construct(
         Enlight_Components_Db_Adapter_Pdo_Mysql $db = null,
@@ -136,7 +141,7 @@ class sRewriteTable
         Enlight_Template_Manager $template = null,
         Shopware_Components_Modules $moduleManager = null,
         SlugInterface $slug = null,
-        ContextServiceInterface $contextService = null,
+        ContextFactoryInterface $contextFactory = null,
         ShopPageServiceInterface $shopPageService = null
     ) {
         $this->db = $db ?: Shopware()->Db();
@@ -146,7 +151,7 @@ class sRewriteTable
         $this->template = $template ?: Shopware()->Template();
         $this->moduleManager = $moduleManager ?: Shopware()->Modules();
         $this->slug = $slug ?: Shopware()->Container()->get('shopware.slug');
-        $this->contextService = $contextService ?: Shopware()->Container()->get('shopware_storefront.context_service');
+        $this->contextFactory = $contextFactory ?: Shopware()->Container()->get('shopware_storefront.context_factory');
         $this->shopPageService = $shopPageService ?: Shopware()->Container()->get('shopware_storefront.shop_page_service');
     }
 
@@ -221,7 +226,11 @@ class sRewriteTable
     {
         $this->baseSetup();
 
-        $context = $this->contextService->createShopContext(Shopware()->Shop()->getId());
+        $context = $this->contextFactory->create(
+            new ShopScope(Shopware()->Shop()->getId()),
+            new CustomerScope(null),
+            new CheckoutScope()
+        );
 
         $this->sCreateRewriteTableCleanup();
         $this->sCreateRewriteTableStatic();
@@ -1020,9 +1029,17 @@ class sRewriteTable
         if (Shopware()->Container()->has('shop')) {
             $shop = Shopware()->Container()->get('shop');
 
-            return $this->contextService->createShopContext($shop->getId());
+            return $this->contextFactory->create(
+                new ShopScope($shop->getId()),
+                new CustomerScope(null),
+                new CheckoutScope()
+            );
         }
 
-        return $this->contextService->createShopContext(1);
+        return $this->contextFactory->create(
+            new ShopScope(1),
+            new CustomerScope(null),
+            new CheckoutScope()
+        );
     }
 }

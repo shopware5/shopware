@@ -27,7 +27,7 @@ use Enlight_Controller_Request_Request as Request;
 use Enlight_Controller_Response_ResponseHttp as Response;
 use Shopware\Bundle\EmotionBundle\ComponentHandler\ArticleComponentHandler;
 use Shopware\Bundle\EmotionBundle\ComponentHandler\ArticleSliderComponentHandler;
-use Shopware\Bundle\StoreFrontBundle\Struct\ProductContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\HttpCache\Store;
 use Shopware\Components\Model\ModelManager;
 use Symfony\Component\HttpKernel\HttpCache\HttpCache;
@@ -1190,11 +1190,11 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
         $session = $this->get('session');
 
         if ($session->offsetGet('sCountry')) {
-            /** @var ProductContextInterface $productContext */
-            $productContext = $this->get('shopware_storefront.context_service')->getShopContext();
+            /** @var ShopContextInterface $context */
+            $context = $this->get('shopware_storefront.context_service')->getShopContext();
             $userContext = sha1(
-                json_encode($productContext->getTaxRules()) .
-                json_encode($productContext->getCurrentCustomerGroup())
+                json_encode($context->getTaxRules()) .
+                json_encode($context->getCurrentCustomerGroup())
             );
             $response->setCookie(
                 'x-cache-context-hash',

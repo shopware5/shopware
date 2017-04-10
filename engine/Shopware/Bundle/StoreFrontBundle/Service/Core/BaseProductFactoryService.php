@@ -49,17 +49,7 @@ class BaseProductFactoryService implements BaseProductFactoryServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function createBaseProduct($number)
-    {
-        $products = $this->createBaseProducts([$number]);
-
-        return array_shift($products);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function createBaseProducts($numbers)
+    public function createBaseProducts($numbers): array
     {
         if (!count($numbers)) {
             return [];

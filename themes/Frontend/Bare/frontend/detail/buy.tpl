@@ -1,5 +1,5 @@
 {block name="frontend_detail_buy"}
-    <form name="sAddToBasket" method="post" action="{url controller=checkout action=addArticle}" class="buybox--form" data-add-article="true" data-eventName="submit"{if $theme.offcanvasCart} data-showModal="false" data-addArticleUrl="{url controller=checkout action=ajaxAddArticleCart}"{/if}>
+    <form name="sAddToBasket" method="post" action="{url controller=checkout action=addProduct sTargetAction=cart}" class="buybox--form" data-add-article="true" data-eventName="submit"{if $theme.offcanvasCart} data-showModal="false" data-addArticleUrl="{url controller=checkout action=addProduct sTargetAction=ajaxCart}"{/if}>
         {block name="frontend_detail_buy_configurator_inputs"}
             {if $sArticle.sConfigurator&&$sArticle.sConfiguratorSettings.type==3}
                 {foreach $sArticle.sConfigurator as $group}
@@ -14,7 +14,7 @@
         {* @deprecated - Product variants block *}
         {block name='frontend_detail_buy_variant'}{/block}
 
-        <input type="hidden" name="sAdd" value="{$sArticle.ordernumber}"/>
+        <input type="hidden" name="number" value="{$sArticle.ordernumber}"/>
 
         {* Article accessories *}
         {block name="frontend_detail_buy_accessories_outer"}
@@ -68,7 +68,7 @@
 
                                     {block name='frontend_detail_buy_quantity_select'}
                                         <div class="select-field">
-                                            <select id="sQuantity" name="sQuantity" class="quantity--select">
+                                            <select id="sQuantity" name="quantity" class="quantity--select">
                                                 {section name="i" start=$sArticle.minpurchase loop=$maxQuantity step=$sArticle.purchasesteps}
                                                     <option value="{$smarty.section.i.index}">{$smarty.section.i.index}{if $sArticle.packunit} {$sArticle.packunit}{/if}</option>
                                                 {/section}

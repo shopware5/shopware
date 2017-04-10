@@ -119,7 +119,7 @@ class PriceSortingTest extends TestCase
         $customerGroup = $context->getCurrentCustomerGroup();
         $fallback = $context->getFallbackCustomerGroup();
 
-        $result = $this->search(
+        $this->search(
             [
                 'first' => [$customerGroup->getKey() => 40, $fallback->getKey() => 1],
                 'second' => [$fallback->getKey() => 10],

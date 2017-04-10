@@ -57,6 +57,8 @@ This changelog references changes done in Shopware Next patch versions.
 * Changed constructor of `shopware_media.strategy_factory` to require a collection of `Shopware\Bundle\MediaBundle\Strategy\StrategyInterface`
 * Changed default path of `media` to `web/media`
 * Changed `\Shopware\Bundle\StoreFrontBundle\Struct\Category::__construct` accessibility to private, use `\Shopware\Bundle\StoreFrontBundle\Struct\Category::create` instead
+* Changed context requirement to new `\Shopware\Bundle\StoreFrontBundle\Struct\TranslationContext` in all `Shopware\Bundle\StoreFrontBundle` gateways
+* Changed `Shopware\Bundle\StoreFrontBundle\Gateway\TaxGateway::getRules` parameters. Removed area, country, state and use new `ShippingLocation` 
 
 ## Removals
 
@@ -137,6 +139,66 @@ This changelog references changes done in Shopware Next patch versions.
 * Removed method `Shopware_Plugins_Frontend_Statistics_Bootstrap::refreshCurrentUsers`, use `Shopware\Components\Statistics\Tracer\CurrentCustomersTracer` instead
 * Removed method `Shopware_Plugins_Frontend_Statistics_Bootstrap::refreshPartner`, use `Shopware\Components\Statistics\Tracer\PartnerTracer` instead
 * Removed class `Shopware_Plugins_Frontend_Statistics_Bootstrap`, use ``\Shopware\Components\Statistics\StatisticRegistry` instead
+* Removed unnecessary `get` function in store front bundle services and gateways, use `getList` instead. Following classes and function are affected:
+    * `\Shopware\Bundle\StoreFrontBundle\Service\CategoryServiceInterface::get`
+    * `\Shopware\Bundle\StoreFrontBundle\Gateway\CategoryGateway::get`
+    * `\Shopware\Bundle\StoreFrontBundle\Service\CheapestPriceServiceInterface::get`
+    * `\Shopware\Bundle\StoreFrontBundle\Gateway\CheapestPriceGateway::get`
+    * `\Shopware\Bundle\StoreFrontBundle\Gateway\CountryGateway::getArea`
+    * `\Shopware\Bundle\StoreFrontBundle\Gateway\CountryGateway::getCountry`
+    * `\Shopware\Bundle\StoreFrontBundle\Gateway\CountryGateway::getState`
+    * `\Shopware\Bundle\StoreFrontBundle\Gateway\CustomerGroupGateway::get`
+    * `\Shopware\Bundle\StoreFrontBundle\Gateway\DownloadGateway::get`
+    * `\Shopware\Bundle\StoreFrontBundle\Service\ProductDownloadServiceInterface::get`
+    * `\Shopware\Bundle\StoreFrontBundle\Gateway\DownloadGateway::get`
+    * `\Shopware\Bundle\StoreFrontBundle\Gateway\GraduatedPricesGateway::get`
+    * `\Shopware\Bundle\StoreFrontBundle\Service\GraduatedPricesServiceInterface::get`
+    * `\Shopware\Bundle\StoreFrontBundle\Gateway\LinkGateway::get`
+    * `\Shopware\Bundle\StoreFrontBundle\Service\ProductLinkServiceInterface::get`
+    * `\Shopware\Bundle\StoreFrontBundle\Gateway\ListProductGateway::get`
+    * `\Shopware\Bundle\StoreFrontBundle\Gateway\ManufacturerGateway::get`
+    * `\Shopware\Bundle\StoreFrontBundle\Gateway\MediaGateway::get`
+    * `\Shopware\Bundle\StoreFrontBundle\Service\Core\MediaService::get`
+    * `\Shopware\Bundle\StoreFrontBundle\Gateway\ProductConfigurationGateway::get`
+    * `\Shopware\Bundle\StoreFrontBundle\Service\ConfiguratorServiceInterface::getProductConfiguration`
+    * `\Shopware\Bundle\StoreFrontBundle\Gateway\ProductMediaGateway::get`
+    * `\Shopware\Bundle\StoreFrontBundle\Gateway\ProductMediaGateway::getCover`
+    * `\Shopware\Bundle\StoreFrontBundle\Gateway\ProductPropertyGateway::get`
+    * `\Shopware\Bundle\StoreFrontBundle\Gateway\RelatedProductsGateway::get`
+    * `\Shopware\Bundle\StoreFrontBundle\Gateway\RelatedProductStreamsGateway::get`
+    * `\Shopware\Bundle\StoreFrontBundle\Gateway\ShopGateway::get`
+    * `\Shopware\Bundle\StoreFrontBundle\Gateway\SimilarProductsGateway::get`
+    * `\Shopware\Bundle\StoreFrontBundle\Gateway\VariantMediaGateway::get`
+    * `\Shopware\Bundle\StoreFrontBundle\Gateway\VariantMediaGateway::getCover`
+    * `\Shopware\Bundle\StoreFrontBundle\Gateway\VoteAverageGateway::get`
+    * `\Shopware\Bundle\StoreFrontBundle\Gateway\VoteGateway::get`
+    * `\Shopware\Bundle\StoreFrontBundle\Service\AdditionalTextServiceInterface::buildAdditionalText`
+    * `\Shopware\Bundle\StoreFrontBundle\Service\Core\BaseProductFactoryService::createBaseProduct`
+    * `\Shopware\Bundle\StoreFrontBundle\Service\ListProductServiceInterface::get`
+    * `\Shopware\Bundle\StoreFrontBundle\Service\ManufacturerServiceInterface::get`
+    * `\Shopware\Bundle\StoreFrontBundle\Service\MediaServiceInterface::get`
+    * `\Shopware\Bundle\StoreFrontBundle\Service\MediaServiceInterface::getCover`
+    * `\Shopware\Bundle\StoreFrontBundle\Service\MediaServiceInterface::getProductMedia`
+    * `\Shopware\Bundle\StoreFrontBundle\Service\ProductServiceInterface::get`
+    * `\Shopware\Bundle\StoreFrontBundle\Service\PropertyServiceInterface::get`
+    * `\Shopware\Bundle\StoreFrontBundle\Service\RelatedProductsServiceInterface::get`
+    * `\Shopware\Bundle\StoreFrontBundle\Service\RelatedProductStreamsServiceInterface::get`
+    * `\Shopware\Bundle\StoreFrontBundle\Service\SimilarProductsServiceInterface::get`
+    * `\Shopware\Bundle\StoreFrontBundle\Service\VoteServiceInterface::get`
+    * `\Shopware\Bundle\StoreFrontBundle\Service\VoteServiceInterface::getAverage`
+
+* Removed `\Shopware\Bundle\StoreFrontBundle\Struct\LocationContext`
+* Removed `\Shopware\Bundle\StoreFrontBundle\Gateway\SimilarProductsGateway::getListByCategory`
+* Removed `\Shopware\Bundle\StoreFrontBundle\Gateway\SimilarProductsGateway::getByCategory`
+* Removed `\Shopware\Bundle\StoreFrontBundle\Service\Core\ContextService::getContext`
+* Removed `\Shopware\Bundle\StoreFrontBundle\Service\Core\ContextService::getProductContext`
+* Removed `\Shopware\Bundle\StoreFrontBundle\Service\Core\ContextService::getLocationContext`
+* Removed `\Shopware\Bundle\StoreFrontBundle\Service\Core\ContextService::initializeContext`
+* Removed `\Shopware\Bundle\StoreFrontBundle\Service\Core\ContextService::initializeLocationContext`
+* Removed `\Shopware\Bundle\StoreFrontBundle\Service\Core\ContextService::initializeProductContext`
+* Removed `\Shopware\Bundle\StoreFrontBundle\Service\Core\ContextService::createProductContext`
+* Removed `Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::createShopContext` use `Shopware\Bundle\StoreFrontBundle\Service\ContextFactoryInterface::create` instead
+* Removed `Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface::getBaseUrl`
 
 ## Filesystem
 

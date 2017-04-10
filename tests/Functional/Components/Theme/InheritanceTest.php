@@ -28,6 +28,9 @@ use Doctrine\DBAL\Connection;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Theme\Inheritance;
 use Shopware\Components\Theme\Installer;
+use Shopware\Models\Country\Country;
+use Shopware\Models\Dispatch\Dispatch;
+use Shopware\Models\Payment\Payment;
 use Shopware\Models\Shop\Shop;
 use Shopware\Models\Shop\Template;
 
@@ -184,6 +187,9 @@ class InheritanceTest extends Base
 
         $shop = new Shop();
         $shop->setName('Main shop');
+        $shop->setCountry($em->find(Country::class, 2));
+        $shop->setPayment($em->find(Payment::class, 2));
+        $shop->setDispatch($em->find(Dispatch::class, 9));
 
         $templateId = $connection->fetchColumn("SELECT id FROM s_core_templates WHERE template = 'Responsive' LIMIT 1");
         $template = $em->find(Template::class, $templateId);
@@ -208,6 +214,9 @@ class InheritanceTest extends Base
         $sub = new Shop();
         $sub->setName('sub shop of main');
         $sub->setMain($shop);
+        $shop->setCountry($em->find(Country::class, 2));
+        $shop->setPayment($em->find(Payment::class, 2));
+        $shop->setDispatch($em->find(Dispatch::class, 9));
 
         $config = $inheritance->buildConfig($template, $sub);
         $this->assertArrayHasKey('brand-primary', $config);

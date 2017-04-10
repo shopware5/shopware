@@ -25,7 +25,7 @@
 namespace Shopware\Bundle\StoreFrontBundle\Service\Core;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Bundle\StoreFrontBundle\Gateway\CountryGatewayInterface;
+use Shopware\Bundle\StoreFrontBundle\Gateway\CountryGateway;
 use Shopware\Bundle\StoreFrontBundle\Service\LocationServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Country;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
@@ -33,7 +33,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 class LocationService implements LocationServiceInterface
 {
     /**
-     * @var CountryGatewayInterface
+     * @var CountryGateway
      */
     private $gateway;
 
@@ -45,10 +45,10 @@ class LocationService implements LocationServiceInterface
     /**
      * LocationService constructor.
      *
-     * @param CountryGatewayInterface $gateway
-     * @param Connection              $connection
+     * @param CountryGateway $gateway
+     * @param Connection     $connection
      */
-    public function __construct(CountryGatewayInterface $gateway, Connection $connection)
+    public function __construct(CountryGateway $gateway, Connection $connection)
     {
         $this->gateway = $gateway;
         $this->connection = $connection;
@@ -64,9 +64,8 @@ class LocationService implements LocationServiceInterface
     public function getCountries(ShopContextInterface $context)
     {
         $ids = $this->getCountryIds();
-        $countries = $this->gateway->getCountries($ids, $context);
-
-        $states = $this->gateway->getCountryStates($ids, $context);
+        $countries = $this->gateway->getCountries($ids, $context->getTranslationContext());
+        $states = $this->gateway->getCountryStates($ids, $context->getTranslationContext());
 
         $result = [];
         foreach ($countries as $country) {

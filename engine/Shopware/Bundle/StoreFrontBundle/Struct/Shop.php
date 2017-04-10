@@ -123,6 +123,21 @@ class Shop extends Extendable implements \JsonSerializable
     protected $customerScope;
 
     /**
+     * @var ShippingMethod
+     */
+    protected $shippingMethod;
+
+    /**
+     * @var PaymentMethod
+     */
+    protected $paymentMethod;
+
+    /**
+     * @var Country
+     */
+    protected $country;
+
+    /**
      * @param ShopEntity $shop
      *
      * @return Shop
@@ -441,5 +456,35 @@ class Shop extends Extendable implements \JsonSerializable
     public function setCustomerScope($customerScope)
     {
         $this->customerScope = $customerScope;
+    }
+
+    public function getShippingMethod(): ShippingMethod
+    {
+        return $this->shippingMethod;
+    }
+
+    public function setShippingMethod(ShippingMethod $shippingMethod): void
+    {
+        $this->shippingMethod = $shippingMethod;
+    }
+
+    public function getPaymentMethod(): PaymentMethod
+    {
+        return $this->paymentMethod;
+    }
+
+    public function setPaymentMethod(PaymentMethod $paymentMethod): void
+    {
+        $this->paymentMethod = $paymentMethod;
+    }
+
+    public function getCountry(): Country
+    {
+        return $this->country;
+    }
+
+    public function setCountry(Country $country): void
+    {
+        $this->country = $country;
     }
 }

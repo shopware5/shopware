@@ -27,6 +27,7 @@ namespace Shopware\Bundle\ESIndexingBundle\Commands;
 use Elasticsearch\Client;
 use Shopware\Bundle\ESIndexingBundle\Struct\ShopIndex;
 use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
+use Shopware\Bundle\StoreFrontBundle\Struct\TranslationContext;
 use Shopware\Commands\ShopwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -60,7 +61,9 @@ class SwitchAliasCommand extends ShopwareCommand
         $indexName = $input->getArgument('index');
 
         /** @var $shop Shop */
-        $shop = $this->container->get('shopware_storefront.shop_gateway_dbal')->get($shopId);
+        $context = new TranslationContext($shopId, true, null);
+        $shop = $this->container->get('shopware_storefront.shop_gateway_dbal')->getList([$shopId], $context);
+        $shop = array_shift($shop);
 
         /** @var $index ShopIndex */
         $index = $this->container->get('shopware_elastic_search.index_factory')

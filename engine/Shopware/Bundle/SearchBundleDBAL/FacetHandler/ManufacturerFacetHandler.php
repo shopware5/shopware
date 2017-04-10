@@ -143,6 +143,7 @@ class ManufacturerFacetHandler implements PartialFacetHandlerInterface
     {
         $listItems = [];
 
+        /** @var Manufacturer $manufacturer */
         foreach ($manufacturers as $manufacturer) {
             $listItem = new ValueListItem(
                 $manufacturer->getId(),

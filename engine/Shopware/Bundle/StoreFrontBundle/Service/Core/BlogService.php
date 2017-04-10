@@ -24,33 +24,34 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Service\Core;
 
-use Shopware\Bundle\StoreFrontBundle\Gateway;
-use Shopware\Bundle\StoreFrontBundle\Service;
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Gateway\BlogGateway;
+use Shopware\Bundle\StoreFrontBundle\Service\BlogServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Service\MediaServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Blog\Blog;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 /**
  * @category  Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class BlogService implements Service\BlogServiceInterface
+class BlogService implements BlogServiceInterface
 {
     /**
-     * @var Gateway\BlogGatewayInterface
+     * @var BlogGateway
      */
     private $blogGateway;
 
     /**
-     * @var Service\MediaServiceInterface
+     * @var MediaServiceInterface
      */
     private $mediaService;
 
     /**
-     * @param Gateway\BlogGatewayInterface  $blogGateway
-     * @param Service\MediaServiceInterface $mediaService
+     * @param BlogGateway           $blogGateway
+     * @param MediaServiceInterface $mediaService
      */
-    public function __construct(Gateway\BlogGatewayInterface $blogGateway, Service\MediaServiceInterface $mediaService)
+    public function __construct(BlogGateway $blogGateway, MediaServiceInterface $mediaService)
     {
         $this->blogGateway = $blogGateway;
         $this->mediaService = $mediaService;
@@ -59,9 +60,9 @@ class BlogService implements Service\BlogServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function getList(array $ids, Struct\ShopContextInterface $context)
+    public function getList(array $ids, ShopContextInterface $context)
     {
-        $blogs = $this->blogGateway->getList($ids, $context);
+        $blogs = $this->blogGateway->getList($ids);
 
         $this->resolveMedias($blogs, $context);
 
@@ -69,10 +70,10 @@ class BlogService implements Service\BlogServiceInterface
     }
 
     /**
-     * @param Blog[]                      $blogs
-     * @param Struct\ShopContextInterface $context
+     * @param Blog[]               $blogs
+     * @param ShopContextInterface $context
      */
-    private function resolveMedias(array $blogs, Struct\ShopContextInterface $context)
+    private function resolveMedias(array $blogs, ShopContextInterface $context)
     {
         $mediaIds = [];
         foreach ($blogs as $blog) {

@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Functional\Bundle\StoreFrontBundle;
+namespace Shopware\tests\Functional\Bundle\StoreFrontBundle;
 
 use Shopware\Bundle\StoreFrontBundle\Struct;
 use Shopware\Models;
@@ -36,12 +36,11 @@ class Converter
      */
     public function convertTax(Models\Tax\Tax $tax)
     {
-        $struct = new Struct\Tax();
-        $struct->setId($tax->getId());
-        $struct->setTax($tax->getTax());
-        $struct->setName($tax->getName());
-
-        return $struct;
+        return new Struct\Tax(
+            $tax->getId(),
+            $tax->getName(),
+            $tax->getTax()
+        );
     }
 
     /**
@@ -135,6 +134,11 @@ class Converter
             );
         }
 
+        $country = new Struct\Country();
+        $country->setId($shop->getCountry()->getId());
+        $country->setName($shop->getCountry()->getName());
+        $struct->setCountry($country);
+
         return $struct;
     }
 
@@ -167,7 +171,7 @@ class Converter
     {
         $struct = new Struct\Locale();
         if (!$locale) {
-            return $locale;
+            return new Struct\Locale();
         }
 
         $struct->setId($locale->getId());

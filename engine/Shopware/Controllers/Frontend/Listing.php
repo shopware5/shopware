@@ -28,7 +28,6 @@ use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
 use Shopware\Bundle\SearchBundle\StoreFrontCriteriaFactoryInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\CustomFacetServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\Manufacturer;
-use Shopware\Bundle\StoreFrontBundle\Struct\ProductContextInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Search\CustomFacet;
 use Shopware\Bundle\StoreFrontBundle\Struct\Search\CustomSorting;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
@@ -146,7 +145,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
     {
         $manufacturerId = $this->Request()->getParam('sSupplier', null);
 
-        /** @var $context ProductContextInterface */
+        /** @var $context ShopContextInterface */
         $context = $this->get('shopware_storefront.context_service')->getShopContext();
 
         if (!$this->Request()->getParam('sCategory')) {

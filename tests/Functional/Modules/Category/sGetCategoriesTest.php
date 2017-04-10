@@ -69,8 +69,8 @@ class sGetCategoriesTest extends \Enlight_Components_Test_TestCase
         $first1 = $this->helper->createCategory(['name' => 'first1', 'parent' => 3]);
         $first2 = $this->helper->createCategory(['name' => 'first2', 'parent' => 3]);
         $second1 = $this->helper->createCategory(['name' => 'second1', 'parent' => $first1->getId()]);
-        $third1 = $this->helper->createCategory(['name' => 'third1', 'parent' => $second1->getId()]);
-        $third2 = $this->helper->createCategory(['name' => 'third2', 'parent' => $second1->getId()]);
+        $this->helper->createCategory(['name' => 'third1', 'parent' => $second1->getId()]);
+        $this->helper->createCategory(['name' => 'third2', 'parent' => $second1->getId()]);
 
         $result = $this->module->sGetCategories(3);
 
@@ -89,8 +89,8 @@ class sGetCategoriesTest extends \Enlight_Components_Test_TestCase
         $first2 = $this->helper->createCategory(['name' => 'first2', 'parent' => 3]);
         $second1 = $this->helper->createCategory(['name' => 'second1', 'parent' => $first1->getId()]);
         $second2 = $this->helper->createCategory(['name' => 'second2', 'parent' => $first1->getId()]);
-        $third1 = $this->helper->createCategory(['name' => 'third1', 'parent' => $second1->getId()]);
-        $third2 = $this->helper->createCategory(['name' => 'third2', 'parent' => $second2->getId()]);
+        $this->helper->createCategory(['name' => 'third1', 'parent' => $second1->getId()]);
+        $this->helper->createCategory(['name' => 'third2', 'parent' => $second2->getId()]);
 
         $result = $this->module->sGetCategories($first1->getId());
 
@@ -127,7 +127,7 @@ class sGetCategoriesTest extends \Enlight_Components_Test_TestCase
         $second1 = $this->helper->createCategory(['name' => 'second1', 'parent' => $first1->getId()]);
         $second2 = $this->helper->createCategory(['name' => 'second2', 'parent' => $first1->getId()]);
         $third1 = $this->helper->createCategory(['name' => 'third1', 'parent' => $second1->getId()]);
-        $third2 = $this->helper->createCategory(['name' => 'third2', 'parent' => $second2->getId()]);
+        $this->helper->createCategory(['name' => 'third2', 'parent' => $second2->getId()]);
 
         $result = $this->module->sGetCategories($second1->getId());
 
@@ -324,7 +324,7 @@ class sGetCategoriesTest extends \Enlight_Components_Test_TestCase
     {
         $first = $this->helper->createCategory(['name' => 'first',  'parent' => 3]);
         $second = $this->helper->createCategory(['name' => 'second', 'parent' => $first->getId()]);
-        $third = $this->helper->createCategory(['name' => 'third',  'parent' => $second->getId(), 'active' => false]);
+        $this->helper->createCategory(['name' => 'third',  'parent' => $second->getId(), 'active' => false]);
 
         $result = $this->module->sGetCategories($second->getId());
 

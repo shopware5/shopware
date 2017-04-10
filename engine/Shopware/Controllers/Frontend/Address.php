@@ -104,6 +104,7 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
             if (!empty($address->getAdditional()['setDefaultShippingAddress'])) {
                 $this->addressService->setDefaultShippingAddress($address);
             }
+            $this->refreshContext();
 
             if ($this->Request()->getParam('sTarget', null)) {
                 $action = $this->Request()->getParam('sTargetAction', 'index') ?: 'index';
@@ -146,6 +147,7 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
             if (!empty($address->getAdditional()['setDefaultShippingAddress'])) {
                 $this->addressService->setDefaultShippingAddress($address);
             }
+            $this->refreshContext();
 
             if ($this->Request()->getParam('sTarget')) {
                 $action = $this->Request()->getParam('sTargetAction', 'index') ?: 'index';
@@ -209,6 +211,7 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
         }
 
         $this->addressService->setDefaultShippingAddress($address);
+        $this->refreshContext();
 
         $this->redirect(['action' => 'index', 'success' => 'default_shipping']);
     }
@@ -230,6 +233,7 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
         }
 
         $this->addressService->setDefaultBillingAddress($address);
+        $this->refreshContext();
 
         $this->redirect(['action' => 'index', 'success' => 'default_billing']);
     }
@@ -308,6 +312,7 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
             }
 
             $this->handleExtraData($extraData, $address);
+            $this->refreshContext();
 
             $addressView = $this->get('models')->toArray($address);
             $addressView['country'] = $this->get('models')->toArray($address->getCountry());
@@ -340,6 +345,7 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
 
         $data = $this->Request()->getParam('extraData', []);
         $this->handleExtraData($data, $address);
+        $this->refreshContext();
     }
 
     /**
@@ -412,7 +418,6 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
                 if ($key == 'checkoutShippingAddressId') {
                     $this->refreshSession($address);
                 }
-
                 $this->get('session')->offsetSet($key, $address->getId());
             }
         }
@@ -424,6 +429,13 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
         if (!empty($extraData['setDefaultShippingAddress'])) {
             $this->addressService->setDefaultShippingAddress($address);
         }
+    }
+
+    private function refreshContext()
+    {
+        /** @var \Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface $service */
+        $service = $this->get('shopware_storefront.context_service');
+        $service->refresh();
     }
 
     /**
@@ -438,7 +450,5 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
         $this->get('session')->offsetSet('sCountry', $countryId);
         $this->get('session')->offsetSet('sState', $stateId);
         $this->get('session')->offsetSet('sArea', $areaId);
-
-        $this->get('shopware_storefront.context_service')->initializeShopContext();
     }
 }

@@ -27,8 +27,6 @@ namespace Shopware\Tests\Unit\Components;
 use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\StoreFrontBundle\Service\Core\ContextService;
 use Shopware\Bundle\StoreFrontBundle\Struct\Category;
-use Shopware\Bundle\StoreFrontBundle\Struct\Currency;
-use Shopware\Bundle\StoreFrontBundle\Struct\Customer\Group;
 use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
 use Shopware\Components\QueryAliasMapper;
@@ -329,7 +327,10 @@ sCategory',
         $category->setId($categoryId);
         $shop = new Shop();
         $shop->setCategory($category);
-        $context = new ShopContext('', $shop, new Currency(), new Group(), new Group(), [], []);
+
+        $context = $this->createMock(ShopContext::class);
+        $context->method('getShop')
+            ->will($this->returnValue($shop));
 
         $contextService = $this->createMock(ContextService::class);
         $contextService->method('getShopContext')

@@ -24,7 +24,8 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Service;
 
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 /**
  * @category  Shopware
@@ -34,22 +35,12 @@ use Shopware\Bundle\StoreFrontBundle\Struct;
 interface RelatedProductStreamsServiceInterface
 {
     /**
-     * @see \Shopware\Bundle\StoreFrontBundle\Service\RelatedProductStreamsServiceInterface::get()
+     * Selects all related product stream ids for the provided product.
      *
-     * @param Struct\BaseProduct[]        $products
-     * @param Struct\ShopContextInterface $context
+     * @param BaseProduct[]        $products
+     * @param ShopContextInterface $context
      *
      * @return array indexed with the product number, each array element contains product stream structs
      */
-    public function getList($products, Struct\ShopContextInterface $context);
-
-    /**
-     * Selects all related product stream ids for the provided product.
-     *
-     * @param Struct\BaseProduct          $product
-     * @param Struct\ShopContextInterface $context
-     *
-     * @return int[] array of product stream structs, indexed by the product order number
-     */
-    public function get(Struct\BaseProduct $product, Struct\ShopContextInterface $context);
+    public function getList($products, ShopContextInterface $context);
 }

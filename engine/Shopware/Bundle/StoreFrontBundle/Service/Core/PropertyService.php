@@ -24,26 +24,26 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Service\Core;
 
-use Shopware\Bundle\StoreFrontBundle\Gateway;
-use Shopware\Bundle\StoreFrontBundle\Service;
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Gateway\ProductPropertyGateway;
+use Shopware\Bundle\StoreFrontBundle\Service\PropertyServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 /**
  * @category  Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class PropertyService implements Service\PropertyServiceInterface
+class PropertyService implements PropertyServiceInterface
 {
     /**
-     * @var Gateway\ProductPropertyGatewayInterface
+     * @var ProductPropertyGateway
      */
     private $productPropertyGateway;
 
     /**
-     * @param Gateway\ProductPropertyGatewayInterface $productPropertyGateway
+     * @param ProductPropertyGateway $productPropertyGateway
      */
-    public function __construct(Gateway\ProductPropertyGatewayInterface $productPropertyGateway)
+    public function __construct(ProductPropertyGateway $productPropertyGateway)
     {
         $this->productPropertyGateway = $productPropertyGateway;
     }
@@ -51,19 +51,9 @@ class PropertyService implements Service\PropertyServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function get(Struct\BaseProduct $product, Struct\ShopContextInterface $context)
+    public function getList($products, ShopContextInterface $context)
     {
-        $properties = $this->getList([$product], $context);
-
-        return array_shift($properties);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getList($products, Struct\ShopContextInterface $context)
-    {
-        $properties = $this->productPropertyGateway->getList($products, $context);
+        $properties = $this->productPropertyGateway->getList($products, $context->getTranslationContext());
 
         return $properties;
     }

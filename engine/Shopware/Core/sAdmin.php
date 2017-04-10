@@ -608,13 +608,8 @@ class sAdmin
             ]
         );
 
-        $this->db->query(
-            $sqlPayment,
-            [
-                $paymentId ?: $this->front->Request()->getPost('sPayment'),
-                $userId,
-            ]
-        );
+        $paymentId = $paymentId ?: $this->front->Request()->getPost('sPayment');
+        $this->db->query($sqlPayment, [$paymentId, $userId]);
 
         if ($this->db->getErrorMessage()) {
             throw new Enlight_Exception(
@@ -622,6 +617,8 @@ class sAdmin
                 . $this->db->getErrorMessage()
             );
         }
+
+        $this->session['sPayment'] = $paymentId;
 
         return true;
     }
@@ -2943,7 +2940,7 @@ class sAdmin
             $discount_tax
         );
 
-        $dispatch = $this->sGetPremiumDispatch((int) $this->session->offsetGet('sDispatch'));
+        $dispatch = $this->sGetPremiumDispatch((int) $this->session->offsetGet('shippingMethodId'));
 
         $payment = $this->handlePaymentMeanSurcharge(
             $country,

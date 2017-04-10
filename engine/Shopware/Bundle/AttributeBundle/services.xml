@@ -98,7 +98,7 @@
         <service id="shopware_attribute.product_reader" class="Shopware\Bundle\AttributeBundle\Repository\Reader\ProductReader">
             <argument>Shopware\Models\Article\Detail</argument>
             <argument type="service" id="models" />
-            <argument type="service" id="shopware_storefront.context_service" />
+            <argument type="service" id="shopware_storefront.context_factory" />
             <argument type="service" id="shopware_storefront.additional_text_service" />
         </service>
 

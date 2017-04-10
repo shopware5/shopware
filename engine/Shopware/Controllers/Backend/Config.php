@@ -24,6 +24,8 @@
 
 use Shopware\Models\Config\Element;
 use Shopware\Models\Config\Value;
+use Shopware\Models\Dispatch\Dispatch;
+use Shopware\Models\Payment\Payment;
 use Shopware\Models\Shop\Shop;
 
 /**
@@ -515,6 +517,9 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                     'currencyId' => 'currency',
                     'categoryId' => 'category',
                     'customerGroupId' => 'customerGroup',
+                    'paymentId' => 'payment',
+                    'dispatchId' => 'dispatch',
+                    'countryId' => 'country',
                 ];
                 foreach ($fields as $field => $mapping) {
                     if (isset($data[$field])) {
@@ -749,6 +754,12 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
             switch ($name) {
                 case 'form':
                     $repository = 'Shopware\Models\Config\Form';
+                    break;
+                case 'payment':
+                    $repository = Payment::class;
+                    break;
+                case 'dispatch':
+                    $repository = Dispatch::class;
                     break;
                 case 'documentTemplate':
                 case 'template':

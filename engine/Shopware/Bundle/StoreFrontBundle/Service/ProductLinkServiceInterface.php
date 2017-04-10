@@ -24,7 +24,8 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Service;
 
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 /**
  * @category  Shopware
@@ -34,28 +35,10 @@ use Shopware\Bundle\StoreFrontBundle\Struct;
 interface ProductLinkServiceInterface
 {
     /**
-     * To get detailed information about the selection conditions, structure and content of the returned object,
-     * please refer to the linked classes.
-     *
-     * @see \Shopware\Bundle\StoreFrontBundle\Service\ProductLinkServiceInterface::get()
-     *
-     * @param Struct\BaseProduct[]        $products
-     * @param Struct\ShopContextInterface $context
+     * @param BaseProduct[]        $products
+     * @param ShopContextInterface $context
      *
      * @return array indexed by the product order number, each array element contains a list of \Shopware\Bundle\StoreFrontBundle\Struct\Product\Link classes
      */
-    public function getList($products, Struct\ShopContextInterface $context);
-
-    /**
-     * To get detailed information about the selection conditions, structure and content of the returned object,
-     * please refer to the linked classes.
-     *
-     * @see \Shopware\Bundle\StoreFrontBundle\Gateway\LinkGatewayInterface::get()
-     *
-     * @param Struct\BaseProduct          $product
-     * @param Struct\ShopContextInterface $context
-     *
-     * @return Struct\Product\Link[]
-     */
-    public function get(Struct\BaseProduct $product, Struct\ShopContextInterface $context);
+    public function getList($products, ShopContextInterface $context);
 }

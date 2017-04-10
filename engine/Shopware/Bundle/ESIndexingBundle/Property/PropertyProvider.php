@@ -25,13 +25,11 @@
 namespace Shopware\Bundle\ESIndexingBundle\Property;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\FieldHelper;
-use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\PropertyHydrator;
-use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
-use Shopware\Bundle\StoreFrontBundle\Service\Core\ContextService;
+use Shopware\Bundle\StoreFrontBundle\Gateway\FieldHelper;
+use Shopware\Bundle\StoreFrontBundle\Gateway\Hydrator\PropertyHydrator;
 use Shopware\Bundle\StoreFrontBundle\Struct\Property\Group;
 use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\TranslationContext;
 
 /**
  * Class PropertyProvider
@@ -44,11 +42,6 @@ class PropertyProvider implements PropertyProviderInterface
     private $connection;
 
     /**
-     * @var ContextServiceInterface
-     */
-    private $contextService;
-
-    /**
      * @var FieldHelper
      */
     private $fieldHelper;
@@ -59,19 +52,16 @@ class PropertyProvider implements PropertyProviderInterface
     private $hydrator;
 
     /**
-     * @param Connection              $connection
-     * @param ContextServiceInterface $contextService
-     * @param FieldHelper             $fieldHelper
-     * @param PropertyHydrator        $hydrator
+     * @param Connection       $connection
+     * @param FieldHelper      $fieldHelper
+     * @param PropertyHydrator $hydrator
      */
     public function __construct(
         Connection $connection,
-        ContextServiceInterface $contextService,
         FieldHelper $fieldHelper,
         PropertyHydrator $hydrator
     ) {
         $this->connection = $connection;
-        $this->contextService = $contextService;
         $this->fieldHelper = $fieldHelper;
         $this->hydrator = $hydrator;
     }
@@ -81,10 +71,7 @@ class PropertyProvider implements PropertyProviderInterface
      */
     public function get(Shop $shop, $groupIds)
     {
-        $context = $this->contextService->createShopContext(
-            $shop->getId(),
-            ContextService::FALLBACK_CUSTOMER_GROUP
-        );
+        $context = TranslationContext::createFromShop($shop);
 
         $result = [];
         $query = $this->getQuery($context);
@@ -120,11 +107,11 @@ class PropertyProvider implements PropertyProviderInterface
     }
 
     /**
-     * @param ShopContextInterface $context
+     * @param TranslationContext $context
      *
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
-    private function getQuery(ShopContextInterface $context)
+    private function getQuery(TranslationContext $context)
     {
         $query = $this->connection->createQueryBuilder();
         $query

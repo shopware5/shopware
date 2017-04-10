@@ -301,13 +301,17 @@ class sArticles
             return [];
         }
 
-        $productContext = $this->contextService->getShopContext();
-        $product = $this->listProductService->get($orderNumber, $productContext);
+        $context = $this->contextService->getShopContext();
+        $products = $this->listProductService->getList([$orderNumber], $context);
+        $product = array_shift($products);
+
         if (!$product || !$product->hasProperties()) {
             return [];
         }
 
-        $set = $this->propertyService->get($product, $productContext);
+        $set = $this->propertyService->getList([$product], $context);
+        $set = array_shift($set);
+
         if (!$set) {
             return [];
         }
@@ -614,7 +618,7 @@ class sArticles
     public function getTaxRateByConditions($taxId)
     {
         $context = $this->contextService->getShopContext();
-        $taxRate = $context->getTaxRule($taxId);
+        $taxRate = $context->getTaxRule((int) $taxId);
         if ($taxRate) {
             return number_format($taxRate->getTax(), 2);
         }
@@ -1100,7 +1104,9 @@ class sArticles
             return [];
         }
 
-        $product = $this->productService->get($productNumber, $context);
+        $product = $this->productService->getList([$productNumber], $context);
+        $product = array_shift($product);
+
         if (!$product) {
             return [];
         }
@@ -1553,7 +1559,7 @@ class sArticles
             $product->setAdditional($article['additionaltext']);
 
             $context = $this->contextService->getShopContext();
-            $product = $this->additionalTextService->buildAdditionalText($product, $context);
+            $this->additionalTextService->buildAdditionalTextLists([$product], $context);
 
             if (!$returnAll) {
                 return $article['articleName'] . ' ' . $product->getAdditional();
@@ -2054,7 +2060,7 @@ class sArticles
      * @param SearchBundle\ProductNumberSearchResult $searchResult
      * @param $orderNumber
      * @param $categoryId
-     * @param StoreFrontBundle\Struct\ProductContextInterface $context
+     * @param StoreFrontBundle\Struct\ShopContextInterface $context
      *
      * @return array
      */
@@ -2062,7 +2068,7 @@ class sArticles
         SearchBundle\ProductNumberSearchResult $searchResult,
         $orderNumber,
         $categoryId,
-        StoreFrontBundle\Struct\ProductContextInterface $context
+        StoreFrontBundle\Struct\ShopContextInterface $context
     ) {
         $products = $searchResult->getProducts();
         $products = array_values($products);
@@ -2083,7 +2089,9 @@ class sArticles
             $navigation = [];
 
             if ($previousProduct) {
-                $previousProduct = $this->listProductService->get($previousProduct->getNumber(), $context);
+                $previousProduct = $this->listProductService->getList([$previousProduct->getNumber()], $context);
+                $previousProduct = array_shift($previousProduct);
+
                 $navigation['previousProduct']['orderNumber'] = $previousProduct->getNumber();
                 $navigation['previousProduct']['link'] = $this->config->get('sBASEFILE') . '?sViewport=detail&sDetails=' . $previousProduct->getId() . '&sCategory=' . $categoryId;
                 $navigation['previousProduct']['name'] = $previousProduct->getName();
@@ -2097,7 +2105,8 @@ class sArticles
             }
 
             if ($nextProduct) {
-                $nextProduct = $this->listProductService->get($nextProduct->getNumber(), $context);
+                $nextProduct = $this->listProductService->getList([$nextProduct->getNumber()], $context);
+                $nextProduct = array_shift($nextProduct);
 
                 $navigation['nextProduct']['orderNumber'] = $nextProduct->getNumber();
                 $navigation['nextProduct']['link'] = $this->config->get('sBASEFILE') . '?sViewport=detail&sDetails=' . $nextProduct->getId() . '&sCategory=' . $categoryId;
@@ -2294,10 +2303,11 @@ class sArticles
     {
         $context = $this->contextService->getShopContext();
 
-        $product = $this->listProductService->get(
-            $number,
+        $product = $this->listProductService->getList(
+            [$number],
             $context
         );
+        $product = array_shift($product);
 
         if (!$product) {
             return false;
@@ -2314,10 +2324,11 @@ class sArticles
             return $promotion;
         }
 
-        $propertySet = $this->propertyService->get(
-            $product,
+        $propertySet = $this->propertyService->getList(
+            [$product],
             $context
         );
+        $propertySet = array_shift($propertySet);
 
         if (!$propertySet) {
             return $promotion;
@@ -2334,15 +2345,15 @@ class sArticles
      * This function calls the new shopware core and converts the result to the old listing structure.
      *
      * @param $categoryId
-     * @param StoreFrontBundle\Struct\ProductContextInterface $context
-     * @param Enlight_Controller_Request_Request              $request
-     * @param SearchBundle\Criteria                           $criteria
+     * @param StoreFrontBundle\Struct\ShopContextInterface $context
+     * @param Enlight_Controller_Request_Request           $request
+     * @param SearchBundle\Criteria                        $criteria
      *
      * @return array
      */
     private function getListing(
         $categoryId,
-        StoreFrontBundle\Struct\ProductContextInterface $context,
+        StoreFrontBundle\Struct\ShopContextInterface $context,
         Enlight_Controller_Request_Request $request,
         SearchBundle\Criteria $criteria
     ) {
@@ -2416,7 +2427,7 @@ class sArticles
 
             // generate additional text
             if (!empty($selection)) {
-                $this->additionalTextService->buildAdditionalText($product, $this->contextService->getShopContext());
+                $this->additionalTextService->buildAdditionalTextLists([$product], $this->contextService->getShopContext());
                 $data['additionaltext'] = $product->getAdditional();
             }
 

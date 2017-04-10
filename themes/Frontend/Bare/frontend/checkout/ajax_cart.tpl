@@ -34,10 +34,10 @@
         {block name='frontend_checkout_ajax_cart_item_container'}
             <div class="item--container">
                 {block name='frontend_checkout_ajax_cart_item_container_inner'}
-                    {if $sBasket.content}
-                        {foreach $sBasket.content as $sBasketItem}
+                    {if $cart.viewLineItems}
+                        {foreach $cart.viewLineItems as $lineItem}
                             {block name='frontend_checkout_ajax_cart_row'}
-                                {include file="frontend/checkout/ajax_cart_item.tpl" basketItem=$sBasketItem}
+                                {include file="frontend/checkout/ajax_cart_item.tpl" lineItem=$lineItem}
                             {/block}
                         {/foreach}
                     {else}

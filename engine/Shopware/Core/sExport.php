@@ -1101,7 +1101,7 @@ class sExport
 
                             $product->setAdditional($row['additionaltext']);
 
-                            $product = $this->additionalTextService->buildAdditionalText($product, $context);
+                            $this->additionalTextService->buildAdditionalTextLists([$product], $context);
 
                             if (array_key_exists($orderNumber, $row['group_additionaltext'])) {
                                 $row['group_additionaltext'][$orderNumber] = $product->getAdditional();
@@ -1120,7 +1120,7 @@ class sExport
 
                 $product->setAdditional($row['additionaltext']);
 
-                $product = $this->additionalTextService->buildAdditionalText($product, $context);
+                $this->additionalTextService->buildAdditionalTextLists([$product], $context);
 
                 $row['additionaltext'] = $product->getAdditional();
                 $row['configurator_options'] = [];

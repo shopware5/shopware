@@ -24,7 +24,9 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Service;
 
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
+use Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceRule;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 /**
  * @category  Shopware
@@ -34,30 +36,15 @@ use Shopware\Bundle\StoreFrontBundle\Struct;
 interface CheapestPriceServiceInterface
 {
     /**
-     * @see \Shopware\Bundle\StoreFrontBundle\Service\Core\CheapestPriceServiceInterface::get()
-     *
-     * @param Struct\ListProduct[]           $products
-     * @param Struct\ProductContextInterface $context
-     *
-     * @return Struct\Product\PriceRule[] Indexed by product number
-     */
-    public function getList($products, Struct\ProductContextInterface $context);
-
-    /**
      * Returns the cheapest product price for the provided context and product.
      *
      * If the current customer group has no specified prices, the function returns
      * the cheapest product price for the fallback customer group.
      *
-     * To get detailed information about the selection conditions, structure and content of the returned object,
-     * please refer to the linked classes.
+     * @param ListProduct[]        $products
+     * @param ShopContextInterface $context
      *
-     * @see \Shopware\Bundle\StoreFrontBundle\Gateway\CheapestPriceGatewayInterface::get()
-     *
-     * @param Struct\ListProduct             $product
-     * @param Struct\ProductContextInterface $context
-     *
-     * @return Struct\Product\PriceRule
+     * @return PriceRule[] Indexed by product number
      */
-    public function get(Struct\ListProduct $product, Struct\ProductContextInterface $context);
+    public function getList($products, ShopContextInterface $context);
 }

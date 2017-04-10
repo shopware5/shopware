@@ -26,8 +26,8 @@ namespace Shopware\Bundle\EmotionBundle\Service\Gateway\Hydrator;
 
 use Shopware\Bundle\EmotionBundle\Struct\Emotion;
 use Shopware\Bundle\EmotionBundle\Struct\EmotionTemplate;
-use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\AttributeHydrator;
-use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\Hydrator;
+use Shopware\Bundle\StoreFrontBundle\Gateway\Hydrator\AttributeHydrator;
+use Shopware\Bundle\StoreFrontBundle\Gateway\Hydrator\Hydrator;
 
 class EmotionHydrator extends Hydrator
 {

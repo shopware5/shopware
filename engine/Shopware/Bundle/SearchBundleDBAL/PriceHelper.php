@@ -55,7 +55,7 @@ class PriceHelper implements PriceHelperInterface
     /**
      * {@inheritdoc}
      */
-    public function getSelection(Struct\ProductContextInterface $context)
+    public function getSelection(Struct\ShopContextInterface $context)
     {
         $fallback = $context->getFallbackCustomerGroup();
         $current = $context->getCurrentCustomerGroup();
@@ -199,11 +199,11 @@ class PriceHelper implements PriceHelperInterface
     /**
      * Builds the tax cases for the price selection query
      *
-     * @param Struct\ProductContextInterface $context
+     * @param Struct\ShopContextInterface $context
      *
      * @return string
      */
-    private function buildTaxCase(Struct\ProductContextInterface $context)
+    private function buildTaxCase(Struct\ShopContextInterface $context)
     {
         $cases = [];
         foreach ($context->getTaxRules() as $rule) {

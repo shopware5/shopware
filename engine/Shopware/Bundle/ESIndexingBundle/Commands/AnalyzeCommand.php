@@ -24,6 +24,7 @@
 
 namespace Shopware\Bundle\ESIndexingBundle\Commands;
 
+use Shopware\Bundle\StoreFrontBundle\Struct\TranslationContext;
 use Shopware\Commands\ShopwareCommand;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
@@ -60,7 +61,10 @@ class AnalyzeCommand extends ShopwareCommand
         $query = $input->getArgument('query');
         $analyzer = $input->getArgument('analyzer');
 
-        $shop = $this->container->get('shopware_storefront.shop_gateway_dbal')->get($shopId);
+        $context = new TranslationContext($shopId, true, null);
+        $shop = $this->container->get('shopware_storefront.shop_gateway_dbal')->getList([$shopId], $context);
+        $shop = array_shift($shop);
+
         $client = $this->container->get('shopware_elastic_search.client');
         $index = $this->container->get('shopware_elastic_search.index_factory')->createShopIndex($shop);
 

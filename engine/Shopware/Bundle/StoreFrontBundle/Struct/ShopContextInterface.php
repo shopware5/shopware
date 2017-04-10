@@ -24,8 +24,7 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Struct;
 
-use Shopware\Bundle\StoreFrontBundle\Struct\Country\Area;
-use Shopware\Bundle\StoreFrontBundle\Struct\Country\State;
+use Shopware\Bundle\CartBundle\Domain\Delivery\ShippingLocation;
 use Shopware\Bundle\StoreFrontBundle\Struct\Customer\Group;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceGroup;
 
@@ -34,7 +33,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceGroup;
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-interface ShopContextInterface
+interface ShopContextInterface extends ExtendableInterface
 {
     /**
      * Contains the current shop object of the store front.
@@ -43,7 +42,7 @@ interface ShopContextInterface
      *
      * @return Shop
      */
-    public function getShop();
+    public function getShop(): Shop;
 
     /**
      * Contains the currency of the store front.
@@ -56,7 +55,7 @@ interface ShopContextInterface
      *
      * @return Currency
      */
-    public function getCurrency();
+    public function getCurrency(): Currency;
 
     /**
      * Contains the current customer group for the store front.
@@ -66,7 +65,7 @@ interface ShopContextInterface
      *
      * @return Group
      */
-    public function getCurrentCustomerGroup();
+    public function getCurrentCustomerGroup(): Group;
 
     /**
      * Contains the fallback customer group for the current shop.
@@ -77,48 +76,31 @@ interface ShopContextInterface
      *
      * @return Group
      */
-    public function getFallbackCustomerGroup();
-
-    /**
-     * @return string
-     */
-    public function getBaseUrl();
+    public function getFallbackCustomerGroup(): Group;
 
     /**
      * Returns all tax rules
      *
      * @return Tax[]
      */
-    public function getTaxRules();
+    public function getTaxRules(): array;
 
-    /**
-     * Returns the active tax rule for the provided tax id.
-     *
-     * @param int $taxId
-     *
-     * @return Tax
-     */
-    public function getTaxRule($taxId);
+    public function getTaxRule(int $taxId): Tax;
 
     /**
      * Returns the active price groups
      *
      * @return PriceGroup[]
      */
-    public function getPriceGroups();
+    public function getPriceGroups(): array;
 
-    /**
-     * @return Area|null
-     */
-    public function getArea();
+    public function getShippingLocation(): ShippingLocation;
 
-    /**
-     * @return Country|null
-     */
-    public function getCountry();
+    public function getCustomer(): ? Customer;
 
-    /**
-     * @return State|null
-     */
-    public function getState();
+    public function getTranslationContext(): TranslationContext;
+
+    public function getPaymentMethod(): PaymentMethod;
+
+    public function getShippingMethod(): ShippingMethod;
 }

@@ -1,0 +1,124 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="cart.price.rounding.precision">2</parameter>
+    </parameters>
+
+    <services>
+        <service id="cart.price.amount_calculator" class="Shopware\Bundle\CartBundle\Domain\Price\AmountCalculator" >
+            <argument type="service" id="cart.tax.detector" />
+            <argument type="service" id="cart.price.rounding" />
+            <argument type="service" id="cart.tax.amount_calculator" />
+        </service>
+
+        <service id="cart.tax.percentage_rule_builder" class="Shopware\Bundle\CartBundle\Domain\Tax\PercentageTaxRuleBuilder" />
+
+        <service id="cart.tax.detector" class="Shopware\Bundle\CartBundle\Domain\Tax\TaxDetector" />
+
+        <service id="cart.calculator" class="Shopware\Bundle\CartBundle\Domain\Cart\CartCalculator">
+            <!--cart processors-->
+            <argument type="collection" />
+
+            <argument type="service" id="cart.calculated_cart_generator" />
+        </service>
+
+        <service id="cart.calculated_cart_generator" class="Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCartGenerator">
+            <argument type="service" id="cart.price.amount_calculator" />
+        </service>
+
+        <service id="cart.price.rounding" class="Shopware\Bundle\CartBundle\Domain\Price\PriceRounding">
+            <argument>%cart.price.rounding.precision%</argument>
+        </service>
+
+        <service id="cart.tax.calculator" class="Shopware\Bundle\CartBundle\Domain\Tax\TaxCalculator" >
+            <argument type="service" id="cart.price.rounding" />
+            <argument type="collection" />
+        </service>
+
+        <service id="cart.tax.rule_calculator" class="Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCalculator">
+            <argument type="service" id="cart.price.rounding" />
+            <tag name="cart.tax.rule_calculator" />
+        </service>
+
+        <service id="cart.tax.percentage_rule_calculator" class="Shopware\Bundle\CartBundle\Domain\Tax\PercentageTaxRuleCalculator">
+            <argument type="service" id="cart.tax.rule_calculator" />
+            <tag name="cart.tax.rule_calculator" />
+        </service>
+
+        <service id="cart.price.calculator" class="Shopware\Bundle\CartBundle\Domain\Price\PriceCalculator">
+            <argument type="service" id="cart.tax.calculator" />
+            <argument type="service" id="cart.price.rounding" />
+            <argument type="service" id="cart.tax.detector" />
+        </service>
+
+        <service id="cart.product.processor" class="Shopware\Bundle\CartBundle\Domain\Product\ProductProcessor">
+            <argument type="service" id="cart.product.calculator" />
+            <tag name="cart.processor" priority="30000" />
+        </service>
+
+        <service id="cart.voucher.processor" class="Shopware\Bundle\CartBundle\Domain\Voucher\VoucherProcessor" >
+            <argument id="cart.price.percentage_calculator" type="service"/>
+            <argument id="cart.calculated_cart_generator" type="service"/>
+            <argument id="cart.voucher.gateway" type="service"/>
+            <argument id="cart.validator.rule_data_collector_registry" type="service"/>
+            <argument id="cart.price.calculator" type="service"/>
+            <tag name="cart.processor" priority="20000"/>
+        </service>
+
+        <service id="cart.delivery.separator_processor" class="Shopware\Bundle\CartBundle\Domain\Delivery\DeliverySeparatorProcessor">
+            <argument type="service" id="cart.delivery.stock_separator" />
+            <tag name="cart.processor" priority="10000" />
+        </service>
+
+        <service id="cart.product.calculator" class="Shopware\Bundle\CartBundle\Domain\Product\ProductCalculator">
+            <argument id="cart.product.price_gateway" type="service"/>
+            <argument id="cart.price.calculator" type="service"/>
+            <argument id="cart.product.delivery_information_gateway" type="service"/>
+        </service>
+
+        <service id="cart.price.percentage_calculator" class="Shopware\Bundle\CartBundle\Domain\Price\PercentagePriceCalculator">
+            <argument type="service" id="cart.price.rounding"/>
+            <argument type="service" id="cart.price.calculator"/>
+            <argument type="service" id="cart.tax.percentage_rule_builder"/>
+        </service>
+
+        <service id="cart.delivery.stock_separator" class="Shopware\Bundle\CartBundle\Domain\Delivery\StockDeliverySeparator">
+            <argument type="service" id="cart.price.calculator" />
+        </service>
+
+        <service id="cart.validator.rule_data_collector_registry" class="Shopware\Bundle\CartBundle\Domain\Validator\Collector\RuleDataCollectorRegistry">
+            <argument type="collection" />
+        </service>
+
+        <service id="cart.payment.validator_processor" class="Shopware\Bundle\CartBundle\Domain\Payment\PaymentValidatorProcessor">
+            <argument id="cart.validator.filter" type="service"/>
+            <argument id="cart.calculated_cart_generator" type="service"/>
+            <tag name="cart.processor" priority="100" />
+        </service>
+
+        <service id="cart.validator.filter" class="Shopware\Bundle\CartBundle\Domain\Validator\ValidatableFilter">
+            <argument id="cart.validator.rule_data_collector_registry" type="service"/>
+        </service>
+
+        <service id="cart.tax.amount_calculator" alias="cart.tax.vertical_amount_calculator" />
+        <!--<service id="cart.tax.amount_calculator" alias="cart.tax.horizontal_amount_calculator" />-->
+
+        <service id="cart.tax.vertical_amount_calculator" class="Shopware\Bundle\CartBundle\Domain\Tax\VerticalTaxAmountCalculator"/>
+
+        <service id="cart.tax.horizontal_amount_calculator" class="Shopware\Bundle\CartBundle\Domain\Tax\HorizontalTaxAmountCalculator" >
+            <argument type="service" id="cart.tax.percentage_rule_builder" />
+            <argument type="service" id="cart.tax.calculator" />
+            <argument type="service" id="cart.tax.detector" />
+        </service>
+
+        <!--requires implementation-->
+        <service id="cart.product.delivery_information_gateway" class="Shopware\Bundle\CartBundle\Domain\Product\ProductDeliveryGateway" />
+        <service id="cart.product.price_gateway" class="Shopware\Bundle\CartBundle\Domain\Product\ProductPriceGateway" />
+        <service id="cart.voucher.gateway" class="Shopware\Bundle\CartBundle\Domain\Voucher\VoucherGateway" />
+
+    </services>
+</container>

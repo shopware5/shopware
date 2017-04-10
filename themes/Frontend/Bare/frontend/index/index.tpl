@@ -174,7 +174,7 @@
                 'register': '{url controller="register"}',
                 'checkout': '{url controller="checkout"}',
                 'ajax_validate': '{url controller="register"}',
-                'ajax_add_article': '{url controller="checkout" action="addArticle"}',
+                'ajax_add_article': '{url controller="checkout" action="addProduct" sTargetAction="ajaxAddArticle"}',
                 'ajax_listing': '{url module="widgets" controller="Listing" action="ajaxListing"}',
                 'ajax_cart_refresh': '{url controller="checkout" action="ajaxAmount"}',
                 'ajax_address_selection': '{url controller="address" action="ajaxSelection" fullPath}',

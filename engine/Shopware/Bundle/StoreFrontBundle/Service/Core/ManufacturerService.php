@@ -24,10 +24,10 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Service\Core;
 
-use Shopware\Bundle\StoreFrontBundle\Gateway;
-use Shopware\Bundle\StoreFrontBundle\Service;
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Gateway\ManufacturerGateway;
+use Shopware\Bundle\StoreFrontBundle\Service\ManufacturerServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\Manufacturer;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\Routing\RouterInterface;
 
 /**
@@ -35,10 +35,10 @@ use Shopware\Components\Routing\RouterInterface;
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class ManufacturerService implements Service\ManufacturerServiceInterface
+class ManufacturerService implements ManufacturerServiceInterface
 {
     /**
-     * @var Gateway\ManufacturerGatewayInterface
+     * @var ManufacturerGateway
      */
     private $manufacturerGateway;
 
@@ -48,11 +48,11 @@ class ManufacturerService implements Service\ManufacturerServiceInterface
     private $router;
 
     /**
-     * @param Gateway\ManufacturerGatewayInterface $manufacturerGateway
-     * @param RouterInterface                      $router
+     * @param ManufacturerGateway $manufacturerGateway
+     * @param RouterInterface     $router
      */
     public function __construct(
-        Gateway\ManufacturerGatewayInterface $manufacturerGateway,
+        ManufacturerGateway $manufacturerGateway,
         RouterInterface $router
     ) {
         $this->manufacturerGateway = $manufacturerGateway;
@@ -62,19 +62,9 @@ class ManufacturerService implements Service\ManufacturerServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function get($id, Struct\ShopContextInterface $context)
+    public function getList(array $ids, ShopContextInterface $context)
     {
-        $manufacturers = $this->getList([$id], $context);
-
-        return array_shift($manufacturers);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getList(array $ids, Struct\ShopContextInterface $context)
-    {
-        $manufacturers = $this->manufacturerGateway->getList($ids, $context);
+        $manufacturers = $this->manufacturerGateway->getList($ids, $context->getTranslationContext());
 
         //fetch all manufacturer links instead of calling {url ...} smarty function which executes a query for each link
         $links = $this->collectLinks($manufacturers);

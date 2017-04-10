@@ -24,15 +24,19 @@
 
 namespace Shopware\Tests\Functional\Bundle\AccountBundle\Controller;
 
+use Shopware\Bundle\StoreFrontBundle\Struct\CheckoutScope;
+use Shopware\Bundle\StoreFrontBundle\Struct\CustomerScope;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopScope;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Country\Country;
 use Shopware\Models\Country\State;
 use Shopware\Models\Customer\Address;
 use Shopware\Models\Customer\Customer;
-use Shopware\Models\Shop\Shop;
 use Symfony\Component\DomCrawler\Crawler;
 
 /**
+ * @group disable
+ *
  * @category  Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
@@ -79,7 +83,11 @@ class AddressTest extends \Enlight_Components_Test_Controller_TestCase
         $billingDemoData = self::getBillingDemoData();
         $shippingDemoData = self::getShippingDemoData();
 
-        $shop = Shopware()->Container()->get('shopware_storefront.context_service')->createShopContext(1)->getShop();
+        $shop = Shopware()->Container()->get('shopware_storefront.context_factory')->create(
+            new ShopScope(1),
+            new CustomerScope(null),
+            new CheckoutScope()
+        )->getShop();
 
         $customer = new Customer();
         $customer->fromArray($demoData);

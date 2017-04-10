@@ -24,9 +24,10 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Service\Core;
 
-use Shopware\Bundle\StoreFrontBundle\Gateway;
+use Shopware\Bundle\StoreFrontBundle\Gateway\ProductMediaGateway;
+use Shopware\Bundle\StoreFrontBundle\Gateway\VariantMediaGateway;
 use Shopware\Bundle\StoreFrontBundle\Service\VariantCoverServiceInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 /**
  * @category  Shopware
@@ -36,22 +37,22 @@ use Shopware\Bundle\StoreFrontBundle\Struct;
 class VariantCoverService implements VariantCoverServiceInterface
 {
     /**
-     * @var Gateway\ProductMediaGatewayInterface
+     * @var ProductMediaGateway
      */
     private $productMediaGateway;
 
     /**
-     * @var Gateway\VariantMediaGatewayInterface
+     * @var VariantMediaGateway
      */
     private $variantMediaGateway;
 
     /**
-     * @param Gateway\ProductMediaGatewayInterface $productMedia
-     * @param Gateway\VariantMediaGatewayInterface $variantMedia
+     * @param ProductMediaGateway $productMedia
+     * @param VariantMediaGateway $variantMedia
      */
     public function __construct(
-        Gateway\ProductMediaGatewayInterface $productMedia,
-        Gateway\VariantMediaGatewayInterface $variantMedia
+        ProductMediaGateway $productMedia,
+        VariantMediaGateway $variantMedia
     ) {
         $this->productMediaGateway = $productMedia;
         $this->variantMediaGateway = $variantMedia;
@@ -60,11 +61,11 @@ class VariantCoverService implements VariantCoverServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function getList($products, Struct\ShopContextInterface $context)
+    public function getList($products, ShopContextInterface $context)
     {
         $covers = $this->variantMediaGateway->getCovers(
             $products,
-            $context
+            $context->getTranslationContext()
         );
 
         $fallback = [];
@@ -78,7 +79,7 @@ class VariantCoverService implements VariantCoverServiceInterface
             return $covers;
         }
 
-        $fallback = $this->productMediaGateway->getCovers($fallback, $context);
+        $fallback = $this->productMediaGateway->getCovers($fallback, $context->getTranslationContext());
 
         return $covers + $fallback;
     }

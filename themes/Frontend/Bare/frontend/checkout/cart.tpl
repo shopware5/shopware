@@ -16,7 +16,7 @@
     <div class="content content--basket content--checkout">
 
         {* If articles are in the basket... *}
-        {if $sBasket.content}
+        {if $cart.viewLineItems}
 
             {* Add article informations *}
             {block name='frontend_checkout_add_article'}
@@ -87,9 +87,9 @@
                                 {/block}
 
                                 {* Basket items *}
-                                {foreach $sBasket.content as $sBasketItem}
+                                {foreach $cart.viewLineItems as $lineItem}
                                     {block name='frontend_checkout_cart_item'}
-                                        {include file='frontend/checkout/cart_item.tpl' isLast=$sBasketItem@last}
+                                        {include file='frontend/checkout/cart_item.tpl' isLast=$lineItem@last}
                                     {/block}
                                 {/foreach}
 

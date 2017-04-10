@@ -1,24 +1,25 @@
 <?php
 /**
- * Enlight
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
- * LICENSE
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
  *
- * This source file is subject to the new BSD license that is bundled
- * with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://enlight.de/license
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@shopware.de so we can send you a copy immediately.
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
  *
- * @category   Enlight
- * @package    Enlight_Test
- * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
- * @license    http://enlight.de/license     New BSD License
- * @version    $Id$
- * @author     Heiner Lohaus
- * @author     $Author$
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
  */
 
 /**
@@ -28,7 +29,7 @@
  * with controller specified functions to grant an easily access to standard controller actions.
  *
  * @category   Enlight
- * @package    Enlight_Test
+ *
  * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
  * @license    http://enlight.de/license     New BSD License
  */
@@ -36,33 +37,60 @@ abstract class Enlight_Components_Test_Controller_TestCase extends Enlight_Compo
 {
     /**
      * Instance of the Front resource
+     *
      * @var Enlight_Controller_Front
      */
     protected $_front;
 
     /**
      * Instance of the View resource
+     *
      * @var Enlight_Template_Manager
      */
     protected $_template;
 
     /**
      * Instance of the enlight view. Is filled in the dispatch function with the template.
+     *
      * @var Enlight_View_Default
      */
     protected $_view;
 
     /**
      * Instance of the enlight request. Filled in the dispatch function.
+     *
      * @var Enlight_Controller_Request_Request
      */
     protected $_request;
 
     /**
      * Instance of the enlight response. Filled in the dispatch function.
+     *
      * @var Enlight_Controller_Response_Response
      */
     protected $_response;
+
+    /**
+     * Magic get method
+     *
+     * @param mixed $name
+     *
+     * @return mixed
+     */
+    public function __get($name)
+    {
+        switch ($name) {
+            case 'request':
+                return $this->Request();
+            case 'response':
+                return $this->Response();
+            case 'front':
+            case 'frontController':
+                return $this->Front();
+        }
+
+        return null;
+    }
 
     /**
      * Tests set up method
@@ -80,8 +108,9 @@ abstract class Enlight_Components_Test_Controller_TestCase extends Enlight_Compo
     /**
      * Dispatch the request
      *
-     * @param   string|null $url
-     * @return  Enlight_Controller_Response_Response
+     * @param string|null $url
+     *
+     * @return Enlight_Controller_Response_Response
      */
     public function dispatch($url = null)
     {
@@ -101,7 +130,9 @@ abstract class Enlight_Components_Test_Controller_TestCase extends Enlight_Compo
 
         /** @var $viewRenderer Enlight_Controller_Plugins_ViewRenderer_Bootstrap */
         $viewRenderer = $front->Plugins()->get('ViewRenderer');
-        $this->_view = $viewRenderer->Action()->View();
+        if ($viewRenderer->Action()) {
+            $this->_view = $viewRenderer->Action()->View();
+        }
 
         return $response;
     }
@@ -166,6 +197,7 @@ abstract class Enlight_Components_Test_Controller_TestCase extends Enlight_Compo
                     ->clearCookies();
         }
         $this->_request = null;
+
         return $this;
     }
 
@@ -177,6 +209,7 @@ abstract class Enlight_Components_Test_Controller_TestCase extends Enlight_Compo
     public function resetResponse()
     {
         $this->_response = null;
+
         return $this;
     }
 
@@ -190,6 +223,7 @@ abstract class Enlight_Components_Test_Controller_TestCase extends Enlight_Compo
         if (null === $this->_front) {
             $this->_front = Shopware()->Container()->get('Front');
         }
+
         return $this->_front;
     }
 
@@ -203,6 +237,7 @@ abstract class Enlight_Components_Test_Controller_TestCase extends Enlight_Compo
         if (null === $this->_template) {
             $this->_template = Shopware()->Container()->get('Template');
         }
+
         return $this->_template;
     }
 
@@ -224,8 +259,9 @@ abstract class Enlight_Components_Test_Controller_TestCase extends Enlight_Compo
     public function Request()
     {
         if (null === $this->_request) {
-            $this->_request = new Enlight_Controller_Request_RequestTestCase;
+            $this->_request = new Enlight_Controller_Request_RequestTestCase();
         }
+
         return $this->_request;
     }
 
@@ -237,28 +273,9 @@ abstract class Enlight_Components_Test_Controller_TestCase extends Enlight_Compo
     public function Response()
     {
         if (null === $this->_response) {
-            $this->_response = new Enlight_Controller_Response_ResponseTestCase;
+            $this->_response = new Enlight_Controller_Response_ResponseTestCase();
         }
-        return $this->_response;
-    }
 
-    /**
-     * Magic get method
-     *
-     * @param mixed $name
-     * @return mixed
-     */
-    public function __get($name)
-    {
-        switch ($name) {
-            case 'request':
-                return $this->Request();
-            case 'response':
-                return $this->Response();
-            case 'front':
-            case 'frontController':
-                return $this->Front();
-        }
-        return null;
+        return $this->_response;
     }
 }

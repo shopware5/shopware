@@ -24,21 +24,21 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Service\Core;
 
-use Shopware\Bundle\StoreFrontBundle\Gateway\CustomSortingGatewayInterface;
+use Shopware\Bundle\StoreFrontBundle\Gateway\CustomSortingGateway;
 use Shopware\Bundle\StoreFrontBundle\Service\CustomSortingServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class CustomSortingService implements CustomSortingServiceInterface
 {
     /**
-     * @var CustomSortingGatewayInterface
+     * @var CustomSortingGateway
      */
     private $gateway;
 
     /**
-     * @param CustomSortingGatewayInterface $gateway
+     * @param CustomSortingGateway $gateway
      */
-    public function __construct(CustomSortingGatewayInterface $gateway)
+    public function __construct(CustomSortingGateway $gateway)
     {
         $this->gateway = $gateway;
     }
@@ -48,7 +48,7 @@ class CustomSortingService implements CustomSortingServiceInterface
      */
     public function getList(array $ids, ShopContextInterface $context)
     {
-        return $this->gateway->getList($ids, $context);
+        return $this->gateway->getList($ids, $context->getTranslationContext());
     }
 
     /**
@@ -56,7 +56,7 @@ class CustomSortingService implements CustomSortingServiceInterface
      */
     public function getSortingsOfCategories(array $categoryIds, ShopContextInterface $context)
     {
-        return $this->gateway->getSortingsOfCategories($categoryIds, $context);
+        return $this->gateway->getSortingsOfCategories($categoryIds, $context->getTranslationContext());
     }
 
     /**
@@ -64,6 +64,6 @@ class CustomSortingService implements CustomSortingServiceInterface
      */
     public function getAllCategorySortings(ShopContextInterface $context)
     {
-        return $this->gateway->getAllCategorySortings($context);
+        return $this->gateway->getAllCategorySortings($context->getTranslationContext());
     }
 }

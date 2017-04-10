@@ -24,6 +24,7 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Struct\Country;
 
+use Shopware\Bundle\StoreFrontBundle\Struct\Country;
 use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
 
 /**
@@ -52,6 +53,11 @@ class State extends Extendable implements \JsonSerializable
      * @var int
      */
     protected $position;
+
+    /**
+     * @var Country
+     */
+    protected $country;
 
     /**
      * @param int $id
@@ -123,5 +129,15 @@ class State extends Extendable implements \JsonSerializable
     public function setPosition($position)
     {
         $this->position = $position;
+    }
+
+    public function getCountry(): Country
+    {
+        return $this->country;
+    }
+
+    public function setCountry(Country $country): void
+    {
+        $this->country = $country;
     }
 }

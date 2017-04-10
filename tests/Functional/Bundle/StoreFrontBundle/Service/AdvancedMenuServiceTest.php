@@ -28,7 +28,10 @@ use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\StoreFrontBundle\Service\CategoryServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\Core\AdvancedMenuService;
+use Shopware\Bundle\StoreFrontBundle\Struct\CheckoutScope;
+use Shopware\Bundle\StoreFrontBundle\Struct\CustomerScope;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopScope;
 use Shopware\Tests\Functional\DataGenerator\CategoryDataGenerator;
 
 /**
@@ -75,7 +78,12 @@ class AdvancedMenuServiceTest extends TestCase
 
         $this->reader = Shopware()->Container()->get('shopware_storefront.advanced_menu_service');
         $this->categoryService = Shopware()->Container()->get('shopware_storefront.category_service');
-        $this->context = Shopware()->Container()->get('shopware_storefront.context_service')->createShopContext(1);
+
+        $this->context = Shopware()->Container()->get('shopware_storefront.context_factory')->create(
+            new ShopScope(1),
+            new CustomerScope(null, 'EK'),
+            new CheckoutScope()
+        );
 
         $this->connection->insert('s_categories', [
             'parent' => 1,
@@ -121,7 +129,7 @@ class AdvancedMenuServiceTest extends TestCase
         ];
 
         $this->context->getShop()->setCategory(
-            $this->categoryService->get($this->mainCategoryId, $this->context)
+            array_shift($this->categoryService->getList([$this->mainCategoryId], $this->context))
         );
 
         $this->dataGenerator->saveTree($categories, [$this->mainCategoryId]);
@@ -164,7 +172,7 @@ class AdvancedMenuServiceTest extends TestCase
 
         $this->context->getShop()->setCategory(
             //set "fourth level" category as system category
-            $this->categoryService->get((int) $tree[0]['children'][2]['id'], $this->context)
+            array_shift($this->categoryService->getList([(int) $tree[0]['children'][2]['id']], $this->context))
         );
 
         $menu = $this->reader->get($this->context, 1);
@@ -219,7 +227,7 @@ class AdvancedMenuServiceTest extends TestCase
         $this->dataGenerator->saveTree($categories, [$this->mainCategoryId]);
 
         $this->context->getShop()->setCategory(
-            $this->categoryService->get($this->mainCategoryId, $this->context)
+            array_shift($this->categoryService->getList([$this->mainCategoryId], $this->context))
         );
 
         $menu = $this->reader->get($this->context, 2);

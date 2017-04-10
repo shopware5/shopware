@@ -41,7 +41,9 @@ class ConfiguratorTest extends TestCase
 
         foreach ($productData['variants'] as $testVariant) {
             $product = Shopware()->Container()->get('shopware_storefront.product_service')
-                ->get($testVariant['number'], $context);
+                ->getList([$testVariant['number']], $context);
+
+            $product = array_shift($product);
 
             $this->assertCount(3, $product->getConfiguration());
 
@@ -64,7 +66,8 @@ class ConfiguratorTest extends TestCase
         $this->helper->createArticle($data);
 
         $product = Shopware()->Container()->get('shopware_storefront.list_product_service')
-            ->get($number, $context);
+            ->getList([$number], $context);
+        $product = array_shift($product);
 
         $configurator = Shopware()->Container()->get('shopware_storefront.configurator_service')
             ->getProductConfigurator($product, $context, []);
@@ -101,7 +104,8 @@ class ConfiguratorTest extends TestCase
         $this->helper->createArticle($data);
 
         $product = Shopware()->Container()->get('shopware_storefront.list_product_service')
-            ->get($number, $context);
+            ->getList([$number], $context);
+        $product = array_shift($product);
 
         $selection = $this->createSelection($product, [
             'rot', 'L',
@@ -166,7 +170,8 @@ class ConfiguratorTest extends TestCase
         );
 
         $product = Shopware()->Container()->get('shopware_storefront.list_product_service')
-            ->get($number, $context);
+            ->getList([$number], $context);
+        $product = array_shift($product);
 
         $selection = $this->createSelection($product, ['rot']);
         $configurator = Shopware()->Container()->get('shopware_storefront.configurator_service')

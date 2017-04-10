@@ -46,7 +46,7 @@ class ProductMediaTest extends TestCase
             ->getList($numbers, $context);
 
         $mediaList = Shopware()->Container()->get('shopware_storefront.product_media_gateway')
-            ->getList($listProducts, $context);
+            ->getList($listProducts, $context->getTranslationContext());
 
         $this->assertCount(2, $mediaList);
 
@@ -87,7 +87,7 @@ class ProductMediaTest extends TestCase
             ->getList($variantNumbers, $context);
 
         $mediaList = Shopware()->Container()->get('shopware_storefront.variant_media_gateway')
-            ->getList($products, $context);
+            ->getList($products, $context->getTranslationContext());
 
         $this->assertCount(3, $mediaList);
         foreach ($variantNumbers as $number) {
@@ -104,7 +104,7 @@ class ProductMediaTest extends TestCase
             ->getList($numbers, $context);
 
         $mediaList = Shopware()->Container()->get('shopware_storefront.product_media_gateway')
-            ->getList($products, $context);
+            ->getList($products, $context->getTranslationContext());
 
         $this->assertCount(2, $mediaList);
 
@@ -133,7 +133,9 @@ class ProductMediaTest extends TestCase
 
         $variantNumber = 'testProductImagesWithVariant-1';
         $product = Shopware()->Container()->get('shopware_storefront.product_service')
-            ->get($variantNumber, $context);
+            ->getList([$variantNumber], $context);
+
+        $product = array_shift($product);
 
         $this->assertCount(2, $product->getMedia());
     }

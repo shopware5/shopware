@@ -38,11 +38,11 @@ interface PriceHelperInterface
     /**
      * Returns the full selection for the cheapest price
      *
-     * @param Struct\ProductContextInterface $context
+     * @param Struct\ShopContextInterface $context
      *
      * @return string
      */
-    public function getSelection(Struct\ProductContextInterface $context);
+    public function getSelection(Struct\ShopContextInterface $context);
 
     /**
      * Joins the customer prices to the provided query

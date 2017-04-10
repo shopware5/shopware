@@ -45,7 +45,6 @@
             $.publish('plugin/swShippingPayment/onInputChangedBefore', [ me ]);
 
             $.loadingIndicator.open();
-
             $.ajax({
                 type: 'POST',
                 url: url,

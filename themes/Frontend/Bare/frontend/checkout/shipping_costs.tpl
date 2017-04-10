@@ -58,7 +58,7 @@
 
             {block name='frontend_checkout_shipping_costs_payment_selection'}
                 <div class="select-field">
-                    <select id="basket_payment_list" name="sPayment" data-auto-submit="true">
+                    <select id="basket_payment_list" name="paymentMethodId" data-auto-submit="true">
                         {foreach $sPayments as $payment}
                             <option value="{$payment.id}"{if $payment.id eq $sPayment.id} selected="selected"{/if}>
                                 {$payment.description}
@@ -79,7 +79,7 @@
 
             {block name='frontend_checkout_shipping_costs_dispatch_selection'}
                 <div class="select-field">
-                    <select id="basket_dispatch_list" name="sDispatch" data-auto-submit="true">
+                    <select id="basket_dispatch_list" name="sippingMethodId" data-auto-submit="true">
                     {if $sDispatches}
                         {foreach $sDispatches as $dispatch}
                             <option value="{$dispatch.id}"{if $dispatch.id eq $sDispatch.id} selected="selected"{/if}>

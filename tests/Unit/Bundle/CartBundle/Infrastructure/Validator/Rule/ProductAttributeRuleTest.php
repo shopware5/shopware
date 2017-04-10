@@ -1,0 +1,121 @@
+<?php
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
+
+namespace Shopware\Tests\Unit\Bundle\CartBundle\Infrastructure\Validator\Rule;
+
+use PHPUnit\Framework\TestCase;
+use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
+use Shopware\Bundle\CartBundle\Domain\Validator\Data\RuleDataCollection;
+use Shopware\Bundle\CartBundle\Infrastructure\Validator\Data\ProductAttributeRuleData;
+use Shopware\Bundle\CartBundle\Infrastructure\Validator\Rule\ProductAttributeRule;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
+
+class ProductAttributeRuleTest extends TestCase
+{
+    public function testSingleAttribute()
+    {
+        $rule = new ProductAttributeRule('attr1', 1);
+
+        $cart = $this->createMock(CalculatedCart::class);
+
+        $context = $this->createMock(ShopContext::class);
+
+        $this->assertTrue(
+            $rule->match($cart, $context, new RuleDataCollection([
+                new ProductAttributeRuleData([
+                    'attr1' => [2, 3, 1],
+                ]),
+            ]))
+        );
+    }
+
+    public function testMultipleAttributeData()
+    {
+        $rule = new ProductAttributeRule('attr1', 1);
+
+        $cart = $this->createMock(CalculatedCart::class);
+
+        $context = $this->createMock(ShopContext::class);
+
+        $this->assertTrue(
+            $rule->match($cart, $context, new RuleDataCollection([
+                new ProductAttributeRuleData([
+                    'attr2' => [2, 3, 1],
+                    'attr3' => [2, 3, 1],
+                    'attr1' => [2, 3, 1],
+                ]),
+            ]))
+        );
+    }
+
+    public function testNotMatch()
+    {
+        $rule = new ProductAttributeRule('attr1', 10);
+
+        $cart = $this->createMock(CalculatedCart::class);
+
+        $context = $this->createMock(ShopContext::class);
+
+        $this->assertFalse(
+            $rule->match($cart, $context, new RuleDataCollection([
+                new ProductAttributeRuleData([
+                    'attr2' => [2, 3, 1],
+                    'attr3' => [2, 3, 1],
+                    'attr1' => [2, 3, 1],
+                ]),
+            ]))
+        );
+    }
+
+    public function testWithoutMappedAttribute()
+    {
+        $rule = new ProductAttributeRule('attr2', 10);
+
+        $cart = $this->createMock(CalculatedCart::class);
+
+        $context = $this->createMock(ShopContext::class);
+
+        $this->assertFalse(
+            $rule->match($cart, $context, new RuleDataCollection([
+                new ProductAttributeRuleData([
+                    'attr3' => [2, 3, 1],
+                    'attr1' => [2, 3, 1],
+                ]),
+            ]))
+        );
+    }
+
+    public function testWithoutDataObject()
+    {
+        $rule = new ProductAttributeRule('attr1', 10);
+
+        $cart = $this->createMock(CalculatedCart::class);
+
+        $context = $this->createMock(ShopContext::class);
+
+        $this->assertFalse(
+            $rule->match($cart, $context, new RuleDataCollection())
+        );
+    }
+}

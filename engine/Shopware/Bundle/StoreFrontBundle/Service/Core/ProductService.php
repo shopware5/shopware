@@ -24,23 +24,35 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Service\Core;
 
-use Shopware\Bundle\StoreFrontBundle\Service;
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Service\ConfiguratorServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Service\ListProductServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Service\MediaServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Service\ProductDownloadServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Service\ProductLinkServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Service\ProductServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Service\PropertyServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Service\RelatedProductsServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Service\RelatedProductStreamsServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Service\SimilarProductsServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Service\VoteServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
+use Shopware\Bundle\StoreFrontBundle\Struct\Product;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 /**
  * @category  Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class ProductService implements Service\ProductServiceInterface
+class ProductService implements ProductServiceInterface
 {
     /**
-     * @var Service\MediaServiceInterface
+     * @var MediaServiceInterface
      */
     private $mediaService;
 
     /**
-     * @var Service\VoteServiceInterface
+     * @var VoteServiceInterface
      */
     private $voteService;
 
@@ -50,69 +62,69 @@ class ProductService implements Service\ProductServiceInterface
     private $eventManager;
 
     /**
-     * @var Service\RelatedProductsServiceInterface
+     * @var RelatedProductsServiceInterface
      */
     private $relatedProductsService;
 
     /**
-     * @var Service\RelatedProductStreamsServiceInterface
+     * @var RelatedProductStreamsServiceInterface
      */
     private $relatedProductStreamsService;
 
     /**
-     * @var Service\SimilarProductsServiceInterface
+     * @var SimilarProductsServiceInterface
      */
     private $similarProductsService;
 
     /**
-     * @var Service\ProductDownloadServiceInterface
+     * @var ProductDownloadServiceInterface
      */
     private $downloadService;
 
     /**
-     * @var Service\ProductLinkServiceInterface
+     * @var ProductLinkServiceInterface
      */
     private $linkService;
 
     /**
-     * @var Service\PropertyServiceInterface
+     * @var PropertyServiceInterface
      */
     private $propertyService;
 
     /**
-     * @var Service\ConfiguratorServiceInterface
+     * @var ConfiguratorServiceInterface
      */
     private $configuratorService;
 
     /**
-     * @var Service\ListProductServiceInterface
+     * @var ListProductServiceInterface
      */
     private $listProductService;
 
     /**
-     * @param Service\ListProductServiceInterface           $listProductService
-     * @param Service\VoteServiceInterface                  $voteService
-     * @param Service\MediaServiceInterface                 $mediaService
-     * @param Service\RelatedProductsServiceInterface       $relatedProductsService
-     * @param Service\RelatedProductStreamsServiceInterface $relatedProductStreamsService
-     * @param Service\SimilarProductsServiceInterface       $similarProductsService
-     * @param Service\ProductDownloadServiceInterface       $downloadService
-     * @param Service\ProductLinkServiceInterface           $linkService
-     * @param Service\PropertyServiceInterface              $propertyService
-     * @param Service\ConfiguratorServiceInterface          $configuratorService
-     * @param \Enlight_Event_EventManager                   $eventManager
+     * @param ListProductServiceInterface           $listProductService
+     * @param VoteServiceInterface                  $voteService
+     * @param MediaServiceInterface                 $mediaService
+     * @param RelatedProductsServiceInterface       $relatedProductsService
+     * @param RelatedProductStreamsServiceInterface $relatedProductStreamsService
+     * @param SimilarProductsServiceInterface       $similarProductsService
+     * @param ProductDownloadServiceInterface       $downloadService
+     * @param ProductLinkServiceInterface           $linkService
+     * @param PropertyServiceInterface              $propertyService
+     * @param ConfiguratorServiceInterface          $configuratorService
+     * @param \Enlight_Event_EventManager           $eventManager
      */
     public function __construct(
-        Service\ListProductServiceInterface $listProductService,
-        Service\VoteServiceInterface $voteService,
-        Service\MediaServiceInterface $mediaService,
-        Service\RelatedProductsServiceInterface $relatedProductsService,
-        Service\RelatedProductStreamsServiceInterface $relatedProductStreamsService,
-        Service\SimilarProductsServiceInterface $similarProductsService,
-        Service\ProductDownloadServiceInterface $downloadService,
-        Service\ProductLinkServiceInterface $linkService,
-        Service\PropertyServiceInterface $propertyService,
-        Service\ConfiguratorServiceInterface $configuratorService,
+        ListProductServiceInterface $listProductService,
+        VoteServiceInterface $voteService,
+        MediaServiceInterface $mediaService,
+        RelatedProductsServiceInterface $relatedProductsService,
+        RelatedProductStreamsServiceInterface $relatedProductStreamsService,
+        SimilarProductsServiceInterface $similarProductsService,
+        ProductDownloadServiceInterface $downloadService,
+        ProductLinkServiceInterface $linkService,
+        PropertyServiceInterface $propertyService,
+        ConfiguratorServiceInterface $configuratorService,
         \Enlight_Event_EventManager $eventManager
     ) {
         $this->voteService = $voteService;
@@ -131,17 +143,7 @@ class ProductService implements Service\ProductServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function get($number, Struct\ProductContextInterface $context)
-    {
-        $products = $this->getList([$number], $context);
-
-        return array_shift($products);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getList(array $numbers, Struct\ProductContextInterface $context)
+    public function getList(array $numbers, ShopContextInterface $context)
     {
         $listProducts = $this->listProductService->getList($numbers, $context);
         $products = $this->createFromListProducts($listProducts, $context);
@@ -150,12 +152,12 @@ class ProductService implements Service\ProductServiceInterface
     }
 
     /**
-     * @param Struct\ListProduct[]           $listProducts
-     * @param Struct\ProductContextInterface $context
+     * @param ListProduct[]        $listProducts
+     * @param ShopContextInterface $context
      *
-     * @return Struct\Product[] indexed by order number
+     * @return Product[] indexed by order number
      */
-    private function createFromListProducts(array $listProducts, Struct\ProductContextInterface $context)
+    private function createFromListProducts(array $listProducts, ShopContextInterface $context)
     {
         $votes = $this->voteService->getList($listProducts, $context);
 
@@ -179,7 +181,7 @@ class ProductService implements Service\ProductServiceInterface
         foreach ($listProducts as $listProduct) {
             $number = $listProduct->getNumber();
 
-            $product = Struct\Product::createFromListProduct($listProduct);
+            $product = Product::createFromListProduct($listProduct);
 
             if (isset($relatedProducts[$number])) {
                 $product->setRelatedProducts($relatedProducts[$number]);

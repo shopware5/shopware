@@ -1,3 +1,5 @@
+{$calculated = $lineItem.product}
+
 <div class="modal--checkout-add-article">
     {block name='checkout_ajax_add_title'}
         <div class="modal--title">
@@ -14,32 +16,26 @@
     {/block}
 
     {block name='checkout_ajax_add_information'}
-        {if $sArticle.additional_details.sConfigurator}
-            {$detailLink={url controller=detail sArticle=$sArticle.articleID number=$sArticle.ordernumber}}
-        {else}
-            {$detailLink=$sArticle.linkDetails}
-        {/if}
+        {$link = {url controller=detail sArticle=$lineItem.id number=$lineItem.number}}
 
         <div class="modal--article block-group">
 
             {* Article image *}
             {block name='checkout_ajax_add_information_image'}
                 <div class="article--image block">
-                    <a href="{$detailLink}" class="link--article-image" title="{$sArticle.articlename|escape}">
+                    <a href="{$link}" class="link--article-image" title="{$lineItem.name|escape}">
 
-                        {$image = $sArticle.additional_details.image}
-                        {$alt = $sArticle.articlename|escape}
-
-                        {if $image.description}
-                            {$alt = $image.description|escape}
+                        {$desc = $lineItem.name|strip_tags|escape}
+                        {if $lineItem.cover.description}
+                            {$desc = $lineItem.cover.description|strip_tags|escape}
                         {/if}
 
                         <span class="image--media">
-                            {if isset($image.thumbnails)}
-                                <img srcset="{$image.thumbnails[0].sourceSet}" alt="{$alt}" title="{$alt|truncate:160}" />
+                            {if $lineItem.cover}
+                                <img srcset="{$lineItem.cover.thumbnails[0].sourceSet}" alt="{$desc}" title="{$desc|truncate:160}" />
                             {else}
                                 {block name='frontend_detail_image_fallback'}
-                                    <img src="{link file='frontend/_public/src/img/no-picture.jpg'}" alt="{$alt}" title="{$alt|truncate:160}" />
+                                    <img src="{link file='frontend/_public/src/img/no-picture.jpg'}" alt="{$desc}" title="{$desc|truncate:160}" />
                                 {/block}
                             {/if}
                         </span>
@@ -53,11 +49,11 @@
                     <div class="article--name">
                         <ul class="list--name list--unstyled">
                             <li class="entry--name">
-                                <a class="link--name" href="{$detailLink}" title="{$sArticle.articlename|escape}">
-                                    {$sArticle.articlename|escape|truncate:35}
+                                <a class="link--name" href="{$link}" title="{$lineItem.name|escape}">
+                                    {$lineItem.name|escape|truncate:35}
                                 </a>
                             </li>
-                            <li class="entry--ordernumber">{s name="AjaxAddLabelOrdernumber"}{/s}: {$sArticle.ordernumber}</li>
+                            <li class="entry--ordernumber">{s name="AjaxAddLabelOrdernumber"}{/s}: {$lineItem.number}</li>
                         </ul>
                     </div>
                 {/block}
@@ -66,8 +62,8 @@
                 {block name='checkout_ajax_add_information_price'}
                     <div class="article--price">
                         <ul class="list--price list--unstyled">
-                            <li class="entry--price">{$sArticle.price|currency} {s name="Star" namespace="frontend/listing/box_article"}{/s}</li>
-                            <li class="entry--quantity">{s name="AjaxAddLabelQuantity"}{/s}: {$sArticle.quantity}</li>
+                            <li class="entry--price">{$calculated.price.unitPrice|currency} {s name="Star" namespace="frontend/listing/box_article"}{/s}</li>
+                            <li class="entry--quantity">{s name="AjaxAddLabelQuantity"}{/s}: {$calculated.quantity}</li>
                         </ul>
                     </div>
                 {/block}
@@ -79,14 +75,14 @@
         <div class="modal--actions">
             {* Contiune shopping *}
             {block name='checkout_ajax_add_actions_continue'}
-                <a href="{$detailLink}" data-modal-close="true" title="{s name='AjaxAddLinkBack'}{/s}" class="link--back btn is--secondary is--left is--icon-left is--large">
+                <a href="{$link}" data-modal-close="true" title="{s name='AjaxAddLinkBack'}{/s}" class="link--back btn is--secondary is--left is--icon-left is--large">
                     {s name='AjaxAddLinkBack'}{/s} <i class="icon--arrow-left"></i>
                 </a>
             {/block}
 
             {* Forward to the checkout *}
             {block name='checkout_ajax_add_actions_checkout'}
-                <a href="{url action=cart}" title="{s name='AjaxAddLinkCart'}{/s}" class="link--confirm btn is--primary right is--icon-right is--large">
+                <a href="{url controller=checkout action=cart}" title="{s name='AjaxAddLinkCart'}{/s}" class="link--confirm btn is--primary right is--icon-right is--large">
                     {s name='AjaxAddLinkCart'}{/s} <i class="icon--arrow-right"></i>
                 </a>
             {/block}

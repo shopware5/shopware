@@ -24,24 +24,27 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Service\Core;
 
-use Shopware\Bundle\StoreFrontBundle\Gateway;
-use Shopware\Bundle\StoreFrontBundle\Service;
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Gateway\MediaGateway;
+use Shopware\Bundle\StoreFrontBundle\Gateway\ProductMediaGateway;
+use Shopware\Bundle\StoreFrontBundle\Gateway\VariantMediaGateway;
+use Shopware\Bundle\StoreFrontBundle\Service\MediaServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Service\VariantCoverServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 /**
  * @category  Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class MediaService implements Service\MediaServiceInterface
+class MediaService implements MediaServiceInterface
 {
     /**
-     * @var Gateway\ProductMediaGatewayInterface
+     * @var ProductMediaGateway
      */
     private $productMediaGateway;
 
     /**
-     * @var Gateway\VariantMediaGatewayInterface
+     * @var VariantMediaGateway
      */
     private $variantMediaGateway;
 
@@ -51,28 +54,28 @@ class MediaService implements Service\MediaServiceInterface
     private $shopwareConfig;
 
     /**
-     * @var \Shopware\Bundle\StoreFrontBundle\Gateway\MediaGatewayInterface
+     * @var MediaGateway
      */
     private $mediaGateway;
 
     /**
-     * @var Service\VariantCoverServiceInterface
+     * @var VariantCoverServiceInterface
      */
     private $variantCoverService;
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Gateway\MediaGatewayInterface $mediaGateway
-     * @param Gateway\ProductMediaGatewayInterface                            $productMedia
-     * @param Gateway\VariantMediaGatewayInterface                            $variantMedia
-     * @param \Shopware_Components_Config                                     $shopwareConfig
-     * @param Service\VariantCoverServiceInterface                            $variantCoverService
+     * @param MediaGateway                 $mediaGateway
+     * @param ProductMediaGateway          $productMedia
+     * @param VariantMediaGateway          $variantMedia
+     * @param \Shopware_Components_Config  $shopwareConfig
+     * @param VariantCoverServiceInterface $variantCoverService
      */
     public function __construct(
-        Gateway\MediaGatewayInterface $mediaGateway,
-        Gateway\ProductMediaGatewayInterface $productMedia,
-        Gateway\VariantMediaGatewayInterface $variantMedia,
+        MediaGateway $mediaGateway,
+        ProductMediaGateway $productMedia,
+        VariantMediaGateway $variantMedia,
         \Shopware_Components_Config $shopwareConfig,
-        Service\VariantCoverServiceInterface $variantCoverService
+        VariantCoverServiceInterface $variantCoverService
     ) {
         $this->productMediaGateway = $productMedia;
         $this->variantMediaGateway = $variantMedia;
@@ -82,46 +85,22 @@ class MediaService implements Service\MediaServiceInterface
     }
 
     /**
-     * @param $id
-     * @param Struct\ShopContextInterface $context
-     *
-     * @return Struct\Media
+     * {@inheritdoc}
      */
-    public function get($id, Struct\ShopContextInterface $context)
+    public function getList($ids, ShopContextInterface $context)
     {
-        return $this->mediaGateway->get($id, $context);
-    }
-
-    /**
-     * @param $ids
-     * @param Struct\ShopContextInterface $context
-     *
-     * @return Struct\Media[] Indexed by the media id
-     */
-    public function getList($ids, Struct\ShopContextInterface $context)
-    {
-        return $this->mediaGateway->getList($ids, $context);
+        return $this->mediaGateway->getList($ids, $context->getTranslationContext());
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getCover(Struct\BaseProduct $product, Struct\ShopContextInterface $context)
-    {
-        $covers = $this->getCovers([$product], $context);
-
-        return array_shift($covers);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getCovers($products, Struct\ShopContextInterface $context)
+    public function getCovers($products, ShopContextInterface $context)
     {
         if ($this->shopwareConfig->get('forceArticleMainImageInListing')) {
             return $this->productMediaGateway->getCovers(
                 $products,
-                $context
+                $context->getTranslationContext()
             );
         }
 
@@ -131,21 +110,11 @@ class MediaService implements Service\MediaServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function getProductMedia(Struct\BaseProduct $product, Struct\ShopContextInterface $context)
+    public function getProductsMedia($products, ShopContextInterface $context)
     {
-        $media = $this->getProductsMedia([$product], $context);
+        $specifyMedia = $this->variantMediaGateway->getList($products, $context->getTranslationContext());
 
-        return array_shift($media);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getProductsMedia($products, Struct\ShopContextInterface $context)
-    {
-        $specifyMedia = $this->variantMediaGateway->getList($products, $context);
-
-        $globalMedia = $this->productMediaGateway->getList($products, $context);
+        $globalMedia = $this->productMediaGateway->getList($products, $context->getTranslationContext());
 
         $result = [];
 

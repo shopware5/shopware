@@ -344,7 +344,9 @@ class sCategories
         }
 
         $context = $this->contextService->getShopContext();
-        $category = Shopware()->Container()->get('shopware_storefront.category_service')->get($id, $context);
+        $category = Shopware()->Container()->get('shopware_storefront.category_service')->getList([$id], $context);
+        $category = array_shift($category);
+
         if (empty($category)) {
             return null;
         }

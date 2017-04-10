@@ -24,6 +24,7 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Struct;
 
+use Shopware\Bundle\StoreFrontBundle\Struct\Country\Area;
 use Shopware\Bundle\StoreFrontBundle\Struct\Country\State;
 
 /**
@@ -107,6 +108,11 @@ class Country extends Extendable implements \JsonSerializable
      * @var State[] indexed by id
      */
     protected $states;
+
+    /**
+     * @var Area|null
+     */
+    protected $area;
 
     /**
      * @param int $id
@@ -354,5 +360,15 @@ class Country extends Extendable implements \JsonSerializable
     public function setActive($active)
     {
         $this->active = $active;
+    }
+
+    public function getArea(): ?Area
+    {
+        return $this->area;
+    }
+
+    public function setArea(?Area $area): void
+    {
+        $this->area = $area;
     }
 }

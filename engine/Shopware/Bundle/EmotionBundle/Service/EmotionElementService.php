@@ -75,7 +75,7 @@ class EmotionElementService implements EmotionElementServiceInterface
      */
     public function getList(array $emotionIds, ShopContextInterface $context)
     {
-        $elements = $this->gateway->getList($emotionIds, $context);
+        $elements = $this->gateway->getList($emotionIds, $context->getTranslationContext());
 
         $this->handleElements($elements, $context);
 

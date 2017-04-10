@@ -24,27 +24,27 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Service\Core;
 
-use Shopware\Bundle\StoreFrontBundle\Gateway;
-use Shopware\Bundle\StoreFrontBundle\Service;
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Gateway\RelatedProductStreamsGateway;
+use Shopware\Bundle\StoreFrontBundle\Service\RelatedProductStreamsServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 /**
  * @category  Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class RelatedProductStreamsService implements Service\RelatedProductStreamsServiceInterface
+class RelatedProductStreamsService implements RelatedProductStreamsServiceInterface
 {
     /**
-     * @var Gateway\RelatedProductStreamsGatewayInterface
+     * @var RelatedProductStreamsGateway
      */
     private $gateway;
 
     /**
-     * @param Gateway\RelatedProductStreamsGatewayInterface $gateway
+     * @param RelatedProductStreamsGateway $gateway
      */
     public function __construct(
-        Gateway\RelatedProductStreamsGatewayInterface $gateway
+        RelatedProductStreamsGateway $gateway
     ) {
         $this->gateway = $gateway;
     }
@@ -52,19 +52,9 @@ class RelatedProductStreamsService implements Service\RelatedProductStreamsServi
     /**
      * {@inheritdoc}
      */
-    public function get(Struct\BaseProduct $product, Struct\ShopContextInterface $context)
+    public function getList($products, ShopContextInterface $context)
     {
-        $related = $this->getList([$product], $context);
-
-        return array_shift($related);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getList($products, Struct\ShopContextInterface $context)
-    {
-        $productStreams = $this->gateway->getList($products, $context);
+        $productStreams = $this->gateway->getList($products, $context->getTranslationContext());
 
         $result = [];
         foreach ($products as $product) {
