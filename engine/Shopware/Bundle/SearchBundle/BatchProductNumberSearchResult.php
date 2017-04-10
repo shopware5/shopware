@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\SearchBundle;
 
-use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
+use Shopware\Bundle\StoreFrontBundle\Product\BaseProduct;
 
 class BatchProductNumberSearchResult
 {

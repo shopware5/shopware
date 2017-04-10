@@ -30,7 +30,7 @@ use Shopware\Bundle\CartBundle\Domain\Cart\CartProcessorInterface;
 use Shopware\Bundle\CartBundle\Domain\Cart\ProcessorCart;
 use Shopware\Bundle\CartBundle\Domain\Error\PaymentBlockedError;
 use Shopware\Bundle\CartBundle\Domain\Validator\ValidatableFilter;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 
 class PaymentValidatorProcessor implements CartProcessorInterface
 {

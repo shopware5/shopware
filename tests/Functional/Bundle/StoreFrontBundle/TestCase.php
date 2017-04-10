@@ -30,8 +30,8 @@ use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\FacetInterface;
 use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
 use Shopware\Bundle\SearchBundle\SortingInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
+use Shopware\Bundle\StoreFrontBundle\Product\BaseProduct;
 use Shopware\Models\Article\Article;
 use Shopware\Models\Category\Category;
 
@@ -62,8 +62,8 @@ abstract class TestCase extends \Enlight_Components_Test_TestCase
 
     /**
      * @param $products
-     * @param ShopContext $context
-     * @param Category    $category
+     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContext $context
+     * @param Category                                              $category
      *
      * @return Article[]
      */
@@ -83,7 +83,7 @@ abstract class TestCase extends \Enlight_Components_Test_TestCase
     }
 
     /**
-     * @return \Shopware\Bundle\StoreFrontBundle\Struct\Customer\Group
+     * @return \Shopware\Bundle\StoreFrontBundle\CustomerGroup\Group
      */
     public function getEkCustomerGroup()
     {
@@ -162,7 +162,7 @@ abstract class TestCase extends \Enlight_Components_Test_TestCase
      * @param Criteria $criteria
      * @param Category $category
      * @param $conditions
-     * @param ShopContext $context
+     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContext $context
      */
     protected function addCategoryBaseCondition(
         Criteria $criteria,
@@ -263,7 +263,7 @@ abstract class TestCase extends \Enlight_Components_Test_TestCase
     ) {
         $productResult = array_values($result->getProducts());
 
-        /** @var BaseProduct $product */
+        /** @var \Shopware\Bundle\StoreFrontBundle\Product\BaseProduct $product */
         foreach ($productResult as $index => $product) {
             $expectedProduct = $expectedNumbers[$index];
 
@@ -299,9 +299,9 @@ abstract class TestCase extends \Enlight_Components_Test_TestCase
 
     /**
      * @param $number
-     * @param ShopContext $context
-     * @param Category    $category
-     * @param array       $additionally
+     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContext $context
+     * @param Category                                              $category
+     * @param array                                                 $additionally
      *
      * @return array
      */

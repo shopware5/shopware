@@ -24,7 +24,7 @@
 
 namespace Shopware\Tests\Functional\Bundle\StoreFrontBundle;
 
-use Shopware\Bundle\StoreFrontBundle\Struct\Product\Manufacturer;
+use Shopware\Bundle\StoreFrontBundle\Manufacturer\Manufacturer;
 
 class ManufacturerTest extends TestCase
 {
@@ -63,10 +63,10 @@ class ManufacturerTest extends TestCase
         ]);
         $ids[] = $manufacturer->getId();
 
-        $manufacturers = Shopware()->Container()->get('shopware_storefront.manufacturer_service')
+        $manufacturers = Shopware()->Container()->get('storefront.manufacturer.service')
             ->getList($ids, $context);
 
-        /** @var $manufacturer Manufacturer */
+        /** @var $manufacturer \Shopware\Bundle\StoreFrontBundle\Manufacturer\Manufacturer */
         foreach ($manufacturers as $key => $manufacturer) {
             $this->assertEquals($key, $manufacturer->getId());
 

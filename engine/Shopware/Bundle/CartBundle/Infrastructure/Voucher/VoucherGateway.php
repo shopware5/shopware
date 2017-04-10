@@ -28,18 +28,14 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
 use Shopware\Bundle\CartBundle\Domain\LineItem\LineItemCollection;
-use Shopware\Bundle\CartBundle\Domain\Price\Price;
 use Shopware\Bundle\CartBundle\Domain\Price\PriceDefinition;
-use Shopware\Bundle\CartBundle\Domain\Tax\CalculatedTax;
-use Shopware\Bundle\CartBundle\Domain\Tax\PercentageTaxRule;
 use Shopware\Bundle\CartBundle\Domain\Tax\PercentageTaxRuleBuilder;
-use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCollection;
 use Shopware\Bundle\CartBundle\Domain\Validator\Container\AndRule;
 use Shopware\Bundle\CartBundle\Domain\Voucher\Voucher;
 use Shopware\Bundle\CartBundle\Domain\Voucher\VoucherCollection;
 use Shopware\Bundle\CartBundle\Domain\Voucher\VoucherGatewayInterface;
 use Shopware\Bundle\CartBundle\Domain\Voucher\VoucherProcessor;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 
 class VoucherGateway implements VoucherGatewayInterface
 {
@@ -104,23 +100,6 @@ class VoucherGateway implements VoucherGatewayInterface
         }
 
         return new Voucher($row['vouchercode'], $mode, $percentage, $priceDefinition, $rule);
-    }
-
-    private function buildPercentageTaxRule(Price $price): TaxRuleCollection
-    {
-        $rules = new TaxRuleCollection([]);
-
-        /** @var CalculatedTax $tax */
-        foreach ($price->getCalculatedTaxes() as $tax) {
-            $rules->add(
-                new PercentageTaxRule(
-                    $tax->getTaxRate(),
-                    $tax->getPrice() / $price->getTotalPrice() * 100
-                )
-            );
-        }
-
-        return $rules;
     }
 
     private function fetchSimpleVouchers(array $codes): QueryBuilder

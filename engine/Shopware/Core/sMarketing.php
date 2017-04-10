@@ -59,12 +59,12 @@ class sMarketing
     public $customerGroupId;
 
     /**
-     * @var StoreFrontBundle\Service\ContextServiceInterface
+     * @var \Shopware\Bundle\StoreFrontBundle\Context\ContextServiceInterface
      */
     private $contextService;
 
     /**
-     * @var StoreFrontBundle\Service\AdditionalTextServiceInterface
+     * @var \Shopware\Bundle\StoreFrontBundle\AdditionalText\AdditionalTextServiceInterface
      */
     private $additionalTextService;
 
@@ -77,8 +77,8 @@ class sMarketing
      * Class constructor.
      */
     public function __construct(
-        StoreFrontBundle\Service\ContextServiceInterface $contextService = null,
-        StoreFrontBundle\Service\AdditionalTextServiceInterface $additionalTextService = null
+        StoreFrontBundle\Context\ContextServiceInterface $contextService = null,
+        StoreFrontBundle\Service\AdditionalText\AdditionalTextServiceInterface $additionalTextService = null
     ) {
         $this->category = Shopware()->Shop()->getCategory();
         $this->categoryId = $this->category->getId();
@@ -88,11 +88,11 @@ class sMarketing
         $this->additionalTextService = $additionalTextService;
 
         if ($this->contextService == null) {
-            $this->contextService = Shopware()->Container()->get('shopware_storefront.context_service');
+            $this->contextService = Shopware()->Container()->get('storefront.context.service');
         }
 
         if ($this->additionalTextService == null) {
-            $this->additionalTextService = Shopware()->Container()->get('shopware_storefront.additional_text_service');
+            $this->additionalTextService = Shopware()->Container()->get('storefront.additional_text.service');
         }
 
         $this->db = Shopware()->Db();
@@ -251,8 +251,8 @@ class sMarketing
         $images = array_map([$strategy, 'normalize'], $images);
 
         $mediaIds = $this->getMediaIdsOfPath($images);
-        $context = Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext();
-        $medias = Shopware()->Container()->get('shopware_storefront.media_service')->getList($mediaIds, $context);
+        $context = Shopware()->Container()->get('storefront.context.service')->getShopContext();
+        $medias = Shopware()->Container()->get('storefront.media.service')->getList($mediaIds, $context);
 
         foreach ($getBanners as &$getAffectedBanners) {
             // converting to old format
@@ -542,10 +542,10 @@ class sMarketing
     }
 
     /**
-     * @param StoreFrontBundle\Struct\Media[] $media
-     * @param string                          $path
+     * @param \Shopware\Bundle\StoreFrontBundle\Media\Media[] $media
+     * @param string                                          $path
      *
-     * @return null|\Shopware\Bundle\StoreFrontBundle\Struct\Media
+     * @return null|\Shopware\Bundle\StoreFrontBundle\Media\Media
      */
     private function getMediaByPath($media, $path)
     {
@@ -581,7 +581,7 @@ class sMarketing
         );
 
         foreach ($variantsData as $variantData) {
-            $product = new StoreFrontBundle\Struct\ListProduct(
+            $product = new StoreFrontBundle\Product\ListProduct(
                 $articleId,
                 $variantData['id'],
                 $variantData['ordernumber']
@@ -608,7 +608,7 @@ class sMarketing
         $products = $this->additionalTextService->buildAdditionalTextLists($products, $context);
 
         return array_map(
-            function (StoreFrontBundle\Struct\ListProduct $elem) {
+            function (StoreFrontBundle\Product\ListProduct $elem) {
                 return [
                     'ordernumber' => $elem->getNumber(),
                     'additionaltext' => $elem->getAdditional(),
@@ -627,8 +627,8 @@ class sMarketing
      */
     private function sGetMailCampaignsArticles($articles)
     {
-        /** @var \Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface $contextService */
-        $contextService = Shopware()->Container()->get('shopware_storefront.context_service');
+        /** @var \Shopware\Bundle\StoreFrontBundle\Context\ContextServiceInterface $contextService */
+        $contextService = Shopware()->Container()->get('storefront.context.service');
         $categoryId = $contextService->getShopContext()->getShop()->getCategory()->getId();
 
         $articleData = [];

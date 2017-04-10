@@ -33,9 +33,9 @@ use Shopware\Bundle\SearchBundle\FacetResult\ValueListItem;
 use Shopware\Bundle\SearchBundle\FacetResultInterface;
 use Shopware\Bundle\SearchBundleDBAL\PartialFacetHandlerInterface;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactoryInterface;
-use Shopware\Bundle\StoreFrontBundle\Service\ManufacturerServiceInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\Product\Manufacturer;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Manufacturer\Manufacturer;
+use Shopware\Bundle\StoreFrontBundle\Manufacturer\ManufacturerServiceInterface;
 use Shopware\Components\QueryAliasMapper;
 
 /**
@@ -66,10 +66,10 @@ class ManufacturerFacetHandler implements PartialFacetHandlerInterface
     private $fieldName;
 
     /**
-     * @param ManufacturerServiceInterface         $manufacturerService
-     * @param QueryBuilderFactoryInterface         $queryBuilderFactory
-     * @param \Shopware_Components_Snippet_Manager $snippetManager
-     * @param QueryAliasMapper                     $queryAliasMapper
+     * @param \Shopware\Bundle\StoreFrontBundle\Manufacturer\ManufacturerServiceInterface $manufacturerService
+     * @param QueryBuilderFactoryInterface                                                $queryBuilderFactory
+     * @param \Shopware_Components_Snippet_Manager                                        $snippetManager
+     * @param QueryAliasMapper                                                            $queryAliasMapper
      */
     public function __construct(
         ManufacturerServiceInterface $manufacturerService,
@@ -133,9 +133,9 @@ class ManufacturerFacetHandler implements PartialFacetHandlerInterface
     }
 
     /**
-     * @param Facet\ManufacturerFacet $facet
-     * @param Manufacturer[]          $manufacturers
-     * @param int[]                   $activeIds
+     * @param Facet\ManufacturerFacet                                       $facet
+     * @param \Shopware\Bundle\StoreFrontBundle\Manufacturer\Manufacturer[] $manufacturers
+     * @param int[]                                                         $activeIds
      *
      * @return ValueListFacetResult
      */

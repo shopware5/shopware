@@ -25,7 +25,7 @@
 namespace Shopware\Tests\Functional\Bundle\SearchBundle\Facet;
 
 use Shopware\Bundle\SearchBundle\Facet\ImmediateDeliveryFacet;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
 use Shopware\Models\Category\Category;
 use Shopware\Tests\Functional\Bundle\StoreFrontBundle\TestCase;
 
@@ -86,9 +86,9 @@ class ImmediateDeliveryFacetTest extends TestCase
 
     /**
      * @param $number
-     * @param \Shopware\Models\Category\Category $category
-     * @param ShopContext                        $context
-     * @param array                              $data
+     * @param \Shopware\Models\Category\Category                    $category
+     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContext $context
+     * @param array                                                 $data
      *
      * @return array
      */

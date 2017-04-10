@@ -27,7 +27,6 @@ namespace Shopware\Tests\Functional\Components\Statistic\Tracer;
 
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\DependencyInjection\Container;
 use Shopware\Components\Statistic\Tracer\CurrentCustomersTracer;
 
@@ -43,7 +42,7 @@ class CurrentCustomersTracerTest extends TestCase
     private $connection;
 
     /**
-     * @var ShopContextInterface
+     * @var \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface
      */
     private $context;
 
@@ -65,7 +64,7 @@ class CurrentCustomersTracerTest extends TestCase
         $this->connection->beginTransaction();
         $this->connection->executeUpdate('DELETE FROM s_statistics_currentusers');
         $this->tracer = $this->container->get('shopware.statistic.tracer.current_customers_tracer');
-        $this->context = $this->container->get('shopware_storefront.context_service')->getShopContext();
+        $this->context = $this->container->get('storefront.context.service')->getShopContext();
     }
 
     protected function tearDown()

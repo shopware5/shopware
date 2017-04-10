@@ -45,9 +45,9 @@ use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
 use Shopware\Bundle\SearchBundleES\HandlerInterface;
 use Shopware\Bundle\SearchBundleES\ResultHydratorInterface;
 use Shopware\Bundle\SearchBundleES\StructHydrator;
-use Shopware\Bundle\StoreFrontBundle\Struct\Property\Group;
-use Shopware\Bundle\StoreFrontBundle\Struct\Property\Option;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Property\Group;
+use Shopware\Bundle\StoreFrontBundle\Property\Option;
 use Shopware\Components\QueryAliasMapper;
 
 class PropertyFacetHandler implements HandlerInterface, ResultHydratorInterface

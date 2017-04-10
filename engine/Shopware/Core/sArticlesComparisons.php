@@ -22,7 +22,6 @@
  * our trademarks remain entirely with us.
  */
 
-use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Components\DependencyInjection\Container;
 
 /**
@@ -58,7 +57,7 @@ class sArticlesComparisons
     private $config;
 
     /**
-     * @var ContextServiceInterface
+     * @var \Shopware\Bundle\StoreFrontBundle\Context\ContextServiceInterface
      */
     private $contextService;
 
@@ -74,7 +73,7 @@ class sArticlesComparisons
         $this->db = $container->get('db');
         $this->config = $container->get('config');
         $this->session = $container->get('session');
-        $this->contextService = $container->get('shopware_storefront.context_service');
+        $this->contextService = $container->get('storefront.context.service');
     }
 
     /**

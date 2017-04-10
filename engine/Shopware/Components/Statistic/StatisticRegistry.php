@@ -25,7 +25,7 @@
 namespace Shopware\Components\Statistic;
 
 use Enlight_Controller_Request_Request as Request;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 use Shopware_Components_Config as Config;
 
 class StatisticRegistry implements StatisticRegistryInterface

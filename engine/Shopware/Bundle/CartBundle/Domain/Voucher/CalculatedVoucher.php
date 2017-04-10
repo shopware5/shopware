@@ -30,7 +30,7 @@ use Shopware\Bundle\CartBundle\Domain\LineItem\CalculatedLineItemInterface;
 use Shopware\Bundle\CartBundle\Domain\LineItem\LineItemInterface;
 use Shopware\Bundle\CartBundle\Domain\Price\Price;
 use Shopware\Bundle\CartBundle\Infrastructure\View\ViewLineItemInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\Media;
+use Shopware\Bundle\StoreFrontBundle\Media\Media;
 
 class CalculatedVoucher implements CalculatedLineItemInterface, ViewLineItemInterface
 {

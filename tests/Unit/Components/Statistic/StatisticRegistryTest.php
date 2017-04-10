@@ -25,7 +25,7 @@
 namespace Shopware\Tests\Unit\Components\Statistic;
 
 use PHPUnit\Framework\TestCase;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
 use Shopware\Components\Statistic\BotDetector;
 use Shopware\Components\Statistic\StatisticRegistry;
 use Shopware\Components\Statistic\StatisticTracerInterface;

@@ -35,9 +35,9 @@ use Shopware\Bundle\SearchBundle\FacetResult\ValueListItem;
 use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
 use Shopware\Bundle\SearchBundleES\HandlerInterface;
 use Shopware\Bundle\SearchBundleES\ResultHydratorInterface;
-use Shopware\Bundle\StoreFrontBundle\Service\ManufacturerServiceInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\Product\Manufacturer;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Manufacturer\Manufacturer;
+use Shopware\Bundle\StoreFrontBundle\Manufacturer\ManufacturerServiceInterface;
 use Shopware\Components\QueryAliasMapper;
 
 class ManufacturerFacetHandler implements HandlerInterface, ResultHydratorInterface
@@ -45,7 +45,7 @@ class ManufacturerFacetHandler implements HandlerInterface, ResultHydratorInterf
     const AGGREGATION_SIZE = 1000;
 
     /**
-     * @var ManufacturerServiceInterface
+     * @var \Shopware\Bundle\StoreFrontBundle\Manufacturer\ManufacturerServiceInterface
      */
     private $manufacturerService;
 
@@ -60,9 +60,9 @@ class ManufacturerFacetHandler implements HandlerInterface, ResultHydratorInterf
     private $queryAliasMapper;
 
     /**
-     * @param ManufacturerServiceInterface         $manufacturerService
-     * @param \Shopware_Components_Snippet_Manager $snippetManager
-     * @param QueryAliasMapper                     $queryAliasMapper
+     * @param \Shopware\Bundle\StoreFrontBundle\Manufacturer\ManufacturerServiceInterface $manufacturerService
+     * @param \Shopware_Components_Snippet_Manager                                        $snippetManager
+     * @param QueryAliasMapper                                                            $queryAliasMapper
      */
     public function __construct(
         ManufacturerServiceInterface $manufacturerService,
@@ -126,8 +126,8 @@ class ManufacturerFacetHandler implements HandlerInterface, ResultHydratorInterf
     }
 
     /**
-     * @param Criteria       $criteria
-     * @param Manufacturer[] $manufacturers
+     * @param Criteria                                                      $criteria
+     * @param \Shopware\Bundle\StoreFrontBundle\Manufacturer\Manufacturer[] $manufacturers
      *
      * @return array
      */
@@ -140,7 +140,7 @@ class ManufacturerFacetHandler implements HandlerInterface, ResultHydratorInterf
         }
 
         $items = [];
-        /** @var $manufacturer Manufacturer */
+        /** @var $manufacturer \Shopware\Bundle\StoreFrontBundle\Manufacturer\Manufacturer */
         foreach ($manufacturers as $manufacturer) {
             $items[] = new ValueListItem(
                 $manufacturer->getId(),

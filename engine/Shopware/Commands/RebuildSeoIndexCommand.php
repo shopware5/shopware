@@ -24,9 +24,9 @@
 
 namespace Shopware\Commands;
 
-use Shopware\Bundle\StoreFrontBundle\Struct\CheckoutScope;
-use Shopware\Bundle\StoreFrontBundle\Struct\CustomerScope;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopScope;
+use Shopware\Bundle\StoreFrontBundle\Context\CheckoutScope;
+use Shopware\Bundle\StoreFrontBundle\Context\CustomerScope;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopScope;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -121,7 +121,7 @@ class RebuildSeoIndexCommand extends ShopwareCommand
 
             $this->seoIndex->setCachedTime($currentTime->format('Y-m-d h:m:i'), $elementId, $shopId);
 
-            $context = $this->container->get('shopware_storefront.context_factory')->create(
+            $context = $this->container->get('storefront.context.factory')->create(
                 new ShopScope($shopId),
                 new CustomerScope(null),
                 new CheckoutScope()

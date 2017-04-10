@@ -47,9 +47,9 @@ use Shopware\Bundle\CartBundle\Domain\Tax\TaxRule;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCalculator;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCollection;
 use Shopware\Bundle\CartBundle\Domain\Voucher\CalculatedVoucher;
-use Shopware\Bundle\StoreFrontBundle\Struct\Address;
-use Shopware\Bundle\StoreFrontBundle\Struct\Country;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShippingMethod;
+use Shopware\Bundle\StoreFrontBundle\Address\Address;
+use Shopware\Bundle\StoreFrontBundle\Country\Country;
+use Shopware\Bundle\StoreFrontBundle\ShippingMethod\ShippingMethod;
 use Shopware\Tests\Unit\Bundle\CartBundle\Common\Generator;
 
 class StockDeliverySeparatorTest extends TestCase
@@ -295,10 +295,10 @@ class StockDeliverySeparatorTest extends TestCase
     private static function createShippingLocation()
     {
         $address = new Address();
-        $address->setState(new Country\State());
+        $address->setState(new \Shopware\Bundle\StoreFrontBundle\Country\State());
 
         $country = new Country();
-        $country->setArea(new Country\Area());
+        $country->setArea(new \Shopware\Bundle\StoreFrontBundle\Country\Area());
 
         $address->setCountry($country);
         $address->getState()->setCountry($country);

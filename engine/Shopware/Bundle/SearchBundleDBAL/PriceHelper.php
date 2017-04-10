@@ -24,8 +24,6 @@
 
 namespace Shopware\Bundle\SearchBundleDBAL;
 
-use Shopware\Bundle\StoreFrontBundle\Struct;
-
 /**
  * @category  Shopware
  *
@@ -55,7 +53,7 @@ class PriceHelper implements PriceHelperInterface
     /**
      * {@inheritdoc}
      */
-    public function getSelection(Struct\ShopContextInterface $context)
+    public function getSelection(\Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context)
     {
         $fallback = $context->getFallbackCustomerGroup();
         $current = $context->getCurrentCustomerGroup();
@@ -102,7 +100,7 @@ class PriceHelper implements PriceHelperInterface
      */
     public function joinPrices(
         QueryBuilder $query,
-        Struct\ShopContextInterface $context
+        \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
     ) {
         if ($query->hasState(self::STATE_INCLUDES_CHEAPEST_PRICE)) {
             return;
@@ -132,7 +130,7 @@ class PriceHelper implements PriceHelperInterface
     /**
      * {@inheritdoc}
      */
-    public function joinDefaultPrices(QueryBuilder $query, Struct\ShopContextInterface $context)
+    public function joinDefaultPrices(QueryBuilder $query, \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context)
     {
         if ($query->hasState(self::STATE_INCLUDES_DEFAULT_PRICE)) {
             return;
@@ -199,11 +197,11 @@ class PriceHelper implements PriceHelperInterface
     /**
      * Builds the tax cases for the price selection query
      *
-     * @param Struct\ShopContextInterface $context
+     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
      *
      * @return string
      */
-    private function buildTaxCase(Struct\ShopContextInterface $context)
+    private function buildTaxCase(\Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context)
     {
         $cases = [];
         foreach ($context->getTaxRules() as $rule) {

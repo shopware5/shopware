@@ -25,7 +25,7 @@
 namespace Shopware\Bundle\SearchBundleDBAL;
 
 use Shopware\Bundle\SearchBundle\SortingInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 
 /**
  * @category  Shopware
@@ -48,9 +48,9 @@ interface SortingHandlerInterface
      * Extends the passed query builder with the specify sorting.
      * Should use the addOrderBy function, otherwise other sortings would be overwritten.
      *
-     * @param SortingInterface     $sorting
-     * @param QueryBuilder         $query
-     * @param ShopContextInterface $context
+     * @param SortingInterface                                               $sorting
+     * @param QueryBuilder                                                   $query
+     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
      */
     public function generateSorting(
         SortingInterface $sorting,

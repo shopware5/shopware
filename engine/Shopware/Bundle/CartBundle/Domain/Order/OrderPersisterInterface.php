@@ -25,7 +25,7 @@
 namespace Shopware\Bundle\CartBundle\Domain\Order;
 
 use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 
 interface OrderPersisterInterface
 {

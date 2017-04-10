@@ -28,7 +28,7 @@ class Shopware_Controllers_Widgets_Index extends Enlight_Controller_Action
     {
         $this->Front()->Plugins()->ViewRenderer()->setNoRender();
 
-        $context = $this->container->get('shopware_storefront.context_service')
+        $context = $this->container->get('storefront.context.service')
             ->getShopContext();
 
         $this->container->get('shopware.statistic.registry')

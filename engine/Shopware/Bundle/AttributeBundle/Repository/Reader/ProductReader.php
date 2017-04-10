@@ -24,13 +24,13 @@
 
 namespace Shopware\Bundle\AttributeBundle\Repository\Reader;
 
-use Shopware\Bundle\StoreFrontBundle\Service\AdditionalTextServiceInterface;
-use Shopware\Bundle\StoreFrontBundle\Service\ContextFactoryInterface;
-use Shopware\Bundle\StoreFrontBundle\Service\Core\ContextService;
-use Shopware\Bundle\StoreFrontBundle\Struct\CheckoutScope;
-use Shopware\Bundle\StoreFrontBundle\Struct\CustomerScope;
-use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopScope;
+use Shopware\Bundle\StoreFrontBundle\AdditionalText\AdditionalTextServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Context\CheckoutScope;
+use Shopware\Bundle\StoreFrontBundle\Context\ContextFactoryInterface;
+use Shopware\Bundle\StoreFrontBundle\Context\ContextService;
+use Shopware\Bundle\StoreFrontBundle\Context\CustomerScope;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopScope;
+use Shopware\Bundle\StoreFrontBundle\Product\ListProduct;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Article\Detail;
 use Shopware\Models\Shop\Repository;
@@ -49,17 +49,17 @@ class ProductReader extends GenericReader
     private $additionalTextService;
 
     /**
-     * @var ContextFactoryInterface
+     * @var \Shopware\Bundle\StoreFrontBundle\Context\ContextFactoryInterface
      */
     private $contextFactory;
 
     /**
      * ProductReader constructor.
      *
-     * @param string                         $entity
-     * @param ModelManager                   $entityManager
-     * @param ContextFactoryInterface        $contextFactory
-     * @param AdditionalTextServiceInterface $additionalTextService
+     * @param string                                                            $entity
+     * @param ModelManager                                                      $entityManager
+     * @param \Shopware\Bundle\StoreFrontBundle\Context\ContextFactoryInterface $contextFactory
+     * @param AdditionalTextServiceInterface                                    $additionalTextService
      */
     public function __construct(
         $entity,
@@ -151,7 +151,7 @@ class ProductReader extends GenericReader
     /**
      * @param array[] $articles
      *
-     * @return ListProduct[]
+     * @return \Shopware\Bundle\StoreFrontBundle\Product\ListProduct[]
      */
     private function buildListProducts(array $articles)
     {

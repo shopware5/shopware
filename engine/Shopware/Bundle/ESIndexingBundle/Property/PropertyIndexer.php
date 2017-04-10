@@ -28,7 +28,7 @@ use Elasticsearch\Client;
 use Shopware\Bundle\ESIndexingBundle\Console\ProgressHelperInterface;
 use Shopware\Bundle\ESIndexingBundle\DataIndexerInterface;
 use Shopware\Bundle\ESIndexingBundle\Struct\ShopIndex;
-use Shopware\Bundle\StoreFrontBundle\Struct\Property\Group;
+use Shopware\Bundle\StoreFrontBundle\Property\Group;
 
 /**
  * Class PropertyIndexer

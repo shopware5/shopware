@@ -29,9 +29,9 @@ use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
 use Shopware\Bundle\CartBundle\Domain\Delivery\ShippingLocation;
 use Shopware\Bundle\CartBundle\Domain\Validator\Data\RuleDataCollection;
 use Shopware\Bundle\CartBundle\Infrastructure\Validator\Rule\ShippingZipCodeRule;
-use Shopware\Bundle\StoreFrontBundle\Struct\Address;
-use Shopware\Bundle\StoreFrontBundle\Struct\Country;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
+use Shopware\Bundle\StoreFrontBundle\Address\Address;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
+use Shopware\Bundle\StoreFrontBundle\Country\Country;
 
 class ShippingZipCodeRuleTest extends TestCase
 {
@@ -116,7 +116,7 @@ class ShippingZipCodeRuleTest extends TestCase
 
     private function createAddress(string $code): Address
     {
-        $state = new Country\State();
+        $state = new \Shopware\Bundle\StoreFrontBundle\Country\State();
         $state->setCountry(new Country());
 
         $address = new Address();

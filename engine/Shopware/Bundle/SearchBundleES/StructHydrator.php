@@ -24,11 +24,11 @@
 
 namespace Shopware\Bundle\SearchBundleES;
 
-use Shopware\Bundle\StoreFrontBundle\Struct\Attribute;
-use Shopware\Bundle\StoreFrontBundle\Struct\Media;
-use Shopware\Bundle\StoreFrontBundle\Struct\Property\Group as PropertyGroup;
-use Shopware\Bundle\StoreFrontBundle\Struct\Property\Option as PropertyOption;
-use Shopware\Bundle\StoreFrontBundle\Struct\Thumbnail;
+use Shopware\Bundle\StoreFrontBundle\Common\Attribute;
+use Shopware\Bundle\StoreFrontBundle\Media\Media;
+use Shopware\Bundle\StoreFrontBundle\Media\Thumbnail;
+use Shopware\Bundle\StoreFrontBundle\Property\Group as PropertyGroup;
+use Shopware\Bundle\StoreFrontBundle\Property\Option as PropertyOption;
 
 /**
  * Class StructHydrator
@@ -81,7 +81,7 @@ class StructHydrator
     /**
      * @param array $data
      *
-     * @return Media
+     * @return \Shopware\Bundle\StoreFrontBundle\Media\Media
      */
     public function createMedia($data)
     {
@@ -108,7 +108,7 @@ class StructHydrator
     /**
      * @param array $data
      *
-     * @return Thumbnail
+     * @return \Shopware\Bundle\StoreFrontBundle\Media\Thumbnail
      */
     public function createThumbnail($data)
     {
@@ -126,7 +126,7 @@ class StructHydrator
     /**
      * @param array $data
      *
-     * @return Attribute[]
+     * @return \Shopware\Bundle\StoreFrontBundle\Common\Attribute[]
      */
     public function createAttributes($data)
     {

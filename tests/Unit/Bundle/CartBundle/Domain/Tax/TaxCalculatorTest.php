@@ -30,7 +30,7 @@ use Shopware\Bundle\CartBundle\Domain\Tax\TaxRule;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCalculator;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCollection;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\Tax;
+use Shopware\Bundle\StoreFrontBundle\Tax\Tax;
 
 class TaxCalculatorTest extends \PHPUnit\Framework\TestCase
 {

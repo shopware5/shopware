@@ -218,7 +218,7 @@ class VisitorTracerTest extends TestCase
 
     private function getContext($shopId = 1)
     {
-        $context = $this->container->get('shopware_storefront.context_service')
+        $context = $this->container->get('storefront.context.service')
             ->getShopContext();
 
         $context->getShop()->setId($shopId);

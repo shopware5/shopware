@@ -29,7 +29,7 @@ use Shopware\Bundle\ESIndexingBundle\FieldMappingInterface;
 use Shopware\Bundle\ESIndexingBundle\IdentifierSelector;
 use Shopware\Bundle\ESIndexingBundle\MappingInterface;
 use Shopware\Bundle\ESIndexingBundle\TextMappingInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
+use Shopware\Bundle\StoreFrontBundle\Shop\Shop;
 
 /**
  * Class ProductMapping
@@ -161,7 +161,7 @@ class ProductMapping implements MappingInterface
     }
 
     /**
-     * @param Shop $shop
+     * @param \Shopware\Bundle\StoreFrontBundle\Shop\Shop $shop
      *
      * @return array
      */
@@ -198,7 +198,7 @@ class ProductMapping implements MappingInterface
     }
 
     /**
-     * @param Shop $shop
+     * @param \Shopware\Bundle\StoreFrontBundle\Shop\Shop $shop
      *
      * @return array
      */
@@ -267,7 +267,7 @@ class ProductMapping implements MappingInterface
     }
 
     /**
-     * @param Shop $shop
+     * @param \Shopware\Bundle\StoreFrontBundle\Shop\Shop $shop
      *
      * @return array
      */

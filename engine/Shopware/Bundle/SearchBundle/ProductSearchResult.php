@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\SearchBundle;
 
-use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
+use Shopware\Bundle\StoreFrontBundle\Product\ListProduct;
 
 /**
  * Defines the search result of the search gateway.
@@ -36,7 +36,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 class ProductSearchResult extends ProductNumberSearchResult
 {
     /**
-     * @var ListProduct[] Indexed by the product order number
+     * @var \Shopware\Bundle\StoreFrontBundle\Product\ListProduct[] Indexed by the product order number
      */
     protected $products;
 
@@ -53,7 +53,7 @@ class ProductSearchResult extends ProductNumberSearchResult
     }
 
     /**
-     * @return ListProduct[] Indexed by the product order number
+     * @return \Shopware\Bundle\StoreFrontBundle\Product\ListProduct[] Indexed by the product order number
      */
     public function getProducts()
     {

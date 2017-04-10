@@ -27,8 +27,7 @@ namespace Shopware\Bundle\EmotionBundle\Service\Gateway;
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\EmotionBundle\Service\Gateway\Hydrator\EmotionHydrator;
 use Shopware\Bundle\EmotionBundle\Struct\Emotion;
-use Shopware\Bundle\StoreFrontBundle\Gateway\FieldHelper;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 
 class EmotionGateway
 {
@@ -38,7 +37,7 @@ class EmotionGateway
     private $hydrator;
 
     /**
-     * @var FieldHelper
+     * @var \Shopware\Bundle\StoreFrontBundle\Common\FieldHelper
      */
     private $fieldHelper;
     /**
@@ -47,11 +46,11 @@ class EmotionGateway
     private $connection;
 
     /**
-     * @param EmotionHydrator $hydrator
-     * @param FieldHelper     $fieldHelper
-     * @param Connection      $connection
+     * @param EmotionHydrator                                      $hydrator
+     * @param \Shopware\Bundle\StoreFrontBundle\Common\FieldHelper $fieldHelper
+     * @param Connection                                           $connection
      */
-    public function __construct(EmotionHydrator $hydrator, FieldHelper $fieldHelper, Connection $connection)
+    public function __construct(EmotionHydrator $hydrator, \Shopware\Bundle\StoreFrontBundle\Common\FieldHelper $fieldHelper, Connection $connection)
     {
         $this->hydrator = $hydrator;
         $this->fieldHelper = $fieldHelper;

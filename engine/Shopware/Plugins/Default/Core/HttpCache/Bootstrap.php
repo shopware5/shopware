@@ -27,7 +27,6 @@ use Enlight_Controller_Request_Request as Request;
 use Enlight_Controller_Response_ResponseHttp as Response;
 use Shopware\Bundle\EmotionBundle\ComponentHandler\ArticleComponentHandler;
 use Shopware\Bundle\EmotionBundle\ComponentHandler\ArticleSliderComponentHandler;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\HttpCache\Store;
 use Shopware\Components\Model\ModelManager;
 use Symfony\Component\HttpKernel\HttpCache\HttpCache;
@@ -910,7 +909,7 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
 
                     foreach ($emotion['elements'] as $element) {
                         if ($element['component']['type'] === ArticleComponentHandler::COMPONENT_NAME) {
-                            /** @var \Shopware\Bundle\StoreFrontBundle\Struct\ListProduct $product */
+                            /** @var \Shopware\Bundle\StoreFrontBundle\Product\ListProduct $product */
                             $product = $element['data']['product'];
                             if (!$product) {
                                 continue;
@@ -918,7 +917,7 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
                             $articleIds[] = $product->getId();
                             $articleIds[] = $product->getVariantId();
                         } elseif ($element['component']['type'] === ArticleSliderComponentHandler::COMPONENT_NAME) {
-                            /** @var \Shopware\Bundle\StoreFrontBundle\Struct\ListProduct[] $products */
+                            /** @var \Shopware\Bundle\StoreFrontBundle\Product\ListProduct[] $products */
                             $products = $element['data']['products'];
                             foreach ($products as $product) {
                                 $articleIds[] = $product->getId();
@@ -1190,8 +1189,8 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
         $session = $this->get('session');
 
         if ($session->offsetGet('sCountry')) {
-            /** @var ShopContextInterface $context */
-            $context = $this->get('shopware_storefront.context_service')->getShopContext();
+            /** @var \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context */
+            $context = $this->get('storefront.context.service')->getShopContext();
             $userContext = sha1(
                 json_encode($context->getTaxRules()) .
                 json_encode($context->getCurrentCustomerGroup())

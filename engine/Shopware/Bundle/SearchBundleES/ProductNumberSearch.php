@@ -34,9 +34,9 @@ use Shopware\Bundle\SearchBundle\CriteriaPartInterface;
 use Shopware\Bundle\SearchBundle\FacetInterface;
 use Shopware\Bundle\SearchBundle\ProductNumberSearchInterface;
 use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
-use Shopware\Bundle\StoreFrontBundle\Struct\Attribute;
-use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Common\Attribute;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Product\BaseProduct;
 
 class ProductNumberSearch implements ProductNumberSearchInterface
 {
@@ -114,8 +114,8 @@ class ProductNumberSearch implements ProductNumberSearchInterface
     }
 
     /**
-     * @param Criteria             $criteria
-     * @param ShopContextInterface $context
+     * @param Criteria                                                       $criteria
+     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
      *
      * @return Search
      */
@@ -177,7 +177,7 @@ class ProductNumberSearch implements ProductNumberSearchInterface
     /**
      * @param array[] $data
      *
-     * @return \Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct[]
+     * @return \Shopware\Bundle\StoreFrontBundle\Product\BaseProduct[]
      */
     private function createProducts($data)
     {

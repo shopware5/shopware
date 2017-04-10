@@ -31,12 +31,12 @@ use Shopware\Bundle\EmotionBundle\Struct\Element;
 use Shopware\Bundle\SearchBundle\Sorting\ReleaseDateSorting;
 use Shopware\Bundle\SearchBundle\SortingInterface;
 use Shopware\Bundle\SearchBundle\StoreFrontCriteriaFactoryInterface;
-use Shopware\Bundle\StoreFrontBundle\Service\BlogServiceInterface;
-use Shopware\Bundle\StoreFrontBundle\Service\CategoryServiceInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\Blog\Blog;
-use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Blog\Blog;
+use Shopware\Bundle\StoreFrontBundle\Blog\BlogServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Category\CategoryServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Product\ListProduct;
 
 class CategoryTeaserComponentHandler implements ComponentHandlerInterface
 {
@@ -52,7 +52,7 @@ class CategoryTeaserComponentHandler implements ComponentHandlerInterface
     private $criteriaFactory;
 
     /**
-     * @var CategoryServiceInterface
+     * @var \Shopware\Bundle\StoreFrontBundle\Category\CategoryServiceInterface
      */
     private $categoryService;
 
@@ -67,10 +67,10 @@ class CategoryTeaserComponentHandler implements ComponentHandlerInterface
     private $connection;
 
     /**
-     * @param StoreFrontCriteriaFactoryInterface $criteriaFactory
-     * @param CategoryServiceInterface           $categoryService
-     * @param Connection                         $connection
-     * @param BlogServiceInterface               $blogService
+     * @param StoreFrontCriteriaFactoryInterface                                  $criteriaFactory
+     * @param \Shopware\Bundle\StoreFrontBundle\Category\CategoryServiceInterface $categoryService
+     * @param Connection                                                          $connection
+     * @param BlogServiceInterface                                                $blogService
      */
     public function __construct(StoreFrontCriteriaFactoryInterface $criteriaFactory, CategoryServiceInterface $categoryService, Connection $connection, BlogServiceInterface $blogService)
     {
@@ -92,9 +92,9 @@ class CategoryTeaserComponentHandler implements ComponentHandlerInterface
     }
 
     /**
-     * @param PrepareDataCollection            $collection
-     * @param Element                          $element
-     * @param ShopContext|ShopContextInterface $context
+     * @param PrepareDataCollection                                                      $collection
+     * @param Element                                                                    $element
+     * @param ShopContext|\Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
      */
     public function prepare(PrepareDataCollection $collection, Element $element, ShopContextInterface $context)
     {

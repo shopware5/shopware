@@ -29,7 +29,7 @@ use Doctrine\DBAL\Connection;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\SortingInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 use Shopware\Components\DependencyInjection\Container;
 
 /**
@@ -173,9 +173,9 @@ class QueryBuilderFactory implements QueryBuilderFactoryInterface
     }
 
     /**
-     * @param Criteria             $criteria
-     * @param QueryBuilder         $query
-     * @param ShopContextInterface $context
+     * @param Criteria                                                       $criteria
+     * @param QueryBuilder                                                   $query
+     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
      */
     private function addConditions(Criteria $criteria, QueryBuilder $query, ShopContextInterface $context)
     {
@@ -186,9 +186,9 @@ class QueryBuilderFactory implements QueryBuilderFactoryInterface
     }
 
     /**
-     * @param Criteria             $criteria
-     * @param QueryBuilder         $query
-     * @param ShopContextInterface $context
+     * @param Criteria                                                       $criteria
+     * @param QueryBuilder                                                   $query
+     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
      *
      * @throws \Exception
      */

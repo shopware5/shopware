@@ -28,9 +28,8 @@ use Shopware\Bundle\EmotionBundle\Struct\Element;
 use Shopware\Bundle\EmotionBundle\Struct\ElementConfig;
 use Shopware\Bundle\EmotionBundle\Struct\ElementViewport;
 use Shopware\Bundle\EmotionBundle\Struct\Library\Component;
-use Shopware\Bundle\StoreFrontBundle\Gateway\Hydrator\Hydrator;
 
-class EmotionElementHydrator extends Hydrator
+class EmotionElementHydrator extends \Shopware\Bundle\StoreFrontBundle\Common\Hydrator
 {
     /**
      * @param array $data

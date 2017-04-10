@@ -26,7 +26,7 @@ namespace Shopware\Tests\Functional\Bundle\SearchBundle\Facet;
 
 use Shopware\Bundle\SearchBundle\Facet\ManufacturerFacet;
 use Shopware\Bundle\SearchBundle\FacetResult\ValueListFacetResult;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
 use Shopware\Models\Article\Supplier;
 use Shopware\Models\Category\Category;
 use Shopware\Tests\Functional\Bundle\StoreFrontBundle\TestCase;
@@ -104,9 +104,9 @@ class ManufacturerFacetTest extends TestCase
 
     /**
      * @param $number
-     * @param ShopContext                        $context
-     * @param \Shopware\Models\Category\Category $category
-     * @param Supplier                           $manufacturer
+     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContext $context
+     * @param \Shopware\Models\Category\Category                    $category
+     * @param Supplier                                              $manufacturer
      *
      * @return array
      */

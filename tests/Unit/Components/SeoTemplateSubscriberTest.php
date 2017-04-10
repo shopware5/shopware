@@ -25,10 +25,10 @@
 namespace Shopware\Tests\Unit\Components;
 
 use PHPUnit\Framework\TestCase;
-use Shopware\Bundle\StoreFrontBundle\Service\Core\ContextService;
-use Shopware\Bundle\StoreFrontBundle\Struct\Category;
-use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
+use Shopware\Bundle\StoreFrontBundle\Category\Category;
+use Shopware\Bundle\StoreFrontBundle\Context\ContextService;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
+use Shopware\Bundle\StoreFrontBundle\Shop\Shop;
 use Shopware\Components\QueryAliasMapper;
 use Shopware\Components\SeoTemplateSubscriber;
 

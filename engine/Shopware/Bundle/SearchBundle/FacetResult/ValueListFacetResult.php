@@ -25,8 +25,7 @@
 namespace Shopware\Bundle\SearchBundle\FacetResult;
 
 use Shopware\Bundle\SearchBundle\FacetResultInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\Attribute;
-use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
+use Shopware\Bundle\StoreFrontBundle\Common\Extendable;
 
 /**
  * @category  Shopware
@@ -66,13 +65,13 @@ class ValueListFacetResult extends Extendable implements FacetResultInterface
     protected $template;
 
     /**
-     * @param string          $facetName
-     * @param bool            $active
-     * @param string          $label
-     * @param ValueListItem[] $values
-     * @param string          $fieldName
-     * @param string|null     $template
-     * @param Attribute[]     $attributes
+     * @param string                                               $facetName
+     * @param bool                                                 $active
+     * @param string                                               $label
+     * @param ValueListItem[]                                      $values
+     * @param string                                               $fieldName
+     * @param string|null                                          $template
+     * @param \Shopware\Bundle\StoreFrontBundle\Common\Attribute[] $attributes
      */
     public function __construct(
         $facetName,

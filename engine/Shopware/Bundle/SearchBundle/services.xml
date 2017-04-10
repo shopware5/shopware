@@ -7,7 +7,7 @@
     <services>
         <!--shopware_search.-->
         <service id="shopware_search.product_search" class="Shopware\Bundle\SearchBundle\ProductSearch">
-            <argument type="service" id="shopware_storefront.list_product_service"/>
+            <argument type="service" id="storefront.product.list_product_service"/>
             <argument type="service" id="shopware_search.product_number_search"/>
         </service>
 
@@ -21,13 +21,13 @@
         </service>
 
         <service id="shopware_search.sorting_criteria_request_handler" class="Shopware\Bundle\SearchBundle\CriteriaRequestHandler\SortingCriteriaRequestHandler">
-            <argument type="service" id="shopware_storefront.custom_sorting_service" />
+            <argument type="service" id="storefront.listing.sorting_service" />
             <tag name="criteria_request_handler" />
         </service>
 
         <service id="shopware_search.custom_facet_criteria_request_handler" class="Shopware\Bundle\SearchBundle\CriteriaRequestHandler\FacetCriteriaRequestHandler">
             <argument type="service" id="config" />
-            <argument type="service" id="shopware_storefront.custom_facet_service" />
+            <argument type="service" id="storefront.listing.facet_service" />
             <argument type="service" id="dbal_connection" />
             <tag name="criteria_request_handler" />
         </service>
@@ -48,12 +48,12 @@
 
         <service id="shopware_search.batch_product_number_search" class="Shopware\Bundle\SearchBundle\BatchProductNumberSearch">
             <argument type="service" id="shopware_search.product_number_search" />
-            <argument type="service" id="shopware_storefront.base_product_factory" />
+            <argument type="service" id="storefront.product.base_product_factory" />
         </service>
 
         <service id="shopware_search.batch_product_search" class="Shopware\Bundle\SearchBundle\BatchProductSearch">
             <argument type="service" id="shopware_search.batch_product_number_search" />
-            <argument type="service" id="shopware_storefront.list_product_service" />
+            <argument type="service" id="storefront.product.list_product_service" />
         </service>
 
         <service id="shopware_search.category_tree_facet_result_builder" class="Shopware\Bundle\SearchBundle\FacetResult\CategoryTreeFacetResultBuilder">

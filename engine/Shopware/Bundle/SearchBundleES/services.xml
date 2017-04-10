@@ -112,7 +112,7 @@
         </service>
 
         <service id="shopware_search_es.manufacturer_facet_handler" class="Shopware\Bundle\SearchBundleES\FacetHandler\ManufacturerFacetHandler">
-            <argument type="service" id="shopware_storefront.manufacturer_service" />
+            <argument type="service" id="storefront.manufacturer.service" />
             <argument type="service" id="snippets" />
             <argument type="service" id="query_alias_mapper" />
             <tag name="shopware_search_es.search_handler" />
@@ -150,8 +150,8 @@
         </service>
 
         <service id="shopware_search_es.category_facet_handler" class="Shopware\Bundle\SearchBundleES\FacetHandler\CategoryFacetHandler">
-            <argument type="service" id="shopware_storefront.category_service" />
-            <argument type="service" id="shopware_storefront.category_depth_service" />
+            <argument type="service" id="storefront.category.service" />
+            <argument type="service" id="shopware.category.depth_service" />
             <argument type="service" id="config" />
             <argument type="service" id="shopware_search.category_tree_facet_result_builder" />
             <tag name="shopware_search_es.search_handler" />

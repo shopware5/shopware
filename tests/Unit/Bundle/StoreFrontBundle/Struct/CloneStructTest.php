@@ -25,7 +25,7 @@
 namespace Shopware\Tests\Unit\StoreFrontBundle\Struct;
 
 use PHPUnit\Framework\TestCase;
-use Shopware\Bundle\StoreFrontBundle\Struct\Struct as BaseStruct;
+use Shopware\Bundle\StoreFrontBundle\Common\Struct as BaseStruct;
 
 class SimpleStruct extends BaseStruct
 {

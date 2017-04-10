@@ -26,7 +26,7 @@ declare(strict_types=1);
 namespace Shopware\Bundle\CartBundle\Domain\Price;
 
 use Shopware\Bundle\CartBundle\Domain\Tax\PercentageTaxRuleBuilder;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 
 class PercentagePriceCalculator
 {

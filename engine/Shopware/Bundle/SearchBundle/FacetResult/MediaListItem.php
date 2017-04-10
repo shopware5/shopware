@@ -24,8 +24,7 @@
 
 namespace Shopware\Bundle\SearchBundle\FacetResult;
 
-use Shopware\Bundle\StoreFrontBundle\Struct\Attribute;
-use Shopware\Bundle\StoreFrontBundle\Struct\Media;
+use Shopware\Bundle\StoreFrontBundle\Media\Media;
 
 /**
  * @category  Shopware
@@ -35,16 +34,16 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Media;
 class MediaListItem extends ValueListItem
 {
     /**
-     * @var Media
+     * @var \Shopware\Bundle\StoreFrontBundle\Media\Media
      */
     protected $media;
 
     /**
-     * @param int|string  $id
-     * @param string      $label
-     * @param bool        $active
-     * @param Media       $media
-     * @param Attribute[] $attributes
+     * @param int|string                                           $id
+     * @param string                                               $label
+     * @param bool                                                 $active
+     * @param \Shopware\Bundle\StoreFrontBundle\Media\Media        $media
+     * @param \Shopware\Bundle\StoreFrontBundle\Common\Attribute[] $attributes
      */
     public function __construct($id, $label, $active, Media $media = null, $attributes = [])
     {
@@ -53,7 +52,7 @@ class MediaListItem extends ValueListItem
     }
 
     /**
-     * @return Media
+     * @return \Shopware\Bundle\StoreFrontBundle\Media\Media
      */
     public function getMedia()
     {

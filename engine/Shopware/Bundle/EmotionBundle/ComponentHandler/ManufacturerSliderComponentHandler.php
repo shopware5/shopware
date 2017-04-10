@@ -28,8 +28,8 @@ use Doctrine\DBAL\Connection;
 use Shopware\Bundle\EmotionBundle\Struct\Collection\PrepareDataCollection;
 use Shopware\Bundle\EmotionBundle\Struct\Collection\ResolvedDataCollection;
 use Shopware\Bundle\EmotionBundle\Struct\Element;
-use Shopware\Bundle\StoreFrontBundle\Service\ManufacturerServiceInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Manufacturer\ManufacturerServiceInterface;
 
 class ManufacturerSliderComponentHandler implements ComponentHandlerInterface
 {
@@ -40,7 +40,7 @@ class ManufacturerSliderComponentHandler implements ComponentHandlerInterface
     const COMPONENT_NAME = 'emotion-components-manufacturer-slider';
 
     /**
-     * @var ManufacturerServiceInterface
+     * @var \Shopware\Bundle\StoreFrontBundle\Manufacturer\ManufacturerServiceInterface
      */
     private $manufacturerService;
 
@@ -50,8 +50,8 @@ class ManufacturerSliderComponentHandler implements ComponentHandlerInterface
     private $connection;
 
     /**
-     * @param ManufacturerServiceInterface $manufacturerService
-     * @param Connection                   $connection
+     * @param \Shopware\Bundle\StoreFrontBundle\Manufacturer\ManufacturerServiceInterface $manufacturerService
+     * @param Connection                                                                  $connection
      */
     public function __construct(ManufacturerServiceInterface $manufacturerService, Connection $connection)
     {

@@ -59,7 +59,7 @@ class CartTracerTest extends TestCase
 
         /** @var CartTracer $tracer */
         $tracer = Shopware()->Container()->get('shopware.statistic.tracer.cart_tracer');
-        $context = Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext();
+        $context = Shopware()->Container()->get('storefront.context.service')->getShopContext();
 
         $this->insertCart(self::SESSION_ID, '', '', 1);
 
@@ -83,7 +83,7 @@ class CartTracerTest extends TestCase
 
         /** @var CartTracer $tracer */
         $tracer = Shopware()->Container()->get('shopware.statistic.tracer.cart_tracer');
-        $context = Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext();
+        $context = Shopware()->Container()->get('storefront.context.service')->getShopContext();
 
         $this->insertCart(self::SESSION_ID, '', '', 1);
         $tracer->traceRequest($request, $context);
@@ -106,7 +106,7 @@ class CartTracerTest extends TestCase
 
         /** @var CartTracer $tracer */
         $tracer = Shopware()->Container()->get('shopware.statistic.tracer.cart_tracer');
-        $context = Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext();
+        $context = Shopware()->Container()->get('storefront.context.service')->getShopContext();
 
         $this->insertCart(self::SESSION_ID, 'checkout', self::USER_AGENT, 1);
 
@@ -130,7 +130,7 @@ class CartTracerTest extends TestCase
 
         /** @var CartTracer $tracer */
         $tracer = Shopware()->Container()->get('shopware.statistic.tracer.cart_tracer');
-        $context = Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext();
+        $context = Shopware()->Container()->get('storefront.context.service')->getShopContext();
 
         $this->insertCart(self::SESSION_ID, 'detail', self::USER_AGENT, 1);
 
@@ -154,7 +154,7 @@ class CartTracerTest extends TestCase
 
         /** @var CartTracer $tracer */
         $tracer = Shopware()->Container()->get('shopware.statistic.tracer.cart_tracer');
-        $context = Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext();
+        $context = Shopware()->Container()->get('storefront.context.service')->getShopContext();
 
         $this->insertCart(self::SESSION_ID, 'checkout', self::USER_AGENT, 0);
 
@@ -178,7 +178,7 @@ class CartTracerTest extends TestCase
 
         /** @var CartTracer $tracer */
         $tracer = Shopware()->Container()->get('shopware.statistic.tracer.cart_tracer');
-        $context = Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext();
+        $context = Shopware()->Container()->get('storefront.context.service')->getShopContext();
 
         $this->insertCart(self::SESSION_ID, 'checkout', self::USER_AGENT, 0);
 
@@ -226,7 +226,7 @@ class CartTracerTest extends TestCase
 
         /** @var CartTracer $tracer */
         $tracer = Shopware()->Container()->get('shopware.statistic.tracer.cart_tracer');
-        $context = Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext();
+        $context = Shopware()->Container()->get('storefront.context.service')->getShopContext();
 
         $this->insertCart(self::SESSION_ID, 'detail', self::USER_AGENT, 10);
 

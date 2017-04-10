@@ -26,10 +26,9 @@ namespace Shopware\Bundle\EmotionBundle\Service;
 
 use Shopware\Bundle\EmotionBundle\Service\Gateway\EmotionGateway;
 use Shopware\Bundle\EmotionBundle\Struct\Emotion;
-use Shopware\Bundle\StoreFrontBundle\Gateway\ShopGateway;
-use Shopware\Bundle\StoreFrontBundle\Service\CategoryServiceInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\TranslationContext;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Context\TranslationContext;
+use Shopware\Bundle\StoreFrontBundle\Shop\ShopGateway;
 
 class EmotionService implements EmotionServiceInterface
 {
@@ -49,21 +48,21 @@ class EmotionService implements EmotionServiceInterface
     private $shopGateway;
 
     /**
-     * @var CategoryServiceInterface
+     * @var \Shopware\Bundle\StoreFrontBundle\Category\CategoryServiceInterface
      */
     private $categoryService;
 
     /**
-     * @param EmotionGateway                 $gateway
-     * @param EmotionElementServiceInterface $elementService
-     * @param ShopGateway                    $shopGateway
-     * @param CategoryServiceInterface       $categoryService
+     * @param EmotionGateway                                                      $gateway
+     * @param EmotionElementServiceInterface                                      $elementService
+     * @param ShopGateway                                                         $shopGateway
+     * @param \Shopware\Bundle\StoreFrontBundle\Category\CategoryServiceInterface $categoryService
      */
     public function __construct(
         EmotionGateway $gateway,
         EmotionElementServiceInterface $elementService,
         ShopGateway $shopGateway,
-        CategoryServiceInterface $categoryService
+        \Shopware\Bundle\StoreFrontBundle\Category\CategoryServiceInterface $categoryService
     ) {
         $this->gateway = $gateway;
         $this->elementService = $elementService;
@@ -72,8 +71,8 @@ class EmotionService implements EmotionServiceInterface
     }
 
     /**
-     * @param array                $emotionIds
-     * @param ShopContextInterface $context
+     * @param array                                                          $emotionIds
+     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
      *
      * @return Emotion[]
      */
@@ -131,8 +130,8 @@ class EmotionService implements EmotionServiceInterface
     }
 
     /**
-     * @param Emotion[]          $emotions
-     * @param TranslationContext $context
+     * @param Emotion[]                                                    $emotions
+     * @param \Shopware\Bundle\StoreFrontBundle\Context\TranslationContext $context
      */
     private function resolveShops(array $emotions, TranslationContext $context)
     {

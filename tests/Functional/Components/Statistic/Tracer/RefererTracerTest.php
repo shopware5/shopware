@@ -27,7 +27,6 @@ namespace Shopware\Tests\Functional\Components\Statistic\Tracer;
 
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\DependencyInjection\Container;
 use Shopware\Components\Statistic\Tracer\RefererTracer;
 
@@ -39,7 +38,7 @@ class RefererTracerTest extends TestCase
     private $connection;
 
     /**
-     * @var ShopContextInterface
+     * @var \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface
      */
     private $context;
 
@@ -66,7 +65,7 @@ class RefererTracerTest extends TestCase
         $this->connection->beginTransaction();
         $this->connection->executeUpdate('DELETE FROM s_statistics_referer');
 
-        $this->context = $this->container->get('shopware_storefront.context_service')->getShopContext();
+        $this->context = $this->container->get('storefront.context.service')->getShopContext();
         $this->tracer = $this->container->get('shopware.statistic.tracer.referer_tracer');
         $this->session = $this->container->get('session');
         $this->session->offsetUnset('Admin');

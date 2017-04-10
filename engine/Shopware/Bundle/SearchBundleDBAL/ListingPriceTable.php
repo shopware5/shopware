@@ -26,7 +26,7 @@ namespace Shopware\Bundle\SearchBundleDBAL;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder as DoctrineQueryBuilder;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 
 class ListingPriceTable implements ListingPriceTableInterface
 {
@@ -51,7 +51,7 @@ class ListingPriceTable implements ListingPriceTableInterface
     }
 
     /**
-     * @param ShopContextInterface $context
+     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
      *
      * @return DoctrineQueryBuilder
      */
@@ -92,7 +92,7 @@ class ListingPriceTable implements ListingPriceTableInterface
     }
 
     /**
-     * @param ShopContextInterface $context
+     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
      *
      * @return bool
      */
@@ -135,7 +135,7 @@ class ListingPriceTable implements ListingPriceTableInterface
     }
 
     /**
-     * @param ShopContextInterface $context
+     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
      *
      * @return string
      */
@@ -180,7 +180,7 @@ class ListingPriceTable implements ListingPriceTableInterface
     /**
      * Builds the tax cases for the price selection query
      *
-     * @param ShopContextInterface $context
+     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
      *
      * @return string
      */

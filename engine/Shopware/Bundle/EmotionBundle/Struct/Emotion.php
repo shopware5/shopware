@@ -24,9 +24,8 @@
 
 namespace Shopware\Bundle\EmotionBundle\Struct;
 
-use Shopware\Bundle\StoreFrontBundle\Struct\Category;
-use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
-use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
+use Shopware\Bundle\StoreFrontBundle\Category\Category;
+use Shopware\Bundle\StoreFrontBundle\Common\Extendable;
 
 class Emotion extends Extendable
 {
@@ -171,7 +170,7 @@ class Emotion extends Extendable
     protected $categoryIds = [];
 
     /**
-     * @var Category[]
+     * @var \Shopware\Bundle\StoreFrontBundle\Category\Category[]
      */
     protected $categories = [];
 
@@ -186,7 +185,7 @@ class Emotion extends Extendable
     protected $shopIds = [];
 
     /**
-     * @var Shop[]
+     * @var \Shopware\Bundle\StoreFrontBundle\Shop\Shop[]
      */
     protected $shops = [];
 
@@ -623,7 +622,7 @@ class Emotion extends Extendable
     }
 
     /**
-     * @return \Shopware\Bundle\StoreFrontBundle\Struct\Shop[]
+     * @return \Shopware\Bundle\StoreFrontBundle\Shop\Shop[]
      */
     public function getShops()
     {
@@ -631,7 +630,7 @@ class Emotion extends Extendable
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Struct\Shop[] $shops
+     * @param \Shopware\Bundle\StoreFrontBundle\Shop\Shop[] $shops
      */
     public function setShops(array $shops)
     {

@@ -24,7 +24,7 @@
 
 namespace Shopware\Tests\Functional\Bundle\StoreFrontBundle;
 
-use Shopware\Bundle\StoreFrontBundle\Struct\Product\Price;
+use Shopware\Bundle\StoreFrontBundle\Price\Price;
 
 class BasePriceTest extends TestCase
 {
@@ -54,7 +54,7 @@ class BasePriceTest extends TestCase
         $this->assertEquals(100, $first->getCalculatedPrice());
         $this->assertEquals(200, $first->getCalculatedReferencePrice());
 
-        /** @var Price $last */
+        /** @var \Shopware\Bundle\StoreFrontBundle\Price\Price $last */
         $last = array_pop($product->getPrices());
         $this->assertEquals(50, $last->getCalculatedPrice());
         $this->assertEquals(100, $last->getCalculatedReferencePrice());

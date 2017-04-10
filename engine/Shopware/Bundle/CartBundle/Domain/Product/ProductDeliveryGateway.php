@@ -27,7 +27,7 @@ namespace Shopware\Bundle\CartBundle\Domain\Product;
 use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryInformationCollection;
 use Shopware\Bundle\CartBundle\Domain\Exception\NotImplementedException;
 use Shopware\Bundle\CartBundle\Domain\LineItem\LineItemCollection;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 
 class ProductDeliveryGateway implements ProductDeliveryGatewayInterface
 {

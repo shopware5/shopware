@@ -36,7 +36,7 @@ use Shopware\Bundle\CartBundle\Domain\Validator\Rule\Rule;
 use Shopware\Bundle\CartBundle\Domain\Voucher\CalculatedVoucher;
 use Shopware\Bundle\CartBundle\Domain\Voucher\VoucherProcessor;
 use Shopware\Bundle\CartBundle\Infrastructure\Validator\Rule\GoodsCountRule;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
 
 class GoodsCountRuleTest extends TestCase
 {

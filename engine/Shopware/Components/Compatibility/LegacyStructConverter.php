@@ -27,10 +27,10 @@ namespace Shopware\Components\Compatibility;
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\MediaBundle\MediaServiceInterface;
 use Shopware\Bundle\StoreFrontBundle;
-use Shopware\Bundle\StoreFrontBundle\Service\CategoryServiceInterface;
-use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
-use Shopware\Bundle\StoreFrontBundle\Struct\Product\Price;
+use Shopware\Bundle\StoreFrontBundle\Category\CategoryServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Context\ContextServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Price\Price;
+use Shopware\Bundle\StoreFrontBundle\Product\ListProduct;
 use Shopware\Components\DependencyInjection\Container;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Emotion\Emotion;
@@ -78,19 +78,19 @@ class LegacyStructConverter
     private $container;
 
     /**
-     * @var CategoryServiceInterface
+     * @var \Shopware\Bundle\StoreFrontBundle\Category\CategoryServiceInterface
      */
     private $categoryService;
 
     /**
-     * @param \Shopware_Components_Config $config
-     * @param ContextServiceInterface     $contextService
-     * @param \Enlight_Event_EventManager $eventManager
-     * @param MediaServiceInterface       $mediaService
-     * @param Connection                  $connection
-     * @param ModelManager                $modelManager
-     * @param CategoryServiceInterface    $categoryService
-     * @param Container                   $container
+     * @param \Shopware_Components_Config                                         $config
+     * @param ContextServiceInterface                                             $contextService
+     * @param \Enlight_Event_EventManager                                         $eventManager
+     * @param MediaServiceInterface                                               $mediaService
+     * @param Connection                                                          $connection
+     * @param ModelManager                                                        $modelManager
+     * @param \Shopware\Bundle\StoreFrontBundle\Category\CategoryServiceInterface $categoryService
+     * @param Container                                                           $container
      */
     public function __construct(
         \Shopware_Components_Config $config,
@@ -113,7 +113,7 @@ class LegacyStructConverter
     }
 
     /**
-     * @param StoreFrontBundle\Struct\Country[] $countries
+     * @param \Shopware\Bundle\StoreFrontBundle\Country\Country[] $countries
      *
      * @return array
      */
@@ -123,11 +123,11 @@ class LegacyStructConverter
     }
 
     /**
-     * @param StoreFrontBundle\Struct\Country $country
+     * @param \Shopware\Bundle\StoreFrontBundle\Country\Country $country
      *
      * @return array
      */
-    public function convertCountryStruct(StoreFrontBundle\Struct\Country $country)
+    public function convertCountryStruct(StoreFrontBundle\Country\Country $country)
     {
         $data = json_decode(json_encode($country), true);
         $data = array_merge($data, [
@@ -157,7 +157,7 @@ class LegacyStructConverter
     }
 
     /**
-     * @param StoreFrontBundle\Struct\Country\State[] $states
+     * @param \Shopware\Bundle\StoreFrontBundle\Country\State[] $states
      *
      * @return array
      */
@@ -167,11 +167,11 @@ class LegacyStructConverter
     }
 
     /**
-     * @param StoreFrontBundle\Struct\Country\State $state
+     * @param \Shopware\Bundle\StoreFrontBundle\Country\State $state
      *
      * @return array
      */
-    public function convertStateStruct(StoreFrontBundle\Struct\Country\State $state)
+    public function convertStateStruct(StoreFrontBundle\Country\State $state)
     {
         $data = json_decode(json_encode($state), true);
         $data += ['shortcode' => $state->getCode(), 'attributes' => $state->getAttributes()];
@@ -184,11 +184,11 @@ class LegacyStructConverter
     /**
      * Converts a configurator group struct which used for default or selection configurators.
      *
-     * @param StoreFrontBundle\Struct\Configurator\Group $group
+     * @param \Shopware\Bundle\StoreFrontBundle\Configurator\Group $group
      *
      * @return array
      */
-    public function convertConfiguratorGroupStruct(StoreFrontBundle\Struct\Configurator\Group $group)
+    public function convertConfiguratorGroupStruct(StoreFrontBundle\Configurator\Group $group)
     {
         $data = [
             'groupID' => $group->getId(),
@@ -206,13 +206,13 @@ class LegacyStructConverter
     }
 
     /**
-     * @param StoreFrontBundle\Struct\Category $category
+     * @param \Shopware\Bundle\StoreFrontBundle\Category\Category $category
      *
      * @throws \Exception
      *
      * @return array
      */
-    public function convertCategoryStruct(StoreFrontBundle\Struct\Category $category)
+    public function convertCategoryStruct(StoreFrontBundle\Category\Category $category)
     {
         $media = null;
         if ($category->getMedia()) {
@@ -292,7 +292,7 @@ class LegacyStructConverter
     }
 
     /**
-     * @param ListProduct[] $products
+     * @param \Shopware\Bundle\StoreFrontBundle\Product\ListProduct[] $products
      *
      * @return array
      */
@@ -304,7 +304,7 @@ class LegacyStructConverter
     /**
      * Converts the passed ListProduct struct to a shopware 3-4 array structure.
      *
-     * @param ListProduct $product
+     * @param \Shopware\Bundle\StoreFrontBundle\Product\ListProduct $product
      *
      * @return array
      */
@@ -403,13 +403,13 @@ class LegacyStructConverter
     /**
      * Converts the passed ProductStream struct to an array structure.
      *
-     * @param StoreFrontBundle\Struct\ProductStream $productStream
+     * @param \Shopware\Bundle\StoreFrontBundle\ProductStream\ProductStream $productStream
      *
      * @return array
      */
-    public function convertRelatedProductStreamStruct(StoreFrontBundle\Struct\ProductStream $productStream)
+    public function convertRelatedProductStreamStruct(StoreFrontBundle\ProductStream\ProductStream $productStream)
     {
-        if (!$productStream instanceof StoreFrontBundle\Struct\ProductStream) {
+        if (!$productStream instanceof StoreFrontBundle\ProductStream\ProductStream) {
             return [];
         }
 
@@ -427,13 +427,13 @@ class LegacyStructConverter
     }
 
     /**
-     * @param StoreFrontBundle\Struct\Product $product
+     * @param \Shopware\Bundle\StoreFrontBundle\Product\Product $product
      *
      * @return array
      */
-    public function convertProductStruct(StoreFrontBundle\Struct\Product $product)
+    public function convertProductStruct(StoreFrontBundle\Product\Product $product)
     {
-        if (!$product instanceof StoreFrontBundle\Struct\Product) {
+        if (!$product instanceof StoreFrontBundle\Product\Product) {
             return [];
         }
 
@@ -552,11 +552,11 @@ class LegacyStructConverter
     }
 
     /**
-     * @param StoreFrontBundle\Struct\Product\VoteAverage $average
+     * @param \Shopware\Bundle\StoreFrontBundle\Vote\VoteAverage $average
      *
      * @return array
      */
-    public function convertVoteAverageStruct(StoreFrontBundle\Struct\Product\VoteAverage $average)
+    public function convertVoteAverageStruct(StoreFrontBundle\Vote\VoteAverage $average)
     {
         $data = [
             'average' => round($average->getAverage()),
@@ -571,11 +571,11 @@ class LegacyStructConverter
     }
 
     /**
-     * @param StoreFrontBundle\Struct\Product\Vote $vote
+     * @param \Shopware\Bundle\StoreFrontBundle\Vote\Vote $vote
      *
      * @return array
      */
-    public function convertVoteStruct(StoreFrontBundle\Struct\Product\Vote $vote)
+    public function convertVoteStruct(StoreFrontBundle\Vote\Vote $vote)
     {
         $data = [
             'id' => $vote->getId(),
@@ -606,7 +606,7 @@ class LegacyStructConverter
     }
 
     /**
-     * @param Price $price
+     * @param \Shopware\Bundle\StoreFrontBundle\Price\Price $price
      *
      * @return array
      */
@@ -628,13 +628,13 @@ class LegacyStructConverter
     }
 
     /**
-     * @param StoreFrontBundle\Struct\Media $media
+     * @param \Shopware\Bundle\StoreFrontBundle\Media\Media $media
      *
      * @return array
      */
-    public function convertMediaStruct(StoreFrontBundle\Struct\Media $media = null)
+    public function convertMediaStruct(StoreFrontBundle\Media\Media $media = null)
     {
-        if (!$media instanceof StoreFrontBundle\Struct\Media) {
+        if (!$media instanceof StoreFrontBundle\Media\Media) {
             return [];
         }
 
@@ -680,11 +680,11 @@ class LegacyStructConverter
     }
 
     /**
-     * @param StoreFrontBundle\Struct\Product\Unit $unit
+     * @param \Shopware\Bundle\StoreFrontBundle\Unit\Unit $unit
      *
      * @return array
      */
-    public function convertUnitStruct(StoreFrontBundle\Struct\Product\Unit $unit)
+    public function convertUnitStruct(StoreFrontBundle\Unit\Unit $unit)
     {
         $data = [
             'minpurchase' => $unit->getMinPurchase(),
@@ -707,11 +707,11 @@ class LegacyStructConverter
     }
 
     /**
-     * @param StoreFrontBundle\Struct\Product\Manufacturer $manufacturer
+     * @param \Shopware\Bundle\StoreFrontBundle\Manufacturer\Manufacturer $manufacturer
      *
      * @return string
      */
-    public function getSupplierListingLink(StoreFrontBundle\Struct\Product\Manufacturer $manufacturer)
+    public function getSupplierListingLink(StoreFrontBundle\Manufacturer\Manufacturer $manufacturer)
     {
         return 'controller=listing&action=manufacturer&sSupplier=' . (int) $manufacturer->getId();
     }
@@ -746,17 +746,17 @@ class LegacyStructConverter
      *     ],
      * ];
      *
-     * @param StoreFrontBundle\Struct\Property\Set $set
+     * @param \Shopware\Bundle\StoreFrontBundle\Property\Set $set
      *
      * @return array
      */
-    public function convertPropertySetStruct(StoreFrontBundle\Struct\Property\Set $set)
+    public function convertPropertySetStruct(StoreFrontBundle\Property\Set $set)
     {
         $result = [];
         foreach ($set->getGroups() as $group) {
             $values = [];
             foreach ($group->getOptions() as $option) {
-                /* @var $option StoreFrontBundle\Struct\Property\Option */
+                /* @var $option \Shopware\Bundle\StoreFrontBundle\Property\Option */
                 $values[$option->getId()] = $option->getName();
             }
 
@@ -764,7 +764,7 @@ class LegacyStructConverter
 
             $mediaValues = [];
             foreach ($group->getOptions() as $option) {
-                /** @var $option StoreFrontBundle\Struct\Property\Option */
+                /** @var $option \Shopware\Bundle\StoreFrontBundle\Property\Option */
                 if ($option->getMedia()) {
                     $mediaValues[$option->getId()] = array_merge(['valueId' => $option->getId()], $this->convertMediaStruct($option->getMedia()));
                 }
@@ -792,11 +792,11 @@ class LegacyStructConverter
     }
 
     /**
-     * @param StoreFrontBundle\Struct\Property\Group $group
+     * @param \Shopware\Bundle\StoreFrontBundle\Property\Group $group
      *
      * @return array
      */
-    public function convertPropertyGroupStruct(StoreFrontBundle\Struct\Property\Group $group)
+    public function convertPropertyGroupStruct(StoreFrontBundle\Property\Group $group)
     {
         $data = [
             'id' => $group->getId(),
@@ -816,11 +816,11 @@ class LegacyStructConverter
     }
 
     /**
-     * @param StoreFrontBundle\Struct\Property\Option $option
+     * @param \Shopware\Bundle\StoreFrontBundle\Property\Option $option
      *
      * @return array
      */
-    public function convertPropertyOptionStruct(StoreFrontBundle\Struct\Property\Option $option)
+    public function convertPropertyOptionStruct(StoreFrontBundle\Property\Option $option)
     {
         $data = [
             'id' => $option->getId(),
@@ -834,11 +834,11 @@ class LegacyStructConverter
     }
 
     /**
-     * @param StoreFrontBundle\Struct\Product\Manufacturer $manufacturer
+     * @param \Shopware\Bundle\StoreFrontBundle\Manufacturer\Manufacturer $manufacturer
      *
      * @return array
      */
-    public function convertManufacturerStruct(StoreFrontBundle\Struct\Product\Manufacturer $manufacturer)
+    public function convertManufacturerStruct(StoreFrontBundle\Manufacturer\Manufacturer $manufacturer)
     {
         $data = [
             'id' => $manufacturer->getId(),
@@ -858,14 +858,14 @@ class LegacyStructConverter
     }
 
     /**
-     * @param ListProduct                              $product
-     * @param StoreFrontBundle\Struct\Configurator\Set $set
+     * @param \Shopware\Bundle\StoreFrontBundle\Product\ListProduct $product
+     * @param \Shopware\Bundle\StoreFrontBundle\Configurator\Set    $set
      *
      * @return array
      */
     public function convertConfiguratorStruct(
         ListProduct $product,
-        StoreFrontBundle\Struct\Configurator\Set $set
+        StoreFrontBundle\Configurator\Set $set
     ) {
         $groups = [];
         foreach ($set->getGroups() as $group) {
@@ -904,14 +904,14 @@ class LegacyStructConverter
     }
 
     /**
-     * @param ListProduct                              $product
-     * @param StoreFrontBundle\Struct\Configurator\Set $set
+     * @param \Shopware\Bundle\StoreFrontBundle\Product\ListProduct $product
+     * @param \Shopware\Bundle\StoreFrontBundle\Configurator\Set    $set
      *
      * @return array
      */
     public function convertConfiguratorPrice(
         ListProduct $product,
-        StoreFrontBundle\Struct\Configurator\Set $set
+        StoreFrontBundle\Configurator\Set $set
     ) {
         if ($set->isSelectionSpecified()) {
             return [];
@@ -939,13 +939,13 @@ class LegacyStructConverter
     /**
      * Creates the settings array for the passed configurator set
      *
-     * @param StoreFrontBundle\Struct\Configurator\Set $set
-     * @param ListProduct                              $product
+     * @param \Shopware\Bundle\StoreFrontBundle\Configurator\Set    $set
+     * @param \Shopware\Bundle\StoreFrontBundle\Product\ListProduct $product
      *
      * @return array
      */
     public function getConfiguratorSettings(
-        StoreFrontBundle\Struct\Configurator\Set $set,
+        StoreFrontBundle\Configurator\Set $set,
         ListProduct $product
     ) {
         $settings = [
@@ -975,14 +975,14 @@ class LegacyStructConverter
     /**
      * Converts a configurator option struct which used for default or selection configurators.
      *
-     * @param StoreFrontBundle\Struct\Configurator\Group  $group
-     * @param StoreFrontBundle\Struct\Configurator\Option $option
+     * @param \Shopware\Bundle\StoreFrontBundle\Configurator\Group  $group
+     * @param \Shopware\Bundle\StoreFrontBundle\Configurator\Option $option
      *
      * @return array
      */
     public function convertConfiguratorOptionStruct(
-        StoreFrontBundle\Struct\Configurator\Group $group,
-        StoreFrontBundle\Struct\Configurator\Option $option
+        StoreFrontBundle\Configurator\Group $group,
+        StoreFrontBundle\Configurator\Option $option
     ) {
         $data = [
             'optionID' => $option->getId(),
@@ -1005,11 +1005,11 @@ class LegacyStructConverter
     }
 
     /**
-     * @param StoreFrontBundle\Struct\Blog\Blog $blog
+     * @param \Shopware\Bundle\StoreFrontBundle\Blog\Blog $blog
      *
      * @return array
      */
-    public function convertBlogStruct(StoreFrontBundle\Struct\Blog\Blog $blog)
+    public function convertBlogStruct(StoreFrontBundle\Blog\Blog $blog)
     {
         $data = [
             'id' => $blog->getId(),
@@ -1054,11 +1054,11 @@ class LegacyStructConverter
     }
 
     /**
-     * @param StoreFrontBundle\Struct\Category $category
+     * @param \Shopware\Bundle\StoreFrontBundle\Category\Category $category
      *
      * @return string
      */
-    private function getCategoryLink(StoreFrontBundle\Struct\Category $category)
+    private function getCategoryLink(StoreFrontBundle\Category\Category $category)
     {
         $viewport = $category->isBlog() ? 'blog' : 'cat';
         $params = http_build_query(
@@ -1071,7 +1071,7 @@ class LegacyStructConverter
     }
 
     /**
-     * @param StoreFrontBundle\Struct\Thumbnail $thumbnail
+     * @param \Shopware\Bundle\StoreFrontBundle\Media\Thumbnail $thumbnail
      *
      * @return string
      */
@@ -1139,7 +1139,7 @@ class LegacyStructConverter
      * Internal function which converts only the data of a list product.
      * Associated data won't converted.
      *
-     * @param ListProduct $product
+     * @param \Shopware\Bundle\StoreFrontBundle\Product\ListProduct $product
      *
      * @return array
      */
@@ -1216,13 +1216,9 @@ class LegacyStructConverter
             $data['supplier_attributes'] = $product->getManufacturer()->getAttributes();
         }
 
-        if ($product->hasAttribute('marketing')) {
-            /** @var $marketing StoreFrontBundle\Struct\Product\MarketingAttribute */
-            $marketing = $product->getAttribute('marketing');
-            $data['newArticle'] = $marketing->isNew();
-            $data['sUpcoming'] = $marketing->comingSoon();
-            $data['topseller'] = $marketing->isTopSeller();
-        }
+        $data['newArticle'] = $product->isNew();
+        $data['sUpcoming'] = $product->comingSoon();
+        $data['topseller'] = $product->isTopSeller();
 
         $today = new \DateTime();
         if ($product->getReleaseDate() && $product->getReleaseDate() > $today) {
@@ -1249,11 +1245,11 @@ class LegacyStructConverter
     }
 
     /**
-     * @param StoreFrontBundle\Struct\Category|null $category
+     * @param \Shopware\Bundle\StoreFrontBundle\Category\Category|null $category
      *
      * @return string
      */
-    private function getProductBoxLayout(StoreFrontBundle\Struct\Category $category = null)
+    private function getProductBoxLayout(StoreFrontBundle\Category\Category $category = null)
     {
         if (!$category) {
             return 'basic';
@@ -1271,11 +1267,11 @@ class LegacyStructConverter
     }
 
     /**
-     * @param StoreFrontBundle\Struct\Category $category
+     * @param \Shopware\Bundle\StoreFrontBundle\Category\Category $category
      *
      * @return string
      */
-    private function getCategoryCanonicalParams(StoreFrontBundle\Struct\Category $category)
+    private function getCategoryCanonicalParams(StoreFrontBundle\Category\Category $category)
     {
         $page = $this->container->get('front')->Request()->getQuery('sPage');
 

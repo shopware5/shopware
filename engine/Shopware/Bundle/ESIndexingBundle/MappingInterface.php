@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\ESIndexingBundle;
 
-use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
+use Shopware\Bundle\StoreFrontBundle\Shop\Shop;
 
 interface MappingInterface
 {
@@ -34,7 +34,7 @@ interface MappingInterface
     public function getType();
 
     /**
-     * @param Shop $shop
+     * @param \Shopware\Bundle\StoreFrontBundle\Shop\Shop $shop
      *
      * @return array
      */

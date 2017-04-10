@@ -24,8 +24,7 @@
 
 namespace Shopware\Tests\Functional\Bundle\StoreFrontBundle;
 
-use Shopware\Bundle\StoreFrontBundle\Struct;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
 use Shopware\Components\Routing\Context;
 use Shopware\Models\Category\Category;
 
@@ -42,10 +41,10 @@ class ProductMediaTest extends TestCase
             );
         }
 
-        $listProducts = Shopware()->Container()->get('shopware_storefront.list_product_service')
+        $listProducts = Shopware()->Container()->get('storefront.product.list_product_service')
             ->getList($numbers, $context);
 
-        $mediaList = Shopware()->Container()->get('shopware_storefront.product_media_gateway')
+        $mediaList = Shopware()->Container()->get('storefront.media.product_media_gateway')
             ->getList($listProducts, $context->getTranslationContext());
 
         $this->assertCount(2, $mediaList);
@@ -57,7 +56,7 @@ class ProductMediaTest extends TestCase
 
             $this->assertCount(3, $productMediaList);
 
-            /** @var $media Struct\Media */
+            /** @var $media \Shopware\Bundle\StoreFrontBundle\Media\Media */
             foreach ($productMediaList as $media) {
                 if ($media->isPreview()) {
                     $this->assertMediaFile('sasse-korn', $media);
@@ -83,10 +82,10 @@ class ProductMediaTest extends TestCase
 
         $variantNumbers = ['testVariantMediaList1-1', 'testVariantMediaList1-2', 'testVariantMediaList2-1'];
 
-        $products = Shopware()->Container()->get('shopware_storefront.list_product_service')
+        $products = Shopware()->Container()->get('storefront.product.list_product_service')
             ->getList($variantNumbers, $context);
 
-        $mediaList = Shopware()->Container()->get('shopware_storefront.variant_media_gateway')
+        $mediaList = Shopware()->Container()->get('storefront.media.variant_media_gateway')
             ->getList($products, $context->getTranslationContext());
 
         $this->assertCount(3, $mediaList);
@@ -100,10 +99,10 @@ class ProductMediaTest extends TestCase
             }
         }
 
-        $products = Shopware()->Container()->get('shopware_storefront.list_product_service')
+        $products = Shopware()->Container()->get('storefront.product.list_product_service')
             ->getList($numbers, $context);
 
-        $mediaList = Shopware()->Container()->get('shopware_storefront.product_media_gateway')
+        $mediaList = Shopware()->Container()->get('storefront.media.product_media_gateway')
             ->getList($products, $context->getTranslationContext());
 
         $this->assertCount(2, $mediaList);
@@ -132,7 +131,7 @@ class ProductMediaTest extends TestCase
         $this->helper->createArticle($data);
 
         $variantNumber = 'testProductImagesWithVariant-1';
-        $product = Shopware()->Container()->get('shopware_storefront.product_service')
+        $product = Shopware()->Container()->get('storefront.product.service')
             ->getList([$variantNumber], $context);
 
         $product = array_shift($product);
@@ -160,7 +159,7 @@ class ProductMediaTest extends TestCase
         return $data;
     }
 
-    private function getVariantImageProduct($number, Struct\ShopContext $context, $imageCount = 2)
+    private function getVariantImageProduct($number, \Shopware\Bundle\StoreFrontBundle\Context\ShopContext $context, $imageCount = 2)
     {
         $data = $this->getProduct(
             $number,
@@ -184,9 +183,9 @@ class ProductMediaTest extends TestCase
         return $data;
     }
 
-    private function assertMediaFile($expected, Struct\Media $media)
+    private function assertMediaFile($expected, \Shopware\Bundle\StoreFrontBundle\Media\Media $media)
     {
-        $this->assertInstanceOf('Shopware\Bundle\StoreFrontBundle\Struct\Media', $media);
+        $this->assertInstanceOf('Shopware\Bundle\StoreFrontBundle\Media\Media', $media);
         $this->assertNotEmpty($media->getThumbnails());
         $this->assertContains($expected, $media->getFile());
 

@@ -27,7 +27,7 @@ namespace Shopware\Bundle\CartBundle\Infrastructure\Order;
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
 use Shopware\Bundle\CartBundle\Domain\Order\OrderPersisterInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 
 class OrderPersister implements OrderPersisterInterface
 {

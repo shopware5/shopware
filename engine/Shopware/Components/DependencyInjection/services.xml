@@ -362,19 +362,19 @@
 
         <service id="legacy_struct_converter" class="Shopware\Components\Compatibility\LegacyStructConverter">
             <argument type="service" id="config" />
-            <argument type="service" id="shopware_storefront.context_service" />
+            <argument type="service" id="storefront.context.service" />
             <argument type="service" id="events" />
             <argument type="service" id="shopware_media.media_service" />
             <argument type="service" id="dbal_connection" />
             <argument type="service" id="models" />
-            <argument type="service" id="shopware_storefront.category_service" />
+            <argument type="service" id="storefront.category.service" />
             <argument type="service" id="service_container" />
         </service>
 
         <service id="legacy_event_manager" class="Shopware\Components\Compatibility\LegacyEventManager">
             <argument type="service" id="events" />
             <argument type="service" id="config" />
-            <argument type="service" id="shopware_storefront.context_service" />
+            <argument type="service" id="storefront.context.service" />
         </service>
 
         <service id="query_alias_mapper" class="Shopware\Components\QueryAliasMapper">
@@ -422,7 +422,7 @@
             <argument type="service" id="shopware_search.product_number_search" />
             <argument type="service" id="shopware_search.store_front_criteria_factory" />
             <argument type="service" id="models" />
-            <argument type="service" id="shopware_storefront.context_service"/>
+            <argument type="service" id="storefront.context.service"/>
         </service>
 
         <service id="AttributeSubscriber" class="Shopware\Components\AttributeSubscriber">
@@ -465,7 +465,7 @@
 
         <service id="shopware_product_stream.facet_filter" class="Shopware\Components\ProductStream\FacetFilter" >
             <argument type="service" id="config" />
-            <argument type="service" id="shopware_storefront.custom_facet_service" />
+            <argument type="service" id="storefront.listing.facet_service" />
         </service>
 
         <service id="shopware.upload_max_size_validator" class="Shopware\Components\UploadMaxSizeValidator">
@@ -676,7 +676,7 @@
         <service id="shopware.components.seo_template_subscriber" class="Shopware\Components\SeoTemplateSubscriber">
             <argument id="config" type="service"/>
             <argument id="query_alias_mapper" type="service"/>
-            <argument id="shopware_storefront.context_service" type="service"/>
+            <argument id="storefront.context.service" type="service"/>
             <tag name="shopware.event_subscriber"/>
         </service>
     </services>

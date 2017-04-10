@@ -26,7 +26,6 @@ namespace Shopware\Tests\Functional\Bundle\AccountBundle\Service;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\AccountBundle\Service\CustomerServiceInterface;
-use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Customer\Customer;
 
@@ -51,7 +50,7 @@ class CustomerServiceTest extends \Enlight_Components_Test_TestCase
     protected static $connection;
 
     /**
-     * @var ContextServiceInterface
+     * @var \Shopware\Bundle\StoreFrontBundle\Context\ContextServiceInterface
      */
     protected static $contextService;
 
@@ -68,7 +67,7 @@ class CustomerServiceTest extends \Enlight_Components_Test_TestCase
         self::$customerService = Shopware()->Container()->get('shopware_account.customer_service');
         self::$modelManager = Shopware()->Container()->get('models');
         self::$connection = Shopware()->Container()->get('dbal_connection');
-        self::$contextService = Shopware()->Container()->get('shopware_storefront.context_service');
+        self::$contextService = Shopware()->Container()->get('storefront.context.service');
 
         self::$modelManager->clear();
     }

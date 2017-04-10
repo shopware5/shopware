@@ -49,7 +49,7 @@
 
         <service id="shopware_elastic_search.identifier_selector" class="Shopware\Bundle\ESIndexingBundle\IdentifierSelector">
             <argument type="service" id="dbal_connection" />
-            <argument type="service" id="shopware_storefront.shop_gateway_dbal" />
+            <argument type="service" id="storefront.shop.gateway" />
         </service>
 
         <service id="shopware_elastic_search.composite_synchronizer_factory" class="Shopware\Bundle\ESIndexingBundle\DependencyInjection\Factory\CompositeSynchronizerFactory" >
@@ -84,8 +84,8 @@
 
         <service id="shopware_elastic_search.property_provider" class="Shopware\Bundle\ESIndexingBundle\Property\PropertyProvider">
             <argument type="service" id="dbal_connection" />
-            <argument type="service" id="shopware_storefront.field_helper_dbal" />
-            <argument type="service" id="shopware_storefront.property_hydrator_dbal" />
+            <argument type="service" id="storefront.common.field_helper" />
+            <argument type="service" id="storefront.property.hydrator" />
         </service>
 
         <service id="shopware_elastic_search.property_mapping" class="Shopware\Bundle\ESIndexingBundle\Property\PropertyMapping">
@@ -108,15 +108,15 @@
         </service>
 
         <service id="shopware_elastic_search.product_provider" class="Shopware\Bundle\ESIndexingBundle\Product\ProductProvider">
-            <argument type="service" id="shopware_storefront.list_product_gateway" />
-            <argument type="service" id="shopware_storefront.cheapest_price_service" />
-            <argument type="service" id="shopware_storefront.vote_service" />
-            <argument type="service" id="shopware_storefront.context_factory" />
+            <argument type="service" id="storefront.product.gateway" />
+            <argument type="service" id="storefront.price.cheapest_price_service" />
+            <argument type="service" id="storefront.vote.service" />
+            <argument type="service" id="storefront.context.factory" />
             <argument type="service" id="dbal_connection" />
             <argument type="service" id="shopware_elastic_search.identifier_selector" />
-            <argument type="service" id="shopware_storefront.price_calculation_service" />
-            <argument type="service" id="shopware_storefront.field_helper_dbal" />
-            <argument type="service" id="shopware_storefront.property_hydrator_dbal" />
+            <argument type="service" id="storefront.price.calculation_service" />
+            <argument type="service" id="storefront.common.field_helper" />
+            <argument type="service" id="storefront.property.hydrator" />
         </service>
 
         <service id="shopware_elastic_search.product_mapping" class="Shopware\Bundle\ESIndexingBundle\Product\ProductMapping">

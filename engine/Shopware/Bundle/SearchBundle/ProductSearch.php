@@ -39,16 +39,16 @@ class ProductSearch implements ProductSearchInterface
     private $searchGateway;
 
     /**
-     * @var StoreFrontBundle\Service\ListProductServiceInterface
+     * @var \Shopware\Bundle\StoreFrontBundle\Product\ListProductServiceInterface
      */
     private $productService;
 
     /**
-     * @param StoreFrontBundle\Service\ListProductServiceInterface $productService
-     * @param ProductNumberSearchInterface                         $searchGateway
+     * @param \Shopware\Bundle\StoreFrontBundle\Product\ListProductServiceInterface $productService
+     * @param ProductNumberSearchInterface                                          $searchGateway
      */
     public function __construct(
-        StoreFrontBundle\Service\ListProductServiceInterface $productService,
+        StoreFrontBundle\Product\ListProductServiceInterface $productService,
         ProductNumberSearchInterface $searchGateway
     ) {
         $this->productService = $productService;
@@ -60,7 +60,7 @@ class ProductSearch implements ProductSearchInterface
      */
     public function search(
         Criteria $criteria,
-        StoreFrontBundle\Struct\ShopContextInterface $context
+        StoreFrontBundle\Context\ShopContextInterface $context
     ) {
         $numberResult = $this->searchGateway->search($criteria, $context);
 
@@ -80,10 +80,10 @@ class ProductSearch implements ProductSearchInterface
     }
 
     /**
-     * @param StoreFrontBundle\Struct\ListProduct[] $products
-     * @param StoreFrontBundle\Struct\BaseProduct[] $searchProducts
+     * @param \Shopware\Bundle\StoreFrontBundle\Product\ListProduct[] $products
+     * @param \Shopware\Bundle\StoreFrontBundle\Product\BaseProduct[] $searchProducts
      *
-     * @return StoreFrontBundle\Struct\ListProduct[]
+     * @return \Shopware\Bundle\StoreFrontBundle\Product\ListProduct[]
      */
     private function assignAttributes($products, $searchProducts)
     {

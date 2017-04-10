@@ -37,8 +37,7 @@ use Shopware\Bundle\SearchBundle\FacetResultInterface;
 use Shopware\Bundle\SearchBundleDBAL\PartialFacetHandlerInterface;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactoryInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 
 /**
  * @category  Shopware
@@ -117,10 +116,10 @@ class ProductAttributeFacetHandler implements PartialFacetHandlerInterface
     }
 
     /**
-     * @param QueryBuilder                $query
-     * @param ProductAttributeFacet       $facet
-     * @param Criteria                    $criteria
-     * @param Struct\ShopContextInterface $context
+     * @param QueryBuilder                                                   $query
+     * @param ProductAttributeFacet                                          $facet
+     * @param Criteria                                                       $criteria
+     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
      *
      * @return null|RadioFacetResult|ValueListFacetResult
      */
@@ -128,7 +127,7 @@ class ProductAttributeFacetHandler implements PartialFacetHandlerInterface
         QueryBuilder $query,
         ProductAttributeFacet $facet,
         Criteria $criteria,
-        Struct\ShopContextInterface $context
+        \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
     ) {
         $sqlField = 'productAttribute.' . $facet->getField();
 
@@ -263,8 +262,8 @@ class ProductAttributeFacetHandler implements PartialFacetHandlerInterface
     }
 
     /**
-     * @param QueryBuilder                $query
-     * @param Struct\ShopContextInterface $context
+     * @param QueryBuilder                                                   $query
+     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
      */
     private function addTranslations($query, $context)
     {

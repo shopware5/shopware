@@ -27,23 +27,22 @@ namespace Shopware\Bundle\ESIndexingBundle\Product;
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\ESIndexingBundle\IdentifierSelector;
 use Shopware\Bundle\ESIndexingBundle\Struct\Product;
-use Shopware\Bundle\StoreFrontBundle\Gateway\FieldHelper;
-use Shopware\Bundle\StoreFrontBundle\Gateway\Hydrator\PropertyHydrator;
-use Shopware\Bundle\StoreFrontBundle\Gateway\ListProductGateway;
-use Shopware\Bundle\StoreFrontBundle\Service\CheapestPriceServiceInterface;
-use Shopware\Bundle\StoreFrontBundle\Service\ContextFactoryInterface;
-use Shopware\Bundle\StoreFrontBundle\Service\Core\ContextService;
-use Shopware\Bundle\StoreFrontBundle\Service\PriceCalculationServiceInterface;
-use Shopware\Bundle\StoreFrontBundle\Service\VoteServiceInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
-use Shopware\Bundle\StoreFrontBundle\Struct\CheckoutScope;
-use Shopware\Bundle\StoreFrontBundle\Struct\CustomerScope;
-use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
-use Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceRule;
-use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopScope;
-use Shopware\Bundle\StoreFrontBundle\Struct\TranslationContext;
+use Shopware\Bundle\StoreFrontBundle\Common\FieldHelper;
+use Shopware\Bundle\StoreFrontBundle\Context\CheckoutScope;
+use Shopware\Bundle\StoreFrontBundle\Context\ContextFactoryInterface;
+use Shopware\Bundle\StoreFrontBundle\Context\ContextService;
+use Shopware\Bundle\StoreFrontBundle\Context\CustomerScope;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopScope;
+use Shopware\Bundle\StoreFrontBundle\Context\TranslationContext;
+use Shopware\Bundle\StoreFrontBundle\Price\CheapestPriceServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Price\PriceCalculationServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Price\PriceRule;
+use Shopware\Bundle\StoreFrontBundle\Product\BaseProduct;
+use Shopware\Bundle\StoreFrontBundle\Product\ListProduct;
+use Shopware\Bundle\StoreFrontBundle\Product\ProductGateway;
+use Shopware\Bundle\StoreFrontBundle\Property\PropertyHydrator;
+use Shopware\Bundle\StoreFrontBundle\Shop\Shop;
+use Shopware\Bundle\StoreFrontBundle\Vote\VoteServiceInterface;
 
 class ProductProvider implements ProductProviderInterface
 {
@@ -53,12 +52,12 @@ class ProductProvider implements ProductProviderInterface
     private $connection;
 
     /**
-     * @var ListProductGateway
+     * @var ProductGateway
      */
     private $productGateway;
 
     /**
-     * @var CheapestPriceServiceInterface
+     * @var \Shopware\Bundle\StoreFrontBundle\Price\CheapestPriceServiceInterface
      */
     private $cheapestPriceService;
 
@@ -83,7 +82,7 @@ class ProductProvider implements ProductProviderInterface
     private $fieldHelper;
 
     /**
-     * @var PropertyHydrator
+     * @var \Shopware\Bundle\StoreFrontBundle\Property\PropertyHydrator
      */
     private $propertyHydrator;
 
@@ -93,18 +92,18 @@ class ProductProvider implements ProductProviderInterface
     private $contextFactory;
 
     /**
-     * @param ListProductGateway               $productGateway
-     * @param CheapestPriceServiceInterface    $cheapestPriceService
-     * @param VoteServiceInterface             $voteService
-     * @param ContextFactoryInterface          $contextFactory
-     * @param Connection                       $connection
-     * @param IdentifierSelector               $identifierSelector
-     * @param PriceCalculationServiceInterface $priceCalculationService
-     * @param FieldHelper                      $fieldHelper
-     * @param PropertyHydrator                 $propertyHydrator
+     * @param ProductGateway                                                           $productGateway
+     * @param CheapestPriceServiceInterface                                            $cheapestPriceService
+     * @param VoteServiceInterface                                                     $voteService
+     * @param ContextFactoryInterface                                                  $contextFactory
+     * @param Connection                                                               $connection
+     * @param IdentifierSelector                                                       $identifierSelector
+     * @param \Shopware\Bundle\StoreFrontBundle\Price\PriceCalculationServiceInterface $priceCalculationService
+     * @param \Shopware\Bundle\StoreFrontBundle\Common\FieldHelper                     $fieldHelper
+     * @param PropertyHydrator                                                         $propertyHydrator
      */
     public function __construct(
-        ListProductGateway $productGateway,
+        ProductGateway $productGateway,
         CheapestPriceServiceInterface $cheapestPriceService,
         VoteServiceInterface $voteService,
         ContextFactoryInterface $contextFactory,
@@ -242,8 +241,8 @@ class ProductProvider implements ProductProviderInterface
     }
 
     /**
-     * @param ListProduct[]      $products
-     * @param TranslationContext $context
+     * @param \Shopware\Bundle\StoreFrontBundle\Product\ListProduct[] $products
+     * @param TranslationContext                                      $context
      *
      * @return \array[]
      */
@@ -293,8 +292,8 @@ class ProductProvider implements ProductProviderInterface
     }
 
     /**
-     * @param ListProduct[] $products
-     * @param int           $shopId
+     * @param \Shopware\Bundle\StoreFrontBundle\Product\ListProduct[] $products
+     * @param int                                                     $shopId
      *
      * @return array[]
      */
@@ -318,8 +317,8 @@ class ProductProvider implements ProductProviderInterface
     }
 
     /**
-     * @param Shop          $shop
-     * @param ListProduct[] $products
+     * @param \Shopware\Bundle\StoreFrontBundle\Shop\Shop             $shop
+     * @param \Shopware\Bundle\StoreFrontBundle\Product\ListProduct[] $products
      * @param $priceRules
      *
      * @return array
@@ -342,7 +341,7 @@ class ProductProvider implements ProductProviderInterface
             }
             $rules = $priceRules[$number];
 
-            /** @var $context ShopContextInterface */
+            /** @var $context \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface */
             foreach ($contexts as $context) {
                 $customerGroup = $context->getCurrentCustomerGroup()->getKey();
                 $key = $customerGroup . '_' . $context->getCurrency()->getId();

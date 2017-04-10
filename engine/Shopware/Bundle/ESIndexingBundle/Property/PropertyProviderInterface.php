@@ -24,14 +24,14 @@
 
 namespace Shopware\Bundle\ESIndexingBundle\Property;
 
-use Shopware\Bundle\StoreFrontBundle\Struct\Property\Group;
-use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
+use Shopware\Bundle\StoreFrontBundle\Property\Group;
+use Shopware\Bundle\StoreFrontBundle\Shop\Shop;
 
 interface PropertyProviderInterface
 {
     /**
-     * @param Shop  $shop
-     * @param int[] $groupIds
+     * @param \Shopware\Bundle\StoreFrontBundle\Shop\Shop $shop
+     * @param int[]                                       $groupIds
      *
      * @return Group[]
      */

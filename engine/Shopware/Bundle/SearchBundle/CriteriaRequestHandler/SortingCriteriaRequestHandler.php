@@ -27,28 +27,28 @@ namespace Shopware\Bundle\SearchBundle\CriteriaRequestHandler;
 use Enlight_Controller_Request_RequestHttp as Request;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\CriteriaRequestHandlerInterface;
-use Shopware\Bundle\StoreFrontBundle\Service\CustomSortingServiceInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Listing\ListingSortingServiceInterface;
 
 class SortingCriteriaRequestHandler implements CriteriaRequestHandlerInterface
 {
     /**
-     * @var CustomSortingServiceInterface
+     * @var ListingSortingServiceInterface
      */
     private $customSortingService;
 
     /**
-     * @param CustomSortingServiceInterface $customSortingService
+     * @param ListingSortingServiceInterface $customSortingService
      */
-    public function __construct(CustomSortingServiceInterface $customSortingService)
+    public function __construct(ListingSortingServiceInterface $customSortingService)
     {
         $this->customSortingService = $customSortingService;
     }
 
     /**
-     * @param Request              $request
-     * @param Criteria             $criteria
-     * @param ShopContextInterface $context
+     * @param Request                                                        $request
+     * @param Criteria                                                       $criteria
+     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
      */
     public function handleRequest(
         Request $request,

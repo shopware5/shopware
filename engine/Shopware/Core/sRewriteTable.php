@@ -23,12 +23,12 @@
  */
 
 use Shopware\Bundle\AttributeBundle\Repository\SearchCriteria;
-use Shopware\Bundle\StoreFrontBundle\Service\ContextFactoryInterface;
-use Shopware\Bundle\StoreFrontBundle\Service\ShopPageServiceInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\CheckoutScope;
-use Shopware\Bundle\StoreFrontBundle\Struct\CustomerScope;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopScope;
+use Shopware\Bundle\StoreFrontBundle\Context\CheckoutScope;
+use Shopware\Bundle\StoreFrontBundle\Context\ContextFactoryInterface;
+use Shopware\Bundle\StoreFrontBundle\Context\CustomerScope;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopScope;
+use Shopware\Bundle\StoreFrontBundle\ShopPage\ShopPageServiceInterface;
 use Shopware\Components\MemoryLimit;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Slug\SlugInterface;
@@ -111,7 +111,7 @@ class sRewriteTable
     private $slug;
 
     /**
-     * @var ShopPageServiceInterface
+     * @var \Shopware\Bundle\StoreFrontBundle\ShopPage\ShopPageServiceInterface
      */
     private $shopPageService;
 
@@ -151,8 +151,8 @@ class sRewriteTable
         $this->template = $template ?: Shopware()->Template();
         $this->moduleManager = $moduleManager ?: Shopware()->Modules();
         $this->slug = $slug ?: Shopware()->Container()->get('shopware.slug');
-        $this->contextFactory = $contextFactory ?: Shopware()->Container()->get('shopware_storefront.context_factory');
-        $this->shopPageService = $shopPageService ?: Shopware()->Container()->get('shopware_storefront.shop_page_service');
+        $this->contextFactory = $contextFactory ?: Shopware()->Container()->get('storefront.context.factory');
+        $this->shopPageService = $shopPageService ?: Shopware()->Container()->get('storefront.shop_page.service');
     }
 
     /**
@@ -551,9 +551,9 @@ class sRewriteTable
     }
 
     /**
-     * @param ShopContextInterface $context
-     * @param null                 $offset
-     * @param null                 $limit
+     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
+     * @param null                                                           $offset
+     * @param null                                                           $limit
      *
      * @throws Exception
      * @throws SmartyException
@@ -566,7 +566,7 @@ class sRewriteTable
         }
 
         $ids = $this->getManufacturerIds($offset, $limit);
-        $manufacturers = Shopware()->Container()->get('shopware_storefront.manufacturer_service')->getList($ids, $context);
+        $manufacturers = Shopware()->Container()->get('storefront.manufacturer.service')->getList($ids, $context);
 
         $seoSupplierRouteTemplate = $this->config->get('seoSupplierRouteTemplate');
         foreach ($manufacturers as $manufacturer) {
@@ -909,7 +909,7 @@ class sRewriteTable
      *
      * @param $offset
      * @param $limit
-     * @param ShopContextInterface $context
+     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
      *
      * @throws Exception
      * @throws SmartyException
@@ -1017,7 +1017,7 @@ class sRewriteTable
     /**
      * @param ShopContextInterface $context
      *
-     * @return ShopContextInterface
+     * @return \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface
      */
     private function createFallbackContext(ShopContextInterface $context = null)
     {

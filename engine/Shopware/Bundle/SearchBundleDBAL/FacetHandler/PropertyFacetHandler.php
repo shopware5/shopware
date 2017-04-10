@@ -36,9 +36,8 @@ use Shopware\Bundle\SearchBundle\FacetResultInterface;
 use Shopware\Bundle\SearchBundleDBAL\PartialFacetHandlerInterface;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactoryInterface;
-use Shopware\Bundle\StoreFrontBundle\Gateway\PropertyGateway;
-use Shopware\Bundle\StoreFrontBundle\Struct;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Property\PropertyGateway;
 use Shopware\Components\QueryAliasMapper;
 
 /**
@@ -49,7 +48,7 @@ use Shopware\Components\QueryAliasMapper;
 class PropertyFacetHandler implements PartialFacetHandlerInterface
 {
     /**
-     * @var PropertyGateway
+     * @var \Shopware\Bundle\StoreFrontBundle\Property\PropertyGateway
      */
     private $propertyGateway;
 
@@ -90,10 +89,10 @@ class PropertyFacetHandler implements PartialFacetHandlerInterface
     }
 
     /**
-     * @param FacetInterface|Facet\PropertyFacet $facet
-     * @param Criteria                           $reverted
-     * @param Criteria                           $criteria
-     * @param ShopContextInterface               $context
+     * @param FacetInterface|Facet\PropertyFacet                             $facet
+     * @param Criteria                                                       $reverted
+     * @param Criteria                                                       $criteria
+     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
      *
      * @return FacetResultInterface|null
      */
@@ -114,12 +113,12 @@ class PropertyFacetHandler implements PartialFacetHandlerInterface
     }
 
     /**
-     * @param Struct\ShopContextInterface $context
-     * @param Criteria                    $queryCriteria
+     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
+     * @param Criteria                                                       $queryCriteria
      *
-     * @return Struct\Property\Set[]
+     * @return \Shopware\Bundle\StoreFrontBundle\Property\Set[]
      */
-    protected function getProperties(Struct\ShopContextInterface $context, Criteria $queryCriteria)
+    protected function getProperties(\Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context, Criteria $queryCriteria)
     {
         $query = $this->queryBuilderFactory->createQuery($queryCriteria, $context);
         $this->rebuildQuery($query);
@@ -172,9 +171,9 @@ class PropertyFacetHandler implements PartialFacetHandlerInterface
     }
 
     /**
-     * @param Facet\PropertyFacet   $facet
-     * @param Struct\Property\Set[] $sets
-     * @param int[]                 $actives
+     * @param Facet\PropertyFacet                              $facet
+     * @param \Shopware\Bundle\StoreFrontBundle\Property\Set[] $sets
+     * @param int[]                                            $actives
      *
      * @return FacetResultGroup
      */

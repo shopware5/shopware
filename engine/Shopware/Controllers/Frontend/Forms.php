@@ -139,7 +139,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
         $fields = [];
         $labels = [];
 
-        $shopId = $this->container->get('shopware_storefront.context_service')->getShopContext()->getShop()->getId();
+        $shopId = $this->container->get('storefront.context.service')->getShopContext()->getShop()->getId();
 
         /* @var $query \Doctrine\ORM\Query */
         $query = Shopware()->Models()->getRepository('Shopware\Models\Form\Form')->getFormQuery($formId, $shopId);

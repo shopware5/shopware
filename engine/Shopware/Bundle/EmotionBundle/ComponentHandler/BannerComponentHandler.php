@@ -27,7 +27,7 @@ namespace Shopware\Bundle\EmotionBundle\ComponentHandler;
 use Shopware\Bundle\EmotionBundle\Struct\Collection\PrepareDataCollection;
 use Shopware\Bundle\EmotionBundle\Struct\Collection\ResolvedDataCollection;
 use Shopware\Bundle\EmotionBundle\Struct\Element;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 
 class BannerComponentHandler implements ComponentHandlerInterface
 {
@@ -93,9 +93,9 @@ class BannerComponentHandler implements ComponentHandlerInterface
     }
 
     /**
-     * @param PrepareDataCollection $collection
-     * @param Element               $element
-     * @param ShopContextInterface  $context
+     * @param PrepareDataCollection                                          $collection
+     * @param Element                                                        $element
+     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
      */
     private function addMappings(PrepareDataCollection $collection, Element $element, ShopContextInterface $context)
     {

@@ -29,7 +29,7 @@ use Shopware\Bundle\SearchBundle\Sorting\PopularitySorting;
 use Shopware\Bundle\SearchBundle\Sorting\PriceSorting;
 use Shopware\Bundle\SearchBundle\Sorting\ReleaseDateSorting;
 use Shopware\Bundle\SearchBundle\SortingInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
 
 /**
  * @category  Shopware
@@ -45,7 +45,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
     public function indexAction()
     {
         /** @var ShopContext $shopContext */
-        $shopContext = $this->container->get('shopware_storefront.context_service')->getShopContext();
+        $shopContext = $this->container->get('storefront.context.service')->getShopContext();
         $emotionService = $this->container->get('shopware_emotion.emotion_service');
 
         $emotionIds = [(int) $this->Request()->getParam('emotionId')];
@@ -228,7 +228,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
      */
     private function getProductSliderData($category, $offset, $limit, $sort = null)
     {
-        $context = Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext();
+        $context = Shopware()->Container()->get('storefront.context.service')->getShopContext();
         $factory = Shopware()->Container()->get('shopware_search.store_front_criteria_factory');
         $criteria = $factory->createBaseCriteria([$category], $context);
 
@@ -270,7 +270,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
 
     private function getProductStream($productStreamId, $offset = 0, $limit = 100)
     {
-        $context = Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext();
+        $context = Shopware()->Container()->get('storefront.context.service')->getShopContext();
         $factory = Shopware()->Container()->get('shopware_search.store_front_criteria_factory');
 
         $category = $context->getShop()->getCategory()->getId();

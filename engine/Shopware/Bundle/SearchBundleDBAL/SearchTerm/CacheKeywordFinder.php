@@ -25,7 +25,7 @@
 namespace Shopware\Bundle\SearchBundleDBAL\SearchTerm;
 
 use Shopware\Bundle\SearchBundleDBAL\KeywordFinderInterface;
-use Shopware\Bundle\StoreFrontBundle\Service\CacheInterface;
+use Shopware\Bundle\StoreFrontBundle\Common\CacheInterface;
 
 /**
  * @category  Shopware

@@ -26,7 +26,7 @@ namespace Shopware\Bundle\AccountBundle\Form\Account;
 
 use Shopware\Bundle\AccountBundle\Constraint\CurrentPassword;
 use Shopware\Bundle\AccountBundle\Constraint\FormEmail;
-use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Context\ContextServiceInterface;
 use Shopware\Models\Attribute\Customer as CustomerAttribute;
 use Shopware\Models\Customer\Customer;
 use Symfony\Component\Form\AbstractType;
@@ -51,7 +51,7 @@ class EmailUpdateFormType extends AbstractType
     protected $config;
 
     /**
-     * @var ContextServiceInterface
+     * @var \Shopware\Bundle\StoreFrontBundle\Context\ContextServiceInterface
      */
     private $context;
 

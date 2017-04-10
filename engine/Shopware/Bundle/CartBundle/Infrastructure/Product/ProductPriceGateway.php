@@ -34,8 +34,8 @@ use Shopware\Bundle\CartBundle\Domain\Price\PriceDefinitionCollection;
 use Shopware\Bundle\CartBundle\Domain\Product\ProductPriceGatewayInterface;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxRule;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCollection;
-use Shopware\Bundle\StoreFrontBundle\Gateway\FieldHelper;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Common\FieldHelper;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 
 class ProductPriceGateway implements ProductPriceGatewayInterface
 {
@@ -50,8 +50,8 @@ class ProductPriceGateway implements ProductPriceGatewayInterface
     private $fieldHelper;
 
     /**
-     * @param Connection  $connection
-     * @param FieldHelper $fieldHelper
+     * @param Connection                                           $connection
+     * @param \Shopware\Bundle\StoreFrontBundle\Common\FieldHelper $fieldHelper
      */
     public function __construct(
         Connection $connection,

@@ -26,9 +26,9 @@ namespace Shopware\Bundle\SearchBundleDBAL;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Shopware\Bundle\SearchBundle;
-use Shopware\Bundle\StoreFrontBundle\Struct\Attribute;
-use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Common\Attribute;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Product\BaseProduct;
 use Shopware\Components\DependencyInjection\Container;
 
 /**
@@ -81,8 +81,8 @@ class ProductNumberSearch implements SearchBundle\ProductNumberSearchInterface
      * The search gateway has to implement an event which plugin can be listened to,
      * to add their own handler classes.
      *
-     * @param SearchBundle\Criteria $criteria
-     * @param ShopContextInterface  $context
+     * @param SearchBundle\Criteria                                          $criteria
+     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
      *
      * @return SearchBundle\ProductNumberSearchResult
      */
@@ -143,8 +143,8 @@ class ProductNumberSearch implements SearchBundle\ProductNumberSearchInterface
     }
 
     /**
-     * @param SearchBundle\Criteria $criteria
-     * @param ShopContextInterface  $context
+     * @param SearchBundle\Criteria                                          $criteria
+     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
      *
      * @throws \Exception
      *

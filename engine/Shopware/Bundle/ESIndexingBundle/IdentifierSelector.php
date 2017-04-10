@@ -25,9 +25,9 @@
 namespace Shopware\Bundle\ESIndexingBundle;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Bundle\StoreFrontBundle\Gateway\ShopGateway;
-use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
-use Shopware\Bundle\StoreFrontBundle\Struct\TranslationContext;
+use Shopware\Bundle\StoreFrontBundle\Context\TranslationContext;
+use Shopware\Bundle\StoreFrontBundle\Shop\Shop;
+use Shopware\Bundle\StoreFrontBundle\Shop\ShopGateway;
 
 /**
  * Class IdentifierSelector
@@ -40,13 +40,13 @@ class IdentifierSelector
     private $connection;
 
     /**
-     * @var ShopGateway
+     * @var \Shopware\Bundle\StoreFrontBundle\Shop\ShopGateway
      */
     private $shopGateway;
 
     /**
-     * @param Connection  $connection
-     * @param ShopGateway $shopGateway
+     * @param Connection                                         $connection
+     * @param \Shopware\Bundle\StoreFrontBundle\Shop\ShopGateway $shopGateway
      */
     public function __construct(
         Connection $connection,

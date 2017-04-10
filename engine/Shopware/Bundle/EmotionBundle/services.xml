@@ -7,34 +7,34 @@
     <services>
 
         <service id="shopware_emotion.emotion_hydrator" class="Shopware\Bundle\EmotionBundle\Service\Gateway\Hydrator\EmotionHydrator">
-            <argument type="service" id="shopware_storefront.attribute_hydrator_dbal" />
+            <argument type="service" id="storefront.common.attribute_hydrator" />
         </service>
 
         <service id="shopware_emotion.emotion_element_hydrator" class="Shopware\Bundle\EmotionBundle\Service\Gateway\Hydrator\EmotionElementHydrator" />
 
         <service id="shopware_emotion.emotion_gateway" class="Shopware\Bundle\EmotionBundle\Service\Gateway\EmotionGateway">
             <argument type="service" id="shopware_emotion.emotion_hydrator" />
-            <argument type="service" id="shopware_storefront.field_helper_dbal" />
+            <argument type="service" id="storefront.common.field_helper" />
             <argument type="service" id="dbal_connection" />
         </service>
 
         <service id="shopware_emotion.emotion_service" class="Shopware\Bundle\EmotionBundle\Service\EmotionService">
             <argument type="service" id="shopware_emotion.emotion_gateway" />
             <argument type="service" id="shopware_emotion.emotion_element_service" />
-            <argument type="service" id="shopware_storefront.shop_gateway_dbal" />
-            <argument type="service" id="shopware_storefront.category_service" />
+            <argument type="service" id="storefront.shop.gateway" />
+            <argument type="service" id="storefront.category.service" />
         </service>
 
         <service id="shopware_emotion.emotion_element_gateway" class="Shopware\Bundle\EmotionBundle\Service\Gateway\EmotionElementGateway">
             <argument type="service" id="shopware_emotion.emotion_element_hydrator" />
-            <argument type="service" id="shopware_storefront.field_helper_dbal" />
+            <argument type="service" id="storefront.common.field_helper" />
             <argument type="service" id="dbal_connection" />
         </service>
 
         <service id="shopware_emotion.data_collection_resolver" class="Shopware\Bundle\EmotionBundle\Service\DataCollectionResolver">
             <argument type="service" id="shopware_search.batch_product_search" />
             <argument type="service" id="dbal_connection" />
-            <argument type="service" id="shopware_storefront.media_service" />
+            <argument type="service" id="storefront.media.service" />
         </service>
 
         <service id="shopware_emotion.emotion_element_service" class="Shopware\Bundle\EmotionBundle\Service\EmotionElementService">
@@ -61,7 +61,7 @@
         <service id="shopware_emotion.component_handler.article" class="Shopware\Bundle\EmotionBundle\ComponentHandler\ArticleComponentHandler">
             <argument type="service" id="shopware_search.store_front_criteria_factory" />
             <argument type="service" id="config" />
-            <argument type="service" id="shopware_storefront.additional_text_service" />
+            <argument type="service" id="storefront.additional_text.service" />
             <tag name="shopware_emotion.component_handler"/>
         </service>
 
@@ -69,7 +69,7 @@
             <argument type="service" id="shopware_search.store_front_criteria_factory" />
             <argument type="service" id="shopware_product_stream.repository" />
             <argument type="service" id="config" />
-            <argument type="service" id="shopware_storefront.additional_text_service" />
+            <argument type="service" id="storefront.additional_text.service" />
             <tag name="shopware_emotion.component_handler"/>
         </service>
 
@@ -79,20 +79,20 @@
 
         <service id="shopware_emotion.component_handler.category_teaser" class="Shopware\Bundle\EmotionBundle\ComponentHandler\CategoryTeaserComponentHandler">
             <argument type="service" id="shopware_search.store_front_criteria_factory" />
-            <argument type="service" id="shopware_storefront.category_service" />
+            <argument type="service" id="storefront.category.service" />
             <argument type="service" id="dbal_connection" />
-            <argument type="service" id="shopware_storefront.blog_service" />
+            <argument type="service" id="storefront.blog.service" />
             <tag name="shopware_emotion.component_handler"/>
         </service>
 
         <service id="shopware_emotion.component_handler.manufacturer_slider" class="Shopware\Bundle\EmotionBundle\ComponentHandler\ManufacturerSliderComponentHandler">
-            <argument type="service" id="shopware_storefront.manufacturer_service" />
+            <argument type="service" id="storefront.manufacturer.service" />
             <argument type="service" id="dbal_connection" />
             <tag name="shopware_emotion.component_handler"/>
         </service>
 
         <service id="shopware_emotion.component_handler.blog" class="Shopware\Bundle\EmotionBundle\ComponentHandler\BlogComponentHandler">
-            <argument type="service" id="shopware_storefront.blog_service" />
+            <argument type="service" id="storefront.blog.service" />
             <argument type="service" id="dbal_connection" />
             <tag name="shopware_emotion.component_handler"/>
         </service>

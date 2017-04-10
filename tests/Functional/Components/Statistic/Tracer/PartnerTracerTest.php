@@ -27,7 +27,6 @@ namespace Shopware\Tests\Functional\Components\Statistic\Tracer;
 
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\DependencyInjection\Container;
 use Shopware\Components\Statistic\Tracer\PartnerTracer;
 
@@ -43,7 +42,7 @@ class PartnerTracerTest extends TestCase
     private $connection;
 
     /**
-     * @var ShopContextInterface
+     * @var \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface
      */
     private $context;
 
@@ -72,7 +71,7 @@ class PartnerTracerTest extends TestCase
         $this->connection->executeUpdate('DELETE FROM s_campaigns_mailings');
 
         $this->tracer = $this->container->get('shopware.statistic.tracer.partner_tracer');
-        $this->context = $this->container->get('shopware_storefront.context_service')->getShopContext();
+        $this->context = $this->container->get('storefront.context.service')->getShopContext();
         $this->session = $this->container->get('session');
         $this->session->offsetUnset('sPartner');
     }

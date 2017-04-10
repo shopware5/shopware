@@ -29,7 +29,7 @@ use Shopware\Bundle\EmotionBundle\Service\Gateway\EmotionElementGateway;
 use Shopware\Bundle\EmotionBundle\Struct\Collection\PrepareDataCollection;
 use Shopware\Bundle\EmotionBundle\Struct\Collection\ResolvedDataCollection;
 use Shopware\Bundle\EmotionBundle\Struct\Element;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 
 class EmotionElementService implements EmotionElementServiceInterface
 {
@@ -68,8 +68,8 @@ class EmotionElementService implements EmotionElementServiceInterface
     }
 
     /**
-     * @param int[]                $emotionIds
-     * @param ShopContextInterface $context
+     * @param int[]                                                          $emotionIds
+     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
      *
      * @return \Shopware\Bundle\EmotionBundle\Struct\Emotion[]
      */
@@ -83,8 +83,8 @@ class EmotionElementService implements EmotionElementServiceInterface
     }
 
     /**
-     * @param array                $elementList
-     * @param ShopContextInterface $context
+     * @param array                                                          $elementList
+     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
      */
     private function handleElements(array $elementList, ShopContextInterface $context)
     {

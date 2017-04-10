@@ -31,7 +31,7 @@ use Shopware\Bundle\SearchBundle\Condition\PriceCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\CriteriaPartInterface;
 use Shopware\Bundle\SearchBundleES\PartialConditionHandlerInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 
 class PriceConditionHandler implements PartialConditionHandlerInterface
 {
@@ -85,8 +85,8 @@ class PriceConditionHandler implements PartialConditionHandlerInterface
     }
 
     /**
-     * @param CriteriaPartInterface $criteriaPart
-     * @param ShopContextInterface  $context
+     * @param CriteriaPartInterface                                          $criteriaPart
+     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
      *
      * @return RangeQuery
      */

@@ -25,7 +25,7 @@
 use Shopware\Bundle\AccountBundle\Form\Account\AddressFormType;
 use Shopware\Bundle\AccountBundle\Form\Account\PersonalFormType;
 use Shopware\Bundle\AccountBundle\Service\RegisterServiceInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 use Shopware\Components\Captcha\Exception\CaptchaNotFoundException;
 use Shopware\Models\Customer\Address;
 use Shopware\Models\Customer\Customer;
@@ -96,7 +96,7 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
         }
 
         /** @var ShopContextInterface $context */
-        $context = $this->get('shopware_storefront.context_service')->getShopContext();
+        $context = $this->get('storefront.context.service')->getShopContext();
 
         /** @var Enlight_Components_Session_Namespace $session */
         $session = $this->get('session');
@@ -491,11 +491,11 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
      */
     private function getCountries()
     {
-        $context = $this->get('shopware_storefront.context_service')->getShopContext();
-        $service = $this->get('shopware_storefront.location_service');
-        $countries = $service->getCountries($context);
+        $context = $this->container->get('storefront.context.service')->getShopContext();
+        $service = $this->container->get('storefront.country.service');
+        $countries = $service->getAvailable($context);
 
-        return $this->get('legacy_struct_converter')->convertCountryStructList($countries);
+        return $this->container->get('legacy_struct_converter')->convertCountryStructList($countries);
     }
 
     /**

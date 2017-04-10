@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
 use Shopware\Components\Emotion\DeviceConfiguration;
 
 class Shopware_Controllers_Frontend_Campaign extends Enlight_Controller_Action
@@ -37,7 +37,7 @@ class Shopware_Controllers_Frontend_Campaign extends Enlight_Controller_Action
         $landingPageShops = $service->getLandingPageShops($emotionId);
 
         /** @var $context ShopContext */
-        $context = $this->get('shopware_storefront.context_service')->getShopContext();
+        $context = $this->get('storefront.context.service')->getShopContext();
         $shopId = $context->getShop()->getId();
         $fallbackId = $context->getShop()->getFallbackId();
 

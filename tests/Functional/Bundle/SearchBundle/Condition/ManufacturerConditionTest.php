@@ -25,7 +25,7 @@
 namespace Shopware\Tests\Functional\Bundle\SearchBundle\Condition;
 
 use Shopware\Bundle\SearchBundle\Condition\ManufacturerCondition;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
 use Shopware\Models\Article\Supplier;
 use Shopware\Models\Category\Category;
 use Shopware\Tests\Functional\Bundle\StoreFrontBundle\TestCase;
@@ -76,9 +76,9 @@ class ManufacturerConditionTest extends TestCase
 
     /**
      * @param $number
-     * @param \Shopware\Models\Category\Category $category
-     * @param Supplier                           $manufacturer
-     * @param ShopContext                        $context
+     * @param \Shopware\Models\Category\Category                    $category
+     * @param Supplier                                              $manufacturer
+     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContext $context
      *
      * @return array
      */

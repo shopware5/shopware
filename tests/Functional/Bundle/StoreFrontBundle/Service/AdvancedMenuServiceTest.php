@@ -26,12 +26,11 @@ namespace Shopware\Tests\Functional\Bundle\StoreFrontBundle\Service;
 
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
-use Shopware\Bundle\StoreFrontBundle\Service\CategoryServiceInterface;
-use Shopware\Bundle\StoreFrontBundle\Service\Core\AdvancedMenuService;
-use Shopware\Bundle\StoreFrontBundle\Struct\CheckoutScope;
-use Shopware\Bundle\StoreFrontBundle\Struct\CustomerScope;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopScope;
+use Shopware\Bundle\StoreFrontBundle\AdvancedMenu\AdvancedMenuService;
+use Shopware\Bundle\StoreFrontBundle\Category\CategoryServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Context\CheckoutScope;
+use Shopware\Bundle\StoreFrontBundle\Context\CustomerScope;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopScope;
 use Shopware\Tests\Functional\DataGenerator\CategoryDataGenerator;
 
 /**
@@ -60,7 +59,7 @@ class AdvancedMenuServiceTest extends TestCase
     private $reader;
 
     /**
-     * @var ShopContextInterface
+     * @var \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface
      */
     private $context;
 
@@ -76,10 +75,10 @@ class AdvancedMenuServiceTest extends TestCase
 
         $this->dataGenerator = new CategoryDataGenerator();
 
-        $this->reader = Shopware()->Container()->get('shopware_storefront.advanced_menu_service');
-        $this->categoryService = Shopware()->Container()->get('shopware_storefront.category_service');
+        $this->reader = Shopware()->Container()->get('storefront.advanced_menu.service');
+        $this->categoryService = Shopware()->Container()->get('storefront.category.service');
 
-        $this->context = Shopware()->Container()->get('shopware_storefront.context_factory')->create(
+        $this->context = Shopware()->Container()->get('storefront.context.factory')->create(
             new ShopScope(1),
             new CustomerScope(null, 'EK'),
             new CheckoutScope()

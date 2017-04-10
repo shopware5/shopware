@@ -28,7 +28,7 @@ namespace Shopware\Bundle\CartBundle\Infrastructure\View;
 use Shopware\Bundle\CartBundle\Domain\JsonSerializableTrait;
 use Shopware\Bundle\CartBundle\Domain\LineItem\CalculatedLineItemInterface;
 use Shopware\Bundle\CartBundle\Domain\Product\CalculatedProduct;
-use Shopware\Bundle\StoreFrontBundle\Struct\SimpleProduct;
+use Shopware\Bundle\StoreFrontBundle\Product\SimpleProduct;
 
 class ViewProduct extends SimpleProduct implements ViewLineItemInterface
 {

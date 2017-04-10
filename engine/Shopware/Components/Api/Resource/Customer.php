@@ -205,7 +205,7 @@ class Customer extends Resource
         $shipping = $this->createAddress($params['shipping']);
 
         $registerService = $this->getContainer()->get('shopware_account.register_service');
-        $context = $this->getContainer()->get('shopware_storefront.context_service')->getShopContext()->getShop();
+        $context = $this->getContainer()->get('storefront.context.service')->getShopContext()->getShop();
 
         $registerService->register($context, $customer, $billing, $shipping);
 

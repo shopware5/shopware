@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Context\ContextServiceInterface;
 use Shopware\Components\NumberRangeIncrementerInterface;
 use Shopware\Models\Customer\Customer;
 
@@ -198,7 +198,7 @@ class sOrder
     private $session;
 
     /**
-     * @var ContextServiceInterface
+     * @var \Shopware\Bundle\StoreFrontBundle\Context\ContextServiceInterface
      */
     private $contextService;
 
@@ -221,7 +221,7 @@ class sOrder
      * Class constructor.
      * Injects all dependencies which are required for this class.
      *
-     * @param ContextServiceInterface $contextService
+     * @param \Shopware\Bundle\StoreFrontBundle\Context\ContextServiceInterface $contextService
      *
      * @throws Exception
      */
@@ -233,7 +233,7 @@ class sOrder
         $this->config = Shopware()->Config();
         $this->numberRangeIncrementer = Shopware()->Container()->get('shopware.number_range_incrementer');
 
-        $this->contextService = $contextService ?: Shopware()->Container()->get('shopware_storefront.context_service');
+        $this->contextService = $contextService ?: Shopware()->Container()->get('storefront.context.service');
         $this->attributeLoader = Shopware()->Container()->get('shopware_attribute.data_loader');
         $this->attributePersister = Shopware()->Container()->get('shopware_attribute.data_persister');
     }

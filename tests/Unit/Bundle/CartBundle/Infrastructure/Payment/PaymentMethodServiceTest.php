@@ -37,12 +37,12 @@ use Shopware\Bundle\CartBundle\Domain\Price\CartPrice;
 use Shopware\Bundle\CartBundle\Domain\Tax\CalculatedTaxCollection;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCollection;
 use Shopware\Bundle\CartBundle\Domain\Validator\ValidatableFilter;
-use Shopware\Bundle\StoreFrontBundle\Gateway\FieldHelper;
-use Shopware\Bundle\StoreFrontBundle\Gateway\Hydrator\AttributeHydrator;
-use Shopware\Bundle\StoreFrontBundle\Gateway\Hydrator\PaymentMethodHydrator;
-use Shopware\Bundle\StoreFrontBundle\Gateway\PaymentMethodGateway;
-use Shopware\Bundle\StoreFrontBundle\Service\CacheInterface;
-use Shopware\Bundle\StoreFrontBundle\Service\PaymentMethodService;
+use Shopware\Bundle\StoreFrontBundle\Common\AttributeHydrator;
+use Shopware\Bundle\StoreFrontBundle\Common\CacheInterface;
+use Shopware\Bundle\StoreFrontBundle\Common\FieldHelper;
+use Shopware\Bundle\StoreFrontBundle\PaymentMethod\PaymentMethodGateway;
+use Shopware\Bundle\StoreFrontBundle\PaymentMethod\PaymentMethodHydrator;
+use Shopware\Bundle\StoreFrontBundle\PaymentMethod\PaymentMethodService;
 use Shopware\Tests\Unit\Bundle\CartBundle\Common\Generator;
 
 class PaymentMethodServiceTest extends TestCase

@@ -22,9 +22,9 @@
  * our trademarks remain entirely with us.
  */
 
-use Shopware\Bundle\StoreFrontBundle\Struct\CheckoutScope;
+use Shopware\Bundle\StoreFrontBundle\Context\CheckoutScope;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopScope;
 use Shopware\Bundle\StoreFrontBundle\Struct\CustomerScope;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopScope;
 
 /**
  * @category  Shopware
@@ -254,7 +254,7 @@ class Shopware_Controllers_Backend_Seo extends Shopware_Controllers_Backend_ExtJ
 
         // Create shop
         $this->SeoIndex()->registerShop($shopId);
-        $context = $this->get('shopware_storefront.context_factory')->create(
+        $context = $this->get('storefront.context.factory')->create(
             new ShopScope($shopId),
             new CustomerScope(null),
             new CheckoutScope()
