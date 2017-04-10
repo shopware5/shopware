@@ -58,7 +58,8 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
                 'reset-conditions': me.resetConditions,
                 'reset-progressbar': me.resetProgressbar,
                 'save-stream-details': me.saveStreamDetails,
-                'customerStream-edit-item': me.editStream
+                'customerStream-edit-item': me.editStream,
+                'stream-selected': me.streamSelected
             },
             'customer-list': {
                 'selection-changed': me.onCustomerSelectionChange
@@ -153,9 +154,9 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
                 if (isNew) {
                     window.streamListing.getStore().insert(0, record);
                 }
-                window.preventStreamChanged = true;
+                me.preventStreamChanged = true;
                 window.streamListing.selModel.deselectAll(true);
-                window.preventStreamChanged = false;
+                me.preventStreamChanged = false;
                 window.streamListing.selModel.select([record], false, true);
                 me.startPopulate(record);
             }
@@ -165,7 +166,6 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
     editStream: function(grid, record) {
         var me = this,
             window = me.getMainWindow();
-    console.log('asfdasf');
 
         var detail = Ext.create('Shopware.apps.Customer.view.customer_stream.Detail', {
             record: record
@@ -175,6 +175,59 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
         window.streamDetailForm.add(detail);
         window.streamDetailForm.loadRecord(record);
         window.cardContainer.getLayout().setActiveItem(3);
+    },
+
+    streamSelected: function(selModel, selection) {
+        var me = this,
+            window = me.getMainWindow();
+
+        if (me.preventStreamChanged) {
+            return;
+        }
+
+        if (selection.length <= 0) {
+            window.resetTitles();
+            me.resetConditions();
+            window.loadChart();
+            return;
+        }
+
+        me.loadStream(selection[0]);
+        window.loadChart();
+    },
+
+    loadStream: function(record) {
+        var me = this,
+            window = me.getMainWindow();
+
+        window.streamListing.setLoading(true);
+
+        window.resetFilterPanel();
+        window.formPanel.loadRecord(record);
+
+        window.streamListing.setLoading(false);
+        window.listStore.getProxy().extraParams = {
+            conditions: record.get('conditions')
+        };
+
+        me.updateTitles(record);
+
+        window.listStore.load();
+    },
+
+    updateTitles: function (stream) {
+        var me = this,
+            window = me.getMainWindow(),
+            toolbar = me.getMainToolbar(),
+            title = stream.get('name').substr(0, 20);
+
+        if (stream.get('name').length > 20) {
+            title += '...';
+        }
+
+        window.formPanel.setTitle(stream.get('name'));
+        toolbar.saveStreamButton.setText('{s name=save}Save{/s}: ' + title);
+        window.setTitle('{s name=window/customer_list_for}Customer list for{/s} ' + stream.get('name'));
     },
 
     startPopulate: function(record) {
@@ -219,8 +272,7 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
         record.save({
             callback: function() {
                 me.switchLayout('table');
-                // todo maybe migrate to stream?
-                window.updateTitles(record);
+                me.updateTitles(record);
             }
         });
     },
