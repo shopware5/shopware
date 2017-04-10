@@ -83,7 +83,9 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
             title: '{s name=window/defined_streams}Definied streams{/s}',
             height: 200,
             iconCls: 'sprite-product-streams',
-            selectionChanged: Ext.bind(me.streamSelected, me)
+            selectionChanged: function (selModel, selection) {
+                me.fireEvent('stream-selected', selModel, selection);
+            }
         });
 
         me.filterPanel = Ext.create('Shopware.apps.Customer.view.customer_stream.ConditionPanel', { flex: 4 });
@@ -108,7 +110,7 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
         });
 
         me.cardContainer = Ext.create('Ext.container.Container', {
-            items: [me.gridPanel, me.metaChart, me.streamChartContainer, me.streamDetailForm],
+            items: [ me.gridPanel, me.metaChart, me.streamChartContainer, me.streamDetailForm ],
             region: 'center',
             layout: 'card'
         });
@@ -140,6 +142,7 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
 
         me.fireEvent('reset-progressbar');
     },
+
     /**
      * Creates the grid toolbar with the add and delete button
      *
@@ -161,11 +164,6 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
         var me = this;
         me.deleteCustomerButton.setDisabled(selection.length === 0);
     },
-
-
-
-
-
 
     resetFilterPanel: function() {
         var me = this;
@@ -190,55 +188,6 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
         me.listStore.load();
     },
 
-    streamSelected: function(selModel, selection) {
-        var me = this;
-
-        if (me.preventStreamChanged) {
-            return;
-        }
-
-        if (selection.length <= 0) {
-            me.resetTitles();
-            me.fireEvent('reset-condition');
-            me.loadChart();
-            return;
-        }
-
-        me.loadStream(selection[0]);
-        me.loadChart();
-    },
-
-    loadStream: function(record) {
-        var me = this;
-
-        me.streamListing.setLoading(true);
-
-        me.resetFilterPanel();
-        me.formPanel.loadRecord(record);
-
-        me.streamListing.setLoading(false);
-        me.listStore.getProxy().extraParams = {
-            conditions: record.get('conditions')
-        };
-
-        me.updateTitles(record);
-
-        me.listStore.load();
-    },
-
-    updateTitles: function (stream) {
-        var me = this,
-            title = stream.get('name').substr(0, 20);
-
-        if (stream.get('name').length > 20) {
-            title += '...';
-        }
-
-        me.formPanel.setTitle(stream.get('name'));
-        me.saveStreamButton.setText('{s name=save}Save{/s}: ' + title);
-        me.setTitle('{s name=window/customer_list_for}Customer list for{/s} ' + stream.get('name'));
-    },
-
     resetTitles: function() {
         var me = this;
 
@@ -260,8 +209,6 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
 
         me.metaChartStore.load();
     },
-
-
 
     loadStreamChart: function() {
         var me = this;
@@ -285,27 +232,9 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
             cls: 'primary',
             handler: function () {
                 me.fireEvent('save-stream-details');
-                // me.saveStreamDetails();
             }
         });
     },
-
-    // saveStreamDetails: function() {
-    //     var me = this;
-    //
-    //     if (!me.streamDetailForm.getForm().isValid()) {
-    //         return;
-    //     }
-    //     var record = me.streamDetailForm.getRecord();
-    //     me.streamDetailForm.getForm().updateRecord(record);
-    //
-    //     record.save({
-    //         callback: function() {
-    //             me.fireEvent('switch-layout', 'table');
-    //             me.updateTitles(record);
-    //         }
-    //     });
-    // },
 
     updateProgressBar: function(request, response) {
         var me = this;
