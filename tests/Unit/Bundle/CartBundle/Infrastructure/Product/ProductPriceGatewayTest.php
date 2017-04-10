@@ -36,7 +36,7 @@ use Shopware\Bundle\CartBundle\Domain\Tax\TaxRule;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCollection;
 use Shopware\Bundle\CartBundle\Infrastructure\Product\ProductPriceGateway;
 use Shopware\Bundle\StoreFrontBundle\Common\FieldHelper;
-use Shopware\Bundle\StoreFrontBundle\CustomerGroup\Group;
+use Shopware\Bundle\StoreFrontBundle\CustomerGroup\CustomerGroup;
 use Shopware\Bundle\StoreFrontBundle\Tax\TaxHydrator;
 use Shopware\Tests\Unit\Bundle\CartBundle\Common\Generator;
 
@@ -311,11 +311,11 @@ class ProductPriceGatewayTest extends \PHPUnit\Framework\TestCase
     /**
      * @param string $key
      *
-     * @return \Shopware\Bundle\StoreFrontBundle\CustomerGroup\Group
+     * @return \Shopware\Bundle\StoreFrontBundle\CustomerGroup\CustomerGroup
      */
     private function createCustomerGroup($key)
     {
-        $group = new Group();
+        $group = new CustomerGroup();
         $group->setKey($key);
 
         return $group;

@@ -24,13 +24,9 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Price;
 
-
-
-use Shopware\Bundle\StoreFrontBundle\CustomerGroup\Group;
-use Shopware\Bundle\StoreFrontBundle\Product\ListProduct;
-use Shopware\Bundle\StoreFrontBundle\PriceGroup\PriceDiscount;
-
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\CustomerGroup\CustomerGroup;
+use Shopware\Bundle\StoreFrontBundle\Product\ListProduct;
 
 /**
  * @category  Shopware
@@ -141,15 +137,15 @@ class GraduatedPricesService implements GraduatedPricesServiceInterface
      * This function is used to override the normal graduated prices
      * with a definition of the product price group discounts.
      *
-     * @param PriceRule       $reference
-     * @param Group           $customerGroup
+     * @param PriceRule                                                    $reference
+     * @param CustomerGroup                                                $customerGroup
      * @param \Shopware\Bundle\StoreFrontBundle\PriceGroup\PriceDiscount[] $discounts
      *
      * @return array
      */
     private function buildDiscountGraduations(
         PriceRule $reference,
-        Group $customerGroup,
+        CustomerGroup $customerGroup,
         array $discounts
     ) {
         $prices = [];
@@ -200,11 +196,11 @@ class GraduatedPricesService implements GraduatedPricesServiceInterface
      *
      * @param ListProduct[] $products
      * @param PriceRule[]   $priceRules
-     * @param Group         $group
+     * @param CustomerGroup $group
      *
      * @return array
      */
-    private function buildPrices($products, array $priceRules, Group $group)
+    private function buildPrices($products, array $priceRules, CustomerGroup $group)
     {
         $prices = [];
 

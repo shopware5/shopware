@@ -26,8 +26,8 @@ namespace Shopware\Bundle\StoreFrontBundle\Configurator;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\StoreFrontBundle\Common\FieldHelper;
+use Shopware\Bundle\StoreFrontBundle\Common\Struct;
 use Shopware\Bundle\StoreFrontBundle\Context\TranslationContext;
-use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
  * @category  Shopware
@@ -62,8 +62,8 @@ class ProductConfigurationGateway
     private $connection;
 
     /**
-     * @param Connection                    $connection
-     * @param FieldHelper                   $fieldHelper
+     * @param Connection           $connection
+     * @param FieldHelper          $fieldHelper
      * @param ConfiguratorHydrator $configuratorHydrator
      */
     public function __construct(
@@ -77,10 +77,10 @@ class ProductConfigurationGateway
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Product\BaseProduct[]      $products
-     * @param TranslationContext $context
+     * @param \Shopware\Bundle\StoreFrontBundle\Product\BaseProduct[] $products
+     * @param TranslationContext                                      $context
      *
-     * @return array indexed by the product order number, each array element contains a Struct\Configurator\Group array
+     * @return array indexed by the product order number, each array element contains a Struct\Configurator\PropertyGroup array
      */
     public function getList($products, TranslationContext $context)
     {

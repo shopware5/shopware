@@ -30,8 +30,7 @@ use Shopware\Bundle\StoreFrontBundle\Common\FieldHelper;
 use Shopware\Bundle\StoreFrontBundle\Country\Area;
 use Shopware\Bundle\StoreFrontBundle\Country\Country;
 use Shopware\Bundle\StoreFrontBundle\Country\State;
-use Shopware\Bundle\StoreFrontBundle\CustomerGroup\Group;
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\CustomerGroup\CustomerGroup;
 
 /**
  * @category  Shopware
@@ -66,8 +65,8 @@ class TaxGateway
     private $connection;
 
     /**
-     * @param Connection           $connection
-     * @param FieldHelper          $fieldHelper
+     * @param Connection  $connection
+     * @param FieldHelper $fieldHelper
      * @param TaxHydrator $taxHydrator
      */
     public function __construct(
@@ -92,13 +91,13 @@ class TaxGateway
      *  - State
      * - The above rules are prioritized, from first to last.
      *
-     * @param Group $customerGroup
-     * @param ShippingLocation      $location
+     * @param CustomerGroup    $customerGroup
+     * @param ShippingLocation $location
      *
      * @return \Shopware\Bundle\StoreFrontBundle\Tax\Tax[] Indexed by 'tax_' + id
      */
     public function getRules(
-        Group $customerGroup,
+        CustomerGroup $customerGroup,
         ShippingLocation $location
     ) {
         $query = $this->connection->createQueryBuilder();
@@ -141,15 +140,15 @@ class TaxGateway
     }
 
     /**
-     * @param Group $customerGroup
-     * @param Area   $area
-     * @param Country        $country
-     * @param State  $state
+     * @param CustomerGroup $customerGroup
+     * @param Area          $area
+     * @param Country       $country
+     * @param State         $state
      *
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
     private function getAreaQuery(
-        Group $customerGroup = null,
+        CustomerGroup $customerGroup = null,
         Area $area = null,
         Country $country = null,
         State $state = null

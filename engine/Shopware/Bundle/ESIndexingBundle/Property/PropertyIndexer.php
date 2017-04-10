@@ -28,7 +28,7 @@ use Elasticsearch\Client;
 use Shopware\Bundle\ESIndexingBundle\Console\ProgressHelperInterface;
 use Shopware\Bundle\ESIndexingBundle\DataIndexerInterface;
 use Shopware\Bundle\ESIndexingBundle\Struct\ShopIndex;
-use Shopware\Bundle\StoreFrontBundle\Property\Group;
+use Shopware\Bundle\StoreFrontBundle\Property\PropertyGroup;
 
 /**
  * Class PropertyIndexer
@@ -92,7 +92,7 @@ class PropertyIndexer implements DataIndexerInterface
             return;
         }
 
-        /** @var Group[] $properties */
+        /** @var PropertyGroup[] $properties */
         $properties = $this->provider->get($index->getShop(), $groupIds);
         $remove = array_diff($groupIds, array_keys($properties));
 

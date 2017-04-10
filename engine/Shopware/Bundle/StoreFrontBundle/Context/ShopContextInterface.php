@@ -28,13 +28,12 @@ use Shopware\Bundle\CartBundle\Domain\Delivery\ShippingLocation;
 use Shopware\Bundle\StoreFrontBundle\Common\ExtendableInterface;
 use Shopware\Bundle\StoreFrontBundle\Currency\Currency;
 use Shopware\Bundle\StoreFrontBundle\Customer\Customer;
-use Shopware\Bundle\StoreFrontBundle\CustomerGroup\Group;
+use Shopware\Bundle\StoreFrontBundle\CustomerGroup\CustomerGroup;
 use Shopware\Bundle\StoreFrontBundle\PaymentMethod\PaymentMethod;
 use Shopware\Bundle\StoreFrontBundle\PriceGroup\PriceGroup;
 use Shopware\Bundle\StoreFrontBundle\ShippingMethod\ShippingMethod;
 use Shopware\Bundle\StoreFrontBundle\Shop\Shop;
 use Shopware\Bundle\StoreFrontBundle\Tax\Tax;
-
 
 /**
  * @category  Shopware
@@ -71,9 +70,9 @@ interface ShopContextInterface extends ExtendableInterface
      * is equal to the fallback customer group of the shop.
      *
      *
-     * @return Group
+     * @return CustomerGroup
      */
-    public function getCurrentCustomerGroup(): Group;
+    public function getCurrentCustomerGroup(): CustomerGroup;
 
     /**
      * Contains the fallback customer group for the current shop.
@@ -82,9 +81,9 @@ interface ShopContextInterface extends ExtendableInterface
      * own defined product prices, the prices of the fallback customer
      * group are displayed.
      *
-     * @return Group
+     * @return CustomerGroup
      */
-    public function getFallbackCustomerGroup(): Group;
+    public function getFallbackCustomerGroup(): CustomerGroup;
 
     /**
      * Returns all tax rules

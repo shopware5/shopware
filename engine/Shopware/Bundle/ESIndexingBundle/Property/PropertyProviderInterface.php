@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\ESIndexingBundle\Property;
 
-use Shopware\Bundle\StoreFrontBundle\Property\Group;
+use Shopware\Bundle\StoreFrontBundle\Property\PropertyGroup;
 use Shopware\Bundle\StoreFrontBundle\Shop\Shop;
 
 interface PropertyProviderInterface
@@ -33,7 +33,7 @@ interface PropertyProviderInterface
      * @param \Shopware\Bundle\StoreFrontBundle\Shop\Shop $shop
      * @param int[]                                       $groupIds
      *
-     * @return Group[]
+     * @return PropertyGroup[]
      */
     public function get(Shop $shop, $groupIds);
 }

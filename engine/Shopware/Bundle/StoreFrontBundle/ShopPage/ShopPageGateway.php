@@ -27,7 +27,6 @@ namespace Shopware\Bundle\StoreFrontBundle\ShopPage;
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\StoreFrontBundle\Common\FieldHelper;
 use Shopware\Bundle\StoreFrontBundle\Context\TranslationContext;
-use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
  * @category  Shopware
@@ -62,8 +61,8 @@ class ShopPageGateway
     private $connection;
 
     /**
-     * @param Connection                $connection
-     * @param FieldHelper               $fieldHelper
+     * @param Connection       $connection
+     * @param FieldHelper      $fieldHelper
      * @param ShopPageHydrator $shopPageHydrator
      */
     public function __construct(
@@ -84,7 +83,7 @@ class ShopPageGateway
      * Required translation in the provided context language:
      * - Shop page
      *
-     * @param int[]                     $ids
+     * @param int[]              $ids
      * @param TranslationContext $context
      *
      * @return \Shopware\Bundle\StoreFrontBundle\ShopPage\ShopPage[] Indexed by the shop page id

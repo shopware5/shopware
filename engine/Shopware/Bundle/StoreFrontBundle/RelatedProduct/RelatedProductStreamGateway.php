@@ -26,9 +26,9 @@ namespace Shopware\Bundle\StoreFrontBundle\RelatedProduct;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\StoreFrontBundle\Common\FieldHelper;
+use Shopware\Bundle\StoreFrontBundle\Common\Struct;
 use Shopware\Bundle\StoreFrontBundle\Context\TranslationContext;
 use Shopware\Bundle\StoreFrontBundle\ProductStream\ProductStreamHydrator;
-use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
  * @category  Shopware
@@ -53,8 +53,8 @@ class RelatedProductStreamGateway
     private $hydrator;
 
     /**
-     * @param Connection                     $connection
-     * @param FieldHelper                    $fieldHelper
+     * @param Connection            $connection
+     * @param FieldHelper           $fieldHelper
      * @param ProductStreamHydrator $hydrator
      */
     public function __construct(
@@ -80,8 +80,8 @@ class RelatedProductStreamGateway
      *    'SW200' => array({Struct\ProductStream}, {Struct\ProductStream})
      * )
      *
-     * @param \Shopware\Bundle\StoreFrontBundle\Product\BaseProduct[]      $products
-     * @param TranslationContext $context
+     * @param \Shopware\Bundle\StoreFrontBundle\Product\BaseProduct[] $products
+     * @param TranslationContext                                      $context
      *
      * @return array indexed by the product number
      */

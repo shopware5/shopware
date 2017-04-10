@@ -27,8 +27,8 @@ namespace Shopware\Bundle\StoreFrontBundle\Country;
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\CartBundle\Infrastructure\SortArrayByKeysTrait;
 use Shopware\Bundle\StoreFrontBundle\Common\FieldHelper;
+use Shopware\Bundle\StoreFrontBundle\Common\Struct;
 use Shopware\Bundle\StoreFrontBundle\Context\TranslationContext;
-use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
  * @category  Shopware
@@ -65,8 +65,8 @@ class CountryGateway
     private $connection;
 
     /**
-     * @param Connection               $connection
-     * @param FieldHelper              $fieldHelper
+     * @param Connection      $connection
+     * @param FieldHelper     $fieldHelper
      * @param CountryHydrator $countryHydrator
      */
     public function __construct(
@@ -80,7 +80,7 @@ class CountryGateway
     }
 
     /**
-     * @param int[]                     $ids
+     * @param int[]              $ids
      * @param TranslationContext $context
      *
      * @return \Shopware\Bundle\StoreFrontBundle\Country\Area[]
@@ -110,7 +110,7 @@ class CountryGateway
     }
 
     /**
-     * @param int[]                     $ids
+     * @param int[]              $ids
      * @param TranslationContext $context
      *
      * @return \Shopware\Bundle\StoreFrontBundle\Country\Country[]
@@ -143,7 +143,7 @@ class CountryGateway
     }
 
     /**
-     * @param int[]                     $ids
+     * @param int[]              $ids
      * @param TranslationContext $context
      *
      * @return \Shopware\Bundle\StoreFrontBundle\Country\State[]
@@ -170,7 +170,7 @@ class CountryGateway
     }
 
     /**
-     * @param int[]                     $countryIds
+     * @param int[]              $countryIds
      * @param TranslationContext $context
      *
      * @return array indexed by country id contains an array of Struct\Country\State

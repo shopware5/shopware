@@ -27,7 +27,6 @@ namespace Shopware\Bundle\StoreFrontBundle\Media;
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\StoreFrontBundle\Common\FieldHelper;
 use Shopware\Bundle\StoreFrontBundle\Context\TranslationContext;
-use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
  * @category  Shopware
@@ -52,8 +51,8 @@ class MediaGateway
     private $hydrator;
 
     /**
-     * @param Connection             $connection
-     * @param FieldHelper            $fieldHelper
+     * @param Connection    $connection
+     * @param FieldHelper   $fieldHelper
      * @param MediaHydrator $hydrator
      */
     public function __construct(
@@ -67,7 +66,7 @@ class MediaGateway
     }
 
     /**
-     * @param int[]                     $ids
+     * @param int[]              $ids
      * @param TranslationContext $context
      *
      * @return \Shopware\Bundle\StoreFrontBundle\Media\Media[] Indexed by the media id

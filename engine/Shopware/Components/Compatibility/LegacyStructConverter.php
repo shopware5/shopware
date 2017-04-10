@@ -184,11 +184,11 @@ class LegacyStructConverter
     /**
      * Converts a configurator group struct which used for default or selection configurators.
      *
-     * @param \Shopware\Bundle\StoreFrontBundle\Configurator\Group $group
+     * @param \Shopware\Bundle\StoreFrontBundle\Configurator\ConfiguratorGroup $group
      *
      * @return array
      */
-    public function convertConfiguratorGroupStruct(StoreFrontBundle\Configurator\Group $group)
+    public function convertConfiguratorGroupStruct(StoreFrontBundle\Configurator\ConfiguratorGroup $group)
     {
         $data = [
             'groupID' => $group->getId(),
@@ -746,17 +746,17 @@ class LegacyStructConverter
      *     ],
      * ];
      *
-     * @param \Shopware\Bundle\StoreFrontBundle\Property\Set $set
+     * @param \Shopware\Bundle\StoreFrontBundle\Property\PropertySet $set
      *
      * @return array
      */
-    public function convertPropertySetStruct(StoreFrontBundle\Property\Set $set)
+    public function convertPropertySetStruct(StoreFrontBundle\Property\PropertySet $set)
     {
         $result = [];
         foreach ($set->getGroups() as $group) {
             $values = [];
             foreach ($group->getOptions() as $option) {
-                /* @var $option \Shopware\Bundle\StoreFrontBundle\Property\Option */
+                /* @var $option \Shopware\Bundle\StoreFrontBundle\Property\PropertyOption */
                 $values[$option->getId()] = $option->getName();
             }
 
@@ -764,7 +764,7 @@ class LegacyStructConverter
 
             $mediaValues = [];
             foreach ($group->getOptions() as $option) {
-                /** @var $option \Shopware\Bundle\StoreFrontBundle\Property\Option */
+                /** @var $option \Shopware\Bundle\StoreFrontBundle\Property\PropertyOption */
                 if ($option->getMedia()) {
                     $mediaValues[$option->getId()] = array_merge(['valueId' => $option->getId()], $this->convertMediaStruct($option->getMedia()));
                 }
@@ -792,11 +792,11 @@ class LegacyStructConverter
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Property\Group $group
+     * @param \Shopware\Bundle\StoreFrontBundle\Property\PropertyGroup $group
      *
      * @return array
      */
-    public function convertPropertyGroupStruct(StoreFrontBundle\Property\Group $group)
+    public function convertPropertyGroupStruct(StoreFrontBundle\Property\PropertyGroup $group)
     {
         $data = [
             'id' => $group->getId(),
@@ -816,11 +816,11 @@ class LegacyStructConverter
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Property\Option $option
+     * @param \Shopware\Bundle\StoreFrontBundle\Property\PropertyOption $option
      *
      * @return array
      */
-    public function convertPropertyOptionStruct(StoreFrontBundle\Property\Option $option)
+    public function convertPropertyOptionStruct(StoreFrontBundle\Property\PropertyOption $option)
     {
         $data = [
             'id' => $option->getId(),
@@ -858,14 +858,14 @@ class LegacyStructConverter
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Product\ListProduct $product
-     * @param \Shopware\Bundle\StoreFrontBundle\Configurator\Set    $set
+     * @param \Shopware\Bundle\StoreFrontBundle\Product\ListProduct          $product
+     * @param \Shopware\Bundle\StoreFrontBundle\Configurator\ConfiguratorSet $set
      *
      * @return array
      */
     public function convertConfiguratorStruct(
         ListProduct $product,
-        StoreFrontBundle\Configurator\Set $set
+        StoreFrontBundle\Configurator\ConfiguratorSet $set
     ) {
         $groups = [];
         foreach ($set->getGroups() as $group) {
@@ -904,14 +904,14 @@ class LegacyStructConverter
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Product\ListProduct $product
-     * @param \Shopware\Bundle\StoreFrontBundle\Configurator\Set    $set
+     * @param \Shopware\Bundle\StoreFrontBundle\Product\ListProduct          $product
+     * @param \Shopware\Bundle\StoreFrontBundle\Configurator\ConfiguratorSet $set
      *
      * @return array
      */
     public function convertConfiguratorPrice(
         ListProduct $product,
-        StoreFrontBundle\Configurator\Set $set
+        StoreFrontBundle\Configurator\ConfiguratorSet $set
     ) {
         if ($set->isSelectionSpecified()) {
             return [];
@@ -939,13 +939,13 @@ class LegacyStructConverter
     /**
      * Creates the settings array for the passed configurator set
      *
-     * @param \Shopware\Bundle\StoreFrontBundle\Configurator\Set    $set
-     * @param \Shopware\Bundle\StoreFrontBundle\Product\ListProduct $product
+     * @param \Shopware\Bundle\StoreFrontBundle\Configurator\ConfiguratorSet $set
+     * @param \Shopware\Bundle\StoreFrontBundle\Product\ListProduct          $product
      *
      * @return array
      */
     public function getConfiguratorSettings(
-        StoreFrontBundle\Configurator\Set $set,
+        StoreFrontBundle\Configurator\ConfiguratorSet $set,
         ListProduct $product
     ) {
         $settings = [
@@ -975,14 +975,14 @@ class LegacyStructConverter
     /**
      * Converts a configurator option struct which used for default or selection configurators.
      *
-     * @param \Shopware\Bundle\StoreFrontBundle\Configurator\Group  $group
-     * @param \Shopware\Bundle\StoreFrontBundle\Configurator\Option $option
+     * @param \Shopware\Bundle\StoreFrontBundle\Configurator\ConfiguratorGroup  $group
+     * @param \Shopware\Bundle\StoreFrontBundle\Configurator\ConfiguratorOption $option
      *
      * @return array
      */
     public function convertConfiguratorOptionStruct(
-        StoreFrontBundle\Configurator\Group $group,
-        StoreFrontBundle\Configurator\Option $option
+        StoreFrontBundle\Configurator\ConfiguratorGroup $group,
+        StoreFrontBundle\Configurator\ConfiguratorOption $option
     ) {
         $data = [
             'optionID' => $option->getId(),

@@ -27,12 +27,12 @@ namespace Shopware\Bundle\StoreFrontBundle\Product;
 use Shopware\Bundle\StoreFrontBundle\Common\Attribute;
 use Shopware\Bundle\StoreFrontBundle\Common\AttributeHydrator;
 use Shopware\Bundle\StoreFrontBundle\Common\Hydrator;
+use Shopware\Bundle\StoreFrontBundle\Common\Struct;
 use Shopware\Bundle\StoreFrontBundle\Esd\EsdHydrator;
+use Shopware\Bundle\StoreFrontBundle\Manufacturer\ManufacturerHydrator;
 use Shopware\Bundle\StoreFrontBundle\PriceGroup\PriceGroup;
 use Shopware\Bundle\StoreFrontBundle\Tax\TaxHydrator;
 use Shopware\Bundle\StoreFrontBundle\Unit\UnitHydrator;
-use Shopware\Bundle\StoreFrontBundle\Manufacturer\ManufacturerHydrator;
-use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
  * @category  Shopware
@@ -67,12 +67,12 @@ class ProductHydrator extends Hydrator
     private $config;
 
     /**
-     * @param AttributeHydrator $attributeHydrator
-     * @param ManufacturerHydrator $manufacturerHydrator
-     * @param \Shopware\Bundle\StoreFrontBundle\Tax\TaxHydrator $taxHydrator
+     * @param AttributeHydrator                                   $attributeHydrator
+     * @param ManufacturerHydrator                                $manufacturerHydrator
+     * @param \Shopware\Bundle\StoreFrontBundle\Tax\TaxHydrator   $taxHydrator
      * @param \Shopware\Bundle\StoreFrontBundle\Unit\UnitHydrator $unitHydrator
-     * @param EsdHydrator $esdHydrator
-     * @param \Shopware_Components_Config $config
+     * @param EsdHydrator                                         $esdHydrator
+     * @param \Shopware_Components_Config                         $config
      */
     public function __construct(
         ManufacturerHydrator $manufacturerHydrator,
@@ -137,7 +137,7 @@ class ProductHydrator extends Hydrator
 
     /**
      * @param ListProduct $product
-     * @param array              $data
+     * @param array       $data
      *
      * @return ListProduct
      */
@@ -197,7 +197,7 @@ class ProductHydrator extends Hydrator
 
     /**
      * @param ListProduct $product
-     * @param array              $data
+     * @param array       $data
      */
     private function assignPriceGroupData(ListProduct $product, array $data)
     {

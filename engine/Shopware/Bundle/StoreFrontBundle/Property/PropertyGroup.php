@@ -32,7 +32,7 @@ use Shopware\Bundle\StoreFrontBundle\Common\Extendable;
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Group extends Extendable
+class PropertyGroup extends Extendable
 {
     /**
      * @var int
@@ -50,7 +50,7 @@ class Group extends Extendable
     protected $filterable;
 
     /**
-     * @var Option[]
+     * @var PropertyOption[]
      */
     protected $options = [];
 
@@ -95,7 +95,7 @@ class Group extends Extendable
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Property\Option[] $options
+     * @param \Shopware\Bundle\StoreFrontBundle\Property\PropertyOption[] $options
      *
      * @return $this
      */
@@ -107,7 +107,7 @@ class Group extends Extendable
     }
 
     /**
-     * @return \Shopware\Bundle\StoreFrontBundle\Property\Option[]
+     * @return \Shopware\Bundle\StoreFrontBundle\Property\PropertyOption[]
      */
     public function getOptions()
     {

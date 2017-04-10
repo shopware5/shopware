@@ -25,7 +25,7 @@
 namespace Shopware\Bundle\ESIndexingBundle\Struct;
 
 use Shopware\Bundle\StoreFrontBundle\Product\ListProduct;
-use Shopware\Bundle\StoreFrontBundle\Property\Option;
+use Shopware\Bundle\StoreFrontBundle\Property\PropertyOption;
 
 /**
  * Class Product
@@ -43,7 +43,7 @@ class Product extends ListProduct
     protected $formattedReleaseDate;
 
     /**
-     * @var \Shopware\Bundle\StoreFrontBundle\Property\Option[]
+     * @var \Shopware\Bundle\StoreFrontBundle\Property\PropertyOption[]
      */
     protected $properties = [];
 
@@ -77,7 +77,7 @@ class Product extends ListProduct
     }
 
     /**
-     * @return \Shopware\Bundle\StoreFrontBundle\Property\Option[]
+     * @return \Shopware\Bundle\StoreFrontBundle\Property\PropertyOption[]
      */
     public function getProperties()
     {
@@ -85,7 +85,7 @@ class Product extends ListProduct
     }
 
     /**
-     * @param Option[] $properties
+     * @param PropertyOption[] $properties
      */
     public function setProperties($properties)
     {

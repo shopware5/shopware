@@ -27,7 +27,6 @@ namespace Shopware\Bundle\StoreFrontBundle\Media;
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\StoreFrontBundle\Common\FieldHelper;
 use Shopware\Bundle\StoreFrontBundle\Context\TranslationContext;
-use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
  * @category  Shopware
@@ -52,8 +51,8 @@ class VariantMediaGateway
     private $hydrator;
 
     /**
-     * @param Connection             $connection
-     * @param FieldHelper            $fieldHelper
+     * @param Connection    $connection
+     * @param FieldHelper   $fieldHelper
      * @param MediaHydrator $hydrator
      */
     public function __construct(
@@ -86,8 +85,8 @@ class VariantMediaGateway
      * )
      * </php>
      *
-     * @param \Shopware\Bundle\StoreFrontBundle\Product\BaseProduct[]      $products
-     * @param TranslationContext $context
+     * @param \Shopware\Bundle\StoreFrontBundle\Product\BaseProduct[] $products
+     * @param TranslationContext                                      $context
      *
      * @return array Indexed by product number. Each element contains a \Shopware\Bundle\StoreFrontBundle\Media\Media array.
      */
@@ -141,8 +140,8 @@ class VariantMediaGateway
      * )
      * </php>
      *
-     * @param \Shopware\Bundle\StoreFrontBundle\Product\BaseProduct[]      $products
-     * @param TranslationContext $context
+     * @param \Shopware\Bundle\StoreFrontBundle\Product\BaseProduct[] $products
+     * @param TranslationContext                                      $context
      *
      * @return \Shopware\Bundle\StoreFrontBundle\Media\Media[] Indexed by the product order number
      */

@@ -27,8 +27,8 @@ namespace Shopware\Bundle\SearchBundleES;
 use Shopware\Bundle\StoreFrontBundle\Common\Attribute;
 use Shopware\Bundle\StoreFrontBundle\Media\Media;
 use Shopware\Bundle\StoreFrontBundle\Media\Thumbnail;
-use Shopware\Bundle\StoreFrontBundle\Property\Group as PropertyGroup;
-use Shopware\Bundle\StoreFrontBundle\Property\Option as PropertyOption;
+use Shopware\Bundle\StoreFrontBundle\Property\PropertyGroup;
+use Shopware\Bundle\StoreFrontBundle\Property\PropertyOption;
 
 /**
  * Class StructHydrator

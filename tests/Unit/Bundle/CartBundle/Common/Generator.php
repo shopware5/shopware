@@ -33,7 +33,7 @@ use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
 use Shopware\Bundle\StoreFrontBundle\Country\Country;
 use Shopware\Bundle\StoreFrontBundle\Currency\Currency;
 use Shopware\Bundle\StoreFrontBundle\Customer\Customer;
-use Shopware\Bundle\StoreFrontBundle\CustomerGroup\Group;
+use Shopware\Bundle\StoreFrontBundle\CustomerGroup\CustomerGroup;
 use Shopware\Bundle\StoreFrontBundle\PaymentMethod\PaymentMethod;
 use Shopware\Bundle\StoreFrontBundle\PriceGroup\PriceGroup;
 use Shopware\Bundle\StoreFrontBundle\ShippingMethod\ShippingMethod;
@@ -64,12 +64,12 @@ class Generator extends \PHPUnit\Framework\TestCase
         $currency = $currency ?: new Currency();
 
         if (!$currentCustomerGroup) {
-            $currentCustomerGroup = new Group();
+            $currentCustomerGroup = new CustomerGroup();
             $currentCustomerGroup->setKey('EK2');
         }
 
         if (!$fallbackCustomerGroup) {
-            $fallbackCustomerGroup = new Group();
+            $fallbackCustomerGroup = new CustomerGroup();
             $fallbackCustomerGroup->setKey('EK1');
         }
 

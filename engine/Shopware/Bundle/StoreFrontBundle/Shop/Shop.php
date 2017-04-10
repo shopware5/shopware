@@ -28,12 +28,9 @@ use Shopware\Bundle\StoreFrontBundle\Category\Category;
 use Shopware\Bundle\StoreFrontBundle\Common\Extendable;
 use Shopware\Bundle\StoreFrontBundle\Country\Country;
 use Shopware\Bundle\StoreFrontBundle\Currency\Currency;
-use Shopware\Bundle\StoreFrontBundle\CustomerGroup\Group;
-
+use Shopware\Bundle\StoreFrontBundle\CustomerGroup\CustomerGroup;
 use Shopware\Bundle\StoreFrontBundle\PaymentMethod\PaymentMethod;
 use Shopware\Bundle\StoreFrontBundle\ShippingMethod\ShippingMethod;
-
-
 use Shopware\Models\Shop\Shop as ShopEntity;
 
 /**
@@ -117,7 +114,7 @@ class Shop extends Extendable
     protected $locale;
 
     /**
-     * @var Group
+     * @var CustomerGroup
      */
     protected $customerGroup;
 
@@ -396,7 +393,7 @@ class Shop extends Extendable
     }
 
     /**
-     * @return Group
+     * @return CustomerGroup
      */
     public function getCustomerGroup()
     {
@@ -404,9 +401,9 @@ class Shop extends Extendable
     }
 
     /**
-     * @param Group $customerGroup
+     * @param CustomerGroup $customerGroup
      */
-    public function setCustomerGroup(Group $customerGroup)
+    public function setCustomerGroup(CustomerGroup $customerGroup)
     {
         $this->customerGroup = $customerGroup;
     }

@@ -24,9 +24,8 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Price;
 
-use Shopware\Bundle\StoreFrontBundle\CustomerGroup\Group;
 use Shopware\Bundle\StoreFrontBundle\Common\Extendable;
-
+use Shopware\Bundle\StoreFrontBundle\CustomerGroup\CustomerGroup;
 
 /**
  * @category  Shopware
@@ -150,7 +149,7 @@ class Price extends Extendable
     }
 
     /**
-     * @return Group
+     * @return CustomerGroup
      */
     public function getCustomerGroup()
     {

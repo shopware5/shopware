@@ -32,7 +32,7 @@ use Shopware\Bundle\StoreFrontBundle\Common\Extendable;
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Set extends Extendable
+class PropertySet extends Extendable
 {
     /**
      * Constant for the alphanumeric sort configuration of the category filters
@@ -65,7 +65,7 @@ class Set extends Extendable
     protected $comparable;
 
     /**
-     * @var Group[]
+     * @var PropertyGroup[]
      */
     protected $groups = [];
 
@@ -115,7 +115,7 @@ class Set extends Extendable
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Property\Group[] $groups
+     * @param \Shopware\Bundle\StoreFrontBundle\Property\PropertyGroup[] $groups
      *
      * @return $this
      */
@@ -127,7 +127,7 @@ class Set extends Extendable
     }
 
     /**
-     * @return \Shopware\Bundle\StoreFrontBundle\Property\Group[]
+     * @return \Shopware\Bundle\StoreFrontBundle\Property\PropertyGroup[]
      */
     public function getGroups()
     {

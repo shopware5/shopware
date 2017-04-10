@@ -27,7 +27,6 @@ namespace Shopware\Bundle\StoreFrontBundle\Property;
 use Shopware\Bundle\StoreFrontBundle\Common\AttributeHydrator;
 use Shopware\Bundle\StoreFrontBundle\Common\Hydrator;
 use Shopware\Bundle\StoreFrontBundle\Media\MediaHydrator;
-use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
  * @category  Shopware
@@ -61,7 +60,7 @@ class PropertyHydrator extends Hydrator
     /**
      * @param array $data
      *
-     * @return Set[]
+     * @return PropertySet[]
      */
     public function hydrateValues(array $data)
     {
@@ -98,7 +97,7 @@ class PropertyHydrator extends Hydrator
             $set->setGroups($groups);
         }
 
-        /** @var Set[] $sets */
+        /** @var PropertySet[] $sets */
         foreach ($sets as $set) {
             foreach ($set->getGroups() as $group) {
                 $options = $group->getOptions();
@@ -113,11 +112,11 @@ class PropertyHydrator extends Hydrator
     /**
      * @param array $data
      *
-     * @return Group
+     * @return PropertyGroup
      */
     public function hydrateGroup(array $data)
     {
-        $group = new Group();
+        $group = new PropertyGroup();
         $translation = $this->getTranslation($data, '__propertyGroup', ['optionName' => 'name']);
         $data = array_merge($data, $translation);
 
@@ -135,11 +134,11 @@ class PropertyHydrator extends Hydrator
     /**
      * @param array $data
      *
-     * @return Option
+     * @return PropertyOption
      */
     public function hydrateOption(array $data)
     {
-        $option = new Option();
+        $option = new PropertyOption();
         $translation = $this->getTranslation($data, '__propertyOption', ['optionValue' => 'value']);
         $data = array_merge($data, $translation);
 
@@ -163,11 +162,11 @@ class PropertyHydrator extends Hydrator
     /**
      * @param array $data
      *
-     * @return Set
+     * @return PropertySet
      */
     private function hydrateSet(array $data)
     {
-        $set = new Set();
+        $set = new PropertySet();
         $translation = $this->getTranslation($data, '__propertySet', ['groupName' => 'name']);
         $data = array_merge($data, $translation);
 
@@ -200,18 +199,18 @@ class PropertyHydrator extends Hydrator
     }
 
     /**
-     * @param $options Option[]
+     * @param $options PropertyOption[]
      * @param int $sortMode
      */
     private function sortOptions(&$options, $sortMode)
     {
-        if ($sortMode == Set::SORT_POSITION) {
+        if ($sortMode == PropertySet::SORT_POSITION) {
             $this->sortOptionsByPosition($options);
 
             return;
         }
 
-        if ($sortMode == Set::SORT_NUMERIC) {
+        if ($sortMode == PropertySet::SORT_NUMERIC) {
             $this->sortOptionsNumercialValue($options);
 
             return;
@@ -221,12 +220,12 @@ class PropertyHydrator extends Hydrator
     }
 
     /**
-     * @param $options Option[]
+     * @param $options PropertyOption[]
      */
     private function sortOptionsByPosition(&$options)
     {
         usort($options, function (
-            Option $a, Option $b) {
+            PropertyOption $a, PropertyOption $b) {
             if ($a->getPosition() == $b->getPosition()) {
                 return 0;
             }
@@ -236,12 +235,12 @@ class PropertyHydrator extends Hydrator
     }
 
     /**
-     * @param $options Option[]
+     * @param $options PropertyOption[]
      */
     private function sortOptionsNumercialValue(&$options)
     {
         usort($options, function (
-            Option $a, Option $b) {
+            PropertyOption $a, PropertyOption $b) {
             $a = floatval(str_replace(',', '.', $a->getName()));
             $b = floatval(str_replace(',', '.', $b->getName()));
 
@@ -254,12 +253,12 @@ class PropertyHydrator extends Hydrator
     }
 
     /**
-     * @param $options Option[]
+     * @param $options PropertyOption[]
      */
     private function sortOptionsAlphanumeric(&$options)
     {
         usort($options, function (
-            Option $a, Option $b) {
+            PropertyOption $a, PropertyOption $b) {
             return strnatcasecmp($a->getName(), $b->getName());
         });
     }

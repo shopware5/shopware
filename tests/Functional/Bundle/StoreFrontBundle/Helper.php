@@ -31,7 +31,7 @@ use Shopware\Bundle\StoreFrontBundle;
 use Shopware\Bundle\StoreFrontBundle\Configurator\ConfiguratorGateway;
 use Shopware\Bundle\StoreFrontBundle\Configurator\ProductConfigurationGateway;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
-use Shopware\Bundle\StoreFrontBundle\CustomerGroup\Group;
+use Shopware\Bundle\StoreFrontBundle\CustomerGroup\CustomerGroup;
 use Shopware\Bundle\StoreFrontBundle\PaymentMethod\PaymentMethod;
 use Shopware\Bundle\StoreFrontBundle\ShippingMethod\ShippingMethod;
 use Shopware\Bundle\StoreFrontBundle\Shop\Shop;
@@ -135,7 +135,7 @@ class Helper
      * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContext             $context
      * @param \Shopware\Bundle\StoreFrontBundle\Property\ProductPropertyGateway $productPropertyGateway
      *
-     * @return \Shopware\Bundle\StoreFrontBundle\Property\Set
+     * @return \Shopware\Bundle\StoreFrontBundle\Property\PropertySet
      */
     public function getProductProperties(
         StoreFrontBundle\Product\ListProduct $product,
@@ -194,20 +194,20 @@ class Helper
      * data for an quick product creation.
      *
      * @param $number
-     * @param Tax                                                   $tax
-     * @param \Shopware\Bundle\StoreFrontBundle\CustomerGroup\Group $customerGroup
-     * @param float                                                 $priceOffset
+     * @param Tax                                                           $tax
+     * @param \Shopware\Bundle\StoreFrontBundle\CustomerGroup\CustomerGroup $customerGroup
+     * @param float                                                         $priceOffset
      *
      * @return array
      */
     public function getSimpleProduct(
         $number,
         $tax, // Either Model/Tax or Struct/Tax
-        Group $customerGroup,
+        CustomerGroup $customerGroup,
         $priceOffset = 0.00
     ) {
         if ($customerGroup instanceof Models\Customer\Group) {
-            $struct = new Group();
+            $struct = new CustomerGroup();
             $struct->setId($customerGroup->getId());
             $struct->setKey($customerGroup->getKey());
             $struct->setName($customerGroup->getName());
@@ -612,14 +612,14 @@ class Helper
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\CustomerGroup\Group $customerGroup used for the price definition
-     * @param string                                                $number
-     * @param array                                                 $data          contains nested configurator group > option array
+     * @param \Shopware\Bundle\StoreFrontBundle\CustomerGroup\CustomerGroup $customerGroup used for the price definition
+     * @param string                                                        $number
+     * @param array                                                         $data          contains nested configurator group > option array
      *
      * @return array
      */
     public function getConfigurator(
-        Group $customerGroup,
+        CustomerGroup $customerGroup,
         $number,
         array $data = []
     ) {
@@ -936,8 +936,8 @@ class Helper
 
         $this->deleteProperties($namePrefix);
 
-        $this->db->insert('s_filter', ['name' => $namePrefix . '-Set', 'comparable' => 1]);
-        $data = $this->db->fetchRow("SELECT * FROM s_filter WHERE name = '" . $namePrefix . "-Set'");
+        $this->db->insert('s_filter', ['name' => $namePrefix . '-PropertySet', 'comparable' => 1]);
+        $data = $this->db->fetchRow("SELECT * FROM s_filter WHERE name = '" . $namePrefix . "-PropertySet'");
 
         for ($i = 0; $i < $groupCount; ++$i) {
             $this->db->insert('s_filter_options', [
@@ -948,7 +948,7 @@ class Helper
 
             for ($i2 = 0; $i2 < $optionCount; ++$i2) {
                 $this->db->insert('s_filter_values', [
-                    'value' => $namePrefix . '-Option-' . $i . '-' . $i2,
+                    'value' => $namePrefix . '-PropertyOption-' . $i . '-' . $i2,
                     'optionID' => $group['id'],
                 ]);
             }
@@ -968,7 +968,7 @@ class Helper
 
     private function deleteProperties($namePrefix = 'Test')
     {
-        $this->db->query("DELETE FROM s_filter WHERE name = '" . $namePrefix . "-Set'");
+        $this->db->query("DELETE FROM s_filter WHERE name = '" . $namePrefix . "-PropertySet'");
 
         $ids = $this->db->fetchCol("SELECT id FROM s_filter_options WHERE name LIKE '" . $namePrefix . "-Gruppe%'");
         foreach ($ids as $id) {
@@ -976,7 +976,7 @@ class Helper
             $this->db->query('DELETE FROM s_filter_relations WHERE optionID = ?', [$id]);
         }
 
-        $this->db->query("DELETE FROM s_filter_values WHERE value LIKE '" . $namePrefix . "-Option%'");
+        $this->db->query("DELETE FROM s_filter_values WHERE value LIKE '" . $namePrefix . "-PropertyOption%'");
     }
 
     private function deleteCategory($name)

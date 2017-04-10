@@ -116,7 +116,7 @@ class PropertyFacetHandler implements PartialFacetHandlerInterface
      * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
      * @param Criteria                                                       $queryCriteria
      *
-     * @return \Shopware\Bundle\StoreFrontBundle\Property\Set[]
+     * @return \Shopware\Bundle\StoreFrontBundle\Property\PropertySet[]
      */
     protected function getProperties(\Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context, Criteria $queryCriteria)
     {
@@ -171,9 +171,9 @@ class PropertyFacetHandler implements PartialFacetHandlerInterface
     }
 
     /**
-     * @param Facet\PropertyFacet                              $facet
-     * @param \Shopware\Bundle\StoreFrontBundle\Property\Set[] $sets
-     * @param int[]                                            $actives
+     * @param Facet\PropertyFacet                                      $facet
+     * @param \Shopware\Bundle\StoreFrontBundle\Property\PropertySet[] $sets
+     * @param int[]                                                    $actives
      *
      * @return FacetResultGroup
      */

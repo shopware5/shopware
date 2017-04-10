@@ -26,8 +26,8 @@ namespace Shopware\Bundle\StoreFrontBundle\Vote;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\StoreFrontBundle\Common\FieldHelper;
+use Shopware\Bundle\StoreFrontBundle\Common\Struct;
 use Shopware\Bundle\StoreFrontBundle\Context\TranslationContext;
-use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
  * @category  Shopware
@@ -69,7 +69,7 @@ class VoteGateway
     /**
      * @param Connection                  $connection
      * @param FieldHelper                 $fieldHelper
-     * @param VoteHydrator $voteHydrator
+     * @param VoteHydrator                $voteHydrator
      * @param \Shopware_Components_Config $config
      */
     public function __construct(
@@ -85,8 +85,8 @@ class VoteGateway
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Product\BaseProduct[]      $products
-     * @param TranslationContext $context
+     * @param \Shopware\Bundle\StoreFrontBundle\Product\BaseProduct[] $products
+     * @param TranslationContext                                      $context
      *
      * @return array Indexed by the product number. Each elements contains a Struct\Product\Vote array.
      */

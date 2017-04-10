@@ -27,8 +27,7 @@ namespace Shopware\Bundle\StoreFrontBundle\Price;
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\StoreFrontBundle\Common\FieldHelper;
 use Shopware\Bundle\StoreFrontBundle\Context\TranslationContext;
-use Shopware\Bundle\StoreFrontBundle\CustomerGroup\Group;
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\CustomerGroup\CustomerGroup;
 
 /**
  * @category  Shopware
@@ -70,7 +69,7 @@ class CheapestPriceGateway
     /**
      * @param Connection                  $connection
      * @param FieldHelper                 $fieldHelper
-     * @param PriceHydrator $priceHydrator
+     * @param PriceHydrator               $priceHydrator
      * @param \Shopware_Components_Config $config
      */
     public function __construct(
@@ -86,16 +85,16 @@ class CheapestPriceGateway
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Product\BaseProduct[]      $products
-     * @param TranslationContext $context
-     * @param Group     $customerGroup
+     * @param \Shopware\Bundle\StoreFrontBundle\Product\BaseProduct[] $products
+     * @param TranslationContext                                      $context
+     * @param CustomerGroup                                           $customerGroup
      *
      * @return \Shopware\Bundle\StoreFrontBundle\Price\PriceRule[] Indexed by the product id
      */
     public function getList(
         $products,
         TranslationContext $context,
-        Group $customerGroup
+        CustomerGroup $customerGroup
     ) {
         /**
          * Contains the cheapest price logic which product price should be selected.
@@ -137,12 +136,12 @@ class CheapestPriceGateway
     /**
      * Pre selection of the cheapest prices ids.
      *
-     * @param \Shopware\Bundle\StoreFrontBundle\Product\BaseProduct[]  $products
-     * @param Group $customerGroup
+     * @param \Shopware\Bundle\StoreFrontBundle\Product\BaseProduct[] $products
+     * @param CustomerGroup                                           $customerGroup
      *
      * @return array
      */
-    private function getCheapestPriceIds($products, Group $customerGroup)
+    private function getCheapestPriceIds($products, CustomerGroup $customerGroup)
     {
         $ids = [];
         foreach ($products as $product) {

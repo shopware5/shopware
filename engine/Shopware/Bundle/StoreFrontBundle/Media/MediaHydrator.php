@@ -28,7 +28,6 @@ use Doctrine\DBAL\Connection;
 use Shopware\Bundle\MediaBundle\MediaService;
 use Shopware\Bundle\StoreFrontBundle\Common\AttributeHydrator;
 use Shopware\Bundle\StoreFrontBundle\Common\Hydrator;
-use Shopware\Bundle\StoreFrontBundle\Struct;
 use Shopware\Components\Thumbnail\Manager;
 
 /**
@@ -170,7 +169,7 @@ class MediaHydrator extends Hydrator
 
     /**
      * @param Media $media
-     * @param array        $data
+     * @param array $data
      *
      * @return bool
      */

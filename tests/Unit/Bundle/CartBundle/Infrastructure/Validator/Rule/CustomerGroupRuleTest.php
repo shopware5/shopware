@@ -29,7 +29,7 @@ use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
 use Shopware\Bundle\CartBundle\Domain\Validator\Data\RuleDataCollection;
 use Shopware\Bundle\CartBundle\Infrastructure\Validator\Rule\CustomerGroupRule;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
-use Shopware\Bundle\StoreFrontBundle\CustomerGroup\Group;
+use Shopware\Bundle\StoreFrontBundle\CustomerGroup\CustomerGroup;
 
 class CustomerGroupRuleTest extends TestCase
 {
@@ -39,7 +39,7 @@ class CustomerGroupRuleTest extends TestCase
 
         $cart = $this->createMock(CalculatedCart::class);
 
-        $group = new Group();
+        $group = new CustomerGroup();
         $group->setId(1);
 
         $context = $this->createMock(ShopContext::class);
@@ -59,7 +59,7 @@ class CustomerGroupRuleTest extends TestCase
 
         $cart = $this->createMock(CalculatedCart::class);
 
-        $group = new Group();
+        $group = new CustomerGroup();
         $group->setId(3);
 
         $context = $this->createMock(ShopContext::class);
@@ -79,7 +79,7 @@ class CustomerGroupRuleTest extends TestCase
 
         $cart = $this->createMock(CalculatedCart::class);
 
-        $group = new Group();
+        $group = new CustomerGroup();
         $group->setId(5);
 
         $context = $this->createMock(ShopContext::class);

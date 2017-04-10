@@ -24,11 +24,10 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\AdditionalText;
 
-
+use Shopware\Bundle\StoreFrontBundle\Configurator\ConfiguratorGroup;
 use Shopware\Bundle\StoreFrontBundle\Configurator\ConfiguratorServiceInterface;
-use Shopware\Bundle\StoreFrontBundle\Configurator\Group;
-use Shopware\Bundle\StoreFrontBundle\Product\ListProduct;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Product\ListProduct;
 
 /**
  * @category  Shopware
@@ -86,7 +85,7 @@ class AdditionalTextService implements AdditionalTextServiceInterface
     }
 
     /**
-     * @param Group[] $configurations
+     * @param ConfiguratorGroup[] $configurations
      *
      * @return string
      */

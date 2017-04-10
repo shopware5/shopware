@@ -28,7 +28,6 @@ use Doctrine\DBAL\Connection;
 use Shopware\Bundle\StoreFrontBundle\Common\FieldHelper;
 use Shopware\Bundle\StoreFrontBundle\Context\TranslationContext;
 use Shopware\Bundle\StoreFrontBundle\Product\BaseProduct;
-use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
  * @category  Shopware
@@ -63,8 +62,8 @@ class CategoryGateway
     private $connection;
 
     /**
-     * @param Connection                $connection
-     * @param FieldHelper               $fieldHelper
+     * @param Connection       $connection
+     * @param FieldHelper      $fieldHelper
      * @param CategoryHydrator $categoryHydrator
      */
     public function __construct(
@@ -119,7 +118,7 @@ class CategoryGateway
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\CategoryGatewayInterface::get()
      *
-     * @param int[]                     $ids
+     * @param int[]              $ids
      * @param TranslationContext $context
      *
      * @return \Shopware\Bundle\StoreFrontBundle\Category\Category[] Indexed by the category id
@@ -212,7 +211,7 @@ class CategoryGateway
     }
 
     /**
-     * @param int[]             $mapping
+     * @param int[]                                                 $mapping
      * @param \Shopware\Bundle\StoreFrontBundle\Category\Category[] $categories
      *
      * @return \Shopware\Bundle\StoreFrontBundle\Category\Category[]

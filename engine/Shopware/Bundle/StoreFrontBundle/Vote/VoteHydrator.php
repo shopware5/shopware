@@ -25,7 +25,6 @@
 namespace Shopware\Bundle\StoreFrontBundle\Vote;
 
 use Shopware\Bundle\StoreFrontBundle\Common\Hydrator;
-use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
  * @category  Shopware

@@ -24,12 +24,9 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Product;
 
-
 use Shopware\Bundle\StoreFrontBundle\Media\Media;
-
-use Shopware\Bundle\StoreFrontBundle\Property\Set;
 use Shopware\Bundle\StoreFrontBundle\ProductStream\ProductStream;
-use Shopware\Bundle\StoreFrontBundle\Media\Thumbnail;
+use Shopware\Bundle\StoreFrontBundle\Property\PropertySet;
 
 /**
  * @category  Shopware
@@ -74,12 +71,12 @@ class Product extends ListProduct
     protected $votes = [];
 
     /**
-     * @var Set
+     * @var PropertySet
      */
     protected $propertySet;
 
     /**
-     * @var \Shopware\Bundle\StoreFrontBundle\Configurator\Group[]
+     * @var \Shopware\Bundle\StoreFrontBundle\Configurator\ConfiguratorGroup[]
      */
     protected $configuration = [];
 
@@ -136,7 +133,7 @@ class Product extends ListProduct
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Property\Set $propertySet
+     * @param \Shopware\Bundle\StoreFrontBundle\Property\PropertySet $propertySet
      */
     public function setPropertySet($propertySet)
     {
@@ -144,7 +141,7 @@ class Product extends ListProduct
     }
 
     /**
-     * @return \Shopware\Bundle\StoreFrontBundle\Property\Set
+     * @return \Shopware\Bundle\StoreFrontBundle\Property\PropertySet
      */
     public function getPropertySet()
     {
@@ -248,7 +245,7 @@ class Product extends ListProduct
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Configurator\Group[] $configuration
+     * @param \Shopware\Bundle\StoreFrontBundle\Configurator\ConfiguratorGroup[] $configuration
      */
     public function setConfiguration($configuration)
     {
@@ -256,7 +253,7 @@ class Product extends ListProduct
     }
 
     /**
-     * @return \Shopware\Bundle\StoreFrontBundle\Configurator\Group[]
+     * @return \Shopware\Bundle\StoreFrontBundle\Configurator\ConfiguratorGroup[]
      */
     public function getConfiguration()
     {
@@ -284,5 +281,4 @@ class Product extends ListProduct
 
         return $selection;
     }
-
 }

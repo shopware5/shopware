@@ -27,7 +27,6 @@ namespace Shopware\Bundle\StoreFrontBundle\Manufacturer;
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\StoreFrontBundle\Common\FieldHelper;
 use Shopware\Bundle\StoreFrontBundle\Context\TranslationContext;
-use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
  * @category  Shopware
@@ -62,8 +61,8 @@ class ManufacturerGateway
     private $connection;
 
     /**
-     * @param Connection                    $connection
-     * @param FieldHelper                   $fieldHelper
+     * @param Connection           $connection
+     * @param FieldHelper          $fieldHelper
      * @param ManufacturerHydrator $manufacturerHydrator
      */
     public function __construct(
@@ -77,7 +76,7 @@ class ManufacturerGateway
     }
 
     /**
-     * @param int[]                     $ids
+     * @param int[]              $ids
      * @param TranslationContext $context
      *
      * @return \Shopware\Bundle\StoreFrontBundle\Manufacturer\Manufacturer[] Indexed by the manufacturer id

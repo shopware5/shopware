@@ -26,7 +26,6 @@ namespace Shopware\Bundle\StoreFrontBundle\CustomerGroup;
 
 use Shopware\Bundle\StoreFrontBundle\Common\AttributeHydrator;
 use Shopware\Bundle\StoreFrontBundle\Common\Hydrator;
-use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
  * @category  Shopware
@@ -51,11 +50,11 @@ class CustomerGroupHydrator extends Hydrator
     /**
      * @param array $data
      *
-     * @return Group
+     * @return CustomerGroup
      */
     public function hydrate(array $data)
     {
-        $customerGroup = new Group();
+        $customerGroup = new CustomerGroup();
 
         $customerGroup->setId((int) $data['__customerGroup_id']);
 

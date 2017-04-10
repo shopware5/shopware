@@ -25,7 +25,6 @@
 namespace Shopware\Bundle\StoreFrontBundle\Unit;
 
 use Shopware\Bundle\StoreFrontBundle\Common\Hydrator;
-use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
  * @category  Shopware
@@ -51,8 +50,8 @@ class UnitHydrator extends Hydrator
     /**
      * Assigns the passed data array to the passed unit instance.
      *
-     * @param Unit $unit
-     * @param array               $data
+     * @param Unit  $unit
+     * @param array $data
      */
     private function assignUnitData(Unit $unit, array $data)
     {

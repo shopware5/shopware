@@ -26,7 +26,6 @@ namespace Shopware\Bundle\StoreFrontBundle\ShopPage;
 
 use Shopware\Bundle\StoreFrontBundle\Common\AttributeHydrator;
 use Shopware\Bundle\StoreFrontBundle\Common\Hydrator;
-use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
  * @category  Shopware
@@ -63,7 +62,7 @@ class ShopPageHydrator extends Hydrator
 
     /**
      * @param ShopPage $shopPage
-     * @param array           $data
+     * @param array    $data
      */
     private function assignData(ShopPage $shopPage, array $data)
     {

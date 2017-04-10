@@ -32,7 +32,7 @@ use Shopware\Bundle\StoreFrontBundle\Media\Media;
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Option extends Extendable
+class ConfiguratorOption extends Extendable
 {
     /**
      * @var int

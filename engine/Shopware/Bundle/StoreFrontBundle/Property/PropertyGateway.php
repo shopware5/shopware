@@ -27,7 +27,6 @@ namespace Shopware\Bundle\StoreFrontBundle\Property;
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\StoreFrontBundle\Common\FieldHelper;
 use Shopware\Bundle\StoreFrontBundle\Context\TranslationContext;
-use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
  * @category  Shopware
@@ -79,7 +78,7 @@ class PropertyGateway
     /**
      * @param Connection                  $connection
      * @param FieldHelper                 $fieldHelper
-     * @param PropertyHydrator $propertyHydrator
+     * @param PropertyHydrator            $propertyHydrator
      * @param \Shopware_Components_Config $config
      */
     public function __construct(
@@ -93,7 +92,7 @@ class PropertyGateway
     }
 
     /**
-     * The \Shopware\Bundle\StoreFrontBundle\Property\Set requires the following data:
+     * The \Shopware\Bundle\StoreFrontBundle\Property\PropertySet requires the following data:
      * - Property set data
      * - Property groups data
      * - Property options data
@@ -106,15 +105,15 @@ class PropertyGateway
      *
      * Required conditions for the selection:
      * - Selects only values which ids provided
-     * - Property values has to be sorted by the \Shopware\Bundle\StoreFrontBundle\Property\Set sort mode.
+     * - Property values has to be sorted by the \Shopware\Bundle\StoreFrontBundle\Property\PropertySet sort mode.
      *  - Sort mode equals to 1, the values are sorted by the numeric value
      *  - Sort mode equals to 3, the values are sorted by the position
      *  - In all other cases the values are sorted by their alphanumeric value
      *
-     * @param int[]                     $valueIds
+     * @param int[]              $valueIds
      * @param TranslationContext $context
      *
-     * @return \Shopware\Bundle\StoreFrontBundle\Property\Set[] Each array element (set, group, option) is indexed by his id
+     * @return \Shopware\Bundle\StoreFrontBundle\Property\PropertySet[] Each array element (set, group, option) is indexed by his id
      */
     public function getList(array $valueIds, TranslationContext $context)
     {

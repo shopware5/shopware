@@ -25,11 +25,9 @@
 namespace Shopware\Bundle\StoreFrontBundle\PriceGroup;
 
 use Doctrine\DBAL\Connection;
-
 use Shopware\Bundle\StoreFrontBundle\Common\FieldHelper;
-use Shopware\Bundle\StoreFrontBundle\CustomerGroup\Group;
+use Shopware\Bundle\StoreFrontBundle\CustomerGroup\CustomerGroup;
 use Shopware\Bundle\StoreFrontBundle\Price\PriceHydrator;
-use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
  * @category  Shopware
@@ -64,8 +62,8 @@ class PriceGroupGateway
     private $connection;
 
     /**
-     * @param Connection             $connection
-     * @param FieldHelper            $fieldHelper
+     * @param Connection    $connection
+     * @param FieldHelper   $fieldHelper
      * @param PriceHydrator $priceHydrator
      */
     public function __construct(
@@ -83,11 +81,11 @@ class PriceGroupGateway
      * - Price group base data
      * - Price group discounts for the provided customer group
      *
-     * @param Group       $customerGroup
+     * @param CustomerGroup $customerGroup
      *
      * @return PriceGroup[] Indexed by the price group id
      */
-    public function getPriceGroups(Group $customerGroup)
+    public function getPriceGroups(CustomerGroup $customerGroup)
     {
         $query = $this->connection->createQueryBuilder();
 

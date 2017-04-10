@@ -22,17 +22,17 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\StoreFrontBundle\Configurator;
-
+namespace Shopware\Bundle\StoreFrontBundle\Property;
 
 use Shopware\Bundle\StoreFrontBundle\Common\Extendable;
+use Shopware\Bundle\StoreFrontBundle\Media\Media;
 
 /**
  * @category  Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Set extends Extendable
+class PropertyOption extends Extendable
 {
     /**
      * @var int
@@ -45,21 +45,25 @@ class Set extends Extendable
     protected $name;
 
     /**
-     * @var string
+     * @var Media
      */
-    protected $type;
+    protected $media;
 
     /**
-     * @var Group[]
+     * @var int
      */
-    protected $groups = [];
+    protected $position;
 
     /**
      * @param int $id
+     *
+     * @return $this
      */
     public function setId($id)
     {
         $this->id = $id;
+
+        return $this;
     }
 
     /**
@@ -72,10 +76,14 @@ class Set extends Extendable
 
     /**
      * @param string $name
+     *
+     * @return $this
      */
     public function setName($name)
     {
         $this->name = $name;
+
+        return $this;
     }
 
     /**
@@ -87,51 +95,34 @@ class Set extends Extendable
     }
 
     /**
-     * @param string $type
+     * @return \Shopware\Bundle\StoreFrontBundle\Media\Media
      */
-    public function setType($type)
+    public function getMedia()
     {
-        $this->type = $type;
+        return $this->media;
     }
 
     /**
-     * @return string
+     * @param \Shopware\Bundle\StoreFrontBundle\Media\Media $media
      */
-    public function getType()
+    public function setMedia($media)
     {
-        return $this->type;
+        $this->media = $media;
     }
 
     /**
-     * @return \Shopware\Bundle\StoreFrontBundle\Configurator\Group[]
+     * @return int
      */
-    public function getGroups()
+    public function getPosition()
     {
-        return $this->groups;
+        return $this->position;
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Configurator\Group[] $groups
+     * @param int $position
      */
-    public function setGroups($groups)
+    public function setPosition($position)
     {
-        $this->groups = $groups;
+        $this->position = $position;
     }
-
-    /**
-     * Returns a bool indicating if the set is fully configured (each group has a selected value)
-     *
-     * @return bool
-     */
-    public function isSelectionSpecified()
-    {
-        foreach ($this->groups as $group) {
-            if (!$group->isSelected()) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
 }

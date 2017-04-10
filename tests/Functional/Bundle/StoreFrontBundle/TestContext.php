@@ -61,7 +61,7 @@ class TestContext extends ShopContext
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\CustomerGroup\Group $currentCustomerGroup
+     * @param \Shopware\Bundle\StoreFrontBundle\CustomerGroup\CustomerGroup $currentCustomerGroup
      */
     public function setCurrentCustomerGroup($currentCustomerGroup)
     {
@@ -69,7 +69,7 @@ class TestContext extends ShopContext
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\CustomerGroup\Group $fallbackCustomerGroup
+     * @param \Shopware\Bundle\StoreFrontBundle\CustomerGroup\CustomerGroup $fallbackCustomerGroup
      */
     public function setFallbackCustomerGroup($fallbackCustomerGroup)
     {

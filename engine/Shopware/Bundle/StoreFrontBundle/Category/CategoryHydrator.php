@@ -28,7 +28,6 @@ use Shopware\Bundle\StoreFrontBundle\Common\AttributeHydrator;
 use Shopware\Bundle\StoreFrontBundle\Common\Hydrator;
 use Shopware\Bundle\StoreFrontBundle\Media\MediaHydrator;
 use Shopware\Bundle\StoreFrontBundle\ProductStream\ProductStreamHydrator;
-use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
  * @category  Shopware
@@ -53,9 +52,9 @@ class CategoryHydrator extends Hydrator
     private $productStreamHydrator;
 
     /**
-     * @param AttributeHydrator     $attributeHydrator
-     * @param \Shopware\Bundle\StoreFrontBundle\Media\MediaHydrator         $mediaHydrator
-     * @param ProductStreamHydrator $productStreamHydrator
+     * @param AttributeHydrator                                     $attributeHydrator
+     * @param \Shopware\Bundle\StoreFrontBundle\Media\MediaHydrator $mediaHydrator
+     * @param ProductStreamHydrator                                 $productStreamHydrator
      */
     public function __construct(
         AttributeHydrator $attributeHydrator,

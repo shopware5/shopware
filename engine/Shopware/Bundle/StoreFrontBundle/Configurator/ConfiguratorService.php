@@ -24,12 +24,8 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Configurator;
 
-
-
-
-use Shopware\Bundle\StoreFrontBundle\Product\BaseProduct;
-
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Product\BaseProduct;
 
 /**
  * @category  Shopware
@@ -54,7 +50,7 @@ class ConfiguratorService implements ConfiguratorServiceInterface
 
     /**
      * @param \Shopware\Bundle\StoreFrontBundle\Configurator\ProductConfigurationGateway $productConfigurationGateway
-     * @param ConfiguratorGateway         $configuratorGateway
+     * @param ConfiguratorGateway                                                        $configuratorGateway
      */
     public function __construct(
         ProductConfigurationGateway $productConfigurationGateway,
@@ -132,13 +128,13 @@ class ConfiguratorService implements ConfiguratorServiceInterface
      * Checks if the passed combination is compatible with the provided customer configurator
      * selection.
      *
-     * @param Group $group
-     * @param array $combinations
+     * @param ConfiguratorGroup $group
+     * @param array             $combinations
      * @param $selection
      *
      * @return bool
      */
-    private function isCombinationValid(Group $group, $combinations, $selection)
+    private function isCombinationValid(ConfiguratorGroup $group, $combinations, $selection)
     {
         if (empty($combinations)) {
             return false;

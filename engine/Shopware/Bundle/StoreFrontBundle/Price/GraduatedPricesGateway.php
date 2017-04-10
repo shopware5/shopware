@@ -27,8 +27,7 @@ namespace Shopware\Bundle\StoreFrontBundle\Price;
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\StoreFrontBundle\Common\FieldHelper;
 use Shopware\Bundle\StoreFrontBundle\Context\TranslationContext;
-use Shopware\Bundle\StoreFrontBundle\CustomerGroup\Group;
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\CustomerGroup\CustomerGroup;
 
 /**
  * @category  Shopware
@@ -63,8 +62,8 @@ class GraduatedPricesGateway
     private $connection;
 
     /**
-     * @param Connection             $connection
-     * @param FieldHelper            $fieldHelper
+     * @param Connection    $connection
+     * @param FieldHelper   $fieldHelper
      * @param PriceHydrator $priceHydrator
      */
     public function __construct(
@@ -78,13 +77,13 @@ class GraduatedPricesGateway
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Product\ListProduct[]      $products
-     * @param TranslationContext $context
-     * @param Group     $customerGroup
+     * @param \Shopware\Bundle\StoreFrontBundle\Product\ListProduct[] $products
+     * @param TranslationContext                                      $context
+     * @param CustomerGroup                                           $customerGroup
      *
      * @return array indexed by the product order number, each array element contains a Struct\Product\PriceRule array
      */
-    public function getList($products, TranslationContext $context, Group $customerGroup)
+    public function getList($products, TranslationContext $context, CustomerGroup $customerGroup)
     {
         $ids = [];
         foreach ($products as $product) {

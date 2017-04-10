@@ -26,7 +26,6 @@ namespace Shopware\Bundle\StoreFrontBundle\Manufacturer;
 
 use Shopware\Bundle\StoreFrontBundle\Common\AttributeHydrator;
 use Shopware\Bundle\StoreFrontBundle\Common\Hydrator;
-use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
  * @category  Shopware
@@ -72,7 +71,7 @@ class ManufacturerHydrator extends Hydrator
 
     /**
      * @param Manufacturer $manufacturer
-     * @param array                       $data
+     * @param array        $data
      */
     private function assignData(Manufacturer $manufacturer, array $data)
     {

@@ -24,8 +24,6 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Property;
 
-use Shopware\Bundle\StoreFrontBundle\Product\BaseProduct;
-
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 
 /**
@@ -36,10 +34,10 @@ use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 interface PropertyServiceInterface
 {
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Product\BaseProduct[]        $products
-     * @param ShopContextInterface $context
+     * @param \Shopware\Bundle\StoreFrontBundle\Product\BaseProduct[] $products
+     * @param ShopContextInterface                                    $context
      *
-     * @return Set[]
+     * @return PropertySet[]
      */
     public function getList($products, ShopContextInterface $context);
 }

@@ -83,7 +83,7 @@ abstract class TestCase extends \Enlight_Components_Test_TestCase
     }
 
     /**
-     * @return \Shopware\Bundle\StoreFrontBundle\CustomerGroup\Group
+     * @return \Shopware\Bundle\StoreFrontBundle\CustomerGroup\CustomerGroup
      */
     public function getEkCustomerGroup()
     {

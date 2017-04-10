@@ -28,14 +28,11 @@ use Shopware\Bundle\CartBundle\Domain\Delivery\ShippingLocation;
 use Shopware\Bundle\StoreFrontBundle\Common\Extendable;
 use Shopware\Bundle\StoreFrontBundle\Currency\Currency;
 use Shopware\Bundle\StoreFrontBundle\Customer\Customer;
-use Shopware\Bundle\StoreFrontBundle\CustomerGroup\Group;
+use Shopware\Bundle\StoreFrontBundle\CustomerGroup\CustomerGroup;
 use Shopware\Bundle\StoreFrontBundle\PaymentMethod\PaymentMethod;
-
 use Shopware\Bundle\StoreFrontBundle\ShippingMethod\ShippingMethod;
 use Shopware\Bundle\StoreFrontBundle\Shop\Shop;
-
 use Shopware\Bundle\StoreFrontBundle\Tax\Tax;
-
 
 /**
  * @category  Shopware
@@ -45,12 +42,12 @@ use Shopware\Bundle\StoreFrontBundle\Tax\Tax;
 class ShopContext extends Extendable implements ShopContextInterface
 {
     /**
-     * @var Group
+     * @var CustomerGroup
      */
     protected $currentCustomerGroup;
 
     /**
-     * @var \Shopware\Bundle\StoreFrontBundle\CustomerGroup\Group
+     * @var \Shopware\Bundle\StoreFrontBundle\CustomerGroup\CustomerGroup
      */
     protected $fallbackCustomerGroup;
 
@@ -100,22 +97,22 @@ class ShopContext extends Extendable implements ShopContextInterface
     protected $shippingLocation;
 
     /**
-     * @param Shop             $shop
-     * @param Currency         $currency
-     * @param Group            $currentCustomerGroup
-     * @param \Shopware\Bundle\StoreFrontBundle\CustomerGroup\Group            $fallbackCustomerGroup
-     * @param \Shopware\Bundle\StoreFrontBundle\Tax\Tax[]            $taxRules
+     * @param Shop                                                          $shop
+     * @param Currency                                                      $currency
+     * @param CustomerGroup                                                 $currentCustomerGroup
+     * @param \Shopware\Bundle\StoreFrontBundle\CustomerGroup\CustomerGroup $fallbackCustomerGroup
+     * @param \Shopware\Bundle\StoreFrontBundle\Tax\Tax[]                   $taxRules
      * @param \Shopware\Bundle\StoreFrontBundle\PriceGroup\PriceGroup[]     $priceGroups
-     * @param PaymentMethod    $paymentMethod
-     * @param ShippingMethod   $shippingMethod
-     * @param ShippingLocation $shippingLocation
-     * @param Customer         $customer
+     * @param PaymentMethod                                                 $paymentMethod
+     * @param ShippingMethod                                                $shippingMethod
+     * @param ShippingLocation                                              $shippingLocation
+     * @param Customer                                                      $customer
      */
     public function __construct(
         Shop $shop,
         Currency $currency,
-        Group $currentCustomerGroup,
-        Group $fallbackCustomerGroup,
+        CustomerGroup $currentCustomerGroup,
+        CustomerGroup $fallbackCustomerGroup,
         array $taxRules,
         array $priceGroups,
         PaymentMethod $paymentMethod,
@@ -146,12 +143,12 @@ class ShopContext extends Extendable implements ShopContextInterface
         return $this->currency;
     }
 
-    public function getCurrentCustomerGroup(): Group
+    public function getCurrentCustomerGroup(): CustomerGroup
     {
         return $this->currentCustomerGroup;
     }
 
-    public function getFallbackCustomerGroup(): Group
+    public function getFallbackCustomerGroup(): CustomerGroup
     {
         return $this->fallbackCustomerGroup;
     }

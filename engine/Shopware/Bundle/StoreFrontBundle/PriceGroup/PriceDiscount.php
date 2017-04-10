@@ -24,7 +24,6 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\PriceGroup;
 
-
 use Shopware\Bundle\StoreFrontBundle\Common\Extendable;
 
 /**
@@ -40,7 +39,7 @@ class PriceDiscount extends Extendable
     protected $id;
 
     /**
-     * @var \Shopware\Bundle\StoreFrontBundle\CustomerGroup\Group
+     * @var \Shopware\Bundle\StoreFrontBundle\CustomerGroup\CustomerGroup
      */
     protected $customerGroup;
 
@@ -71,7 +70,7 @@ class PriceDiscount extends Extendable
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\CustomerGroup\Group $customerGroup
+     * @param \Shopware\Bundle\StoreFrontBundle\CustomerGroup\CustomerGroup $customerGroup
      */
     public function setCustomerGroup($customerGroup)
     {
@@ -79,7 +78,7 @@ class PriceDiscount extends Extendable
     }
 
     /**
-     * @return \Shopware\Bundle\StoreFrontBundle\CustomerGroup\Group
+     * @return \Shopware\Bundle\StoreFrontBundle\CustomerGroup\CustomerGroup
      */
     public function getCustomerGroup()
     {

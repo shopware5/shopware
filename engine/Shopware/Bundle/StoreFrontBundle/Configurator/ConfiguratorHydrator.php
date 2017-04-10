@@ -26,7 +26,6 @@ namespace Shopware\Bundle\StoreFrontBundle\Configurator;
 
 use Shopware\Bundle\StoreFrontBundle\Common\AttributeHydrator;
 use Shopware\Bundle\StoreFrontBundle\Common\Hydrator;
-use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
  * @category  Shopware
@@ -51,7 +50,7 @@ class ConfiguratorHydrator extends Hydrator
     /**
      * @param array $data
      *
-     * @return Set
+     * @return ConfiguratorSet
      */
     public function hydrate(array $data)
     {
@@ -64,7 +63,7 @@ class ConfiguratorHydrator extends Hydrator
     /**
      * @param array $data
      *
-     * @return Group[]
+     * @return ConfiguratorGroup[]
      */
     public function hydrateGroups(array $data)
     {
@@ -91,11 +90,11 @@ class ConfiguratorHydrator extends Hydrator
     /**
      * @param $data
      *
-     * @return Set
+     * @return ConfiguratorSet
      */
     private function createSet($data)
     {
-        $set = new Set();
+        $set = new ConfiguratorSet();
         $set->setId((int) $data['__configuratorSet_id']);
         $set->setName($data['__configuratorSet_name']);
         $set->setType((int) $data['__configuratorSet_type']);
@@ -106,11 +105,11 @@ class ConfiguratorHydrator extends Hydrator
     /**
      * @param array $data
      *
-     * @return Group
+     * @return ConfiguratorGroup
      */
     private function createGroup($data)
     {
-        $group = new Group();
+        $group = new ConfiguratorGroup();
         $translation = $this->getTranslation($data, '__configuratorGroup');
         $data = array_merge($data, $translation);
 
@@ -128,11 +127,11 @@ class ConfiguratorHydrator extends Hydrator
     /**
      * @param array $data
      *
-     * @return Option
+     * @return ConfiguratorOption
      */
     private function createOption($data)
     {
-        $option = new Option();
+        $option = new ConfiguratorOption();
 
         $translation = $this->getTranslation($data, '__configuratorOption');
         $data = array_merge($data, $translation);

@@ -26,7 +26,6 @@ namespace Shopware\Bundle\StoreFrontBundle\SimilarProduct;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\StoreFrontBundle\Context\TranslationContext;
-use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
  * @category  Shopware
@@ -61,8 +60,8 @@ class SimilarProductGateway
      *    'SW200' => array('SW201', 'SW202')
      * )
      *
-     * @param \Shopware\Bundle\StoreFrontBundle\Product\BaseProduct[]      $products
-     * @param TranslationContext $context
+     * @param \Shopware\Bundle\StoreFrontBundle\Product\BaseProduct[] $products
+     * @param TranslationContext                                      $context
      *
      * @return array Indexed by the product number
      */

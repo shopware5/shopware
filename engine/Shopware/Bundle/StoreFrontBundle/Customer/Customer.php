@@ -28,8 +28,8 @@ namespace Shopware\Bundle\StoreFrontBundle\Customer;
 use Shopware\Bundle\CartBundle\Domain\CloneTrait;
 use Shopware\Bundle\CartBundle\Domain\JsonSerializableTrait;
 use Shopware\Bundle\StoreFrontBundle\Address\Address;
-use Shopware\Bundle\StoreFrontBundle\CustomerGroup\Group;
 use Shopware\Bundle\StoreFrontBundle\Common\Extendable;
+use Shopware\Bundle\StoreFrontBundle\CustomerGroup\CustomerGroup;
 use Shopware\Bundle\StoreFrontBundle\PaymentMethod\PaymentMethod;
 use Shopware\Bundle\StoreFrontBundle\Shop\Shop;
 
@@ -169,7 +169,7 @@ class Customer extends Extendable
     protected $internalComment;
 
     /**
-     * @var Group
+     * @var CustomerGroup
      */
     protected $customerGroup;
 
@@ -478,12 +478,12 @@ class Customer extends Extendable
         $this->internalComment = $internalComment;
     }
 
-    public function getCustomerGroup(): Group
+    public function getCustomerGroup(): CustomerGroup
     {
         return $this->customerGroup;
     }
 
-    public function setCustomerGroup(Group $customerGroup): void
+    public function setCustomerGroup(CustomerGroup $customerGroup): void
     {
         $this->customerGroup = $customerGroup;
     }

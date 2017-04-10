@@ -32,7 +32,7 @@ use Shopware\Bundle\StoreFrontBundle\Common\Extendable;
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Group extends Extendable
+class ConfiguratorGroup extends Extendable
 {
     /**
      * @var int
@@ -50,7 +50,7 @@ class Group extends Extendable
     protected $description;
 
     /**
-     * @var Option[]
+     * @var ConfiguratorOption[]
      */
     protected $options = [];
 
@@ -108,7 +108,7 @@ class Group extends Extendable
     }
 
     /**
-     * @return \Shopware\Bundle\StoreFrontBundle\Configurator\Option[]
+     * @return \Shopware\Bundle\StoreFrontBundle\Configurator\ConfiguratorOption[]
      */
     public function getOptions()
     {
@@ -116,7 +116,7 @@ class Group extends Extendable
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Configurator\Option[] $options
+     * @param \Shopware\Bundle\StoreFrontBundle\Configurator\ConfiguratorOption[] $options
      */
     public function setOptions($options)
     {
@@ -124,9 +124,9 @@ class Group extends Extendable
     }
 
     /**
-     * @param Option $option
+     * @param ConfiguratorOption $option
      */
-    public function addOption(Option $option)
+    public function addOption(ConfiguratorOption $option)
     {
         $this->options[] = $option;
     }

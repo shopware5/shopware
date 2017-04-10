@@ -27,7 +27,6 @@ namespace Shopware\Bundle\StoreFrontBundle\CustomerGroup;
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\StoreFrontBundle\Common\FieldHelper;
 
-
 /**
  * @category  Shopware
  *
@@ -61,8 +60,8 @@ class CustomerGroupGateway
     private $connection;
 
     /**
-     * @param Connection                     $connection
-     * @param FieldHelper                    $fieldHelper
+     * @param Connection            $connection
+     * @param FieldHelper           $fieldHelper
      * @param CustomerGroupHydrator $customerGroupHydrator
      */
     public function __construct(
@@ -78,7 +77,7 @@ class CustomerGroupGateway
     /**
      * @param string[] $keys
      *
-     * @return Group[] Indexed by the customer group key
+     * @return CustomerGroup[] Indexed by the customer group key
      */
     public function getList(array $keys)
     {

@@ -24,7 +24,7 @@
 
 namespace Shopware\tests\Functional\Bundle\StoreFrontBundle;
 
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Common\Struct;
 use Shopware\Models;
 
 class Converter
@@ -145,11 +145,11 @@ class Converter
     /**
      * @param Models\Customer\Group $group
      *
-     * @return \Shopware\Bundle\StoreFrontBundle\CustomerGroup\Group
+     * @return \Shopware\Bundle\StoreFrontBundle\CustomerGroup\CustomerGroup
      */
     public function convertCustomerGroup(Models\Customer\Group $group)
     {
-        $customerGroup = new \Shopware\Bundle\StoreFrontBundle\CustomerGroup\Group();
+        $customerGroup = new \Shopware\Bundle\StoreFrontBundle\CustomerGroup\CustomerGroup();
         $customerGroup->setKey($group->getKey());
         $customerGroup->setUseDiscount($group->getMode());
         $customerGroup->setId($group->getId());

@@ -1127,7 +1127,7 @@ class sExport
 
                 $configurationGroups = $this->configuratorService->getProductConfiguration($product, $context);
 
-                /* @var \Shopware\Bundle\StoreFrontBundle\Configurator\Group $configuratorOption */
+                /* @var \Shopware\Bundle\StoreFrontBundle\Configurator\ConfiguratorGroup $configuratorOption */
                 foreach ($configurationGroups as $configurationGroup) {
                     $option = current($configurationGroup->getOptions());
                     $row['configurator_options'][$configurationGroup->getName()] = $option->getName();

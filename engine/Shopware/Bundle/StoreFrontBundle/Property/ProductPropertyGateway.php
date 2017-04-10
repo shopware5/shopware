@@ -27,7 +27,7 @@ namespace Shopware\Bundle\StoreFrontBundle\Property;
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\StoreFrontBundle\Common\FieldHelper;
 use Shopware\Bundle\StoreFrontBundle\Context\TranslationContext;
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Product\BaseProduct;
 
 /**
  * @category  Shopware
@@ -62,8 +62,8 @@ class ProductPropertyGateway
     private $connection;
 
     /**
-     * @param Connection                $connection
-     * @param FieldHelper               $fieldHelper
+     * @param Connection       $connection
+     * @param FieldHelper      $fieldHelper
      * @param PropertyHydrator $propertyHydrator
      */
     public function __construct(
@@ -77,10 +77,10 @@ class ProductPropertyGateway
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Product\BaseProduct[]      $products
+     * @param BaseProduct[]      $products
      * @param TranslationContext $context
      *
-     * @return \Shopware\Bundle\StoreFrontBundle\Property\Set[] Indexed by the product order number
+     * @return PropertySet[] Indexed by the product order number
      */
     public function getList($products, TranslationContext $context)
     {

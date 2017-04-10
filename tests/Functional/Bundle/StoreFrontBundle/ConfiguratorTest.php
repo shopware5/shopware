@@ -24,7 +24,7 @@
 
 namespace Shopware\Tests\Functional\Bundle\StoreFrontBundle;
 
-use Shopware\Bundle\StoreFrontBundle\Configurator\Set;
+use Shopware\Bundle\StoreFrontBundle\Configurator\ConfiguratorSet;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
 use Shopware\Bundle\StoreFrontBundle\Product\ListProduct;
 use Shopware\Models\Category\Category;
@@ -72,7 +72,7 @@ class ConfiguratorTest extends TestCase
         $configurator = Shopware()->Container()->get('storefront.configurator.service')
             ->getProductConfigurator($product, $context, []);
 
-        $this->assertInstanceOf('Shopware\Bundle\StoreFrontBundle\Configurator\Set', $configurator);
+        $this->assertInstanceOf('Shopware\Bundle\StoreFrontBundle\Configurator\ConfiguratorSet', $configurator);
 
         $this->assertCount(3, $configurator->getGroups());
         foreach ($configurator->getGroups() as $group) {
@@ -229,7 +229,7 @@ class ConfiguratorTest extends TestCase
         return $selection;
     }
 
-    private function assertInactiveOptions(Set $configurator, $expectedOptions)
+    private function assertInactiveOptions(ConfiguratorSet $configurator, $expectedOptions)
     {
         foreach ($configurator->getGroups() as $group) {
             foreach ($group->getOptions() as $option) {

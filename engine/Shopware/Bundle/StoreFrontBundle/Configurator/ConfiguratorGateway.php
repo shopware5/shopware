@@ -26,12 +26,10 @@ namespace Shopware\Bundle\StoreFrontBundle\Configurator;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
-use Shopware\Bundle\StoreFrontBundle\Context\TranslationContext;
-use Shopware\Bundle\StoreFrontBundle\Gateway;
 use Shopware\Bundle\StoreFrontBundle\Common\FieldHelper;
+use Shopware\Bundle\StoreFrontBundle\Context\TranslationContext;
 use Shopware\Bundle\StoreFrontBundle\Media\MediaGateway;
 use Shopware\Bundle\StoreFrontBundle\Product\BaseProduct;
-use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
  * @category  Shopware
@@ -71,10 +69,10 @@ class ConfiguratorGateway
     private $connection;
 
     /**
-     * @param Connection                                             $connection
-     * @param FieldHelper                                            $fieldHelper
+     * @param Connection           $connection
+     * @param FieldHelper          $fieldHelper
      * @param ConfiguratorHydrator $configuratorHydrator
-     * @param MediaGateway $mediaGateway
+     * @param MediaGateway         $mediaGateway
      */
     public function __construct(
         Connection $connection,
@@ -89,7 +87,7 @@ class ConfiguratorGateway
     }
 
     /**
-     * The \Shopware\Bundle\StoreFrontBundle\Configurator\Set requires the following data:
+     * The \Shopware\Bundle\StoreFrontBundle\Configurator\PropertySet requires the following data:
      * - Configurator set
      * - Core attribute of the configurator set
      * - Groups of the configurator set
@@ -108,7 +106,7 @@ class ConfiguratorGateway
      * @param BaseProduct        $product
      * @param TranslationContext $context
      *
-     * @return \Shopware\Bundle\StoreFrontBundle\Configurator\Set
+     * @return \Shopware\Bundle\StoreFrontBundle\Configurator\ConfiguratorSet
      */
     public function get(BaseProduct $product, TranslationContext $context)
     {

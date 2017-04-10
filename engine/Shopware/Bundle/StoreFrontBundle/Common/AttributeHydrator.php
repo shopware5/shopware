@@ -24,10 +24,6 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Common;
 
-
-
-use Shopware\Bundle\StoreFrontBundle\Struct;
-
 /**
  * @category  Shopware
  *
@@ -61,10 +57,10 @@ class AttributeHydrator extends Hydrator
 
     /**
      * @param \Shopware\Bundle\StoreFrontBundle\Common\Extendable $struct
-     * @param array             $data
-     * @param string            $arrayKey
-     * @param string            $attributeKey
-     * @param null|string       $translationKey
+     * @param array                                               $data
+     * @param string                                              $arrayKey
+     * @param string                                              $attributeKey
+     * @param null|string                                         $translationKey
      */
     public function addAttribute(ExtendableInterface $struct, $data, $arrayKey, $attributeKey = null, $translationKey = null)
     {

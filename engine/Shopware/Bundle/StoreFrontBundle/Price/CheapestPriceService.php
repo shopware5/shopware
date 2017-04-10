@@ -24,14 +24,10 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Price;
 
-
-
-use Shopware\Bundle\StoreFrontBundle\Product\BaseProduct;
-use Shopware\Bundle\StoreFrontBundle\CustomerGroup\Group;
-use Shopware\Bundle\StoreFrontBundle\Product\ListProduct;
-use Shopware\Bundle\StoreFrontBundle\PriceGroup\PriceDiscount;
-
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\CustomerGroup\CustomerGroup;
+use Shopware\Bundle\StoreFrontBundle\Product\BaseProduct;
+use Shopware\Bundle\StoreFrontBundle\Product\ListProduct;
 
 /**
  * @category  Shopware
@@ -51,8 +47,8 @@ class CheapestPriceService implements CheapestPriceServiceInterface
     private $config;
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Price\CheapestPriceGateway        $cheapestPriceGateway
-     * @param \Shopware_Components_Config $config
+     * @param \Shopware\Bundle\StoreFrontBundle\Price\CheapestPriceGateway $cheapestPriceGateway
+     * @param \Shopware_Components_Config                                  $config
      */
     public function __construct(
         CheapestPriceGateway $cheapestPriceGateway,
@@ -144,11 +140,11 @@ class CheapestPriceService implements CheapestPriceServiceInterface
      *
      * @param BaseProduct[] $products
      * @param PriceRule[]   $priceRules
-     * @param Group         $group
+     * @param CustomerGroup $group
      *
      * @return array
      */
-    private function buildPrices($products, array $priceRules, Group $group)
+    private function buildPrices($products, array $priceRules, CustomerGroup $group)
     {
         $prices = [];
 
