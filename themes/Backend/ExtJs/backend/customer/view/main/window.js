@@ -86,8 +86,6 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
             selectionChanged: Ext.bind(me.streamSelected, me)
         });
 
-        // me.streamListing.on('customerStream-edit-item', Ext.bind(me.editStream, me));
-
         me.filterPanel = Ext.create('Shopware.apps.Customer.view.customer_stream.ConditionPanel', { flex: 4 });
 
         me.metaChart = Ext.create('Shopware.apps.Customer.view.chart.MetaChart');
@@ -140,24 +138,8 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
 
         me.callParent(arguments);
 
-        me.resetProgressbar();
+        me.fireEvent('reset-progressbar');
     },
-
-    resetProgressbar: function () {
-        var me = this;
-
-        Ext.Ajax.request({
-            url: '{url controller=CustomerStream action=getLastFullIndexTime}',
-            success: function(operation) {
-                var response = Ext.decode(operation.responseText);
-                Ext.defer(function () {
-                    me.indexingBar.updateProgress(0, '{s name=window/last_analyse}Last analyse at: {/s}' + Ext.util.Format.date(response.last_index_time), true);
-                }, 1000);
-            }
-        });
-    },
-
-
     /**
      * Creates the grid toolbar with the add and delete button
      *
@@ -175,10 +157,9 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
         return me.toolbar;
     },
 
-
     customerSelected: function (selection) {
         var me = this;
-        me.deleteCustomerButton.setDisabled(selection.length == 0);
+        me.deleteCustomerButton.setDisabled(selection.length === 0);
     },
 
 
@@ -303,27 +284,28 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
             text: '{s name=save}Save{/s}',
             cls: 'primary',
             handler: function () {
-                me.saveStreamDetails();
+                me.fireEvent('save-stream-details');
+                // me.saveStreamDetails();
             }
         });
     },
 
-    saveStreamDetails: function() {
-        var me = this;
-
-        if (!me.streamDetailForm.getForm().isValid()) {
-            return;
-        }
-        var record = me.streamDetailForm.getRecord();
-        me.streamDetailForm.getForm().updateRecord(record);
-
-        record.save({
-            callback: function() {
-                me.fireEvent('switch-layout', 'table');
-                me.updateTitles(record);
-            }
-        });
-    },
+    // saveStreamDetails: function() {
+    //     var me = this;
+    //
+    //     if (!me.streamDetailForm.getForm().isValid()) {
+    //         return;
+    //     }
+    //     var record = me.streamDetailForm.getRecord();
+    //     me.streamDetailForm.getForm().updateRecord(record);
+    //
+    //     record.save({
+    //         callback: function() {
+    //             me.fireEvent('switch-layout', 'table');
+    //             me.updateTitles(record);
+    //         }
+    //     });
+    // },
 
     updateProgressBar: function(request, response) {
         var me = this;
@@ -331,9 +313,10 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
     },
 
     finish: function() {
+        var me = this;
         this.formPanel.setDisabled(false);
         this.loadListing();
-        this.resetProgressbar();
+        me.fireEvent('reset-progressbar');
     }
 });
 //{/block}

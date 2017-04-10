@@ -65,7 +65,7 @@ Ext.define('Shopware.apps.Customer', {
      * Requires controllers for sub-application
      * @array
      */
-    controllers: [ 'Main', 'List', 'Detail', 'Order', 'Stream' ],
+    controllers: [ 'List', 'Detail', 'Order', 'Main', 'Stream' ],
 
     /**
      * The detail controller knows all form field sets and the detail window component
@@ -142,9 +142,9 @@ Ext.define('Shopware.apps.Customer', {
      */
     launch: function() {
         var me = this,
-            mainController = me.getController('Main');
+            mainController = me.getController('Main'),
+            streamController = me.getController('Stream');
 
-        me.getController('Stream').startPartialIndexing();
         return mainController.mainWindow;
     }
 });
