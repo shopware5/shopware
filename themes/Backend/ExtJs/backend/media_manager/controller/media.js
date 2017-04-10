@@ -93,7 +93,7 @@ Ext.define('Shopware.apps.MediaManager.controller.Media', {
                 changePreviewSize: me.onChangePreviewSize
             },
             'mediamanager-media-view button[action=mediamanager-media-view-layout]': {
-                change: me.onChangeLayout
+                'layout-button-click': me.onChangeLayout
             },
             'mediamanager-media-view button[action=mediamanager-media-view-delete]': {
                 click: me.onDeleteMedia
@@ -140,7 +140,7 @@ Ext.define('Shopware.apps.MediaManager.controller.Media', {
                     displayType: view.selectedLayout,
                     itemsPerPage: view.mediaStore.pageSize,
                     tableThumbnailSize: 16,
-                    gridThumbnailSize: 64
+                    gridThumbnailSize: 72
                 });
                 settingStore.add(settingRecord);
             }

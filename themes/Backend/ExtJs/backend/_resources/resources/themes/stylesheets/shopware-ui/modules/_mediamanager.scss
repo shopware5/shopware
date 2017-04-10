@@ -242,7 +242,7 @@
 	        }
 	    }
 
-        .thumb.icon .icon-unknown {
+        .thumb.icon [class^="icon"] {
             position: absolute;
             top: 50%;
             left: 50%;
