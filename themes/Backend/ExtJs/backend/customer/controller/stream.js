@@ -55,13 +55,16 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
             },
             'customer-list-main-window': {
                 'switch-layout': me.switchLayout,
-                'reset-conditions': me.resetConditions
+                'reset-conditions': me.resetConditions,
+                'reset-progressbar': me.resetProgressbar,
+                'save-stream-details': me.saveStreamDetails,
+                'customerStream-edit-item': me.editStream
             },
             'customer-list': {
                 'selection-changed': me.onCustomerSelectionChange
             },
             'customer-stream-listing': {
-                'customerStream-edit-item': me.editStream
+                'customerstream-edit-item': me.editStream
             }
         });
 
@@ -162,6 +165,7 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
     editStream: function(grid, record) {
         var me = this,
             window = me.getMainWindow();
+    console.log('asfdasf');
 
         var detail = Ext.create('Shopware.apps.Customer.view.customer_stream.Detail', {
             record: record
@@ -201,8 +205,27 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
         });
     },
 
+    saveStreamDetails: function() {
+        var me = this,
+            window = me.getMainWindow(),
+            streamDetailForm = window.streamDetailForm;
+
+        if (!streamDetailForm.getForm().isValid()) {
+            return;
+        }
+        var record = streamDetailForm.getRecord();
+        streamDetailForm.getForm().updateRecord(record);
+
+        record.save({
+            callback: function() {
+                me.switchLayout('table');
+                // todo maybe migrate to stream?
+                window.updateTitles(record);
+            }
+        });
+    },
+
     startPartialIndexing: function() {
-        console.log('entered');
         var me = this,
             window = me.getMainWindow();
 
@@ -225,6 +248,7 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
                     url: '{url controller=CustomerStream action=buildSearchIndex}',
                     params: params
                 }]);
+                me.resetProgressbar();
             }
         });
     },
@@ -266,6 +290,22 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
 
         window.resetFilterPanel();
         window.loadListing();
+    },
+
+    // todo move progress bar to toolbar.js!
+    resetProgressbar: function () {
+        var me = this,
+            window = me.getMainWindow();
+
+        Ext.Ajax.request({
+            url: '{url controller=CustomerStream action=getLastFullIndexTime}',
+            success: function(operation) {
+                var response = Ext.decode(operation.responseText);
+                Ext.defer(function () {
+                    window.indexingBar.updateProgress(0, '{s name=window/last_analyse}Last analyse at: {/s}' + Ext.util.Format.date(response.last_index_time), true);
+                }, 1000);
+            }
+        });
     }
 
 });
