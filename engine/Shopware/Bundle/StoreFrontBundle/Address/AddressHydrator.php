@@ -25,10 +25,9 @@ declare(strict_types=1);
 
 namespace Shopware\Bundle\StoreFrontBundle\Address;
 
-
 use Shopware\Bundle\StoreFrontBundle\Common\AttributeHydrator;
-use Shopware\Bundle\StoreFrontBundle\Country\CountryHydrator;
 use Shopware\Bundle\StoreFrontBundle\Common\Hydrator;
+use Shopware\Bundle\StoreFrontBundle\Country\CountryHydrator;
 
 class AddressHydrator extends Hydrator
 {
@@ -44,7 +43,7 @@ class AddressHydrator extends Hydrator
 
     /**
      * @param \Shopware\Bundle\StoreFrontBundle\Common\AttributeHydrator $attributeHydrator
-     * @param \Shopware\Bundle\StoreFrontBundle\Country\CountryHydrator   $countryHydrator
+     * @param \Shopware\Bundle\StoreFrontBundle\Country\CountryHydrator  $countryHydrator
      */
     public function __construct(AttributeHydrator $attributeHydrator, CountryHydrator $countryHydrator)
     {

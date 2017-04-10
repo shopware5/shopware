@@ -26,8 +26,6 @@ namespace Shopware\Bundle\StoreFrontBundle\Context;
 
 use Enlight_Components_Session_Namespace as Session;
 use Shopware\Bundle\StoreFrontBundle\Common\CacheInterface;
-
-
 use Shopware\Components\DependencyInjection\Container;
 use Shopware\Models;
 use Symfony\Component\DependencyInjection\ContainerInterface;

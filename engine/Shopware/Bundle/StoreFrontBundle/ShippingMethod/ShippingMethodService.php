@@ -25,8 +25,6 @@
 namespace Shopware\Bundle\StoreFrontBundle\ShippingMethod;
 
 use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
-
-
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 
 class ShippingMethodService

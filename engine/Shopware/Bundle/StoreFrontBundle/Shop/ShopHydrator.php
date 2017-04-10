@@ -29,10 +29,8 @@ use Shopware\Bundle\StoreFrontBundle\Common\Hydrator;
 use Shopware\Bundle\StoreFrontBundle\Country\CountryHydrator;
 use Shopware\Bundle\StoreFrontBundle\Currency\CurrencyHydrator;
 use Shopware\Bundle\StoreFrontBundle\CustomerGroup\CustomerGroupHydrator;
-
 use Shopware\Bundle\StoreFrontBundle\PaymentMethod\PaymentMethodHydrator;
 use Shopware\Bundle\StoreFrontBundle\ShippingMethod\ShippingMethodHydrator;
-
 
 class ShopHydrator extends Hydrator
 {
@@ -77,14 +75,14 @@ class ShopHydrator extends Hydrator
     private $shippingMethodHydrator;
 
     /**
-     * @param TemplateHydrator       $templateHydrator
-     * @param CategoryHydrator       $categoryHydrator
-     * @param \Shopware\Bundle\StoreFrontBundle\Shop\LocaleHydrator         $localeHydrator
-     * @param CurrencyHydrator       $currencyHydrator
-     * @param CustomerGroupHydrator  $customerGroupHydrator
-     * @param CountryHydrator        $countryHydrator
-     * @param PaymentMethodHydrator  $paymentMethodHydrator
-     * @param ShippingMethodHydrator $shippingMethodHydrator
+     * @param TemplateHydrator                                      $templateHydrator
+     * @param CategoryHydrator                                      $categoryHydrator
+     * @param \Shopware\Bundle\StoreFrontBundle\Shop\LocaleHydrator $localeHydrator
+     * @param CurrencyHydrator                                      $currencyHydrator
+     * @param CustomerGroupHydrator                                 $customerGroupHydrator
+     * @param CountryHydrator                                       $countryHydrator
+     * @param PaymentMethodHydrator                                 $paymentMethodHydrator
+     * @param ShippingMethodHydrator                                $shippingMethodHydrator
      */
     public function __construct(
         TemplateHydrator $templateHydrator,

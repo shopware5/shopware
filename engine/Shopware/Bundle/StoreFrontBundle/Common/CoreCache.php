@@ -26,7 +26,6 @@ namespace Shopware\Bundle\StoreFrontBundle\Common;
 
 use Doctrine\Common\Cache\Cache;
 
-
 /**
  * @category  Shopware
  *

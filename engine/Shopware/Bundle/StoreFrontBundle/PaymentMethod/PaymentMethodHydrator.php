@@ -25,10 +25,9 @@ declare(strict_types=1);
 
 namespace Shopware\Bundle\StoreFrontBundle\PaymentMethod;
 
+use Shopware\Bundle\CartBundle\Domain\Validator\RuleBuilder;
 use Shopware\Bundle\StoreFrontBundle\Common\AttributeHydrator;
 use Shopware\Bundle\StoreFrontBundle\Common\Hydrator;
-
-use Shopware\Bundle\CartBundle\Domain\Validator\RuleBuilder;
 
 class PaymentMethodHydrator extends Hydrator
 {

@@ -25,8 +25,6 @@
 namespace Shopware\Bundle\StoreFrontBundle\Country;
 
 use Doctrine\DBAL\Connection;
-
-
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 
 class CountryService implements CountryServiceInterface

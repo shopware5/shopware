@@ -25,10 +25,9 @@ declare(strict_types=1);
 
 namespace Shopware\Bundle\StoreFrontBundle\Customer;
 
-
 use Shopware\Bundle\StoreFrontBundle\Common\AttributeHydrator;
-use Shopware\Bundle\StoreFrontBundle\CustomerGroup\CustomerGroupHydrator;
 use Shopware\Bundle\StoreFrontBundle\Common\Hydrator;
+use Shopware\Bundle\StoreFrontBundle\CustomerGroup\CustomerGroupHydrator;
 
 class CustomerHydrator extends Hydrator
 {
@@ -43,7 +42,7 @@ class CustomerHydrator extends Hydrator
     private $customerGroupHydrator;
 
     /**
-     * @param AttributeHydrator     $attributeHydrator
+     * @param AttributeHydrator                                                     $attributeHydrator
      * @param \Shopware\Bundle\StoreFrontBundle\CustomerGroup\CustomerGroupHydrator $customerGroupHydrator
      */
     public function __construct(

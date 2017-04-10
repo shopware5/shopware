@@ -28,7 +28,6 @@ namespace Shopware\Bundle\StoreFrontBundle\ShippingMethod;
 use Shopware\Bundle\StoreFrontBundle\Common\AttributeHydrator;
 use Shopware\Bundle\StoreFrontBundle\Common\Hydrator;
 
-
 class ShippingMethodHydrator extends Hydrator
 {
     /**

@@ -34,7 +34,7 @@ interface AdvancedMenuServiceInterface
 {
     /**
      * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
-     * @param int                  $depth
+     * @param int                                                            $depth
      *
      * @return \Shopware\Bundle\StoreFrontBundle\Category\CategoryCollection
      */

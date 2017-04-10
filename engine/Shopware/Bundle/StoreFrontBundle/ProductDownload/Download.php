@@ -116,5 +116,4 @@ class Download extends Extendable
     {
         return $this->size;
     }
-
 }

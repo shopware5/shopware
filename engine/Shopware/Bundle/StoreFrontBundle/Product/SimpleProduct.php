@@ -28,8 +28,6 @@ use Shopware\Bundle\StoreFrontBundle\Esd\Esd;
 use Shopware\Bundle\StoreFrontBundle\Manufacturer\Manufacturer;
 use Shopware\Bundle\StoreFrontBundle\Media\Media;
 use Shopware\Bundle\StoreFrontBundle\PriceGroup\PriceGroup;
-
-
 use Shopware\Bundle\StoreFrontBundle\Unit\Unit;
 
 /**

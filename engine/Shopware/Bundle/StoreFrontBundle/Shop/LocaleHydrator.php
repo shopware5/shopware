@@ -26,7 +26,6 @@ namespace Shopware\Bundle\StoreFrontBundle\Shop;
 
 use Shopware\Bundle\StoreFrontBundle\Common\Hydrator;
 
-
 class LocaleHydrator extends Hydrator
 {
     public function hydrate($data)

@@ -26,12 +26,10 @@ declare(strict_types=1);
 namespace Shopware\Bundle\StoreFrontBundle\Customer;
 
 use Shopware\Bundle\StoreFrontBundle\Address\AddressGateway;
-
-use Shopware\Bundle\StoreFrontBundle\PaymentMethod\PaymentMethodGateway;
-use Shopware\Bundle\StoreFrontBundle\Shop\ShopGateway;
-
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 use Shopware\Bundle\StoreFrontBundle\Context\TranslationContext;
+use Shopware\Bundle\StoreFrontBundle\PaymentMethod\PaymentMethodGateway;
+use Shopware\Bundle\StoreFrontBundle\Shop\ShopGateway;
 
 class CustomerService
 {
@@ -56,9 +54,9 @@ class CustomerService
     private $paymentMethodGateway;
 
     /**
-     * @param CustomerGateway                                                $customerGateway
-     * @param \Shopware\Bundle\StoreFrontBundle\Address\AddressGateway                                                 $addressGateway
-     * @param ShopGateway                                                    $shopGateway
+     * @param CustomerGateway                                                      $customerGateway
+     * @param \Shopware\Bundle\StoreFrontBundle\Address\AddressGateway             $addressGateway
+     * @param ShopGateway                                                          $shopGateway
      * @param \Shopware\Bundle\StoreFrontBundle\PaymentMethod\PaymentMethodGateway $paymentMethodGateway
      */
     public function __construct(

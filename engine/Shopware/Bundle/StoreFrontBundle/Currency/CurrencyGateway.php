@@ -25,9 +25,7 @@
 namespace Shopware\Bundle\StoreFrontBundle\Currency;
 
 use Doctrine\DBAL\Connection;
-
 use Shopware\Bundle\StoreFrontBundle\Common\FieldHelper;
-
 
 class CurrencyGateway
 {

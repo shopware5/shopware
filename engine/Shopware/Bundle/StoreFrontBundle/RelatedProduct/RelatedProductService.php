@@ -24,11 +24,9 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\RelatedProduct;
 
-
-use Shopware\Bundle\StoreFrontBundle\Product\ListProductServiceInterface;
-
-use Shopware\Bundle\StoreFrontBundle\Product\BaseProduct;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Product\BaseProduct;
+use Shopware\Bundle\StoreFrontBundle\Product\ListProductServiceInterface;
 
 /**
  * @category  Shopware
@@ -48,8 +46,8 @@ class RelatedProductService implements RelatedProductServiceInterface
     private $listProductService;
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\RelatedProduct\RelatedProductGateway      $gateway
-     * @param \Shopware\Bundle\StoreFrontBundle\Product\ListProductServiceInterface $listProductService
+     * @param \Shopware\Bundle\StoreFrontBundle\RelatedProduct\RelatedProductGateway $gateway
+     * @param \Shopware\Bundle\StoreFrontBundle\Product\ListProductServiceInterface  $listProductService
      */
     public function __construct(
         RelatedProductGateway $gateway,

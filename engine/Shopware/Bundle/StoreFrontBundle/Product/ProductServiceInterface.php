@@ -24,7 +24,6 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Product;
 
-
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 
 /**

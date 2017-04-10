@@ -24,8 +24,6 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Category;
 
-
-
 interface CategoryDepthServiceInterface
 {
     /**

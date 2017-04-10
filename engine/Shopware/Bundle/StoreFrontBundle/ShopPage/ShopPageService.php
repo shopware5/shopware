@@ -24,13 +24,10 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\ShopPage;
 
-use Shopware\Bundle\StoreFrontBundle\Shop\ShopGateway;
-
-
-use Shopware\Bundle\StoreFrontBundle\Shop\Shop;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
-
 use Shopware\Bundle\StoreFrontBundle\Context\TranslationContext;
+use Shopware\Bundle\StoreFrontBundle\Shop\Shop;
+use Shopware\Bundle\StoreFrontBundle\Shop\ShopGateway;
 
 /**
  * @category  Shopware
@@ -121,7 +118,7 @@ class ShopPageService implements ShopPageServiceInterface
     }
 
     /**
-     * @param ShopPage[]           $shopPages
+     * @param ShopPage[]                                                     $shopPages
      * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
      */
     private function resolveParents(array $shopPages, ShopContextInterface $context)

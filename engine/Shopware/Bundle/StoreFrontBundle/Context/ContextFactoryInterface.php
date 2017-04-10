@@ -24,9 +24,6 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Context;
 
-
-
-
 interface ContextFactoryInterface
 {
     public function create(

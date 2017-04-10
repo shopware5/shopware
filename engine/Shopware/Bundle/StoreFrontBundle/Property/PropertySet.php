@@ -24,7 +24,6 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Property;
 
-
 use Shopware\Bundle\StoreFrontBundle\Common\Extendable;
 
 /**
@@ -169,5 +168,4 @@ class PropertySet extends Extendable
     {
         return $this->comparable;
     }
-
 }

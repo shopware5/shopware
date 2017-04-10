@@ -24,8 +24,8 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\RelatedProduct;
 
-use Shopware\Bundle\StoreFrontBundle\Product\BaseProduct;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Product\BaseProduct;
 
 /**
  * @category  Shopware
@@ -41,7 +41,7 @@ interface RelatedProductServiceInterface
      * After the relation is selected, the \Shopware\Bundle\StoreFrontBundle\Product\ListProductServiceInterface is used to load
      * the whole product data for the relations.
      *
-     * @param BaseProduct[]        $products
+     * @param BaseProduct[]                                                  $products
      * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
      *
      * @return array indexed with the product number, each array element contains a \Shopware\Bundle\StoreFrontBundle\Product\BaseProduct array

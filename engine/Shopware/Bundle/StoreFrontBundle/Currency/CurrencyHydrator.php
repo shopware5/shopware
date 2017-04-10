@@ -26,7 +26,6 @@ namespace Shopware\Bundle\StoreFrontBundle\Currency;
 
 use Shopware\Bundle\StoreFrontBundle\Common\Hydrator;
 
-
 class CurrencyHydrator extends Hydrator
 {
     public function hydrate($data)

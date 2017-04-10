@@ -26,7 +26,6 @@ namespace Shopware\Bundle\StoreFrontBundle\Property;
 
 use Shopware\Bundle\StoreFrontBundle\Common\Extendable;
 
-
 /**
  * @category  Shopware
  *
@@ -129,5 +128,4 @@ class PropertyGroup extends Extendable
     {
         return $this->filterable;
     }
-
 }

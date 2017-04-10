@@ -26,9 +26,7 @@ namespace Shopware\Bundle\StoreFrontBundle\Listing;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
-
 use Shopware\Bundle\StoreFrontBundle\Common\FieldHelper;
-
 use Shopware\Bundle\StoreFrontBundle\Context\TranslationContext;
 
 class ListingSortingGateway
@@ -54,10 +52,10 @@ class ListingSortingGateway
     private $config;
 
     /**
-     * @param Connection                  $connection
-     * @param \Shopware\Bundle\StoreFrontBundle\Common\FieldHelper                 $fieldHelper
-     * @param ListingHydrator       $hydrator
-     * @param \Shopware_Components_Config $config
+     * @param Connection                                           $connection
+     * @param \Shopware\Bundle\StoreFrontBundle\Common\FieldHelper $fieldHelper
+     * @param ListingHydrator                                      $hydrator
+     * @param \Shopware_Components_Config                          $config
      */
     public function __construct(
         Connection $connection,
@@ -181,7 +179,7 @@ class ListingSortingGateway
     }
 
     /**
-     * @param int[]           $sortingIds
+     * @param int[]            $sortingIds
      * @param ListingSorting[] $sortings
      *
      * @return ListingSorting[] indexed by id

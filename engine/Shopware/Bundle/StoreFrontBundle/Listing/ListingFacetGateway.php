@@ -26,9 +26,7 @@ namespace Shopware\Bundle\StoreFrontBundle\Listing;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
-
 use Shopware\Bundle\StoreFrontBundle\Common\FieldHelper;
-
 use Shopware\Bundle\StoreFrontBundle\Context\TranslationContext;
 
 class ListingFacetGateway
@@ -49,9 +47,9 @@ class ListingFacetGateway
     private $hydrator;
 
     /**
-     * @param Connection            $connection
-     * @param \Shopware\Bundle\StoreFrontBundle\Common\FieldHelper           $fieldHelper
-     * @param ListingHydrator $hydrator
+     * @param Connection                                           $connection
+     * @param \Shopware\Bundle\StoreFrontBundle\Common\FieldHelper $fieldHelper
+     * @param ListingHydrator                                      $hydrator
      */
     public function __construct(
         Connection $connection,
@@ -64,7 +62,7 @@ class ListingFacetGateway
     }
 
     /**
-     * @param int[]              $ids
+     * @param int[]                                                        $ids
      * @param \Shopware\Bundle\StoreFrontBundle\Context\TranslationContext $context
      *
      * @return ListingFacet[] indexed by id
@@ -84,7 +82,7 @@ class ListingFacetGateway
     }
 
     /**
-     * @param int[]              $categoryIds
+     * @param int[]                                                        $categoryIds
      * @param \Shopware\Bundle\StoreFrontBundle\Context\TranslationContext $context
      *
      * @return array indexed by category id, each element contains a list of ListingFacet
@@ -175,7 +173,7 @@ class ListingFacetGateway
     }
 
     /**
-     * @param int[]         $facetIds
+     * @param int[]          $facetIds
      * @param ListingFacet[] $facets
      *
      * @return ListingFacet[] indexed by id

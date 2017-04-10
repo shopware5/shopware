@@ -25,7 +25,6 @@ declare(strict_types=1);
 
 namespace Shopware\Bundle\StoreFrontBundle\Category;
 
-
 use Shopware\Bundle\StoreFrontBundle\Common\KeyCollection;
 
 class CategoryCollection extends KeyCollection implements \JsonSerializable

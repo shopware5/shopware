@@ -26,7 +26,6 @@ namespace Shopware\Bundle\StoreFrontBundle\Media;
 
 use Shopware\Bundle\StoreFrontBundle\Common\Extendable;
 
-
 /**
  * @category  Shopware
  *

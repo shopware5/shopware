@@ -24,7 +24,6 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Country;
 
-
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 
 interface CountryServiceInterface

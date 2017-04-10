@@ -24,7 +24,6 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Configurator;
 
-
 use Shopware\Bundle\StoreFrontBundle\Common\Extendable;
 
 /**
@@ -133,5 +132,4 @@ class ConfiguratorSet extends Extendable
 
         return true;
     }
-
 }

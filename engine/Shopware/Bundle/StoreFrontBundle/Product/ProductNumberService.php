@@ -25,9 +25,8 @@
 namespace Shopware\Bundle\StoreFrontBundle\Product;
 
 use Doctrine\DBAL\Connection;
-
-use Shopware\Bundle\StoreFrontBundle\Shop\Shop;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Shop\Shop;
 
 /**
  * @category  Shopware

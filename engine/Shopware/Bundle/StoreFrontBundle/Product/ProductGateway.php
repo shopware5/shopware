@@ -79,7 +79,7 @@ class ProductGateway
     }
 
     /**
-     * @param string[]                    $numbers
+     * @param string[]             $numbers
      * @param ShopContextInterface $context
      *
      * @return ListProduct[] Indexed by the product order number

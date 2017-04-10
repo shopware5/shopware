@@ -25,8 +25,6 @@ declare(strict_types=1);
 
 namespace Shopware\Bundle\StoreFrontBundle\Common;
 
-
-
 /**
  * @category  Shopware
  *

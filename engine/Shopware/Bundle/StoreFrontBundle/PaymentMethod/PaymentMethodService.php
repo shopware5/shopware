@@ -26,8 +26,6 @@ declare(strict_types=1);
 namespace Shopware\Bundle\StoreFrontBundle\PaymentMethod;
 
 use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
-
-
 use Shopware\Bundle\CartBundle\Domain\Validator\ValidatableFilter;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 
@@ -52,7 +50,7 @@ class PaymentMethodService
     }
 
     /**
-     * @param CalculatedCart       $calculatedCart
+     * @param CalculatedCart                                                 $calculatedCart
      * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
      *
      * @return \Shopware\Bundle\StoreFrontBundle\PaymentMethod\PaymentMethod[]

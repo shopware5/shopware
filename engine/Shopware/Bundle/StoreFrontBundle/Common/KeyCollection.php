@@ -26,8 +26,6 @@ declare(strict_types=1);
 
 namespace Shopware\Bundle\StoreFrontBundle\Common;
 
-
-
 abstract class KeyCollection extends Collection
 {
     protected function doAdd($element): void

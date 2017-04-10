@@ -24,9 +24,8 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Vote;
 
-use Shopware\Bundle\StoreFrontBundle\Product\BaseProduct;
-
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Product\BaseProduct;
 
 /**
  * @category  Shopware
@@ -44,7 +43,7 @@ interface VoteServiceInterface
     public function getList($products, ShopContextInterface $context);
 
     /**
-     * @param BaseProduct[]        $products
+     * @param BaseProduct[]                                                  $products
      * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
      *
      * @return VoteAverage[] Indexed by the product order number - Sorted by the vote create date

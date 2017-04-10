@@ -27,10 +27,8 @@ namespace Shopware\Bundle\StoreFrontBundle\PaymentMethod;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
-use Shopware\Bundle\StoreFrontBundle\Common\FieldHelper;
-
 use Shopware\Bundle\CartBundle\Infrastructure\SortArrayByKeysTrait;
-
+use Shopware\Bundle\StoreFrontBundle\Common\FieldHelper;
 use Shopware\Bundle\StoreFrontBundle\Context\TranslationContext;
 
 class PaymentMethodGateway
@@ -53,9 +51,9 @@ class PaymentMethodGateway
     private $connection;
 
     /**
-     * @param FieldHelper           $fieldHelper
+     * @param FieldHelper                                                           $fieldHelper
      * @param \Shopware\Bundle\StoreFrontBundle\PaymentMethod\PaymentMethodHydrator $hydrator
-     * @param Connection            $connection
+     * @param Connection                                                            $connection
      */
     public function __construct(
         FieldHelper $fieldHelper,
@@ -68,7 +66,7 @@ class PaymentMethodGateway
     }
 
     /**
-     * @param int[]              $ids
+     * @param int[]                                                        $ids
      * @param \Shopware\Bundle\StoreFrontBundle\Context\TranslationContext $context
      *
      * @return PaymentMethod[]

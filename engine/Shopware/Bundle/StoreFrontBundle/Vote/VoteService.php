@@ -24,9 +24,6 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Vote;
 
-
-
-
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 
 /**
@@ -47,7 +44,7 @@ class VoteService implements VoteServiceInterface
     private $voteAverageGateway;
 
     /**
-     * @param VoteGateway        $voteGateway
+     * @param VoteGateway                                               $voteGateway
      * @param \Shopware\Bundle\StoreFrontBundle\Vote\VoteAverageGateway $voteAverageGateway
      */
     public function __construct(

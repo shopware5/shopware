@@ -26,7 +26,6 @@ namespace Shopware\Bundle\StoreFrontBundle\Context;
 
 use Enlight_Components_Session_Namespace as Session;
 
-
 class ContextSwitcher
 {
     /**

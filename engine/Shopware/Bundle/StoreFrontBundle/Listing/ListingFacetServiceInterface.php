@@ -24,7 +24,6 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Listing;
 
-
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 
 interface ListingFacetServiceInterface
@@ -38,7 +37,7 @@ interface ListingFacetServiceInterface
     public function getList(array $ids, ShopContextInterface $context);
 
     /**
-     * @param int[]                $categoryIds
+     * @param int[]                                                          $categoryIds
      * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
      *
      * @return array indexed by category id, each element contains an array of ListingFacet[]

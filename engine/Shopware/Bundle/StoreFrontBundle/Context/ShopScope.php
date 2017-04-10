@@ -24,8 +24,6 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Context;
 
-
-
 class ShopScope implements \JsonSerializable
 {
     /**

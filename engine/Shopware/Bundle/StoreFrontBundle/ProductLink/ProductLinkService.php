@@ -24,8 +24,6 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\ProductLink;
 
-
-
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 
 /**

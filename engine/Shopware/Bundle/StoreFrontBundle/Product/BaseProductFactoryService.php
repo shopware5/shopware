@@ -26,7 +26,6 @@ namespace Shopware\Bundle\StoreFrontBundle\Product;
 
 use Doctrine\DBAL\Connection;
 
-
 /**
  * Class BaseProductFactory
  */

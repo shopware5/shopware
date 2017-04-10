@@ -24,7 +24,6 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Blog;
 
-
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 
 /**
@@ -35,7 +34,7 @@ use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 interface BlogServiceInterface
 {
     /**
-     * @param int[]                $ids
+     * @param int[]                                                          $ids
      * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
      *
      * @return Blog[] indexed by the blog id

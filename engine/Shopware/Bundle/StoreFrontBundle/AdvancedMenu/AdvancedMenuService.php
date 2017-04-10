@@ -26,12 +26,11 @@ declare(strict_types=1);
 
 namespace Shopware\Bundle\StoreFrontBundle\AdvancedMenu;
 
-
-use Shopware\Bundle\StoreFrontBundle\Category\CategoryDepthServiceInterface;
-use Shopware\Bundle\StoreFrontBundle\Category\CategoryServiceInterface;
-use Shopware\Bundle\StoreFrontBundle\Category\CategoryDepthService;
-use Shopware\Bundle\StoreFrontBundle\Category\CategoryService;
 use Shopware\Bundle\StoreFrontBundle\Category\CategoryCollection;
+use Shopware\Bundle\StoreFrontBundle\Category\CategoryDepthService;
+use Shopware\Bundle\StoreFrontBundle\Category\CategoryDepthServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Category\CategoryService;
+use Shopware\Bundle\StoreFrontBundle\Category\CategoryServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 
 class AdvancedMenuService implements AdvancedMenuServiceInterface
@@ -50,7 +49,7 @@ class AdvancedMenuService implements AdvancedMenuServiceInterface
      * AdvancedMenuService constructor.
      *
      * @param \Shopware\Bundle\StoreFrontBundle\Category\CategoryDepthServiceInterface $categoryDepthService
-     * @param \Shopware\Bundle\StoreFrontBundle\Category\CategoryServiceInterface $categoryService
+     * @param \Shopware\Bundle\StoreFrontBundle\Category\CategoryServiceInterface      $categoryService
      */
     public function __construct(
         CategoryDepthServiceInterface $categoryDepthService,
@@ -62,7 +61,7 @@ class AdvancedMenuService implements AdvancedMenuServiceInterface
 
     /**
      * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
-     * @param int                  $depth
+     * @param int                                                            $depth
      *
      * @return \Shopware\Bundle\StoreFrontBundle\Category\CategoryCollection
      */

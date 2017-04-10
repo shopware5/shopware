@@ -24,9 +24,8 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Category;
 
-use Shopware\Bundle\StoreFrontBundle\Product\BaseProduct;
-
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Product\BaseProduct;
 
 /**
  * @category  Shopware
@@ -36,7 +35,7 @@ use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 interface CategoryServiceInterface
 {
     /**
-     * @param int[]                $ids
+     * @param int[]                                                          $ids
      * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
      *
      * @return Category[] indexed by the category id

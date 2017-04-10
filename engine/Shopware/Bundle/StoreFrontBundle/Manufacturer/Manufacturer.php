@@ -243,5 +243,4 @@ class Manufacturer extends Extendable
     {
         $this->coverFile = $coverFile;
     }
-
 }

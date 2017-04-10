@@ -24,7 +24,6 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Configurator;
 
-
 use Shopware\Bundle\StoreFrontBundle\Common\Extendable;
 
 /**

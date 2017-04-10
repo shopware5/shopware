@@ -24,8 +24,6 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Common;
 
-
-
 /**
  * @category  Shopware
  *
@@ -119,6 +117,7 @@ class Attribute extends Struct
     {
         $data = $this->storage;
         $data['_class'] = static::class;
+
         return $data;
     }
 

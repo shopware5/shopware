@@ -27,10 +27,8 @@ namespace Shopware\Bundle\StoreFrontBundle\ShippingMethod;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
-use Shopware\Bundle\StoreFrontBundle\Common\FieldHelper;
-
 use Shopware\Bundle\CartBundle\Infrastructure\SortArrayByKeysTrait;
-
+use Shopware\Bundle\StoreFrontBundle\Common\FieldHelper;
 use Shopware\Bundle\StoreFrontBundle\Context\TranslationContext;
 
 class ShippingMethodGateway
@@ -63,7 +61,7 @@ class ShippingMethodGateway
     }
 
     /**
-     * @param int[]              $ids
+     * @param int[]                                                        $ids
      * @param \Shopware\Bundle\StoreFrontBundle\Context\TranslationContext $context
      *
      * @return ShippingMethod[]

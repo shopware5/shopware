@@ -24,11 +24,8 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Blog;
 
-
-
-use Shopware\Bundle\StoreFrontBundle\Media\MediaServiceInterface;
-
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Media\MediaServiceInterface;
 
 /**
  * @category  Shopware

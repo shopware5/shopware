@@ -24,8 +24,6 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\ProductDownload;
 
-
-
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 
 /**

@@ -24,8 +24,6 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Country;
 
-
-
 use Shopware\Bundle\StoreFrontBundle\Common\Extendable;
 
 /**

@@ -27,7 +27,6 @@ namespace Shopware\Bundle\StoreFrontBundle\Product;
 use Shopware\Bundle\StoreFrontBundle\Category\Category;
 use Shopware\Bundle\StoreFrontBundle\Price\Price;
 use Shopware\Bundle\StoreFrontBundle\Price\PriceRule;
-
 use Shopware\Bundle\StoreFrontBundle\Vote\VoteAverage;
 
 /**
