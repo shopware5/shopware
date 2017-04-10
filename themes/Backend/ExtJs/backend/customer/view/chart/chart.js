@@ -68,7 +68,6 @@ Ext.define('Shopware.apps.Customer.view.chart.Chart', {
         });
 
         return series;
-
     },
 
     createLineSeries: function(field, title) {
