@@ -544,6 +544,9 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
             showText: true,
             prependText: '{s name=toolbar/view}Display as{/s} ',
             action: 'mediamanager-media-view-layout',
+            handler: function(btn) {
+                btn.fireEvent('layout-button-click', btn, btn.getActiveItem());
+            },
             menu: {
                 items: [{
                     text: '{s name=toolbar/view_chart}Grid{/s}',
@@ -626,7 +629,7 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
         var me = this;
 
         me.tableImageSizes = me.createPreviewSizeStoreData(16);
-        me.gridImageSizes = me.createPreviewSizeStoreData(32, 7);
+        me.gridImageSizes = me.createPreviewSizeStoreData(36, 7);
         me.gridImageSizes.shift();
 
         // Preview image size selection, especially for the list view
