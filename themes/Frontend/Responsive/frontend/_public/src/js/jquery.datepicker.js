@@ -25,7 +25,7 @@
             utc: false,
 
             /**
-             * Wrap: see https://chmln.github.io/flatpickr/#strap
+             * Wrap: see https://chmln.github.io/flatpickr/options/
              */
             wrap: false,
 
