@@ -34,7 +34,7 @@ class CurrencyRule extends Rule
     /**
      * @var int[]
      */
-    private $currencyIds;
+    protected $currencyIds;
 
     /**
      * @param int[] $currencyIds

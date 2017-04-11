@@ -34,7 +34,7 @@ class BillingZipCodeRule extends Rule
     /**
      * @var string[]
      */
-    private $zipCodes;
+    protected $zipCodes;
 
     /**
      * @param \string[] $zipCodes

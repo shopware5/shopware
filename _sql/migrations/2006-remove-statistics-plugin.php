@@ -22,12 +22,16 @@
  * our trademarks remain entirely with us.
  */
 
-class Migrations_Migration1002 extends Shopware\Components\Migrations\AbstractMigration
+class Migrations_Migration2006 extends Shopware\Components\Migrations\AbstractMigration
 {
     public function up($modus)
     {
-        $this->addSql('SET @elementId = (SELECT id FROM s_core_config_elements WHERE name="esdDownloadStrategy")');
-        $this->addSql('DELETE FROM s_core_config_values WHERE element_id = @elementId');
-        $this->addSql('DELETE FROM s_core_config_elements WHERE id = @elementId');
+        $this->addSql("SET @pluginId = (SELECT id FROM s_core_plugins WHERE name = 'Statistics' AND source = 'Default' LIMIT 1)");
+
+        $this->addSql('UPDATE s_core_config_forms SET plugin_id = NULL WHERE plugin_id = @pluginId');
+
+        $this->addSql('DELETE FROM s_core_subscribes WHERE pluginID = @pluginId');
+
+        $this->addSql('DELETE FROM s_core_plugins WHERE id = @pluginId');
     }
 }

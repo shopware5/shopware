@@ -31,7 +31,7 @@ class OrderCountRuleData extends RuleData
     /**
      * @var int
      */
-    private $orderCount;
+    protected $orderCount;
 
     public function __construct(int $orderCount)
     {

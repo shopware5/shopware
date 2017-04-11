@@ -34,7 +34,7 @@ class CustomerNumberRule extends Rule
     /**
      * @var string[]
      */
-    private $numbers;
+    protected $numbers;
 
     /**
      * @param string[] $numbers

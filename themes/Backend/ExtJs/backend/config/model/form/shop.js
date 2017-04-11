@@ -52,6 +52,7 @@ Ext.define('Shopware.apps.Config.model.form.Shop', {
         }},
         { name: 'name', type: 'string' },
         { name: 'title', type: 'string', useNull: true },
+        { name: 'taxCalculationType', type: 'string' },
         { name: 'position', type: 'int' },
         { name: 'countryId', type: 'int' },
         { name: 'paymentId', type: 'int' },

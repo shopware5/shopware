@@ -27,8 +27,11 @@ namespace Shopware\Bundle\CartBundle\Domain\Tax;
 use Shopware\Bundle\CartBundle\Domain\Price\PriceCollection;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 
-class HorizontalTaxAmountCalculator implements TaxAmountCalculatorInterface
+class TaxAmountCalculator implements TaxAmountCalculatorInterface
 {
+    const CALCULATION_HORIZONTAL = 'horizontal';
+    const CALCULATION_VERTICAL = 'vertical';
+
     /**
      * @var PercentageTaxRuleBuilder
      */
@@ -44,11 +47,6 @@ class HorizontalTaxAmountCalculator implements TaxAmountCalculatorInterface
      */
     private $taxDetector;
 
-    /**
-     * @param PercentageTaxRuleBuilder $percentageTaxRuleBuilder
-     * @param TaxCalculator            $taxCalculator
-     * @param TaxDetector              $taxDetector
-     */
     public function __construct(
         PercentageTaxRuleBuilder $percentageTaxRuleBuilder,
         TaxCalculator $taxCalculator,
@@ -61,6 +59,14 @@ class HorizontalTaxAmountCalculator implements TaxAmountCalculatorInterface
 
     public function calculate(PriceCollection $priceCollection, ShopContextInterface $context): CalculatedTaxCollection
     {
+        if ($this->taxDetector->isNetDelivery($context)) {
+            return new CalculatedTaxCollection([]);
+        }
+
+        if ($context->getShop()->getTaxCalculation() === self::CALCULATION_VERTICAL) {
+            return $priceCollection->getCalculatedTaxes();
+        }
+
         $price = $priceCollection->getTotalPrice();
 
         $rules = $this->percentageTaxRuleBuilder->buildRules($price);
@@ -68,10 +74,6 @@ class HorizontalTaxAmountCalculator implements TaxAmountCalculatorInterface
         switch (true) {
             case $this->taxDetector->useGross($context):
                 return $this->taxCalculator->calculateGrossTaxes($price->getTotalPrice(), $rules);
-                break;
-
-            case $this->taxDetector->isNetDelivery($context):
-                return new CalculatedTaxCollection([]);
 
             default:
                 return $this->taxCalculator->calculateNetTaxes($price->getTotalPrice(), $rules);

@@ -31,7 +31,7 @@ class LastOrderRuleData extends RuleData
     /**
      * @var \DateTime|null
      */
-    private $lastOrderTime;
+    protected $lastOrderTime;
 
     public function __construct(?\DateTime $lastOrderTime)
     {

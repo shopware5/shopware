@@ -34,7 +34,7 @@ class LastNameRule extends Rule
     /**
      * @var string
      */
-    private $lastName;
+    protected $lastName;
 
     public function __construct(string $lastName)
     {

@@ -147,4 +147,46 @@ class PriceCollectionTest extends \PHPUnit\Framework\TestCase
         $collection->clear();
         static::assertEquals(new PriceCollection(), $collection);
     }
+
+    public function testGet()
+    {
+        $collection = new PriceCollection([
+            new Price(1, 1, new CalculatedTaxCollection(), new TaxRuleCollection()),
+            new Price(2, 2, new CalculatedTaxCollection(), new TaxRuleCollection()),
+        ]);
+
+        $this->assertEquals(
+            new Price(1, 1, new CalculatedTaxCollection(), new TaxRuleCollection()),
+            $collection->get(0)
+        );
+
+        $this->assertEquals(
+            new Price(2, 2, new CalculatedTaxCollection(), new TaxRuleCollection()),
+            $collection->get(1)
+        );
+        $this->assertNull($collection->get(2));
+    }
+
+    public function testRemove()
+    {
+        $collection = new PriceCollection([
+            new Price(1, 1, new CalculatedTaxCollection(), new TaxRuleCollection()),
+            new Price(2, 2, new CalculatedTaxCollection(), new TaxRuleCollection()),
+        ]);
+
+        $this->assertEquals(
+            new Price(1, 1, new CalculatedTaxCollection(), new TaxRuleCollection()),
+            $collection->get(0)
+        );
+
+        $this->assertEquals(
+            new Price(2, 2, new CalculatedTaxCollection(), new TaxRuleCollection()),
+            $collection->get(1)
+        );
+
+        $collection->remove(0);
+        $collection->remove(1);
+        $this->assertNull($collection->get(0));
+        $this->assertNull($collection->get(1));
+    }
 }

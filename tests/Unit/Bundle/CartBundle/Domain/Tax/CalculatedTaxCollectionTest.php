@@ -231,4 +231,24 @@ class CalculatedTaxCollectionTest extends \PHPUnit\Framework\TestCase
         $collection = new CalculatedTaxCollection();
         static::assertNull($collection->get(19));
     }
+
+    public function testRemoveElement()
+    {
+        $toRemove = new CalculatedTax(5.50, 18, 1);
+        $collection = new CalculatedTaxCollection([
+            new CalculatedTax(5.50, 19, 1),
+            $toRemove,
+            new CalculatedTax(5.50, 17, 1),
+        ]);
+
+        $collection->removeElement($toRemove);
+
+        $this->assertEquals(
+            new CalculatedTaxCollection([
+                new CalculatedTax(5.50, 19, 1),
+                new CalculatedTax(5.50, 17, 1),
+            ]),
+            $collection
+        );
+    }
 }

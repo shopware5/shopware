@@ -31,9 +31,11 @@ use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryDate;
 use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryInformation;
 use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryInformationCollection;
 use Shopware\Bundle\CartBundle\Domain\Error\ErrorCollection;
+use Shopware\Bundle\CartBundle\Domain\Error\ProductDeliveryInformationNotFoundError;
 use Shopware\Bundle\CartBundle\Domain\Error\ProductPriceNotFoundError;
 use Shopware\Bundle\CartBundle\Domain\LineItem\CalculatedLineItemCollection;
 use Shopware\Bundle\CartBundle\Domain\LineItem\LineItem;
+use Shopware\Bundle\CartBundle\Domain\LineItem\LineItemCollection;
 use Shopware\Bundle\CartBundle\Domain\Price\Price;
 use Shopware\Bundle\CartBundle\Domain\Price\PriceCalculator;
 use Shopware\Bundle\CartBundle\Domain\Price\PriceDefinition;
@@ -45,6 +47,7 @@ use Shopware\Bundle\CartBundle\Domain\Tax\CalculatedTaxCollection;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCollection;
 use Shopware\Bundle\CartBundle\Infrastructure\Product\ProductDeliveryGateway;
 use Shopware\Bundle\CartBundle\Infrastructure\Product\ProductPriceGateway;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
 use Shopware\Tests\Unit\Bundle\CartBundle\Common\Generator;
 
 class ProductProcessorTest extends \PHPUnit\Framework\TestCase
@@ -130,7 +133,13 @@ class ProductProcessorTest extends \PHPUnit\Framework\TestCase
             $cart,
             Generator::createContext()
         );
+
         static::assertCount(1, $cart->getCalculatedLineItems());
+
+        static::assertEquals(
+            new LineItem('SW1', ProductProcessor::TYPE_PRODUCT, 1),
+            $cart->getCalculatedLineItems()->get('SW1')->getLineItem()
+        );
     }
 
     public function testConvertMultipleProducts()
@@ -267,6 +276,46 @@ class ProductProcessorTest extends \PHPUnit\Framework\TestCase
                 new ProductPriceNotFoundError('SW2'),
                 new ProductPriceNotFoundError('SW3'),
             ])
+        );
+    }
+
+    public function testWithMissingDeliveryInformation()
+    {
+        $priceGateway = $this->createMock(ProductPriceGateway::class);
+        $priceGateway->method('get')
+            ->will($this->returnValue(
+                new PriceDefinitionCollection([
+                    'SW1' => new PriceDefinition(0, new TaxRuleCollection()),
+                ])
+            ));
+
+        $deliveryGateway = $this->createMock(ProductDeliveryGateway::class);
+        $deliveryGateway->expects($this->once())
+            ->method('get')->will($this->returnValue(new DeliveryInformationCollection([])));
+
+        $priceCalculator = $this->createMock(PriceCalculator::class);
+        $priceCalculator->method('calculate')->will($this->returnValue(
+            new Price(1, 1, new CalculatedTaxCollection(), new TaxRuleCollection())
+        ));
+
+        $productCalculator = new ProductCalculator(
+            $priceGateway,
+            $priceCalculator,
+            $deliveryGateway
+        );
+
+        $lineItemCollection = new LineItemCollection([
+            new LineItem('SW1', ProductProcessor::TYPE_PRODUCT, 1),
+        ]);
+
+        $context = $this->createMock(ShopContext::class);
+
+        $productCollection = $productCalculator->calculate($lineItemCollection, $context);
+
+        $this->assertCount(1, $productCollection->getErrors());
+        $this->assertEquals(
+            [new ProductDeliveryInformationNotFoundError('SW1')],
+            $productCollection->getErrors()
         );
     }
 }

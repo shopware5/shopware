@@ -22,12 +22,33 @@
  * our trademarks remain entirely with us.
  */
 
-class Migrations_Migration1001 extends Shopware\Components\Migrations\AbstractMigration
+namespace Shopware\Tests\Unit\Bundle\CartBundle\Domain\Validator\Container;
+
+use PHPUnit\Framework\TestCase;
+use Shopware\Bundle\CartBundle\Domain\Validator\Container\AndRule;
+use Shopware\Tests\Unit\Bundle\CartBundle\Common\FalseRule;
+use Shopware\Tests\Unit\Bundle\CartBundle\Common\TrueRule;
+
+class ContainerTest extends TestCase
 {
-    public function up($modus)
+    public function testConstructorWithRules()
     {
-        $this->addSql("SET @pluginId = (SELECT id FROM s_core_plugins WHERE name = 'Auth' AND namespace = 'Backend' LIMIT 1);");
-        $this->addSql('UPDATE s_core_config_forms SET plugin_id = NULL WHERE plugin_id = @pluginId;');
-        $this->addSql('DELETE FROM s_core_subscribes WHERE pluginID = @pluginId;');
+        $container = new AndRule([
+            new TrueRule(),
+        ]);
+
+        $this->assertEquals(
+            [new TrueRule()],
+            $container->getRules()
+        );
+
+        $container->setRules([
+            new FalseRule(),
+        ]);
+
+        $this->assertEquals(
+            [new FalseRule()],
+            $container->getRules()
+        );
     }
 }

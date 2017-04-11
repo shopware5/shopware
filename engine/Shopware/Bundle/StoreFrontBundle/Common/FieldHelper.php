@@ -708,6 +708,7 @@ class FieldHelper
             'shop.customer_scope as __shop_customer_scope',
             'shop.default as __shop_default',
             'shop.active as __shop_active',
+            'shop.tax_calculation_type as __shop_tax_calculation_type',
         ];
     }
 

@@ -22,16 +22,21 @@
  * our trademarks remain entirely with us.
  */
 
-class Migrations_Migration1006 extends Shopware\Components\Migrations\AbstractMigration
+namespace Shopware\Tests\Unit\Bundle\CartBundle\Domain\Product;
+
+use PHPUnit\Framework\TestCase;
+use Shopware\Bundle\CartBundle\Domain\LineItem\LineItemCollection;
+use Shopware\Bundle\CartBundle\Domain\Product\ProductDeliveryGateway;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
+
+class ProductDeliveryGatewayTest extends TestCase
 {
-    public function up($modus)
+    /**
+     * @expectedException \Shopware\Bundle\CartBundle\Domain\Exception\NotImplementedException
+     */
+    public function testDummyGatewayThrowsException()
     {
-        $this->addSql("SET @pluginId = (SELECT id FROM s_core_plugins WHERE name = 'Statistics' AND source = 'Default' LIMIT 1)");
-
-        $this->addSql('UPDATE s_core_config_forms SET plugin_id = NULL WHERE plugin_id = @pluginId');
-
-        $this->addSql('DELETE FROM s_core_subscribes WHERE pluginID = @pluginId');
-
-        $this->addSql('DELETE FROM s_core_plugins WHERE id = @pluginId');
+        $gateway = new ProductDeliveryGateway();
+        $gateway->get(new LineItemCollection(), $this->createMock(ShopContext::class));
     }
 }

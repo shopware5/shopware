@@ -121,6 +121,7 @@ class ShopHydrator extends Hydrator
         $shop->setCustomerGroup($this->customerGroupHydrator->hydrate($data));
         $shop->setCategory($this->categoryHydrator->hydrate($data));
         $shop->setLocale($this->localeHydrator->hydrate($data));
+        $shop->setTaxCalculation($data['__shop_tax_calculation_type']);
 
         $parent = $data;
         if ($data['parent']) {

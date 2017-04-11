@@ -24,6 +24,7 @@
 
 namespace Shopware\Tests\Unit\Bundle\CartBundle\Domain\Tax;
 
+use Shopware\Bundle\CartBundle\Domain\Exception\TaxRuleNotSupportedException;
 use Shopware\Bundle\CartBundle\Domain\Price\PriceRounding;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxCalculator;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxRule;
@@ -55,6 +56,26 @@ class TaxCalculatorTest extends \PHPUnit\Framework\TestCase
             $expected,
             $calculator->calculateGross($net, $rules)
         );
+    }
+
+    public function testNotSupportedRule()
+    {
+        $calculator = new TaxCalculator(
+            new PriceRounding(2),
+            []
+        );
+
+        $rule = new TaxRule(19);
+        $rules = new TaxRuleCollection([$rule]);
+
+        try {
+            $calculator->calculateGross(1, $rules);
+        } catch (\Exception $e) {
+            $this->assertInstanceOf(TaxRuleNotSupportedException::class, $e);
+
+            /* @var TaxRuleNotSupportedException $e */
+            $this->assertSame($rule, $e->getTaxRule());
+        }
     }
 
     /**

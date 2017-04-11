@@ -22,15 +22,12 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\CartBundle\Domain\Tax;
-
-use Shopware\Bundle\CartBundle\Domain\Price\PriceCollection;
-use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
-
-class VerticalTaxAmountCalculator implements TaxAmountCalculatorInterface
+class Migrations_Migration2002 extends Shopware\Components\Migrations\AbstractMigration
 {
-    public function calculate(PriceCollection $priceCollection, ShopContextInterface $context): CalculatedTaxCollection
+    public function up($modus)
     {
-        return $priceCollection->getCalculatedTaxes();
+        $this->addSql('SET @elementId = (SELECT id FROM s_core_config_elements WHERE name="esdDownloadStrategy")');
+        $this->addSql('DELETE FROM s_core_config_values WHERE element_id = @elementId');
+        $this->addSql('DELETE FROM s_core_config_elements WHERE id = @elementId');
     }
 }

@@ -34,7 +34,7 @@ class CustomerGroupRule extends Rule
     /**
      * @var int[]
      */
-    private $customerGroupIds;
+    protected $customerGroupIds;
 
     /**
      * @param int[] $customerGroupIds

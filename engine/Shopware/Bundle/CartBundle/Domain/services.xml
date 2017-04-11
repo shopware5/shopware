@@ -104,12 +104,7 @@
             <argument id="cart.validator.rule_data_collector_registry" type="service"/>
         </service>
 
-        <service id="cart.tax.amount_calculator" alias="cart.tax.vertical_amount_calculator" />
-        <!--<service id="cart.tax.amount_calculator" alias="cart.tax.horizontal_amount_calculator" />-->
-
-        <service id="cart.tax.vertical_amount_calculator" class="Shopware\Bundle\CartBundle\Domain\Tax\VerticalTaxAmountCalculator"/>
-
-        <service id="cart.tax.horizontal_amount_calculator" class="Shopware\Bundle\CartBundle\Domain\Tax\HorizontalTaxAmountCalculator" >
+        <service id="cart.tax.amount_calculator" class="Shopware\Bundle\CartBundle\Domain\Tax\TaxAmountCalculator" >
             <argument type="service" id="cart.tax.percentage_rule_builder" />
             <argument type="service" id="cart.tax.calculator" />
             <argument type="service" id="cart.tax.detector" />

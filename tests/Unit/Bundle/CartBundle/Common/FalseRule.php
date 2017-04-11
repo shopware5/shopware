@@ -22,10 +22,20 @@
  * our trademarks remain entirely with us.
  */
 
-class Migrations_Migration1003 extends Shopware\Components\Migrations\AbstractMigration
+namespace Shopware\Tests\Unit\Bundle\CartBundle\Common;
+
+use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
+use Shopware\Bundle\CartBundle\Domain\Validator\Data\RuleDataCollection;
+use Shopware\Bundle\CartBundle\Domain\Validator\Rule\Rule;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+
+class FalseRule extends Rule
 {
-    public function up($modus)
-    {
-        $this->addSql('DROP TABLE IF EXISTS `s_core_engine_elements`;');
+    public function match(
+        CalculatedCart $calculatedCart,
+        ShopContextInterface $context,
+        RuleDataCollection $collection
+    ): bool {
+        return false;
     }
 }

@@ -35,12 +35,12 @@ class OrderAmountRule extends Rule
     /**
      * @var float
      */
-    private $amount;
+    protected $amount;
 
     /**
      * @var string
      */
-    private $operator;
+    protected $operator;
 
     public function __construct(float $amount, string $operator)
     {

@@ -35,12 +35,12 @@ class ProductAttributeRule extends Rule
     /**
      * @var string
      */
-    private $attribute;
+    protected $attribute;
 
     /**
      * @var mixed
      */
-    private $value;
+    protected $value;
 
     public function __construct(string $attribute, $value)
     {

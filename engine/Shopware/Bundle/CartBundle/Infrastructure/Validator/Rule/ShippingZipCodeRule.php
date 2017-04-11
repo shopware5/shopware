@@ -34,7 +34,7 @@ class ShippingZipCodeRule extends Rule
     /**
      * @var string[]
      */
-    private $zipCodes;
+    protected $zipCodes;
 
     /**
      * @param string[] $zipCodes

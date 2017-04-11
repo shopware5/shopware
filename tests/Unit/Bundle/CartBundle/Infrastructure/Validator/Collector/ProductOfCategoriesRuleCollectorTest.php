@@ -36,7 +36,7 @@ use Shopware\Bundle\CartBundle\Infrastructure\Validator\Collector\ProductOfCateg
 use Shopware\Bundle\CartBundle\Infrastructure\Validator\Data\ProductOfCategoriesRuleData;
 use Shopware\Bundle\CartBundle\Infrastructure\Validator\Rule\ProductOfCategoriesRule;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
-use Shopware\Tests\Unit\Bundle\CartBundle\Infrastructure\Validator\Rule\DummyProduct;
+use Shopware\Tests\Unit\Bundle\CartBundle\Common\DummyProduct;
 
 class ProductOfCategoriesRuleCollectorTest extends TestCase
 {

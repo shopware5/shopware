@@ -35,12 +35,12 @@ class ShippingCountryRule extends Rule
     /**
      * @var int[]
      */
-    private $countryIds;
+    protected $countryIds;
 
     /**
      * @var string
      */
-    private $operator;
+    protected $operator;
 
     public function __construct(array $countryIds, string $operator)
     {

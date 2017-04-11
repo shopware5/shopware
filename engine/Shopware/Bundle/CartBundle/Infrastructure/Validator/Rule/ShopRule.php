@@ -35,12 +35,12 @@ class ShopRule extends Rule
     /**
      * @var int[]
      */
-    private $shopIds;
+    protected $shopIds;
 
     /**
      * @var string
      */
-    private $operator;
+    protected $operator;
 
     public function __construct(array $shopIds, string $operator)
     {

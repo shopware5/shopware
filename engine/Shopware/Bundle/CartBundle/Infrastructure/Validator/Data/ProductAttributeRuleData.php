@@ -33,7 +33,7 @@ class ProductAttributeRuleData extends RuleData
      *
      * @var array[]
      */
-    private $data;
+    protected $data;
 
     /**
      * @param array[] $data

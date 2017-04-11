@@ -31,7 +31,7 @@ class OrderClearedStateRuleData extends RuleData
     /**
      * @var int[]
      */
-    private $states;
+    protected $states;
 
     /**
      * @param \int[] $states

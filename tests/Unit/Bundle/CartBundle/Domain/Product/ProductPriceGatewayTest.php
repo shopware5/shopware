@@ -22,10 +22,21 @@
  * our trademarks remain entirely with us.
  */
 
-class Migrations_Migration1005 extends Shopware\Components\Migrations\AbstractMigration
+namespace Shopware\Tests\Unit\Bundle\CartBundle\Domain\Product;
+
+use PHPUnit\Framework\TestCase;
+use Shopware\Bundle\CartBundle\Domain\LineItem\LineItemCollection;
+use Shopware\Bundle\CartBundle\Domain\Product\ProductPriceGateway;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
+
+class ProductPriceGatewayTest extends TestCase
 {
-    public function up($modus)
+    /**
+     * @expectedException \Shopware\Bundle\CartBundle\Domain\Exception\NotImplementedException
+     */
+    public function testDummyGatewayThrowsException()
     {
-        $this->addSql("DELETE FROM s_core_plugins WHERE name = 'Seo' AND `source` = 'Default'");
+        $gateway = new ProductPriceGateway();
+        $gateway->get(new LineItemCollection(), $this->createMock(ShopContext::class));
     }
 }

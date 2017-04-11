@@ -36,7 +36,7 @@ use Shopware\Bundle\CartBundle\Infrastructure\Validator\Collector\ProductAttribu
 use Shopware\Bundle\CartBundle\Infrastructure\Validator\Data\ProductAttributeRuleData;
 use Shopware\Bundle\CartBundle\Infrastructure\Validator\Rule\ProductAttributeRule;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
-use Shopware\Tests\Unit\Bundle\CartBundle\Infrastructure\Validator\Rule\DummyProduct;
+use Shopware\Tests\Unit\Bundle\CartBundle\Common\DummyProduct;
 
 class ProductAttributeRuleCollectorTest extends TestCase
 {
