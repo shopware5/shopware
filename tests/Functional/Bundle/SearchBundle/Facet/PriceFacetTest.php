@@ -26,7 +26,7 @@ namespace Shopware\Tests\Functional\Bundle\SearchBundle\Facet;
 
 use Shopware\Bundle\SearchBundle\Facet\PriceFacet;
 use Shopware\Bundle\SearchBundle\FacetResult\RangeFacetResult;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
 use Shopware\Models\Category\Category;
 use Shopware\Tests\Functional\Bundle\StoreFrontBundle\TestCase;
 
@@ -173,9 +173,9 @@ class PriceFacetTest extends TestCase
 
     /**
      * @param $number
-     * @param ShopContext                        $context
-     * @param \Shopware\Models\Category\Category $category
-     * @param array                              $prices
+     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContext $context
+     * @param \Shopware\Models\Category\Category                    $category
+     * @param array                                                 $prices
      *
      * @return array
      */

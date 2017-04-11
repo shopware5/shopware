@@ -30,8 +30,8 @@ use Shopware\Bundle\CartBundle\Domain\LineItem\CalculatedLineItemInterface;
 use Shopware\Bundle\CartBundle\Domain\LineItem\Deliverable;
 use Shopware\Bundle\CartBundle\Domain\Price\PriceCalculator;
 use Shopware\Bundle\CartBundle\Domain\Price\PriceDefinition;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShippingMethod;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\ShippingMethod\ShippingMethod;
 
 class StockDeliverySeparator
 {

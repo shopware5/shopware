@@ -29,7 +29,7 @@ use Enlight_Controller_Request_Request as Request;
 use Shopware\Bundle\SearchBundle\Condition\CategoryCondition;
 use Shopware\Bundle\SearchBundle\Condition\CustomerGroupCondition;
 use Shopware\Bundle\SearchBundle\Condition\IsAvailableCondition;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 
 /**
  * @category  Shopware

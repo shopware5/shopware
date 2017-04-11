@@ -22,10 +22,10 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Bundle\StoreFrontBundle\Context\CheckoutScope;
+use Shopware\Bundle\StoreFrontBundle\Context\CustomerScope;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopScope;
 use Shopware\Bundle\StoreFrontBundle\Service\Core\ContextService;
-use Shopware\Bundle\StoreFrontBundle\Struct\CheckoutScope;
-use Shopware\Bundle\StoreFrontBundle\Struct\CustomerScope;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopScope;
 
 /**
  * Shopware SwagMultiEdit Plugin - MultiEdit Backend Controller
@@ -590,7 +590,7 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
         foreach ($result as $item) {
             $number = $item['Detail_number'];
 
-            $product = new \Shopware\Bundle\StoreFrontBundle\Struct\ListProduct(
+            $product = new \Shopware\Bundle\StoreFrontBundle\Product\ListProduct(
                 $item['Article_id'],
                 $item['Detail_id'],
                 $item['Detail_number']
@@ -624,14 +624,14 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Struct\ListProduct[] $products
+     * @param \Shopware\Bundle\StoreFrontBundle\Product\ListProduct[] $products
      *
-     * @return \Shopware\Bundle\StoreFrontBundle\Struct\ListProduct[]
+     * @return \Shopware\Bundle\StoreFrontBundle\Product\ListProduct[]
      */
     private function getAdditionalTexts($products)
     {
-        /** @var \Shopware\Bundle\StoreFrontBundle\Service\AdditionalTextServiceInterface $service */
-        $service = $this->get('shopware_storefront.additional_text_service');
+        /** @var \Shopware\Bundle\StoreFrontBundle\AdditionalText\AdditionalTextServiceInterface $service */
+        $service = $this->get('storefront.additional_text.service');
 
         /** @var \Shopware\Models\Shop\Repository $shopRepo */
         $shopRepo = $this->get('models')->getRepository('Shopware\Models\Shop\Shop');
@@ -639,7 +639,7 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
         /** @var \Shopware\Models\Shop\Shop $shop */
         $shop = $shopRepo->getActiveDefault();
 
-        $context = $this->get('shopware_storefront.context_factory')->create(
+        $context = $this->get('storefront.context.factory')->create(
             new ShopScope($shop->getId(), $shop->getCurrency()->getId()),
             new CustomerScope(null, ContextService::FALLBACK_CUSTOMER_GROUP),
             new CheckoutScope()

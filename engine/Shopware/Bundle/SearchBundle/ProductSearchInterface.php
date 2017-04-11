@@ -24,8 +24,6 @@
 
 namespace Shopware\Bundle\SearchBundle;
 
-use Shopware\Bundle\StoreFrontBundle\Struct;
-
 /**
  * @category  Shopware
  *
@@ -37,10 +35,10 @@ interface ProductSearchInterface
      * Creates a search request on the internal search gateway to
      * get the product result for the passed criteria object.
      *
-     * @param Criteria                    $criteria
-     * @param Struct\ShopContextInterface $context
+     * @param Criteria                                                       $criteria
+     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
      *
      * @return ProductSearchResult
      */
-    public function search(Criteria $criteria, Struct\ShopContextInterface $context);
+    public function search(Criteria $criteria, \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context);
 }

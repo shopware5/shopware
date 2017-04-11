@@ -28,8 +28,7 @@ use Doctrine\DBAL\Connection;
 use Shopware\Bundle\EmotionBundle\Struct\Collection\PrepareDataCollection;
 use Shopware\Bundle\EmotionBundle\Struct\Collection\ResolvedDataCollection;
 use Shopware\Bundle\SearchBundle\BatchProductSearch;
-use Shopware\Bundle\StoreFrontBundle\Service\MediaServiceInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 
 class DataCollectionResolver implements DataCollectionResolverInterface
 {
@@ -39,7 +38,7 @@ class DataCollectionResolver implements DataCollectionResolverInterface
     private $connection;
 
     /**
-     * @var MediaServiceInterface
+     * @var \Shopware\Bundle\StoreFrontBundle\Media\MediaServiceInterface
      */
     private $mediaService;
 
@@ -49,14 +48,14 @@ class DataCollectionResolver implements DataCollectionResolverInterface
     private $batchProductSearch;
 
     /**
-     * @param BatchProductSearch    $batchProductSearch
-     * @param Connection            $connection
-     * @param MediaServiceInterface $mediaService
+     * @param BatchProductSearch                                            $batchProductSearch
+     * @param Connection                                                    $connection
+     * @param \Shopware\Bundle\StoreFrontBundle\Media\MediaServiceInterface $mediaService
      */
     public function __construct(
         BatchProductSearch $batchProductSearch,
         Connection $connection,
-        MediaServiceInterface $mediaService
+        \Shopware\Bundle\StoreFrontBundle\Media\MediaServiceInterface $mediaService
     ) {
         $this->batchProductSearch = $batchProductSearch;
         $this->connection = $connection;
@@ -64,8 +63,8 @@ class DataCollectionResolver implements DataCollectionResolverInterface
     }
 
     /**
-     * @param PrepareDataCollection $prepareDataCollection
-     * @param ShopContextInterface  $context
+     * @param PrepareDataCollection                                          $prepareDataCollection
+     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
      *
      * @return ResolvedDataCollection
      */
@@ -83,8 +82,8 @@ class DataCollectionResolver implements DataCollectionResolverInterface
     }
 
     /**
-     * @param PrepareDataCollection $prepareDataCollection
-     * @param ShopContextInterface  $context
+     * @param PrepareDataCollection                                          $prepareDataCollection
+     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
      *
      * @return array
      */
@@ -128,8 +127,8 @@ class DataCollectionResolver implements DataCollectionResolverInterface
     }
 
     /**
-     * @param PrepareDataCollection $prepareDataCollection
-     * @param ShopContextInterface  $context
+     * @param PrepareDataCollection                                          $prepareDataCollection
+     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
      *
      * @return \Shopware\Bundle\SearchBundle\BatchProductNumberSearchResult
      */

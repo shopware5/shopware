@@ -26,7 +26,7 @@ namespace Shopware\Bundle\ESIndexingBundle\Commands;
 
 use Shopware\Bundle\ESIndexingBundle\Console\ConsoleProgressHelper;
 use Shopware\Bundle\ESIndexingBundle\ShopIndexerInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
+use Shopware\Bundle\StoreFrontBundle\Shop\Shop;
 use Shopware\Commands\ShopwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -57,7 +57,7 @@ class IndexPopulateCommand extends ShopwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         if ($shopId = $input->getOption('shopId')) {
-            $shops = $this->container->get('shopware_storefront.shop_gateway_dbal')->getList(
+            $shops = $this->container->get('storefront.shop.gateway')->getList(
                 [$shopId],
                 new TranslationContext((int) $shopId, true, null)
             );

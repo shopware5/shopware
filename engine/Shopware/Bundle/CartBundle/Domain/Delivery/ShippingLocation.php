@@ -24,10 +24,10 @@
 
 namespace Shopware\Bundle\CartBundle\Domain\Delivery;
 
-use Shopware\Bundle\StoreFrontBundle\Struct\Address;
-use Shopware\Bundle\StoreFrontBundle\Struct\Country;
-use Shopware\Bundle\StoreFrontBundle\Struct\Country\Area;
-use Shopware\Bundle\StoreFrontBundle\Struct\Country\State;
+use Shopware\Bundle\StoreFrontBundle\Address\Address;
+use Shopware\Bundle\StoreFrontBundle\Country\Area;
+use Shopware\Bundle\StoreFrontBundle\Country\Country;
+use Shopware\Bundle\StoreFrontBundle\Country\State;
 
 class ShippingLocation
 {
@@ -37,7 +37,7 @@ class ShippingLocation
     protected $country;
 
     /**
-     * @var null|State
+     * @var null|\Shopware\Bundle\StoreFrontBundle\Country\State
      */
     protected $state;
 
@@ -47,9 +47,9 @@ class ShippingLocation
     protected $address;
 
     /**
-     * @param Country      $country
-     * @param null|State   $state
-     * @param null|Address $address
+     * @param Country                                              $country
+     * @param null|\Shopware\Bundle\StoreFrontBundle\Country\State $state
+     * @param null|Address                                         $address
      */
     private function __construct(Country $country, ?State $state, ?Address $address)
     {
@@ -113,7 +113,7 @@ class ShippingLocation
     }
 
     /**
-     * @return Area
+     * @return \Shopware\Bundle\StoreFrontBundle\Country\Area
      */
     public function getArea(): Area
     {

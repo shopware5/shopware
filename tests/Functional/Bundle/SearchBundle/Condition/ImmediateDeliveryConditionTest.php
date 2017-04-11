@@ -25,7 +25,7 @@
 namespace Shopware\Tests\Functional\Bundle\SearchBundle\Condition;
 
 use Shopware\Bundle\SearchBundle\Condition\ImmediateDeliveryCondition;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
 use Shopware\Models\Category\Category;
 use Shopware\Tests\Functional\Bundle\StoreFrontBundle\TestCase;
 
@@ -87,9 +87,9 @@ class ImmediateDeliveryConditionTest extends TestCase
 
     /**
      * @param $number
-     * @param \Shopware\Models\Category\Category $category
-     * @param ShopContext                        $context
-     * @param array                              $data
+     * @param \Shopware\Models\Category\Category                    $category
+     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContext $context
+     * @param array                                                 $data
      *
      * @return array
      */

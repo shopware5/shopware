@@ -44,7 +44,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
 
     public function cartAction(): void
     {
-        $context = $this->container->get('shopware_storefront.context_service')->getShopContext();
+        $context = $this->container->get('storefront.context.service')->getShopContext();
 
         $cart = $this->container->get('shopware.cart.storefront_service')->getCart();
 
@@ -57,7 +57,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
 
     public function confirmAction(): void
     {
-        $context = $this->container->get('shopware_storefront.context_service')->getShopContext();
+        $context = $this->container->get('storefront.context.service')->getShopContext();
 
         if ($context->getCustomer() === null) {
             $this->forwardToLogin();
@@ -89,14 +89,14 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
     {
         $cart = $this->container->get('shopware.cart.storefront_service')->getCart();
 
-        $context = $this->container->get('shopware_storefront.context_service')->getShopContext();
+        $context = $this->container->get('storefront.context.service')->getShopContext();
 
-        $paymentMethods = $this->container->get('storefront.payment.service')->getAvailable(
+        $paymentMethods = $this->container->get('storefront.payment_method.service')->getAvailable(
             $cart->getCalculatedCart(),
             $context
         );
 
-        $shippingMethods = $this->container->get('storefront.delivery.service')
+        $shippingMethods = $this->container->get('storefront.shipping_method.service')
             ->getAvailable($cart->getCalculatedCart(), $context);
 
         if ($this->Request()->getParam('isXHR')) {
@@ -118,7 +118,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
     {
         Shopware()->Plugins()->Controller()->Json()->setPadding();
 
-        $context = $this->container->get('shopware_storefront.context_service')->getShopContext();
+        $context = $this->container->get('storefront.context.service')->getShopContext();
 
         $cart = $this->container->get('shopware.cart.storefront_service')->getCart();
 
@@ -247,7 +247,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
     {
         $cart = $this->container->get('shopware.cart.storefront_service')->getCart();
 
-        $context = $this->container->get('shopware_storefront.context_service')->getShopContext();
+        $context = $this->container->get('storefront.context.service')->getShopContext();
 
         $this->container->get('shopware.cart.storefront_service')->order();
 

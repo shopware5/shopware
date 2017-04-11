@@ -26,12 +26,11 @@ namespace Shopware\Tests\Functional\Bundle\AccountBundle\Service;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\AccountBundle\Service\RegisterServiceInterface;
-use Shopware\Bundle\StoreFrontBundle\Service\ContextFactoryInterface;
-use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\CheckoutScope;
-use Shopware\Bundle\StoreFrontBundle\Struct\CustomerScope;
-use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopScope;
+use Shopware\Bundle\StoreFrontBundle\Context\CheckoutScope;
+use Shopware\Bundle\StoreFrontBundle\Context\ContextFactoryInterface;
+use Shopware\Bundle\StoreFrontBundle\Context\CustomerScope;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopScope;
+use Shopware\Bundle\StoreFrontBundle\Shop\Shop;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Country\Country;
 use Shopware\Models\Country\State;
@@ -59,7 +58,7 @@ class RegisterServiceTest extends \Enlight_Components_Test_TestCase
     protected static $connection;
 
     /**
-     * @var ContextServiceInterface
+     * @var \Shopware\Bundle\StoreFrontBundle\Context\ContextServiceInterface
      */
     protected static $contextService;
 
@@ -81,8 +80,8 @@ class RegisterServiceTest extends \Enlight_Components_Test_TestCase
         self::$registerService = Shopware()->Container()->get('shopware_account.register_service');
         self::$modelManager = Shopware()->Container()->get('models');
         self::$connection = Shopware()->Container()->get('dbal_connection');
-        self::$contextService = Shopware()->Container()->get('shopware_storefront.context_service');
-        self::$contextFactory = Shopware()->Container()->get('shopware_storefront.context_factory');
+        self::$contextService = Shopware()->Container()->get('storefront.context.service');
+        self::$contextFactory = Shopware()->Container()->get('storefront.context.factory');
 
         self::$modelManager->clear();
     }
@@ -326,7 +325,7 @@ class RegisterServiceTest extends \Enlight_Components_Test_TestCase
     }
 
     /**
-     * @return Shop
+     * @return \Shopware\Bundle\StoreFrontBundle\Shop\Shop
      */
     private function getShop()
     {

@@ -114,7 +114,7 @@ class sAdmin
     private $snippetManager;
 
     /**
-     * @var StoreFrontBundle\Service\ContextServiceInterface
+     * @var \Shopware\Bundle\StoreFrontBundle\Context\ContextServiceInterface
      */
     private $contextService;
 
@@ -162,7 +162,7 @@ class sAdmin
         Shopware_Components_Snippet_Manager              $snippetManager = null,
         Shopware_Components_Modules                      $moduleManager = null,
         sSystem                                          $systemModule = null,
-        StoreFrontBundle\Service\ContextServiceInterface $contextService = null,
+        StoreFrontBundle\Context\ContextServiceInterface $contextService = null,
         EmailValidatorInterface                          $emailValidator = null,
         AddressServiceInterface                          $addressService = null,
         NumberRangeIncrementerInterface                  $numberRangeIncrementer = null
@@ -180,7 +180,7 @@ class sAdmin
         $mainShop = Shopware()->Shop()->getMain() !== null ? Shopware()->Shop()->getMain() : Shopware()->Shop();
         $this->scopedRegistration = $mainShop->getCustomerScope();
 
-        $this->contextService = $contextService ?: Shopware()->Container()->get('shopware_storefront.context_service');
+        $this->contextService = $contextService ?: Shopware()->Container()->get('storefront.context.service');
         $this->emailValidator = $emailValidator ?: Shopware()->Container()->get('validator.email');
         $this->subshopId = $this->contextService->getShopContext()->getShop()->getParentId();
         $this->addressService = $addressService ?: Shopware()->Container()->get('shopware_account.address_service');
@@ -3409,7 +3409,7 @@ SQL;
 
         $context = $this->contextService->getShopContext();
         $orderArticleOrderNumbers = array_column($getOrderDetails, 'articleordernumber');
-        $listProducts = Shopware()->Container()->get('shopware_storefront.list_product_service')->getList($orderArticleOrderNumbers, $context);
+        $listProducts = Shopware()->Container()->get('storefront.product.list_product_service')->getList($orderArticleOrderNumbers, $context);
         $listProducts = Shopware()->Container()->get('legacy_struct_converter')->convertListProductStructList($listProducts);
 
         foreach ($listProducts as &$listProduct) {

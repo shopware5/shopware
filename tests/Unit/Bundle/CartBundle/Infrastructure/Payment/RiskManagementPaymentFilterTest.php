@@ -30,9 +30,9 @@ use Shopware\Bundle\CartBundle\Domain\Validator\Collector\RuleDataCollectorRegis
 use Shopware\Bundle\CartBundle\Domain\Validator\Data\RuleDataCollection;
 use Shopware\Bundle\CartBundle\Domain\Validator\Rule\Rule;
 use Shopware\Bundle\CartBundle\Domain\Validator\ValidatableFilter;
-use Shopware\Bundle\StoreFrontBundle\Struct\PaymentMethod;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\PaymentMethod\PaymentMethod;
 
 class RiskManagementPaymentFilterTest extends TestCase
 {

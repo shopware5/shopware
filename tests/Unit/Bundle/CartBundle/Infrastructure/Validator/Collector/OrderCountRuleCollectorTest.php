@@ -32,8 +32,8 @@ use Shopware\Bundle\CartBundle\Domain\Validator\Rule\RuleCollection;
 use Shopware\Bundle\CartBundle\Infrastructure\Validator\Collector\OrderCountRuleCollector;
 use Shopware\Bundle\CartBundle\Infrastructure\Validator\Data\OrderCountRuleData;
 use Shopware\Bundle\CartBundle\Infrastructure\Validator\Rule\OrderCountRule;
-use Shopware\Bundle\StoreFrontBundle\Struct\Customer;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
+use Shopware\Bundle\StoreFrontBundle\Customer\Customer;
 
 class OrderCountRuleCollectorTest extends TestCase
 {

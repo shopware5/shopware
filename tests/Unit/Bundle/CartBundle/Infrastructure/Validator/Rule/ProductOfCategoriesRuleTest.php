@@ -29,7 +29,7 @@ use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
 use Shopware\Bundle\CartBundle\Domain\Validator\Data\RuleDataCollection;
 use Shopware\Bundle\CartBundle\Infrastructure\Validator\Data\ProductOfCategoriesRuleData;
 use Shopware\Bundle\CartBundle\Infrastructure\Validator\Rule\ProductOfCategoriesRule;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
 
 class ProductOfCategoriesRuleTest extends TestCase
 {

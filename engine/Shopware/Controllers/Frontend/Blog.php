@@ -188,8 +188,8 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
             }
         }, $blogArticles);
 
-        $context = $this->get('shopware_storefront.context_service')->getShopContext();
-        $medias = $this->get('shopware_storefront.media_service')->getList($mediaIds, $context);
+        $context = $this->get('storefront.context.service')->getShopContext();
+        $medias = $this->get('storefront.media.service')->getList($mediaIds, $context);
 
         foreach ($blogArticles as $key => $blogArticle) {
             //adding number of comments to the blog article
@@ -215,7 +215,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
                 continue;
             }
 
-            /** @var $media \Shopware\Bundle\StoreFrontBundle\Struct\Media */
+            /** @var $media \Shopware\Bundle\StoreFrontBundle\Media\Media */
             $media = $medias[$mediaId];
             $media = $this->get('legacy_struct_converter')->convertMediaStruct($media);
 
@@ -303,8 +303,8 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
         }
 
         $mediaIds = array_column($blogArticleData['media'], 'mediaId');
-        $context = $this->get('shopware_storefront.context_service')->getShopContext();
-        $mediaStructs = $this->get('shopware_storefront.media_service')->getList($mediaIds, $context);
+        $context = $this->get('storefront.context.service')->getShopContext();
+        $mediaStructs = $this->get('storefront.media.service')->getList($mediaIds, $context);
 
         //adding thumbnails to the blog article
         foreach ($blogArticleData['media'] as &$media) {

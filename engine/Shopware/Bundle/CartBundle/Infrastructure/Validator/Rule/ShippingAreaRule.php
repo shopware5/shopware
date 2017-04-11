@@ -28,7 +28,7 @@ use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
 use Shopware\Bundle\CartBundle\Domain\Validator\Data\RuleDataCollection;
 use Shopware\Bundle\CartBundle\Domain\Validator\Exception\UnsupportedOperatorException;
 use Shopware\Bundle\CartBundle\Domain\Validator\Rule\Rule;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 
 class ShippingAreaRule extends Rule
 {

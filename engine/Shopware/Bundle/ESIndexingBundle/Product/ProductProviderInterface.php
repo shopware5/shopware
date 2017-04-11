@@ -25,7 +25,7 @@
 namespace Shopware\Bundle\ESIndexingBundle\Product;
 
 use Shopware\Bundle\ESIndexingBundle\Struct\Product;
-use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
+use Shopware\Bundle\StoreFrontBundle\Shop\Shop;
 
 interface ProductProviderInterface
 {

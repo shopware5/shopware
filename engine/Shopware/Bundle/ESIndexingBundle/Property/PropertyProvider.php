@@ -25,11 +25,11 @@
 namespace Shopware\Bundle\ESIndexingBundle\Property;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Bundle\StoreFrontBundle\Gateway\FieldHelper;
-use Shopware\Bundle\StoreFrontBundle\Gateway\Hydrator\PropertyHydrator;
-use Shopware\Bundle\StoreFrontBundle\Struct\Property\Group;
-use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
-use Shopware\Bundle\StoreFrontBundle\Struct\TranslationContext;
+use Shopware\Bundle\StoreFrontBundle\Common\FieldHelper;
+use Shopware\Bundle\StoreFrontBundle\Context\TranslationContext;
+use Shopware\Bundle\StoreFrontBundle\Property\PropertyGroup;
+use Shopware\Bundle\StoreFrontBundle\Property\PropertyHydrator;
+use Shopware\Bundle\StoreFrontBundle\Shop\Shop;
 
 /**
  * Class PropertyProvider
@@ -42,7 +42,7 @@ class PropertyProvider implements PropertyProviderInterface
     private $connection;
 
     /**
-     * @var FieldHelper
+     * @var \Shopware\Bundle\StoreFrontBundle\Common\FieldHelper
      */
     private $fieldHelper;
 
@@ -91,7 +91,7 @@ class PropertyProvider implements PropertyProviderInterface
     /**
      * @param array[] $data
      *
-     * @return Group
+     * @return PropertyGroup
      */
     private function hydrateGroup($data)
     {

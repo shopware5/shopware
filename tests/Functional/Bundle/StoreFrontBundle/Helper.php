@@ -28,13 +28,13 @@ use Doctrine\DBAL\Connection;
 use Shopware\Bundle\CartBundle\Domain\Delivery\ShippingLocation;
 use Shopware\Bundle\ESIndexingBundle\Console\ProgressHelperInterface;
 use Shopware\Bundle\StoreFrontBundle;
-use Shopware\Bundle\StoreFrontBundle\Gateway\ConfiguratorGateway;
-use Shopware\Bundle\StoreFrontBundle\Gateway\ProductConfigurationGateway;
-use Shopware\Bundle\StoreFrontBundle\Struct\Customer\Group;
-use Shopware\Bundle\StoreFrontBundle\Struct\PaymentMethod;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShippingMethod;
-use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Configurator\ConfiguratorGateway;
+use Shopware\Bundle\StoreFrontBundle\Configurator\ProductConfigurationGateway;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\CustomerGroup\CustomerGroup;
+use Shopware\Bundle\StoreFrontBundle\PaymentMethod\PaymentMethod;
+use Shopware\Bundle\StoreFrontBundle\ShippingMethod\ShippingMethod;
+use Shopware\Bundle\StoreFrontBundle\Shop\Shop;
 use Shopware\Components\Api\Resource;
 use Shopware\Kernel;
 use Shopware\Models;
@@ -109,20 +109,20 @@ class Helper
     }
 
     public function getProductConfigurator(
-        StoreFrontBundle\Struct\ListProduct $listProduct,
-        StoreFrontBundle\Struct\ShopContext $context,
+        StoreFrontBundle\Product\ListProduct $listProduct,
+        StoreFrontBundle\Context\ShopContext $context,
         array $selection = [],
         ProductConfigurationGateway $productConfigurationGateway = null,
         ConfiguratorGateway $configuratorGateway = null
     ) {
         if ($productConfigurationGateway == null) {
-            $productConfigurationGateway = Shopware()->Container()->get('shopware_storefront.product_configuration_gateway');
+            $productConfigurationGateway = Shopware()->Container()->get('storefront.configurator.product_configuration_gateway');
         }
         if ($configuratorGateway == null) {
-            $configuratorGateway = Shopware()->Container()->get('shopware_storefront.configurator_gateway');
+            $configuratorGateway = Shopware()->Container()->get('storefront.configurator.gateway');
         }
 
-        $service = new StoreFrontBundle\Service\Core\ConfiguratorService(
+        $service = new StoreFrontBundle\Configurator\ConfiguratorService(
             $productConfigurationGateway,
             $configuratorGateway
         );
@@ -131,21 +131,21 @@ class Helper
     }
 
     /**
-     * @param StoreFrontBundle\Struct\ListProduct                              $product
-     * @param StoreFrontBundle\Struct\ShopContext                              $context
-     * @param \Shopware\Bundle\StoreFrontBundle\Gateway\ProductPropertyGateway $productPropertyGateway
+     * @param \Shopware\Bundle\StoreFrontBundle\Product\ListProduct             $product
+     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContext             $context
+     * @param \Shopware\Bundle\StoreFrontBundle\Property\ProductPropertyGateway $productPropertyGateway
      *
-     * @return StoreFrontBundle\Struct\Property\Set
+     * @return \Shopware\Bundle\StoreFrontBundle\Property\PropertySet
      */
     public function getProductProperties(
-        StoreFrontBundle\Struct\ListProduct $product,
-        StoreFrontBundle\Struct\ShopContext $context,
-        StoreFrontBundle\Gateway\ProductPropertyGateway $productPropertyGateway = null
+        StoreFrontBundle\Product\ListProduct $product,
+        StoreFrontBundle\Context\ShopContext $context,
+        StoreFrontBundle\Property\ProductPropertyGateway $productPropertyGateway = null
     ) {
         if ($productPropertyGateway === null) {
-            $productPropertyGateway = Shopware()->Container()->get('shopware_storefront.product_property_gateway');
+            $productPropertyGateway = Shopware()->Container()->get('storefront.property.product_property_gateway');
         }
-        $service = new StoreFrontBundle\Service\Core\PropertyService($productPropertyGateway);
+        $service = new StoreFrontBundle\Property\PropertyService($productPropertyGateway);
 
         $properties = $service->getList([$product], $context);
 
@@ -157,7 +157,7 @@ class Helper
      * @param ShopContextInterface $context
      * @param array                $configs
      *
-     * @return \Shopware\Bundle\StoreFrontBundle\Struct\ListProduct[]
+     * @return \Shopware\Bundle\StoreFrontBundle\Product\ListProduct[]
      */
     public function getListProducts($numbers, ShopContextInterface $context, array $configs = [])
     {
@@ -168,7 +168,7 @@ class Helper
             $config->offsetSet($key, $value);
         }
 
-        $service = Shopware()->Container()->get('shopware_storefront.list_product_service');
+        $service = Shopware()->Container()->get('storefront.product.list_product_service');
         $result = $service->getList($numbers, $context);
         foreach ($originals as $key => $value) {
             $config->offsetSet($key, $value);
@@ -178,11 +178,11 @@ class Helper
     }
 
     /**
-     * @param string               $number
-     * @param ShopContextInterface $context
-     * @param array                $configs
+     * @param string                                                         $number
+     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
+     * @param array                                                          $configs
      *
-     * @return StoreFrontBundle\Struct\ListProduct
+     * @return \Shopware\Bundle\StoreFrontBundle\Product\ListProduct
      */
     public function getListProduct($number, ShopContextInterface $context, array $configs = [])
     {
@@ -194,20 +194,20 @@ class Helper
      * data for an quick product creation.
      *
      * @param $number
-     * @param Tax   $tax
-     * @param Group $customerGroup
-     * @param float $priceOffset
+     * @param Tax                                                           $tax
+     * @param \Shopware\Bundle\StoreFrontBundle\CustomerGroup\CustomerGroup $customerGroup
+     * @param float                                                         $priceOffset
      *
      * @return array
      */
     public function getSimpleProduct(
         $number,
         $tax, // Either Model/Tax or Struct/Tax
-        Group $customerGroup,
+        CustomerGroup $customerGroup,
         $priceOffset = 0.00
     ) {
         if ($customerGroup instanceof Models\Customer\Group) {
-            $struct = new Group();
+            $struct = new CustomerGroup();
             $struct->setId($customerGroup->getId());
             $struct->setKey($customerGroup->getKey());
             $struct->setName($customerGroup->getName());
@@ -612,14 +612,14 @@ class Helper
     }
 
     /**
-     * @param Group  $customerGroup used for the price definition
-     * @param string $number
-     * @param array  $data          contains nested configurator group > option array
+     * @param \Shopware\Bundle\StoreFrontBundle\CustomerGroup\CustomerGroup $customerGroup used for the price definition
+     * @param string                                                        $number
+     * @param array                                                         $data          contains nested configurator group > option array
      *
      * @return array
      */
     public function getConfigurator(
-        Group $customerGroup,
+        CustomerGroup $customerGroup,
         $number,
         array $data = []
     ) {
@@ -909,7 +909,7 @@ class Helper
     }
 
     /**
-     * @param Shop $shop
+     * @param \Shopware\Bundle\StoreFrontBundle\Shop\Shop $shop
      */
     public function refreshSearchIndexes(Shop $shop)
     {
@@ -936,8 +936,8 @@ class Helper
 
         $this->deleteProperties($namePrefix);
 
-        $this->db->insert('s_filter', ['name' => $namePrefix . '-Set', 'comparable' => 1]);
-        $data = $this->db->fetchRow("SELECT * FROM s_filter WHERE name = '" . $namePrefix . "-Set'");
+        $this->db->insert('s_filter', ['name' => $namePrefix . '-PropertySet', 'comparable' => 1]);
+        $data = $this->db->fetchRow("SELECT * FROM s_filter WHERE name = '" . $namePrefix . "-PropertySet'");
 
         for ($i = 0; $i < $groupCount; ++$i) {
             $this->db->insert('s_filter_options', [
@@ -948,7 +948,7 @@ class Helper
 
             for ($i2 = 0; $i2 < $optionCount; ++$i2) {
                 $this->db->insert('s_filter_values', [
-                    'value' => $namePrefix . '-Option-' . $i . '-' . $i2,
+                    'value' => $namePrefix . '-PropertyOption-' . $i . '-' . $i2,
                     'optionID' => $group['id'],
                 ]);
             }
@@ -968,7 +968,7 @@ class Helper
 
     private function deleteProperties($namePrefix = 'Test')
     {
-        $this->db->query("DELETE FROM s_filter WHERE name = '" . $namePrefix . "-Set'");
+        $this->db->query("DELETE FROM s_filter WHERE name = '" . $namePrefix . "-PropertySet'");
 
         $ids = $this->db->fetchCol("SELECT id FROM s_filter_options WHERE name LIKE '" . $namePrefix . "-Gruppe%'");
         foreach ($ids as $id) {
@@ -976,7 +976,7 @@ class Helper
             $this->db->query('DELETE FROM s_filter_relations WHERE optionID = ?', [$id]);
         }
 
-        $this->db->query("DELETE FROM s_filter_values WHERE value LIKE '" . $namePrefix . "-Option%'");
+        $this->db->query("DELETE FROM s_filter_values WHERE value LIKE '" . $namePrefix . "-PropertyOption%'");
     }
 
     private function deleteCategory($name)
@@ -1253,7 +1253,7 @@ class Helper
     /**
      * @param Models\Tax\Tax[] $taxes
      *
-     * @return StoreFrontBundle\Struct\Tax[]
+     * @return \Shopware\Bundle\StoreFrontBundle\Tax\Tax[]
      */
     private function buildTaxRules(array $taxes)
     {

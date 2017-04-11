@@ -30,7 +30,7 @@ use Shopware\Bundle\CartBundle\Domain\LineItem\CalculatedProductCollection;
 use Shopware\Bundle\CartBundle\Domain\LineItem\LineItemCollection;
 use Shopware\Bundle\CartBundle\Domain\LineItem\LineItemInterface;
 use Shopware\Bundle\CartBundle\Domain\Price\PriceCalculator;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 
 class ProductCalculator
 {

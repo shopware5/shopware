@@ -24,8 +24,6 @@
 
 namespace Shopware\Bundle\SearchBundle;
 
-use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
-
 class BatchProductSearchResult
 {
     /**
@@ -50,7 +48,7 @@ class BatchProductSearchResult
      *
      * @throws \OutOfBoundsException
      *
-     * @return ListProduct[]
+     * @return \Shopware\Bundle\StoreFrontBundle\Product\ListProduct[]
      */
     public function get($key)
     {

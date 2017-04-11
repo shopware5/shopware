@@ -27,7 +27,7 @@ namespace Shopware\Bundle\CartBundle\Domain\Validator;
 use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
 use Shopware\Bundle\CartBundle\Domain\Validator\Collector\RuleDataCollectorRegistry;
 use Shopware\Bundle\CartBundle\Domain\Validator\Rule\RuleCollection;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 
 class ValidatableFilter
 {
@@ -42,9 +42,10 @@ class ValidatableFilter
     }
 
     /**
-     * @param Validatable[] $items
-     * @param CalculatedCart $calculatedCart
+     * @param Validatable[]        $items
+     * @param CalculatedCart       $calculatedCart
      * @param ShopContextInterface $context
+     *
      * @return array
      */
     public function filter(
@@ -52,8 +53,7 @@ class ValidatableFilter
         CalculatedCart $calculatedCart,
         ShopContextInterface $context,
         $filterOnMatch = true
-    ): array
-    {
+    ): array {
         $rules = array_map(function (Validatable $item) {
             return $item->getRule();
         }, $items);

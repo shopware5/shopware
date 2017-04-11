@@ -25,7 +25,7 @@
 namespace Shopware\Tests\Functional\Bundle\SearchBundle\Condition;
 
 use Shopware\Bundle\SearchBundle\Condition\CustomerGroupCondition;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
 use Shopware\Models\Category\Category;
 use Shopware\Models\Customer\Group;
 use Shopware\Tests\Functional\Bundle\StoreFrontBundle\TestCase;
@@ -74,9 +74,9 @@ class CustomerGroupConditionTest extends TestCase
 
     /**
      * @param $number
-     * @param Group[]                            $customerGroups
-     * @param \Shopware\Models\Category\Category $category
-     * @param ShopContext                        $context
+     * @param Group[]                                               $customerGroups
+     * @param \Shopware\Models\Category\Category                    $category
+     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContext $context
      *
      * @return array
      */

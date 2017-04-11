@@ -25,8 +25,7 @@
 namespace Shopware\Bundle\SearchBundle\FacetResult;
 
 use Shopware\Bundle\SearchBundle\FacetResultInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\Attribute;
-use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
+use Shopware\Bundle\StoreFrontBundle\Common\Extendable;
 
 /**
  * @category  Shopware
@@ -66,13 +65,13 @@ class TreeFacetResult extends Extendable implements FacetResultInterface
     protected $template;
 
     /**
-     * @param string      $facetName
-     * @param string      $fieldName
-     * @param bool        $active
-     * @param string      $label
-     * @param TreeItem[]  $values
-     * @param null|string $template
-     * @param Attribute[] $attributes
+     * @param string                                               $facetName
+     * @param string                                               $fieldName
+     * @param bool                                                 $active
+     * @param string                                               $label
+     * @param TreeItem[]                                           $values
+     * @param null|string                                          $template
+     * @param \Shopware\Bundle\StoreFrontBundle\Common\Attribute[] $attributes
      */
     public function __construct(
         $facetName,

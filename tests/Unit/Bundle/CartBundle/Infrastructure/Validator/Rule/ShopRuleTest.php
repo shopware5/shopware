@@ -29,8 +29,8 @@ use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
 use Shopware\Bundle\CartBundle\Domain\Validator\Data\RuleDataCollection;
 use Shopware\Bundle\CartBundle\Domain\Validator\Rule\Rule;
 use Shopware\Bundle\CartBundle\Infrastructure\Validator\Rule\ShopRule;
-use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
+use Shopware\Bundle\StoreFrontBundle\Shop\Shop;
 
 class ShopRuleTest extends TestCase
 {

@@ -24,13 +24,13 @@
 
 namespace Shopware\Bundle\EmotionBundle\Service;
 
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 
 interface EmotionElementServiceInterface
 {
     /**
-     * @param int[]                $emotionIds
-     * @param ShopContextInterface $context
+     * @param int[]                                                          $emotionIds
+     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
      *
      * @return array Contains sub-arrays with elements indexed by emotion id
      */

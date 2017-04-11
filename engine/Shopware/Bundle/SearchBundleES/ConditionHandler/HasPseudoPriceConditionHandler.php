@@ -30,7 +30,7 @@ use Shopware\Bundle\SearchBundle\Condition\HasPseudoPriceCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\CriteriaPartInterface;
 use Shopware\Bundle\SearchBundleES\PartialConditionHandlerInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 
 class HasPseudoPriceConditionHandler implements PartialConditionHandlerInterface
 {
@@ -77,7 +77,7 @@ class HasPseudoPriceConditionHandler implements PartialConditionHandlerInterface
     }
 
     /**
-     * @param ShopContextInterface $context
+     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
      *
      * @return string
      */

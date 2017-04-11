@@ -32,8 +32,8 @@ use Shopware\Bundle\CartBundle\Domain\Validator\Rule\RuleCollection;
 use Shopware\Bundle\CartBundle\Infrastructure\Validator\Collector\LastOrderRuleCollector;
 use Shopware\Bundle\CartBundle\Infrastructure\Validator\Data\LastOrderRuleData;
 use Shopware\Bundle\CartBundle\Infrastructure\Validator\Rule\LastOrderRule;
-use Shopware\Bundle\StoreFrontBundle\Struct\Customer;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
+use Shopware\Bundle\StoreFrontBundle\Customer\Customer;
 
 class LastOrderRuleCollectorTest extends TestCase
 {

@@ -87,7 +87,7 @@ class CSRFTokenValidator implements SubscriberInterface
      */
     public function invalidateToken(\Enlight_Controller_Response_Response $response)
     {
-        $context = $this->container->get('shopware_storefront.context_service')->getShopContext();
+        $context = $this->container->get('storefront.context.service')->getShopContext();
         $response->setCookie('invalidate-xcsrf-token', 1, 0, $context->getShop()->getPath());
     }
 

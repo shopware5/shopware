@@ -24,8 +24,8 @@
 
 use Shopware\Bundle\AttributeBundle\Service\CrudService;
 use Shopware\Bundle\StoreFrontBundle;
-use Shopware\Bundle\StoreFrontBundle\Service\AdditionalTextServiceInterface;
-use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\AdditionalText\AdditionalTextServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Context\ContextServiceInterface;
 
 /**
  * Deprecated Shopware Class to provide article export feeds
@@ -94,7 +94,7 @@ class sExport
     private $contextService;
 
     /**
-     * @var AdditionalTextServiceInterface
+     * @var \Shopware\Bundle\StoreFrontBundle\AdditionalText\AdditionalTextServiceInterface
      */
     private $additionalTextService;
 
@@ -112,11 +112,11 @@ class sExport
     private $configuratorService;
 
     /**
-     * @param ContextServiceInterface                               $contextService
-     * @param AdditionalTextServiceInterface                        $additionalTextService
-     * @param Enlight_Components_Db_Adapter_Pdo_Mysql               $db
-     * @param Shopware_Components_Config                            $config
-     * @param StoreFrontBundle\Service\ConfiguratorServiceInterface $configuratorService
+     * @param ContextServiceInterface                                                         $contextService
+     * @param \Shopware\Bundle\StoreFrontBundle\AdditionalText\AdditionalTextServiceInterface $additionalTextService
+     * @param Enlight_Components_Db_Adapter_Pdo_Mysql                                         $db
+     * @param Shopware_Components_Config                                                      $config
+     * @param StoreFrontBundle\Service\ConfiguratorServiceInterface                           $configuratorService
      */
     public function __construct(
         ContextServiceInterface $contextService = null,
@@ -127,11 +127,11 @@ class sExport
     ) {
         $container = Shopware()->Container();
 
-        $this->contextService = $contextService ?: $container->get('shopware_storefront.context_service');
-        $this->additionalTextService = $container->get('shopware_storefront.additional_text_service');
+        $this->contextService = $contextService ?: $container->get('storefront.context.service');
+        $this->additionalTextService = $container->get('storefront.additional_text.service');
         $this->db = $db ?: $container->get('db');
         $this->config = $config ?: $container->get('config');
-        $this->configuratorService = $configuratorService ?: $container->get('shopware_storefront.configurator_service');
+        $this->configuratorService = $configuratorService ?: $container->get('storefront.configurator.service');
     }
 
     /**
@@ -1093,7 +1093,7 @@ class sExport
 
                     if (!empty($row['group_ordernumber'])) {
                         foreach ($row['group_ordernumber'] as $orderNumber) {
-                            $product = new StoreFrontBundle\Struct\ListProduct(
+                            $product = new StoreFrontBundle\Product\ListProduct(
                                 (int) $row['articleID'],
                                 (int) $row['articledetailsID'],
                                 $orderNumber
@@ -1112,7 +1112,7 @@ class sExport
                         }
                     }
                 }
-                $product = new StoreFrontBundle\Struct\ListProduct(
+                $product = new StoreFrontBundle\Product\ListProduct(
                     (int) $row['articleID'],
                     (int) $row['articledetailsID'],
                     $row['ordernumber']
@@ -1127,7 +1127,7 @@ class sExport
 
                 $configurationGroups = $this->configuratorService->getProductConfiguration($product, $context);
 
-                /* @var StoreFrontBundle\Struct\Configurator\Group $configuratorOption */
+                /* @var \Shopware\Bundle\StoreFrontBundle\Configurator\ConfiguratorGroup $configuratorOption */
                 foreach ($configurationGroups as $configurationGroup) {
                     $option = current($configurationGroup->getOptions());
                     $row['configurator_options'][$configurationGroup->getName()] = $option->getName();

@@ -24,8 +24,7 @@
 
 namespace Shopware\Tests\Functional\Bundle\StoreFrontBundle;
 
-use Shopware\Bundle\StoreFrontBundle\Struct\Product\Download;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
 use Shopware\Models\Category\Category;
 
 class DownloadTest extends TestCase
@@ -37,17 +36,17 @@ class DownloadTest extends TestCase
         $data = $this->getProduct($number, $context);
         $this->helper->createArticle($data);
 
-        $product = Shopware()->Container()->get('shopware_storefront.list_product_service')->getList([$number], $context);
+        $product = Shopware()->Container()->get('storefront.product.list_product_service')->getList([$number], $context);
         $product = array_shift($product);
 
-        $downloads = Shopware()->Container()->get('shopware_storefront.product_download_service')->getList([$product], $context);
+        $downloads = Shopware()->Container()->get('storefront.product_download.service')->getList([$product], $context);
         $downloads = array_shift($downloads);
 
         $this->assertCount(2, $downloads);
 
-        /** @var $download Download */
+        /** @var $download \Shopware\Bundle\StoreFrontBundle\ProductDownload\ProductDownload */
         foreach ($downloads as $download) {
-            $this->assertInstanceOf('Shopware\Bundle\StoreFrontBundle\Struct\Product\Download', $download);
+            $this->assertInstanceOf('Shopware\Bundle\StoreFrontBundle\ProductDownload\ProductDownload', $download);
             $this->assertContains($download->getFile(), ['/var/www/first.txt', '/var/www/second.txt']);
             $this->assertCount(1, $download->getAttributes());
             $this->assertTrue($download->hasAttribute('core'));
@@ -63,10 +62,10 @@ class DownloadTest extends TestCase
             $this->helper->createArticle($data);
         }
 
-        $products = Shopware()->Container()->get('shopware_storefront.list_product_service')
+        $products = Shopware()->Container()->get('storefront.product.list_product_service')
             ->getList($numbers, $context);
 
-        $downloads = Shopware()->Container()->get('shopware_storefront.product_download_service')
+        $downloads = Shopware()->Container()->get('storefront.product_download.service')
             ->getList($products, $context);
 
         $this->assertCount(2, $downloads);

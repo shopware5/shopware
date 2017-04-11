@@ -26,7 +26,7 @@ namespace Shopware\Components\Statistic\Tracer;
 
 use Doctrine\DBAL\Connection;
 use Enlight_Controller_Request_Request as Request;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 use Shopware\Components\Statistic\StatisticTracerInterface;
 
 class ProductImpressionTracer implements StatisticTracerInterface
@@ -66,6 +66,7 @@ class ProductImpressionTracer implements StatisticTracerInterface
                  WHERE id = :id',
                 [':id' => $id]
             );
+
             return;
         }
 
@@ -74,7 +75,7 @@ class ProductImpressionTracer implements StatisticTracerInterface
             'shopId' => $shopId,
             'date' => $date->format('Y-m-d'),
             'impressions' => 1,
-            'deviceType' => $deviceType
+            'deviceType' => $deviceType,
         ]);
     }
 
@@ -96,6 +97,7 @@ class ProductImpressionTracer implements StatisticTracerInterface
         if ($id) {
             return (int) $id;
         }
+
         return null;
     }
 }

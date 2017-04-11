@@ -25,7 +25,7 @@
 namespace Shopware\Bundle\AccountBundle\Constraint;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
+use Shopware\Bundle\StoreFrontBundle\Shop\Shop;
 use Shopware\Components\Validator\EmailValidatorInterface;
 use Shopware\Models\Customer\Customer;
 use Shopware_Components_Snippet_Manager;

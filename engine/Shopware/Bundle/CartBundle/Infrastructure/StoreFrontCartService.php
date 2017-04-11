@@ -35,7 +35,7 @@ use Shopware\Bundle\CartBundle\Domain\LineItem\LineItemInterface;
 use Shopware\Bundle\CartBundle\Domain\Order\OrderPersisterInterface;
 use Shopware\Bundle\CartBundle\Infrastructure\View\ViewCart;
 use Shopware\Bundle\CartBundle\Infrastructure\View\ViewCartTransformer;
-use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Context\ContextServiceInterface;
 
 class StoreFrontCartService
 {

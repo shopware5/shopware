@@ -45,9 +45,9 @@ use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
 use Shopware\Bundle\SearchBundleES\HandlerInterface;
 use Shopware\Bundle\SearchBundleES\ResultHydratorInterface;
 use Shopware\Bundle\SearchBundleES\StructHydrator;
-use Shopware\Bundle\StoreFrontBundle\Struct\Property\Group;
-use Shopware\Bundle\StoreFrontBundle\Struct\Property\Option;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Property\PropertyGroup;
+use Shopware\Bundle\StoreFrontBundle\Property\PropertyOption;
 use Shopware\Components\QueryAliasMapper;
 
 class PropertyFacetHandler implements HandlerInterface, ResultHydratorInterface
@@ -173,7 +173,7 @@ class PropertyFacetHandler implements HandlerInterface, ResultHydratorInterface
      * @param array[] $data
      * @param int[]   $optionIds
      *
-     * @return Group[]
+     * @return PropertyGroup[]
      */
     private function hydrateProperties($data, $optionIds)
     {
@@ -181,11 +181,11 @@ class PropertyFacetHandler implements HandlerInterface, ResultHydratorInterface
         foreach ($data as $row) {
             $group = $this->hydrator->createPropertyGroup($row['_source']);
 
-            $options = array_filter($group->getOptions(), function (Option $option) use ($optionIds) {
+            $options = array_filter($group->getOptions(), function (PropertyOption $option) use ($optionIds) {
                 return in_array($option->getId(), $optionIds);
             });
 
-            usort($options, function (Option $a, Option $b) {
+            usort($options, function (PropertyOption $a, PropertyOption $b) {
                 if ($a->getPosition() !== $b->getPosition()) {
                     return $a->getPosition() > $b->getPosition();
                 }
@@ -217,8 +217,8 @@ class PropertyFacetHandler implements HandlerInterface, ResultHydratorInterface
     }
 
     /**
-     * @param Group[] $groups
-     * @param int[]   $actives
+     * @param PropertyGroup[] $groups
+     * @param int[]           $actives
      *
      * @return FacetResultGroup
      */

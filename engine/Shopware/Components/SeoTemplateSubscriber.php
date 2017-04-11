@@ -25,7 +25,7 @@
 namespace Shopware\Components;
 
 use Enlight\Event\SubscriberInterface;
-use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Context\ContextServiceInterface;
 
 class SeoTemplateSubscriber implements SubscriberInterface
 {

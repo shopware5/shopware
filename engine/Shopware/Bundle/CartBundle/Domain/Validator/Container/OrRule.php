@@ -28,7 +28,7 @@ namespace Shopware\Bundle\CartBundle\Domain\Validator\Container;
 
 use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
 use Shopware\Bundle\CartBundle\Domain\Validator\Data\RuleDataCollection;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 
 /**
  * OrRule returns true, if at least one child rule is true

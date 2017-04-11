@@ -32,7 +32,7 @@ use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCollection;
 use Shopware\Bundle\CartBundle\Domain\Validator\Data\RuleDataCollection;
 use Shopware\Bundle\CartBundle\Domain\Validator\Rule\Rule;
 use Shopware\Bundle\CartBundle\Infrastructure\Validator\Rule\OrderAmountRule;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
 
 class OrderAmountRuleTest extends TestCase
 {

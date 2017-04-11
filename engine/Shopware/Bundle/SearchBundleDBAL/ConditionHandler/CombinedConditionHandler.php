@@ -28,7 +28,7 @@ use Shopware\Bundle\SearchBundle\Condition\CombinedCondition;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
 use Shopware\Bundle\SearchBundleDBAL\ConditionHandlerInterface;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 use Shopware\Components\DependencyInjection\Container;
 
 class CombinedConditionHandler implements ConditionHandlerInterface

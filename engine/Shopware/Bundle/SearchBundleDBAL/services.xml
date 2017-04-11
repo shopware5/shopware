@@ -33,7 +33,7 @@
         </service>
 
         <service id="shopware_searchdbal.cache_keyword_finder" class="Shopware\Bundle\SearchBundleDBAL\SearchTerm\CacheKeywordFinder">
-            <argument type="service" id="shopware_storefront.storefront_cache" />
+            <argument type="service" id="storefront.common.cache" />
             <argument type="service" id="config" />
             <argument type="service" id="shopware_searchdbal.keyword_finder_dbal" />
         </service>
@@ -88,7 +88,7 @@
         </service>
 
         <service id="shopware_searchdbal.manufacturer_facet_handler_dbal" class="Shopware\Bundle\SearchBundleDBAL\FacetHandler\ManufacturerFacetHandler">
-            <argument type="service" id="shopware_storefront.manufacturer_service"/>
+            <argument type="service" id="storefront.manufacturer.service"/>
             <argument type="service" id="shopware_searchdbal.dbal_query_builder_factory" />
             <argument type="service" id="snippets" />
             <argument type="service" id="query_alias_mapper" />
@@ -96,17 +96,17 @@
         </service>
 
         <service id="shopware_searchdbal.property_facet_handler_dbal" class="Shopware\Bundle\SearchBundleDBAL\FacetHandler\PropertyFacetHandler">
-            <argument type="service" id="shopware_storefront.property_gateway"/>
+            <argument type="service" id="storefront.property.gateway"/>
             <argument type="service" id="shopware_searchdbal.dbal_query_builder_factory" />
             <argument type="service" id="query_alias_mapper" />
             <tag name="facet_handler_dbal"/>
         </service>
 
         <service id="shopware_searchdbal.category_facet_handler_dbal" class="Shopware\Bundle\SearchBundleDBAL\FacetHandler\CategoryFacetHandler">
-            <argument type="service" id="shopware_storefront.category_service"/>
+            <argument type="service" id="storefront.category.service"/>
             <argument type="service" id="shopware_searchdbal.dbal_query_builder_factory" />
             <argument type="service" id="config" />
-            <argument type="service" id="shopware_storefront.category_depth_service" />
+            <argument type="service" id="storefront.category.depth_service" />
             <argument type="service" id="shopware_search.category_tree_facet_result_builder" />
             <tag name="facet_handler_dbal"/>
         </service>

@@ -32,9 +32,9 @@ use Shopware\Bundle\SearchBundle\Sorting\PriceSorting;
 use Shopware\Bundle\SearchBundle\Sorting\ReleaseDateSorting;
 use Shopware\Bundle\SearchBundle\SortingInterface;
 use Shopware\Bundle\SearchBundle\StoreFrontCriteriaFactoryInterface;
-use Shopware\Bundle\StoreFrontBundle\Service\Core\AdditionalTextService;
-use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\AdditionalText\AdditionalTextService;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Product\ListProduct;
 use Shopware\Components\ProductStream\RepositoryInterface;
 use Shopware_Components_Config as ShopwareConfig;
 
@@ -67,15 +67,15 @@ class ArticleSliderComponentHandler implements ComponentHandlerInterface
     private $shopwareConfig;
 
     /**
-     * @var AdditionalTextService
+     * @var \Shopware\Bundle\StoreFrontBundle\AdditionalText\AdditionalTextService
      */
     private $additionalTextService;
 
     /**
-     * @param StoreFrontCriteriaFactoryInterface $criteriaFactory
-     * @param RepositoryInterface                $productStreamRepository
-     * @param ShopwareConfig                     $shopwareConfig
-     * @param AdditionalTextService              $additionalTextService
+     * @param StoreFrontCriteriaFactoryInterface                                     $criteriaFactory
+     * @param RepositoryInterface                                                    $productStreamRepository
+     * @param ShopwareConfig                                                         $shopwareConfig
+     * @param \Shopware\Bundle\StoreFrontBundle\AdditionalText\AdditionalTextService $additionalTextService
      */
     public function __construct(
         StoreFrontCriteriaFactoryInterface $criteriaFactory,
@@ -178,7 +178,7 @@ class ArticleSliderComponentHandler implements ComponentHandlerInterface
 
                 $products = [];
                 foreach ($productNumbers as $productNumber) {
-                    /** @var ListProduct $product */
+                    /** @var \Shopware\Bundle\StoreFrontBundle\Product\ListProduct $product */
                     $product = $listProducts[$productNumber];
                     $this->switchPrice($product);
                     $products[$productNumber] = $product;
@@ -190,7 +190,7 @@ class ArticleSliderComponentHandler implements ComponentHandlerInterface
     }
 
     /**
-     * @param ListProduct $product
+     * @param \Shopware\Bundle\StoreFrontBundle\Product\ListProduct $product
      */
     private function switchPrice(ListProduct $product)
     {

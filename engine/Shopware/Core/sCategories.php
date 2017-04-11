@@ -22,9 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-use Shopware\Bundle\StoreFrontBundle\Service\CategoryServiceInterface;
-use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\Category;
+use Shopware\Bundle\StoreFrontBundle\Category\Category;
 
 /**
  * Shopware Class that handles categories
@@ -92,12 +90,12 @@ class sCategories
     private $connection;
 
     /**
-     * @var CategoryServiceInterface
+     * @var \Shopware\Bundle\StoreFrontBundle\Category\CategoryServiceInterface
      */
     private $categoryService;
 
     /**
-     * @var ContextServiceInterface
+     * @var \Shopware\Bundle\StoreFrontBundle\Context\ContextServiceInterface
      */
     private $contextService;
 
@@ -120,8 +118,8 @@ class sCategories
         $this->baseId = (int) Shopware()->Shop()->get('parentID');
         $this->customerGroupId = (int) Shopware()->Modules()->System()->sUSERGROUPDATA['id'];
         $this->connection = Shopware()->Container()->get('dbal_connection');
-        $this->categoryService = Shopware()->Container()->get('shopware_storefront.category_service');
-        $this->contextService = Shopware()->Container()->get('shopware_storefront.context_service');
+        $this->categoryService = Shopware()->Container()->get('storefront.category.service');
+        $this->contextService = Shopware()->Container()->get('storefront.context.service');
         $this->frontController = Shopware()->Container()->get('front');
     }
 
@@ -344,7 +342,7 @@ class sCategories
         }
 
         $context = $this->contextService->getShopContext();
-        $category = Shopware()->Container()->get('shopware_storefront.category_service')->getList([$id], $context);
+        $category = Shopware()->Container()->get('storefront.category.service')->getList([$id], $context);
         $category = array_shift($category);
 
         if (empty($category)) {

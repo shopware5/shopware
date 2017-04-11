@@ -18,13 +18,13 @@
 
         <service id="shopware.cart.product.price_gateway" class="Shopware\Bundle\CartBundle\Infrastructure\Product\ProductPriceGateway">
             <argument type="service" id="dbal_connection" />
-            <argument type="service" id="shopware_storefront.field_helper_dbal" />
+            <argument type="service" id="storefront.common.field_helper" />
         </service>
 
         <service id="shopware.cart.storefront_service" class="Shopware\Bundle\CartBundle\Infrastructure\StoreFrontCartService">
             <argument type="service" id="cart.calculator" />
             <argument type="service" id="shopware.cart.persister" />
-            <argument type="service" id="shopware_storefront.context_service" />
+            <argument type="service" id="storefront.context.service" />
             <argument type="service" id="session" />
             <argument type="service" id="shopware.cart.view.cart_transformer" />
             <argument type="service" id="corelogger" />
@@ -42,8 +42,8 @@
 
 
         <service id="shopware.cart.view.product_transformer" class="Shopware\Bundle\CartBundle\Infrastructure\View\ViewProductTransformer">
-            <argument type="service" id="shopware_storefront.list_product_gateway" />
-            <argument type="service" id="shopware_storefront.variant_cover_service" />
+            <argument type="service" id="storefront.product.gateway" />
+            <argument type="service" id="storefront.media.service" />
         </service>
 
         <service id="shopware.cart.view.cart_transformer" class="Shopware\Bundle\CartBundle\Infrastructure\View\ViewCartTransformer">

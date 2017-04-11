@@ -24,7 +24,7 @@
 
 namespace Shopware\tests\Functional\Bundle\StoreFrontBundle;
 
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Common\Struct;
 use Shopware\Models;
 
 class Converter
@@ -32,11 +32,11 @@ class Converter
     /**
      * @param Models\Tax\Tax $tax
      *
-     * @return Struct\Tax
+     * @return \Shopware\Bundle\StoreFrontBundle\Tax\Tax
      */
     public function convertTax(Models\Tax\Tax $tax)
     {
-        return new Struct\Tax(
+        return new \Shopware\Bundle\StoreFrontBundle\Tax\Tax(
             $tax->getId(),
             $tax->getName(),
             $tax->getTax()
@@ -46,11 +46,11 @@ class Converter
     /**
      * @param Models\Price\Group $entity
      *
-     * @return Struct\Product\PriceGroup
+     * @return \Shopware\Bundle\StoreFrontBundle\PriceGroup\PriceGroup
      */
     public function convertPriceGroup(Models\Price\Group $entity)
     {
-        $struct = new Struct\Product\PriceGroup();
+        $struct = new \Shopware\Bundle\StoreFrontBundle\PriceGroup\PriceGroup();
 
         $struct->setId($entity->getId());
 
@@ -59,7 +59,7 @@ class Converter
         $discounts = [];
 
         foreach ($entity->getDiscounts() as $discountEntity) {
-            $discount = new Struct\Product\PriceDiscount();
+            $discount = new \Shopware\Bundle\StoreFrontBundle\PriceGroup\PriceDiscount();
 
             $discount->setId($discountEntity->getId());
 
@@ -77,7 +77,7 @@ class Converter
 
     public function convertCategory(Models\Category\Category $category)
     {
-        return Struct\Category::createFromCategoryEntity($category);
+        return \Shopware\Bundle\StoreFrontBundle\Category\Category::createFromCategoryEntity($category);
     }
 
     /**
@@ -85,11 +85,11 @@ class Converter
      *
      * @param \Shopware\Models\Shop\Currency $currency
      *
-     * @return Struct\Currency
+     * @return \Shopware\Bundle\StoreFrontBundle\Currency\Currency
      */
     public function convertCurrency(Models\Shop\Currency $currency)
     {
-        $struct = new Struct\Currency();
+        $struct = new \Shopware\Bundle\StoreFrontBundle\Currency\Currency();
 
         $struct->setId($currency->getId());
         $struct->setName($currency->getName());
@@ -105,11 +105,11 @@ class Converter
      *
      * @param \Shopware\Models\Shop\Shop $shop
      *
-     * @return Struct\Shop
+     * @return \Shopware\Bundle\StoreFrontBundle\Shop\Shop
      */
     public function convertShop(Models\Shop\Shop $shop)
     {
-        $struct = new Struct\Shop();
+        $struct = new \Shopware\Bundle\StoreFrontBundle\Shop\Shop();
         $struct->setId($shop->getId());
 
         $struct->setName($shop->getName());
@@ -134,7 +134,7 @@ class Converter
             );
         }
 
-        $country = new Struct\Country();
+        $country = new \Shopware\Bundle\StoreFrontBundle\Country\Country();
         $country->setId($shop->getCountry()->getId());
         $country->setName($shop->getCountry()->getName());
         $struct->setCountry($country);
@@ -145,11 +145,11 @@ class Converter
     /**
      * @param Models\Customer\Group $group
      *
-     * @return Struct\Customer\Group
+     * @return \Shopware\Bundle\StoreFrontBundle\CustomerGroup\CustomerGroup
      */
     public function convertCustomerGroup(Models\Customer\Group $group)
     {
-        $customerGroup = new Struct\Customer\Group();
+        $customerGroup = new \Shopware\Bundle\StoreFrontBundle\CustomerGroup\CustomerGroup();
         $customerGroup->setKey($group->getKey());
         $customerGroup->setUseDiscount($group->getMode());
         $customerGroup->setId($group->getId());
@@ -165,13 +165,13 @@ class Converter
     /**
      * @param Models\Shop\Locale $locale
      *
-     * @return Struct\Locale
+     * @return \Shopware\Bundle\StoreFrontBundle\Shop\Locale
      */
     public function convertLocale($locale)
     {
-        $struct = new Struct\Locale();
+        $struct = new \Shopware\Bundle\StoreFrontBundle\Shop\Locale();
         if (!$locale) {
-            return new Struct\Locale();
+            return new \Shopware\Bundle\StoreFrontBundle\Shop\Locale();
         }
 
         $struct->setId($locale->getId());

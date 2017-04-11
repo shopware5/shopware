@@ -142,7 +142,7 @@ class Shopware_Plugins_Core_ControllerBase_Bootstrap extends Shopware_Components
     public function getMenu($shopId = null, $activePageId = null)
     {
         if ($shopId === null) {
-            $context = Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext();
+            $context = Shopware()->Container()->get('storefront.context.service')->getShopContext();
             $shopId = $context->getShop()->getId();
         }
 

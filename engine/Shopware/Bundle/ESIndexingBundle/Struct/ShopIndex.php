@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\ESIndexingBundle\Struct;
 
-use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
+use Shopware\Bundle\StoreFrontBundle\Shop\Shop;
 
 class ShopIndex
 {
@@ -34,13 +34,13 @@ class ShopIndex
     private $name;
 
     /**
-     * @var Shop
+     * @var \Shopware\Bundle\StoreFrontBundle\Shop\Shop
      */
     private $shop;
 
     /**
-     * @param string $name
-     * @param Shop   $shop
+     * @param string                                      $name
+     * @param \Shopware\Bundle\StoreFrontBundle\Shop\Shop $shop
      */
     public function __construct($name, Shop $shop)
     {
@@ -57,7 +57,7 @@ class ShopIndex
     }
 
     /**
-     * @return Shop
+     * @return \Shopware\Bundle\StoreFrontBundle\Shop\Shop
      */
     public function getShop()
     {

@@ -30,8 +30,8 @@ use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryCollection;
 use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryDate;
 use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryPositionCollection;
 use Shopware\Bundle\CartBundle\Domain\Delivery\ShippingLocation;
-use Shopware\Bundle\StoreFrontBundle\Struct\Country;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShippingMethod;
+use Shopware\Bundle\StoreFrontBundle\Country\Country;
+use Shopware\Bundle\StoreFrontBundle\ShippingMethod\ShippingMethod;
 
 class DeliveryCollectionTest extends TestCase
 {
@@ -113,7 +113,7 @@ class DeliveryCollectionTest extends TestCase
     private static function createShippingLocation()
     {
         $country = new Country();
-        $country->setArea(new Country\Area());
+        $country->setArea(new \Shopware\Bundle\StoreFrontBundle\Country\Area());
 
         return ShippingLocation::createFromCountry($country);
     }

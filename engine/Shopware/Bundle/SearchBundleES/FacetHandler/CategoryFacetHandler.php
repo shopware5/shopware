@@ -34,21 +34,21 @@ use Shopware\Bundle\SearchBundle\FacetResult\CategoryTreeFacetResultBuilder;
 use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
 use Shopware\Bundle\SearchBundleES\HandlerInterface;
 use Shopware\Bundle\SearchBundleES\ResultHydratorInterface;
-use Shopware\Bundle\StoreFrontBundle\Service\CategoryServiceInterface;
-use Shopware\Bundle\StoreFrontBundle\Service\Core\CategoryDepthService;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Category\CategoryDepthService;
+use Shopware\Bundle\StoreFrontBundle\Category\CategoryServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 
 class CategoryFacetHandler implements HandlerInterface, ResultHydratorInterface
 {
     const AGGREGATION_SIZE = 1000;
 
     /**
-     * @var CategoryServiceInterface
+     * @var \Shopware\Bundle\StoreFrontBundle\Category\CategoryServiceInterface
      */
     private $categoryService;
 
     /**
-     * @var CategoryDepthService
+     * @var \Shopware\Bundle\StoreFrontBundle\Category\CategoryDepthService
      */
     private $categoryDepthService;
 
@@ -63,10 +63,10 @@ class CategoryFacetHandler implements HandlerInterface, ResultHydratorInterface
     private $categoryTreeFacetResultBuilder;
 
     /**
-     * @param CategoryServiceInterface       $categoryService
-     * @param CategoryDepthService           $categoryDepthService
-     * @param \Shopware_Components_Config    $config
-     * @param CategoryTreeFacetResultBuilder $categoryTreeFacetResultBuilder
+     * @param \Shopware\Bundle\StoreFrontBundle\Category\CategoryServiceInterface $categoryService
+     * @param \Shopware\Bundle\StoreFrontBundle\Category\CategoryDepthService     $categoryDepthService
+     * @param \Shopware_Components_Config                                         $config
+     * @param CategoryTreeFacetResultBuilder                                      $categoryTreeFacetResultBuilder
      */
     public function __construct(
         CategoryServiceInterface $categoryService,
@@ -146,8 +146,8 @@ class CategoryFacetHandler implements HandlerInterface, ResultHydratorInterface
     }
 
     /**
-     * @param array                $ids
-     * @param ShopContextInterface $context
+     * @param array                                                          $ids
+     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
      *
      * @return array
      */

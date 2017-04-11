@@ -27,9 +27,9 @@ use Shopware\Bundle\SearchBundle\Sorting\PopularitySorting;
 use Shopware\Bundle\SearchBundle\Sorting\ReleaseDateSorting;
 use Shopware\Bundle\SearchBundle\SortingInterface;
 use Shopware\Bundle\StoreFrontBundle;
-use Shopware\Bundle\StoreFrontBundle\Service\Core\ConfiguratorService;
-use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
-use Shopware\Bundle\StoreFrontBundle\Struct\Product;
+use Shopware\Bundle\StoreFrontBundle\Configurator\ConfiguratorService;
+use Shopware\Bundle\StoreFrontBundle\Product\BaseProduct;
+use Shopware\Bundle\StoreFrontBundle\Product\Product;
 use Shopware\Components\QueryAliasMapper;
 
 /**
@@ -79,7 +79,7 @@ class sArticles
     protected $mediaRepository = null;
 
     /**
-     * @var StoreFrontBundle\Service\ContextServiceInterface
+     * @var \Shopware\Bundle\StoreFrontBundle\Context\ContextServiceInterface
      */
     private $contextService;
 
@@ -94,7 +94,7 @@ class sArticles
     private $listProductService;
 
     /**
-     * @var StoreFrontBundle\Service\ProductServiceInterface
+     * @var \Shopware\Bundle\StoreFrontBundle\Product\ProductServiceInterface
      */
     private $productService;
 
@@ -104,12 +104,12 @@ class sArticles
     private $configuratorService;
 
     /**
-     * @var StoreFrontBundle\Service\PropertyServiceInterface
+     * @var \Shopware\Bundle\StoreFrontBundle\Property\PropertyServiceInterface
      */
     private $propertyService;
 
     /**
-     * @var StoreFrontBundle\Service\AdditionalTextServiceInterface
+     * @var \Shopware\Bundle\StoreFrontBundle\AdditionalText\AdditionalTextServiceInterface
      */
     private $additionalTextService;
 
@@ -174,7 +174,7 @@ class sArticles
     private $articleComparisons;
 
     /**
-     * @var StoreFrontBundle\Service\ProductNumberServiceInterface
+     * @var \Shopware\Bundle\StoreFrontBundle\Product\ProductNumberServiceInterface
      */
     private $productNumberService;
 
@@ -193,13 +193,13 @@ class sArticles
         $this->config = $container->get('config');
         $this->db = $container->get('db');
         $this->eventManager = $container->get('events');
-        $this->contextService = $container->get('shopware_storefront.context_service');
-        $this->listProductService = $container->get('shopware_storefront.list_product_service');
-        $this->productService = $container->get('shopware_storefront.product_service');
+        $this->contextService = $container->get('storefront.context.service');
+        $this->listProductService = $container->get('storefront.product.list_product_service');
+        $this->productService = $container->get('storefront.product.service');
         $this->productNumberSearch = $container->get('shopware_search.product_number_search');
-        $this->configuratorService = $container->get('shopware_storefront.configurator_service');
-        $this->propertyService = $container->get('shopware_storefront.property_service');
-        $this->additionalTextService = $container->get('shopware_storefront.additional_text_service');
+        $this->configuratorService = $container->get('storefront.configurator.service');
+        $this->propertyService = $container->get('storefront.property.service');
+        $this->additionalTextService = $container->get('storefront.additional_text.service');
         $this->searchService = $container->get('shopware_search.product_search');
         $this->queryAliasMapper = $container->get('query_alias_mapper');
         $this->frontController = $container->get('front');
@@ -207,7 +207,7 @@ class sArticles
         $this->legacyEventManager = $container->get('legacy_event_manager');
         $this->session = $container->get('session');
         $this->storeFrontCriteriaFactory = $container->get('shopware_search.store_front_criteria_factory');
-        $this->productNumberService = $container->get('shopware_storefront.product_number_service');
+        $this->productNumberService = $container->get('storefront.product.number_service');
 
         $this->articleComparisons = new sArticlesComparisons($this, $container);
     }
@@ -1550,7 +1550,7 @@ class sArticles
 
         // If article has variants, we need to append the additional text to the name
         if ($article['configurator_set_id'] > 0) {
-            $product = new StoreFrontBundle\Struct\ListProduct(
+            $product = new StoreFrontBundle\Product\ListProduct(
                 (int) $article['id'],
                 (int) $article['did'],
                 $orderNumber
@@ -2014,15 +2014,15 @@ class sArticles
     }
 
     /**
-     * @param int                                          $categoryId
-     * @param StoreFrontBundle\Struct\ShopContextInterface $context
-     * @param Enlight_Controller_Request_RequestHttp       $request
+     * @param int                                                            $categoryId
+     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
+     * @param Enlight_Controller_Request_RequestHttp                         $request
      *
      * @return SearchBundle\Criteria
      */
     private function createProductNavigationCriteria(
         $categoryId,
-        StoreFrontBundle\Struct\ShopContextInterface $context,
+        StoreFrontBundle\Context\ShopContextInterface $context,
         Enlight_Controller_Request_RequestHttp $request
     ) {
         $streamId = $this->getStreamIdOfCategory($categoryId);
@@ -2060,7 +2060,7 @@ class sArticles
      * @param SearchBundle\ProductNumberSearchResult $searchResult
      * @param $orderNumber
      * @param $categoryId
-     * @param StoreFrontBundle\Struct\ShopContextInterface $context
+     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
      *
      * @return array
      */
@@ -2068,7 +2068,7 @@ class sArticles
         SearchBundle\ProductNumberSearchResult $searchResult,
         $orderNumber,
         $categoryId,
-        StoreFrontBundle\Struct\ShopContextInterface $context
+        StoreFrontBundle\Context\ShopContextInterface $context
     ) {
         $products = $searchResult->getProducts();
         $products = array_values($products);
@@ -2077,7 +2077,7 @@ class sArticles
             return [];
         }
 
-        /** @var $currentProduct BaseProduct */
+        /** @var $currentProduct \Shopware\Bundle\StoreFrontBundle\Product\BaseProduct */
         foreach ($products as $index => $currentProduct) {
             if ($currentProduct->getNumber() != $orderNumber) {
                 continue;
@@ -2345,15 +2345,15 @@ class sArticles
      * This function calls the new shopware core and converts the result to the old listing structure.
      *
      * @param $categoryId
-     * @param StoreFrontBundle\Struct\ShopContextInterface $context
-     * @param Enlight_Controller_Request_Request           $request
-     * @param SearchBundle\Criteria                        $criteria
+     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
+     * @param Enlight_Controller_Request_Request                             $request
+     * @param SearchBundle\Criteria                                          $criteria
      *
      * @return array
      */
     private function getListing(
         $categoryId,
-        StoreFrontBundle\Struct\ShopContextInterface $context,
+        StoreFrontBundle\Context\ShopContextInterface $context,
         Enlight_Controller_Request_Request $request,
         SearchBundle\Criteria $criteria
     ) {
@@ -2364,7 +2364,7 @@ class sArticles
 
         $articles = [];
 
-        /** @var $product StoreFrontBundle\Struct\ListProduct */
+        /** @var $product \Shopware\Bundle\StoreFrontBundle\Product\ListProduct */
         foreach ($searchResult->getProducts() as $product) {
             $article = $this->legacyStructConverter->convertListProductStruct($product);
 
@@ -2402,9 +2402,9 @@ class sArticles
      * Helper function which loads a full product struct and converts the product struct
      * to the shopware 3 array structure.
      *
-     * @param Product $product
-     * @param int     $categoryId
-     * @param array   $selection
+     * @param \Shopware\Bundle\StoreFrontBundle\Product\Product $product
+     * @param int                                               $categoryId
+     * @param array                                             $selection
      *
      * @return array
      */
@@ -2468,13 +2468,13 @@ class sArticles
     /**
      * Creates different links for the product like `add to basket`, `add to note`, `view detail page`, ...
      *
-     * @param StoreFrontBundle\Struct\ListProduct $product
-     * @param int                                 $categoryId
-     * @param bool                                $addNumber
+     * @param \Shopware\Bundle\StoreFrontBundle\Product\ListProduct $product
+     * @param int                                                   $categoryId
+     * @param bool                                                  $addNumber
      *
      * @return array
      */
-    private function getLinksOfProduct(StoreFrontBundle\Struct\ListProduct $product, $categoryId, $addNumber)
+    private function getLinksOfProduct(StoreFrontBundle\Product\ListProduct $product, $categoryId, $addNumber)
     {
         $baseFile = $this->config->get('baseFile');
         $context = $this->contextService->getShopContext();

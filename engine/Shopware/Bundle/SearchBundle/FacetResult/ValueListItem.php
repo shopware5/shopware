@@ -24,8 +24,7 @@
 
 namespace Shopware\Bundle\SearchBundle\FacetResult;
 
-use Shopware\Bundle\StoreFrontBundle\Struct\Attribute;
-use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
+use Shopware\Bundle\StoreFrontBundle\Common\Extendable;
 
 /**
  * @category  Shopware
@@ -50,10 +49,10 @@ class ValueListItem extends Extendable
     protected $active;
 
     /**
-     * @param int|string  $id
-     * @param string      $label
-     * @param bool        $active
-     * @param Attribute[] $attributes
+     * @param int|string                                           $id
+     * @param string                                               $label
+     * @param bool                                                 $active
+     * @param \Shopware\Bundle\StoreFrontBundle\Common\Attribute[] $attributes
      */
     public function __construct($id, $label, $active, $attributes = [])
     {

@@ -24,9 +24,9 @@
 
 namespace Shopware\Bundle\SearchBundle;
 
-use Shopware\Bundle\StoreFrontBundle\Service\BaseProductFactoryServiceInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Product\BaseProduct;
+use Shopware\Bundle\StoreFrontBundle\Product\BaseProductFactoryServiceInterface;
 
 class BatchProductNumberSearch
 {
@@ -36,7 +36,7 @@ class BatchProductNumberSearch
     private $productNumberSearch;
 
     /**
-     * @var BaseProductFactoryServiceInterface
+     * @var \Shopware\Bundle\StoreFrontBundle\Product\BaseProductFactoryServiceInterface
      */
     private $baseProductFactoryService;
 
@@ -56,8 +56,8 @@ class BatchProductNumberSearch
     }
 
     /**
-     * @param BatchProductNumberSearchRequest $request
-     * @param ShopContextInterface            $context
+     * @param BatchProductNumberSearchRequest                                $request
+     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
      *
      * @return BatchProductNumberSearchResult
      */

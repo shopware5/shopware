@@ -26,7 +26,7 @@ namespace Shopware\Bundle\CartBundle\Domain\Voucher;
 
 use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
 use Shopware\Bundle\CartBundle\Domain\LineItem\LineItemCollection;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 
 interface VoucherGatewayInterface
 {

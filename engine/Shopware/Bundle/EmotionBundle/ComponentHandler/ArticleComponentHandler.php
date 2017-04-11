@@ -31,9 +31,9 @@ use Shopware\Bundle\SearchBundle\Sorting\PopularitySorting;
 use Shopware\Bundle\SearchBundle\Sorting\ReleaseDateSorting;
 use Shopware\Bundle\SearchBundle\SortingInterface;
 use Shopware\Bundle\SearchBundle\StoreFrontCriteriaFactoryInterface;
-use Shopware\Bundle\StoreFrontBundle\Service\Core\AdditionalTextService;
-use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\AdditionalText\AdditionalTextService;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Product\ListProduct;
 use Shopware_Components_Config as ShopwareConfig;
 
 class ArticleComponentHandler implements ComponentHandlerInterface
@@ -58,14 +58,14 @@ class ArticleComponentHandler implements ComponentHandlerInterface
     private $shopwareConfig;
 
     /**
-     * @var AdditionalTextService
+     * @var \Shopware\Bundle\StoreFrontBundle\AdditionalText\AdditionalTextService
      */
     private $additionalTextService;
 
     /**
-     * @param StoreFrontCriteriaFactoryInterface $criteriaFactory
-     * @param ShopwareConfig                     $shopwareConfig
-     * @param AdditionalTextService              $additionalTextService
+     * @param StoreFrontCriteriaFactoryInterface                                     $criteriaFactory
+     * @param ShopwareConfig                                                         $shopwareConfig
+     * @param \Shopware\Bundle\StoreFrontBundle\AdditionalText\AdditionalTextService $additionalTextService
      */
     public function __construct(
         StoreFrontCriteriaFactoryInterface $criteriaFactory,
@@ -119,7 +119,7 @@ class ArticleComponentHandler implements ComponentHandlerInterface
         $key = 'emotion-element--' . $element->getId();
         $type = $element->getConfig()->get('article_type');
 
-        /** @var ListProduct $product */
+        /** @var \Shopware\Bundle\StoreFrontBundle\Product\ListProduct $product */
         $product = current($collection->getBatchResult()->get($key));
         if ($type === self::TYPE_STATIC_VARIANT) {
             $this->additionalTextService->buildAdditionalTextLists([$product], $context);

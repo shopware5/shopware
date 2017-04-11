@@ -25,7 +25,7 @@
 namespace Shopware\Bundle\CartBundle\Domain\Tax;
 
 use Shopware\Bundle\CartBundle\Domain\Price\PriceCollection;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 
 interface TaxAmountCalculatorInterface
 {

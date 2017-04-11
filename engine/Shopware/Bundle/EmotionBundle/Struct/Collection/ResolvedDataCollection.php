@@ -25,8 +25,7 @@
 namespace Shopware\Bundle\EmotionBundle\Struct\Collection;
 
 use Shopware\Bundle\SearchBundle\BatchProductSearchResult;
-use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
-use Shopware\Bundle\StoreFrontBundle\Struct\Media;
+use Shopware\Bundle\StoreFrontBundle\Common\Extendable;
 
 class ResolvedDataCollection extends Extendable
 {
@@ -36,14 +35,14 @@ class ResolvedDataCollection extends Extendable
     private $batchResult;
 
     /**
-     * @var Media[]
+     * @var \Shopware\Bundle\StoreFrontBundle\Media\Media[]
      */
     private $mediaList = [];
 
     /**
      * @param int $mediaId
      *
-     * @return Media|null
+     * @return \Shopware\Bundle\StoreFrontBundle\Media\Media|null
      */
     public function getMedia($mediaId)
     {
@@ -57,7 +56,7 @@ class ResolvedDataCollection extends Extendable
     /**
      * @param int $mediaPath
      *
-     * @return Media|null
+     * @return \Shopware\Bundle\StoreFrontBundle\Media\Media|null
      */
     public function getMediaByPath($mediaPath)
     {
@@ -85,7 +84,7 @@ class ResolvedDataCollection extends Extendable
     }
 
     /**
-     * @param Media[] $mediaList
+     * @param \Shopware\Bundle\StoreFrontBundle\Media\Media[] $mediaList
      */
     public function setMediaList($mediaList)
     {

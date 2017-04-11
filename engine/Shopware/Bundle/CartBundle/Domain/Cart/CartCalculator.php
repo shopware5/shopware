@@ -27,7 +27,7 @@ namespace Shopware\Bundle\CartBundle\Domain\Cart;
 
 use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryCollection;
 use Shopware\Bundle\CartBundle\Domain\LineItem\CalculatedLineItemCollection;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 
 class CartCalculator
 {

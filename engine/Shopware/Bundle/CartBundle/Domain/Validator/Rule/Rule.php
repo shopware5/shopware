@@ -27,7 +27,7 @@ namespace Shopware\Bundle\CartBundle\Domain\Validator\Rule;
 use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
 use Shopware\Bundle\CartBundle\Domain\JsonSerializableTrait;
 use Shopware\Bundle\CartBundle\Domain\Validator\Data\RuleDataCollection;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 
 abstract class Rule implements \JsonSerializable
 {
@@ -45,7 +45,7 @@ abstract class Rule implements \JsonSerializable
      * Validate the current rule and return boolean to indicate if the current rule applied (true) or not (false)
      *
      * @param CalculatedCart                                                       $calculatedCart
-     * @param ShopContextInterface                                                 $context
+     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface       $context
      * @param \Shopware\Bundle\CartBundle\Domain\Validator\Data\RuleDataCollection $collection
      *
      * @return bool

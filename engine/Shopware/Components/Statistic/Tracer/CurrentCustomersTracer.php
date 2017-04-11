@@ -26,7 +26,7 @@ namespace Shopware\Components\Statistic\Tracer;
 
 use Doctrine\DBAL\Connection;
 use Enlight_Controller_Request_Request as Request;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 use Shopware\Components\DependencyInjection\Container;
 use Shopware\Components\Statistic\StatisticTracerInterface;
 

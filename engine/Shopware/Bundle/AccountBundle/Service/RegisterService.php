@@ -26,8 +26,8 @@ namespace Shopware\Bundle\AccountBundle\Service;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\AccountBundle\Service\Validator\CustomerValidatorInterface;
-use Shopware\Bundle\StoreFrontBundle\Service\Core\ContextService;
-use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
+use Shopware\Bundle\StoreFrontBundle\Context\ContextService;
+use Shopware\Bundle\StoreFrontBundle\Shop\Shop;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\NumberRangeIncrementerInterface;
 use Shopware\Components\Password\Manager;
@@ -102,10 +102,10 @@ class RegisterService implements RegisterServiceInterface
     }
 
     /**
-     * @param Shop         $shop
-     * @param Customer     $customer
-     * @param Address      $billing
-     * @param Address|null $shipping
+     * @param \Shopware\Bundle\StoreFrontBundle\Shop\Shop $shop
+     * @param Customer                                    $customer
+     * @param Address                                     $billing
+     * @param Address|null                                $shipping
      *
      * @throws \Exception
      */
@@ -156,8 +156,8 @@ class RegisterService implements RegisterServiceInterface
     }
 
     /**
-     * @param Shop     $shop
-     * @param Customer $customer
+     * @param \Shopware\Bundle\StoreFrontBundle\Shop\Shop $shop
+     * @param Customer                                    $customer
      */
     private function saveCustomer(Shop $shop, Customer $customer)
     {

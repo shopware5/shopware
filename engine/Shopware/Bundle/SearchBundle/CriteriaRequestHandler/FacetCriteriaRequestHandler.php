@@ -32,9 +32,8 @@ use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\CriteriaRequestHandlerInterface;
 use Shopware\Bundle\SearchBundle\Facet\CombinedConditionFacet;
 use Shopware\Bundle\SearchBundle\Facet\ProductAttributeFacet;
-use Shopware\Bundle\StoreFrontBundle\Service\CustomFacetServiceInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\Search\CustomFacet;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Listing\ListingFacetServiceInterface;
 
 class FacetCriteriaRequestHandler implements CriteriaRequestHandlerInterface
 {
@@ -44,7 +43,7 @@ class FacetCriteriaRequestHandler implements CriteriaRequestHandlerInterface
     private $config;
 
     /**
-     * @var CustomFacetServiceInterface
+     * @var \Shopware\Bundle\StoreFrontBundle\Listing\ListingFacetServiceInterface
      */
     private $facetService;
 
@@ -54,13 +53,13 @@ class FacetCriteriaRequestHandler implements CriteriaRequestHandlerInterface
     private $connection;
 
     /**
-     * @param \Shopware_Components_Config $config
-     * @param CustomFacetServiceInterface $facetService
-     * @param Connection                  $connection
+     * @param \Shopware_Components_Config                                            $config
+     * @param \Shopware\Bundle\StoreFrontBundle\Listing\ListingFacetServiceInterface $facetService
+     * @param Connection                                                             $connection
      */
     public function __construct(
         \Shopware_Components_Config $config,
-        CustomFacetServiceInterface $facetService,
+        ListingFacetServiceInterface $facetService,
         Connection $connection
     ) {
         $this->config = $config;
@@ -88,7 +87,7 @@ class FacetCriteriaRequestHandler implements CriteriaRequestHandlerInterface
             $customFacets = $this->facetService->getAllCategoryFacets($context);
         }
 
-        /** @var CustomFacet[] $customFacets */
+        /** @var \Shopware\Bundle\StoreFrontBundle\Listing\ListingFacet[] $customFacets */
         foreach ($customFacets as $customFacet) {
             if (!$customFacet->getFacet()) {
                 continue;

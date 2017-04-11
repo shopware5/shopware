@@ -26,7 +26,7 @@ declare(strict_types=1);
 namespace Shopware\Bundle\CartBundle\Infrastructure\View;
 
 use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 
 interface ViewLineItemTransformerInterface
 {

@@ -30,8 +30,8 @@ use Shopware\Bundle\CartBundle\Domain\Delivery\ShippingLocation;
 use Shopware\Bundle\CartBundle\Domain\Validator\Data\RuleDataCollection;
 use Shopware\Bundle\CartBundle\Domain\Validator\Rule\Rule;
 use Shopware\Bundle\CartBundle\Infrastructure\Validator\Rule\ShippingAreaRule;
-use Shopware\Bundle\StoreFrontBundle\Struct\Country;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
+use Shopware\Bundle\StoreFrontBundle\Country\Country;
 
 class ShippingAreaRuleTest extends TestCase
 {
@@ -136,7 +136,7 @@ class ShippingAreaRuleTest extends TestCase
     {
         $country = new Country();
         $country->setId(1);
-        $area = new Country\Area();
+        $area = new \Shopware\Bundle\StoreFrontBundle\Country\Area();
         $area->setId($areaId);
         $country->setArea($area);
 

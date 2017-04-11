@@ -28,17 +28,17 @@ use Shopware\Bundle\CartBundle\Domain\Delivery\ShippingLocation;
 use Shopware\Bundle\CartBundle\Domain\Price\PriceDefinition;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxDetector;
 use Shopware\Bundle\CartBundle\Infrastructure\Product\ProductPriceGateway;
-use Shopware\Bundle\StoreFrontBundle\Struct\Address;
-use Shopware\Bundle\StoreFrontBundle\Struct\Country;
-use Shopware\Bundle\StoreFrontBundle\Struct\Currency;
-use Shopware\Bundle\StoreFrontBundle\Struct\Customer;
-use Shopware\Bundle\StoreFrontBundle\Struct\Customer\Group;
-use Shopware\Bundle\StoreFrontBundle\Struct\PaymentMethod;
-use Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceGroup;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShippingMethod;
-use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
-use Shopware\Bundle\StoreFrontBundle\Struct\Tax;
+use Shopware\Bundle\StoreFrontBundle\Address\Address;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
+use Shopware\Bundle\StoreFrontBundle\Country\Country;
+use Shopware\Bundle\StoreFrontBundle\Currency\Currency;
+use Shopware\Bundle\StoreFrontBundle\Customer\Customer;
+use Shopware\Bundle\StoreFrontBundle\CustomerGroup\CustomerGroup;
+use Shopware\Bundle\StoreFrontBundle\PaymentMethod\PaymentMethod;
+use Shopware\Bundle\StoreFrontBundle\PriceGroup\PriceGroup;
+use Shopware\Bundle\StoreFrontBundle\ShippingMethod\ShippingMethod;
+use Shopware\Bundle\StoreFrontBundle\Shop\Shop;
+use Shopware\Bundle\StoreFrontBundle\Tax\Tax;
 
 class Generator extends \PHPUnit\Framework\TestCase
 {
@@ -64,26 +64,26 @@ class Generator extends \PHPUnit\Framework\TestCase
         $currency = $currency ?: new Currency();
 
         if (!$currentCustomerGroup) {
-            $currentCustomerGroup = new Group();
+            $currentCustomerGroup = new CustomerGroup();
             $currentCustomerGroup->setKey('EK2');
         }
 
         if (!$fallbackCustomerGroup) {
-            $fallbackCustomerGroup = new Group();
+            $fallbackCustomerGroup = new CustomerGroup();
             $fallbackCustomerGroup->setKey('EK1');
         }
 
         $priceGroups = $priceGroups ?: [new PriceGroup()];
         $taxes = $taxes ?: [new Tax(1, 'test', 19.0)];
 
-        $area = $area ?: new Country\Area();
+        $area = $area ?: new \Shopware\Bundle\StoreFrontBundle\Country\Area();
 
         if (!$country) {
             $country = new Country();
             $country->setArea($area);
         }
         if (!$state) {
-            $state = new Country\State();
+            $state = new \Shopware\Bundle\StoreFrontBundle\Country\State();
             $state->setCountry($country);
         }
 

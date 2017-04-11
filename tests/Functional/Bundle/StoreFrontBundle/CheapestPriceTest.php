@@ -24,8 +24,7 @@
 
 namespace Shopware\Tests\Functional\Bundle\StoreFrontBundle;
 
-use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 
 class CheapestPriceTest extends TestCase
 {
@@ -344,7 +343,7 @@ class CheapestPriceTest extends TestCase
             'useLastGraduationForCheapestPrice' => true,
         ]);
 
-        /* @var ListProduct $listProduct */
+        /* @var \Shopware\Bundle\StoreFrontBundle\Product\ListProduct $listProduct */
         $this->assertEquals(7, $listProduct->getCheapestPrice()->getCalculatedPrice());
     }
 

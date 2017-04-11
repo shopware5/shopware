@@ -24,8 +24,7 @@
 
 namespace Shopware\Tests\Functional\Bundle\StoreFrontBundle;
 
-use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
-use Shopware\Bundle\StoreFrontBundle\Struct\Product\Vote;
+use Shopware\Bundle\StoreFrontBundle\Vote\Vote;
 
 class VoteTest extends TestCase
 {
@@ -39,9 +38,9 @@ class VoteTest extends TestCase
         $points = [1, 2, 2, 3, 3];
         $this->helper->createVotes($product->getId(), $points);
 
-        $listProducts = Shopware()->Container()->get('shopware_storefront.list_product_service')->getList([$number], $context);
+        $listProducts = Shopware()->Container()->get('storefront.product.list_product_service')->getList([$number], $context);
 
-        $votes = Shopware()->Container()->get('shopware_storefront.vote_service')->getList($listProducts, $context);
+        $votes = Shopware()->Container()->get('storefront.vote.service')->getList($listProducts, $context);
         $votes = array_shift($votes);
 
         $this->assertCount(5, $votes);
@@ -62,10 +61,10 @@ class VoteTest extends TestCase
         $points = [1, 2, 2, 3, 3, 3, 3, 3];
         $this->helper->createVotes($product->getId(), $points);
 
-        $listProduct = Shopware()->Container()->get('shopware_storefront.list_product_service')->getList([$number], $context);
+        $listProduct = Shopware()->Container()->get('storefront.product.list_product_service')->getList([$number], $context);
         $listProduct = array_shift($listProduct);
 
-        /** @var ListProduct $listProduct */
+        /** @var \Shopware\Bundle\StoreFrontBundle\Product\ListProduct $listProduct */
         $voteAverage = $listProduct->getVoteAverage();
 
         $this->assertEquals(5, $voteAverage->getAverage());
@@ -211,11 +210,11 @@ class VoteTest extends TestCase
         }
 
         //load product struct
-        $factory = Shopware()->Container()->get('shopware_storefront.base_product_factory');
+        $factory = Shopware()->Container()->get('storefront.product.base_product_factory');
         $product = $factory->createBaseProducts([$number]);
         $product = array_shift($product);
 
-        $service = Shopware()->Container()->get('shopware_storefront.vote_service');
+        $service = Shopware()->Container()->get('storefront.vote.service');
 
         //iterate all expected shop votes/averages
         foreach ($expected as $shopId => $data) {

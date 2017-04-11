@@ -31,7 +31,7 @@ use Shopware\Bundle\CartBundle\Domain\Validator\Data\RuleDataCollection;
 use Shopware\Bundle\CartBundle\Domain\Validator\Rule\RuleCollection;
 use Shopware\Bundle\CartBundle\Infrastructure\Validator\Data\OrderClearedStateRuleData;
 use Shopware\Bundle\CartBundle\Infrastructure\Validator\Rule\OrderClearedStateRule;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 
 class OrderClearedStateRuleCollector implements RuleDataCollectorInterface
 {

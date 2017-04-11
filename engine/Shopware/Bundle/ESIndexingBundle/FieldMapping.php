@@ -24,8 +24,8 @@
 
 namespace Shopware\Bundle\ESIndexingBundle;
 
-use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Shop\Shop;
 
 /**
  * Class FieldMapping
@@ -68,7 +68,7 @@ class FieldMapping implements FieldMappingInterface
     }
 
     /**
-     * @param Shop $shop
+     * @param \Shopware\Bundle\StoreFrontBundle\Shop\Shop $shop
      *
      * @return array
      */

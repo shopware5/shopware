@@ -9,7 +9,7 @@ The usage of the Shopware\Bundle\SearchBundle\ProductSearch and Shopware\Bundle\
 
 ```
 //load or create a context object to define which user context is set
-$context = Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext();
+$context = Shopware()->Container()->get('storefront.context.service')->getShopContext();
 
 $criteria = new \Shopware\Bundle\SearchBundle\Criteria();
 
@@ -32,8 +32,8 @@ $productNumberResult = Shopware()->Container()->get('shopware_search.product_num
     $context
 );
 
-//executes a search request to find a list of \Shopware\Bundle\StoreFrontBundle\Struct\ListProduct.
-$context = Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext();
+//executes a search request to find a list of \Shopware\Bundle\StoreFrontBundle\Product\ListProduct.
+$context = Shopware()->Container()->get('storefront.context.service')->getShopContext();
 $productResult = Shopware()->Container()->get('shopware_search.product_search')->search(
     $criteria,
     $context
@@ -99,7 +99,7 @@ class PluginSortingHandler implements \Shopware\Bundle\SearchBundleDBAL\SortingH
     public function generateSorting(
         \Shopware\Bundle\SearchBundle\SortingInterface   $sorting,
         \Shopware\Bundle\SearchBundle\DBAL\QueryBuilder  $query,
-        \Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface $context
+        \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
     ) {
         $query->innerJoin(
             'product',
@@ -135,7 +135,7 @@ class PluginConditionHandler implements \Shopware\Bundle\SearchBundle\DBAL\Condi
     public function generateCondition(
         \Shopware\Bundle\SearchBundle\ConditionInterface $condition,
         \Shopware\Bundle\SearchBundle\DBAL\QueryBuilder  $query,
-        \Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface $context
+        \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
     ) {
         $query->innerJoin(
             'product',
@@ -181,7 +181,7 @@ class PluginFacetHandler implements \Shopware\Bundle\SearchBundleDBAL\FacetHandl
         \Shopware\Bundle\SearchBundle\FacetInterface     $facet,
         \Shopware\Bundle\SearchBundle\DBAL\QueryBuilder  $query,
         \Shopware\Bundle\SearchBundle\Criteria           $criteria,
-        \Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface $context
+        \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
     ) {
         $query = $this->queryBuilderFactory->createQuery($criteria, $context);
 

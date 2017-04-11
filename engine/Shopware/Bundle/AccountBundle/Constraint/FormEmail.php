@@ -24,18 +24,17 @@
 
 namespace Shopware\Bundle\AccountBundle\Constraint;
 
-use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
 use Symfony\Component\Validator\Constraint;
 
 class FormEmail extends Constraint
 {
     /**
-     * @var Shop
+     * @var \Shopware\Bundle\StoreFrontBundle\Shop\Shop
      */
     protected $shop;
 
     /**
-     * @return Shop
+     * @return \Shopware\Bundle\StoreFrontBundle\Shop\Shop
      */
     public function getShop()
     {

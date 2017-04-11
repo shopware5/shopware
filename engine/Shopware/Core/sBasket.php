@@ -23,7 +23,7 @@
  */
 
 use Shopware\Bundle\StoreFrontBundle;
-use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
+use Shopware\Bundle\StoreFrontBundle\Product\ListProduct;
 
 /**
  * Shopware Class that handles cart operations
@@ -99,12 +99,12 @@ class sBasket
     private $moduleManager;
 
     /**
-     * @var StoreFrontBundle\Service\ContextServiceInterface
+     * @var \Shopware\Bundle\StoreFrontBundle\Context\ContextServiceInterface
      */
     private $contextService;
 
     /**
-     * @var StoreFrontBundle\Service\AdditionalTextServiceInterface
+     * @var \Shopware\Bundle\StoreFrontBundle\AdditionalText\AdditionalTextServiceInterface
      */
     private $additionalTextService;
 
@@ -118,8 +118,8 @@ class sBasket
         Shopware_Components_Modules             $moduleManager = null,
         sSystem                                 $systemModule = null,
 
-        StoreFrontBundle\Service\ContextServiceInterface $contextService = null,
-        StoreFrontBundle\Service\AdditionalTextServiceInterface $additionalTextService = null
+        StoreFrontBundle\Context\ContextServiceInterface $contextService = null,
+        StoreFrontBundle\Service\AdditionalText\AdditionalTextServiceInterface $additionalTextService = null
     ) {
         $this->db = $db ?: Shopware()->Db();
         $this->eventManager = $eventManager ?: Shopware()->Events();
@@ -134,11 +134,11 @@ class sBasket
         $this->additionalTextService = $additionalTextService;
 
         if ($this->contextService == null) {
-            $this->contextService = Shopware()->Container()->get('shopware_storefront.context_service');
+            $this->contextService = Shopware()->Container()->get('storefront.context.service');
         }
 
         if ($this->additionalTextService == null) {
-            $this->additionalTextService = Shopware()->Container()->get('shopware_storefront.additional_text_service');
+            $this->additionalTextService = Shopware()->Container()->get('storefront.additional_text.service');
         }
     }
 
@@ -509,7 +509,7 @@ class sBasket
                 $premium, $premium['variantID'], 'variant'
             );
 
-            $product = new StoreFrontBundle\Struct\ListProduct(
+            $product = new StoreFrontBundle\Product\ListProduct(
                 $premium['articleID'],
                 $premium['variantID'],
                 $premium['ordernumber']
@@ -1236,16 +1236,16 @@ class sBasket
 
         $numbers = array_column($notes, 'ordernumber');
 
-        $context = Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext();
+        $context = Shopware()->Container()->get('storefront.context.service')->getShopContext();
 
-        $products = Shopware()->Container()->get('shopware_storefront.list_product_service')
+        $products = Shopware()->Container()->get('storefront.product.list_product_service')
             ->getList($numbers, $context);
 
-        $products = Shopware()->Container()->get('shopware_storefront.additional_text_service')
+        $products = Shopware()->Container()->get('storefront.additional_text.service')
             ->buildAdditionalTextLists($products, $context);
 
         $promotions = [];
-        /** @var $product ListProduct */
+        /** @var $product \Shopware\Bundle\StoreFrontBundle\Product\ListProduct */
         foreach ($products as $product) {
             $note = $notes[$product->getNumber()];
 
@@ -1750,8 +1750,8 @@ class sBasket
     }
 
     /**
-     * @param ListProduct $product
-     * @param array       $note
+     * @param \Shopware\Bundle\StoreFrontBundle\Product\ListProduct $product
+     * @param array                                                 $note
      *
      * @return array
      */
@@ -2081,27 +2081,27 @@ class sBasket
     private function getBasketAdditionalDetails($numbers)
     {
         $container = Shopware()->Container();
-        /** @var \Shopware\Bundle\StoreFrontBundle\Service\ListProductServiceInterface $listProduct */
-        $listProduct = $container->get('shopware_storefront.list_product_service');
-        /** @var \Shopware\Bundle\StoreFrontBundle\Service\PropertyServiceInterface $propertyService */
-        $propertyService = $container->get('shopware_storefront.property_service');
-        /** @var \Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface $context */
-        $context = $container->get('shopware_storefront.context_service');
+        /** @var \Shopware\Bundle\StoreFrontBundle\Product\ListProductServiceInterface $listProduct */
+        $listProduct = $container->get('storefront.product.list_product_service');
+        /** @var \Shopware\Bundle\StoreFrontBundle\Property\PropertyServiceInterface $propertyService */
+        $propertyService = $container->get('storefront.property.service');
+        /** @var \Shopware\Bundle\StoreFrontBundle\Context\ContextServiceInterface $context */
+        $context = $container->get('storefront.context.service');
         /** @var \Shopware\Components\Compatibility\LegacyStructConverter $legacyStructConverter */
         $legacyStructConverter = $container->get('legacy_struct_converter');
 
         $products = $listProduct->getList($numbers, $context->getShopContext());
         $propertySets = $propertyService->getList($products, $context->getShopContext());
 
-        $covers = $container->get('shopware_storefront.variant_cover_service')
-            ->getList($products, $context->getShopContext());
+        $covers = $container->get('storefront.media.service')
+            ->getVariantCovers($products, $context->getShopContext());
 
         $details = [];
         foreach ($products as $product) {
             $promotion = $legacyStructConverter->convertListProductStruct($product);
 
             if ($product->hasConfigurator()) {
-                /** @var StoreFrontBundle\Struct\Product\Price $variantPrice */
+                /** @var \Shopware\Bundle\StoreFrontBundle\Price\Price $variantPrice */
                 $variantPrice = $product->getVariantPrice();
                 $promotion['referenceprice'] = $variantPrice->getCalculatedReferencePrice();
             }
@@ -2785,7 +2785,7 @@ class sBasket
 
         if ($article['configurator_set_id'] > 0) {
             $context = $this->contextService->getShopContext();
-            $product = Shopware()->Container()->get('shopware_storefront.list_product_service')->getList([$article['ordernumber']], $context);
+            $product = Shopware()->Container()->get('storefront.product.list_product_service')->getList([$article['ordernumber']], $context);
             $product = array_shift($product);
 
             if (null === $product) {

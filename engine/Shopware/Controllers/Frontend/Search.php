@@ -24,7 +24,6 @@
 
 use Shopware\Bundle\SearchBundle\ProductSearchResult;
 use Shopware\Bundle\SearchBundle\SearchTermPreProcessorInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 /**
  * @category  Shopware
@@ -63,8 +62,8 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
             return;
         }
 
-        /** @var $context ShopContextInterface */
-        $context = $this->get('shopware_storefront.context_service')->getShopContext();
+        /** @var $context \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface */
+        $context = $this->get('storefront.context.service')->getShopContext();
 
         $criteria = Shopware()->Container()->get('shopware_search.store_front_criteria_factory')
             ->createSearchCriteria($this->Request(), $context);
@@ -89,7 +88,7 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
         /** @var $mapper \Shopware\Components\QueryAliasMapper */
         $mapper = $this->get('query_alias_mapper');
 
-        $service = Shopware()->Container()->get('shopware_storefront.custom_sorting_service');
+        $service = Shopware()->Container()->get('storefront.listing.sorting_service');
 
         $sortingIds = $this->container->get('config')->get('searchSortings');
         $sortingIds = array_filter(explode('|', $sortingIds));

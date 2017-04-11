@@ -24,9 +24,8 @@
 
 namespace Shopware\Bundle\ESIndexingBundle\Struct;
 
-use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
-use Shopware\Bundle\StoreFrontBundle\Struct\Product\Price;
-use Shopware\Bundle\StoreFrontBundle\Struct\Property\Option;
+use Shopware\Bundle\StoreFrontBundle\Product\ListProduct;
+use Shopware\Bundle\StoreFrontBundle\Property\PropertyOption;
 
 /**
  * Class Product
@@ -44,7 +43,7 @@ class Product extends ListProduct
     protected $formattedReleaseDate;
 
     /**
-     * @var Option[]
+     * @var \Shopware\Bundle\StoreFrontBundle\Property\PropertyOption[]
      */
     protected $properties = [];
 
@@ -54,7 +53,7 @@ class Product extends ListProduct
     protected $categoryIds = [];
 
     /**
-     * @var Price[]
+     * @var \Shopware\Bundle\StoreFrontBundle\Price\Price[]
      */
     protected $calculatedPrices = [];
 
@@ -78,7 +77,7 @@ class Product extends ListProduct
     }
 
     /**
-     * @return Option[]
+     * @return \Shopware\Bundle\StoreFrontBundle\Property\PropertyOption[]
      */
     public function getProperties()
     {
@@ -86,7 +85,7 @@ class Product extends ListProduct
     }
 
     /**
-     * @param Option[] $properties
+     * @param PropertyOption[] $properties
      */
     public function setProperties($properties)
     {
@@ -142,7 +141,7 @@ class Product extends ListProduct
     }
 
     /**
-     * @return Price[]
+     * @return \Shopware\Bundle\StoreFrontBundle\Price\Price[]
      */
     public function getCalculatedPrices()
     {
@@ -150,7 +149,7 @@ class Product extends ListProduct
     }
 
     /**
-     * @param Price[] $calculatedPrices
+     * @param \Shopware\Bundle\StoreFrontBundle\Price\Price[] $calculatedPrices
      */
     public function setCalculatedPrices($calculatedPrices)
     {

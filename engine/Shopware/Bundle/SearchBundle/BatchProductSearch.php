@@ -24,9 +24,8 @@
 
 namespace Shopware\Bundle\SearchBundle;
 
-use Shopware\Bundle\StoreFrontBundle\Service\ListProductServiceInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct;
-use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
+use Shopware\Bundle\StoreFrontBundle\Product\ListProduct;
+use Shopware\Bundle\StoreFrontBundle\Product\ListProductServiceInterface;
 
 class BatchProductSearch
 {
@@ -56,12 +55,12 @@ class BatchProductSearch
      * Creates a search request on the internal search gateway to
      * get the product result for the passed criteria object.
      *
-     * @param BatchProductNumberSearchRequest $request
-     * @param Struct\ShopContextInterface     $context
+     * @param BatchProductNumberSearchRequest                                $request
+     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
      *
      * @return BatchProductSearchResult
      */
-    public function search(BatchProductNumberSearchRequest $request, Struct\ShopContextInterface $context)
+    public function search(BatchProductNumberSearchRequest $request, \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context)
     {
         $searchResult = $this->productNumberSearch->search($request, $context);
         $listProducts = $this->listProductService->getList($searchResult->getProductNumbers(), $context);
@@ -90,10 +89,10 @@ class BatchProductSearch
     }
 
     /**
-     * @param Struct\ListProduct[] $products
-     * @param Struct\BaseProduct[] $searchProducts
+     * @param \Shopware\Bundle\StoreFrontBundle\Product\ListProduct[] $products
+     * @param \Shopware\Bundle\StoreFrontBundle\Product\BaseProduct[] $searchProducts
      *
-     * @return Struct\ListProduct[]
+     * @return \Shopware\Bundle\StoreFrontBundle\Product\ListProduct[]
      */
     private function assignAttributes($products, $searchProducts)
     {

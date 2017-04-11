@@ -24,8 +24,7 @@
 
 use Shopware\Bundle\SearchBundle\ProductSearchInterface;
 use Shopware\Bundle\SearchBundle\ProductSearchResult;
-use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\Search\CustomFacet;
+use Shopware\Bundle\StoreFrontBundle\Listing\ListingFacet;
 use Shopware\Components\Compatibility\LegacyStructConverter;
 use Shopware\Components\Routing\RouterInterface;
 
@@ -147,7 +146,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
         $categoryId = $this->Request()->getParam('sCategory');
         $pageIndex = $this->Request()->getParam('sPage');
 
-        $context = $this->get('shopware_storefront.context_service')->getShopContext();
+        $context = $this->get('storefront.context.service')->getShopContext();
         $productStreamId = $this->findStreamIdByCategoryId($categoryId);
 
         if ($productStreamId) {
@@ -216,8 +215,8 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
         $childrenIds = $this->getCategoryChildrenIds($categoryId);
         $childrenIds[] = $categoryId;
 
-        $context = $this->container->get('shopware_storefront.context_service')->getShopContext();
-        $categories = $this->container->get('shopware_storefront.category_service')
+        $context = $this->container->get('storefront.context.service')->getShopContext();
+        $categories = $this->container->get('storefront.category.service')
             ->getList($childrenIds, $context);
 
         $converted = [];
@@ -303,8 +302,8 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
      */
     private function fetchStreamListing($categoryId, $productStreamId)
     {
-        /** @var ContextServiceInterface $contextService */
-        $contextService = $this->get('shopware_storefront.context_service');
+        /** @var \Shopware\Bundle\StoreFrontBundle\Context\ContextServiceInterface $contextService */
+        $contextService = $this->get('storefront.context.service');
         $context = $contextService->getShopContext();
 
         /** @var \Shopware\Components\ProductStream\CriteriaFactoryInterface $factory */
@@ -315,11 +314,11 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
         $streamRepository = $this->get('shopware_product_stream.repository');
         $streamRepository->prepareCriteria($criteria, $productStreamId);
 
-        /** @var \Shopware\Bundle\StoreFrontBundle\Service\CustomFacetServiceInterface $facetService */
-        $facetService = $this->get('shopware_storefront.custom_facet_service');
+        /** @var \Shopware\Bundle\StoreFrontBundle\Listing\ListingFacetServiceInterface $facetService */
+        $facetService = $this->get('storefront.listing.facet_service');
         $facets = $facetService->getFacetsOfCategories([$categoryId], $context);
 
-        /** @var CustomFacet[] $facets */
+        /** @var ListingFacet[] $facets */
         $facets = array_shift($facets);
         foreach ($facets as $facet) {
             $criteria->addFacet($facet->getFacet());
@@ -362,8 +361,8 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
      */
     private function fetchCategoryListing()
     {
-        /** @var ContextServiceInterface $contextService */
-        $contextService = $this->get('shopware_storefront.context_service');
+        /** @var \Shopware\Bundle\StoreFrontBundle\Context\ContextServiceInterface $contextService */
+        $contextService = $this->get('storefront.context.service');
         $context = $contextService->getShopContext();
 
         /** @var \Shopware\Bundle\SearchBundle\StoreFrontCriteriaFactoryInterface $factory */
@@ -393,8 +392,8 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
      */
     private function fetchSearchListing()
     {
-        /** @var ContextServiceInterface $contextService */
-        $contextService = $this->get('shopware_storefront.context_service');
+        /** @var \Shopware\Bundle\StoreFrontBundle\Context\ContextServiceInterface $contextService */
+        $contextService = $this->get('storefront.context.service');
         $context = $contextService->getShopContext();
 
         /** @var \Shopware\Bundle\SearchBundle\StoreFrontCriteriaFactoryInterface $factory */

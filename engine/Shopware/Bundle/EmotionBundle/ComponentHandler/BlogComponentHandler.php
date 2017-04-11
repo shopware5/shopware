@@ -28,10 +28,8 @@ use Doctrine\DBAL\Connection;
 use Shopware\Bundle\EmotionBundle\Struct\Collection\PrepareDataCollection;
 use Shopware\Bundle\EmotionBundle\Struct\Collection\ResolvedDataCollection;
 use Shopware\Bundle\EmotionBundle\Struct\Element;
-use Shopware\Bundle\StoreFrontBundle\Service\BlogServiceInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\Blog\Blog;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Blog\BlogServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 
 class BlogComponentHandler implements ComponentHandlerInterface
 {
@@ -68,18 +66,18 @@ class BlogComponentHandler implements ComponentHandlerInterface
     }
 
     /**
-     * @param PrepareDataCollection            $collection
-     * @param Element                          $element
-     * @param ShopContext|ShopContextInterface $context
+     * @param PrepareDataCollection                                                                                                $collection
+     * @param Element                                                                                                              $element
+     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContext|\Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
      */
     public function prepare(PrepareDataCollection $collection, Element $element, ShopContextInterface $context)
     {
     }
 
     /**
-     * @param ResolvedDataCollection $collection
-     * @param Element                $element
-     * @param ShopContextInterface   $context
+     * @param ResolvedDataCollection                                         $collection
+     * @param Element                                                        $element
+     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface $context
      */
     public function handle(ResolvedDataCollection $collection, Element $element, ShopContextInterface $context)
     {
@@ -96,7 +94,7 @@ class BlogComponentHandler implements ComponentHandlerInterface
      * @param int                  $categoryId
      * @param ShopContextInterface $context
      *
-     * @return Blog[]
+     * @return \Shopware\Bundle\StoreFrontBundle\Blog\Blog[]
      */
     private function getRandomBlogEntries($numberOfEntries, $categoryId, ShopContextInterface $context)
     {

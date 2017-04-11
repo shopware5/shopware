@@ -34,7 +34,6 @@ use Shopware\Bundle\EmotionBundle\ComponentHandler\ManufacturerSliderComponentHa
 use Shopware\Bundle\EmotionBundle\Struct\Element;
 use Shopware\Bundle\EmotionBundle\Struct\Emotion;
 use Shopware\Bundle\MediaBundle\MediaServiceInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\Product\Manufacturer;
 use Shopware\Components\Compatibility\LegacyStructConverter;
 use Shopware\Components\DependencyInjection\Container;
 
@@ -191,7 +190,7 @@ class StructConverter
                 break;
 
             case ManufacturerSliderComponentHandler::COMPONENT_NAME:
-                /** @var Manufacturer $manufacturer */
+                /** @var \Shopware\Bundle\StoreFrontBundle\Manufacturer\Manufacturer $manufacturer */
                 foreach ($element->getData()->get('manufacturers') as $manufacturer) {
                     $manufacturerArray = $this->converter->convertManufacturerStruct($manufacturer);
 

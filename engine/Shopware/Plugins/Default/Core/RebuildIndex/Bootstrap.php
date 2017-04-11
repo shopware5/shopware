@@ -23,9 +23,9 @@
  */
 
 use Shopware\Bundle\SearchBundleDBAL\SearchTerm\SearchIndexerInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\CheckoutScope;
-use Shopware\Bundle\StoreFrontBundle\Struct\CustomerScope;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopScope;
+use Shopware\Bundle\StoreFrontBundle\Context\CheckoutScope;
+use Shopware\Bundle\StoreFrontBundle\Context\CustomerScope;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopScope;
 
 /**
  * @category  Shopware
@@ -175,7 +175,7 @@ class Shopware_Plugins_Core_RebuildIndex_Bootstrap extends Shopware_Components_P
 
             $this->SeoIndex()->setCachedTime($currentTime->format('Y-m-d h:m:i'), $elementId, $shopId);
 
-            $context = $this->get('shopware_storefront.context_factory')->create(
+            $context = $this->get('storefront.context.factory')->create(
                 new ShopScope($shopId),
                 new CustomerScope(null),
                 new CheckoutScope()

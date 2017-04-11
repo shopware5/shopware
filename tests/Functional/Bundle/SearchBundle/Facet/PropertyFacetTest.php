@@ -27,7 +27,7 @@ namespace Shopware\Tests\Functional\Bundle\SearchBundle\Facet;
 use Shopware\Bundle\SearchBundle\Facet\PropertyFacet;
 use Shopware\Bundle\SearchBundle\FacetResult\FacetResultGroup;
 use Shopware\Bundle\SearchBundle\FacetResult\ValueListFacetResult;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
 use Shopware\Models\Category\Category;
 use Shopware\Tests\Functional\Bundle\StoreFrontBundle\TestCase;
 

@@ -13,7 +13,7 @@
 
         <service id="shopware_account.address_validator" class="Shopware\Bundle\AccountBundle\Service\Validator\AddressValidator">
             <argument type="service" id="validator" />
-            <argument type="service" id="shopware_storefront.context_service" />
+            <argument type="service" id="storefront.context.service" />
             <argument type="service" id="config" />
         </service>
 
@@ -24,7 +24,7 @@
 
         <service id="shopware_account.customer_validator" class="Shopware\Bundle\AccountBundle\Service\Validator\CustomerValidator">
             <argument type="service" id="validator" />
-            <argument type="service" id="shopware_storefront.context_service" />
+            <argument type="service" id="storefront.context.service" />
             <argument type="service" id="config" />
         </service>
 
@@ -57,21 +57,21 @@
         <service id="shopware_account.form.profile_update_form" class="Shopware\Bundle\AccountBundle\Form\Account\ProfileUpdateFormType">
             <argument type="service" id="snippets" />
             <argument type="service" id="config" />
-            <argument type="service" id="shopware_storefront.context_service" />
+            <argument type="service" id="storefront.context.service" />
             <tag name="form.type" />
         </service>
 
         <service id="shopware_account.form.personalform" class="Shopware\Bundle\AccountBundle\Form\Account\PersonalFormType">
             <argument type="service" id="snippets" />
             <argument type="service" id="config" />
-            <argument type="service" id="shopware_storefront.context_service" />
+            <argument type="service" id="storefront.context.service" />
             <tag name="form.type" />
         </service>
 
         <service id="shopware_account.form.emailupdateform" class="Shopware\Bundle\AccountBundle\Form\Account\EmailUpdateFormType">
             <argument type="service" id="snippets" />
             <argument type="service" id="config" />
-            <argument type="service" id="shopware_storefront.context_service" />
+            <argument type="service" id="storefront.context.service" />
             <tag name="form.type" />
         </service>
 

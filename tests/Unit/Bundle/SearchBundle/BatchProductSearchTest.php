@@ -26,8 +26,8 @@ use Shopware\Bundle\SearchBundle\BatchProductNumberSearch;
 use Shopware\Bundle\SearchBundle\BatchProductNumberSearchResult;
 use Shopware\Bundle\SearchBundle\BatchProductSearch;
 use Shopware\Bundle\SearchBundle\BatchProductSearchResult;
-use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
-use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
+use Shopware\Bundle\StoreFrontBundle\Product\BaseProduct;
+use Shopware\Bundle\StoreFrontBundle\Product\ListProduct;
 
 class BatchProductSearchTest extends \PHPUnit\Framework\TestCase
 {

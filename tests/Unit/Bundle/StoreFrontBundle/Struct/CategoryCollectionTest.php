@@ -25,8 +25,8 @@
 namespace Shopware\Tests\Unit\Bundle\StoreFrontBundle\Struct;
 
 use PHPUnit\Framework\TestCase;
-use Shopware\Bundle\StoreFrontBundle\Struct\Category;
-use Shopware\Bundle\StoreFrontBundle\Struct\CategoryCollection;
+use Shopware\Bundle\StoreFrontBundle\Category\Category;
+use Shopware\Bundle\StoreFrontBundle\Category\CategoryCollection;
 
 class CategoryCollectionTest extends TestCase
 {
@@ -115,7 +115,7 @@ class CategoryCollectionTest extends TestCase
 
     public function testGetNestedTreeWithSubParent()
     {
-        $collection = new CategoryCollection([
+        $collection = new \Shopware\Bundle\StoreFrontBundle\Category\CategoryCollection([
             Category::create(1, null, [], 'First level 01'),
             Category::create(2, 1, [1], 'Second level 01'),
             Category::create(3, 2, [2, 1], 'Third level 01'),
@@ -139,7 +139,7 @@ class CategoryCollectionTest extends TestCase
 
     public function testGetIds()
     {
-        $collection = new CategoryCollection([
+        $collection = new \Shopware\Bundle\StoreFrontBundle\Category\CategoryCollection([
             Category::create(1, null, [], 'First level 01'),
             Category::create(2, 1, [1], 'Second level 01'),
             Category::create(3, 2, [2, 1], 'Third level 01'),
@@ -156,7 +156,7 @@ class CategoryCollectionTest extends TestCase
 
     public function testGetPaths()
     {
-        $collection = new CategoryCollection([
+        $collection = new \Shopware\Bundle\StoreFrontBundle\Category\CategoryCollection([
             Category::create(1, null, [], 'First level 01'),
             Category::create(2, 1, [1], 'Second level 01'),
             Category::create(3, 2, [2, 1], 'Third level 01'),
@@ -194,7 +194,7 @@ class CategoryCollectionTest extends TestCase
 
     public function testGetByKey()
     {
-        $collection = new CategoryCollection([
+        $collection = new \Shopware\Bundle\StoreFrontBundle\Category\CategoryCollection([
             Category::create(1, null, [], 'First level 01'),
             Category::create(2, 1, [1], 'Second level 01'),
         ]);

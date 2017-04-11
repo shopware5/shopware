@@ -26,7 +26,7 @@ declare(strict_types=1);
 namespace Shopware\Bundle\CartBundle\Infrastructure\View;
 
 use Shopware\Bundle\CartBundle\Domain\LineItem\CalculatedLineItemInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\Media;
+use Shopware\Bundle\StoreFrontBundle\Media\Media;
 
 interface ViewLineItemInterface extends \JsonSerializable
 {

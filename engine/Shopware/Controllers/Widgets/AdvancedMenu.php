@@ -22,8 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-use Shopware\Bundle\StoreFrontBundle\Service\AdvancedMenuServiceInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 
 /**
  * Shopware AdvancedMenu Controller
@@ -33,10 +32,10 @@ class Shopware_Controllers_Widgets_AdvancedMenu extends Enlight_Controller_Actio
     public function indexAction()
     {
         /** @var ShopContextInterface $context */
-        $context = $this->get('shopware_storefront.context_service')->getShopContext();
+        $context = $this->get('storefront.context.service')->getShopContext();
 
-        /** @var AdvancedMenuServiceInterface $reader */
-        $reader = $this->get('shopware_storefront.advanced_menu_service');
+        /** @var \Shopware\Bundle\StoreFrontBundle\AdvancedMenu\AdvancedMenuServiceInterface $reader */
+        $reader = $this->get('storefront.advanced_menu.service');
 
         $categories = $reader->get(
             $context,

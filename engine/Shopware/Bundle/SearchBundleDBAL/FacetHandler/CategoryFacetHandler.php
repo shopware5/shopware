@@ -32,9 +32,9 @@ use Shopware\Bundle\SearchBundle\FacetResult\CategoryTreeFacetResultBuilder;
 use Shopware\Bundle\SearchBundle\FacetResultInterface;
 use Shopware\Bundle\SearchBundleDBAL\PartialFacetHandlerInterface;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactoryInterface;
-use Shopware\Bundle\StoreFrontBundle\Service\CategoryServiceInterface;
-use Shopware\Bundle\StoreFrontBundle\Service\Core\CategoryDepthService;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Category\CategoryDepthService;
+use Shopware\Bundle\StoreFrontBundle\Category\CategoryServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 
 /**
  * @category  Shopware
@@ -44,7 +44,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 class CategoryFacetHandler implements PartialFacetHandlerInterface
 {
     /**
-     * @var CategoryServiceInterface
+     * @var \Shopware\Bundle\StoreFrontBundle\Category\CategoryServiceInterface
      */
     private $categoryService;
 
@@ -69,11 +69,11 @@ class CategoryFacetHandler implements PartialFacetHandlerInterface
     private $categoryTreeFacetResultBuilder;
 
     /**
-     * @param CategoryServiceInterface       $categoryService
-     * @param QueryBuilderFactoryInterface   $queryBuilderFactory
-     * @param \Shopware_Components_Config    $config
-     * @param CategoryDepthService           $categoryDepthService
-     * @param CategoryTreeFacetResultBuilder $categoryTreeFacetResultBuilder
+     * @param \Shopware\Bundle\StoreFrontBundle\Category\CategoryServiceInterface $categoryService
+     * @param QueryBuilderFactoryInterface                                        $queryBuilderFactory
+     * @param \Shopware_Components_Config                                         $config
+     * @param CategoryDepthService                                                $categoryDepthService
+     * @param CategoryTreeFacetResultBuilder                                      $categoryTreeFacetResultBuilder
      */
     public function __construct(
         CategoryServiceInterface $categoryService,

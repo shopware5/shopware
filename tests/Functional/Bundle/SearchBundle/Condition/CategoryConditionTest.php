@@ -26,7 +26,7 @@ namespace Shopware\Tests\Functional\Bundle\SearchBundle\Condition;
 
 use Shopware\Bundle\SearchBundle\Condition\CategoryCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
 use Shopware\Models\Category\Category;
 use Shopware\Tests\Functional\Bundle\StoreFrontBundle\TestCase;
 
@@ -73,7 +73,7 @@ class CategoryConditionTest extends TestCase
      * @param Criteria $criteria
      * @param Category $category
      * @param $conditions
-     * @param ShopContext $context
+     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContext $context
      */
     protected function addCategoryBaseCondition(
         Criteria $criteria,

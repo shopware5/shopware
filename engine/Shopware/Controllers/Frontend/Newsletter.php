@@ -109,7 +109,7 @@ class Shopware_Controllers_Frontend_Newsletter extends Enlight_Controller_Action
     {
         $customergroups = $this->getCustomerGroups();
         $customergroups = Shopware()->Db()->quote($customergroups);
-        $context = $this->container->get('shopware_storefront.context_service')->getShopContext();
+        $context = $this->container->get('storefront.context.service')->getShopContext();
 
         $page = (int) $this->Request()->getQuery('sPage', 1);
         $perPage = (int) Shopware()->Config()->get('contentPerPage', 12);
@@ -166,7 +166,7 @@ class Shopware_Controllers_Frontend_Newsletter extends Enlight_Controller_Action
     {
         $customergroups = $this->getCustomerGroups();
         $customergroups = Shopware()->Db()->quote($customergroups);
-        $context = $this->container->get('shopware_storefront.context_service')->getShopContext();
+        $context = $this->container->get('storefront.context.service')->getShopContext();
 
         $sql = "
             SELECT id, IF(datum='00-00-0000','',datum) as `date`, subject as description, sendermail, sendername

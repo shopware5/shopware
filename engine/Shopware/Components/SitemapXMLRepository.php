@@ -28,8 +28,8 @@ use Doctrine\DBAL\Connection;
 use Doctrine\ORM\QueryBuilder;
 use Shopware\Bundle\SearchBundle\ProductNumberSearchInterface;
 use Shopware\Bundle\SearchBundle\StoreFrontCriteriaFactoryInterface;
-use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
+use Shopware\Bundle\StoreFrontBundle\Context\ContextServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Product\BaseProduct;
 use Shopware\Components\Model\ModelManager;
 
 /**

@@ -27,27 +27,27 @@ namespace Shopware\Bundle\CartBundle\Infrastructure\View;
 
 use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
 use Shopware\Bundle\CartBundle\Domain\Product\CalculatedProduct;
-use Shopware\Bundle\StoreFrontBundle\Gateway\ListProductGateway;
-use Shopware\Bundle\StoreFrontBundle\Service\VariantCoverServiceInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Media\MediaServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Product\ProductGateway;
 
 class ViewProductTransformer implements ViewLineItemTransformerInterface
 {
     /**
-     * @var ListProductGateway
+     * @var \Shopware\Bundle\StoreFrontBundle\Product\ProductGateway
      */
-    private $listProductGateway;
+    private $productGateway;
 
     /**
-     * @var VariantCoverServiceInterface
+     * @var MediaServiceInterface
      */
     private $mediaService;
 
     public function __construct(
-        ListProductGateway $listProductGateway,
-        VariantCoverServiceInterface $mediaService
+        ProductGateway $listProductGateway,
+        MediaServiceInterface $mediaService
     ) {
-        $this->listProductGateway = $listProductGateway;
+        $this->productGateway = $listProductGateway;
         $this->mediaService = $mediaService;
     }
 
@@ -65,12 +65,9 @@ class ViewProductTransformer implements ViewLineItemTransformerInterface
             return;
         }
 
-        $listProducts = $this->listProductGateway->getList(
-            $collection->getIdentifiers(),
-            $context
-        );
+        $listProducts = $this->productGateway->getList($collection->getIdentifiers(), $context);
 
-        $covers = $this->mediaService->getList($listProducts, $context);
+        $covers = $this->mediaService->getVariantCovers($listProducts, $context);
 
         foreach ($listProducts as $listProduct) {
             /** @var CalculatedProduct $calculated */
