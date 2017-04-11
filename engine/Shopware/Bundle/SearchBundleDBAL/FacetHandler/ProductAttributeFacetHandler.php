@@ -24,6 +24,9 @@
 
 namespace Shopware\Bundle\SearchBundleDBAL\FacetHandler;
 
+use Shopware\Bundle\AttributeBundle\Service\ConfigurationStruct;
+use Shopware\Bundle\AttributeBundle\Service\CrudService;
+use Shopware\Bundle\AttributeBundle\Service\TypeMapping;
 use Shopware\Bundle\SearchBundle\Condition\ProductAttributeCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\Facet\ProductAttributeFacet;
@@ -51,13 +54,21 @@ class ProductAttributeFacetHandler implements PartialFacetHandlerInterface
      * @var QueryBuilderFactoryInterface
      */
     private $queryBuilderFactory;
+    /**
+     * @var CrudService
+     */
+    private $crudService;
 
     /**
      * @param QueryBuilderFactoryInterface $queryBuilderFactory
+     * @param CrudService $crudService
      */
-    public function __construct(QueryBuilderFactoryInterface $queryBuilderFactory)
-    {
+    public function __construct(
+        QueryBuilderFactoryInterface $queryBuilderFactory,
+        CrudService $crudService
+    ) {
         $this->queryBuilderFactory = $queryBuilderFactory;
+        $this->crudService = $crudService;
     }
 
     /**
@@ -90,6 +101,11 @@ class ProductAttributeFacetHandler implements PartialFacetHandlerInterface
         $query->andWhere($sqlField . ' IS NOT NULL')
             ->andWhere($sqlField . " != ''");
 
+        /** @var ConfigurationStruct $attribute */
+        $attribute = $this->crudService->get('s_articles_attributes', $facet->getField());
+
+        $type = $attribute ? $attribute->getColumnType() : null;
+
         switch ($facet->getMode()) {
             case ProductAttributeFacet::MODE_VALUE_LIST_RESULT:
             case ProductAttributeFacet::MODE_RADIO_LIST_RESULT:
@@ -109,9 +125,18 @@ class ProductAttributeFacetHandler implements PartialFacetHandlerInterface
                 break;
         }
 
-        if ($result !== null && $facet->getTemplate()) {
-            $result->setTemplate($facet->getTemplate());
+        if ($result === null) {
+            return $result;
         }
+
+        if ($facet->getTemplate()) {
+            $result->setTemplate($facet->getTemplate());
+            return $result;
+        }
+
+        $result->setTemplate(
+            $this->getTypeTemplate($type, $facet->getMode(), $result->getTemplate())
+        );
 
         return $result;
     }
@@ -149,6 +174,10 @@ class ProductAttributeFacetHandler implements PartialFacetHandlerInterface
         /** @var $condition ProductAttributeCondition */
         if ($condition = $criteria->getCondition($facet->getName())) {
             $actives = $condition->getValue();
+        }
+
+        if (!is_array($actives)) {
+            $actives = [$actives];
         }
 
         $items = array_map(function ($row) use ($actives, $facet) {
@@ -343,5 +372,37 @@ class ProductAttributeFacetHandler implements PartialFacetHandlerInterface
         }
 
         return $result[$fieldName];
+    }
+
+    /**
+     * @param string $type
+     * @param string $mode
+     * @param string $defaultTemplate
+     * @return string
+     */
+    private function getTypeTemplate($type, $mode, $defaultTemplate)
+    {
+        switch (true) {
+            case ($type === TypeMapping::TYPE_DATE && $mode === ProductAttributeFacet::MODE_RANGE_RESULT):
+
+                return 'frontend/listing/filter/facet-date-range.tpl';
+            case ($type === TypeMapping::TYPE_DATE && $mode === ProductAttributeFacet::MODE_VALUE_LIST_RESULT):
+
+                return 'frontend/listing/filter/facet-date-multi.tpl';
+            case ($type === TypeMapping::TYPE_DATE && $mode !== ProductAttributeFacet::MODE_BOOLEAN_RESULT):
+
+                return 'frontend/listing/filter/facet-date.tpl';
+            case ($type === TypeMapping::TYPE_DATETIME && $mode === ProductAttributeFacet::MODE_RANGE_RESULT):
+
+                return 'frontend/listing/filter/facet-datetime-range.tpl';
+            case ($type === TypeMapping::TYPE_DATETIME && $mode === ProductAttributeFacet::MODE_VALUE_LIST_RESULT):
+
+                return 'frontend/listing/filter/facet-datetime-multi.tpl';
+            case ($type === TypeMapping::TYPE_DATETIME && $mode !== ProductAttributeFacet::MODE_BOOLEAN_RESULT):
+
+                return 'frontend/listing/filter/facet-datetime.tpl';
+            default:
+                return $defaultTemplate;
+        }
     }
 }

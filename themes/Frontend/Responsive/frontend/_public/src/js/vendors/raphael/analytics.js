@@ -100,7 +100,7 @@ window.onload = function () {
     for (var i = 0, ii = labels.length; i < ii; i++) {
         var y = Math.round(height - bottomgutter - Y * data[i]),
             x = Math.round(leftgutter + X * (i + .5)),
-            t = r.text(x, height - 6, jQuery.partnerChart.timeUnit + " " + labels[i]).attr(txt1).toBack();
+            t = r.text(x, height - 6, window.partnerChart.timeUnit + " " + labels[i]).attr(txt1).toBack();
 
         if (!i) {
             p = ["M", x, y, "C", x, y];
@@ -140,8 +140,8 @@ window.onload = function () {
                 lx = label[0].transform()[0][1] + ppp.dx;
                 ly = label[0].transform()[0][2] + ppp.dy;
                 frame.show().stop().animate(anim);
-                label[0].attr({ text: data + " " + jQuery.partnerChart.netAmountLabel }).show().stop().animateWith(frame, anim, { transform: ["t", lx, ly] }, 350 * is_label_visible);
-                label[1].attr({ text: jQuery.partnerChart.timeUnit + " " + lbl }).show().stop().animateWith(frame, anim, {transform: ["t", lx, ly] }, 350 * is_label_visible);
+                label[0].attr({ text: data + " " + window.partnerChart.netAmountLabel }).show().stop().animateWith(frame, anim, { transform: ["t", lx, ly] }, 350 * is_label_visible);
+                label[1].attr({ text: window.partnerChart.timeUnit + " " + lbl }).show().stop().animateWith(frame, anim, {transform: ["t", lx, ly] }, 350 * is_label_visible);
                 dot.attr("r", 6);
                 is_label_visible = true;
             }, function () {

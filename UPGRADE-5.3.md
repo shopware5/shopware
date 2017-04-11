@@ -72,6 +72,14 @@ This changelog references changes done in Shopware 5.3 patch versions.
     * `frontend_register_shipping_fieldset_panel`
     * `frontend_register_shipping_fieldset_title`
     * `frontend_register_shipping_fieldset_body`
+* Added new global date picker component `frontend/_public/src/js/jquery.datepicker.js` to Responsive theme
+* Added filter facets for date and datetime fields
+    * `themes/Frontend/Bare/frontend/listing/filter/facet-date.tpl`
+    * `themes/Frontend/Bare/frontend/listing/filter/facet-date-multi.tpl`
+    * `themes/Frontend/Bare/frontend/listing/filter/facet-date-range.tpl`
+    * `themes/Frontend/Bare/frontend/listing/filter/facet-datetime.tpl`
+    * `themes/Frontend/Bare/frontend/listing/filter/facet-datetime-multi.tpl`
+    * `themes/Frontend/Bare/frontend/listing/filter/facet-datetime-range.tpl`
 
 ### Changes
 
@@ -289,6 +297,8 @@ did not work anymore because the smarty rendering is off. The string {$offerPosi
 * Removed scrollbar styling on filter-panels (Selector `.filter-panel--content`)
 * Removed support for `.swf` file type in banner module
 * Removed deprecated template block `frontend_listing_swf_banner` in `themes/Frontend/Bare/frontend/listing/banner.tpl`
+* Removed the jQuery UI date picker integration for new global component
+    * `themes/Responsive/frontend/_public/src/js/jquery.ui.datepicker.js`
 
 ### Deprecations
 

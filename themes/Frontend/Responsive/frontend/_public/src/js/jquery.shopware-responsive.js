@@ -32,6 +32,9 @@
         // OffCanvas menu
         .addPlugin('*[data-offcanvas="true"]', 'swOffcanvasMenu', ['xs', 's'])
 
+        // Datepicker
+        .addPlugin('*[data-datepicker="true"]', 'swDatePicker')
+
         // Search field
         .addPlugin('*[data-search="true"]', 'swSearch')
 

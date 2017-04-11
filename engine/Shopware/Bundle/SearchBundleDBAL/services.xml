@@ -77,6 +77,7 @@
 
         <service id="shopware_searchdbal.product_attribute_facet_handler_dbal" class="Shopware\Bundle\SearchBundleDBAL\FacetHandler\ProductAttributeFacetHandler">
             <argument type="service" id="shopware_searchdbal.dbal_query_builder_factory" />
+            <argument type="service" id="shopware_attribute.crud_service" />
             <tag name="facet_handler_dbal"/>
         </service>
 
