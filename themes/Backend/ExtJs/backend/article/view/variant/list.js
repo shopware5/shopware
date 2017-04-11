@@ -319,8 +319,8 @@ Ext.define('Shopware.apps.Article.view.variant.List', {
         standardColumns = [
             {
                 header: me.snippets.columns.stock,
-                dataIndex: 'inStock',
-                sortable: false,
+                dataIndex: 'details.inStock',
+                sortable: true,
                 flex: 1,
                 renderer: me.stockColumnRenderer,
                 editor: {
