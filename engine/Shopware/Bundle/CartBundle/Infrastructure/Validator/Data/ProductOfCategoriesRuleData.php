@@ -31,7 +31,7 @@ class ProductOfCategoriesRuleData extends RuleData
     /**
      * @var int[] indexed by category id
      */
-    private $mapping;
+    protected $mapping;
 
     public function __construct(array $mapping)
     {

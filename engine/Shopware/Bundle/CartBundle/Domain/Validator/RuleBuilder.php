@@ -50,6 +50,10 @@ class RuleBuilder
         }
 
         if (!array_key_exists('_class', $rule)) {
+            if (array_key_exists(0, $rule) && array_key_exists('_class', $rule[0])) {
+                return array_map([$this, 'build'], $rule);
+            }
+
             return $rule;
         }
 

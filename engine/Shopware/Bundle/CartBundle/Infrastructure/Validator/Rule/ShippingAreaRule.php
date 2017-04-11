@@ -35,12 +35,12 @@ class ShippingAreaRule extends Rule
     /**
      * @var int[]
      */
-    private $areaIds;
+    protected $areaIds;
 
     /**
      * @var string
      */
-    private $operator;
+    protected $operator;
 
     public function __construct(array $areaIds, string $operator)
     {

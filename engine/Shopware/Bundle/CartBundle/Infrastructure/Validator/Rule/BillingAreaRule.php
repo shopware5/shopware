@@ -34,7 +34,7 @@ class BillingAreaRule extends Rule
     /**
      * @var int[]
      */
-    private $areaIds;
+    protected $areaIds;
 
     /**
      * @param int[] $areaIds

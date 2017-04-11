@@ -28,6 +28,7 @@ use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
 use Shopware\Bundle\CartBundle\Domain\Delivery\ShippingLocation;
 use Shopware\Bundle\CartBundle\Domain\Validator\Data\RuleDataCollection;
+use Shopware\Bundle\CartBundle\Domain\Validator\Exception\UnsupportedOperatorException;
 use Shopware\Bundle\CartBundle\Infrastructure\Validator\Rule\ShippingCountryRule;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
 use Shopware\Bundle\StoreFrontBundle\Country\Country;
@@ -137,6 +138,29 @@ class ShippingCountryRuleTest extends TestCase
             ->will($this->returnValue(ShippingLocation::createFromCountry($country)));
 
         $rule->match($cart, $context, new RuleDataCollection());
+    }
+
+    public function testUnsupportedOperatorMessage()
+    {
+        $rule = new ShippingCountryRule([1, 2, 3], ShippingCountryRule::OPERATOR_GTE);
+
+        $cart = $this->createMock(CalculatedCart::class);
+
+        $context = $this->createMock(ShopContext::class);
+
+        $country = new Country();
+        $country->setId(2);
+
+        $context->expects($this->any())
+            ->method('getShippingLocation')
+            ->will($this->returnValue(ShippingLocation::createFromCountry($country)));
+
+        try {
+            $rule->match($cart, $context, new RuleDataCollection());
+        } catch (UnsupportedOperatorException $e) {
+            $this->assertSame(ShippingCountryRule::OPERATOR_GTE, $e->getOperator());
+            $this->assertSame(ShippingCountryRule::class, $e->getClass());
+        }
     }
 
     public function unsupportedOperators()

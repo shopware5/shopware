@@ -36,12 +36,12 @@ class GoodsCountRule extends Rule
     /**
      * @var int
      */
-    private $count;
+    protected $count;
 
     /**
      * @var string
      */
-    private $operator;
+    protected $operator;
 
     public function __construct(int $count, string $operator)
     {

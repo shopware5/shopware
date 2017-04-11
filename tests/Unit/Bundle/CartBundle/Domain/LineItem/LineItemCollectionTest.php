@@ -185,4 +185,51 @@ class LineItemCollectionTest extends TestCase
         $collection = new LineItemCollection();
         static::assertNull($collection->get('not found'));
     }
+
+    public function testRemoveElement()
+    {
+        $first = new LineItem('A', 'temp', 1);
+
+        $collection = new LineItemCollection([
+            $first,
+            new LineItem('B', 'temp', 1),
+        ]);
+
+        $collection->removeElement($first);
+
+        $this->assertEquals(
+            new LineItemCollection([new LineItem('B', 'temp', 1)]),
+            $collection
+        );
+    }
+
+    public function testExists()
+    {
+        $first = new LineItem('A', 'temp', 1);
+        $second = new LineItem('B2', 'temp', 1);
+
+        $collection = new LineItemCollection([
+            $first,
+            new LineItem('B', 'temp', 1),
+        ]);
+
+        $this->assertTrue($collection->exists($first));
+        $this->assertFalse($collection->exists($second));
+    }
+
+    public function testGetCollectiveExtraData()
+    {
+        $collection = new LineItemCollection([
+            new LineItem('A', 'temp', 1, ['foo' => 'bar']),
+            new LineItem('B', 'temp', 1, ['bar' => 'foo']),
+        ]);
+
+        $this->assertEquals(
+            [
+                'A' => ['foo' => 'bar'],
+                'B' => ['bar' => 'foo'],
+            ],
+            $collection->getExtraData()
+        );
+    }
 }

@@ -35,7 +35,7 @@ class OrderClearedStateRule extends Rule
     /**
      * @var int[]
      */
-    private $states;
+    protected $states;
 
     /**
      * @param int[] $states

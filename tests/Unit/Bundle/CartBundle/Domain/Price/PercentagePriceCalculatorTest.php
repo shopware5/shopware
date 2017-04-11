@@ -78,6 +78,11 @@ class PercentagePriceCalculatorTest extends \PHPUnit\Framework\TestCase
             Generator::createContext()
         );
         static::assertEquals($expected, $price);
+        static::assertEquals($expected->getCalculatedTaxes(), $price->getCalculatedTaxes());
+        static::assertEquals($expected->getTaxRules(), $price->getTaxRules());
+        static::assertEquals($expected->getTotalPrice(), $price->getTotalPrice());
+        static::assertEquals($expected->getUnitPrice(), $price->getUnitPrice());
+        static::assertEquals($expected->getQuantity(), $price->getQuantity());
     }
 
     public function calculatePercentagePriceOfGrossPricesProvider()

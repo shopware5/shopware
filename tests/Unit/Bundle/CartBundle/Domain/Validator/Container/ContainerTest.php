@@ -22,11 +22,33 @@
  * our trademarks remain entirely with us.
  */
 
-class Migrations_Migration1501 extends Shopware\Components\Migrations\AbstractMigration
+namespace Shopware\Tests\Unit\Bundle\CartBundle\Domain\Validator\Container;
+
+use PHPUnit\Framework\TestCase;
+use Shopware\Bundle\CartBundle\Domain\Validator\Container\AndRule;
+use Shopware\Tests\Unit\Bundle\CartBundle\Common\FalseRule;
+use Shopware\Tests\Unit\Bundle\CartBundle\Common\TrueRule;
+
+class ContainerTest extends TestCase
 {
-    public function up($modus)
+    public function testConstructorWithRules()
     {
-        $this->addSql("ALTER TABLE `s_core_shops` ADD `tax_calculation_type` VARCHAR(50) DEFAULT 'vertical' NOT NULL");
-        $this->addSql("UPDATE `s_core_shops` SET `tax_calculation_type` = 'vertical'");
+        $container = new AndRule([
+            new TrueRule(),
+        ]);
+
+        $this->assertEquals(
+            [new TrueRule()],
+            $container->getRules()
+        );
+
+        $container->setRules([
+            new FalseRule(),
+        ]);
+
+        $this->assertEquals(
+            [new FalseRule()],
+            $container->getRules()
+        );
     }
 }

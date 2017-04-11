@@ -34,7 +34,7 @@ class ShippingStreetRule extends Rule
     /**
      * @var string
      */
-    private $streetName;
+    protected $streetName;
 
     /**
      * @param string $streetName

@@ -35,7 +35,7 @@ class LastOrderRule extends Rule
     /**
      * @var int
      */
-    private $days;
+    protected $days;
 
     public function __construct(int $days)
     {

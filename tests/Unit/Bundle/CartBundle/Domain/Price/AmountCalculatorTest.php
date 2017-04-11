@@ -158,6 +158,10 @@ class AmountCalculatorTest extends \PHPUnit\Framework\TestCase
 
         $cartPrice = $calculator->calculateAmount($prices, $context);
         static::assertEquals($expected, $cartPrice);
+        static::assertSame($expected->getTotalPrice(), $cartPrice->getTotalPrice());
+        static::assertEquals($expected->getTaxRules(), $cartPrice->getTaxRules());
+        static::assertEquals($expected->getCalculatedTaxes(), $cartPrice->getCalculatedTaxes());
+        static::assertSame($expected->getNetPrice(), $cartPrice->getNetPrice());
     }
 
     public function calculateAmountForNetDeliveriesProvider()

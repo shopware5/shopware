@@ -161,4 +161,25 @@ class TaxRuleCollectionTest extends \PHPUnit\Framework\TestCase
         $collection = new TaxRuleCollection([]);
         static::assertNull($collection->get(19));
     }
+
+    public function testRemoveElement()
+    {
+        $toRemove = new TaxRule(18);
+
+        $collection = new TaxRuleCollection([
+            new TaxRule(19),
+            $toRemove,
+            new TaxRule(17),
+        ]);
+
+        $collection->removeElement($toRemove);
+
+        $this->assertEquals(
+            new TaxRuleCollection([
+                new TaxRule(19),
+                new TaxRule(17),
+            ]),
+            $collection
+        );
+    }
 }

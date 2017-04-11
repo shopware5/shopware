@@ -22,11 +22,20 @@
  * our trademarks remain entirely with us.
  */
 
-class Migrations_Migration1501 extends Shopware\Components\Migrations\AbstractMigration
+namespace Shopware\Tests\Unit\Bundle\CartBundle\Common;
+
+use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
+use Shopware\Bundle\CartBundle\Domain\Validator\Data\RuleDataCollection;
+use Shopware\Bundle\CartBundle\Domain\Validator\Rule\Rule;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+
+class TrueRule extends Rule
 {
-    public function up($modus)
-    {
-        $this->addSql("ALTER TABLE `s_core_shops` ADD `tax_calculation_type` VARCHAR(50) DEFAULT 'vertical' NOT NULL");
-        $this->addSql("UPDATE `s_core_shops` SET `tax_calculation_type` = 'vertical'");
+    public function match(
+        CalculatedCart $calculatedCart,
+        ShopContextInterface $context,
+        RuleDataCollection $collection
+    ): bool {
+        return true;
     }
 }

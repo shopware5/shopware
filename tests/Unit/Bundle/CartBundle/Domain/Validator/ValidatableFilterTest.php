@@ -22,18 +22,18 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Unit\Bundle\CartBundle\Domain\Validatori;
+namespace Shopware\Tests\Unit\Bundle\CartBundle\Domain\Validator;
 
 use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
 use Shopware\Bundle\CartBundle\Domain\Validator\Collector\RuleDataCollectorRegistry;
-use Shopware\Bundle\CartBundle\Domain\Validator\Data\RuleDataCollection;
 use Shopware\Bundle\CartBundle\Domain\Validator\Rule\Rule;
 use Shopware\Bundle\CartBundle\Domain\Validator\Validatable;
 use Shopware\Bundle\CartBundle\Domain\Validator\ValidatableFilter;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 use Shopware\Bundle\StoreFrontBundle\PaymentMethod\PaymentMethod;
+use Shopware\Tests\Unit\Bundle\CartBundle\Common\TrueRule;
 
 class ValidatableFilterTest extends TestCase
 {
@@ -97,16 +97,5 @@ class ValidatableClass implements Validatable
     public function getRule(): ? Rule
     {
         return $this->rule;
-    }
-}
-
-class TrueRule extends Rule
-{
-    public function match(
-        CalculatedCart $calculatedCart,
-        ShopContextInterface $context,
-        RuleDataCollection $collection
-    ): bool {
-        return true;
     }
 }

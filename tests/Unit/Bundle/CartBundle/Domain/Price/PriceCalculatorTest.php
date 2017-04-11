@@ -31,9 +31,11 @@ use Shopware\Bundle\CartBundle\Domain\Price\PriceRounding;
 use Shopware\Bundle\CartBundle\Domain\Tax\CalculatedTax;
 use Shopware\Bundle\CartBundle\Domain\Tax\CalculatedTaxCollection;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxCalculator;
+use Shopware\Bundle\CartBundle\Domain\Tax\TaxDetector;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxRule;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCalculator;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCollection;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
 use Shopware\Tests\Unit\Bundle\CartBundle\Common\Generator;
 
 /**
@@ -68,6 +70,90 @@ class PriceCalculatorTest extends \PHPUnit\Framework\TestCase
         );
 
         static::assertEquals($expected, $lineItemPrice);
+    }
+
+    /**
+     * @dataProvider netPrices
+     *
+     * @param Price           $expected
+     * @param PriceDefinition $priceDefinition
+     */
+    public function testNetPrices(
+        Price $expected,
+        PriceDefinition $priceDefinition
+    ) {
+        $detector = $this->createMock(TaxDetector::class);
+        $detector->method('useGross')->will($this->returnValue(false));
+        $detector->method('isNetDelivery')->will($this->returnValue(false));
+
+        $calculator = new PriceCalculator(
+            new TaxCalculator(
+                new PriceRounding(2),
+                [new TaxRuleCalculator(new PriceRounding(2))]
+            ),
+            new PriceRounding(2),
+            $detector
+        );
+
+        $context = $this->createMock(ShopContext::class);
+
+        $lineItemPrice = $calculator->calculate($priceDefinition, $context);
+
+        static::assertEquals($expected, $lineItemPrice);
+    }
+
+    /**
+     * @dataProvider netDeliveryPrices
+     *
+     * @param Price           $expected
+     * @param PriceDefinition $priceDefinition
+     */
+    public function testNetDeliveries(
+        Price $expected,
+        PriceDefinition $priceDefinition
+    ) {
+        $detector = $this->createMock(TaxDetector::class);
+        $detector->method('useGross')->will($this->returnValue(false));
+        $detector->method('isNetDelivery')->will($this->returnValue(true));
+
+        $calculator = new PriceCalculator(
+            new TaxCalculator(
+                new PriceRounding(2),
+                [new TaxRuleCalculator(new PriceRounding(2))]
+            ),
+            new PriceRounding(2),
+            $detector
+        );
+
+        $context = $this->createMock(ShopContext::class);
+
+        $lineItemPrice = $calculator->calculate($priceDefinition, $context);
+
+        static::assertEquals($expected, $lineItemPrice);
+    }
+
+    public function netPrices()
+    {
+        $highTaxRules = new TaxRuleCollection([new TaxRule(19)]);
+
+        return [
+            [
+                new Price(13.44, 13.44, new CalculatedTaxCollection([new CalculatedTax(2.55, 19, 13.44)]), $highTaxRules),
+                new PriceDefinition(13.436974789916, $highTaxRules),
+            ],
+        ];
+    }
+
+    public function netDeliveryPrices()
+    {
+        $highTaxRules = new TaxRuleCollection([new TaxRule(19)]);
+
+        return [
+            [
+                new Price(13.44, 13.44, new CalculatedTaxCollection(), new TaxRuleCollection()),
+                new PriceDefinition(13.436974789916, $highTaxRules),
+            ],
+        ];
     }
 
     public function priceCalculationWithGrossPricesProvider()

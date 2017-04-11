@@ -34,7 +34,7 @@ class BillingCountryRule extends Rule
     /**
      * @var int[]
      */
-    private $countryIds;
+    protected $countryIds;
 
     /**
      * @param int[] $countryIds

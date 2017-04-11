@@ -250,7 +250,7 @@ class Shop extends ModelEntity
      *
      * @var string
      */
-    protected $taxCalculationType;
+    protected $taxCalculationType = 'vertical';
 
     /**
      * Class constructor.

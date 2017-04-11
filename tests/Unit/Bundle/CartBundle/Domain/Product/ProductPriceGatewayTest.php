@@ -22,11 +22,21 @@
  * our trademarks remain entirely with us.
  */
 
-class Migrations_Migration1501 extends Shopware\Components\Migrations\AbstractMigration
+namespace Shopware\Tests\Unit\Bundle\CartBundle\Domain\Product;
+
+use PHPUnit\Framework\TestCase;
+use Shopware\Bundle\CartBundle\Domain\LineItem\LineItemCollection;
+use Shopware\Bundle\CartBundle\Domain\Product\ProductPriceGateway;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
+
+class ProductPriceGatewayTest extends TestCase
 {
-    public function up($modus)
+    /**
+     * @expectedException \Shopware\Bundle\CartBundle\Domain\Exception\NotImplementedException
+     */
+    public function testDummyGatewayThrowsException()
     {
-        $this->addSql("ALTER TABLE `s_core_shops` ADD `tax_calculation_type` VARCHAR(50) DEFAULT 'vertical' NOT NULL");
-        $this->addSql("UPDATE `s_core_shops` SET `tax_calculation_type` = 'vertical'");
+        $gateway = new ProductPriceGateway();
+        $gateway->get(new LineItemCollection(), $this->createMock(ShopContext::class));
     }
 }

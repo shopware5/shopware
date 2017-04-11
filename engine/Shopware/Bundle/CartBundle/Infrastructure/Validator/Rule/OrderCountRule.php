@@ -35,7 +35,7 @@ class OrderCountRule extends Rule
     /**
      * @var int
      */
-    private $count;
+    protected $count;
 
     public function __construct(int $count)
     {
