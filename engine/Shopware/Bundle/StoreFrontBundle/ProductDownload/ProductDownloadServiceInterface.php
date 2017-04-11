@@ -38,7 +38,7 @@ interface ProductDownloadServiceInterface
      * @param BaseProduct[]        $products
      * @param ShopContextInterface $context
      *
-     * @return array indexed by the product order number, each array element contains a list of \Shopware\Bundle\StoreFrontBundle\ProductDownload\Download classes
+     * @return array indexed by the product order number, each array element contains a list of \Shopware\Bundle\StoreFrontBundle\ProductDownload\ProductDownload classes
      */
     public function getList($products, ShopContextInterface $context);
 }

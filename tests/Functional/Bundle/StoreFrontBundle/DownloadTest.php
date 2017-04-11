@@ -25,7 +25,6 @@
 namespace Shopware\Tests\Functional\Bundle\StoreFrontBundle;
 
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
-use Shopware\Bundle\StoreFrontBundle\ProductDownload\Download;
 use Shopware\Models\Category\Category;
 
 class DownloadTest extends TestCase
@@ -45,9 +44,9 @@ class DownloadTest extends TestCase
 
         $this->assertCount(2, $downloads);
 
-        /** @var $download \Shopware\Bundle\StoreFrontBundle\ProductDownload\Download */
+        /** @var $download \Shopware\Bundle\StoreFrontBundle\ProductDownload\ProductDownload */
         foreach ($downloads as $download) {
-            $this->assertInstanceOf('Shopware\Bundle\StoreFrontBundle\ProductDownload\Download', $download);
+            $this->assertInstanceOf('Shopware\Bundle\StoreFrontBundle\ProductDownload\ProductDownload', $download);
             $this->assertContains($download->getFile(), ['/var/www/first.txt', '/var/www/second.txt']);
             $this->assertCount(1, $download->getAttributes());
             $this->assertTrue($download->hasAttribute('core'));

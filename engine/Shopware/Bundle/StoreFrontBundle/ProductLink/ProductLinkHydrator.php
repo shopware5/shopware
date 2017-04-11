@@ -50,11 +50,11 @@ class ProductLinkHydrator extends Hydrator
     /**
      * @param array $data
      *
-     * @return Link
+     * @return ProductLink
      */
     public function hydrate(array $data)
     {
-        $link = new Link();
+        $link = new ProductLink();
         $link->setId((int) $data['__link_id']);
         $link->setDescription($data['__link_description']);
         $link->setLink($data['__link_link']);

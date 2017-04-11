@@ -31,7 +31,7 @@ use Shopware\Bundle\StoreFrontBundle\Common\Extendable;
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Download extends Extendable
+class ProductDownload extends Extendable
 {
     /**
      * @var int

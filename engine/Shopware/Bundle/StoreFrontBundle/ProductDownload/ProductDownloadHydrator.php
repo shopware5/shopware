@@ -48,15 +48,15 @@ class ProductDownloadHydrator extends Hydrator
     }
 
     /**
-     * Creates a new Struct\Product\Download struct with the passed data.
+     * Creates a new Struct\Product\ProductDownload struct with the passed data.
      *
      * @param array $data
      *
-     * @return Download
+     * @return ProductDownload
      */
     public function hydrate(array $data)
     {
-        $download = new Download();
+        $download = new ProductDownload();
         $download->setId((int) $data['__download_id']);
         $download->setDescription($data['__download_description']);
         $download->setFile($data['__download_filename']);

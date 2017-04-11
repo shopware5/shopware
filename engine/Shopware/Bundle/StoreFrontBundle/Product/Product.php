@@ -51,12 +51,12 @@ class Product extends ListProduct
     protected $similarProducts = [];
 
     /**
-     * @var \Shopware\Bundle\StoreFrontBundle\ProductDownload\Download[]
+     * @var \Shopware\Bundle\StoreFrontBundle\ProductDownload\ProductDownload[]
      */
     protected $downloads = [];
 
     /**
-     * @var \Shopware\Bundle\StoreFrontBundle\ProductLink\Link[]
+     * @var \Shopware\Bundle\StoreFrontBundle\ProductLink\ProductLink[]
      */
     protected $links = [];
 
@@ -213,7 +213,7 @@ class Product extends ListProduct
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\ProductDownload\Download[] $downloads
+     * @param \Shopware\Bundle\StoreFrontBundle\ProductDownload\ProductDownload[] $downloads
      */
     public function setDownloads($downloads)
     {
@@ -221,7 +221,7 @@ class Product extends ListProduct
     }
 
     /**
-     * @return \Shopware\Bundle\StoreFrontBundle\ProductDownload\Download[]
+     * @return \Shopware\Bundle\StoreFrontBundle\ProductDownload\ProductDownload[]
      */
     public function getDownloads()
     {
@@ -229,7 +229,7 @@ class Product extends ListProduct
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\ProductLink\Link[] $links
+     * @param \Shopware\Bundle\StoreFrontBundle\ProductLink\ProductLink[] $links
      */
     public function setLinks($links)
     {
@@ -237,7 +237,7 @@ class Product extends ListProduct
     }
 
     /**
-     * @return \Shopware\Bundle\StoreFrontBundle\ProductLink\Link[]
+     * @return \Shopware\Bundle\StoreFrontBundle\ProductLink\ProductLink[]
      */
     public function getLinks()
     {

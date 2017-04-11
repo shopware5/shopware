@@ -84,7 +84,7 @@ class ProductDownloadGateway
      * @param \Shopware\Bundle\StoreFrontBundle\Product\BaseProduct[] $products
      * @param TranslationContext                                      $context
      *
-     * @return array indexed by the product number, each array element contains a \Shopware\Bundle\StoreFrontBundle\ProductDownload\Download array
+     * @return array indexed by the product number, each array element contains a \Shopware\Bundle\StoreFrontBundle\ProductDownload\ProductDownload array
      */
     public function getList($products, TranslationContext $context)
     {

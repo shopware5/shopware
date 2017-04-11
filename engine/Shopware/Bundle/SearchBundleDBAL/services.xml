@@ -106,7 +106,7 @@
             <argument type="service" id="storefront.category.service"/>
             <argument type="service" id="shopware_searchdbal.dbal_query_builder_factory" />
             <argument type="service" id="config" />
-            <argument type="service" id="shopware.category.depth_service" />
+            <argument type="service" id="storefront.category.depth_service" />
             <argument type="service" id="shopware_search.category_tree_facet_result_builder" />
             <tag name="facet_handler_dbal"/>
         </service>

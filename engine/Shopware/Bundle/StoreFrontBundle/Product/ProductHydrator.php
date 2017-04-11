@@ -25,7 +25,6 @@
 namespace Shopware\Bundle\StoreFrontBundle\Product;
 
 use Shopware\Bundle\StoreFrontBundle\Common\Attribute;
-use Shopware\Bundle\StoreFrontBundle\Common\AttributeHydrator;
 use Shopware\Bundle\StoreFrontBundle\Common\Hydrator;
 use Shopware\Bundle\StoreFrontBundle\Esd\EsdHydrator;
 use Shopware\Bundle\StoreFrontBundle\Manufacturer\ManufacturerHydrator;
@@ -65,14 +64,6 @@ class ProductHydrator extends Hydrator
      */
     private $config;
 
-    /**
-     * @param AttributeHydrator                                   $attributeHydrator
-     * @param ManufacturerHydrator                                $manufacturerHydrator
-     * @param \Shopware\Bundle\StoreFrontBundle\Tax\TaxHydrator   $taxHydrator
-     * @param \Shopware\Bundle\StoreFrontBundle\Unit\UnitHydrator $unitHydrator
-     * @param EsdHydrator                                         $esdHydrator
-     * @param \Shopware_Components_Config                         $config
-     */
     public function __construct(
         ManufacturerHydrator $manufacturerHydrator,
         TaxHydrator $taxHydrator,

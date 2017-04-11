@@ -101,7 +101,7 @@
             <argument type="service" id="dbal_connection" />
         </service>
 
-        <service id="shopware.category.depth_service" class="Shopware\Bundle\StoreFrontBundle\Category\CategoryDepthService">
+        <service id="storefront.category.depth_service" class="Shopware\Bundle\StoreFrontBundle\Category\CategoryDepthService">
             <argument type="service" id="dbal_connection" />
         </service>
 
@@ -511,7 +511,7 @@
         </service>
 
         <service id="storefront.advanced_menu.service" class="Shopware\Bundle\StoreFrontBundle\AdvancedMenu\AdvancedMenuService">
-            <argument type="service" id="shopware.category.depth_service" />
+            <argument type="service" id="storefront.category.depth_service" />
             <argument type="service" id="storefront.category.service" />
         </service>
     </services>

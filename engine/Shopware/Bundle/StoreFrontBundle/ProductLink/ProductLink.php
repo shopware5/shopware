@@ -31,7 +31,7 @@ use Shopware\Bundle\StoreFrontBundle\Common\Extendable;
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Link extends Extendable
+class ProductLink extends Extendable
 {
     /**
      * @var int
