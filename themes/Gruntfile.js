@@ -5,8 +5,7 @@ module.exports = function (grunt) {
         lessTargetFile = {},
         jsFiles = [],
         jsTargetFile = {},
-        content = '',
-        variables = {};
+        content = '';
 
     lessTargetFile['../' + config.lessTarget] = '../web/cache/all.less';
 
@@ -15,14 +14,16 @@ module.exports = function (grunt) {
     });
     jsTargetFile['../' + config.jsTarget] = jsFiles;
 
+    for (var key in config.config) {
+        content += '@' + key + ': ' + config.config[key] + ';';
+        content += '\n';
+    }
+
     config.less.forEach(function (item) {
         content += `@import "../${item}";`;
     });
-    grunt.file.write('../web/cache/all.less', content);
 
-    for (var key in config.config) {
-        variables[key] = config.config[key];
-    }
+    grunt.file.write('../web/cache/all.less', content);
 
     grunt.initConfig({
         uglify: {
@@ -47,14 +48,12 @@ module.exports = function (grunt) {
             production: {
                 options: {
                     compress: true,
-                    modifyVars: variables,
                     relativeUrls: true
                 },
                 files: lessTargetFile
             },
             development: {
                 options: {
-                    modifyVars: variables,
                     dumpLineNumbers: 'all',
                     relativeUrls: true,
                     sourceMap: true,
@@ -71,7 +70,7 @@ module.exports = function (grunt) {
                     '../themes/Frontend/**/*.less',
                     '../custom/plugins/**/*.less'
                 ],
-                tasks: ['less:development', 'eslint'],
+                tasks: ['less:development'],
                 options: {
                     spawn: false
                 }
@@ -82,7 +81,7 @@ module.exports = function (grunt) {
                     '../engine/Shopware/Plugins/**/frontend/**/src/js/**/*.js',
                     '../custom/plugins/**/frontend/**/src/js/**/*.js'
                 ],
-                tasks: ['uglify:development'],
+                tasks: ['eslint', 'uglify:development'],
                 options: {
                     spawn: false
                 }
@@ -91,8 +90,13 @@ module.exports = function (grunt) {
         eslint: {
             src: [
                 'Gruntfile.js',
-                'Frontend/Responsive/frontend/_public/src/js/*.js'
-            ]
+                '../themes/Frontend/**/_public/src/js/*.js',
+                '../engine/Shopware/Plugins/**/frontend/**/src/js/**/*.js',
+                '../custom/plugins/**/frontend/**/src/js/**/*.js'
+            ],
+            options: {
+                configFile: '.eslintrc.js'
+            }
         },
         fileExists: {
             js: jsFiles
