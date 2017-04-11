@@ -22,12 +22,10 @@
  * our trademarks remain entirely with us.
  */
 
-class Migrations_Migration1002 extends Shopware\Components\Migrations\AbstractMigration
+class Migrations_Migration2003 extends Shopware\Components\Migrations\AbstractMigration
 {
     public function up($modus)
     {
-        $this->addSql('SET @elementId = (SELECT id FROM s_core_config_elements WHERE name="esdDownloadStrategy")');
-        $this->addSql('DELETE FROM s_core_config_values WHERE element_id = @elementId');
-        $this->addSql('DELETE FROM s_core_config_elements WHERE id = @elementId');
+        $this->addSql('DROP TABLE IF EXISTS `s_core_engine_elements`;');
     }
 }

@@ -22,11 +22,16 @@
  * our trademarks remain entirely with us.
  */
 
-class Migrations_Migration1501 extends Shopware\Components\Migrations\AbstractMigration
+class Migrations_Migration2006 extends Shopware\Components\Migrations\AbstractMigration
 {
     public function up($modus)
     {
-        $this->addSql("ALTER TABLE `s_core_shops` ADD `tax_calculation_type` VARCHAR(50) DEFAULT 'vertical' NOT NULL");
-        $this->addSql("UPDATE `s_core_shops` SET `tax_calculation_type` = 'vertical'");
+        $this->addSql("SET @pluginId = (SELECT id FROM s_core_plugins WHERE name = 'Statistics' AND source = 'Default' LIMIT 1)");
+
+        $this->addSql('UPDATE s_core_config_forms SET plugin_id = NULL WHERE plugin_id = @pluginId');
+
+        $this->addSql('DELETE FROM s_core_subscribes WHERE pluginID = @pluginId');
+
+        $this->addSql('DELETE FROM s_core_plugins WHERE id = @pluginId');
     }
 }
