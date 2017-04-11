@@ -19,11 +19,28 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
+ *
+ * @category   Shopware
+ * @package    ProductStream
+ * @subpackage Store
+ * @version    $Id$
+ * @author shopware AG
  */
-
-//{namespace name="backend/customer_stream/translation"}
-
-
-Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.field.Attribute', {
-    extend: ''
+//{block name="backend/product_stream/store/attribute"}
+// todo change controller
+Ext.define('Shopware.apps.Customer.store.Attribute', {
+    extend:'Ext.data.Store',
+    fields: [ 'column', 'label' ],
+    autoLoad: false,
+    pageSize: 15,
+    proxy:{
+        type:'ajax',
+        url: '{url controller=ProductStream action=getAttributes}',
+        reader:{
+            type:'json',
+            root:'data',
+            totalProperty:'total'
+        }
+    }
 });
+//{/block}

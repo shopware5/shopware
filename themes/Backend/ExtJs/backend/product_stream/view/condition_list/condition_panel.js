@@ -28,7 +28,7 @@
  */
 //{namespace name=backend/product_stream/main}
 //{block name="backend/product_stream/view/condition_list/condition_panel"}
-Ext.define('Shopware.apps.ProductStream.view.condition_list.ConditionPanel', {
+Ext.define('Shopware.apps.Customer.view.condition_list.ConditionPanel', {
     extend: 'Ext.form.Panel',
     cls: 'shopware-form',
     alias: 'widget.product-stream-condition-panel',
