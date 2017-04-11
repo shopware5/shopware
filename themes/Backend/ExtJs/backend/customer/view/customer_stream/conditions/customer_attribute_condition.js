@@ -52,105 +52,14 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.CustomerAttri
     },
 
     _create: function(attribute) {
-        var me = this;
-
-        var valueField = Ext.create('Ext.form.field.Text', {
-            fieldLabel: '{s name=attribute/value}Value:{/s}',
-            allowBlank: false,
-            name: 'value'
-        });
-
-        var fromField = me.createFromField();
-        var toField = me.createToField();
-
-        fromField.toField = toField;
-        toField.fromField = fromField;
-
-        var betweenContainer = Ext.create('Ext.container.Container', {
-
-            layout: { type: 'hbox', alaign: 'strech' },
-            hidden: true,
-            items: [ fromField, toField ]
+        var items = Ext.create('Shopware.apps.Customer.view.customer_stream.conditions.field.Attribute', {
+            attributeField: attribute
         });
 
         return {
             title: this.getLabel() + ' [' + attribute + ']',
             conditionClass: 'Shopware\\Bundle\\CustomerSearchBundle\\Condition\\CustomerAttributeCondition',
-            items: [{
-                xtype: 'textfield',
-                hidden: true,
-                allowBlank: false,
-                name: 'attribute',
-                value: attribute
-            }, {
-                xtype: 'combobox',
-                fieldLabel: '{s name=attribute/operator}Operator:{/s}',
-                store: me.operatorStore(),
-                displayField: 'name',
-                valueField: 'value',
-                attributeValueField: valueField,
-                betweenContainer: betweenContainer,
-                allowBlank: false,
-                name: 'operator',
-                listeners: {
-                    change: function (field, value) {
-                        if (value === 'BETWEEN') {
-                            this.betweenContainer.show();
-                            this.attributeValueField.hide();
-                        } else {
-                            this.betweenContainer.hide();
-                            this.attributeValueField.show();
-                        }
-                    }
-                }
-            }, valueField, betweenContainer]
+            items: items
         };
-    },
-
-    operatorStore: function () {
-        return Ext.create('Ext.data.Store', {
-            fields: [ 'name', 'value' ],
-            data: [
-                { name: '{s name=attribute_condition/equals}equals{/s}', value: '=' },
-                { name: '{s name=attribute_condition/not_equals}not equals{/s}', value: '!=' },
-                { name: '{s name=attribute_condition/less_than}less than{/s}', value: '<' },
-                { name: '{s name=attribute_condition/less_than_equals}less than equals{/s}', value: '<=' },
-                { name: '{s name=attribute_condition/between}between{/s}', value: 'BETWEEN' },
-                { name: '{s name=attribute_condition/greater_than}greater than{/s}', value: '>' },
-                { name: '{s name=attribute_condition/greater_than_equals}greater than equals{/s}', value: '>=' },
-                { name: '{s name=attribute_condition/in}in{/s}', value: 'IN' },
-                { name: '{s name=attribute_condition/starts_with}starts with{/s}', value: 'STARTS_WITH' },
-                { name: '{s name=attribute_condition/ends_with}ends with{/s}', value: 'ENDS_WITH' },
-                { name: '{s name=attribute_condition/like}like{/s}', value: 'CONTAINS' }
-            ]
-        });
-    },
-
-    createFromField: function() {
-
-        return Ext.create('Ext.form.field.Number', {
-            fieldLabel: '{s name=attribute/from_text}From{/s}',
-            flex: 1,
-            listeners: {
-                change: function() {
-                    this.toField.setMinValue(this.getValue() + 1);
-                }
-            }
-        });
-    },
-
-    createToField: function() {
-
-        return Ext.create('Ext.form.field.Number', {
-            labelWidth: 50,
-            fieldLabel: '{s name=attribute/to_text}to{/s}',
-            padding: '0 0 0 10',
-            flex: 1,
-            listeners: {
-                change: function() {
-                    this.fromField.setMaxValue(this.getValue() - 1);
-                }
-            }
-        });
     }
 });
