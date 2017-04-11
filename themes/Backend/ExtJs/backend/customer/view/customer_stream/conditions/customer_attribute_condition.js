@@ -100,6 +100,5 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.CustomerAttri
                 { name: '{s name=attribute_condition/like}like{/s}', value: 'CONTAINS' }
             ]
         });
-    },
-
+    }
 });
