@@ -40,6 +40,10 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
         { ref: 'mainToolbar', selector: 'customer-main-toolbar' }
     ],
 
+    mixins: {
+        batch: 'Shopware.helper.BatchRequests'
+    },
+
     init:function () {
         var me = this;
 
@@ -276,8 +280,7 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
             },
             success: function(operation) {
                 var response = Ext.decode(operation.responseText);
-                // todo oli fragen was die start function genau tut :-)
-                window.start([{
+                me.start([{
                     text: '{s name=stream/indexing_customers}Indexing customers{/s}',
                     url: '{url controller=CustomerStream action=indexStream}',
                     params: {
@@ -328,7 +331,7 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
                     params.lastIndexTime = response.lastIndexTime;
                 }
 
-                window.start([{
+                me.start([{
                     text: '{s name=window/analysing_new_customer}Analyse new customer{/s}',
                     url: '{url controller=CustomerStream action=buildSearchIndex}',
                     params: params
@@ -352,7 +355,7 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
             success: function(operation) {
                 var response = Ext.decode(operation.responseText);
 
-                window.start([{
+                me.start([{
                     text: '{s name=stream/analysing_customers}Analysing customers{/s}',
                     url: '{url controller=CustomerStream action=buildSearchIndex}',
                     params: {
@@ -378,6 +381,12 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
         window.loadListing();
     },
 
+    updateProgressBar: function(request, response) {
+        var me = this,
+            toolbar = me.getMainToolbar();
+        toolbar.indexingBar.updateProgress(response.progress, response.text, true);
+    },
+
     resetProgressbar: function () {
         var me = this,
             toolbar = me.getMainToolbar();
@@ -391,6 +400,14 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
                 }, 1000);
             }
         });
+    },
+
+    finish: function() {
+        var me = this,
+            window = me.getMainWindow();
+        window.formPanel.setDisabled(false);
+        window.loadListing();
+        me.resetProgressbar();
     }
 
 });

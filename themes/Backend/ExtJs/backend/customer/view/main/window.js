@@ -41,10 +41,6 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
     height: '95%',
     title: '{s name=window_title}Customer list{/s}',
 
-    mixins: {
-        batch: 'Shopware.helper.BatchRequests'
-    },
-
     /**
      * Initializes the component and builds up the main interface
      *
@@ -202,13 +198,6 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
                 me.fireEvent('save-stream-details');
             }
         });
-    },
-
-    finish: function() {
-        var me = this;
-        me.formPanel.setDisabled(false);
-        me.loadListing();
-        me.fireEvent('reset-progressbar');
     }
 });
 //{/block}
