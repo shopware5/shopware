@@ -36,8 +36,9 @@ use Shopware\Bundle\CartBundle\Domain\LineItem\CalculatedLineItemCollection;
 use Shopware\Bundle\CartBundle\Domain\Payment\PaymentValidatorProcessor;
 use Shopware\Bundle\CartBundle\Domain\Validator\Collector\RuleDataCollectorRegistry;
 use Shopware\Bundle\CartBundle\Domain\Validator\ValidatableFilter;
-use Shopware\Bundle\StoreFrontBundle\Struct\PaymentMethod;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
+use Shopware\Bundle\StoreFrontBundle\Customer\Customer;
+use Shopware\Bundle\StoreFrontBundle\PaymentMethod\PaymentMethod;
 use Shopware\Tests\Unit\Bundle\CartBundle\Common\FalseRule;
 use Shopware\Tests\Unit\Bundle\CartBundle\Common\TrueRule;
 
@@ -63,7 +64,7 @@ class PaymentValidatorProcessorTest extends TestCase
     public function testWithoutPaymentRule()
     {
         $context = $this->createMock(ShopContext::class);
-        $customer = new \Shopware\Bundle\StoreFrontBundle\Struct\Customer();
+        $customer = new Customer();
         $context->expects($this->once())->method('getCustomer')->will($this->returnValue($customer));
 
         $paymentMethod = new PaymentMethod(1, 'test', 'test', 'test');
@@ -88,7 +89,7 @@ class PaymentValidatorProcessorTest extends TestCase
     public function testValid()
     {
         $context = $this->createMock(ShopContext::class);
-        $customer = new \Shopware\Bundle\StoreFrontBundle\Struct\Customer();
+        $customer = new Customer();
         $context->expects($this->once())->method('getCustomer')->will($this->returnValue($customer));
 
         $paymentMethod = new PaymentMethod(1, 'test', 'test', 'test');
@@ -115,7 +116,7 @@ class PaymentValidatorProcessorTest extends TestCase
     public function testInvalid()
     {
         $context = $this->createMock(ShopContext::class);
-        $customer = new \Shopware\Bundle\StoreFrontBundle\Struct\Customer();
+        $customer = new Customer();
         $context->expects($this->once())->method('getCustomer')->will($this->returnValue($customer));
 
         $paymentMethod = new PaymentMethod(1, 'test', 'test', 'test');

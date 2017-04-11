@@ -27,7 +27,7 @@ namespace Shopware\Tests\Unit\Bundle\CartBundle\Common;
 use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
 use Shopware\Bundle\CartBundle\Domain\Validator\Data\RuleDataCollection;
 use Shopware\Bundle\CartBundle\Domain\Validator\Rule\Rule;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 
 class TrueRule extends Rule
 {

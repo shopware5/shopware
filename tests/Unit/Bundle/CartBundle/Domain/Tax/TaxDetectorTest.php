@@ -27,16 +27,16 @@ namespace Shopware\Tests\Unit\Bundle\CartBundle\Domain\Tax;
 use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\CartBundle\Domain\Delivery\ShippingLocation;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxDetector;
-use Shopware\Bundle\StoreFrontBundle\Struct\Country;
-use Shopware\Bundle\StoreFrontBundle\Struct\Customer\Group;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
+use Shopware\Bundle\StoreFrontBundle\Country\Country;
+use Shopware\Bundle\StoreFrontBundle\CustomerGroup\CustomerGroup;
 
 class TaxDetectorTest extends TestCase
 {
     public function testUseGrossPrices()
     {
         $context = $this->createMock(ShopContext::class);
-        $customerGroup = $this->createMock(Group::class);
+        $customerGroup = $this->createMock(CustomerGroup::class);
         $customerGroup->expects($this->once())->method('displayGrossPrices')->will($this->returnValue(true));
         $context->expects($this->once())->method('getCurrentCustomerGroup')->will($this->returnValue($customerGroup));
 
@@ -47,7 +47,7 @@ class TaxDetectorTest extends TestCase
     public function testDoNotUseGrossPrices()
     {
         $context = $this->createMock(ShopContext::class);
-        $customerGroup = $this->createMock(Group::class);
+        $customerGroup = $this->createMock(CustomerGroup::class);
         $customerGroup->expects($this->once())->method('displayGrossPrices')->will($this->returnValue(false));
         $context->expects($this->once())->method('getCurrentCustomerGroup')->will($this->returnValue($customerGroup));
 

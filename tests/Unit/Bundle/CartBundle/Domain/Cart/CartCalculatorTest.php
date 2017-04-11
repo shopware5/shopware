@@ -31,7 +31,7 @@ use Shopware\Bundle\CartBundle\Domain\Cart\CartCalculator;
 use Shopware\Bundle\CartBundle\Domain\Cart\CartContainer;
 use Shopware\Bundle\CartBundle\Domain\Product\ProductProcessor;
 use Shopware\Bundle\CartBundle\Domain\Voucher\VoucherProcessor;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
 
 class CartCalculatorTest extends TestCase
 {

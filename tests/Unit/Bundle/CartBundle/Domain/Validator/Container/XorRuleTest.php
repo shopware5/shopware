@@ -28,7 +28,7 @@ use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
 use Shopware\Bundle\CartBundle\Domain\Validator\Container\XorRule;
 use Shopware\Bundle\CartBundle\Domain\Validator\Data\RuleDataCollection;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
 use Shopware\Tests\Unit\Bundle\CartBundle\Common\FalseRule;
 use Shopware\Tests\Unit\Bundle\CartBundle\Common\TrueRule;
 

@@ -27,7 +27,7 @@ namespace Shopware\Tests\Unit\Bundle\CartBundle\Domain\Product;
 use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\CartBundle\Domain\LineItem\LineItemCollection;
 use Shopware\Bundle\CartBundle\Domain\Product\ProductPriceGateway;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
 
 class ProductPriceGatewayTest extends TestCase
 {

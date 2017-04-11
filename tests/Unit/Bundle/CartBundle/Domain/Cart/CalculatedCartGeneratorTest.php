@@ -41,8 +41,8 @@ use Shopware\Bundle\CartBundle\Domain\Price\AmountCalculator;
 use Shopware\Bundle\CartBundle\Domain\Price\CartPrice;
 use Shopware\Bundle\CartBundle\Domain\Tax\CalculatedTaxCollection;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCollection;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShippingMethod;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
+use Shopware\Bundle\StoreFrontBundle\ShippingMethod\ShippingMethod;
 use Shopware\Tests\Unit\Bundle\CartBundle\Common\DummyProduct;
 
 class CalculatedCartGeneratorTest extends TestCase

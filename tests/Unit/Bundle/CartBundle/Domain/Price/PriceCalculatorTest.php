@@ -35,7 +35,7 @@ use Shopware\Bundle\CartBundle\Domain\Tax\TaxDetector;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxRule;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCalculator;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCollection;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
 use Shopware\Tests\Unit\Bundle\CartBundle\Common\Generator;
 
 /**

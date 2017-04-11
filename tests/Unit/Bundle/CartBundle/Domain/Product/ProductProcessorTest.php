@@ -47,7 +47,7 @@ use Shopware\Bundle\CartBundle\Domain\Tax\CalculatedTaxCollection;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCollection;
 use Shopware\Bundle\CartBundle\Infrastructure\Product\ProductDeliveryGateway;
 use Shopware\Bundle\CartBundle\Infrastructure\Product\ProductPriceGateway;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
 use Shopware\Tests\Unit\Bundle\CartBundle\Common\Generator;
 
 class ProductProcessorTest extends \PHPUnit\Framework\TestCase

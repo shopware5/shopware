@@ -31,7 +31,7 @@ use Shopware\Bundle\CartBundle\Domain\Validator\Rule\RuleCollection;
 use Shopware\Bundle\CartBundle\Infrastructure\Validator\Collector\OrderClearedStateRuleCollector;
 use Shopware\Bundle\CartBundle\Infrastructure\Validator\Collector\OrderCountRuleCollector;
 use Shopware\Bundle\CartBundle\Infrastructure\Validator\Collector\ProductOfCategoriesRuleCollector;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
 
 class RuleDataCollectorRegistryTest extends TestCase
 {
