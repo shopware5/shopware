@@ -48,18 +48,55 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.CustomerAttri
     },
 
     load: function(conditionClass, items, callback) {
-        callback(this._create());
+        callback(this._create(items.field));
     },
 
     _create: function(attribute) {
-        var items = Ext.create('Shopware.apps.Customer.view.customer_stream.conditions.field.Attribute', {
-            attributeField: attribute
+        var operatorField = this.createOperatorField();
+
+        var valueField = Ext.create('Shopware.apps.Customer.view.customer_stream.conditions.field.AttributeValue', {
+            name: 'value',
+            operatorField: operatorField
         });
 
         return {
             title: this.getLabel() + ' [' + attribute + ']',
             conditionClass: 'Shopware\\Bundle\\CustomerSearchBundle\\Condition\\CustomerAttributeCondition',
-            items: items
+            items: [{ xtype: 'hidden', name: 'field', value: attribute }, operatorField, valueField]
         };
-    }
+    },
+
+    createOperatorField: function () {
+        var me = this;
+        me.operatorSelection = Ext.create('Ext.form.field.ComboBox', {
+            fieldLabel: '{s name=attribute/operator}Operator:{/s}',
+            store: me.operatorStore(),
+            displayField: 'name',
+            valueField: 'value',
+            allowBlank: false,
+            name: 'operator'
+        });
+        return me.operatorSelection;
+
+    },
+
+    operatorStore: function () {
+        return Ext.create('Ext.data.Store', {
+            fields: [ 'name', 'value' ],
+            data: [
+                { name: '{s name=attribute_condition/equals}equals{/s}', value: '=' },
+                { name: '{s name=attribute_condition/not_equals}not equals{/s}', value: '!=' },
+                { name: '{s name=attribute_condition/less_than}less than{/s}', value: '<' },
+                { name: '{s name=attribute_condition/less_than_equals}less than equals{/s}', value: '<=' },
+                { name: '{s name=attribute_condition/between}between{/s}', value: 'BETWEEN' },
+                { name: '{s name=attribute_condition/greater_than}greater than{/s}', value: '>' },
+                { name: '{s name=attribute_condition/greater_than_equals}greater than equals{/s}', value: '>=' },
+                { name: '{s name=attribute_condition/in}in{/s}', value: 'IN' },
+                { name: '{s name=attribute_condition/starts_with}starts with{/s}', value: 'STARTS_WITH' },
+                { name: '{s name=attribute_condition/ends_with}ends with{/s}', value: 'ENDS_WITH' },
+                { name: '{s name=attribute_condition/like}like{/s}', value: 'CONTAINS' }
+            ]
+        });
+    },
+
 });

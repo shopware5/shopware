@@ -111,7 +111,8 @@ Ext.define('Shopware.apps.Customer', {
         'customer_stream.conditions.OrderedWithDeliveryCondition',
         'customer_stream.conditions.OrderedWithPaymentCondition',
         'customer_stream.conditions.HasTotalOrderAmountCondition',
-        'customer_stream.conditions.CustomerAttributeCondition'
+        'customer_stream.conditions.CustomerAttributeCondition',
+        'customer_stream.conditions.field.AttributeValue',
     ],
 
     /**
