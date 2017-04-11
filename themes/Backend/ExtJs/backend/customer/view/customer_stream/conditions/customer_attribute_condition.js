@@ -62,7 +62,11 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.CustomerAttri
         return {
             title: this.getLabel() + ' [' + attribute + ']',
             conditionClass: 'Shopware\\Bundle\\CustomerSearchBundle\\Condition\\CustomerAttributeCondition',
-            items: [{ xtype: 'hidden', name: 'field', value: attribute }, operatorField, valueField]
+            items: [
+                { xtype: 'hidden', name: 'field', value: attribute },
+                operatorField,
+                valueField
+            ]
         };
     },
 
@@ -77,7 +81,6 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.CustomerAttri
             name: 'operator'
         });
         return me.operatorSelection;
-
     },
 
     operatorStore: function () {

@@ -50,7 +50,7 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.field.Attribu
             return {
                 min: this.fromField.getValue(),
                 max: this.toField.getValue()
-            }
+            };
         } else if (this.operator === 'IN') {
             return value.split(",");
         }
@@ -61,17 +61,19 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.field.Attribu
     setValue: function(value) {
         var me = this;
 
-        me.valueField.setValue(value);
-
         if (Ext.isObject(value)) {
             me.fromField.setValue(value.min);
             me.toField.setValue(value.max);
+
+            return;
         }
+        me.valueField.setValue(value);
     },
 
     getSubmitData: function() {
         var result = {};
         result[this.name] = this.getValue();
+
         return result;
     },
 
@@ -130,5 +132,4 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.field.Attribu
         });
         return me.betweenContainer;
     }
-
 });
