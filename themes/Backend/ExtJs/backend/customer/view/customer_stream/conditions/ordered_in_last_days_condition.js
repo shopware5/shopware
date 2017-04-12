@@ -1,3 +1,4 @@
+/* global Ext */
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -21,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-//{namespace name="backend/customer_stream/translation"}
+// {namespace name="backend/customer_stream/translation"}
 Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.OrderedInLastDaysCondition', {
 
     getLabel: function() {
@@ -42,7 +43,7 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.OrderedInLast
 
     _create: function() {
         return {
-            title:  '{s name="ordered_in_last_days_condition_input"}{/s}',
+            title: '{s name="ordered_in_last_days_condition_input"}{/s}',
             conditionClass: 'Shopware\\Bundle\\CustomerSearchBundle\\Condition\\OrderedInLastDaysCondition',
             items: [{
                 xtype: 'numberfield',

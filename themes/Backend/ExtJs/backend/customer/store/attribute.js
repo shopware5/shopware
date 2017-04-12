@@ -1,3 +1,4 @@
+/* global Ext */
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -26,21 +27,21 @@
  * @version    $Id$
  * @author shopware AG
  */
-//{block name="backend/product_stream/store/attribute"}
+// {block name="backend/product_stream/store/attribute"}
 // todo change controller
 Ext.define('Shopware.apps.Customer.store.Attribute', {
-    extend:'Ext.data.Store',
+    extend: 'Ext.data.Store',
     fields: [ 'column', 'label' ],
     autoLoad: false,
     pageSize: 15,
-    proxy:{
-        type:'ajax',
+    proxy: {
+        type: 'ajax',
         url: '{url controller=ProductStream action=getAttributes}',
-        reader:{
-            type:'json',
-            root:'data',
-            totalProperty:'total'
+        reader: {
+            type: 'json',
+            root: 'data',
+            totalProperty: 'total'
         }
     }
 });
-//{/block}
+// {/block}

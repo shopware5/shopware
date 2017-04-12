@@ -1,3 +1,4 @@
+/* global Ext */
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -21,11 +22,11 @@
  * our trademarks remain entirely with us.
  */
 
-//{namespace name="backend/customer_stream/translation"}
+// {namespace name="backend/customer_stream/translation"}
 
 Ext.define('Shopware.apps.Customer.view.customer_stream.Listing', {
     extend: 'Shopware.grid.Panel',
-    alias:  'widget.customer-stream-listing',
+    alias: 'widget.customer-stream-listing',
     cls: 'stream-listing',
 
     configure: function() {
@@ -57,6 +58,6 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.Listing', {
     },
 
     nameRenderer: function (value) {
-        return '<span class="stream-name-column"><i>'+value+'</i></span>'
+        return '<span class="stream-name-column"><i>' + value + '</i></span>';
     }
 });

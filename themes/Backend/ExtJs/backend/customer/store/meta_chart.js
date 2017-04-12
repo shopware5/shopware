@@ -1,22 +1,50 @@
-
+/* global Ext */
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ *
+ * @category   Shopware
+ * @package    Customer
+ * @subpackage Store
+ * @version    $Id$
+ * @author shopware AG
+ */
 Ext.define('Shopware.apps.Customer.store.MetaChart', {
     extend: 'Ext.data.Store',
 
-    fields:[
-        { name:'count_orders', type: 'int' },
-        { name:'invoice_amount_avg', type: 'float' },
-        { name:'invoice_amount_max', type: 'float' },
-        { name:'invoice_amount_min', type: 'float' },
-        { name:'invoice_amount_sum', type: 'float' },
-        { name:'product_avg', type: 'float' },
-        { name:'yearMonth', type: 'string' }
+    fields: [
+        { name: 'count_orders', type: 'int' },
+        { name: 'invoice_amount_avg', type: 'float' },
+        { name: 'invoice_amount_max', type: 'float' },
+        { name: 'invoice_amount_min', type: 'float' },
+        { name: 'invoice_amount_sum', type: 'float' },
+        { name: 'product_avg', type: 'float' },
+        { name: 'yearMonth', type: 'string' }
     ],
-    proxy:{
-        type:'ajax',
+    proxy: {
+        type: 'ajax',
         url: '{url controller="CustomerStream" action="loadChart"}',
-        reader:{
-            type:'json',
-            root:'data'
+        reader: {
+            type: 'json',
+            root: 'data'
         }
     }
 });

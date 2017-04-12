@@ -1,3 +1,4 @@
+/* global Ext */
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -33,54 +34,54 @@
  * The chart model used for the order chart which displayed on top of the
  * order tab within the customer detail page.
  */
-//{block name="backend/customer/model/chart"}
+// {block name="backend/customer/model/chart"}
 Ext.define('Shopware.apps.Customer.model.Chart', {
 
     /**
      * Extends the standard Ext Model
      * @string
      */
-    extend:'Ext.data.Model',
+    extend: 'Ext.data.Model',
 
     /**
      * The fields used for this model
      * @array
      */
-    fields:[
-        //{block name="backend/customer/model/chart/fields"}{/block}
-        { name:'amount', type:'float' },
-        { name:'date', type:'date', dateFormat:'Y-m-d' }
+    fields: [
+        // {block name="backend/customer/model/chart/fields"}{/block}
+        { name: 'amount', type: 'float' },
+        { name: 'date', type: 'date', dateFormat: 'Y-m-d' }
     ],
 
     /**
      * Configure the data communication
      * @object
      */
-    proxy:{
+    proxy: {
         /**
          * Set proxy type to ajax
          * @string
          */
-        type:'ajax',
+        type: 'ajax',
 
         /**
          * Configure the url mapping for the different
          * store operations based on
          * @object
          */
-        api:{
-            read:'{url action="getOrderChart"}'
+        api: {
+            read: '{url action="getOrderChart"}'
         },
 
         /**
          * Configure the data reader
          * @object
          */
-        reader:{
-            type:'json',
-            root:'data'
+        reader: {
+            type: 'json',
+            root: 'data'
         }
     }
 
 });
-//{/block}
+// {/block}

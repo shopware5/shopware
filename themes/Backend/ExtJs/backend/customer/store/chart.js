@@ -1,3 +1,4 @@
+/* global Ext */
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -33,27 +34,27 @@
  * The chart store is used for the order chart which displayed on top of the
  * order tab.
  */
-//{block name="backend/customer/store/chart"}
+// {block name="backend/customer/store/chart"}
 Ext.define('Shopware.apps.Customer.store.Chart', {
     /**
      * Extend for the standard ExtJS 4
      * @string
      */
-    extend:'Ext.data.Store',
+    extend: 'Ext.data.Store',
     /**
      * Disable auto loading
      * @boolean
      */
-    autoLoad:false,
+    autoLoad: false,
     /**
      * To upload all selected items in one request
      * @boolean
      */
-    batch:true,
+    batch: true,
     /**
      * Define the used model for this store
      * @string
      */
-    model:'Shopware.apps.Customer.model.Chart'
+    model: 'Shopware.apps.Customer.model.Chart'
 });
-//{/block}
+// {/block}

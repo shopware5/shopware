@@ -1,4 +1,4 @@
-
+/* global Ext */
 Ext.define('Shopware.apps.Customer.view.list.Filter', {
     extend: 'Shopware.listing.FilterPanel',
     alias: 'widget.customer-filter-panel',
@@ -8,6 +8,6 @@ Ext.define('Shopware.apps.Customer.view.list.Filter', {
         return {
             controller: 'Customer',
             model: 'Shopware.apps.Customer.model.List'
-        }
+        };
     }
 });

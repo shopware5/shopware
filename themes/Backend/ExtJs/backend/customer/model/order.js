@@ -1,3 +1,4 @@
+/* global Ext */
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -33,67 +34,67 @@
  * The order model represents a single data row of the s_order or the Shopware\Models\Order\Order
  * doctrine mode which contains the head data about a shop order.
  */
-//{block name="backend/customer/model/order"}
+// {block name="backend/customer/model/order"}
 Ext.define('Shopware.apps.Customer.model.Order', {
 
     /**
      * Extends the standard Ext Model
      * @string
      */
-    extend:'Ext.data.Model',
+    extend: 'Ext.data.Model',
 
     /**
      * Unique identifier field
      * @string
      */
-    idProperty:'id',
+    idProperty: 'id',
 
     /**
      * The fields used for this model
      * @array
      */
-    fields:[
-        //{block name="backend/customer/model/order/fields"}{/block}
-        { name:'id', type:'int' },
-        { name:'orderNumber', type:'string' },
-        { name:'invoiceAmount', type:'string' },
-        { name:'orderTime', type:'date' },
+    fields: [
+        // {block name="backend/customer/model/order/fields"}{/block}
+        { name: 'id', type: 'int' },
+        { name: 'orderNumber', type: 'string' },
+        { name: 'invoiceAmount', type: 'string' },
+        { name: 'orderTime', type: 'date' },
 
-        { name:'paymentId', type:'int' },
-        { name:'dispatchId', type:'int' },
-        { name:'orderStatusId', type:'int' },
-        { name:'paymentStatusId', type:'int' }
+        { name: 'paymentId', type: 'int' },
+        { name: 'dispatchId', type: 'int' },
+        { name: 'orderStatusId', type: 'int' },
+        { name: 'paymentStatusId', type: 'int' }
     ],
 
     /**
      * Configure the data communication
      * @object
      */
-    proxy:{
+    proxy: {
         /**
          * Set proxy type to ajax
          * @string
          */
-        type:'ajax',
+        type: 'ajax',
 
         /**
          * Configure the url mapping for the different
          * store operations based on
          * @object
          */
-        api:{
-            read:'{url action="getOrders"}'
+        api: {
+            read: '{url action="getOrders"}'
         },
 
         /**
          * Configure the data reader
          * @object
          */
-        reader:{
-            type:'json',
-            root:'data',
-            totalProperty:'total'
+        reader: {
+            type: 'json',
+            root: 'data',
+            totalProperty: 'total'
         }
     }
 });
-//{/block}
+// {/block}

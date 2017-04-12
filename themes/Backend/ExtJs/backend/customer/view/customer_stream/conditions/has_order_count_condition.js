@@ -1,3 +1,4 @@
+/* global Ext */
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -21,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-//{namespace name="backend/customer_stream/translation"}
+// {namespace name="backend/customer_stream/translation"}
 
 Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.HasOrderCountCondition', {
 
@@ -50,7 +51,7 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.HasOrderCount
                 minValue: 1,
                 value: 1,
                 allowBlank: false,
-                name: 'minimumOrderCount',
+                name: 'minimumOrderCount'
             }]
         };
     }

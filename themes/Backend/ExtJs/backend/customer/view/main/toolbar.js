@@ -1,4 +1,5 @@
-//{namespace name=backend/customer_stream/translation}
+/* global Ext */
+// {namespace name=backend/customer_stream/translation}
 
 Ext.define('Shopware.apps.Customer.view.main.Toolbar', {
 
@@ -10,22 +11,30 @@ Ext.define('Shopware.apps.Customer.view.main.Toolbar', {
 
     ui: 'shopware-ui',
 
-
     initComponent: function () {
         var me = this, items = [];
 
         me.saveStreamButton = Ext.create('Ext.button.Split', {
             showText: true,
-            textAlign: 'left',
+            textAlign: 'center',
+            width: 220,
             iconCls: 'sprite-product-streams',
-            text: '{s name=toolbar/save_stream}Save stream{/s}',
+            text: '{s name=toolbar/stream_actions}Stream actions{/s}',
             name: 'save-stream',
             handler: function () {
-                me.fireEvent('create-or-update-stream');
+                this.showMenu();
             },
             menu: {
                 xtype: 'menu',
                 items: [{
+                    xtype: 'menuitem',
+                    iconCls: 'sprite-disk-black',
+                    text: '{s name=toolbar/save_stream}Save stream{/s}',
+                    action: 'save-stream',
+                    handler: function () {
+                        me.fireEvent('create-or-update-stream');
+                    }
+                }, {
                     xtype: 'menuitem',
                     iconCls: 'sprite-plus-circle-frame',
                     text: '{s name=toolbar/save_as_new_stream}Save as a new stream{/s}',
@@ -35,7 +44,7 @@ Ext.define('Shopware.apps.Customer.view.main.Toolbar', {
                     }
                 }, {
                     xtype: 'menuitem',
-                    iconCls: 'sprite',
+                    iconCls: 'sprite-chart-up-color',
                     text: '{s name=toolbar/analyse_customer}Analyse customer{/s}',
                     action: 'index',
                     handler: function () {
@@ -59,7 +68,7 @@ Ext.define('Shopware.apps.Customer.view.main.Toolbar', {
         items.push({
             iconCls: 'sprite-arrow-circle-225-left',
             handler: function () {
-                me.fireEvent('reload-view')
+                me.fireEvent('reload-view');
             }
         });
 
@@ -87,20 +96,19 @@ Ext.define('Shopware.apps.Customer.view.main.Toolbar', {
             action: 'deleteCustomer'
         });
 
-        /*{if {acl_is_allowed privilege=create}}*/
+        /* {if {acl_is_allowed privilege=create}} */
         items.push({
             iconCls: 'sprite-plus-circle-frame',
             text: '{s name=toolbar/button_add}Add{/s}',
             action: 'addCustomer'
         });
-        /*{/if}*/
+        /* {/if} */
 
-        /*{if {acl_is_allowed privilege=delete}}*/
+        /* {if {acl_is_allowed privilege=delete}} */
         items.push(me.deleteCustomerButton);
-        /*{/if}*/
+        /* {/if} */
 
         items.push({
-            // showText: true,
             xtype: 'cycle',
             prependText: '{s name=toolbar/view}Display as{/s} ',
             action: 'layout',
@@ -131,19 +139,6 @@ Ext.define('Shopware.apps.Customer.view.main.Toolbar', {
             }
         });
 
-        items.push('->');
-
-        items.push({
-            xtype: 'textfield',
-            name: 'searchfield',
-            cls: 'searchfield',
-            width: 170,
-            emptyText: '{s name=toolbar/search_empty_text}Search...{/s}',
-            enableKeyEvents: true,
-            checkChangeBuffer: 500
-        });
-
-        items.push({ xtype: 'tbspacer', width: 6 });
         me.items = items;
 
         me.callParent(arguments);

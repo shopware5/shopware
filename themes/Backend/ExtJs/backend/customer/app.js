@@ -1,3 +1,5 @@
+/* global Ext */
+
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -33,7 +35,7 @@
  * Contains the configuration for the customer list backend module.
  * This component defines which controllers belong to the application or whether the bulk loading is activated.
  */
-//{block name="backend/customer/application"}
+// {block name="backend/customer/application"}
 Ext.define('Shopware.apps.Customer', {
 
     /**
@@ -76,7 +78,7 @@ Ext.define('Shopware.apps.Customer', {
         'detail.Base',
         'detail.Debit',
         'detail.Comment',
-        'detail.Additional' ,
+        'detail.Additional',
         'list.List',
         'list.Filter',
         'main.Window',
@@ -112,7 +114,7 @@ Ext.define('Shopware.apps.Customer', {
         'customer_stream.conditions.OrderedWithPaymentCondition',
         'customer_stream.conditions.HasTotalOrderAmountCondition',
         'customer_stream.conditions.CustomerAttributeCondition',
-        'customer_stream.conditions.field.AttributeValue',
+        'customer_stream.conditions.field.AttributeValue'
     ],
 
     /**
@@ -143,11 +145,9 @@ Ext.define('Shopware.apps.Customer', {
      */
     launch: function() {
         var me = this,
-            mainController = me.getController('Main'),
-            streamController = me.getController('Stream');
+            mainController = me.getController('Main');
 
         return mainController.mainWindow;
     }
 });
-//{/block}
-
+// {/block}

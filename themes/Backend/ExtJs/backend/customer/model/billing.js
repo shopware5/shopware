@@ -1,3 +1,4 @@
+/* global Ext */
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -32,22 +33,22 @@
  * The billing model represents a single data row of the s_user_billingaddress or
  * the Shopware\Models\Customer\Billing.
  */
-//{block name="backend/customer/model/billing"}
+// {block name="backend/customer/model/billing"}
 Ext.define('Shopware.apps.Customer.model.Billing', {
 
     /**
      * Extends the standard Ext Model
      * @string
      */
-    extend:'Shopware.apps.Base.model.BillingAddress',
+    extend: 'Shopware.apps.Base.model.BillingAddress',
 
     /**
      * The fields used for this model
      * @array
      */
-    fields:[
-        //{block name="backend/customer/model/billing/fields"}{/block}
-        { name:'stateId', type:'int', useNull:true }
+    fields: [
+        // {block name="backend/customer/model/billing/fields"}{/block}
+        { name: 'stateId', type: 'int', useNull: true }
     ],
 
     /**
@@ -75,5 +76,4 @@ Ext.define('Shopware.apps.Customer.model.Billing', {
         return this;
     }
 });
-//{/block}
-
+// {/block}

@@ -1,3 +1,4 @@
+/* global Ext */
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -33,51 +34,51 @@
  * The list model represents a single row for the customer list grid.
  * The model data are concat by the different customer associations.
  */
-//{block name="backend/customer/model/list"}
+// {block name="backend/customer/model/list"}
 Ext.define('Shopware.apps.Customer.model.List', {
 
     /**
      * Extends the standard Ext Model
      * @string
      */
-    extend:'Ext.data.Model',
+    extend: 'Ext.data.Model',
 
     /**
      * Unique identifier field
      * @string
      */
-    idProperty:'id',
+    idProperty: 'id',
 
     /**
      * The fields used for this model
      * @array
      */
-    fields:[
-        //{block name="backend/customer/model/list/fields"}{/block}
-        { name:'id', type:'int' },
-        { name:'number', type:'string' },
-        { name:'firstname', type:'string' },
-        { name:'lastname', type:'string' },
-        { name:'firstLogin', type:'date' },
-        { name:'customerGroup', type:'string' },
-        { name:'company', type:'string' },
-        { name:'zipCode', type:'string' },
-        { name:'city', type:'string' },
-        { name:'accountMode', type:'int' },
-        { name:'orderCount', type:'int' },
-        { name:'amount', type:'float' }
+    fields: [
+        // {block name="backend/customer/model/list/fields"}{/block}
+        { name: 'id', type: 'int' },
+        { name: 'number', type: 'string' },
+        { name: 'firstname', type: 'string' },
+        { name: 'lastname', type: 'string' },
+        { name: 'firstLogin', type: 'date' },
+        { name: 'customerGroup', type: 'string' },
+        { name: 'company', type: 'string' },
+        { name: 'zipCode', type: 'string' },
+        { name: 'city', type: 'string' },
+        { name: 'accountMode', type: 'int' },
+        { name: 'orderCount', type: 'int' },
+        { name: 'amount', type: 'float' }
     ],
 
     /**
      * Configure the data communication
      * @object
      */
-    proxy:{
+    proxy: {
         /**
          * Set proxy type to ajax
          * @string
          */
-        type:'ajax',
+        type: 'ajax',
 
         /**
          * Configure the url mapping for the different
@@ -85,20 +86,20 @@ Ext.define('Shopware.apps.Customer.model.List', {
          * @object
          */
 
-        api:{
-            read:'{url action="getList"}',
-            destroy:'{url action="delete" targetField=customers}'
+        api: {
+            read: '{url action="getList"}',
+            destroy: '{url action="delete" targetField=customers}'
         },
 
         /**
          * Configure the data reader
          * @object
          */
-        reader:{
-            type:'json',
-            root:'data',
-            totalProperty:'total'
+        reader: {
+            type: 'json',
+            root: 'data',
+            totalProperty: 'total'
         }
     }
 });
-//{/block}
+// {/block}

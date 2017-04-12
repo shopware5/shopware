@@ -1,4 +1,5 @@
-//{namespace name=backend/customer_stream/translation}
+/* global Ext */
+// {namespace name=backend/customer_stream/translation}
 
 Ext.define('Shopware.apps.Customer.view.chart.Chart', {
 
@@ -8,7 +9,6 @@ Ext.define('Shopware.apps.Customer.view.chart.Chart', {
     margin: 30,
     legend: true,
     animate: true,
-
 
     initComponent: function () {
         var me = this;
@@ -52,7 +52,6 @@ Ext.define('Shopware.apps.Customer.view.chart.Chart', {
             title: '{s name="chart_month"}Month{/s}',
             fields: ['yearMonth']
         }];
-
     },
 
     createSeries: function () {

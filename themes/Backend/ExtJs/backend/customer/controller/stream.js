@@ -1,3 +1,4 @@
+/* global Ext */
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -27,9 +28,9 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/customer_stream/translation}
+// {namespace name=backend/customer_stream/translation}
 
-//{block name="backend/customer/controller/stream"}
+// {block name="backend/customer/controller/stream"}
 
 Ext.define('Shopware.apps.Customer.controller.Stream', {
 
@@ -44,7 +45,7 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
         batch: 'Shopware.helper.BatchRequests'
     },
 
-    init:function () {
+    init: function () {
         var me = this;
 
         me.control({
@@ -89,20 +90,20 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
             window = me.getMainWindow();
 
         switch (layout) {
-            case 'table':
-                window.cardContainer.getLayout().setActiveItem(0);
-                window.gridPanel.getStore().load();
-                break;
+        case 'table':
+            window.cardContainer.getLayout().setActiveItem(0);
+            window.gridPanel.getStore().load();
+            break;
 
-            case 'amount_chart':
-                window.cardContainer.getLayout().setActiveItem(1);
-                window.metaChartStore.load();
-                break;
+        case 'amount_chart':
+            window.cardContainer.getLayout().setActiveItem(1);
+            window.metaChartStore.load();
+            break;
 
-            case 'stream_chart':
-                window.cardContainer.getLayout().setActiveItem(2);
-                me.loadStreamChart();
-                break;
+        case 'stream_chart':
+            window.cardContainer.getLayout().setActiveItem(2);
+            me.loadStreamChart();
+            break;
         }
     },
 
@@ -142,7 +143,7 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
 
     saveStream: function (record, callback) {
         var me = this,
-        window = me.getMainWindow();
+            window = me.getMainWindow();
 
         if (!window.filterPanel.getForm().isValid()) {
             return;
@@ -288,7 +289,6 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
                         streamId: record.get('id')
                     }
                 }]);
-
             }
         });
     },
@@ -411,4 +411,4 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
     }
 
 });
-//{/block}
+// {/block}

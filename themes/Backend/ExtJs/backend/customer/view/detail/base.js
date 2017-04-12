@@ -1,3 +1,4 @@
+/* global Ext */
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -27,7 +28,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/customer/view/detail}
+// {namespace name=backend/customer/view/detail}
 
 /**
  * Shopware UI - Customer detail page
@@ -36,18 +37,18 @@
  * which is stored in the base model and filled over the s_user table
  *
  */
-//{block name="backend/customer/view/detail/base"}
+// {block name="backend/customer/view/detail/base"}
 Ext.define('Shopware.apps.Customer.view.detail.Base', {
     /**
      * Define that the base field set is an extension of the Ext.form.FieldSet
      * @string
      */
-    extend:'Ext.form.FieldSet',
+    extend: 'Ext.form.FieldSet',
     /**
      * List of short aliases for class names. Most useful for defining xtypes for widgets.
      * @string
      */
-    alias:'widget.customer-base-field-set',
+    alias: 'widget.customer-base-field-set',
 
     /**
      * Set css class for this component
@@ -65,37 +66,36 @@ Ext.define('Shopware.apps.Customer.view.detail.Base', {
      * Contains all snippets for the view component
      * @object
      */
-    snippets:{
-        title:'{s name=base/title}Base data{/s}',
-        email:{
-            message:'{s name=base/validate_email_message}Email address is already in use{/s}',
-            label:'{s name=base/email}Email{/s}'
+    snippets: {
+        title: '{s name=base/title}Base data{/s}',
+        email: {
+            message: '{s name=base/validate_email_message}Email address is already in use{/s}',
+            label: '{s name=base/email}Email{/s}'
         },
-        confirm:{
-            label:'{s name=base/password_confirm}Confirm password{/s}',
-            support:'{s name=base/confirm_support}Please confirm the password you have entered{/s}',
-            helpTitle:'{s name=base/confirm_help_title}Password confirmation{/s}',
-            helpText:'{s name=base/confirm_help_text}For security reasons, please enter the password again.{/s}'
+        confirm: {
+            label: '{s name=base/password_confirm}Confirm password{/s}',
+            support: '{s name=base/confirm_support}Please confirm the password you have entered{/s}',
+            helpTitle: '{s name=base/confirm_help_title}Password confirmation{/s}',
+            helpText: '{s name=base/confirm_help_text}For security reasons, please enter the password again.{/s}'
         },
-        active:{
-            box:'{s name=base/active_box_label}Mark the account as active{/s}',
-            field:'{s name=base/active_field_label}Active{/s}'
+        active: {
+            box: '{s name=base/active_box_label}Mark the account as active{/s}',
+            field: '{s name=base/active_field_label}Active{/s}'
         },
-        password:{
-            label:'{s name=base/password}Password{/s}',
-            support:'{s name=base/password_support}To automatically create the password, use the button on the right side.{/s}',
-            button:'{s name=base/password_generate}Generate password{/s}',
-            message:'{s name=base/password_error}The passwords do not match.{/s}'
+        password: {
+            label: '{s name=base/password}Password{/s}',
+            support: '{s name=base/password_support}To automatically create the password, use the button on the right side.{/s}',
+            button: '{s name=base/password_generate}Generate password{/s}',
+            message: '{s name=base/password_error}The passwords do not match.{/s}'
         },
-        group:'{s name=base/customer_group}Customer group{/s}',
-        shop:'{s name=base/shop}Shop{/s}',
+        group: '{s name=base/customer_group}Customer group{/s}',
+        shop: '{s name=base/shop}Shop{/s}',
         number: {
-            label:'{s name=base/customer_number}Customer number{/s}',
+            label: '{s name=base/customer_number}Customer number{/s}',
             helpTitle: '{s name=base/customer_number_help_title}Customer number generation{/s}',
             helpText: '{s name=base/customer_number_help_text}If the parameter sShopwareManagedCustomerNumbers is set to 1 in the shopware configuration, the customer number will be set automatically when the customer is saved and the field is not editable.{/s}'
         }
     },
-
 
     /**
      * Component event method which is fired when the component
@@ -103,7 +103,7 @@ Ext.define('Shopware.apps.Customer.view.detail.Base', {
      * want to create a new customer or edit an existing customer
      * @return void
      */
-    initComponent:function () {
+    initComponent: function () {
         var me = this;
         me.title = me.snippets.title;
         me.registerEvents();
@@ -119,7 +119,7 @@ Ext.define('Shopware.apps.Customer.view.detail.Base', {
      *
      * @return void
      */
-    registerEvents:function () {
+    registerEvents: function () {
         this.addEvents(
             /**
              * Event will be fired when the user clicks the button to
@@ -133,38 +133,37 @@ Ext.define('Shopware.apps.Customer.view.detail.Base', {
         );
     },
 
-
     /**
      * Creates the both containers for the field set
      * to display the form fields in two columns.
      *
      * @return [Array] Contains the left and right container
      */
-    createBaseForm:function () {
+    createBaseForm: function () {
         var leftContainer, rightContainer, me = this;
 
         leftContainer = Ext.create('Ext.container.Container', {
-            columnWidth:0.5,
-            border:false,
+            columnWidth: 0.5,
+            border: false,
             cls: Ext.baseCSSPrefix + 'field-set-container',
-            layout:'anchor',
-            defaults:{
-                anchor:'95%',
-                labelWidth:155,
-                minWidth:250,
-                xtype:'textfield'
+            layout: 'anchor',
+            defaults: {
+                anchor: '95%',
+                labelWidth: 155,
+                minWidth: 250,
+                xtype: 'textfield'
             },
-            items:me.createBaseFormLeft()
+            items: me.createBaseFormLeft()
         });
 
         rightContainer = Ext.create('Ext.container.Container', {
-            columnWidth:0.5,
-            border:false,
-            layout:'anchor',
+            columnWidth: 0.5,
+            border: false,
+            layout: 'anchor',
             cls: Ext.baseCSSPrefix + 'field-set-container',
-            defaults:{
-                labelWidth:155,
-                xtype:'textfield',
+            defaults: {
+                labelWidth: 155,
+                xtype: 'textfield',
                 anchor: '95%'
             },
             items: me.createBaseFormRight()
@@ -180,43 +179,46 @@ Ext.define('Shopware.apps.Customer.view.detail.Base', {
      *
      * @return [Array] Contains the different form field of the left container
      */
-    createBaseFormLeft:function () {
+    createBaseFormLeft: function () {
         var me = this;
 
         me.customerGroupCombo = Ext.create('Ext.form.field.ComboBox', {
-            triggerAction:'all',
+            triggerAction: 'all',
             queryMode: 'local',
-            name:'groupKey',
-            fieldLabel:me.snippets.group,
-            valueField:'key',
-            displayField:'name',
-            editable:false,
-            allowBlank:false,
-            anchor:'95%',
-            labelWidth:155,
-            minWidth:250
+            name: 'groupKey',
+            fieldLabel: me.snippets.group,
+            valueField: 'key',
+            displayField: 'name',
+            editable: false,
+            allowBlank: false,
+            anchor: '95%',
+            labelWidth: 155,
+            minWidth: 250
         });
 
         me.shopStoreCombo = Ext.create('Ext.form.field.ComboBox', {
-            triggerAction:'all',
-            name:'languageId',
+            triggerAction: 'all',
+            name: 'languageId',
             queryMode: 'local',
-            fieldLabel:me.snippets.shop,
-            valueField:'id',
-            displayField:'name',
-            allowBlank:false,
-            editable:false,
-            anchor:'95%',
+            fieldLabel: me.snippets.shop,
+            valueField: 'id',
+            displayField: 'name',
+            allowBlank: false,
+            editable: false,
+            anchor: '95%',
             forceSelection: true,
-            labelWidth:155,
-            minWidth:250,
+            labelWidth: 155,
+            minWidth: 250,
             listeners: {
                 // When the selected job changes, validate the mail address again
                 change: function(combo, newValue, oldValue, eOpts) {
                     var me = this,
                         fieldSet = me.up('fieldset');
 
-                    fieldSet.customerMail.validationRequestParams = { 'param' : fieldSet.record.get('id'),'subshopId' : newValue};
+                    fieldSet.customerMail.validationRequestParams = {
+                        'param': fieldSet.record.get('id'),
+                        'subshopId': newValue
+                    };
 
                     // set oldValue to null in order to force a re-check
                     // else VType 'remote' will just return "oldValid"
@@ -227,18 +229,21 @@ Ext.define('Shopware.apps.Customer.view.detail.Base', {
         });
 
         me.customerMail = Ext.create('Ext.form.field.Text', {
-            fieldLabel:me.snippets.email.label,
-            labelWidth:155,
+            fieldLabel: me.snippets.email.label,
+            labelWidth: 155,
             anchor: '95%',
-            name:'email',
-            allowBlank:false,
-            required:true,
-            enableKeyEvents:true,
-            checkChangeBuffer:700,
-            vtype:'remote',
+            name: 'email',
+            allowBlank: false,
+            required: true,
+            enableKeyEvents: true,
+            checkChangeBuffer: 700,
+            vtype: 'remote',
             validationUrl: null,
-            validationRequestParams:{ 'param' : me.record.get('id'),'subshopId' : me.record.get('shopId')},
-            validationErrorMsg:me.snippets.email.message,
+            validationRequestParams: {
+                'param': me.record.get('id'),
+                'subshopId': me.record.get('shopId')
+            },
+            validationErrorMsg: me.snippets.email.message,
             listeners: {
                 scope: me,
                 afterrender: function(field) {
@@ -254,9 +259,9 @@ Ext.define('Shopware.apps.Customer.view.detail.Base', {
             me.customerGroupCombo,
             me.shopStoreCombo,
             {
-                /*{if {config name=shopwareManagedCustomerNumbers}==1}*/
+                /* {if {config name=shopwareManagedCustomerNumbers}==1} */
                 xtype: 'displayfield',
-                /*{/if}*/
+                /* {/if} */
                 name: 'number',
                 anchor: '95%',
                 labelWidth: 155,
@@ -275,29 +280,29 @@ Ext.define('Shopware.apps.Customer.view.detail.Base', {
      *
      * @return [Array] Contains the three form fields
      */
-    createBaseFormRight:function () {
+    createBaseFormRight: function () {
         var me = this,
             pwRequired = false;
 
-        if ( me.record.data.id === 0 ) {
+        if (me.record.data.id === 0) {
             pwRequired = true;
         }
 
-        //create the confirm password field to get access in the create password
-        //button handler to pass the field to the generate password event
+        // create the confirm password field to get access in the create password
+        // button handler to pass the field to the generate password event
         me.confirmField = Ext.create('Ext.form.field.Text', {
-            name:'confirm',
-            inputType:'password',
+            name: 'confirm',
+            inputType: 'password',
             anchor: '95%',
             labelWidth: 155,
-            allowBlank:!pwRequired,
-            required:pwRequired,
-            fieldLabel:me.snippets.confirm.label,
-            supportText:me.snippets.confirm.support,
-            helpTitle:me.snippets.confirm.helpTitle,
-            helpText:me.snippets.confirm.helpText,
-            validator:function (value) {
-                if ( Ext.String.trim(value) == Ext.String.trim(me.passwordField.getValue()) ) {
+            allowBlank: !pwRequired,
+            required: pwRequired,
+            fieldLabel: me.snippets.confirm.label,
+            supportText: me.snippets.confirm.support,
+            helpTitle: me.snippets.confirm.helpTitle,
+            helpText: me.snippets.confirm.helpText,
+            validator: function (value) {
+                if (Ext.String.trim(value) == Ext.String.trim(me.passwordField.getValue())) {
                     me.passwordField.clearInvalid();
                     return true;
                 } else {
@@ -309,64 +314,63 @@ Ext.define('Shopware.apps.Customer.view.detail.Base', {
         me.passwordContainer = me.createPasswordContainer();
 
         return [{
-            name:'active',
+            name: 'active',
             anchor: '95%',
-            boxLabel:me.snippets.active.box,
-            fieldLabel:me.snippets.active.field,
-            xtype:'checkbox',
+            boxLabel: me.snippets.active.box,
+            fieldLabel: me.snippets.active.field,
+            xtype: 'checkbox',
             value: true,
-            labelWidth:155,
-            uncheckedValue:false,
-            inputValue:true
-        },  me.passwordContainer, me.confirmField ];
+            labelWidth: 155,
+            uncheckedValue: false,
+            inputValue: true
+        }, me.passwordContainer, me.confirmField ];
     },
-
 
     /**
      * Creates the container for the password field and the generatePassword button.
      * @return [Ext.container.Container] - Contains the text field and the button
      */
-    createPasswordContainer:function () {
+    createPasswordContainer: function () {
         var me = this,
             pwRequired = false;
 
-        if ( me.record.data.id === 0 ) {
+        if (me.record.data.id === 0) {
             pwRequired = true;
         }
 
-        //create the password generation button
+        // create the password generation button
         me.passwordButton = Ext.create('Ext.button.Button', {
             cls: Ext.baseCSSPrefix + 'password-button',
-            iconCls:'sprite-license-key',
-            action:'create-password',
+            iconCls: 'sprite-license-key',
+            action: 'create-password',
             labelWidth: 155,
-            tooltip:me.snippets.password.button,
+            tooltip: me.snippets.password.button,
             width: 25,
             /**
              * Add button handler to fire the generatePassword event which is handled
              * in the detail controller. The detail controller generates a password and set it into the password field
              */
-            handler:function () {
+            handler: function () {
                 me.fireEvent('generatePassword', me.passwordField, me.confirmField);
             }
         });
 
-        //create the password field to get access in the create password
-        //button handler to pass the field to the generate password event
+        // create the password field to get access in the create password
+        // button handler to pass the field to the generate password event
         me.passwordField = Ext.create('Ext.form.field.Text', {
-            name:'newPassword',
+            name: 'newPassword',
             flex: 1,
-            inputType:'password',
+            inputType: 'password',
             labelWidth: 155,
-            allowBlank:!pwRequired,
-            required:pwRequired,
-            fieldLabel:me.snippets.password.label,
-            supportText:me.snippets.password.support,
+            allowBlank: !pwRequired,
+            required: pwRequired,
+            fieldLabel: me.snippets.password.label,
+            supportText: me.snippets.password.support,
             cls: Ext.baseCSSPrefix + 'password-field',
             validateOnBlur: true,
             validateOnChange: false,
-            validator:function (value) {
-                if ( Ext.String.trim(value) == Ext.String.trim(me.confirmField.getValue()) ) {
+            validator: function (value) {
+                if (Ext.String.trim(value) == Ext.String.trim(me.confirmField.getValue())) {
                     me.confirmField.clearInvalid();
                     return true;
                 } else {
@@ -375,15 +379,15 @@ Ext.define('Shopware.apps.Customer.view.detail.Base', {
             }
         });
 
-        //create a container for the password field to append the generate password button
+        // create a container for the password field to append the generate password button
         return Ext.create('Ext.container.Container', {
-            layout:'hbox',
+            layout: 'hbox',
             anchor: '95%',
             cls: Ext.baseCSSPrefix + 'password-container',
-            height:70,
-            items:[ me.passwordField, me.passwordButton ]
+            height: 70,
+            items: [ me.passwordField, me.passwordButton ]
         });
     }
 
 });
-//{/block}
+// {/block}

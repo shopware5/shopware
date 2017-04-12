@@ -1,10 +1,10 @@
-//{namespace name=backend/customer_stream/translation}
+/* global Ext */
+// {namespace name=backend/customer_stream/translation}
 
 Ext.define('Shopware.apps.Customer.view.customer_stream.Detail', {
     extend: 'Shopware.model.Container',
 
     configure: function () {
-
         var factory = Ext.create('Shopware.attribute.SelectionFactory');
 
         return {
