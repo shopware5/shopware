@@ -195,204 +195,209 @@ The styling includes the collapsed and expanded styling and the panel component 
     }
 }
 
-.filter--multi-selection, .filter--value, .filter--value-tree  {
-    .input-type--radio .filter-panel--input {
-        .border-radius(11px);
+.option--container:hover {
+    .filter-panel--label {
+        color: @brand-primary;
+    }
+    .filter-panel--input, .filter-panel--checkbox, .filter-panel--radio {
+        border-color: @brand-primary;
+    }
+}
+
+.option--container:hover {
+    .filter-panel--input.is--disabled,
+    .filter-panel--checkbox.is--disabled,
+    .filter-panel--radio.is--disabled {
+        border-color: @border-color;
+    }
+}
+
+.filter-panel--input, .filter-panel--checkbox, .filter-panel--radio {
+    .unitize-width(16);
+    .unitize-height(16);
+    .unitize-padding(1, 1);
+    .border-radius();
+    .unitize(top, 5);
+    .unitize(left, 0);
+    display: inline-block;
+    border: 1px solid @border-color;
+    cursor: pointer;
+    position: absolute;
+
+    &:hover {
+        border-color: @brand-primary;
     }
 
-    .option--container:hover {
-        .filter-panel--label {
-            color: @brand-primary;
+    &.is--disabled {
+        & ~ .filter-panel--label {
+            color: @gray-dark;
         }
-        .filter-panel--input {
-            border-color: @brand-primary;
-        }
-    }
 
-    .option--container:hover {
-        .filter-panel--input.is--disabled {
+        &:hover {
             border-color: @border-color;
         }
     }
 
-    .filter-panel--input {
-        .unitize-width(16);
-        .unitize-height(16);
-        .unitize-padding(1, 1);
-        .border-radius();
-        .unitize(top, 5);
-        .unitize(left, 0);
-        display: inline-block;
-        border: 1px solid @border-color;
-        cursor: pointer;
+    input[type="checkbox"] {
+        .opacity(0);
+        display: block;
+        width: 100%;
+        height: 100%;
         position: absolute;
+        top: 0;
+        left: 0;
+        border: 0 none;
+        background: none;
+        cursor: pointer;
+        z-index: @zindex-filter-panel-checkbox;
 
-        &:hover {
-            border-color: @brand-primary;
-        }
+        &:checked ~ .input--state, &:checked ~ .checkbox--state {
+            .primary-gradient();
 
-        &.is--disabled {
-            & ~ .filter-panel--label {
-                color: @gray-dark;
-            }
-
-            &:hover {
-                border-color: @border-color;
-            }
-        }
-
-        input[type="checkbox"] {
-            .opacity(0);
-            display: block;
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            top: 0;
-            left: 0;
-            border: 0 none;
-            background: none;
-            cursor: pointer;
-            z-index: @zindex-filter-panel-checkbox;
-
-            &:checked ~ .input--state {
-                .primary-gradient();
-
-                &:before {
-                    .unitize-width(12);
-                    .unitize-height(12);
-                    .unitize(line-height, 12);
-                    .unitize(font-size, 7);
-                    display: block;
-                    font-family: @sw-icon-fontname;
-                    font-weight: normal;
-                    text-align: center;
-                    color: #fff;
-                    content: @sw-icon-check;
-                }
-            }
-
-            &:checked ~ .filter-panel--label {
-                color: @brand-primary;
-                font-weight: 600;
-            }
-
-            &:disabled ~ .input--state {
-                background: @body-bg;
-            }
-
-            &:disabled ~ .filter-panel--label {
-                color: lighten(@text-color, 15%);
+            &:before {
+                .unitize-width(12);
+                .unitize-height(12);
+                .unitize(line-height, 12);
+                .unitize(font-size, 7);
+                display: block;
+                font-family: @sw-icon-fontname;
+                font-weight: normal;
+                text-align: center;
+                color: #fff;
+                content: @sw-icon-check;
             }
         }
 
-        .input--state {
-            .border-radius();
+        &:checked ~ .filter-panel--label {
+            color: @brand-primary;
+            font-weight: 600;
+        }
+
+        &:disabled ~ .input--state, &:disabled ~ .checkbox--state {
+            background: @body-bg;
+        }
+
+        &:disabled ~ .filter-panel--label {
+            color: lighten(@text-color, 15%);
+        }
+    }
+
+    .input--state, .checkbox--state {
+        .border-radius();
+        display: block;
+        width: 100%;
+        height: 100%;
+        position: relative;
+        z-index: @zindex-filter-panel-checkbox-state;
+    }
+
+    input[type="radio"] {
+        .opacity(0);
+        display: block;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        border: 0 none;
+        background: none;
+        cursor: pointer;
+        z-index: @zindex-filter-panel-radio;
+
+        &:checked ~ .input--state, &:checked ~ .radio--state {
+            .primary-gradient();
+        }
+
+        &:checked ~ .filter-panel--label {
+            color: @brand-primary;
+            font-weight: 600;
+        }
+
+        &:disabled ~ .input--state, &:disabled ~ .radio--state {
+            background: @body-bg;
+        }
+
+        &:disabled ~ .filter-panel--label {
+            color: @text-color;
+        }
+
+        & + .input--state, & + .radio--state {
+            .border-radius(11px);
             display: block;
             width: 100%;
             height: 100%;
             position: relative;
-            z-index: @zindex-filter-panel-checkbox-state;
-        }
-
-        input[type="radio"] {
-            .opacity(0);
-            display: block;
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            top: 0;
-            left: 0;
-            border: 0 none;
-            background: none;
-            cursor: pointer;
-            z-index: @zindex-filter-panel-radio;
-
-            &:checked ~ .input--state {
-                .primary-gradient();
-            }
-
-            &:checked ~ .filter-panel--label {
-                color: @brand-primary;
-                font-weight: 600;
-            }
-
-            &:disabled .input--state {
-                background: @body-bg;
-            }
-
-            &:disabled .filter-panel--label {
-                color: @text-color;
-            }
-
-            & + .input--state {
-                .border-radius(11px);
-            }
+            z-index: @zindex-filter-panel-radio-state;
         }
     }
+}
 
-    .input-type--media {
-        .clearfix();
+.input-type--radio .filter-panel--input, .filter-panel--radio {
+    .border-radius(11px);
+}
+
+.input-type--media {
+    .clearfix();
+}
+
+.input-type--media .option--container {
+    .unitize-height(45);
+    .unitize(max-width, 45);
+    width: 18%;
+    margin: 0 0 2% 2%;
+    display: block;
+    position: relative;
+    float: left;
+
+    .filter-panel--label {
+        padding: 0;
     }
 
-    .input-type--media .option--container {
-        .unitize-height(45);
-        .unitize(max-width, 45);
-        width: 18%;
-        margin: 0 0 2% 2%;
+    input.is--disabled ~ label {
+        opacity: 0.5;
+    }
+
+    input[type="checkbox"], input[type="radio"] {
+        .opacity(0);
         display: block;
-        position: relative;
-        float: left;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        border: 0 none;
+        background: none;
+        cursor: pointer;
+        z-index: @zindex-filter-panel-media-checkbox;
 
-        .filter-panel--label {
-            padding: 0;
+        &:hover ~ .filter-panel--label {
+            border-color: @brand-primary;
         }
 
-        input.is--disabled ~ label {
-            opacity: 0.5;
+        &:checked ~ .filter-panel--label {
+            border-color: @brand-primary;
+
+            &:after {
+                .unitize-width(16);
+                .unitize-height(16);
+                .unitize(line-height, 16);
+                .unitize(font-size, 7);
+                .unitize(-4, 16, top);
+                .unitize(-4, 16, right);
+                .primary-gradient();
+                .border-radius(8px);
+                display: block;
+                position: absolute;
+                font-family: @sw-icon-fontname;
+                font-weight: normal;
+                text-align: center;
+                color: #fff;
+                content: @sw-icon-check;
+            }
         }
 
-        input[type="checkbox"], input[type="radio"] {
-            .opacity(0);
-            display: block;
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            top: 0;
-            left: 0;
-            border: 0 none;
-            background: none;
-            cursor: pointer;
-            z-index: @zindex-filter-panel-media-checkbox;
-
-            &:hover ~ .filter-panel--label {
-                border-color: @brand-primary;
-            }
-
-            &:checked ~ .filter-panel--label {
-                border-color: @brand-primary;
-
-                &:after {
-                    .unitize-width(16);
-                    .unitize-height(16);
-                    .unitize(line-height, 16);
-                    .unitize(font-size, 7);
-                    .unitize(-4, 16, top);
-                    .unitize(-4, 16, right);
-                    .primary-gradient();
-                    .border-radius(8px);
-                    display: block;
-                    position: absolute;
-                    font-family: @sw-icon-fontname;
-                    font-weight: normal;
-                    text-align: center;
-                    color: #fff;
-                    content: @sw-icon-check;
-                }
-            }
-
-            &:disabled .filter-panel--label {
-                .opacity(0.5);
-            }
+        &:disabled .filter-panel--label {
+            .opacity(0.5);
         }
     }
 }
@@ -474,7 +479,7 @@ The styling includes the collapsed and expanded styling and the panel component 
 .filter--value {
     background: #fff;
 
-    .filter-panel--input {
+    .filter-panel--input, .filter-panel--checkbox, .filter-panel--radio {
         .unitize(top, 10);
         .unitize(left, 10);
     }
@@ -483,7 +488,9 @@ The styling includes the collapsed and expanded styling and the panel component 
         .unitize-padding(0, 30, 0, 40);
     }
 
-    &.is--disabled .filter-panel--input:hover {
+    &.is--disabled .filter-panel--input:hover,
+    &.is--disabled .filter-panel--checkbox:hover,
+    &.is--disabled .filter-panel--radio:hover {
         border-color: @border-color;
     }
 }
@@ -501,16 +508,15 @@ The styling includes the collapsed and expanded styling and the panel component 
 .filter--active {
     .unitize-padding(0, 10);
     .unitize-margin(0, 10, 10, 0);
-    .unitize(line-height, 30);
+    .unitize(line-height, 22);
     .unitize(font-size, 13);
     .border-radius();
     display: inline-block;
     border: 1px solid @border-color;
-    color: @text-color;
+    color: @brand-primary;
     background: #FFF;
     cursor: pointer;
     white-space: nowrap;
-    max-width: 32%;
     overflow: hidden;
     text-overflow: ellipsis;
 

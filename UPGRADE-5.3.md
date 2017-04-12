@@ -80,6 +80,11 @@ This changelog references changes done in Shopware 5.3 patch versions.
     * `themes/Frontend/Bare/frontend/listing/filter/facet-datetime.tpl`
     * `themes/Frontend/Bare/frontend/listing/filter/facet-datetime-multi.tpl`
     * `themes/Frontend/Bare/frontend/listing/filter/facet-datetime-range.tpl`
+* Added classes to `themes/Frontend/Responsive/frontend/_public/src/less/_components/filter-panel.less`
+    * `.filter-panel--radio`
+    * `.filter-panel--checkbox`
+    * `.radio--state`
+    * `.checkbox--state`
 
 ### Changes
 
@@ -129,6 +134,7 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Change behavior of the tracking url rendering.
     * only the smarty variable **{$offerPosition.trackingcode}** is in use.
     * use now only the url of the tracking service like: https://gls-group.eu/DE/de/paketverfolgung?match={$offerPosition.trackingcode}
+* Changed text colour and height of `.filter--active` in `themes/Frontend/Responsive/frontend/_public/src/less/_components/filter-panel.less`
 
 ```xml
 <a href="https://gls-group.eu/DE/de/paketverfolgung?match={$offerPosition.trackingcode}" onclick="return !window.open(this.href, 'popup', 'width=500,height=600,left=20,top=20');" target="_blank">{$offerPosition.trackingcode}</a>
@@ -313,6 +319,7 @@ did not work anymore because the smarty rendering is off. The string {$offerPosi
     * `.device--tablet-portrait`
     * `.device--tablet-landscape`
     * `.device--desktop`
+* Removed `max-width` rule for `.filter--active` in `themes/Frontend/Responsive/frontend/_public/src/less/_components/filter-panel.less`
 
 ### Deprecations
 
