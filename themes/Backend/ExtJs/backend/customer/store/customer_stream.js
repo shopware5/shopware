@@ -1,3 +1,4 @@
+/* global Ext */
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -21,11 +22,10 @@
  * our trademarks remain entirely with us.
  */
 
-//{namespace name="backend/customer_stream/translation"}
-
+// {namespace name="backend/customer_stream/translation"}
 
 Ext.define('Shopware.apps.Customer.store.CustomerStream', {
-    extend:'Shopware.store.Listing',
+    extend: 'Shopware.store.Listing',
     configure: function() {
         return {
             controller: 'CustomerStream'

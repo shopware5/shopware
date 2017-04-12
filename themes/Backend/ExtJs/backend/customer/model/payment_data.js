@@ -1,3 +1,4 @@
+/* global Ext */
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -34,33 +35,33 @@
  * the Shopware\Models\Customer\PaymentData doctrine model which contains all data about the
  * customer payment data.
  */
-//{block name="backend/customer/model/payment_data"}
+// {block name="backend/customer/model/payment_data"}
 Ext.define('Shopware.apps.Customer.model.PaymentData', {
 
     /**
      * Extends the standard Ext Model
      * @string
      */
-    extend:'Ext.data.Model',
+    extend: 'Ext.data.Model',
 
     /**
      * Unique identifier field
      * @string
      */
-    idProperty:'id',
+    idProperty: 'id',
     /**
      * The fields used for this model
      * @array
      */
-    fields:[
-        //{block name="backend/customer/model/payment_data/fields"}{/block}
-        { name:'accountNumber', type:'string' },
-        { name:'bankCode', type:'string' },
-        { name:'bankName', type:'string' },
-        { name:'accountHolder', type:'string' },
-        { name:'bic', type:'string' },
-        { name:'iban', type:'string' },
-        { name:'useBillingData', type:'boolean' }
+    fields: [
+        // {block name="backend/customer/model/payment_data/fields"}{/block}
+        { name: 'accountNumber', type: 'string' },
+        { name: 'bankCode', type: 'string' },
+        { name: 'bankName', type: 'string' },
+        { name: 'accountHolder', type: 'string' },
+        { name: 'bic', type: 'string' },
+        { name: 'iban', type: 'string' },
+        { name: 'useBillingData', type: 'boolean' }
     ]
 });
-//{/block}
+// {/block}

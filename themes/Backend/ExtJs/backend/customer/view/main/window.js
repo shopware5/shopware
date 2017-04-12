@@ -1,3 +1,4 @@
+/* global Ext */
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -27,9 +28,9 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/customer_stream/translation}
+// {namespace name=backend/customer_stream/translation}
 
-//{block name="backend/customer/view/main/window"}
+// {block name="backend/customer/view/main/window"}
 Ext.define('Shopware.apps.Customer.view.main.Window', {
     extend: 'Enlight.app.Window',
     cls: Ext.baseCSSPrefix + 'customer-list-window',
@@ -67,7 +68,7 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
                     )
                 ]);
             }, me, {
-                delegate: ".stream-inline"
+                delegate: '.stream-inline'
             });
         });
 
@@ -144,7 +145,7 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
      *
      * @return [Ext.toolbar.Toolbar] grid toolbar
      */
-    getToolbar:function () {
+    getToolbar: function () {
         var me = this;
 
         me.toolbar = Ext.create('Shopware.apps.Customer.view.main.Toolbar', {
@@ -160,10 +161,6 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
 
     resetFilterPanel: function() {
         var me = this;
-        var newStream = Ext.create('Shopware.apps.Customer.model.CustomerStream', {
-            id: null,
-            name: '{s name=window/new_stream}New stream{/s}'
-        });
 
         me.filterPanel.removeAll();
         me.filterPanel.loadRecord(null);
@@ -200,4 +197,4 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
         });
     }
 });
-//{/block}
+// {/block}

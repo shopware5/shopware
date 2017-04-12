@@ -1,3 +1,4 @@
+/* global Ext */
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -21,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-//{namespace name="backend/customer_stream/translation"}
+// {namespace name="backend/customer_stream/translation"}
 Ext.define('Shopware.apps.Customer.view.customer_stream.ConditionPanel', {
     extend: 'Ext.form.Panel',
     alias: 'widget.customer-stream-condition-panel',
@@ -70,7 +71,8 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.ConditionPanel', {
             Ext.create('Shopware.apps.Customer.view.customer_stream.conditions.OrderedWithDeliveryCondition'),
             Ext.create('Shopware.apps.Customer.view.customer_stream.conditions.OrderedWithPaymentCondition'),
             Ext.create('Shopware.apps.Customer.view.customer_stream.conditions.HasTotalOrderAmountCondition'),
-            Ext.create('Shopware.apps.Customer.view.customer_stream.conditions.CustomerAttributeCondition')
+            Ext.create('Shopware.apps.Customer.view.customer_stream.conditions.CustomerAttributeCondition'),
+            Ext.create('Shopware.apps.Customer.view.customer_stream.conditions.SearchTerm')
         ];
     },
 
@@ -83,8 +85,6 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.ConditionPanel', {
     },
 
     createConditionContainer: function(configuration) {
-        var me = this;
-
         var panel = Ext.create('Shopware.apps.Customer.view.customer_stream.ConditionField', {
             flex: 1,
             name: configuration.conditionClass,
@@ -115,8 +115,7 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.ConditionPanel', {
     },
 
     conditionExists: function(items, configuration) {
-        var me = this,
-            exists = false;
+        var exists = false;
 
         Ext.each(items, function(item) {
             if (item.conditionClass === configuration.conditionClass) {

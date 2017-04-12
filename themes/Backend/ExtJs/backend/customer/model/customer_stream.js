@@ -1,3 +1,4 @@
+/* global Ext */
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -21,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-//{namespace name="backend/customer_stream/translation"}
+// {namespace name="backend/customer_stream/translation"}
 
 Ext.define('Shopware.apps.Customer.model.CustomerStream', {
     extend: 'Shopware.data.Model',
@@ -33,10 +34,10 @@ Ext.define('Shopware.apps.Customer.model.CustomerStream', {
     },
 
     fields: [
-        { name : 'id', type: 'int', useNull: true },
-        { name : 'name', type: 'string' },
-        { name : 'description', type: 'string', useNull: true },
-        { name : 'conditions', type: 'string' },
-        { name : 'productStreamIds', type: 'string' }
+        { name: 'id', type: 'int', useNull: true },
+        { name: 'name', type: 'string' },
+        { name: 'description', type: 'string', useNull: true },
+        { name: 'conditions', type: 'string' },
+        { name: 'productStreamIds', type: 'string' }
     ]
 });

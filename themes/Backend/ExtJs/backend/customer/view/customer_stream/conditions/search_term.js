@@ -23,14 +23,14 @@
  */
 
 // {namespace name="backend/customer_stream/translation"}
-Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.OrderedInShopCondition', {
+Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.SearchTerm', {
 
     getLabel: function() {
-        return '{s name="ordered_in_shop_condition"}{/s}';
+        return '{s name="customer_searchterm_condition"}Search term condition{/s}';
     },
 
     supports: function(conditionClass) {
-        return (conditionClass == 'Shopware\\Bundle\\CustomerSearchBundle\\Condition\\OrderedInShopCondition');
+        return (conditionClass === 'Shopware\\Bundle\\CustomerSearchBundle\\Condition\\SearchTerm');
     },
 
     create: function(callback) {
@@ -42,20 +42,13 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.OrderedInShop
     },
 
     _create: function() {
-        var factory = Ext.create('Shopware.attribute.SelectionFactory');
-
         return {
-            title: '{s name="ordered_in_shop_condition_selection"}{/s}',
-            conditionClass: 'Shopware\\Bundle\\CustomerSearchBundle\\Condition\\OrderedInShopCondition',
+            title: '{s name="customer_searchterm_condition"}Search term condition{/s}',
+            conditionClass: 'Shopware\\Bundle\\CustomerSearchBundle\\Condition\\SearchTerm',
             items: [{
-                xtype: 'shopware-form-field-shop-grid',
-                name: 'shopIds',
-                flex: 1,
-                allowSorting: false,
-                useSeparator: false,
-                allowBlank: false,
-                store: factory.createEntitySearchStore('Shopware\\Models\\Shop\\Shop'),
-                searchStore: factory.createEntitySearchStore('Shopware\\Models\\Shop\\Shop')
+                xtype: 'textfield',
+                name: 'searchTerm',
+                allowBlank: false
             }]
         };
     }

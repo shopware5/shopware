@@ -1,3 +1,4 @@
+/* global Ext */
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -21,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-//{namespace name="backend/customer_stream/translation"}
+// {namespace name="backend/customer_stream/translation"}
 Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.IsInCustomerGroupCondition', {
 
     getLabel: function() {
@@ -53,8 +54,8 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.IsInCustomerG
                 allowSorting: false,
                 useSeparator: false,
                 allowBlank: false,
-                store: factory.createEntitySearchStore("Shopware\\Models\\Customer\\Group"),
-                searchStore: factory.createEntitySearchStore("Shopware\\Models\\Customer\\Group")
+                store: factory.createEntitySearchStore('Shopware\\Models\\Customer\\Group'),
+                searchStore: factory.createEntitySearchStore('Shopware\\Models\\Customer\\Group')
             }]
         };
     }

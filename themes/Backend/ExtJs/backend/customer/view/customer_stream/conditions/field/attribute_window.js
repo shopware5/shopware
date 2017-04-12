@@ -1,3 +1,4 @@
+/* global Ext */
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -26,8 +27,8 @@
  * @version    $Id$
  * @author shopware AG
  */
-//{namespace name=backend/product_stream/main}
-//{block name="backend/product_stream/view/condition_list/field/attribute_window"}
+// {namespace name=backend/product_stream/main}
+// {block name="backend/product_stream/view/condition_list/field/attribute_window"}
 Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.field.AttributeWindow', {
     extend: 'Ext.window.Window',
     modal: true,
@@ -91,4 +92,4 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.field.Attribu
         });
     }
 });
-//{/block}
+// {/block}

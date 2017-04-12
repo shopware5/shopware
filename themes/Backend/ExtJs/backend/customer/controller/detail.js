@@ -1,3 +1,5 @@
+/* global Ext Shopware */
+
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -27,7 +29,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/customer/view/detail}
+// {namespace name=backend/customer/view/detail}
 
 /**
  * Shopware Controller - Customer list backend module
@@ -44,14 +46,15 @@
  *  - Payment combo box => When the payment changed, the account fields for the bank information will be hide when the payment not equals debit
  *  - Password button => Generates a password for the customer account.
  */
-//{block name="backend/customer/controller/detail"}
+// {block name="backend/customer/controller/detail"}
 Ext.define('Shopware.apps.Customer.controller.Detail', {
 
     /**
      * Defines that this component is an extension of the extJs application controller
      * @string
      */
-    extend:'Ext.app.Controller',
+
+    extend: 'Ext.app.Controller',
 
     refs: [
         { ref: 'detailWindow', selector: 'customer-detail-window' }
@@ -61,26 +64,27 @@ Ext.define('Shopware.apps.Customer.controller.Detail', {
      * Contains all snippets for the controller
      * @object
      */
-    snippets:{
-        form:{
+
+    snippets: {
+        form: {
             errorTitle: '{s name=message/password/form/error_title}Error saving the form{/s}',
             errorMessage: '{s name=message/password/form/error_message}The field [0] is not valid{/s}'
         },
-        password:{
-            support:'{s name=message/password/generated_password}The generated password is:{/s}',
-            successTitle:'{s name=message/password/success_title}Successfully{/s}',
-            successText:'{s name=message/password/success_text}Customer [0] has been saved{/s}',
-            errorTitle:'{s name=message/password/error_title}Failure{/s}',
-            errorText:'{s name=message/password/error_text}There is an error occurred while saving.{/s}'
+        password: {
+            support: '{s name=message/password/generated_password}The generated password is:{/s}',
+            successTitle: '{s name=message/password/success_title}Successfully{/s}',
+            successText: '{s name=message/password/success_text}Customer [0] has been saved{/s}',
+            errorTitle: '{s name=message/password/error_title}Failure{/s}',
+            errorText: '{s name=message/password/error_text}There is an error occurred while saving.{/s}'
         },
-        account:{
-            successTitle:'{s name=message/account/success_title}Successfully{/s}',
-            successText:'{s name=message/account/success_text}The account for the customer [0] has been created successfully.{/s}',
-            errorTitle:'{s name=message/account/error_title}Failure{/s}',
-            errorText:'{s name=message/account/error_text}There is an error occurred while saving.{/s}'
+        account: {
+            successTitle: '{s name=message/account/success_title}Successfully{/s}',
+            successText: '{s name=message/account/success_text}The account for the customer [0] has been created successfully.{/s}',
+            errorTitle: '{s name=message/account/error_title}Failure{/s}',
+            errorText: '{s name=message/account/error_text}There is an error occurred while saving.{/s}'
         },
 
-        growlMessage:'{s name=message/growlMessage}Customer{/s}'
+        growlMessage: '{s name=message/growlMessage}Customer{/s}'
     },
 
     /**
@@ -88,30 +92,31 @@ Ext.define('Shopware.apps.Customer.controller.Detail', {
      * Register the different events to handle all around the customer editing and creation
      * @return void
      */
-    init:function () {
+
+    init: function () {
         var me = this;
 
-        //listen to different events to handle the user actions.
+        // listen to different events to handle the user actions.
         me.control({
-            'customer-list':{
-                editColumn:me.onEditCustomer,
-                itemdblclick:me.onGridDblClick
+            'customer-list': {
+                editColumn: me.onEditCustomer,
+                itemdblclick: me.onGridDblClick
             },
-            'customer-list-main-window button[action=addCustomer]':{
-                click:me.onCreateCustomer
+            'customer-list-main-window button[action=addCustomer]': {
+                click: me.onCreateCustomer
             },
-            'customer-detail-window button[action=save-customer]':{
-                click:me.onSaveCustomer
+            'customer-detail-window button[action=save-customer]': {
+                click: me.onSaveCustomer
             },
-            'customer-base-field-set':{
-                generatePassword:me.onGeneratePassword
+            'customer-base-field-set': {
+                generatePassword: me.onGeneratePassword
             },
-            'customer-debit-field-set':{
-                changePayment:me.onChangePayment
+            'customer-debit-field-set': {
+                changePayment: me.onChangePayment
             },
-            'customer-additional-panel':{
-                performOrder:me.onPerformOrder,
-                createAccount:me.onCreateAccount
+            'customer-additional-panel': {
+                performOrder: me.onPerformOrder,
+                createAccount: me.onCreateAccount
             }
         });
 
@@ -138,12 +143,12 @@ Ext.define('Shopware.apps.Customer.controller.Detail', {
 
         customer.set('accountMode', 0);
         customer.save({
-            callback:function (data, operation) {
+            callback: function (data, operation) {
                 var records = operation.getRecords(),
                     record = records[0],
                     rawData = record.getProxy().getReader().rawData;
 
-                if ( operation.success === true ) {
+                if (operation.success === true) {
                     var number = record.get('number');
                     Shopware.Notification.createGrowlMessage(me.snippets.account.successTitle, Ext.String.format(me.snippets.account.successText, number), me.snippets.growlMessage);
 
@@ -166,12 +171,12 @@ Ext.define('Shopware.apps.Customer.controller.Detail', {
      * @param [Ext.data.Model] record
      * @return void
      */
-    onGridDblClick:function (view, record) {
+    onGridDblClick: function (view, record) {
         var me = this;
 
-        /*{if {acl_is_allowed privilege=update}}*/
-            me.openCustomerDetailPage(record);
-        /*{/if}*/
+        /* {if {acl_is_allowed privilege=update}} */
+        me.openCustomerDetailPage(record);
+        /* {/if} */
     },
 
     openCustomerDetailPage: function(record) {
@@ -179,7 +184,7 @@ Ext.define('Shopware.apps.Customer.controller.Detail', {
             detailStore = me.subApplication.getStore('Detail');
 
         detailStore.getProxy().extraParams = {
-            customerID:record.data.id
+            customerID: record.data.id
         };
 
         var win = me.getView('detail.Window').create().show();
@@ -187,10 +192,10 @@ Ext.define('Shopware.apps.Customer.controller.Detail', {
 
         var store = Ext.create('Shopware.apps.Customer.store.Batch');
         store.load({
-            callback:function (records) {
+            callback: function (records) {
                 var storeData = records[0];
                 detailStore.load({
-                    callback:function (records) {
+                    callback: function (records) {
                         win.record = records[0];
                         win.createTabPanel();
                         win.setStores(storeData);
@@ -209,26 +214,26 @@ Ext.define('Shopware.apps.Customer.controller.Detail', {
      * @param [object] container - The field container which contains the debit account fields
      * @return void
      */
-    onChangePayment:function (value, container) {
+    onChangePayment: function (value, container) {
         var me = this;
         var window = me.getDetailWindow();
         var paymentFieldSet = window.down('customer-debit-field-set');
 
-        if ( value !== 2 ) {
+        if (value !== 2) {
             container.getEl().fadeOut({
-                opacity:0,
-                easing:'easeOut',
-                duration:500,
-                callback:function () {
+                opacity: 0,
+                easing: 'easeOut',
+                duration: 500,
+                callback: function () {
                     container.hide();
                 }
             });
         } else {
             container.show();
             container.getEl().fadeIn({
-                opacity:1,
-                easing:'easeOut',
-                duration:500
+                opacity: 1,
+                easing: 'easeOut',
+                duration: 500
             });
         }
 
@@ -254,7 +259,7 @@ Ext.define('Shopware.apps.Customer.controller.Detail', {
      * @param [Shopware.apps.Customer.model.Base] record - The current form record.
      * @return void
      */
-    onPerformOrder:function (record) {
+    onPerformOrder: function (record) {
         window.open('{url action="performOrder"}?id=' + record.get('id'));
     },
 
@@ -267,12 +272,12 @@ Ext.define('Shopware.apps.Customer.controller.Detail', {
      * @param confirmField
      * @return void
      */
-    onGeneratePassword:function (passwordField, confirmField) {
+    onGeneratePassword: function (passwordField, confirmField) {
         var me = this,
             pool = '01234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ',
             password = '', i = 8, length = pool.length;
 
-        while(i--) password += pool[Math.floor(length * Math.random())];
+        while (i--) password += pool[Math.floor(length * Math.random())];
 
         Ext.suspendLayouts();
         passwordField.setValue(password);
@@ -288,7 +293,7 @@ Ext.define('Shopware.apps.Customer.controller.Detail', {
      * the add button in the toolbar to create a new customer.
      * @return void
      */
-    onCreateCustomer:function () {
+    onCreateCustomer: function () {
         var me = this,
             record = me.getModel('Customer').create({ active: true });
 
@@ -297,7 +302,7 @@ Ext.define('Shopware.apps.Customer.controller.Detail', {
 
         var store = Ext.create('Shopware.apps.Customer.store.Batch');
         store.load({
-            callback:function (records) {
+            callback: function (records) {
                 var storeData = records[0];
                 detailWindow.record = record;
                 detailWindow.createTabPanel();
@@ -315,12 +320,12 @@ Ext.define('Shopware.apps.Customer.controller.Detail', {
      * @param [integer] rowIndex - On which row position has been clicked
      * @return void
      */
-    onEditCustomer:function (record) {
+    onEditCustomer: function (record) {
         var me = this;
 
-        /*{if {acl_is_allowed privilege=update}}*/
-            me.openCustomerDetailPage(record);
-        /*{/if}*/
+        /* {if {acl_is_allowed privilege=update}} */
+        me.openCustomerDetailPage(record);
+        /* {/if} */
     },
 
     /**
@@ -331,29 +336,28 @@ Ext.define('Shopware.apps.Customer.controller.Detail', {
      * @param btn Ext.button.Button contains the save button
      * @return void
      */
-    onSaveCustomer:function (btn) {
+    onSaveCustomer: function (btn) {
         var me = this, number,
             win = btn.up('window'),
             form = win.down('form'),
             model = form.getRecord(),
-            missingField = "Unknown field",
+            missingField = 'Unknown field',
             listStore = me.subApplication.getStore('List');
 
-        if (!form.getForm().isValid() ) {
+        if (!form.getForm().isValid()) {
             // check which field is not valid in order to tell the user, why the customer cannot be saved
             // SW-4322
-            form.getForm().getFields().each(function(f){
-                 if(!f.validate()){
-                    if(f.fieldLabel){
+            form.getForm().getFields().each(function(f) {
+                if (!f.validate()) {
+                    if (f.fieldLabel) {
                         missingField = f.fieldLabel;
-                    }else if(f.name){
+                    } else if (f.name) {
                         missingField = f.name;
                     }
                     Shopware.Notification.createGrowlMessage(me.snippets.form.errorTitle, Ext.String.format(me.snippets.form.errorMessage, missingField), me.snippets.growlMessage);
                     return false;
-                 }
-
-             });
+                }
+            });
             return;
         }
 
@@ -377,7 +381,7 @@ Ext.define('Shopware.apps.Customer.controller.Detail', {
 
         form.getForm().updateRecord(model);
 
-        //save the model and check in the callback function if the operation was successfully
+        // save the model and check in the callback function if the operation was successfully
         model.save({
             callback: function (data, operation) {
                 var records = operation.getRecords(),
@@ -409,10 +413,10 @@ Ext.define('Shopware.apps.Customer.controller.Detail', {
                     win.destroy();
                     listStore.load();
                 } else {
-                    Shopware.Notification.createGrowlMessage(me.snippets.password.errorTitle, me.snippets.password.errorText + '<br> ' + rawData.message, me.snippets.growlMessage)
+                    Shopware.Notification.createGrowlMessage(me.snippets.password.errorTitle, me.snippets.password.errorText + '<br> ' + rawData.message, me.snippets.growlMessage);
                 }
             }
         });
     }
 });
-//{/block}
+// {/block}

@@ -1,3 +1,4 @@
+/* global Ext */
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -21,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-//{namespace name="backend/customer_stream/translation"}
+// {namespace name="backend/customer_stream/translation"}
 
 Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.HasAddressWithCountryCondition', {
 
@@ -58,8 +59,8 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.HasAddressWit
                 allowSorting: false,
                 useSeparator: false,
                 allowBlank: false,
-                store: factory.createEntitySearchStore("Shopware\\Models\\Country\\Country"),
-                searchStore: factory.createEntitySearchStore("Shopware\\Models\\Country\\Country")
+                store: factory.createEntitySearchStore('Shopware\\Models\\Country\\Country'),
+                searchStore: factory.createEntitySearchStore('Shopware\\Models\\Country\\Country')
             }]
         };
     }

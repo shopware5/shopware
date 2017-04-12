@@ -1,3 +1,4 @@
+/* global Ext Shopware */
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -27,12 +28,12 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/customer/view/address}
+// {namespace name=backend/customer/view/address}
 
 /**
  * Shopware UI - Customer address window backend module
  */
-//{block name="backend/customer/view/address/detail/window"}
+// {block name="backend/customer/view/address/detail/window"}
 Ext.define('Shopware.apps.Customer.view.address.detail.Window', {
     extend: 'Shopware.window.Detail',
     alias: 'widget.customer-address-detail-window',
@@ -98,8 +99,7 @@ Ext.define('Shopware.apps.Customer.view.address.detail.Window', {
      */
     onSaveSuccessful: function(controller, record, window) {
         window.attributeForm.saveAttribute(record.get('id'), function(success) {
-
-            if(!success){
+            if (!success) {
                 window.close();
                 return;
             }
@@ -118,4 +118,4 @@ Ext.define('Shopware.apps.Customer.view.address.detail.Window', {
         });
     }
 });
-//{/block}
+// {/block}

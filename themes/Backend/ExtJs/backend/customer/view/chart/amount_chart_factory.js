@@ -1,9 +1,9 @@
-//{namespace name=backend/customer_stream/translation}
+/* global Ext */
+// {namespace name=backend/customer_stream/translation}
 
 Ext.define('Shopware.apps.Customer.view.chart.AmountChartFactory', {
 
     createChart: function (streamStore, callback) {
-        var me = this;
         var fields = [];
         var modelFields = [];
 
@@ -14,7 +14,7 @@ Ext.define('Shopware.apps.Customer.view.chart.AmountChartFactory', {
 
         fields.push({ name: 'unassigned' });
         modelFields.push({ name: 'unassigned', type: 'float' });
-        modelFields.push({ name: 'yearMonth', type: 'string'});
+        modelFields.push({ name: 'yearMonth', type: 'string' });
 
         var store = Ext.create('Ext.data.Store', {
             fields: modelFields,

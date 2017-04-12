@@ -1,3 +1,4 @@
+/* global Ext */
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -21,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-//{namespace name="backend/customer_stream/translation"}
+// {namespace name="backend/customer_stream/translation"}
 Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.OrderedOnDeviceCondition', {
 
     getLabel: function() {
@@ -45,8 +46,8 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.OrderedOnDevi
             fields: ['id', 'label'],
             data: [
                 { id: 'desktop', label: '<div class="sprite-imac" style="width: 16px; height: 16px; display: inline-block; margin-right:5px">&nbsp;</div> {s name="desktop"}{/s}' },
-                { id: 'tablet',  label: '<div class="sprite-ipad--portrait" style="width: 16px; height: 16px; display: inline-block; margin-right:5px">&nbsp;</div> {s name="tablet"}{/s}' },
-                { id: 'mobile',  label: '<div class="sprite-iphone--portrait" style="width: 16px; height: 16px; display: inline-block; margin-right:5px">&nbsp;</div> {s name="mobile"}{/s}' }
+                { id: 'tablet', label: '<div class="sprite-ipad--portrait" style="width: 16px; height: 16px; display: inline-block; margin-right:5px">&nbsp;</div> {s name="tablet"}{/s}' },
+                { id: 'mobile', label: '<div class="sprite-iphone--portrait" style="width: 16px; height: 16px; display: inline-block; margin-right:5px">&nbsp;</div> {s name="mobile"}{/s}' }
             ]
         });
 

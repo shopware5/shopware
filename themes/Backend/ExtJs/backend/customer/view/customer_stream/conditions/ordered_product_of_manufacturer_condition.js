@@ -1,3 +1,4 @@
+/* global Ext */
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -21,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-//{namespace name="backend/customer_stream/translation"}
+// {namespace name="backend/customer_stream/translation"}
 Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.OrderedProductOfManufacturerCondition', {
 
     getLabel: function() {
@@ -53,8 +54,8 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.OrderedProduc
                 allowSorting: false,
                 useSeparator: false,
                 allowBlank: false,
-                store: factory.createEntitySearchStore("Shopware\\Models\\Article\\Supplier"),
-                searchStore: factory.createEntitySearchStore("Shopware\\Models\\Article\\Supplier")
+                store: factory.createEntitySearchStore('Shopware\\Models\\Article\\Supplier'),
+                searchStore: factory.createEntitySearchStore('Shopware\\Models\\Article\\Supplier')
             }]
         };
     }
