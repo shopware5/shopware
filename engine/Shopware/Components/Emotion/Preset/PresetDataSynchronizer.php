@@ -108,7 +108,6 @@ class PresetDataSynchronizer implements PresetDataSynchronizerInterface
 
             $element = $handler->export($element);
         }
-        unset($element);
 
         $preset->setPresetData(json_encode($presetData));
         $this->modelManager->flush($preset);

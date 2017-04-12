@@ -606,6 +606,8 @@
             <argument type="service" id="shopware.api.emotionpreset" />
             <argument type="service" id="shopware_media.media_service" />
             <argument>%kernel.root_dir%</argument>
+            <argument type="service" id="dbal_connection" />
+            <argument type="service" id="shopware.slug" />
         </service>
 
         <service id="shopware.emotion.emotion_importer" class="Shopware\Components\Emotion\EmotionImporter">
@@ -643,6 +645,14 @@
 
         <service id="shopware.emotion.preset_categoryteaser_component_handler" class="Shopware\Components\Emotion\Preset\ComponentHandler\CategoryTeaserComponentHandler">
             <argument type="service" id="shopware_media.media_service" />
+            <tag name="shopware.emotion.preset_component_handler" />
+        </service>
+
+        <service id="shopware.emotion.preset_html5_video_component_handler" class="Shopware\Components\Emotion\Preset\ComponentHandler\Html5VideoComponentHandler">
+            <argument type="service" id="shopware_media.media_service" />
+            <argument type="service" id="shopware.api.media" />
+            <argument type="service" id="service_container" />
+
             <tag name="shopware.emotion.preset_component_handler" />
         </service>
 

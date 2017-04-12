@@ -98,7 +98,7 @@ class CategoryTeaserComponentHandler implements ComponentHandlerInterface
         $assets = $element['assets'];
 
         foreach ($data as &$elementData) {
-            if ($elementData['key'] === self::ELEMENT_DATA_KEY) {
+            if ($elementData['key'] === self::ELEMENT_DATA_KEY && !empty($elementData['value'])) {
                 $assetPath = $assets[$elementData['value']];
 
                 $media = $this->doAssetImport($assetPath);
@@ -140,7 +140,7 @@ class CategoryTeaserComponentHandler implements ComponentHandlerInterface
         $data = $element['data'];
 
         foreach ($data as &$elementData) {
-            if ($elementData['key'] === self::ELEMENT_DATA_KEY) {
+            if ($elementData['key'] === self::ELEMENT_DATA_KEY && !empty($elementData['value'])) {
                 $assetPath = $elementData['value'];
                 $assetHash = uniqid('asset-', false);
 

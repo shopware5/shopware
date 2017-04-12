@@ -24,10 +24,12 @@
 
 namespace Shopware\Components\Emotion;
 
+use Doctrine\DBAL\Connection;
 use Shopware\Bundle\MediaBundle\MediaService;
 use Shopware\Components\Api\Resource\EmotionPreset;
 use Shopware\Components\Emotion\Preset\EmotionToPresetDataTransformerInterface;
 use Shopware\Components\Emotion\Preset\PresetDataSynchronizerInterface;
+use Shopware\Components\Slug\SlugInterface;
 
 class EmotionExporter implements EmotionExporterInterface
 {
@@ -57,6 +59,16 @@ class EmotionExporter implements EmotionExporterInterface
     private $rootDirectory;
 
     /**
+     * @var Connection
+     */
+    private $connection;
+
+    /**
+     * @var SlugInterface
+     */
+    private $slug;
+
+    /**
      * @param EmotionToPresetDataTransformerInterface $emotionToPresetDataTransformer
      * @param PresetDataSynchronizerInterface         $synchronizer
      * @param EmotionPreset                           $emotionPresetResource
@@ -67,13 +79,17 @@ class EmotionExporter implements EmotionExporterInterface
         PresetDataSynchronizerInterface $synchronizer,
         EmotionPreset $emotionPresetResource,
         MediaService $mediaService,
-        $rootDirectory
+        $rootDirectory,
+        Connection $connection,
+        SlugInterface $slug
     ) {
         $this->transformer = $transformer;
         $this->synchronizer = $synchronizer;
         $this->presetResource = $emotionPresetResource;
         $this->mediaService = $mediaService;
         $this->rootDirectory = $rootDirectory;
+        $this->connection = $connection;
+        $this->slug = $slug;
     }
 
     /**
@@ -86,7 +102,11 @@ class EmotionExporter implements EmotionExporterInterface
     public function export($emotionId)
     {
         $zip = new \ZipArchive();
-        $filename = $this->rootDirectory . '/files/downloads/emotion' . time() . '.zip';
+
+        $name = $this->connection->fetchColumn('SELECT name FROM s_emotion WHERE id = :id', [':id' => $emotionId]);
+        $name = strtolower($this->slug->slugify($name));
+
+        $filename = $this->rootDirectory . '/files/downloads/' . $name . time() . '.zip';
 
         if ($zip->open($filename, \ZipArchive::CREATE) !== true) {
             throw new \Exception('Could not create zip file!');

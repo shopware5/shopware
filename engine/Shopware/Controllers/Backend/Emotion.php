@@ -1215,7 +1215,12 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
      */
     private function createElementData(Emotion $emotion, array $element, array $elementData)
     {
-        foreach ($elementData as &$item) {
+        foreach ($elementData as $key => &$item) {
+            if (empty($item['fieldId'])) {
+                unset($elementData[$key]);
+                continue;
+            }
+
             /** @var $field Field */
             $field = Shopware()->Models()->find('Shopware\Models\Emotion\Library\Field', $item['fieldId']);
             $item['field'] = $field;
