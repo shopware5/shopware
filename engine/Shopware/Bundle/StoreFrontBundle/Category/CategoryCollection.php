@@ -25,9 +25,9 @@ declare(strict_types=1);
 
 namespace Shopware\Bundle\StoreFrontBundle\Category;
 
-use Shopware\Bundle\StoreFrontBundle\Common\KeyCollection;
+use Shopware\Bundle\StoreFrontBundle\Common\Collection;
 
-class CategoryCollection extends KeyCollection implements \JsonSerializable
+class CategoryCollection extends Collection implements \JsonSerializable
 {
     /**
      * @var Category[]
@@ -36,7 +36,8 @@ class CategoryCollection extends KeyCollection implements \JsonSerializable
 
     public function add(Category $category): void
     {
-        parent::doAdd($category);
+        $key = $this->getKey($category);
+        $this->elements[$key] = $category;
     }
 
     public function remove(int $id): void
@@ -122,7 +123,7 @@ class CategoryCollection extends KeyCollection implements \JsonSerializable
      *
      * @return int
      */
-    protected function getKey($element)
+    protected function getKey(Category $element)
     {
         return $element->getId();
     }

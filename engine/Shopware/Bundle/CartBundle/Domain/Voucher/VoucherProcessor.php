@@ -92,8 +92,12 @@ class VoucherProcessor implements CartProcessorInterface
         ShopContextInterface $context
     ): void {
         $lineItems = $cartContainer->getLineItems()->filterType(self::TYPE_VOUCHER);
-
         if (0 === $lineItems->count()) {
+            return;
+        }
+
+        $prices = $processorCart->getCalculatedLineItems()->filterGoods()->getPrices();
+        if (0 === $prices->count()) {
             return;
         }
 
@@ -139,15 +143,11 @@ class VoucherProcessor implements CartProcessorInterface
     ): void {
         $prices = $processorCart->getCalculatedLineItems()->filterGoods()->getPrices();
 
-        if (0 === $prices->count()) {
-            return;
-        }
-
         switch ($voucher->getMode()) {
             case self::TYPE_PERCENTAGE:
                 $percentage = abs($voucher->getPercentageDiscount()) * -1;
 
-                $discount = $this->percentagePriceCalculator->calculatePrice($percentage, $prices, $context);
+                $discount = $this->percentagePriceCalculator->calculate($percentage, $prices, $context);
 
                 $processorCart->getCalculatedLineItems()->add(
                     new CalculatedVoucher($lineItem->getIdentifier(), $lineItem, $discount)

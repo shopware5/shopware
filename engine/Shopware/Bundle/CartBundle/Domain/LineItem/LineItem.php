@@ -85,21 +85,4 @@ class LineItem extends Struct implements LineItemInterface
     {
         return $this->extraData;
     }
-
-    public function serialize(): string
-    {
-        return json_encode(get_object_vars($this));
-    }
-
-    public static function unserialize(string $data): LineItemInterface
-    {
-        $data = json_decode($data, true);
-
-        return new self(
-            (string) $data['identifier'],
-            (string) $data['type'],
-            (int) $data['quantity'],
-            (array) $data['extraData']
-        );
-    }
 }

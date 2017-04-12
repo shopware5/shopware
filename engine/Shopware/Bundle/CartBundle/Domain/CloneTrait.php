@@ -29,7 +29,8 @@ trait CloneTrait
 {
     public function __clone()
     {
-        foreach ($this as $key => $value) {
+        $variables = get_object_vars($this);
+        foreach ($variables as $key => $value) {
             if (is_object($value)) {
                 $this->$key = clone $this->$key;
             } elseif (is_array($value)) {

@@ -26,6 +26,7 @@ namespace Shopware\Tests\Unit\StoreFrontBundle\Serializer;
 
 use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\StoreFrontBundle\Common\Attribute;
+use Shopware\Bundle\StoreFrontBundle\Common\Collection;
 use Shopware\Bundle\StoreFrontBundle\Common\Struct;
 use Shopware\Bundle\StoreFrontBundle\Serializer\JsonSerializer;
 use Shopware\Bundle\StoreFrontBundle\Serializer\ObjectDeserializer;
@@ -78,12 +79,51 @@ class JsonSerializerTest extends TestCase
                     'struct' => new EmptyStruct(),
                 ])),
             ],
+            [
+                new StructCollection([
+                    new IdStruct(1),
+                    new IdStruct(2),
+                    new IdStruct(3),
+                    new IdStruct(4),
+                ]),
+            ],
         ];
+    }
+}
+
+class StructCollection extends Collection
+{
+    /**
+     * @var IdStruct[]
+     */
+    protected $elements = [];
+
+    public function add(IdStruct $struct)
+    {
+        $this->elements[$struct->getId()] = $struct;
     }
 }
 
 class EmptyStruct extends Struct
 {
+}
+
+class IdStruct extends Struct
+{
+    protected $id;
+
+    /**
+     * @param $id
+     */
+    public function __construct(int $id)
+    {
+        $this->id = $id;
+    }
+
+    public function getId(): int
+    {
+        return $this->id;
+    }
 }
 
 class StructWithStructArrayConstructor extends Struct

@@ -27,7 +27,7 @@ namespace Shopware\Bundle\StoreFrontBundle\Common;
 
 use ArrayIterator;
 
-class Collection implements \IteratorAggregate, \JsonSerializable
+abstract class Collection extends Struct implements \IteratorAggregate
 {
     /**
      * @var array
@@ -44,11 +44,7 @@ class Collection implements \IteratorAggregate, \JsonSerializable
 
     public function fill(array $elements): void
     {
-        if (method_exists($this, 'add')) {
-            array_map([$this, 'add'], $elements);
-        } else {
-            array_map([$this, 'doAdd'], $elements);
-        }
+        array_map([$this, 'add'], $elements);
     }
 
     public function clear(): void
@@ -76,7 +72,12 @@ class Collection implements \IteratorAggregate, \JsonSerializable
         return array_map($closure, $this->elements);
     }
 
-    public function filterInstance($class): Collection
+    /**
+     * @param string $class
+     *
+     * @return static
+     */
+    public function filterInstance(string $class): Collection
     {
         return $this->filter(function ($item) use ($class) {
             return $item instanceof $class;
@@ -106,7 +107,11 @@ class Collection implements \IteratorAggregate, \JsonSerializable
 
     public function jsonSerialize(): array
     {
-        return $this->elements;
+        $data = get_object_vars($this);
+        $data['elements'] = array_values($this->elements);
+        $data['_class'] = get_class($this);
+
+        return $data;
     }
 
     protected function doAdd($element): void
@@ -117,5 +122,10 @@ class Collection implements \IteratorAggregate, \JsonSerializable
     protected function doRemoveByKey($key): void
     {
         unset($this->elements[$key]);
+    }
+
+    protected function doMerge(Collection $collection): Collection
+    {
+        return new static(array_merge($this->elements, $collection->getIterator()->getArrayCopy()));
     }
 }

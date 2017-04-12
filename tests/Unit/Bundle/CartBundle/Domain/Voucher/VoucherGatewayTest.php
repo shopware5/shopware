@@ -1,6 +1,4 @@
 <?php
-declare(strict_types=1);
-
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -24,20 +22,23 @@ declare(strict_types=1);
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\StoreFrontBundle\Common;
+namespace Shopware\Tests\Unit\Bundle\CartBundle\Domain\Voucher;
 
-abstract class KeyCollection extends Collection
+use PHPUnit\Framework\TestCase;
+use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
+use Shopware\Bundle\CartBundle\Domain\LineItem\LineItemCollection;
+use Shopware\Bundle\CartBundle\Domain\Product\ProductPriceGateway;
+use Shopware\Bundle\CartBundle\Domain\Voucher\VoucherGateway;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
+
+class VoucherGatewayTest extends TestCase
 {
-    protected function doAdd($element): void
-    {
-        $key = $this->getKey($element);
-        $this->elements[$key] = $element;
-    }
-
     /**
-     * @param $element
-     *
-     * @return string|int
+     * @expectedException \Shopware\Bundle\CartBundle\Domain\Exception\NotImplementedException
      */
-    abstract protected function getKey($element);
+    public function testDummyGatewayThrowsException()
+    {
+        $gateway = new VoucherGateway();
+        $gateway->get(new LineItemCollection(), $this->createMock(CalculatedCart::class), $this->createMock(ShopContext::class));
+    }
 }

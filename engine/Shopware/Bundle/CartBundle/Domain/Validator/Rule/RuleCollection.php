@@ -24,8 +24,8 @@
 
 namespace Shopware\Bundle\CartBundle\Domain\Validator\Rule;
 
-use Shopware\Bundle\CartBundle\Domain\Collection;
 use Shopware\Bundle\CartBundle\Domain\Validator\Container\Container;
+use Shopware\Bundle\StoreFrontBundle\Common\Collection;
 
 class RuleCollection extends Collection
 {

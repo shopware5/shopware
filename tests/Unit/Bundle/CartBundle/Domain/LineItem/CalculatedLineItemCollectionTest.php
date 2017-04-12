@@ -310,4 +310,65 @@ class CalculatedLineItemCollectionTest extends TestCase
             $collection
         );
     }
+
+    public function testRemoveElement()
+    {
+        $c = new ConfiguredLineItem('C', 3);
+
+        $collection = new CalculatedLineItemCollection([
+            new ConfiguredLineItem('A', 3),
+            new ConfiguredLineItem('B', 3),
+            $c,
+            new ConfiguredLineItem('D', 3),
+        ]);
+
+        $collection->removeElement($c);
+
+        $this->assertEquals(
+            new CalculatedLineItemCollection([
+                new ConfiguredLineItem('A', 3),
+                new ConfiguredLineItem('B', 3),
+                new ConfiguredLineItem('D', 3),
+            ]),
+            $collection
+        );
+    }
+
+    public function testExists()
+    {
+        $c = new ConfiguredLineItem('C', 3);
+
+        $collection = new CalculatedLineItemCollection([
+            new ConfiguredLineItem('A', 3),
+            new ConfiguredLineItem('B', 3),
+            $c,
+            new ConfiguredLineItem('D', 3),
+        ]);
+
+        $this->assertTrue($collection->exists($c));
+        $collection->removeElement($c);
+        $this->assertFalse($collection->exists($c));
+    }
+
+    public function testRemoveWithNotExisting()
+    {
+        $c = new ConfiguredLineItem('C', 3);
+
+        $collection = new CalculatedLineItemCollection([
+            new ConfiguredLineItem('A', 3),
+            new ConfiguredLineItem('B', 3),
+            new ConfiguredLineItem('D', 3),
+        ]);
+
+        $collection->removeElement($c);
+
+        $this->assertEquals(
+            new CalculatedLineItemCollection([
+                new ConfiguredLineItem('A', 3),
+                new ConfiguredLineItem('B', 3),
+                new ConfiguredLineItem('D', 3),
+            ]),
+            $collection
+        );
+    }
 }
