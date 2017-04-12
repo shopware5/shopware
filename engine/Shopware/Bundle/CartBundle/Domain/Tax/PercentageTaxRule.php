@@ -25,12 +25,10 @@ declare(strict_types=1);
 
 namespace Shopware\Bundle\CartBundle\Domain\Tax;
 
-use Shopware\Bundle\CartBundle\Domain\JsonSerializableTrait;
+use Shopware\Bundle\StoreFrontBundle\Common\Struct;
 
-class PercentageTaxRule implements TaxRuleInterface
+class PercentageTaxRule extends Struct implements TaxRuleInterface
 {
-    use JsonSerializableTrait;
-
     /**
      * @var float
      */

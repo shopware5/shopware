@@ -25,14 +25,12 @@
 namespace Shopware\Bundle\CartBundle\Domain\Validator\Rule;
 
 use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
-use Shopware\Bundle\CartBundle\Domain\JsonSerializableTrait;
 use Shopware\Bundle\CartBundle\Domain\Validator\Data\RuleDataCollection;
+use Shopware\Bundle\StoreFrontBundle\Common\Struct;
 use Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface;
 
-abstract class Rule implements \JsonSerializable
+abstract class Rule extends Struct
 {
-    use JsonSerializableTrait;
-
     const OPERATOR_GTE = '=>';
 
     const OPERATOR_LTE = '<=';

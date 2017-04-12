@@ -26,7 +26,6 @@ declare(strict_types=1);
 
 namespace Shopware\Bundle\CartBundle\Domain\Validator\Container;
 
-use Shopware\Bundle\CartBundle\Domain\JsonSerializableTrait;
 use Shopware\Bundle\CartBundle\Domain\Validator\Rule\Rule;
 
 /**
@@ -34,8 +33,6 @@ use Shopware\Bundle\CartBundle\Domain\Validator\Rule\Rule;
  */
 abstract class Container extends Rule
 {
-    use JsonSerializableTrait;
-
     /**
      * @var Rule[]
      */

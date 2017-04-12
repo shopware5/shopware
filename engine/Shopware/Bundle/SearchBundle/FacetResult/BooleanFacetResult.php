@@ -26,14 +26,14 @@ namespace Shopware\Bundle\SearchBundle\FacetResult;
 
 use Shopware\Bundle\SearchBundle\FacetResultInterface;
 use Shopware\Bundle\StoreFrontBundle\Common\Attribute;
-use Shopware\Bundle\StoreFrontBundle\Common\Extendable;
+use Shopware\Bundle\StoreFrontBundle\Common\Struct;
 
 /**
  * @category  Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class BooleanFacetResult extends Extendable implements FacetResultInterface
+class BooleanFacetResult extends Struct implements FacetResultInterface
 {
     /**
      * @var string

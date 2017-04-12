@@ -24,12 +24,10 @@
 
 namespace Shopware\Bundle\CartBundle\Domain\Error;
 
-use Shopware\Bundle\CartBundle\Domain\JsonSerializableTrait;
+use Shopware\Bundle\StoreFrontBundle\Common\Struct;
 
-abstract class Error implements \JsonSerializable
+abstract class Error extends Struct
 {
-    use JsonSerializableTrait;
-
     const LEVEL_WARNING = 0;
 
     const LEVEL_ERROR = 1;

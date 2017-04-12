@@ -27,9 +27,9 @@ namespace Shopware\Bundle\StoreFrontBundle\ShippingMethod;
 
 use Shopware\Bundle\CartBundle\Domain\CloneTrait;
 use Shopware\Bundle\CartBundle\Domain\JsonSerializableTrait;
-use Shopware\Bundle\StoreFrontBundle\Common\Extendable;
+use Shopware\Bundle\StoreFrontBundle\Common\Struct;
 
-class ShippingMethod extends Extendable
+class ShippingMethod extends Struct
 {
     use CloneTrait, JsonSerializableTrait;
 

@@ -28,12 +28,12 @@ namespace Shopware\Bundle\StoreFrontBundle\Customer;
 use Shopware\Bundle\CartBundle\Domain\CloneTrait;
 use Shopware\Bundle\CartBundle\Domain\JsonSerializableTrait;
 use Shopware\Bundle\StoreFrontBundle\Address\Address;
-use Shopware\Bundle\StoreFrontBundle\Common\Extendable;
+use Shopware\Bundle\StoreFrontBundle\Common\Struct;
 use Shopware\Bundle\StoreFrontBundle\CustomerGroup\CustomerGroup;
 use Shopware\Bundle\StoreFrontBundle\PaymentMethod\PaymentMethod;
 use Shopware\Bundle\StoreFrontBundle\Shop\Shop;
 
-class Customer extends Extendable
+class Customer extends Struct
 {
     use CloneTrait, JsonSerializableTrait;
 

@@ -27,17 +27,15 @@ namespace Shopware\Bundle\CartBundle\Domain\Product;
 
 use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryDate;
 use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryInformation;
-use Shopware\Bundle\CartBundle\Domain\JsonSerializableTrait;
 use Shopware\Bundle\CartBundle\Domain\LineItem\CalculatedLineItemInterface;
 use Shopware\Bundle\CartBundle\Domain\LineItem\Deliverable;
 use Shopware\Bundle\CartBundle\Domain\LineItem\Goods;
 use Shopware\Bundle\CartBundle\Domain\LineItem\LineItemInterface;
 use Shopware\Bundle\CartBundle\Domain\Price\Price;
+use Shopware\Bundle\StoreFrontBundle\Common\Struct;
 
-class CalculatedProduct implements CalculatedLineItemInterface, Deliverable, Goods
+class CalculatedProduct extends Struct implements CalculatedLineItemInterface, Deliverable, Goods
 {
-    use JsonSerializableTrait;
-
     /**
      * @var LineItemInterface
      */

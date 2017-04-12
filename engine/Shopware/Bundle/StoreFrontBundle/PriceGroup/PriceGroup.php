@@ -24,14 +24,14 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\PriceGroup;
 
-use Shopware\Bundle\StoreFrontBundle\Common\Extendable;
+use Shopware\Bundle\StoreFrontBundle\Common\Struct;
 
 /**
  * @category  Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class PriceGroup extends Extendable
+class PriceGroup extends Struct
 {
     /**
      * @var int

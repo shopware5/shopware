@@ -24,14 +24,14 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Media;
 
-use Shopware\Bundle\StoreFrontBundle\Common\Extendable;
+use Shopware\Bundle\StoreFrontBundle\Common\Struct;
 
 /**
  * @category  Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Thumbnail extends Extendable
+class Thumbnail extends Struct
 {
     /**
      * @var string

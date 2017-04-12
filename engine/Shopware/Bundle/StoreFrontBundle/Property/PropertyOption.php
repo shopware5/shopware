@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Property;
 
-use Shopware\Bundle\StoreFrontBundle\Common\Extendable;
+use Shopware\Bundle\StoreFrontBundle\Common\Struct;
 use Shopware\Bundle\StoreFrontBundle\Media\Media;
 
 /**
@@ -32,7 +32,7 @@ use Shopware\Bundle\StoreFrontBundle\Media\Media;
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class PropertyOption extends Extendable
+class PropertyOption extends Struct
 {
     /**
      * @var int

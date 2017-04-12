@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-use Shopware\Bundle\CartBundle\Infrastructure\Serializer;
+use Shopware\Bundle\StoreFrontBundle\Serializer\Serializer;
 use Shopware\Components\DependencyInjection\Container;
 use Shopware\Components\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\Form\Form;
@@ -406,7 +406,7 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
 
     public function serialize($data, string $format = Serializer::FORMAT_ARRAY)
     {
-        return $this->container->get('serializer')->serialize($data, $format);
+        return $this->container->get('storefront.serializer')->serialize($data, $format);
     }
 
     /**

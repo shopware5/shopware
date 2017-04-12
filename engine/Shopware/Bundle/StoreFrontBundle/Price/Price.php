@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Price;
 
-use Shopware\Bundle\StoreFrontBundle\Common\Extendable;
+use Shopware\Bundle\StoreFrontBundle\Common\Struct;
 use Shopware\Bundle\StoreFrontBundle\CustomerGroup\CustomerGroup;
 
 /**
@@ -32,7 +32,7 @@ use Shopware\Bundle\StoreFrontBundle\CustomerGroup\CustomerGroup;
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Price extends Extendable
+class Price extends Struct
 {
     /**
      * Contains the calculated gross or net price.

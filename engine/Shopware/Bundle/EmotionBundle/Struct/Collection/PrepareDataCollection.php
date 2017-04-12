@@ -25,9 +25,9 @@
 namespace Shopware\Bundle\EmotionBundle\Struct\Collection;
 
 use Shopware\Bundle\SearchBundle\BatchProductNumberSearchRequest;
-use Shopware\Bundle\StoreFrontBundle\Common\Extendable;
+use Shopware\Bundle\StoreFrontBundle\Common\Struct;
 
-class PrepareDataCollection extends Extendable
+class PrepareDataCollection extends Struct
 {
     /**
      * @var BatchProductNumberSearchRequest

@@ -25,12 +25,10 @@ declare(strict_types=1);
 
 namespace Shopware\Bundle\CartBundle\Domain\Delivery;
 
-use Shopware\Bundle\CartBundle\Domain\JsonSerializableTrait;
+use Shopware\Bundle\StoreFrontBundle\Common\Struct;
 
-class DeliveryInformation implements \JsonSerializable
+class DeliveryInformation extends Struct
 {
-    use JsonSerializableTrait;
-
     /**
      * @var int
      */

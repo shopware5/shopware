@@ -59,9 +59,6 @@ class BatchProductSearchTest extends \PHPUnit\Framework\TestCase
         return $method->invokeArgs($object, $parameters);
     }
 
-    /**
-     * @covers \BatchProductSearch::mapListProducts
-     */
     public function testListProductMapping()
     {
         $searchResult = new BatchProductNumberSearchResult([

@@ -10,8 +10,6 @@
         <service id="cart.product.price_gateway" alias="shopware.cart.product.price_gateway" />
         <service id="cart.voucher.gateway" alias="shopware.cart.voucher.gateway" />
 
-        <service id="serializer" class="Shopware\Bundle\CartBundle\Infrastructure\Serializer" />
-
         <service id="shopware.cart.product.delivery_information_gateway" class="Shopware\Bundle\CartBundle\Infrastructure\Product\ProductDeliveryGateway">
             <argument type="service" id="dbal_connection" />
         </service>
@@ -37,9 +35,8 @@
 
         <service id="shopware.cart.persister" class="Shopware\Bundle\CartBundle\Infrastructure\Cart\CartPersister">
             <argument type="service" id="dbal_connection" />
+            <argument type="service" id="storefront.serializer.json" />
         </service>
-
-
 
         <service id="shopware.cart.view.product_transformer" class="Shopware\Bundle\CartBundle\Infrastructure\View\ViewProductTransformer">
             <argument type="service" id="storefront.product.gateway" />

@@ -29,6 +29,7 @@ use Doctrine\DBAL\Connection;
 use Shopware\Bundle\CartBundle\Domain\Cart\CartContainer;
 use Shopware\Bundle\CartBundle\Domain\Cart\CartPersisterInterface;
 use Shopware\Bundle\CartBundle\Domain\Exception\CartTokenNotFoundException;
+use Shopware\Bundle\StoreFrontBundle\Serializer\JsonSerializer;
 
 class CartPersister implements CartPersisterInterface
 {
@@ -38,11 +39,17 @@ class CartPersister implements CartPersisterInterface
     private $connection;
 
     /**
+     * @var JsonSerializer
+     */
+    private $serializer;
+
+    /**
      * @param Connection $connection
      */
-    public function __construct(Connection $connection)
+    public function __construct(Connection $connection, JsonSerializer $serializer)
     {
         $this->connection = $connection;
+        $this->serializer = $serializer;
     }
 
     public function load(string $token): CartContainer
@@ -56,7 +63,7 @@ class CartPersister implements CartPersisterInterface
             throw new CartTokenNotFoundException($token);
         }
 
-        return CartContainer::unserialize($content);
+        return $this->serializer->deserialize($content);
     }
 
     public function save(CartContainer $cartContainer): void
@@ -68,7 +75,7 @@ class CartPersister implements CartPersisterInterface
             [
                 ':token' => $cartContainer->getToken(),
                 ':name' => $cartContainer->getName(),
-                ':content' => $cartContainer->serialize(),
+                ':content' => $this->serializer->serialize($cartContainer),
             ]
         );
     }

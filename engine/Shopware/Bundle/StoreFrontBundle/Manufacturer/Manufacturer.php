@@ -24,14 +24,14 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Manufacturer;
 
-use Shopware\Bundle\StoreFrontBundle\Common\Extendable;
+use Shopware\Bundle\StoreFrontBundle\Common\Struct;
 
 /**
  * @category  Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Manufacturer extends Extendable
+class Manufacturer extends Struct
 {
     /**
      * Unique identifier of the manufacturer

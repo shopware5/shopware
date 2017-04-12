@@ -25,7 +25,7 @@
 namespace Shopware\Bundle\StoreFrontBundle\Context;
 
 use Shopware\Bundle\CartBundle\Domain\Delivery\ShippingLocation;
-use Shopware\Bundle\StoreFrontBundle\Common\Extendable;
+use Shopware\Bundle\StoreFrontBundle\Common\Struct;
 use Shopware\Bundle\StoreFrontBundle\Currency\Currency;
 use Shopware\Bundle\StoreFrontBundle\Customer\Customer;
 use Shopware\Bundle\StoreFrontBundle\CustomerGroup\CustomerGroup;
@@ -39,7 +39,7 @@ use Shopware\Bundle\StoreFrontBundle\Tax\Tax;
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class ShopContext extends Extendable implements ShopContextInterface
+class ShopContext extends Struct implements ShopContextInterface
 {
     /**
      * @var CustomerGroup

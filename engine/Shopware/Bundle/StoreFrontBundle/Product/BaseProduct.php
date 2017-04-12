@@ -24,14 +24,14 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Product;
 
-use Shopware\Bundle\StoreFrontBundle\Common\Extendable;
+use Shopware\Bundle\StoreFrontBundle\Common\Struct;
 
 /**
  * @category  Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class BaseProduct extends Extendable
+class BaseProduct extends Struct
 {
     /**
      * Unique identifier of the product (s_articles).

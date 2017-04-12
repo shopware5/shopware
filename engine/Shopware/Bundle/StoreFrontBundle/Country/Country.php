@@ -24,14 +24,14 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Country;
 
-use Shopware\Bundle\StoreFrontBundle\Common\Extendable;
+use Shopware\Bundle\StoreFrontBundle\Common\Struct;
 
 /**
  * @category  Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Country extends Extendable
+class Country extends Struct
 {
     /**
      * @var int

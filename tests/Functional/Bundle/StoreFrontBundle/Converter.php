@@ -24,6 +24,7 @@
 
 namespace Shopware\tests\Functional\Bundle\StoreFrontBundle;
 
+use Shopware\Bundle\StoreFrontBundle\Category\Category;
 use Shopware\Bundle\StoreFrontBundle\Common\Struct;
 use Shopware\Models;
 
@@ -75,11 +76,6 @@ class Converter
         return $struct;
     }
 
-    public function convertCategory(Models\Category\Category $category)
-    {
-        return \Shopware\Bundle\StoreFrontBundle\Category\Category::createFromCategoryEntity($category);
-    }
-
     /**
      * Converts a currency doctrine model to a currency struct
      *
@@ -129,9 +125,18 @@ class Converter
         );
 
         if ($shop->getCategory()) {
-            $struct->setCategory(
-                $this->convertCategory($shop->getCategory())
+            $category = new Category(
+                $shop->getCategory()->getId(),
+                $shop->getCategory()->getParentId(),
+                array_filter(explode('|', (string) $shop->getCategory()->getPath())),
+                $shop->getCategory()->getName()
             );
+
+            $category->assign([
+                'position' => (int) $shop->getCategory()->getPosition(),
+            ]);
+
+            $struct->setCategory($category);
         }
 
         $country = new \Shopware\Bundle\StoreFrontBundle\Country\Country();

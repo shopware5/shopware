@@ -25,14 +25,14 @@
 namespace Shopware\Bundle\SearchBundle\FacetResult;
 
 use Shopware\Bundle\SearchBundle\FacetResultInterface;
-use Shopware\Bundle\StoreFrontBundle\Common\Extendable;
+use Shopware\Bundle\StoreFrontBundle\Common\Struct;
 
 /**
  * @category  Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class TreeFacetResult extends Extendable implements FacetResultInterface
+class TreeFacetResult extends Struct implements FacetResultInterface
 {
     /**
      * @var string

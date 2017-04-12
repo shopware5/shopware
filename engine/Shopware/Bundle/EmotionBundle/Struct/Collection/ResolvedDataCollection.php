@@ -25,9 +25,9 @@
 namespace Shopware\Bundle\EmotionBundle\Struct\Collection;
 
 use Shopware\Bundle\SearchBundle\BatchProductSearchResult;
-use Shopware\Bundle\StoreFrontBundle\Common\Extendable;
+use Shopware\Bundle\StoreFrontBundle\Common\Struct;
 
-class ResolvedDataCollection extends Extendable
+class ResolvedDataCollection extends Struct
 {
     /**
      * @var BatchProductSearchResult

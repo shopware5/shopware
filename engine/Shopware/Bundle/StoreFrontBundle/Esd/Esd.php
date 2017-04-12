@@ -24,14 +24,14 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Esd;
 
-use Shopware\Bundle\StoreFrontBundle\Common\Extendable;
+use Shopware\Bundle\StoreFrontBundle\Common\Struct;
 
 /**
  * @category  Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Esd extends Extendable
+class Esd extends Struct
 {
     /**
      * @var int

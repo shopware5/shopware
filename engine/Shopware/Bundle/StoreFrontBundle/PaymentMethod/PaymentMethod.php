@@ -29,9 +29,9 @@ use Shopware\Bundle\CartBundle\Domain\CloneTrait;
 use Shopware\Bundle\CartBundle\Domain\JsonSerializableTrait;
 use Shopware\Bundle\CartBundle\Domain\Validator\Rule\Rule;
 use Shopware\Bundle\CartBundle\Domain\Validator\Validatable;
-use Shopware\Bundle\StoreFrontBundle\Common\Extendable;
+use Shopware\Bundle\StoreFrontBundle\Common\Struct;
 
-class PaymentMethod extends Extendable implements Validatable
+class PaymentMethod extends Struct implements Validatable
 {
     use CloneTrait, JsonSerializableTrait;
 

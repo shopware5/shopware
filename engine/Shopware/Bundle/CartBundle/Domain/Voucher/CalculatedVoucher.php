@@ -25,17 +25,15 @@ declare(strict_types=1);
 
 namespace Shopware\Bundle\CartBundle\Domain\Voucher;
 
-use Shopware\Bundle\CartBundle\Domain\JsonSerializableTrait;
 use Shopware\Bundle\CartBundle\Domain\LineItem\CalculatedLineItemInterface;
 use Shopware\Bundle\CartBundle\Domain\LineItem\LineItemInterface;
 use Shopware\Bundle\CartBundle\Domain\Price\Price;
 use Shopware\Bundle\CartBundle\Infrastructure\View\ViewLineItemInterface;
+use Shopware\Bundle\StoreFrontBundle\Common\Struct;
 use Shopware\Bundle\StoreFrontBundle\Media\Media;
 
-class CalculatedVoucher implements CalculatedLineItemInterface, ViewLineItemInterface
+class CalculatedVoucher extends Struct implements CalculatedLineItemInterface, ViewLineItemInterface
 {
-    use JsonSerializableTrait;
-
     /**
      * @var LineItemInterface
      */

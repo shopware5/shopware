@@ -30,7 +30,7 @@ namespace Shopware\Bundle\StoreFrontBundle\Common;
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-abstract class Extendable extends Struct implements ExtendableInterface
+trait ExtendableTrait
 {
     /**
      * Contains an array of attribute structs.
@@ -96,5 +96,10 @@ abstract class Extendable extends Struct implements ExtendableInterface
     public function getAttributes(): array
     {
         return $this->attributes;
+    }
+
+    public function setAttributes(array $attributes): void
+    {
+        $this->attributes = $attributes;
     }
 }

@@ -24,14 +24,14 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Shop;
 
-use Shopware\Bundle\StoreFrontBundle\Common\Extendable;
+use Shopware\Bundle\StoreFrontBundle\Common\Struct;
 
 /**
  * @category  Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Template extends Extendable
+class Template extends Struct
 {
     /**
      * @var int

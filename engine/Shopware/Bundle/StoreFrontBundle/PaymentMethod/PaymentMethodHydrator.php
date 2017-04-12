@@ -25,9 +25,9 @@ declare(strict_types=1);
 
 namespace Shopware\Bundle\StoreFrontBundle\PaymentMethod;
 
-use Shopware\Bundle\CartBundle\Domain\Validator\RuleBuilder;
 use Shopware\Bundle\StoreFrontBundle\Common\AttributeHydrator;
 use Shopware\Bundle\StoreFrontBundle\Common\Hydrator;
+use Shopware\Bundle\StoreFrontBundle\Serializer\JsonSerializer;
 
 class PaymentMethodHydrator extends Hydrator
 {
@@ -37,17 +37,17 @@ class PaymentMethodHydrator extends Hydrator
     private $attributeHydrator;
 
     /**
-     * @var RuleBuilder
+     * @var JsonSerializer
      */
-    private $ruleBuilder;
+    private $serializer;
 
     /**
      * @param AttributeHydrator $attributeHydrator
      */
-    public function __construct(AttributeHydrator $attributeHydrator)
+    public function __construct(AttributeHydrator $attributeHydrator, JsonSerializer $serializer)
     {
         $this->attributeHydrator = $attributeHydrator;
-        $this->ruleBuilder = new RuleBuilder();
+        $this->serializer = $serializer;
     }
 
     public function hydrate(array $data): PaymentMethod
@@ -79,7 +79,7 @@ class PaymentMethodHydrator extends Hydrator
         if ($data['__paymentMethod_rules']) {
             $rule = json_decode($data['__paymentMethod_rules'], true);
             $paymentMethod->setRule(
-                $this->ruleBuilder->build($rule)
+                $this->serializer->deserialize($rule)
             );
         }
 

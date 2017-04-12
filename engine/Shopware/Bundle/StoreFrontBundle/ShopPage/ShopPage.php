@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\ShopPage;
 
-use Shopware\Bundle\StoreFrontBundle\Common\Extendable;
+use Shopware\Bundle\StoreFrontBundle\Common\Struct;
 use Shopware\Bundle\StoreFrontBundle\Shop\Shop;
 
 /**
@@ -32,7 +32,7 @@ use Shopware\Bundle\StoreFrontBundle\Shop\Shop;
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class ShopPage extends Extendable
+class ShopPage extends Struct
 {
     /**
      * @var int

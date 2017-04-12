@@ -51,7 +51,7 @@ class ShippingLocation
      * @param null|\Shopware\Bundle\StoreFrontBundle\Country\State $state
      * @param null|Address                                         $address
      */
-    private function __construct(Country $country, ?State $state, ?Address $address)
+    public function __construct(Country $country, ?State $state, ?Address $address)
     {
         $this->country = $country;
         if ($state) {

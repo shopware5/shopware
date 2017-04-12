@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\SearchBundle;
 
-use Shopware\Bundle\StoreFrontBundle\Common\Extendable;
+use Shopware\Bundle\StoreFrontBundle\Common\Struct;
 use Shopware\Bundle\StoreFrontBundle\Product\BaseProduct;
 
 /**
@@ -34,7 +34,7 @@ use Shopware\Bundle\StoreFrontBundle\Product\BaseProduct;
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class ProductNumberSearchResult extends Extendable
+class ProductNumberSearchResult extends Struct
 {
     /**
      * @var BaseProduct[] Indexed by the product order number

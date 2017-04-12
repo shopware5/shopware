@@ -22,27 +22,19 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\CartBundle\Infrastructure;
+namespace Shopware\Bundle\StoreFrontBundle\Common;
 
-use Shopware\Bundle\CartBundle\Infrastructure\Exception\NotSupportedSerializerFormatException;
-
-class Serializer
+trait AssignArrayTrait
 {
-    const FORMAT_JSON = 'json';
-
-    const FORMAT_ARRAY = 'array';
-
-    public function serialize($data, string $format)
+    public function assign(array $options): void
     {
-        switch ($format) {
-            case self::FORMAT_ARRAY:
-                return json_decode(json_encode($data), true);
-
-            case self::FORMAT_JSON:
-                return json_encode($data);
-
-            default:
-                throw new NotSupportedSerializerFormatException($data, $format);
+        foreach ($options as $key => $value) {
+            $setter = 'set' . ucfirst($key);
+            try {
+                $this->$setter($value);
+            } catch (\Error $error) {
+            } catch (\Exception $error) {
+            }
         }
     }
 }

@@ -24,14 +24,14 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\ProductStream;
 
-use Shopware\Bundle\StoreFrontBundle\Common\Extendable;
+use Shopware\Bundle\StoreFrontBundle\Common\Struct;
 
 /**
  * @category  Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class ProductStream extends Extendable
+class ProductStream extends Struct
 {
     /**
      * @var int

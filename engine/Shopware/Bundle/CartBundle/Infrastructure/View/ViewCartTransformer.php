@@ -42,7 +42,7 @@ class ViewCartTransformer
 
     public function transform(CalculatedCart $calculatedCart, ShopContextInterface $context): ViewCart
     {
-        $viewCart = ViewCart::createFromCalculatedCart($calculatedCart);
+        $viewCart = new ViewCart($calculatedCart);
 
         foreach ($this->transformers as $transformer) {
             $transformer->transform($calculatedCart, $viewCart, $context);
