@@ -22,6 +22,8 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Components\Routing\Context;
+
 /**
  * Shopware Cron for article ratings
  */
@@ -82,11 +84,13 @@ class Shopware_Plugins_Core_CronRating_Bootstrap extends Shopware_Components_Plu
             $shop->setCurrency($repository->find($order['currencyID']));
             $shop->registerResources();
 
+            $config = Shopware()->Container()->get('config');
+            $mailContext = Context::createFromShop($shop, $config);
             foreach ($positions[$orderId] as &$position) {
                 $position['link'] = Shopware()->Container()->get('router')->assemble([
                     'module' => 'frontend', 'sViewport' => 'detail',
                     'sArticle' => $position['articleID'],
-                ]);
+                ], $mailContext);
             }
 
             $context = [
@@ -95,7 +99,7 @@ class Shopware_Plugins_Core_CronRating_Bootstrap extends Shopware_Components_Plu
                 'sArticles' => $positions[$orderId],
             ];
 
-            $mail = Shopware()->TemplateMail()->createMail('sARTICLECOMMENT', $context);
+            $mail = Shopware()->TemplateMail()->createMail('sARTICLECOMMENT', $context, $shop);
             $mail->addTo($customers[$orderId]['email']);
             $mail->send();
             ++$count;
