@@ -25,9 +25,9 @@
 namespace Shopware\Bundle\StoreFrontBundle\Listing;
 
 use Shopware\Bundle\SearchBundle\SortingInterface;
-use Shopware\Bundle\StoreFrontBundle\Common\Extendable;
+use Shopware\Bundle\StoreFrontBundle\Common\Struct;
 
-class ListingSorting extends Extendable
+class ListingSorting extends Struct
 {
     /**
      * @var int

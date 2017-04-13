@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Unit\Bundle\StoreFrontBundle\Struct;
+namespace Shopware\Tests\Unit\Bundle\StoreFrontBundle\Category;
 
 use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\StoreFrontBundle\Category\Category;
@@ -40,15 +40,15 @@ class CategoryCollectionTest extends TestCase
     public function testGetTreeWithOneLevel()
     {
         $collection = new CategoryCollection([
-            Category::create(1, null, [1], 'First level 01'),
-            Category::create(2, null, [1], 'First level 02'),
-            Category::create(3, null, [1], 'First level 03'),
+            self::create(1, null, [1], 'First level 01'),
+            self::create(2, null, [1], 'First level 02'),
+            self::create(3, null, [1], 'First level 03'),
         ]);
         $this->assertEquals(
             [
-                Category::create(1, null, [1], 'First level 01'),
-                Category::create(2, null, [1], 'First level 02'),
-                Category::create(3, null, [1], 'First level 03'),
+                self::create(1, null, [1], 'First level 01'),
+                self::create(2, null, [1], 'First level 02'),
+                self::create(3, null, [1], 'First level 03'),
             ],
             $collection->getTree(null)
         );
@@ -57,9 +57,9 @@ class CategoryCollectionTest extends TestCase
     public function testGetTreeWithNoneExistingParentId()
     {
         $collection = new CategoryCollection([
-            Category::create(1, null, [1], 'First level 01'),
-            Category::create(2, null, [1], 'First level 02'),
-            Category::create(3, null, [1], 'First level 03'),
+            self::create(1, null, [1], 'First level 01'),
+            self::create(2, null, [1], 'First level 02'),
+            self::create(3, null, [1], 'First level 03'),
         ]);
 
         $this->assertSame([], $collection->getTree(100));
@@ -68,21 +68,21 @@ class CategoryCollectionTest extends TestCase
     public function testGetNestedTree()
     {
         $collection = new CategoryCollection([
-            Category::create(1, null, [], 'First level 01'),
-            Category::create(2, 1, [1], 'Second level 01'),
-            Category::create(3, 2, [2, 1], 'Third level 01'),
-            Category::create(4, 1, [1], 'Second level 02'),
-            Category::create(5, 4, [4, 1], 'Third level 02'),
+            self::create(1, null, [], 'First level 01'),
+            self::create(2, 1, [1], 'Second level 01'),
+            self::create(3, 2, [2, 1], 'Third level 01'),
+            self::create(4, 1, [1], 'Second level 02'),
+            self::create(5, 4, [4, 1], 'Third level 02'),
         ]);
 
         $this->assertEquals(
             [
-                Category::create(1, null, [], 'First level 01', ['children' => [
-                    Category::create(2, 1, [1], 'Second level 01', ['children' => [
-                        Category::create(3, 2, [2, 1], 'Third level 01'),
+                self::create(1, null, [], 'First level 01', ['children' => [
+                    self::create(2, 1, [1], 'Second level 01', ['children' => [
+                        self::create(3, 2, [2, 1], 'Third level 01'),
                     ]]),
-                    Category::create(4, 1, [1], 'Second level 02', ['children' => [
-                        Category::create(5, 4, [4, 1], 'Third level 02'),
+                    self::create(4, 1, [1], 'Second level 02', ['children' => [
+                        self::create(5, 4, [4, 1], 'Third level 02'),
                     ]]),
                 ]]),
             ],
@@ -93,20 +93,20 @@ class CategoryCollectionTest extends TestCase
     public function testGetTreeRemovesElementsWithoutParent()
     {
         $collection = new CategoryCollection([
-            Category::create(1, null, [], 'First level 01'),
-            Category::create(2, 1, [1], 'Second level 01'),
-            Category::create(3, 2, [2, 1], 'Third level 01'),
-            Category::create(4, 1, [1], 'Second level 02'),
-            Category::create(5, 6, [6, 1], 'Third level 02'),
+            self::create(1, null, [], 'First level 01'),
+            self::create(2, 1, [1], 'Second level 01'),
+            self::create(3, 2, [2, 1], 'Third level 01'),
+            self::create(4, 1, [1], 'Second level 02'),
+            self::create(5, 6, [6, 1], 'Third level 02'),
         ]);
 
         $this->assertEquals(
             [
-                Category::create(1, null, [], 'First level 01', ['children' => [
-                    Category::create(2, 1, [1], 'Second level 01', ['children' => [
-                        Category::create(3, 2, [2, 1], 'Third level 01'),
+                self::create(1, null, [], 'First level 01', ['children' => [
+                    self::create(2, 1, [1], 'Second level 01', ['children' => [
+                        self::create(3, 2, [2, 1], 'Third level 01'),
                     ]]),
-                    Category::create(4, 1, [1], 'Second level 02'),
+                    self::create(4, 1, [1], 'Second level 02'),
                 ]]),
             ],
             $collection->getTree(null)
@@ -116,21 +116,21 @@ class CategoryCollectionTest extends TestCase
     public function testGetNestedTreeWithSubParent()
     {
         $collection = new \Shopware\Bundle\StoreFrontBundle\Category\CategoryCollection([
-            Category::create(1, null, [], 'First level 01'),
-            Category::create(2, 1, [1], 'Second level 01'),
-            Category::create(3, 2, [2, 1], 'Third level 01'),
+            self::create(1, null, [], 'First level 01'),
+            self::create(2, 1, [1], 'Second level 01'),
+            self::create(3, 2, [2, 1], 'Third level 01'),
 
-            Category::create(4, 1, [1], 'Second level 02'),
-            Category::create(5, 4, [4, 1], 'Third level 02'),
+            self::create(4, 1, [1], 'Second level 02'),
+            self::create(5, 4, [4, 1], 'Third level 02'),
         ]);
 
         $this->assertEquals(
             [
-                Category::create(2, 1, [1], 'Second level 01', ['children' => [
-                    Category::create(3, 2, [2, 1], 'Third level 01'),
+                self::create(2, 1, [1], 'Second level 01', ['children' => [
+                    self::create(3, 2, [2, 1], 'Third level 01'),
                 ]]),
-                Category::create(4, 1, [1], 'Second level 02', ['children' => [
-                    Category::create(5, 4, [4, 1], 'Third level 02'),
+                self::create(4, 1, [1], 'Second level 02', ['children' => [
+                    self::create(5, 4, [4, 1], 'Third level 02'),
                 ]]),
             ],
             $collection->getTree(1)
@@ -140,12 +140,12 @@ class CategoryCollectionTest extends TestCase
     public function testGetIds()
     {
         $collection = new \Shopware\Bundle\StoreFrontBundle\Category\CategoryCollection([
-            Category::create(1, null, [], 'First level 01'),
-            Category::create(2, 1, [1], 'Second level 01'),
-            Category::create(3, 2, [2, 1], 'Third level 01'),
+            self::create(1, null, [], 'First level 01'),
+            self::create(2, 1, [1], 'Second level 01'),
+            self::create(3, 2, [2, 1], 'Third level 01'),
 
-            Category::create(4, 1, [1], 'Second level 02'),
-            Category::create(5, 4, [4, 1], 'Third level 02'),
+            self::create(4, 1, [1], 'Second level 02'),
+            self::create(5, 4, [4, 1], 'Third level 02'),
         ]);
 
         $this->assertSame(
@@ -157,11 +157,11 @@ class CategoryCollectionTest extends TestCase
     public function testGetPaths()
     {
         $collection = new \Shopware\Bundle\StoreFrontBundle\Category\CategoryCollection([
-            Category::create(1, null, [], 'First level 01'),
-            Category::create(2, 1, [1], 'Second level 01'),
-            Category::create(3, 2, [2, 1], 'Third level 01'),
-            Category::create(4, 1, [1], 'Second level 02'),
-            Category::create(5, 4, [4, 1], 'Third level 02'),
+            self::create(1, null, [], 'First level 01'),
+            self::create(2, 1, [1], 'Second level 01'),
+            self::create(3, 2, [2, 1], 'Third level 01'),
+            self::create(4, 1, [1], 'Second level 02'),
+            self::create(5, 4, [4, 1], 'Third level 02'),
         ]);
 
         $this->assertSame(
@@ -179,11 +179,11 @@ class CategoryCollectionTest extends TestCase
     public function testGetIdsWithPath()
     {
         $collection = new CategoryCollection([
-            Category::create(1, null, [], 'First level 01'),
-            Category::create(2, 1, [1], 'Second level 01'),
-            Category::create(3, 2, [2, 1], 'Third level 01'),
-            Category::create(4, 1, [1], 'Second level 02'),
-            Category::create(5, 50, [50, 1], 'Third level 02'),
+            self::create(1, null, [], 'First level 01'),
+            self::create(2, 1, [1], 'Second level 01'),
+            self::create(3, 2, [2, 1], 'Third level 01'),
+            self::create(4, 1, [1], 'Second level 02'),
+            self::create(5, 50, [50, 1], 'Third level 02'),
         ]);
 
         $this->assertSame(
@@ -195,12 +195,12 @@ class CategoryCollectionTest extends TestCase
     public function testGetByKey()
     {
         $collection = new \Shopware\Bundle\StoreFrontBundle\Category\CategoryCollection([
-            Category::create(1, null, [], 'First level 01'),
-            Category::create(2, 1, [1], 'Second level 01'),
+            self::create(1, null, [], 'First level 01'),
+            self::create(2, 1, [1], 'Second level 01'),
         ]);
 
         $this->assertEquals(
-            Category::create(1, null, [], 'First level 01'),
+            self::create(1, null, [], 'First level 01'),
             $collection->get(1)
         );
     }
@@ -208,8 +208,8 @@ class CategoryCollectionTest extends TestCase
     public function testGetWithNoneExistingKey()
     {
         $collection = new CategoryCollection([
-            Category::create(1, null, [], 'First level 01'),
-            Category::create(2, 1, [1], 'Second level 01'),
+            self::create(1, null, [], 'First level 01'),
+            self::create(2, 1, [1], 'Second level 01'),
         ]);
 
         $this->assertSame(
@@ -221,12 +221,12 @@ class CategoryCollectionTest extends TestCase
     public function testGetById()
     {
         $collection = new CategoryCollection([
-            Category::create(1, null, [], 'First level 01'),
-            Category::create(2, 1, [1], 'Second level 01'),
+            self::create(1, null, [], 'First level 01'),
+            self::create(2, 1, [1], 'Second level 01'),
         ]);
 
         $this->assertEquals(
-            Category::create(2, 1, [1], 'Second level 01'),
+            self::create(2, 1, [1], 'Second level 01'),
             $collection->get(2)
         );
     }
@@ -234,8 +234,8 @@ class CategoryCollectionTest extends TestCase
     public function testGetByIdWithNoneExisting()
     {
         $collection = new CategoryCollection([
-            Category::create(1, null, [], 'First level 01'),
-            Category::create(2, 1, [1], 'Second level 01'),
+            self::create(1, null, [], 'First level 01'),
+            self::create(2, 1, [1], 'Second level 01'),
         ]);
 
         $this->assertEquals(
@@ -247,17 +247,25 @@ class CategoryCollectionTest extends TestCase
     public function testAddCategory()
     {
         $collection = new CategoryCollection([
-            Category::create(1, null, [], 'First level 01'),
+            self::create(1, null, [], 'First level 01'),
         ]);
 
-        $collection->add(Category::create(2, 1, [1], 'Second level 01'));
+        $collection->add(self::create(2, 1, [1], 'Second level 01'));
 
         $this->assertEquals(
             new CategoryCollection([
-                Category::create(1, null, [], 'First level 01'),
-                Category::create(2, 1, [1], 'Second level 01'),
+                self::create(1, null, [], 'First level 01'),
+                self::create(2, 1, [1], 'Second level 01'),
             ]),
             $collection
         );
+    }
+
+    private static function create(int $id, ?int $parentId, array $path, string $name, array $options = [])
+    {
+        $category = new Category($id, $parentId, $path, $name);
+        $category->assign($options);
+
+        return $category;
     }
 }

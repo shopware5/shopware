@@ -25,10 +25,10 @@ declare(strict_types=1);
 
 namespace Shopware\Bundle\CartBundle\Domain\LineItem;
 
-use Shopware\Bundle\CartBundle\Domain\Collection;
 use Shopware\Bundle\CartBundle\Domain\Error\Error;
 use Shopware\Bundle\CartBundle\Domain\Price\PriceCollection;
 use Shopware\Bundle\CartBundle\Domain\Product\CalculatedProduct;
+use Shopware\Bundle\StoreFrontBundle\Common\Collection;
 
 class CalculatedProductCollection extends Collection
 {

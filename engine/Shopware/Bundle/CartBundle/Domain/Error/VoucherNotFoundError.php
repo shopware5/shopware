@@ -29,7 +29,7 @@ class VoucherNotFoundError extends Error
     /**
      * @var string
      */
-    private $code;
+    protected $code;
 
     public function __construct(string $code)
     {

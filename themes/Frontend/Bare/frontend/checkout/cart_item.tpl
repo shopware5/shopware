@@ -1,43 +1,12 @@
-{* Constants for the different basket item types *}
-{$IS_PRODUCT = 0}
-{$IS_PREMIUM_PRODUCT = 1}
-{$IS_VOUCHER = 2}
-{$IS_REBATE = 3}
-{$IS_SURCHARGE_DISCOUNT = 4}
-
 {* Product *}
-{if $lineItem._class === "Shopware\Bundle\CartBundle\Infrastructure\View\ViewProduct"}
+{if $lineItem.type == "product"}
     {block name='frontend_checkout_cart_item_product'}
         {include file="frontend/checkout/items/product.tpl" isLast=$isLast}
     {/block}
 
 {* Voucher *}
-{elseif $lineItem._class === "Shopware\Bundle\CartBundle\Domain\Voucher\CalculatedVoucher"}
+{elseif $lineItem.type == "voucher"}
     {block name='frontend_checkout_cart_item_voucher'}
         {include file="frontend/checkout/items/voucher.tpl" isLast=$isLast}
     {/block}
-
-{elseif $sBasketItem.modus == $IS_PREMIUM_PRODUCT}
-
-    {* Chosen premium products *}
-    {block name='frontend_checkout_cart_item_premium_product'}
-        {include file="frontend/checkout/items/premium-product.tpl" isLast=$isLast}
-    {/block}
-
-{elseif $sBasketItem.modus == $IS_REBATE}
-
-    {* Basket rebate *}
-    {block name='frontend_checkout_cart_item_rebate'}
-        {include file="frontend/checkout/items/rebate.tpl" isLast=$isLast}
-    {/block}
-{elseif $sBasketItem.modus == $IS_SURCHARGE_DISCOUNT}
-
-    {* Surcharge / discount *}
-    {block name='frontend_checkout_cart_item_surcharge_discount'}
-        {include file="frontend/checkout/items/rebate.tpl" isLast=$isLast}
-    {/block}
-{else}
-
-    {* Register your own mode selection *}
-    {block name='frontend_checkout_cart_item_additional_type'}{/block}
 {/if}

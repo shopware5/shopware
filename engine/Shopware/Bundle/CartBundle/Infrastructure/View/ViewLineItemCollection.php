@@ -25,8 +25,8 @@ declare(strict_types=1);
 
 namespace Shopware\Bundle\CartBundle\Infrastructure\View;
 
-use Shopware\Bundle\CartBundle\Domain\Collection;
-use Shopware\Bundle\CartBundle\Infrastructure\SortArrayByKeysTrait;
+use Shopware\Bundle\StoreFrontBundle\Common\Collection;
+use Shopware\Bundle\StoreFrontBundle\Common\SortArrayByKeysTrait;
 
 class ViewLineItemCollection extends Collection
 {

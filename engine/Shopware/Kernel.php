@@ -44,6 +44,7 @@ use Shopware\Bundle\PluginInstallerBundle\Service\PluginInitializer;
 use Shopware\Bundle\SearchBundle\DependencyInjection\Compiler\CriteriaRequestHandlerCompilerPass;
 use Shopware\Bundle\SearchBundleDBAL\DependencyInjection\Compiler\DBALCompilerPass;
 use Shopware\Bundle\SearchBundleES\DependencyInjection\CompilerPass\SearchHandlerCompilerPass;
+use Shopware\Bundle\StoreFrontBundle\DependencyInjection\CompilerPass\SerializerCompilerPass;
 use Shopware\Components\ConfigLoader;
 use Shopware\Components\DependencyInjection\Compiler\AddCaptchaCompilerPass;
 use Shopware\Components\DependencyInjection\Compiler\AddConsoleCommandPass;
@@ -648,6 +649,7 @@ class Kernel implements HttpKernelInterface
         $container->addCompilerPass(new CartProcessorCompilerPass());
         $container->addCompilerPass(new CartRuleDataCollectorCompilerPass());
         $container->addCompilerPass(new TaxRuleCalculatorCompilerPass());
+        $container->addCompilerPass(new SerializerCompilerPass());
 
         if ($this->isElasticSearchEnabled()) {
             $container->addCompilerPass(new SearchHandlerCompilerPass());

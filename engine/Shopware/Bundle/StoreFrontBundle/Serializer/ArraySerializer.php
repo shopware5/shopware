@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -23,15 +22,32 @@ declare(strict_types=1);
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\CartBundle\Domain;
+namespace Shopware\Bundle\StoreFrontBundle\Serializer;
 
-trait JsonSerializableTrait
+class ArraySerializer implements SerializerInterface
 {
-    public function jsonSerialize(): array
-    {
-        $data = get_object_vars($this);
-        $data['_class'] = get_class($this);
+    /**
+     * @var ObjectDeserializer
+     */
+    private $deserializer;
 
-        return $data;
+    public function __construct(ObjectDeserializer $deserializer)
+    {
+        $this->deserializer = $deserializer;
+    }
+
+    public function supportsFormat(string $format): bool
+    {
+        return $format === 'array';
+    }
+
+    public function serialize($data)
+    {
+        return json_decode(json_encode($data), true);
+    }
+
+    public function deserialize(string $data)
+    {
+        return $this->deserializer->deserialize($data);
     }
 }

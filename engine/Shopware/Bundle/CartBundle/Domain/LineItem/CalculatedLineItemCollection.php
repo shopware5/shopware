@@ -25,8 +25,8 @@ declare(strict_types=1);
 
 namespace Shopware\Bundle\CartBundle\Domain\LineItem;
 
-use Shopware\Bundle\CartBundle\Domain\Collection;
 use Shopware\Bundle\CartBundle\Domain\Price\PriceCollection;
+use Shopware\Bundle\StoreFrontBundle\Common\Collection;
 
 class CalculatedLineItemCollection extends Collection
 {

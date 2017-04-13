@@ -24,14 +24,14 @@
 
 namespace Shopware\Bundle\SearchBundle\FacetResult;
 
-use Shopware\Bundle\StoreFrontBundle\Common\Extendable;
+use Shopware\Bundle\StoreFrontBundle\Common\Struct;
 
 /**
  * @category  Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class ValueListItem extends Extendable
+class ValueListItem extends Struct
 {
     /**
      * @var int|string

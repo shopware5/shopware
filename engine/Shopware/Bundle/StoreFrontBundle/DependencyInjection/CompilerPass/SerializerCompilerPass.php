@@ -1,6 +1,4 @@
 <?php
-declare(strict_types=1);
-
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -24,20 +22,18 @@ declare(strict_types=1);
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\StoreFrontBundle\Common;
+namespace Shopware\Bundle\StoreFrontBundle\DependencyInjection\CompilerPass;
 
-abstract class KeyCollection extends Collection
+use Shopware\Components\DependencyInjection\Compiler\TagReplaceTrait;
+use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+
+class SerializerCompilerPass implements CompilerPassInterface
 {
-    protected function doAdd($element): void
-    {
-        $key = $this->getKey($element);
-        $this->elements[$key] = $element;
-    }
+    use TagReplaceTrait;
 
-    /**
-     * @param $element
-     *
-     * @return string|int
-     */
-    abstract protected function getKey($element);
+    public function process(ContainerBuilder $container)
+    {
+        $this->replaceArgumentWithTaggedServices($container, 'storefront.serializer', 'storefront.serializer', 0);
+    }
 }

@@ -26,28 +26,22 @@ declare(strict_types=1);
 
 namespace Shopware\Bundle\StoreFrontBundle\Common;
 
-use Shopware\Bundle\CartBundle\Domain\CloneTrait;
-use Shopware\Bundle\CartBundle\Domain\JsonSerializableTrait;
-
 /**
  * @category  Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-abstract class Struct implements \JsonSerializable
+abstract class Struct implements \JsonSerializable, ExtendableInterface
 {
+    //allows to clone full struct with all references
     use CloneTrait;
 
+    //allows json_encode and to decode object via \Shopware\Bundle\StoreFrontBundle\Serializer\JsonSerializer
     use JsonSerializableTrait;
 
-    /**
-     * @param array $options
-     */
-    protected function resolveOptions(array $options)
-    {
-        foreach ($options as $key => $value) {
-            $method = 'set' . ucfirst($key);
-            $this->$method($value);
-        }
-    }
+    //allows to assign array data to this object
+    use AssignArrayTrait;
+
+    //allows to add values to an internal attribute storage
+    use ExtendableTrait;
 }

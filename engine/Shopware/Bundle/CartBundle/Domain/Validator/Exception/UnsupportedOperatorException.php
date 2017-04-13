@@ -29,12 +29,12 @@ class UnsupportedOperatorException extends \Exception
     /**
      * @var string
      */
-    private $operator;
+    protected $operator;
 
     /**
      * @var string
      */
-    private $class;
+    protected $class;
 
     /**
      * @param string $operator

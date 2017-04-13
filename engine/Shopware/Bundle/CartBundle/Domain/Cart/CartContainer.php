@@ -26,35 +26,31 @@ declare(strict_types=1);
 namespace Shopware\Bundle\CartBundle\Domain\Cart;
 
 use Ramsey\Uuid\Uuid;
-use Shopware\Bundle\CartBundle\Domain\JsonSerializableTrait;
-use Shopware\Bundle\CartBundle\Domain\LineItem\LineItem;
 use Shopware\Bundle\CartBundle\Domain\LineItem\LineItemCollection;
-use Shopware\Bundle\CartBundle\Domain\LineItem\LineItemInterface;
+use Shopware\Bundle\StoreFrontBundle\Common\Struct;
 
-class CartContainer implements \JsonSerializable
+class CartContainer extends Struct
 {
-    use JsonSerializableTrait;
-
     /**
      * @var string
      */
-    private $name;
+    protected $name;
 
     /**
      * @var LineItemCollection
      */
-    private $items;
+    protected $lineItems;
 
     /**
      * @var string
      */
-    private $token;
+    protected $token;
 
-    private function __construct(string $name, string $token, LineItemCollection $items)
+    public function __construct(string $name, string $token, LineItemCollection $lineItems)
     {
         $this->name = $name;
         $this->token = $token;
-        $this->items = $items;
+        $this->lineItems = $lineItems;
     }
 
     public static function createNew(string $name): CartContainer
@@ -79,44 +75,6 @@ class CartContainer implements \JsonSerializable
 
     public function getLineItems(): LineItemCollection
     {
-        return $this->items;
-    }
-
-    public function serialize(): string
-    {
-        $items = $this->items->map(function (LineItemInterface $item) {
-            return $item->serialize();
-        });
-
-        return json_encode([
-            'items' => $items,
-            'token' => $this->getToken(),
-            'name' => $this->getName(),
-        ]);
-    }
-
-    public static function unserialize(string $json): CartContainer
-    {
-        $data = json_decode($json, true);
-
-        $items = array_map(function ($item) {
-            return self::unserializeItem($item);
-        }, $data['items']);
-
-        return self::createExisting($data['name'], $data['token'], $items);
-    }
-
-    public static function unserializeItem(string $json): LineItemInterface
-    {
-        $decoded = json_decode($json, true);
-
-        if (is_array($decoded) && array_key_exists('_class', $decoded)) {
-            /** @var LineItemInterface $class */
-            $class = $decoded['_class'];
-
-            return $class::unserialize($json);
-        }
-
-        return LineItem::unserialize($json);
+        return $this->lineItems;
     }
 }

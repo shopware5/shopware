@@ -25,14 +25,14 @@
 namespace Shopware\Bundle\SearchBundle\FacetResult;
 
 use Shopware\Bundle\StoreFrontBundle\Common\Attribute;
-use Shopware\Bundle\StoreFrontBundle\Common\Extendable;
+use Shopware\Bundle\StoreFrontBundle\Common\Struct;
 
 /**
  * @category  Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class TreeItem extends Extendable
+class TreeItem extends Struct
 {
     /**
      * @var int|string

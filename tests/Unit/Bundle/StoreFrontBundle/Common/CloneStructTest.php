@@ -22,9 +22,10 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Unit\StoreFrontBundle\Struct;
+namespace Shopware\Tests\Unit\StoreFrontBundle\Common;
 
 use PHPUnit\Framework\TestCase;
+use Shopware\Bundle\StoreFrontBundle\Common\Collection;
 use Shopware\Bundle\StoreFrontBundle\Common\Struct as BaseStruct;
 
 class SimpleStruct extends BaseStruct
@@ -53,6 +54,19 @@ class SimpleStruct extends BaseStruct
     }
 }
 
+class CollectionStruct extends Collection
+{
+    /**
+     * @var SimpleStruct[]
+     */
+    protected $elements = [];
+
+    public function add(SimpleStruct $struct)
+    {
+        $this->elements[$struct->getValue()] = $struct;
+    }
+}
+
 class CloneStructTest extends TestCase
 {
     public function testNestedStructCloning()
@@ -68,12 +82,25 @@ class CloneStructTest extends TestCase
         $this->assertEquals('initial', $clone->getValue()->getValue());
     }
 
+    public function testCollectionCloning()
+    {
+        $collection = new CollectionStruct([
+            new SimpleStruct(1),
+            new SimpleStruct('A'),
+            new SimpleStruct(2),
+        ]);
+
+        $clone = clone $collection;
+
+        $this->assertEquals($clone, $collection);
+    }
+
     public function testNestedArrayCloning()
     {
         $simple = new SimpleStruct(
             [
-               new SimpleStruct('struct 1'),
-               new SimpleStruct('struct 2'),
+                new SimpleStruct('struct 1'),
+                new SimpleStruct('struct 2'),
             ]
         );
 

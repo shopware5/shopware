@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Price;
 
-use Shopware\Bundle\StoreFrontBundle\Common\Extendable;
+use Shopware\Bundle\StoreFrontBundle\Common\Struct;
 use Shopware\Bundle\StoreFrontBundle\CustomerGroup\CustomerGroup;
 use Shopware\Bundle\StoreFrontBundle\Unit\Unit;
 
@@ -33,7 +33,7 @@ use Shopware\Bundle\StoreFrontBundle\Unit\Unit;
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class PriceRule extends Extendable
+class PriceRule extends Struct
 {
     /**
      * @var int

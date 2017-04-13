@@ -25,9 +25,9 @@
 namespace Shopware\Bundle\StoreFrontBundle\Listing;
 
 use Shopware\Bundle\SearchBundle\FacetInterface;
-use Shopware\Bundle\StoreFrontBundle\Common\Extendable;
+use Shopware\Bundle\StoreFrontBundle\Common\Struct;
 
-class ListingFacet extends Extendable
+class ListingFacet extends Struct
 {
     /**
      * @var int

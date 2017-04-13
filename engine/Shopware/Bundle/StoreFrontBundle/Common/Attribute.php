@@ -43,15 +43,9 @@ class Attribute extends Struct
      *
      * @throws \Exception
      */
-    public function __construct($data = [])
+    public function __construct(array $storage = [])
     {
-        if (!$this->isValid($data)) {
-            throw new \Exception(sprintf(
-                'Class values should be serializable',
-                __CLASS__
-            ));
-        }
-        $this->storage = $data;
+        $this->storage = $storage;
     }
 
     /**
@@ -67,6 +61,17 @@ class Attribute extends Struct
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function jsonSerialize()
+    {
+        $data = $this->storage;
+        $data['_class'] = static::class;
+
+        return $data;
+    }
+
+    /**
      * Sets a single store value.
      * The attribute storage allows only serializable
      * values which allows shopware to serialize the struct elements.
@@ -78,13 +83,6 @@ class Attribute extends Struct
      */
     public function set($name, $value)
     {
-        if (!$this->isValid($value)) {
-            throw new \Exception(sprintf(
-                'Class values should be serializable',
-                __CLASS__
-            ));
-        }
-
         $this->storage[$name] = $value;
     }
 
@@ -93,7 +91,7 @@ class Attribute extends Struct
      *
      * @return array
      */
-    public function toArray()
+    public function toArray(): array
     {
         return $this->storage;
     }
@@ -110,40 +108,8 @@ class Attribute extends Struct
         return $this->storage[$name];
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function jsonSerialize()
+    public function assign(array $options): void
     {
-        $data = $this->storage;
-        $data['_class'] = static::class;
-
-        return $data;
-    }
-
-    /**
-     * @param mixed $value
-     *
-     * @return bool
-     */
-    private function isValid($value)
-    {
-        if (is_scalar($value)) {
-            return true;
-        }
-        if ($value instanceof \JsonSerializable) {
-            return true;
-        }
-        if (!is_array($value)) {
-            return true;
-        }
-
-        foreach ($value as $val) {
-            if (!$this->isValid($val)) {
-                return false;
-            }
-        }
-
-        return true;
+        $this->storage = array_merge($this->storage, $options);
     }
 }

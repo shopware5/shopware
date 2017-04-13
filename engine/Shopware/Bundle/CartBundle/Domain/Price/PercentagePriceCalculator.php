@@ -64,7 +64,7 @@ class PercentagePriceCalculator
      *
      * @return Price
      */
-    public function calculatePrice(
+    public function calculate(
         $percentage,
         PriceCollection $prices,
         ShopContextInterface $context

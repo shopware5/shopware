@@ -24,14 +24,14 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Property;
 
-use Shopware\Bundle\StoreFrontBundle\Common\Extendable;
+use Shopware\Bundle\StoreFrontBundle\Common\Struct;
 
 /**
  * @category  Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class PropertySet extends Extendable
+class PropertySet extends Struct
 {
     /**
      * Constant for the alphanumeric sort configuration of the category filters

@@ -25,7 +25,7 @@ declare(strict_types=1);
 
 namespace Shopware\Bundle\CartBundle\Domain\Voucher;
 
-use Shopware\Bundle\CartBundle\Domain\Collection;
+use Shopware\Bundle\StoreFrontBundle\Common\Collection;
 
 class VoucherCollection extends Collection
 {

@@ -28,13 +28,11 @@ namespace Shopware\Bundle\CartBundle\Infrastructure\View;
 use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
 use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryCollection;
 use Shopware\Bundle\CartBundle\Domain\Error\ErrorCollection;
-use Shopware\Bundle\CartBundle\Domain\JsonSerializableTrait;
 use Shopware\Bundle\CartBundle\Domain\Price\CartPrice;
+use Shopware\Bundle\StoreFrontBundle\Common\Struct;
 
-class ViewCart implements \JsonSerializable
+class ViewCart extends Struct
 {
-    use JsonSerializableTrait;
-
     /**
      * @var ViewLineItemCollection
      */
@@ -45,17 +43,13 @@ class ViewCart implements \JsonSerializable
      */
     protected $calculatedCart;
 
-    final private function __construct(CalculatedCart $calculatedCart)
+    public function __construct(CalculatedCart $calculatedCart)
     {
         $this->calculatedCart = $calculatedCart;
+
         $this->viewLineItems = new ViewLineItemCollection(
             $calculatedCart->getCalculatedLineItems()->filterInstance(ViewLineItemInterface::class)->getIterator()->getArrayCopy()
         );
-    }
-
-    public static function createFromCalculatedCart(CalculatedCart $calculatedCart): ViewCart
-    {
-        return new self($calculatedCart);
     }
 
     public function getPrice(): CartPrice

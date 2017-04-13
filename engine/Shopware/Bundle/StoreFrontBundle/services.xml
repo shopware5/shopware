@@ -72,6 +72,7 @@
 
         <service id="storefront.payment_method.hydrator" class="Shopware\Bundle\StoreFrontBundle\PaymentMethod\PaymentMethodHydrator">
             <argument type="service" id="storefront.common.attribute_hydrator" />
+            <argument type="service" id="storefront.serializer.json" />
         </service>
 
         <service id="storefront.shipping_method.service" class="Shopware\Bundle\StoreFrontBundle\ShippingMethod\ShippingMethodService">
@@ -514,5 +515,22 @@
             <argument type="service" id="storefront.category.depth_service" />
             <argument type="service" id="storefront.category.service" />
         </service>
+
+        <service id="storefront.serializer.object_deserializer" class="Shopware\Bundle\StoreFrontBundle\Serializer\ObjectDeserializer"/>
+
+        <service id="storefront.serializer" class="Shopware\Bundle\StoreFrontBundle\Serializer\Serializer">
+            <argument type="collection" />
+        </service>
+
+        <service id="storefront.serializer.json" class="Shopware\Bundle\StoreFrontBundle\Serializer\JsonSerializer">
+            <argument type="service" id="storefront.serializer.object_deserializer" />
+            <tag name="storefront.serializer" />
+        </service>
+
+        <service id="storefront.serializer.array" class="Shopware\Bundle\StoreFrontBundle\Serializer\ArraySerializer">
+            <argument id="storefront.serializer.object_deserializer" type="service"/>
+            <tag name="storefront.serializer"/>
+        </service>
+
     </services>
 </container>

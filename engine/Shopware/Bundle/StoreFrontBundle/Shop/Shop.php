@@ -25,20 +25,19 @@
 namespace Shopware\Bundle\StoreFrontBundle\Shop;
 
 use Shopware\Bundle\StoreFrontBundle\Category\Category;
-use Shopware\Bundle\StoreFrontBundle\Common\Extendable;
+use Shopware\Bundle\StoreFrontBundle\Common\Struct;
 use Shopware\Bundle\StoreFrontBundle\Country\Country;
 use Shopware\Bundle\StoreFrontBundle\Currency\Currency;
 use Shopware\Bundle\StoreFrontBundle\CustomerGroup\CustomerGroup;
 use Shopware\Bundle\StoreFrontBundle\PaymentMethod\PaymentMethod;
 use Shopware\Bundle\StoreFrontBundle\ShippingMethod\ShippingMethod;
-use Shopware\Models\Shop\Shop as ShopEntity;
 
 /**
  * @category  Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Shop extends Extendable
+class Shop extends Struct
 {
     /**
      * @var int
@@ -147,39 +146,6 @@ class Shop extends Extendable
      * @var string
      */
     protected $taxCalculation;
-
-    /**
-     * @param ShopEntity $shop
-     *
-     * @return Shop
-     */
-    public static function createFromShopEntity(ShopEntity $shop)
-    {
-        $struct = new self();
-        $struct->setId($shop->getId());
-        $struct->setParentId($shop->getMain() ? $shop->getMain()->getId() : $shop->getId());
-
-        $struct->setCustomerScope($shop->getMain() ? $shop->getMain()->getCustomerScope() : $shop->getCustomerScope());
-        $struct->setIsDefault($shop->getDefault());
-        $struct->setName($shop->getName());
-        $struct->setHost($shop->getHost());
-        $struct->setPath($shop->getBasePath());
-        $struct->setUrl($shop->getBaseUrl());
-        $struct->setSecure($shop->getSecure());
-        if ($shop->getCategory()) {
-            $struct->setCategory(
-                Category::createFromCategoryEntity($shop->getCategory())
-            );
-        }
-
-        if ($shop->getFallback()) {
-            $struct->setFallbackId(
-                $shop->getFallback()->getId()
-            );
-        }
-
-        return $struct;
-    }
 
     /**
      * @param int $id

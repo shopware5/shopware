@@ -24,14 +24,14 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Unit;
 
-use Shopware\Bundle\StoreFrontBundle\Common\Extendable;
+use Shopware\Bundle\StoreFrontBundle\Common\Struct;
 
 /**
  * @category  Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Unit extends Extendable
+class Unit extends Struct
 {
     /**
      * Unique identifier of the struct.

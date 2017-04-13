@@ -43,6 +43,8 @@ use Shopware\Bundle\StoreFrontBundle\Common\FieldHelper;
 use Shopware\Bundle\StoreFrontBundle\PaymentMethod\PaymentMethodGateway;
 use Shopware\Bundle\StoreFrontBundle\PaymentMethod\PaymentMethodHydrator;
 use Shopware\Bundle\StoreFrontBundle\PaymentMethod\PaymentMethodService;
+use Shopware\Bundle\StoreFrontBundle\Serializer\JsonSerializer;
+use Shopware\Bundle\StoreFrontBundle\Serializer\ObjectDeserializer;
 use Shopware\Tests\Unit\Bundle\CartBundle\Common\Generator;
 
 class PaymentMethodServiceTest extends TestCase
@@ -67,7 +69,8 @@ class PaymentMethodServiceTest extends TestCase
         );
 
         $hydrator = new PaymentMethodHydrator(
-            new AttributeHydrator($fieldHelper)
+            new AttributeHydrator($fieldHelper),
+            new JsonSerializer(new ObjectDeserializer())
         );
 
         $filter = $this->createMock(ValidatableFilter::class);
@@ -96,9 +99,8 @@ class PaymentMethodServiceTest extends TestCase
     public function dataSets()
     {
         $hydrator = new PaymentMethodHydrator(
-            new AttributeHydrator(
-                $this->createMock(FieldHelper::class)
-            )
+            new AttributeHydrator($this->createMock(FieldHelper::class)),
+            new JsonSerializer(new ObjectDeserializer())
         );
 
         return [

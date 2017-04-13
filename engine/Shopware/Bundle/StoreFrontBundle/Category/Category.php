@@ -26,17 +26,16 @@ declare(strict_types=1);
 
 namespace Shopware\Bundle\StoreFrontBundle\Category;
 
-use Shopware\Bundle\StoreFrontBundle\Common\Extendable;
+use Shopware\Bundle\StoreFrontBundle\Common\Struct;
 use Shopware\Bundle\StoreFrontBundle\Media\Media;
 use Shopware\Bundle\StoreFrontBundle\ProductStream\ProductStream;
-use Shopware\Models\Category\Category as CategoryEntity;
 
 /**
  * @category  Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Category extends Extendable
+class Category extends Struct
 {
     /**
      * @var int
@@ -143,49 +142,12 @@ class Category extends Extendable
      */
     protected $children = [];
 
-    private function __construct()
+    public function __construct(int $id, ?int $parentId, array $path, string $name)
     {
-    }
-
-    /**
-     * @param int      $id
-     * @param int|null $parentId
-     * @param array    $path
-     * @param string   $name
-     * @param array    $options
-     *
-     * @return Category
-     */
-    public static function create(int $id, ?int $parentId, array $path, string $name, array $options = [])
-    {
-        $self = new self();
-        $self->id = $id;
-        $self->parentId = $parentId;
-        $self->path = $path;
-        $self->name = $name;
-
-        unset($options['id'], $options['parentId'], $options['path'], $options['name']);
-        $self->resolveOptions($options);
-
-        return $self;
-    }
-
-    /**
-     * @param CategoryEntity $category
-     *
-     * @return Category
-     */
-    public static function createFromCategoryEntity(CategoryEntity $category)
-    {
-        return self::create(
-            $category->getId(),
-            $category->getParentId(),
-            array_filter(explode('|', (string) $category->getPath())),
-            $category->getName(),
-            [
-                'position' => (int) $category->getPosition(),
-            ]
-        );
+        $this->id = $id;
+        $this->parentId = $parentId;
+        $this->path = $path;
+        $this->name = $name;
     }
 
     /**

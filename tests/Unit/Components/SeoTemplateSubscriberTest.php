@@ -323,8 +323,7 @@ sCategory',
      */
     private function createContextService($categoryId): \PHPUnit_Framework_MockObject_MockObject
     {
-        $category = Category::create($categoryId, null, [null], 'Test');
-        $category->setId($categoryId);
+        $category = new Category($categoryId, null, [null], 'Test');
         $shop = new Shop();
         $shop->setCategory($category);
 

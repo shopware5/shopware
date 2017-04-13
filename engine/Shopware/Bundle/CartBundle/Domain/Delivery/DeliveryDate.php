@@ -25,12 +25,10 @@ declare(strict_types=1);
 
 namespace Shopware\Bundle\CartBundle\Domain\Delivery;
 
-use Shopware\Bundle\CartBundle\Domain\JsonSerializableTrait;
+use Shopware\Bundle\StoreFrontBundle\Common\Struct;
 
-class DeliveryDate implements \JsonSerializable
+class DeliveryDate extends Struct
 {
-    use JsonSerializableTrait;
-
     /**
      * @var \DateTime
      */

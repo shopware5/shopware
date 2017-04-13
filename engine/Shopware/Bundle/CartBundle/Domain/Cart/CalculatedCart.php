@@ -27,14 +27,12 @@ namespace Shopware\Bundle\CartBundle\Domain\Cart;
 
 use Shopware\Bundle\CartBundle\Domain\Delivery\DeliveryCollection;
 use Shopware\Bundle\CartBundle\Domain\Error\ErrorCollection;
-use Shopware\Bundle\CartBundle\Domain\JsonSerializableTrait;
 use Shopware\Bundle\CartBundle\Domain\LineItem\CalculatedLineItemCollection;
 use Shopware\Bundle\CartBundle\Domain\Price\CartPrice;
+use Shopware\Bundle\StoreFrontBundle\Common\Struct;
 
-class CalculatedCart implements \JsonSerializable
+class CalculatedCart extends Struct
 {
-    use JsonSerializableTrait;
-
     /**
      * @var CartPrice
      */

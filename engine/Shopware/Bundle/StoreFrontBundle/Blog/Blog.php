@@ -24,10 +24,10 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Blog;
 
-use Shopware\Bundle\StoreFrontBundle\Common\Extendable;
+use Shopware\Bundle\StoreFrontBundle\Common\Struct;
 use Shopware\Bundle\StoreFrontBundle\Product\ListProduct;
 
-class Blog extends Extendable
+class Blog extends Struct
 {
     /**
      * @var int

@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\CartBundle\Domain\Error;
 
-use Shopware\Bundle\CartBundle\Domain\Collection;
+use Shopware\Bundle\StoreFrontBundle\Common\Collection;
 
 class ErrorCollection extends Collection
 {
@@ -36,6 +36,11 @@ class ErrorCollection extends Collection
     public function add(Error $error): void
     {
         parent::doAdd($error);
+    }
+
+    public function get($index): ? Error
+    {
+        return $this->elements[$index];
     }
 
     public function has($errorClass): bool

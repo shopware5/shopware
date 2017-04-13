@@ -25,15 +25,13 @@ declare(strict_types=1);
 
 namespace Shopware\Bundle\CartBundle\Domain\Delivery;
 
-use Shopware\Bundle\CartBundle\Domain\JsonSerializableTrait;
 use Shopware\Bundle\CartBundle\Domain\LineItem\CalculatedLineItemInterface;
 use Shopware\Bundle\CartBundle\Domain\LineItem\Deliverable;
 use Shopware\Bundle\CartBundle\Domain\Price\Price;
+use Shopware\Bundle\StoreFrontBundle\Common\Struct;
 
-class DeliveryPosition implements \JsonSerializable
+class DeliveryPosition extends Struct
 {
-    use JsonSerializableTrait;
-
     /**
      * @var CalculatedLineItemInterface|Deliverable
      */
@@ -57,7 +55,7 @@ class DeliveryPosition implements \JsonSerializable
     /**
      * @var DeliveryDate
      */
-    private $deliveryDate;
+    protected $deliveryDate;
 
     /**
      * @param string                                  $identifier

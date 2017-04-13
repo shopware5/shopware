@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\CartBundle\Domain\Delivery;
 
-use Shopware\Bundle\CartBundle\Domain\Collection;
+use Shopware\Bundle\StoreFrontBundle\Common\Collection;
 
 class DeliveryInformationCollection extends Collection
 {

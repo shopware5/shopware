@@ -32,27 +32,27 @@ class Voucher
     /**
      * @var string
      */
-    private $code;
+    protected $code;
 
     /**
      * @var string
      */
-    private $mode;
+    protected $mode;
 
     /**
      * @var Rule|null
      */
-    private $rule;
+    protected $rule;
 
     /**
      * @var float
      */
-    private $percentageDiscount;
+    protected $percentageDiscount;
 
     /**
      * @var PriceDefinition|null
      */
-    private $price;
+    protected $price;
 
     public function __construct(string $code, string $mode, ?float $percentageDiscount, ?PriceDefinition $price, ?Rule $rule)
     {

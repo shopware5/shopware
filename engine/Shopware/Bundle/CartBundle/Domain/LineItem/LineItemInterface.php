@@ -41,8 +41,4 @@ interface LineItemInterface extends \JsonSerializable
     public function getExtraData(): array;
 
     public function setQuantity(int $quantity): void;
-
-    public function serialize(): string;
-
-    public static function unserialize(string $data): LineItemInterface;
 }

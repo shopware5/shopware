@@ -24,9 +24,8 @@
 
 namespace Shopware\Bundle\CartBundle\Domain\Validator\Data;
 
-use Shopware\Bundle\CartBundle\Domain\JsonSerializableTrait;
+use Shopware\Bundle\StoreFrontBundle\Common\Struct;
 
-abstract class RuleData implements \JsonSerializable
+abstract class RuleData extends Struct
 {
-    use JsonSerializableTrait;
 }

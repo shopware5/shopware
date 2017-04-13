@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -23,25 +22,20 @@ declare(strict_types=1);
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\CartBundle\Infrastructure;
+namespace Shopware\Bundle\StoreFrontBundle\Common;
 
-trait SortArrayByKeysTrait
+trait AssignArrayTrait
 {
-    /**
-     * @param int[]|string[] $sortedKeys
-     * @param array          $indexedArray - indexed with keys
-     *
-     * @return array
-     */
-    protected function sortIndexedArrayByKeys(array $sortedKeys, array $indexedArray): array
+    public function assign(array $options): void
     {
-        $sorted = [];
-        foreach ($sortedKeys as $index) {
-            if (array_key_exists($index, $indexedArray)) {
-                $sorted[$index] = $indexedArray[$index];
+        foreach ($options as $key => $value) {
+            $setter = 'set' . ucfirst($key);
+            try {
+                $this->$setter($value);
+            } catch (\TypeError $error) {
+                throw $error;
+            } catch (\Error | \Exception $error) {
             }
         }
-
-        return $sorted;
     }
 }

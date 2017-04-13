@@ -24,14 +24,14 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Configurator;
 
-use Shopware\Bundle\StoreFrontBundle\Common\Extendable;
+use Shopware\Bundle\StoreFrontBundle\Common\Struct;
 
 /**
  * @category  Shopware
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class ConfiguratorSet extends Extendable
+class ConfiguratorSet extends Struct
 {
     /**
      * @var int

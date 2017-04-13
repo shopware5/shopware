@@ -25,19 +25,21 @@ declare(strict_types=1);
 
 namespace Shopware\Bundle\CartBundle\Infrastructure\View;
 
-use Shopware\Bundle\CartBundle\Domain\JsonSerializableTrait;
 use Shopware\Bundle\CartBundle\Domain\LineItem\CalculatedLineItemInterface;
 use Shopware\Bundle\CartBundle\Domain\Product\CalculatedProduct;
 use Shopware\Bundle\StoreFrontBundle\Product\SimpleProduct;
 
 class ViewProduct extends SimpleProduct implements ViewLineItemInterface
 {
-    use JsonSerializableTrait;
-
     /**
      * @var CalculatedProduct
      */
     protected $product;
+
+    /**
+     * @var string
+     */
+    protected $type = 'product';
 
     final public function __construct(int $id, int $variantId, string $number)
     {

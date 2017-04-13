@@ -34,8 +34,8 @@
         {block name='frontend_checkout_ajax_cart_item_container'}
             <div class="item--container">
                 {block name='frontend_checkout_ajax_cart_item_container_inner'}
-                    {if $cart.viewLineItems}
-                        {foreach $cart.viewLineItems as $lineItem}
+                    {if $cart.viewLineItems.elements}
+                        {foreach $cart.viewLineItems.elements as $lineItem}
                             {block name='frontend_checkout_ajax_cart_row'}
                                 {include file="frontend/checkout/ajax_cart_item.tpl" lineItem=$lineItem}
                             {/block}
@@ -54,12 +54,12 @@
         {/block}
 
         {block name='frontend_checkout_ajax_cart_prices_container'}
-            {if $sBasket.content}
+            {if $cart.viewLineItems.elements}
                 <div class="prices--container">
                     {block name='frontend_checkout_ajax_cart_prices_container_inner'}
                         <div class="prices--articles">
                             <span class="prices--articles-text">{s name="AjaxCartTotalAmount"}{/s}</span>
-                            <span class="prices--articles-amount">{$sBasket.Amount|currency}</span>
+                            <span class="prices--articles-amount">{$cart.calculatedCart.price.totalPrice|currency}</span>
                         </div>
                     {/block}
                 </div>

@@ -29,7 +29,7 @@ class LineItemNotFoundException extends \Exception
     /**
      * @var string
      */
-    private $identifier;
+    protected $identifier;
 
     public function __construct(string $identifier)
     {

@@ -138,7 +138,7 @@
                 {* Taxes *}
                 {block name='frontend_checkout_cart_footer_field_labels_taxes'}
 
-                    {foreach $cart.calculatedCart.price.calculatedTaxes as $rule}
+                    {foreach $cart.calculatedCart.price.calculatedTaxes.elements as $rule}
                         {$value = $rule.tax}
                         {$rate = $rule.taxRate}
 

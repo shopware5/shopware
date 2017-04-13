@@ -25,8 +25,8 @@
 namespace Shopware\Bundle\StoreFrontBundle\Country;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Bundle\CartBundle\Infrastructure\SortArrayByKeysTrait;
 use Shopware\Bundle\StoreFrontBundle\Common\FieldHelper;
+use Shopware\Bundle\StoreFrontBundle\Common\SortArrayByKeysTrait;
 use Shopware\Bundle\StoreFrontBundle\Context\TranslationContext;
 
 /**

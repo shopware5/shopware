@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Currency;
 
-use Shopware\Bundle\StoreFrontBundle\Common\Extendable;
+use Shopware\Bundle\StoreFrontBundle\Common\Struct;
 use Shopware\Models\Shop\Currency as CurrencyEntity;
 
 /**
@@ -32,7 +32,7 @@ use Shopware\Models\Shop\Currency as CurrencyEntity;
  *
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Currency extends Extendable
+class Currency extends Struct
 {
     /**
      * @var int

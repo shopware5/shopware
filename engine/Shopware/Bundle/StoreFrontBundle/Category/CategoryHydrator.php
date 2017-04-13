@@ -73,11 +73,14 @@ class CategoryHydrator extends Hydrator
      */
     public function hydrate(array $data)
     {
-        $category = Category::create(
+        $category = new Category(
             (int) $data['__category_id'],
             (int) $data['__category_parent_id'],
             array_filter(explode('|', $data['__category_path'])),
-            (string) $data['__category_description'],
+            (string) $data['__category_description']
+        );
+
+        $category->assign(
             [
                 'position' => (int) $data['__category_position'],
                 'name' => (string) $data['__category_description'],

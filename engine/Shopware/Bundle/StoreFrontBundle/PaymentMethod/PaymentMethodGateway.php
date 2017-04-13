@@ -27,8 +27,8 @@ namespace Shopware\Bundle\StoreFrontBundle\PaymentMethod;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
-use Shopware\Bundle\CartBundle\Infrastructure\SortArrayByKeysTrait;
 use Shopware\Bundle\StoreFrontBundle\Common\FieldHelper;
+use Shopware\Bundle\StoreFrontBundle\Common\SortArrayByKeysTrait;
 use Shopware\Bundle\StoreFrontBundle\Context\TranslationContext;
 
 class PaymentMethodGateway

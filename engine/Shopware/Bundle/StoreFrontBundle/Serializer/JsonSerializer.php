@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -23,35 +22,37 @@ declare(strict_types=1);
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\CartBundle\Domain;
+namespace Shopware\Bundle\StoreFrontBundle\Serializer;
 
-trait CloneTrait
+class JsonSerializer implements SerializerInterface
 {
-    public function __clone()
+    /**
+     * @var ObjectDeserializer
+     */
+    private $deserializer;
+
+    /**
+     * @param ObjectDeserializer $deserializer
+     */
+    public function __construct(ObjectDeserializer $deserializer)
     {
-        foreach ($this as $key => $value) {
-            if (is_object($value)) {
-                $this->$key = clone $this->$key;
-            } elseif (is_array($value)) {
-                $this->$key = $this->cloneArray($value);
-            }
-        }
+        $this->deserializer = $deserializer;
     }
 
-    private function cloneArray(array $array): array
+    public function supportsFormat(string $format): bool
     {
-        $newValue = [];
+        return $format === 'json';
+    }
 
-        foreach ($array as $index => $value) {
-            if (is_object($value)) {
-                $newValue[$index] = clone $value;
-            } elseif (is_array($value)) {
-                $newValue[$index] = $this->cloneArray($value);
-            } else {
-                $newValue[$index] = $value;
-            }
-        }
+    public function serialize($data)
+    {
+        return json_encode($data);
+    }
 
-        return $newValue;
+    public function deserialize(string $data)
+    {
+        $data = json_decode($data, true);
+
+        return $this->deserializer->deserialize($data);
     }
 }

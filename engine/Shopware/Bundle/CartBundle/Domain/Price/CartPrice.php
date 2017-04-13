@@ -25,14 +25,12 @@ declare(strict_types=1);
 
 namespace Shopware\Bundle\CartBundle\Domain\Price;
 
-use Shopware\Bundle\CartBundle\Domain\JsonSerializableTrait;
 use Shopware\Bundle\CartBundle\Domain\Tax\CalculatedTaxCollection;
 use Shopware\Bundle\CartBundle\Domain\Tax\TaxRuleCollection;
+use Shopware\Bundle\StoreFrontBundle\Common\Struct;
 
-class CartPrice implements \JsonSerializable
+class CartPrice extends Struct
 {
-    use JsonSerializableTrait;
-
     /**
      * @var float
      */

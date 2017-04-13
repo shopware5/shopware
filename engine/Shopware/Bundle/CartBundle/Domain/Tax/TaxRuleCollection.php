@@ -25,7 +25,7 @@ declare(strict_types=1);
 
 namespace Shopware\Bundle\CartBundle\Domain\Tax;
 
-use Shopware\Bundle\CartBundle\Domain\Collection;
+use Shopware\Bundle\StoreFrontBundle\Common\Collection;
 
 class TaxRuleCollection extends Collection
 {

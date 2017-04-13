@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -22,27 +23,25 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\CartBundle\Infrastructure;
+namespace Shopware\Bundle\StoreFrontBundle\Common;
 
-use Shopware\Bundle\CartBundle\Infrastructure\Exception\NotSupportedSerializerFormatException;
-
-class Serializer
+trait SortArrayByKeysTrait
 {
-    const FORMAT_JSON = 'json';
-
-    const FORMAT_ARRAY = 'array';
-
-    public function serialize($data, string $format)
+    /**
+     * @param int[]|string[] $sortedKeys
+     * @param array          $indexedArray - indexed with keys
+     *
+     * @return array
+     */
+    protected function sortIndexedArrayByKeys(array $sortedKeys, array $indexedArray): array
     {
-        switch ($format) {
-            case self::FORMAT_ARRAY:
-                return json_decode(json_encode($data), true);
-
-            case self::FORMAT_JSON:
-                return json_encode($data);
-
-            default:
-                throw new NotSupportedSerializerFormatException($data, $format);
+        $sorted = [];
+        foreach ($sortedKeys as $index) {
+            if (array_key_exists($index, $indexedArray)) {
+                $sorted[$index] = $indexedArray[$index];
+            }
         }
+
+        return $sorted;
     }
 }

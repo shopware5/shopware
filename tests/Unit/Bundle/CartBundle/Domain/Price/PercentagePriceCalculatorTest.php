@@ -72,7 +72,7 @@ class PercentagePriceCalculatorTest extends \PHPUnit\Framework\TestCase
             new PercentageTaxRuleBuilder()
         );
 
-        $price = $calculator->calculatePrice(
+        $price = $calculator->calculate(
             $percentage,
             $prices,
             Generator::createContext()

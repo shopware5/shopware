@@ -25,12 +25,10 @@ declare(strict_types=1);
 
 namespace Shopware\Bundle\CartBundle\Domain\LineItem;
 
-use Shopware\Bundle\CartBundle\Domain\JsonSerializableTrait;
+use Shopware\Bundle\StoreFrontBundle\Common\Struct;
 
-class LineItem implements LineItemInterface
+class LineItem extends Struct implements LineItemInterface
 {
-    use JsonSerializableTrait;
-
     /**
      * @var string
      */
@@ -86,22 +84,5 @@ class LineItem implements LineItemInterface
     public function getExtraData(): array
     {
         return $this->extraData;
-    }
-
-    public function serialize(): string
-    {
-        return json_encode(get_object_vars($this));
-    }
-
-    public static function unserialize(string $data): LineItemInterface
-    {
-        $data = json_decode($data, true);
-
-        return new self(
-            (string) $data['identifier'],
-            (string) $data['type'],
-            (int) $data['quantity'],
-            (array) $data['extraData']
-        );
     }
 }
