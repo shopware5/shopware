@@ -24,6 +24,7 @@
 
 use Doctrine\DBAL\Connection;
 use Shopware\Components\CSRFWhitelistAware;
+use Shopware\Models\Shop\Locale;
 
 /**
  * Backend Controller for the Shopware global configured stores.
@@ -750,7 +751,7 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
 
     public function getLocalesAction()
     {
-        $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Locale');
+        $repository = $this->get('models')->getRepository(Locale::class);
 
         $builder = $repository->createQueryBuilder('l');
         $builder->select([
@@ -759,15 +760,22 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
             'l.language as language',
             'l.territory as territory',
         ]);
+
         $builder->addFilter((array) $this->Request()->getParam('filter', []));
-        $builder->addOrderBy((array) $this->Request()->getParam('sort', []));
+
+        $sort = $this->Request()->getParam('sort', []);
+        if (is_array($sort) && count($sort) === 0) {
+            $builder->addOrderBy('l.language');
+            $builder->addOrderBy('l.territory');
+        }
+        $builder->addOrderBy($sort);
 
         $builder->setFirstResult($this->Request()->getParam('start'))
             ->setMaxResults($this->Request()->getParam('limit'));
 
         $query = $builder->getQuery();
 
-        $total = Shopware()->Models()->getQueryCount($query);
+        $total = $this->get('models')->getQueryCount($query);
         $data = $query->getArrayResult();
 
         $this->View()->assign(['success' => true, 'data' => $data, 'total' => $total]);
