@@ -29,12 +29,12 @@ class NotSupportedSerializerFormatException extends \Exception
     /**
      * @var mixed
      */
-    private $data;
+    protected $data;
 
     /**
      * @var string
      */
-    private $format;
+    protected $format;
 
     public function __construct($data, string $format)
     {

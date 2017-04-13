@@ -25,16 +25,12 @@ declare(strict_types=1);
 
 namespace Shopware\Bundle\StoreFrontBundle\PaymentMethod;
 
-use Shopware\Bundle\CartBundle\Domain\CloneTrait;
-use Shopware\Bundle\CartBundle\Domain\JsonSerializableTrait;
 use Shopware\Bundle\CartBundle\Domain\Validator\Rule\Rule;
 use Shopware\Bundle\CartBundle\Domain\Validator\Validatable;
 use Shopware\Bundle\StoreFrontBundle\Common\Struct;
 
 class PaymentMethod extends Struct implements Validatable
 {
-    use CloneTrait, JsonSerializableTrait;
-
     /**
      * @var int
      */

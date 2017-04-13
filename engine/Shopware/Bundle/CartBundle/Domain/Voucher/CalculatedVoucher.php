@@ -59,6 +59,11 @@ class CalculatedVoucher extends Struct implements CalculatedLineItemInterface, V
      */
     protected $identifier;
 
+    /**
+     * @var string
+     */
+    protected $type = 'voucher';
+
     public function __construct(string $code, LineItemInterface $lineItem, Price $price)
     {
         $this->price = $price;

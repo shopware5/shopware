@@ -38,6 +38,11 @@ class ErrorCollection extends Collection
         parent::doAdd($error);
     }
 
+    public function get($index): ? Error
+    {
+        return $this->elements[$index];
+    }
+
     public function has($errorClass): bool
     {
         foreach ($this->elements as $element) {

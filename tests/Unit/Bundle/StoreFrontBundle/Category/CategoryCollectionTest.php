@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Unit\Bundle\StoreFrontBundle\Struct;
+namespace Shopware\Tests\Unit\Bundle\StoreFrontBundle\Category;
 
 use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\StoreFrontBundle\Category\Category;

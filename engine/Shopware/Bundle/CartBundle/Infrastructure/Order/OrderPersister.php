@@ -46,7 +46,7 @@ class OrderPersister implements OrderPersisterInterface
 
     public function persist(CalculatedCart $calculatedCart, ShopContextInterface $context): void
     {
-        $this->connection->executeQuery(
+        $this->connection->executeUpdate(
             'INSERT INTO `s_cart_order` (`token`, `name`, `content`, `order_time`) 
              VALUES (:token, :name, :content, :order_time)',
             [

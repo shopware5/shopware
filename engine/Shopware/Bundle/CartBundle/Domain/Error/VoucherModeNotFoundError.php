@@ -29,12 +29,12 @@ class VoucherModeNotFoundError extends Error
     /**
      * @var string
      */
-    private $code;
+    protected $code;
 
     /**
      * @var string
      */
-    private $mode;
+    protected $mode;
 
     public function __construct(string $code, string $mode)
     {

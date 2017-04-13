@@ -23,7 +23,7 @@ declare(strict_types=1);
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\CartBundle\Infrastructure;
+namespace Shopware\Bundle\StoreFrontBundle\Common;
 
 trait SortArrayByKeysTrait
 {

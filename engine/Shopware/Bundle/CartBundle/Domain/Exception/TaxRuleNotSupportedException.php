@@ -31,7 +31,7 @@ class TaxRuleNotSupportedException extends \Exception
     /**
      * @var TaxRuleInterface
      */
-    private $taxRule;
+    protected $taxRule;
 
     public function __construct(TaxRuleInterface $taxRule)
     {

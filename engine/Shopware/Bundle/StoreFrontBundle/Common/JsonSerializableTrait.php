@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -24,18 +25,13 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Common;
 
-trait AssignArrayTrait
+trait JsonSerializableTrait
 {
-    public function assign(array $options): void
+    public function jsonSerialize(): array
     {
-        foreach ($options as $key => $value) {
-            $setter = 'set' . ucfirst($key);
-            try {
-                $this->$setter($value);
-            } catch (\TypeError $error) {
-                throw $error;
-            } catch (\Error | \Exception $error) {
-            }
-        }
+        $data = get_object_vars($this);
+        $data['_class'] = get_class($this);
+
+        return $data;
     }
 }

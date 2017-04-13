@@ -22,20 +22,26 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\StoreFrontBundle\Common;
+namespace Shopware\Tests\Unit\Bundle\CartBundle\Infrastructure\Cart;
 
-trait AssignArrayTrait
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\TestCase;
+use Shopware\Bundle\CartBundle\Domain\Cart\CalculatedCart;
+use Shopware\Bundle\CartBundle\Infrastructure\Order\OrderPersister;
+use Shopware\Bundle\StoreFrontBundle\Context\ShopContext;
+
+class OrderPersisterTest extends TestCase
 {
-    public function assign(array $options): void
+    public function testSave()
     {
-        foreach ($options as $key => $value) {
-            $setter = 'set' . ucfirst($key);
-            try {
-                $this->$setter($value);
-            } catch (\TypeError $error) {
-                throw $error;
-            } catch (\Error | \Exception $error) {
-            }
-        }
+        $connection = $this->createMock(Connection::class);
+        $connection->expects($this->once())->method('executeUpdate');
+
+        $persister = new OrderPersister($connection);
+
+        $persister->persist(
+            $this->createMock(CalculatedCart::class),
+            $this->createMock(ShopContext::class)
+        );
     }
 }

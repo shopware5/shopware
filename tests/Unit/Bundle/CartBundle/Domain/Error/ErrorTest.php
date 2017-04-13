@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -23,15 +22,42 @@ declare(strict_types=1);
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\CartBundle\Domain;
+namespace Shopware\Tests\Unit\Bundle\CartBundle\Domain\Error;
 
-trait JsonSerializableTrait
+use PHPUnit\Framework\TestCase;
+
+class ErrorTest extends TestCase
 {
-    public function jsonSerialize(): array
+    public function testJsonSerialize()
     {
-        $data = get_object_vars($this);
-        $data['_class'] = get_class($this);
+        $error = new SimpleError();
+        $this->assertEquals(
+            [
+                '_class' => SimpleError::class,
+                'messageKey' => 'message_key',
+                'level' => 1,
+                'message' => 'message',
+                'attributes' => [],
+            ],
+            json_decode(json_encode($error), true)
+        );
+    }
+}
 
-        return $data;
+class SimpleError extends \Shopware\Bundle\CartBundle\Domain\Error\Error
+{
+    public function getMessageKey(): string
+    {
+        return 'message_key';
+    }
+
+    public function getMessage(): string
+    {
+        return 'message';
+    }
+
+    public function getLevel(): int
+    {
+        return 1;
     }
 }

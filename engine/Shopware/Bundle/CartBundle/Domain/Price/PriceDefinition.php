@@ -48,7 +48,7 @@ class PriceDefinition extends Struct
     /**
      * @var bool
      */
-    private $isCalculated;
+    protected $isCalculated;
 
     public function __construct(
         float $price,

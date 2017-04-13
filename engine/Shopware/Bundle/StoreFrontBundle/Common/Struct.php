@@ -26,9 +26,6 @@ declare(strict_types=1);
 
 namespace Shopware\Bundle\StoreFrontBundle\Common;
 
-use Shopware\Bundle\CartBundle\Domain\CloneTrait;
-use Shopware\Bundle\CartBundle\Domain\JsonSerializableTrait;
-
 /**
  * @category  Shopware
  *

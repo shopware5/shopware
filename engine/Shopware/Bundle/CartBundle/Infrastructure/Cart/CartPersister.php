@@ -68,7 +68,7 @@ class CartPersister implements CartPersisterInterface
 
     public function save(CartContainer $cartContainer): void
     {
-        $this->connection->executeQuery(
+        $this->connection->executeUpdate(
             'INSERT INTO `s_cart` (`token`, `name`, `content`) 
              VALUES (:token, :name, :content)
              ON DUPLICATE KEY UPDATE `name` = :name, `content` = :content',

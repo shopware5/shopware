@@ -324,7 +324,7 @@
                         {/block}
 
                         {* Article items *}
-                        {foreach $cart.viewLineItems as $lineItem}
+                        {foreach $cart.viewLineItems.elements as $lineItem}
                             {block name='frontend_checkout_finish_item'}
                                 {include file='frontend/checkout/finish_item.tpl' isLast=$lineItem@last}
                             {/block}

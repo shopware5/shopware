@@ -32,12 +32,12 @@ class PercentageTaxRule extends Struct implements TaxRuleInterface
     /**
      * @var float
      */
-    private $rate;
+    protected $rate;
 
     /**
      * @var float
      */
-    private $percentage;
+    protected $percentage;
 
     public function __construct(float $rate, float $percentage)
     {

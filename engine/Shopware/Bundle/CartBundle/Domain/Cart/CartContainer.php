@@ -34,23 +34,23 @@ class CartContainer extends Struct
     /**
      * @var string
      */
-    private $name;
+    protected $name;
 
     /**
      * @var LineItemCollection
      */
-    private $items;
+    protected $lineItems;
 
     /**
      * @var string
      */
-    private $token;
+    protected $token;
 
-    public function __construct(string $name, string $token, LineItemCollection $items)
+    public function __construct(string $name, string $token, LineItemCollection $lineItems)
     {
         $this->name = $name;
         $this->token = $token;
-        $this->items = $items;
+        $this->lineItems = $lineItems;
     }
 
     public static function createNew(string $name): CartContainer
@@ -75,6 +75,6 @@ class CartContainer extends Struct
 
     public function getLineItems(): LineItemCollection
     {
-        return $this->items;
+        return $this->lineItems;
     }
 }

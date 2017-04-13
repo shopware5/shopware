@@ -40,8 +40,7 @@ abstract class Error extends Struct
 
     public function jsonSerialize(): array
     {
-        $data = get_object_vars($this);
-        $data['_class'] = get_class($this);
+        $data = parent::jsonSerialize();
         $data['level'] = $this->getLevel();
         $data['message'] = $this->getMessage();
         $data['messageKey'] = $this->getMessageKey();

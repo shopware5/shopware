@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Unit\StoreFrontBundle\Struct;
+namespace Shopware\Tests\Unit\StoreFrontBundle\Common;
 
 use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\StoreFrontBundle\Common\Collection;
@@ -53,6 +53,7 @@ class SimpleStruct extends BaseStruct
         $this->value = $value;
     }
 }
+
 class CollectionStruct extends Collection
 {
     /**
@@ -98,8 +99,8 @@ class CloneStructTest extends TestCase
     {
         $simple = new SimpleStruct(
             [
-               new SimpleStruct('struct 1'),
-               new SimpleStruct('struct 2'),
+                new SimpleStruct('struct 1'),
+                new SimpleStruct('struct 2'),
             ]
         );
 

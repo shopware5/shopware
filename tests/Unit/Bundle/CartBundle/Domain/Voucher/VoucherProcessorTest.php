@@ -180,6 +180,13 @@ class VoucherProcessorTest extends TestCase
             new ErrorCollection([new VoucherNotFoundError('test')]),
             $processorCart->getErrors()
         );
+
+        /** @var VoucherNotFoundError $error */
+        $error = $processorCart->getErrors()->get(0);
+
+        $this->assertSame('Voucher with code test not found', $error->getMessage());
+        $this->assertSame(VoucherNotFoundError::LEVEL_ERROR, $error->getLevel());
+        $this->assertSame(VoucherNotFoundError::class, $error->getMessageKey());
     }
 
     public function testVoucherRuleMatch()

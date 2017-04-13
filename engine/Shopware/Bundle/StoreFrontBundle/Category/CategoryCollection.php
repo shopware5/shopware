@@ -27,7 +27,7 @@ namespace Shopware\Bundle\StoreFrontBundle\Category;
 
 use Shopware\Bundle\StoreFrontBundle\Common\Collection;
 
-class CategoryCollection extends Collection implements \JsonSerializable
+class CategoryCollection extends Collection
 {
     /**
      * @var Category[]

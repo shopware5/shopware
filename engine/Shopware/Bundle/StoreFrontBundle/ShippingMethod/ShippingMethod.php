@@ -25,14 +25,10 @@ declare(strict_types=1);
 
 namespace Shopware\Bundle\StoreFrontBundle\ShippingMethod;
 
-use Shopware\Bundle\CartBundle\Domain\CloneTrait;
-use Shopware\Bundle\CartBundle\Domain\JsonSerializableTrait;
 use Shopware\Bundle\StoreFrontBundle\Common\Struct;
 
 class ShippingMethod extends Struct
 {
-    use CloneTrait, JsonSerializableTrait;
-
     /**
      * @var int
      */

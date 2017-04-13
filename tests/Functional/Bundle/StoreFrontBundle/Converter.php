@@ -131,10 +131,7 @@ class Converter
                 array_filter(explode('|', (string) $shop->getCategory()->getPath())),
                 $shop->getCategory()->getName()
             );
-
-            $category->assign([
-                'position' => (int) $shop->getCategory()->getPosition(),
-            ]);
+            $category->setPosition((int) $shop->getCategory()->getPosition());
 
             $struct->setCategory($category);
         }

@@ -42,9 +42,9 @@ abstract class Rule extends Struct
     /**
      * Validate the current rule and return boolean to indicate if the current rule applied (true) or not (false)
      *
-     * @param CalculatedCart                                                       $calculatedCart
-     * @param \Shopware\Bundle\StoreFrontBundle\Context\ShopContextInterface       $context
-     * @param \Shopware\Bundle\CartBundle\Domain\Validator\Data\RuleDataCollection $collection
+     * @param CalculatedCart       $calculatedCart
+     * @param ShopContextInterface $context
+     * @param RuleDataCollection   $collection
      *
      * @return bool
      */

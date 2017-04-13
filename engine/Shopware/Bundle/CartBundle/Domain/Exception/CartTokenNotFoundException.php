@@ -29,7 +29,7 @@ class CartTokenNotFoundException extends \Exception
     /**
      * @var string
      */
-    private $token;
+    protected $token;
 
     /**
      * @param string $token

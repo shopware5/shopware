@@ -48,7 +48,7 @@ class Delivery extends Struct
     /**
      * @var ShippingMethod
      */
-    private $shippingMethod;
+    protected $shippingMethod;
 
     public function __construct(
         DeliveryPositionCollection $positions,

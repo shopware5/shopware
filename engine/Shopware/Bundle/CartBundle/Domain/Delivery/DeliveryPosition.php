@@ -55,7 +55,7 @@ class DeliveryPosition extends Struct
     /**
      * @var DeliveryDate
      */
-    private $deliveryDate;
+    protected $deliveryDate;
 
     /**
      * @param string                                  $identifier

@@ -29,12 +29,12 @@ class PaymentBlockedError extends Error
     /**
      * @var int
      */
-    private $paymentId;
+    protected $paymentId;
 
     /**
      * @var string
      */
-    private $paymentName;
+    protected $paymentName;
 
     public function __construct(int $paymentId, string $paymentName)
     {

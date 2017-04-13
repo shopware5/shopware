@@ -36,6 +36,11 @@ class ViewProduct extends SimpleProduct implements ViewLineItemInterface
      */
     protected $product;
 
+    /**
+     * @var string
+     */
+    protected $type = 'product';
+
     final public function __construct(int $id, int $variantId, string $number)
     {
         parent::__construct($id, $variantId, $number);
