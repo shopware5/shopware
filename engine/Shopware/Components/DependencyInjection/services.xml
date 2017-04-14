@@ -406,6 +406,7 @@
         </service>
 
         <service id="validator.email" class="Shopware\Components\Validator\EmailValidator" />
+        <service id="validator.user_name" class="Shopware\Components\Validator\UserNameValidator" />
 
         <service id="sitemapxml.repository" class="Shopware\Components\SitemapXMLRepository">
             <argument type="service" id="shopware_search.product_number_search" />
