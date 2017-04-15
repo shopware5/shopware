@@ -13,7 +13,7 @@
                 {$images = $media.thumbnails}
             {/block}
 
-            {* Category teaser lnk *}
+            {* Category teaser link *}
             {block name="widget_emotion_component_category_teaser_link"}
 
                 {if $Data.blog_category}
