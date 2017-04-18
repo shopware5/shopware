@@ -1,4 +1,3 @@
-/* global Ext */
 // {namespace name=backend/customer_stream/translation}
 
 Ext.define('Shopware.apps.Customer.view.chart.Chart', {
