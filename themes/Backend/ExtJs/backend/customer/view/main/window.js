@@ -27,8 +27,7 @@
  * @author shopware AG
  */
 
-// {namespace name=backend/customer_stream/translation}
-
+// {namespace name=backend/customer/view/main}
 // {block name="backend/customer/view/main/window"}
 Ext.define('Shopware.apps.Customer.view.main.Window', {
     extend: 'Enlight.app.Window',

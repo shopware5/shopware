@@ -21,13 +21,13 @@
  * our trademarks remain entirely with us.
  *
  * @category   Shopware
- * @package    ProductStream
- * @subpackage Window
+ * @package    Customer
+ * @subpackage CustomerStream
  * @version    $Id$
  * @author shopware AG
  */
 // {namespace name=backend/product_stream/main}
-// {block name="backend/product_stream/view/condition_list/field/attribute_window"}
+// {block name="backend/customer/view/customer_stream/conditions/field/attribute_window"}
 Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.field.AttributeWindow', {
     extend: 'Ext.window.Window',
     modal: true,

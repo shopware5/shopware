@@ -27,6 +27,8 @@
  * @author shopware AG
  */
 
+// {namespace name=backend/customer/view/main}
+
 /**
  * Shopware Application - Customer list backend module
  *
@@ -112,7 +114,8 @@ Ext.define('Shopware.apps.Customer', {
         'customer_stream.conditions.OrderedWithPaymentCondition',
         'customer_stream.conditions.HasTotalOrderAmountCondition',
         'customer_stream.conditions.CustomerAttributeCondition',
-        'customer_stream.conditions.field.AttributeValue'
+        'customer_stream.conditions.field.AttributeValue',
+        'customer_stream.conditions.SearchTermCondition'
     ],
 
     /**

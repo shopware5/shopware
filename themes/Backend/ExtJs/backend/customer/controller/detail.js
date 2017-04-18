@@ -1,5 +1,3 @@
-/* global Ext Shopware */
-
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -341,7 +339,7 @@ Ext.define('Shopware.apps.Customer.controller.Detail', {
             win = btn.up('window'),
             form = win.down('form'),
             model = form.getRecord(),
-            missingField = 'Unknown field',
+            missingField = '{s name=unknown_field}Unknown field{/s}',
             listStore = me.subApplication.getStore('List');
 
         if (!form.getForm().isValid()) {

@@ -27,6 +27,8 @@
  * @author shopware AG
  */
 
+// {namespace name=backend/customer/view/main}
+
 /**
  * Shopware Model - Customer list backend module.
  *

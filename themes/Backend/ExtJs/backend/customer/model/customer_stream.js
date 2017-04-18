@@ -19,10 +19,17 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
+ *
+ * @category   Shopware
+ * @package    Customer
+ * @subpackage Model
+ * @version    $Id$
+ * @author shopware AG
  */
 
-// {namespace name="backend/customer_stream/translation"}
+// {namespace name=backend/customer/view/main}
 
+// {block name="backend/customer/model/customer_stream"}
 Ext.define('Shopware.apps.Customer.model.CustomerStream', {
     extend: 'Shopware.data.Model',
 
@@ -33,6 +40,7 @@ Ext.define('Shopware.apps.Customer.model.CustomerStream', {
     },
 
     fields: [
+        // {block name="backend/customer/model/customer_stream/fields"}{/block}
         { name: 'id', type: 'int', useNull: true },
         { name: 'name', type: 'string' },
         { name: 'description', type: 'string', useNull: true },
@@ -40,3 +48,4 @@ Ext.define('Shopware.apps.Customer.model.CustomerStream', {
         { name: 'productStreamIds', type: 'string' }
     ]
 });
+// {/block}
