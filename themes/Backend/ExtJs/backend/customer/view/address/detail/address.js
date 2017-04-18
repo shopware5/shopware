@@ -27,12 +27,12 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/customer/view/address}
+// {namespace name=backend/customer/view/address}
 
 /**
  * Shopware UI - Customer address detail backend module
  */
-//{block name="backend/customer/view/address/detail/address"}
+// {block name="backend/customer/view/address/detail/address"}
 Ext.define('Shopware.apps.Customer.view.address.detail.Address', {
     extend: 'Shopware.model.Container',
     padding: 20,
@@ -136,17 +136,17 @@ Ext.define('Shopware.apps.Customer.view.address.detail.Address', {
                             anchor: '95%'
                         },
                         additionalAddressLine1: {
-                            /*{if {config name=showAdditionAddressLine1} && {config name=requireAdditionAddressLine1}}*/
+                            /* {if {config name=showAdditionAddressLine1} && {config name=requireAdditionAddressLine1}} */
                             allowBlank: false,
-                            /*{/if}*/
+                            /* {/if} */
                             fieldLabel: me.snippets.fields.additionalAddressLine1,
                             labelWidth: 155,
                             anchor: '95%'
                         },
                         additionalAddressLine2: {
-                            /*{if {config name=showAdditionAddressLine2} && {config name=requireAdditionAddressLine2}}*/
+                            /* {if {config name=showAdditionAddressLine2} && {config name=requireAdditionAddressLine2}} */
                             allowBlank: false,
-                            /*{/if}*/
+                            /* {/if} */
                             fieldLabel: me.snippets.fields.additionalAddressLine2,
                             labelWidth: 155,
                             anchor: '95%'
@@ -181,9 +181,9 @@ Ext.define('Shopware.apps.Customer.view.address.detail.Address', {
                             pageSize: 25
                         },
                         phone: {
-                            /*{if {config name=showphonenumberfield} && {config name=requirePhoneField}}*/
+                            /* {if {config name=showphonenumberfield} && {config name=requirePhoneField}} */
                             allowBlank: false,
-                            /*{/if}*/
+                            /* {/if} */
                             fieldLabel: me.snippets.fields.phone,
                             labelWidth: 155,
                             anchor: '95%'
@@ -281,4 +281,4 @@ Ext.define('Shopware.apps.Customer.view.address.detail.Address', {
         });
     }
 });
-//{/block}
+// {/block}

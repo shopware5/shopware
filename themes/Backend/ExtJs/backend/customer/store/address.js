@@ -27,17 +27,19 @@
  * @author shopware AG
  */
 
+// {namespace name=backend/customer/view/main}
+
 /**
  * Shopware Store - Customer list backend module
  *
  * The orders store is used from the customer order grid which is displayed
  * on bottom of the order tab.
  */
-//{block name="backend/customer/store/address"}
+// {block name="backend/customer/store/address"}
 Ext.define('Shopware.apps.Customer.store.Address', {
 
-    extend:'Shopware.store.Listing',
-    model:'Shopware.apps.Customer.model.Address',
+    extend: 'Shopware.store.Listing',
+    model: 'Shopware.apps.Customer.model.Address',
     pageSize: 50,
 
     configure: function() {
@@ -46,4 +48,4 @@ Ext.define('Shopware.apps.Customer.store.Address', {
         };
     }
 });
-//{/block}
+// {/block}

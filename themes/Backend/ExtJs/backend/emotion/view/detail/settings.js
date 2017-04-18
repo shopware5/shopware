@@ -100,6 +100,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
         me.generalFieldSet = me.createGeneralFieldSet();
         me.landingPageFieldSet = me.createLandingPageFieldset();
         me.deviceFieldset = me.createDeviceFieldset();
+        me.customerFieldSet = me.createCustomerFieldset();
         me.timingFieldSet = me.createTimingFieldSet();
 
         me.items = [
@@ -107,7 +108,8 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
             me.generalFieldSet,
             me.landingPageFieldSet,
             me.deviceFieldset,
-            me.timingFieldSet
+            me.timingFieldSet,
+            me.customerFieldSet
         ];
 
         me.addEvents(
@@ -532,6 +534,34 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
                 me.timeFields.validTo,
                 me.timeFields.validToTime
             ]
+        });
+    },
+
+    createCustomerFieldset: function() {
+        var me = this;
+
+        var factory = Ext.create('Shopware.attribute.SelectionFactory');
+        me.customerStreamSelection = Ext.create('Shopware.form.field.SingleSelection', {
+            name: 'customerStreamId',
+            labelWidth: 100,
+            fieldLabel: '{s name="customer_streams"}{/s}',
+            store: factory.createEntitySearchStore("Shopware\\Models\\Customer\\CustomerStream")
+        });
+
+        me.replacementSelection = Ext.create('Shopware.form.field.EmotionGrid', {
+            name: 'replacement',
+            labelWidth: 100,
+            helpText: '{s name="replacement_help"}{/s}',
+            helpTitle: '',
+            store: factory.createEntitySearchStore("Shopware\\Models\\Emotion\\Emotion"),
+            searchStore: factory.createEntitySearchStore("Shopware\\Models\\Emotion\\Emotion")
+        });
+
+        return Ext.create('Ext.form.FieldSet', {
+            collapsible: true,
+            title: '{s name="customize_field_set"}{/s}',
+            collapsed: true,
+            items: [me.customerStreamSelection, me.replacementSelection]
         });
     }
 });

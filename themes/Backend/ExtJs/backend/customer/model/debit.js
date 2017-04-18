@@ -27,6 +27,8 @@
  * @author shopware AG
  */
 
+// {namespace name=backend/customer/view/main}
+
 /**
  * Shopware Model - Customer list backend module.
  *
@@ -34,30 +36,30 @@
  * the Shopware\Models\Customer\Debit doctrine model which contains all data about the
  * customer debit.
  */
-//{block name="backend/customer/model/debit"}
+// {block name="backend/customer/model/debit"}
 Ext.define('Shopware.apps.Customer.model.Debit', {
 
     /**
      * Extends the standard Ext Model
      * @string
      */
-    extend:'Ext.data.Model',
+    extend: 'Ext.data.Model',
 
     /**
      * Unique identifier field
      * @string
      */
-    idProperty:'id',
+    idProperty: 'id',
     /**
      * The fields used for this model
      * @array
      */
-    fields:[
-        //{block name="backend/customer/model/debit/fields"}{/block}
-        { name:'account', type:'string' },
-        { name:'bankCode', type:'string' },
-        { name:'bankName', type:'string' },
-        { name:'accountHolder', type:'string' }
+    fields: [
+        // {block name="backend/customer/model/debit/fields"}{/block}
+        { name: 'account', type: 'string' },
+        { name: 'bankCode', type: 'string' },
+        { name: 'bankName', type: 'string' },
+        { name: 'accountHolder', type: 'string' }
     ]
 });
-//{/block}
+// {/block}

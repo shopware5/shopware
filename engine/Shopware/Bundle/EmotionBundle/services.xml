@@ -25,6 +25,10 @@
             <argument type="service" id="shopware_storefront.category_service" />
         </service>
 
+        <service id="shopware_emotion.store_front_emotion_device_configuration" class="Shopware\Bundle\EmotionBundle\Service\StoreFrontEmotionDeviceConfiguration">
+            <argument type="service" id="emotion_device_configuration" />
+        </service>
+
         <service id="shopware_emotion.emotion_element_gateway" class="Shopware\Bundle\EmotionBundle\Service\Gateway\EmotionElementGateway">
             <argument type="service" id="shopware_emotion.emotion_element_hydrator" />
             <argument type="service" id="shopware_storefront.field_helper_dbal" />

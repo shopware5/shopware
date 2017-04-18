@@ -27,48 +27,49 @@
  * @author shopware AG
  */
 
+// {namespace name=backend/customer/view/main}
+
 /**
  * Shopware Store - Customer list backend module
  *
  * The list store is used from the customer list grid.
  */
-//{block name="backend/customer/store/list"}
+// {block name="backend/customer/store/list"}
 Ext.define('Shopware.apps.Customer.store.List', {
     /**
      * Extend for the standard ExtJS 4
      * @string
      */
-    extend:'Ext.data.Store',
+    extend: 'Ext.data.Store',
     /**
      * Auto load the store after the component is initialized
      * @boolean
      */
-    autoLoad:false,
+    autoLoad: false,
     /**
      * Enable remote sort.
      * @boolean
      */
-    remoteSort:true,
+    remoteSort: true,
     /**
      * Enable remote filtering
      * @boolean
      */
-    remoteFilter:true,
+    remoteFilter: true,
     /**
      * Amount of data loaded at once
      * @integer
      */
-    pageSize:15,
+    pageSize: 20,
     /**
      * to upload all selected items in one request
      * @boolean
      */
-    batch:true,
+    batch: true,
     /**
      * Define the used model for this store
      * @string
      */
-    model:'Shopware.apps.Customer.model.List'
+    model: 'Shopware.apps.Customer.model.List'
 });
-//{/block}
-
+// {/block}

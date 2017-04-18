@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/customer/view/main}
+// {namespace name=backend/customer/view/main}
 
 /**
  * Shopware Controller - Customer list backend module
@@ -39,37 +39,37 @@
  *  - Search field => Fires when the user insert a search string into the search field to filter the grid store
  *  - Search combo box => Fires when the user select a customer group in the combo box to filter the grid store.
  */
-//{block name="backend/customer/controller/list"}
+// {block name="backend/customer/controller/list"}
 Ext.define('Shopware.apps.Customer.controller.List', {
 
     /**
      * Defines that this component is a extJs controller extension
      * @string
      */
-    extend:'Ext.app.Controller',
+    extend: 'Ext.app.Controller',
 
     /**
      * Set component references for easy access
      * @array
      */
-    refs:[
-        { ref:'grid', selector:'customer-list' }
+    refs: [
+        { ref: 'grid', selector: 'customer-list' }
     ],
 
     /**
      * Contains all snippets for the controller
      * @object
      */
-    snippets:{
-        singleDeleteTitle:'{s name=message/delete_single_title}Delete selected customer{/s}',
-        singleDeleteMessage:'{s name=message/delete_single_content}Are you sure, you want to delete the selected customer: {/s}',
-        multipleDeleteTitle:'{s name=message/delete_multiple_title}Delete selected customers{/s}',
-        multipleDeleteMessage:'{s name=message/delete_multiple_content}There were marked [0] customers. Are you sure you want to delete all selected customers?{/s}',
-        deleteSuccessTitle:'{s name=message/delete_success_message}Successfully{/s}',
-        deleteSuccessMessage:'{s name=message/delete_success_title}Customer(s) has been removed{/s}',
-        deleteErrorTitle:'{s name=message/delete_error_title}Failure{/s}',
-        deleteErrorMessage:'{s name=message/delete_error_message}During deleting an error has occurred:{/s}',
-        growlMessage:'{s name=message/growlMessage}Customer{/s}'
+    snippets: {
+        singleDeleteTitle: '{s name=message/delete_single_title}Delete selected customer{/s}',
+        singleDeleteMessage: '{s name=message/delete_single_content}Are you sure, you want to delete the selected customer: {/s}',
+        multipleDeleteTitle: '{s name=message/delete_multiple_title}Delete selected customers{/s}',
+        multipleDeleteMessage: '{s name=message/delete_multiple_content}There were marked [0] customers. Are you sure you want to delete all selected customers?{/s}',
+        deleteSuccessTitle: '{s name=message/delete_success_message}Successfully{/s}',
+        deleteSuccessMessage: '{s name=message/delete_success_title}Customer(s) has been removed{/s}',
+        deleteErrorTitle: '{s name=message/delete_error_title}Failure{/s}',
+        deleteErrorMessage: '{s name=message/delete_error_message}During deleting an error has occurred:{/s}',
+        growlMessage: '{s name=message/growlMessage}Customer{/s}'
     },
 
     /**
@@ -79,22 +79,19 @@ Ext.define('Shopware.apps.Customer.controller.List', {
      * and creates and show the customer list window.
      * @return void
      */
-    init:function () {
+    init: function () {
         var me = this;
 
-        //controls the event for the customer list (delete single/multiple customers)
+        // controls the event for the customer list (delete single/multiple customers)
         me.control({
-            'customer-list button[action=deleteCustomer]':{
-                click:me.onDeleteMultipleCustomers
+            'customer-list-main-window button[action=deleteCustomer]': {
+                click: me.onDeleteMultipleCustomers
             },
-            'customer-list':{
-                deleteColumn:me.onDeleteSingleCustomer
+            'customer-list': {
+                deleteColumn: me.onDeleteSingleCustomer
             },
-            'customer-list textfield[name=searchfield]':{
-                change:me.onSearchField
-            },
-            'customer-list combobox[name=customerGroupSearch]':{
-                change:me.onSearchComboBox
+            'customer-list-main-window textfield[name=searchfield]': {
+                change: me.onSearchField
             }
         });
 
@@ -105,14 +102,11 @@ Ext.define('Shopware.apps.Customer.controller.List', {
      * Event listener method which fires when the user use the
      * delete icon at the end of an grid row to delete a single customer.
      *
-     * @param [object] view - The view
-     * @param [integer] rowIndex - On which row position has been clicked
+     * @param [object] record - customer record
      * @return void
      */
-    onDeleteSingleCustomer:function (view, rowIndex) {
+    onDeleteSingleCustomer: function (record) {
         var me = this,
-            store = me.subApplication.getStore('List'),
-            record = store.getAt(rowIndex),
             customers = [record],
             message = me.snippets.singleDeleteMessage + ' ' + record.get('number'),
             title = me.snippets.singleDeleteTitle;
@@ -126,16 +120,16 @@ Ext.define('Shopware.apps.Customer.controller.List', {
      * the toolbar button "delete selected customers"
      * @return void
      */
-    onDeleteMultipleCustomers:function () {
+    onDeleteMultipleCustomers: function () {
         var me = this,
-            grid = this.getGrid(),
+            grid = me.getGrid(),
             sm = grid.getSelectionModel(),
             customers = sm.getSelection(),
             noOfElements = customers.length,
             message = Ext.String.format(me.snippets.multipleDeleteMessage, noOfElements),
             title = me.snippets.multipleDeleteTitle;
 
-        this.deleteCustomers(customers, title, message);
+        me.deleteCustomers(customers, title, message);
     },
 
     /**
@@ -147,31 +141,31 @@ Ext.define('Shopware.apps.Customer.controller.List', {
      * @param message   Message for the confirm message box
      * @return void
      */
-    deleteCustomers:function (customers, title, message) {
+    deleteCustomers: function (customers, title, message) {
         var me = this,
-            counter = 0,
-            store = me.subApplication.getStore('List');
+            counter = 0;
 
         // we do not just delete - we are polite and ask the user if he is sure.
         Ext.MessageBox.confirm(title, message, function (response) {
-            if ( response !== 'yes' ) {
+            if (response !== 'yes') {
                 return;
             }
-            Ext.each(customers, function (customer) {
-                customer.destroy({
-                    callback:function (data, operation) {
-                        var records = operation.getRecords(),
-                            record = records[0],
-                            rawData = record.getProxy().getReader().rawData;
 
-                        if ( operation.success === true ) {
+            Ext.each(customers, function (customer) {
+                Ext.Ajax.request({
+                    url: '{url controller="CustomerStream" action="deleteCustomer"}',
+                    params: { id: customer.get('id') },
+                    callback: function(data, operation, response) {
+                        response = Ext.JSON.decode(response.responseText);
+
+                        if (response.success === true) {
                             Shopware.Notification.createGrowlMessage(me.snippets.deleteSuccessTitle, me.snippets.deleteSuccessMessage, me.snippets.growlMessage);
                         } else {
-                            Shopware.Notification.createGrowlMessage(me.snippets.deleteErrorTitle, me.snippets.deleteErrorMessage + ' ' + rawData.message, me.snippets.growlMessage);
+                            Shopware.Notification.createGrowlMessage(me.snippets.deleteErrorTitle, me.snippets.deleteErrorMessage + ' ', me.snippets.growlMessage);
                         }
                         counter++;
                         if (counter >= customers.length) {
-                            store.load();
+                            me.getGrid().getStore().load();
                         }
                     }
                 });
@@ -186,21 +180,20 @@ Ext.define('Shopware.apps.Customer.controller.List', {
      * @param [object] field - Ext.field.Text which is displayed on the top of the customer grid
      * @return boolean
      */
-    onSearchField:function (field) {
+    onSearchField: function (field) {
         var me = this,
             searchString = Ext.String.trim(field.value),
             store = me.subApplication.getStore('List');
 
-        //scroll the store to first page
+        // scroll the store to first page
         store.currentPage = 1;
-
-        //If the search-value is empty, reset the filter
-        if ( searchString.length === 0 ) {
+        // If the search-value is empty, reset the filter
+        if (searchString.length === 0) {
             store.clearFilter();
         } else {
-            //This won't reload the store
+            // This won't reload the store
             store.filters.clear();
-            //Loads the store with a special filter
+            // Loads the store with a special filter
             store.filter('filter', searchString);
         }
 
@@ -214,24 +207,24 @@ Ext.define('Shopware.apps.Customer.controller.List', {
      * @param [object] field - Ext.field.ComboBox which is displayed on the top of the customer grid
      * @return boolean
      */
-    onSearchComboBox:function (field) {
+    onSearchComboBox: function (field) {
         var me = this,
-                searchString = field.value,
-                store = me.subApplication.getStore('List');
+            searchString = field.value,
+            store = me.subApplication.getStore('List');
 
-        //scroll the store to the first page
+        // scroll the store to the first page
         store.currentPage = 1;
 
-        //refresh the customer group parameter and set the old filter parameter
+        // refresh the customer group parameter and set the old filter parameter
         store.getProxy().extraParams = {
-            customerGroup:searchString
+            customerGroup: searchString
         };
 
-        //load store with the passed parameters
+        // load store with the passed parameters
         store.load();
 
         return true;
     }
 
 });
-//{/block}
+// {/block}

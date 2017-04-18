@@ -27,39 +27,39 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/customer/view/main}
+// {namespace name=backend/customer/view/main}
 
 /**
  * Shopware UI - Customer list backend module
  * The customer list view displays the data of the list store.
  * One row displays the head data of a customer.
  */
-//{block name="backend/customer/view/list/list"}
+// {block name="backend/customer/view/list/list"}
 Ext.define('Shopware.apps.Customer.view.list.List', {
 
     /**
      * Extend from the standard ExtJS 4
      * @string
      */
-    extend:'Ext.grid.Panel',
+    extend: 'Ext.grid.Panel',
 
     /**
      * List of short aliases for class names. Most useful for defining xtypes for widgets.
      * @string
     */
-    alias:'widget.customer-list',
+    alias: 'widget.customer-list',
 
     /**
      * Set css class
      * @string
      */
-    cls:Ext.baseCSSPrefix + 'customer-grid',
+    cls: Ext.baseCSSPrefix + 'customer-grid',
 
     /**
      * The view needs to be scrollable
      * @string
      */
-    autoScroll:true,
+    autoScroll: true,
 
     /**
      * Defaults for the grid panel.
@@ -71,28 +71,21 @@ Ext.define('Shopware.apps.Customer.view.list.List', {
      * Contains all snippets for the view component
      * @object
      */
-    snippets:{
-        columns:{
-            number:'{s name=column/number}Customer number{/s}',
-            firstName:'{s name=column/first_name}First name{/s}',
-            lastName:'{s name=column/last_name}Last name{/s}',
-            date:'{s name=column/date}Date{/s}',
-            customerGroup:'{s name=column/customer_group}Customer group{/s}',
-            company:'{s name=column/company}Company{/s}',
-            zipCode:'{s name=column/zip_code}Zip code{/s}',
-            city:'{s name=column/city}City{/s}',
-            accountMode:'{s name=column/accountMode}Type{/s}',
-            orderCount:'{s name=column/orderCount}Number of orders{/s}',
-            sales:'{s name=column/sales}Turnover{/s}',
-            remove:'{s name=column/delete}Delete customer{/s}',
-            edit:'{s name=column/detail}Show customer details{/s}'
-        },
-        toolbar:{
-            add:'{s name=toolbar/button_add}Add{/s}',
-            remove:'{s name=toolbar/button_delete}Delete all selected{/s}',
-            customerGroup:'{s name=toolbar/customer_group}Customer group{/s}',
-            groupEmpty:'{s name=toolbar/customer_group_empty}Select...{/s}',
-            search:'{s name=toolbar/search_empty_text}Search...{/s}'
+    snippets: {
+        columns: {
+            number: '{s name=column/number}Customer number{/s}',
+            firstName: '{s name=column/first_name}First name{/s}',
+            lastName: '{s name=column/last_name}Last name{/s}',
+            date: '{s name=column/date}Date{/s}',
+            customerGroup: '{s name=column/customer_group}Customer group{/s}',
+            company: '{s name=column/company}Company{/s}',
+            zipCode: '{s name=column/zip_code}Zip code{/s}',
+            city: '{s name=column/city}City{/s}',
+            accountMode: '{s name=column/accountMode}Type{/s}',
+            orderCount: '{s name=column/orderCount}Number of orders{/s}',
+            sales: '{s name=column/sales}Turnover{/s}',
+            remove: '{s name=column/delete}Delete customer{/s}',
+            edit: '{s name=column/detail}Show customer details{/s}'
         }
     },
 
@@ -101,17 +94,72 @@ Ext.define('Shopware.apps.Customer.view.list.List', {
      * default configuration
      * @return void
      */
-    initComponent:function () {
+    initComponent: function () {
         var me = this;
 
         me.registerEvents();
-        /*{if {acl_is_allowed privilege=delete}}*/
-            me.selModel = me.getGridSelModel();
-        /*{/if}*/
+        /* {if {acl_is_allowed privilege=delete}} */
+        me.selModel = me.getGridSelModel();
+        /* {/if} */
         me.columns = me.getColumns();
 
-        me.dockedItems = [ me.getToolbar(), me.getPagingBar() ];
+        me.dockedItems = [ me.getPagingBar() ];
+
         me.callParent(arguments);
+
+        var header = me.headerCt;
+
+        header.on('menucreate', function (ct, menu, eOpts) {
+            menu.remove(menu.items.items[2]);
+            menu.remove(menu.items.items[1]);
+            menu.remove(menu.items.items[0]);
+
+            menu.add([
+                me.createSortingItem('Kundennummber', 'customernumber'),
+                me.createSortingItem('Kunde seit', 'firstlogin'),
+                me.createSortingItem('Kundengruppe', 'customerGroup'),
+                me.createSortingItem('Kundenname', 'lastname'),
+                me.createSortingItem('Stadt', 'city'),
+                me.createSortingItem('Postleitzahl', 'zipcode'),
+                me.createSortingItem('Straße', 'street'),
+                me.createSortingItem('Gesamtumsatz', 'invoice_amount_sum'),
+                me.createSortingItem('Ø Warenkorb', 'invoice_amount_avg'),
+                me.createSortingItem('Ø Warenwert', 'product_avg'),
+                me.createSortingItem('Anzahl Bestellungen', 'count_orders'),
+                me.createSortingItem('Letzte Bestellung', 'last_order_time'),
+                me.createSortingItem('Interessen', 'interests')
+            ]);
+        });
+    },
+
+    createSortingItem: function(text, field) {
+        var me = this;
+
+        return {
+            text: text,
+            field: field,
+            menu: {
+                items: [
+                    { text: 'Aufsteigend',
+                        handler: function () {
+                            me.sortingHandler(field, 'asc');
+                        } },
+                    { text: 'Absteigend',
+                        handler: function () {
+                            me.sortingHandler(field, 'desc');
+                        } }
+                ]
+            }
+        };
+    },
+
+    sortingHandler: function(field, direction) {
+        var me = this;
+
+        me.getStore().sort({
+            property: field,
+            direction: direction
+        });
     },
 
     /**
@@ -120,7 +168,7 @@ Ext.define('Shopware.apps.Customer.view.list.List', {
      *
      * @return void
      */
-    registerEvents:function () {
+    registerEvents: function () {
         this.addEvents(
             /**
              * Event will be fired when the user clicks the delete icon in the
@@ -153,88 +201,130 @@ Ext.define('Shopware.apps.Customer.view.list.List', {
      *
      * @return [array] grid columns
      */
-    getColumns:function () {
+    getColumns: function () {
         var me = this;
 
-        var columns = [{
-            header:me.snippets.columns.number,
-            dataIndex:'number',
-            flex:1.5
+        return [{
+            header: 'Information',
+            dataIndex: 'customernumber',
+            flex: 2,
+            renderer: function (value, meta, record) {
+                return '<b>' + record.get('customernumber') + '</b> - ' + record.get('customerGroup') +
+                    '<br><i>Kunde seit: ' + Ext.util.Format.date(record.get('firstlogin')) + '</i></span>';
+            }
         }, {
-            header:me.snippets.columns.firstName,
-            dataIndex:'firstname',
-            flex: 1
+            header: 'Kunde',
+            dataIndex: 'lastname',
+            flex: 3,
+            renderer: function (v, meta, record) {
+                var names = [
+                    record.get('title'),
+                    record.get('firstname'),
+                    record.get('lastname')
+                ];
+
+                var name = '<b>' + names.join(' ') + '</b>';
+                var age = '';
+                if (record.get('age')) {
+                    age = ' (' + record.get('age') + ')';
+                }
+                var company = '';
+                if (record.get('company')) {
+                    company = '<br><i>' + record.get('company') + '</i>';
+                }
+                return name + age + company;
+            }
         }, {
-            header:me.snippets.columns.lastName,
-            dataIndex:'lastname',
-            flex: 1
+            header: 'Anschrift',
+            dataIndex: 'city',
+            flex: 3,
+            renderer: function(v, meta, record) {
+                var lines = [
+                    record.get('street'),
+                    [record.get('zipcode'), record.get('city'), record.get('country')].join(' '),
+                    record.get('additional_address_line1'),
+                    record.get('additional_address_line2')
+                ];
+                return lines.join('<br>');
+            }
         }, {
-            header:me.snippets.columns.date,
-            dataIndex:'firstLogin',
-            flex:0.5,
-            renderer:me.dateColumn
+            header: 'Umsatz',
+            dataIndex: 'invoice_amount_sum',
+            flex: 2,
+            renderer: function(v, meta, record) {
+                return '' +
+                    'Gesamt: <b>' + record.get('invoice_amount_sum') + '</b>' +
+                    '<br>Ø Warenkorb: <b>' + record.get('invoice_amount_avg') + '</b>' +
+                    '<br>Ø Warenwert: <b>' + record.get('product_avg') + '</b>';
+            }
         }, {
-            header:me.snippets.columns.customerGroup,
-            dataIndex:'customerGroup',
-            flex: 1
+            header: 'Bestellungen',
+            dataIndex: 'count_orders',
+            renderer: function(v, meta, record) {
+                return '<b>Bestellungen: ' + record.get('count_orders') + '</b>' +
+                    '<br>Letzte: ' + Ext.util.Format.date(record.get('last_order_time'));
+            }
         }, {
-            header:me.snippets.columns.company,
-            dataIndex:'company',
-            flex: 1
+            header: 'Top Interessen',
+            dataIndex: 'interests',
+            flex: 4,
+            renderer: function(v, meta, record) {
+                v = record.get('interests');
+                if (!v || v.length <= 0) {
+                    return 'Nicht bekannt';
+                }
+                var interests = [];
+                Ext.each(v, function(interest) {
+                    interests.push('<b>' + interest.categoryName + '</b> - <i>' + interest.manufacturerName + '</i>');
+                });
+                interests = interests.slice(0, 3);
+                return interests.join('<br>');
+            }
         }, {
-            header:me.snippets.columns.zipCode,
-            dataIndex:'zipCode',
-            flex:0.5
+            header: 'Kategoriesierung',
+            dataIndex: 'streams',
+            flex: 2,
+            sortable: false,
+            renderer: function(streams) {
+                if (streams.length <= 0) {
+                    return;
+                }
+
+                var names = [];
+                Ext.each(streams, function(item) {
+                    names.push('<a href="#" class="stream-inline" data-id="' + item.id + '">' + item.name + '</a>');
+                });
+
+                return names.join('<br>');
+            }
         }, {
-            header:me.snippets.columns.city,
-            dataIndex:'city',
-            flex: 1
-        }, {
-            header:me.snippets.columns.accountMode,
-            dataIndex:'accountMode',
-            flex: 1,
-            renderer:me.accountModeRenderer
-        }, {
-            header:me.snippets.columns.orderCount,
-            dataIndex:'orderCount',
-            flex: 1
-        }, {
-            header:me.snippets.columns.sales,
-            dataIndex:'amount',
-            flex: 1,
-            renderer:me.salesColumn
-        }, {
-            /**
-             * Special column type which provides
-             * clickable icons in each row
-             */
-            xtype:'actioncolumn',
-            width:70,
-            items:[
-                /*{if {acl_is_allowed privilege=delete}}*/
+            xtype: 'actioncolumn',
+            width: 70,
+            items: [
+                    /* {if {acl_is_allowed privilege=delete}} */
                 {
-                    iconCls:'sprite-minus-circle-frame',
-                    action:'deleteCustomer',
-                    tooltip:me.snippets.columns.remove,
-                    handler:function (view, rowIndex, colIndex, item) {
-                        me.fireEvent('deleteColumn', view, rowIndex, colIndex, item);
+                    iconCls: 'sprite-minus-circle-frame',
+                    action: 'deleteCustomer',
+                    tooltip: me.snippets.columns.remove,
+                    handler: function (view, rowIndex, colIndex, item, opts, record) {
+                        me.fireEvent('deleteColumn', record);
                     }
-                } ,
-                /*{/if}*/
-                /*{if {acl_is_allowed privilege=detail}}*/
+                },
+                    /* {/if} */
+
+                    /* {if {acl_is_allowed privilege=detail}} */
                 {
-                    iconCls:'sprite-pencil',
-                    action:'editCustomer',
-                    tooltip:me.snippets.columns.edit,
-                    handler:function (view, rowIndex, colIndex, item) {
-                        me.fireEvent('editColumn', view, rowIndex, colIndex, item);
+                    iconCls: 'sprite-pencil',
+                    action: 'editCustomer',
+                    tooltip: me.snippets.columns.edit,
+                    handler: function (view, rowIndex, colIndex, item, opts, record) {
+                        me.fireEvent('editColumn', record);
                     }
                 }
-                /*{/if}*/
+                    /* {/if} */
             ]
-        }];
-
-        return columns;
+        }
+        ];
     },
 
     /**
@@ -242,74 +332,16 @@ Ext.define('Shopware.apps.Customer.view.list.List', {
      *
      * @return [Ext.selection.CheckboxModel] grid selection model
      */
-    getGridSelModel:function () {
+    getGridSelModel: function () {
         var me = this;
 
         return Ext.create('Ext.selection.CheckboxModel', {
-            listeners:{
+            listeners: {
                 // Unlocks the save button if the user has checked at least one checkbox
-                selectionchange:function (sm, selections) {
-                    me.deleteCustomerButton.setDisabled(selections.length == 0);
+                selectionchange: function (sm, selections) {
+                    me.fireEvent('selection-changed', selections);
                 }
             }
-        });
-    },
-
-
-    /**
-     * Creates the grid toolbar with the add and delete button
-     *
-     * @return [Ext.toolbar.Toolbar] grid toolbar
-     */
-    getToolbar:function () {
-        var me = this;
-
-        me.deleteCustomerButton = Ext.create('Ext.button.Button', {
-            iconCls:'sprite-minus-circle-frame',
-            text:me.snippets.toolbar.remove,
-            disabled:true,
-            action:'deleteCustomer'
-        });
-
-        return Ext.create('Ext.toolbar.Toolbar', {
-            dock:'top',
-            ui: 'shopware-ui',
-            items:[
-                /*{if {acl_is_allowed privilege=create}}*/
-                {
-                    iconCls:'sprite-plus-circle-frame',
-                    text:me.snippets.toolbar.add,
-                    action:'addCustomer'
-                } ,
-                /*{/if}*/
-                /*{if {acl_is_allowed privilege=delete}}*/
-                    me.deleteCustomerButton,
-                /*{/if}*/
-                {
-                    xtype:'combobox',
-                    triggerAction:'all',
-                    name:'customerGroupSearch',
-                    fieldLabel:me.snippets.toolbar.customerGroup,
-                    store:Ext.create('Shopware.store.CustomerGroup').load(),
-                    emptyText: me.snippets.toolbar.groupEmpty,
-                    valueField:'id',
-                    displayField:'name',
-                    enableKeyEvents:true,
-                    checkChangeBuffer:500,
-                    marginRight:10
-                },
-                '->',
-                {
-                    xtype:'textfield',
-                    name:'searchfield',
-                    cls:'searchfield',
-                    width:170,
-                    emptyText:me.snippets.toolbar.search,
-                    enableKeyEvents:true,
-                    checkChangeBuffer:500
-                },
-                { xtype:'tbspacer', width:6 }
-            ]
         });
     },
 
@@ -319,13 +351,13 @@ Ext.define('Shopware.apps.Customer.view.list.List', {
      *
      * @return Ext.toolbar.Paging The paging toolbar for the customer grid
      */
-    getPagingBar:function () {
+    getPagingBar: function () {
         var me = this;
 
         return Ext.create('Ext.toolbar.Paging', {
-            store:me.store,
-            dock:'bottom',
-            displayInfo:true
+            store: me.store,
+            dock: 'bottom',
+            displayInfo: true
         });
     },
 
@@ -335,7 +367,7 @@ Ext.define('Shopware.apps.Customer.view.list.List', {
      * @param [string] - The order time value
      * @return [string] - The passed value, formatted with Ext.util.Format.date()
      */
-    dateColumn:function (value) {
+    dateColumn: function (value) {
         return !value ? value : Ext.util.Format.date(value);
     },
 
@@ -345,7 +377,7 @@ Ext.define('Shopware.apps.Customer.view.list.List', {
      * @param [string] - accountMode
      * @returns [string] - description
      */
-    accountModeRenderer:function (value) {
+    accountModeRenderer: function (value) {
         if (value) {
             return '{s name="accountModeGuest"}Accountless{/s}';
         }
@@ -358,10 +390,9 @@ Ext.define('Shopware.apps.Customer.view.list.List', {
      * @param [string] - The sales value
      * @return [string] - The passed value, formatted with Ext.util.Format.currency()
      */
-    salesColumn:function (value) {
+    salesColumn: function (value) {
         return !value ? value : Ext.util.Format.currency(value);
     }
 
 });
-//{/block}
-
+// {/block}

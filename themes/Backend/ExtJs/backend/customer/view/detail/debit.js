@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/customer/view/detail}
+// {namespace name=backend/customer/view/detail}
 
 /**
  * Shopware UI - Customer detail page
@@ -35,18 +35,18 @@
  * The debit field set contains the debit data of the customer
  * which is stored in the debit model and filled over the s_user_debit table
  */
-//{block name="backend/customer/view/detail/debit"}
+// {block name="backend/customer/view/detail/debit"}
 Ext.define('Shopware.apps.Customer.view.detail.Debit', {
     /**
      * Define that the debit field set is an extension of the Ext.form.FieldSet
      * @string
      */
-    extend:'Ext.form.FieldSet',
+    extend: 'Ext.form.FieldSet',
     /**
      * List of short aliases for class names. Most useful for defining xtypes for widgets.
      * @string
      */
-    alias:'widget.customer-debit-field-set',
+    alias: 'widget.customer-debit-field-set',
     /**
      * Set css class for this component
      * @string
@@ -56,17 +56,17 @@ Ext.define('Shopware.apps.Customer.view.detail.Debit', {
      * Contains all snippets for the view component
      * @object
      */
-    snippets:{
-        title:'{s name=debit/title}Payment data{/s}',
-        payment:{
-            label:'{s name=debit/current_payment}Current payment method{/s}',
-            helpTitle:'{s name=debit/payment_help_title}Payment method{/s}',
-            helpText:'{s name=debit/payment_help_text}If you change the payment on this menu item, the payment kind of the customer will not be considered by the risk management.{/s}'
+    snippets: {
+        title: '{s name=debit/title}Payment data{/s}',
+        payment: {
+            label: '{s name=debit/current_payment}Current payment method{/s}',
+            helpTitle: '{s name=debit/payment_help_title}Payment method{/s}',
+            helpText: '{s name=debit/payment_help_text}If you change the payment on this menu item, the payment kind of the customer will not be considered by the risk management.{/s}'
         },
-        account:'{s name=debit/account}Account{/s}',
-        accountHolder:'{s name=debit/account_holder}Account holder{/s}',
-        bankName:'{s name=debit/bank_name}Bank name{/s}',
-        bankCode:'{s name=debit/bank_code}Bank code{/s}'
+        account: '{s name=debit/account}Account{/s}',
+        accountHolder: '{s name=debit/account_holder}Account holder{/s}',
+        bankName: '{s name=debit/bank_name}Bank name{/s}',
+        bankCode: '{s name=debit/bank_code}Bank code{/s}'
     },
 
     /**
@@ -75,24 +75,24 @@ Ext.define('Shopware.apps.Customer.view.detail.Debit', {
      * want to create a new customer or edit an existing customer
      * @return void
      */
-    initComponent:function () {
+    initComponent: function () {
         var me = this;
 
         me.registerEvents();
         me.title = me.snippets.title;
         me.topContainer = Ext.create('Ext.container.Container', {
             layout: 'anchor',
-            items:me.createDebitTopForm()
+            items: me.createDebitTopForm()
         });
         me.fieldContainer = Ext.create('Ext.container.Container', {
-            layout:'column',
-            items:me.createDebitForm()
+            layout: 'column',
+            items: me.createDebitForm()
         });
         me.items = [ me.topContainer, me.fieldContainer ];
 
         me.callParent(arguments);
 
-        if ( me.record.get('paymentId') !== 2 ) {
+        if (me.record.get('paymentId') !== 2) {
             me.fieldContainer.hide();
         }
     },
@@ -102,7 +102,7 @@ Ext.define('Shopware.apps.Customer.view.detail.Debit', {
      * and will be fired when the user change the payment combo box.
      * @return void
      */
-    registerEvents:function () {
+    registerEvents: function () {
         this.addEvents(
             /**
              * Event will be fired when the user change the payment combo box which
@@ -117,14 +117,13 @@ Ext.define('Shopware.apps.Customer.view.detail.Debit', {
         );
     },
 
-
     /**
      * Creates the container which contains the combo box
      * for the payments.
      *
      * @return [Array] Container which contains the payment combo box
      */
-    createDebitTopForm:function () {
+    createDebitTopForm: function () {
         var me = this;
 
         return me.createDebitFormTopElements();
@@ -136,24 +135,24 @@ Ext.define('Shopware.apps.Customer.view.detail.Debit', {
      *
      * @return [Array] Container which contains the payment combo box
      */
-    createDebitFormTopElements:function () {
+    createDebitFormTopElements: function () {
         var me = this;
 
         me.paymentCombo = Ext.create('Ext.form.field.ComboBox', {
-            name:'paymentId',
+            name: 'paymentId',
             queryMode: 'local',
-            triggerAction:'all',
-            fieldLabel:me.snippets.payment.label,
-            helpTitle:me.snippets.payment.helpTitle,
-            helpText:me.snippets.payment.helpText,
-            valueField:'id',
-            displayField:'description',
-            allowBlank:false,
-            required:true,
-            anchor:'100%',
-            labelWidth:155,
-            minWidth:250,
-            editable:false,
+            triggerAction: 'all',
+            fieldLabel: me.snippets.payment.label,
+            helpTitle: me.snippets.payment.helpTitle,
+            helpText: me.snippets.payment.helpText,
+            valueField: 'id',
+            displayField: 'description',
+            allowBlank: false,
+            required: true,
+            anchor: '100%',
+            labelWidth: 155,
+            minWidth: 250,
+            editable: false,
             tpl: Ext.create('Ext.XTemplate',
                 '<tpl for=".">',
                 '<tpl if="this.doHighlight(id)">',
@@ -164,22 +163,21 @@ Ext.define('Shopware.apps.Customer.view.detail.Debit', {
                 '</tpl>',
                 {
                     doHighlight: function (id) {
-                        //highlight all inactive payment methods of the boundlist
+                        // highlight all inactive payment methods of the boundlist
                         var record = me.paymentCombo.getStore().findRecord('id', id);
                         return !record.get('active');
                     }
                 }
             ),
-            listeners:{
-                change:function (field, newValue) {
+            listeners: {
+                change: function (field, newValue) {
                     var store = field.getStore(),
                         selectedRecord = store.findRecord('id', newValue),
                         input = Ext.get(field.getEl().down('.x-form-field'));
-                    if(!selectedRecord.get('active')) {
-                        input.setStyle( { 'color': '#A94442','background': '#F2DEDE' } );
-                    }
-                    else {
-                        input.setStyle( { 'background': '', 'color': '' } );
+                    if (!selectedRecord.get('active')) {
+                        input.setStyle({ 'color': '#A94442', 'background': '#F2DEDE' });
+                    } else {
+                        input.setStyle({ 'background': '', 'color': '' });
                     }
                     me.fireEvent('changePayment', newValue, me.fieldContainer);
                 }
@@ -188,12 +186,12 @@ Ext.define('Shopware.apps.Customer.view.detail.Debit', {
 
         return [
             {
-                xtype:'container',
-                columnWidth:.5,
-                border:false,
-                layout:'anchor',
+                xtype: 'container',
+                columnWidth: 0.5,
+                border: false,
+                layout: 'anchor',
                 cls: Ext.baseCSSPrefix + 'field-set-container',
-                items:[ me.paymentCombo ]
+                items: [ me.paymentCombo ]
             }
         ];
     },
@@ -204,32 +202,32 @@ Ext.define('Shopware.apps.Customer.view.detail.Debit', {
      *
      * @return [Array] Contains the left and right container
      */
-    createDebitForm:function () {
+    createDebitForm: function () {
         var leftContainer, rightContainer, me = this;
 
         leftContainer = Ext.create('Ext.container.Container', {
-            columnWidth:.5,
-            border:false,
-            layout:'anchor',
+            columnWidth: 0.5,
+            border: false,
+            layout: 'anchor',
             cls: Ext.baseCSSPrefix + 'field-set-container',
-            defaults:{
-                anchor:'100%',
-                labelWidth:155,
-                minWidth:250,
-                xtype:'textfield'
+            defaults: {
+                anchor: '100%',
+                labelWidth: 155,
+                minWidth: 250,
+                xtype: 'textfield'
             },
             items: me.createDebitFormLeft()
         });
 
         rightContainer = Ext.create('Ext.container.Container', {
-            columnWidth:.5,
-            border:false,
-            layout:'anchor',
+            columnWidth: 0.5,
+            border: false,
+            layout: 'anchor',
             cls: Ext.baseCSSPrefix + 'field-set-container',
-            defaults:{
-                anchor:'100%',
-                labelWidth:155,
-                xtype:'textfield'
+            defaults: {
+                anchor: '100%',
+                labelWidth: 155,
+                xtype: 'textfield'
             },
             items: me.createDebitFormRight()
         });
@@ -242,16 +240,16 @@ Ext.define('Shopware.apps.Customer.view.detail.Debit', {
      *
      * @return [Array] Contains the account name and account holder
      */
-    createDebitFormLeft:function () {
+    createDebitFormLeft: function () {
         var me = this;
         return [{
-            name:'debit[account]',
-            alias:'account',
-            fieldLabel:me.snippets.account
+            name: 'debit[account]',
+            alias: 'account',
+            fieldLabel: me.snippets.account
         }, {
-            name:'debit[accountHolder]',
-            alias:'holder',
-            fieldLabel:me.snippets.accountHolder
+            name: 'debit[accountHolder]',
+            alias: 'holder',
+            fieldLabel: me.snippets.accountHolder
         }];
     },
 
@@ -260,18 +258,18 @@ Ext.define('Shopware.apps.Customer.view.detail.Debit', {
      *
      * @return [Array] Contains the bank name and code
      */
-    createDebitFormRight:function () {
+    createDebitFormRight: function () {
         var me = this;
         return [{
-            name:'debit[bankName]',
-            alias:'bankName',
-            fieldLabel:me.snippets.bankName
+            name: 'debit[bankName]',
+            alias: 'bankName',
+            fieldLabel: me.snippets.bankName
         },
         {
-            name:'debit[bankCode]',
-            alias:'bankCode',
-            fieldLabel:me.snippets.bankCode
+            name: 'debit[bankCode]',
+            alias: 'bankCode',
+            fieldLabel: me.snippets.bankCode
         }];
     }
 });
-//{/block}
+// {/block}

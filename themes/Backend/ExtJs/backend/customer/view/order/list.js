@@ -27,31 +27,31 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/customer/view/order}
+// {namespace name=backend/customer/view/order}
 
 /**
  * Shopware UI - Customer list backend module
  *
  * todo@all: Documentation
  */
-//{block name="backend/customer/view/order/list"}
+// {block name="backend/customer/view/order/list"}
 Ext.define('Shopware.apps.Customer.view.order.List', {
     /**
      * Extend from the standard ExtJS 4
      * @string
      */
-    extend:'Ext.grid.Panel',
+    extend: 'Ext.grid.Panel',
     /**
      * List of short aliases for class names. Most useful for defining xtypes for widgets.
      * @string
      */
-    alias:'widget.customer-order-grid',
+    alias: 'widget.customer-order-grid',
 
     /**
      * The view needs to be scrollable
      * @string
      */
-    autoScroll:true,
+    autoScroll: true,
     /**
      * Set css class for this component
      * @string
@@ -61,16 +61,16 @@ Ext.define('Shopware.apps.Customer.view.order.List', {
      * Contains all snippets for the view component
      * @object
      */
-    snippets:{
-        search:'{s name=toolbar/search_empty_text}Search...{/s}',
-        openOrder:'{s name=column/open_order}Open order in a new window{/s}',
-        orderTime:'{s name=column/time}Order date{/s}',
-        number:'{s name=column/number}Order number{/s}',
-        paymentMethod:'{s name=column/payment_method}Payment method{/s}',
-        dispatchMethod:'{s name=column/dispatch_method}Shipping type{/s}',
-        orderStatus:'{s name=column/order_status}Order status{/s}',
-        paymentStatus:'{s name=column/payment_status}Payment status{/s}',
-        total:'{s name=column/total}Total{/s}'
+    snippets: {
+        search: '{s name=toolbar/search_empty_text}Search...{/s}',
+        openOrder: '{s name=column/open_order}Open order in a new window{/s}',
+        orderTime: '{s name=column/time}Order date{/s}',
+        number: '{s name=column/number}Order number{/s}',
+        paymentMethod: '{s name=column/payment_method}Payment method{/s}',
+        dispatchMethod: '{s name=column/dispatch_method}Shipping type{/s}',
+        orderStatus: '{s name=column/order_status}Order status{/s}',
+        paymentStatus: '{s name=column/payment_status}Payment status{/s}',
+        total: '{s name=column/total}Total{/s}'
     },
 
     /**
@@ -78,7 +78,7 @@ Ext.define('Shopware.apps.Customer.view.order.List', {
      * default configuration
      * @return void
      */
-    initComponent:function () {
+    initComponent: function () {
         var me = this;
 
         me.store = me.gridStore;
@@ -95,7 +95,7 @@ Ext.define('Shopware.apps.Customer.view.order.List', {
      * to open the order in a new window.
      * @return void
      */
-    registerEvents:function () {
+    registerEvents: function () {
         this.addEvents(
             /**
              * Event will be fired when the user clicks the grid action
@@ -124,13 +124,13 @@ Ext.define('Shopware.apps.Customer.view.order.List', {
      *
      * @return [Ext.toolbar.Paging] - The paging toolbar for the customer grid
      */
-    getPagingBar:function () {
+    getPagingBar: function () {
         var me = this;
 
         return Ext.create('Ext.toolbar.Paging', {
-            store:me.gridStore,
-            dock:'bottom',
-            displayInfo:true
+            store: me.gridStore,
+            dock: 'bottom',
+            displayInfo: true
         });
     },
 
@@ -139,71 +139,71 @@ Ext.define('Shopware.apps.Customer.view.order.List', {
      *
      * @return [array] grid columns
      */
-    getColumns:function () {
+    getColumns: function () {
         var me = this;
 
         return [
             {
-                header:me.snippets.orderTime,
-                dataIndex:'orderTime',
-                flex:1,
-                renderer:me.orderDateColumn
+                header: me.snippets.orderTime,
+                dataIndex: 'orderTime',
+                flex: 1,
+                renderer: me.orderDateColumn
             },
             {
-                header:me.snippets.number,
-                dataIndex:'orderNumber',
-                flex:1
+                header: me.snippets.number,
+                dataIndex: 'orderNumber',
+                flex: 1
             },
             {
-                header:me.snippets.paymentMethod,
-                dataIndex:'paymentId',
-                flex:1,
+                header: me.snippets.paymentMethod,
+                dataIndex: 'paymentId',
+                flex: 1,
                 renderer: me.paymentColumn
             },
             {
-                header:me.snippets.dispatchMethod,
-                dataIndex:'dispatchId',
-                flex:1,
+                header: me.snippets.dispatchMethod,
+                dataIndex: 'dispatchId',
+                flex: 1,
                 renderer: me.dispatchColumn
             },
             {
-                header:me.snippets.orderStatus,
-                dataIndex:'orderStatusId',
-                flex:1,
+                header: me.snippets.orderStatus,
+                dataIndex: 'orderStatusId',
+                flex: 1,
                 renderer: me.orderStatusColumn
             },
             {
-                header:me.snippets.paymentStatus,
-                dataIndex:'paymentStatusId',
-                flex:1,
+                header: me.snippets.paymentStatus,
+                dataIndex: 'paymentStatusId',
+                flex: 1,
                 renderer: me.paymentStatusColumn
             },
             {
-                header:me.snippets.total,
-                dataIndex:'invoiceAmount',
-                flex:1,
-                renderer:me.invoiceAmountColumn
+                header: me.snippets.total,
+                dataIndex: 'invoiceAmount',
+                flex: 1,
+                renderer: me.invoiceAmountColumn
             },
             {
                 /**
                  * Special column type which provides
                  * clickable icons in each row
                  */
-                xtype:'actioncolumn',
-                width:50,
-                items:[
+                xtype: 'actioncolumn',
+                width: 50,
+                items: [
                     {
-                        cls:'editBtn',
-                        iconCls:'sprite-sticky-notes-pin',
-                        action:'customer-order-list-open-order',
-                        tooltip:me.snippets.openOrder,
+                        cls: 'editBtn',
+                        iconCls: 'sprite-sticky-notes-pin',
+                        action: 'customer-order-list-open-order',
+                        tooltip: me.snippets.openOrder,
                         /**
                          * Add button handler to fire the generatePassword event which is handled
                          * in the detail controller. The detail controller generates a password and set it into the password field
                          */
-                        handler:function (view, rowIndex, colIndex, item) {
+                        handler: function (view, rowIndex, colIndex, item) {
                             var store = view.getStore(),
-                                    record = store.getAt(rowIndex);
+                                record = store.getAt(rowIndex);
 
                             me.fireEvent('openOrder', record);
                         }
@@ -211,7 +211,6 @@ Ext.define('Shopware.apps.Customer.view.order.List', {
                 ]
             }
         ];
-
     },
 
     /**
@@ -219,29 +218,29 @@ Ext.define('Shopware.apps.Customer.view.order.List', {
      *
      * @return [Ext.toolbar.Toolbar] grid toolbar
      */
-    getToolbar:function () {
+    getToolbar: function () {
         var me = this;
         return Ext.create('Ext.toolbar.Toolbar', {
-            dock:'top',
+            dock: 'top',
             ui: 'shopware-ui',
             cls: Ext.baseCSSPrefix + 'order-list-toolbar',
-            items:[
+            items: [
                 '->',
                 {
-                    xtype:'textfield',
-                    name:'searchfield',
-                    cls:'searchfield',
-                    width:170,
-                    emptyText:me.snippets.search,
-                    enableKeyEvents:true,
-                    checkChangeBuffer:500,
+                    xtype: 'textfield',
+                    name: 'searchfield',
+                    cls: 'searchfield',
+                    width: 170,
+                    emptyText: me.snippets.search,
+                    enableKeyEvents: true,
+                    checkChangeBuffer: 500,
                     listeners: {
                         change: function(field, value) {
                             me.fireEvent('searchOrder', value, me.gridStore);
                         }
                     }
                 },
-                { xtype:'tbspacer', width:6 }
+                { xtype: 'tbspacer', width: 6 }
             ]
         });
     },
@@ -251,7 +250,7 @@ Ext.define('Shopware.apps.Customer.view.order.List', {
      * @param [string] value
      * @return [string]
      */
-    invoiceAmountColumn:function (value) {
+    invoiceAmountColumn: function (value) {
         return Ext.util.Format.currency(value);
     },
 
@@ -259,8 +258,9 @@ Ext.define('Shopware.apps.Customer.view.order.List', {
      * Formats the order time column
      * @param value
      */
-    orderDateColumn:function (value) {
-        if ( typeof value === Ext.undefined ) {
+    orderDateColumn: function (value) {
+        // eslint-disable-next-line valid-typeof
+        if (typeof value === Ext.undefined) {
             return value;
         }
         return Ext.util.Format.date(value) + ' ' + Ext.util.Format.date(value, timeFormat);
@@ -306,7 +306,7 @@ Ext.define('Shopware.apps.Customer.view.order.List', {
 
         if (me.dispatchStore) {
             var dispatch = me.dispatchStore.getById(value);
-            if(!dispatch) {
+            if (!dispatch) {
                 return '';
             }
             return dispatch.get('name');
@@ -314,7 +314,6 @@ Ext.define('Shopware.apps.Customer.view.order.List', {
             return '';
         }
     },
-
 
     /**
      *
@@ -324,7 +323,7 @@ Ext.define('Shopware.apps.Customer.view.order.List', {
 
         if (me.paymentStore) {
             var payment = me.paymentStore.getById(value);
-            if(!payment) {
+            if (!payment) {
                 return '';
             }
             return payment.get('description');
@@ -333,6 +332,5 @@ Ext.define('Shopware.apps.Customer.view.order.List', {
         }
     }
 
-
 });
-//{/block}
+// {/block}

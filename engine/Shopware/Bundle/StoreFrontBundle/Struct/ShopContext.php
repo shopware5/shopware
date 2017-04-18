@@ -87,16 +87,22 @@ class ShopContext extends Extendable implements ProductContextInterface, \JsonSe
     protected $state;
 
     /**
-     * @param string       $baseUrl
-     * @param Shop         $shop
-     * @param Currency     $currency
-     * @param Group        $currentCustomerGroup
-     * @param Group        $fallbackCustomerGroup
-     * @param Tax[]        $taxRules
+     * @var int[]
+     */
+    protected $customerStreamIds;
+
+    /**
+     * @param string $baseUrl
+     * @param Shop $shop
+     * @param Currency $currency
+     * @param Group $currentCustomerGroup
+     * @param Group $fallbackCustomerGroup
+     * @param Tax[] $taxRules
      * @param PriceGroup[] $priceGroups
-     * @param Area|null    $area
+     * @param Area|null $area
      * @param Country|null $country
-     * @param State|null   $state
+     * @param State|null $state
+     * @param int[] $customerStreamIds
      */
     public function __construct(
         $baseUrl,
@@ -108,7 +114,8 @@ class ShopContext extends Extendable implements ProductContextInterface, \JsonSe
         array $priceGroups,
         Area $area = null,
         Country $country = null,
-        State $state = null
+        State $state = null,
+        $customerStreamIds = []
     ) {
         $this->baseUrl = $baseUrl;
         $this->shop = $shop;
@@ -120,6 +127,7 @@ class ShopContext extends Extendable implements ProductContextInterface, \JsonSe
         $this->area = $area;
         $this->country = $country;
         $this->state = $state;
+        $this->customerStreamIds = $customerStreamIds;
     }
 
     /**
@@ -211,6 +219,12 @@ class ShopContext extends Extendable implements ProductContextInterface, \JsonSe
     {
         return $this->state;
     }
+
+    public function getActiveCustomerStreamIds()
+    {
+        return $this->customerStreamIds;
+    }
+
 
     /**
      * {@inheritdoc}

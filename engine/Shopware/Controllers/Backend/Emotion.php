@@ -1011,6 +1011,8 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
         $emotion->setSeoDescription($data['seoDescription']);
         $emotion->setPreviewId(array_key_exists('previewId', $data) ? $data['previewId'] : null);
         $emotion->setPreviewSecret(array_key_exists('previewSecret', $data) ? $data['previewSecret'] : null);
+        $emotion->setCustomerStreamId($data['customerStreamId'] ?: null);
+        $emotion->setReplacement($data['replacement'] ?: null);
 
         Shopware()->Models()->persist($emotion);
         Shopware()->Models()->flush();

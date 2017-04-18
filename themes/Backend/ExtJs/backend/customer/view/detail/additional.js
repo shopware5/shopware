@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/customer/view/detail}
+// {namespace name=backend/customer/view/detail}
 
 /**
  * Shopware UI - Customer detail page additional panel
@@ -35,49 +35,49 @@
  * Displayed on the right side of the detail page when a customer is edit.
  *
  */
-//{block name="backend/customer/view/detail/additional"}
+// {block name="backend/customer/view/detail/additional"}
 Ext.define('Shopware.apps.Customer.view.detail.Additional', {
 
     /**
      * Define that the additional information is an Ext.panel.Panel extension
      * @string
      */
-    extend:'Ext.panel.Panel',
+    extend: 'Ext.panel.Panel',
 
     /**
      * List of short aliases for class names. Most useful for defining xtypes for widgets.
      * @string
      */
-    alias:'widget.customer-additional-panel',
+    alias: 'widget.customer-additional-panel',
 
     /**
      * Set css class for this component
      * @string
      */
-    cls:Ext.baseCSSPrefix + 'more-info',
+    cls: Ext.baseCSSPrefix + 'more-info',
 
     /**
      * Allow to scroll within the panel
      * @boolean
      */
-    autoScroll:true,
+    autoScroll: true,
 
     /**
      * Contains all snippets for the view component
      * @object
      */
-    snippets:{
-        registeredSince:'{s name=additional/registered_since}Registered since:{/s}',
-        lastLogin:'{s name=additional/last_login}Last login:{/s}',
-        language:'{s name=additional/language}Language:{/s}',
-        shop:'{s name=additional/shop}Shop:{/s}',
-        orders:'{s name=additional/orders_since_registration}Orders since registration:{/s}',
-        sales:'{s name=additional/sales}Turnover:{/s}',
-        paymentDefaults:'{s name=additional/payment_defaults}Payment defaults:{/s}',
-        emptyText:'{s name=additional/empty}No additional information found{/s}',
-        performOrderBtn:'{s name=additional/do_order}Perform order{/s}',
-        quickOrder:'{s name=additional/quick_order}For this customer, no account has been created (quick order){/s}',
-        title:'{s name=additional/title}Further information{/s}',
+    snippets: {
+        registeredSince: '{s name=additional/registered_since}Registered since:{/s}',
+        lastLogin: '{s name=additional/last_login}Last login:{/s}',
+        language: '{s name=additional/language}Language:{/s}',
+        shop: '{s name=additional/shop}Shop:{/s}',
+        orders: '{s name=additional/orders_since_registration}Orders since registration:{/s}',
+        sales: '{s name=additional/sales}Turnover:{/s}',
+        paymentDefaults: '{s name=additional/payment_defaults}Payment defaults:{/s}',
+        emptyText: '{s name=additional/empty}No additional information found{/s}',
+        performOrderBtn: '{s name=additional/do_order}Perform order{/s}',
+        quickOrder: '{s name=additional/quick_order}For this customer, no account has been created (quick order){/s}',
+        title: '{s name=additional/title}Further information{/s}',
         createAccountBtn: '{s name=additional/create_account}Create account{/s}'
     },
 
@@ -85,7 +85,7 @@ Ext.define('Shopware.apps.Customer.view.detail.Additional', {
      * Component event which is fired when the component is initials.
      * @return void
      */
-    initComponent:function () {
+    initComponent: function () {
         var me = this;
         me.title = me.snippets.title;
         me.registerEvents();
@@ -99,7 +99,7 @@ Ext.define('Shopware.apps.Customer.view.detail.Additional', {
      * which is displayed on bottom of the additional panel.
      * @return void
      */
-    registerEvents:function () {
+    registerEvents: function () {
         this.addEvents(
             /**
              * Event will be fired when the user clicks the "Perform order" button
@@ -129,35 +129,35 @@ Ext.define('Shopware.apps.Customer.view.detail.Additional', {
      * is displayed on bottom of the panel.
      * @return [Ext.container.Container] - Contains the perform order button and the create account button when the accountMode of the customer is set to 1
      */
-    createButtonsContainer:function () {
+    createButtonsContainer: function () {
         var me = this,
             buttons = [];
 
-        /*{if {acl_is_allowed privilege=perform_order}}*/
-            me.performOrderBtn = Ext.create('Ext.button.Button', {
-                text:me.snippets.performOrderBtn,
-                handler:function () {
-                    me.fireEvent('performOrder', me.record);
+        /* {if {acl_is_allowed privilege=perform_order}} */
+        me.performOrderBtn = Ext.create('Ext.button.Button', {
+            text: me.snippets.performOrderBtn,
+            handler: function () {
+                me.fireEvent('performOrder', me.record);
+            }
+        });
+        buttons.push(me.performOrderBtn);
+        /* {/if} */
+
+        /* {if {acl_is_allowed privilege=update}} */
+        if (me.record.get('accountMode') == 1) {
+            me.createAccountButton = Ext.create('Ext.button.Button', {
+                text: me.snippets.createAccountBtn,
+                handler: function () {
+                    var tpl = me.createInfoPanelTemplate();
+                    me.fireEvent('createAccount', me.record, me.infoView, tpl, me.createAccountButton);
                 }
             });
-            buttons.push(me.performOrderBtn);
-        /*{/if}*/
-
-        /*{if {acl_is_allowed privilege=update}}*/
-            if (me.record.get('accountMode') == 1) {
-                me.createAccountButton = Ext.create('Ext.button.Button', {
-                    text:me.snippets.createAccountBtn,
-                    handler:function () {
-                        var tpl = me.createInfoPanelTemplate();
-                        me.fireEvent('createAccount', me.record, me.infoView, tpl, me.createAccountButton);
-                    }
-                });
-                buttons.push(me.createAccountButton);
-            }
-        /*{/if}*/
+            buttons.push(me.createAccountButton);
+        }
+        /* {/if} */
 
         return Ext.create('Ext.container.Container', {
-            height:40,
+            height: 40,
             cls: Ext.baseCSSPrefix + 'button-container',
             items: buttons
         });
@@ -171,7 +171,7 @@ Ext.define('Shopware.apps.Customer.view.detail.Additional', {
      *
      * @return [Ext.XTemplate] generated Ext.XTemplate
      */
-    createInfoPanelTemplate:function () {
+    createInfoPanelTemplate: function () {
         var me = this;
 
         return new Ext.XTemplate(
@@ -215,35 +215,35 @@ Ext.define('Shopware.apps.Customer.view.detail.Additional', {
                     '</div>',
                 '</div>',
                 '</tpl>{/literal}',
-                {
+            {
                     /**
                      * Member function of the template which formats a date string
                      *
                      * @param [string] value - Date string in the following format: Y-m-d H:i:s
                      * @return [string] - The passed value, formatted with Ext.util.Format.date
                      */
-                    formatDate:function (value) {
-                        if ( value === Ext.undefined ) {
-                            return value;
-                        }
-                        return Ext.util.Format.date(value);
+                formatDate: function (value) {
+                    if (value === Ext.undefined) {
+                        return value;
                     }
-                },
-                {
+                    return Ext.util.Format.date(value);
+                }
+            },
+            {
                     /**
                      * Member function of the template which format a currency string
                      * @param [string] values - The currency value to be format
                      * @param [string] sign - The currency symbol to be displayed
                      * @return [string] - The passed value, formatted with Ext.util.Format.currency
                      */
-                    formatCurrency:function (value) {
-                        if ( value === Ext.undefined ) {
-                            return value;
-                        }
-
-                        return Ext.util.Format.currency(value);
+                formatCurrency: function (value) {
+                    if (value === Ext.undefined) {
+                        return value;
                     }
+
+                    return Ext.util.Format.currency(value);
                 }
+            }
         );
     },
 
@@ -253,13 +253,13 @@ Ext.define('Shopware.apps.Customer.view.detail.Additional', {
      *
      * @return [object] this.infoPanel - generated Ext.panel.Panel
      */
-    createInfoView:function () {
+    createInfoView: function () {
         var me = this;
 
         me.infoView = Ext.create('Ext.container.Container', {
             cls: Ext.baseCSSPrefix + 'outer-customer-info-pnl',
-            emptyText:me.snippets.emptyText,
-            autoScroll:true,
+            emptyText: me.snippets.emptyText,
+            autoScroll: true,
             renderTpl: me.createInfoPanelTemplate(),
             renderData: me.record.data
         });
@@ -268,4 +268,4 @@ Ext.define('Shopware.apps.Customer.view.detail.Additional', {
     }
 
 });
-//{/block}
+// {/block}

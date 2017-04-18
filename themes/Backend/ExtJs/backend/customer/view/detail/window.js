@@ -27,83 +27,83 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/customer/view/detail}
+// {namespace name=backend/customer/view/detail}
 
 /**
  * Shopware UI - Customer list detail page
  *
  * This component represents the window for the detail page of a customer record.
  */
-//{block name="backend/customer/view/detail/window"}
+// {block name="backend/customer/view/detail/window"}
 Ext.define('Shopware.apps.Customer.view.detail.Window', {
     /**
      * Define that the customer detail window is an extension of the Enlight application window
      * @string
      */
-    //extend:'Enlight.app.Window',
+    // extend:'Enlight.app.Window',
     extend: 'Enlight.app.Window',
 
     /**
      * Set the border layout for the detail window.
      * @string
      */
-    layout:'fit',
+    layout: 'fit',
     /**
      * List of short aliases for class names. Most useful for defining xtypes for widgets.
      * @string
      */
-    alias:'widget.customer-detail-window',
+    alias: 'widget.customer-detail-window',
     /**
      * Define the width of the window
      * @integer
      */
-    width:'80%',
+    width: '80%',
 
     /**
      * Define the height of the window
      * @integer
      */
-    height:'90%',
+    height: '90%',
 
     /**
      * Display no footer button for the detail window
      * @boolean
      */
-    footerButton:false,
+    footerButton: false,
     /**
      * Set no border for the window
      * @boolean
      */
-    border:false,
+    border: false,
 
     /**
      * Set css class for sass styling
      * @string
      */
-    cls:Ext.baseCSSPrefix + 'customer-detail-window',
+    cls: Ext.baseCSSPrefix + 'customer-detail-window',
     /**
      * A flag which causes the object to attempt to restore the state of internal properties from a saved state on startup.
      */
-    stateful:true,
+    stateful: true,
     /**
      * The unique id for this object to use for state management purposes.
      */
-    stateId:'shopware-customer-detail-window',
+    stateId: 'shopware-customer-detail-window',
 
     /**
      * Contains all snippets for the view component
      * @object
      */
-    snippets:{
-        titleCreate:'{s name=window/create_title}Customer administration - Create a customer{/s}',
-        titleEdit:'{s name=window/edit_title}Customer account:{/s}',
-        cancel:'{s name=window/cancel}Cancel{/s}',
-        save:'{s name=window/save}Save{/s}',
-        dataTab:'{s name=window/data_tab}Data{/s}',
-        orderTab:'{s name=window/order_tab}Orders{/s}',
-        addressTab:'{s name=window/address_tab}Addresses{/s}',
-        from:'{s name=window/from_date}From{/s}',
-        to:'{s name=window/to_date}To{/s}',
+    snippets: {
+        titleCreate: '{s name=window/create_title}Customer administration - Create a customer{/s}',
+        titleEdit: '{s name=window/edit_title}Customer account:{/s}',
+        cancel: '{s name=window/cancel}Cancel{/s}',
+        save: '{s name=window/save}Save{/s}',
+        dataTab: '{s name=window/data_tab}Data{/s}',
+        orderTab: '{s name=window/order_tab}Orders{/s}',
+        addressTab: '{s name=window/address_tab}Addresses{/s}',
+        from: '{s name=window/from_date}From{/s}',
+        to: '{s name=window/to_date}To{/s}',
         field_title: '{s name=base/field_title}Title{/s}',
         salutation: {
             label: '{s name=base/salutation}Salutation{/s}'
@@ -117,7 +117,7 @@ Ext.define('Shopware.apps.Customer.view.detail.Window', {
      * Component event method which is fired when the window is initialed.
      * @return void
      */
-    initComponent:function () {
+    initComponent: function () {
         var me = this;
 
         // Set the basic window title
@@ -126,7 +126,7 @@ Ext.define('Shopware.apps.Customer.view.detail.Window', {
         me.callParent(arguments);
 
         // Create the content if we're having an record on start up
-        if(me.record) {
+        if (me.record) {
             me.createTabPanel();
         }
     },
@@ -143,7 +143,7 @@ Ext.define('Shopware.apps.Customer.view.detail.Window', {
         me.paymentStore = stores.getPaymentStore;
         me.countryStore = stores.getCountryStore;
 
-        if(me.hasOwnProperty('orderGrid')) {
+        if (me.hasOwnProperty('orderGrid')) {
             me.orderGrid.dispatchStore = stores.getDispatchStore;
             me.orderGrid.orderStatusStore = stores.getOrderStatusStore;
             me.orderGrid.paymentStore = stores.getPaymentStore;
@@ -151,7 +151,7 @@ Ext.define('Shopware.apps.Customer.view.detail.Window', {
         }
         me.detailForm.loadRecord(me.record);
 
-        if (!me.record.get('id') ) {
+        if (!me.record.get('id')) {
             me.detailForm.getForm().clearInvalid();
         } else {
             me.countryStateStore = Ext.create('Shopware.apps.Base.store.CountryState');
@@ -194,11 +194,11 @@ Ext.define('Shopware.apps.Customer.view.detail.Window', {
      * @public
      * @return void
      */
-    setWindowTitle:function () {
+    setWindowTitle: function () {
         var me = this;
 
-        //set different titles for create and edit customers
-        if ( me.record.get('id') ) {
+        // set different titles for create and edit customers
+        if (me.record.get('id')) {
             me.setTitle(Ext.String.format('[0] [1] [2] ([3])',
                 me.snippets.titleEdit,
                 me.record.get('firstname') || '',
@@ -218,21 +218,20 @@ Ext.define('Shopware.apps.Customer.view.detail.Window', {
      * displays the orders grouped by the order year and month
      * @return [array] - Contains the data and order tab container
      */
-    getTabs:function () {
+    getTabs: function () {
         var me = this,
             tabs = [
                 me.createFormTab()
             ];
 
-        if ( me.record.get('id') ) {
+        if (me.record.get('id')) {
             tabs.push(me.createAddressTab());
-            /*{if {acl_is_allowed resource=order privilege=read}}*/
-                tabs.push(me.createOrderTab());
-            /*{/if}*/
+            /* {if {acl_is_allowed resource=order privilege=read}} */
+            tabs.push(me.createOrderTab());
+            /* {/if} */
         }
 
         return tabs;
-
     },
 
     /**
@@ -240,13 +239,13 @@ Ext.define('Shopware.apps.Customer.view.detail.Window', {
      * to edit or create a new customer.
      * @return [Ext.container.Container] - Contains the data and order tab
      */
-    createFormTab:function () {
+    createFormTab: function () {
         var me = this, additional;
 
-        //Create a customer? Then display only the form panel
+        // Create a customer? Then display only the form panel
         if (me.record.get('id')) {
             additional = Ext.create('Shopware.apps.Customer.view.detail.Additional', {
-                region:'east',
+                region: 'east',
                 width: 205,
                 minSize: 205,
                 maxSize: 250,
@@ -276,11 +275,11 @@ Ext.define('Shopware.apps.Customer.view.detail.Window', {
 
         me.detailForm = Ext.create('Ext.form.Panel', {
             collapsible: false,
-            region:'center',
+            region: 'center',
             minWidth: 600,
-            bodyPadding:10,
-            autoScroll:true,
-            items:[
+            bodyPadding: 10,
+            autoScroll: true,
+            items: [
                 me.baseFieldSet,
                 me.personalFieldSet,
                 me.addressFieldSet,
@@ -299,7 +298,7 @@ Ext.define('Shopware.apps.Customer.view.detail.Window', {
 
         return Ext.create('Ext.container.Container', {
             layout: 'border',
-            title:me.snippets.dataTab,
+            title: me.snippets.dataTab,
             items:
             [
                 additional,
@@ -358,15 +357,15 @@ Ext.define('Shopware.apps.Customer.view.detail.Window', {
             title: '{s name="personal_field_set"}{/s}',
             defaults: {
                 xtype: 'container',
-                columnWidth:0.5,
-                border:false,
+                columnWidth: 0.5,
+                border: false,
                 cls: Ext.baseCSSPrefix + 'field-set-container',
-                layout:'anchor',
+                layout: 'anchor',
                 defaults: {
-                    anchor:'95%',
-                    labelWidth:155,
-                    minWidth:250,
-                    xtype:'textfield'
+                    anchor: '95%',
+                    labelWidth: 155,
+                    minWidth: 250,
+                    xtype: 'textfield'
                 }
             },
             items: [
@@ -415,25 +414,25 @@ Ext.define('Shopware.apps.Customer.view.detail.Window', {
             text: me.snippets.cancel,
             scope: me,
             cls: 'secondary',
-            handler:function () {
+            handler: function () {
                 me.destroy();
             }
         });
         buttons.push(cancelButton);
 
         var saveButton = Ext.create('Ext.button.Button', {
-            text:me.snippets.save,
-            action:'save-customer',
-            cls:'primary'
+            text: me.snippets.save,
+            action: 'save-customer',
+            cls: 'primary'
         });
 
-        //Create a customer? Then display only the form panel
-        if ( !me.record.get('id') ) {
+        // Create a customer? Then display only the form panel
+        if (!me.record.get('id')) {
             buttons.push(saveButton);
         } else {
-            /*{if {acl_is_allowed privilege=update}}*/
-                buttons.push(saveButton);
-            /*{/if}*/
+            /* {if {acl_is_allowed privilege=update}} */
+            buttons.push(saveButton);
+            /* {/if} */
         }
         return buttons;
     },
@@ -443,13 +442,13 @@ Ext.define('Shopware.apps.Customer.view.detail.Window', {
      * which displays the customer orders grouped by the order year and month
      * @return [Ext.container.Container] - Contains the order grid and the order chart
      */
-    createOrderTab:function () {
+    createOrderTab: function () {
         var me = this,
             gridStore = Ext.create('Shopware.apps.Customer.store.Orders'),
             chartStore = Ext.create('Shopware.apps.Customer.store.Chart');
 
-        gridStore.getProxy().extraParams = { customerID:me.record.data.id };
-        chartStore.getProxy().extraParams = { customerID:me.record.data.id };
+        gridStore.getProxy().extraParams = { customerID: me.record.data.id };
+        chartStore.getProxy().extraParams = { customerID: me.record.data.id };
 
         me.orderGrid = Ext.create('Shopware.apps.Customer.view.order.List', {
             flex: 1,
@@ -461,7 +460,7 @@ Ext.define('Shopware.apps.Customer.view.detail.Window', {
         return Ext.create('Ext.container.Container', {
             layout: {
                 type: 'vbox',
-                align : 'stretch'
+                align: 'stretch'
             },
             defaults: { flex: 1 },
             title: me.snippets.orderTab,
@@ -470,9 +469,9 @@ Ext.define('Shopware.apps.Customer.view.detail.Window', {
                 unstyled: true,
                 layout: 'border',
                 items: [{
-                    xtype:'customer-list-order-chart',
+                    xtype: 'customer-list-order-chart',
                     region: 'center',
-                    store:chartStore.load()
+                    store: chartStore.load()
                 }],
                 dockedItems: [ me.orderToolbar ]
             }, me.orderGrid ]
@@ -485,32 +484,32 @@ Ext.define('Shopware.apps.Customer.view.detail.Window', {
      *
      * @return [Ext.toolbar.Toolbar] - Toolbar for the order tab which contains the from and to date field to filter the chart
      */
-    createOrderToolbar:function () {
+    createOrderToolbar: function () {
         var me = this,
             today = new Date();
 
         me.fromDateField = Ext.create('Ext.form.field.Date', {
-            labelWidth:45,
-            name:'fromDate',
-            fieldLabel:me.snippets.from,
-            value:new Date(today.getFullYear() - 1, today.getMonth(), today.getDate())
+            labelWidth: 45,
+            name: 'fromDate',
+            fieldLabel: me.snippets.from,
+            value: new Date(today.getFullYear() - 1, today.getMonth(), today.getDate())
         });
 
         me.toDateField = Ext.create('Ext.form.field.Date', {
-            labelWidth:45,
-            name:'toDate',
-            fieldLabel:me.snippets.to,
-            value:today
+            labelWidth: 45,
+            name: 'toDate',
+            fieldLabel: me.snippets.to,
+            value: today
         });
 
         return Ext.create('Ext.toolbar.Toolbar', {
-            ui:'shopware-ui',
+            ui: 'shopware-ui',
             padding: '10 0 5',
             cls: Ext.baseCSSPrefix + 'order-chart-toolbar',
-            items:[
-                { xtype:'tbspacer', width:6 },
+            items: [
+                { xtype: 'tbspacer', width: 6 },
                 me.fromDateField,
-                { xtype:'tbspacer', width:12 },
+                { xtype: 'tbspacer', width: 12 },
                 me.toDateField
             ]
         });
@@ -522,7 +521,7 @@ Ext.define('Shopware.apps.Customer.view.detail.Window', {
         me.billingPanel = me.createBillingContainer();
         me.shippingPanel = me.createShippingContainer();
 
-        return me.addressContainer = Ext.create('Ext.container.Container', {
+        me.addressContainer = Ext.create('Ext.container.Container', {
             minWidth: 250,
             layout: {
                 type: 'hbox',
@@ -535,6 +534,7 @@ Ext.define('Shopware.apps.Customer.view.detail.Window', {
                 me.shippingPanel
             ]
         });
+        return me.addressContainer;
     },
 
     /**
@@ -565,7 +565,7 @@ Ext.define('Shopware.apps.Customer.view.detail.Window', {
      *
      * @return [Ext.XTemplate] generated Ext.XTemplate
      */
-    createBillingTemplate:function () {
+    createBillingTemplate: function () {
         var me = this;
 
         return new Ext.XTemplate(
@@ -629,12 +629,12 @@ Ext.define('Shopware.apps.Customer.view.detail.Window', {
             shipping = me.record.getShipping().first();
 
         if (shipping === Ext.undefined) {
-            if(me.record.getBilling() === null || me.record.getBilling().first() === null) {
+            if (me.record.getBilling() === null || me.record.getBilling().first() === null) {
                 return;
             }
             shipping = me.record.getBilling().first();
-            if(shipping == null) {
-                return ;
+            if (shipping == null) {
+                return;
             }
         }
 
@@ -660,7 +660,7 @@ Ext.define('Shopware.apps.Customer.view.detail.Window', {
      *
      * @return [Ext.XTemplate] generated Ext.XTemplate
      */
-    createShippingTemplate:function () {
+    createShippingTemplate: function () {
         return this.createBillingTemplate();
     },
 
@@ -688,11 +688,12 @@ Ext.define('Shopware.apps.Customer.view.detail.Window', {
     createAddressForm: function() {
         var me = this;
 
-        return me.addressForm = Ext.create('Shopware.apps.Customer.view.address.detail.Address', {
+        me.addressForm = Ext.create('Shopware.apps.Customer.view.address.detail.Address', {
             padding: 0,
             record: Ext.create('Shopware.apps.Customer.model.Address')
         });
+        return me.addressForm;
     }
 
 });
-//{/block}
+// {/block}

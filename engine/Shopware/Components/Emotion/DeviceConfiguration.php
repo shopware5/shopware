@@ -26,6 +26,7 @@ namespace Shopware\Components\Emotion;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class DeviceConfiguration
 {
@@ -44,9 +45,6 @@ class DeviceConfiguration
 
     /**
      * @param int $categoryId
-     *
-     * @throws \Exception
-     *
      * @return array
      */
     public function get($categoryId)
@@ -58,10 +56,12 @@ class DeviceConfiguration
             'emotion.device as devices',
             'emotion.show_listing as showListing',
             'emotion.fullscreen',
+            'emotion.customer_stream_id',
+            'emotion.replacement'
         ]);
 
         $query->from('s_emotion', 'emotion')
-            ->where('emotion.active = 1')
+            ->andWhere('emotion.active = 1')
             ->andWhere('emotion.is_landingpage = 0')
             ->andWhere('(emotion.valid_to   >= NOW() OR emotion.valid_to IS NULL)')
             ->andWhere('(emotion.valid_from <= NOW() OR emotion.valid_from IS NULL)')
@@ -219,7 +219,9 @@ class DeviceConfiguration
             'emotion.seo_description',
             'emotion.valid_from',
             'emotion.valid_to',
-            'now()',
+            'emotion.customer_stream_id',
+            'emotion.replacement',
+            'now()'
         ]);
 
         $query->from('s_emotion', 'emotion')

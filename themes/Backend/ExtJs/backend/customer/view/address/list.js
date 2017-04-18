@@ -27,27 +27,27 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/customer/view/address}
+// {namespace name=backend/customer/view/address}
 
 /**
  * Shopware UI - Customer address list backend module
  */
-//{block name="backend/customer/view/address/list"}
+// {block name="backend/customer/view/address/list"}
 Ext.define('Shopware.apps.Customer.view.address.List', {
 
-    extend:'Shopware.grid.Panel',
+    extend: 'Shopware.grid.Panel',
 
     /**
      * List of short aliases for class names. Most useful for defining xtypes for widgets.
      * @string
      */
-    alias:'widget.customer-address-grid',
+    alias: 'widget.customer-address-grid',
 
     /**
      * The view needs to be scrollable
      * @string
      */
-    autoScroll:true,
+    autoScroll: true,
 
     /**
      * Set css class for this component
@@ -63,7 +63,7 @@ Ext.define('Shopware.apps.Customer.view.address.List', {
     /**
      * Snippets for grid headers
      */
-    snippets:{
+    snippets: {
         header: {
             isDefaultAddress: '{s name="list/header/isDefaultAddress"}Default{/s}',
             company: '{s name="list/header/company"}Company{/s}',
@@ -150,18 +150,18 @@ Ext.define('Shopware.apps.Customer.view.address.List', {
             }
         };
 
-        /*{if {config name=showphonenumberfield}}*/
+        /* {if {config name=showphonenumberfield}} */
         columns['phone'] = {
             header: me.snippets.header.phone,
             flex: 1
         };
-        /*{/if}*/
+        /* {/if} */
 
         return {
             columns: columns,
             searchField: false,
             detailWindow: 'Shopware.apps.Customer.view.address.detail.Window'
-        }
+        };
     },
 
     /**
@@ -240,7 +240,7 @@ Ext.define('Shopware.apps.Customer.view.address.List', {
             defaults.push('{s name="list/data/shippingaddress"}{/s}');
         }
 
-        return defaults.join("<br/>");
+        return defaults.join('<br/>');
     },
 
     /**
@@ -279,8 +279,8 @@ Ext.define('Shopware.apps.Customer.view.address.List', {
     isDefaultAddress: function(record) {
         var customer = record.getCustomerStore && record.getCustomerStore.first();
 
-        return customer
-            && (customer.get('default_billing_address_id') == record.get('id') || customer.get('default_shipping_address_id') == record.get('id'));
+        return customer &&
+            (customer.get('default_billing_address_id') == record.get('id') || customer.get('default_shipping_address_id') == record.get('id'));
     }
 });
-//{/block}
+// {/block}

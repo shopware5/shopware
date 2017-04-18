@@ -27,28 +27,30 @@
  * @author shopware AG
  */
 
+// {namespace name=backend/customer/view/main}
+
 /**
  * Shopware Store - Customer list backend module.
  *
  * The detail store is used for the customer detail page and allows the user
  * to edit or add customers.
  */
-//{block name="backend/customer/store/detail"}
+// {block name="backend/customer/store/detail"}
 Ext.define('Shopware.apps.Customer.store.Detail', {
     /**
      * Extend for the standard ExtJS 4
      * @string
      */
-    extend:'Ext.data.Store',
+    extend: 'Ext.data.Store',
     /**
      * Disable auto loading
      * @boolean
      */
-    autoLoad:false,
+    autoLoad: false,
     /**
      * Define the used model for this store
      * @string
      */
-    model:'Shopware.apps.Customer.model.Customer'
+    model: 'Shopware.apps.Customer.model.Customer'
 });
-//{/block}
+// {/block}

@@ -27,97 +27,172 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/customer/view/main}
-
-/**
- * Shopware UI - Customer list main window.
- *
- * todo@all: Documentation
- */
-//{block name="backend/customer/view/main/window"}
+// {namespace name=backend/customer/view/main}
+// {block name="backend/customer/view/main/window"}
 Ext.define('Shopware.apps.Customer.view.main.Window', {
-    /**
-     * Define that the customer main window is an extension of the enlight application window
-     * @string
-     */
-    extend:'Enlight.app.Window',
-    /**
-     * Set base css class prefix and module individual css class for css styling
-     * @string
-     */
-    cls:Ext.baseCSSPrefix + 'customer-list-window',
-    /**
-     * List of short aliases for class names. Most useful for defining xtypes for widgets.
-     * @string
-     */
-    alias:'widget.customer-list-main-window',
-    /**
-     * Set no border for the window
-     * @boolean
-     */
-    border:false,
-    /**
-     * True to automatically show the component upon creation.
-     * @boolean
-     */
-    autoShow:true,
-    /**
-     * Set border layout for the window
-     * @string
-     */
-    layout:'fit',
-    /**
-     * Define window width
-     * @integer
-     */
-    width:800,
-    /**
-     * Define window height
-     * @integer
-     */
-    height:'90%',
-    /**
-     * True to display the 'maximize' tool button and allow the user to maximize the window, false to hide the button and disallow maximizing the window.
-     * @boolean
-     */
-    maximizable:true,
-    /**
-     * True to display the 'minimize' tool button and allow the user to minimize the window, false to hide the button and disallow minimizing the window.
-     * @boolean
-     */
-    minimizable:true,
-    /**
-     * A flag which causes the object to attempt to restore the state of internal properties from a saved state on startup.
-     */
-    stateful:true,
-    /**
-     * The unique id for this object to use for state management purposes.
-     */
-    stateId:'shopware-customer-main-window',
-    /**
-     * Set window title which is displayed in the window header
-     * @string
-     */
-    title:'{s name=window_title}Customer list{/s}',
+    extend: 'Enlight.app.Window',
+    cls: Ext.baseCSSPrefix + 'customer-list-window',
+    alias: 'widget.customer-list-main-window',
+    border: false,
+    autoShow: true,
+    layout: 'border',
+    width: '95%',
+    height: '95%',
+    title: '{s name=window_title}Customer list{/s}',
 
     /**
      * Initializes the component and builds up the main interface
      *
      * @return void
      */
-    initComponent:function () {
+    initComponent: function () {
         var me = this;
 
         Ext.suspendLayouts();
+        me.listStore = Ext.create('Shopware.apps.Customer.store.Preview', { pageSize: 15 }).load({ conditions: null });
 
-        //add the customer list grid panel and set the store
-        me.items = [{
-            xtype:'customer-list',
+        me.gridPanel = Ext.create('Shopware.apps.Customer.view.list.List', {
             store: me.listStore
-        }];
+        });
+
+        me.gridPanel.on('afterrender', function() {
+            me.gridPanel.getEl().on('click', function(event, element) {
+                element = Ext.get(element);
+                event.preventDefault();
+
+                me.streamListing.getSelectionModel().select([
+                    me.streamListing.getStore().getById(
+                        window.parseInt(element.getAttribute('data-id'))
+                    )
+                ]);
+            }, me, {
+                delegate: '.stream-inline'
+            });
+        });
+
+        me.streamListing = Ext.create('Shopware.apps.Customer.view.customer_stream.Listing', {
+            store: Ext.create('Shopware.apps.Customer.store.CustomerStream').load(),
+            subApp: me.subApp,
+            collapsible: true,
+            hideHeaders: true,
+            title: '{s name=window/defined_streams}Definied streams{/s}',
+            height: 200,
+            iconCls: 'sprite-product-streams',
+            selectionChanged: function (selModel, selection) {
+                me.fireEvent('stream-selected', selModel, selection);
+            }
+        });
+
+        me.filterPanel = Ext.create('Shopware.apps.Customer.view.customer_stream.ConditionPanel', { flex: 4 });
+
+        me.metaChart = Ext.create('Shopware.apps.Customer.view.chart.MetaChart');
+
+        me.metaChartStore = me.metaChart.store;
+
+        me.streamChartContainer = Ext.create('Ext.container.Container', {
+            items: [],
+            flex: 1,
+            layout: 'border'
+        });
+
+        me.streamDetailForm = Ext.create('Ext.form.Panel', {
+            bodyPadding: 20,
+            dockedItems: [{
+                xtype: 'toolbar',
+                dock: 'bottom',
+                items: ['->', me.createSaveStreamDetailButton()]
+            }]
+        });
+
+        me.cardContainer = Ext.create('Ext.container.Container', {
+            items: [ me.gridPanel, me.metaChart, me.streamChartContainer, me.streamDetailForm ],
+            region: 'center',
+            layout: 'card'
+        });
+
+        me.formPanel = Ext.create('Ext.form.Panel', {
+            region: 'west',
+            collapsible: true,
+            cls: 'shopware-form customer-filter-panel',
+            layout: {
+                type: 'vbox',
+                align: 'stretch'
+            },
+            width: 400,
+            title: '{s name=window/filter_and_customer_streams}Filter & Customer streams{/s}',
+            items: [
+                me.filterPanel,
+                me.streamListing
+            ]
+        });
+        me.items = [
+            me.formPanel,
+            me.cardContainer
+        ];
+        me.dockedItems = [ me.getToolbar() ];
+
         Ext.resumeLayouts(true);
 
         me.callParent(arguments);
+
+        me.fireEvent('reset-progressbar');
+    },
+
+    /**
+     * Creates the grid toolbar with the add and delete button
+     *
+     * @return [Ext.toolbar.Toolbar] grid toolbar
+     */
+    getToolbar: function () {
+        var me = this;
+
+        me.toolbar = Ext.create('Shopware.apps.Customer.view.main.Toolbar', {
+            handlers: me.filterPanel.handlers
+        });
+        return me.toolbar;
+    },
+
+    customerSelected: function (selection) {
+        var me = this;
+        me.deleteCustomerButton.setDisabled(selection.length === 0);
+    },
+
+    resetFilterPanel: function() {
+        var me = this;
+
+        me.filterPanel.removeAll();
+        me.filterPanel.loadRecord(null);
+        me.formPanel.loadRecord(null);
+    },
+
+    loadListing: function() {
+        var me = this;
+
+        if (!me.filterPanel.getForm().isValid()) {
+            return;
+        }
+
+        me.listStore.getProxy().extraParams = me.filterPanel.getSubmitData();
+        me.listStore.load();
+    },
+
+    resetTitles: function() {
+        var me = this;
+
+        me.formPanel.setTitle('{s name=window/stream_filter}Stream filter{/s}');
+        me.setTitle('{s name=window/customer_list }Customer list{/s}');
+    },
+
+    createSaveStreamDetailButton: function() {
+        var me = this;
+
+        return Ext.create('Ext.button.Button', {
+            text: '{s name=save}Save{/s}',
+            cls: 'primary',
+            handler: function () {
+                me.fireEvent('save-stream-details');
+            }
+        });
     }
 });
-//{/block}
+// {/block}

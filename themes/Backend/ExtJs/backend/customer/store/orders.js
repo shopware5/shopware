@@ -27,43 +27,45 @@
  * @author shopware AG
  */
 
+// {namespace name=backend/customer/view/main}
+
 /**
  * Shopware Store - Customer list backend module
  *
  * The orders store is used from the customer order grid which is displayed
  * on bottom of the order tab.
  */
-//{block name="backend/customer/store/orders"}
+// {block name="backend/customer/store/orders"}
 Ext.define('Shopware.apps.Customer.store.Orders', {
     /**
      * Extend for the standard ExtJS 4
      * @string
      */
-    extend:'Ext.data.Store',
+    extend: 'Ext.data.Store',
     /**
      * Disable auto loading
      * @boolean
      */
-    autoLoad:false,
+    autoLoad: false,
     /**
      * Amount of data loaded at once
      * @integer
      */
-    pageSize:10,
+    pageSize: 10,
     /**
      * Enable remote sorting.
      * @boolean
      */
-    remoteSort:true,
+    remoteSort: true,
     /**
      * Enable remote filtering.
      * @boolean
      */
-    remoteFilter:true,
+    remoteFilter: true,
     /**
      * Define the used model for this store
      * @string
      */
-    model:'Shopware.apps.Customer.model.Order'
+    model: 'Shopware.apps.Customer.model.Order'
 });
-//{/block}
+// {/block}
