@@ -135,6 +135,7 @@ This changelog references changes done in Shopware 5.3 patch versions.
 ```
 
 did not work anymore because the smarty rendering is off. The string {$offerPosition.trackingcode} is only a placeholder.
+* Change `s_articles_details.instock` definition from `NULL` to `NOT NULL DEFAULT '0'`
 
 ### Removals
 
