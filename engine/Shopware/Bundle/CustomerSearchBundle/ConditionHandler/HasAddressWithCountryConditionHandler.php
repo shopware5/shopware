@@ -39,15 +39,15 @@ class HasAddressWithCountryConditionHandler implements ConditionHandlerInterface
 
     public function handle(ConditionInterface $condition, QueryBuilder $query)
     {
-//        $query->innerJoin(
-//            'customer',
-//            's_user_addresses',
-//            'addresses',
-//            'addresses.user_id = customer.id
-//            AND addresses.country_id IN (:HasAddressWithCountryCondition)'
-//        );
-//
-//        /* @var HasAddressWithCountryCondition $condition */
-//        $query->setParameter(':HasAddressWithCountryCondition', $condition->getCountryIds(), Connection::PARAM_INT_ARRAY);
+        $query->innerJoin(
+            'customer',
+            's_user_addresses',
+            'addresses',
+            'addresses.user_id = customer.id
+            AND addresses.country_id IN (:HasAddressWithCountryCondition)'
+        );
+
+        /* @var HasAddressWithCountryCondition $condition */
+        $query->setParameter(':HasAddressWithCountryCondition', $condition->getCountryIds(), Connection::PARAM_INT_ARRAY);
     }
 }

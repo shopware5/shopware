@@ -75,12 +75,9 @@ class Attribute extends Struct implements \JsonSerializable
      */
     public function set($name, $value)
     {
-        //        if (!$this->isValid($value)) {
-//            throw new \Exception(sprintf(
-//                'Class values should be serializable',
-//                __CLASS__
-//            ));
-//        }
+        if (!$this->isValid($value)) {
+            throw new \Exception('Class values should be serializable');
+        }
 
         $this->storage[$name] = $value;
     }
