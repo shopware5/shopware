@@ -123,13 +123,13 @@ Ext.define('Shopware.apps.Customer', {
      * The other shops are global stores which used for combo boxes.
      * @array
      */
-    stores: [ 'Detail', 'MetaChart', 'List', 'Orders', 'Chart', 'Batch', 'Address' ],
+    stores: [ 'Detail', 'MetaChart', 'Orders', 'Chart', 'Batch', 'Address' ],
 
     /**
      * All store's required models. The detail store handles the base, billing, shipping and debit model.
      * @array
      */
-    models: [ 'Customer', 'Billing', 'Shipping', 'Debit', 'PaymentData', 'List', 'Order', 'Chart', 'Batch', 'Address' ],
+    models: [ 'Customer', 'Billing', 'Shipping', 'Debit', 'PaymentData', 'Order', 'Chart', 'Batch', 'Address' ],
 
     /**
      * Returns the main application window for this is expected

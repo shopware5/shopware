@@ -334,6 +334,13 @@ did not work anymore because the smarty rendering is off. The string {$offerPosi
 * Removed `__country_shippingfree` field in `Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\FieldHelper::getCountryFields`
 * Removed `Shopware\Bundle\StoreFrontBundle\Struct\Country::setShippingFree` and `Shopware\Bundle\StoreFrontBundle\Struct\Country::isShippingFree`
 * Removed `Shopware\Models\Country\Country::$shippingFree`, `Shopware\Models\Country\Country::setShippingFree` and `Shopware\Models\Country\Country::getShippingFree`
+* Removed old customer listing functions:
+    * `Shopware\Models\Customer\Repository::getListQueryBuilder` 
+    * `Shopware\Models\Customer\Repository::getListQuery`
+    * `Shopware_Controllers_Backend_Customer::getListAction`
+    * `Shopware.apps.Customer.model.List`
+    * `Shopware.apps.Customer.store.List`
+    * Functions only used for backend listing, use CustomerSearchBundle or own query instead.
 
 ### Deprecations
 
