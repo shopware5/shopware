@@ -1,9 +1,31 @@
 <?php
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
 
 namespace Shopware\Tests\Functional\Bundle\CustomerSearchBundle\ConditionHandler;
 
 use Shopware\Bundle\CustomerSearchBundle\Condition\OrderedProductOfCategoryCondition;
-use Shopware\Bundle\CustomerSearchBundle\Criteria;
+use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Models\Article\Article;
 use Shopware\Tests\Functional\Bundle\CustomerSearchBundle\TestCase;
 use Shopware\Tests\Functional\Bundle\StoreFrontBundle\Helper;
@@ -24,7 +46,6 @@ class OrderedProductOfCategoryConditionHandlerTest extends TestCase
      * @var Article
      */
     private $sw2;
-
 
     protected function setUp()
     {
@@ -54,7 +75,7 @@ class OrderedProductOfCategoryConditionHandlerTest extends TestCase
         $criteria = new Criteria();
         $criteria->addCondition(
             new OrderedProductOfCategoryCondition([
-                $this->categoryId
+                $this->categoryId,
             ])
         );
 
@@ -70,10 +91,10 @@ class OrderedProductOfCategoryConditionHandlerTest extends TestCase
                             'ordernumber' => '1',
                             'status' => 2,
                             'details' => [
-                                ['ordernumber' => 'SW1', 'modus' => 0, 'articleID' => $this->sw1->getId()]
-                            ]
-                        ]
-                    ]
+                                ['articleordernumber' => 'SW1', 'modus' => 0, 'articleID' => $this->sw1->getId()],
+                            ],
+                        ],
+                    ],
                 ],
                 [
                     'email' => 'test2@example.com',
@@ -83,10 +104,10 @@ class OrderedProductOfCategoryConditionHandlerTest extends TestCase
                             'ordernumber' => '2',
                             'status' => 2,
                             'details' => [
-                                ['ordernumber' => 'SW2', 'modus' => 0, 'articleID' => $this->sw2->getId()]
-                            ]
-                        ]
-                    ]
+                                ['articleordernumber' => 'SW2', 'modus' => 0, 'articleID' => $this->sw2->getId()],
+                            ],
+                        ],
+                    ],
                 ],
                 [
                     'email' => 'test3@example.com',
@@ -96,12 +117,12 @@ class OrderedProductOfCategoryConditionHandlerTest extends TestCase
                             'ordernumber' => '3',
                             'status' => 2,
                             'details' => [
-                                ['ordernumber' => 'SW200', 'modus' => 0],
-                                ['ordernumber' => 'SW100', 'modus' => 1]
-                            ]
-                        ]
-                    ]
-                ]
+                                ['articleordernumber' => 'SW200', 'modus' => 0],
+                                ['articleordernumber' => 'SW100', 'modus' => 1],
+                            ],
+                        ],
+                    ],
+                ],
             ]
         );
     }
