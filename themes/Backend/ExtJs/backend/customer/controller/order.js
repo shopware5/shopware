@@ -159,7 +159,8 @@ Ext.define('Shopware.apps.Customer.controller.Order', {
      * Event listener method which is fired when the user
      * insert a search string into the text field which is placed
      * on top of the customer order grid.
-     * @param [object] field - Ext.field.Text which is displayed on the top of the customer order grid
+     * @param [string] value - search string
+     * @param [object] store - store that will be filtered
      * @return boolean
      */
     onSearchOrder: function (value, store) {

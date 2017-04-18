@@ -27,6 +27,8 @@
  * @author shopware AG
  */
 
+// {namespace name=backend/customer/view/main}
+
 /**
  * Shopware Model - Customer list backend module.
  * The billing model represents a single data row of the s_user_billingaddress or

@@ -19,10 +19,17 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
+ *
+ * @category   Shopware
+ * @package    Customer
+ * @subpackage CustomerStream
+ * @version    $Id$
+ * @author shopware AG
  */
 
-// {namespace name="backend/customer_stream/translation"}
-Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.SearchTerm', {
+// {namespace name=backend/customer/view/main}
+// {block name="backend/customer/view/customer_stream/conditions/search_term_condition"}
+Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.SearchTermCondition', {
 
     getLabel: function() {
         return '{s name="customer_searchterm_condition"}Search term condition{/s}';
@@ -52,3 +59,4 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.SearchTerm', 
         };
     }
 });
+// {/block}

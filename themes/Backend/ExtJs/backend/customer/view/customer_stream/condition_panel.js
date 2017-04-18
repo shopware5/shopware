@@ -19,9 +19,16 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
+ *
+ * @category   Shopware
+ * @package    Customer
+ * @subpackage CustomerStream
+ * @version    $Id$
+ * @author shopware AG
  */
 
-// {namespace name="backend/customer_stream/translation"}
+// {namespace name=backend/customer/view/main}
+// {block name="backend/customer/view/customer_stream/condition_panel"}
 Ext.define('Shopware.apps.Customer.view.customer_stream.ConditionPanel', {
     extend: 'Ext.form.Panel',
     alias: 'widget.customer-stream-condition-panel',
@@ -71,7 +78,7 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.ConditionPanel', {
             Ext.create('Shopware.apps.Customer.view.customer_stream.conditions.OrderedWithPaymentCondition'),
             Ext.create('Shopware.apps.Customer.view.customer_stream.conditions.HasTotalOrderAmountCondition'),
             Ext.create('Shopware.apps.Customer.view.customer_stream.conditions.CustomerAttributeCondition'),
-            Ext.create('Shopware.apps.Customer.view.customer_stream.conditions.SearchTerm')
+            Ext.create('Shopware.apps.Customer.view.customer_stream.conditions.SearchTermCondition')
         ];
     },
 
@@ -183,3 +190,4 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.ConditionPanel', {
         return handler;
     }
 });
+// {/block}

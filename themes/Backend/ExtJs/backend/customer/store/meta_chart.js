@@ -26,6 +26,9 @@
  * @version    $Id$
  * @author shopware AG
  */
+
+// {namespace name=backend/customer/view/main}
+// {block name="backend/customer/store/meta_chart"}
 Ext.define('Shopware.apps.Customer.store.MetaChart', {
     extend: 'Ext.data.Store',
 
@@ -47,3 +50,4 @@ Ext.define('Shopware.apps.Customer.store.MetaChart', {
         }
     }
 });
+// {/block}

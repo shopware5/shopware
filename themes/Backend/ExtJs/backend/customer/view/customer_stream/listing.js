@@ -19,10 +19,16 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
+ *
+ * @category   Shopware
+ * @package    Customer
+ * @subpackage CustomerStream
+ * @version    $Id$
+ * @author shopware AG
  */
 
-// {namespace name="backend/customer_stream/translation"}
-
+// {namespace name=backend/customer/view/main}
+// {block name="backend/customer/view/customer_stream/listing"}
 Ext.define('Shopware.apps.Customer.view.customer_stream.Listing', {
     extend: 'Shopware.grid.Panel',
     alias: 'widget.customer-stream-listing',
@@ -60,3 +66,4 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.Listing', {
         return '<span class="stream-name-column"><i>' + value + '</i></span>';
     }
 });
+// {/block}

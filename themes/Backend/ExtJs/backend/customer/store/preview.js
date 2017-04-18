@@ -19,10 +19,16 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
+ *
+ * @category   Shopware
+ * @package    Customer
+ * @subpackage Store
+ * @version    $Id$
+ * @author shopware AG
  */
 
-// {namespace name="backend/customer_stream/translation"}
-
+// {namespace name=backend/customer/view/main}
+// {block name="backend/customer/store/preview"}
 Ext.define('Shopware.apps.Customer.store.Preview', {
     extend: 'Ext.data.Store',
     model: 'Shopware.model.Dynamic',
@@ -38,3 +44,4 @@ Ext.define('Shopware.apps.Customer.store.Preview', {
         reader: Ext.create('Shopware.model.DynamicReader')
     }
 });
+// {/block}

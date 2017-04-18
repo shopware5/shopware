@@ -21,11 +21,12 @@
  * our trademarks remain entirely with us.
  *
  * @category   Shopware
- * @package    ProductStream
+ * @package    Customer
  * @subpackage Store
  * @version    $Id$
  * @author shopware AG
  */
+// {namespace name=backend/customer/view/main}
 // {block name="backend/product_stream/store/attribute"}
 Ext.define('Shopware.apps.Customer.store.Attribute', {
     extend: 'Ext.data.Store',

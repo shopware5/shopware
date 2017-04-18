@@ -102,8 +102,7 @@ Ext.define('Shopware.apps.Customer.controller.List', {
      * Event listener method which fires when the user use the
      * delete icon at the end of an grid row to delete a single customer.
      *
-     * @param [object] view - The view
-     * @param [integer] rowIndex - On which row position has been clicked
+     * @param [object] record - customer record
      * @return void
      */
     onDeleteSingleCustomer: function (record) {

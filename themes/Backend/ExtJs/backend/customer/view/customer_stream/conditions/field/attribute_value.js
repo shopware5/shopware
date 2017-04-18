@@ -21,12 +21,13 @@
  * our trademarks remain entirely with us.
  *
  * @category   Shopware
- * @package    ProductStream
- * @subpackage Window
+ * @package    Customer
+ * @subpackage CustumerStream
  * @version    $Id$
  * @author shopware AG
  */
 
+// {block name="backend/customer/view/customer_stream/conditions/field/attribute_value"}
 Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.field.AttributeValue', {
     extend: 'Ext.form.FieldContainer',
     layout: { type: 'vbox', align: 'stretch' },
@@ -161,3 +162,4 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.field.Attribu
         return me.betweenContainer;
     }
 });
+// {/block}
