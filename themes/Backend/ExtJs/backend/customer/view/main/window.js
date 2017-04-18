@@ -78,8 +78,10 @@ Ext.define('Shopware.apps.Customer.view.main.Window', {
             title: '{s name=window/defined_streams}Definied streams{/s}',
             height: 200,
             iconCls: 'sprite-product-streams',
-            selectionChanged: function (selModel, selection) {
-                me.fireEvent('stream-selected', selModel, selection);
+            listeners: {
+                'selectionchange': function(selModel, selection){
+                    me.fireEvent('stream-selected', selModel, selection);
+                }
             }
         });
 

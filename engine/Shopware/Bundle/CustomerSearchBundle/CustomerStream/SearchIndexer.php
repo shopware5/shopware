@@ -55,6 +55,12 @@ class SearchIndexer
     public function populate(array $ids)
     {
         $this->connection->transactional(function () use ($ids) {
+            $this->connection->executeUpdate(
+                'DELETE FROM s_customer_search_index WHERE id IN (:ids)',
+                [':ids' => $ids],
+                [':ids' => Connection::PARAM_INT_ARRAY]
+            );
+
             $insert = $this->createInsertQuery();
 
             $customers = $this->provider->get($ids);
