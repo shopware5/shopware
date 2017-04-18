@@ -159,7 +159,12 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
                 window.streamListing.selModel.deselectAll(true);
                 me.preventStreamChanged = false;
                 window.streamListing.selModel.select([record], false, true);
-                me.startPopulate(record);
+
+                if (isNew) {
+                    me.startPopulate(record);
+                } else {
+                    me.loadStream(record);
+                }
             }
         });
     },

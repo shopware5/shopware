@@ -24,7 +24,7 @@
 
 use Shopware\Components\Migrations\AbstractMigration;
 
-class Migrations_Migration1000 extends AbstractMigration
+class Migrations_Migration923 extends AbstractMigration
 {
     /**
      * {@inheritdoc}
@@ -116,5 +116,10 @@ CREATE TABLE `s_customer_streams_mapping` (
   UNIQUE KEY `stream_id` (`stream_id`,`customer_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
         ');
+
+        $this->addSql("
+INSERT INTO `s_crontab` (`id`, `name`, `action`, `elementID`, `data`, `next`, `start`, `interval`, `active`, `disable_on_error`, `end`, `inform_template`, `inform_mail`, `pluginID`) VALUES
+(NULL, 'Customer Stream refresh', 'RefreshCustomerStreams',	NULL, '', '2016-01-01 01:00:00', NULL, 7200, 1, 0, '2016-01-01 01:00:01', '', '', NULL);
+");
     }
 }

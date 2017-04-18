@@ -62,7 +62,7 @@ class SearchIndexPopulateCommand extends ShopwareCommand
 
         $this->container->get('dbal_connection')->executeUpdate('DELETE FROM s_customer_search_index');
 
-        $indexer = $this->container->get('shopware_bundle_customer_search.customer_stream.search_indexer');
+        $indexer = $this->container->get('shopware_customer_search.customer_stream.search_indexer');
 
         while ($ids = $query->fetch()) {
             $indexer->populate($ids);
