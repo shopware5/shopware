@@ -413,7 +413,6 @@ class FieldHelper
             'country.countryen as __country_countryen',
             'country.position as __country_position',
             'country.notice as __country_notice',
-            'country.shippingfree as __country_shippingfree',
             'country.taxfree as __country_taxfree',
             'country.taxfree_ustid as __country_taxfree_ustid',
             'country.taxfree_ustid_checked as __country_taxfree_ustid_checked',
