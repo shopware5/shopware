@@ -13,7 +13,7 @@
 </div>
 
 <div class="database-hint">
-    <?= $t->t("database-import-hint"); ?>
+    <?= $t->t('database-import-hint'); ?>
 </div>
 
 <div class="progress-container">
@@ -34,17 +34,17 @@
         <div class="install-buttons">
             <form action="<?= $menuHelper->getNextUrl() ?>">
                 <div class="actions clearfix">
-                    <a href="<?= $menuHelper->getPreviousUrl() ?>" id="back" class="btn btn-default btn-arrow-left"><?= $t->t("back") ?></a>
+                    <a href="<?= $menuHelper->getPreviousUrl() ?>" id="back" class="btn btn-default btn-arrow-left"><?= $t->t('back') ?></a>
                     <?php if ($hasSchema): ?>
-                        <a href="<?= $menuHelper->getNextUrl() ?>" id="skip-import" class="btn btn-default btn-arrow-right"><?= $t->t("database-import_skip_import") ?></a>
+                        <a href="<?= $menuHelper->getNextUrl() ?>" id="skip-import" class="btn btn-default btn-arrow-right"><?= $t->t('database-import_skip_import') ?></a>
                     <?php endif; ?>
-                    <button type="submit" class="btn btn-primary btn-arrow-right is--right is--hidden"><?= $t->t("forward") ?></button>
+                    <button type="submit" class="btn btn-primary btn-arrow-right is--right is--hidden"><?= $t->t('forward') ?></button>
                 </div>
             </form>
         </div>
 
         <div class="progress-actions actions clearfix install-buttons is--right">
-            <button id="start-ajax" class="btn btn-primary btn-database-right is--right"><?= $t->t("start_installation") ?></button>
+            <button id="start-ajax" class="btn btn-primary is--right"><?= $t->t('start_installation') ?></button>
         </div>
     </div>
 </div>
