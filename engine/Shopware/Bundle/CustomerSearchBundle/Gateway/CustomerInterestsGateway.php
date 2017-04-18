@@ -81,6 +81,7 @@ class CustomerInterestsGateway
         $query->from('s_order_details', 'details');
         $query->innerJoin('details', 's_order', 'orders', 'orders.id = details.orderID');
         $query->where('orders.userID IN (:ids)');
+        $query->andWhere('details.modus = 0');
         $query->setParameter(':ids', $customerIds, Connection::PARAM_INT_ARRAY);
 
         if ($lastDays !== null) {

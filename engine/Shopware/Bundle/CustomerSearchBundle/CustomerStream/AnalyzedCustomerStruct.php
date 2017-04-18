@@ -41,11 +41,6 @@ class AnalyzedCustomerStruct extends CustomerStruct
     protected $interests = [];
 
     /**
-     * @var InterestsStruct[]
-     */
-    protected $newestInterests = [];
-
-    /**
      * @param CustomerStruct $customer
      *
      * @return AnalyzedCustomerStruct
@@ -90,21 +85,5 @@ class AnalyzedCustomerStruct extends CustomerStruct
     public function setInterests($interests)
     {
         $this->interests = $interests;
-    }
-
-    /**
-     * @return InterestsStruct[]
-     */
-    public function getNewestInterests()
-    {
-        return $this->newestInterests;
-    }
-
-    /**
-     * @param InterestsStruct[] $newestInterests
-     */
-    public function setNewestInterests($newestInterests)
-    {
-        $this->newestInterests = $newestInterests;
     }
 }

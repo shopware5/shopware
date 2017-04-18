@@ -62,11 +62,11 @@ class CustomerOrderGateway
         $structs = [];
         foreach ($customerIds as $customerId) {
             if (!array_key_exists($customerId, $data)) {
-                $structs[$customerId] = new CustomerOrderStruct();
-                continue;
+                $struct = new CustomerOrderStruct();
+            } else {
+                $struct = $this->hydrator->hydrate($data[$customerId]);
             }
 
-            $struct = $this->hydrator->hydrate($data[$customerId]);
             $struct->setHasCanceledOrders(in_array($customerId, $canceled));
 
             $structs[$customerId] = $struct;
