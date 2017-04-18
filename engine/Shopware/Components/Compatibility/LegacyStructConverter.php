@@ -135,7 +135,6 @@ class LegacyStructConverter
             'countryiso' => $country->getIso(),
             'countryen' => $country->getEn(),
             'position' => $country->getPosition(),
-            'shippingfree' => $country->isShippingFree(),
             'taxfree' => $country->isTaxFree(),
             'taxfree_ustid' => $country->isTaxFreeForVatId(),
             'taxfree_ustid_checked' => $country->checkVatId(),

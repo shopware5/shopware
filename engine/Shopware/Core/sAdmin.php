@@ -2353,12 +2353,10 @@ class sAdmin
         $sql = "
             SELECT c.id, c.id as countryID, countryname, countryiso,
                 (SELECT name FROM s_core_countries_areas WHERE id = areaID ) AS countryarea,
-                countryen, c.position, notice, c.shippingfree as shippingfree
+                countryen, c.position, notice
             FROM s_core_countries c
             WHERE $sql
         ";
-        $currencyFactor = empty($this->sSYSTEM->sCurrency['factor']) ? 1 : $this->sSYSTEM->sCurrency['factor'];
-        $cache[$country]['shippingfree'] = round($cache[$country]['shippingfree'] * $currencyFactor, 2);
 
         return $cache[$country] = $this->db->fetchRow($sql) ?: [];
     }
