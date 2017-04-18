@@ -30,7 +30,7 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.SearchTerm', 
     },
 
     supports: function(conditionClass) {
-        return (conditionClass === 'Shopware\\Bundle\\CustomerSearchBundle\\Condition\\SearchTerm');
+        return (conditionClass === 'Shopware\\Bundle\\SearchBundle\\Condition\\SearchTermCondition');
     },
 
     create: function(callback) {
@@ -44,7 +44,7 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.SearchTerm', 
     _create: function() {
         return {
             title: '{s name="customer_searchterm_condition"}Search term condition{/s}',
-            conditionClass: 'Shopware\\Bundle\\CustomerSearchBundle\\Condition\\SearchTerm',
+            conditionClass: 'Shopware\\Bundle\\SearchBundle\\Condition\\SearchTermCondition',
             items: [{
                 xtype: 'textfield',
                 name: 'searchTerm',

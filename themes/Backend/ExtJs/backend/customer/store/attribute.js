@@ -28,15 +28,18 @@
  * @author shopware AG
  */
 // {block name="backend/product_stream/store/attribute"}
-// todo change controller
 Ext.define('Shopware.apps.Customer.store.Attribute', {
     extend: 'Ext.data.Store',
-    fields: [ 'column', 'label' ],
+    fields: [ 'columnName', 'label' ],
     autoLoad: false,
     pageSize: 15,
     proxy: {
         type: 'ajax',
-        url: '{url controller=ProductStream action=getAttributes}',
+        method: 'post',
+        url: '{url controller=AttributeData action=list}',
+        extraParams: {
+            table: 's_user_attributes'
+        },
         reader: {
             type: 'json',
             root: 'data',
