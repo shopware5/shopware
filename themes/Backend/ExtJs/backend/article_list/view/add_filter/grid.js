@@ -95,7 +95,7 @@ Ext.define('Shopware.apps.ArticleList.view.AddFilter.Grid', {
                 colRecord = me.columnStore.getAt(0);
             }
 
-            me.setOperatorsForCurrentRecord(colRecord, me.createOperatorStore);
+            me.setOperatorsForCurrentRecord(colRecord, me.operatorStore);
 
             me.fireEvent('setEditorBeforeEdit', me.columns, context.record);
         }, me);
@@ -185,7 +185,7 @@ Ext.define('Shopware.apps.ArticleList.view.AddFilter.Grid', {
                     'select': { fn:function(combo, records, e) {
                         me.fireEvent('setEditor', me.columns, records[0], 'column');
 
-                        me.setOperatorsForCurrentRecord(records[0], me.createOperatorStore);
+                        me.setOperatorsForCurrentRecord(records[0], me.operatorStore);
                     }, scope: this }
                 }
             },
@@ -238,7 +238,7 @@ Ext.define('Shopware.apps.ArticleList.view.AddFilter.Grid', {
             xtype: 'combo',
             queryMode: 'local',
             editable: false,
-            store: me.createOperatorStore,
+            store: me.operatorStore,
             displayField: 'name',
             forceSelection: true,
             listeners: {

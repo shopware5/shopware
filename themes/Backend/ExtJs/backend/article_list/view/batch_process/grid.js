@@ -105,7 +105,7 @@ Ext.define('Shopware.apps.ArticleList.view.BatchProcess.Grid', {
                 record = me.editableColumnsStore.getAt(0);
             }
 
-            me.setOperatorsForCurrentRecord(record, me.createOperatorStore);
+            me.setOperatorsForCurrentRecord(record, me.operatorStore);
 
             me.fireEvent('setEditor', me.columns[2], record);
         }, me);
