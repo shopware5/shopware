@@ -74,7 +74,7 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.CustomerAttri
         var me = this;
         me.operatorSelection = Ext.create('Ext.form.field.ComboBox', {
             fieldLabel: '{s name=attribute/operator}Operator:{/s}',
-            store: me.operatorStore(),
+            store: me.createOperatorStore(),
             displayField: 'name',
             valueField: 'value',
             allowBlank: false,
@@ -83,7 +83,7 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.CustomerAttri
         return me.operatorSelection;
     },
 
-    operatorStore: function () {
+    createOperatorStore: function () {
         return Ext.create('Ext.data.Store', {
             fields: [ 'name', 'value' ],
             data: [

@@ -251,7 +251,7 @@ Ext.define('Shopware.apps.ArticleList.view.AddFilter.Window', {
                 internalTitle: 'simple',
                 filterableColumns: me.filterableColumns,
                 columnStore: me.columnStore,
-                operatorStore: me.operatorStore,
+                operatorStore: me.createOperatorStore,
                 title: '{s name=addFilter/simpleTitle}Simple{/s}',
                 border: false,
                 tabConfig: {

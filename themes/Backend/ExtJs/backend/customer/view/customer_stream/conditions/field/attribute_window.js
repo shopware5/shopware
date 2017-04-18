@@ -61,7 +61,7 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.field.Attribu
             fieldLabel: '{s name=select_product_attribute}Select product attribute{/s}',
             pageSize: 20,
             store: store,
-            valueField: 'column',
+            valueField: 'columnName',
             allowBlank: false,
             displayField: 'label'
         });

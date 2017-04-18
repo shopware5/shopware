@@ -90,20 +90,20 @@ Ext.define('Shopware.apps.Customer.controller.Stream', {
             window = me.getMainWindow();
 
         switch (layout) {
-        case 'table':
-            window.cardContainer.getLayout().setActiveItem(0);
-            window.gridPanel.getStore().load();
-            break;
+            case 'table':
+                window.cardContainer.getLayout().setActiveItem(0);
+                window.gridPanel.getStore().load();
+                break;
 
-        case 'amount_chart':
-            window.cardContainer.getLayout().setActiveItem(1);
-            window.metaChartStore.load();
-            break;
+            case 'amount_chart':
+                window.cardContainer.getLayout().setActiveItem(1);
+                window.metaChartStore.load();
+                break;
 
-        case 'stream_chart':
-            window.cardContainer.getLayout().setActiveItem(2);
-            me.loadStreamChart();
-            break;
+            case 'stream_chart':
+                window.cardContainer.getLayout().setActiveItem(2);
+                me.loadStreamChart();
+                break;
         }
     },
 
