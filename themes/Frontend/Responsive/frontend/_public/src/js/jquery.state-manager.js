@@ -1405,7 +1405,7 @@
                 script.parentNode.insertBefore(style, script);
 
                 // 'style.currentStyle' is used by IE <= 8 and 'window.getComputedStyle' for all other browsers
-                info = ('getComputedStyle' in window) && window.getComputedStyle(style, null) || style.currentStyle;
+                info = (('getComputedStyle' in window) && window.getComputedStyle(style, null)) || style.currentStyle;
 
                 styleMedia = {
                     matchMedium: function (media) {

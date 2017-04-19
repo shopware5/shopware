@@ -49,7 +49,7 @@ module.exports = function (grunt) {
                         nodeDir + '/jquery/dist/jquery.min.js',
                         nodeDir + '/jquery/dist/jquery.min.map',
                         nodeDir + '/jquery/README.md',
-                        nodeDir + '/jquery/MIT-LICENSE.txt'
+                        nodeDir + '/jquery/LICENSE.txt'
                     ],
                     dest: vendorDir + '/js/jquery',
                     flatten: true

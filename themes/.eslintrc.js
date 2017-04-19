@@ -38,6 +38,8 @@ module.exports = {
         'indent': [
             'error',
             4
-        ]
+        ],
+
+        'standard/no-callback-literal': 0
     }
 };
