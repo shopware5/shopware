@@ -501,7 +501,6 @@
             $.each(data, function(index, item) {
                 if (item.name == key) {
                     value = item.value;
-                    return;
                 }
             });
             return value;

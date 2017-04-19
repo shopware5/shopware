@@ -560,7 +560,7 @@
 
             pos = Math.round(pos * me.stepWidth);
 
-            return pos > 0 && pos || 0;
+            return (pos > 0 && pos) || 0;
         },
 
         _getPositionLinear: function(value) {

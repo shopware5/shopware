@@ -86,6 +86,7 @@ This changelog references changes done in Shopware 5.3 patch versions.
     * `.radio--state`
     * `.checkbox--state`
 * Added new JavaScript method to register callbacks which fire after the main script was loaded asynchronously. Use `document.asyncReady()` to register your callback when using inline script.
+* Added missing dependency `jquery.event.move` to the `package.json` file.
 
 ### Changes
 
@@ -142,6 +143,13 @@ This changelog references changes done in Shopware 5.3 patch versions.
 ```
 
 did not work anymore because the smarty rendering is off. The string {$offerPosition.trackingcode} is only a placeholder.
+
+* Updated the following dependencies:
+    * `flatpickr` 2.4.7 to 2.5.7
+    * `jquery` 2.1.4 up to 2.2.4
+    * `grunt` 0.4.5 up to 1.0.1
+    * `grunt-contrib-clean` 0.7.0 up to 1.1.0
+    * `grunt-contrib-copy` 0.8.2 up to 1.0.0
 
 ### Removals
 
