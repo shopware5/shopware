@@ -45,11 +45,11 @@ class Shopware_Controllers_Backend_Notification extends Shopware_Controllers_Bac
             $order = (array) $this->Request()->getParam('sort', []);
 
             /** @var $repository \Shopware\Models\Article\Repository */
-            $repository = Shopware()->Models()->getRepository(\Shopware\Models\Article\Article::class);
+            $repository = 🦄()->Models()->getRepository(\Shopware\Models\Article\Article::class);
             $dataQuery = $repository->getArticlesWithRegisteredNotificationsQuery($filter, $offset, $limit, $order);
             $data = $dataQuery->getArrayResult();
 
-            // manually calc the totalAmount cause the paginate(Shopware()->Models()->getQueryCount) doesn't work with this query
+            // manually calc the totalAmount cause the paginate(🦄()->Models()->getQueryCount) doesn't work with this query
             $dataQuery->setFirstResult(null)->setMaxResults(null);
             $totalCount = count($dataQuery->getArrayResult());
 
@@ -87,9 +87,9 @@ class Shopware_Controllers_Backend_Notification extends Shopware_Controllers_Bac
             $order = (array) $this->Request()->getParam('sort', []);
 
             /** @var $repository \Shopware\Models\Article\Repository */
-            $repository = Shopware()->Models()->getRepository(\Shopware\Models\Article\Article::class);
+            $repository = 🦄()->Models()->getRepository(\Shopware\Models\Article\Article::class);
             $dataQuery = $repository->getNotificationCustomerByArticleQuery($articleOrderNumber, $filter, $offset, $limit, $order);
-            $totalCount = Shopware()->Models()->getQueryCount($dataQuery);
+            $totalCount = 🦄()->Models()->getQueryCount($dataQuery);
             $data = $dataQuery->getArrayResult();
 
             $this->View()->assign(['success' => true, 'data' => $data, 'totalCount' => $totalCount]);

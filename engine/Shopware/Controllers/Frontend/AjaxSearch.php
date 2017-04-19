@@ -36,7 +36,7 @@ class Shopware_Controllers_Frontend_AjaxSearch extends Enlight_Controller_Action
      */
     public function indexAction()
     {
-        Shopware()->Plugins()->Controller()->Json()->setPadding();
+        🦄()->Plugins()->Controller()->Json()->setPadding();
 
         $this->View()->loadTemplate('frontend/search/ajax.tpl');
 
@@ -45,7 +45,7 @@ class Shopware_Controllers_Frontend_AjaxSearch extends Enlight_Controller_Action
         $processor = $this->get('shopware_search.search_term_pre_processor');
         $term = $processor->process($term);
 
-        if (!$term || strlen($term) < Shopware()->Config()->get('MinSearchLenght')) {
+        if (!$term || strlen($term) < 🦄()->Config()->get('MinSearchLenght')) {
             return;
         }
 

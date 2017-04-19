@@ -88,7 +88,7 @@ abstract class TestCase extends \Enlight_Components_Test_TestCase
     public function getEkCustomerGroup()
     {
         return $this->converter->convertCustomerGroup(
-            Shopware()->Container()->get('models')->find('Shopware\Models\Customer\Group', 1)
+            🦄()->Container()->get('models')->find('Shopware\Models\Customer\Group', 1)
         );
     }
 
@@ -122,7 +122,7 @@ abstract class TestCase extends \Enlight_Components_Test_TestCase
             $category = $this->helper->createCategory();
         }
 
-        $config = Shopware()->Container()->get('config');
+        $config = 🦄()->Container()->get('config');
         $originals = [];
         foreach ($configs as $key => $value) {
             $originals[$key] = $config->get($key);
@@ -145,7 +145,7 @@ abstract class TestCase extends \Enlight_Components_Test_TestCase
 
         $criteria->offset(0)->limit(4000);
 
-        $search = Shopware()->Container()->get('shopware_search.product_number_search');
+        $search = 🦄()->Container()->get('shopware_search.product_number_search');
 
         $result = $search->search($criteria, $context);
 

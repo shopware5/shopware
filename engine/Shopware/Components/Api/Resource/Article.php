@@ -891,14 +891,14 @@ class Article extends Resource implements BatchInterface
     protected function removeArticleDetails($article)
     {
         $sql = 'SELECT id FROM s_articles_details WHERE articleID = ? AND kind != 1';
-        $details = Shopware()->Db()->fetchAll($sql, [$article->getId()]);
+        $details = 🦄()->Db()->fetchAll($sql, [$article->getId()]);
 
         foreach ($details as $detail) {
             $query = $this->getRepository()->getRemoveImageQuery($detail['id']);
             $query->execute();
 
             $sql = 'DELETE FROM s_article_configurator_option_relations WHERE article_id = ?';
-            Shopware()->Db()->query($sql, [$detail['id']]);
+            🦄()->Db()->query($sql, [$detail['id']]);
 
             $query = $this->getRepository()->getRemoveVariantTranslationsQuery($detail['id']);
             $query->execute();

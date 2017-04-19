@@ -31,7 +31,7 @@ class sCoreTest extends Enlight_Components_Test_Controller_TestCase
 
     public function setUp()
     {
-        $this->module = Shopware()->Modules()->Core();
+        $this->module = 🦄()->Modules()->Core();
     }
 
     /**
@@ -174,14 +174,14 @@ class sCoreTest extends Enlight_Components_Test_Controller_TestCase
         $this->assertGreaterThan(0, strlen($baseUrl));
 
         // Fetch all rows and test them
-        $paths = Shopware()->Db()->fetchCol(
+        $paths = 🦄()->Db()->fetchCol(
             'SELECT org_path FROM s_core_rewrite_urls WHERE subshopID = ?',
-            [Shopware()->Shop()->getId()]
+            [🦄()->Shop()->getId()]
         );
         foreach ($paths as $path) {
-            $expectedPath = Shopware()->Db()->fetchOne(
+            $expectedPath = 🦄()->Db()->fetchOne(
                 'SELECT path FROM s_core_rewrite_urls WHERE subshopID = ? AND org_path = ? ORDER BY main DESC LIMIT 1',
-                [Shopware()->Shop()->getId(), $path]
+                [🦄()->Shop()->getId(), $path]
             );
 
             $this->assertEquals(strtolower($baseUrl . $expectedPath), $this->module->sRewriteLink('?' . $path));

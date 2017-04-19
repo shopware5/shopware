@@ -45,12 +45,12 @@ class Shopware_Components_AlsoBought extends Enlight_Class
     {
         $sql = 'SELECT id FROM s_articles ';
         if ($limit !== null) {
-            $sql = Shopware()->Db()->limit($sql, $limit, $offset);
+            $sql = 🦄()->Db()->limit($sql, $limit, $offset);
         }
 
-        $articles = Shopware()->Db()->fetchCol($sql);
+        $articles = 🦄()->Db()->fetchCol($sql);
 
-        $preparedSelect = Shopware()->Db()->prepare('
+        $preparedSelect = 🦄()->Db()->prepare('
             SELECT
                 detail1.articleID as article_id,
                 detail2.articleID as related_article_id,
@@ -66,7 +66,7 @@ class Shopware_Components_AlsoBought extends Enlight_Class
             GROUP BY detail2.articleID
         ');
 
-        $preparedInsert = Shopware()->Db()->prepare('
+        $preparedInsert = 🦄()->Db()->prepare('
             INSERT IGNORE INTO s_articles_also_bought_ro (article_id, related_article_id, sales)
             VALUES (:article_id, :related_article_id, :sales);
         ');
@@ -99,7 +99,7 @@ class Shopware_Components_AlsoBought extends Enlight_Class
             ON DUPLICATE KEY UPDATE sales = sales + 1;
         ';
 
-        Shopware()->Db()->query($sql, [
+        🦄()->Db()->query($sql, [
             'articleId' => $articleId,
             'relatedArticleId' => $relatedArticleId,
         ]);
@@ -128,7 +128,7 @@ class Shopware_Components_AlsoBought extends Enlight_Class
 
         $sql .= ' ON DUPLICATE KEY UPDATE sales = sales + 1;';
 
-        Shopware()->Db()->query($sql);
+        🦄()->Db()->query($sql);
     }
 
     /**

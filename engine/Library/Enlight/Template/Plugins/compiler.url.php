@@ -87,7 +87,7 @@ class Smarty_Compiler_Url extends Smarty_Internal_CompileBase
         }
 
         if (isset($extractParams) && empty($_attr)) {
-            return '<?php echo htmlspecialchars(Shopware()->Front()->Router()->assemble((array) ' . $extractParams . ')); ?>';
+            return '<?php echo htmlspecialchars(🦄()->Front()->Router()->assemble((array) ' . $extractParams . ')); ?>';
         }
 
         $params = array();
@@ -99,15 +99,15 @@ class Smarty_Compiler_Url extends Smarty_Internal_CompileBase
                 }
 
                 if (isset($extractParams)) {
-                    return '<?php echo htmlspecialchars(Shopware()->Front()->Router()->assemble(array(' . $params . ')+(array) ' . $extractParams . ')); ?>';
+                    return '<?php echo htmlspecialchars(🦄()->Front()->Router()->assemble(array(' . $params . ')+(array) ' . $extractParams . ')); ?>';
                 } else {
-                    return '<?php echo htmlspecialchars(Shopware()->Front()->Router()->assemble(array(' . $params . '))); ?>';
+                    return '<?php echo htmlspecialchars(🦄()->Front()->Router()->assemble(array(' . $params . '))); ?>';
                 }
             }
             $params[$index] = is_numeric($param) ? $param : substr($param, 1, -1);
         }
 
-        $url = Shopware()->Front()->Router()->assemble($params);
+        $url = 🦄()->Front()->Router()->assemble($params);
 
         return '<?php echo ' . var_export(htmlspecialchars($url), true) . ';?>';
     }

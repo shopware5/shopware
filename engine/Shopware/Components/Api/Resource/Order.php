@@ -250,7 +250,7 @@ class Order extends Resource
         $params = array_intersect_key($params, array_flip($orderWhiteList));
 
         if (isset($params['orderStatusId'])) {
-            $params['orderStatus'] = Shopware()->Models()->getRepository('Shopware\Models\Order\Status')->findOneBy(
+            $params['orderStatus'] = 🦄()->Models()->getRepository('Shopware\Models\Order\Status')->findOneBy(
                 [
                     'id' => $params['orderStatusId'],
                     'group' => 'state',
@@ -266,7 +266,7 @@ class Order extends Resource
         }
 
         if (isset($params['paymentStatusId'])) {
-            $params['paymentStatus'] = Shopware()->Models()->getRepository('Shopware\Models\Order\Status')->findOneBy(
+            $params['paymentStatus'] = 🦄()->Models()->getRepository('Shopware\Models\Order\Status')->findOneBy(
                 [
                     'id' => $params['paymentStatusId'],
                     'group' => 'payment',
@@ -323,7 +323,7 @@ class Order extends Resource
 
             // Check order detail model
             /** @var \Shopware\Models\Order\Detail $detailModel */
-            $detailModel = Shopware()->Models()->find('Shopware\Models\Order\Detail', $detail['id']);
+            $detailModel = 🦄()->Models()->find('Shopware\Models\Order\Detail', $detail['id']);
             if (!$detailModel) {
                 throw new ApiException\NotFoundException(sprintf(
                     'Detail by id %s not found',
@@ -333,7 +333,7 @@ class Order extends Resource
 
             if (isset($detail['status'])) {
                 /** @var $status \Shopware\Models\Order\DetailStatus */
-                $status = Shopware()->Models()->find('Shopware\Models\Order\DetailStatus', $detail['status']);
+                $status = 🦄()->Models()->find('Shopware\Models\Order\DetailStatus', $detail['status']);
 
                 if (!$status) {
                     throw new ApiException\NotFoundException(sprintf(

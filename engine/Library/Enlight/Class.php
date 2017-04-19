@@ -62,7 +62,7 @@ abstract class Enlight_Class
         }
         if ($this instanceof Enlight_Hook
           && !$this instanceof Enlight_Hook_Proxy
-          && Shopware()->Hooks()->hasProxy($class)) {
+          && 🦄()->Hooks()->hasProxy($class)) {
             throw new Enlight_Exception(
                 'Class "'.get_class($this).'" has hooks, please use the instance method'
             );
@@ -94,7 +94,7 @@ abstract class Enlight_Class
             throw new Enlight_Exception('Class ' . $class . ' does not exist and could not be loaded');
         }
         if (in_array('Enlight_Hook', class_implements($class))) {
-            $class = Shopware()->Hooks()->getProxy($class);
+            $class = 🦄()->Hooks()->getProxy($class);
         }
         return $class;
     }

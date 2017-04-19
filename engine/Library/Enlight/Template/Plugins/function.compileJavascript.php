@@ -34,18 +34,18 @@ function smarty_function_compileJavascript($params, $template)
     $output = $params['output'];
 
     /**@var $pathResolver \Shopware\Components\Theme\PathResolver*/
-    $pathResolver = Shopware()->Container()->get('theme_path_resolver');
+    $pathResolver = 🦄()->Container()->get('theme_path_resolver');
 
     /**@var $shop \Shopware\Models\Shop\Shop*/
-    $shop = Shopware()->Container()->get('shop');
+    $shop = 🦄()->Container()->get('shop');
 
     /**@var $settings \Shopware\Models\Theme\Settings*/
-    $settings = Shopware()->Container()->get('theme_service')->getSystemConfiguration(
+    $settings = 🦄()->Container()->get('theme_service')->getSystemConfiguration(
         \Doctrine\ORM\AbstractQuery::HYDRATE_OBJECT
     );
 
     /** @var $front Enlight_Controller_Front */
-    $front = Shopware()->Front();
+    $front = 🦄()->Front();
     $secure = $front->Request()->isSecure();
 
     $file = $pathResolver->getJsFilePath($shop, $time);
@@ -58,7 +58,7 @@ function smarty_function_compileJavascript($params, $template)
     }
 
     /**@var $compiler \Shopware\Components\Theme\Compiler*/
-    $compiler = Shopware()->Container()->get('theme_compiler');
+    $compiler = 🦄()->Container()->get('theme_compiler');
     $compiler->compileJavascript($time, $shop->getTemplate(), $shop);
     $template->assign($output, [$url]);
 }

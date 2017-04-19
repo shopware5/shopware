@@ -73,7 +73,7 @@ class Shopware_Controllers_Backend_Payment extends Shopware_Controllers_Backend_
      */
     public function getPaymentsAction()
     {
-        $this->repository = Shopware()->Models()->getRepository(Payment::class);
+        $this->repository = 🦄()->Models()->getRepository(Payment::class);
 
         $query = $this->repository->getListQuery();
         $results = $query->getArrayResult();
@@ -102,7 +102,7 @@ class Shopware_Controllers_Backend_Payment extends Shopware_Controllers_Backend_
         try {
             $params = $this->Request()->getParams();
             unset($params['action']);
-            $repository = Shopware()->Models()->getRepository('Shopware\Models\Payment\Payment');
+            $repository = 🦄()->Models()->getRepository('Shopware\Models\Payment\Payment');
             $existingModel = $repository->findByName($params['name']);
 
             if ($existingModel) {
@@ -116,21 +116,21 @@ class Shopware_Controllers_Backend_Payment extends Shopware_Controllers_Backend_
             $countries = $params['countries'];
             $countryArray = [];
             foreach ($countries as $country) {
-                $countryArray[] = Shopware()->Models()->find('Shopware\Models\Country\Country', $country['id']);
+                $countryArray[] = 🦄()->Models()->find('Shopware\Models\Country\Country', $country['id']);
             }
             $params['countries'] = $countryArray;
 
             $shops = $params['shops'];
             $shopArray = [];
             foreach ($shops as $shop) {
-                $shopArray[] = Shopware()->Models()->find('Shopware\Models\Shop\Shop', $shop['id']);
+                $shopArray[] = 🦄()->Models()->find('Shopware\Models\Shop\Shop', $shop['id']);
             }
             $params['shops'] = $shopArray;
 
             $paymentModel->fromArray($params);
 
-            Shopware()->Models()->persist($paymentModel);
-            Shopware()->Models()->flush();
+            🦄()->Models()->persist($paymentModel);
+            🦄()->Models()->flush();
 
             $params['id'] = $paymentModel->getId();
             $this->View()->assign(['success' => true, 'data' => $params]);
@@ -148,7 +148,7 @@ class Shopware_Controllers_Backend_Payment extends Shopware_Controllers_Backend_
         try {
             $id = $this->Request()->getParam('id', null);
             /** @var $payment Payment */
-            $payment = Shopware()->Models()->find('Shopware\Models\Payment\Payment', $id);
+            $payment = 🦄()->Models()->find('Shopware\Models\Payment\Payment', $id);
             $action = $payment->getAction();
             $data = $this->Request()->getParams();
             $data['surcharge'] = str_replace(',', '.', $data['surcharge']);
@@ -159,7 +159,7 @@ class Shopware_Controllers_Backend_Payment extends Shopware_Controllers_Backend_
                 //clear all countries, to save the old and new ones then
                 $payment->getCountries()->clear();
                 foreach ($data['countries'] as $country) {
-                    $model = Shopware()->Models()->find('Shopware\Models\Country\Country', $country['id']);
+                    $model = 🦄()->Models()->find('Shopware\Models\Country\Country', $country['id']);
                     $countries->add($model);
                 }
                 $data['countries'] = $countries;
@@ -170,7 +170,7 @@ class Shopware_Controllers_Backend_Payment extends Shopware_Controllers_Backend_
                 //clear all shops, to save the old and new ones then
                 $payment->getShops()->clear();
                 foreach ($data['shops'] as $shop) {
-                    $model = Shopware()->Models()->find('Shopware\Models\Shop\Shop', $shop['id']);
+                    $model = 🦄()->Models()->find('Shopware\Models\Shop\Shop', $shop['id']);
                     $shops->add($model);
                 }
                 $data['shops'] = $shops;
@@ -195,8 +195,8 @@ class Shopware_Controllers_Backend_Payment extends Shopware_Controllers_Backend_
                 $payment->setPluginId(null);
             }
 
-            Shopware()->Models()->persist($payment);
-            Shopware()->Models()->flush();
+            🦄()->Models()->persist($payment);
+            🦄()->Models()->flush();
 
             if ($data['active']) {
                 $data['iconCls'] = 'sprite-tick';
@@ -217,14 +217,14 @@ class Shopware_Controllers_Backend_Payment extends Shopware_Controllers_Backend_
 
             return;
         }
-        $repository = Shopware()->Models()->getRepository(Payment::class);
+        $repository = 🦄()->Models()->getRepository(Payment::class);
         $id = $this->Request()->get('id');
         /** @var $model Payment */
         $model = $repository->find($id);
         if ($model->getSource() == 1) {
             try {
-                Shopware()->Models()->remove($model);
-                Shopware()->Models()->flush();
+                🦄()->Models()->remove($model);
+                🦄()->Models()->flush();
                 $this->View()->assign(['success' => true]);
             } catch (Exception $e) {
                 $this->View()->assign(['success' => false, 'errorMsg' => $e->getMessage()]);
@@ -240,7 +240,7 @@ class Shopware_Controllers_Backend_Payment extends Shopware_Controllers_Backend_
     private function getManager()
     {
         if ($this->manager === null) {
-            $this->manager = Shopware()->Models();
+            $this->manager = 🦄()->Models();
         }
 
         return $this->manager;
@@ -254,7 +254,7 @@ class Shopware_Controllers_Backend_Payment extends Shopware_Controllers_Backend_
     private function getCountryRepository()
     {
         if ($this->countryRepository === null) {
-            $this->countryRepository = Shopware()->Models()->getRepository('Shopware\Models\Country\Country');
+            $this->countryRepository = 🦄()->Models()->getRepository('Shopware\Models\Country\Country');
         }
 
         return $this->countryRepository;

@@ -125,7 +125,7 @@ class sExport
         Shopware_Components_Config $config = null,
         StoreFrontBundle\Service\ConfiguratorServiceInterface $configuratorService = null
     ) {
-        $container = Shopware()->Container();
+        $container = 🦄()->Container();
 
         $this->contextService = $contextService ?: $container->get('shopware_storefront.context_service');
         $this->additionalTextService = $container->get('shopware_storefront.additional_text_service');
@@ -248,7 +248,7 @@ class sExport
         $hash = $this->db->quote($this->sHash);
 
         /** @var $shopRepository \Shopware\Models\Shop\Repository */
-        $shopRepository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
+        $shopRepository = 🦄()->Models()->getRepository('Shopware\Models\Shop\Shop');
 
         $sql = "
             SELECT
@@ -342,13 +342,13 @@ class sExport
                 ->getAlbumWithSettingsQuery(-1)
                 ->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_OBJECT);
 
-        $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Currency');
+        $repository = 🦄()->Models()->getRepository('Shopware\Models\Shop\Currency');
         $shop->setCurrency($repository->find($this->sCurrency['id']));
         $shop->registerResources();
 
         $this->shop = $shop;
 
-        $this->sSYSTEM->sCONFIG = Shopware()->Config();
+        $this->sSYSTEM->sCONFIG = 🦄()->Config();
     }
 
     public function sInitSmarty()
@@ -515,7 +515,7 @@ class sExport
 
     public function sGetArticleLink($articleID, $title = '')
     {
-        return Shopware()->Modules()->Core()->sRewriteLink($this->sSYSTEM->sCONFIG['sBASEFILE'] . "?sViewport=detail&sArticle=$articleID", $title) . (empty($this->sSettings['partnerID']) ? '' : '?sPartner=' . urlencode($this->sSettings['partnerID']));
+        return 🦄()->Modules()->Core()->sRewriteLink($this->sSYSTEM->sCONFIG['sBASEFILE'] . "?sViewport=detail&sArticle=$articleID", $title) . (empty($this->sSettings['partnerID']) ? '' : '?sPartner=' . urlencode($this->sSettings['partnerID']));
     }
 
     public function sGetImageLink($hash, $imageSize = null)
@@ -524,7 +524,7 @@ class sExport
             return '';
         }
 
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $mediaService = 🦄()->Container()->get('shopware_media.media_service');
 
         // get the image directory
         $imageDir = 'media/image/';
@@ -575,8 +575,8 @@ class sExport
         if (empty($articleId) || empty($orderNumber)) {
             return '';
         }
-        $imageData = Shopware()->Modules()->sArticles()->sGetArticlePictures($articleId, false, null, $orderNumber);
-        $cover = Shopware()->Modules()->sArticles()->sGetArticlePictures($articleId, true, null, $orderNumber);
+        $imageData = 🦄()->Modules()->sArticles()->sGetArticlePictures($articleId, false, null, $orderNumber);
+        $cover = 🦄()->Modules()->sArticles()->sGetArticlePictures($articleId, true, null, $orderNumber);
         $returnData[] = $cover['src'][$imageSize];
         foreach ($imageData as $image) {
             $returnData[] = $image['src'][$imageSize];
@@ -600,7 +600,7 @@ class sExport
             return '';
         }
 
-        return Shopware()->Modules()->Articles()->sGetArticleProperties($articleId, $filterGroupId);
+        return 🦄()->Modules()->Articles()->sGetArticleProperties($articleId, $filterGroupId);
     }
 
     public function sMapTranslation($object, $objectData)
@@ -615,7 +615,7 @@ class sExport
                     'txtzusatztxt' => 'additionaltext',
                 ];
 
-                $attributes = Shopware()->Container()->get('shopware_attribute.crud_service')->getList('s_articles_attributes');
+                $attributes = 🦄()->Container()->get('shopware_attribute.crud_service')->getList('s_articles_attributes');
                 foreach ($attributes as $attribute) {
                     if ($attribute->isIdentifier()) {
                         continue;
@@ -999,7 +999,7 @@ class sExport
             return;
         }
 
-        $result = Shopware()->Container()->get('events')->filter(
+        $result = 🦄()->Container()->get('events')->filter(
             'Shopware_Modules_Export_ExportResult_Filter',
             $result,
             ['feedId' => $this->sFeedID, 'subject' => $this]
@@ -1081,7 +1081,7 @@ class sExport
             $row['purchaseunit'] = floatval($row['purchaseunit']);
             $row['referenceunit'] = floatval($row['referenceunit']);
             if (!empty($row['purchaseunit']) && !empty($row['referenceunit'])) {
-                $row['referenceprice'] = Shopware()->Modules()->Articles()->calculateReferencePrice(
+                $row['referenceprice'] = 🦄()->Modules()->Articles()->calculateReferencePrice(
                     $row['price'],
                     $row['purchaseunit'],
                     $row['referenceunit']
@@ -1157,7 +1157,7 @@ class sExport
         }
 
         $articleCategoryId = $this->sSYSTEM->sMODULES['sCategories']->sGetCategoryIdByArticleId($articleID, $categoryID);
-        $breadcrumb = array_reverse(Shopware()->Modules()->sCategories()->sGetCategoriesByParent($articleCategoryId));
+        $breadcrumb = array_reverse(🦄()->Modules()->sCategories()->sGetCategoriesByParent($articleCategoryId));
 
         foreach ($breadcrumb as $breadcrumbObj) {
             $breadcrumbs[] = $breadcrumbObj['name'];
@@ -1779,7 +1779,7 @@ class sExport
     private function getArticleRepository()
     {
         if ($this->articleRepository === null) {
-            $this->articleRepository = Shopware()->Models()->getRepository('Shopware\Models\Article\Article');
+            $this->articleRepository = 🦄()->Models()->getRepository('Shopware\Models\Article\Article');
         }
 
         return $this->articleRepository;
@@ -1793,7 +1793,7 @@ class sExport
     private function getMediaRepository()
     {
         if ($this->mediaRepository === null) {
-            $this->mediaRepository = Shopware()->Models()->getRepository('Shopware\Models\Media\Media');
+            $this->mediaRepository = 🦄()->Models()->getRepository('Shopware\Models\Media\Media');
         }
 
         return $this->mediaRepository;

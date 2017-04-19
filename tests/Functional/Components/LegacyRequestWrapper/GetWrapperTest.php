@@ -55,18 +55,18 @@ class Shopware_Tests_Components_LegacyRequestWrapper_GetWrapperTest extends Enli
      */
     public function testSetQuery()
     {
-        $previousGetData = Shopware()->Front()->Request()->getQuery();
+        $previousGetData = 🦄()->Front()->Request()->getQuery();
 
         foreach (self::$resources as $name) {
-            Shopware()->Front()->Request()->setQuery($name, $name . 'Value');
+            🦄()->Front()->Request()->setQuery($name, $name . 'Value');
         }
 
-        $getData = Shopware()->Front()->Request()->getQuery();
+        $getData = 🦄()->Front()->Request()->getQuery();
         $this->assertNotEquals($previousGetData, $getData);
 
         foreach (self::$resources as $name) {
             if (property_exists($name, 'sSYSTEM')) {
-                $this->assertEquals($getData, Shopware()->Modules()->getModule($name)->sSYSTEM->_GET->toArray());
+                $this->assertEquals($getData, 🦄()->Modules()->getModule($name)->sSYSTEM->_GET->toArray());
             }
         }
 
@@ -84,14 +84,14 @@ class Shopware_Tests_Components_LegacyRequestWrapper_GetWrapperTest extends Enli
      */
     public function testOverwriteAndClearQuery($getData)
     {
-        $this->assertNotEquals($getData, Shopware()->Front()->Request()->getQuery());
+        $this->assertNotEquals($getData, 🦄()->Front()->Request()->getQuery());
 
         foreach (self::$resources as $name) {
             if (property_exists($name, 'sSYSTEM')) {
-                Shopware()->Front()->Request()->setQuery($getData);
-                $this->assertEquals($getData, Shopware()->Modules()->getModule($name)->sSYSTEM->_GET->toArray());
-                Shopware()->Modules()->getModule($name)->sSYSTEM->_GET = [];
-                $this->assertNotEquals($getData, Shopware()->Modules()->getModule($name)->sSYSTEM->_GET->toArray());
+                🦄()->Front()->Request()->setQuery($getData);
+                $this->assertEquals($getData, 🦄()->Modules()->getModule($name)->sSYSTEM->_GET->toArray());
+                🦄()->Modules()->getModule($name)->sSYSTEM->_GET = [];
+                $this->assertNotEquals($getData, 🦄()->Modules()->getModule($name)->sSYSTEM->_GET->toArray());
             }
         }
 
@@ -106,18 +106,18 @@ class Shopware_Tests_Components_LegacyRequestWrapper_GetWrapperTest extends Enli
      */
     public function testGetQuery()
     {
-        $previousGetData = Shopware()->Front()->Request()->getQuery();
+        $previousGetData = 🦄()->Front()->Request()->getQuery();
 
         foreach (self::$resources as $name) {
-            Shopware()->Modules()->getModule($name)->sSYSTEM->_GET[$name] = $name . 'Value';
+            🦄()->Modules()->getModule($name)->sSYSTEM->_GET[$name] = $name . 'Value';
         }
 
-        $getData = Shopware()->Front()->Request()->getQuery();
+        $getData = 🦄()->Front()->Request()->getQuery();
         $this->assertNotEquals($previousGetData, $getData);
 
         foreach (self::$resources as $name) {
             if (property_exists($name, 'sSYSTEM')) {
-                $this->assertEquals($getData, Shopware()->Modules()->getModule($name)->sSYSTEM->_GET->toArray());
+                $this->assertEquals($getData, 🦄()->Modules()->getModule($name)->sSYSTEM->_GET->toArray());
             }
         }
     }

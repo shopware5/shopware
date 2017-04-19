@@ -167,26 +167,26 @@ class sAdmin
         AddressServiceInterface                          $addressService = null,
         NumberRangeIncrementerInterface                  $numberRangeIncrementer = null
     ) {
-        $this->db = $db ?: Shopware()->Db();
-        $this->eventManager = $eventManager ?: Shopware()->Events();
-        $this->config = $config ?: Shopware()->Config();
-        $this->session = $session ?: Shopware()->Session();
-        $this->front = $front ?: Shopware()->Front();
-        $this->passwordEncoder = $passwordEncoder ?: Shopware()->PasswordEncoder();
-        $this->snippetManager = $snippetManager ?: Shopware()->Snippets();
-        $this->moduleManager = $moduleManager ?: Shopware()->Modules();
-        $this->sSYSTEM = $systemModule ?: Shopware()->System();
+        $this->db = $db ?: 🦄()->Db();
+        $this->eventManager = $eventManager ?: 🦄()->Events();
+        $this->config = $config ?: 🦄()->Config();
+        $this->session = $session ?: 🦄()->Session();
+        $this->front = $front ?: 🦄()->Front();
+        $this->passwordEncoder = $passwordEncoder ?: 🦄()->PasswordEncoder();
+        $this->snippetManager = $snippetManager ?: 🦄()->Snippets();
+        $this->moduleManager = $moduleManager ?: 🦄()->Modules();
+        $this->sSYSTEM = $systemModule ?: 🦄()->System();
 
-        $mainShop = Shopware()->Shop()->getMain() !== null ? Shopware()->Shop()->getMain() : Shopware()->Shop();
+        $mainShop = 🦄()->Shop()->getMain() !== null ? 🦄()->Shop()->getMain() : 🦄()->Shop();
         $this->scopedRegistration = $mainShop->getCustomerScope();
 
-        $this->contextService = $contextService ?: Shopware()->Container()->get('shopware_storefront.context_service');
-        $this->emailValidator = $emailValidator ?: Shopware()->Container()->get('validator.email');
+        $this->contextService = $contextService ?: 🦄()->Container()->get('shopware_storefront.context_service');
+        $this->emailValidator = $emailValidator ?: 🦄()->Container()->get('validator.email');
         $this->subshopId = $this->contextService->getShopContext()->getShop()->getParentId();
-        $this->addressService = $addressService ?: Shopware()->Container()->get('shopware_account.address_service');
-        $this->attributeLoader = Shopware()->Container()->get('shopware_attribute.data_loader');
-        $this->attributePersister = Shopware()->Container()->get('shopware_attribute.data_persister');
-        $this->numberRangeIncrementer = $numberRangeIncrementer ?: Shopware()->Container()->get('shopware.number_range_incrementer');
+        $this->addressService = $addressService ?: 🦄()->Container()->get('shopware_account.address_service');
+        $this->attributeLoader = 🦄()->Container()->get('shopware_attribute.data_loader');
+        $this->attributePersister = 🦄()->Container()->get('shopware_attribute.data_persister');
+        $this->numberRangeIncrementer = $numberRangeIncrementer ?: 🦄()->Container()->get('shopware.number_range_incrementer');
     }
 
     /**
@@ -630,9 +630,9 @@ class sAdmin
     {
         $this->moduleManager->Basket()->clearBasket();
 
-        Shopware()->Session()->unsetAll();
+        🦄()->Session()->unsetAll();
         $this->regenerateSessionId();
-        Shopware()->Container()->get('shopware.csrftoken_validator')->invalidateToken($this->front->Response());
+        🦄()->Container()->get('shopware.csrftoken_validator')->invalidateToken($this->front->Response());
     }
 
     /**
@@ -978,7 +978,7 @@ class sAdmin
      */
     public function sGetCountryStateTranslation($state = null)
     {
-        if (Shopware()->Shop()->get('skipbackend')) {
+        if (🦄()->Shop()->get('skipbackend')) {
             return empty($state) ? [] : $state;
         }
 
@@ -1107,7 +1107,7 @@ class sAdmin
             unset($context['password']);
         }
 
-        $mail = Shopware()->TemplateMail()->createMail('sREGISTERCONFIRMATION', $context);
+        $mail = 🦄()->TemplateMail()->createMail('sREGISTERCONFIRMATION', $context);
         $mail->addTo($email);
 
         $sendConfirmationEmail = $this->config->get('sSEND_CONFIRM_MAIL');
@@ -1243,12 +1243,12 @@ class sAdmin
      */
     public function sGetOpenOrderData($destinationPage = 1, $perPage = 10)
     {
-        $shop = Shopware()->Shop();
+        $shop = 🦄()->Shop();
         $mainShop = $shop->getMain() !== null ? $shop->getMain() : $shop;
 
         $destinationPage = !empty($destinationPage) ? $destinationPage : 1;
-        $limitStart = Shopware()->Db()->quote(($destinationPage - 1) * $perPage);
-        $limitEnd = Shopware()->Db()->quote($perPage);
+        $limitStart = 🦄()->Db()->quote(($destinationPage - 1) * $perPage);
+        $limitEnd = 🦄()->Db()->quote($perPage);
 
         $sql = "
             SELECT SQL_CALC_FOUND_ROWS o.*, cu.templatechar as currency_html, cu.symbol_position as currency_position, DATE_FORMAT(ordertime, '%d.%m.%Y %H:%i') AS datum
@@ -1267,7 +1267,7 @@ class sAdmin
                 $mainShop->getId(),
             ]
         );
-        $foundOrdersCount = (int) Shopware()->Db()->fetchOne('SELECT FOUND_ROWS()');
+        $foundOrdersCount = (int) 🦄()->Db()->fetchOne('SELECT FOUND_ROWS()');
 
         foreach ($getOrders as $orderKey => $orderValue) {
             $getOrders[$orderKey]['invoice_amount'] = $this->moduleManager->Articles()
@@ -2305,7 +2305,7 @@ class sAdmin
     public function sCreateHolidaysTable()
     {
         /** @var \Shopware\Components\HolidayTableUpdater $updater */
-        $updater = Shopware()->Container()->get('shopware.holiday_table_updater');
+        $updater = 🦄()->Container()->get('shopware.holiday_table_updater');
         $updater->update();
 
         return true;
@@ -3123,7 +3123,7 @@ class sAdmin
             $context['sConfirmLink'] = $optIn;
         }
 
-        $mail = Shopware()->TemplateMail()->createMail($template, $context);
+        $mail = 🦄()->TemplateMail()->createMail($template, $context);
         $mail->addTo($recipient);
         $mail->send();
     }
@@ -3150,8 +3150,8 @@ class sAdmin
 
         $this->sSYSTEM->sSESSION_ID = $newSessionId;
         $this->session->offsetSet('sessionId', $newSessionId);
-        Shopware()->Container()->reset('SessionId');
-        Shopware()->Container()->set('SessionId', $newSessionId);
+        🦄()->Container()->reset('SessionId');
+        🦄()->Container()->set('SessionId', $newSessionId);
 
         $this->eventManager->notify(
             'Shopware_Modules_Admin_Regenerate_Session_Id',
@@ -3186,11 +3186,11 @@ class sAdmin
     private function overwriteBillingAddress(array $userData)
     {
         // temporarily overwrite billing address
-        if (!$this->session->offsetGet('checkoutBillingAddressId') || Shopware()->Front()->Request()->getControllerName() !== 'checkout') {
+        if (!$this->session->offsetGet('checkoutBillingAddressId') || 🦄()->Front()->Request()->getControllerName() !== 'checkout') {
             return $userData;
         }
 
-        $addressRepository = Shopware()->Models()->getRepository(Address::class);
+        $addressRepository = 🦄()->Models()->getRepository(Address::class);
         $addressId = $this->session->offsetGet('checkoutBillingAddressId');
 
         try {
@@ -3218,11 +3218,11 @@ class sAdmin
     private function overwriteShippingAddress(array $userData)
     {
         // temporarily overwrite shipping address
-        if (!$this->session->offsetGet('checkoutShippingAddressId') || Shopware()->Front()->Request()->getControllerName() !== 'checkout') {
+        if (!$this->session->offsetGet('checkoutShippingAddressId') || 🦄()->Front()->Request()->getControllerName() !== 'checkout') {
             return $userData;
         }
 
-        $addressRepository = Shopware()->Models()->getRepository(Address::class);
+        $addressRepository = 🦄()->Models()->getRepository(Address::class);
         $addressId = $this->session->offsetGet('checkoutShippingAddressId');
 
         try {
@@ -3249,7 +3249,7 @@ class sAdmin
      */
     private function convertToLegacyAddressArray(Address $address)
     {
-        $output = Shopware()->Models()->toArray($address);
+        $output = 🦄()->Models()->toArray($address);
 
         $output = array_merge($output, [
             'id' => $address->getId(),
@@ -3273,7 +3273,7 @@ class sAdmin
         ]);
 
         if ($address->getAttribute()) {
-            $data = Shopware()->Models()->toArray($address->getAttribute());
+            $data = 🦄()->Models()->toArray($address->getAttribute());
 
             $output['attributes'] = $data;
         }
@@ -3300,11 +3300,11 @@ SQL;
         $countryKey = $isShippingAddress ? 'countryShipping' : 'country';
         $stateKey = $isShippingAddress ? 'stateShipping' : 'state';
 
-        $userData['additional'][$countryKey] = Shopware()->Container()->get('dbal_connection')
+        $userData['additional'][$countryKey] = 🦄()->Container()->get('dbal_connection')
             ->executeQuery($sql, [$userData[$addressKey]['countryID']])
             ->fetch(\PDO::FETCH_ASSOC);
 
-        $userData['additional'][$stateKey] = Shopware()->Container()->get('dbal_connection')
+        $userData['additional'][$stateKey] = 🦄()->Container()->get('dbal_connection')
             ->executeQuery('SELECT *, name as statename FROM s_core_countries_states WHERE id = ?', [$userData[$addressKey]['stateID']])
             ->fetch(\PDO::FETCH_ASSOC);
 
@@ -3412,8 +3412,8 @@ SQL;
 
         $context = $this->contextService->getShopContext();
         $orderArticleOrderNumbers = array_column($getOrderDetails, 'articleordernumber');
-        $listProducts = Shopware()->Container()->get('shopware_storefront.list_product_service')->getList($orderArticleOrderNumbers, $context);
-        $listProducts = Shopware()->Container()->get('legacy_struct_converter')->convertListProductStructList($listProducts);
+        $listProducts = 🦄()->Container()->get('shopware_storefront.list_product_service')->getList($orderArticleOrderNumbers, $context);
+        $listProducts = 🦄()->Container()->get('legacy_struct_converter')->convertListProductStructList($listProducts);
 
         foreach ($listProducts as &$listProduct) {
             $listProduct = array_merge($listProduct, $listProduct['prices'][0]);
@@ -3548,7 +3548,7 @@ SQL;
      */
     private function getUserShippingData($userId, $userData, $countryQuery)
     {
-        $entityManager = Shopware()->Container()->get('models');
+        $entityManager = 🦄()->Container()->get('models');
         $customer = $entityManager->find(Shopware\Models\Customer\Customer::class, $userId);
         $shipping = $this->convertToLegacyAddressArray($customer->getDefaultShippingAddress());
         $shipping['attributes'] = $this->attributeLoader->load('s_user_addresses_attributes', $shipping['id']) ?: [];
@@ -3601,7 +3601,7 @@ SQL;
      */
     private function getUserBillingData($userId, $userData)
     {
-        $entityManager = Shopware()->Container()->get('models');
+        $entityManager = 🦄()->Container()->get('models');
         $customer = $entityManager->find(Customer::class, $userId);
         $billing = $this->convertToLegacyAddressArray($customer->getDefaultBillingAddress());
         $billing['attributes'] = $this->attributeLoader->load('s_user_addresses_attributes', $billing['id']) ?: [];
@@ -3993,7 +3993,7 @@ SQL;
         if (!$this->session->offsetGet('sUserId')) {
             return 0;
         }
-        $dbal = Shopware()->Container()->get('dbal_connection');
+        $dbal = 🦄()->Container()->get('dbal_connection');
 
         return (int) $dbal->fetchColumn('
             SELECT default_billing_address_id 
@@ -4014,7 +4014,7 @@ SQL;
         if (!$this->session->offsetGet('sUserId')) {
             return 0;
         }
-        $dbal = Shopware()->Container()->get('dbal_connection');
+        $dbal = 🦄()->Container()->get('dbal_connection');
 
         return (int) $dbal->fetchColumn('
             SELECT default_shipping_address_id 

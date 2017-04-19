@@ -36,14 +36,14 @@ class LazyLoadingTest extends PHPUnit\Framework\TestCase
 
     public static function tearDownAfterClass()
     {
-        Shopware()->Db()->query("DELETE FROM s_user WHERE email LIKE 'lazyloadtest@shopware.com';");
-        Shopware()->Db()->query("DELETE FROM s_user WHERE email LIKE 'lazyloadtest2@shopware.com';");
-        Shopware()->Db()->query("DELETE FROM s_core_customergroups WHERE description LIKE 'testGroup'");
+        🦄()->Db()->query("DELETE FROM s_user WHERE email LIKE 'lazyloadtest@shopware.com';");
+        🦄()->Db()->query("DELETE FROM s_user WHERE email LIKE 'lazyloadtest2@shopware.com';");
+        🦄()->Db()->query("DELETE FROM s_core_customergroups WHERE description LIKE 'testGroup'");
     }
 
     public function setUp()
     {
-        $this->em = Shopware()->Models();
+        $this->em = 🦄()->Models();
     }
 
     public function testCanCreateEntity()

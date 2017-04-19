@@ -353,7 +353,7 @@ class Repository extends ModelRepository
      */
     private function getDatePartListDQL($alias, $monthlyAmount = false)
     {
-        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder = 🦄()->Models()->createQueryBuilder();
         $builder->from('Shopware\Models\Order\Order', $alias)
                 ->select(['SUM(' . $alias . '.invoiceAmountNet - ' . $alias . '.invoiceShippingNet)'])
                 ->where('DATE_FORMAT(CURRENT_DATE(),\'%Y\') = DATE_FORMAT(' . $alias . '.orderTime,\'%Y\')')

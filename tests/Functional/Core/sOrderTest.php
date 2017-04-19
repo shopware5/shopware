@@ -37,13 +37,13 @@ class sOrderTest extends PHPUnit\Framework\TestCase
 
     public function setUp()
     {
-        $this->module = Shopware()->Modules()->Order();
-        Shopware()->Session()->offsetSet('sessionId', self::$sessionId);
+        $this->module = 🦄()->Modules()->Order();
+        🦄()->Session()->offsetSet('sessionId', self::$sessionId);
     }
 
     public function testGetOrderNumber()
     {
-        $current = (int) Shopware()->Db()->fetchOne(
+        $current = (int) 🦄()->Db()->fetchOne(
             "SELECT number FROM s_order_number WHERE name='invoice'"
         );
 
@@ -75,15 +75,15 @@ class sOrderTest extends PHPUnit\Framework\TestCase
         );
 
         // Register the event listener, so that we test the value of "$context"
-        Shopware()->Events()->addListener(
+        🦄()->Events()->addListener(
             'Shopware_Modules_Order_SendMail_Create',
             [$this, 'validatePaymentContextData']
         );
 
         $variables = [
             'additional' => [
-                'payment' => Shopware()->Modules()->Admin()->sGetPaymentMeanById(
-                    Shopware()->Db()->fetchRow('SELECT * FROM s_core_paymentmeans WHERE name LIKE "debit"')
+                'payment' => 🦄()->Modules()->Admin()->sGetPaymentMeanById(
+                    🦄()->Db()->fetchRow('SELECT * FROM s_core_paymentmeans WHERE name LIKE "debit"')
                 ),
             ],
         ];
@@ -102,7 +102,7 @@ class sOrderTest extends PHPUnit\Framework\TestCase
     {
         $orderId = $this->createDummyOrder();
         $transaction = uniqid('TRANS-');
-        Shopware()->Db()->query(
+        🦄()->Db()->query(
             'UPDATE s_order SET transactionID = :transaction WHERE id = :id',
             [
                 ':id' => $orderId,
@@ -129,14 +129,14 @@ class sOrderTest extends PHPUnit\Framework\TestCase
 
     public function testRefreshOrderedVariant()
     {
-        $detail = Shopware()->Db()->fetchRow('SELECT * FROM s_articles_details WHERE instock > 10 LIMIT 1');
+        $detail = 🦄()->Db()->fetchRow('SELECT * FROM s_articles_details WHERE instock > 10 LIMIT 1');
 
         $this->invokeMethod($this->module, 'refreshOrderedVariant', [
             $detail['ordernumber'],
             10,
         ]);
 
-        $updated = Shopware()->Db()->fetchRow('SELECT * FROM s_articles_details WHERE id = :id', [
+        $updated = 🦄()->Db()->fetchRow('SELECT * FROM s_articles_details WHERE id = :id', [
             ':id' => $detail['id'],
         ]);
 
@@ -300,7 +300,7 @@ class sOrderTest extends PHPUnit\Framework\TestCase
 
         $this->assertEquals(1, $this->module->sSaveBillingAddress($originalBillingAddress, $orderNumber));
 
-        $billing = Shopware()->Models()->getRepository('Shopware\Models\Order\Billing')->findOneBy(['order' => $orderNumber]);
+        $billing = 🦄()->Models()->getRepository('Shopware\Models\Order\Billing')->findOneBy(['order' => $orderNumber]);
 
         $this->assertEquals($originalBillingAddress['userID'], $billing->getCustomer()->getId());
         $this->assertEquals($originalBillingAddress['company'], $billing->getCompany());
@@ -317,10 +317,10 @@ class sOrderTest extends PHPUnit\Framework\TestCase
             $this->assertEquals($originalBillingAddress['text4'], $billingAttr->getText4());
             $this->assertEquals($originalBillingAddress['text5'], $billingAttr->getText5());
             $this->assertEquals($originalBillingAddress['text6'], $billingAttr->getText6());
-            Shopware()->Models()->remove($billingAttr);
+            🦄()->Models()->remove($billingAttr);
         }
-        Shopware()->Models()->remove($billing);
-        Shopware()->Models()->flush();
+        🦄()->Models()->remove($billing);
+        🦄()->Models()->flush();
     }
 
     public function testSaveShippingAddress()
@@ -332,7 +332,7 @@ class sOrderTest extends PHPUnit\Framework\TestCase
 
         $this->assertEquals(1, $this->module->sSaveShippingAddress($originalBillingAddress, $orderNumber));
 
-        $shipping = Shopware()->Models()->getRepository('Shopware\Models\Order\Shipping')->findOneBy(['order' => $orderNumber]);
+        $shipping = 🦄()->Models()->getRepository('Shopware\Models\Order\Shipping')->findOneBy(['order' => $orderNumber]);
 
         $this->assertEquals($originalBillingAddress['userID'], $shipping->getCustomer()->getId());
         $this->assertEquals($originalBillingAddress['company'], $shipping->getCompany());
@@ -349,11 +349,11 @@ class sOrderTest extends PHPUnit\Framework\TestCase
             $this->assertEquals($originalBillingAddress['text4'], $shippingAttr->getText4());
             $this->assertEquals($originalBillingAddress['text5'], $shippingAttr->getText5());
             $this->assertEquals($originalBillingAddress['text6'], $shippingAttr->getText6());
-            Shopware()->Models()->remove($shippingAttr);
+            🦄()->Models()->remove($shippingAttr);
         }
 
-        Shopware()->Models()->remove($shipping);
-        Shopware()->Models()->flush();
+        🦄()->Models()->remove($shipping);
+        🦄()->Models()->flush();
     }
 
     /**
@@ -376,7 +376,7 @@ class sOrderTest extends PHPUnit\Framework\TestCase
 
     public function testSCreateTemporaryOrder()
     {
-        $order = Shopware()->Models()->getRepository('Shopware\Models\Order\Order')->findOneBy(['temporaryId' => self::$sessionId]);
+        $order = 🦄()->Models()->getRepository('Shopware\Models\Order\Order')->findOneBy(['temporaryId' => self::$sessionId]);
 
         $this->assertNull($order);
 
@@ -384,7 +384,7 @@ class sOrderTest extends PHPUnit\Framework\TestCase
 
         $this->module->sCreateTemporaryOrder();
 
-        $order = Shopware()->Models()->getRepository('Shopware\Models\Order\Order')->findOneBy(['temporaryId' => self::$sessionId]);
+        $order = 🦄()->Models()->getRepository('Shopware\Models\Order\Order')->findOneBy(['temporaryId' => self::$sessionId]);
 
         $this->assertNotNull($order);
         $this->assertNotNull($order->getAttribute());
@@ -402,7 +402,7 @@ class sOrderTest extends PHPUnit\Framework\TestCase
      */
     public function testSDeleteTemporaryOrder()
     {
-        $order = Shopware()->Models()->createQueryBuilder()
+        $order = 🦄()->Models()->createQueryBuilder()
             ->select(['orders'])
             ->from('Shopware\Models\Order\Order', 'orders')
             ->where('orders.temporaryId = :orderId')
@@ -418,7 +418,7 @@ class sOrderTest extends PHPUnit\Framework\TestCase
 
         $this->module->sDeleteTemporaryOrder();
 
-        $order = Shopware()->Models()->getRepository('Shopware\Models\Order\Order')->findOneBy(['temporaryId' => self::$sessionId]);
+        $order = 🦄()->Models()->getRepository('Shopware\Models\Order\Order')->findOneBy(['temporaryId' => self::$sessionId]);
 
         $this->assertNull($order);
     }
@@ -460,26 +460,26 @@ class sOrderTest extends PHPUnit\Framework\TestCase
 
             if (!$esdArticle['id']) {
                 // Not ESD, ensure nothing happened
-                $this->assertFalse(Shopware()->Db()->fetchRow(
+                $this->assertFalse(🦄()->Db()->fetchRow(
                     'SELECT id FROM s_order_esd WHERE orderID = ? AND orderdetailsID = ?',
                     [1234, 4567]
                 ));
             } elseif (!$esdArticle['serials']) {
                 // ESD without serial
-                $this->assertFalse(Shopware()->Db()->fetchRow(
+                $this->assertFalse(🦄()->Db()->fetchRow(
                     'SELECT id FROM s_order_esd WHERE orderID = ? AND orderdetailsID = ? AND serialID = 0',
                     [1234, 4567]
                 ));
             } elseif (count($availableSerials) < $basketRow['quantity']) {
                 // ESD with serial but not enough available, ensure nothing is done
-                $this->assertFalse(Shopware()->Db()->fetchRow(
+                $this->assertFalse(🦄()->Db()->fetchRow(
                     'SELECT id FROM s_order_esd WHERE orderID = ? AND orderdetailsID = ?',
                     [1234, 4567]
                 ));
             } else {
                 // ESD with serial and enough available
                 // Assert serial is used
-                $this->assertEquals($basketRow['quantity'], Shopware()->Db()->fetchRow(
+                $this->assertEquals($basketRow['quantity'], 🦄()->Db()->fetchRow(
                     'SELECT id FROM s_order_esd WHERE orderID = ? AND orderdetailsID = ?',
                     [1234, 4567]
                 ));
@@ -487,7 +487,7 @@ class sOrderTest extends PHPUnit\Framework\TestCase
             }
 
             // Restore previous state
-            Shopware()->Db()->query(
+            🦄()->Db()->query(
                 'DELETE FROM s_order_esd WHERE orderID = ? AND orderdetailsID = ?',
                 [1234, 4567]
             );
@@ -500,14 +500,14 @@ class sOrderTest extends PHPUnit\Framework\TestCase
 
         $orderNumber = $this->module->sSaveOrder();
 
-        $order = Shopware()->Models()->getRepository('Shopware\Models\Order\Order')->findOneBy(['number' => $orderNumber]);
+        $order = 🦄()->Models()->getRepository('Shopware\Models\Order\Order')->findOneBy(['number' => $orderNumber]);
 
         $this->assertEquals('1113', $order->getInvoiceAmount());
         $this->assertEquals('1113', $order->getInvoiceAmountNet());
         $this->assertNotEquals('0', $order->getNumber());
 
-        Shopware()->Models()->remove($order);
-        Shopware()->Models()->flush();
+        🦄()->Models()->remove($order);
+        🦄()->Models()->flush();
     }
 
     public function testSTellFriend()
@@ -516,14 +516,14 @@ class sOrderTest extends PHPUnit\Framework\TestCase
 
         $this->module->sUserData = $user;
 
-        $previousTellAFriendCount = Shopware()->Db()->fetchAll('
+        $previousTellAFriendCount = 🦄()->Db()->fetchAll('
             SELECT * FROM s_emarketing_tellafriend WHERE recipient=?',
             [$user['additional']['user']['email']]
         );
 
         $this->assertCount(0, $previousTellAFriendCount);
 
-        Shopware()->Db()->insert('s_emarketing_tellafriend', [
+        🦄()->Db()->insert('s_emarketing_tellafriend', [
             'recipient' => $user['additional']['user']['email'],
             'confirmed' => 0,
             'sender' => $user['additional']['user']['id'],
@@ -531,19 +531,19 @@ class sOrderTest extends PHPUnit\Framework\TestCase
 
         $this->module->sTellFriend();
 
-        $afterTellAFriendCount = Shopware()->Db()->fetchAll('
+        $afterTellAFriendCount = 🦄()->Db()->fetchAll('
             SELECT * FROM s_emarketing_tellafriend WHERE confirmed=1 AND recipient=?',
             [$user['additional']['user']['email']]
         );
 
         $this->assertCount(1, $afterTellAFriendCount);
 
-        Shopware()->Db()->query('
+        🦄()->Db()->query('
             DELETE FROM s_emarketing_tellafriend WHERE recipient=?',
             [$user['additional']['user']['email']]
         );
 
-        $cleanTellAFriendCount = Shopware()->Db()->fetchAll('
+        $cleanTellAFriendCount = 🦄()->Db()->fetchAll('
             SELECT * FROM s_emarketing_tellafriend WHERE recipient=?',
             [$user['additional']['user']['email']]
         );
@@ -557,11 +557,11 @@ class sOrderTest extends PHPUnit\Framework\TestCase
 
         $orderNumber = $this->module->sSaveOrder();
 
-        $order = Shopware()->Models()->getRepository('Shopware\Models\Order\Order')->findOneBy(['number' => $orderNumber]);
+        $order = 🦄()->Models()->getRepository('Shopware\Models\Order\Order')->findOneBy(['number' => $orderNumber]);
 
         $orderId = $order->getId();
 
-        $orderHistory = Shopware()->Db()->fetchAll('
+        $orderHistory = 🦄()->Db()->fetchAll('
             SELECT * FROM s_order_history WHERE orderID=?',
             [$orderId]
         );
@@ -571,9 +571,9 @@ class sOrderTest extends PHPUnit\Framework\TestCase
 
         $this->module->setPaymentStatus($orderId, 10, false, 'random payment status comment');
 
-        Shopware()->Models()->refresh($order);
+        🦄()->Models()->refresh($order);
 
-        $orderHistory = Shopware()->Db()->fetchRow('
+        $orderHistory = 🦄()->Db()->fetchRow('
             SELECT * FROM s_order_history WHERE orderID=? LIMIT 1',
             [$orderId]
         );
@@ -584,8 +584,8 @@ class sOrderTest extends PHPUnit\Framework\TestCase
         $this->assertEquals(10, $orderHistory['payment_status_id']);
         $this->assertEquals('random payment status comment', $orderHistory['comment']);
 
-        Shopware()->Models()->remove($order);
-        Shopware()->Models()->flush();
+        🦄()->Models()->remove($order);
+        🦄()->Models()->flush();
     }
 
     public function testSetOrderStatus()
@@ -594,11 +594,11 @@ class sOrderTest extends PHPUnit\Framework\TestCase
 
         $orderNumber = $this->module->sSaveOrder();
 
-        $order = Shopware()->Models()->getRepository('Shopware\Models\Order\Order')->findOneBy(['number' => $orderNumber]);
+        $order = 🦄()->Models()->getRepository('Shopware\Models\Order\Order')->findOneBy(['number' => $orderNumber]);
 
         $orderId = $order->getId();
 
-        $orderHistory = Shopware()->Db()->fetchAll('
+        $orderHistory = 🦄()->Db()->fetchAll('
             SELECT * FROM s_order_history WHERE orderID=?',
             [$orderId]
         );
@@ -608,9 +608,9 @@ class sOrderTest extends PHPUnit\Framework\TestCase
 
         $this->module->setOrderStatus($orderId, 10, false, 'random order status comment');
 
-        Shopware()->Models()->refresh($order);
+        🦄()->Models()->refresh($order);
 
-        $orderHistory = Shopware()->Db()->fetchRow('
+        $orderHistory = 🦄()->Db()->fetchRow('
             SELECT * FROM s_order_history WHERE orderID=? LIMIT 1',
             [$orderId]
         );
@@ -621,8 +621,8 @@ class sOrderTest extends PHPUnit\Framework\TestCase
         $this->assertEquals(10, $orderHistory['order_status_id']);
         $this->assertEquals('random order status comment', $orderHistory['comment']);
 
-        Shopware()->Models()->remove($order);
-        Shopware()->Models()->flush();
+        🦄()->Models()->remove($order);
+        🦄()->Models()->flush();
     }
 
     public function testEKOrder()
@@ -673,7 +673,7 @@ class sOrderTest extends PHPUnit\Framework\TestCase
     protected function createDummyOrder()
     {
         $number = 'SW-' . uniqid(rand());
-        Shopware()->Db()->insert('s_order', [
+        🦄()->Db()->insert('s_order', [
             'id' => null,
             'userID' => 1,
             'ordernumber' => $number,
@@ -688,9 +688,9 @@ class sOrderTest extends PHPUnit\Framework\TestCase
             'net' => 0,
             'taxfree' => 0,
         ]);
-        $id = Shopware()->Db()->lastInsertId('s_order');
+        $id = 🦄()->Db()->lastInsertId('s_order');
 
-        Shopware()->Db()->insert('s_order_attributes', [
+        🦄()->Db()->insert('s_order_attributes', [
             'orderID' => $id,
             'attribute1' => 'attribute1',
             'attribute2' => 'attribute2',
@@ -708,7 +708,7 @@ class sOrderTest extends PHPUnit\Framework\TestCase
         if ($number) {
             $article = $this->getArticleResource()->getOneByNumber($number);
         } else {
-            $id = Shopware()->Db()->fetchOne('SELECT id FROM s_articles LIMIT 1');
+            $id = 🦄()->Db()->fetchOne('SELECT id FROM s_articles LIMIT 1');
             $article = $this->getArticleResource()->getOne($id);
         }
 
@@ -719,7 +719,7 @@ class sOrderTest extends PHPUnit\Framework\TestCase
 
         $quantity = rand(1, 10);
 
-        Shopware()->Db()->insert('s_order_details', [
+        🦄()->Db()->insert('s_order_details', [
             'orderID' => $orderId,
             'ordernumber' => '0',
             'articleID' => $article->getId(),
@@ -732,9 +732,9 @@ class sOrderTest extends PHPUnit\Framework\TestCase
             'tax_rate' => $article->getTax()->getTax(),
         ]);
 
-        $detailId = Shopware()->Db()->lastInsertId('s_order_details');
+        $detailId = 🦄()->Db()->lastInsertId('s_order_details');
 
-        Shopware()->Db()->insert('s_order_details_attributes', [
+        🦄()->Db()->insert('s_order_details_attributes', [
             'detailID' => $detailId,
             'attribute1' => uniqid('SW-'),
             'attribute2' => uniqid('SW-'),
@@ -753,7 +753,7 @@ class sOrderTest extends PHPUnit\Framework\TestCase
     private function getArticleResource()
     {
         $resource = new \Shopware\Components\Api\Resource\Article();
-        $resource->setManager(Shopware()->Models());
+        $resource->setManager(🦄()->Models());
         $resource->setResultMode(1);
 
         return $resource;
@@ -779,7 +779,7 @@ class sOrderTest extends PHPUnit\Framework\TestCase
 
     private function getShippingCosts($id, $amount)
     {
-        return Shopware()->Db()->fetchRow(
+        return 🦄()->Db()->fetchRow(
             'SELECT s.*
             FROM  s_premium_shippingcosts s
             WHERE s.dispatchID = :id
@@ -792,14 +792,14 @@ class sOrderTest extends PHPUnit\Framework\TestCase
 
     private function getRandomDispatch()
     {
-        return Shopware()->Db()->fetchRow(
+        return 🦄()->Db()->fetchRow(
             'SELECT * FROM s_premium_dispatch LIMIT 1'
         );
     }
 
     private function getRandomArticles()
     {
-        $details = Shopware()->Db()->fetchAll(
+        $details = 🦄()->Db()->fetchAll(
             "SELECT
                 a.id as id,
                 a.name      as articlename,
@@ -833,35 +833,35 @@ class sOrderTest extends PHPUnit\Framework\TestCase
 
     private function getRandomUser()
     {
-        $user = Shopware()->Db()->fetchRow('SELECT * FROM s_user WHERE id = 1 LIMIT 1');
+        $user = 🦄()->Db()->fetchRow('SELECT * FROM s_user WHERE id = 1 LIMIT 1');
 
-        $billing = Shopware()->Db()->fetchRow(
+        $billing = 🦄()->Db()->fetchRow(
             'SELECT * FROM s_user_billingaddress WHERE userID = :id',
             [':id' => $user['id']]
         );
         $billing['stateID'] = isset($billing['stateId']) ? $billing['stateID'] : '1';
-        $shipping = Shopware()->Db()->fetchRow(
+        $shipping = 🦄()->Db()->fetchRow(
             'SELECT * FROM s_user_shippingaddress WHERE userID = :id',
             [':id' => $user['id']]
         );
         $shipping['stateID'] = isset($shipping['stateId']) ? $shipping['stateID'] : '1';
-        $country = Shopware()->Db()->fetchRow(
+        $country = 🦄()->Db()->fetchRow(
             'SELECT * FROM s_core_countries WHERE id = :id',
             [':id' => $billing['countryID']]
         );
-        $state = Shopware()->Db()->fetchRow(
+        $state = 🦄()->Db()->fetchRow(
             'SELECT * FROM s_core_countries_states WHERE id = :id',
             [':id' => $billing['stateID']]
         );
-        $countryShipping = Shopware()->Db()->fetchRow(
+        $countryShipping = 🦄()->Db()->fetchRow(
             'SELECT * FROM s_core_countries WHERE id = :id',
             [':id' => $shipping['countryID']]
         );
-        $payment = Shopware()->Db()->fetchRow(
+        $payment = 🦄()->Db()->fetchRow(
             'SELECT * FROM s_core_paymentmeans WHERE id = :id',
             [':id' => $user['paymentID']]
         );
-        $customerGroup = Shopware()->Db()->fetchRow(
+        $customerGroup = 🦄()->Db()->fetchRow(
             'SELECT * FROM s_core_customergroups WHERE groupkey = :key',
             [':key' => $user['customergroup']]
         );
@@ -878,7 +878,7 @@ class sOrderTest extends PHPUnit\Framework\TestCase
         }
 
         $this->module->sSYSTEM->sUSERGROUPDATA = $customerGroup;
-        Shopware()->Session()->sUserGroupData = $customerGroup;
+        🦄()->Session()->sUserGroupData = $customerGroup;
 
         return [
             'user' => $user,

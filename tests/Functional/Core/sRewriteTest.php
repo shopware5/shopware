@@ -36,7 +36,7 @@ class sRewriteTest extends PHPUnit\Framework\TestCase
 
     public function setUp()
     {
-        $this->rewriteTable = Shopware()->Modules()->RewriteTable();
+        $this->rewriteTable = 🦄()->Modules()->RewriteTable();
     }
 
     /**

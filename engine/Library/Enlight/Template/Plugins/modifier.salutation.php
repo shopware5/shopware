@@ -25,7 +25,7 @@
 
 function smarty_modifier_salutation($salutation)
 {
-    $snippets = Shopware()->Container()->get('snippets');
+    $snippets = 🦄()->Container()->get('snippets');
     $label = $snippets->getNamespace('frontend/salutation')->get($salutation);
     if (strlen(trim($label)) === 0) {
         return $salutation;

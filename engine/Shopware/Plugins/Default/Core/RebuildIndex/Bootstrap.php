@@ -97,7 +97,7 @@ class Shopware_Plugins_Core_RebuildIndex_Bootstrap extends Shopware_Components_P
      */
     public function RewriteTable()
     {
-        return Shopware()->Modules()->RewriteTable();
+        return 🦄()->Modules()->RewriteTable();
     }
 
     /**
@@ -107,7 +107,7 @@ class Shopware_Plugins_Core_RebuildIndex_Bootstrap extends Shopware_Components_P
      */
     public function SeoIndex()
     {
-        return Shopware()->Container()->get('SeoIndex');
+        return 🦄()->Container()->get('SeoIndex');
     }
 
     /**
@@ -133,13 +133,13 @@ class Shopware_Plugins_Core_RebuildIndex_Bootstrap extends Shopware_Components_P
      */
     public function onRefreshSeoIndex(Enlight_Event_EventArgs $arguments)
     {
-        $strategy = Shopware()->Config()->get('seoRefreshStrategy', self::STRATEGY_LIVE);
+        $strategy = 🦄()->Config()->get('seoRefreshStrategy', self::STRATEGY_LIVE);
 
         if ($strategy !== self::STRATEGY_CRON_JOB) {
             return true;
         }
 
-        $shops = Shopware()->Db()->fetchCol('SELECT id FROM s_core_shops WHERE active = 1');
+        $shops = 🦄()->Db()->fetchCol('SELECT id FROM s_core_shops WHERE active = 1');
 
         $currentTime = new DateTime();
 
@@ -148,13 +148,13 @@ class Shopware_Plugins_Core_RebuildIndex_Bootstrap extends Shopware_Components_P
 
         foreach ($shops as $shopId) {
             /** @var $repository \Shopware\Models\Shop\Repository */
-            $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
+            $repository = 🦄()->Models()->getRepository('Shopware\Models\Shop\Shop');
             $shop = $repository->getActiveById($shopId);
             if ($shop === null) {
                 throw new Exception('No valid shop id passed');
             }
             $shop->registerResources();
-            Shopware()->Modules()->Categories()->baseId = $shop->getCategory()->getId();
+            🦄()->Modules()->Categories()->baseId = $shop->getCategory()->getId();
 
             list($cachedTime, $elementId, $shopId) = $this->SeoIndex()->getCachedTime();
             $this->SeoIndex()->setCachedTime($currentTime->format('Y-m-d h:m:i'), $elementId, $shopId);
@@ -194,7 +194,7 @@ class Shopware_Plugins_Core_RebuildIndex_Bootstrap extends Shopware_Components_P
      */
     public function refreshSearchIndex(Enlight_Event_EventArgs $arguments)
     {
-        $strategy = Shopware()->Config()->get('searchRefreshStrategy', self::STRATEGY_LIVE);
+        $strategy = 🦄()->Config()->get('searchRefreshStrategy', self::STRATEGY_LIVE);
 
         if ($strategy !== self::STRATEGY_CRON_JOB) {
             return true;
@@ -223,7 +223,7 @@ class Shopware_Plugins_Core_RebuildIndex_Bootstrap extends Shopware_Components_P
             return;
         }
 
-        if (!Shopware()->Container()->initialized('Shop')) {
+        if (!🦄()->Container()->initialized('Shop')) {
             return;
         }
 

@@ -42,7 +42,7 @@ class Shopware_Tests_Components_TemplateMailTest extends Enlight_Components_Test
     {
         parent::setUp();
 
-        $stringCompiler = new Shopware_Components_StringCompiler(Shopware()->Template());
+        $stringCompiler = new Shopware_Components_StringCompiler(🦄()->Template());
 
         $repository = $this->createMock(\Doctrine\ORM\EntityRepository::class);
         $repository->expects($this->any())
@@ -55,7 +55,7 @@ class Shopware_Tests_Components_TemplateMailTest extends Enlight_Components_Test
                 ->willReturn($repository);
 
         $this->mail = new Shopware_Components_TemplateMail();
-        $this->mail->setShop(Shopware()->Shop());
+        $this->mail->setShop(🦄()->Shop());
         $this->mail->setModelManager($manager);
         $this->mail->setStringCompiler($stringCompiler);
     }

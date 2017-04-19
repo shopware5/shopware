@@ -363,7 +363,7 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
         $controllerName = $request->getControllerName();
         $controllerName = $this->formatControllerName($controllerName);
         $moduleName = $this->formatModuleName($this->curModule);
-        if ($event = Shopware()->Events()->notifyUntil(
+        if ($event = 🦄()->Events()->notifyUntil(
                 'Enlight_Controller_Dispatcher_ControllerPath_' . $moduleName . '_' . $controllerName,
                 array('subject' => $this, 'request' => $request)
                 )
@@ -495,19 +495,19 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
         $path = $this->getControllerPath($request);
 
         try {
-            Shopware()->Loader()->loadClass($class, $path);
+            🦄()->Loader()->loadClass($class, $path);
         } catch (Exception $e) {
             throw new Enlight_Exception('Controller "' . $class . '" can\'t load failure');
         }
 
-        $proxy = Shopware()->Hooks()->getProxy($class);
+        $proxy = 🦄()->Hooks()->getProxy($class);
 
         /** @var $controller Enlight_Controller_Action */
         $controller = new $proxy($request, $response);
         $controller->setFront($this->Front());
 
         if ($controller instanceof ContainerAwareInterface) {
-            $container = Shopware()->Container();
+            $container = 🦄()->Container();
             $controller->setContainer($container);
         }
 

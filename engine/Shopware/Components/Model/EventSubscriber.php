@@ -45,7 +45,7 @@ use Doctrine\ORM\Proxy\Proxy;
  * </code>
  *
  * - Shopware Core Solution:
- * Shopware()->Subscriber()->subscribeEvent(
+ * 🦄()->Subscriber()->subscribeEvent(
  *     new Enlight_Event_EventHandler('Shopware\Models\Article\Article::prePersist', 'beforeAnArticleCreated')
  * );
  */

@@ -76,12 +76,12 @@ class Shopware_Controllers_Backend_Document extends Enlight_Controller_Action im
         $id = $this->Request()->id;
 
         // Update statement
-        $getDocumentTypes = Shopware()->Db()->fetchAll(
+        $getDocumentTypes = 🦄()->Db()->fetchAll(
             'SELECT DISTINCT id FROM s_core_documents WHERE id != ?',
             [$id]
         );
         foreach ($getDocumentTypes as $targetID) {
-            $deleteOldRows = Shopware()->Db()->query(
+            $deleteOldRows = 🦄()->Db()->query(
                 'DELETE FROM s_core_documents_box WHERE documentID = ?',
                 [$targetID['id']]
             );
@@ -89,7 +89,7 @@ class Shopware_Controllers_Backend_Document extends Enlight_Controller_Action im
                 SELECT NULL AS id, ? AS documentID , name, style, value
                 FROM s_core_documents_box WHERE `documentID` = ?;
             ';
-            Shopware()->Db()->query($sqlDuplicate, [$targetID['id'], $id]);
+            🦄()->Db()->query($sqlDuplicate, [$targetID['id'], $id]);
         }
     }
 

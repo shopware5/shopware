@@ -67,7 +67,7 @@ class Shopware_Tests_Controllers_Backend_PartnerTest extends Enlight_Components_
     public static function tearDownAfterClass()
     {
         $sql = 'DELETE FROM s_emarketing_partner WHERE idcode = ?';
-        Shopware()->Db()->query($sql, ['31337']);
+        🦄()->Db()->query($sql, ['31337']);
     }
 
     /**
@@ -77,12 +77,12 @@ class Shopware_Tests_Controllers_Backend_PartnerTest extends Enlight_Components_
     {
         parent::setUp();
 
-        $this->manager = Shopware()->Models();
-        $this->repository = Shopware()->Models()->getRepository(\Shopware\Models\Partner\Partner::class);
+        $this->manager = 🦄()->Models();
+        $this->repository = 🦄()->Models()->getRepository(\Shopware\Models\Partner\Partner::class);
 
         // disable auth and acl
-        Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
-        Shopware()->Plugins()->Backend()->Auth()->setNoAcl();
+        🦄()->Plugins()->Backend()->Auth()->setNoAuth();
+        🦄()->Plugins()->Backend()->Auth()->setNoAcl();
     }
 
     /**

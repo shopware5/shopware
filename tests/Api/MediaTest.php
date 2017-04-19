@@ -37,7 +37,7 @@ class Shopware_Tests_Api_MediaTest extends PHPUnit\Framework\TestCase
     {
         parent::setUp();
 
-        $helper = Shopware();
+        $helper = 🦄();
 
         $hostname = $helper->Shop()->getHost();
         if (empty($hostname)) {
@@ -48,7 +48,7 @@ class Shopware_Tests_Api_MediaTest extends PHPUnit\Framework\TestCase
 
         $this->apiBaseUrl = 'http://' . $hostname . $helper->Shop()->getBasePath() . '/api';
 
-        Shopware()->Db()->query('UPDATE s_core_auth SET apiKey = ? WHERE username LIKE "demo"', [sha1('demo')]);
+        🦄()->Db()->query('UPDATE s_core_auth SET apiKey = ? WHERE username LIKE "demo"', [sha1('demo')]);
     }
 
     /**
@@ -196,7 +196,7 @@ class Shopware_Tests_Api_MediaTest extends PHPUnit\Framework\TestCase
         $this->assertGreaterThan(0, $identifier);
 
         // Check userId
-        $media = Shopware()->Models()->find('Shopware\Models\Media\Media', $identifier);
+        $media = 🦄()->Models()->find('Shopware\Models\Media\Media', $identifier);
         $this->assertGreaterThan(0, $media->getUserId());
 
         return $identifier;

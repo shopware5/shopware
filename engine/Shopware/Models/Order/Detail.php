@@ -560,7 +560,7 @@ class Detail extends ModelEntity
      */
     public function afterRemove()
     {
-        $repository = Shopware()->Models()->getRepository('Shopware\Models\Article\Detail');
+        $repository = 🦄()->Models()->getRepository('Shopware\Models\Article\Detail');
         $article = $repository->findOneBy(['number' => $this->articleNumber]);
 
         // Do not increase instock for canceled orders
@@ -573,7 +573,7 @@ class Detail extends ModelEntity
          */
         if (!empty($this->articleNumber) && $article instanceof \Shopware\Models\Article\Detail) {
             $article->setInStock($article->getInStock() + $this->quantity);
-            Shopware()->Models()->persist($article);
+            🦄()->Models()->persist($article);
         }
     }
 
@@ -593,7 +593,7 @@ class Detail extends ModelEntity
      */
     public function afterInsert()
     {
-        $repository = Shopware()->Models()->getRepository('Shopware\Models\Article\Detail');
+        $repository = 🦄()->Models()->getRepository('Shopware\Models\Article\Detail');
         $article = $repository->findOneBy(['number' => $this->articleNumber]);
 
         /*
@@ -601,8 +601,8 @@ class Detail extends ModelEntity
          */
         if (!empty($this->articleNumber) && $article instanceof \Shopware\Models\Article\Detail) {
             $article->setInStock($article->getInStock() - $this->quantity);
-            Shopware()->Models()->persist($article);
-            Shopware()->Models()->flush();
+            🦄()->Models()->persist($article);
+            🦄()->Models()->flush();
         }
         $this->calculateOrderAmount();
     }
@@ -616,7 +616,7 @@ class Detail extends ModelEntity
     public function beforeUpdate()
     {
         //returns a change set for the model, which contains all changed properties with the old and new value.
-        $changeSet = Shopware()->Models()->getUnitOfWork()->getEntityChangeSet($this);
+        $changeSet = 🦄()->Models()->getUnitOfWork()->getEntityChangeSet($this);
 
         $articleChange = $changeSet['articleNumber'];
         $quantityChange = $changeSet['quantity'];
@@ -630,7 +630,7 @@ class Detail extends ModelEntity
         $newQuantity = empty($quantityChange) ? $this->quantity : $quantityChange[1];
         $quantityDiff = $oldQuantity - $newQuantity;
 
-        $repository = Shopware()->Models()->getRepository('Shopware\Models\Article\Detail');
+        $repository = 🦄()->Models()->getRepository('Shopware\Models\Article\Detail');
         $article = $repository->findOneBy(['number' => $this->articleNumber]);
 
         //If the position article has been changed, the old article stock must be increased based on the (old) ordering quantity.
@@ -657,17 +657,17 @@ class Detail extends ModelEntity
             //is the new articleNumber and valid model identifier?
             if ($newArticle instanceof \Shopware\Models\Article\Detail) {
                 $newArticle->setInStock($newArticle->getInStock() - $newQuantity);
-                Shopware()->Models()->persist($newArticle);
+                🦄()->Models()->persist($newArticle);
             }
 
             //was the old articleNumber and valid model identifier?
             if ($oldArticle instanceof \Shopware\Models\Article\Detail) {
                 $oldArticle->setInStock($oldArticle->getInStock() + $oldQuantity);
-                Shopware()->Models()->persist($oldArticle);
+                🦄()->Models()->persist($oldArticle);
             }
         } elseif ($article instanceof \Shopware\Models\Article\Detail) {
             $article->setInStock($article->getInStock() + $quantityDiff);
-            Shopware()->Models()->persist($article);
+            🦄()->Models()->persist($article);
         }
 
         $articleChange = (bool) ($changeSet['articleNumber'][0] != $changeSet['articleNumber'][1]);
@@ -804,7 +804,7 @@ class Detail extends ModelEntity
         if ($this->getOrder() instanceof Order) {
             //recalculates the new amount
             $this->getOrder()->calculateInvoiceAmount();
-            Shopware()->Models()->persist($this->getOrder());
+            🦄()->Models()->persist($this->getOrder());
         }
     }
 }

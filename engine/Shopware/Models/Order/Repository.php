@@ -380,7 +380,7 @@ class Repository extends ModelRepository
         $today = new \DateTime();
         $today = "'" . $today->format('Y-m-d') . "'";
 
-        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder = 🦄()->Models()->createQueryBuilder();
 
         return $builder->select(['voucher.id', 'voucher.description', 'voucher.voucherCode', 'voucher.value', 'voucher.minimumCharge'])
                        ->from('Shopware\Models\Voucher\Voucher', 'voucher')

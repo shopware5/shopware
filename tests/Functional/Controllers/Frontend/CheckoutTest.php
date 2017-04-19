@@ -43,7 +43,7 @@ class Shopware_Tests_Controllers_Frontend_CheckoutTest extends Enlight_Component
             if (!empty($userAgent)) {
                 $sessionId = $this->addBasketArticle($userAgent);
                 $this->assertNotEmpty($sessionId);
-                $basketId = Shopware()->Db()->fetchOne(
+                $basketId = 🦄()->Db()->fetchOne(
                     'SELECT id FROM s_order_basket WHERE sessionID = ?',
                     [$sessionId]
                 );
@@ -51,7 +51,7 @@ class Shopware_Tests_Controllers_Frontend_CheckoutTest extends Enlight_Component
             }
         }
 
-        Shopware()->Modules()->Basket()->sDeleteBasket();
+        🦄()->Modules()->Basket()->sDeleteBasket();
     }
 
     /**
@@ -63,13 +63,13 @@ class Shopware_Tests_Controllers_Frontend_CheckoutTest extends Enlight_Component
     {
         $sessionId = $this->addBasketArticle(include __DIR__ . '/fixtures/UserAgent.php');
         $this->assertNotEmpty($sessionId);
-        $basketId = Shopware()->Db()->fetchOne(
+        $basketId = 🦄()->Db()->fetchOne(
             'SELECT id FROM s_order_basket WHERE sessionID = ?',
             [$sessionId]
         );
         $this->assertNotEmpty($basketId);
 
-        Shopware()->Modules()->Basket()->sDeleteBasket();
+        🦄()->Modules()->Basket()->sDeleteBasket();
     }
 
     /**
@@ -85,6 +85,6 @@ class Shopware_Tests_Controllers_Frontend_CheckoutTest extends Enlight_Component
         $this->Request()->setHeader('User-Agent', $userAgent);
         $this->dispatch('/checkout/addArticle/sAdd/' . self::ARTICLE_NUMBER);
 
-        return Shopware()->Container()->get('SessionID');
+        return 🦄()->Container()->get('SessionID');
     }
 }

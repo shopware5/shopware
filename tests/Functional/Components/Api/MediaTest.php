@@ -57,8 +57,8 @@ class MediaTest extends TestCase
         copy($source, $dest);
 
         $data['file'] = $dest;
-        $path = Shopware()->DocPath('media_image') . 'test-bild-used.jpg';
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $path = 🦄()->DocPath('media_image') . 'test-bild-used.jpg';
+        $mediaService = 🦄()->Container()->get('shopware_media.media_service');
         if ($mediaService->has($path)) {
             $mediaService->delete($path);
         }
@@ -67,7 +67,7 @@ class MediaTest extends TestCase
         $this->assertTrue($mediaService->has($path));
 
         //check if the thumbnails are generated
-        $path = Shopware()->DocPath('media_image_thumbnail') . 'test-bild-used_140x140.jpg';
+        $path = 🦄()->DocPath('media_image_thumbnail') . 'test-bild-used_140x140.jpg';
         $this->assertTrue($mediaService->has($path));
     }
 
@@ -84,15 +84,15 @@ class MediaTest extends TestCase
         $data['file'] = $dest;
         $media = $this->resource->create($data);
 
-        $pathPicture = Shopware()->DocPath('media_image') . $media->getFileName();
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $pathPicture = 🦄()->DocPath('media_image') . $media->getFileName();
+        $mediaService = 🦄()->Container()->get('shopware_media.media_service');
         $this->assertTrue($mediaService->has($pathPicture));
 
         //check if the thumbnails are generated
-        $path = Shopware()->DocPath('media_image_thumbnail') . $media->getName() . '_140x140.jpg';
+        $path = 🦄()->DocPath('media_image_thumbnail') . $media->getName() . '_140x140.jpg';
         $this->assertTrue($mediaService->has($path));
 
-        $mediaService->delete(Shopware()->DocPath('media_image') . $media->getFileName());
+        $mediaService->delete(🦄()->DocPath('media_image') . $media->getFileName());
         $mediaService->delete($path);
     }
 

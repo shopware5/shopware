@@ -93,7 +93,7 @@ class ValidationException extends \Enlight_Exception
         $violations = [];
 
         foreach ($errors as $error) {
-            $message = Shopware()->Template()->fetch('string:' . $error->getMessage());
+            $message = 🦄()->Template()->fetch('string:' . $error->getMessage());
 
             $violations[] = new ConstraintViolation(
                 $message,

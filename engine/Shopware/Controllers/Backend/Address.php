@@ -57,7 +57,7 @@ class Shopware_Controllers_Backend_Address extends Shopware_Controllers_Backend_
             return;
         }
         $address = $this->getManager()->getRepository('Shopware\Models\Customer\Address')->find($customerAddressId);
-        Shopware()->Container()->get('shopware_account.address_service')->update($address);
+        🦄()->Container()->get('shopware_account.address_service')->update($address);
     }
 
     /**

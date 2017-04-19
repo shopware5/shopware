@@ -65,7 +65,7 @@ class Shopware_Plugins_Frontend_RouterRewrite_Bootstrap extends Shopware_Compone
             'Enlight_Controller_Front_PreDispatch',
             [$this, 'onPreDispatch']
         );
-        Shopware()->Events()->registerListener($event);
+        🦄()->Events()->registerListener($event);
     }
 
     /**

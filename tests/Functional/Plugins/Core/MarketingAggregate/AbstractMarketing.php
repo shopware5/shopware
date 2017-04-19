@@ -46,7 +46,7 @@ class AbstractMarketing extends \Enlight_Components_Test_Plugin_TestCase
      */
     protected function SimilarShown()
     {
-        return Shopware()->Container()->get('SimilarShown');
+        return 🦄()->Container()->get('SimilarShown');
     }
 
     /**
@@ -54,7 +54,7 @@ class AbstractMarketing extends \Enlight_Components_Test_Plugin_TestCase
      */
     protected function TopSeller()
     {
-        return Shopware()->Container()->get('TopSeller');
+        return 🦄()->Container()->get('TopSeller');
     }
 
     /**
@@ -62,7 +62,7 @@ class AbstractMarketing extends \Enlight_Components_Test_Plugin_TestCase
      */
     protected function AlsoBought()
     {
-        return Shopware()->Container()->get('AlsoBought');
+        return 🦄()->Container()->get('AlsoBought');
     }
 
     /**
@@ -70,7 +70,7 @@ class AbstractMarketing extends \Enlight_Components_Test_Plugin_TestCase
      */
     protected function Db()
     {
-        return Shopware()->Db();
+        return 🦄()->Db();
     }
 
     /**
@@ -78,7 +78,7 @@ class AbstractMarketing extends \Enlight_Components_Test_Plugin_TestCase
      */
     protected function Articles()
     {
-        return Shopware()->Modules()->Articles();
+        return 🦄()->Modules()->Articles();
     }
 
     /**
@@ -86,7 +86,7 @@ class AbstractMarketing extends \Enlight_Components_Test_Plugin_TestCase
      */
     protected function Plugin()
     {
-        return Shopware()->Plugins()->Core()->MarketingAggregate();
+        return 🦄()->Plugins()->Core()->MarketingAggregate();
     }
 
     protected function getAllArticles($condition = '')
@@ -106,10 +106,10 @@ class AbstractMarketing extends \Enlight_Components_Test_Plugin_TestCase
      */
     protected function saveConfig($name, $value)
     {
-        $shopRepository = Shopware()->Models()->getRepository(Shop::class);
-        $elementRepository = Shopware()->Models()->getRepository(Element::class);
-        $formRepository = Shopware()->Models()->getRepository(Form::class);
-        $valueRepository = Shopware()->Models()->getRepository(Value::class);
+        $shopRepository = 🦄()->Models()->getRepository(Shop::class);
+        $elementRepository = 🦄()->Models()->getRepository(Element::class);
+        $formRepository = 🦄()->Models()->getRepository(Form::class);
+        $valueRepository = 🦄()->Models()->getRepository(Value::class);
 
         $shop = $shopRepository->find($shopRepository->getActiveDefault()->getId());
 
@@ -141,17 +141,17 @@ class AbstractMarketing extends \Enlight_Components_Test_Plugin_TestCase
             $valueModel->setShop($shop);
             $valueModel->setValue($value);
 
-            Shopware()->Models()->persist($valueModel);
-            Shopware()->Models()->flush($valueModel);
+            🦄()->Models()->persist($valueModel);
+            🦄()->Models()->flush($valueModel);
 
             return;
         }
 
         if ($value == $defaultValue || $value === null) {
-            Shopware()->Models()->remove($valueModel);
+            🦄()->Models()->remove($valueModel);
         } else {
             $valueModel->setValue($value);
         }
-        Shopware()->Models()->flush($valueModel);
+        🦄()->Models()->flush($valueModel);
     }
 }

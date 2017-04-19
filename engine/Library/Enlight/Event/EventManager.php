@@ -32,7 +32,7 @@ use Enlight\Event\SubscriberInterface;
  * notify function. <br><br>
  *
  * Example to execute an event manuel:<br>
- *       Shopware()->Events()->notify(
+ *       🦄()->Events()->notify(
  *           'Enlight_Controller_Front_StartDispatch',
  *           array('subject' => $this)
  *       );

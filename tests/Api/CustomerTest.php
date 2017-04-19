@@ -58,7 +58,7 @@ class Shopware_Tests_Api_CustomerTest extends PHPUnit\Framework\TestCase
     {
         parent::setUp();
 
-        $helper = Shopware();
+        $helper = 🦄();
 
         $hostname = $helper->Shop()->getHost();
         if (empty($hostname)) {
@@ -69,7 +69,7 @@ class Shopware_Tests_Api_CustomerTest extends PHPUnit\Framework\TestCase
 
         $this->apiBaseUrl = 'http://' . $hostname . $helper->Shop()->getBasePath() . '/api';
 
-        Shopware()->Db()->query('UPDATE s_core_auth SET apiKey = ? WHERE username LIKE "demo"', [sha1('demo')]);
+        🦄()->Db()->query('UPDATE s_core_auth SET apiKey = ? WHERE username LIKE "demo"', [sha1('demo')]);
     }
 
     /**
@@ -289,7 +289,7 @@ class Shopware_Tests_Api_CustomerTest extends PHPUnit\Framework\TestCase
 
         $this->assertGreaterThan(0, $identifier);
 
-        $customer = Shopware()->Models()->getRepository('Shopware\Models\Customer\Customer')->find($identifier);
+        $customer = 🦄()->Models()->getRepository('Shopware\Models\Customer\Customer')->find($identifier);
         $paymentData = array_shift($customer->getPaymentData()->toArray());
 
         $this->assertNotNull($paymentData);
@@ -382,7 +382,7 @@ class Shopware_Tests_Api_CustomerTest extends PHPUnit\Framework\TestCase
 
         $this->assertGreaterThan(0, $identifier);
 
-        $customer = Shopware()->Models()->getRepository('Shopware\Models\Customer\Customer')->find($identifier);
+        $customer = 🦄()->Models()->getRepository('Shopware\Models\Customer\Customer')->find($identifier);
         $paymentData = array_shift($customer->getPaymentData()->toArray());
 
         $this->assertNotNull($paymentData);
@@ -517,7 +517,7 @@ class Shopware_Tests_Api_CustomerTest extends PHPUnit\Framework\TestCase
     {
         $client = $this->getHttpClient()->setUri($this->apiBaseUrl . '/customers/' . $id);
 
-        $customer = Shopware()->Models()->getRepository(Customer::class)->find($id);
+        $customer = 🦄()->Models()->getRepository(Customer::class)->find($id);
 
         $requestData = [
             'active' => true,

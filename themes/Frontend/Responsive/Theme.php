@@ -1345,7 +1345,7 @@ class Theme extends \Shopware\Components\Theme
                 true,
                 ['attributes' => [
                     'lessCompatible' => false,
-                    'boxLabel' => Shopware()->Snippets()->getNamespace('themes/bare/backend/config')->get('ajax_variant_switch_description')
+                    'boxLabel' => 🦄()->Snippets()->getNamespace('themes/bare/backend/config')->get('ajax_variant_switch_description')
                 ]]
             )
         );
@@ -1357,7 +1357,7 @@ class Theme extends \Shopware\Components\Theme
                 true,
                 ['attributes' => [
                     'lessCompatible' => false,
-                    'boxLabel' => Shopware()->Snippets()->getNamespace('themes/bare/backend/config')->get('async_javascript_loading_description')
+                    'boxLabel' => 🦄()->Snippets()->getNamespace('themes/bare/backend/config')->get('async_javascript_loading_description')
                 ]]
             )
         );
@@ -1407,7 +1407,7 @@ class Theme extends \Shopware\Components\Theme
      */
     private function getLabelAttribute($snippetName, $labelType = 'boxLabel')
     {
-        $description = Shopware()->Snippets()->getNamespace('themes/bare/backend/config')->get($snippetName);
+        $description = 🦄()->Snippets()->getNamespace('themes/bare/backend/config')->get($snippetName);
         return ['attributes' => [$labelType => $description]];
     }
 

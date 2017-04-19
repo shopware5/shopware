@@ -91,8 +91,8 @@ class Shopware_Controllers_Backend_Property extends Shopware_Controllers_Backend
         $group->fromArray($params);
 
         try {
-            Shopware()->Models()->persist($group);
-            Shopware()->Models()->flush();
+            🦄()->Models()->persist($group);
+            🦄()->Models()->flush();
         } catch (\Exception $e) {
             $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);
 
@@ -117,7 +117,7 @@ class Shopware_Controllers_Backend_Property extends Shopware_Controllers_Backend
         }
 
         /* @var $group Group */
-        $group = Shopware()->Models()->getRepository('Shopware\Models\Property\Group')->find($id);
+        $group = 🦄()->Models()->getRepository('Shopware\Models\Property\Group')->find($id);
         if (!$group) {
             $this->View()->assign(['success' => false, 'message' => 'Group not found']);
 
@@ -128,7 +128,7 @@ class Shopware_Controllers_Backend_Property extends Shopware_Controllers_Backend
         $group->fromArray($params);
 
         try {
-            Shopware()->Models()->flush();
+            🦄()->Models()->flush();
         } catch (Exception $e) {
             $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);
 
@@ -187,7 +187,7 @@ class Shopware_Controllers_Backend_Property extends Shopware_Controllers_Backend
         }
 
         /* @var $group Group */
-        $group = Shopware()->Models()->getRepository('Shopware\Models\Property\Group')->find($setId);
+        $group = 🦄()->Models()->getRepository('Shopware\Models\Property\Group')->find($setId);
         if (!$group) {
             $this->View()->assign(['success' => false, 'message' => 'Group not found']);
 
@@ -195,7 +195,7 @@ class Shopware_Controllers_Backend_Property extends Shopware_Controllers_Backend
         }
 
         /* @var $option Option */
-        $option = Shopware()->Models()->getReference('Shopware\Models\Property\Option', $optionId);
+        $option = 🦄()->Models()->getReference('Shopware\Models\Property\Option', $optionId);
         if (!$option) {
             $this->View()->assign(['success' => false, 'message' => 'Option not found']);
 
@@ -205,7 +205,7 @@ class Shopware_Controllers_Backend_Property extends Shopware_Controllers_Backend
         $group->addOption($option);
 
         try {
-            Shopware()->Models()->flush();
+            🦄()->Models()->flush();
         } catch (\Exception $e) {
             $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);
 
@@ -230,7 +230,7 @@ class Shopware_Controllers_Backend_Property extends Shopware_Controllers_Backend
         }
 
         /* @var $group Group */
-        $group = Shopware()->Models()->getRepository('Shopware\Models\Property\Group')->find($groupId);
+        $group = 🦄()->Models()->getRepository('Shopware\Models\Property\Group')->find($groupId);
         if (!$group) {
             $this->View()->assign(['success' => false, 'message' => 'Group not found']);
 
@@ -238,7 +238,7 @@ class Shopware_Controllers_Backend_Property extends Shopware_Controllers_Backend
         }
 
         /* @var $option Option */
-        $option = Shopware()->Models()->getRepository('Shopware\Models\Property\Option')->find($optionId);
+        $option = 🦄()->Models()->getRepository('Shopware\Models\Property\Option')->find($optionId);
         if (!$option) {
             $this->View()->assign(['success' => false, 'message' => 'Option not found']);
 
@@ -248,7 +248,7 @@ class Shopware_Controllers_Backend_Property extends Shopware_Controllers_Backend
         $group->removeOption($option);
 
         try {
-            Shopware()->Models()->flush();
+            🦄()->Models()->flush();
         } catch (\Exception $e) {
             $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);
 
@@ -285,15 +285,15 @@ class Shopware_Controllers_Backend_Property extends Shopware_Controllers_Backend
         $option->fromArray($params);
 
         try {
-            Shopware()->Models()->persist($option);
-            Shopware()->Models()->flush();
+            🦄()->Models()->persist($option);
+            🦄()->Models()->flush();
         } catch (Exception $e) {
             $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);
 
             return;
         }
 
-        $data = Shopware()->Models()->toArray($option);
+        $data = 🦄()->Models()->toArray($option);
         $this->View()->assign(['success' => true, 'data' => $data]);
     }
 
@@ -309,7 +309,7 @@ class Shopware_Controllers_Backend_Property extends Shopware_Controllers_Backend
         }
 
         /* @var $option Option */
-        $option = Shopware()->Models()->getRepository('Shopware\Models\Property\Option')->find($id);
+        $option = 🦄()->Models()->getRepository('Shopware\Models\Property\Option')->find($id);
         if (!$option) {
             $this->View()->assign(['success' => false, 'message' => 'Option not found']);
 
@@ -319,14 +319,14 @@ class Shopware_Controllers_Backend_Property extends Shopware_Controllers_Backend
         $option->fromArray($this->Request()->getPost());
 
         try {
-            Shopware()->Models()->flush();
+            🦄()->Models()->flush();
         } catch (Exception $e) {
             $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);
 
             return;
         }
 
-        $data = Shopware()->Models()->toArray($option);
+        $data = 🦄()->Models()->toArray($option);
         $this->View()->assign(['success' => true, 'data' => $data]);
     }
 
@@ -344,7 +344,7 @@ class Shopware_Controllers_Backend_Property extends Shopware_Controllers_Backend
         }
 
         /* @var $option Option */
-        $option = Shopware()->Models()->getRepository('Shopware\Models\Property\Option')->find($id);
+        $option = 🦄()->Models()->getRepository('Shopware\Models\Property\Option')->find($id);
         if (!$option) {
             $this->View()->assign(['success' => false, 'message' => 'Snippet not found']);
 
@@ -353,8 +353,8 @@ class Shopware_Controllers_Backend_Property extends Shopware_Controllers_Backend
 
         try {
             // Cascades remove to associated values
-            Shopware()->Models()->remove($option);
-            Shopware()->Models()->flush();
+            🦄()->Models()->remove($option);
+            🦄()->Models()->flush();
         } catch (Exception $e) {
             $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);
 
@@ -392,7 +392,7 @@ class Shopware_Controllers_Backend_Property extends Shopware_Controllers_Backend
         }
 
         /* @var $option Option */
-        $option = Shopware()->Models()->getReference('Shopware\Models\Property\Option', $optionId);
+        $option = 🦄()->Models()->getReference('Shopware\Models\Property\Option', $optionId);
         if (!$option) {
             $this->View()->assign(['success' => false, 'message' => 'Option not found']);
 
@@ -403,15 +403,15 @@ class Shopware_Controllers_Backend_Property extends Shopware_Controllers_Backend
         $value = new Value($option, $postValue);
 
         try {
-            Shopware()->Models()->persist($value);
-            Shopware()->Models()->flush();
+            🦄()->Models()->persist($value);
+            🦄()->Models()->flush();
         } catch (Exception $e) {
             $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);
 
             return;
         }
 
-        $data = Shopware()->Models()->toArray($value);
+        $data = 🦄()->Models()->toArray($value);
         $this->View()->assign(['success' => true, 'data' => $data]);
     }
 
@@ -424,7 +424,7 @@ class Shopware_Controllers_Backend_Property extends Shopware_Controllers_Backend
         }
 
         /* @var $value Value */
-        $value = Shopware()->Models()->getRepository('Shopware\Models\Property\Value')->find($id);
+        $value = 🦄()->Models()->getRepository('Shopware\Models\Property\Value')->find($id);
         if (!$value) {
             $this->View()->assign(['success' => false, 'message' => 'Value not found']);
 
@@ -441,7 +441,7 @@ class Shopware_Controllers_Backend_Property extends Shopware_Controllers_Backend
         }
 
         try {
-            Shopware()->Models()->flush();
+            🦄()->Models()->flush();
         } catch (Exception $e) {
             $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);
 
@@ -468,7 +468,7 @@ class Shopware_Controllers_Backend_Property extends Shopware_Controllers_Backend
         }
 
         /* @var $value Value */
-        $value = Shopware()->Models()->getRepository('Shopware\Models\Property\Value')->find($id);
+        $value = 🦄()->Models()->getRepository('Shopware\Models\Property\Value')->find($id);
         if (!$value) {
             $this->View()->assign(['success' => false, 'message' => 'Value not found']);
 
@@ -476,8 +476,8 @@ class Shopware_Controllers_Backend_Property extends Shopware_Controllers_Backend
         }
 
         try {
-            Shopware()->Models()->remove($value);
-            Shopware()->Models()->flush();
+            🦄()->Models()->remove($value);
+            🦄()->Models()->flush();
         } catch (Exception $e) {
             $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);
 
@@ -496,7 +496,7 @@ class Shopware_Controllers_Backend_Property extends Shopware_Controllers_Backend
         $data = json_decode($data, true);
 
         foreach ($data as $row) {
-            Shopware()->Db()->update(
+            🦄()->Db()->update(
                 's_filter_relations',
                 ['position' => $row['position']],
                 ['groupID = ?' => $row['groupId'], 'optionID = ?' => $row['optionId']]
@@ -540,7 +540,7 @@ class Shopware_Controllers_Backend_Property extends Shopware_Controllers_Backend
         foreach ($positions as $position => $valueId) {
             $test[] = ([['position' => $position, 'optionId' => $valueId, 'groupId' => $setId]]);
 
-            Shopware()->Db()->update(
+            🦄()->Db()->update(
                 's_filter_relations',
                 ['position' => $position],
                 ['groupID = ?' => $setId, 'optionID = ?' => $valueId]
@@ -558,7 +558,7 @@ class Shopware_Controllers_Backend_Property extends Shopware_Controllers_Backend
     private function getPropertyRepository()
     {
         if ($this->propertyRepository === null) {
-            $this->propertyRepository = Shopware()->Models()->getRepository('Shopware\Models\Property\Group');
+            $this->propertyRepository = 🦄()->Models()->getRepository('Shopware\Models\Property\Group');
         }
 
         return $this->propertyRepository;
@@ -570,7 +570,7 @@ class Shopware_Controllers_Backend_Property extends Shopware_Controllers_Backend
     private function getManager()
     {
         if ($this->manager === null) {
-            $this->manager = Shopware()->Models();
+            $this->manager = 🦄()->Models();
         }
 
         return $this->manager;

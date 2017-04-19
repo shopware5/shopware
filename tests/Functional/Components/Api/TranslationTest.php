@@ -63,7 +63,7 @@ class TranslationTest extends TestCase
         ]);
 
         foreach ($list['data'] as $item) {
-            $article = Shopware()->Models()->find('Shopware\Models\Article\Article', $item['key']);
+            $article = 🦄()->Models()->find('Shopware\Models\Article\Article', $item['key']);
 
             $this->assertInstanceOf('Shopware\Models\Article\Article', $article);
 
@@ -83,7 +83,7 @@ class TranslationTest extends TestCase
             ],
             [
                 'property' => 'translation.key',
-                'value' => Shopware()->Db()->fetchOne("SELECT objectkey FROM s_core_translations WHERE objecttype='article' LIMIT 1"),
+                'value' => 🦄()->Db()->fetchOne("SELECT objectkey FROM s_core_translations WHERE objecttype='article' LIMIT 1"),
             ],
             [
                 [
@@ -137,7 +137,7 @@ class TranslationTest extends TestCase
     public function testCreateArticleByNumber()
     {
         $data = $this->getDummyData('article');
-        $article = Shopware()->Db()->fetchRow('SELECT ordernumber, articleID FROM s_articles_details LIMIT 1');
+        $article = 🦄()->Db()->fetchRow('SELECT ordernumber, articleID FROM s_articles_details LIMIT 1');
         $data['key'] = $article['ordernumber'];
 
         /** @var $translation \Shopware\Models\Translation\Translation */
@@ -176,7 +176,7 @@ class TranslationTest extends TestCase
     {
         $data = $this->getDummyData('variant');
         //Artikel mit Standardkonfigurator rot / 39
-        $article = Shopware()->Db()->fetchRow("SELECT id, ordernumber, articleID FROM s_articles_details WHERE ordernumber = 'SW10201.11'");
+        $article = 🦄()->Db()->fetchRow("SELECT id, ordernumber, articleID FROM s_articles_details WHERE ordernumber = 'SW10201.11'");
         $data['key'] = $article['ordernumber'];
 
         /** @var $translation \Shopware\Models\Translation\Translation */
@@ -356,7 +356,7 @@ class TranslationTest extends TestCase
             $translations[] = $this->getDummyData('article');
         }
 
-        $article = Shopware()->Db()->fetchRow(
+        $article = 🦄()->Db()->fetchRow(
             'SELECT ordernumber, articleID
             FROM s_articles_details
             LIMIT 1'
@@ -380,7 +380,7 @@ class TranslationTest extends TestCase
     public function testUpdateByNumber($articleId)
     {
         $translation = $this->getDummyData('article');
-        $article = Shopware()->Db()->fetchRow(
+        $article = 🦄()->Db()->fetchRow(
             'SELECT ordernumber, articleID
             FROM s_articles_details
             WHERE articleID = :articleId
@@ -424,7 +424,7 @@ class TranslationTest extends TestCase
     {
         $data = $this->getDummyData('article');
 
-        $article = Shopware()->Db()->fetchRow(
+        $article = 🦄()->Db()->fetchRow(
             'SELECT ordernumber, articleID
             FROM s_articles_details
             LIMIT 1'
@@ -462,7 +462,7 @@ class TranslationTest extends TestCase
 
     public function testManufacturerNumber()
     {
-        $entity = Shopware()->Db()->fetchRow('SELECT * FROM s_articles_supplier LIMIT 1');
+        $entity = 🦄()->Db()->fetchRow('SELECT * FROM s_articles_supplier LIMIT 1');
         $this->numberCreate('supplier', $entity['id'], $entity['name']);
         $this->numberUpdate('supplier', $entity['id'], $entity['name']);
         $this->numberDelete('supplier', $entity['name']);
@@ -470,7 +470,7 @@ class TranslationTest extends TestCase
 
     public function testCountryName()
     {
-        $entity = Shopware()->Db()->fetchRow('SELECT * FROM s_core_countries LIMIT 1');
+        $entity = 🦄()->Db()->fetchRow('SELECT * FROM s_core_countries LIMIT 1');
         $this->numberCreate('config_countries', $entity['id'], $entity['countryname']);
         $this->numberUpdate('config_countries', $entity['id'], $entity['countryname']);
         $this->numberDelete('config_countries', $entity['countryname']);
@@ -478,7 +478,7 @@ class TranslationTest extends TestCase
 
     public function testCountryIso()
     {
-        $entity = Shopware()->Db()->fetchRow('SELECT * FROM s_core_countries LIMIT 1');
+        $entity = 🦄()->Db()->fetchRow('SELECT * FROM s_core_countries LIMIT 1');
         $this->numberCreate('config_countries', $entity['id'], $entity['countryiso']);
         $this->numberUpdate('config_countries', $entity['id'], $entity['countryiso']);
         $this->numberDelete('config_countries', $entity['countryiso']);
@@ -486,7 +486,7 @@ class TranslationTest extends TestCase
 
     public function testCountryStateName()
     {
-        $entity = Shopware()->Db()->fetchRow('SELECT * FROM s_core_countries_states LIMIT 1');
+        $entity = 🦄()->Db()->fetchRow('SELECT * FROM s_core_countries_states LIMIT 1');
         $this->numberCreate('config_country_states', $entity['id'], $entity['name']);
         $this->numberUpdate('config_country_states', $entity['id'], $entity['name']);
         $this->numberDelete('config_country_states', $entity['name']);
@@ -494,7 +494,7 @@ class TranslationTest extends TestCase
 
     public function testCountryStateCode()
     {
-        $entity = Shopware()->Db()->fetchRow('SELECT * FROM s_core_countries_states LIMIT 1');
+        $entity = 🦄()->Db()->fetchRow('SELECT * FROM s_core_countries_states LIMIT 1');
         $this->numberCreate('config_country_states', $entity['id'], $entity['shortcode']);
         $this->numberUpdate('config_country_states', $entity['id'], $entity['shortcode']);
         $this->numberDelete('config_country_states', $entity['shortcode']);
@@ -502,7 +502,7 @@ class TranslationTest extends TestCase
 
     public function testDispatchName()
     {
-        $entity = Shopware()->Db()->fetchRow('SELECT * FROM s_premium_dispatch LIMIT 1');
+        $entity = 🦄()->Db()->fetchRow('SELECT * FROM s_premium_dispatch LIMIT 1');
         $this->numberCreate('config_dispatch', $entity['id'], $entity['name']);
         $this->numberUpdate('config_dispatch', $entity['id'], $entity['name']);
         $this->numberDelete('config_dispatch', $entity['name']);
@@ -510,7 +510,7 @@ class TranslationTest extends TestCase
 
     public function testPaymentName()
     {
-        $entity = Shopware()->Db()->fetchRow('SELECT * FROM s_core_paymentmeans LIMIT 1');
+        $entity = 🦄()->Db()->fetchRow('SELECT * FROM s_core_paymentmeans LIMIT 1');
         $this->numberCreate('config_payment', $entity['id'], $entity['name']);
         $this->numberUpdate('config_payment', $entity['id'], $entity['name']);
         $this->numberDelete('config_payment', $entity['name']);
@@ -518,7 +518,7 @@ class TranslationTest extends TestCase
 
     public function testPaymentDescription()
     {
-        $entity = Shopware()->Db()->fetchRow('SELECT * FROM s_core_paymentmeans LIMIT 1');
+        $entity = 🦄()->Db()->fetchRow('SELECT * FROM s_core_paymentmeans LIMIT 1');
         $this->numberCreate('config_payment', $entity['id'], $entity['description']);
         $this->numberUpdate('config_payment', $entity['id'], $entity['description']);
         $this->numberDelete('config_payment', $entity['description']);
@@ -526,7 +526,7 @@ class TranslationTest extends TestCase
 
     public function testFilterSetNumber()
     {
-        $entity = Shopware()->Db()->fetchRow('SELECT * FROM s_filter LIMIT 1');
+        $entity = 🦄()->Db()->fetchRow('SELECT * FROM s_filter LIMIT 1');
 
         $this->numberCreate('propertygroup', $entity['id'], $entity['name']);
         $this->numberUpdate('propertygroup', $entity['id'], $entity['name']);
@@ -553,7 +553,7 @@ class TranslationTest extends TestCase
 
     public function testConfiguratorGroupNumber()
     {
-        $entity = Shopware()->Db()->fetchRow('
+        $entity = 🦄()->Db()->fetchRow('
             SELECT * FROM s_article_configurator_groups
         ');
 
@@ -694,7 +694,7 @@ class TranslationTest extends TestCase
     {
         $data = $this->getDummyData('article');
 
-        $article = Shopware()->Db()->fetchRow('SELECT ordernumber, articleID FROM s_articles_details LIMIT 1');
+        $article = 🦄()->Db()->fetchRow('SELECT ordernumber, articleID FROM s_articles_details LIMIT 1');
         $data['key'] = $article['articleID'];
 
         $this->resource->create($data);
@@ -1066,7 +1066,7 @@ class TranslationTest extends TestCase
 
     protected function getFilterGroupName()
     {
-        return Shopware()->Db()->fetchRow("
+        return 🦄()->Db()->fetchRow("
             SELECT fo.id,
                    CONCAT(f.name, '|', fo.name) as name
             FROM s_filter_options as fo
@@ -1080,7 +1080,7 @@ class TranslationTest extends TestCase
 
     protected function getFilterOptionName()
     {
-        return Shopware()->Db()->fetchRow("
+        return 🦄()->Db()->fetchRow("
             SELECT fv.id,
                    CONCAT(f.name, '|', fo.name, '|', fv.value) as name
             FROM s_filter_values as fv
@@ -1096,7 +1096,7 @@ class TranslationTest extends TestCase
 
     protected function getConfiguratorOptionName()
     {
-        return  Shopware()->Db()->fetchRow("
+        return  🦄()->Db()->fetchRow("
             SELECT co.id,
                    CONCAT(cg.name, '|', co.name) as name
 

@@ -35,7 +35,7 @@ class RouterTest extends \PHPUnit\Framework\TestCase
 
     public function setUp()
     {
-        $helper = Shopware();
+        $helper = 🦄();
         $loader = $helper->Container()->get('loader');
 
         $pluginDir = $helper->DocPath() . 'engine/Shopware/Plugins/Default/Core/RestApi';

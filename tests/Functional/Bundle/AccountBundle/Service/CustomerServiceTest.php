@@ -65,10 +65,10 @@ class CustomerServiceTest extends \Enlight_Components_Test_TestCase
      */
     public static function setUpBeforeClass()
     {
-        self::$customerService = Shopware()->Container()->get('shopware_account.customer_service');
-        self::$modelManager = Shopware()->Container()->get('models');
-        self::$connection = Shopware()->Container()->get('dbal_connection');
-        self::$contextService = Shopware()->Container()->get('shopware_storefront.context_service');
+        self::$customerService = 🦄()->Container()->get('shopware_account.customer_service');
+        self::$modelManager = 🦄()->Container()->get('models');
+        self::$connection = 🦄()->Container()->get('dbal_connection');
+        self::$contextService = 🦄()->Container()->get('shopware_storefront.context_service');
 
         self::$modelManager->clear();
     }
@@ -89,7 +89,7 @@ class CustomerServiceTest extends \Enlight_Components_Test_TestCase
         self::$modelManager->flush();
         self::$modelManager->clear();
 
-        Shopware()->Container()->reset('router');
+        🦄()->Container()->reset('router');
     }
 
     public function testUpdateEmail()

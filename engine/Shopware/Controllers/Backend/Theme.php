@@ -95,12 +95,12 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
         $shop = $this->getManager()->getRepository('Shopware\Models\Shop\Shop')->getActiveById($shopId);
         $shop->registerResources();
 
-        Shopware()->Session()->template = $theme->getTemplate();
-        Shopware()->Session()->Admin = true;
+        🦄()->Session()->template = $theme->getTemplate();
+        🦄()->Session()->Admin = true;
 
         if (!$this->Request()->isXmlHttpRequest()) {
             $this->get('events')->notify('Shopware_Theme_Preview_Starts', [
-                'session' => Shopware()->Session(),
+                'session' => 🦄()->Session(),
                 'shop' => $shop,
                 'theme' => $theme,
             ]);
@@ -138,7 +138,7 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
 
         $shop->registerResources();
 
-        Shopware()->Session()->template = null;
+        🦄()->Session()->template = null;
     }
 
     /**
@@ -466,7 +466,7 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
      */
     private function getDefaultShopId()
     {
-        return Shopware()->Db()->fetchOne(
+        return 🦄()->Db()->fetchOne(
             'SELECT id FROM s_core_shops WHERE `default` = 1'
         );
     }

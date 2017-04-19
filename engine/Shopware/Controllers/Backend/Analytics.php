@@ -80,7 +80,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
     public function init()
     {
         parent::init();
-        $currency = Shopware()->Db()->fetchRow(
+        $currency = 🦄()->Db()->fetchRow(
             'SELECT templatechar as sign, (symbol_position = 16) currencyAtEnd
             FROM s_core_currencies
             WHERE standard = 1'
@@ -898,7 +898,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
     private function getManager()
     {
         if ($this->manager === null) {
-            $this->manager = Shopware()->Models();
+            $this->manager = 🦄()->Models();
         }
 
         return $this->manager;

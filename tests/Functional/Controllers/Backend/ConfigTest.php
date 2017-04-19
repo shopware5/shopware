@@ -34,12 +34,12 @@ class Shopware_Tests_Controllers_Backend_ConfigTest extends Enlight_Components_T
      */
     public function testCronJobPaginationConfig()
     {
-        Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
+        🦄()->Plugins()->Backend()->Auth()->setNoAuth();
         $this->checkTableListConfig('cronJob');
 
         $this->reset();
 
-        Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
+        🦄()->Plugins()->Backend()->Auth()->setNoAuth();
         $this->checkGetTableListConfigPagination('cronJob');
     }
 
@@ -49,7 +49,7 @@ class Shopware_Tests_Controllers_Backend_ConfigTest extends Enlight_Components_T
     public function testCronJobSearchConfig()
     {
         $sql = 'SELECT count(*) FROM  s_crontab';
-        $totalCronJobCount = Shopware()->Db()->fetchOne($sql);
+        $totalCronJobCount = 🦄()->Db()->fetchOne($sql);
 
         //test the search
         $this->checkGetTableListSearch('a', $totalCronJobCount, 'cronJob');
@@ -65,12 +65,12 @@ class Shopware_Tests_Controllers_Backend_ConfigTest extends Enlight_Components_T
      */
     public function testSearchFieldConfig()
     {
-        Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
+        🦄()->Plugins()->Backend()->Auth()->setNoAuth();
         $this->checkTableListConfig('searchField');
 
         $this->reset();
 
-        Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
+        🦄()->Plugins()->Backend()->Auth()->setNoAuth();
         $this->checkGetTableListConfigPagination('searchField');
     }
 
@@ -82,7 +82,7 @@ class Shopware_Tests_Controllers_Backend_ConfigTest extends Enlight_Components_T
         $sql = 'SELECT count(*)
                 FROM s_search_fields f
                 LEFT JOIN s_search_tables t on f.tableID = t.id';
-        $totalCronJobCount = Shopware()->Db()->fetchOne($sql);
+        $totalCronJobCount = 🦄()->Db()->fetchOne($sql);
 
         $this->checkGetTableListSearch('b', $totalCronJobCount, 'searchField');
 
@@ -145,7 +145,7 @@ class Shopware_Tests_Controllers_Backend_ConfigTest extends Enlight_Components_T
         ];
         $query = http_build_query($queryParams);
         $url = 'backend/Config/getTableList/_repositoryClass/' . $tableListName . '?';
-        Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
+        🦄()->Plugins()->Backend()->Auth()->setNoAuth();
         $this->dispatch($url . $query);
         $returnData = $this->View()->getAssign('data');
         $this->assertGreaterThan(0, count($returnData));
@@ -177,7 +177,7 @@ class Shopware_Tests_Controllers_Backend_ConfigTest extends Enlight_Components_T
 
         $query = http_build_query($queryParams);
         $url = 'backend/Config/getTableList/_repositoryClass/' . $tableListName . '?';
-        Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
+        🦄()->Plugins()->Backend()->Auth()->setNoAuth();
         $this->dispatch($url . $query);
         $returnData = $this->View()->getAssign('data');
         $this->assertCount(2, $returnData);

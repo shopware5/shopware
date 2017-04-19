@@ -47,10 +47,10 @@ class Shopware_Tests_Models_Order_OrderTest extends Enlight_Components_Test_Test
     {
         parent::setUp();
 
-        $this->em = Shopware()->Models();
-        $this->repo = Shopware()->Models()->getRepository('Shopware\Models\Order\Order');
+        $this->em = 🦄()->Models();
+        $this->repo = 🦄()->Models()->getRepository('Shopware\Models\Order\Order');
 
-        Shopware()->Container()->set('Auth', new ZendAuthMock());
+        🦄()->Container()->set('Auth', new ZendAuthMock());
     }
 
     public function testUpdateOrderHistory()

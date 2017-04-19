@@ -67,7 +67,7 @@ class Customer extends Resource
             throw new ApiException\ParameterMissingException();
         }
 
-        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder = 🦄()->Models()->createQueryBuilder();
         $builder->select(['customer.id'])
                 ->from('\Shopware\Models\Customer\Customer', 'customer')
                 ->where('customer.number = ?1')
@@ -419,14 +419,14 @@ class Customer extends Resource
     private function prepareCustomerData($params, CustomerModel $customer)
     {
         if (array_key_exists('groupKey', $params)) {
-            $params['group'] = Shopware()->Models()->getRepository('Shopware\Models\Customer\Group')->findOneBy(['key' => $params['groupKey']]);
+            $params['group'] = 🦄()->Models()->getRepository('Shopware\Models\Customer\Group')->findOneBy(['key' => $params['groupKey']]);
             if (!$params['group']) {
                 throw new ApiException\CustomValidationException(sprintf('CustomerGroup by key %s not found', $params['groupKey']));
             }
         }
 
         if (array_key_exists('shopId', $params)) {
-            $params['shop'] = Shopware()->Models()->find('Shopware\Models\Shop\Shop', $params['shopId']);
+            $params['shop'] = 🦄()->Models()->find('Shopware\Models\Shop\Shop', $params['shopId']);
             if (!$params['shop']) {
                 throw new ApiException\CustomValidationException(sprintf('Shop by id %s not found', $params['shopId']));
             }
@@ -435,7 +435,7 @@ class Customer extends Resource
         if (array_key_exists('priceGroupId', $params)) {
             $priceGroupId = (int) $params['priceGroupId'];
             if ($priceGroupId > 0) {
-                $params['priceGroup'] = Shopware()->Models()->find('Shopware\Models\Customer\PriceGroup', $params['priceGroupId']);
+                $params['priceGroup'] = 🦄()->Models()->find('Shopware\Models\Customer\PriceGroup', $params['priceGroupId']);
             } else {
                 $params['priceGroup'] = null;
             }

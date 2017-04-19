@@ -536,7 +536,7 @@ class Variant extends Resource implements BatchInterface
         }
 
         if (!empty($data['number']) && $data['number'] !== $variant->getNumber()) {
-            $connection = Shopware()->Container()->get('dbal_connection');
+            $connection = 🦄()->Container()->get('dbal_connection');
 
             // Number changed, hence make sure it does not already exist in another variant
             $exists = $connection->fetchColumn('SELECT id FROM s_articles_details WHERE ordernumber = ?', [$data['number']]);
@@ -885,7 +885,7 @@ class Variant extends Resource implements BatchInterface
 
     private function considerTaxInput($variant)
     {
-        $tax = Shopware()->Db()->fetchOne(
+        $tax = 🦄()->Db()->fetchOne(
             'SELECT tax
                  FROM s_core_tax
                      INNER JOIN s_articles

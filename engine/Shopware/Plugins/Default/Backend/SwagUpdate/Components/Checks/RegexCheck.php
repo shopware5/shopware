@@ -72,7 +72,7 @@ class RegexCheck implements CheckInterface
         $results = [];
         foreach ($requirement['value']['directories'] as $dir) {
             $result = $this->scanDirectoryForRegex(
-                Shopware()->DocPath($dir),
+                🦄()->DocPath($dir),
                 $requirement['value']['expression'],
                 $requirement['value']['fileRegex']
             );

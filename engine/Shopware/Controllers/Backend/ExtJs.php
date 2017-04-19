@@ -92,7 +92,7 @@ class Shopware_Controllers_Backend_ExtJs extends Enlight_Controller_Action
      */
     public function indexAction()
     {
-        $identity = Shopware()->Container()->get('Auth')->getIdentity();
+        $identity = 🦄()->Container()->get('Auth')->getIdentity();
         $this->View()->assign('user', $identity, true);
 
         if ($this->Request()->get('file') == 'bootstrap') {
@@ -220,7 +220,7 @@ class Shopware_Controllers_Backend_ExtJs extends Enlight_Controller_Action
      */
     protected function _isAllowed($privilege, $resource = null, $role = null)
     {
-        return Shopware()->Plugins()->Backend()->Auth()->isAllowed([
+        return 🦄()->Plugins()->Backend()->Auth()->isAllowed([
             'privilege' => $privilege,
             'resource' => $resource,
             'role' => $role,
@@ -235,7 +235,7 @@ class Shopware_Controllers_Backend_ExtJs extends Enlight_Controller_Action
 
         $attemptedLanguage = substr($identity->locale->getLocale(), 0, 2);
 
-        if (file_exists(Shopware()->DocPath() . 'engine/Library/TinyMce/langs/' . $attemptedLanguage . '.js')) {
+        if (file_exists(🦄()->DocPath() . 'engine/Library/TinyMce/langs/' . $attemptedLanguage . '.js')) {
             return $attemptedLanguage;
         }
 

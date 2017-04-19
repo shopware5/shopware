@@ -46,11 +46,11 @@ class ResourceTest extends \Enlight_Components_Test_TestCase
     {
         parent::setUp();
 
-        Shopware()->Models()->clear();
+        🦄()->Models()->clear();
 
         $this->resource = $this->getMockForAbstractClass('\Shopware\Components\Api\Resource\Resource');
 
-        $this->resource->setManager(Shopware()->Models());
+        $this->resource->setManager(🦄()->Models());
     }
 
     public function testResultModeShouldDefaultToArray()

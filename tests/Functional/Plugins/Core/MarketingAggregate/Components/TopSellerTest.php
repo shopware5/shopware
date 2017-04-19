@@ -125,11 +125,11 @@ class TopSellerTest extends AbstractMarketing
         $this->TopSeller()->initTopSeller();
 
         $this->saveConfig('topSellerRefreshStrategy', 3);
-        Shopware()->Container()->get('cache')->clean();
+        🦄()->Container()->get('cache')->clean();
 
         $this->Db()->query("UPDATE s_articles_top_seller_ro SET last_cleared = '2010-01-01'");
 
-        Shopware()->Modules()->Articles()->sGetArticleCharts(3);
+        🦄()->Modules()->Articles()->sGetArticleCharts(3);
 
         $topSeller = $this->getAllTopSeller(" WHERE last_cleared > '2010-01-01' ");
         $this->assertCount(50, $topSeller);
@@ -141,7 +141,7 @@ class TopSellerTest extends AbstractMarketing
         $this->TopSeller()->initTopSeller();
 
         $this->saveConfig('topSellerRefreshStrategy', 2);
-        Shopware()->Container()->get('cache')->clean();
+        🦄()->Container()->get('cache')->clean();
 
         $this->Db()->query("UPDATE s_articles_top_seller_ro SET last_cleared = '2010-01-01'");
 
@@ -170,7 +170,7 @@ class TopSellerTest extends AbstractMarketing
         $this->TopSeller()->initTopSeller();
 
         $this->saveConfig('topSellerRefreshStrategy', 1);
-        Shopware()->Container()->get('cache')->clean();
+        🦄()->Container()->get('cache')->clean();
 
         $this->Db()->query("UPDATE s_articles_top_seller_ro SET last_cleared = '2010-01-01'");
 

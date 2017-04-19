@@ -680,7 +680,7 @@ class Shop extends ModelEntity
     public function registerResources($bootstrap = null)
     {
         /** @var Container $container */
-        $container = Shopware()->Container();
+        $container = 🦄()->Container();
 
         $container->set('Shop', $this);
 
@@ -776,10 +776,10 @@ class Shop extends ModelEntity
     private function registerTheme(Template $template)
     {
         /** @var $templateManager \Enlight_Template_Manager */
-        $templateManager = Shopware()->Container()->get('template');
+        $templateManager = 🦄()->Container()->get('template');
 
         /** @var $inheritance Inheritance */
-        $inheritance = Shopware()->Container()->get('theme_inheritance');
+        $inheritance = 🦄()->Container()->get('theme_inheritance');
 
         $path = $inheritance->getTemplateDirectories($template);
         $templateManager->setTemplateDir($path);

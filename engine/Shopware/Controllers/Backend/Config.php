@@ -54,7 +54,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
         $filter = $this->Request()->getParam('filter');
         $repository = $this->getRepository('form');
 
-        $user = Shopware()->Container()->get('Auth')->getIdentity();
+        $user = 🦄()->Container()->get('Auth')->getIdentity();
         /** @var $locale \Shopware\Models\Shop\Locale */
         $locale = $user->locale;
 
@@ -106,7 +106,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
     {
         $repository = $this->getRepository('form');
 
-        $user = Shopware()->Container()->get('Auth')->getIdentity();
+        $user = 🦄()->Container()->get('Auth')->getIdentity();
         /** @var $locale \Shopware\Models\Shop\Locale */
         $locale = $user->locale;
         $language = $locale->toString();
@@ -237,7 +237,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                 ->setMaxResults($this->Request()->getParam('limit'));
 
             $query = $builder->getQuery();
-            $total = Shopware()->Models()->getQueryCount($query);
+            $total = 🦄()->Models()->getQueryCount($query);
             $data = $query->getArrayResult();
         }
 
@@ -260,7 +260,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
         }
         switch ($name) {
             case 'cronJob':
-                $select = Shopware()->Db()->select();
+                $select = 🦄()->Db()->select();
                 $select->from(['c' => $table]);
                 if (isset($search)) {
                     $select->where(
@@ -274,7 +274,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                     );
                 }
                 $select->limit($limit, $start);
-                $data = Shopware()->Db()->fetchAll($select);
+                $data = 🦄()->Db()->fetchAll($select);
                 foreach ($data as $key => &$row) {
                     $row = [
                         'id' => (int) $row['id'],
@@ -299,11 +299,11 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                 $select->reset(Zend_Db_Select::LIMIT_COUNT);
                 $select->reset(Zend_Db_Select::LIMIT_OFFSET);
                 $select->from(['c' => $table], ['count(*) as total']);
-                $totalCount = Shopware()->Db()->fetchOne($select);
+                $totalCount = 🦄()->Db()->fetchOne($select);
 
                 break;
             case 'searchTable':
-                $select = Shopware()->Db()->select();
+                $select = 🦄()->Db()->select();
                 $select->from(['t' => $table], [
                     '*', 'name' => 'table',
                 ]);
@@ -315,12 +315,12 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                         'search' => $search,
                     ]);
                 }
-                $data = Shopware()->Db()->fetchAll($select);
+                $data = 🦄()->Db()->fetchAll($select);
                 break;
             case 'searchField':
                 $sqlParams = [];
                 $sql = 'SELECT SQL_CALC_FOUND_ROWS f.id, f.name, f.relevance, f.field, f.tableId as tableId, t.table
-                        FROM ' . Shopware()->Db()->quoteTableAs($table, 'f') . '
+                        FROM ' . 🦄()->Db()->quoteTableAs($table, 'f') . '
                         LEFT JOIN s_search_tables t on f.tableID = t.id';
 
                 if (isset($search)) {
@@ -331,14 +331,14 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                 }
 
                 if (!empty($limit)) {
-                    $sql .= ' Limit ' . Shopware()->Db()->quote($start) . ',' . Shopware()->Db()->quote($limit);
+                    $sql .= ' Limit ' . 🦄()->Db()->quote($start) . ',' . 🦄()->Db()->quote($limit);
                 }
 
-                $data = Shopware()->Db()->fetchAll($sql, $sqlParams);
+                $data = 🦄()->Db()->fetchAll($sql, $sqlParams);
 
                 //get the total count
                 $sql = 'SELECT FOUND_ROWS()';
-                $totalCount = Shopware()->Db()->fetchOne($sql);
+                $totalCount = 🦄()->Db()->fetchOne($sql);
 
                 break;
             default:
@@ -430,7 +430,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
      */
     public function saveValuesAction()
     {
-        $manager = Shopware()->Models();
+        $manager = 🦄()->Models();
         $name = $this->Request()->get('_repositoryClass');
         $repository = $this->getRepository($name);
         $data = $this->Request()->getPost();
@@ -503,7 +503,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
 
                 if (!empty($data['id']) && !empty($data['mainId'])) {
                     $sql = 'UPDATE s_core_shops SET main_id = 1 WHERE main_id = ?';
-                    Shopware()->Db()->query($sql, [$data['id']]);
+                    🦄()->Db()->query($sql, [$data['id']]);
                 }
 
                 $fields = [
@@ -540,9 +540,9 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                     $data['widget'] = $mappingRepository->find($data['widgetId']);
                     unset($data['widgetId']);
                 }
-                if (Shopware()->Container()->get('Auth')->hasIdentity()) {
+                if (🦄()->Container()->get('Auth')->hasIdentity()) {
                     $mappingRepository = $this->getRepository('auth');
-                    $authId = Shopware()->Container()->get('Auth')->getIdentity()->id;
+                    $authId = 🦄()->Container()->get('Auth')->getIdentity()->id;
                     $data['auth'] = $mappingRepository->find($authId);
                 }
                 break;
@@ -651,9 +651,9 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
         }
 
         if ($id !== null) {
-            $result = Shopware()->Db()->update($table, $data, ['id=?' => $id]);
+            $result = 🦄()->Db()->update($table, $data, ['id=?' => $id]);
         } else {
-            $result = Shopware()->Db()->insert($table, $data);
+            $result = 🦄()->Db()->insert($table, $data);
         }
 
         $this->View()->assign([
@@ -667,7 +667,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
      */
     public function deleteValuesAction()
     {
-        $manager = Shopware()->Models();
+        $manager = 🦄()->Models();
         $name = $this->Request()->get('_repositoryClass');
         $repository = $this->getRepository($name);
         $data = $this->Request()->getPost();
@@ -715,7 +715,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
         $table = $this->getTable($name);
 
         if ($table !== null && !empty($data['id'])) {
-            Shopware()->Db()->delete($table, ['id=?' => $data['id']]);
+            🦄()->Db()->delete($table, ['id=?' => $data['id']]);
             $this->View()->assign(['success' => true]);
         } else {
             $this->View()->assign(['success' => false]);
@@ -813,7 +813,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                 default:
                     return null;
             }
-            self::$repositories[$name] = Shopware()->Models()->getRepository($repository);
+            self::$repositories[$name] = 🦄()->Models()->getRepository($repository);
         }
 
         return self::$repositories[$name];
@@ -1039,7 +1039,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
 
                 // check existence of each locale
                 foreach ($value as $localeId) {
-                    $locale = Shopware()->Models()->find('Shopware\Models\Shop\Locale', $localeId);
+                    $locale = 🦄()->Models()->find('Shopware\Models\Shop\Locale', $localeId);
                     if (null === $locale) {
                         return false;
                     }
@@ -1098,7 +1098,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
      */
     private function getShopLocaleMapping()
     {
-        $connection = Shopware()->Container()->get('dbal_connection');
+        $connection = 🦄()->Container()->get('dbal_connection');
         $query = $connection->createQueryBuilder();
         $query->select(['locale_id, IFNULL(main_id, id)']);
         $query->from('s_core_shops');
@@ -1115,7 +1115,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
      */
     private function createSalutationSnippets($elementData)
     {
-        $connection = Shopware()->Container()->get('dbal_connection');
+        $connection = 🦄()->Container()->get('dbal_connection');
 
         $shops = $this->getShopLocaleMapping();
 
@@ -1172,14 +1172,14 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
         $shopRepository = $this->getRepository('shop');
 
         /** @var $element Element */
-        $element = Shopware()->Models()->find(Element::class, $elementData['id']);
+        $element = 🦄()->Models()->find(Element::class, $elementData['id']);
 
         $removedValues = [];
         foreach ($element->getValues() as $value) {
-            Shopware()->Models()->remove($value);
+            🦄()->Models()->remove($value);
             $removedValues[] = $value;
         }
-        Shopware()->Models()->flush($removedValues);
+        🦄()->Models()->flush($removedValues);
 
         $values = [];
         foreach ($elementData['values'] as $valueData) {
@@ -1222,7 +1222,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
 
         $this->beforeSaveElement($elementData);
 
-        $values = Shopware()->Events()->filter('Shopware_Controllers_Backend_Config_Before_Save_Config_Element',
+        $values = 🦄()->Events()->filter('Shopware_Controllers_Backend_Config_Before_Save_Config_Element',
             $values, [
                 'subject' => $this,
                 'element' => $element,
@@ -1230,9 +1230,9 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
 
         $element->setValues($values);
 
-        Shopware()->Models()->flush($element);
+        🦄()->Models()->flush($element);
 
-        Shopware()->Events()->notify('Shopware_Controllers_Backend_Config_After_Save_Config_Element', [
+        🦄()->Events()->notify('Shopware_Controllers_Backend_Config_After_Save_Config_Element', [
             'subject' => $this,
             'element' => $element,
         ]);

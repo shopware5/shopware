@@ -32,7 +32,7 @@ class Shopware_Controllers_Frontend_Compare extends Enlight_Controller_Action
     public function preDispatch()
     {
         $this->View()->setScope(Enlight_Template_Manager::SCOPE_PARENT);
-        $this->articles = Shopware()->Modules()->Articles();
+        $this->articles = 🦄()->Modules()->Articles();
         $this->Front()->Plugins()->Json()->setPadding();
     }
 

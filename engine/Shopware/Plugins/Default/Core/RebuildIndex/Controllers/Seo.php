@@ -36,7 +36,7 @@ class Shopware_Controllers_Backend_Seo extends Shopware_Controllers_Backend_ExtJ
      */
     public function SeoIndex()
     {
-        return Shopware()->Container()->get('SeoIndex');
+        return 🦄()->Container()->get('SeoIndex');
     }
 
     /**
@@ -46,7 +46,7 @@ class Shopware_Controllers_Backend_Seo extends Shopware_Controllers_Backend_ExtJ
      */
     public function RewriteTable()
     {
-        return Shopware()->Modules()->RewriteTable();
+        return 🦄()->Modules()->RewriteTable();
     }
 
     /**
@@ -234,7 +234,7 @@ class Shopware_Controllers_Backend_Seo extends Shopware_Controllers_Backend_ExtJ
      */
     public function seoSupplierAction()
     {
-        $seoSupplierConfig = Shopware()->Config()->get('sSEOSUPPLIER');
+        $seoSupplierConfig = 🦄()->Config()->get('sSEOSUPPLIER');
         if (is_null($seoSupplierConfig) || $seoSupplierConfig === false) {
             $this->View()->assign([
                 'success' => true,
@@ -274,18 +274,18 @@ class Shopware_Controllers_Backend_Seo extends Shopware_Controllers_Backend_ExtJ
     {
         $this->RewriteTable()->baseSetup();
 
-        $template = Shopware()->Template();
+        $template = 🦄()->Template();
         $data = $template->createData();
-        $data->assign('sConfig', Shopware()->Config());
+        $data->assign('sConfig', 🦄()->Config());
         $data->assign('sRouter', $this->RewriteTable());
         $data->assign('sCategoryStart', $shop->getCategory()->getId());
 
         $sql = $this->RewriteTable()->getSeoArticleQuery();
-        $sql = Shopware()->Db()->limit($sql, $limit, $offset);
+        $sql = 🦄()->Db()->limit($sql, $limit, $offset);
 
         $shopFallbackId = ($shop->getFallback() instanceof \Shopware\Models\Shop\Shop) ? $shop->getFallback()->getId() : null;
 
-        $articles = Shopware()->Db()->fetchAll($sql, [
+        $articles = 🦄()->Db()->fetchAll($sql, [
             $shop->get('parentID'),
             $shop->getId(),
             $shopFallbackId,
@@ -305,7 +305,7 @@ class Shopware_Controllers_Backend_Seo extends Shopware_Controllers_Backend_ExtJ
         foreach ($articles as $article) {
             $data->assign('sArticle', $article);
             $path = $template->fetch(
-                'string:' . Shopware()->Config()->get('sRouterArticleTemplate'),
+                'string:' . 🦄()->Config()->get('sRouterArticleTemplate'),
                 $data
             );
             $path = $this->RewriteTable()->sCleanupPath($path);

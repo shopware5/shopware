@@ -542,7 +542,7 @@ class Shipping extends ModelEntity
             $this->setStateId(null);
         }
 
-        $attributeData = Shopware()->Models()->toArray($address->getAttribute());
+        $attributeData = 🦄()->Models()->toArray($address->getAttribute());
         $this->setAttribute($attributeData);
     }
 

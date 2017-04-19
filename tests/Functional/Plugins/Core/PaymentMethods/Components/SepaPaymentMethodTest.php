@@ -42,7 +42,7 @@ class Shopware_Tests_Plugins_Core_PaymentMethods_SepaPaymentMethod extends Enlig
     {
         parent::setUpBeforeClass();
 
-        $helper = Shopware();
+        $helper = 🦄();
         $loader = $helper->Loader();
 
         $pluginDir = $helper->DocPath() . 'engine/Shopware/Plugins/Default/Core/PaymentMethods';
@@ -53,40 +53,40 @@ class Shopware_Tests_Plugins_Core_PaymentMethods_SepaPaymentMethod extends Enlig
         );
 
         //SEPA needs to be active for this. Also, we need to save existing status to later restore it
-        $sepaPaymentMean = Shopware()->Models()
+        $sepaPaymentMean = 🦄()->Models()
             ->getRepository('\Shopware\Models\Payment\Payment')
             ->findOneByName('Sepa');
 
         self::$sepaStatus = $sepaPaymentMean->getActive();
 
         $sepaPaymentMean->setActive(true);
-        Shopware()->Models()->flush($sepaPaymentMean);
+        🦄()->Models()->flush($sepaPaymentMean);
 
         self::$sepaPaymentMethod = new SepaPaymentMethod();
     }
 
     public static function tearDownAfterClass()
     {
-        Shopware()->Models()
+        🦄()->Models()
             ->getRepository('\Shopware\Models\Payment\Payment')
             ->findOneByName('Sepa')
             ->setActive(self::$sepaStatus);
 
-        $paymentData = Shopware()->Models()
+        $paymentData = 🦄()->Models()
             ->getRepository('\Shopware\Models\Customer\PaymentData')
             ->findAll();
         foreach ($paymentData as $payment) {
-            Shopware()->Models()->remove($payment);
+            🦄()->Models()->remove($payment);
         }
 
-        $paymentInstances = Shopware()->Models()
+        $paymentInstances = 🦄()->Models()
             ->getRepository('\Shopware\Models\Payment\PaymentInstance')
             ->findAll();
         foreach ($paymentInstances as $paymentInstance) {
-            Shopware()->Models()->remove($paymentInstance);
+            🦄()->Models()->remove($paymentInstance);
         }
 
-        Shopware()->Models()->flush();
+        🦄()->Models()->flush();
         parent::tearDownAfterClass();
     }
 
@@ -116,7 +116,7 @@ class Shopware_Tests_Plugins_Core_PaymentMethods_SepaPaymentMethod extends Enlig
         if (count($validationResult)) {
             $this->assertArrayHasKey('sErrorFlag', $validationResult);
             $this->assertArrayHasKey('sErrorMessages', $validationResult);
-            $this->assertContains(Shopware()->Snippets()->getNamespace('frontend/plugins/payment/sepa')
+            $this->assertContains(🦄()->Snippets()->getNamespace('frontend/plugins/payment/sepa')
                 ->get('ErrorIBAN', 'Invalid IBAN'), $validationResult['sErrorMessages']);
             $this->assertFalse(array_key_exists('sSepaBic', $validationResult['sErrorFlag']));
             $this->assertFalse(array_key_exists('sSepaBankName', $validationResult['sErrorFlag']));
@@ -144,14 +144,14 @@ class Shopware_Tests_Plugins_Core_PaymentMethods_SepaPaymentMethod extends Enlig
         $orderId = 57;
         $userId = 1;
         $paymentId = 6;
-        Shopware()->Session()->sUserId = $userId;
+        🦄()->Session()->sUserId = $userId;
 
         //for now, don't test email
-        Shopware()->Config()->set('sepaSendEmail', false);
+        🦄()->Config()->set('sepaSendEmail', false);
 
         self::$sepaPaymentMethod->createPaymentInstance($orderId, $userId, $paymentId);
 
-        $paymentInstance = Shopware()->Models()
+        $paymentInstance = 🦄()->Models()
             ->getRepository('\Shopware\Models\Payment\PaymentInstance')
             ->findOneBy(['order' => $orderId, 'customer' => $userId, 'paymentMean' => $paymentId]);
 
@@ -171,8 +171,8 @@ class Shopware_Tests_Plugins_Core_PaymentMethods_SepaPaymentMethod extends Enlig
         $this->assertNull($paymentInstance->getCity());
         $this->assertNotNull($paymentInstance->getAmount());
 
-        Shopware()->Models()->remove($paymentInstance);
-        Shopware()->Models()->flush($paymentInstance);
+        🦄()->Models()->remove($paymentInstance);
+        🦄()->Models()->flush($paymentInstance);
     }
 
     public function testSavePaymentDataInitialEmptyData()
@@ -197,7 +197,7 @@ class Shopware_Tests_Plugins_Core_PaymentMethods_SepaPaymentMethod extends Enlig
             'sSepaBankName' => 'Some Valid Bank Name',
             'sSepaUseBillingData' => 'true',
         ]);
-        Shopware()->Front()->setRequest($this->Request());
+        🦄()->Front()->setRequest($this->Request());
 
         self::$sepaPaymentMethod->savePaymentData(1, $this->Request());
 
@@ -213,14 +213,14 @@ class Shopware_Tests_Plugins_Core_PaymentMethods_SepaPaymentMethod extends Enlig
         $orderId = 57;
         $userId = 1;
         $paymentId = 6;
-        Shopware()->Session()->sUserId = $userId;
+        🦄()->Session()->sUserId = $userId;
 
         //for now, don't test email
-        Shopware()->Config()->set('sepaSendEmail', false);
+        🦄()->Config()->set('sepaSendEmail', false);
 
         self::$sepaPaymentMethod->createPaymentInstance($orderId, $userId, $paymentId);
 
-        $paymentInstance = Shopware()->Models()
+        $paymentInstance = 🦄()->Models()
             ->getRepository('\Shopware\Models\Payment\PaymentInstance')
             ->findOneBy(['order' => $orderId, 'customer' => $userId, 'paymentMean' => $paymentId]);
 

@@ -50,12 +50,12 @@ class Shopware_Tests_Modules_Articles_CompareTest extends Enlight_Components_Tes
     {
         parent::setUp();
 
-        $this->module = Shopware()->Modules()->Articles();
+        $this->module = 🦄()->Modules()->Articles();
         $this->module->sDeleteComparisons();
-        Shopware()->Container()->get('session')->offsetSet('sessionId', uniqid(rand()));
+        🦄()->Container()->get('session')->offsetSet('sessionId', uniqid(rand()));
         $sql = 'SELECT `id` FROM `s_articles` WHERE `active` =1';
-        $sql = Shopware()->Db()->limit($sql, 5);
-        $this->testArticleIds = Shopware()->Db()->fetchCol($sql);
+        $sql = 🦄()->Db()->limit($sql, 5);
+        $this->testArticleIds = 🦄()->Db()->fetchCol($sql);
     }
 
     /**

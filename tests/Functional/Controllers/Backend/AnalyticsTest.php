@@ -51,10 +51,10 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
         parent::setUp();
 
         // disable auth and acl
-        Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
-        Shopware()->Plugins()->Backend()->Auth()->setNoAcl();
+        🦄()->Plugins()->Backend()->Auth()->setNoAuth();
+        🦄()->Plugins()->Backend()->Auth()->setNoAcl();
 
-        $this->repository = new Repository(Shopware()->Models()->getConnection(), Shopware()->Events());
+        $this->repository = new Repository(🦄()->Models()->getConnection(), 🦄()->Events());
 
         $this->orderNumber = uniqid('SW');
         $this->articleId = 0;
@@ -157,7 +157,7 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
         $this->createCustomer();
         $this->createOrders();
 
-        $shop = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop')->getActiveDefault();
+        $shop = 🦄()->Models()->getRepository('Shopware\Models\Shop\Shop')->getActiveDefault();
         $shop->registerResources();
 
         $result = $this->repository->getReferrerRevenue(
@@ -786,7 +786,7 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
     {
         $this->customerNumber = uniqid(rand());
 
-        Shopware()->Db()->insert(
+        🦄()->Db()->insert(
             's_user',
             [
                 'password' => '098f6bcd4621d373cade4e832627b4f6', // md5('test')
@@ -803,9 +803,9 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
                 'birthday' => '1990-01-01',
             ]
         );
-        $this->userId = Shopware()->Db()->lastInsertId();
+        $this->userId = 🦄()->Db()->lastInsertId();
 
-        Shopware()->Db()->insert('s_user_billingaddress', [
+        🦄()->Db()->insert('s_user_billingaddress', [
             'userID' => $this->userId,
             'company' => 'PHPUNIT',
             'salutation' => 'mr',
@@ -813,7 +813,7 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
             'stateID' => 3,
         ]);
 
-        Shopware()->Db()->insert('s_user_addresses', [
+        🦄()->Db()->insert('s_user_addresses', [
             'user_id' => $this->userId,
             'company' => 'PHPUNIT',
             'salutation' => 'mr',
@@ -824,9 +824,9 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
             'country_id' => 2,
             'state_id' => 3,
         ]);
-        $this->addressId = Shopware()->Db()->lastInsertId();
+        $this->addressId = 🦄()->Db()->lastInsertId();
 
-        Shopware()->Db()->update('s_user', [
+        🦄()->Db()->update('s_user', [
             'default_billing_address_id' => $this->addressId,
             'default_shipping_address_id' => $this->addressId,
         ], [
@@ -836,7 +836,7 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
 
     private function createArticle()
     {
-        Shopware()->Db()->insert(
+        🦄()->Db()->insert(
             's_articles',
             [
                 'supplierID' => 1,
@@ -847,9 +847,9 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
                 'main_detail_id' => 0,
             ]
         );
-        $this->articleId = Shopware()->Db()->lastInsertId();
+        $this->articleId = 🦄()->Db()->lastInsertId();
 
-        Shopware()->Db()->insert(
+        🦄()->Db()->insert(
             's_articles_details',
             [
                 'articleID' => $this->articleId,
@@ -859,9 +859,9 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
                 'instock' => 1,
             ]
         );
-        $this->articleDetailId = Shopware()->Db()->lastInsertId();
+        $this->articleDetailId = 🦄()->Db()->lastInsertId();
 
-        Shopware()->Db()->update(
+        🦄()->Db()->update(
             's_articles',
             ['main_detail_id' => $this->articleDetailId],
                 'id = ' . $this->articleId
@@ -870,7 +870,7 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
 
     private function createCategory()
     {
-        Shopware()->Db()->insert(
+        🦄()->Db()->insert(
             's_categories',
             [
                 'description' => 'phpunit category',
@@ -878,9 +878,9 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
                 'active' => 1,
             ]
         );
-        $this->categoryId = Shopware()->Db()->lastInsertId();
+        $this->categoryId = 🦄()->Db()->lastInsertId();
 
-        Shopware()->Db()->insert(
+        🦄()->Db()->insert(
             's_articles_categories_ro',
             [
                 'articleID' => $this->articleId,
@@ -935,8 +935,8 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
         ];
 
         foreach ($orders as $order) {
-            Shopware()->Db()->insert('s_order', $order);
-            array_push($this->orderIds, Shopware()->Db()->lastInsertId());
+            🦄()->Db()->insert('s_order', $order);
+            array_push($this->orderIds, 🦄()->Db()->lastInsertId());
         }
 
         $orderDetails = [
@@ -962,7 +962,7 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
             ],
         ];
         foreach ($orderDetails as $detail) {
-            Shopware()->Db()->insert('s_order_details', $detail);
+            🦄()->Db()->insert('s_order_details', $detail);
         }
 
         $userBillingAddress = [
@@ -1002,7 +1002,7 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
             ],
         ];
         foreach ($orderBillingAddresses as $address) {
-            Shopware()->Db()->insert('s_order_billingaddress', $address);
+            🦄()->Db()->insert('s_order_billingaddress', $address);
         }
     }
 
@@ -1023,13 +1023,13 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
             ],
         ];
         foreach ($visitors as $visitor) {
-            Shopware()->Db()->insert('s_statistics_visitors', $visitor);
+            🦄()->Db()->insert('s_statistics_visitors', $visitor);
         }
     }
 
     private function createImpressions()
     {
-        Shopware()->Db()->insert(
+        🦄()->Db()->insert(
             's_statistics_article_impression',
             [
                 'articleId' => $this->articleId,
@@ -1042,7 +1042,7 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
 
     private function createSearchTerms()
     {
-        Shopware()->Db()->insert(
+        🦄()->Db()->insert(
             's_statistics_search',
             [
                 'datum' => '2013-06-15 10:11:12',
@@ -1054,7 +1054,7 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
 
     private function createReferrer()
     {
-        Shopware()->Db()->insert(
+        🦄()->Db()->insert(
             's_statistics_referer',
             [
                 'datum' => '2013-06-15',
@@ -1066,33 +1066,33 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
     private function removeDemoData()
     {
         if ($this->userId) {
-            Shopware()->Db()->delete('s_user', 'id = ' . $this->userId);
-            Shopware()->Db()->delete('s_user_addresses', 'user_id = ' . $this->userId);
-            Shopware()->Db()->delete('s_user_billingaddress', 'userID = ' . $this->userId);
-            Shopware()->Db()->delete('s_order', 'userID = ' . $this->userId);
-            Shopware()->Db()->delete('s_order_billingaddress', 'userID = ' . $this->userId);
+            🦄()->Db()->delete('s_user', 'id = ' . $this->userId);
+            🦄()->Db()->delete('s_user_addresses', 'user_id = ' . $this->userId);
+            🦄()->Db()->delete('s_user_billingaddress', 'userID = ' . $this->userId);
+            🦄()->Db()->delete('s_order', 'userID = ' . $this->userId);
+            🦄()->Db()->delete('s_order_billingaddress', 'userID = ' . $this->userId);
         }
 
         if ($this->articleDetailId) {
-            Shopware()->Db()->delete('s_articles_details', 'id = ' . $this->articleDetailId);
+            🦄()->Db()->delete('s_articles_details', 'id = ' . $this->articleDetailId);
         }
 
         if ($this->articleId) {
-            Shopware()->Db()->delete('s_articles', 'id = ' . $this->articleId);
-            Shopware()->Db()->delete('s_statistics_article_impression', 'articleId = ' . $this->articleId);
-            Shopware()->Db()->delete('s_order_details', 'articleID = ' . $this->articleId);
+            🦄()->Db()->delete('s_articles', 'id = ' . $this->articleId);
+            🦄()->Db()->delete('s_statistics_article_impression', 'articleId = ' . $this->articleId);
+            🦄()->Db()->delete('s_order_details', 'articleID = ' . $this->articleId);
         }
 
         if ($this->categoryId) {
             if ($this->articleId) {
-                Shopware()->Db()->delete('s_articles_categories_ro', 'articleID = ' . $this->articleId);
+                🦄()->Db()->delete('s_articles_categories_ro', 'articleID = ' . $this->articleId);
             }
-            Shopware()->Db()->delete('s_categories', 'id = ' . $this->categoryId);
+            🦄()->Db()->delete('s_categories', 'id = ' . $this->categoryId);
         }
 
-        Shopware()->Db()->delete('s_statistics_visitors', "shopID = 1 AND datum = '2013-06-01' OR datum = '2013-06-15'");
-        Shopware()->Db()->delete('s_statistics_search', "searchterm = 'phpunit search term'");
-        Shopware()->Db()->delete('s_statistics_referer', "referer = 'http://www.google.de/?q=phpunit'");
+        🦄()->Db()->delete('s_statistics_visitors', "shopID = 1 AND datum = '2013-06-01' OR datum = '2013-06-15'");
+        🦄()->Db()->delete('s_statistics_search', "searchterm = 'phpunit search term'");
+        🦄()->Db()->delete('s_statistics_referer', "referer = 'http://www.google.de/?q=phpunit'");
     }
 
     private function getSearchTermFromReferrerUrl($url)

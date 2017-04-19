@@ -105,7 +105,7 @@ class MenuSynchronizer
                 $locale = 'de_DE';
             }
 
-            $locale = Shopware()->Models()->getRepository(Locale::class)->findOneBy(['locale' => $locale]);
+            $locale = 🦄()->Models()->getRepository(Locale::class)->findOneBy(['locale' => $locale]);
 
             $databaseWriter->write([$name => $text], 'backend/index/view/main', $locale->getId(), 1);
         }

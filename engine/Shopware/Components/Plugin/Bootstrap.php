@@ -233,7 +233,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
     final public function Plugin()
     {
         if ($this->plugin === null) {
-            $repo = Shopware()->Models()->getRepository(Plugin::class);
+            $repo = 🦄()->Models()->getRepository(Plugin::class);
             $this->plugin = $repo->findOneBy(['id' => $this->getId()]);
         }
 
@@ -245,7 +245,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
      */
     final public function Forms()
     {
-        return Shopware()->Models()->getRepository(Form::class);
+        return 🦄()->Models()->getRepository(Form::class);
     }
 
     /**
@@ -286,7 +286,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
      */
     final public function Menu()
     {
-        return Shopware()->Models()->getRepository(Menu::class);
+        return 🦄()->Models()->getRepository(Menu::class);
     }
 
     /**
@@ -316,7 +316,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
      */
     final public function Payments()
     {
-        return Shopware()->Models()->getRepository(Payment::class);
+        return 🦄()->Models()->getRepository(Payment::class);
     }
 
     /**
@@ -532,21 +532,21 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
 
         //register plugin views directory
         if (file_exists($this->Path() . 'Views')) {
-            Shopware()->Template()->addTemplateDir(
+            🦄()->Template()->addTemplateDir(
                 $this->Path() . 'Views/'
             );
         }
 
         //register plugin snippet directory
         if (file_exists($this->Path() . 'Snippets')) {
-            Shopware()->Snippets()->addConfigDir(
+            🦄()->Snippets()->addConfigDir(
                 $this->Path() . 'Snippets/'
             );
         }
 
         //register plugin component directory
         if (file_exists($this->Path() . 'Components')) {
-            Shopware()->Loader()->registerNamespace(
+            🦄()->Loader()->registerNamespace(
                 'Shopware_Components',
                 $this->Path() . 'Components/'
             );
@@ -784,7 +784,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
         $form = $this->Form();
 
         foreach ($translations as $localeCode => $translationSet) {
-            $locale = Shopware()->Models()->getRepository(Locale::class)->findOneBy(['locale' => $localeCode]);
+            $locale = 🦄()->Models()->getRepository(Locale::class)->findOneBy(['locale' => $localeCode]);
             if (empty($locale)) {
                 continue;
             }
@@ -863,14 +863,14 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
      */
     protected function HttpCache()
     {
-        $httpCache = Shopware()->Plugins()->Core()->HttpCache();
+        $httpCache = 🦄()->Plugins()->Core()->HttpCache();
 
         if (!$httpCache instanceof self) {
             return null;
         }
 
         /** @var $plugin Plugin */
-        $plugin = Shopware()->Models()->find(Plugin::class, $httpCache->getId());
+        $plugin = 🦄()->Models()->find(Plugin::class, $httpCache->getId());
 
         if (!$plugin->getActive() || !$plugin->getInstalled()) {
             return null;
@@ -916,7 +916,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
      */
     protected function assertMinimumVersion($requiredVersion)
     {
-        $version = Shopware()->Config()->version;
+        $version = 🦄()->Config()->version;
 
         if ($version === '___VERSION___') {
             return true;
@@ -947,7 +947,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
      */
     protected function registerCustomModels()
     {
-        Shopware()->Loader()->registerNamespace(
+        🦄()->Loader()->registerNamespace(
             'Shopware\CustomModels',
             $this->Path() . 'Models/'
         );
@@ -1045,7 +1045,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
             'name' => strpos($this->name, 'Payment') !== false ? 'Payment' : 'Other',
         ]);
         $form->setParent($parent);
-        Shopware()->Models()->persist($form);
+        🦄()->Models()->persist($form);
 
         return $form;
     }

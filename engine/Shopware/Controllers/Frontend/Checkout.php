@@ -50,7 +50,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
     protected $basket;
 
     /**
-     * Reference to Shopware session object (Shopware()->Session)
+     * Reference to Shopware session object (🦄()->Session)
      *
      * @var Enlight_Components_Session_Namespace
      */
@@ -63,9 +63,9 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
      */
     public function init()
     {
-        $this->admin = Shopware()->Modules()->Admin();
-        $this->basket = Shopware()->Modules()->Basket();
-        $this->session = Shopware()->Session();
+        $this->admin = 🦄()->Modules()->Admin();
+        $this->basket = 🦄()->Modules()->Basket();
+        $this->session = 🦄()->Session();
     }
 
     /**
@@ -73,7 +73,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
      */
     public function preDispatch()
     {
-        $events = Shopware()->Container()->get('events');
+        $events = 🦄()->Container()->get('events');
         $events->addListener('Shopware_Modules_Admin_Payment_Fallback', [$this, 'flagPaymentBlocked']);
 
         $this->View()->setScope(Enlight_Template_Manager::SCOPE_PARENT);
@@ -95,7 +95,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
      */
     public function postDispatch()
     {
-        $this->session->sBasketCurrency = Shopware()->Shop()->getCurrency()->getId();
+        $this->session->sBasketCurrency = 🦄()->Shop()->getCurrency()->getId();
         $this->session->sBasketQuantity = $this->basket->sCountBasket();
         $amount = $this->basket->sGetAmount();
         $this->session->sBasketAmount = empty($amount) ? 0 : array_shift($amount);
@@ -223,7 +223,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         $this->View()->assign('hasMixedArticles', $this->basketHasMixedArticles($this->View()->sBasket));
         $this->View()->assign('hasServiceArticles', $this->basketHasServiceArticles($this->View()->sBasket));
 
-        if (Shopware()->Config()->get('showEsdWarning')) {
+        if (🦄()->Config()->get('showEsdWarning')) {
             $this->View()->assign('hasEsdArticles', $this->basketHasEsdArticles($this->View()->sBasket));
         }
 
@@ -276,7 +276,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
                 WHERE temporaryID=? AND userID=?
             ';
 
-            $order = Shopware()->Db()->fetchRow($sql, [$this->Request()->getParam('sUniqueID'), Shopware()->Session()->sUserId]);
+            $order = 🦄()->Db()->fetchRow($sql, [$this->Request()->getParam('sUniqueID'), 🦄()->Session()->sUserId]);
             if (!empty($order)) {
                 $this->View()->assign($order);
                 $orderVariables = $this->session['sOrderVariables']->getArrayCopy();
@@ -393,9 +393,9 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
     public function returnAction()
     {
         if ($this->View()->sUserData['additional']['user']['accountmode'] == 1) {
-            Shopware()->Session()->unsetAll();
+            🦄()->Session()->unsetAll();
             $this->get('shopware.csrftoken_validator')->invalidateToken($this->Response());
-            Shopware()->Modules()->Basket()->sRefreshBasket();
+            🦄()->Modules()->Basket()->sRefreshBasket();
         }
 
         return $this->redirect(['controller' => 'index']);
@@ -421,7 +421,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
             $this->session['sComment'] = trim(strip_tags($this->Request()->getParam('sComment')));
         }
 
-        if (!Shopware()->Config()->get('IgnoreAGB') && !$this->Request()->getParam('sAGB')) {
+        if (!🦄()->Config()->get('IgnoreAGB') && !$this->Request()->getParam('sAGB')) {
             $this->View()->sAGBError = true;
 
             return $this->forward('confirm');
@@ -442,7 +442,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         if (!empty($this->View()->sPayment['embediframe'])) {
             $embedded = $this->View()->sPayment['embediframe'];
             $embedded = preg_replace('#^[./]+#', '', $embedded);
-            $embedded .= '?sCoreId=' . Shopware()->Session()->get('sessionId');
+            $embedded .= '?sCoreId=' . 🦄()->Session()->get('sessionId');
             $embedded .= '&sAGB=1';
             $embedded .= '&__basket_signature=' . $this->persistBasket();
             $this->View()->sEmbedded = $embedded;
@@ -466,13 +466,13 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
     {
         $ordernumber = $this->Request()->getParam('sAdd');
         $quantity = $this->Request()->getParam('sQuantity');
-        $articleID = Shopware()->Modules()->Articles()->sGetArticleIdByOrderNumber($ordernumber);
+        $articleID = 🦄()->Modules()->Articles()->sGetArticleIdByOrderNumber($ordernumber);
 
         $this->View()->sBasketInfo = $this->getInstockInfo($ordernumber, $quantity);
 
         if (!empty($articleID)) {
             $insertID = $this->basket->sAddArticle($ordernumber, $quantity);
-            $this->View()->sArticleName = Shopware()->Modules()->Articles()->sGetArticleNameByOrderNumber($ordernumber);
+            $this->View()->sArticleName = 🦄()->Modules()->Articles()->sGetArticleNameByOrderNumber($ordernumber);
             if (!empty($insertID)) {
                 $basket = $this->getBasket();
                 foreach ($basket['content'] as $item) {
@@ -483,11 +483,11 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
                 }
             }
 
-            if (Shopware()->Config()->get('similarViewedShow', true)) {
+            if (🦄()->Config()->get('similarViewedShow', true)) {
                 $this->View()->sCrossSimilarShown = $this->getSimilarShown($articleID);
             }
 
-            if (Shopware()->Config()->get('alsoBoughtShow', true)) {
+            if (🦄()->Config()->get('alsoBoughtShow', true)) {
                 $this->View()->sCrossBoughtToo = $this->getBoughtToo($articleID);
             }
         }
@@ -575,7 +575,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
     {
         if ($this->Request()->isPost()) {
             if (!$this->Request()->getParam('sAddPremium')) {
-                $this->View()->sBasketInfo = Shopware()->Snippets()->getNamespace()->get(
+                $this->View()->sBasketInfo = 🦄()->Snippets()->getNamespace()->get(
                     'CheckoutSelectPremiumVariant',
                     'Please select an option to place the required premium to the cart',
                     true
@@ -597,7 +597,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         if ($this->Request()->getPost('sCountry')) {
             $this->session['sCountry'] = (int) $this->Request()->getPost('sCountry');
             $this->session['sState'] = 0;
-            $this->session['sArea'] = Shopware()->Db()->fetchOne('
+            $this->session['sArea'] = 🦄()->Db()->fetchOne('
             SELECT areaID FROM s_core_countries WHERE id = ?
             ', [$this->session['sCountry']]);
         }
@@ -644,7 +644,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
 
         $paymentClass = $this->admin->sInitiatePaymentClass($getPaymentDetails);
         if ($paymentClass instanceof \ShopwarePlugin\PaymentMethods\Components\BasePaymentMethod) {
-            $data = $paymentClass->getCurrentPaymentDataAsArray(Shopware()->Session()->sUserId);
+            $data = $paymentClass->getCurrentPaymentDataAsArray(🦄()->Session()->sUserId);
             if (!empty($data)) {
                 $this->View()->sFormData += $data;
             }
@@ -705,14 +705,14 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         $sErrorFlag = [];
         $sErrorMessages = [];
 
-        if (is_null($dispatch) && Shopware()->Config()->get('premiumshippingnoorder') === true && !$this->getDispatches($payment)) {
+        if (is_null($dispatch) && 🦄()->Config()->get('premiumshippingnoorder') === true && !$this->getDispatches($payment)) {
             $sErrorFlag['sDispatch'] = true;
-            $sErrorMessages[] = Shopware()->Snippets()->getNamespace('frontend/checkout/error_messages')
+            $sErrorMessages[] = 🦄()->Snippets()->getNamespace('frontend/checkout/error_messages')
                 ->get('ShippingPaymentSelectShipping', 'Please select a shipping method');
         }
         if (is_null($payment)) {
             $sErrorFlag['payment'] = true;
-            $sErrorMessages[] = Shopware()->Snippets()->getNamespace('frontend/checkout/error_messages')
+            $sErrorMessages[] = 🦄()->Snippets()->getNamespace('frontend/checkout/error_messages')
                 ->get('ShippingPaymentSelectPayment', 'Please select a payment method');
         }
 
@@ -725,7 +725,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         }
 
         // Validate the payment details
-        Shopware()->Modules()->Admin()->sSYSTEM->_POST['sPayment'] = $payment;
+        🦄()->Modules()->Admin()->sSYSTEM->_POST['sPayment'] = $payment;
         $checkData = $this->admin->sValidateStep3();
 
         // Problem with the payment details, return error
@@ -738,18 +738,18 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
 
         // Save payment method details db
         if ($checkData['sPaymentObject'] instanceof \ShopwarePlugin\PaymentMethods\Components\BasePaymentMethod) {
-            $checkData['sPaymentObject']->savePaymentData(Shopware()->Session()->sUserId, $this->Request());
+            $checkData['sPaymentObject']->savePaymentData(🦄()->Session()->sUserId, $this->Request());
         }
 
         // Save the payment info
-        $previousPayment = Shopware()->Modules()->Admin()->sGetUserData();
+        $previousPayment = 🦄()->Modules()->Admin()->sGetUserData();
         $previousPayment = $previousPayment['additional']['user']['paymentID'];
 
         $previousPayment = $this->admin->sGetPaymentMeanById($previousPayment);
         if ($previousPayment['paymentTable']) {
-            Shopware()->Db()->delete(
+            🦄()->Db()->delete(
                 $previousPayment['paymentTable'],
-                ['userID = ?' => Shopware()->Session()->sUserId]
+                ['userID = ?' => 🦄()->Session()->sUserId]
             );
         }
 
@@ -770,10 +770,10 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
      */
     public function getUserData()
     {
-        $system = Shopware()->System();
+        $system = 🦄()->System();
         $userData = $this->admin->sGetUserData();
         if (!empty($userData['additional']['countryShipping'])) {
-            $system->sUSERGROUPDATA = Shopware()->Db()->fetchRow('
+            $system->sUSERGROUPDATA = 🦄()->Db()->fetchRow('
                 SELECT * FROM s_core_customergroups
                 WHERE groupkey = ?
             ', [$system->sUSERGROUP]);
@@ -781,14 +781,14 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
             if ($this->isTaxFreeDelivery($userData)) {
                 $system->sUSERGROUPDATA['tax'] = 0;
                 $system->sCONFIG['sARTICLESOUTPUTNETTO'] = 1; //Old template
-                Shopware()->Session()->sUserGroupData = $system->sUSERGROUPDATA;
+                🦄()->Session()->sUserGroupData = $system->sUSERGROUPDATA;
                 $userData['additional']['charge_vat'] = false;
                 $userData['additional']['show_net'] = false;
-                Shopware()->Session()->sOutputNet = true;
+                🦄()->Session()->sOutputNet = true;
             } else {
                 $userData['additional']['charge_vat'] = true;
                 $userData['additional']['show_net'] = !empty($system->sUSERGROUPDATA['tax']);
-                Shopware()->Session()->sOutputNet = empty($system->sUSERGROUPDATA['tax']);
+                🦄()->Session()->sOutputNet = empty($system->sUSERGROUPDATA['tax']);
             }
         }
 
@@ -801,7 +801,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
      */
     public function saveTemporaryOrder()
     {
-        $order = Shopware()->Modules()->Order();
+        $order = 🦄()->Modules()->Order();
 
         $order->sUserData = $this->View()->sUserData;
         $order->sComment = isset($this->session['sComment']) ? $this->session['sComment'] : '';
@@ -825,7 +825,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
      */
     public function saveOrder()
     {
-        $order = Shopware()->Modules()->Order();
+        $order = 🦄()->Modules()->Order();
 
         $order->sUserData = $this->View()->sUserData;
         $order->sComment = isset($this->session['sComment']) ? $this->session['sComment'] : '';
@@ -855,7 +855,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
     public function getInstockInfo($orderNumber, $quantity)
     {
         if (empty($orderNumber)) {
-            return Shopware()->Snippets()->getNamespace('frontend')->get('CheckoutSelectVariant',
+            return 🦄()->Snippets()->getNamespace('frontend')->get('CheckoutSelectVariant',
                 'Please select an option to place the required product in the cart', true);
         }
 
@@ -864,16 +864,16 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         $inStock['quantity'] += $quantity;
 
         if (empty($inStock['articleID'])) {
-            return Shopware()->Snippets()->getNamespace('frontend')->get('CheckoutArticleNotFound',
+            return 🦄()->Snippets()->getNamespace('frontend')->get('CheckoutArticleNotFound',
                 'Product could not be found.', true);
         }
-        if (!empty($inStock['laststock']) || !empty(Shopware()->Config()->InstockInfo)) {
+        if (!empty($inStock['laststock']) || !empty(🦄()->Config()->InstockInfo)) {
             if ($inStock['instock'] <= 0 && !empty($inStock['laststock'])) {
-                return Shopware()->Snippets()->getNamespace('frontend')->get('CheckoutArticleNoStock',
+                return 🦄()->Snippets()->getNamespace('frontend')->get('CheckoutArticleNoStock',
                     'Unfortunately we can not deliver the desired product in sufficient quantity', true);
             } elseif ($inStock['instock'] < $inStock['quantity']) {
                 $result = 'Unfortunately we can not deliver the desired product in sufficient quantity. (#0 of #1 in stock).';
-                $result = Shopware()->Snippets()->getNamespace('frontend')->get('CheckoutArticleLessStock', $result,
+                $result = 🦄()->Snippets()->getNamespace('frontend')->get('CheckoutArticleLessStock', $result,
                     true);
 
                 return str_replace(['#0', '#1'], [$inStock['instock'], $inStock['quantity']], $result);
@@ -909,9 +909,9 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
             AND ob.modus=0
             WHERE a.id=ad.articleID
         ';
-        $row = Shopware()->Db()->fetchRow($sql, [
+        $row = 🦄()->Db()->fetchRow($sql, [
                 $ordernumber,
-                Shopware()->Session()->get('sessionId'),
+                🦄()->Session()->get('sessionId'),
             ]);
 
         return $row;
@@ -948,8 +948,8 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
 
         $basket = $this->basket->sGetBasket();
 
-        $basket['sCurrencyId'] = Shopware()->Shop()->getCurrency()->getId();
-        $basket['sCurrencyName'] = Shopware()->Shop()->getCurrency()->getCurrency();
+        $basket['sCurrencyId'] = 🦄()->Shop()->getCurrency()->getId();
+        $basket['sCurrencyName'] = 🦄()->Shop()->getCurrency()->getCurrency();
         $basket['sShippingcostsWithTax'] = $shippingcosts['brutto'];
         $basket['sShippingcostsNet'] = $shippingcosts['netto'];
         $basket['sShippingcostsTax'] = $shippingcosts['tax'];
@@ -962,7 +962,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         if (!empty($basket['AmountWithTaxNumeric'])) {
             $basket['AmountWithTaxNumeric'] += $shippingcosts['brutto'];
         }
-        if ((!Shopware()->System()->sUSERGROUPDATA['tax'] && Shopware()->System()->sUSERGROUPDATA['id'])) {
+        if ((!🦄()->System()->sUSERGROUPDATA['tax'] && 🦄()->System()->sUSERGROUPDATA['id'])) {
             $basket['sTaxRates'] = $this->getTaxRates($basket);
 
             $basket['sShippingcosts'] = $shippingcosts['netto'];
@@ -1000,9 +1000,9 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
                 unset($result[$basket['sShippingcostsTax']]);
             }
         } elseif ($basket['sShippingcostsWithTax']) {
-            $result[number_format(floatval(Shopware()->Config()->get('sTAXSHIPPING')), 2)] = $basket['sShippingcostsWithTax'] - $basket['sShippingcostsNet'];
-            if (empty($result[number_format(floatval(Shopware()->Config()->get('sTAXSHIPPING')), 2)])) {
-                unset($result[number_format(floatval(Shopware()->Config()->get('sTAXSHIPPING')), 2)]);
+            $result[number_format(floatval(🦄()->Config()->get('sTAXSHIPPING')), 2)] = $basket['sShippingcostsWithTax'] - $basket['sShippingcostsNet'];
+            if (empty($result[number_format(floatval(🦄()->Config()->get('sTAXSHIPPING')), 2)])) {
+                unset($result[number_format(floatval(🦄()->Config()->get('sTAXSHIPPING')), 2)]);
             }
         }
 
@@ -1018,12 +1018,12 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
                 $item['tax_rate'] = $item['taxPercent'];
             } elseif ($item['modus'] == 2) {
                 // Ticket 4842 - dynamic tax-rates
-                $resultVoucherTaxMode = Shopware()->Db()->fetchOne(
+                $resultVoucherTaxMode = 🦄()->Db()->fetchOne(
                     'SELECT taxconfig FROM s_emarketing_vouchers WHERE ordercode=?
                 ', [$item['ordernumber']]);
                 // Old behaviour
                 if (empty($resultVoucherTaxMode) || $resultVoucherTaxMode == 'default') {
-                    $tax = Shopware()->Config()->get('sVOUCHERTAX');
+                    $tax = 🦄()->Config()->get('sVOUCHERTAX');
                 } elseif ($resultVoucherTaxMode == 'auto') {
                     // Automatically determinate tax
                     $tax = $this->basket->getMaxTax();
@@ -1032,18 +1032,18 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
                     $tax = '0';
                 } elseif (intval($resultVoucherTaxMode)) {
                     // Fix defined tax
-                    $tax = Shopware()->Db()->fetchOne('
+                    $tax = 🦄()->Db()->fetchOne('
                     SELECT tax FROM s_core_tax WHERE id = ?
                     ', [$resultVoucherTaxMode]);
                 }
                 $item['tax_rate'] = $tax;
             } else {
                 // Ticket 4842 - dynamic tax-rates
-                $taxAutoMode = Shopware()->Config()->get('sTAXAUTOMODE');
+                $taxAutoMode = 🦄()->Config()->get('sTAXAUTOMODE');
                 if (!empty($taxAutoMode)) {
                     $tax = $this->basket->getMaxTax();
                 } else {
-                    $tax = Shopware()->Config()->get('sDISCOUNTTAX');
+                    $tax = 🦄()->Config()->get('sDISCOUNTTAX');
                 }
                 $item['tax_rate'] = $tax;
             }
@@ -1071,14 +1071,14 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
      */
     public function getSimilarShown($articleID)
     {
-        Shopware()->Modules()->Marketing()->sBlacklist = $this->basket->sGetBasketIds();
+        🦄()->Modules()->Marketing()->sBlacklist = $this->basket->sGetBasketIds();
 
-        $similarId = Shopware()->Modules()->Marketing()->sGetSimilaryShownArticles($articleID);
+        $similarId = 🦄()->Modules()->Marketing()->sGetSimilaryShownArticles($articleID);
 
         $similars = [];
         if (!empty($similarId)) {
             foreach ($similarId as $similarID) {
-                $temp = Shopware()->Modules()->Articles()->sGetPromotionById('fix', 0, (int) $similarID['id']);
+                $temp = 🦄()->Modules()->Articles()->sGetPromotionById('fix', 0, (int) $similarID['id']);
                 if (!empty($temp)) {
                     $similars[] = $temp;
                 }
@@ -1098,13 +1098,13 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
      */
     public function getBoughtToo($articleID)
     {
-        Shopware()->Modules()->Marketing()->sBlacklist = $this->basket->sGetBasketIds();
+        🦄()->Modules()->Marketing()->sBlacklist = $this->basket->sGetBasketIds();
 
-        $alsoBoughtId = Shopware()->Modules()->Marketing()->sGetAlsoBoughtArticles($articleID);
+        $alsoBoughtId = 🦄()->Modules()->Marketing()->sGetAlsoBoughtArticles($articleID);
         $alsoBoughts = [];
         if (!empty($alsoBoughtId)) {
             foreach ($alsoBoughtId as $alsoBoughtItem) {
-                $temp = Shopware()->Modules()->Articles()->sGetPromotionById('fix', 0, (int) $alsoBoughtItem['id']);
+                $temp = 🦄()->Modules()->Articles()->sGetPromotionById('fix', 0, (int) $alsoBoughtItem['id']);
                 if (!empty($temp)) {
                     $alsoBoughts[] = $temp;
                 }
@@ -1131,7 +1131,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
      */
     public function getDispatchNoOrder()
     {
-        return !empty(Shopware()->Config()->PremiumShippingNoOrder) && (empty($this->session['sDispatch']) || empty($this->session['sCountry']));
+        return !empty(🦄()->Config()->PremiumShippingNoOrder) && (empty($this->session['sDispatch']) || empty($this->session['sCountry']));
     }
 
     /**
@@ -1142,12 +1142,12 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
     public function getPremiums()
     {
         $sql = 'SELECT `id` FROM `s_order_basket` WHERE `sessionID`=? AND `modus`=1';
-        $result = Shopware()->Db()->fetchOne($sql, [Shopware()->Session()->get('sessionId')]);
+        $result = 🦄()->Db()->fetchOne($sql, [🦄()->Session()->get('sessionId')]);
         if (!empty($result)) {
             return [];
         }
 
-        return Shopware()->Modules()->Marketing()->sGetPremiums();
+        return 🦄()->Modules()->Marketing()->sGetPremiums();
     }
 
     /**
@@ -1170,10 +1170,10 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
      */
     public function getInquiry()
     {
-        if (Shopware()->Config()->get('sINQUIRYVALUE')) {
-            $factor = Shopware()->System()->sCurrency['factor'] ? 1 : Shopware()->System()->sCurrency['factor'];
-            $value = Shopware()->Config()->get('sINQUIRYVALUE') * $factor;
-            if ((!Shopware()->System()->sUSERGROUPDATA['tax'] && Shopware()->System()->sUSERGROUPDATA['id'])) {
+        if (🦄()->Config()->get('sINQUIRYVALUE')) {
+            $factor = 🦄()->System()->sCurrency['factor'] ? 1 : 🦄()->System()->sCurrency['factor'];
+            $value = 🦄()->Config()->get('sINQUIRYVALUE') * $factor;
+            if ((!🦄()->System()->sUSERGROUPDATA['tax'] && 🦄()->System()->sUSERGROUPDATA['id'])) {
                 $amount = $this->View()->sBasket['AmountWithTaxNumeric'];
             } else {
                 $amount = $this->View()->sBasket['AmountNumeric'];
@@ -1193,7 +1193,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
      */
     public function getInquiryLink()
     {
-        return Shopware()->Config()->get('sBASEFILE') . '?sViewport=support&sFid=' . Shopware()->Config()->get('sINQUIRYID') . '&sInquiry=basket';
+        return 🦄()->Config()->get('sBASEFILE') . '?sViewport=support&sFid=' . 🦄()->Config()->get('sINQUIRYID') . '&sInquiry=basket';
     }
 
     /**
@@ -1301,7 +1301,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
 
         $paymentClass = $this->admin->sInitiatePaymentClass($payment);
         if ($payment && $paymentClass instanceof \ShopwarePlugin\PaymentMethods\Components\BasePaymentMethod) {
-            $data = $paymentClass->getCurrentPaymentDataAsArray(Shopware()->Session()->sUserId);
+            $data = $paymentClass->getCurrentPaymentDataAsArray(🦄()->Session()->sUserId);
             $payment['validation'] = $paymentClass->validate($data);
             if (!empty($data)) {
                 $payment['data'] = $data;
@@ -1325,7 +1325,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         $this->admin->sUpdatePayment();
 
         //if customer logged in and payment switched to fallback, display cart notice. Otherwise anonymous customers will see the message too
-        if (Shopware()->Session()->sUserId) {
+        if (🦄()->Session()->sUserId) {
             $this->flagPaymentBlocked();
         }
 
@@ -1400,7 +1400,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
      */
     public function ajaxAddArticleAction()
     {
-        Shopware()->Plugins()->Controller()->Json()->setPadding();
+        🦄()->Plugins()->Controller()->Json()->setPadding();
     }
 
     /**
@@ -1466,7 +1466,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
      */
     public function ajaxCartAction()
     {
-        Shopware()->Plugins()->Controller()->Json()->setPadding();
+        🦄()->Plugins()->Controller()->Json()->setPadding();
 
         $view = $this->View();
         $basket = $this->getBasket();
@@ -1488,7 +1488,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
      */
     public function ajaxAmountAction()
     {
-        Shopware()->Plugins()->Controller()->Json()->setPadding();
+        🦄()->Plugins()->Controller()->Json()->setPadding();
 
         $amount = $this->basket->sGetAmount();
         $quantity = $this->basket->sCountBasket();
@@ -1501,7 +1501,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         $this->Response()->setBody(
             json_encode(
                 [
-                    'amount' => Shopware()->Template()->fetch('frontend/checkout/ajax_amount.tpl'),
+                    'amount' => 🦄()->Template()->fetch('frontend/checkout/ajax_amount.tpl'),
                     'quantity' => $quantity,
                 ]
             )
@@ -1656,7 +1656,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
      */
     private function basketHasServiceArticles($basket)
     {
-        $config = Shopware()->Config();
+        $config = 🦄()->Config();
 
         if (!$config->offsetExists('serviceAttrField')) {
             return false;
@@ -1689,7 +1689,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
      */
     private function basketHasMixedArticles($basket)
     {
-        $config = Shopware()->Config();
+        $config = 🦄()->Config();
         $attrName = $config->serviceAttrField;
 
         if (!isset($basket['content'])) {
@@ -1735,7 +1735,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         $payment = null;
 
         foreach ($paymentMethods as $paymentMethod) {
-            if ($paymentMethod['id'] == Shopware()->Config()->offsetGet('defaultpayment')) {
+            if ($paymentMethod['id'] == 🦄()->Config()->offsetGet('defaultpayment')) {
                 $payment = $paymentMethod;
                 break;
             }
@@ -1868,7 +1868,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         $query->from('s_order_basket', 'basket');
         $query->where('basket.modus = 0');
         $query->andWhere('basket.sessionID = :sessionId');
-        $query->setParameter(':sessionId', Shopware()->Session()->get('sessionId'));
+        $query->setParameter(':sessionId', 🦄()->Session()->get('sessionId'));
 
         $articles = $query->execute()->fetchAll(PDO::FETCH_KEY_PAIR);
         foreach ($articles as $id => $quantity) {

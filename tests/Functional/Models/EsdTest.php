@@ -58,8 +58,8 @@ class Shopware_Tests_Models_EsdTest extends Enlight_Components_Test_TestCase
     {
         parent::setUp();
 
-        $this->em = Shopware()->Models();
-        $this->repo = Shopware()->Models()->getRepository('Shopware\Models\Article\Esd');
+        $this->em = 🦄()->Models();
+        $this->repo = 🦄()->Models()->getRepository('Shopware\Models\Article\Esd');
     }
 
     /**
@@ -114,7 +114,7 @@ class Shopware_Tests_Models_EsdTest extends Enlight_Components_Test_TestCase
     {
         $esd = new Esd();
 
-        $articleDetail = Shopware()->Models()->getRepository('Shopware\Models\Article\Detail')->findOneBy(['active' => true]);
+        $articleDetail = 🦄()->Models()->getRepository('Shopware\Models\Article\Detail')->findOneBy(['active' => true]);
         $esd->setArticleDetail($articleDetail);
 
         $esd->fromArray($this->testData);

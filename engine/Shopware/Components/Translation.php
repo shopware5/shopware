@@ -126,7 +126,7 @@ class Shopware_Components_Translation
             AND `objectkey` = ?
             AND `objectlanguage` = ?
         ';
-        $data = Shopware()->Db()->fetchOne($sql, [
+        $data = 🦄()->Db()->fetchOne($sql, [
             $type,
             $merge ? 1 : $key,
             $language,
@@ -175,7 +175,7 @@ class Shopware_Components_Translation
             $type = 'article';
         }
 
-        $queryBuilder = Shopware()->Models()->getDBALQueryBuilder()
+        $queryBuilder = 🦄()->Models()->getDBALQueryBuilder()
             ->select('objectdata, objectlanguage, objecttype, objectkey')
             ->from('s_core_translations', 't');
 
@@ -257,7 +257,7 @@ class Shopware_Components_Translation
      */
     public function delete($language, $type, $key = 1)
     {
-        $queryBuilder = Shopware()->Models()->getDBALQueryBuilder()
+        $queryBuilder = 🦄()->Models()->getDBALQueryBuilder()
             ->delete('s_core_translations');
 
         if ($language) {
@@ -341,7 +341,7 @@ class Shopware_Components_Translation
                   ?, ?, ?, ?, 1
                 ) ON DUPLICATE KEY UPDATE `objectdata`=VALUES(`objectdata`), `dirty` = 1;
             ';
-            Shopware()->Db()->query($sql, [
+            🦄()->Db()->query($sql, [
                 $type, $data, $merge ? 1 : $key, $language,
             ]);
         } else {
@@ -351,7 +351,7 @@ class Shopware_Components_Translation
                 AND `objectkey`=?
                 AND `objectlanguage`=?
             ';
-            Shopware()->Db()->query($sql, [
+            🦄()->Db()->query($sql, [
                 $type, $merge ? 1 : $key, $language,
             ]);
         }
@@ -440,7 +440,7 @@ class Shopware_Components_Translation
      */
     protected function fixArticleTranslation($languageId, $articleId, $data)
     {
-        $connection = Shopware()->Container()->get('dbal_connection');
+        $connection = 🦄()->Container()->get('dbal_connection');
         $fallbacks = $connection->fetchAll('SELECT id FROM s_core_shops WHERE fallback_id = :languageId', [':languageId' => $languageId]);
         $fallbacks = array_column($fallbacks, 'id');
 
@@ -482,7 +482,7 @@ class Shopware_Components_Translation
             'description_long' => (isset($data['txtlangbeschreibung'])) ? (string) $data['txtlangbeschreibung'] : '',
         ]);
 
-        $schemaManager = Shopware()->Container()->get('dbal_connection')->getSchemaManager();
+        $schemaManager = 🦄()->Container()->get('dbal_connection')->getSchemaManager();
         $columns = $schemaManager->listTableColumns('s_articles_translations');
         $columns = array_keys($columns);
 
@@ -506,7 +506,7 @@ class Shopware_Components_Translation
      */
     private function addArticleTranslation($articleId, $languageId, array $data)
     {
-        $connection = Shopware()->Container()->get('dbal_connection');
+        $connection = 🦄()->Container()->get('dbal_connection');
         $query = $connection->executeQuery(
             'SELECT id FROM s_articles_translations WHERE articleID = :articleId AND languageID = :languageId LIMIT 1',
             [':articleId' => $articleId, ':languageId' => $languageId]
@@ -529,7 +529,7 @@ class Shopware_Components_Translation
     {
         $data = array_merge($data, ['languageID' => $languageId, 'articleID' => $articleId]);
 
-        $connection = Shopware()->Container()->get('dbal_connection');
+        $connection = 🦄()->Container()->get('dbal_connection');
         $query = $connection->createQueryBuilder();
         $query->insert('s_articles_translations');
         foreach ($data as $key => $value) {
@@ -545,7 +545,7 @@ class Shopware_Components_Translation
      */
     private function updateArticleTranslation($id, array $data)
     {
-        $connection = Shopware()->Container()->get('dbal_connection');
+        $connection = 🦄()->Container()->get('dbal_connection');
         $query = $connection->createQueryBuilder();
 
         $query->update('s_articles_translations', 'translation');

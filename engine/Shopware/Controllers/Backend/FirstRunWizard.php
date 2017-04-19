@@ -34,11 +34,11 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
     public function saveEnabledAction()
     {
         $value = (bool) $this->Request()->getParam('value');
-        $element = Shopware()->Models()
+        $element = 🦄()->Models()
             ->getRepository('Shopware\Models\Config\Element')
             ->findOneBy(['name' => 'firstRunWizardEnabled']);
 
-        $defaultShop = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop')->getDefault();
+        $defaultShop = 🦄()->Models()->getRepository('Shopware\Models\Shop\Shop')->getDefault();
 
         $requestElements = [
             [
@@ -69,7 +69,7 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
     public function saveConfigurationAction()
     {
         $values = $this->Request()->getParams();
-        $defaultShop = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop')->getDefault();
+        $defaultShop = 🦄()->Models()->getRepository('Shopware\Models\Shop\Shop')->getDefault();
 
         /**
          * Save theme config
@@ -111,7 +111,7 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
         $requestElements = [];
 
         foreach ($shopConfigValues as $configName => $configValue) {
-            $element = Shopware()->Models()
+            $element = 🦄()->Models()
                 ->getRepository('Shopware\Models\Config\Element')
                 ->findOneBy(['name' => $configName]);
 
@@ -249,20 +249,20 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
     public function getAlternativeLocalesAction()
     {
         /** @var $locale \Shopware\Models\Shop\Locale */
-        $targetLocale = Shopware()->Container()->get('Auth')->getIdentity()->locale;
+        $targetLocale = 🦄()->Container()->get('Auth')->getIdentity()->locale;
 
         /** @var Zend_Locale $baseLocale */
-        $baseLocale = Shopware()->Container()->get('locale');
+        $baseLocale = 🦄()->Container()->get('locale');
 
-        $locales = Shopware()->Plugins()->Backend()->Auth()->getLocales();
+        $locales = 🦄()->Plugins()->Backend()->Auth()->getLocales();
 
         if (($key = array_search($targetLocale->getId(), $locales)) !== false) {
             unset($locales[$key]);
         }
 
-        $locales = Shopware()->Db()->quote($locales);
+        $locales = 🦄()->Db()->quote($locales);
         $sql = 'SELECT id, locale FROM s_core_locales WHERE id IN (' . $locales . ')';
-        $locales = Shopware()->Db()->fetchPairs($sql);
+        $locales = 🦄()->Db()->fetchPairs($sql);
 
         $data = [];
         foreach ($locales as $id => $locale) {
@@ -497,7 +497,7 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
             }
         }
 
-        $user = Shopware()->Container()->get('Auth')->getIdentity();
+        $user = 🦄()->Container()->get('Auth')->getIdentity();
         /** @var $locale \Shopware\Models\Shop\Locale */
         $locale = $user->locale;
         $localeCode = $locale->getLocale();
@@ -551,7 +551,7 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
     private function getToken($shopwareId, $password)
     {
         /** @var AccessTokenStruct $token */
-        $token = Shopware()->BackendSession()->accessToken;
+        $token = 🦄()->BackendSession()->accessToken;
 
         if (empty($token) || $token->getExpire()->getTimestamp() <= strtotime('+30 seconds')) {
             if (empty($shopwareId) || empty($password)) {
@@ -563,7 +563,7 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
 
             $token = $accountManagerService->getToken($shopwareId, $password);
 
-            Shopware()->BackendSession()->accessToken = $token;
+            🦄()->BackendSession()->accessToken = $token;
         }
 
         return $token;

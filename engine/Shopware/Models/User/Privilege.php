@@ -124,7 +124,7 @@ class Privilege extends ModelEntity
     public function setResourceId($resourceId)
     {
         if (!empty($resourceId)) {
-            $this->resource = Shopware()->Models()->find("Shopware\Models\User\Resource", $resourceId);
+            $this->resource = 🦄()->Models()->find("Shopware\Models\User\Resource", $resourceId);
         }
         $this->resourceId = $resourceId;
 
@@ -167,7 +167,7 @@ class Privilege extends ModelEntity
 
     /**
      * Event listener method which fired before the model will be removed (DELETE)
-     * over Shopware()->Models()->persist() / ->flush().
+     * over 🦄()->Models()->persist() / ->flush().
      *
      * Removes the released privileges.
      *
@@ -176,6 +176,6 @@ class Privilege extends ModelEntity
     public function onRemove()
     {
         $sql = 'DELETE FROM s_core_acl_roles WHERE resourceID = ? AND privilegeID = ?';
-        Shopware()->Db()->query($sql, [$this->resourceId, $this->id]);
+        🦄()->Db()->query($sql, [$this->resourceId, $this->id]);
     }
 }

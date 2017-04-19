@@ -80,12 +80,12 @@ class Shopware_Tests_Controllers_Backend_ProductFeedTest extends Enlight_Compone
     {
         parent::setUp();
 
-        $this->manager = Shopware()->Models();
-        $this->repository = Shopware()->Models()->getRepository(ProductFeed::class);
+        $this->manager = 🦄()->Models();
+        $this->repository = 🦄()->Models()->getRepository(ProductFeed::class);
 
         // disable auth and acl
-        Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
-        Shopware()->Plugins()->Backend()->Auth()->setNoAcl();
+        🦄()->Plugins()->Backend()->Auth()->setNoAuth();
+        🦄()->Plugins()->Backend()->Auth()->setNoAcl();
     }
 
     /**

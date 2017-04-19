@@ -34,14 +34,14 @@ class Shopware_Tests_Plugins_Core_Debug_Debug extends Enlight_Components_Test_Pl
      */
     public function testStartDispatch()
     {
-        $front = Shopware()->Front();
+        $front = 🦄()->Front();
         $request = new \Enlight_Controller_Request_RequestTestCase();
         $request->setClientIp('127.0.0.1');
         $front->setRequest($request);
 
         $eventArgs = $this->createEventArgs()->set('subject', $front);
 
-        $plugin = Shopware()->Plugins()->Core()->Debug();
+        $plugin = 🦄()->Plugins()->Core()->Debug();
         $plugin->Config()->AllowIP = '127.0.0.1';
         $plugin->onStartDispatch($eventArgs);
 

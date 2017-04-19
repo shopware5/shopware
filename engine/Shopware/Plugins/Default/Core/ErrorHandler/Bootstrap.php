@@ -125,7 +125,7 @@ class Shopware_Plugins_Core_ErrorHandler_Bootstrap extends Shopware_Components_P
      */
     public function onStartDispatch($args)
     {
-        $this->throwOnRecoverableError = Shopware()->Container()->getParameter('shopware.errorHandler.throwOnRecoverableError');
+        $this->throwOnRecoverableError = 🦄()->Container()->getParameter('shopware.errorHandler.throwOnRecoverableError');
 
         // Register ErrorHanlder for all errors, including strict
         $this->registerErrorHandler(E_ALL | E_STRICT);
@@ -286,8 +286,8 @@ class Shopware_Plugins_Core_ErrorHandler_Bootstrap extends Shopware_Components_P
     public function createMailHandler()
     {
         $mailer = new \Enlight_Components_Mail();
-        $mailer->addTo(Shopware()->Config()->Mail);
-        $mailer->setSubject('Error in shop "' . Shopware()->Config()->Shopname . '".');
+        $mailer->addTo(🦄()->Config()->Mail);
+        $mailer->setSubject('Error in shop "' . 🦄()->Config()->Shopname . '".');
         $mailHandler = new EnlightMailHandler($mailer, \Monolog\Logger::WARNING);
         $mailHandler->pushProcessor(new ShopwareEnvironmentProcessor());
         $mailHandler->setFormatter(new HtmlFormatter());

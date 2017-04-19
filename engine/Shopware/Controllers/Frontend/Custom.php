@@ -38,7 +38,7 @@ class Shopware_Controllers_Frontend_Custom extends Enlight_Controller_Action
 
         $shopId = $this->container->get('shopware_storefront.context_service')->getShopContext()->getShop()->getId();
 
-        $staticPage = Shopware()->Modules()->Cms()->sGetStaticPage(
+        $staticPage = 🦄()->Modules()->Cms()->sGetStaticPage(
             $this->Request()->sCustom,
             $shopId
         );
@@ -50,7 +50,7 @@ class Shopware_Controllers_Frontend_Custom extends Enlight_Controller_Action
         }
 
         if (!empty($staticPage['link'])) {
-            $link = Shopware()->Modules()->Core()->sRewriteLink($staticPage['link'], $staticPage['description']);
+            $link = 🦄()->Modules()->Core()->sRewriteLink($staticPage['link'], $staticPage['description']);
 
             return $this->redirect($link, ['code' => 301]);
         }

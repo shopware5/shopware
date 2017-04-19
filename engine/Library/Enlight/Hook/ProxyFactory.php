@@ -81,7 +81,7 @@ class <namespace>_<proxyClassName> extends <className> implements Enlight_Hook_P
         '
     <methodModifiers> function <methodName>(<methodParameters>)
     {
-        return Shopware()->Hooks()->executeHooks(
+        return 🦄()->Hooks()->executeHooks(
             $this, \'<methodName>\', array(<arrayMethodParameters>)
         );
     }
@@ -119,7 +119,7 @@ class <namespace>_<proxyClassName> extends <className> implements Enlight_Hook_P
      * Returns the proxy of the given class. If the proxy is not already created
      * it is generated and written.
      * If the proxy is already created it is drawn by the
-     * Shopware()->Hooks()->getHooks($class) method.
+     * 🦄()->Hooks()->getHooks($class) method.
      *
      * @param  string    $class
      * @throws Exception

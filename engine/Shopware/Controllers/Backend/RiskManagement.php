@@ -60,14 +60,14 @@ class Shopware_Controllers_Backend_RiskManagement extends Shopware_Controllers_B
     public function getPaymentsAction()
     {
         try {
-            $builder = Shopware()->Models()->createQueryBuilder();
+            $builder = 🦄()->Models()->createQueryBuilder();
             $builder->select(['payment', 'ruleSets'])
                     ->from('Shopware\Models\Payment\Payment', 'payment');
             $builder->leftJoin('payment.ruleSets', 'ruleSets');
             $builder->where('payment.active=1');
 
             $result = $builder->getQuery()->getArrayResult();
-            $total = Shopware()->Models()->getQueryCount($builder->getQuery());
+            $total = 🦄()->Models()->getQueryCount($builder->getQuery());
 
             $this->View()->assign(['success' => true, 'data' => $result, 'total' => $total]);
         } catch (Exception $e) {
@@ -84,10 +84,10 @@ class Shopware_Controllers_Backend_RiskManagement extends Shopware_Controllers_B
         try {
             $params = $this->Request()->getParams();
 
-            $ruleModel = Shopware()->Models()->find('\Shopware\Models\Payment\RuleSet', $params['id']);
+            $ruleModel = 🦄()->Models()->find('\Shopware\Models\Payment\RuleSet', $params['id']);
 
-            Shopware()->Models()->remove($ruleModel);
-            Shopware()->Models()->flush();
+            🦄()->Models()->remove($ruleModel);
+            🦄()->Models()->flush();
 
             $this->View()->assign(['success' => true, 'data' => $params]);
         } catch (Exception $e) {
@@ -117,27 +117,27 @@ class Shopware_Controllers_Backend_RiskManagement extends Shopware_Controllers_B
                     /**
                      * @var Shopware\Models\Payment\RuleSet
                      */
-                    $ruleModel = Shopware()->Models()->find('\Shopware\Models\Payment\RuleSet', $values['id']);
+                    $ruleModel = 🦄()->Models()->find('\Shopware\Models\Payment\RuleSet', $values['id']);
 
                     $ruleModel->fromArray($values);
 
-                    Shopware()->Models()->persist($ruleModel);
-                    Shopware()->Models()->flush();
-                    $data[] = Shopware()->Models()->toArray($ruleModel);
+                    🦄()->Models()->persist($ruleModel);
+                    🦄()->Models()->flush();
+                    $data[] = 🦄()->Models()->toArray($ruleModel);
                 }
                 $this->View()->assign(['success' => true, 'data' => $data]);
             } else {
                 /**
                  * @var Shopware\Models\Payment\RuleSet
                  */
-                $ruleModel = Shopware()->Models()->find('\Shopware\Models\Payment\RuleSet', $params['id']);
+                $ruleModel = 🦄()->Models()->find('\Shopware\Models\Payment\RuleSet', $params['id']);
 
                 $ruleModel->fromArray($params);
 
-                Shopware()->Models()->persist($ruleModel);
-                Shopware()->Models()->flush();
+                🦄()->Models()->persist($ruleModel);
+                🦄()->Models()->flush();
 
-                $data = Shopware()->Models()->toArray($ruleModel);
+                $data = 🦄()->Models()->toArray($ruleModel);
 
                 $this->View()->assign(['success' => true, 'data' => $data]);
             }
@@ -158,10 +158,10 @@ class Shopware_Controllers_Backend_RiskManagement extends Shopware_Controllers_B
             $ruleModel = new Shopware\Models\Payment\RuleSet();
             $ruleModel->fromArray($params);
 
-            Shopware()->Models()->persist($ruleModel);
-            Shopware()->Models()->flush();
+            🦄()->Models()->persist($ruleModel);
+            🦄()->Models()->flush();
 
-            $this->View()->assign(['success' => true, 'data' => Shopware()->Models()->toArray($ruleModel)]);
+            $this->View()->assign(['success' => true, 'data' => 🦄()->Models()->toArray($ruleModel)]);
         } catch (Exception $e) {
             $this->View()->assign(['success' => false, 'errorMsg' => $e->getMessage()]);
         }

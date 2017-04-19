@@ -42,7 +42,7 @@ class Shopware_Tests_Components_AclTest extends Enlight_Components_Test_TestCase
     {
         parent::setUp();
 
-        $this->acl = Shopware()->Acl();
+        $this->acl = 🦄()->Acl();
     }
 
     /**

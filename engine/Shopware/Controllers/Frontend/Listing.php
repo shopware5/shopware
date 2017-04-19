@@ -57,10 +57,10 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
             );
         }
 
-        $categoryContent = Shopware()->Modules()->Categories()->sGetCategoryContent($requestCategoryId);
+        $categoryContent = 🦄()->Modules()->Categories()->sGetCategoryContent($requestCategoryId);
 
         $categoryId = $categoryContent['id'];
-        Shopware()->System()->_GET['sCategory'] = $categoryId;
+        🦄()->System()->_GET['sCategory'] = $categoryId;
 
         $emotionConfiguration = $this->getEmotionConfiguration($categoryId);
 
@@ -73,7 +73,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
 
         $this->View()->assign($emotionConfiguration);
         $this->View()->assign([
-            'sBanner' => Shopware()->Modules()->Marketing()->sBanner($categoryId),
+            'sBanner' => 🦄()->Modules()->Marketing()->sBanner($categoryId),
             'sBreadcrumb' => $this->getBreadcrumb($categoryId),
             'sCategoryContent' => $categoryContent,
             'activeFilterGroup' => $this->request->getQuery('sFilterGroup'),
@@ -109,7 +109,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
             $criteria->resetFacets();
         }
 
-        $categoryArticles = Shopware()->Modules()->Articles()->sGetArticlesByCategory($categoryId, $criteria);
+        $categoryArticles = 🦄()->Modules()->Articles()->sGetArticlesByCategory($categoryId, $criteria);
 
         if ($this->Request()->getParam('sRss') || $this->Request()->getParam('sAtom')) {
             $this->Response()->setHeader('Content-Type', 'text/xml');
@@ -164,7 +164,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
             $criteria->addBaseCondition($condition);
         }
 
-        $categoryArticles = Shopware()->Modules()->Articles()->sGetArticlesByCategory(
+        $categoryArticles = 🦄()->Modules()->Articles()->sGetArticlesByCategory(
             $context->getShop()->getCategory()->getId(),
             $criteria
         );
@@ -176,7 +176,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         );
 
         if ($manufacturer->getCoverFile()) {
-            $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+            $mediaService = 🦄()->Container()->get('shopware_media.media_service');
             $manufacturer->setCoverFile($mediaService->getUrl($manufacturer->getCoverFile()));
         }
 
@@ -210,7 +210,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
      */
     public function getBreadcrumb($categoryId)
     {
-        $breadcrumb = Shopware()->Modules()->Categories()->sGetCategoriesByParent($categoryId);
+        $breadcrumb = 🦄()->Modules()->Categories()->sGetCategoriesByParent($categoryId);
 
         return array_reverse($breadcrumb);
     }
@@ -339,10 +339,10 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
      */
     private function isValidCategoryPath($categoryId)
     {
-        $defaultShopCategoryId = Shopware()->Shop()->getCategory()->getId();
+        $defaultShopCategoryId = 🦄()->Shop()->getCategory()->getId();
 
         /** @var $repository \Shopware\Models\Category\Repository */
-        $categoryRepository = Shopware()->Models()->getRepository('Shopware\Models\Category\Category');
+        $categoryRepository = 🦄()->Models()->getRepository('Shopware\Models\Category\Category');
         $categoryPath = $categoryRepository->getPathById($categoryId);
 
         if (!in_array($defaultShopCategoryId, array_keys($categoryPath))) {
@@ -365,7 +365,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
      */
     private function isShopsBaseCategoryPage($categoryId)
     {
-        $defaultShopCategoryId = Shopware()->Shop()->getCategory()->getId();
+        $defaultShopCategoryId = 🦄()->Shop()->getCategory()->getId();
 
         $queryParamsWhiteList = ['controller', 'action', 'sCategory', 'sViewport', 'rewriteUrl', 'module'];
         $queryParamsNames = array_keys($this->Request()->getParams());

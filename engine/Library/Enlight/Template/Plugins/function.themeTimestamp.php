@@ -28,8 +28,8 @@
  */
 function smarty_function_themeTimestamp($params, $template)
 {
-    $context = Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext();
+    $context = 🦄()->Container()->get('shopware_storefront.context_service')->getShopContext();
     $shopId = $context->getShop()->getParentId();
 
-    return Shopware()->Container()->get('theme_timestamp_persistor')->getCurrentTimestamp($shopId);
+    return 🦄()->Container()->get('theme_timestamp_persistor')->getCurrentTimestamp($shopId);
 }

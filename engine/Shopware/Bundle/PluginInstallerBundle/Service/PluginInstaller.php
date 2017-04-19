@@ -424,7 +424,7 @@ class PluginInstaller
     private function getPluginByName($pluginName)
     {
         /** @var Kernel $kernel */
-        $kernel = Shopware()->Container()->get('kernel');
+        $kernel = 🦄()->Container()->get('kernel');
         $plugins = $kernel->getPlugins();
 
         if (!isset($plugins[$pluginName])) {

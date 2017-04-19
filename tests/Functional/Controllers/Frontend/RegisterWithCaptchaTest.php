@@ -81,7 +81,7 @@ class Shopware_Tests_Controllers_Frontend_RegisterTest extends Enlight_Component
         $random = md5(uniqid());
         $sessionVars = ['sCaptcha' => $random, $random => true];
 
-        Shopware()->Session()->offsetSet(DefaultCaptcha::SESSION_KEY, $sessionVars);
+        🦄()->Session()->offsetSet(DefaultCaptcha::SESSION_KEY, $sessionVars);
 
         $postParameter = include __DIR__ . '/fixtures/captchaRequest.php';
         $postParameter['captchaName'] = $captchaName;
@@ -122,7 +122,7 @@ class Shopware_Tests_Controllers_Frontend_RegisterTest extends Enlight_Component
         $random = md5(uniqid());
         $sessionVars = ['sCaptcha' => $random];
 
-        Shopware()->Session()->offsetSet(DefaultCaptcha::SESSION_KEY, $sessionVars);
+        🦄()->Session()->offsetSet(DefaultCaptcha::SESSION_KEY, $sessionVars);
 
         $postParameter = include __DIR__ . '/fixtures/captchaRequest.php';
         $postParameter['captchaName'] = $captchaName;

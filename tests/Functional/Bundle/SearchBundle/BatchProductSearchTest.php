@@ -46,7 +46,7 @@ class BatchProductNumberSearchTest extends TestCase
 
     protected function setUp()
     {
-        $this->batchSearch = Shopware()->Container()->get('shopware_search.batch_product_number_search');
+        $this->batchSearch = 🦄()->Container()->get('shopware_search.batch_product_number_search');
 
         parent::setUp();
     }

@@ -71,7 +71,7 @@ class AddressTest extends \Enlight_Components_Test_Controller_TestCase
     {
         parent::setUpBeforeClass();
 
-        self::$modelManager = Shopware()->Container()->get('models');
+        self::$modelManager = 🦄()->Container()->get('models');
         self::$modelManager->clear();
 
         // Register customer
@@ -79,7 +79,7 @@ class AddressTest extends \Enlight_Components_Test_Controller_TestCase
         $billingDemoData = self::getBillingDemoData();
         $shippingDemoData = self::getShippingDemoData();
 
-        $shop = Shopware()->Container()->get('shopware_storefront.context_service')->createShopContext(1)->getShop();
+        $shop = 🦄()->Container()->get('shopware_storefront.context_service')->createShopContext(1)->getShop();
 
         $customer = new Customer();
         $customer->fromArray($demoData);
@@ -90,7 +90,7 @@ class AddressTest extends \Enlight_Components_Test_Controller_TestCase
         $shipping = new Address();
         $shipping->fromArray($shippingDemoData);
 
-        $registerService = Shopware()->Container()->get('shopware_account.register_service');
+        $registerService = 🦄()->Container()->get('shopware_account.register_service');
         $registerService->register($shop, $customer, $billing, $shipping);
 
         self::$loginEmail = $demoData['email'];
@@ -116,7 +116,7 @@ class AddressTest extends \Enlight_Components_Test_Controller_TestCase
         self::$modelManager->flush();
         self::$modelManager->clear();
 
-        Shopware()->Container()->reset('router');
+        🦄()->Container()->reset('router');
     }
 
     public function testList()

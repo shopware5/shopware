@@ -42,7 +42,7 @@ class Shopware_Tests_Components_StringCompilerTest extends Enlight_Components_Te
     {
         parent::setUp();
 
-        $this->compiler = new Shopware_Components_StringCompiler(Shopware()->Template());
+        $this->compiler = new Shopware_Components_StringCompiler(🦄()->Template());
     }
 
     /**

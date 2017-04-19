@@ -38,7 +38,7 @@ class SimilarProductsTest extends TestCase
      */
     public static function setUpBeforeClass()
     {
-        Shopware()->Config()->offsetSet('similarlimit', 3);
+        🦄()->Config()->offsetSet('similarlimit', 3);
     }
 
     /**
@@ -46,7 +46,7 @@ class SimilarProductsTest extends TestCase
      */
     public static function tearDownAfterClass()
     {
-        Shopware()->Config()->offsetSet('similarlimit', 0);
+        🦄()->Config()->offsetSet('similarlimit', 0);
     }
 
     public function testSimilarProduct()
@@ -66,10 +66,10 @@ class SimilarProductsTest extends TestCase
         }
         $this->linkSimilarProduct($article->getId(), $similarProducts);
 
-        $product = Shopware()->Container()->get('shopware_storefront.list_product_service')
+        $product = 🦄()->Container()->get('shopware_storefront.list_product_service')
             ->get($number, $context);
 
-        $similarProducts = Shopware()->Container()->get('shopware_storefront.similar_products_service')
+        $similarProducts = 🦄()->Container()->get('shopware_storefront.similar_products_service')
             ->get($product, $context);
 
         $this->assertCount(4, $similarProducts);
@@ -103,10 +103,10 @@ class SimilarProductsTest extends TestCase
         $this->linkSimilarProduct($article->getId(), $similarProducts);
         $this->linkSimilarProduct($article2->getId(), $similarProducts);
 
-        $products = Shopware()->Container()->get('shopware_storefront.list_product_service')
+        $products = 🦄()->Container()->get('shopware_storefront.list_product_service')
             ->getList([$number, $number2], $context);
 
-        $similarProductList = Shopware()->Container()->get('shopware_storefront.similar_products_service')
+        $similarProductList = 🦄()->Container()->get('shopware_storefront.similar_products_service')
             ->getList($products, $context);
 
         $this->assertCount(2, $similarProductList);
@@ -144,10 +144,10 @@ class SimilarProductsTest extends TestCase
             $converter->convertShop($helper->getShop(1))
         );
 
-        $product = Shopware()->Container()->get('shopware_storefront.list_product_service')
+        $product = 🦄()->Container()->get('shopware_storefront.list_product_service')
             ->get($number, $context);
 
-        $similar = Shopware()->Container()->get('shopware_storefront.similar_products_service')
+        $similar = 🦄()->Container()->get('shopware_storefront.similar_products_service')
             ->get($product, $context);
 
         $this->assertCount(3, $similar);
@@ -178,7 +178,7 @@ class SimilarProductsTest extends TestCase
     private function linkSimilarProduct($productId, $similarProductIds)
     {
         foreach ($similarProductIds as $similarProductId) {
-            Shopware()->Db()->insert('s_articles_similar', [
+            🦄()->Db()->insert('s_articles_similar', [
                 'articleID' => $productId,
                 'relatedarticle' => $similarProductId,
             ]);

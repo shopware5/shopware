@@ -84,7 +84,7 @@ class Shopware_Controllers_Backend_Banner extends Shopware_Controllers_Backend_E
             $filter[] = ['property' => 'c.parentId', 'value' => $node];
         }
 
-        $query = Shopware()->Models()->getRepository('Shopware\Models\Category\Category')->getListQuery(
+        $query = 🦄()->Models()->getRepository('Shopware\Models\Category\Category')->getListQuery(
             $filter,
             $this->Request()->getParam('sort', []),
             $this->Request()->getParam('limit', null),
@@ -92,7 +92,7 @@ class Shopware_Controllers_Backend_Banner extends Shopware_Controllers_Backend_E
             false
         );
 
-        $count = Shopware()->Models()->getQueryCount($query);
+        $count = 🦄()->Models()->getQueryCount($query);
 
         $data = $query->getArrayResult();
 
@@ -123,9 +123,9 @@ class Shopware_Controllers_Backend_Banner extends Shopware_Controllers_Backend_E
         if (!is_null(self::$testRepository)) {
             $this->repository = self::$testRepository;
         } else {
-            $this->repository = Shopware()->Models()->getRepository(Banner::class);
+            $this->repository = 🦄()->Models()->getRepository(Banner::class);
         }
-        $this->namespace = Shopware()->Snippets()->getNamespace('backend/banner/banner');
+        $this->namespace = 🦄()->Snippets()->getNamespace('backend/banner/banner');
     }
 
     /**
@@ -264,8 +264,8 @@ class Shopware_Controllers_Backend_Banner extends Shopware_Controllers_Backend_E
 
         // write model to db
         try {
-            Shopware()->Models()->persist($bannerModel);
-            Shopware()->Models()->flush();
+            🦄()->Models()->persist($bannerModel);
+            🦄()->Models()->flush();
             $params['id'] = $bannerModel->getId();
             $this->View()->assign(['success' => 'true', 'data' => $params]);
         } catch (Exception $e) {
@@ -286,10 +286,10 @@ class Shopware_Controllers_Backend_Banner extends Shopware_Controllers_Backend_E
         $bannerRequestData = empty($multipleBanner) ? [['id' => $this->Request()->id]] : $multipleBanner;
         try {
             foreach ($bannerRequestData as $banner) {
-                $model = Shopware()->Models()->find('Shopware\Models\Banner\Banner', $banner['id']);
-                Shopware()->Models()->remove($model);
+                $model = 🦄()->Models()->find('Shopware\Models\Banner\Banner', $banner['id']);
+                🦄()->Models()->remove($model);
             }
-            Shopware()->Models()->flush();
+            🦄()->Models()->flush();
             $this->View()->assign(['success' => true]);
         } catch (Exception $e) {
             $this->View()->assign(['success' => false, 'errorMsg' => $e->getMessage()]);
@@ -305,7 +305,7 @@ class Shopware_Controllers_Backend_Banner extends Shopware_Controllers_Backend_E
      */
     protected function initAcl()
     {
-        $this->namespace = Shopware()->Snippets()->getNamespace('backend/banner/banner');
+        $this->namespace = 🦄()->Snippets()->getNamespace('backend/banner/banner');
         $this->addAclPermission('getAllBannersAction', 'read', $this->namespace->get('no_list_rights', 'Read access denied.'));
         $this->addAclPermission('getListAction', 'read', $this->namespace->get('no_list_rights', 'Read access denied.'));
         $this->addAclPermission('getBannerAction', 'read', $this->namespace->get('no_list_rights', 'Read access denied.'));
@@ -326,7 +326,7 @@ class Shopware_Controllers_Backend_Banner extends Shopware_Controllers_Backend_E
     {
         $cnt = 0;
         $nodes = null;
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $mediaService = 🦄()->Container()->get('shopware_media.media_service');
 
         foreach ($banners as $banner) {
             // we have to split the datetime to date and time

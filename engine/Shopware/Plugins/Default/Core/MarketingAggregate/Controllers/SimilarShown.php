@@ -36,7 +36,7 @@ class Shopware_Controllers_Backend_SimilarShown extends Shopware_Controllers_Bac
      */
     public function SimilarShown()
     {
-        return Shopware()->Container()->get('SimilarShown');
+        return 🦄()->Container()->get('SimilarShown');
     }
 
     /**
@@ -46,7 +46,7 @@ class Shopware_Controllers_Backend_SimilarShown extends Shopware_Controllers_Bac
     public function getSimilarShownCountAction()
     {
         $sql = 'SELECT COUNT(id) FROM s_articles';
-        $count = Shopware()->Db()->fetchOne($sql);
+        $count = 🦄()->Db()->fetchOne($sql);
 
         $this->View()->assign(['success' => true, 'data' => ['count' => $count]]);
     }
@@ -64,7 +64,7 @@ class Shopware_Controllers_Backend_SimilarShown extends Shopware_Controllers_Bac
 
         if ($offset == 0) {
             $sql = 'DELETE FROM s_articles_similar_shown_ro';
-            Shopware()->Db()->query($sql);
+            🦄()->Db()->query($sql);
         }
 
         $this->SimilarShown()->initSimilarShown($offset, $limit);

@@ -54,7 +54,7 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
         $this->Response()->setHttpResponseCode(
             $config->get('PageNotFoundCode', 404)
         );
-        $this->View()->sRelatedArticles = Shopware()->Modules()->Marketing()->sGetSimilarArticles(
+        $this->View()->sRelatedArticles = 🦄()->Modules()->Marketing()->sGetSimilarArticles(
             $this->Request()->sArticle,
             4
         );
@@ -77,11 +77,11 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
         $this->View()->assign('sAction', isset($this->View()->sAction) ? $this->View()->sAction : 'index', true);
         $this->View()->assign('sErrorFlag', isset($this->View()->sErrorFlag) ? $this->View()->sErrorFlag : [], true);
         $this->View()->assign('sFormData', isset($this->View()->sFormData) ? $this->View()->sFormData : [], true);
-        $this->View()->assign('userLoggedIn', Shopware()->Modules()->Admin()->sCheckUser());
+        $this->View()->assign('userLoggedIn', 🦄()->Modules()->Admin()->sCheckUser());
 
-        if (!empty(Shopware()->Session()->sUserId) && empty($this->Request()->sVoteName)
+        if (!empty(🦄()->Session()->sUserId) && empty($this->Request()->sVoteName)
           && $this->Request()->getParam('__cache') !== null) {
-            $userData = Shopware()->Modules()->Admin()->sGetUserData();
+            $userData = 🦄()->Modules()->Admin()->sGetUserData();
             $this->View()->sFormData = [
                 'sVoteMail' => $userData['additional']['user']['email'],
                 'sVoteName' => $userData['billingaddress']['firstname'] . ' ' . $userData['billingaddress']['lastname'],
@@ -97,7 +97,7 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
         }
 
         try {
-            $article = Shopware()->Modules()->Articles()->sGetArticleById(
+            $article = 🦄()->Modules()->Articles()->sGetArticleById(
                 $id,
                 $categoryId,
                 $number,
@@ -122,24 +122,24 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
             $this->View()->loadTemplate('frontend/detail/ajax.tpl');
         }
 
-        $article = Shopware()->Modules()->Articles()->sGetConfiguratorImage($article);
+        $article = 🦄()->Modules()->Articles()->sGetConfiguratorImage($article);
 
         // Was:
-        // $article['sBundles'] = Shopware()->Modules()->Articles()->sGetArticleBundlesByArticleID($id);
+        // $article['sBundles'] = 🦄()->Modules()->Articles()->sGetArticleBundlesByArticleID($id);
         // But sGetArticleBundlesByArticleID() always returned false.
         $article['sBundles'] = false;
 
-        if (!empty(Shopware()->Config()->InquiryValue)) {
+        if (!empty(🦄()->Config()->InquiryValue)) {
             $this->View()->sInquiry = $this->Front()->Router()->assemble([
                 'sViewport' => 'support',
-                'sFid' => Shopware()->Config()->InquiryID,
+                'sFid' => 🦄()->Config()->InquiryID,
                 'sInquiry' => 'detail',
                 'sOrdernumber' => $article['ordernumber'],
             ]);
         }
 
         if (!empty($article['categoryID'])) {
-            $breadcrumb = array_reverse(Shopware()->Modules()->sCategories()->sGetCategoriesByParent($article['categoryID']));
+            $breadcrumb = array_reverse(🦄()->Modules()->sCategories()->sGetCategoriesByParent($article['categoryID']));
             $categoryInfo = end($breadcrumb);
         } else {
             $breadcrumb = [];
@@ -170,7 +170,7 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
         }
 
         /** @var sArticles $articleModule */
-        $articleModule = Shopware()->Modules()->Articles();
+        $articleModule = 🦄()->Modules()->Articles();
         $this->View()->sArticle = $articleModule->sGetProductByOrdernumber($orderNumber);
     }
 
@@ -186,7 +186,7 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
             return $this->forward('error');
         }
 
-        $article = Shopware()->Modules()->Articles()->sGetArticleNameByArticleId($id);
+        $article = 🦄()->Modules()->Articles()->sGetArticleNameByArticleId($id);
         if (empty($article)) {
             return $this->forward('error');
         }
@@ -194,20 +194,20 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
         $voteConfirmed = false;
 
         if ($hash = $this->Request()->sConfirmation) {
-            $getVote = Shopware()->Db()->fetchRow('
+            $getVote = 🦄()->Db()->fetchRow('
                 SELECT * FROM s_core_optin WHERE hash = ?
             ', [$hash]);
             if (!empty($getVote['data'])) {
-                Shopware()->System()->_POST = unserialize($getVote['data']);
+                🦄()->System()->_POST = unserialize($getVote['data']);
                 $voteConfirmed = true;
-                Shopware()->Db()->query('DELETE FROM s_core_optin WHERE hash = ?', [$hash]);
+                🦄()->Db()->query('DELETE FROM s_core_optin WHERE hash = ?', [$hash]);
             }
         }
 
-        if (empty(Shopware()->System()->_POST['sVoteName'])) {
+        if (empty(🦄()->System()->_POST['sVoteName'])) {
             $sErrorFlag['sVoteName'] = true;
         }
-        if (empty(Shopware()->System()->_POST['sVoteSummary'])) {
+        if (empty(🦄()->System()->_POST['sVoteSummary'])) {
             $sErrorFlag['sVoteSummary'] = true;
         }
 
@@ -221,24 +221,24 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
         }
 
         $validator = $this->container->get('validator.email');
-        if (!empty(Shopware()->Config()->sOPTINVOTE)
-            && (empty(Shopware()->System()->_POST['sVoteMail'])
-                || !$validator->isValid(Shopware()->System()->_POST['sVoteMail']))
+        if (!empty(🦄()->Config()->sOPTINVOTE)
+            && (empty(🦄()->System()->_POST['sVoteMail'])
+                || !$validator->isValid(🦄()->System()->_POST['sVoteMail']))
         ) {
             $sErrorFlag['sVoteMail'] = true;
         }
 
         if (empty($sErrorFlag)) {
-            if (!empty(Shopware()->Config()->sOPTINVOTE)
-                && !$voteConfirmed && empty(Shopware()->Session()->sUserId)
+            if (!empty(🦄()->Config()->sOPTINVOTE)
+                && !$voteConfirmed && empty(🦄()->Session()->sUserId)
             ) {
                 $hash = \Shopware\Components\Random::getAlphanumericString(32);
                 $sql = '
                     INSERT INTO s_core_optin (datum, hash, data)
                     VALUES (NOW(), ?, ?)
                 ';
-                Shopware()->Db()->query($sql, [
-                    $hash, serialize(Shopware()->System()->_POST->toArray()),
+                🦄()->Db()->query($sql, [
+                    $hash, serialize(🦄()->System()->_POST->toArray()),
                 ]);
 
                 $link = $this->Front()->Router()->assemble([
@@ -253,15 +253,15 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
                     'sArticle' => ['articleName' => $article],
                 ];
 
-                $mail = Shopware()->TemplateMail()->createMail('sOPTINVOTE', $context);
+                $mail = 🦄()->TemplateMail()->createMail('sOPTINVOTE', $context);
                 $mail->addTo($this->Request()->getParam('sVoteMail'));
                 $mail->send();
             } else {
-                unset(Shopware()->Config()->sOPTINVOTE);
-                Shopware()->Modules()->Articles()->sSaveComment($id);
+                unset(🦄()->Config()->sOPTINVOTE);
+                🦄()->Modules()->Articles()->sSaveComment($id);
             }
         } else {
-            $this->View()->sFormData = Shopware()->System()->_POST->toArray();
+            $this->View()->sFormData = 🦄()->System()->_POST->toArray();
             $this->View()->sErrorFlag = $sErrorFlag;
         }
 
@@ -279,10 +279,10 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
      */
     private function isValidCategory($categoryId)
     {
-        $defaultShopCategoryId = Shopware()->Shop()->getCategory()->getId();
+        $defaultShopCategoryId = 🦄()->Shop()->getCategory()->getId();
 
         /** @var $repository \Shopware\Models\Category\Repository */
-        $repository = Shopware()->Models()->getRepository('Shopware\Models\Category\Category');
+        $repository = 🦄()->Models()->getRepository('Shopware\Models\Category\Category');
         $categoryPath = $repository->getPathById($categoryId);
 
         if (!$categoryPath) {

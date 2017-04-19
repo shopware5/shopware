@@ -193,7 +193,7 @@ class Theme extends \Shopware\Components\Theme
      */
     private function getLabelAttribute($snippetName, $labelType = 'boxLabel')
     {
-        $description = Shopware()->Snippets()->getNamespace('themes/bare/backend/config')->get($snippetName);
+        $description = 🦄()->Snippets()->getNamespace('themes/bare/backend/config')->get($snippetName);
         return ['attributes' => [$labelType => $description]];
     }
 

@@ -2597,7 +2597,7 @@ class Repository extends ModelRepository
      */
     public function getRemovePricesQueryBuilder($articleId)
     {
-        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder = 🦄()->Models()->createQueryBuilder();
         $builder->delete('Shopware\Models\Article\Price', 'prices')
                 ->where('prices.articleId = :id')
                 ->setParameter('id', $articleId);
@@ -2630,7 +2630,7 @@ class Repository extends ModelRepository
      */
     public function getRemoveAttributesQueryBuilder($articleId)
     {
-        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder = 🦄()->Models()->createQueryBuilder();
         $builder->delete('Shopware\Models\Attribute\Article', 'attribute')
                 ->where('attribute.articleId = :id')
                 ->setParameter('id', $articleId);
@@ -2662,7 +2662,7 @@ class Repository extends ModelRepository
      */
     public function getRemoveESDQueryBuilder($articleId)
     {
-        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder = 🦄()->Models()->createQueryBuilder();
         $builder->delete('Shopware\Models\Article\Esd', 'esd')
                 ->where('esd.articleId = :id')
                 ->setParameter('id', $articleId);
@@ -2695,7 +2695,7 @@ class Repository extends ModelRepository
      */
     public function getRemoveArticleTranslationsQueryBuilder($articleId)
     {
-        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder = 🦄()->Models()->createQueryBuilder();
         $builder->delete('Shopware\Models\Translation\Translation', 'translation')
             ->where('translation.key = :id')
             ->andWhere('translation.type = \'article\'')
@@ -2729,7 +2729,7 @@ class Repository extends ModelRepository
      */
     public function getRemoveVariantTranslationsQueryBuilder($detailId)
     {
-        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder = 🦄()->Models()->createQueryBuilder();
         $builder->delete('Shopware\Models\Translation\Translation', 'translation')
             ->where('translation.key = :id')
             ->andWhere('translation.type = \'variant\'')
@@ -2763,7 +2763,7 @@ class Repository extends ModelRepository
      */
     public function getRemoveImageQueryBuilder($detailId)
     {
-        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder = 🦄()->Models()->createQueryBuilder();
         $builder->delete('Shopware\Models\Article\Image', 'image')
                 ->where('image.articleDetailId = :id')
                 ->setParameter('id', $detailId);
@@ -2795,7 +2795,7 @@ class Repository extends ModelRepository
      */
     public function getRemoveDetailQueryBuilder($detailId)
     {
-        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder = 🦄()->Models()->createQueryBuilder();
         $builder->delete('Shopware\Models\Article\Detail', 'detail')
                 ->where('detail.id = :id')
                 ->setParameter('id', $detailId);

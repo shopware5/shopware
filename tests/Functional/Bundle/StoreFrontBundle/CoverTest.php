@@ -249,11 +249,11 @@ class CoverTest extends TestCase
     private function resetContext()
     {
         // correct router context for url building
-        Shopware()->Container()->get('router')->setContext(
+        🦄()->Container()->get('router')->setContext(
             new Context(
                 'localhost',
-                Shopware()->Shop()->getBasePath(),
-                Shopware()->Shop()->getSecure()
+                🦄()->Shop()->getBasePath(),
+                🦄()->Shop()->getSecure()
             )
         );
     }

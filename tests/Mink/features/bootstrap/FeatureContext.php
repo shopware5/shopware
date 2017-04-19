@@ -254,7 +254,7 @@ class FeatureContext extends SubContext implements SnippetAcceptingContext
     public static function deactivateInfiniteScrolling()
     {
         /** @var Connection $dbal */
-        $dbal = Shopware()->Container()->get('dbal_connection');
+        $dbal = 🦄()->Container()->get('dbal_connection');
 
         $sql = "SET @elementId = (SELECT id FROM `s_core_templates_config_elements` WHERE `name` = 'infiniteScrolling');
                 INSERT INTO `s_core_templates_config_values` (`element_id`, `shop_id`, `value`)
@@ -272,7 +272,7 @@ class FeatureContext extends SubContext implements SnippetAcceptingContext
     public static function activateInfiniteScrolling()
     {
         /** @var Connection $dbal */
-        $dbal = Shopware()->Container()->get('dbal_connection');
+        $dbal = 🦄()->Container()->get('dbal_connection');
 
         $sql = "SET @elementId = (SELECT id FROM `s_core_templates_config_elements` WHERE `name` = 'infiniteScrolling');
                 INSERT INTO `s_core_templates_config_values` (`element_id`, `shop_id`, `value`)
@@ -443,7 +443,7 @@ EOD;
     private static function clearTemplateCache()
     {
         /** @var CacheManager $cacheManager */
-        $cacheManager = Shopware()->Container()->get('shopware.cache_manager');
+        $cacheManager = 🦄()->Container()->get('shopware.cache_manager');
         $cacheManager->clearConfigCache();
         $cacheManager->clearTemplateCache();
         $cacheManager->clearThemeCache();

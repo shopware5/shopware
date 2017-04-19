@@ -38,14 +38,14 @@ class Shopware_Components_SeoIndex extends Enlight_Class
     {
         list($cachedTime, $elementId, $shopId) = $this->getCachedTime();
 
-        $cache = (int) Shopware()->Config()->routerCache;
+        $cache = (int) 🦄()->Config()->routerCache;
         $cache = $cache < 360 ? 86400 : $cache;
         $currentTime = date('Y-m-d H:i:s');
 
         if (strtotime($cachedTime) < time() - $cache) {
             $this->setCachedTime($currentTime, $elementId, $shopId);
 
-            $resultTime = Shopware()->Modules()->RewriteTable()->sCreateRewriteTable($cachedTime);
+            $resultTime = 🦄()->Modules()->RewriteTable()->sCreateRewriteTable($cachedTime);
             if ($resultTime === $cachedTime) {
                 $resultTime = $currentTime;
             }
@@ -67,8 +67,8 @@ class Shopware_Components_SeoIndex extends Enlight_Class
     {
         // Get elementId in order to read/write config later
         $sql = "SELECT `id` FROM `s_core_config_elements` WHERE `name` LIKE 'routerlastupdate'";
-        $elementId = Shopware()->Db()->fetchOne($sql);
-        $shopId = Shopware()->Shop()->getId();
+        $elementId = 🦄()->Db()->fetchOne($sql);
+        $shopId = 🦄()->Shop()->getId();
 
         // Read config
         $sql = '
@@ -76,7 +76,7 @@ class Shopware_Components_SeoIndex extends Enlight_Class
             FROM s_core_config_elements e, s_core_config_values v
             WHERE v.element_id=e.id AND e.id=? AND v.shop_id=?
         ';
-        $cachedTime = Shopware()->Db()->fetchOne($sql, [$elementId, $shopId]);
+        $cachedTime = 🦄()->Db()->fetchOne($sql, [$elementId, $shopId]);
         if (!empty($cachedTime)) {
             $cachedTime = unserialize($cachedTime);
         }
@@ -100,12 +100,12 @@ class Shopware_Components_SeoIndex extends Enlight_Class
             DELETE FROM s_core_config_values
             WHERE element_id=? AND shop_id=?
         ';
-        Shopware()->Db()->query($sql, [$elementId, $shopId]);
+        🦄()->Db()->query($sql, [$elementId, $shopId]);
         $sql = '
             INSERT INTO s_core_config_values (element_id, shop_id, value)
             VALUES (?, ?, ?)
         ';
-        Shopware()->Db()->query($sql, [$elementId, $shopId, serialize($resultTime)]);
+        🦄()->Db()->query($sql, [$elementId, $shopId, serialize($resultTime)]);
     }
 
     /**
@@ -118,7 +118,7 @@ class Shopware_Components_SeoIndex extends Enlight_Class
     public function registerShop($shopId)
     {
         /** @var $repository \Shopware\Models\Shop\Repository */
-        $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
+        $repository = 🦄()->Models()->getRepository('Shopware\Models\Shop\Shop');
 
         $shop = $repository->getActiveById($shopId);
 
@@ -143,14 +143,14 @@ class Shopware_Components_SeoIndex extends Enlight_Class
      */
     public function countCategories($shopId)
     {
-        if (empty(Shopware()->Config()->routerCategoryTemplate)) {
+        if (empty(🦄()->Config()->routerCategoryTemplate)) {
             return 0;
         }
 
         $shop = $this->registerShop($shopId);
         $parentId = $shop->getCategory()->getId();
 
-        return Shopware()->Db()->fetchOne(
+        return 🦄()->Db()->fetchOne(
             'SELECT COUNT(id) FROM s_categories WHERE path LIKE :path',
             ['path' => '%|' . $parentId . '|%']
         );
@@ -169,7 +169,7 @@ class Shopware_Components_SeoIndex extends Enlight_Class
 
         // Get blog categories
         /** @var \Doctrine\ORM\Query $query */
-        $query = Shopware()->Models()->getRepository('Shopware\Models\Category\Category')->getBlogCategoriesByParentQuery(Shopware()->Shop()->get('parentID'));
+        $query = 🦄()->Models()->getRepository('Shopware\Models\Category\Category')->getBlogCategoriesByParentQuery(🦄()->Shop()->get('parentID'));
         $blogCategories = $query->getArrayResult();
 
         // Get list of blogCategory ids
@@ -179,7 +179,7 @@ class Shopware_Components_SeoIndex extends Enlight_Class
         }
 
         // Count total number of associated blog articles
-        $builder = Shopware()->Models()->getRepository('Shopware\Models\Blog\Blog')->getListQueryBuilder(
+        $builder = 🦄()->Models()->getRepository('Shopware\Models\Blog\Blog')->getListQueryBuilder(
             $blogCategoryIds, null
         );
         $numResults = $builder->select('COUNT(blog)')
@@ -229,9 +229,9 @@ class Shopware_Components_SeoIndex extends Enlight_Class
             ORDER BY a.changetime, a.id
         ';
 
-        return (int) Shopware()->Db()->fetchOne($sql, [
-            Shopware()->Shop()->get('parentID'),
-            Shopware()->Shop()->getId(),
+        return (int) 🦄()->Db()->fetchOne($sql, [
+            🦄()->Shop()->get('parentID'),
+            🦄()->Shop()->getId(),
         ]);
     }
 
@@ -243,7 +243,7 @@ class Shopware_Components_SeoIndex extends Enlight_Class
     public function countEmotions()
     {
         /** @var $repo \Shopware\Models\Emotion\Repository */
-        $repo = Shopware()->Models()->getRepository('Shopware\Models\Emotion\Emotion');
+        $repo = 🦄()->Models()->getRepository('Shopware\Models\Emotion\Emotion');
         $builder = $repo->getListingQuery();
 
         $builder
@@ -274,8 +274,8 @@ class Shopware_Components_SeoIndex extends Enlight_Class
         $this->registerShop($shopId);
 
         $counts = [
-            Shopware()->Db()->fetchOne('SELECT COUNT(id) FROM `s_cms_support`'),
-            Shopware()->Db()->fetchOne('SELECT COUNT(id) FROM `s_cms_static` WHERE link=\'\''),
+            🦄()->Db()->fetchOne('SELECT COUNT(id) FROM `s_cms_support`'),
+            🦄()->Db()->fetchOne('SELECT COUNT(id) FROM `s_cms_static` WHERE link=\'\''),
         ];
 
         return array_sum($counts);
@@ -291,7 +291,7 @@ class Shopware_Components_SeoIndex extends Enlight_Class
     public function countStatic($shopId)
     {
         $this->registerShop($shopId);
-        $urls = Shopware()->Config()->seoStaticUrls;
+        $urls = 🦄()->Config()->seoStaticUrls;
 
         if (empty($urls)) {
             return 0;
@@ -320,12 +320,12 @@ class Shopware_Components_SeoIndex extends Enlight_Class
      */
     public function countSuppliers($shopId)
     {
-        $seoSupplierConfig = Shopware()->Config()->get('sSEOSUPPLIER');
+        $seoSupplierConfig = 🦄()->Config()->get('sSEOSUPPLIER');
         if (is_null($seoSupplierConfig) || $seoSupplierConfig === false) {
             return 0;
         }
 
-        $repository = Shopware()->Models()->getRepository('Shopware\Models\Article\Supplier');
+        $repository = 🦄()->Models()->getRepository('Shopware\Models\Article\Supplier');
 
         $numResults = $repository->getFriendlyUrlSuppliersCountQueryBuilder()->getQuery()->getSingleScalarResult();
 

@@ -54,7 +54,7 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
     {
         // Get locales from s_core_shops. Join over snippets in order to get default snippets referring onto main-shop
         // as well as snippets which have no own shop
-        $locales = Shopware()->Db()->fetchAll("
+        $locales = 🦄()->Db()->fetchAll("
             SELECT
               DISTINCT s.id as shopId,
               IFNULL(sn.localeID, s.locale_id) as localeId,
@@ -123,7 +123,7 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
             $filters[$singleFilter['property']] = $singleFilter['value'];
         }
 
-        $secondStmt = Shopware()->Db()
+        $secondStmt = 🦄()->Db()
                                 ->select()
                                 ->from(['s1' => 's_core_snippets']);
 
@@ -147,7 +147,7 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
         $secondStmt->where('s1.shopID = ?', 1);
         $secondStmt->where('s2.id IS NULL');
 
-        $stmt = Shopware()->Db()
+        $stmt = 🦄()->Db()
           ->select()
           ->from(
               ['s' => 's_core_snippets'],
@@ -168,26 +168,26 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
         if (!empty($namespace)) {
             $namespaceWildcard = $namespace . '/%';
             $stmt->where(
-                Shopware()->Db()->quoteInto('s.namespace LIKE ?', $namespace) .
+                🦄()->Db()->quoteInto('s.namespace LIKE ?', $namespace) .
                 ' OR ' .
-                Shopware()->Db()->quoteInto('s.namespace LIKE ?', $namespaceWildcard)
+                🦄()->Db()->quoteInto('s.namespace LIKE ?', $namespaceWildcard)
             );
 
             $secondStmt->where(
-                Shopware()->Db()->quoteInto('s1.namespace LIKE ?', $namespace) .
+                🦄()->Db()->quoteInto('s1.namespace LIKE ?', $namespace) .
                 ' OR ' .
-                Shopware()->Db()->quoteInto('s1.namespace LIKE ?', $namespaceWildcard)
+                🦄()->Db()->quoteInto('s1.namespace LIKE ?', $namespaceWildcard)
             );
         }
 
         // Filter by name
         if (!empty($name)) {
             $stmt->where(
-                Shopware()->Db()->quoteInto('s.name IN (?)', $name)
+                🦄()->Db()->quoteInto('s.name IN (?)', $name)
             );
 
             $secondStmt->where(
-                Shopware()->Db()->quoteInto('s1.name IN (?)', $name)
+                🦄()->Db()->quoteInto('s1.name IN (?)', $name)
             );
         }
 
@@ -204,7 +204,7 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
             $secondStmt->where('(s1.namespace LIKE ? OR s1.name LIKE ? OR s1.value LIKE ?)', $filter);
         }
 
-        $selectUnion = Shopware()->Db()->select()->union(['(' . $stmt . ')', '(' . $secondStmt . ')'], Zend_Db_Select::SQL_UNION_ALL);
+        $selectUnion = 🦄()->Db()->select()->union(['(' . $stmt . ')', '(' . $secondStmt . ')'], Zend_Db_Select::SQL_UNION_ALL);
 
         if (!empty($order)) {
             $selectUnion->order($order['property'] . ' ' . $order['direction']);
@@ -219,9 +219,9 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
                 ->reset('limitoffset');
 
         $sql = 'SELECT COUNT(*) FROM (' . $countStmt . ') as counter';
-        $totalCount = Shopware()->Db()->fetchOne($sql);
+        $totalCount = 🦄()->Db()->fetchOne($sql);
 
-        $result = Shopware()->Db()->query($selectUnion)->fetchAll();
+        $result = 🦄()->Db()->query($selectUnion)->fetchAll();
 
         $this->View()->assign([
             'success' => true,
@@ -255,15 +255,15 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
             }
 
             try {
-                Shopware()->Models()->persist($snippet);
-                Shopware()->Models()->flush();
+                🦄()->Models()->persist($snippet);
+                🦄()->Models()->flush();
             } catch (Exception $e) {
                 $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);
 
                 return;
             }
 
-            $result[$snippet->getId()] = Shopware()->Models()->toArray($snippet);
+            $result[$snippet->getId()] = 🦄()->Models()->toArray($snippet);
         }
 
         if ($isSingleSnippet) {
@@ -284,17 +284,17 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
         if (!empty($snippets)) {
             foreach ($snippets as $snippet) {
                 /* @var $snippetModel Snippet */
-                $snippetModel = Shopware()->Models()->getRepository('Shopware\Models\Snippet\Snippet')->find($snippet['id']);
+                $snippetModel = 🦄()->Models()->getRepository('Shopware\Models\Snippet\Snippet')->find($snippet['id']);
                 $dirty = ($snippetModel->getDirty() || strcmp($snippetModel->getValue(), $snippet['value']) != 0);
                 $snippetModel->setDirty($dirty);
                 $snippetModel->setValue($snippet['value']);
 
                 if (!$this->isSnippetValid($snippetModel)) {
-                    Shopware()->Models()->remove($snippetModel);
+                    🦄()->Models()->remove($snippetModel);
                     continue;
                 }
             }
-            Shopware()->Models()->flush();
+            🦄()->Models()->flush();
             $this->View()->assign(['success' => true]);
 
             return;
@@ -308,7 +308,7 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
         }
 
         /* @var $result Snippet */
-        $result = Shopware()->Models()->getRepository('Shopware\Models\Snippet\Snippet')->find($id);
+        $result = 🦄()->Models()->getRepository('Shopware\Models\Snippet\Snippet')->find($id);
         if (!$result) {
             $this->View()->assign(['success' => false, 'message' => 'Snippet not found']);
 
@@ -321,12 +321,12 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
         $result->fromArray($params);
 
         if (!$this->isSnippetValid($result)) {
-            Shopware()->Models()->remove($result);
+            🦄()->Models()->remove($result);
         }
 
-        Shopware()->Models()->flush();
+        🦄()->Models()->flush();
 
-        $data = Shopware()->Models()->toArray($result);
+        $data = 🦄()->Models()->toArray($result);
         $this->View()->assign(['success' => true, 'data' => $data]);
     }
 
@@ -342,7 +342,7 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
         }
 
         /* @var $snippet Snippet */
-        $snippet = Shopware()->Models()->getRepository('\Shopware\Models\Snippet\Snippet')->find($id);
+        $snippet = 🦄()->Models()->getRepository('\Shopware\Models\Snippet\Snippet')->find($id);
         if (!$snippet) {
             $this->View()->assign(['success' => false, 'message' => 'Snippet not found']);
 
@@ -350,8 +350,8 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
         }
 
         try {
-            Shopware()->Models()->remove($snippet);
-            Shopware()->Models()->flush();
+            🦄()->Models()->remove($snippet);
+            🦄()->Models()->flush();
         } catch (Exception $e) {
             $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);
 
@@ -398,7 +398,7 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
             return;
         }
 
-        $destPath = Shopware()->DocPath('media_' . 'temp');
+        $destPath = 🦄()->DocPath('media_' . 'temp');
         if (!is_dir($destPath)) {
             // Try to create directory with write permissions
             mkdir($destPath, 0777, true);
@@ -502,7 +502,7 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
                     ON DUPLICATE KEY UPDATE `value`=VALUES(`value`), `updated`=NOW()
                 ';
 
-                Shopware()->Db()->query($sql, [
+                🦄()->Db()->query($sql, [
                     $namespace,
                     $name,
                     $translation['localeID'],
@@ -537,12 +537,12 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
             WHERE l.id = s.localeID
             AND o.id = s.shopID
             ORDER BY shopId, localeId';
-            $locales = Shopware()->Db()->query($sql)->fetchAll();
+            $locales = 🦄()->Db()->query($sql)->fetchAll();
 
             $baseLocale = $locales[0];
             $alias = $baseLocale['locale'] . $baseLocale['shopId'];
 
-            $stmt = Shopware()->Db()
+            $stmt = 🦄()->Db()
                 ->select()
                 ->from(['s1' => 's_core_snippets'], ['namespace', 'name', "value as $alias", "dirty as $alias-dirty"])
                 ->where('s1.localeId = ?', 1)
@@ -567,7 +567,7 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
                 );
             }
 
-            $result = Shopware()->Db()->query($stmt)->fetchAll();
+            $result = 🦄()->Db()->query($stmt)->fetchAll();
 
             $header = [];
             $header[] = 'namespace';
@@ -603,16 +603,16 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
             $this->Response()->setHeader('Content-Disposition', 'attachment; filename="export.sql"');
 
             $sql = 'SELECT * FROM s_core_snippets ORDER BY namespace';
-            $result = Shopware()->Db()->query($sql);
+            $result = 🦄()->Db()->query($sql);
 
             echo  "REPLACE INTO `s_core_snippets` (`namespace`, `name`, `value`, `localeID`, `shopID`,`created`, `updated`, `dirty`) VALUES \r\n";
             foreach ($result->fetchAll() as $row) {
-                $value = Shopware()->Db()->quote($row['value']);
+                $value = 🦄()->Db()->quote($row['value']);
                 $value = str_replace("\n", '\\n', $value);
 
                 $rows[] = sprintf("(%s, %s, %s, '%s', '%s', '%s', NOW(), %d)",
-                      Shopware()->Db()->quote($row['namespace']),
-                      Shopware()->Db()->quote($row['name']),
+                      🦄()->Db()->quote($row['namespace']),
+                      🦄()->Db()->quote($row['name']),
                       $value,
                       (int) $row['localeID'],
                       (int) $row['shopID'],
@@ -634,11 +634,11 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
         $node = $this->Request()->getParam('node');
 
         if ($node !== 'root') {
-            $snippets = Shopware()->Models()
+            $snippets = 🦄()->Models()
                                   ->getRepository('Shopware\Models\Snippet\Snippet')
                                   ->findBy(['namespace' => $node]);
 
-            $snippets = Shopware()->Models()->toArray($snippets);
+            $snippets = 🦄()->Models()->toArray($snippets);
 
             $result = [];
             foreach ($snippets as $snippet) {
@@ -660,7 +660,7 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
         }
 
         /** @var $builder \Doctrine\ORM\QueryBuilder */
-        $builder = Shopware()->Models()
+        $builder = 🦄()->Models()
                              ->getRepository('Shopware\Models\Snippet\Snippet')
                              ->createQueryBuilder('snippet');
 
@@ -691,7 +691,7 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
         }
 
         /** @var $builder \Doctrine\ORM\QueryBuilder */
-        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder = 🦄()->Models()->createQueryBuilder();
 
         $builder->delete('Shopware\Models\Snippet\Snippet', 's')
                 ->andWhere('s.namespace LIKE :namespace')
@@ -762,7 +762,7 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
             WHERE `locale` = ?
         ';
 
-        return Shopware()->Db()->fetchOne($sql, [$locale]);
+        return 🦄()->Db()->fetchOne($sql, [$locale]);
     }
 
     /**

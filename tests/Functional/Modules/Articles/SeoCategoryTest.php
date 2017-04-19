@@ -36,9 +36,9 @@ class Shopware_Tests_Modules_Articles_SeoCategoryTest extends Enlight_Components
 
     public function setUp()
     {
-        Shopware()->Container()->get('models')->clear();
+        🦄()->Container()->get('models')->clear();
         $this->resource = new \Shopware\Components\Api\Resource\Article();
-        $this->resource->setManager(Shopware()->Models());
+        $this->resource->setManager(🦄()->Models());
         parent::setUp();
     }
 
@@ -48,7 +48,7 @@ class Shopware_Tests_Modules_Articles_SeoCategoryTest extends Enlight_Components
 
         $data = $this->getSimpleTestData();
 
-        $data['categories'] = Shopware()->Db()->fetchAll('SELECT DISTINCT id FROM s_categories LIMIT 5, 10');
+        $data['categories'] = 🦄()->Db()->fetchAll('SELECT DISTINCT id FROM s_categories LIMIT 5, 10');
 
         $first = $data['categories'][3];
         $second = $data['categories'][4];
@@ -65,13 +65,13 @@ class Shopware_Tests_Modules_Articles_SeoCategoryTest extends Enlight_Components
         /** @var $article Shopware\Models\Article\Article */
         $article = $this->resource->getOne($article->getId());
 
-        $german = Shopware()->Modules()->Categories()->sGetCategoryIdByArticleId(
+        $german = 🦄()->Modules()->Categories()->sGetCategoryIdByArticleId(
             $article->getId(),
             null,
             1
         );
 
-        $english = Shopware()->Modules()->Categories()->sGetCategoryIdByArticleId(
+        $english = 🦄()->Modules()->Categories()->sGetCategoryIdByArticleId(
             $article->getId(),
             null,
             2

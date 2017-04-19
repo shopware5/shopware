@@ -91,7 +91,7 @@ abstract class Resource
     public function getContainer()
     {
         if (!$this->container) {
-            $this->container = Shopware()->Container();
+            $this->container = 🦄()->Container();
         }
 
         return $this->container;
@@ -262,7 +262,7 @@ abstract class Resource
                     'data' => $this->delete($id),
                 ];
                 if ($this->getResultMode() == self::HYDRATE_ARRAY) {
-                    $results[$key]['data'] = Shopware()->Models()->toArray(
+                    $results[$key]['data'] = 🦄()->Models()->toArray(
                         $results[$key]['data']
                     );
                 }
@@ -321,7 +321,7 @@ abstract class Resource
                     ];
                 }
                 if ($this->getResultMode() == self::HYDRATE_ARRAY) {
-                    $results[$key]['data'] = Shopware()->Models()->toArray(
+                    $results[$key]['data'] = 🦄()->Models()->toArray(
                         $results[$key]['data']
                     );
                 }

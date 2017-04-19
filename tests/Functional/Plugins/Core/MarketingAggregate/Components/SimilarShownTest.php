@@ -100,11 +100,11 @@ class SimilarShownTest extends AbstractMarketing
 
         $countBefore = count($this->getAllSimilarShown());
         $this->saveConfig('similarRefreshStrategy', 3);
-        Shopware()->Container()->get('cache')->clean();
+        🦄()->Container()->get('cache')->clean();
 
         $this->setSimilarShownInvalid('2010-01-01', 'LIMIT 20');
 
-        Shopware()->Events()->notify('Shopware_Plugins_LastArticles_ResetLastArticles', []);
+        🦄()->Events()->notify('Shopware_Plugins_LastArticles_ResetLastArticles', []);
 
         $articles = $this->getAllSimilarShown();
 
@@ -117,7 +117,7 @@ class SimilarShownTest extends AbstractMarketing
         $this->SimilarShown()->initSimilarShown();
 
         $this->saveConfig('similarRefreshStrategy', 2);
-        Shopware()->Container()->get('cache')->clean();
+        🦄()->Container()->get('cache')->clean();
 
         $this->setSimilarShownInvalid();
 

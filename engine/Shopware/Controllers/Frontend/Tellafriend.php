@@ -33,7 +33,7 @@ class Shopware_Controllers_Frontend_Tellafriend extends Enlight_Controller_Actio
 
     public function init()
     {
-        $this->sSYSTEM = Shopware()->System();
+        $this->sSYSTEM = 🦄()->System();
     }
 
     public function successAction()
@@ -55,7 +55,7 @@ class Shopware_Controllers_Frontend_Tellafriend extends Enlight_Controller_Actio
         }
 
         // Get Article-Information
-        $sArticle = Shopware()->Modules()->Articles()->sGetPromotionById('fix', 0, intval($id));
+        $sArticle = 🦄()->Modules()->Articles()->sGetPromotionById('fix', 0, intval($id));
         if (empty($sArticle['articleName'])) {
             return $this->forward('index', 'index');
         }
@@ -81,7 +81,7 @@ class Shopware_Controllers_Frontend_Tellafriend extends Enlight_Controller_Actio
                 $variables['sError'] = true;
             }
 
-            if (!empty(Shopware()->Config()->CaptchaColor)) {
+            if (!empty(🦄()->Config()->CaptchaColor)) {
                 /** @var \Shopware\Components\Captcha\CaptchaValidator $captchaValidator */
                 $captchaValidator = $this->container->get('shopware.captcha.validator');
 
@@ -106,7 +106,7 @@ class Shopware_Controllers_Frontend_Tellafriend extends Enlight_Controller_Actio
                     $context['sComment'] = '';
                 }
 
-                $mail = Shopware()->TemplateMail()->createMail('sTELLAFRIEND', $context, null, [
+                $mail = 🦄()->TemplateMail()->createMail('sTELLAFRIEND', $context, null, [
                     'fromMail' => $this->sSYSTEM->_POST['sMail'],
                     'fromName' => $this->sSYSTEM->_POST['sName'],
                 ]);

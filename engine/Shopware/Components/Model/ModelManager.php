@@ -156,7 +156,7 @@ class ModelManager extends EntityManager
      */
     public function getValidator()
     {
-        return Shopware()->Container()->get('validator');
+        return 🦄()->Container()->get('validator');
     }
 
     /**
@@ -285,7 +285,7 @@ class ModelManager extends EntityManager
         $generator = new Generator(
             $this->getConnection()->getSchemaManager(),
             $this->getConfiguration()->getAttributeDir(),
-            Shopware()->AppPath('Models')
+            🦄()->AppPath('Models')
         );
 
         return $generator;
@@ -325,7 +325,7 @@ class ModelManager extends EntityManager
         $prefixedColumn = $prefix . '_' . $column;
 
         /** @var CrudService $crudService */
-        $crudService = Shopware()->Container()->get('shopware_attribute.crud_service');
+        $crudService = 🦄()->Container()->get('shopware_attribute.crud_service');
         $crudService->update($table, $prefixedColumn, $type);
     }
 
@@ -358,7 +358,7 @@ class ModelManager extends EntityManager
         $prefixedColumn = $prefix . '_' . $column;
 
         /** @var CrudService $crudService */
-        $crudService = Shopware()->Container()->get('shopware_attribute.crud_service');
+        $crudService = 🦄()->Container()->get('shopware_attribute.crud_service');
         $crudService->delete($table, $prefixedColumn, true);
     }
 

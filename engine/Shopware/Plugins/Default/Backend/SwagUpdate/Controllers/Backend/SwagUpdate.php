@@ -80,7 +80,7 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
             return;
         }
 
-        $user = Shopware()->Container()->get('Auth')->getIdentity();
+        $user = 🦄()->Container()->get('Auth')->getIdentity();
         $userLang = $this->getUserLanguage($user);
         $languagePriorities = [
             $userLang,
@@ -111,7 +111,7 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
             return;
         }
 
-        $user = Shopware()->Container()->get('Auth')->getIdentity();
+        $user = 🦄()->Container()->get('Auth')->getIdentity();
         $userLang = $this->getUserLanguage($user);
 
         $namespace = $this->get('snippets')->getNamespace('backend/swag_update/main');
@@ -166,7 +166,7 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
     {
         $fs = new \ShopwarePlugins\SwagUpdate\Components\FileSystem();
 
-        $result = $fs->checkDirectoryPermissions(Shopware()->DocPath(), true);
+        $result = $fs->checkDirectoryPermissions(🦄()->DocPath(), true);
 
         if (!empty($result)) {
             $this->View()->assign([
@@ -240,7 +240,7 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
         ftp_close($connection);
 
         /** @var \Enlight_Components_Session_Namespace $session */
-        $session = Shopware()->BackendSession();
+        $session = 🦄()->BackendSession();
         $session->offsetSet('update_ftp', $ftpParams);
 
         $this->View()->assign([
@@ -257,7 +257,7 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
 
         if ($config['update-send-feedback']) {
             $apiEndpoint = $config['update-feedback-api-endpoint'];
-            $rootDir = Shopware()->Container()->getParameter('kernel.root_dir');
+            $rootDir = 🦄()->Container()->getParameter('kernel.root_dir');
             $publicKey = trim(file_get_contents($rootDir . '/engine/Shopware/Components/HttpClient/public.key'));
 
             $collector = new FeedbackCollector($apiEndpoint, $publicKey, $this->getUnique());
@@ -286,7 +286,7 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
     {
         $clientIp = $this->Request()->getClientIp();
         $base = $this->Request()->getBaseUrl();
-        $user = Shopware()->Container()->get('Auth')->getIdentity();
+        $user = 🦄()->Container()->get('Auth')->getIdentity();
 
         /** @var $locale \Shopware\Models\Shop\Locale */
         $locale = $user->locale;
@@ -300,13 +300,13 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
         $payload['version'] = $version->version;
 
         /** @var \Enlight_Components_Session_Namespace $session */
-        $session = Shopware()->BackendSession();
+        $session = 🦄()->BackendSession();
         if ($session->offsetExists('update_ftp')) {
             $payload['ftp_credentials'] = $session->offsetGet('update_ftp');
         }
 
         $payload = json_encode($payload);
-        if (!file_put_contents(Shopware()->DocPath() . '/files/update/update.json', $payload)) {
+        if (!file_put_contents(🦄()->DocPath() . '/files/update/update.json', $payload)) {
             throw new \Exception('Could not write update.json');
         }
 
@@ -340,8 +340,8 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
 
         $fs = new Filesystem();
 
-        $updateDir = Shopware()->DocPath() . 'files/update/';
-        $fileDir = Shopware()->DocPath() . 'files/update/files';
+        $updateDir = 🦄()->DocPath() . 'files/update/';
+        $fileDir = 🦄()->DocPath() . 'files/update/files';
 
         $unpackStep = new UnpackStep($source, $fileDir);
 
@@ -406,7 +406,7 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
         /** @var $file \SplFileInfo */
         foreach ($iterator as $file) {
             $sourceFile = $file->getPathname();
-            $destinationFile = Shopware()->DocPath() . str_replace($fileDir, '', $file->getPathname());
+            $destinationFile = 🦄()->DocPath() . str_replace($fileDir, '', $file->getPathname());
 
             $destinationDirectory = dirname($destinationFile);
             $fs->mkdir($destinationDirectory);
@@ -468,7 +468,7 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
      */
     private function getPluginConfig()
     {
-        return Shopware()->Plugins()->Backend()->SwagUpdate()->Config()->toArray();
+        return 🦄()->Plugins()->Backend()->SwagUpdate()->Config()->toArray();
     }
 
     /**
@@ -536,7 +536,7 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
     private function createDestinationFromVersion(Version $version)
     {
         $filename = 'update_' . $version->sha1 . '.zip';
-        $destination = Shopware()->DocPath('files') . $filename;
+        $destination = 🦄()->DocPath('files') . $filename;
 
         return $destination;
     }

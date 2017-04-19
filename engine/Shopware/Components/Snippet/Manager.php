@@ -276,8 +276,8 @@ class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Man
     protected function getConfigDirs()
     {
         $configDir = [];
-        if (file_exists(Shopware()->DocPath('snippets'))) {
-            $configDir[] = Shopware()->DocPath('snippets');
+        if (file_exists(🦄()->DocPath('snippets'))) {
+            $configDir[] = 🦄()->DocPath('snippets');
         }
 
         /** @var Plugin[] $plugins */

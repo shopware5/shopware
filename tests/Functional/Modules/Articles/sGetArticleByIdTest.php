@@ -3489,7 +3489,7 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
     public function setUp()
     {
         parent::setUp();
-        $this->module = Shopware()->Modules()->Articles();
+        $this->module = 🦄()->Modules()->Articles();
     }
 
     /**
@@ -3504,7 +3504,7 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
 
     public function testArticles()
     {
-        Shopware()->Container()->get('shopware_storefront.context_service')->initializeShopContext();
+        🦄()->Container()->get('shopware_storefront.context_service')->initializeShopContext();
         $this->dispatch('/');
 
         foreach ($this->articles as $id => $expected) {
@@ -3522,18 +3522,18 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
 
         $id = $this->articles[2]['articleID'];
 
-        Shopware()->Db()->query('UPDATE s_articles SET active = 0 WHERE id = ?', [$id]);
+        🦄()->Db()->query('UPDATE s_articles SET active = 0 WHERE id = ?', [$id]);
 
         $this->assertCount(0, $this->Module()->sGetArticleById($id));
 
-        Shopware()->Db()->query('UPDATE s_articles SET active = 1 WHERE id = ?', [$id]);
+        🦄()->Db()->query('UPDATE s_articles SET active = 1 WHERE id = ?', [$id]);
 
         $this->assertGreaterThan(0, count($this->Module()->sGetArticleById($id)));
     }
 
     private function assertArticleData($expected, $data)
     {
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $mediaService = 🦄()->Container()->get('shopware_media.media_service');
         foreach ($this->articleProperties as $property) {
             if ($property === 'supplierImg') {
                 $expected[$property] = $mediaService->getUrl($expected[$property]);
@@ -3559,7 +3559,7 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
     private function assertRelated($expected, $data)
     {
         $this->assertCount(count($expected['sRelatedArticles']), $data['sRelatedArticles']);
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $mediaService = 🦄()->Container()->get('shopware_media.media_service');
 
         for ($i = 0; $i < count($expected['sRelatedArticles']); ++$i) {
             $expectedArticle = $expected['sRelatedArticles'][$i];

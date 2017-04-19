@@ -433,7 +433,7 @@ class CustomerTest extends TestCase
         $identifier = $customer->getId();
 
         $this->resource->getManager()->clear();
-        $customer = Shopware()->Models()->getRepository('Shopware\Models\Customer\Customer')->find($identifier);
+        $customer = 🦄()->Models()->getRepository('Shopware\Models\Customer\Customer')->find($identifier);
 
         $paymentData = array_shift($customer->getPaymentData()->toArray());
 
@@ -509,7 +509,7 @@ class CustomerTest extends TestCase
         $identifier = $customer->getId();
 
         $this->resource->getManager()->clear();
-        $customer = Shopware()->Models()->getRepository('Shopware\Models\Customer\Customer')->find($identifier);
+        $customer = 🦄()->Models()->getRepository('Shopware\Models\Customer\Customer')->find($identifier);
 
         $paymentData = array_shift($customer->getPaymentData()->toArray());
 
@@ -549,7 +549,7 @@ class CustomerTest extends TestCase
 
     public function testCreateCustomerWithDefaultShopCustomerGroup()
     {
-        $context = Shopware()->Container()->get('shopware_storefront.context_service')->createShopContext(1);
+        $context = 🦄()->Container()->get('shopware_storefront.context_service')->createShopContext(1);
         $data = [
             'shopId' => 1,
             'password' => 'fooobar',

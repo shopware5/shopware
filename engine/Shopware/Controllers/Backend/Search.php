@@ -112,8 +112,8 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
      */
     public function getArticles($search)
     {
-        $search2 = Shopware()->Db()->quote("$search%");
-        $search = Shopware()->Db()->quote("%$search%");
+        $search2 = 🦄()->Db()->quote("$search%");
+        $search = 🦄()->Db()->quote("%$search%");
 
         $sql = "
             SELECT DISTINCT
@@ -138,9 +138,9 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
                 OR d.id IS NOT NULL
             )
         ";
-        $sql = Shopware()->Db()->limit($sql, 5);
+        $sql = 🦄()->Db()->limit($sql, 5);
 
-        return Shopware()->Db()->fetchAll($sql);
+        return 🦄()->Db()->fetchAll($sql);
     }
 
     /**
@@ -152,8 +152,8 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
      */
     public function getCustomers($search)
     {
-        $search2 = Shopware()->Db()->quote("$search%");
-        $search = Shopware()->Db()->quote("%$search%");
+        $search2 = 🦄()->Db()->quote("$search%");
+        $search = 🦄()->Db()->quote("%$search%");
 
         $sql = "
             SELECT b.user_id as id,
@@ -173,8 +173,8 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
             ORDER BY name ASC
         ";
 
-        $sql = Shopware()->Db()->limit($sql, 5);
-        $result = Shopware()->Db()->fetchAll($sql);
+        $sql = 🦄()->Db()->limit($sql, 5);
+        $result = 🦄()->Db()->fetchAll($sql);
 
         return $result;
     }
@@ -188,7 +188,7 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
      */
     public function getOrders($search)
     {
-        $search = Shopware()->Db()->quote("$search%");
+        $search = 🦄()->Db()->quote("$search%");
 
         $sql = "
             SELECT
@@ -220,9 +220,9 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
             GROUP BY o.id
             ORDER BY o.ordertime DESC
         ";
-        $sql = Shopware()->Db()->limit($sql, 5);
+        $sql = 🦄()->Db()->limit($sql, 5);
 
-        return Shopware()->Db()->fetchAll($sql);
+        return 🦄()->Db()->fetchAll($sql);
     }
 
     /**

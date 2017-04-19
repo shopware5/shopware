@@ -51,11 +51,11 @@ class Shopware_Plugins_Core_CronRating_Bootstrap extends Shopware_Components_Plu
      */
     public function onRun(Enlight_Components_Cron_EventArgs $job)
     {
-        if (empty(Shopware()->Config()->voteSendCalling)) {
+        if (empty(🦄()->Config()->voteSendCalling)) {
             return;
         }
 
-        $sendTime = Shopware()->Config()->get('voteCallingTime', 10);
+        $sendTime = 🦄()->Config()->get('voteCallingTime', 10);
         $orders = $this->getOrders($sendTime);
         if (empty($orders)) {
             return 'No orders for rating mail found.';
@@ -72,18 +72,18 @@ class Shopware_Plugins_Core_CronRating_Bootstrap extends Shopware_Components_Plu
             }
 
             /** @var Shopware\Models\Shop\Repository $repository */
-            $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
+            $repository = 🦄()->Models()->getRepository('Shopware\Models\Shop\Shop');
 
             $shopId = is_numeric($order['language']) ? $order['language'] : $order['subshopID'];
             $shop = $repository->getActiveById($shopId);
 
             /** @var Shopware\Models\Shop\Currency $repository */
-            $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Currency');
+            $repository = 🦄()->Models()->getRepository('Shopware\Models\Shop\Currency');
             $shop->setCurrency($repository->find($order['currencyID']));
             $shop->registerResources();
 
             foreach ($positions[$orderId] as &$position) {
-                $position['link'] = Shopware()->Container()->get('router')->assemble([
+                $position['link'] = 🦄()->Container()->get('router')->assemble([
                     'module' => 'frontend', 'sViewport' => 'detail',
                     'sArticle' => $position['articleID'],
                 ]);
@@ -95,7 +95,7 @@ class Shopware_Plugins_Core_CronRating_Bootstrap extends Shopware_Components_Plu
                 'sArticles' => $positions[$orderId],
             ];
 
-            $mail = Shopware()->TemplateMail()->createMail('sARTICLECOMMENT', $context);
+            $mail = 🦄()->TemplateMail()->createMail('sARTICLECOMMENT', $context);
             $mail->addTo($customers[$orderId]['email']);
             $mail->send();
             ++$count;
@@ -172,7 +172,7 @@ class Shopware_Plugins_Core_CronRating_Bootstrap extends Shopware_Components_Plu
             AND o.ordertime LIKE CONCAT(DATE_SUB(CURDATE(), INTERVAL ? DAY), '%')
         ";
 
-        return Shopware()->Db()->fetchAssoc($sql, [$sendTime]);
+        return 🦄()->Db()->fetchAssoc($sql, [$sendTime]);
     }
 
     /**
@@ -182,7 +182,7 @@ class Shopware_Plugins_Core_CronRating_Bootstrap extends Shopware_Components_Plu
      */
     public function getCustomers($orderIds)
     {
-        $orderIds = Shopware()->Db()->quote($orderIds);
+        $orderIds = 🦄()->Db()->quote($orderIds);
         $sql = "
             SELECT
                 b.orderID,
@@ -258,7 +258,7 @@ class Shopware_Plugins_Core_CronRating_Bootstrap extends Shopware_Components_Plu
             WHERE b.orderID IN ($orderIds)
         ";
 
-        return Shopware()->Db()->fetchAssoc($sql);
+        return 🦄()->Db()->fetchAssoc($sql);
     }
 
     /**
@@ -268,7 +268,7 @@ class Shopware_Plugins_Core_CronRating_Bootstrap extends Shopware_Components_Plu
      */
     public function getPositions($orderIds)
     {
-        $orderIds = Shopware()->Db()->quote($orderIds);
+        $orderIds = 🦄()->Db()->quote($orderIds);
         $sql = "
             SELECT
                 d.id as orderdetailsID,
@@ -299,7 +299,7 @@ class Shopware_Plugins_Core_CronRating_Bootstrap extends Shopware_Components_Plu
             AND d.modus = 0
             ORDER BY orderdetailsID ASC
         ";
-        $result = Shopware()->Db()->fetchAll($sql);
+        $result = 🦄()->Db()->fetchAll($sql);
         $rows = [];
         foreach ($result as $row) {
             $rows[$row['orderID']][$row['orderdetailsID']] = $row;

@@ -41,7 +41,7 @@ class Repository extends ModelRepository
      * The filtering is performed on all columns.
      * The passed limit parameters for the list paging are placed directly into the query object.
      * To determine the total number of records, use the following syntax:
-     * Shopware()->Models()->getQueryCount($query)
+     * 🦄()->Models()->getQueryCount($query)
      *
      * @param null $filter
      * @param null $orderBy
@@ -328,7 +328,7 @@ class Repository extends ModelRepository
                 ->leftJoin('orders.orderStatus', 'orderStatus')
                 ->leftJoin('orders.paymentStatus', 'paymentStatus');
 
-        $expr = Shopware()->Models()->getExpressionBuilder();
+        $expr = 🦄()->Models()->getExpressionBuilder();
         //filter the displayed columns with the passed filter string
         if (!empty($filter)) {
             $builder->where(

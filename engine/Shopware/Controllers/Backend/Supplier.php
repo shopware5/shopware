@@ -51,10 +51,10 @@ class Shopware_Controllers_Backend_Supplier extends Shopware_Controllers_Backend
         }
 
         $id = (int) $this->Request()->get('id');
-        $supplierModel = Shopware()->Models()->find('Shopware\Models\Article\Supplier', $id);
+        $supplierModel = 🦄()->Models()->find('Shopware\Models\Article\Supplier', $id);
 
-        Shopware()->Models()->remove($supplierModel);
-        Shopware()->Models()->flush();
+        🦄()->Models()->remove($supplierModel);
+        🦄()->Models()->flush();
 
         $this->View()->assign(['success' => true, 'data' => $id]);
     }
@@ -84,10 +84,10 @@ class Shopware_Controllers_Backend_Supplier extends Shopware_Controllers_Backend
         $offset = $this->Request()->getParam('start', 0);
 
         $query = $this->getRepository()->getSupplierListQuery($filter, $sort, $limit, $offset);
-        $total = Shopware()->Models()->getQueryCount($query);
+        $total = 🦄()->Models()->getQueryCount($query);
 
         $suppliers = $query->getArrayResult();
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $mediaService = 🦄()->Container()->get('shopware_media.media_service');
 
         foreach ($suppliers as &$supplier) {
             $supplier['description'] = strip_tags($supplier['description']);
@@ -145,7 +145,7 @@ class Shopware_Controllers_Backend_Supplier extends Shopware_Controllers_Backend
 
         $id = (int) $this->Request()->get('id');
         if ($id > 0) {
-            $supplierModel = Shopware()->Models()->find('Shopware\Models\Article\Supplier', $id);
+            $supplierModel = 🦄()->Models()->find('Shopware\Models\Article\Supplier', $id);
         } else {
             $supplierModel = new \Shopware\Models\Article\Supplier();
         }
@@ -176,7 +176,7 @@ class Shopware_Controllers_Backend_Supplier extends Shopware_Controllers_Backend
             return;
         }
 
-        $manager = Shopware()->Models();
+        $manager = 🦄()->Models();
         $manager->persist($supplierModel);
         $manager->flush();
         $params['id'] = $supplierModel->getId();
@@ -196,7 +196,7 @@ class Shopware_Controllers_Backend_Supplier extends Shopware_Controllers_Backend
         $offset = $this->Request()->getParam('start', 0);
 
         $query = $this->getRepository()->getSupplierListQuery($filter, $sort, $limit, $offset);
-        $count = Shopware()->Models()->getQueryCount($query);
+        $count = 🦄()->Models()->getQueryCount($query);
 
         return [
             'result' => $query->getArrayResult(),
@@ -211,7 +211,7 @@ class Shopware_Controllers_Backend_Supplier extends Shopware_Controllers_Backend
      */
     protected function getSingleSupplier($id)
     {
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $mediaService = 🦄()->Container()->get('shopware_media.media_service');
         $data = $this->getRepository()->getSupplierQuery($id)->getArrayResult();
         $data[0]['image'] = $data[0]['image'] ? $mediaService->getUrl($data[0]['image']) : null;
 
@@ -232,7 +232,7 @@ class Shopware_Controllers_Backend_Supplier extends Shopware_Controllers_Backend
      */
     protected function initAcl()
     {
-        $namespace = Shopware()->Snippets()->getNamespace('backend/supplier');
+        $namespace = 🦄()->Snippets()->getNamespace('backend/supplier');
 
         $this->addAclPermission('getSuppliersAction', 'read', $namespace->get('no_list_rights', 'Read access denied.'));
         $this->addAclPermission('deleteSupplierAction', 'delete', $namespace->get('no_list_rights', 'Delete access denied.'));
@@ -248,7 +248,7 @@ class Shopware_Controllers_Backend_Supplier extends Shopware_Controllers_Backend
     private function getRepository()
     {
         if ($this->repository === null) {
-            $this->repository = Shopware()->Models()->getRepository('Shopware\Models\Article\Article');
+            $this->repository = 🦄()->Models()->getRepository('Shopware\Models\Article\Article');
         }
 
         return $this->repository;

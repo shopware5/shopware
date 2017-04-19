@@ -280,7 +280,7 @@ class Kernel implements HttpKernelInterface
         }
 
         $this->initializeContainer();
-        $this->initializeShopware();
+        $this->initialize🦄();
 
         foreach ($this->getPlugins() as $plugin) {
             $plugin->setContainer($this->container);
@@ -486,7 +486,7 @@ class Kernel implements HttpKernelInterface
     /**
      * Creates a new instance of the Shopware application
      */
-    protected function initializeShopware()
+    protected function initialize🦄()
     {
         $this->shopware = new \Shopware($this->container);
         $this->container->setApplication($this->shopware);

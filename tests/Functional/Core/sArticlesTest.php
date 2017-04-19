@@ -34,9 +34,9 @@ class sArticlesTest extends Enlight_Components_Test_Controller_TestCase
     public function testCanInstanciatesArticles()
     {
         $sArticles = new sArticles();
-        $categoryId = Shopware()->Shop()->getCategory()->getId();
-        $translationId = (!Shopware()->Shop()->getDefault() ? Shopware()->Shop()->getId() : null);
-        $customerGroupId = ((int) Shopware()->Modules()->System()->sUSERGROUPDATA['id']);
+        $categoryId = 🦄()->Shop()->getCategory()->getId();
+        $translationId = (!🦄()->Shop()->getDefault() ? 🦄()->Shop()->getId() : null);
+        $customerGroupId = ((int) 🦄()->Modules()->System()->sUSERGROUPDATA['id']);
 
         $this->assertsArticlesState($sArticles, $categoryId, $translationId, $customerGroupId);
     }
@@ -68,14 +68,14 @@ class sArticlesTest extends Enlight_Components_Test_Controller_TestCase
         INSERT INTO s_core_pricegroups_discounts (`groupID`, `customergroupID`, `discount`, `discountstart`) VALUES (1, 1, 5, 1);
         ';
 
-        Shopware()->Db()->query($sql);
+        🦄()->Db()->query($sql);
 
         $this->dispatch('/');
 
-        Shopware()->Container()->get('shopware_storefront.context_service')->initializeShopContext();
+        🦄()->Container()->get('shopware_storefront.context_service')->initializeShopContext();
 
         $correctPrice = '18,99';
-        $article = Shopware()->Modules()->Articles()->sGetArticleById(
+        $article = 🦄()->Modules()->Articles()->sGetArticleById(
             2
         );
         $this->assertEquals($correctPrice, $article['price']);
@@ -85,7 +85,7 @@ class sArticlesTest extends Enlight_Components_Test_Controller_TestCase
         UPDATE s_articles SET pricegroupActive = 0 WHERE id = 2;
         DELETE FROM s_core_pricegroups_discounts WHERE `customergroupID` = 1 AND `discount` = 5;
         ';
-        Shopware()->Db()->query($sql);
+        🦄()->Db()->query($sql);
     }
 
     /**
@@ -93,7 +93,7 @@ class sArticlesTest extends Enlight_Components_Test_Controller_TestCase
      */
     public function testsGetPromotionByIdWithNonExistingArticle()
     {
-        $result = Shopware()->Modules()->Articles()->sGetPromotionById('fix', 0, 9999999);
+        $result = 🦄()->Modules()->Articles()->sGetPromotionById('fix', 0, 9999999);
 
         // a query to a not existing article should return 'false' and not throw an exception
         $this->assertFalse($result);

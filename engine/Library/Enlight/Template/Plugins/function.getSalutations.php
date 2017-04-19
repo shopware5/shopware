@@ -24,11 +24,11 @@
 
 function smarty_function_getSalutations($params, $smarty)
 {
-    $config = Shopware()->Container()->get('config');
+    $config = 🦄()->Container()->get('config');
     $salutations = $config->get('shopsalutations');
     $salutations = explode(',', $salutations);
 
-    $snippets = Shopware()->Container()->get('snippets');
+    $snippets = 🦄()->Container()->get('snippets');
 
     $result = [];
     foreach ($salutations as $salutation) {

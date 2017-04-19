@@ -46,7 +46,7 @@ class Shopware_Controllers_Widgets_Index extends Enlight_Controller_Action
         $response = $this->Response();
 
         /** @var $plugin Shopware_Plugins_Frontend_Statistics_Bootstrap */
-        $plugin = Shopware()->Plugins()->Frontend()->Statistics();
+        $plugin = 🦄()->Plugins()->Frontend()->Statistics();
         $plugin->updateLog($request, $response);
     }
 
@@ -56,7 +56,7 @@ class Shopware_Controllers_Widgets_Index extends Enlight_Controller_Action
     public function menuAction()
     {
         $this->View()->sGroup = $this->Request()->getParam('group');
-        $plugin = Shopware()->Plugins()->Core()->ControllerBase();
+        $plugin = 🦄()->Plugins()->Core()->ControllerBase();
         $this->View()->sMenu = $plugin->getMenu();
     }
 
@@ -65,9 +65,9 @@ class Shopware_Controllers_Widgets_Index extends Enlight_Controller_Action
      */
     public function shopMenuAction()
     {
-        $shop = Shopware()->Shop();
+        $shop = 🦄()->Shop();
         $main = $shop->getMain() !== null ? $shop->getMain() : $shop;
-        Shopware()->Models()->detach($main);
+        🦄()->Models()->detach($main);
 
         $this->View()->shop = $shop;
         if (!$this->Request()->getParam('hideCurrency', false)) {
@@ -75,7 +75,7 @@ class Shopware_Controllers_Widgets_Index extends Enlight_Controller_Action
         }
         $languages = $shop->getChildren()->toArray();
         foreach ($languages as $languageKey => $language) {
-            Shopware()->Models()->detach($language);
+            🦄()->Models()->detach($language);
             if (!$language->getActive()) {
                 unset($languages[$languageKey]);
             }

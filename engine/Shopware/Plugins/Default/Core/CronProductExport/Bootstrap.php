@@ -67,7 +67,7 @@ class Shopware_Plugins_Core_CronProductExport_Bootstrap extends Shopware_Compone
      */
     public function exportProductFiles()
     {
-        $cacheDir = Shopware()->Container()->getParameter('kernel.cache_dir');
+        $cacheDir = 🦄()->Container()->getParameter('kernel.cache_dir');
         $cacheDir .= '/productexport/';
         if (!is_dir($cacheDir)) {
             if (false === @mkdir($cacheDir, 0777, true)) {
@@ -77,11 +77,11 @@ class Shopware_Plugins_Core_CronProductExport_Bootstrap extends Shopware_Compone
             throw new \RuntimeException(sprintf("Unable to write in the %s directory (%s)\n", 'Productexport', $cacheDir));
         }
 
-        $export = Shopware()->Modules()->Export();
-        $export->sSYSTEM = Shopware()->System();
-        $sSmarty = Shopware()->Template();
+        $export = 🦄()->Modules()->Export();
+        $export->sSYSTEM = 🦄()->System();
+        $sSmarty = 🦄()->Template();
 
-        $productFeedRepository = Shopware()->Models()->getRepository(ProductFeed::class);
+        $productFeedRepository = 🦄()->Models()->getRepository(ProductFeed::class);
         $activeFeeds = $productFeedRepository->getActiveListQuery()->getResult();
         foreach ($activeFeeds as $feedModel) {
             /** @var Shopware\Models\ProductFeed\ProductFeed $feedModel */

@@ -231,8 +231,8 @@ class Shopware_Components_Modules extends Enlight_Class implements ArrayAccess
             return;
         }
 
-        Shopware()->Hooks()->setAlias($name, $name);
-        $proxy = Shopware()->Hooks()->getProxy($name);
+        🦄()->Hooks()->setAlias($name, $name);
+        $proxy = 🦄()->Hooks()->getProxy($name);
         $this->modules_container[$name] = new $proxy();
         $this->modules_container[$name]->sSYSTEM = $this->system;
     }

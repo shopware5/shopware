@@ -182,13 +182,13 @@ class PluginLocalService
      */
     private function getIconOfPlugin($name)
     {
-        $rootDir = Shopware()->Container()->getParameter('kernel.root_dir');
+        $rootDir = 🦄()->Container()->getParameter('kernel.root_dir');
 
-        $path = Shopware()->Container()->get('shopware_plugininstaller.plugin_manager')->getPluginPath($name);
+        $path = 🦄()->Container()->get('shopware_plugininstaller.plugin_manager')->getPluginPath($name);
         $path .= '/plugin.png';
 
         $relativePath = str_replace($rootDir, '', $path);
-        $front = Shopware()->Container()->get('front');
+        $front = 🦄()->Container()->get('front');
 
         if (file_exists($path) && $front && $front->Request()) {
             return $front->Request()->getBasePath() . $relativePath;

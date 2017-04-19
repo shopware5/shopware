@@ -36,7 +36,7 @@ class Shopware_Controllers_Backend_TopSeller extends Shopware_Controllers_Backen
      */
     public function TopSeller()
     {
-        return Shopware()->Container()->get('TopSeller');
+        return 🦄()->Container()->get('TopSeller');
     }
 
     /**
@@ -52,7 +52,7 @@ class Shopware_Controllers_Backend_TopSeller extends Shopware_Controllers_Backen
 
         if ($offset == 0) {
             $sql = 'DELETE FROM s_articles_top_seller_ro';
-            Shopware()->Db()->query($sql);
+            🦄()->Db()->query($sql);
         }
 
         $this->TopSeller()->initTopSeller($limit);
@@ -67,7 +67,7 @@ class Shopware_Controllers_Backend_TopSeller extends Shopware_Controllers_Backen
     public function getTopSellerCountAction()
     {
         $sql = 'SELECT COUNT(id) FROM s_articles';
-        $count = Shopware()->Db()->fetchOne($sql);
+        $count = 🦄()->Db()->fetchOne($sql);
         $this->View()->assign(['success' => true, 'data' => ['count' => $count]]);
     }
 }

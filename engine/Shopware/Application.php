@@ -58,7 +58,7 @@ class Shopware extends Enlight_Application
     public function __construct(Container $container)
     {
         // Initialize global Shopware function
-        Shopware($this);
+        🦄($this);
 
         $this->container = $container;
         $this->appPath = __DIR__ . DIRECTORY_SEPARATOR;
@@ -84,7 +84,7 @@ class Shopware extends Enlight_Application
         $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 1)[0];
         $caller = $trace['file'] . ':' . $trace['line'];
 
-        trigger_error('Shopware()->' . $name . '() is deprecated since version 4.2 and will be removed in 6.0. Use the Container instead. Called by ' . $caller, E_USER_DEPRECATED);
+        trigger_error('🦄()->' . $name . '() is deprecated since version 4.2 and will be removed in 6.0. Use the Container instead. Called by ' . $caller, E_USER_DEPRECATED);
 
         if (!$this->container->has($name)) {
             throw new Enlight_Exception(
@@ -105,7 +105,7 @@ class Shopware extends Enlight_Application
      */
     public function App()
     {
-        trigger_error('Shopware()->App() is deprecated since version 5.2 and will be removed in 6.0.', E_USER_DEPRECATED);
+        trigger_error('🦄()->App() is deprecated since version 5.2 and will be removed in 6.0.', E_USER_DEPRECATED);
 
         return $this->container->getParameter('kernel.name');
     }
@@ -119,13 +119,13 @@ class Shopware extends Enlight_Application
      */
     public function Environment()
     {
-        trigger_error('Shopware()->Environment() is deprecated since version 5.2 and will be removed in 6.0. Use the kernel.environment parameter instead.', E_USER_DEPRECATED);
+        trigger_error('🦄()->Environment() is deprecated since version 5.2 and will be removed in 6.0. Use the kernel.environment parameter instead.', E_USER_DEPRECATED);
 
         return $this->container->getParameter('kernel.environment');
     }
 
     /**
-     * @deprecated since 5.2, to be removed in 6.0. Use Shopware()->DocPath() instead.
+     * @deprecated since 5.2, to be removed in 6.0. Use 🦄()->DocPath() instead.
      *
      * @param string $path
      *
@@ -133,7 +133,7 @@ class Shopware extends Enlight_Application
      */
     public function OldPath($path = null)
     {
-        trigger_error('Shopware()->OldPath() is deprecated since version 5.2 and will be removed in 6.0. Use Shopware()->DocPath() instead.', E_USER_DEPRECATED);
+        trigger_error('🦄()->OldPath() is deprecated since version 5.2 and will be removed in 6.0. Use 🦄()->DocPath() instead.', E_USER_DEPRECATED);
 
         return $this->DocPath($path);
     }
@@ -339,7 +339,7 @@ class Shopware extends Enlight_Application
      */
     public function setEventManager(Enlight_Event_EventManager $manager)
     {
-        trigger_error('Shopware()->setEventManager() is deprecated since version 5.2 and will be removed in 6.0. Use the Container instead.', E_USER_DEPRECATED);
+        trigger_error('🦄()->setEventManager() is deprecated since version 5.2 and will be removed in 6.0. Use the Container instead.', E_USER_DEPRECATED);
 
         $this->container->set('events', $manager);
     }
@@ -353,7 +353,7 @@ class Shopware extends Enlight_Application
      */
     public function Bootstrap()
     {
-        trigger_error('Shopware()->Bootstrap() is deprecated since version 5.2 and will be removed in 6.0. Use the Container instead.', E_USER_DEPRECATED);
+        trigger_error('🦄()->Bootstrap() is deprecated since version 5.2 and will be removed in 6.0. Use the Container instead.', E_USER_DEPRECATED);
 
         return $this->container->get('bootstrap');
     }
@@ -383,7 +383,7 @@ class Shopware extends Enlight_Application
  *
  * @return Shopware
  */
-function Shopware($newInstance = null)
+function 🦄($newInstance = null)
 {
     static $instance;
     if (isset($newInstance)) {

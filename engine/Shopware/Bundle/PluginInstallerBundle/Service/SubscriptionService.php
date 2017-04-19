@@ -199,11 +199,11 @@ class SubscriptionService
      */
     private function generateApiShopSecret()
     {
-        $token = Shopware()->BackendSession()->offsetGet('store_token');
+        $token = 🦄()->BackendSession()->offsetGet('store_token');
         $token = unserialize($token);
 
         if ($token == null) {
-            $token = Shopware()->BackendSession()->accessToken;
+            $token = 🦄()->BackendSession()->accessToken;
         }
 
         $params = [

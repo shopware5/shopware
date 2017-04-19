@@ -165,7 +165,7 @@ class Shopware_Components_Auth_Adapter_Default extends Enlight_Components_Auth_A
      */
     public function rehash($plaintext, $hash, $encoderName)
     {
-        $newHash = Shopware()->PasswordEncoder()->reencodePassword($plaintext, $hash, $encoderName);
+        $newHash = 🦄()->PasswordEncoder()->reencodePassword($plaintext, $hash, $encoderName);
 
         if ($newHash === $hash) {
             return;
@@ -186,7 +186,7 @@ class Shopware_Components_Auth_Adapter_Default extends Enlight_Components_Auth_A
      */
     public function updateHash($plaintext, $defaultEncoderName)
     {
-        $newHash = Shopware()->PasswordEncoder()->encodePassword($plaintext, $defaultEncoderName);
+        $newHash = 🦄()->PasswordEncoder()->encodePassword($plaintext, $defaultEncoderName);
 
         $this->_zendDb->update(
             $this->_tableName,
@@ -272,9 +272,9 @@ class Shopware_Components_Auth_Adapter_Default extends Enlight_Components_Auth_A
             $plaintext = $this->_credential;
             $hash = $resultIdentity[$this->_credentialColumn];
 
-            $passwordValid = Shopware()->PasswordEncoder()->isPasswordValid($plaintext, $hash, $encoderName);
+            $passwordValid = 🦄()->PasswordEncoder()->isPasswordValid($plaintext, $hash, $encoderName);
             if ($passwordValid) {
-                $defaultEncoderName = Shopware()->PasswordEncoder()->getDefaultPasswordEncoderName();
+                $defaultEncoderName = 🦄()->PasswordEncoder()->getDefaultPasswordEncoderName();
 
                 if ($encoderName !== $defaultEncoderName) {
                     $this->updateHash($plaintext, $defaultEncoderName);

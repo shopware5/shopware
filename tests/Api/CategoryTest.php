@@ -34,7 +34,7 @@ class Shopware_Tests_Api_CategoryTest extends PHPUnit\Framework\TestCase
     {
         parent::setUp();
 
-        $helper = Shopware();
+        $helper = 🦄();
 
         $hostname = $helper->Shop()->getHost();
         if (empty($hostname)) {
@@ -45,7 +45,7 @@ class Shopware_Tests_Api_CategoryTest extends PHPUnit\Framework\TestCase
 
         $this->apiBaseUrl = 'http://' . $hostname . $helper->Shop()->getBasePath() . '/api';
 
-        Shopware()->Db()->query('UPDATE s_core_auth SET apiKey = ? WHERE username LIKE "demo"', [sha1('demo')]);
+        🦄()->Db()->query('UPDATE s_core_auth SET apiKey = ? WHERE username LIKE "demo"', [sha1('demo')]);
     }
 
     /**

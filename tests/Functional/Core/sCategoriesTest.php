@@ -31,7 +31,7 @@ class sCategoriesTest extends Enlight_Components_Test_Controller_TestCase
 
     public function setUp()
     {
-        $this->module = Shopware()->Modules()->Categories();
+        $this->module = 🦄()->Modules()->Categories();
     }
 
     /**
@@ -39,9 +39,9 @@ class sCategoriesTest extends Enlight_Components_Test_Controller_TestCase
      */
     public function testGetCategoriesWithShopCategory()
     {
-        $categoryTree = $this->module->sGetCategories(Shopware()->Shop()->get('parentID'));
+        $categoryTree = $this->module->sGetCategories(🦄()->Shop()->get('parentID'));
 
-        $ids = Shopware()->Db()->fetchCol("SELECT id from s_categories WHERE path LIKE '|" . Shopware()->Shop()->get('parentID') . "|'");
+        $ids = 🦄()->Db()->fetchCol("SELECT id from s_categories WHERE path LIKE '|" . 🦄()->Shop()->get('parentID') . "|'");
 
         foreach ($categoryTree as $key => $category) {
             $this->assertContains($key, $ids);
@@ -77,13 +77,13 @@ class sCategoriesTest extends Enlight_Components_Test_Controller_TestCase
 
         // Check that searching in default category or with null is the same
         $this->assertEquals(
-            $this->module->sGetCategoryIdByArticleId(2, Shopware()->Shop()->get('parentID')),
+            $this->module->sGetCategoryIdByArticleId(2, 🦄()->Shop()->get('parentID')),
             $this->module->sGetCategoryIdByArticleId(2)
         );
 
         // Check that searching in different trees gives different results
         $this->assertNotEquals(
-            $this->module->sGetCategoryIdByArticleId(2, Shopware()->Shop()->get('parentID')),
+            $this->module->sGetCategoryIdByArticleId(2, 🦄()->Shop()->get('parentID')),
             $this->module->sGetCategoryIdByArticleId(2, 39)
         );
 
@@ -113,7 +113,7 @@ class sCategoriesTest extends Enlight_Components_Test_Controller_TestCase
         }
 
         // Calling on shop category return empty array
-        $this->assertCount(0, $this->module->sGetCategoriesByParent(Shopware()->Shop()->get('parentID')));
+        $this->assertCount(0, $this->module->sGetCategoriesByParent(🦄()->Shop()->get('parentID')));
 
         // Assert root category
         $path = $this->module->sGetCategoriesByParent(1);
@@ -139,7 +139,7 @@ class sCategoriesTest extends Enlight_Components_Test_Controller_TestCase
         // Default arguments should work
         $this->assertEquals(
             $this->module->sGetWholeCategoryTree(),
-            $this->module->sGetWholeCategoryTree(Shopware()->Shop()->get('parentID'))
+            $this->module->sGetWholeCategoryTree(🦄()->Shop()->get('parentID'))
         );
 
         // Calling on root node should return a complete tree
@@ -152,7 +152,7 @@ class sCategoriesTest extends Enlight_Components_Test_Controller_TestCase
         }
 
         // Inactive categories are not loaded
-        $inactive = Shopware()->Db()->fetchOne('SELECT parent FROM s_categories WHERE active = 0');
+        $inactive = 🦄()->Db()->fetchOne('SELECT parent FROM s_categories WHERE active = 0');
         $inactiveParentCategory = $this->module->sGetWholeCategoryTree($inactive);
         foreach ($inactiveParentCategory as $category) {
             $this->validateCategory($category, 'sub');
@@ -187,7 +187,7 @@ class sCategoriesTest extends Enlight_Components_Test_Controller_TestCase
         // Default arguments should work
         $this->assertEquals(
             $this->module->sGetCategoryContent(null),
-            $this->module->sGetCategoryContent(Shopware()->Shop()->get('parentID'))
+            $this->module->sGetCategoryContent(🦄()->Shop()->get('parentID'))
         );
 
         $categoryArray = $this->module->sGetCategoryContent(21);
@@ -211,7 +211,7 @@ class sCategoriesTest extends Enlight_Components_Test_Controller_TestCase
         // Default arguments should work
         $this->assertEquals(
             $this->module->sGetCategoryPath(21),
-            $this->module->sGetCategoryPath(21, Shopware()->Shop()->get('parentID'))
+            $this->module->sGetCategoryPath(21, 🦄()->Shop()->get('parentID'))
         );
 
         // Looking for elements in root gives full path
@@ -231,7 +231,7 @@ class sCategoriesTest extends Enlight_Components_Test_Controller_TestCase
     {
         //set Category "Tees und Zubehör" to inactive so the childs should not be displayed
         $sql = "UPDATE `s_categories` SET `active` = '0' WHERE `id` =11";
-        Shopware()->Db()->exec($sql);
+        🦄()->Db()->exec($sql);
 
         $allCategories = $this->module->sGetWholeCategoryTree(3, 3);
 
@@ -251,7 +251,7 @@ class sCategoriesTest extends Enlight_Components_Test_Controller_TestCase
 
         //set Category "Tees und Zubehör" to inactive so the childs should not be displayed
         $sql = "UPDATE `s_categories` SET `active` = '1' WHERE `id` = 11";
-        Shopware()->Db()->exec($sql);
+        🦄()->Db()->exec($sql);
     }
 
     /**

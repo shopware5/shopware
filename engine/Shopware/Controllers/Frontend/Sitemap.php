@@ -34,10 +34,10 @@ class Shopware_Controllers_Frontend_Sitemap extends Enlight_Controller_Action
      */
     public function indexAction()
     {
-        $categoryTree = Shopware()->Modules()->sCategories()->sGetWholeCategoryTree();
+        $categoryTree = 🦄()->Modules()->sCategories()->sGetWholeCategoryTree();
         $additionalTrees = $this->getAdditionalTrees();
 
-        $additionalTrees = Shopware()->Events()->filter(
+        $additionalTrees = 🦄()->Events()->filter(
             'Shopware_Modules_Sitemap_indexAction',
             $additionalTrees,
             ['subject' => $this]
@@ -68,7 +68,7 @@ class Shopware_Controllers_Frontend_Sitemap extends Enlight_Controller_Action
      */
     private function getCustomPages()
     {
-        $sites = $this->getSitesByShopId(Shopware()->Shop()->getId());
+        $sites = $this->getSitesByShopId(🦄()->Shop()->getId());
 
         foreach ($sites as &$site) {
             $site = $this->convertSite($site);
@@ -98,7 +98,7 @@ class Shopware_Controllers_Frontend_Sitemap extends Enlight_Controller_Action
             WHERE shopPages.shop_id = ?
         ';
 
-        $statement = Shopware()->Db()->executeQuery($sql, [$shopId]);
+        $statement = 🦄()->Db()->executeQuery($sql, [$shopId]);
 
         $keys = $statement->fetchAll(PDO::FETCH_COLUMN);
 
@@ -218,10 +218,10 @@ class Shopware_Controllers_Frontend_Sitemap extends Enlight_Controller_Action
         /** @var Shopware\Models\Emotion\Repository $emotionRepository */
         $emotionRepository = $this->get('models')->getRepository('Shopware\Models\Emotion\Emotion');
 
-        $shopId = Shopware()->Shop()->getId();
+        $shopId = 🦄()->Shop()->getId();
         $fallbackId = null;
 
-        $fallbackShop = Shopware()->Shop()->getFallback();
+        $fallbackShop = 🦄()->Shop()->getFallback();
 
         if (!empty($fallbackShop)) {
             $fallbackId = $fallbackShop->getId();

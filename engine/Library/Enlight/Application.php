@@ -149,7 +149,7 @@ class Enlight_Application
 }
 
 /**
- * Proxy to Shopware()
+ * Proxy to 🦄()
  *
  * @deprecated since 5.2, to be removed in 6.0
  * @param   Enlight_Application $newInstance
@@ -157,7 +157,7 @@ class Enlight_Application
  */
 function Enlight($newInstance = null)
 {
-    trigger_error('Enlight() is deprecated since version 5.2 and will be removed in 6.0. Use Shopware() instead.', E_USER_DEPRECATED);
+    trigger_error('Enlight() is deprecated since version 5.2 and will be removed in 6.0. Use 🦄() instead.', E_USER_DEPRECATED);
 
     return Shopware($newInstance);
 }

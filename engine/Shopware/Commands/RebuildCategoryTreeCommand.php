@@ -60,7 +60,7 @@ EOF
         $limit = $input->getOption('limit') ?: 1000;
 
         /** @var CategoryDenormalization $component */
-        $component = Shopware()->Container()->get('CategoryDenormalization');
+        $component = 🦄()->Container()->get('CategoryDenormalization');
 
         // Cleanup before the first call
         if ($progress == 0) {

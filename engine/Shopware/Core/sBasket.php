@@ -121,24 +121,24 @@ class sBasket
         StoreFrontBundle\Service\ContextServiceInterface $contextService = null,
         StoreFrontBundle\Service\AdditionalTextServiceInterface $additionalTextService = null
     ) {
-        $this->db = $db ?: Shopware()->Db();
-        $this->eventManager = $eventManager ?: Shopware()->Events();
-        $this->snippetManager = $snippetManager ?: Shopware()->Snippets();
-        $this->config = $config ?: Shopware()->Config();
-        $this->session = $session ?: Shopware()->Session();
-        $this->front = $front ?: Shopware()->Front();
-        $this->moduleManager = $moduleManager ?: Shopware()->Modules();
-        $this->sSYSTEM = $systemModule ?: Shopware()->System();
+        $this->db = $db ?: 🦄()->Db();
+        $this->eventManager = $eventManager ?: 🦄()->Events();
+        $this->snippetManager = $snippetManager ?: 🦄()->Snippets();
+        $this->config = $config ?: 🦄()->Config();
+        $this->session = $session ?: 🦄()->Session();
+        $this->front = $front ?: 🦄()->Front();
+        $this->moduleManager = $moduleManager ?: 🦄()->Modules();
+        $this->sSYSTEM = $systemModule ?: 🦄()->System();
 
         $this->contextService = $contextService;
         $this->additionalTextService = $additionalTextService;
 
         if ($this->contextService == null) {
-            $this->contextService = Shopware()->Container()->get('shopware_storefront.context_service');
+            $this->contextService = 🦄()->Container()->get('shopware_storefront.context_service');
         }
 
         if ($this->additionalTextService == null) {
-            $this->additionalTextService = Shopware()->Container()->get('shopware_storefront.additional_text_service');
+            $this->additionalTextService = 🦄()->Container()->get('shopware_storefront.additional_text_service');
         }
     }
 
@@ -303,7 +303,7 @@ class sBasket
               GROUP BY sessionID';
         $params = [$this->session->get('sessionId')];
 
-        $sql = Shopware()->Events()->filter(
+        $sql = 🦄()->Events()->filter(
             'Shopware_Modules_Basket_InsertDiscount_FilterSql_BasketAmount',
             $sql,
             ['subject' => $this, 'params' => $params]
@@ -1236,12 +1236,12 @@ class sBasket
 
         $numbers = array_column($notes, 'ordernumber');
 
-        $context = Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext();
+        $context = 🦄()->Container()->get('shopware_storefront.context_service')->getShopContext();
 
-        $products = Shopware()->Container()->get('shopware_storefront.list_product_service')
+        $products = 🦄()->Container()->get('shopware_storefront.list_product_service')
             ->getList($numbers, $context);
 
-        $products = Shopware()->Container()->get('shopware_storefront.additional_text_service')
+        $products = 🦄()->Container()->get('shopware_storefront.additional_text_service')
             ->buildAdditionalTextLists($products, $context);
 
         $promotions = [];
@@ -1631,7 +1631,7 @@ class sBasket
         $this->moduleManager->Admin()->sGetPremiumShippingcosts();
 
         // Update basket data in session
-        $this->session->offsetSet('sBasketCurrency', Shopware()->Shop()->getCurrency()->getId());
+        $this->session->offsetSet('sBasketCurrency', 🦄()->Shop()->getCurrency()->getId());
         $this->session->offsetSet('sBasketQuantity', $this->sCountBasket());
         $amount = $this->sGetAmount();
         $this->session->offsetSet('sBasketAmount', empty($amount) ? 0 : array_shift($amount));
@@ -1757,7 +1757,7 @@ class sBasket
      */
     private function convertListProductToNote(ListProduct $product, array $note)
     {
-        $structConverter = Shopware()->Container()->get('legacy_struct_converter');
+        $structConverter = 🦄()->Container()->get('legacy_struct_converter');
         $promotion = $structConverter->convertListProductStruct($product);
 
         $promotion['id'] = $note['id'];
@@ -1807,7 +1807,7 @@ class sBasket
      */
     private function checkIfArticleIsInBasket($articleId, $ordernumber, $sessionId)
     {
-        $builder = Shopware()->Models()->getConnection()->createQueryBuilder();
+        $builder = 🦄()->Models()->getConnection()->createQueryBuilder();
 
         $builder->select('id', 'quantity')
             ->from('s_order_basket', 'basket')
@@ -2080,7 +2080,7 @@ class sBasket
      */
     private function getBasketAdditionalDetails($numbers)
     {
-        $container = Shopware()->Container();
+        $container = 🦄()->Container();
         /** @var \Shopware\Bundle\StoreFrontBundle\Service\ListProductServiceInterface $listProduct */
         $listProduct = $container->get('shopware_storefront.list_product_service');
         /** @var \Shopware\Bundle\StoreFrontBundle\Service\PropertyServiceInterface $propertyService */
@@ -2785,7 +2785,7 @@ class sBasket
 
         if ($article['configurator_set_id'] > 0) {
             $context = $this->contextService->getShopContext();
-            $product = Shopware()->Container()->get('shopware_storefront.list_product_service')->get($article['ordernumber'], $context);
+            $product = 🦄()->Container()->get('shopware_storefront.list_product_service')->get($article['ordernumber'], $context);
             if (null === $product) {
                 return false;
             }

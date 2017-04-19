@@ -169,7 +169,7 @@ class Resource extends ModelEntity implements \Zend_Acl_Resource_Interface
 
     /**
      * Event listener method which fired before the model will be removed (DELETE)
-     * over Shopware()->Models()->persist() / ->flush().
+     * over 🦄()->Models()->persist() / ->flush().
      *
      * Removes the released resource.
      *
@@ -178,7 +178,7 @@ class Resource extends ModelEntity implements \Zend_Acl_Resource_Interface
     public function onRemove()
     {
         $sql = 'DELETE FROM s_core_acl_roles WHERE resourceID = ?';
-        Shopware()->Db()->query($sql, [$this->id]);
+        🦄()->Db()->query($sql, [$this->id]);
     }
 
     /**

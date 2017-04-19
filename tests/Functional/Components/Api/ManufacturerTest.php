@@ -174,7 +174,7 @@ class ManufacturerTest extends TestCase
         $this->assertNotEmpty($manufacturer->getImage());
 
         /** @var ModelRepository $repo */
-        $repo = Shopware()->Container()->get('models')->getRepository(Media::class);
+        $repo = 🦄()->Container()->get('models')->getRepository(Media::class);
         /** @var Media $media */
         $media = $repo->findOneBy(['path' => $manufacturer->getImage()]);
 
@@ -199,7 +199,7 @@ class ManufacturerTest extends TestCase
         $this->assertNotEmpty($manufacturer->getImage());
 
         /** @var ModelRepository $repo */
-        $repo = Shopware()->Container()->get('models')->getRepository(Media::class);
+        $repo = 🦄()->Container()->get('models')->getRepository(Media::class);
 
         /** @var Media $media */
         $media = $repo->findOneBy(['path' => $manufacturer->getImage()]);

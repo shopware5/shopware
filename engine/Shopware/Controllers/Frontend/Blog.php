@@ -65,7 +65,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
      */
     public function init()
     {
-        $this->blogBaseUrl = Shopware()->Config()->get('baseFile');
+        $this->blogBaseUrl = 🦄()->Config()->get('baseFile');
     }
 
     /**
@@ -84,7 +84,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
     public function getRepository()
     {
         if ($this->repository === null) {
-            $this->repository = Shopware()->Models()->getRepository('Shopware\Models\Blog\Blog');
+            $this->repository = 🦄()->Models()->getRepository('Shopware\Models\Blog\Blog');
         }
 
         return $this->repository;
@@ -98,7 +98,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
     public function getBlogCommentRepository()
     {
         if ($this->blogCommentRepository === null) {
-            $this->blogCommentRepository = Shopware()->Models()->getRepository('Shopware\Models\Blog\Comment');
+            $this->blogCommentRepository = 🦄()->Models()->getRepository('Shopware\Models\Blog\Comment');
         }
 
         return $this->blogCommentRepository;
@@ -112,7 +112,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
     public function getCategoryRepository()
     {
         if ($this->categoryRepository === null) {
-            $this->categoryRepository = Shopware()->Models()->getRepository('Shopware\Models\Category\Category');
+            $this->categoryRepository = 🦄()->Models()->getRepository('Shopware\Models\Category\Category');
         }
 
         return $this->categoryRepository;
@@ -126,7 +126,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
     public function getCommentConfirmRepository()
     {
         if ($this->commentConfirmRepository === null) {
-            $this->commentConfirmRepository = Shopware()->Models()->getRepository('Shopware\Models\CommentConfirm\CommentConfirm');
+            $this->commentConfirmRepository = 🦄()->Models()->getRepository('Shopware\Models\CommentConfirm\CommentConfirm');
         }
 
         return $this->commentConfirmRepository;
@@ -144,7 +144,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
         $sFilterTags = urldecode($this->Request()->sFilterTags);
 
         // Redirect if blog's category is not a child of the current shop's category
-        $shopCategory = Shopware()->Shop()->getCategory();
+        $shopCategory = 🦄()->Shop()->getCategory();
         $category = $this->getCategoryRepository()->findOneBy(['id' => $categoryId, 'active' => true]);
         $isChild = ($shopCategory && $category) ? $category->isChildOf($shopCategory) : false;
         if (!$isChild) {
@@ -153,11 +153,11 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
 
         // PerPage
         if (!empty($this->Request()->sPerPage)) {
-            Shopware()->Session()->sPerPage = (int) $this->Request()->sPerPage;
+            🦄()->Session()->sPerPage = (int) $this->Request()->sPerPage;
         }
-        $sPerPage = Shopware()->Session()->sPerPage;
+        $sPerPage = 🦄()->Session()->sPerPage;
         if (empty($sPerPage)) {
-            $sPerPage = (int) Shopware()->Config()->get('sARTICLESPERPAGE');
+            $sPerPage = (int) 🦄()->Config()->get('sARTICLESPERPAGE');
         }
 
         $filter = $this->createFilter($sFilterDate, $sFilterAuthor, $sFilterTags);
@@ -174,7 +174,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
         $blogArticlesQuery = $this->getRepository()->getListQuery($blogCategoryIds, $sLimitStart, $sLimitEnd, $filter);
         $blogArticlesQuery->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
 
-        $paginator = Shopware()->Models()->createPaginator($blogArticlesQuery);
+        $paginator = 🦄()->Models()->createPaginator($blogArticlesQuery);
 
         //returns the total count of the query
         $totalResult = $paginator->count();
@@ -229,9 +229,9 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
             $this->View()->loadTemplate('frontend/blog/' . $type . '.tpl');
         }
 
-        $categoryContent = Shopware()->Modules()->Categories()->sGetCategoryContent($categoryId);
+        $categoryContent = 🦄()->Modules()->Categories()->sGetCategoryContent($categoryId);
         $assigningData = [
-            'sBanner' => Shopware()->Modules()->Marketing()->sBanner($categoryId),
+            'sBanner' => 🦄()->Modules()->Marketing()->sBanner($categoryId),
             'sBreadcrumb' => $this->getCategoryBreadcrumb($categoryId),
             'sCategoryContent' => $categoryContent,
             'sNumberArticles' => $totalResult,
@@ -277,7 +277,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
         }
 
         // Redirect if blog's category is not a child of the current shop's category
-        $shopCategory = Shopware()->Shop()->getCategory();
+        $shopCategory = 🦄()->Shop()->getCategory();
         $isChild = ($shopCategory && $category) ? $category->isChildOf($shopCategory) : false;
         if (!$isChild) {
             $location = ['controller' => 'index'];
@@ -292,10 +292,10 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
             $this->View()->loadTemplate('frontend/blog/' . $blogArticleData['template']);
         }
 
-        $this->View()->userLoggedIn = !empty(Shopware()->Session()->sUserId);
-        if (!empty(Shopware()->Session()->sUserId) && empty($this->Request()->name)
+        $this->View()->userLoggedIn = !empty(🦄()->Session()->sUserId);
+        if (!empty(🦄()->Session()->sUserId) && empty($this->Request()->name)
                 && $this->Request()->getParam('__cache') === null) {
-            $userData = Shopware()->Modules()->Admin()->sGetUserData();
+            $userData = 🦄()->Modules()->Admin()->sGetUserData();
             $this->View()->sFormData = [
                 'eMail' => $userData['additional']['user']['email'],
                 'name' => $userData['billingaddress']['firstname'] . ' ' . $userData['billingaddress']['lastname'],
@@ -305,7 +305,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
         $mediaIds = array_column($blogArticleData['media'], 'mediaId');
         $context = $this->get('shopware_storefront.context_service')->getShopContext();
         $mediaStructs = $this->get('shopware_storefront.media_service')->getList($mediaIds, $context);
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $mediaService = 🦄()->Container()->get('shopware_media.media_service');
 
         //adding thumbnails to the blog article
         foreach ($blogArticleData['media'] as &$media) {
@@ -319,7 +319,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
 
         //add sRelatedArticles
         foreach ($blogArticleData['assignedArticles'] as &$assignedArticle) {
-            $product = Shopware()->Modules()->Articles()->sGetPromotionById('fix', 0, (int) $assignedArticle['id']);
+            $product = 🦄()->Modules()->Articles()->sGetPromotionById('fix', 0, (int) $assignedArticle['id']);
             if ($product) {
                 $blogArticleData['sRelatedArticles'][] = $product;
             }
@@ -330,18 +330,18 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
         $blogArticleData['sVoteAverage'] = $avgVoteQuery->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_SINGLE_SCALAR);
 
         //count the views of this blog item
-        $visitedBlogItems = Shopware()->Session()->visitedBlogItems;
-        if (!Shopware()->Session()->Bot && !in_array($blogArticleId, $visitedBlogItems)) {
+        $visitedBlogItems = 🦄()->Session()->visitedBlogItems;
+        if (!🦄()->Session()->Bot && !in_array($blogArticleId, $visitedBlogItems)) {
             //update the views count
             /* @var $blogModel Shopware\Models\Blog\Blog */
             $blogModel = $this->getRepository()->find($blogArticleId);
             if ($blogModel) {
                 $blogModel->setViews($blogModel->getViews() + 1);
-                Shopware()->Models()->flush($blogModel);
+                🦄()->Models()->flush($blogModel);
 
                 //save it to the session
                 $visitedBlogItems[] = $blogArticleId;
-                Shopware()->Session()->visitedBlogItems = $visitedBlogItems;
+                🦄()->Session()->visitedBlogItems = $visitedBlogItems;
             }
         }
 
@@ -381,8 +381,8 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
                     $commentData = unserialize($getComment->getData());
 
                     //delete the data in the comment confirm table we don't need it anymore
-                    Shopware()->Models()->remove($getComment);
-                    Shopware()->Models()->flush();
+                    🦄()->Models()->remove($getComment);
+                    🦄()->Models()->flush();
 
                     $this->sSaveComment($commentData, $blogArticleId);
 
@@ -406,7 +406,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
                 $sErrorFlag['points'] = true;
             }
 
-            if (!empty(Shopware()->Config()->CaptchaColor)) {
+            if (!empty(🦄()->Config()->CaptchaColor)) {
                 /** @var \Shopware\Components\Captcha\CaptchaValidator $captchaValidator */
                 $captchaValidator = $this->container->get('shopware.captcha.validator');
 
@@ -416,12 +416,12 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
             }
 
             $validator = $this->container->get('validator.email');
-            if (!empty(Shopware()->Config()->sOPTINVOTE) && (empty($this->Request()->eMail) || !$validator->isValid($this->Request()->eMail))) {
+            if (!empty(🦄()->Config()->sOPTINVOTE) && (empty($this->Request()->eMail) || !$validator->isValid($this->Request()->eMail))) {
                 $sErrorFlag['eMail'] = true;
             }
 
             if (empty($sErrorFlag)) {
-                if (!empty(Shopware()->Config()->sOPTINVOTE) && empty(Shopware()->Session()->sUserId)) {
+                if (!empty(🦄()->Config()->sOPTINVOTE) && empty(🦄()->Session()->sUserId)) {
                     $hash = md5(uniqid(rand()));
 
                     //save comment confirm for the optin
@@ -430,13 +430,13 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
                     $blogCommentModel->setHash($hash);
                     $blogCommentModel->setData(serialize($this->Request()->getPost()));
 
-                    Shopware()->Models()->persist($blogCommentModel);
-                    Shopware()->Models()->flush();
+                    🦄()->Models()->persist($blogCommentModel);
+                    🦄()->Models()->flush();
 
                     $link = $this->Front()->Router()->assemble(['sViewport' => 'blog', 'action' => 'rating', 'blogArticle' => $blogArticleId, 'sConfirmation' => $hash]);
 
                     $context = ['sConfirmLink' => $link, 'sArticle' => ['title' => $blogArticleData['title']]];
-                    $mail = Shopware()->TemplateMail()->createMail('sOPTINVOTE', $context);
+                    $mail = 🦄()->TemplateMail()->createMail('sOPTINVOTE', $context);
                     $mail->addTo($this->Request()->getParam('eMail'));
                     $mail->send();
                 } else {
@@ -445,7 +445,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
                     $this->sSaveComment($commentData, $blogArticleId);
                 }
             } else {
-                $this->View()->sFormData = Shopware()->System()->_POST->toArray();
+                $this->View()->sFormData = 🦄()->System()->_POST->toArray();
                 $this->View()->sErrorFlag = $sErrorFlag;
             }
         }
@@ -512,7 +512,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
      */
     public function getCategoryBreadcrumb($categoryId)
     {
-        return array_reverse(Shopware()->Modules()->Categories()->sGetCategoriesByParent($categoryId));
+        return array_reverse(🦄()->Modules()->Categories()->sGetCategoriesByParent($categoryId));
     }
 
     /**
@@ -542,8 +542,8 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
         $blogCommentModel->setComment($commentData['comment']);
         $blogCommentModel->setPoints($commentData['points']);
 
-        Shopware()->Models()->persist($blogCommentModel);
-        Shopware()->Models()->flush();
+        🦄()->Models()->persist($blogCommentModel);
+        🦄()->Models()->flush();
     }
 
     /**
@@ -608,12 +608,12 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
     protected function addLinksToFilter($filterData, $requestParameterName, $requestParameterValue, $addRemoveProperty = true)
     {
         foreach ($filterData as $key => $dateData) {
-            $filterData[$key]['link'] = $this->blogBaseUrl . Shopware()->Modules()->Core()->sBuildLink(
+            $filterData[$key]['link'] = $this->blogBaseUrl . 🦄()->Modules()->Core()->sBuildLink(
                 ['sPage' => 1, $requestParameterName => urlencode($dateData[$requestParameterValue])]
             );
         }
         if ($addRemoveProperty) {
-            $filterData[] = ['removeProperty' => 1, 'link' => $this->blogBaseUrl . Shopware()->Modules()->Core()->sBuildLink(
+            $filterData[] = ['removeProperty' => 1, 'link' => $this->blogBaseUrl . 🦄()->Modules()->Core()->sBuildLink(
                 ['sPage' => 1, $requestParameterName => '']),
             ];
         }

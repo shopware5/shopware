@@ -41,12 +41,12 @@ class Shopware_Tests_Controllers_Backend_CustomerTest extends Enlight_Components
     {
         parent::setUp();
 
-        $this->manager = Shopware()->Models();
-        $this->repository = Shopware()->Models()->getRepository('Shopware\Models\Customer\Customer');
+        $this->manager = 🦄()->Models();
+        $this->repository = 🦄()->Models()->getRepository('Shopware\Models\Customer\Customer');
 
         // disable auth and acl
-        Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
-        Shopware()->Plugins()->Backend()->Auth()->setNoAcl();
+        🦄()->Plugins()->Backend()->Auth()->setNoAuth();
+        🦄()->Plugins()->Backend()->Auth()->setNoAcl();
     }
 
     /**
@@ -242,7 +242,7 @@ class Shopware_Tests_Controllers_Backend_CustomerTest extends Enlight_Components
     {
         $dummy = $this->createDummyCustomer();
 
-        $customer = Shopware()->Models()->find('Shopware\Models\Customer\Customer', $dummy->getId());
+        $customer = 🦄()->Models()->find('Shopware\Models\Customer\Customer', $dummy->getId());
 
         $this->assertInstanceOf('\Shopware\Models\Customer\Customer', $customer);
         $this->assertEquals('1', $customer->getGroup()->getId());
