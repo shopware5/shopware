@@ -129,7 +129,7 @@ class CustomerStream extends ModelEntity
         return $this->productStreamIds;
     }
 
-    public function setProductStreamIds($productStreamIds): void
+    public function setProductStreamIds($productStreamIds)
     {
         $this->productStreamIds = $productStreamIds;
     }
