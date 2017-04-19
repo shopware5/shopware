@@ -163,9 +163,6 @@ Ext.define('Shopware.form.field.ComboTree', {
         }
         me.value = value;
         
-        /** 
-        * Setting rawValue, otherwise the value of the input element is not displayed - SN - 22/11/2016
-        */
         if (inputEl && !Ext.isEmpty(value)){
             me.setRawValue(value); 
         }  
