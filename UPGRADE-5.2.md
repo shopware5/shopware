@@ -7,6 +7,7 @@ This changelog references changes done in Shopware 5.2 patch versions.
 * Added new event `plugin/swAutoSubmit/onChangeSelection` in `themes/Frontend/Responsive/frontend/_public/src/js/jquery.auto-submit.js`
 * Added ExtJS override `engine/Library/ExtJs/overrides/Ext.view.Table.js` to fix display of row selection in grid panel when updating the row after row editing
 * Added optional parameter `appendCSRFToken`  for JSONP-Requests. The CSRF token will only be sent if the parameter is true.
+* Added `src` attribute as a fallback for `srcset` to the main `<img />` tag in `themes/Frontend/Bare/frontend/detail/image.tpl` and `themes/Frontend/Bare/frontend/blog/images.tpl`
 
 ## 5.2.21
 
