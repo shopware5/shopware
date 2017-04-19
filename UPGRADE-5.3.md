@@ -85,6 +85,7 @@ This changelog references changes done in Shopware 5.3 patch versions.
     * `.filter-panel--checkbox`
     * `.radio--state`
     * `.checkbox--state`
+* Added new JavaScript method to register callbacks which fire after the main script was loaded asynchronously. Use `document.asyncReady()` to register your callback when using inline script.
 
 ### Changes
 
